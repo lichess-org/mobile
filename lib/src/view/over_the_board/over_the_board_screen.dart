@@ -42,13 +42,8 @@ class OverTheBoardScreen extends StatelessWidget {
   /// Initial variant to be preselected in the "New Game" dialog.
   final Variant? initialVariant;
 
-  static Route<void> buildRoute(
-    BuildContext context, {
-    Variant? initialVariant,
-    String? initialFen,
-  }) {
+  static Route<void> buildRoute({Variant? initialVariant, String? initialFen}) {
     return buildScreenRoute(
-      context,
       screen: OverTheBoardScreen(initialVariant: initialVariant, initialFen: initialFen),
     );
   }
@@ -270,27 +265,12 @@ class _BodyState extends ConsumerState<_Body> {
                           : gameState.turn == Side.white
                           ? PlayerSide.white
                           : PlayerSide.black,
-                      onPromotionSelection: (role) {
-                        ref
-                            .read(overTheBoardGameControllerProvider.notifier)
-                            .onPromotionSelection(role);
-                        if (role != null) {
-                          ref
-                              .read(overTheBoardClockProvider.notifier)
-                              .onMove(newSideToMove: gameState.turn.opposite);
-                        }
-                      },
-                      promotionMove: gameState.promotionMove,
                       onMove: (move, {viaDragAndDrop}) {
-                        if (move is! NormalMove ||
-                            !isPromotionPawnMove(gameState.currentPosition, move)) {
-                          ref
-                              .read(overTheBoardClockProvider.notifier)
-                              .onMove(newSideToMove: gameState.turn.opposite);
-                        }
                         ref.read(overTheBoardGameControllerProvider.notifier).makeMove(move);
+                        ref
+                            .read(overTheBoardClockProvider.notifier)
+                            .onMove(newSideToMove: gameState.turn.opposite);
                       },
-                      premovable: null,
                     ),
                     moves: gameState.moves,
                     currentMoveIndex: gameState.stepCursor,
@@ -302,6 +282,7 @@ class _BodyState extends ConsumerState<_Body> {
                       pieceAssets: overTheBoardPrefs.symmetricPieces
                           ? PieceSet.symmetric.assets
                           : null,
+                      enablePremoves: false,
                     ),
                     userActionsBar: _BottomBar(
                       onFlipBoard: () {
@@ -418,7 +399,6 @@ class _BottomBar extends ConsumerWidget {
             makeLabel: (context) => Text(context.l10n.analysis),
             onPressed: () => Navigator.of(context).push(
               AnalysisScreen.buildRoute(
-                context,
                 AnalysisOptions.pgn(
                   id: const StringId('otb_finished_game_analysis'),
                   orientation: Side.white,

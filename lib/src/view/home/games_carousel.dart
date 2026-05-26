@@ -224,21 +224,23 @@ class _BoardCarouselItem extends ConsumerWidget {
             SizedBox(
               height: boardSize,
               child: StaticChessboard(
-                hue: boardPrefs.hue,
-                brightness: boardPrefs.brightness,
                 size: boardSize,
                 fen: fen,
                 orientation: orientation,
                 lastMove: lastMove,
-                enableCoordinates: false,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(10.0),
-                  topRight: Radius.circular(10.0),
+                settings: StaticChessboardSettings(
+                  hue: boardPrefs.hue,
+                  brightness: boardPrefs.brightness,
+                  enableCoordinates: false,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(10.0),
+                    topRight: Radius.circular(10.0),
+                  ),
+                  pieceAssets: boardPrefs.pieceSet.assets,
+                  colorScheme: isRealTimeGame
+                      ? realTimeColors(context)
+                      : boardPrefs.boardTheme.colors,
                 ),
-                pieceAssets: boardPrefs.pieceSet.assets,
-                colorScheme: isRealTimeGame
-                    ? realTimeColors(context)
-                    : boardPrefs.boardTheme.colors,
               ),
             ),
             Positioned(

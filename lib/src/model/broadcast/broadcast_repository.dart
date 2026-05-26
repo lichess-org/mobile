@@ -1,10 +1,9 @@
-import 'dart:convert';
-
 import 'package:clock/clock.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_summary.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -65,45 +64,10 @@ class BroadcastRepository {
     bool withAnalysisSummary = true,
   }) async {
     final queryParams = withAnalysisSummary ? {'analysisHeader': '1'} : null;
-    final response = await client.get(
+    final response = await client.readResponse(
       Uri(path: 'api/study/$roundId/$gameId.pgn', queryParameters: queryParams),
     );
-    final pgn = response.body;
-    BroadcastAnalysisSummary? analysisSummary;
-
-    final analysisHeader = response.headers['x-lichess-analysis'];
-    if (analysisHeader != null) {
-      final json = jsonDecode(analysisHeader) as Map<String, dynamic>;
-      analysisSummary = _analysisSummaryFromPick(json);
-    }
-
-    return (pgn: pgn, analysisSummary: analysisSummary);
-  }
-
-  BroadcastAnalysisSummary _analysisSummaryFromPick(Map<String, dynamic> json) {
-    final summary = pick(json, 'summary').required();
-    return (
-      division: pick(json, 'division').letOrNull(_divisionFromPick),
-      white: _playerAnalysisSummaryFromPick(summary('white').required()),
-      black: _playerAnalysisSummaryFromPick(summary('black').required()),
-    );
-  }
-
-  BroadcastPlayerAnalysisSummary _playerAnalysisSummaryFromPick(RequiredPick pick) {
-    return (
-      inaccuracies: pick('inaccuracy').asIntOrThrow(),
-      mistakes: pick('mistake').asIntOrThrow(),
-      blunders: pick('blunder').asIntOrThrow(),
-      acpl: pick('acpl').asIntOrThrow(),
-      accuracy: pick('accuracy').asIntOrThrow(),
-    );
-  }
-
-  Division _divisionFromPick(RequiredPick pick) {
-    return Division(
-      middlegame: pick('middle').asDoubleOrNull(),
-      endgame: pick('end').asDoubleOrNull(),
-    );
+    return (pgn: response.body, analysisSummary: readAnalysisSummaryFromHeader(response));
   }
 
   Future<IList<BroadcastPlayerWithOverallResult>> getPlayers(BroadcastTournamentId tournamentId) {
@@ -128,6 +92,13 @@ class BroadcastRepository {
       Uri(path: 'broadcast/$roundId/teams'),
       mapper: (json) =>
           pick(json, 'table').asListOrThrow<BroadcastTeamMatch>(_teamMatchFromPick).toIList(),
+    );
+  }
+
+  Future<IList<BroadcastTeamStanding>> getTeamStandings(BroadcastTournamentId tournamentId) {
+    return client.readJsonList(
+      Uri(path: 'broadcast/$tournamentId/teams/standings'),
+      mapper: (json) => _teamStandingFromPick(pick(json).required()),
     );
   }
 }
@@ -166,6 +137,7 @@ BroadcastTournamentData _tournamentDataFromPick(RequiredPick pick) => BroadcastT
   imageUrl: pick('image').asStringOrNull(),
   description: pick('description').asStringOrNull(),
   teamTable: pick('teamTable').asBoolOrFalse(),
+  showTeamScores: pick('showTeamScores').asBoolOrFalse(),
   information: (
     format: pick('info', 'format').asStringOrNull(),
     timeControl: pick('info', 'tc').asStringOrNull(),
@@ -411,6 +383,7 @@ BroadcastPlayerGameResult _playerGameResultFromPick(RequiredPick pick) {
     points: points,
     customPoints: pick('customPoints').asDoubleOrNull(),
     opponent: _playerFromPick(pick('opponent').required()),
+    ongoing: pick('ongoing').asBoolOrNull() ?? false,
   );
 }
 
@@ -437,5 +410,26 @@ BroadcastTeamGame _teamGameFromPick(RequiredPick pick) {
   return BroadcastTeamGame(
     id: pick('id').asBroadcastGameIdOrThrow(),
     pov: pick('pov').asSideOrThrow(),
+  );
+}
+
+BroadcastTeamStanding _teamStandingFromPick(RequiredPick pick) {
+  return BroadcastTeamStanding(
+    name: pick('name').asStringOrThrow(),
+    mp: pick('mp').asDoubleOrThrow(),
+    gp: pick('gp').asDoubleOrThrow(),
+    matches: pick('matches').asListOrEmpty(_teamStandingMatchFromPick).toIList(),
+    players: pick('players').asListOrEmpty(_playerWithOverallResultFromPick).toIList(),
+    averageRating: pick('averageRating').asIntOrNull(),
+  );
+}
+
+BroadcastTeamStandingMatch _teamStandingMatchFromPick(RequiredPick pick) {
+  return BroadcastTeamStandingMatch(
+    roundId: pick('roundId').asBroadcastRoundIdOrThrow(),
+    opponent: pick('opponent').asStringOrThrow(),
+    points: pick('points').asStringOrThrow(),
+    mp: pick('mp').asDoubleOrThrow(),
+    gp: pick('gp').asDoubleOrThrow(),
   );
 }

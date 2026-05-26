@@ -7,38 +7,34 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
+typedef AcplChartParams = ({
+  /// The evaluation data points to display on the chart
+  IList<ExternalEval> acplChartData,
+
+  /// Game phase division information (opening/middlegame/endgame boundaries)
+  Division? division,
+
+  /// The ply number at the root of the analysis tree
+  int rootPly,
+
+  /// The ply number of the current position being viewed
+  int currentNodePly,
+
+  /// Whether the current node is on the main line
+  bool isOnMainline,
+
+  /// Callback when user taps/drags to jump to a specific node
+  void Function(int nodeIndex) onJumpToNode,
+});
+
 /// A chart displaying average centipawn loss (ACPL) analysis over the course of a game.
 ///
 /// This widget shows the evaluation curve for the chess game, with lines indicating
 /// for game phases (opening, middlegame, endgame) and the current position.
 class AcplChart extends StatelessWidget {
-  const AcplChart({
-    required this.acplChartData,
-    required this.division,
-    required this.rootPly,
-    required this.currentNodePly,
-    required this.isOnMainline,
-    required this.onJumpToNode,
-    super.key,
-  });
+  const AcplChart({required this.params, super.key});
 
-  /// The evaluation data points to display on the chart
-  final IList<ExternalEval> acplChartData;
-
-  /// Game phase division information (opening/middlegame/endgame boundaries)
-  final Division? division;
-
-  /// The ply number at the root of the analysis tree
-  final int rootPly;
-
-  /// The ply number of the current position being viewed
-  final int currentNodePly;
-
-  /// Whether the current node is on the main line
-  final bool isOnMainline;
-
-  /// Callback when user taps/drags to jump to a specific node
-  final void Function(int nodeIndex) onJumpToNode;
+  final AcplChartParams params;
 
   @override
   Widget build(BuildContext context) {
@@ -50,11 +46,11 @@ class AcplChart extends StatelessWidget {
     final belowLineColor = brightness == .light ? white : black;
     final aboveLineColor = brightness == .light ? black : white;
 
-    final spots = acplChartData
+    final spots = params.acplChartData
         .mapIndexed((i, e) => FlSpot(i.toDouble(), e.winningChances(Side.white)))
         .toList(growable: false);
 
-    final divisionLines = _buildDivisionLines(context, division);
+    final divisionLines = _buildDivisionLines(context, params.division);
 
     return Center(
       child: AspectRatio(
@@ -81,7 +77,7 @@ class AcplChart extends StatelessWidget {
                           (a.x - touchXDataValue).abs() < (b.x - touchXDataValue).abs() ? a : b,
                     );
                     final closestNodeIndex = closestSpot.x.round();
-                    onJumpToNode(closestNodeIndex);
+                    params.onJumpToNode(closestNodeIndex);
                   }
                 },
               ),
@@ -100,9 +96,9 @@ class AcplChart extends StatelessWidget {
               ],
               extraLinesData: ExtraLinesData(
                 verticalLines: [
-                  if (isOnMainline)
+                  if (params.isOnMainline)
                     VerticalLine(
-                      x: (currentNodePly - 1 - rootPly).toDouble(),
+                      x: (params.currentNodePly - 1 - params.rootPly).toDouble(),
                       color: mainLineColor,
                       strokeWidth: 1.0,
                     ),
@@ -122,8 +118,8 @@ class AcplChart extends StatelessWidget {
   List<VerticalLine> _buildDivisionLines(BuildContext context, Division? division) {
     final divisionLines = <VerticalLine>[];
 
-    VerticalLine phaseVerticalBar(double x, String label) => VerticalLine(
-      x: x,
+    VerticalLine phaseVerticalBar(int x, String label) => VerticalLine(
+      x: x.toDouble(),
       color: const Color(0xFF707070),
       strokeWidth: 0.5,
       label: VerticalLineLabel(
@@ -141,10 +137,10 @@ class AcplChart extends StatelessWidget {
 
     if (division?.middlegame != null) {
       if (division!.middlegame! > 0) {
-        divisionLines.add(phaseVerticalBar(0.0, context.l10n.opening));
+        divisionLines.add(phaseVerticalBar(0, context.l10n.opening));
         divisionLines.add(phaseVerticalBar(division.middlegame! - 1, context.l10n.middlegame));
       } else {
-        divisionLines.add(phaseVerticalBar(0.0, context.l10n.middlegame));
+        divisionLines.add(phaseVerticalBar(0, context.l10n.middlegame));
       }
     }
 
@@ -152,7 +148,7 @@ class AcplChart extends StatelessWidget {
       if (division!.endgame! > 0) {
         divisionLines.add(phaseVerticalBar(division.endgame! - 1, context.l10n.endgame));
       } else {
-        divisionLines.add(phaseVerticalBar(0.0, context.l10n.endgame));
+        divisionLines.add(phaseVerticalBar(0, context.l10n.endgame));
       }
     }
 

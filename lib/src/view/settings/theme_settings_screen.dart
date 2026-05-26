@@ -1,9 +1,9 @@
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -22,8 +22,8 @@ import 'package:lichess_mobile/src/widgets/settings.dart';
 class ThemeSettingsScreen extends ConsumerWidget {
   const ThemeSettingsScreen({super.key});
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const ThemeSettingsScreen());
+  static Route<dynamic> buildRoute() {
+    return buildScreenRoute(screen: const ThemeSettingsScreen());
   }
 
   @override
@@ -32,7 +32,7 @@ class ThemeSettingsScreen extends ConsumerWidget {
   }
 }
 
-String shapeColorL10n(BuildContext context, ShapeColor shapeColor) => switch (shapeColor) {
+String shapeColorL10n(ShapeColor shapeColor) => switch (shapeColor) {
   ShapeColor.green => 'Green',
   ShapeColor.red => 'Red',
   ShapeColor.blue => 'Blue',
@@ -142,7 +142,7 @@ class _BodyState extends ConsumerState<_Body> {
                           ? generalPrefs.backgroundColor!.$1.label
                           : (generalPrefs.backgroundImage != null ? 'Image' : 'Default'),
                       onTap: () {
-                        Navigator.of(context).push(BackgroundChoiceScreen.buildRoute(context));
+                        Navigator.of(context).push(BackgroundChoiceScreen.buildRoute());
                       },
                     ),
                     if (generalPrefs.backgroundColor != null ||
@@ -161,7 +161,7 @@ class _BodyState extends ConsumerState<_Body> {
                       settingsLabel: Text(context.l10n.board),
                       settingsValue: boardPrefs.boardTheme.label,
                       onTap: () {
-                        Navigator.of(context).push(BoardChoiceScreen.buildRoute(context));
+                        Navigator.of(context).push(BoardChoiceScreen.buildRoute());
                       },
                     ),
                     SettingsListTile(
@@ -169,7 +169,7 @@ class _BodyState extends ConsumerState<_Body> {
                       settingsLabel: Text(context.l10n.pieceSet),
                       settingsValue: boardPrefs.pieceSet.label,
                       onTap: () {
-                        Navigator.of(context).push(PieceSetScreen.buildRoute(context));
+                        Navigator.of(context).push(PieceSetScreen.buildRoute());
                       },
                     ),
                     SettingsListTile(
@@ -177,7 +177,7 @@ class _BodyState extends ConsumerState<_Body> {
                       settingsLabel: const Text('Drawn shape color'),
                       explanation:
                           'This color is only used for shapes drawn by hand using two fingers.',
-                      settingsValue: shapeColorL10n(context, boardPrefs.shapeColor),
+                      settingsValue: shapeColorL10n(boardPrefs.shapeColor),
                       onTap: () {
                         showChoicePicker(
                           context,
@@ -186,7 +186,7 @@ class _BodyState extends ConsumerState<_Body> {
                           labelBuilder: (t) => Text.rich(
                             TextSpan(
                               children: [
-                                TextSpan(text: shapeColorL10n(context, t)),
+                                TextSpan(text: shapeColorL10n(t)),
                                 const TextSpan(text: '   '),
                                 WidgetSpan(child: Container(width: 15, height: 15, color: t.color)),
                               ],
@@ -300,24 +300,28 @@ class _BoardPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Chessboard.fixed(
+      child: StaticChessboard(
         size: size,
         orientation: Side.white,
         lastMove: const NormalMove(from: Square.e2, to: Square.e4),
         fen: 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1',
-        shapes: <Shape>{
+        shapes: {
           Circle(color: boardPrefs.shapeColor.color, orig: Square.fromName('b8')),
           Arrow(
             color: boardPrefs.shapeColor.color,
             orig: Square.fromName('b8'),
             dest: Square.fromName('c6'),
           ),
-        }.lock,
-        settings: boardPrefs.toBoardSettings().copyWith(
-          brightness: brightness,
-          hue: hue,
-          borderRadius: Styles.boardBorderRadius,
-          boxShadow: boardShadows,
+        },
+        settings: StaticChessboardSettings.fromBoardSettings(
+          boardPrefs
+              .toBoardSettings(Variant.standard)
+              .copyWith(
+                brightness: brightness,
+                hue: hue,
+                borderRadius: Styles.boardBorderRadius,
+                boxShadow: boardShadows,
+              ),
         ),
       ),
     );

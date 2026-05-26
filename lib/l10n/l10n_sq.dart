@@ -9,6 +9,9 @@ class AppLocalizationsSq extends AppLocalizations {
   AppLocalizationsSq([String locale = 'sq']) : super(locale);
 
   @override
+  String get mobileAccount => 'Llogari';
+
+  @override
   String get mobileAccountPreferences => 'Parapëlqime llogarie';
 
   @override
@@ -1604,9 +1607,6 @@ class AppLocalizationsSq extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Ju pëlqeu ky ushtrim?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Votojeni, që të ngarkohet pasuesi!';
-
-  @override
   String get puzzleUpVote => 'Jepini një votë ushtrimit';
 
   @override
@@ -2606,6 +2606,16 @@ class AppLocalizationsSq extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Vlerësim minimum prej $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Vlerësim maksimum prej $param';
+  }
+
+  @override
   String get recentGames => 'Lojëra së fundi';
 
   @override
@@ -2689,9 +2699,6 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Shfaq shigjeta variacionesh';
-
-  @override
-  String get evaluationGauge => 'Matësi i vlerësimit';
 
   @override
   String get visualMotifs => 'Motive pamore';
@@ -2971,15 +2978,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get checkSpamFolder => 'Shihni gjithashtu edhe te dosja juaj e të padëshiruarve, mund të përfundojë atje. Në ndodhtë kështu, i hiqni shenjën si i padëshiruar.';
 
   @override
-  String get emailForSignupHelp => 'Nëse gjithçka tjetër dështon, atëherë dërgonani këtë email:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Kopjoni dhe ngjitni tekstin më poshtë dhe dërgojeni te $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'Nëse s’gjeni dot email-in e ripohimit, dërgoni një email te $param dhe do të miratojmë llogarinë tuaj për ju.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Do të lidhemi me ju së shpejti, për t’ju ndihmuar të plotësoni regjistrimin tuaj.';
 
   @override
   String accountConfirmed(String param) {

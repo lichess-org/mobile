@@ -9,6 +9,9 @@ class AppLocalizationsUz extends AppLocalizations {
   AppLocalizationsUz([String locale = 'uz']) : super(locale);
 
   @override
+  String get mobileAccount => 'Akkaunt';
+
+  @override
   String get mobileAccountPreferences => 'Akkaunt sozlamalari';
 
   @override
@@ -1604,9 +1607,6 @@ class AppLocalizationsUz extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Ushbu masala yoqdimi?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Keyingisini yuklash uchun ovoz bering!';
-
-  @override
   String get puzzleUpVote => 'Masala yoqdi';
 
   @override
@@ -2606,6 +2606,16 @@ class AppLocalizationsUz extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return '$param maksimal reytingi';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return '$param maksimal reytingi';
+  }
+
+  @override
   String get recentGames => 'Soʻnggi oʻyinlar';
 
   @override
@@ -2689,9 +2699,6 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Variantlar strelkalarini koʻrsatish';
-
-  @override
-  String get evaluationGauge => 'Baholash shkalasi';
 
   @override
   String get visualMotifs => 'Vizual motivlar';
@@ -2971,15 +2978,9 @@ class AppLocalizationsUz extends AppLocalizations {
   String get checkSpamFolder => 'Shuningdek, spam jildini ham tekshiring, xat u yerga tushib qolgan boʻlishi mumkin. Agar shunday boʻlsa, uni “Spam emas” deb belgilang.';
 
   @override
-  String get emailForSignupHelp => 'Agar bularning hech biri yordam bermasa, u holda bizni e‑pochtamizga ushbu xatni yuboring:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Yuqoridagi matndan nusxa oling va $param manziliga yuboring';
+  String sendEmailForAccountVerification(String param) {
+    return 'Agar tasdiqlash xatini topa olmasangiz, $param manziliga xat yuboring va biz hisobingizni tasdiqlab beramiz.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Roʻyxatdan oʻtishga yordam berish uchun siz bilan tez orada bogʻlanamiz.';
 
   @override
   String accountConfirmed(String param) {

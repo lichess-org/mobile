@@ -1,6 +1,4 @@
 import 'package:chessground/chessground.dart';
-import 'package:dartchess/dartchess.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -108,6 +106,10 @@ class BoardPreferences extends Notifier<BoardPrefs> with PreferencesStorage<Boar
     return save(state.copyWith(clockPosition: clockPosition));
   }
 
+  Future<void> setLandscapeBoardPosition(LandscapeBoardPosition landscapeBoardPosition) {
+    return save(state.copyWith(landscapeBoardPosition: landscapeBoardPosition));
+  }
+
   Future<void> toggleMoveListDisplay() {
     return save(state.copyWith(moveListDisplay: !state.moveListDisplay));
   }
@@ -131,7 +133,7 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
 
   @Assert('brightness >= 0.2 && brightness <= 1.4, hue >= 0.0 && hue <= 360.0')
   const factory BoardPrefs({
-    @JsonKey(defaultValue: PieceSet.staunty, unknownEnumValue: PieceSet.staunty)
+    @JsonKey(defaultValue: PieceSet.cburnett, unknownEnumValue: PieceSet.cburnett)
     required PieceSet pieceSet,
     @JsonKey(defaultValue: BoardTheme.brown, unknownEnumValue: BoardTheme.brown)
     required BoardTheme boardTheme,
@@ -148,6 +150,11 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
     required MaterialDifferenceFormat materialDifferenceFormat,
     @JsonKey(defaultValue: ClockPosition.right, unknownEnumValue: ClockPosition.right)
     required ClockPosition clockPosition,
+    @JsonKey(
+      defaultValue: LandscapeBoardPosition.left,
+      unknownEnumValue: LandscapeBoardPosition.left,
+    )
+    required LandscapeBoardPosition landscapeBoardPosition,
     @JsonKey(defaultValue: PieceShiftMethod.either, unknownEnumValue: PieceShiftMethod.either)
     required PieceShiftMethod pieceShiftMethod,
     @JsonKey(
@@ -172,7 +179,7 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
   }) = _BoardPrefs;
 
   static const defaults = BoardPrefs(
-    pieceSet: PieceSet.staunty,
+    pieceSet: PieceSet.cburnett,
     boardTheme: BoardTheme.brown,
     immersiveModeWhilePlaying: false,
     hapticFeedback: true,
@@ -182,6 +189,7 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
     pieceAnimation: true,
     materialDifferenceFormat: MaterialDifferenceFormat.materialDifference,
     clockPosition: ClockPosition.right,
+    landscapeBoardPosition: LandscapeBoardPosition.left,
     moveListDisplay: true,
     premoves: true,
     confirmResignAndDraw: true,
@@ -199,7 +207,7 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
   bool get hasColorAdjustments =>
       brightness != kBoardDefaultBrightnessFilter || hue != kBoardDefaultHueFilter;
 
-  ChessboardSettings toBoardSettings() {
+  ChessboardSettings toBoardSettings(Variant variant) {
     return ChessboardSettings(
       pieceAssets: pieceSet.assets,
       colorScheme: boardTheme.colors,
@@ -217,30 +225,7 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
       dragTargetKind: dragTargetKind,
       pieceShiftMethod: pieceShiftMethod,
       drawShape: DrawShapeOptions(enable: enableShapeDrawings, newShapeColor: shapeColor.color),
-    );
-  }
-
-  GameData toGameData({
-    required Variant variant,
-    required Position position,
-    required PlayerSide playerSide,
-    required NormalMove? promotionMove,
-    required void Function(Move, {bool? viaDragAndDrop}) onMove,
-    required void Function(Role? role) onPromotionSelection,
-    Premovable? premovable,
-  }) {
-    return GameData(
-      playerSide: playerSide,
-      onMove: onMove,
-      onPromotionSelection: onPromotionSelection,
-      premovable: premoves ? premovable : null,
-      promotionMove: promotionMove,
-      sideToMove: position.turn,
-      validMoves: _makeLegalMoves(position, variant: variant, castlingMethod: castlingMethod),
-      droppable: variant == Variant.crazyhouse
-          ? (validDropSquares: position.legalDrops.squares.toISet())
-          : null,
-      isCheck: boardHighlights && position.isCheck,
+      enableDrops: variant == Variant.crazyhouse,
       canPromoteToKing: variant == Variant.antichess,
     );
   }
@@ -251,40 +236,6 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
 
   Duration get pieceAnimationDuration =>
       pieceAnimation ? const Duration(milliseconds: 150) : Duration.zero;
-}
-
-IMap<Square, ISet<Square>> _makeLegalMoves(
-  Position pos, {
-  required CastlingMethod castlingMethod,
-  required Variant variant,
-}) {
-  final Map<Square, ISet<Square>> result = {};
-  for (final entry in pos.legalMoves.entries) {
-    final dests = entry.value.squares;
-    if (dests.isNotEmpty) {
-      final from = entry.key;
-      final destSet = dests.toSet();
-      if (variant != Variant.chess960 &&
-          from == pos.board.kingOf(pos.turn) &&
-          entry.key.file == 4) {
-        if (dests.contains(Square.a1)) {
-          destSet.add(Square.c1);
-        } else if (dests.contains(Square.a8)) {
-          destSet.add(Square.c8);
-        }
-        if (dests.contains(Square.h1)) {
-          destSet.add(Square.g1);
-        } else if (dests.contains(Square.h8)) {
-          destSet.add(Square.g8);
-        }
-        if (castlingMethod == CastlingMethod.kingTwoSquares) {
-          destSet.removeAll([Square.a1, Square.h1, Square.a8, Square.h8]);
-        }
-      }
-      result[from] = ISet(destSet);
-    }
-  }
-  return IMap(result);
 }
 
 /// Colors taken from lila: https://github.com/lichess-org/chessground/blob/54a7e71bf88701c1109d3b9b8106b464012b94cf/src/state.ts#L178
@@ -451,6 +402,16 @@ enum ClockPosition {
   String label(AppLocalizations l10n) => switch (this) {
     ClockPosition.left => l10n.mobilePositionLeft,
     ClockPosition.right => l10n.mobilePositionRight,
+  };
+}
+
+enum LandscapeBoardPosition {
+  left,
+  right;
+
+  String label(AppLocalizations l10n) => switch (this) {
+    LandscapeBoardPosition.left => l10n.mobilePositionLeft,
+    LandscapeBoardPosition.right => l10n.mobilePositionRight,
   };
 }
 

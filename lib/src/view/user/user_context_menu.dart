@@ -62,9 +62,7 @@ class UserContextMenu extends ConsumerWidget {
               children: [
                 BottomSheetContextMenuAction(
                   onPressed: () {
-                    Navigator.of(
-                      context,
-                    ).push(UserOrProfileScreen.buildRoute(context, value.lightUser));
+                    Navigator.of(context).push(UserOrProfileScreen.buildRoute(value.lightUser));
                   },
                   icon: Icons.person,
                   child: Text(context.l10n.profile),
@@ -75,7 +73,7 @@ class UserContextMenu extends ConsumerWidget {
                     Navigator.of(
                       context,
                       rootNavigator: true,
-                    ).push(TvScreen.buildRoute(context, user: value.lightUser));
+                    ).push(TvScreen.buildRoute(user: value.lightUser));
                   },
                   child: Text(context.l10n.watchGames),
                 ),

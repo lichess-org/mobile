@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/game.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
+import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
@@ -293,9 +294,26 @@ void main() {
       await tester.pumpAndSettle(); // Wait tournament screen to load
       expect(
         tester.widget(find.byType(TournamentScreen)),
-        isA<TournamentScreen>().having((s) => s.id, 'id', '61044'),
+        isA<TournamentScreen>()
+            .having((s) => s.id, 'id', '61044')
+            .having((s) => s.initialPlayerId, 'initialPlayerId', isNull),
       );
     });
+
+    testWidgets(
+      'resolves /tournament/{id}?player={name} to TournamentScreen with initialPlayerId',
+      (WidgetTester tester) async {
+        final uri = Uri.parse('https://lichess.org/tournament/spring26?player=realcyberbird');
+        await triggerAppLink(tester, uri);
+        await tester.pumpAndSettle();
+        expect(
+          tester.widget(find.byType(TournamentScreen)),
+          isA<TournamentScreen>()
+              .having((s) => s.id, 'id', 'spring26')
+              .having((s) => s.initialPlayerId, 'initialPlayerId', const UserId('realcyberbird')),
+        );
+      },
+    );
 
     testWidgets('resolves /broadcast/.../{roundId}#players to players tab', (
       WidgetTester tester,
@@ -468,6 +486,34 @@ void main() {
       );
     });
 
+    testWidgets('resolves /gameid link for imported game to analysis', (WidgetTester tester) async {
+      final mockGameRepository = MockGameRepository();
+      final importedGame = generateExportedGames(count: 1).first.copyWith(
+        status: GameStatus.started,
+        source: GameSource.import,
+        black: const Player(),
+        white: const Player(),
+      );
+      when(() => mockGameRepository.getGame(importedGame.id)).thenAnswer((_) async => importedGame);
+
+      final uri = Uri.parse('https://lichess.org/${importedGame.id.value}');
+
+      await triggerAppLink(
+        tester,
+        uri,
+        overrides: {
+          gameRepositoryProvider: gameRepositoryProvider.overrideWith((_) => mockGameRepository),
+        },
+      );
+      await tester.pumpAndSettle();
+
+      expect(
+        tester.widget(find.byType(AnalysisScreen)),
+        isA<AnalysisScreen>().having((s) => s.options.gameId, 'id', importedGame.id.value),
+      );
+      expect(find.byType(TvScreen), findsNothing);
+    });
+
     testWidgets('resolves /gameid link for ongoing game', (WidgetTester tester) async {
       final mockGameRepository = MockGameRepository();
       final ongoingGame = generateExportedGames(count: 1).first.copyWith(
@@ -619,6 +665,10 @@ void main() {
       when(() => mockUserRepository.getUser(const UserId('thibault'))).thenAnswer(
         (_) async => const User(id: UserId('thibault'), username: 'Thibault', perfs: IMap.empty()),
       );
+      final testGame = generateExportedGames(count: 1).first;
+      when(
+        () => mockUserRepository.getCurrentGame(const UserId('thibault')),
+      ).thenAnswer((_) async => testGame);
 
       await triggerAppLink(
         tester,
@@ -627,6 +677,20 @@ void main() {
           userRepositoryProvider: userRepositoryProvider.overrideWith((_) => mockUserRepository),
         },
       );
+
+      // Wait a frame for the async getCurrentGame lookup to complete
+      await tester.pump();
+
+      sendServerSocketMessages(Uri(path: '/watch/${testGame.id.value}/white/v6'), [
+        makeFullEvent(
+          testGame.id,
+          '',
+          whiteUserName: testGame.white.user?.name ?? 'White',
+          blackUserName: testGame.black.user?.name ?? 'Black',
+        ),
+      ]);
+      await tester.pump(); // Process socket message
+
       await tester.pumpAndSettle(); // Wait for tv screen to load
 
       expect(
@@ -658,7 +722,37 @@ void main() {
 
     testWidgets('Shows tv screen for /tv/<channel> link', (WidgetTester tester) async {
       final uri = Uri.parse('https://lichess.org/tv/blitz');
-      await triggerAppLink(tester, uri);
+      await triggerAppLink(
+        tester,
+        uri,
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(
+              () => MockClient((request) async {
+                if (request.url.path == '/api/tv/channels') {
+                  const body = '''
+                  {
+                    "blitz": {"color": "white", "gameId": "v3pIFdTz", "rating": 2615, "user": {"id": "whitePlayer", "name": "whitePlayer"}}
+                  }''';
+                  return http.Response(body, 200, headers: {'content-type': 'application/json'});
+                }
+                return http.Response('', 404);
+              }),
+            );
+          }),
+        },
+      );
+      await tester.pump(kFakeWebSocketConnectionLag);
+      sendServerSocketMessages(Uri(path: '/watch/v3pIFdTz/white/v6'), [
+        makeFullEvent(
+          const GameId('gameid11'),
+          '',
+          whiteUserName: 'whitePlayer',
+          blackUserName: 'blackPlayer',
+        ),
+      ]);
+      await tester.pump(); // Process socket message
+
       await tester.pumpAndSettle(); // Wait for TV screen to load
 
       expect(

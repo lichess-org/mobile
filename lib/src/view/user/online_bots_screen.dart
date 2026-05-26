@@ -21,8 +21,8 @@ import 'package:lichess_mobile/src/widgets/user.dart';
 class OnlineBotsScreen extends StatelessWidget {
   const OnlineBotsScreen();
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const OnlineBotsScreen());
+  static Route<dynamic> buildRoute() {
+    return buildScreenRoute(screen: const OnlineBotsScreen());
   }
 
   @override
@@ -49,7 +49,7 @@ class OnlineBotsWidget extends ConsumerWidget {
         return ListSection(
           header: Text(context.l10n.onlineBots),
           onHeaderTap: () {
-            Navigator.of(context).push(OnlineBotsScreen.buildRoute(context));
+            Navigator.of(context).push(OnlineBotsScreen.buildRoute());
           },
           children: [
             for (final bot in value.where((bot) => bot.verified == true))
@@ -154,7 +154,7 @@ void _challengeBot(User bot, {required BuildContext context, required WidgetRef 
   }
   final isOddBot = oddBots.contains(bot.lightUser.name.toLowerCase());
   if (isOddBot) {
-    Navigator.of(context).push(ChallengeOddBotsScreen.buildRoute(context, bot.lightUser));
+    Navigator.of(context).push(ChallengeOddBotsScreen.buildRoute(bot.lightUser));
   } else {
     showModalBottomSheet<void>(
       context: context,

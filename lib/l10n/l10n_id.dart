@@ -9,6 +9,9 @@ class AppLocalizationsId extends AppLocalizations {
   AppLocalizationsId([String locale = 'id']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Pengaturan akun';
 
   @override
@@ -1585,13 +1588,10 @@ class AppLocalizationsId extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Apakah anda menyukai teka-teki ini?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Isi untuk memanggil yang satunya lagi!';
+  String get puzzleUpVote => 'Great puzzle!';
 
   @override
-  String get puzzleUpVote => 'Rate puzzle positively';
-
-  @override
-  String get puzzleDownVote => 'Rate puzzle negatively';
+  String get puzzleDownVote => 'Bad puzzle!';
 
   @override
   String get puzzleYourPuzzleRatingWillNotChange => 'Your puzzle rating will not change. Note that puzzles are not a competition. Your rating helps select the most appropriate puzzles for your skill level.';
@@ -2582,6 +2582,16 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'Permainan terkini';
 
   @override
@@ -2665,9 +2675,6 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Tampilkan variasi panah';
-
-  @override
-  String get evaluationGauge => 'Mengukur evaluasi';
 
   @override
   String get visualMotifs => 'Visual motifs';
@@ -2947,15 +2954,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get checkSpamFolder => 'Cek juga folder spam Anda, mungkin ada disana. Jika ada, tandai sebagai bukan spam.';
 
   @override
-  String get emailForSignupHelp => 'Jika semuanya gagal, kirim kami email ini:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Salin dan tempel teks diatas dan kirimkan ke $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Kami akan kembali sejenak untuk membantu penyelesaian signup anda.';
 
   @override
   String accountConfirmed(String param) {

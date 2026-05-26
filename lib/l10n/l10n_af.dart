@@ -9,6 +9,9 @@ class AppLocalizationsAf extends AppLocalizations {
   AppLocalizationsAf([String locale = 'af']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Account preferences';
 
   @override
@@ -1604,9 +1607,6 @@ class AppLocalizationsAf extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Hou jy van hierdie raaisel?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Stem om die volgende een te laai!';
-
-  @override
   String get puzzleUpVote => 'Stem vir raaisel';
 
   @override
@@ -2606,6 +2606,16 @@ class AppLocalizationsAf extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'Onlangse wedstryde';
 
   @override
@@ -2689,9 +2699,6 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Wys variasiepyle';
-
-  @override
-  String get evaluationGauge => 'Evaluering meter';
 
   @override
   String get visualMotifs => 'Visual motifs';
@@ -2971,15 +2978,9 @@ class AppLocalizationsAf extends AppLocalizations {
   String get checkSpamFolder => 'Kyk ook in jou strooipos lêer, dit mag dalk daarin opeinding. In dien dit die geval is, merk dit as nie strooipos nie.';
 
   @override
-  String get emailForSignupHelp => 'Indien niks werk nie, stuur die volgende boodskap:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Kopieer en plak die teks hierbo en stuur dit na $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Ons sal spoedig na jou terugkom en jou help met die intekenproses.';
 
   @override
   String accountConfirmed(String param) {

@@ -9,6 +9,9 @@ class AppLocalizationsBn extends AppLocalizations {
   AppLocalizationsBn([String locale = 'bn']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'একাউন্ট নির্বাচনী পছন্দসমূহ';
 
   @override
@@ -1604,9 +1607,6 @@ class AppLocalizationsBn extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'আপনি এই ধাঁধা তি কি পছন্দ করেছেন?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'পরের ধাঁধা তি তে জেতে ভতে দিন!';
-
-  @override
   String get puzzleUpVote => 'ধাঁধা কে আপ-ভোট করুন';
 
   @override
@@ -2606,6 +2606,16 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'সম্প্রতি খেলা';
 
   @override
@@ -2689,9 +2699,6 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'বৈচিত্র্য তীর দেখান';
-
-  @override
-  String get evaluationGauge => 'পরিমাপ মূল্যায়ন';
 
   @override
   String get visualMotifs => 'Visual motifs';
@@ -2971,15 +2978,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String get checkSpamFolder => 'এছাড়াও আপনার স্প্যাম ফোল্ডার চেক করুন, এটি সেখানে থাকতে পারে। যদি তাই হয়, এটি স্প্যাম নয় হিসাবে চিহ্নিত করুন.';
 
   @override
-  String get emailForSignupHelp => 'অন্য সব কিছু ব্যর্থ হলে, আমাদের এই ইমেল পাঠান:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'উপরের লেখাটি কপি করে পেস্ট করুন এবং $param এ পাঠান';
+  String sendEmailForAccountVerification(String param) {
+    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
   }
-
-  @override
-  String get waitForSignupHelp => 'আপনাকে আপনার সাইনআপ সম্পূর্ণ করতে সাহায্য করার জন্য আমরা শীঘ্রই আপনার কাছে ফিরে আসব.';
 
   @override
   String accountConfirmed(String param) {

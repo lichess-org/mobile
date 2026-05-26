@@ -40,11 +40,12 @@ void main() {
 
       await tester.pumpWidget(app);
 
+      // Scaffold with tabs is always shown; counts default to 0 while loading
+      expect(find.byType(Tab), findsNWidgets(2));
+      expect(find.text('0 friends online'), findsOneWidget);
+      expect(find.text('0 following'), findsOneWidget);
+      // tab content shows loading indicator
       expect(find.byType(CenterLoadingIndicator), findsOneWidget);
-
-      expect(find.byType(Tab), findsNothing);
-      expect(find.text('0 friends online'), findsNothing);
-      expect(find.text('0 following'), findsNothing);
     });
 
     testWidgets('shows _Online and _Following tabs after request completes with empty list', (

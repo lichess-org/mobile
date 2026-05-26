@@ -275,7 +275,6 @@ class _OpenChallengeLoadingContentState extends ConsumerState<OpenChallengeLoadi
                       FilledButton.tonalIcon(
                         onPressed: () => Navigator.of(context).push(
                           PickPlayerScreen.buildRoute(
-                            context,
                             title: Text(context.l10n.challengeAFriend),
                             onUserTap: (user) async {
                               // Capture everything that needs BuildContext before the async gap.
@@ -287,7 +286,6 @@ class _OpenChallengeLoadingContentState extends ConsumerState<OpenChallengeLoadi
                                   widget.challengeRequest.timeControl ==
                                       ChallengeTimeControlType.clock
                                   ? GameScreen.buildRoute(
-                                      context,
                                       source: UserChallengeSource(directedChallengeReq),
                                     )
                                   : null;

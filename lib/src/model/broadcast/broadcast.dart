@@ -3,7 +3,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intl/intl.dart';
-import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_summary.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -107,6 +107,7 @@ sealed class BroadcastTournamentData with _$BroadcastTournamentData {
     // PRIVATE=-1, NORMAL=3, HIGH=4, BEST=5
     int? tier,
     bool? teamTable,
+    bool? showTeamScores,
     required BroadcastTournamentInformation information,
   }) = _BroadcastTournamentData;
 }
@@ -131,7 +132,7 @@ typedef BroadcastTournamentGroup = ({
 });
 
 typedef BroadcastCustomPointsPerColor = ({double win, double draw});
-typedef BroadcastCustomScoring = BySide<BroadcastCustomPointsPerColor>;
+typedef BroadcastCustomScoring = IMap<Side, BroadcastCustomPointsPerColor>;
 
 extension BroadcastCustomScoringExt on BroadcastCustomScoring {
   String pointsForResult(Side side, BroadcastResult result) {
@@ -192,7 +193,7 @@ sealed class BroadcastGame with _$BroadcastGame {
 
   const factory BroadcastGame({
     required BroadcastGameId id,
-    required BySide<BroadcastPlayerWithClock> players,
+    required IMap<Side, BroadcastPlayerWithClock> players,
     required String fen,
     required Move? lastMove,
     required Duration? thinkTime,
@@ -209,24 +210,7 @@ sealed class BroadcastGame with _$BroadcastGame {
   Side get sideToMove => Setup.parseFen(fen).turn;
 }
 
-typedef BroadcastGamePgnWithAnalysisSummary = ({
-  String pgn,
-  BroadcastAnalysisSummary? analysisSummary,
-});
-
-typedef BroadcastAnalysisSummary = ({
-  Division? division,
-  BroadcastPlayerAnalysisSummary white,
-  BroadcastPlayerAnalysisSummary black,
-});
-
-typedef BroadcastPlayerAnalysisSummary = ({
-  int inaccuracies,
-  int mistakes,
-  int blunders,
-  int acpl,
-  int accuracy,
-});
+typedef BroadcastGamePgnWithAnalysisSummary = ({String pgn, AnalysisSummary? analysisSummary});
 
 @freezed
 sealed class BroadcastPlayer with _$BroadcastPlayer {
@@ -329,6 +313,7 @@ sealed class BroadcastPlayerGameResult with _$BroadcastPlayerGameResult {
     required double? customPoints,
     required int? ratingDiff,
     required BroadcastPlayer opponent,
+    required bool ongoing,
   }) = _BroadcastPlayerGameResult;
 }
 
@@ -352,4 +337,27 @@ sealed class BroadcastTeamMatch with _$BroadcastTeamMatch {
     required BroadcastTeam team2,
     required IList<BroadcastTeamGame> games,
   }) = _BroadcastTeamMatch;
+}
+
+@freezed
+sealed class BroadcastTeamStandingMatch with _$BroadcastTeamStandingMatch {
+  const factory BroadcastTeamStandingMatch({
+    required BroadcastRoundId roundId,
+    required String opponent,
+    required String points,
+    required double mp,
+    required double gp,
+  }) = _BroadcastTeamStandingMatch;
+}
+
+@freezed
+sealed class BroadcastTeamStanding with _$BroadcastTeamStanding {
+  const factory BroadcastTeamStanding({
+    required String name,
+    required double mp,
+    required double gp,
+    required IList<BroadcastTeamStandingMatch> matches,
+    required IList<BroadcastPlayerWithOverallResult> players,
+    required int? averageRating,
+  }) = _BroadcastTeamStanding;
 }

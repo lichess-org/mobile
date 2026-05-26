@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:chessground/chessground.dart';
@@ -5,6 +6,8 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 
 import '../../test_helpers.dart';
@@ -25,7 +28,7 @@ void main() {
               pov: Side.white,
               sideToMove: Side.white,
               boardBuilder: (context, boardSize, boardRadius) {
-                return Chessboard.fixed(
+                return StaticChessboard(
                   size: boardSize,
                   fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR',
                   orientation: Side.white,
@@ -48,7 +51,7 @@ void main() {
         reason: 'Board background size is square on $surface',
       );
 
-      final boardSize = tester.getSize(find.byType(Chessboard));
+      final boardSize = tester.getSize(find.byType(StaticChessboard));
 
       expect(boardSize.width, boardSize.height, reason: 'Board size is square on $surface');
 
@@ -74,7 +77,7 @@ void main() {
               pov: Side.white,
               sideToMove: Side.white,
               boardBuilder: (context, boardSize, boardRadius) {
-                return Chessboard.fixed(
+                return StaticChessboard(
                   size: boardSize,
                   fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR',
                   orientation: Side.white,
@@ -91,7 +94,7 @@ void main() {
 
       final isPortrait = surface.aspectRatio < 1.0;
       final isTablet = surface.shortestSide > 600;
-      final boardSize = tester.getSize(find.byType(Chessboard));
+      final boardSize = tester.getSize(find.byType(StaticChessboard));
 
       if (isPortrait) {
         final expectedBoardSize = isTablet ? surface.width - 32.0 : surface.width;
@@ -128,6 +131,51 @@ void main() {
           reason: 'Tab bar view width should be at least $minSideWidth on $surface',
         );
       }
+    }
+  }, variant: kPlatformVariant);
+
+  testWidgets('Landscape board position', (WidgetTester tester) async {
+    for (final boardPosition in LandscapeBoardPosition.values) {
+      const tabletSurface = Size(1280, 800);
+      final app = await makeTestProviderScope(
+        key: ValueKey(boardPosition),
+        tester,
+        child: MaterialApp(
+          home: DefaultTabController(
+            length: 1,
+            child: AnalysisLayout(
+              pov: Side.white,
+              sideToMove: Side.white,
+              boardBuilder: (context, boardSize, boardRadius) {
+                return StaticChessboard(
+                  size: boardSize,
+                  fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR',
+                  orientation: Side.white,
+                );
+              },
+              bottomBar: const SizedBox(height: kBottomBarHeight),
+              children: const [Center(child: Text('Analysis tab'))],
+            ),
+          ),
+        ),
+        defaultPreferences: {
+          PrefCategory.board.storageKey: jsonEncode(
+            BoardPrefs.defaults.copyWith(landscapeBoardPosition: boardPosition).toJson(),
+          ),
+        },
+        surfaceSize: tabletSurface,
+      );
+      await tester.pumpWidget(app);
+
+      final boardTopLeft = tester.getTopLeft(find.byType(StaticChessboard));
+      final tabBarTopLeft = tester.getTopLeft(find.byType(TabBarView));
+
+      expect(
+        tabBarTopLeft.dx,
+        boardPosition == LandscapeBoardPosition.left
+            ? greaterThan(boardTopLeft.dx)
+            : lessThan(boardTopLeft.dx),
+      );
     }
   }, variant: kPlatformVariant);
 }

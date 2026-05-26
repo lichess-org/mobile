@@ -68,9 +68,7 @@ class BroadcastBoardsTab extends ConsumerWidget {
                 roundSlug: value.round.slug,
                 customScoring: value.round.customScoring,
               ),
-      AsyncError(:final error) => Center(
-        child: Center(child: Text('Could not load broadcast: $error')),
-      ),
+      AsyncError(:final error) => Center(child: Text('Could not load broadcast: $error')),
       _ => const Center(child: CircularProgressIndicator.adaptive()),
     };
   }
@@ -295,7 +293,6 @@ class _ObservedBoardThumbnailState extends ConsumerState<ObservedBoardThumbnail>
         onTap: () {
           Navigator.of(context).push(
             BroadcastGameScreen.buildRoute(
-              context,
               tournamentId: widget.tournamentId,
               roundId: widget.roundId,
               gameId: widget.game.id,

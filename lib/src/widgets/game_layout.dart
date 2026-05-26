@@ -43,9 +43,14 @@ Side variantBoardOrientation({
 /// An optional overlay or error message can be displayed on top of the board.
 class GameLayout extends ConsumerStatefulWidget {
   /// Creates a game layout with the given values.
+  ///
+  /// Exactly one of [boardParams] (the screen lets [GameLayout] own the board
+  /// controller) or [controllerParams] (the screen owns the controller, for the
+  /// high-performance path) must be provided.
   const GameLayout({
     required this.orientation,
-    required this.boardParams,
+    this.boardParams,
+    this.controllerParams,
     this.lastMove,
     this.boardSettingsOverrides,
     this.topTable = const SizedBox.shrink(),
@@ -58,19 +63,26 @@ class GameLayout extends ConsumerStatefulWidget {
     this.moves,
     this.currentMoveIndex = 0,
     this.onSelectMove,
+    this.moveListBuilder,
     this.boardOverlay,
     this.errorMessage,
     this.boardKey,
     this.zenMode = false,
     this.userActionsBar,
     this.explosionSquares,
+    this.isReplaying = false,
+    this.onPremove,
     super.key,
-  });
+  }) : assert(
+         (boardParams == null) != (controllerParams == null),
+         'Provide exactly one of boardParams or controllerParams',
+       );
 
   /// Creates an empty game layout (useful for loading).
   const GameLayout.empty({this.moves, this.errorMessage})
     : orientation = Side.white,
       boardParams = GameBoardParams.emptyBoard,
+      controllerParams = null,
       lastMove = null,
       boardSettingsOverrides = null,
       topTable = const SizedBox.shrink(),
@@ -82,16 +94,32 @@ class GameLayout extends ConsumerStatefulWidget {
       shapes = null,
       currentMoveIndex = 0,
       onSelectMove = null,
+      moveListBuilder = null,
       boardOverlay = null,
       boardKey = null,
       zenMode = false,
       userActionsBar = null,
-      explosionSquares = null;
+      explosionSquares = null,
+      isReplaying = false,
+      onPremove = null;
 
-  final GameBoardParams boardParams;
+  /// Board parameters for the owned-controller path: [GameLayout] creates and
+  /// drives the controller from these, updating it in [didUpdateWidget].
+  ///
+  /// Null in the [controllerParams] (high-performance) path.
+  final GameBoardParams? boardParams;
+
+  /// Board parameters for the high-performance path: the caller owns the
+  /// [ChessboardController] and drives it directly. [GameLayout] renders the
+  /// board with it but never creates, disposes, or drives it, and does no
+  /// position work in [didUpdateWidget].
+  ///
+  /// Null in the [boardParams] (owned-controller) path.
+  final ControllerBoardParams? controllerParams;
 
   final Side orientation;
 
+  /// Last move highlight for readonly boards. For interactive boards, use [InteractiveBoardParams.lastMove].
   final Move? lastMove;
 
   final BoardSettingsOverrides? boardSettingsOverrides;
@@ -130,6 +158,14 @@ class GameLayout extends ConsumerStatefulWidget {
   /// Callback that will be called when a move is selected from the [moves] list.
   final void Function(int moveIndex)? onSelectMove;
 
+  /// Optional builder for a self-watching move list (high-performance path).
+  ///
+  /// When provided, it takes precedence over [moves]/[currentMoveIndex]/[onSelectMove]
+  /// and is responsible for rendering a [MoveList] of the requested [MoveListType].
+  /// This lets the caller drive the move list from its own provider so that move
+  /// updates do not force [GameLayout] to rebuild.
+  final Widget Function(MoveListType type)? moveListBuilder;
+
   /// Optional error message that will be displayed on top of the board.
   final String? errorMessage;
 
@@ -144,20 +180,177 @@ class GameLayout extends ConsumerStatefulWidget {
   final Widget? userActionsBar;
 
   /// Squares on which an atomic chess explosion should be shown.
+  final Set<Square>? explosionSquares;
+
+  /// Whether the board is currently replaying move history (e.g. analysis navigation).
   ///
-  /// See [Chessboard.explosionSquares] for details.
-  final ISet<Square>? explosionSquares;
+  /// When true, position changes use [ChessboardController.jumpToPosition] instead of
+  /// [ChessboardController.animatePosition], skipping animation and clearing the premove.
+  final bool isReplaying;
+
+  /// Called when a premove is ready to be executed after the opponent moves.
+  final void Function(Move)? onPremove;
 
   @override
   ConsumerState<GameLayout> createState() => _GameLayoutState();
 }
 
 class _GameLayoutState extends ConsumerState<GameLayout> {
-  ISet<Shape> userShapes = ISet();
+  /// The controller created and owned by this state, used only in the
+  /// [GameBoardParams] path. Null in the [ControllerBoardParams] path.
+  ChessboardController? _ownController;
+
+  /// The controller actually rendered by the board: the externally owned one if
+  /// provided, otherwise the one we created.
+  ChessboardController? get _controller => widget.controllerParams?.controller ?? _ownController;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.controllerParams == null) {
+      _initController();
+    }
+    _controller?.premoveNotifier.addListener(_onPremoveChanged);
+  }
+
+  @override
+  void dispose() {
+    _controller?.premoveNotifier.removeListener(_onPremoveChanged);
+    _ownController?.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(GameLayout old) {
+    super.didUpdateWidget(old);
+
+    // If the externally owned controller instance changed, move the premove
+    // listener from the old controller to the new one.
+    final oldController = old.controllerParams?.controller ?? _ownController;
+    if (oldController != _controller) {
+      oldController?.premoveNotifier.removeListener(_onPremoveChanged);
+      _controller?.premoveNotifier.addListener(_onPremoveChanged);
+    }
+
+    // External-controller path: the owner drives position updates.
+    if (widget.controllerParams != null) return;
+
+    final ctrl = _ownController;
+    if (ctrl == null) return;
+
+    final newParams = widget.boardParams!;
+    final newFen = newParams.fen;
+    final fenChanged = old.boardParams?.fen != newFen;
+    final newGameData = _gameDataFor(newParams);
+
+    if (!fenChanged) {
+      // Only game metadata changed (e.g. playerSide, validMoves) — update without animation.
+      ctrl.animatePosition(newGameData);
+      return;
+    }
+
+    if (widget.isReplaying) {
+      ctrl.jumpToPosition(newGameData);
+      return;
+    }
+
+    ctrl.animatePosition(newGameData);
+    if (widget.explosionSquares != null) {
+      ctrl.triggerExplosion(widget.explosionSquares!);
+    }
+    if (newParams is InteractiveBoardParams) {
+      final onPremove = widget.onPremove;
+      if (onPremove != null) {
+        tryExecutePremove(ctrl, newParams.position, onPremove);
+      }
+    }
+  }
+
+  void _initController() {
+    final params = widget.boardParams;
+    if (params == null) return;
+    _ownController = ChessboardController(game: _gameDataFor(params));
+  }
+
+  void _onPremoveChanged() {
+    if (mounted) setState(() {});
+  }
+
+  /// Whether a move list can be rendered (either inline moves or a builder).
+  bool get _hasMoveList => widget.moves != null || widget.moveListBuilder != null;
+
+  /// Builds the move list content for [type], using the [GameLayout.moveListBuilder]
+  /// when provided, otherwise the inline [GameLayout.moves]. Must only be called
+  /// when [_hasMoveList] is true. Does not apply zen-mode handling — callers do.
+  Widget _moveListContent(MoveListType type) {
+    final builder = widget.moveListBuilder;
+    if (builder != null) return builder(type);
+    return MoveList(
+      type: type,
+      slicedMoves: widget.moves!.asMap().entries.slices(2),
+      currentMoveIndex: widget.currentMoveIndex,
+      onSelectMove: widget.onSelectMove,
+    );
+  }
+
+  /// Builds the [GameData] driving the owned controller.
+  ///
+  /// Readonly boards are still controller-backed; they are made non-interactive
+  /// by using [PlayerSide.none] (so the user cannot move) with no valid moves.
+  GameData _gameDataFor(GameBoardParams params) {
+    final boardPrefs = ref.read(boardPreferencesProvider);
+    return switch (params) {
+      InteractiveBoardParams(:final variant, :final position, :final playerSide, :final lastMove) =>
+        buildGameData(
+          fen: position.fen,
+          variant: variant,
+          position: position,
+          playerSide: playerSide,
+          lastMove: lastMove,
+          castlingMethod: boardPrefs.castlingMethod,
+          boardHighlights: boardPrefs.boardHighlights,
+        ),
+      ReadonlyBoardParams(:final fen) => GameData(
+        fen: fen,
+        playerSide: PlayerSide.none,
+        sideToMove: _sideToMoveFromFen(fen),
+        validMoves: const <Square, Set<Square>>{},
+        lastMove: widget.lastMove,
+      ),
+    };
+  }
+
+  Side _sideToMoveFromFen(String fen) {
+    final parts = fen.split(' ');
+    return parts.length > 1 && parts[1] == 'b' ? Side.black : Side.white;
+  }
 
   @override
   Widget build(BuildContext context) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
+
+    // Board info needed for the layout, derived from whichever path is active.
+    // In the controller path, playerSide/sideToMove come from the controller's
+    // game data; in the owned path they come from the board params.
+    final cp = widget.controllerParams;
+    final variant = cp?.variant ?? widget.boardParams!.variant;
+    final pockets = cp != null ? cp.pockets : widget.boardParams!.pockets;
+    final playerSide = cp != null
+        ? (_controller?.game.playerSide ?? PlayerSide.none)
+        : widget.boardParams!.playerSide;
+    final sideToMove = cp != null
+        ? (playerSide == PlayerSide.none ? null : _controller?.game.sideToMove)
+        : switch (widget.boardParams!) {
+            ReadonlyBoardParams() => null,
+            InteractiveBoardParams(:final position, :final playerSide) =>
+              playerSide == PlayerSide.none ? null : position.turn,
+          };
+    final void Function(Move, {bool? viaDragAndDrop})? rawOnMove = cp != null
+        ? cp.onMove
+        : switch (widget.boardParams!) {
+            InteractiveBoardParams(:final onMove) => onMove,
+            _ => null,
+          };
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -166,46 +359,20 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
             : Orientation.portrait;
         final isTablet = isTabletOrLarger(context);
 
-        final defaultSettings = boardPrefs.toBoardSettings().copyWith(
-          borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
-          boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
-          drawShape: DrawShapeOptions(
-            enable: boardPrefs.enableShapeDrawings,
-            onCompleteShape: _onCompleteShape,
-            onClearShapes: _onClearShapes,
-            newShapeColor: boardPrefs.shapeColor.color,
-          ),
-        );
+        final defaultSettings = boardPrefs
+            .toBoardSettings(variant)
+            .copyWith(
+              borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
+              boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
+            );
 
         final settings = widget.boardSettingsOverrides != null
             ? widget.boardSettingsOverrides!.merge(defaultSettings)
             : defaultSettings;
 
-        final shapes = userShapes.union(widget.shapes ?? ISet());
-        final slicedMoves = widget.moves?.asMap().entries.slices(2);
+        final shapes = widget.shapes?.unlock ?? const <Shape>{};
 
-        final fen = widget.boardParams.fen;
-        final gameData = switch (widget.boardParams) {
-          ReadonlyBoardParams() => null,
-          final InteractiveBoardParams board => boardPrefs.toGameData(
-            variant: board.variant,
-            position: board.position,
-            playerSide: board.playerSide,
-            promotionMove: board.promotionMove,
-            onMove: board.onMove,
-            onPromotionSelection: board.onPromotionSelection,
-            premovable: board.premovable,
-          ),
-        };
-
-        final sideToMove = switch (widget.boardParams) {
-          ReadonlyBoardParams() => null,
-          InteractiveBoardParams(:final position, :final playerSide) =>
-            playerSide == PlayerSide.none ? null : position.turn,
-        };
-
-        final pockets = widget.boardParams.pockets;
-        final premoveDropRole = switch (gameData?.premovable?.premove) {
+        final premoveDropRole = switch (_controller?.premove) {
           DropMove(:final role) => role,
           _ => null,
         };
@@ -222,7 +389,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                 PocketsMenu(
                   side: widget.orientation.opposite,
                   sideToMove: sideToMove,
-                  playerSide: widget.boardParams.playerSide,
+                  playerSide: playerSide,
                   pockets: pockets,
                   squareSize: pocketSquareSize(boardSize: boardSize, isTablet: isTablet),
                   isUpsideDown: widget.topTableUpsideDown,
@@ -246,7 +413,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                 PocketsMenu(
                   side: widget.orientation,
                   sideToMove: sideToMove,
-                  playerSide: widget.boardParams.playerSide,
+                  playerSide: playerSide,
                   pockets: pockets,
                   squareSize: pocketSquareSize(boardSize: boardSize, isTablet: isTablet),
                   isUpsideDown: widget.bottomTableUpsideDown,
@@ -267,20 +434,22 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
           return Padding(
             padding: const EdgeInsets.all(kTabletBoardTableSidePadding),
             child: Row(
+              textDirection: switch (boardPrefs.landscapeBoardPosition) {
+                .left => TextDirection.ltr,
+                .right => TextDirection.rtl,
+              },
               mainAxisSize: MainAxisSize.max,
               children: [
                 BoardWidget(
                   size: boardSize,
-                  fen: fen,
                   orientation: widget.orientation,
-                  gameData: gameData,
-                  lastMove: widget.lastMove,
+                  controller: _controller!,
+                  onMove: rawOnMove,
                   shapes: shapes,
                   settings: settings,
                   boardKey: widget.boardKey,
                   boardOverlay: widget.boardOverlay,
                   error: widget.errorMessage,
-                  explosionSquares: widget.explosionSquares,
                 ),
                 const SizedBox(width: 16.0),
                 Expanded(
@@ -289,16 +458,11 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       topTable(boardSize: boardSize),
-                      if (boardPrefs.moveListDisplay && !widget.zenMode && slicedMoves != null)
+                      if (boardPrefs.moveListDisplay && !widget.zenMode && _hasMoveList)
                         Expanded(
                           child: Padding(
                             padding: const EdgeInsets.only(top: 16.0),
-                            child: MoveList(
-                              type: MoveListType.stacked,
-                              slicedMoves: slicedMoves,
-                              currentMoveIndex: widget.currentMoveIndex,
-                              onSelectMove: widget.onSelectMove,
-                            ),
+                            child: _moveListContent(MoveListType.stacked),
                           ),
                         )
                       else
@@ -339,19 +503,14 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               if (boardPrefs.moveListDisplay &&
-                  slicedMoves != null &&
+                  _hasMoveList &&
                   !isShortScreen &&
                   !(isTablet && pockets != null))
                 if (widget.zenMode)
                   // display empty move list to keep the layout consistent in zen mode
                   const MoveList(type: MoveListType.inline, slicedMoves: [], currentMoveIndex: 0)
                 else
-                  MoveList(
-                    type: MoveListType.inline,
-                    slicedMoves: slicedMoves,
-                    currentMoveIndex: widget.currentMoveIndex,
-                    onSelectMove: widget.onSelectMove,
-                  ),
+                  _moveListContent(MoveListType.inline),
               Expanded(
                 flex: widget.topTableFlex,
                 child: Padding(
@@ -367,16 +526,14 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                     : EdgeInsets.zero,
                 child: BoardWidget(
                   size: effectiveBoardSize,
-                  fen: fen,
                   orientation: widget.orientation,
-                  gameData: gameData,
-                  lastMove: widget.lastMove,
+                  controller: _controller!,
+                  onMove: rawOnMove,
                   shapes: shapes,
                   settings: settings,
                   boardKey: widget.boardKey,
                   boardOverlay: widget.boardOverlay,
                   error: widget.errorMessage,
-                  explosionSquares: widget.explosionSquares,
                 ),
               ),
               Expanded(
@@ -395,29 +552,6 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
       },
     );
   }
-
-  void _onCompleteShape(Shape shape) {
-    if (!mounted) return;
-
-    if (userShapes.any((element) => element == shape)) {
-      setState(() {
-        userShapes = userShapes.remove(shape);
-      });
-      return;
-    } else {
-      setState(() {
-        userShapes = userShapes.add(shape);
-      });
-    }
-  }
-
-  void _onClearShapes() {
-    if (!mounted) return;
-
-    setState(() {
-      userShapes = ISet();
-    });
-  }
 }
 
 class BoardSettingsOverrides {
@@ -429,6 +563,7 @@ class BoardSettingsOverrides {
     this.drawShape,
     this.pieceOrientationBehavior,
     this.pieceAssets,
+    this.enablePremoves,
   });
 
   final Duration? animationDuration;
@@ -438,6 +573,7 @@ class BoardSettingsOverrides {
   final DrawShapeOptions? drawShape;
   final PieceOrientationBehavior? pieceOrientationBehavior;
   final PieceAssets? pieceAssets;
+  final bool? enablePremoves;
 
   ChessboardSettings merge(ChessboardSettings settings) {
     return settings.copyWith(
@@ -448,6 +584,7 @@ class BoardSettingsOverrides {
       drawShape: drawShape,
       pieceOrientationBehavior: pieceOrientationBehavior,
       pieceAssets: pieceAssets,
+      enablePremoves: enablePremoves,
     );
   }
 }

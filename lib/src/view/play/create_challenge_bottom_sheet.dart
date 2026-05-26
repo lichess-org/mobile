@@ -326,7 +326,7 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
                                   // Use pushAndRemoveUntil to clear any old GameScreen from
                                   // the navigation stack without removing unrelated routes.
                                   Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
-                                    GameScreen.buildRoute(context, source: source),
+                                    GameScreen.buildRoute(source: source),
                                     (route) => route is! ScreenRoute || route.screen is! GameScreen,
                                   );
                                 }

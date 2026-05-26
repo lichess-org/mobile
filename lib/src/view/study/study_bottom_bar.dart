@@ -198,7 +198,6 @@ class _GamebookBottomBar extends ConsumerWidget {
               BottomBarButton(
                 onTap: () => Navigator.of(context, rootNavigator: true).push(
                   AnalysisScreen.buildRoute(
-                    context,
                     AnalysisOptions.pgn(
                       id: options.id,
                       orientation: state.pov,

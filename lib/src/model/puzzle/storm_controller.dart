@@ -90,11 +90,6 @@ class StormController extends Notifier<StormState> {
     if (state.clock.endAt != null) return;
     state.clock.start();
 
-    if (move case NormalMove() when isPromotionPawnMove(state.position, move)) {
-      state = state.copyWith(promotionMove: move);
-      return;
-    }
-
     final expected = state.expectedMove;
     _addMove(move, ComboState.noChange, runStarted: true, userMove: true);
     state = state.copyWith(moves: state.moves + 1);
@@ -127,18 +122,6 @@ class StormController extends Notifier<StormState> {
       }
       _pushToHistory(success: false);
       await _loadNextPuzzle(false, ComboState.reset);
-    }
-  }
-
-  void onPromotionSelection(Role? role) {
-    if (role == null) {
-      state = state.copyWith(promotionMove: null);
-      return;
-    }
-    final promotionMove = state.promotionMove;
-    if (promotionMove != null) {
-      final move = promotionMove.withPromotion(role);
-      onUserMove(move);
     }
   }
 
@@ -230,7 +213,6 @@ class StormController extends Notifier<StormState> {
         current: newComboCurrent,
         best: math.max(state.combo.best, state.combo.current + 1),
       ),
-      promotionMove: null,
     );
     Future<void>.delayed(userMove ? Duration.zero : const Duration(milliseconds: 250), () {
       if (pos.board.pieceAt(move.to) != null) {
@@ -333,9 +315,6 @@ sealed class StormState with _$StormState {
 
     /// bool to indicate that the first move has been played
     required bool firstMovePlayed,
-
-    /// Promotion move to be selected
-    NormalMove? promotionMove,
   }) = _StormState;
 
   Move? get expectedMove => Move.parse(puzzle.solution[moveIndex + 1]);

@@ -9,6 +9,9 @@ class AppLocalizationsHu extends AppLocalizations {
   AppLocalizationsHu([String locale = 'hu']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Fiókbeállítások';
 
   @override
@@ -1604,9 +1607,6 @@ class AppLocalizationsHu extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Tetszett ez a feladvány?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Szavazz egy újért cserébe!';
-
-  @override
   String get puzzleUpVote => 'Tetszett';
 
   @override
@@ -2606,6 +2606,16 @@ class AppLocalizationsHu extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'Legutóbbi játszmák';
 
   @override
@@ -2689,9 +2699,6 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Változatok nyilainak megjelenítése';
-
-  @override
-  String get evaluationGauge => 'Állásértékelő oldaljelzés';
 
   @override
   String get visualMotifs => 'Vizuális jelölések';
@@ -2971,15 +2978,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get checkSpamFolder => 'Ellenőrizd a spam mappát is, talán oda kerül, ez esetben jelöld, hogy nem spam.';
 
   @override
-  String get emailForSignupHelp => 'Ha mindezek ellenére nem sikerül, küldd nekünk ezt az emailt:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Másold ki és illeszd be a fenti szöveget, és küldd el a $param címre';
+  String sendEmailForAccountVerification(String param) {
+    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Rövid időn belül felvesszük veled a kapcsolatot a regisztrációd befejezéséhez.';
 
   @override
   String accountConfirmed(String param) {

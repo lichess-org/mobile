@@ -81,6 +81,7 @@ class BroadcastOverviewTab extends ConsumerWidget {
                   if (url == null) return;
                   launchUrl(Uri.https('lichess.org').resolve(url));
                 },
+                softLineBreak: true,
               ),
             ],
           ],

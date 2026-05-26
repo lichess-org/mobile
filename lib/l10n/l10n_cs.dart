@@ -9,6 +9,9 @@ class AppLocalizationsCs extends AppLocalizations {
   AppLocalizationsCs([String locale = 'cs']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Předvolby účtu';
 
   @override
@@ -55,7 +58,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileGoodDayWithoutName => 'Dobrý den';
 
   @override
-  String get mobileHideVariation => 'Schovej variace';
+  String get mobileHideVariation => 'Skrýt variace';
 
   @override
   String get mobileHomeTab => 'Domů';
@@ -105,16 +108,16 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobilePuzzleStormFilterNothingToShow => 'Nic k zobrazení, prosím změn filtry';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Nic k zobrazení. Zahrajte si nějaké běhy úlohových bouří.';
+  String get mobilePuzzleStormNothingToShow => 'Nic k zobrazení. Zahrajte si nějaké běhy Puzzle Storm.';
 
   @override
-  String get mobilePuzzleStormSubtitle => 'Vyřeš co nejvíce úloh za 3 minuty.';
+  String get mobilePuzzleStormSubtitle => 'Vyřešte co nejvíce úloh za 3 minuty.';
 
   @override
   String get mobilePuzzleStreakAbortWarning => 'Ztratíte aktuální sérii a vaše skóre bude uloženo.';
 
   @override
-  String get mobilePuzzleThemesSubtitle => 'Hraj úlohy z tvých oblíbených zahájení, nebo si vyber styl.';
+  String get mobilePuzzleThemesSubtitle => 'Hrajte úlohy ze svých oblíbených zahájení, nebo si zvolte téma.';
 
   @override
   String get mobilePuzzlesTab => 'Úlohy';
@@ -254,10 +257,10 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Dismiss';
 
   @override
-  String get mobileCustomizeButton => 'Customize';
+  String get mobileCustomizeButton => 'Přizpůsobit';
 
   @override
-  String get mobileStopShowingThreat => 'Stop showing threat';
+  String get mobileStopShowingThreat => 'Skrýt zobrazování hrozby';
 
   @override
   String get mobileTournamentCompleted => 'Completed';
@@ -275,13 +278,13 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'Opening Explorer is not available offline.';
 
   @override
-  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\nYou can access it from the home tab.';
+  String get mobileChallengeCreated => 'Byla vytvořena výzva: Budete upozorněni, až hra začne.\nMůžete se k ní dostat z domovské obrazovky.';
 
   @override
   String get mobilePreviousPage => 'Předchozí';
 
   @override
-  String get mobileOrImportPgnFile => 'Or import a PGN file';
+  String get mobileOrImportPgnFile => 'Nebo nahrajte soubor PGN';
 
   @override
   String get variantStandardTitle => 'Standardní pravidla šachů (FIDE)';
@@ -1648,9 +1651,6 @@ class AppLocalizationsCs extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Líbila se vám tato úloha?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Hlasujte pro načtení další úlohy!';
-
-  @override
   String get puzzleUpVote => 'Dobrá úloha';
 
   @override
@@ -2660,6 +2660,16 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'Nedávné hry';
 
   @override
@@ -2743,9 +2753,6 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Zobrazit šipky variant';
-
-  @override
-  String get evaluationGauge => 'Měřítko hodnocení';
 
   @override
   String get visualMotifs => 'Visual motifs';
@@ -3025,15 +3032,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get checkSpamFolder => 'Také zkontrolujte složku nevyžádané pošty. Pokud ano, označte mail jako vyžádaný.';
 
   @override
-  String get emailForSignupHelp => 'Pokud všechno ostatní selže, pošlete nám tento e-mail:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Zkopírujte a vložte výše uvedený text a pošlete jej na $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Brzy se k vám ozveme, abychom vám pomohli dokončit registraci.';
 
   @override
   String accountConfirmed(String param) {

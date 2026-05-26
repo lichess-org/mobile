@@ -22,14 +22,12 @@ class SearchScreen extends ConsumerStatefulWidget {
   final Widget? title;
   final bool autoFocus;
 
-  static Route<dynamic> buildRoute(
-    BuildContext context, {
+  static Route<dynamic> buildRoute({
     void Function(LightUser)? onUserTap,
     Widget? title,
     bool autoFocus = true,
   }) {
     return buildScreenRoute(
-      context,
       screen: SearchScreen(onUserTap: onUserTap, title: title, autoFocus: autoFocus),
       fullscreenDialog: true,
     );

@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:dartchess/dartchess.dart' hide File;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_riverpod/experimental/mutation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -48,18 +49,19 @@ import 'package:lichess_mobile/src/widgets/side_indicator.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:path_provider/path_provider.dart' show getTemporaryDirectory;
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class TournamentScreen extends ConsumerStatefulWidget {
-  const TournamentScreen({required this.id});
+  const TournamentScreen({required this.id, this.initialPlayerId});
 
   final TournamentId id;
+  final UserId? initialPlayerId;
 
   static const String routeName = '/tournament';
 
-  static Route<void> buildRoute(BuildContext context, TournamentId id) {
+  static Route<void> buildRoute(TournamentId id, {UserId? initialPlayerId}) {
     return buildScreenRoute(
-      context,
-      screen: TournamentScreen(id: id),
+      screen: TournamentScreen(id: id, initialPlayerId: initialPlayerId),
       settings: const RouteSettings(name: routeName),
     );
   }
@@ -69,6 +71,18 @@ class TournamentScreen extends ConsumerStatefulWidget {
 }
 
 class _TournamentScreenState extends ConsumerState<TournamentScreen> with RouteAware {
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialPlayerId != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _showPlayerDetails(context, widget.id, widget.initialPlayerId!);
+        }
+      });
+    }
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -108,7 +122,7 @@ class _TournamentScreenState extends ConsumerState<TournamentScreen> with RouteA
           Navigator.of(
             context,
             rootNavigator: true,
-          ).push(GameScreen.buildRoute(context, source: ExistingGameSource(currentGameId)));
+          ).push(GameScreen.buildRoute(source: ExistingGameSource(currentGameId)));
         }
       },
     );
@@ -215,6 +229,11 @@ class _Body extends ConsumerWidget {
                             ],
                           ),
                         ),
+                      ],
+                      if (state.tournament.description != null &&
+                          state.tournament.description!.isNotEmpty) ...[
+                        const SizedBox(height: 10),
+                        _ExpandableDescription(description: state.tournament.description!),
                       ],
                     ],
                   ),
@@ -446,6 +465,37 @@ class _TournamentHelp extends StatelessWidget {
   }
 }
 
+class _ExpandableDescription extends ConsumerWidget {
+  const _ExpandableDescription({required this.description});
+
+  final String description;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ExpansionTile(
+      leading: const Icon(Icons.info_outline),
+      title: Text(context.l10n.description),
+      tilePadding: EdgeInsets.zero,
+      splashColor: Colors.transparent,
+      shape: LinearBorder.none,
+      collapsedShape: LinearBorder.none,
+      expandedCrossAxisAlignment: .start,
+      expandedAlignment: .centerLeft,
+      children: [
+        MarkdownBody(
+          data: description,
+          softLineBreak: true,
+          onTapLink: (text, url, title) {
+            if (url != null) {
+              launchUrl(Uri.parse(url));
+            }
+          },
+        ),
+      ],
+    );
+  }
+}
+
 class _TeamStanding extends ConsumerWidget {
   const _TeamStanding(this.state);
 
@@ -489,9 +539,7 @@ class _TeamStanding extends ConsumerWidget {
                 style: TextStyle(color: context.lichessColors.primary),
               ),
               onTap: () {
-                Navigator.of(
-                  context,
-                ).push(_AllTeamsScreen.buildRoute(context, state.id, teamBattle));
+                Navigator.of(context).push(_AllTeamsScreen.buildRoute(state.id, teamBattle));
               },
             ),
         ],
@@ -568,7 +616,7 @@ class _TeamStandingTile extends ConsumerWidget {
         style: const TextStyle(fontWeight: .bold, fontSize: 14),
       ),
       onTap: () {
-        _showTeamDetails(context, ref, tournamentId, team.id);
+        _showTeamDetails(context, tournamentId, team.id);
       },
     );
   }
@@ -639,7 +687,7 @@ class _StandingPlayer extends ConsumerWidget {
         ],
       ),
       onTap: () {
-        _showPlayerDetails(context, ref, tournamentId, player.user.id);
+        _showPlayerDetails(context, tournamentId, player.user.id);
       },
     );
   }
@@ -1150,7 +1198,7 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
                             if (selectedTeamId == null) {
                               return; // User cancelled
                             }
-
+                            if (!mounted) return;
                             setState(() {
                               joinOrLeaveInProgress = true;
                             });
@@ -1166,7 +1214,7 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
                             if (entryCode == null || entryCode.isEmpty) {
                               return;
                             }
-
+                            if (!mounted) return;
                             setState(() {
                               joinOrLeaveInProgress = true;
                             });
@@ -1176,6 +1224,7 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
                                   .read(tournamentControllerProvider(widget.state.id).notifier)
                                   .joinOrPause(entryCode: entryCode);
                             } catch (e) {
+                              if (!mounted) return;
                               setState(() {
                                 joinOrLeaveInProgress = false;
                               });
@@ -1223,12 +1272,7 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
   }
 }
 
-void _showPlayerDetails(
-  BuildContext context,
-  WidgetRef ref,
-  TournamentId tournamentId,
-  UserId userId,
-) {
+void _showPlayerDetails(BuildContext context, TournamentId tournamentId, UserId userId) {
   showModalBottomSheet<void>(
     context: context,
     isScrollControlled: true,
@@ -1299,7 +1343,7 @@ class _TournamentPlayerDetails extends ConsumerWidget {
                         onTap: tournamentState.value?.isSpectator == true
                             ? () => Navigator.of(
                                 context,
-                              ).push(UserOrProfileScreen.buildRoute(context, player.user))
+                              ).push(UserOrProfileScreen.buildRoute(player.user))
                             : null,
                       ),
                     ),
@@ -1468,7 +1512,6 @@ class _PairingTile extends ConsumerWidget {
               if (pairing.status != GameStatus.started && pairing.status != GameStatus.created) {
                 Navigator.of(context, rootNavigator: true).push(
                   AnalysisScreen.buildRoute(
-                    context,
                     AnalysisOptions.archivedGame(
                       orientation: pairing.color,
                       gameId: pairing.gameId,
@@ -1479,7 +1522,6 @@ class _PairingTile extends ConsumerWidget {
                 // If game is still in progress, go to TV view
                 Navigator.of(context, rootNavigator: true).push(
                   TvScreen.buildRoute(
-                    context,
                     gameId: pairing.gameId,
                     orientation: pairing.color,
                     user: player,
@@ -1526,12 +1568,7 @@ int _calculateAverageOpponentRating(TournamentPlayer player) {
   return (totalRating / player.pairings.length).round();
 }
 
-void _showTeamDetails(
-  BuildContext context,
-  WidgetRef ref,
-  TournamentId tournamentId,
-  TeamId teamId,
-) {
+void _showTeamDetails(BuildContext context, TournamentId tournamentId, TeamId teamId) {
   showModalBottomSheet<void>(
     context: context,
     isScrollControlled: true,
@@ -1719,7 +1756,7 @@ class _TeamPlayerTile extends ConsumerWidget {
         ],
       ),
       onTap: () {
-        _showPlayerDetails(context, ref, tournamentId, player.user.id);
+        _showPlayerDetails(context, tournamentId, player.user.id);
       },
     );
   }
@@ -1793,13 +1830,8 @@ class _AllTeamsScreen extends ConsumerWidget {
   final TournamentId tournamentId;
   final TeamBattleData teamBattle;
 
-  static Route<void> buildRoute(
-    BuildContext context,
-    TournamentId tournamentId,
-    TeamBattleData teamBattle,
-  ) {
+  static Route<void> buildRoute(TournamentId tournamentId, TeamBattleData teamBattle) {
     return buildScreenRoute(
-      context,
       screen: _AllTeamsScreen(tournamentId: tournamentId, teamBattle: teamBattle),
     );
   }

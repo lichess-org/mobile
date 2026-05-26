@@ -9,6 +9,9 @@ class AppLocalizationsLt extends AppLocalizations {
   AppLocalizationsLt([String locale = 'lt']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Account preferences';
 
   @override
@@ -1648,9 +1651,6 @@ class AppLocalizationsLt extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Ar jums patiko ši užduotis?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Nubalsuokite norėdami pakrauti kitą!';
-
-  @override
   String get puzzleUpVote => 'Prabalsuoti už';
 
   @override
@@ -2660,6 +2660,16 @@ class AppLocalizationsLt extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'Paskiausios partijos';
 
   @override
@@ -2743,9 +2753,6 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Rodyti variacijų rodykles';
-
-  @override
-  String get evaluationGauge => 'Vertinimo matuoklis';
 
   @override
   String get visualMotifs => 'Vizualiniai motyvai';
@@ -3025,15 +3032,9 @@ class AppLocalizationsLt extends AppLocalizations {
   String get checkSpamFolder => 'Pasitikrinkite šlamtšo aplanką, laiškas galėjo atsirasti ir ten. Jei taip įvyko - pažymėkite kaip ne šlamštą.';
 
   @override
-  String get emailForSignupHelp => 'Jei niekas nepavyko, atsiųskite mums tokį laišką:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Nukopijuokite tekstą viršuje ir atsiųskite į $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Ne už ilgo susisieksime su jumis ir padėsime užbaigti prisijungimo procesą.';
 
   @override
   String accountConfirmed(String param) {

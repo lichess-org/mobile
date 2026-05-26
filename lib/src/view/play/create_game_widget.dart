@@ -229,10 +229,7 @@ class CreateGameWidget extends ConsumerWidget {
                   }
 
                   Navigator.of(context, rootNavigator: true).push(
-                    GameScreen.buildRoute(
-                      context,
-                      source: LobbySource(GameSeek.custom(playPrefs, account)),
-                    ),
+                    GameScreen.buildRoute(source: LobbySource(GameSeek.custom(playPrefs, account))),
                   );
                 }
               : null,

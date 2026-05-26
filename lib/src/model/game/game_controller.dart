@@ -179,11 +179,6 @@ class GameController extends AsyncNotifier<GameState> {
   void userMove(Move move, {bool? viaDragAndDrop, bool? isPremove}) {
     final curState = state.requireValue;
 
-    if (move case NormalMove() when isPromotionPawnMove(curState.game.lastPosition, move)) {
-      state = AsyncValue.data(curState.copyWith(promotionMove: move));
-      return;
-    }
-
     if (curState.shouldConfirmMove && isPremove != true) {
       state = AsyncValue.data(curState.copyWith(moveToConfirm: move));
       return;
@@ -214,8 +209,6 @@ class GameController extends AsyncNotifier<GameState> {
       curState.copyWith(
         game: curState.game.copyWith(steps: curState.game.steps.add(newStep)),
         stepCursor: curState.stepCursor + 1,
-        promotionMove: null,
-        premove: null,
       ),
     );
 
@@ -228,21 +221,6 @@ class GameController extends AsyncNotifier<GameState> {
       // we want to send client lag only at the beginning of the game when the clock is not running yet
       withLag: curState.game.clock != null && curState.activeClockSide == null,
     );
-  }
-
-  void onPromotionSelection(Role? role) {
-    final curState = state.requireValue;
-    if (role == null) {
-      state = AsyncValue.data(curState.copyWith(promotionMove: null));
-      return;
-    }
-    if (curState.promotionMove == null) {
-      assert(false, 'promotionMove must not be null on promotion select');
-      return;
-    }
-
-    final move = curState.promotionMove!.withPromotion(role);
-    userMove(move, viaDragAndDrop: true);
   }
 
   /// Called if the player cancels the move when confirm move preference is enabled
@@ -310,12 +288,6 @@ class GameController extends AsyncNotifier<GameState> {
     );
   }
 
-  /// Set or unset a premove.
-  void setPremove(Move? move) {
-    final curState = state.requireValue;
-    state = AsyncValue.data(curState.copyWith(premove: move));
-  }
-
   void cursorAt(int cursor) {
     if (state.hasValue) {
       final currentCursor = state.requireValue.stepCursor;
@@ -323,7 +295,7 @@ class GameController extends AsyncNotifier<GameState> {
         return;
       }
       final (newState, _) = _tryCancelMoveConfirmation(state.requireValue);
-      state = AsyncValue.data(newState.copyWith(stepCursor: cursor, premove: null));
+      state = AsyncValue.data(newState.copyWith(stepCursor: cursor));
       final san = state.requireValue.game.stepAt(cursor).sanMove?.san;
       if (san != null) {
         _playReplayMoveSound(san);
@@ -336,13 +308,7 @@ class GameController extends AsyncNotifier<GameState> {
     if (state.hasValue) {
       final curState = state.requireValue;
       if (curState.stepCursor < curState.game.steps.length - 1) {
-        state = AsyncValue.data(
-          curState.copyWith(
-            stepCursor: curState.stepCursor + 1,
-            premove: null,
-            promotionMove: null,
-          ),
-        );
+        state = AsyncValue.data(curState.copyWith(stepCursor: curState.stepCursor + 1));
         final san = curState.game.stepAt(curState.stepCursor + 1).sanMove?.san;
         if (san != null) {
           _playReplayMoveSound(san);
@@ -357,11 +323,7 @@ class GameController extends AsyncNotifier<GameState> {
       if (curState.stepCursor > 0) {
         final (newState, didCancel) = _tryCancelMoveConfirmation(curState);
         state = AsyncValue.data(
-          newState.copyWith(
-            stepCursor: didCancel ? newState.stepCursor : newState.stepCursor - 1,
-            premove: null,
-            promotionMove: null,
-          ),
+          newState.copyWith(stepCursor: didCancel ? newState.stepCursor : newState.stepCursor - 1),
         );
         final san = state.requireValue.game.stepAt(state.requireValue.stepCursor).sanMove?.san;
         if (san != null) {
@@ -474,7 +436,6 @@ class GameController extends AsyncNotifier<GameState> {
 
   void acceptTakeback() {
     _socketClient.send('takeback-yes', null);
-    setPremove(null);
   }
 
   void cancelOrDeclineTakeback() {
@@ -617,8 +578,6 @@ class GameController extends AsyncNotifier<GameState> {
           state.requireValue.copyWith(
             game: newGame,
             stepCursor: hasSameNumberOfSteps ? curState.stepCursor : newGame.steps.length - 1,
-            premove: hasSameNumberOfSteps ? curState.premove : null,
-            promotionMove: hasSameNumberOfSteps ? curState.promotionMove : null,
             moveToConfirm: hasSameNumberOfSteps ? curState.moveToConfirm : null,
             opponentLeftCountdown: isOpponentOnGame
                 ? null
@@ -692,10 +651,8 @@ class GameController extends AsyncNotifier<GameState> {
 
           newState = newState.copyWith(
             game: newState.game.copyWith(steps: newState.game.steps.add(newStep)),
-            // Clear any pending move confirmation or promotion since the position
-            // has changed and these moves are no longer valid.
+            // Clear any pending move confirmation since the position has changed.
             moveToConfirm: null,
-            promotionMove: null,
           );
 
           if (!curState.isReplaying) {
@@ -731,6 +688,7 @@ class GameController extends AsyncNotifier<GameState> {
             newState = newState.copyWith.game.correspondenceClock!(
               white: data.clock!.white,
               black: data.clock!.black,
+              resetId: DateTime.now().millisecondsSinceEpoch,
             );
           }
         }
@@ -754,20 +712,6 @@ class GameController extends AsyncNotifier<GameState> {
           ref.read(ongoingGamesProvider.notifier).updateGame(gameFullId, newState.game);
         }
 
-        if (!curState.isReplaying &&
-            playedSide == curState.game.youAre?.opposite &&
-            curState.premove != null) {
-          scheduleMicrotask(() {
-            final postMovePremove = state.value?.premove;
-            final postMovePosition = state.value?.game.lastPosition;
-            if (postMovePremove != null && postMovePosition?.isLegal(postMovePremove) == true) {
-              userMove(postMovePremove, isPremove: true);
-            } else if (postMovePremove != null) {
-              newState = newState.copyWith(premove: null);
-            }
-          });
-        }
-
         state = AsyncValue.data(newState);
 
       // End game event
@@ -782,7 +726,6 @@ class GameController extends AsyncNotifier<GameState> {
             white: curState.game.white.copyWith(ratingDiff: endData.ratingDiff?.white),
             black: curState.game.black.copyWith(ratingDiff: endData.ratingDiff?.black),
           ),
-          premove: null,
         );
 
         if (endData.clock != null) {
@@ -1068,12 +1011,6 @@ sealed class GameState with _$GameState {
     required LiveGameClock? liveClock,
     int? lastDrawOfferAtPly,
     (Duration, DateTime)? opponentLeftCountdown,
-
-    /// Promotion waiting to be selected (only if auto queen is disabled)
-    NormalMove? promotionMove,
-
-    /// Premove waiting to be played
-    Move? premove,
 
     /// Game only setting to override the account preference
     bool? moveConfirmSettingOverride,

@@ -9,6 +9,9 @@ class AppLocalizationsCa extends AppLocalizations {
   AppLocalizationsCa([String locale = 'ca']) : super(locale);
 
   @override
+  String get mobileAccount => 'Compte';
+
+  @override
   String get mobileAccountPreferences => 'Preferències del compte';
 
   @override
@@ -1604,9 +1607,6 @@ class AppLocalizationsCa extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'T\'ha agradat aquest problema?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Vota per passar al següent!';
-
-  @override
   String get puzzleUpVote => 'Vota positivament el problema';
 
   @override
@@ -2606,6 +2606,16 @@ class AppLocalizationsCa extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Puntuació mínima de $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Puntuació màxima de $param';
+  }
+
+  @override
   String get recentGames => 'Partides recents';
 
   @override
@@ -2689,9 +2699,6 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Mostrar fletxes de les variants';
-
-  @override
-  String get evaluationGauge => 'Indicador d\'avaluació';
 
   @override
   String get visualMotifs => 'Motius visuals';
@@ -2971,15 +2978,9 @@ class AppLocalizationsCa extends AppLocalizations {
   String get checkSpamFolder => 'Comprova també la carpeta de correu brossa, pot acabar allà. Si hi és, marca\'l com no brossa.';
 
   @override
-  String get emailForSignupHelp => 'Si tot això falla, envia\'ns un correu a aquesta adreça:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Copia i enganxa el text a continuació i envia\'l a $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'Si no pots trobar el teu correu electrònic de confirmació, envia\'ns un correu a $param i confirmarem el compte per tu.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Et contestarem el més breument posible per ajudar-te a completar el registre.';
 
   @override
   String accountConfirmed(String param) {

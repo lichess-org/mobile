@@ -214,7 +214,7 @@ class TvController extends AsyncNotifier<TvState> {
         }
       case 'rematchTaken':
         _onReload?.call();
-      case 'move':
+      case 'move' || 'drop':
         final curState = state.requireValue;
         final data = MoveEvent.fromJson(event.data as Map<String, dynamic>);
         final lastPos = curState.game.lastPosition;

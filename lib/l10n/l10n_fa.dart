@@ -9,6 +9,9 @@ class AppLocalizationsFa extends AppLocalizations {
   AppLocalizationsFa([String locale = 'fa']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'ترجیح‌های حساب';
 
   @override
@@ -1604,9 +1607,6 @@ class AppLocalizationsFa extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'این معما را دوست داشتید؟';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'رأی‌ دهید تا معمای بعدی بار شود!';
-
-  @override
   String get puzzleUpVote => 'رأیِ مثبت به معما';
 
   @override
@@ -2606,6 +2606,16 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'بازی‌های اخیر';
 
   @override
@@ -2689,9 +2699,6 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'نمایش پیکان‌های وَرتِش';
-
-  @override
-  String get evaluationGauge => 'میله ارزیابی';
 
   @override
   String get visualMotifs => 'بُن‌مایه‌های بصری';
@@ -2971,15 +2978,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get checkSpamFolder => 'پوشه هرزنامه خود را نیز بررسی کنید، ممکن است در آنجا باشد. اگر چنین است، آن را به عنوان غیر هرزنامه علامت‌گذاری کنید.';
 
   @override
-  String get emailForSignupHelp => 'اگر تمام موارد ناموفق بود، این رایانامه را به ما بفرستید:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'متن بالا را کپی و پیست کرده و به آدرس زیر ارسال کنید $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
   }
-
-  @override
-  String get waitForSignupHelp => 'ما به زودی با شما تماس خواهیم گرفت تا به شما کمک کنیم ثبت نام خود را تکمیل کنید.';
 
   @override
   String accountConfirmed(String param) {

@@ -29,6 +29,8 @@ class AnalysisTreeView extends ConsumerWidget {
             livePath: analysisState.pathToLiveMove,
             pgnRootComments: analysisState.pgnRootComments,
             notifier: ref.read(ctrlProvider.notifier),
+            // Avoid overlap with the divider of the analysis tab bar
+            showTopDivider: false,
             shouldShowComputerAnalysis: enableServerAnalysis,
             shouldShowComments: enableServerAnalysis && prefs.showPgnComments,
             shouldShowAnnotations: enableServerAnalysis && prefs.showAnnotations,

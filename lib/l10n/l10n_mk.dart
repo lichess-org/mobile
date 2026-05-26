@@ -9,6 +9,9 @@ class AppLocalizationsMk extends AppLocalizations {
   AppLocalizationsMk([String locale = 'mk']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Поставки за акаунтот';
 
   @override
@@ -1604,13 +1607,10 @@ class AppLocalizationsMk extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Дали Ви се допадна оваа загатка?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Гласај и премини на наредната!';
+  String get puzzleUpVote => 'Great puzzle!';
 
   @override
-  String get puzzleUpVote => 'Rate puzzle positively';
-
-  @override
-  String get puzzleDownVote => 'Rate puzzle negatively';
+  String get puzzleDownVote => 'Bad puzzle!';
 
   @override
   String get puzzleYourPuzzleRatingWillNotChange => 'Вашиот рејтинг нема да се промени. Имајте на ум дека загатките не се натпреварување. Вашиот рејтинг помага во изборот на најсоодветните загатки за вашата моментална вештина.';
@@ -2606,6 +2606,16 @@ class AppLocalizationsMk extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'Неодамнешни игри';
 
   @override
@@ -2689,9 +2699,6 @@ class AppLocalizationsMk extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Show variation arrows';
-
-  @override
-  String get evaluationGauge => 'Мерач за проценка';
 
   @override
   String get visualMotifs => 'Visual motifs';
@@ -2971,15 +2978,9 @@ class AppLocalizationsMk extends AppLocalizations {
   String get checkSpamFolder => 'Исто, проверете да не залутал во spam фолдерот. Во таков случај преместете го од таму.';
 
   @override
-  String get emailForSignupHelp => 'Ако ништо друо не функционира испратете ни го следниов email:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Копирајте го текстот погоре и испратете го на $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
   }
-
-  @override
-  String get waitForSignupHelp => 'За брзо ќе сме со Вас да Ви помогнеме околу пријавувањето.';
 
   @override
   String accountConfirmed(String param) {

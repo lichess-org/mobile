@@ -9,6 +9,9 @@ class AppLocalizationsSr extends AppLocalizations {
   AppLocalizationsSr([String locale = 'sr']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Преференсе налога';
 
   @override
@@ -1621,13 +1624,10 @@ class AppLocalizationsSr extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Да ли ти се свидео овај проблем?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Гласај да учиташ следећу!';
+  String get puzzleUpVote => 'Great puzzle!';
 
   @override
-  String get puzzleUpVote => 'Rate puzzle positively';
-
-  @override
-  String get puzzleDownVote => 'Rate puzzle negatively';
+  String get puzzleDownVote => 'Bad puzzle!';
 
   @override
   String get puzzleYourPuzzleRatingWillNotChange => 'Your puzzle rating will not change. Note that puzzles are not a competition. Your rating helps select the most appropriate puzzles for your skill level.';
@@ -2622,6 +2622,16 @@ class AppLocalizationsSr extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'Недавне партије';
 
   @override
@@ -2705,9 +2715,6 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Прикажи стрелице за варијацију';
-
-  @override
-  String get evaluationGauge => 'Мерило процене';
 
   @override
   String get visualMotifs => 'Visual motifs';
@@ -2987,15 +2994,9 @@ class AppLocalizationsSr extends AppLocalizations {
   String get checkSpamFolder => 'Такође провери фасциклу са спам порукама, можда је тамо. Ако је ту, обележи поруку тако да није спам.';
 
   @override
-  String get emailForSignupHelp => 'Ако ништа од овога не помаже, онда нам пошаљи овај мејл:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Ископирај горњи текст и пошаљи га на $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Ускоро ћемо те контактирати како бисмо ти помогли да завршиш своју регистрацију.';
 
   @override
   String accountConfirmed(String param) {
@@ -5053,7 +5054,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get showMeEverything => 'Прикажи све';
 
   @override
-  String get lichessPatronInfo => 'Lichess is a charity and entirely free/libre open source software.\nAll operating costs, development, and content are funded solely by user donations.';
+  String get lichessPatronInfo => 'Lichess is a charity and entirely free/libre open source software. We depend on user donations to support our operating costs, development, and content. Without our generous community, we would not be able to keep the site running. Thank you for joining us!\n  ';
 
   @override
   String get nothingToSeeHere => 'Nothing to see here at the moment.';

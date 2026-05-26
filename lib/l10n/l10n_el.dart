@@ -9,6 +9,9 @@ class AppLocalizationsEl extends AppLocalizations {
   AppLocalizationsEl([String locale = 'el']) : super(locale);
 
   @override
+  String get mobileAccount => 'Λογαριασμός';
+
+  @override
   String get mobileAccountPreferences => 'Ρυθμίσεις';
 
   @override
@@ -1604,9 +1607,6 @@ class AppLocalizationsEl extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Σας άρεσε αυτό το τακτικό;';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Ψηφίστε για να προχωρήσετε στο επόμενο!';
-
-  @override
   String get puzzleUpVote => 'Μου άρεσε το τακτικό';
 
   @override
@@ -2606,6 +2606,16 @@ class AppLocalizationsEl extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'Πρόσφατα παιχνίδια';
 
   @override
@@ -2689,9 +2699,6 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Εμφάνιση βελών για βαριάντες';
-
-  @override
-  String get evaluationGauge => 'Δείκτης αξιολόγησης';
 
   @override
   String get visualMotifs => 'Οπτικά μοτίβα';
@@ -2971,15 +2978,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String get checkSpamFolder => 'Επίσης, ελέγξτε τον φάκελο με τα ανεπιθύμητα email. Αν το email που στείλαμε βρίσκεται εκεί, αναφέρετέ το ως μη ανεπιθύμητο.';
 
   @override
-  String get emailForSignupHelp => 'Αν όλα τα παραπάνω αποτύχουν, στείλτε μας το εξής email:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Αντιγράψτε και επικολλήστε το παραπάνω κείμενο και στείλτε το στη διεύθυνση $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'Αν δεν μπορείτε να βρείτε το email επιβεβαίωσης, στείλτε ένα email στο $param και θα επιβεβαιώσουμε τον λογαριασμό σας για εσάς.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Θα επανέλθουμε σύντομα σε σας για να σας βοηθήσουμε να ολοκληρώσετε την εγγραφή σας.';
 
   @override
   String accountConfirmed(String param) {

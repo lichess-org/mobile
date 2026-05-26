@@ -111,7 +111,6 @@ class _SectionChoices extends ConsumerWidget {
                     ? () {
                         Navigator.of(context, rootNavigator: true).push(
                           GameScreen.buildRoute(
-                            context,
                             source: LobbySource(GameSeek.fastPairing(choice, authUser)),
                           ),
                         );

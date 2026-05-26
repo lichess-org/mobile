@@ -1,6 +1,7 @@
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/experimental/mutation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/db/database.dart';
@@ -20,17 +21,20 @@ import 'package:lichess_mobile/src/view/settings/engine_settings_screen.dart';
 import 'package:lichess_mobile/src/view/settings/http_log_screen.dart';
 import 'package:lichess_mobile/src/view/settings/sound_settings_screen.dart';
 import 'package:lichess_mobile/src/view/settings/theme_settings_screen.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const SettingsScreen());
+  static Route<dynamic> buildRoute() {
+    return buildScreenRoute(screen: const SettingsScreen());
   }
 
   @override
@@ -39,6 +43,7 @@ class SettingsScreen extends ConsumerWidget {
     final generalPrefs = ref.watch(generalPreferencesProvider);
     final packageInfo = ref.read(preloadedDataProvider).requireValue.packageInfo;
     final authUser = ref.watch(authControllerProvider);
+    final signOutState = ref.watch(signOutMutation);
     final dbSize = ref.watch(getDbSizeInBytesProvider);
 
     return PlatformScaffold(
@@ -57,7 +62,7 @@ class SettingsScreen extends ConsumerWidget {
                   title: Text(context.l10n.mobileAccountPreferences),
                   enabled: isOnline,
                   onTap: () {
-                    Navigator.of(context).push(AccountPreferencesScreen.buildRoute(context));
+                    Navigator.of(context).push(AccountPreferencesScreen.buildRoute());
                   },
                 ),
               ],
@@ -71,7 +76,7 @@ class SettingsScreen extends ConsumerWidget {
                 settingsValue:
                     '${soundThemeL10n(context, generalPrefs.soundTheme)} (${volumeLabel(generalPrefs.masterVolume)})',
                 onTap: () {
-                  Navigator.of(context).push(SoundSettingsScreen.buildRoute(context));
+                  Navigator.of(context).push(SoundSettingsScreen.buildRoute());
                 },
               ),
               SettingsListTile(
@@ -100,7 +105,7 @@ class SettingsScreen extends ConsumerWidget {
                     ? const CupertinoListTileChevron()
                     : null,
                 onTap: () {
-                  Navigator.of(context).push(ThemeSettingsScreen.buildRoute(context));
+                  Navigator.of(context).push(ThemeSettingsScreen.buildRoute());
                 },
               ),
               ListTile(
@@ -110,9 +115,7 @@ class SettingsScreen extends ConsumerWidget {
                     ? const CupertinoListTileChevron()
                     : null,
                 onTap: () {
-                  Navigator.of(
-                    context,
-                  ).push(HomeTabScreen.buildRoute(context, editModeEnabled: true));
+                  Navigator.of(context).push(HomeTabScreen.buildRoute(editModeEnabled: true));
                 },
               ),
               ListTile(
@@ -122,7 +125,7 @@ class SettingsScreen extends ConsumerWidget {
                     ? const CupertinoListTileChevron()
                     : null,
                 onTap: () {
-                  Navigator.of(context).push(BoardSettingsScreen.buildRoute(context));
+                  Navigator.of(context).push(BoardSettingsScreen.buildRoute());
                 },
               ),
               ListTile(
@@ -132,7 +135,7 @@ class SettingsScreen extends ConsumerWidget {
                     ? const CupertinoListTileChevron()
                     : null,
                 onTap: () {
-                  Navigator.of(context).push(EngineSettingsScreen.buildRoute(context));
+                  Navigator.of(context).push(EngineSettingsScreen.buildRoute());
                 },
               ),
               SettingsListTile(
@@ -169,7 +172,7 @@ class SettingsScreen extends ConsumerWidget {
               ListTile(
                 leading: const Icon(Icons.http),
                 title: const Text('HTTP logs'),
-                onTap: () => Navigator.push(context, HttpLogScreen.buildRoute(context)),
+                onTap: () => Navigator.push(context, HttpLogScreen.buildRoute()),
               ),
               ListTile(
                 leading: const Icon(Icons.bug_report),
@@ -178,17 +181,99 @@ class SettingsScreen extends ConsumerWidget {
                     ? const CupertinoListTileChevron()
                     : null,
                 onTap: () {
-                  Navigator.of(context).push(AppLogSettingsScreen.buildRoute(context));
+                  Navigator.of(context).push(AppLogSettingsScreen.buildRoute());
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.star_outline),
+                title: const Text('Rate this app'),
+                onTap: () async {
+                  final isAndroid = Theme.of(context).platform == TargetPlatform.android;
+                  final launched = await launchUrl(
+                    isAndroid
+                        ? Uri.parse('market://details?id=org.lichess.mobileV2')
+                        : Uri.parse('https://apps.apple.com/us/app/lichess/id1662361230'),
+                    mode: LaunchMode.externalApplication,
+                  );
+                  if (!launched && isAndroid) {
+                    launchUrl(
+                      Uri.parse(
+                        'https://play.google.com/store/apps/details?id=org.lichess.mobileV2',
+                      ),
+                      mode: LaunchMode.externalApplication,
+                    );
+                  }
                 },
               ),
             ],
           ),
+          if (authUser != null)
+            ListSection(
+              hasLeading: true,
+              children: [
+                switch (signOutState) {
+                  MutationPending() => const ListTile(
+                    leading: Icon(Icons.logout_outlined),
+                    enabled: false,
+                    title: Center(child: ButtonLoadingIndicator()),
+                  ),
+                  _ => ListTile(
+                    leading: const Icon(Icons.logout_outlined),
+                    title: Text(context.l10n.logOut),
+                    enabled: isOnline,
+                    onTap: () => _showSignOutConfirmDialog(context, ref),
+                  ),
+                },
+              ],
+            ),
           Padding(
             padding: Styles.bodySectionPadding,
             child: Text('v${packageInfo.version}', style: TextTheme.of(context).bodySmall),
           ),
         ],
       ),
+    );
+  }
+
+  Future<void> _showSignOutConfirmDialog(BuildContext context, WidgetRef ref) {
+    if (Theme.of(context).platform == TargetPlatform.iOS) {
+      return showCupertinoActionSheet(
+        context: context,
+        actions: [
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.logOut),
+            isDestructiveAction: true,
+            onPressed: () async {
+              await signOutMutation.run(ref, (tsx) async {
+                await tsx.get(authControllerProvider.notifier).signOut();
+              });
+            },
+          ),
+        ],
+      );
+    }
+    return showDialog<void>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: Text(context.l10n.logOut),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(),
+              child: Text(context.l10n.cancel),
+            ),
+            TextButton(
+              onPressed: () async {
+                Navigator.of(dialogContext).pop();
+                await signOutMutation.run(ref, (tsx) async {
+                  await tsx.get(authControllerProvider.notifier).signOut();
+                });
+              },
+              child: Text(context.l10n.mobileOkButton),
+            ),
+          ],
+        );
+      },
     );
   }
 

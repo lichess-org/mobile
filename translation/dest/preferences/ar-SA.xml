@@ -62,6 +62,7 @@
   <string name="notifyGameEvent">تحديثات مباراة المراسلة</string>
   <string name="notifyChallenge">تحديات</string>
   <string name="notifyTournamentSoon">البطولة ستبدأ قريباً</string>
+  <string name="notifyBroadcasts">البرامج التي اشتركت فيها</string>
   <string name="notifyTimeAlarm">ساعة المراسلة تنفد</string>
   <string name="notifyBell" comment="A notification setting - toggles a bell sound being played when a notification appears.&#10;&#10;This text used to say &quot;Bell notification within Lichess&quot;. The word &quot;bell&quot; can be removed, as it is obvious from the context.">إشعار الجرس داخل Lichess</string>
   <string name="notifyPush">إشعار الجهاز عندما لا تكون على Lichess</string>
@@ -69,4 +70,5 @@
   <string name="notifyDevice">الجهاز</string>
   <string name="bellNotificationSound">صوت التنبيه</string>
   <string name="blindfold" comment="As in Blindfold chess">معصوب العينين</string>
+  <string name="showClockOnTheLeft" comment="During the game on a mobile device, show the clock on the left side of the screen. Only applies to mobile devices.">إظهار على اليسار على أجهزة الجوال</string>
 </resources>

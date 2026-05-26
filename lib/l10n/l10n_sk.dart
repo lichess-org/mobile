@@ -9,6 +9,9 @@ class AppLocalizationsSk extends AppLocalizations {
   AppLocalizationsSk([String locale = 'sk']) : super(locale);
 
   @override
+  String get mobileAccount => 'Account';
+
+  @override
   String get mobileAccountPreferences => 'Preferencie účtu';
 
   @override
@@ -1648,9 +1651,6 @@ class AppLocalizationsSk extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Páčila sa vám táto úloha?';
 
   @override
-  String get puzzleVoteToLoadNextOne => 'Hlasujte a prejdite k ďalšej úlohe!';
-
-  @override
   String get puzzleUpVote => 'Posunúť úlohu vyššie';
 
   @override
@@ -2662,6 +2662,16 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return 'Minimum rating of $param';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return 'Maximum rating of $param';
+  }
+
+  @override
   String get recentGames => 'Nedávne partie';
 
   @override
@@ -2745,9 +2755,6 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get showVariationArrows => 'Zobraziť šípky variantov';
-
-  @override
-  String get evaluationGauge => 'Ukazovateľ hodnotenia';
 
   @override
   String get visualMotifs => 'Vizuálne motívy';
@@ -3027,15 +3034,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get checkSpamFolder => 'Skontrolujte si aj priečinok s nevyžiadanou poštou, je možné, že sa dostal tam. Ak sa tak stalo, zrušte označenie emailu ako nevyžiadanej pošty.';
 
   @override
-  String get emailForSignupHelp => 'Ak všetko ostatné zlyhá, pošlite nám tento email:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Skopírujte a vložte uvedený text a pošlite ho na adresu $param';
+  String sendEmailForAccountVerification(String param) {
+    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
   }
-
-  @override
-  String get waitForSignupHelp => 'Čoskoro sa Vám ozveme, aby sme Vám pomohli dokončiť registráciu.';
 
   @override
   String accountConfirmed(String param) {

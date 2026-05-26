@@ -22,8 +22,8 @@ class ChallengeOddBotsScreen extends StatelessWidget {
 
   final LightUser bot;
 
-  static Route<dynamic> buildRoute(BuildContext context, LightUser bot) {
-    return buildScreenRoute(context, screen: ChallengeOddBotsScreen(bot));
+  static Route<dynamic> buildRoute(LightUser bot) {
+    return buildScreenRoute(screen: ChallengeOddBotsScreen(bot));
   }
 
   @override
@@ -271,7 +271,6 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                   ? () {
                       Navigator.of(context, rootNavigator: true).push(
                         GameScreen.buildRoute(
-                          context,
                           source: UserChallengeSource(
                             ChallengeRequest(
                               destUser: widget.bot,

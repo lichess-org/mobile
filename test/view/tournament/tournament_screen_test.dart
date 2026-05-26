@@ -148,6 +148,7 @@ String makeTournamentJson({
   "minRatedGames": {
     "nb": 20
   },
+  "description": "This is a test tournament. Have fun playing!",
   "chat": {
     "lines": [],
     "writeable": true
@@ -377,6 +378,15 @@ void main() {
 
       expect(find.text('>= 20 Blitz rated games'), findsOneWidget);
       expect(find.text('Rated <= 1300 in Blitz for the last week'), findsOneWidget);
+      // Description should be hidden by default, but expandable
+      expect(find.text('Description'), findsOneWidget);
+      expect(find.text('This is a test tournament. Have fun playing!'), findsNothing);
+      await tester.tap(find.text('Description'));
+      await tester.pump();
+      expect(find.text('This is a test tournament. Have fun playing!'), findsOneWidget);
+      await tester.tap(find.text('Description'));
+      await tester.pump();
+      expect(find.text('This is a test tournament. Have fun playing!'), findsNothing);
 
       for (var i = 0; i < 10; i++) {
         expect(find.text('player$i'), findsOneWidget);
@@ -441,7 +451,10 @@ void main() {
 
       expect(find.text('BlackFeatured'), findsOneWidget);
       expect(find.text('WhiteFeatured'), findsOneWidget);
-      expect(find.byType(PieceWidget), findsAny);
+      expect(
+        tester.widget<StaticChessboard>(find.byType(StaticChessboard)).fen,
+        isNot(kEmptyBoardFEN),
+      );
       expect(find.byType(BoardThumbnail), findsOneWidget);
 
       // Pretend all the pieces are gone to check that the board is updated
@@ -453,7 +466,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(BoardThumbnail), findsOneWidget);
-      expect(find.byType(PieceWidget), findsNothing);
+      expect(tester.widget<StaticChessboard>(find.byType(StaticChessboard)).fen, kEmptyBoardFEN);
     });
 
     testWidgets('Can join tournament', (WidgetTester tester) async {

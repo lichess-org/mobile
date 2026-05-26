@@ -13,8 +13,8 @@ import 'package:lichess_mobile/src/widgets/user.dart';
 class OngoingGamesScreen extends ConsumerWidget {
   const OngoingGamesScreen({super.key});
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const OngoingGamesScreen());
+  static Route<dynamic> buildRoute() {
+    return buildScreenRoute(screen: const OngoingGamesScreen());
   }
 
   @override
@@ -89,7 +89,6 @@ class OngoingGamePreview extends ConsumerWidget {
       onTap: () {
         Navigator.of(context, rootNavigator: true).push(
           GameScreen.buildRoute(
-            context,
             source: ExistingGameSource(game.fullId),
             loadingPosition: (
               fen: game.fen,

@@ -9,6 +9,9 @@ class AppLocalizationsKo extends AppLocalizations {
   AppLocalizationsKo([String locale = 'ko']) : super(locale);
 
   @override
+  String get mobileAccount => '계정';
+
+  @override
   String get mobileAccountPreferences => '계정 환경 설정';
 
   @override
@@ -1582,9 +1585,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => '이 퍼즐이 괜찮았나요?';
 
   @override
-  String get puzzleVoteToLoadNextOne => '다음 퍼즐을 위해 투표해주세요!';
-
-  @override
   String get puzzleUpVote => '퍼즐 추천';
 
   @override
@@ -2578,6 +2578,16 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
+  String minRatingX(String param) {
+    return '$param의 최소 레이팅';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return '$param의 최대 레이팅';
+  }
+
+  @override
   String get recentGames => '최근 대국';
 
   @override
@@ -2661,9 +2671,6 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get showVariationArrows => '라인을 화살표로 표시하기';
-
-  @override
-  String get evaluationGauge => '평가 게이지';
 
   @override
   String get visualMotifs => '전술 시각화';
@@ -2943,15 +2950,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get checkSpamFolder => '또한 스팸 메일함에 들어가 있을 수 있습니다. 만약 그런 경우, 스팸이 아님으로 표시해 두세요.';
 
   @override
-  String get emailForSignupHelp => '모두 실패했다면, 이곳으로 메일을 보내주세요:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return '위의 텍스트를 복사해서 $param(으)로 보내주세요';
+  String sendEmailForAccountVerification(String param) {
+    return '확인 이메일을 찾을 수 없는 경우 $param에 이메일을 보내주시면 계정을 확인해 드리겠습니다.';
   }
-
-  @override
-  String get waitForSignupHelp => '가입을 완료할 수 있도록 빠르게 연락드리겠습니다.';
 
   @override
   String accountConfirmed(String param) {
@@ -3523,7 +3524,7 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get randomChess960Position => 'Random Chess960 position';
+  String get randomChess960Position => '랜덤 체스960 포지션';
 
   @override
   String get startPosition => '시작 포지션';

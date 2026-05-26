@@ -18,7 +18,7 @@ import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
-import 'package:lichess_mobile/src/view/account/account_drawer.dart';
+import 'package:lichess_mobile/src/view/account/account_menu.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_carousel.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_list_screen.dart';
 import 'package:lichess_mobile/src/view/watch/live_tv_channels_screen.dart';
@@ -90,11 +90,13 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
       },
       child: PlatformScaffold(
         appBar: PlatformAppBar(
-          leading: const AccountDrawerIconButton(),
           title: Text(context.l10n.watch),
-          centerTitle: true,
+          centerTitle: false,
+          titleTextStyle: Theme.of(context).platform == TargetPlatform.iOS
+              ? Theme.of(context).textTheme.headlineSmall
+              : null,
+          actions: const [AccountMenuButton()],
         ),
-        drawer: const AccountDrawer(),
         body: isOnline
             ? OrientationBuilder(
                 builder: (context, orientation) {
@@ -208,7 +210,7 @@ class _BroadcastWidget extends ConsumerWidget {
             child: ListSectionHeader(
               title: Text(context.l10n.broadcastBroadcasts),
               onTap: () {
-                Navigator.of(context).push(BroadcastListScreen.buildRoute(context));
+                Navigator.of(context).push(BroadcastListScreen.buildRoute());
               },
             ),
           ),
@@ -256,7 +258,7 @@ class _WatchTvWidget extends ConsumerWidget {
           header: const Text('Lichess TV'),
           hasLeading: true,
           onHeaderTap: () =>
-              Navigator.of(context).push(LiveTvChannelsScreen.buildRoute(context)).then((_) {
+              Navigator.of(context).push(LiveTvChannelsScreen.buildRoute()).then((_) {
                 if (context.mounted) {
                   _doRefreshDataForRef(ref);
                 }
@@ -281,7 +283,6 @@ class _WatchTvWidget extends ConsumerWidget {
                   onTap: () => Navigator.of(context, rootNavigator: true)
                       .push(
                         TvScreen.buildRoute(
-                          context,
                           channel: snapshot.channel,
                           gameId: snapshot.id,
                           orientation: snapshot.player.side,
@@ -298,7 +299,7 @@ class _WatchTvWidget extends ConsumerWidget {
         );
       },
       error: (error, stackTrace) {
-        debugPrint('SEVERE: [StreamerWidget] could not load channels data; $error\n $stackTrace');
+        debugPrint('SEVERE: [WatchTvWidget] could not load TV channels data; $error\n $stackTrace');
         return const Padding(
           padding: Styles.bodySectionPadding,
           child: Text('Could not load TV channels'),
@@ -332,7 +333,7 @@ class _StreamerWidget extends ConsumerWidget {
           header: Text(context.l10n.streamersMenu),
           hasLeading: true,
           leadingIndent: kThumbnailImageSize + 16,
-          onHeaderTap: () => Navigator.of(context).push(StreamerScreen.buildRoute(context, data)),
+          onHeaderTap: () => Navigator.of(context).push(StreamerScreen.buildRoute(data)),
           children: [
             ...data
                 .take(numberOfItems)

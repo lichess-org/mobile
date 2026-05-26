@@ -32,15 +32,13 @@ class TvScreen extends ConsumerStatefulWidget {
   final (GameId id, Side orientation)? initialGame;
   final LightUser? user;
 
-  static Route<dynamic> buildRoute(
-    BuildContext context, {
+  static Route<dynamic> buildRoute({
     TvChannel? channel,
     GameId? gameId,
     LightUser? user,
     Side? orientation,
   }) {
     return buildScreenRoute(
-      context,
       screen: TvScreen(
         channel: channel,
         initialGame: gameId != null ? (gameId, orientation ?? Side.white) : null,
@@ -293,13 +291,11 @@ class _WatcherButton extends ConsumerWidget {
     if (nb <= 0) return const SizedBox.shrink();
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Icon(Icons.person_outlined, size: 20),
-          const SizedBox(width: 4),
-          Text('$nb', style: Theme.of(context).textTheme.bodyMedium),
-        ],
+      child: Badge(
+        label: Text('$nb'),
+        backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+        textColor: Theme.of(context).colorScheme.onSurfaceVariant,
+        child: const Icon(Icons.person_outlined),
       ),
     );
   }

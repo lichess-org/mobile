@@ -123,7 +123,7 @@ class BroadcastRoundController extends AsyncNotifier<BroadcastRoundState> {
         _handleAddNodeEvent(event);
       // Sent when a new board is added
       case 'addChapter':
-        _handleAddBoardEvent(event);
+        _handleAddBoardEvent();
       // Sent when the state of games changes
       case 'chapters':
         _handleGamesChangeEvent(event);
@@ -176,7 +176,7 @@ class BroadcastRoundController extends AsyncNotifier<BroadcastRoundState> {
     }
   }
 
-  void _handleAddBoardEvent(SocketEvent event) {
+  void _handleAddBoardEvent() {
     _syncRound();
   }
 
