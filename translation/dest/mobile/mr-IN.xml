@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="account" comment="Title for the account screen.&#10;&#10;This is just a title for the account, NOT account preferences.">खाते</string>
   <string name="accountPreferences" comment="Displayed on settings screen.&#10;&#10;These preferences are applied to your Lichess account and will be used across all devices. They are not mobile-specific and will be synced with the server.">खाते प्राधान्ये</string>
   <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">ही प्राधान्ये तुमच्या Lichess खात्यावर लागू केली जातील  आणि सर्व उपकरणांवर वापरली जातील.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">सर्व खेळ</string>
