@@ -129,9 +129,6 @@ Two rules the analyzer enforces that are easy to miss:
 # Static analysis
 flutter analyze
 
-# Riverpod linting
-dart run custom_lint
-
 # Format check (files to format)
 dart format --output=none --set-exit-if-changed $(find lib/src -name "*.dart" -not \( -name "*.*freezed.dart" -o -name "*.*g.dart" -o -name "*lichess_icons.dart" \) )
 dart format --output=none --set-exit-if-changed $(find test -name "*.dart" -not \( -name "*.*freezed.dart" -o -name "*.*g.dart" \) )
