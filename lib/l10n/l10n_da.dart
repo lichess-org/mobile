@@ -916,6 +916,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get broadcastOfficialStandings => 'Officiel stilling';
 
   @override
+  String get broadcastRegulations => 'Regulativer';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'Flere muligheder på $param';
   }
@@ -2016,10 +2019,10 @@ class AppLocalizationsDa extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'En taktik som inkluderer En passant-reglen, hvor en bonde kan tage en modstanderbonde, der er flyttet forbi med dens første to-felts-træk.';
 
   @override
-  String get puzzleThemeEpauletteMate => 'Epaulette mate';
+  String get puzzleThemeEpauletteMate => 'Epaulet-mat';
 
   @override
-  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+  String get puzzleThemeEpauletteMateDescription => 'To tilstødende flugtfelter for en konge i skak er blokeret af andre brikker.';
 
   @override
   String get puzzleThemeExposedKing => 'Eksponeret konge';
@@ -2076,10 +2079,10 @@ class AppLocalizationsDa extends AppLocalizations {
   String get puzzleThemeMorphysMateDescription => 'Brug løberen til at sætte kongen skak, mens tårnet hjælper med at spærre den inde.';
 
   @override
-  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+  String get puzzleThemeSwallowstailMate => 'Svalehale-mat';
 
   @override
-  String get puzzleThemeSwallowstailMateDescription => 'A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.';
+  String get puzzleThemeSwallowstailMateDescription => 'Et skakmatmønster, der visuelt minder om en svalehale, svarende til en V-form.';
 
   @override
   String get puzzleThemeTriangleMate => 'Trekantmat';
@@ -4392,6 +4395,12 @@ class AppLocalizationsDa extends AppLocalizations {
   }
 
   @override
+  String get like => 'Synes godt om';
+
+  @override
+  String get liked => 'Syntes godt om';
+
+  @override
   String get quickPairing => 'Hurtig parring';
 
   @override
@@ -4787,6 +4796,9 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'forummets etikette';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Hold en god tone i forummet.';
 
   @override
   String get thisTopicIsArchived => 'Dette emne er arkiveret og kan ikke længere besvares.';
@@ -5840,9 +5852,6 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get studyLike => 'Synes godt om';
-
-  @override
-  String get studyUnlike => 'Synes ikke godt om';
 
   @override
   String get studyNewTag => 'Nyt tag';

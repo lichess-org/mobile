@@ -916,6 +916,9 @@ class AppLocalizationsHy extends AppLocalizations {
   String get broadcastOfficialStandings => 'Official standings';
 
   @override
+  String get broadcastRegulations => 'Regulations';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'Find more options on the $param.';
   }
@@ -4392,6 +4395,12 @@ class AppLocalizationsHy extends AppLocalizations {
   }
 
   @override
+  String get like => 'Like';
+
+  @override
+  String get liked => 'Liked';
+
+  @override
   String get quickPairing => 'Արագ սկիզբ';
 
   @override
@@ -4787,6 +4796,9 @@ class AppLocalizationsHy extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'ֆորումի վարվելակարգը';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Please be nice in the forum.';
 
   @override
   String get thisTopicIsArchived => 'Այս թեման տեղափոխվել է արխիվ, և այն այլևս հնարավոր չէ մեկնաբանել։';
@@ -5840,9 +5852,6 @@ class AppLocalizationsHy extends AppLocalizations {
 
   @override
   String get studyLike => 'Հավանել';
-
-  @override
-  String get studyUnlike => 'Չեմ հավանում';
 
   @override
   String get studyNewTag => 'Նոր թեգ';

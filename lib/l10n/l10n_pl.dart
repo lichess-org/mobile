@@ -9,7 +9,7 @@ class AppLocalizationsPl extends AppLocalizations {
   AppLocalizationsPl([String locale = 'pl']) : super(locale);
 
   @override
-  String get mobileAccount => 'Account';
+  String get mobileAccount => 'Konto';
 
   @override
   String get mobileAccountPreferences => 'Ustawienia konta';
@@ -954,6 +954,9 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get broadcastOfficialStandings => 'Oficjalna klasyfikacja';
+
+  @override
+  String get broadcastRegulations => 'Regulacje';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -2663,12 +2666,12 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String minRatingX(String param) {
-    return 'Minimum rating of $param';
+    return 'Minimalny ranking $param';
   }
 
   @override
   String maxRatingX(String param) {
-    return 'Maximum rating of $param';
+    return 'Minimalny ranking $param';
   }
 
   @override
@@ -4448,6 +4451,12 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
+  String get like => 'Lubię';
+
+  @override
+  String get liked => 'Polubione';
+
+  @override
   String get quickPairing => 'Szybkie parowanie';
 
   @override
@@ -4843,6 +4852,9 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'etykieta forum';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Bądź miły na forum.';
 
   @override
   String get thisTopicIsArchived => 'Ten temat został zarchiwizowany i nie można już na niego odpowiedzieć.';
@@ -5988,9 +6000,6 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get studyLike => 'Lubię to';
-
-  @override
-  String get studyUnlike => 'Cofnij polubienie';
 
   @override
   String get studyNewTag => 'Nowy znacznik';

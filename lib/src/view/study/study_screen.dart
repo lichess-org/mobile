@@ -251,7 +251,7 @@ class _StudyMenu extends ConsumerWidget {
         if (authUser != null)
           ContextMenuAction(
             icon: state.study.liked ? Icons.favorite : Icons.favorite_border,
-            label: state.study.liked ? context.l10n.studyUnlike : context.l10n.studyLike,
+            label: state.study.liked ? 'Stop liking' : context.l10n.studyLike,
             onPressed: () {
               ref.read(studyControllerProvider(options).notifier).toggleLike();
             },

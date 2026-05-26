@@ -43,7 +43,7 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String mobileGoodEvening(String param) {
-    return 'Good evening, $param';
+    return 'Tere õhtust, $param';
   }
 
   @override
@@ -76,13 +76,13 @@ class AppLocalizationsEt extends AppLocalizations {
   String get mobileNoSearchResults => 'No results';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
+  String get mobileNotAllFeaturesAreAvailable => 'Palun arvesta, et hetkel ei ole kõik vana rakenduse või veebisaidi funktsioonid veel kättesaadavad, kuid lisame neid pidevalt juurde.';
 
   @override
   String get mobileNotFollowingAnyUser => 'You are not following any users.';
 
   @override
-  String get mobileOkButton => 'OK';
+  String get mobileOkButton => 'Hüva';
 
   @override
   String get mobileOverTheBoard => 'Üle laua';
@@ -99,7 +99,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get mobilePositionRight => 'Paremal';
 
   @override
-  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
+  String get mobilePrefMagnifyDraggedPiece => 'Suurenda tiritud malendit';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
@@ -108,22 +108,22 @@ class AppLocalizationsEt extends AppLocalizations {
   String get mobilePuzzleStormFilterNothingToShow => 'Nothing to show, please change the filters';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of Puzzle Storm.';
+  String get mobilePuzzleStormNothingToShow => 'Tulemused puuduvad. Palun mängi mõned pusletormi partiid.';
 
   @override
-  String get mobilePuzzleStormSubtitle => 'Solve as many puzzles as possible in 3 minutes.';
+  String get mobilePuzzleStormSubtitle => 'Lahenda 3 minuti jooksul nii palju puslesid kui võimalik.';
 
   @override
-  String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
+  String get mobilePuzzleStreakAbortWarning => 'Sa kaotad praeguse seeria ja sinu punktisumma salvestatakse.';
 
   @override
-  String get mobilePuzzleThemesSubtitle => 'Play puzzles from your favorite openings, or choose a theme.';
+  String get mobilePuzzleThemesSubtitle => 'Mängi oma lemmikavangute puslesid või vali teema.';
 
   @override
   String get mobilePuzzlesTab => 'Pusle';
 
   @override
-  String get mobileRecentSearches => 'Recent searches';
+  String get mobileRecentSearches => 'Hiljutised otsingud';
 
   @override
   String get mobileRemoveBookmark => 'Remove bookmark';
@@ -914,6 +914,9 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get broadcastOfficialStandings => 'Official standings';
+
+  @override
+  String get broadcastRegulations => 'Regulations';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -4392,6 +4395,12 @@ class AppLocalizationsEt extends AppLocalizations {
   }
 
   @override
+  String get like => 'Like';
+
+  @override
+  String get liked => 'Liked';
+
+  @override
   String get quickPairing => 'Kiirelt mängu';
 
   @override
@@ -4787,6 +4796,9 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'foorumi etikett';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Please be nice in the forum.';
 
   @override
   String get thisTopicIsArchived => 'See teema on arhiveeritud ja sellele ei saa enam vastata.';
@@ -5840,9 +5852,6 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get studyLike => 'Meeldib';
-
-  @override
-  String get studyUnlike => 'Eemalda meeldimine';
 
   @override
   String get studyNewTag => 'Uus silt';

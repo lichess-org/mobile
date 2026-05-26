@@ -956,6 +956,9 @@ class AppLocalizationsHe extends AppLocalizations {
   String get broadcastOfficialStandings => 'טבלת מובילים רשמית';
 
   @override
+  String get broadcastRegulations => 'Regulations';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'ישנן אפשרויות נוספות ב$param';
   }
@@ -4444,6 +4447,12 @@ class AppLocalizationsHe extends AppLocalizations {
   }
 
   @override
+  String get like => 'Like';
+
+  @override
+  String get liked => 'Liked';
+
+  @override
   String get quickPairing => 'הצטרפות מהירה';
 
   @override
@@ -4839,6 +4848,9 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'כללי ההשתתפות בפורומים';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Please be nice in the forum.';
 
   @override
   String get thisTopicIsArchived => 'נושא זה עבר לארכיון ולא ניתן עוד להשיב עליו.';
@@ -5984,9 +5996,6 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get studyLike => 'אהבתי';
-
-  @override
-  String get studyUnlike => 'ביטול \"אהבתי\"';
 
   @override
   String get studyNewTag => 'תג חדש';

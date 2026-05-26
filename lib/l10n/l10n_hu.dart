@@ -916,6 +916,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get broadcastOfficialStandings => 'Hivatalos állás';
 
   @override
+  String get broadcastRegulations => 'Regulations';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'Több választási lehetőség itt: $param';
   }
@@ -4392,6 +4395,12 @@ class AppLocalizationsHu extends AppLocalizations {
   }
 
   @override
+  String get like => 'Like';
+
+  @override
+  String get liked => 'Liked';
+
+  @override
   String get quickPairing => 'Gyors játszma';
 
   @override
@@ -4787,6 +4796,9 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'a fórum etikettet';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Please be nice in the forum.';
 
   @override
   String get thisTopicIsArchived => 'Ezt a témát archiváltuk, ezért nem lehet már hozzászólni.';
@@ -5840,9 +5852,6 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get studyLike => 'Tetszik';
-
-  @override
-  String get studyUnlike => 'Mégse tetszik';
 
   @override
   String get studyNewTag => 'Új címke';

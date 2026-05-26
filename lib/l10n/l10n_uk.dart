@@ -956,6 +956,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get broadcastOfficialStandings => 'Офіційна турнірна таблиця';
 
   @override
+  String get broadcastRegulations => 'Регламенти';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'Більше опцій на $param';
   }
@@ -4448,6 +4451,12 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
+  String get like => 'Уподобати';
+
+  @override
+  String get liked => 'Уподобано';
+
+  @override
   String get quickPairing => 'Швидкий старт';
 
   @override
@@ -4843,6 +4852,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'етикет форуму';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Будь ласка, будьте ввічливими на форумі.';
 
   @override
   String get thisTopicIsArchived => 'Ця тема була заархівована і додати відповідь більше не можна.';
@@ -5988,9 +6000,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get studyLike => 'Подобається';
-
-  @override
-  String get studyUnlike => 'Не подобається';
 
   @override
   String get studyNewTag => 'Новий тег';

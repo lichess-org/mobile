@@ -916,6 +916,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get broadcastOfficialStandings => 'Officiële standen';
 
   @override
+  String get broadcastRegulations => 'Regulations';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'Meer opties voor de $param';
   }
@@ -4392,6 +4395,12 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
+  String get like => 'Vind ik leuk';
+
+  @override
+  String get liked => 'Vond ik leuk';
+
+  @override
   String get quickPairing => 'Snel koppelen';
 
   @override
@@ -4787,6 +4796,9 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'de regels van het forum';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Wees aardig op het forum.';
 
   @override
   String get thisTopicIsArchived => 'Dit onderwerp is gearchiveerd; er kan niet meer op worden gereageerd.';
@@ -5840,9 +5852,6 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get studyLike => 'Vind ik leuk';
-
-  @override
-  String get studyUnlike => 'Vind ik niet meer leuk';
 
   @override
   String get studyNewTag => 'Nieuw label';

@@ -916,6 +916,9 @@ class AppLocalizationsEu extends AppLocalizations {
   String get broadcastOfficialStandings => 'Sailkapen ofiziala';
 
   @override
+  String get broadcastRegulations => 'Arauak';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'Aukera gehiago ${param}ean';
   }
@@ -2607,12 +2610,12 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String minRatingX(String param) {
-    return 'Minimum rating of $param';
+    return 'Gutxieneko puntuazioa: $param';
   }
 
   @override
   String maxRatingX(String param) {
-    return 'Maximum rating of $param';
+    return 'Gehienezko puntuazioa: $param';
   }
 
   @override
@@ -3578,7 +3581,7 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String xRating(String param) {
-    return '$param sailkapena';
+    return '$param puntuazioa';
   }
 
   @override
@@ -4392,6 +4395,12 @@ class AppLocalizationsEu extends AppLocalizations {
   }
 
   @override
+  String get like => 'Datsegit';
+
+  @override
+  String get liked => 'Atsegin duzu';
+
+  @override
   String get quickPairing => 'Parekatze azkarra';
 
   @override
@@ -4789,6 +4798,9 @@ class AppLocalizationsEu extends AppLocalizations {
   String get theForumEtiquette => 'foroko etiketa';
 
   @override
+  String get pleaseBeNiceInTheForum => 'Mesedez izan atsegina foroan.';
+
+  @override
   String get thisTopicIsArchived => 'Mezu hau artxibatu egin da eta jada ezin da erantzunik utzi bertan.';
 
   @override
@@ -4899,10 +4911,10 @@ class AppLocalizationsEu extends AppLocalizations {
   String get minimumRatedGames => 'Gutxieneko partida kopurua';
 
   @override
-  String get minimumRating => 'Gutxieneko sailkapena';
+  String get minimumRating => 'Puntuazio minimoa';
 
   @override
-  String get maximumWeeklyRating => 'Asteroko gehieneko sailkapena';
+  String get maximumWeeklyRating => 'Asteroko gehieneko puntuazioa';
 
   @override
   String positionInputHelp(String param) {
@@ -5840,9 +5852,6 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get studyLike => 'Datsegit';
-
-  @override
-  String get studyUnlike => 'Ez dut atsegin';
 
   @override
   String get studyNewTag => 'Etiketa berria';

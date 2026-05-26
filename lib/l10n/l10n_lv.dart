@@ -935,6 +935,9 @@ class AppLocalizationsLv extends AppLocalizations {
   String get broadcastOfficialStandings => 'Official standings';
 
   @override
+  String get broadcastRegulations => 'Regulations';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'Find more options on the $param.';
   }
@@ -4416,6 +4419,12 @@ class AppLocalizationsLv extends AppLocalizations {
   }
 
   @override
+  String get like => 'Like';
+
+  @override
+  String get liked => 'Liked';
+
+  @override
   String get quickPairing => 'Ātrais pāris';
 
   @override
@@ -4811,6 +4820,9 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'foruma etiķeti';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Please be nice in the forum.';
 
   @override
   String get thisTopicIsArchived => 'Šis temats ir arhivēts un šeit vairs nevar atbildēt.';
@@ -5910,9 +5922,6 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get studyLike => 'Patīk';
-
-  @override
-  String get studyUnlike => 'Noņemt atzīmi \"patīk\"';
 
   @override
   String get studyNewTag => 'Jauna birka';

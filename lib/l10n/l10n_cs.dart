@@ -956,6 +956,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get broadcastOfficialStandings => 'Oficiální pořadí';
 
   @override
+  String get broadcastRegulations => 'Regulations';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'Více možností na $param';
   }
@@ -4446,6 +4449,12 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
+  String get like => 'Like';
+
+  @override
+  String get liked => 'Liked';
+
+  @override
   String get quickPairing => 'Rychlá hra';
 
   @override
@@ -4841,6 +4850,9 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'pravidla chování ve fórech';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Please be nice in the forum.';
 
   @override
   String get thisTopicIsArchived => 'Toto téma se archivovalo a nelze na něj dále odpovídat.';
@@ -5986,9 +5998,6 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get studyLike => 'To se mi líbí';
-
-  @override
-  String get studyUnlike => 'Už se mi nelíbí';
 
   @override
   String get studyNewTag => 'Nový štítek';

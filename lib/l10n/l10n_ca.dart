@@ -916,6 +916,9 @@ class AppLocalizationsCa extends AppLocalizations {
   String get broadcastOfficialStandings => 'Classificació oficial';
 
   @override
+  String get broadcastRegulations => 'Normativa';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'Més opcions a la $param';
   }
@@ -2339,7 +2342,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get gameMode => 'Tipus de partida';
 
   @override
-  String get createLobbyGame => 'Crea una sala de joc';
+  String get createLobbyGame => 'Crea una partida';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Per convidar algú a jugar, envia-li aquest enllaç';
@@ -4392,6 +4395,12 @@ class AppLocalizationsCa extends AppLocalizations {
   }
 
   @override
+  String get like => 'M’agrada';
+
+  @override
+  String get liked => 'M\'ha agradat';
+
+  @override
   String get quickPairing => 'Emparellament ràpid';
 
   @override
@@ -4787,6 +4796,9 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'l\'etiqueta del fòrum';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Si us plau sigues amable al fòrum.';
 
   @override
   String get thisTopicIsArchived => 'Aquest tema ha estat arxivat i no es pot respondre.';
@@ -5840,9 +5852,6 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get studyLike => 'M’agrada';
-
-  @override
-  String get studyUnlike => 'Ja no m\'agrada';
 
   @override
   String get studyNewTag => 'Nova etiqueta';

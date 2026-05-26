@@ -916,6 +916,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get broadcastOfficialStandings => 'Official standings';
 
   @override
+  String get broadcastRegulations => 'Regulations';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'Find more options on the $param.';
   }
@@ -4390,6 +4393,12 @@ class AppLocalizationsHi extends AppLocalizations {
   }
 
   @override
+  String get like => 'Like';
+
+  @override
+  String get liked => 'Liked';
+
+  @override
   String get quickPairing => 'त्वरित युग्मन';
 
   @override
@@ -4785,6 +4794,9 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'the forum etiquette';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Please be nice in the forum.';
 
   @override
   String get thisTopicIsArchived => 'इस विषय को संग्रहीत किया गया है और अब इसका उत्तर नहीं दिया जा सकता है।';
@@ -5838,9 +5850,6 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get studyLike => 'लाइक';
-
-  @override
-  String get studyUnlike => 'नापसन्द करे';
 
   @override
   String get studyNewTag => 'नया टैग';

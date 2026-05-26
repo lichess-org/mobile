@@ -896,6 +896,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get broadcastOfficialStandings => '官方排名';
 
   @override
+  String get broadcastRegulations => '规定';
+
+  @override
   String broadcastIframeHelp(String param) {
     return '更多选项位于 $param';
   }
@@ -4111,7 +4114,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get averageCentipawnLoss => '平均厘兵损失';
 
   @override
-  String get accuracy => '准确率';
+  String get accuracy => '准确度';
 
   @override
   String get keyboardShortcuts => '键盘快捷键';
@@ -4362,6 +4365,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String xLikesY(String param1, String param2) {
     return '$param1 喜欢 $param2';
   }
+
+  @override
+  String get like => '点赞';
+
+  @override
+  String get liked => '已赞';
 
   @override
   String get quickPairing => '快速匹配';
@@ -4759,6 +4768,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get theForumEtiquette => '论坛礼仪';
+
+  @override
+  String get pleaseBeNiceInTheForum => '聊天时请注意文明用语！';
 
   @override
   String get thisTopicIsArchived => '此话题已被归档，无法再回复。';
@@ -5537,7 +5549,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get stormMoves => '着法数';
 
   @override
-  String get stormAccuracy => '准确率';
+  String get stormAccuracy => '准确度';
 
   @override
   String get stormCombo => '连击数';
@@ -5766,9 +5778,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get studyLike => '点赞';
-
-  @override
-  String get studyUnlike => '取消点赞';
 
   @override
   String get studyNewTag => '新建标签';
@@ -11841,9 +11850,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get studyLike => '喜歡';
-
-  @override
-  String get studyUnlike => '取消喜歡';
 
   @override
   String get studyNewTag => '新標籤';

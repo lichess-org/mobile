@@ -896,6 +896,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get broadcastOfficialStandings => '공식 순위';
 
   @override
+  String get broadcastRegulations => '규정';
+
+  @override
   String broadcastIframeHelp(String param) {
     return '$param에서 더 많은 정보를 확인하실 수 있습니다';
   }
@@ -4364,6 +4367,12 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
+  String get like => '좋아요';
+
+  @override
+  String get liked => '좋아요함';
+
+  @override
   String get quickPairing => '빠른 상대 찾기';
 
   @override
@@ -4759,6 +4768,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get theForumEtiquette => '포럼 에티켓';
+
+  @override
+  String get pleaseBeNiceInTheForum => '포럼을 건전히 이용해 주세요.';
 
   @override
   String get thisTopicIsArchived => '이 주제는 보존되어서 댓글을 남기실 수 없습니다.';
@@ -5766,9 +5778,6 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get studyLike => '좋아요';
-
-  @override
-  String get studyUnlike => '좋아요 취소';
 
   @override
   String get studyNewTag => '새 태그';

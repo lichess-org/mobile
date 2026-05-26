@@ -916,6 +916,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get broadcastOfficialStandings => 'Classifica Ufficiale';
 
   @override
+  String get broadcastRegulations => 'Regulations';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'Altre opzioni si trovano nella $param';
   }
@@ -2607,12 +2610,12 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String minRatingX(String param) {
-    return 'Minimum rating of $param';
+    return 'Punteggio minimo di $param';
   }
 
   @override
   String maxRatingX(String param) {
-    return 'Maximum rating of $param';
+    return 'Punteggio massimo di $param';
   }
 
   @override
@@ -2979,7 +2982,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String sendEmailForAccountVerification(String param) {
-    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
+    return 'Se non trovi la tua email di conferma, invia un\'email a $param e confermeremo il tuo account per te.';
   }
 
   @override
@@ -3552,7 +3555,7 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
-  String get randomChess960Position => 'Random Chess960 position';
+  String get randomChess960Position => 'Posizione di Chess960 casuale';
 
   @override
   String get startPosition => 'Posizione iniziale';
@@ -4392,6 +4395,12 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
+  String get like => 'Like';
+
+  @override
+  String get liked => 'Liked';
+
+  @override
   String get quickPairing => 'Accoppiamento rapido';
 
   @override
@@ -4787,6 +4796,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'le regole del forum';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Per favore sii rispettoso nel forum.';
 
   @override
   String get thisTopicIsArchived => 'Questo argomento è stato archiviato e non è più possibile rispondervi.';
@@ -5840,9 +5852,6 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get studyLike => 'Mi piace';
-
-  @override
-  String get studyUnlike => 'Non mi piace più';
 
   @override
   String get studyNewTag => 'Nuovo tag';

@@ -9,7 +9,7 @@ class AppLocalizationsNb extends AppLocalizations {
   AppLocalizationsNb([String locale = 'nb']) : super(locale);
 
   @override
-  String get mobileAccount => 'Account';
+  String get mobileAccount => 'Konto';
 
   @override
   String get mobileAccountPreferences => 'Kontoinnstillinger';
@@ -914,6 +914,9 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get broadcastOfficialStandings => 'Offisiell tabell';
+
+  @override
+  String get broadcastRegulations => 'Regulations';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -2607,12 +2610,12 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String minRatingX(String param) {
-    return 'Minimum rating of $param';
+    return 'Minimumrating på $param';
   }
 
   @override
   String maxRatingX(String param) {
-    return 'Maximum rating of $param';
+    return 'Maksimumrating på $param';
   }
 
   @override
@@ -2979,7 +2982,7 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String sendEmailForAccountVerification(String param) {
-    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
+    return 'Finner du ikke bekreftelsen som ble sendt som e-post? Send e-post til $param, så bekrefter vi kontoen din.';
   }
 
   @override
@@ -4392,6 +4395,12 @@ class AppLocalizationsNb extends AppLocalizations {
   }
 
   @override
+  String get like => 'Like';
+
+  @override
+  String get liked => 'Liked';
+
+  @override
   String get quickPairing => 'Raskt parti';
 
   @override
@@ -4787,6 +4796,9 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'forumetiketten';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Hold en god tone i forumet.';
 
   @override
   String get thisTopicIsArchived => 'Dette emnet er arkivert og kan ikke lenger besvares.';
@@ -5840,9 +5852,6 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get studyLike => 'Lik';
-
-  @override
-  String get studyUnlike => 'Slutt å like';
 
   @override
   String get studyNewTag => 'Ny merkelapp';

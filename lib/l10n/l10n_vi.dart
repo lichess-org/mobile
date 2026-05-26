@@ -896,6 +896,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get broadcastOfficialStandings => 'Bảng xếp hạng Chính thức';
 
   @override
+  String get broadcastRegulations => 'Regulations';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'Thêm tùy chọn trên $param';
   }
@@ -4364,6 +4367,12 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
+  String get like => 'Like';
+
+  @override
+  String get liked => 'Liked';
+
+  @override
   String get quickPairing => 'Xếp cặp nhanh';
 
   @override
@@ -4759,6 +4768,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'quy tắc diễn đàn';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Please be nice in the forum.';
 
   @override
   String get thisTopicIsArchived => 'Chủ đề này đã được lưu trữ và không thể trả lời được nữa.';
@@ -5766,9 +5778,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get studyLike => 'Thích';
-
-  @override
-  String get studyUnlike => 'Bỏ thích';
 
   @override
   String get studyNewTag => 'Nhãn mới';
