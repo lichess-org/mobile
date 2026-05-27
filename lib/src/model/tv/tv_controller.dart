@@ -6,6 +6,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart' show VoidCallback;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/model/chat/chat_mixin.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
@@ -35,7 +36,7 @@ final tvControllerProvider = AsyncNotifierProvider.autoDispose
       name: 'TvControllerProvider',
     );
 
-class TvController extends AsyncNotifier<TvState> {
+class TvController extends AsyncNotifier<TvState> with ChatMixin<TvState> {
   TvController(this.params);
 
   final TvControllerParams params;
@@ -43,6 +44,18 @@ class TvController extends AsyncNotifier<TvState> {
   StreamSubscription<SocketEvent>? _socketSubscription;
 
   VoidCallback? _onReload;
+
+  @override
+  @protected
+  StringId get chatId => state.requireValue.game.id;
+
+  @override
+  @protected
+  String get chatReportResource => 'game/$chatId';
+
+  @override
+  @protected
+  bool get chatIsPublic => true;
 
   @override
   Future<TvState> build() {
@@ -63,12 +76,14 @@ class TvController extends AsyncNotifier<TvState> {
 
   SoundService get _soundService => ref.read(soundServiceProvider);
 
-  Future<void> startWatching() async {
+  @override
+  Future<void> onFocusRegained() async {
     final newState = await _connectWebsocket(null);
     state = AsyncValue.data(newState);
   }
 
-  void stopWatching() {
+  @override
+  void onForegroundLost() {
     _socketSubscription?.cancel();
   }
 
@@ -107,11 +122,19 @@ class TvController extends AsyncNotifier<TvState> {
         );
 
     _socketSubscription?.cancel();
-    _socketSubscription = socketClient.stream.listen(_handleSocketEvent);
+    _socketSubscription = socketClient.stream.listen(handleSocketEvent);
 
     return socketClient.stream.firstWhere((e) => e.topic == 'full').then((event) {
       final fullEvent = GameFullEvent.fromJson(event.data as Map<String, dynamic>);
       socketClient.version = fullEvent.socketEventVersion;
+
+      Future(() async {
+        if (state.hasValue) {
+          state = AsyncValue.data(
+            state.requireValue.copyWith(chatState: await initChat(state.requireValue.game.chat)),
+          );
+        }
+      });
 
       return TvState(
         game: fullEvent.game,
@@ -182,7 +205,17 @@ class TvController extends AsyncNotifier<TvState> {
     }
   }
 
-  void _handleSocketEvent(SocketEvent event) {
+  @protected
+  @override
+  void updateChatState(ChatState newState) {
+    state = AsyncValue.data(state.requireValue.copyWith(chatState: newState));
+  }
+
+  @protected
+  @override
+  void handleSocketEvent(SocketEvent event) {
+    super.handleSocketEvent(event);
+
     if (!state.hasValue) {
       return;
     }
@@ -198,7 +231,7 @@ class TvController extends AsyncNotifier<TvState> {
             return;
           }
           final reloadEvent = SocketEvent(topic: data['t'] as String, data: data['d']);
-          _handleSocketEvent(reloadEvent);
+          handleSocketEvent(reloadEvent);
         } else {
           _onReload?.call();
         }
@@ -278,13 +311,14 @@ class TvController extends AsyncNotifier<TvState> {
 }
 
 @freezed
-sealed class TvState with _$TvState {
+sealed class TvState with _$TvState, ChatMixinState {
   const TvState._();
 
   const factory TvState({
     required PlayableGame game,
     required int stepCursor,
     required Side orientation,
+    ChatState? chatState,
     @Default(0) int nbWatchers,
     @Default(IList<String>.empty()) IList<String> watcherNames,
   }) = _TvState;

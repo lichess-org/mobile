@@ -19,7 +19,7 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:sqflite/sqflite.dart';
 
-part 'chat_controller.freezed.dart';
+part 'chat_mixin.freezed.dart';
 
 const _tableName = 'chat_read_messages';
 String _storeKey(StringId id) => 'chat.$id';
@@ -32,11 +32,10 @@ sealed class ChatOptions {
   LightUser? get opponent;
   bool get isPublic;
   bool get writeable;
-  Uri get socketUri;
 
   @override
   String toString() =>
-      'ChatOptions(id: $id, opponent: $opponent, isPublic: $isPublic, writeable: $writeable, socketUri: $socketUri)';
+      'ChatOptions(id: $id, opponent: $opponent, isPublic: $isPublic, writeable: $writeable)';
 }
 
 @freezed
@@ -50,9 +49,6 @@ abstract class GameChatOptions extends ChatOptions with _$GameChatOptions {
 
   @override
   bool get writeable => true;
-
-  @override
-  Uri get socketUri => GameController.socketUri(id);
 }
 
 @freezed
@@ -62,7 +58,6 @@ abstract class TvChatOptions extends ChatOptions with _$TvChatOptions {
     TvControllerParams params, {
     required GameId id,
     required bool writeable,
-    required Uri socketUri,
   }) = _TvChatOptions;
 
   @override
@@ -83,9 +78,6 @@ abstract class TournamentChatOptions extends ChatOptions with _$TournamentChatOp
 
   @override
   bool get isPublic => true;
-
-  @override
-  Uri get socketUri => TournamentController.socketUri(id);
 }
 
 @freezed
@@ -102,75 +94,85 @@ abstract class StudyChatOptions extends ChatOptions with _$StudyChatOptions {
 
   @override
   StringId get id => options.id;
-
-  @override
-  Uri get socketUri => StudyController.socketUri(options.id);
 }
+
+@freezed
+sealed class ChatState with _$ChatState {
+  const ChatState._();
+
+  const factory ChatState({
+    required IList<ChatMessage> messages,
+    required int unreadMessages,
+    @Default('') String inputText,
+  }) = _ChatState;
+}
+
+/// Interface for Notifiers's State that uses [ChatMixin].
+mixin ChatMixinState {
+  ChatState? get chatState;
+}
+
+/// A provider that gets the current chat state
+final chatProvider = FutureProvider.autoDispose.family<ChatState?, ChatOptions>(
+  (ref, options) => ref.watch(
+    switch (options) {
+      GameChatOptions(:final id) => gameControllerProvider(id),
+      TournamentChatOptions(:final id) => tournamentControllerProvider(id),
+      StudyChatOptions(:final options) => studyControllerProvider(options),
+      TvChatOptions(:final params) => tvControllerProvider(params),
+    }.selectAsync((state) => state.chatState),
+  ),
+  name: 'ChatProvider',
+);
+
+final chatNotifierProvider = Provider.autoDispose.family<ChatMixin, ChatOptions>(
+  (ref, options) => ref.read(switch (options) {
+    GameChatOptions(:final id) => gameControllerProvider(id).notifier,
+    TournamentChatOptions(:final id) => tournamentControllerProvider(id).notifier,
+    StudyChatOptions(:final options) => studyControllerProvider(options).notifier,
+    TvChatOptions(:final params) => tvControllerProvider(params).notifier,
+  }),
+  name: 'ChatNotifierProvider',
+);
 
 /// A provider that gets the chat unread messages
 final chatUnreadProvider = FutureProvider.autoDispose.family<int, ChatOptions>((
   Ref ref,
   ChatOptions options,
 ) async {
-  return (await ref.watch(chatControllerProvider(options).future)).unreadMessages;
+  return (await ref.watch(chatProvider(options).future))?.unreadMessages ?? 0;
 }, name: 'ChatUnreadProvider');
 
-const IList<ChatMessage> _kEmptyMessages = IListConst([]);
+mixin ChatMixin<T extends ChatMixinState> on AnyNotifier<AsyncValue<T>, T> {
+  @protected
+  StringId get chatId;
 
-/// A provider for [ChatController].
-final chatControllerProvider = AsyncNotifierProvider.autoDispose
-    .family<ChatController, ChatState, ChatOptions>(
-      ChatController.new,
-      name: 'ChatControllerProvider',
-    );
+  @protected
+  String get chatReportResource;
 
-class ChatController extends AsyncNotifier<ChatState> {
-  ChatController(this.options);
-
-  final ChatOptions options;
-
-  StreamSubscription<SocketEvent>? _subscription;
+  @protected
+  bool get chatIsPublic;
 
   LightUser? get _me => ref.read(authControllerProvider)?.user;
 
-  @override
-  Future<ChatState> build() async {
-    _subscription?.cancel();
-    _subscription = socketGlobalStream.listen(_handleSocketEvent);
+  @protected
+  Future<ChatState?> initChat(ChatData? initialData) async {
+    if (initialData == null) {
+      return null;
+    }
 
-    ref.onDispose(() {
-      _subscription?.cancel();
-    });
-
-    // Do NOT use ref.watch() here, since we just need to get the initial messages.
-    // The game/tournament/study controllers do NOT update their `chat` fields when a new
-    // chat message is received, instead the ChatController itself listens to this socket event.
-    // This means that with ref.watch(), whenever the game/tournament/study controller updates,
-    // (e.g. when a new move has been made), the `ChatController` would rebuild and we'd lose
-    // any chat messages that have been received since the last build.
-    final initialMessages = switch (options) {
-      GameChatOptions(:final id) => (await ref.read(
-        gameControllerProvider(id).future,
-      )).game.chat?.lines,
-      TournamentChatOptions(:final id) => (await ref.read(
-        tournamentControllerProvider(id).future,
-      )).tournament.chat?.lines,
-      StudyChatOptions(:final options) => (await ref.read(
-        studyControllerProvider(options).future,
-      )).study.chat?.lines,
-      TvChatOptions(:final params) => (await ref.read(
-        tvControllerProvider(params).future,
-      )).game.chat?.lines,
-    };
-
-    final filteredMessages = _selectMessages(initialMessages ?? _kEmptyMessages);
+    final filteredMessages = _selectMessages(initialData.lines);
     final readMessagesCount = await _getReadMessagesCount();
-
     return ChatState(
       messages: filteredMessages,
       unreadMessages: math.max(0, filteredMessages.length - readMessagesCount),
     );
   }
+
+  void updateChatState(ChatState newState);
+
+  void onFocusRegained() {}
+  void onForegroundLost() {}
 
   /// Sends a message to the chat.
   void postMessage(String message) {
@@ -184,28 +186,21 @@ class ChatController extends AsyncNotifier<ChatState> {
     }
     final uri = Uri(path: '/report/flag');
 
-    final resource = switch (options) {
-      GameChatOptions(:final id) => 'game/${id.gameId}',
-      TournamentChatOptions(:final id) => 'tournament/$id',
-      StudyChatOptions(:final id) => 'study/$id',
-      TvChatOptions(:final id) => 'game/$id',
-    };
-
     await ref
         .read(lichessClientProvider)
         .postRead(
           uri,
           headers: {'Accept': 'application/json'},
-          body: {'username': username, 'resource': resource, 'text': message.message},
+          body: {'username': username, 'resource': chatReportResource, 'text': message.message},
         );
   }
 
   /// Resets the unread messages count to 0 and saves the number of read messages.
   Future<void> markMessagesAsRead() async {
     if (state.hasValue) {
-      await _setReadMessagesCount(state.requireValue.messages.length);
+      await _setReadMessagesCount(state.requireValue.chatState!.messages.length);
+      updateChatState(state.requireValue.chatState!.copyWith(unreadMessages: 0));
     }
-    state = state.whenData((s) => s.copyWith(unreadMessages: 0));
   }
 
   IList<ChatMessage> _selectMessages(IList<ChatMessage> all) {
@@ -223,7 +218,7 @@ class ChatController extends AsyncNotifier<ChatState> {
       _tableName,
       columns: ['nbRead'],
       where: 'id = ?',
-      whereArgs: [_storeKey(options.id)],
+      whereArgs: [_storeKey(chatId)],
     );
     return result.firstOrNull?['nbRead'] as int? ?? 0;
   }
@@ -231,42 +226,37 @@ class ChatController extends AsyncNotifier<ChatState> {
   Future<void> _setReadMessagesCount(int count) async {
     final db = await ref.read(databaseProvider.future);
     await db.insert(_tableName, {
-      'id': _storeKey(options.id),
+      'id': _storeKey(chatId),
       'lastModified': DateTime.now().toIso8601String(),
       'nbRead': count,
     }, conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  void _handleSocketEvent(SocketEvent event) {
+  @protected
+  @mustCallSuper
+  void handleSocketEvent(SocketEvent event) {
     if (!state.hasValue) return;
 
     if (event.topic == 'message') {
       final data = event.data as Map<String, dynamic>;
       final message = ChatMessage.fromJson(data);
-      state = state.whenData((s) {
-        final oldMessages = s.messages;
-        final newMessages = _selectMessages(oldMessages.add(message));
-        final newUnread = newMessages.length - oldMessages.length;
-        if (options.isPublic == false && newUnread > 0) {
-          ref.read(soundServiceProvider).play(Sound.confirmation, volume: 0.5);
-        }
-        return s.copyWith(messages: newMessages, unreadMessages: s.unreadMessages + newUnread);
-      });
+
+      final oldMessages = state.requireValue.chatState!.messages;
+      final newMessages = _selectMessages(oldMessages.add(message));
+      final newUnread = newMessages.length - oldMessages.length;
+      if (chatIsPublic == false && newUnread > 0) {
+        ref.read(soundServiceProvider).play(Sound.confirmation, volume: 0.5);
+      }
+      updateChatState(
+        state.requireValue.chatState!.copyWith(
+          messages: newMessages,
+          unreadMessages: state.requireValue.chatState!.unreadMessages + newUnread,
+        ),
+      );
     }
   }
 
   void setInputText(String text) {
-    state = state.whenData((s) => s.copyWith(inputText: text));
+    updateChatState(state.requireValue.chatState!.copyWith(inputText: text));
   }
-}
-
-@freezed
-sealed class ChatState with _$ChatState {
-  const ChatState._();
-
-  const factory ChatState({
-    required IList<ChatMessage> messages,
-    required int unreadMessages,
-    @Default('') String inputText,
-  }) = _ChatState;
 }
