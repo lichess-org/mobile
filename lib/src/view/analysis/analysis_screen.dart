@@ -122,7 +122,7 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
         Widget appBarTitle;
         if (value.archivedGame != null) {
           final title =
-              '${value.archivedGame!.data.clockDisplay(context.l10n)} • ${value.archivedGame!.meta.speed.label} • ${value.archivedGame!.meta.rated ? context.l10n.rated : context.l10n.casual}';
+              '${value.archivedGame!.data.clockDisplay(context.l10n)} • ${value.archivedGame!.meta.speed.translatedLabel(context.l10n)} • ${value.archivedGame!.meta.rated ? context.l10n.rated : context.l10n.casual}';
           appBarTitle = VariantAppBarTitle(variant: value.variant, title: title);
         } else {
           appBarTitle = VariantAppBarTitle(variant: value.variant, title: context.l10n.analysis);
