@@ -151,7 +151,7 @@ void main() {
         tester,
       ) async {
         await pumpPlayerResultsScreen(tester, points: '1/2', customPoints: 0.0);
-        expectGameTileShows('½');
+        expectGameTileShows('0');
       });
     });
 

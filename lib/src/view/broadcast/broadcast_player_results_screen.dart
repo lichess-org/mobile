@@ -558,7 +558,7 @@ class _GameResultListTile extends StatelessWidget {
                     mainAxisSize: .min,
                     children: [
                       Text(
-                        customPoints != null && customPoints != 0.0 && customPoints != points?.value
+                        customPoints != null && customPoints != points?.value
                             ? NumberFormat('0.##').format(customPoints)
                             : points?.resultFor(color).resultToString(color) ??
                                   (ongoing ? '*' : ''),
