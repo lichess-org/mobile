@@ -287,31 +287,61 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Or import a PGN file';
 
   @override
+  String get variantStandard => 'Normala';
+
+  @override
   String get variantStandardTitle => 'Normal reguloj ŝakaj (FIDE)';
+
+  @override
+  String get variantChess960 => 'Ŝako 960';
 
   @override
   String get variantChess960Title => 'La komenca pozicio de la pecoj en la unua vico estas hazarda.';
 
   @override
+  String get variantKingOfTheHill => 'Reĝo de la monteto';
+
+  @override
   String get variantKingOfTheHillTitle => 'Portu vian reĝon al la centro por venki la ludon.';
+
+  @override
+  String get variantThreeCheck => 'Tri ŝakoj';
 
   @override
   String get variantThreeCheckTitle => 'Ŝakigu vian kontraŭulon tri fojojn por venki la ludon.';
 
   @override
+  String get variantAntichess => 'Antiŝako';
+
+  @override
   String get variantAntichessTitle => 'Perdu ĉiujn viajn pecojn (aŭ kun via reĝo en pato) por venki la ludon.';
+
+  @override
+  String get variantAtomic => 'Atoma';
 
   @override
   String get variantAtomicTitle => 'Eksplodigu la reĝon de la kontraŭulo por venki la ludon.';
 
   @override
+  String get variantHorde => 'Trupa';
+
+  @override
   String get variantHordeTitle => 'Unu flanko havas amason da peonoj, la alia flanko normalan pecaron.';
+
+  @override
+  String get variantRacingKings => 'Konkuro reĝa';
 
   @override
   String get variantRacingKingsTitle => 'Portu vian reĝon al la alia flanko de la tabulo por venki.';
 
   @override
+  String get variantCrazyhouse => 'Frenezeja';
+
+  @override
   String get variantCrazyhouseTitle => 'Kaptitaj pecoj povas esti metitaj denove en la tabulon, anstataŭ fari movon.';
+
+  @override
+  String get variantFromPosition => 'Ekde specifa pozicio';
 
   @override
   String get variantFromPositionTitle => 'Normala ŝako, komencante el specifa pozicio';

@@ -287,31 +287,61 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Ou importa un arquivo PGN';
 
   @override
+  String get variantStandard => 'Estándar';
+
+  @override
   String get variantStandardTitle => 'Regras do xadrez estándar (FIDE)';
+
+  @override
+  String get variantChess960 => 'Xadrez 960';
 
   @override
   String get variantChess960Title => 'A posición inicial das pezas das filas 1 e 8 é aleatoria.';
 
   @override
+  String get variantKingOfTheHill => 'Rei da Cuíña';
+
+  @override
   String get variantKingOfTheHillTitle => 'Leva o teu Rei ó centro para gañar a partida.';
+
+  @override
+  String get variantThreeCheck => 'Tres-Xaques';
 
   @override
   String get variantThreeCheckTitle => 'Dálle xaque 3 veces ó teu rival para gañar a partida.';
 
   @override
+  String get variantAntichess => 'Antixadrez';
+
+  @override
   String get variantAntichessTitle => 'Perde todas as túas pezas (ou fica afogado) para gañar a partida.';
+
+  @override
+  String get variantAtomic => 'Atómico';
 
   @override
   String get variantAtomicTitle => 'Estoura o rei do rival para gañares.';
 
   @override
+  String get variantHorde => 'Horda';
+
+  @override
   String get variantHordeTitle => 'Un bando ten unha manchea de peóns e o outro ten un exército normal.';
+
+  @override
+  String get variantRacingKings => 'Reis a correr';
 
   @override
   String get variantRacingKingsTitle => 'Leva o teu rei ó outro lado do taboleiro para gañar.';
 
   @override
+  String get variantCrazyhouse => 'Casa de loucos';
+
+  @override
   String get variantCrazyhouseTitle => 'Ademais dos movementos convencionais, podes guindar as pezas capturadas no taboleiro.';
+
+  @override
+  String get variantFromPosition => 'A partir dunha posición';
 
   @override
   String get variantFromPositionTitle => 'Xadrez estándar a partir dunha posición personalizada';

@@ -448,7 +448,11 @@ class _Body extends ConsumerWidget {
           sideToMove: null,
           boardBuilder: (context, boardSize, borderRadius) => SizedBox.square(
             dimension: boardSize,
-            child: Center(child: Text('${variant.label} is not supported yet.')),
+            child: Center(
+              child: Text(
+                context.l10n.mobileUnsupportedVariant(variant.translatedLabel(context.l10n)),
+              ),
+            ),
           ),
           smallBoard: studyPrefs.smallBoard,
           children: const [SizedBox.shrink()],

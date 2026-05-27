@@ -130,6 +130,31 @@ enum Variant {
   final String label;
   final IconData icon;
 
+  String translatedLabel(AppLocalizations l10n) {
+    switch (this) {
+      case .standard:
+        return l10n.variantStandard;
+      case .chess960:
+        return l10n.variantChess960;
+      case .fromPosition:
+        return l10n.variantFromPosition;
+      case .antichess:
+        return l10n.variantAntichess;
+      case .kingOfTheHill:
+        return l10n.variantKingOfTheHill;
+      case .threeCheck:
+        return l10n.variantThreeCheck;
+      case .atomic:
+        return l10n.variantAtomic;
+      case .horde:
+        return l10n.variantHorde;
+      case .racingKings:
+        return l10n.variantRacingKings;
+      case .crazyhouse:
+        return l10n.variantCrazyhouse;
+    }
+  }
+
   String description(AppLocalizations l10n) {
     switch (this) {
       case .standard:

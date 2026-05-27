@@ -143,7 +143,7 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
           children: [
             SettingsListTile(
               settingsLabel: Text(context.l10n.variant),
-              settingsValue: chosenVariant.label,
+              settingsValue: chosenVariant.translatedLabel(context.l10n),
               onTap: () {
                 showChoicePicker<Variant>(
                   context,

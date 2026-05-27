@@ -287,31 +287,61 @@ class AppLocalizationsEt extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Or import a PGN file';
 
   @override
+  String get variantStandard => 'Tavaline';
+
+  @override
   String get variantStandardTitle => 'Tavapäraste malereeglitega (FIDE)';
+
+  @override
+  String get variantChess960 => 'Male960';
 
   @override
   String get variantChess960Title => 'The starting position of the home rank pieces is randomised.';
 
   @override
+  String get variantKingOfTheHill => 'King of the Hill';
+
+  @override
   String get variantKingOfTheHillTitle => 'Bring your King to the centre to win the game.';
+
+  @override
+  String get variantThreeCheck => 'Three-Check';
 
   @override
   String get variantThreeCheckTitle => 'Check your opponent 3 times to win the game.';
 
   @override
+  String get variantAntichess => 'Antimale';
+
+  @override
   String get variantAntichessTitle => 'Mängu võitmiseks kaota kõik oma malendid (või satu patiseisu).';
+
+  @override
+  String get variantAtomic => 'Atomic';
 
   @override
   String get variantAtomicTitle => 'Nuke your opponent\'s king to win.';
 
   @override
+  String get variantHorde => 'Hord';
+
+  @override
   String get variantHordeTitle => 'Ühel poolel on suur hulk ettureid, teisel tavalised malendid.';
+
+  @override
+  String get variantRacingKings => 'Kuningate võiduajamine';
 
   @override
   String get variantRacingKingsTitle => 'Võitmiseks jõua oma kuningaga malelaua teise otsa.';
 
   @override
+  String get variantCrazyhouse => 'Crazyhouse';
+
+  @override
   String get variantCrazyhouseTitle => 'Captured pieces can be dropped back on the board instead of moving a piece.';
+
+  @override
+  String get variantFromPosition => 'From Position';
 
   @override
   String get variantFromPositionTitle => 'Standard chess from a custom position';
