@@ -5,14 +5,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
-import 'package:lichess_mobile/src/model/chat/chat_controller.dart';
+import 'package:lichess_mobile/src/model/chat/chat_mixin.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_board_params.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/tv/tv_controller.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
-import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/chessboard.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
@@ -72,11 +71,11 @@ class _TvScreenState extends ConsumerState<TvScreen> {
 
     return FocusDetector(
       onFocusRegained: () {
-        ref.read(_tvGameCtrl.notifier).startWatching();
+        ref.read(_tvGameCtrl.notifier).onFocusRegained();
       },
-      onFocusLost: () {
+      onForegroundLost: () {
         if (context.mounted) {
-          ref.read(_tvGameCtrl.notifier).stopWatching();
+          ref.read(_tvGameCtrl.notifier).onForegroundLost();
         }
       },
       child: WakelockWidget(
@@ -117,7 +116,6 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                         _tvControllerParams,
                         id: game.id,
                         writeable: authUser != null,
-                        socketUri: ref.watch(socketPoolProvider).currentClient.route,
                       );
 
                       // If Stockfish is playing, user is null

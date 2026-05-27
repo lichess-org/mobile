@@ -13,7 +13,7 @@ import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
-import 'package:lichess_mobile/src/model/chat/chat_controller.dart';
+import 'package:lichess_mobile/src/model/chat/chat_mixin.dart';
 import 'package:lichess_mobile/src/model/clock/chess_clock.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -44,7 +44,7 @@ final gameControllerProvider = AsyncNotifierProvider.autoDispose
       name: 'GameControllerProvider',
     );
 
-class GameController extends AsyncNotifier<GameState> {
+class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> {
   GameController(this.gameFullId);
 
   final GameFullId gameFullId;
@@ -78,9 +78,22 @@ class GameController extends AsyncNotifier<GameState> {
   SocketPool get _socketPool => ref.read(socketPoolProvider);
 
   ChessClock? _clock;
+
   late SocketClient _socketClient;
 
   GameRepository get _gameRepository => ref.read(gameRepositoryProvider);
+
+  @protected
+  @override
+  StringId get chatId => gameFullId.gameId;
+
+  @protected
+  @override
+  String get chatReportResource => 'game/${gameFullId.gameId}';
+
+  @protected
+  @override
+  bool get chatIsPublic => false;
 
   @override
   Future<GameState> build() {
@@ -101,8 +114,8 @@ class GameController extends AsyncNotifier<GameState> {
     });
 
     _socketSubscription?.cancel();
-    _socketSubscription = _socketClient.stream.listen(_handleSocketEvent);
-    return _socketClient.stream.firstWhere((e) => e.topic == 'full').then((event) {
+    _socketSubscription = _socketClient.stream.listen(handleSocketEvent);
+    return _socketClient.stream.firstWhere((e) => e.topic == 'full').then((event) async {
       final fullEvent = GameFullEvent.fromJson(event.data as Map<String, dynamic>);
       _socketClient.version = fullEvent.socketEventVersion;
 
@@ -142,10 +155,12 @@ class GameController extends AsyncNotifier<GameState> {
         game: game,
         stepCursor: game.steps.length - 1,
         liveClock: _clock != null ? (white: _clock!.whiteTime, black: _clock!.blackTime) : null,
+        chatState: await initChat(game.chat),
       );
     });
   }
 
+  @override
   void onForegroundLost() {
     if (_socketClient.isDisposed) {
       assert(false, 'socket client should not be disposed here');
@@ -164,6 +179,7 @@ class GameController extends AsyncNotifier<GameState> {
     }
   }
 
+  @override
   void onFocusRegained() {
     if (_socketClient.isDisposed) {
       assert(false, 'socket client should not be disposed here');
@@ -558,7 +574,16 @@ class GameController extends AsyncNotifier<GameState> {
     _socketClient.connect();
   }
 
-  void _handleSocketEvent(SocketEvent event, [bool hasRetried = false]) {
+  @protected
+  @override
+  void updateChatState(ChatState newState) {
+    state = AsyncValue.data(state.requireValue.copyWith(chatState: newState));
+  }
+
+  @override
+  void handleSocketEvent(SocketEvent event, [bool hasRetried = false]) {
+    super.handleSocketEvent(event);
+
     if (!state.hasValue) {
       if (event.version != null) {
         _logger.warning('received $event while game state not yet available');
@@ -619,7 +644,7 @@ class GameController extends AsyncNotifier<GameState> {
             return;
           }
           final reloadEvent = SocketEvent(topic: data['t'] as String, data: data['d']);
-          _handleSocketEvent(reloadEvent);
+          handleSocketEvent(reloadEvent);
         } else {
           _reloadGame();
         }
@@ -1011,7 +1036,7 @@ class GameController extends AsyncNotifier<GameState> {
 typedef LiveGameClock = ({ValueListenable<Duration> white, ValueListenable<Duration> black});
 
 @freezed
-sealed class GameState with _$GameState {
+sealed class GameState with _$GameState, ChatMixinState {
   const GameState._();
 
   const factory GameState({
@@ -1035,6 +1060,8 @@ sealed class GameState with _$GameState {
 
     /// Game full id used to redirect to the new game of the rematch
     GameFullId? redirectGameId,
+
+    ChatState? chatState,
   }) = _GameState;
 
   /// The [Position] at the current cursor.
