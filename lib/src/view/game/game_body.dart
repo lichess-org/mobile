@@ -318,17 +318,17 @@ class _PlayableGameBoardState extends ConsumerState<_PlayableGameBoard> {
     );
 
     if (state.isReplaying) {
-      // History navigation — no animation, premove cleared by jumpToPosition.
+      // History navigation — animate and clear premove.
       if (fen != _controller.fen) {
-        _controller.jumpToPosition(gameData);
+        _controller.updatePosition(gameData, resetPremove: true);
       } else {
-        _controller.animatePosition(gameData);
+        _controller.updatePosition(gameData);
       }
       return;
     }
 
     if (fen != _controller.fen) {
-      _controller.animatePosition(gameData);
+      _controller.updatePosition(gameData);
       final explosion = state.stepCursor > 0
           ? atomicExplosionSquares(
               state.game.positionAt(state.stepCursor - 1),
@@ -342,8 +342,8 @@ class _PlayableGameBoardState extends ConsumerState<_PlayableGameBoard> {
         (move) => ref.read(_ctrlProvider.notifier).userMove(move, isPremove: true),
       );
     } else {
-      // Only game metadata changed (e.g. playable went false) — update without animation.
-      _controller.animatePosition(gameData);
+      // Only game metadata changed (e.g. playable went false)
+      _controller.updatePosition(gameData);
     }
   }
 

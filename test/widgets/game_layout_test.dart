@@ -457,7 +457,7 @@ void main() {
     showBoard.value = false;
     await tester.pumpAndSettle();
     expect(
-      () => controller.animatePosition(
+      () => controller.updatePosition(
         buildGameData(
           fen: kInitialFEN,
           variant: Variant.standard,

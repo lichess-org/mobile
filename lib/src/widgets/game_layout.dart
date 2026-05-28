@@ -184,8 +184,7 @@ class GameLayout extends ConsumerStatefulWidget {
 
   /// Whether the board is currently replaying move history (e.g. analysis navigation).
   ///
-  /// When true, position changes use [ChessboardController.jumpToPosition] instead of
-  /// [ChessboardController.animatePosition], skipping animation and clearing the premove.
+  /// When true, position changes animate and clear the premove (e.g. analysis navigation).
   final bool isReplaying;
 
   /// Called when a premove is ready to be executed after the opponent moves.
@@ -245,16 +244,16 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
 
     if (!fenChanged) {
       // Only game metadata changed (e.g. playerSide, validMoves) — update without animation.
-      ctrl.animatePosition(newGameData);
+      ctrl.updatePosition(newGameData);
       return;
     }
 
     if (widget.isReplaying) {
-      ctrl.jumpToPosition(newGameData);
+      ctrl.updatePosition(newGameData, resetPremove: true);
       return;
     }
 
-    ctrl.animatePosition(newGameData);
+    ctrl.updatePosition(newGameData);
     if (widget.explosionSquares != null) {
       ctrl.triggerExplosion(widget.explosionSquares!);
     }
