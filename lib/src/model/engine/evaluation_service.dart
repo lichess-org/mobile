@@ -86,6 +86,18 @@ class EvaluationService {
 
   final UCIProtocol _protocol = UCIProtocol();
 
+  // serialize engine start/quit operations to avoid races
+  Future<void> _engineOpQueue = Future<void>.value();
+
+  Future<void> _runStockfishOperation(Future<void> Function() op) {
+    final result = _engineOpQueue.then((_) => op());
+    // The queue tail swallows errors so a single failed operation doesn't block
+    // the ones chained after it, but the future returned to the caller keeps the
+    // error so awaiting callers (e.g. _initEngine) can still detect failures.
+    _engineOpQueue = result.catchError((_, _) {});
+    return result;
+  }
+
   late final StreamSubscription<String> _stdoutSubscription;
   late final StreamSubscription<EvalResult> _evalSubscription;
   late final StreamSubscription<MoveResult> _moveSubscription;
@@ -326,14 +338,17 @@ class EvaluationService {
     _logger.finer(
       'Engine restart needed: $needsRestart, new game needed: $needsNewGame, current engine state: $stockfishState',
     );
-
+    // Update work and flag other type of work to be discarded
     switch (work) {
       case final EvalWork evalWork:
         _setEvalWork(evalWork);
         _discardEvalResults = false;
+        _discardMoveResults = true;
+        _cancelPendingMoveRequest();
       case final MoveWork moveWork:
         _setMoveWork(moveWork);
         _discardMoveResults = false;
+        _discardEvalResults = true;
     }
 
     if (_initInProgress) {
@@ -363,7 +378,7 @@ class EvaluationService {
     try {
       _logger.fine('Initializing engine with flavor: $flavor');
 
-      await _stockfish.quit();
+      await _runStockfishOperation(() => _stockfish.quit());
 
       _protocol.reset();
 
@@ -382,12 +397,14 @@ class EvaluationService {
         }
       }
 
-      await _stockfish.start(
-        flavor: actualFlavor,
-        // We always pass the variant, but this is ignored if flavor is not StockfishFlavor.variant
-        variant: variant.fairy,
-        smallNetPath: smallNetPath,
-        bigNetPath: bigNetPath,
+      await _runStockfishOperation(
+        () => _stockfish.start(
+          flavor: actualFlavor,
+          // We always pass the variant, but this is ignored if flavor is not StockfishFlavor.variant
+          variant: variant.fairy,
+          smallNetPath: smallNetPath,
+          bigNetPath: bigNetPath,
+        ),
       );
 
       if (_stockfish.state.value == StockfishState.error) {
@@ -497,6 +514,10 @@ class EvaluationService {
   /// This should be called when the engine is no longer needed (e.g., when leaving an analysis screen).
   /// The service can be reused after calling this method.
   void quit() {
+    if (_engineState == EngineState.initial && !_initInProgress) {
+      _logger.fine('Engine already quit or uninitialized. Ignoring duplicate quit call.');
+      return;
+    }
     _logger.info('Quitting engine');
     _protocol.compute(null);
     _evalThrottleTimer?.cancel();
@@ -506,7 +527,7 @@ class EvaluationService {
     _discardEvalResults = true;
     _discardMoveResults = true;
     _currentMoveWork = null;
-    _stockfish.quit();
+    _runStockfishOperation(() => _stockfish.quit());
     _currentRequestedFlavor = null;
     _currentVariant = null;
     _initInProgress = false;
@@ -532,7 +553,7 @@ class EvaluationService {
     _protocol.isComputing.removeListener(_onComputingChange);
     _protocol.engineName.removeListener(_onEngineNameChange);
     _protocol.dispose();
-    _stockfish.quit();
+    _runStockfishOperation(() => _stockfish.quit());
     _evalController.close();
     _moveController.close();
     _evaluationState.dispose();
