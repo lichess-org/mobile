@@ -230,7 +230,8 @@ void main() {
 
       service.quit();
 
-      await Future<void>.delayed(const Duration(milliseconds: 1));
+      // Let the queued quit operation drain before re-evaluating.
+      await pumpEventQueue();
 
       final stream2 = service.evaluate(work);
       await stream2!.first;
@@ -426,7 +427,7 @@ void main() {
       service.quit();
 
       // Allow the single queued quit to run.
-      await Future<void>.delayed(const Duration(milliseconds: 1));
+      await pumpEventQueue();
 
       expect(
         delayedStockfish.quitCallCount,
@@ -451,19 +452,18 @@ void main() {
         service.quit();
       }
 
-      // Let the serialized operation queue fully drain.
-      await Future<void>.delayed(const Duration(milliseconds: 300));
+      // A final evaluation is enqueued after every cycle's operations. Awaiting
+      // its first result therefore deterministically guarantees the whole
+      // serialized queue has drained — no fixed delay needed.
+      final stream = service.evaluate(makeWork(id: const StringId('after')));
+      final (resultWork, _) = await stream!.first;
+      expect(resultWork.id, const StringId('after'));
 
       expect(
         stockfish.maxConcurrentOps,
         1,
         reason: 'engine start/quit must be serialized to avoid native crashes (#2870)',
       );
-
-      // The engine must remain usable after the rapid cycles.
-      final stream = service.evaluate(makeWork(id: const StringId('after')));
-      final (resultWork, _) = await stream!.first;
-      expect(resultWork.id, const StringId('after'));
     });
   });
 
@@ -874,7 +874,7 @@ void main() {
       service.evaluate(makeWork());
 
       // Wait for the failing initialization to settle.
-      await Future<void>.delayed(const Duration(milliseconds: 10));
+      await pumpEventQueue();
 
       expect(service.evaluationState.value.state, EngineState.error);
     });
@@ -895,7 +895,8 @@ void main() {
       expect(service.evaluationState.value.engineName, 'Stockfish 16');
 
       service.quit();
-      await Future<void>.delayed(const Duration(milliseconds: 100));
+      // Let the queued quit drain before restarting with a different flavor.
+      await pumpEventQueue();
 
       final stream2 = service.evaluate(
         work.copyWith(stockfishFlavor: StockfishFlavor.latestNoNNUE),
@@ -1669,12 +1670,13 @@ void main() {
       await subscription.cancel();
     });
 
-    test('quit discards pending move results', () {
-      fakeAsync((async) async {
-        final throttleStockfish = ThrottleTestStockfish();
-        testBinding.stockfish = throttleStockfish;
+    test('quit discards pending move results', () async {
+      final throttleStockfish = ThrottleTestStockfish();
+      testBinding.stockfish = throttleStockfish;
 
-        final container = await makeContainer();
+      final container = await makeContainer();
+
+      fakeAsync((async) {
         final service = container.read(evaluationServiceProvider);
 
         final work = makeMoveWork();
@@ -1684,44 +1686,37 @@ void main() {
           receivedMove = result.$2;
         });
 
-        // Start findMove (don't await)
-        service.findMove(work);
+        // Start a move search and let the engine begin computing it. The
+        // returned future is cancelled by quit() below; we assert on the move
+        // stream instead, so ignore its (expected) cancellation error.
+        service.findMove(work).ignore();
         async.elapse(const Duration(milliseconds: 50));
 
-        // Quit before bestmove is emitted
+        // Quit before the bestmove is emitted.
         service.quit();
         async.flushMicrotasks();
 
-        // Now emit bestmove
+        // A bestmove arriving after quit() must be discarded.
         throttleStockfish.emitBestMove();
         async.flushMicrotasks();
 
-        // The move should have been discarded
         expect(receivedMove, isNull);
       });
     });
 
-    test('findMove throws MoveRequestCancelledException when quit() is called', () {
-      fakeAsync((async) async {
-        final throttleStockfish = ThrottleTestStockfish();
-        testBinding.stockfish = throttleStockfish;
+    test('findMove throws MoveRequestCancelledException when quit() is called', () async {
+      final throttleStockfish = ThrottleTestStockfish();
+      testBinding.stockfish = throttleStockfish;
 
-        final container = await makeContainer();
-        final service = container.read(evaluationServiceProvider);
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
 
-        final work = makeMoveWork();
+      // Start a move search and quit before any bestmove is emitted.
+      final moveFuture = service.findMove(makeMoveWork());
+      service.quit();
 
-        // Start findMove and capture the future
-        final moveFuture = service.findMove(work);
-        async.elapse(const Duration(milliseconds: 50));
-
-        // Quit before bestmove is emitted
-        service.quit();
-        async.flushMicrotasks();
-
-        // The future should throw MoveRequestCancelledException
-        expect(moveFuture, throwsA(isA<MoveRequestCancelledException>()));
-      });
+      // The pending move request must be cancelled.
+      await expectLater(moveFuture, throwsA(isA<MoveRequestCancelledException>()));
     });
 
     test('evaluate() cancels a pending findMove and the evaluation still runs', () async {
@@ -1747,36 +1742,26 @@ void main() {
       expect(resultWork, evalWork);
     });
 
-    test('second findMove cancels the first one with MoveRequestCancelledException', () {
-      fakeAsync((async) async {
-        final throttleStockfish = ThrottleTestStockfish();
-        testBinding.stockfish = throttleStockfish;
+    test('second findMove cancels the first one with MoveRequestCancelledException', () async {
+      final delayedStockfish = DelayedFakeStockfish();
+      testBinding.stockfish = delayedStockfish;
 
-        final container = await makeContainer();
-        final service = container.read(evaluationServiceProvider);
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
 
-        final work1 = makeMoveWork(level: .level3);
-        final work2 = makeMoveWork(level: .level6);
+      final work1 = makeMoveWork(level: .level3);
+      final work2 = makeMoveWork(level: .level6);
 
-        // Start first findMove
-        final future1 = service.findMove(work1);
-        async.elapse(const Duration(milliseconds: 50));
+      // Start the first move search, then supersede it before it completes.
+      final future1 = service.findMove(work1);
+      final future2 = service.findMove(work2);
 
-        // Start second findMove before first completes
-        final future2 = service.findMove(work2);
-        async.flushMicrotasks();
+      // The first request must be cancelled.
+      await expectLater(future1, throwsA(isA<MoveRequestCancelledException>()));
 
-        // First future should throw MoveRequestCancelledException
-        expect(future1, throwsA(isA<MoveRequestCancelledException>()));
-
-        // Emit bestmove for second request
-        throttleStockfish.emitBestMove();
-        async.flushMicrotasks();
-
-        // Second future should complete with the move
-        final move2 = await future2;
-        expect(move2, equals('e2e4'));
-      });
+      // The second request runs to completion.
+      final move2 = await future2;
+      expect(move2, equals('e2e4'));
     });
   });
 
