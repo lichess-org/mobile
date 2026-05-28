@@ -841,6 +841,152 @@ void main() {
         expect(boardHasPremove(tester, const DropMove(to: Square.a4, role: Role.pawn)), isFalse);
         expect(boardHasPiece(tester, Square.a4, Piece.whitePawn), isTrue);
       });
+
+      testWidgets('premove is cleared, not played, after a takeback', (WidgetTester tester) async {
+        const gameFullId = GameFullId('qVChCOTcHSeW');
+        final gameSocketUri = GameController.socketUri(gameFullId);
+
+        // After e4 it's black's turn, white can premove.
+        await createTestGame(
+          tester,
+          pgn: 'e4',
+          clock: const (
+            running: true,
+            initial: Duration(minutes: 1),
+            increment: Duration.zero,
+            white: Duration(seconds: 58),
+            black: Duration(seconds: 58),
+            emerg: Duration(seconds: 10),
+          ),
+          serverPrefs: const ServerGamePrefs(
+            showRatings: true,
+            enablePremove: true,
+            autoQueen: .always,
+            confirmResign: true,
+            submitMove: false,
+            zenMode: .no,
+          ),
+        );
+
+        // white premoves d2-d4
+        await playMove(tester, 'd2', 'd4');
+        expect(boardHasPremove(tester, const NormalMove(from: Square.d2, to: Square.d4)), isTrue);
+
+        // A takeback rolls e4 back: the socket reconnects and the server resends
+        // the game state at the starting position — where d2-d4 would be legal.
+        sendServerSocketMessages(gameSocketUri, [
+          makeFullEvent(
+            const GameId('qVChCOTc'),
+            '',
+            whiteUserName: 'Peter',
+            blackUserName: 'Steven',
+            youAre: Side.white,
+            socketVersion: 1,
+            clock: const (
+              running: true,
+              initial: Duration(minutes: 1),
+              increment: Duration.zero,
+              white: Duration(seconds: 58),
+              black: Duration(seconds: 58),
+              emerg: Duration(seconds: 10),
+            ),
+            serverPrefs: const ServerGamePrefs(
+              showRatings: true,
+              enablePremove: true,
+              autoQueen: .always,
+              confirmResign: true,
+              submitMove: false,
+              zenMode: .no,
+            ),
+          ),
+        ]);
+        await tester.pump();
+        // give any (incorrectly) scheduled premove microtask a chance to run
+        await tester.pump(const Duration(milliseconds: 1));
+        await tester.pump();
+
+        // the premove must NOT have been played
+        expect(boardHasPiece(tester, Square.d4, Piece.whitePawn), isFalse);
+        // the board is back to the starting position
+        expect(boardHasPiece(tester, Square.d2, Piece.whitePawn), isTrue);
+        expect(boardHasPiece(tester, Square.e2, Piece.whitePawn), isTrue);
+        expect(boardHasPiece(tester, Square.e4, Piece.whitePawn), isFalse);
+        expect(getBoardPieces(tester).length, 32);
+      });
+
+      testWidgets('premove is played after reconnect when the opponent has moved', (
+        WidgetTester tester,
+      ) async {
+        const gameFullId = GameFullId('qVChCOTcHSeW');
+        final gameSocketUri = GameController.socketUri(gameFullId);
+
+        // After e4 it's black's turn, white can premove.
+        await createTestGame(
+          tester,
+          pgn: 'e4',
+          clock: const (
+            running: true,
+            initial: Duration(minutes: 1),
+            increment: Duration.zero,
+            white: Duration(seconds: 58),
+            black: Duration(seconds: 58),
+            emerg: Duration(seconds: 10),
+          ),
+          serverPrefs: const ServerGamePrefs(
+            showRatings: true,
+            enablePremove: true,
+            autoQueen: .always,
+            confirmResign: true,
+            submitMove: false,
+            zenMode: .no,
+          ),
+        );
+
+        // white premoves d2-d4
+        await playMove(tester, 'd2', 'd4');
+        expect(boardHasPremove(tester, const NormalMove(from: Square.d2, to: Square.d4)), isTrue);
+
+        // The socket reconnects and the server resends the game state with the
+        // opponent's reply already played (e7-e5). The line has grown, so the
+        // queued premove should now be played.
+        sendServerSocketMessages(gameSocketUri, [
+          makeFullEvent(
+            const GameId('qVChCOTc'),
+            'e4 e5',
+            whiteUserName: 'Peter',
+            blackUserName: 'Steven',
+            youAre: Side.white,
+            socketVersion: 1,
+            clock: const (
+              running: true,
+              initial: Duration(minutes: 1),
+              increment: Duration.zero,
+              white: Duration(seconds: 58),
+              black: Duration(seconds: 56),
+              emerg: Duration(seconds: 10),
+            ),
+            serverPrefs: const ServerGamePrefs(
+              showRatings: true,
+              enablePremove: true,
+              autoQueen: .always,
+              confirmResign: true,
+              submitMove: false,
+              zenMode: .no,
+            ),
+          ),
+        ]);
+        await tester.pump();
+        // let the premove microtask run, then the board rebuild from userMove
+        await tester.pump(const Duration(milliseconds: 1));
+        await tester.pump();
+
+        // the premove has been played
+        expect(boardHasPremove(tester, const NormalMove(from: Square.d2, to: Square.d4)), isFalse);
+        expect(boardHasPiece(tester, Square.d4, Piece.whitePawn), isTrue);
+        // the opponent's move is on the board
+        expect(boardHasPiece(tester, Square.e5, Piece.blackPawn), isTrue);
+        expect(boardHasPiece(tester, Square.d2, Piece.whitePawn), isFalse);
+      });
     });
 
     testWidgets('takeback', (WidgetTester tester) async {

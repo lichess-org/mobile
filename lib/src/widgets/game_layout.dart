@@ -253,6 +253,18 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
       return;
     }
 
+    // A revert (e.g. takeback) rolls the line back to a lower ply. A premove
+    // must never be played in that case — clear it instead.
+    final oldParams = old.boardParams;
+    final isRevert =
+        newParams is InteractiveBoardParams &&
+        oldParams is InteractiveBoardParams &&
+        newParams.position.ply < oldParams.position.ply;
+    if (isRevert) {
+      ctrl.updatePosition(newGameData, resetPremove: true);
+      return;
+    }
+
     ctrl.updatePosition(newGameData);
     if (widget.explosionSquares != null) {
       ctrl.triggerExplosion(widget.explosionSquares!);

@@ -267,6 +267,11 @@ class _PlayableGameBoard extends ConsumerStatefulWidget {
 class _PlayableGameBoardState extends ConsumerState<_PlayableGameBoard> {
   late final ChessboardController _controller;
 
+  /// Ply of the position currently shown on the board. Used to tell a forward
+  /// move (opponent move) from a position revert (takeback), so a queued premove
+  /// is only ever played on the former.
+  late int _lastPly;
+
   late final _ctrlProvider = gameControllerProvider(widget.gameId);
 
   @override
@@ -274,6 +279,7 @@ class _PlayableGameBoardState extends ConsumerState<_PlayableGameBoard> {
     super.initState();
     final state = ref.read(_ctrlProvider).requireValue;
     final boardPrefs = ref.read(boardPreferencesProvider);
+    _lastPly = state.currentPosition.ply;
     _controller = ChessboardController(
       game: buildGameData(
         fen: state.currentPosition.fen,
@@ -306,6 +312,7 @@ class _PlayableGameBoardState extends ConsumerState<_PlayableGameBoard> {
     if (state == null) return;
     final boardPrefs = ref.read(boardPreferencesProvider);
     final fen = state.currentPosition.fen;
+    final newPly = state.currentPosition.ply;
     final lastMove = state.game.moveAt(state.stepCursor);
     final gameData = buildGameData(
       fen: fen,
@@ -317,34 +324,45 @@ class _PlayableGameBoardState extends ConsumerState<_PlayableGameBoard> {
       boardHighlights: boardPrefs.boardHighlights,
     );
 
+    final fenChanged = fen != _controller.fen;
+    // A revert (e.g. takeback, or a reconnection that rolled the line back)
+    // shortens the game line. A premove must never be played in that case.
+    final isRevert = newPly < _lastPly;
+    _lastPly = newPly;
+
     if (state.isReplaying) {
-      // History navigation — animate and clear premove.
-      if (fen != _controller.fen) {
-        _controller.updatePosition(gameData, resetPremove: true);
-      } else {
-        _controller.updatePosition(gameData);
-      }
+      // History navigation — animate and clear premove on position change.
+      _controller.updatePosition(gameData, resetPremove: fenChanged);
       return;
     }
 
-    if (fen != _controller.fen) {
+    if (!fenChanged) {
+      // Only game metadata changed (e.g. playable went false).
       _controller.updatePosition(gameData);
-      final explosion = state.stepCursor > 0
-          ? atomicExplosionSquares(
-              state.game.positionAt(state.stepCursor - 1),
-              state.game.moveAt(state.stepCursor),
-            )
-          : null;
-      if (explosion != null) _controller.triggerExplosion(explosion);
-      tryExecutePremove(
-        _controller,
-        state.currentPosition,
-        (move) => ref.read(_ctrlProvider.notifier).userMove(move, isPremove: true),
-      );
-    } else {
-      // Only game metadata changed (e.g. playable went false)
-      _controller.updatePosition(gameData);
+      return;
     }
+
+    if (isRevert) {
+      // Position was rolled back: clear any queued premove instead of playing it.
+      _controller.updatePosition(gameData, resetPremove: true);
+      return;
+    }
+
+    // A move was added to the game (a live opponent move, or one that arrived
+    // during a reconnection): advance the board and play any queued premove.
+    _controller.updatePosition(gameData);
+    final explosion = state.stepCursor > 0
+        ? atomicExplosionSquares(
+            state.game.positionAt(state.stepCursor - 1),
+            state.game.moveAt(state.stepCursor),
+          )
+        : null;
+    if (explosion != null) _controller.triggerExplosion(explosion);
+    tryExecutePremove(
+      _controller,
+      state.currentPosition,
+      (move) => ref.read(_ctrlProvider.notifier).userMove(move, isPremove: true),
+    );
   }
 
   @override
