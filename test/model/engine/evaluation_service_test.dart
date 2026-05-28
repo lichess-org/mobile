@@ -861,6 +861,24 @@ void main() {
       });
     });
 
+    test('Engine transitions to error state when start() throws', () async {
+      // Non-regression test: start/quit go through an error-swallowing
+      // serialization queue, but a thrown failure from start() must still be
+      // surfaced as EngineState.error rather than leaving the engine stuck in
+      // the loading state.
+      testBinding.stockfish = ThrowingStartStockfish();
+
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      service.evaluate(makeWork());
+
+      // Wait for the failing initialization to settle.
+      await Future<void>.delayed(const Duration(milliseconds: 10));
+
+      expect(service.evaluationState.value.state, EngineState.error);
+    });
+
     test('Engine name is correctly set after restarting stockfish', () async {
       final fakeStockfish = FakeStockfish();
       testBinding.stockfish = fakeStockfish;

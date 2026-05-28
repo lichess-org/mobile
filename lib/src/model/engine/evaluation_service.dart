@@ -90,8 +90,12 @@ class EvaluationService {
   Future<void> _engineOpQueue = Future<void>.value();
 
   Future<void> _runStockfishOperation(Future<void> Function() op) {
-    // discard errors to keep the queue running
-    return _engineOpQueue = _engineOpQueue.then((_) => op()).catchError((_, _) {});
+    final result = _engineOpQueue.then((_) => op());
+    // The queue tail swallows errors so a single failed operation doesn't block
+    // the ones chained after it, but the future returned to the caller keeps the
+    // error so awaiting callers (e.g. _initEngine) can still detect failures.
+    _engineOpQueue = result.catchError((_, _) {});
+    return result;
   }
 
   late final StreamSubscription<String> _stdoutSubscription;
@@ -359,7 +363,6 @@ class EvaluationService {
       _initInProgress = true;
       _setEngineState(EngineState.loading);
       _initEngine(flavor, work.variant).then((_) {
-        _initInProgress = false;
         // Compute the current work (might be different from original if another request came in)
         final currentWork = _evaluationState.value.currentWork ?? _currentMoveWork;
         if (currentWork != null) {

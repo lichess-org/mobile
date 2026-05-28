@@ -1035,6 +1035,60 @@ class ErrorStockfish implements Stockfish {
   Stream<String> get stdout => _stdoutController.stream;
 }
 
+/// A fake Stockfish whose [start] throws, simulating a native engine that fails
+/// to launch by raising an exception rather than reporting an error state.
+///
+/// Used to verify that [EvaluationService] still surfaces such failures as
+/// [EngineState.error] even though start/quit calls go through an error-
+/// swallowing serialization queue.
+class ThrowingStartStockfish implements Stockfish {
+  ThrowingStartStockfish();
+
+  final _state = ValueNotifier<StockfishState>(StockfishState.initial);
+  final _stdoutController = StreamController<String>.broadcast();
+
+  @override
+  StockfishFlavor get flavor => StockfishFlavor.sf16;
+
+  @override
+  String? get variant => null;
+
+  @override
+  String? get bigNetPath => null;
+
+  @override
+  String? get smallNetPath => null;
+
+  @override
+  Future<void> start({
+    StockfishFlavor flavor = StockfishFlavor.sf16,
+    String? variant,
+    String? smallNetPath,
+    String? bigNetPath,
+  }) async {
+    _state.value = StockfishState.starting;
+    await Future<void>.delayed(Duration.zero);
+    throw Exception('engine failed to start');
+  }
+
+  @override
+  Future<void> quit() async {
+    await Future.microtask(() {});
+    _state.value = StockfishState.initial;
+  }
+
+  @override
+  set stdin(String line) {
+    // Engine never connects, so nothing to do.
+  }
+
+  @override
+  ValueListenable<StockfishState> get state => _state;
+
+  @override
+  Stream<String> get stdout => _stdoutController.stream;
+}
+
 /// A fake Stockfish for testing practice mode with configurable eval shifts.
 ///
 /// This stockfish emits multiPv evaluations and can be configured to simulate
