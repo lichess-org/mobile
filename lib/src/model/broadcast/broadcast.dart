@@ -149,9 +149,7 @@ extension BroadcastCustomScoringExt on BroadcastCustomScoring {
                 _ => 0.0,
               }) ??
         0.0;
-    return customScore == 0.5
-        ? result.resultToString(side) // '½' looks nicer than '0.5'
-        : NumberFormat('0.##').format(customScore);
+    return customScore == 0.5 ? '½' : NumberFormat('0.##').format(customScore);
   }
 }
 
