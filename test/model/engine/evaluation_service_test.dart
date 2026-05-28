@@ -403,6 +403,68 @@ void main() {
       expect(stream2, isNotNull);
       await stream2!.first;
     });
+
+    test('redundant quit() calls do not issue extra engine quit operations', () async {
+      // Non-regression test for the idempotent-quit fix: once the engine is
+      // back in its initial state, further quit() calls must short-circuit and
+      // not reach the native engine again (quitting an already-quit engine is
+      // what crashed it in #2870).
+      final delayedStockfish = DelayedFakeStockfish();
+      testBinding.stockfish = delayedStockfish;
+
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      final stream = service.evaluate(makeWork());
+      await stream!.first;
+
+      // One quit from _initEngine (before start) so far.
+      expect(delayedStockfish.quitCallCount, 1);
+
+      service.quit();
+      service.quit();
+      service.quit();
+
+      // Allow the single queued quit to run.
+      await Future<void>.delayed(const Duration(milliseconds: 1));
+
+      expect(
+        delayedStockfish.quitCallCount,
+        2,
+        reason: 'only the first quit() reaches the engine; subsequent quits are no-ops',
+      );
+    });
+
+    test('engine start/quit operations never overlap during rapid open/close cycles', () async {
+      // Non-regression test for #2870: repeatedly opening and closing the
+      // analysis page crashed the engine because native start/quit calls ran
+      // concurrently. They must now be serialized through a single queue.
+      final stockfish = ConcurrencyTrackingStockfish();
+      testBinding.stockfish = stockfish;
+
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      // Simulate repeatedly opening (evaluate) and closing (quit) the screen.
+      for (var i = 0; i < 5; i++) {
+        service.evaluate(makeWork(id: StringId('game$i')));
+        service.quit();
+      }
+
+      // Let the serialized operation queue fully drain.
+      await Future<void>.delayed(const Duration(milliseconds: 300));
+
+      expect(
+        stockfish.maxConcurrentOps,
+        1,
+        reason: 'engine start/quit must be serialized to avoid native crashes (#2870)',
+      );
+
+      // The engine must remain usable after the rapid cycles.
+      final stream = service.evaluate(makeWork(id: const StringId('after')));
+      final (resultWork, _) = await stream!.first;
+      expect(resultWork.id, const StringId('after'));
+    });
   });
 
   group('EvaluationService internal state consistency', () {
@@ -1642,6 +1704,29 @@ void main() {
         // The future should throw MoveRequestCancelledException
         expect(moveFuture, throwsA(isA<MoveRequestCancelledException>()));
       });
+    });
+
+    test('evaluate() cancels a pending findMove and the evaluation still runs', () async {
+      // Non-regression test for the _startWork race fix: when an evaluation
+      // supersedes an in-flight move search, the pending findMove future must
+      // be cancelled (previously it would hang forever) and the evaluation
+      // must proceed normally.
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      // Start a move search but don't await it.
+      final moveFuture = service.findMove(makeMoveWork());
+
+      // Switch to an evaluation while the move search is still pending.
+      final evalWork = makeWork(id: const StringId('eval'));
+      final evalStream = service.evaluate(evalWork);
+
+      // The superseded move request must be cancelled, not left hanging.
+      await expectLater(moveFuture, throwsA(isA<MoveRequestCancelledException>()));
+
+      // The evaluation that took over must still produce a result.
+      final (resultWork, _) = await evalStream!.first;
+      expect(resultWork, evalWork);
     });
 
     test('second findMove cancels the first one with MoveRequestCancelledException', () {

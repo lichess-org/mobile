@@ -623,6 +623,129 @@ class AnalysisTestStockfish implements Stockfish {
   Stream<String> get stdout => _stdoutController.stream;
 }
 
+/// A fake Stockfish that records whether native start/quit operations ever run
+/// concurrently.
+///
+/// Used to verify that [EvaluationService] serializes engine start/quit calls
+/// so they never overlap (issue #2870: repeatedly opening/closing the analysis
+/// page crashed the engine because of concurrent native quit/start calls).
+///
+/// Both [start] and [quit] take a real (small) delay so that, if the service
+/// ever issued two operations without waiting for the previous one,
+/// [maxConcurrentOps] would observe a value greater than 1.
+class ConcurrencyTrackingStockfish implements Stockfish {
+  ConcurrencyTrackingStockfish({this.opDelay = const Duration(milliseconds: 15)});
+
+  /// Duration each native start/quit operation takes.
+  final Duration opDelay;
+
+  final _state = ValueNotifier<StockfishState>(StockfishState.initial);
+  final _stdoutController = StreamController<String>.broadcast();
+  Position? _position;
+
+  int _inFlightOps = 0;
+
+  /// The maximum number of native operations observed running at the same time.
+  /// Must stay at 1 when start/quit are correctly serialized.
+  int maxConcurrentOps = 0;
+
+  int startCallCount = 0;
+  int quitCallCount = 0;
+
+  void _enter() {
+    _inFlightOps++;
+    if (_inFlightOps > maxConcurrentOps) maxConcurrentOps = _inFlightOps;
+  }
+
+  void _exit() {
+    _inFlightOps--;
+  }
+
+  void _emit(String line) {
+    if (!_stdoutController.isClosed) _stdoutController.add(line);
+  }
+
+  @override
+  StockfishFlavor get flavor => StockfishFlavor.sf16;
+
+  @override
+  String? get variant => null;
+
+  @override
+  String? get bigNetPath => null;
+
+  @override
+  String? get smallNetPath => null;
+
+  @override
+  Future<void> start({
+    StockfishFlavor flavor = StockfishFlavor.sf16,
+    String? variant,
+    String? smallNetPath,
+    String? bigNetPath,
+  }) async {
+    _enter();
+    try {
+      startCallCount++;
+      _state.value = StockfishState.starting;
+      await Future<void>.delayed(opDelay);
+      _state.value = StockfishState.ready;
+      _emit('id name Stockfish 16\n');
+      _emit('uciok\n');
+    } finally {
+      _exit();
+    }
+  }
+
+  @override
+  Future<void> quit() async {
+    _enter();
+    try {
+      quitCallCount++;
+      await Future<void>.delayed(opDelay);
+      _state.value = StockfishState.initial;
+    } finally {
+      _exit();
+    }
+  }
+
+  @override
+  set stdin(String line) {
+    final parts = line.trim().split(RegExp(r'\s+'));
+    switch (parts.first) {
+      case 'isready':
+        _emit('readyok\n');
+      case 'position':
+        if (parts.length > 1 && parts[1] == 'fen') {
+          final movesPartIndex = parts.indexWhere((p) => p == 'moves');
+          if (parts.length > 2) {
+            _position = Position.setupPosition(
+              Rule.chess,
+              Setup.parseFen(
+                parts.sublist(2, movesPartIndex != -1 ? movesPartIndex : null).join(' '),
+              ),
+            );
+          }
+        }
+      case 'go':
+        if (parts.length > 1 && parts[1] == 'movetime' && parts.length > 2) {
+          for (var i = 1; i < 3; i++) {
+            _emit(
+              'info depth ${14 + i} seldepth 8 multipv 1 score cp ${_position?.turn == Side.black ? '-' : ''}23 nodes ${359 * (i + 14)} nps 359000 hashfull 0 tbhits 0 time ${100 * (i + 14)} pv e2e4 e7e5 g1f3\n',
+            );
+          }
+          _emit('bestmove e2e4 ponder e7e5\n');
+        }
+    }
+  }
+
+  @override
+  ValueListenable<StockfishState> get state => _state;
+
+  @override
+  Stream<String> get stdout => _stdoutController.stream;
+}
+
 /// A fake Stockfish that returns the first legal move from the current position.
 /// This is useful for tests that need realistic game progression.
 class LegalMoveFakeStockfish implements Stockfish {
