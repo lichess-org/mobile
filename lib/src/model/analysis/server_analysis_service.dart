@@ -229,7 +229,7 @@ final currentAnalysisProvider =
 class CurrentAnalysis extends Notifier<ServerAnalysisSource?> {
   @override
   ServerAnalysisSource? build() {
-    final listenable = ref.read(serverAnalysisServiceProvider).currentAnalysis;
+    final listenable = ref.watch(serverAnalysisServiceProvider).currentAnalysis;
 
     listenable.addListener(_listener);
 
