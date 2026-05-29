@@ -9,8 +9,6 @@ PODS:
     - Flutter
   - multistockfish_variant (0.1.1):
     - Flutter
-  - receive_sharing_intent (1.8.1):
-    - Flutter
   - sound_effect (0.1.3):
     - Flutter
 
@@ -20,7 +18,6 @@ DEPENDENCIES:
   - multistockfish_chess (from `.symlinks/plugins/multistockfish_chess/ios`)
   - multistockfish_sf16 (from `.symlinks/plugins/multistockfish_sf16/ios`)
   - multistockfish_variant (from `.symlinks/plugins/multistockfish_variant/ios`)
-  - receive_sharing_intent (from `.symlinks/plugins/receive_sharing_intent/ios`)
   - sound_effect (from `.symlinks/plugins/sound_effect/ios`)
 
 EXTERNAL SOURCES:
@@ -34,8 +31,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/multistockfish_sf16/ios"
   multistockfish_variant:
     :path: ".symlinks/plugins/multistockfish_variant/ios"
-  receive_sharing_intent:
-    :path: ".symlinks/plugins/receive_sharing_intent/ios"
   sound_effect:
     :path: ".symlinks/plugins/sound_effect/ios"
 
@@ -45,7 +40,6 @@ SPEC CHECKSUMS:
   multistockfish_chess: 826a3fb3746cbf66496bb1388eb664084fac393c
   multistockfish_sf16: dfd62eb23f5caaad596fa61e88624ead35f0a5e8
   multistockfish_variant: fba6f8034da46db2a1745a0fab420000c3db5cd9
-  receive_sharing_intent: 222384f00ffe7e952bbfabaa9e3967cb87e5fe00
   sound_effect: 2eb2c9ff67dfed3a5e2799128ffd5cf42b6bbfd9
 
 PODFILE CHECKSUM: 5d2ab20fea2b68bc8d26fad47359f4c9158ad6f4
