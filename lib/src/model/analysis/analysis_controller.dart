@@ -235,7 +235,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
               'Event': '?',
               'Site': '?',
               'Date': _dateFormat.format(DateTime.now()),
-              'Variant': _variant.label,
+              'Variant': _variant.pgnName,
               'Round': '?',
               'White': '?',
               'Black': '?',

@@ -247,7 +247,7 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
                     },
                   );
                 },
-                child: Text(preferences.variant.translatedLabel(context.l10n)),
+                child: Text(preferences.variant.label(context.l10n)),
               ),
             ),
             ExpandedSection(

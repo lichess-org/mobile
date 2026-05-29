@@ -36,7 +36,7 @@ class VariantLabel extends StatelessWidget {
                 child: Icon(variant.icon, size: style.fontSize, color: style.color),
               ),
               const WidgetSpan(child: SizedBox(width: 8)),
-              TextSpan(text: variant.translatedLabel(context.l10n)),
+              TextSpan(text: variant.label(context.l10n)),
             ],
           ),
         ),

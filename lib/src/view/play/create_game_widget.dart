@@ -90,7 +90,7 @@ class CreateGameWidget extends ConsumerWidget {
                     icon: playPrefs.customVariant != Variant.standard
                         ? Icon(playPrefs.customVariant.icon)
                         : null,
-                    label: Text(playPrefs.customVariant.translatedLabel(context.l10n)),
+                    label: Text(playPrefs.customVariant.label(context.l10n)),
                     onPressed: () {
                       showChoicePicker(
                         context,

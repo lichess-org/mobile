@@ -449,9 +449,7 @@ class _Body extends ConsumerWidget {
           boardBuilder: (context, boardSize, borderRadius) => SizedBox.square(
             dimension: boardSize,
             child: Center(
-              child: Text(
-                context.l10n.mobileUnsupportedVariant(variant.translatedLabel(context.l10n)),
-              ),
+              child: Text(context.l10n.mobileUnsupportedVariant(variant.label(context.l10n))),
             ),
           ),
           smallBoard: studyPrefs.smallBoard,

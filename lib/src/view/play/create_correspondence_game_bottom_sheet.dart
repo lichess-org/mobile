@@ -95,7 +95,7 @@ class _CreateGameBodyState extends ConsumerState<CreateCorrespondenceGameBottomS
                     },
                   );
                 },
-                child: Text(preferences.customVariant.translatedLabel(context.l10n)),
+                child: Text(preferences.customVariant.label(context.l10n)),
               ),
             ),
             ExpandedSection(

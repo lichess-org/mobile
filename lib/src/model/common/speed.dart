@@ -35,24 +35,7 @@ enum Speed {
     }
   }
 
-  String get label {
-    switch (this) {
-      case Speed.ultraBullet:
-        return 'UltraBullet';
-      case Speed.bullet:
-        return 'Bullet';
-      case Speed.blitz:
-        return 'Blitz';
-      case Speed.rapid:
-        return 'Rapid';
-      case Speed.classical:
-        return 'Classical';
-      case Speed.correspondence:
-        return 'Correspondence';
-    }
-  }
-
-  String translatedLabel(AppLocalizations l10n) {
+  String label(AppLocalizations l10n) {
     switch (this) {
       case Speed.ultraBullet:
         return l10n.ultraBullet;
