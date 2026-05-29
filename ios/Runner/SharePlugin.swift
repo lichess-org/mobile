@@ -76,7 +76,8 @@ public final class SharePlugin: NSObject, FlutterPlugin, FlutterStreamHandler,
   private func readPgn(fromFileURL url: URL) -> String? {
     let scoped = url.startAccessingSecurityScopedResource()
     defer { if scoped { url.stopAccessingSecurityScopedResource() } }
-    return try? String(contentsOf: url, encoding: .utf8)
+    guard let data = try? Data(contentsOf: url) else { return nil }
+    return decodePgn(data)
   }
 
   private func readSharedPgnFromAppGroup() -> String? {
@@ -85,9 +86,18 @@ public final class SharePlugin: NSObject, FlutterPlugin, FlutterStreamHandler,
         forSecurityApplicationGroupIdentifier: Self.appGroupId)
     else { return nil }
     let fileURL = container.appendingPathComponent(Self.sharedFileName)
-    let pgn = try? String(contentsOf: fileURL, encoding: .utf8)
+    let data = try? Data(contentsOf: fileURL)
     try? FileManager.default.removeItem(at: fileURL)
-    return pgn
+    return data.map(decodePgn)
+  }
+
+  /// Decodes PGN bytes tolerantly. PGN files are usually UTF-8 but legacy files
+  /// may use ISO-8859-1 (e.g. for player names), so we fall back to Latin-1 —
+  /// which maps every byte to a code point and never fails — rather than silently
+  /// dropping a file that isn't valid UTF-8.
+  private func decodePgn(_ data: Data) -> String {
+    if let utf8 = String(data: data, encoding: .utf8) { return utf8 }
+    return String(data: data, encoding: .isoLatin1) ?? String(decoding: data, as: UTF8.self)
   }
 
   // MARK: - Application delegate (non-scene fallback)

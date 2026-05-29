@@ -46,11 +46,21 @@ class ShareViewController: UIViewController {
 
   private func pgnString(from data: Any?) -> String? {
     if let url = data as? URL, url.isFileURL {
-      return try? String(contentsOf: url, encoding: .utf8)
+      guard let bytes = try? Data(contentsOf: url) else { return nil }
+      return decodePgn(bytes)
     }
     if let text = data as? String { return text }
-    if let raw = data as? Data { return String(data: raw, encoding: .utf8) }
+    if let raw = data as? Data { return decodePgn(raw) }
     return nil
+  }
+
+  /// Decodes PGN bytes tolerantly. PGN files are usually UTF-8 but legacy files
+  /// may use ISO-8859-1 (e.g. for player names), so we fall back to Latin-1 —
+  /// which maps every byte to a code point and never fails — rather than silently
+  /// dropping a file that isn't valid UTF-8.
+  private func decodePgn(_ data: Data) -> String {
+    if let utf8 = String(data: data, encoding: .utf8) { return utf8 }
+    return String(data: data, encoding: .isoLatin1) ?? String(decoding: data, as: UTF8.self)
   }
 
   private func savePgn(_ pgn: String) {
