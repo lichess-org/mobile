@@ -193,7 +193,6 @@ class _BodyState extends ConsumerState<_Body> {
                 youAre: youAre!,
                 isBoardTurned: isBoardTurned,
               ),
-              lastMove: game.moveAt(stepCursor),
               explosionSquares: stepCursor > 0
                   ? atomicExplosionSquares(game.positionAt(stepCursor - 1), game.moveAt(stepCursor))
                   : null,
@@ -205,6 +204,7 @@ class _BodyState extends ConsumerState<_Body> {
                           ? PlayerSide.white
                           : PlayerSide.black
                     : PlayerSide.none,
+                lastMove: game.moveAt(stepCursor),
                 onMove: (move, {viaDragAndDrop}) {
                   onUserMove(move);
                 },
