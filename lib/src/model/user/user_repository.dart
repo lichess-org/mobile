@@ -82,7 +82,7 @@ class UserRepository {
   }
 
   Future<IList<User>> getOnlineBots() {
-    return client.readNdJsonList(Uri(path: '/api/bot/online', queryParameters: {'nb': '500'}), mapper: User.fromServerJson);
+    return client.readNdJsonList(Uri(path: '/api/bot/online', queryParameters: {'nb': '500'}), mapper: User.fromServerJson,);
   }
 
   Future<UserPerfStats> getPerfStats(UserId id, Perf perf) {
