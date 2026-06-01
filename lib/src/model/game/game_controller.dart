@@ -345,6 +345,9 @@ class GameController extends AsyncNotifier<GameState> {
       await ref
           .read(accountServiceProvider)
           .setGameBookmark(gameFullId.gameId, bookmark: toggledBookmark);
+
+      if (!ref.mounted) return;
+
       state = AsyncValue.data(
         state.requireValue.copyWith(
           game: state.requireValue.game.copyWith(bookmarked: toggledBookmark),
@@ -559,6 +562,9 @@ class GameController extends AsyncNotifier<GameState> {
   }
 
   void _handleSocketEvent(SocketEvent event, [bool hasRetried = false]) {
+    // If we are unmounting ignore incoming socket traffic
+    if (!ref.mounted) return;
+
     if (!state.hasValue) {
       if (event.version != null) {
         _logger.warning('received $event while game state not yet available');
@@ -768,6 +774,8 @@ class GameController extends AsyncNotifier<GameState> {
         if (!newState.game.aborted) {
           _getPostGameData()
               .then((data) {
+                if (!ref.mounted) return;
+
                 final game = _mergePostGameData(state.requireValue.game, data);
                 state = AsyncValue.data(state.requireValue.copyWith(game: game));
                 _storeGame(game);
@@ -967,6 +975,8 @@ class GameController extends AsyncNotifier<GameState> {
     }
 
     await _storeGame(gameWithPostData);
+
+    if (!ref.mounted) return;
 
     state = AsyncValue.data(state.requireValue.copyWith(game: gameWithPostData));
   }

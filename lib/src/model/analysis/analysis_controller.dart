@@ -162,6 +162,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
     _socketSubscription = socketClient.stream.listen(_handleSocketEvent);
 
     isOnline(ref.read(defaultClientProvider)).then((online) {
+      if (!ref.mounted) return;
       if (!online) {
         socketClient.close();
       }
@@ -664,6 +665,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
       if (game == null) return;
       final toggledBookmark = !(game.data.bookmarked ?? false);
       await ref.read(accountServiceProvider).setGameBookmark(game.id, bookmark: toggledBookmark);
+      if (!ref.mounted) return;
       state = AsyncValue.data(
         state.requireValue.copyWith(
           archivedGame: state.requireValue.archivedGame?.copyWith(

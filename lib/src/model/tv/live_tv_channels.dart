@@ -39,6 +39,7 @@ class LiveTvChannels extends AsyncNotifier<LiveTvChannelsState> {
   /// Start watching the TV games
   Future<void> startWatching() async {
     final newState = await _doStartWatching();
+    if (!ref.mounted) return;
     state = AsyncValue.data(newState);
   }
 
@@ -50,12 +51,14 @@ class LiveTvChannels extends AsyncNotifier<LiveTvChannelsState> {
 
   Future<IMap<TvChannel, TvGameSnapshot>> _doStartWatching() async {
     final repoGames = await ref.read(tvRepositoryProvider).channels();
+    if (!ref.mounted) throw Exception('Provider unmounted during initial repository fetch');
 
     _socketClient = ref.read(socketPoolProvider).open(Uri(path: kDefaultSocketRoute));
 
     _socketReadySubscription?.cancel();
     _socketReadySubscription = _socketClient.connectedStream.listen((_) async {
       final repoGames = await ref.read(tvRepositoryProvider).channels();
+      if (!ref.mounted) return;
       _socketWatch(repoGames);
     });
 
@@ -63,6 +66,12 @@ class LiveTvChannels extends AsyncNotifier<LiveTvChannelsState> {
     _socketSubscription = _socketClient.stream.listen(_handleSocketEvent);
 
     await _socketClient.firstConnection;
+    if (!ref.mounted) {
+      _socketClient.close();
+      _socketReadySubscription?.cancel();
+      _socketSubscription?.cancel();
+      throw Exception('Provider unmounted while awaiting initial socket connection');
+    }
     _socketWatch(repoGames);
 
     return repoGames.map((channel, game) {
@@ -92,6 +101,9 @@ class LiveTvChannels extends AsyncNotifier<LiveTvChannelsState> {
   }
 
   void _handleSocketEvent(SocketEvent event) {
+    // If we are unmounting ignore incoming socket traffic
+    if (!ref.mounted) return;
+
     if (!state.hasValue) {
       assert(false, 'received a SocketEvent while LiveTvChannels state is null');
       return;

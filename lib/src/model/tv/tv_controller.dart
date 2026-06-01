@@ -65,6 +65,7 @@ class TvController extends AsyncNotifier<TvState> {
 
   Future<void> startWatching() async {
     final newState = await _connectWebsocket(null);
+    if (!ref.mounted) return;
     state = AsyncValue.data(newState);
   }
 
@@ -81,17 +82,21 @@ class TvController extends AsyncNotifier<TvState> {
       orientation = game.$2;
     } else if (params.channel != null) {
       final channels = await ref.read(tvRepositoryProvider).channels();
+      if (!ref.mounted) throw Exception('Provider disposed during channel fetch');
       final channelGame = channels[params.channel!]!;
       id = channelGame.id;
       orientation = channelGame.side ?? Side.white;
     } else if (params.userId != null) {
       final game = await ref.read(userRepositoryProvider).getCurrentGame(params.userId!);
+      if (!ref.mounted) throw Exception('Provider disposed during user game fetch');
       id = game.id;
       orientation = game.playerSideOf(params.userId!) ?? Side.white;
     } else {
       id = state.value?.game.id ?? params.initialGame!.$1;
       orientation = state.value?.orientation ?? params.initialGame!.$2;
     }
+
+    if (!ref.mounted) throw Exception('Provider unmounted before socket initialization');
 
     final socketClient = ref
         .read(socketPoolProvider)
@@ -110,6 +115,10 @@ class TvController extends AsyncNotifier<TvState> {
     _socketSubscription = socketClient.stream.listen(_handleSocketEvent);
 
     return socketClient.stream.firstWhere((e) => e.topic == 'full').then((event) {
+      if (!ref.mounted) {
+        socketClient.close(); // Clean up the connection if we are shutting down
+        throw Exception('Provider unmounted waiting for full socket payload');
+      }
       final fullEvent = GameFullEvent.fromJson(event.data as Map<String, dynamic>);
       socketClient.version = fullEvent.socketEventVersion;
 
@@ -123,6 +132,7 @@ class TvController extends AsyncNotifier<TvState> {
 
   Future<void> _moveToNextGame((GameId id, Side orientation) game) async {
     final newState = await _connectWebsocket(game);
+    if (!ref.mounted) return;
     state = AsyncValue.data(newState);
   }
 
