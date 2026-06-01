@@ -23,7 +23,7 @@ dependencies:
   connectivity_plus: ^7.1.1
   cronet_http: ^1.8.0
   crypto: ^3.0.7
-  cupertino_http: ^2.4.0
+  cupertino_http: ^3.0.2
   cupertino_icons: ^1.0.9
   dartchess: ^0.13.1
   deep_pick: ^1.1.0
