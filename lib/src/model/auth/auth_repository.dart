@@ -55,8 +55,7 @@ class AuthRepository {
   ///
   /// Opens a system auth session (Chrome Auth/Custom Tab on Android,
   /// `ASWebAuthenticationSession` on iOS) to the Lichess authorization page and waits for the
-  /// redirect back to the app. The browser session shares cookies with the platform browser, so the
-  /// user stays logged in when later opening Lichess pages there.
+  /// redirect back to the app.
   Future<AuthUser> signIn() async {
     final codeVerifier = _generateCodeVerifier();
     final codeChallenge = _generateCodeChallenge(codeVerifier);
