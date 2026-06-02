@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -29,11 +28,10 @@ import 'package:lichess_mobile/src/model/study/study_preferences.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/quick_actions.dart';
+import 'package:lichess_mobile/src/shared_pgn_service.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
-import 'package:lichess_mobile/src/view/more/import_pgn_screen.dart';
-import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
 const String _kIosAppGroupId = 'group.org.lichess.mobileV2.LichessWidgets';
 const List<String> _kIosBlogWidgetKinds = [
@@ -82,8 +80,6 @@ class _AppState extends ConsumerState<Application> {
   /// Whether the app has checked for online status for the first time.
   bool _firstTimeOnlineCheck = false;
   final _navigatorKey = GlobalKey<NavigatorState>();
-
-  StreamSubscription<List<SharedMediaFile>>? _intentSub;
 
   // Adjusts some settings for small screens based on the MediaQuery data.
   Future<void> _screenSizeBasedInitialization(WidgetRef ref) async {
@@ -148,6 +144,7 @@ class _AppState extends ConsumerState<Application> {
     ref.read(quickActionServiceProvider).start();
     ref.read(announceServiceProvider).start();
     ref.read(appLinksServiceProvider).start();
+    ref.read(sharedPgnServiceProvider).start();
 
     if (Platform.isIOS) {
       HomeWidget.setAppGroupId(_kIosAppGroupId);
@@ -205,13 +202,6 @@ class _AppState extends ConsumerState<Application> {
     });
 
     super.initState();
-    _initSharingIntent();
-  }
-
-  @override
-  void dispose() {
-    _intentSub?.cancel();
-    super.dispose();
   }
 
   @override
@@ -242,43 +232,5 @@ class _AppState extends ConsumerState<Application> {
       home: const MainTabScaffold(),
       navigatorObservers: [rootNavPageRouteObserver],
     );
-  }
-
-  void _initSharingIntent() {
-    // Warm start
-    _intentSub = ReceiveSharingIntent.instance.getMediaStream().listen((
-      List<SharedMediaFile> value,
-    ) {
-      _processSharedFiles(value);
-    });
-
-    // Cold start
-    ReceiveSharingIntent.instance.getInitialMedia().then((List<SharedMediaFile> value) {
-      _processSharedFiles(value);
-      ReceiveSharingIntent.instance.reset();
-    });
-  }
-
-  Future<void> _processSharedFiles(List<SharedMediaFile> files) async {
-    if (files.isEmpty) return;
-    final filePath = files.first.path;
-    if (filePath.startsWith('http')) {
-      debugPrint('Ignored shared URL in file processor: $filePath');
-      return;
-    }
-    try {
-      final context = _navigatorKey.currentContext;
-      if (context == null || !context.mounted) return;
-
-      final file = File(filePath);
-      final bytes = await file.readAsBytes();
-      final pgnText = utf8.decode(bytes, allowMalformed: true);
-
-      if (context.mounted) {
-        ImportPgnScreen.handlePgnText(context, pgnText);
-      }
-    } catch (e) {
-      debugPrint('Failed to process incoming file: $e');
-    }
   }
 }

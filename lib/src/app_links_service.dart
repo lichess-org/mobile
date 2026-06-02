@@ -87,6 +87,11 @@ class AppLinksService {
     if (uri.scheme == 'file' || uri.scheme == 'content') {
       return;
     }
+    // Shared PGN deeplinks (from the iOS Share Extension) are handled natively by
+    // SharePlugin, which reads the PGN from the shared App Group container.
+    if (uri.scheme == kLichessUriScheme && uri.host == 'shared-pgn') {
+      return;
+    }
     if (uri.scheme == kLichessUriScheme && uri.host == kOAuthRedirectUriHost) {
       ref.read(oauthCallbackProvider).add(uri);
       return;
