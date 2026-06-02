@@ -4,6 +4,7 @@ import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/lichess_links.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -11,7 +12,6 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_symbols_icons/symbols.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class AccountPreferencesScreen extends ConsumerStatefulWidget {
   const AccountPreferencesScreen({super.key});
@@ -389,7 +389,7 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                   trailing: const _OpenInNewIcon(),
                   onTap: () {
                     _pendingKidModeRefresh = true;
-                    launchUrl(lichessUri('/account/kid'));
+                    launchAuthenticatedLichessUrl(lichessUri('/account/kid'));
                   },
                 ),
               ],
@@ -403,7 +403,7 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                   title: Text(context.l10n.changePassword),
                   trailing: const _OpenInNewIcon(),
                   onTap: () {
-                    launchUrl(lichessUri('/account/passwd'));
+                    launchAuthenticatedLichessUrl(lichessUri('/account/passwd'));
                   },
                 ),
                 ListTile(
@@ -411,7 +411,7 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                   title: Text(context.l10n.tfaTwoFactorAuth),
                   trailing: const _OpenInNewIcon(),
                   onTap: () {
-                    launchUrl(lichessUri('/account/twofactor'));
+                    launchAuthenticatedLichessUrl(lichessUri('/account/twofactor'));
                   },
                 ),
               ],
@@ -426,7 +426,7 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                     title: const Text('Delete your account'),
                     trailing: const _OpenInNewIcon(),
                     onTap: () {
-                      launchUrl(lichessUri('/account/delete'));
+                      launchAuthenticatedLichessUrl(lichessUri('/account/delete'));
                     },
                   )
                 else
@@ -435,7 +435,7 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
                     title: Text(context.l10n.settingsCloseAccount),
                     trailing: const _OpenInNewIcon(),
                     onTap: () {
-                      launchUrl(lichessUri('/account/close'));
+                      launchAuthenticatedLichessUrl(lichessUri('/account/close'));
                     },
                   ),
               ],

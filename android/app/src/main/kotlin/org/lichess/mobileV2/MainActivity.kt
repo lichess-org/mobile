@@ -31,11 +31,11 @@ class MainActivity: FlutterActivity() {
     super.onCreate(savedInstanceState)
   }
 
-  // The OAuth redirect (org.lichess.mobile://login-callback) is delivered here, not in onCreate,
-  // because OAuthCallbackActivity forwards it to this already-running singleTop instance. Flutter's
-  // default handling leaves getIntent() pointing at the stale launch intent, so app_links would read
-  // the wrong URI and the login flow would never receive the callback. setIntent() updates the
-  // activity's current intent to the one carrying the OAuth code so app_links surfaces it correctly.
+  // Deep links (study/broadcast/puzzle/share/open-web, etc.) delivered while the app is already
+  // running arrive here. Flutter's default handling leaves getIntent() pointing at the stale launch
+  // intent, so app_links would read the wrong URI; setIntent() updates the activity's current intent
+  // to the freshly received one so app_links surfaces it correctly. (OAuth callbacks no longer pass
+  // through here — flutter_web_auth_2 captures them in its own CallbackActivity / auth session.)
   override fun onNewIntent(intent: Intent) {
     setIntent(intent)
     super.onNewIntent(intent)

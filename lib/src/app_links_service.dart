@@ -8,7 +8,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
-import 'package:lichess_mobile/src/model/auth/oauth_callback.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -90,10 +89,6 @@ class AppLinksService {
     // Shared PGN deeplinks (from the iOS Share Extension) are handled natively by
     // SharePlugin, which reads the PGN from the shared App Group container.
     if (uri.scheme == kLichessUriScheme && uri.host == 'shared-pgn') {
-      return;
-    }
-    if (uri.scheme == kLichessUriScheme && uri.host == kOAuthRedirectUriHost) {
-      ref.read(oauthCallbackProvider).add(uri);
       return;
     }
     if (uri.scheme == kLichessUriScheme && uri.host == 'open-web') {
