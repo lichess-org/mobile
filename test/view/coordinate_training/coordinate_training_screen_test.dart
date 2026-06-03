@@ -10,6 +10,11 @@ import 'package:lichess_mobile/src/view/coordinate_training/coordinate_training_
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 
+/// Returns true if the board has a highlight on [square].
+bool _boardHasHighlight(WidgetTester tester, Square square) {
+  return findBoardHighlightPainter(tester).squareHighlights.containsKey(square);
+}
+
 void main() {
   group('Coordinate Training', () {
     testWidgets('Initial state when started in FindSquare mode', (tester) async {
@@ -63,10 +68,10 @@ void main() {
       expect(container.read(controllerProvider).nextCoord, nextCoord);
       expect(container.read(controllerProvider).trainingActive, true);
 
-      expect(boardHasHighlight(tester, wrongCoord), isTrue);
+      expect(_boardHasHighlight(tester, wrongCoord), isTrue);
 
       await tester.pump(const Duration(milliseconds: 300));
-      expect(boardHasHighlight(tester, wrongCoord), isFalse);
+      expect(_boardHasHighlight(tester, wrongCoord), isFalse);
     });
 
     testWidgets('Tap correct square', (tester) async {
@@ -92,14 +97,14 @@ void main() {
 
       await tester.pump();
 
-      expect(boardHasHighlight(tester, currentCoord), isTrue);
+      expect(_boardHasHighlight(tester, currentCoord), isTrue);
 
       expect(container.read(controllerProvider).score, 1);
       expect(container.read(controllerProvider).currentCoord, nextCoord);
       expect(container.read(controllerProvider).trainingActive, true);
 
       await tester.pumpAndSettle(const Duration(milliseconds: 300));
-      expect(boardHasHighlight(tester, currentCoord), isFalse);
+      expect(_boardHasHighlight(tester, currentCoord), isFalse);
 
       expect(find.text(container.read(controllerProvider).currentCoord!.name), findsOneWidget);
       expect(find.text(container.read(controllerProvider).nextCoord!.name), findsOneWidget);
