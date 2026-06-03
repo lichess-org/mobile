@@ -3,8 +3,10 @@ import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 
-/// A bar showing the variations branching out of the current position, if there is more than one variation,
-/// each variation is shown as a button with the move SAN, and if annotations are enabled, the move annotation is also shown (e.g. "!" or "?")
+/// A bar showing the variations branching out of the current position, if there is more than one variation.
+///
+/// Each variation is shown as a button with the move SAN, and if annotations are enabled, the move
+/// annotation is also shown (e.g. "!" or "?")
 class VariationsBar extends StatelessWidget {
   const VariationsBar({
     super.key,
