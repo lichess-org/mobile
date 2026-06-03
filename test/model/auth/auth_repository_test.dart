@@ -53,6 +53,13 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group('AuthRepository.signIn', () {
+    // [FlutterWebAuth2Platform.instance] is global; restore the original after each test so the
+    // fake doesn't leak into other test files (and cause order-dependent failures).
+    final originalWebAuthPlatform = FlutterWebAuth2Platform.instance;
+    tearDown(() {
+      FlutterWebAuth2Platform.instance = originalWebAuthPlatform;
+    });
+
     test('returns the authenticated user on success', () async {
       FlutterWebAuth2Platform.instance = FakeFlutterWebAuth2((url) async => successCallback(url));
 
