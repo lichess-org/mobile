@@ -852,7 +852,7 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
             ),
             SettingsListTile(
               settingsLabel: Text(context.l10n.variant),
-              settingsValue: _selectedVariant.label,
+              settingsValue: _selectedVariant.label(context.l10n),
               onTap: () {
                 showChoicePicker(
                   context,

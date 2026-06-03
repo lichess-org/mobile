@@ -287,31 +287,61 @@ class AppLocalizationsEu extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Edo inportatu PGN fitxategi bat';
 
   @override
+  String get variantStandard => 'Ohikoa';
+
+  @override
   String get variantStandardTitle => 'Xakearen Lege arruntak (FIDE)';
+
+  @override
+  String get variantChess960 => '960 xakea';
 
   @override
   String get variantChess960Title => 'Lehenengo lerroko piezen kokalekua ausaz erabakitzen da.';
 
   @override
+  String get variantKingOfTheHill => 'Muinoko erregea';
+
+  @override
   String get variantKingOfTheHillTitle => 'Eraman zure erregea taularen erdira partida irabazteko.';
+
+  @override
+  String get variantThreeCheck => 'Hiru xake';
 
   @override
   String get variantThreeCheckTitle => 'Egin xake hiru aldiz aurkariari partida irabazteko.';
 
   @override
+  String get variantAntichess => 'Antixakea';
+
+  @override
   String get variantAntichessTitle => 'Galdu zure pieza guztiak (edo zure erregea ito) partida irabazteko.';
+
+  @override
+  String get variantAtomic => 'Atomikoa';
 
   @override
   String get variantAtomicTitle => 'Aurkariaren erregea akabatu partida irabazteko.';
 
   @override
+  String get variantHorde => 'Tropela';
+
+  @override
   String get variantHordeTitle => 'Jokalari baten peoi asko ditu eta besteak ohiko piezak.';
+
+  @override
+  String get variantRacingKings => 'Errege korrikalariak';
 
   @override
   String get variantRacingKingsTitle => 'Ereman zure erregea taularen beste aldera partida irabazteko.';
 
   @override
+  String get variantCrazyhouse => 'Auto-fitxa-pasa';
+
+  @override
   String get variantCrazyhouseTitle => 'Harrapatutako piezak berriz ere xake-taulak jarri ditzakezu jokaldi bat egin beharrean.';
+
+  @override
+  String get variantFromPosition => 'Posizio jakin batetik';
 
   @override
   String get variantFromPositionTitle => 'Xake estandarra posizio jakin batetik abiatuta';

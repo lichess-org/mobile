@@ -105,7 +105,10 @@ class _SectionChoices extends ConsumerWidget {
                   choice.display,
                   style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 20.0),
                 ),
-                subtitle: Text(choice.speed.label, style: const TextStyle(fontSize: 14.0)),
+                subtitle: Text(
+                  choice.speed.label(context.l10n),
+                  style: const TextStyle(fontSize: 14.0),
+                ),
                 speed: choice.speed,
                 onTap: isOnline
                     ? () {
@@ -239,7 +242,7 @@ Future<void> showTimeControlPicker(BuildContext context, WidgetRef ref) {
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          speed.label,
+                          speed.label(context.l10n),
                           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14.0),
                         ),
                       ),

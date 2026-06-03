@@ -287,31 +287,61 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileOrImportPgnFile => 'یا یک فایل PGN را بارگذاری کنید';
 
   @override
+  String get variantStandard => 'اِستانده';
+
+  @override
   String get variantStandardTitle => 'قانون‌های اِستاندهٔ شطرنج (فیده)';
+
+  @override
+  String get variantChess960 => 'شطرنج۹۶۰';
 
   @override
   String get variantChess960Title => 'وضعیتِ آغازشِ مُهره‌های عرضِ سواران تصادفی است.';
 
   @override
+  String get variantKingOfTheHill => 'پادشاهِ تَپه‌ها';
+
+  @override
   String get variantKingOfTheHillTitle => 'برای پیروزی در بازی، شاه‌تان را به تپه بَرید.';
+
+  @override
+  String get variantThreeCheck => 'سه‌کیش';
 
   @override
   String get variantThreeCheckTitle => 'برای پیروزی در بازی، ۳ بار به حریف‌تان کیش دهید.';
 
   @override
+  String get variantAntichess => 'مَطرَنج';
+
+  @override
   String get variantAntichessTitle => 'برای پیروزی در بازی، همهٔ مُهره‌های‌تان را ببازید (یا پات شوید).';
+
+  @override
+  String get variantAtomic => 'اِنفجاری';
 
   @override
   String get variantAtomicTitle => 'برای پیروزی، شاهِ حریف را بِپُکانید.';
 
   @override
+  String get variantHorde => 'لشکر';
+
+  @override
   String get variantHordeTitle => 'یک طرف پیاده‌های زیادی دارد و دیگری یک ارتشِ عادی دارد.';
+
+  @override
+  String get variantRacingKings => 'دویِ شاهان';
 
   @override
   String get variantRacingKingsTitle => 'برای پیروزی، شاه‌تان را به طرفِ دیگر بَرید.';
 
   @override
+  String get variantCrazyhouse => 'دیوانه‌خانه';
+
+  @override
   String get variantCrazyhouseTitle => 'می‌توان جای حرکتِ یک مهره، مهره‌های گرفته را روی تخته گذاشت.';
+
+  @override
+  String get variantFromPosition => 'از وضعیت';
 
   @override
   String get variantFromPositionTitle => 'شطرنج اِستانده از وضعیتِ دلخواه';

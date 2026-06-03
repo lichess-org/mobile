@@ -287,31 +287,61 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Или импортировать в PGN файл';
 
   @override
+  String get variantStandard => 'Шахматы';
+
+  @override
   String get variantStandardTitle => 'Стандартные правила шахмат (FIDE)';
+
+  @override
+  String get variantChess960 => 'Шахматы Фишера';
 
   @override
   String get variantChess960Title => 'Стартовая позиция фигур определяется случайно.';
 
   @override
+  String get variantKingOfTheHill => 'Царь горы';
+
+  @override
   String get variantKingOfTheHillTitle => 'Проведите короля в центр доски, чтобы выиграть партию.';
+
+  @override
+  String get variantThreeCheck => 'Три шаха';
 
   @override
   String get variantThreeCheckTitle => 'Объявите 3 шаха, чтобы победить.';
 
   @override
+  String get variantAntichess => 'Поддавки';
+
+  @override
   String get variantAntichessTitle => 'Проиграйте все ваши фигуры (или получите пат), чтобы выиграть игру.';
+
+  @override
+  String get variantAtomic => 'Атомные шахматы';
 
   @override
   String get variantAtomicTitle => 'Взорвите короля противника, чтобы победить.';
 
   @override
+  String get variantHorde => 'Орда';
+
+  @override
   String get variantHordeTitle => 'Одна сторона имеет большое количество пешек, когда другая имеет стандартный набор фигур.';
+
+  @override
+  String get variantRacingKings => 'Гонка королей';
 
   @override
   String get variantRacingKingsTitle => 'Проведите своего короля на другою сторону доски, чтобы победить.';
 
   @override
+  String get variantCrazyhouse => 'Крейзихаус';
+
+  @override
   String get variantCrazyhouseTitle => 'Срубленные фигуры могут быть возвращены на доску вместо хода фигурой.';
+
+  @override
+  String get variantFromPosition => 'С позиции';
 
   @override
   String get variantFromPositionTitle => 'Стандартные шахматы с заданной позиции';

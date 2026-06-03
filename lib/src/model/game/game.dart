@@ -196,7 +196,7 @@ abstract mixin class BaseGame {
           'WhiteRatingDiff': '${white.ratingDiff! > 0 ? '+' : ''}${white.ratingDiff!}',
         if (black.ratingDiff != null)
           'BlackRatingDiff': '${black.ratingDiff! > 0 ? '+' : ''}${black.ratingDiff!}',
-        'Variant': meta.variant.label,
+        'Variant': meta.variant.pgnName,
         if (meta.clock != null)
           'TimeControl': '${meta.clock!.initial.inSeconds}+${meta.clock!.increment.inSeconds}',
         if (initialFen != null) 'FEN': initialFen!,

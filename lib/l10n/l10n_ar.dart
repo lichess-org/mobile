@@ -287,31 +287,61 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileOrImportPgnFile => 'أو استيراد ملف PGN';
 
   @override
+  String get variantStandard => 'الأساسي';
+
+  @override
   String get variantStandardTitle => 'قواعد الشطرنج القياسية (FIDE)';
+
+  @override
+  String get variantChess960 => 'شطرنج960';
 
   @override
   String get variantChess960Title => 'مكان بداية قطع الرتبة الأولى عشوائياً.';
 
   @override
+  String get variantKingOfTheHill => 'ملك التل';
+
+  @override
   String get variantKingOfTheHillTitle => 'أحضر الملك إلى المركز للفوز باللعبة.';
+
+  @override
+  String get variantThreeCheck => 'كش ملك ثلاث مرات';
 
   @override
   String get variantThreeCheckTitle => 'كش ملك خصمك ثلاث مرات للفوز.';
 
   @override
+  String get variantAntichess => 'الشطرنج العكسية';
+
+  @override
   String get variantAntichessTitle => 'افقد جميع القطع الخاصة بك (أو الحصول على تعادل) للفوز باللعبة.';
+
+  @override
+  String get variantAtomic => 'ذري';
 
   @override
   String get variantAtomicTitle => 'فجّر ملك خصمك لتنتصر.';
 
   @override
+  String get variantHorde => 'حشد';
+
+  @override
   String get variantHordeTitle => 'لدى أحد الجانبين عدد كبير من الجنود، ولدى الطرف الآخر جيش عادي.';
+
+  @override
+  String get variantRacingKings => 'سباق الملوك';
 
   @override
   String get variantRacingKingsTitle => 'أوصل ملكك إلى الجانب الآخر من اللوحة للفوز.';
 
   @override
+  String get variantCrazyhouse => 'البيت المجنون';
+
+  @override
   String get variantCrazyhouseTitle => 'يمكنك إلقاء القطع المصطادة مرة أخرى على اللوحة بدلا من تحريك قطعة.';
+
+  @override
+  String get variantFromPosition => 'من وضع';
 
   @override
   String get variantFromPositionTitle => 'الشطرنج الطبيعي من موضع مخصص';

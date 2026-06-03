@@ -287,31 +287,61 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Vagy PGN fájl importálása';
 
   @override
+  String get variantStandard => 'Normál';
+
+  @override
   String get variantStandardTitle => 'Standard sakk szabályok (FIDE)';
+
+  @override
+  String get variantChess960 => 'Fischer Random';
 
   @override
   String get variantChess960Title => 'Az alapsori bábuk véletlenszerű mezőről indulnak.';
 
   @override
+  String get variantKingOfTheHill => 'King of the Hill';
+
+  @override
   String get variantKingOfTheHillTitle => 'Juttasd a királyt a centrumba, hogy megnyerd a partit.';
+
+  @override
+  String get variantThreeCheck => 'Three-Check';
 
   @override
   String get variantThreeCheckTitle => 'Adj 3 sakkot a győzelemért.';
 
   @override
+  String get variantAntichess => 'Francia sakk';
+
+  @override
   String get variantAntichessTitle => 'Lose all your pieces (or get stalemated) to win the game.';
+
+  @override
+  String get variantAtomic => 'Atomic';
 
   @override
   String get variantAtomicTitle => 'Robbantsd fel az ellenfél királyát a győzelemért.';
 
   @override
+  String get variantHorde => 'Horda';
+
+  @override
   String get variantHordeTitle => 'Világos nagy számú gyaloggal kezd, sötétnek minden bábuja megvan.';
+
+  @override
+  String get variantRacingKings => 'Racing Kings';
 
   @override
   String get variantRacingKingsTitle => 'Juttasd királyod a tábla túloldalára a győzelemért.';
 
   @override
+  String get variantCrazyhouse => 'Crazyhouse';
+
+  @override
   String get variantCrazyhouseTitle => 'A leütött bábukat vissza lehet helyezni a táblára egy lépés helyett.';
+
+  @override
+  String get variantFromPosition => 'From Position';
 
   @override
   String get variantFromPositionTitle => 'Standard chess from a custom position';

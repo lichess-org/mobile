@@ -135,7 +135,7 @@ void main() {
       expect(find.textContaining('From Position'), findsNothing);
       expect(find.textContaining('Antichess'), findsOneWidget);
       expect(find.textContaining('King of the Hill'), findsOneWidget);
-      expect(find.textContaining('Three Check'), findsOneWidget);
+      expect(find.textContaining('Three-Check'), findsOneWidget);
       expect(find.textContaining('Atomic'), findsOneWidget);
       expect(find.textContaining('Horde'), findsOneWidget);
       expect(find.textContaining('Racing Kings'), findsOneWidget);

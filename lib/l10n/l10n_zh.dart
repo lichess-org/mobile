@@ -287,31 +287,61 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileOrImportPgnFile => '或者导入 PGN 文件';
 
   @override
+  String get variantStandard => '标准';
+
+  @override
   String get variantStandardTitle => '国际象棋标准规则（国际棋联）';
+
+  @override
+  String get variantChess960 => 'Chess960';
 
   @override
   String get variantChess960Title => '底线棋子的起始位置随机生成';
 
   @override
+  String get variantKingOfTheHill => '山丘之王';
+
+  @override
   String get variantKingOfTheHillTitle => '将您的王移至中心区域即可获胜';
+
+  @override
+  String get variantThreeCheck => '三次将军';
 
   @override
   String get variantThreeCheckTitle => '将军对手 3 次即可获胜';
 
   @override
+  String get variantAntichess => '弃子棋';
+
+  @override
   String get variantAntichessTitle => '输掉所有棋子（或被逼和）即可获胜';
+
+  @override
+  String get variantAtomic => '原子棋';
 
   @override
   String get variantAtomicTitle => '“核爆”对手的王即可获胜';
 
   @override
+  String get variantHorde => '部落棋';
+
+  @override
   String get variantHordeTitle => '一方拥有大量兵，另一方拥有常规军队';
+
+  @override
+  String get variantRacingKings => '竞速棋';
 
   @override
   String get variantRacingKingsTitle => '将您的王移动至棋盘另一侧即可获胜';
 
   @override
+  String get variantCrazyhouse => 'Crazyhouse';
+
+  @override
   String get variantCrazyhouseTitle => '被吃掉的棋子可以放回棋盘上，代替走子';
+
+  @override
+  String get variantFromPosition => '自定义局面';
 
   @override
   String get variantFromPositionTitle => '来自自定义局面的标准国际象棋';
@@ -6734,10 +6764,16 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get mobileViewGame => '查看對局';
 
   @override
+  String get variantStandard => '標準';
+
+  @override
   String get variantStandardTitle => '標準西洋棋規則';
 
   @override
   String get variantCrazyhouseTitle => '除了移動棋子以外，也可將吃掉的棋子打入回盤面。';
+
+  @override
+  String get variantFromPosition => '自訂局面';
 
   @override
   String get activityActivity => '活動';
