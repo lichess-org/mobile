@@ -28,10 +28,7 @@ dependencies:
   dartchess: ^0.13.1
   deep_pick: ^1.1.0
   device_info_plus: ^13.1.0
-  dynamic_system_colors:
-    git:
-      url: https://github.com/veloce/flutter_dynamic_system_colors.git
-      ref: main
+  dynamic_system_colors: ^1.9.0
   fast_immutable_collections: ^11.2.0
   file_picker: ^12.0.0-beta.5
   firebase_core: ^4.10.0

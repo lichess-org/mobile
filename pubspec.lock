@@ -349,12 +349,11 @@ packages:
   dynamic_system_colors:
     dependency: "direct main"
     description:
-      path: "."
-      ref: main
-      resolved-ref: "42bffb8f461eb2d52c96a124eef68bd8e9b55739"
-      url: "https://github.com/veloce/flutter_dynamic_system_colors.git"
-    source: git
-    version: "1.8.0"
+      name: dynamic_system_colors
+      sha256: "6cda994363fe362e3c433e068af83feffc2c9a26ba0be7ecdb2b96f676d2dfd8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.9.0"
   equatable:
     dependency: transitive
     description:
