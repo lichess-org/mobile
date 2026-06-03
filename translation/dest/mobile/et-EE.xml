@@ -15,10 +15,18 @@
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Pusle</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Hiljutised otsingud</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Kella asukoht</string>
+  <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Haarav seisund</string>
+  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Peida mängimise ajal süsteemi UI. Kasuta seda, kui sind segavad ekraani servades süsteemi navigeerimise väljad. Kehtib mängu- ja pusleekraanide kohta.</string>
+  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">Kohandatud taust töötab ainult tumedas olekus. Soovitatav on kasutada tumedat pilti.</string>
+  <string name="settingsShapeDrawing" comment="Entry in the settings.">Kuju joonistamine</string>
+  <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Kui lubatud, vibreerib seade lühidalt, kui liigutad või võtad lööd malendit.</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Seaded</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Jaga PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Jaga mängu URL</string>
+  <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">Näita tulemust</string>
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Tööriistad</string>
-  <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Variant %s ei ole toetatud sellel versioonil.</string>
+  <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Variant %s ei ole rakenduse versioonis saadaval.</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Vaata</string>
+  <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">Tere tulemast Lichess rakendusse!</string>
+  <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">Või importi PGN-fail</string>
 </resources>
