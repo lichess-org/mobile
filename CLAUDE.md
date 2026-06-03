@@ -100,9 +100,6 @@ Use the helpers in `test/test_helpers.dart` instead:
 getBoardPieces(tester)                             // Map<Square, Piece>
 boardHasPiece(tester, Square.f3, Piece.whiteKnight) // bool
 
-// Check square highlights (squareHighlights prop on Chessboard.fixed)
-boardHasHighlight(tester, square)                  // bool
-
 // Check premove highlight
 boardHasPremove(tester, move)                      // bool
 
