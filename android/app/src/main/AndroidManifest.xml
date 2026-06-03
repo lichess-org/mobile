@@ -131,18 +131,33 @@
             </intent-filter>
             <meta-data android:name="flutter_deeplinking_enabled" android:value="false" />
         </activity>
-        <!-- Trampoline for the OAuth redirect URI. Receives org.lichess.mobile://login-callback,
-             forwards it to the running MainActivity via FLAG_ACTIVITY_CLEAR_TOP|SINGLE_TOP so
-             that onNewIntent is called on the existing instance, then finishes immediately. -->
+        <!-- OAuth callback receiver for flutter_web_auth_2. The modern Chrome Auth Tab returns the
+             result directly via an activity result; this activity is the fallback path used when the
+             auth session falls back to a plain Custom Tab. Two filters:
+              - custom scheme org.lichess.mobile://login-callback — used on dev/staging hosts where
+                HTTPS App Links aren't verified,
+              - HTTPS App Link https://lichess.org/account/oauth/mobile-callback — used in production
+                once lichess redirects there (domain verified via /.well-known/assetlinks.json).
+             android:taskAffinity="" keeps the callback in the app's task (advised by the package). -->
         <activity
-            android:name=".OAuthCallbackActivity"
+            android:name="com.linusu.flutter_web_auth_2.CallbackActivity"
             android:exported="true"
+            android:taskAffinity=""
             android:theme="@android:style/Theme.NoDisplay">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="org.lichess.mobile" android:host="login-callback" />
+            </intent-filter>
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="https"
+                    android:host="lichess.org"
+                    android:path="/account/oauth/mobile-callback" />
             </intent-filter>
         </activity>
 
