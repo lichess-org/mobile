@@ -51,7 +51,6 @@ class GameLayout extends ConsumerStatefulWidget {
     required this.orientation,
     this.boardParams,
     this.controllerParams,
-    this.lastMove,
     this.boardSettingsOverrides,
     this.topTable = const SizedBox.shrink(),
     this.bottomTable = const SizedBox.shrink(),
@@ -83,7 +82,6 @@ class GameLayout extends ConsumerStatefulWidget {
     : orientation = Side.white,
       boardParams = GameBoardParams.emptyBoard,
       controllerParams = null,
-      lastMove = null,
       boardSettingsOverrides = null,
       topTable = const SizedBox.shrink(),
       bottomTable = const SizedBox.shrink(),
@@ -118,9 +116,6 @@ class GameLayout extends ConsumerStatefulWidget {
   final ControllerBoardParams? controllerParams;
 
   final Side orientation;
-
-  /// Last move highlight for readonly boards. For interactive boards, use [InteractiveBoardParams.lastMove].
-  final Move? lastMove;
 
   final BoardSettingsOverrides? boardSettingsOverrides;
 
@@ -184,8 +179,7 @@ class GameLayout extends ConsumerStatefulWidget {
 
   /// Whether the board is currently replaying move history (e.g. analysis navigation).
   ///
-  /// When true, position changes use [ChessboardController.jumpToPosition] instead of
-  /// [ChessboardController.animatePosition], skipping animation and clearing the premove.
+  /// When true, position changes animate and clear the premove (e.g. analysis navigation).
   final bool isReplaying;
 
   /// Called when a premove is ready to be executed after the opponent moves.
@@ -245,16 +239,28 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
 
     if (!fenChanged) {
       // Only game metadata changed (e.g. playerSide, validMoves) — update without animation.
-      ctrl.animatePosition(newGameData);
+      ctrl.updatePosition(newGameData);
       return;
     }
 
     if (widget.isReplaying) {
-      ctrl.jumpToPosition(newGameData);
+      ctrl.updatePosition(newGameData, resetPremove: true);
       return;
     }
 
-    ctrl.animatePosition(newGameData);
+    // A revert (e.g. takeback) rolls the line back to a lower ply. A premove
+    // must never be played in that case — clear it instead.
+    final oldParams = old.boardParams;
+    final isRevert =
+        newParams is InteractiveBoardParams &&
+        oldParams is InteractiveBoardParams &&
+        newParams.position.ply < oldParams.position.ply;
+    if (isRevert) {
+      ctrl.updatePosition(newGameData, resetPremove: true);
+      return;
+    }
+
+    ctrl.updatePosition(newGameData);
     if (widget.explosionSquares != null) {
       ctrl.triggerExplosion(widget.explosionSquares!);
     }
@@ -310,12 +316,12 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
           castlingMethod: boardPrefs.castlingMethod,
           boardHighlights: boardPrefs.boardHighlights,
         ),
-      ReadonlyBoardParams(:final fen) => GameData(
+      ReadonlyBoardParams(:final fen, :final lastMove) => GameData(
         fen: fen,
         playerSide: PlayerSide.none,
         sideToMove: _sideToMoveFromFen(fen),
         validMoves: const <Square, Set<Square>>{},
-        lastMove: widget.lastMove,
+        lastMove: lastMove,
       ),
     };
   }

@@ -287,31 +287,61 @@ class AppLocalizationsSv extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Or import a PGN file';
 
   @override
+  String get variantStandard => 'Standard';
+
+  @override
   String get variantStandardTitle => 'Standardregler för schack (FIDE)';
+
+  @override
+  String get variantChess960 => 'Schack960';
 
   @override
   String get variantChess960Title => 'Pjäspositioner på bakre raden är slumpade.';
 
   @override
+  String get variantKingOfTheHill => 'Herre på täppan';
+
+  @override
   String get variantKingOfTheHillTitle => 'Ta din kung till centrum för att vinna spelet.';
+
+  @override
+  String get variantThreeCheck => 'Tre-schack';
 
   @override
   String get variantThreeCheckTitle => 'Schacka din motståndare 3 gånger för att vinna.';
 
   @override
+  String get variantAntichess => 'Antischack';
+
+  @override
   String get variantAntichessTitle => 'Förlora alla pjäser (eller hamna i patt) för att vinna spelet.';
+
+  @override
+  String get variantAtomic => 'Atomiskt';
 
   @override
   String get variantAtomicTitle => 'Spräng din motståndares kung för att vinna spelet.';
 
   @override
+  String get variantHorde => 'Hord';
+
+  @override
   String get variantHordeTitle => 'Ena sidan har ett stort antal bönder, den andra har normal pjäsuppställning.';
+
+  @override
+  String get variantRacingKings => 'Racingkungar';
 
   @override
   String get variantRacingKingsTitle => 'Få din kung till andra sidan av brädet för att vinna.';
 
   @override
+  String get variantCrazyhouse => 'Crazyhouse';
+
+  @override
   String get variantCrazyhouseTitle => 'Fångade pjäser kan återplaceras på brädet istället för att flytta en pjäs.';
+
+  @override
+  String get variantFromPosition => 'From Position';
 
   @override
   String get variantFromPositionTitle => 'Standard chess from a custom position';
@@ -914,6 +944,9 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get broadcastOfficialStandings => 'Officiella ställningar';
+
+  @override
+  String get broadcastRegulations => 'Regulations';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -3080,7 +3113,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get unlimited => 'Obegränsad';
 
   @override
-  String get unlimitedDescription => 'Take all the time you need';
+  String get unlimitedDescription => 'Ta den tid du behöver';
 
   @override
   String get mode => 'Läge';
@@ -4392,6 +4425,12 @@ class AppLocalizationsSv extends AppLocalizations {
   }
 
   @override
+  String get like => 'Like';
+
+  @override
+  String get liked => 'Liked';
+
+  @override
   String get quickPairing => 'Snabbparning';
 
   @override
@@ -4787,6 +4826,9 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'forumets etikett';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Please be nice in the forum.';
 
   @override
   String get thisTopicIsArchived => 'Detta ämne har arkiverats och kan inte längre besvaras.';
@@ -5840,9 +5882,6 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get studyLike => 'Gilla';
-
-  @override
-  String get studyUnlike => 'Sluta gilla';
 
   @override
   String get studyNewTag => 'Ny tag';

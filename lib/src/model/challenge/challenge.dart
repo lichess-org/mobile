@@ -67,7 +67,7 @@ sealed class Challenge with _$Challenge, BaseChallenge implements BaseChallenge 
   /// The description of the challenge.
   String description(AppLocalizations l10n) {
     if (!variant.isPlaySupported) {
-      return l10n.mobileUnsupportedVariant(variant.label);
+      return l10n.mobileUnsupportedVariant(variant.label(l10n));
     }
 
     final time = switch (timeControl) {
@@ -85,7 +85,7 @@ sealed class Challenge with _$Challenge, BaseChallenge implements BaseChallenge 
       ChallengeTimeControlType.unlimited => '∞',
     };
 
-    final variantStr = variant == Variant.standard ? '' : ' • ${variant.label}';
+    final variantStr = variant == Variant.standard ? '' : ' • ${variant.label(l10n)}';
 
     final sidePiece = sideChoice == SideChoice.black
         ? '♔ '

@@ -1,5 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Explicitly define screen support for niche device compatibility -->
+    <supports-screens
+        android:smallScreens="true"
+        android:normalScreens="true"
+        android:largeScreens="true"
+        android:xlargeScreens="true"/>
     <application
         android:label="Lichess"
         android:name="${applicationName}"
@@ -131,18 +137,33 @@
             </intent-filter>
             <meta-data android:name="flutter_deeplinking_enabled" android:value="false" />
         </activity>
-        <!-- Trampoline for the OAuth redirect URI. Receives org.lichess.mobile://login-callback,
-             forwards it to the running MainActivity via FLAG_ACTIVITY_CLEAR_TOP|SINGLE_TOP so
-             that onNewIntent is called on the existing instance, then finishes immediately. -->
+        <!-- OAuth callback receiver for flutter_web_auth_2. The modern Chrome Auth Tab returns the
+             result directly via an activity result; this activity is the fallback path used when the
+             auth session falls back to a plain Custom Tab. Two filters:
+              - custom scheme org.lichess.mobile://login-callback — used on dev/staging hosts where
+                HTTPS App Links aren't verified,
+              - HTTPS App Link https://lichess.org/account/oauth/mobile-callback — used in production
+                once lichess redirects there (domain verified via /.well-known/assetlinks.json).
+             android:taskAffinity="" keeps the callback in the app's task (advised by the package). -->
         <activity
-            android:name=".OAuthCallbackActivity"
+            android:name="com.linusu.flutter_web_auth_2.CallbackActivity"
             android:exported="true"
+            android:taskAffinity=""
             android:theme="@android:style/Theme.NoDisplay">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="org.lichess.mobile" android:host="login-callback" />
+            </intent-filter>
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="https"
+                    android:host="lichess.org"
+                    android:path="/account/oauth/mobile-callback" />
             </intent-filter>
         </activity>
 
@@ -154,15 +175,23 @@
             android:name="flutterEmbedding"
             android:value="2" />
     </application>
-    <!-- Required to query activities that can process text, see:
-         https://developer.android.com/training/package-visibility and
-         https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT.
-
-         In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin. -->
+    <!-- On Android 11+ (API 30) package visibility is restricted: the app can only see/resolve other
+         apps it explicitly declares intents for here. See:
+         https://developer.android.com/training/package-visibility -->
     <queries>
+        <!-- Lets the Flutter engine resolve text-processing apps (io.flutter.plugin.text.ProcessTextPlugin), see:
+             https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT -->
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
+        </intent>
+        <!-- Lets url_launcher discover a browser/Custom Tabs handler for https. Required for OAuth
+             login: without it, launchUrl() can't resolve a browser on Android 11+ and returns false,
+             so the in-app browser never opens and sign-in fails. -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="https" />
         </intent>
     </queries>
 </manifest>

@@ -137,7 +137,7 @@ class _BodyState extends ConsumerState<_Body> {
 
   /// Pushes the latest storm position to the board controller without rebuilding it.
   void _applyBoardUpdate() {
-    _controller.animatePosition(_buildGameData());
+    _controller.updatePosition(_buildGameData());
   }
 
   @override

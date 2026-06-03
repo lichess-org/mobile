@@ -89,7 +89,9 @@ Future<void> meetsTapTargetGuideline(WidgetTester tester) async {
 /// Finds either an interactive [Chessboard] or a [StaticChessboard].
 Finder _anyBoard() => find.byWidgetPredicate((w) => w is Chessboard || w is StaticChessboard);
 
-/// Returns the pieces on the chessboard.
+/// Returns the pieces of the first [Chessboard] or [StaticChessboard] found in the widget tree.
+///
+/// Throws a [StateError] if no [PiecesPainter] is found.
 Map<Square, Piece> getBoardPieces(WidgetTester tester) {
   for (final element
       in find.descendant(of: _anyBoard(), matching: find.byType(CustomPaint)).evaluate()) {
@@ -101,7 +103,10 @@ Map<Square, Piece> getBoardPieces(WidgetTester tester) {
   throw StateError('PiecesPainter not found');
 }
 
-HighlightsPainter _highlightsPainter(WidgetTester tester) {
+/// Returns the [HighlightsPainter] of the first [Chessboard] or [StaticChessboard] found in the widget tree.
+///
+/// Throws a [StateError] if no [HighlightsPainter] is found.
+HighlightsPainter findBoardHighlightPainter(WidgetTester tester) {
   for (final element
       in find.descendant(of: _anyBoard(), matching: find.byType(CustomPaint)).evaluate()) {
     final widget = element.widget as CustomPaint;
@@ -119,22 +124,17 @@ bool boardHasPiece(WidgetTester tester, Square square, Piece piece) {
 
 /// Returns the valid moves set currently highlighted on the interactive chessboard.
 Set<Square> getBoardValidMoves(WidgetTester tester) {
-  return _highlightsPainter(tester).interactionNotifier.moveDests;
+  return findBoardHighlightPainter(tester).interactionNotifier.moveDests;
 }
 
 /// Returns the last move currently highlighted on the chessboard, or null if no last move is highlighted.
 Move? getBoardLastMove(WidgetTester tester) {
-  return _highlightsPainter(tester).interactionNotifier.lastMove;
-}
-
-/// Returns true if the board has a highlight on [square].
-bool boardHasHighlight(WidgetTester tester, Square square) {
-  return _highlightsPainter(tester).squareHighlights.containsKey(square);
+  return findBoardHighlightPainter(tester).interactionNotifier.lastMove;
 }
 
 /// Returns true if the board has a premove highlight set for [move].
 bool boardHasPremove(WidgetTester tester, Move move) {
-  final p = _highlightsPainter(tester);
+  final p = findBoardHighlightPainter(tester);
   return p.interactionNotifier.premove != null &&
       switch (move) {
         NormalMove(:final from, :final to) =>

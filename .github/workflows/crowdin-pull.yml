@@ -11,6 +11,7 @@ permissions:
 
 jobs:
   crowdin-pull-mobile:
+    if: github.repository_owner == 'lichess-org'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -37,6 +38,7 @@ jobs:
           CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
 
   crowdin-pull-lila:
+    if: github.repository_owner == 'lichess-org'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

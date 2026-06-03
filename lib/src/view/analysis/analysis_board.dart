@@ -147,13 +147,13 @@ abstract class AnalysisBoardState<
     final gameData = _buildGameData(next, boardPrefs);
     final prevFen = prev != null ? computeFen(prev) : null;
     if (prevFen != newFen) {
-      if (gameData != null) controller.jumpToPosition(gameData);
+      if (gameData != null) controller.updatePosition(gameData, resetPremove: true);
       final explosionSquares = next.explosionSquares;
       if (explosionSquares != null) {
         controller.triggerExplosion(explosionSquares.toSet());
       }
     } else if (gameData != null) {
-      controller.animatePosition(gameData);
+      controller.updatePosition(gameData);
     }
   }
 
@@ -163,7 +163,7 @@ abstract class AnalysisBoardState<
     final state = readCurrentState();
     if (state == null) return;
     final gameData = _buildGameData(state, next);
-    if (gameData != null) controller.animatePosition(gameData);
+    if (gameData != null) controller.updatePosition(gameData);
   }
 
   Set<Shape> _bestMoveShapes(PieceAssets pieceAssets) {

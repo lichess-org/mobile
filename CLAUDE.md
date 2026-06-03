@@ -100,9 +100,6 @@ Use the helpers in `test/test_helpers.dart` instead:
 getBoardPieces(tester)                             // Map<Square, Piece>
 boardHasPiece(tester, Square.f3, Piece.whiteKnight) // bool
 
-// Check square highlights (squareHighlights prop on Chessboard.fixed)
-boardHasHighlight(tester, square)                  // bool
-
 // Check premove highlight
 boardHasPremove(tester, move)                      // bool
 
@@ -128,9 +125,6 @@ Two rules the analyzer enforces that are easy to miss:
 ```bash
 # Static analysis
 flutter analyze
-
-# Riverpod linting
-dart run custom_lint
 
 # Format check (files to format)
 dart format --output=none --set-exit-if-changed $(find lib/src -name "*.dart" -not \( -name "*.*freezed.dart" -o -name "*.*g.dart" -o -name "*lichess_icons.dart" \) )

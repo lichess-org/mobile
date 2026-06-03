@@ -63,6 +63,30 @@ void main() {
       testTimeStr(mockAppLocalizations, 0, 0, 0, '0 minutes');
     });
   });
+  group('DurationExtensions.toHoursMinutesSeconds()', () {
+    test('formats without tenths correctly', () {
+      const d = Duration(minutes: 5, seconds: 30, milliseconds: 600);
+      expect(d.toHoursMinutesSeconds(showTenths: false), '05:30');
+    });
+
+    test('formats with tenths correctly under an hour', () {
+      const d = Duration(minutes: 5, seconds: 30, milliseconds: 600);
+      expect(d.toHoursMinutesSeconds(showTenths: true), '05:30.6');
+    });
+
+    test('correct tenth truncation', () {
+      const d = Duration(seconds: 120, milliseconds: 30);
+      expect(d.toHoursMinutesSeconds(showTenths: true), '02:00.0');
+
+      const d2 = Duration(seconds: 120, milliseconds: 880);
+      expect(d2.toHoursMinutesSeconds(showTenths: true), '02:00.8');
+    });
+
+    test('does not show tenths for durations over an hour even if showTenths is true', () {
+      const d = Duration(hours: 1, minutes: 5, seconds: 30, milliseconds: 600);
+      expect(d.toHoursMinutesSeconds(showTenths: true), '1:05:30');
+    });
+  });
 }
 
 void testTimeStr(
