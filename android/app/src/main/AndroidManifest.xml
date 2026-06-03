@@ -5,9 +5,7 @@
         android:smallScreens="true"
         android:normalScreens="true"
         android:largeScreens="true"
-        android:xlargeScreens="true"
-        android:anyDensity="true"
-        android:resizeable="true" />
+        android:xlargeScreens="true"/>
     <application
         android:label="Lichess"
         android:name="${applicationName}"
