@@ -13,6 +13,7 @@ sealed class GameBoardParams with _$GameBoardParams {
     required String fen,
     required Variant variant,
     required Pockets? pockets,
+    Move? lastMove,
   }) = ReadonlyBoardParams;
 
   const factory GameBoardParams.interactive({
