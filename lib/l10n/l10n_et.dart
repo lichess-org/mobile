@@ -150,10 +150,10 @@ class AppLocalizationsEt extends AppLocalizations {
   String get mobileSettingsHomeWidgets => 'Home widgets';
 
   @override
-  String get mobileSettingsImmersiveMode => 'Immersive mode';
+  String get mobileSettingsImmersiveMode => 'Haarav seisund';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and puzzle screens.';
+  String get mobileSettingsImmersiveModeSubtitle => 'Peida mängimise ajal süsteemi UI. Kasuta seda, kui sind segavad ekraani servades süsteemi navigeerimise väljad. Kehtib mängu- ja pusleekraanide kohta.';
 
   @override
   String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
@@ -162,7 +162,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get mobileSettingsPickAnImage => 'Pick an image';
 
   @override
-  String get mobileSettingsPickAnImageHelp => 'Custom background works only in dark mode. A dark image is recommended.';
+  String get mobileSettingsPickAnImageHelp => 'Kohandatud taust töötab ainult tumedas olekus. Soovitatav on kasutada tumedat pilti.';
 
   @override
   String get mobileSettingsPickAnImageBlur => 'Blur the image';
@@ -183,7 +183,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tap two squares';
 
   @override
-  String get mobileSettingsShapeDrawing => 'Shape drawing';
+  String get mobileSettingsShapeDrawing => 'Kuju joonistamine';
 
   @override
   String get mobileSettingsShapeDrawingSubtitle => 'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
@@ -195,7 +195,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get mobileSettingsTouchFeedback => 'Touch feedback';
 
   @override
-  String get mobileSettingsTouchFeedbackSubtitle => 'When enabled, the device will vibrate shortly when you move or capture a piece.';
+  String get mobileSettingsTouchFeedbackSubtitle => 'Kui lubatud, vibreerib seade lühidalt, kui liigutad või võtad lööd malendit.';
 
   @override
   String get mobileSettingsTab => 'Seaded';
@@ -216,7 +216,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get mobileShowComments => 'Show comments';
 
   @override
-  String get mobileShowResult => 'Show result';
+  String get mobileShowResult => 'Näita tulemust';
 
   @override
   String get mobileShowVariations => 'Show variations';
@@ -235,7 +235,7 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String mobileUnsupportedVariant(String param) {
-    return 'Variant $param ei ole toetatud sellel versioonil.';
+    return 'Variant $param ei ole rakenduse versioonis saadaval.';
   }
 
   @override
@@ -245,7 +245,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get mobileWatchTab => 'Vaata';
 
   @override
-  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
+  String get mobileWelcomeToLichessApp => 'Tere tulemast Lichess rakendusse!';
 
   @override
   String get mobileViewGame => 'View Game';
@@ -284,7 +284,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get mobilePreviousPage => 'Previous';
 
   @override
-  String get mobileOrImportPgnFile => 'Or import a PGN file';
+  String get mobileOrImportPgnFile => 'Või importi PGN-fail';
 
   @override
   String get variantStandard => 'Tavaline';

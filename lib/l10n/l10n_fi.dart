@@ -954,7 +954,7 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
-  String get broadcastWebmastersPage => 'webmasterin sivulta';
+  String get broadcastWebmastersPage => 'Webmaster-sivulta';
 
   @override
   String get broadcastEmbedThisBroadcast => 'Upota tämä lähetys sivustoosi';

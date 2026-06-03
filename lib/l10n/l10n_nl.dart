@@ -946,7 +946,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get broadcastOfficialStandings => 'Officiële standen';
 
   @override
-  String get broadcastRegulations => 'Regulations';
+  String get broadcastRegulations => 'Regelgeving';
 
   @override
   String broadcastIframeHelp(String param) {

@@ -294,6 +294,7 @@
   "broadcastTiebreaks": "Tiebreak",
   "broadcastGameX": "Partie {param}",
   "broadcastKnockouts": "K.O.-Runde",
+  "broadcastUnderXAgeTournament": "U{param}",
   "broadcastUnderXEloTournament": "U{param}",
   "broadcastNbBroadcasts": "{count, plural, =1{{count} Übertragung} other{{count} Übertragungen}}",
   "broadcastNbViewers": "{count, plural, =1{{count} Zuschauer} other{{count} Zuschauer}}",

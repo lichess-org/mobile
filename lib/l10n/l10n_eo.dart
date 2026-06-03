@@ -398,8 +398,8 @@ class AppLocalizationsEo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Ludis $count $param2 ludojn',
-      one: 'Ludis $count $param2 ludon',
+      other: '$count $param2 ludoj luditaj',
+      one: '$count $param2 ludo ludita',
     );
     return '$_temp0';
   }
@@ -420,8 +420,8 @@ class AppLocalizationsEo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Ludis $count movojn',
-      one: 'Ludis $count movon',
+      other: '$count movoj luditaj',
+      one: '$count movo ludita',
     );
     return '$_temp0';
   }
@@ -1134,7 +1134,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get challengeChallengeToPlay => 'Defii al nova ludo';
 
   @override
-  String get challengeChallengeDeclined => 'Defio malakceptita';
+  String get challengeChallengeDeclined => 'Defio rifuzita.';
 
   @override
   String get challengeChallengeAccepted => 'Defio akceptita!';
@@ -1284,7 +1284,7 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String perfStatPerfStats(String param) {
-    return '$param statikoj';
+    return 'Statistikoj de $param';
   }
 
   @override
@@ -3503,7 +3503,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get inappropriateNameWarning => 'Se vi uzas maltaŭgan aŭ maldecan nomon, ni fermos vian konton.';
 
   @override
-  String get emptyTournamentName => 'Se vi lasas ĝin malplena, ni uzos la nomon de fama ŝakludisto.';
+  String get emptyTournamentName => 'Se vi lasas ĝin malplena, ni uzos la nomon de fama ŝakludanto.';
 
   @override
   String get makePrivateTournament => 'Faru la turniron privata kaj restriktu la aliron per pasvorto';

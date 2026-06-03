@@ -7555,6 +7555,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get broadcastOfficialStandings => 'Official standings';
 
   @override
+  String get broadcastRegulations => 'Regulations';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'More options on the $param';
   }
@@ -11019,6 +11022,12 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String xLikesY(String param1, String param2) {
     return '$param1 likes $param2';
   }
+
+  @override
+  String get like => 'Like';
+
+  @override
+  String get liked => 'Liked';
 
   @override
   String get quickPairing => 'Quick pairing';

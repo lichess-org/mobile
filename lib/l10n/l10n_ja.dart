@@ -926,7 +926,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get broadcastOfficialStandings => '公式順位';
 
   @override
-  String get broadcastRegulations => 'Regulations';
+  String get broadcastRegulations => '規則';
 
   @override
   String broadcastIframeHelp(String param) {

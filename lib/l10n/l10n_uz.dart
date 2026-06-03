@@ -946,7 +946,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get broadcastOfficialStandings => 'Rasmiy turnir jadvali';
 
   @override
-  String get broadcastRegulations => 'Regulations';
+  String get broadcastRegulations => 'Reglament';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -1702,7 +1702,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get puzzleUseCtrlF => 'Yoqtirgan debyutlaringizni topish uchun Ctrl+f tugmalarini bosing!';
 
   @override
-  String get puzzleNotTheMove => 'Bu notoʻgʻri yurish!';
+  String get puzzleNotTheMove => 'Bu yurish notoʻgʻri!';
 
   @override
   String get puzzleTrySomethingElse => 'Boshqa yurishni sinab koʻring.';
@@ -4425,10 +4425,10 @@ class AppLocalizationsUz extends AppLocalizations {
   }
 
   @override
-  String get like => 'Like';
+  String get like => 'Yoqdi';
 
   @override
-  String get liked => 'Liked';
+  String get liked => 'Yoqdi';
 
   @override
   String get quickPairing => 'Raqibni tez topish';

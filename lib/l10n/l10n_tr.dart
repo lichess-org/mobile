@@ -946,7 +946,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get broadcastOfficialStandings => 'Resmi Sıralamalar';
 
   @override
-  String get broadcastRegulations => 'Regulations';
+  String get broadcastRegulations => 'Yönetmelikler';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -4425,10 +4425,10 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get like => 'Like';
+  String get like => 'Beğen';
 
   @override
-  String get liked => 'Liked';
+  String get liked => 'Beğenildi';
 
   @override
   String get quickPairing => 'Hızlı eşleşme';
