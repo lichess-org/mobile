@@ -287,6 +287,12 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Of importeer een PGN-bestand';
 
   @override
+  String get mobileServerOutageMessage => 'Lichess is undergoing technical difficulties. We\'re doing everything we can, and expect to be back up very soon.';
+
+  @override
+  String get mobileServerOutageKeepInformed => 'To get updates on the maintenance, checkout our social media channels.';
+
+  @override
   String get variantStandard => 'Standaard';
 
   @override

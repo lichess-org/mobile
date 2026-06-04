@@ -1,6 +1,5 @@
-import 'dart:async';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:logging/logging.dart';
 
@@ -9,41 +8,41 @@ final _logger = Logger('ServerStatus');
 final serverStatusProvider = NotifierProvider<ServerStatusNotifier, bool>(ServerStatusNotifier.new);
 
 class ServerStatusNotifier extends Notifier<bool> {
-  Timer? _outageTimer;
-
   @override
   bool build() {
     final pool = ref.watch(socketPoolProvider);
-
     pool.averageLag.addListener(_onLagChange);
-    ref.onDispose(() {
-      pool.averageLag.removeListener(_onLagChange);
-      _outageTimer?.cancel();
-    });
-
-    // Assume reachable on startup; the lag listener handles state changes.
+    ref.onDispose(() => pool.averageLag.removeListener(_onLagChange));
     return true;
   }
 
   void _onLagChange() {
-    final pool = ref.read(socketPoolProvider);
-    if (pool.averageLag.value == Duration.zero) {
-      // Lag dropped to zero — start the outage timer.
-      // Only show outage after 30s of continuous disconnection to avoid
-      // false positives during normal reconnects (~22.5s per failed cycle:
-      // 9s ping timeout + 3.5s reconnect delay + 10s connect timeout).
-      _outageTimer ??= Timer(const Duration(seconds: 30), () {
-        _logger.warning('Server unreachable for 30s, marking as offline.');
-        state = false;
-      });
-    } else {
-      // Connection restored — cancel the outage timer and mark as online.
-      if (_outageTimer != null) {
-        _logger.info('Server reachable again.');
-      }
-      _outageTimer?.cancel();
-      _outageTimer = null;
+    final lag = ref.read(socketPoolProvider).averageLag.value;
+    if (lag != Duration.zero && !state) {
+      _logger.info('WebSocket reconnected, marking server as reachable again.');
       state = true;
     }
   }
+
+  /// Called by the HTTP client when a response is received from the lichess server.
+  ///
+  /// A 502 or 503 response indicates the server is down (maintenance or unreachable).
+  /// Any successful response (2xx/3xx) restores the online state.
+  void handleHttpResponse(int statusCode, Uri uri) {
+    if (!_isLichessUri(uri)) return;
+
+    if (statusCode == 502 || statusCode == 503) {
+      if (state) {
+        _logger.warning('Received HTTP $statusCode from lichess, marking server as down.');
+        state = false;
+      }
+    } else if (statusCode >= 200 && statusCode < 400) {
+      if (!state) {
+        _logger.info('Lichess server reachable again (HTTP $statusCode).');
+        state = true;
+      }
+    }
+  }
+
+  bool _isLichessUri(Uri uri) => uri.host == kLichessHost.split(':').first;
 }
