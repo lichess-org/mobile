@@ -287,31 +287,61 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Nebo nahrajte soubor PGN';
 
   @override
+  String get variantStandard => 'Standardní';
+
+  @override
   String get variantStandardTitle => 'Standardní pravidla šachů (FIDE)';
+
+  @override
+  String get variantChess960 => 'Fischerovy šachy';
 
   @override
   String get variantChess960Title => 'Počáteční pozice je zadních figur náhodná.';
 
   @override
+  String get variantKingOfTheHill => 'Král hory';
+
+  @override
   String get variantKingOfTheHillTitle => 'Přines svého krále do středu a vyhraj hru.';
+
+  @override
+  String get variantThreeCheck => 'Třikrát šach';
 
   @override
   String get variantThreeCheckTitle => 'Dej soupeři tříkrát šach a vyhraj hru.';
 
   @override
+  String get variantAntichess => 'Antichess';
+
+  @override
   String get variantAntichessTitle => 'Ztrať všechny své figury (nebo se dostaň do patu) a vyhraj hru.';
+
+  @override
+  String get variantAtomic => 'Atomic';
 
   @override
   String get variantAtomicTitle => 'Nuke your opponent\'s king to win.';
 
   @override
+  String get variantHorde => 'Horde';
+
+  @override
   String get variantHordeTitle => 'One side has a large number of pawns, the other has a normal army.';
+
+  @override
+  String get variantRacingKings => 'Racing Kings';
 
   @override
   String get variantRacingKingsTitle => 'Dostaň svého krále na druhou stranu šachovnice, abys vyhrál.';
 
   @override
+  String get variantCrazyhouse => 'Crazyhouse';
+
+  @override
   String get variantCrazyhouseTitle => 'Captured pieces can be dropped back on the board instead of moving a piece.';
+
+  @override
+  String get variantFromPosition => 'Z pozice';
 
   @override
   String get variantFromPositionTitle => 'Standard chess from a custom position';
@@ -954,6 +984,9 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get broadcastOfficialStandings => 'Oficiální pořadí';
+
+  @override
+  String get broadcastRegulations => 'Regulations';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -4446,6 +4479,12 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
+  String get like => 'Like';
+
+  @override
+  String get liked => 'Liked';
+
+  @override
   String get quickPairing => 'Rychlá hra';
 
   @override
@@ -4841,6 +4880,9 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'pravidla chování ve fórech';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Please be nice in the forum.';
 
   @override
   String get thisTopicIsArchived => 'Toto téma se archivovalo a nelze na něj dále odpovídat.';
@@ -5986,9 +6028,6 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get studyLike => 'To se mi líbí';
-
-  @override
-  String get studyUnlike => 'Už se mi nelíbí';
 
   @override
   String get studyNewTag => 'Nový štítek';

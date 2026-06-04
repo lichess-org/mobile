@@ -161,9 +161,16 @@ class _BodyState extends ConsumerState<_Body> {
                 ),
               );
             } else if (element is DateTime) {
-              final title = DateTime.now().difference(element).inDays >= 15
-                  ? _dateFormatter.format(element)
-                  : relativeDate(context.l10n, element);
+              final now = DateTime.now();
+              final today = DateTime(now.year, now.month, now.day);
+              final difference = today.difference(element).inDays;
+              final title = difference == 0
+                  ? context.l10n.today
+                  : difference == 1
+                  ? context.l10n.yesterday
+                  : difference < 15
+                  ? relativeDate(context.l10n, element)
+                  : _dateFormatter.format(element);
               return Padding(
                 padding: const EdgeInsets.only(left: _kPuzzlePadding).add(Styles.sectionTopPadding),
                 child: Text(

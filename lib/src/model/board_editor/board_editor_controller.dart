@@ -313,7 +313,7 @@ sealed class BoardEditorState with _$BoardEditorState {
     try {
       final position = Position.setupPosition(variant.rule, Setup.parseFen(fen));
       return PgnGame(
-        headers: {'FEN': position.fen, 'Variant': variant.label},
+        headers: {'FEN': position.fen, 'Variant': variant.pgnName},
         moves: PgnNode<PgnNodeData>(),
         comments: [],
       ).makePgn();

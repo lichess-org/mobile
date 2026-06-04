@@ -287,31 +287,61 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Чи завантажте файл PGN';
 
   @override
+  String get variantStandard => 'Стандартні шахи';
+
+  @override
   String get variantStandardTitle => 'Стандартні правила шахів (FIDE)';
+
+  @override
+  String get variantChess960 => 'Шахи-960';
 
   @override
   String get variantChess960Title => 'Початкова позиція фігур задається випадково.';
 
   @override
+  String get variantKingOfTheHill => 'Король гори';
+
+  @override
   String get variantKingOfTheHillTitle => 'Перемістіть свого короля до центру, щоб перемогти.';
+
+  @override
+  String get variantThreeCheck => 'До трьох шахів';
 
   @override
   String get variantThreeCheckTitle => 'Поставте шах супернику 3 рази, щоб перемогти.';
 
   @override
+  String get variantAntichess => 'Антишахи';
+
+  @override
   String get variantAntichessTitle => 'Утратьте всі свої фігури (або хай вам поставлять пат), щоб перемогти.';
+
+  @override
+  String get variantAtomic => 'Атомічні шахи';
 
   @override
   String get variantAtomicTitle => 'Підірвіть короля суперника, щоб перемогти.';
 
   @override
+  String get variantHorde => 'Орда';
+
+  @override
   String get variantHordeTitle => 'Одна сторона має багато пішаків, а інша — звичайну армію.';
+
+  @override
+  String get variantRacingKings => 'Королівські перегони';
 
   @override
   String get variantRacingKingsTitle => 'Перемістіть короля на інший бік дошки, щоб перемогти.';
 
   @override
+  String get variantCrazyhouse => 'Шалені шахи';
+
+  @override
   String get variantCrazyhouseTitle => 'Замість звичайного ходу можна поставити захоплену ворожу фігуру.';
+
+  @override
+  String get variantFromPosition => 'З позиції';
 
   @override
   String get variantFromPositionTitle => 'Звичайні шахи із власної позиції';
@@ -954,6 +984,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get broadcastOfficialStandings => 'Офіційна турнірна таблиця';
+
+  @override
+  String get broadcastRegulations => 'Регламенти';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -4448,6 +4481,12 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
+  String get like => 'Уподобати';
+
+  @override
+  String get liked => 'Уподобано';
+
+  @override
   String get quickPairing => 'Швидкий старт';
 
   @override
@@ -4843,6 +4882,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'етикет форуму';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Будь ласка, будьте ввічливими на форумі.';
 
   @override
   String get thisTopicIsArchived => 'Ця тема була заархівована і додати відповідь більше не можна.';
@@ -5988,9 +6030,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get studyLike => 'Подобається';
-
-  @override
-  String get studyUnlike => 'Не подобається';
 
   @override
   String get studyNewTag => 'Новий тег';

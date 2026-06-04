@@ -258,29 +258,9 @@ class RetroController extends AsyncNotifier<RetroState>
   void onUserMove(Move move) {
     if (!state.requireValue.currentPosition.isLegal(move)) return;
 
-    if (move case NormalMove() when isPromotionPawnMove(state.requireValue.currentPosition, move)) {
-      state = AsyncValue.data(state.requireValue.copyWith(promotionMove: move));
-      return;
-    }
-
     final (newPath, isNewNode) = _root.addMoveAt(state.requireValue.currentPath, move);
     if (newPath != null) {
       _setPath(newPath);
-    }
-  }
-
-  void onPromotionSelection(Role? role) {
-    final state = this.state.value;
-    if (state == null) return;
-
-    if (role == null) {
-      this.state = AsyncValue.data(state.copyWith(promotionMove: null));
-      return;
-    }
-    final promotionMove = state.promotionMove;
-    if (promotionMove != null) {
-      final promotion = promotionMove.withPromotion(role);
-      onUserMove(promotion);
     }
   }
 
@@ -375,7 +355,6 @@ class RetroController extends AsyncNotifier<RetroState>
           currentPath: path,
           currentNode: RetroCurrentNode.fromNode(currentNode),
           lastMove: currentNode.sanMove.move,
-          promotionMove: null,
           root: isNavigating ? state.root : _root.view,
         ),
       );
@@ -385,7 +364,6 @@ class RetroController extends AsyncNotifier<RetroState>
           currentPath: path,
           currentNode: RetroCurrentNode.fromNode(currentNode),
           lastMove: null,
-          promotionMove: null,
           root: isNavigating ? state.root : _root.view,
         ),
       );
@@ -523,7 +501,6 @@ sealed class RetroState
     required ViewRoot root,
     DateTime? evalRequestedAt,
     Move? lastMove,
-    NormalMove? promotionMove,
     @Default(false) bool engineInThreatMode,
   }) = _RetroState;
 

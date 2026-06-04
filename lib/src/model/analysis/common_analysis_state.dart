@@ -30,9 +30,6 @@ abstract class CommonAnalysisState {
   /// The side to display the board from.
   Side get pov;
 
-  /// Possible promotion move to be played.
-  NormalMove? get promotionMove;
-
   /// Squares that should have an atomic explosion animation after the last move.
   ///
   /// Returns `null` if the variant is not atomic, there is no last move, or the

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +9,8 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer.dart';
+import 'package:lichess_mobile/src/model/explorer/opening_explorer_preferences.dart';
+import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/explorer/explorer_view.dart';
@@ -94,6 +98,92 @@ void main() {
 
       expect(find.byType(OpeningExplorerView), findsOneWidget);
       expect(find.byType(TablebaseView), findsNothing);
+    });
+
+    testWidgets('uses lichess database for crazyhouse when masters is selected', (
+      WidgetTester tester,
+    ) async {
+      Uri? openingExplorerUrl;
+      final mockClient = MockClient((request) {
+        if (request.url.host == kLichessOpeningExplorerHost) {
+          openingExplorerUrl = request.url;
+          if (request.url.path == '/lichess') {
+            return mockResponse(mastersOpeningExplorerResponse, 200);
+          }
+        }
+        return mockResponse('', 404);
+      });
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: Scaffold(
+          body: ExplorerView(
+            pov: Side.white,
+            position: Crazyhouse.initial,
+            onMoveSelected: (move) {},
+            isComputerAnalysisAllowed: true,
+          ),
+        ),
+        authUser: authUser,
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => mockClient);
+          }),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pump(const Duration(milliseconds: 350));
+
+      expect(openingExplorerUrl?.path, '/lichess');
+      expect(openingExplorerUrl?.queryParameters['variant'], 'crazyhouse');
+    });
+
+    testWidgets('sends variant for crazyhouse lichess database', (WidgetTester tester) async {
+      Uri? openingExplorerUrl;
+      final mockClient = MockClient((request) {
+        if (request.url.host == kLichessOpeningExplorerHost) {
+          openingExplorerUrl = request.url;
+          if (request.url.path == '/lichess') {
+            return mockResponse(mastersOpeningExplorerResponse, 200);
+          }
+        }
+        return mockResponse('', 404);
+      });
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: Scaffold(
+          body: ExplorerView(
+            pov: Side.white,
+            position: Crazyhouse.initial,
+            onMoveSelected: (move) {},
+            isComputerAnalysisAllowed: true,
+          ),
+        ),
+        authUser: authUser,
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => mockClient);
+          }),
+        },
+        // Seed Lichess DB prefs to exercise the direct variant request path;
+        // the default Masters setting is covered by the fallback test above.
+        defaultPreferences: {
+          SessionPreferencesStorage.key(
+            PrefCategory.openingExplorer.storageKey,
+            authUser,
+          ): jsonEncode(
+            OpeningExplorerPrefs.defaults(
+              user: user,
+            ).copyWith(db: OpeningDatabase.lichess).toJson(),
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pump(const Duration(milliseconds: 350));
+
+      expect(openingExplorerUrl?.path, '/lichess');
+      expect(openingExplorerUrl?.queryParameters['variant'], 'crazyhouse');
     });
 
     testWidgets('shows tablebase for 8-piece endgame', (WidgetTester tester) async {

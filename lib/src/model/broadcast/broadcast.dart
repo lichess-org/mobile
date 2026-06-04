@@ -107,6 +107,7 @@ sealed class BroadcastTournamentData with _$BroadcastTournamentData {
     // PRIVATE=-1, NORMAL=3, HIGH=4, BEST=5
     int? tier,
     bool? teamTable,
+    bool? showTeamScores,
     required BroadcastTournamentInformation information,
   }) = _BroadcastTournamentData;
 }
@@ -131,26 +132,22 @@ typedef BroadcastTournamentGroup = ({
 });
 
 typedef BroadcastCustomPointsPerColor = ({double win, double draw});
-typedef BroadcastCustomScoring = BySide<BroadcastCustomPointsPerColor>;
+typedef BroadcastCustomScoring = IMap<Side, BroadcastCustomPointsPerColor>;
 
 extension BroadcastCustomScoringExt on BroadcastCustomScoring {
   String pointsForResult(Side side, BroadcastResult result) {
-    final customScore =
-        (side == Side.white
-            ? switch (result) {
-                BroadcastResult.whiteWins => this[side]?.win,
-                BroadcastResult.draw || BroadcastResult.whiteHalfWins => this[side]?.draw,
-                _ => 0.0,
-              }
-            : switch (result) {
-                BroadcastResult.blackWins => this[side]?.win,
-                BroadcastResult.draw || BroadcastResult.blackHalfWins => this[side]?.draw,
-                _ => 0.0,
-              }) ??
-        0.0;
-    return customScore == 0.5
-        ? result.resultToString(side) // '½' looks nicer than '0.5'
-        : NumberFormat('0.##').format(customScore);
+    final customScore = (side == Side.white
+        ? switch (result) {
+            BroadcastResult.whiteWins => this[side]?.win,
+            BroadcastResult.draw || BroadcastResult.whiteHalfWins => this[side]?.draw,
+            _ => 0.0,
+          }
+        : switch (result) {
+            BroadcastResult.blackWins => this[side]?.win,
+            BroadcastResult.draw || BroadcastResult.blackHalfWins => this[side]?.draw,
+            _ => 0.0,
+          });
+    return customScore == 0.5 ? '½' : NumberFormat('0.##').format(customScore);
   }
 }
 
@@ -192,7 +189,7 @@ sealed class BroadcastGame with _$BroadcastGame {
 
   const factory BroadcastGame({
     required BroadcastGameId id,
-    required BySide<BroadcastPlayerWithClock> players,
+    required IMap<Side, BroadcastPlayerWithClock> players,
     required String fen,
     required Move? lastMove,
     required Duration? thinkTime,
@@ -336,4 +333,27 @@ sealed class BroadcastTeamMatch with _$BroadcastTeamMatch {
     required BroadcastTeam team2,
     required IList<BroadcastTeamGame> games,
   }) = _BroadcastTeamMatch;
+}
+
+@freezed
+sealed class BroadcastTeamStandingMatch with _$BroadcastTeamStandingMatch {
+  const factory BroadcastTeamStandingMatch({
+    required BroadcastRoundId roundId,
+    required String opponent,
+    required String points,
+    required double mp,
+    required double gp,
+  }) = _BroadcastTeamStandingMatch;
+}
+
+@freezed
+sealed class BroadcastTeamStanding with _$BroadcastTeamStanding {
+  const factory BroadcastTeamStanding({
+    required String name,
+    required double mp,
+    required double gp,
+    required IList<BroadcastTeamStandingMatch> matches,
+    required IList<BroadcastPlayerWithOverallResult> players,
+    required int? averageRating,
+  }) = _BroadcastTeamStanding;
 }
