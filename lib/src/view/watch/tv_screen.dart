@@ -32,15 +32,13 @@ class TvScreen extends ConsumerStatefulWidget {
   final (GameId id, Side orientation)? initialGame;
   final LightUser? user;
 
-  static Route<dynamic> buildRoute(
-    BuildContext context, {
+  static Route<dynamic> buildRoute({
     TvChannel? channel,
     GameId? gameId,
     LightUser? user,
     Side? orientation,
   }) {
     return buildScreenRoute(
-      context,
       screen: TvScreen(
         channel: channel,
         initialGame: gameId != null ? (gameId, orientation ?? Side.white) : null,
@@ -176,6 +174,7 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                           fen: position.fen,
                           variant: gameState.game.meta.variant,
                           pockets: position.pockets,
+                          lastMove: game.moveAt(gameState.stepCursor),
                         ),
                         boardSettingsOverrides: const BoardSettingsOverrides(
                           animationDuration: Duration.zero,
@@ -194,7 +193,6 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                         onSelectMove: (index) {
                           ref.read(_tvGameCtrl.notifier).goToMove(index);
                         },
-                        lastMove: game.moveAt(gameState.stepCursor),
                         explosionSquares: gameState.stepCursor > 0
                             ? atomicExplosionSquares(
                                 game.positionAt(gameState.stepCursor - 1),

@@ -8,6 +8,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_summary.dart';
 import 'package:lichess_mobile/src/model/analysis/common_analysis_state.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
@@ -22,6 +23,7 @@ import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
+import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
@@ -299,28 +301,9 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
 
     if (!state.requireValue.currentPosition.isLegal(move)) return;
 
-    if (move case NormalMove() when isPromotionPawnMove(state.requireValue.currentPosition, move)) {
-      state = AsyncData(state.requireValue.copyWith(promotionMove: move));
-      return;
-    }
-
     final (newPath, isNewNode) = _root.addMoveAt(state.requireValue.currentPath, move);
     if (newPath != null) {
       _setPath(newPath, shouldRecomputeRootView: isNewNode, shouldForceShowVariation: true);
-    }
-  }
-
-  void onPromotionSelection(Role? role) {
-    if (!state.hasValue) return;
-
-    if (role == null) {
-      state = AsyncData(state.requireValue.copyWith(promotionMove: null));
-      return;
-    }
-    final promotionMove = state.requireValue.promotionMove;
-    if (promotionMove != null) {
-      final promotion = promotionMove.withPromotion(role);
-      onUserMove(promotion);
     }
   }
 
@@ -476,7 +459,6 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
           isOnMainline: _root.isOnMainline(path),
           currentNode: AnalysisCurrentNode.fromNode(currentNode),
           lastMove: currentNode.sanMove.move,
-          promotionMove: null,
           root: rootView,
           clocks: _getClocks(path),
         ),
@@ -489,7 +471,6 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
           isOnMainline: _root.isOnMainline(path),
           currentNode: AnalysisCurrentNode.fromNode(currentNode),
           lastMove: null,
-          promotionMove: null,
           root: rootView,
           clocks: _getClocks(path),
         ),
@@ -598,9 +579,6 @@ sealed class BroadcastAnalysisState
     /// The last move played.
     Move? lastMove,
 
-    /// Possible promotion move to be played.
-    NormalMove? promotionMove,
-
     /// The PGN headers of the game.
     required IMap<String, String> pgnHeaders,
 
@@ -614,7 +592,7 @@ sealed class BroadcastAnalysisState
 
     /// The analysis summary sent by the server.
     /// Contains the Accuracy, ACPL, Mistakes, Blunders, Inaccuracies of White and Black.
-    BroadcastAnalysisSummary? analysisSummary,
+    AnalysisSummary? analysisSummary,
 
     @Default(false) bool engineInThreatMode,
   }) = _BroadcastGameState;
@@ -659,6 +637,10 @@ sealed class BroadcastAnalysisState
 
   bool get canGoNext => currentNode.hasChild;
   bool get canGoBack => currentPath.size > UciPath.empty.size;
+
+  PlayersAnalysis? get playersAnalysis => analysisSummary != null
+      ? (white: analysisSummary!.white, black: analysisSummary!.black)
+      : null;
 
   EngineGaugeParams engineGaugeParams(EngineEvaluationPrefState prefs) => (
     isLocalEngineAvailable: isEngineAvailable(prefs),

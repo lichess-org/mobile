@@ -30,8 +30,8 @@ class OpeningExplorerScreen extends ConsumerWidget {
 
   final AnalysisOptions options;
 
-  static Route<dynamic> buildRoute(BuildContext context, AnalysisOptions options) {
-    return buildScreenRoute(context, screen: OpeningExplorerScreen(options: options));
+  static Route<dynamic> buildRoute(AnalysisOptions options) {
+    return buildScreenRoute(screen: OpeningExplorerScreen(options: options));
   }
 
   @override
@@ -70,7 +70,7 @@ class OpeningExplorerScreen extends ConsumerWidget {
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.mobileShareGamePGN),
           onPressed: () {
-            Navigator.of(context).push(AnalysisShareScreen.buildRoute(context, options: options));
+            Navigator.of(context).push(AnalysisShareScreen.buildRoute(options: options));
           },
         ),
         BottomSheetAction(

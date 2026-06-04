@@ -49,18 +49,15 @@ class QuickActionService {
           Navigator.of(
             context,
             rootNavigator: true,
-          ).push(GameScreen.buildRoute(context, source: LobbySource(recentSeeks[index])));
+          ).push(GameScreen.buildRoute(source: LobbySource(recentSeeks[index])));
         }
       } else if (shortcutType == 'play_puzzles') {
         Navigator.of(
           context,
           rootNavigator: true,
-        ).push(PuzzleScreen.buildRoute(context, angle: const PuzzleTheme(PuzzleThemeKey.mix)));
+        ).push(PuzzleScreen.buildRoute(angle: const PuzzleTheme(PuzzleThemeKey.mix)));
       } else if (shortcutType == 'play_computer') {
-        Navigator.of(
-          context,
-          rootNavigator: true,
-        ).push(OfflineComputerGameScreen.buildRoute(context));
+        Navigator.of(context, rootNavigator: true).push(OfflineComputerGameScreen.buildRoute());
       }
     });
     setQuickActions(recentSeeks);

@@ -37,8 +37,8 @@ class RetroScreen extends ConsumerWidget {
 
   final RetroOptions options;
 
-  static Route<dynamic> buildRoute(BuildContext context, RetroOptions options) {
-    return buildScreenRoute(context, screen: RetroScreen(options: options));
+  static Route<dynamic> buildRoute(RetroOptions options) {
+    return buildScreenRoute(screen: RetroScreen(options: options));
   }
 
   @override
@@ -167,6 +167,16 @@ class RetroAnalysisBoard extends AnalysisBoard {
 class _RetroAnalysisBoardState
     extends AnalysisBoardState<RetroAnalysisBoard, RetroState, AnalysisPrefs> {
   @override
+  RetroState? readCurrentState() => ref.read(retroControllerProvider(widget.options)).value;
+
+  @override
+  void listenToStateChanges(void Function(RetroState? prev, RetroState? next) listener) =>
+      ref.listenManual<RetroState?>(
+        retroControllerProvider(widget.options).select((v) => v.value),
+        listener,
+      );
+
+  @override
   RetroState get analysisState => ref.watch(retroControllerProvider(widget.options)).requireValue;
 
   @override
@@ -178,9 +188,8 @@ class _RetroAnalysisBoardState
   @override
   bool get hideBestMoveArrow => true;
 
-  // Disable interaction while the engine is evaluating the move
   @override
-  bool get interactive => analysisState.feedback != RetroFeedback.evalMove;
+  bool computeInteractive(RetroState state) => state.feedback != RetroFeedback.evalMove;
 
   @override
   void onUserMove(Move move) {
@@ -192,12 +201,7 @@ class _RetroAnalysisBoardState
       (id: analysisState.evaluationContext.id, path: analysisState.currentPath);
 
   @override
-  void onPromotionSelection(Role? role) {
-    ref.read(retroControllerProvider(widget.options).notifier).onPromotionSelection(role);
-  }
-
-  @override
-  String get fen => analysisState.currentPosition.board.fen;
+  String computeFen(RetroState state) => state.currentPosition.board.fen;
 
   @override
   ISet<Shape> get extraShapes {
@@ -385,7 +389,7 @@ class _RetroMenu extends ConsumerWidget {
           icon: Icons.settings,
           label: context.l10n.settingsSettings,
           onPressed: () =>
-              Navigator.of(context).push(RetroSettingsScreen.buildRoute(context, options: options)),
+              Navigator.of(context).push(RetroSettingsScreen.buildRoute(options: options)),
         ),
         ToggleSoundContextMenuAction(
           isEnabled: ref.watch(generalPreferencesProvider.select((prefs) => prefs.isSoundEnabled)),

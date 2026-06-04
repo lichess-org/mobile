@@ -15,8 +15,8 @@ class AnalysisSettingsScreen extends ConsumerWidget {
 
   final AnalysisOptions options;
 
-  static Route<dynamic> buildRoute(BuildContext context, {required AnalysisOptions options}) {
-    return buildScreenRoute(context, screen: AnalysisSettingsScreen(options));
+  static Route<dynamic> buildRoute({required AnalysisOptions options}) {
+    return buildScreenRoute(screen: AnalysisSettingsScreen(options));
   }
 
   @override
@@ -38,6 +38,12 @@ class AnalysisSettingsScreen extends ConsumerWidget {
                     value: prefs.inlineNotation,
                     onChanged: (value) =>
                         ref.read(analysisPreferencesProvider.notifier).toggleInlineNotation(),
+                  ),
+                  SwitchSettingTile(
+                    title: const Text('Small board'), // TODO l10n
+                    value: prefs.smallBoard,
+                    onChanged: (value) =>
+                        ref.read(analysisPreferencesProvider.notifier).toggleSmallBoard(),
                   ),
                   ListTile(
                     title: Text(context.l10n.openingExplorer),

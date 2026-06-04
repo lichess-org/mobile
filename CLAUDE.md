@@ -89,22 +89,42 @@ overrides: {
 
 Direct provider overrides are acceptable for **non-network providers** (repositories backed by mocks, services with no HTTP, etc.) where the provider has no `keepAlive` dependency and the override doesn't skip meaningful logic.
 
+### Chessboard Testing Patterns
+
+Since chessground v10, pieces and highlights are rendered by `CustomPainter`s, not as individual widgets. **Do not use `find.byKey(Key('e2-whitepawn'))` or `find.byKey(ValueKey('${sq}-highlight'))` — those keys no longer exist.**
+
+Use the helpers in `test/test_helpers.dart` instead:
+
+```dart
+// Check pieces on any Chessboard (interactive or Chessboard.fixed)
+getBoardPieces(tester)                             // Map<Square, Piece>
+boardHasPiece(tester, Square.f3, Piece.whiteKnight) // bool
+
+// Check premove highlight
+boardHasPremove(tester, move)                      // bool
+
+// Tap/move at a board square
+squareOffset(square, tester.getRect(find.byType(Chessboard)))
+```
+
+For `ChessboardEditor` (board editor screen), read pieces directly from the widget:
+```dart
+tester.widget<ChessboardEditor>(find.byType(ChessboardEditor)).pieces
+```
+
 ### Analysis Rules (CRITICAL)
 
 **Always run `flutter analyze` on every file you edit, including test files, before finishing.**
 
 Two rules the analyzer enforces that are easy to miss:
 
-- **`const` constructors**: use `const` (not `final`) when constructing a const-capable class. The analyzer will flag `prefer_const_constructors`. This applies everywhere, including test files.
+- **`const` constructors**: use `const` (not `final`) when constructing a const-capable class. The analyzer will flag `prefer_const_constructors`. This applies everywhere, including test files. When the enclosing expression is not `const` (e.g. a non-const record or class), constructor calls inside it still need their own explicit `const` — e.g. `(time: const Duration(minutes: 3), increment: const Duration(seconds: 2))`.
 - **No leading underscores for local identifiers**: local variables and functions must not start with `_`. Reserve `_` for library-private top-level or class members.
 
 ### Code Quality Checks
 ```bash
 # Static analysis
 flutter analyze
-
-# Riverpod linting
-dart run custom_lint
 
 # Format check (files to format)
 dart format --output=none --set-exit-if-changed $(find lib/src -name "*.dart" -not \( -name "*.*freezed.dart" -o -name "*.*g.dart" -o -name "*lichess_icons.dart" \) )
@@ -182,6 +202,16 @@ lib/src/
 ### Key Architectural Patterns
 
 **State Management**: Riverpod providers throughout `lib/src/model/`. Controllers, repositories, and services are implemented as providers. State is immutable and managed with Freezed data classes.
+
+**Riverpod version: 3.x — API differences from 2.x (CRITICAL)**
+
+This project uses `flutter_riverpod 3.x` / `riverpod 3.x`. Several APIs changed from 2.x:
+
+- **`AsyncValue.value`** (not `valueOrNull`): In 3.x, `AsyncValue<T>.value` returns `T?` (null while loading/error). `valueOrNull` no longer exists.
+- **`ProviderListenable` is not exported**: Do not use `ProviderListenable<T>` as a type annotation — it is an internal interface. The return type of `.select()` is also internal (`_ProviderSelector`). `ProviderListenableSelect` is exported but is an *extension* on `ProviderListenable`, not a class — it cannot be used as a type.
+  - When you need to pass a provider or select result to `ref.watch`/`ref.read`/`ref.listenManual`, just pass it directly without naming the type. If a return type annotation is required (e.g. an abstract method), use two concrete methods (`readCurrentState()` + `listenToStateChanges()`) instead of trying to name the provider type.
+- **`ref.listenManual` type inference**: When the selected type is nullable (e.g. `provider.select((v) => v.value)` → `T?`), Dart cannot infer `StateT` because the callback signature is `void Function(StateT?, StateT)`. Always add an explicit type: `ref.listenManual<T?>(provider.select(...), listener)`.
+- **`listenManual` in `ConsumerState`**: Subscriptions set up in `initState()` via `ref.listenManual` are automatically cancelled when the widget is disposed. No need to store or cancel manually.
 
 **Binding Layer**: `LichessBinding` (in `binding.dart`) provides a testable abstraction for plugins and external APIs:
 - SharedPreferences

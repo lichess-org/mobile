@@ -95,7 +95,7 @@ class _CreateGameBodyState extends ConsumerState<CreateCorrespondenceGameBottomS
                     },
                   );
                 },
-                child: Text(preferences.customVariant.label),
+                child: Text(preferences.customVariant.label(context.l10n)),
               ),
             ),
             ExpandedSection(
@@ -151,9 +151,11 @@ class _CreateGameBodyState extends ConsumerState<CreateCorrespondenceGameBottomS
                             try {
                               await _pendingCreateGame;
                             } finally {
-                              setState(() {
-                                _pendingCreateGame = null;
-                              });
+                              if (mounted) {
+                                setState(() {
+                                  _pendingCreateGame = null;
+                                });
+                              }
                             }
                             if (context.mounted) {
                               Navigator.of(

@@ -35,8 +35,8 @@ final _themesProvider =
 class PuzzleThemesScreen extends StatelessWidget {
   const PuzzleThemesScreen({super.key});
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const PuzzleThemesScreen());
+  static Route<dynamic> buildRoute() {
+    return buildScreenRoute(screen: const PuzzleThemesScreen());
   }
 
   @override
@@ -130,7 +130,7 @@ class _BodyState extends ConsumerState<_Body> {
                 trailing: const Icon(Icons.keyboard_arrow_right),
                 onExpansionChanged: openingsAvailable
                     ? (expanded) {
-                        Navigator.of(context).push(OpeningThemeScreen.buildRoute(context));
+                        Navigator.of(context).push(OpeningThemeScreen.buildRoute());
                       }
                     : null,
               ),
@@ -199,7 +199,7 @@ class _ThemeTile extends StatelessWidget {
               Navigator.of(
                 context,
                 rootNavigator: true,
-              ).push(PuzzleScreen.buildRoute(context, angle: PuzzleTheme(theme)));
+              ).push(PuzzleScreen.buildRoute(angle: PuzzleTheme(theme)));
             }
           : null,
     );

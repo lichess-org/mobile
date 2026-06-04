@@ -287,31 +287,61 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Sau încarcă un fișier PGN';
 
   @override
+  String get variantStandard => 'Standard';
+
+  @override
   String get variantStandardTitle => 'Reguli de șah standard (FIDE)';
+
+  @override
+  String get variantChess960 => 'Chess960';
 
   @override
   String get variantChess960Title => 'Poziţia de început a pieselor din prima linie este randomizată.';
 
   @override
+  String get variantKingOfTheHill => 'Regele Dealului';
+
+  @override
   String get variantKingOfTheHillTitle => 'Adu-ți regele în centru pentru a câștiga jocul.';
+
+  @override
+  String get variantThreeCheck => 'Șah triplu';
 
   @override
   String get variantThreeCheckTitle => 'Dă-i șah de 3 ori adversarului pentru a câștiga jocul.';
 
   @override
+  String get variantAntichess => 'Antișah';
+
+  @override
   String get variantAntichessTitle => 'Pierde-ți toate piesele (sau intră în pat) pentru a câștiga jocul.';
+
+  @override
+  String get variantAtomic => 'Atomic';
 
   @override
   String get variantAtomicTitle => 'Spulberă regele adversarului pentru a câștiga.';
 
   @override
+  String get variantHorde => 'Hoardă';
+
+  @override
   String get variantHordeTitle => 'O parte are un număr mare de pioni, cealaltă parte are o armată normală.';
+
+  @override
+  String get variantRacingKings => 'Cursa Regilor';
 
   @override
   String get variantRacingKingsTitle => 'Adu-ți regele în cealaltă parte a tablei pentru a câștiga.';
 
   @override
+  String get variantCrazyhouse => 'Crazyhouse';
+
+  @override
   String get variantCrazyhouseTitle => 'Piesele capturate pot fi așezate înapoi pe tablă în loc de a mișca o piesă.';
+
+  @override
+  String get variantFromPosition => 'Din poziția';
 
   @override
   String get variantFromPositionTitle => 'Șah standard dintr-o poziție personalizată';
@@ -934,6 +964,9 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get broadcastOfficialStandings => 'Clasament oficial';
+
+  @override
+  String get broadcastRegulations => 'Reglementări';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -4420,6 +4453,12 @@ class AppLocalizationsRo extends AppLocalizations {
   }
 
   @override
+  String get like => 'Apreciază';
+
+  @override
+  String get liked => 'Apreciat';
+
+  @override
   String get quickPairing => 'Potrivire rapidă';
 
   @override
@@ -4815,6 +4854,9 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'normele de comportare în forum';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Te rugăm să fii cu bun simț pe forum.';
 
   @override
   String get thisTopicIsArchived => 'Acest subiect a fost arhivat și nu mai acceptă răspunsuri.';
@@ -5914,9 +5956,6 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get studyLike => 'Apreciază';
-
-  @override
-  String get studyUnlike => 'Nu îmi mai place';
 
   @override
   String get studyNewTag => 'Etichetă nouă';

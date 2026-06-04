@@ -18,20 +18,19 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 
 /// A provider for picking PGN files. Can be overridden in tests.
 final pickPgnFileProvider = Provider<Future<FilePickerResult?> Function()>((ref) {
-  return () =>
-      FilePicker.pickFiles(type: FileType.custom, allowedExtensions: ['pgn'], withData: true);
+  return () => FilePicker.pickFiles(type: FileType.custom, allowedExtensions: ['pgn']);
 });
 
 class ImportPgnScreen extends StatelessWidget {
   const ImportPgnScreen({super.key});
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const ImportPgnScreen());
+  static Route<dynamic> buildRoute() {
+    return buildScreenRoute(screen: const ImportPgnScreen());
   }
 
   static void handlePgnText(BuildContext context, String text) {
     try {
-      final games = PgnGame.parseMultiGamePgn(text);
+      final games = PgnGame.parseMultiGameLazy(text);
 
       if (games.isEmpty) {
         showSnackBar(context, context.l10n.invalidPgn, type: .error);
@@ -44,22 +43,18 @@ class ImportPgnScreen extends StatelessWidget {
 
         Navigator.of(context, rootNavigator: true).push(
           AnalysisScreen.buildRoute(
-            context,
             AnalysisOptions.pgn(
               id: const StringId('pgn_import_single_game'),
               orientation: .white,
               pgn: text,
               isComputerAnalysisAllowed: true,
-              initialMoveCursor: game.moves.mainline().isEmpty ? 0 : 1,
+              initialMoveCursor: 1,
               variant: rule != null ? Variant.fromRule(rule) : .standard,
             ),
           ),
         );
       } else {
-        Navigator.of(
-          context,
-          rootNavigator: true,
-        ).push(PgnGamesListScreen.buildRoute(context, games.lock));
+        Navigator.of(context, rootNavigator: true).push(PgnGamesListScreen.buildRoute(games.lock));
       }
     } catch (_) {
       showSnackBar(context, context.l10n.invalidPgn, type: .error);
@@ -135,8 +130,10 @@ class _BodyState extends ConsumerState<_Body> {
     try {
       final result = await ref.read(pickPgnFileProvider)();
 
-      if (result != null && result.files.single.bytes != null) {
-        final content = utf8.decode(result.files.single.bytes!, allowMalformed: true);
+      if (result != null) {
+        final content = await const Utf8Decoder(
+          allowMalformed: true,
+        ).bind(result.files.single.readAsByteStream()).join();
         if (mounted) {
           ImportPgnScreen.handlePgnText(context, content);
         }

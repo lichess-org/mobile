@@ -20,8 +20,8 @@ class AnalysisShareScreen extends StatelessWidget {
 
   final AnalysisOptions options;
 
-  static Route<dynamic> buildRoute(BuildContext context, {required AnalysisOptions options}) {
-    return buildScreenRoute(context, screen: AnalysisShareScreen(options: options));
+  static Route<dynamic> buildRoute({required AnalysisOptions options}) {
+    return buildScreenRoute(screen: AnalysisShareScreen(options: options));
   }
 
   @override

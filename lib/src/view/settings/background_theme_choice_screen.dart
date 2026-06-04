@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
@@ -24,8 +25,8 @@ import 'package:path/path.dart';
 class BackgroundChoiceScreen extends StatelessWidget {
   const BackgroundChoiceScreen({super.key});
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const BackgroundChoiceScreen());
+  static Route<dynamic> buildRoute() {
+    return buildScreenRoute(screen: const BackgroundChoiceScreen());
   }
 
   @override
@@ -256,13 +257,15 @@ class _ConfirmColorBackgroundScreenState extends State<ConfirmColorBackgroundScr
                         padding: EdgeInsets.only(
                           left: orientation == Orientation.portrait ? 0 : 16.0,
                         ),
-                        child: Chessboard.fixed(
+                        child: StaticChessboard(
                           size: orientation == Orientation.portrait
                               ? constraints.maxWidth
                               : constraints.maxHeight - landscapeBoardPadding * 2,
                           fen: kInitialFEN,
                           orientation: Side.white,
-                          settings: widget.boardPrefs.toBoardSettings(),
+                          settings: StaticChessboardSettings.fromBoardSettings(
+                            widget.boardPrefs.toBoardSettings(Variant.standard),
+                          ),
                         ),
                       ),
                     ),
@@ -431,13 +434,15 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
                       padding: EdgeInsets.only(
                         left: widget.viewportOrientation == Orientation.portrait ? 0 : 16.0,
                       ),
-                      child: Chessboard.fixed(
+                      child: StaticChessboard(
                         size: widget.viewportOrientation == Orientation.portrait
                             ? widget.viewport.width
                             : widget.viewport.height - landscapeBoardPadding * 2,
                         fen: kInitialFEN,
                         orientation: Side.white,
-                        settings: widget.boardPrefs.toBoardSettings(),
+                        settings: StaticChessboardSettings.fromBoardSettings(
+                          widget.boardPrefs.toBoardSettings(Variant.standard),
+                        ),
                       ),
                     ),
                   ),

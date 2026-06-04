@@ -108,6 +108,20 @@ class BoardEditorController extends Notifier<BoardEditorState> {
     }
   }
 
+  void clearBoard() {
+    state = state.copyWith(
+      pieces: IMap(const {}), // No pieces
+      castlingRights: IMap(const {
+        CastlingRight.whiteKing: false,
+        CastlingRight.whiteQueen: false,
+        CastlingRight.blackKing: false,
+        CastlingRight.blackQueen: false,
+      }),
+      enPassantOptions: SquareSet.empty,
+      enPassantSquare: null,
+    );
+  }
+
   IMap<CastlingRight, bool> _getCastlingRights(Variant variant, Setup setup) {
     final position = Position.setupPosition(variant.rule, setup, ignoreImpossibleCheck: true);
     return IMap({
@@ -299,7 +313,7 @@ sealed class BoardEditorState with _$BoardEditorState {
     try {
       final position = Position.setupPosition(variant.rule, Setup.parseFen(fen));
       return PgnGame(
-        headers: {'FEN': position.fen, 'Variant': variant.label},
+        headers: {'FEN': position.fen, 'Variant': variant.pgnName},
         moves: PgnNode<PgnNodeData>(),
         comments: [],
       ).makePgn();

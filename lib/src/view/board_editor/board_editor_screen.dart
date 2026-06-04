@@ -37,8 +37,8 @@ class BoardEditorScreen extends ConsumerWidget {
 
   final BoardEditorControllerParams? params;
 
-  static Route<dynamic> buildRoute(BuildContext context, BoardEditorControllerParams? params) {
-    return buildScreenRoute(context, screen: BoardEditorScreen(params: params));
+  static Route<dynamic> buildRoute(BoardEditorControllerParams? params) {
+    return buildScreenRoute(screen: BoardEditorScreen(params: params));
   }
 
   @override
@@ -143,10 +143,12 @@ class _BoardEditor extends ConsumerWidget {
       size: boardSize,
       pieces: pieces,
       orientation: orientation,
-      settings: boardPrefs.toBoardSettings().copyWith(
-        borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
-        boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
-      ),
+      settings: boardPrefs
+          .toBoardSettings(editorState.variant)
+          .copyWith(
+            borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
+            boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
+          ),
       pointerMode: editorState.editorPointerMode,
       onDiscardedPiece: (Square square) =>
           ref.read(boardEditorControllerProvider(params).notifier).discardPiece(square),
@@ -307,7 +309,6 @@ class _BottomBar extends ConsumerWidget {
                   final notifier = ref.read(editorController.notifier);
                   Navigator.of(context).push(
                     BoardEditorPositionsScreen.buildRoute(
-                      context,
                       onPositionSelected: (position) => {
                         notifier.loadFen(position.fen),
                         Navigator.of(context).pop(),
@@ -332,7 +333,6 @@ class _BottomBar extends ConsumerWidget {
                     }
                     Navigator.of(context).push(
                       PickPlayerScreen.buildRoute(
-                        context,
                         onUserTap: (user) {
                           if (user.id == authUser.user.id) {
                             showSnackBar(
@@ -387,7 +387,7 @@ class _BottomBar extends ConsumerWidget {
               BottomSheetAction(
                 makeLabel: (context) => Text(context.l10n.clearBoard),
                 onPressed: () {
-                  ref.read(editorController.notifier).loadFen(kEmptyFEN);
+                  ref.read(editorController.notifier).clearBoard();
                 },
               ),
             ],
@@ -409,7 +409,6 @@ class _BottomBar extends ConsumerWidget {
               ? () {
                   Navigator.of(context).push(
                     AnalysisScreen.buildRoute(
-                      context,
                       AnalysisOptions.pgn(
                         id: const StringId('board_editor_position'),
                         orientation: editorState.orientation,
@@ -445,15 +444,15 @@ class _BottomBar extends ConsumerWidget {
       actions: [
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.playAgainstComputer),
-          onPressed: () => Navigator.of(context).push(
-            OfflineComputerGameScreen.buildRoute(context, initialVariant: variant, initialFen: fen),
-          ),
+          onPressed: () => Navigator.of(
+            context,
+          ).push(OfflineComputerGameScreen.buildRoute(initialVariant: variant, initialFen: fen)),
         ),
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.mobileOverTheBoard),
           onPressed: () => Navigator.of(
             context,
-          ).push(OverTheBoardScreen.buildRoute(context, initialVariant: variant, initialFen: fen)),
+          ).push(OverTheBoardScreen.buildRoute(initialVariant: variant, initialFen: fen)),
         ),
       ],
     );

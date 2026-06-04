@@ -16,7 +16,7 @@ import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 
-const innacuracyColor = LichessColors.cyan;
+const inaccuracyColor = LichessColors.cyan;
 const mistakeColor = Color(0xFFe69f00);
 const blunderColor = Color(0xFFdf5353);
 const kInlineMovePadding = EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.0);
@@ -544,7 +544,6 @@ class _PgnTreeViewState extends State<_PgnTreeView> {
 
 List<InlineSpan> _buildInlineSideLine({
   required ViewBranch firstNode,
-  required ViewNode parent,
   required UciPath initialPath,
   required TextStyle textStyle,
   required bool followsComment,
@@ -691,7 +690,6 @@ class _SideLinePart extends ConsumerWidget {
             ..._buildInlineSideLine(
               followsComment: node.children.first.hasTextComment,
               firstNode: node.children[1],
-              parent: node,
               initialPath: path,
               textStyle: textStyle,
               params: params,
@@ -912,7 +910,6 @@ class _InlineNotationMainlinePart extends ConsumerWidget {
                     _buildInlineSideLine(
                       followsComment: mainlineNode.hasTextComment,
                       firstNode: children[1],
-                      parent: node,
                       initialPath: path,
                       textStyle: textStyle,
                       params: params,

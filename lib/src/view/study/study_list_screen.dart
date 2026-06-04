@@ -27,8 +27,8 @@ class StudyListScreen extends ConsumerStatefulWidget {
 
   final StudyCategory? initialCategory;
 
-  static Route<dynamic> buildRoute(BuildContext context, {StudyCategory? initialCategory}) {
-    return buildScreenRoute(context, screen: StudyListScreen(initialCategory: initialCategory));
+  static Route<dynamic> buildRoute({StudyCategory? initialCategory}) {
+    return buildScreenRoute(screen: StudyListScreen(initialCategory: initialCategory));
   }
 
   @override
@@ -261,7 +261,7 @@ class StudyListItem extends StatelessWidget {
       onTap: () => Navigator.of(
         context,
         rootNavigator: true,
-      ).push(StudyScreen.buildRoute(context, (id: study.id, initialChapter: null))),
+      ).push(StudyScreen.buildRoute((id: study.id, initialChapter: null))),
       onLongPress: () {
         showModalBottomSheet<void>(
           context: context,

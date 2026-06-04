@@ -24,6 +24,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
+import 'package:lichess_mobile/src/view/analysis/server_analysis.dart';
 import 'package:lichess_mobile/src/view/chat/chat_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
@@ -50,8 +51,8 @@ class StudyScreen extends StatelessWidget {
 
   final StudyOptions options;
 
-  static Route<dynamic> buildRoute(BuildContext context, StudyOptions options) {
-    return buildScreenRoute(context, screen: StudyScreen(options: options));
+  static Route<dynamic> buildRoute(StudyOptions options) {
+    return buildScreenRoute(screen: StudyScreen(options: options));
   }
 
   @override
@@ -68,6 +69,7 @@ class _StudyScreenLoader extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
+    final studyPrefs = ref.watch(studyPreferencesProvider);
     switch (ref.watch(studyControllerProvider(options))) {
       case AsyncData(:final value):
         return _StudyScreen(options: options, studyState: value);
@@ -80,15 +82,20 @@ class _StudyScreenLoader extends ConsumerWidget {
             child: AnalysisLayout(
               pov: Side.white,
               sideToMove: null,
-              boardBuilder: (context, boardSize, borderRadius) => Chessboard.fixed(
+              boardBuilder: (context, boardSize, borderRadius) => StaticChessboard(
                 size: boardSize,
-                settings: boardPrefs.toBoardSettings().copyWith(
-                  borderRadius: borderRadius,
-                  boxShadow: borderRadius != null ? boardShadows : const <BoxShadow>[],
+                settings: StaticChessboardSettings.fromBoardSettings(
+                  boardPrefs
+                      .toBoardSettings(Variant.standard)
+                      .copyWith(
+                        borderRadius: borderRadius,
+                        boxShadow: borderRadius != null ? boardShadows : const <BoxShadow>[],
+                      ),
                 ),
                 orientation: Side.white,
                 fen: kEmptyFEN,
               ),
+              smallBoard: studyPrefs.smallBoard,
               children: const [Center(child: Text('Failed to load study.'))],
             ),
           ),
@@ -117,15 +124,20 @@ class _StudyScreenLoader extends ConsumerWidget {
             child: AnalysisLayout(
               pov: Side.white,
               sideToMove: null,
-              boardBuilder: (context, boardSize, borderRadius) => Chessboard.fixed(
+              boardBuilder: (context, boardSize, borderRadius) => StaticChessboard(
                 size: boardSize,
-                settings: boardPrefs.toBoardSettings().copyWith(
-                  borderRadius: borderRadius,
-                  boxShadow: borderRadius != null ? boardShadows : const <BoxShadow>[],
+                settings: StaticChessboardSettings.fromBoardSettings(
+                  boardPrefs
+                      .toBoardSettings(Variant.standard)
+                      .copyWith(
+                        borderRadius: borderRadius,
+                        boxShadow: borderRadius != null ? boardShadows : const <BoxShadow>[],
+                      ),
                 ),
                 orientation: Side.white,
                 fen: kEmptyFEN,
               ),
+              smallBoard: studyPrefs.smallBoard,
               children: const [Center(child: CircularProgressIndicator.adaptive())],
             ),
           ),
@@ -148,33 +160,34 @@ class _StudyScreenState extends ConsumerState<_StudyScreen> with TickerProviderS
   late List<AnalysisTab> tabs;
   late TabController _tabController;
 
+  void _initTabs() {
+    tabs = [
+      if (widget.studyState.isOpeningExplorerAvailable) AnalysisTab.explorer,
+      AnalysisTab.moves,
+      if (widget.studyState.isServerAnalysisAllowed) AnalysisTab.summary,
+    ];
+
+    _tabController = TabController(
+      vsync: this,
+      initialIndex: tabs.indexOf(AnalysisTab.moves),
+      length: tabs.length,
+    );
+  }
+
   @override
   void initState() {
     super.initState();
 
-    tabs = [
-      if (widget.studyState.isOpeningExplorerAvailable) AnalysisTab.explorer,
-      AnalysisTab.moves,
-    ];
-
-    _tabController = TabController(vsync: this, initialIndex: tabs.length - 1, length: tabs.length);
+    _initTabs();
   }
 
   @override
   void didUpdateWidget(covariant _StudyScreen oldWidget) {
-    // If the study has not yet loaded the opening explorer and it is now available
-    // with this chapter, add the opening tab.
-    // We don't want to remove a tab, so if the opening explorer is not available
-    // anymore, we keep the tabs as they are.
-    // In theory, studies mixing chapters with and without opening explorer should be pretty rare.
-    if (tabs.length < 2 && widget.studyState.isOpeningExplorerAvailable) {
-      tabs = [AnalysisTab.explorer, AnalysisTab.moves];
-      _tabController = TabController(
-        vsync: this,
-        initialIndex: tabs.length - 1,
-        length: tabs.length,
-      );
+    if (oldWidget.studyState.currentChapter.id != widget.studyState.currentChapter.id) {
+      _tabController.dispose();
+      _initTabs();
     }
+
     super.didUpdateWidget(oldWidget);
   }
 
@@ -232,13 +245,13 @@ class _StudyMenu extends ConsumerWidget {
           icon: Icons.settings,
           label: context.l10n.settingsSettings,
           onPressed: () {
-            Navigator.of(context).push(StudySettingsScreen.buildRoute(context, options));
+            Navigator.of(context).push(StudySettingsScreen.buildRoute(options));
           },
         ),
         if (authUser != null)
           ContextMenuAction(
             icon: state.study.liked ? Icons.favorite : Icons.favorite_border,
-            label: state.study.liked ? context.l10n.studyUnlike : context.l10n.studyLike,
+            label: state.study.liked ? 'Stop liking' : context.l10n.studyLike,
             onPressed: () {
               ref.read(studyControllerProvider(options).notifier).toggleLike();
             },
@@ -385,7 +398,7 @@ class _StudyMenu extends ConsumerWidget {
           ContextMenuAction(
             label: context.l10n.chatRoom,
             onPressed: () {
-              Navigator.of(context).push(ChatScreen.buildRoute(context, options: chatOptions));
+              Navigator.of(context).push(ChatScreen.buildRoute(options: chatOptions));
             },
             icon: Icons.chat_bubble_outline,
           ),
@@ -397,6 +410,19 @@ class _StudyMenu extends ConsumerWidget {
           },
         ),
       ],
+    );
+  }
+}
+
+class _CannotRequestServerAnalysisReason extends StatelessWidget {
+  const _CannotRequestServerAnalysisReason({required this.reason});
+
+  final String reason;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(padding: const EdgeInsets.symmetric(vertical: 16.0), child: Text(reason)),
     );
   }
 }
@@ -422,8 +448,11 @@ class _Body extends ConsumerWidget {
           sideToMove: null,
           boardBuilder: (context, boardSize, borderRadius) => SizedBox.square(
             dimension: boardSize,
-            child: Center(child: Text('${variant.label} is not supported yet.')),
+            child: Center(
+              child: Text(context.l10n.mobileUnsupportedVariant(variant.label(context.l10n))),
+            ),
           ),
+          smallBoard: studyPrefs.smallBoard,
           children: const [SizedBox.shrink()],
         ),
       );
@@ -448,6 +477,7 @@ class _Body extends ConsumerWidget {
       sideToMove: studyState.currentPosition?.turn,
       boardBuilder: (context, boardSize, borderRadius) =>
           StudyAnalysisBoard(options: options, boardSize: boardSize, boardRadius: borderRadius),
+      smallBoard: studyPrefs.smallBoard,
       engineGaugeBuilder:
           isComputerAnalysisAllowed && showEvaluationGauge && engineGaugeParams != null
           ? (context) {
@@ -461,7 +491,7 @@ class _Body extends ConsumerWidget {
               numEvalLines > 0
           ? EngineLines(
               filters: (id: studyState.evaluationContext.id, path: studyState.currentPath),
-              analyisState: studyState,
+              analysisState: studyState,
               onTapMove: ref.read(studyControllerProvider(options).notifier).onUserMove,
             )
           : null,
@@ -482,6 +512,38 @@ class _Body extends ConsumerWidget {
               );
             } else {
               return const Center(child: Text('Opening explorer not available.'));
+            }
+          case AnalysisTab.summary:
+            switch (studyState.chapterServerAnalysisStatus) {
+              case ChapterServerAnalysisStatus.canRequest || ChapterServerAnalysisStatus.available:
+                return ServerAnalysisSummary(
+                  serverAnalysisSource: studyState.serverAnalysisSource,
+                  playersAnalysis: studyState.playersAnalysis,
+                  pgnHeaders: studyState.pgnHeaders,
+                  acplChartParams: studyState.acplChartData != null
+                      ? (
+                          acplChartData: studyState.acplChartData!,
+                          division: studyState.analysisSummary?.division,
+                          rootPly: studyState.root!.position.ply,
+                          currentNodePly: studyState.currentPosition!.ply,
+                          isOnMainline: studyState.isOnMainline,
+                          onJumpToNode: ref
+                              .read(studyControllerProvider(options).notifier)
+                              .jumpToNthNodeOnMainline,
+                        )
+                      : null,
+                  onRequestServerAnalysis: ref
+                      .read(studyControllerProvider(options).notifier)
+                      .requestServerAnalysis,
+                );
+              case ChapterServerAnalysisStatus.notEnoughMoves:
+                return _CannotRequestServerAnalysisReason(
+                  reason: context.l10n.studyTheChapterIsTooShortToBeAnalysed,
+                );
+              case ChapterServerAnalysisStatus.notWriteable:
+                return _CannotRequestServerAnalysisReason(
+                  reason: context.l10n.studyOnlyContributorsCanRequestAnalysis,
+                );
             }
           case _:
             return bottomChild;
@@ -517,6 +579,16 @@ class StudyAnalysisBoard extends AnalysisBoard {
 class _StudyAnalysisBoardState
     extends AnalysisBoardState<StudyAnalysisBoard, StudyState, StudyPrefs> {
   @override
+  StudyState? readCurrentState() => ref.read(studyControllerProvider(widget.options)).value;
+
+  @override
+  void listenToStateChanges(void Function(StudyState? prev, StudyState? next) listener) =>
+      ref.listenManual<StudyState?>(
+        studyControllerProvider(widget.options).select((v) => v.value),
+        listener,
+      );
+
+  @override
   StudyState get analysisState => ref.watch(studyControllerProvider(widget.options)).requireValue;
 
   @override
@@ -535,15 +607,8 @@ class _StudyAnalysisBoardState
       (id: analysisState.evaluationContext.id, path: analysisState.currentPath);
 
   @override
-  void onPromotionSelection(Role? role) {
-    ref.read(studyControllerProvider(widget.options).notifier).onPromotionSelection(role);
-  }
-
-  @override
-  String get fen =>
-      analysisState.currentPosition?.board.fen ??
-      analysisState.study.currentChapterMeta.fen ??
-      kInitialFEN;
+  String computeFen(StudyState state) =>
+      state.currentPosition?.board.fen ?? state.study.currentChapterMeta.fen ?? kInitialFEN;
 
   @override
   ISet<Shape> get extraShapes {
@@ -583,9 +648,7 @@ class _StudyAnalysisBoardState
       next,
     ) {
       if (prev != next) {
-        setState(() {
-          userShapes = ISet();
-        });
+        clearDrawnShapes();
       }
     });
 
@@ -618,7 +681,7 @@ class _StudyMembersSheet extends ConsumerWidget {
           ListTile(
             title: UserFullNameWidget(user: member.user),
             onTap: () {
-              Navigator.of(context).push(UserOrProfileScreen.buildRoute(context, member.user));
+              Navigator.of(context).push(UserOrProfileScreen.buildRoute(member.user));
             },
           ),
       ],

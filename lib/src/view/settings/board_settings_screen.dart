@@ -16,9 +16,8 @@ import 'package:lichess_mobile/src/widgets/settings.dart';
 class BoardSettingsScreen extends StatelessWidget {
   const BoardSettingsScreen({super.key});
 
-  static Route<dynamic> buildRoute(BuildContext context, {bool fullscreenDialog = false}) {
+  static Route<dynamic> buildRoute({bool fullscreenDialog = false}) {
     return buildScreenRoute(
-      context,
       fullscreenDialog: fullscreenDialog,
       screen: const BoardSettingsScreen(),
     );
@@ -52,14 +51,14 @@ class _Body extends ConsumerWidget {
               settingsLabel: Text(context.l10n.board),
               settingsValue: boardPrefs.boardTheme.label,
               onTap: () {
-                Navigator.of(context).push(BoardChoiceScreen.buildRoute(context));
+                Navigator.of(context).push(BoardChoiceScreen.buildRoute());
               },
             ),
             SettingsListTile(
               settingsLabel: Text(context.l10n.pieceSet),
               settingsValue: boardPrefs.pieceSet.label,
               onTap: () {
-                Navigator.of(context).push(PieceSetScreen.buildRoute(context));
+                Navigator.of(context).push(PieceSetScreen.buildRoute());
               },
             ),
             SwitchSettingTile(

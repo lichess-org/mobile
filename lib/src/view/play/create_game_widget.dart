@@ -90,7 +90,7 @@ class CreateGameWidget extends ConsumerWidget {
                     icon: playPrefs.customVariant != Variant.standard
                         ? Icon(playPrefs.customVariant.icon)
                         : null,
-                    label: Text(playPrefs.customVariant.label),
+                    label: Text(playPrefs.customVariant.label(context.l10n)),
                     onPressed: () {
                       showChoicePicker(
                         context,
@@ -229,10 +229,7 @@ class CreateGameWidget extends ConsumerWidget {
                   }
 
                   Navigator.of(context, rootNavigator: true).push(
-                    GameScreen.buildRoute(
-                      context,
-                      source: LobbySource(GameSeek.custom(playPrefs, account)),
-                    ),
+                    GameScreen.buildRoute(source: LobbySource(GameSeek.custom(playPrefs, account))),
                   );
                 }
               : null,

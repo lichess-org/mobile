@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -5,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/study/study.dart';
 import 'package:lichess_mobile/src/model/study/study_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
@@ -329,7 +332,33 @@ void main() {
           expect(request.url.queryParameters['chapters'], '1');
           return mockResponse(response, 200);
         } else if (request.url.path == '/api/study/JbWtuaeK/7OJXp679.pgn') {
-          return mockResponse('pgn', 200);
+          expect(request.url.queryParameters['analysisHeader'], '1');
+          return mockResponse(
+            'pgn',
+            200,
+            headers: {
+              'x-lichess-analysis': jsonEncode({
+                'division': {'middle': 20, 'end': 43},
+                'summary': {
+                  'id': 'YrDpIbAh',
+                  'white': {
+                    'inaccuracy': 4,
+                    'mistake': 1,
+                    'blunder': 4,
+                    'acpl': 77,
+                    'accuracy': 75,
+                  },
+                  'black': {
+                    'inaccuracy': 8,
+                    'mistake': 0,
+                    'blunder': 6,
+                    'acpl': 103,
+                    'accuracy': 70,
+                  },
+                },
+              }),
+            },
+          );
         }
         return mockResponse('', 404);
       });
@@ -337,12 +366,30 @@ void main() {
       final container = await makeTestContainer(mockClient);
       final repo = container.read(studyRepositoryProvider);
 
-      final (study, pgn) = await repo.getStudy(
+      final (study, summary, pgn) = await repo.getStudy(
         id: const StudyId('JbWtuaeK'),
         chapterId: const StudyChapterId('7OJXp679'),
       );
 
       expect(pgn, 'pgn');
+
+      expect(summary, (
+        division: const Division(middlegame: 20, endgame: 43),
+        white: const PlayerAnalysis(
+          inaccuracies: 4,
+          mistakes: 1,
+          blunders: 4,
+          acpl: 77,
+          accuracy: 75,
+        ),
+        black: const PlayerAnalysis(
+          inaccuracies: 8,
+          mistakes: 0,
+          blunders: 6,
+          acpl: 103,
+          accuracy: 70,
+        ),
+      ));
 
       expect(
         study,

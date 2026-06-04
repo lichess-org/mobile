@@ -51,7 +51,7 @@ extension _MoveVerdictDisplay on MoveVerdict {
 
   Color get color => switch (this) {
     .goodMove || .notBest => Colors.lightGreen,
-    .inaccuracy => innacuracyColor,
+    .inaccuracy => inaccuracyColor,
     .mistake => mistakeColor,
     .blunder => blunderColor,
   };
@@ -73,13 +73,8 @@ class OfflineComputerGameScreen extends ConsumerWidget {
   /// Optional initial FEN to start the game from a custom position.
   final String? initialFen;
 
-  static Route<void> buildRoute(
-    BuildContext context, {
-    Variant? initialVariant,
-    String? initialFen,
-  }) {
+  static Route<void> buildRoute({Variant? initialVariant, String? initialFen}) {
     return buildScreenRoute(
-      context,
       screen: OfflineComputerGameScreen(initialVariant: initialVariant, initialFen: initialFen),
     );
   }
@@ -258,7 +253,6 @@ class _BodyState extends ConsumerState<_Body> {
                       youAre: orientation,
                       isBoardTurned: isBoardFlipped,
                     ),
-                    lastMove: gameState.lastMove,
                     explosionSquares: gameState.stepCursor > 0
                         ? atomicExplosionSquares(
                             gameState.game.stepAt(gameState.stepCursor - 1).position,
@@ -266,6 +260,7 @@ class _BodyState extends ConsumerState<_Body> {
                           )
                         : null,
                     shapes: _buildBoardShapes(gameState, boardColorScheme),
+                    boardSettingsOverrides: const BoardSettingsOverrides(enablePremoves: false),
                     boardParams: GameBoardParams.interactive(
                       variant: gameState.game.meta.variant,
                       position: gameState.currentPosition,
@@ -274,14 +269,10 @@ class _BodyState extends ConsumerState<_Body> {
                           : isPlayerTurn && !gameState.isEvaluatingMove
                           ? (orientation == Side.white ? PlayerSide.white : PlayerSide.black)
                           : PlayerSide.none,
-                      onPromotionSelection: ref
-                          .read(offlineComputerGameControllerProvider.notifier)
-                          .onPromotionSelection,
-                      promotionMove: gameState.promotionMove,
+                      lastMove: gameState.lastMove,
                       onMove: (move, {viaDragAndDrop}) {
                         ref.read(offlineComputerGameControllerProvider.notifier).makeMove(move);
                       },
-                      premovable: null,
                     ),
                     moves: gameState.moves,
                     currentMoveIndex: gameState.stepCursor,
@@ -397,7 +388,6 @@ class _BottomBar extends ConsumerWidget {
             makeLabel: (context) => Text(context.l10n.analysis),
             onPressed: () => Navigator.of(context).push(
               AnalysisScreen.buildRoute(
-                context,
                 AnalysisOptions.pgn(
                   id: gameState.game.id,
                   orientation: gameState.game.playerSide,
@@ -788,12 +778,14 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
                       size: 150,
                       fen: widget.initialFen!,
                       orientation: _selectedSideChoice.toSide(fen: widget.initialFen) ?? Side.white,
-                      pieceAssets: boardPrefs.pieceSet.assets,
-                      colorScheme: boardPrefs.boardTheme.colors,
-                      brightness: boardPrefs.brightness,
-                      hue: boardPrefs.hue,
-                      enableCoordinates: false,
-                      borderRadius: const BorderRadius.all(Radius.circular(4)),
+                      settings: StaticChessboardSettings(
+                        pieceAssets: boardPrefs.pieceSet.assets,
+                        colorScheme: boardPrefs.boardTheme.colors,
+                        brightness: boardPrefs.brightness,
+                        hue: boardPrefs.hue,
+                        enableCoordinates: false,
+                        borderRadius: const BorderRadius.all(Radius.circular(4)),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -842,7 +834,7 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
             ),
             SettingsListTile(
               settingsLabel: Text(context.l10n.variant),
-              settingsValue: _selectedVariant.label,
+              settingsValue: _selectedVariant.label(context.l10n),
               onTap: () {
                 showChoicePicker(
                   context,
@@ -1038,7 +1030,6 @@ class OfflineComputerGameResultDialog extends StatelessWidget {
             Navigator.pop(context);
             Navigator.of(context).push(
               AnalysisScreen.buildRoute(
-                context,
                 AnalysisOptions.pgn(
                   id: game.id,
                   orientation: game.playerSide,

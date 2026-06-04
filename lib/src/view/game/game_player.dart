@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -23,13 +24,12 @@ import 'package:lichess_mobile/src/widgets/material_diff.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 
-export 'package:lichess_mobile/src/widgets/material_diff.dart';
-
 /// A widget to display player information above/below the chess board.
 class GamePlayer extends StatelessWidget {
   const GamePlayer({
     required this.game,
     required this.side,
+    this.socketUri,
     this.matchupScore,
     this.clock,
     this.materialDiff,
@@ -46,6 +46,8 @@ class GamePlayer extends StatelessWidget {
 
   final BaseGame game;
   final Side side;
+
+  final Uri? socketUri;
 
   final Widget? clock;
   final MaterialDiffSide? materialDiff;
@@ -107,10 +109,21 @@ class GamePlayer extends StatelessWidget {
                   style: TextStyle(fontSize: playerFontSize, color: textShade(context, 0.7)),
                 ),
               if (player.user != null) ...[
-                ConnectedIcon(
-                  isConnected: player.onGame == true,
-                  shouldShowIsOnGameLabels: true,
-                  size: DefaultTextStyle.of(context).style.fontSize,
+                Consumer(
+                  builder: (context, ref, _) {
+                    bool isPlayerConnected = player.onGame == true;
+                    if (mePlaying && socketUri != null) {
+                      final ping = ref.watch(socketPingProvider(socketUri));
+                      if (ping.rating == 0) {
+                        isPlayerConnected = false;
+                      }
+                    }
+                    return ConnectedIcon(
+                      isConnected: isPlayerConnected,
+                      shouldShowIsOnGameLabels: true,
+                      size: DefaultTextStyle.of(context).style.fontSize,
+                    );
+                  },
                 ),
               ],
               const SizedBox(width: 5),
@@ -224,7 +237,7 @@ class GamePlayer extends StatelessWidget {
                                   }
                                   Navigator.of(
                                     context,
-                                  ).push(UserOrProfileScreen.buildRoute(context, player.user!));
+                                  ).push(UserOrProfileScreen.buildRoute(player.user!));
                                 }
                               : null,
                           child: playerWidget,

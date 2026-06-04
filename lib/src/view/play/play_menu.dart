@@ -52,7 +52,7 @@ class PlayMenu extends ConsumerWidget {
                 Navigator.of(
                   context,
                   rootNavigator: true,
-                ).push(CorrespondenceChallengesScreen.buildRoute(context));
+                ).push(CorrespondenceChallengesScreen.buildRoute());
               },
               leading: Icon(Perf.correspondence.icon),
               title: Text(context.l10n.correspondence),
@@ -63,7 +63,7 @@ class PlayMenu extends ConsumerWidget {
                 // Pops the play bottom sheet
                 Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
 
-                Navigator.of(context).push(TournamentListScreen.buildRoute(context));
+                Navigator.of(context).push(TournamentListScreen.buildRoute());
               },
               leading: const Icon(LichessIcons.tournament_cup),
               title: Text(context.l10n.arenaArenaTournaments),
@@ -75,7 +75,7 @@ class PlayMenu extends ConsumerWidget {
                 Navigator.of(
                   context,
                   rootNavigator: true,
-                ).push(OfflineComputerGameScreen.buildRoute(context));
+                ).push(OfflineComputerGameScreen.buildRoute());
               },
               leading: const Icon(Icons.memory),
               title: Text(context.l10n.playAgainstComputer),
@@ -84,10 +84,7 @@ class PlayMenu extends ConsumerWidget {
               onTap: () {
                 // Pops the play bottom sheet
                 Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
-                Navigator.of(
-                  context,
-                  rootNavigator: true,
-                ).push(OverTheBoardScreen.buildRoute(context));
+                Navigator.of(context, rootNavigator: true).push(OverTheBoardScreen.buildRoute());
               },
               leading: const Icon(Icons.table_restaurant_outlined),
               title: Text(context.l10n.mobileOverTheBoard),

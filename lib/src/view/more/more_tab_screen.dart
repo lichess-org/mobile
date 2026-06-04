@@ -84,7 +84,7 @@ class _Body extends ConsumerWidget {
                     ? const CupertinoListTileChevron()
                     : null,
                 title: Text(context.l10n.importPgn),
-                onTap: () => Navigator.of(context).push(ImportPgnScreen.buildRoute(context)),
+                onTap: () => Navigator.of(context).push(ImportPgnScreen.buildRoute()),
               ),
               ListTile(
                 leading: const Icon(Icons.biotech_outlined),
@@ -94,7 +94,6 @@ class _Body extends ConsumerWidget {
                 title: Text(context.l10n.analysis),
                 onTap: () => Navigator.of(context, rootNavigator: true).push(
                   AnalysisScreen.buildRoute(
-                    context,
                     const AnalysisOptions.standalone(variant: Variant.standard),
                   ),
                 ),
@@ -108,7 +107,6 @@ class _Body extends ConsumerWidget {
                 enabled: isOnline,
                 onTap: () => Navigator.of(context, rootNavigator: true).push(
                   OpeningExplorerScreen.buildRoute(
-                    context,
                     const AnalysisOptions.pgn(
                       id: StringId('standalone_opening_explorer'),
                       orientation: Side.white,
@@ -126,7 +124,7 @@ class _Body extends ConsumerWidget {
                     : null,
                 title: Text(context.l10n.boardEditor),
                 onTap: () => Navigator.of(context, rootNavigator: true).push(
-                  BoardEditorScreen.buildRoute(context, (
+                  BoardEditorScreen.buildRoute((
                     initialVariant: Variant.standard,
                     initialFen: null,
                   )),
@@ -139,10 +137,7 @@ class _Body extends ConsumerWidget {
                     : null,
                 title: Text(context.l10n.clock),
                 onTap: () {
-                  Navigator.of(
-                    context,
-                    rootNavigator: true,
-                  ).push(ClockToolScreen.buildRoute(context));
+                  Navigator.of(context, rootNavigator: true).push(ClockToolScreen.buildRoute());
                 },
               ),
             ],
@@ -159,7 +154,7 @@ class _Body extends ConsumerWidget {
                     ? const CupertinoListTileChevron()
                     : null,
                 onTap: () {
-                  Navigator.of(context, rootNavigator: true).push(PlayerScreen.buildRoute(context));
+                  Navigator.of(context, rootNavigator: true).push(PlayerScreen.buildRoute());
                 },
               ),
               if (authUser != null)
@@ -171,10 +166,7 @@ class _Body extends ConsumerWidget {
                       ? const CupertinoListTileChevron()
                       : null,
                   onTap: () {
-                    Navigator.of(
-                      context,
-                      rootNavigator: true,
-                    ).push(FriendScreen.buildRoute(context));
+                    Navigator.of(context, rootNavigator: true).push(FriendScreen.buildRoute());
                   },
                 ),
             ],
@@ -197,10 +189,7 @@ class _Body extends ConsumerWidget {
                   leading: const Icon(Icons.info_outline),
                   title: Text(context.l10n.about),
                   onTap: () {
-                    Navigator.of(
-                      context,
-                      rootNavigator: true,
-                    ).push(AboutScreen.buildRoute(context));
+                    Navigator.of(context, rootNavigator: true).push(AboutScreen.buildRoute());
                   },
                 ),
               ],
@@ -241,7 +230,7 @@ class _AccountSection extends ConsumerWidget {
             enabled: isOnline,
             onTap: () {
               ref.invalidate(accountProvider);
-              Navigator.of(context, rootNavigator: true).push(ProfileScreen.buildRoute(context));
+              Navigator.of(context, rootNavigator: true).push(ProfileScreen.buildRoute());
             },
           ),
           if (!kidMode)
@@ -255,7 +244,7 @@ class _AccountSection extends ConsumerWidget {
               trailing: isIOS ? const CupertinoListTileChevron() : null,
               enabled: isOnline,
               onTap: () {
-                Navigator.of(context, rootNavigator: true).push(ContactsScreen.buildRoute(context));
+                Navigator.of(context, rootNavigator: true).push(ContactsScreen.buildRoute());
               },
             ),
         ],
@@ -264,7 +253,7 @@ class _AccountSection extends ConsumerWidget {
           title: Text(context.l10n.settingsSettings),
           trailing: isIOS ? const CupertinoListTileChevron() : null,
           onTap: () {
-            Navigator.of(context, rootNavigator: true).push(SettingsScreen.buildRoute(context));
+            Navigator.of(context, rootNavigator: true).push(SettingsScreen.buildRoute());
           },
         ),
       ],

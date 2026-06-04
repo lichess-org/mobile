@@ -17,8 +17,8 @@ import 'package:lichess_mobile/src/widgets/clock.dart';
 class ClockToolScreen extends StatelessWidget {
   const ClockToolScreen({super.key});
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const ClockToolScreen());
+  static Route<dynamic> buildRoute() {
+    return buildScreenRoute(screen: const ClockToolScreen());
   }
 
   @override

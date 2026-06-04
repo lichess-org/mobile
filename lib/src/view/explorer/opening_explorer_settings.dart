@@ -110,7 +110,6 @@ class OpeningExplorerSettings extends ConsumerWidget {
                 recognizer: TapGestureRecognizer()
                   ..onTap = () => Navigator.of(context).push(
                     SearchScreen.buildRoute(
-                      context,
                       onUserTap: (user) {
                         ref
                             .read(openingExplorerPreferencesProvider.notifier)

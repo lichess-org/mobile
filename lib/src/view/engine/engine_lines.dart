@@ -15,11 +15,11 @@ const kEngineLineHeight = 24.0;
 const kEngineLineFontSize = 11.0;
 
 class EngineLines extends ConsumerStatefulWidget {
-  const EngineLines({required this.filters, required this.onTapMove, required this.analyisState});
+  const EngineLines({required this.filters, required this.onTapMove, required this.analysisState});
 
   final EngineEvaluationFilters filters;
   final void Function(Move move) onTapMove;
-  final CommonAnalysisState analyisState;
+  final CommonAnalysisState analysisState;
 
   @override
   ConsumerState<EngineLines> createState() => _EngineLinesState();
@@ -36,7 +36,7 @@ class _EngineLinesState extends ConsumerState<EngineLines> {
     final localEval = ref.watch(engineEvaluationProvider(widget.filters)).eval;
     final eval = pickBestClientEval(
       localEval: localEval,
-      savedEval: widget.analyisState.currentNode.eval,
+      savedEval: widget.analysisState.currentNode.eval,
     );
     // save the last eval to display when the current eval is not yet available to avoid flickering
     if (eval != null) lastEval = eval;
@@ -46,8 +46,8 @@ class _EngineLinesState extends ConsumerState<EngineLines> {
     final evalOrLastEval = eval ?? lastEval;
 
     final content =
-        widget.analyisState.currentPosition?.isGameOver != false &&
-            !widget.analyisState.engineInThreatMode
+        widget.analysisState.currentPosition?.isGameOver != false &&
+            !widget.analysisState.engineInThreatMode
         ? emptyLines
         : (evalOrLastEval != null
               ? evalOrLastEval.pvs

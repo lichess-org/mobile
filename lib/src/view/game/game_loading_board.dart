@@ -275,7 +275,6 @@ class _OpenChallengeLoadingContentState extends ConsumerState<OpenChallengeLoadi
                       FilledButton.tonalIcon(
                         onPressed: () => Navigator.of(context).push(
                           PickPlayerScreen.buildRoute(
-                            context,
                             title: Text(context.l10n.challengeAFriend),
                             onUserTap: (user) async {
                               // Capture everything that needs BuildContext before the async gap.
@@ -287,7 +286,6 @@ class _OpenChallengeLoadingContentState extends ConsumerState<OpenChallengeLoadi
                                   widget.challengeRequest.timeControl ==
                                       ChallengeTimeControlType.clock
                                   ? GameScreen.buildRoute(
-                                      context,
                                       source: UserChallengeSource(directedChallengeReq),
                                     )
                                   : null;
@@ -461,15 +459,18 @@ class StandaloneGameLoadingContent extends StatelessWidget {
             fen: position?.fen ?? kEmptyFEN,
             variant: Variant.standard,
             pockets: null,
+            lastMove: switch (lastMove) {
+              // In crazyhouse games, the "ongoing games" endpoint does not return the correct UCI for crazyhouse games,
+              // e.g. instead of P@c4 the UCI will be c4c4.
+              // This leads to a "duplicate key" error, since chessground would try to highlight the same square twice.
+              // The dropped role does not matter, since we just use it for the square highlight.
+              NormalMove(:final from, :final to) when from == to => DropMove(
+                to: to,
+                role: Role.pawn,
+              ),
+              _ => lastMove,
+            },
           ),
-          lastMove: switch (lastMove) {
-            // In crazyhouse games, the "ongoing games" endpoint does not return the correct UCI for crazyhouse games,
-            // e.g. instead of P@c4 the UCI will be c4c4.
-            // This leads to a "duplicate key" error, since chessground would try to highlight the same square twice.
-            // The dropped role does not matter, since we just use it for the square highlight.
-            NormalMove(:final from, :final to) when from == to => DropMove(to: to, role: Role.pawn),
-            _ => lastMove,
-          },
           topTable: const LoadingPlayerWidget(),
           bottomTable: const LoadingPlayerWidget(),
           moves: const [],

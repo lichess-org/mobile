@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/relation/online_friends.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -18,13 +19,11 @@ class PickPlayerScreen extends ConsumerWidget {
   final void Function(LightUser) onUserTap;
   final Widget title;
 
-  static Route<dynamic> buildRoute(
-    BuildContext context, {
+  static Route<dynamic> buildRoute({
     required void Function(LightUser) onUserTap,
     required Widget title,
   }) {
     return buildScreenRoute(
-      context,
       screen: PickPlayerScreen(onUserTap: onUserTap, title: title),
     );
   }
@@ -45,47 +44,40 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    switch (ref.watch(onlineAndFollowingProvider)) {
-      case AsyncData(value: (final online, final following)):
-        return _PlayersList(
-          onUserTap: onUserTap,
-          children: [
-            if (online.isNotEmpty)
-              ListSection(
-                header: Text(context.l10n.nbFriendsOnline(online.length)),
-                children: [
-                  for (final friend in online)
-                    _FriendTile(friend: friend.user, onUserTap: onUserTap),
-                ],
-              ),
-            if (following.isNotEmpty)
-              ListSection(
-                header: Text(context.l10n.following),
-                children: [
-                  for (final user in following)
-                    _FriendTile(friend: user.lightUser, onUserTap: onUserTap),
-                ],
-              ),
-          ],
-        );
-      case AsyncError(:final error, :final stackTrace):
-        debugPrint(
-          'SEVERE: [PickPlayerScreen] could not load following users; $error\n$stackTrace',
-        );
-        return FullScreenRetryRequest(onRetry: () => ref.invalidate(onlineAndFollowingProvider));
-      case _:
-        return _PlayersList(
-          onUserTap: onUserTap,
-          children: [
-            Shimmer(
-              child: ShimmerLoading(isLoading: true, child: ListSection.loading(itemsNumber: 5)),
-            ),
-            Shimmer(
-              child: ShimmerLoading(isLoading: true, child: ListSection.loading(itemsNumber: 5)),
-            ),
-          ],
-        );
+    final online = ref.watch(onlineFriendsProvider);
+    final following = ref.watch(followingProvider);
+
+    if (following case AsyncError(:final error, :final stackTrace)) {
+      debugPrint('SEVERE: [PickPlayerScreen] could not load following users; $error\n$stackTrace');
+      return FullScreenRetryRequest(onRetry: () => ref.invalidate(followingProvider));
     }
+
+    return _PlayersList(
+      onUserTap: onUserTap,
+      children: [
+        switch (online) {
+          AsyncData(:final value) when value.isNotEmpty => ListSection(
+            header: Text(context.l10n.nbFriendsOnline(value.length)),
+            children: [
+              for (final friend in value) _FriendTile(friend: friend.user, onUserTap: onUserTap),
+            ],
+          ),
+          _ => const SizedBox.shrink(),
+        },
+        switch (following) {
+          AsyncData(:final value) when value.isNotEmpty => ListSection(
+            header: Text(context.l10n.following),
+            children: [
+              for (final user in value) _FriendTile(friend: user.lightUser, onUserTap: onUserTap),
+            ],
+          ),
+          AsyncData() => const SizedBox.shrink(),
+          _ => Shimmer(
+            child: ShimmerLoading(isLoading: true, child: ListSection.loading(itemsNumber: 5)),
+          ),
+        },
+      ],
+    );
   }
 }
 
@@ -119,7 +111,6 @@ class _PlayersListState extends State<_PlayersList> {
             focusNode: _searchFocusNode,
             onTap: () => Navigator.of(context).push(
               SearchScreen.buildRoute(
-                context,
                 onUserTap: (user) {
                   Navigator.of(context).pop();
                   widget.onUserTap(user);

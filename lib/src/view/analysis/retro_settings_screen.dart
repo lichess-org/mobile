@@ -10,8 +10,8 @@ class RetroSettingsScreen extends ConsumerWidget {
 
   final RetroOptions options;
 
-  static Route<dynamic> buildRoute(BuildContext context, {required RetroOptions options}) {
-    return buildScreenRoute(context, screen: RetroSettingsScreen(options));
+  static Route<dynamic> buildRoute({required RetroOptions options}) {
+    return buildScreenRoute(screen: RetroSettingsScreen(options));
   }
 
   @override

@@ -14,8 +14,8 @@ class StudySettingsScreen extends ConsumerWidget {
 
   final StudyOptions options;
 
-  static Route<dynamic> buildRoute(BuildContext context, StudyOptions options) {
-    return buildScreenRoute(context, screen: StudySettingsScreen(options));
+  static Route<dynamic> buildRoute(StudyOptions options) {
+    return buildScreenRoute(screen: StudySettingsScreen(options));
   }
 
   @override
@@ -39,6 +39,12 @@ class StudySettingsScreen extends ConsumerWidget {
                 value: studyPrefs.inlineNotation,
                 onChanged: (value) =>
                     ref.read(studyPreferencesProvider.notifier).toggleInlineNotation(),
+              ),
+              SwitchSettingTile(
+                title: const Text('Small board'), // TODO l10n
+                value: studyPrefs.smallBoard,
+                onChanged: (value) =>
+                    ref.read(studyPreferencesProvider.notifier).toggleSmallBoard(),
               ),
               ListTile(
                 title: Text(context.l10n.openingExplorer),

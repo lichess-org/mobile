@@ -9,7 +9,8 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/user/countries.dart';
-import 'package:lichess_mobile/src/widgets/emoji_picker/widget.dart';
+import 'package:lichess_mobile/src/widgets/emoji_picker/emoji_item.dart';
+import 'package:lichess_mobile/src/widgets/emoji_picker/emoji_picker.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
@@ -20,8 +21,8 @@ final _countries = countries.values.toList();
 class EditProfileScreen extends ConsumerStatefulWidget {
   const EditProfileScreen({super.key});
 
-  static Route<dynamic> buildRoute(BuildContext context) {
-    return buildScreenRoute(context, screen: const EditProfileScreen());
+  static Route<dynamic> buildRoute() {
+    return buildScreenRoute(screen: const EditProfileScreen());
   }
 
   @override
@@ -34,8 +35,8 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     'flag': null,
     'location': null,
     'bio': null,
+    'flair': null,
     'realName': null,
-    'lastName': null,
     'fideRating': null,
     'uscfRating': null,
     'ecfRating': null,

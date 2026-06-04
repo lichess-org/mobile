@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
@@ -81,6 +81,7 @@ class BroadcastOverviewTab extends ConsumerWidget {
                   if (url == null) return;
                   launchUrl(Uri.https('lichess.org').resolve(url));
                 },
+                softLineBreak: true,
               ),
             ],
           ],

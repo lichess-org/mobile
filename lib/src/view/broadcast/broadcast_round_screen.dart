@@ -62,13 +62,8 @@ class BroadcastRoundScreenLoading extends ConsumerWidget {
 
   const BroadcastRoundScreenLoading({super.key, required this.roundId, this.initialTab});
 
-  static Route<dynamic> buildRoute(
-    BuildContext context,
-    BroadcastRoundId roundId, {
-    BroadcastRoundTab? initialTab,
-  }) {
+  static Route<dynamic> buildRoute(BroadcastRoundId roundId, {BroadcastRoundTab? initialTab}) {
     return buildScreenRoute(
-      context,
       screen: BroadcastRoundScreenLoading(roundId: roundId, initialTab: initialTab),
     );
   }
@@ -105,13 +100,8 @@ class BroadcastRoundScreen extends ConsumerStatefulWidget {
 
   const BroadcastRoundScreen({required this.broadcast, this.initialTab});
 
-  static Route<dynamic> buildRoute(
-    BuildContext context,
-    Broadcast broadcast, {
-    BroadcastRoundTab? initialTab,
-  }) {
+  static Route<dynamic> buildRoute(Broadcast broadcast, {BroadcastRoundTab? initialTab}) {
     return buildScreenRoute(
-      context,
       screen: BroadcastRoundScreen(broadcast: broadcast, initialTab: initialTab),
     );
   }
@@ -259,6 +249,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
                   roundId: _selectedRoundId ?? value.defaultRoundId,
                   tournamentId: _selectedTournamentId,
                   tournamentSlug: value.data.slug,
+                  showTeamScores: value.data.showTeamScores == true,
                 ),
                 _ => const SizedBox.shrink(),
               },

@@ -45,9 +45,8 @@ class PerfStatsScreen extends StatelessWidget {
   final User user;
   final Perf perf;
 
-  static Route<dynamic> buildRoute(BuildContext context, {required User user, required Perf perf}) {
+  static Route<dynamic> buildRoute({required User user, required Perf perf}) {
     return buildScreenRoute(
-      context,
       screen: PerfStatsScreen(user: user, perf: perf),
     );
   }
@@ -115,7 +114,7 @@ class _Title extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(
                       context,
-                    ).pushReplacement(PerfStatsScreen.buildRoute(context, user: user, perf: p));
+                    ).pushReplacement(PerfStatsScreen.buildRoute(user: user, perf: p));
                   },
                 );
               })
@@ -301,7 +300,6 @@ class _Body extends ConsumerWidget {
                     onTap: () {
                       Navigator.of(context).push(
                         GameHistoryScreen.buildRoute(
-                          context,
                           user: user.lightUser,
                           isOnline: true,
                           gameFilter: GameFilterState(perfs: ISet({perf})),
@@ -670,7 +668,6 @@ class _GameListWidget extends ConsumerWidget {
               if (context.mounted && gameData != null && gameData.variant.isReadSupported) {
                 Navigator.of(context, rootNavigator: true).push(
                   AnalysisScreen.buildRoute(
-                    context,
                     AnalysisOptions.archivedGame(
                       orientation: user.id == gameData.white.user?.id ? Side.white : Side.black,
                       gameId: gameData.id,

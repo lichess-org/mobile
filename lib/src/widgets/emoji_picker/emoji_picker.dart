@@ -128,7 +128,7 @@ class _EmojiPickerState extends State<EmojiPicker> with SingleTickerProviderStat
       mainAxisSize: MainAxisSize.min,
       children: [
         // tab bar
-        if (widget.configuration.showTabs) _buildTabBar(context),
+        if (widget.configuration.showTabs) _buildTabBar(),
 
         // search bar
         if (widget.configuration.showSearchBar)
@@ -141,12 +141,12 @@ class _EmojiPickerState extends State<EmojiPicker> with SingleTickerProviderStat
               ),
 
         // sections
-        Expanded(child: _buildSections(context)),
+        Expanded(child: _buildSections()),
       ],
     );
   }
 
-  Widget _buildTabBar(BuildContext context) {
+  Widget _buildTabBar() {
     final tabs = widget.emojiData.categories
         .map(
           (category) => Padding(
@@ -166,7 +166,7 @@ class _EmojiPickerState extends State<EmojiPicker> with SingleTickerProviderStat
     );
   }
 
-  Widget _buildSections(BuildContext context) {
+  Widget _buildSections() {
     CustomScrollView builder(EmojiData emojiData, EmojiSkinTone skinTone) => CustomScrollView(
       controller: scrollController,
       slivers: emojiData.categories

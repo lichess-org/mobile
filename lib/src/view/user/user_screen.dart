@@ -44,8 +44,8 @@ class UserScreen extends ConsumerStatefulWidget {
 
   final LightUser user;
 
-  static Route<dynamic> buildRoute(BuildContext context, LightUser user) {
-    return buildScreenRoute(context, screen: UserScreen(user: user));
+  static Route<dynamic> buildRoute(LightUser user) {
+    return buildScreenRoute(screen: UserScreen(user: user));
   }
 
   static void challengeUser(User user, {required BuildContext context, required WidgetRef ref}) {
@@ -60,7 +60,7 @@ class UserScreen extends ConsumerStatefulWidget {
     }
     final isOddBot = oddBots.contains(user.lightUser.name.toLowerCase());
     if (isOddBot) {
-      Navigator.of(context).push(ChallengeOddBotsScreen.buildRoute(context, user.lightUser));
+      Navigator.of(context).push(ChallengeOddBotsScreen.buildRoute(user.lightUser));
     } else {
       showModalBottomSheet<void>(
         context: context,
@@ -215,7 +215,6 @@ class _UserProfileListView extends ConsumerWidget {
                     onTap: () {
                       Navigator.of(context).push(
                         GameHistoryScreen.buildRoute(
-                          context,
                           user: authUser.user,
                           isOnline: isOnline,
                           gameFilter: GameFilterState(opponent: user),
@@ -233,7 +232,7 @@ class _UserProfileListView extends ConsumerWidget {
                   Navigator.of(
                     context,
                     rootNavigator: true,
-                  ).push(TvScreen.buildRoute(context, user: user.lightUser));
+                  ).push(TvScreen.buildRoute(user: user.lightUser));
                 },
               ),
               if (authUser != null) ...[
@@ -252,7 +251,7 @@ class _UserProfileListView extends ConsumerWidget {
                       Navigator.of(
                         context,
                         rootNavigator: true,
-                      ).push(ConversationScreen.buildRoute(context, user: user.lightUser));
+                      ).push(ConversationScreen.buildRoute(user: user.lightUser));
                     },
                   ),
                 if (user.followable == true && user.following != true)

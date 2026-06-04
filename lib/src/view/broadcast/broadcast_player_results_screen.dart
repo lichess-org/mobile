@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_team_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -41,13 +42,11 @@ class BroadcastPlayerResultsScreenLoading extends ConsumerWidget {
   });
 
   static Route<dynamic> buildRoute(
-    BuildContext context,
     BroadcastRoundId roundId,
     String playerId, {
     BroadcastPlayer? player,
   }) {
     return buildScreenRoute(
-      context,
       screen: BroadcastPlayerResultsScreenLoading(
         roundId: roundId,
         player: player,
@@ -90,13 +89,11 @@ class BroadcastPlayerResultsScreen extends ConsumerWidget {
   });
 
   static Route<dynamic> buildRoute(
-    BuildContext context,
     BroadcastTournamentId tournamentId,
     BroadcastPlayer player,
     String playerId,
   ) {
     return buildScreenRoute(
-      context,
       screen: BroadcastPlayerResultsScreen(
         tournamentId: tournamentId,
         player: player,
@@ -312,13 +309,22 @@ class _OverallStatPlayer extends StatelessWidget {
                       ),
                     const SizedBox(height: 16),
                     if (team != null) ...[
-                      Row(
-                        children: [
-                          const SizedBox(width: 100, child: Text('Team')),
-                          Expanded(
-                            child: Text(team.trim(), style: Theme.of(context).textTheme.bodyLarge),
-                          ),
-                        ],
+                      GestureDetector(
+                        onTap: () {
+                          if (tournament.data.showTeamScores == true) {
+                            Navigator.of(context).push(
+                              BroadcastTeamScreen.buildRoute(context, tournament.data.id, team),
+                            );
+                          }
+                        },
+                        child: Row(
+                          children: [
+                            const SizedBox(width: 100, child: Text('Team')),
+                            Expanded(
+                              child: Text(team, style: Theme.of(context).textTheme.bodyLarge),
+                            ),
+                          ],
+                        ),
                       ),
                       const SizedBox(height: 16),
                     ],
@@ -506,7 +512,6 @@ class _GameResultListTile extends StatelessWidget {
       onTap: () {
         Navigator.of(context).push(
           BroadcastGameScreen.buildRoute(
-            context,
             tournamentId: tournament.data.id,
             roundId: roundId,
             gameId: gameId,
@@ -553,7 +558,7 @@ class _GameResultListTile extends StatelessWidget {
                     mainAxisSize: .min,
                     children: [
                       Text(
-                        customPoints != null && customPoints != 0.0 && customPoints != points?.value
+                        customPoints != null && customPoints != points?.value
                             ? NumberFormat('0.##').format(customPoints)
                             : points?.resultFor(color).resultToString(color) ??
                                   (ongoing ? '*' : ''),
