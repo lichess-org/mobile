@@ -181,10 +181,10 @@ packages:
     dependency: "direct main"
     description:
       name: chessground
-      sha256: b5c7bf1ea49a6a8a497b92d81077fd4714d09822ce64f3e6cbf37d1c131c1e02
+      sha256: a69078e1ca97d67972a7d3f11363047421058cca9e73d7de4de8aa18e7f7e13a
       url: "https://pub.dev"
     source: hosted
-    version: "10.0.0"
+    version: "10.0.1"
   cli_config:
     dependency: transitive
     description:
