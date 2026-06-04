@@ -484,16 +484,21 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
     }
   }
 
-  void userPrevious() {
-    _setPath(state.requireValue.currentPath.penultimate, isNavigating: true);
+  void userPrevious({bool fastSeek = false}) {
+    _setPath(
+      state.requireValue.currentPath.penultimate,
+      isNavigating: true,
+      keepCollapsed: fastSeek,
+    );
   }
 
-  void userNext() {
+  void userNext({bool fastSeek = false}) {
     final curState = state.requireValue;
     if (!curState.currentNode.hasChild) return;
     _setPath(
       curState.currentPath + _root.nodeAt(curState.currentPath).children.first.id,
       isNavigating: true,
+      keepCollapsed: fastSeek,
     );
   }
 
@@ -681,6 +686,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
 
     /// Whether the user is navigating through the moves (as opposed to playing a move).
     bool isNavigating = false,
+    bool keepCollapsed = false,
   }) {
     _currentPath = path;
     final curState = state.requireValue;
@@ -688,7 +694,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
     final (currentNode, opening) = _nodeOpeningAt(_root, path);
 
     bool pathWasExpanded = false;
-    if (pathChange) {
+    if (pathChange && !keepCollapsed) {
       for (final child in currentNode.children) {
         if (child.isCollapsed) {
           child.isCollapsed = false;

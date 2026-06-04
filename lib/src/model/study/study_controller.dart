@@ -287,18 +287,23 @@ class StudyController extends AsyncNotifier<StudyState>
     onUserMove(state.requireValue.currentNode.children.first);
   }
 
-  void userPrevious() {
+  void userPrevious({bool fastSeek = false}) {
     if (state.hasValue) {
-      _setPath(state.requireValue.currentPath.penultimate, isNavigating: true);
+      _setPath(
+        state.requireValue.currentPath.penultimate,
+        isNavigating: true,
+        keepCollapsed: fastSeek,
+      );
     }
   }
 
-  void userNext() {
+  void userNext({bool fastSeek = false}) {
     final state = this.state.value;
     if (state!.currentNode.children.isEmpty) return;
     _setPath(
       state.currentPath + _root.nodeAt(state.currentPath).children.first.id,
       isNavigating: true,
+      keepCollapsed: fastSeek,
     );
   }
 
@@ -430,6 +435,7 @@ class StudyController extends AsyncNotifier<StudyState>
 
     /// Whether the user is navigating through the moves (as opposed to playing a move).
     bool isNavigating = false,
+    bool keepCollapsed = false,
   }) {
     final state = this.state.value;
     if (state == null) return;
@@ -438,7 +444,7 @@ class StudyController extends AsyncNotifier<StudyState>
     final currentNode = _root.nodeAt(path);
 
     bool pathWasExpanded = false;
-    if (pathChange) {
+    if (pathChange && !keepCollapsed) {
       for (final child in currentNode.children) {
         if (child.isCollapsed) {
           child.isCollapsed = false;
