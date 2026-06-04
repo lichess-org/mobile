@@ -222,7 +222,7 @@ class ClockToolController extends Notifier<ClockState> {
         : state.bottomMoves > 0;
 
     if (active != null && (initialOfActive.inMilliseconds != 0 || hasActiveMoved)) {
-      final delay = _pausedDelayRemaining ?? _delayFor(active);
+      final delay = _pausedDelayRemaining;
       _markDelay(delay);
       _clock.start(delay: delay);
     }

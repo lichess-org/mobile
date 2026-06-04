@@ -108,6 +108,38 @@ void main() {
     });
   });
 
+  test('simple delay does not reapply expired delay across pause and resume', () {
+    fakeAsync((async) {
+      final container = makeClockContainer();
+      final controller = container.read(clockToolControllerProvider.notifier);
+
+      controller
+        ..updateOptions(const TimeIncrement(5, 2))
+        ..updateClockType(ClockTimeControlType.simpleDelay)
+        ..start(ClockSide.top);
+
+      async.elapse(const Duration(seconds: 3));
+      expect(
+        container.read(clockToolControllerProvider).bottomTime.value,
+        const Duration(seconds: 4),
+      );
+
+      controller.pause();
+      async.elapse(const Duration(seconds: 5));
+      expect(
+        container.read(clockToolControllerProvider).bottomTime.value,
+        const Duration(seconds: 4),
+      );
+
+      controller.resume();
+      async.elapse(const Duration(milliseconds: 100));
+      expect(
+        container.read(clockToolControllerProvider).bottomTime.value,
+        const Duration(milliseconds: 3900),
+      );
+    });
+  });
+
   test('bronstein delay restores only the time spent up to the delay', () {
     fakeAsync((async) {
       final container = makeClockContainer();
