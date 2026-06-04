@@ -685,7 +685,7 @@
   <string name="tournamentFAQ">竞技场锦标赛常见问题</string>
   <string name="timeBeforeTournamentStarts">锦标赛开始前等待时间</string>
   <string name="averageCentipawnLoss">平均厘兵损失</string>
-  <string name="accuracy">准确率</string>
+  <string name="accuracy">准确度</string>
   <string name="keyboardShortcuts">键盘快捷键</string>
   <string name="keyMoveBackwardOrForward">后退/前进</string>
   <string name="keyGoToStartOrEnd">跳到开始/结尾</string>
@@ -766,6 +766,8 @@
   <string name="xHostsY">%1$s 主持了 %2$s</string>
   <string name="xJoinsY">%1$s 加入了 %2$s</string>
   <string name="xLikesY">%1$s 喜欢 %2$s</string>
+  <string name="like">点赞</string>
+  <string name="liked">已赞</string>
   <string name="quickPairing">快速匹配</string>
   <string name="lobby">大厅</string>
   <string name="anonymous">匿名</string>
@@ -898,6 +900,7 @@
   <string name="tryTheContactPage">请尝试联系页面</string>
   <string name="makeSureToRead">请务必阅读 %1$s</string>
   <string name="theForumEtiquette">论坛礼仪</string>
+  <string name="pleaseBeNiceInTheForum">聊天时请注意文明用语！</string>
   <string name="thisTopicIsArchived">此话题已被归档，无法再回复。</string>
   <string name="joinTheTeamXToPost">加入 %1$s，以在此论坛发帖</string>
   <string name="teamNamedX">%1$s 团队</string>

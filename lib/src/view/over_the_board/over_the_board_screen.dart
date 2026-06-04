@@ -250,7 +250,6 @@ class _BodyState extends ConsumerState<_Body> {
                     bottomTableUpsideDown:
                         overTheBoardPrefs.flipPiecesAfterMove && orientation != gameState.turn,
                     orientation: orientation,
-                    lastMove: gameState.lastMove,
                     explosionSquares: gameState.stepCursor > 0
                         ? atomicExplosionSquares(
                             gameState.game.stepAt(gameState.stepCursor - 1).position,
@@ -265,27 +264,13 @@ class _BodyState extends ConsumerState<_Body> {
                           : gameState.turn == Side.white
                           ? PlayerSide.white
                           : PlayerSide.black,
-                      onPromotionSelection: (role) {
-                        ref
-                            .read(overTheBoardGameControllerProvider.notifier)
-                            .onPromotionSelection(role);
-                        if (role != null) {
-                          ref
-                              .read(overTheBoardClockProvider.notifier)
-                              .onMove(newSideToMove: gameState.turn.opposite);
-                        }
-                      },
-                      promotionMove: gameState.promotionMove,
+                      lastMove: gameState.lastMove,
                       onMove: (move, {viaDragAndDrop}) {
-                        if (move is! NormalMove ||
-                            !isPromotionPawnMove(gameState.currentPosition, move)) {
-                          ref
-                              .read(overTheBoardClockProvider.notifier)
-                              .onMove(newSideToMove: gameState.turn.opposite);
-                        }
                         ref.read(overTheBoardGameControllerProvider.notifier).makeMove(move);
+                        ref
+                            .read(overTheBoardClockProvider.notifier)
+                            .onMove(newSideToMove: gameState.turn.opposite);
                       },
-                      premovable: null,
                     ),
                     moves: gameState.moves,
                     currentMoveIndex: gameState.stepCursor,
@@ -297,6 +282,7 @@ class _BodyState extends ConsumerState<_Body> {
                       pieceAssets: overTheBoardPrefs.symmetricPieces
                           ? PieceSet.symmetric.assets
                           : null,
+                      enablePremoves: false,
                     ),
                     userActionsBar: _BottomBar(
                       onFlipBoard: () {

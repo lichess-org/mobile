@@ -333,7 +333,7 @@ class FakeFirebaseMessaging extends Fake implements FirebaseMessaging {
   final StreamController<String> _tokenController = StreamController<String>.broadcast();
 
   @override
-  Future<String?> getToken({String? vapidKey}) async {
+  Future<String?> getToken({String? serviceWorkerScriptPath, String? vapidKey}) async {
     assert(vapidKey == null);
     return _token;
   }

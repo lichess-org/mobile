@@ -148,7 +148,7 @@ void main() {
       await tester.pump(const Duration(milliseconds: 200));
       await tester.pumpAndSettle();
 
-      expect(find.byKey(const ValueKey('c4-whitepawn')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.c4, Piece.whitePawn), isTrue);
     });
 
     testWidgets('Engine responds after player move', (tester) async {
@@ -537,15 +537,78 @@ void main() {
       expect(find.text('Game setup'), findsNothing);
 
       // Should load the game's current position, i.e. e4 and e5 were played
-      expect(find.byKey(const ValueKey('e2-whitepawn')), findsNothing);
-      expect(find.byKey(const ValueKey('e4-whitepawn')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.e2, Piece.whitePawn), isFalse);
+      expect(boardHasPiece(tester, Square.e4, Piece.whitePawn), isTrue);
 
-      expect(find.byKey(const ValueKey('e7-blackpawn')), findsNothing);
-      expect(find.byKey(const ValueKey('e5-blackpawn')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.e7, Piece.blackPawn), isFalse);
+      expect(boardHasPiece(tester, Square.e5, Piece.blackPawn), isTrue);
 
       // Move list should show the played moves
       expect(find.text('e4'), findsOneWidget);
       expect(find.text('e5'), findsOneWidget);
+    });
+
+    testWidgets('Last move is highlighted when loading a saved game', (tester) async {
+      // Regression test: interactive boards read the last move from
+      // InteractiveBoardParams.lastMove, not GameLayout.lastMove (readonly only).
+      // The last move of a restored game must be highlighted on the board.
+      final gameStorage = MockOfflineComputerGameStorage();
+
+      // Saved game after 1.e4 e5 — it's white's turn (the player's), so the
+      // engine does not move and the last move stays e7e5.
+      when(() => gameStorage.fetchGame()).thenAnswer(
+        (_) async => SavedOfflineComputerGame(
+          game: OfflineComputerGame(
+            id: const StringId('test-game-id'),
+            steps: [
+              const GameStep(position: Chess.initial),
+              GameStep(
+                position: Position.setupPosition(
+                  Rule.chess,
+                  Setup.parseFen('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1'),
+                ),
+                sanMove: SanMove('e4', Move.parse('e2e4')!),
+              ),
+              GameStep(
+                position: Position.setupPosition(
+                  Rule.chess,
+                  Setup.parseFen('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2'),
+                ),
+                sanMove: SanMove('e5', Move.parse('e7e5')!),
+              ),
+            ].lock,
+            meta: GameMeta(
+              createdAt: DateTime.now(),
+              rated: false,
+              variant: Variant.standard,
+              speed: Speed.classical,
+              perf: Perf.classical,
+            ),
+            initialFen: kInitialFEN,
+            status: GameStatus.started,
+            playerSide: Side.white,
+            stockfishLevel: StockfishLevel.level1,
+            humanPlayer: const Player(onGame: true),
+            enginePlayer: stockfishPlayer(),
+          ),
+        ),
+      );
+      when(() => gameStorage.save(any())).thenAnswer((_) async {});
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const OfflineComputerGameScreen(),
+        overrides: {
+          offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      // The last move (e7e5) must be highlighted on the restored board.
+      expect(getBoardLastMove(tester), Move.parse('e7e5'));
     });
 
     testWidgets('Game is saved when exiting with confirmation', (tester) async {
@@ -992,12 +1055,12 @@ void main() {
       expect(find.byType(Chessboard), findsOneWidget);
 
       // The position should show e4 and e5 pawns
-      expect(find.byKey(const ValueKey('e4-whitepawn')), findsOneWidget);
-      expect(find.byKey(const ValueKey('e5-blackpawn')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.e4, Piece.whitePawn), isTrue);
+      expect(boardHasPiece(tester, Square.e5, Piece.blackPawn), isTrue);
 
       // e2 and e7 should be empty
-      expect(find.byKey(const ValueKey('e2-whitepawn')), findsNothing);
-      expect(find.byKey(const ValueKey('e7-blackpawn')), findsNothing);
+      expect(boardHasPiece(tester, Square.e2, Piece.whitePawn), isFalse);
+      expect(boardHasPiece(tester, Square.e7, Piece.blackPawn), isFalse);
     });
 
     testWidgets('Engine plays first when custom position turn differs from player side', (

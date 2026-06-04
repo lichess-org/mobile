@@ -287,37 +287,61 @@ class AppLocalizationsHe extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Or import a PGN file';
 
   @override
-  String get mobileServerOutageMessage => 'Lichess is undergoing technical difficulties. We\'re doing everything we can, and expect to be back up very soon.';
-
-  @override
-  String get mobileServerOutageKeepInformed => 'To get updates on the maintenance, checkout our social media channels.';
+  String get variantStandard => 'רגיל';
 
   @override
   String get variantStandardTitle => 'Standard rules of chess (FIDE)';
 
   @override
+  String get variantChess960 => 'Chess960';
+
+  @override
   String get variantChess960Title => 'The starting position of the home rank pieces is randomised.';
+
+  @override
+  String get variantKingOfTheHill => 'King of the Hill';
 
   @override
   String get variantKingOfTheHillTitle => 'לבוא את המלך שלך למרכז כדי לנצח.';
 
   @override
+  String get variantThreeCheck => 'Three-Check';
+
+  @override
   String get variantThreeCheckTitle => 'Check your opponent 3 times to win the game.';
+
+  @override
+  String get variantAntichess => 'Antichess';
 
   @override
   String get variantAntichessTitle => 'Lose all your pieces (or get stalemated) to win the game.';
 
   @override
+  String get variantAtomic => 'Atomic';
+
+  @override
   String get variantAtomicTitle => 'Nuke your opponent\'s king to win.';
+
+  @override
+  String get variantHorde => 'Horde';
 
   @override
   String get variantHordeTitle => 'One side has a large number of pawns, the other has a normal army.';
 
   @override
+  String get variantRacingKings => 'Racing Kings';
+
+  @override
   String get variantRacingKingsTitle => 'Get your king to the other side of the board to win.';
 
   @override
+  String get variantCrazyhouse => 'Crazyhouse';
+
+  @override
   String get variantCrazyhouseTitle => 'Captured pieces can be dropped back on the board instead of moving a piece.';
+
+  @override
+  String get variantFromPosition => 'From Position';
 
   @override
   String get variantFromPositionTitle => 'Standard chess from a custom position';
@@ -960,6 +984,9 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get broadcastOfficialStandings => 'טבלת מובילים רשמית';
+
+  @override
+  String get broadcastRegulations => 'Regulations';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -4450,6 +4477,12 @@ class AppLocalizationsHe extends AppLocalizations {
   }
 
   @override
+  String get like => 'Like';
+
+  @override
+  String get liked => 'Liked';
+
+  @override
   String get quickPairing => 'הצטרפות מהירה';
 
   @override
@@ -4845,6 +4878,9 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'כללי ההשתתפות בפורומים';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Please be nice in the forum.';
 
   @override
   String get thisTopicIsArchived => 'נושא זה עבר לארכיון ולא ניתן עוד להשיב עליו.';
@@ -5990,9 +6026,6 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get studyLike => 'אהבתי';
-
-  @override
-  String get studyUnlike => 'ביטול \"אהבתי\"';
 
   @override
   String get studyNewTag => 'תג חדש';

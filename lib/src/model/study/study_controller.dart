@@ -261,12 +261,6 @@ class StudyController extends AsyncNotifier<StudyState>
 
     if (!state.requireValue.currentPosition!.isLegal(move)) return;
 
-    if (move case NormalMove()
-        when isPromotionPawnMove(state.requireValue.currentPosition!, move)) {
-      state = AsyncValue.data(state.requireValue.copyWith(promotionMove: move));
-      return;
-    }
-
     _sendMoveToSocket(move);
 
     final (newPath, isNewNode) = _root.addMoveAt(state.requireValue.currentPath, move);
@@ -286,21 +280,6 @@ class StudyController extends AsyncNotifier<StudyState>
           }
         });
       }
-    }
-  }
-
-  void onPromotionSelection(Role? role) {
-    final state = this.state.value;
-    if (state == null) return;
-
-    if (role == null) {
-      this.state = AsyncValue.data(state.copyWith(promotionMove: null));
-      return;
-    }
-    final promotionMove = state.promotionMove;
-    if (promotionMove != null) {
-      final promotion = promotionMove.withPromotion(role);
-      onUserMove(promotion);
     }
   }
 
@@ -497,7 +476,6 @@ class StudyController extends AsyncNotifier<StudyState>
           isOnMainline: _root.isOnMainline(path),
           currentNode: StudyCurrentNode.fromNode(currentNode),
           lastMove: currentNode.sanMove.move,
-          promotionMove: null,
           root: rootView,
         ),
       );
@@ -508,7 +486,6 @@ class StudyController extends AsyncNotifier<StudyState>
           isOnMainline: _root.isOnMainline(path),
           currentNode: StudyCurrentNode.fromNode(currentNode),
           lastMove: null,
-          promotionMove: null,
           root: rootView,
         ),
       );
@@ -601,9 +578,6 @@ sealed class StudyState
 
     /// The last move played.
     Move? lastMove,
-
-    /// Possible promotion move to be played.
-    NormalMove? promotionMove,
 
     /// The PGN root comments of the study
     IList<PgnComment>? pgnRootComments,

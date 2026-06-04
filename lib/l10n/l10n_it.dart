@@ -287,37 +287,61 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileOrImportPgnFile => 'O importa un file PGN';
 
   @override
-  String get mobileServerOutageMessage => 'Lichess is undergoing technical difficulties. We\'re doing everything we can, and expect to be back up very soon.';
-
-  @override
-  String get mobileServerOutageKeepInformed => 'To get updates on the maintenance, checkout our social media channels.';
+  String get variantStandard => 'Standard';
 
   @override
   String get variantStandardTitle => 'Regole standard degli scacchi (FIDE)';
 
   @override
+  String get variantChess960 => 'Scacchi960';
+
+  @override
   String get variantChess960Title => 'La posizione di partenza dei pezzi nelle traverse 1 e 8 è casuale.';
+
+  @override
+  String get variantKingOfTheHill => 'King of the Hill';
 
   @override
   String get variantKingOfTheHillTitle => 'Porta il tuo Re al centro per vincere la partita.';
 
   @override
+  String get variantThreeCheck => 'Three-Check';
+
+  @override
   String get variantThreeCheckTitle => 'Dai scacco 3 volte al tuo avversario per vincere la partita.';
+
+  @override
+  String get variantAntichess => 'Antichess';
 
   @override
   String get variantAntichessTitle => 'Perdi tutti i tuoi pezzi (o ottieni uno stallo) per vincere la partita.';
 
   @override
+  String get variantAtomic => 'Atomic';
+
+  @override
   String get variantAtomicTitle => 'Fai esplodere il re del tuo avversario per vincere.';
+
+  @override
+  String get variantHorde => 'Horde';
 
   @override
   String get variantHordeTitle => 'Un lato ha un gran numero di pedoni, l\'altro ha un esercito normale.';
 
   @override
+  String get variantRacingKings => 'Racing Kings';
+
+  @override
   String get variantRacingKingsTitle => 'Porta il tuo re dall\'altra parte della scacchiera per vincere.';
 
   @override
+  String get variantCrazyhouse => 'Crazyhouse';
+
+  @override
   String get variantCrazyhouseTitle => 'I pezzi catturati possono essere rimessi sulla scacchiera invece di spostare un pezzo.';
+
+  @override
+  String get variantFromPosition => 'Dalla posizione';
 
   @override
   String get variantFromPositionTitle => 'Scacchi tradizionali da una posizione personalizzata';
@@ -920,6 +944,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get broadcastOfficialStandings => 'Classifica Ufficiale';
+
+  @override
+  String get broadcastRegulations => 'Regulations';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -2613,12 +2640,12 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String minRatingX(String param) {
-    return 'Minimum rating of $param';
+    return 'Punteggio minimo di $param';
   }
 
   @override
   String maxRatingX(String param) {
-    return 'Maximum rating of $param';
+    return 'Punteggio massimo di $param';
   }
 
   @override
@@ -2985,7 +3012,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String sendEmailForAccountVerification(String param) {
-    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
+    return 'Se non trovi la tua email di conferma, invia un\'email a $param e confermeremo il tuo account per te.';
   }
 
   @override
@@ -3558,7 +3585,7 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
-  String get randomChess960Position => 'Random Chess960 position';
+  String get randomChess960Position => 'Posizione di Chess960 casuale';
 
   @override
   String get startPosition => 'Posizione iniziale';
@@ -4398,6 +4425,12 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
+  String get like => 'Like';
+
+  @override
+  String get liked => 'Liked';
+
+  @override
   String get quickPairing => 'Accoppiamento rapido';
 
   @override
@@ -4793,6 +4826,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'le regole del forum';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Per favore sii rispettoso nel forum.';
 
   @override
   String get thisTopicIsArchived => 'Questo argomento è stato archiviato e non è più possibile rispondervi.';
@@ -5846,9 +5882,6 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get studyLike => 'Mi piace';
-
-  @override
-  String get studyUnlike => 'Non mi piace più';
 
   @override
   String get studyNewTag => 'Nuovo tag';

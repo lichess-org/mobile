@@ -287,37 +287,61 @@ class AppLocalizationsBg extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Или зареди PGN файл';
 
   @override
-  String get mobileServerOutageMessage => 'Lichess is undergoing technical difficulties. We\'re doing everything we can, and expect to be back up very soon.';
-
-  @override
-  String get mobileServerOutageKeepInformed => 'To get updates on the maintenance, checkout our social media channels.';
+  String get variantStandard => 'Стандартен';
 
   @override
   String get variantStandardTitle => 'Стандартни правила на шаха (ФИДЕ)';
 
   @override
+  String get variantChess960 => 'Шах960';
+
+  @override
   String get variantChess960Title => 'Началната подредба на фигурите на последния ред е произволна.';
+
+  @override
+  String get variantKingOfTheHill => 'Цар на хълма';
 
   @override
   String get variantKingOfTheHillTitle => 'Докарай царя си до центъра, за да спечелиш партията.';
 
   @override
+  String get variantThreeCheck => 'Три шаха';
+
+  @override
   String get variantThreeCheckTitle => 'Дай шах на противника 3 пъти, за да спечелиш.';
+
+  @override
+  String get variantAntichess => 'Антишах';
 
   @override
   String get variantAntichessTitle => 'Спечели, като загубиш всичките си фигури или останеш в пат.';
 
   @override
+  String get variantAtomic => 'Атомен шах';
+
+  @override
   String get variantAtomicTitle => 'Взриви противниковия цар, за да спечелиш.';
+
+  @override
+  String get variantHorde => 'Орда';
 
   @override
   String get variantHordeTitle => 'Едната страна разполага с войска от пешки срещу нормална армия.';
 
   @override
+  String get variantRacingKings => 'Препускащи царе';
+
+  @override
   String get variantRacingKingsTitle => 'Стигни пръв с царя си до другия край на дъската, за да спечелиш.';
 
   @override
+  String get variantCrazyhouse => 'Крейзихаус';
+
+  @override
   String get variantCrazyhouseTitle => 'Вместо ход, можеш да поставиш пленена фигура обратно на дъската.';
+
+  @override
+  String get variantFromPosition => 'От позиция';
 
   @override
   String get variantFromPositionTitle => 'Стандартен шах от зададена позиция';
@@ -920,6 +944,9 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get broadcastOfficialStandings => 'Официално класиране';
+
+  @override
+  String get broadcastRegulations => 'Regulations';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -4398,6 +4425,12 @@ class AppLocalizationsBg extends AppLocalizations {
   }
 
   @override
+  String get like => 'Like';
+
+  @override
+  String get liked => 'Liked';
+
+  @override
   String get quickPairing => 'Бърза игра';
 
   @override
@@ -4793,6 +4826,9 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'правилата за етикет на форума';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Моля бъдете учтиви във форума.';
 
   @override
   String get thisTopicIsArchived => 'Тази тема е архивирана и не може да получава повече мнения.';
@@ -5846,9 +5882,6 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get studyLike => 'Харесай';
-
-  @override
-  String get studyUnlike => 'Не харесвам';
 
   @override
   String get studyNewTag => 'Нов таг';

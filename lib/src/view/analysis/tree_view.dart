@@ -4,6 +4,7 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/view/game/game_result_dialog.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
+import 'package:lichess_mobile/src/widgets/variations_bar.dart';
 
 class AnalysisTreeView extends ConsumerWidget {
   const AnalysisTreeView(this.options);
@@ -18,34 +19,47 @@ class AnalysisTreeView extends ConsumerWidget {
     final prefs = ref.watch(analysisPreferencesProvider);
     // enable computer analysis takes effect here only if it's a lichess game
     final enableServerAnalysis = !options.isLichessGameAnalysis || prefs.enableServerAnalysis;
+    final currentNode =
+        analysisState.root.branchesOn(analysisState.currentPath).lastOrNull ?? analysisState.root;
 
-    return SingleChildScrollView(
-      padding: EdgeInsets.zero,
-      child: Column(
-        children: [
-          DebouncedPgnTreeView(
-            root: analysisState.root,
-            currentPath: analysisState.currentPath,
-            livePath: analysisState.pathToLiveMove,
-            pgnRootComments: analysisState.pgnRootComments,
-            notifier: ref.read(ctrlProvider.notifier),
-            // Avoid overlap with the divider of the analysis tab bar
-            showTopDivider: false,
-            shouldShowComputerAnalysis: enableServerAnalysis,
-            shouldShowComments: enableServerAnalysis && prefs.showPgnComments,
-            shouldShowAnnotations: enableServerAnalysis && prefs.showAnnotations,
-            premovePaths: analysisState.forecast?.lines,
-            displayMode: prefs.inlineNotation
-                ? PgnTreeDisplayMode.inlineNotation
-                : PgnTreeDisplayMode.twoColumn,
-          ),
-          if (analysisState.archivedGame != null)
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: GameResult(game: analysisState.archivedGame!),
+    return Column(
+      crossAxisAlignment: .stretch,
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.zero,
+            child: Column(
+              children: [
+                DebouncedPgnTreeView(
+                  root: analysisState.root,
+                  currentPath: analysisState.currentPath,
+                  livePath: analysisState.pathToLiveMove,
+                  pgnRootComments: analysisState.pgnRootComments,
+                  notifier: ref.read(ctrlProvider.notifier),
+                  // Avoid overlap with the divider of the analysis tab bar
+                  showTopDivider: false,
+                  shouldShowComputerAnalysis: enableServerAnalysis,
+                  shouldShowComments: enableServerAnalysis && prefs.showPgnComments,
+                  shouldShowAnnotations: enableServerAnalysis && prefs.showAnnotations,
+                  premovePaths: analysisState.forecast?.lines,
+                  displayMode: prefs.inlineNotation ? .inlineNotation : .twoColumn,
+                ),
+                if (analysisState.archivedGame != null)
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GameResult(game: analysisState.archivedGame!),
+                  ),
+              ],
             ),
-        ],
-      ),
+          ),
+        ),
+        VariationsBar(
+          currentNode: currentNode,
+          currentPath: analysisState.currentPath,
+          showAnnotations: enableServerAnalysis && prefs.showAnnotations,
+          onJump: (path) => ref.read(ctrlProvider.notifier).userJump(path),
+        ),
+      ],
     );
   }
 }

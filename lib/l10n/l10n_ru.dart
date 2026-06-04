@@ -9,7 +9,7 @@ class AppLocalizationsRu extends AppLocalizations {
   AppLocalizationsRu([String locale = 'ru']) : super(locale);
 
   @override
-  String get mobileAccount => 'Account';
+  String get mobileAccount => 'Учётная запись';
 
   @override
   String get mobileAccountPreferences => 'Настройки аккаунта';
@@ -287,37 +287,61 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Или импортировать в PGN файл';
 
   @override
-  String get mobileServerOutageMessage => 'Lichess is undergoing technical difficulties. We\'re doing everything we can, and expect to be back up very soon.';
-
-  @override
-  String get mobileServerOutageKeepInformed => 'To get updates on the maintenance, checkout our social media channels.';
+  String get variantStandard => 'Шахматы';
 
   @override
   String get variantStandardTitle => 'Стандартные правила шахмат (FIDE)';
 
   @override
+  String get variantChess960 => 'Шахматы Фишера';
+
+  @override
   String get variantChess960Title => 'Стартовая позиция фигур определяется случайно.';
+
+  @override
+  String get variantKingOfTheHill => 'Царь горы';
 
   @override
   String get variantKingOfTheHillTitle => 'Проведите короля в центр доски, чтобы выиграть партию.';
 
   @override
+  String get variantThreeCheck => 'Три шаха';
+
+  @override
   String get variantThreeCheckTitle => 'Объявите 3 шаха, чтобы победить.';
+
+  @override
+  String get variantAntichess => 'Поддавки';
 
   @override
   String get variantAntichessTitle => 'Проиграйте все ваши фигуры (или получите пат), чтобы выиграть игру.';
 
   @override
+  String get variantAtomic => 'Атомные шахматы';
+
+  @override
   String get variantAtomicTitle => 'Взорвите короля противника, чтобы победить.';
+
+  @override
+  String get variantHorde => 'Орда';
 
   @override
   String get variantHordeTitle => 'Одна сторона имеет большое количество пешек, когда другая имеет стандартный набор фигур.';
 
   @override
+  String get variantRacingKings => 'Гонка королей';
+
+  @override
   String get variantRacingKingsTitle => 'Проведите своего короля на другою сторону доски, чтобы победить.';
 
   @override
+  String get variantCrazyhouse => 'Крейзихаус';
+
+  @override
   String get variantCrazyhouseTitle => 'Срубленные фигуры могут быть возвращены на доску вместо хода фигурой.';
+
+  @override
+  String get variantFromPosition => 'С позиции';
 
   @override
   String get variantFromPositionTitle => 'Стандартные шахматы с заданной позиции';
@@ -845,7 +869,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get broadcastSourceSingleUrl => 'Исходный URL PGN';
 
   @override
-  String get broadcastSourceUrlHelp => 'URL-адрес, с которого Lichess будет получать обновление PGN. Он должен быть доступен для получения из Интернета.';
+  String get broadcastSourceUrlHelp => 'URL адрес, с которого Lichess будет получать обновление PGN. Он должен быть доступен для получения из Интернета.';
 
   @override
   String get broadcastSourceGameIds => 'До 64 идентификаторов (ID) игр Lichess, разделённых пробелами.';
@@ -960,6 +984,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get broadcastOfficialStandings => 'Официальная турнирная таблица';
+
+  @override
+  String get broadcastRegulations => 'Регламенты';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -2669,12 +2696,12 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String minRatingX(String param) {
-    return 'Minimum rating of $param';
+    return 'Минимальный рейтинг $param';
   }
 
   @override
   String maxRatingX(String param) {
-    return 'Maximum rating of $param';
+    return 'Максимальный рейтинг $param';
   }
 
   @override
@@ -4454,6 +4481,12 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String get like => 'Нравится';
+
+  @override
+  String get liked => 'Понравилось';
+
+  @override
   String get quickPairing => 'Быстрый старт';
 
   @override
@@ -4849,6 +4882,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'форумный этикет';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Пожалуйста, будьте вежливы на форуме.';
 
   @override
   String get thisTopicIsArchived => 'Эта тема была помещена в архив и добавить комментарий уже нельзя.';
@@ -5994,9 +6030,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get studyLike => 'Нравится';
-
-  @override
-  String get studyUnlike => 'Не нравится';
 
   @override
   String get studyNewTag => 'Новый тег';

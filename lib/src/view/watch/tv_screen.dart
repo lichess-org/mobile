@@ -174,6 +174,7 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                           fen: position.fen,
                           variant: gameState.game.meta.variant,
                           pockets: position.pockets,
+                          lastMove: game.moveAt(gameState.stepCursor),
                         ),
                         boardSettingsOverrides: const BoardSettingsOverrides(
                           animationDuration: Duration.zero,
@@ -192,7 +193,6 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                         onSelectMove: (index) {
                           ref.read(_tvGameCtrl.notifier).goToMove(index);
                         },
-                        lastMove: game.moveAt(gameState.stepCursor),
                         explosionSquares: gameState.stepCursor > 0
                             ? atomicExplosionSquares(
                                 game.positionAt(gameState.stepCursor - 1),

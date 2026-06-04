@@ -105,11 +105,6 @@ class PuzzleController extends Notifier<PuzzleState> {
   }
 
   Future<void> onUserMove(Move move) async {
-    if (move case NormalMove() when isPromotionPawnMove(state.currentPosition, move)) {
-      state = state.copyWith(promotionMove: move);
-      return;
-    }
-
     _addMove(move);
 
     if (state.mode == PuzzleMode.play) {
@@ -150,18 +145,6 @@ class PuzzleController extends Notifier<PuzzleState> {
           _setPath(wrongPath.penultimate);
         }
       }
-    }
-  }
-
-  void onPromotionSelection(Role? role) {
-    if (role == null) {
-      state = state.copyWith(promotionMove: null);
-      return;
-    }
-    final promotionMove = state.promotionMove;
-    if (promotionMove != null) {
-      final move = promotionMove.withPromotion(role);
-      onUserMove(move);
     }
   }
 
@@ -377,7 +360,6 @@ class PuzzleController extends Notifier<PuzzleState> {
       root: _gameTree.view,
       node: newNode,
       lastMove: sanMove.move,
-      promotionMove: null,
       shouldBlinkNextArrow: false,
     );
   }
@@ -450,7 +432,6 @@ sealed class PuzzleState with _$PuzzleState {
     required ViewBranch node,
     required ViewNode root,
     Move? lastMove,
-    NormalMove? promotionMove,
     PuzzleResult? result,
     PuzzleFeedback? feedback,
     required bool hintShown,

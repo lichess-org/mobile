@@ -86,6 +86,64 @@ Future<void> meetsTapTargetGuideline(WidgetTester tester) async {
   }
 }
 
+/// Finds either an interactive [Chessboard] or a [StaticChessboard].
+Finder _anyBoard() => find.byWidgetPredicate((w) => w is Chessboard || w is StaticChessboard);
+
+/// Returns the pieces of the first [Chessboard] or [StaticChessboard] found in the widget tree.
+///
+/// Throws a [StateError] if no [PiecesPainter] is found.
+Map<Square, Piece> getBoardPieces(WidgetTester tester) {
+  for (final element
+      in find.descendant(of: _anyBoard(), matching: find.byType(CustomPaint)).evaluate()) {
+    final widget = element.widget as CustomPaint;
+    if (widget.painter is PiecesPainter) {
+      return (widget.painter! as PiecesPainter).pieces;
+    }
+  }
+  throw StateError('PiecesPainter not found');
+}
+
+/// Returns the [HighlightsPainter] of the first [Chessboard] or [StaticChessboard] found in the widget tree.
+///
+/// Throws a [StateError] if no [HighlightsPainter] is found.
+HighlightsPainter findBoardHighlightPainter(WidgetTester tester) {
+  for (final element
+      in find.descendant(of: _anyBoard(), matching: find.byType(CustomPaint)).evaluate()) {
+    final widget = element.widget as CustomPaint;
+    if (widget.painter is HighlightsPainter) {
+      return widget.painter! as HighlightsPainter;
+    }
+  }
+  throw StateError('HighlightsPainter not found');
+}
+
+/// Returns true if the board has [piece] at [square].
+bool boardHasPiece(WidgetTester tester, Square square, Piece piece) {
+  return getBoardPieces(tester)[square] == piece;
+}
+
+/// Returns the valid moves set currently highlighted on the interactive chessboard.
+Set<Square> getBoardValidMoves(WidgetTester tester) {
+  return findBoardHighlightPainter(tester).interactionNotifier.moveDests;
+}
+
+/// Returns the last move currently highlighted on the chessboard, or null if no last move is highlighted.
+Move? getBoardLastMove(WidgetTester tester) {
+  return findBoardHighlightPainter(tester).interactionNotifier.lastMove;
+}
+
+/// Returns true if the board has a premove highlight set for [move].
+bool boardHasPremove(WidgetTester tester, Move move) {
+  final p = findBoardHighlightPainter(tester);
+  return p.interactionNotifier.premove != null &&
+      switch (move) {
+        NormalMove(:final from, :final to) =>
+          p.interactionNotifier.premove!.hasSquare(from) &&
+              p.interactionNotifier.premove!.hasSquare(to),
+        DropMove(:final to) => p.interactionNotifier.premove!.hasSquare(to),
+      };
+}
+
 /// Returns the offset of a square on a board defined by [Rect].
 Offset squareOffset(Square square, Rect boardRect, {Side orientation = Side.white}) {
   final squareSize = boardRect.width / 8;
@@ -121,11 +179,9 @@ Future<void> playDropMove(
   Side orientation = Side.white,
 }) async {
   final rect = boardRect ?? tester.getRect(find.byType(Chessboard));
+  final targetOffset = squareOffset(Square.fromName(to), rect, orientation: orientation);
   final fromOffset = tester.getCenter(find.byKey(ValueKey('pocket-${side.name}${role.name}')));
-  await tester.dragFrom(
-    fromOffset,
-    squareOffset(Square.fromName(to), rect, orientation: orientation) - fromOffset,
-  );
+  await tester.dragFrom(fromOffset, targetOffset - fromOffset);
   await tester.pumpAndSettle();
 }
 

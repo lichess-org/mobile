@@ -24,8 +24,6 @@ import 'package:lichess_mobile/src/widgets/material_diff.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 
-export 'package:lichess_mobile/src/widgets/material_diff.dart';
-
 /// A widget to display player information above/below the chess board.
 class GamePlayer extends StatelessWidget {
   const GamePlayer({

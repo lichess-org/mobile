@@ -18,8 +18,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 
 /// A provider for picking PGN files. Can be overridden in tests.
 final pickPgnFileProvider = Provider<Future<FilePickerResult?> Function()>((ref) {
-  return () =>
-      FilePicker.pickFiles(type: FileType.custom, allowedExtensions: ['pgn'], withData: true);
+  return () => FilePicker.pickFiles(type: FileType.custom, allowedExtensions: ['pgn']);
 });
 
 class ImportPgnScreen extends StatelessWidget {
@@ -31,7 +30,7 @@ class ImportPgnScreen extends StatelessWidget {
 
   static void handlePgnText(BuildContext context, String text) {
     try {
-      final games = PgnGame.parseMultiGamePgn(text);
+      final games = PgnGame.parseMultiGameLazy(text);
 
       if (games.isEmpty) {
         showSnackBar(context, context.l10n.invalidPgn, type: .error);
@@ -49,7 +48,7 @@ class ImportPgnScreen extends StatelessWidget {
               orientation: .white,
               pgn: text,
               isComputerAnalysisAllowed: true,
-              initialMoveCursor: game.moves.mainline().isEmpty ? 0 : 1,
+              initialMoveCursor: 1,
               variant: rule != null ? Variant.fromRule(rule) : .standard,
             ),
           ),
@@ -131,8 +130,10 @@ class _BodyState extends ConsumerState<_Body> {
     try {
       final result = await ref.read(pickPgnFileProvider)();
 
-      if (result != null && result.files.single.bytes != null) {
-        final content = utf8.decode(result.files.single.bytes!, allowMalformed: true);
+      if (result != null) {
+        final content = await const Utf8Decoder(
+          allowMalformed: true,
+        ).bind(result.files.single.readAsByteStream()).join();
         if (mounted) {
           ImportPgnScreen.handlePgnText(context, content);
         }

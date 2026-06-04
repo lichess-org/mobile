@@ -9,7 +9,7 @@ class AppLocalizationsNb extends AppLocalizations {
   AppLocalizationsNb([String locale = 'nb']) : super(locale);
 
   @override
-  String get mobileAccount => 'Account';
+  String get mobileAccount => 'Konto';
 
   @override
   String get mobileAccountPreferences => 'Kontoinnstillinger';
@@ -287,37 +287,61 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Eller importer en PGN-fil';
 
   @override
-  String get mobileServerOutageMessage => 'Lichess is undergoing technical difficulties. We\'re doing everything we can, and expect to be back up very soon.';
-
-  @override
-  String get mobileServerOutageKeepInformed => 'To get updates on the maintenance, checkout our social media channels.';
+  String get variantStandard => 'Standard';
 
   @override
   String get variantStandardTitle => 'Standardregler for sjakk (FIDE)';
 
   @override
+  String get variantChess960 => 'Sjakk-960';
+
+  @override
   String get variantChess960Title => 'Offiserene har tilfeldig rekkefølge.';
+
+  @override
+  String get variantKingOfTheHill => 'Kongen på haugen';
 
   @override
   String get variantKingOfTheHillTitle => 'Før kongen til midten for å vinne.';
 
   @override
+  String get variantThreeCheck => 'Tre-sjakk';
+
+  @override
   String get variantThreeCheckTitle => 'Sett motstanderen i sjakk tre ganger for å vinne.';
+
+  @override
+  String get variantAntichess => 'Antisjakk';
 
   @override
   String get variantAntichessTitle => 'Få alle brikkene dine slått (eller bli satt patt) for å vinne.';
 
   @override
+  String get variantAtomic => 'Atomsjakk';
+
+  @override
   String get variantAtomicTitle => 'Spreng motstanderens konge for å vinne.';
+
+  @override
+  String get variantHorde => 'Horde';
 
   @override
   String get variantHordeTitle => 'Den ene siden har mange bønder, den andre en vanlig hær.';
 
   @override
+  String get variantRacingKings => 'Kongeløp';
+
+  @override
   String get variantRacingKingsTitle => 'Før kongen over brettet for å vinne.';
 
   @override
+  String get variantCrazyhouse => 'Galimatias';
+
+  @override
   String get variantCrazyhouseTitle => 'Slåtte brikker kan droppes tilbake på brettet i stedet for å flytte en brikke.';
+
+  @override
+  String get variantFromPosition => 'Fra stilling';
 
   @override
   String get variantFromPositionTitle => 'Vanlig sjakk fra en egendefinert stilling';
@@ -920,6 +944,9 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get broadcastOfficialStandings => 'Offisiell tabell';
+
+  @override
+  String get broadcastRegulations => 'Regulations';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -2613,12 +2640,12 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String minRatingX(String param) {
-    return 'Minimum rating of $param';
+    return 'Minimumrating på $param';
   }
 
   @override
   String maxRatingX(String param) {
-    return 'Maximum rating of $param';
+    return 'Maksimumrating på $param';
   }
 
   @override
@@ -2985,7 +3012,7 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String sendEmailForAccountVerification(String param) {
-    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
+    return 'Finner du ikke bekreftelsen som ble sendt som e-post? Send e-post til $param, så bekrefter vi kontoen din.';
   }
 
   @override
@@ -4398,6 +4425,12 @@ class AppLocalizationsNb extends AppLocalizations {
   }
 
   @override
+  String get like => 'Like';
+
+  @override
+  String get liked => 'Liked';
+
+  @override
   String get quickPairing => 'Raskt parti';
 
   @override
@@ -4793,6 +4826,9 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'forumetiketten';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Hold en god tone i forumet.';
 
   @override
   String get thisTopicIsArchived => 'Dette emnet er arkivert og kan ikke lenger besvares.';
@@ -5846,9 +5882,6 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get studyLike => 'Lik';
-
-  @override
-  String get studyUnlike => 'Slutt å like';
 
   @override
   String get studyNewTag => 'Ny merkelapp';

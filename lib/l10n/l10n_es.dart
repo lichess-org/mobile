@@ -287,37 +287,61 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mobileOrImportPgnFile => 'O importa un archivo PGN';
 
   @override
-  String get mobileServerOutageMessage => 'Lichess is undergoing technical difficulties. We\'re doing everything we can, and expect to be back up very soon.';
-
-  @override
-  String get mobileServerOutageKeepInformed => 'To get updates on the maintenance, checkout our social media channels.';
+  String get variantStandard => 'Estándar';
 
   @override
   String get variantStandardTitle => 'Reglas de ajedrez estándar (FIDE)';
 
   @override
+  String get variantChess960 => 'Ajedrez 960';
+
+  @override
   String get variantChess960Title => 'La posición inicial de las piezas es aleatoria.';
+
+  @override
+  String get variantKingOfTheHill => 'Rey de la colina';
 
   @override
   String get variantKingOfTheHillTitle => 'Lleva a tu rey al centro para ganar la partida.';
 
   @override
+  String get variantThreeCheck => 'Tres jaques';
+
+  @override
   String get variantThreeCheckTitle => 'Poner en jaque a tu oponente 3 veces para ganar la partida.';
+
+  @override
+  String get variantAntichess => 'Antiajedrez';
 
   @override
   String get variantAntichessTitle => 'Pierde todas tus piezas (o una posición de ahogado) para ganar la partida.';
 
   @override
+  String get variantAtomic => 'Atómico';
+
+  @override
   String get variantAtomicTitle => 'Haz explotar al rey de tu oponente para ganar.';
+
+  @override
+  String get variantHorde => 'Horda';
 
   @override
   String get variantHordeTitle => 'Un jugador tiene un gran número de peones, el otro posee un ejército normal.';
 
   @override
+  String get variantRacingKings => 'Reyes en carrera';
+
+  @override
   String get variantRacingKingsTitle => 'Lleva a tu rey al otro lado del tablero para ganar.';
 
   @override
+  String get variantCrazyhouse => 'Revuelta';
+
+  @override
   String get variantCrazyhouseTitle => 'Las piezas capturadas pueden volver a colocarse en el tablero en lugar de hacer un movimiento.';
+
+  @override
+  String get variantFromPosition => 'De la posición';
 
   @override
   String get variantFromPositionTitle => 'Ajedrez estándar desde una posición personalizada';
@@ -922,6 +946,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get broadcastOfficialStandings => 'Clasificación oficial';
 
   @override
+  String get broadcastRegulations => 'Normativas';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'Más opciones en $param';
   }
@@ -1029,7 +1056,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get broadcastGirlsTournament => 'Femenino';
 
   @override
-  String get broadcastBoysTournament => 'Chicos';
+  String get broadcastBoysTournament => 'Masculino';
 
   @override
   String broadcastOpenUnderXAgeTournament(String param) {
@@ -1043,7 +1070,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String broadcastBoysUnderXAgeTournament(String param) {
-    return 'Masculino sub$param';
+    return 'Masculino Sub$param';
   }
 
   @override
@@ -4398,6 +4425,12 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get like => 'Me gusta';
+
+  @override
+  String get liked => 'Me gustó';
+
+  @override
   String get quickPairing => 'Emparejamiento rápido';
 
   @override
@@ -4793,6 +4826,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'las reglas del foro';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Por favor, sé amable en el foro.';
 
   @override
   String get thisTopicIsArchived => 'Este tema ha sido archivado y ya no admite respuestas.';
@@ -5846,9 +5882,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get studyLike => 'Me gusta';
-
-  @override
-  String get studyUnlike => 'No me gusta';
 
   @override
   String get studyNewTag => 'Nueva etiqueta';

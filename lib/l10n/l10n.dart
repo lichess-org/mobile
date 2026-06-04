@@ -736,17 +736,11 @@ abstract class AppLocalizations {
   /// **'Or import a PGN file'**
   String get mobileOrImportPgnFile;
 
-  /// No description provided for @mobileServerOutageMessage.
+  /// No description provided for @variantStandard.
   ///
   /// In en, this message translates to:
-  /// **'Lichess is undergoing technical difficulties. We\'re doing everything we can, and expect to be back up very soon.'**
-  String get mobileServerOutageMessage;
-
-  /// No description provided for @mobileServerOutageKeepInformed.
-  ///
-  /// In en, this message translates to:
-  /// **'To get updates on the maintenance, checkout our social media channels.'**
-  String get mobileServerOutageKeepInformed;
+  /// **'Standard'**
+  String get variantStandard;
 
   /// No description provided for @variantStandardTitle.
   ///
@@ -754,11 +748,23 @@ abstract class AppLocalizations {
   /// **'Standard rules of chess (FIDE)'**
   String get variantStandardTitle;
 
+  /// No description provided for @variantChess960.
+  ///
+  /// In en, this message translates to:
+  /// **'Chess960'**
+  String get variantChess960;
+
   /// No description provided for @variantChess960Title.
   ///
   /// In en, this message translates to:
   /// **'The starting position of the home rank pieces is randomised.'**
   String get variantChess960Title;
+
+  /// No description provided for @variantKingOfTheHill.
+  ///
+  /// In en, this message translates to:
+  /// **'King of the Hill'**
+  String get variantKingOfTheHill;
 
   /// No description provided for @variantKingOfTheHillTitle.
   ///
@@ -766,11 +772,23 @@ abstract class AppLocalizations {
   /// **'Bring your King to the centre to win the game.'**
   String get variantKingOfTheHillTitle;
 
+  /// No description provided for @variantThreeCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'Three-Check'**
+  String get variantThreeCheck;
+
   /// No description provided for @variantThreeCheckTitle.
   ///
   /// In en, this message translates to:
   /// **'Check your opponent 3 times to win the game.'**
   String get variantThreeCheckTitle;
+
+  /// No description provided for @variantAntichess.
+  ///
+  /// In en, this message translates to:
+  /// **'Antichess'**
+  String get variantAntichess;
 
   /// No description provided for @variantAntichessTitle.
   ///
@@ -778,11 +796,23 @@ abstract class AppLocalizations {
   /// **'Lose all your pieces (or get stalemated) to win the game.'**
   String get variantAntichessTitle;
 
+  /// No description provided for @variantAtomic.
+  ///
+  /// In en, this message translates to:
+  /// **'Atomic'**
+  String get variantAtomic;
+
   /// No description provided for @variantAtomicTitle.
   ///
   /// In en, this message translates to:
   /// **'Nuke your opponent\'s king to win.'**
   String get variantAtomicTitle;
+
+  /// No description provided for @variantHorde.
+  ///
+  /// In en, this message translates to:
+  /// **'Horde'**
+  String get variantHorde;
 
   /// No description provided for @variantHordeTitle.
   ///
@@ -790,17 +820,35 @@ abstract class AppLocalizations {
   /// **'One side has a large number of pawns, the other has a normal army.'**
   String get variantHordeTitle;
 
+  /// No description provided for @variantRacingKings.
+  ///
+  /// In en, this message translates to:
+  /// **'Racing Kings'**
+  String get variantRacingKings;
+
   /// No description provided for @variantRacingKingsTitle.
   ///
   /// In en, this message translates to:
   /// **'Get your king to the other side of the board to win.'**
   String get variantRacingKingsTitle;
 
+  /// No description provided for @variantCrazyhouse.
+  ///
+  /// In en, this message translates to:
+  /// **'Crazyhouse'**
+  String get variantCrazyhouse;
+
   /// No description provided for @variantCrazyhouseTitle.
   ///
   /// In en, this message translates to:
   /// **'Captured pieces can be dropped back on the board instead of moving a piece.'**
   String get variantCrazyhouseTitle;
+
+  /// No description provided for @variantFromPosition.
+  ///
+  /// In en, this message translates to:
+  /// **'From Position'**
+  String get variantFromPosition;
 
   /// No description provided for @variantFromPositionTitle.
   ///
@@ -1653,6 +1701,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Official standings'**
   String get broadcastOfficialStandings;
+
+  /// No description provided for @broadcastRegulations.
+  ///
+  /// In en, this message translates to:
+  /// **'Regulations'**
+  String get broadcastRegulations;
 
   /// No description provided for @broadcastIframeHelp.
   ///
@@ -8074,6 +8128,18 @@ abstract class AppLocalizations {
   /// **'{param1} likes {param2}'**
   String xLikesY(String param1, String param2);
 
+  /// No description provided for @like.
+  ///
+  /// In en, this message translates to:
+  /// **'Like'**
+  String get like;
+
+  /// No description provided for @liked.
+  ///
+  /// In en, this message translates to:
+  /// **'Liked'**
+  String get liked;
+
   /// No description provided for @quickPairing.
   ///
   /// In en, this message translates to:
@@ -8811,6 +8877,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'the forum etiquette'**
   String get theForumEtiquette;
+
+  /// No description provided for @pleaseBeNiceInTheForum.
+  ///
+  /// In en, this message translates to:
+  /// **'Please be nice in the forum.'**
+  String get pleaseBeNiceInTheForum;
 
   /// No description provided for @thisTopicIsArchived.
   ///
@@ -10101,12 +10173,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Like'**
   String get studyLike;
-
-  /// No description provided for @studyUnlike.
-  ///
-  /// In en, this message translates to:
-  /// **'Unlike'**
-  String get studyUnlike;
 
   /// No description provided for @studyNewTag.
   ///

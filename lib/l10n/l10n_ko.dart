@@ -287,37 +287,61 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileOrImportPgnFile => '또는 PGN 파일 가져오기';
 
   @override
-  String get mobileServerOutageMessage => 'Lichess is undergoing technical difficulties. We\'re doing everything we can, and expect to be back up very soon.';
-
-  @override
-  String get mobileServerOutageKeepInformed => 'To get updates on the maintenance, checkout our social media channels.';
+  String get variantStandard => '스탠다드';
 
   @override
   String get variantStandardTitle => '체스(FIDE)의 표준 규칙';
 
   @override
+  String get variantChess960 => '체스960';
+
+  @override
   String get variantChess960Title => '백의 1랭크, 흑의 8랭크에 있는 기물의 시작 위치가 무작위로 변경됩니다.';
+
+  @override
+  String get variantKingOfTheHill => '언덕의 왕';
 
   @override
   String get variantKingOfTheHillTitle => '킹을 중앙 칸에 놓으면 승리합니다.';
 
   @override
+  String get variantThreeCheck => '3체크';
+
+  @override
   String get variantThreeCheckTitle => '상대방을 세 번 체크하면 승리합니다.';
+
+  @override
+  String get variantAntichess => '안티체스';
 
   @override
   String get variantAntichessTitle => '모든 기물을 잃거나 스테일메이트되면 승리합니다.';
 
   @override
+  String get variantAtomic => '아토믹';
+
+  @override
   String get variantAtomicTitle => '상대의 킹을 터뜨려버리면 승리합니다.';
+
+  @override
+  String get variantHorde => '호드';
 
   @override
   String get variantHordeTitle => '한 쪽은 다수의 폰으로, 다른 쪽은 일반적인 기물로 경기합니다.';
 
   @override
+  String get variantRacingKings => '킹 경주';
+
+  @override
   String get variantRacingKingsTitle => '킹이 보드 반대편 끝까지 도달하면 승리합니다.';
 
   @override
+  String get variantCrazyhouse => '크레이지하우스';
+
+  @override
   String get variantCrazyhouseTitle => '자신의 차례일 때, 기물을 움직이는 대신 잡았던 기물을 자신의 색으로 보드에 소환할 수 있습니다.';
+
+  @override
+  String get variantFromPosition => '정해진 보드판에서 시작';
 
   @override
   String get variantFromPositionTitle => '사용자가 지정한 포지션으로 시작하는 일반 체스';
@@ -900,6 +924,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get broadcastOfficialStandings => '공식 순위';
+
+  @override
+  String get broadcastRegulations => '규정';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -4370,6 +4397,12 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
+  String get like => '좋아요';
+
+  @override
+  String get liked => '좋아요함';
+
+  @override
   String get quickPairing => '빠른 상대 찾기';
 
   @override
@@ -4765,6 +4798,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get theForumEtiquette => '포럼 에티켓';
+
+  @override
+  String get pleaseBeNiceInTheForum => '포럼을 건전히 이용해 주세요.';
 
   @override
   String get thisTopicIsArchived => '이 주제는 보존되어서 댓글을 남기실 수 없습니다.';
@@ -5772,9 +5808,6 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get studyLike => '좋아요';
-
-  @override
-  String get studyUnlike => '좋아요 취소';
 
   @override
   String get studyNewTag => '새 태그';

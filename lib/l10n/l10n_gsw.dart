@@ -287,37 +287,61 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Oder lad e PGN-Datei ufe';
 
   @override
-  String get mobileServerOutageMessage => 'Lichess is undergoing technical difficulties. We\'re doing everything we can, and expect to be back up very soon.';
-
-  @override
-  String get mobileServerOutageKeepInformed => 'To get updates on the maintenance, checkout our social media channels.';
+  String get variantStandard => 'Schtandard';
 
   @override
   String get variantStandardTitle => 'Schtandard-Schachregle (FIDE)';
 
   @override
+  String get variantChess960 => 'Chess960';
+
+  @override
   String get variantChess960Title => 'D\'Grundschtellig, vu de Figure, isch zuefällig.';
+
+  @override
+  String get variantKingOfTheHill => 'König vum Hügel';
 
   @override
   String get variantKingOfTheHillTitle => 'Bring din König is Zäntrum zum s\'Schpiel günne.';
 
   @override
+  String get variantThreeCheck => 'Drü-Schach';
+
+  @override
   String get variantThreeCheckTitle => 'Büt dim Gägner drümal Schach, zum s\'Schpiel günne.';
+
+  @override
+  String get variantAntichess => 'Anti-Schach';
 
   @override
   String get variantAntichessTitle => 'Verlür all Figure (oder mach es Patt) zum s\'Schpiel günne.';
 
   @override
+  String get variantAtomic => 'Atom-Schach';
+
+  @override
   String get variantAtomicTitle => 'Schpräng de gägnerisch Köng, zum günne.';
+
+  @override
+  String get variantHorde => 'Horde';
 
   @override
   String get variantHordeTitle => 'En hufe Pure gäge e ganz normali Armee.';
 
   @override
+  String get variantRacingKings => 'Ränn-Könige';
+
+  @override
   String get variantRacingKingsTitle => 'Bring din König, zum günne, uf die ander Site vum Brätt.';
 
   @override
+  String get variantCrazyhouse => 'Isetz-Schach';
+
+  @override
   String get variantCrazyhouseTitle => 'Anstatt en Zug z\'mache, gschlageni Figure zrugg ufs Brätt schtelle.';
+
+  @override
+  String get variantFromPosition => 'Vu Position';
 
   @override
   String get variantFromPositionTitle => 'Schtandard-Schach vunere g\'wählte Position';
@@ -920,6 +944,9 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get broadcastOfficialStandings => 'Offizielli Ranglischte';
+
+  @override
+  String get broadcastRegulations => 'Regulations';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -4398,6 +4425,12 @@ class AppLocalizationsGsw extends AppLocalizations {
   }
 
   @override
+  String get like => 'Like';
+
+  @override
+  String get liked => 'Liked';
+
+  @override
   String get quickPairing => 'Schnälli Paarig';
 
   @override
@@ -4793,6 +4826,9 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'd\'Forum Aschtandsregle';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Please be nice in the forum.';
 
   @override
   String get thisTopicIsArchived => 'Das Thema isch archiviert und chann nüme beantwortet werde.';
@@ -5846,9 +5882,6 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get studyLike => 'Gfallt mir';
-
-  @override
-  String get studyUnlike => 'Gfallt mir nümme';
 
   @override
   String get studyNewTag => 'Neue Tag';

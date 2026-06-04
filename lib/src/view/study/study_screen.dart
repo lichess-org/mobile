@@ -82,11 +82,15 @@ class _StudyScreenLoader extends ConsumerWidget {
             child: AnalysisLayout(
               pov: Side.white,
               sideToMove: null,
-              boardBuilder: (context, boardSize, borderRadius) => Chessboard.fixed(
+              boardBuilder: (context, boardSize, borderRadius) => StaticChessboard(
                 size: boardSize,
-                settings: boardPrefs.toBoardSettings().copyWith(
-                  borderRadius: borderRadius,
-                  boxShadow: borderRadius != null ? boardShadows : const <BoxShadow>[],
+                settings: StaticChessboardSettings.fromBoardSettings(
+                  boardPrefs
+                      .toBoardSettings(Variant.standard)
+                      .copyWith(
+                        borderRadius: borderRadius,
+                        boxShadow: borderRadius != null ? boardShadows : const <BoxShadow>[],
+                      ),
                 ),
                 orientation: Side.white,
                 fen: kEmptyFEN,
@@ -120,11 +124,15 @@ class _StudyScreenLoader extends ConsumerWidget {
             child: AnalysisLayout(
               pov: Side.white,
               sideToMove: null,
-              boardBuilder: (context, boardSize, borderRadius) => Chessboard.fixed(
+              boardBuilder: (context, boardSize, borderRadius) => StaticChessboard(
                 size: boardSize,
-                settings: boardPrefs.toBoardSettings().copyWith(
-                  borderRadius: borderRadius,
-                  boxShadow: borderRadius != null ? boardShadows : const <BoxShadow>[],
+                settings: StaticChessboardSettings.fromBoardSettings(
+                  boardPrefs
+                      .toBoardSettings(Variant.standard)
+                      .copyWith(
+                        borderRadius: borderRadius,
+                        boxShadow: borderRadius != null ? boardShadows : const <BoxShadow>[],
+                      ),
                 ),
                 orientation: Side.white,
                 fen: kEmptyFEN,
@@ -243,7 +251,7 @@ class _StudyMenu extends ConsumerWidget {
         if (authUser != null)
           ContextMenuAction(
             icon: state.study.liked ? Icons.favorite : Icons.favorite_border,
-            label: state.study.liked ? context.l10n.studyUnlike : context.l10n.studyLike,
+            label: state.study.liked ? 'Stop liking' : context.l10n.studyLike,
             onPressed: () {
               ref.read(studyControllerProvider(options).notifier).toggleLike();
             },
@@ -440,7 +448,9 @@ class _Body extends ConsumerWidget {
           sideToMove: null,
           boardBuilder: (context, boardSize, borderRadius) => SizedBox.square(
             dimension: boardSize,
-            child: Center(child: Text('${variant.label} is not supported yet.')),
+            child: Center(
+              child: Text(context.l10n.mobileUnsupportedVariant(variant.label(context.l10n))),
+            ),
           ),
           smallBoard: studyPrefs.smallBoard,
           children: const [SizedBox.shrink()],
@@ -569,6 +579,16 @@ class StudyAnalysisBoard extends AnalysisBoard {
 class _StudyAnalysisBoardState
     extends AnalysisBoardState<StudyAnalysisBoard, StudyState, StudyPrefs> {
   @override
+  StudyState? readCurrentState() => ref.read(studyControllerProvider(widget.options)).value;
+
+  @override
+  void listenToStateChanges(void Function(StudyState? prev, StudyState? next) listener) =>
+      ref.listenManual<StudyState?>(
+        studyControllerProvider(widget.options).select((v) => v.value),
+        listener,
+      );
+
+  @override
   StudyState get analysisState => ref.watch(studyControllerProvider(widget.options)).requireValue;
 
   @override
@@ -587,15 +607,8 @@ class _StudyAnalysisBoardState
       (id: analysisState.evaluationContext.id, path: analysisState.currentPath);
 
   @override
-  void onPromotionSelection(Role? role) {
-    ref.read(studyControllerProvider(widget.options).notifier).onPromotionSelection(role);
-  }
-
-  @override
-  String get fen =>
-      analysisState.currentPosition?.board.fen ??
-      analysisState.study.currentChapterMeta.fen ??
-      kInitialFEN;
+  String computeFen(StudyState state) =>
+      state.currentPosition?.board.fen ?? state.study.currentChapterMeta.fen ?? kInitialFEN;
 
   @override
   ISet<Shape> get extraShapes {
@@ -635,9 +648,7 @@ class _StudyAnalysisBoardState
       next,
     ) {
       if (prev != next) {
-        setState(() {
-          userShapes = ISet();
-        });
+        clearDrawnShapes();
       }
     });
 

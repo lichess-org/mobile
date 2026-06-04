@@ -287,37 +287,61 @@ class AppLocalizationsSl extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Ali uvozite datoteko PGN';
 
   @override
-  String get mobileServerOutageMessage => 'Lichess is undergoing technical difficulties. We\'re doing everything we can, and expect to be back up very soon.';
-
-  @override
-  String get mobileServerOutageKeepInformed => 'To get updates on the maintenance, checkout our social media channels.';
+  String get variantStandard => 'Običajno';
 
   @override
   String get variantStandardTitle => 'Standardna pravila šaha (FIDE)';
 
   @override
+  String get variantChess960 => 'Šah960';
+
+  @override
   String get variantChess960Title => 'Začetni položaj figur v prvi vrstici je naključen.';
+
+  @override
+  String get variantKingOfTheHill => 'Kralj hriba';
 
   @override
   String get variantKingOfTheHillTitle => 'Pripelji svojega kralja v sredino, da zmagaš v igri.';
 
   @override
+  String get variantThreeCheck => 'Trikratni šah';
+
+  @override
   String get variantThreeCheckTitle => 'Za zmago v igri trikrat napadite nasprotnikovega kralja.';
+
+  @override
+  String get variantAntichess => 'Antišah';
 
   @override
   String get variantAntichessTitle => 'Izgubite vse svoje figure (ali se znajdete v pat poziciji), da zmagate v igri.';
 
   @override
+  String get variantAtomic => 'Atomski šah';
+
+  @override
   String get variantAtomicTitle => 'Za zmago uniči nasprotnikovega kralja.';
+
+  @override
+  String get variantHorde => 'Horda';
 
   @override
   String get variantHordeTitle => 'Ena stran ima veliko število kmetov, druga pa normalno vojsko.';
 
   @override
+  String get variantRacingKings => 'Dirkanje kraljev';
+
+  @override
   String get variantRacingKingsTitle => 'Premakni svojega kralja na drugo stran plošče, da zmagaš.';
 
   @override
+  String get variantCrazyhouse => 'Nora hiša';
+
+  @override
   String get variantCrazyhouseTitle => 'Zajete figure lahko namesto premikanja figure spustite nazaj na šahovnico.';
+
+  @override
+  String get variantFromPosition => 'From Position';
 
   @override
   String get variantFromPositionTitle => 'Standard chess from a custom position';
@@ -960,6 +984,9 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get broadcastOfficialStandings => 'Uradna lestvica';
+
+  @override
+  String get broadcastRegulations => 'Regulations';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -4454,6 +4481,12 @@ class AppLocalizationsSl extends AppLocalizations {
   }
 
   @override
+  String get like => 'Like';
+
+  @override
+  String get liked => 'Liked';
+
+  @override
   String get quickPairing => 'Hitri pari';
 
   @override
@@ -4849,6 +4882,9 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'forumski bonton';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Please be nice in the forum.';
 
   @override
   String get thisTopicIsArchived => 'Ta tema je arhivirana in nanjo ni mogoče več odgovarjati.';
@@ -5994,9 +6030,6 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get studyLike => 'Všečkaj';
-
-  @override
-  String get studyUnlike => 'Ni mi všeč';
 
   @override
   String get studyNewTag => 'Nova oznaka';

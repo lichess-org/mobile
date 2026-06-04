@@ -287,37 +287,61 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileOrImportPgnFile => '或者导入 PGN 文件';
 
   @override
-  String get mobileServerOutageMessage => 'Lichess is undergoing technical difficulties. We\'re doing everything we can, and expect to be back up very soon.';
-
-  @override
-  String get mobileServerOutageKeepInformed => 'To get updates on the maintenance, checkout our social media channels.';
+  String get variantStandard => '标准';
 
   @override
   String get variantStandardTitle => '国际象棋标准规则（国际棋联）';
 
   @override
+  String get variantChess960 => 'Chess960';
+
+  @override
   String get variantChess960Title => '底线棋子的起始位置随机生成';
+
+  @override
+  String get variantKingOfTheHill => '山丘之王';
 
   @override
   String get variantKingOfTheHillTitle => '将您的王移至中心区域即可获胜';
 
   @override
+  String get variantThreeCheck => '三次将军';
+
+  @override
   String get variantThreeCheckTitle => '将军对手 3 次即可获胜';
+
+  @override
+  String get variantAntichess => '弃子棋';
 
   @override
   String get variantAntichessTitle => '输掉所有棋子（或被逼和）即可获胜';
 
   @override
+  String get variantAtomic => '原子棋';
+
+  @override
   String get variantAtomicTitle => '“核爆”对手的王即可获胜';
+
+  @override
+  String get variantHorde => '部落棋';
 
   @override
   String get variantHordeTitle => '一方拥有大量兵，另一方拥有常规军队';
 
   @override
+  String get variantRacingKings => '竞速棋';
+
+  @override
   String get variantRacingKingsTitle => '将您的王移动至棋盘另一侧即可获胜';
 
   @override
+  String get variantCrazyhouse => 'Crazyhouse';
+
+  @override
   String get variantCrazyhouseTitle => '被吃掉的棋子可以放回棋盘上，代替走子';
+
+  @override
+  String get variantFromPosition => '自定义局面';
 
   @override
   String get variantFromPositionTitle => '来自自定义局面的标准国际象棋';
@@ -900,6 +924,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get broadcastOfficialStandings => '官方排名';
+
+  @override
+  String get broadcastRegulations => '规定';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -4117,7 +4144,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get averageCentipawnLoss => '平均厘兵损失';
 
   @override
-  String get accuracy => '准确率';
+  String get accuracy => '准确度';
 
   @override
   String get keyboardShortcuts => '键盘快捷键';
@@ -4368,6 +4395,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String xLikesY(String param1, String param2) {
     return '$param1 喜欢 $param2';
   }
+
+  @override
+  String get like => '点赞';
+
+  @override
+  String get liked => '已赞';
 
   @override
   String get quickPairing => '快速匹配';
@@ -4765,6 +4798,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get theForumEtiquette => '论坛礼仪';
+
+  @override
+  String get pleaseBeNiceInTheForum => '聊天时请注意文明用语！';
 
   @override
   String get thisTopicIsArchived => '此话题已被归档，无法再回复。';
@@ -5543,7 +5579,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get stormMoves => '着法数';
 
   @override
-  String get stormAccuracy => '准确率';
+  String get stormAccuracy => '准确度';
 
   @override
   String get stormCombo => '连击数';
@@ -5772,9 +5808,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get studyLike => '点赞';
-
-  @override
-  String get studyUnlike => '取消点赞';
 
   @override
   String get studyNewTag => '新建标签';
@@ -6731,10 +6764,16 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get mobileViewGame => '查看對局';
 
   @override
+  String get variantStandard => '標準';
+
+  @override
   String get variantStandardTitle => '標準西洋棋規則';
 
   @override
   String get variantCrazyhouseTitle => '除了移動棋子以外，也可將吃掉的棋子打入回盤面。';
+
+  @override
+  String get variantFromPosition => '自訂局面';
 
   @override
   String get activityActivity => '活動';
@@ -11847,9 +11886,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get studyLike => '喜歡';
-
-  @override
-  String get studyUnlike => '取消喜歡';
 
   @override
   String get studyNewTag => '新標籤';

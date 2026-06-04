@@ -287,37 +287,61 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Of importeer een PGN-bestand';
 
   @override
-  String get mobileServerOutageMessage => 'Lichess is undergoing technical difficulties. We\'re doing everything we can, and expect to be back up very soon.';
-
-  @override
-  String get mobileServerOutageKeepInformed => 'To get updates on the maintenance, checkout our social media channels.';
+  String get variantStandard => 'Standaard';
 
   @override
   String get variantStandardTitle => 'Standaard schaakregels (FIDE)';
 
   @override
+  String get variantChess960 => 'Schaak 960';
+
+  @override
   String get variantChess960Title => 'De beginopstelling van de stukken op de eerste rij worden willekeurig bepaald.';
+
+  @override
+  String get variantKingOfTheHill => 'Koning van de heuvel';
 
   @override
   String get variantKingOfTheHillTitle => 'Breng je Koning naar het centrum om te winnen.';
 
   @override
+  String get variantThreeCheck => 'Driemaalschaak';
+
+  @override
   String get variantThreeCheckTitle => 'Breng je tegenstander 3 keer in schaak om te winnen.';
+
+  @override
+  String get variantAntichess => 'Weggeefschaak';
 
   @override
   String get variantAntichessTitle => 'Verlies al je stukken (of kom in pat) om te winnen.';
 
   @override
+  String get variantAtomic => 'Atoomschaak';
+
+  @override
   String get variantAtomicTitle => 'Vernietig de koning van je tegenstander om te winnen.';
+
+  @override
+  String get variantHorde => 'Hordeschaak';
 
   @override
   String get variantHordeTitle => 'De ene kant heeft een groot aantal pionnen, de andere speelt met normale stukken.';
 
   @override
+  String get variantRacingKings => 'Rennende koningen';
+
+  @override
   String get variantRacingKingsTitle => 'Breng je koning naar de andere kant van het bord om te winnen.';
 
   @override
+  String get variantCrazyhouse => 'Gekkenhuisschaak';
+
+  @override
   String get variantCrazyhouseTitle => 'Geslagen stukken kunnen terug op het bord worden geplaatst in plaats van dat ze verzet worden.';
+
+  @override
+  String get variantFromPosition => 'Vanaf stelling';
 
   @override
   String get variantFromPositionTitle => 'Standaard schaak vanaf eigen stelling';
@@ -920,6 +944,9 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get broadcastOfficialStandings => 'Officiële standen';
+
+  @override
+  String get broadcastRegulations => 'Regelgeving';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -4398,6 +4425,12 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
+  String get like => 'Vind ik leuk';
+
+  @override
+  String get liked => 'Vond ik leuk';
+
+  @override
   String get quickPairing => 'Snel koppelen';
 
   @override
@@ -4793,6 +4826,9 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'de regels van het forum';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Wees aardig op het forum.';
 
   @override
   String get thisTopicIsArchived => 'Dit onderwerp is gearchiveerd; er kan niet meer op worden gereageerd.';
@@ -5846,9 +5882,6 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get studyLike => 'Vind ik leuk';
-
-  @override
-  String get studyUnlike => 'Vind ik niet meer leuk';
 
   @override
   String get studyNewTag => 'Nieuw label';

@@ -300,7 +300,7 @@ class _WatchTvWidget extends ConsumerWidget {
         );
       },
       error: (error, stackTrace) {
-        debugPrint('SEVERE: [StreamerWidget] could not load channels data; $error\n $stackTrace');
+        debugPrint('SEVERE: [WatchTvWidget] could not load TV channels data; $error\n $stackTrace');
         return const Padding(
           padding: Styles.bodySectionPadding,
           child: Text('Could not load TV channels'),
