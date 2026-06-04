@@ -4,6 +4,7 @@ import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/view/clock/clock_tool_l10n.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
@@ -49,13 +50,6 @@ class _CustomClockSettingsState extends State<CustomClockSettings> {
     Navigator.of(context).pop();
   }
 
-  String _clockValueInSecondsLabel(BuildContext context) {
-    return switch (widget.clockType) {
-      ClockTimeControlType.increment => context.l10n.incrementInSeconds,
-      ClockTimeControlType.simpleDelay || ClockTimeControlType.bronsteinDelay => 'Delay in seconds',
-    };
-  }
-
   @override
   Widget build(BuildContext context) {
     return BottomSheetScrollableContainer(
@@ -66,7 +60,7 @@ class _CustomClockSettingsState extends State<CustomClockSettings> {
             ListTile(
               title: Text.rich(
                 TextSpan(
-                  text: 'Minutes: ',
+                  text: '${context.l10n.minutesPerSide}: ',
                   children: [
                     TextSpan(
                       style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
@@ -86,7 +80,7 @@ class _CustomClockSettingsState extends State<CustomClockSettings> {
             ListTile(
               title: Text.rich(
                 TextSpan(
-                  text: '${_clockValueInSecondsLabel(context)}: ',
+                  text: '${widget.clockType.valueInSecondsLabel(context.l10n)}: ',
                   children: [
                     TextSpan(
                       style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),

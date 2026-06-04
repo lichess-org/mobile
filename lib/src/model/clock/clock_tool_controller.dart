@@ -18,22 +18,7 @@ enum ClockSide {
   Side get chessClockSide => this == ClockSide.top ? Side.black : Side.white;
 }
 
-enum ClockTimeControlType {
-  increment,
-  simpleDelay,
-  bronsteinDelay;
-
-  String get label => switch (this) {
-    increment => 'Increment',
-    simpleDelay => 'Simple delay',
-    bronsteinDelay => 'Bronstein delay',
-  };
-
-  String get clockValueLabel => switch (this) {
-    increment => 'Increment',
-    simpleDelay || bronsteinDelay => 'Delay',
-  };
-}
+enum ClockTimeControlType { increment, simpleDelay, bronsteinDelay }
 
 /// A provider for [ClockToolController].
 final clockToolControllerProvider = NotifierProvider.autoDispose<ClockToolController, ClockState>(

@@ -4,6 +4,7 @@ import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/view/clock/clock_tool_l10n.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -61,13 +62,6 @@ class _ClockToolSettingsModalState extends State<ClockToolSettingsModal> {
     Navigator.of(context).pop();
   }
 
-  String _clockValueInSecondsLabel(BuildContext context) {
-    return switch (_clockType) {
-      ClockTimeControlType.increment => context.l10n.incrementInSeconds,
-      ClockTimeControlType.simpleDelay || ClockTimeControlType.bronsteinDelay => 'Delay in seconds',
-    };
-  }
-
   @override
   Widget build(BuildContext context) {
     return BottomSheetScrollableContainer(
@@ -76,15 +70,15 @@ class _ClockToolSettingsModalState extends State<ClockToolSettingsModal> {
           materialFilledCard: true,
           children: [
             SettingsListTile(
-              settingsLabel: const Text('Clock type'),
-              settingsValue: _clockType.label,
+              settingsLabel: Text(context.l10n.timeControl),
+              settingsValue: _clockType.label(context.l10n),
               onTap: () {
                 showChoicePicker<ClockTimeControlType>(
                   context,
-                  title: const Text('Clock type'),
+                  title: Text(context.l10n.timeControl),
                   choices: ClockTimeControlType.values,
                   selectedItem: _clockType,
-                  labelBuilder: (type) => Text(type.label),
+                  labelBuilder: (type) => Text(type.label(context.l10n)),
                   onSelectedItemChanged: _setClockType,
                 );
               },
@@ -112,7 +106,7 @@ class _ClockToolSettingsModalState extends State<ClockToolSettingsModal> {
             ListTile(
               title: Text.rich(
                 TextSpan(
-                  text: '${_clockValueInSecondsLabel(context)}: ',
+                  text: '${_clockType.valueInSecondsLabel(context.l10n)}: ',
                   children: [
                     TextSpan(
                       style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
