@@ -336,18 +336,22 @@ class _MatchHistoryTable extends StatelessWidget {
                 match: match,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12.0),
-                  child: Text(
-                    NumberFormat('#.#').format(match.mp),
-                    textAlign: .center,
-                    style: TextStyle(fontWeight: .bold, color: pointsColor),
-                  ),
+                  child: match.mp != null
+                      ? Text(
+                          NumberFormat('#.#').format(match.mp),
+                          textAlign: .center,
+                          style: TextStyle(fontWeight: .bold, color: pointsColor),
+                        )
+                      : const Text('*', textAlign: .center),
                 ),
               ),
               _TableTapCell(
                 match: match,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-                  child: Text(NumberFormat('#.#').format(match.gp), textAlign: .center),
+                  child: match.gp != null
+                      ? Text(NumberFormat('#.#').format(match.gp), textAlign: .center)
+                      : const Text('*', textAlign: .center),
                 ),
               ),
             ],

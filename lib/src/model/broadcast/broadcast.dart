@@ -340,9 +340,9 @@ sealed class BroadcastTeamStandingMatch with _$BroadcastTeamStandingMatch {
   const factory BroadcastTeamStandingMatch({
     required BroadcastRoundId roundId,
     required String opponent,
-    required String points,
-    required double mp,
-    required double gp,
+    required String? points,
+    required double? mp,
+    required double? gp,
   }) = _BroadcastTeamStandingMatch;
 }
 
