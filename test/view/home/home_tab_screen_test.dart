@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_web_auth_2_platform_interface/flutter_web_auth_2_platform_interface.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/app.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
@@ -21,6 +23,7 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import '../../binding.dart';
 import '../../example_data.dart';
 import '../../mock_server_responses.dart';
+import '../../model/auth/auth_repository_test.dart';
 import '../../model/auth/fake_auth_storage.dart';
 import '../../model/challenge/challenge_repository_test.dart';
 import '../../model/engine/fake_nnue_service.dart';
@@ -509,6 +512,52 @@ void main() {
 
         expect(find.text(nnueFilesMissingTip), findsNothing);
       });
+    });
+  });
+
+  group('Sign in error handling', () {
+    // [FlutterWebAuth2Platform.instance] is global; restore the original after
+    // each test so the fake doesn't leak into other test files.
+    final originalWebAuthPlatform = FlutterWebAuth2Platform.instance;
+    tearDown(() {
+      FlutterWebAuth2Platform.instance = originalWebAuthPlatform;
+    });
+
+    testWidgets('shows an error snackbar when sign-in fails', (tester) async {
+      // Android returns this when the AuthTab cannot verify the HTTPS callback
+      // (code 2 = RESULT_VERIFICATION_FAILED).
+      FlutterWebAuth2Platform.instance = FakeFlutterWebAuth2(
+        (url) async =>
+            throw PlatformException(code: 'FAILED', message: 'Authentication failed with code: 2'),
+      );
+
+      final app = await makeTestProviderScope(tester, child: const Application());
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Sign in'), findsOneWidget);
+
+      await tester.tap(find.text('Sign in'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Something went wrong.'), findsOneWidget);
+    });
+
+    testWidgets('does not show a snackbar when the user cancels sign-in', (tester) async {
+      FlutterWebAuth2Platform.instance = FakeFlutterWebAuth2(
+        (url) async => throw PlatformException(code: 'CANCELED'),
+      );
+
+      final app = await makeTestProviderScope(tester, child: const Application());
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Sign in'), findsOneWidget);
+
+      await tester.tap(find.text('Sign in'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Something went wrong.'), findsNothing);
     });
   });
 }

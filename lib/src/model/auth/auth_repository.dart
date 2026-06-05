@@ -33,6 +33,17 @@ const _appLinkVerifiedHost = 'lichess.org';
 const kOAuthHttpsCallbackPath = '/account/oauth/mobile-callback';
 const _oauthHttpsRedirectUri = 'https://$_appLinkVerifiedHost$kOAuthHttpsCallbackPath';
 
+/// Thrown when the user dismisses the OAuth session before completing it.
+///
+/// This is distinct from a genuine sign-in failure: the UI should silently
+/// ignore it rather than surfacing an error.
+class SignInCancelledException implements Exception {
+  const SignInCancelledException();
+
+  @override
+  String toString() => 'Sign-in was cancelled.';
+}
+
 final authRepositoryProvider = Provider<AuthRepository>((Ref ref) {
   return AuthRepository(ref);
 }, name: 'AuthRepositoryProvider');
@@ -88,7 +99,7 @@ class AuthRepository {
     } on PlatformException catch (e) {
       // The user dismissed the auth session before completing it.
       if (e.code == 'CANCELED') {
-        throw Exception('Sign-in was cancelled.');
+        throw const SignInCancelledException();
       }
       rethrow;
     }

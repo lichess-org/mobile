@@ -93,15 +93,43 @@ void main() {
       expect(tokenRequestBody, contains('code=test-code'));
     });
 
-    test('throws when the user cancels the auth session', () async {
+    test('throws SignInCancelledException when the user cancels the auth session', () async {
       FlutterWebAuth2Platform.instance = FakeFlutterWebAuth2(
         (url) async => throw PlatformException(code: 'CANCELED'),
       );
 
       final container = await lichessClientContainer(tokenAndAccountClient());
 
-      await expectLater(container.read(authRepositoryProvider).signIn(), throwsA(isA<Exception>()));
+      await expectLater(
+        container.read(authRepositoryProvider).signIn(),
+        throwsA(isA<SignInCancelledException>()),
+      );
     });
+
+    test(
+      'rethrows non-cancellation platform errors (e.g. App Link verification failure)',
+      () async {
+        // Android returns this when the AuthTab cannot verify the HTTPS callback
+        // (code 2 = RESULT_VERIFICATION_FAILED).
+        FlutterWebAuth2Platform.instance = FakeFlutterWebAuth2(
+          (url) async => throw PlatformException(
+            code: 'FAILED',
+            message: 'Authentication failed with code: 2',
+          ),
+        );
+
+        final container = await lichessClientContainer(tokenAndAccountClient());
+
+        await expectLater(
+          container.read(authRepositoryProvider).signIn(),
+          throwsA(
+            isA<PlatformException>()
+                .having((e) => e.code, 'code', 'FAILED')
+                .having((e) => e, 'is not a cancellation', isNot(isA<SignInCancelledException>())),
+          ),
+        );
+      },
+    );
 
     test('throws when the callback state does not match the request', () async {
       FlutterWebAuth2Platform.instance = FakeFlutterWebAuth2(
