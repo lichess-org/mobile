@@ -13,9 +13,12 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:logging/logging.dart';
 
-const kLichessUriScheme = 'org.lichess.mobile';
-const kOAuthRedirectUriHost = 'login-callback';
-const kOAuthRedirectUri = '$kLichessUriScheme://$kOAuthRedirectUriHost';
+/// Host of the custom URI scheme callback. Must stay in sync with the callback activity intent-filter in `android/app/src/main/AndroidManifest.xml`.
+const _kOAuthCustomSchemeCallbackHost = 'login-callback';
+
+/// The custom URI scheme redirect for OAuth. Used on iOS and for dev/staging hosts where App Links aren't verified.
+const kOAuthCustomSchemeRedirectUri =
+    '$kLichessCustomUriSchemeName://$_kOAuthCustomSchemeCallbackHost';
 const oauthScopes = ['web:mobile'];
 
 /// Host the app claims via verified Android App Links / iOS Universal Links. The HTTPS OAuth
@@ -29,14 +32,6 @@ const _appLinkVerifiedHost = 'lichess.org';
 ///  - the `apple-app-site-association` entry served by lichess.org.
 const kOAuthHttpsCallbackPath = '/account/oauth/mobile-callback';
 const _oauthHttpsRedirectUri = 'https://$_appLinkVerifiedHost$kOAuthHttpsCallbackPath';
-
-/// Whether to use the HTTPS App Link OAuth callback on Android.
-///
-/// The HTTPS `redirect_uri` is rejected by lichess until the server registers it for the
-/// `lichess_mobile` client. Keep this disabled so Android keeps using the custom-scheme callback
-/// (which lichess already accepts), and flip it to `true` in lockstep with the server-side deploy
-/// that accepts the HTTPS redirect URI.
-const kEnableHttpsOAuthCallback = false;
 
 final authRepositoryProvider = Provider<AuthRepository>((Ref ref) {
   return AuthRepository(ref);
@@ -66,11 +61,9 @@ class AuthRepository {
     // custom-scheme redirect. iOS — where ASWebAuthenticationSession captures the custom scheme
     // directly — and all dev/staging hosts keep the custom URI scheme.
     final useHttpsCallback =
-        kEnableHttpsOAuthCallback &&
-        defaultTargetPlatform == TargetPlatform.android &&
-        kLichessHost == _appLinkVerifiedHost;
-    final redirectUri = useHttpsCallback ? _oauthHttpsRedirectUri : kOAuthRedirectUri;
-    final callbackUrlScheme = useHttpsCallback ? 'https' : kLichessUriScheme;
+        defaultTargetPlatform == TargetPlatform.android && kLichessHost == _appLinkVerifiedHost;
+    final redirectUri = useHttpsCallback ? _oauthHttpsRedirectUri : kOAuthCustomSchemeRedirectUri;
+    final callbackUrlScheme = useHttpsCallback ? 'https' : kLichessCustomUriSchemeName;
 
     final authUrl = lichessUri('/oauth', {
       'response_type': 'code',
