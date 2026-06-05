@@ -77,8 +77,8 @@ class _TvScreenState extends ConsumerState<TvScreen> {
       child: WakelockWidget(
         child: Scaffold(
           appBar: AppBar(
-            title: widget.channel?.label != null
-                ? Text('${widget.channel!.label} TV')
+            title: widget.channel != null
+                ? Text('${widget.channel!.localizedLabel(context.l10n)} TV')
                 : Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [

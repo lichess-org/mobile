@@ -84,7 +84,7 @@ class UserActivityEntry extends ConsumerWidget {
               leading: Icon(gameEntry.key.icon, size: leadingIconSize),
               title: context.l10n.activityPlayedNbGames(
                 gameEntry.value.win + gameEntry.value.draw + gameEntry.value.loss,
-                gameEntry.key.title,
+                gameEntry.key.label(context.l10n),
               ),
               subtitle: RatingPrefAware(
                 child: Row(
@@ -192,7 +192,7 @@ class UserActivityEntry extends ConsumerWidget {
                       corresEndEntry.value.win +
                           corresEndEntry.value.draw +
                           corresEndEntry.value.loss,
-                      corresEndEntry.key.title,
+                      corresEndEntry.key.label(context.l10n),
                     ),
               subtitle: emptySubtitle,
               trailing: BriefGameResultBox(
