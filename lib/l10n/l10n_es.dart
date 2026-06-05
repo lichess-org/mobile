@@ -916,6 +916,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get broadcastOfficialStandings => 'Clasificación oficial';
 
   @override
+  String get broadcastRegulations => 'Normativas';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'Más opciones en $param';
   }
@@ -1023,7 +1026,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get broadcastGirlsTournament => 'Femenino';
 
   @override
-  String get broadcastBoysTournament => 'Chicos';
+  String get broadcastBoysTournament => 'Masculino';
 
   @override
   String broadcastOpenUnderXAgeTournament(String param) {
@@ -1037,7 +1040,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String broadcastBoysUnderXAgeTournament(String param) {
-    return 'Masculino sub$param';
+    return 'Masculino Sub$param';
   }
 
   @override
@@ -4392,6 +4395,12 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get like => 'Me gusta';
+
+  @override
+  String get liked => 'Me gustó';
+
+  @override
   String get quickPairing => 'Emparejamiento rápido';
 
   @override
@@ -4787,6 +4796,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'las reglas del foro';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Por favor, sé amable en el foro.';
 
   @override
   String get thisTopicIsArchived => 'Este tema ha sido archivado y ya no admite respuestas.';
@@ -5840,9 +5852,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get studyLike => 'Me gusta';
-
-  @override
-  String get studyUnlike => 'No me gusta';
 
   @override
   String get studyNewTag => 'Nueva etiqueta';

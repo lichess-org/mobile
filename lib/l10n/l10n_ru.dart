@@ -9,7 +9,7 @@ class AppLocalizationsRu extends AppLocalizations {
   AppLocalizationsRu([String locale = 'ru']) : super(locale);
 
   @override
-  String get mobileAccount => 'Account';
+  String get mobileAccount => 'Учётная запись';
 
   @override
   String get mobileAccountPreferences => 'Настройки аккаунта';
@@ -839,7 +839,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get broadcastSourceSingleUrl => 'Исходный URL PGN';
 
   @override
-  String get broadcastSourceUrlHelp => 'URL-адрес, с которого Lichess будет получать обновление PGN. Он должен быть доступен для получения из Интернета.';
+  String get broadcastSourceUrlHelp => 'URL адрес, с которого Lichess будет получать обновление PGN. Он должен быть доступен для получения из Интернета.';
 
   @override
   String get broadcastSourceGameIds => 'До 64 идентификаторов (ID) игр Lichess, разделённых пробелами.';
@@ -954,6 +954,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get broadcastOfficialStandings => 'Официальная турнирная таблица';
+
+  @override
+  String get broadcastRegulations => 'Регламенты';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -2663,12 +2666,12 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String minRatingX(String param) {
-    return 'Minimum rating of $param';
+    return 'Минимальный рейтинг $param';
   }
 
   @override
   String maxRatingX(String param) {
-    return 'Maximum rating of $param';
+    return 'Максимальный рейтинг $param';
   }
 
   @override
@@ -4448,6 +4451,12 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String get like => 'Нравится';
+
+  @override
+  String get liked => 'Понравилось';
+
+  @override
   String get quickPairing => 'Быстрый старт';
 
   @override
@@ -4843,6 +4852,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'форумный этикет';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Пожалуйста, будьте вежливы на форуме.';
 
   @override
   String get thisTopicIsArchived => 'Эта тема была помещена в архив и добавить комментарий уже нельзя.';
@@ -5988,9 +6000,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get studyLike => 'Нравится';
-
-  @override
-  String get studyUnlike => 'Не нравится';
 
   @override
   String get studyNewTag => 'Новый тег';

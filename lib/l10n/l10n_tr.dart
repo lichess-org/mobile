@@ -916,6 +916,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get broadcastOfficialStandings => 'Resmi Sıralamalar';
 
   @override
+  String get broadcastRegulations => 'Regulations';
+
+  @override
   String broadcastIframeHelp(String param) {
     return '${param}nda daha fazla seçenek';
   }
@@ -4392,6 +4395,12 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
+  String get like => 'Like';
+
+  @override
+  String get liked => 'Liked';
+
+  @override
   String get quickPairing => 'Hızlı eşleşme';
 
   @override
@@ -4787,6 +4796,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'forum görgü kuralları';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Lütfen forumda nazik ol.';
 
   @override
   String get thisTopicIsArchived => 'Bu konu arşivlenmiş ve yeni yanıtlara kapatılmıştır.';
@@ -5840,9 +5852,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get studyLike => 'Beğen';
-
-  @override
-  String get studyUnlike => 'Beğenmekten Vazgeç';
 
   @override
   String get studyNewTag => 'Yeni etiket';

@@ -916,6 +916,9 @@ class AppLocalizationsGl extends AppLocalizations {
   String get broadcastOfficialStandings => 'Clasificación oficial';
 
   @override
+  String get broadcastRegulations => 'Regulamento';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'Atopar máis opcións na $param.';
   }
@@ -4392,6 +4395,12 @@ class AppLocalizationsGl extends AppLocalizations {
   }
 
   @override
+  String get like => 'Gústame';
+
+  @override
+  String get liked => 'Gustáronme';
+
+  @override
   String get quickPairing => 'Emparellamento rápido';
 
   @override
@@ -4787,6 +4796,9 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'a etiqueta do foro';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Por favor, sé amable no foro.';
 
   @override
   String get thisTopicIsArchived => 'Este tema foi arquivado e non admite respostas.';
@@ -5840,9 +5852,6 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get studyLike => 'Gústame';
-
-  @override
-  String get studyUnlike => 'Xa non me gusta';
 
   @override
   String get studyNewTag => 'Nova etiqueta';

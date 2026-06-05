@@ -916,6 +916,9 @@ class AppLocalizationsBg extends AppLocalizations {
   String get broadcastOfficialStandings => 'Официално класиране';
 
   @override
+  String get broadcastRegulations => 'Regulations';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'Още опции на страницата за $param';
   }
@@ -4392,6 +4395,12 @@ class AppLocalizationsBg extends AppLocalizations {
   }
 
   @override
+  String get like => 'Like';
+
+  @override
+  String get liked => 'Liked';
+
+  @override
   String get quickPairing => 'Бърза игра';
 
   @override
@@ -4787,6 +4796,9 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'правилата за етикет на форума';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Моля бъдете учтиви във форума.';
 
   @override
   String get thisTopicIsArchived => 'Тази тема е архивирана и не може да получава повече мнения.';
@@ -5840,9 +5852,6 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get studyLike => 'Харесай';
-
-  @override
-  String get studyUnlike => 'Не харесвам';
 
   @override
   String get studyNewTag => 'Нов таг';

@@ -2,6 +2,7 @@ package org.lichess.mobileV2
 
 import android.app.ActivityManager
 import android.content.Context
+import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
@@ -18,6 +19,16 @@ class MainActivity: FlutterActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     installSplashScreen()
     super.onCreate(savedInstanceState)
+  }
+
+  // The OAuth redirect (org.lichess.mobile://login-callback) is delivered here, not in onCreate,
+  // because OAuthCallbackActivity forwards it to this already-running singleTop instance. Flutter's
+  // default handling leaves getIntent() pointing at the stale launch intent, so app_links would read
+  // the wrong URI and the login flow would never receive the callback. setIntent() updates the
+  // activity's current intent to the one carrying the OAuth code so app_links surfaces it correctly.
+  override fun onNewIntent(intent: Intent) {
+    setIntent(intent)
+    super.onNewIntent(intent)
   }
 
   override fun configureFlutterEngine(flutterEngine: FlutterEngine) {

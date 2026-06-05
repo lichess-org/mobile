@@ -143,10 +143,12 @@ class _BoardEditor extends ConsumerWidget {
       size: boardSize,
       pieces: pieces,
       orientation: orientation,
-      settings: boardPrefs.toBoardSettings().copyWith(
-        borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
-        boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
-      ),
+      settings: boardPrefs
+          .toBoardSettings(editorState.variant)
+          .copyWith(
+            borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
+            boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
+          ),
       pointerMode: editorState.editorPointerMode,
       onDiscardedPiece: (Square square) =>
           ref.read(boardEditorControllerProvider(params).notifier).discardPiece(square),

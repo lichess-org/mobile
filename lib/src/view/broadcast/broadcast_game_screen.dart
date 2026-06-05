@@ -286,6 +286,7 @@ class _Body extends ConsumerWidget {
               boardSize: boardSize,
               boardRadius: borderRadius,
             ),
+            smallBoard: broadcastPrefs.smallBoard,
             boardHeader: _PlayerWidget(
               tournamentId: tournamentId,
               roundId: roundId,
@@ -385,6 +386,8 @@ enum PgnTags {
   blackFideId('BlackFideId', isLink: true),
   timeControl('TimeControl', isLink: false),
   result('Result', isLink: false),
+  site('Site', isLink: false),
+  event('Event', isLink: false),
   round('Round', isLink: false);
 
   const PgnTags(this.tagName, {required this.isLink});
@@ -502,6 +505,22 @@ class BroadcastAnalysisBoard extends AnalysisBoard {
 class _BroadcastAnalysisBoardState
     extends AnalysisBoardState<BroadcastAnalysisBoard, BroadcastAnalysisState, BroadcastPrefs> {
   @override
+  BroadcastAnalysisState? readCurrentState() => ref
+      .read(broadcastAnalysisControllerProvider((roundId: widget.roundId, gameId: widget.gameId)))
+      .value;
+
+  @override
+  void listenToStateChanges(
+    void Function(BroadcastAnalysisState? prev, BroadcastAnalysisState? next) listener,
+  ) => ref.listenManual<BroadcastAnalysisState?>(
+    broadcastAnalysisControllerProvider((
+      roundId: widget.roundId,
+      gameId: widget.gameId,
+    )).select((v) => v.value),
+    listener,
+  );
+
+  @override
   BroadcastAnalysisState get analysisState => ref
       .watch(broadcastAnalysisControllerProvider((roundId: widget.roundId, gameId: widget.gameId)))
       .requireValue;
@@ -528,14 +547,7 @@ class _BroadcastAnalysisBoardState
       (id: analysisState.evaluationContext.id, path: analysisState.currentPath);
 
   @override
-  void onPromotionSelection(Role? role) => ref
-      .read(
-        broadcastAnalysisControllerProvider((
-          roundId: widget.roundId,
-          gameId: widget.gameId,
-        )).notifier,
-      )
-      .onPromotionSelection(role);
+  String computeFen(BroadcastAnalysisState state) => state.currentPosition.fen;
 }
 
 enum _PlayerWidgetPosition { bottom, top }

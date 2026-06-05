@@ -896,6 +896,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get broadcastOfficialStandings => '公式順位';
 
   @override
+  String get broadcastRegulations => 'Regulations';
+
+  @override
   String broadcastIframeHelp(String param) {
     return '他のオプションは $param にあります';
   }
@@ -4364,6 +4367,12 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String get like => 'Like';
+
+  @override
+  String get liked => 'Liked';
+
+  @override
   String get quickPairing => '自動ペアリング';
 
   @override
@@ -4759,6 +4768,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'フォーラムでのマナー';
+
+  @override
+  String get pleaseBeNiceInTheForum => '掲示板では礼儀を忘れず。';
 
   @override
   String get thisTopicIsArchived => 'このトピックはすでにアーカイブ化されコメントの追加はできません。';
@@ -5766,9 +5778,6 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get studyLike => 'いいね';
-
-  @override
-  String get studyUnlike => 'いいね解除';
 
   @override
   String get studyNewTag => '新しいタグ';

@@ -30,7 +30,11 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace = "org.lichess.mobileV2"
-    compileSdk = flutter.compileSdkVersion
+    // compileSdk = flutter.compileSdkVersion
+    // home_widget pulls in glance-appwidget and remote-creation-android, both of which
+    // declare in their AAR metadata that all dependents (including the app) must compile
+    // against SDK 37+. This cannot be suppressed — it is enforced by AGP at build time.
+    compileSdk = 37
     ndkVersion = flutter.ndkVersion
 
     compileOptions {

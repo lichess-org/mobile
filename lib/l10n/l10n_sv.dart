@@ -916,6 +916,9 @@ class AppLocalizationsSv extends AppLocalizations {
   String get broadcastOfficialStandings => 'Officiella ställningar';
 
   @override
+  String get broadcastRegulations => 'Regulations';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'Fler alternativ på $param';
   }
@@ -3080,7 +3083,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get unlimited => 'Obegränsad';
 
   @override
-  String get unlimitedDescription => 'Take all the time you need';
+  String get unlimitedDescription => 'Ta den tid du behöver';
 
   @override
   String get mode => 'Läge';
@@ -4392,6 +4395,12 @@ class AppLocalizationsSv extends AppLocalizations {
   }
 
   @override
+  String get like => 'Like';
+
+  @override
+  String get liked => 'Liked';
+
+  @override
   String get quickPairing => 'Snabbparning';
 
   @override
@@ -4787,6 +4796,9 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'forumets etikett';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Please be nice in the forum.';
 
   @override
   String get thisTopicIsArchived => 'Detta ämne har arkiverats och kan inte längre besvaras.';
@@ -5840,9 +5852,6 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get studyLike => 'Gilla';
-
-  @override
-  String get studyUnlike => 'Sluta gilla';
 
   @override
   String get studyNewTag => 'Ny tag';

@@ -1642,6 +1642,12 @@ abstract class AppLocalizations {
   /// **'Official standings'**
   String get broadcastOfficialStandings;
 
+  /// No description provided for @broadcastRegulations.
+  ///
+  /// In en, this message translates to:
+  /// **'Regulations'**
+  String get broadcastRegulations;
+
   /// No description provided for @broadcastIframeHelp.
   ///
   /// In en, this message translates to:
@@ -8062,6 +8068,18 @@ abstract class AppLocalizations {
   /// **'{param1} likes {param2}'**
   String xLikesY(String param1, String param2);
 
+  /// No description provided for @like.
+  ///
+  /// In en, this message translates to:
+  /// **'Like'**
+  String get like;
+
+  /// No description provided for @liked.
+  ///
+  /// In en, this message translates to:
+  /// **'Liked'**
+  String get liked;
+
   /// No description provided for @quickPairing.
   ///
   /// In en, this message translates to:
@@ -8799,6 +8817,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'the forum etiquette'**
   String get theForumEtiquette;
+
+  /// No description provided for @pleaseBeNiceInTheForum.
+  ///
+  /// In en, this message translates to:
+  /// **'Please be nice in the forum.'**
+  String get pleaseBeNiceInTheForum;
 
   /// No description provided for @thisTopicIsArchived.
   ///
@@ -10089,12 +10113,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Like'**
   String get studyLike;
-
-  /// No description provided for @studyUnlike.
-  ///
-  /// In en, this message translates to:
-  /// **'Unlike'**
-  String get studyUnlike;
 
   /// No description provided for @studyNewTag.
   ///

@@ -916,6 +916,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String get broadcastOfficialStandings => 'Επίσημη κατάταξη';
 
   @override
+  String get broadcastRegulations => 'Κανονισμοί';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'Περισσότερες επιλογές στη $param';
   }
@@ -936,7 +939,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get broadcastScore => 'Βαθμοί';
 
   @override
-  String get broadcastStandingsDisclaimer => 'Standings are calculated using broadcasted games and may differ from official results.';
+  String get broadcastStandingsDisclaimer => 'Οι βαθμολογίες υπολογίζονται χρησιμοποιώντας μεταδομένα παιχνίδια και μπορεί να διαφέρουν από τα επίσημα αποτελέσματα.';
 
   @override
   String get broadcastAllTeams => 'Όλες οι ομάδες';
@@ -983,16 +986,16 @@ class AppLocalizationsEl extends AppLocalizations {
   }
 
   @override
-  String get broadcastMatchPoints => 'Match Points';
+  String get broadcastMatchPoints => 'Βαθμοί αγώνα';
 
   @override
-  String get broadcastGamePoints => 'Game Points';
+  String get broadcastGamePoints => 'Βαθμοί παρτιδών';
 
   @override
   String get broadcastMatches => 'Παρτίδες';
 
   @override
-  String get broadcastMatchHistory => 'Match History';
+  String get broadcastMatchHistory => 'Ιστορικό παιχνιδιών';
 
   @override
   String get broadcastTeamResults => 'Αποτελέσματα Ομάδας';
@@ -1932,7 +1935,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get puzzleThemeCollinearMove => 'Συγγραμμική κίνηση';
 
   @override
-  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+  String get puzzleThemeCollinearMoveDescription => 'Δύο αντίπαλα κομμάτια κοιτάζουν το ένα το άλλο, και το ένα κινείται κατά μήκος της γραμμής χωρίς να τρώει το εχθρικό κομμάτι.';
 
   @override
   String get puzzleThemeCornerMate => 'Ματ στη γωνία';
@@ -2607,12 +2610,12 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String minRatingX(String param) {
-    return 'Minimum rating of $param';
+    return 'Ελάχιστη βαθμολογία: $param';
   }
 
   @override
   String maxRatingX(String param) {
-    return 'Maximum rating of $param';
+    return 'Μέγιστη βαθμολογία: $param';
   }
 
   @override
@@ -2716,22 +2719,22 @@ class AppLocalizationsEl extends AppLocalizations {
   String get multipleLines => 'Πολλαπλές γραμμές';
 
   @override
-  String get multipleLinesDescription => 'Set number of evaluation lines and move arrows on the board';
+  String get multipleLinesDescription => 'Ορίστε τον αριθμό των γραμμών αξιολόγησης και μετακινήστε τα βέλη στον πίνακα';
 
   @override
-  String get searchTime => 'Search time';
+  String get searchTime => 'Χρόνος αναζήτησης';
 
   @override
-  String get searchTimeDescription => 'Set time to evaluate fresh positions';
+  String get searchTimeDescription => 'Ορισμός ώρας για την αξιολόγηση νέων θέσεων';
 
   @override
-  String get threads => 'Threads';
+  String get threads => 'Νήματα';
 
   @override
-  String get threadsDescription => 'Set this below your CPU\'s thread count, the ticks mark a good safe choice';
+  String get threadsDescription => 'Ορίστε την τιμή χαμηλότερα από τον αριθμό νημάτων του επεξεργαστή σας, οι ενδείξεις δείχνουν ασφαλείς επιλογές';
 
   @override
-  String get threadsDescriptionMobile => 'More threads will use more battery for better analysis';
+  String get threadsDescriptionMobile => 'Περισσότερα νήματα θα χρησιμοποιήσουν περισσότερη μπαταρία για καλύτερη ανάλυση';
 
   @override
   String get cpus => 'CPUs';
@@ -2740,7 +2743,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get memory => 'Μνήμη';
 
   @override
-  String get memoryDescription => 'Higher values may improve performance';
+  String get memoryDescription => 'Μεγαλύτερες τιμές μπορεί να βελτιώσουν την απόδοση';
 
   @override
   String get infiniteAnalysis => 'Άπειρη ανάλυση';
@@ -4392,6 +4395,12 @@ class AppLocalizationsEl extends AppLocalizations {
   }
 
   @override
+  String get like => 'Μου αρέσει';
+
+  @override
+  String get liked => 'Μου άρεσε';
+
+  @override
   String get quickPairing => 'Γρήγορη αντιστοίχιση';
 
   @override
@@ -4787,6 +4796,9 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'τους κανόνες καλής συμπεριφοράς του φόρουμ';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Παρακαλούμε να συμπεριφέρεστε ευγενικά στο φόρουμ.';
 
   @override
   String get thisTopicIsArchived => 'Αυτό το θέμα έχει αρχειοθετηθεί και η ανάρτηση νέων απαντήσεων δεν είναι δυνατή.';
@@ -5840,9 +5852,6 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get studyLike => 'Μου αρέσει';
-
-  @override
-  String get studyUnlike => 'Δε μου αρέσει';
 
   @override
   String get studyNewTag => 'Νέα ετικέτα';

@@ -154,15 +154,23 @@
             android:name="flutterEmbedding"
             android:value="2" />
     </application>
-    <!-- Required to query activities that can process text, see:
-         https://developer.android.com/training/package-visibility and
-         https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT.
-
-         In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin. -->
+    <!-- On Android 11+ (API 30) package visibility is restricted: the app can only see/resolve other
+         apps it explicitly declares intents for here. See:
+         https://developer.android.com/training/package-visibility -->
     <queries>
+        <!-- Lets the Flutter engine resolve text-processing apps (io.flutter.plugin.text.ProcessTextPlugin), see:
+             https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT -->
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
+        </intent>
+        <!-- Lets url_launcher discover a browser/Custom Tabs handler for https. Required for OAuth
+             login: without it, launchUrl() can't resolve a browser on Android 11+ and returns false,
+             so the in-app browser never opens and sign-in fails. -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="https" />
         </intent>
     </queries>
 </manifest>

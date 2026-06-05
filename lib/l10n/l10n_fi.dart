@@ -9,7 +9,7 @@ class AppLocalizationsFi extends AppLocalizations {
   AppLocalizationsFi([String locale = 'fi']) : super(locale);
 
   @override
-  String get mobileAccount => 'Account';
+  String get mobileAccount => 'Käyttäjätunnus';
 
   @override
   String get mobileAccountPreferences => 'Käyttäjätunnuksen asetukset';
@@ -914,6 +914,9 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get broadcastOfficialStandings => 'Virallinen tulostaulu';
+
+  @override
+  String get broadcastRegulations => 'Säännöt';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -2607,12 +2610,12 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String minRatingX(String param) {
-    return 'Minimum rating of $param';
+    return 'Vahvuusluvun alaraja $param';
   }
 
   @override
   String maxRatingX(String param) {
-    return 'Maximum rating of $param';
+    return 'Vahvuusluvun yläraja $param';
   }
 
   @override
@@ -4392,6 +4395,12 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
+  String get like => 'Tykkää';
+
+  @override
+  String get liked => 'Tykätty';
+
+  @override
   String get quickPairing => 'Nopeasti peliin';
 
   @override
@@ -4787,6 +4796,9 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'foorumin etiketti';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Olethan ystävällinen foorumilla.';
 
   @override
   String get thisTopicIsArchived => 'Tämä aihe on arkistoitu, eikä siihen voi enää vastata.';
@@ -5840,9 +5852,6 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get studyLike => 'Tykkää';
-
-  @override
-  String get studyUnlike => 'Poista tykkäys';
 
   @override
   String get studyNewTag => 'Uusi tunniste';

@@ -916,6 +916,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get broadcastOfficialStandings => 'Classificações oficiais';
 
   @override
+  String get broadcastRegulations => 'Regulamentos';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'Mais opções na $param';
   }
@@ -4392,6 +4395,12 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String get like => 'Like';
+
+  @override
+  String get liked => 'Liked';
+
+  @override
   String get quickPairing => 'Emparelhamento rápido';
 
   @override
@@ -4787,6 +4796,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'a etiqueta do fórum';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Please be nice in the forum.';
 
   @override
   String get thisTopicIsArchived => 'Este tópico foi arquivado e já não pode ser respondido.';
@@ -5840,9 +5852,6 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get studyLike => 'Gostar';
-
-  @override
-  String get studyUnlike => 'Remover gosto';
 
   @override
   String get studyNewTag => 'Nova etiqueta';
@@ -7486,6 +7495,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get broadcastOfficialStandings => 'Classificação oficial';
+
+  @override
+  String get broadcastRegulations => 'Regulamentos';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -10964,6 +10976,12 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   }
 
   @override
+  String get like => 'Curtir';
+
+  @override
+  String get liked => 'Curtidas';
+
+  @override
   String get quickPairing => 'Pareamento rápido';
 
   @override
@@ -11359,6 +11377,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get theForumEtiquette => 'as regras do fórum';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Por favor, seja gentil no fórum.';
 
   @override
   String get thisTopicIsArchived => 'Este tópico foi arquivado e não pode mais ser respondido.';
@@ -12412,9 +12433,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get studyLike => 'Gostei';
-
-  @override
-  String get studyUnlike => 'Não gostei';
 
   @override
   String get studyNewTag => 'Nova etiqueta';

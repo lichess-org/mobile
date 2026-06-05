@@ -936,6 +936,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get broadcastOfficialStandings => 'Clasament oficial';
 
   @override
+  String get broadcastRegulations => 'Reglementări';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'Mai multe opțiuni pe $param';
   }
@@ -4420,6 +4423,12 @@ class AppLocalizationsRo extends AppLocalizations {
   }
 
   @override
+  String get like => 'Apreciază';
+
+  @override
+  String get liked => 'Apreciat';
+
+  @override
   String get quickPairing => 'Potrivire rapidă';
 
   @override
@@ -4815,6 +4824,9 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'normele de comportare în forum';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Te rugăm să fii cu bun simț pe forum.';
 
   @override
   String get thisTopicIsArchived => 'Acest subiect a fost arhivat și nu mai acceptă răspunsuri.';
@@ -5914,9 +5926,6 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get studyLike => 'Apreciază';
-
-  @override
-  String get studyUnlike => 'Nu îmi mai place';
 
   @override
   String get studyNewTag => 'Etichetă nouă';

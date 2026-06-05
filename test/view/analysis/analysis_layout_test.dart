@@ -28,7 +28,7 @@ void main() {
               pov: Side.white,
               sideToMove: Side.white,
               boardBuilder: (context, boardSize, boardRadius) {
-                return Chessboard.fixed(
+                return StaticChessboard(
                   size: boardSize,
                   fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR',
                   orientation: Side.white,
@@ -51,7 +51,7 @@ void main() {
         reason: 'Board background size is square on $surface',
       );
 
-      final boardSize = tester.getSize(find.byType(Chessboard));
+      final boardSize = tester.getSize(find.byType(StaticChessboard));
 
       expect(boardSize.width, boardSize.height, reason: 'Board size is square on $surface');
 
@@ -77,7 +77,7 @@ void main() {
               pov: Side.white,
               sideToMove: Side.white,
               boardBuilder: (context, boardSize, boardRadius) {
-                return Chessboard.fixed(
+                return StaticChessboard(
                   size: boardSize,
                   fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR',
                   orientation: Side.white,
@@ -94,7 +94,7 @@ void main() {
 
       final isPortrait = surface.aspectRatio < 1.0;
       final isTablet = surface.shortestSide > 600;
-      final boardSize = tester.getSize(find.byType(Chessboard));
+      final boardSize = tester.getSize(find.byType(StaticChessboard));
 
       if (isPortrait) {
         final expectedBoardSize = isTablet ? surface.width - 32.0 : surface.width;
@@ -147,7 +147,7 @@ void main() {
               pov: Side.white,
               sideToMove: Side.white,
               boardBuilder: (context, boardSize, boardRadius) {
-                return Chessboard.fixed(
+                return StaticChessboard(
                   size: boardSize,
                   fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR',
                   orientation: Side.white,
@@ -167,7 +167,7 @@ void main() {
       );
       await tester.pumpWidget(app);
 
-      final boardTopLeft = tester.getTopLeft(find.byType(Chessboard));
+      final boardTopLeft = tester.getTopLeft(find.byType(StaticChessboard));
       final tabBarTopLeft = tester.getTopLeft(find.byType(TabBarView));
 
       expect(

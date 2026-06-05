@@ -916,6 +916,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get broadcastOfficialStandings => 'Official standings';
 
   @override
+  String get broadcastRegulations => 'Regulations';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'Find more options on the $param.';
   }
@@ -4390,6 +4393,12 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get like => 'Like';
+
+  @override
+  String get liked => 'Liked';
+
+  @override
   String get quickPairing => 'Quick pairing';
 
   @override
@@ -4785,6 +4794,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'the forum etiquette';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Please be nice in the forum.';
 
   @override
   String get thisTopicIsArchived => 'This topic has been archived and can no longer be replied to.';
@@ -5838,9 +5850,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get studyLike => 'Like';
-
-  @override
-  String get studyUnlike => 'Unlike';
 
   @override
   String get studyNewTag => 'New tag';
@@ -11349,6 +11358,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get theForumEtiquette => 'the forum etiquette';
 
   @override
+  String get pleaseBeNiceInTheForum => 'Please be nice in the forum.';
+
+  @override
   String get thisTopicIsArchived => 'This topic has been archived and can no longer be replied to.';
 
   @override
@@ -12400,9 +12412,6 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get studyLike => 'Like';
-
-  @override
-  String get studyUnlike => 'Unlike';
 
   @override
   String get studyNewTag => 'New tag';

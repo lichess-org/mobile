@@ -157,7 +157,9 @@ class AppLinksService {
         }
       case 'tournament':
         final tournamentId = TournamentId(appLinkUri.pathSegments[1]);
-        return [TournamentScreen.buildRoute(tournamentId)];
+        final playerName = appLinkUri.queryParameters['player'];
+        final playerId = playerName != null ? UserId.fromUserName(playerName) : null;
+        return [TournamentScreen.buildRoute(tournamentId, initialPlayerId: playerId)];
       case 'training':
         final id = appLinkUri.pathSegments[1];
         return [PuzzleScreen.buildRoute(angle: PuzzleAngle.fromKey('mix'), puzzleId: PuzzleId(id))];

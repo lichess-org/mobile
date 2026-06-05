@@ -301,28 +301,9 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
 
     if (!state.requireValue.currentPosition.isLegal(move)) return;
 
-    if (move case NormalMove() when isPromotionPawnMove(state.requireValue.currentPosition, move)) {
-      state = AsyncData(state.requireValue.copyWith(promotionMove: move));
-      return;
-    }
-
     final (newPath, isNewNode) = _root.addMoveAt(state.requireValue.currentPath, move);
     if (newPath != null) {
       _setPath(newPath, shouldRecomputeRootView: isNewNode, shouldForceShowVariation: true);
-    }
-  }
-
-  void onPromotionSelection(Role? role) {
-    if (!state.hasValue) return;
-
-    if (role == null) {
-      state = AsyncData(state.requireValue.copyWith(promotionMove: null));
-      return;
-    }
-    final promotionMove = state.requireValue.promotionMove;
-    if (promotionMove != null) {
-      final promotion = promotionMove.withPromotion(role);
-      onUserMove(promotion);
     }
   }
 
@@ -478,7 +459,6 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
           isOnMainline: _root.isOnMainline(path),
           currentNode: AnalysisCurrentNode.fromNode(currentNode),
           lastMove: currentNode.sanMove.move,
-          promotionMove: null,
           root: rootView,
           clocks: _getClocks(path),
         ),
@@ -491,7 +471,6 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
           isOnMainline: _root.isOnMainline(path),
           currentNode: AnalysisCurrentNode.fromNode(currentNode),
           lastMove: null,
-          promotionMove: null,
           root: rootView,
           clocks: _getClocks(path),
         ),
@@ -599,9 +578,6 @@ sealed class BroadcastAnalysisState
 
     /// The last move played.
     Move? lastMove,
-
-    /// Possible promotion move to be played.
-    NormalMove? promotionMove,
 
     /// The PGN headers of the game.
     required IMap<String, String> pgnHeaders,

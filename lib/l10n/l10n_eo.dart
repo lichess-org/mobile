@@ -9,13 +9,13 @@ class AppLocalizationsEo extends AppLocalizations {
   AppLocalizationsEo([String locale = 'eo']) : super(locale);
 
   @override
-  String get mobileAccount => 'Account';
+  String get mobileAccount => 'Konto';
 
   @override
   String get mobileAccountPreferences => 'Kontaj Preferoj';
 
   @override
-  String get mobileAccountPreferencesHelp => 'These preferences are applied to your Lichess account and will be used across all devices.';
+  String get mobileAccountPreferencesHelp => 'Ĉi tiuj agordoj estas aplikitaj al via konto de Lichess kaj estos uzata tra ĉiuj viaj aparatoj.';
 
   @override
   String get mobileAllGames => 'Ĉiuj ludoj';
@@ -76,10 +76,10 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileNoSearchResults => 'Neniu rezultoj';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'Please note that not all features from the old app or the website are currently available, but we are adding features all the time.';
+  String get mobileNotAllFeaturesAreAvailable => 'Bonvolu noti, ke ne ĉiuj funkcioj de la malnova apo aŭ la retejo estas nune disponeblaj, sed ni ĉiam aldonas funkciojn.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'You are not following any users.';
+  String get mobileNotFollowingAnyUser => 'Vi ne abonas iujn ajn uzantojn.';
 
   @override
   String get mobileOkButton => 'Bone';
@@ -126,19 +126,19 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileRecentSearches => 'Lastaj serĉoj';
 
   @override
-  String get mobileRemoveBookmark => 'Remove bookmark';
+  String get mobileRemoveBookmark => 'Forigi legosignon';
 
   @override
-  String get mobileServerAnalysis => 'Server analysis';
+  String get mobileServerAnalysis => 'Analizo per servilo';
 
   @override
   String get mobileSettingsClockPosition => 'Horloĝa pozicio';
 
   @override
-  String get mobileSettingsCustomBackgroundPresets => 'Presets';
+  String get mobileSettingsCustomBackgroundPresets => 'Antaŭagordoj';
 
   @override
-  String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
+  String get mobileSettingsDraggedPieceTarget => 'Montrado de celo de trenita ŝakpeco';
 
   @override
   String get mobileSettingsDraggedTargetCircle => 'Cirklo';
@@ -147,25 +147,25 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileSettingsDraggedTargetSquare => 'Kvadrato';
 
   @override
-  String get mobileSettingsHomeWidgets => 'Home widgets';
+  String get mobileSettingsHomeWidgets => 'Fenestraĵoj por hejma ekrano';
 
   @override
   String get mobileSettingsImmersiveMode => 'Enakviĝa reĝimo';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and puzzle screens.';
+  String get mobileSettingsImmersiveModeSubtitle => 'Kaŝi la sisteman uzantinterfacon dum ludado. Uzu ĉi tion, se vin ĝenas la sistemaj navigadaj gestoj ĉe la randoj de la ekrano. Aplikiĝas al ludaj kaj puzlaj ekranoj.';
 
   @override
-  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
+  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Kaptitaj pecoj';
 
   @override
-  String get mobileSettingsPickAnImage => 'Pick an image';
+  String get mobileSettingsPickAnImage => 'Elektu bildon';
 
   @override
-  String get mobileSettingsPickAnImageHelp => 'Custom background works only in dark mode. A dark image is recommended.';
+  String get mobileSettingsPickAnImageHelp => 'Propra fono nur funkcias en la malhel-fona etoso. Malhela bildo estas rekomendata.';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'Blur the image';
+  String get mobileSettingsPickAnImageBlur => 'Malfokusigi la bildon';
 
   @override
   String get mobileSettingsPickAnImageHideBoard => 'Kaŝi la tabulon';
@@ -914,6 +914,9 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get broadcastOfficialStandings => 'Official standings';
+
+  @override
+  String get broadcastRegulations => 'Regulations';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -4392,6 +4395,12 @@ class AppLocalizationsEo extends AppLocalizations {
   }
 
   @override
+  String get like => 'Like';
+
+  @override
+  String get liked => 'Liked';
+
+  @override
   String get quickPairing => 'Rapida parado';
 
   @override
@@ -4787,6 +4796,9 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'la foruma etiketo';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Please be nice in the forum.';
 
   @override
   String get thisTopicIsArchived => 'Ĉi tiu temo eniris la arkivon kaj oni ne plu rajtas respondi.';
@@ -5840,9 +5852,6 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get studyLike => 'Ŝati';
-
-  @override
-  String get studyUnlike => 'Malŝati';
 
   @override
   String get studyNewTag => 'Nova etikedo';

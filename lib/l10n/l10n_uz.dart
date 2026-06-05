@@ -302,7 +302,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get variantAntichessTitle => 'Gʻalaba qozonish uchun barcha donalaringizni boy bering (yoki pat oling).';
 
   @override
-  String get variantAtomicTitle => 'Gʻalaba qozonish uchun raqibni shohini portlating.';
+  String get variantAtomicTitle => 'Gʻalaba qozonish uchun raqibning shohini portlating.';
 
   @override
   String get variantHordeTitle => 'Bir tarafda koʻp miqdorda piyodalar boʻlsa, boshqa tarafda standart shaxmat donalari mavjud.';
@@ -916,6 +916,9 @@ class AppLocalizationsUz extends AppLocalizations {
   String get broadcastOfficialStandings => 'Rasmiy turnir jadvali';
 
   @override
+  String get broadcastRegulations => 'Regulations';
+
+  @override
   String broadcastIframeHelp(String param) {
     return '$param sahifasida qoʻshimcha imkoniyatlar mavjud';
   }
@@ -1373,16 +1376,16 @@ class AppLocalizationsUz extends AppLocalizations {
   String get preferencesMaterialDifference => 'Material farqi';
 
   @override
-  String get preferencesBoardHighlights => 'Oxirgi yurishni va shoh berishni taxtada belgilash';
+  String get preferencesBoardHighlights => 'Oxirgi yurish va shoh berish taxtada ko\'rsatilsin';
 
   @override
-  String get preferencesPieceDestinations => 'Mumkin boʻlgan yurishlani koʻrsatish';
+  String get preferencesPieceDestinations => 'Mumkin boʻlgan yurishlar koʻrsatilsin (qonuniy yurishlar va oldindan yurishlar)';
 
   @override
-  String get preferencesBoardCoordinates => 'Doska koordinatalari (A-H, 1-8)';
+  String get preferencesBoardCoordinates => 'Taxta koordinatalari (A‑H, 1‑8)';
 
   @override
-  String get preferencesMoveListWhilePlaying => 'Oʻyin davomida yurishlar roʻyxatini koʻrsatish';
+  String get preferencesMoveListWhilePlaying => 'Oʻyin davomida yurishlar roʻyxati koʻrsatilsin';
 
   @override
   String get preferencesPgnPieceNotation => 'Yurish notatsiyasi';
@@ -1397,16 +1400,16 @@ class AppLocalizationsUz extends AppLocalizations {
   String get preferencesZenMode => 'Zen rejimi';
 
   @override
-  String get preferencesShowPlayerRatings => 'Oʻyinchilar reytingini koʻrsatish';
+  String get preferencesShowPlayerRatings => 'Oʻyinchilar reytingi koʻrsatilsin';
 
   @override
-  String get preferencesShowFlairs => 'Oʻyinchilar hisbelgilarini koʻrsatish';
+  String get preferencesShowFlairs => 'Oʻyinchilar hisbelgilari koʻrsatilsin';
 
   @override
   String get preferencesExplainShowPlayerRatings => 'Ushbu sozlama butun Lichess boʻylab barcha reytinglarni yashiradi va bor eʼtiboringizni shaxmatga qaratishga yordam beradi. Reytingli oʻyinlar reytingingizga baribir taʼsir qiladi, bu sozlama faqat reytinglarni yashirish uchun.';
 
   @override
-  String get preferencesDisplayBoardResizeHandle => 'Taxta oʻlchamini oʻzgartirish tutqichini koʻrsatish';
+  String get preferencesDisplayBoardResizeHandle => 'Taxta oʻlchamini oʻzgartirish tutqichi koʻrsatilsin';
 
   @override
   String get preferencesOnlyOnInitialPosition => 'Faqat boshlangʻich pozitsiyada';
@@ -1421,16 +1424,16 @@ class AppLocalizationsUz extends AppLocalizations {
   String get preferencesChessClock => 'Shaxmat soati';
 
   @override
-  String get preferencesTenthsOfSeconds => 'Soniyaning oʻndan birini koʻrsatish';
+  String get preferencesTenthsOfSeconds => 'Soniyaning oʻndan biri koʻrsatilsin';
 
   @override
   String get preferencesWhenTimeRemainingLessThanTenSeconds => '10 soniyadan kam vaqt qolganda';
 
   @override
-  String get preferencesHorizontalGreenProgressBars => 'Gorizantal yashil vaqt indikatori';
+  String get preferencesHorizontalGreenProgressBars => 'Gorizantal yashil vaqt indikatori koʻrsatilsin';
 
   @override
-  String get preferencesSoundWhenTimeGetsCritical => 'Vaqt oz qolganda tovush bilan ogohlantirish';
+  String get preferencesSoundWhenTimeGetsCritical => 'Vaqt oz qolganda tovush bilan ogohlantirilsin';
 
   @override
   String get preferencesGiveMoreTime => 'Vaqt berish';
@@ -1565,7 +1568,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get preferencesBlindfold => 'Koʻzi bogʻlangan shaxmat';
 
   @override
-  String get preferencesShowClockOnTheLeft => 'Mobil qurilmalarda chap tomonda koʻrsatish';
+  String get preferencesShowClockOnTheLeft => 'Mobil qurilmalarda chap tomonda koʻrsatilsin';
 
   @override
   String get puzzlePuzzles => 'Masalalar';
@@ -2277,7 +2280,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get puzzleThemeXRayAttack => 'Rentgen';
 
   @override
-  String get puzzleThemeXRayAttackDescription => 'Donaning raqib figurasi ortidagi katakka hujum qilishi yoki uni himoya qilishi.';
+  String get puzzleThemeXRayAttackDescription => 'Donaning raqib donasi ortidagi katakka hujum qilishi yoki uni himoya qilishi.';
 
   @override
   String get puzzleThemeZugzwang => 'Sugsvang';
@@ -2668,7 +2671,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get lossOr50MovesByPriorMistake => 'Avvalgi xato tufayli magʻlubiyat yoki 50 ta yurish qoidasi';
 
   @override
-  String get unknownDueToRounding => 'Ga‘laba/Mag‘lubiyat kafolatlanadi agarda oxirgi figurani olish yoki Syzygy jadvalidagi DTZ ning qiymatiga asosan aylanaga olingan peshka yurishidan keyin tavsiya etilgan yurishlar ketma‑ketligiga rioya qilingan bo‘linsa.';
+  String get unknownDueToRounding => 'Ga‘laba/Mag‘lubiyat kafolatlanadi agarda oxirgi donani olish yoki Syzygy jadvalidagi DTZ ning qiymatiga asosan aylanaga olingan piyoda yurishidan keyin tavsiya etilgan yurishlar ketma‑ketligiga rioya qilingan bo‘linsa.';
 
   @override
   String get allSet => 'Tayyor!';
@@ -2846,7 +2849,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get yesterday => 'Kecha';
 
   @override
-  String get minutesPerSide => 'Har bir tomonga berilgan vaqt, daqiqalarda';
+  String get minutesPerSide => 'Har bir tomonga beriladigan vaqt (daqiqalarda)';
 
   @override
   String get variant => 'Variant';
@@ -2867,7 +2870,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get correspondence => 'Yozishmali oʻyin';
 
   @override
-  String get daysPerTurn => 'Har bir yurish uchun kunlar soni';
+  String get daysPerTurn => 'Har bir yurish uchun beriladigan vaqt (kunlarda)';
 
   @override
   String get oneDay => 'Bir kun';
@@ -3152,7 +3155,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get send => 'Joʻnatish';
 
   @override
-  String get incrementInSeconds => 'Qoʻshimcha vaqt, soniyalarda';
+  String get incrementInSeconds => 'Vaqt qo\'shilishi (soniyalarda)';
 
   @override
   String get freeOnlineChess => 'Bepul onlayn shaxmat';
@@ -3591,7 +3594,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get editProfile => 'Profilni tahrirlash';
 
   @override
-  String get realName => 'Haqiqiy ism';
+  String get realName => 'Haqiqiy ismingiz';
 
   @override
   String get setFlair => 'Hisbelgingizni tanlang';
@@ -3603,7 +3606,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get youCanHideFlair => 'Butun saytda foydalanuvchi hisbelgilarini yashirish imkoniyati mavjud.';
 
   @override
-  String get biography => 'Biografiya';
+  String get biography => 'Tarjimai hol';
 
   @override
   String get countryRegion => 'Mamlakat yoki mintaqa';
@@ -3933,7 +3936,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get tools => 'Asboblar';
 
   @override
-  String get increment => 'Qoʻshimcha vaqt';
+  String get increment => 'Vaqt qo\'shilishi';
 
   @override
   String get error_unknown => 'Yaroqsiz qiymat';
@@ -4130,7 +4133,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get lichessTournaments => 'Lichess turnirlar';
 
   @override
-  String get tournamentFAQ => 'Arena turnirlari haqida TSS';
+  String get tournamentFAQ => 'Arena turnirlari haqida FAQ';
 
   @override
   String get timeBeforeTournamentStarts => 'Turnir boshlangunicha';
@@ -4390,6 +4393,12 @@ class AppLocalizationsUz extends AppLocalizations {
   String xLikesY(String param1, String param2) {
     return '$param1ʼga $param2 yoqdi';
   }
+
+  @override
+  String get like => 'Like';
+
+  @override
+  String get liked => 'Liked';
 
   @override
   String get quickPairing => 'Raqibni tez topish';
@@ -4762,7 +4771,7 @@ class AppLocalizationsUz extends AppLocalizations {
   }
 
   @override
-  String get inTheFAQ => 'TSS boʻlimida';
+  String get inTheFAQ => 'FAQ boʻlimida';
 
   @override
   String toReportSomeoneForCheatingOrBadBehavior(String param1) {
@@ -4787,6 +4796,9 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'Forum odob‑axloq qoidalari';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Forumda odob saqlang.';
 
   @override
   String get thisTopicIsArchived => 'Bu mavzu arxivlangan, unga endi javob yozib boʻlmaydi.';
@@ -5840,9 +5852,6 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get studyLike => 'Yoqdi';
-
-  @override
-  String get studyUnlike => 'Yoqmadi';
 
   @override
   String get studyNewTag => 'Yangi teg';

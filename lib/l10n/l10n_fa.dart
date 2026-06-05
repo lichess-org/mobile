@@ -916,6 +916,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get broadcastOfficialStandings => 'رده‌بندی رسمی';
 
   @override
+  String get broadcastRegulations => 'Regulations';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'گزینه‌های بیشتر در $param';
   }
@@ -4392,6 +4395,12 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
+  String get like => 'Like';
+
+  @override
+  String get liked => 'Liked';
+
+  @override
   String get quickPairing => 'رویارویی سریع';
 
   @override
@@ -4787,6 +4796,9 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'آداب انجمن';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Please be nice in the forum.';
 
   @override
   String get thisTopicIsArchived => 'این موضوع بایگانی شده است و دیگر نمی توان به آن پاسخ داد.';
@@ -5840,9 +5852,6 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get studyLike => 'پسندیدن';
-
-  @override
-  String get studyUnlike => 'نمی‌پسندم';
 
   @override
   String get studyNewTag => 'برچسب جدید';

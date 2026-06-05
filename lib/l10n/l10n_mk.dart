@@ -916,6 +916,9 @@ class AppLocalizationsMk extends AppLocalizations {
   String get broadcastOfficialStandings => 'Official standings';
 
   @override
+  String get broadcastRegulations => 'Regulations';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'Find more options on the $param.';
   }
@@ -4392,6 +4395,12 @@ class AppLocalizationsMk extends AppLocalizations {
   }
 
   @override
+  String get like => 'Like';
+
+  @override
+  String get liked => 'Liked';
+
+  @override
   String get quickPairing => 'Брзо спојување';
 
   @override
@@ -4787,6 +4796,9 @@ class AppLocalizationsMk extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'Форумски бон-тон';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Please be nice in the forum.';
 
   @override
   String get thisTopicIsArchived => 'Темата е архивирана и не дозволува нови објави.';
@@ -5840,9 +5852,6 @@ class AppLocalizationsMk extends AppLocalizations {
 
   @override
   String get studyLike => 'Like';
-
-  @override
-  String get studyUnlike => 'Unlike';
 
   @override
   String get studyNewTag => 'New tag';
