@@ -63,7 +63,7 @@ sealed class GameSeek with _$GameSeek {
       ),
       rated: account != null && setup.customRated,
       variant: setup.customVariant,
-      ratingRange: account != null ? setup.realTimeRatingRange(account) : null,
+      ratingRange: account != null ? setup.customRatingDelta : null,
     );
   }
 
