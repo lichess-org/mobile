@@ -1,6 +1,5 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -461,13 +460,9 @@ class _PgnTagsView extends ConsumerWidget {
                         final value = pgnHeaders[tag.tagName]!;
                         final url = tag.isLink ? tag.buildUrl(value) : null;
                         if (url != null) {
-                          return RichText(
-                            text: TextSpan(
-                              text: value,
-                              style: Styles.linkStyle,
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () => launchUrlString(url),
-                            ),
+                          return GestureDetector(
+                            onTap: () => launchUrlString(url),
+                            child: Text(value, style: Styles.linkStyle),
                           );
                         }
                         return Text(value.isEmpty ? '-' : value);
