@@ -37,6 +37,8 @@ const kLichessVapidPublicKey = String.fromEnvironment(
 const kLichessDevUser = String.fromEnvironment('LICHESS_DEV_USER', defaultValue: 'lichess');
 const kLichessDevPassword = String.fromEnvironment('LICHESS_DEV_PASSWORD');
 
+const kLichessCustomUriSchemeName = 'org.lichess.mobile';
+
 const kLichessClientId = 'lichess_mobile';
 
 const kSRIStorageKey = 'socket_random_identifier';

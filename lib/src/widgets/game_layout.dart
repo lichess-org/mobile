@@ -51,7 +51,6 @@ class GameLayout extends ConsumerStatefulWidget {
     required this.orientation,
     this.boardParams,
     this.controllerParams,
-    this.lastMove,
     this.boardSettingsOverrides,
     this.topTable = const SizedBox.shrink(),
     this.bottomTable = const SizedBox.shrink(),
@@ -83,7 +82,6 @@ class GameLayout extends ConsumerStatefulWidget {
     : orientation = Side.white,
       boardParams = GameBoardParams.emptyBoard,
       controllerParams = null,
-      lastMove = null,
       boardSettingsOverrides = null,
       topTable = const SizedBox.shrink(),
       bottomTable = const SizedBox.shrink(),
@@ -118,9 +116,6 @@ class GameLayout extends ConsumerStatefulWidget {
   final ControllerBoardParams? controllerParams;
 
   final Side orientation;
-
-  /// Last move highlight for readonly boards. For interactive boards, use [InteractiveBoardParams.lastMove].
-  final Move? lastMove;
 
   final BoardSettingsOverrides? boardSettingsOverrides;
 
@@ -321,12 +316,12 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
           castlingMethod: boardPrefs.castlingMethod,
           boardHighlights: boardPrefs.boardHighlights,
         ),
-      ReadonlyBoardParams(:final fen) => GameData(
+      ReadonlyBoardParams(:final fen, :final lastMove) => GameData(
         fen: fen,
         playerSide: PlayerSide.none,
         sideToMove: _sideToMoveFromFen(fen),
         validMoves: const <Square, Set<Square>>{},
-        lastMove: widget.lastMove,
+        lastMove: lastMove,
       ),
     };
   }

@@ -287,31 +287,61 @@ class AppLocalizationsDe extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Oder importiere eine PGN-Datei';
 
   @override
+  String get variantStandard => 'Standard';
+
+  @override
   String get variantStandardTitle => 'Standardschachregeln (FIDE)';
+
+  @override
+  String get variantChess960 => 'Schach960';
 
   @override
   String get variantChess960Title => 'Die Startposition der Figuren auf der Grundreihe wird zufällig ermittelt.';
 
   @override
+  String get variantKingOfTheHill => 'King of the Hill';
+
+  @override
   String get variantKingOfTheHillTitle => 'Bring deinen König in die Mitte, um die Partie zu gewinnen.';
+
+  @override
+  String get variantThreeCheck => 'Three-Check';
 
   @override
   String get variantThreeCheckTitle => 'Biete deinem Gegner dreimal Schach, um diese Partie zu gewinnen.';
 
   @override
+  String get variantAntichess => 'Antischach';
+
+  @override
   String get variantAntichessTitle => 'Verliere alle deine Figuren (oder werde Patt gesetzt), um diese Partie zu gewinnen.';
+
+  @override
+  String get variantAtomic => 'Atomschach';
 
   @override
   String get variantAtomicTitle => 'Jage den gegnerischen König in die Luft, um zu gewinnen.';
 
   @override
+  String get variantHorde => 'Horde';
+
+  @override
   String get variantHordeTitle => 'Die eine Seite besitzt eine große Anzahl an Bauern, die andere eine normale Armee.';
+
+  @override
+  String get variantRacingKings => 'Racing Kings';
 
   @override
   String get variantRacingKingsTitle => 'Bringe deinen König auf die andere Seite des Bretts, um zu gewinnen.';
 
   @override
+  String get variantCrazyhouse => 'Crazyhouse';
+
+  @override
   String get variantCrazyhouseTitle => 'Geschlagene Figuren können, statt eines regulären Zuges, auf das Brett zurückgebracht werden.';
+
+  @override
+  String get variantFromPosition => 'Von Stellung';
 
   @override
   String get variantFromPositionTitle => 'Standardschach mit einer selbstgewählten Stellung';

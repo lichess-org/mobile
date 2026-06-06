@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
+import 'package:lichess_mobile/src/view/auth/sign_in_error.dart';
 import 'package:lichess_mobile/src/view/message/contacts_screen.dart';
 import 'package:lichess_mobile/src/view/settings/settings_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
@@ -84,6 +85,8 @@ class _AccountMenuScreenState extends ConsumerState<AccountMenuScreen> with Widg
     final isOnline = ref.watch(onlineStatusProvider).value ?? false;
     final signInState = ref.watch(signInMutation);
     final signOutState = ref.watch(signOutMutation);
+
+    ref.listen(signInMutation, (_, next) => showSignInErrorSnackBar(context, next));
     final account = ref.watch(accountProvider);
     final authUser = ref.watch(authControllerProvider);
     final kidMode = account.value?.kid ?? false;
@@ -99,193 +102,156 @@ class _AccountMenuScreenState extends ConsumerState<AccountMenuScreen> with Widg
             IconButton(icon: const Icon(Icons.close), onPressed: () => Navigator.of(context).pop()),
         ],
       ),
-      body: Column(
+      body: ListView(
         children: [
-          Expanded(
-            child: ListView(
+          if (user != null)
+            ListSection(
               children: [
-                if (user != null)
-                  ListSection(
-                    children: [
-                      ListTile(
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                        leading: switch (account) {
-                          AsyncData(:final value) =>
-                            value == null
-                                ? const Icon(Icons.account_circle_outlined, size: 30)
-                                : CircleAvatar(
-                                    radius: 20,
-                                    foregroundImage: value.flair != null && !_errorLoadingFlair
-                                        ? HttpNetworkImage(lichessFlairSrc(value.flair!), client)
-                                        : null,
-                                    onForegroundImageError: value.flair != null
-                                        ? (error, _) => setState(() => _errorLoadingFlair = true)
-                                        : null,
-                                    backgroundColor: value.flair == null || _errorLoadingFlair
-                                        ? null
-                                        : ColorScheme.of(context).surfaceContainer,
-                                    child: value.flair == null || _errorLoadingFlair
-                                        ? Text(value.initials)
-                                        : null,
-                                  ),
-                          _ => const Icon(Icons.account_circle_outlined, size: 30),
-                        },
-                        trailing: Theme.of(context).platform == TargetPlatform.iOS
-                            ? const CupertinoListTileChevron()
-                            : null,
-                        title: AutoSizeText(
-                          user.name,
-                          style: Styles.callout,
-                          maxLines: 1,
-                          minFontSize: 14,
-                          maxFontSize: 18,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        enabled: isOnline,
-                        onTap: () {
-                          ref.invalidate(accountProvider);
-                          _navigate(context, ProfileScreen.buildRoute());
-                        },
-                      ),
-                      if (kidMode)
-                        ListTile(
-                          textColor: Theme.of(context).colorScheme.primary,
-                          iconColor: Theme.of(context).colorScheme.primary,
-                          leading: const Icon(Symbols.sentiment_satisfied, weight: 600),
-                          title: Text(
-                            context.l10n.kidModeIsEnabled,
-                            style: const TextStyle(fontWeight: FontWeight.w600),
-                          ),
-                          onTap: () {
-                            _pendingKidModeRefresh = true;
-                            launchUrl(lichessUri('/account/kid'));
-                          },
-                        ),
-                    ],
-                  )
-                else ...[
-                  Center(
-                    child: FilledButton(
-                      onPressed: isOnline
-                          ? switch (signInState) {
-                              MutationPending() => null,
-                              _ => () {
-                                signInMutation.run(ref, (tsx) async {
-                                  await tsx.get(authControllerProvider.notifier).signIn();
-                                });
-                              },
-                            }
-                          : null,
-                      child: Text(context.l10n.signIn),
-                    ),
+                ListTile(
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  leading: switch (account) {
+                    AsyncData(:final value) =>
+                      value == null
+                          ? const Icon(Icons.account_circle_outlined, size: 30)
+                          : CircleAvatar(
+                              radius: 20,
+                              foregroundImage: value.flair != null && !_errorLoadingFlair
+                                  ? HttpNetworkImage(lichessFlairSrc(value.flair!), client)
+                                  : null,
+                              onForegroundImageError: value.flair != null
+                                  ? (error, _) => setState(() => _errorLoadingFlair = true)
+                                  : null,
+                              backgroundColor: value.flair == null || _errorLoadingFlair
+                                  ? null
+                                  : ColorScheme.of(context).surfaceContainer,
+                              child: value.flair == null || _errorLoadingFlair
+                                  ? Text(value.initials)
+                                  : null,
+                            ),
+                    _ => const Icon(Icons.account_circle_outlined, size: 30),
+                  },
+                  trailing: Theme.of(context).platform == TargetPlatform.iOS
+                      ? const CupertinoListTileChevron()
+                      : null,
+                  title: AutoSizeText(
+                    user.name,
+                    style: Styles.callout,
+                    maxLines: 1,
+                    minFontSize: 14,
+                    maxFontSize: 18,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                ],
-                ListSection(
-                  children: [
-                    if (user != null && account.hasValue && !kidMode)
-                      ListTile(
-                        leading: Badge.count(
-                          isLabelVisible: unreadMessages > 0,
-                          count: unreadMessages,
-                          child: const Icon(Icons.mail_outline),
-                        ),
-                        trailing: Theme.of(context).platform == TargetPlatform.iOS
-                            ? const CupertinoListTileChevron()
-                            : null,
-                        title: Text(context.l10n.inbox),
-                        enabled: isOnline,
-                        onTap: () {
-                          _navigate(context, ContactsScreen.buildRoute());
-                        },
-                      ),
-                    ListTile(
-                      leading: const Icon(Icons.settings_outlined),
-                      trailing: Theme.of(context).platform == TargetPlatform.iOS
-                          ? const CupertinoListTileChevron()
-                          : null,
-                      title: Text(context.l10n.settingsSettings),
-                      onTap: () {
-                        _navigate(context, SettingsScreen.buildRoute());
-                      },
-                    ),
-                    if (user != null)
-                      switch (signOutState) {
-                        MutationPending() => const ListTile(
-                          leading: Icon(Icons.logout_outlined),
-                          enabled: false,
-                          title: Center(child: ButtonLoadingIndicator()),
-                        ),
-                        _ => ListTile(
-                          leading: const Icon(Icons.logout_outlined),
-                          title: Text(context.l10n.logOut),
-                          enabled: isOnline,
-                          onTap: () => _showSignOutConfirmDialog(context, ref),
-                        ),
-                      },
-                  ],
+                  enabled: isOnline,
+                  onTap: () {
+                    ref.invalidate(accountProvider);
+                    _navigate(context, ProfileScreen.buildRoute());
+                  },
                 ),
-                ListSection(
-                  children: [
-                    if (Theme.of(context).platform == TargetPlatform.android)
-                      ListTile(
-                        leading: Icon(
-                          LichessIcons.patron,
-                          semanticLabel: context.l10n.patronLichessPatron,
-                        ),
-                        title: Text(context.l10n.patronDonate),
-                        enabled: isOnline,
-                        onTap: () => launchUrl(Uri.parse('https://lichess.org/patron')),
-                      ),
-                    ListTile(
-                      leading: const Icon(Icons.info_outline),
-                      trailing: Theme.of(context).platform == TargetPlatform.iOS
-                          ? const CupertinoListTileChevron()
-                          : null,
-                      title: Text(context.l10n.about),
-                      onTap: () {
-                        _navigate(context, AboutScreen.buildRoute());
-                      },
+                if (kidMode)
+                  ListTile(
+                    textColor: Theme.of(context).colorScheme.primary,
+                    iconColor: Theme.of(context).colorScheme.primary,
+                    leading: const Icon(Symbols.sentiment_satisfied, weight: 600),
+                    title: Text(
+                      context.l10n.kidModeIsEnabled,
+                      style: const TextStyle(fontWeight: FontWeight.w600),
                     ),
-                  ],
-                ),
-                const SocketPingRatingListTile(),
+                    onTap: () {
+                      _pendingKidModeRefresh = true;
+                      launchUrl(lichessUri('/account/kid'));
+                    },
+                  ),
               ],
-            ),
-          ),
-          SafeArea(
-            top: false,
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                vertical: Theme.of(context).platform == TargetPlatform.iOS ? 8.0 : 16.0,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      textStyle: TextTheme.of(context).bodyMedium,
-                      minimumSize: Size.zero,
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                    ),
-                    onPressed: () => launchUrl(Uri.parse('https://lichess.org/terms-of-service')),
-                    child: Text(context.l10n.termsOfService),
-                  ),
-                  Text('  •  ', style: TextTheme.of(context).bodyMedium),
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      textStyle: TextTheme.of(context).bodyMedium,
-                      minimumSize: Size.zero,
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                    ),
-                    onPressed: () => launchUrl(Uri.parse('https://lichess.org/privacy')),
-                    child: Text(context.l10n.privacyPolicy),
-                  ),
-                ],
+            )
+          else ...[
+            Center(
+              child: FilledButton(
+                onPressed: isOnline
+                    ? switch (signInState) {
+                        MutationPending() => null,
+                        _ => () {
+                          // The error is surfaced via the [ref.listen] above;
+                          // ignore the rethrown future so it does not become an
+                          // unhandled exception.
+                          signInMutation.run(ref, (tsx) async {
+                            await tsx.get(authControllerProvider.notifier).signIn();
+                          }).ignore();
+                        },
+                      }
+                    : null,
+                child: Text(context.l10n.signIn),
               ),
             ),
+          ],
+          ListSection(
+            children: [
+              if (user != null && account.hasValue && !kidMode)
+                ListTile(
+                  leading: Badge.count(
+                    isLabelVisible: unreadMessages > 0,
+                    count: unreadMessages,
+                    child: const Icon(Icons.mail_outline),
+                  ),
+                  trailing: Theme.of(context).platform == TargetPlatform.iOS
+                      ? const CupertinoListTileChevron()
+                      : null,
+                  title: Text(context.l10n.inbox),
+                  enabled: isOnline,
+                  onTap: () {
+                    _navigate(context, ContactsScreen.buildRoute());
+                  },
+                ),
+              ListTile(
+                leading: const Icon(Icons.settings_outlined),
+                trailing: Theme.of(context).platform == TargetPlatform.iOS
+                    ? const CupertinoListTileChevron()
+                    : null,
+                title: Text(context.l10n.settingsSettings),
+                onTap: () {
+                  _navigate(context, SettingsScreen.buildRoute());
+                },
+              ),
+              if (user != null)
+                switch (signOutState) {
+                  MutationPending() => const ListTile(
+                    leading: Icon(Icons.logout_outlined),
+                    enabled: false,
+                    title: Center(child: ButtonLoadingIndicator()),
+                  ),
+                  _ => ListTile(
+                    leading: const Icon(Icons.logout_outlined),
+                    title: Text(context.l10n.logOut),
+                    enabled: isOnline,
+                    onTap: () => _showSignOutConfirmDialog(context, ref),
+                  ),
+                },
+            ],
           ),
+          ListSection(
+            children: [
+              if (Theme.of(context).platform == TargetPlatform.android)
+                ListTile(
+                  leading: Icon(
+                    LichessIcons.patron,
+                    semanticLabel: context.l10n.patronLichessPatron,
+                  ),
+                  title: Text(context.l10n.patronDonate),
+                  enabled: isOnline,
+                  onTap: () => launchUrl(Uri.parse('https://lichess.org/patron')),
+                ),
+              ListTile(
+                leading: const Icon(Icons.info_outline),
+                trailing: Theme.of(context).platform == TargetPlatform.iOS
+                    ? const CupertinoListTileChevron()
+                    : null,
+                title: Text(context.l10n.about),
+                onTap: () {
+                  _navigate(context, AboutScreen.buildRoute());
+                },
+              ),
+            ],
+          ),
+          const SocketPingRatingListTile(),
         ],
       ),
     );

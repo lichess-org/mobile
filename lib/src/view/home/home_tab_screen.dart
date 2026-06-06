@@ -36,6 +36,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/account/account_menu.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
+import 'package:lichess_mobile/src/view/auth/sign_in_error.dart';
 import 'package:lichess_mobile/src/view/correspondence/offline_correspondence_game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
@@ -502,13 +503,17 @@ class _SignInWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final signInState = ref.watch(signInMutation);
 
+    ref.listen(signInMutation, (_, next) => showSignInErrorSnackBar(context, next));
+
     return FilledButton(
       onPressed: switch (signInState) {
         MutationPending() => null,
         _ => () {
+          // The error is surfaced via the [ref.listen] above; ignore the
+          // rethrown future so it does not become an unhandled exception.
           signInMutation.run(ref, (tsx) async {
             await tsx.get(authControllerProvider.notifier).signIn();
-          });
+          }).ignore();
         },
       },
       child: Text(context.l10n.signIn),

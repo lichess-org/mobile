@@ -287,31 +287,61 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Or import a PGN file';
 
   @override
+  String get variantStandard => 'Normala';
+
+  @override
   String get variantStandardTitle => 'Normal reguloj ŝakaj (FIDE)';
+
+  @override
+  String get variantChess960 => 'Ŝako 960';
 
   @override
   String get variantChess960Title => 'La komenca pozicio de la pecoj en la unua vico estas hazarda.';
 
   @override
+  String get variantKingOfTheHill => 'Reĝo de la monteto';
+
+  @override
   String get variantKingOfTheHillTitle => 'Portu vian reĝon al la centro por venki la ludon.';
+
+  @override
+  String get variantThreeCheck => 'Tri ŝakoj';
 
   @override
   String get variantThreeCheckTitle => 'Ŝakigu vian kontraŭulon tri fojojn por venki la ludon.';
 
   @override
+  String get variantAntichess => 'Antiŝako';
+
+  @override
   String get variantAntichessTitle => 'Perdu ĉiujn viajn pecojn (aŭ kun via reĝo en pato) por venki la ludon.';
+
+  @override
+  String get variantAtomic => 'Atoma';
 
   @override
   String get variantAtomicTitle => 'Eksplodigu la reĝon de la kontraŭulo por venki la ludon.';
 
   @override
+  String get variantHorde => 'Trupa';
+
+  @override
   String get variantHordeTitle => 'Unu flanko havas amason da peonoj, la alia flanko normalan pecaron.';
+
+  @override
+  String get variantRacingKings => 'Konkuro reĝa';
 
   @override
   String get variantRacingKingsTitle => 'Portu vian reĝon al la alia flanko de la tabulo por venki.';
 
   @override
+  String get variantCrazyhouse => 'Frenezeja';
+
+  @override
   String get variantCrazyhouseTitle => 'Kaptitaj pecoj povas esti metitaj denove en la tabulon, anstataŭ fari movon.';
+
+  @override
+  String get variantFromPosition => 'Ekde specifa pozicio';
 
   @override
   String get variantFromPositionTitle => 'Normala ŝako, komencante el specifa pozicio';
@@ -368,8 +398,8 @@ class AppLocalizationsEo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Ludis $count $param2 ludojn',
-      one: 'Ludis $count $param2 ludon',
+      other: '$count $param2 ludoj luditaj',
+      one: '$count $param2 ludo ludita',
     );
     return '$_temp0';
   }
@@ -390,8 +420,8 @@ class AppLocalizationsEo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Ludis $count movojn',
-      one: 'Ludis $count movon',
+      other: '$count movoj luditaj',
+      one: '$count movo ludita',
     );
     return '$_temp0';
   }
@@ -1104,7 +1134,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get challengeChallengeToPlay => 'Defii al nova ludo';
 
   @override
-  String get challengeChallengeDeclined => 'Defio malakceptita';
+  String get challengeChallengeDeclined => 'Defio rifuzita.';
 
   @override
   String get challengeChallengeAccepted => 'Defio akceptita!';
@@ -1254,7 +1284,7 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String perfStatPerfStats(String param) {
-    return '$param statikoj';
+    return 'Statistikoj de $param';
   }
 
   @override
@@ -3473,7 +3503,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get inappropriateNameWarning => 'Se vi uzas maltaŭgan aŭ maldecan nomon, ni fermos vian konton.';
 
   @override
-  String get emptyTournamentName => 'Se vi lasas ĝin malplena, ni uzos la nomon de fama ŝakludisto.';
+  String get emptyTournamentName => 'Se vi lasas ĝin malplena, ni uzos la nomon de fama ŝakludanto.';
 
   @override
   String get makePrivateTournament => 'Faru la turniron privata kaj restriktu la aliron per pasvorto';

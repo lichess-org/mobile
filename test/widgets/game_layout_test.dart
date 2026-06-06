@@ -342,11 +342,11 @@ void main() {
           valueListenable: boardNotifier,
           builder: (context, value, _) => GameLayout(
             orientation: Side.white,
-            lastMove: value.lastMove,
             boardParams: GameBoardParams.readonly(
               fen: value.fen,
               variant: Variant.standard,
               pockets: null,
+              lastMove: value.lastMove,
             ),
           ),
         ),

@@ -287,31 +287,61 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Tai tuo PGN-tiedosto';
 
   @override
+  String get variantStandard => 'Normaali';
+
+  @override
   String get variantStandardTitle => 'Shakin perussäännöt (FIDE)';
+
+  @override
+  String get variantChess960 => 'Shakki960';
 
   @override
   String get variantChess960Title => 'Takarivin nappuloiden järjestys pelin alussa on satunnainen.';
 
   @override
+  String get variantKingOfTheHill => 'Kukkulan kuningas';
+
+  @override
   String get variantKingOfTheHillTitle => 'Voita peli tuomalla kuninkaasi keskustaan.';
+
+  @override
+  String get variantThreeCheck => 'Kolme shakkausta';
 
   @override
   String get variantThreeCheckTitle => 'Voita peli shakkaamalla vastustajaa kolmesti.';
 
   @override
+  String get variantAntichess => 'Antishakki';
+
+  @override
   String get variantAntichessTitle => 'Voita peli menettämällä kaikki nappulasi (tai pääsemällä pattiin).';
+
+  @override
+  String get variantAtomic => 'Atomishakki';
 
   @override
   String get variantAtomicTitle => 'Voita peli räjäyttämällä vastustajasi kuningas.';
 
   @override
+  String get variantHorde => 'Lauma';
+
+  @override
   String get variantHordeTitle => 'Yhdellä pelaajalla on suuri määrä sotilaita, toisella on normaali armeija.';
+
+  @override
+  String get variantRacingKings => 'Kuninkaiden kilpajuoksu';
 
   @override
   String get variantRacingKingsTitle => 'Voita peli viemällä kuninkaasi laudan toiseen päähän.';
 
   @override
+  String get variantCrazyhouse => 'Crazyhouse';
+
+  @override
   String get variantCrazyhouseTitle => 'Lyödyn nappulan pudottaminen takaisin laudalle on siirto yhtä lailla kuin nappulan siirtäminenkin.';
+
+  @override
+  String get variantFromPosition => 'Asemasta';
 
   @override
   String get variantFromPositionTitle => 'Normaalia shakkia itse määriteltävän aseman pohjalta';
@@ -924,7 +954,7 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
-  String get broadcastWebmastersPage => 'webmasterin sivulta';
+  String get broadcastWebmastersPage => 'Webmaster-sivulta';
 
   @override
   String get broadcastEmbedThisBroadcast => 'Upota tämä lähetys sivustoosi';

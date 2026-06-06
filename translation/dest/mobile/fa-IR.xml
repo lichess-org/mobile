@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="account" comment="Title for the account screen.&#10;&#10;This is just a title for the account, NOT account preferences.">حساب</string>
   <string name="accountPreferences" comment="Displayed on settings screen.&#10;&#10;These preferences are applied to your Lichess account and will be used across all devices. They are not mobile-specific and will be synced with the server.">ترجیح‌های حساب</string>
   <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">این ترجیح‌ها به حساب Lichess تان اعمال می‌شود و در همه دستگاه‌ها استفاده خواهد شد.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">همه بازی‌ها</string>
@@ -20,7 +21,7 @@
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">برای دیدن این برگه باید وارد شده باشید.</string>
   <string name="newGame" comment="New game button in OTB and play against offline computer features">بازی جدید</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">بدون نتیجه</string>
-  <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">لطفاً توجه کنید که همه آرَنگ‌های برنامهٔ قدیمی یا وبگاه اکنون در دسترس نیستند، اما ما همواره در حال افزودنِ آرَنگ‌هاییم.</string>
+  <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">لطفاً توجه کنید که همه آرَنگ‌های بَرکِ قدیمی یا وبگاه اکنون در دسترس نیستند، اما ما همواره در حال افزودنِ آرَنگ‌هاییم.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">شما هیچ کاربری را نمی‌دنبالید.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">باشه</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">سَرِ میز</string>
@@ -43,7 +44,7 @@
   <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">هدفِ مهرهٔ کشیده</string>
   <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">دایره</string>
   <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">مربع</string>
-  <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">اَبزاره‌های خانه</string>
+  <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">اَبزارک‌های خانه</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">حالت غوطه‌ور</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">پنهان کردن رابط کاربری سیستم موقع بازی. اگر ژست‌های حرکتی سیستم (مثل دکمهٔ بازگشت) در لبه‌های صفحه مزاحمتان است، از این گزینه استفاده کنید. این تنظیم برای صفحه‌های بازی و معما اعمال می‌شود.</string>
   <string name="settingsMaterialDifferenceCapturedPieces" comment="A value of the material difference settings choice (to show all captured pieces instead of material difference).">مهره‌های زده</string>
@@ -75,18 +76,18 @@
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">وَرتای %s در این نسخه پشتیبانی نمی‌شود.</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">در انتظار آمدن حریف...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">تماشا</string>
-  <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">به نرم‌افزار lichess خوش آمدید</string>
-  <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">مشاهده بازی</string>
-  <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">نکته: می‌توانید ویجت های بیشتری را به صفحه‌ی اصلی اضافه کرده و یا آنهایی را که نیاز ندارید حذف کنید!</string>
+  <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">به بَرکِ lichess خوش آمدید!</string>
+  <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">دیدنِ بازی</string>
+  <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">نکته: می‌توانید ابزارک‌های بیشتری به صفحهٔ خانه بیفزایید یا آنهایی را که نیاز ندارید بحذفید!</string>
   <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">رد کردن</string>
   <string name="customizeButton" comment="Text of a button, so translation should be short.">شخصی سازی</string>
-  <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">تهدید رو نشان نده</string>
-  <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word">کامل شده</string>
+  <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">توقفِ نمایشِ تهدید</string>
+  <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word">تکمیلیده</string>
   <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">به صفحه‌ی من برو</string>
   <string name="displayModeCompact" comment="">فشرده</string>
   <string name="displayModeDetailed" comment="">با جزئیات</string>
   <string name="openingExplorerNotAvailableOffline" comment="">پویشگرِ گشایش، برون‌خط امکان‌پذیر نیست.</string>
   <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">چالش ایجاد شد: وقتی بازی شروع شود شما آگاهنده می‌شوید.\nمی‌توانید از زبانهٔ خانه به آن دسترسی داشته باشید.</string>
   <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">پیشین</string>
-  <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">یا یک فایل PGN را بارگذاری کنید</string>
+  <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">یا درونبُردِ یک پَروَنِ PGN</string>
 </resources>

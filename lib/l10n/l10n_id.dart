@@ -287,31 +287,61 @@ class AppLocalizationsId extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Or import a PGN file';
 
   @override
+  String get variantStandard => 'Standar';
+
+  @override
   String get variantStandardTitle => 'Aturan catur standar (FIDE)';
+
+  @override
+  String get variantChess960 => 'Catur960';
 
   @override
   String get variantChess960Title => 'Posisi awal buah-buah di baris belakang diacak.';
 
   @override
+  String get variantKingOfTheHill => 'Raja di Tengah';
+
+  @override
   String get variantKingOfTheHillTitle => 'Bawa raja Anda ke tengah papan untuk memenangkan permainan.';
+
+  @override
+  String get variantThreeCheck => 'Tiga Skak';
 
   @override
   String get variantThreeCheckTitle => 'Skak lawan 3 kali untuk memenangkan permainan.';
 
   @override
+  String get variantAntichess => 'Anticatur';
+
+  @override
   String get variantAntichessTitle => 'Kehilangan semua buah Anda (atau mengalami langkah buntu) untuk memenangkan permainan.';
+
+  @override
+  String get variantAtomic => 'Atomik';
 
   @override
   String get variantAtomicTitle => 'Ledakkan raja lawan untuk menang.';
 
   @override
+  String get variantHorde => 'Gerombolan';
+
+  @override
   String get variantHordeTitle => 'Satu sisi memiliki banyak pion, sisi lainnya memiliki pasukan normal.';
+
+  @override
+  String get variantRacingKings => 'Balapan Raja';
 
   @override
   String get variantRacingKingsTitle => 'Bawa raja Anda ke sisi seberang papan untuk menang.';
 
   @override
+  String get variantCrazyhouse => 'Crazyhouse';
+
+  @override
   String get variantCrazyhouseTitle => 'Buah yang ditangkap dapat diletakkan kembali ke papan alih-alih menggerakkan buah.';
+
+  @override
+  String get variantFromPosition => 'Dari Posisi';
 
   @override
   String get variantFromPositionTitle => 'Catur standar dari posisi kustom';

@@ -1,23 +1,48 @@
-import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
 import 'package:crypto/crypto.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
-import 'package:lichess_mobile/src/model/auth/oauth_callback.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:logging/logging.dart';
-import 'package:url_launcher/url_launcher.dart';
 
-const kLichessUriScheme = 'org.lichess.mobile';
-const kOAuthRedirectUriHost = 'login-callback';
-const kOAuthRedirectUri = '$kLichessUriScheme://$kOAuthRedirectUriHost';
+/// Host of the custom URI scheme callback. Must stay in sync with the callback activity intent-filter in `android/app/src/main/AndroidManifest.xml`.
+const _kOAuthCustomSchemeCallbackHost = 'login-callback';
+
+/// The custom URI scheme redirect for OAuth. Used on iOS and for dev/staging hosts where App Links aren't verified.
+const kOAuthCustomSchemeRedirectUri =
+    '$kLichessCustomUriSchemeName://$_kOAuthCustomSchemeCallbackHost';
 const oauthScopes = ['web:mobile'];
+
+/// Host the app claims via verified Android App Links / iOS Universal Links. The HTTPS OAuth
+/// callback is only valid on this host; against any other host (dev/staging) the custom URI scheme
+/// is used instead.
+const _appLinkVerifiedHost = 'lichess.org';
+
+/// Path of the HTTPS OAuth redirect/callback. Must stay in sync with:
+///  - the redirect URI registered for the `lichess_mobile` client on the lichess server,
+///  - the App Link intent-filter in `android/app/src/main/AndroidManifest.xml`,
+///  - the `apple-app-site-association` entry served by lichess.org.
+const kOAuthHttpsCallbackPath = '/account/oauth/mobile-callback';
+const _oauthHttpsRedirectUri = 'https://$_appLinkVerifiedHost$kOAuthHttpsCallbackPath';
+
+/// Thrown when the user dismisses the OAuth session before completing it.
+///
+/// This is distinct from a genuine sign-in failure: the UI should silently
+/// ignore it rather than surfacing an error.
+class SignInCancelledException implements Exception {
+  const SignInCancelledException();
+
+  @override
+  String toString() => 'Sign-in was cancelled.';
+}
 
 final authRepositoryProvider = Provider<AuthRepository>((Ref ref) {
   return AuthRepository(ref);
@@ -34,75 +59,55 @@ class AuthRepository {
 
   /// Sign in with Lichess using OAuth 2.0 PKCE.
   ///
-  /// Opens an in-app browser (or fallback to the system default browser) to the Lichess
-  /// authorization page.
-  /// After the user authorizes, the browser redirects to [kOAuthRedirectUri] which
-  /// is caught by the app links handler and forwarded to [oauthCallbackProvider].
+  /// Opens a system auth session (Chrome Auth/Custom Tab on Android,
+  /// `ASWebAuthenticationSession` on iOS) to the Lichess authorization page and waits for the
+  /// redirect back to the app.
   Future<AuthUser> signIn() async {
     final codeVerifier = _generateCodeVerifier();
     final codeChallenge = _generateCodeChallenge(codeVerifier);
     final state = _generateState();
 
-    final authUrl = lichessUri('/oauth').replace(
-      queryParameters: {
-        'response_type': 'code',
-        'client_id': kLichessClientId,
-        'redirect_uri': kOAuthRedirectUri,
-        'scope': oauthScopes.join(' '),
-        'code_challenge': codeChallenge,
-        'code_challenge_method': 'S256',
-        'state': state,
-      },
-    );
+    // Pick the OAuth callback transport. HTTPS App Links are only verified for
+    // [_appLinkVerifiedHost] and are used on Android, where Chrome unreliably hands off the
+    // custom-scheme redirect. iOS — where ASWebAuthenticationSession captures the custom scheme
+    // directly — and all dev/staging hosts keep the custom URI scheme.
+    final useHttpsCallback =
+        defaultTargetPlatform == TargetPlatform.android && kLichessHost == _appLinkVerifiedHost;
+    final redirectUri = useHttpsCallback ? _oauthHttpsRedirectUri : kOAuthCustomSchemeRedirectUri;
+    final callbackUrlScheme = useHttpsCallback ? 'https' : kLichessCustomUriSchemeName;
 
-    final launched = await launchUrl(authUrl, mode: .inAppBrowserView);
-    if (!launched) {
-      throw Exception('Could not open browser for authentication.');
+    final authUrl = lichessUri('/oauth', {
+      'response_type': 'code',
+      'client_id': kLichessClientId,
+      'redirect_uri': redirectUri,
+      'scope': oauthScopes.join(' '),
+      'code_challenge': codeChallenge,
+      'code_challenge_method': 'S256',
+      'state': state,
+    });
+
+    final String callbackUrl;
+    try {
+      callbackUrl = await FlutterWebAuth2.authenticate(
+        url: authUrl.toString(),
+        callbackUrlScheme: callbackUrlScheme,
+        options: FlutterWebAuth2Options(
+          httpsHost: useHttpsCallback ? _appLinkVerifiedHost : null,
+          httpsPath: useHttpsCallback ? kOAuthHttpsCallbackPath : null,
+        ),
+      );
+    } on PlatformException catch (e) {
+      // The user dismissed the auth session before completing it.
+      if (e.code == 'CANCELED') {
+        throw const SignInCancelledException();
+      }
+      rethrow;
     }
 
-    final callbackCompleter = Completer<Uri>();
+    final callbackUri = Uri.parse(callbackUrl);
 
-    // Listen for the redirect callback URI from the browser.
-    // Mismatched URIs (stale callbacks, unrelated deep links) are silently ignored and the listener
-    // keeps waiting.
-    final callbackSub = _ref
-        .read(oauthCallbackProvider)
-        .stream
-        .listen(
-          (uri) {
-            if (!callbackCompleter.isCompleted &&
-                uri.scheme == kLichessUriScheme &&
-                uri.host == kOAuthRedirectUriHost &&
-                uri.queryParameters['state'] == state) {
-              callbackCompleter.complete(uri);
-            }
-          },
-          onError: (Object error) {
-            if (!callbackCompleter.isCompleted) {
-              callbackCompleter.completeError(error);
-            }
-          },
-        );
-
-    // Cancel the flow when the user dismisses the browser without completing auth. When a redirect
-    // succeeds, the callback URI arrives in Dart before (or very shortly after) the resumed
-    // lifecycle event — a short delay prevents a false cancellation in the success path.
-    final lifecycleListener = AppLifecycleListener(
-      onResume: () => Future<void>.delayed(const Duration(milliseconds: 300), () {
-        if (!callbackCompleter.isCompleted) {
-          callbackCompleter.completeError(Exception('Sign-in was cancelled.'));
-        }
-      }),
-    );
-
-    final Uri callbackUri;
-    try {
-      callbackUri = await callbackCompleter.future.timeout(const Duration(minutes: 5));
-    } finally {
-      // Dismiss the in-app browser in all cases (no-op if already closed).
-      unawaited(closeInAppWebView());
-      unawaited(callbackSub.cancel());
-      lifecycleListener.dispose();
+    if (callbackUri.queryParameters['state'] != state) {
+      throw Exception('OAuth state mismatch.');
     }
 
     final error = callbackUri.queryParameters['error'];
@@ -125,7 +130,7 @@ class AuthRepository {
         'grant_type': 'authorization_code',
         'code': code,
         'code_verifier': codeVerifier,
-        'redirect_uri': kOAuthRedirectUri,
+        'redirect_uri': redirectUri,
         'client_id': kLichessClientId,
       },
       mapper: (json) => json,

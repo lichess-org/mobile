@@ -287,31 +287,61 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileOrImportPgnFile => 'O importa un file PGN';
 
   @override
+  String get variantStandard => 'Standard';
+
+  @override
   String get variantStandardTitle => 'Regole standard degli scacchi (FIDE)';
+
+  @override
+  String get variantChess960 => 'Scacchi960';
 
   @override
   String get variantChess960Title => 'La posizione di partenza dei pezzi nelle traverse 1 e 8 è casuale.';
 
   @override
+  String get variantKingOfTheHill => 'King of the Hill';
+
+  @override
   String get variantKingOfTheHillTitle => 'Porta il tuo Re al centro per vincere la partita.';
+
+  @override
+  String get variantThreeCheck => 'Three-Check';
 
   @override
   String get variantThreeCheckTitle => 'Dai scacco 3 volte al tuo avversario per vincere la partita.';
 
   @override
+  String get variantAntichess => 'Antichess';
+
+  @override
   String get variantAntichessTitle => 'Perdi tutti i tuoi pezzi (o ottieni uno stallo) per vincere la partita.';
+
+  @override
+  String get variantAtomic => 'Atomic';
 
   @override
   String get variantAtomicTitle => 'Fai esplodere il re del tuo avversario per vincere.';
 
   @override
+  String get variantHorde => 'Horde';
+
+  @override
   String get variantHordeTitle => 'Un lato ha un gran numero di pedoni, l\'altro ha un esercito normale.';
+
+  @override
+  String get variantRacingKings => 'Racing Kings';
 
   @override
   String get variantRacingKingsTitle => 'Porta il tuo re dall\'altra parte della scacchiera per vincere.';
 
   @override
+  String get variantCrazyhouse => 'Crazyhouse';
+
+  @override
   String get variantCrazyhouseTitle => 'I pezzi catturati possono essere rimessi sulla scacchiera invece di spostare un pezzo.';
+
+  @override
+  String get variantFromPosition => 'Dalla posizione';
 
   @override
   String get variantFromPositionTitle => 'Scacchi tradizionali da una posizione personalizzata';

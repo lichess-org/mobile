@@ -7,8 +7,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
-import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
-import 'package:lichess_mobile/src/model/auth/oauth_callback.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -87,16 +85,17 @@ class AppLinksService {
     if (uri.scheme == 'file' || uri.scheme == 'content') {
       return;
     }
-    if (uri.scheme == kLichessUriScheme && uri.host == kOAuthRedirectUriHost) {
-      ref.read(oauthCallbackProvider).add(uri);
+    // Shared PGN deeplinks (from the iOS Share Extension) are handled natively by
+    // SharePlugin, which reads the PGN from the shared App Group container.
+    if (uri.scheme == kLichessCustomUriSchemeName && uri.host == 'shared-pgn') {
       return;
     }
-    if (uri.scheme == kLichessUriScheme && uri.host == 'open-web') {
+    if (uri.scheme == kLichessCustomUriSchemeName && uri.host == 'open-web') {
       _handleOpenWebLink(uri);
       return;
     }
     final context = ref.read(currentNavigatorKeyProvider).currentContext;
-    if (uri.scheme == kLichessUriScheme &&
+    if (uri.scheme == kLichessCustomUriSchemeName &&
         uri.host == _kDailyPuzzleDeeplinkHost &&
         uri.pathSegments.firstOrNull == _kDailyPuzzleDeeplinkPath) {
       if (context != null && context.mounted) {

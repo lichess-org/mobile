@@ -287,31 +287,61 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Or import a PGN file';
 
   @override
+  String get variantStandard => 'Padrão';
+
+  @override
   String get variantStandardTitle => 'Regras padrão do xadrez (FIDE)';
+
+  @override
+  String get variantChess960 => 'Xadrez960';
 
   @override
   String get variantChess960Title => 'A posição inicial das peças da primeira fila é aleatória.';
 
   @override
+  String get variantKingOfTheHill => 'Rei da Montanha';
+
+  @override
   String get variantKingOfTheHillTitle => 'Leve o teu Rei para o centro para ganhar o jogo.';
+
+  @override
+  String get variantThreeCheck => 'Três-Xeques';
 
   @override
   String get variantThreeCheckTitle => 'Xeque o teu adversário 3 vezes para ganhar o jogo.';
 
   @override
+  String get variantAntichess => 'Anti-xadrez';
+
+  @override
   String get variantAntichessTitle => 'Perde todas as tuas peças (ou fica em impedido) para ganhar o jogo.';
+
+  @override
+  String get variantAtomic => 'Atómico';
 
   @override
   String get variantAtomicTitle => 'Explode o rei do adversário para vencer.';
 
   @override
+  String get variantHorde => 'Horda';
+
+  @override
   String get variantHordeTitle => 'Um lado tem um grande número de peões, o outro tem um exército normal.';
+
+  @override
+  String get variantRacingKings => 'Corrida dos Reis';
 
   @override
   String get variantRacingKingsTitle => 'Leve o seu rei para o outro lado do tabuleiro para ganhar.';
 
   @override
+  String get variantCrazyhouse => 'Crazyhouse';
+
+  @override
   String get variantCrazyhouseTitle => 'As peças capturadas podem ser colocadas de volta no tabuleiro em vez de mover uma peça.';
+
+  @override
+  String get variantFromPosition => 'From Position';
 
   @override
   String get variantFromPositionTitle => 'Standard chess from a custom position';
@@ -6868,31 +6898,61 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get mobileOrImportPgnFile => 'Ou importe um arquivo PGN';
 
   @override
+  String get variantStandard => 'Clássico';
+
+  @override
   String get variantStandardTitle => 'Regras padrão de xadrez (FIDE)';
+
+  @override
+  String get variantChess960 => 'Xadrez960';
 
   @override
   String get variantChess960Title => 'A posição inicial das peças da primeira fila é aleatória.';
 
   @override
+  String get variantKingOfTheHill => 'Rei da Colina';
+
+  @override
   String get variantKingOfTheHillTitle => 'Traga seu Rei para o centro para ganhar a partida.';
+
+  @override
+  String get variantThreeCheck => 'Três xeques';
 
   @override
   String get variantThreeCheckTitle => 'Coloque seu oponente em xeque 3 vezes para ganhar a partida.';
 
   @override
+  String get variantAntichess => 'Antichess';
+
+  @override
   String get variantAntichessTitle => 'Perca todas as suas peças (ou fique em afogamento) para ganhar o jogo.';
+
+  @override
+  String get variantAtomic => 'Xadrez Atômico';
 
   @override
   String get variantAtomicTitle => 'Detone o rei do seu oponente para ganhar.';
 
   @override
+  String get variantHorde => 'Horda';
+
+  @override
   String get variantHordeTitle => 'Um lado tem um grande número de peões; o outro tem um exército normal.';
+
+  @override
+  String get variantRacingKings => 'Corrida de Reis';
 
   @override
   String get variantRacingKingsTitle => 'Leve seu rei para o outro lado do tabuleiro para vencer.';
 
   @override
+  String get variantCrazyhouse => 'Crazyhouse';
+
+  @override
   String get variantCrazyhouseTitle => 'As peças capturadas podem ser devolvidas ao tabuleiro ao invés de mover uma peça.';
+
+  @override
+  String get variantFromPosition => 'A partir da posição';
 
   @override
   String get variantFromPositionTitle => 'Xadrez padrão a partir de uma posição personalizada';
