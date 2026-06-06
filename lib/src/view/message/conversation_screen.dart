@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/app_links_service.dart';
@@ -13,6 +12,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/chat/chat_context_menu.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
+import 'package:lichess_mobile/src/widgets/app_linkify.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
@@ -403,13 +403,11 @@ class _MessageBubble extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Linkify(
-                onOpen: (link) async =>
-                    await ref.read(appLinksServiceProvider).onLinkifyOpen(context, link),
-                linkifiers: AppLinksService.kLichessLinkifiers,
+              AppLinkify(
                 text: message.text,
                 style: TextStyle(color: _textColor(context)),
                 linkStyle: Styles.linkStyle,
+                linkService: ref.read(appLinksServiceProvider),
               ),
               const SizedBox(height: 4),
               Text(

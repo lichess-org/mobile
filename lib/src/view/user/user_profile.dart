@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
@@ -14,6 +13,7 @@ import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/view/user/countries.dart';
+import 'package:lichess_mobile/src/widgets/app_linkify.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -63,15 +63,13 @@ class UserProfileWidget extends ConsumerWidget {
             if (userFullName != null)
               Padding(padding: const EdgeInsets.only(bottom: 5), child: userFullName),
             if (user.profile?.bio != null)
-              Linkify(
-                onOpen: (link) async =>
-                    await ref.read(appLinksServiceProvider).onLinkifyOpen(context, link),
-                linkifiers: AppLinksService.kLichessLinkifiers,
+              AppLinkify(
                 text: user.profile!.bio!,
                 maxLines: bioMaxLines,
                 style: bioStyle,
                 overflow: TextOverflow.ellipsis,
                 linkStyle: Styles.linkStyle,
+                linkService: ref.read(appLinksServiceProvider),
               ),
             const SizedBox(height: 10),
             if (user.profile?.fideRating != null)
