@@ -11,10 +11,12 @@ import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/theme.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_team_screen.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_team_standings_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -83,27 +85,73 @@ class BroadcastTeamsList extends ConsumerWidget {
     );
 
     return switch (round) {
-      AsyncData(:final value) => ListView.builder(
-        itemCount: teamMatches.length,
-        itemBuilder: (context, index) {
-          final match = teamMatches[index];
-          return _TeamMatchCard(
-            match: match,
-            games: value.games,
-            tournamentId: tournamentId,
-            roundId: roundId,
-            tournamentSlug: tournamentSlug,
-            roundSlug: value.round.slug,
-            title: value.round.name,
-            showEvaluationGauge: showEvaluationGauges,
-            customScoring: value.round.customScoring,
-            showTeamScores: showTeamScores,
-          );
-        },
+      AsyncData(:final value) => CustomScrollView(
+        slivers: [
+          if (showTeamScores)
+            SliverToBoxAdapter(child: _TeamStandingsButton(tournamentId: tournamentId)),
+          SliverList(
+            delegate: SliverChildBuilderDelegate((context, index) {
+              final match = teamMatches[index];
+              return _TeamMatchCard(
+                match: match,
+                games: value.games,
+                tournamentId: tournamentId,
+                roundId: roundId,
+                tournamentSlug: tournamentSlug,
+                roundSlug: value.round.slug,
+                title: value.round.name,
+                showEvaluationGauge: showEvaluationGauges,
+                customScoring: value.round.customScoring,
+                showTeamScores: showTeamScores,
+              );
+            }, childCount: teamMatches.length),
+          ),
+        ],
       ),
       AsyncError(:final error) => Center(child: Text('Cannot load games data: $error')),
       _ => const Center(child: CircularProgressIndicator.adaptive()),
     };
+  }
+}
+
+class _TeamStandingsButton extends StatelessWidget {
+  const _TeamStandingsButton({required this.tournamentId});
+
+  final BroadcastTournamentId tournamentId;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(4.0, 12.0, 4.0, 8.0),
+      child: OutlinedButton(
+        style: OutlinedButton.styleFrom(
+          padding: const EdgeInsets.all(16.0),
+          shape: RoundedRectangleBorder(borderRadius: .circular(8.0)),
+          side: BorderSide(color: colorScheme.primary, width: 0.8),
+        ),
+        onPressed: () {
+          Navigator.of(context).push(BroadcastTeamStandingsScreen.buildRoute(tournamentId));
+        },
+        child: Row(
+          mainAxisAlignment: .spaceBetween,
+          children: [
+            Row(
+              children: [
+                Icon(Icons.leaderboard, color: colorScheme.secondary),
+                const SizedBox(width: 12),
+                Text(
+                  context.l10n.broadcastTeamResults,
+                  style: TextStyle(fontWeight: .bold, color: colorScheme.secondary, fontSize: 16),
+                ),
+              ],
+            ),
+            Icon(Icons.chevron_right, color: colorScheme.secondary),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -144,7 +192,8 @@ class _TeamMatchCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+      clipBehavior: .hardEdge,
       elevation: 2,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
