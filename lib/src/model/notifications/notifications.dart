@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -92,6 +93,20 @@ sealed class FcmMessage {
           } else {
             return MalformedFcmMessage(message.data);
           }
+        case 'broadcastPlayerFollow':
+          final roundId = message.data['lichess.roundId'] as String?;
+          final gameId = message.data['lichess.gameId'] as String?;
+          final color = message.data['lichess.color'] as String?;
+          if (roundId != null && gameId != null && color != null) {
+            return BroadcastFcmMessage(
+              BroadcastRoundId(roundId),
+              BroadcastGameId(gameId),
+              Side.values.byName(color),
+              notification: message.notification,
+            );
+          } else {
+            return MalformedFcmMessage(message.data);
+          }
         default:
           return UnhandledFcmMessage(message.data);
       }
@@ -143,6 +158,19 @@ class ChallengeAcceptFcmMessage extends FcmMessage {
 
   final ChallengeId id;
   final GameFullId fullId;
+
+  @override
+  final RemoteNotification? notification;
+}
+
+/// An [FcmMessage] sent when a followed player starts a broadcast game.
+@immutable
+class BroadcastFcmMessage extends FcmMessage {
+  const BroadcastFcmMessage(this.roundId, this.gameId, this.color, {required this.notification});
+
+  final BroadcastRoundId roundId;
+  final BroadcastGameId gameId;
+  final Side color;
 
   @override
   final RemoteNotification? notification;
@@ -229,6 +257,8 @@ sealed class LocalNotification {
         return ChallengeCreatedNotification.fromJson(json);
       case 'announce':
         return AnnounceNotification.fromJson(json);
+      case 'broadcastPlayerFollow':
+        return BroadcastPlayerFollowNotification.fromJson(json);
       default:
         throw ArgumentError('Unknown notification channel: $channel');
     }
@@ -700,4 +730,71 @@ class ChallengeNotification extends LocalNotification {
           DarwinNotificationCategoryOption.hiddenPreviewShowTitle,
         },
       );
+}
+
+/// A notification for when a followed player starts a broadcast game.
+///
+/// This notification is shown when a FIDE player followed by the user begins a game in a broacast.
+class BroadcastPlayerFollowNotification extends LocalNotification {
+  const BroadcastPlayerFollowNotification(
+    this.roundId,
+    this.gameId,
+    this.color,
+    String title,
+    String body,
+  ) : _title = title,
+      _body = body;
+
+  final BroadcastRoundId roundId;
+  final BroadcastGameId gameId;
+  final Side color;
+
+  final String _title;
+  final String _body;
+
+  factory BroadcastPlayerFollowNotification.fromJson(Map<String, dynamic> json) {
+    final roundId = BroadcastRoundId(json['roundId'] as String);
+    final gameId = BroadcastGameId(json['gameId'] as String);
+    final color = Side.values.byName(json['color'] as String);
+    final title = json['title'] as String;
+    final body = json['body'] as String;
+    return BroadcastPlayerFollowNotification(roundId, gameId, color, title, body);
+  }
+
+  factory BroadcastPlayerFollowNotification.fromFcmMessage(BroadcastFcmMessage broadcast) {
+    return BroadcastPlayerFollowNotification(
+      broadcast.roundId,
+      broadcast.gameId,
+      broadcast.color,
+      broadcast.notification?.title ?? '',
+      broadcast.notification?.body ?? '',
+    );
+  }
+
+  @override
+  String get channelId => 'broadcastPlayerFollow';
+
+  @override
+  int get id => gameId.hashCode;
+
+  @override
+  Map<String, dynamic> get _concretePayload => {
+    'roundId': roundId.value,
+    'gameId': gameId.value,
+    'color': color.name,
+    'title': _title,
+    'body': _body,
+  };
+
+  @override
+  String title(_) => _title;
+
+  @override
+  String? body(_) => _body;
+
+  @override
+  NotificationDetails details(AppLocalizations l10n) => NotificationDetails(
+    android: AndroidNotificationDetails(channelId, l10n.broadcastBroadcasts),
+    iOS: DarwinNotificationDetails(threadIdentifier: channelId),
+  );
 }

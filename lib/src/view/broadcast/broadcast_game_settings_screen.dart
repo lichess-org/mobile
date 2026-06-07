@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_analysis_controller.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/engine_settings_widget.dart';
@@ -11,21 +10,17 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
 class BroadcastGameSettingsScreen extends ConsumerWidget {
-  const BroadcastGameSettingsScreen(this.roundId, this.gameId);
+  const BroadcastGameSettingsScreen(this.controllerParams);
 
-  final BroadcastRoundId roundId;
-  final BroadcastGameId gameId;
+  final BroadcastAnalysisControllerParams controllerParams;
 
-  static Route<dynamic> buildRoute({
-    required BroadcastRoundId roundId,
-    required BroadcastGameId gameId,
-  }) {
-    return buildScreenRoute(screen: BroadcastGameSettingsScreen(roundId, gameId));
+  static Route<dynamic> buildRoute({required BroadcastAnalysisControllerParams controllerParams}) {
+    return buildScreenRoute(screen: BroadcastGameSettingsScreen(controllerParams));
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final controller = broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId));
+    final controller = broadcastAnalysisControllerProvider(controllerParams);
 
     final broadcastPrefs = ref.watch(broadcastPreferencesProvider);
 
