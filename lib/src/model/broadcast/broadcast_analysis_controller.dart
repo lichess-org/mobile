@@ -36,7 +36,11 @@ part 'broadcast_analysis_controller.freezed.dart';
 
 final _logger = Logger('BroadcastAnalysisController');
 
-typedef BroadcastAnalysisControllerParams = ({BroadcastRoundId roundId, BroadcastGameId gameId});
+typedef BroadcastAnalysisControllerParams = ({
+  BroadcastRoundId roundId,
+  BroadcastGameId gameId,
+  Side initialPov,
+});
 
 /// A provider for [BroadcastAnalysisController].
 final broadcastAnalysisControllerProvider = AsyncNotifierProvider.autoDispose
@@ -142,7 +146,7 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
       pgnHeaders: pgnHeaders,
       pgnRootComments: rootComments,
       lastMove: lastMove,
-      pov: Side.white,
+      pov: params.initialPov,
       isServerAnalysisEnabled: prefs.enableServerAnalysis,
       clocks: _getClocks(currentPath),
       analysisSummary: pgnWithAnalysisSummary.analysisSummary,

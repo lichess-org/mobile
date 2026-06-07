@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -92,6 +93,34 @@ sealed class FcmMessage {
           } else {
             return MalformedFcmMessage(message.data);
           }
+        case 'broadcast':
+          final rawUrl = message.data['lichess.url'] as String?;
+          if (rawUrl == null) return MalformedFcmMessage(message.data);
+          final url = Uri.tryParse(rawUrl);
+          switch (url) {
+            case Uri(pathSegments: ['broadcast', _, _, final roundId]):
+              return BroadcastRoundFcmMessage(
+                BroadcastRoundId(roundId),
+                notification: message.notification,
+              );
+            case Uri(
+              pathSegments: ['broadcast', _, _, final roundId, final gameId],
+              queryParameters: {'pov': final pov},
+            ):
+              final side = Side.values.where((s) => s.name == pov).firstOrNull;
+              if (side == null) {
+                return MalformedFcmMessage(message.data);
+              }
+
+              return BroadcastPlayerFollowFcmMessage(
+                BroadcastRoundId(roundId),
+                BroadcastGameId(gameId),
+                side,
+                notification: message.notification,
+              );
+            case _:
+              return MalformedFcmMessage(message.data);
+          }
         default:
           return UnhandledFcmMessage(message.data);
       }
@@ -143,6 +172,35 @@ class ChallengeAcceptFcmMessage extends FcmMessage {
 
   final ChallengeId id;
   final GameFullId fullId;
+
+  @override
+  final RemoteNotification? notification;
+}
+
+/// An [FcmMessage] sent when a broadcast round a user subscribed to starts.
+@immutable
+class BroadcastRoundFcmMessage extends FcmMessage {
+  const BroadcastRoundFcmMessage(this.roundId, {required this.notification});
+
+  final BroadcastRoundId roundId;
+
+  @override
+  final RemoteNotification? notification;
+}
+
+/// An [FcmMessage] sent when a followed player starts a broadcast game.
+@immutable
+class BroadcastPlayerFollowFcmMessage extends FcmMessage {
+  const BroadcastPlayerFollowFcmMessage(
+    this.roundId,
+    this.gameId,
+    this.pov, {
+    required this.notification,
+  });
+
+  final BroadcastRoundId roundId;
+  final BroadcastGameId gameId;
+  final Side pov;
 
   @override
   final RemoteNotification? notification;
@@ -229,6 +287,10 @@ sealed class LocalNotification {
         return ChallengeCreatedNotification.fromJson(json);
       case 'announce':
         return AnnounceNotification.fromJson(json);
+      case 'broadcastRound':
+        return BroadcastRoundNotification.fromJson(json);
+      case 'broadcastPlayerFollow':
+        return BroadcastPlayerFollowNotification.fromJson(json);
       default:
         throw ArgumentError('Unknown notification channel: $channel');
     }
@@ -700,4 +762,139 @@ class ChallengeNotification extends LocalNotification {
           DarwinNotificationCategoryOption.hiddenPreviewShowTitle,
         },
       );
+}
+
+/// A notification for when a broadcast round starts.
+///
+/// This notification is shown when a broadcast round the user subscribed to starts.
+class BroadcastRoundNotification extends LocalNotification {
+  const BroadcastRoundNotification(this.roundId, String title, String body)
+    : _title = title,
+      _body = body;
+
+  final BroadcastRoundId roundId;
+
+  final String _title;
+  final String _body;
+
+  // The Android notification channel ID
+  static const _channelId = 'broadcast';
+
+  factory BroadcastRoundNotification.fromJson(Map<String, dynamic> json) {
+    final roundId = BroadcastRoundId(json['roundId'] as String);
+    final title = json['title'] as String;
+    final body = json['body'] as String;
+    return BroadcastRoundNotification(roundId, title, body);
+  }
+
+  factory BroadcastRoundNotification.fromFcmMessage(BroadcastRoundFcmMessage broadcast) {
+    return BroadcastRoundNotification(
+      broadcast.roundId,
+      broadcast.notification?.title ?? '',
+      broadcast.notification?.body ?? '',
+    );
+  }
+
+  @override
+  // Used to identify the notification type when reconstructing it from the
+  // Android local notification payload. This is not the Android notification
+  // channel ID.
+  String get channelId => 'broadcastRound';
+
+  @override
+  int get id => roundId.hashCode;
+
+  @override
+  Map<String, dynamic> get _concretePayload => {
+    'roundId': roundId.value,
+    'title': _title,
+    'body': _body,
+  };
+
+  @override
+  String title(_) => _title;
+
+  @override
+  String? body(_) => _body;
+
+  @override
+  NotificationDetails details(AppLocalizations l10n) => NotificationDetails(
+    android: AndroidNotificationDetails(_channelId, l10n.broadcastBroadcasts),
+    iOS: const DarwinNotificationDetails(threadIdentifier: _channelId),
+  );
+}
+
+/// A notification for when a followed player starts a broadcast game.
+///
+/// This notification is shown when a FIDE player followed by the user begins a game in a broadcast.
+class BroadcastPlayerFollowNotification extends LocalNotification {
+  const BroadcastPlayerFollowNotification(
+    this.roundId,
+    this.gameId,
+    this.pov,
+    String title,
+    String body,
+  ) : _title = title,
+      _body = body;
+
+  final BroadcastRoundId roundId;
+  final BroadcastGameId gameId;
+  final Side pov;
+
+  final String _title;
+  final String _body;
+
+  // The Android notification channel ID
+  static const _channelId = 'broadcast';
+
+  factory BroadcastPlayerFollowNotification.fromJson(Map<String, dynamic> json) {
+    final roundId = BroadcastRoundId(json['roundId'] as String);
+    final gameId = BroadcastGameId(json['gameId'] as String);
+    final pov = Side.values.byName(json['pov'] as String);
+    final title = json['title'] as String;
+    final body = json['body'] as String;
+    return BroadcastPlayerFollowNotification(roundId, gameId, pov, title, body);
+  }
+
+  factory BroadcastPlayerFollowNotification.fromFcmMessage(
+    BroadcastPlayerFollowFcmMessage broadcast,
+  ) {
+    return BroadcastPlayerFollowNotification(
+      broadcast.roundId,
+      broadcast.gameId,
+      broadcast.pov,
+      broadcast.notification?.title ?? '',
+      broadcast.notification?.body ?? '',
+    );
+  }
+
+  @override
+  // Used to identify the notification type when reconstructing it from the
+  // Android local notification payload. This is not the Android notification
+  // channel ID.
+  String get channelId => 'broadcastPlayerFollow';
+
+  @override
+  int get id => gameId.hashCode;
+
+  @override
+  Map<String, dynamic> get _concretePayload => {
+    'roundId': roundId.value,
+    'gameId': gameId.value,
+    'pov': pov.name,
+    'title': _title,
+    'body': _body,
+  };
+
+  @override
+  String title(_) => _title;
+
+  @override
+  String? body(_) => _body;
+
+  @override
+  NotificationDetails details(AppLocalizations l10n) => NotificationDetails(
+    android: AndroidNotificationDetails(_channelId, l10n.broadcastBroadcasts),
+    iOS: const DarwinNotificationDetails(threadIdentifier: _channelId),
+  );
 }

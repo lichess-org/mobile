@@ -3,13 +3,13 @@ import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_round_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 
-typedef BroadcastRoundGameParam = ({BroadcastRoundId roundId, BroadcastGameId gameId});
+typedef BroadcastRoundGameParams = ({BroadcastRoundId roundId, BroadcastGameId gameId});
 
-/// A provider that exposes the [BroadcastGame] for the given [BroadcastRoundGameParam].
+/// A provider that exposes the [BroadcastGame] for the given [BroadcastRoundGameParams].
 final broadcastRoundGameProvider = FutureProvider.autoDispose
-    .family<BroadcastGame, BroadcastRoundGameParam>((
+    .family<BroadcastGame, BroadcastRoundGameParams>((
       Ref ref,
-      BroadcastRoundGameParam params,
+      BroadcastRoundGameParams params,
     ) async {
       final round = await ref.watch(broadcastRoundControllerProvider(params.roundId).future);
       return round.games[params.gameId]!;
