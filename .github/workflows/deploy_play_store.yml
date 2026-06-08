@@ -27,7 +27,7 @@ jobs:
           distribution: temurin
 
       - name: Checkout mobile code
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v6.0.3
 
       - name: Install Flutter
         uses: subosito/flutter-action@v2.23.0
