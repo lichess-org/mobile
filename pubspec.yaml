@@ -73,7 +73,7 @@ dependencies:
   signal_strength_indicator: ^0.5.0
   sound_effect: ^0.1.3
   sqflite: ^2.4.2+1
-  sqflite_common_ffi: ^2.4.0+3
+  sqflite_common_ffi: ^2.4.1
   stream_transform: ^2.1.1
   url_launcher: ^6.3.2
   visibility_detector: ^0.4.0+2
