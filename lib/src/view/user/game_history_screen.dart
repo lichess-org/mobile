@@ -33,15 +33,6 @@ import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 
-String displayModeL10n(BuildContext context, GameHistoryDisplayMode mode) {
-  switch (mode) {
-    case GameHistoryDisplayMode.compact:
-      return context.l10n.mobileDisplayModeCompact;
-    case GameHistoryDisplayMode.detail:
-      return context.l10n.mobileDisplayModeDetailed;
-  }
-}
-
 class GameHistoryScreen extends ConsumerWidget {
   const GameHistoryScreen({
     required this.user,

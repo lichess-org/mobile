@@ -50,15 +50,6 @@ String? engineShortLabel(String? engineName) {
   return 'SF ${match.group(1)}';
 }
 
-/// Extracts the major version like "16" from a UCI engine name like "Stockfish 16.1".
-///
-/// Returns null if the engine name is null or doesn't match the expected pattern.
-String? engineVersion(String? engineName) {
-  if (engineName == null) return null;
-  final match = _sfVersionPattern.firstMatch(engineName);
-  return match?.group(1);
-}
-
 /// The (fake) position to use in threat mode searches.
 Position threatModePosition(Position position) => position.copyWith(
   turn: position.turn.opposite,

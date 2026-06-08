@@ -39,12 +39,6 @@ Future<String> get _databasePath async {
   return join(await getDatabasesPath(), kLichessDatabaseName);
 }
 
-/// Returns the sqlite version as an integer.
-final sqliteVersionProvider = FutureProvider<int?>((Ref ref) async {
-  final db = await ref.read(databaseProvider.future);
-  return _getDatabaseVersion(db);
-}, name: 'SqliteVersionProvider');
-
 Future<int?> _getDatabaseVersion(Database db) async {
   try {
     final versionStr = (await db.rawQuery('SELECT sqlite_version()')).first.values.first.toString();
