@@ -124,7 +124,7 @@ class _TeamStandingsButton extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(4.0, 12.0, 4.0, 8.0),
+      padding: Styles.horizontalBodyPadding.copyWith(top: 12.0, bottom: 8.0),
       child: OutlinedButton(
         style: OutlinedButton.styleFrom(
           padding: const EdgeInsets.all(16.0),

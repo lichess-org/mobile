@@ -518,8 +518,13 @@ void main() {
 
       await tester.pumpWidget(app);
 
+      // Load the tournament
       await tester.pump();
+
+      // Load the round
       await tester.pump();
+
+      // Load the teams data
       await tester.pump();
 
       expect(find.text('Team Results'), findsOneWidget);

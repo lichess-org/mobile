@@ -20,7 +20,7 @@ enum _SortingTypes { elo, score }
 typedef _TeamPicker<T> = T? Function(BroadcastTeamStanding team);
 
 const _kTableRowPadding = EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0);
-const _kHeaderTextStyle = TextStyle(fontWeight: FontWeight.bold, overflow: .ellipsis);
+const _kHeaderTextStyle = TextStyle(fontWeight: .bold, overflow: .ellipsis);
 
 class BroadcastTeamStandingsScreen extends ConsumerWidget {
   const BroadcastTeamStandingsScreen({super.key, required this.tournamentId});
@@ -39,8 +39,10 @@ class BroadcastTeamStandingsScreen extends ConsumerWidget {
     return PlatformScaffold(
       appBar: PlatformAppBar(title: AppBarTitleText(context.l10n.broadcastTeamResults)),
       body: switch ((standingsAsync, tournamentAsync)) {
-        (AsyncData(value: final teams), AsyncData()) when teams.isNotEmpty =>
-          BroadcastTeamStandingsList(teams: teams, tournamentId: tournamentId),
+        (AsyncData(value: final teams), AsyncData()) =>
+          teams.isNotEmpty
+              ? BroadcastTeamStandingsList(teams: teams, tournamentId: tournamentId)
+              : Center(child: Text(context.l10n.nothingToSeeHere)),
         (AsyncError(:final error), _) ||
         (_, AsyncError(:final error)) => Center(child: Text('Cannot load data: $error')),
         _ => const Center(child: CircularProgressIndicator.adaptive()),
@@ -91,6 +93,7 @@ class _BroadcastTeamStandingsListState extends ConsumerState<BroadcastTeamStandi
   ) => (team1, team2) {
     final field1 = picker(team1);
     final field2 = picker(team2);
+    if (field1 == null && field2 == null) return 0;
     if (field1 == null) return -1;
     if (field2 == null) return 1;
     return field1.compareTo(field2);
@@ -175,8 +178,9 @@ class _BroadcastTeamStandingsListState extends ConsumerState<BroadcastTeamStandi
                       Expanded(
                         child: _TableTitleCell(
                           title: Text(
-                            '${context.l10n.broadcastTeams} (avg. Elo)',
+                            '${context.l10n.broadcastTeams} (${context.l10n.averageElo})',
                             style: _kHeaderTextStyle,
+                            maxLines: 2,
                           ),
                           onTap: () => toggleSort(.elo),
                           sortIcon: currentSort == .elo ? sortIcon : null,
@@ -192,7 +196,12 @@ class _BroadcastTeamStandingsListState extends ConsumerState<BroadcastTeamStandi
                     SizedBox(
                       width: scoreWidth,
                       child: _TableTitleCell(
-                        title: const Text('Match\nPoints', style: _kHeaderTextStyle, maxLines: 2),
+                        title: Text(
+                          context.l10n.broadcastMatchPoints,
+                          style: _kHeaderTextStyle,
+                          maxLines: 2,
+                          textAlign: .right,
+                        ),
                         onTap: () => toggleSort(.score),
                         sortIcon: currentSort == .score ? sortIcon : null,
                         mainAxisAlignment: .end,
@@ -200,10 +209,10 @@ class _BroadcastTeamStandingsListState extends ConsumerState<BroadcastTeamStandi
                     ),
                     SizedBox(
                       width: scoreWidth,
-                      child: const Padding(
+                      child: Padding(
                         padding: _kTableRowPadding,
                         child: Text(
-                          'Game\nPoints',
+                          context.l10n.broadcastGamePoints,
                           textAlign: .right,
                           style: _kHeaderTextStyle,
                           maxLines: 2,
