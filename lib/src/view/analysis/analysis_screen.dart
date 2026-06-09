@@ -41,6 +41,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
@@ -121,9 +122,24 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
       case AsyncData(:final value):
         Widget appBarTitle;
         if (value.archivedGame != null) {
+          final meta = value.archivedGame!.meta;
+          final isStandardVariant =
+              value.variant == Variant.standard || value.variant == Variant.fromPosition;
+          final ratedOrCasual = meta.rated ? context.l10n.rated : context.l10n.casual;
+          final trailingLabel = isStandardVariant
+              ? meta.speed.label(context.l10n)
+              : value.variant.label(context.l10n);
           final title =
-              '${value.archivedGame!.data.clockDisplay(context.l10n)} • ${value.archivedGame!.meta.speed.label(context.l10n)} • ${value.archivedGame!.meta.rated ? context.l10n.rated : context.l10n.casual}';
-          appBarTitle = VariantAppBarTitle(variant: value.variant, title: title);
+              '${value.archivedGame!.data.clockDisplay(context.l10n)} • $ratedOrCasual • $trailingLabel';
+          final icon = isStandardVariant ? meta.speed.icon : value.variant.icon;
+          appBarTitle = Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(icon),
+              const SizedBox(width: 5.0),
+              Flexible(child: AppBarTitleText(title)),
+            ],
+          );
         } else {
           appBarTitle = VariantAppBarTitle(variant: value.variant, title: context.l10n.analysis);
         }
