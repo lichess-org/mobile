@@ -32,8 +32,8 @@
 					$extensionItem.attachments,
 					$attachment,
 					ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "org.lichess.pgn"
-				).@count == 1
-			).@count == 1</string>
+					).@count == 1
+				).@count == 1</string>
 		</dict>
 		<key>NSExtensionPointIdentifier</key>
 		<string>com.apple.share-services</string>

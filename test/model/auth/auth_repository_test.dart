@@ -33,7 +33,7 @@ class FakeFlutterWebAuth2 extends FlutterWebAuth2Platform {
 /// A callback URL echoing the `state` from [authUrl], as a successful redirect would produce.
 String successCallback(String authUrl, {String code = 'test-code'}) {
   final state = Uri.parse(authUrl).queryParameters['state'];
-  return '$kOAuthRedirectUri?code=$code&state=$state';
+  return '$kOAuthCustomSchemeRedirectUri?code=$code&state=$state';
 }
 
 MockClient tokenAndAccountClient() => MockClient((request) {
@@ -93,19 +93,47 @@ void main() {
       expect(tokenRequestBody, contains('code=test-code'));
     });
 
-    test('throws when the user cancels the auth session', () async {
+    test('throws SignInCancelledException when the user cancels the auth session', () async {
       FlutterWebAuth2Platform.instance = FakeFlutterWebAuth2(
         (url) async => throw PlatformException(code: 'CANCELED'),
       );
 
       final container = await lichessClientContainer(tokenAndAccountClient());
 
-      await expectLater(container.read(authRepositoryProvider).signIn(), throwsA(isA<Exception>()));
+      await expectLater(
+        container.read(authRepositoryProvider).signIn(),
+        throwsA(isA<SignInCancelledException>()),
+      );
     });
+
+    test(
+      'rethrows non-cancellation platform errors (e.g. App Link verification failure)',
+      () async {
+        // Android returns this when the AuthTab cannot verify the HTTPS callback
+        // (code 2 = RESULT_VERIFICATION_FAILED).
+        FlutterWebAuth2Platform.instance = FakeFlutterWebAuth2(
+          (url) async => throw PlatformException(
+            code: 'FAILED',
+            message: 'Authentication failed with code: 2',
+          ),
+        );
+
+        final container = await lichessClientContainer(tokenAndAccountClient());
+
+        await expectLater(
+          container.read(authRepositoryProvider).signIn(),
+          throwsA(
+            isA<PlatformException>()
+                .having((e) => e.code, 'code', 'FAILED')
+                .having((e) => e, 'is not a cancellation', isNot(isA<SignInCancelledException>())),
+          ),
+        );
+      },
+    );
 
     test('throws when the callback state does not match the request', () async {
       FlutterWebAuth2Platform.instance = FakeFlutterWebAuth2(
-        (url) async => '$kOAuthRedirectUri?code=test-code&state=tampered',
+        (url) async => '$kOAuthCustomSchemeRedirectUri?code=test-code&state=tampered',
       );
 
       final container = await lichessClientContainer(tokenAndAccountClient());
@@ -116,7 +144,7 @@ void main() {
     test('throws when the callback carries an OAuth error', () async {
       FlutterWebAuth2Platform.instance = FakeFlutterWebAuth2((url) async {
         final state = Uri.parse(url).queryParameters['state'];
-        return '$kOAuthRedirectUri?error=access_denied&state=$state';
+        return '$kOAuthCustomSchemeRedirectUri?error=access_denied&state=$state';
       });
 
       final container = await lichessClientContainer(tokenAndAccountClient());
@@ -127,7 +155,7 @@ void main() {
     test('throws when the callback has no authorization code', () async {
       FlutterWebAuth2Platform.instance = FakeFlutterWebAuth2((url) async {
         final state = Uri.parse(url).queryParameters['state'];
-        return '$kOAuthRedirectUri?state=$state';
+        return '$kOAuthCustomSchemeRedirectUri?state=$state';
       });
 
       final container = await lichessClientContainer(tokenAndAccountClient());

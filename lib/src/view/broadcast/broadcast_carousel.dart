@@ -7,7 +7,6 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -493,23 +492,4 @@ Future<_CardColors?> _computeImageColors(
     return cardColors;
   }
   return null;
-}
-
-/// Pre-cache images and extract colors for broadcasts.
-Future<void> preCacheBroadcastImages(
-  BuildContext context, {
-  required Iterable<Broadcast> broadcasts,
-  required ImageColorWorker worker,
-  required http.Client httpClient,
-}) async {
-  for (final broadcast in broadcasts.take(5)) {
-    final imageUrl = broadcast.tour.imageUrl;
-    if (imageUrl != null) {
-      final provider = HttpNetworkImage(imageUrl, httpClient);
-      await precacheImage(provider, context);
-      final ui.Image scaledImage = await imageProviderToScaled(provider);
-      final imageBytes = await scaledImage.toByteData();
-      await _computeImageColors(worker, imageUrl, imageBytes!);
-    }
-  }
 }
