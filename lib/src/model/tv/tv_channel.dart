@@ -5,29 +5,28 @@ import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 
 enum TvChannel {
-  best('Top Rated', LichessIcons.crown),
-  bullet('Bullet', LichessIcons.bullet),
-  blitz('Blitz', LichessIcons.blitz),
-  rapid('Rapid', LichessIcons.rapid),
-  classical('Classical', LichessIcons.classical),
-  chess960('Chess960', LichessIcons.die_six),
-  kingOfTheHill('King of the Hill', LichessIcons.flag),
-  threeCheck('Three Check', LichessIcons.three_check),
-  antichess('Antichess', LichessIcons.antichess),
-  atomic('Atomic', LichessIcons.atom),
-  horde('Horde', LichessIcons.horde),
-  racingKings('Racing Kings', LichessIcons.racing_kings),
-  crazyhouse('Crazyhouse', LichessIcons.h_square),
-  ultraBullet('UltraBullet', LichessIcons.ultrabullet),
-  bot('Bot', LichessIcons.cogs),
-  computer('Computer', LichessIcons.cogs);
+  best(LichessIcons.crown),
+  bullet(LichessIcons.bullet),
+  blitz(LichessIcons.blitz),
+  rapid(LichessIcons.rapid),
+  classical(LichessIcons.classical),
+  chess960(LichessIcons.die_six),
+  kingOfTheHill(LichessIcons.flag),
+  threeCheck(LichessIcons.three_check),
+  antichess(LichessIcons.antichess),
+  atomic(LichessIcons.atom),
+  horde(LichessIcons.horde),
+  racingKings(LichessIcons.racing_kings),
+  crazyhouse(LichessIcons.h_square),
+  ultraBullet(LichessIcons.ultrabullet),
+  bot(LichessIcons.cogs),
+  computer(LichessIcons.cogs);
 
-  const TvChannel(this.label, this.icon);
+  const TvChannel(this.icon);
 
-  final String label;
   final IconData icon;
 
-  String localizedLabel(AppLocalizations l10n) {
+  String label(AppLocalizations l10n) {
     switch (this) {
       case TvChannel.best:
         return l10n.topGames;

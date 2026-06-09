@@ -274,7 +274,7 @@ class _WatchTvWidget extends ConsumerWidget {
                   trailing: Theme.of(context).platform == TargetPlatform.iOS
                       ? const CupertinoListTileChevron()
                       : null,
-                  title: Text(snapshot.channel.localizedLabel(context.l10n)),
+                  title: Text(snapshot.channel.label(context.l10n)),
                   subtitle: UserFullNameWidget.player(
                     user: snapshot.player.asPlayer.user,
                     aiLevel: snapshot.player.asPlayer.aiLevel,

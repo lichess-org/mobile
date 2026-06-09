@@ -78,7 +78,7 @@ class _TvScreenState extends ConsumerState<TvScreen> {
         child: Scaffold(
           appBar: AppBar(
             title: widget.channel != null
-                ? Text('${widget.channel!.localizedLabel(context.l10n)} TV')
+                ? Text('${widget.channel!.label(context.l10n)} TV')
                 : Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [

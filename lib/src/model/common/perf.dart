@@ -74,7 +74,7 @@ enum Perf {
   }
 
   String shortLabel(AppLocalizations l10n) {
-    return l10n.localeName.startsWith('en') ? shortTitle : label(l10n);
+    return shortTitle;
   }
 
   factory Perf.fromVariantAndSpeed(Variant variant, Speed speed) {
