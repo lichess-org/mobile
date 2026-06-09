@@ -316,7 +316,7 @@ class _BroadcastTeamStandingRow extends StatelessWidget {
       title: Text(team.name, maxLines: 2, overflow: .ellipsis),
       subtitle: team.averageRating != null
           ? Text(
-              'Ø ${team.averageRating}',
+              '${team.averageRating}',
               style: TextStyle(fontSize: 13, color: textShade(context, Styles.subtitleOpacity)),
             )
           : null,
