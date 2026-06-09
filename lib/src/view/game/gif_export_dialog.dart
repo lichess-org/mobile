@@ -30,6 +30,28 @@ class _GifExportState extends ConsumerState<GifExport> {
   bool showPlayerRatings = true;
   bool moveAnnotations = false;
   bool chessClock = false;
+  bool loading = false;
+
+  Future<void> _export() async {
+    setState(() {
+      loading = true;
+    });
+    await shareGameGif(
+      context,
+      ref,
+      widget.gameId,
+      widget.orientation,
+      GifExportOptions(
+        playerNames: playerNames,
+        showPlayerRatings: showPlayerRatings,
+        moveAnnotations: moveAnnotations,
+        chessClock: chessClock,
+      ),
+    );
+    if (mounted) {
+      Navigator.pop(context);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,22 +103,14 @@ class _GifExportState extends ConsumerState<GifExport> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: FilledButton(
-            onPressed: () => {
-              Navigator.pop(context),
-              shareGameGif(
-                context,
-                ref,
-                widget.gameId,
-                widget.orientation,
-                GifExportOptions(
-                  playerNames: playerNames,
-                  showPlayerRatings: showPlayerRatings,
-                  moveAnnotations: moveAnnotations,
-                  chessClock: chessClock,
-                ),
-              ),
-            },
-            child: Text(context.l10n.next, textAlign: TextAlign.center),
+            onPressed: loading ? null : _export,
+            child: loading
+                ? const SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: CircularProgressIndicator.adaptive(strokeWidth: 3),
+                  )
+                : Text(context.l10n.next, textAlign: TextAlign.center),
           ),
         ),
       ],
