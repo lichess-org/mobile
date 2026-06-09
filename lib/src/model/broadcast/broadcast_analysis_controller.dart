@@ -10,6 +10,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_summary.dart';
 import 'package:lichess_mobile/src/model/analysis/common_analysis_state.dart';
+import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
@@ -124,9 +125,21 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
     final currentNode = _root.nodeAt(currentPath);
     final lastMove = _root.branchAt(_root.mainlinePath)?.sanMove.move;
 
+    final openingFutures = <Future<(UciPath, FullOpening)?>>[];
+    {
+      UciPath mainlinePath = UciPath.empty;
+      for (final branch in _root.mainline) {
+        mainlinePath = mainlinePath + branch.id;
+        if (branch.position.ply > 30) break;
+        openingFutures.add(_fetchOpening(branch.position.fen, mainlinePath));
+      }
+    }
+
     // don't use ref.watch here: we don't want to invalidate state when the
     // analysis preferences change
     final prefs = ref.read(broadcastPreferencesProvider);
+
+    final (_, initialBranchOpening) = _nodeOpeningAt(_root, currentPath);
 
     final broadcastState = BroadcastAnalysisState(
       id: params.gameId,
@@ -135,6 +148,7 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
       isOnMainline: _root.isOnMainline(currentPath),
       root: _root.view,
       currentNode: AnalysisCurrentNode.fromNode(currentNode),
+      currentBranchOpening: initialBranchOpening,
       pgnHeaders: pgnHeaders,
       pgnRootComments: rootComments,
       lastMove: lastMove,
@@ -148,6 +162,27 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
     // We need to define the state value in the build method because `sendEvalGetEvent` and
     // `debouncedStartEngineEval` require the state to have a value.
     state = AsyncData(broadcastState);
+
+    Future.wait(openingFutures)
+        .then((list) {
+          bool hasOpening = false;
+          for (final updated in list) {
+            if (updated != null) {
+              hasOpening = true;
+              final (path, opening) = updated;
+              _root.updateAt(path, (node) => node.opening = opening);
+            }
+          }
+          return hasOpening;
+        })
+        .then((hasOpening) {
+          if (hasOpening && ref.mounted && state.hasValue) {
+            scheduleMicrotask(() {
+              if (!ref.mounted || !state.hasValue) return;
+              _setPath(state.requireValue.currentPath);
+            });
+          }
+        });
 
     if (state.requireValue.isEngineAvailable(evaluationPrefs)) {
       requestEval();
@@ -431,6 +466,7 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
         : state.requireValue.root;
 
     final isForward = path.size > state.requireValue.currentPath.size;
+    final (_, branchOpening) = _nodeOpeningAt(_root, path);
     if (currentNode is Branch) {
       // normal move feedback
       if (!isNavigating && isForward) {
@@ -452,12 +488,22 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
           soundService.play(Sound.move);
         }
       }
+
+      if (currentNode.opening == null && currentNode.position.ply <= 30) {
+        _fetchOpening(currentNode.position.fen, path).then((value) {
+          if (value != null) {
+            _updateOpening(value.$1, value.$2);
+          }
+        });
+      }
+
       state = AsyncData(
         state.requireValue.copyWith(
           currentPath: path,
           broadcastPath: broadcastPath ?? state.requireValue.broadcastPath,
           isOnMainline: _root.isOnMainline(path),
           currentNode: AnalysisCurrentNode.fromNode(currentNode),
+          currentBranchOpening: branchOpening,
           lastMove: currentNode.sanMove.move,
           root: rootView,
           clocks: _getClocks(path),
@@ -470,6 +516,7 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
           broadcastPath: broadcastPath ?? state.requireValue.broadcastPath,
           isOnMainline: _root.isOnMainline(path),
           currentNode: AnalysisCurrentNode.fromNode(currentNode),
+          currentBranchOpening: branchOpening,
           lastMove: null,
           root: rootView,
           clocks: _getClocks(path),
@@ -480,6 +527,47 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
     if (pathChange) {
       state = AsyncData(state.requireValue.copyWith(engineInThreatMode: false));
       requestEval();
+    }
+  }
+
+  (Node, Opening?) _nodeOpeningAt(Node node, UciPath path, [Opening? opening]) {
+    if (path.isEmpty) return (node, opening);
+    final child = node.childById(path.head!);
+    if (child != null) {
+      return _nodeOpeningAt(child, path.tail, child.opening ?? opening);
+    } else {
+      return (node, opening);
+    }
+  }
+
+  Future<(UciPath, FullOpening)?> _fetchOpening(String fen, UciPath path) async {
+    if (!kOpeningAllowedVariants.contains(state.value?.variant ?? Variant.standard)) {
+      return null;
+    }
+    final opening = await ref.read(openingServiceProvider).fetchFromFen(fen);
+    if (opening != null) {
+      return (path, opening);
+    }
+    return null;
+  }
+
+  void _updateOpening(UciPath path, FullOpening opening) {
+    _root.updateAt(path, (node) => node.opening = opening);
+
+    if (!state.hasValue) return;
+    final curState = state.requireValue;
+    if (curState.currentPath == path) {
+      state = AsyncData(
+        curState.copyWith(
+          currentNode: AnalysisCurrentNode.fromNode(_root.nodeAt(path)),
+          currentBranchOpening: opening,
+        ),
+      );
+    } else {
+      final (_, newOpening) = _nodeOpeningAt(_root, curState.currentPath);
+      if (newOpening != null && newOpening != curState.currentBranchOpening) {
+        state = AsyncData(curState.copyWith(currentBranchOpening: newOpening));
+      }
     }
   }
 
@@ -593,6 +681,8 @@ sealed class BroadcastAnalysisState
     /// The analysis summary sent by the server.
     /// Contains the Accuracy, ACPL, Mistakes, Blunders, Inaccuracies of White and Black.
     AnalysisSummary? analysisSummary,
+
+    Opening? currentBranchOpening,
 
     @Default(false) bool engineInThreatMode,
   }) = _BroadcastGameState;

@@ -4,10 +4,12 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_analysis_controller.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
@@ -493,9 +495,16 @@ class _OpeningExplorerTab extends ConsumerWidget {
     final ctrlProvider = broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId));
     final state = ref.watch(ctrlProvider).requireValue;
 
+    final opening = kOpeningAllowedVariants.contains(state.variant)
+        ? state.currentNode.isRoot
+              ? LightOpening(eco: '', name: context.l10n.startPosition)
+              : state.currentNode.opening ?? state.currentBranchOpening
+        : null;
+
     return ExplorerView(
       pov: state.pov,
       position: state.currentNode.position,
+      opening: opening,
       onMoveSelected: ref.read(ctrlProvider.notifier).onUserMove,
       isComputerAnalysisAllowed: true,
     );
