@@ -22,23 +22,18 @@ mixin ServerAnalysisMixinState {
 /// - [positionTree] to provide the tree where the evaluations are stored.
 /// - [onServerAnalysisEvent] to react to new analysis events from ongoing server analysis and update internal state.
 mixin ServerAnalysisMixin<T extends ServerAnalysisMixinState> on AnyNotifier<AsyncValue<T>, T> {
-  late ServerAnalysisService _serverAnalysisService;
-
   Root get positionTree;
 
   ValueListenable<ServerAnalysisSource?> get currentServerAnalysis =>
-      _serverAnalysisService.currentAnalysis;
+      ref.read(serverAnalysisServiceProvider).currentAnalysis;
 
   @override
   void runBuild() {
-    _serverAnalysisService = ref.watch(serverAnalysisServiceProvider);
-
-    // Avoid registering the listener multiple times when the notifier is rebuilt.
-    _serverAnalysisService.lastAnalysisEvent.removeListener(_onServerAnalysisEvent);
-    _serverAnalysisService.lastAnalysisEvent.addListener(_onServerAnalysisEvent);
-
-    ref.onDispose(() {
-      _serverAnalysisService.lastAnalysisEvent.removeListener(_onServerAnalysisEvent);
+    ref.listen(lastAnalysisEventProvider, (previous, next) {
+      if (next case (final source, final event) when source == state.value?.serverAnalysisSource) {
+        ServerAnalysisService.mergeOngoingAnalysis(positionTree, event.tree);
+        onServerAnalysisEvent(event);
+      }
     });
 
     super.runBuild();
@@ -55,16 +50,6 @@ mixin ServerAnalysisMixin<T extends ServerAnalysisMixinState> on AnyNotifier<Asy
   }
 
   Future<void> onServerAnalysisEvent(ServerEvalEvent event);
-
-  Future<void> _onServerAnalysisEvent() async {
-    if (ref.read(serverAnalysisServiceProvider).lastAnalysisEvent.value case (
-      final source,
-      final event,
-    ) when source == state.value?.serverAnalysisSource) {
-      ServerAnalysisService.mergeOngoingAnalysis(positionTree, event.tree);
-      await onServerAnalysisEvent(event);
-    }
-  }
 
   @protected
   IList<ExternalEval>? makeAcplChartData() {

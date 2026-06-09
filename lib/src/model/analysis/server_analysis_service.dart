@@ -247,3 +247,26 @@ class CurrentAnalysis extends Notifier<ServerAnalysisSource?> {
     }
   }
 }
+
+/// A provider that exposes the last analysis progress event received from the server.
+final lastAnalysisEventProvider =
+    NotifierProvider.autoDispose<LastAnalysisEvent, (ServerAnalysisSource, ServerEvalEvent)?>(
+      LastAnalysisEvent.new,
+      name: 'LastAnalysisEventProvider',
+    );
+
+class LastAnalysisEvent extends Notifier<(ServerAnalysisSource, ServerEvalEvent)?> {
+  @override
+  (ServerAnalysisSource, ServerEvalEvent)? build() {
+    final listenable = ref.read(serverAnalysisServiceProvider).lastAnalysisEvent;
+
+    listenable.addListener(_listener);
+    ref.onDispose(() => listenable.removeListener(_listener));
+
+    return listenable.value;
+  }
+
+  void _listener() {
+    state = ref.read(serverAnalysisServiceProvider).lastAnalysisEvent.value;
+  }
+}
