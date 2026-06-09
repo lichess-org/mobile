@@ -109,7 +109,7 @@ class RetroController extends AsyncNotifier<RetroState>
       _incorrectMoveTimer?.cancel();
     });
 
-    socketClient = ref.watch(socketPoolProvider).open(AnalysisController.socketUri);
+    socketClient = ref.read(socketPoolProvider).open(AnalysisController.socketUri);
 
     // Don't use archivedGameProvider, as its value gets cached when we watch it in AnalysisController,
     // so when a server analysis is already running, _game.serverAnalysis would still be null.

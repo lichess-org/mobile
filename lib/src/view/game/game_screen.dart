@@ -71,7 +71,7 @@ final _isRealTimePlayableGameProvider = FutureProvider.autoDispose.family<bool, 
   Ref ref,
   GameFullId gameId,
 ) async {
-  final state = await ref.watch(gameControllerProvider(gameId).future);
+  final state = await ref.read(gameControllerProvider(gameId).future);
   return state.game.meta.speed != Speed.correspondence && state.game.playable;
 }, name: 'IsRealTimePlayableGameProvider');
 

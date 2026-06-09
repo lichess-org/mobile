@@ -1130,7 +1130,7 @@ class _ClaimWinDialog extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = gameControllerProvider(id);
-    final gameState = ref.watch(ctrlProvider).requireValue;
+    final canClaimWin = ref.watch(ctrlProvider.select((s) => s.value?.game.canClaimWin ?? false));
 
     final content = Text(context.l10n.opponentLeftChoices);
 
@@ -1148,12 +1148,12 @@ class _ClaimWinDialog extends ConsumerWidget {
       content: content,
       actions: [
         PlatformDialogAction(
-          onPressed: gameState.game.canClaimWin ? onClaimWin : null,
+          onPressed: canClaimWin ? onClaimWin : null,
           cupertinoIsDefaultAction: true,
           child: Text(context.l10n.forceResignation),
         ),
         PlatformDialogAction(
-          onPressed: gameState.game.canClaimWin ? onClaimDraw : null,
+          onPressed: canClaimWin ? onClaimDraw : null,
           child: Text(context.l10n.forceDraw),
         ),
       ],

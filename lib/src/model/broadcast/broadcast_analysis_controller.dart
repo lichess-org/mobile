@@ -84,7 +84,7 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
     });
 
     _socketClient = ref
-        .watch(socketPoolProvider)
+        .read(socketPoolProvider)
         .open(BroadcastAnalysisController.broadcastSocketUri(params.roundId));
 
     _subscription = _socketClient.stream.listen(_handleSocketEvent);

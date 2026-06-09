@@ -157,7 +157,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
       _socketSubscription?.cancel();
     });
 
-    socketClient = ref.watch(socketPoolProvider).open(AnalysisController.socketUri);
+    socketClient = ref.read(socketPoolProvider).open(AnalysisController.socketUri);
     _socketSubscription?.cancel();
     _socketSubscription = socketClient.stream.listen(_handleSocketEvent);
 
@@ -178,7 +178,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
     switch (options) {
       case ArchivedGame(:final gameId):
         {
-          archivedGame = await ref.watch(archivedGameProvider(gameId).future);
+          archivedGame = await ref.read(archivedGameProvider(gameId).future);
           _variant = archivedGame!.meta.variant;
           pgn = archivedGame.makePgn();
           opening = archivedGame.data.opening;

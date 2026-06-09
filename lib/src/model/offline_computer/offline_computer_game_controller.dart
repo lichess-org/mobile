@@ -98,10 +98,10 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
 
   @override
   OfflineComputerGameState build() {
-    socketClient = ref.watch(socketPoolProvider).open(AnalysisController.socketUri);
+    socketClient = ref.read(socketPoolProvider).open(AnalysisController.socketUri);
     _socketSubscription?.cancel();
     _socketSubscription = socketClient.stream.listen(_handleSocketEvent);
-    final evaluationService = ref.watch(evaluationServiceProvider);
+    final evaluationService = ref.read(evaluationServiceProvider);
     ref.onDispose(() {
       evaluationService.quit();
       _socketSubscription?.cancel();

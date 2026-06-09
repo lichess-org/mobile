@@ -588,7 +588,7 @@ class EngineEvaluationNotifier extends Notifier<EngineEvaluationState> {
 
   @override
   EngineEvaluationState build() {
-    final listenable = ref.watch(evaluationServiceProvider).evaluationState;
+    final listenable = ref.read(evaluationServiceProvider).evaluationState;
 
     listenable.addListener(_listener);
 

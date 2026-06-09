@@ -114,7 +114,7 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState<T>> on AnyNotifier<As
 
   @override
   void runBuild() {
-    _evaluationService = ref.watch(evaluationServiceProvider);
+    _evaluationService = ref.read(evaluationServiceProvider);
 
     ref.onDispose(() {
       _evalRequestDebounce.cancel();

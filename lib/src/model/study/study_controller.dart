@@ -74,7 +74,7 @@ class StudyController extends AsyncNotifier<StudyState>
       _likeDebouncer.cancel();
     });
 
-    final socketPool = ref.watch(socketPoolProvider);
+    final socketPool = ref.read(socketPoolProvider);
     _socketClient = socketPool.open(Uri(path: '/study/${options.id}/socket/v6'));
 
     final chapter = await _fetchChapter(options.id, chapterId: options.initialChapter);

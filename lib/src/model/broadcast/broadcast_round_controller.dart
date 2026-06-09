@@ -57,7 +57,7 @@ class BroadcastRoundController extends AsyncNotifier<BroadcastRoundState> {
     });
 
     _socketClient = ref
-        .watch(socketPoolProvider)
+        .read(socketPoolProvider)
         .open(BroadcastRoundController.broadcastSocketUri(broadcastRoundId));
 
     _subscription = _socketClient.stream.listen(_handleSocketEvent);
