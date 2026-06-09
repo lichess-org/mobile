@@ -287,6 +287,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileOrImportPgnFile => '或者导入 PGN 文件';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+
+  @override
   String get variantStandard => '标准';
 
   @override

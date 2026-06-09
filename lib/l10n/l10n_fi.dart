@@ -287,6 +287,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Tai tuo PGN-tiedosto';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+
+  @override
   String get variantStandard => 'Normaali';
 
   @override

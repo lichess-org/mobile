@@ -287,6 +287,9 @@ class AppLocalizationsUz extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Yoki PGN faylini import qiling';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+
+  @override
   String get variantStandard => 'Standart';
 
   @override

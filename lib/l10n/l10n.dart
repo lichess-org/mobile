@@ -736,6 +736,12 @@ abstract class AppLocalizations {
   /// **'Or import a PGN file'**
   String get mobileOrImportPgnFile;
 
+  /// No description provided for @mobileGoodMoveButThereIsBetter.
+  ///
+  /// In en, this message translates to:
+  /// **'Good move, but there\'s better'**
+  String get mobileGoodMoveButThereIsBetter;
+
   /// No description provided for @variantStandard.
   ///
   /// In en, this message translates to:

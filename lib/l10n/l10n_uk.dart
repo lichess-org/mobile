@@ -287,6 +287,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Чи завантажте файл PGN';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+
+  @override
   String get variantStandard => 'Стандартні шахи';
 
   @override
