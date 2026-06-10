@@ -465,9 +465,7 @@ class GameController extends AsyncNotifier<GameState> {
     // The server doesn't return the created challenge, so fetch the outgoing
     // challenges to find it, which allows the user to cancel it later.
     final challenges = await repository.list();
-    final challenge = challenges.outward.firstWhereOrNull(
-      (c) => c.rematchOf == gameFullId.gameId,
-    );
+    final challenge = challenges.outward.firstWhereOrNull((c) => c.rematchOf == gameFullId.gameId);
     final curState = state.requireValue;
     state = AsyncValue.data(curState.copyWith(rematchChallengeId: challenge?.id));
   }
