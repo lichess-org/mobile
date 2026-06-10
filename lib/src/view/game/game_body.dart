@@ -19,6 +19,7 @@ import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessboard.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
@@ -958,6 +959,33 @@ class _GameBottomBar extends ConsumerWidget {
             dismissOnPress: true,
             onPressed: () {
               ref.read(gameControllerProvider(id).notifier).proposeOrAcceptRematch();
+            },
+          )
+        // Offline opponent in a clockless game: persistent challenge, not a socket offer.
+        else if (gameState.canOfferRematch &&
+            gameState.game.clock == null &&
+            gameState.game.me?.user != null &&
+            gameState.game.opponent?.user != null)
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.rematch),
+            dismissOnPress: true,
+            // Capture the messenger before the await, since the sheet dismisses on tap.
+            onPressed: () async {
+              final messenger = ScaffoldMessenger.of(context);
+              final errorColor = context.lichessColors.error;
+              try {
+                await ref.read(gameControllerProvider(id).notifier).challengeRematch();
+              } catch (_) {
+                messenger.showSnackBar(
+                  SnackBar(
+                    content: const Text(
+                      'Could not send the rematch challenge',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    backgroundColor: errorColor,
+                  ),
+                );
+              }
             },
           ),
         if (gameState.canGetNewOpponent)
