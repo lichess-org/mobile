@@ -103,7 +103,8 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
               firstChild: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  if (value.game.me?.offeringRematch == true) ...[
+                  if (value.game.me?.offeringRematch == true ||
+                      value.rematchChallengeId != null) ...[
                     Flexible(
                       flex: 3,
                       child: Text(
@@ -114,8 +115,22 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
                     ),
                     const Spacer(),
                     IconButton.outlined(
-                      onPressed: () {
-                        ref.read(ctrlProvider.notifier).declineRematch();
+                      onPressed: () async {
+                        if (value.game.me?.offeringRematch == true) {
+                          ref.read(ctrlProvider.notifier).declineRematch();
+                        } else {
+                          try {
+                            await ref.read(ctrlProvider.notifier).cancelRematchChallenge();
+                          } catch (_) {
+                            if (context.mounted) {
+                              showSnackBar(
+                                context,
+                                'Could not cancel the rematch challenge',
+                                type: SnackBarType.error,
+                              );
+                            }
+                          }
+                        }
                       },
                       tooltip: context.l10n.cancelRematchOffer,
                       icon: const Icon(Icons.cancel),

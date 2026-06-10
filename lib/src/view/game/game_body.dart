@@ -37,7 +37,6 @@ import 'package:lichess_mobile/src/widgets/board.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
-import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
@@ -953,6 +952,24 @@ class _GameBottomBar extends ConsumerWidget {
               ref.read(gameControllerProvider(id).notifier).declineRematch();
             },
           )
+        else if (gameState.rematchChallengeId != null)
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.cancelRematchOffer),
+            dismissOnPress: true,
+            isDestructiveAction: true,
+            onPressed: () async {
+              // dismissOnPress unmounts this context before the request
+              // completes, so capture the messenger now.
+              final messenger = ScaffoldMessenger.of(context);
+              try {
+                await ref.read(gameControllerProvider(id).notifier).cancelRematchChallenge();
+              } catch (_) {
+                messenger.showSnackBar(
+                  const SnackBar(content: Text('Could not cancel the rematch challenge')),
+                );
+              }
+            },
+          )
         else if (gameState.canOfferRematch && gameState.game.opponent?.onGame == true)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.rematch),
@@ -970,16 +987,15 @@ class _GameBottomBar extends ConsumerWidget {
             makeLabel: (context) => Text(context.l10n.rematch),
             dismissOnPress: true,
             onPressed: () async {
+              // dismissOnPress unmounts this context before the request
+              // completes, so capture the messenger now.
+              final messenger = ScaffoldMessenger.of(context);
               try {
                 await ref.read(gameControllerProvider(id).notifier).challengeRematch();
               } catch (_) {
-                if (context.mounted) {
-                  showSnackBar(
-                    context,
-                    'Could not send the rematch challenge',
-                    type: SnackBarType.error,
-                  );
-                }
+                messenger.showSnackBar(
+                  const SnackBar(content: Text('Could not send the rematch challenge')),
+                );
               }
             },
           ),
