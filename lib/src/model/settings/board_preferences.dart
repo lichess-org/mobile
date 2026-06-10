@@ -123,9 +123,9 @@ class BoardPreferences extends Notifier<BoardPrefs> with PreferencesStorage<Boar
   Future<void> setShapeColor(ShapeColor shapeColor) {
     return save(state.copyWith(shapeColor: shapeColor));
   }
-  
+
   Future<void> setHighlightColor(HighlightColor highlightColor) {
-  return save(state.copyWith(highlightColor: highlightColor));
+    return save(state.copyWith(highlightColor: highlightColor));
   }
 
   Future<void> adjustColors({double? brightness, double? hue}) {
@@ -328,6 +328,7 @@ enum ShapeColor {
     ShapeColor.yellow => 0xe68f00,
   }).withAlpha(0xAA);
 }
+
 /// Colors for the last move highlight on the board.
 enum HighlightColor {
   yellow,
@@ -338,10 +339,10 @@ enum HighlightColor {
 
   Color get color => Color(switch (this) {
     HighlightColor.yellow => 0x9cc700,
-    HighlightColor.green  => 0x15781B,
-    HighlightColor.red    => 0x882020,
-    HighlightColor.blue   => 0x003088,
-    HighlightColor.white  => 0xFFFFFF,
+    HighlightColor.green => 0x15781B,
+    HighlightColor.red => 0x882020,
+    HighlightColor.blue => 0x003088,
+    HighlightColor.white => 0xFFFFFF,
   }).withAlpha(0x80);
 }
 

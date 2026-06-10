@@ -227,9 +227,7 @@ class _BodyState extends ConsumerState<_Body> {
                             ),
                           ),
                           onSelectedItemChanged: (HighlightColor value) {
-                            ref
-                                .read(boardPreferencesProvider.notifier)
-                                .setHighlightColor(value);
+                            ref.read(boardPreferencesProvider.notifier).setHighlightColor(value);
                           },
                         );
                       },
