@@ -19,7 +19,6 @@ import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessboard.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
@@ -38,6 +37,7 @@ import 'package:lichess_mobile/src/widgets/board.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
@@ -969,22 +969,17 @@ class _GameBottomBar extends ConsumerWidget {
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.rematch),
             dismissOnPress: true,
-            // Capture the messenger before the await, since the sheet dismisses on tap.
             onPressed: () async {
-              final messenger = ScaffoldMessenger.of(context);
-              final errorColor = context.lichessColors.error;
               try {
                 await ref.read(gameControllerProvider(id).notifier).challengeRematch();
               } catch (_) {
-                messenger.showSnackBar(
-                  SnackBar(
-                    content: const Text(
-                      'Could not send the rematch challenge',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    backgroundColor: errorColor,
-                  ),
-                );
+                if (context.mounted) {
+                  showSnackBar(
+                    context,
+                    'Could not send the rematch challenge',
+                    type: SnackBarType.error,
+                  );
+                }
               }
             },
           ),

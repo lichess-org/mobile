@@ -157,10 +157,10 @@ void main() {
         opponentOnGame: false,
       );
 
-      // Let the auto result dialog appear, then dismiss it via its barrier to
-      // reach the bottom bar menu underneath.
+      // Let the auto result dialog appear, then pop it to reach the bottom bar
+      // menu underneath.
       await tester.pump(const Duration(milliseconds: 600));
-      await tester.tapAt(const Offset(5, 5));
+      tester.state<NavigatorState>(find.byType(Navigator).first).pop();
       await tester.pumpAndSettle();
 
       // Open the game menu (bottom sheet) and tap the rematch action.
