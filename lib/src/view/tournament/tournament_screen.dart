@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
@@ -438,20 +439,47 @@ class _TournamentHelp extends StatelessWidget {
                       ),
                     ),
                   ],
-                  rows: const [
-                    DataRow(
-                      cells: [DataCell(Text('Standard, Chess960, Horde')), DataCell(Text('30'))],
-                    ),
+                  rows: [
                     DataRow(
                       cells: [
-                        DataCell(Text('Antichess, Crazyhouse, King of the Hill')),
-                        DataCell(Text('20')),
+                        DataCell(
+                          Text(
+                            _variantLabels(context, [
+                              Variant.standard,
+                              Variant.chess960,
+                              Variant.horde,
+                            ]),
+                          ),
+                        ),
+                        const DataCell(Text('30')),
                       ],
                     ),
                     DataRow(
                       cells: [
-                        DataCell(Text('Three-check, Atomic, Racing Kings')),
-                        DataCell(Text('10')),
+                        DataCell(
+                          Text(
+                            _variantLabels(context, [
+                              Variant.antichess,
+                              Variant.crazyhouse,
+                              Variant.kingOfTheHill,
+                            ]),
+                          ),
+                        ),
+                        const DataCell(Text('20')),
+                      ],
+                    ),
+                    DataRow(
+                      cells: [
+                        DataCell(
+                          Text(
+                            _variantLabels(context, [
+                              Variant.threeCheck,
+                              Variant.atomic,
+                              Variant.racingKings,
+                            ]),
+                          ),
+                        ),
+                        const DataCell(Text('10')),
                       ],
                     ),
                   ],
@@ -464,6 +492,9 @@ class _TournamentHelp extends StatelessWidget {
     );
   }
 }
+
+String _variantLabels(BuildContext context, Iterable<Variant> variants) =>
+    variants.map((variant) => variant.label(context.l10n)).join(', ');
 
 class _ExpandableDescription extends ConsumerWidget {
   const _ExpandableDescription({required this.description});
@@ -785,7 +816,7 @@ class _TournamentInfo extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '${tournament.meta.timeIncrement.display} • ${tournament.meta.perf.title} • ${context.l10n.nbMinutes(tournament.meta.duration.inMinutes)}',
+                '${tournament.meta.timeIncrement.display} • ${tournament.meta.perf.label(context.l10n)} • ${context.l10n.nbMinutes(tournament.meta.duration.inMinutes)}',
               ),
               Text(
                 '${tournament.meta.rated ? context.l10n.rated : context.l10n.casual} • ${context.l10n.arenaArena}',
