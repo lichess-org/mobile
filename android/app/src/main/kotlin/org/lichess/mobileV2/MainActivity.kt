@@ -35,7 +35,7 @@ class MainActivity: FlutterActivity() {
   // running arrive here. Flutter's default handling leaves getIntent() pointing at the stale launch
   // intent, so app_links would read the wrong URI; setIntent() updates the activity's current intent
   // to the freshly received one so app_links surfaces it correctly. (OAuth callbacks no longer pass
-  // through here — flutter_web_auth_2 captures them in its own CallbackActivity / auth session.)
+  // through here — flutter_appauth captures them in its own RedirectUriReceiverActivity.)
   override fun onNewIntent(intent: Intent) {
     setIntent(intent)
     super.onNewIntent(intent)
