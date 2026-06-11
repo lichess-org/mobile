@@ -31,6 +31,7 @@ enum PrefCategory {
   broadcast('preferences.broadcast'),
   engineEvaluation('preferences.engineEvaluation'),
   offlineComputerGame('preferences.offlineComputerGame'),
+  account('preferences.account'),
   log('preferences.log');
 
   const PrefCategory(this.storageKey);

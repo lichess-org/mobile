@@ -467,9 +467,8 @@ class _Player extends ConsumerWidget {
     final gameState = ref.watch(overTheBoardGameControllerProvider);
     final boardPreferences = ref.watch(boardPreferencesProvider);
     final clock = ref.watch(overTheBoardClockProvider);
-    final clockTenths = ref.watch(
-      accountPreferencesProvider.select((prefs) => prefs.value?.clockTenths),
-    );
+    final clockTenths =
+        ref.watch(clockTenthsProvider).value ?? defaultAccountPreferences.clockTenths;
 
     return GamePlayer(
       game: gameState.game,

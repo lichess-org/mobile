@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
+import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 
 typedef AccountPrefState = ({
   // game display
@@ -29,20 +33,26 @@ typedef AccountPrefState = ({
 
 /// A provider that tells if the user wants to see ratings in the app.
 final showRatingsPrefProvider = FutureProvider<ShowRatings>((Ref ref) async {
-  final prefs = await ref.watch(accountPreferencesProvider.future);
-  return prefs?.showRatings ?? defaultAccountPreferences.showRatings;
+  final prefs = await ref.watch(effectiveAccountPreferencesProvider.future);
+  return prefs.showRatings;
 });
 
 /// A provider that tells if the user wants clock sounds.
 final clockSoundProvider = FutureProvider<bool>((Ref ref) async {
-  final prefs = await ref.watch(accountPreferencesProvider.future);
-  return prefs?.clockSound.value ?? defaultAccountPreferences.clockSound.value;
+  final prefs = await ref.watch(effectiveAccountPreferencesProvider.future);
+  return prefs.clockSound.value;
 });
 
 /// A provider that gives the user's preferred piece notation.
 final pieceNotationProvider = FutureProvider<PieceNotation>((Ref ref) async {
-  final prefs = await ref.watch(accountPreferencesProvider.future);
-  return prefs?.pieceNotation ?? defaultAccountPreferences.pieceNotation;
+  final prefs = await ref.watch(effectiveAccountPreferencesProvider.future);
+  return prefs.pieceNotation;
+});
+
+/// A provider that gives the user's preferred clock tenths display.
+final clockTenthsProvider = FutureProvider<ClockTenths>((Ref ref) async {
+  final prefs = await ref.watch(effectiveAccountPreferencesProvider.future);
+  return prefs.clockTenths;
 });
 
 final defaultAccountPreferences = (
@@ -69,6 +79,24 @@ final accountPreferencesProvider = AsyncNotifierProvider<AccountPreferences, Acc
   name: 'AccountPreferencesProvider',
 );
 
+/// Local account-style preferences used when the user is signed out.
+final localAccountPreferencesProvider = NotifierProvider<LocalAccountPreferences, AccountPrefState>(
+  LocalAccountPreferences.new,
+  name: 'LocalAccountPreferencesProvider',
+);
+
+/// Account-style preferences with server values taking precedence when signed in.
+final effectiveAccountPreferencesProvider = FutureProvider<AccountPrefState>((Ref ref) async {
+  final localPrefs = ref.watch(localAccountPreferencesProvider);
+  final authUser = ref.watch(authControllerProvider);
+  if (authUser == null) {
+    return localPrefs;
+  }
+
+  final serverPrefs = await ref.watch(accountPreferencesProvider.selectAsync((prefs) => prefs));
+  return serverPrefs ?? localPrefs;
+});
+
 /// Get the account preferences for the current user.
 ///
 /// The result is cached for the lifetime of the app, until refreshed.
@@ -83,7 +111,7 @@ class AccountPreferences extends AsyncNotifier<AccountPrefState?> {
     }
 
     try {
-      return ref.read(accountRepositoryProvider).getPreferences();
+      return await ref.read(accountRepositoryProvider).getPreferences();
     } catch (e) {
       debugPrint('[AccountPreferences] Error getting account preferences: $e');
       return defaultAccountPreferences;
@@ -112,6 +140,154 @@ class AccountPreferences extends AsyncNotifier<AccountPrefState?> {
     await ref.read(accountRepositoryProvider).setPreference(key, value);
     ref.invalidateSelf();
   }
+}
+
+class LocalAccountPreferences extends Notifier<AccountPrefState> {
+  @override
+  AccountPrefState build() {
+    return _fetch();
+  }
+
+  Future<void> setZen(Zen value) => _save(_copyWith(zenMode: value));
+  Future<void> setPieceNotation(PieceNotation value) => _save(_copyWith(pieceNotation: value));
+  Future<void> setShowRatings(ShowRatings value) => _save(_copyWith(showRatings: value));
+
+  Future<void> setPremove(BooleanPref value) => _save(_copyWith(premove: value));
+  Future<void> setTakeback(Takeback value) => _save(_copyWith(takeback: value));
+  Future<void> setAutoQueen(AutoQueen value) => _save(_copyWith(autoQueen: value));
+  Future<void> setAutoThreefold(AutoThreefold value) => _save(_copyWith(autoThreefold: value));
+  Future<void> setMoretime(Moretime value) => _save(_copyWith(moretime: value));
+  Future<void> setClockTenths(ClockTenths value) => _save(_copyWith(clockTenths: value));
+  Future<void> setClockSound(BooleanPref value) => _save(_copyWith(clockSound: value));
+  Future<void> setConfirmResign(BooleanPref value) => _save(_copyWith(confirmResign: value));
+  Future<void> setSubmitMove(SubmitMove value) => _save(_copyWith(submitMove: value));
+
+  Future<void> _save(AccountPrefState value) async {
+    await LichessBinding.instance.sharedPreferences.setString(
+      PrefCategory.account.storageKey,
+      jsonEncode(_accountPreferencesToJson(value)),
+    );
+    state = value;
+  }
+
+  AccountPrefState _fetch() {
+    final stored = LichessBinding.instance.sharedPreferences.getString(
+      PrefCategory.account.storageKey,
+    );
+    if (stored == null) {
+      return defaultAccountPreferences;
+    }
+    try {
+      return _localAccountPreferencesFromJson(jsonDecode(stored) as Map<String, dynamic>);
+    } catch (e) {
+      debugPrint('[LocalAccountPreferences] Error reading local account preferences: $e');
+      return defaultAccountPreferences;
+    }
+  }
+
+  AccountPrefState _copyWith({
+    Zen? zenMode,
+    PieceNotation? pieceNotation,
+    ShowRatings? showRatings,
+    BooleanPref? premove,
+    AutoQueen? autoQueen,
+    AutoThreefold? autoThreefold,
+    Takeback? takeback,
+    BooleanPref? confirmResign,
+    SubmitMove? submitMove,
+    Moretime? moretime,
+    ClockTenths? clockTenths,
+    BooleanPref? clockSound,
+  }) {
+    return (
+      zenMode: zenMode ?? state.zenMode,
+      pieceNotation: pieceNotation ?? state.pieceNotation,
+      showRatings: showRatings ?? state.showRatings,
+      premove: premove ?? state.premove,
+      autoQueen: autoQueen ?? state.autoQueen,
+      autoThreefold: autoThreefold ?? state.autoThreefold,
+      takeback: takeback ?? state.takeback,
+      moretime: moretime ?? state.moretime,
+      clockTenths: clockTenths ?? state.clockTenths,
+      clockSound: clockSound ?? state.clockSound,
+      confirmResign: confirmResign ?? state.confirmResign,
+      submitMove: submitMove ?? state.submitMove,
+      follow: state.follow,
+      challenge: state.challenge,
+      message: state.message,
+    );
+  }
+}
+
+Map<String, dynamic> _accountPreferencesToJson(AccountPrefState prefs) {
+  return {
+    'zen': prefs.zenMode.value,
+    'pieceNotation': prefs.pieceNotation.value,
+    'ratings': prefs.showRatings.value,
+    'premove': prefs.premove.value,
+    'autoQueen': prefs.autoQueen.value,
+    'autoThreefold': prefs.autoThreefold.value,
+    'takeback': prefs.takeback.value,
+    'moretime': prefs.moretime.value,
+    'clockTenths': prefs.clockTenths.value,
+    'clockSound': prefs.clockSound.value,
+    'confirmResign': prefs.confirmResign.value,
+    'submitMove': prefs.submitMove.value,
+  };
+}
+
+AccountPrefState _localAccountPreferencesFromJson(Map<String, dynamic> json) {
+  return (
+    zenMode: Zen.fromInt(_intValue(json, 'zen', defaultAccountPreferences.zenMode.value)),
+    pieceNotation: PieceNotation.fromInt(
+      _intValue(json, 'pieceNotation', defaultAccountPreferences.pieceNotation.value),
+    ),
+    showRatings: ShowRatings.fromInt(
+      _intValue(json, 'ratings', defaultAccountPreferences.showRatings.value),
+    ),
+    premove: BooleanPref(_boolValue(json, 'premove', defaultAccountPreferences.premove.value)),
+    autoQueen: AutoQueen.fromInt(
+      _intValue(json, 'autoQueen', defaultAccountPreferences.autoQueen.value),
+    ),
+    autoThreefold: AutoThreefold.fromInt(
+      _intValue(json, 'autoThreefold', defaultAccountPreferences.autoThreefold.value),
+    ),
+    takeback: Takeback.fromInt(
+      _intValue(json, 'takeback', defaultAccountPreferences.takeback.value),
+    ),
+    moretime: Moretime.fromInt(
+      _intValue(json, 'moretime', defaultAccountPreferences.moretime.value),
+    ),
+    clockTenths: ClockTenths.fromInt(
+      _intValue(json, 'clockTenths', defaultAccountPreferences.clockTenths.value),
+    ),
+    clockSound: BooleanPref(
+      _boolValue(json, 'clockSound', defaultAccountPreferences.clockSound.value),
+    ),
+    confirmResign: BooleanPref(
+      _boolValue(json, 'confirmResign', defaultAccountPreferences.confirmResign.value),
+    ),
+    submitMove: SubmitMove.fromInt(
+      _intValue(json, 'submitMove', defaultAccountPreferences.submitMove.value),
+    ),
+    follow: defaultAccountPreferences.follow,
+    challenge: defaultAccountPreferences.challenge,
+    message: defaultAccountPreferences.message,
+  );
+}
+
+int _intValue(Map<String, dynamic> json, String key, int fallback) {
+  final value = json[key];
+  return value is num ? value.toInt() : fallback;
+}
+
+bool _boolValue(Map<String, dynamic> json, String key, bool fallback) {
+  final value = json[key];
+  return switch (value) {
+    final bool b => b,
+    final num n => n != 0,
+    _ => fallback,
+  };
 }
 
 abstract class AccountPref<T> {
