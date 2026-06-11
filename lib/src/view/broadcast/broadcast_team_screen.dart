@@ -22,11 +22,7 @@ class BroadcastTeamScreen extends ConsumerWidget {
   final BroadcastTournamentId tournamentId;
   final String teamName;
 
-  static Route<dynamic> buildRoute(
-    BuildContext context,
-    BroadcastTournamentId tournamentId,
-    String teamName,
-  ) {
+  static Route<dynamic> buildRoute(BroadcastTournamentId tournamentId, String teamName) {
     return buildScreenRoute(
       screen: BroadcastTeamScreen(tournamentId: tournamentId, teamName: teamName),
     );
@@ -495,9 +491,9 @@ class _MatchHistoryTable extends StatelessWidget {
               ),
               TableRowInkWell(
                 onTap: () {
-                  Navigator.of(context).push(
-                    BroadcastTeamScreen.buildRoute(context, tournament.data.id, match.opponent),
-                  );
+                  Navigator.of(
+                    context,
+                  ).push(BroadcastTeamScreen.buildRoute(tournament.data.id, match.opponent));
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: _kMatchHistoryRowVerticalPadding),
