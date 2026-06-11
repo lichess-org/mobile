@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -5,12 +6,27 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
 
+import '../../model/auth/fake_auth_storage.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 
 final client = MockClient((request) {
   if (request.url.path == '/api/mobile/profile/$testUserId') {
     return mockResponse(userProfileResponse, 200);
+  }
+  return mockResponse('', 404);
+});
+
+final clientCannotChallenge = MockClient((request) {
+  if (request.url.path == '/api/mobile/profile/$testUserId') {
+    return mockResponse(userProfileResponseCannotChallenge, 200);
+  }
+  return mockResponse('', 404);
+});
+
+final clientCanChallenge = MockClient((request) {
+  if (request.url.path == '/api/mobile/profile/$testUserId') {
+    return mockResponse(userProfileResponseCanChallenge, 200);
   }
   return mockResponse('', 404);
 });
@@ -41,6 +57,80 @@ void main() {
 
       expect(find.text('Activity'), findsOneWidget);
     }, variant: kPlatformVariant);
+
+    testWidgets('Challenge action is hidden when canChallenge is null (own profile case)', (
+      WidgetTester tester,
+    ) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const UserScreen(user: testUser),
+        authUser: fakeAuthUser,
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pump(const Duration(milliseconds: 100));
+
+      expect(find.text('Challenge'), findsNothing);
+    });
+
+    testWidgets(
+      'Challenge action shown when canChallenge is true, and triggers the challenge flow',
+      (WidgetTester tester) async {
+        final app = await makeTestProviderScopeApp(
+          tester,
+          home: const UserScreen(user: testUser),
+          authUser: fakeAuthUser,
+          overrides: {
+            lichessClientProvider: lichessClientProvider.overrideWith(
+              (ref) => LichessClient(clientCanChallenge, ref),
+            ),
+          },
+        );
+
+        await tester.pumpWidget(app);
+        await tester.pump(const Duration(milliseconds: 100));
+
+        expect(find.text('Challenge'), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'Challenge action is visible but shows a toast when the user does not accept challenges',
+      (WidgetTester tester) async {
+        final app = await makeTestProviderScopeApp(
+          tester,
+          home: const UserScreen(user: testUser),
+          authUser: fakeAuthUser,
+          overrides: {
+            lichessClientProvider: lichessClientProvider.overrideWith(
+              (ref) => LichessClient(clientCannotChallenge, ref),
+            ),
+          },
+        );
+
+        await tester.pumpWidget(app);
+        await tester.pump(const Duration(milliseconds: 100));
+
+        // Button stays visible (web parity) so the reason can be explained.
+        expect(find.text('Challenge'), findsOneWidget);
+
+        await tester.tap(find.text('Challenge'));
+        await tester.pump();
+
+        expect(
+          find.descendant(
+            of: find.byType(SnackBar),
+            matching: find.text('$testUserName does not accept challenges.'),
+          ),
+          findsOneWidget,
+        );
+      },
+    );
   });
 }
 
@@ -985,3 +1075,19 @@ const userProfileResponse =
     }
 }
 ''';
+
+/// Same as [userProfileResponse] but with the user's `canChallenge` flag set
+/// to `true`, as the server returns when viewing a profile of someone you can
+/// challenge to a game.
+final userProfileResponseCanChallenge = userProfileResponse.replaceFirst(
+  '"verified": true',
+  '"verified": true,\n        "canChallenge": true',
+);
+
+/// Same as [userProfileResponse] but with the user's `canChallenge` flag set
+/// to `false`, as the server returns for users who have opted out of
+/// receiving challenges (e.g. accept challenges only from friends).
+final userProfileResponseCannotChallenge = userProfileResponse.replaceFirst(
+  '"verified": true',
+  '"verified": true,\n        "canChallenge": false',
+);
