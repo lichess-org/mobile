@@ -10,7 +10,7 @@ environment:
   flutter: 3.44.1
 
 dependencies:
-  app_links: ^7.1.1
+  app_links: ^7.1.2
   app_settings: ^7.0.0
   async: ^2.13.1
   auto_size_text: ^3.0.0
@@ -34,7 +34,7 @@ dependencies:
   fl_chart: ^1.2.0
   flutter:
     sdk: flutter
-  flutter_appauth: ^12.0.0
+  flutter_appauth: ^12.0.1
   flutter_displaymode: ^0.7.0
   flutter_layout_grid: ^2.0.8
   flutter_linkify: ^6.0.0
@@ -43,7 +43,7 @@ dependencies:
     sdk: flutter
   flutter_markdown_plus: ^1.0.7
   flutter_native_splash: ^2.4.8
-  flutter_riverpod: ^3.3.1
+  flutter_riverpod: ^3.3.2
   flutter_secure_storage: ^10.3.1
   flutter_slidable: ^4.0.3
   flutter_spinkit: ^5.2.2
@@ -73,7 +73,7 @@ dependencies:
   signal_strength_indicator: ^0.5.0
   sound_effect: ^0.1.3
   sqflite: ^2.4.3
-  sqflite_common_ffi: ^2.4.1
+  sqflite_common_ffi: ^2.4.2
   stream_transform: ^2.1.1
   url_launcher: ^6.3.2
   visibility_detector: ^0.4.0+2
