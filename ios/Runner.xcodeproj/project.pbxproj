@@ -380,7 +380,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [[ \"$PLATFORM_NAME\" == *simulator* ]]; then\n  echo \"Skipping Crashlytics upload for simulator build\"\n  exit 0\nfi\n\"$PODS_ROOT/FirebaseCrashlytics/upload-symbols\" --flutter-project \"$PROJECT_DIR/firebase_app_id_file.json\" ";
+			shellScript = "if [[ \"$PLATFORM_NAME\" == *simulator* ]]; then\n  echo \"Skipping Crashlytics upload for simulator build\"\n  exit 0\nfi\nUPLOAD_SYMBOLS=\"$PODS_ROOT/FirebaseCrashlytics/upload-symbols\"\nif [[ ! -x \"$UPLOAD_SYMBOLS\" ]]; then\n  echo \"Skipping Crashlytics upload; upload-symbols not found at $UPLOAD_SYMBOLS\"\n  exit 0\nfi\n\"$UPLOAD_SYMBOLS\" --flutter-project \"$PROJECT_DIR/firebase_app_id_file.json\" ";
 		};
 		87319253AF8B73E944EEC4D0 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
