@@ -36,18 +36,30 @@ class _GifExportState extends ConsumerState<GifExport> {
     setState(() {
       loading = true;
     });
-    await shareGameGif(
-      context,
-      ref,
-      widget.gameId,
-      widget.orientation,
-      GifExportOptions(
-        playerNames: playerNames,
-        showPlayerRatings: showPlayerRatings,
-        moveAnnotations: moveAnnotations,
-        chessClock: chessClock,
-      ),
-    );
+    try {
+      await shareGameGif(
+        context,
+        ref,
+        widget.gameId,
+        widget.orientation,
+        GifExportOptions(
+          playerNames: playerNames,
+          showPlayerRatings: showPlayerRatings,
+          moveAnnotations: moveAnnotations,
+          chessClock: chessClock,
+        ),
+      );
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Failed to export GIF: $e')));
+      }
+    } finally {
+      setState(() {
+        loading = false;
+      });
+    }
     if (mounted) {
       Navigator.pop(context);
     }
