@@ -287,6 +287,9 @@ class AppLocalizationsEu extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Edo inportatu PGN fitxategi bat';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+
+  @override
   String get variantStandard => 'Ohikoa';
 
   @override

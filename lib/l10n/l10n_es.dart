@@ -287,6 +287,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mobileOrImportPgnFile => 'O importa un archivo PGN';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+
+  @override
   String get variantStandard => 'Estándar';
 
   @override

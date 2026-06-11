@@ -1430,9 +1430,9 @@ void main() {
       expect(find.text('Good move'), findsOneWidget);
     });
 
-    testWidgets('notBest shows "Good, but there\'s better" label', (tester) async {
+    testWidgets('notBest shows "Good move, but there\'s better" label', (tester) async {
       await pumpWithComment(tester, makeComment(.notBest));
-      expect(find.text("Good, but there's better"), findsOneWidget);
+      expect(find.text("Good move, but there's better"), findsOneWidget);
     });
 
     testWidgets('inaccuracy shows "Inaccuracy" label', (tester) async {
