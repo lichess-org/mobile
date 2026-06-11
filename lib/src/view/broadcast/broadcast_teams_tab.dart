@@ -88,23 +88,29 @@ class BroadcastTeamsList extends ConsumerWidget {
       AsyncData(:final value) => CustomScrollView(
         slivers: [
           if (showTeamScores)
-            SliverToBoxAdapter(child: _TeamStandingsButton(tournamentId: tournamentId)),
-          SliverList(
-            delegate: SliverChildBuilderDelegate((context, index) {
-              final match = teamMatches[index];
-              return _TeamMatchCard(
-                match: match,
-                games: value.games,
-                tournamentId: tournamentId,
-                roundId: roundId,
-                tournamentSlug: tournamentSlug,
-                roundSlug: value.round.slug,
-                title: value.round.name,
-                showEvaluationGauge: showEvaluationGauges,
-                customScoring: value.round.customScoring,
-                showTeamScores: showTeamScores,
-              );
-            }, childCount: teamMatches.length),
+            SliverSafeArea(
+              bottom: false,
+              sliver: SliverToBoxAdapter(child: _TeamStandingsButton(tournamentId: tournamentId)),
+            ),
+          SliverSafeArea(
+            top: !showTeamScores,
+            sliver: SliverList(
+              delegate: SliverChildBuilderDelegate((context, index) {
+                final match = teamMatches[index];
+                return _TeamMatchCard(
+                  match: match,
+                  games: value.games,
+                  tournamentId: tournamentId,
+                  roundId: roundId,
+                  tournamentSlug: tournamentSlug,
+                  roundSlug: value.round.slug,
+                  title: value.round.name,
+                  showEvaluationGauge: showEvaluationGauges,
+                  customScoring: value.round.customScoring,
+                  showTeamScores: showTeamScores,
+                );
+              }, childCount: teamMatches.length),
+            ),
           ),
         ],
       ),
