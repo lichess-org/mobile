@@ -1,4 +1,5 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- Explicitly define screen support for niche device compatibility -->
     <supports-screens
@@ -137,9 +138,21 @@
             </intent-filter>
             <meta-data android:name="flutter_deeplinking_enabled" android:value="false" />
         </activity>
-        <!-- The OAuth custom-scheme callback (org.lichess.mobile://login-callback) is handled by
-             flutter_appauth's net.openid.appauth.RedirectUriReceiverActivity, registered via the
-             `appAuthRedirectScheme` manifest placeholder in android/app/build.gradle.kts. -->
+        <!-- OAuth custom-scheme callback receiver for flutter_appauth. We declare the intent-filter
+             here (with `tools:node="replace"`) instead of relying on the `appAuthRedirectScheme`
+             manifest placeholder. The theme matches the one the plugin contributes. -->
+        <activity
+            android:name="net.openid.appauth.RedirectUriReceiverActivity"
+            android:theme="@style/Theme.AppCompat.Translucent.NoTitleBar"
+            android:exported="true"
+            tools:node="replace">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="org.lichess.mobile" android:host="login-callback" />
+            </intent-filter>
+        </activity>
 
         <receiver android:exported="false"
             android:name="com.dexterous.flutterlocalnotifications.ActionBroadcastReceiver"/>
