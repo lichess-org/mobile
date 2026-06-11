@@ -10,8 +10,8 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:logging/logging.dart';
 
 /// Host of the custom URI scheme callback. Must stay in sync with the
-/// `appAuthRedirectScheme` manifest placeholder in `android/app/build.gradle.kts`
-/// and the `CFBundleURLSchemes` entry in `ios/Runner/Info.plist`.
+/// intent-filter for `net.openid.appauth.RedirectUriReceiverActivity` in
+/// `android/app/src/main/AndroidManifest.xml` and the `CFBundleURLSchemes` entry in `ios/Runner/Info.plist`.
 const _kOAuthCustomSchemeCallbackHost = 'login-callback';
 
 /// The custom URI scheme redirect for OAuth.
