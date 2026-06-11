@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
+import 'package:lichess_mobile/src/model/auth/sign_in_failure_reporter.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:logging/logging.dart';
@@ -72,9 +73,14 @@ class AuthRepository {
           scopes: oauthScopes,
         ),
       );
-    } on FlutterAppAuthUserCancelledException {
-      // The user dismissed the auth session before completing it.
+    } on FlutterAppAuthUserCancelledException catch (e, st) {
+      // The user dismissed the auth session before completing it. This is also how broken-redirect
+      // failures surface (see [reportSignInFailure]), so it is still recorded for monitoring.
+      await reportSignInFailure(_ref, e, st, cancelled: true);
       throw const SignInCancelledException();
+    } catch (e, st) {
+      await reportSignInFailure(_ref, e, st, cancelled: false);
+      rethrow;
     }
 
     _log.fine('Got OAuth token response');
