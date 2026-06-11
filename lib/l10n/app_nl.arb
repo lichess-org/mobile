@@ -732,6 +732,8 @@
   "blackLeftTheGame": "Zwart is weggegaan",
   "whiteDidntMove": "Wit heeft niet gezet",
   "blackDidntMove": "Zwart heeft niet gezet",
+  "whiteAborted": "Wit heeft de partij afgebroken",
+  "blackAborted": "Zwart heeft de partij afgebroken",
   "requestAComputerAnalysis": "Verzoek een computeranalyse",
   "computerAnalysis": "Analyse door de computer",
   "computerAnalysisAvailable": "Computeranalyse beschikbaar",

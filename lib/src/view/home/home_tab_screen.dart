@@ -969,6 +969,36 @@ class _ChallengeScreenButton extends ConsumerWidget {
   }
 }
 
+class _TipCard extends StatelessWidget {
+  const _TipCard({required this.content, required this.actions});
+
+  final Widget content;
+
+  final List<Widget> actions;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: Styles.bodyPadding,
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              DefaultTextStyle.merge(
+                style: Theme.of(context).textTheme.bodyLarge,
+                child: Padding(padding: const EdgeInsets.all(8.0), child: content),
+              ),
+              Row(mainAxisAlignment: MainAxisAlignment.end, children: actions),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _WelcomeMessageCard extends StatefulWidget {
   const _WelcomeMessageCard();
 
@@ -992,39 +1022,19 @@ class _WelcomeMessageCardState extends State<_WelcomeMessageCard> {
       return const SizedBox.shrink();
     }
 
-    return Padding(
-      padding: Styles.bodyPadding,
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text.rich(
-                  TextSpan(
-                    children: [
-                      TextSpan(
-                        text: '${context.l10n.mobileWelcomeToLichessApp}\n\n',
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                      TextSpan(
-                        text: context.l10n.mobileNotAllFeaturesAreAvailable,
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [TextButton(onPressed: _dismiss, child: Text(context.l10n.ok))],
-              ),
-            ],
-          ),
+    return _TipCard(
+      content: Text.rich(
+        TextSpan(
+          children: [
+            TextSpan(
+              text: '${context.l10n.mobileWelcomeToLichessApp}\n\n',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            TextSpan(text: context.l10n.mobileNotAllFeaturesAreAvailable),
+          ],
         ),
       ),
+      actions: [TextButton(onPressed: _dismiss, child: Text(context.l10n.ok))],
     );
   }
 }
@@ -1076,54 +1086,34 @@ class _NNUEFilesOutdatedTipState extends ConsumerState<_NNUEFilesOutdatedTip> {
             return const SizedBox.shrink();
           }
 
-          return Padding(
-            padding: Styles.bodyPadding,
-            child: Card(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.warning,
-                            size: 25.0,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                          const SizedBox(width: 8.0),
-                          const Flexible(
-                            child: Text(
-                              // TODO l10n
-                              'New Stockfish version available! Go to the settings to download the updated NNUE files.',
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        TextButton(
-                          onPressed: () {
-                            setState(() {
-                              _openedSettings = true;
-                            });
-                            Navigator.of(
-                              context,
-                              rootNavigator: true,
-                            ).push(EngineSettingsScreen.buildRoute());
-                          },
-                          // TODO l10n
-                          child: const Text('Open settings'),
-                        ),
-                      ],
-                    ),
-                  ],
+          return _TipCard(
+            content: Row(
+              children: [
+                Icon(Icons.warning, size: 25.0, color: Theme.of(context).colorScheme.primary),
+                const SizedBox(width: 8.0),
+                const Flexible(
+                  child: Text(
+                    // TODO l10n
+                    'New Stockfish version available! Go to the settings to download the updated NNUE files.',
+                  ),
                 ),
-              ),
+              ],
             ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    _openedSettings = true;
+                  });
+                  Navigator.of(
+                    context,
+                    rootNavigator: true,
+                  ).push(EngineSettingsScreen.buildRoute());
+                },
+                // TODO l10n
+                child: const Text('Open settings'),
+              ),
+            ],
           );
         },
       ),
@@ -1159,41 +1149,28 @@ class _HomeCustomizationTipState extends State<_HomeCustomizationTip> {
       return const SizedBox.shrink();
     }
 
-    return Padding(
-      padding: Styles.bodyPadding,
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ListTile(title: Text(context.l10n.mobileCustomizeHomeTip)),
-              Row(
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(
-                        context,
-                        rootNavigator: true,
-                      ).push(HomeTabScreen.buildRoute(editModeEnabled: true));
+    return _TipCard(
+      content: Text(context.l10n.mobileCustomizeHomeTip),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(
+              context,
+              rootNavigator: true,
+            ).push(HomeTabScreen.buildRoute(editModeEnabled: true));
 
-                      _setHideHomeWidgetCustomizationTip();
-                    },
-                    child: Text(context.l10n.mobileCustomizeButton),
-                  ),
-                  const SizedBox(width: 8.0),
-                  TextButton(
-                    onPressed: () {
-                      _setHideHomeWidgetCustomizationTip();
-                    },
-                    child: Text(context.l10n.mobileCustomizeHomeTipDismiss),
-                  ),
-                ],
-              ),
-            ],
-          ),
+            _setHideHomeWidgetCustomizationTip();
+          },
+          child: Text(context.l10n.mobileCustomizeButton),
         ),
-      ),
+        const SizedBox(width: 8.0),
+        TextButton(
+          onPressed: () {
+            _setHideHomeWidgetCustomizationTip();
+          },
+          child: Text(context.l10n.mobileCustomizeHomeTipDismiss),
+        ),
+      ],
     );
   }
 }

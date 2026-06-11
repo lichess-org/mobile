@@ -1,3 +1,4 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -74,14 +75,7 @@ class _Body extends StatelessWidget {
       children: [
         _OverallTeamStat(team: team),
         if (team.players.isNotEmpty) ...[
-          _SectionHeader(title: context.l10n.players),
-          ...team.players.asMap().entries.map(
-            (entry) => _PlayerListTile(
-              tournament: tournament,
-              playerResult: entry.value,
-              index: entry.key,
-            ),
-          ),
+          _TeamPlayersList(tournament: tournament, players: team.players),
         ],
 
         if (team.matches.isNotEmpty) ...[
@@ -171,6 +165,191 @@ class _SectionHeader extends StatelessWidget {
   }
 }
 
+enum _SortingTypes { elo, score }
+
+typedef _BroadcastPlayerPicker<T> = T? Function(BroadcastPlayerWithOverallResult player);
+
+const _kTableRowVerticalPadding = 12.0;
+const _kTableRowHorizontalPadding = 8.0;
+const _kTableRowPadding = EdgeInsets.symmetric(
+  horizontal: _kTableRowHorizontalPadding,
+  vertical: _kTableRowVerticalPadding,
+);
+const _kHeaderTextStyle = TextStyle(fontWeight: .bold, overflow: .ellipsis);
+
+class _TeamPlayersList extends StatefulWidget {
+  const _TeamPlayersList({required this.tournament, required this.players});
+
+  final BroadcastTournament tournament;
+  final IList<BroadcastPlayerWithOverallResult> players;
+
+  @override
+  State<_TeamPlayersList> createState() => _TeamPlayersListState();
+}
+
+class _TeamPlayersListState extends State<_TeamPlayersList> {
+  late IList<BroadcastPlayerWithOverallResult> players;
+  late _SortingTypes currentSort;
+  bool reverse = false;
+  bool get withScores => players.any((p) => p.score != null);
+
+  @override
+  void initState() {
+    super.initState();
+    players = widget.players;
+    currentSort = .elo;
+    sort();
+  }
+
+  @override
+  void didUpdateWidget(_TeamPlayersList oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.players != widget.players) {
+      players = widget.players;
+      sort();
+    }
+  }
+
+  Comparator<BroadcastPlayerWithOverallResult> nullableCompare<T extends Comparable<T>>(
+    _BroadcastPlayerPicker<T> picker,
+  ) => (p1, p2) {
+    final field1 = picker(p1);
+    final field2 = picker(p2);
+    if (field1 == null && field2 == null) return 0;
+    if (field1 == null) return -1;
+    if (field2 == null) return 1;
+
+    return field1.compareTo(field2);
+  };
+
+  Comparator<BroadcastPlayerWithOverallResult> bothCompare<
+    T extends Comparable<T>,
+    U extends Comparable<U>
+  >(_BroadcastPlayerPicker<T> picker1, _BroadcastPlayerPicker<U> picker2) => (p1, p2) {
+    final value = nullableCompare(picker1)(p1, p2);
+
+    if (value == 0) {
+      return nullableCompare(picker2)(p1, p2);
+    } else {
+      return value;
+    }
+  };
+
+  void toggleSort(_SortingTypes newSort) {
+    if (currentSort != newSort) {
+      currentSort = newSort;
+      reverse = false;
+    } else {
+      reverse = !reverse;
+    }
+
+    sort();
+  }
+
+  void sort() {
+    final compare = switch (currentSort) {
+      _SortingTypes.elo =>
+        (BroadcastPlayerWithOverallResult p1, BroadcastPlayerWithOverallResult p2) =>
+            bothCompare((p) => p.player.rating, (p) => p.score)(p2, p1),
+      _SortingTypes.score =>
+        (BroadcastPlayerWithOverallResult p1, BroadcastPlayerWithOverallResult p2) =>
+            p1.rank != null && p2.rank != null
+            ? p1.rank!.compareTo(p2.rank!)
+            : bothCompare(withScores ? (p) => p.score : (p) => p.played, (p) => p.player.rating)(
+                p2,
+                p1,
+              ),
+    };
+
+    setState(() {
+      players = reverse ? players.sortReversed(compare) : players.sort(compare);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final sortIcon = reverse ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down;
+
+    return Column(
+      mainAxisSize: .min,
+      crossAxisAlignment: .stretch,
+      children: [
+        Row(
+          crossAxisAlignment: .center,
+          children: [
+            Expanded(
+              child: _TableTitleCell(
+                title: Text('${context.l10n.players} (Elo)', style: _kHeaderTextStyle),
+                onTap: () => toggleSort(.elo),
+                sortIcon: currentSort == .elo ? sortIcon : null,
+              ),
+            ),
+            _TableTitleCell(
+              title: Text(
+                withScores ? context.l10n.broadcastScore : context.l10n.games,
+                style: _kHeaderTextStyle,
+              ),
+              onTap: () => toggleSort(.score),
+              sortIcon: currentSort == .score ? sortIcon : null,
+            ),
+          ],
+        ),
+        ...players.asMap().entries.map(
+          (entry) => _PlayerListTile(
+            tournament: widget.tournament,
+            playerResult: entry.value,
+            index: entry.key,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _TableTitleCell extends StatelessWidget {
+  const _TableTitleCell({required this.title, required this.onTap, this.sortIcon});
+
+  final Widget title;
+  final void Function() onTap;
+  final IconData? sortIcon;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: ColorScheme.of(context).surfaceDim,
+      child: InkWell(
+        onTap: onTap,
+        child: SizedBox(
+          height: 44,
+          child: Padding(
+            padding: _kTableRowPadding,
+            child: Row(
+              mainAxisSize: .min,
+              crossAxisAlignment: .center,
+              children: [
+                Flexible(child: title),
+                const SizedBox(width: 4),
+                SizedBox(
+                  width: 16,
+                  child: sortIcon != null
+                      ? Text(
+                          String.fromCharCode(sortIcon!.codePoint),
+                          style: _kHeaderTextStyle.copyWith(
+                            fontSize: 16,
+                            fontFamily: sortIcon!.fontFamily,
+                          ),
+                        )
+                      : null,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _PlayerListTile extends StatelessWidget {
   const _PlayerListTile({
     required this.tournament,
@@ -206,23 +385,11 @@ class _PlayerListTile extends StatelessWidget {
       subtitle: playerResult.player.rating != null
           ? Text(playerResult.player.rating.toString())
           : null,
-      trailing: Column(
-        mainAxisSize: .min,
-        crossAxisAlignment: .end,
-        mainAxisAlignment: .center,
-        children: [
-          Text(
-            '$scoreStr / ${playerResult.played}',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: .bold),
-          ),
-          Text(
-            'Score',
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
-            ),
-          ),
-        ],
+      trailing: Text(
+        '$scoreStr / ${playerResult.played}',
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: .bold),
       ),
+
       onTap: () {
         if (playerResult.player.id == null) return;
         Navigator.of(context).push(
@@ -252,6 +419,8 @@ class _StatCard extends StatelessWidget {
     );
   }
 }
+
+const _kMatchHistoryRowVerticalPadding = 16.0;
 
 class _MatchHistoryTable extends StatelessWidget {
   const _MatchHistoryTable({required this.team, required this.tournament});
@@ -317,7 +486,10 @@ class _MatchHistoryTable extends StatelessWidget {
               _TableTapCell(
                 match: match,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0,
+                    vertical: _kMatchHistoryRowVerticalPadding,
+                  ),
                   child: Text((index + 1).toString()),
                 ),
               ),
@@ -328,14 +500,19 @@ class _MatchHistoryTable extends StatelessWidget {
                   );
                 },
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12.0),
-                  child: Text(match.opponent, maxLines: 2, overflow: .ellipsis),
+                  padding: const EdgeInsets.symmetric(vertical: _kMatchHistoryRowVerticalPadding),
+                  child: Text(
+                    match.opponent,
+                    maxLines: 2,
+                    overflow: .ellipsis,
+                    style: const TextStyle(fontWeight: .w500),
+                  ),
                 ),
               ),
               _TableTapCell(
                 match: match,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12.0),
+                  padding: const EdgeInsets.symmetric(vertical: _kMatchHistoryRowVerticalPadding),
                   child: match.mp != null
                       ? Text(
                           NumberFormat('#.#').format(match.mp),
@@ -348,7 +525,10 @@ class _MatchHistoryTable extends StatelessWidget {
               _TableTapCell(
                 match: match,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0,
+                    vertical: _kMatchHistoryRowVerticalPadding,
+                  ),
                   child: match.gp != null
                       ? Text(NumberFormat('#.#').format(match.gp), textAlign: .center)
                       : const Text('*', textAlign: .center),

@@ -287,6 +287,9 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Ou importa un arquivo PGN';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+
+  @override
   String get variantStandard => 'Estándar';
 
   @override
@@ -2524,6 +2527,12 @@ class AppLocalizationsGl extends AppLocalizations {
   String get blackDidntMove => 'As negras non moveron';
 
   @override
+  String get whiteAborted => 'As brancas abortaron a partida';
+
+  @override
+  String get blackAborted => 'As negras abortaron a partida';
+
+  @override
   String get requestAComputerAnalysis => 'Solicitar unha análise por computador';
 
   @override
@@ -3360,7 +3369,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get playerNames => 'Nomes das xogadoras/es';
 
   @override
-  String get moveAnnotations => 'Mover anotacións';
+  String get moveAnnotations => 'Anotación das xogadas';
 
   @override
   String get pasteTheFenStringHere => 'Pega o texto FEN aquí';

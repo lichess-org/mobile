@@ -611,7 +611,7 @@ class _PracticeCommentCardState extends ConsumerState<_PracticeCommentCard> {
 
       final verdictText = switch (verdict) {
         MoveVerdict.goodMove => context.l10n.studyGoodMove,
-        MoveVerdict.notBest => "Good, but there's better",
+        MoveVerdict.notBest => context.l10n.mobileGoodMoveButThereIsBetter,
         MoveVerdict.inaccuracy => context.l10n.inaccuracy,
         MoveVerdict.mistake => context.l10n.mistake,
         MoveVerdict.blunder => context.l10n.blunder,

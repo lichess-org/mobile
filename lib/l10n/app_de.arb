@@ -732,6 +732,8 @@
   "blackLeftTheGame": "Schwarz hat die Partie verlassen",
   "whiteDidntMove": "Weiß hat nicht gezogen",
   "blackDidntMove": "Schwarz hat nicht gezogen",
+  "whiteAborted": "Weiß hat die Partie verlassen",
+  "blackAborted": "Schwarz hat die Partie verlassen",
   "requestAComputerAnalysis": "Computer-Analyse anfordern",
   "computerAnalysis": "Computer-Analyse",
   "computerAnalysisAvailable": "Computeranalyse verfügbar",

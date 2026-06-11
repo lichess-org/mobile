@@ -500,7 +500,7 @@ class _StandaloneGameTitle extends ConsumerWidget {
             else if (meta.daysPerTurn != null)
               Flexible(child: AppBarTitleText('${context.l10n.nbDays(meta.daysPerTurn!)}$info'))
             else
-              Flexible(child: AppBarTitleText('${meta.perf.title}$info')),
+              Flexible(child: AppBarTitleText('${meta.perf.label(context.l10n)}$info')),
           ],
         );
       },

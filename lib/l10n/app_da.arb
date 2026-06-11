@@ -732,6 +732,8 @@
   "blackLeftTheGame": "Sort forlod partiet",
   "whiteDidntMove": "Hvid trak ikke",
   "blackDidntMove": "Sort trak ikke",
+  "whiteAborted": "Hvid forlod partiet",
+  "blackAborted": "Sort forlod partiet",
   "requestAComputerAnalysis": "Anmod om en computeranalyse",
   "computerAnalysis": "Computeranalyse",
   "computerAnalysisAvailable": "Computeranalyse tilgængelig",

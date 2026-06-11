@@ -236,11 +236,16 @@ class _UserProfileListView extends ConsumerWidget {
                 },
               ),
               if (authUser != null) ...[
-                if (user.canChallenge == true)
+                if (user.canChallenge != null)
                   ListTile(
                     title: Text(context.l10n.challengeChallengeToPlay),
                     leading: const Icon(LichessIcons.crossed_swords),
-                    onTap: () => UserScreen.challengeUser(user, context: context, ref: ref),
+                    onTap: user.canChallenge == true
+                        ? () => UserScreen.challengeUser(user, context: context, ref: ref)
+                        : () => showSnackBar(
+                            context,
+                            context.l10n.challengeXDoesNotAcceptChallenges(user.username),
+                          ),
                   ),
 
                 if (user.blocking != true && !user.isBot && kidMode.value == false)

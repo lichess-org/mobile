@@ -490,7 +490,7 @@ class ChallengeCreatedNotification extends LocalNotification {
   }
 
   @override
-  String get channelId => 'challengeAccept';
+  String get channelId => 'challengeCreate';
 
   @override
   int get id => challengeId.hashCode;

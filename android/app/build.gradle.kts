@@ -56,8 +56,6 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
-        // Used by flutter_appauth plugin
-        manifestPlaceholders["appAuthRedirectScheme"] = "org.lichess.mobile"
     }
 
     signingConfigs {
