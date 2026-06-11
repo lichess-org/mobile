@@ -2527,6 +2527,12 @@ class AppLocalizationsEl extends AppLocalizations {
   String get blackDidntMove => 'Τα μαύρα δεν έπαιξαν';
 
   @override
+  String get whiteAborted => 'Τα λευκά ακύρωσαν την παρτίδα';
+
+  @override
+  String get blackAborted => 'Τα μαύρα ακύρωσαν την παρτίδα';
+
+  @override
   String get requestAComputerAnalysis => 'Ζητήστε ανάλυση υπολογιστή';
 
   @override

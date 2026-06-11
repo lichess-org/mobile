@@ -2525,6 +2525,12 @@ class AppLocalizationsHi extends AppLocalizations {
   String get blackDidntMove => 'काले ने चाल नहीं चली';
 
   @override
+  String get whiteAborted => 'White aborted the game';
+
+  @override
+  String get blackAborted => 'Black aborted the game';
+
+  @override
   String get requestAComputerAnalysis => 'कंप्यूटर विश्लेषण का अनुरोध करें';
 
   @override

@@ -2525,6 +2525,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get blackDidntMove => 'Black didn\'t move';
 
   @override
+  String get whiteAborted => 'White aborted the game';
+
+  @override
+  String get blackAborted => 'Black aborted the game';
+
+  @override
   String get requestAComputerAnalysis => 'Request a computer analysis';
 
   @override
@@ -9134,6 +9140,12 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get blackDidntMove => 'Black didn\'t move';
+
+  @override
+  String get whiteAborted => 'White aborted the game';
+
+  @override
+  String get blackAborted => 'Black aborted the game';
 
   @override
   String get requestAComputerAnalysis => 'Request a computer analysis';

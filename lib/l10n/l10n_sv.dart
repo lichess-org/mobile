@@ -2527,6 +2527,12 @@ class AppLocalizationsSv extends AppLocalizations {
   String get blackDidntMove => 'Svart flyttade ingen pjäs';
 
   @override
+  String get whiteAborted => 'White aborted the game';
+
+  @override
+  String get blackAborted => 'Black aborted the game';
+
+  @override
   String get requestAComputerAnalysis => 'Begär datoranalys';
 
   @override

@@ -2583,6 +2583,12 @@ class AppLocalizationsPl extends AppLocalizations {
   String get blackDidntMove => 'Czarne nie ruszyły się';
 
   @override
+  String get whiteAborted => 'Białe porzuciły partię';
+
+  @override
+  String get blackAborted => 'Czarne porzuciły partię';
+
+  @override
   String get requestAComputerAnalysis => 'Poproś o analizę komputerową';
 
   @override

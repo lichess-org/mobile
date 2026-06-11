@@ -2527,6 +2527,12 @@ class AppLocalizationsEt extends AppLocalizations {
   String get blackDidntMove => 'Must ei sooritanud käiku';
 
   @override
+  String get whiteAborted => 'White aborted the game';
+
+  @override
+  String get blackAborted => 'Black aborted the game';
+
+  @override
   String get requestAComputerAnalysis => 'Nõua arvuti analüüsi';
 
   @override

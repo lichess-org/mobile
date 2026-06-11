@@ -2503,6 +2503,12 @@ class AppLocalizationsId extends AppLocalizations {
   String get blackDidntMove => 'Hitam tidak melangkah';
 
   @override
+  String get whiteAborted => 'White aborted the game';
+
+  @override
+  String get blackAborted => 'Black aborted the game';
+
+  @override
   String get requestAComputerAnalysis => 'Minta analisis komputer';
 
   @override

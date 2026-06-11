@@ -2527,6 +2527,12 @@ class AppLocalizationsKk extends AppLocalizations {
   String get blackDidntMove => 'Қара жүрмей қойды';
 
   @override
+  String get whiteAborted => 'White aborted the game';
+
+  @override
+  String get blackAborted => 'Black aborted the game';
+
+  @override
   String get requestAComputerAnalysis => 'Компьютерлік талдауды сұрау';
 
   @override

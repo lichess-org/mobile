@@ -2555,6 +2555,12 @@ class AppLocalizationsRo extends AppLocalizations {
   String get blackDidntMove => 'Negrul nu a mutat';
 
   @override
+  String get whiteAborted => 'Albul a anulat jocul';
+
+  @override
+  String get blackAborted => 'Negrul a anulat jocul';
+
+  @override
   String get requestAComputerAnalysis => 'Cereți o analiză făcută de calculator';
 
   @override

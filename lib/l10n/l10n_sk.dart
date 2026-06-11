@@ -2583,6 +2583,12 @@ class AppLocalizationsSk extends AppLocalizations {
   String get blackDidntMove => 'Čierny nepotiahol';
 
   @override
+  String get whiteAborted => 'White aborted the game';
+
+  @override
+  String get blackAborted => 'Black aborted the game';
+
+  @override
   String get requestAComputerAnalysis => 'Požiadať o počítačovú analýzu';
 
   @override

@@ -2527,6 +2527,12 @@ class AppLocalizationsNl extends AppLocalizations {
   String get blackDidntMove => 'Zwart heeft niet gezet';
 
   @override
+  String get whiteAborted => 'Wit heeft de partij afgebroken';
+
+  @override
+  String get blackAborted => 'Zwart heeft de partij afgebroken';
+
+  @override
   String get requestAComputerAnalysis => 'Verzoek een computeranalyse';
 
   @override

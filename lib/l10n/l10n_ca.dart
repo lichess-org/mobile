@@ -2527,6 +2527,12 @@ class AppLocalizationsCa extends AppLocalizations {
   String get blackDidntMove => 'Les negres no han mogut';
 
   @override
+  String get whiteAborted => 'Les blanques han cancel·lat la partida';
+
+  @override
+  String get blackAborted => 'Les negres han cancel·lat la partida';
+
+  @override
   String get requestAComputerAnalysis => 'Demana una anàlisi computeritzada';
 
   @override

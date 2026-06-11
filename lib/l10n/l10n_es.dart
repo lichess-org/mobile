@@ -2527,6 +2527,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get blackDidntMove => 'Las negras no han movido';
 
   @override
+  String get whiteAborted => 'Las blancas han dejado la partida';
+
+  @override
+  String get blackAborted => 'Las negras han dejado la partida';
+
+  @override
   String get requestAComputerAnalysis => 'Solicitar un análisis del ordenador';
 
   @override

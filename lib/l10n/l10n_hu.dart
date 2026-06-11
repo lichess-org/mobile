@@ -2527,6 +2527,12 @@ class AppLocalizationsHu extends AppLocalizations {
   String get blackDidntMove => 'Sötét nem lépett';
 
   @override
+  String get whiteAborted => 'White aborted the game';
+
+  @override
+  String get blackAborted => 'Black aborted the game';
+
+  @override
   String get requestAComputerAnalysis => 'Számítógépes elemzés kérése';
 
   @override

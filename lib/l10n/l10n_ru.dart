@@ -2583,6 +2583,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get blackDidntMove => 'Чёрные не сделали ход';
 
   @override
+  String get whiteAborted => 'Белые отменили игру';
+
+  @override
+  String get blackAborted => 'Чёрные отменили игру';
+
+  @override
   String get requestAComputerAnalysis => 'Выполнить компьютерный анализ';
 
   @override

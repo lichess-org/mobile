@@ -2579,6 +2579,12 @@ class AppLocalizationsBe extends AppLocalizations {
   String get blackDidntMove => 'Чорныя не зрабілі ход';
 
   @override
+  String get whiteAborted => 'White aborted the game';
+
+  @override
+  String get blackAborted => 'Black aborted the game';
+
+  @override
   String get requestAComputerAnalysis => 'Запытаць кампутарны аналіз';
 
   @override

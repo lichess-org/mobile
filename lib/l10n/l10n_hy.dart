@@ -2527,6 +2527,12 @@ class AppLocalizationsHy extends AppLocalizations {
   String get blackDidntMove => 'Սևերը քայլ չեն կատարել';
 
   @override
+  String get whiteAborted => 'White aborted the game';
+
+  @override
+  String get blackAborted => 'Black aborted the game';
+
+  @override
   String get requestAComputerAnalysis => 'Համակարգչային վերլուծություն պատվիրել';
 
   @override

@@ -2527,6 +2527,12 @@ class AppLocalizationsEu extends AppLocalizations {
   String get blackDidntMove => 'Beltzak ez du mugitu';
 
   @override
+  String get whiteAborted => 'Zuriak partida bertan behera utzi du';
+
+  @override
+  String get blackAborted => 'Beltzak partida bertan behera utzi du';
+
+  @override
   String get requestAComputerAnalysis => 'Ordenagailuaren analisia eskatu';
 
   @override

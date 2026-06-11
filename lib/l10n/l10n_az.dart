@@ -2525,6 +2525,12 @@ class AppLocalizationsAz extends AppLocalizations {
   String get blackDidntMove => 'Qaralar gediş oynamadı';
 
   @override
+  String get whiteAborted => 'White aborted the game';
+
+  @override
+  String get blackAborted => 'Black aborted the game';
+
+  @override
   String get requestAComputerAnalysis => 'Kompüter təhlilini tələb et';
 
   @override

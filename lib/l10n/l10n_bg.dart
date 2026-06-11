@@ -2527,6 +2527,12 @@ class AppLocalizationsBg extends AppLocalizations {
   String get blackDidntMove => 'Черните не направиха ход';
 
   @override
+  String get whiteAborted => 'White aborted the game';
+
+  @override
+  String get blackAborted => 'Black aborted the game';
+
+  @override
   String get requestAComputerAnalysis => 'Поискайте компютърен анализ';
 
   @override

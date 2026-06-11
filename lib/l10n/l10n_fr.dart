@@ -2527,6 +2527,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String get blackDidntMove => 'Les Noirs n\'ont pas bougé';
 
   @override
+  String get whiteAborted => 'Les Blancs ont quitté la partie';
+
+  @override
+  String get blackAborted => 'Les Noirs ont quitté la partie';
+
+  @override
   String get requestAComputerAnalysis => 'Demander une analyse automatique';
 
   @override

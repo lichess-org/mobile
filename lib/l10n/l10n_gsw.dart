@@ -2527,6 +2527,12 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get blackDidntMove => 'Schwarz hät nöd zoge';
 
   @override
+  String get whiteAborted => 'White aborted the game';
+
+  @override
+  String get blackAborted => 'Black aborted the game';
+
+  @override
   String get requestAComputerAnalysis => 'Computer-Analyse afordere';
 
   @override

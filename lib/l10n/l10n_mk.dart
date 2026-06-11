@@ -2527,6 +2527,12 @@ class AppLocalizationsMk extends AppLocalizations {
   String get blackDidntMove => 'Црниот не направи потег';
 
   @override
+  String get whiteAborted => 'White aborted the game';
+
+  @override
+  String get blackAborted => 'Black aborted the game';
+
+  @override
   String get requestAComputerAnalysis => 'Побарајте компјутерска анализа';
 
   @override

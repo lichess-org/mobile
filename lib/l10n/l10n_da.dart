@@ -2527,6 +2527,12 @@ class AppLocalizationsDa extends AppLocalizations {
   String get blackDidntMove => 'Sort trak ikke';
 
   @override
+  String get whiteAborted => 'Hvid forlod partiet';
+
+  @override
+  String get blackAborted => 'Sort forlod partiet';
+
+  @override
   String get requestAComputerAnalysis => 'Anmod om en computeranalyse';
 
   @override

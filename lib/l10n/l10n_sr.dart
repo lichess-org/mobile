@@ -2543,6 +2543,12 @@ class AppLocalizationsSr extends AppLocalizations {
   String get blackDidntMove => 'Црни се није померијо';
 
   @override
+  String get whiteAborted => 'White aborted the game';
+
+  @override
+  String get blackAborted => 'Black aborted the game';
+
+  @override
   String get requestAComputerAnalysis => 'Затражи рачунарску анализу';
 
   @override

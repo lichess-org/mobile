@@ -2581,6 +2581,12 @@ class AppLocalizationsLt extends AppLocalizations {
   String get blackDidntMove => 'Juodieji nepajudėjo';
 
   @override
+  String get whiteAborted => 'White aborted the game';
+
+  @override
+  String get blackAborted => 'Black aborted the game';
+
+  @override
   String get requestAComputerAnalysis => 'Užsakyti kompiuterio analizę';
 
   @override

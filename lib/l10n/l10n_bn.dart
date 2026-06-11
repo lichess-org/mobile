@@ -2527,6 +2527,12 @@ class AppLocalizationsBn extends AppLocalizations {
   String get blackDidntMove => 'কালো চাল দিল না';
 
   @override
+  String get whiteAborted => 'White aborted the game';
+
+  @override
+  String get blackAborted => 'Black aborted the game';
+
+  @override
   String get requestAComputerAnalysis => 'কম্পিউটার বিশ্লেষণের জন্য অবেদন করুন';
 
   @override

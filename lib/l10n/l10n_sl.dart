@@ -2583,6 +2583,12 @@ class AppLocalizationsSl extends AppLocalizations {
   String get blackDidntMove => 'Črni ni naredil poteze';
 
   @override
+  String get whiteAborted => 'White aborted the game';
+
+  @override
+  String get blackAborted => 'Black aborted the game';
+
+  @override
   String get requestAComputerAnalysis => 'Zahtevaj računalniško analizo';
 
   @override

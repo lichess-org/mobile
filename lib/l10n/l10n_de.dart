@@ -2527,6 +2527,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get blackDidntMove => 'Schwarz hat nicht gezogen';
 
   @override
+  String get whiteAborted => 'Weiß hat die Partie verlassen';
+
+  @override
+  String get blackAborted => 'Schwarz hat die Partie verlassen';
+
+  @override
   String get requestAComputerAnalysis => 'Computer-Analyse anfordern';
 
   @override

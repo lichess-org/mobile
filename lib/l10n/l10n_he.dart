@@ -2579,6 +2579,12 @@ class AppLocalizationsHe extends AppLocalizations {
   String get blackDidntMove => 'שחור לא ביצע מסע';
 
   @override
+  String get whiteAborted => 'White aborted the game';
+
+  @override
+  String get blackAborted => 'Black aborted the game';
+
+  @override
   String get requestAComputerAnalysis => 'בקש/י ניתוח ממוחשב';
 
   @override

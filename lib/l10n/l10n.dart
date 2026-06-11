@@ -4600,6 +4600,18 @@ abstract class AppLocalizations {
   /// **'Black didn\'t move'**
   String get blackDidntMove;
 
+  /// No description provided for @whiteAborted.
+  ///
+  /// In en, this message translates to:
+  /// **'White aborted the game'**
+  String get whiteAborted;
+
+  /// No description provided for @blackAborted.
+  ///
+  /// In en, this message translates to:
+  /// **'Black aborted the game'**
+  String get blackAborted;
+
   /// No description provided for @requestAComputerAnalysis.
   ///
   /// In en, this message translates to:

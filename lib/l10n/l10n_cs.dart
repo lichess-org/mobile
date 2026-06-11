@@ -2581,6 +2581,12 @@ class AppLocalizationsCs extends AppLocalizations {
   String get blackDidntMove => 'Černý netáhl';
 
   @override
+  String get whiteAborted => 'White aborted the game';
+
+  @override
+  String get blackAborted => 'Black aborted the game';
+
+  @override
   String get requestAComputerAnalysis => 'Vyžádat počítačovou analýzu';
 
   @override

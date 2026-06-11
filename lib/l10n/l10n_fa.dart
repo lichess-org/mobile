@@ -153,7 +153,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileSettingsImmersiveMode => 'حالت غوطه‌ور';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'پنهان کردن رابط کاربری سیستم موقع بازی. اگر ژست‌های حرکتی سیستم (مثل دکمهٔ بازگشت) در لبه‌های صفحه مزاحمتان است، از این گزینه استفاده کنید. این تنظیم برای صفحه‌های بازی و معما اعمال می‌شود.';
+  String get mobileSettingsImmersiveModeSubtitle => 'رابط کاربری سامانه را هنگام بازی بپنهانید. اگر از ایماهای ناوِش سامانه در لبه‌های پرده آزرده می‌شوید، از این گزینه بَهرید. برای پرده‌های بازی و معما اعمال می‌شود.';
 
   @override
   String get mobileSettingsMaterialDifferenceCapturedPieces => 'مهره‌های زده';
@@ -1283,7 +1283,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get patronLichessPatron => 'یاورِ Lichess';
 
   @override
-  String get patronBecomePatron => 'یاور Lichess بشوید';
+  String get patronBecomePatron => 'یاورِ Lichess شوید';
 
   @override
   String perfStatPerfStats(String param) {
@@ -2419,7 +2419,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get chat => 'گپ';
 
   @override
-  String get resign => 'تسلیم شدن';
+  String get resign => 'تسلیم';
 
   @override
   String get checkmate => 'کیش و مات';
@@ -2525,6 +2525,12 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get blackDidntMove => 'سیاه بازی نکرد';
+
+  @override
+  String get whiteAborted => 'سفید بازی را لغوید';
+
+  @override
+  String get blackAborted => 'سیاه بازی را لغوید';
 
   @override
   String get requestAComputerAnalysis => 'درخواست تحلیل رایانه‌ای';
@@ -3101,10 +3107,10 @@ class AppLocalizationsFa extends AppLocalizations {
   String get finished => 'تمام شده';
 
   @override
-  String get abortGame => 'انصراف از بازی';
+  String get abortGame => 'لغویدنِ بازی';
 
   @override
-  String get gameAborted => 'بازی لغو شد';
+  String get gameAborted => 'بازی لغوید';
 
   @override
   String get standard => 'معیار';
@@ -3354,7 +3360,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get leaderboard => 'جدول رده‌بندی';
 
   @override
-  String get screenshotCurrentPosition => 'نماگرفت از وضعیت فعلی';
+  String get screenshotCurrentPosition => 'از وضعیت فعلی عکس‌پَرده بگیرید';
 
   @override
   String get gameAsGIF => 'بارگیری GIF بازی';
@@ -4172,7 +4178,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get timeBeforeTournamentStarts => 'زمان باقی مانده به شروع مسابقه';
 
   @override
-  String get averageCentipawnLoss => 'میانگین سرباز از دست داده';
+  String get averageCentipawnLoss => 'میانگینِ تلفِ صدم‌پیاده';
 
   @override
   String get accuracy => 'دقت';
@@ -5050,7 +5056,7 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String get abortTheGame => 'انصراف از بازی';
+  String get abortTheGame => 'لغویدنِ بازی';
 
   @override
   String get resignTheGame => 'تسلیم';

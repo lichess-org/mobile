@@ -2551,6 +2551,12 @@ class AppLocalizationsLv extends AppLocalizations {
   String get blackDidntMove => 'Melnie neveica gājienu';
 
   @override
+  String get whiteAborted => 'White aborted the game';
+
+  @override
+  String get blackAborted => 'Black aborted the game';
+
+  @override
   String get requestAComputerAnalysis => 'Pieprasīt datoranalīzi';
 
   @override
