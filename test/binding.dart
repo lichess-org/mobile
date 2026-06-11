@@ -233,6 +233,9 @@ class FakeFirebaseCrashlytics extends Fake implements FirebaseCrashlytics {
     bool? printDetails,
     bool fatal = false,
   }) async {}
+
+  @override
+  Future<void> setCustomKey(String key, Object value) async {}
 }
 
 class FakeFirebaseMessaging extends Fake implements FirebaseMessaging {
