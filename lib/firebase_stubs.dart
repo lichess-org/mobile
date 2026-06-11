@@ -86,4 +86,8 @@ class FirebaseCrashlytics {
   void recordFlutterFatalError(FlutterErrorDetails flutterErrorDetails) {
     return FlutterError.presentError(flutterErrorDetails);
   }
+
+  Future<void> setCustomKey(String key, Object value) {
+    return Future.value();
+  }
 }
