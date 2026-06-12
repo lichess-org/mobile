@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/chat/chat_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -503,15 +502,16 @@ class _Body extends ConsumerWidget {
         switch (tab) {
           case AnalysisTab.explorer:
             if (studyState.isOpeningExplorerAvailable && studyState.currentNode.position != null) {
-              final opening = kOpeningAllowedVariants.contains(studyState.variant)
-                  ? studyState.currentNode.isRoot
-                        ? LightOpening(eco: '', name: context.l10n.startPosition)
-                        : studyState.currentNode.opening ?? studyState.currentBranchOpening
-                  : null;
               return ExplorerView(
                 pov: pov,
                 position: studyState.currentNode.position!,
-                opening: opening,
+                opening: explorerOpening(
+                  context,
+                  variant: studyState.variant,
+                  isRootNode: studyState.currentNode.isRoot,
+                  nodeOpening: studyState.currentNode.opening,
+                  branchOpening: studyState.currentBranchOpening,
+                ),
                 onMoveSelected: (move) {
                   ref.read(studyControllerProvider(options).notifier).onUserMove(move);
                 },

@@ -462,7 +462,7 @@ class StudyController extends AsyncNotifier<StudyState>
     if (state == null) return;
 
     final pathChange = state.currentPath != path;
-    final currentNode = _root.nodeAt(path);
+    final (currentNode, branchOpening) = nodeOpeningAt(_root, path);
 
     // always show variation if the user plays a move
     if (shouldForceShowVariation && currentNode is Branch && currentNode.isCollapsed) {
@@ -477,7 +477,6 @@ class StudyController extends AsyncNotifier<StudyState>
     final rootView = shouldForceShowVariation || shouldRecomputeRootView ? _root.view : state.root;
 
     final isForward = path.size > state.currentPath.size;
-    final branchOpening = currentBranchOpeningAt(path);
     if (currentNode is Branch) {
       // normal move feedback
       if (!isNavigating && isForward) {

@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
+import 'package:meta/meta.dart';
 
 /// Openings only exist for the first moves, so we don't look them up beyond this ply.
 const _kMaxOpeningPly = 30;
@@ -26,14 +27,17 @@ mixin OpeningExplorerMixinState {
 /// and [refreshCurrentBranchOpening].
 mixin OpeningExplorerMixin<T extends OpeningExplorerMixinState> on AsyncNotifier<T> {
   /// The tree where openings are stored.
+  @protected
   Root get positionTree;
 
   /// Recomputes the state from the tree at the current path after an opening
   /// has been stored on a node.
+  @protected
   void refreshCurrentBranchOpening();
 
   /// Whether openings can be fetched. Studies with an illegal starting position
   /// have no tree and should override this to return `false`.
+  @protected
   bool get canFetchMainlineOpenings => true;
 
   @override
@@ -48,6 +52,7 @@ mixin OpeningExplorerMixin<T extends OpeningExplorerMixinState> on AsyncNotifier
 
   /// Fetches the opening for each mainline branch (up to [_kMaxOpeningPly]),
   /// stores them on the tree, and refreshes the current branch opening.
+  @protected
   void initMainlineOpenings() {
     if (!canFetchMainlineOpenings) return;
     final openingFutures = <Future<(UciPath, FullOpening)?>>[];
@@ -63,6 +68,7 @@ mixin OpeningExplorerMixin<T extends OpeningExplorerMixinState> on AsyncNotifier
 
   /// Walks the tree from [node] down to [path], returning the node at [path]
   /// and the deepest opening found along the way.
+  @protected
   (Node, Opening?) nodeOpeningAt(Node node, UciPath path, [Opening? opening]) {
     if (path.isEmpty) return (node, opening);
     final child = node.childById(path.head!);
@@ -74,6 +80,7 @@ mixin OpeningExplorerMixin<T extends OpeningExplorerMixinState> on AsyncNotifier
   }
 
   /// The deepest opening found while walking the tree down to [path].
+  @protected
   Opening? currentBranchOpeningAt(UciPath path) {
     final (_, opening) = nodeOpeningAt(positionTree, path);
     return opening;
@@ -105,6 +112,7 @@ mixin OpeningExplorerMixin<T extends OpeningExplorerMixinState> on AsyncNotifier
 
   /// Fetches [currentNode]'s opening if it is a shallow [Branch] without one yet,
   /// then refreshes the current branch opening. Call from the controller's `_setPath`.
+  @protected
   void maybeFetchOpeningAt(Node currentNode, UciPath path) {
     if (currentNode is Branch &&
         currentNode.opening == null &&
@@ -122,6 +130,7 @@ mixin OpeningExplorerMixin<T extends OpeningExplorerMixinState> on AsyncNotifier
 
   /// Fetches the opening for [fen], returning it with [path] if found and the
   /// variant allows openings.
+  @protected
   Future<(UciPath, FullOpening)?> fetchOpening(String fen, UciPath path) async {
     if (!kOpeningAllowedVariants.contains(state.value?.variant ?? Variant.standard)) {
       return null;

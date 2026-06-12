@@ -418,7 +418,7 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
     if (!state.hasValue) return;
 
     final pathChange = state.requireValue.currentPath != path;
-    final currentNode = _root.nodeAt(path);
+    final (currentNode, branchOpening) = nodeOpeningAt(_root, path);
 
     // always show variation if the user plays a move
     if (shouldForceShowVariation && currentNode is Branch && currentNode.isCollapsed) {
@@ -435,7 +435,6 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
         : state.requireValue.root;
 
     final isForward = path.size > state.requireValue.currentPath.size;
-    final branchOpening = currentBranchOpeningAt(path);
     if (currentNode is Branch) {
       // normal move feedback
       if (!isNavigating && isForward) {
