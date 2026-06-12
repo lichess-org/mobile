@@ -1,6 +1,8 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_results_screen.dart';
@@ -170,6 +172,50 @@ void main() {
         await pumpPlayerResultsScreen(tester, points: '0', customPoints: 0.0);
         expectGameTileShows('0');
       });
+    });
+  });
+
+  group('tournamentReferenceYear', () {
+    BroadcastTournament makeTournament({DateTime? startsAt, DateTime? endsAt}) {
+      return BroadcastTournament(
+        data: BroadcastTournamentData(
+          id: const BroadcastTournamentId('t'),
+          name: 'Test',
+          slug: 'test',
+          imageUrl: null,
+          description: null,
+          information: (
+            format: null,
+            timeControl: null,
+            players: null,
+            location: null,
+            dates: startsAt == null ? null : (startsAt: startsAt, endsAt: endsAt),
+            website: null,
+            standings: null,
+          ),
+        ),
+        rounds: const IListConst([]),
+        defaultRoundId: const BroadcastRoundId('r'),
+        group: null,
+      );
+    }
+
+    test('uses end year when the tournament has ended', () {
+      final tournament = makeTournament(
+        startsAt: DateTime.utc(2021, 1, 10),
+        endsAt: DateTime.utc(2021, 12, 20),
+      );
+      expect(tournamentReferenceYear(tournament), 2021);
+    });
+
+    test('uses start year when no end date is set', () {
+      final tournament = makeTournament(startsAt: DateTime.utc(2018, 6, 5));
+      expect(tournamentReferenceYear(tournament), 2018);
+    });
+
+    test('falls back to current year when no dates are available', () {
+      final tournament = makeTournament();
+      expect(tournamentReferenceYear(tournament), DateTime.now().year);
     });
   });
 }

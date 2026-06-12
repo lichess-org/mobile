@@ -75,7 +75,7 @@
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">工具</string>
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">此版本不支持 %s 变体</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">等待对手加入...</string>
-  <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">观战</string>
+  <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">观看</string>
   <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">欢迎使用 Lichess 应用！</string>
   <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">查看对局</string>
   <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">提示：您可以在主屏幕上添加更多小组件，或移除不需要的！</string>

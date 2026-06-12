@@ -293,6 +293,9 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobileServerOutageKeepInformed => 'To get updates on the maintenance, checkout our social media channels.';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+
+  @override
   String get variantStandard => 'Standard';
 
   @override
@@ -952,7 +955,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get broadcastOfficialStandings => 'Offisiell tabell';
 
   @override
-  String get broadcastRegulations => 'Regulations';
+  String get broadcastRegulations => 'Reglement';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -2528,6 +2531,12 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get blackDidntMove => 'Svart flyttet ikke';
+
+  @override
+  String get whiteAborted => 'White aborted the game';
+
+  @override
+  String get blackAborted => 'Black aborted the game';
 
   @override
   String get requestAComputerAnalysis => 'Be om computeranalyse';
@@ -4431,10 +4440,10 @@ class AppLocalizationsNb extends AppLocalizations {
   }
 
   @override
-  String get like => 'Like';
+  String get like => 'Lik';
 
   @override
-  String get liked => 'Liked';
+  String get liked => 'Likte';
 
   @override
   String get quickPairing => 'Raskt parti';

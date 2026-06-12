@@ -732,6 +732,8 @@
   "blackLeftTheGame": "Les negres han marxat de la partida",
   "whiteDidntMove": "Les blanques no han mogut",
   "blackDidntMove": "Les negres no han mogut",
+  "whiteAborted": "Les blanques han cancel·lat la partida",
+  "blackAborted": "Les negres han cancel·lat la partida",
   "requestAComputerAnalysis": "Demana una anàlisi computeritzada",
   "computerAnalysis": "Anàlisi computeritzada",
   "computerAnalysisAvailable": "Anàlisi de l'ordinador disponible",

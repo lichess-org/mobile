@@ -728,6 +728,8 @@
   "blackLeftTheGame": "Τα μαύρα έφυγαν από το παιχνίδι",
   "whiteDidntMove": "Τα λευκά δεν έπαιξαν",
   "blackDidntMove": "Τα μαύρα δεν έπαιξαν",
+  "whiteAborted": "Τα λευκά ακύρωσαν την παρτίδα",
+  "blackAborted": "Τα μαύρα ακύρωσαν την παρτίδα",
   "requestAComputerAnalysis": "Ζητήστε ανάλυση υπολογιστή",
   "computerAnalysis": "Ανάλυση υπολογιστή",
   "computerAnalysisAvailable": "Ανάλυση υπολογιστή διαθέσιμη",

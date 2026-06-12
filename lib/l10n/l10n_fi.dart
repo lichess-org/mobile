@@ -293,6 +293,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileServerOutageKeepInformed => 'To get updates on the maintenance, checkout our social media channels.';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+
+  @override
   String get variantStandard => 'Normaali';
 
   @override
@@ -2528,6 +2531,12 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get blackDidntMove => 'Musta ei siirtänyt';
+
+  @override
+  String get whiteAborted => 'Valkea keskeytti pelin';
+
+  @override
+  String get blackAborted => 'Musta keskeytti pelin';
 
   @override
   String get requestAComputerAnalysis => 'Pyydä tietokoneanalyysiä';
@@ -5086,7 +5095,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get showMeEverything => 'Näytä kaikki';
 
   @override
-  String get lichessPatronInfo => 'Lichess on hyväntekeväisyysjärjestö ja täysin ilmainen avoimen lähdekoodin ohjelmisto.\nKaikki toimintakustannukset, kehitystyö ja sisältö rahoitetaan yksinomaan käyttäjien lahjoituksilla.';
+  String get lichessPatronInfo => 'Lichess on hyväntekeväisyysjärjestö ja täysin ilmainen avoimen lähdekoodin ohjelmisto.\nKaikki toimintakustannukset, kehitystyö ja sisältö rahoitetaan yksinomaan käyttäjien lahjoituksilla. Ilman anteliasta yhteisöämme emme pystyisi pitämään sivustoa yllä. Kiitos liittymisestä tukijoihimme!  ';
 
   @override
   String get nothingToSeeHere => 'Täällä ei ole tällä hetkellä mitään nähtävää.';

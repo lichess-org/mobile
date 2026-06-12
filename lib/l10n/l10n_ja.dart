@@ -293,6 +293,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileServerOutageKeepInformed => 'To get updates on the maintenance, checkout our social media channels.';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+
+  @override
   String get variantStandard => 'スタンダード';
 
   @override
@@ -2368,7 +2371,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get reusableChallengeUrl => '再利用可能なチャレンジ URL';
 
   @override
-  String get permanentLinkForAnyoneToChallengeYou => '誰でもこのとおりの設定であなたにチャレンジできる恒久的リンク。';
+  String get permanentLinkForAnyoneToChallengeYou => 'これと同じ設定で対局をするための固定URL';
 
   @override
   String get waiting => '待機中';
@@ -2500,6 +2503,12 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get blackDidntMove => '黒、手を指さず';
+
+  @override
+  String get whiteAborted => '白がゲームを中止しました';
+
+  @override
+  String get blackAborted => '黒がゲームを中止しました';
 
   @override
   String get requestAComputerAnalysis => 'コンピューター解析をリクエスト';
@@ -3338,7 +3347,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get playerNames => 'プレイヤー名';
 
   @override
-  String get moveAnnotations => '移動の注釈';
+  String get moveAnnotations => '手の注釈を表示';
 
   @override
   String get pasteTheFenStringHere => 'ここにFEN形式の局面をペースト';
@@ -4403,10 +4412,10 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get like => 'Like';
+  String get like => 'いいね';
 
   @override
-  String get liked => 'Liked';
+  String get liked => 'いいね済み';
 
   @override
   String get quickPairing => '自動ペアリング';

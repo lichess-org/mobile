@@ -293,6 +293,9 @@ class AppLocalizationsAz extends AppLocalizations {
   String get mobileServerOutageKeepInformed => 'To get updates on the maintenance, checkout our social media channels.';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+
+  @override
   String get variantStandard => 'Standard';
 
   @override
@@ -2526,6 +2529,12 @@ class AppLocalizationsAz extends AppLocalizations {
 
   @override
   String get blackDidntMove => 'Qaralar gediş oynamadı';
+
+  @override
+  String get whiteAborted => 'White aborted the game';
+
+  @override
+  String get blackAborted => 'Black aborted the game';
 
   @override
   String get requestAComputerAnalysis => 'Kompüter təhlilini tələb et';

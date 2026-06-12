@@ -748,6 +748,12 @@ abstract class AppLocalizations {
   /// **'To get updates on the maintenance, checkout our social media channels.'**
   String get mobileServerOutageKeepInformed;
 
+  /// No description provided for @mobileGoodMoveButThereIsBetter.
+  ///
+  /// In en, this message translates to:
+  /// **'Good move, but there\'s better'**
+  String get mobileGoodMoveButThereIsBetter;
+
   /// No description provided for @variantStandard.
   ///
   /// In en, this message translates to:
@@ -4605,6 +4611,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Black didn\'t move'**
   String get blackDidntMove;
+
+  /// No description provided for @whiteAborted.
+  ///
+  /// In en, this message translates to:
+  /// **'White aborted the game'**
+  String get whiteAborted;
+
+  /// No description provided for @blackAborted.
+  ///
+  /// In en, this message translates to:
+  /// **'Black aborted the game'**
+  String get blackAborted;
 
   /// No description provided for @requestAComputerAnalysis.
   ///

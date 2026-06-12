@@ -293,6 +293,9 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileServerOutageKeepInformed => 'To get updates on the maintenance, checkout our social media channels.';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+
+  @override
   String get variantStandard => 'Estándar';
 
   @override
@@ -2530,6 +2533,12 @@ class AppLocalizationsGl extends AppLocalizations {
   String get blackDidntMove => 'As negras non moveron';
 
   @override
+  String get whiteAborted => 'As brancas abortaron a partida';
+
+  @override
+  String get blackAborted => 'As negras abortaron a partida';
+
+  @override
   String get requestAComputerAnalysis => 'Solicitar unha análise por computador';
 
   @override
@@ -3366,7 +3375,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get playerNames => 'Nomes das xogadoras/es';
 
   @override
-  String get moveAnnotations => 'Mover anotacións';
+  String get moveAnnotations => 'Anotación das xogadas';
 
   @override
   String get pasteTheFenStringHere => 'Pega o texto FEN aquí';

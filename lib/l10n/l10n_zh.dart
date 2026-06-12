@@ -242,7 +242,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileWaitingForOpponentToJoin => '等待对手加入...';
 
   @override
-  String get mobileWatchTab => '观战';
+  String get mobileWatchTab => '观看';
 
   @override
   String get mobileWelcomeToLichessApp => '欢迎使用 Lichess 应用！';
@@ -291,6 +291,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get mobileServerOutageKeepInformed => 'To get updates on the maintenance, checkout our social media channels.';
+
+  @override
+  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
 
   @override
   String get variantStandard => '标准';
@@ -2502,6 +2505,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get blackDidntMove => '黑方未走棋';
 
   @override
+  String get whiteAborted => '白方终止对局';
+
+  @override
+  String get blackAborted => '黑方终止对局';
+
+  @override
   String get requestAComputerAnalysis => '请求电脑分析';
 
   @override
@@ -4189,7 +4198,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get togglePositionAnnotations => '开启局面评注';
 
   @override
-  String get toggleObservationAnnotations => '开启观战者评注';
+  String get toggleObservationAnnotations => '切换观战评注';
 
   @override
   String get variationArrowsInfo => '变着箭头让您无需使用着法列表即可导航';

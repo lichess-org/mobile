@@ -732,6 +732,8 @@
   "blackLeftTheGame": "Чёрные вышли из игры",
   "whiteDidntMove": "Белые не сделали ход",
   "blackDidntMove": "Чёрные не сделали ход",
+  "whiteAborted": "Белые отменили игру",
+  "blackAborted": "Чёрные отменили игру",
   "requestAComputerAnalysis": "Выполнить компьютерный анализ",
   "computerAnalysis": "Компьютерный анализ",
   "computerAnalysisAvailable": "Доступен компьютерный анализ",

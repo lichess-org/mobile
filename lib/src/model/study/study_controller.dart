@@ -382,6 +382,12 @@ class StudyController extends AsyncNotifier<StudyState>
     this.state = AsyncValue.data(
       state.copyWith(isOnMainline: _root.isOnMainline(state.currentPath), root: _root.view),
     );
+
+    _recordChange('promote', {
+      'toMainline': toMainline,
+      'path': path.value,
+      'ch': state.currentChapter.id.value,
+    });
   }
 
   @override

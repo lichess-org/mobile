@@ -293,6 +293,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileServerOutageKeepInformed => 'To get updates on the maintenance, checkout our social media channels.';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+
+  @override
   String get variantStandard => 'Standardowe';
 
   @override
@@ -2584,6 +2587,12 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get blackDidntMove => 'Czarne nie ruszyły się';
+
+  @override
+  String get whiteAborted => 'Białe porzuciły partię';
+
+  @override
+  String get blackAborted => 'Czarne porzuciły partię';
 
   @override
   String get requestAComputerAnalysis => 'Poproś o analizę komputerową';

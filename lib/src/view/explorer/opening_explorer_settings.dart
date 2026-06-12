@@ -49,7 +49,7 @@ class OpeningExplorerSettings extends ConsumerWidget {
                     String.fromCharCode(speed.icon.codePoint),
                     style: TextStyle(fontFamily: speed.icon.fontFamily, fontSize: 18.0),
                   ),
-                  tooltip: Perf.fromVariantAndSpeed(Variant.standard, speed).title,
+                  tooltip: Perf.fromVariantAndSpeed(Variant.standard, speed).label(context.l10n),
                   selected: prefs.lichessDb.speeds.contains(speed),
                   onSelected: (_) => ref
                       .read(openingExplorerPreferencesProvider.notifier)
@@ -159,7 +159,7 @@ class OpeningExplorerSettings extends ConsumerWidget {
                     String.fromCharCode(speed.icon.codePoint),
                     style: TextStyle(fontFamily: speed.icon.fontFamily, fontSize: 18.0),
                   ),
-                  tooltip: Perf.fromVariantAndSpeed(Variant.standard, speed).title,
+                  tooltip: Perf.fromVariantAndSpeed(Variant.standard, speed).label(context.l10n),
                   selected: prefs.playerDb.speeds.contains(speed),
                   onSelected: (_) => ref
                       .read(openingExplorerPreferencesProvider.notifier)

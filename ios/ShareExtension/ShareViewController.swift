@@ -38,8 +38,9 @@ class ShareViewController: UIViewController {
         self.savePgn(pgn)
       }
       DispatchQueue.main.async {
-        self.openHostApp()
-        self.completeRequest()
+        self.openHostApp {
+          DispatchQueue.main.async { self.completeRequest() }
+        }
       }
     }
   }
@@ -72,11 +73,23 @@ class ShareViewController: UIViewController {
     try? pgn.write(to: fileURL, atomically: true, encoding: .utf8)
   }
 
-  /// Opens the host app. `UIApplication.open` is unavailable to app extensions,
-  /// so we walk the responder chain to the shared application and invoke the
-  /// `openURL:` selector — the long-standing technique for share extensions.
-  private func openHostApp() {
-    guard let url = URL(string: hostAppURL) else { return }
+  /// Opens the host app via the custom URL scheme. We prefer the sanctioned
+  /// `NSExtensionContext.open(_:)`; if the system declines it (Share extensions
+  /// historically may not support it), we fall back to walking the responder chain
+  /// and invoking the `openURL:` selector — the long-standing technique for share
+  /// extensions, since `UIApplication.open` is unavailable to app extensions.
+  private func openHostApp(completion: @escaping () -> Void) {
+    guard let url = URL(string: hostAppURL), let context = extensionContext else {
+      completion()
+      return
+    }
+    context.open(url) { [weak self] success in
+      if !success { self?.openURLViaResponderChain(url) }
+      completion()
+    }
+  }
+
+  private func openURLViaResponderChain(_ url: URL) {
     let selector = sel_registerName("openURL:")
     var responder: UIResponder? = self
     while let current = responder {

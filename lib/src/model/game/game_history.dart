@@ -53,14 +53,6 @@ final myRecentGamesProvider = FutureProvider.autoDispose<IList<LightExportedGame
   }
 }, name: 'MyRecentGamesProvider');
 
-/// A provider that fetches the recent games from the server for a given user.
-final userRecentGamesProvider = FutureProvider.autoDispose
-    .family<IList<LightExportedGameWithPov>, UserId>((Ref ref, UserId userId) {
-      return ref
-          .read(gameRepositoryProvider)
-          .getUserGames(userId, withBookmarked: true, max: kNumberOfRecentGames);
-    }, name: 'UserRecentGamesProvider');
-
 /// A provider that fetches the total number of games played by given user, or the current app user if no user is provided.
 ///
 /// If the user is logged in, the number of games is fetched from the server.

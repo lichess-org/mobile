@@ -117,10 +117,10 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
 
     _logger.fine('Connectivity changed: $result');
     final newIsOnline = await isOnline(_defaultClient);
-    _logger.fine('Online check result: $isOnline');
+    _logger.fine('Online check result: $newIsOnline');
 
     if (newIsOnline != wasOnline) {
-      _logger.info('Connectivity status: $result, isOnline: $isOnline');
+      _logger.info('Connectivity status: $result, isOnline: $newIsOnline');
       state = AsyncValue.data((isOnline: newIsOnline, appState: state.value?.appState));
     }
   }

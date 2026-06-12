@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
+import 'package:lichess_mobile/src/view/auth/sign_in_error.dart';
 import 'package:lichess_mobile/src/view/message/contacts_screen.dart';
 import 'package:lichess_mobile/src/view/settings/settings_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
@@ -85,6 +86,8 @@ class _AccountMenuScreenState extends ConsumerState<AccountMenuScreen> with Widg
     final isOnline = connectionStatus == ConnectionStatus.online;
     final signInState = ref.watch(signInMutation);
     final signOutState = ref.watch(signOutMutation);
+
+    ref.listen(signInMutation, (_, next) => showSignInErrorSnackBar(context, next));
     final account = ref.watch(accountProvider);
     final authUser = ref.watch(authControllerProvider);
     final kidMode = account.value?.kid ?? false;
@@ -168,9 +171,12 @@ class _AccountMenuScreenState extends ConsumerState<AccountMenuScreen> with Widg
                     ? switch (signInState) {
                         MutationPending() => null,
                         _ => () {
+                          // The error is surfaced via the [ref.listen] above;
+                          // ignore the rethrown future so it does not become an
+                          // unhandled exception.
                           signInMutation.run(ref, (tsx) async {
                             await tsx.get(authControllerProvider.notifier).signIn();
-                          });
+                          }).ignore();
                         },
                       }
                     : null,
