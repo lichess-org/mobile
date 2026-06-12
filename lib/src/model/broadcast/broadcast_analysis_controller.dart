@@ -125,17 +125,6 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
     final currentNode = _root.nodeAt(currentPath);
     final lastMove = _root.branchAt(_root.mainlinePath)?.sanMove.move;
 
-    final openingFutures = <Future<(UciPath, FullOpening)?>>[];
-    {
-      UciPath mainlinePath = UciPath.empty;
-      for (final branch in _root.mainline) {
-        mainlinePath = mainlinePath + branch.id;
-        final openingFuture = fetchMainlineOpening(branch, mainlinePath);
-        if (openingFuture == null) break;
-        openingFutures.add(openingFuture);
-      }
-    }
-
     // don't use ref.watch here: we don't want to invalidate state when the
     // analysis preferences change
     final prefs = ref.read(broadcastPreferencesProvider);
@@ -163,8 +152,6 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
     // We need to define the state value in the build method because `sendEvalGetEvent` and
     // `debouncedStartEngineEval` require the state to have a value.
     state = AsyncData(broadcastState);
-
-    applyFetchedOpenings(openingFutures);
 
     if (state.requireValue.isEngineAvailable(evaluationPrefs)) {
       requestEval();

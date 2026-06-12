@@ -227,7 +227,6 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
     }
 
     UciPath path = UciPath.empty;
-    UciPath mainlinePath = UciPath.empty;
     Move? lastMove;
 
     final game = PgnGame.parsePgn(
@@ -260,8 +259,6 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
       ActiveCorrespondenceGame() => false,
     };
 
-    final List<Future<(UciPath, FullOpening)?>> openingFutures = [];
-
     _root = switch (options) {
       Standalone() when _savedStandalone != null => _savedStandalone!.root,
       _ => Root.fromPgnGame(
@@ -274,19 +271,9 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
             path = path + branch.id;
             lastMove = branch.sanMove.move;
           }
-          if (isMainline) {
-            mainlinePath = mainlinePath + branch.id;
-            final openingFuture = fetchMainlineOpening(branch, mainlinePath);
-            if (openingFuture != null) {
-              openingFutures.add(openingFuture);
-            }
-          }
         },
       ),
     };
-
-    // wait for the openings to be fetched to recompute the branch opening
-    applyFetchedOpenings(openingFutures);
 
     final currentPath = switch (options) {
       Standalone() when _savedStandalone != null => _savedStandalone!.path,

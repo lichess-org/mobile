@@ -67,6 +67,11 @@ class StudyController extends AsyncNotifier<StudyState>
   @protected
   Root get positionTree => _root;
 
+  // Studies with an illegal starting position do not build a position tree, so
+  // there is nothing to fetch openings for in that case.
+  @override
+  bool get canFetchMainlineOpenings => state.value?.root != null;
+
   @override
   Future<StudyState> build() async {
     ref.onDispose(() {
@@ -123,6 +128,9 @@ class StudyController extends AsyncNotifier<StudyState>
 
   Future<void> goToChapter(StudyChapterId chapterId) async {
     await _fetchChapter(state.requireValue.study.id, chapterId: chapterId);
+    // Switching chapters does not re-run [runBuild], so fetch the new mainline's
+    // openings explicitly here.
+    if (state.hasValue) initMainlineOpenings();
     _ensureItsOurTurnIfGamebook();
   }
 
@@ -188,17 +196,6 @@ class StudyController extends AsyncNotifier<StudyState>
     const currentPath = UciPath.empty;
     Move? lastMove;
 
-    final openingFutures = <Future<(UciPath, FullOpening)?>>[];
-    {
-      UciPath mainlinePath = UciPath.empty;
-      for (final branch in _root.mainline) {
-        mainlinePath = mainlinePath + branch.id;
-        final openingFuture = fetchMainlineOpening(branch, mainlinePath);
-        if (openingFuture == null) break;
-        openingFutures.add(openingFuture);
-      }
-    }
-
     final studyState = StudyState(
       myId: me,
       variant: variant,
@@ -227,10 +224,6 @@ class StudyController extends AsyncNotifier<StudyState>
     // We need to define the state value in the build method because `requestEval` require the state
     // to have a value.
     state = AsyncData(studyState);
-
-    // Fetch openings for the mainline asynchronously and refresh the branch
-    // opening once they resolve.
-    applyFetchedOpenings(openingFutures);
 
     if (state.requireValue.isEngineAvailable(evaluationPrefs)) {
       socketClient.firstConnection.then((_) {

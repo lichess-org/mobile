@@ -35,12 +35,17 @@ mixin OpeningExplorerMixinState {
 /// [OpeningExplorerMixinState.currentBranchOpening] is recomputed whenever the
 /// current path changes or a new opening is fetched.
 ///
+/// The build-time mainline opening fetch is centralized here: this mixin
+/// overrides [runBuild] to schedule [initMainlineOpenings] once the initial
+/// state has been built. Controllers therefore do not need to fetch the
+/// mainline openings themselves.
+///
 /// The parent must implement:
 /// - [positionTree] to provide the tree where openings are stored.
 /// - [refreshCurrentBranchOpening] to recompute its state from the tree at the
 ///   current path (i.e. rebuild `currentNode` and update `currentBranchOpening`)
 ///   after an opening has been fetched.
-mixin OpeningExplorerMixin<T extends OpeningExplorerMixinState> on AnyNotifier<AsyncValue<T>, T> {
+mixin OpeningExplorerMixin<T extends OpeningExplorerMixinState> on AsyncNotifier<T> {
   /// The tree where openings are stored.
   Root get positionTree;
 
@@ -51,6 +56,46 @@ mixin OpeningExplorerMixin<T extends OpeningExplorerMixinState> on AnyNotifier<A
   /// freshly fetched opening on the current node is reflected) and update
   /// `currentBranchOpening` with [currentBranchOpeningAt] for the current path.
   void refreshCurrentBranchOpening();
+
+  /// Whether the [positionTree] is available and openings can be fetched for it.
+  ///
+  /// Defaults to `true`. Implementations whose [positionTree] may be
+  /// unavailable (e.g. studies with an illegal starting position) should
+  /// override this to return `false` in that case.
+  bool get canFetchMainlineOpenings => true;
+
+  @override
+  void runBuild() {
+    super.runBuild();
+    // Fetch the openings of the mainline once the initial state has been built.
+    // [future] resolves with the first non-loading state, which is exactly when
+    // [positionTree] has been populated and [state] has a value. This is
+    // fire-and-forget: it must not block the build, since openings are a
+    // non-critical enhancement.
+    future
+        .then((_) {
+          if (ref.mounted && state.hasValue) initMainlineOpenings();
+        })
+        // If the build fails, there is nothing to fetch openings for; swallow
+        // the error so it does not surface as an unhandled async error.
+        .ignore();
+  }
+
+  /// Walks the mainline of [positionTree], fetches the opening for each branch
+  /// (up to [_kMaxOpeningPly]), stores them on the tree, and refreshes the
+  /// current branch opening once they resolve.
+  void initMainlineOpenings() {
+    if (!canFetchMainlineOpenings) return;
+    final openingFutures = <Future<(UciPath, FullOpening)?>>[];
+    UciPath mainlinePath = UciPath.empty;
+    for (final branch in positionTree.mainline) {
+      mainlinePath = mainlinePath + branch.id;
+      final openingFuture = _fetchMainlineOpening(branch, mainlinePath);
+      if (openingFuture == null) break;
+      openingFutures.add(openingFuture);
+    }
+    _applyFetchedOpenings(openingFutures);
+  }
 
   /// Walks the tree from [node] down to [path], returning the node at [path]
   /// and the deepest opening found along the way.
@@ -74,10 +119,8 @@ mixin OpeningExplorerMixin<T extends OpeningExplorerMixinState> on AnyNotifier<A
   /// Returns a future that fetches the opening for the mainline [branch] at
   /// [mainlinePath], or `null` if the position is too deep to have an opening.
   ///
-  /// Should be called during the build of the notifier while iterating over the
-  /// mainline. The returned futures should be collected and then awaited with
-  /// [applyFetchedOpenings].
-  Future<(UciPath, FullOpening)?>? fetchMainlineOpening(Branch branch, UciPath mainlinePath) {
+  /// Called by [initMainlineOpenings] while iterating over the mainline.
+  Future<(UciPath, FullOpening)?>? _fetchMainlineOpening(Branch branch, UciPath mainlinePath) {
     if (branch.position.ply > _kMaxOpeningPly) return null;
     return fetchOpening(branch.position.fen, mainlinePath);
   }
@@ -88,7 +131,7 @@ mixin OpeningExplorerMixin<T extends OpeningExplorerMixinState> on AnyNotifier<A
   ///
   /// This is fire-and-forget: it must not block the build, since openings are a
   /// non-critical enhancement.
-  void applyFetchedOpenings(List<Future<(UciPath, FullOpening)?>> openingFutures) {
+  void _applyFetchedOpenings(List<Future<(UciPath, FullOpening)?>> openingFutures) {
     Future.wait(openingFutures).then((list) {
       var hasOpening = false;
       for (final updated in list) {
