@@ -6,84 +6,48 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 
-/// The maximum ply up to which openings are looked up.
-///
-/// Openings only exist for the first moves of a game, so there is no point in
-/// querying the opening database for positions deeper than this.
+/// Openings only exist for the first moves, so we don't look them up beyond this ply.
 const _kMaxOpeningPly = 30;
 
 /// Interface for a Notifier state that uses [OpeningExplorerMixin].
 mixin OpeningExplorerMixinState {
-  /// The variant of the analysis, used to determine whether openings should be
-  /// looked up (see [kOpeningAllowedVariants]).
   Variant get variant;
-
-  /// The path to the current node in the analysis view.
   UciPath get currentPath;
 
-  /// The opening associated with the current branch, if any.
-  ///
-  /// This is the opening of the deepest ancestor of the current node (including
-  /// the current node itself) that has an opening.
+  /// The opening of the deepest ancestor of the current node (including itself).
   Opening? get currentBranchOpening;
 }
 
-/// A mixin to provide opening name lookup to an [AsyncNotifier] backing an
-/// analysis-like screen (analysis, broadcast, study).
+/// Provides opening name lookup to an [AsyncNotifier] backing an analysis-like
+/// screen (analysis, broadcast, study).
 ///
-/// Openings are stored on the tree [Node]s themselves and the
-/// [OpeningExplorerMixinState.currentBranchOpening] is recomputed whenever the
-/// current path changes or a new opening is fetched.
-///
-/// The build-time mainline opening fetch is centralized here: this mixin
-/// overrides [runBuild] to schedule [initMainlineOpenings] once the initial
-/// state has been built. Controllers therefore do not need to fetch the
-/// mainline openings themselves.
-///
-/// The parent must implement:
-/// - [positionTree] to provide the tree where openings are stored.
-/// - [refreshCurrentBranchOpening] to recompute its state from the tree at the
-///   current path (i.e. rebuild `currentNode` and update `currentBranchOpening`)
-///   after an opening has been fetched.
+/// Openings are stored on the tree [Node]s. The build-time mainline fetch is
+/// centralized here via [runBuild]; controllers only implement [positionTree]
+/// and [refreshCurrentBranchOpening].
 mixin OpeningExplorerMixin<T extends OpeningExplorerMixinState> on AsyncNotifier<T> {
   /// The tree where openings are stored.
   Root get positionTree;
 
   /// Recomputes the state from the tree at the current path after an opening
   /// has been stored on a node.
-  ///
-  /// Implementations should rebuild their `currentNode` from the tree (so a
-  /// freshly fetched opening on the current node is reflected) and update
-  /// `currentBranchOpening` with [currentBranchOpeningAt] for the current path.
   void refreshCurrentBranchOpening();
 
-  /// Whether the [positionTree] is available and openings can be fetched for it.
-  ///
-  /// Defaults to `true`. Implementations whose [positionTree] may be
-  /// unavailable (e.g. studies with an illegal starting position) should
-  /// override this to return `false` in that case.
+  /// Whether openings can be fetched. Studies with an illegal starting position
+  /// have no tree and should override this to return `false`.
   bool get canFetchMainlineOpenings => true;
 
   @override
   void runBuild() {
     super.runBuild();
-    // Fetch the openings of the mainline once the initial state has been built.
-    // [future] resolves with the first non-loading state, which is exactly when
-    // [positionTree] has been populated and [state] has a value. This is
-    // fire-and-forget: it must not block the build, since openings are a
-    // non-critical enhancement.
-    future
-        .then((_) {
-          if (ref.mounted && state.hasValue) initMainlineOpenings();
-        })
-        // If the build fails, there is nothing to fetch openings for; swallow
-        // the error so it does not surface as an unhandled async error.
-        .ignore();
+    // [future] resolves with the first non-loading state, i.e. once [positionTree]
+    // is populated. Fire-and-forget: openings are a non-critical enhancement.
+    future.then((_) {
+      if (ref.mounted && state.hasValue) initMainlineOpenings();
+    }).ignore();
   }
 
-  /// Walks the mainline of [positionTree], fetches the opening for each branch
-  /// (up to [_kMaxOpeningPly]), stores them on the tree, and refreshes the
-  /// current branch opening once they resolve.
+  /// Fetches the opening for each mainline branch (up to [_kMaxOpeningPly]),
+  /// stores them on the tree, and refreshes the current branch opening.
   void initMainlineOpenings() {
     if (!canFetchMainlineOpenings) return;
     final openingFutures = <Future<(UciPath, FullOpening)?>>[];
@@ -109,28 +73,17 @@ mixin OpeningExplorerMixin<T extends OpeningExplorerMixinState> on AsyncNotifier
     }
   }
 
-  /// The opening associated with the current branch given [path], i.e. the
-  /// deepest opening found while walking the tree down to [path].
+  /// The deepest opening found while walking the tree down to [path].
   Opening? currentBranchOpeningAt(UciPath path) {
     final (_, opening) = nodeOpeningAt(positionTree, path);
     return opening;
   }
 
-  /// Returns a future that fetches the opening for the mainline [branch] at
-  /// [mainlinePath], or `null` if the position is too deep to have an opening.
-  ///
-  /// Called by [initMainlineOpenings] while iterating over the mainline.
   Future<(UciPath, FullOpening)?>? _fetchMainlineOpening(Branch branch, UciPath mainlinePath) {
     if (branch.position.ply > _kMaxOpeningPly) return null;
     return fetchOpening(branch.position.fen, mainlinePath);
   }
 
-  /// Awaits the [openingFutures] collected during build, stores the fetched
-  /// openings on the tree, and refreshes the current branch opening if any
-  /// opening was found.
-  ///
-  /// This is fire-and-forget: it must not block the build, since openings are a
-  /// non-critical enhancement.
   void _applyFetchedOpenings(List<Future<(UciPath, FullOpening)?>> openingFutures) {
     Future.wait(openingFutures).then((list) {
       var hasOpening = false;
@@ -150,11 +103,8 @@ mixin OpeningExplorerMixin<T extends OpeningExplorerMixinState> on AsyncNotifier
     });
   }
 
-  /// If [currentNode] is a [Branch] without an opening yet (and shallow enough),
-  /// fetches its opening asynchronously, stores it on the tree, then refreshes
-  /// the current branch opening.
-  ///
-  /// Should be called from the controller's `_setPath` when the path changes.
+  /// Fetches [currentNode]'s opening if it is a shallow [Branch] without one yet,
+  /// then refreshes the current branch opening. Call from the controller's `_setPath`.
   void maybeFetchOpeningAt(Node currentNode, UciPath path) {
     if (currentNode is Branch &&
         currentNode.opening == null &&
@@ -170,8 +120,8 @@ mixin OpeningExplorerMixin<T extends OpeningExplorerMixinState> on AsyncNotifier
     }
   }
 
-  /// Fetches the opening for [fen] from the opening database, returning it
-  /// together with [path] if found and the variant allows openings.
+  /// Fetches the opening for [fen], returning it with [path] if found and the
+  /// variant allows openings.
   Future<(UciPath, FullOpening)?> fetchOpening(String fen, UciPath path) async {
     if (!kOpeningAllowedVariants.contains(state.value?.variant ?? Variant.standard)) {
       return null;
