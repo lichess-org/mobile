@@ -100,9 +100,9 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                     data: (gameState) {
                       final game = gameState.game;
                       final position = gameState.game.positionAt(gameState.stepCursor);
-                      final clockTenths = ref.watch(
-                        accountPreferencesProvider.select((prefs) => prefs.value?.clockTenths),
-                      );
+                      final clockTenths =
+                          ref.watch(clockTenthsProvider).value ??
+                          defaultAccountPreferences.clockTenths;
 
                       // If Stockfish is playing, user is null
                       final crosstable = game.white.user != null && game.black.user != null

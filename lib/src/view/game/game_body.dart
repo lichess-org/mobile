@@ -547,9 +547,8 @@ class _GamePlayerTable extends ConsumerWidget {
     if (data == null) return const SizedBox.shrink();
 
     final boardPrefs = ref.watch(boardPreferencesProvider);
-    final clockTenths = ref.watch(
-      accountPreferencesProvider.select((prefs) => prefs.value?.clockTenths),
-    );
+    final clockTenths =
+        ref.watch(clockTenthsProvider).value ?? defaultAccountPreferences.clockTenths;
 
     final game = data.game;
     final youAre = game.youAre ?? Side.white;

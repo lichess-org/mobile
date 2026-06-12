@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/chat/chat_controller.dart';
 import 'package:lichess_mobile/src/model/clock/chess_clock.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -43,6 +44,33 @@ final gameControllerProvider = AsyncNotifierProvider.autoDispose
       GameController.new,
       name: 'GameControllerProvider',
     );
+
+PlayableGame _withLocalPrefsFallback(PlayableGame game, AccountPrefState localPrefs) {
+  if (game.prefs != null) {
+    return game;
+  }
+
+  return game.copyWith(
+    prefs: ServerGamePrefs(
+      showRatings: localPrefs.showRatings == ShowRatings.yes,
+      enablePremove: localPrefs.premove.value,
+      autoQueen: localPrefs.autoQueen,
+      confirmResign: localPrefs.confirmResign.value,
+      submitMove: _submitMoveEnabledForSpeed(localPrefs.submitMove, game.meta.speed),
+      zenMode: localPrefs.zenMode,
+    ),
+  );
+}
+
+bool _submitMoveEnabledForSpeed(SubmitMove submitMove, Speed speed) {
+  return switch (speed) {
+    Speed.correspondence => submitMove.choices.contains(SubmitMoveChoice.correspondence),
+    Speed.classical => submitMove.choices.contains(SubmitMoveChoice.classical),
+    Speed.rapid => submitMove.choices.contains(SubmitMoveChoice.rapid),
+    Speed.blitz => submitMove.choices.contains(SubmitMoveChoice.blitz),
+    Speed.ultraBullet || Speed.bullet => false,
+  };
+}
 
 class GameController extends AsyncNotifier<GameState> {
   GameController(this.gameFullId);
@@ -106,7 +134,10 @@ class GameController extends AsyncNotifier<GameState> {
       final fullEvent = GameFullEvent.fromJson(event.data as Map<String, dynamic>);
       _socketClient.version = fullEvent.socketEventVersion;
 
-      final game = fullEvent.game;
+      final game = _withLocalPrefsFallback(
+        fullEvent.game,
+        ref.read(localAccountPreferencesProvider),
+      );
 
       // Play "dong" sound when this is a new game and we're playing it (not spectating)
       final isMyGame = game.youAre != null;
@@ -370,7 +401,11 @@ class GameController extends AsyncNotifier<GameState> {
     state = AsyncValue.data(
       curState.copyWith.game(prefs: curState.game.prefs?.copyWith(zenMode: newZen)),
     );
-    ref.read(accountPreferencesProvider.notifier).setZen(newZen);
+    if (ref.read(authControllerProvider) == null) {
+      ref.read(localAccountPreferencesProvider.notifier).setZen(newZen);
+    } else {
+      ref.read(accountPreferencesProvider.notifier).setZen(newZen);
+    }
   }
 
   void toggleAutoQueen() {
