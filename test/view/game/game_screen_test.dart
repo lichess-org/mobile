@@ -1688,7 +1688,7 @@ void main() {
       await tester.tap(find.text('Analysis board'));
       await tester.pumpAndSettle(); // wait for analysis screen to open
       expect(
-        find.descendant(of: find.byType(AppBar), matching: find.text('2+1 • Rated • Bullet')),
+        find.descendant(of: find.byType(AppBar), matching: find.text('2+1 • Rated')),
         findsOneWidget,
       ); // analysis screen is now open
       expect(find.byType(Chessboard), findsOneWidget);

@@ -123,17 +123,16 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
         Widget appBarTitle;
         if (value.archivedGame != null) {
           final meta = value.archivedGame!.meta;
-          final isStandardVariant =
-              value.variant == Variant.standard || value.variant == Variant.fromPosition;
+          // On mobile space is constrained, so unlike the web we omit the speed for standard chess
+          final isStandardVariant = value.variant == .standard || value.variant == .fromPosition;
           final ratedOrCasual = meta.rated ? context.l10n.rated : context.l10n.casual;
-          final trailingLabel = isStandardVariant
-              ? meta.speed.label(context.l10n)
-              : value.variant.label(context.l10n);
-          final title =
-              '${value.archivedGame!.data.clockDisplay(context.l10n)} • $ratedOrCasual • $trailingLabel';
+          final clockDisplay = value.archivedGame!.data.clockDisplay(context.l10n);
+          final title = isStandardVariant
+              ? '$clockDisplay • $ratedOrCasual'
+              : '$clockDisplay • $ratedOrCasual • ${value.variant.label(context.l10n)}';
           final icon = isStandardVariant ? meta.speed.icon : value.variant.icon;
           appBarTitle = Row(
-            mainAxisSize: MainAxisSize.min,
+            mainAxisSize: .min,
             children: [
               Icon(icon),
               const SizedBox(width: 5.0),
