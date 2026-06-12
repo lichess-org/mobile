@@ -37,7 +37,7 @@ const _openGame = FullOpening(
   uciMoves: 'e2e4 e7e5',
 );
 
-MockClient _client(String pgn) => MockClient((request) async {
+MockClient _client(String pgn) => MockClient((request) {
   if (request.url.path == '/api/broadcast/-/-/$_roundId') {
     return mockResponse(
       broadcastRoundMockResponses[(_tournamentId, _roundId)]!,
