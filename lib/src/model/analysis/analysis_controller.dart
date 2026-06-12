@@ -484,16 +484,21 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
     }
   }
 
-  void userPrevious() {
-    _setPath(state.requireValue.currentPath.penultimate, isNavigating: true);
+  void userPrevious({bool fastSeek = false}) {
+    _setPath(
+      state.requireValue.currentPath.penultimate,
+      isNavigating: true,
+      keepCollapsed: fastSeek,
+    );
   }
 
-  void userNext() {
+  void userNext({bool fastSeek = false}) {
     final curState = state.requireValue;
     if (!curState.currentNode.hasChild) return;
     _setPath(
       curState.currentPath + _root.nodeAt(curState.currentPath).children.first.id,
       isNavigating: true,
+      keepCollapsed: fastSeek,
     );
   }
 
@@ -681,11 +686,22 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
 
     /// Whether the user is navigating through the moves (as opposed to playing a move).
     bool isNavigating = false,
+    bool keepCollapsed = false,
   }) {
     _currentPath = path;
     final curState = state.requireValue;
     final pathChange = curState.currentPath != path;
     final (currentNode, opening) = _nodeOpeningAt(_root, path);
+
+    bool pathWasExpanded = false;
+    if (pathChange && !keepCollapsed) {
+      for (final child in currentNode.children) {
+        if (child.isCollapsed) {
+          child.isCollapsed = false;
+          pathWasExpanded = true;
+        }
+      }
+    }
 
     // always show variation if the user plays a move
     if (shouldForceShowVariation && currentNode is Branch && currentNode.isCollapsed) {
@@ -697,7 +713,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
     // root view is only used to display move list, so we need to
     // recompute the root view only when the nodelist length changes
     // or a variation is hidden/shown
-    final rootView = shouldForceShowVariation || shouldRecomputeRootView
+    final rootView = shouldForceShowVariation || shouldRecomputeRootView || pathWasExpanded
         ? _root.view
         : curState.root;
 
