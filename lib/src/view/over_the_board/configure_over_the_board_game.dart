@@ -284,17 +284,19 @@ class OverTheBoardDisplaySettings extends ConsumerWidget {
 
     return BottomSheetScrollableContainer(
       children: [
-        SwitchSettingTile(
-          title: const Text('Use symmetric pieces'),
-          value: prefs.symmetricPieces,
-          onChanged: (_) =>
-              ref.read(overTheBoardPreferencesProvider.notifier).toggleSymmetricPieces(),
-        ),
-        SwitchSettingTile(
-          title: const Text('Flip pieces and opponent info after move'),
-          value: prefs.flipPiecesAfterMove,
-          onChanged: (_) =>
-              ref.read(overTheBoardPreferencesProvider.notifier).toggleFlipPiecesAfterMove(),
+        SettingsListTile(
+          settingsLabel: const Text('Board view'),
+          settingsValue: prefs.myView.label(context.l10n),
+          onTap: () {
+            showChoicePicker<OverTheBoardMyView>(
+              context,
+              choices: OverTheBoardMyView.values,
+              selectedItem: prefs.myView,
+              labelBuilder: (v) => Text(v.label(context.l10n)),
+              onSelectedItemChanged: (v) =>
+                  ref.read(overTheBoardPreferencesProvider.notifier).setMyView(v),
+            );
+          },
         ),
       ],
     );
