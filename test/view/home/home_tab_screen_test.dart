@@ -530,6 +530,29 @@ void main() {
       expect(find.byType(FloatingActionButton), findsOneWidget);
     });
 
+    testWidgets('Players button is disabled when server is down', (tester) async {
+      final app = await makeTestProviderScope(
+        tester,
+        child: const Application(),
+        overrides: {serverStatusProvider: serverStatusProvider.overrideWith(FakeServerOffline.new)},
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      expect(
+        tester
+            .widget<SemanticIconButton>(
+              find.ancestor(
+                of: find.byIcon(Icons.group_outlined),
+                matching: find.byType(SemanticIconButton),
+              ),
+            )
+            .onPressed,
+        isNull,
+      );
+    });
+
     testWidgets('Watch tab shows no internet message when network is down', (tester) async {
       final app = await makeTestProviderScope(
         tester,

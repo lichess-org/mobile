@@ -21,42 +21,53 @@ class ServerOutage extends ConsumerWidget {
         ? 'assets/images/discord-logo-white.png'
         : 'assets/images/discord-logo-black.png';
 
-    return SizedBox.expand(
-      child: ColoredBox(
-        color: Theme.of(context).scaffoldBackgroundColor,
-        child: Padding(
-          padding: Styles.bodyPadding,
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(logo, width: 150),
-                const SizedBox(height: 16),
-                Text(context.l10n.mobileServerOutageMessage, textAlign: TextAlign.center),
-                const SizedBox(height: 16),
-                Text(context.l10n.mobileServerOutageKeepInformed, textAlign: TextAlign.center),
-                const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    IconButton(
-                      icon: Image.asset(mastodonLogo, width: 32),
-                      onPressed: () => launchUrl(Uri.parse(kLichessMastodonUrl)),
-                    ),
-                    IconButton(
-                      icon: Image.asset('assets/images/bluesky-logo.png', width: 32),
-                      onPressed: () => launchUrl(Uri.parse(kLichessBlueskyUrl)),
-                    ),
-                    IconButton(
-                      icon: Image.asset(discordLogo, width: 32),
-                      onPressed: () => launchUrl(Uri.parse(kLichessDiscordUrl)),
-                    ),
-                  ],
+    return ColoredBox(
+      color: Theme.of(context).scaffoldBackgroundColor,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
+              child: Padding(
+                padding: Styles.bodyPadding,
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(logo, width: 150),
+                      const SizedBox(height: 16),
+                      Text(context.l10n.mobileServerOutageMessage, textAlign: TextAlign.center),
+                      const SizedBox(height: 16),
+                      Text(
+                        context.l10n.mobileServerOutageKeepInformed,
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          IconButton(
+                            icon: Image.asset(mastodonLogo, width: 32),
+                            onPressed: () => launchUrl(Uri.parse(kLichessMastodonUrl)),
+                          ),
+                          IconButton(
+                            icon: Image.asset('assets/images/bluesky-logo.png', width: 32),
+                            onPressed: () => launchUrl(Uri.parse(kLichessBlueskyUrl)),
+                          ),
+                          IconButton(
+                            icon: Image.asset(discordLogo, width: 32),
+                            onPressed: () => launchUrl(Uri.parse(kLichessDiscordUrl)),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }

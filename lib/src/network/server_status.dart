@@ -8,9 +8,12 @@ final _logger = Logger('ServerStatus');
 final serverStatusProvider = NotifierProvider<ServerStatusNotifier, bool>(ServerStatusNotifier.new);
 
 class ServerStatusNotifier extends Notifier<bool> {
+  Duration _lastLag = Duration.zero;
+
   @override
   bool build() {
     final pool = ref.watch(socketPoolProvider);
+    _lastLag = pool.averageLag.value;
     pool.averageLag.addListener(_onLagChange);
     ref.onDispose(() => pool.averageLag.removeListener(_onLagChange));
     return true;
@@ -18,7 +21,10 @@ class ServerStatusNotifier extends Notifier<bool> {
 
   void _onLagChange() {
     final lag = ref.read(socketPoolProvider).averageLag.value;
-    if (lag != Duration.zero && !state) {
+    final wasDisconnected = _lastLag == Duration.zero;
+    _lastLag = lag;
+
+    if (wasDisconnected && lag != Duration.zero && !state) {
       _logger.info('WebSocket reconnected, marking server as reachable again.');
       state = true;
     }
