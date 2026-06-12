@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_summary.dart';
 import 'package:lichess_mobile/src/model/analysis/common_analysis_state.dart';
+import 'package:lichess_mobile/src/model/analysis/opening_explorer_mixin.dart';
 import 'package:lichess_mobile/src/model/analysis/server_analysis_mixin.dart';
 import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
@@ -44,7 +45,7 @@ final studyControllerProvider = AsyncNotifierProvider.autoDispose
 enum ChapterServerAnalysisStatus { canRequest, notEnoughMoves, notWriteable, available }
 
 class StudyController extends AsyncNotifier<StudyState>
-    with EngineEvaluationMixin, ServerAnalysisMixin
+    with EngineEvaluationMixin, ServerAnalysisMixin, OpeningExplorerMixin<StudyState>
     implements PgnTreeNotifier {
   StudyController(this.options);
 
@@ -95,6 +96,17 @@ class StudyController extends AsyncNotifier<StudyState>
       state.requireValue.copyWith(
         root: recomputeRootView ? _root.view : state.requireValue.root,
         currentNode: StudyCurrentNode.fromNode(_root.nodeAt(state.requireValue.currentPath)),
+      ),
+    );
+  }
+
+  @override
+  void refreshCurrentBranchOpening() {
+    final curState = state.requireValue;
+    state = AsyncData(
+      curState.copyWith(
+        currentNode: StudyCurrentNode.fromNode(_root.nodeAt(curState.currentPath)),
+        currentBranchOpening: currentBranchOpeningAt(curState.currentPath),
       ),
     );
   }
@@ -176,6 +188,17 @@ class StudyController extends AsyncNotifier<StudyState>
     const currentPath = UciPath.empty;
     Move? lastMove;
 
+    final openingFutures = <Future<(UciPath, FullOpening)?>>[];
+    {
+      UciPath mainlinePath = UciPath.empty;
+      for (final branch in _root.mainline) {
+        mainlinePath = mainlinePath + branch.id;
+        final openingFuture = fetchMainlineOpening(branch, mainlinePath);
+        if (openingFuture == null) break;
+        openingFutures.add(openingFuture);
+      }
+    }
+
     final studyState = StudyState(
       myId: me,
       variant: variant,
@@ -184,6 +207,7 @@ class StudyController extends AsyncNotifier<StudyState>
       isOnMainline: true,
       root: _root.view,
       currentNode: StudyCurrentNode.fromNode(_root),
+      currentBranchOpening: currentBranchOpeningAt(currentPath),
       evaluationContext: EvaluationContext(
         id: study.chapter.id,
         variant: variant,
@@ -203,6 +227,10 @@ class StudyController extends AsyncNotifier<StudyState>
     // We need to define the state value in the build method because `requestEval` require the state
     // to have a value.
     state = AsyncData(studyState);
+
+    // Fetch openings for the mainline asynchronously and refresh the branch
+    // opening once they resolve.
+    applyFetchedOpenings(openingFutures);
 
     if (state.requireValue.isEngineAvailable(evaluationPrefs)) {
       socketClient.firstConnection.then((_) {
@@ -456,6 +484,7 @@ class StudyController extends AsyncNotifier<StudyState>
     final rootView = shouldForceShowVariation || shouldRecomputeRootView ? _root.view : state.root;
 
     final isForward = path.size > state.currentPath.size;
+    final branchOpening = currentBranchOpeningAt(path);
     if (currentNode is Branch) {
       // normal move feedback
       if (!isNavigating && isForward) {
@@ -476,11 +505,14 @@ class StudyController extends AsyncNotifier<StudyState>
         }
       }
 
+      maybeFetchOpeningAt(currentNode, path);
+
       this.state = AsyncValue.data(
         state.copyWith(
           currentPath: path,
           isOnMainline: _root.isOnMainline(path),
           currentNode: StudyCurrentNode.fromNode(currentNode),
+          currentBranchOpening: branchOpening,
           lastMove: currentNode.sanMove.move,
           root: rootView,
         ),
@@ -491,6 +523,7 @@ class StudyController extends AsyncNotifier<StudyState>
           currentPath: path,
           isOnMainline: _root.isOnMainline(path),
           currentNode: StudyCurrentNode.fromNode(currentNode),
+          currentBranchOpening: branchOpening,
           lastMove: null,
           root: rootView,
         ),
@@ -531,7 +564,8 @@ sealed class StudyState
         _$StudyState,
         AnalysisExplosionMixin,
         EvaluationMixinState<StudyState>,
-        ServerAnalysisMixinState
+        ServerAnalysisMixinState,
+        OpeningExplorerMixinState
     implements CommonAnalysisState {
   const StudyState._();
 
@@ -584,6 +618,9 @@ sealed class StudyState
 
     /// The last move played.
     Move? lastMove,
+
+    /// The opening of the current branch, if any.
+    Opening? currentBranchOpening,
 
     /// The PGN root comments of the study
     IList<PgnComment>? pgnRootComments,
@@ -723,6 +760,7 @@ sealed class StudyCurrentNode with _$StudyCurrentNode implements AnalysisCurrent
     required List<Move> children,
     required bool isRoot,
     SanMove? sanMove,
+    Opening? opening,
     IList<PgnComment>? startingComments,
     IList<PgnComment>? comments,
     IList<int>? nags,
@@ -742,6 +780,7 @@ sealed class StudyCurrentNode with _$StudyCurrentNode implements AnalysisCurrent
         isRoot: false,
         children: children,
         eval: node.eval,
+        opening: node.opening,
         startingComments: IList(node.startingComments),
         comments: IList(node.comments),
         nags: IList(node.nags),
@@ -751,6 +790,7 @@ sealed class StudyCurrentNode with _$StudyCurrentNode implements AnalysisCurrent
         position: node.position,
         children: children,
         eval: node.eval,
+        opening: node.opening,
         isRoot: true,
       );
     }

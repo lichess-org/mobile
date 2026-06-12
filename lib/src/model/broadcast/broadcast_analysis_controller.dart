@@ -10,7 +10,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_summary.dart';
 import 'package:lichess_mobile/src/model/analysis/common_analysis_state.dart';
-import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
+import 'package:lichess_mobile/src/model/analysis/opening_explorer_mixin.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
@@ -46,7 +46,7 @@ final broadcastAnalysisControllerProvider = AsyncNotifierProvider.autoDispose
     );
 
 class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
-    with EngineEvaluationMixin
+    with EngineEvaluationMixin, OpeningExplorerMixin<BroadcastAnalysisState>
     implements PgnTreeNotifier {
   BroadcastAnalysisController(this.params);
 
@@ -130,8 +130,9 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
       UciPath mainlinePath = UciPath.empty;
       for (final branch in _root.mainline) {
         mainlinePath = mainlinePath + branch.id;
-        if (branch.position.ply > 30) break;
-        openingFutures.add(_fetchOpening(branch.position.fen, mainlinePath));
+        final openingFuture = fetchMainlineOpening(branch, mainlinePath);
+        if (openingFuture == null) break;
+        openingFutures.add(openingFuture);
       }
     }
 
@@ -139,7 +140,7 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
     // analysis preferences change
     final prefs = ref.read(broadcastPreferencesProvider);
 
-    final (_, initialBranchOpening) = _nodeOpeningAt(_root, currentPath);
+    final initialBranchOpening = currentBranchOpeningAt(currentPath);
 
     final broadcastState = BroadcastAnalysisState(
       id: params.gameId,
@@ -163,26 +164,7 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
     // `debouncedStartEngineEval` require the state to have a value.
     state = AsyncData(broadcastState);
 
-    Future.wait(openingFutures)
-        .then((list) {
-          bool hasOpening = false;
-          for (final updated in list) {
-            if (updated != null) {
-              hasOpening = true;
-              final (path, opening) = updated;
-              _root.updateAt(path, (node) => node.opening = opening);
-            }
-          }
-          return hasOpening;
-        })
-        .then((hasOpening) {
-          if (hasOpening && ref.mounted && state.hasValue) {
-            scheduleMicrotask(() {
-              if (!ref.mounted || !state.hasValue) return;
-              _setPath(state.requireValue.currentPath);
-            });
-          }
-        });
+    applyFetchedOpenings(openingFutures);
 
     if (state.requireValue.isEngineAvailable(evaluationPrefs)) {
       requestEval();
@@ -466,7 +448,7 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
         : state.requireValue.root;
 
     final isForward = path.size > state.requireValue.currentPath.size;
-    final (_, branchOpening) = _nodeOpeningAt(_root, path);
+    final branchOpening = currentBranchOpeningAt(path);
     if (currentNode is Branch) {
       // normal move feedback
       if (!isNavigating && isForward) {
@@ -489,13 +471,7 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
         }
       }
 
-      if (currentNode.opening == null && currentNode.position.ply <= 30) {
-        _fetchOpening(currentNode.position.fen, path).then((value) {
-          if (value != null) {
-            _updateOpening(value.$1, value.$2);
-          }
-        });
-      }
+      maybeFetchOpeningAt(currentNode, path);
 
       state = AsyncData(
         state.requireValue.copyWith(
@@ -530,45 +506,15 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
     }
   }
 
-  (Node, Opening?) _nodeOpeningAt(Node node, UciPath path, [Opening? opening]) {
-    if (path.isEmpty) return (node, opening);
-    final child = node.childById(path.head!);
-    if (child != null) {
-      return _nodeOpeningAt(child, path.tail, child.opening ?? opening);
-    } else {
-      return (node, opening);
-    }
-  }
-
-  Future<(UciPath, FullOpening)?> _fetchOpening(String fen, UciPath path) async {
-    if (!kOpeningAllowedVariants.contains(state.value?.variant ?? Variant.standard)) {
-      return null;
-    }
-    final opening = await ref.read(openingServiceProvider).fetchFromFen(fen);
-    if (opening != null) {
-      return (path, opening);
-    }
-    return null;
-  }
-
-  void _updateOpening(UciPath path, FullOpening opening) {
-    _root.updateAt(path, (node) => node.opening = opening);
-
-    if (!state.hasValue) return;
+  @override
+  void refreshCurrentBranchOpening() {
     final curState = state.requireValue;
-    if (curState.currentPath == path) {
-      state = AsyncData(
-        curState.copyWith(
-          currentNode: AnalysisCurrentNode.fromNode(_root.nodeAt(path)),
-          currentBranchOpening: opening,
-        ),
-      );
-    } else {
-      final (_, newOpening) = _nodeOpeningAt(_root, curState.currentPath);
-      if (newOpening != null && newOpening != curState.currentBranchOpening) {
-        state = AsyncData(curState.copyWith(currentBranchOpening: newOpening));
-      }
-    }
+    state = AsyncData(
+      curState.copyWith(
+        currentNode: AnalysisCurrentNode.fromNode(_root.nodeAt(curState.currentPath)),
+        currentBranchOpening: currentBranchOpeningAt(curState.currentPath),
+      ),
+    );
   }
 
   ({Duration? parentClock, Duration? clock}) _getClocks(UciPath path) {
@@ -621,7 +567,8 @@ sealed class BroadcastAnalysisState
     with
         _$BroadcastAnalysisState,
         AnalysisExplosionMixin,
-        EvaluationMixinState<BroadcastAnalysisState>
+        EvaluationMixinState<BroadcastAnalysisState>,
+        OpeningExplorerMixinState
     implements CommonAnalysisState {
   const BroadcastAnalysisState._();
 
