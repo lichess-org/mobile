@@ -85,6 +85,9 @@ class AppLocalizationsBs extends AppLocalizations {
   String get mobileOkButton => 'U redu';
 
   @override
+  String get mobileOtbBoardView => 'Board view';
+
+  @override
   String get mobileOverTheBoard => 'Preko ploče';
 
   @override

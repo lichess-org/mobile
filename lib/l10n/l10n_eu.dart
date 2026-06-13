@@ -85,6 +85,9 @@ class AppLocalizationsEu extends AppLocalizations {
   String get mobileOkButton => 'Ados';
 
   @override
+  String get mobileOtbBoardView => 'Board view';
+
+  @override
   String get mobileOverTheBoard => 'Taula gainean';
 
   @override

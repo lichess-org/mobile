@@ -285,14 +285,14 @@ class OverTheBoardDisplaySettings extends ConsumerWidget {
     return BottomSheetScrollableContainer(
       children: [
         SettingsListTile(
-          settingsLabel: const Text('Board view'),
-          settingsValue: prefs.myView.label(context.l10n),
+          settingsLabel: Text(context.l10n.mobileOtbBoardView),
+          settingsValue: prefs.myView.label(),
           onTap: () {
             showChoicePicker<OverTheBoardMyView>(
               context,
               choices: OverTheBoardMyView.values,
               selectedItem: prefs.myView,
-              labelBuilder: (v) => Text(v.label(context.l10n)),
+              labelBuilder: (v) => Text(v.label()),
               onSelectedItemChanged: (v) =>
                   ref.read(overTheBoardPreferencesProvider.notifier).setMyView(v),
             );

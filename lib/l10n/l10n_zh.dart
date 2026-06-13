@@ -85,6 +85,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileOkButton => '确定';
 
   @override
+  String get mobileOtbBoardView => 'Board view';
+
+  @override
   String get mobileOverTheBoard => '离线棋盘';
 
   @override

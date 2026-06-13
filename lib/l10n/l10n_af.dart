@@ -85,6 +85,9 @@ class AppLocalizationsAf extends AppLocalizations {
   String get mobileOkButton => 'Reg';
 
   @override
+  String get mobileOtbBoardView => 'Board view';
+
+  @override
   String get mobileOverTheBoard => 'Oor die bord';
 
   @override
