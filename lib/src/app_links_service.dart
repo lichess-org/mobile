@@ -29,8 +29,8 @@ import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
+import 'package:lichess_mobile/src/widgets/app_link.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:linkify/linkify.dart';
 import 'package:logging/logging.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -387,23 +387,21 @@ class AppLinksService {
     return route;
   }
 
-  static const kLichessLinkifiers = [UrlLinkifier(), EmailLinkifier(), UserTagLinkifier()];
-
   /// Handles link clicks in Linkify widgets throughout the app.
-  Future<void> onLinkifyOpen(BuildContext context, LinkableElement link) async {
-    if (link is UrlElement && link.url.startsWith(RegExp('https?:\\/\\/$kLichessHost'))) {
-      // Handle Lichess links specifically
-      final appLinkUri = Uri.parse(link.url);
-      await handleAppLink(context, appLinkUri);
-    } else if (link.originText.startsWith('@')) {
-      final username = link.originText.substring(1);
-      Navigator.of(context).push(
-        UserOrProfileScreen.buildRoute(
-          LightUser(id: UserId.fromUserName(username), name: username),
-        ),
-      );
-    } else {
-      launchUrl(Uri.parse(link.url));
+  Future<void> onLinkTap(BuildContext context, AppLink link) async {
+    switch (link) {
+      case MentionLink(:final username):
+        Navigator.of(context).push(
+          UserOrProfileScreen.buildRoute(
+            LightUser(id: UserId.fromUserName(username), name: username),
+          ),
+        );
+      case UrlLink(:final uri):
+        if (uri.host == kLichessHost) {
+          await handleAppLink(context, uri);
+        } else {
+          await launchUrl(uri);
+        }
     }
   }
 }

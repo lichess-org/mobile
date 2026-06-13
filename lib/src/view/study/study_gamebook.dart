@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/app_links_service.dart';
 import 'package:lichess_mobile/src/model/study/study_controller.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:lichess_mobile/src/widgets/app_linkify.dart';
 
 class StudyGamebook extends StatelessWidget {
   const StudyGamebook(this.options);
@@ -45,6 +45,7 @@ class _CommentState extends ConsumerState<_Comment> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(studyControllerProvider(widget.options)).requireValue;
+    final service = ref.read<AppLinksService>(appLinksServiceProvider);
 
     final comment =
         state.gamebookComment ??
@@ -63,12 +64,10 @@ class _CommentState extends ConsumerState<_Comment> {
           controller: _scrollController,
           child: Padding(
             padding: const EdgeInsets.only(right: 5),
-            child: Linkify(
+            child: AppLinkify(
               text: comment,
               style: const TextStyle(fontSize: 16),
-              onOpen: (link) {
-                launchUrl(Uri.parse(link.url));
-              },
+              linkService: service,
             ),
           ),
         ),
