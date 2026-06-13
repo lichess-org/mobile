@@ -952,12 +952,51 @@ class _GameBottomBar extends ConsumerWidget {
               ref.read(gameControllerProvider(id).notifier).declineRematch();
             },
           )
+        else if (gameState.rematchChallengeId != null)
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.cancelRematchOffer),
+            dismissOnPress: true,
+            isDestructiveAction: true,
+            onPressed: () async {
+              // dismissOnPress unmounts this context before the request
+              // completes, so capture the messenger now.
+              final messenger = ScaffoldMessenger.of(context);
+              try {
+                await ref.read(gameControllerProvider(id).notifier).cancelRematchChallenge();
+              } catch (_) {
+                messenger.showSnackBar(
+                  const SnackBar(content: Text('Could not cancel the rematch challenge')),
+                );
+              }
+            },
+          )
         else if (gameState.canOfferRematch && gameState.game.opponent?.onGame == true)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.rematch),
             dismissOnPress: true,
             onPressed: () {
               ref.read(gameControllerProvider(id).notifier).proposeOrAcceptRematch();
+            },
+          )
+        // Offline opponent in a clockless game: persistent challenge, not a socket offer.
+        else if (gameState.canOfferRematch &&
+            gameState.game.clock == null &&
+            gameState.game.me?.user != null &&
+            gameState.game.opponent?.user != null)
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.rematch),
+            dismissOnPress: true,
+            onPressed: () async {
+              // dismissOnPress unmounts this context before the request
+              // completes, so capture the messenger now.
+              final messenger = ScaffoldMessenger.of(context);
+              try {
+                await ref.read(gameControllerProvider(id).notifier).challengeRematch();
+              } catch (_) {
+                messenger.showSnackBar(
+                  const SnackBar(content: Text('Could not send the rematch challenge')),
+                );
+              }
             },
           ),
         if (gameState.canGetNewOpponent)

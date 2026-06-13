@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
 import 'package:lichess_mobile/src/model/chat/chat_controller.dart';
 import 'package:lichess_mobile/src/model/clock/chess_clock.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -456,6 +457,26 @@ class GameController extends AsyncNotifier<GameState> {
 
   void proposeOrAcceptRematch() {
     _socketClient.send('rematch-yes', null);
+  }
+
+  Future<void> challengeRematch() async {
+    final repository = ref.read(challengeRepositoryProvider);
+    await repository.rematchOfGame(gameFullId.gameId);
+    // The server doesn't return the created challenge, so fetch the outgoing
+    // challenges to find it, which allows the user to cancel it later.
+    final challenges = await repository.list();
+    final challenge = challenges.outward.firstWhereOrNull((c) => c.rematchOf == gameFullId.gameId);
+    final curState = state.requireValue;
+    state = AsyncValue.data(curState.copyWith(rematchChallengeId: challenge?.id));
+  }
+
+  /// Cancels the rematch challenge previously created by [challengeRematch].
+  Future<void> cancelRematchChallenge() async {
+    final curState = state.requireValue;
+    final challengeId = curState.rematchChallengeId;
+    if (challengeId == null) return;
+    await ref.read(challengeRepositoryProvider).cancel(challengeId);
+    state = AsyncValue.data(curState.copyWith(rematchChallengeId: null));
   }
 
   void declineRematch() {
@@ -1035,6 +1056,10 @@ sealed class GameState with _$GameState {
 
     /// Game full id used to redirect to the new game of the rematch
     GameFullId? redirectGameId,
+
+    /// Id of the rematch challenge created when the opponent is offline in a
+    /// clockless game (see [GameController.challengeRematch]).
+    ChallengeId? rematchChallengeId,
   }) = _GameState;
 
   /// The [Position] at the current cursor.
