@@ -94,14 +94,18 @@ class ChallengeService {
     );
 
     // new incoming challenges
-    await Future.wait(
-      _current?.inward.whereNot((challenge) => prevInwardIds.contains(challenge.id)).map((
-            challenge,
-          ) async {
-            return await notificationService.show(ChallengeNotification(challenge));
-          }) ??
-          <Future<int>>[],
-    );
+    // only display the notifications if the app is in the foregroud because fcm already
+    // shows notifications when the app is in the background
+    if (WidgetsBinding.instance.lifecycleState == AppLifecycleState.resumed) {
+      await Future.wait(
+        _current?.inward.whereNot((challenge) => prevInwardIds.contains(challenge.id)).map((
+              challenge,
+            ) async {
+              return await notificationService.show(ChallengeNotification(challenge));
+            }) ??
+            <Future<int>>[],
+      );
+    }
   }
 
   /// Stop listening to challenge events from the server.
