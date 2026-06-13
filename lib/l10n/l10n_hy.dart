@@ -85,6 +85,9 @@ class AppLocalizationsHy extends AppLocalizations {
   String get mobileOkButton => 'Լավ';
 
   @override
+  String get mobileOtbBoardView => 'Board view';
+
+  @override
   String get mobileOverTheBoard => 'Երկուսով խաղատախտակի առջև';
 
   @override

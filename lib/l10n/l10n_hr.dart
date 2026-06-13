@@ -85,6 +85,9 @@ class AppLocalizationsHr extends AppLocalizations {
   String get mobileOkButton => 'U redu';
 
   @override
+  String get mobileOtbBoardView => 'Board view';
+
+  @override
   String get mobileOverTheBoard => 'Igraj bez mreže, preko uređaja';
 
   @override

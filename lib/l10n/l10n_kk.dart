@@ -85,6 +85,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get mobileOkButton => 'Иә';
 
   @override
+  String get mobileOtbBoardView => 'Board view';
+
+  @override
   String get mobileOverTheBoard => 'Тақтаны жаю';
 
   @override
