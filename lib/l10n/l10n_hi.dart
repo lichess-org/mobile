@@ -85,6 +85,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get mobileOkButton => 'ठीक है';
 
   @override
+  String get mobileOtbBoardView => 'Board view';
+
+  @override
   String get mobileOverTheBoard => 'बोर्ड पर';
 
   @override

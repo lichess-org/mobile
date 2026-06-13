@@ -64,7 +64,7 @@ enum OverTheBoardMyView {
   flipPieces,
   flipBoard;
 
-  String label(AppLocalizations l10n) => switch(this) {
+  String label() => switch (this) {
     whiteBottom => 'White at the bottom',
     symmetricPieces => 'Symmetric pieces',
     flipPieces => 'Flip pieces after move',

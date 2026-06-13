@@ -85,6 +85,9 @@ class AppLocalizationsAz extends AppLocalizations {
   String get mobileOkButton => 'Təsdiqlə';
 
   @override
+  String get mobileOtbBoardView => 'Board view';
+
+  @override
   String get mobileOverTheBoard => 'Taxta üzərində';
 
   @override

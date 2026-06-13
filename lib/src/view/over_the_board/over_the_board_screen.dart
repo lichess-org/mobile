@@ -176,7 +176,9 @@ class _BodyState extends ConsumerState<_Body> {
                 game: newGameState.game,
                 onRematch: () {
                   setState(() {
-                    orientation = orientation.opposite;
+                    if (myView != OverTheBoardMyView.flipBoard) {
+                      orientation = orientation.opposite;
+                    }
                     ref.read(overTheBoardGameControllerProvider.notifier).rematch();
                     ref.read(overTheBoardClockProvider.notifier).restart();
                     Navigator.pop(context);
@@ -402,7 +404,7 @@ class _BottomBar extends ConsumerWidget {
 
   Future<void> _showOtbGameMenu(BuildContext context, WidgetRef ref) {
     final gameState = ref.read(overTheBoardGameControllerProvider);
-    final overTheBoardPrefs = ref.watch(overTheBoardPreferencesProvider);
+    final overTheBoardPrefs = ref.read(overTheBoardPreferencesProvider);
 
     final myView = overTheBoardPrefs.myView;
 
