@@ -31,6 +31,10 @@ class OverTheBoardPreferencesNotifier extends Notifier<OverTheBoardPrefs>
     return fetch();
   }
 
+  Future<void> toggleFlipOpponentInfo() {
+    return save(state.copyWith(flipOpponentInfo: !state.flipOpponentInfo));
+  }
+
   Future<void> setMyView(OverTheBoardMyView myView) {
     return save(state.copyWith(myView: myView));
   }
@@ -70,6 +74,13 @@ enum OverTheBoardMyView {
     flipPieces => 'Flip pieces after move',
     flipBoard => 'Same side (flip board after move)',
   };
+
+  /// Whether the "flip opponent info" setting is user-configurable for this view.
+  ///
+  /// Only [symmetricPieces] exposes a toggle. The other views have fixed
+  /// behavior: [whiteBottom] always flips the opponent info, [flipBoard] never
+  /// does, and [flipPieces] flips both info bars to face whoever is to move.
+  bool get canConfigureFlipOpponentInfo => this == symmetricPieces;
 }
 
 @Freezed(fromJson: true, toJson: true)
@@ -79,12 +90,14 @@ sealed class OverTheBoardPrefs with _$OverTheBoardPrefs implements Serializable 
   static const _defaultTimeIncrement = TimeIncrement(300, 3);
 
   const factory OverTheBoardPrefs({
+    required bool flipOpponentInfo,
     @Default(OverTheBoardMyView.whiteBottom) OverTheBoardMyView myView,
     @Default(TimeControlType.realTime) TimeControlType timeControlType,
     @Default(OverTheBoardPrefs._defaultTimeIncrement) TimeIncrement timeIncrement,
   }) = _OverTheBoardPrefs;
 
   static const defaults = OverTheBoardPrefs(
+    flipOpponentInfo: true,
     myView: OverTheBoardMyView.whiteBottom,
     timeControlType: TimeControlType.realTime,
     timeIncrement: _defaultTimeIncrement,

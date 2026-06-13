@@ -295,6 +295,13 @@ class OverTheBoardDisplaySettings extends ConsumerWidget {
             );
           },
         ),
+        if (prefs.myView.canConfigureFlipOpponentInfo)
+          SwitchSettingTile(
+            title: const Text('Flip opponent info'),
+            value: prefs.flipOpponentInfo,
+            onChanged: (_) =>
+                ref.read(overTheBoardPreferencesProvider.notifier).toggleFlipOpponentInfo(),
+          ),
       ],
     );
   }
