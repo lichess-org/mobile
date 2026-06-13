@@ -21,6 +21,7 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/account/account_menu.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_carousel.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_list_screen.dart';
+import 'package:lichess_mobile/src/view/home/server_outage.dart';
 import 'package:lichess_mobile/src/view/watch/live_tv_channels_screen.dart';
 import 'package:lichess_mobile/src/view/watch/streamer_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
@@ -64,10 +65,6 @@ class WatchTabScreen extends ConsumerStatefulWidget {
 class _WatchScreenState extends ConsumerState<WatchTabScreen> {
   final _androidRefreshKey = GlobalKey<RefreshIndicatorState>();
 
-  static const offlineWidget = Center(
-    child: Text('No internet connection.', style: Styles.noResultTextStyle),
-  );
-
   @override
   Widget build(BuildContext context) {
     ref.listen<BottomTab>(currentBottomTabProvider, (prev, current) {
@@ -80,7 +77,7 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
       }
     });
 
-    final isOnline = ref.watch(onlineStatusProvider).value ?? true;
+    final connectionStatus = ref.watch(connectionStatusProvider);
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, _) {
@@ -97,20 +94,24 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
               : null,
           actions: const [AccountMenuButton()],
         ),
-        body: isOnline
-            ? OrientationBuilder(
-                builder: (context, orientation) {
-                  return HapticRefreshIndicator(
-                    edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
-                        ? MediaQuery.paddingOf(context).top + kToolbarHeight
-                        : 0.0,
-                    key: _androidRefreshKey,
-                    onRefresh: _refreshData,
-                    child: _Body(orientation),
-                  );
-                },
-              )
-            : offlineWidget,
+        body: switch (connectionStatus) {
+          ConnectionStatus.online => OrientationBuilder(
+            builder: (context, orientation) {
+              return HapticRefreshIndicator(
+                edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
+                    ? MediaQuery.paddingOf(context).top + kToolbarHeight
+                    : 0.0,
+                key: _androidRefreshKey,
+                onRefresh: _refreshData,
+                child: _Body(orientation),
+              );
+            },
+          ),
+          ConnectionStatus.networkDown => const Center(
+            child: Text('No internet connection.', style: Styles.noResultTextStyle),
+          ),
+          ConnectionStatus.serverDown => const ServerOutage(),
+        },
       ),
     );
   }

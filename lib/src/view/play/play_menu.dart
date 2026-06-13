@@ -17,7 +17,7 @@ class PlayMenu extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
+    final connectionStatus = ref.watch(connectionStatusProvider);
 
     return Column(
       children: [
@@ -28,7 +28,7 @@ class PlayMenu extends ConsumerWidget {
         _Section(
           children: [
             ListTile(
-              enabled: isOnline,
+              enabled: connectionStatus == ConnectionStatus.online,
               onTap: () {
                 // Pops the play bottom sheet
                 Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
@@ -45,7 +45,7 @@ class PlayMenu extends ConsumerWidget {
               title: Text(context.l10n.challengeAFriend),
             ),
             ListTile(
-              enabled: isOnline,
+              enabled: connectionStatus == ConnectionStatus.online,
               onTap: () {
                 // Pops the play bottom sheet
                 Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
@@ -58,7 +58,7 @@ class PlayMenu extends ConsumerWidget {
               title: Text(context.l10n.correspondence),
             ),
             ListTile(
-              enabled: isOnline,
+              enabled: connectionStatus == ConnectionStatus.online,
               onTap: () {
                 // Pops the play bottom sheet
                 Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);

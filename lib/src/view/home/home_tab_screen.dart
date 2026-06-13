@@ -43,6 +43,7 @@ import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/game/offline_correspondence_games_screen.dart';
 import 'package:lichess_mobile/src/view/home/blog_carousel.dart';
 import 'package:lichess_mobile/src/view/home/games_carousel.dart';
+import 'package:lichess_mobile/src/view/home/server_outage.dart';
 import 'package:lichess_mobile/src/view/message/conversation_screen.dart';
 import 'package:lichess_mobile/src/view/play/ongoing_games_screen.dart';
 import 'package:lichess_mobile/src/view/play/play_bottom_sheet.dart';
@@ -404,7 +405,15 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                         AccountMenuButton(),
                       ],
                     ),
-              body: widget.editModeEnabled
+              body: ref.watch(connectionStatusProvider) == ConnectionStatus.serverDown
+                  ? HapticRefreshIndicator(
+                      edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
+                          ? MediaQuery.paddingOf(context).top + kToolbarHeight
+                          : 0.0,
+                      onRefresh: () => _refreshData(isOnline: isOnline),
+                      child: const ServerOutage(),
+                    )
+                  : widget.editModeEnabled
                   ? content
                   : HapticRefreshIndicator(
                       edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
@@ -905,23 +914,16 @@ class _PlayerScreenButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isOnlineAsync = ref.watch(onlineStatusProvider);
+    final connectionStatus = ref.watch(connectionStatusProvider);
 
-    return isOnlineAsync.maybeWhen(
-      data: (isOnline) => SemanticIconButton(
-        icon: const Icon(Icons.group_outlined),
-        semanticsLabel: context.l10n.players,
-        onPressed: !isOnline
-            ? null
-            : () {
-                Navigator.of(context).push(PlayerScreen.buildRoute());
-              },
-      ),
-      orElse: () => SemanticIconButton(
-        icon: const Icon(Icons.group_outlined),
-        semanticsLabel: context.l10n.players,
-        onPressed: null,
-      ),
+    return SemanticIconButton(
+      icon: const Icon(Icons.group_outlined),
+      semanticsLabel: context.l10n.players,
+      onPressed: connectionStatus != ConnectionStatus.online
+          ? null
+          : () {
+              Navigator.of(context).push(PlayerScreen.buildRoute());
+            },
     );
   }
 }
@@ -935,7 +937,7 @@ class _ChallengeScreenButton extends ConsumerWidget {
     if (authUser == null) {
       return const SizedBox.shrink();
     }
-    final isOnlineAsync = ref.watch(onlineStatusProvider);
+    final connectionStatus = ref.watch(connectionStatusProvider);
     final challenges = ref.watch(challengesProvider);
 
     final inwardCount = challenges.value?.inward.length ?? 0;
@@ -945,27 +947,20 @@ class _ChallengeScreenButton extends ConsumerWidget {
       return const SizedBox.shrink();
     }
 
-    return switch (isOnlineAsync) {
-      AsyncData(value: final isOnline) => SemanticIconButton(
-        icon: Badge.count(
-          count: inwardCount,
-          isLabelVisible: inwardCount > 0,
-          child: const Icon(LichessIcons.crossed_swords, size: 18.0),
-        ),
-        semanticsLabel: context.l10n.preferencesNotifyChallenge,
-        onPressed: !isOnline
-            ? null
-            : () {
-                ref.invalidate(challengesProvider);
-                Navigator.of(context).push(ChallengeRequestsScreen.buildRoute());
-              },
+    return SemanticIconButton(
+      icon: Badge.count(
+        count: inwardCount,
+        isLabelVisible: inwardCount > 0,
+        child: const Icon(LichessIcons.crossed_swords, size: 18.0),
       ),
-      _ => SemanticIconButton(
-        icon: const Icon(LichessIcons.crossed_swords, size: 18.0),
-        semanticsLabel: context.l10n.preferencesNotifyChallenge,
-        onPressed: null,
-      ),
-    };
+      semanticsLabel: context.l10n.preferencesNotifyChallenge,
+      onPressed: connectionStatus != ConnectionStatus.online
+          ? null
+          : () {
+              ref.invalidate(challengesProvider);
+              Navigator.of(context).push(ChallengeRequestsScreen.buildRoute());
+            },
+    );
   }
 }
 
