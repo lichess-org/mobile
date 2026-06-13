@@ -146,16 +146,21 @@ class _BodyState extends ConsumerState<_Body> {
       bool bottomUpsideDown,
       PieceOrientationBehavior pieceBehavior,
     ) = switch (myView) {
-      OverTheBoardMyView.whiteBottom || OverTheBoardMyView.symmetricPieces => (
-        true,
+      // White always at the bottom: the opponent's info is always flipped to face them.
+      OverTheBoardMyView.whiteBottom => (true, false, PieceOrientationBehavior.opponentUpsideDown),
+      // Symmetric pieces: flipping the opponent's info is user-configurable.
+      OverTheBoardMyView.symmetricPieces => (
+        overTheBoardPrefs.flipOpponentInfo,
         false,
         PieceOrientationBehavior.opponentUpsideDown,
       ),
+      // Flip pieces after move: both info bars face whoever is to move.
       OverTheBoardMyView.flipPieces => (
         orientation != gameState.turn,
         orientation != gameState.turn,
         PieceOrientationBehavior.sideToPlay,
       ),
+      // Same side: both players share a side, so the opponent's info is never flipped.
       OverTheBoardMyView.flipBoard => (false, false, PieceOrientationBehavior.facingUser),
     };
 
