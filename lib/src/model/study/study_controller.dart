@@ -87,16 +87,11 @@ class StudyController extends AsyncNotifier<StudyState>
       _likeDebouncer.cancel();
     });
 
-    final chapter = await _fetchChapter(options.id, chapterId: options.initialChapter);
-
-    final socketPool = ref.watch(socketPoolProvider);
-    _socketClient = socketPool.open(
-      Uri(path: '/study/${options.id}/socket/v6'),
-      version: chapter.study.socketVersion,
+    final chapter = await _fetchChapter(
+      options.id,
+      chapterId: options.initialChapter,
+      initSocket: true,
     );
-
-    _socketSubscription?.cancel();
-    _socketSubscription = _socketClient.stream.listen(handleSocketEvent);
 
     return chapter.copyWith(chatState: await initChat(chapter.study.chat));
   }
@@ -130,10 +125,25 @@ class StudyController extends AsyncNotifier<StudyState>
     _ensureItsOurTurnIfGamebook();
   }
 
-  Future<StudyState> _fetchChapter(StudyId id, {StudyChapterId? chapterId}) async {
+  Future<StudyState> _fetchChapter(
+    StudyId id, {
+    StudyChapterId? chapterId,
+    bool initSocket = false,
+  }) async {
     final (study, analysisSummary, pgn) = await ref
         .read(studyRepositoryProvider)
         .getStudy(id: id, chapterId: chapterId);
+
+    // We receive the socket version from the study API, so we can only initialize the socket connection after fetching the study for the first time.
+    if (initSocket) {
+      final socketPool = ref.watch(socketPoolProvider);
+      _socketClient = socketPool.open(
+        Uri(path: '/study/${options.id}/socket/v6'),
+        version: study.socketVersion,
+      );
+      _socketSubscription?.cancel();
+      _socketSubscription = _socketClient.stream.listen(handleSocketEvent);
+    }
 
     final game = PgnGame.parsePgn(pgn);
 
