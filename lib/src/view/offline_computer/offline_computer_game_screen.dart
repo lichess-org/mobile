@@ -833,24 +833,6 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
               ),
             ),
             SettingsListTile(
-              settingsLabel: Text(context.l10n.side),
-              settingsValue: _sideChoiceLabel(context, _selectedSideChoice),
-              onTap: () {
-                showChoicePicker(
-                  context,
-                  choices: (widget.initialFen != null || _selectedVariant == Variant.fromPosition)
-                      ? SideChoice.values
-                      : SideChoice.values.where((c) => c != SideChoice.nextToPlay).toList(),
-                  selectedItem: _selectedSideChoice,
-                  labelBuilder: (SideChoice choice) => Text(_sideChoiceLabel(context, choice)),
-                  onSelectedItemChanged: (SideChoice choice) {
-                    setState(() => _selectedSideChoice = choice);
-                    ref.read(offlineComputerGamePreferencesProvider.notifier).setSideChoice(choice);
-                  },
-                );
-              },
-            ),
-            SettingsListTile(
               settingsLabel: Text(context.l10n.variant),
               settingsValue: _selectedVariant.label(context.l10n),
               onTap: () {
@@ -893,6 +875,24 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
                       )
                     : const SizedBox.shrink(),
               ),
+            SettingsListTile(
+              settingsLabel: Text(context.l10n.side),
+              settingsValue: _sideChoiceLabel(context, _selectedSideChoice),
+              onTap: () {
+                showChoicePicker(
+                  context,
+                  choices: (widget.initialFen != null || _selectedVariant == Variant.fromPosition)
+                      ? SideChoice.values
+                      : SideChoice.values.where((c) => c != SideChoice.nextToPlay).toList(),
+                  selectedItem: _selectedSideChoice,
+                  labelBuilder: (SideChoice choice) => Text(_sideChoiceLabel(context, choice)),
+                  onSelectedItemChanged: (SideChoice choice) {
+                    setState(() => _selectedSideChoice = choice);
+                    ref.read(offlineComputerGamePreferencesProvider.notifier).setSideChoice(choice);
+                  },
+                );
+              },
+            ),
             SwitchSettingTile(
               title: const Text('Practice mode'),
               subtitle: const Text('Get feedback on your moves'),
