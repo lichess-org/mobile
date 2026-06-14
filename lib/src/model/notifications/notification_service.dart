@@ -248,6 +248,17 @@ class NotificationService {
           notification,
         ));
 
+      case final BroadcastFcmMessage broadcast:
+        final notification = BroadcastPlayerFollowNotification.fromFcmMessage(broadcast);
+        _responseStreamController.add((
+          NotificationResponse(
+            notificationResponseType: NotificationResponseType.selectedNotification,
+            id: notification.id,
+            payload: jsonEncode(notification.payload),
+          ),
+          notification,
+        ));
+
       // TODO: handle other notification types
       case UnhandledFcmMessage(data: final data):
         _logger.warning('Received unhandled FCM notification type: ${data['lichess.type']}');
@@ -303,6 +314,19 @@ class NotificationService {
         if (fromBackground == false && notification != null) {
           await show(
             ChallengeAcceptedNotification(fullId, notification.title!, notification.body!),
+          );
+        }
+
+      case BroadcastFcmMessage(:final roundId, :final gameId, :final color, :final notification):
+        if (fromBackground == false && notification != null) {
+          await show(
+            BroadcastPlayerFollowNotification(
+              roundId,
+              gameId,
+              color,
+              notification.title!,
+              notification.body!,
+            ),
           );
         }
 
