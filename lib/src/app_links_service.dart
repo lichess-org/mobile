@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
@@ -21,6 +22,7 @@ import 'package:lichess_mobile/src/model/user/user_repository.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_results_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
@@ -162,6 +164,29 @@ class AppLinksService {
       case 'training':
         final id = appLinkUri.pathSegments[1];
         return [PuzzleScreen.buildRoute(angle: PuzzleAngle.fromKey('mix'), puzzleId: PuzzleId(id))];
+      case 'editor':
+        final orientation = appLinkUri.queryParameters['color'] == 'black'
+            ? Side.black
+            : Side.white;
+        final fen = appLinkUri.pathSegments.sublist(1).join('/').replaceAll('_', ' ').trim();
+        String? initialFen;
+        if (fen.isNotEmpty) {
+          try {
+            Setup.parseFen(fen);
+            initialFen = fen;
+          } catch (_) {
+            if (context.mounted) {
+              showSnackBar(context, 'Invalid FEN: $fen', type: SnackBarType.error);
+            }
+          }
+        }
+        return [
+          BoardEditorScreen.buildRoute((
+            initialVariant: Variant.standard,
+            initialFen: initialFen,
+            initialOrientation: orientation,
+          )),
+        ];
       case 'tv':
         if (appLinkUri.pathSegments.length < 2) return null;
         final channel = TvChannel.nameMap.entryOrNull(appLinkUri.pathSegments[1]);

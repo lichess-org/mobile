@@ -24,6 +24,7 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_results_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
@@ -287,6 +288,90 @@ void main() {
         isA<PuzzleScreen>().having((s) => s.puzzleId, 'id', '61044'),
       );
     });
+
+    testWidgets('resolves bare /editor to BoardEditorScreen with default position', (
+      WidgetTester tester,
+    ) async {
+      final uri = Uri.parse('https://lichess.org/editor');
+      await triggerAppLink(tester, uri);
+      await tester.pumpAndSettle();
+      expect(
+        tester.widget(find.byType(BoardEditorScreen)),
+        isA<BoardEditorScreen>()
+            .having((s) => s.params?.initialFen, 'initialFen', isNull)
+            .having((s) => s.params?.initialOrientation, 'orientation', Side.white),
+      );
+    });
+
+    testWidgets('resolves trailing-slash /editor/ to BoardEditorScreen with default position', (
+      WidgetTester tester,
+    ) async {
+      // /editor/ parses to an empty trailing path segment, so the reconstructed FEN is
+      // empty: it must fall back to the default position rather than fail validation.
+      final uri = Uri.parse('https://lichess.org/editor/?color=black');
+      await triggerAppLink(tester, uri);
+      await tester.pumpAndSettle();
+      expect(find.textContaining('Invalid FEN'), findsNothing);
+      expect(
+        tester.widget(find.byType(BoardEditorScreen)),
+        isA<BoardEditorScreen>()
+            .having((s) => s.params?.initialFen, 'initialFen', isNull)
+            .having((s) => s.params?.initialOrientation, 'orientation', Side.black),
+      );
+    });
+
+    testWidgets('resolves /editor/{fen} reconstructing the FEN from path segments', (
+      WidgetTester tester,
+    ) async {
+      // Ranks are split by '/' and metadata spaces are encoded as '_'.
+      final uri = Uri.parse(
+        'https://lichess.org/editor/rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR_w_KQkq_-_0_1',
+      );
+      await triggerAppLink(tester, uri);
+      await tester.pumpAndSettle();
+      expect(
+        tester.widget(find.byType(BoardEditorScreen)),
+        isA<BoardEditorScreen>()
+            .having(
+              (s) => s.params?.initialFen,
+              'initialFen',
+              'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1',
+            )
+            .having((s) => s.params?.initialOrientation, 'orientation', Side.white),
+      );
+    });
+
+    testWidgets('resolves /editor/{fen}?color=black with black orientation', (
+      WidgetTester tester,
+    ) async {
+      final uri = Uri.parse(
+        'https://lichess.org/editor/rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR_w_KQkq_-_0_1?color=black',
+      );
+      await triggerAppLink(tester, uri);
+      await tester.pumpAndSettle();
+      expect(
+        tester.widget(find.byType(BoardEditorScreen)),
+        isA<BoardEditorScreen>().having(
+          (s) => s.params?.initialOrientation,
+          'orientation',
+          Side.black,
+        ),
+      );
+    });
+
+    testWidgets(
+      'shows error snackbar but still opens editor with default position for invalid FEN',
+      (WidgetTester tester) async {
+        final uri = Uri.parse('https://lichess.org/editor/not-a-valid-fen');
+        await triggerAppLink(tester, uri);
+        await tester.pumpAndSettle();
+        expect(find.textContaining('Invalid FEN'), findsOneWidget);
+        expect(
+          tester.widget(find.byType(BoardEditorScreen)),
+          isA<BoardEditorScreen>().having((s) => s.params?.initialFen, 'initialFen', isNull),
+        );
+      },
+    );
 
     testWidgets('resolves /tournament/{id} to TournamentScreen route', (WidgetTester tester) async {
       final uri = Uri.parse('https://lichess.org/tournament/61044');
