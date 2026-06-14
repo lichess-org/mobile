@@ -14,6 +14,7 @@ sealed class GameBoardParams with _$GameBoardParams {
     required Variant variant,
     required Pockets? pockets,
     Move? lastMove,
+    Position? position,
   }) = ReadonlyBoardParams;
 
   const factory GameBoardParams.interactive({

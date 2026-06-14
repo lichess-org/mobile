@@ -316,12 +316,15 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
           castlingMethod: boardPrefs.castlingMethod,
           boardHighlights: boardPrefs.boardHighlights,
         ),
-      ReadonlyBoardParams(:final fen, :final lastMove) => GameData(
+      ReadonlyBoardParams(:final fen, :final lastMove, :final position) => GameData(
         fen: fen,
         playerSide: PlayerSide.none,
         sideToMove: _sideToMoveFromFen(fen),
         validMoves: const <Square, Set<Square>>{},
         lastMove: lastMove,
+        kingSquareInCheck: position != null && boardPrefs.boardHighlights && position.isCheck
+            ? position.board.kingOf(position.turn)
+            : null,
       ),
     };
   }
