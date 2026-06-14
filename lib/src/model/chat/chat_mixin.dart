@@ -5,6 +5,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/db/database.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/chat/chat.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -110,6 +111,7 @@ sealed class ChatState with _$ChatState {
 /// Interface for Notifiers's State that uses [ChatMixin].
 mixin ChatMixinState {
   ChatState? get chatState;
+  bool get chatEnabled;
 }
 
 /// A provider that gets the current chat state
@@ -235,7 +237,8 @@ mixin ChatMixin<T extends ChatMixinState> on AnyNotifier<AsyncValue<T>, T> {
   @protected
   @mustCallSuper
   void handleSocketEvent(SocketEvent event) {
-    if (!state.hasValue) return;
+    if (state.value?.chatEnabled != true) return;
+    if (ref.read(kidModeProvider).value != false) return;
 
     if (event.topic == 'message') {
       final data = event.data as Map<String, dynamic>;

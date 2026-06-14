@@ -283,4 +283,7 @@ sealed class TournamentState with _$TournamentState, ChatMixinState {
   ChatOptions? get chatOptions => tournament.chat != null
       ? TournamentChatOptions(id: tournament.id, writeable: tournament.chat!.writeable)
       : null;
+
+  @override
+  bool get chatEnabled => chatOptions != null;
 }
