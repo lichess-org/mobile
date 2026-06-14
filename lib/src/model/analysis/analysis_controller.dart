@@ -297,6 +297,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
         .then((hasOpening) {
           if (hasOpening) {
             scheduleMicrotask(() {
+              if (!ref.mounted) return;
               _setPath(state.requireValue.currentPath);
             });
           }
@@ -379,6 +380,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
         .timeout(const Duration(seconds: 3))
         .onError((_, _) {})
         .whenComplete(() {
+          if (!ref.mounted) return;
           if (state.requireValue.isEngineAvailable(evaluationPrefs)) {
             requestEval();
           } else if (options case ActiveCorrespondenceGame(:final gameFullId)) {
@@ -724,6 +726,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
 
       if (currentNode.opening == null && currentNode.position.ply <= 30) {
         _fetchOpening(currentNode.position.fen, path).then((value) {
+          if (!ref.mounted) return;
           if (value != null) {
             final (path, opening) = value;
             _updateOpening(path, opening);
