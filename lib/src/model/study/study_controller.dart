@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/model/analysis/common_analysis_state.dart';
 import 'package:lichess_mobile/src/model/analysis/server_analysis_mixin.dart';
 import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/chat/chat_mixin.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -44,7 +45,7 @@ final studyControllerProvider = AsyncNotifierProvider.autoDispose
 enum ChapterServerAnalysisStatus { canRequest, notEnoughMoves, notWriteable, available }
 
 class StudyController extends AsyncNotifier<StudyState>
-    with EngineEvaluationMixin, ServerAnalysisMixin
+    with EngineEvaluationMixin, ServerAnalysisMixin, ChatMixin
     implements PgnTreeNotifier {
   StudyController(this.options);
 
@@ -67,6 +68,18 @@ class StudyController extends AsyncNotifier<StudyState>
   Root get positionTree => _root;
 
   @override
+  @protected
+  StringId get chatId => options.id;
+
+  @override
+  @protected
+  String get chatReportResource => 'study/${options.id}';
+
+  @override
+  @protected
+  bool get chatIsPublic => true;
+
+  @override
   Future<StudyState> build() async {
     ref.onDispose(() {
       _opponentFirstMoveTimer?.cancel();
@@ -74,15 +87,13 @@ class StudyController extends AsyncNotifier<StudyState>
       _likeDebouncer.cancel();
     });
 
-    final socketPool = ref.watch(socketPoolProvider);
-    _socketClient = socketPool.open(Uri(path: '/study/${options.id}/socket/v6'));
+    final chapter = await _fetchChapter(
+      options.id,
+      chapterId: options.initialChapter,
+      initSocket: true,
+    );
 
-    final chapter = await _fetchChapter(options.id, chapterId: options.initialChapter);
-
-    _socketSubscription?.cancel();
-    _socketSubscription = _socketClient.stream.listen(_handleSocketEvent);
-
-    return chapter;
+    return chapter.copyWith(chatState: await initChat(chapter.study.chat));
   }
 
   @override
@@ -114,10 +125,25 @@ class StudyController extends AsyncNotifier<StudyState>
     _ensureItsOurTurnIfGamebook();
   }
 
-  Future<StudyState> _fetchChapter(StudyId id, {StudyChapterId? chapterId}) async {
+  Future<StudyState> _fetchChapter(
+    StudyId id, {
+    StudyChapterId? chapterId,
+    bool initSocket = false,
+  }) async {
     final (study, analysisSummary, pgn) = await ref
         .read(studyRepositoryProvider)
         .getStudy(id: id, chapterId: chapterId);
+
+    // We receive the socket version from the study API, so we can only initialize the socket connection after fetching the study for the first time.
+    if (initSocket) {
+      final socketPool = ref.watch(socketPoolProvider);
+      _socketClient = socketPool.open(
+        Uri(path: '/study/${options.id}/socket/v6'),
+        version: study.socketVersion,
+      );
+      _socketSubscription?.cancel();
+      _socketSubscription = _socketClient.stream.listen(handleSocketEvent);
+    }
 
     final game = PgnGame.parsePgn(pgn);
 
@@ -224,7 +250,17 @@ class StudyController extends AsyncNotifier<StudyState>
     });
   }
 
-  void _handleSocketEvent(SocketEvent event) {
+  @protected
+  @override
+  void updateChatState(ChatState newState) {
+    state = AsyncValue.data(state.requireValue.copyWith(chatState: newState));
+  }
+
+  @protected
+  @override
+  void handleSocketEvent(SocketEvent event) {
+    super.handleSocketEvent(event);
+
     if (!state.hasValue) {
       assert(false, 'received a game SocketEvent while StudyState is null');
       return;
@@ -531,6 +567,7 @@ sealed class StudyState
         _$StudyState,
         AnalysisExplosionMixin,
         EvaluationMixinState<StudyState>,
+        ChatMixinState,
         ServerAnalysisMixinState
     implements CommonAnalysisState {
   const StudyState._();
@@ -595,6 +632,8 @@ sealed class StudyState
 
     /// Optional ACPL chart data of the game, coming from lichess server analysis.
     IList<ExternalEval>? acplChartData,
+
+    ChatState? chatState,
   }) = _StudyState;
 
   /// Whether the current user is the owner of the study.
@@ -711,6 +750,9 @@ sealed class StudyState
   PlayersAnalysis? get playersAnalysis => analysisSummary != null
       ? (white: analysisSummary!.white, black: analysisSummary!.black)
       : null;
+
+  @override
+  bool get chatEnabled => true;
 }
 
 @freezed
