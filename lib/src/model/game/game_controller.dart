@@ -24,6 +24,7 @@ import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/game_preferences.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
@@ -156,6 +157,7 @@ class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> 
         stepCursor: game.steps.length - 1,
         liveClock: _clock != null ? (white: _clock!.whiteTime, black: _clock!.blackTime) : null,
         chatState: await initChat(game.chat),
+        chatDisabledViaPrefs: ref.read(gamePreferencesProvider).enableChat == false,
       );
     });
   }
@@ -397,6 +399,7 @@ class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> 
   }
 
   void onToggleChat(bool isChatEnabled) {
+    state = AsyncValue.data(state.requireValue.copyWith(chatDisabledViaPrefs: !isChatEnabled));
     if (isChatEnabled) {
       // if chat is enabled, we need to resync the game data to get the chat messages
       _reloadGame();
@@ -1062,6 +1065,8 @@ sealed class GameState with _$GameState, ChatMixinState {
     GameFullId? redirectGameId,
 
     ChatState? chatState,
+
+    required bool chatDisabledViaPrefs,
   }) = _GameState;
 
   /// The [Position] at the current cursor.
@@ -1176,10 +1181,14 @@ sealed class GameState with _$GameState, ChatMixinState {
           isComputerAnalysisAllowed: false,
         );
 
-  GameChatOptions? get chatOptions => isZenModeActive || game.meta.tournament != null
+  GameChatOptions? get chatOptions =>
+      chatDisabledViaPrefs || isZenModeActive || game.meta.tournament != null
       ? null
       : GameChatOptions(
           id: gameFullId,
           opponent: game.youAre != null ? game.playerOf(game.youAre!.opposite).user : null,
         );
+
+  @override
+  bool get chatEnabled => chatOptions != null;
 }

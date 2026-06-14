@@ -339,4 +339,7 @@ sealed class TvState with _$TvState, ChatMixinState {
 
     return null;
   }
+
+  @override
+  bool get chatEnabled => true;
 }

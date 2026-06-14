@@ -750,6 +750,9 @@ sealed class StudyState
   PlayersAnalysis? get playersAnalysis => analysisSummary != null
       ? (white: analysisSummary!.white, black: analysisSummary!.black)
       : null;
+
+  @override
+  bool get chatEnabled => true;
 }
 
 @freezed
