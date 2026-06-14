@@ -215,6 +215,7 @@ class StormController extends Notifier<StormState> {
       ),
     );
     Future<void>.delayed(userMove ? Duration.zero : const Duration(milliseconds: 250), () {
+      if (!ref.mounted) return;
       if (pos.board.pieceAt(move.to) != null) {
         ref
             .read(moveFeedbackServiceProvider)
