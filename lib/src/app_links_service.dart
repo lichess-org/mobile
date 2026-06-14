@@ -58,28 +58,33 @@ class AppLinksService {
   StreamSubscription<Uri>? _linkSubscription;
 
   Future<void> start() async {
-    // Handle the link that cold-started the app (if any) after the first frame
-    // so the navigator is ready. Push without animation — the user launched the
-    // app via this link so the target screen should just be there.
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      try {
-        final initialUri = await _appLinks.getInitialLink();
-        if (initialUri != null) {
-          await _handleUri(initialUri, animated: false);
-        }
-      } catch (e, st) {
-        _logger.severe('Error handling initial app link: $e\n$st');
+    // app_links' uriLinkStream emits the link that cold-started the app as its
+    // first event, followed by any links received while the app is running, so a
+    // single subscription covers both. (Also calling getInitialLink() would
+    // deliver the cold-start link a second time, running its side effects twice.)
+    var isColdStart = true;
+    _linkSubscription = _appLinks.uriLinkStream.listen((uri) {
+      if (isColdStart) {
+        isColdStart = false;
+        // The cold-start link can arrive before the first frame, so defer until
+        // the navigator is ready. Push without a transition — the user launched
+        // the app via this link so the target screen should just be there.
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          unawaited(_handleUriLogged(uri, animated: false));
+        });
+      } else {
+        // Links received while the app is already running get a normal transition.
+        unawaited(_handleUriLogged(uri, animated: true));
       }
     });
+  }
 
-    // Links received while the app is already running get a normal transition.
-    _linkSubscription = _appLinks.uriLinkStream.listen((uri) async {
-      try {
-        await _handleUri(uri, animated: true);
-      } catch (e, st) {
-        _logger.severe('Error handling app link: $e\n$st');
-      }
-    });
+  Future<void> _handleUriLogged(Uri uri, {required bool animated}) async {
+    try {
+      await _handleUri(uri, animated: animated);
+    } catch (e, st) {
+      _logger.severe('Error handling app link: $e\n$st');
+    }
   }
 
   Future<void> _handleUri(Uri uri, {required bool animated}) async {
