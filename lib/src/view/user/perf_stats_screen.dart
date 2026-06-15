@@ -525,6 +525,7 @@ class _PercentageValueWidget extends StatelessWidget {
   const _PercentageValueWidget(this.value, this.denominator, {this.color, this.isShaded = false});
 
   String _getPercentageString(num numerator, num denominator) {
+    if (denominator == 0) return '0%';
     return '${((numerator / denominator) * 100).round()}%';
   }
 
