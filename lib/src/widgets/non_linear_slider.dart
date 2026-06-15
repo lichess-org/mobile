@@ -1,5 +1,45 @@
 import 'package:flutter/material.dart';
 
+/// A [ListTile] pairing a [title] with a [NonLinearSlider] whose drag and
+/// drag-end callbacks both invoke [onChanged] with the selected value as an
+/// `int`.
+///
+/// Used by the time-control and clock settings sheets, where every slider
+/// updates its value identically on change and change-end.
+class NonLinearSliderTile extends StatelessWidget {
+  const NonLinearSliderTile({
+    required this.title,
+    required this.value,
+    required this.values,
+    required this.onChanged,
+    this.labelBuilder,
+    this.contentPadding,
+    super.key,
+  });
+
+  final Widget title;
+  final num value;
+  final List<num> values;
+  final ValueChanged<int> onChanged;
+  final String Function(num)? labelBuilder;
+  final EdgeInsetsGeometry? contentPadding;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      contentPadding: contentPadding,
+      title: title,
+      subtitle: NonLinearSlider(
+        value: value,
+        values: values,
+        labelBuilder: labelBuilder,
+        onChange: (num value) => onChanged(value.toInt()),
+        onChangeEnd: (num value) => onChanged(value.toInt()),
+      ),
+    );
+  }
+}
+
 /// Platform adaptive slider that allows for non-linear values.
 class NonLinearSlider extends StatefulWidget {
   NonLinearSlider({

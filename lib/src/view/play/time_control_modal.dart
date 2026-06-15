@@ -145,68 +145,34 @@ class TimeControlModal extends StatelessWidget {
                         builder: (context, setState) {
                           return Column(
                             children: [
-                              ListTile(
+                              NonLinearSliderTile(
                                 contentPadding: EdgeInsets.zero,
-                                title: Text.rich(
-                                  TextSpan(
-                                    text: '${context.l10n.minutesPerSide}: ',
-                                    children: [
-                                      TextSpan(
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18,
-                                        ),
-                                        text: clockLabelInMinutes(custom.time),
-                                      ),
-                                    ],
-                                  ),
+                                title: _SliderValueTitle(
+                                  '${context.l10n.minutesPerSide}: ',
+                                  clockLabelInMinutes(custom.time),
                                 ),
-                                subtitle: NonLinearSlider(
-                                  value: custom.time,
-                                  values: kAvailableTimesInSeconds,
-                                  labelBuilder: clockLabelInMinutes,
-                                  onChange: (num value) {
-                                    setState(() {
-                                      custom = TimeIncrement(value.toInt(), custom.increment);
-                                    });
-                                  },
-                                  onChangeEnd: (num value) {
-                                    setState(() {
-                                      custom = TimeIncrement(value.toInt(), custom.increment);
-                                    });
-                                  },
-                                ),
+                                value: custom.time,
+                                values: kAvailableTimesInSeconds,
+                                labelBuilder: clockLabelInMinutes,
+                                onChanged: (value) {
+                                  setState(() {
+                                    custom = TimeIncrement(value, custom.increment);
+                                  });
+                                },
                               ),
-                              ListTile(
+                              NonLinearSliderTile(
                                 contentPadding: EdgeInsets.zero,
-                                title: Text.rich(
-                                  TextSpan(
-                                    text: '${context.l10n.incrementInSeconds}: ',
-                                    children: [
-                                      TextSpan(
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18,
-                                        ),
-                                        text: custom.increment.toString(),
-                                      ),
-                                    ],
-                                  ),
+                                title: _SliderValueTitle(
+                                  '${context.l10n.incrementInSeconds}: ',
+                                  custom.increment.toString(),
                                 ),
-                                subtitle: NonLinearSlider(
-                                  value: custom.increment,
-                                  values: kAvailableIncrementsInSeconds,
-                                  onChange: (num value) {
-                                    setState(() {
-                                      custom = TimeIncrement(custom.time, value.toInt());
-                                    });
-                                  },
-                                  onChangeEnd: (num value) {
-                                    setState(() {
-                                      custom = TimeIncrement(custom.time, value.toInt());
-                                    });
-                                  },
-                                ),
+                                value: custom.increment,
+                                values: kAvailableIncrementsInSeconds,
+                                onChanged: (value) {
+                                  setState(() {
+                                    custom = TimeIncrement(custom.time, value);
+                                  });
+                                },
                               ),
                               FilledButton(
                                 onPressed: custom.isInfinite ? null : () => onSelected(custom),
@@ -329,6 +295,29 @@ class _ChoiceChip extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// A slider label of the form "`label`**`value`**" (bold value).
+class _SliderValueTitle extends StatelessWidget {
+  const _SliderValueTitle(this.label, this.value);
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text.rich(
+      TextSpan(
+        text: label,
+        children: [
+          TextSpan(
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            text: value,
+          ),
+        ],
       ),
     );
   }
