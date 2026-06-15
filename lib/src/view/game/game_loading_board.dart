@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/model/game/game_board_params.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_numbers.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
@@ -314,9 +315,24 @@ class _OpenChallengeLoadingContentState extends ConsumerState<OpenChallengeLoadi
                                   (route) => route is! ScreenRoute || route.screen is! GameScreen,
                                 );
                               } else {
-                                await ref
-                                    .read(challengeRepositoryProvider)
-                                    .create(directedChallengeReq);
+                                try {
+                                  await ref
+                                      .read(challengeRepositoryProvider)
+                                      .create(directedChallengeReq);
+                                } catch (e) {
+                                  // The server can reject the challenge with a 400, e.g. when the
+                                  // rating is too far from the opponent's, or the opponent does not
+                                  // accept challenges. Surface the error instead of crashing.
+                                  if (!context.mounted) return;
+                                  showSnackBar(
+                                    context,
+                                    e is ServerException && e.statusCode == 400
+                                        ? '${e.jsonError?['error'] ?? 'Could not create the challenge.'}'
+                                        : 'Could not create the challenge. Please try again later.',
+                                    type: SnackBarType.error,
+                                  );
+                                  return;
+                                }
                                 if (!context.mounted) return;
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(

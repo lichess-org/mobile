@@ -503,6 +503,47 @@ void main() {
       expect(find.text('3+2 • Rated'), findsOneWidget);
     });
 
+    testWidgets('challenge rejected with a 400 shows an error instead of crashing', (
+      WidgetTester tester,
+    ) async {
+      final challengeRequest = ChallengeRequest(
+        destUser: LightUser(id: UserId.fromUserName('YoBot_v2'), name: 'YoBot_v2'),
+        variant: Variant.standard,
+        timeControl: ChallengeTimeControlType.clock,
+        clock: (time: const Duration(minutes: 3), increment: const Duration(seconds: 2)),
+        rated: true,
+        sideChoice: .random,
+      );
+      final createGameService = MockCreateGameService();
+      when(() => createGameService.newOpenOrRealTimeChallenge(any())).thenAnswer(
+        (_) async => throw ServerException(
+          400,
+          'Request to /api/challenge/yobot_v2 failed with status 400',
+          Uri(path: '/api/challenge/yobot_v2'),
+          const {'error': 'Your Blitz rating is too far from BOT YoBot_v2.'},
+        ),
+      );
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: GameScreen(source: UserChallengeSource(challengeRequest)),
+        overrides: {
+          createGameServiceProvider: createGameServiceProvider.overrideWith(
+            (_) => createGameService,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      // The 400 must be surfaced as an error, not crash or hang on the loading board.
+      expect(tester.takeException(), isNull);
+      expect(
+        find.textContaining('Your Blitz rating is too far from BOT YoBot_v2.'),
+        findsOneWidget,
+      );
+    });
+
     testWidgets('open challenge shows challenge time control and mode', (
       WidgetTester tester,
     ) async {

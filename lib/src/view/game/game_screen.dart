@@ -116,7 +116,17 @@ class _GameScreenState extends ConsumerState<GameScreen> {
   Widget build(BuildContext context) {
     final boardPreferences = ref.watch(boardPreferencesProvider);
 
-    switch (ref.watch(gameScreenLoaderProvider(widget.source))) {
+    final loaderState = ref.watch(gameScreenLoaderProvider(widget.source));
+
+    // An error raised in the loader's `build` can be attached to an
+    // `AsyncLoading` state (Riverpod keeps the previous state on rebuild), in
+    // which case it would not match the `AsyncError` case below and the screen
+    // would stay stuck on the loading board. Handle any error here first.
+    if (loaderState case AsyncValue(hasError: true, :final error, :final stackTrace)) {
+      return _buildErrorScaffold(context, error!, stackTrace);
+    }
+
+    switch (loaderState) {
       case AsyncData(value: SeekCancelledState()):
         return Scaffold(
           resizeToAvoidBottomInset: false,
@@ -246,29 +256,6 @@ class _GameScreenState extends ConsumerState<GameScreen> {
             ),
           ),
         );
-      case AsyncError(error: final e, stackTrace: final s):
-        debugPrint('SEVERE: [GameScreen] could not create game; $e\n$s');
-
-        // lichess sends a 400 response if user has not allowed challenges
-        final message = e is ServerException && e.statusCode == 400
-            ? LoadGameError('Could not create the game: ${e.jsonError?['error']}')
-            : const LoadGameError('Sorry, we could not create the game. Please try again later.');
-
-        return Scaffold(
-          resizeToAvoidBottomInset: false,
-          appBar: AppBar(
-            leading: const SocketPingRatingIcon(),
-            title: switch (widget.source) {
-              LobbySource(:final seek) => _GameTitle(_LobbyTitleVariant(seek), monitorSocket: true),
-              UserChallengeSource(:final challengeRequest) => _GameTitle(
-                _ChallengeTitleVariant(challengeRequest),
-                monitorSocket: true,
-              ),
-              _ => null,
-            },
-          ),
-          body: PopScope(child: message),
-        );
       case _:
         final loadingBoard = switch (widget.source) {
           LobbySource(:final seek) => LobbyScreenLoadingContent(
@@ -299,6 +286,31 @@ class _GameScreenState extends ConsumerState<GameScreen> {
           body: PopScope(canPop: false, child: WakelockWidget(child: loadingBoard)),
         );
     }
+  }
+
+  Widget _buildErrorScaffold(BuildContext context, Object error, StackTrace? stackTrace) {
+    debugPrint('SEVERE: [GameScreen] could not create game; $error\n$stackTrace');
+
+    // lichess sends a 400 response if user has not allowed challenges
+    final message = error is ServerException && error.statusCode == 400
+        ? LoadGameError('Could not create the game: ${error.jsonError?['error']}')
+        : const LoadGameError('Sorry, we could not create the game. Please try again later.');
+
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        leading: const SocketPingRatingIcon(),
+        title: switch (widget.source) {
+          LobbySource(:final seek) => _GameTitle(_LobbyTitleVariant(seek), monitorSocket: true),
+          UserChallengeSource(:final challengeRequest) => _GameTitle(
+            _ChallengeTitleVariant(challengeRequest),
+            monitorSocket: true,
+          ),
+          _ => null,
+        },
+      ),
+      body: PopScope(child: message),
+    );
   }
 }
 
