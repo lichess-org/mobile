@@ -62,6 +62,7 @@ class ClockSettings extends ConsumerWidget {
                       showModalBottomSheet<void>(
                         context: context,
                         isScrollControlled: true,
+                        clipBehavior: Clip.antiAlias,
                         constraints: BoxConstraints(maxHeight: screenHeight - (screenHeight / 10)),
                         builder: (BuildContext context) {
                           final options = ref.watch(
