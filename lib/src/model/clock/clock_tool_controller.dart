@@ -31,6 +31,9 @@ class ClockToolController extends Notifier<ClockState> {
   };
   late Duration _emergencyThreshold;
 
+  /// Start delay remaining from the last pause, carried over on [resume].
+  Duration _pausedDelay = Duration.zero;
+
   @override
   ClockState build() {
     const time = Duration(minutes: 10);
@@ -111,7 +114,10 @@ class ClockToolController extends Notifier<ClockState> {
     final bool hasNewActiveMoved =
         (playerType.opposite == ClockSide.top ? state.topMoves : state.bottomMoves) > 0;
     if (initialOfNewActive.inMilliseconds != 0 || hasNewActiveMoved) {
-      _clock.startSide(playerType.opposite.chessClockSide);
+      _clock.startSide(
+        playerType.opposite.chessClockSide,
+        delay: state.options.getDelay(playerType.opposite),
+      );
     } else {
       _clock.stop();
     }
@@ -153,6 +159,10 @@ class ClockToolController extends Notifier<ClockState> {
       bottomIncrement: player == ClockSide.bottom
           ? Duration(seconds: clock.increment)
           : state.options.bottomIncrement,
+      topDelay: player == ClockSide.top ? Duration(seconds: clock.delay) : state.options.topDelay,
+      bottomDelay: player == ClockSide.bottom
+          ? Duration(seconds: clock.delay)
+          : state.options.bottomDelay,
     );
     _clock.setTimes(blackTime: options.topTime, whiteTime: options.bottomTime);
     state = ClockState(
@@ -192,12 +202,16 @@ class ClockToolController extends Notifier<ClockState> {
     if (initialOfStartingPlayer.inMilliseconds == 0) {
       _clock.stop();
     } else {
-      _clock.startSide(playerType.opposite.chessClockSide);
+      _clock.startSide(
+        playerType.opposite.chessClockSide,
+        delay: state.options.getDelay(playerType.opposite),
+      );
     }
   }
 
   void pause() {
-    _clock.stop();
+    // Preserve any remaining start delay so it carries over on resume.
+    _pausedDelay = _clock.pause();
     state = state.copyWith(paused: true);
   }
 
@@ -213,8 +227,10 @@ class ClockToolController extends Notifier<ClockState> {
         : state.bottomMoves > 0;
 
     if (active != null && (initialOfActive.inMilliseconds != 0 || hasActiveMoved)) {
-      _clock.start();
+      // Carry over any delay left from when we paused; otherwise resume immediately.
+      _clock.start(delay: _pausedDelay > Duration.zero ? _pausedDelay : null);
     }
+    _pausedDelay = Duration.zero;
     state = state.copyWith(paused: false);
   }
 
@@ -232,6 +248,8 @@ sealed class ClockOptions with _$ClockOptions {
     required Duration bottomTime,
     required Duration topIncrement,
     required Duration bottomIncrement,
+    @Default(Duration.zero) Duration topDelay,
+    @Default(Duration.zero) Duration bottomDelay,
   }) = _ClockOptions;
 
   factory ClockOptions.fromTimeIncrement(TimeIncrement timeIncrement) => ClockOptions(
@@ -239,6 +257,8 @@ sealed class ClockOptions with _$ClockOptions {
     bottomTime: Duration(seconds: timeIncrement.time),
     topIncrement: Duration(seconds: timeIncrement.increment),
     bottomIncrement: Duration(seconds: timeIncrement.increment),
+    topDelay: Duration(seconds: timeIncrement.delay),
+    bottomDelay: Duration(seconds: timeIncrement.delay),
   );
 
   factory ClockOptions.fromSeparateTimeIncrements(
@@ -249,6 +269,8 @@ sealed class ClockOptions with _$ClockOptions {
     bottomTime: Duration(seconds: playerBottom.time),
     topIncrement: Duration(seconds: playerTop.increment),
     bottomIncrement: Duration(seconds: playerBottom.increment),
+    topDelay: Duration(seconds: playerTop.delay),
+    bottomDelay: Duration(seconds: playerBottom.delay),
   );
 
   int getIncrement(ClockSide playerType) {
@@ -257,6 +279,14 @@ sealed class ClockOptions with _$ClockOptions {
 
   bool hasIncrement(ClockSide playerType) {
     return getIncrement(playerType) > 0;
+  }
+
+  Duration getDelay(ClockSide playerType) {
+    return playerType == ClockSide.top ? topDelay : bottomDelay;
+  }
+
+  bool hasDelay(ClockSide playerType) {
+    return getDelay(playerType) > Duration.zero;
   }
 }
 

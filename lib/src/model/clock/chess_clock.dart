@@ -116,8 +116,6 @@ class ChessClock {
   ///
   /// Trying to start an already running clock on the same side is a no-op.
   ///
-  /// The [delay] parameter can be used to add a delay before the clock starts counting down. This is useful for lag compensation.
-  ///
   /// Returns the think time of the active side before switching or `null` if the clock is not running.
   Duration? startSide(Side side, {Duration? delay}) {
     if (isRunning && _activeSide == side) {
@@ -131,23 +129,39 @@ class ChessClock {
 
   /// Starts the clock.
   ///
-  /// The [delay] parameter can be used to add a delay before the clock starts counting down. This is useful for lag compensation.
+  /// The [delay] parameter holds the main clock for that long before it starts
+  /// counting down (used for clock delay, and for lag compensation).
   void start({Duration? delay}) {
-    _lastStarted = clock.now().add(delay ?? Duration.zero);
+    final delayDuration = delay ?? Duration.zero;
+    _lastStarted = clock.now().add(delayDuration);
     _startDelayTimer?.cancel();
-    _startDelayTimer = Timer(delay ?? Duration.zero, _scheduleTick);
+    // Cancel any in-progress main tick so it doesn't run during the start delay.
+    _timer?.cancel();
+    _startDelayTimer = Timer(delayDuration, _scheduleTick);
   }
 
-  /// Pauses the clock.
+  /// Stops the clock, discarding any in-progress start delay.
   ///
   /// Returns the current think time for the active side.
   Duration stop() {
+    final thinkTime = _thinkTime ?? Duration.zero;
+    _halt();
+    return thinkTime;
+  }
+
+  /// Pauses the clock, returning any remaining start delay so it can be carried
+  /// over on resume.
+  Duration pause() {
+    final remaining = _lastStarted != null ? _lastStarted!.difference(clock.now()) : Duration.zero;
+    _halt();
+    return remaining > Duration.zero ? remaining : Duration.zero;
+  }
+
+  void _halt() {
     _stopwatch.stop();
     _startDelayTimer?.cancel();
     _timer?.cancel();
-    final thinkTime = _thinkTime ?? Duration.zero;
     _lastStarted = null;
-    return thinkTime;
   }
 
   void dispose() {

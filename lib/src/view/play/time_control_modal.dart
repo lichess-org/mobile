@@ -14,6 +14,7 @@ class TimeControlModal extends StatelessWidget {
     required this.timeIncrement,
     required this.onSelected,
     this.excludeUltraBullet = false,
+    this.showDelay = false,
     super.key,
   });
 
@@ -21,6 +22,12 @@ class TimeControlModal extends StatelessWidget {
   final ValueSetter<TimeIncrement> onSelected;
 
   final bool excludeUltraBullet;
+
+  /// Whether to show a clock delay slider in the custom section.
+  ///
+  /// Only enabled for the local clock tool: lichess online play does not
+  /// support clock delay.
+  final bool showDelay;
 
   static const _horizontalPadding = EdgeInsets.symmetric(horizontal: 16.0);
   static const _sectionSpacing = SizedBox(height: 16.0);
@@ -156,7 +163,11 @@ class TimeControlModal extends StatelessWidget {
                                 labelBuilder: clockLabelInMinutes,
                                 onChanged: (value) {
                                   setState(() {
-                                    custom = TimeIncrement(value, custom.increment);
+                                    custom = TimeIncrement(
+                                      value,
+                                      custom.increment,
+                                      delay: custom.delay,
+                                    );
                                   });
                                 },
                               ),
@@ -170,10 +181,29 @@ class TimeControlModal extends StatelessWidget {
                                 values: kAvailableIncrementsInSeconds,
                                 onChanged: (value) {
                                   setState(() {
-                                    custom = TimeIncrement(custom.time, value);
+                                    custom = TimeIncrement(custom.time, value, delay: custom.delay);
                                   });
                                 },
                               ),
+                              if (showDelay)
+                                NonLinearSliderTile(
+                                  contentPadding: EdgeInsets.zero,
+                                  title: _SliderValueTitle(
+                                    'Delay in seconds: ',
+                                    custom.delay.toString(),
+                                  ),
+                                  value: custom.delay,
+                                  values: kAvailableIncrementsInSeconds,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      custom = TimeIncrement(
+                                        custom.time,
+                                        custom.increment,
+                                        delay: value,
+                                      );
+                                    });
+                                  },
+                                ),
                               FilledButton(
                                 onPressed: custom.isInfinite ? null : () => onSelected(custom),
                                 child: Text(context.l10n.mobileOkButton, style: Styles.bold),

@@ -310,10 +310,12 @@ class _ClockTileState extends ConsumerState<ClockTile> with SingleTickerProvider
                                           ? TimeIncrement.fromDurations(
                                               clockState.options.topTime,
                                               clockState.options.topIncrement,
+                                              delay: clockState.options.topDelay,
                                             )
                                           : TimeIncrement.fromDurations(
                                               clockState.options.bottomTime,
                                               clockState.options.bottomIncrement,
+                                              delay: clockState.options.bottomDelay,
                                             ),
                                       onSubmit: (ClockSide player, TimeIncrement clock) {
                                         Navigator.of(context).pop();
@@ -328,6 +330,13 @@ class _ClockTileState extends ConsumerState<ClockTile> with SingleTickerProvider
                             const SizedBox(width: 8),
                             Text(
                               '+${clockState.options.getIncrement(playerType)}',
+                              style: TextStyle(fontSize: 28, color: clockStyle.textColor),
+                            ),
+                          ],
+                          if (clockState.options.hasDelay(playerType)) ...[
+                            const SizedBox(width: 8),
+                            Text(
+                              'd${clockState.options.getDelay(playerType).inSeconds}',
                               style: TextStyle(fontSize: 28, color: clockStyle.textColor),
                             ),
                           ],

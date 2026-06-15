@@ -22,11 +22,13 @@ class CustomClockSettings extends StatefulWidget {
 class _CustomClockSettingsState extends State<CustomClockSettings> {
   late int time;
   late int increment;
+  late int delay;
 
   @override
   void initState() {
     time = widget.clock.time;
     increment = widget.clock.increment;
+    delay = widget.clock.delay;
     super.initState();
   }
 
@@ -36,15 +38,17 @@ class _CustomClockSettingsState extends State<CustomClockSettings> {
       padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
       children: [
         _PlayerTimeSlider(
-          clock: TimeIncrement(time, increment),
+          clock: TimeIncrement(time, increment, delay: delay),
           updateTime: (int t) => setState(() => time = t),
           updateIncrement: (int inc) => setState(() => increment = inc),
+          updateDelay: (int d) => setState(() => delay = d),
         ),
         Padding(
           padding: Styles.horizontalBodyPadding,
           child: FilledButton(
             child: Text(context.l10n.apply),
-            onPressed: () => widget.onSubmit(widget.player, TimeIncrement(time, increment)),
+            onPressed: () =>
+                widget.onSubmit(widget.player, TimeIncrement(time, increment, delay: delay)),
           ),
         ),
       ],
@@ -57,11 +61,13 @@ class _PlayerTimeSlider extends StatelessWidget {
     required this.clock,
     required this.updateTime,
     required this.updateIncrement,
+    required this.updateDelay,
   });
 
   final TimeIncrement clock;
   final void Function(int time) updateTime;
   final void Function(int time) updateIncrement;
+  final void Function(int delay) updateDelay;
 
   @override
   Widget build(BuildContext context) {
@@ -82,6 +88,13 @@ class _PlayerTimeSlider extends StatelessWidget {
           values: kAvailableIncrementsInSeconds,
           labelBuilder: (num sec) => sec.toString(),
           onChanged: updateIncrement,
+        ),
+        NonLinearSliderTile(
+          title: Text('Delay: ${context.l10n.nbSeconds(clock.delay)}'),
+          value: clock.delay,
+          values: kAvailableIncrementsInSeconds,
+          labelBuilder: (num sec) => sec.toString(),
+          onChanged: updateDelay,
         ),
       ],
     );

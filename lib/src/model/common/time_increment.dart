@@ -5,14 +5,16 @@ import 'package:lichess_mobile/src/model/common/speed.dart';
 /// A pair of time and increment in seconds used as game clock
 @immutable
 class TimeIncrement implements Comparable<TimeIncrement> {
-  const TimeIncrement(this.time, this.increment) : assert(time >= 0 && increment >= 0);
+  const TimeIncrement(this.time, this.increment, {this.delay = 0})
+    : assert(time >= 0 && increment >= 0 && delay >= 0);
 
-  TimeIncrement.fromDurations(Duration time, Duration increment)
+  TimeIncrement.fromDurations(Duration time, Duration increment, {Duration delay = Duration.zero})
     : time = time.inSeconds,
       increment = increment.inSeconds,
-      assert(time >= Duration.zero && increment >= Duration.zero);
+      delay = delay.inSeconds,
+      assert(time >= Duration.zero && increment >= Duration.zero && delay >= Duration.zero);
 
-  const TimeIncrement.infinite() : time = 0, increment = 0;
+  const TimeIncrement.infinite() : time = 0, increment = 0, delay = 0;
 
   /// Clock initial time in seconds
   final int time;
@@ -20,11 +22,16 @@ class TimeIncrement implements Comparable<TimeIncrement> {
   /// Clock increment in seconds
   final int increment;
 
+  /// Clock simple (US) delay in seconds. Only used by the local clock tool:
+  /// lichess online play does not support delay.
+  final int delay;
+
   TimeIncrement.fromJson(Map<String, dynamic> json)
     : time = json['time'] as int,
-      increment = json['increment'] as int;
+      increment = json['increment'] as int,
+      delay = json['delay'] as int? ?? 0;
 
-  Map<String, dynamic> toJson() => {'time': time, 'increment': increment};
+  Map<String, dynamic> toJson() => {'time': time, 'increment': increment, 'delay': delay};
 
   /// Returns the estimated duration of the game, with increment * 40 added to
   /// the initial time.
@@ -50,13 +57,14 @@ class TimeIncrement implements Comparable<TimeIncrement> {
       other is TimeIncrement &&
           runtimeType == other.runtimeType &&
           time == other.time &&
-          increment == other.increment;
+          increment == other.increment &&
+          delay == other.delay;
 
   @override
-  int get hashCode => Object.hash(time, increment);
+  int get hashCode => Object.hash(time, increment, delay);
 
   @override
-  String toString() => 'TimeIncrement($time+$increment)';
+  String toString() => 'TimeIncrement($time+$increment${delay > 0 ? ' d$delay' : ''})';
 
   @override
   int compareTo(TimeIncrement other) {
