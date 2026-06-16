@@ -1455,10 +1455,10 @@ packages:
     dependency: "direct main"
     description:
       name: sound_effect
-      sha256: "9641f586e0249d39a17097627b53955dfa4ebf0dcc3b503e904f01242df6379d"
+      sha256: "8ec27c9d5f963cb17de01bd1a3a855c04a0ee9094bbf0d21194585f6e5b972e3"
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.3"
+    version: "0.2.0"
   source_gen:
     dependency: transitive
     description:
@@ -1853,4 +1853,4 @@ packages:
     version: "3.1.3"
 sdks:
   dart: ">=3.12.0 <4.0.0"
-  flutter: "3.44.1"
+  flutter: "3.44.2"
