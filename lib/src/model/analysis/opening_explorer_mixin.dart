@@ -135,10 +135,11 @@ mixin OpeningExplorerMixin<T extends OpeningExplorerMixinState> on AsyncNotifier
     if (!kOpeningAllowedVariants.contains(state.value?.variant ?? Variant.standard)) {
       return null;
     }
-    final opening = await ref.read(openingServiceProvider).fetchFromFen(fen);
-    if (opening != null) {
-      return (path, opening);
+    try {
+      final opening = await ref.read(openingServiceProvider).fetchFromFen(fen);
+      return opening != null ? (path, opening) : null;
+    } catch (_) {
+      return null;
     }
-    return null;
   }
 }
