@@ -287,31 +287,64 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Veya bir PGN dosyası aktar';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+
+  @override
+  String get variantStandard => 'Standart';
+
+  @override
   String get variantStandardTitle => 'Satrancın standart kuralları (FIDE)';
+
+  @override
+  String get variantChess960 => 'Satranç960';
 
   @override
   String get variantChess960Title => 'Kendi sıranızdaki taşlarınızın başlangıç ​​pozisyonu rastgele belirlenir.';
 
   @override
+  String get variantKingOfTheHill => 'Merkezin Şahı';
+
+  @override
   String get variantKingOfTheHillTitle => 'Oyunu kazanmak için şahınızı merkeze getirin.';
+
+  @override
+  String get variantThreeCheck => 'Üç-Şah';
 
   @override
   String get variantThreeCheckTitle => 'Oyunu kazanmak için rakibinize 3 kez şah çekin.';
 
   @override
+  String get variantAntichess => 'Antisatranç';
+
+  @override
   String get variantAntichessTitle => 'Oyunu kazanmak için tüm taşlarınızı kaybedin (veya pat olun).';
+
+  @override
+  String get variantAtomic => 'Atomik';
 
   @override
   String get variantAtomicTitle => 'Kazanmak için rakibinizin şahını patlatın.';
 
   @override
+  String get variantHorde => 'Sürü';
+
+  @override
   String get variantHordeTitle => 'Bir tarafta çok sayıda piyon varken, öbür tarafta normal ordu vardır.';
+
+  @override
+  String get variantRacingKings => 'Yarışan Şahlar';
 
   @override
   String get variantRacingKingsTitle => 'Kazanmak için şahınızı tahtanın öbür tarafına geçirin.';
 
   @override
+  String get variantCrazyhouse => 'Çılgın Satranç';
+
+  @override
   String get variantCrazyhouseTitle => 'Hamle yapmak yerine yediğiniz taşları tahtaya koyabilirsiniz.';
+
+  @override
+  String get variantFromPosition => 'Konumdan';
 
   @override
   String get variantFromPositionTitle => 'Özel pozisyondan standart satranç';
@@ -916,7 +949,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get broadcastOfficialStandings => 'Resmi Sıralamalar';
 
   @override
-  String get broadcastRegulations => 'Regulations';
+  String get broadcastRegulations => 'Yönetmelikler';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -2492,6 +2525,12 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get blackDidntMove => 'Siyah hamle yapmadı';
+
+  @override
+  String get whiteAborted => 'Beyaz oyunu iptal etti';
+
+  @override
+  String get blackAborted => 'Siyah oyunu iptal etti';
 
   @override
   String get requestAComputerAnalysis => 'Bilgisayar analizi talep et';
@@ -4395,10 +4434,10 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get like => 'Like';
+  String get like => 'Beğen';
 
   @override
-  String get liked => 'Liked';
+  String get liked => 'Beğenildi';
 
   @override
   String get quickPairing => 'Hızlı eşleşme';
@@ -5050,7 +5089,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get showMeEverything => 'Bana her şeyi göster';
 
   @override
-  String get lichessPatronInfo => 'Lichess bir yardım kuruluşudur ve tamamen özgür/açık kaynak kodlu bir yazılımdır. Tüm işletme maliyetleri, geliştirmeler ve içerikler yalnızca kullanıcı bağışları ile finanse edilmektedir.';
+  String get lichessPatronInfo => 'Lichess bir yardım kuruluşudur ve tamamen özgür/açık kaynak kodlu bir yazılımdır. Tüm işletme maliyetleri, geliştirmeler ve içerikler yalnızca kullanıcı bağışları ile finanse edilmektedir. Bize katıldığınız için teşekkür ederiz!  ';
 
   @override
   String get nothingToSeeHere => 'Şu anda görülebilecek bir şey yok.';

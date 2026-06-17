@@ -287,31 +287,64 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileOrImportPgnFile => '또는 PGN 파일 가져오기';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+
+  @override
+  String get variantStandard => '스탠다드';
+
+  @override
   String get variantStandardTitle => '체스(FIDE)의 표준 규칙';
+
+  @override
+  String get variantChess960 => '체스960';
 
   @override
   String get variantChess960Title => '백의 1랭크, 흑의 8랭크에 있는 기물의 시작 위치가 무작위로 변경됩니다.';
 
   @override
+  String get variantKingOfTheHill => '언덕의 왕';
+
+  @override
   String get variantKingOfTheHillTitle => '킹을 중앙 칸에 놓으면 승리합니다.';
+
+  @override
+  String get variantThreeCheck => '3체크';
 
   @override
   String get variantThreeCheckTitle => '상대방을 세 번 체크하면 승리합니다.';
 
   @override
+  String get variantAntichess => '안티체스';
+
+  @override
   String get variantAntichessTitle => '모든 기물을 잃거나 스테일메이트되면 승리합니다.';
+
+  @override
+  String get variantAtomic => '아토믹';
 
   @override
   String get variantAtomicTitle => '상대의 킹을 터뜨려버리면 승리합니다.';
 
   @override
+  String get variantHorde => '호드';
+
+  @override
   String get variantHordeTitle => '한 쪽은 다수의 폰으로, 다른 쪽은 일반적인 기물로 경기합니다.';
+
+  @override
+  String get variantRacingKings => '킹 경주';
 
   @override
   String get variantRacingKingsTitle => '킹이 보드 반대편 끝까지 도달하면 승리합니다.';
 
   @override
+  String get variantCrazyhouse => '크레이지하우스';
+
+  @override
   String get variantCrazyhouseTitle => '자신의 차례일 때, 기물을 움직이는 대신 잡았던 기물을 자신의 색으로 보드에 소환할 수 있습니다.';
+
+  @override
+  String get variantFromPosition => '정해진 보드판에서 시작';
 
   @override
   String get variantFromPositionTitle => '사용자가 지정한 포지션으로 시작하는 일반 체스';
@@ -2466,6 +2499,12 @@ class AppLocalizationsKo extends AppLocalizations {
   String get blackDidntMove => '흑이 수를 두지 않음';
 
   @override
+  String get whiteAborted => '백 게임 중단';
+
+  @override
+  String get blackAborted => '흑 게임 중단';
+
+  @override
   String get requestAComputerAnalysis => '컴퓨터 분석 요청하기';
 
   @override
@@ -3040,10 +3079,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String get finished => '종료됨';
 
   @override
-  String get abortGame => '대국 취소';
+  String get abortGame => '대국 중단';
 
   @override
-  String get gameAborted => '대국 취소됨';
+  String get gameAborted => '대국 중단됨';
 
   @override
   String get standard => '스탠다드';

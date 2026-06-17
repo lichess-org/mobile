@@ -39,6 +39,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
+import 'package:lichess_mobile/src/widgets/variations_bar.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -353,24 +354,38 @@ class _BroadcastGameTreeView extends ConsumerWidget {
     final state = ref.watch(ctrlProvider).requireValue;
 
     final broadcastPrefs = ref.watch(broadcastPreferencesProvider);
+    final currentNode = state.root.branchesOn(state.currentPath).lastOrNull ?? state.root;
 
-    return SingleChildScrollView(
-      child: DebouncedPgnTreeView(
-        root: state.root,
-        currentPath: state.currentPath,
-        livePath: state.broadcastLivePath,
-        pgnRootComments: state.pgnRootComments,
-        // Avoid overlap with the divider of the tab bar
-        showTopDivider: false,
-        shouldShowComputerAnalysis: broadcastPrefs.enableServerAnalysis,
-        shouldShowComments: broadcastPrefs.enableServerAnalysis && broadcastPrefs.showPgnComments,
-        shouldShowAnnotations:
-            broadcastPrefs.enableServerAnalysis && broadcastPrefs.showAnnotations,
-        notifier: ref.read(ctrlProvider.notifier),
-        displayMode: broadcastPrefs.inlineNotation
-            ? PgnTreeDisplayMode.inlineNotation
-            : PgnTreeDisplayMode.twoColumn,
-      ),
+    return Column(
+      crossAxisAlignment: .stretch,
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            child: DebouncedPgnTreeView(
+              root: state.root,
+              currentPath: state.currentPath,
+              livePath: state.broadcastLivePath,
+              pgnRootComments: state.pgnRootComments,
+              // Avoid overlap with the divider of the tab bar
+              showTopDivider: false,
+              shouldShowComputerAnalysis: broadcastPrefs.enableServerAnalysis,
+              shouldShowComments:
+                  broadcastPrefs.enableServerAnalysis && broadcastPrefs.showPgnComments,
+              shouldShowAnnotations:
+                  broadcastPrefs.enableServerAnalysis && broadcastPrefs.showAnnotations,
+              notifier: ref.read(ctrlProvider.notifier),
+              displayMode: broadcastPrefs.inlineNotation ? .inlineNotation : .twoColumn,
+            ),
+          ),
+        ),
+
+        VariationsBar(
+          currentNode: currentNode,
+          currentPath: state.currentPath,
+          showAnnotations: broadcastPrefs.enableServerAnalysis && broadcastPrefs.showAnnotations,
+          onJump: (path) => ref.read(ctrlProvider.notifier).userJump(path),
+        ),
+      ],
     );
   }
 }

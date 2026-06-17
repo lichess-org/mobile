@@ -287,31 +287,64 @@ class AppLocalizationsUz extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Yoki PGN faylini import qiling';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+
+  @override
+  String get variantStandard => 'Standart';
+
+  @override
   String get variantStandardTitle => 'Standart shaxmat qoidalari (FIDE)';
+
+  @override
+  String get variantChess960 => 'Fisher shaxmati';
 
   @override
   String get variantChess960Title => 'Donalarni boshlangʻich pozitsiyasi tasodifiy ravishda aniqlanadi.';
 
   @override
+  String get variantKingOfTheHill => 'Shoh markazda';
+
+  @override
   String get variantKingOfTheHillTitle => 'Gʻalaba qozonish uchun shohni taxtani markaziga olib keling.';
+
+  @override
+  String get variantThreeCheck => 'Uch shoh';
 
   @override
   String get variantThreeCheckTitle => 'Gʻalaba qozonish uchun raqibingizga 3 marta shoh bering.';
 
   @override
+  String get variantAntichess => 'Antishaxmat';
+
+  @override
   String get variantAntichessTitle => 'Gʻalaba qozonish uchun barcha donalaringizni boy bering (yoki pat oling).';
+
+  @override
+  String get variantAtomic => 'Atomik shaxmat';
 
   @override
   String get variantAtomicTitle => 'Gʻalaba qozonish uchun raqibning shohini portlating.';
 
   @override
+  String get variantHorde => 'Oʻrda';
+
+  @override
   String get variantHordeTitle => 'Bir tarafda koʻp miqdorda piyodalar boʻlsa, boshqa tarafda standart shaxmat donalari mavjud.';
+
+  @override
+  String get variantRacingKings => 'Shohlar poygasi';
 
   @override
   String get variantRacingKingsTitle => 'Gʻalaba qozonish uchun shohni taxtani narigi tarariga olib boring.';
 
   @override
+  String get variantCrazyhouse => 'Kreyzihaus';
+
+  @override
   String get variantCrazyhouseTitle => 'Donani yurish oʻrniga yeyilgan donalarni taxtaga joylashtirishingiz mumkin.';
+
+  @override
+  String get variantFromPosition => 'Belgilangan pozitsiyadan';
 
   @override
   String get variantFromPositionTitle => 'Belgilangan pozitsiyadan standart shaxmat';
@@ -916,7 +949,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get broadcastOfficialStandings => 'Rasmiy turnir jadvali';
 
   @override
-  String get broadcastRegulations => 'Regulations';
+  String get broadcastRegulations => 'Reglament';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -1454,7 +1487,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get preferencesBothClicksAndDrag => 'Har ikkala usulda';
 
   @override
-  String get preferencesPremovesPlayingDuringOpponentTurn => 'Oldindan yurish (raqib navbati paytida yurish)';
+  String get preferencesPremovesPlayingDuringOpponentTurn => 'Oldindan yurish (raqib gali paytida yurish)';
 
   @override
   String get preferencesTakebacksWithOpponentApproval => 'Yurishni qaytarish (raqib roziligi bilan)';
@@ -1672,7 +1705,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get puzzleUseCtrlF => 'Yoqtirgan debyutlaringizni topish uchun Ctrl+f tugmalarini bosing!';
 
   @override
-  String get puzzleNotTheMove => 'Bu notoʻgʻri yurish!';
+  String get puzzleNotTheMove => 'Bu yurish notoʻgʻri!';
 
   @override
   String get puzzleTrySomethingElse => 'Boshqa yurishni sinab koʻring.';
@@ -1983,7 +2016,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get puzzleThemeClearance => 'Yoʻl ochish';
 
   @override
-  String get puzzleThemeClearanceDescription => 'Navbatdagi taktik gʻoya uchun katak, liniya yoki diagonalni boʻshatish (koʻpincha tempo bilan).';
+  String get puzzleThemeClearanceDescription => 'Navbatdagi taktik gʻoya uchun katak, liniya yoki diagonalni boʻshating (koʻpincha tempo bilan).';
 
   @override
   String get puzzleThemeDefensiveMove => 'Himoya yurishi';
@@ -2366,7 +2399,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get waiting => 'Kutib turing';
 
   @override
-  String get yourTurn => 'Sizning navbatingiz';
+  String get yourTurn => 'Sizning galingiz';
 
   @override
   String aiNameLevelAiLevel(String param1, String param2) {
@@ -2428,7 +2461,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get youPlayTheBlackPieces => 'Qora donalarda siz oʻynaysiz';
 
   @override
-  String get itsYourTurn => 'Sizning navbatingiz!';
+  String get itsYourTurn => 'Sizning galingiz!';
 
   @override
   String get cheatDetected => 'Gʻirromlik aniqlandi';
@@ -2455,10 +2488,10 @@ class AppLocalizationsUz extends AppLocalizations {
   String get joinTheGame => 'Oʻyinga qoʻshilish';
 
   @override
-  String get whitePlays => 'Oqlar navbati';
+  String get whitePlays => 'Oqlar gali';
 
   @override
-  String get blackPlays => 'Qoralar navbati';
+  String get blackPlays => 'Qoralar gali';
 
   @override
   String get opponentLeftChoices => 'Raqibingiz oʻyinni tark etdi. Gʻalaba yoki durang talab etishingiz mumkin yoki yana kutishingiz mumkin.';
@@ -2492,6 +2525,12 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get blackDidntMove => 'Qoralar yurmadi';
+
+  @override
+  String get whiteAborted => 'White aborted the game';
+
+  @override
+  String get blackAborted => 'Black aborted the game';
 
   @override
   String get requestAComputerAnalysis => 'Kompyuter tahlilini soʻrash';
@@ -4395,10 +4434,10 @@ class AppLocalizationsUz extends AppLocalizations {
   }
 
   @override
-  String get like => 'Like';
+  String get like => 'Yoqdi';
 
   @override
-  String get liked => 'Liked';
+  String get liked => 'Yoqdi';
 
   @override
   String get quickPairing => 'Raqibni tez topish';
@@ -6001,7 +6040,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get studyNormalAnalysis => 'Normal tahlil';
 
   @override
-  String get studyHideNextMoves => 'Navbatdagi yurishni yashirish';
+  String get studyHideNextMoves => 'Keyingi yurishlarni yashirish';
 
   @override
   String get studyInteractiveLesson => 'Interaktiv dars';

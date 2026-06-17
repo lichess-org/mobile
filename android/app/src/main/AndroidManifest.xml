@@ -1,5 +1,12 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Explicitly define screen support for niche device compatibility -->
+    <supports-screens
+        android:smallScreens="true"
+        android:normalScreens="true"
+        android:largeScreens="true"
+        android:xlargeScreens="true"/>
     <application
         android:label="Lichess"
         android:name="${applicationName}"
@@ -131,13 +138,14 @@
             </intent-filter>
             <meta-data android:name="flutter_deeplinking_enabled" android:value="false" />
         </activity>
-        <!-- Trampoline for the OAuth redirect URI. Receives org.lichess.mobile://login-callback,
-             forwards it to the running MainActivity via FLAG_ACTIVITY_CLEAR_TOP|SINGLE_TOP so
-             that onNewIntent is called on the existing instance, then finishes immediately. -->
+        <!-- OAuth custom-scheme callback receiver for flutter_appauth. We declare the intent-filter
+             here (with `tools:node="replace"`) instead of relying on the `appAuthRedirectScheme`
+             manifest placeholder. The theme matches the one the plugin contributes. -->
         <activity
-            android:name=".OAuthCallbackActivity"
+            android:name="net.openid.appauth.RedirectUriReceiverActivity"
+            android:theme="@style/Theme.AppCompat.Translucent.NoTitleBar"
             android:exported="true"
-            android:theme="@android:style/Theme.NoDisplay">
+            tools:node="replace">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />

@@ -287,31 +287,64 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Or import a PGN file';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+
+  @override
+  String get variantStandard => 'Štandard';
+
+  @override
   String get variantStandardTitle => 'Štandardné pravidlá šachu (FIDE)';
+
+  @override
+  String get variantChess960 => 'Šach960';
 
   @override
   String get variantChess960Title => 'Počiatočná pozícia figúrok v prvom rade je náhodná.';
 
   @override
+  String get variantKingOfTheHill => 'Kráľ kopca';
+
+  @override
   String get variantKingOfTheHillTitle => 'Pre výhru partie priveďte svojho kráľa do stredu šachovnice.';
+
+  @override
+  String get variantThreeCheck => 'Tri šachy';
 
   @override
   String get variantThreeCheckTitle => 'Pre výhru partie dajte svojmu súperovi 3-krát šach.';
 
   @override
+  String get variantAntichess => 'Antišach';
+
+  @override
   String get variantAntichessTitle => 'Ak chcete vyhrať partiu, musíte prísť o všetky svoje figúrky (alebo dosiahnuť pat).';
+
+  @override
+  String get variantAtomic => 'Atomik';
 
   @override
   String get variantAtomicTitle => 'Pre výhru nechajte súperovho kráľa vybuchnúť.';
 
   @override
+  String get variantHorde => 'Horda';
+
+  @override
   String get variantHordeTitle => 'Jedna strana má veľký počet pešiakov, druhá má klasickú sadu figúrok.';
+
+  @override
+  String get variantRacingKings => 'Pretekajúci sa králi';
 
   @override
   String get variantRacingKingsTitle => 'Pre výhru sa so svojim kráľom dostaňte na druhú stranu šachovnice ako prvý.';
 
   @override
+  String get variantCrazyhouse => 'Šialený dom';
+
+  @override
   String get variantCrazyhouseTitle => 'Namiesto ťahu Vašou figúrkou môžete figúrku, ktorú ste vzali súperovi použiť ako vlastnú a vrátiť ju späť do hry.';
+
+  @override
+  String get variantFromPosition => 'Z pozície';
 
   @override
   String get variantFromPositionTitle => 'Štandardný šach z vlastnej pozície';
@@ -2548,6 +2581,12 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get blackDidntMove => 'Čierny nepotiahol';
+
+  @override
+  String get whiteAborted => 'White aborted the game';
+
+  @override
+  String get blackAborted => 'Black aborted the game';
 
   @override
   String get requestAComputerAnalysis => 'Požiadať o počítačovú analýzu';

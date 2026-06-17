@@ -287,31 +287,64 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Of importeer een PGN-bestand';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+
+  @override
+  String get variantStandard => 'Standaard';
+
+  @override
   String get variantStandardTitle => 'Standaard schaakregels (FIDE)';
+
+  @override
+  String get variantChess960 => 'Schaak 960';
 
   @override
   String get variantChess960Title => 'De beginopstelling van de stukken op de eerste rij worden willekeurig bepaald.';
 
   @override
+  String get variantKingOfTheHill => 'Koning van de heuvel';
+
+  @override
   String get variantKingOfTheHillTitle => 'Breng je Koning naar het centrum om te winnen.';
+
+  @override
+  String get variantThreeCheck => 'Driemaalschaak';
 
   @override
   String get variantThreeCheckTitle => 'Breng je tegenstander 3 keer in schaak om te winnen.';
 
   @override
+  String get variantAntichess => 'Weggeefschaak';
+
+  @override
   String get variantAntichessTitle => 'Verlies al je stukken (of kom in pat) om te winnen.';
+
+  @override
+  String get variantAtomic => 'Atoomschaak';
 
   @override
   String get variantAtomicTitle => 'Vernietig de koning van je tegenstander om te winnen.';
 
   @override
+  String get variantHorde => 'Hordeschaak';
+
+  @override
   String get variantHordeTitle => 'De ene kant heeft een groot aantal pionnen, de andere speelt met normale stukken.';
+
+  @override
+  String get variantRacingKings => 'Rennende koningen';
 
   @override
   String get variantRacingKingsTitle => 'Breng je koning naar de andere kant van het bord om te winnen.';
 
   @override
+  String get variantCrazyhouse => 'Gekkenhuisschaak';
+
+  @override
   String get variantCrazyhouseTitle => 'Geslagen stukken kunnen terug op het bord worden geplaatst in plaats van dat ze verzet worden.';
+
+  @override
+  String get variantFromPosition => 'Vanaf stelling';
 
   @override
   String get variantFromPositionTitle => 'Standaard schaak vanaf eigen stelling';
@@ -916,7 +949,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get broadcastOfficialStandings => 'Officiële standen';
 
   @override
-  String get broadcastRegulations => 'Regulations';
+  String get broadcastRegulations => 'Regelgeving';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -2492,6 +2525,12 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get blackDidntMove => 'Zwart heeft niet gezet';
+
+  @override
+  String get whiteAborted => 'Wit heeft de partij afgebroken';
+
+  @override
+  String get blackAborted => 'Zwart heeft de partij afgebroken';
 
   @override
   String get requestAComputerAnalysis => 'Verzoek een computeranalyse';

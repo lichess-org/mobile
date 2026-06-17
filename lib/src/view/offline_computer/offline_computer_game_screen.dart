@@ -253,7 +253,6 @@ class _BodyState extends ConsumerState<_Body> {
                       youAre: orientation,
                       isBoardTurned: isBoardFlipped,
                     ),
-                    lastMove: gameState.lastMove,
                     explosionSquares: gameState.stepCursor > 0
                         ? atomicExplosionSquares(
                             gameState.game.stepAt(gameState.stepCursor - 1).position,
@@ -270,6 +269,7 @@ class _BodyState extends ConsumerState<_Body> {
                           : isPlayerTurn && !gameState.isEvaluatingMove
                           ? (orientation == Side.white ? PlayerSide.white : PlayerSide.black)
                           : PlayerSide.none,
+                      lastMove: gameState.lastMove,
                       onMove: (move, {viaDragAndDrop}) {
                         ref.read(offlineComputerGameControllerProvider.notifier).makeMove(move);
                       },
@@ -611,7 +611,7 @@ class _PracticeCommentCardState extends ConsumerState<_PracticeCommentCard> {
 
       final verdictText = switch (verdict) {
         MoveVerdict.goodMove => context.l10n.studyGoodMove,
-        MoveVerdict.notBest => "Good, but there's better",
+        MoveVerdict.notBest => context.l10n.mobileGoodMoveButThereIsBetter,
         MoveVerdict.inaccuracy => context.l10n.inaccuracy,
         MoveVerdict.mistake => context.l10n.mistake,
         MoveVerdict.blunder => context.l10n.blunder,
@@ -852,7 +852,7 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
             ),
             SettingsListTile(
               settingsLabel: Text(context.l10n.variant),
-              settingsValue: _selectedVariant.label,
+              settingsValue: _selectedVariant.label(context.l10n),
               onTap: () {
                 showChoicePicker(
                   context,

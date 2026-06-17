@@ -84,10 +84,14 @@ class _BroadcastListScreenState extends State<BroadcastListScreen> {
       ),
     );
 
+    final appBarBackground = ColorScheme.of(context).surfaceContainerHigh.withValues(alpha: 1);
+
     return Scaffold(
       body: _Body(filter),
       appBar: AppBar(
-        backgroundColor: ColorScheme.of(context).surfaceContainerHigh.withValues(alpha: 1),
+        backgroundColor: appBarBackground,
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
         title: title,
         actions: [searchButton, filterButton],
       ),
@@ -136,6 +140,7 @@ class _Body extends ConsumerWidget {
                           backgroundColor: ColorScheme.of(
                             context,
                           ).surfaceContainerHigh.withValues(alpha: 1),
+                          scrolledUnderElevation: 0,
                           automaticallyImplyLeading: false,
                           primary: false,
                           title: AppBarTitleText(section.$2),

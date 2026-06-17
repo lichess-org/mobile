@@ -233,6 +233,9 @@ class FakeFirebaseCrashlytics extends Fake implements FirebaseCrashlytics {
     bool? printDetails,
     bool fatal = false,
   }) async {}
+
+  @override
+  Future<void> setCustomKey(String key, Object value) async {}
 }
 
 class FakeFirebaseMessaging extends Fake implements FirebaseMessaging {
@@ -333,7 +336,7 @@ class FakeFirebaseMessaging extends Fake implements FirebaseMessaging {
   final StreamController<String> _tokenController = StreamController<String>.broadcast();
 
   @override
-  Future<String?> getToken({String? vapidKey}) async {
+  Future<String?> getToken({String? serviceWorkerScriptPath, String? vapidKey}) async {
     assert(vapidKey == null);
     return _token;
   }

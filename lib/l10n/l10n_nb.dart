@@ -287,31 +287,64 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Eller importer en PGN-fil';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+
+  @override
+  String get variantStandard => 'Standard';
+
+  @override
   String get variantStandardTitle => 'Standardregler for sjakk (FIDE)';
+
+  @override
+  String get variantChess960 => 'Sjakk-960';
 
   @override
   String get variantChess960Title => 'Offiserene har tilfeldig rekkefølge.';
 
   @override
+  String get variantKingOfTheHill => 'Kongen på haugen';
+
+  @override
   String get variantKingOfTheHillTitle => 'Før kongen til midten for å vinne.';
+
+  @override
+  String get variantThreeCheck => 'Tre-sjakk';
 
   @override
   String get variantThreeCheckTitle => 'Sett motstanderen i sjakk tre ganger for å vinne.';
 
   @override
+  String get variantAntichess => 'Antisjakk';
+
+  @override
   String get variantAntichessTitle => 'Få alle brikkene dine slått (eller bli satt patt) for å vinne.';
+
+  @override
+  String get variantAtomic => 'Atomsjakk';
 
   @override
   String get variantAtomicTitle => 'Spreng motstanderens konge for å vinne.';
 
   @override
+  String get variantHorde => 'Horde';
+
+  @override
   String get variantHordeTitle => 'Den ene siden har mange bønder, den andre en vanlig hær.';
+
+  @override
+  String get variantRacingKings => 'Kongeløp';
 
   @override
   String get variantRacingKingsTitle => 'Før kongen over brettet for å vinne.';
 
   @override
+  String get variantCrazyhouse => 'Galimatias';
+
+  @override
   String get variantCrazyhouseTitle => 'Slåtte brikker kan droppes tilbake på brettet i stedet for å flytte en brikke.';
+
+  @override
+  String get variantFromPosition => 'Fra stilling';
 
   @override
   String get variantFromPositionTitle => 'Vanlig sjakk fra en egendefinert stilling';
@@ -916,7 +949,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get broadcastOfficialStandings => 'Offisiell tabell';
 
   @override
-  String get broadcastRegulations => 'Regulations';
+  String get broadcastRegulations => 'Reglement';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -2492,6 +2525,12 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get blackDidntMove => 'Svart flyttet ikke';
+
+  @override
+  String get whiteAborted => 'White aborted the game';
+
+  @override
+  String get blackAborted => 'Black aborted the game';
 
   @override
   String get requestAComputerAnalysis => 'Be om computeranalyse';
@@ -4395,10 +4434,10 @@ class AppLocalizationsNb extends AppLocalizations {
   }
 
   @override
-  String get like => 'Like';
+  String get like => 'Lik';
 
   @override
-  String get liked => 'Liked';
+  String get liked => 'Likte';
 
   @override
   String get quickPairing => 'Raskt parti';

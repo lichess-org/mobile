@@ -287,31 +287,64 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileOrImportPgnFile => 'または PGN ファイルをインポート';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+
+  @override
+  String get variantStandard => 'スタンダード';
+
+  @override
   String get variantStandardTitle => 'チェスの標準ルール (FIDE)';
+
+  @override
+  String get variantChess960 => 'チェス960';
 
   @override
   String get variantChess960Title => '1 段目の駒の配置がランダムになります。';
 
   @override
+  String get variantKingOfTheHill => 'キング・オブ・ザ・ヒル';
+
+  @override
   String get variantKingOfTheHillTitle => 'キングを中央のマスに進めると勝ち。';
+
+  @override
+  String get variantThreeCheck => 'スリーチェック';
 
   @override
   String get variantThreeCheckTitle => '先に 3 回チェックした方が勝ち。';
 
   @override
+  String get variantAntichess => 'アンチチェス';
+
+  @override
   String get variantAntichessTitle => 'すべての駒を取られる（またはステイルメイトされる）と勝ち。';
+
+  @override
+  String get variantAtomic => 'アトミック';
 
   @override
   String get variantAtomicTitle => '相手のキングを「吹き飛ばす」と勝ち。';
 
   @override
+  String get variantHorde => 'ホード';
+
+  @override
   String get variantHordeTitle => '一方はポーンだけ、他方はふつうの駒で戦う。';
+
+  @override
+  String get variantRacingKings => 'キング・レース';
 
   @override
   String get variantRacingKingsTitle => 'キングをボードの向こうの端まで進めると勝ち。';
 
   @override
+  String get variantCrazyhouse => 'クレージーハウス';
+
+  @override
   String get variantCrazyhouseTitle => '取った駒を自分の手番に盤上に打つことができる。';
+
+  @override
+  String get variantFromPosition => '特定の局面から';
 
   @override
   String get variantFromPositionTitle => '指定した局面からのふつうのチェス';
@@ -896,7 +929,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get broadcastOfficialStandings => '公式順位';
 
   @override
-  String get broadcastRegulations => 'Regulations';
+  String get broadcastRegulations => '規則';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -2332,7 +2365,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get reusableChallengeUrl => '再利用可能なチャレンジ URL';
 
   @override
-  String get permanentLinkForAnyoneToChallengeYou => '誰でもこのとおりの設定であなたにチャレンジできる恒久的リンク。';
+  String get permanentLinkForAnyoneToChallengeYou => 'これと同じ設定で対局をするための固定URL';
 
   @override
   String get waiting => '待機中';
@@ -2464,6 +2497,12 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get blackDidntMove => '黒、手を指さず';
+
+  @override
+  String get whiteAborted => '白がゲームを中止しました';
+
+  @override
+  String get blackAborted => '黒がゲームを中止しました';
 
   @override
   String get requestAComputerAnalysis => 'コンピューター解析をリクエスト';
@@ -3302,7 +3341,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get playerNames => 'プレイヤー名';
 
   @override
-  String get moveAnnotations => '移動の注釈';
+  String get moveAnnotations => '手の注釈を表示';
 
   @override
   String get pasteTheFenStringHere => 'ここにFEN形式の局面をペースト';
@@ -4367,10 +4406,10 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get like => 'Like';
+  String get like => 'いいね';
 
   @override
-  String get liked => 'Liked';
+  String get liked => 'いいね済み';
 
   @override
   String get quickPairing => '自動ペアリング';

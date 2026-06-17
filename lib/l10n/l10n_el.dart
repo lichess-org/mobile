@@ -287,31 +287,64 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Ή μεταφορτώστε ένα αρχείο PGN';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+
+  @override
+  String get variantStandard => 'Κανονικό';
+
+  @override
   String get variantStandardTitle => 'Πρότυποι κανόνες του σκακιού (FIDE)';
+
+  @override
+  String get variantChess960 => 'Σκάκι960';
 
   @override
   String get variantChess960Title => 'Η αρχική θέση των κομματιών της πρώτης και τελευταίας γραμμής είναι τυχαία.';
 
   @override
+  String get variantKingOfTheHill => 'Βασιλιάς του λόφου';
+
+  @override
   String get variantKingOfTheHillTitle => 'Φέρτε τον βασιλιά στο κέντρο της σκακιέρας για να κερδίσετε την παρτίδα.';
+
+  @override
+  String get variantThreeCheck => 'Τριών σαχ';
 
   @override
   String get variantThreeCheckTitle => 'Κάντε σαχ 3 φορές για να κερδίσετε την παρτίδα.';
 
   @override
+  String get variantAntichess => 'Φάτο';
+
+  @override
   String get variantAntichessTitle => 'Η πλευρά που χάνει πρώτη όλα τα κομμάτια της ή δεν μπορεί να παίξει καμία κίνηση (πατ) κερδίζει την παρτίδα.';
+
+  @override
+  String get variantAtomic => 'Πυρηνικό';
 
   @override
   String get variantAtomicTitle => 'Ανατινάξτε τον αντίπαλο βασιλιά για να κερδίσετε.';
 
   @override
+  String get variantHorde => 'Ορδής';
+
+  @override
   String get variantHordeTitle => 'Η μία πλευρά έχει πολλά πιόνια, ενώ η άλλη έχει κανονική διάταξη σκακιού.';
+
+  @override
+  String get variantRacingKings => 'Βασιλικός αγώνας';
 
   @override
   String get variantRacingKingsTitle => 'Κερδίζει ο βασιλιάς που φτάνει μέχρι την άλλη άκρη της σκακιέρας.';
 
   @override
+  String get variantCrazyhouse => 'Τρελάδικο';
+
+  @override
   String get variantCrazyhouseTitle => 'Τα αιχμαλωτισμένα κομμάτια μπορούν να «φυτευτούν» πάλι στη σκακιέρα.';
+
+  @override
+  String get variantFromPosition => 'Από συγκεκριμένη θέση';
 
   @override
   String get variantFromPositionTitle => 'Κανονικό σκάκι από καθορισμένη θέση';
@@ -2492,6 +2525,12 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get blackDidntMove => 'Τα μαύρα δεν έπαιξαν';
+
+  @override
+  String get whiteAborted => 'Τα λευκά ακύρωσαν την παρτίδα';
+
+  @override
+  String get blackAborted => 'Τα μαύρα ακύρωσαν την παρτίδα';
 
   @override
   String get requestAComputerAnalysis => 'Ζητήστε ανάλυση υπολογιστή';

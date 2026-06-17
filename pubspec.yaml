@@ -2,58 +2,53 @@ name: lichess_mobile
 description: Lichess mobile app V2
 publish_to: "none"
 
-version: 0.24.2+002402 # See README.md for details about versioning
+version: 0.24.6+002406 # See README.md for details about versioning
 
 environment:
   sdk: ^3.11.5
   # this should be updated with every new flutter stable release
-  flutter: 3.44.0
+  flutter: 3.44.2
 
 dependencies:
-  app_links: ^7.0.0
+  app_links: ^7.1.2
   app_settings: ^7.0.0
   async: ^2.13.1
   auto_size_text: ^3.0.0
-  chessground:
-    git:
-      url: https://github.com/lichess-org/flutter-chessground.git
-      ref: ce2be45e639d06d255ed2f6da80afdc5c557098f
+  chessground: ^10.0.3
   clock: ^1.1.2
   collection: ^1.19.1
   connectivity_plus: ^7.1.1
   cronet_http: ^1.8.0
   crypto: ^3.0.7
-  cupertino_http: ^2.4.0
+  cupertino_http: ^3.0.2
   cupertino_icons: ^1.0.9
   dartchess: ^0.13.1
   deep_pick: ^1.1.0
   device_info_plus: ^13.1.0
-  dynamic_system_colors:
-    git:
-      url: https://github.com/veloce/flutter_dynamic_system_colors.git
-      ref: main
+  dynamic_system_colors: ^1.9.0
   fast_immutable_collections: ^11.2.0
-  file_picker: ^12.0.0-beta.4
-  firebase_core: ^4.9.0
-  firebase_crashlytics: ^5.2.2
-  firebase_messaging: ^16.2.2
+  file_picker: ^12.0.0-beta.5
+  firebase_core: ^4.10.0
+  firebase_crashlytics: ^5.2.3
+  firebase_messaging: ^16.3.0
   fl_chart: ^1.2.0
   flutter:
     sdk: flutter
+  flutter_appauth: ^12.0.1
   flutter_displaymode: ^0.7.0
   flutter_layout_grid: ^2.0.8
   flutter_linkify: ^6.0.0
-  flutter_local_notifications: ^21.0.0
+  flutter_local_notifications: ^22.0.1
   flutter_localizations:
     sdk: flutter
   flutter_markdown_plus: ^1.0.7
-  flutter_native_splash: ^2.4.7
+  flutter_native_splash: ^2.4.8
   flutter_riverpod: ^3.3.1
-  flutter_secure_storage: ^10.3.0
+  flutter_secure_storage: ^10.3.1
   flutter_slidable: ^4.0.3
   flutter_spinkit: ^5.2.2
   freezed_annotation: ^3.1.0
-  home_widget: ^0.9.2
+  home_widget: ^0.9.3
   http: ^1.6.0
   image_picker: ^1.2.2
   intl: ^0.20.2
@@ -72,17 +67,13 @@ dependencies:
   pub_semver: ^2.2.0
   qr_flutter: ^4.1.0
   quick_actions: ^1.1.0
-  receive_sharing_intent:
-    git:
-      url: https://github.com/KasemJaffer/receive_sharing_intent
-      ref: 2cea396843cd3ab1b5ec4334be4233864637874e
   result_extensions: ^0.2.0
   share_plus: ^13.1.0
   shared_preferences: ^2.5.5
   signal_strength_indicator: ^0.5.0
-  sound_effect: ^0.1.3
-  sqflite: ^2.4.2+1
-  sqflite_common_ffi: ^2.4.0+3
+  sound_effect: ^0.2.0
+  sqflite: ^2.4.3
+  sqflite_common_ffi: ^2.4.2
   stream_transform: ^2.1.1
   url_launcher: ^6.3.2
   visibility_detector: ^0.4.0+2

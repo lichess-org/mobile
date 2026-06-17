@@ -287,31 +287,64 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Чи завантажте файл PGN';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+
+  @override
+  String get variantStandard => 'Стандартні шахи';
+
+  @override
   String get variantStandardTitle => 'Стандартні правила шахів (FIDE)';
+
+  @override
+  String get variantChess960 => 'Шахи-960';
 
   @override
   String get variantChess960Title => 'Початкова позиція фігур задається випадково.';
 
   @override
+  String get variantKingOfTheHill => 'Король гори';
+
+  @override
   String get variantKingOfTheHillTitle => 'Перемістіть свого короля до центру, щоб перемогти.';
+
+  @override
+  String get variantThreeCheck => 'До трьох шахів';
 
   @override
   String get variantThreeCheckTitle => 'Поставте шах супернику 3 рази, щоб перемогти.';
 
   @override
+  String get variantAntichess => 'Антишахи';
+
+  @override
   String get variantAntichessTitle => 'Утратьте всі свої фігури (або хай вам поставлять пат), щоб перемогти.';
+
+  @override
+  String get variantAtomic => 'Атомічні шахи';
 
   @override
   String get variantAtomicTitle => 'Підірвіть короля суперника, щоб перемогти.';
 
   @override
+  String get variantHorde => 'Орда';
+
+  @override
   String get variantHordeTitle => 'Одна сторона має багато пішаків, а інша — звичайну армію.';
+
+  @override
+  String get variantRacingKings => 'Королівські перегони';
 
   @override
   String get variantRacingKingsTitle => 'Перемістіть короля на інший бік дошки, щоб перемогти.';
 
   @override
+  String get variantCrazyhouse => 'Шалені шахи';
+
+  @override
   String get variantCrazyhouseTitle => 'Замість звичайного ходу можна поставити захоплену ворожу фігуру.';
+
+  @override
+  String get variantFromPosition => 'З позиції';
 
   @override
   String get variantFromPositionTitle => 'Звичайні шахи із власної позиції';
@@ -2416,7 +2449,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get reusableChallengeUrl => 'Постійне посилання на виклик';
 
   @override
-  String get permanentLinkForAnyoneToChallengeYou => 'Постійне посилання, за яким хто-небудь може кинути вам виклик із цими налаштуваннями.';
+  String get permanentLinkForAnyoneToChallengeYou => 'Постійне посилання, за яким будь-хто може кинути вам виклик із цими налаштуваннями.';
 
   @override
   String get waiting => 'Очікування';
@@ -2550,6 +2583,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get blackDidntMove => 'Чорні не зробили хід';
 
   @override
+  String get whiteAborted => 'Білі скасували гру';
+
+  @override
+  String get blackAborted => 'Чорні скасували гру';
+
+  @override
   String get requestAComputerAnalysis => 'Зробити запит на комп’ютерний аналіз';
 
   @override
@@ -2618,7 +2657,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get copyVariationPgn => 'Скопіювати PGN варіанту';
 
   @override
-  String get copyMainLinePgn => 'Копіювати pgn головної лінії';
+  String get copyMainLinePgn => 'Копіювати PGN головної лінії';
 
   @override
   String get move => 'Хід';

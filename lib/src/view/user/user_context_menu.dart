@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 
@@ -77,9 +78,17 @@ class UserContextMenu extends ConsumerWidget {
                   },
                   child: Text(context.l10n.watchGames),
                 ),
-                if (authUser != null && value.canChallenge == true)
+                if (authUser != null && value.canChallenge != null)
                   BottomSheetContextMenuAction(
-                    onPressed: () => UserScreen.challengeUser(value, context: context, ref: ref),
+                    onPressed: value.canChallenge == true
+                        ? () => UserScreen.challengeUser(value, context: context, ref: ref)
+                        : () {
+                            Navigator.of(context).pop();
+                            showSnackBar(
+                              context,
+                              context.l10n.challengeXDoesNotAcceptChallenges(value.username),
+                            );
+                          },
                     icon: LichessIcons.crossed_swords,
                     child: Text(context.l10n.challengeChallengeToPlay),
                   ),

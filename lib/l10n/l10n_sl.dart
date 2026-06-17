@@ -287,31 +287,64 @@ class AppLocalizationsSl extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Ali uvozite datoteko PGN';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+
+  @override
+  String get variantStandard => 'Običajno';
+
+  @override
   String get variantStandardTitle => 'Standardna pravila šaha (FIDE)';
+
+  @override
+  String get variantChess960 => 'Šah960';
 
   @override
   String get variantChess960Title => 'Začetni položaj figur v prvi vrstici je naključen.';
 
   @override
+  String get variantKingOfTheHill => 'Kralj hriba';
+
+  @override
   String get variantKingOfTheHillTitle => 'Pripelji svojega kralja v sredino, da zmagaš v igri.';
+
+  @override
+  String get variantThreeCheck => 'Trikratni šah';
 
   @override
   String get variantThreeCheckTitle => 'Za zmago v igri trikrat napadite nasprotnikovega kralja.';
 
   @override
+  String get variantAntichess => 'Antišah';
+
+  @override
   String get variantAntichessTitle => 'Izgubite vse svoje figure (ali se znajdete v pat poziciji), da zmagate v igri.';
+
+  @override
+  String get variantAtomic => 'Atomski šah';
 
   @override
   String get variantAtomicTitle => 'Za zmago uniči nasprotnikovega kralja.';
 
   @override
+  String get variantHorde => 'Horda';
+
+  @override
   String get variantHordeTitle => 'Ena stran ima veliko število kmetov, druga pa normalno vojsko.';
+
+  @override
+  String get variantRacingKings => 'Dirkanje kraljev';
 
   @override
   String get variantRacingKingsTitle => 'Premakni svojega kralja na drugo stran plošče, da zmagaš.';
 
   @override
+  String get variantCrazyhouse => 'Nora hiša';
+
+  @override
   String get variantCrazyhouseTitle => 'Zajete figure lahko namesto premikanja figure spustite nazaj na šahovnico.';
+
+  @override
+  String get variantFromPosition => 'From Position';
 
   @override
   String get variantFromPositionTitle => 'Standard chess from a custom position';
@@ -2548,6 +2581,12 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get blackDidntMove => 'Črni ni naredil poteze';
+
+  @override
+  String get whiteAborted => 'White aborted the game';
+
+  @override
+  String get blackAborted => 'Black aborted the game';
 
   @override
   String get requestAComputerAnalysis => 'Zahtevaj računalniško analizo';

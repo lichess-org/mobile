@@ -287,31 +287,64 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Eller importer en PGN-fil';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+
+  @override
+  String get variantStandard => 'Standard';
+
+  @override
   String get variantStandardTitle => 'Standardregler for skak (FIDE)';
+
+  @override
+  String get variantChess960 => 'Skak960';
 
   @override
   String get variantChess960Title => 'Startopstillingen af den bageste rækkes brikker er tilfældig.';
 
   @override
+  String get variantKingOfTheHill => 'Kongen i centrum';
+
+  @override
   String get variantKingOfTheHillTitle => 'Få din konge ind i centrum for at vinde partiet.';
+
+  @override
+  String get variantThreeCheck => 'Tre-skak';
 
   @override
   String get variantThreeCheckTitle => 'Sæt din modstander skak 3 gange for at vinde partiet.';
 
   @override
+  String get variantAntichess => 'Antiskak';
+
+  @override
   String get variantAntichessTitle => 'Du vinder partiet ved at miste alle dine brikker (eller blive pat).';
+
+  @override
+  String get variantAtomic => 'Eksplosion';
 
   @override
   String get variantAtomicTitle => 'Spring din modstanders konge i luften for at vinde.';
 
   @override
+  String get variantHorde => 'Horde';
+
+  @override
   String get variantHordeTitle => 'Den ene side har et stort antal bønder, den anden har en normal hær.';
+
+  @override
+  String get variantRacingKings => 'Kongeløb';
 
   @override
   String get variantRacingKingsTitle => 'Få din konge til den anden side af brættet for at vinde.';
 
   @override
+  String get variantCrazyhouse => 'Galehus';
+
+  @override
   String get variantCrazyhouseTitle => 'Erobrede brikker kan genindsættes på brættet i stedet for at foretage et træk.';
+
+  @override
+  String get variantFromPosition => 'Fra stilling';
 
   @override
   String get variantFromPositionTitle => 'Standard skak fra en brugerdefineret position';
@@ -2492,6 +2525,12 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get blackDidntMove => 'Sort trak ikke';
+
+  @override
+  String get whiteAborted => 'Hvid forlod partiet';
+
+  @override
+  String get blackAborted => 'Sort forlod partiet';
 
   @override
   String get requestAComputerAnalysis => 'Anmod om en computeranalyse';

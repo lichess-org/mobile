@@ -135,6 +135,85 @@ void main() {
       expect(activeClock(tester), Side.white);
     });
 
+    testWidgets('Last move is highlighted after playing a move', (tester) async {
+      // Regression test: interactive boards read the last move from
+      // InteractiveBoardParams.lastMove. If the screen passes lastMove to
+      // GameLayout.lastMove (only used for readonly boards) instead, the move
+      // highlight never reaches the board controller.
+      await initOverTheBoardGame(tester, const TimeIncrement(60, 0));
+
+      // No last move highlight before any move is played.
+      expect(getBoardLastMove(tester), isNull);
+
+      await playMove(tester, 'e2', 'e4');
+      await tester.pumpAndSettle();
+
+      expect(getBoardLastMove(tester), Move.parse('e2e4'));
+
+      await playMove(tester, 'e7', 'e5');
+      await tester.pumpAndSettle();
+
+      expect(getBoardLastMove(tester), Move.parse('e7e5'));
+    });
+
+    testWidgets('Last move is highlighted when loading a saved game', (tester) async {
+      // Regression test: the last move of a restored game must be highlighted on
+      // the interactive board right away (via InteractiveBoardParams.lastMove).
+      final gameStorage = MockOverTheBoardGameStorage();
+
+      when(() => gameStorage.fetchOngoingGame()).thenAnswer(
+        (_) async => SavedOtbGame(
+          game: OverTheBoardGame(
+            id: const StringId('otb_test01'),
+            steps: [
+              const GameStep(position: Chess.initial),
+              GameStep(
+                position: Position.setupPosition(
+                  Rule.chess,
+                  Setup.parseFen('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1'),
+                ),
+                sanMove: SanMove('e4', Move.parse('e2e4')!),
+              ),
+              GameStep(
+                position: Position.setupPosition(
+                  Rule.chess,
+                  Setup.parseFen('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2'),
+                ),
+                sanMove: SanMove('e5', Move.parse('e7e5')!),
+              ),
+            ].lock,
+            meta: GameMeta(
+              createdAt: DateTime.now(),
+              rated: false,
+              variant: Variant.standard,
+              speed: Speed.rapid,
+              perf: Perf.rapid,
+            ),
+            initialFen: null,
+            status: GameStatus.started,
+          ),
+          whiteTimeLeft: const Duration(minutes: 2),
+          blackTimeLeft: const Duration(minutes: 1),
+          timeIncrement: const TimeIncrement(5, 3),
+        ),
+      );
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const OverTheBoardScreen(),
+        overrides: {
+          overTheBoardGameStorageProvider: overTheBoardGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      // The last move (e7e5) must be highlighted on the restored board.
+      expect(getBoardLastMove(tester), Move.parse('e7e5'));
+    });
+
     testWidgets('Go back and Forward', (tester) async {
       const time = Duration(seconds: 10);
 

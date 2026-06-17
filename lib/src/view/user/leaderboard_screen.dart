@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/leaderboard.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -40,19 +41,19 @@ class _Body extends ConsumerWidget {
     return leaderboard.when(
       data: (data) {
         final List<Widget> list = [
-          _Leaderboard(data.bullet, LichessIcons.bullet, 'BULLET'),
-          _Leaderboard(data.blitz, LichessIcons.blitz, 'BLITZ'),
-          _Leaderboard(data.rapid, LichessIcons.rapid, 'RAPID'),
-          _Leaderboard(data.classical, LichessIcons.classical, 'CLASSICAL'),
-          _Leaderboard(data.ultrabullet, LichessIcons.ultrabullet, 'ULTRA BULLET'),
-          _Leaderboard(data.crazyhouse, LichessIcons.h_square, 'CRAZYHOUSE'),
-          _Leaderboard(data.chess960, LichessIcons.die_six, 'CHESS 960'),
-          _Leaderboard(data.kingOfThehill, LichessIcons.bullet, 'KING OF THE HILL'),
-          _Leaderboard(data.threeCheck, LichessIcons.three_check, 'THREE CHECK'),
-          _Leaderboard(data.atomic, LichessIcons.atom, 'ATOMIC'),
-          _Leaderboard(data.horde, LichessIcons.horde, 'HORDE'),
-          _Leaderboard(data.antichess, LichessIcons.antichess, 'ANTICHESS'),
-          _Leaderboard(data.racingKings, LichessIcons.racing_kings, 'RACING KINGS'),
+          _Leaderboard(data.bullet, Perf.bullet),
+          _Leaderboard(data.blitz, Perf.blitz),
+          _Leaderboard(data.rapid, Perf.rapid),
+          _Leaderboard(data.classical, Perf.classical),
+          _Leaderboard(data.ultrabullet, Perf.ultraBullet),
+          _Leaderboard(data.crazyhouse, Perf.crazyhouse),
+          _Leaderboard(data.chess960, Perf.chess960),
+          _Leaderboard(data.kingOfThehill, Perf.kingOfTheHill),
+          _Leaderboard(data.threeCheck, Perf.threeCheck),
+          _Leaderboard(data.atomic, Perf.atomic),
+          _Leaderboard(data.horde, Perf.horde),
+          _Leaderboard(data.antichess, Perf.antichess),
+          _Leaderboard(data.racingKings, Perf.racingKings),
         ];
 
         return SafeArea(
@@ -138,10 +139,9 @@ class _Progress extends StatelessWidget {
 }
 
 class _Leaderboard extends StatelessWidget {
-  const _Leaderboard(this.userList, this.iconData, this.title);
+  const _Leaderboard(this.userList, this.perf);
   final List<LeaderboardUser> userList;
-  final IconData iconData;
-  final String title;
+  final Perf perf;
 
   @override
   Widget build(BuildContext context) {
@@ -151,9 +151,9 @@ class _Leaderboard extends StatelessWidget {
         hasLeading: false,
         header: Row(
           children: [
-            Icon(iconData, color: context.lichessColors.brag),
+            Icon(perf.icon, color: context.lichessColors.brag),
             const SizedBox(width: 10.0),
-            Text(title),
+            Text(perf.label(context.l10n)),
           ],
         ),
         children: userList.map((user) => LeaderboardListTile(user: user)).toList(),

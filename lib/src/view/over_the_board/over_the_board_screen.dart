@@ -250,7 +250,6 @@ class _BodyState extends ConsumerState<_Body> {
                     bottomTableUpsideDown:
                         overTheBoardPrefs.flipPiecesAfterMove && orientation != gameState.turn,
                     orientation: orientation,
-                    lastMove: gameState.lastMove,
                     explosionSquares: gameState.stepCursor > 0
                         ? atomicExplosionSquares(
                             gameState.game.stepAt(gameState.stepCursor - 1).position,
@@ -265,6 +264,7 @@ class _BodyState extends ConsumerState<_Body> {
                           : gameState.turn == Side.white
                           ? PlayerSide.white
                           : PlayerSide.black,
+                      lastMove: gameState.lastMove,
                       onMove: (move, {viaDragAndDrop}) {
                         ref.read(overTheBoardGameControllerProvider.notifier).makeMove(move);
                         ref
