@@ -267,9 +267,12 @@ class _BodyState extends ConsumerState<_Body> {
                       lastMove: gameState.lastMove,
                       onMove: (move, {viaDragAndDrop}) {
                         ref.read(overTheBoardGameControllerProvider.notifier).makeMove(move);
-                        ref
-                            .read(overTheBoardClockProvider.notifier)
-                            .onMove(newSideToMove: gameState.turn.opposite);
+                        // Don't restart the clock on a game-ending move, or it keeps running.
+                        if (!ref.read(overTheBoardGameControllerProvider).finished) {
+                          ref
+                              .read(overTheBoardClockProvider.notifier)
+                              .onMove(newSideToMove: gameState.turn.opposite);
+                        }
                       },
                     ),
                     moves: gameState.moves,
