@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_player.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
-import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
@@ -344,11 +343,13 @@ class _Body extends ConsumerWidget {
             pov: pov,
             isComputerAnalysisAllowed: analysisState.isComputerAnalysisAllowed,
             position: currentNode.position,
-            opening: kOpeningAllowedVariants.contains(analysisState.variant)
-                ? analysisState.currentNode.isRoot
-                      ? LightOpening(eco: '', name: context.l10n.startPosition)
-                      : analysisState.currentNode.opening ?? analysisState.currentBranchOpening
-                : null,
+            opening: explorerOpening(
+              context,
+              variant: analysisState.variant,
+              isRootNode: analysisState.currentNode.isRoot,
+              nodeOpening: analysisState.currentNode.opening,
+              branchOpening: analysisState.currentBranchOpening,
+            ),
             onMoveSelected: (move) {
               ref.read(ctrlProvider.notifier).onUserMove(move);
             },

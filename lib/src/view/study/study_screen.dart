@@ -505,6 +505,13 @@ class _Body extends ConsumerWidget {
               return ExplorerView(
                 pov: pov,
                 position: studyState.currentNode.position!,
+                opening: explorerOpening(
+                  context,
+                  variant: studyState.variant,
+                  isRootNode: studyState.currentNode.isRoot,
+                  nodeOpening: studyState.currentNode.opening,
+                  branchOpening: studyState.currentBranchOpening,
+                ),
                 onMoveSelected: (move) {
                   ref.read(studyControllerProvider(options).notifier).onUserMove(move);
                 },
