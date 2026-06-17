@@ -142,7 +142,7 @@ final defaultClientProvider = Provider<DefaultClient>((Ref ref) {
   final client = DefaultClient(ref.read(httpClientFactoryProvider)(), userAgent: userAgent);
   ref.onDispose(() => client.close());
   return client;
-});
+}, name: 'DefaultHttpClientProvider');
 
 /// The http client configured to make requests to the lichess API.
 ///
@@ -160,7 +160,7 @@ final lichessClientProvider = Provider<LichessClient>((Ref ref) {
   );
   ref.onDispose(() => client.close());
   return client;
-});
+}, name: 'LichessHttpClientProvider');
 
 Duration _defaultDelay(int retryCount) =>
     const Duration(milliseconds: 900) * math.pow(1.5, retryCount);
