@@ -45,6 +45,8 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 
 typedef LoadingPosition = ({String? fen, Move? lastMove, Side? orientation});
 
+const _kGameEndDialogDelay = Duration(milliseconds: 500);
+
 /// Game body for the [GameScreen].
 ///
 /// This widget is responsible for displaying the board, the clocks, the players,
@@ -168,21 +170,28 @@ class GameBody extends ConsumerWidget {
         }
       }
 
+      final game = state.requireValue.game;
+
       // If the game is no longer playable, show the game end dialog.
       // We want to show it only once, whether the game is already finished on
       // first load or not.
       if ((prev?.hasValue != true || prev!.requireValue.game.playable == true) &&
           state.requireValue.game.playable == false) {
-        Timer(const Duration(milliseconds: 500), () {
-          if (context.mounted) {
-            showAdaptiveDialog<void>(
-              context: context,
-              builder: (context) =>
-                  GameResultDialog(id: gameId, onNewOpponentCallback: onNewOpponentCallback),
-              barrierDismissible: true,
-            );
-          }
-        });
+        Timer(
+          (game.meta.speed == Speed.bullet || game.meta.speed == Speed.ultraBullet)
+              ? Duration.zero
+              : _kGameEndDialogDelay,
+          () {
+            if (context.mounted) {
+              showAdaptiveDialog<void>(
+                context: context,
+                builder: (context) =>
+                    GameResultDialog(id: gameId, onNewOpponentCallback: onNewOpponentCallback),
+                barrierDismissible: true,
+              );
+            }
+          },
+        );
       }
 
       // true when the game was loaded, playable, and just finished
@@ -191,7 +200,6 @@ class GameBody extends ConsumerWidget {
       }
       // true when the game was not loaded: handles rematches
       else if (prev?.hasValue != true) {
-        final game = state.requireValue.game;
         if (game.meta.speed != Speed.correspondence && game.playable) {
           setAndroidBoardGesturesExclusion(
             boardKey,
