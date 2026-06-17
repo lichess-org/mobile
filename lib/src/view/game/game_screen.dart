@@ -280,7 +280,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
             () => ref.read(createGameServiceProvider).cancelChallenge(),
           ),
           ExistingGameSource() => StandaloneGameLoadingContent(
-            position: widget.loadingPosition,
+            loadingParam: widget.loadingPosition,
             userActionsBar: const BottomBar.empty(),
           ),
         };

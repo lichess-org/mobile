@@ -128,7 +128,7 @@ class GameBody extends ConsumerWidget {
       case _GamePhase.refreshing:
         final value = ref.read(ctrlProvider).requireValue;
         return StandaloneGameLoadingContent(
-          position: (
+          loadingParam: (
             fen: value.game.lastPosition.fen,
             lastMove: value.game.moveAt(value.stepCursor),
             orientation: value.game.youAre,
@@ -141,7 +141,7 @@ class GameBody extends ConsumerWidget {
         );
       case _GamePhase.loading:
         return StandaloneGameLoadingContent(
-          position: loadingPosition,
+          loadingParam: loadingPosition,
           userActionsBar: _GameBottomBar(
             id: gameId,
             onLoadGameCallback: onLoadGameCallback,

@@ -443,14 +443,14 @@ class _GameParamsDisplay extends StatelessWidget {
 }
 
 class StandaloneGameLoadingContent extends StatelessWidget {
-  const StandaloneGameLoadingContent({this.position, this.userActionsBar, super.key});
+  const StandaloneGameLoadingContent({this.loadingParam, this.userActionsBar, super.key});
 
-  final LoadingPosition? position;
+  final LoadingPosition? loadingParam;
   final Widget? userActionsBar;
 
   @override
   Widget build(BuildContext context) {
-    final loadingFen = position?.fen;
+    final loadingFen = loadingParam?.fen;
     Position? loadingPosition;
     if (loadingFen != null) {
       try {
@@ -459,11 +459,11 @@ class StandaloneGameLoadingContent extends StatelessWidget {
         loadingPosition = null;
       }
     }
-    final lastMove = position?.lastMove;
+    final lastMove = loadingParam?.lastMove;
     return Shimmer(
       child: SafeArea(
         child: GameLayout(
-          orientation: position?.orientation ?? Side.white,
+          orientation: loadingParam?.orientation ?? Side.white,
           boardParams: loadingPosition == null
               ? GameBoardParams.emptyBoard
               : GameBoardParams.readonly(
