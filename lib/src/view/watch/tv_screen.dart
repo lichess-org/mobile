@@ -171,11 +171,9 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                           isBoardTurned: false,
                         ),
                         boardParams: GameBoardParams.readonly(
-                          fen: position.fen,
                           variant: gameState.game.meta.variant,
-                          pockets: position.pockets,
-                          lastMove: game.moveAt(gameState.stepCursor),
                           position: position,
+                          lastMove: game.moveAt(gameState.stepCursor),
                         ),
                         boardSettingsOverrides: const BoardSettingsOverrides(
                           animationDuration: Duration.zero,

@@ -450,27 +450,37 @@ class StandaloneGameLoadingContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loadingFen = position?.fen;
+    Position? loadingPosition;
+    if (loadingFen != null) {
+      try {
+        loadingPosition = Chess.fromSetup(Setup.parseFen(loadingFen));
+      } catch (_) {
+        loadingPosition = null;
+      }
+    }
     final lastMove = position?.lastMove;
     return Shimmer(
       child: SafeArea(
         child: GameLayout(
           orientation: position?.orientation ?? Side.white,
-          boardParams: GameBoardParams.readonly(
-            fen: position?.fen ?? kEmptyFEN,
-            variant: Variant.standard,
-            pockets: null,
-            lastMove: switch (lastMove) {
-              // In crazyhouse games, the "ongoing games" endpoint does not return the correct UCI for crazyhouse games,
-              // e.g. instead of P@c4 the UCI will be c4c4.
-              // This leads to a "duplicate key" error, since chessground would try to highlight the same square twice.
-              // The dropped role does not matter, since we just use it for the square highlight.
-              NormalMove(:final from, :final to) when from == to => DropMove(
-                to: to,
-                role: Role.pawn,
-              ),
-              _ => lastMove,
-            },
-          ),
+          boardParams: loadingPosition == null
+              ? GameBoardParams.emptyBoard
+              : GameBoardParams.readonly(
+                  variant: Variant.standard,
+                  position: loadingPosition,
+                  lastMove: switch (lastMove) {
+                    // In crazyhouse games, the "ongoing games" endpoint does not return the correct UCI for crazyhouse games,
+                    // e.g. instead of P@c4 the UCI will be c4c4.
+                    // This leads to a "duplicate key" error, since chessground would try to highlight the same square twice.
+                    // The dropped role does not matter, since we just use it for the square highlight.
+                    NormalMove(:final from, :final to) when from == to => DropMove(
+                      to: to,
+                      role: Role.pawn,
+                    ),
+                    _ => lastMove,
+                  },
+                ),
           topTable: const LoadingPlayerWidget(),
           bottomTable: const LoadingPlayerWidget(),
           moves: const [],

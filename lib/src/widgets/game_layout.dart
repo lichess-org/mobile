@@ -316,22 +316,25 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
           castlingMethod: boardPrefs.castlingMethod,
           boardHighlights: boardPrefs.boardHighlights,
         ),
-      ReadonlyBoardParams(:final fen, :final lastMove, :final position) => GameData(
-        fen: fen,
+      ReadonlyBoardParams(:final lastMove, :final position) => GameData(
+        fen: position.fen,
         playerSide: PlayerSide.none,
-        sideToMove: _sideToMoveFromFen(fen),
+        sideToMove: position.turn,
         validMoves: const <Square, Set<Square>>{},
         lastMove: lastMove,
-        kingSquareInCheck: position != null && boardPrefs.boardHighlights && position.isCheck
+        kingSquareInCheck: boardPrefs.boardHighlights && position.isCheck
             ? position.board.kingOf(position.turn)
             : null,
       ),
+      EmptyBoardParams() => const GameData(
+        fen: kEmptyFEN,
+        playerSide: PlayerSide.none,
+        sideToMove: Side.white,
+        validMoves: <Square, Set<Square>>{},
+        lastMove: null,
+        kingSquareInCheck: null,
+      ),
     };
-  }
-
-  Side _sideToMoveFromFen(String fen) {
-    final parts = fen.split(' ');
-    return parts.length > 1 && parts[1] == 'b' ? Side.black : Side.white;
   }
 
   @override
@@ -351,6 +354,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
         ? (playerSide == PlayerSide.none ? null : _controller?.game.sideToMove)
         : switch (widget.boardParams!) {
             ReadonlyBoardParams() => null,
+            EmptyBoardParams() => null,
             InteractiveBoardParams(:final position, :final playerSide) =>
               playerSide == PlayerSide.none ? null : position.turn,
           };
