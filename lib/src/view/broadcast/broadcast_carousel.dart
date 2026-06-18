@@ -25,7 +25,7 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_share_menu.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/text_badge.dart';
 
-const kDefaultBroadcastImage = AssetImage('assets/images/broadcast_image.png');
+const kDefaultBroadcastImage = AssetImage('assets/images/broadcast_image.webp');
 const kBroadcastCardItemContentPadding = EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0);
 const kDefaultCardOpacity = 0.9;
 
