@@ -451,10 +451,15 @@ class StandaloneGameLoadingContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final loadingFen = loadingParam?.fen;
+    final variant = loadingParam?.variant ?? Variant.standard;
     Position? loadingPosition;
     if (loadingFen != null) {
       try {
-        loadingPosition = Chess.fromSetup(Setup.parseFen(loadingFen));
+        loadingPosition = Position.setupPosition(
+          variant.rule,
+          Setup.parseFen(loadingFen),
+          ignoreImpossibleCheck: true,
+        );
       } catch (_) {
         loadingPosition = null;
       }
@@ -467,7 +472,7 @@ class StandaloneGameLoadingContent extends StatelessWidget {
           boardParams: loadingPosition == null
               ? GameBoardParams.emptyBoard
               : GameBoardParams.readonly(
-                  variant: Variant.standard,
+                  variant: variant,
                   position: loadingPosition,
                   lastMove: switch (lastMove) {
                     // In crazyhouse games, the "ongoing games" endpoint does not return the correct UCI for crazyhouse games,

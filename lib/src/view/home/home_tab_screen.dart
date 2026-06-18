@@ -743,6 +743,7 @@ class _OngoingGamesCarousel extends ConsumerWidget {
               GameScreen.buildRoute(
                 source: ExistingGameSource(game.fullId),
                 loadingPosition: (
+                  variant: game.variant,
                   fen: game.fen,
                   orientation: game.orientation,
                   lastMove: game.lastMove,

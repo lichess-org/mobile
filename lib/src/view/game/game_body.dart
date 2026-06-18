@@ -43,7 +43,7 @@ import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
-typedef LoadingParam = ({String? fen, Move? lastMove, Side? orientation});
+typedef LoadingParam = ({Variant variant, String? fen, Move? lastMove, Side? orientation});
 
 const _kGameEndDialogDelay = Duration(milliseconds: 500);
 
@@ -129,6 +129,7 @@ class GameBody extends ConsumerWidget {
         final value = ref.read(ctrlProvider).requireValue;
         return StandaloneGameLoadingContent(
           loadingParam: (
+            variant: value.game.meta.variant,
             fen: value.game.lastPosition.fen,
             lastMove: value.game.moveAt(value.stepCursor),
             orientation: value.game.youAre,
