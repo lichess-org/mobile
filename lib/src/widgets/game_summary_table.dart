@@ -5,8 +5,10 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// A reusable table displaying game summary with player names, result, and analysis statistics.
@@ -14,13 +16,25 @@ import 'package:url_launcher/url_launcher.dart';
 /// Shows player names, game result, accuracy, inaccuracies, mistakes, blunders, and ACPL
 /// in a formatted table layout.
 class GameSummaryTable extends StatelessWidget {
-  const GameSummaryTable({required this.pgnHeaders, required this.playersAnalysis, super.key});
+  const GameSummaryTable({
+    required this.pgnHeaders,
+    required this.playersAnalysis,
+    this.whiteUser,
+    this.blackUser,
+    super.key,
+  });
 
   /// PGN headers containing player names, titles, and result
   final IMap<String, String> pgnHeaders;
 
   /// White and Black player's analysis summary
   final PlayersAnalysis playersAnalysis;
+
+  /// White player's lichess user, when known
+  final LightUser? whiteUser;
+
+  /// Black player's lichess user, when known
+  final LightUser? blackUser;
 
   @override
   Widget build(BuildContext context) {
@@ -47,11 +61,11 @@ class GameSummaryTable extends StatelessWidget {
                   border: Border(bottom: BorderSide(color: Colors.grey)),
                 ),
                 children: [
-                  _SummaryPlayerName(.white, pgnHeaders),
+                  _SummaryPlayerName(.white, pgnHeaders, whiteUser),
                   Center(
                     child: Text(result, style: const TextStyle(fontWeight: .bold)),
                   ),
-                  _SummaryPlayerName(.black, pgnHeaders),
+                  _SummaryPlayerName(.black, pgnHeaders, blackUser),
                 ],
               ),
 
@@ -147,9 +161,10 @@ class _SummaryNumber extends StatelessWidget {
 }
 
 class _SummaryPlayerName extends StatelessWidget {
-  const _SummaryPlayerName(this.side, this.pgnHeaders);
+  const _SummaryPlayerName(this.side, this.pgnHeaders, this.user);
   final Side side;
   final IMap<String, String> pgnHeaders;
+  final LightUser? user;
 
   @override
   Widget build(BuildContext context) {
@@ -161,6 +176,29 @@ class _SummaryPlayerName extends StatelessWidget {
         : pgnHeaders.get('Black') ?? context.l10n.black;
 
     final brightness = Theme.of(context).brightness;
+
+    final nameText = Text.rich(
+      TextSpan(
+        children: [
+          if (playerTitle != null)
+            TextSpan(
+              text: '$playerTitle ',
+              style: TextStyle(
+                fontWeight: .bold,
+                color: playerTitle == 'BOT'
+                    ? context.lichessColors.fancy
+                    : context.lichessColors.brag,
+              ),
+            ),
+          TextSpan(
+            text: playerName,
+            style: const TextStyle(fontWeight: .bold),
+          ),
+        ],
+      ),
+      textAlign: .center,
+      softWrap: true,
+    );
 
     return TableCell(
       verticalAlignment: .top,
@@ -179,28 +217,13 @@ class _SummaryPlayerName extends StatelessWidget {
                     : CupertinoIcons.circle,
                 size: 14,
               ),
-              Text.rich(
-                TextSpan(
-                  children: [
-                    if (playerTitle != null)
-                      TextSpan(
-                        text: '$playerTitle ',
-                        style: TextStyle(
-                          fontWeight: .bold,
-                          color: playerTitle == 'BOT'
-                              ? context.lichessColors.fancy
-                              : context.lichessColors.brag,
-                        ),
-                      ),
-                    TextSpan(
-                      text: playerName,
-                      style: const TextStyle(fontWeight: .bold),
-                    ),
-                  ],
-                ),
-                textAlign: .center,
-                softWrap: true,
-              ),
+              if (user != null)
+                GestureDetector(
+                  onTap: () => Navigator.of(context).push(UserOrProfileScreen.buildRoute(user!)),
+                  child: nameText,
+                )
+              else
+                nameText,
             ],
           ),
         ),

@@ -360,6 +360,8 @@ class _Body extends ConsumerWidget {
               serverAnalysisSource: analysisState.serverAnalysisSource,
               playersAnalysis: analysisState.playersAnalysis,
               pgnHeaders: analysisState.pgnHeaders,
+              whiteUser: analysisState.archivedGame?.white.user,
+              blackUser: analysisState.archivedGame?.black.user,
               acplChartParams: analysisState.acplChartData != null
                   ? (
                       acplChartData: analysisState.acplChartData!,
