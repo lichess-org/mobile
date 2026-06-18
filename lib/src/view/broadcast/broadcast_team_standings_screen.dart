@@ -355,9 +355,7 @@ class _BroadcastTeamStandingRow extends StatelessWidget {
         ),
       ),
       onTap: () {
-        Navigator.of(
-          context,
-        ).push(BroadcastTeamScreen.buildRoute(context, tournamentId, team.name));
+        Navigator.of(context).push(BroadcastTeamScreen.buildRoute(tournamentId, team.name));
       },
     );
   }
