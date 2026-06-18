@@ -46,7 +46,11 @@ final studyControllerProvider = AsyncNotifierProvider.autoDispose
 enum ChapterServerAnalysisStatus { canRequest, notEnoughMoves, notWriteable, available }
 
 class StudyController extends AsyncNotifier<StudyState>
-    with EngineEvaluationMixin, ServerAnalysisMixin, ChatMixin, OpeningExplorerMixin<StudyState>
+    with
+        EngineEvaluationMixin,
+        ServerAnalysisMixin,
+        ChatMixin<StudyState>,
+        OpeningExplorerMixin<StudyState>
     implements PgnTreeNotifier {
   StudyController(this.options);
 
