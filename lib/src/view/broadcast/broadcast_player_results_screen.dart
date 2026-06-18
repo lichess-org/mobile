@@ -302,7 +302,7 @@ class _OverallStatPlayer extends StatelessWidget {
                           Expanded(
                             child: Row(
                               children: [
-                                Image.asset('assets/images/fide-fed/$federation.png', height: 12),
+                                Image.asset('assets/images/fide-fed/$federation.webp', height: 12),
                                 const SizedBox(width: 5),
                                 Flexible(
                                   child: Text(
@@ -543,7 +543,7 @@ class _GameResultListTile extends StatelessWidget {
           ? Row(
               mainAxisSize: .min,
               children: [
-                Image.asset('assets/images/fide-fed/$federation.png', height: 12),
+                Image.asset('assets/images/fide-fed/$federation.webp', height: 12),
                 const SizedBox(width: 5),
                 if (rating != null) Text(rating.toString()),
               ],
