@@ -804,7 +804,7 @@ sealed class StudyState
       : null;
 
   @override
-  bool get chatEnabled => true;
+  bool get chatEnabled => study.chat != null;
 }
 
 @freezed
