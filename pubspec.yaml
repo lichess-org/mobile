@@ -143,7 +143,7 @@ flutter_native_splash:
   web: false
 
   color: "#ffffff"
-  image: assets/images/logo-black.png
+  image: assets/images/logo-black.webp
 
   color_dark: "#000000"
-  image_dark: assets/images/logo-white.png
+  image_dark: assets/images/logo-white.webp

@@ -159,7 +159,7 @@ class WaitingForServerAnalysis extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.max,
       children: [
-        Image.asset('assets/images/stockfish/icon.png', width: 30, height: 30),
+        Image.asset('assets/images/stockfish/icon.webp', width: 30, height: 30),
         const SizedBox(width: 8.0),
         Text(context.l10n.waitingForAnalysis),
         const SizedBox(width: 8.0),

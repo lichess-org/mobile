@@ -472,7 +472,7 @@ class _Player extends ConsumerWidget {
     if (isStockfish) {
       return Row(
         children: [
-          Image.asset('assets/images/stockfish/icon.png', width: 44, height: 44),
+          Image.asset('assets/images/stockfish/icon.webp', width: 44, height: 44),
           const SizedBox(width: 8),
           Expanded(
             child: Column(
