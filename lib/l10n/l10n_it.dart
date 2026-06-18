@@ -85,6 +85,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileOkButton => 'Ok';
 
   @override
+  String get mobileOtbBoardView => 'Board view';
+
+  @override
   String get mobileOverTheBoard => 'Gioca offline';
 
   @override

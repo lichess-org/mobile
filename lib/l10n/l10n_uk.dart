@@ -85,6 +85,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileOkButton => 'Гаразд';
 
   @override
+  String get mobileOtbBoardView => 'Board view';
+
+  @override
   String get mobileOverTheBoard => 'За дошкою';
 
   @override

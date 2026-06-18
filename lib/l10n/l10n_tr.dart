@@ -85,6 +85,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileOkButton => 'Tamam';
 
   @override
+  String get mobileOtbBoardView => 'Board view';
+
+  @override
   String get mobileOverTheBoard => 'Tahta üzerinde çevrimdışı oyna';
 
   @override
