@@ -309,18 +309,23 @@ class StudyController extends AsyncNotifier<StudyState>
     onUserMove(state.requireValue.currentNode.children.first);
   }
 
-  void userPrevious() {
+  void userPrevious({bool fastSeek = false}) {
     if (state.hasValue) {
-      _setPath(state.requireValue.currentPath.penultimate, isNavigating: true);
+      _setPath(
+        state.requireValue.currentPath.penultimate,
+        isNavigating: true,
+        keepCollapsed: fastSeek,
+      );
     }
   }
 
-  void userNext() {
+  void userNext({bool fastSeek = false}) {
     final state = this.state.value;
     if (state!.currentNode.children.isEmpty) return;
     _setPath(
       state.currentPath + _root.nodeAt(state.currentPath).children.first.id,
       isNavigating: true,
+      keepCollapsed: fastSeek,
     );
   }
 
@@ -458,12 +463,23 @@ class StudyController extends AsyncNotifier<StudyState>
 
     /// Whether the user is navigating through the moves (as opposed to playing a move).
     bool isNavigating = false,
+    bool keepCollapsed = false,
   }) {
     final state = this.state.value;
     if (state == null) return;
 
     final pathChange = state.currentPath != path;
     final (currentNode, branchOpening) = nodeOpeningAt(_root, path);
+
+    bool pathWasExpanded = false;
+    if (pathChange && !keepCollapsed) {
+      for (final child in currentNode.children) {
+        if (child.isCollapsed) {
+          child.isCollapsed = false;
+          pathWasExpanded = true;
+        }
+      }
+    }
 
     // always show variation if the user plays a move
     if (shouldForceShowVariation && currentNode is Branch && currentNode.isCollapsed) {
@@ -475,7 +491,9 @@ class StudyController extends AsyncNotifier<StudyState>
     // root view is only used to display move list, so we need to
     // recompute the root view only when the nodelist length changes
     // or a variation is hidden/shown
-    final rootView = shouldForceShowVariation || shouldRecomputeRootView ? _root.view : state.root;
+    final rootView = shouldForceShowVariation || shouldRecomputeRootView || pathWasExpanded
+        ? _root.view
+        : state.root;
 
     final isForward = path.size > state.currentPath.size;
     if (currentNode is Branch) {

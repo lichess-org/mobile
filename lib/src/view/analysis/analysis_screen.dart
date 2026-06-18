@@ -512,7 +512,7 @@ class _BottomBar extends ConsumerWidget {
             },
           ),
         RepeatButton(
-          onLongPress: analysisState.canGoBack ? () => _moveBackward(ref) : null,
+          onLongPress: analysisState.canGoBack ? () => _moveBackward(ref, fastSeek: true) : null,
           child: BottomBarButton(
             key: const ValueKey('goto-previous'),
             onTap: analysisState.canGoBack ? () => _moveBackward(ref) : null,
@@ -522,7 +522,7 @@ class _BottomBar extends ConsumerWidget {
           ),
         ),
         RepeatButton(
-          onLongPress: analysisState.canGoNext ? () => _moveForward(ref) : null,
+          onLongPress: analysisState.canGoNext ? () => _moveForward(ref, fastSeek: true) : null,
           child: BottomBarButton(
             key: const ValueKey('goto-next'),
             icon: CupertinoIcons.chevron_forward,
@@ -535,11 +535,11 @@ class _BottomBar extends ConsumerWidget {
     );
   }
 
-  void _moveForward(WidgetRef ref) =>
-      ref.read(analysisControllerProvider(options).notifier).userNext();
+  void _moveForward(WidgetRef ref, {bool fastSeek = false}) =>
+      ref.read(analysisControllerProvider(options).notifier).userNext(fastSeek: fastSeek);
 
-  void _moveBackward(WidgetRef ref) =>
-      ref.read(analysisControllerProvider(options).notifier).userPrevious();
+  void _moveBackward(WidgetRef ref, {bool fastSeek = false}) =>
+      ref.read(analysisControllerProvider(options).notifier).userPrevious(fastSeek: fastSeek);
 
   Future<void> _showAnalysisMenu(BuildContext context, WidgetRef ref) {
     final analysisState = ref.read(analysisControllerProvider(options)).requireValue;
