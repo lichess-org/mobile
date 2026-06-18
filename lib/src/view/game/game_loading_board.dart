@@ -445,7 +445,7 @@ class _GameParamsDisplay extends StatelessWidget {
 class StandaloneGameLoadingContent extends StatelessWidget {
   const StandaloneGameLoadingContent({this.loadingParam, this.userActionsBar, super.key});
 
-  final LoadingPosition? loadingParam;
+  final LoadingParam? loadingParam;
   final Widget? userActionsBar;
 
   @override

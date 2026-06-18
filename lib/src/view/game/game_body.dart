@@ -43,7 +43,7 @@ import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
-typedef LoadingPosition = ({String? fen, Move? lastMove, Side? orientation});
+typedef LoadingParam = ({String? fen, Move? lastMove, Side? orientation});
 
 const _kGameEndDialogDelay = Duration(milliseconds: 500);
 
@@ -69,7 +69,7 @@ class GameBody extends ConsumerWidget {
 
   final GameFullId gameId;
 
-  final LoadingPosition? loadingPosition;
+  final LoadingParam? loadingPosition;
 
   /// [GlobalKey] for the white clock.
   ///
