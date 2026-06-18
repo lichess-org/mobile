@@ -352,6 +352,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
         .timeout(const Duration(seconds: 3))
         .onError((_, _) {})
         .whenComplete(() {
+          if (!ref.mounted) return;
           if (state.requireValue.isEngineAvailable(evaluationPrefs)) {
             requestEval();
           } else if (options case ActiveCorrespondenceGame(:final gameFullId)) {

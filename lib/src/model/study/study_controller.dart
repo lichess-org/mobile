@@ -227,6 +227,7 @@ class StudyController extends AsyncNotifier<StudyState>
 
     if (state.requireValue.isEngineAvailable(evaluationPrefs)) {
       socketClient.firstConnection.then((_) {
+        if (!ref.mounted) return;
         requestEval();
       });
     }
