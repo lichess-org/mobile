@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_player.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
-import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
@@ -41,6 +40,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
@@ -121,9 +121,23 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
       case AsyncData(:final value):
         Widget appBarTitle;
         if (value.archivedGame != null) {
-          final title =
-              '${value.archivedGame!.data.clockDisplay(context.l10n)} • ${value.archivedGame!.meta.speed.label(context.l10n)} • ${value.archivedGame!.meta.rated ? context.l10n.rated : context.l10n.casual}';
-          appBarTitle = VariantAppBarTitle(variant: value.variant, title: title);
+          final meta = value.archivedGame!.meta;
+          // On mobile space is constrained, so unlike the web we omit the speed for standard chess
+          final isStandardVariant = value.variant == .standard || value.variant == .fromPosition;
+          final ratedOrCasual = meta.rated ? context.l10n.rated : context.l10n.casual;
+          final clockDisplay = value.archivedGame!.data.clockDisplay(context.l10n);
+          final title = isStandardVariant
+              ? '$clockDisplay • $ratedOrCasual'
+              : '$clockDisplay • $ratedOrCasual • ${value.variant.label(context.l10n)}';
+          final icon = isStandardVariant ? meta.speed.icon : value.variant.icon;
+          appBarTitle = Row(
+            mainAxisSize: .min,
+            children: [
+              Icon(icon),
+              const SizedBox(width: 5.0),
+              Flexible(child: AppBarTitleText(title)),
+            ],
+          );
         } else {
           appBarTitle = VariantAppBarTitle(variant: value.variant, title: context.l10n.analysis);
         }
@@ -329,11 +343,13 @@ class _Body extends ConsumerWidget {
             pov: pov,
             isComputerAnalysisAllowed: analysisState.isComputerAnalysisAllowed,
             position: currentNode.position,
-            opening: kOpeningAllowedVariants.contains(analysisState.variant)
-                ? analysisState.currentNode.isRoot
-                      ? LightOpening(eco: '', name: context.l10n.startPosition)
-                      : analysisState.currentNode.opening ?? analysisState.currentBranchOpening
-                : null,
+            opening: explorerOpening(
+              context,
+              variant: analysisState.variant,
+              isRootNode: analysisState.currentNode.isRoot,
+              nodeOpening: analysisState.currentNode.opening,
+              branchOpening: analysisState.currentBranchOpening,
+            ),
             onMoveSelected: (move) {
               ref.read(ctrlProvider.notifier).onUserMove(move);
             },
@@ -344,6 +360,8 @@ class _Body extends ConsumerWidget {
               serverAnalysisSource: analysisState.serverAnalysisSource,
               playersAnalysis: analysisState.playersAnalysis,
               pgnHeaders: analysisState.pgnHeaders,
+              whiteUser: analysisState.archivedGame?.white.user,
+              blackUser: analysisState.archivedGame?.black.user,
               acplChartParams: analysisState.acplChartData != null
                   ? (
                       acplChartData: analysisState.acplChartData!,

@@ -760,6 +760,7 @@ class GameController extends AsyncNotifier<GameState> {
 
         if (curState.game.lastPosition.fullmoves > 1) {
           Timer(const Duration(milliseconds: 500), () {
+            if (!ref.mounted) return;
             ref.read(soundServiceProvider).play(Sound.dong);
           });
         }
@@ -775,7 +776,6 @@ class GameController extends AsyncNotifier<GameState> {
           _getPostGameData()
               .then((data) {
                 if (!ref.mounted) return;
-
                 final game = _mergePostGameData(state.requireValue.game, data);
                 state = AsyncValue.data(state.requireValue.copyWith(game: game));
                 _storeGame(game);

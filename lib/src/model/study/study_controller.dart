@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_summary.dart';
 import 'package:lichess_mobile/src/model/analysis/common_analysis_state.dart';
+import 'package:lichess_mobile/src/model/analysis/opening_explorer_mixin.dart';
 import 'package:lichess_mobile/src/model/analysis/server_analysis_mixin.dart';
 import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
@@ -44,7 +45,7 @@ final studyControllerProvider = AsyncNotifierProvider.autoDispose
 enum ChapterServerAnalysisStatus { canRequest, notEnoughMoves, notWriteable, available }
 
 class StudyController extends AsyncNotifier<StudyState>
-    with EngineEvaluationMixin, ServerAnalysisMixin
+    with EngineEvaluationMixin, ServerAnalysisMixin, OpeningExplorerMixin<StudyState>
     implements PgnTreeNotifier {
   StudyController(this.options);
 
@@ -65,6 +66,11 @@ class StudyController extends AsyncNotifier<StudyState>
   @override
   @protected
   Root get positionTree => _root;
+
+  // Studies with an illegal starting position do not build a position tree, so
+  // there is nothing to fetch openings for in that case.
+  @override
+  bool get canFetchMainlineOpenings => state.value?.root != null;
 
   @override
   Future<StudyState> build() async {
@@ -99,6 +105,17 @@ class StudyController extends AsyncNotifier<StudyState>
     );
   }
 
+  @override
+  void refreshCurrentBranchOpening() {
+    final curState = state.requireValue;
+    state = AsyncData(
+      curState.copyWith(
+        currentNode: StudyCurrentNode.fromNode(_root.nodeAt(curState.currentPath)),
+        currentBranchOpening: currentBranchOpeningAt(curState.currentPath),
+      ),
+    );
+  }
+
   Future<void> nextChapter() async {
     if (state.hasValue) {
       final chapters = state.requireValue.study.chapters;
@@ -111,6 +128,9 @@ class StudyController extends AsyncNotifier<StudyState>
 
   Future<void> goToChapter(StudyChapterId chapterId) async {
     await _fetchChapter(state.requireValue.study.id, chapterId: chapterId);
+    // Switching chapters does not re-run [runBuild], so fetch the new mainline's
+    // openings explicitly here.
+    if (state.hasValue) initMainlineOpenings();
     _ensureItsOurTurnIfGamebook();
   }
 
@@ -184,6 +204,7 @@ class StudyController extends AsyncNotifier<StudyState>
       isOnMainline: true,
       root: _root.view,
       currentNode: StudyCurrentNode.fromNode(_root),
+      currentBranchOpening: currentBranchOpeningAt(currentPath),
       evaluationContext: EvaluationContext(
         id: study.chapter.id,
         variant: variant,
@@ -206,6 +227,7 @@ class StudyController extends AsyncNotifier<StudyState>
 
     if (state.requireValue.isEngineAvailable(evaluationPrefs)) {
       socketClient.firstConnection.then((_) {
+        if (!ref.mounted) return;
         requestEval();
       });
     }
@@ -441,7 +463,7 @@ class StudyController extends AsyncNotifier<StudyState>
     if (state == null) return;
 
     final pathChange = state.currentPath != path;
-    final currentNode = _root.nodeAt(path);
+    final (currentNode, branchOpening) = nodeOpeningAt(_root, path);
 
     // always show variation if the user plays a move
     if (shouldForceShowVariation && currentNode is Branch && currentNode.isCollapsed) {
@@ -476,11 +498,14 @@ class StudyController extends AsyncNotifier<StudyState>
         }
       }
 
+      maybeFetchOpeningAt(currentNode, path);
+
       this.state = AsyncValue.data(
         state.copyWith(
           currentPath: path,
           isOnMainline: _root.isOnMainline(path),
           currentNode: StudyCurrentNode.fromNode(currentNode),
+          currentBranchOpening: branchOpening,
           lastMove: currentNode.sanMove.move,
           root: rootView,
         ),
@@ -491,6 +516,7 @@ class StudyController extends AsyncNotifier<StudyState>
           currentPath: path,
           isOnMainline: _root.isOnMainline(path),
           currentNode: StudyCurrentNode.fromNode(currentNode),
+          currentBranchOpening: branchOpening,
           lastMove: null,
           root: rootView,
         ),
@@ -531,7 +557,8 @@ sealed class StudyState
         _$StudyState,
         AnalysisExplosionMixin,
         EvaluationMixinState<StudyState>,
-        ServerAnalysisMixinState
+        ServerAnalysisMixinState,
+        OpeningExplorerMixinState
     implements CommonAnalysisState {
   const StudyState._();
 
@@ -584,6 +611,9 @@ sealed class StudyState
 
     /// The last move played.
     Move? lastMove,
+
+    /// The opening of the current branch, if any.
+    Opening? currentBranchOpening,
 
     /// The PGN root comments of the study
     IList<PgnComment>? pgnRootComments,
@@ -723,6 +753,7 @@ sealed class StudyCurrentNode with _$StudyCurrentNode implements AnalysisCurrent
     required List<Move> children,
     required bool isRoot,
     SanMove? sanMove,
+    Opening? opening,
     IList<PgnComment>? startingComments,
     IList<PgnComment>? comments,
     IList<int>? nags,
@@ -742,6 +773,7 @@ sealed class StudyCurrentNode with _$StudyCurrentNode implements AnalysisCurrent
         isRoot: false,
         children: children,
         eval: node.eval,
+        opening: node.opening,
         startingComments: IList(node.startingComments),
         comments: IList(node.comments),
         nags: IList(node.nags),
@@ -751,6 +783,7 @@ sealed class StudyCurrentNode with _$StudyCurrentNode implements AnalysisCurrent
         position: node.position,
         children: children,
         eval: node.eval,
+        opening: node.opening,
         isRoot: true,
       );
     }

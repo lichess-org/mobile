@@ -20,6 +20,16 @@ final client = MockClient((request) {
   return mockResponse('', 404);
 });
 
+final zeroGamesClient = MockClient((request) {
+  if (request.url.path == '/api/user/${fakeUser.id}/perf/${testPerf.name}') {
+    return mockResponse(userPerfStatsZeroGamesResponse, 200);
+  }
+  if (request.url.path == '/api/user/${fakeUser.id}/rating-history') {
+    return mockResponse('[]', 200);
+  }
+  return mockResponse('', 404);
+});
+
 void main() {
   group('PerfStatsScreen', () {
     testWidgets('meets accessibility guidelines', (WidgetTester tester) async {
@@ -84,10 +94,63 @@ void main() {
         expect(find.widgetWithText(Card, val), findsAtLeastNWidgets(1));
       }
     }, variant: kPlatformVariant);
+
+    testWidgets('a perf with zero games does not crash the stat columns', (
+      WidgetTester tester,
+    ) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: PerfStatsScreen(user: fakeUser, perf: testPerf),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith((ref) {
+            return LichessClient(zeroGamesClient, ref);
+          }),
+        },
+      );
+
+      await tester.pumpWidget(app);
+
+      // wait for auth state and perf stats
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.byType(ErrorWidget), findsNothing);
+      expect(find.text('0%'), findsWidgets);
+    }, variant: kPlatformVariant);
   });
 }
 
 const testPerf = Perf.rapid;
+final userPerfStatsZeroGamesResponse =
+    '''
+{
+  "user": { "name": "${fakeUser.username}" },
+  "perf": {
+    "glicko": { "rating": 1837.0, "deviation": 215.18, "provisional": true },
+    "nb": 0,
+    "progress": 40
+  },
+  "rank": null,
+  "percentile": null,
+  "stat": {
+    "count": {
+      "berserk": 0, "win": 0, "all": 0, "seconds": 0,
+      "opAvg": null, "draw": 0, "tour": 0, "disconnects": 0,
+      "rated": 0, "loss": 0
+    },
+    "resultStreak": {
+      "win": { "cur": {"v": 0}, "max": {"v": 0} },
+      "loss": { "cur": {"v": 0}, "max": {"v": 0} }
+    },
+    "playStreak": {
+      "nb": { "cur": {"v": 0}, "max": {"v": 0} },
+      "time": { "cur": {"v": 0}, "max": {"v": 0} }
+    },
+    "worstLosses": { "results": [] },
+    "bestWins": { "results": [] }
+  }
+}
+''';
 final userPerfStatsResponse =
     '''
 {
