@@ -108,9 +108,15 @@ sealed class ChatState with _$ChatState {
   }) = _ChatState;
 }
 
-/// Interface for Notifiers's State that uses [ChatMixin].
+/// Interface for a Notifier's State that uses [ChatMixin].
 mixin ChatMixinState {
+  /// The current chat state, or `null` when the entity has no chat (e.g. a game
+  /// or study without a chat room).
   ChatState? get chatState;
+
+  /// Whether chat is currently enabled for the entity.
+  ///
+  /// Must imply [chatState] is non-null when `true`.
   bool get chatEnabled;
 }
 
@@ -127,6 +133,7 @@ final chatProvider = FutureProvider.autoDispose.family<ChatState?, ChatOptions>(
   name: 'ChatProvider',
 );
 
+/// A provider that gets the [ChatMixin] notifier for the given chat.
 final chatNotifierProvider = Provider.autoDispose.family<ChatMixin, ChatOptions>(
   (ref, options) => ref.read(switch (options) {
     GameChatOptions(:final id) => gameControllerProvider(id).notifier,
@@ -145,18 +152,40 @@ final chatUnreadProvider = FutureProvider.autoDispose.family<int, ChatOptions>((
   return (await ref.watch(chatProvider(options).future))?.unreadMessages ?? 0;
 }, name: 'ChatUnreadProvider');
 
+/// A mixin to provide chat functionality to an [AsyncNotifier].
+///
+/// The parent must implement the following:
+/// - [chatId] to identify the chat for read-state persistence.
+/// - [chatReportResource] to identify the resource when reporting a message.
+/// - [chatIsPublic] to tell whether the chat is public (no message notification sound).
+/// - [updateChatState] to write a new [ChatState] back into the notifier's state.
+///
+/// The notifier's state must expose its [ChatState] via [ChatMixinState], and
+/// the parent is responsible for calling [handleSocketEvent] with incoming
+/// socket events.
 mixin ChatMixin<T extends ChatMixinState> on AnyNotifier<AsyncValue<T>, T> {
+  /// Identifies the chat, used as the key for persisting the read-messages count.
   @protected
   StringId get chatId;
 
+  /// The resource reported alongside a flagged message (see [reportMessage]).
   @protected
   String get chatReportResource;
 
+  /// Whether the chat is public.
+  ///
+  /// Private chats play a notification sound on incoming messages; public chats
+  /// do not.
   @protected
   bool get chatIsPublic;
 
   LightUser? get _me => ref.read(authControllerProvider)?.user;
 
+  /// Builds the initial [ChatState] from [initialData].
+  ///
+  /// Returns `null` when [initialData] is `null` (the entity has no chat).
+  /// Filters out messages that should not be displayed and computes the unread
+  /// count from the persisted read-messages count.
   @protected
   Future<ChatState?> initChat(ChatData? initialData) async {
     if (initialData == null) {
@@ -171,9 +200,13 @@ mixin ChatMixin<T extends ChatMixinState> on AnyNotifier<AsyncValue<T>, T> {
     );
   }
 
+  /// Writes [newState] back into the notifier's state.
   void updateChatState(ChatState newState);
 
+  /// Called when the screen regains focus.
   void onFocusRegained() {}
+
+  /// Called when the app goes to the background.
   void onForegroundLost() {}
 
   /// Sends a message to the chat.
@@ -181,6 +214,9 @@ mixin ChatMixin<T extends ChatMixinState> on AnyNotifier<AsyncValue<T>, T> {
     ref.read(socketPoolProvider).currentClient.send('talk', message);
   }
 
+  /// Reports [message] to moderation.
+  ///
+  /// Throws an [ArgumentError] if the message has no username.
   Future<void> reportMessage(ChatMessage message) async {
     final username = message.username;
     if (username == null) {
@@ -235,6 +271,10 @@ mixin ChatMixin<T extends ChatMixinState> on AnyNotifier<AsyncValue<T>, T> {
     }, conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
+  /// Handles an incoming chat socket [event].
+  ///
+  /// Appends new messages to the chat state and updates the unread count. Does
+  /// nothing when chat is disabled, not initialized, or in kid mode.
   @protected
   @mustCallSuper
   void handleSocketEvent(SocketEvent event) {
@@ -262,6 +302,7 @@ mixin ChatMixin<T extends ChatMixinState> on AnyNotifier<AsyncValue<T>, T> {
     }
   }
 
+  /// Updates the text of the chat input field.
   void setInputText(String text) {
     final chatState = state.value?.chatState;
     if (chatState == null) return;
