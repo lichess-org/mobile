@@ -646,6 +646,9 @@ void main() {
         },
       );
 
+      // First frame mounts the game controller (which opens the game socket),
+      // the lag pump lets it connect before the server sends the full event.
+      await tester.pump();
       await tester.pump(kFakeWebSocketConnectionLag);
 
       sendServerSocketMessages(Uri(path: '/watch/${ongoingGame.id.value}/white/v6'), [
@@ -787,7 +790,9 @@ void main() {
         },
       );
 
-      // Wait a frame for the async getCurrentGame lookup to complete
+      // Wait a frame for the async getCurrentGame lookup to complete, then a
+      // frame for the game controller to mount and open the game socket.
+      await tester.pump();
       await tester.pump();
 
       sendServerSocketMessages(Uri(path: '/watch/${testGame.id.value}/white/v6'), [
@@ -851,6 +856,10 @@ void main() {
           }),
         },
       );
+      // First frame resolves the channel and mounts the game controller, which
+      // opens the game socket; the lag pump lets it connect before the server
+      // sends the full event.
+      await tester.pump();
       await tester.pump(kFakeWebSocketConnectionLag);
       sendServerSocketMessages(Uri(path: '/watch/v3pIFdTz/white/v6'), [
         makeFullEvent(

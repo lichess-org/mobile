@@ -14,7 +14,7 @@ import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/study/study_controller.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_controller.dart';
-import 'package:lichess_mobile/src/model/tv/tv_controller.dart';
+import 'package:lichess_mobile/src/model/tv/tv_game_controller.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
@@ -55,11 +55,11 @@ abstract class GameChatOptions extends ChatOptions with _$GameChatOptions {
 @freezed
 abstract class TvChatOptions extends ChatOptions with _$TvChatOptions {
   const TvChatOptions._();
-  const factory TvChatOptions(
-    TvControllerParams params, {
-    required GameId id,
-    required bool writeable,
-  }) = _TvChatOptions;
+  const factory TvChatOptions(TvGameControllerParams params, {required bool writeable}) =
+      _TvChatOptions;
+
+  @override
+  GameId get id => params.gameId;
 
   @override
   LightUser? get opponent => null;
@@ -121,7 +121,7 @@ final chatProvider = FutureProvider.autoDispose.family<ChatState?, ChatOptions>(
       GameChatOptions(:final id) => gameControllerProvider(id),
       TournamentChatOptions(:final id) => tournamentControllerProvider(id),
       StudyChatOptions(:final options) => studyControllerProvider(options),
-      TvChatOptions(:final params) => tvControllerProvider(params),
+      TvChatOptions(:final params) => tvGameControllerProvider(params),
     }.selectAsync((state) => state.chatState),
   ),
   name: 'ChatProvider',
@@ -132,7 +132,7 @@ final chatNotifierProvider = Provider.autoDispose.family<ChatMixin, ChatOptions>
     GameChatOptions(:final id) => gameControllerProvider(id).notifier,
     TournamentChatOptions(:final id) => tournamentControllerProvider(id).notifier,
     StudyChatOptions(:final options) => studyControllerProvider(options).notifier,
-    TvChatOptions(:final params) => tvControllerProvider(params).notifier,
+    TvChatOptions(:final params) => tvGameControllerProvider(params).notifier,
   }),
   name: 'ChatNotifierProvider',
 );
