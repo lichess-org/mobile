@@ -59,7 +59,7 @@ class QuickGameMatrix extends ConsumerWidget {
               ? BoxDecoration(
                   image: DecorationImage(
                     colorFilter: ColorFilter.mode(logoColor, BlendMode.modulate),
-                    image: const AssetImage('assets/images/logo-transp.png'),
+                    image: const AssetImage('assets/images/logo-transp.webp'),
                     fit: BoxFit.contain,
                   ),
                 )
