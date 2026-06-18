@@ -656,6 +656,7 @@ class _BottomBar extends ConsumerWidget {
                 BoardEditorScreen.buildRoute((
                   initialVariant: analysisState.variant,
                   initialFen: boardFen,
+                  initialOrientation: null,
                 )),
               );
             },

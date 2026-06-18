@@ -8,7 +8,11 @@ import 'package:lichess_mobile/src/model/common/chess960.dart';
 
 part 'board_editor_controller.freezed.dart';
 
-typedef BoardEditorControllerParams = ({Variant initialVariant, String? initialFen});
+typedef BoardEditorControllerParams = ({
+  Variant initialVariant,
+  String? initialFen,
+  Side? initialOrientation,
+});
 
 /// A provider for [BoardEditorController].
 final boardEditorControllerProvider = NotifierProvider.autoDispose
@@ -32,7 +36,7 @@ class BoardEditorController extends Notifier<BoardEditorState> {
     final pieces = readFen(fen).lock;
 
     return BoardEditorState(
-      orientation: Side.white,
+      orientation: params?.initialOrientation ?? Side.white,
       sideToPlay: setup.turn,
       variant: variant,
       pieces: pieces,

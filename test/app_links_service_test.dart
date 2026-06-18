@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app_links/app_links.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_riverpod/misc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
+import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/app_links_service.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
@@ -23,7 +25,9 @@ import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_results_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
@@ -47,6 +51,8 @@ final _mockStalePuzzleJson = mockDailyPuzzleResponse.trim().replaceFirst(
   '"id":"0XqV2"',
   '"id":"stale1"',
 );
+
+class MockAppLinks extends Mock implements AppLinks {}
 
 class MockGameRepository extends Mock implements GameRepository {}
 
@@ -85,6 +91,25 @@ class _TestWidget extends ConsumerWidget {
       child: const Text('test link'),
     );
   }
+}
+
+/// Starts the [AppLinksService] when mounted, as the real app does at launch.
+class _ColdStartLauncher extends ConsumerStatefulWidget {
+  const _ColdStartLauncher();
+
+  @override
+  ConsumerState<_ColdStartLauncher> createState() => _ColdStartLauncherState();
+}
+
+class _ColdStartLauncherState extends ConsumerState<_ColdStartLauncher> {
+  @override
+  void initState() {
+    super.initState();
+    ref.read(appLinksServiceProvider).start();
+  }
+
+  @override
+  Widget build(BuildContext context) => const Scaffold(body: SizedBox.shrink());
 }
 
 Future<void> triggerAppLink(
@@ -287,6 +312,90 @@ void main() {
         isA<PuzzleScreen>().having((s) => s.puzzleId, 'id', '61044'),
       );
     });
+
+    testWidgets('resolves bare /editor to BoardEditorScreen with default position', (
+      WidgetTester tester,
+    ) async {
+      final uri = Uri.parse('https://lichess.org/editor');
+      await triggerAppLink(tester, uri);
+      await tester.pumpAndSettle();
+      expect(
+        tester.widget(find.byType(BoardEditorScreen)),
+        isA<BoardEditorScreen>()
+            .having((s) => s.params?.initialFen, 'initialFen', isNull)
+            .having((s) => s.params?.initialOrientation, 'orientation', Side.white),
+      );
+    });
+
+    testWidgets('resolves trailing-slash /editor/ to BoardEditorScreen with default position', (
+      WidgetTester tester,
+    ) async {
+      // /editor/ parses to an empty trailing path segment, so the reconstructed FEN is
+      // empty: it must fall back to the default position rather than fail validation.
+      final uri = Uri.parse('https://lichess.org/editor/?color=black');
+      await triggerAppLink(tester, uri);
+      await tester.pumpAndSettle();
+      expect(find.textContaining('Invalid FEN'), findsNothing);
+      expect(
+        tester.widget(find.byType(BoardEditorScreen)),
+        isA<BoardEditorScreen>()
+            .having((s) => s.params?.initialFen, 'initialFen', isNull)
+            .having((s) => s.params?.initialOrientation, 'orientation', Side.black),
+      );
+    });
+
+    testWidgets('resolves /editor/{fen} reconstructing the FEN from path segments', (
+      WidgetTester tester,
+    ) async {
+      // Ranks are split by '/' and metadata spaces are encoded as '_'.
+      final uri = Uri.parse(
+        'https://lichess.org/editor/rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR_w_KQkq_-_0_1',
+      );
+      await triggerAppLink(tester, uri);
+      await tester.pumpAndSettle();
+      expect(
+        tester.widget(find.byType(BoardEditorScreen)),
+        isA<BoardEditorScreen>()
+            .having(
+              (s) => s.params?.initialFen,
+              'initialFen',
+              'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1',
+            )
+            .having((s) => s.params?.initialOrientation, 'orientation', Side.white),
+      );
+    });
+
+    testWidgets('resolves /editor/{fen}?color=black with black orientation', (
+      WidgetTester tester,
+    ) async {
+      final uri = Uri.parse(
+        'https://lichess.org/editor/rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR_w_KQkq_-_0_1?color=black',
+      );
+      await triggerAppLink(tester, uri);
+      await tester.pumpAndSettle();
+      expect(
+        tester.widget(find.byType(BoardEditorScreen)),
+        isA<BoardEditorScreen>().having(
+          (s) => s.params?.initialOrientation,
+          'orientation',
+          Side.black,
+        ),
+      );
+    });
+
+    testWidgets(
+      'shows error snackbar but still opens editor with default position for invalid FEN',
+      (WidgetTester tester) async {
+        final uri = Uri.parse('https://lichess.org/editor/not-a-valid-fen');
+        await triggerAppLink(tester, uri);
+        await tester.pumpAndSettle();
+        expect(find.textContaining('Invalid FEN'), findsOneWidget);
+        expect(
+          tester.widget(find.byType(BoardEditorScreen)),
+          isA<BoardEditorScreen>().having((s) => s.params?.initialFen, 'initialFen', isNull),
+        );
+      },
+    );
 
     testWidgets('resolves /tournament/{id} to TournamentScreen route', (WidgetTester tester) async {
       final uri = Uri.parse('https://lichess.org/tournament/61044');
@@ -776,6 +885,51 @@ void main() {
 
       expect(find.byType(TvScreen), findsNothing);
       expect(find.text('Invalid TV channel: not-a-real-channel'), findsOneWidget);
+    });
+  });
+
+  group('start (deep link subscription)', () {
+    testWidgets('a cold-start link is handled exactly once', (tester) async {
+      // An invalid-FEN editor link shows a snackbar, and snackbars queue rather
+      // than dedup, so a double-handled link surfaces as a duplicate.
+      final coldStartUri = Uri.parse('https://lichess.org/editor/not-a-valid-fen');
+      final navigatorKey = GlobalKey<NavigatorState>();
+
+      final mockAppLinks = MockAppLinks();
+      // The stream emits the cold-start link as its first (and only) event.
+      when(() => mockAppLinks.uriLinkStream).thenAnswer((_) => Stream.value(coldStartUri));
+      // getInitialLink() also returns it, so handling it too would duplicate.
+      when(() => mockAppLinks.getInitialLink()).thenAnswer((_) async => coldStartUri);
+
+      final app = await makeTestProviderScope(
+        tester,
+        overrides: {
+          currentNavigatorKeyProvider: currentNavigatorKeyProvider.overrideWithValue(navigatorKey),
+          appLinksServiceProvider: appLinksServiceProvider.overrideWith((ref) {
+            final service = AppLinksService(ref, appLinks: mockAppLinks);
+            ref.onDispose(service.dispose);
+            return service;
+          }),
+        },
+        child: MaterialApp(
+          navigatorKey: navigatorKey,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          home: const _ColdStartLauncher(),
+        ),
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(BoardEditorScreen), findsOneWidget);
+      expect(find.textContaining('Invalid FEN'), findsOneWidget);
+      verifyNever(() => mockAppLinks.getInitialLink());
+
+      // Dismiss the current snackbar; a duplicate would surface behind it.
+      tester
+          .firstState<ScaffoldMessengerState>(find.byType(ScaffoldMessenger))
+          .removeCurrentSnackBar();
+      await tester.pumpAndSettle();
+      expect(find.textContaining('Invalid FEN'), findsNothing);
     });
   });
 }
