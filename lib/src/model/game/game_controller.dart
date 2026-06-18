@@ -97,7 +97,7 @@ class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> 
   bool get chatIsPublic => false;
 
   @override
-  Future<GameState> build() {
+  Future<GameState> build() async {
     _socketClient = _openSocket();
 
     _onFullReload = () {
@@ -116,50 +116,50 @@ class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> 
 
     _socketSubscription?.cancel();
     _socketSubscription = _socketClient.stream.listen(handleSocketEvent);
-    return _socketClient.stream.firstWhere((e) => e.topic == 'full').then((event) async {
-      final fullEvent = GameFullEvent.fromJson(event.data as Map<String, dynamic>);
-      _socketClient.version = fullEvent.socketEventVersion;
 
-      final game = fullEvent.game;
+    final rawFullEvent = await _socketClient.stream.firstWhere((e) => e.topic == 'full');
+    final fullEvent = GameFullEvent.fromJson(rawFullEvent.data as Map<String, dynamic>);
+    _socketClient.version = fullEvent.socketEventVersion;
 
-      // Play "dong" sound when this is a new game and we're playing it (not spectating)
-      final isMyGame = game.youAre != null;
-      final noMovePlayed = game.steps.length == 1;
-      if (isMyGame && noMovePlayed && game.status == GameStatus.started) {
-        ref.read(soundServiceProvider).play(Sound.dong);
-      }
+    final game = fullEvent.game;
 
-      if (game.clock != null) {
-        _clock = ChessClock(
-          whiteTime: game.clock!.white,
-          blackTime: game.clock!.black,
-          emergencyThreshold: game.meta.clock?.emergency,
-          onEmergency: onClockEmergency,
-          onFlag: onFlag,
-        );
-        if (game.clock!.running) {
-          final pos = game.lastPosition;
-          if (pos.fullmoves > 1) {
-            _clock!.startSide(pos.turn);
-          }
+    // Play "dong" sound when this is a new game and we're playing it (not spectating)
+    final isMyGame = game.youAre != null;
+    final noMovePlayed = game.steps.length == 1;
+    if (isMyGame && noMovePlayed && game.status == GameStatus.started) {
+      ref.read(soundServiceProvider).play(Sound.dong);
+    }
+
+    if (game.clock != null) {
+      _clock = ChessClock(
+        whiteTime: game.clock!.white,
+        blackTime: game.clock!.black,
+        emergencyThreshold: game.meta.clock?.emergency,
+        onEmergency: onClockEmergency,
+        onFlag: onFlag,
+      );
+      if (game.clock!.running) {
+        final pos = game.lastPosition;
+        if (pos.fullmoves > 1) {
+          _clock!.startSide(pos.turn);
         }
       }
+    }
 
-      if (game.finished) {
-        _onFinishedGameLoad(fullEvent.game);
-      }
+    if (game.finished) {
+      _onFinishedGameLoad(fullEvent.game);
+    }
 
-      _initialZenPref = game.prefs?.zenMode;
+    _initialZenPref = game.prefs?.zenMode;
 
-      return GameState(
-        gameFullId: gameFullId,
-        game: game,
-        stepCursor: game.steps.length - 1,
-        liveClock: _clock != null ? (white: _clock!.whiteTime, black: _clock!.blackTime) : null,
-        chatState: await initChat(game.chat),
-        chatDisabledViaPrefs: ref.read(gamePreferencesProvider).enableChat == false,
-      );
-    });
+    return GameState(
+      gameFullId: gameFullId,
+      game: game,
+      stepCursor: game.steps.length - 1,
+      liveClock: _clock != null ? (white: _clock!.whiteTime, black: _clock!.blackTime) : null,
+      chatState: await initChat(game.chat),
+      chatDisabledViaPrefs: ref.read(gamePreferencesProvider).enableChat == false,
+    );
   }
 
   @override
