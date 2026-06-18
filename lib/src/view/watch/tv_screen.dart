@@ -157,7 +157,7 @@ class _TvGameBody extends ConsumerWidget {
         );
 
         final kidModeAsync = ref.watch(kidModeProvider);
-        final canShowChat = channel == null && kidModeAsync.value == false;
+        final canShowChat = channel == null && gameState.chatEnabled && kidModeAsync.value == false;
 
         final authUser = ref.watch(authControllerProvider);
         final chatOptions = TvChatOptions(gameParams, writeable: authUser != null);
