@@ -706,6 +706,7 @@ class _GameBottomBar extends ConsumerWidget {
           isCorrespondence: game.meta.speed == Speed.correspondence,
           numPremoveLines: game.correspondenceForecast?.length,
           chatOptions: gameState.chatOptions,
+          chatAvailable: gameState.chatState != null,
         );
       }),
     );
@@ -713,7 +714,10 @@ class _GameBottomBar extends ConsumerWidget {
     if (data == null) return const BottomBar.empty();
 
     final canShowChat =
-        gamePrefs.enableChat == true && data.chatOptions != null && kidModeAsync.value == false;
+        gamePrefs.enableChat == true &&
+        data.chatOptions != null &&
+        data.chatAvailable &&
+        kidModeAsync.value == false;
     final numPremoveLines = data.numPremoveLines;
 
     return BottomBar(

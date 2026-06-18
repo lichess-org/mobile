@@ -199,10 +199,11 @@ mixin ChatMixin<T extends ChatMixinState> on AnyNotifier<AsyncValue<T>, T> {
 
   /// Resets the unread messages count to 0 and saves the number of read messages.
   Future<void> markMessagesAsRead() async {
-    if (state.hasValue) {
-      await _setReadMessagesCount(state.requireValue.chatState!.messages.length);
-      updateChatState(state.requireValue.chatState!.copyWith(unreadMessages: 0));
-    }
+    final chatState = state.value?.chatState;
+    if (chatState == null) return;
+    await _setReadMessagesCount(chatState.messages.length);
+    if (!ref.mounted) return;
+    updateChatState(chatState.copyWith(unreadMessages: 0));
   }
 
   IList<ChatMessage> _selectMessages(IList<ChatMessage> all) {
@@ -237,29 +238,33 @@ mixin ChatMixin<T extends ChatMixinState> on AnyNotifier<AsyncValue<T>, T> {
   @protected
   @mustCallSuper
   void handleSocketEvent(SocketEvent event) {
-    if (state.value?.chatEnabled != true) return;
+    final currentState = state.value;
+    final chatState = currentState?.chatState;
+    if (currentState?.chatEnabled != true || chatState == null) return;
     if (ref.read(kidModeProvider).value != false) return;
 
     if (event.topic == 'message') {
       final data = event.data as Map<String, dynamic>;
       final message = ChatMessage.fromJson(data);
 
-      final oldMessages = state.requireValue.chatState!.messages;
+      final oldMessages = chatState.messages;
       final newMessages = _selectMessages(oldMessages.add(message));
       final newUnread = newMessages.length - oldMessages.length;
       if (chatIsPublic == false && newUnread > 0) {
         ref.read(soundServiceProvider).play(Sound.confirmation, volume: 0.5);
       }
       updateChatState(
-        state.requireValue.chatState!.copyWith(
+        chatState.copyWith(
           messages: newMessages,
-          unreadMessages: state.requireValue.chatState!.unreadMessages + newUnread,
+          unreadMessages: chatState.unreadMessages + newUnread,
         ),
       );
     }
   }
 
   void setInputText(String text) {
-    updateChatState(state.requireValue.chatState!.copyWith(inputText: text));
+    final chatState = state.value?.chatState;
+    if (chatState == null) return;
+    updateChatState(chatState.copyWith(inputText: text));
   }
 }
