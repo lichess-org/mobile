@@ -132,6 +132,7 @@ class ContextMenuIconButton extends StatelessWidget {
             }
           },
           tooltip: semanticsLabel,
+          color: color,
           icon: icon,
           iconSize: isCompact ? 20.0 : null,
           style: isCompact
