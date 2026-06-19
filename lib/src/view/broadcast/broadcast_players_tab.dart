@@ -420,7 +420,8 @@ class BroadcastPlayerRow extends StatelessWidget {
         mainAxisSize: .min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          if (federation != null) Image.asset('assets/images/fide-fed/$federation.webp', height: 12),
+          if (federation != null)
+            Image.asset('assets/images/fide-fed/$federation.webp', height: 12),
           if (ratingsMap != null)
             Column(
               mainAxisAlignment: .start,
