@@ -53,7 +53,6 @@ import 'package:lichess_mobile/src/view/play/quick_game_matrix.dart';
 import 'package:lichess_mobile/src/view/settings/engine_settings_screen.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_list_screen.dart';
 import 'package:lichess_mobile/src/view/user/challenge_requests_screen.dart';
-import 'package:lichess_mobile/src/view/user/player_screen.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -410,11 +409,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                       titleTextStyle: Theme.of(context).platform == TargetPlatform.iOS
                           ? Theme.of(context).textTheme.headlineSmall
                           : null,
-                      actions: const [
-                        _ChallengeScreenButton(),
-                        _PlayerScreenButton(),
-                        AccountMenuButton(),
-                      ],
+                      actions: const [_ChallengeScreenButton(), AccountMenuButton()],
                     ),
               body: widget.editModeEnabled
                   ? content
@@ -909,32 +904,6 @@ class PreviewGameList<T> extends StatelessWidget {
           ),
           for (final data in list.take(maxGamesToShow)) builder(data),
         ],
-      ),
-    );
-  }
-}
-
-class _PlayerScreenButton extends ConsumerWidget {
-  const _PlayerScreenButton();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final isOnlineAsync = ref.watch(onlineStatusProvider);
-
-    return isOnlineAsync.maybeWhen(
-      data: (isOnline) => SemanticIconButton(
-        icon: const Icon(Icons.group_outlined),
-        semanticsLabel: context.l10n.players,
-        onPressed: !isOnline
-            ? null
-            : () {
-                Navigator.of(context).push(PlayerScreen.buildRoute());
-              },
-      ),
-      orElse: () => SemanticIconButton(
-        icon: const Icon(Icons.group_outlined),
-        semanticsLabel: context.l10n.players,
-        onPressed: null,
       ),
     );
   }
