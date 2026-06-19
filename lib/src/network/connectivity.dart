@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/network/server_status.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:logging/logging.dart';
 
@@ -22,6 +23,30 @@ final connectivityPluginProvider = Provider<Connectivity>((Ref _) => Connectivit
 final onlineStatusProvider = FutureProvider.autoDispose<bool>((ref) {
   return ref.watch(connectivityChangesProvider.selectAsync((status) => status.isOnline));
 }, name: 'OnlineStatusProvider');
+
+/// Represents the connection state of the app with respect to the lichess server.
+enum ConnectionStatus {
+  /// The device is online and the lichess server is reachable.
+  online,
+
+  /// The device has no network connection.
+  networkDown,
+
+  /// The device is online but the lichess server is unreachable.
+  serverDown,
+}
+
+/// A provider that exposes the current [ConnectionStatus].
+///
+/// Use this instead of [onlineStatusProvider] when the distinction between a
+/// local network drop and a server outage matters for the UI.
+final connectionStatusProvider = Provider.autoDispose<ConnectionStatus>((ref) {
+  final isNetworkOnline = ref.watch(onlineStatusProvider).value ?? false;
+  if (!isNetworkOnline) return ConnectionStatus.networkDown;
+  final isServerReachable = ref.watch(serverStatusProvider);
+  if (!isServerReachable) return ConnectionStatus.serverDown;
+  return ConnectionStatus.online;
+}, name: 'ConnectionStatusProvider');
 
 /// This provider is used to check the device's connectivity status, reacting to
 /// changes in connectivity and app lifecycle events.

@@ -10,11 +10,14 @@ import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
 import 'package:lichess_mobile/src/model/game/game_storage.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
+import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/network/server_status.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/view/home/games_carousel.dart';
 import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
+import 'package:lichess_mobile/src/view/home/server_outage.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -27,6 +30,7 @@ import '../../model/auth/fake_auth_storage.dart';
 import '../../model/challenge/challenge_repository_test.dart';
 import '../../model/engine/fake_nnue_service.dart';
 import '../../network/fake_http_client_factory.dart';
+import '../../network/fake_offline_server.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 
@@ -511,6 +515,83 @@ void main() {
 
         expect(find.text(nnueFilesMissingTip), findsNothing);
       });
+    });
+  });
+  group('Server offline', () {
+    testWidgets('outage page shown and Play button still accessible', (tester) async {
+      final app = await makeTestProviderScope(
+        tester,
+        child: const Application(),
+        overrides: {serverStatusProvider: serverStatusProvider.overrideWith(FakeServerOffline.new)},
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(ServerOutage), findsOneWidget);
+      expect(find.byType(FloatingActionButton), findsOneWidget);
+    });
+
+    testWidgets('Players button is disabled when server is down', (tester) async {
+      final app = await makeTestProviderScope(
+        tester,
+        child: const Application(),
+        overrides: {serverStatusProvider: serverStatusProvider.overrideWith(FakeServerOffline.new)},
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      expect(
+        tester
+            .widget<SemanticIconButton>(
+              find.ancestor(
+                of: find.byIcon(Icons.group_outlined),
+                matching: find.byType(SemanticIconButton),
+              ),
+            )
+            .onPressed,
+        isNull,
+      );
+    });
+
+    testWidgets('Watch tab shows no internet message when network is down', (tester) async {
+      final app = await makeTestProviderScope(
+        tester,
+        child: const Application(),
+        overrides: {
+          onlineStatusProvider: onlineStatusProvider.overrideWith((ref) => Future.value(false)),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      // Wait for connectivity state to resolve.
+      await tester.pump();
+      await tester.pumpAndSettle();
+
+      // Navigate to the Watch tab.
+      await tester.tap(find.text('Watch'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('No internet connection.'), findsOneWidget);
+      expect(find.byType(ServerOutage), findsNothing);
+    });
+
+    testWidgets('Watch tab shows outage screen when server is down', (tester) async {
+      final app = await makeTestProviderScope(
+        tester,
+        child: const Application(),
+        overrides: {serverStatusProvider: serverStatusProvider.overrideWith(FakeServerOffline.new)},
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      // Navigate to the Watch tab.
+      await tester.tap(find.text('Watch'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(ServerOutage), findsOneWidget);
     });
   });
 

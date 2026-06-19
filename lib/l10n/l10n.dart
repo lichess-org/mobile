@@ -736,6 +736,18 @@ abstract class AppLocalizations {
   /// **'Or import a PGN file'**
   String get mobileOrImportPgnFile;
 
+  /// No description provided for @mobileServerOutageMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Lichess is undergoing technical difficulties. We\'re doing everything we can, and expect to be back up very soon.'**
+  String get mobileServerOutageMessage;
+
+  /// No description provided for @mobileServerOutageKeepInformed.
+  ///
+  /// In en, this message translates to:
+  /// **'To get updates on the maintenance, checkout our social media channels.'**
+  String get mobileServerOutageKeepInformed;
+
   /// No description provided for @mobileGoodMoveButThereIsBetter.
   ///
   /// In en, this message translates to:

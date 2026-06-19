@@ -28,6 +28,7 @@ import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/log/http_log_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/aggregator.dart';
+import 'package:lichess_mobile/src/network/server_status.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -107,6 +108,9 @@ final httpClientFactoryProvider = Provider<HttpClientFactory>((Ref ref) {
             responseCode: response.statusCode,
             responseDateTime: DateTime.now(),
           );
+          ref
+              .read(serverStatusProvider.notifier)
+              .handleHttpResponse(response.statusCode, response.request!.url);
         }
       },
       onError: (request, error, [st]) async {

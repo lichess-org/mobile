@@ -918,7 +918,7 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
     final ctrlProvider = puzzleControllerProvider(initialPuzzleContext);
     final puzzleState = ref.watch(ctrlProvider);
     final difficulty = ref.watch(puzzlePreferencesProvider.select((state) => state.difficulty));
-    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
+    final connectionStatus = ref.watch(connectionStatusProvider);
     return BottomSheetScrollableContainer(
       padding: const EdgeInsets.only(bottom: 16),
       children: [
@@ -929,7 +929,7 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
             if (initialPuzzleContext.userId != null &&
                 initialPuzzleContext.replayRemaining == null &&
                 puzzleState.mode != PuzzleMode.view &&
-                isOnline)
+                connectionStatus == ConnectionStatus.online)
               StatefulBuilder(
                 builder: (context, setState) {
                   PuzzleDifficulty selectedDifficulty = difficulty;
