@@ -231,7 +231,7 @@ class _AccountSection extends ConsumerWidget {
             enabled: isOnline,
             onTap: () {
               ref.invalidate(accountProvider);
-              Navigator.of(context, rootNavigator: true).push(ProfileScreen.buildRoute());
+              Navigator.of(context).push(ProfileScreen.buildRoute());
             },
           ),
           if (!kidMode)
@@ -245,7 +245,7 @@ class _AccountSection extends ConsumerWidget {
               trailing: isIOS ? const CupertinoListTileChevron() : null,
               enabled: isOnline,
               onTap: () {
-                Navigator.of(context, rootNavigator: true).push(ContactsScreen.buildRoute());
+                Navigator.of(context).push(ContactsScreen.buildRoute());
               },
             ),
         ],
@@ -254,7 +254,7 @@ class _AccountSection extends ConsumerWidget {
           title: Text(context.l10n.settingsSettings),
           trailing: isIOS ? const CupertinoListTileChevron() : null,
           onTap: () {
-            Navigator.of(context, rootNavigator: true).push(SettingsScreen.buildRoute());
+            Navigator.of(context).push(SettingsScreen.buildRoute());
           },
         ),
       ],
