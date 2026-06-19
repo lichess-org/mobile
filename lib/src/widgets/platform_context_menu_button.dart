@@ -120,11 +120,10 @@ class ContextMenuIconButton extends StatelessWidget {
         maximumSize: WidgetStatePropertyAll(
           Size(MediaQuery.sizeOf(context).width * 0.6, MediaQuery.sizeOf(context).height * 0.8),
         ),
-        visualDensity: isCompact ? VisualDensity.compact : null,
       ),
       menuChildren: actions,
       builder: (BuildContext context, MenuController controller, Widget? child) {
-        return SemanticIconButton(
+        return IconButton(
           onPressed: () {
             if (controller.isOpen) {
               controller.close();
@@ -132,8 +131,15 @@ class ContextMenuIconButton extends StatelessWidget {
               controller.open();
             }
           },
-          semanticsLabel: semanticsLabel,
+          tooltip: semanticsLabel,
           icon: icon,
+          iconSize: isCompact ? 20.0 : null,
+          style: isCompact
+              ? IconButton.styleFrom(
+                  visualDensity: VisualDensity.compact,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                )
+              : null,
         );
       },
     );
