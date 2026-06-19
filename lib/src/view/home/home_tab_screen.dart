@@ -472,7 +472,7 @@ class _LichessMessageBanner extends ConsumerWidget {
       color: theme.colorScheme.tertiaryContainer,
       child: InkWell(
         onTap: () {
-          Navigator.of(context)
+          Navigator.of(context, rootNavigator: true)
               .push(
                 ConversationScreen.buildRoute(
                   user: const LightUser(id: UserId('lichess'), name: 'lichess'),
