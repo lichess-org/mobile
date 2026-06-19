@@ -1,7 +1,9 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/relation/following_user.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/network/aggregator.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 
 /// A provider for [RelationRepository].
@@ -45,5 +47,29 @@ class RelationRepository {
   Future<void> deleteThread(UserId userId) async {
     final uri = Uri(path: '/inbox/$userId/delete');
     await client.postRead(uri);
+  }
+}
+
+final followingCarouselProvider = FutureProvider.autoDispose<IList<FollowingUser>>((ref) {
+  return ref.watch(followingRepositoryProvider).getFollowing();
+}, name: 'FollowingCarouselProvider');
+
+final followingRepositoryProvider = Provider<FollowingRepository>((ref) {
+  final client = ref.watch(lichessClientProvider);
+  final aggregator = ref.watch(aggregatorProvider);
+  return FollowingRepository(client, aggregator);
+}, name: 'FollowingRepositoryProvider');
+
+class FollowingRepository {
+  FollowingRepository(this.client, this.aggregator);
+
+  final LichessClient client;
+  final Aggregator aggregator;
+
+  Future<IList<FollowingUser>> getFollowing() {
+    return aggregator.readNdJsonList(
+      Uri(path: '/api/mobile/following', queryParameters: {'nb': '10'}),
+      mapper: FollowingUser.fromJson,
+    );
   }
 }
