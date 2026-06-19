@@ -68,7 +68,7 @@ class FollowingRepository {
 
   Future<IList<FollowingUser>> getFollowing() {
     return aggregator.readNdJsonList(
-      Uri(path: '/api/mobile/following'),
+      Uri(path: '/api/mobile/following', queryParameters: {'nb': '10'}),
       mapper: FollowingUser.fromJson,
     );
   }

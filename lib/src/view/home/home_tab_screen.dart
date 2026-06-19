@@ -272,7 +272,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
               ),
             _EditableWidget(
               widget: HomeEditableWidget.friends,
-              shouldShow: authUser != null,
+              shouldShow: authUser != null && isOnline,
               child: const FollowingWidget(),
             ),
             Row(

@@ -39,6 +39,11 @@ class _FollowingWidgetState extends ConsumerState<FollowingWidget> {
 
         final sortedUsers = users.toList()
           ..sort((a, b) {
+            final aPlaying = a.playing == true;
+            final bPlaying = b.playing == true;
+            if (aPlaying && !bPlaying) return -1;
+            if (!aPlaying && bPlaying) return 1;
+
             final aOnline = a.user.isOnline == true;
             final bOnline = b.user.isOnline == true;
 
@@ -107,9 +112,11 @@ class _FollowingWidgetState extends ConsumerState<FollowingWidget> {
                                         ? context.l10n.playingRightNow
                                         : friend.user.isOnline == true
                                         ? context.l10n.online.capitalize()
-                                        : context.l10n.lastSeenActive(
+                                        : friend.seenAt != null
+                                        ? context.l10n.lastSeenActive(
                                             relativeDate(context.l10n, friend.seenAt!),
-                                          ),
+                                          )
+                                        : context.l10n.offline.capitalize(),
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontSize: 13,
@@ -163,7 +170,7 @@ Widget _buildActionButtons(BuildContext context, WidgetRef ref, FollowingUser fr
         isCompact: true,
         color: Theme.of(context).colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
         icon: const Icon(Icons.more_horiz),
-        semanticsLabel: context.l10n.message,
+        semanticsLabel: context.l10n.more,
         actions: [
           ContextMenuAction(
             icon: Icons.chat_bubble_outline,
