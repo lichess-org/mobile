@@ -7,11 +7,13 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
+import 'package:lichess_mobile/src/view/message/conversation_screen.dart';
 import 'package:lichess_mobile/src/view/relation/friend_screen.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 
@@ -91,11 +93,12 @@ class _FollowingWidgetState extends ConsumerState<FollowingWidget> {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: .start,
+                              mainAxisAlignment: .center,
                               children: [
                                 UserFullNameWidget(
                                   user: friend.user,
-                                  style: const TextStyle(fontWeight: .w500),
+                                  style: const TextStyle(fontWeight: .w500, fontSize: 16),
                                 ),
                                 FittedBox(
                                   fit: BoxFit.scaleDown,
@@ -110,12 +113,12 @@ class _FollowingWidgetState extends ConsumerState<FollowingWidget> {
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontSize: 13,
-                                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                      color: textShade(context, Styles.subtitleOpacity),
                                     ),
                                   ),
                                 ),
                                 const Spacer(),
-                                _buildActionButton(context, ref, friend),
+                                Center(child: _buildActionButtons(context, ref, friend)),
                               ],
                             ),
                           ),
@@ -133,46 +136,53 @@ class _FollowingWidgetState extends ConsumerState<FollowingWidget> {
   }
 }
 
-Widget _buildActionButton(BuildContext context, WidgetRef ref, FollowingUser friend) {
-  final compactStyle = FilledButton.styleFrom(
-    visualDensity: const VisualDensity(horizontal: -3, vertical: -3),
-    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-    textStyle: const TextStyle(fontSize: 12),
+Widget _buildActionButtons(BuildContext context, WidgetRef ref, FollowingUser friend) {
+  final compactStyle = IconButton.styleFrom(
+    visualDensity: VisualDensity.compact,
     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
   );
 
-  if (friend.playing == true) {
-    return FilledButton.icon(
-      onPressed: () {
-        Navigator.of(context).push(TvScreen.buildRoute(user: friend.user));
-      },
-      icon: const Icon(Icons.live_tv_outlined, size: 14),
-      label: Text(context.l10n.watch),
-      style: compactStyle,
-    );
-  } else if (friend.user.isOnline == true) {
-    return FilledButton.tonalIcon(
-      onPressed: () {
-        UserScreen.challengeUser(friend.user, context: context, ref: ref);
-      },
-      style: compactStyle,
-      icon: const Icon(LichessIcons.crossed_swords, size: 14),
-      label: Text(context.l10n.challengeChallengeToPlay),
-    );
-  } else {
-    return FilledButton.tonalIcon(
-      onPressed: () {
-        Navigator.of(context).push(UserOrProfileScreen.buildRoute(friend.user));
-      },
-      style: compactStyle.copyWith(
-        backgroundColor: WidgetStatePropertyAll(
-          Theme.of(context).colorScheme.surfaceContainerHighest,
+  const iconSize = 20.0;
+
+  return Row(
+    mainAxisAlignment: .spaceBetween,
+    children: [
+      if (friend.playing == true)
+        IconButton.filledTonal(
+          onPressed: () {
+            Navigator.of(context).push(TvScreen.buildRoute(user: friend.user));
+          },
+          icon: const Icon(Icons.live_tv_outlined),
+          iconSize: iconSize,
+          tooltip: context.l10n.watchGames,
+          style: compactStyle,
         ),
+      const Spacer(),
+      ContextMenuIconButton(
+        consumeOutsideTap: true,
+        isCompact: true,
+        color: Theme.of(context).colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
+        icon: const Icon(Icons.more_horiz),
+        semanticsLabel: context.l10n.message,
+        actions: [
+          ContextMenuAction(
+            icon: Icons.chat_bubble_outline,
+            label: context.l10n.message,
+            onPressed: () {
+              Navigator.of(context).push(ConversationScreen.buildRoute(user: friend.user));
+            },
+          ),
+          ContextMenuAction(
+            icon: LichessIcons.crossed_swords,
+            label: context.l10n.challengeChallengeToPlay,
+            onPressed: () {
+              UserScreen.challengeUser(friend.user, context: context, ref: ref);
+            },
+          ),
+        ],
       ),
-      icon: const Icon(Icons.person, size: 14),
-      label: Text(context.l10n.profile),
-    );
-  }
+    ],
+  );
 }
 
 Widget _buildLoadingSkeleton(BuildContext context) {

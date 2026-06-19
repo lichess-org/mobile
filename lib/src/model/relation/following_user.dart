@@ -7,12 +7,8 @@ part 'following_user.freezed.dart';
 
 @freezed
 sealed class FollowingUser with _$FollowingUser {
-  const factory FollowingUser({
-    required LightUser user,
-    DateTime? seenAt,
-    bool? online,
-    bool? playing,
-  }) = _FollowingUser;
+  const factory FollowingUser({required LightUser user, DateTime? seenAt, bool? playing}) =
+      _FollowingUser;
 
   factory FollowingUser.fromJson(Map<String, dynamic> json) =>
       _$FollowingUserFromPick(pick(json).required());
