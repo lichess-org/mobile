@@ -89,6 +89,7 @@
   "mobileChallengeCreated": "Udfordring oprettet: Du vil blive underrettet, når partiet starter.\nDu kan få adgang til det fra hjemfanen.",
   "mobilePreviousPage": "Forrige",
   "mobileOrImportPgnFile": "Eller importer en PGN-fil",
+  "mobileGoodMoveButThereIsBetter": "Godt træk, men der findes et bedre",
   "variantStandard": "Standard",
   "variantStandardTitle": "Standardregler for skak (FIDE)",
   "variantChess960": "Skak960",

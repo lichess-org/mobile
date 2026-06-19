@@ -89,6 +89,7 @@
   "mobileChallengeCreated": "Provocare creată: Vei fi notificat când începe jocul.\nO poți accesa din pagina principală.",
   "mobilePreviousPage": "Înapoi",
   "mobileOrImportPgnFile": "Sau încarcă un fișier PGN",
+  "mobileGoodMoveButThereIsBetter": "Mișcare bună, dar există una si mai bună",
   "variantStandard": "Standard",
   "variantStandardTitle": "Reguli de șah standard (FIDE)",
   "variantChess960": "Chess960",

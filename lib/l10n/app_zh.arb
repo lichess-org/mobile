@@ -89,6 +89,7 @@
   "mobileChallengeCreated": "挑战已创建：对局开始时您将收到通知。\n您可以在首页选项卡中访问它。",
   "mobilePreviousPage": "上一页",
   "mobileOrImportPgnFile": "或者导入 PGN 文件",
+  "mobileGoodMoveButThereIsBetter": "好着，但有更好的着法",
   "variantStandard": "标准",
   "variantStandardTitle": "国际象棋标准规则（国际棋联）",
   "variantChess960": "Chess960",

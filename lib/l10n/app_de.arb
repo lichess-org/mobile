@@ -89,6 +89,7 @@
   "mobileChallengeCreated": "Herausforderung erstellt: Du wirst benachrichtigt, wenn die Partie beginnt.\n Du kannst über den Home-Tab darauf zugreifen.",
   "mobilePreviousPage": "Zurück",
   "mobileOrImportPgnFile": "Oder importiere eine PGN-Datei",
+  "mobileGoodMoveButThereIsBetter": "Guter Zug, aber es gibt einen besseren",
   "variantStandard": "Standard",
   "variantStandardTitle": "Standardschachregeln (FIDE)",
   "variantChess960": "Schach960",

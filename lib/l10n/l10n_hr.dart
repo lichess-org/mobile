@@ -2383,7 +2383,7 @@ class AppLocalizationsHr extends AppLocalizations {
   String get settingsCancelKeepAccount => 'Cancel and keep my account';
 
   @override
-  String get settingsCloseAccountAreYouSure => 'Are you sure you want to close your account?';
+  String get settingsCloseAccountAreYouSure => 'Jeste li sigurni da želite zatvoriti svoj račun?';
 
   @override
   String get settingsThisAccountIsClosed => 'Račun je zatvoren.';
@@ -2392,7 +2392,7 @@ class AppLocalizationsHr extends AppLocalizations {
   String get gameSetup => 'Game setup';
 
   @override
-  String get challengeAFriend => 'Challenge a friend';
+  String get challengeAFriend => 'Izazovi prijatelja';
 
   @override
   String get playAgainstComputer => 'Igrajte se s računalom';

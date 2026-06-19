@@ -287,7 +287,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileOrImportPgnFile => 'O importa un arxiu PGN';
 
   @override
-  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+  String get mobileGoodMoveButThereIsBetter => 'Bona jugada, però n\'hi ha una de millor';
 
   @override
   String get variantStandard => 'Estàndard';
@@ -2375,7 +2375,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get gameMode => 'Tipus de partida';
 
   @override
-  String get createLobbyGame => 'Crea una partida';
+  String get createLobbyGame => 'Publica una partida';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Per convidar algú a jugar, envia-li aquest enllaç';

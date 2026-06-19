@@ -89,6 +89,7 @@
   "mobileChallengeCreated": "Desafío creado: Se te notificará cuando comience la partida.\nPuedes acceder a ella desde la pestaña de inicio.",
   "mobilePreviousPage": "Anterior",
   "mobileOrImportPgnFile": "O importa un archivo PGN",
+  "mobileGoodMoveButThereIsBetter": "Buen movimiento, pero los hay mejores",
   "variantStandard": "Estándar",
   "variantStandardTitle": "Reglas de ajedrez estándar (FIDE)",
   "variantChess960": "Ajedrez 960",

@@ -1496,7 +1496,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get preferencesInCasualGamesOnly => 'Nur ĉe amikaj ludoj';
 
   @override
-  String get preferencesPromoteToQueenAutomatically => 'Memage rangaltigi soldatojn al damoj';
+  String get preferencesPromoteToQueenAutomatically => 'Aŭtomate ŝanĝi peonojn al damoj';
 
   @override
   String get preferencesExplainPromoteToQueenAutomatically => 'Premu la <ctrl> klavon dum rangaltigo por momente malŝalti memagan rangaltiĝon';
@@ -1505,7 +1505,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get preferencesWhenPremoving => 'Ĉe antaŭmovoj';
 
   @override
-  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Memage postuli egalvenkon post trifoja ripetado';
+  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Aŭtomate postuli egalvenkon post trifoja ripeto';
 
   @override
   String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Kiam restas malpli ol 30 sekundoj';
@@ -3684,7 +3684,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get success => 'Sukceso';
 
   @override
-  String get automaticallyProceedToNextGameAfterMoving => 'Memage iri al sekvanta ludo post via movo';
+  String get automaticallyProceedToNextGameAfterMoving => 'Aŭtomate iri al sekvanta ludo post via movo';
 
   @override
   String get autoSwitch => 'Aŭtomata ludŝanĝado';

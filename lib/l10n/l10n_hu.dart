@@ -302,13 +302,13 @@ class AppLocalizationsHu extends AppLocalizations {
   String get variantChess960Title => 'Az alapsori bábuk véletlenszerű mezőről indulnak.';
 
   @override
-  String get variantKingOfTheHill => 'King of the Hill';
+  String get variantKingOfTheHill => 'A hegy királya';
 
   @override
   String get variantKingOfTheHillTitle => 'Juttasd a királyt a centrumba, hogy megnyerd a partit.';
 
   @override
-  String get variantThreeCheck => 'Three-Check';
+  String get variantThreeCheck => 'Három sakk';
 
   @override
   String get variantThreeCheckTitle => 'Adj 3 sakkot a győzelemért.';
@@ -317,10 +317,10 @@ class AppLocalizationsHu extends AppLocalizations {
   String get variantAntichess => 'Francia sakk';
 
   @override
-  String get variantAntichessTitle => 'Lose all your pieces (or get stalemated) to win the game.';
+  String get variantAntichessTitle => 'Veszítsd el az összes bábudat (vagy kerülj patthelyzetbe) a játék megnyeréséhez.';
 
   @override
-  String get variantAtomic => 'Atomic';
+  String get variantAtomic => 'Atomsakk';
 
   @override
   String get variantAtomicTitle => 'Robbantsd fel az ellenfél királyát a győzelemért.';

@@ -287,7 +287,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Yoki PGN faylini import qiling';
 
   @override
-  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+  String get mobileGoodMoveButThereIsBetter => 'Yaxshi yurish, ammo bundan ham yaxshirogʻi bor';
 
   @override
   String get variantStandard => 'Standart';
@@ -390,8 +390,8 @@ class AppLocalizationsUz extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count ta masala mashq qildi',
-      one: '$count ta masala mashq qildi',
+      other: '$count ta masala yechdi',
+      one: '$count ta masala yechdi',
     );
     return '$_temp0';
   }
@@ -478,8 +478,8 @@ class AppLocalizationsUz extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count ta yangi obunachi qoʻshildi',
-      one: '$count ta yangi obunachi qoʻshildi',
+      other: 'Obunachilar soni $count taga koʻpaydi',
+      one: 'Obunachilar soni $count taga koʻpaydi',
     );
     return '$_temp0';
   }
@@ -589,7 +589,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get arenaHowAreScoresCalculatedAnswer => 'Gʻalaba uchun 2 ochko, durang uchun 1 ochko beriladi, magʻlubiyat uchun esa ochko berilmaydi.\nAgar ketma‑ket ikki marta gʻalaba qozonsangiz, sizda olov belgisi bilan koʻrsatiladigan “ikki karrali ochkolar seriyasi” boshlanadi.\nKeyingi oʻyinlarda gʻalaba qozonganiz sayin, sizga ikki karra ochko yoziladi.\nYaʼni, gʻalaba 4 ochko, durang 2 ochko boʻladi, magʻlubiyat uchun esa ochko berilmaydi va “ochkolar seriyasi”ni toʻxtatadi.\n\nMasalan, ikkita gʻalaba va bitta durang jami 6 ochko beradi: 2 + 2 + (2 x 1)';
 
   @override
-  String get arenaBerserk => 'Arena Berserk';
+  String get arenaBerserk => 'Berserk arena';
 
   @override
   String get arenaBerserkAnswer => 'Oʻyin boshida oʻyinchi “Berserk” tugmasini bossa, uning vaqti yarmiga qisqaradi, biroq gʻalaba uchun turnir jadvaliga qoʻshimcha bir ochko qoʻshiladi.\n\nVaqt qoʻshilishi bor (inkrementli) oʻyinlarda “Berserk” qilsangiz vaqt ortishidan voz kechasiz (1+2 vaqt nazorati bundan mustasno va 1+0 holatiga oʻtadi).\n\nBoshlangʻich vaqti nolga teng boʻlgan (0+1, 0+2) oʻyinlarda “Berserk” qilib boʻlmaydi.\n\n“Berserk” rejimida qoʻshimcha ochko olish uchun kamida 7 ta yurish amalga oshirishingiz kerak boʻladi.';
@@ -739,7 +739,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get arenaTournamentWinners => 'Turnir gʻoliblari';
 
   @override
-  String get arenaTournamentShields => 'Turnir qalqonlari';
+  String get arenaTournamentShields => 'Turnir Qalqonlari';
 
   @override
   String get arenaOnlyTitled => 'Faqat unvonli oʻyinchilar';
@@ -1040,7 +1040,7 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String broadcastRoundX(String param) {
-    return '$param‑raund';
+    return '$param‑tur';
   }
 
   @override
@@ -1134,7 +1134,7 @@ class AppLocalizationsUz extends AppLocalizations {
   }
 
   @override
-  String get challengeChallengeToPlay => 'Chorlash';
+  String get challengeChallengeToPlay => 'Oʻyinga chaqirish';
 
   @override
   String get challengeChallengeDeclined => 'Chorlov rad etildi.';
@@ -1146,11 +1146,11 @@ class AppLocalizationsUz extends AppLocalizations {
   String get challengeChallengeCanceled => 'Chorlov bekor qilindi.';
 
   @override
-  String get challengeRegisterToSendChallenges => 'Ushbu foydalanuvchini oʻyinga chorlash uchun, iltimos, roʻyxatdan oʻting.';
+  String get challengeRegisterToSendChallenges => 'Ushbu foydalanuvchini oʻyinga chaqirish uchun roʻyxatdan oʻting.';
 
   @override
   String challengeYouCannotChallengeX(String param) {
-    return 'Siz $param ni chorlay olmaysiz.';
+    return 'Siz $paramʼni oʻyinga chaqira olmaysiz.';
   }
 
   @override
@@ -1165,7 +1165,7 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String challengeCannotChallengeDueToProvisionalXRating(String param) {
-    return '$param reyting hali aniqlanmaganligi sababli chorlab boʻlmaydi.';
+    return '$param reyting hali aniqlanmaganligi sababli oʻyinga chaqirib boʻlmaydi.';
   }
 
   @override
@@ -1180,10 +1180,10 @@ class AppLocalizationsUz extends AppLocalizations {
   String get challengeDeclineLater => 'Ayni dam men uchun qulay emas, iltimos keyinroq soʻrang.';
 
   @override
-  String get challengeDeclineTooFast => 'Usbu vaqt boshqaruvi men uchun tezlik qiladi, iltimos sekinroq oʻynash uchun uzoqroq vaqt bilan chorlang.';
+  String get challengeDeclineTooFast => 'Usbu vaqt boshqaruvi men uchun tezlik qiladi, iltimos sekinroq oʻynash uchun uzoqroq vaqt bilan oʻyinga chaqiring.';
 
   @override
-  String get challengeDeclineTooSlow => 'Ushbu vaqt boshqaruvi men uchun sekin hisoblanadi, iltimos tezroq oʻyin uchun qisqaroq vaqt bilan chorlang.';
+  String get challengeDeclineTooSlow => 'Ushbu vaqt boshqaruvi men uchun sekin, iltimos tezroq oʻyin uchun qisqaroq vaqt bilan oʻyinga chaqiring.';
 
   @override
   String get challengeDeclineTimeControl => 'Men ushbu vaqt boshqaruvidagi chorlovni qabul qila olmayman.';
@@ -1415,7 +1415,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get preferencesPieceDestinations => 'Mumkin boʻlgan yurishlar koʻrsatilsin (qonuniy yurishlar va oldindan yurishlar)';
 
   @override
-  String get preferencesBoardCoordinates => 'Taxta koordinatalari (A‑H, 1‑8)';
+  String get preferencesBoardCoordinates => 'Taxta koordinatalari (A–H, 1–8)';
 
   @override
   String get preferencesMoveListWhilePlaying => 'Oʻyin davomida yurishlar roʻyxati koʻrsatilsin';
@@ -2366,7 +2366,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get gameSetup => 'Oʻyin sozlamalari';
 
   @override
-  String get challengeAFriend => 'Doʻstingizni oʻyinga chorlang';
+  String get challengeAFriend => 'Doʻstingizni oʻyinga chaqiring';
 
   @override
   String get playAgainstComputer => 'Kompyuterga qarshi oʻynash';
@@ -2393,13 +2393,13 @@ class AppLocalizationsUz extends AppLocalizations {
   String get reusableChallengeUrl => 'Chorlov havolasi';
 
   @override
-  String get permanentLinkForAnyoneToChallengeYou => 'Ushbu sozlamalar bilan sizni chorlash mumkin bo\'lgan doimiy havola.';
+  String get permanentLinkForAnyoneToChallengeYou => 'Ushbu sozlamalar bilan sizni oʻyinga chaqirish mumkin bo\'lgan doimiy havola.';
 
   @override
   String get waiting => 'Kutib turing';
 
   @override
-  String get yourTurn => 'Sizning galingiz';
+  String get yourTurn => 'Siz yurasiz';
 
   @override
   String aiNameLevelAiLevel(String param1, String param2) {
@@ -2461,7 +2461,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get youPlayTheBlackPieces => 'Qora donalarda siz oʻynaysiz';
 
   @override
-  String get itsYourTurn => 'Sizning galingiz!';
+  String get itsYourTurn => 'Siz yurasiz!';
 
   @override
   String get cheatDetected => 'Gʻirromlik aniqlandi';
@@ -2482,16 +2482,16 @@ class AppLocalizationsUz extends AppLocalizations {
   String get newOpponent => 'Yangi raqib topish';
 
   @override
-  String get yourOpponentWantsToPlayANewGameWithYou => 'Raqibingiz sizni yangi oʻyinga chorlamoqda';
+  String get yourOpponentWantsToPlayANewGameWithYou => 'Raqibingiz sizni yangi oʻyinga chaqirmoqda';
 
   @override
   String get joinTheGame => 'Oʻyinga qoʻshilish';
 
   @override
-  String get whitePlays => 'Oqlar gali';
+  String get whitePlays => 'Yurish oqlardan';
 
   @override
-  String get blackPlays => 'Qoralar gali';
+  String get blackPlays => 'Yurish qoralardan';
 
   @override
   String get opponentLeftChoices => 'Raqibingiz oʻyinni tark etdi. Gʻalaba yoki durang talab etishingiz mumkin yoki yana kutishingiz mumkin.';
@@ -2527,10 +2527,10 @@ class AppLocalizationsUz extends AppLocalizations {
   String get blackDidntMove => 'Qoralar yurmadi';
 
   @override
-  String get whiteAborted => 'White aborted the game';
+  String get whiteAborted => 'Oqlar oʻyinni bekor qildi';
 
   @override
-  String get blackAborted => 'Black aborted the game';
+  String get blackAborted => 'Qoralar oʻyinni bekor qildi';
 
   @override
   String get requestAComputerAnalysis => 'Kompyuter tahlilini soʻrash';
@@ -3610,7 +3610,7 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String reportXToModerators(String param) {
-    return '$param haqida moderatorlarga shikoyat bildirish';
+    return '$param haqida moderatorlarga shikoyat qilish';
   }
 
   @override
@@ -3865,7 +3865,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get letOtherPlayersFollowYou => 'Boshqa oʻyinchilarga sizga obuna boʻlishga ruxsat berish';
 
   @override
-  String get letOtherPlayersChallengeYou => 'Boshqa oʻyinchilarga sizni oʻyinga chorlashga ruxsat berish';
+  String get letOtherPlayersChallengeYou => 'Boshqa oʻyinchilarga sizni oʻyinga chaqirishga ruxsat berish';
 
   @override
   String get letOtherPlayersInviteYouToStudy => 'Boshqa oʻyinchilar sizni saboqqa taklif qilishga ruxsat berish';
@@ -4619,10 +4619,10 @@ class AppLocalizationsUz extends AppLocalizations {
   }
 
   @override
-  String get findBetterMoveForWhite => 'Oqlar uchun yaxshi yurishni toping';
+  String get findBetterMoveForWhite => 'Oqlar uchun yaxshiroq yurishni toping';
 
   @override
-  String get findBetterMoveForBlack => 'Qoralar uchun eng yaxshi yurishni toping';
+  String get findBetterMoveForBlack => 'Qoralar uchun yaxshiroq yurishni toping';
 
   @override
   String get resumeLearning => 'Oʻrganishni davom ettirish';
@@ -4694,7 +4694,7 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String challengeX(String param) {
-    return '$paramʼni chorlash';
+    return '$paramʼni oʻyinga chaqirish';
   }
 
   @override

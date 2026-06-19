@@ -287,7 +287,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileOrImportPgnFile => 'یا درونبُردِ یک پَروَنِ PGN';
 
   @override
-  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+  String get mobileGoodMoveButThereIsBetter => 'حرکتِ خوب، اما بهتر هم هست';
 
   @override
   String get variantStandard => 'اِستانده';

@@ -89,6 +89,7 @@
   "mobileChallengeCreated": "Desafio criado: Você será notificado quando a partida começar.\nVocê pode acessá-lo pela aba de início.",
   "mobilePreviousPage": "Anterior",
   "mobileOrImportPgnFile": "Ou importe um arquivo PGN",
+  "mobileGoodMoveButThereIsBetter": "Bom lance, mas existe um ainda melhor",
   "variantStandard": "Clássico",
   "variantStandardTitle": "Regras padrão de xadrez (FIDE)",
   "variantChess960": "Xadrez960",

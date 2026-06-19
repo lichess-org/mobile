@@ -287,7 +287,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Ose importoni një kartelë PNG';
 
   @override
-  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+  String get mobileGoodMoveButThereIsBetter => 'Lëvizje e mirë, por ka edhe më mirë';
 
   @override
   String get variantStandard => 'Standard';
