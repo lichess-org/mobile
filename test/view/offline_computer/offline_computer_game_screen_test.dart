@@ -257,6 +257,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Verify new game bottom sheet is shown with all options
+      await tester.ensureVisible(find.text('Side'));
       expect(find.text('Side'), findsOneWidget);
       expect(find.byType(Slider), findsOneWidget);
     });
@@ -2005,7 +2006,8 @@ Future<Rect> initPracticeModeGame(WidgetTester tester, {Side side = Side.white})
 /// Helper to select a side in the new game bottom sheet using the picker.
 Future<void> selectSide(WidgetTester tester, Side side) async {
   // Open the side picker by tapping on the side settings tile
-  await tester.tap(find.byType(SettingsListTile).first);
+  await tester.ensureVisible(find.text('Side'));
+  await tester.tap(find.text('Side'));
   await tester.pumpAndSettle();
 
   // Select the desired side from the picker
