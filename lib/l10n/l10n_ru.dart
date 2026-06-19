@@ -287,6 +287,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Или импортировать в PGN файл';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+
+  @override
   String get variantStandard => 'Шахматы';
 
   @override
@@ -2578,6 +2581,12 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get blackDidntMove => 'Чёрные не сделали ход';
+
+  @override
+  String get whiteAborted => 'Белые отменили игру';
+
+  @override
+  String get blackAborted => 'Чёрные отменили игру';
 
   @override
   String get requestAComputerAnalysis => 'Выполнить компьютерный анализ';

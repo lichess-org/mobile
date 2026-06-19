@@ -287,6 +287,9 @@ class AppLocalizationsEt extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Või importi PGN-fail';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+
+  @override
   String get variantStandard => 'Tavaline';
 
   @override
@@ -2522,6 +2525,12 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get blackDidntMove => 'Must ei sooritanud käiku';
+
+  @override
+  String get whiteAborted => 'White aborted the game';
+
+  @override
+  String get blackAborted => 'Black aborted the game';
 
   @override
   String get requestAComputerAnalysis => 'Nõua arvuti analüüsi';

@@ -51,6 +51,8 @@ mixin PreferencesStorage<T extends Serializable> on Notifier<T> {
       jsonEncode(value.toJson()),
     );
 
+    if (!ref.mounted) return;
+
     state = value;
   }
 
@@ -81,6 +83,8 @@ mixin SessionPreferencesStorage<T extends Serializable> on Notifier<T> {
       key(prefCategory.storageKey, authUser),
       jsonEncode(value.toJson()),
     );
+
+    if (!ref.mounted) return;
 
     state = value;
   }

@@ -85,7 +85,10 @@ class _AnalysisBottomBar extends ConsumerWidget {
             },
           ),
         RepeatButton(
-          onLongPress: onGoBack,
+          onLongPress: state.canGoBack
+              ? () =>
+                    ref.read(studyControllerProvider(options).notifier).userPrevious(fastSeek: true)
+              : null,
           child: BottomBarButton(
             key: const ValueKey('goto-previous'),
             onTap: onGoBack,
@@ -96,7 +99,9 @@ class _AnalysisBottomBar extends ConsumerWidget {
           ),
         ),
         RepeatButton(
-          onLongPress: onGoForward,
+          onLongPress: state.canGoNext
+              ? () => ref.read(studyControllerProvider(options).notifier).userNext(fastSeek: true)
+              : null,
           child: BottomBarButton(
             key: const ValueKey('goto-next'),
             icon: CupertinoIcons.chevron_forward,

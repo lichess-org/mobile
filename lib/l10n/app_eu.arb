@@ -732,6 +732,8 @@
   "blackLeftTheGame": "Beltza partidatik atera da",
   "whiteDidntMove": "Zuriak ez du mugitu",
   "blackDidntMove": "Beltzak ez du mugitu",
+  "whiteAborted": "Zuriak partida bertan behera utzi du",
+  "blackAborted": "Beltzak partida bertan behera utzi du",
   "requestAComputerAnalysis": "Ordenagailuaren analisia eskatu",
   "computerAnalysis": "Ordenagailuaren analisia",
   "computerAnalysisAvailable": "Ordenagailu bidezko analisia egin daiteke",

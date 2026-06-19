@@ -501,6 +501,42 @@ void main() {
 
       expect(find.byType(Card), findsNWidgets(2));
     });
+
+    testWidgets('Check team standings screen opens from teams tab', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: BroadcastRoundScreen(
+          broadcast: _liveTeamBroadcast,
+          initialTab: BroadcastRoundTab.teams,
+        ),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(_liveTeamBroadcastClient, ref),
+          ),
+        },
+      );
+
+      await tester.pumpWidget(app);
+
+      // Load the tournament
+      await tester.pump();
+
+      // Load the round
+      await tester.pump();
+
+      // Load the teams data
+      await tester.pump();
+
+      expect(find.text('Team Results'), findsOneWidget);
+      expect(find.text('5.5'), findsNothing);
+
+      await tester.tap(find.text('Team Results'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('5.5'), findsOneWidget);
+      expect(find.text('12'), findsOneWidget);
+      expect(find.text('Team A'), findsOneWidget);
+    });
   });
 }
 
@@ -2128,6 +2164,13 @@ final _liveTeamBroadcastClient = MockClient((request) {
       headers: {'content-type': 'application/json; charset=utf-8'},
     );
   }
+  if (request.url.path == '/broadcast/AAAAAAAA/teams/standings') {
+    return mockResponse(
+      _teamStandingsResponse,
+      200,
+      headers: {'content-type': 'application/json; charset=utf-8'},
+    );
+  }
   return mockResponse('', 404);
 });
 
@@ -2141,7 +2184,8 @@ const _liveTeamTournamentResponse = '''
       1735671720000
     ],
     "image": "",
-    "teamTable": true
+    "teamTable": true,
+    "showTeamScores": true
   },
   "rounds": [
     {
@@ -2164,6 +2208,7 @@ final _liveTeamBroadcast = Broadcast(
     description: null,
     tier: null,
     teamTable: true,
+    showTeamScores: true,
     information: (
       dates: (startsAt: DateTime.fromMillisecondsSinceEpoch(1735671720000), endsAt: null),
       format: null,
@@ -2187,6 +2232,48 @@ final _liveTeamBroadcast = Broadcast(
   roundToLinkId: const BroadcastRoundId('00000000'),
   group: null,
 );
+
+const _teamStandingsResponse = '''
+[
+  {
+    "name": "Team A",
+    "mp": 5.5,
+    "gp": 12,
+    "matches": [
+      {
+        "roundId": "00000000",
+        "opponent": "Team B",
+        "points": "1",
+        "mp": 1,
+        "gp": 6
+      },
+      {
+        "roundId": "00000001",
+        "opponent": "Team C",
+        "points": "1",
+        "mp": 1,
+        "gp": 6
+      }
+    ],
+    "players": []
+  },
+  {
+    "name": "Team B",
+    "mp": 4,
+    "gp": 10.5,
+    "matches": [
+      {
+        "roundId": "00000000",
+        "opponent": "Team A",
+        "points": "0",
+        "mp": 0,
+        "gp": 4
+      }
+    ],
+    "players": []
+  }
+]
+''';
 
 const _teamMatchesResponse = '''
 {

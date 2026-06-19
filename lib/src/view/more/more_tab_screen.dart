@@ -127,6 +127,7 @@ class _Body extends ConsumerWidget {
                   BoardEditorScreen.buildRoute((
                     initialVariant: Variant.standard,
                     initialFen: null,
+                    initialOrientation: null,
                   )),
                 ),
               ),

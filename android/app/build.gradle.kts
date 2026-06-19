@@ -44,8 +44,6 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
-        // Used by flutter_appauth plugin
-        manifestPlaceholders["appAuthRedirectScheme"] = "org.lichess.mobile"
         ndk {
             abiFilters += listOf("armeabi-v7a", "arm64-v8a", "x86_64")
         }

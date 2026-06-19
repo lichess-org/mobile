@@ -287,6 +287,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Ose importoni një kartelë PNG';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+
+  @override
   String get variantStandard => 'Standard';
 
   @override
@@ -2522,6 +2525,12 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get blackDidntMove => 'I ziu s’bëri lëvizje';
+
+  @override
+  String get whiteAborted => 'White aborted the game';
+
+  @override
+  String get blackAborted => 'Black aborted the game';
 
   @override
   String get requestAComputerAnalysis => 'Kërko analizë kompjuterike';

@@ -45,7 +45,7 @@ sealed class GameFilterState with _$GameFilterState {
     final labels = fields
         .map(
           (field) => field is ISet<Perf>
-              ? field.map((e) => e.shortTitle).join(', ')
+              ? field.map((e) => e.shortLabel(l10n)).join(', ')
               : (field as Side?) != null
               ? field == Side.white
                     ? l10n.white
@@ -54,7 +54,7 @@ sealed class GameFilterState with _$GameFilterState {
         )
         .where((label) => label != null && label.isNotEmpty)
         .toList();
-    return labels.isEmpty ? 'All' : labels.join(', ');
+    return labels.isEmpty ? l10n.mobileAllGames : labels.join(', ');
   }
 
   int get count {

@@ -732,6 +732,8 @@
   "blackLeftTheGame": "Las negras han dejado la partida",
   "whiteDidntMove": "Las blancas no han movido",
   "blackDidntMove": "Las negras no han movido",
+  "whiteAborted": "Las blancas han dejado la partida",
+  "blackAborted": "Las negras han dejado la partida",
   "requestAComputerAnalysis": "Solicitar un análisis del ordenador",
   "computerAnalysis": "Análisis del ordenador",
   "computerAnalysisAvailable": "Análisis del ordenador disponible",

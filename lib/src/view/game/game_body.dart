@@ -43,7 +43,9 @@ import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
-typedef LoadingPosition = ({String? fen, Move? lastMove, Side? orientation});
+typedef LoadingParam = ({Variant variant, String? fen, Move? lastMove, Side? orientation});
+
+const _kGameEndDialogDelay = Duration(milliseconds: 500);
 
 /// Game body for the [GameScreen].
 ///
@@ -67,7 +69,7 @@ class GameBody extends ConsumerWidget {
 
   final GameFullId gameId;
 
-  final LoadingPosition? loadingPosition;
+  final LoadingParam? loadingPosition;
 
   /// [GlobalKey] for the white clock.
   ///
@@ -126,7 +128,8 @@ class GameBody extends ConsumerWidget {
       case _GamePhase.refreshing:
         final value = ref.read(ctrlProvider).requireValue;
         return StandaloneGameLoadingContent(
-          position: (
+          loadingParam: (
+            variant: value.game.meta.variant,
             fen: value.game.lastPosition.fen,
             lastMove: value.game.moveAt(value.stepCursor),
             orientation: value.game.youAre,
@@ -139,7 +142,7 @@ class GameBody extends ConsumerWidget {
         );
       case _GamePhase.loading:
         return StandaloneGameLoadingContent(
-          position: loadingPosition,
+          loadingParam: loadingPosition,
           userActionsBar: _GameBottomBar(
             id: gameId,
             onLoadGameCallback: onLoadGameCallback,
@@ -168,21 +171,28 @@ class GameBody extends ConsumerWidget {
         }
       }
 
+      final game = state.requireValue.game;
+
       // If the game is no longer playable, show the game end dialog.
       // We want to show it only once, whether the game is already finished on
       // first load or not.
       if ((prev?.hasValue != true || prev!.requireValue.game.playable == true) &&
           state.requireValue.game.playable == false) {
-        Timer(const Duration(milliseconds: 500), () {
-          if (context.mounted) {
-            showAdaptiveDialog<void>(
-              context: context,
-              builder: (context) =>
-                  GameResultDialog(id: gameId, onNewOpponentCallback: onNewOpponentCallback),
-              barrierDismissible: true,
-            );
-          }
-        });
+        Timer(
+          (game.meta.speed == Speed.bullet || game.meta.speed == Speed.ultraBullet)
+              ? Duration.zero
+              : _kGameEndDialogDelay,
+          () {
+            if (context.mounted) {
+              showAdaptiveDialog<void>(
+                context: context,
+                builder: (context) =>
+                    GameResultDialog(id: gameId, onNewOpponentCallback: onNewOpponentCallback),
+                barrierDismissible: true,
+              );
+            }
+          },
+        );
       }
 
       // true when the game was loaded, playable, and just finished
@@ -191,7 +201,6 @@ class GameBody extends ConsumerWidget {
       }
       // true when the game was not loaded: handles rematches
       else if (prev?.hasValue != true) {
-        final game = state.requireValue.game;
         if (game.meta.speed != Speed.correspondence && game.playable) {
           setAndroidBoardGesturesExclusion(
             boardKey,
@@ -697,6 +706,7 @@ class _GameBottomBar extends ConsumerWidget {
           isCorrespondence: game.meta.speed == Speed.correspondence,
           numPremoveLines: game.correspondenceForecast?.length,
           chatOptions: gameState.chatOptions,
+          chatAvailable: gameState.chatState != null,
         );
       }),
     );
@@ -704,7 +714,10 @@ class _GameBottomBar extends ConsumerWidget {
     if (data == null) return const BottomBar.empty();
 
     final canShowChat =
-        gamePrefs.enableChat == true && data.chatOptions != null && kidModeAsync.value == false;
+        gamePrefs.enableChat == true &&
+        data.chatOptions != null &&
+        data.chatAvailable &&
+        kidModeAsync.value == false;
     final numPremoveLines = data.numPremoveLines;
 
     return BottomBar(

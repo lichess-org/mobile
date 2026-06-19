@@ -287,6 +287,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileOrImportPgnFile => 'O importa un file PGN';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+
+  @override
   String get variantStandard => 'Standard';
 
   @override
@@ -2522,6 +2525,12 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get blackDidntMove => 'Il nero non ha mosso';
+
+  @override
+  String get whiteAborted => 'White aborted the game';
+
+  @override
+  String get blackAborted => 'Black aborted the game';
 
   @override
   String get requestAComputerAnalysis => 'Chiedi un\'analisi del computer';

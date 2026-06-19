@@ -4,6 +4,7 @@ import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_dashboard.dart';
 import 'package:lichess_mobile/src/view/user/perf_stats_screen.dart';
@@ -88,7 +89,12 @@ class PerfCards extends StatelessWidget {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            Text(perf.shortTitle, style: TextStyle(color: textShade(context, 0.7))),
+                            Text(
+                              perf.shortLabel(context.l10n),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(color: textShade(context, 0.7)),
+                            ),
                             Icon(perf.icon, color: textShade(context, 0.6)),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,

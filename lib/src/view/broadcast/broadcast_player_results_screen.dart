@@ -30,6 +30,18 @@ final broadcastTournamentIdProvider = FutureProvider.autoDispose
       return (await ref.watch(broadcastRoundProvider(roundId).future)).tournament.id;
     }, name: 'BroadcastTournamentIdProvider');
 
+/// Returns the year that should be used as the reference point for the
+/// player's age display, matching lichess.org behaviour: the year the
+/// tournament took place (preferring its end date when known, otherwise its
+/// start date). Falls back to the current year only if no dates are known.
+int tournamentReferenceYear(BroadcastTournament tournament) {
+  final dates = tournament.data.information.dates;
+  if (dates == null) {
+    return DateTime.now().year;
+  }
+  return (dates.endsAt ?? dates.startsAt).year;
+}
+
 class BroadcastPlayerResultsScreenLoading extends ConsumerWidget {
   final BroadcastRoundId roundId;
   final BroadcastPlayer? player;
@@ -290,7 +302,7 @@ class _OverallStatPlayer extends StatelessWidget {
                           Expanded(
                             child: Row(
                               children: [
-                                Image.asset('assets/images/fide-fed/$federation.png', height: 12),
+                                Image.asset('assets/images/fide-fed/$federation.webp', height: 12),
                                 const SizedBox(width: 5),
                                 Flexible(
                                   child: Text(
@@ -312,9 +324,9 @@ class _OverallStatPlayer extends StatelessWidget {
                       GestureDetector(
                         onTap: () {
                           if (tournament.data.showTeamScores == true) {
-                            Navigator.of(context).push(
-                              BroadcastTeamScreen.buildRoute(context, tournament.data.id, team),
-                            );
+                            Navigator.of(
+                              context,
+                            ).push(BroadcastTeamScreen.buildRoute(tournament.data.id, team));
                           }
                         },
                         child: Row(
@@ -334,7 +346,7 @@ class _OverallStatPlayer extends StatelessWidget {
                           SizedBox(width: 100, child: Text(context.l10n.broadcastAge)),
                           Expanded(
                             child: Text(
-                              (DateTime.now().year - birthYear).toString(),
+                              (tournamentReferenceYear(tournament) - birthYear).toString(),
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
                           ),
@@ -531,7 +543,7 @@ class _GameResultListTile extends StatelessWidget {
           ? Row(
               mainAxisSize: .min,
               children: [
-                Image.asset('assets/images/fide-fed/$federation.png', height: 12),
+                Image.asset('assets/images/fide-fed/$federation.webp', height: 12),
                 const SizedBox(width: 5),
                 if (rating != null) Text(rating.toString()),
               ],

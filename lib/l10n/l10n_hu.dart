@@ -287,6 +287,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Vagy PGN fájl importálása';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+
+  @override
   String get variantStandard => 'Normál';
 
   @override
@@ -2522,6 +2525,12 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get blackDidntMove => 'Sötét nem lépett';
+
+  @override
+  String get whiteAborted => 'White aborted the game';
+
+  @override
+  String get blackAborted => 'Black aborted the game';
 
   @override
   String get requestAComputerAnalysis => 'Számítógépes elemzés kérése';

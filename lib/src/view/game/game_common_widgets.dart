@@ -36,6 +36,7 @@ void openGameScreen(
           ? GameScreen.buildRoute(
               source: ExistingGameSource(game.fullId!),
               loadingPosition: (
+                variant: game.variant,
                 fen: loadingFen,
                 lastMove: loadingLastMove,
                 orientation: orientation,
