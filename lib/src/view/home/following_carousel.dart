@@ -63,7 +63,7 @@ class _FollowingWidgetState extends ConsumerState<FollowingWidget> {
               Padding(
                 padding: Styles.horizontalBodyPadding,
                 child: ListSectionHeader(
-                  title: const Text('Friends'),
+                  title: Text(context.l10n.friends),
                   onTap: () {
                     Navigator.of(context).push(FriendScreen.buildRoute());
                   },
