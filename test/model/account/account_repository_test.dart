@@ -70,4 +70,34 @@ void main() {
       expect(result.autoQueen, AutoQueen.premove);
     });
   });
+
+  group('AccountPreferences', () {
+    test('uses local defaults when signed out', () async {
+      final container = await makeContainer();
+
+      final prefs = await container.read(accountPreferencesProvider.future);
+
+      expect(prefs.zenMode, defaultAccountPreferences.zenMode);
+      expect(prefs.showRatings, defaultAccountPreferences.showRatings);
+      expect(prefs.clockTenths, defaultAccountPreferences.clockTenths);
+    });
+
+    test('local settings feed public preference providers when signed out', () async {
+      final container = await makeContainer();
+
+      await container.read(accountPreferencesProvider.notifier).setShowRatings(ShowRatings.no);
+      await container
+          .read(accountPreferencesProvider.notifier)
+          .setPieceNotation(PieceNotation.letter);
+      await container
+          .read(accountPreferencesProvider.notifier)
+          .setClockSound(const BooleanPref(false));
+      await container.read(accountPreferencesProvider.notifier).setClockTenths(ClockTenths.always);
+
+      expect(await container.read(showRatingsPrefProvider.future), ShowRatings.no);
+      expect(await container.read(pieceNotationProvider.future), PieceNotation.letter);
+      expect(await container.read(clockSoundProvider.future), isFalse);
+      expect(await container.read(clockTenthsProvider.future), ClockTenths.always);
+    });
+  });
 }
