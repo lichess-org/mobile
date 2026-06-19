@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
+import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 
 typedef AccountPrefState = ({
   // game display
@@ -30,19 +34,25 @@ typedef AccountPrefState = ({
 /// A provider that tells if the user wants to see ratings in the app.
 final showRatingsPrefProvider = FutureProvider<ShowRatings>((Ref ref) async {
   final prefs = await ref.watch(accountPreferencesProvider.future);
-  return prefs?.showRatings ?? defaultAccountPreferences.showRatings;
+  return prefs.showRatings;
 });
 
 /// A provider that tells if the user wants clock sounds.
 final clockSoundProvider = FutureProvider<bool>((Ref ref) async {
   final prefs = await ref.watch(accountPreferencesProvider.future);
-  return prefs?.clockSound.value ?? defaultAccountPreferences.clockSound.value;
+  return prefs.clockSound.value;
 });
 
 /// A provider that gives the user's preferred piece notation.
 final pieceNotationProvider = FutureProvider<PieceNotation>((Ref ref) async {
   final prefs = await ref.watch(accountPreferencesProvider.future);
-  return prefs?.pieceNotation ?? defaultAccountPreferences.pieceNotation;
+  return prefs.pieceNotation;
+});
+
+/// A provider that gives the user's preferred clock tenths display.
+final clockTenthsProvider = FutureProvider<ClockTenths>((Ref ref) async {
+  final prefs = await ref.watch(accountPreferencesProvider.future);
+  return prefs.clockTenths;
 });
 
 final defaultAccountPreferences = (
@@ -64,7 +74,7 @@ final defaultAccountPreferences = (
 );
 
 /// A provider that gives the account preferences for the current user.
-final accountPreferencesProvider = AsyncNotifierProvider<AccountPreferences, AccountPrefState?>(
+final accountPreferencesProvider = AsyncNotifierProvider<AccountPreferences, AccountPrefState>(
   AccountPreferences.new,
   name: 'AccountPreferencesProvider',
 );
@@ -73,45 +83,209 @@ final accountPreferencesProvider = AsyncNotifierProvider<AccountPreferences, Acc
 ///
 /// The result is cached for the lifetime of the app, until refreshed.
 /// If the server returns an error, default values are returned.
-class AccountPreferences extends AsyncNotifier<AccountPrefState?> {
+class AccountPreferences extends AsyncNotifier<AccountPrefState> {
   @override
-  Future<AccountPrefState?> build() async {
+  Future<AccountPrefState> build() async {
     final authUser = ref.watch(authControllerProvider);
 
     if (authUser == null) {
-      return null;
+      return _fetchLocal();
     }
 
     try {
-      return ref.read(accountRepositoryProvider).getPreferences();
+      return await ref.read(accountRepositoryProvider).getPreferences();
     } catch (e) {
       debugPrint('[AccountPreferences] Error getting account preferences: $e');
       return defaultAccountPreferences;
     }
   }
 
-  Future<void> setZen(Zen value) => _setPref('zen', value);
-  Future<void> setPieceNotation(PieceNotation value) => _setPref('pieceNotation', value);
-  Future<void> setShowRatings(ShowRatings value) => _setPref('ratings', value);
+  Future<void> setZen(Zen value) =>
+      _setPref('zen', value, (prefs) => _copyWith(prefs, zenMode: value));
+  Future<void> setPieceNotation(PieceNotation value) =>
+      _setPref('pieceNotation', value, (prefs) => _copyWith(prefs, pieceNotation: value));
+  Future<void> setShowRatings(ShowRatings value) =>
+      _setPref('ratings', value, (prefs) => _copyWith(prefs, showRatings: value));
 
-  Future<void> setPremove(BooleanPref value) => _setPref('premove', value);
-  Future<void> setTakeback(Takeback value) => _setPref('takeback', value);
-  Future<void> setAutoQueen(AutoQueen value) => _setPref('autoQueen', value);
-  Future<void> setAutoThreefold(AutoThreefold value) => _setPref('autoThreefold', value);
-  Future<void> setMoretime(Moretime value) => _setPref('moretime', value);
-  Future<void> setClockTenths(ClockTenths value) => _setPref('clockTenths', value);
-  Future<void> setClockSound(BooleanPref value) => _setPref('clockSound', value);
-  Future<void> setConfirmResign(BooleanPref value) => _setPref('confirmResign', value);
-  Future<void> setSubmitMove(SubmitMove value) => _setPref('submitMove', value);
-  Future<void> setFollow(BooleanPref value) => _setPref('follow', value);
-  Future<void> setChallenge(Challenge value) => _setPref('challenge', value);
-  Future<void> setMessage(Message value) => _setPref('message', value);
+  Future<void> setPremove(BooleanPref value) =>
+      _setPref('premove', value, (prefs) => _copyWith(prefs, premove: value));
+  Future<void> setTakeback(Takeback value) =>
+      _setPref('takeback', value, (prefs) => _copyWith(prefs, takeback: value));
+  Future<void> setAutoQueen(AutoQueen value) =>
+      _setPref('autoQueen', value, (prefs) => _copyWith(prefs, autoQueen: value));
+  Future<void> setAutoThreefold(AutoThreefold value) =>
+      _setPref('autoThreefold', value, (prefs) => _copyWith(prefs, autoThreefold: value));
+  Future<void> setMoretime(Moretime value) =>
+      _setPref('moretime', value, (prefs) => _copyWith(prefs, moretime: value));
+  Future<void> setClockTenths(ClockTenths value) =>
+      _setPref('clockTenths', value, (prefs) => _copyWith(prefs, clockTenths: value));
+  Future<void> setClockSound(BooleanPref value) =>
+      _setPref('clockSound', value, (prefs) => _copyWith(prefs, clockSound: value));
+  Future<void> setConfirmResign(BooleanPref value) =>
+      _setPref('confirmResign', value, (prefs) => _copyWith(prefs, confirmResign: value));
+  Future<void> setSubmitMove(SubmitMove value) =>
+      _setPref('submitMove', value, (prefs) => _copyWith(prefs, submitMove: value));
+  Future<void> setFollow(BooleanPref value) =>
+      _setPref('follow', value, (prefs) => _copyWith(prefs, follow: value));
+  Future<void> setChallenge(Challenge value) =>
+      _setPref('challenge', value, (prefs) => _copyWith(prefs, challenge: value));
+  Future<void> setMessage(Message value) =>
+      _setPref('message', value, (prefs) => _copyWith(prefs, message: value));
 
-  Future<void> _setPref<T>(String key, AccountPref<T> value) async {
+  Future<void> _setPref<T>(
+    String key,
+    AccountPref<T> value,
+    AccountPrefState Function(AccountPrefState prefs) updateLocal,
+  ) async {
+    final authUser = ref.read(authControllerProvider);
+    if (authUser == null) {
+      await _saveLocal(updateLocal(state.value ?? _fetchLocal()));
+      return;
+    }
+
     await Future<void>.delayed(const Duration(milliseconds: 200));
     await ref.read(accountRepositoryProvider).setPreference(key, value);
     ref.invalidateSelf();
   }
+
+  Future<void> _saveLocal(AccountPrefState value) async {
+    await LichessBinding.instance.sharedPreferences.setString(
+      PrefCategory.account.storageKey,
+      jsonEncode(_accountPreferencesToJson(value)),
+    );
+
+    if (!ref.mounted) return;
+
+    state = AsyncValue.data(value);
+  }
+
+  AccountPrefState _fetchLocal() {
+    final stored = LichessBinding.instance.sharedPreferences.getString(
+      PrefCategory.account.storageKey,
+    );
+    if (stored == null) {
+      return defaultAccountPreferences;
+    }
+    try {
+      return _localAccountPreferencesFromJson(jsonDecode(stored) as Map<String, dynamic>);
+    } catch (e) {
+      debugPrint('[AccountPreferences] Error reading local account preferences: $e');
+      return defaultAccountPreferences;
+    }
+  }
+}
+
+AccountPrefState _copyWith(
+  AccountPrefState prefs, {
+  Zen? zenMode,
+  PieceNotation? pieceNotation,
+  ShowRatings? showRatings,
+  BooleanPref? premove,
+  AutoQueen? autoQueen,
+  AutoThreefold? autoThreefold,
+  Takeback? takeback,
+  BooleanPref? confirmResign,
+  SubmitMove? submitMove,
+  Moretime? moretime,
+  ClockTenths? clockTenths,
+  BooleanPref? clockSound,
+  BooleanPref? follow,
+  Challenge? challenge,
+  Message? message,
+}) {
+  return (
+    zenMode: zenMode ?? prefs.zenMode,
+    pieceNotation: pieceNotation ?? prefs.pieceNotation,
+    showRatings: showRatings ?? prefs.showRatings,
+    premove: premove ?? prefs.premove,
+    autoQueen: autoQueen ?? prefs.autoQueen,
+    autoThreefold: autoThreefold ?? prefs.autoThreefold,
+    takeback: takeback ?? prefs.takeback,
+    moretime: moretime ?? prefs.moretime,
+    clockTenths: clockTenths ?? prefs.clockTenths,
+    clockSound: clockSound ?? prefs.clockSound,
+    confirmResign: confirmResign ?? prefs.confirmResign,
+    submitMove: submitMove ?? prefs.submitMove,
+    follow: follow ?? prefs.follow,
+    challenge: challenge ?? prefs.challenge,
+    message: message ?? prefs.message,
+  );
+}
+
+Map<String, dynamic> _accountPreferencesToJson(AccountPrefState prefs) {
+  return {
+    'zen': prefs.zenMode.value,
+    'pieceNotation': prefs.pieceNotation.value,
+    'ratings': prefs.showRatings.value,
+    'premove': prefs.premove.value,
+    'autoQueen': prefs.autoQueen.value,
+    'autoThreefold': prefs.autoThreefold.value,
+    'takeback': prefs.takeback.value,
+    'moretime': prefs.moretime.value,
+    'clockTenths': prefs.clockTenths.value,
+    'clockSound': prefs.clockSound.value,
+    'confirmResign': prefs.confirmResign.value,
+    'submitMove': prefs.submitMove.value,
+    'follow': prefs.follow.value,
+    'challenge': prefs.challenge.value,
+    'message': prefs.message.value,
+  };
+}
+
+AccountPrefState _localAccountPreferencesFromJson(Map<String, dynamic> json) {
+  return (
+    zenMode: Zen.fromInt(_intValue(json, 'zen', defaultAccountPreferences.zenMode.value)),
+    pieceNotation: PieceNotation.fromInt(
+      _intValue(json, 'pieceNotation', defaultAccountPreferences.pieceNotation.value),
+    ),
+    showRatings: ShowRatings.fromInt(
+      _intValue(json, 'ratings', defaultAccountPreferences.showRatings.value),
+    ),
+    premove: BooleanPref(_boolValue(json, 'premove', defaultAccountPreferences.premove.value)),
+    autoQueen: AutoQueen.fromInt(
+      _intValue(json, 'autoQueen', defaultAccountPreferences.autoQueen.value),
+    ),
+    autoThreefold: AutoThreefold.fromInt(
+      _intValue(json, 'autoThreefold', defaultAccountPreferences.autoThreefold.value),
+    ),
+    takeback: Takeback.fromInt(
+      _intValue(json, 'takeback', defaultAccountPreferences.takeback.value),
+    ),
+    moretime: Moretime.fromInt(
+      _intValue(json, 'moretime', defaultAccountPreferences.moretime.value),
+    ),
+    clockTenths: ClockTenths.fromInt(
+      _intValue(json, 'clockTenths', defaultAccountPreferences.clockTenths.value),
+    ),
+    clockSound: BooleanPref(
+      _boolValue(json, 'clockSound', defaultAccountPreferences.clockSound.value),
+    ),
+    confirmResign: BooleanPref(
+      _boolValue(json, 'confirmResign', defaultAccountPreferences.confirmResign.value),
+    ),
+    submitMove: SubmitMove.fromInt(
+      _intValue(json, 'submitMove', defaultAccountPreferences.submitMove.value),
+    ),
+    follow: BooleanPref(_boolValue(json, 'follow', defaultAccountPreferences.follow.value)),
+    challenge: Challenge.fromInt(
+      _intValue(json, 'challenge', defaultAccountPreferences.challenge.value),
+    ),
+    message: Message.fromInt(_intValue(json, 'message', defaultAccountPreferences.message.value)),
+  );
+}
+
+int _intValue(Map<String, dynamic> json, String key, int fallback) {
+  final value = json[key];
+  return value is num ? value.toInt() : fallback;
+}
+
+bool _boolValue(Map<String, dynamic> json, String key, bool fallback) {
+  final value = json[key];
+  return switch (value) {
+    final bool b => b,
+    final num n => n != 0,
+    _ => fallback,
+  };
 }
 
 abstract class AccountPref<T> {
