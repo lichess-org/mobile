@@ -51,14 +51,14 @@ class RelationRepository {
 }
 
 final followingCarouselProvider = FutureProvider.autoDispose<IList<FollowingUser>>((ref) {
-  return ref.read(mobileFollowingProvider).getFollowing();
+  return ref.watch(followingRepositoryProvider).getFollowing();
 }, name: 'FollowingCarouselProvider');
 
-final mobileFollowingProvider = Provider<FollowingRepository>((ref) {
+final followingRepositoryProvider = Provider<FollowingRepository>((ref) {
   final client = ref.watch(lichessClientProvider);
   final aggregator = ref.watch(aggregatorProvider);
   return FollowingRepository(client, aggregator);
-}, name: 'MobileFollowingRepositoryProvider');
+}, name: 'FollowingRepositoryProvider');
 
 class FollowingRepository {
   FollowingRepository(this.client, this.aggregator);
