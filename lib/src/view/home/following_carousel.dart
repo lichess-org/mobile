@@ -157,7 +157,7 @@ Widget _buildActionButtons(BuildContext context, WidgetRef ref, FollowingUser fr
       if (friend.playing == true)
         IconButton.filledTonal(
           onPressed: () {
-            Navigator.of(context).push(TvScreen.buildRoute(user: friend.user));
+            Navigator.of(context, rootNavigator: true).push(TvScreen.buildRoute(user: friend.user));
           },
           icon: const Icon(Icons.live_tv_outlined),
           iconSize: iconSize,
@@ -176,7 +176,10 @@ Widget _buildActionButtons(BuildContext context, WidgetRef ref, FollowingUser fr
             icon: Icons.chat_bubble_outline,
             label: context.l10n.message,
             onPressed: () {
-              Navigator.of(context).push(ConversationScreen.buildRoute(user: friend.user));
+              Navigator.of(
+                context,
+                rootNavigator: true,
+              ).push(ConversationScreen.buildRoute(user: friend.user));
             },
           ),
           ContextMenuAction(
