@@ -14,7 +14,7 @@ dependencies:
   app_settings: ^7.0.0
   async: ^2.13.1
   auto_size_text: ^3.0.0
-  chessground: ^10.0.3
+  chessground: ^10.1.0
   clock: ^1.1.2
   collection: ^1.19.1
   connectivity_plus: ^7.1.1
@@ -27,10 +27,10 @@ dependencies:
   device_info_plus: ^13.1.0
   dynamic_system_colors: ^1.9.0
   fast_immutable_collections: ^11.2.0
-  file_picker: ^12.0.0-beta.5
-  firebase_core: ^4.10.0
-  firebase_crashlytics: ^5.2.3
-  firebase_messaging: ^16.3.0
+  file_picker: ^12.0.0-beta.7
+  firebase_core: ^4.11.0
+  firebase_crashlytics: ^5.2.4
+  firebase_messaging: ^16.4.0
   fl_chart: ^1.2.0
   flutter:
     sdk: flutter
@@ -43,7 +43,7 @@ dependencies:
     sdk: flutter
   flutter_markdown_plus: ^1.0.7
   flutter_native_splash: ^2.4.8
-  flutter_riverpod: ^3.3.1
+  flutter_riverpod: 3.2.1 # current 3.3.2 version has a breaking change
   flutter_secure_storage: ^10.3.1
   flutter_slidable: ^4.0.3
   flutter_spinkit: ^5.2.2
@@ -57,12 +57,12 @@ dependencies:
   linkify: ^5.0.0
   logging: ^1.3.0
   material_color_utilities: ^0.13.0
-  material_symbols_icons: ^4.2928.1
+  material_symbols_icons: ^4.2951.0
   meta: ^1.18.0
   multistockfish: ^0.5.0
   package_info_plus: ^10.1.0
   path: ^1.9.1
-  path_provider: ^2.1.5
+  path_provider: ^2.1.6
   popover: ^0.4.0
   pub_semver: ^2.2.0
   qr_flutter: ^4.1.0
