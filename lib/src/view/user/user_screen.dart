@@ -182,10 +182,10 @@ class _UserProfileListView extends ConsumerWidget {
       return Center(child: Text(context.l10n.settingsThisAccountIsClosed, style: Styles.bold));
     }
 
-    Future<void> userAction(Future<void> Function(LichessClient client) action) async {
+    Future<void> userAction(Future<void> Function() action) async {
       setIsLoading(true);
       try {
-        await ref.withClient(action).then((_) => ref.invalidate(_userScreenDataProvider(user.id)));
+        await action.call().then((_) => ref.invalidate(_userScreenDataProvider(user.id)));
       } finally {
         setIsLoading(false);
       }
@@ -269,7 +269,9 @@ class _UserProfileListView extends ConsumerWidget {
                     title: Text(context.l10n.follow),
                     onTap: isLoading
                         ? null
-                        : () => userAction((client) => RelationRepository(client).follow(user.id)),
+                        : () => userAction(
+                            () => ref.read(relationRepositoryProvider).follow(user.id),
+                          ),
                   )
                 else if (user.following == true)
                   ListTile(
@@ -277,8 +279,9 @@ class _UserProfileListView extends ConsumerWidget {
                     title: Text(context.l10n.unfollow),
                     onTap: isLoading
                         ? null
-                        : () =>
-                              userAction((client) => RelationRepository(client).unfollow(user.id)),
+                        : () => userAction(
+                            () => ref.read(relationRepositoryProvider).unfollow(user.id),
+                          ),
                   ),
                 if (user.following != true && user.blocking != true)
                   ListTile(
@@ -286,7 +289,8 @@ class _UserProfileListView extends ConsumerWidget {
                     title: Text(context.l10n.block),
                     onTap: isLoading
                         ? null
-                        : () => userAction((client) => RelationRepository(client).block(user.id)),
+                        : () =>
+                              userAction(() => ref.read(relationRepositoryProvider).block(user.id)),
                   )
                 else if (user.blocking == true)
                   ListTile(
@@ -294,7 +298,9 @@ class _UserProfileListView extends ConsumerWidget {
                     title: Text(context.l10n.unblock),
                     onTap: isLoading
                         ? null
-                        : () => userAction((client) => RelationRepository(client).unblock(user.id)),
+                        : () => userAction(
+                            () => ref.read(relationRepositoryProvider).unblock(user.id),
+                          ),
                   ),
                 ListTile(
                   leading: const Icon(Icons.report_problem_outlined),

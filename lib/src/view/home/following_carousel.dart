@@ -1,3 +1,4 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/relation/following_user.dart';
@@ -17,8 +18,14 @@ import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 
+final followingCarouselProvider = FutureProvider.autoDispose<IList<FollowingUser>>((ref) {
+  return ref.watch(relationRepositoryProvider).getRecentFollowing();
+}, name: 'FollowingCarouselProvider');
+
 class FollowingWidget extends ConsumerStatefulWidget {
-  const FollowingWidget({super.key});
+  const FollowingWidget(this.followingAsync, {super.key});
+
+  final AsyncValue<IList<FollowingUser>> followingAsync;
 
   @override
   ConsumerState<FollowingWidget> createState() => _FollowingWidgetState();
@@ -27,9 +34,7 @@ class FollowingWidget extends ConsumerStatefulWidget {
 class _FollowingWidgetState extends ConsumerState<FollowingWidget> {
   @override
   Widget build(BuildContext context) {
-    final followingAsync = ref.watch(followingCarouselProvider);
-
-    return followingAsync.when(
+    return widget.followingAsync.when(
       loading: () => _buildLoadingSkeleton(context),
       error: (e, s) => const SizedBox.shrink(),
       data: (users) {

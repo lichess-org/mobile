@@ -21,7 +21,7 @@ import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/message/message_repository.dart';
-import 'package:lichess_mobile/src/model/relation/relation_repository.dart';
+import 'package:lichess_mobile/src/model/relation/following_user.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_providers.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
@@ -161,6 +161,9 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
         final blogPosts = isOnline
             ? ref.watch(blogCarouselProvider)
             : const AsyncValue.data(IListConst<BlogPost>([]));
+        final followingAsync = authUser != null && isOnline
+            ? ref.watch(followingCarouselProvider)
+            : const AsyncValue.data(IListConst<FollowingUser>([]));
 
         final isKidMode = ref.watch(kidModeProvider).value ?? false;
 
@@ -273,7 +276,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
             _EditableWidget(
               widget: HomeEditableWidget.friends,
               shouldShow: authUser != null && isOnline,
-              child: const FollowingWidget(),
+              child: FollowingWidget(followingAsync),
             ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -339,7 +342,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
             _EditableWidget(
               widget: HomeEditableWidget.friends,
               shouldShow: authUser != null && isOnline,
-              child: const FollowingWidget(),
+              child: FollowingWidget(followingAsync),
             ),
             _EditableWidget(
               widget: HomeEditableWidget.quickPairing,

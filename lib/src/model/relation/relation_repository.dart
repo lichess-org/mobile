@@ -8,19 +8,32 @@ import 'package:lichess_mobile/src/network/http.dart';
 
 /// A provider for [RelationRepository].
 final relationRepositoryProvider = Provider<RelationRepository>((ref) {
-  return RelationRepository(ref.watch(lichessClientProvider));
+  return RelationRepository(ref.watch(lichessClientProvider), ref.watch(aggregatorProvider));
 }, name: 'RelationRepositoryProvider');
 
 class RelationRepository {
-  const RelationRepository(this.client);
+  const RelationRepository(this.client, this.aggregator);
 
   final LichessClient client;
+  final Aggregator aggregator;
 
-  Future<IList<User>> getFollowing() {
+  /// Fetches the list of users that the current user is following.
+  Future<IList<User>> getAllFollowing() {
     return client.readNdJsonList(
       Uri(path: '/api/rel/following'),
       headers: {'Accept': 'application/x-ndjson'},
       mapper: User.fromServerJson,
+    );
+  }
+
+  /// Fetches a list of users that the current user is following, limited to 10 users.
+  ///
+  /// This is for displaying a recent following carousel or a preview of the following list.
+  /// It contains useful information such as the last seen time and whether the user is currently playing a game.
+  Future<IList<FollowingUser>> getRecentFollowing() {
+    return aggregator.readNdJsonList(
+      Uri(path: '/api/mobile/following', queryParameters: {'nb': '10'}),
+      mapper: FollowingUser.fromJson,
     );
   }
 
@@ -47,29 +60,5 @@ class RelationRepository {
   Future<void> deleteThread(UserId userId) async {
     final uri = Uri(path: '/inbox/$userId/delete');
     await client.postRead(uri);
-  }
-}
-
-final followingCarouselProvider = FutureProvider.autoDispose<IList<FollowingUser>>((ref) {
-  return ref.watch(followingRepositoryProvider).getFollowing();
-}, name: 'FollowingCarouselProvider');
-
-final followingRepositoryProvider = Provider<FollowingRepository>((ref) {
-  final client = ref.watch(lichessClientProvider);
-  final aggregator = ref.watch(aggregatorProvider);
-  return FollowingRepository(client, aggregator);
-}, name: 'FollowingRepositoryProvider');
-
-class FollowingRepository {
-  FollowingRepository(this.client, this.aggregator);
-
-  final LichessClient client;
-  final Aggregator aggregator;
-
-  Future<IList<FollowingUser>> getFollowing() {
-    return aggregator.readNdJsonList(
-      Uri(path: '/api/mobile/following', queryParameters: {'nb': '10'}),
-      mapper: FollowingUser.fromJson,
-    );
   }
 }
