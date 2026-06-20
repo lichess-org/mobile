@@ -57,12 +57,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         title: account.when(
           data: (user) => user == null
               ? const SizedBox.shrink()
-              : ListTile(
-                  contentPadding: EdgeInsets.zero,
-                  leading: UserAvatar(user.lightUser, radius: 16),
-                  title: UserFullNameWidget(user: user.lightUser, showFlair: false),
-                  subtitle: Text(online == true ? context.l10n.online : context.l10n.offline),
-                ),
+              : UserAppBarTitleWidget(user: user.lightUser, isOnline: online, seenAt: user.seenAt),
           loading: () => const SizedBox.shrink(),
           error: (error, _) => const SizedBox.shrink(),
         ),

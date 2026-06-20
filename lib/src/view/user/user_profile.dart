@@ -10,9 +10,9 @@ import 'package:lichess_mobile/src/model/user/profile.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
-import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
+import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/user/countries.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -109,12 +109,12 @@ class UserProfileWidget extends ConsumerWidget {
                 padding: const EdgeInsets.only(bottom: 5),
                 child: Location(profile: user.profile!),
               ),
+            if (user.count != null) ...[
+              Text(context.l10n.nbGames(user.count!.all).localizeNumbers()),
+              const SizedBox(height: 5),
+            ],
             if (user.createdAt != null)
               Text('${context.l10n.memberSince} ${DateFormat.yMMMMd().format(user.createdAt!)}'),
-            if (user.seenAt != null) ...[
-              const SizedBox(height: 5),
-              Text(context.l10n.lastSeenActive(relativeDate(context.l10n, user.seenAt!))),
-            ],
             if (user.playTime != null) ...[
               const SizedBox(height: 5),
               Text(
