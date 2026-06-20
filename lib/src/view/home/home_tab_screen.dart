@@ -276,7 +276,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
             _EditableWidget(
               widget: HomeEditableWidget.friends,
               shouldShow: authUser != null && isOnline,
-              child: FollowingWidget(followingAsync),
+              child: FollowingCarousel(followingAsync),
             ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -342,7 +342,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
             _EditableWidget(
               widget: HomeEditableWidget.friends,
               shouldShow: authUser != null && isOnline,
-              child: FollowingWidget(followingAsync),
+              child: FollowingCarousel(followingAsync),
             ),
             _EditableWidget(
               widget: HomeEditableWidget.quickPairing,

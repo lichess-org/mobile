@@ -22,16 +22,17 @@ final followingCarouselProvider = FutureProvider.autoDispose<IList<FollowingUser
   return ref.watch(relationRepositoryProvider).getRecentFollowing();
 }, name: 'FollowingCarouselProvider');
 
-class FollowingWidget extends ConsumerStatefulWidget {
-  const FollowingWidget(this.followingAsync, {super.key});
+/// A carousel widget that displays a list of users that the current user is following.
+class FollowingCarousel extends ConsumerStatefulWidget {
+  const FollowingCarousel(this.followingAsync, {super.key});
 
   final AsyncValue<IList<FollowingUser>> followingAsync;
 
   @override
-  ConsumerState<FollowingWidget> createState() => _FollowingWidgetState();
+  ConsumerState<FollowingCarousel> createState() => _FollowingWidgetState();
 }
 
-class _FollowingWidgetState extends ConsumerState<FollowingWidget> {
+class _FollowingWidgetState extends ConsumerState<FollowingCarousel> {
   @override
   Widget build(BuildContext context) {
     return widget.followingAsync.when(
