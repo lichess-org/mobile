@@ -626,7 +626,10 @@ class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> 
             stepCursor: curState.isReplaying
                 ? curState.stepCursor.clamp(0, newGame.steps.length - 1)
                 : newGame.steps.length - 1,
-            moveToConfirm: curState.isReplaying ? null : curState.moveToConfirm,
+            moveToConfirm:
+                (!curState.isReplaying && newGame.steps.length == curState.game.steps.length)
+                ? curState.moveToConfirm
+                : null,
             opponentLeftCountdown: isOpponentOnGame ? null : curState.opponentLeftCountdown,
           ),
         );
