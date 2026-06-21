@@ -1075,6 +1075,143 @@ void main() {
       expect(findClockWithTime(Side.black, '0:51'), findsOneWidget);
       expect(findClockWithTime(Side.white, '0:55'), findsOneWidget);
     });
+
+    testWidgets('full event after takeback clamps an out-of-bounds replay cursor', (
+      WidgetTester tester,
+    ) async {
+      const gameFullId = GameFullId('qVChCOTcHSeW');
+      final gameSocketUri = GameController.socketUri(gameFullId);
+
+      // 6 plies -> 7 steps (indices 0..6), live cursor at 6.
+      await createTestGame(
+        tester,
+        pgn: 'e4 e5 Nf3 Nc6 Bc4 Bc5',
+        clock: const (
+          running: true,
+          initial: Duration(minutes: 1),
+          increment: Duration.zero,
+          white: Duration(seconds: 58),
+          black: Duration(seconds: 54),
+          emerg: Duration(seconds: 10),
+        ),
+      );
+      expect(getBoardPieces(tester).length, 32);
+
+      final container = ProviderScope.containerOf(tester.element(find.byType(GameScreen)));
+      final ctrlProvider = gameControllerProvider(gameFullId);
+
+      // The user browses back to an earlier move: the controller is now replaying.
+      container.read(ctrlProvider.notifier).cursorAt(5);
+      await tester.pump();
+      expect(container.read(ctrlProvider).requireValue.isReplaying, isTrue);
+
+      // A takeback rolls the game back to 'e4 e5 Nf3' (4 steps, indices 0..3).
+      // The socket reconnects and the server resends the shortened game state.
+      // The replay cursor (5) now points past the last available step (3).
+      sendServerSocketMessages(gameSocketUri, [
+        makeFullEvent(
+          const GameId('qVChCOTc'),
+          'e4 e5 Nf3',
+          whiteUserName: 'Peter',
+          blackUserName: 'Steven',
+          youAre: Side.white,
+          socketVersion: 1,
+          clock: const (
+            running: true,
+            initial: Duration(minutes: 1),
+            increment: Duration.zero,
+            white: Duration(seconds: 55),
+            black: Duration(seconds: 53),
+            emerg: Duration(seconds: 10),
+          ),
+        ),
+      ]);
+      // Without the clamp the cursor would stay at 5 and rendering the board
+      // position (or calling cursorForward) would throw a RangeError here.
+      await tester.pump();
+
+      final state = container.read(ctrlProvider).requireValue;
+      // The cursor is clamped to the last available step.
+      expect(state.stepCursor, state.game.steps.length - 1);
+      expect(state.stepCursor, 3);
+
+      // The board renders the shortened game without throwing.
+      expect(boardHasPiece(tester, Square.f3, Piece.whiteKnight), isTrue);
+      expect(boardHasPiece(tester, Square.c6, Piece.blackKnight), isFalse);
+      expect(boardHasPiece(tester, Square.c4, Piece.whiteBishop), isFalse);
+      expect(getBoardPieces(tester).length, 32);
+
+      // cursorForward() must be safe to call (the bug this clamp guards against).
+      container.read(ctrlProvider.notifier).cursorForward();
+      await tester.pump();
+      expect(container.read(ctrlProvider).requireValue.stepCursor, 3);
+    });
+
+    testWidgets('full event keeps the replay cursor instead of jumping to the live position', (
+      WidgetTester tester,
+    ) async {
+      const gameFullId = GameFullId('qVChCOTcHSeW');
+      final gameSocketUri = GameController.socketUri(gameFullId);
+
+      // 4 plies -> 5 steps (indices 0..4), live cursor at 4.
+      await createTestGame(
+        tester,
+        pgn: 'e4 e5 Nf3 Nc6',
+        clock: const (
+          running: true,
+          initial: Duration(minutes: 1),
+          increment: Duration.zero,
+          white: Duration(seconds: 58),
+          black: Duration(seconds: 54),
+          emerg: Duration(seconds: 10),
+        ),
+      );
+
+      final container = ProviderScope.containerOf(tester.element(find.byType(GameScreen)));
+      final ctrlProvider = gameControllerProvider(gameFullId);
+
+      // The user browses back to the position after 2.e5: now replaying at step 2.
+      container.read(ctrlProvider.notifier).cursorAt(2);
+      await tester.pump();
+      expect(container.read(ctrlProvider).requireValue.isReplaying, isTrue);
+      expect(boardHasPiece(tester, Square.f3, Piece.whiteKnight), isFalse);
+
+      // A full event arrives (socket reconnect) with the game grown by one move
+      // (the opponent's reply Bc4... here a 5th ply Bc4). The step count changed,
+      // but the browse cursor (2) is still within bounds.
+      //
+      // Pre-PR behaviour: the cursor jumped to the live end (step 5).
+      // PR behaviour: the browse cursor is preserved (step 2).
+      sendServerSocketMessages(gameSocketUri, [
+        makeFullEvent(
+          const GameId('qVChCOTc'),
+          'e4 e5 Nf3 Nc6 Bc4',
+          whiteUserName: 'Peter',
+          blackUserName: 'Steven',
+          youAre: Side.white,
+          socketVersion: 1,
+          clock: const (
+            running: true,
+            initial: Duration(minutes: 1),
+            increment: Duration.zero,
+            white: Duration(seconds: 57),
+            black: Duration(seconds: 54),
+            emerg: Duration(seconds: 10),
+          ),
+        ),
+      ]);
+      await tester.pump();
+
+      final state = container.read(ctrlProvider).requireValue;
+      // The game grew, but the user's browsing position is kept.
+      expect(state.game.steps.length, 6);
+      expect(state.stepCursor, 2);
+      expect(state.isReplaying, isTrue);
+      // Board still shows the position after 2.e5 (Nf3 not yet played at this cursor).
+      expect(boardHasPiece(tester, Square.f3, Piece.whiteKnight), isFalse);
+      expect(boardHasPiece(tester, Square.e4, Piece.whitePawn), isTrue);
+      expect(boardHasPiece(tester, Square.e5, Piece.blackPawn), isTrue);
+    });
   });
 
   group('Castling', () {
