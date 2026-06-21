@@ -1212,6 +1212,138 @@ void main() {
       expect(boardHasPiece(tester, Square.e4, Piece.whitePawn), isTrue);
       expect(boardHasPiece(tester, Square.e5, Piece.blackPawn), isTrue);
     });
+
+    testWidgets('full event clears a pending move-to-confirm when the server position changed', (
+      WidgetTester tester,
+    ) async {
+      const gameFullId = GameFullId('qVChCOTcHSeW');
+      final gameSocketUri = GameController.socketUri(gameFullId);
+
+      // White to move after 2...Nc6, with move confirmation enabled.
+      await createTestGame(
+        tester,
+        pgn: 'e4 e5 Nf3 Nc6',
+        clock: const (
+          running: true,
+          initial: Duration(minutes: 1),
+          increment: Duration.zero,
+          white: Duration(seconds: 58),
+          black: Duration(seconds: 54),
+          emerg: Duration(seconds: 10),
+        ),
+        serverPrefs: const ServerGamePrefs(
+          showRatings: true,
+          enablePremove: true,
+          autoQueen: AutoQueen.always,
+          confirmResign: true,
+          submitMove: true,
+          zenMode: Zen.no,
+        ),
+      );
+
+      final container = ProviderScope.containerOf(tester.element(find.byType(GameScreen)));
+      final ctrlProvider = gameControllerProvider(gameFullId);
+
+      // White selects Nf3-g5 but has not confirmed it yet: the knight is shown on
+      // g5 (via currentPosition) and f3 is vacated.
+      await playMove(tester, 'f3', 'g5');
+      expect(container.read(ctrlProvider).requireValue.moveToConfirm, isNotNull);
+      expect(boardHasPiece(tester, Square.g5, Piece.whiteKnight), isTrue);
+
+      // A takeback is resynced via a full event, rolling the game back to 'e4 e5':
+      // the knight is back on g1 and f3 is empty. The pending Nf3-g5 now refers to
+      // a square (f3) that no longer holds a piece. Keeping it would make
+      // currentPosition play an illegal move on the new position.
+      sendServerSocketMessages(gameSocketUri, [
+        makeFullEvent(
+          const GameId('qVChCOTc'),
+          'e4 e5',
+          whiteUserName: 'Peter',
+          blackUserName: 'Steven',
+          youAre: Side.white,
+          socketVersion: 1,
+          clock: const (
+            running: true,
+            initial: Duration(minutes: 1),
+            increment: Duration.zero,
+            white: Duration(seconds: 57),
+            black: Duration(seconds: 54),
+            emerg: Duration(seconds: 10),
+          ),
+        ),
+      ]);
+      await tester.pump();
+
+      final state = container.read(ctrlProvider).requireValue;
+      // The stale pending move must be dropped...
+      expect(state.moveToConfirm, isNull);
+      // ...and the board renders the resynced position (knight back on g1).
+      expect(boardHasPiece(tester, Square.g1, Piece.whiteKnight), isTrue);
+      expect(boardHasPiece(tester, Square.g5, Piece.whiteKnight), isFalse);
+      expect(boardHasPiece(tester, Square.f3, Piece.whiteKnight), isFalse);
+      expect(getBoardPieces(tester).length, 32);
+    });
+
+    testWidgets('full event keeps a pending move-to-confirm when the position is unchanged', (
+      WidgetTester tester,
+    ) async {
+      const gameFullId = GameFullId('qVChCOTcHSeW');
+      final gameSocketUri = GameController.socketUri(gameFullId);
+
+      await createTestGame(
+        tester,
+        pgn: 'e4 e5 Nf3 Nc6',
+        clock: const (
+          running: true,
+          initial: Duration(minutes: 1),
+          increment: Duration.zero,
+          white: Duration(seconds: 58),
+          black: Duration(seconds: 54),
+          emerg: Duration(seconds: 10),
+        ),
+        serverPrefs: const ServerGamePrefs(
+          showRatings: true,
+          enablePremove: true,
+          autoQueen: AutoQueen.always,
+          confirmResign: true,
+          submitMove: true,
+          zenMode: Zen.no,
+        ),
+      );
+
+      final container = ProviderScope.containerOf(tester.element(find.byType(GameScreen)));
+      final ctrlProvider = gameControllerProvider(gameFullId);
+
+      await playMove(tester, 'f3', 'g5');
+      expect(container.read(ctrlProvider).requireValue.moveToConfirm, isNotNull);
+      expect(boardHasPiece(tester, Square.g5, Piece.whiteKnight), isTrue);
+
+      // A transient reconnect resends the same game state ('e4 e5 Nf3 Nc6'): the
+      // position the move was selected for is unchanged, so the pending move (and
+      // its confirmation dialog) must survive.
+      sendServerSocketMessages(gameSocketUri, [
+        makeFullEvent(
+          const GameId('qVChCOTc'),
+          'e4 e5 Nf3 Nc6',
+          whiteUserName: 'Peter',
+          blackUserName: 'Steven',
+          youAre: Side.white,
+          socketVersion: 1,
+          clock: const (
+            running: true,
+            initial: Duration(minutes: 1),
+            increment: Duration.zero,
+            white: Duration(seconds: 58),
+            black: Duration(seconds: 54),
+            emerg: Duration(seconds: 10),
+          ),
+        ),
+      ]);
+      await tester.pump();
+
+      expect(container.read(ctrlProvider).requireValue.moveToConfirm, isNotNull);
+      expect(boardHasPiece(tester, Square.g5, Piece.whiteKnight), isTrue);
+    });
   });
 
   group('Castling', () {

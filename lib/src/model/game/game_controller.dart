@@ -619,6 +619,12 @@ class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> 
         final isOpponentOnGame =
             newGame.playerOf(newGame.youAre?.opposite ?? Side.white).onGame ?? false;
 
+        // A pending (unconfirmed) move was selected for the previous live
+        // position. If the server resync changed that position (e.g. a takeback),
+        // the move could be applied to a different position and render an illegal
+        // one, so it must be dropped.
+        final positionChanged = newGame.lastPosition.fen != curState.game.lastPosition.fen;
+
         state = AsyncValue.data(
           state.requireValue.copyWith(
             game: newGame,
@@ -626,7 +632,7 @@ class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> 
             stepCursor: curState.isReplaying
                 ? curState.stepCursor.clamp(0, newGame.steps.length - 1)
                 : newGame.steps.length - 1,
-            moveToConfirm: curState.isReplaying ? null : curState.moveToConfirm,
+            moveToConfirm: curState.isReplaying || positionChanged ? null : curState.moveToConfirm,
             opponentLeftCountdown: isOpponentOnGame ? null : curState.opponentLeftCountdown,
           ),
         );
