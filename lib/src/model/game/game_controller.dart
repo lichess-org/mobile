@@ -618,16 +618,16 @@ class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> 
         final newGame = fullEvent.game;
         final isOpponentOnGame =
             newGame.playerOf(newGame.youAre?.opposite ?? Side.white).onGame ?? false;
-        final hasSameNumberOfSteps = newGame.steps.length == curState.game.steps.length;
 
         state = AsyncValue.data(
           state.requireValue.copyWith(
             game: newGame,
-            stepCursor: hasSameNumberOfSteps ? curState.stepCursor : newGame.steps.length - 1,
-            moveToConfirm: hasSameNumberOfSteps ? curState.moveToConfirm : null,
-            opponentLeftCountdown: isOpponentOnGame
-                ? null
-                : state.requireValue.opponentLeftCountdown,
+            // Clamp in case a takeback happened to prevent problems with cursorForward()
+            stepCursor: curState.isReplaying
+                ? curState.stepCursor.clamp(0, newGame.steps.length - 1)
+                : newGame.steps.length - 1,
+            moveToConfirm: curState.isReplaying ? null : curState.moveToConfirm,
+            opponentLeftCountdown: isOpponentOnGame ? null : curState.opponentLeftCountdown,
           ),
         );
 
