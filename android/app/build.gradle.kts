@@ -49,6 +49,19 @@ android {
         }
     }
 
+    flavorDimensions += "environment"
+
+    productFlavors {
+        create("default") {
+            dimension = "environment"
+        }
+
+        create("preview") {
+            dimension = "environment"
+            applicationIdSuffix = ".preview"
+        }
+    }
+
     signingConfigs {
         create("release") {
             keyAlias = keystoreProperties["keyAlias"] as String?
