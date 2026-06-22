@@ -471,12 +471,19 @@ class _MaterialTabViewState extends ConsumerState<_MaterialTabView> {
             }
           : null,
       enabled: enablePopHandler,
-      child: Navigator(
-        key: widget.navigatorKey,
-        onGenerateRoute: _onGenerateRoute,
-        onUnknownRoute: _onUnknownRoute,
-        observers: _navigatorObservers,
-        restorationScopeId: widget.restorationScopeId,
+      child: Theme(
+        data: Theme.of(context).copyWith(
+          pageTransitionsTheme: const PageTransitionsTheme(
+            builders: {TargetPlatform.android: ZoomPageTransitionsBuilder()},
+          ),
+        ),
+        child: Navigator(
+          key: widget.navigatorKey,
+          onGenerateRoute: _onGenerateRoute,
+          onUnknownRoute: _onUnknownRoute,
+          observers: _navigatorObservers,
+          restorationScopeId: widget.restorationScopeId,
+        ),
       ),
     );
   }
