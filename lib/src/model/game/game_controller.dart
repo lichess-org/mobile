@@ -758,6 +758,14 @@ class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> 
           ref.read(ongoingGamesProvider.notifier).updateGame(gameFullId, newState.game);
         }
 
+        if (newState.moveToConfirm != null) {
+          try {
+            newState.game.lastPosition.makeSan(newState.moveToConfirm!);
+          } catch (_) {
+            newState = newState.copyWith(moveToConfirm: null);
+          }
+        }
+
         state = AsyncValue.data(newState);
 
       // End game event
