@@ -100,7 +100,11 @@ class CreateGameService {
     }
 
     try {
-      await LobbyRepository(lichessClient).createSeek(actualSeek, sri: sri);
+      final account = ref.read(accountProvider).value;
+
+      final finalSeek = account != null ? actualSeek.withRatingRangeOf(account) : actualSeek;
+
+      await LobbyRepository(lichessClient).createSeek(finalSeek, sri: sri);
     } catch (e) {
       _log.warning('Failed to create seek', e);
       if (!completer.isCompleted) {
@@ -115,7 +119,11 @@ class CreateGameService {
   Future<void> newCorrespondenceGame(GameSeek seek) async {
     _log.info('Creating new correspondence game');
 
-    await ref.withClient((client) => LobbyRepository(client).createSeek(seek, sri: sri));
+    final account = ref.read(accountProvider).value;
+
+    final finalSeek = account != null ? seek.withRatingRangeOf(account) : seek;
+
+    await ref.withClient((client) => LobbyRepository(client).createSeek(finalSeek, sri: sri));
   }
 
   /// Create a new challenge that is either open or a directed real-time challenge.
