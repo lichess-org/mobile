@@ -287,6 +287,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Veya bir PGN dosyası aktar';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+
+  @override
   String get variantStandard => 'Standart';
 
   @override
@@ -2522,6 +2525,12 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get blackDidntMove => 'Siyah hamle yapmadı';
+
+  @override
+  String get whiteAborted => 'Beyaz oyunu iptal etti';
+
+  @override
+  String get blackAborted => 'Siyah oyunu iptal etti';
 
   @override
   String get requestAComputerAnalysis => 'Bilgisayar analizi talep et';
@@ -5080,7 +5089,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get showMeEverything => 'Bana her şeyi göster';
 
   @override
-  String get lichessPatronInfo => 'Lichess bir yardım kuruluşudur ve tamamen özgür/açık kaynak kodlu bir yazılımdır. Tüm işletme maliyetleri, geliştirmeler ve içerikler yalnızca kullanıcı bağışları ile finanse edilmektedir.';
+  String get lichessPatronInfo => 'Lichess bir yardım kuruluşudur ve tamamen özgür/açık kaynak kodlu bir yazılımdır. Tüm işletme maliyetleri, geliştirmeler ve içerikler yalnızca kullanıcı bağışları ile finanse edilmektedir. Bize katıldığınız için teşekkür ederiz!  ';
 
   @override
   String get nothingToSeeHere => 'Şu anda görülebilecek bir şey yok.';

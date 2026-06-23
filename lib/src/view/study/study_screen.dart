@@ -8,7 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
-import 'package:lichess_mobile/src/model/chat/chat_controller.dart';
+import 'package:lichess_mobile/src/model/chat/chat.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
@@ -505,6 +505,13 @@ class _Body extends ConsumerWidget {
               return ExplorerView(
                 pov: pov,
                 position: studyState.currentNode.position!,
+                opening: explorerOpening(
+                  context,
+                  variant: studyState.variant,
+                  isRootNode: studyState.currentNode.isRoot,
+                  nodeOpening: studyState.currentNode.opening,
+                  branchOpening: studyState.currentBranchOpening,
+                ),
                 onMoveSelected: (move) {
                   ref.read(studyControllerProvider(options).notifier).onUserMove(move);
                 },

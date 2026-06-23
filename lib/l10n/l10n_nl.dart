@@ -287,6 +287,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Of importeer een PGN-bestand';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Goede zet, maar er is een betere';
+
+  @override
   String get variantStandard => 'Standaard';
 
   @override
@@ -2522,6 +2525,12 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get blackDidntMove => 'Zwart heeft niet gezet';
+
+  @override
+  String get whiteAborted => 'Wit heeft de partij afgebroken';
+
+  @override
+  String get blackAborted => 'Zwart heeft de partij afgebroken';
 
   @override
   String get requestAComputerAnalysis => 'Verzoek een computeranalyse';

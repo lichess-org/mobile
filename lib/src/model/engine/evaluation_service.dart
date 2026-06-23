@@ -483,6 +483,8 @@ class EvaluationService {
     final pending = _pendingEvalResult;
     if (pending != null) {
       _pendingEvalResult = null;
+      // Drop results if they are flagged to be discarded
+      if (_discardEvalResults) return;
       _emitEval(pending);
       // Start new throttle window for trailing emission
       _evalThrottleTimer = Timer(kEngineEvalEmissionThrottleDelay, _onThrottleExpired);
@@ -490,8 +492,12 @@ class EvaluationService {
   }
 
   void _emitEval(EvalResult result) {
-    _setEval(result.$2);
+    if (_discardEvalResults) return;
     _evalController.add(result);
+    final currentWork = _evaluationState.value.currentWork ?? _currentMoveWork;
+    if (currentWork != null && result.$1 == currentWork) {
+      _setEval(result.$2);
+    }
   }
 
   void _onMoveResult(MoveResult result) {
@@ -586,22 +592,20 @@ class EngineEvaluationNotifier extends Notifier<EngineEvaluationState> {
 
   final EngineEvaluationFilters filters;
 
+  late ValueListenable<EngineEvaluationState> _listenable;
+
   @override
   EngineEvaluationState build() {
-    final listenable = ref.watch(evaluationServiceProvider).evaluationState;
+    _listenable = ref.watch(evaluationServiceProvider).evaluationState;
 
-    listenable.addListener(_listener);
+    _listenable.addListener(_listener);
 
     ref.onDispose(() {
-      listenable.removeListener(_listener);
+      _listenable.removeListener(_listener);
     });
 
-    final evalState = listenable.value;
-    if (_filter(evalState)) {
-      return evalState;
-    } else {
-      return EvaluationService._defaultState;
-    }
+    final evalState = _listenable.value;
+    return _filter(evalState) ? evalState : EvaluationService._defaultState;
   }
 
   void _listener() {
@@ -609,11 +613,12 @@ class EngineEvaluationNotifier extends Notifier<EngineEvaluationState> {
     // This is needed because notifications can be triggered during disposal
     // of other providers (e.g., when EngineEvaluationMixin's onDispose calls quit())
     Future.microtask(() {
-      if (ref.mounted) {
-        final evaluationState = ref.read(evaluationServiceProvider).evaluationState.value;
-        if (_filter(evaluationState)) {
-          state = evaluationState;
-        }
+      if (!ref.mounted) return;
+      final evaluationState = _listenable.value;
+      if (_filter(evaluationState)) {
+        state = evaluationState;
+      } else {
+        state = EvaluationService._defaultState;
       }
     });
   }

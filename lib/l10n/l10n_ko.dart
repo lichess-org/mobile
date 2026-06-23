@@ -287,6 +287,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileOrImportPgnFile => '또는 PGN 파일 가져오기';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => '좋은 수지만, 더 좋은 수가 있습니다';
+
+  @override
   String get variantStandard => '스탠다드';
 
   @override
@@ -2496,6 +2499,12 @@ class AppLocalizationsKo extends AppLocalizations {
   String get blackDidntMove => '흑이 수를 두지 않음';
 
   @override
+  String get whiteAborted => '백 게임 중단';
+
+  @override
+  String get blackAborted => '흑 게임 중단';
+
+  @override
   String get requestAComputerAnalysis => '컴퓨터 분석 요청하기';
 
   @override
@@ -3070,10 +3079,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String get finished => '종료됨';
 
   @override
-  String get abortGame => '대국 취소';
+  String get abortGame => '대국 중단';
 
   @override
-  String get gameAborted => '대국 취소됨';
+  String get gameAborted => '대국 중단됨';
 
   @override
   String get standard => '스탠다드';
@@ -5093,7 +5102,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get tags => '태그';
 
   @override
-  String get enPassant => '앙파상';
+  String get enPassant => '앙파상 권리';
 
   @override
   String opponentLeftCounter(int count) {

@@ -9,7 +9,7 @@ class AppLocalizationsVi extends AppLocalizations {
   AppLocalizationsVi([String locale = 'vi']) : super(locale);
 
   @override
-  String get mobileAccount => 'Account';
+  String get mobileAccount => 'Tài khoản';
 
   @override
   String get mobileAccountPreferences => 'Tùy chỉnh tài khoản';
@@ -285,6 +285,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get mobileOrImportPgnFile => 'Hoặc nhập một tệp PGN';
+
+  @override
+  String get mobileGoodMoveButThereIsBetter => 'Nước đi tốt, nhưng có nước đi tốt hơn nữa';
 
   @override
   String get variantStandard => 'Tiêu chuẩn';
@@ -926,7 +929,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get broadcastOfficialStandings => 'Bảng xếp hạng Chính thức';
 
   @override
-  String get broadcastRegulations => 'Regulations';
+  String get broadcastRegulations => 'Quy định';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -2496,6 +2499,12 @@ class AppLocalizationsVi extends AppLocalizations {
   String get blackDidntMove => 'Bên đen không đi quân';
 
   @override
+  String get whiteAborted => 'Bên trắng đã hủy ván đấu';
+
+  @override
+  String get blackAborted => 'Bên đen đã hủy ván đấu';
+
+  @override
   String get requestAComputerAnalysis => 'Yêu cầu máy tính phân tích';
 
   @override
@@ -2612,12 +2621,12 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String minRatingX(String param) {
-    return 'Minimum rating of $param';
+    return 'Hệ số tối thiểu của $param';
   }
 
   @override
   String maxRatingX(String param) {
-    return 'Maximum rating of $param';
+    return 'Hệ số tối đa của $param';
   }
 
   @override
@@ -4397,10 +4406,10 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get like => 'Like';
+  String get like => 'Thích';
 
   @override
-  String get liked => 'Liked';
+  String get liked => 'Đã Thích';
 
   @override
   String get quickPairing => 'Xếp cặp nhanh';
@@ -4800,7 +4809,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get theForumEtiquette => 'quy tắc diễn đàn';
 
   @override
-  String get pleaseBeNiceInTheForum => 'Please be nice in the forum.';
+  String get pleaseBeNiceInTheForum => 'Hãy cư xử thân thiện trong diễn đàn.';
 
   @override
   String get thisTopicIsArchived => 'Chủ đề này đã được lưu trữ và không thể trả lời được nữa.';

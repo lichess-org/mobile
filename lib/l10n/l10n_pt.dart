@@ -9,7 +9,7 @@ class AppLocalizationsPt extends AppLocalizations {
   AppLocalizationsPt([String locale = 'pt']) : super(locale);
 
   @override
-  String get mobileAccount => 'Account';
+  String get mobileAccount => 'Conta';
 
   @override
   String get mobileAccountPreferences => 'Preferências da conta';
@@ -251,19 +251,19 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileViewGame => 'Ver Jogo';
 
   @override
-  String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
+  String get mobileCustomizeHomeTip => 'Dica: Pode adicionar mais widgets no ecrã inicial ou remover aqueles que não precisa!';
 
   @override
-  String get mobileCustomizeHomeTipDismiss => 'Dismiss';
+  String get mobileCustomizeHomeTipDismiss => 'Ignorar';
 
   @override
-  String get mobileCustomizeButton => 'Customize';
+  String get mobileCustomizeButton => 'Personalizar';
 
   @override
   String get mobileStopShowingThreat => 'Stop showing threat';
 
   @override
-  String get mobileTournamentCompleted => 'Completed';
+  String get mobileTournamentCompleted => 'Concluído';
 
   @override
   String get mobileTournamentJumpToMyPage => 'Jump to my page';
@@ -272,19 +272,22 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileDisplayModeCompact => 'Compact';
 
   @override
-  String get mobileDisplayModeDetailed => 'Detailed';
+  String get mobileDisplayModeDetailed => 'Detalhado';
 
   @override
   String get mobileOpeningExplorerNotAvailableOffline => 'Opening Explorer is not available offline.';
 
   @override
-  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\nYou can access it from the home tab.';
+  String get mobileChallengeCreated => 'Desafio criado: Irá ser notificado quando o jogo começar. \nPode acessá-lo a partir do ecrã inicial.';
 
   @override
-  String get mobilePreviousPage => 'Previous';
+  String get mobilePreviousPage => 'Anterior';
 
   @override
   String get mobileOrImportPgnFile => 'Or import a PGN file';
+
+  @override
+  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
 
   @override
   String get variantStandard => 'Padrão';
@@ -2522,6 +2525,12 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get blackDidntMove => 'As pretas não se moveram';
+
+  @override
+  String get whiteAborted => 'White aborted the game';
+
+  @override
+  String get blackAborted => 'Black aborted the game';
 
   @override
   String get requestAComputerAnalysis => 'Solicitar uma análise de computador';
@@ -6898,6 +6907,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get mobileOrImportPgnFile => 'Ou importe um arquivo PGN';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Bom lance, mas existe um ainda melhor';
+
+  @override
   String get variantStandard => 'Clássico';
 
   @override
@@ -9133,6 +9145,12 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get blackDidntMove => 'Pretas não moveram';
+
+  @override
+  String get whiteAborted => 'As brancas abortaram a partida';
+
+  @override
+  String get blackAborted => 'As pretas abortaram a partida';
 
   @override
   String get requestAComputerAnalysis => 'Solicitar uma análise do computador';

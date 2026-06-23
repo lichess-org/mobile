@@ -8,7 +8,7 @@
   <string name="materialDifference">Material farqi</string>
   <string name="boardHighlights">Oxirgi yurish va shoh berish taxtada ko\'rsatilsin</string>
   <string name="pieceDestinations">Mumkin boʻlgan yurishlar koʻrsatilsin (qonuniy yurishlar va oldindan yurishlar)</string>
-  <string name="boardCoordinates">Taxta koordinatalari (A‑H, 1‑8)</string>
+  <string name="boardCoordinates">Taxta koordinatalari (A–H, 1–8)</string>
   <string name="moveListWhilePlaying">Oʻyin davomida yurishlar roʻyxati koʻrsatilsin</string>
   <string name="pgnPieceNotation">Yurish notatsiyasi</string>
   <string name="chessPieceSymbol">Shaxmat dona simvoli</string>
@@ -32,7 +32,7 @@
   <string name="clickTwoSquares">Ikkita katakni bosish orqali</string>
   <string name="dragPiece">Donani surish orqali</string>
   <string name="bothClicksAndDrag">Har ikkala usulda</string>
-  <string name="premovesPlayingDuringOpponentTurn">Oldindan yurish (raqib navbati paytida yurish)</string>
+  <string name="premovesPlayingDuringOpponentTurn">Oldindan yurish (raqib gali paytida yurish)</string>
   <string name="takebacksWithOpponentApproval">Yurishni qaytarish (raqib roziligi bilan)</string>
   <string name="inCasualGamesOnly">Faqat reytingsiz oʻyinlarda</string>
   <string name="promoteToQueenAutomatically">Piyoda avtomatik ravishda farzinga aylanadi</string>

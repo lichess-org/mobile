@@ -1688,7 +1688,7 @@ void main() {
       await tester.tap(find.text('Analysis board'));
       await tester.pumpAndSettle(); // wait for analysis screen to open
       expect(
-        find.descendant(of: find.byType(AppBar), matching: find.textContaining('Rated')),
+        find.descendant(of: find.byType(AppBar), matching: find.text('2+1 • Rated')),
         findsOneWidget,
       ); // analysis screen is now open
       expect(find.byType(Chessboard), findsOneWidget);
@@ -1972,6 +1972,57 @@ void main() {
         reason: 'the bottom bar must not rebuild on an opponent move',
       );
     });
+
+    testWidgets(
+      'a chat message does not rebuild GameBody, GameLayout, the board or the bottom bar',
+      (tester) async {
+        await createTestGame(tester, pgn: 'e4 e5');
+        await tester.pump(const Duration(milliseconds: 50));
+
+        final gameBodyBefore = tester.widget<GameBody>(find.byType(GameBody));
+        final gameLayoutBefore = tester.widget<GameLayout>(find.byType(GameLayout));
+        final boardBefore = tester.widget<Chessboard>(find.byType(Chessboard));
+        final bottomBarBefore = tester.widget<BottomBar>(find.byType(BottomBar));
+
+        // A spectator/opponent chat message arrives from the server.
+        sendServerSocketMessages(testGameSocketUri, [
+          '{"t":"message","d":{"u":"Steven","t":"Hello!"}}',
+        ]);
+        await tester.pump();
+
+        // The chat state lives in the GameController, but receiving a message must
+        // not rebuild the expensive game widgets — only the isolated chat button
+        // (which renders the unread badge) is allowed to rebuild.
+        expect(
+          identical(tester.widget<GameBody>(find.byType(GameBody)), gameBodyBefore),
+          isTrue,
+          reason: 'GameScreen must not rebuild GameBody on a chat message',
+        );
+        expect(
+          identical(tester.widget<GameLayout>(find.byType(GameLayout)), gameLayoutBefore),
+          isTrue,
+          reason: 'the GameLayout shell must not rebuild on a chat message',
+        );
+        expect(
+          identical(tester.widget<Chessboard>(find.byType(Chessboard)), boardBefore),
+          isTrue,
+          reason: 'the board must not rebuild on a chat message',
+        );
+        expect(
+          identical(tester.widget<BottomBar>(find.byType(BottomBar)), bottomBarBefore),
+          isTrue,
+          reason: 'the bottom bar must not rebuild on a chat message',
+        );
+
+        // Sanity check that the message was actually delivered (so the test is not
+        // vacuously passing because the message never arrived): opening the chat
+        // shows it. The chat state lives in the GameController and was updated
+        // without rebuilding any of the game widgets asserted above.
+        await tester.tap(find.byType(ChatBottomBarButton));
+        await tester.pumpAndSettle();
+        expect(find.text('Hello!'), findsOneWidget);
+      },
+    );
   });
 
   group('Wakelock', () {

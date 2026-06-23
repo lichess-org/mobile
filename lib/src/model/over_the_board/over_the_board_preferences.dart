@@ -24,7 +24,14 @@ class OverTheBoardPreferencesNotifier extends Notifier<OverTheBoardPrefs>
   OverTheBoardPrefs get defaults => OverTheBoardPrefs.defaults;
 
   @override
-  OverTheBoardPrefs fromJson(Map<String, dynamic> json) => OverTheBoardPrefs.fromJson(json);
+  OverTheBoardPrefs fromJson(Map<String, dynamic> json) {
+    final migratedJson = Map<String, dynamic>.of(json);
+    if (migratedJson['timeControlType'] == 'realTime' ||
+        migratedJson['timeControlType'] == 'increment') {
+      migratedJson['timeControlType'] = 'clock';
+    }
+    return OverTheBoardPrefs.fromJson(migratedJson);
+  }
 
   @override
   OverTheBoardPrefs build() {
@@ -49,13 +56,13 @@ class OverTheBoardPreferencesNotifier extends Notifier<OverTheBoardPrefs>
 }
 
 enum TimeControlType {
-  realTime,
+  clock,
   unlimited;
 
   String label(AppLocalizations l10n) {
     switch (this) {
-      case TimeControlType.realTime:
-        return l10n.realTime;
+      case TimeControlType.clock:
+        return l10n.clock;
       case TimeControlType.unlimited:
         return l10n.unlimited;
     }
@@ -71,14 +78,14 @@ sealed class OverTheBoardPrefs with _$OverTheBoardPrefs implements Serializable 
   const factory OverTheBoardPrefs({
     required bool flipPiecesAfterMove,
     required bool symmetricPieces,
-    @Default(TimeControlType.realTime) TimeControlType timeControlType,
+    @Default(TimeControlType.clock) TimeControlType timeControlType,
     @Default(OverTheBoardPrefs._defaultTimeIncrement) TimeIncrement timeIncrement,
   }) = _OverTheBoardPrefs;
 
   static const defaults = OverTheBoardPrefs(
     flipPiecesAfterMove: false,
     symmetricPieces: false,
-    timeControlType: TimeControlType.realTime,
+    timeControlType: TimeControlType.clock,
     timeIncrement: _defaultTimeIncrement,
   );
 

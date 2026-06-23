@@ -105,6 +105,7 @@ class _BroadcastPlayersListState extends ConsumerState<BroadcastPlayersList> {
   ) => (p1, p2) {
     final field1 = picker(p1);
     final field2 = picker(p2);
+    if (field1 == null && field2 == null) return 0;
     if (field1 == null) return -1;
     if (field2 == null) return 1;
 
@@ -419,7 +420,8 @@ class BroadcastPlayerRow extends StatelessWidget {
         mainAxisSize: .min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          if (federation != null) Image.asset('assets/images/fide-fed/$federation.png', height: 12),
+          if (federation != null)
+            Image.asset('assets/images/fide-fed/$federation.webp', height: 12),
           if (ratingsMap != null)
             Column(
               mainAxisAlignment: .start,

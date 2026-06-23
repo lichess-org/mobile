@@ -3,6 +3,7 @@ package org.lichess.mobileV2
 import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Rect
 import android.net.Uri
 import android.os.Bundle
@@ -35,7 +36,7 @@ class MainActivity: FlutterActivity() {
   // running arrive here. Flutter's default handling leaves getIntent() pointing at the stale launch
   // intent, so app_links would read the wrong URI; setIntent() updates the activity's current intent
   // to the freshly received one so app_links surfaces it correctly. (OAuth callbacks no longer pass
-  // through here — flutter_web_auth_2 captures them in its own CallbackActivity / auth session.)
+  // through here — flutter_appauth captures them in its own RedirectUriReceiverActivity.)
   override fun onNewIntent(intent: Intent) {
     setIntent(intent)
     super.onNewIntent(intent)
@@ -95,6 +96,10 @@ class MainActivity: FlutterActivity() {
             val totalMemInMb = memoryInfo.totalMem / 1048576L
             result.success(totalMemInMb.toInt())
           }
+          // Returns the default browser's package and version, used to attribute login failures.
+          "getDefaultBrowser" -> {
+            result.success(getDefaultBrowserInfo())
+          }
           // "getAvailableRam" -> {
           //   val memoryInfo = getAvailableMemory()
           //   val availMemInMb = memoryInfo.availMem / 1048576L
@@ -150,6 +155,23 @@ private fun decodeExclusionRects(inputRects: List<Map<String, Int>>): List<Rect>
     val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
     return ActivityManager.MemoryInfo().also { memoryInfo ->
         activityManager.getMemoryInfo(memoryInfo)
+    }
+  }
+
+  private fun getDefaultBrowserInfo(): Map<String, String?>? {
+    return try {
+      val pm = packageManager
+      val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://lichess.org"))
+      val resolveInfo = pm.resolveActivity(browserIntent, PackageManager.MATCH_DEFAULT_ONLY)
+      val pkg = resolveInfo?.activityInfo?.packageName ?: return null
+      val version = try {
+        pm.getPackageInfo(pkg, 0).versionName
+      } catch (e: Exception) {
+        null
+      }
+      mapOf("package" to pkg, "version" to version)
+    } catch (e: Exception) {
+      null
     }
   }
 }

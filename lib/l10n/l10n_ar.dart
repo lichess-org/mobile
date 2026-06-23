@@ -287,6 +287,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileOrImportPgnFile => 'أو استيراد ملف PGN';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'نقلة جيدة، ولكن توجد نقلة أفضل';
+
+  @override
   String get variantStandard => 'الأساسي';
 
   @override
@@ -296,7 +299,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get variantChess960 => 'شطرنج960';
 
   @override
-  String get variantChess960Title => 'مكان بداية قطع الرتبة الأولى عشوائياً.';
+  String get variantChess960Title => 'يتم توزيع قطع الصف الخلفي عشوائيًا في وضعية البداية.';
 
   @override
   String get variantKingOfTheHill => 'ملك التل';
@@ -308,7 +311,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get variantThreeCheck => 'كش ملك ثلاث مرات';
 
   @override
-  String get variantThreeCheckTitle => 'كش ملك خصمك ثلاث مرات للفوز.';
+  String get variantThreeCheckTitle => 'تفوز بالمباراة إذا نجحت في إعطاء كش لملك خصمك 3 مرات.';
 
   @override
   String get variantAntichess => 'الشطرنج العكسية';
@@ -1079,10 +1082,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get broadcastAllBroadcastsByMonth => 'اعرض البثوث حسب الشهر';
 
   @override
-  String get broadcastBackToLiveMove => 'العودة إلى الحرقات المباشرة';
+  String get broadcastBackToLiveMove => 'العودة إلى النقلات المباشرة';
 
   @override
-  String get broadcastSinceHideResults => 'بما أنك اخترت إخفاء النتائج، فإن جميع لوحات المعاينة فارغة لتجنب الحرق.';
+  String get broadcastSinceHideResults => 'نظرًا لاختيارك إخفاء النتائج، تظهر جميع لوحات المعاينة فارغة لتجنّب حرق النتائج.';
 
   @override
   String get broadcastLiveboard => 'اللوحة الآن';
@@ -1121,10 +1124,10 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get broadcastDefaultRoundNameHelp => 'الحفاظ على الاسم الافتراضي سوف يترجمه تلقائياً إلى جميع اللغات الأخرى.';
+  String get broadcastDefaultRoundNameHelp => 'الإبقاء على الاسم الافتراضي سيؤدي إلى ترجمته تلقائيًا إلى جميع اللغات الأخرى.';
 
   @override
-  String get broadcastOpenTournament => 'الفتح';
+  String get broadcastOpenTournament => 'الافتتاحية';
 
   @override
   String get broadcastWomenTournament => 'النساء';
@@ -1140,17 +1143,17 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String broadcastOpenUnderXAgeTournament(String param) {
-    return 'مفتوح تحت$param';
+    return 'مفتوح تحت سن$param';
   }
 
   @override
   String broadcastGirlsUnderXAgeTournament(String param) {
-    return 'البنات تحت$param';
+    return 'البنات تحت سن$param';
   }
 
   @override
   String broadcastBoysUnderXAgeTournament(String param) {
-    return 'الأولاد تحت$param';
+    return 'الأولاد تحت سن$param';
   }
 
   @override
@@ -1599,7 +1602,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get preferencesMoveConfirmation => 'تأكيد النقلة';
 
   @override
-  String get preferencesExplainCanThenBeTemporarilyDisabled => 'يمكن تعطيله أثناء اللعبة مع قائمة اللوحة';
+  String get preferencesExplainCanThenBeTemporarilyDisabled => 'يمكن تعطيله أثناء اللعبة من قائمة اللوحة';
 
   @override
   String get preferencesInCorrespondenceGames => 'فى العاب المراسلة';
@@ -2634,6 +2637,12 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get blackDidntMove => 'لم يلعب الأسود بعد';
+
+  @override
+  String get whiteAborted => 'قام الأبيض بإلغاء المباراة قبل بدايتها';
+
+  @override
+  String get blackAborted => 'قام الأسود بإلغاء المباراة قبل بدايتها';
 
   @override
   String get requestAComputerAnalysis => 'اطلب تحليل حاسب';
@@ -4139,10 +4148,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get castling => 'تبييت';
 
   @override
-  String get whiteCastlingKingside => 'تبييت قصير للأبيض';
+  String get whiteCastlingKingside => 'تبييت قصير O-O للأبيض';
 
   @override
-  String get blackCastlingKingside => 'تبييت قصير للأسود';
+  String get blackCastlingKingside => 'تبييت قصير O-O للأسود';
 
   @override
   String tpTimeSpentPlaying(String param) {
@@ -6984,7 +6993,7 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get tfaTwoFactorAuth => 'التوثيق ذو العاملين';
+  String get tfaTwoFactorAuth => 'التوثيق الثنائي';
 
   @override
   String get ublogCommunity => 'المجتمع';

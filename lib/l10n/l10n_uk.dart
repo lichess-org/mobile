@@ -287,6 +287,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Чи завантажте файл PGN';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Хороший хід, але є кращий';
+
+  @override
   String get variantStandard => 'Стандартні шахи';
 
   @override
@@ -2446,7 +2449,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get reusableChallengeUrl => 'Постійне посилання на виклик';
 
   @override
-  String get permanentLinkForAnyoneToChallengeYou => 'Постійне посилання, за яким хто-небудь може кинути вам виклик із цими налаштуваннями.';
+  String get permanentLinkForAnyoneToChallengeYou => 'Постійне посилання, за яким будь-хто може кинути вам виклик із цими налаштуваннями.';
 
   @override
   String get waiting => 'Очікування';
@@ -2580,6 +2583,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get blackDidntMove => 'Чорні не зробили хід';
 
   @override
+  String get whiteAborted => 'Білі скасували гру';
+
+  @override
+  String get blackAborted => 'Чорні скасували гру';
+
+  @override
   String get requestAComputerAnalysis => 'Зробити запит на комп’ютерний аналіз';
 
   @override
@@ -2648,7 +2657,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get copyVariationPgn => 'Скопіювати PGN варіанту';
 
   @override
-  String get copyMainLinePgn => 'Копіювати pgn головної лінії';
+  String get copyMainLinePgn => 'Копіювати PGN головної лінії';
 
   @override
   String get move => 'Хід';

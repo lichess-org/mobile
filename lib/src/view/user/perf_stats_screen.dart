@@ -89,7 +89,10 @@ class _Title extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(perf.icon),
-            Text(' ${context.l10n.perfStatPerfStats(perf.title)}', overflow: TextOverflow.ellipsis),
+            Text(
+              ' ${context.l10n.perfStatPerfStats(perf.label(context.l10n))}',
+              overflow: TextOverflow.ellipsis,
+            ),
             const Icon(Icons.arrow_drop_down),
           ],
         ),
@@ -106,7 +109,7 @@ class _Title extends StatelessWidget {
                       Icon(p.icon),
                       const SizedBox(width: 6),
                       Text(
-                        context.l10n.perfStatPerfStats(p.title),
+                        context.l10n.perfStatPerfStats(p.label(context.l10n)),
                         overflow: TextOverflow.ellipsis,
                       ),
                     ],
@@ -235,12 +238,12 @@ class _Body extends ConsumerWidget {
                           (loggedInUser != null && loggedInUser.user.id == user.id)
                               ? context.l10n.youAreBetterThanPercentOfPerfTypePlayers(
                                   '${data.percentile!.toStringAsFixed(2)}%',
-                                  perf.title,
+                                  perf.label(context.l10n),
                                 )
                               : context.l10n.userIsBetterThanPercentOfPerfTypePlayers(
                                   user.username,
                                   '${data.percentile!.toStringAsFixed(2)}%',
-                                  perf.title,
+                                  perf.label(context.l10n),
                                 ),
                           style: TextStyle(color: textShade(context, 0.7)),
                         ),
@@ -522,7 +525,8 @@ class _PercentageValueWidget extends StatelessWidget {
   const _PercentageValueWidget(this.value, this.denominator, {this.color, this.isShaded = false});
 
   String _getPercentageString(num numerator, num denominator) {
-    return '${((numerator / denominator) * 100).round()}%';
+    final fraction = denominator == 0 ? 0 : numerator / denominator;
+    return NumberFormat.percentPattern().format(fraction);
   }
 
   @override

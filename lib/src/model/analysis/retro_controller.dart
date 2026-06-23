@@ -168,6 +168,7 @@ class RetroController extends AsyncNotifier<RetroState>
     state = AsyncData(await _computeMistakes(options.initialSide));
 
     socketClient.firstConnection.then((_) {
+      if (!ref.mounted) return;
       requestEval();
     });
 
