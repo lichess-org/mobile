@@ -109,6 +109,7 @@ class EvaluationService {
   StockfishFlavor? _currentRequestedFlavor;
   Variant? _currentVariant;
   bool _initInProgress = false;
+  bool _quitInProgress = false;
   bool _discardEvalResults = false;
   bool _discardMoveResults = false;
 
@@ -325,6 +326,7 @@ class EvaluationService {
     // Compare against the originally requested flavor, not the effective one. This prevents restart
     // when latestNoNNUE fell back to sf16
     final needsRestart =
+        _quitInProgress ||
         _currentRequestedFlavor != flavor ||
         _currentVariant != work.variant ||
         stockfishState == StockfishState.initial ||
@@ -525,6 +527,7 @@ class EvaluationService {
       return;
     }
     _logger.info('Quitting engine');
+    _quitInProgress = true;
     _protocol.compute(null);
     _evalThrottleTimer?.cancel();
     _evalThrottleTimer = null;
@@ -533,7 +536,13 @@ class EvaluationService {
     _discardEvalResults = true;
     _discardMoveResults = true;
     _currentMoveWork = null;
-    _runStockfishOperation(() => _stockfish.quit());
+    _runStockfishOperation(() async {
+      try {
+        await _stockfish.quit();
+      } finally {
+        _quitInProgress = false;
+      }
+    });
     _currentRequestedFlavor = null;
     _currentVariant = null;
     _initInProgress = false;
