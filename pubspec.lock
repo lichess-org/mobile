@@ -660,14 +660,13 @@ packages:
     source: hosted
     version: "0.3.2"
   flutter_secure_storage_linux:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
-      path: flutter_secure_storage_linux
-      ref: "v10.0.0-beta.4-literal_operator_fix"
-      resolved-ref: b24fada37569fc042b01205dfbb9cd46d837b4fc
-      url: "https://github.com/christianfl/flutter_secure_storage.git"
-    source: git
-    version: "2.0.0"
+      name: flutter_secure_storage_linux
+      sha256: a5f35ddab43cf5c8215d2feb4ce1957851f28c5c37e6f04335066a0602087bf5
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.1"
   flutter_secure_storage_platform_interface:
     dependency: transitive
     description:

@@ -92,13 +92,6 @@ dev_dependencies:
   stream_channel: ^2.1.4
   wakelock_plus_platform_interface: ^1.5.1
 
-dependency_overrides:
-  flutter_secure_storage_linux:
-    git:
-      url: https://github.com/christianfl/flutter_secure_storage.git
-      path: flutter_secure_storage_linux
-      ref: v10.0.0-beta.4-literal_operator_fix
-
 flutter:
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
