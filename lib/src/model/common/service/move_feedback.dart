@@ -7,19 +7,20 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 /// A provider for [MoveFeedbackService].
 final moveFeedbackServiceProvider = Provider<MoveFeedbackService>((Ref ref) {
   final soundService = ref.watch(soundServiceProvider);
-  return MoveFeedbackService(soundService, ref);
+  final hasHapticFeedback = ref.watch(
+    boardPreferencesProvider.select((prefs) => prefs.hapticFeedback),
+  );
+  return MoveFeedbackService(soundService, hasHapticFeedback: hasHapticFeedback);
 }, name: 'MoveFeedbackServiceProvider');
 
 class MoveFeedbackService {
-  MoveFeedbackService(this._soundService, this._ref);
+  MoveFeedbackService(this._soundService, {required this.hasHapticFeedback});
 
   final SoundService _soundService;
-  final Ref _ref;
+  final bool hasHapticFeedback;
 
-  void moveFeedback({bool check = false}) {
-    _soundService.play(Sound.move);
-
-    if (_ref.read(boardPreferencesProvider).hapticFeedback) {
+  void _playHapticFeedback({required bool check}) {
+    if (hasHapticFeedback) {
       if (check) {
         HapticFeedback.mediumImpact();
       } else {
@@ -28,15 +29,13 @@ class MoveFeedbackService {
     }
   }
 
+  void moveFeedback({bool check = false}) {
+    _soundService.play(Sound.move);
+    _playHapticFeedback(check: check);
+  }
+
   void captureFeedback(Variant variant, {bool check = false}) {
     _soundService.playCaptureSound(variant);
-
-    if (_ref.read(boardPreferencesProvider).hapticFeedback) {
-      if (check) {
-        HapticFeedback.mediumImpact();
-      } else {
-        HapticFeedback.lightImpact();
-      }
-    }
+    _playHapticFeedback(check: check);
   }
 }
