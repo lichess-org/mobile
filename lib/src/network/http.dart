@@ -472,7 +472,7 @@ class LichessClient implements Client {
 /// * Sets the user-agent header with the app version, build number, and device info.
 /// * Logs all requests and responses with status code >= 400.
 class DefaultClient implements Client {
-  DefaultClient(this._inner, {required String userAgent}) : _userAgent = userAgent;
+  DefaultClient(this._inner, {required this._userAgent});
 
   final Client _inner;
   final String _userAgent;

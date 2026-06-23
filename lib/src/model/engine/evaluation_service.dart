@@ -62,8 +62,7 @@ final evaluationServiceProvider = Provider<EvaluationService>((Ref ref) {
 /// can run at a time - when a new evaluation is requested, it takes over from any
 /// previous one ("last caller wins").
 class EvaluationService {
-  EvaluationService({required this.maxMemory, required NnueService nnueService})
-    : _nnueService = nnueService {
+  EvaluationService({required this.maxMemory, required this._nnueService}) {
     _stdoutSubscription = _stockfish.stdout.listen(_protocol.received);
     _stockfish.state.addListener(_onStockfishStateChange);
     _protocol.isComputing.addListener(_onComputingChange);
