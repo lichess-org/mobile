@@ -109,7 +109,7 @@ class _FollowingWidgetState extends ConsumerState<FollowingCarousel> {
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                   padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 3.0),
-                  itemCount: users.length,
+                  itemCount: sortedUsers.length,
                   separatorBuilder: (context, index) => const SizedBox(width: 10),
                   itemBuilder: (context, index) {
                     final friend = sortedUsers[index];
