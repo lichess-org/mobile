@@ -555,7 +555,7 @@ class _BottomBar extends ConsumerWidget {
                 : null,
             highlighted: true,
             label: context.l10n.puzzleNewStreak,
-            icon: CupertinoIcons.play_arrow_solid,
+            icon: Icons.refresh,
           ),
       ],
     );
