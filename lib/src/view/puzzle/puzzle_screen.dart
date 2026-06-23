@@ -439,6 +439,7 @@ class _BodyState extends ConsumerState<_Body> {
     final boardPreferences = ref.watch(boardPreferencesProvider);
     final ctrlProvider = puzzleControllerProvider(widget.initialPuzzleContext);
     final puzzleState = ref.watch(ctrlProvider);
+    final actualOrientation = puzzleState.isFlipped ? puzzleState.pov.opposite : puzzleState.pov;
 
     // Drive the board on position/interactivity changes without rebuilding it.
     ref.listen(
@@ -513,7 +514,7 @@ class _BodyState extends ConsumerState<_Body> {
                       onMove: (move, {viaDragAndDrop}) {
                         ref.read(ctrlProvider.notifier).onUserMove(move);
                       },
-                      orientation: puzzleState.pov,
+                      orientation: actualOrientation,
                       shapes: shapes,
                       settings: defaultSettings,
                     ),
@@ -605,7 +606,7 @@ class _BodyState extends ConsumerState<_Body> {
                       onMove: (move, {viaDragAndDrop}) {
                         ref.read(ctrlProvider.notifier).onUserMove(move);
                       },
-                      orientation: puzzleState.pov,
+                      orientation: actualOrientation,
                       shapes: shapes,
                       settings: defaultSettings,
                     ),
@@ -796,7 +797,13 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
             label: context.l10n.analysis,
             icon: Icons.biotech,
           ),
-
+        BottomBarButton(
+          label: context.l10n.flipBoard,
+          onTap: ref
+              .read(puzzleControllerProvider(widget.initialPuzzleContext).notifier)
+              .toggleBoard,
+          icon: CupertinoIcons.arrow_2_squarepath,
+        ),
         RepeatButton(
           triggerDelays: _BottomBar._repeatTriggerDelays,
           onLongPress: puzzleState.canGoBack ? () => _moveBackward(ref) : null,

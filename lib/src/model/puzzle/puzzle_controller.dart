@@ -101,7 +101,14 @@ class PuzzleController extends Notifier<PuzzleState> {
       resultSent: false,
       isChangingDifficulty: false,
       shouldBlinkNextArrow: false,
+      isFlipped: false,
     );
+  }
+
+  void toggleBoard() {
+    // NOTE: use isFlipped for visual orientation only,
+    // pov drives puzzle logic (whose turn, valid moves)
+    state = state.copyWith(isFlipped: !state.isFlipped);
   }
 
   Future<void> onUserMove(Move move) async {
@@ -440,6 +447,7 @@ sealed class PuzzleState with _$PuzzleState {
     required bool isChangingDifficulty,
     required bool shouldBlinkNextArrow,
     PuzzleContext? nextContext,
+    required bool isFlipped,
   }) = _PuzzleState;
 
   Position get currentPosition => node.position;
