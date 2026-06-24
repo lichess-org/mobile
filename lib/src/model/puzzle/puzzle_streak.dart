@@ -68,6 +68,56 @@ class PuzzleStreakController extends AsyncNotifier<StreakState> {
     }
   }
 
+  /// Caches the upcoming puzzles so the streak can be played offline.
+  ///
+  /// Fire-and-forget on an autoDispose notifier, so [ref] is captured before the
+  /// async loop and never touched again: the notifier may be disposed mid-flight
+  /// but writes through the captured storage stay valid.
+  Future<void> _prefetchUpcoming(Streak streak, int startIndex) async {
+    const prefetchCount = 30;
+    const batchSize = 5;
+
+    final endIndex = (startIndex + prefetchCount).clamp(0, streak.length);
+    if (startIndex >= endIndex) return;
+    final idsToFetch = streak.sublist(startIndex, endIndex);
+
+    final repository = ref.read(puzzleRepositoryProvider);
+    final storage = await ref.read(puzzleStorageProvider.future);
+
+    for (var i = 0; i < idsToFetch.length; i += batchSize) {
+      final batchEnd = (i + batchSize).clamp(0, idsToFetch.length);
+      final batchIds = idsToFetch.sublist(i, batchEnd);
+
+      await Future.wait(
+        batchIds.map((id) async {
+          try {
+            if (await storage.fetch(puzzleId: id) != null) return;
+          } catch (_) {
+            // Corrupt row: fall through to re-fetch.
+          }
+          try {
+            final puzzle = await repository.fetch(id);
+            await storage.save(puzzle: puzzle);
+          } catch (_) {
+            // Best-effort: ignore failures.
+          }
+        }),
+      );
+    }
+  }
+
+  /// Shows a snackbar via the root navigator, if one is available.
+  void _showStreakSnackBar(String message, {SnackBarType type = SnackBarType.info}) {
+    try {
+      final context = ref.read(currentNavigatorKeyProvider).currentContext;
+      if (context != null && context.mounted) {
+        showSnackBar(context, message, type: type);
+      }
+    } catch (_) {
+      // No navigator/binding available (e.g. in tests); nothing to show.
+    }
+  }
+
   @override
   Future<StreakState> build() async {
     final authUser = ref.watch(authControllerProvider);
@@ -84,6 +134,8 @@ class PuzzleStreakController extends AsyncNotifier<StreakState> {
         throw Exception('Could not load puzzle for active streak');
       }
 
+      _prefetchUpcoming(activeStreak.streak, activeStreak.index + 2).ignore();
+
       return (streak: activeStreak, puzzle: puzzle, nextPuzzle: nextPuzzle);
     }
 
@@ -96,6 +148,8 @@ class PuzzleStreakController extends AsyncNotifier<StreakState> {
     await storage.save(puzzle: newStreak.puzzle);
 
     final nextPuzzle = newStreak.streak.length > 1 ? await _fetchPuzzle(newStreak.streak[1]) : null;
+
+    _prefetchUpcoming(newStreak.streak, 2).ignore();
 
     return (
       streak: PuzzleStreak(
@@ -126,14 +180,30 @@ class PuzzleStreakController extends AsyncNotifier<StreakState> {
 
   /// Advance the streak to the next puzzle.
   Future<void> next() async {
-    if (!state.hasValue || state.requireValue.nextPuzzle == null) {
-      return;
+    if (!state.hasValue) return;
+
+    final currentState = state.requireValue;
+
+    // The next puzzle is normally prefetched; if not (offline buffer exhausted),
+    // fetch it inline so a reconnected player resumes automatically. If that
+    // fails too, stay put and tell the player.
+    var advanceTo = currentState.nextPuzzle;
+    if (advanceTo == null) {
+      final advanceId = currentState.streak.nextId;
+      if (advanceId == null) return;
+      advanceTo = await _fetchPuzzle(advanceId);
+      if (!ref.mounted) return;
+      if (advanceTo == null) {
+        _showStreakSnackBar("You're offline — reconnect to continue your streak.");
+        return;
+      }
     }
+
     ref.read(soundServiceProvider).play(Sound.confirmation);
 
     state = AsyncData((
-      streak: state.requireValue.streak.copyWith(index: state.requireValue.streak.index + 1),
-      puzzle: state.requireValue.nextPuzzle!,
+      streak: currentState.streak.copyWith(index: currentState.streak.index + 1),
+      puzzle: advanceTo,
       nextPuzzle: null,
     ));
 
@@ -171,7 +241,12 @@ class PuzzleStreakController extends AsyncNotifier<StreakState> {
     if (userId != null) {
       final streak = state.requireValue.streak.index;
       if (streak > 0) {
-        await ref.read(puzzleRepositoryProvider).postStreakRun(streak);
+        try {
+          await ref.read(puzzleRepositoryProvider).postStreakRun(streak);
+        } catch (_) {
+          // Offline: the score is lost for now. Pending-score retry is added
+          // in a subsequent commit.
+        }
       }
     }
   }
