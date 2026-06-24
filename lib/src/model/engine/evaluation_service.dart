@@ -21,17 +21,6 @@ const kEngineEvalEmissionThrottleDelay = Duration(milliseconds: 200);
 /// Variants supported by the official Stockfish engine.
 const officialStockfishVariants = {Variant.standard, Variant.chess960, Variant.fromPosition};
 
-/// Exception thrown when the engine does not support the requested variant.
-class EngineUnsupportedVariantException implements Exception {
-  const EngineUnsupportedVariantException(this.variant);
-
-  final Variant variant;
-
-  @override
-  String toString() =>
-      'EngineUnsupportedVariantException: variant $variant is not supported by the engine';
-}
-
 /// Exception thrown when a [EvaluationService.findMove] request is cancelled.
 ///
 /// This can happen when [EvaluationService.quit] is called, or when a new
