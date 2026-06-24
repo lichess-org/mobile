@@ -138,6 +138,9 @@ class PuzzleStreakController extends AsyncNotifier<StreakState> {
     }
   }
 
+  /// Local-first fetch of an already-solved puzzle, for history review.
+  Future<Puzzle?> fetchPuzzleForReview(PuzzleId id) => _fetchPuzzle(id);
+
   @override
   Future<StreakState> build() async {
     final authUser = ref.watch(authControllerProvider);

@@ -211,6 +211,26 @@ class PuzzleController extends Notifier<PuzzleState> {
     state = _loadNewContext(nextContext);
   }
 
+  /// Loads [context]'s puzzle directly into view mode with its solution merged
+  /// in, for reviewing an already-solved puzzle. Unlike [onLoadPuzzle] it never
+  /// starts play nor emits a [PuzzleResult].
+  void loadForReview(PuzzleContext context) {
+    _firstMoveTimer?.cancel();
+    _viewSolutionTimer?.cancel();
+    state = _loadNewContext(context);
+    // _loadNewContext re-schedules the opponent's first move; cancel it so the
+    // board stays in view mode rather than flipping to play after 1s.
+    _firstMoveTimer?.cancel();
+
+    _mergeSolution();
+    state = state.copyWith(
+      mode: PuzzleMode.view,
+      currentPath: state.initialPath,
+      root: _gameTree.view,
+      node: _gameTree.branchAt(state.initialPath).view,
+    );
+  }
+
   Future<PuzzleContext?> _nextReplayPuzzle() async {
     final remaining = _replayRemaining;
     if (remaining == null || remaining.isEmpty) return null;

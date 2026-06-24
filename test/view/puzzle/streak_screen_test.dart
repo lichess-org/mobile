@@ -216,6 +216,90 @@ void main() {
       //now, the text should say 'Your turn'.
       expect(find.text('Your turn'), findsOneWidget);
     });
+
+    testWidgets('can review a previous puzzle and return to the live one', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const StreakScreen(),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      final previousPuzzleFinder = find.byWidgetPredicate(
+        (widget) => widget is BottomBarButton && widget.label == 'Previous puzzle',
+      );
+      final nextPuzzleFinder = find.byKey(const ValueKey('next-puzzle'));
+      final skipFinder = find.byWidgetPredicate(
+        (widget) => widget is BottomBarButton && widget.label == 'Skip this move',
+      );
+      final menuFinder = find.byWidgetPredicate(
+        (widget) => widget is BottomBarButton && widget.label == 'Menu',
+      );
+
+      // First puzzle shows only Skip — no previous-puzzle button yet, no menu.
+      expect(previousPuzzleFinder, findsNothing);
+      expect(menuFinder, findsNothing);
+
+      // Solve the first puzzle to advance to the second.
+      await playMove(tester, 'e5', 'e1', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      await playMove(tester, 'f6', 'f4', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      await playMove(tester, 'f4', 'f2', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+
+      // After the first puzzle: [← Prev puzzle] [Skip] — still no hamburger menu.
+      expect(find.textContaining(RegExp('1\$')), findsOneWidget);
+      expect(menuFinder, findsNothing);
+      expect(tester.widget<BottomBarButton>(previousPuzzleFinder).onTap, isNotNull);
+      expect(skipFinder, findsOneWidget);
+
+      // The board shows the live (second) puzzle, rating 1058.
+      expect(find.textContaining('1058'), findsOneWidget);
+      expect(find.textContaining('1012'), findsNothing);
+
+      // Enter review of the first (solved) puzzle.
+      await tester.tap(previousPuzzleFinder);
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+
+      // Viewing layout: [Menu] [Analysis] [<] [>] [→ Next], no Skip/Prev button.
+      expect(menuFinder, findsOneWidget);
+      expect(nextPuzzleFinder, findsOneWidget);
+      expect(skipFinder, findsNothing);
+      expect(previousPuzzleFinder, findsNothing);
+
+      // The board now shows the reviewed (first) puzzle, rating 1012 — proving a
+      // separate controller drives the board while the live puzzle is untouched.
+      expect(find.textContaining('1012'), findsOneWidget);
+      expect(find.textContaining('1058'), findsNothing);
+
+      // Menu holds Share + About; previous-puzzle item is hidden on the first puzzle.
+      await tester.tap(menuFinder);
+      await tester.pumpAndSettle();
+      expect(find.text('Share this puzzle'), findsOneWidget);
+      expect(find.text('Previous puzzle'), findsNothing);
+      expect(find.text('About Streak'), findsOneWidget);
+
+      // Dismiss the sheet.
+      await tester.tapAt(const Offset(20, 20));
+      await tester.pumpAndSettle();
+
+      // Return to the live puzzle.
+      await tester.tap(nextPuzzleFinder);
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      expect(nextPuzzleFinder, findsNothing);
+      expect(skipFinder, findsOneWidget);
+
+      // Back on the live puzzle (rating 1058) with no reload.
+      expect(find.textContaining('1058'), findsOneWidget);
+      expect(find.textContaining('1012'), findsNothing);
+    });
   });
 }
 
