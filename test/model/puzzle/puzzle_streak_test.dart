@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/db/database.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
@@ -18,6 +19,7 @@ import 'package:lichess_mobile/src/network/http.dart';
 
 import '../../network/fake_http_client_factory.dart';
 import '../../test_container.dart';
+import '../auth/fake_auth_storage.dart';
 
 /// Returns a raw API puzzle JSON document (game + puzzle) with puzzle [id].
 String _puzzleJsonWithId(String id) {
@@ -52,7 +54,8 @@ MockClient _onlineClient(List<String> streakIds) {
   });
 }
 
-Future<ProviderContainer> _makeContainer(http.Client client) => makeContainer(
+Future<ProviderContainer> _makeContainer(http.Client client, {AuthUser? authUser}) => makeContainer(
+  authUser: authUser,
   overrides: {
     httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
       (ref) => FakeHttpClientFactory(() => client),
@@ -312,6 +315,102 @@ void main() {
 
       final state = await container.read(puzzleStreakControllerProvider.future);
       expect(state.streak.finished, isTrue);
+    });
+
+    test('savePendingScore keeps the best pending run', () async {
+      final container = await _makeContainer(_offlineClient, authUser: fakeAuthUser);
+      final storage = container.read(streakStorageProvider(fakeAuthUser.user.id));
+
+      await storage.savePendingScore(3);
+      await storage.savePendingScore(8);
+      await storage.savePendingScore(5);
+      expect(await storage.loadPendingScore(), 8);
+
+      await storage.clearPendingScore();
+      expect(await storage.loadPendingScore(), isNull);
+    });
+
+    test('gameOver() offline saves the streak score to post later', () async {
+      final container = await _makeContainer(_offlineClient, authUser: fakeAuthUser);
+      final userId = fakeAuthUser.user.id;
+
+      final puzzleStorage = await container.read(puzzleStorageProvider.future);
+      await puzzleStorage.save(puzzle: _puzzle('MptxK'));
+      await puzzleStorage.save(puzzle: _puzzle('4CZxz'));
+      await container
+          .read(streakStorageProvider(userId))
+          .saveActiveStreak(_activeStreak(['MptxK', '4CZxz'], index: 1));
+
+      _keepAlive(container);
+      await container.read(puzzleStreakControllerProvider.future);
+      await container.read(puzzleStreakControllerProvider.notifier).gameOver();
+
+      expect(await container.read(streakStorageProvider(userId)).loadPendingScore(), 1);
+    });
+
+    test('a pending streak score is posted on the next build once back online', () async {
+      final postedRuns = <int>[];
+      final client = MockClient((request) async {
+        final path = request.url.path;
+        if (request.method == 'POST' && path.startsWith('/api/streak/')) {
+          postedRuns.add(int.parse(path.split('/').last));
+          return http.Response('', 200);
+        }
+        if (path == '/api/streak') {
+          return http.Response(_streakJson(['AAAAA', 'BBBBB', 'CCCCC']), 200);
+        }
+        if (path.startsWith('/api/puzzle/')) {
+          return http.Response(_puzzleJsonWithId(path.split('/').last), 200);
+        }
+        return http.Response('', 404);
+      });
+
+      final container = await _makeContainer(client, authUser: fakeAuthUser);
+      final userId = fakeAuthUser.user.id;
+
+      await container.read(streakStorageProvider(userId)).savePendingScore(7);
+
+      _keepAlive(container);
+      await container.read(puzzleStreakControllerProvider.future);
+
+      for (var i = 0; i < 100 && postedRuns.isEmpty; i++) {
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+      }
+      expect(postedRuns, [7]);
+      expect(await container.read(streakStorageProvider(userId)).loadPendingScore(), isNull);
+    });
+
+    test('gameOver() online clears a now-redundant lower pending score', () async {
+      final client = MockClient((request) async {
+        final path = request.url.path;
+        if (request.method == 'POST' && path == '/api/streak/2') {
+          return http.Response('', 200);
+        }
+        if (request.method == 'POST') {
+          return http.Response('', 500);
+        }
+        if (path.startsWith('/api/puzzle/')) {
+          return http.Response(_puzzleJsonWithId(path.split('/').last), 200);
+        }
+        return http.Response('', 404);
+      });
+
+      final container = await _makeContainer(client, authUser: fakeAuthUser);
+      final userId = fakeAuthUser.user.id;
+
+      await container.read(streakStorageProvider(userId)).savePendingScore(1);
+
+      final puzzleStorage = await container.read(puzzleStorageProvider.future);
+      await puzzleStorage.save(puzzle: _puzzle('kcN3a'));
+      await container
+          .read(streakStorageProvider(userId))
+          .saveActiveStreak(_activeStreak(['MptxK', '4CZxz', 'kcN3a'], index: 2));
+
+      _keepAlive(container);
+      await container.read(puzzleStreakControllerProvider.future);
+      await container.read(puzzleStreakControllerProvider.notifier).gameOver();
+
+      expect(await container.read(streakStorageProvider(userId)).loadPendingScore(), isNull);
     });
   });
 }

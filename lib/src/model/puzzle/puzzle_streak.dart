@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/streak_storage.dart';
+import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart' show currentNavigatorKeyProvider;
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 
@@ -118,10 +119,44 @@ class PuzzleStreakController extends AsyncNotifier<StreakState> {
     }
   }
 
+  bool _flushing = false;
+
+  /// Posts a streak run that was saved while offline (see [gameOver]) and clears
+  /// it on success. A failure leaves the score in place to retry later.
+  Future<void> _flushPendingScore(StreakStorage storage) async {
+    if (_flushing) return;
+    _flushing = true;
+    try {
+      final pending = await storage.loadPendingScore();
+      if (pending == null) return;
+      await ref.read(puzzleRepositoryProvider).postStreakRun(pending);
+      await storage.clearPendingScore();
+    } catch (_) {
+      // Still offline; keep the pending score for the next attempt.
+    } finally {
+      _flushing = false;
+    }
+  }
+
   @override
   Future<StreakState> build() async {
     final authUser = ref.watch(authControllerProvider);
     final streakStorage = ref.watch(streakStorageProvider(authUser?.user.id));
+
+    // Flush any score that couldn't be posted while offline (logged-in only).
+    if (authUser != null) {
+      _flushPendingScore(streakStorage).ignore();
+
+      // Retry on reconnect while the game-over screen is still open.
+      ref.listen(connectivityChangesProvider, (previous, current) {
+        final wasOffline = previous?.value?.isOnline == false;
+        final isNowOnline = current.value?.isOnline == true;
+        if (wasOffline && isNowOnline) {
+          _flushPendingScore(streakStorage).ignore();
+        }
+      });
+    }
+
     final activeStreak = await streakStorage.loadActiveStreak();
 
     if (activeStreak != null) {
@@ -236,16 +271,23 @@ class PuzzleStreakController extends AsyncNotifier<StreakState> {
     ));
 
     final userId = ref.read(authControllerProvider)?.user.id;
-    ref.read(streakStorageProvider(userId)).clearActiveStreak();
+    final streakStorage = ref.read(streakStorageProvider(userId));
+    streakStorage.clearActiveStreak();
 
     if (userId != null) {
       final streak = state.requireValue.streak.index;
       if (streak > 0) {
         try {
           await ref.read(puzzleRepositoryProvider).postStreakRun(streak);
+          // A lower-or-equal pending run from a past offline session is now
+          // redundant (the server keeps the best); a higher one is still owed.
+          final pending = await streakStorage.loadPendingScore();
+          if (pending != null && pending <= streak) {
+            await streakStorage.clearPendingScore();
+          }
         } catch (_) {
-          // Offline: the score is lost for now. Pending-score retry is added
-          // in a subsequent commit.
+          // Offline: persist the score so it is posted on reconnect, not lost.
+          await streakStorage.savePendingScore(streak);
         }
       }
     }
