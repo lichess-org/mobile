@@ -304,8 +304,7 @@ final Map<String, _CardColors?> _colorsCache = {};
 final _dateFormat = DateFormat.MMMd().add_jm();
 
 class _BroadcastCardContent extends StatelessWidget {
-  const _BroadcastCardContent({required this.broadcast, required _CardColors? cardColors})
-    : _cardColors = cardColors;
+  const _BroadcastCardContent({required this.broadcast, required this._cardColors});
 
   final Broadcast broadcast;
   final _CardColors? _cardColors;

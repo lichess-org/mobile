@@ -14,9 +14,8 @@ import '../../test_provider_scope.dart';
 /// A [PlatformFile] that overrides [readAsBytes] to return in-memory bytes,
 /// avoiding the need for a real file path in tests.
 class _FakePlatformFile extends PlatformFile {
-  _FakePlatformFile({required super.name, required super.size, required Uint8List fileBytes})
-    : _fileBytes = fileBytes,
-      super(path: '');
+  _FakePlatformFile({required super.name, required super.size, required this._fileBytes})
+    : super(path: '');
 
   final Uint8List _fileBytes;
 

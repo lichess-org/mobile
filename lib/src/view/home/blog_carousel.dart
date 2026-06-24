@@ -275,8 +275,7 @@ final Map<String, _CardColors?> _colorsCache = {};
 final _dateFormat = DateFormat.MMMd();
 
 class _BlogCardContent extends StatelessWidget {
-  const _BlogCardContent({required this.post, required _CardColors? cardColors})
-    : _cardColors = cardColors;
+  const _BlogCardContent({required this.post, required this._cardColors});
 
   final BlogPost post;
   final _CardColors? _cardColors;
