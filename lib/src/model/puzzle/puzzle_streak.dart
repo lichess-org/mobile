@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/streak_storage.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart' show currentNavigatorKeyProvider;
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -42,26 +43,59 @@ final puzzleStreakControllerProvider =
     );
 
 class PuzzleStreakController extends AsyncNotifier<StreakState> {
+  /// Reads the puzzle from the SQLite cache, falling back to the network on a
+  /// miss (caching the result). Returns null if both miss, e.g. offline.
+  Future<Puzzle?> _fetchPuzzle(PuzzleId id) async {
+    try {
+      final storage = await ref.read(puzzleStorageProvider.future);
+
+      Puzzle? cached;
+      try {
+        cached = await storage.fetch(puzzleId: id);
+      } catch (_) {
+        // Corrupt row: ignore and re-fetch, overwriting it below.
+        cached = null;
+      }
+      if (cached != null) {
+        return cached;
+      }
+
+      final puzzle = await ref.read(puzzleRepositoryProvider).fetch(id);
+      await storage.save(puzzle: puzzle);
+      return puzzle;
+    } catch (_) {
+      return null;
+    }
+  }
+
   @override
   Future<StreakState> build() async {
     final authUser = ref.watch(authControllerProvider);
     final streakStorage = ref.watch(streakStorageProvider(authUser?.user.id));
     final activeStreak = await streakStorage.loadActiveStreak();
-    final repository = ref.read(puzzleRepositoryProvider);
+
     if (activeStreak != null) {
       final [puzzle, nextPuzzle] = await Future.wait([
-        repository.fetch(activeStreak.streak[activeStreak.index]),
-        if (activeStreak.nextId != null)
-          repository.fetch(activeStreak.nextId!)
-        else
-          Future.value(null),
+        _fetchPuzzle(activeStreak.streak[activeStreak.index]),
+        if (activeStreak.nextId != null) _fetchPuzzle(activeStreak.nextId!) else Future.value(null),
       ]);
 
-      return (streak: activeStreak, puzzle: puzzle!, nextPuzzle: nextPuzzle);
+      if (puzzle == null) {
+        throw Exception('Could not load puzzle for active streak');
+      }
+
+      return (streak: activeStreak, puzzle: puzzle, nextPuzzle: nextPuzzle);
     }
 
+    final repository = ref.read(puzzleRepositoryProvider);
     final newStreak = await repository.streak();
-    final nextPuzzle = await repository.fetch(newStreak.streak[1]);
+
+    // Index 0 arrives embedded in /api/streak, so save it explicitly to allow
+    // resuming offline at index 0.
+    final storage = await ref.read(puzzleStorageProvider.future);
+    await storage.save(puzzle: newStreak.puzzle);
+
+    final nextPuzzle = newStreak.streak.length > 1 ? await _fetchPuzzle(newStreak.streak[1]) : null;
 
     return (
       streak: PuzzleStreak(
@@ -105,22 +139,16 @@ class PuzzleStreakController extends AsyncNotifier<StreakState> {
 
     final nextId = state.requireValue.streak.nextId;
     if (nextId != null) {
-      ref
-          .read(puzzleRepositoryProvider)
-          .fetch(nextId)
-          .then((puzzle) {
-            state = AsyncData((
-              streak: state.requireValue.streak,
-              puzzle: state.requireValue.puzzle,
-              nextPuzzle: puzzle,
-            ));
-          })
-          .catchError((_) {
-            final currentContext = ref.read(currentNavigatorKeyProvider).currentContext;
-            if (currentContext != null && currentContext.mounted) {
-              showSnackBar(currentContext, 'Error loading next puzzle', type: SnackBarType.error);
-            }
-          });
+      final expectedIndex = state.requireValue.streak.index;
+      _fetchPuzzle(nextId).then((puzzle) {
+        if (!ref.mounted) return;
+        if (!state.hasValue || state.requireValue.streak.index != expectedIndex) return;
+        state = AsyncData((
+          streak: state.requireValue.streak,
+          puzzle: state.requireValue.puzzle,
+          nextPuzzle: puzzle,
+        ));
+      });
     }
 
     ref
