@@ -323,7 +323,7 @@ class ConfirmMove extends StatelessWidget {
 ///
 /// While the claim threshold has not been reached, displays a live countdown.
 /// Once [canClaim] is true, displays the two claim choices inline (so there is
-/// no dialog to dismiss), keeping the player clock visible alongside.
+/// no dialog to dismiss). The player clock is hidden to leave enough room.
 class OpponentLeftCountdown extends StatelessWidget {
   const OpponentLeftCountdown({
     required this.countdown,
