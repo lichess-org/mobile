@@ -212,17 +212,6 @@ class GameBody extends ConsumerWidget {
     }
 
     if (prev?.hasValue == true && state.hasValue) {
-      // Opponent is gone long enough to show the claim win dialog.
-      if (!prev!.requireValue.game.canClaimWin && state.requireValue.game.canClaimWin) {
-        if (context.mounted) {
-          showAdaptiveDialog<void>(
-            context: context,
-            builder: (context) => _ClaimWinDialog(id: gameId),
-            barrierDismissible: true,
-          );
-        }
-      }
-
       if (state.requireValue.redirectGameId != null) {
         // Be sure to pop any dialogs that might be on top of the game screen.
         Navigator.of(context).popUntil((route) => route is! PopupRoute);
@@ -454,17 +443,14 @@ class _PlayableGameBoardState extends ConsumerState<_PlayableGameBoard> {
             side: topSide,
             clockKey: topSide == Side.white ? widget.whiteClockKey : widget.blackClockKey,
           ),
-          bottomTable: shell.showClaimWinCountdown
-              ? _ClaimWinCountdown(
-                  gameId: widget.gameId,
-                  canClaimWin: shell.canClaimWin,
-                  countdown: shell.opponentLeftCountdown!,
-                )
-              : _GamePlayerTable(
-                  gameId: widget.gameId,
-                  side: bottomSide,
-                  clockKey: bottomSide == Side.white ? widget.whiteClockKey : widget.blackClockKey,
-                ),
+          bottomTable: _GamePlayerTable(
+            gameId: widget.gameId,
+            side: bottomSide,
+            clockKey: bottomSide == Side.white ? widget.whiteClockKey : widget.blackClockKey,
+            // The claim-win countdown / choices are the user's action, so they
+            // are shown in the bottom table only.
+            showOpponentLeftCountdown: true,
+          ),
           moveListBuilder: (type) => _GameMoveList(gameId: widget.gameId, type: type),
           zenMode: shell.zen,
           userActionsBar: _GameBottomBar(
@@ -488,9 +474,6 @@ typedef _ShellData = ({
   bool canPremove,
   bool canAutoQueen,
   bool canAutoQueenOnPremove,
-  bool showClaimWinCountdown,
-  bool canClaimWin,
-  (Duration, DateTime)? opponentLeftCountdown,
   // Crazyhouse pockets (null for other variants). [Pockets] has value equality,
   // so this both supplies the pocket counts and drives the shell to rebuild on
   // each move in Crazyhouse, while other variants keep the build-once shell.
@@ -509,9 +492,6 @@ _ShellData? _shellOf(AsyncValue<GameState> state) {
     canPremove: s.canPremove,
     canAutoQueen: s.canAutoQueen,
     canAutoQueenOnPremove: s.canAutoQueenOnPremove,
-    showClaimWinCountdown: s.canShowClaimWinCountdown && s.opponentLeftCountdown != null,
-    canClaimWin: s.game.canClaimWin,
-    opponentLeftCountdown: s.opponentLeftCountdown,
     pockets: s.currentPosition.pockets,
   );
 }
@@ -521,11 +501,20 @@ _ShellData? _shellOf(AsyncValue<GameState> state) {
 /// Lives inside the [_PlayableGameBoard] shell and rebuilds independently on the
 /// state it actually needs, so it does not force the shell or board to rebuild.
 class _GamePlayerTable extends ConsumerWidget {
-  const _GamePlayerTable({required this.gameId, required this.side, required this.clockKey});
+  const _GamePlayerTable({
+    required this.gameId,
+    required this.side,
+    required this.clockKey,
+    this.showOpponentLeftCountdown = false,
+  });
 
   final GameFullId gameId;
   final Side side;
   final GlobalKey clockKey;
+
+  /// Whether this table displays the claim-win countdown and choices when the
+  /// opponent has left. Only the bottom table (the user's) sets this.
+  final bool showOpponentLeftCountdown;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -550,6 +539,10 @@ class _GamePlayerTable extends ConsumerWidget {
           moveToConfirm: state.moveToConfirm,
           liveClock: state.liveClock,
           activeClockSide: state.activeClockSide,
+          // Only computed for the bottom table, so the top table stays stable.
+          canShowClaimWinCountdown: showOpponentLeftCountdown && state.canShowClaimWinCountdown,
+          canClaimWin: showOpponentLeftCountdown && state.game.canClaimWin,
+          opponentLeftCountdown: showOpponentLeftCountdown ? state.opponentLeftCountdown : null,
         );
       }),
     );
@@ -579,6 +572,8 @@ class _GamePlayerTable extends ConsumerWidget {
 
     final sideUser = side == Side.white ? game.white.user : game.black.user;
 
+    final showOpponentLeft = data.canShowClaimWinCountdown && data.opponentLeftCountdown != null;
+
     return GamePlayer(
       game: game,
       side: side,
@@ -600,6 +595,18 @@ class _GamePlayerTable extends ConsumerWidget {
               },
               cancel: () {
                 ref.read(ctrlProvider.notifier).cancelMove();
+              },
+            )
+          : null,
+      opponentLeftCallbacks: showOpponentLeft
+          ? (
+              countdown: data.opponentLeftCountdown!,
+              canClaim: data.canClaimWin,
+              onClaimWin: () {
+                ref.read(ctrlProvider.notifier).forceResign();
+              },
+              onClaimDraw: () {
+                ref.read(ctrlProvider.notifier).forceDraw();
               },
             )
           : null,
@@ -1131,85 +1138,6 @@ class _ThreefoldDialog extends ConsumerWidget {
         PlatformDialogAction(onPressed: accept, child: Text(context.l10n.claimADraw)),
         PlatformDialogAction(onPressed: decline, child: Text(context.l10n.cancel)),
       ],
-    );
-  }
-}
-
-class _ClaimWinDialog extends ConsumerWidget {
-  const _ClaimWinDialog({required this.id});
-
-  final GameFullId id;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = gameControllerProvider(id);
-    final gameState = ref.watch(ctrlProvider).requireValue;
-
-    final content = Text(context.l10n.opponentLeftChoices);
-
-    void onClaimWin() {
-      Navigator.of(context).pop();
-      ref.read(ctrlProvider.notifier).forceResign();
-    }
-
-    void onClaimDraw() {
-      Navigator.of(context).pop();
-      ref.read(ctrlProvider.notifier).forceDraw();
-    }
-
-    return AlertDialog.adaptive(
-      content: content,
-      actions: [
-        PlatformDialogAction(
-          onPressed: gameState.game.canClaimWin ? onClaimWin : null,
-          cupertinoIsDefaultAction: true,
-          child: Text(context.l10n.forceResignation),
-        ),
-        PlatformDialogAction(
-          onPressed: gameState.game.canClaimWin ? onClaimDraw : null,
-          child: Text(context.l10n.forceDraw),
-        ),
-      ],
-    );
-  }
-}
-
-class _ClaimWinCountdown extends StatelessWidget {
-  const _ClaimWinCountdown({
-    required this.gameId,
-    required this.canClaimWin,
-    required this.countdown,
-  });
-
-  final GameFullId gameId;
-  final bool canClaimWin;
-  final (Duration, DateTime) countdown;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: CountdownClockBuilder(
-          timeLeft: countdown.$1,
-          clockUpdatedAt: countdown.$2,
-          active: true,
-          builder: (context, duration) {
-            return InkWell(
-              onTap: canClaimWin
-                  ? () {
-                      showAdaptiveDialog<void>(
-                        context: context,
-                        builder: (context) => _ClaimWinDialog(id: gameId),
-                        barrierDismissible: true,
-                      );
-                    }
-                  : null,
-              child: Text(context.l10n.opponentLeftCounter(duration.inSeconds)),
-            );
-          },
-        ),
-      ),
     );
   }
 }
