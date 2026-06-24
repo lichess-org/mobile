@@ -842,14 +842,6 @@ extension ClientExtension on Client {
   }
 }
 
-extension ClientWidgetRefExtension on WidgetRef {
-  /// Runs [fn] with a [LichessClient].
-  Future<T> withClient<T>(Future<T> Function(LichessClient) fn) async {
-    final client = read(lichessClientProvider);
-    return await fn(client);
-  }
-}
-
 extension ClientRefExtension on Ref {
   /// Runs [fn] with a [LichessClient].
   Future<T> withClient<T>(Future<T> Function(LichessClient) fn) async {
