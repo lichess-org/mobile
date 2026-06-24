@@ -162,11 +162,12 @@ class SocketClient {
 
   /// Messages that were sent while the socket was not connected.
   ///
-  /// They are flushed when the connection (re)opens. This prevents losing messages.
-  /// Ackable messages are queued here too (as the web client does) so they are
-  /// resent immediately on reconnect rather than waiting for [_resendAcks]; they
-  /// also stay in [_acks] as the retry-until-acked fallback.
-  final List<String> _resendWhenOpen = [];
+  /// Each entry is the ack id (null for non-ackable messages) and the encoded
+  /// message. They are flushed when the connection (re)opens, which prevents
+  /// losing messages. Ackable messages are queued here too (as the web client
+  /// does) so they are resent immediately on reconnect rather than waiting for
+  /// [_resendAcks]; they also stay in [_acks] as the retry-until-acked fallback.
+  final List<(int?, String)> _resendWhenOpen = [];
 
   /// The current number of connections attempted.
   int nbConnectionAttempts = 0;
@@ -270,16 +271,27 @@ class SocketClient {
       if (_socketOpenController.hasListener) {
         _socketOpenController.add(null);
       }
-      _resendAcks();
 
       // Flush messages that were queued while the socket was not connected.
+      // This runs *before* [_resendAcks] and bumps each flushed ackable
+      // message's timestamp so that [_resendAcks] does not immediately send it a
+      // second time (the periodic resend-until-acked behavior is preserved).
       if (_resendWhenOpen.isNotEmpty) {
-        final pending = List<String>.of(_resendWhenOpen);
+        final pending = List<(int?, String)>.of(_resendWhenOpen);
         _resendWhenOpen.clear();
-        for (final message in pending) {
+        final now = clock_package.clock.now();
+        for (final (ackId, message) in pending) {
           _sink?.add(message);
+          if (ackId != null) {
+            final index = _acks.indexWhere((rec) => rec.$2 == ackId);
+            if (index != -1) {
+              _acks[index] = (now, _acks[index].$2, _acks[index].$3);
+            }
+          }
         }
       }
+
+      _resendAcks();
     } catch (error) {
       _logger.severe('WebSocket connection failed: $error', error);
       _averageLag.value = Duration.zero;
@@ -290,9 +302,10 @@ class SocketClient {
   /// Sends a message to the websocket.
   void send(String topic, Object? data, {bool? ackable, bool? withLag}) {
     Map<String, Object> message;
+    int? ackId;
 
     if (ackable == true) {
-      final ackId = _ackId++;
+      ackId = _ackId++;
       message = {
         't': topic,
         'd': {
@@ -319,7 +332,7 @@ class SocketClient {
     } else {
       // Not connected: queue the message so it is sent once the connection
       // (re)opens, instead of being silently dropped.
-      _resendWhenOpen.add(encoded);
+      _resendWhenOpen.add((ackId, encoded));
     }
   }
 

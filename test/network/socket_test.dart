@@ -302,6 +302,36 @@ void main() {
       socketClient.close();
     });
 
+    test('does not double-send a queued ackable message whose ack is past the resend cutoff', () {
+      fakeAsync((async) {
+        final fakeChannel = FakeWebSocketChannel(defaultSocketUri);
+
+        final socketClient = makeTestSocketClient(
+          fakeChannelFactory: FakeWebSocketChannelFactory((_) => fakeChannel),
+        );
+
+        final sent = <dynamic>[];
+        fakeChannel.sentMessagesExceptPing.listen(sent.add);
+
+        // Sent while disconnected: queued and also tracked in _acks.
+        socketClient.send('move', {'u': 'e2e4'}, ackable: true);
+
+        // Let enough time pass that the ack is older than the resend cutoff
+        // (2500ms), so _resendAcks() would otherwise resend it on connect.
+        async.elapse(const Duration(seconds: 3));
+
+        socketClient.connect();
+        async.elapse(kFakeWebSocketConnectionLag);
+        async.flushMicrotasks();
+
+        // It is sent exactly once on reconnect (by the flush), not twice (flush
+        // + _resendAcks).
+        expect(sent.where((m) => m == '{"t":"move","d":{"u":"e2e4","a":1}}').length, 1);
+
+        socketClient.close();
+      });
+    });
+
     test('handles batch message', () async {
       final fakeChannel = FakeWebSocketChannel(defaultSocketUri);
 
