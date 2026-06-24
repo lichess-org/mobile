@@ -160,6 +160,14 @@ class SocketClient {
   /// The list of acknowledgeable messages.
   final List<(DateTime, int, Map<String, dynamic>)> _acks = [];
 
+  /// Messages that were sent while the socket was not connected.
+  ///
+  /// They are flushed when the connection (re)opens. This prevents losing messages.
+  /// Ackable messages are queued here too (as the web client does) so they are
+  /// resent immediately on reconnect rather than waiting for [_resendAcks]; they
+  /// also stay in [_acks] as the retry-until-acked fallback.
+  final List<String> _resendWhenOpen = [];
+
   /// The current number of connections attempted.
   int nbConnectionAttempts = 0;
 
@@ -263,6 +271,15 @@ class SocketClient {
         _socketOpenController.add(null);
       }
       _resendAcks();
+
+      // Flush messages that were queued while the socket was not connected.
+      if (_resendWhenOpen.isNotEmpty) {
+        final pending = List<String>.of(_resendWhenOpen);
+        _resendWhenOpen.clear();
+        for (final message in pending) {
+          _sink?.add(message);
+        }
+      }
     } catch (error) {
       _logger.severe('WebSocket connection failed: $error', error);
       _averageLag.value = Duration.zero;
@@ -295,7 +312,15 @@ class SocketClient {
       };
     }
 
-    _sink?.add(jsonEncode(message));
+    final encoded = jsonEncode(message);
+    final sink = _sink;
+    if (sink != null) {
+      sink.add(encoded);
+    } else {
+      // Not connected: queue the message so it is sent once the connection
+      // (re)opens, instead of being silently dropped.
+      _resendWhenOpen.add(encoded);
+    }
   }
 
   /// Closes the WebSocket connection and disposes the client.

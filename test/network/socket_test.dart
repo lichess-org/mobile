@@ -222,6 +222,86 @@ void main() {
       socketClient.close();
     });
 
+    test(
+      'queues non-ackable messages sent while not connected and flushes them on connect',
+      () async {
+        final fakeChannel = FakeWebSocketChannel(defaultSocketUri);
+
+        final socketClient = makeTestSocketClient(
+          fakeChannelFactory: FakeWebSocketChannelFactory((_) => fakeChannel),
+        );
+
+        // Messages sent before the connection is open must be queued, not dropped.
+        socketClient.send('test1', null);
+        socketClient.send('test2', {'foo': 'bar'});
+
+        // They are flushed, in order, once the connection opens. Subscribe before
+        // connecting, since the flush happens as soon as the connection is ready
+        // and [sentMessages] is a broadcast stream.
+        final expectation = expectLater(
+          fakeChannel.sentMessagesExceptPing,
+          emitsInOrder(['{"t":"test1"}', '{"t":"test2","d":{"foo":"bar"}}']),
+        );
+
+        await socketClient.connect();
+        await expectation;
+
+        socketClient.close();
+      },
+    );
+
+    test('queues a message sent while the socket is connecting and sends it once open', () async {
+      final fakeChannel = FakeWebSocketChannel(defaultSocketUri);
+
+      final socketClient = makeTestSocketClient(
+        fakeChannelFactory: FakeWebSocketChannelFactory((_) => fakeChannel),
+      );
+
+      // Start connecting but don't await: the connection is in progress (the
+      // attempt is counted but not yet successful).
+      final connectFuture = socketClient.connect();
+      expect(socketClient.nbConnectionAttempts, 1);
+      expect(socketClient.nbConnectionSuccess, 0);
+
+      // Sent while connecting: must be queued, not dropped.
+      socketClient.send('test', null);
+
+      // Subscribe before the connection opens, since the flush is immediate and
+      // [sentMessages] is a broadcast stream.
+      final expectation = expectLater(
+        fakeChannel.sentMessagesExceptPing,
+        emitsThrough('{"t":"test"}'),
+      );
+
+      await connectFuture;
+      expect(socketClient.nbConnectionSuccess, 1);
+      await expectation;
+
+      socketClient.close();
+    });
+
+    test('queues an ackable message sent while not connected and sends it on connect', () async {
+      final fakeChannel = FakeWebSocketChannel(defaultSocketUri);
+
+      final socketClient = makeTestSocketClient(
+        fakeChannelFactory: FakeWebSocketChannelFactory((_) => fakeChannel),
+      );
+
+      // An ackable message (e.g. a move) sent before the connection is open must
+      // be sent as soon as it opens, not only after the ack-resend delay.
+      socketClient.send('move', {'u': 'e2e4'}, ackable: true);
+
+      final expectation = expectLater(
+        fakeChannel.sentMessagesExceptPing,
+        emitsThrough('{"t":"move","d":{"u":"e2e4","a":1}}'),
+      );
+
+      await socketClient.connect();
+      await expectation;
+
+      socketClient.close();
+    });
+
     test('handles batch message', () async {
       final fakeChannel = FakeWebSocketChannel(defaultSocketUri);
 
