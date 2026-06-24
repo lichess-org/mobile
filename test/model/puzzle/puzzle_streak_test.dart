@@ -40,6 +40,15 @@ String _streakJson(List<String> ids) {
 /// An http client that fails every request, simulating being offline.
 final _offlineClient = MockClient((request) async => http.Response('', 500));
 
+/// A connectivity notifier whose online status the test drives directly,
+/// bypassing the real plugin/throttler/HEAD-check machinery.
+class _FakeConnectivity extends ConnectivityChangesNotifier {
+  @override
+  Future<ConnectivityStatus> build() async => (isOnline: false, appState: null);
+
+  void goOnline() => state = const AsyncData((isOnline: true, appState: null));
+}
+
 /// An http client that serves `/api/streak` and `/api/puzzle/{id}` for any id.
 MockClient _onlineClient(List<String> streakIds) {
   return MockClient((request) async {
@@ -411,6 +420,59 @@ void main() {
       await container.read(puzzleStreakControllerProvider.notifier).gameOver();
 
       expect(await container.read(streakStorageProvider(userId)).loadPendingScore(), isNull);
+    });
+
+    test('a win stuck offline resumes automatically on reconnect', () async {
+      var online = false;
+      final client = MockClient((request) async {
+        if (!online) return http.Response('', 500);
+        final path = request.url.path;
+        if (path.startsWith('/api/puzzle/')) {
+          return http.Response(_puzzleJsonWithId(path.split('/').last), 200);
+        }
+        return http.Response('', 404);
+      });
+
+      final container = await makeContainer(
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+            (ref) => FakeHttpClientFactory(() => client),
+          ),
+          connectivityChangesProvider: connectivityChangesProvider.overrideWith(
+            _FakeConnectivity.new,
+          ),
+        },
+      );
+
+      final puzzleStorage = await container.read(puzzleStorageProvider.future);
+      await puzzleStorage.save(puzzle: _puzzle('MptxK'));
+      await container
+          .read(streakStorageProvider(null))
+          .saveActiveStreak(_activeStreak(['MptxK', '4CZxz']));
+
+      _keepAlive(container);
+      final initial = await container.read(puzzleStreakControllerProvider.future);
+      expect(initial.nextPuzzle, isNull);
+
+      // Settle connectivity at offline first, so flipping it online below is seen
+      // as a clean false -> true transition by the controller's listener.
+      await container.read(connectivityChangesProvider.future);
+
+      // A win can't advance: offline and the next puzzle isn't cached.
+      await container.read(puzzleStreakControllerProvider.notifier).next();
+      expect(container.read(puzzleStreakControllerProvider).requireValue.streak.index, 0);
+
+      // Connectivity returns: the controller retries the pending advance.
+      online = true;
+      (container.read(connectivityChangesProvider.notifier) as _FakeConnectivity).goOnline();
+
+      for (var i = 0; i < 100; i++) {
+        if (container.read(puzzleStreakControllerProvider).value?.streak.index == 1) break;
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+      }
+      final state = container.read(puzzleStreakControllerProvider).requireValue;
+      expect(state.streak.index, 1);
+      expect(state.puzzle.puzzle.id, const PuzzleId('4CZxz'));
     });
   });
 }

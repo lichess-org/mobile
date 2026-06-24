@@ -121,6 +121,11 @@ class PuzzleStreakController extends AsyncNotifier<StreakState> {
 
   bool _flushing = false;
 
+  /// Set when a win could not advance the streak because the next puzzle wasn't
+  /// available offline. The streak is paused on the solved puzzle; reconnecting
+  /// retries the advance (see [build]).
+  bool _advancePending = false;
+
   /// Posts a streak run that was saved while offline (see [gameOver]) and clears
   /// it on success. A failure leaves the score in place to retry later.
   Future<void> _flushPendingScore(StreakStorage storage) async {
@@ -149,16 +154,23 @@ class PuzzleStreakController extends AsyncNotifier<StreakState> {
     // Flush any score that couldn't be posted while offline (logged-in only).
     if (authUser != null) {
       _flushPendingScore(streakStorage).ignore();
-
-      // Retry on reconnect while the game-over screen is still open.
-      ref.listen(connectivityChangesProvider, (previous, current) {
-        final wasOffline = previous?.value?.isOnline == false;
-        final isNowOnline = current.value?.isOnline == true;
-        if (wasOffline && isNowOnline) {
-          _flushPendingScore(streakStorage).ignore();
-        }
-      });
     }
+
+    // On reconnect (the game-over or live screen may still be open): post any
+    // pending score, and resume a streak that's paused on a solved puzzle whose
+    // successor couldn't be fetched offline (see [next]). The resume path is not
+    // gated on auth — anonymous streaks get stuck the same way.
+    ref.listen(connectivityChangesProvider, (previous, current) {
+      final wasOffline = previous?.value?.isOnline == false;
+      final isNowOnline = current.value?.isOnline == true;
+      if (!wasOffline || !isNowOnline) return;
+      if (authUser != null) {
+        _flushPendingScore(streakStorage).ignore();
+      }
+      if (_advancePending) {
+        next();
+      }
+    });
 
     final activeStreak = await streakStorage.loadActiveStreak();
 
@@ -232,10 +244,13 @@ class PuzzleStreakController extends AsyncNotifier<StreakState> {
       advanceTo = await _fetchPuzzle(advanceId);
       if (!ref.mounted) return;
       if (advanceTo == null) {
+        // Paused on the solved puzzle; the advance is retried on reconnect.
+        _advancePending = true;
         _showStreakSnackBar("You're offline — reconnect to continue your streak.");
         return;
       }
     }
+    _advancePending = false;
 
     ref.read(soundServiceProvider).play(Sound.confirmation);
 
