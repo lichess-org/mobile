@@ -19,12 +19,14 @@ jobs:
           java-version: 17
           distribution: temurin
 
-      - name: Install Flutter
-        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
-      - run: flutter doctor -v
-
       - name: Checkout mobile code
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          flutter-version-file: pubspec.yaml
+      - run: flutter doctor -v
 
       - name: Install dependencies
         run: flutter pub get
