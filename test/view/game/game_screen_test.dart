@@ -795,6 +795,93 @@ void main() {
         expect(boardHasPiece(tester, Square.d4, Piece.whitePawn), isTrue);
       });
 
+      // Regression test for https://github.com/lichess-org/mobile/issues/3124:
+      // an invalidated premove was being played a couple of moves later.
+      testWidgets('invalidated premove is not replayed on a later move (move confirmation)', (
+        WidgetTester tester,
+      ) async {
+        const gameFullId = GameFullId('qVChCOTcHSeW');
+        final gameSocketUri = GameController.socketUri(gameFullId);
+
+        await createTestGame(
+          tester,
+          pgn: 'e4 e5',
+          clock: const (
+            running: true,
+            initial: Duration(minutes: 1),
+            increment: Duration.zero,
+            white: Duration(seconds: 58),
+            black: Duration(seconds: 54),
+            emerg: Duration(seconds: 10),
+          ),
+          serverPrefs: const ServerGamePrefs(
+            showRatings: true,
+            enablePremove: true,
+            autoQueen: .always,
+            confirmResign: true,
+            submitMove: true,
+            zenMode: .no,
+          ),
+        );
+
+        // white plays Bc4 with confirmation
+        await playMove(tester, 'f1', 'c4');
+        expect(find.text('Confirm move'), findsOneWidget);
+
+        // white premoves the capture Bc4xf7
+        await playMove(tester, 'c4', 'f7');
+        await tester.pump();
+        expect(boardHasPremove(tester, const NormalMove(from: Square.c4, to: Square.f7)), isTrue);
+
+        // confirm Bc4
+        await tester.tap(find.byIcon(CupertinoIcons.checkmark_rectangle_fill));
+        await tester.pump();
+
+        // server acknowledges white's Bc4 (ply 3)
+        sendServerSocketMessages(gameSocketUri, [
+          '{"t": "move", "v": 1, "d": {"ply": 3, "uci": "f1c4", "san": "Bc4", "clock": {"white": 57, "black": 54}}}',
+        ]);
+        await tester.pump();
+
+        // opponent plays d7-d5 (ply 4), blocking the bishop diagonal at d5,
+        // which makes Bc4xf7 illegal: the premove must be discarded.
+        sendServerSocketMessages(gameSocketUri, [
+          '{"t": "move", "v": 2, "d": {"ply": 4, "uci": "d7d5", "san": "d5", "clock": {"white": 57, "black": 52}}}',
+        ]);
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 1));
+        await tester.pump();
+
+        // premove is gone and the bishop has NOT captured on f7
+        expect(boardHasPremove(tester, const NormalMove(from: Square.c4, to: Square.f7)), isFalse);
+        expect(boardHasPiece(tester, Square.c4, Piece.whiteBishop), isTrue);
+        expect(boardHasPiece(tester, Square.f7, Piece.blackPawn), isTrue);
+        expect(boardHasPiece(tester, Square.d5, Piece.blackPawn), isTrue);
+
+        // Now play two more half-moves and make sure the stale premove never
+        // resurfaces ("two moves later").
+        // white plays exd5 with confirmation
+        await playMove(tester, 'e4', 'd5');
+        await tester.tap(find.byIcon(CupertinoIcons.checkmark_rectangle_fill));
+        await tester.pump();
+        sendServerSocketMessages(gameSocketUri, [
+          '{"t": "move", "v": 3, "d": {"ply": 5, "uci": "e4d5", "san": "exd5", "clock": {"white": 56, "black": 52}}}',
+        ]);
+        await tester.pump();
+
+        // opponent plays Qxd5 (ply 6)
+        sendServerSocketMessages(gameSocketUri, [
+          '{"t": "move", "v": 4, "d": {"ply": 6, "uci": "d8d5", "san": "Qxd5", "clock": {"white": 56, "black": 50}}}',
+        ]);
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 1));
+        await tester.pump();
+
+        // the bishop must still be on c4 — the old premove was never played
+        expect(boardHasPiece(tester, Square.c4, Piece.whiteBishop), isTrue);
+        expect(boardHasPiece(tester, Square.f7, Piece.blackPawn), isTrue);
+      });
+
       testWidgets('can premove drop moves in Crazyhouse', (WidgetTester tester) async {
         const gameFullId = GameFullId('qVChCOTcHSeW');
         final gameSocketUri = GameController.socketUri(gameFullId);
