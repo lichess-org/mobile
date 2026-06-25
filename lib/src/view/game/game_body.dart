@@ -45,7 +45,7 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 
 typedef LoadingParam = ({Variant variant, String? fen, Move? lastMove, Side? orientation});
 
-const _kGameEndDialogDelay = Duration(milliseconds: 500);
+const _kGameEndDialogDelay = Duration(milliseconds: 400);
 
 /// Game body for the [GameScreen].
 ///
@@ -177,9 +177,11 @@ class GameBody extends ConsumerWidget {
       // We want to show it only once, whether the game is already finished on
       // first load or not.
       if ((prev?.hasValue != true || prev!.requireValue.game.playable == true) &&
-          state.requireValue.game.playable == false) {
+          game.playable == false) {
         Timer(
-          (game.meta.speed == Speed.bullet || game.meta.speed == Speed.ultraBullet)
+          // already finished or bullet: show the dialog immediately
+          (prev?.hasValue != true && game.playable == false) ||
+                  (game.meta.speed == Speed.bullet || game.meta.speed == Speed.ultraBullet)
               ? Duration.zero
               : _kGameEndDialogDelay,
           () {
