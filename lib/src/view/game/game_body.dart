@@ -358,11 +358,19 @@ class _PlayableGameBoardState extends ConsumerState<_PlayableGameBoard> {
           )
         : null;
     if (explosion != null) _controller.triggerExplosion(explosion);
-    tryExecutePremove(
-      _controller,
-      state.currentPosition,
-      (move) => ref.read(_ctrlProvider.notifier).userMove(move, isPremove: true),
-    );
+
+    // Only play a queued premove when the opponent just moved, i.e. it is now
+    // our turn. This mirrors lila's `playedColor !== d.player.color` gate: a
+    // forward line change can also come from our own (optimistically applied)
+    // move, and attempting the premove then would validate it against a
+    // position where it isn't our turn and wrongly discard it.
+    if (state.currentPosition.turn == state.game.youAre) {
+      tryExecutePremove(
+        _controller,
+        state.currentPosition,
+        (move) => ref.read(_ctrlProvider.notifier).userMove(move, isPremove: true),
+      );
+    }
   }
 
   @override

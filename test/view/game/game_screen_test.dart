@@ -1145,6 +1145,90 @@ void main() {
         expect(boardHasPiece(tester, Square.e5, Piece.blackPawn), isTrue);
         expect(boardHasPiece(tester, Square.d2, Piece.whitePawn), isFalse);
       });
+
+      // The premove must only be played when the opponent just moved (it is now
+      // our turn). A forward line change that lands on the opponent's turn — e.g.
+      // a reconnect that resyncs us further along — must keep the premove queued,
+      // not validate it against a position where it isn't our move and discard it.
+      testWidgets('queued premove is kept when a reconnect resyncs to the opponent turn', (
+        WidgetTester tester,
+      ) async {
+        const gameFullId = GameFullId('qVChCOTcHSeW');
+        final gameSocketUri = GameController.socketUri(gameFullId);
+
+        // After e4 it's black's turn; white queues a premove.
+        await createTestGame(
+          tester,
+          pgn: 'e4',
+          clock: const (
+            running: true,
+            initial: Duration(minutes: 1),
+            increment: Duration.zero,
+            white: Duration(seconds: 58),
+            black: Duration(seconds: 58),
+            emerg: Duration(seconds: 10),
+          ),
+          serverPrefs: const ServerGamePrefs(
+            showRatings: true,
+            enablePremove: true,
+            autoQueen: .always,
+            confirmResign: true,
+            submitMove: false,
+            zenMode: .no,
+          ),
+        );
+
+        await playMove(tester, 'd2', 'd4');
+        expect(boardHasPremove(tester, const NormalMove(from: Square.d2, to: Square.d4)), isTrue);
+
+        // A reconnect resyncs the game further along, but it is still black (the
+        // opponent) to move. The premove is not ours to play yet.
+        sendServerSocketMessages(gameSocketUri, [
+          makeFullEvent(
+            const GameId('qVChCOTc'),
+            'e4 e5 Nf3',
+            whiteUserName: 'Peter',
+            blackUserName: 'Steven',
+            youAre: Side.white,
+            socketVersion: 1,
+            clock: const (
+              running: true,
+              initial: Duration(minutes: 1),
+              increment: Duration.zero,
+              white: Duration(seconds: 58),
+              black: Duration(seconds: 56),
+              emerg: Duration(seconds: 10),
+            ),
+            serverPrefs: const ServerGamePrefs(
+              showRatings: true,
+              enablePremove: true,
+              autoQueen: .always,
+              confirmResign: true,
+              submitMove: false,
+              zenMode: .no,
+            ),
+          ),
+        ]);
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 1));
+        await tester.pump();
+
+        // premove preserved and the d-pawn has not moved (still black to move)
+        expect(boardHasPremove(tester, const NormalMove(from: Square.d2, to: Square.d4)), isTrue);
+        expect(boardHasPiece(tester, Square.d2, Piece.whitePawn), isTrue);
+        expect(boardHasPiece(tester, Square.d4, Piece.whitePawn), isFalse);
+
+        // once the opponent actually moves, it becomes our turn and the premove plays
+        sendServerSocketMessages(gameSocketUri, [
+          '{"t": "move", "v": 2, "d": {"ply": 4, "uci": "b8c6", "san": "Nc6", "clock": {"white": 58, "black": 54}}}',
+        ]);
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 1));
+        await tester.pump();
+
+        expect(boardHasPremove(tester, const NormalMove(from: Square.d2, to: Square.d4)), isFalse);
+        expect(boardHasPiece(tester, Square.d4, Piece.whitePawn), isTrue);
+      });
     });
 
     testWidgets('takeback', (WidgetTester tester) async {
