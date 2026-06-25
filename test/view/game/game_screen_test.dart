@@ -723,6 +723,77 @@ void main() {
         expect(boardHasPiece(tester, Square.d4, Piece.whitePawn), isTrue);
       });
 
+      // Non-regression test for https://github.com/lichess-org/mobile/issues/2130:
+      // an auto-fired premove that the server never confirmed (because the player
+      // flagged) must be rolled back when the game ends, so the final position —
+      // and the result text derived from it — matches the server's state.
+      testWidgets('unconfirmed premove is rolled back when the game ends on time', (
+        WidgetTester tester,
+      ) async {
+        const gameFullId = GameFullId('qVChCOTcHSeW');
+        final gameSocketUri = GameController.socketUri(gameFullId);
+
+        // After e4 it's black's turn; white (us) is down to the last fraction of a
+        // second with a premove set.
+        await createTestGame(
+          tester,
+          pgn: 'e4',
+          clock: const (
+            running: true,
+            initial: Duration(minutes: 1),
+            increment: Duration.zero,
+            white: Duration(milliseconds: 300),
+            black: Duration(seconds: 27),
+            emerg: Duration(seconds: 10),
+          ),
+          serverPrefs: const ServerGamePrefs(
+            showRatings: true,
+            enablePremove: true,
+            autoQueen: .always,
+            confirmResign: true,
+            submitMove: false,
+            zenMode: .no,
+          ),
+        );
+
+        // white premoves d2-d4
+        await playMove(tester, 'd2', 'd4');
+        expect(boardHasPremove(tester, const NormalMove(from: Square.d2, to: Square.d4)), isTrue);
+
+        // opponent plays e7-e5 (ply 2): white's premove auto-fires and is applied
+        // optimistically, advancing the local turn to black.
+        sendServerSocketMessages(gameSocketUri, [
+          '{"t": "move", "v": 1, "d": {"ply": 2, "uci": "e7e5", "san": "e5", "clock": {"white": 0.3, "black": 27}}}',
+        ]);
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 1));
+        await tester.pump();
+        expect(boardHasPiece(tester, Square.d4, Piece.whitePawn), isTrue);
+
+        // The server never confirms the premove: white flagged, and with black left
+        // holding only insufficient mating material the game is scored a draw.
+        sendServerSocketMessages(gameSocketUri, [
+          '{"t":"endData","d":{"status":"outoftime","winner":null,"clock":{"wc":0,"bc":2700}}}',
+        ]);
+        await tester.pump(const Duration(milliseconds: 10));
+
+        // The unconfirmed premove has been rolled back: the d-pawn is back on d2
+        // and it is white to move again.
+        expect(boardHasPiece(tester, Square.d4, Piece.whitePawn), isFalse);
+        expect(boardHasPiece(tester, Square.d2, Piece.whitePawn), isTrue);
+        expect(boardHasPiece(tester, Square.e5, Piece.blackPawn), isTrue);
+
+        // Let the game-end dialog appear and check it names the side that actually
+        // flagged (white), not the side to move in the corrupted local position.
+        await tester.pump(const Duration(milliseconds: 400));
+        await tester.pump();
+        expect(find.text('White time out • Draw'), findsOneWidget);
+        expect(find.text('Black time out • Draw'), findsNothing);
+
+        // wait for the dong
+        await tester.pump(const Duration(seconds: 500));
+      });
+
       testWidgets('illegal premove is cancelled after opponent move with move confirmation', (
         WidgetTester tester,
       ) async {

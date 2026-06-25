@@ -613,6 +613,11 @@ class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> 
         final fullEvent = GameFullEvent.fromJson(event.data as Map<String, dynamic>);
         _socketClient.version = fullEvent.socketEventVersion;
 
+        // The resync replaces our steps with the server's authoritative ones, so
+        // any optimistically-applied move is now either confirmed or gone: clear
+        // the pending-move marker.
+        _transientMoveTimer?.cancel();
+
         final curState = state.requireValue;
 
         final newGame = fullEvent.game;
@@ -769,7 +774,26 @@ class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> 
       // End game event
       case 'endData':
         final endData = GameEndEvent.fromJson(event.data as Map<String, dynamic>);
-        final curState = state.requireValue;
+
+        // A move (typically an auto-fired premove) may have been applied
+        // optimistically to the board but never confirmed by the server because
+        // the game ended first — e.g. the player flagged, so the premove was
+        // rejected. The transient move timer is still active in that case. Roll
+        // the unconfirmed move back so the final position (and the result text
+        // derived from it) matches the server.
+        // See https://github.com/lichess-org/mobile/issues/2130.
+        GameState curState = state.requireValue;
+        if (_transientMoveTimer?.isActive == true && curState.game.steps.length > 1) {
+          final confirmedSteps = curState.game.steps.removeLast();
+          curState = curState.copyWith(
+            game: curState.game.copyWith(steps: confirmedSteps),
+            stepCursor: curState.stepCursor.clamp(0, confirmedSteps.length - 1),
+            moveToConfirm: null,
+          );
+          state = AsyncValue.data(curState);
+        }
+        _transientMoveTimer?.cancel();
+
         GameState newState = curState.copyWith(
           game: curState.game.copyWith(
             status: endData.status,
