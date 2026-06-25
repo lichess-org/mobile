@@ -70,6 +70,23 @@ class PuzzleRepository {
     return client.readJson(Uri(path: '/api/puzzle/$id'), mapper: _puzzleFromJson);
   }
 
+  /// Fetches several puzzles by id in a single request via `/api/puzzle/many`.
+  ///
+  /// The server preserves the requested order, silently drops unknown ids, and
+  /// caps each request at 50 ids, so the returned list may be shorter than [ids]
+  /// and is not index-aligned with it. Callers should match results by puzzle id.
+  Future<IList<Puzzle>> fetchMany(IList<PuzzleId> ids) {
+    return client
+        .readJson(
+          Uri(
+            path: '/api/puzzle/many',
+            queryParameters: {'ids': ids.map((id) => id.value).join(',')},
+          ),
+          mapper: _decodeBatchResponse,
+        )
+        .then((response) => response.puzzles);
+  }
+
   Future<PuzzleStreakResponse> streak() {
     return client.readJson(
       Uri(path: '/api/streak'),

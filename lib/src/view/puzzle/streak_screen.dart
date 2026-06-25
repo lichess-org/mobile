@@ -62,9 +62,9 @@ class _Load extends ConsumerWidget {
     final streak = ref.watch(puzzleStreakControllerProvider);
 
     switch (streak) {
-      case AsyncValue(:final error?, :final stackTrace):
-        debugPrint('SEVERE: [StreakScreen] could not load streak; $error\n$stackTrace');
-        return PuzzleErrorBoardWidget(errorMessage: error.toString());
+      // Match a retained value before the error arm: a background rebuild that
+      // fails (e.g. offline) still carries the previous value, and we must keep
+      // showing the live board rather than tearing it down for the error board.
       case AsyncValue(:final value?):
         return _Body(
           initialPuzzleContext: PuzzleContext(
@@ -74,6 +74,14 @@ class _Load extends ConsumerWidget {
             isPuzzleStreak: true,
           ),
           streak: value.streak,
+        );
+      case AsyncValue(:final error?, :final stackTrace):
+        debugPrint('SEVERE: [StreakScreen] could not load streak; $error\n$stackTrace');
+        // The streak needs the network for an uncached puzzle (a brand-new
+        // streak, or resuming past the offline prefetch buffer). Degrade to a
+        // static "go online" board instead of surfacing a raw error.
+        return const PuzzleErrorBoardWidget(
+          errorMessage: 'Go online to start or continue your streak.',
         );
       case _:
         return const Center(child: CircularProgressIndicator.adaptive());
@@ -262,7 +270,16 @@ class _BodyState extends ConsumerState<_Body> {
       if (previous?.result != PuzzleResult.lose && next.result == PuzzleResult.lose) {
         ref.read(puzzleStreakControllerProvider.notifier).gameOver();
       } else if (previous?.result != PuzzleResult.win && next.result == PuzzleResult.win) {
-        ref.read(puzzleStreakControllerProvider.notifier).next();
+        ref.read(puzzleStreakControllerProvider.notifier).next().then((result) {
+          // The puzzle was solved but we couldn't load the next one offline.
+          // Tell the user instead of silently freezing on the solved board.
+          if (!context.mounted || result != StreakAdvance.offline) return;
+          showSnackBar(
+            context,
+            'You are offline. Reconnect to continue your streak.',
+            type: SnackBarType.info,
+          );
+        });
       }
     });
 
