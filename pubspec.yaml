@@ -10,21 +10,21 @@ environment:
   flutter: 3.44.3
 
 dependencies:
-  app_links: ^7.1.2
+  app_links: ^7.2.0
   app_settings: ^7.0.0
   async: ^2.13.1
   auto_size_text: ^3.0.0
-  chessground: ^10.1.0
+  chessground: ^10.1.1
   clock: ^1.1.2
   collection: ^1.19.1
-  connectivity_plus: ^7.1.1
+  connectivity_plus: ^7.2.0
   cronet_http: ^1.9.0
   crypto: ^3.0.7
   cupertino_http: ^3.0.2
   cupertino_icons: ^1.0.9
   dartchess: ^0.13.1
   deep_pick: ^1.1.0
-  device_info_plus: ^13.1.0
+  device_info_plus: ^13.2.0
   dynamic_system_colors: ^1.9.0
   fast_immutable_collections: ^11.2.0
   file_picker: 12.0.0-beta.7 # pin because of 12.0.0-beta.7 build issue on android
@@ -34,7 +34,7 @@ dependencies:
   fl_chart: ^1.2.0
   flutter:
     sdk: flutter
-  flutter_appauth: ^12.0.1
+  flutter_appauth: ^12.0.2
   flutter_displaymode: ^0.7.0
   flutter_layout_grid: ^2.0.8
   flutter_linkify: ^6.0.0
@@ -60,7 +60,7 @@ dependencies:
   material_symbols_icons: ^4.2951.0
   meta: ^1.18.0
   multistockfish: ^0.5.0
-  package_info_plus: ^10.1.0
+  package_info_plus: ^10.2.0
   path: ^1.9.1
   path_provider: ^2.1.6
   popover: ^0.4.0
@@ -68,7 +68,7 @@ dependencies:
   qr_flutter: ^4.1.0
   quick_actions: ^1.1.0
   result_extensions: ^0.2.0
-  share_plus: ^13.1.0
+  share_plus: ^13.2.0
   shared_preferences: ^2.5.5
   signal_strength_indicator: ^0.5.0
   sound_effect: ^0.2.0
