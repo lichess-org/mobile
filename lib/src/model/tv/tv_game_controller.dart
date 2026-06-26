@@ -195,7 +195,11 @@ class TvGameController extends AsyncNotifier<TvGameState> with ChatMixin<TvGameS
     super.handleSocketEvent(event);
 
     if (event.topic == 'resync' || event.topic == 'rematchTaken') {
-      unawaited(_onResyncOrRematchTaken());
+      unawaited(
+        _onResyncOrRematchTaken().catchError((_) {
+          _onReload?.call();
+        }),
+      );
       return;
     }
 
