@@ -62,7 +62,7 @@ class _ShowDeclineDialogWidget extends ConsumerWidget {
 }
 
 void main() {
-  TestWidgetsFlutterBinding.ensureInitialized();
+  final binding = TestWidgetsFlutterBinding.ensureInitialized();
 
   setUpAll(() {
     registerFallbackValue(const ChallengeId(''));
@@ -73,6 +73,8 @@ void main() {
 
   tearDown(() {
     reset(notificationDisplayMock);
+    // reset lifecycle state between tests
+    binding.resetInternalState();
   });
 
   test('exposes a challenges stream', () async {
@@ -124,6 +126,9 @@ void main() {
   });
 
   test('Listen to socket and show a notification for any new challenge', () async {
+    // notifications from socket are only displayed if app is in foreground
+    binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+
     when(
       () => notificationDisplayMock.show(
         id: any(named: 'id'),
@@ -208,7 +213,71 @@ void main() {
     });
   });
 
+  test('Does not show local notification when app is in background', () async {
+    // when app is in background, socket notifications should not be displayed
+    binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
+
+    when(
+      () => notificationDisplayMock.show(
+        id: any(named: 'id'),
+        title: any(named: 'title'),
+        body: any(named: 'body'),
+        notificationDetails: any(named: 'notificationDetails'),
+        payload: any(named: 'payload'),
+      ),
+    ).thenAnswer((_) => Future.value());
+
+    final container = await makeContainer(
+      authUser: fakeAuthUser,
+      overrides: {
+        notificationDisplayProvider: notificationDisplayProvider.overrideWithValue(
+          notificationDisplayMock,
+        ),
+      },
+    );
+
+    final notificationService = container.read(notificationServiceProvider);
+    final challengeService = container.read(challengeServiceProvider);
+
+    fakeAsync((async) {
+      final socketClient = makeTestSocketClient();
+      socketClient.connect();
+      notificationService.start();
+      challengeService.start();
+
+      // wait for the socket to connect
+      async.elapse(const Duration(milliseconds: 100));
+      async.flushMicrotasks();
+
+      sendServerSocketMessages(Uri(path: kDefaultSocketRoute), [
+        '''
+{"t": "challenges", "d": {"in": [ { "socketVersion": 0, "id": "H9fIRZUk", "url": "https://lichess.org/H9fIRZUk", "status": "created", "challenger": { "id": "bot1", "name": "Bot1", "rating": 1500, "title": "BOT", "provisional": true, "online": true, "lag": 4 }, "destUser": { "id": "bobby", "name": "Bobby", "rating": 1635, "title": "GM", "provisional": true, "online": true, "lag": 4 }, "variant": { "key": "standard", "name": "Standard", "short": "Std" }, "rated": true, "speed": "rapid", "timeControl": { "type": "clock", "limit": 600, "increment": 0, "show": "10+0" }, "color": "random", "finalColor": "black", "perf": { "icon": "", "name": "Rapid" }, "direction": "in" } ] }, "v": 0 }
+''',
+      ]);
+
+      async.flushMicrotasks();
+
+      // ensure no notification is shown while app is backgrounded
+      verifyNever(
+        () => notificationDisplayMock.show(
+          id: any(named: 'id'),
+          title: any(named: 'title'),
+          body: any(named: 'body'),
+          notificationDetails: any(named: 'notificationDetails'),
+          payload: any(named: 'payload'),
+        ),
+      );
+
+      // closing the socket client to be able to flush the timers
+      socketClient.close();
+      async.flushTimers();
+    });
+  });
+
   test('Cancels the notification for any missing challenge', () async {
+    // notifications from socket are only displayed if app is in foreground
+    binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+
     when(
       () => notificationDisplayMock.show(
         id: any(named: 'id'),
