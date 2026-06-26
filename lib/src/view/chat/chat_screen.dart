@@ -271,6 +271,7 @@ class _ChatBottomBar extends ConsumerStatefulWidget {
 
 class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
   final _textController = TextEditingController();
+  final _focusNode = FocusNode();
 
   @override
   void initState() {
@@ -285,6 +286,7 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
   @override
   void dispose() {
     _textController.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -312,6 +314,7 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
         child: TextField(
+          focusNode: _focusNode,
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
             suffixIcon: sendButton,
