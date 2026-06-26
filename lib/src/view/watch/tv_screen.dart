@@ -73,7 +73,7 @@ class _TvScreenState extends ConsumerState<TvScreen> {
 
     return FocusDetector(
       onFocusRegained: () {
-        ref.read(_tvCtrl.notifier).onFocusRegained();
+        ref.read(_tvCtrl.notifier).resolveCurrentGame();
         if (gameParams != null) {
           ref.read(tvGameControllerProvider(gameParams).notifier).onFocusRegained();
         }

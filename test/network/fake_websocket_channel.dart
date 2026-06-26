@@ -73,7 +73,7 @@ class FakeWebSocketChannelFactory implements WebSocketChannelFactory {
     Map<String, dynamic>? headers,
     Duration timeout = const Duration(seconds: 1),
   }) {
-    return Future.value(createFunction(Uri(path: Uri.parse(url).path)));
+    return Future.value(createFunction(Uri.parse(url)));
   }
 }
 
@@ -109,10 +109,11 @@ typedef FakeSocketServerHandlers =
 /// verify that the client sends the expected messages.
 class FakeWebSocketChannel implements WebSocketChannel {
   FakeWebSocketChannel(
-    this.route, {
+    Uri socketRoute, {
     this.connectionLag = kFakeWebSocketConnectionLag,
     this.serverHandlers = const {},
-  }) : assert(route.path.isNotEmpty, 'Route path must not be empty'),
+  }) : route = Uri(path: socketRoute.path),
+       assert(socketRoute.path.isNotEmpty, 'Route path must not be empty'),
        assert(connectionLag > Duration.zero, 'Connection lag must be greater than 0') {
     _sink = _FakeWebSocketSink(this, serverHandlers);
   }

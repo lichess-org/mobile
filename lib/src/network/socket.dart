@@ -221,7 +221,13 @@ class SocketClient {
     _ackResendTimer = Timer.periodic(resendAckDelay, (_) => _resendAcks());
 
     final authUser = getSession();
-    final uri = lichessWSUri(route.path, version != null ? {'v': version.toString()} : null);
+
+    final queryParameters = Map<String, String>.from(route.queryParameters);
+    if (version != null) {
+      queryParameters['v'] = version.toString();
+    }
+    final uri = lichessWSUri(route.path, queryParameters.isNotEmpty ? queryParameters : null);
+
     final Map<String, String> headers = authUser != null
         ? {'Authorization': 'Bearer ${signBearerToken(authUser.token)}'}
         : {};
