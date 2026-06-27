@@ -2,7 +2,10 @@ import 'package:chessground/chessground.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
@@ -10,6 +13,7 @@ import 'package:lichess_mobile/src/utils/system.dart';
 import 'package:lichess_mobile/src/view/settings/board_choice_screen.dart';
 import 'package:lichess_mobile/src/view/settings/piece_set_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
@@ -32,13 +36,48 @@ class BoardSettingsScreen extends StatelessWidget {
   }
 }
 
-class _Body extends ConsumerWidget {
+class _Body extends ConsumerStatefulWidget {
   const _Body();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final boardPrefs = ref.watch(boardPreferencesProvider);
+  ConsumerState<_Body> createState() => _BodyState();
+}
 
+class _BodyState extends ConsumerState<_Body> {
+  bool isLoading = false;
+
+  Future<void> _setAccountPref(Future<void> Function(AccountPreferences preferences) save) async {
+    setState(() {
+      isLoading = true;
+    });
+    try {
+      final authUser = ref.read(authControllerProvider);
+      await save(ref.read(accountPreferencesProvider.notifier));
+      if (authUser != null && mounted) {
+        showSnackBar(
+          context,
+          context.l10n.preferencesYourPreferencesHaveBeenSaved,
+          type: SnackBarType.success,
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final boardPrefs = ref.watch(boardPreferencesProvider);
+    final accountPrefsAsync = ref.watch(accountPreferencesProvider);
+    final accountPrefs = accountPrefsAsync.value ?? defaultAccountPreferences;
+    final authUser = ref.watch(authControllerProvider);
+    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
+    final accountPrefsEnabled =
+        accountPrefsAsync.hasValue && !isLoading && (authUser == null || isOnline);
     final androidVersionAsync = ref.watch(androidVersionProvider);
 
     return ListView(
@@ -60,6 +99,65 @@ class _Body extends ConsumerWidget {
               onTap: () {
                 Navigator.of(context).push(PieceSetScreen.buildRoute());
               },
+            ),
+            SettingsListTile(
+              enabled: accountPrefsEnabled,
+              settingsLabel: Text(context.l10n.preferencesZenMode),
+              settingsValue: accountPrefs.zenMode.label(context.l10n),
+              onTap: accountPrefsEnabled
+                  ? () {
+                      showChoicePicker(
+                        context,
+                        choices: Zen.values,
+                        selectedItem: accountPrefs.zenMode,
+                        labelBuilder: (t) => Text(t.label(context.l10n)),
+                        onSelectedItemChanged: (Zen? value) {
+                          _setAccountPref((prefs) => prefs.setZen(value ?? accountPrefs.zenMode));
+                        },
+                      );
+                    }
+                  : null,
+            ),
+            SettingsListTile(
+              enabled: accountPrefsEnabled,
+              settingsLabel: Text(context.l10n.preferencesPgnPieceNotation),
+              settingsValue: accountPrefs.pieceNotation.label(context.l10n),
+              onTap: accountPrefsEnabled
+                  ? () {
+                      showChoicePicker(
+                        context,
+                        choices: PieceNotation.values,
+                        selectedItem: accountPrefs.pieceNotation,
+                        labelBuilder: (t) => Text(t.label(context.l10n)),
+                        onSelectedItemChanged: (PieceNotation? value) {
+                          _setAccountPref(
+                            (prefs) => prefs.setPieceNotation(value ?? accountPrefs.pieceNotation),
+                          );
+                        },
+                      );
+                    }
+                  : null,
+            ),
+            SettingsListTile(
+              enabled: accountPrefsEnabled,
+              settingsLabel: Text(context.l10n.preferencesShowPlayerRatings),
+              settingsValue: accountPrefs.showRatings.label(context.l10n),
+              onTap: accountPrefsEnabled
+                  ? () {
+                      showChoicePicker(
+                        context,
+                        choices: ShowRatings.values,
+                        selectedItem: accountPrefs.showRatings,
+                        labelBuilder: (t) => Text(t.label(context.l10n)),
+                        onSelectedItemChanged: (ShowRatings? value) {
+                          _setAccountPref(
+                            (prefs) => prefs.setShowRatings(value ?? accountPrefs.showRatings),
+                          );
+                        },
+                      );
+                    }
+                  : null,
+              explanation: context.l10n.preferencesExplainShowPlayerRatings,
             ),
             SwitchSettingTile(
               title: Text(context.l10n.preferencesBoardCoordinates),
@@ -201,6 +299,88 @@ class _Body extends ConsumerWidget {
                 ref.read(boardPreferencesProvider.notifier).togglePremoves();
               },
             ),
+            SettingsListTile(
+              enabled: accountPrefsEnabled,
+              settingsLabel: Text(context.l10n.preferencesTakebacksWithOpponentApproval),
+              settingsValue: accountPrefs.takeback.label(context.l10n),
+              onTap: accountPrefsEnabled
+                  ? () {
+                      showChoicePicker(
+                        context,
+                        choices: Takeback.values,
+                        selectedItem: accountPrefs.takeback,
+                        labelBuilder: (t) => Text(t.label(context.l10n)),
+                        onSelectedItemChanged: (Takeback? value) {
+                          _setAccountPref(
+                            (prefs) => prefs.setTakeback(value ?? accountPrefs.takeback),
+                          );
+                        },
+                      );
+                    }
+                  : null,
+            ),
+            SettingsListTile(
+              enabled: accountPrefsEnabled,
+              settingsLabel: Text(context.l10n.preferencesPromoteToQueenAutomatically),
+              settingsValue: accountPrefs.autoQueen.label(context.l10n),
+              onTap: accountPrefsEnabled
+                  ? () {
+                      showChoicePicker(
+                        context,
+                        choices: AutoQueen.values,
+                        selectedItem: accountPrefs.autoQueen,
+                        labelBuilder: (t) => Text(t.label(context.l10n)),
+                        onSelectedItemChanged: (AutoQueen? value) {
+                          _setAccountPref(
+                            (prefs) => prefs.setAutoQueen(value ?? accountPrefs.autoQueen),
+                          );
+                        },
+                      );
+                    }
+                  : null,
+            ),
+            SettingsListTile(
+              enabled: accountPrefsEnabled,
+              settingsLabel: Text(
+                context.l10n.preferencesClaimDrawOnThreefoldRepetitionAutomatically,
+              ),
+              settingsValue: accountPrefs.autoThreefold.label(context.l10n),
+              onTap: accountPrefsEnabled
+                  ? () {
+                      showChoicePicker(
+                        context,
+                        choices: AutoThreefold.values,
+                        selectedItem: accountPrefs.autoThreefold,
+                        labelBuilder: (t) => Text(t.label(context.l10n)),
+                        onSelectedItemChanged: (AutoThreefold? value) {
+                          _setAccountPref(
+                            (prefs) => prefs.setAutoThreefold(value ?? accountPrefs.autoThreefold),
+                          );
+                        },
+                      );
+                    }
+                  : null,
+            ),
+            SettingsListTile(
+              enabled: accountPrefsEnabled,
+              settingsLabel: Text(context.l10n.preferencesMoveConfirmation),
+              settingsValue: accountPrefs.submitMove.label(context.l10n),
+              onTap: accountPrefsEnabled
+                  ? () {
+                      showMultipleChoicesPicker(
+                        context,
+                        choices: SubmitMoveChoice.values,
+                        selectedItems: accountPrefs.submitMove.choices,
+                        labelBuilder: (t) => Text(t.label(context.l10n)),
+                      ).then((value) {
+                        if (value != null) {
+                          _setAccountPref((prefs) => prefs.setSubmitMove(SubmitMove(value)));
+                        }
+                      });
+                    }
+                  : null,
+              explanation: context.l10n.preferencesExplainCanThenBeTemporarilyDisabled,
+            ),
             SwitchSettingTile(
               title: Text(context.l10n.preferencesConfirmResignationAndDrawOffers),
               value: boardPrefs.confirmResignAndDraw,
@@ -272,6 +452,61 @@ class _Body extends ConsumerWidget {
               onChanged: (value) {
                 ref.read(boardPreferencesProvider.notifier).toggleEnableShapeDrawings();
               },
+            ),
+          ],
+        ),
+        ListSection(
+          header: SettingsSectionTitle(context.l10n.preferencesChessClock),
+          hasLeading: false,
+          children: [
+            SettingsListTile(
+              enabled: accountPrefsEnabled,
+              settingsLabel: Text(context.l10n.preferencesGiveMoreTime),
+              settingsValue: accountPrefs.moretime.label(context.l10n),
+              onTap: accountPrefsEnabled
+                  ? () {
+                      showChoicePicker(
+                        context,
+                        choices: Moretime.values,
+                        selectedItem: accountPrefs.moretime,
+                        labelBuilder: (t) => Text(t.label(context.l10n)),
+                        onSelectedItemChanged: (Moretime? value) {
+                          _setAccountPref(
+                            (prefs) => prefs.setMoretime(value ?? accountPrefs.moretime),
+                          );
+                        },
+                      );
+                    }
+                  : null,
+            ),
+            SwitchSettingTile(
+              title: Text(context.l10n.preferencesSoundWhenTimeGetsCritical),
+              value: accountPrefs.clockSound.value,
+              onChanged: accountPrefsEnabled
+                  ? (value) {
+                      _setAccountPref((prefs) => prefs.setClockSound(BooleanPref(value)));
+                    }
+                  : null,
+            ),
+            SettingsListTile(
+              enabled: accountPrefsEnabled,
+              settingsLabel: Text(context.l10n.preferencesTenthsOfSeconds),
+              settingsValue: accountPrefs.clockTenths.label(context.l10n),
+              onTap: accountPrefsEnabled
+                  ? () {
+                      showChoicePicker(
+                        context,
+                        choices: ClockTenths.values,
+                        selectedItem: accountPrefs.clockTenths,
+                        labelBuilder: (t) => Text(t.label(context.l10n)),
+                        onSelectedItemChanged: (ClockTenths? value) {
+                          _setAccountPref(
+                            (prefs) => prefs.setClockTenths(value ?? accountPrefs.clockTenths),
+                          );
+                        },
+                      );
+                    }
+                  : null,
             ),
           ],
         ),
