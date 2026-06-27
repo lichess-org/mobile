@@ -9,7 +9,7 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/utils/rate_limit.dart';
+import 'package:lichess_mobile/src/utils/riverpod.dart';
 import 'package:lichess_mobile/src/view/message/conversation_screen.dart';
 import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -24,6 +24,7 @@ final messageSearchResultsProvider = FutureProvider.autoDispose<SearchResult>((r
   if (query.length < 3) {
     return _emptySearchResult;
   }
+  await ref.debounce(const Duration(milliseconds: 300));
   return await repo.search(query);
 });
 
@@ -45,13 +46,13 @@ class ContactsScreen extends ConsumerStatefulWidget {
 }
 
 class _ContactsScreenState extends ConsumerState<ContactsScreen> {
-  final onChangedDebouncer = Debouncer(const Duration(milliseconds: 300));
-  final controller = TextEditingController();
-  final focusNode = FocusNode();
+  final _controller = TextEditingController();
+  final _focusNode = FocusNode();
 
   @override
   void dispose() {
-    onChangedDebouncer.cancel();
+    _controller.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -62,8 +63,8 @@ class _ContactsScreenState extends ConsumerState<ContactsScreen> {
     ).push(ConversationScreen.buildRoute(user: user));
     ref.invalidate(contactsProvider);
     ref.read(messageSearchQueryProvider.notifier).state = '';
-    controller.clear();
-    focusNode.unfocus();
+    _controller.clear();
+    _focusNode.unfocus();
   }
 
   @override
@@ -82,13 +83,11 @@ class _ContactsScreenState extends ConsumerState<ContactsScreen> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: PlatformSearchBar(
-              controller: controller,
-              focusNode: focusNode,
+              controller: _controller,
+              focusNode: _focusNode,
               hintText: context.l10n.searchOrStartNewDiscussion,
               onChanged: (value) {
-                onChangedDebouncer.call(() {
-                  ref.read(messageSearchQueryProvider.notifier).state = value;
-                });
+                ref.read(messageSearchQueryProvider.notifier).state = value;
               },
             ),
           ),
