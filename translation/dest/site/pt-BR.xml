@@ -814,6 +814,10 @@
   <string name="quickPairing">Pareamento rápido</string>
   <string name="lobby">Sala de espera</string>
   <string name="anonymous">Anônimo</string>
+  <plurals name="nbAnonymous">
+    <item quantity="one">Anônimo</item>
+    <item quantity="other">Anônimo (%s)</item>
+  </plurals>
   <string name="yourScore">Sua pontuação:%s</string>
   <string name="language">Idioma</string>
   <string name="allLanguages">Todos os idiomas</string>
@@ -1038,4 +1042,5 @@ Deixe em branco para começar as partidas na posição inicial padrão.</string>
   <string name="thereAreNoResultsForX">Nenhum resultado para \"%s\"</string>
   <string name="tags">Etiquetas</string>
   <string name="enPassant">En passant</string>
+  <string name="settings">Configurações</string>
 </resources>
