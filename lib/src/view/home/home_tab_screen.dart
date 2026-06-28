@@ -33,6 +33,7 @@ import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/launch.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/account/account_menu.dart';
@@ -196,9 +197,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                   (authUser == null || authUser.user.isPatron != true)) ...[
                 Center(
                   child: FilledButton.tonal(
-                    onPressed: () {
-                      launchUrl(Uri.parse('https://lichess.org/patron'));
-                    },
+                    onPressed: () => launchPatronPage(),
                     child: Text(context.l10n.patronDonate),
                   ),
                 ),
