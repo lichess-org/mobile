@@ -90,4 +90,5 @@
   <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">Utfordring opprettet: Du blir varslet når partiet starter.\nDu kan åpne det fra Hjem-fanen.</string>
   <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Forrige</string>
   <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">Eller importer en PGN-fil</string>
+  <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">Bra trekk, men det finnes et bedre</string>
 </resources>
