@@ -364,59 +364,61 @@ class _MessageBubble extends ConsumerWidget {
 
     return ChatBubbleContextMenu(
       message: message.text,
-      child: FractionallySizedBox(
+      child: Align(
         alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
-        widthFactor: 0.85,
-        child: Container(
-          margin: EdgeInsets.only(
-            bottom: !isInGroup || isFirstInGroup ? 8 : 2,
-            top: !isInGroup || isLastInGroup ? 8 : 2,
-            left: 8,
-            right: 8,
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
-          decoration: BoxDecoration(
-            color: _bubbleColor(context),
-            borderRadius: BorderRadius.only(
-              topLeft: isMe
-                  ? _bubbleRadius
-                  : isInGroup && !isLastInGroup
-                  ? _inGroupRadius
-                  : _bubbleRadius,
-              topRight: isMe
-                  ? isInGroup && !isLastInGroup
-                        ? _inGroupRadius
-                        : _bubbleRadius
-                  : _bubbleRadius,
-              bottomLeft: isMe
-                  ? _bubbleRadius
-                  : isInGroup && !isFirstInGroup
-                  ? _inGroupRadius
-                  : _bubbleRadius,
-              bottomRight: isMe
-                  ? isInGroup && !isFirstInGroup
-                        ? _inGroupRadius
-                        : _bubbleRadius
-                  : _bubbleRadius,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.85),
+          child: Container(
+            margin: EdgeInsets.only(
+              bottom: !isInGroup || isFirstInGroup ? 8 : 2,
+              top: !isInGroup || isLastInGroup ? 8 : 2,
+              left: 8,
+              right: 8,
             ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Linkify(
-                onOpen: (link) async =>
-                    await ref.read(appLinksServiceProvider).onLinkifyOpen(context, link),
-                linkifiers: AppLinksService.kLichessLinkifiers,
-                text: message.text,
-                style: TextStyle(color: _textColor(context)),
-                linkStyle: Styles.linkStyle,
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
+            decoration: BoxDecoration(
+              color: _bubbleColor(context),
+              borderRadius: BorderRadius.only(
+                topLeft: isMe
+                    ? _bubbleRadius
+                    : isInGroup && !isLastInGroup
+                    ? _inGroupRadius
+                    : _bubbleRadius,
+                topRight: isMe
+                    ? isInGroup && !isLastInGroup
+                          ? _inGroupRadius
+                          : _bubbleRadius
+                    : _bubbleRadius,
+                bottomLeft: isMe
+                    ? _bubbleRadius
+                    : isInGroup && !isFirstInGroup
+                    ? _inGroupRadius
+                    : _bubbleRadius,
+                bottomRight: isMe
+                    ? isInGroup && !isFirstInGroup
+                          ? _inGroupRadius
+                          : _bubbleRadius
+                    : _bubbleRadius,
               ),
-              const SizedBox(height: 4),
-              Text(
-                time,
-                style: TextStyle(fontSize: 11, color: _textColor(context).withValues(alpha: 0.6)),
-              ),
-            ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Linkify(
+                  onOpen: (link) async =>
+                      await ref.read(appLinksServiceProvider).onLinkifyOpen(context, link),
+                  linkifiers: AppLinksService.kLichessLinkifiers,
+                  text: message.text,
+                  style: TextStyle(color: _textColor(context)),
+                  linkStyle: Styles.linkStyle,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  time,
+                  style: TextStyle(fontSize: 11, color: _textColor(context).withValues(alpha: 0.6)),
+                ),
+              ],
+            ),
           ),
         ),
       ),
