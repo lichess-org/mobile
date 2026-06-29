@@ -45,7 +45,8 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 
 typedef LoadingParam = ({Variant variant, String? fen, Move? lastMove, Side? orientation});
 
-const _kGameEndDialogDelay = Duration(milliseconds: 400);
+/// Delay before the game end dialog is shown after a (non-bullet) game finishes.
+const kGameEndDialogDelay = Duration(milliseconds: 400);
 
 /// Game body for the [GameScreen].
 ///
@@ -183,7 +184,7 @@ class GameBody extends ConsumerWidget {
           (prev?.hasValue != true && game.playable == false) ||
                   (game.meta.speed == Speed.bullet || game.meta.speed == Speed.ultraBullet)
               ? Duration.zero
-              : _kGameEndDialogDelay,
+              : kGameEndDialogDelay,
           () {
             if (context.mounted) {
               showAdaptiveDialog<void>(
@@ -982,7 +983,7 @@ class _GameBottomBar extends ConsumerWidget {
               ref.read(gameControllerProvider(id).notifier).declineRematch();
             },
           )
-        else if (gameState.rematchChallengeId != null)
+        else if (gameState.correspondenceRematchId != null)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.cancelRematchOffer),
             dismissOnPress: true,

@@ -104,7 +104,7 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   if (value.game.me?.offeringRematch == true ||
-                      value.rematchChallengeId != null) ...[
+                      value.correspondenceRematchId != null) ...[
                     Flexible(
                       flex: 3,
                       child: Text(

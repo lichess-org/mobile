@@ -5,6 +5,7 @@ import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/view/game/game_body.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
@@ -108,9 +109,9 @@ void main() {
         opponentOnGame: false,
       );
 
-      // The result dialog is shown 500ms after the game finishes, then its
-      // buttons activate after a further second.
-      await tester.pump(const Duration(milliseconds: 600));
+      // The result dialog is shown after kGameEndDialogDelay, then its buttons
+      // activate after a further second.
+      await tester.pump(kGameEndDialogDelay);
       await tester.pump(const Duration(seconds: 1));
 
       final rematchButton = find.widgetWithText(FilledButton, 'Rematch');
@@ -136,7 +137,7 @@ void main() {
         opponentOnGame: false,
       );
 
-      await tester.pump(const Duration(milliseconds: 600));
+      await tester.pump(kGameEndDialogDelay);
       await tester.pump(const Duration(seconds: 1));
 
       await tester.tap(find.widgetWithText(FilledButton, 'Rematch'));
@@ -159,7 +160,7 @@ void main() {
 
       // Let the auto result dialog appear, then pop it to reach the bottom bar
       // menu underneath.
-      await tester.pump(const Duration(milliseconds: 600));
+      await tester.pump(kGameEndDialogDelay);
       tester.state<NavigatorState>(find.byType(Navigator).first).pop();
       await tester.pumpAndSettle();
 
@@ -189,7 +190,7 @@ void main() {
         opponentOnGame: true,
       );
 
-      await tester.pump(const Duration(milliseconds: 600));
+      await tester.pump(kGameEndDialogDelay);
       await tester.pump(const Duration(seconds: 1));
 
       final rematchButton = find.widgetWithText(FilledButton, 'Rematch');

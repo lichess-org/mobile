@@ -488,18 +488,19 @@ class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> 
     // The server doesn't return the created challenge, so fetch the outgoing
     // challenges to find it, which allows the user to cancel it later.
     final challenges = await repository.list();
+    if (!ref.mounted) return;
     final challenge = challenges.outward.firstWhereOrNull((c) => c.rematchOf == gameFullId.gameId);
     final curState = state.requireValue;
-    state = AsyncValue.data(curState.copyWith(rematchChallengeId: challenge?.id));
+    state = AsyncValue.data(curState.copyWith(correspondenceRematchId: challenge?.id));
   }
 
   /// Cancels the rematch challenge previously created by [challengeRematch].
   Future<void> cancelRematchChallenge() async {
-    final curState = state.requireValue;
-    final challengeId = curState.rematchChallengeId;
+    final challengeId = state.requireValue.correspondenceRematchId;
     if (challengeId == null) return;
     await ref.read(challengeRepositoryProvider).cancel(challengeId);
-    state = AsyncValue.data(curState.copyWith(rematchChallengeId: null));
+    if (!ref.mounted) return;
+    state = AsyncValue.data(state.requireValue.copyWith(correspondenceRematchId: null));
   }
 
   void declineRematch() {
@@ -1127,7 +1128,7 @@ sealed class GameState with _$GameState, ChatMixinState {
 
     /// Id of the rematch challenge created when the opponent is offline in a
     /// clockless game (see [GameController.challengeRematch]).
-    ChallengeId? rematchChallengeId,
+    ChallengeId? correspondenceRematchId,
 
     ChatState? chatState,
 
