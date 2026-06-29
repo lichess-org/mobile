@@ -9,57 +9,54 @@ void main() {
   final mockAppLocalizations = MockAppLocalizations();
 
   setUpAll(() {
-    when(() => mockAppLocalizations.nbDays(2)).thenReturn('2 days');
-    when(() => mockAppLocalizations.nbDays(1)).thenReturn('1 day');
-    when(() => mockAppLocalizations.nbDays(0)).thenReturn('0 days');
-
-    when(() => mockAppLocalizations.nbHours(2)).thenReturn('2 hours');
-    when(() => mockAppLocalizations.nbHours(1)).thenReturn('1 hour');
-    when(() => mockAppLocalizations.nbHours(0)).thenReturn('0 hours');
-
-    when(() => mockAppLocalizations.nbMinutes(2)).thenReturn('2 minutes');
-    when(() => mockAppLocalizations.nbMinutes(1)).thenReturn('1 minute');
-    when(() => mockAppLocalizations.nbMinutes(0)).thenReturn('0 minutes');
+    for (final n in [0, 1, 2, 3, 5, 18, 24]) {
+      when(() => mockAppLocalizations.nbDays(n)).thenReturn('$n day${n == 1 ? '' : 's'}');
+      when(() => mockAppLocalizations.nbHours(n)).thenReturn('$n hour${n == 1 ? '' : 's'}');
+      when(() => mockAppLocalizations.nbMinutes(n)).thenReturn('$n minute${n == 1 ? '' : 's'}');
+    }
   });
 
   group('DurationExtensions.toDaysHoursMinutes()', () {
-    test('all values nonzero, plural', () {
-      testTimeStr(mockAppLocalizations, 2, 2, 2, '2 days, 2 hours and 2 minutes');
+    // Mirrors lila's `translateDuration` in
+    // `modules/coreI18n/src/main/i18n.scala`.
+
+    test('hours+minutes are joined with ", " and minutes shown when no days', () {
+      testTimeStr(mockAppLocalizations, 0, 2, 2, '2 hours, 2 minutes');
     });
 
-    test('all values nonzero, plural', () {
-      testTimeStr(mockAppLocalizations, 2, 2, 2, '2 days, 2 hours and 2 minutes');
+    test('minutes are omitted when there is at least one day', () {
+      testTimeStr(mockAppLocalizations, 3, 18, 24, '3 days, 18 hours');
     });
 
-    test('all values nonzero, single', () {
-      testTimeStr(mockAppLocalizations, 1, 1, 1, '1 day, 1 hour and 1 minute');
+    test('singular labels are respected', () {
+      testTimeStr(mockAppLocalizations, 1, 1, 1, '1 day, 1 hour');
     });
 
-    test('no days', () {
-      testTimeStr(mockAppLocalizations, 0, 2, 2, '2 hours and 2 minutes');
+    test('middle zero hours are preserved when days are nonzero', () {
+      testTimeStr(mockAppLocalizations, 2, 0, 5, '2 days, 0 hours');
     });
 
-    test('no hours', () {
-      testTimeStr(mockAppLocalizations, 2, 0, 2, '2 days and 2 minutes');
+    test('leading zero days are dropped', () {
+      testTimeStr(mockAppLocalizations, 0, 2, 2, '2 hours, 2 minutes');
     });
 
-    test('no minutes', () {
-      testTimeStr(mockAppLocalizations, 2, 2, 0, '2 days and 2 hours');
-    });
-
-    test('only days', () {
-      testTimeStr(mockAppLocalizations, 2, 0, 0, '2 days');
-    });
-
-    test('only hours', () {
-      testTimeStr(mockAppLocalizations, 0, 2, 0, '2 hours');
-    });
-
-    test('only minutes', () {
+    test('leading zero days and hours are dropped', () {
       testTimeStr(mockAppLocalizations, 0, 0, 2, '2 minutes');
     });
 
-    test('all values zero', () {
+    test('only days', () {
+      testTimeStr(mockAppLocalizations, 2, 0, 0, '2 days, 0 hours');
+    });
+
+    test('only hours', () {
+      testTimeStr(mockAppLocalizations, 0, 2, 0, '2 hours, 0 minutes');
+    });
+
+    test('one day no hours no minutes -> "1 day, 0 hours"', () {
+      testTimeStr(mockAppLocalizations, 1, 0, 0, '1 day, 0 hours');
+    });
+
+    test('all values zero -> "0 minutes"', () {
       testTimeStr(mockAppLocalizations, 0, 0, 0, '0 minutes');
     });
   });

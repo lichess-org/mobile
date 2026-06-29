@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:popover/popover.dart';
 
 const Color _kBorderColor = CupertinoDynamicColor.withBrightness(
@@ -14,15 +13,20 @@ const Color _kBorderColor = CupertinoDynamicColor.withBrightness(
 class ContextMenuIconButton extends StatelessWidget {
   const ContextMenuIconButton({
     required this.icon,
+    this.color,
     required this.semanticsLabel,
     required this.actions,
     this.consumeOutsideTap = false,
+    this.isCompact = false,
     super.key,
   });
 
   final Widget icon;
+  final Color? color;
   final String semanticsLabel;
   final List<Widget> actions;
+
+  final bool isCompact;
 
   /// Whether to consume taps outside the menu to close it (only on Android).
   final bool consumeOutsideTap;
@@ -30,7 +34,17 @@ class ContextMenuIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (Theme.of(context).platform == TargetPlatform.iOS) {
-      return SemanticIconButton(
+      return IconButton(
+        icon: icon,
+        iconSize: isCompact ? 20.0 : null,
+        color: color,
+        tooltip: semanticsLabel,
+        style: isCompact
+            ? IconButton.styleFrom(
+                visualDensity: VisualDensity.compact,
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              )
+            : null,
         onPressed: () {
           showPopover(
             context: context,
@@ -95,8 +109,6 @@ class ContextMenuIconButton extends StatelessWidget {
             backgroundColor: Colors.transparent,
           );
         },
-        semanticsLabel: semanticsLabel,
-        icon: icon,
       );
     }
 
@@ -110,7 +122,7 @@ class ContextMenuIconButton extends StatelessWidget {
       ),
       menuChildren: actions,
       builder: (BuildContext context, MenuController controller, Widget? child) {
-        return SemanticIconButton(
+        return IconButton(
           onPressed: () {
             if (controller.isOpen) {
               controller.close();
@@ -118,8 +130,16 @@ class ContextMenuIconButton extends StatelessWidget {
               controller.open();
             }
           },
-          semanticsLabel: semanticsLabel,
+          tooltip: semanticsLabel,
+          color: color,
           icon: icon,
+          iconSize: isCompact ? 20.0 : null,
+          style: isCompact
+              ? IconButton.styleFrom(
+                  visualDensity: VisualDensity.compact,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                )
+              : null,
         );
       },
     );

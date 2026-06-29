@@ -287,6 +287,9 @@ class AppLocalizationsEu extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Edo inportatu PGN fitxategi bat';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Jokaldi ona, baina hobea dago';
+
+  @override
   String get variantStandard => 'Ohikoa';
 
   @override
@@ -2522,6 +2525,12 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get blackDidntMove => 'Beltzak ez du mugitu';
+
+  @override
+  String get whiteAborted => 'Zuriak partida bertan behera utzi du';
+
+  @override
+  String get blackAborted => 'Beltzak partida bertan behera utzi du';
 
   @override
   String get requestAComputerAnalysis => 'Ordenagailuaren analisia eskatu';

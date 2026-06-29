@@ -30,9 +30,8 @@ void main() {
           home: GameLayout(
             orientation: Side.white,
             boardParams: GameBoardParams.readonly(
-              fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR',
               variant: Variant.standard,
-              pockets: null,
+              position: Chess.initial,
             ),
             topTable: Row(
               mainAxisSize: MainAxisSize.max,
@@ -80,9 +79,8 @@ void main() {
           home: GameLayout(
             orientation: Side.white,
             boardParams: GameBoardParams.readonly(
-              fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR',
               variant: Variant.standard,
-              pockets: null,
+              position: Chess.initial,
             ),
             moves: ['e4', 'e5'],
             topTable: Row(
@@ -129,9 +127,8 @@ void main() {
           home: GameLayout(
             orientation: Side.white,
             boardParams: GameBoardParams.readonly(
-              fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR',
               variant: Variant.standard,
-              pockets: null,
+              position: Chess.initial,
             ),
             topTable: Row(
               mainAxisSize: MainAxisSize.max,
@@ -329,8 +326,8 @@ void main() {
     tester,
   ) async {
     final after1e4 = Chess.initial.play(const NormalMove(from: Square.e2, to: Square.e4));
-    final boardNotifier = ValueNotifier<({String fen, Move? lastMove})>((
-      fen: kInitialFEN,
+    final boardNotifier = ValueNotifier<({Position position, Move? lastMove})>((
+      position: Chess.initial,
       lastMove: null,
     ));
     addTearDown(boardNotifier.dispose);
@@ -338,14 +335,13 @@ void main() {
     final app = await makeTestProviderScope(
       tester,
       child: MaterialApp(
-        home: ValueListenableBuilder<({String fen, Move? lastMove})>(
+        home: ValueListenableBuilder<({Position position, Move? lastMove})>(
           valueListenable: boardNotifier,
           builder: (context, value, _) => GameLayout(
             orientation: Side.white,
             boardParams: GameBoardParams.readonly(
-              fen: value.fen,
               variant: Variant.standard,
-              pockets: null,
+              position: value.position,
               lastMove: value.lastMove,
             ),
           ),
@@ -359,7 +355,7 @@ void main() {
 
     // Advance the readonly board to the position after 1.e4.
     boardNotifier.value = (
-      fen: after1e4.fen,
+      position: after1e4,
       lastMove: const NormalMove(from: Square.e2, to: Square.e4),
     );
     await tester.pumpAndSettle();

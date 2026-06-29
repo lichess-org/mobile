@@ -246,23 +246,6 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
   }
 }
 
-class ExportedGameResultDialog extends StatelessWidget {
-  const ExportedGameResultDialog({required this.game, super.key});
-
-  final BaseGame game;
-
-  @override
-  Widget build(BuildContext context) {
-    final content = Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [GameResult(game: game)],
-    );
-
-    return _ResultDialog(child: content);
-  }
-}
-
 class OverTheBoardGameResultDialog extends StatelessWidget {
   const OverTheBoardGameResultDialog({super.key, required this.game, required this.onRematch});
 

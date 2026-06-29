@@ -10,9 +10,9 @@ import 'package:lichess_mobile/src/model/user/profile.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
-import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
+import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/user/countries.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -25,7 +25,6 @@ class UserProfileWidget extends ConsumerWidget {
   final User user;
 
   final int bioMaxLines;
-  static const bioStyle = TextStyle(fontStyle: FontStyle.italic);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -69,7 +68,6 @@ class UserProfileWidget extends ConsumerWidget {
                 linkifiers: AppLinksService.kLichessLinkifiers,
                 text: user.profile!.bio!,
                 maxLines: bioMaxLines,
-                style: bioStyle,
                 overflow: TextOverflow.ellipsis,
                 linkStyle: Styles.linkStyle,
               ),
@@ -111,9 +109,9 @@ class UserProfileWidget extends ConsumerWidget {
               ),
             if (user.createdAt != null)
               Text('${context.l10n.memberSince} ${DateFormat.yMMMMd().format(user.createdAt!)}'),
-            if (user.seenAt != null) ...[
+            if (user.count != null) ...[
               const SizedBox(height: 5),
-              Text(context.l10n.lastSeenActive(relativeDate(context.l10n, user.seenAt!))),
+              Text(context.l10n.nbGames(user.count!.all).localizeNumbers()),
             ],
             if (user.playTime != null) ...[
               const SizedBox(height: 5),

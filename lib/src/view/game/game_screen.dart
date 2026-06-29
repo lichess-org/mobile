@@ -48,14 +48,14 @@ class GameScreen extends ConsumerStatefulWidget {
 
   final GameScreenSource source;
 
-  final LoadingPosition? loadingPosition;
+  final LoadingParam? loadingPosition;
 
   /// The date of the last move played in the game. If null, the game is in progress.
   final DateTime? lastMoveAt;
 
   static Route<dynamic> buildRoute({
     required GameScreenSource source,
-    LoadingPosition? loadingPosition,
+    LoadingParam? loadingPosition,
     DateTime? lastMoveAt,
   }) {
     return buildScreenRoute(
@@ -280,7 +280,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
             () => ref.read(createGameServiceProvider).cancelChallenge(),
           ),
           ExistingGameSource() => StandaloneGameLoadingContent(
-            position: widget.loadingPosition,
+            loadingParam: widget.loadingPosition,
             userActionsBar: const BottomBar.empty(),
           ),
         };
@@ -500,7 +500,7 @@ class _StandaloneGameTitle extends ConsumerWidget {
             else if (meta.daysPerTurn != null)
               Flexible(child: AppBarTitleText('${context.l10n.nbDays(meta.daysPerTurn!)}$info'))
             else
-              Flexible(child: AppBarTitleText('${meta.perf.title}$info')),
+              Flexible(child: AppBarTitleText('${meta.perf.label(context.l10n)}$info')),
           ],
         );
       },

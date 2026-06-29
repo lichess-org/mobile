@@ -14,7 +14,8 @@ import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
-import 'package:lichess_mobile/src/model/chat/chat_controller.dart';
+import 'package:lichess_mobile/src/model/chat/chat.dart';
+import 'package:lichess_mobile/src/model/chat/chat_mixin.dart';
 import 'package:lichess_mobile/src/model/clock/chess_clock.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -25,6 +26,7 @@ import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/game_preferences.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
@@ -45,7 +47,7 @@ final gameControllerProvider = AsyncNotifierProvider.autoDispose
       name: 'GameControllerProvider',
     );
 
-class GameController extends AsyncNotifier<GameState> {
+class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> {
   GameController(this.gameFullId);
 
   final GameFullId gameFullId;
@@ -79,12 +81,25 @@ class GameController extends AsyncNotifier<GameState> {
   SocketPool get _socketPool => ref.read(socketPoolProvider);
 
   ChessClock? _clock;
+
   late SocketClient _socketClient;
 
   GameRepository get _gameRepository => ref.read(gameRepositoryProvider);
 
+  @protected
   @override
-  Future<GameState> build() {
+  StringId get chatId => gameFullId.gameId;
+
+  @protected
+  @override
+  String get chatReportResource => 'game/${gameFullId.gameId}';
+
+  @protected
+  @override
+  bool get chatIsPublic => false;
+
+  @override
+  Future<GameState> build() async {
     _socketClient = _openSocket();
 
     _onFullReload = () {
@@ -102,51 +117,54 @@ class GameController extends AsyncNotifier<GameState> {
     });
 
     _socketSubscription?.cancel();
-    _socketSubscription = _socketClient.stream.listen(_handleSocketEvent);
-    return _socketClient.stream.firstWhere((e) => e.topic == 'full').then((event) {
-      final fullEvent = GameFullEvent.fromJson(event.data as Map<String, dynamic>);
-      _socketClient.version = fullEvent.socketEventVersion;
+    _socketSubscription = _socketClient.stream.listen(handleSocketEvent);
 
-      final game = fullEvent.game;
+    final rawFullEvent = await _socketClient.stream.firstWhere((e) => e.topic == 'full');
+    final fullEvent = GameFullEvent.fromJson(rawFullEvent.data as Map<String, dynamic>);
+    _socketClient.version = fullEvent.socketEventVersion;
 
-      // Play "dong" sound when this is a new game and we're playing it (not spectating)
-      final isMyGame = game.youAre != null;
-      final noMovePlayed = game.steps.length == 1;
-      if (isMyGame && noMovePlayed && game.status == GameStatus.started) {
-        ref.read(soundServiceProvider).play(Sound.dong);
-      }
+    final game = fullEvent.game;
 
-      if (game.clock != null) {
-        _clock = ChessClock(
-          whiteTime: game.clock!.white,
-          blackTime: game.clock!.black,
-          emergencyThreshold: game.meta.clock?.emergency,
-          onEmergency: onClockEmergency,
-          onFlag: onFlag,
-        );
-        if (game.clock!.running) {
-          final pos = game.lastPosition;
-          if (pos.fullmoves > 1) {
-            _clock!.startSide(pos.turn);
-          }
+    // Play "dong" sound when this is a new game and we're playing it (not spectating)
+    final isMyGame = game.youAre != null;
+    final noMovePlayed = game.steps.length == 1;
+    if (isMyGame && noMovePlayed && game.status == GameStatus.started) {
+      ref.read(soundServiceProvider).play(Sound.dong);
+    }
+
+    if (game.clock != null) {
+      _clock = ChessClock(
+        whiteTime: game.clock!.white,
+        blackTime: game.clock!.black,
+        emergencyThreshold: game.meta.clock?.emergency,
+        onEmergency: onClockEmergency,
+        onFlag: onFlag,
+      );
+      if (game.clock!.running) {
+        final pos = game.lastPosition;
+        if (pos.fullmoves > 1) {
+          _clock!.startSide(pos.turn);
         }
       }
+    }
 
-      if (game.finished) {
-        _onFinishedGameLoad(fullEvent.game);
-      }
+    if (game.finished) {
+      _onFinishedGameLoad(fullEvent.game);
+    }
 
-      _initialZenPref = game.prefs?.zenMode;
+    _initialZenPref = game.prefs?.zenMode;
 
-      return GameState(
-        gameFullId: gameFullId,
-        game: game,
-        stepCursor: game.steps.length - 1,
-        liveClock: _clock != null ? (white: _clock!.whiteTime, black: _clock!.blackTime) : null,
-      );
-    });
+    return GameState(
+      gameFullId: gameFullId,
+      game: game,
+      stepCursor: game.steps.length - 1,
+      liveClock: _clock != null ? (white: _clock!.whiteTime, black: _clock!.blackTime) : null,
+      chatState: await initChat(game.chat),
+      chatDisabledViaPrefs: ref.read(gamePreferencesProvider).enableChat == false,
+    );
   }
 
+  @override
   void onForegroundLost() {
     if (_socketClient.isDisposed) {
       assert(false, 'socket client should not be disposed here');
@@ -165,6 +183,7 @@ class GameController extends AsyncNotifier<GameState> {
     }
   }
 
+  @override
   void onFocusRegained() {
     if (_socketClient.isDisposed) {
       assert(false, 'socket client should not be disposed here');
@@ -346,6 +365,9 @@ class GameController extends AsyncNotifier<GameState> {
       await ref
           .read(accountServiceProvider)
           .setGameBookmark(gameFullId.gameId, bookmark: toggledBookmark);
+
+      if (!ref.mounted) return;
+
       state = AsyncValue.data(
         state.requireValue.copyWith(
           game: state.requireValue.game.copyWith(bookmarked: toggledBookmark),
@@ -382,6 +404,7 @@ class GameController extends AsyncNotifier<GameState> {
   }
 
   void onToggleChat(bool isChatEnabled) {
+    state = AsyncValue.data(state.requireValue.copyWith(chatDisabledViaPrefs: !isChatEnabled));
     if (isChatEnabled) {
       // if chat is enabled, we need to resync the game data to get the chat messages
       _reloadGame();
@@ -579,7 +602,18 @@ class GameController extends AsyncNotifier<GameState> {
     _socketClient.connect();
   }
 
-  void _handleSocketEvent(SocketEvent event, [bool hasRetried = false]) {
+  @protected
+  @override
+  void updateChatState(ChatState newState) {
+    state = AsyncValue.data(state.requireValue.copyWith(chatState: newState));
+  }
+
+  @override
+  void handleSocketEvent(SocketEvent event, [bool hasRetried = false]) {
+    super.handleSocketEvent(event);
+    // If we are unmounting ignore incoming socket traffic
+    if (!ref.mounted) return;
+
     if (!state.hasValue) {
       if (event.version != null) {
         _logger.warning('received $event while game state not yet available');
@@ -600,21 +634,32 @@ class GameController extends AsyncNotifier<GameState> {
         final fullEvent = GameFullEvent.fromJson(event.data as Map<String, dynamic>);
         _socketClient.version = fullEvent.socketEventVersion;
 
+        // The resync replaces our steps with the server's authoritative ones, so
+        // any optimistically-applied move is now either confirmed or gone: clear
+        // the pending-move marker.
+        _transientMoveTimer?.cancel();
+
         final curState = state.requireValue;
 
         final newGame = fullEvent.game;
         final isOpponentOnGame =
             newGame.playerOf(newGame.youAre?.opposite ?? Side.white).onGame ?? false;
-        final hasSameNumberOfSteps = newGame.steps.length == curState.game.steps.length;
+
+        // A pending (unconfirmed) move was selected for the previous live
+        // position. If the server resync changed that position (e.g. a takeback),
+        // the move could be applied to a different position and render an illegal
+        // one, so it must be dropped.
+        final positionChanged = newGame.lastPosition.fen != curState.game.lastPosition.fen;
 
         state = AsyncValue.data(
           state.requireValue.copyWith(
             game: newGame,
-            stepCursor: hasSameNumberOfSteps ? curState.stepCursor : newGame.steps.length - 1,
-            moveToConfirm: hasSameNumberOfSteps ? curState.moveToConfirm : null,
-            opponentLeftCountdown: isOpponentOnGame
-                ? null
-                : state.requireValue.opponentLeftCountdown,
+            // Clamp in case a takeback happened to prevent problems with cursorForward()
+            stepCursor: curState.isReplaying
+                ? curState.stepCursor.clamp(0, newGame.steps.length - 1)
+                : newGame.steps.length - 1,
+            moveToConfirm: curState.isReplaying || positionChanged ? null : curState.moveToConfirm,
+            opponentLeftCountdown: isOpponentOnGame ? null : curState.opponentLeftCountdown,
           ),
         );
 
@@ -640,7 +685,7 @@ class GameController extends AsyncNotifier<GameState> {
             return;
           }
           final reloadEvent = SocketEvent(topic: data['t'] as String, data: data['d']);
-          _handleSocketEvent(reloadEvent);
+          handleSocketEvent(reloadEvent);
         } else {
           _reloadGame();
         }
@@ -750,7 +795,26 @@ class GameController extends AsyncNotifier<GameState> {
       // End game event
       case 'endData':
         final endData = GameEndEvent.fromJson(event.data as Map<String, dynamic>);
-        final curState = state.requireValue;
+
+        // A move (typically an auto-fired premove) may have been applied
+        // optimistically to the board but never confirmed by the server because
+        // the game ended first — e.g. the player flagged, so the premove was
+        // rejected. The transient move timer is still active in that case. Roll
+        // the unconfirmed move back so the final position (and the result text
+        // derived from it) matches the server.
+        // See https://github.com/lichess-org/mobile/issues/2130.
+        GameState curState = state.requireValue;
+        if (_transientMoveTimer?.isActive == true && curState.game.steps.length > 1) {
+          final confirmedSteps = curState.game.steps.removeLast();
+          curState = curState.copyWith(
+            game: curState.game.copyWith(steps: confirmedSteps),
+            stepCursor: curState.stepCursor.clamp(0, confirmedSteps.length - 1),
+            moveToConfirm: null,
+          );
+          state = AsyncValue.data(curState);
+        }
+        _transientMoveTimer?.cancel();
+
         GameState newState = curState.copyWith(
           game: curState.game.copyWith(
             status: endData.status,
@@ -775,6 +839,7 @@ class GameController extends AsyncNotifier<GameState> {
 
         if (curState.game.lastPosition.fullmoves > 1) {
           Timer(const Duration(milliseconds: 500), () {
+            if (!ref.mounted) return;
             ref.read(soundServiceProvider).play(Sound.dong);
           });
         }
@@ -789,6 +854,7 @@ class GameController extends AsyncNotifier<GameState> {
         if (!newState.game.aborted) {
           _getPostGameData()
               .then((data) {
+                if (!ref.mounted) return;
                 final game = _mergePostGameData(state.requireValue.game, data);
                 state = AsyncValue.data(state.requireValue.copyWith(game: game));
                 _storeGame(game);
@@ -989,6 +1055,8 @@ class GameController extends AsyncNotifier<GameState> {
 
     await _storeGame(gameWithPostData);
 
+    if (!ref.mounted) return;
+
     state = AsyncValue.data(state.requireValue.copyWith(game: gameWithPostData));
   }
 
@@ -1032,7 +1100,7 @@ class GameController extends AsyncNotifier<GameState> {
 typedef LiveGameClock = ({ValueListenable<Duration> white, ValueListenable<Duration> black});
 
 @freezed
-sealed class GameState with _$GameState {
+sealed class GameState with _$GameState, ChatMixinState {
   const GameState._();
 
   const factory GameState({
@@ -1060,6 +1128,10 @@ sealed class GameState with _$GameState {
     /// Id of the rematch challenge created when the opponent is offline in a
     /// clockless game (see [GameController.challengeRematch]).
     ChallengeId? rematchChallengeId,
+
+    ChatState? chatState,
+
+    required bool chatDisabledViaPrefs,
   }) = _GameState;
 
   /// The [Position] at the current cursor.
@@ -1174,10 +1246,14 @@ sealed class GameState with _$GameState {
           isComputerAnalysisAllowed: false,
         );
 
-  GameChatOptions? get chatOptions => isZenModeActive || game.meta.tournament != null
+  GameChatOptions? get chatOptions =>
+      chatDisabledViaPrefs || isZenModeActive || game.meta.tournament != null
       ? null
       : GameChatOptions(
           id: gameFullId,
           opponent: game.youAre != null ? game.playerOf(game.youAre!.opposite).user : null,
         );
+
+  @override
+  bool get chatEnabled => chatOptions != null;
 }

@@ -287,6 +287,9 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Ou importa un arquivo PGN';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Boa xogada, pero hai unha mellor';
+
+  @override
   String get variantStandard => 'Estándar';
 
   @override
@@ -1713,7 +1716,7 @@ class AppLocalizationsGl extends AppLocalizations {
   }
 
   @override
-  String get puzzleHidden => 'oculta';
+  String get puzzleHidden => 'Oculta';
 
   @override
   String puzzleFromGameLink(String param) {
@@ -1926,7 +1929,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Xaque mate na última fila, onde o rei está atrapado polas súas propias pezas.';
 
   @override
-  String get puzzleThemeBalestraMate => 'Mate da besta';
+  String get puzzleThemeBalestraMate => 'Mate da bésta';
 
   @override
   String get puzzleThemeBalestraMateDescription => 'O bispo dá xaque mate mentres a dama bloquea as casas de escape';
@@ -1971,7 +1974,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get puzzleThemeCornerMate => 'Mate do curruncho';
 
   @override
-  String get puzzleThemeCornerMateDescription => 'Confina o rei nun recuncho usando unha torre ou unha dama e un cabalo para facer xaque mate.';
+  String get puzzleThemeCornerMateDescription => 'Acurrala ó rei nun recanto cunha dama ou cunha torre e logo dá o xaque mate co cabalo.';
 
   @override
   String get puzzleThemeCrushing => 'Vantaxe decisiva';
@@ -2522,6 +2525,12 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get blackDidntMove => 'As negras non moveron';
+
+  @override
+  String get whiteAborted => 'As brancas abortaron a partida';
+
+  @override
+  String get blackAborted => 'As negras abortaron a partida';
 
   @override
   String get requestAComputerAnalysis => 'Solicitar unha análise por computador';
@@ -3357,10 +3366,10 @@ class AppLocalizationsGl extends AppLocalizations {
   String get gameAsGIF => 'Gardar a partida en formato GIF';
 
   @override
-  String get playerNames => 'Nomes das xogadoras/es';
+  String get playerNames => 'Nomes dos xogadores';
 
   @override
-  String get moveAnnotations => 'Mover anotacións';
+  String get moveAnnotations => 'Anotación das xogadas';
 
   @override
   String get pasteTheFenStringHere => 'Pega o texto FEN aquí';
@@ -4428,7 +4437,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get like => 'Gústame';
 
   @override
-  String get liked => 'Gustáronme';
+  String get liked => 'Gustoume';
 
   @override
   String get quickPairing => 'Emparellamento rápido';

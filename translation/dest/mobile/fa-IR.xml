@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="account" comment="Title for the account screen.&#10;&#10;This is just a title for the account, NOT account preferences.">حساب</string>
-  <string name="accountPreferences" comment="Displayed on settings screen.&#10;&#10;These preferences are applied to your Lichess account and will be used across all devices. They are not mobile-specific and will be synced with the server.">ترجیح‌های حساب</string>
+  <string name="account" comment="The account screen title.">حساب</string>
+  <string name="accountPreferences" comment="Displayed on settings screen. This is for preferences synced with website on the server.">ترجیح‌های حساب</string>
   <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">این ترجیح‌ها به حساب Lichess تان اعمال می‌شود و در همه دستگاه‌ها استفاده خواهد شد.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">همه بازی‌ها</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">مطمئنید؟</string>
@@ -46,7 +46,7 @@
   <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">مربع</string>
   <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">اَبزارک‌های خانه</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">حالت غوطه‌ور</string>
-  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">پنهان کردن رابط کاربری سیستم موقع بازی. اگر ژست‌های حرکتی سیستم (مثل دکمهٔ بازگشت) در لبه‌های صفحه مزاحمتان است، از این گزینه استفاده کنید. این تنظیم برای صفحه‌های بازی و معما اعمال می‌شود.</string>
+  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">رابط کاربری سامانه را هنگام بازی بپنهانید. اگر از ایماهای ناوِش سامانه در لبه‌های پرده آزرده می‌شوید، از این گزینه بَهرید. برای پرده‌های بازی و معما اعمال می‌شود.</string>
   <string name="settingsMaterialDifferenceCapturedPieces" comment="A value of the material difference settings choice (to show all captured pieces instead of material difference).">مهره‌های زده</string>
   <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick and image from the image library as app custom background.">انتخاب عکس</string>
   <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">پس‌زمینهٔ سفارشی فقط در حالت تاریک کار می‌کند. یک تصویر تاریک توصیه می‌شود.</string>
@@ -90,4 +90,5 @@
   <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">چالش ایجاد شد: وقتی بازی شروع شود شما آگاهنده می‌شوید.\nمی‌توانید از زبانهٔ خانه به آن دسترسی داشته باشید.</string>
   <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">پیشین</string>
   <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">یا درونبُردِ یک پَروَنِ PGN</string>
+  <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">حرکتِ خوب، اما بهتر هم هست</string>
 </resources>

@@ -87,7 +87,7 @@ class QuickActionService {
         final variant = (seek.variant == Variant.standard)
             ? ''
             : (seek.variant != null && seek.timeIncrement != null)
-            ? ' • ${Perf.fromVariantAndSpeed(seek.variant!, Speed.fromTimeIncrement(seek.timeIncrement!)).shortTitle}'
+            ? ' • ${Perf.fromVariantAndSpeed(seek.variant!, Speed.fromTimeIncrement(seek.timeIncrement!)).shortLabel(l10n)}'
             : '';
 
         return ShortcutItem(

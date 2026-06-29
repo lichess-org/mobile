@@ -22,11 +22,7 @@ class BroadcastTeamScreen extends ConsumerWidget {
   final BroadcastTournamentId tournamentId;
   final String teamName;
 
-  static Route<dynamic> buildRoute(
-    BuildContext context,
-    BroadcastTournamentId tournamentId,
-    String teamName,
-  ) {
+  static Route<dynamic> buildRoute(BroadcastTournamentId tournamentId, String teamName) {
     return buildScreenRoute(
       screen: BroadcastTeamScreen(tournamentId: tournamentId, teamName: teamName),
     );
@@ -215,6 +211,7 @@ class _TeamPlayersListState extends State<_TeamPlayersList> {
   ) => (p1, p2) {
     final field1 = picker(p1);
     final field2 = picker(p2);
+    if (field1 == null && field2 == null) return 0;
     if (field1 == null) return -1;
     if (field2 == null) return 1;
 
@@ -494,9 +491,9 @@ class _MatchHistoryTable extends StatelessWidget {
               ),
               TableRowInkWell(
                 onTap: () {
-                  Navigator.of(context).push(
-                    BroadcastTeamScreen.buildRoute(context, tournament.data.id, match.opponent),
-                  );
+                  Navigator.of(
+                    context,
+                  ).push(BroadcastTeamScreen.buildRoute(tournament.data.id, match.opponent));
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: _kMatchHistoryRowVerticalPadding),

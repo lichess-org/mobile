@@ -287,6 +287,9 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileOrImportPgnFile => 'O importa un arxiu PGN';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Bona jugada, però n\'hi ha una de millor';
+
+  @override
   String get variantStandard => 'Estàndard';
 
   @override
@@ -2372,7 +2375,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get gameMode => 'Tipus de partida';
 
   @override
-  String get createLobbyGame => 'Crea una partida';
+  String get createLobbyGame => 'Publica una partida';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Per convidar algú a jugar, envia-li aquest enllaç';
@@ -2522,6 +2525,12 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get blackDidntMove => 'Les negres no han mogut';
+
+  @override
+  String get whiteAborted => 'Les blanques han cancel·lat la partida';
+
+  @override
+  String get blackAborted => 'Les negres han cancel·lat la partida';
 
   @override
   String get requestAComputerAnalysis => 'Demana una anàlisi computeritzada';

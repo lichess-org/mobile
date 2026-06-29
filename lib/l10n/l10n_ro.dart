@@ -287,6 +287,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Sau încarcă un fișier PGN';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Mișcare bună, dar există una si mai bună';
+
+  @override
   String get variantStandard => 'Standard';
 
   @override
@@ -2550,6 +2553,12 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get blackDidntMove => 'Negrul nu a mutat';
+
+  @override
+  String get whiteAborted => 'Albul a anulat jocul';
+
+  @override
+  String get blackAborted => 'Negrul a anulat jocul';
 
   @override
   String get requestAComputerAnalysis => 'Cereți o analiză făcută de calculator';

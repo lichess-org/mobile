@@ -287,6 +287,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Eller importer en PGN-fil';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Godt træk, men der findes et bedre';
+
+  @override
   String get variantStandard => 'Standard';
 
   @override
@@ -2522,6 +2525,12 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get blackDidntMove => 'Sort trak ikke';
+
+  @override
+  String get whiteAborted => 'Hvid forlod partiet';
+
+  @override
+  String get blackAborted => 'Sort forlod partiet';
 
   @override
   String get requestAComputerAnalysis => 'Anmod om en computeranalyse';

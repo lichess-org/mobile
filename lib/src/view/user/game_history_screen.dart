@@ -471,7 +471,7 @@ class _FilterGamesState extends ConsumerState<_FilterGames> {
     filterType: FilterType.multipleChoice,
     choices: choices,
     choiceSelected: (choice) => filter.perfs.contains(choice),
-    choiceLabel: (t) => Text(t.shortTitle),
+    choiceLabel: (t) => Text(t.shortLabel(context.l10n)),
     onSelected: (value, selected) => setState(() {
       filter = filter.copyWith(
         perfs: selected ? filter.perfs.add(value) : filter.perfs.remove(value),

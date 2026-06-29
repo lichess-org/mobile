@@ -324,9 +324,17 @@ double _rawWinningChances(num cp) {
   return 2 / (1 + math.exp(multiplier * cp)) - 1;
 }
 
+/// Maximum absolute centipawn value displayed in evaluations.
+///
+/// Values above this magnitude (e.g. tablebase scores like +200) are clamped
+/// to +/-99 pawns when rendered, since such large advantages have little
+/// practical value for human consumption. Mate scores are unaffected.
+const int _maxDisplayedCp = 9900;
+
 String _evalString(int? cp, int? mate) {
   if (cp != null) {
-    final e = cpToPawns(cp);
+    final clamped = cp.clamp(-_maxDisplayedCp, _maxDisplayedCp);
+    final e = cpToPawns(clamped);
     final s = e.toStringAsFixed(1);
     if (s == '0.0' || s == '-0.0') {
       return '0.0';

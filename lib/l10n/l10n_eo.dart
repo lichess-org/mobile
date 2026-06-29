@@ -287,6 +287,9 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Or import a PGN file';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+
+  @override
   String get variantStandard => 'Normala';
 
   @override
@@ -832,7 +835,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get broadcastSourceUrlHelp => 'URL kiun Lichess kontrolos por akiri PGN ĝisdatigojn. Ĝi devas esti publike alirebla en interreto.';
 
   @override
-  String get broadcastSourceGameIds => 'Up to 64 Lichess game IDs, separated by spaces.';
+  String get broadcastSourceGameIds => 'Ĝis 64 identigiloj de ludoj en Lichess, apartigitaj de komoj.';
 
   @override
   String broadcastStartDateTimeZone(String param) {
@@ -946,7 +949,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get broadcastOfficialStandings => 'Official standings';
 
   @override
-  String get broadcastRegulations => 'Regulations';
+  String get broadcastRegulations => 'Regularo';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -1005,7 +1008,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get broadcastSinceHideResults => 'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
 
   @override
-  String get broadcastLiveboard => 'Live board';
+  String get broadcastLiveboard => 'Fakta tabulo';
 
   @override
   String get broadcastCommunityBroadcast => 'Community broadcast';
@@ -1095,12 +1098,12 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String broadcastUnderXAgeTournament(String param) {
-    return 'U$param';
+    return 'Malpli ol $param';
   }
 
   @override
   String broadcastUnderXEloTournament(String param) {
-    return 'U$param';
+    return 'Malpli ol $param';
   }
 
   @override
@@ -1493,7 +1496,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get preferencesInCasualGamesOnly => 'Nur ĉe amikaj ludoj';
 
   @override
-  String get preferencesPromoteToQueenAutomatically => 'Memage rangaltigi soldatojn al damoj';
+  String get preferencesPromoteToQueenAutomatically => 'Aŭtomate ŝanĝi peonojn al damoj';
 
   @override
   String get preferencesExplainPromoteToQueenAutomatically => 'Premu la <ctrl> klavon dum rangaltigo por momente malŝalti memagan rangaltiĝon';
@@ -1502,7 +1505,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get preferencesWhenPremoving => 'Ĉe antaŭmovoj';
 
   @override
-  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Memage postuli egalvenkon post trifoja ripetado';
+  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Aŭtomate postuli egalvenkon post trifoja ripeto';
 
   @override
   String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Kiam restas malpli ol 30 sekundoj';
@@ -2522,6 +2525,12 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get blackDidntMove => 'Nigro ne movis';
+
+  @override
+  String get whiteAborted => 'White aborted the game';
+
+  @override
+  String get blackAborted => 'Black aborted the game';
 
   @override
   String get requestAComputerAnalysis => 'Peti komputilan analizon';
@@ -3675,7 +3684,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get success => 'Sukceso';
 
   @override
-  String get automaticallyProceedToNextGameAfterMoving => 'Memage iri al sekvanta ludo post via movo';
+  String get automaticallyProceedToNextGameAfterMoving => 'Aŭtomate iri al sekvanta ludo post via movo';
 
   @override
   String get autoSwitch => 'Aŭtomata ludŝanĝado';
