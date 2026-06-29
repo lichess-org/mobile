@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/model/tournament/tournament_controller.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/status_l10n.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 
 class GameResultDialog extends ConsumerStatefulWidget {
   const GameResultDialog({required this.id, required this.onNewOpponentCallback, super.key});
@@ -51,6 +52,34 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
     super.dispose();
   }
 
+  /// The rematch button action, or null to disable it. A socket offer if the
+  /// opponent is online, otherwise a challenge for offline clockless games.
+  VoidCallback? _rematchAction(BuildContext context, GameState value) {
+    if (!_activateButtons || value.game.opponent?.offeringRematch == true) {
+      return null;
+    }
+    final ctrlProvider = gameControllerProvider(widget.id);
+    if (value.game.opponent?.onGame == true) {
+      return () {
+        ref.read(ctrlProvider.notifier).proposeOrAcceptRematch();
+      };
+    }
+    if (value.game.clock == null &&
+        value.game.me?.user != null &&
+        value.game.opponent?.user != null) {
+      return () async {
+        try {
+          await ref.read(ctrlProvider.notifier).challengeRematch();
+        } catch (_) {
+          if (context.mounted) {
+            showSnackBar(context, 'Could not send the rematch challenge', type: SnackBarType.error);
+          }
+        }
+      };
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     final ctrlProvider = gameControllerProvider(widget.id);
@@ -74,7 +103,8 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
               firstChild: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  if (value.game.me?.offeringRematch == true) ...[
+                  if (value.game.me?.offeringRematch == true ||
+                      value.correspondenceRematchId != null) ...[
                     Flexible(
                       flex: 3,
                       child: Text(
@@ -85,8 +115,22 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
                     ),
                     const Spacer(),
                     IconButton.outlined(
-                      onPressed: () {
-                        ref.read(ctrlProvider.notifier).declineRematch();
+                      onPressed: () async {
+                        if (value.game.me?.offeringRematch == true) {
+                          ref.read(ctrlProvider.notifier).declineRematch();
+                        } else {
+                          try {
+                            await ref.read(ctrlProvider.notifier).cancelRematchChallenge();
+                          } catch (_) {
+                            if (context.mounted) {
+                              showSnackBar(
+                                context,
+                                'Could not cancel the rematch challenge',
+                                type: SnackBarType.error,
+                              );
+                            }
+                          }
+                        }
                       },
                       tooltip: context.l10n.cancelRematchOffer,
                       icon: const Icon(Icons.cancel),
@@ -94,14 +138,7 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
                   ] else if (value.canOfferRematch)
                     Expanded(
                       child: FilledButton(
-                        onPressed:
-                            _activateButtons &&
-                                value.game.opponent?.onGame == true &&
-                                value.game.opponent?.offeringRematch != true
-                            ? () {
-                                ref.read(ctrlProvider.notifier).proposeOrAcceptRematch();
-                              }
-                            : null,
+                        onPressed: _rematchAction(context, value),
                         child: Text(context.l10n.rematch),
                       ),
                     )
