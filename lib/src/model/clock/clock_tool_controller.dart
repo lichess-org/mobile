@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/clock/chess_clock.dart';
+import 'package:lichess_mobile/src/model/clock/clock_tool_preferences.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 
@@ -40,10 +41,13 @@ class ClockToolController extends Notifier<ClockState> {
 
   @override
   ClockState build() {
-    const time = Duration(minutes: 10);
-    const increment = Duration.zero;
+    // using read is good enough as config change updates in-memory state which re-renders the ui
+    // and prefs are also saved
+    final timeIncrement = ref.read(clockToolPreferencesProvider).timeIncrement;
+    final time = Duration(seconds: timeIncrement.time);
+    final increment = Duration(seconds: timeIncrement.increment);
     _emergencyThreshold = _calculateEmergencyThreshold(time);
-    const options = ClockOptions(
+    final options = ClockOptions(
       type: ClockTimeControlType.increment,
       topTime: time,
       bottomTime: time,
@@ -135,6 +139,7 @@ class ClockToolController extends Notifier<ClockState> {
       topTime: _clock.blackTime,
       bottomTime: _clock.whiteTime,
     );
+    ref.read(clockToolPreferencesProvider.notifier).setTimeIncrement(timeIncrement);
   }
 
   void updateOptionsCustom(TimeIncrement clock, ClockSide player) {
@@ -159,6 +164,7 @@ class ClockToolController extends Notifier<ClockState> {
       activeSide: state.activeSide,
       clockOrientation: state.clockOrientation,
     );
+    ref.read(clockToolPreferencesProvider.notifier).setTimeIncrement(clock);
   }
 
   void updateClockType(ClockTimeControlType type) {

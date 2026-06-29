@@ -2,15 +2,30 @@ import 'package:fake_async/fake_async.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/clock/clock_tool_controller.dart';
+import 'package:lichess_mobile/src/model/clock/clock_tool_preferences.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 
 import '../common/service/fake_sound_service.dart';
 
+class FakeClockToolPreferences extends ClockToolPreferences {
+  @override
+  ClockToolPrefs build() => ClockToolPrefs.defaults;
+
+  @override
+  Future<void> setTimeIncrement(TimeIncrement timeIncrement) async {
+    await Future<void>.delayed(Duration.zero);
+    state = state.copyWith(timeIncrement: timeIncrement);
+  }
+}
+
 void main() {
   ProviderContainer makeClockContainer() {
     final container = ProviderContainer(
-      overrides: [soundServiceProvider.overrideWithValue(FakeSoundService())],
+      overrides: [
+        soundServiceProvider.overrideWithValue(FakeSoundService()),
+        clockToolPreferencesProvider.overrideWith(FakeClockToolPreferences.new),
+      ],
     );
     final subscription = container.listen(clockToolControllerProvider, (_, _) {});
     addTearDown(subscription.close);
