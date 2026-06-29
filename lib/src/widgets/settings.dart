@@ -53,7 +53,7 @@ class SettingsListTile extends StatelessWidget {
         enabled: enabled,
         onTap: onTap,
         trailing: ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.25),
+          constraints: BoxConstraints(maxWidth: MediaQuery.widthOf(context) * 0.25),
           child: Text(
             settingsValue,
             overflow: TextOverflow.ellipsis,

@@ -135,7 +135,7 @@ class _BroadcastPreviewState extends ConsumerState<BroadcastPreview> {
     final textHeight = _kPlayerWidgetTextStyle.fontSize!;
     final headerAndFooterHeight = textHeight + _kPlayerWidgetPadding.vertical;
     final numberOfBoardsByRow = isTabletOrLarger(context) ? 3 : 2;
-    final screenWidth = MediaQuery.sizeOf(context).width;
+    final screenWidth = MediaQuery.widthOf(context);
     final boardWithMaybeEvalBarWidth =
         (screenWidth -
             Styles.horizontalBodyPadding.horizontal -

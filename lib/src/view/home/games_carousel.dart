@@ -208,7 +208,7 @@ class _BoardCarouselItem extends ConsumerWidget {
       hsl.lightness,
     ).toColor();
 
-    final screenWidth = MediaQuery.sizeOf(context).width;
+    final screenWidth = MediaQuery.widthOf(context);
     final totalFlex = kGameCarouselFlexWeights.reduce((a, b) => a + b);
     final double width = screenWidth - 16.0;
     final boardSize =

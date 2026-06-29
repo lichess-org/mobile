@@ -59,7 +59,7 @@ class _BroadcastListScreenState extends State<BroadcastListScreen> {
       onPressed: () => showModalBottomSheet<void>(
         context: context,
         isScrollControlled: true,
-        constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height * 0.4),
+        constraints: BoxConstraints(minHeight: MediaQuery.heightOf(context) * 0.4),
         builder: (_) => StatefulBuilder(
           builder: (context, setLocalState) {
             return BottomSheetScrollableContainer(

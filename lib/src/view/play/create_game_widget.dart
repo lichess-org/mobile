@@ -55,7 +55,7 @@ class CreateGameWidget extends ConsumerWidget {
                       style: const TextStyle(letterSpacing: 2.0),
                     ),
                     onPressed: () {
-                      final double screenHeight = MediaQuery.sizeOf(context).height;
+                      final double screenHeight = MediaQuery.heightOf(context);
                       showModalBottomSheet<void>(
                         context: context,
                         isScrollControlled: true,
@@ -182,7 +182,7 @@ class CreateGameWidget extends ConsumerWidget {
                               showModalBottomSheet<void>(
                                 context: context,
                                 constraints: BoxConstraints(
-                                  minHeight: MediaQuery.sizeOf(context).height * 0.4,
+                                  minHeight: MediaQuery.heightOf(context) * 0.4,
                                 ),
                                 isScrollControlled: true,
                                 builder: (BuildContext context) {
