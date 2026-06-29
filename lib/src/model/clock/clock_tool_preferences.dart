@@ -29,7 +29,7 @@ class ClockToolPreferences extends Notifier<ClockToolPrefs>
     return fetch();
   }
 
-  Future<void> setTimeIncrement(TimeIncrement timeIncrement) async {
+  Future<void> setTimeIncrement(TimeIncrement timeIncrement) {
     return save(state.copyWith(timeIncrement: timeIncrement));
   }
 }
