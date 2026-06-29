@@ -41,7 +41,9 @@ class ClockToolController extends Notifier<ClockState> {
 
   @override
   ClockState build() {
-    final timeIncrement = ref.watch(clockToolPreferencesProvider).timeIncrement;
+    // using read is good enough as config change updates in-memory state which re-renders the ui
+    // and prefs are also saved
+    final timeIncrement = ref.read(clockToolPreferencesProvider).timeIncrement;
     final time = Duration(seconds: timeIncrement.time);
     final increment = Duration(seconds: timeIncrement.increment);
     _emergencyThreshold = _calculateEmergencyThreshold(time);
