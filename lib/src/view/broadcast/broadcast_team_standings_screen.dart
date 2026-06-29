@@ -142,7 +142,7 @@ class _BroadcastTeamStandingsListState extends ConsumerState<BroadcastTeamStandi
 
   @override
   Widget build(BuildContext context) {
-    final scoreWidth = max(MediaQuery.sizeOf(context).width * 0.15, 90.0);
+    final scoreWidth = max(MediaQuery.widthOf(context) * 0.15, 90.0);
     final sortIcon = reverse ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down;
     final mediaQueryPadding = MediaQuery.paddingOf(context);
     final scoreFormat = NumberFormat('#.#');

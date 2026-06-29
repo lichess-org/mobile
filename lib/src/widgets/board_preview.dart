@@ -108,7 +108,7 @@ class SmallBoardPreview extends ConsumerWidget {
                             const SizedBox(height: 4.0),
                             Container(
                               height: 16.0,
-                              width: MediaQuery.sizeOf(context).width / 3,
+                              width: MediaQuery.widthOf(context) / 3,
                               decoration: const BoxDecoration(
                                 color: Colors.black,
                                 borderRadius: Styles.boardBorderRadius,

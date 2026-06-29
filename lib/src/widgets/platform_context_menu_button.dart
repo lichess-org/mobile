@@ -55,9 +55,9 @@ class ContextMenuIconButton extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: ConstrainedBox(
                   constraints: BoxConstraints(
-                    maxHeight: MediaQuery.sizeOf(context).height * 0.8,
-                    minWidth: MediaQuery.sizeOf(context).width * 0.4,
-                    maxWidth: MediaQuery.sizeOf(context).width * 0.6,
+                    maxHeight: MediaQuery.heightOf(context) * 0.8,
+                    minWidth: MediaQuery.widthOf(context) * 0.4,
+                    maxWidth: MediaQuery.widthOf(context) * 0.6,
                   ),
                   child: IntrinsicHeight(
                     child: ClipRRect(
@@ -117,7 +117,7 @@ class ContextMenuIconButton extends StatelessWidget {
       consumeOutsideTap: consumeOutsideTap,
       style: MenuStyle(
         maximumSize: WidgetStatePropertyAll(
-          Size(MediaQuery.sizeOf(context).width * 0.6, MediaQuery.sizeOf(context).height * 0.8),
+          Size(MediaQuery.widthOf(context) * 0.6, MediaQuery.heightOf(context) * 0.8),
         ),
       ),
       menuChildren: actions,

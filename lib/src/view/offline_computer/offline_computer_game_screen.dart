@@ -291,7 +291,7 @@ class _BodyState extends ConsumerState<_Body> {
   }
 
   void _showNewGameDialog({required Variant? initialVariant}) {
-    final double screenHeight = MediaQuery.sizeOf(context).height;
+    final double screenHeight = MediaQuery.heightOf(context);
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
