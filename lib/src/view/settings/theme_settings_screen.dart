@@ -42,6 +42,14 @@ String shapeColorL10n(ShapeColor shapeColor) => switch (shapeColor) {
   ShapeColor.yellow => 'Yellow',
 };
 
+String highlightColorL10n(HighlightColor highlightColor) => switch (highlightColor) {
+  HighlightColor.yellow => 'Yellow',
+  HighlightColor.green => 'Green',
+  HighlightColor.red => 'Red',
+  HighlightColor.blue => 'Blue',
+  HighlightColor.white => 'White',
+};
+
 class _Body extends ConsumerStatefulWidget {
   const _Body();
 
@@ -162,6 +170,30 @@ class _BodyState extends ConsumerState<_Body> {
                             ref
                                 .read(boardPreferencesProvider.notifier)
                                 .setShapeColor(value ?? ShapeColor.green);
+                          },
+                        );
+                      },
+                    ),
+                    SettingsListTile(
+                      icon: const Icon(Icons.highlight),
+                      settingsLabel: const Text('Last move highlight color'),
+                      settingsValue: highlightColorL10n(boardPrefs.highlightColor),
+                      onTap: () {
+                        showChoicePicker(
+                          context,
+                          choices: HighlightColor.values,
+                          selectedItem: boardPrefs.highlightColor,
+                          labelBuilder: (t) => Text.rich(
+                            TextSpan(
+                              children: [
+                                TextSpan(text: highlightColorL10n(t)),
+                                const TextSpan(text: '   '),
+                                WidgetSpan(child: Container(width: 15, height: 15, color: t.color)),
+                              ],
+                            ),
+                          ),
+                          onSelectedItemChanged: (HighlightColor value) {
+                            ref.read(boardPreferencesProvider.notifier).setHighlightColor(value);
                           },
                         );
                       },
