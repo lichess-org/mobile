@@ -280,4 +280,13 @@ extension IDPick on Pick {
     }
     throw PickException("value $value at $debugParsingExit can't be casted to TournamentId");
   }
+
+  TournamentId? asTournamentIdOrNull() {
+    if (value == null) return null;
+    try {
+      return asTournamentIdOrThrow();
+    } catch (_) {
+      return null;
+    }
+  }
 }

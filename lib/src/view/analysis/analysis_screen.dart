@@ -34,6 +34,7 @@ import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
 import 'package:lichess_mobile/src/view/offline_computer/offline_computer_game_screen.dart';
 import 'package:lichess_mobile/src/view/over_the_board/over_the_board_screen.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
+import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
@@ -603,6 +604,15 @@ class _BottomBar extends ConsumerWidget {
           makeLabel: (context) => Text(context.l10n.flipBoard),
           onPressed: () => ref.read(analysisControllerProvider(options).notifier).toggleBoard(),
         ),
+        if (analysisState.archivedGame?.data.arenaTournamentId != null)
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.viewTournament),
+            onPressed: () {
+              Navigator.of(context).push(
+                TournamentScreen.buildRoute(analysisState.archivedGame!.data.arenaTournamentId!),
+              );
+            },
+          ),
         if (options case ArchivedGame())
           if (analysisState.canRequestServerAnalysis)
             BottomSheetAction(
