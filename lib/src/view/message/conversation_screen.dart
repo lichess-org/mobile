@@ -365,10 +365,11 @@ class _MessageBubble extends ConsumerWidget {
 
     return ChatBubbleContextMenu(
       message: message.text,
-      child: Align(
-        alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
-        child: ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.85),
+      child: FractionallySizedBox(
+        alignment: isMe ? .centerRight : .centerLeft,
+        widthFactor: 0.85,
+        child: Align(
+          alignment: isMe ? .centerRight : .centerLeft,
           child: Container(
             margin: EdgeInsets.only(
               bottom: !isInGroup || isFirstInGroup ? 8 : 2,
