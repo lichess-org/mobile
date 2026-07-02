@@ -55,6 +55,10 @@ class StudyPreferencesNotifier extends Notifier<StudyPrefs> with PreferencesStor
   Future<void> toggleInlineNotation() {
     return save(state.copyWith(inlineNotation: !state.inlineNotation));
   }
+
+  Future<void> toggleSmallBoard() {
+    return save(state.copyWith(smallBoard: !state.smallBoard));
+  }
 }
 
 @Freezed(fromJson: true, toJson: true)
@@ -69,6 +73,7 @@ sealed class StudyPrefs with _$StudyPrefs implements Serializable, CommonAnalysi
     @JsonKey(defaultValue: true) required bool showAnnotations,
     @JsonKey(defaultValue: true) required bool showPgnComments,
     @JsonKey(defaultValue: false) required bool inlineNotation,
+    @JsonKey(defaultValue: false) required bool smallBoard,
   }) = _StudyPrefs;
 
   static const defaults = StudyPrefs(
@@ -79,6 +84,7 @@ sealed class StudyPrefs with _$StudyPrefs implements Serializable, CommonAnalysi
     showAnnotations: true,
     showPgnComments: true,
     inlineNotation: false,
+    smallBoard: false,
   );
 
   factory StudyPrefs.fromJson(Map<String, dynamic> json) {

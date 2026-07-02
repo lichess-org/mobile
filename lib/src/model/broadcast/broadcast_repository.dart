@@ -94,6 +94,13 @@ class BroadcastRepository {
           pick(json, 'table').asListOrThrow<BroadcastTeamMatch>(_teamMatchFromPick).toIList(),
     );
   }
+
+  Future<IList<BroadcastTeamStanding>> getTeamStandings(BroadcastTournamentId tournamentId) {
+    return client.readJsonList(
+      Uri(path: 'broadcast/$tournamentId/teams/standings'),
+      mapper: (json) => _teamStandingFromPick(pick(json).required()),
+    );
+  }
 }
 
 BroadcastList broadcastListFromServerJson(Map<String, dynamic> json) {
@@ -130,6 +137,7 @@ BroadcastTournamentData _tournamentDataFromPick(RequiredPick pick) => BroadcastT
   imageUrl: pick('image').asStringOrNull(),
   description: pick('description').asStringOrNull(),
   teamTable: pick('teamTable').asBoolOrFalse(),
+  showTeamScores: pick('showTeamScores').asBoolOrFalse(),
   information: (
     format: pick('info', 'format').asStringOrNull(),
     timeControl: pick('info', 'tc').asStringOrNull(),
@@ -402,5 +410,26 @@ BroadcastTeamGame _teamGameFromPick(RequiredPick pick) {
   return BroadcastTeamGame(
     id: pick('id').asBroadcastGameIdOrThrow(),
     pov: pick('pov').asSideOrThrow(),
+  );
+}
+
+BroadcastTeamStanding _teamStandingFromPick(RequiredPick pick) {
+  return BroadcastTeamStanding(
+    name: pick('name').asStringOrThrow(),
+    mp: pick('mp').asDoubleOrThrow(),
+    gp: pick('gp').asDoubleOrThrow(),
+    matches: pick('matches').asListOrEmpty(_teamStandingMatchFromPick).toIList(),
+    players: pick('players').asListOrEmpty(_playerWithOverallResultFromPick).toIList(),
+    averageRating: pick('averageRating').asIntOrNull(),
+  );
+}
+
+BroadcastTeamStandingMatch _teamStandingMatchFromPick(RequiredPick pick) {
+  return BroadcastTeamStandingMatch(
+    roundId: pick('roundId').asBroadcastRoundIdOrThrow(),
+    opponent: pick('opponent').asStringOrThrow(),
+    points: pick('points').asStringOrNull(),
+    mp: pick('mp').asDoubleOrNull(),
+    gp: pick('gp').asDoubleOrNull(),
   );
 }

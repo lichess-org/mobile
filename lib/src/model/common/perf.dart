@@ -1,6 +1,7 @@
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
+import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -31,6 +32,50 @@ enum Perf {
   final String title;
   final String shortTitle;
   final IconData icon;
+
+  String label(AppLocalizations l10n) {
+    switch (this) {
+      case Perf.ultraBullet:
+        return l10n.ultraBullet;
+      case Perf.bullet:
+        return l10n.bullet;
+      case Perf.blitz:
+        return l10n.blitz;
+      case Perf.rapid:
+        return l10n.rapid;
+      case Perf.classical:
+        return l10n.classical;
+      case Perf.correspondence:
+        return l10n.correspondence;
+      case Perf.fromPosition:
+        return l10n.variantFromPosition;
+      case Perf.chess960:
+        return l10n.variantChess960;
+      case Perf.antichess:
+        return l10n.variantAntichess;
+      case Perf.kingOfTheHill:
+        return l10n.variantKingOfTheHill;
+      case Perf.threeCheck:
+        return l10n.variantThreeCheck;
+      case Perf.atomic:
+        return l10n.variantAtomic;
+      case Perf.horde:
+        return l10n.variantHorde;
+      case Perf.racingKings:
+        return l10n.variantRacingKings;
+      case Perf.crazyhouse:
+        return l10n.variantCrazyhouse;
+      case Perf.puzzle:
+        return l10n.puzzles;
+      case Perf.storm:
+      case Perf.streak:
+        return title;
+    }
+  }
+
+  String shortLabel(AppLocalizations l10n) {
+    return shortTitle;
+  }
 
   factory Perf.fromVariantAndSpeed(Variant variant, Speed speed) {
     switch (variant) {

@@ -205,8 +205,9 @@ void main() {
       expect(find.text('Your turn'), findsOneWidget);
 
       // before the first move is played, puzzle is not interactable
-      expect(find.byKey(const Key('g4-blackrook')), findsOneWidget);
-      await tester.tap(find.byKey(const Key('g4-blackrook')));
+      expect(boardHasPiece(tester, Square.g4, Piece.blackRook), isTrue);
+      final boardRect = tester.getRect(find.byType(Chessboard));
+      await tester.tapAt(squareOffset(Square.g4, boardRect, orientation: Side.black));
       await tester.pump();
       expect(find.byKey(const Key('g4-selected')), findsNothing);
 
@@ -220,23 +221,23 @@ void main() {
       // in play mode we see the solution button
       expect(find.byIcon(Icons.flag_outlined), findsOneWidget);
 
-      expect(find.byKey(const Key('g4-blackrook')), findsOneWidget);
-      expect(find.byKey(const Key('h8-whitequeen')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.g4, Piece.blackRook), isTrue);
+      expect(boardHasPiece(tester, Square.h8, Piece.whiteQueen), isTrue);
 
       await playMove(tester, 'g4', 'h4', orientation: orientation);
 
-      expect(find.byKey(const Key('h4-blackrook')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.h4, Piece.blackRook), isTrue);
       expect(find.text('Best move!'), findsOneWidget);
 
       // wait for line reply and move animation
       await tester.pump(const Duration(milliseconds: 500));
       await tester.pumpAndSettle();
 
-      expect(find.byKey(const Key('h4-whitequeen')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.h4, Piece.whiteQueen), isTrue);
 
       await playMove(tester, 'b4', 'h4', orientation: orientation);
 
-      expect(find.byKey(const Key('h4-blackrook')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.h4, Piece.blackRook), isTrue);
       expect(find.text('Success!'), findsOneWidget);
 
       // wait for move animation
@@ -317,7 +318,7 @@ void main() {
         // await for first move to be played
         await tester.pump(const Duration(milliseconds: 1500));
 
-        expect(find.byKey(const Key('g4-blackrook')), findsOneWidget);
+        expect(boardHasPiece(tester, Square.g4, Piece.blackRook), isTrue);
 
         await playMove(tester, 'g4', 'f4', orientation: orientation);
 
@@ -328,11 +329,11 @@ void main() {
         await tester.pumpAndSettle();
 
         // can still play the puzzle
-        expect(find.byKey(const Key('g4-blackrook')), findsOneWidget);
+        expect(boardHasPiece(tester, Square.g4, Piece.blackRook), isTrue);
 
         await playMove(tester, 'g4', 'h4', orientation: orientation);
 
-        expect(find.byKey(const Key('h4-blackrook')), findsOneWidget);
+        expect(boardHasPiece(tester, Square.h4, Piece.blackRook), isTrue);
         expect(find.text('Best move!'), findsOneWidget);
 
         // wait for line reply and move animation
@@ -341,7 +342,7 @@ void main() {
 
         await playMove(tester, 'b4', 'h4', orientation: orientation);
 
-        expect(find.byKey(const Key('h4-blackrook')), findsOneWidget);
+        expect(boardHasPiece(tester, Square.h4, Piece.blackRook), isTrue);
         expect(find.text('Puzzle complete!'), findsOneWidget);
         final expectedPlayedXTimes =
             'Played ${puzzle2.puzzle.plays.toString().localizeNumbers()} times.';
@@ -414,7 +415,7 @@ void main() {
       // await for first move to be played
       await tester.pump(const Duration(milliseconds: 1500));
 
-      expect(find.byKey(const Key('g4-blackrook')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.g4, Piece.blackRook), isTrue);
 
       // Help button should still be disabled
       expect(find.byIcon(Icons.flag_outlined), findsOneWidget);
@@ -438,8 +439,8 @@ void main() {
       // wait for solution replay animation to finish
       await tester.pump(const Duration(seconds: 1));
 
-      expect(find.byKey(const Key('h4-blackrook')), findsOneWidget);
-      expect(find.byKey(const Key('h8-whitequeen')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.h4, Piece.blackRook), isTrue);
+      expect(boardHasPiece(tester, Square.h8, Piece.whiteQueen), isTrue);
       expect(find.text('Puzzle complete!'), findsOneWidget);
 
       final nextMoveBtnEnabled = find.byWidgetPredicate(
@@ -778,7 +779,7 @@ void main() {
       // wait for previous opponent's move to be played
       await tester.pump(const Duration(milliseconds: 1500));
 
-      expect(find.byKey(const Key('g4-blackrook')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.g4, Piece.blackRook), isTrue);
 
       bool isPrevEnabled() {
         return tester
@@ -816,7 +817,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // computer replied by capturing our rook with its queen
-      expect(find.byKey(const Key('h4-whitequeen')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.h4, Piece.whiteQueen), isTrue);
 
       expect(isPrevEnabled(), isTrue);
 
@@ -825,19 +826,19 @@ void main() {
       await tester.pump();
 
       // verify we see our original bold move (black rook on h4)
-      expect(find.byKey(const Key('h4-blackrook')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.h4, Piece.blackRook), isTrue);
 
       // tap "Previous" again to undo our first move
       await tester.tap(find.byIcon(CupertinoIcons.chevron_back));
       await tester.pump();
 
       // verify we are back at the start (black rook on g4)
-      expect(find.byKey(const Key('g4-blackrook')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.g4, Piece.blackRook), isTrue);
 
       // check that the user can not play a different move in the starting position
       await playMove(tester, 'g4', 'g5', orientation: orientation);
       // check that the rook stayed on g4
-      expect(find.byKey(const Key('g4-blackrook')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.g4, Piece.blackRook), isTrue);
 
       // check that the "Next" button is now enabled
       expect(isNextEnabled(), isTrue);
@@ -849,7 +850,7 @@ void main() {
       await tester.pump();
 
       // verify we are back to the current state (computer's white queen on h4)
-      expect(find.byKey(const Key('h4-whitequeen')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.h4, Piece.whiteQueen), isTrue);
     },
   );
 
@@ -922,7 +923,7 @@ void main() {
       // await for first move to be played
       await tester.pump(const Duration(milliseconds: 1500));
 
-      expect(find.byKey(const Key('b2-blackrook')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.b2, Piece.blackRook), isTrue);
 
       await playMove(tester, 'e8', 'a8', orientation: Side.white);
 
@@ -1005,7 +1006,7 @@ void main() {
       // await for first move to be played (Nxc3)
       await tester.pump(const Duration(milliseconds: 1500));
 
-      expect(find.byKey(const Key('e1-whiteking')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.e1, Piece.whiteKing), isTrue);
 
       // Play castling move (O-O) by moving king to g1
       await playMove(tester, 'e1', 'g1', orientation: Side.white);
@@ -1023,7 +1024,7 @@ void main() {
       // Wait for the move animation to complete
       await tester.pumpAndSettle();
 
-      expect(find.byKey(const Key('h6-whitebishop')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.h6, Piece.whiteBishop), isTrue);
     },
   );
 
@@ -1149,22 +1150,22 @@ void main() {
       // wait for first move to be played
       await tester.pump(const Duration(milliseconds: 1500));
 
-      expect(find.byKey(const Key('g4-blackrook')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.g4, Piece.blackRook), isTrue);
 
       await playMove(tester, 'g4', 'h4', orientation: orientation);
 
-      expect(find.byKey(const Key('h4-blackrook')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.h4, Piece.blackRook), isTrue);
       expect(find.text('Best move!'), findsOneWidget);
 
       // wait for line reply and move animation
       await tester.pump(const Duration(milliseconds: 500));
       await tester.pumpAndSettle();
 
-      expect(find.byKey(const Key('h4-whitequeen')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.h4, Piece.whiteQueen), isTrue);
 
       await playMove(tester, 'b4', 'h4', orientation: orientation);
 
-      expect(find.byKey(const Key('h4-blackrook')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.h4, Piece.blackRook), isTrue);
       expect(find.text('Success!'), findsOneWidget);
 
       // wait for move animation

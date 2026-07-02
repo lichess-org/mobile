@@ -9,7 +9,7 @@ class AppLocalizationsFi extends AppLocalizations {
   AppLocalizationsFi([String locale = 'fi']) : super(locale);
 
   @override
-  String get mobileAccount => 'Account';
+  String get mobileAccount => 'Käyttäjätunnus';
 
   @override
   String get mobileAccountPreferences => 'Käyttäjätunnuksen asetukset';
@@ -287,31 +287,64 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Tai tuo PGN-tiedosto';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+
+  @override
+  String get variantStandard => 'Normaali';
+
+  @override
   String get variantStandardTitle => 'Shakin perussäännöt (FIDE)';
+
+  @override
+  String get variantChess960 => 'Shakki960';
 
   @override
   String get variantChess960Title => 'Takarivin nappuloiden järjestys pelin alussa on satunnainen.';
 
   @override
+  String get variantKingOfTheHill => 'Kukkulan kuningas';
+
+  @override
   String get variantKingOfTheHillTitle => 'Voita peli tuomalla kuninkaasi keskustaan.';
+
+  @override
+  String get variantThreeCheck => 'Kolme shakkausta';
 
   @override
   String get variantThreeCheckTitle => 'Voita peli shakkaamalla vastustajaa kolmesti.';
 
   @override
+  String get variantAntichess => 'Antishakki';
+
+  @override
   String get variantAntichessTitle => 'Voita peli menettämällä kaikki nappulasi (tai pääsemällä pattiin).';
+
+  @override
+  String get variantAtomic => 'Atomishakki';
 
   @override
   String get variantAtomicTitle => 'Voita peli räjäyttämällä vastustajasi kuningas.';
 
   @override
+  String get variantHorde => 'Lauma';
+
+  @override
   String get variantHordeTitle => 'Yhdellä pelaajalla on suuri määrä sotilaita, toisella on normaali armeija.';
+
+  @override
+  String get variantRacingKings => 'Kuninkaiden kilpajuoksu';
 
   @override
   String get variantRacingKingsTitle => 'Voita peli viemällä kuninkaasi laudan toiseen päähän.';
 
   @override
+  String get variantCrazyhouse => 'Crazyhouse';
+
+  @override
   String get variantCrazyhouseTitle => 'Lyödyn nappulan pudottaminen takaisin laudalle on siirto yhtä lailla kuin nappulan siirtäminenkin.';
+
+  @override
+  String get variantFromPosition => 'Asemasta';
 
   @override
   String get variantFromPositionTitle => 'Normaalia shakkia itse määriteltävän aseman pohjalta';
@@ -916,12 +949,15 @@ class AppLocalizationsFi extends AppLocalizations {
   String get broadcastOfficialStandings => 'Virallinen tulostaulu';
 
   @override
+  String get broadcastRegulations => 'Säännöt';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'Lisäasetuksia löytyy $param';
   }
 
   @override
-  String get broadcastWebmastersPage => 'webmasterin sivulta';
+  String get broadcastWebmastersPage => 'Webmaster-sivulta';
 
   @override
   String get broadcastEmbedThisBroadcast => 'Upota tämä lähetys sivustoosi';
@@ -2491,6 +2527,12 @@ class AppLocalizationsFi extends AppLocalizations {
   String get blackDidntMove => 'Musta ei siirtänyt';
 
   @override
+  String get whiteAborted => 'Valkea keskeytti pelin';
+
+  @override
+  String get blackAborted => 'Musta keskeytti pelin';
+
+  @override
   String get requestAComputerAnalysis => 'Pyydä tietokoneanalyysiä';
 
   @override
@@ -2607,12 +2649,12 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String minRatingX(String param) {
-    return 'Minimum rating of $param';
+    return 'Vahvuusluvun alaraja $param';
   }
 
   @override
   String maxRatingX(String param) {
-    return 'Maximum rating of $param';
+    return 'Vahvuusluvun yläraja $param';
   }
 
   @override
@@ -4392,6 +4434,12 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
+  String get like => 'Tykkää';
+
+  @override
+  String get liked => 'Tykätty';
+
+  @override
   String get quickPairing => 'Nopeasti peliin';
 
   @override
@@ -4789,6 +4837,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get theForumEtiquette => 'foorumin etiketti';
 
   @override
+  String get pleaseBeNiceInTheForum => 'Olethan ystävällinen foorumilla.';
+
+  @override
   String get thisTopicIsArchived => 'Tämä aihe on arkistoitu, eikä siihen voi enää vastata.';
 
   @override
@@ -5038,7 +5089,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get showMeEverything => 'Näytä kaikki';
 
   @override
-  String get lichessPatronInfo => 'Lichess on hyväntekeväisyysjärjestö ja täysin ilmainen avoimen lähdekoodin ohjelmisto.\nKaikki toimintakustannukset, kehitystyö ja sisältö rahoitetaan yksinomaan käyttäjien lahjoituksilla.';
+  String get lichessPatronInfo => 'Lichess on hyväntekeväisyysjärjestö ja täysin ilmainen avoimen lähdekoodin ohjelmisto.\nKaikki toimintakustannukset, kehitystyö ja sisältö rahoitetaan yksinomaan käyttäjien lahjoituksilla. Ilman anteliasta yhteisöämme emme pystyisi pitämään sivustoa yllä. Kiitos liittymisestä tukijoihimme!  ';
 
   @override
   String get nothingToSeeHere => 'Täällä ei ole tällä hetkellä mitään nähtävää.';
@@ -5840,9 +5891,6 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get studyLike => 'Tykkää';
-
-  @override
-  String get studyUnlike => 'Poista tykkäys';
 
   @override
   String get studyNewTag => 'Uusi tunniste';

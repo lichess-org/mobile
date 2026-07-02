@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="accountPreferences" comment="Displayed on settings screen.&#10;&#10;These preferences are applied to your Lichess account and will be used across all devices. They are not mobile-specific and will be synced with the server.">Preferências da conta</string>
+  <string name="account" comment="The account screen title.">Conta</string>
+  <string name="accountPreferences" comment="Displayed on settings screen. This is for preferences synced with website on the server.">Preferências da conta</string>
   <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">Estas preferências são aplicadas à sua conta Lichess e serão usadas em todos os dispositivos.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Todos os jogos</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Tem certeza?</string>
@@ -77,4 +78,11 @@
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Assistir</string>
   <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">Bem-vindo(a) à aplicação do Lichess!</string>
   <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">Ver Jogo</string>
+  <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">Dica: Pode adicionar mais widgets no ecrã inicial ou remover aqueles que não precisa!</string>
+  <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">Ignorar</string>
+  <string name="customizeButton" comment="Text of a button, so translation should be short.">Personalizar</string>
+  <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word">Concluído</string>
+  <string name="displayModeDetailed" comment="">Detalhado</string>
+  <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">Desafio criado: Irá ser notificado quando o jogo começar. \nPode acessá-lo a partir do ecrã inicial.</string>
+  <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Anterior</string>
 </resources>

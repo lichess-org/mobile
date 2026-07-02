@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
@@ -39,9 +37,6 @@ const kTestSurfaceSize = Size(_kTestScreenWidth, _kTestScreenHeight);
 
 const kPlatformVariant = TargetPlatformVariant({TargetPlatform.android, TargetPlatform.iOS});
 
-Matcher sameRequest(http.BaseRequest request) => _SameRequest(request);
-Matcher sameHeaders(Map<String, String> headers) => _SameHeaders(headers);
-
 /// Mocks a surface with a given size.
 class TestSurface extends StatelessWidget {
   const TestSurface({required this.child, required this.size, super.key});
@@ -65,25 +60,70 @@ Future<http.Response> mockResponse(
   Map<String, String> headers = const {},
 }) => Future.value(http.Response(body, code, headers: headers));
 
-Future<http.StreamedResponse> mockStreamedResponse(String body, int code) =>
-    Future.value(http.StreamedResponse(Stream.value(body).map(utf8.encode), code));
-
-Future<http.StreamedResponse> mockHttpStreamFromIterable(Iterable<String> events) async {
-  return http.StreamedResponse(
-    _streamFromFutures(events.map((e) => Future.value(utf8.encode(e)))),
-    200,
-  );
-}
-
-Future<http.StreamedResponse> mockHttpStream(Stream<String> stream) =>
-    Future.value(http.StreamedResponse(stream.map(utf8.encode), 200));
-
 Future<void> meetsTapTargetGuideline(WidgetTester tester) async {
   if (debugDefaultTargetPlatformOverride == TargetPlatform.iOS) {
     await expectLater(tester, meetsGuideline(iOSTapTargetGuideline));
   } else {
     await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
   }
+}
+
+/// Finds either an interactive [Chessboard] or a [StaticChessboard].
+Finder _anyBoard() => find.byWidgetPredicate((w) => w is Chessboard || w is StaticChessboard);
+
+/// Returns the pieces of the first [Chessboard] or [StaticChessboard] found in the widget tree.
+///
+/// Throws a [StateError] if no [PiecesPainter] is found.
+Map<Square, Piece> getBoardPieces(WidgetTester tester) {
+  for (final element
+      in find.descendant(of: _anyBoard(), matching: find.byType(CustomPaint)).evaluate()) {
+    final widget = element.widget as CustomPaint;
+    if (widget.painter is PiecesPainter) {
+      return (widget.painter! as PiecesPainter).pieces;
+    }
+  }
+  throw StateError('PiecesPainter not found');
+}
+
+/// Returns the [HighlightsPainter] of the first [Chessboard] or [StaticChessboard] found in the widget tree.
+///
+/// Throws a [StateError] if no [HighlightsPainter] is found.
+HighlightsPainter findBoardHighlightPainter(WidgetTester tester) {
+  for (final element
+      in find.descendant(of: _anyBoard(), matching: find.byType(CustomPaint)).evaluate()) {
+    final widget = element.widget as CustomPaint;
+    if (widget.painter is HighlightsPainter) {
+      return widget.painter! as HighlightsPainter;
+    }
+  }
+  throw StateError('HighlightsPainter not found');
+}
+
+/// Returns true if the board has [piece] at [square].
+bool boardHasPiece(WidgetTester tester, Square square, Piece piece) {
+  return getBoardPieces(tester)[square] == piece;
+}
+
+/// Returns the valid moves set currently highlighted on the interactive chessboard.
+Set<Square> getBoardValidMoves(WidgetTester tester) {
+  return findBoardHighlightPainter(tester).interactionNotifier.moveDests;
+}
+
+/// Returns the last move currently highlighted on the chessboard, or null if no last move is highlighted.
+Move? getBoardLastMove(WidgetTester tester) {
+  return findBoardHighlightPainter(tester).interactionNotifier.lastMove;
+}
+
+/// Returns true if the board has a premove highlight set for [move].
+bool boardHasPremove(WidgetTester tester, Move move) {
+  final p = findBoardHighlightPainter(tester);
+  return p.interactionNotifier.premove != null &&
+      switch (move) {
+        NormalMove(:final from, :final to) =>
+          p.interactionNotifier.premove!.hasSquare(from) &&
+              p.interactionNotifier.premove!.hasSquare(to),
+        DropMove(:final to) => p.interactionNotifier.premove!.hasSquare(to),
+      };
 }
 
 /// Returns the offset of a square on a board defined by [Rect].
@@ -121,49 +161,8 @@ Future<void> playDropMove(
   Side orientation = Side.white,
 }) async {
   final rect = boardRect ?? tester.getRect(find.byType(Chessboard));
+  final targetOffset = squareOffset(Square.fromName(to), rect, orientation: orientation);
   final fromOffset = tester.getCenter(find.byKey(ValueKey('pocket-${side.name}${role.name}')));
-  await tester.dragFrom(
-    fromOffset,
-    squareOffset(Square.fromName(to), rect, orientation: orientation) - fromOffset,
-  );
+  await tester.dragFrom(fromOffset, targetOffset - fromOffset);
   await tester.pumpAndSettle();
-}
-
-// --
-
-class _SameRequest extends Matcher {
-  const _SameRequest(this._expected);
-
-  final http.BaseRequest _expected;
-
-  @override
-  bool matches(Object? item, Map<dynamic, dynamic> matchState) =>
-      item is http.BaseRequest &&
-      item.method == _expected.method &&
-      item.url == _expected.url &&
-      mapEquals(item.headers, _expected.headers);
-
-  @override
-  Description describe(Description description) =>
-      description.add('same Request as ').addDescriptionOf(_expected);
-}
-
-class _SameHeaders extends Matcher {
-  const _SameHeaders(this._expected);
-
-  final Map<String, String> _expected;
-
-  @override
-  bool matches(Object? item, Map<dynamic, dynamic> matchState) =>
-      item is Map<String, String> && mapEquals(item, _expected);
-  @override
-  Description describe(Description description) =>
-      description.add('same headers as ').addDescriptionOf(_expected);
-}
-
-Stream<T> _streamFromFutures<T>(Iterable<Future<T>> futures) async* {
-  for (final future in futures) {
-    final result = await future;
-    yield result;
-  }
 }

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="accountPreferences" comment="Displayed on settings screen.&#10;&#10;These preferences are applied to your Lichess account and will be used across all devices. They are not mobile-specific and will be synced with the server.">Kontaj Preferoj</string>
+  <string name="account" comment="The account screen title.">Konto</string>
+  <string name="accountPreferences" comment="Displayed on settings screen. This is for preferences synced with website on the server.">Kontaj Preferoj</string>
+  <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">Ĉi tiuj agordoj estas aplikitaj al via konto de Lichess kaj estos uzata tra ĉiuj viaj aparatoj.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Ĉiuj ludoj</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Ĉu vi certas?</string>
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Agordoj de la tabulo</string>
@@ -19,6 +21,8 @@
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Vi devas esti ensalutata por spekti ĉi tiun paĝon.</string>
   <string name="newGame" comment="New game button in OTB and play against offline computer features">Nova ludo</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Neniu rezultoj</string>
+  <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Bonvolu noti, ke ne ĉiuj funkcioj de la malnova apo aŭ la retejo estas nune disponeblaj, sed ni ĉiam aldonas funkciojn.</string>
+  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Vi ne abonas iujn ajn uzantojn.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">Bone</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Ludi fizike kun aliulo</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Ludantanto kun \"%s\"</string>
@@ -33,10 +37,20 @@
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Ludu puzlojn el viaj ŝatataj malfermoj, aŭ elektu temon.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Puzloj</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Lastaj serĉoj</string>
+  <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Forigi legosignon</string>
+  <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.">Analizo per servilo</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Horloĝa pozicio</string>
+  <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">Antaŭagordoj</string>
+  <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">Montrado de celo de trenita ŝakpeco</string>
   <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">Cirklo</string>
   <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">Kvadrato</string>
+  <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">Fenestraĵoj por hejma ekrano</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Enakviĝa reĝimo</string>
+  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Kaŝi la sisteman uzantinterfacon dum ludado. Uzu ĉi tion, se vin ĝenas la sistemaj navigadaj gestoj ĉe la randoj de la ekrano. Aplikiĝas al ludaj kaj puzlaj ekranoj.</string>
+  <string name="settingsMaterialDifferenceCapturedPieces" comment="A value of the material difference settings choice (to show all captured pieces instead of material difference).">Kaptitaj pecoj</string>
+  <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick and image from the image library as app custom background.">Elektu bildon</string>
+  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">Propra fono nur funkcias en la malhel-fona etoso. Malhela bildo estas rekomendata.</string>
+  <string name="settingsPickAnImageBlur" comment="Displayed in theme background choice screen, to blur the chosen image.">Malfokusigi la bildon</string>
   <string name="settingsPickAnImageHideBoard" comment="Displayed in theme background choice screen, to hide the board when viewing chosen image.">Kaŝi la tabulon</string>
   <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">Montri tabulon</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Agordoj</string>

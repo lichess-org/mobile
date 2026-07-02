@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="account" comment="The account screen title.">അക്കൌണ്ട്</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">എല്ലാ കളികൾ</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">താങ്ങൾക്ക് ഉറപ്പാണോ?</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">തിരിച്ചെടുക്കൽ നിർദേശം കളയുക</string>
@@ -12,6 +13,7 @@
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">തൽസമയ പ്രവാഹക്കാർ</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">ഈ താളിനു് കാണുകാൻ താങ്ങൾ പ്രവേശപെട്ടിരിക്കണം.</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">ഫലങ്ങളൊന്നുമില്ല</string>
+  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">താങ്ങൾ മറ്റാരേയും പിന്തുടരുന്നില്ല.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">ശരി</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">ബോർഡിൽ കളിക്കുക</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">%s ഒപ്പമുള്ള കളിക്കാർ</string>
@@ -28,6 +30,7 @@
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">സമീപകാല തിരയലുകൾ</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">ക്ലോക്ക് സ്ഥാനം</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">ആഴത്തിലുള്ള അനുഭവരീതി</string>
+  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">സ്വന്തം പശ്ചാത്തല ചിത്രം ഇരുണ്ട പശ്ചാത്തലത്തിൽ മാത്രം ലഭ്യം. ഇരുണ്ട നിറമുള്ള ചിത്രം ഉപയോഗിക്കുന്നതു ഉചിതം.</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">ക്രമീകരണം</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PGN പങ്കിടുക</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">കളി വിലാസം (URL) പങ്കിടുക</string>

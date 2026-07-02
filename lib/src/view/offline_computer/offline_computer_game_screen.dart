@@ -253,7 +253,6 @@ class _BodyState extends ConsumerState<_Body> {
                       youAre: orientation,
                       isBoardTurned: isBoardFlipped,
                     ),
-                    lastMove: gameState.lastMove,
                     explosionSquares: gameState.stepCursor > 0
                         ? atomicExplosionSquares(
                             gameState.game.stepAt(gameState.stepCursor - 1).position,
@@ -261,6 +260,7 @@ class _BodyState extends ConsumerState<_Body> {
                           )
                         : null,
                     shapes: _buildBoardShapes(gameState, boardColorScheme),
+                    boardSettingsOverrides: const BoardSettingsOverrides(enablePremoves: false),
                     boardParams: GameBoardParams.interactive(
                       variant: gameState.game.meta.variant,
                       position: gameState.currentPosition,
@@ -269,14 +269,10 @@ class _BodyState extends ConsumerState<_Body> {
                           : isPlayerTurn && !gameState.isEvaluatingMove
                           ? (orientation == Side.white ? PlayerSide.white : PlayerSide.black)
                           : PlayerSide.none,
-                      onPromotionSelection: ref
-                          .read(offlineComputerGameControllerProvider.notifier)
-                          .onPromotionSelection,
-                      promotionMove: gameState.promotionMove,
+                      lastMove: gameState.lastMove,
                       onMove: (move, {viaDragAndDrop}) {
                         ref.read(offlineComputerGameControllerProvider.notifier).makeMove(move);
                       },
-                      premovable: null,
                     ),
                     moves: gameState.moves,
                     currentMoveIndex: gameState.stepCursor,
@@ -295,7 +291,7 @@ class _BodyState extends ConsumerState<_Body> {
   }
 
   void _showNewGameDialog({required Variant? initialVariant}) {
-    final double screenHeight = MediaQuery.sizeOf(context).height;
+    final double screenHeight = MediaQuery.heightOf(context);
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
@@ -476,7 +472,7 @@ class _Player extends ConsumerWidget {
     if (isStockfish) {
       return Row(
         children: [
-          Image.asset('assets/images/stockfish/icon.png', width: 44, height: 44),
+          Image.asset('assets/images/stockfish/icon.webp', width: 44, height: 44),
           const SizedBox(width: 8),
           Expanded(
             child: Column(
@@ -615,7 +611,7 @@ class _PracticeCommentCardState extends ConsumerState<_PracticeCommentCard> {
 
       final verdictText = switch (verdict) {
         MoveVerdict.goodMove => context.l10n.studyGoodMove,
-        MoveVerdict.notBest => "Good, but there's better",
+        MoveVerdict.notBest => context.l10n.mobileGoodMoveButThereIsBetter,
         MoveVerdict.inaccuracy => context.l10n.inaccuracy,
         MoveVerdict.mistake => context.l10n.mistake,
         MoveVerdict.blunder => context.l10n.blunder,
@@ -782,12 +778,14 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
                       size: 150,
                       fen: widget.initialFen!,
                       orientation: _selectedSideChoice.toSide(fen: widget.initialFen) ?? Side.white,
-                      pieceAssets: boardPrefs.pieceSet.assets,
-                      colorScheme: boardPrefs.boardTheme.colors,
-                      brightness: boardPrefs.brightness,
-                      hue: boardPrefs.hue,
-                      enableCoordinates: false,
-                      borderRadius: const BorderRadius.all(Radius.circular(4)),
+                      settings: StaticChessboardSettings(
+                        pieceAssets: boardPrefs.pieceSet.assets,
+                        colorScheme: boardPrefs.boardTheme.colors,
+                        brightness: boardPrefs.brightness,
+                        hue: boardPrefs.hue,
+                        enableCoordinates: false,
+                        borderRadius: const BorderRadius.all(Radius.circular(4)),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -835,26 +833,8 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
               ),
             ),
             SettingsListTile(
-              settingsLabel: Text(context.l10n.side),
-              settingsValue: _sideChoiceLabel(context, _selectedSideChoice),
-              onTap: () {
-                showChoicePicker(
-                  context,
-                  choices: (widget.initialFen != null || _selectedVariant == Variant.fromPosition)
-                      ? SideChoice.values
-                      : SideChoice.values.where((c) => c != SideChoice.nextToPlay).toList(),
-                  selectedItem: _selectedSideChoice,
-                  labelBuilder: (SideChoice choice) => Text(_sideChoiceLabel(context, choice)),
-                  onSelectedItemChanged: (SideChoice choice) {
-                    setState(() => _selectedSideChoice = choice);
-                    ref.read(offlineComputerGamePreferencesProvider.notifier).setSideChoice(choice);
-                  },
-                );
-              },
-            ),
-            SettingsListTile(
               settingsLabel: Text(context.l10n.variant),
-              settingsValue: _selectedVariant.label,
+              settingsValue: _selectedVariant.label(context.l10n),
               onTap: () {
                 showChoicePicker(
                   context,
@@ -895,6 +875,24 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
                       )
                     : const SizedBox.shrink(),
               ),
+            SettingsListTile(
+              settingsLabel: Text(context.l10n.side),
+              settingsValue: _sideChoiceLabel(context, _selectedSideChoice),
+              onTap: () {
+                showChoicePicker(
+                  context,
+                  choices: (widget.initialFen != null || _selectedVariant == Variant.fromPosition)
+                      ? SideChoice.values
+                      : SideChoice.values.where((c) => c != SideChoice.nextToPlay).toList(),
+                  selectedItem: _selectedSideChoice,
+                  labelBuilder: (SideChoice choice) => Text(_sideChoiceLabel(context, choice)),
+                  onSelectedItemChanged: (SideChoice choice) {
+                    setState(() => _selectedSideChoice = choice);
+                    ref.read(offlineComputerGamePreferencesProvider.notifier).setSideChoice(choice);
+                  },
+                );
+              },
+            ),
             SwitchSettingTile(
               title: const Text('Practice mode'),
               subtitle: const Text('Get feedback on your moves'),

@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/app.dart';
+import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
 import 'package:lichess_mobile/src/model/game/game_storage.dart';
@@ -21,6 +22,7 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import '../../binding.dart';
 import '../../example_data.dart';
 import '../../mock_server_responses.dart';
+import '../../model/auth/auth_repository_test.dart';
 import '../../model/auth/fake_auth_storage.dart';
 import '../../model/challenge/challenge_repository_test.dart';
 import '../../model/engine/fake_nnue_service.dart';
@@ -509,6 +511,50 @@ void main() {
 
         expect(find.text(nnueFilesMissingTip), findsNothing);
       });
+    });
+  });
+
+  group('Sign in error handling', () {
+    testWidgets('shows an error snackbar when sign-in fails', (tester) async {
+      final app = await makeTestProviderScope(
+        tester,
+        child: const Application(),
+        overrides: {
+          appAuthProvider: appAuthProvider.overrideWith(
+            (ref) => FakeFlutterAppAuth((request) async => throw Exception('authorization failed')),
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Sign in'), findsOneWidget);
+
+      await tester.tap(find.text('Sign in'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Something went wrong.'), findsOneWidget);
+    });
+
+    testWidgets('does not show a snackbar when the user cancels sign-in', (tester) async {
+      final app = await makeTestProviderScope(
+        tester,
+        child: const Application(),
+        overrides: {
+          appAuthProvider: appAuthProvider.overrideWith(
+            (ref) => FakeFlutterAppAuth((request) async => throw userCancelled()),
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Sign in'), findsOneWidget);
+
+      await tester.tap(find.text('Sign in'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Something went wrong.'), findsNothing);
     });
   });
 }

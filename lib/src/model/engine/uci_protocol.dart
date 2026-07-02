@@ -10,7 +10,6 @@ import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:logging/logging.dart';
 
 const minDepth = 6;
-const maxPlies = 245;
 
 class UCIProtocol {
   UCIProtocol() : _options = {'Threads': '1', 'Hash': '16', 'MultiPV': '1'};

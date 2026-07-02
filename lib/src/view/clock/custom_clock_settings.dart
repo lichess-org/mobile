@@ -4,117 +4,108 @@ import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/view/clock/clock_tool_l10n.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 
 class CustomClockSettings extends StatefulWidget {
-  const CustomClockSettings({required this.onSubmit, required this.player, required this.clock});
+  const CustomClockSettings({
+    required this.clockType,
+    required this.clock,
+    required this.onTimeSelected,
+  });
 
-  final ClockSide player;
+  final ClockTimeControlType clockType;
   final TimeIncrement clock;
-  final void Function(ClockSide player, TimeIncrement clock) onSubmit;
+  final ValueSetter<TimeIncrement> onTimeSelected;
 
   @override
   State<CustomClockSettings> createState() => _CustomClockSettingsState();
 }
 
 class _CustomClockSettingsState extends State<CustomClockSettings> {
-  late int time;
-  late int increment;
+  late TimeIncrement _clock;
 
   @override
   void initState() {
-    time = widget.clock.time;
-    increment = widget.clock.increment;
     super.initState();
+    _clock = widget.clock;
+  }
+
+  void _setTotalTime(num seconds) {
+    setState(() {
+      _clock = TimeIncrement(seconds.toInt(), _clock.increment);
+    });
+  }
+
+  void _setIncrement(num seconds) {
+    setState(() {
+      _clock = TimeIncrement(_clock.time, seconds.toInt());
+    });
+  }
+
+  void _submit(BuildContext context) {
+    widget.onTimeSelected(_clock);
+    Navigator.of(context).pop();
   }
 
   @override
   Widget build(BuildContext context) {
     return BottomSheetScrollableContainer(
-      padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
       children: [
-        _PlayerTimeSlider(
-          clock: TimeIncrement(time, increment),
-          updateTime: (int t) => setState(() => time = t),
-          updateIncrement: (int inc) => setState(() => increment = inc),
+        ListSection(
+          materialFilledCard: true,
+          children: [
+            ListTile(
+              title: Text.rich(
+                TextSpan(
+                  text: '${context.l10n.minutesPerSide}: ',
+                  children: [
+                    TextSpan(
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                      text: clockLabelInMinutes(_clock.time),
+                    ),
+                  ],
+                ),
+              ),
+              subtitle: NonLinearSlider(
+                value: _clock.time,
+                values: kAvailableTimesInSeconds,
+                labelBuilder: clockLabelInMinutes,
+                onChange: _setTotalTime,
+                onChangeEnd: _setTotalTime,
+              ),
+            ),
+            ListTile(
+              title: Text.rich(
+                TextSpan(
+                  text: '${widget.clockType.valueInSecondsLabel(context.l10n)}: ',
+                  children: [
+                    TextSpan(
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                      text: _clock.increment.toString(),
+                    ),
+                  ],
+                ),
+              ),
+              subtitle: NonLinearSlider(
+                value: _clock.increment,
+                values: kAvailableIncrementsInSeconds,
+                onChange: _setIncrement,
+                onChangeEnd: _setIncrement,
+              ),
+            ),
+          ],
         ),
         Padding(
           padding: Styles.horizontalBodyPadding,
           child: FilledButton(
-            child: Text(context.l10n.apply),
-            onPressed: () => widget.onSubmit(widget.player, TimeIncrement(time, increment)),
+            onPressed: () => _submit(context),
+            child: Text(context.l10n.mobileOkButton, style: Styles.bold),
           ),
         ),
       ],
     );
-  }
-}
-
-class _PlayerTimeSlider extends StatelessWidget {
-  const _PlayerTimeSlider({
-    required this.clock,
-    required this.updateTime,
-    required this.updateIncrement,
-  });
-
-  final TimeIncrement clock;
-  final void Function(int time) updateTime;
-  final void Function(int time) updateIncrement;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListSection(
-      children: [
-        ListTile(
-          title: Text(
-            '${context.l10n.time}: ${clock.time < 60 ? context.l10n.nbSeconds(clock.time) : context.l10n.nbMinutes(_secToMin(clock.time))}',
-          ),
-          subtitle: NonLinearSlider(
-            value: clock.time,
-            values: kAvailableTimesInSeconds,
-            labelBuilder: _clockTimeLabel,
-            onChange: (num value) {
-              updateTime(value.toInt());
-            },
-            onChangeEnd: (num value) {
-              updateTime(value.toInt());
-            },
-          ),
-        ),
-        ListTile(
-          title: Text('${context.l10n.increment}: ${context.l10n.nbSeconds(clock.increment)}'),
-          subtitle: NonLinearSlider(
-            value: clock.increment,
-            values: kAvailableIncrementsInSeconds,
-            labelBuilder: (num sec) => sec.toString(),
-            onChange: (num value) {
-              updateIncrement(value.toInt());
-            },
-            onChangeEnd: (num value) {
-              updateIncrement(value.toInt());
-            },
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-int _secToMin(num sec) => sec ~/ 60;
-
-String _clockTimeLabel(num seconds) {
-  switch (seconds) {
-    case 0:
-      return '0';
-    case 45:
-      return '¾';
-    case 30:
-      return '½';
-    case 15:
-      return '¼';
-    default:
-      return _secToMin(seconds).toString();
   }
 }

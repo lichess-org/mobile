@@ -249,6 +249,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
                   roundId: _selectedRoundId ?? value.defaultRoundId,
                   tournamentId: _selectedTournamentId,
                   tournamentSlug: value.data.slug,
+                  showTeamScores: value.data.showTeamScores == true,
                 ),
                 _ => const SizedBox.shrink(),
               },
@@ -331,7 +332,7 @@ class _BottomBar extends ConsumerWidget {
               showDragHandle: true,
               isScrollControlled: true,
               isDismissible: true,
-              constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.9),
+              constraints: BoxConstraints(maxHeight: MediaQuery.heightOf(context) * 0.9),
               builder: (_) => DraggableScrollableSheet(
                 initialChildSize: 0.4,
                 snap: true,
@@ -358,7 +359,7 @@ class _BottomBar extends ConsumerWidget {
             showDragHandle: true,
             isScrollControlled: true,
             isDismissible: true,
-            constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.9),
+            constraints: BoxConstraints(maxHeight: MediaQuery.heightOf(context) * 0.9),
             builder: (_) => DraggableScrollableSheet(
               initialChildSize: 0.6,
               snap: true,

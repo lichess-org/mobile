@@ -287,31 +287,64 @@ class AppLocalizationsBs extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Or import a PGN file';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+
+  @override
+  String get variantStandard => 'Standardna';
+
+  @override
   String get variantStandardTitle => 'Standardna pravila šaha (FIDE)';
+
+  @override
+  String get variantChess960 => 'Šah960';
 
   @override
   String get variantChess960Title => 'Početna pozicija figura domaćeg reda je nasumično odabrana.';
 
   @override
+  String get variantKingOfTheHill => 'Kralj brda';
+
+  @override
   String get variantKingOfTheHillTitle => 'Dovedite svog kralja u centar da biste pobijedili u igri.';
+
+  @override
+  String get variantThreeCheck => 'Tri provjere';
 
   @override
   String get variantThreeCheckTitle => 'Provjerite protivnika 3 puta da biste pobijedili u igri.';
 
   @override
+  String get variantAntichess => 'Antišah';
+
+  @override
   String get variantAntichessTitle => 'Izgubite sve svoje figure (ili dospijte u pat poziciju) da biste pobijedili u igri.';
+
+  @override
+  String get variantAtomic => 'Atomski';
 
   @override
   String get variantAtomicTitle => 'Nuklearno uništite protivničkog kralja da biste pobijedili.';
 
   @override
+  String get variantHorde => 'Horda';
+
+  @override
   String get variantHordeTitle => 'Jedna strana ima veliki broj pijuna, druga ima normalnu vojsku.';
+
+  @override
+  String get variantRacingKings => 'Kraljevi trka';
 
   @override
   String get variantRacingKingsTitle => 'Dovedite svog kralja na drugu stranu ploče da biste pobijedili.';
 
   @override
+  String get variantCrazyhouse => 'Luda kuća';
+
+  @override
   String get variantCrazyhouseTitle => 'Osvojene figure mogu se vratiti na tablu umjesto pomjeranja figure.';
+
+  @override
+  String get variantFromPosition => 'From Position';
 
   @override
   String get variantFromPositionTitle => 'Standard chess from a custom position';
@@ -934,6 +967,9 @@ class AppLocalizationsBs extends AppLocalizations {
 
   @override
   String get broadcastOfficialStandings => 'Oficijelna rang lista';
+
+  @override
+  String get broadcastRegulations => 'Regulations';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -2517,6 +2553,12 @@ class AppLocalizationsBs extends AppLocalizations {
 
   @override
   String get blackDidntMove => 'Crni nije odigrao potez';
+
+  @override
+  String get whiteAborted => 'White aborted the game';
+
+  @override
+  String get blackAborted => 'Black aborted the game';
 
   @override
   String get requestAComputerAnalysis => 'Zatražite računarsku analizu';
@@ -4420,6 +4462,12 @@ class AppLocalizationsBs extends AppLocalizations {
   }
 
   @override
+  String get like => 'Like';
+
+  @override
+  String get liked => 'Liked';
+
+  @override
   String get quickPairing => 'Brzo uparivanje';
 
   @override
@@ -4815,6 +4863,9 @@ class AppLocalizationsBs extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'forumski bonton';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Please be nice in the forum.';
 
   @override
   String get thisTopicIsArchived => 'Ova je tema arhivirana i na nju se više ne može odgovarati.';
@@ -5914,9 +5965,6 @@ class AppLocalizationsBs extends AppLocalizations {
 
   @override
   String get studyLike => 'Sviđa mi se';
-
-  @override
-  String get studyUnlike => 'Ne sviđa mi se';
 
   @override
   String get studyNewTag => 'Nova oznaka';

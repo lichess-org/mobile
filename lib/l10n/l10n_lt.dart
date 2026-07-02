@@ -287,31 +287,64 @@ class AppLocalizationsLt extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Or import a PGN file';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+
+  @override
+  String get variantStandard => 'Standard';
+
+  @override
   String get variantStandardTitle => 'Standard rules of chess (FIDE)';
+
+  @override
+  String get variantChess960 => 'Chess960';
 
   @override
   String get variantChess960Title => 'The starting position of the home rank pieces is randomised.';
 
   @override
+  String get variantKingOfTheHill => 'King of the Hill';
+
+  @override
   String get variantKingOfTheHillTitle => 'Bring your King to the centre to win the game.';
+
+  @override
+  String get variantThreeCheck => 'Three-Check';
 
   @override
   String get variantThreeCheckTitle => 'Check your opponent 3 times to win the game.';
 
   @override
+  String get variantAntichess => 'Antichess';
+
+  @override
   String get variantAntichessTitle => 'Lose all your pieces (or get stalemated) to win the game.';
+
+  @override
+  String get variantAtomic => 'Atomic';
 
   @override
   String get variantAtomicTitle => 'Nuke your opponent\'s king to win.';
 
   @override
+  String get variantHorde => 'Horde';
+
+  @override
   String get variantHordeTitle => 'One side has a large number of pawns, the other has a normal army.';
+
+  @override
+  String get variantRacingKings => 'Racing Kings';
 
   @override
   String get variantRacingKingsTitle => 'Get your king to the other side of the board to win.';
 
   @override
+  String get variantCrazyhouse => 'Crazyhouse';
+
+  @override
   String get variantCrazyhouseTitle => 'Captured pieces can be dropped back on the board instead of moving a piece.';
+
+  @override
+  String get variantFromPosition => 'From Position';
 
   @override
   String get variantFromPositionTitle => 'Standard chess from a custom position';
@@ -954,6 +987,9 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get broadcastOfficialStandings => 'Oficialūs rezultatai';
+
+  @override
+  String get broadcastRegulations => 'Regulations';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -2543,6 +2579,12 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get blackDidntMove => 'Juodieji nepajudėjo';
+
+  @override
+  String get whiteAborted => 'White aborted the game';
+
+  @override
+  String get blackAborted => 'Black aborted the game';
 
   @override
   String get requestAComputerAnalysis => 'Užsakyti kompiuterio analizę';
@@ -4446,6 +4488,12 @@ class AppLocalizationsLt extends AppLocalizations {
   }
 
   @override
+  String get like => 'Like';
+
+  @override
+  String get liked => 'Liked';
+
+  @override
   String get quickPairing => 'Greitas suporavimas';
 
   @override
@@ -4841,6 +4889,9 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'forumo etiketą';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Please be nice in the forum.';
 
   @override
   String get thisTopicIsArchived => 'Ši tema yra suarchyvuota, tad nauji atsakymai negalimi.';
@@ -5986,9 +6037,6 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get studyLike => 'Mėgti';
-
-  @override
-  String get studyUnlike => 'Nebemėgti';
 
   @override
   String get studyNewTag => 'Nauja žyma';

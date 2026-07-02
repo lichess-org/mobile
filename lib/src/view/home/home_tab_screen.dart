@@ -21,6 +21,7 @@ import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/message/message_repository.dart';
+import 'package:lichess_mobile/src/model/relation/following_user.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_providers.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
@@ -36,11 +37,13 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/account/account_menu.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
+import 'package:lichess_mobile/src/view/auth/sign_in_error.dart';
 import 'package:lichess_mobile/src/view/correspondence/offline_correspondence_game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/game/offline_correspondence_games_screen.dart';
 import 'package:lichess_mobile/src/view/home/blog_carousel.dart';
+import 'package:lichess_mobile/src/view/home/following_carousel.dart';
 import 'package:lichess_mobile/src/view/home/games_carousel.dart';
 import 'package:lichess_mobile/src/view/message/conversation_screen.dart';
 import 'package:lichess_mobile/src/view/play/ongoing_games_screen.dart';
@@ -50,7 +53,6 @@ import 'package:lichess_mobile/src/view/play/quick_game_matrix.dart';
 import 'package:lichess_mobile/src/view/settings/engine_settings_screen.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_list_screen.dart';
 import 'package:lichess_mobile/src/view/user/challenge_requests_screen.dart';
-import 'package:lichess_mobile/src/view/user/player_screen.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -159,6 +161,9 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
         final blogPosts = isOnline
             ? ref.watch(blogCarouselProvider)
             : const AsyncValue.data(IListConst<BlogPost>([]));
+        final followingAsync = authUser != null && isOnline
+            ? ref.watch(followingCarouselProvider)
+            : const AsyncValue.data(IListConst<FollowingUser>([]));
 
         final isKidMode = ref.watch(kidModeProvider).value ?? false;
 
@@ -268,6 +273,11 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                 shouldShow: authUser != null,
                 child: const AccountPerfCards(padding: Styles.bodySectionPadding),
               ),
+            _EditableWidget(
+              widget: HomeEditableWidget.friends,
+              shouldShow: authUser != null && isOnline,
+              child: FollowingCarousel(followingAsync),
+            ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -328,6 +338,11 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
               child: AccountPerfCards(
                 padding: Styles.horizontalBodyPadding.add(Styles.sectionBottomPadding),
               ),
+            ),
+            _EditableWidget(
+              widget: HomeEditableWidget.friends,
+              shouldShow: authUser != null && isOnline,
+              child: FollowingCarousel(followingAsync),
             ),
             _EditableWidget(
               widget: HomeEditableWidget.quickPairing,
@@ -397,11 +412,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                       titleTextStyle: Theme.of(context).platform == TargetPlatform.iOS
                           ? Theme.of(context).textTheme.headlineSmall
                           : null,
-                      actions: const [
-                        _ChallengeScreenButton(),
-                        _PlayerScreenButton(),
-                        AccountMenuButton(),
-                      ],
+                      actions: const [_ChallengeScreenButton(), AccountMenuButton()],
                     ),
               body: widget.editModeEnabled
                   ? content
@@ -449,6 +460,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
       if (isOnline) ref.refresh(accountProvider.future),
       if (isOnline) ref.refresh(ongoingGamesProvider.future),
       if (isOnline) ref.refresh(featuredTournamentsProvider.future),
+      if (isOnline) ref.refresh(followingCarouselProvider.future),
     ]);
   }
 }
@@ -463,7 +475,7 @@ class _LichessMessageBanner extends ConsumerWidget {
       color: theme.colorScheme.tertiaryContainer,
       child: InkWell(
         onTap: () {
-          Navigator.of(context)
+          Navigator.of(context, rootNavigator: true)
               .push(
                 ConversationScreen.buildRoute(
                   user: const LightUser(id: UserId('lichess'), name: 'lichess'),
@@ -502,13 +514,17 @@ class _SignInWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final signInState = ref.watch(signInMutation);
 
+    ref.listen(signInMutation, (_, next) => showSignInErrorSnackBar(context, next));
+
     return FilledButton(
       onPressed: switch (signInState) {
         MutationPending() => null,
         _ => () {
+          // The error is surfaced via the [ref.listen] above; ignore the
+          // rethrown future so it does not become an unhandled exception.
           signInMutation.run(ref, (tsx) async {
             await tsx.get(authControllerProvider.notifier).signIn();
-          });
+          }).ignore();
         },
       },
       child: Text(context.l10n.signIn),
@@ -738,6 +754,7 @@ class _OngoingGamesCarousel extends ConsumerWidget {
               GameScreen.buildRoute(
                 source: ExistingGameSource(game.fullId),
                 loadingPosition: (
+                  variant: game.variant,
                   fen: game.fen,
                   orientation: game.orientation,
                   lastMove: game.lastMove,
@@ -895,32 +912,6 @@ class PreviewGameList<T> extends StatelessWidget {
   }
 }
 
-class _PlayerScreenButton extends ConsumerWidget {
-  const _PlayerScreenButton();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final isOnlineAsync = ref.watch(onlineStatusProvider);
-
-    return isOnlineAsync.maybeWhen(
-      data: (isOnline) => SemanticIconButton(
-        icon: const Icon(Icons.group_outlined),
-        semanticsLabel: context.l10n.players,
-        onPressed: !isOnline
-            ? null
-            : () {
-                Navigator.of(context).push(PlayerScreen.buildRoute());
-              },
-      ),
-      orElse: () => SemanticIconButton(
-        icon: const Icon(Icons.group_outlined),
-        semanticsLabel: context.l10n.players,
-        onPressed: null,
-      ),
-    );
-  }
-}
-
 class _ChallengeScreenButton extends ConsumerWidget {
   const _ChallengeScreenButton();
 
@@ -964,6 +955,36 @@ class _ChallengeScreenButton extends ConsumerWidget {
   }
 }
 
+class _TipCard extends StatelessWidget {
+  const _TipCard({required this.content, required this.actions});
+
+  final Widget content;
+
+  final List<Widget> actions;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: Styles.bodyPadding,
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              DefaultTextStyle.merge(
+                style: Theme.of(context).textTheme.bodyLarge,
+                child: Padding(padding: const EdgeInsets.all(8.0), child: content),
+              ),
+              Row(mainAxisAlignment: MainAxisAlignment.end, children: actions),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _WelcomeMessageCard extends StatefulWidget {
   const _WelcomeMessageCard();
 
@@ -987,39 +1008,19 @@ class _WelcomeMessageCardState extends State<_WelcomeMessageCard> {
       return const SizedBox.shrink();
     }
 
-    return Padding(
-      padding: Styles.bodyPadding,
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text.rich(
-                  TextSpan(
-                    children: [
-                      TextSpan(
-                        text: '${context.l10n.mobileWelcomeToLichessApp}\n\n',
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                      TextSpan(
-                        text: context.l10n.mobileNotAllFeaturesAreAvailable,
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [TextButton(onPressed: _dismiss, child: Text(context.l10n.ok))],
-              ),
-            ],
-          ),
+    return _TipCard(
+      content: Text.rich(
+        TextSpan(
+          children: [
+            TextSpan(
+              text: '${context.l10n.mobileWelcomeToLichessApp}\n\n',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            TextSpan(text: context.l10n.mobileNotAllFeaturesAreAvailable),
+          ],
         ),
       ),
+      actions: [TextButton(onPressed: _dismiss, child: Text(context.l10n.ok))],
     );
   }
 }
@@ -1071,54 +1072,34 @@ class _NNUEFilesOutdatedTipState extends ConsumerState<_NNUEFilesOutdatedTip> {
             return const SizedBox.shrink();
           }
 
-          return Padding(
-            padding: Styles.bodyPadding,
-            child: Card(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.warning,
-                            size: 25.0,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                          const SizedBox(width: 8.0),
-                          const Flexible(
-                            child: Text(
-                              // TODO l10n
-                              'New Stockfish version available! Go to the settings to download the updated NNUE files.',
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        TextButton(
-                          onPressed: () {
-                            setState(() {
-                              _openedSettings = true;
-                            });
-                            Navigator.of(
-                              context,
-                              rootNavigator: true,
-                            ).push(EngineSettingsScreen.buildRoute());
-                          },
-                          // TODO l10n
-                          child: const Text('Open settings'),
-                        ),
-                      ],
-                    ),
-                  ],
+          return _TipCard(
+            content: Row(
+              children: [
+                Icon(Icons.warning, size: 25.0, color: Theme.of(context).colorScheme.primary),
+                const SizedBox(width: 8.0),
+                const Flexible(
+                  child: Text(
+                    // TODO l10n
+                    'New Stockfish version available! Go to the settings to download the updated NNUE files.',
+                  ),
                 ),
-              ),
+              ],
             ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    _openedSettings = true;
+                  });
+                  Navigator.of(
+                    context,
+                    rootNavigator: true,
+                  ).push(EngineSettingsScreen.buildRoute());
+                },
+                // TODO l10n
+                child: const Text('Open settings'),
+              ),
+            ],
           );
         },
       ),
@@ -1154,53 +1135,28 @@ class _HomeCustomizationTipState extends State<_HomeCustomizationTip> {
       return const SizedBox.shrink();
     }
 
-    return Padding(
-      padding: Styles.bodyPadding,
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.lightbulb_circle_outlined,
-                      size: 25.0,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    const SizedBox(width: 8.0),
-                    Flexible(child: Text(context.l10n.mobileCustomizeHomeTip)),
-                  ],
-                ),
-              ),
-              Row(
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(
-                        context,
-                        rootNavigator: true,
-                      ).push(HomeTabScreen.buildRoute(editModeEnabled: true));
+    return _TipCard(
+      content: Text(context.l10n.mobileCustomizeHomeTip),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(
+              context,
+              rootNavigator: true,
+            ).push(HomeTabScreen.buildRoute(editModeEnabled: true));
 
-                      _setHideHomeWidgetCustomizationTip();
-                    },
-                    child: Text(context.l10n.mobileCustomizeButton),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      _setHideHomeWidgetCustomizationTip();
-                    },
-                    child: Text(context.l10n.mobileCustomizeHomeTipDismiss),
-                  ),
-                ],
-              ),
-            ],
-          ),
+            _setHideHomeWidgetCustomizationTip();
+          },
+          child: Text(context.l10n.mobileCustomizeButton),
         ),
-      ),
+        const SizedBox(width: 8.0),
+        TextButton(
+          onPressed: () {
+            _setHideHomeWidgetCustomizationTip();
+          },
+          child: Text(context.l10n.mobileCustomizeHomeTipDismiss),
+        ),
+      ],
     );
   }
 }

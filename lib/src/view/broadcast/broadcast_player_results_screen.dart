@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_team_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -28,6 +29,18 @@ final broadcastTournamentIdProvider = FutureProvider.autoDispose
     .family<BroadcastTournamentId, BroadcastRoundId>((Ref ref, BroadcastRoundId roundId) async {
       return (await ref.watch(broadcastRoundProvider(roundId).future)).tournament.id;
     }, name: 'BroadcastTournamentIdProvider');
+
+/// Returns the year that should be used as the reference point for the
+/// player's age display, matching lichess.org behaviour: the year the
+/// tournament took place (preferring its end date when known, otherwise its
+/// start date). Falls back to the current year only if no dates are known.
+int tournamentReferenceYear(BroadcastTournament tournament) {
+  final dates = tournament.data.information.dates;
+  if (dates == null) {
+    return DateTime.now().year;
+  }
+  return (dates.endsAt ?? dates.startsAt).year;
+}
 
 class BroadcastPlayerResultsScreenLoading extends ConsumerWidget {
   final BroadcastRoundId roundId;
@@ -258,11 +271,10 @@ class _OverallStatPlayer extends StatelessWidget {
 
     final pic = player.fideId != null ? tournament.photos?.get(player.fideId!) : null;
 
-    final statWidth =
-        (MediaQuery.sizeOf(context).width - Styles.bodyPadding.horizontal - 10 * 2) / 3;
+    final statWidth = (MediaQuery.widthOf(context) - Styles.bodyPadding.horizontal - 10 * 2) / 3;
     const cardSpacing = 10.0;
 
-    final picWidth = MediaQuery.sizeOf(context).width / 3;
+    final picWidth = MediaQuery.widthOf(context) / 3;
 
     return Padding(
       padding: Styles.bodyPadding,
@@ -289,7 +301,7 @@ class _OverallStatPlayer extends StatelessWidget {
                           Expanded(
                             child: Row(
                               children: [
-                                Image.asset('assets/images/fide-fed/$federation.png', height: 12),
+                                Image.asset('assets/images/fide-fed/$federation.webp', height: 12),
                                 const SizedBox(width: 5),
                                 Flexible(
                                   child: Text(
@@ -308,13 +320,22 @@ class _OverallStatPlayer extends StatelessWidget {
                       ),
                     const SizedBox(height: 16),
                     if (team != null) ...[
-                      Row(
-                        children: [
-                          const SizedBox(width: 100, child: Text('Team')),
-                          Expanded(
-                            child: Text(team.trim(), style: Theme.of(context).textTheme.bodyLarge),
-                          ),
-                        ],
+                      GestureDetector(
+                        onTap: () {
+                          if (tournament.data.showTeamScores == true) {
+                            Navigator.of(
+                              context,
+                            ).push(BroadcastTeamScreen.buildRoute(tournament.data.id, team));
+                          }
+                        },
+                        child: Row(
+                          children: [
+                            const SizedBox(width: 100, child: Text('Team')),
+                            Expanded(
+                              child: Text(team, style: Theme.of(context).textTheme.bodyLarge),
+                            ),
+                          ],
+                        ),
                       ),
                       const SizedBox(height: 16),
                     ],
@@ -324,7 +345,7 @@ class _OverallStatPlayer extends StatelessWidget {
                           SizedBox(width: 100, child: Text(context.l10n.broadcastAge)),
                           Expanded(
                             child: Text(
-                              (DateTime.now().year - birthYear).toString(),
+                              (tournamentReferenceYear(tournament) - birthYear).toString(),
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
                           ),
@@ -521,7 +542,7 @@ class _GameResultListTile extends StatelessWidget {
           ? Row(
               mainAxisSize: .min,
               children: [
-                Image.asset('assets/images/fide-fed/$federation.png', height: 12),
+                Image.asset('assets/images/fide-fed/$federation.webp', height: 12),
                 const SizedBox(width: 5),
                 if (rating != null) Text(rating.toString()),
               ],
@@ -548,7 +569,7 @@ class _GameResultListTile extends StatelessWidget {
                     mainAxisSize: .min,
                     children: [
                       Text(
-                        customPoints != null && customPoints != 0.0 && customPoints != points?.value
+                        customPoints != null && customPoints != points?.value
                             ? NumberFormat('0.##').format(customPoints)
                             : points?.resultFor(color).resultToString(color) ??
                                   (ongoing ? '*' : ''),

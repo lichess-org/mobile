@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
@@ -47,14 +48,14 @@ class GameScreen extends ConsumerStatefulWidget {
 
   final GameScreenSource source;
 
-  final LoadingPosition? loadingPosition;
+  final LoadingParam? loadingPosition;
 
   /// The date of the last move played in the game. If null, the game is in progress.
   final DateTime? lastMoveAt;
 
   static Route<dynamic> buildRoute({
     required GameScreenSource source,
-    LoadingPosition? loadingPosition,
+    LoadingParam? loadingPosition,
     DateTime? lastMoveAt,
   }) {
     return buildScreenRoute(
@@ -121,8 +122,8 @@ class _GameScreenState extends ConsumerState<GameScreen> {
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
             title: switch (widget.source) {
-              LobbySource(:final seek) => _LobbyGameTitle(seek: seek),
-              _ => const SizedBox.shrink(),
+              LobbySource(:final seek) => _GameTitle(_LobbyTitleVariant(seek)),
+              _ => null,
             },
           ),
           body: const LoadGameError('The game search was cancelled.', showBottomBar: false),
@@ -131,8 +132,8 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         return Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
-            title: _ChallengeGameTitle(
-              challenge: (widget.source as UserChallengeSource).challengeRequest,
+            title: _GameTitle(
+              _ChallengeTitleVariant((widget.source as UserChallengeSource).challengeRequest),
             ),
           ),
           body: const LoadGameError('The challenge was cancelled.', showBottomBar: false),
@@ -145,8 +146,8 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         return Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
-            title: _ChallengeGameTitle(
-              challenge: (widget.source as UserChallengeSource).challengeRequest,
+            title: _GameTitle(
+              _ChallengeTitleVariant((widget.source as UserChallengeSource).challengeRequest),
             ),
           ),
           body: ChallengeDeclinedBoard(
@@ -157,8 +158,9 @@ class _GameScreenState extends ConsumerState<GameScreen> {
           ),
         );
       case AsyncData(value: GameCreatedState(:final createdGameId)):
-        final isRealTimePlayingGame =
-            ref.watch(_isRealTimePlayableGameProvider(createdGameId)).value ?? false;
+        final isRealTimePlayingGame = ref.watch(
+          _isRealTimePlayableGameProvider(createdGameId).select((s) => s.value ?? false),
+        );
 
         final socketUri = GameController.socketUri(createdGameId);
 
@@ -206,7 +208,11 @@ class _GameScreenState extends ConsumerState<GameScreen> {
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
             leading: isRealTimePlayingGame ? SocketPingRatingIcon(socketUri: socketUri) : null,
-            title: _StandaloneGameTitle(id: createdGameId, lastMoveAt: widget.lastMoveAt),
+            title: _GameTitle(
+              _StandaloneTitleVariant(id: createdGameId, lastMoveAt: widget.lastMoveAt),
+              monitorSocket: isRealTimePlayingGame,
+              socketUri: socketUri,
+            ),
             actions: [
               _WatcherButton(gameId: createdGameId),
               _GameMenu(gameId: createdGameId),
@@ -226,8 +232,9 @@ class _GameScreenState extends ConsumerState<GameScreen> {
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
             leading: const SocketPingRatingIcon(),
-            title: _ChallengeGameTitle(
-              challenge: (widget.source as UserChallengeSource).challengeRequest,
+            title: _GameTitle(
+              _ChallengeTitleVariant((widget.source as UserChallengeSource).challengeRequest),
+              monitorSocket: true,
             ),
           ),
           body: PopScope(
@@ -252,11 +259,12 @@ class _GameScreenState extends ConsumerState<GameScreen> {
           appBar: AppBar(
             leading: const SocketPingRatingIcon(),
             title: switch (widget.source) {
-              LobbySource(:final seek) => _LobbyGameTitle(seek: seek),
-              UserChallengeSource(:final challengeRequest) => _ChallengeGameTitle(
-                challenge: challengeRequest,
+              LobbySource(:final seek) => _GameTitle(_LobbyTitleVariant(seek), monitorSocket: true),
+              UserChallengeSource(:final challengeRequest) => _GameTitle(
+                _ChallengeTitleVariant(challengeRequest),
+                monitorSocket: true,
               ),
-              _ => const SizedBox.shrink(),
+              _ => null,
             },
           ),
           body: PopScope(child: message),
@@ -272,7 +280,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
             () => ref.read(createGameServiceProvider).cancelChallenge(),
           ),
           ExistingGameSource() => StandaloneGameLoadingContent(
-            position: widget.loadingPosition,
+            loadingParam: widget.loadingPosition,
             userActionsBar: const BottomBar.empty(),
           ),
         };
@@ -282,10 +290,10 @@ class _GameScreenState extends ConsumerState<GameScreen> {
           appBar: AppBar(
             leading: const SocketPingRatingIcon(),
             title: switch (widget.source) {
-              LobbySource(:final seek) => _LobbyGameTitle(seek: seek),
+              LobbySource(:final seek) => _GameTitle(_LobbyTitleVariant(seek), monitorSocket: true),
               UserChallengeSource(:final challengeRequest) when challengeRequest.destUser != null =>
-                _ChallengeGameTitle(challenge: challengeRequest),
-              _ => const SizedBox.shrink(),
+                _GameTitle(_ChallengeTitleVariant(challengeRequest), monitorSocket: true),
+              _ => null,
             },
           ),
           body: PopScope(canPop: false, child: WakelockWidget(child: loadingBoard)),
@@ -344,16 +352,58 @@ class _GameMenu extends ConsumerWidget {
   }
 }
 
-class _LobbyGameTitle extends ConsumerWidget {
-  const _LobbyGameTitle({required this.seek});
+sealed class _GameTitleVariant {
+  const _GameTitleVariant();
+}
 
+final class _LobbyTitleVariant extends _GameTitleVariant {
+  const _LobbyTitleVariant(this.seek);
   final GameSeek seek;
+}
+
+final class _ChallengeTitleVariant extends _GameTitleVariant {
+  const _ChallengeTitleVariant(this.challenge);
+  final ChallengeRequest challenge;
+}
+
+final class _StandaloneTitleVariant extends _GameTitleVariant {
+  const _StandaloneTitleVariant({required this.id, this.lastMoveAt});
+  final GameFullId id;
+  final DateTime? lastMoveAt;
+}
+
+/// Single title widget for all GameScreen AppBar configurations.
+///
+/// When [monitorSocket] is true, shows "Reconnecting" if the socket is
+/// disconnected (ping rating == 0). [socketUri] scopes the ping check to a
+/// specific socket; null monitors the currently active route.
+class _GameTitle extends ConsumerWidget {
+  const _GameTitle(this.variant, {this.monitorSocket = false, this.socketUri});
+
+  final _GameTitleVariant variant;
+  final bool monitorSocket;
+  final Uri? socketUri;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    if (monitorSocket && ref.watch(socketPingProvider(socketUri)).rating == 0) {
+      return AppBarTitleText(context.l10n.reconnecting);
+    }
+
+    return switch (variant) {
+      _LobbyTitleVariant(:final seek) => _buildLobbyContent(context, seek),
+      _ChallengeTitleVariant(:final challenge) => _buildChallengeContent(context, challenge),
+      _StandaloneTitleVariant(:final id, :final lastMoveAt) => _StandaloneGameTitle(
+        id: id,
+        lastMoveAt: lastMoveAt,
+      ),
+    };
+  }
+
+  static Widget _buildLobbyContent(BuildContext context, GameSeek seek) {
     final mode = seek.rated ? ' • ${context.l10n.rated}' : ' • ${context.l10n.casual}';
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: .center,
       children: [
         Icon(seek.perf.icon, color: DefaultTextStyle.of(context).style.color),
         const SizedBox(width: 4.0),
@@ -361,18 +411,11 @@ class _LobbyGameTitle extends ConsumerWidget {
       ],
     );
   }
-}
 
-class _ChallengeGameTitle extends ConsumerWidget {
-  const _ChallengeGameTitle({required this.challenge});
-
-  final ChallengeRequest challenge;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  static Widget _buildChallengeContent(BuildContext context, ChallengeRequest challenge) {
     final mode = challenge.rated ? ' • ${context.l10n.rated}' : ' • ${context.l10n.casual}';
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: .center,
       children: [
         Icon(challenge.perf.icon, color: DefaultTextStyle.of(context).style.color),
         const SizedBox(width: 4.0),
@@ -457,7 +500,7 @@ class _StandaloneGameTitle extends ConsumerWidget {
             else if (meta.daysPerTurn != null)
               Flexible(child: AppBarTitleText('${context.l10n.nbDays(meta.daysPerTurn!)}$info'))
             else
-              Flexible(child: AppBarTitleText('${meta.perf.title}$info')),
+              Flexible(child: AppBarTitleText('${meta.perf.label(context.l10n)}$info')),
           ],
         );
       },
@@ -487,9 +530,12 @@ class _WatcherButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(gameControllerProvider(gameId).select((s) => s.value));
-    final nb = state?.nbWatchers ?? 0;
-    final isZenModeActive = state?.isZenModeActive ?? false;
+    final (nb, isZenModeActive) = ref.watch(
+      gameControllerProvider(gameId).select((s) {
+        final state = s.value;
+        return (state?.nbWatchers ?? 0, state?.isZenModeActive ?? false);
+      }),
+    );
     if (nb <= 0 || isZenModeActive) return const SizedBox.shrink();
     return SemanticIconButton(
       semanticsLabel: context.l10n.spectatorRoom,

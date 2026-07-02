@@ -287,31 +287,64 @@ class AppLocalizationsEu extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Edo inportatu PGN fitxategi bat';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Jokaldi ona, baina hobea dago';
+
+  @override
+  String get variantStandard => 'Ohikoa';
+
+  @override
   String get variantStandardTitle => 'Xakearen Lege arruntak (FIDE)';
+
+  @override
+  String get variantChess960 => '960 xakea';
 
   @override
   String get variantChess960Title => 'Lehenengo lerroko piezen kokalekua ausaz erabakitzen da.';
 
   @override
+  String get variantKingOfTheHill => 'Muinoko erregea';
+
+  @override
   String get variantKingOfTheHillTitle => 'Eraman zure erregea taularen erdira partida irabazteko.';
+
+  @override
+  String get variantThreeCheck => 'Hiru xake';
 
   @override
   String get variantThreeCheckTitle => 'Egin xake hiru aldiz aurkariari partida irabazteko.';
 
   @override
+  String get variantAntichess => 'Antixakea';
+
+  @override
   String get variantAntichessTitle => 'Galdu zure pieza guztiak (edo zure erregea ito) partida irabazteko.';
+
+  @override
+  String get variantAtomic => 'Atomikoa';
 
   @override
   String get variantAtomicTitle => 'Aurkariaren erregea akabatu partida irabazteko.';
 
   @override
+  String get variantHorde => 'Tropela';
+
+  @override
   String get variantHordeTitle => 'Jokalari baten peoi asko ditu eta besteak ohiko piezak.';
+
+  @override
+  String get variantRacingKings => 'Errege korrikalariak';
 
   @override
   String get variantRacingKingsTitle => 'Ereman zure erregea taularen beste aldera partida irabazteko.';
 
   @override
+  String get variantCrazyhouse => 'Auto-fitxa-pasa';
+
+  @override
   String get variantCrazyhouseTitle => 'Harrapatutako piezak berriz ere xake-taulak jarri ditzakezu jokaldi bat egin beharrean.';
+
+  @override
+  String get variantFromPosition => 'Posizio jakin batetik';
 
   @override
   String get variantFromPositionTitle => 'Xake estandarra posizio jakin batetik abiatuta';
@@ -914,6 +947,9 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get broadcastOfficialStandings => 'Sailkapen ofiziala';
+
+  @override
+  String get broadcastRegulations => 'Arauak';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -2491,6 +2527,12 @@ class AppLocalizationsEu extends AppLocalizations {
   String get blackDidntMove => 'Beltzak ez du mugitu';
 
   @override
+  String get whiteAborted => 'Zuriak partida bertan behera utzi du';
+
+  @override
+  String get blackAborted => 'Beltzak partida bertan behera utzi du';
+
+  @override
   String get requestAComputerAnalysis => 'Ordenagailuaren analisia eskatu';
 
   @override
@@ -2607,12 +2649,12 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String minRatingX(String param) {
-    return 'Minimum rating of $param';
+    return 'Gutxieneko puntuazioa: $param';
   }
 
   @override
   String maxRatingX(String param) {
-    return 'Maximum rating of $param';
+    return 'Gehienezko puntuazioa: $param';
   }
 
   @override
@@ -3578,7 +3620,7 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String xRating(String param) {
-    return '$param sailkapena';
+    return '$param puntuazioa';
   }
 
   @override
@@ -4392,6 +4434,12 @@ class AppLocalizationsEu extends AppLocalizations {
   }
 
   @override
+  String get like => 'Datsegit';
+
+  @override
+  String get liked => 'Atsegin duzu';
+
+  @override
   String get quickPairing => 'Parekatze azkarra';
 
   @override
@@ -4789,6 +4837,9 @@ class AppLocalizationsEu extends AppLocalizations {
   String get theForumEtiquette => 'foroko etiketa';
 
   @override
+  String get pleaseBeNiceInTheForum => 'Mesedez izan atsegina foroan.';
+
+  @override
   String get thisTopicIsArchived => 'Mezu hau artxibatu egin da eta jada ezin da erantzunik utzi bertan.';
 
   @override
@@ -4899,10 +4950,10 @@ class AppLocalizationsEu extends AppLocalizations {
   String get minimumRatedGames => 'Gutxieneko partida kopurua';
 
   @override
-  String get minimumRating => 'Gutxieneko sailkapena';
+  String get minimumRating => 'Puntuazio minimoa';
 
   @override
-  String get maximumWeeklyRating => 'Asteroko gehieneko sailkapena';
+  String get maximumWeeklyRating => 'Asteroko gehieneko puntuazioa';
 
   @override
   String positionInputHelp(String param) {
@@ -5840,9 +5891,6 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get studyLike => 'Datsegit';
-
-  @override
-  String get studyUnlike => 'Ez dut atsegin';
 
   @override
   String get studyNewTag => 'Etiketa berria';

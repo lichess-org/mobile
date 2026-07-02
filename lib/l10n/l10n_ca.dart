@@ -287,31 +287,64 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileOrImportPgnFile => 'O importa un arxiu PGN';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Bona jugada, però n\'hi ha una de millor';
+
+  @override
+  String get variantStandard => 'Estàndard';
+
+  @override
   String get variantStandardTitle => 'Regles d\'escacs estàndard (FIDE)';
+
+  @override
+  String get variantChess960 => 'Escacs 960';
 
   @override
   String get variantChess960Title => 'La posició inicial de les peces a la primera fila és aleatòria.';
 
   @override
+  String get variantKingOfTheHill => 'El rei del turó';
+
+  @override
   String get variantKingOfTheHillTitle => 'Porta el teu rei al centre per guanyar la partida.';
+
+  @override
+  String get variantThreeCheck => 'Tres escacs';
 
   @override
   String get variantThreeCheckTitle => 'Fes escac 3 vegades al teu oponent per guanyar la partida.';
 
   @override
+  String get variantAntichess => 'Antiescacs';
+
+  @override
   String get variantAntichessTitle => 'Perds tot les teves peces (o aconsegueix l\'ofegat) per guanyar la partida.';
+
+  @override
+  String get variantAtomic => 'Atòmic';
 
   @override
   String get variantAtomicTitle => 'Explota el rei del teu oponent per guanyar la partida.';
 
   @override
+  String get variantHorde => 'Horda';
+
+  @override
   String get variantHordeTitle => 'Un jugador té un gran nombre de peons, l\'altre té un exèrcit normal.';
+
+  @override
+  String get variantRacingKings => 'Carrera de reis';
 
   @override
   String get variantRacingKingsTitle => 'Fes arribar el teu rei a l\'altre costat del tauler per guanyar.';
 
   @override
+  String get variantCrazyhouse => 'Passa peces';
+
+  @override
   String get variantCrazyhouseTitle => 'Les peces capturades es poden tornar a ficar al tauler en comptes de moure una peça.';
+
+  @override
+  String get variantFromPosition => 'Des de la posició';
 
   @override
   String get variantFromPositionTitle => 'Escacs estàndard des d\'una posició personalitzada';
@@ -914,6 +947,9 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get broadcastOfficialStandings => 'Classificació oficial';
+
+  @override
+  String get broadcastRegulations => 'Normativa';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -2339,7 +2375,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get gameMode => 'Tipus de partida';
 
   @override
-  String get createLobbyGame => 'Crea una sala de joc';
+  String get createLobbyGame => 'Publica una partida';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Per convidar algú a jugar, envia-li aquest enllaç';
@@ -2489,6 +2525,12 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get blackDidntMove => 'Les negres no han mogut';
+
+  @override
+  String get whiteAborted => 'Les blanques han cancel·lat la partida';
+
+  @override
+  String get blackAborted => 'Les negres han cancel·lat la partida';
 
   @override
   String get requestAComputerAnalysis => 'Demana una anàlisi computeritzada';
@@ -4392,6 +4434,12 @@ class AppLocalizationsCa extends AppLocalizations {
   }
 
   @override
+  String get like => 'M’agrada';
+
+  @override
+  String get liked => 'M\'ha agradat';
+
+  @override
   String get quickPairing => 'Emparellament ràpid';
 
   @override
@@ -4787,6 +4835,9 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'l\'etiqueta del fòrum';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Si us plau sigues amable al fòrum.';
 
   @override
   String get thisTopicIsArchived => 'Aquest tema ha estat arxivat i no es pot respondre.';
@@ -5840,9 +5891,6 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get studyLike => 'M’agrada';
-
-  @override
-  String get studyUnlike => 'Ja no m\'agrada';
 
   @override
   String get studyNewTag => 'Nova etiqueta';

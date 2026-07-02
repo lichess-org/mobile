@@ -2,88 +2,82 @@ name: lichess_mobile
 description: Lichess mobile app V2
 publish_to: "none"
 
-version: 0.23.13+002313 # See README.md for details about versioning
+version: 0.25.3+002503 # See README.md for details about versioning
 
 environment:
-  sdk: ^3.11.5
+  sdk: ^3.12.2
   # this should be updated with every new flutter stable release
-  flutter: 3.41.9
+  flutter: 3.44.3
 
 dependencies:
-  app_links: ^7.0.0
+  app_links: ^7.2.0
   app_settings: ^7.0.0
   async: ^2.13.1
   auto_size_text: ^3.0.0
-  chessground: ^9.0.0
+  chessground: ^10.1.1
   clock: ^1.1.2
   collection: ^1.19.1
-  connectivity_plus: ^7.1.1
-  cronet_http: ^1.8.0
+  connectivity_plus: ^7.2.0
+  cronet_http: ^1.9.0
   crypto: ^3.0.7
-  cupertino_http: ^2.4.0
+  cupertino_http: ^3.0.2
   cupertino_icons: ^1.0.9
-  dartchess: ^0.12.3
+  dartchess: ^0.13.1
   deep_pick: ^1.1.0
-  device_info_plus: ^12.4.0
-  dynamic_system_colors:
-    git:
-      url: https://github.com/veloce/flutter_dynamic_system_colors.git
-      ref: main
+  device_info_plus: ^13.2.0
+  dynamic_system_colors: ^1.9.0
   fast_immutable_collections: ^11.2.0
-  file_picker: ^11.0.2
-  firebase_core: ^4.7.0
-  firebase_crashlytics: ^5.2.0
-  firebase_messaging: ^16.2.0
+  file_picker: ^12.0.0-beta
+  firebase_core: ^4.11.0
+  firebase_crashlytics: ^5.2.4
+  firebase_messaging: ^16.4.1
   fl_chart: ^1.2.0
   flutter:
     sdk: flutter
+  flutter_appauth: ^12.0.2
   flutter_displaymode: ^0.7.0
   flutter_layout_grid: ^2.0.8
   flutter_linkify: ^6.0.0
-  flutter_local_notifications: ^21.0.0
+  flutter_local_notifications: ^22.0.1
   flutter_localizations:
     sdk: flutter
-  flutter_markdown: ^0.7.7+1
-  flutter_native_splash: ^2.4.7
-  flutter_riverpod: ^3.3.1
-  flutter_secure_storage: ^10.1.0
+  flutter_markdown_plus: ^1.0.7
+  flutter_native_splash: ^2.4.8
+  flutter_riverpod: 3.3.1 # 3.3.2 version has a breaking change
+  flutter_secure_storage: ^10.3.1
   flutter_slidable: ^4.0.3
   flutter_spinkit: ^5.2.2
   freezed_annotation: ^3.1.0
-  home_widget: ^0.9.1
+  home_widget: ^0.9.3
   http: ^1.6.0
   image_picker: ^1.2.2
   intl: ^0.20.2
-  json_annotation: ^4.11.0
+  json_annotation: ^4.12.0
   l10n_esperanto: ^2.0.14
   linkify: ^5.0.0
   logging: ^1.3.0
   material_color_utilities: ^0.13.0
-  material_symbols_icons: 4.2906.0   # Check tree shaking during the production build when updating.
-  meta: ^1.17.0
+  material_symbols_icons: ^4.2951.0
+  meta: ^1.18.0
   multistockfish: ^0.5.0
-  package_info_plus: ^9.0.1
+  package_info_plus: ^10.2.0
   path: ^1.9.1
-  path_provider: ^2.1.5
+  path_provider: ^2.1.6
   popover: ^0.4.0
   pub_semver: ^2.2.0
   qr_flutter: ^4.1.0
   quick_actions: ^1.1.0
-  receive_sharing_intent:
-    git:
-      url: https://github.com/KasemJaffer/receive_sharing_intent
-      ref: 2cea396843cd3ab1b5ec4334be4233864637874e
   result_extensions: ^0.2.0
-  share_plus: ^12.0.2
+  share_plus: ^13.2.0
   shared_preferences: ^2.5.5
   signal_strength_indicator: ^0.5.0
-  sound_effect: ^0.1.3
-  sqflite: ^2.4.2+1
-  sqflite_common_ffi: ^2.4.0+3
+  sound_effect: ^0.2.0
+  sqflite: ^2.4.3
+  sqflite_common_ffi: ^2.4.2
   stream_transform: ^2.1.1
   url_launcher: ^6.3.2
   visibility_detector: ^0.4.0+2
-  wakelock_plus: ^1.5.2
+  wakelock_plus: ^1.6.1
   web_socket_channel: ^3.0.3
 
 dev_dependencies:
@@ -92,18 +86,11 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   freezed: ^3.2.5
-  json_serializable: ^6.13.2
+  json_serializable: ^6.14.0
   lint: ^2.8.0
   mocktail: ^1.0.5
   stream_channel: ^2.1.4
-  wakelock_plus_platform_interface: ^1.5.0
-
-dependency_overrides:
-  flutter_secure_storage_linux:
-    git:
-      url: https://github.com/christianfl/flutter_secure_storage.git
-      path: flutter_secure_storage_linux
-      ref: v10.0.0-beta.4-literal_operator_fix
+  wakelock_plus_platform_interface: ^1.5.1
 
 flutter:
   # The following line ensures that the Material Icons font is
@@ -149,7 +136,7 @@ flutter_native_splash:
   web: false
 
   color: "#ffffff"
-  image: assets/images/logo-black.png
+  image: assets/images/logo-black.webp
 
   color_dark: "#000000"
-  image_dark: assets/images/logo-white.png
+  image_dark: assets/images/logo-white.webp

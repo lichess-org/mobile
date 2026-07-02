@@ -13,7 +13,8 @@ import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
-import 'package:lichess_mobile/src/model/chat/chat_controller.dart';
+import 'package:lichess_mobile/src/model/chat/chat.dart';
+import 'package:lichess_mobile/src/model/chat/chat_mixin.dart';
 import 'package:lichess_mobile/src/model/clock/chess_clock.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -24,6 +25,7 @@ import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/game_preferences.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
@@ -44,7 +46,7 @@ final gameControllerProvider = AsyncNotifierProvider.autoDispose
       name: 'GameControllerProvider',
     );
 
-class GameController extends AsyncNotifier<GameState> {
+class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> {
   GameController(this.gameFullId);
 
   final GameFullId gameFullId;
@@ -52,6 +54,10 @@ class GameController extends AsyncNotifier<GameState> {
   final _logger = Logger('GameController');
 
   StreamSubscription<SocketEvent>? _socketSubscription;
+
+  /// The zen preference as received from the server when the game was loaded.
+  /// Used to restore the correct "on" state when toggling zen back on.
+  Zen? _initialZenPref;
 
   /// Tracks moves that were played on the board, sent to the server, possibly
   /// acked, but without a move response from the server yet.
@@ -74,12 +80,25 @@ class GameController extends AsyncNotifier<GameState> {
   SocketPool get _socketPool => ref.read(socketPoolProvider);
 
   ChessClock? _clock;
+
   late SocketClient _socketClient;
 
   GameRepository get _gameRepository => ref.read(gameRepositoryProvider);
 
+  @protected
   @override
-  Future<GameState> build() {
+  StringId get chatId => gameFullId.gameId;
+
+  @protected
+  @override
+  String get chatReportResource => 'game/${gameFullId.gameId}';
+
+  @protected
+  @override
+  bool get chatIsPublic => false;
+
+  @override
+  Future<GameState> build() async {
     _socketClient = _openSocket();
 
     _onFullReload = () {
@@ -97,49 +116,54 @@ class GameController extends AsyncNotifier<GameState> {
     });
 
     _socketSubscription?.cancel();
-    _socketSubscription = _socketClient.stream.listen(_handleSocketEvent);
-    return _socketClient.stream.firstWhere((e) => e.topic == 'full').then((event) {
-      final fullEvent = GameFullEvent.fromJson(event.data as Map<String, dynamic>);
-      _socketClient.version = fullEvent.socketEventVersion;
+    _socketSubscription = _socketClient.stream.listen(handleSocketEvent);
 
-      final game = fullEvent.game;
+    final rawFullEvent = await _socketClient.stream.firstWhere((e) => e.topic == 'full');
+    final fullEvent = GameFullEvent.fromJson(rawFullEvent.data as Map<String, dynamic>);
+    _socketClient.version = fullEvent.socketEventVersion;
 
-      // Play "dong" sound when this is a new game and we're playing it (not spectating)
-      final isMyGame = game.youAre != null;
-      final noMovePlayed = game.steps.length == 1;
-      if (isMyGame && noMovePlayed && game.status == GameStatus.started) {
-        ref.read(soundServiceProvider).play(Sound.dong);
-      }
+    final game = fullEvent.game;
 
-      if (game.clock != null) {
-        _clock = ChessClock(
-          whiteTime: game.clock!.white,
-          blackTime: game.clock!.black,
-          emergencyThreshold: game.meta.clock?.emergency,
-          onEmergency: onClockEmergency,
-          onFlag: onFlag,
-        );
-        if (game.clock!.running) {
-          final pos = game.lastPosition;
-          if (pos.fullmoves > 1) {
-            _clock!.startSide(pos.turn);
-          }
+    // Play "dong" sound when this is a new game and we're playing it (not spectating)
+    final isMyGame = game.youAre != null;
+    final noMovePlayed = game.steps.length == 1;
+    if (isMyGame && noMovePlayed && game.status == GameStatus.started) {
+      ref.read(soundServiceProvider).play(Sound.dong);
+    }
+
+    if (game.clock != null) {
+      _clock = ChessClock(
+        whiteTime: game.clock!.white,
+        blackTime: game.clock!.black,
+        emergencyThreshold: game.meta.clock?.emergency,
+        onEmergency: onClockEmergency,
+        onFlag: onFlag,
+      );
+      if (game.clock!.running) {
+        final pos = game.lastPosition;
+        if (pos.fullmoves > 1) {
+          _clock!.startSide(pos.turn);
         }
       }
+    }
 
-      if (game.finished) {
-        _onFinishedGameLoad(fullEvent.game);
-      }
+    if (game.finished) {
+      _onFinishedGameLoad(fullEvent.game);
+    }
 
-      return GameState(
-        gameFullId: gameFullId,
-        game: game,
-        stepCursor: game.steps.length - 1,
-        liveClock: _clock != null ? (white: _clock!.whiteTime, black: _clock!.blackTime) : null,
-      );
-    });
+    _initialZenPref = game.prefs?.zenMode;
+
+    return GameState(
+      gameFullId: gameFullId,
+      game: game,
+      stepCursor: game.steps.length - 1,
+      liveClock: _clock != null ? (white: _clock!.whiteTime, black: _clock!.blackTime) : null,
+      chatState: await initChat(game.chat),
+      chatDisabledViaPrefs: ref.read(gamePreferencesProvider).enableChat == false,
+    );
   }
 
+  @override
   void onForegroundLost() {
     if (_socketClient.isDisposed) {
       assert(false, 'socket client should not be disposed here');
@@ -158,6 +182,7 @@ class GameController extends AsyncNotifier<GameState> {
     }
   }
 
+  @override
   void onFocusRegained() {
     if (_socketClient.isDisposed) {
       assert(false, 'socket client should not be disposed here');
@@ -179,13 +204,8 @@ class GameController extends AsyncNotifier<GameState> {
   void userMove(Move move, {bool? viaDragAndDrop, bool? isPremove}) {
     final curState = state.requireValue;
 
-    if (move case NormalMove() when isPromotionPawnMove(curState.game.lastPosition, move)) {
-      state = AsyncValue.data(curState.copyWith(promotionMove: move));
-      return;
-    }
-
     if (curState.shouldConfirmMove && isPremove != true) {
-      state = AsyncValue.data(curState.copyWith(moveToConfirm: move, promotionMove: null));
+      state = AsyncValue.data(curState.copyWith(moveToConfirm: move));
       return;
     }
 
@@ -214,8 +234,6 @@ class GameController extends AsyncNotifier<GameState> {
       curState.copyWith(
         game: curState.game.copyWith(steps: curState.game.steps.add(newStep)),
         stepCursor: curState.stepCursor + 1,
-        promotionMove: null,
-        premove: null,
       ),
     );
 
@@ -228,21 +246,6 @@ class GameController extends AsyncNotifier<GameState> {
       // we want to send client lag only at the beginning of the game when the clock is not running yet
       withLag: curState.game.clock != null && curState.activeClockSide == null,
     );
-  }
-
-  void onPromotionSelection(Role? role) {
-    final curState = state.requireValue;
-    if (role == null) {
-      state = AsyncValue.data(curState.copyWith(promotionMove: null));
-      return;
-    }
-    if (curState.promotionMove == null) {
-      assert(false, 'promotionMove must not be null on promotion select');
-      return;
-    }
-
-    final move = curState.promotionMove!.withPromotion(role);
-    userMove(move, viaDragAndDrop: true);
   }
 
   /// Called if the player cancels the move when confirm move preference is enabled
@@ -310,12 +313,6 @@ class GameController extends AsyncNotifier<GameState> {
     );
   }
 
-  /// Set or unset a premove.
-  void setPremove(Move? move) {
-    final curState = state.requireValue;
-    state = AsyncValue.data(curState.copyWith(premove: move));
-  }
-
   void cursorAt(int cursor) {
     if (state.hasValue) {
       final currentCursor = state.requireValue.stepCursor;
@@ -323,7 +320,7 @@ class GameController extends AsyncNotifier<GameState> {
         return;
       }
       final (newState, _) = _tryCancelMoveConfirmation(state.requireValue);
-      state = AsyncValue.data(newState.copyWith(stepCursor: cursor, premove: null));
+      state = AsyncValue.data(newState.copyWith(stepCursor: cursor));
       final san = state.requireValue.game.stepAt(cursor).sanMove?.san;
       if (san != null) {
         _playReplayMoveSound(san);
@@ -336,13 +333,7 @@ class GameController extends AsyncNotifier<GameState> {
     if (state.hasValue) {
       final curState = state.requireValue;
       if (curState.stepCursor < curState.game.steps.length - 1) {
-        state = AsyncValue.data(
-          curState.copyWith(
-            stepCursor: curState.stepCursor + 1,
-            premove: null,
-            promotionMove: null,
-          ),
-        );
+        state = AsyncValue.data(curState.copyWith(stepCursor: curState.stepCursor + 1));
         final san = curState.game.stepAt(curState.stepCursor + 1).sanMove?.san;
         if (san != null) {
           _playReplayMoveSound(san);
@@ -357,11 +348,7 @@ class GameController extends AsyncNotifier<GameState> {
       if (curState.stepCursor > 0) {
         final (newState, didCancel) = _tryCancelMoveConfirmation(curState);
         state = AsyncValue.data(
-          newState.copyWith(
-            stepCursor: didCancel ? newState.stepCursor : newState.stepCursor - 1,
-            premove: null,
-            promotionMove: null,
-          ),
+          newState.copyWith(stepCursor: didCancel ? newState.stepCursor : newState.stepCursor - 1),
         );
         final san = state.requireValue.game.stepAt(state.requireValue.stepCursor).sanMove?.san;
         if (san != null) {
@@ -377,6 +364,9 @@ class GameController extends AsyncNotifier<GameState> {
       await ref
           .read(accountServiceProvider)
           .setGameBookmark(gameFullId.gameId, bookmark: toggledBookmark);
+
+      if (!ref.mounted) return;
+
       state = AsyncValue.data(
         state.requireValue.copyWith(
           game: state.requireValue.game.copyWith(bookmarked: toggledBookmark),
@@ -394,9 +384,15 @@ class GameController extends AsyncNotifier<GameState> {
 
   void toggleZenMode() {
     final curState = state.requireValue;
+    final curZen = curState.game.prefs?.zenMode ?? Zen.no;
+    final initial = _initialZenPref;
+    final newZen = curZen == Zen.no
+        ? (initial != null && initial != Zen.no ? initial : Zen.gameAuto)
+        : Zen.no;
     state = AsyncValue.data(
-      curState.copyWith(zenModeGameSetting: !(curState.zenModeGameSetting ?? false)),
+      curState.copyWith.game(prefs: curState.game.prefs?.copyWith(zenMode: newZen)),
     );
+    ref.read(accountPreferencesProvider.notifier).setZen(newZen);
   }
 
   void toggleAutoQueen() {
@@ -407,6 +403,7 @@ class GameController extends AsyncNotifier<GameState> {
   }
 
   void onToggleChat(bool isChatEnabled) {
+    state = AsyncValue.data(state.requireValue.copyWith(chatDisabledViaPrefs: !isChatEnabled));
     if (isChatEnabled) {
       // if chat is enabled, we need to resync the game data to get the chat messages
       _reloadGame();
@@ -474,7 +471,6 @@ class GameController extends AsyncNotifier<GameState> {
 
   void acceptTakeback() {
     _socketClient.send('takeback-yes', null);
-    setPremove(null);
   }
 
   void cancelOrDeclineTakeback() {
@@ -585,7 +581,18 @@ class GameController extends AsyncNotifier<GameState> {
     _socketClient.connect();
   }
 
-  void _handleSocketEvent(SocketEvent event, [bool hasRetried = false]) {
+  @protected
+  @override
+  void updateChatState(ChatState newState) {
+    state = AsyncValue.data(state.requireValue.copyWith(chatState: newState));
+  }
+
+  @override
+  void handleSocketEvent(SocketEvent event, [bool hasRetried = false]) {
+    super.handleSocketEvent(event);
+    // If we are unmounting ignore incoming socket traffic
+    if (!ref.mounted) return;
+
     if (!state.hasValue) {
       if (event.version != null) {
         _logger.warning('received $event while game state not yet available');
@@ -606,23 +613,32 @@ class GameController extends AsyncNotifier<GameState> {
         final fullEvent = GameFullEvent.fromJson(event.data as Map<String, dynamic>);
         _socketClient.version = fullEvent.socketEventVersion;
 
+        // The resync replaces our steps with the server's authoritative ones, so
+        // any optimistically-applied move is now either confirmed or gone: clear
+        // the pending-move marker.
+        _transientMoveTimer?.cancel();
+
         final curState = state.requireValue;
 
         final newGame = fullEvent.game;
         final isOpponentOnGame =
             newGame.playerOf(newGame.youAre?.opposite ?? Side.white).onGame ?? false;
-        final hasSameNumberOfSteps = newGame.steps.length == curState.game.steps.length;
+
+        // A pending (unconfirmed) move was selected for the previous live
+        // position. If the server resync changed that position (e.g. a takeback),
+        // the move could be applied to a different position and render an illegal
+        // one, so it must be dropped.
+        final positionChanged = newGame.lastPosition.fen != curState.game.lastPosition.fen;
 
         state = AsyncValue.data(
           state.requireValue.copyWith(
             game: newGame,
-            stepCursor: hasSameNumberOfSteps ? curState.stepCursor : newGame.steps.length - 1,
-            premove: hasSameNumberOfSteps ? curState.premove : null,
-            promotionMove: hasSameNumberOfSteps ? curState.promotionMove : null,
-            moveToConfirm: hasSameNumberOfSteps ? curState.moveToConfirm : null,
-            opponentLeftCountdown: isOpponentOnGame
-                ? null
-                : state.requireValue.opponentLeftCountdown,
+            // Clamp in case a takeback happened to prevent problems with cursorForward()
+            stepCursor: curState.isReplaying
+                ? curState.stepCursor.clamp(0, newGame.steps.length - 1)
+                : newGame.steps.length - 1,
+            moveToConfirm: curState.isReplaying || positionChanged ? null : curState.moveToConfirm,
+            opponentLeftCountdown: isOpponentOnGame ? null : curState.opponentLeftCountdown,
           ),
         );
 
@@ -648,7 +664,7 @@ class GameController extends AsyncNotifier<GameState> {
             return;
           }
           final reloadEvent = SocketEvent(topic: data['t'] as String, data: data['d']);
-          _handleSocketEvent(reloadEvent);
+          handleSocketEvent(reloadEvent);
         } else {
           _reloadGame();
         }
@@ -692,10 +708,8 @@ class GameController extends AsyncNotifier<GameState> {
 
           newState = newState.copyWith(
             game: newState.game.copyWith(steps: newState.game.steps.add(newStep)),
-            // Clear any pending move confirmation or promotion since the position
-            // has changed and these moves are no longer valid.
+            // Clear any pending move confirmation since the position has changed.
             moveToConfirm: null,
-            promotionMove: null,
           );
 
           if (!curState.isReplaying) {
@@ -755,26 +769,31 @@ class GameController extends AsyncNotifier<GameState> {
           ref.read(ongoingGamesProvider.notifier).updateGame(gameFullId, newState.game);
         }
 
-        if (!curState.isReplaying &&
-            playedSide == curState.game.youAre?.opposite &&
-            curState.premove != null) {
-          scheduleMicrotask(() {
-            final postMovePremove = state.value?.premove;
-            final postMovePosition = state.value?.game.lastPosition;
-            if (postMovePremove != null && postMovePosition?.isLegal(postMovePremove) == true) {
-              userMove(postMovePremove, isPremove: true);
-            } else if (postMovePremove != null) {
-              newState = newState.copyWith(premove: null);
-            }
-          });
-        }
-
         state = AsyncValue.data(newState);
 
       // End game event
       case 'endData':
         final endData = GameEndEvent.fromJson(event.data as Map<String, dynamic>);
-        final curState = state.requireValue;
+
+        // A move (typically an auto-fired premove) may have been applied
+        // optimistically to the board but never confirmed by the server because
+        // the game ended first — e.g. the player flagged, so the premove was
+        // rejected. The transient move timer is still active in that case. Roll
+        // the unconfirmed move back so the final position (and the result text
+        // derived from it) matches the server.
+        // See https://github.com/lichess-org/mobile/issues/2130.
+        GameState curState = state.requireValue;
+        if (_transientMoveTimer?.isActive == true && curState.game.steps.length > 1) {
+          final confirmedSteps = curState.game.steps.removeLast();
+          curState = curState.copyWith(
+            game: curState.game.copyWith(steps: confirmedSteps),
+            stepCursor: curState.stepCursor.clamp(0, confirmedSteps.length - 1),
+            moveToConfirm: null,
+          );
+          state = AsyncValue.data(curState);
+        }
+        _transientMoveTimer?.cancel();
+
         GameState newState = curState.copyWith(
           game: curState.game.copyWith(
             status: endData.status,
@@ -783,7 +802,6 @@ class GameController extends AsyncNotifier<GameState> {
             white: curState.game.white.copyWith(ratingDiff: endData.ratingDiff?.white),
             black: curState.game.black.copyWith(ratingDiff: endData.ratingDiff?.black),
           ),
-          premove: null,
         );
 
         if (endData.clock != null) {
@@ -800,6 +818,7 @@ class GameController extends AsyncNotifier<GameState> {
 
         if (curState.game.lastPosition.fullmoves > 1) {
           Timer(const Duration(milliseconds: 500), () {
+            if (!ref.mounted) return;
             ref.read(soundServiceProvider).play(Sound.dong);
           });
         }
@@ -814,6 +833,7 @@ class GameController extends AsyncNotifier<GameState> {
         if (!newState.game.aborted) {
           _getPostGameData()
               .then((data) {
+                if (!ref.mounted) return;
                 final game = _mergePostGameData(state.requireValue.game, data);
                 state = AsyncValue.data(state.requireValue.copyWith(game: game));
                 _storeGame(game);
@@ -1014,6 +1034,8 @@ class GameController extends AsyncNotifier<GameState> {
 
     await _storeGame(gameWithPostData);
 
+    if (!ref.mounted) return;
+
     state = AsyncValue.data(state.requireValue.copyWith(game: gameWithPostData));
   }
 
@@ -1057,7 +1079,7 @@ class GameController extends AsyncNotifier<GameState> {
 typedef LiveGameClock = ({ValueListenable<Duration> white, ValueListenable<Duration> black});
 
 @freezed
-sealed class GameState with _$GameState {
+sealed class GameState with _$GameState, ChatMixinState {
   const GameState._();
 
   const factory GameState({
@@ -1070,26 +1092,21 @@ sealed class GameState with _$GameState {
     int? lastDrawOfferAtPly,
     (Duration, DateTime)? opponentLeftCountdown,
 
-    /// Promotion waiting to be selected (only if auto queen is disabled)
-    NormalMove? promotionMove,
-
-    /// Premove waiting to be played
-    Move? premove,
-
     /// Game only setting to override the account preference
     bool? moveConfirmSettingOverride,
 
     /// Game only setting to override the account preference
     bool? autoQueenSettingOverride,
 
-    /// Zen mode setting if account preference is set to [Zen.gameAuto]
-    bool? zenModeGameSetting,
-
     /// Set if confirm move preference is enabled and player played a move
     Move? moveToConfirm,
 
     /// Game full id used to redirect to the new game of the rematch
     GameFullId? redirectGameId,
+
+    ChatState? chatState,
+
+    required bool chatDisabledViaPrefs,
   }) = _GameState;
 
   /// The [Position] at the current cursor.
@@ -1101,12 +1118,22 @@ sealed class GameState with _$GameState {
     return game.positionAt(stepCursor);
   }
 
-  /// Whether the zen mode is active
+  /// Whether the zen mode is active.
+  ///
+  /// For finished games, only [Zen.yes] keeps zen mode active.
+  /// For playable games, zen is active when account pref is [Zen.yes] or [Zen.gameAuto].
   bool get isZenModeActive => game.playable ? isZenModeEnabled : game.prefs?.zenMode == Zen.yes;
 
-  /// Whether zen mode is enabled by account preference or local game setting
-  bool get isZenModeEnabled =>
-      zenModeGameSetting ?? game.prefs?.zenMode == Zen.yes || game.prefs?.zenMode == Zen.gameAuto;
+  /// Whether zen mode is enabled by account preference
+  bool get isZenModeEnabled {
+    final prefs = game.prefs;
+    if (prefs == null) return false;
+    return switch (prefs.zenMode) {
+      Zen.no => false,
+      Zen.yes => true,
+      Zen.gameAuto => true,
+    };
+  }
 
   bool get canPremove => game.meta.speed != Speed.correspondence;
   bool get canAutoQueen => autoQueenSettingOverride ?? (game.prefs?.autoQueen == AutoQueen.always);
@@ -1194,10 +1221,14 @@ sealed class GameState with _$GameState {
           isComputerAnalysisAllowed: false,
         );
 
-  GameChatOptions? get chatOptions => isZenModeActive || game.meta.tournament != null
+  GameChatOptions? get chatOptions =>
+      chatDisabledViaPrefs || isZenModeActive || game.meta.tournament != null
       ? null
       : GameChatOptions(
           id: gameFullId,
           opponent: game.youAre != null ? game.playerOf(game.youAre!.opposite).user : null,
         );
+
+  @override
+  bool get chatEnabled => chatOptions != null;
 }

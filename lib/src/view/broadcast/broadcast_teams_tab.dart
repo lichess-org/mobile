@@ -11,9 +11,12 @@ import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/theme.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_team_screen.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_team_standings_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -33,11 +36,13 @@ class BroadcastTeamsTab extends ConsumerWidget {
     required this.roundId,
     required this.tournamentId,
     required this.tournamentSlug,
+    this.showTeamScores = false,
   });
 
   final BroadcastRoundId roundId;
   final BroadcastTournamentId tournamentId;
   final String tournamentSlug;
+  final bool showTeamScores;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -49,6 +54,7 @@ class BroadcastTeamsTab extends ConsumerWidget {
         roundId,
         tournamentId,
         tournamentSlug,
+        showTeamScores,
       ),
       AsyncError(:final error) => Center(child: Text('Cannot load teams data: $error')),
       _ => const Center(child: CircularProgressIndicator.adaptive()),
@@ -57,12 +63,19 @@ class BroadcastTeamsTab extends ConsumerWidget {
 }
 
 class BroadcastTeamsList extends ConsumerWidget {
-  const BroadcastTeamsList(this.teamMatches, this.roundId, this.tournamentId, this.tournamentSlug);
+  const BroadcastTeamsList(
+    this.teamMatches,
+    this.roundId,
+    this.tournamentId,
+    this.tournamentSlug,
+    this.showTeamScores,
+  );
 
   final IList<BroadcastTeamMatch> teamMatches;
   final BroadcastRoundId roundId;
   final BroadcastTournamentId tournamentId;
   final String tournamentSlug;
+  final bool showTeamScores;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -72,26 +85,79 @@ class BroadcastTeamsList extends ConsumerWidget {
     );
 
     return switch (round) {
-      AsyncData(:final value) => ListView.builder(
-        itemCount: teamMatches.length,
-        itemBuilder: (context, index) {
-          final match = teamMatches[index];
-          return _TeamMatchCard(
-            match: match,
-            games: value.games,
-            tournamentId: tournamentId,
-            roundId: roundId,
-            tournamentSlug: tournamentSlug,
-            roundSlug: value.round.slug,
-            title: value.round.name,
-            showEvaluationGauge: showEvaluationGauges,
-            customScoring: value.round.customScoring,
-          );
-        },
+      AsyncData(:final value) => CustomScrollView(
+        slivers: [
+          if (showTeamScores)
+            SliverSafeArea(
+              bottom: false,
+              sliver: SliverToBoxAdapter(child: _TeamStandingsButton(tournamentId: tournamentId)),
+            ),
+          SliverSafeArea(
+            top: !showTeamScores,
+            sliver: SliverList(
+              delegate: SliverChildBuilderDelegate((context, index) {
+                final match = teamMatches[index];
+                return _TeamMatchCard(
+                  match: match,
+                  games: value.games,
+                  tournamentId: tournamentId,
+                  roundId: roundId,
+                  tournamentSlug: tournamentSlug,
+                  roundSlug: value.round.slug,
+                  title: value.round.name,
+                  showEvaluationGauge: showEvaluationGauges,
+                  customScoring: value.round.customScoring,
+                  showTeamScores: showTeamScores,
+                );
+              }, childCount: teamMatches.length),
+            ),
+          ),
+        ],
       ),
       AsyncError(:final error) => Center(child: Text('Cannot load games data: $error')),
       _ => const Center(child: CircularProgressIndicator.adaptive()),
     };
+  }
+}
+
+class _TeamStandingsButton extends StatelessWidget {
+  const _TeamStandingsButton({required this.tournamentId});
+
+  final BroadcastTournamentId tournamentId;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Padding(
+      padding: Styles.horizontalBodyPadding.copyWith(top: 12.0, bottom: 8.0),
+      child: OutlinedButton(
+        style: OutlinedButton.styleFrom(
+          padding: const EdgeInsets.all(16.0),
+          shape: RoundedRectangleBorder(borderRadius: .circular(8.0)),
+          side: BorderSide(color: colorScheme.primary, width: 0.8),
+        ),
+        onPressed: () {
+          Navigator.of(context).push(BroadcastTeamStandingsScreen.buildRoute(tournamentId));
+        },
+        child: Row(
+          mainAxisAlignment: .spaceBetween,
+          children: [
+            Row(
+              children: [
+                Icon(Icons.leaderboard, color: colorScheme.secondary),
+                const SizedBox(width: 12),
+                Text(
+                  context.l10n.broadcastTeamResults,
+                  style: TextStyle(fontWeight: .bold, color: colorScheme.secondary, fontSize: 16),
+                ),
+              ],
+            ),
+            Icon(Icons.chevron_right, color: colorScheme.secondary),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -106,6 +172,7 @@ class _TeamMatchCard extends StatelessWidget {
     required this.title,
     required this.showEvaluationGauge,
     required this.customScoring,
+    required this.showTeamScores,
   });
 
   final BroadcastTeamMatch match;
@@ -117,6 +184,7 @@ class _TeamMatchCard extends StatelessWidget {
   final String title;
   final bool showEvaluationGauge;
   final BroadcastCustomScoring? customScoring;
+  final bool showTeamScores;
 
   bool get matchFinished => games.everyEntry((e) => e.value.isOver);
   BroadcastResult? get matchStatus => matchFinished
@@ -130,7 +198,8 @@ class _TeamMatchCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+      clipBehavior: .hardEdge,
       elevation: 2,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -142,11 +211,20 @@ class _TeamMatchCard extends StatelessWidget {
               child: Row(
                 children: [
                   Expanded(
-                    child: Text(
-                      match.team1.name,
-                      maxLines: _kTeamNameMaxLines,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    child: GestureDetector(
+                      onTap: () {
+                        if (showTeamScores) {
+                          Navigator.of(
+                            context,
+                          ).push(BroadcastTeamScreen.buildRoute(tournamentId, match.team1.name));
+                        }
+                      },
+                      child: Text(
+                        match.team1.name,
+                        maxLines: _kTeamNameMaxLines,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
                   Container(
@@ -174,11 +252,20 @@ class _TeamMatchCard extends StatelessWidget {
                     ),
                   ),
                   Expanded(
-                    child: Text(
-                      match.team2.name,
-                      maxLines: _kTeamNameMaxLines,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    child: GestureDetector(
+                      onTap: () {
+                        if (showTeamScores) {
+                          Navigator.of(
+                            context,
+                          ).push(BroadcastTeamScreen.buildRoute(tournamentId, match.team2.name));
+                        }
+                      },
+                      child: Text(
+                        match.team2.name,
+                        maxLines: _kTeamNameMaxLines,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
                 ],

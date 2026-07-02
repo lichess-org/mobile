@@ -18,6 +18,7 @@ import 'package:lichess_mobile/src/view/analysis/game_analysis_board.dart';
 import 'package:lichess_mobile/src/view/analysis/retro_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
+import 'package:lichess_mobile/src/widgets/board.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 
 /// An abstract widget that provides the common interface for three types of analysis boards:
@@ -51,24 +52,121 @@ abstract class AnalysisBoardState<
 
   void onUserMove(Move move);
 
-  void onPromotionSelection(Role? role);
+  /// Reads the current analysis state without subscribing.
+  ///
+  /// Called once in [initState] to eagerly create the board controller.
+  /// Implement as: `ref.read(yourControllerProvider(...)).value`
+  AnalysisState? readCurrentState();
 
-  /// For the study board to set a different fen if the position is `null`.
-  String get fen => analysisState.currentPosition!.fen;
+  /// Sets up a subscription to analysis state changes.
+  ///
+  /// Called in [initState] to drive controller position updates.
+  /// Implement as: `ref.listenManual(yourControllerProvider(...).select((v) => v.value), listener)`
+  /// The subscription is managed by Riverpod and cancelled automatically on dispose.
+  void listenToStateChanges(void Function(AnalysisState? prev, AnalysisState? next) listener);
+
+  /// Computes the board FEN string from [state].
+  ///
+  /// Each board defines its own FEN semantics and is responsible for handling
+  /// (or asserting the absence of) a null [CommonAnalysisState.currentPosition].
+  String computeFen(AnalysisState state);
+
+  String get fen => computeFen(analysisState);
+
+  /// Whether the board should be interactive for [state].
+  ///
+  /// Override to conditionally disable user interaction.
+  bool computeInteractive(AnalysisState state) => true;
+
+  /// Whether the board should be interactive for the current [analysisState].
+  bool get interactive => computeInteractive(analysisState);
 
   /// E.g. for the study board to add pgn shapes and variations arrows.
   ISet<Shape> get extraShapes => ISet();
 
-  /// Can be used to disable interaction with the board in certain states
-  bool get interactive => true;
-
   /// Filters to identify the correct engine evaluation provider instance.
   EngineEvaluationFilters get engineEvaluationFilters;
 
-  /// Set of shapes drawn by the user on the board (arrows, circle).
-  ISet<Shape> userShapes = ISet();
+  ChessboardController? _controller;
 
-  ISet<Shape> _bestMoveShapes(PieceAssets pieceAssets) {
+  /// Clears all user-drawn shapes from the board.
+  void clearDrawnShapes() => _controller?.clearDrawnShapes();
+
+  @override
+  void initState() {
+    super.initState();
+    final initialState = readCurrentState();
+    if (initialState != null) {
+      _controller = _createController(initialState, ref.read(boardPreferencesProvider));
+    }
+    listenToStateChanges(_onAnalysisStateChanged);
+    ref.listenManual<BoardPrefs>(boardPreferencesProvider, _onBoardPrefsChanged);
+  }
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
+  }
+
+  GameData? _buildGameData(AnalysisState state, BoardPrefs boardPrefs) {
+    final position = state.currentPosition;
+    if (position == null) return null;
+    final playerSide = !computeInteractive(state) || position.isGameOver
+        ? PlayerSide.none
+        : position.turn == Side.white
+        ? PlayerSide.white
+        : PlayerSide.black;
+    return buildGameData(
+      fen: computeFen(state),
+      variant: state.variant,
+      position: position,
+      playerSide: playerSide,
+      lastMove: state.lastMove,
+      castlingMethod: boardPrefs.castlingMethod,
+      boardHighlights: boardPrefs.boardHighlights,
+    );
+  }
+
+  ChessboardController? _createController(AnalysisState state, BoardPrefs boardPrefs) {
+    final gameData = _buildGameData(state, boardPrefs);
+    if (gameData == null) return null;
+    return ChessboardController(game: gameData);
+  }
+
+  void _onAnalysisStateChanged(AnalysisState? prev, AnalysisState? next) {
+    if (!mounted || next == null) return;
+    final boardPrefs = ref.read(boardPreferencesProvider);
+    final controller = _controller;
+    if (controller == null) {
+      final ctrl = _createController(next, boardPrefs);
+      if (ctrl != null) setState(() => _controller = ctrl);
+      return;
+    }
+    final newFen = computeFen(next);
+    final gameData = _buildGameData(next, boardPrefs);
+    final prevFen = prev != null ? computeFen(prev) : null;
+    if (prevFen != newFen) {
+      if (gameData != null) controller.updatePosition(gameData, resetPremove: true);
+      final explosionSquares = next.explosionSquares;
+      if (explosionSquares != null) {
+        controller.triggerExplosion(explosionSquares.toSet());
+      }
+    } else if (gameData != null) {
+      controller.updatePosition(gameData);
+    }
+  }
+
+  void _onBoardPrefsChanged(BoardPrefs? prev, BoardPrefs next) {
+    final controller = _controller;
+    if (controller == null) return;
+    final state = readCurrentState();
+    if (state == null) return;
+    final gameData = _buildGameData(state, next);
+    if (gameData != null) controller.updatePosition(gameData);
+  }
+
+  Set<Shape> _bestMoveShapes(PieceAssets pieceAssets) {
     final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
     final currentPosition = analysisState.currentPosition;
 
@@ -78,7 +176,7 @@ abstract class AnalysisBoardState<
         analysisPrefs.showBestMoveArrow;
 
     if (!showBestMoveArrow || currentPosition == null) {
-      return ISet();
+      return {};
     }
 
     final localEval = ref.watch(
@@ -90,13 +188,13 @@ abstract class AnalysisBoardState<
         : pickBestClientEval(localEval: localEval, savedEval: analysisState.currentNode.eval);
 
     if (eval == null) {
-      return ISet();
+      return {};
     }
 
     if (eval.position.fen != currentPosition.fen) {
       // Eval is out of sync, this usually happens after making a move on the board.
       // While waiting for the updated eval we don't want to show the best moves from the previous position.
-      return ISet();
+      return {};
     }
 
     final bestMoveShapes = computeBestMoveShapes(
@@ -118,10 +216,10 @@ abstract class AnalysisBoardState<
         bestMoveColor: LichessColors.red.withValues(alpha: 0.6),
         nextBestMovesColor: LichessColors.red.withValues(alpha: 0.4),
       );
-      return {...threatMoveShapes, if (bestMoveShapes.isNotEmpty) bestMoveShapes.first}.toISet();
+      return {...threatMoveShapes, if (bestMoveShapes.isNotEmpty) bestMoveShapes.first};
     }
 
-    return bestMoveShapes;
+    return bestMoveShapes.toSet();
   }
 
   @override
@@ -129,65 +227,54 @@ abstract class AnalysisBoardState<
     final boardPrefs = ref.watch(boardPreferencesProvider);
 
     final currentNode = analysisState.currentNode;
-    final currentPosition = analysisState.currentPosition;
-
     final annotation = showAnnotations ? makeAnnotation(currentNode.nags) : null;
     final sanMove = currentNode.sanMove;
 
-    return Chessboard(
+    final externalShapes = {..._bestMoveShapes(boardPrefs.pieceSet.assets), ...extraShapes.unlock};
+    final boardAnnotations = sanMove != null && annotation != null
+        ? (sanMove.isCastles && altCastles.containsKey(sanMove.move.uci)
+              ? {Move.parse(altCastles[sanMove.move.uci]!)!.to: annotation}
+              : {sanMove.move.to: annotation})
+        : const <Square, Annotation>{};
+
+    // The controller is normally created in initState. If it is somehow absent,
+    // fall back to a non-interactive board rather than crashing.
+    final ctrl = _controller;
+    if (ctrl == null) {
+      return StaticChessboard(
+        size: widget.boardSize,
+        orientation: analysisState.pov,
+        fen: fen,
+        lastMove: analysisState.lastMove,
+        shapes: externalShapes,
+        settings: StaticChessboardSettings.fromBoardSettings(
+          boardPrefs
+              .toBoardSettings(analysisState.variant)
+              .copyWith(
+                borderRadius: widget.boardRadius,
+                boxShadow: widget.boardRadius != null ? boardShadows : const <BoxShadow>[],
+              ),
+        ),
+      );
+    }
+
+    return BoardWidget(
       size: widget.boardSize,
       orientation: analysisState.pov,
-      fen: fen,
-      lastMove: analysisState.lastMove,
-      explosionSquares: analysisState.explosionSquares,
-      game: (interactive && currentPosition != null)
-          ? boardPrefs.toGameData(
-              variant: analysisState.variant,
-              position: currentPosition,
-              playerSide: analysisState.currentPosition!.isGameOver
-                  ? PlayerSide.none
-                  : analysisState.currentPosition!.turn == Side.white
-                  ? PlayerSide.white
-                  : PlayerSide.black,
-              promotionMove: analysisState.promotionMove,
-              onMove: (move, {viaDragAndDrop}) => onUserMove(move),
-              onPromotionSelection: onPromotionSelection,
-            )
-          : null,
-      shapes: userShapes.union(_bestMoveShapes(boardPrefs.pieceSet.assets)).union(extraShapes),
-      annotations: sanMove != null && annotation != null
-          ? sanMove.isCastles && altCastles.containsKey(sanMove.move.uci)
-                ? IMap({Move.parse(altCastles[sanMove.move.uci]!)!.to: annotation})
-                : IMap({sanMove.move.to: annotation})
-          : null,
-      settings: boardPrefs.toBoardSettings().copyWith(
-        borderRadius: widget.boardRadius,
-        boxShadow: widget.boardRadius != null ? boardShadows : const <BoxShadow>[],
-        drawShape: DrawShapeOptions(
-          enable: boardPrefs.enableShapeDrawings,
-          onCompleteShape: _onCompleteShape,
-          onClearShapes: _onClearShapes,
-          newShapeColor: boardPrefs.shapeColor.color,
-        ),
-      ),
+      controller: ctrl,
+      onMove: (move, {viaDragAndDrop}) => onUserMove(move),
+      shapes: externalShapes,
+      settings: boardPrefs
+          .toBoardSettings(analysisState.variant)
+          .copyWith(
+            borderRadius: widget.boardRadius,
+            boxShadow: widget.boardRadius != null ? boardShadows : const <BoxShadow>[],
+            drawShape: DrawShapeOptions(
+              enable: boardPrefs.enableShapeDrawings,
+              newShapeColor: boardPrefs.shapeColor.color,
+            ),
+          ),
+      annotations: boardAnnotations,
     );
-  }
-
-  void _onCompleteShape(Shape shape) {
-    if (userShapes.any((element) => element == shape)) {
-      setState(() {
-        userShapes = userShapes.remove(shape);
-      });
-    } else {
-      setState(() {
-        userShapes = userShapes.add(shape);
-      });
-    }
-  }
-
-  void _onClearShapes() {
-    setState(() {
-      userShapes = ISet();
-    });
   }
 }

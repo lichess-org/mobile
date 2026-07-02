@@ -7,7 +7,6 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -26,7 +25,7 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_share_menu.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/text_badge.dart';
 
-const kDefaultBroadcastImage = AssetImage('assets/images/broadcast_image.png');
+const kDefaultBroadcastImage = AssetImage('assets/images/broadcast_image.webp');
 const kBroadcastCardItemContentPadding = EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0);
 const kDefaultCardOpacity = 0.9;
 
@@ -241,7 +240,7 @@ class _BroadcastCarouselItemState extends ConsumerState<BroadcastCarouselItem> {
         _cardColors?.primaryContainer ??
         Theme.of(context).cardTheme.color ??
         Theme.of(context).colorScheme.surfaceContainerLow;
-    final screenWidth = MediaQuery.sizeOf(context).width;
+    final screenWidth = MediaQuery.widthOf(context);
     final double width = screenWidth - 16.0;
     final paddingWidth = kBroadcastCarouselItemPadding.horizontal;
     final flexWeights = widget.flexWeights;
@@ -305,8 +304,7 @@ final Map<String, _CardColors?> _colorsCache = {};
 final _dateFormat = DateFormat.MMMd().add_jm();
 
 class _BroadcastCardContent extends StatelessWidget {
-  const _BroadcastCardContent({required this.broadcast, required _CardColors? cardColors})
-    : _cardColors = cardColors;
+  const _BroadcastCardContent({required this.broadcast, required this._cardColors});
 
   final Broadcast broadcast;
   final _CardColors? _cardColors;
@@ -493,23 +491,4 @@ Future<_CardColors?> _computeImageColors(
     return cardColors;
   }
   return null;
-}
-
-/// Pre-cache images and extract colors for broadcasts.
-Future<void> preCacheBroadcastImages(
-  BuildContext context, {
-  required Iterable<Broadcast> broadcasts,
-  required ImageColorWorker worker,
-  required http.Client httpClient,
-}) async {
-  for (final broadcast in broadcasts.take(5)) {
-    final imageUrl = broadcast.tour.imageUrl;
-    if (imageUrl != null) {
-      final provider = HttpNetworkImage(imageUrl, httpClient);
-      await precacheImage(provider, context);
-      final ui.Image scaledImage = await imageProviderToScaled(provider);
-      final imageBytes = await scaledImage.toByteData();
-      await _computeImageColors(worker, imageUrl, imageBytes!);
-    }
-  }
 }

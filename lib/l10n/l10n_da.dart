@@ -287,31 +287,64 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Eller importer en PGN-fil';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Godt træk, men der findes et bedre';
+
+  @override
+  String get variantStandard => 'Standard';
+
+  @override
   String get variantStandardTitle => 'Standardregler for skak (FIDE)';
+
+  @override
+  String get variantChess960 => 'Skak960';
 
   @override
   String get variantChess960Title => 'Startopstillingen af den bageste rækkes brikker er tilfældig.';
 
   @override
+  String get variantKingOfTheHill => 'Kongen i centrum';
+
+  @override
   String get variantKingOfTheHillTitle => 'Få din konge ind i centrum for at vinde partiet.';
+
+  @override
+  String get variantThreeCheck => 'Tre-skak';
 
   @override
   String get variantThreeCheckTitle => 'Sæt din modstander skak 3 gange for at vinde partiet.';
 
   @override
+  String get variantAntichess => 'Antiskak';
+
+  @override
   String get variantAntichessTitle => 'Du vinder partiet ved at miste alle dine brikker (eller blive pat).';
+
+  @override
+  String get variantAtomic => 'Eksplosion';
 
   @override
   String get variantAtomicTitle => 'Spring din modstanders konge i luften for at vinde.';
 
   @override
+  String get variantHorde => 'Horde';
+
+  @override
   String get variantHordeTitle => 'Den ene side har et stort antal bønder, den anden har en normal hær.';
+
+  @override
+  String get variantRacingKings => 'Kongeløb';
 
   @override
   String get variantRacingKingsTitle => 'Få din konge til den anden side af brættet for at vinde.';
 
   @override
+  String get variantCrazyhouse => 'Galehus';
+
+  @override
   String get variantCrazyhouseTitle => 'Erobrede brikker kan genindsættes på brættet i stedet for at foretage et træk.';
+
+  @override
+  String get variantFromPosition => 'Fra stilling';
 
   @override
   String get variantFromPositionTitle => 'Standard skak fra en brugerdefineret position';
@@ -914,6 +947,9 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get broadcastOfficialStandings => 'Officiel stilling';
+
+  @override
+  String get broadcastRegulations => 'Regulativer';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -2016,10 +2052,10 @@ class AppLocalizationsDa extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'En taktik som inkluderer En passant-reglen, hvor en bonde kan tage en modstanderbonde, der er flyttet forbi med dens første to-felts-træk.';
 
   @override
-  String get puzzleThemeEpauletteMate => 'Epaulette mate';
+  String get puzzleThemeEpauletteMate => 'Epaulet-mat';
 
   @override
-  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+  String get puzzleThemeEpauletteMateDescription => 'To tilstødende flugtfelter for en konge i skak er blokeret af andre brikker.';
 
   @override
   String get puzzleThemeExposedKing => 'Eksponeret konge';
@@ -2076,10 +2112,10 @@ class AppLocalizationsDa extends AppLocalizations {
   String get puzzleThemeMorphysMateDescription => 'Brug løberen til at sætte kongen skak, mens tårnet hjælper med at spærre den inde.';
 
   @override
-  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+  String get puzzleThemeSwallowstailMate => 'Svalehale-mat';
 
   @override
-  String get puzzleThemeSwallowstailMateDescription => 'A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.';
+  String get puzzleThemeSwallowstailMateDescription => 'Et skakmatmønster, der visuelt minder om en svalehale, svarende til en V-form.';
 
   @override
   String get puzzleThemeTriangleMate => 'Trekantmat';
@@ -2489,6 +2525,12 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get blackDidntMove => 'Sort trak ikke';
+
+  @override
+  String get whiteAborted => 'Hvid forlod partiet';
+
+  @override
+  String get blackAborted => 'Sort forlod partiet';
 
   @override
   String get requestAComputerAnalysis => 'Anmod om en computeranalyse';
@@ -4392,6 +4434,12 @@ class AppLocalizationsDa extends AppLocalizations {
   }
 
   @override
+  String get like => 'Synes godt om';
+
+  @override
+  String get liked => 'Syntes godt om';
+
+  @override
   String get quickPairing => 'Hurtig parring';
 
   @override
@@ -4787,6 +4835,9 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'forummets etikette';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Hold en god tone i forummet.';
 
   @override
   String get thisTopicIsArchived => 'Dette emne er arkiveret og kan ikke længere besvares.';
@@ -5840,9 +5891,6 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get studyLike => 'Synes godt om';
-
-  @override
-  String get studyUnlike => 'Synes ikke godt om';
 
   @override
   String get studyNewTag => 'Nyt tag';

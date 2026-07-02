@@ -8,7 +8,11 @@ import 'package:lichess_mobile/src/model/common/chess960.dart';
 
 part 'board_editor_controller.freezed.dart';
 
-typedef BoardEditorControllerParams = ({Variant initialVariant, String? initialFen});
+typedef BoardEditorControllerParams = ({
+  Variant initialVariant,
+  String? initialFen,
+  Side? initialOrientation,
+});
 
 /// A provider for [BoardEditorController].
 final boardEditorControllerProvider = NotifierProvider.autoDispose
@@ -32,7 +36,7 @@ class BoardEditorController extends Notifier<BoardEditorState> {
     final pieces = readFen(fen).lock;
 
     return BoardEditorState(
-      orientation: Side.white,
+      orientation: params?.initialOrientation ?? Side.white,
       sideToPlay: setup.turn,
       variant: variant,
       pieces: pieces,
@@ -106,6 +110,20 @@ class BoardEditorController extends Notifier<BoardEditorState> {
         fullmoves: setup.fullmoves,
       );
     }
+  }
+
+  void clearBoard() {
+    state = state.copyWith(
+      pieces: IMap(const {}), // No pieces
+      castlingRights: IMap(const {
+        CastlingRight.whiteKing: false,
+        CastlingRight.whiteQueen: false,
+        CastlingRight.blackKing: false,
+        CastlingRight.blackQueen: false,
+      }),
+      enPassantOptions: SquareSet.empty,
+      enPassantSquare: null,
+    );
   }
 
   IMap<CastlingRight, bool> _getCastlingRights(Variant variant, Setup setup) {
@@ -299,7 +317,7 @@ sealed class BoardEditorState with _$BoardEditorState {
     try {
       final position = Position.setupPosition(variant.rule, Setup.parseFen(fen));
       return PgnGame(
-        headers: {'FEN': position.fen, 'Variant': variant.label},
+        headers: {'FEN': position.fen, 'Variant': variant.pgnName},
         moves: PgnNode<PgnNodeData>(),
         comments: [],
       ).makePgn();

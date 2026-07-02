@@ -1,9 +1,9 @@
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -28,7 +28,10 @@ class ThemeSettingsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return const Scaffold(body: _Body());
+    return Scaffold(
+      appBar: AppBar(title: Text(context.l10n.mobileTheme), animateColor: true),
+      body: const _Body(),
+    );
   }
 }
 
@@ -50,8 +53,6 @@ class _BodyState extends ConsumerState<_Body> {
   late double brightness;
   late double hue;
 
-  double headerOpacity = 0;
-
   bool openAdjustColorSection = false;
 
   @override
@@ -60,31 +61,6 @@ class _BodyState extends ConsumerState<_Body> {
     final boardPrefs = ref.read(boardPreferencesProvider);
     brightness = boardPrefs.brightness;
     hue = boardPrefs.hue;
-  }
-
-  bool handleScrollNotification(ScrollNotification notification) {
-    if (notification is ScrollUpdateNotification && notification.depth == 0) {
-      final ScrollMetrics metrics = notification.metrics;
-      double scrollExtent = 0.0;
-      switch (metrics.axisDirection) {
-        case AxisDirection.up:
-          scrollExtent = metrics.extentAfter;
-        case AxisDirection.down:
-          scrollExtent = metrics.extentBefore;
-        case AxisDirection.right:
-        case AxisDirection.left:
-          break;
-      }
-
-      final opacity = scrollExtent > 0.0 ? 1.0 : 0.0;
-
-      if (opacity != headerOpacity) {
-        setState(() {
-          headerOpacity = opacity;
-        });
-      }
-    }
-    return false;
   }
 
   @override
@@ -97,31 +73,21 @@ class _BodyState extends ConsumerState<_Body> {
 
     final boardSize = isTabletOrLarger(context) ? 350.0 : 200.0;
 
-    return NotificationListener(
-      onNotification: handleScrollNotification,
-      child: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              backgroundColor: Theme.of(
-                context,
-              ).appBarTheme.backgroundColor?.withValues(alpha: headerOpacity),
-              pinned: true,
-              title: Text(context.l10n.mobileTheme),
-              bottom: PreferredSize(
-                preferredSize: Size.fromHeight(boardSize + 16.0),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: _BoardPreview(
-                    size: boardSize,
-                    boardPrefs: boardPrefs,
-                    brightness: brightness,
-                    hue: hue,
-                  ),
-                ),
-              ),
+    return SafeArea(
+      top: false,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: _BoardPreview(
+              size: boardSize,
+              boardPrefs: boardPrefs,
+              brightness: brightness,
+              hue: hue,
             ),
-            SliverList.list(
+          ),
+          Expanded(
+            child: ListView(
               children: [
                 ListSection(
                   hasLeading: true,
@@ -277,8 +243,8 @@ class _BodyState extends ConsumerState<_Body> {
                 ),
               ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -300,24 +266,28 @@ class _BoardPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Chessboard.fixed(
+      child: StaticChessboard(
         size: size,
         orientation: Side.white,
         lastMove: const NormalMove(from: Square.e2, to: Square.e4),
         fen: 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1',
-        shapes: <Shape>{
+        shapes: {
           Circle(color: boardPrefs.shapeColor.color, orig: Square.fromName('b8')),
           Arrow(
             color: boardPrefs.shapeColor.color,
             orig: Square.fromName('b8'),
             dest: Square.fromName('c6'),
           ),
-        }.lock,
-        settings: boardPrefs.toBoardSettings().copyWith(
-          brightness: brightness,
-          hue: hue,
-          borderRadius: Styles.boardBorderRadius,
-          boxShadow: boardShadows,
+        },
+        settings: StaticChessboardSettings.fromBoardSettings(
+          boardPrefs
+              .toBoardSettings(Variant.standard)
+              .copyWith(
+                brightness: brightness,
+                hue: hue,
+                borderRadius: Styles.boardBorderRadius,
+                boxShadow: boardShadows,
+              ),
         ),
       ),
     );

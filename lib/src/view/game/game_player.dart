@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -19,22 +20,23 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/material_diff.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
-
-export 'package:lichess_mobile/src/widgets/material_diff.dart';
 
 /// A widget to display player information above/below the chess board.
 class GamePlayer extends StatelessWidget {
   const GamePlayer({
     required this.game,
     required this.side,
+    this.socketUri,
     this.matchupScore,
     this.clock,
     this.materialDiff,
     this.materialDifferenceFormat,
     this.confirmMoveCallbacks,
+    this.opponentLeftCallbacks,
     this.timeToMove,
     this.shouldLinkToUserProfile = true,
     this.mePlaying = false,
@@ -47,12 +49,24 @@ class GamePlayer extends StatelessWidget {
   final BaseGame game;
   final Side side;
 
+  final Uri? socketUri;
+
   final Widget? clock;
   final MaterialDiffSide? materialDiff;
   final MaterialDifferenceFormat? materialDifferenceFormat;
 
   /// if confirm move preference is enabled, used to display confirmation buttons
   final ({VoidCallback confirm, VoidCallback cancel})? confirmMoveCallbacks;
+
+  /// When the opponent has left the game, used to display the claim-win countdown
+  /// and, once the opponent has been gone long enough, the claim choices.
+  final ({
+    (Duration, DateTime) countdown,
+    bool canClaim,
+    VoidCallback onClaimWin,
+    VoidCallback onClaimDraw,
+  })?
+  opponentLeftCallbacks;
 
   final double? matchupScore;
   final bool shouldLinkToUserProfile;
@@ -107,10 +121,21 @@ class GamePlayer extends StatelessWidget {
                   style: TextStyle(fontSize: playerFontSize, color: textShade(context, 0.7)),
                 ),
               if (player.user != null) ...[
-                ConnectedIcon(
-                  isConnected: player.onGame == true,
-                  shouldShowIsOnGameLabels: true,
-                  size: DefaultTextStyle.of(context).style.fontSize,
+                Consumer(
+                  builder: (context, ref, _) {
+                    bool isPlayerConnected = player.onGame == true;
+                    if (mePlaying && socketUri != null) {
+                      final ping = ref.watch(socketPingProvider(socketUri));
+                      if (ping.rating == 0) {
+                        isPlayerConnected = false;
+                      }
+                    }
+                    return ConnectedIcon(
+                      isConnected: isPlayerConnected,
+                      shouldShowIsOnGameLabels: true,
+                      size: DefaultTextStyle.of(context).style.fontSize,
+                    );
+                  },
                 ),
               ],
               const SizedBox(width: 5),
@@ -191,6 +216,20 @@ class GamePlayer extends StatelessWidget {
           ),
       ],
     );
+
+    // When the opponent has left, the countdown / claim choices take the whole
+    // table width (the clock is hidden) to leave enough room for the buttons.
+    if (opponentLeftCallbacks != null) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: OpponentLeftCountdown(
+          countdown: opponentLeftCallbacks!.countdown,
+          canClaim: opponentLeftCallbacks!.canClaim,
+          onClaimWin: opponentLeftCallbacks!.onClaimWin,
+          onClaimDraw: opponentLeftCallbacks!.onClaimDraw,
+        ),
+      );
+    }
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -275,6 +314,99 @@ class ConfirmMove extends StatelessWidget {
           padding: const EdgeInsets.all(10),
           onPressed: onConfirm,
         ),
+      ],
+    );
+  }
+}
+
+/// Shown in the player table when the opponent has left the game.
+///
+/// While the claim threshold has not been reached, displays a live countdown.
+/// Once [canClaim] is true, displays the two claim choices inline (so there is
+/// no dialog to dismiss). The player clock is hidden to leave enough room.
+class OpponentLeftCountdown extends StatelessWidget {
+  const OpponentLeftCountdown({
+    required this.countdown,
+    required this.canClaim,
+    required this.onClaimWin,
+    required this.onClaimDraw,
+    super.key,
+  });
+
+  final (Duration, DateTime) countdown;
+  final bool canClaim;
+  final VoidCallback onClaimWin;
+  final VoidCallback onClaimDraw;
+
+  @override
+  Widget build(BuildContext context) {
+    if (!canClaim) {
+      return CountdownClockBuilder(
+        timeLeft: countdown.$1,
+        clockUpdatedAt: countdown.$2,
+        active: true,
+        builder: (context, duration) => Text(
+          context.l10n.opponentLeftCounter(duration.inSeconds),
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+        ),
+      );
+    }
+    return Column(
+      mainAxisSize: .max,
+      mainAxisAlignment: .center,
+      children: [
+        // The buttons are the priority: they keep their full size and stay
+        // visible even when vertical space is constrained.
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Flexible(
+              child: OpacityButton(
+                semanticsLabel: context.l10n.forceResignation,
+                onPressed: onClaimWin,
+                child: Text(
+                  context.l10n.forceResignation,
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: ColorScheme.of(context).secondary,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+            Flexible(
+              child: OpacityButton(
+                semanticsLabel: context.l10n.forceDraw,
+                onPressed: onClaimDraw,
+                child: Text(
+                  context.l10n.forceDraw,
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: ColorScheme.of(context).secondary,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        // The explanatory text comes second and is dropped entirely on short
+        // screens, where every pixel counts and the buttons take priority.
+        if (!isShortVerticalScreen(context)) ...[
+          const SizedBox(height: 8.0),
+          Text(
+            context.l10n.opponentLeftChoices,
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+        ],
       ],
     );
   }

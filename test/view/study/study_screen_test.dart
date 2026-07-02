@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/model/study/study_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
+import 'package:lichess_mobile/src/widgets/variations_bar.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../test_helpers.dart';
@@ -282,16 +283,70 @@ void main() {
 
       await playMove(tester, 'e2', 'e4', orientation: Side.black);
 
-      expect(find.byKey(const Key('e2-whitepawn')), findsNothing);
-      expect(find.byKey(const Key('e4-whitepawn')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.e2, Piece.whitePawn), isFalse);
+      expect(boardHasPiece(tester, Square.e4, Piece.whitePawn), isTrue);
 
       await playMove(tester, 'e7', 'e5', orientation: Side.black);
 
-      expect(find.byKey(const Key('e5-blackpawn')), findsOneWidget);
-      expect(find.byKey(const Key('e7-blackpawn')), findsNothing);
+      expect(boardHasPiece(tester, Square.e5, Piece.blackPawn), isTrue);
+      expect(boardHasPiece(tester, Square.e7, Piece.blackPawn), isFalse);
 
       expect(find.text('1. e4'), findsOneWidget);
       expect(find.text('e5'), findsOneWidget);
+    });
+    testWidgets('Variations bar displays variations and can be tapped', (
+      WidgetTester tester,
+    ) async {
+      final mockRepository = MockStudyRepository();
+
+      // Return a study that branches: 1. e4 : e5 and c5
+      when(
+        () => mockRepository.getStudy(id: testId),
+      ).thenAnswer((_) async => (makeStudy(), null, '1. e4 e5 (1... c5)'));
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const StudyScreen(options: (id: testId, initialChapter: null)),
+        overrides: {
+          studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
+        },
+        defaultPreferences: {
+          PrefCategory.study.storageKey: jsonEncode(
+            StudyPrefs.defaults.copyWith(inlineNotation: true).toJson(),
+          ),
+          PrefCategory.engineEvaluation.storageKey: jsonEncode(
+            EngineEvaluationPrefState.defaults.copyWith(isEnabled: false).toJson(),
+          ),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      // Jump to 1. e4
+      await tester.tap(find.textContaining('e4'));
+      await tester.pump();
+
+      // The variations bar should now display both e5 and c5
+      expect(find.byType(VariationsBar), findsOneWidget);
+
+      // Look for e5 and c5 specifically inside the VariationsBar
+      expect(
+        find.descendant(of: find.byType(VariationsBar), matching: find.text('e5')),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(of: find.byType(VariationsBar), matching: find.text('c5')),
+        findsOneWidget,
+      );
+
+      // Tap the 'c5' variation inside the VariationsBar widget
+      await tester.tap(find.descendant(of: find.byType(VariationsBar), matching: find.text('c5')));
+
+      await tester.pump();
+
+      // Verify a black pawn is placed on c5
+      expect(boardHasPiece(tester, Square.c5, Piece.blackPawn), isTrue);
     });
 
     testWidgets('Can flip the board', (tester) async {
@@ -695,9 +750,9 @@ void main() {
       final board = tester.widget<Chessboard>(find.byType(Chessboard));
 
       if (annotations.isEmpty) {
-        expect(board.annotations, isNull);
+        expect(board.annotations, isEmpty);
       } else {
-        expect(board.annotations!.length, annotations.length);
+        expect(board.annotations.length, annotations.length);
         expect(board.annotations, allOf(annotations));
       }
     }
@@ -784,7 +839,7 @@ void main() {
     await tester.pumpAndSettle(); // Wait for O-O-O move to be played
 
     final board = tester.widget<Chessboard>(find.byType(Chessboard));
-    expect(board.annotations!.length, 1);
+    expect(board.annotations.length, 1);
     expect(
       board.annotations,
       containsPair(Square.c1, predicate<Annotation>((annotation) => annotation.symbol == '!!')),

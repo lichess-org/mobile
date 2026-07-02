@@ -18,7 +18,11 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace = "org.lichess.mobileV2"
-    compileSdk = flutter.compileSdkVersion
+    // compileSdk = flutter.compileSdkVersion
+    // home_widget pulls in glance-appwidget and remote-creation-android, both of which
+    // declare in their AAR metadata that all dependents (including the app) must compile
+    // against SDK 37+. This cannot be suppressed — it is enforced by AGP at build time.
+    compileSdk = 37
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
@@ -40,8 +44,6 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
-        // Used by flutter_appauth plugin
-        manifestPlaceholders["appAuthRedirectScheme"] = "org.lichess.mobile"
         ndk {
             abiFilters += listOf("armeabi-v7a", "arm64-v8a", "x86_64")
         }

@@ -143,10 +143,12 @@ class _BoardEditor extends ConsumerWidget {
       size: boardSize,
       pieces: pieces,
       orientation: orientation,
-      settings: boardPrefs.toBoardSettings().copyWith(
-        borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
-        boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
-      ),
+      settings: boardPrefs
+          .toBoardSettings(editorState.variant)
+          .copyWith(
+            borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
+            boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
+          ),
       pointerMode: editorState.editorPointerMode,
       onDiscardedPiece: (Square square) =>
           ref.read(boardEditorControllerProvider(params).notifier).discardPiece(square),
@@ -385,7 +387,7 @@ class _BottomBar extends ConsumerWidget {
               BottomSheetAction(
                 makeLabel: (context) => Text(context.l10n.clearBoard),
                 onPressed: () {
-                  ref.read(editorController.notifier).loadFen(kEmptyFEN);
+                  ref.read(editorController.notifier).clearBoard();
                 },
               ),
             ],
@@ -428,7 +430,7 @@ class _BottomBar extends ConsumerWidget {
             context: context,
             builder: (BuildContext context) => BoardEditorFilters(params: params),
             showDragHandle: true,
-            constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height * 0.5),
+            constraints: BoxConstraints(minHeight: MediaQuery.heightOf(context) * 0.5),
           ),
           icon: Icons.tune,
         ),

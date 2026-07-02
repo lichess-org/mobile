@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:dartchess/dartchess.dart' hide File;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:flutter_riverpod/experimental/mutation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -11,6 +12,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
@@ -48,17 +50,19 @@ import 'package:lichess_mobile/src/widgets/side_indicator.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:path_provider/path_provider.dart' show getTemporaryDirectory;
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class TournamentScreen extends ConsumerStatefulWidget {
-  const TournamentScreen({required this.id});
+  const TournamentScreen({required this.id, this.initialPlayerId});
 
   final TournamentId id;
+  final UserId? initialPlayerId;
 
   static const String routeName = '/tournament';
 
-  static Route<void> buildRoute(TournamentId id) {
+  static Route<void> buildRoute(TournamentId id, {UserId? initialPlayerId}) {
     return buildScreenRoute(
-      screen: TournamentScreen(id: id),
+      screen: TournamentScreen(id: id, initialPlayerId: initialPlayerId),
       settings: const RouteSettings(name: routeName),
     );
   }
@@ -68,6 +72,18 @@ class TournamentScreen extends ConsumerStatefulWidget {
 }
 
 class _TournamentScreenState extends ConsumerState<TournamentScreen> with RouteAware {
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialPlayerId != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _showPlayerDetails(context, widget.id, widget.initialPlayerId!);
+        }
+      });
+    }
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -214,6 +230,11 @@ class _Body extends ConsumerWidget {
                             ],
                           ),
                         ),
+                      ],
+                      if (state.tournament.description != null &&
+                          state.tournament.description!.isNotEmpty) ...[
+                        const SizedBox(height: 10),
+                        _ExpandableDescription(description: state.tournament.description!),
                       ],
                     ],
                   ),
@@ -418,20 +439,47 @@ class _TournamentHelp extends StatelessWidget {
                       ),
                     ),
                   ],
-                  rows: const [
-                    DataRow(
-                      cells: [DataCell(Text('Standard, Chess960, Horde')), DataCell(Text('30'))],
-                    ),
+                  rows: [
                     DataRow(
                       cells: [
-                        DataCell(Text('Antichess, Crazyhouse, King of the Hill')),
-                        DataCell(Text('20')),
+                        DataCell(
+                          Text(
+                            _variantLabels(context, [
+                              Variant.standard,
+                              Variant.chess960,
+                              Variant.horde,
+                            ]),
+                          ),
+                        ),
+                        const DataCell(Text('30')),
                       ],
                     ),
                     DataRow(
                       cells: [
-                        DataCell(Text('Three-check, Atomic, Racing Kings')),
-                        DataCell(Text('10')),
+                        DataCell(
+                          Text(
+                            _variantLabels(context, [
+                              Variant.antichess,
+                              Variant.crazyhouse,
+                              Variant.kingOfTheHill,
+                            ]),
+                          ),
+                        ),
+                        const DataCell(Text('20')),
+                      ],
+                    ),
+                    DataRow(
+                      cells: [
+                        DataCell(
+                          Text(
+                            _variantLabels(context, [
+                              Variant.threeCheck,
+                              Variant.atomic,
+                              Variant.racingKings,
+                            ]),
+                          ),
+                        ),
+                        const DataCell(Text('10')),
                       ],
                     ),
                   ],
@@ -441,6 +489,40 @@ class _TournamentHelp extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+String _variantLabels(BuildContext context, Iterable<Variant> variants) =>
+    variants.map((variant) => variant.label(context.l10n)).join(', ');
+
+class _ExpandableDescription extends ConsumerWidget {
+  const _ExpandableDescription({required this.description});
+
+  final String description;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ExpansionTile(
+      leading: const Icon(Icons.info_outline),
+      title: Text(context.l10n.description),
+      tilePadding: EdgeInsets.zero,
+      splashColor: Colors.transparent,
+      shape: LinearBorder.none,
+      collapsedShape: LinearBorder.none,
+      expandedCrossAxisAlignment: .start,
+      expandedAlignment: .centerLeft,
+      children: [
+        MarkdownBody(
+          data: description,
+          softLineBreak: true,
+          onTapLink: (text, url, title) {
+            if (url != null) {
+              launchUrl(Uri.parse(url));
+            }
+          },
+        ),
+      ],
     );
   }
 }
@@ -734,7 +816,7 @@ class _TournamentInfo extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '${tournament.meta.timeIncrement.display} • ${tournament.meta.perf.title} • ${context.l10n.nbMinutes(tournament.meta.duration.inMinutes)}',
+                '${tournament.meta.timeIncrement.display} • ${tournament.meta.perf.label(context.l10n)} • ${context.l10n.nbMinutes(tournament.meta.duration.inMinutes)}',
               ),
               Text(
                 '${tournament.meta.rated ? context.l10n.rated : context.l10n.casual} • ${context.l10n.arenaArena}',

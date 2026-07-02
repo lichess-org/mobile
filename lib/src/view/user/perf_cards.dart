@@ -4,6 +4,7 @@ import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_dashboard.dart';
 import 'package:lichess_mobile/src/view/user/perf_stats_screen.dart';
@@ -60,15 +61,24 @@ class PerfCards extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
+    final resolvedPadding = (padding ?? Styles.bodySectionPadding).resolve(
+      Directionality.of(context),
+    );
+
     return MediaQuery.withClampedTextScaling(
       maxScaleFactor: 1.4,
       child: RatingPrefAware(
         child: Padding(
-          padding: padding ?? Styles.bodySectionPadding,
+          padding: EdgeInsets.only(top: resolvedPadding.top, bottom: resolvedPadding.bottom),
           child: SizedBox(
             height: 106,
             child: ListView.separated(
-              padding: const EdgeInsets.symmetric(vertical: 3.0),
+              padding: EdgeInsets.only(
+                left: resolvedPadding.left,
+                right: resolvedPadding.right,
+                top: 3.0,
+                bottom: 3.0,
+              ),
               scrollDirection: Axis.horizontal,
               itemCount: userPerfs.length,
               itemBuilder: (context, index) {
@@ -88,7 +98,12 @@ class PerfCards extends StatelessWidget {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            Text(perf.shortTitle, style: TextStyle(color: textShade(context, 0.7))),
+                            Text(
+                              perf.shortLabel(context.l10n),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(color: textShade(context, 0.7)),
+                            ),
                             Icon(perf.icon, color: textShade(context, 0.6)),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,

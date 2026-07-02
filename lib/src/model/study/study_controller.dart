@@ -9,9 +9,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_summary.dart';
 import 'package:lichess_mobile/src/model/analysis/common_analysis_state.dart';
+import 'package:lichess_mobile/src/model/analysis/opening_explorer_mixin.dart';
 import 'package:lichess_mobile/src/model/analysis/server_analysis_mixin.dart';
 import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/chat/chat_mixin.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -44,7 +46,11 @@ final studyControllerProvider = AsyncNotifierProvider.autoDispose
 enum ChapterServerAnalysisStatus { canRequest, notEnoughMoves, notWriteable, available }
 
 class StudyController extends AsyncNotifier<StudyState>
-    with EngineEvaluationMixin, ServerAnalysisMixin
+    with
+        EngineEvaluationMixin,
+        ServerAnalysisMixin,
+        ChatMixin<StudyState>,
+        OpeningExplorerMixin<StudyState>
     implements PgnTreeNotifier {
   StudyController(this.options);
 
@@ -66,6 +72,23 @@ class StudyController extends AsyncNotifier<StudyState>
   @protected
   Root get positionTree => _root;
 
+  // Studies with an illegal starting position do not build a position tree, so
+  // there is nothing to fetch openings for in that case.
+  @override
+  bool get canFetchMainlineOpenings => state.value?.root != null;
+
+  @override
+  @protected
+  StringId get chatId => options.id;
+
+  @override
+  @protected
+  String get chatReportResource => 'study/${options.id}';
+
+  @override
+  @protected
+  bool get chatIsPublic => true;
+
   @override
   Future<StudyState> build() async {
     ref.onDispose(() {
@@ -74,15 +97,13 @@ class StudyController extends AsyncNotifier<StudyState>
       _likeDebouncer.cancel();
     });
 
-    final socketPool = ref.watch(socketPoolProvider);
-    _socketClient = socketPool.open(Uri(path: '/study/${options.id}/socket/v6'));
+    final chapter = await _fetchChapter(
+      options.id,
+      chapterId: options.initialChapter,
+      initSocket: true,
+    );
 
-    final chapter = await _fetchChapter(options.id, chapterId: options.initialChapter);
-
-    _socketSubscription?.cancel();
-    _socketSubscription = _socketClient.stream.listen(_handleSocketEvent);
-
-    return chapter;
+    return chapter.copyWith(chatState: await initChat(chapter.study.chat));
   }
 
   @override
@@ -99,6 +120,17 @@ class StudyController extends AsyncNotifier<StudyState>
     );
   }
 
+  @override
+  void refreshCurrentBranchOpening() {
+    final curState = state.requireValue;
+    state = AsyncData(
+      curState.copyWith(
+        currentNode: StudyCurrentNode.fromNode(_root.nodeAt(curState.currentPath)),
+        currentBranchOpening: currentBranchOpeningAt(curState.currentPath),
+      ),
+    );
+  }
+
   Future<void> nextChapter() async {
     if (state.hasValue) {
       final chapters = state.requireValue.study.chapters;
@@ -111,13 +143,31 @@ class StudyController extends AsyncNotifier<StudyState>
 
   Future<void> goToChapter(StudyChapterId chapterId) async {
     await _fetchChapter(state.requireValue.study.id, chapterId: chapterId);
+    // Switching chapters does not re-run [runBuild], so fetch the new mainline's
+    // openings explicitly here.
+    if (state.hasValue) initMainlineOpenings();
     _ensureItsOurTurnIfGamebook();
   }
 
-  Future<StudyState> _fetchChapter(StudyId id, {StudyChapterId? chapterId}) async {
+  Future<StudyState> _fetchChapter(
+    StudyId id, {
+    StudyChapterId? chapterId,
+    bool initSocket = false,
+  }) async {
     final (study, analysisSummary, pgn) = await ref
         .read(studyRepositoryProvider)
         .getStudy(id: id, chapterId: chapterId);
+
+    // We receive the socket version from the study API, so we can only initialize the socket connection after fetching the study for the first time.
+    if (initSocket) {
+      final socketPool = ref.watch(socketPoolProvider);
+      _socketClient = socketPool.open(
+        Uri(path: '/study/${options.id}/socket/v6'),
+        version: study.socketVersion,
+      );
+      _socketSubscription?.cancel();
+      _socketSubscription = _socketClient.stream.listen(handleSocketEvent);
+    }
 
     final game = PgnGame.parsePgn(pgn);
 
@@ -184,6 +234,7 @@ class StudyController extends AsyncNotifier<StudyState>
       isOnMainline: true,
       root: _root.view,
       currentNode: StudyCurrentNode.fromNode(_root),
+      currentBranchOpening: currentBranchOpeningAt(currentPath),
       evaluationContext: EvaluationContext(
         id: study.chapter.id,
         variant: variant,
@@ -206,6 +257,7 @@ class StudyController extends AsyncNotifier<StudyState>
 
     if (state.requireValue.isEngineAvailable(evaluationPrefs)) {
       socketClient.firstConnection.then((_) {
+        if (!ref.mounted) return;
         requestEval();
       });
     }
@@ -224,7 +276,17 @@ class StudyController extends AsyncNotifier<StudyState>
     });
   }
 
-  void _handleSocketEvent(SocketEvent event) {
+  @protected
+  @override
+  void updateChatState(ChatState newState) {
+    state = AsyncValue.data(state.requireValue.copyWith(chatState: newState));
+  }
+
+  @protected
+  @override
+  void handleSocketEvent(SocketEvent event) {
+    super.handleSocketEvent(event);
+
     if (!state.hasValue) {
       assert(false, 'received a game SocketEvent while StudyState is null');
       return;
@@ -261,12 +323,6 @@ class StudyController extends AsyncNotifier<StudyState>
 
     if (!state.requireValue.currentPosition!.isLegal(move)) return;
 
-    if (move case NormalMove()
-        when isPromotionPawnMove(state.requireValue.currentPosition!, move)) {
-      state = AsyncValue.data(state.requireValue.copyWith(promotionMove: move));
-      return;
-    }
-
     _sendMoveToSocket(move);
 
     final (newPath, isNewNode) = _root.addMoveAt(state.requireValue.currentPath, move);
@@ -289,37 +345,27 @@ class StudyController extends AsyncNotifier<StudyState>
     }
   }
 
-  void onPromotionSelection(Role? role) {
-    final state = this.state.value;
-    if (state == null) return;
-
-    if (role == null) {
-      this.state = AsyncValue.data(state.copyWith(promotionMove: null));
-      return;
-    }
-    final promotionMove = state.promotionMove;
-    if (promotionMove != null) {
-      final promotion = promotionMove.withPromotion(role);
-      onUserMove(promotion);
-    }
-  }
-
   void showGamebookSolution() {
     onUserMove(state.requireValue.currentNode.children.first);
   }
 
-  void userPrevious() {
+  void userPrevious({bool fastSeek = false}) {
     if (state.hasValue) {
-      _setPath(state.requireValue.currentPath.penultimate, isNavigating: true);
+      _setPath(
+        state.requireValue.currentPath.penultimate,
+        isNavigating: true,
+        keepCollapsed: fastSeek,
+      );
     }
   }
 
-  void userNext() {
+  void userNext({bool fastSeek = false}) {
     final state = this.state.value;
     if (state!.currentNode.children.isEmpty) return;
     _setPath(
       state.currentPath + _root.nodeAt(state.currentPath).children.first.id,
       isNavigating: true,
+      keepCollapsed: fastSeek,
     );
   }
 
@@ -403,6 +449,12 @@ class StudyController extends AsyncNotifier<StudyState>
     this.state = AsyncValue.data(
       state.copyWith(isOnMainline: _root.isOnMainline(state.currentPath), root: _root.view),
     );
+
+    _recordChange('promote', {
+      'toMainline': toMainline,
+      'path': path.value,
+      'ch': state.currentChapter.id.value,
+    });
   }
 
   @override
@@ -451,12 +503,23 @@ class StudyController extends AsyncNotifier<StudyState>
 
     /// Whether the user is navigating through the moves (as opposed to playing a move).
     bool isNavigating = false,
+    bool keepCollapsed = false,
   }) {
     final state = this.state.value;
     if (state == null) return;
 
     final pathChange = state.currentPath != path;
-    final currentNode = _root.nodeAt(path);
+    final (currentNode, branchOpening) = nodeOpeningAt(_root, path);
+
+    bool pathWasExpanded = false;
+    if (pathChange && !keepCollapsed) {
+      for (final child in currentNode.children) {
+        if (child.isCollapsed) {
+          child.isCollapsed = false;
+          pathWasExpanded = true;
+        }
+      }
+    }
 
     // always show variation if the user plays a move
     if (shouldForceShowVariation && currentNode is Branch && currentNode.isCollapsed) {
@@ -468,7 +531,9 @@ class StudyController extends AsyncNotifier<StudyState>
     // root view is only used to display move list, so we need to
     // recompute the root view only when the nodelist length changes
     // or a variation is hidden/shown
-    final rootView = shouldForceShowVariation || shouldRecomputeRootView ? _root.view : state.root;
+    final rootView = shouldForceShowVariation || shouldRecomputeRootView || pathWasExpanded
+        ? _root.view
+        : state.root;
 
     final isForward = path.size > state.currentPath.size;
     if (currentNode is Branch) {
@@ -491,13 +556,15 @@ class StudyController extends AsyncNotifier<StudyState>
         }
       }
 
+      maybeFetchOpeningAt(currentNode, path);
+
       this.state = AsyncValue.data(
         state.copyWith(
           currentPath: path,
           isOnMainline: _root.isOnMainline(path),
           currentNode: StudyCurrentNode.fromNode(currentNode),
+          currentBranchOpening: branchOpening,
           lastMove: currentNode.sanMove.move,
-          promotionMove: null,
           root: rootView,
         ),
       );
@@ -507,8 +574,8 @@ class StudyController extends AsyncNotifier<StudyState>
           currentPath: path,
           isOnMainline: _root.isOnMainline(path),
           currentNode: StudyCurrentNode.fromNode(currentNode),
+          currentBranchOpening: branchOpening,
           lastMove: null,
-          promotionMove: null,
           root: rootView,
         ),
       );
@@ -548,7 +615,9 @@ sealed class StudyState
         _$StudyState,
         AnalysisExplosionMixin,
         EvaluationMixinState<StudyState>,
-        ServerAnalysisMixinState
+        ChatMixinState,
+        ServerAnalysisMixinState,
+        OpeningExplorerMixinState
     implements CommonAnalysisState {
   const StudyState._();
 
@@ -602,8 +671,8 @@ sealed class StudyState
     /// The last move played.
     Move? lastMove,
 
-    /// Possible promotion move to be played.
-    NormalMove? promotionMove,
+    /// The opening of the current branch, if any.
+    Opening? currentBranchOpening,
 
     /// The PGN root comments of the study
     IList<PgnComment>? pgnRootComments,
@@ -615,6 +684,8 @@ sealed class StudyState
 
     /// Optional ACPL chart data of the game, coming from lichess server analysis.
     IList<ExternalEval>? acplChartData,
+
+    ChatState? chatState,
   }) = _StudyState;
 
   /// Whether the current user is the owner of the study.
@@ -731,6 +802,9 @@ sealed class StudyState
   PlayersAnalysis? get playersAnalysis => analysisSummary != null
       ? (white: analysisSummary!.white, black: analysisSummary!.black)
       : null;
+
+  @override
+  bool get chatEnabled => study.chat != null;
 }
 
 @freezed
@@ -743,6 +817,7 @@ sealed class StudyCurrentNode with _$StudyCurrentNode implements AnalysisCurrent
     required List<Move> children,
     required bool isRoot,
     SanMove? sanMove,
+    Opening? opening,
     IList<PgnComment>? startingComments,
     IList<PgnComment>? comments,
     IList<int>? nags,
@@ -762,6 +837,7 @@ sealed class StudyCurrentNode with _$StudyCurrentNode implements AnalysisCurrent
         isRoot: false,
         children: children,
         eval: node.eval,
+        opening: node.opening,
         startingComments: IList(node.startingComments),
         comments: IList(node.comments),
         nags: IList(node.nags),
@@ -771,6 +847,7 @@ sealed class StudyCurrentNode with _$StudyCurrentNode implements AnalysisCurrent
         position: node.position,
         children: children,
         eval: node.eval,
+        opening: node.opening,
         isRoot: true,
       );
     }

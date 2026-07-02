@@ -9,7 +9,7 @@ class AppLocalizationsPl extends AppLocalizations {
   AppLocalizationsPl([String locale = 'pl']) : super(locale);
 
   @override
-  String get mobileAccount => 'Account';
+  String get mobileAccount => 'Konto';
 
   @override
   String get mobileAccountPreferences => 'Ustawienia konta';
@@ -287,31 +287,64 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Lub zaimportuj plik PGN';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Dobry ruch, ale jest lepszy';
+
+  @override
+  String get variantStandard => 'Standardowe';
+
+  @override
   String get variantStandardTitle => 'Standardowe zasady szachów (FIDE)';
+
+  @override
+  String get variantChess960 => 'Szachy 960';
 
   @override
   String get variantChess960Title => 'Pozycja początkowa figur jest losowa.';
 
   @override
+  String get variantKingOfTheHill => 'Król wzgórza';
+
+  @override
   String get variantKingOfTheHillTitle => 'Przeprowadź swojego króla na środek szachownicy, by wygrał partię.';
+
+  @override
+  String get variantThreeCheck => 'Trzy szachy';
 
   @override
   String get variantThreeCheckTitle => 'Zaszachuj swojego przeciwnika 3 razy, by wygrać partię.';
 
   @override
+  String get variantAntichess => 'Antyszachy';
+
+  @override
   String get variantAntichessTitle => 'Podstaw do bicia wszystkie swoje bierki (lub zmuś przeciwnika do pata), by wygrać partię.';
+
+  @override
+  String get variantAtomic => 'Atomowe';
 
   @override
   String get variantAtomicTitle => 'Wysadź króla przeciwnika, by wygrać partię.';
 
   @override
+  String get variantHorde => 'Horda';
+
+  @override
   String get variantHordeTitle => 'Jedna ze stron ma dużą liczbę pionów, druga ma standardowe bierki.';
+
+  @override
+  String get variantRacingKings => 'Wyścig królów';
 
   @override
   String get variantRacingKingsTitle => 'Poprowadź swojego króla na drugą stronę szachownicy, aby wygrać partię.';
 
   @override
+  String get variantCrazyhouse => 'Crazyhouse';
+
+  @override
   String get variantCrazyhouseTitle => 'Zbite przeciwnikowi bierki można z powrotem postawić na szachownicy zamiast swojego posunięcia.';
+
+  @override
+  String get variantFromPosition => 'Z zadanej pozycji';
 
   @override
   String get variantFromPositionTitle => 'Standardowa partia szachów startując z zadanej pozycji';
@@ -954,6 +987,9 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get broadcastOfficialStandings => 'Oficjalna klasyfikacja';
+
+  @override
+  String get broadcastRegulations => 'Regulacje';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -2547,6 +2583,12 @@ class AppLocalizationsPl extends AppLocalizations {
   String get blackDidntMove => 'Czarne nie ruszyły się';
 
   @override
+  String get whiteAborted => 'Białe porzuciły partię';
+
+  @override
+  String get blackAborted => 'Czarne porzuciły partię';
+
+  @override
   String get requestAComputerAnalysis => 'Poproś o analizę komputerową';
 
   @override
@@ -2663,12 +2705,12 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String minRatingX(String param) {
-    return 'Minimum rating of $param';
+    return 'Minimalny ranking $param';
   }
 
   @override
   String maxRatingX(String param) {
-    return 'Maximum rating of $param';
+    return 'Minimalny ranking $param';
   }
 
   @override
@@ -4448,6 +4490,12 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
+  String get like => 'Lubię';
+
+  @override
+  String get liked => 'Polubione';
+
+  @override
   String get quickPairing => 'Szybkie parowanie';
 
   @override
@@ -4843,6 +4891,9 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get theForumEtiquette => 'etykieta forum';
+
+  @override
+  String get pleaseBeNiceInTheForum => 'Bądź miły na forum.';
 
   @override
   String get thisTopicIsArchived => 'Ten temat został zarchiwizowany i nie można już na niego odpowiedzieć.';
@@ -5988,9 +6039,6 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get studyLike => 'Lubię to';
-
-  @override
-  String get studyUnlike => 'Cofnij polubienie';
 
   @override
   String get studyNewTag => 'Nowy znacznik';

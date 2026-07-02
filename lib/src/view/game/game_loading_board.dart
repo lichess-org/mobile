@@ -443,31 +443,49 @@ class _GameParamsDisplay extends StatelessWidget {
 }
 
 class StandaloneGameLoadingContent extends StatelessWidget {
-  const StandaloneGameLoadingContent({this.position, this.userActionsBar, super.key});
+  const StandaloneGameLoadingContent({this.loadingParam, this.userActionsBar, super.key});
 
-  final LoadingPosition? position;
+  final LoadingParam? loadingParam;
   final Widget? userActionsBar;
 
   @override
   Widget build(BuildContext context) {
-    final lastMove = position?.lastMove;
+    final loadingFen = loadingParam?.fen;
+    final variant = loadingParam?.variant ?? Variant.standard;
+    Position? loadingPosition;
+    if (loadingFen != null) {
+      try {
+        loadingPosition = Position.setupPosition(
+          variant.rule,
+          Setup.parseFen(loadingFen),
+          ignoreImpossibleCheck: true,
+        );
+      } catch (_) {
+        loadingPosition = null;
+      }
+    }
+    final lastMove = loadingParam?.lastMove;
     return Shimmer(
       child: SafeArea(
         child: GameLayout(
-          orientation: position?.orientation ?? Side.white,
-          boardParams: GameBoardParams.readonly(
-            fen: position?.fen ?? kEmptyFEN,
-            variant: Variant.standard,
-            pockets: null,
-          ),
-          lastMove: switch (lastMove) {
-            // In crazyhouse games, the "ongoing games" endpoint does not return the correct UCI for crazyhouse games,
-            // e.g. instead of P@c4 the UCI will be c4c4.
-            // This leads to a "duplicate key" error, since chessground would try to highlight the same square twice.
-            // The dropped role does not matter, since we just use it for the square highlight.
-            NormalMove(:final from, :final to) when from == to => DropMove(to: to, role: Role.pawn),
-            _ => lastMove,
-          },
+          orientation: loadingParam?.orientation ?? Side.white,
+          boardParams: loadingPosition == null
+              ? GameBoardParams.emptyBoard
+              : GameBoardParams.readonly(
+                  variant: variant,
+                  position: loadingPosition,
+                  lastMove: switch (lastMove) {
+                    // In crazyhouse games, the "ongoing games" endpoint does not return the correct UCI for crazyhouse games,
+                    // e.g. instead of P@c4 the UCI will be c4c4.
+                    // This leads to a "duplicate key" error, since chessground would try to highlight the same square twice.
+                    // The dropped role does not matter, since we just use it for the square highlight.
+                    NormalMove(:final from, :final to) when from == to => DropMove(
+                      to: to,
+                      role: Role.pawn,
+                    ),
+                    _ => lastMove,
+                  },
+                ),
           topTable: const LoadingPlayerWidget(),
           bottomTable: const LoadingPlayerWidget(),
           moves: const [],

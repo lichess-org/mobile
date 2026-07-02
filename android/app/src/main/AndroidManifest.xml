@@ -1,5 +1,12 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Explicitly define screen support for niche device compatibility -->
+    <supports-screens
+        android:smallScreens="true"
+        android:normalScreens="true"
+        android:largeScreens="true"
+        android:xlargeScreens="true"/>
     <application
         android:label="Lichess"
         android:name="${applicationName}"
@@ -116,6 +123,10 @@
                 <data android:pathPattern="/broadcast/.*/.*/........" />
                 <data android:pathPattern="/broadcast/.*/.*/......../........" />
 
+                <!-- Board editor: bare /editor and /editor/<fen> (FEN ranks contain '/'). -->
+                <data android:pathPattern="/editor" />
+                <data android:pathPattern="/editor/.*" />
+
                 <!--
                   Game or challenge link: any 8-char path (e.g. /abcd1234).
                   pathPattern cannot exclude known static 8-char routes (e.g. /analysis,
@@ -131,13 +142,14 @@
             </intent-filter>
             <meta-data android:name="flutter_deeplinking_enabled" android:value="false" />
         </activity>
-        <!-- Trampoline for the OAuth redirect URI. Receives org.lichess.mobile://login-callback,
-             forwards it to the running MainActivity via FLAG_ACTIVITY_CLEAR_TOP|SINGLE_TOP so
-             that onNewIntent is called on the existing instance, then finishes immediately. -->
+        <!-- OAuth custom-scheme callback receiver for flutter_appauth. We declare the intent-filter
+             here (with `tools:node="replace"`) instead of relying on the `appAuthRedirectScheme`
+             manifest placeholder. The theme matches the one the plugin contributes. -->
         <activity
-            android:name=".OAuthCallbackActivity"
+            android:name="net.openid.appauth.RedirectUriReceiverActivity"
+            android:theme="@style/Theme.AppCompat.Translucent.NoTitleBar"
             android:exported="true"
-            android:theme="@android:style/Theme.NoDisplay">
+            tools:node="replace">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -154,15 +166,23 @@
             android:name="flutterEmbedding"
             android:value="2" />
     </application>
-    <!-- Required to query activities that can process text, see:
-         https://developer.android.com/training/package-visibility and
-         https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT.
-
-         In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin. -->
+    <!-- On Android 11+ (API 30) package visibility is restricted: the app can only see/resolve other
+         apps it explicitly declares intents for here. See:
+         https://developer.android.com/training/package-visibility -->
     <queries>
+        <!-- Lets the Flutter engine resolve text-processing apps (io.flutter.plugin.text.ProcessTextPlugin), see:
+             https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT -->
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
+        </intent>
+        <!-- Lets url_launcher discover a browser/Custom Tabs handler for https. Required for OAuth
+             login: without it, launchUrl() can't resolve a browser on Android 11+ and returns false,
+             so the in-app browser never opens and sign-in fails. -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="https" />
         </intent>
     </queries>
 </manifest>
