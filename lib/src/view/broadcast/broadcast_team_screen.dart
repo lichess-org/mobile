@@ -91,8 +91,7 @@ class _OverallTeamStat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final statWidth =
-        (MediaQuery.sizeOf(context).width - Styles.bodyPadding.horizontal - 10 * 2) / 3;
+    final statWidth = (MediaQuery.widthOf(context) - Styles.bodyPadding.horizontal - 10 * 2) / 3;
     const cardSpacing = 10.0;
 
     return Padding(

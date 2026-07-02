@@ -240,7 +240,7 @@ class _BroadcastCarouselItemState extends ConsumerState<BroadcastCarouselItem> {
         _cardColors?.primaryContainer ??
         Theme.of(context).cardTheme.color ??
         Theme.of(context).colorScheme.surfaceContainerLow;
-    final screenWidth = MediaQuery.sizeOf(context).width;
+    final screenWidth = MediaQuery.widthOf(context);
     final double width = screenWidth - 16.0;
     final paddingWidth = kBroadcastCarouselItemPadding.horizontal;
     final flexWeights = widget.flexWeights;

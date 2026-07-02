@@ -23,7 +23,7 @@ void showConfigureGameSheet(
   required Variant initialVariant,
   String? initialFen,
 }) {
-  final double screenHeight = MediaQuery.sizeOf(context).height;
+  final double screenHeight = MediaQuery.heightOf(context);
   showModalBottomSheet<void>(
     context: context,
     isScrollControlled: true,

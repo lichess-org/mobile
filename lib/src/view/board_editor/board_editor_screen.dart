@@ -430,7 +430,7 @@ class _BottomBar extends ConsumerWidget {
             context: context,
             builder: (BuildContext context) => BoardEditorFilters(params: params),
             showDragHandle: true,
-            constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height * 0.5),
+            constraints: BoxConstraints(minHeight: MediaQuery.heightOf(context) * 0.5),
           ),
           icon: Icons.tune,
         ),

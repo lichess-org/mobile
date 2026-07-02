@@ -45,7 +45,7 @@ class GameSummaryTable extends StatelessWidget {
 
     return Center(
       child: SizedBox(
-        width: math.min(MediaQuery.sizeOf(context).width, 500),
+        width: math.min(MediaQuery.widthOf(context), 500),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Table(

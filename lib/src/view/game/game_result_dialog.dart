@@ -292,7 +292,7 @@ class _ResultDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.sizeOf(context).width;
+    final screenWidth = MediaQuery.widthOf(context);
     final paddedContent = Padding(padding: const EdgeInsets.all(16.0), child: child);
     final sizedContent = SizedBox(
       width: min(screenWidth, kMaterialPopupMenuMaxWidth),

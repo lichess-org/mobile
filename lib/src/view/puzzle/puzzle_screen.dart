@@ -896,7 +896,7 @@ class _PuzzleSettingsButton extends StatelessWidget {
         context: context,
         isDismissible: true,
         isScrollControlled: true,
-        constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height * 0.5),
+        constraints: BoxConstraints(minHeight: MediaQuery.heightOf(context) * 0.5),
         builder: (_) => _PuzzleSettingsBottomSheet(initialPuzzleContext),
       ),
       semanticsLabel: context.l10n.settingsSettings,
