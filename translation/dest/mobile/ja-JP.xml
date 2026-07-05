@@ -90,4 +90,5 @@
   <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">チャレンジを作成しました：ゲームが始まると通知されます。\nホームタブからアクセスできます。</string>
   <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">前</string>
   <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">または PGN ファイルをインポート</string>
+  <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">いい手ですがもっといい手があります</string>
 </resources>
