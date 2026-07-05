@@ -62,11 +62,11 @@
 \"یک پیاده که در یک خانه در همان عرض و در یک ستون مجاور با پیاده حریف قرار دارد و اخیراً دو خانه به جلو حرکت کرده است، می‌تواند این پیاده حریف را به‌گونه‌ای بگیرد که گویی پیاده حریف فقط یک خانه حرکت کرده است. این گرفتن تنها در حرکت بعد از این پیشرفت قانونی است و به عنوان گرفتن \'آن‌پاسان\' نامیده می‌شود.\"
 
 برای تمرین این حرکت، به %3$s مراجعه کنید.</string>
-  <string name="goodIntroduction">معرفی و مقدمه خوب</string>
+  <string name="goodIntroduction">معرفیِ خوب</string>
   <string name="lichessTraining">آموزش Lichess</string>
   <string name="watchIMRosenCheckmate">کیش و مات شدن %s در مقابل استاد بین‌المللی اریک روزن را تماشا کنید.</string>
   <string name="threefoldRepetition">تکرار سه‌گانه</string>
-  <string name="threefoldRepetitionExplanation">اگر یک وضعیت سه بار رخ دهد، بازیکنان می‌توانند با %1$s، ادعای تساوی کنند. لیچس قانون‌های رسمی فیده را که در ماده 9.2 %2$s آمده، اجرا می‌کند.</string>
+  <string name="threefoldRepetitionExplanation">اگر یک وضعیت سه بار رخ دهد، بازیکنان می‌توانند با %1$s، ادعای تساوی کنند. Lichess قانون‌های رسمی فیده را که در ماده 9.2 %2$s آمده، اجرا می‌کند.</string>
   <string name="threefoldRepetitionLowerCase">تکرار سه‌گانه</string>
   <string name="notRepeatedMoves">ما حرکات را تکرار نکردیم. چرا بازی همچنان با تکرار مساوی می شد؟</string>
   <string name="repeatedPositionsThatMatters">تکرار سه‌گانه درباره %1$s تکراری است، نه حرکت‌ها. لازم نیست که تکرار، پیاپی باشد.</string>
