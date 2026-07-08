@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/streak_storage.dart';
+import 'package:lichess_mobile/src/network/connectivity.dart';
 
 part 'puzzle_streak.freezed.dart';
 part 'puzzle_streak.g.dart';
@@ -34,6 +35,23 @@ sealed class PuzzleStreak with _$PuzzleStreak {
 /// [PuzzleStreak] with its current [Puzzle].
 typedef StreakState = ({PuzzleStreak streak, Puzzle puzzle, Puzzle? nextPuzzle});
 
+/// Outcome of [PuzzleStreakController.next].
+enum StreakAdvance {
+  /// Advanced to the next puzzle.
+  advanced,
+
+  /// The next puzzle could not be loaded — typically offline with no cached
+  /// successor. The streak stays on the solved puzzle; the advance is retried
+  /// automatically when connectivity returns (see [PuzzleStreakController.build]).
+  unavailable,
+
+  /// The streak has no further puzzle to advance to (end reached).
+  endOfStreak,
+
+  /// The controller was disposed while loading the next puzzle; nothing happened.
+  aborted,
+}
+
 final puzzleStreakControllerProvider =
     AsyncNotifierProvider.autoDispose<PuzzleStreakController, StreakState>(
       PuzzleStreakController.new,
@@ -41,6 +59,11 @@ final puzzleStreakControllerProvider =
     );
 
 class PuzzleStreakController extends AsyncNotifier<StreakState> {
+  /// Set when a win could not advance the streak because the next puzzle wasn't
+  /// available offline. The streak is paused on the solved puzzle; reconnecting
+  /// retries the advance (see [build]).
+  bool _advancePending = false;
+
   /// Loads the puzzle from the local cache, falling back to the network on a
   /// miss (caching the result). Returns null if both fail, e.g. offline.
   Future<Puzzle?> fetchPuzzle(PuzzleId id) async {
@@ -78,6 +101,22 @@ class PuzzleStreakController extends AsyncNotifier<StreakState> {
   Future<StreakState> build() async {
     final authUser = ref.watch(authControllerProvider);
     final streakStorage = ref.watch(streakStorageProvider(authUser?.user.id));
+
+    // build() starts a fresh streak session (first load, sign-in change or new
+    // streak after game over), so reset the per-session bookkeeping.
+    _advancePending = false;
+
+    // On reconnect (the screen may still be open): resume a streak that is
+    // paused on a solved puzzle whose successor couldn't be fetched offline
+    // (see [next]).
+    ref.listen(connectivityChangesProvider, (previous, current) {
+      final wasOffline = previous?.value?.isOnline == false;
+      final isNowOnline = current.value?.isOnline == true;
+      if (!wasOffline || !isNowOnline) return;
+      if (_advancePending) {
+        next().ignore();
+      }
+    });
 
     final activeStreak = await streakStorage.loadActiveStreak();
 
@@ -136,18 +175,41 @@ class PuzzleStreakController extends AsyncNotifier<StreakState> {
         .saveActiveStreak(state.requireValue.streak);
   }
 
-  /// Advances the streak to the next puzzle, if it is available.
-  Future<void> next() async {
-    if (!state.hasValue || state.requireValue.nextPuzzle == null) {
-      return;
-    }
+  /// Advances the streak to the next puzzle.
+  ///
+  /// Returns [StreakAdvance.advanced] on success and [StreakAdvance.endOfStreak]
+  /// when there is no further puzzle. Returns [StreakAdvance.unavailable] when
+  /// the next puzzle can't be loaded (offline with no cached successor): the
+  /// streak stays on the solved puzzle and the advance is retried automatically
+  /// once connectivity returns.
+  Future<StreakAdvance> next() async {
+    var solvedState = state.value;
+    if (solvedState == null) return .endOfStreak;
 
-    final currentState = state.requireValue;
+    // The next puzzle is normally already prefetched into [nextPuzzle]. If it
+    // isn't, try one local-first fetch; if that also misses there is no way to
+    // advance right now. The reconnect listener set up in [build] retries the
+    // advance when back online.
+    var advanceTo = solvedState.nextPuzzle;
+    if (advanceTo == null) {
+      final advanceId = solvedState.streak.nextId;
+      if (advanceId == null) return .endOfStreak;
+      advanceTo = await fetchPuzzle(advanceId);
+      if (!ref.mounted) return .aborted;
+      // Re-read the state: it may have changed (e.g. a skip) while fetching.
+      solvedState = state.value;
+      if (solvedState == null) return .aborted;
+      if (advanceTo == null) {
+        _advancePending = true;
+        return .unavailable;
+      }
+    }
+    _advancePending = false;
 
     ref.read(soundServiceProvider).play(Sound.confirmation);
 
-    final advanced = currentState.streak.copyWith(index: currentState.streak.index + 1);
-    state = AsyncData((streak: advanced, puzzle: currentState.nextPuzzle!, nextPuzzle: null));
+    final advanced = solvedState.streak.copyWith(index: solvedState.streak.index + 1);
+    state = AsyncData((streak: advanced, puzzle: advanceTo, nextPuzzle: null));
 
     final nextId = advanced.nextId;
     if (nextId != null) {
@@ -166,6 +228,8 @@ class PuzzleStreakController extends AsyncNotifier<StreakState> {
     ref
         .read(streakStorageProvider(ref.read(authControllerProvider)?.user.id))
         .saveActiveStreak(state.requireValue.streak);
+
+    return .advanced;
   }
 
   Future<void> gameOver() async {

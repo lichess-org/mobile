@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_streak.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -28,6 +29,7 @@ import 'package:lichess_mobile/src/view/puzzle/puzzle_feedback_widget.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/board.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
@@ -59,10 +61,23 @@ class _Load extends ConsumerWidget {
     final authUser = ref.watch(authControllerProvider);
     final streak = ref.watch(puzzleStreakControllerProvider);
 
+    // A background rebuild that fails (e.g. tapping 'New streak' while offline)
+    // keeps showing the previous board (see the switch below), so surface the
+    // failure explicitly instead of leaving the user with no feedback.
+    ref.listen(puzzleStreakControllerProvider, (previous, next) {
+      if (previous?.hasError == false && next.hasError && next.hasValue) {
+        showSnackBar(
+          context,
+          'Could not load the streak. Please check your connection.',
+          type: SnackBarType.error,
+        );
+      }
+    });
+
     switch (streak) {
-      case AsyncValue(:final error?, :final stackTrace):
-        debugPrint('SEVERE: [StreakScreen] could not load streak; $error\n$stackTrace');
-        return PuzzleErrorBoardWidget(errorMessage: error.toString());
+      // Match a retained value before the error arm: a background rebuild that
+      // fails (e.g. offline) still carries the previous value, and we must keep
+      // showing the live board rather than tearing it down for the error board.
       case AsyncValue(:final value?):
         return _Body(
           initialPuzzleContext: PuzzleContext(
@@ -72,6 +87,14 @@ class _Load extends ConsumerWidget {
             isPuzzleStreak: true,
           ),
           streak: value.streak,
+        );
+      case AsyncValue(:final error?, :final stackTrace):
+        debugPrint('SEVERE: [StreakScreen] could not load streak; $error\n$stackTrace');
+        // The streak needs the network for an uncached puzzle (a brand-new
+        // streak, or resuming past the offline cache). Degrade to a static
+        // "go online" board instead of surfacing a raw error.
+        return const PuzzleErrorBoardWidget(
+          errorMessage: 'Go online to start or continue your streak.',
         );
       case _:
         return const Center(child: CircularProgressIndicator.adaptive());
@@ -175,7 +198,20 @@ class _BodyState extends ConsumerState<_Body> {
       if (previous?.result != PuzzleResult.lose && next.result == PuzzleResult.lose) {
         ref.read(puzzleStreakControllerProvider.notifier).gameOver();
       } else if (previous?.result != PuzzleResult.win && next.result == PuzzleResult.win) {
-        ref.read(puzzleStreakControllerProvider.notifier).next();
+        ref.read(puzzleStreakControllerProvider.notifier).next().then((result) {
+          // The puzzle was solved but the next one couldn't be loaded. Tell the
+          // user instead of silently freezing on the solved board, and don't
+          // claim they are offline when it was a server error.
+          if (!context.mounted || result != StreakAdvance.unavailable) return;
+          final isOnline = ref.read(onlineStatusProvider).value ?? false;
+          showSnackBar(
+            context,
+            isOnline
+                ? 'Could not load the next puzzle. Leave and rejoin the streak to retry.'
+                : "You're offline. Your streak will continue when you reconnect.",
+            type: isOnline ? SnackBarType.error : SnackBarType.info,
+          );
+        });
       }
     });
 
@@ -480,6 +516,7 @@ class _BottomBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = puzzleControllerProvider(initialPuzzleContext);
     final puzzleState = ref.watch(ctrlProvider);
+    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
 
     return BottomBar(
       children: [
@@ -550,7 +587,8 @@ class _BottomBar extends ConsumerWidget {
           ),
         if (streak.finished)
           BottomBarButton(
-            onTap: ref.read(puzzleStreakControllerProvider).isLoading == false
+            // A brand-new streak always needs the network.
+            onTap: isOnline && ref.read(puzzleStreakControllerProvider).isLoading == false
                 ? () => ref.invalidate(puzzleStreakControllerProvider)
                 : null,
             highlighted: true,

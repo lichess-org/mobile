@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,10 +15,12 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_streak.dart';
 import 'package:lichess_mobile/src/model/puzzle/streak_storage.dart';
+import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 
 import '../../network/fake_http_client_factory.dart';
 import '../../test_container.dart';
+import '../../utils/fake_connectivity.dart';
 
 /// Returns a raw API puzzle JSON document (game + puzzle) with puzzle [id].
 String _puzzleJsonWithId(String id) {
@@ -105,6 +108,15 @@ Future<Object?> _awaitBuildError(ProviderContainer container) async {
   return null;
 }
 
+/// Waits until [connectivityChangesProvider] reports the wanted status.
+Future<void> _waitForConnectivity(ProviderContainer container, {required bool isOnline}) async {
+  for (var i = 0; i < 200; i++) {
+    if (container.read(connectivityChangesProvider).value?.isOnline == isOnline) return;
+    await Future<void>.delayed(const Duration(milliseconds: 10));
+  }
+  fail('connectivity did not report isOnline=$isOnline');
+}
+
 /// A [PuzzleStorage] whose cache writes always fail, to prove a network fetch is
 /// still returned (not discarded) when the local cache write throws. Reads use
 /// the real database via the inherited [PuzzleStorage.fetch].
@@ -145,6 +157,9 @@ Puzzle _puzzle(String id) => Puzzle(
 );
 
 void main() {
+  // Required by the connectivity provider, which registers an [AppLifecycleListener].
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   group('PuzzleStreakController local-first fetching', () {
     test('a fresh streak caches the embedded index 0 and index 1 puzzles', () async {
       final ids = ['AAAAA', 'BBBBB', 'CCCCC'];
@@ -248,6 +263,135 @@ void main() {
 
       _keepAlive(container);
       expect(await _awaitBuildError(container), isNotNull);
+    });
+
+    test('next() advances offline when the next puzzle is cached', () async {
+      final container = await _makeContainer(_offlineClient);
+
+      final puzzleStorage = await container.read(puzzleStorageProvider.future);
+      await puzzleStorage.save(puzzle: _puzzle('MptxK'));
+      await puzzleStorage.save(puzzle: _puzzle('4CZxz'));
+      await container
+          .read(streakStorageProvider(null))
+          .saveActiveStreak(_activeStreak(['MptxK', '4CZxz']));
+
+      _keepAlive(container);
+      await container.read(puzzleStreakControllerProvider.future);
+      final result = await container.read(puzzleStreakControllerProvider.notifier).next();
+      expect(result, StreakAdvance.advanced);
+
+      final state = await container.read(puzzleStreakControllerProvider.future);
+      expect(state.streak.index, 1);
+      expect(state.puzzle.puzzle.id, const PuzzleId('4CZxz'));
+      expect(state.nextPuzzle, isNull);
+    });
+
+    test('next() with an uncached next puzzle offline is a graceful no-op', () async {
+      final container = await _makeContainer(_offlineClient);
+
+      final puzzleStorage = await container.read(puzzleStorageProvider.future);
+      await puzzleStorage.save(puzzle: _puzzle('MptxK'));
+      await container
+          .read(streakStorageProvider(null))
+          .saveActiveStreak(_activeStreak(['MptxK', '4CZxz']));
+
+      _keepAlive(container);
+      final initial = await container.read(puzzleStreakControllerProvider.future);
+      expect(initial.nextPuzzle, isNull);
+
+      final result = await container.read(puzzleStreakControllerProvider.notifier).next();
+      expect(result, StreakAdvance.unavailable);
+
+      final state = await container.read(puzzleStreakControllerProvider.future);
+      expect(state.streak.index, 0);
+      expect(state.puzzle.puzzle.id, const PuzzleId('MptxK'));
+    });
+
+    test('a win that cannot advance offline stays on the solved puzzle', () async {
+      final container = await _makeContainer(_offlineClient);
+
+      final puzzleStorage = await container.read(puzzleStorageProvider.future);
+      await puzzleStorage.save(puzzle: _puzzle('MptxK'));
+      await container
+          .read(streakStorageProvider(null))
+          .saveActiveStreak(_activeStreak(['MptxK', '4CZxz']));
+
+      _keepAlive(container);
+      final initial = await container.read(puzzleStreakControllerProvider.future);
+      expect(initial.nextPuzzle, isNull);
+
+      // Offline with no cached successor: next() reports the puzzle as
+      // unavailable (so the UI can tell the user) and leaves the streak on the
+      // solved puzzle (it resumes automatically on reconnect).
+      final result = await container.read(puzzleStreakControllerProvider.notifier).next();
+      expect(result, StreakAdvance.unavailable);
+
+      final state = container.read(puzzleStreakControllerProvider).requireValue;
+      expect(state.streak.index, 0);
+      expect(state.puzzle.puzzle.id, const PuzzleId('MptxK'));
+    });
+
+    test('next() self-heals and resumes automatically once back online', () async {
+      var online = false;
+      final client = MockClient((request) async {
+        if (!online) return http.Response('', 500);
+        final path = request.url.path;
+        if (path.startsWith('/api/puzzle/')) {
+          return http.Response(_puzzleJsonWithId(path.split('/').last), 200);
+        }
+        return http.Response('', 404);
+      });
+
+      final container = await _makeContainer(client);
+
+      final puzzleStorage = await container.read(puzzleStorageProvider.future);
+      await puzzleStorage.save(puzzle: _puzzle('MptxK'));
+      await container
+          .read(streakStorageProvider(null))
+          .saveActiveStreak(_activeStreak(['MptxK', '4CZxz']));
+
+      _keepAlive(container);
+      final initial = await container.read(puzzleStreakControllerProvider.future);
+      expect(initial.nextPuzzle, isNull);
+
+      online = true;
+      final result = await container.read(puzzleStreakControllerProvider.notifier).next();
+      expect(result, StreakAdvance.advanced);
+
+      final state = await container.read(puzzleStreakControllerProvider.future);
+      expect(state.streak.index, 1);
+      expect(state.puzzle.puzzle.id, const PuzzleId('4CZxz'));
+    });
+
+    test('a stuck advance resumes automatically on reconnect', () async {
+      var online = false;
+      final container = await _makeContainer(_reconnectingClient(() => online));
+
+      final puzzleStorage = await container.read(puzzleStorageProvider.future);
+      await puzzleStorage.save(puzzle: _puzzle('MptxK'));
+      await container
+          .read(streakStorageProvider(null))
+          .saveActiveStreak(_activeStreak(['MptxK', '4CZxz']));
+
+      _keepAlive(container);
+      await container.read(puzzleStreakControllerProvider.future);
+      await _waitForConnectivity(container, isOnline: false);
+
+      final result = await container.read(puzzleStreakControllerProvider.notifier).next();
+      expect(result, StreakAdvance.unavailable);
+
+      // Back online: the controller must advance without any user action.
+      online = true;
+      FakeConnectivity.controller.add([ConnectivityResult.wifi]);
+      await _waitForConnectivity(container, isOnline: true);
+
+      for (var i = 0; i < 100; i++) {
+        if (container.read(puzzleStreakControllerProvider).value?.streak.index == 1) break;
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+      }
+      final state = container.read(puzzleStreakControllerProvider).requireValue;
+      expect(state.streak.index, 1);
+      expect(state.puzzle.puzzle.id, const PuzzleId('4CZxz'));
     });
 
     test('a network-fetched puzzle is kept even when the cache write fails', () async {
