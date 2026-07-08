@@ -95,14 +95,22 @@ MockClient _countingClient(List<String> streakIds, _RequestLog log) {
 }
 
 /// A client that throws while `isOnline()` is false — simulating being offline
-/// — and serves `/api/streak` (when [streakIds] is given) and puzzles when
-/// online.
-MockClient _reconnectingClient(bool Function() isOnline, {List<String>? streakIds}) {
+/// — and serves `/api/streak` (when [streakIds] is given), puzzles, and
+/// streak-run posts (recorded into [postedRuns]) when online.
+MockClient _reconnectingClient(
+  bool Function() isOnline, {
+  List<String>? streakIds,
+  List<int>? postedRuns,
+}) {
   return MockClient((request) async {
     if (!isOnline()) {
       throw http.ClientException('offline');
     }
     final path = request.url.path;
+    if (request.method == 'POST' && path.startsWith('/api/streak/')) {
+      postedRuns?.add(int.parse(path.split('/').last));
+      return http.Response('', 200);
+    }
     if (streakIds != null && path == '/api/streak') {
       return http.Response(_streakJson(streakIds), 200);
     }
@@ -543,6 +551,155 @@ void main() {
       final state = container.read(puzzleStreakControllerProvider).requireValue;
       expect(state.streak.index, 1);
       expect(state.puzzle.puzzle.id, const PuzzleId('4CZxz'));
+    });
+
+    test('gameOver() offline does not throw', () async {
+      final container = await _makeContainer(_offlineClient);
+
+      final puzzleStorage = await container.read(puzzleStorageProvider.future);
+      await puzzleStorage.save(puzzle: _puzzle('MptxK'));
+      await puzzleStorage.save(puzzle: _puzzle('4CZxz'));
+      await container
+          .read(streakStorageProvider(null))
+          .saveActiveStreak(_activeStreak(['MptxK', '4CZxz']));
+
+      _keepAlive(container);
+      await container.read(puzzleStreakControllerProvider.future);
+      await container.read(puzzleStreakControllerProvider.notifier).gameOver();
+
+      final state = await container.read(puzzleStreakControllerProvider.future);
+      expect(state.streak.finished, isTrue);
+    });
+
+    test('savePendingScore keeps the best pending run', () async {
+      final container = await _makeContainer(_offlineClient, authUser: fakeAuthUser);
+      final storage = container.read(streakStorageProvider(fakeAuthUser.user.id));
+
+      await storage.savePendingScore(3);
+      await storage.savePendingScore(8);
+      await storage.savePendingScore(5);
+      expect(await storage.loadPendingScore(), 8);
+
+      await storage.clearPendingScore();
+      expect(await storage.loadPendingScore(), isNull);
+    });
+
+    test('gameOver() offline saves the streak score to post later', () async {
+      final container = await _makeContainer(_offlineClient, authUser: fakeAuthUser);
+      final userId = fakeAuthUser.user.id;
+
+      final puzzleStorage = await container.read(puzzleStorageProvider.future);
+      await puzzleStorage.save(puzzle: _puzzle('MptxK'));
+      await puzzleStorage.save(puzzle: _puzzle('4CZxz'));
+      await container
+          .read(streakStorageProvider(userId))
+          .saveActiveStreak(_activeStreak(['MptxK', '4CZxz'], index: 1));
+
+      _keepAlive(container);
+      await container.read(puzzleStreakControllerProvider.future);
+      await container.read(puzzleStreakControllerProvider.notifier).gameOver();
+
+      expect(await container.read(streakStorageProvider(userId)).loadPendingScore(), 1);
+    });
+
+    test('a pending streak score is posted on the next build once back online', () async {
+      final postedRuns = <int>[];
+      final client = MockClient((request) async {
+        final path = request.url.path;
+        if (request.method == 'POST' && path.startsWith('/api/streak/')) {
+          postedRuns.add(int.parse(path.split('/').last));
+          return http.Response('', 200);
+        }
+        if (path == '/api/streak') {
+          return http.Response(_streakJson(['AAAAA', 'BBBBB', 'CCCCC']), 200);
+        }
+        if (path == '/api/puzzle/many') {
+          return http.Response(_manyJson(request.url.queryParameters['ids']!.split(',')), 200);
+        }
+        if (path.startsWith('/api/puzzle/')) {
+          return http.Response(_puzzleJsonWithId(path.split('/').last), 200);
+        }
+        return http.Response('', 404);
+      });
+
+      final container = await _makeContainer(client, authUser: fakeAuthUser);
+      final userId = fakeAuthUser.user.id;
+
+      await container.read(streakStorageProvider(userId)).savePendingScore(7);
+
+      _keepAlive(container);
+      await container.read(puzzleStreakControllerProvider.future);
+
+      for (var i = 0; i < 100 && postedRuns.isEmpty; i++) {
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+      }
+      expect(postedRuns, [7]);
+      expect(await container.read(streakStorageProvider(userId)).loadPendingScore(), isNull);
+    });
+
+    test('a pending streak score is posted on reconnect', () async {
+      var online = false;
+      final postedRuns = <int>[];
+      final container = await _makeContainer(
+        _reconnectingClient(() => online, postedRuns: postedRuns),
+        authUser: fakeAuthUser,
+      );
+      final userId = fakeAuthUser.user.id;
+
+      final puzzleStorage = await container.read(puzzleStorageProvider.future);
+      await puzzleStorage.save(puzzle: _puzzle('MptxK'));
+      await container
+          .read(streakStorageProvider(userId))
+          .saveActiveStreak(_activeStreak(['MptxK', '4CZxz']));
+      await container.read(streakStorageProvider(userId)).savePendingScore(5);
+
+      _keepAlive(container);
+      await container.read(puzzleStreakControllerProvider.future);
+      await _waitForConnectivity(container, isOnline: false);
+      // The flush attempted at build time failed (offline): the score is still owed.
+      expect(await container.read(streakStorageProvider(userId)).loadPendingScore(), 5);
+
+      online = true;
+      FakeConnectivity.controller.add([ConnectivityResult.wifi]);
+
+      for (var i = 0; i < 100 && postedRuns.isEmpty; i++) {
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+      }
+      expect(postedRuns, [5]);
+      expect(await container.read(streakStorageProvider(userId)).loadPendingScore(), isNull);
+    });
+
+    test('gameOver() online clears a now-redundant lower pending score', () async {
+      final client = MockClient((request) async {
+        final path = request.url.path;
+        if (request.method == 'POST' && path == '/api/streak/2') {
+          return http.Response('', 200);
+        }
+        if (request.method == 'POST') {
+          return http.Response('', 500);
+        }
+        if (path.startsWith('/api/puzzle/')) {
+          return http.Response(_puzzleJsonWithId(path.split('/').last), 200);
+        }
+        return http.Response('', 404);
+      });
+
+      final container = await _makeContainer(client, authUser: fakeAuthUser);
+      final userId = fakeAuthUser.user.id;
+
+      await container.read(streakStorageProvider(userId)).savePendingScore(1);
+
+      final puzzleStorage = await container.read(puzzleStorageProvider.future);
+      await puzzleStorage.save(puzzle: _puzzle('kcN3a'));
+      await container
+          .read(streakStorageProvider(userId))
+          .saveActiveStreak(_activeStreak(['MptxK', '4CZxz', 'kcN3a'], index: 2));
+
+      _keepAlive(container);
+      await container.read(puzzleStreakControllerProvider.future);
+      await container.read(puzzleStreakControllerProvider.notifier).gameOver();
+
+      expect(await container.read(streakStorageProvider(userId)).loadPendingScore(), isNull);
     });
 
     test('a network-fetched puzzle is kept even when the cache write fails', () async {

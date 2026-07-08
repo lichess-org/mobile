@@ -75,6 +75,8 @@ class PuzzleStreakController extends AsyncNotifier<StreakState> {
   /// Exclusive end of the streak window that [_prefetchUpcoming] has warmed.
   int _warmedUpTo = 0;
 
+  bool _flushing = false;
+
   /// Loads the puzzle from the local cache, falling back to the network on a
   /// miss (caching the result). Returns null if both fail, e.g. offline.
   Future<Puzzle?> fetchPuzzle(PuzzleId id) async {
@@ -147,6 +149,23 @@ class PuzzleStreakController extends AsyncNotifier<StreakState> {
     }
   }
 
+  /// Posts a streak run that was saved while offline (see [gameOver]) and clears
+  /// it on success. A failure leaves the score in place to retry later.
+  Future<void> _flushPendingScore(StreakStorage storage) async {
+    if (_flushing) return;
+    _flushing = true;
+    try {
+      final pending = await storage.loadPendingScore();
+      if (pending == null) return;
+      await ref.read(puzzleRepositoryProvider).postStreakRun(pending);
+      await storage.clearPendingScore();
+    } catch (_) {
+      // Still offline; keep the pending score for the next attempt.
+    } finally {
+      _flushing = false;
+    }
+  }
+
   @override
   Future<StreakState> build() async {
     final authUser = ref.watch(authControllerProvider);
@@ -157,13 +176,23 @@ class PuzzleStreakController extends AsyncNotifier<StreakState> {
     _advancePending = false;
     _warmedUpTo = 0;
 
-    // On reconnect (the screen may still be open): resume a streak that is
-    // paused on a solved puzzle whose successor couldn't be fetched offline
-    // (see [next]), and top up the look-ahead buffer.
+    // Best-effort: post any streak score that couldn't be sent while offline.
+    if (authUser != null) {
+      _flushPendingScore(streakStorage).ignore();
+    }
+
+    // On reconnect (the game-over or live screen may still be open): post any
+    // pending score, resume a streak that is paused on a solved puzzle whose
+    // successor couldn't be fetched offline (see [next]), and top up the
+    // look-ahead buffer. The resume path is not gated on auth — anonymous
+    // streaks get stuck the same way.
     ref.listen(connectivityChangesProvider, (previous, current) {
       final wasOffline = previous?.value?.isOnline == false;
       final isNowOnline = current.value?.isOnline == true;
       if (!wasOffline || !isNowOnline) return;
+      if (authUser != null) {
+        _flushPendingScore(streakStorage).ignore();
+      }
       if (_advancePending) {
         // next() refills the look-ahead buffer once it has advanced.
         next().ignore();
@@ -305,12 +334,24 @@ class PuzzleStreakController extends AsyncNotifier<StreakState> {
     ));
 
     final userId = ref.read(authControllerProvider)?.user.id;
-    ref.read(streakStorageProvider(userId)).clearActiveStreak();
+    final streakStorage = ref.read(streakStorageProvider(userId));
+    await streakStorage.clearActiveStreak();
 
     if (userId != null) {
       final streak = state.requireValue.streak.index;
       if (streak > 0) {
-        await ref.read(puzzleRepositoryProvider).postStreakRun(streak);
+        try {
+          await ref.read(puzzleRepositoryProvider).postStreakRun(streak);
+          // A lower-or-equal pending run from a past offline session is now
+          // redundant (the server keeps the best); a higher one is still owed.
+          final pending = await streakStorage.loadPendingScore();
+          if (pending != null && pending <= streak) {
+            await streakStorage.clearPendingScore();
+          }
+        } catch (_) {
+          // Offline: persist the score so it is posted on reconnect, not lost.
+          await streakStorage.savePendingScore(streak);
+        }
       }
     }
   }
