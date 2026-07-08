@@ -79,6 +79,8 @@ class PuzzleStreakController extends AsyncNotifier<StreakState> {
 
   /// Loads the puzzle from the local cache, falling back to the network on a
   /// miss (caching the result). Returns null if both fail, e.g. offline.
+  ///
+  /// Also used by the streak screen to review already-solved puzzles.
   Future<Puzzle?> fetchPuzzle(PuzzleId id) async {
     try {
       final storage = await ref.read(puzzleStorageProvider.future);

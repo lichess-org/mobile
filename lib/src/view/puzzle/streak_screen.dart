@@ -27,6 +27,7 @@ import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_error_board_widget.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_feedback_widget.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -91,8 +92,8 @@ class _Load extends ConsumerWidget {
       case AsyncValue(:final error?, :final stackTrace):
         debugPrint('SEVERE: [StreakScreen] could not load streak; $error\n$stackTrace');
         // The streak needs the network for an uncached puzzle (a brand-new
-        // streak, or resuming past the offline cache). Degrade to a static
-        // "go online" board instead of surfacing a raw error.
+        // streak, or resuming past the offline prefetch buffer). Degrade to a
+        // static "go online" board instead of surfacing a raw error.
         return const PuzzleErrorBoardWidget(
           errorMessage: 'Go online to start or continue your streak.',
         );
@@ -116,6 +117,22 @@ class _BodyState extends ConsumerState<_Body> {
   final _boardKey = GlobalKey(debugLabel: 'boardOnPuzzleStreakScreen');
   late final ChessboardController _controller;
 
+  /// The solved puzzle under review — its index in the streak and its own
+  /// [PuzzleContext] — or `null` when the live puzzle is displayed.
+  ///
+  /// Reviewing uses a separate [puzzleControllerProvider] (a distinct family
+  /// key) so the live puzzle keeps its in-progress state and needs no reload
+  /// on return.
+  ({int index, PuzzleContext context})? _review;
+
+  /// The puzzle shown on the board: the reviewed one, else the live one.
+  PuzzleContext get _displayedContext => _review?.context ?? widget.initialPuzzleContext;
+
+  /// Bumped on every navigation intent (view another puzzle, return to live, or
+  /// a live-puzzle swap); an in-flight [_viewPuzzleAt] bails out if a newer
+  /// intent superseded it while its fetch was resolving.
+  int _navGeneration = 0;
+
   @override
   void initState() {
     super.initState();
@@ -125,9 +142,11 @@ class _BodyState extends ConsumerState<_Body> {
   @override
   void didUpdateWidget(_Body oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // The streak feeds new puzzles by swapping the puzzle context (and thus the
-    // controller provider), so push the new puzzle onto the board.
+    // A new live puzzle swaps the context: exit any review (superseding an
+    // in-flight review navigation) and push it to the board.
     if (oldWidget.initialPuzzleContext != widget.initialPuzzleContext) {
+      _navGeneration++;
+      _review = null;
       _applyBoardUpdate();
     }
   }
@@ -149,7 +168,7 @@ class _BodyState extends ConsumerState<_Body> {
   }
 
   GameData _buildGameData() {
-    final state = ref.read(puzzleControllerProvider(widget.initialPuzzleContext));
+    final state = ref.read(puzzleControllerProvider(_displayedContext));
     final boardPreferences = ref.read(boardPreferencesProvider);
     return buildGameData(
       fen: state.currentPosition.fen,
@@ -167,10 +186,68 @@ class _BodyState extends ConsumerState<_Body> {
     _controller.updatePosition(_buildGameData());
   }
 
+  /// Loads the solved puzzle at [index] into the board for review.
+  Future<void> _viewPuzzleAt(int index) async {
+    final generation = ++_navGeneration;
+    final puzzle = await ref
+        .read(puzzleStreakControllerProvider.notifier)
+        .fetchPuzzle(widget.streak.streak[index]);
+    // Bail if unmounted or a newer navigation intent superseded this fetch.
+    if (!mounted || generation != _navGeneration) return;
+    if (puzzle == null) {
+      showSnackBar(context, 'Could not load puzzle', type: SnackBarType.error);
+      return;
+    }
+    final authUser = ref.read(authControllerProvider);
+    final reviewContext = PuzzleContext(
+      puzzle: puzzle,
+      angle: widget.initialPuzzleContext.angle,
+      userId: authUser?.user.id,
+      isPuzzleStreak: true,
+    );
+    _controller.clearDrawnShapes();
+    ref.read(puzzleControllerProvider(reviewContext).notifier).loadForReview(reviewContext);
+    setState(() {
+      _review = (index: index, context: reviewContext);
+    });
+    _applyBoardUpdate();
+  }
+
+  void _viewPreviousPuzzle() {
+    final currentIndex = _review?.index ?? widget.streak.index;
+    if (currentIndex > 0) {
+      _viewPuzzleAt(currentIndex - 1);
+    }
+  }
+
+  void _viewNextPuzzle() {
+    final reviewIndex = _review?.index;
+    if (reviewIndex == null) return;
+    if (reviewIndex + 1 >= widget.streak.index) {
+      _returnToCurrentPuzzle();
+    } else {
+      _viewPuzzleAt(reviewIndex + 1);
+    }
+  }
+
+  void _returnToCurrentPuzzle() {
+    // Supersede any in-flight _viewPuzzleAt, then re-display the untouched live
+    // puzzle (its in-progress/solved state is preserved).
+    _navGeneration++;
+    _controller.clearDrawnShapes();
+    setState(() {
+      _review = null;
+    });
+    _applyBoardUpdate();
+  }
+
   @override
   Widget build(BuildContext context) {
     final boardPreferences = ref.watch(boardPreferencesProvider);
-    final ctrlProvider = puzzleControllerProvider(widget.initialPuzzleContext);
+    // The live puzzle drives streak progression; the displayed puzzle drives the
+    // board and bottom bar. Same provider unless a review is open.
+    final liveProvider = puzzleControllerProvider(widget.initialPuzzleContext);
+    final ctrlProvider = puzzleControllerProvider(_displayedContext);
     final puzzleState = ref.watch(ctrlProvider);
 
     // fix for #1951 : when failing the first puzzle, need to do
@@ -182,7 +259,7 @@ class _BodyState extends ConsumerState<_Body> {
           _controller.clearDrawnShapes();
           final authUser = ref.read(authControllerProvider);
           ref
-              .read(ctrlProvider.notifier)
+              .read(liveProvider.notifier)
               .onLoadPuzzle(
                 PuzzleContext(
                   puzzle: next.requireValue.puzzle,
@@ -194,7 +271,8 @@ class _BodyState extends ConsumerState<_Body> {
       }
     });
 
-    ref.listen(ctrlProvider, (previous, next) {
+    // Streak progression is driven only by the live puzzle, never a reviewed one.
+    ref.listen(liveProvider, (previous, next) {
       if (previous?.result != PuzzleResult.lose && next.result == PuzzleResult.lose) {
         ref.read(puzzleStreakControllerProvider.notifier).gameOver();
       } else if (previous?.result != PuzzleResult.win && next.result == PuzzleResult.win) {
@@ -378,8 +456,12 @@ class _BodyState extends ConsumerState<_Body> {
                                       ),
                                     ),
                                     _BottomBar(
-                                      initialPuzzleContext: widget.initialPuzzleContext,
+                                      puzzleContext: _displayedContext,
                                       streak: widget.streak,
+                                      viewingIndex: _review?.index,
+                                      onViewPrevious: _viewPreviousPuzzle,
+                                      onViewNext: _viewNextPuzzle,
+                                      onJumpToLive: _returnToCurrentPuzzle,
                                     ),
                                   ],
                                 ),
@@ -479,8 +561,12 @@ class _BodyState extends ConsumerState<_Body> {
                               ),
                             ),
                             _BottomBar(
-                              initialPuzzleContext: widget.initialPuzzleContext,
+                              puzzleContext: _displayedContext,
                               streak: widget.streak,
+                              viewingIndex: _review?.index,
+                              onViewPrevious: _viewPreviousPuzzle,
+                              onViewNext: _viewNextPuzzle,
+                              onJumpToLive: _returnToCurrentPuzzle,
                             ),
                           ],
                         );
@@ -507,28 +593,114 @@ class _BodyState extends ConsumerState<_Body> {
 }
 
 class _BottomBar extends ConsumerWidget {
-  const _BottomBar({required this.initialPuzzleContext, required this.streak});
+  const _BottomBar({
+    required this.puzzleContext,
+    required this.streak,
+    required this.viewingIndex,
+    required this.onViewPrevious,
+    required this.onViewNext,
+    required this.onJumpToLive,
+  });
 
-  final PuzzleContext initialPuzzleContext;
+  /// Puzzle shown on the board (live or reviewed).
+  final PuzzleContext puzzleContext;
   final PuzzleStreak streak;
+
+  /// Index of the solved puzzle being reviewed, or `null` for the live puzzle.
+  final int? viewingIndex;
+  final VoidCallback onViewPrevious;
+  final VoidCallback onViewNext;
+  final VoidCallback onJumpToLive;
+
+  /// Whether there is an earlier solved puzzle to review.
+  bool get _canViewPrevious => (viewingIndex ?? streak.index) > 0;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = puzzleControllerProvider(initialPuzzleContext);
+    final ctrlProvider = puzzleControllerProvider(puzzleContext);
     final puzzleState = ref.watch(ctrlProvider);
     final isOnline = ref.watch(onlineStatusProvider).value ?? false;
 
+    final viewing = viewingIndex != null;
+
+    final previousMoveButton = BottomBarButton(
+      key: const ValueKey('previous-move'),
+      onTap: puzzleState.canGoBack ? () => ref.read(ctrlProvider.notifier).userPrevious() : null,
+      label: 'Previous',
+      icon: CupertinoIcons.chevron_back,
+    );
+
+    final nextMoveButton = BottomBarButton(
+      key: const ValueKey('next-move'),
+      onTap: puzzleState.canGoNext ? () => ref.read(ctrlProvider.notifier).userNext() : null,
+      label: context.l10n.next,
+      icon: CupertinoIcons.chevron_forward,
+    );
+
+    final menuButton = BottomBarButton(
+      key: const ValueKey('menu'),
+      onTap: () => _showMenu(context, puzzleState),
+      label: context.l10n.menu,
+      icon: Icons.menu,
+    );
+
+    final analysisButton = BottomBarButton(
+      key: const ValueKey('analysis'),
+      onTap: () {
+        Navigator.of(context, rootNavigator: true).push(
+          AnalysisScreen.buildRoute(
+            AnalysisOptions.pgn(
+              id: puzzleState.puzzle.puzzle.id,
+              orientation: puzzleState.pov,
+              pgn: ref.read(ctrlProvider.notifier).makePgn(),
+              isComputerAnalysisAllowed: true,
+              variant: Variant.standard,
+              initialMoveCursor: 0,
+            ),
+          ),
+        );
+      },
+      label: context.l10n.analysis,
+      icon: Icons.biotech,
+    );
+
     return BottomBar(
       children: [
-        if (!streak.finished)
+        menuButton,
+        if (viewing || streak.finished) ...[
+          analysisButton,
+          previousMoveButton,
+          nextMoveButton,
+          if (viewing)
+            BottomBarButton(
+              key: const ValueKey('next-puzzle'),
+              icon: CupertinoIcons.arrow_right,
+              label: 'Next',
+              showLabel: true,
+              onTap: onViewNext,
+            )
+          else
+            BottomBarButton(
+              key: const ValueKey('new-streak'),
+              // A brand-new streak always needs the network.
+              onTap: isOnline && ref.read(puzzleStreakControllerProvider).isLoading == false
+                  ? () => ref.invalidate(puzzleStreakControllerProvider)
+                  : null,
+              highlighted: true,
+              label: context.l10n.puzzleNewStreak,
+              icon: CupertinoIcons.play_arrow_solid,
+            ),
+        ] else ...[
+          if (_canViewPrevious)
+            BottomBarButton(
+              key: const ValueKey('previous-puzzle'),
+              icon: CupertinoIcons.arrow_left,
+              label: 'Previous puzzle',
+              showLabel: true,
+              onTap: onViewPrevious,
+            ),
           BottomBarButton(
-            icon: Icons.info_outline,
-            label: context.l10n.aboutX('Streak'),
-            showLabel: true,
-            onTap: () => _streakInfoDialogBuilder(context),
-          ),
-        if (!streak.finished)
-          BottomBarButton(
+            key: const ValueKey('skip'),
             icon: Icons.skip_next,
             label: context.l10n.skipThisMove,
             showLabel: true,
@@ -539,62 +711,40 @@ class _BottomBar extends ConsumerWidget {
                     ref.read(puzzleStreakControllerProvider.notifier).skipMove();
                   },
           ),
-        if (streak.finished)
-          BottomBarButton(
-            onTap: () {
-              launchShareDialog(
-                context,
-                ShareParams(
-                  text: lichessUri('/training/${puzzleState.puzzle.puzzle.id}').toString(),
-                ),
-              );
-            },
-            label: 'Share this puzzle',
-            icon: Theme.of(context).platform == TargetPlatform.iOS ? Icons.ios_share : Icons.share,
+        ],
+      ],
+    );
+  }
+
+  Future<void> _showMenu(BuildContext context, PuzzleState puzzleState) {
+    final viewing = viewingIndex != null;
+    return showAdaptiveActionSheet(
+      context: context,
+      actions: [
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.mobileSharePuzzle),
+          onPressed: () {
+            launchShareDialog(
+              context,
+              ShareParams(text: lichessUri('/training/${puzzleState.puzzle.puzzle.id}').toString()),
+            );
+          },
+        ),
+        // On the live puzzle the bottom bar already has a previous-puzzle button.
+        if (viewing && _canViewPrevious)
+          BottomSheetAction(
+            makeLabel: (context) => const Text('Previous puzzle'),
+            onPressed: onViewPrevious,
           ),
-        if (streak.finished)
-          BottomBarButton(
-            onTap: () {
-              Navigator.of(context, rootNavigator: true).push(
-                AnalysisScreen.buildRoute(
-                  AnalysisOptions.pgn(
-                    id: puzzleState.puzzle.puzzle.id,
-                    orientation: puzzleState.pov,
-                    pgn: ref.read(ctrlProvider.notifier).makePgn(),
-                    isComputerAnalysisAllowed: true,
-                    variant: Variant.standard,
-                    initialMoveCursor: 0,
-                  ),
-                ),
-              );
-            },
-            label: context.l10n.analysis,
-            icon: Icons.biotech,
+        if (viewing)
+          BottomSheetAction(
+            makeLabel: (context) => const Text('Jump to live'),
+            onPressed: onJumpToLive,
           ),
-        if (streak.finished)
-          BottomBarButton(
-            onTap: puzzleState.canGoBack
-                ? () => ref.read(ctrlProvider.notifier).userPrevious()
-                : null,
-            label: 'Previous',
-            icon: CupertinoIcons.chevron_back,
-          ),
-        if (streak.finished)
-          BottomBarButton(
-            onTap: puzzleState.canGoNext ? () => ref.read(ctrlProvider.notifier).userNext() : null,
-            label: context.l10n.next,
-            icon: CupertinoIcons.chevron_forward,
-          ),
-        if (streak.finished)
-          BottomBarButton(
-            // A brand-new streak always needs the network.
-            onTap: isOnline && ref.read(puzzleStreakControllerProvider).isLoading == false
-                ? () => ref.invalidate(puzzleStreakControllerProvider)
-                : null,
-            highlighted: true,
-            label: context.l10n.puzzleNewStreak,
-            icon: CupertinoIcons.play_arrow_solid,
-          ),
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.aboutX('Streak')),
+          onPressed: () => _streakInfoDialogBuilder(context),
+        ),
       ],
     );
   }

@@ -73,17 +73,19 @@ class PuzzleController extends Notifier<PuzzleState> {
     } catch (_) {}
   }
 
-  PuzzleState _loadNewContext(PuzzleContext context) {
+  PuzzleState _loadNewContext(PuzzleContext context, {bool startPlay = true}) {
     final root = Root.fromPgnMoves(context.puzzle.game.pgn);
     _gameTree = root.nodeAt(root.mainlinePath.penultimate) as Branch;
 
     // update puzzles that are remaining in replay
     _replayRemaining = context.replayRemaining;
 
-    // play first move after 1 second
-    _firstMoveTimer = Timer(const Duration(seconds: 1), () {
-      _setPath(state.initialPath, firstMove: true);
-    });
+    if (startPlay) {
+      // play first move after 1 second
+      _firstMoveTimer = Timer(const Duration(seconds: 1), () {
+        _setPath(state.initialPath, firstMove: true);
+      });
+    }
 
     final initialPath = UciPath.fromId(_gameTree.children.first.id);
 
@@ -209,6 +211,25 @@ class PuzzleController extends Notifier<PuzzleState> {
 
   void onLoadPuzzle(PuzzleContext nextContext) {
     state = _loadNewContext(nextContext);
+  }
+
+  /// Loads [context]'s puzzle directly into view mode with its solution merged
+  /// in, for reviewing an already-solved puzzle. Unlike [onLoadPuzzle] it never
+  /// starts play nor emits a [PuzzleResult].
+  void loadForReview(PuzzleContext context) {
+    _firstMoveTimer?.cancel();
+    _viewSolutionTimer?.cancel();
+    state = _loadNewContext(context, startPlay: false);
+
+    // _mergeSolution reads the freshly assigned state, so this cannot be folded
+    // into a single state write.
+    _mergeSolution();
+    state = state.copyWith(
+      mode: PuzzleMode.view,
+      currentPath: state.initialPath,
+      root: _gameTree.view,
+      node: _gameTree.branchAt(state.initialPath).view,
+    );
   }
 
   Future<PuzzleContext?> _nextReplayPuzzle() async {
