@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -59,10 +61,19 @@ final puzzleStreakControllerProvider =
     );
 
 class PuzzleStreakController extends AsyncNotifier<StreakState> {
+  /// How many puzzles ahead of the current one to keep in the local cache.
+  static const _prefetchWindow = 30;
+
+  /// Refill the look-ahead buffer when fewer than this many warmed puzzles remain.
+  static const _prefetchMargin = 10;
+
   /// Set when a win could not advance the streak because the next puzzle wasn't
   /// available offline. The streak is paused on the solved puzzle; reconnecting
   /// retries the advance (see [build]).
   bool _advancePending = false;
+
+  /// Exclusive end of the streak window that [_prefetchUpcoming] has warmed.
+  int _warmedUpTo = 0;
 
   /// Loads the puzzle from the local cache, falling back to the network on a
   /// miss (caching the result). Returns null if both fail, e.g. offline.
@@ -97,6 +108,45 @@ class PuzzleStreakController extends AsyncNotifier<StreakState> {
     }
   }
 
+  /// Warms the local cache with upcoming puzzles so the streak can continue
+  /// offline.
+  ///
+  /// Looks ahead [_prefetchWindow] puzzles from [startIndex] and fetches the
+  /// ones that are not cached yet: in a single `/api/puzzle/many` request when
+  /// signed in, or one by one when anonymous (the batch endpoint requires the
+  /// `web:mobile` OAuth scope).
+  ///
+  /// Best-effort and fire-and-forget: failures are swallowed and the fetch is
+  /// retried on the next advance or on reconnect (see [next] and [build]).
+  Future<void> _prefetchUpcoming(Streak streak, int startIndex) async {
+    final endIndex = min(startIndex + _prefetchWindow, streak.length);
+    if (startIndex >= endIndex) return;
+
+    try {
+      final isSignedIn = ref.read(authControllerProvider) != null;
+      final repository = ref.read(puzzleRepositoryProvider);
+      final storage = await ref.read(puzzleStorageProvider.future);
+
+      final window = streak.sublist(startIndex, endIndex);
+      final cached = await storage.cachedPuzzleIds(ids: window);
+      final missing = window.where((id) => !cached.contains(id)).toIList();
+
+      if (missing.isNotEmpty) {
+        if (isSignedIn) {
+          await storage.saveAll(puzzles: await repository.fetchMany(missing));
+        } else {
+          for (final id in missing) {
+            await storage.save(puzzle: await repository.fetch(id));
+          }
+        }
+      }
+      _warmedUpTo = max(_warmedUpTo, endIndex);
+    } catch (_) {
+      // Best-effort: e.g. offline. [_warmedUpTo] is left as is so the window
+      // is requested again on the next attempt.
+    }
+  }
+
   @override
   Future<StreakState> build() async {
     final authUser = ref.watch(authControllerProvider);
@@ -105,16 +155,20 @@ class PuzzleStreakController extends AsyncNotifier<StreakState> {
     // build() starts a fresh streak session (first load, sign-in change or new
     // streak after game over), so reset the per-session bookkeeping.
     _advancePending = false;
+    _warmedUpTo = 0;
 
     // On reconnect (the screen may still be open): resume a streak that is
     // paused on a solved puzzle whose successor couldn't be fetched offline
-    // (see [next]).
+    // (see [next]), and top up the look-ahead buffer.
     ref.listen(connectivityChangesProvider, (previous, current) {
       final wasOffline = previous?.value?.isOnline == false;
       final isNowOnline = current.value?.isOnline == true;
       if (!wasOffline || !isNowOnline) return;
       if (_advancePending) {
+        // next() refills the look-ahead buffer once it has advanced.
         next().ignore();
+      } else if (state.value case final current?) {
+        _prefetchUpcoming(current.streak.streak, current.streak.index + 2).ignore();
       }
     });
 
@@ -129,6 +183,8 @@ class PuzzleStreakController extends AsyncNotifier<StreakState> {
       if (puzzle == null) {
         throw Exception('Could not load puzzle for active streak');
       }
+
+      _prefetchUpcoming(activeStreak.streak, activeStreak.index + 2).ignore();
 
       return (streak: activeStreak, puzzle: puzzle, nextPuzzle: nextPuzzle);
     }
@@ -157,6 +213,8 @@ class PuzzleStreakController extends AsyncNotifier<StreakState> {
     // Save the pointer right away so the streak can be resumed offline even
     // before the first puzzle is solved.
     await streakStorage.saveActiveStreak(streak);
+
+    _prefetchUpcoming(newStreak.streak, 2).ignore();
 
     return (streak: streak, puzzle: newStreak.puzzle, nextPuzzle: nextPuzzle);
   }
@@ -187,9 +245,9 @@ class PuzzleStreakController extends AsyncNotifier<StreakState> {
     if (solvedState == null) return .endOfStreak;
 
     // The next puzzle is normally already prefetched into [nextPuzzle]. If it
-    // isn't, try one local-first fetch; if that also misses there is no way to
-    // advance right now. The reconnect listener set up in [build] retries the
-    // advance when back online.
+    // isn't (the offline look-ahead buffer ran dry), try one local-first fetch;
+    // if that also misses there is no way to advance right now. The reconnect
+    // listener set up in [build] retries the advance when back online.
     var advanceTo = solvedState.nextPuzzle;
     if (advanceTo == null) {
       final advanceId = solvedState.streak.nextId;
@@ -223,6 +281,11 @@ class PuzzleStreakController extends AsyncNotifier<StreakState> {
           nextPuzzle: puzzle,
         ));
       });
+    }
+
+    // Keep the offline look-ahead buffer topped up as the streak progresses.
+    if (advanced.index + _prefetchMargin >= _warmedUpTo) {
+      _prefetchUpcoming(advanced.streak, advanced.index + 2).ignore();
     }
 
     ref

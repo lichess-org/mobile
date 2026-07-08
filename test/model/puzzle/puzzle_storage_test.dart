@@ -31,6 +31,39 @@ void main() {
       await storage.save(puzzle: puzzle);
       expect(storage.fetch(puzzleId: const PuzzleId('pId3')), completion(equals(puzzle)));
     });
+
+    test('saveAll stores every puzzle and cachedPuzzleIds reports them', () async {
+      final db = await openAppDatabase(dbFactory, inMemoryDatabasePath);
+
+      final container = await makeContainer(
+        overrides: {
+          databaseProvider: databaseProvider.overrideWith((ref) {
+            ref.onDispose(db.close);
+            return db;
+          }),
+        },
+      );
+
+      final storage = await container.read(puzzleStorageProvider.future);
+
+      final puzzles = IList([
+        for (final id in const ['pId1', 'pId2'])
+          puzzle.copyWith(puzzle: puzzle.puzzle.copyWith(id: PuzzleId(id))),
+      ]);
+      await storage.saveAll(puzzles: puzzles);
+
+      for (final saved in puzzles) {
+        expect(storage.fetch(puzzleId: saved.puzzle.id), completion(equals(saved)));
+      }
+
+      expect(
+        storage.cachedPuzzleIds(
+          ids: IList(const [PuzzleId('pId1'), PuzzleId('pId2'), PuzzleId('none1')]),
+        ),
+        completion(equals(ISet(const [PuzzleId('pId1'), PuzzleId('pId2')]))),
+      );
+      expect(storage.cachedPuzzleIds(ids: IList(const <PuzzleId>[])), completion(isEmpty));
+    });
   });
 }
 
