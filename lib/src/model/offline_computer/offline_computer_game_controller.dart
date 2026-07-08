@@ -361,7 +361,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         _playEngineMoveAfterPlayerAnimation();
       }
     } catch (e) {
-      _logger.warning('Error evaluating move: $e');
+      _logger.warning('Error evaluating move:', e);
       if (ref.mounted) {
         state = state.copyWith(isEvaluatingMove: false);
         if (state.game.playable && state.turn != state.game.playerSide) {
@@ -490,7 +490,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         break;
       }
     } catch (e) {
-      _logger.fine('Could not get cloud eval: $e');
+      _logger.fine('Could not get cloud eval:', e);
     }
 
     return eval;
@@ -614,7 +614,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
           .getTablebaseEntry(position.fen, Variant.fromRule(position.rule));
       return tablebaseEntryToCloudEval(entry, position);
     } catch (e) {
-      _logger.fine('Could not get tablebase eval: $e');
+      _logger.fine('Could not get tablebase eval:', e);
       return null;
     }
   }

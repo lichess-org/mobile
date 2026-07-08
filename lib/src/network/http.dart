@@ -218,13 +218,13 @@ Future<bool> downloadFile(
         })
         .pipe(sink);
   } catch (e) {
-    _logger.warning('Failed to download file: $e');
+    _logger.warning('Failed to download file:', e);
   } finally {
     try {
       await sink.flush();
       await sink.close();
     } on FileSystemException catch (e) {
-      _logger.warning('Failed to save file: $e');
+      _logger.warning('Failed to save file:', e);
     }
   }
 
@@ -365,7 +365,7 @@ class LichessClient implements Client {
 
       return response;
     } catch (e, st) {
-      _logger.warning('Request to ${request.url} failed: $e', e, st);
+      _logger.warning('Request to ${request.url} failed:', e, st);
       rethrow;
     }
   }
@@ -490,7 +490,7 @@ class DefaultClient implements Client {
 
       return response;
     } catch (e, st) {
-      _logger.warning('Request to ${request.url} failed: $e', e, st);
+      _logger.warning('Request to ${request.url} failed:', e, st);
       rethrow;
     }
   }
@@ -685,7 +685,7 @@ extension ClientExtension on Client {
     try {
       return mapper(json);
     } catch (e, st) {
-      _logger.severe('Could not read JSON object as $T: $e', e, st);
+      _logger.severe('Could not read JSON object as $T:', e, st);
       throw ClientException('Could not read JSON object as $T: $e\n$st', url);
     }
   }
@@ -721,7 +721,7 @@ extension ClientExtension on Client {
           list.add(mapped);
         }
       } catch (e, st) {
-        _logger.severe('Could not read JSON object as $T: $e', e, st);
+        _logger.severe('Could not read JSON object as $T:', e, st);
         throw ClientException('Could not read JSON object as $T: $e', url);
       }
     }
@@ -799,7 +799,7 @@ extension ClientExtension on Client {
     try {
       return mapper(json);
     } catch (e, st) {
-      _logger.severe('Could not read json as $T: $e', e, st);
+      _logger.severe('Could not read json as $T:', e, st);
       throw ClientException('Could not read json as $T: $e', url);
     }
   }

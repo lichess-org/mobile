@@ -55,7 +55,7 @@ Future<void> initializeApp() async {
       prefs.setString('installed_version', appVersion.canonicalizedVersion);
     }
   } catch (e, st) {
-    _logger.severe('Error during app initialization: $e');
+    _logger.severe('Error during app initialization:', e, st);
     LichessBinding.instance.firebaseCrashlytics.recordError(
       e,
       st,
@@ -94,7 +94,7 @@ Future<void> preloadPieceImages() async {
     try {
       boardPrefs = BoardPrefs.fromJson(jsonDecode(storedPrefs) as Map<String, dynamic>);
     } catch (e) {
-      _logger.warning('Failed to decode board preferences: $e');
+      _logger.warning('Failed to decode board preferences:', e);
     }
   }
 
@@ -122,7 +122,7 @@ Future<void> androidDisplayInitialization(WidgetsBinding widgetsBinding) async {
       setSystemColors(palette, colorSchemes);
     });
   } catch (e) {
-    _logger.fine('Device does not support core palette: $e');
+    _logger.fine('Device does not support core palette:', e);
   }
 
   // lock orientation to portrait on android phones

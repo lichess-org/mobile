@@ -133,7 +133,7 @@ class NotificationService {
           final success = await registerDevice();
           if (success) _registeredDevice = true;
         } catch (e, st) {
-          _logger.severe('Could not setup push notifications; $e\n$st');
+          _logger.severe('Could not setup push notifications:', e, st);
         }
       }
     });
@@ -319,7 +319,7 @@ class NotificationService {
       try {
         await BadgeService.instance.setBadge(int.parse(badge));
       } catch (e) {
-        _logger.severe('Could not parse badge: $badge');
+        _logger.severe('Could not parse badge: $badge', e);
       }
     }
   }
@@ -354,7 +354,7 @@ class NotificationService {
     try {
       await _ref.withClient((client) => client.post(Uri(path: '/mobile/unregister')));
     } catch (e, st) {
-      _logger.severe('could not unregister device; $e', e, st);
+      _logger.severe('could not unregister device:', e, st);
     }
   }
 
@@ -372,7 +372,7 @@ class NotificationService {
       await _ref.withClient((client) => client.post(Uri(path: '/mobile/register/firebase/$token')));
       return true;
     } catch (e, st) {
-      _logger.severe('could not register device; $e', e, st);
+      _logger.severe('could not register device:', e, st);
       return false;
     }
   }
@@ -391,7 +391,7 @@ class NotificationService {
 
       ref.dispose();
     } catch (e) {
-      _logger.severe('Error when processing an FCM background message: $e');
+      _logger.severe('Error when processing an FCM background message:', e);
       ref.dispose();
     }
   }

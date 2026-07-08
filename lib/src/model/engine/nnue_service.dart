@@ -89,7 +89,7 @@ class NnueService {
     try {
       files = nnueFiles;
     } catch (e) {
-      _logger.warning('Error getting NNUE files: $e');
+      _logger.warning('Error getting NNUE files:', e);
       return false;
     }
 
@@ -112,7 +112,7 @@ class NnueService {
 
       return false;
     } catch (e) {
-      _logger.warning('Error checking NNUE files: $e');
+      _logger.warning('Error checking NNUE files:', e);
       return false;
     }
   }
@@ -130,7 +130,7 @@ class NnueService {
       try {
         files = nnueFiles;
       } catch (e) {
-        _logger.warning('Error getting NNUE files: $e');
+        _logger.warning('Error getting NNUE files:', e);
         return false;
       }
 

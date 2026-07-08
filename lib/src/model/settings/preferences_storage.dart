@@ -64,7 +64,7 @@ mixin PreferencesStorage<T extends Serializable> on Notifier<T> {
     try {
       return fromJson(jsonDecode(stored) as Map<String, dynamic>);
     } catch (e) {
-      _logger.warning('Failed to decode $prefCategory preferences: $e');
+      _logger.warning('Failed to decode $prefCategory preferences:', e);
       return defaults;
     }
   }
@@ -100,7 +100,7 @@ mixin SessionPreferencesStorage<T extends Serializable> on Notifier<T> {
     try {
       return fromJson(jsonDecode(stored) as Map<String, dynamic>);
     } catch (e) {
-      _logger.warning('Failed to decode $prefCategory preferences: $e');
+      _logger.warning('Failed to decode $prefCategory preferences:', e);
       return defaults(user: authUser?.user);
     }
   }

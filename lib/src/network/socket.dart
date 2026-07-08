@@ -299,7 +299,7 @@ class SocketClient {
 
       _resendAcks();
     } catch (error) {
-      _logger.severe('WebSocket connection failed: $error', error);
+      _logger.severe('WebSocket connection failed:', error);
       _averageLag.value = Duration.zero;
       _scheduleReconnect(autoReconnectDelay);
     }
@@ -392,7 +392,7 @@ class SocketClient {
               _averageLag.value = Duration.zero;
             })
             .catchError((Object? error) {
-              _logger.warning('WebSocket connection to $route could not be closed: $error', error);
+              _logger.warning('WebSocket connection to $route could not be closed:', error);
               if (isDisposed) {
                 return;
               }

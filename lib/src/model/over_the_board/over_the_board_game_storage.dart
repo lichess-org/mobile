@@ -61,7 +61,7 @@ class OverTheBoardGameStorage {
 
       return SavedOtbGame.fromJson(json);
     } catch (e) {
-      _logger.warning('[OtbGameStorage] failed to fetch game: $e');
+      _logger.warning('[OtbGameStorage] failed to fetch game:', e);
       return null;
     }
   }
@@ -86,7 +86,7 @@ class OverTheBoardGameStorage {
         ),
       );
     } catch (e) {
-      _logger.warning('[OtbGameStorage] failed to save game: $e');
+      _logger.warning('[OtbGameStorage] failed to save game:', e);
     }
   }
 }

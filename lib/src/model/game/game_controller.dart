@@ -220,7 +220,7 @@ class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> 
         reason: 'PlayException thrown when making SAN of user move',
         information: ['move: $move', 'position: ${curState.game.lastPosition}'],
       );
-      _logger.warning('Invalid user move: $e');
+      _logger.warning('Invalid user move:', e);
       return;
     }
     final (newPos, newSan) = sanResult;
@@ -286,7 +286,7 @@ class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> 
         reason: 'PlayException thrown when making SAN of confirm move',
         information: ['move: $moveToConfirm', 'position: ${curState.game.lastPosition}'],
       );
-      _logger.warning('Invalid confirm move: $e');
+      _logger.warning('Invalid confirm move:', e);
       state = AsyncValue.data(curState.copyWith(moveToConfirm: null));
       return;
     }
