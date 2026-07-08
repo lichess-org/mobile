@@ -157,10 +157,13 @@ class GamePlayer extends StatelessWidget {
                 const SizedBox(width: 5),
               ],
               Flexible(
-                child: Text(
-                  player.displayName(context.l10n),
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: playerFontSize, fontWeight: FontWeight.w600),
+                child: Tooltip(
+                  message: player.displayName(context.l10n),
+                  child: Text(
+                    player.displayName(context.l10n),
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontSize: playerFontSize, fontWeight: FontWeight.w600),
+                  ),
                 ),
               ),
               if (player.user?.flair != null) ...[
