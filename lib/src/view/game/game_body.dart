@@ -45,7 +45,8 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 
 typedef LoadingParam = ({Variant variant, String? fen, Move? lastMove, Side? orientation});
 
-const _kGameEndDialogDelay = Duration(milliseconds: 400);
+/// Delay before the game end dialog is shown after a (non-bullet) game finishes.
+const kGameEndDialogDelay = Duration(milliseconds: 400);
 
 /// Game body for the [GameScreen].
 ///
@@ -183,7 +184,7 @@ class GameBody extends ConsumerWidget {
           (prev?.hasValue != true && game.playable == false) ||
                   (game.meta.speed == Speed.bullet || game.meta.speed == Speed.ultraBullet)
               ? Duration.zero
-              : _kGameEndDialogDelay,
+              : kGameEndDialogDelay,
           () {
             if (context.mounted) {
               showAdaptiveDialog<void>(
@@ -982,12 +983,51 @@ class _GameBottomBar extends ConsumerWidget {
               ref.read(gameControllerProvider(id).notifier).declineRematch();
             },
           )
+        else if (gameState.correspondenceRematchId != null)
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.cancelRematchOffer),
+            dismissOnPress: true,
+            isDestructiveAction: true,
+            onPressed: () async {
+              // dismissOnPress unmounts this context before the request
+              // completes, so capture the messenger now.
+              final messenger = ScaffoldMessenger.of(context);
+              try {
+                await ref.read(gameControllerProvider(id).notifier).cancelRematchChallenge();
+              } catch (_) {
+                messenger.showSnackBar(
+                  const SnackBar(content: Text('Could not cancel the rematch challenge')),
+                );
+              }
+            },
+          )
         else if (gameState.canOfferRematch && gameState.game.opponent?.onGame == true)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.rematch),
             dismissOnPress: true,
             onPressed: () {
               ref.read(gameControllerProvider(id).notifier).proposeOrAcceptRematch();
+            },
+          )
+        // Offline opponent in a clockless game: persistent challenge, not a socket offer.
+        else if (gameState.canOfferRematch &&
+            gameState.game.clock == null &&
+            gameState.game.me?.user != null &&
+            gameState.game.opponent?.user != null)
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.rematch),
+            dismissOnPress: true,
+            onPressed: () async {
+              // dismissOnPress unmounts this context before the request
+              // completes, so capture the messenger now.
+              final messenger = ScaffoldMessenger.of(context);
+              try {
+                await ref.read(gameControllerProvider(id).notifier).challengeRematch();
+              } catch (_) {
+                messenger.showSnackBar(
+                  const SnackBar(content: Text('Could not send the rematch challenge')),
+                );
+              }
             },
           ),
         if (gameState.canGetNewOpponent)
