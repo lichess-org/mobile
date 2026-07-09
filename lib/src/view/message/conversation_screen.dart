@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
+import 'package:linkify/linkify.dart' show linkify;
 
 sealed class DisplayItem {}
 
@@ -365,61 +366,96 @@ class _MessageBubble extends ConsumerWidget {
     return ChatBubbleContextMenu(
       message: message.text,
       child: FractionallySizedBox(
-        alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
+        alignment: isMe ? .centerRight : .centerLeft,
         widthFactor: 0.85,
-        child: Container(
-          margin: EdgeInsets.only(
-            bottom: !isInGroup || isFirstInGroup ? 8 : 2,
-            top: !isInGroup || isLastInGroup ? 8 : 2,
-            left: 8,
-            right: 8,
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
-          decoration: BoxDecoration(
-            color: _bubbleColor(context),
-            borderRadius: BorderRadius.only(
-              topLeft: isMe
-                  ? _bubbleRadius
-                  : isInGroup && !isLastInGroup
-                  ? _inGroupRadius
-                  : _bubbleRadius,
-              topRight: isMe
-                  ? isInGroup && !isLastInGroup
-                        ? _inGroupRadius
-                        : _bubbleRadius
-                  : _bubbleRadius,
-              bottomLeft: isMe
-                  ? _bubbleRadius
-                  : isInGroup && !isFirstInGroup
-                  ? _inGroupRadius
-                  : _bubbleRadius,
-              bottomRight: isMe
-                  ? isInGroup && !isFirstInGroup
-                        ? _inGroupRadius
-                        : _bubbleRadius
-                  : _bubbleRadius,
+        child: Align(
+          alignment: isMe ? .centerRight : .centerLeft,
+          child: Container(
+            margin: EdgeInsets.only(
+              bottom: !isInGroup || isFirstInGroup ? 8 : 2,
+              top: !isInGroup || isLastInGroup ? 8 : 2,
+              left: 8,
+              right: 8,
             ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Linkify(
-                onOpen: (link) async =>
-                    await ref.read(appLinksServiceProvider).onLinkifyOpen(context, link),
-                linkifiers: AppLinksService.kLichessLinkifiers,
-                text: message.text,
-                style: TextStyle(color: _textColor(context)),
-                linkStyle: Styles.linkStyle,
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
+            decoration: BoxDecoration(
+              color: _bubbleColor(context),
+              borderRadius: BorderRadius.only(
+                topLeft: isMe
+                    ? _bubbleRadius
+                    : isInGroup && !isLastInGroup
+                    ? _inGroupRadius
+                    : _bubbleRadius,
+                topRight: isMe
+                    ? isInGroup && !isLastInGroup
+                          ? _inGroupRadius
+                          : _bubbleRadius
+                    : _bubbleRadius,
+                bottomLeft: isMe
+                    ? _bubbleRadius
+                    : isInGroup && !isFirstInGroup
+                    ? _inGroupRadius
+                    : _bubbleRadius,
+                bottomRight: isMe
+                    ? isInGroup && !isFirstInGroup
+                          ? _inGroupRadius
+                          : _bubbleRadius
+                    : _bubbleRadius,
               ),
-              const SizedBox(height: 4),
-              Text(
-                time,
-                style: TextStyle(fontSize: 11, color: _textColor(context).withValues(alpha: 0.6)),
-              ),
-            ],
+            ),
+            child: _MessageContent(
+              text: message.text,
+              time: time,
+              textColor: _textColor(context),
+              onLinkOpen: (link) => ref.read(appLinksServiceProvider).onLinkifyOpen(context, link),
+            ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class _MessageContent extends StatelessWidget {
+  const _MessageContent({
+    required this.text,
+    required this.time,
+    required this.textColor,
+    required this.onLinkOpen,
+  });
+
+  final String text;
+  final String time;
+  final Color textColor;
+  final LinkCallback onLinkOpen;
+
+  @override
+  Widget build(BuildContext context) {
+    final timeStyle = TextStyle(fontSize: 11, color: textColor.withValues(alpha: 0.6));
+    final spacer = WidgetSpan(
+      alignment: PlaceholderAlignment.baseline,
+      baseline: TextBaseline.alphabetic,
+      child: Opacity(
+        opacity: 0,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 8),
+          child: Text(time, style: timeStyle),
+        ),
+      ),
+    );
+
+    final linkSpan = buildTextSpan(
+      linkify(text, linkifiers: AppLinksService.kLichessLinkifiers),
+      style: TextStyle(color: textColor),
+      linkStyle: Styles.linkStyle,
+      onOpen: onLinkOpen,
+    );
+
+    return Stack(
+      children: [
+        RichText(text: TextSpan(children: [linkSpan, spacer])),
+        Positioned(right: 0, bottom: 0, child: Text(time, style: timeStyle)),
+      ],
     );
   }
 }
