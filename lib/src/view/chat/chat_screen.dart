@@ -134,6 +134,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with RouteAware {
               Expanded(
                 child: GestureDetector(
                   onTap: () => FocusScope.of(context).unfocus(),
+                  // remove the automatic bottom padding of the ListView which is here taken care
+                  // of by the _ChatBottomBar
                   child: ListView.builder(
                     padding: MediaQuery.paddingOf(context).copyWith(bottom: 0),
                     reverse: true,
