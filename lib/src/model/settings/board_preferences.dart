@@ -223,8 +223,8 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
         whiteCoordBackground: boardTheme.colors.whiteCoordBackground,
         blackCoordBackground: boardTheme.colors.blackCoordBackground,
         lastMove: highlightColor != null
-        ? HighlightDetails(solidColor: highlightColor!.color)
-        : boardTheme.colors.lastMove,
+            ? HighlightDetails(solidColor: highlightColor!.color)
+            : boardTheme.colors.lastMove,
         selected: boardTheme.colors.selected,
         validMoves: boardTheme.colors.validMoves,
         validPremoves: boardTheme.colors.validPremoves,
