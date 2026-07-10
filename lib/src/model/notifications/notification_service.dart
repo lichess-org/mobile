@@ -318,8 +318,8 @@ class NotificationService {
     if (badge != null) {
       try {
         await BadgeService.instance.setBadge(int.parse(badge));
-      } catch (e) {
-        _logger.severe('Could not parse badge: $badge', e);
+      } catch (e, st) {
+        _logger.severe('Could not parse badge: $badge', e, st);
       }
     }
   }
@@ -390,8 +390,8 @@ class NotificationService {
       await ref.read(notificationServiceProvider)._processFcmMessage(message, fromBackground: true);
 
       ref.dispose();
-    } catch (e) {
-      _logger.severe('Error when processing an FCM background message:', e);
+    } catch (e, st) {
+      _logger.severe('Error when processing an FCM background message:', e, st);
       ref.dispose();
     }
   }

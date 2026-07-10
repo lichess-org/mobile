@@ -93,8 +93,8 @@ Future<void> preloadPieceImages() async {
   if (storedPrefs != null) {
     try {
       boardPrefs = BoardPrefs.fromJson(jsonDecode(storedPrefs) as Map<String, dynamic>);
-    } catch (e) {
-      _logger.warning('Failed to decode board preferences:', e);
+    } catch (e, st) {
+      _logger.warning('Failed to decode board preferences:', e, st);
     }
   }
 
@@ -121,8 +121,8 @@ Future<void> androidDisplayInitialization(WidgetsBinding widgetsBinding) async {
 
       setSystemColors(palette, colorSchemes);
     });
-  } catch (e) {
-    _logger.fine('Device does not support core palette:', e);
+  } catch (e, st) {
+    _logger.fine('Device does not support core palette:', e, st);
   }
 
   // lock orientation to portrait on android phones

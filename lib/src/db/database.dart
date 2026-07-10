@@ -44,8 +44,8 @@ Future<int?> _getDatabaseVersion(Database db) async {
     final versionStr = (await db.rawQuery('SELECT sqlite_version()')).first.values.first.toString();
     final versionCells = versionStr.split('.').map((i) => int.parse(i)).toList();
     return versionCells[0] * 100000 + versionCells[1] * 1000 + versionCells[2];
-  } catch (e) {
-    _logger.warning('Error occurred while fetching SQLite version:', e);
+  } catch (e, st) {
+    _logger.warning('Error occurred while fetching SQLite version:', e, st);
     return null;
   }
 }

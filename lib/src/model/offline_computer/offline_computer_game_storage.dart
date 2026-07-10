@@ -55,8 +55,8 @@ class OfflineComputerGameStorage {
       }
 
       return SavedOfflineComputerGame.fromJson(json);
-    } catch (e) {
-      _logger.warning('Failed to fetch game:', e);
+    } catch (e, st) {
+      _logger.warning('Failed to fetch game:', e, st);
       return null;
     }
   }
@@ -67,8 +67,8 @@ class OfflineComputerGameStorage {
       final file = await _getFile();
       _logger.info('Saving game to ${file.path}');
       await file.writeAsString(jsonEncode(savedGame.toJson()));
-    } catch (e) {
-      _logger.warning('Failed to save game:', e);
+    } catch (e, st) {
+      _logger.warning('Failed to save game:', e, st);
     }
   }
 }

@@ -217,14 +217,14 @@ Future<bool> downloadFile(
           return s;
         })
         .pipe(sink);
-  } catch (e) {
-    _logger.warning('Failed to download file:', e);
+  } catch (e, st) {
+    _logger.warning('Failed to download file:', e, st);
   } finally {
     try {
       await sink.flush();
       await sink.close();
-    } on FileSystemException catch (e) {
-      _logger.warning('Failed to save file:', e);
+    } on FileSystemException catch (e, st) {
+      _logger.warning('Failed to save file:', e, st);
     }
   }
 
@@ -770,8 +770,8 @@ extension ClientExtension on Client {
         final json = jsonDecode(e) as Map<String, dynamic>;
         return mapper(json);
       });
-    } catch (e) {
-      _logger.severe('Could not read nd-json object as $T.');
+    } catch (e, st) {
+      _logger.severe('Could not read nd-json object as $T.', e, st);
       throw ClientException('Could not read nd-json object as $T: $e', url);
     }
   }
@@ -832,8 +832,8 @@ extension ClientExtension on Client {
           return mapper(json);
         }),
       );
-    } catch (e) {
-      _logger.severe('Could not read nd-json objects as List<$T>.');
+    } catch (e, st) {
+      _logger.severe('Could not read nd-json objects as List<$T>.', e, st);
       throw ClientException(
         'Could not read nd-json objects as List<$T>: $e',
         response.request?.url,
