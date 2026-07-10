@@ -106,6 +106,8 @@ sealed class LightExportedGame with _$LightExportedGame {
     ClockData? clock,
     int? daysPerTurn,
     bool? bookmarked,
+    TournamentId? arenaTournamentId,
+    String? arenaTournamentName,
   }) = _ExportedGameData;
 
   factory LightExportedGame.fromServerJson(
@@ -269,6 +271,8 @@ LightExportedGame _lightExportedGameFromPick(
         : withBookmarked
         ? pick('bookmarked').asBoolOrFalse()
         : null,
+    arenaTournamentId: pick('arenaTour', 'id').asTournamentIdOrNull(),
+    arenaTournamentName: pick('arenaTour', 'name').asStringOrNull(),
   );
 }
 
