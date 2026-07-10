@@ -73,8 +73,6 @@ void main() {
 
   tearDown(() {
     reset(notificationDisplayMock);
-    // reset lifecycle state between tests
-    binding.resetInternalState();
   });
 
   test('exposes a challenges stream', () async {
@@ -126,9 +124,6 @@ void main() {
   });
 
   test('Listen to socket and show a notification for any new challenge', () async {
-    // notifications from socket are only displayed if app is in foreground
-    binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
-
     when(
       () => notificationDisplayMock.show(
         id: any(named: 'id'),
@@ -216,6 +211,9 @@ void main() {
   test('Does not show local notification when app is in background', () async {
     // when app is in background, socket notifications should not be displayed
     binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
+    addTearDown(() {
+      binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+    });
 
     when(
       () => notificationDisplayMock.show(
@@ -275,9 +273,6 @@ void main() {
   });
 
   test('Cancels the notification for any missing challenge', () async {
-    // notifications from socket are only displayed if app is in foreground
-    binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
-
     when(
       () => notificationDisplayMock.show(
         id: any(named: 'id'),
