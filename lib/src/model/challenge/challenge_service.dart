@@ -94,7 +94,7 @@ class ChallengeService {
     );
 
     // new incoming challenges
-    // only display the notifications if the app is in the foregroud because fcm already
+    // only display the notifications if the app is in the foreground because FCM already
     // shows notifications when the app is in the background
     // TODO find a better solution to avoid duplicate notifications
     final state = WidgetsBinding.instance.lifecycleState;
