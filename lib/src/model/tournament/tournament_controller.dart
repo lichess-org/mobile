@@ -88,8 +88,17 @@ class TournamentController extends AsyncNotifier<TournamentState> with ChatMixin
     return TournamentState(tournament: tournament, chatState: await initChat(tournament.chat));
   }
 
-  @override
-  void onFocusRegained() {
+  void onFocusGained() {
+    // Don't interfere with the initial [build] which opens the socket itself.
+    if (!state.hasValue) {
+      return;
+    }
+    // When another [TournamentScreen] for the same tournament is already in the
+    // route stack, this provider is kept alive and [build] won't re-run, so the
+    // socket (closed by the game we navigated through) isn't reopened by it.
+    // We use `onFocusGained` (not `onFocusRegained`) because a freshly pushed
+    // screen gains focus for the *first* time, which never triggers
+    // `onFocusRegained`.
     final currentClient = ref.read(socketPoolProvider).currentClient;
     if (currentClient.route != _socketClient?.route) {
       ref.invalidateSelf();
