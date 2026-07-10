@@ -1582,6 +1582,60 @@ class AppLocalizationsZh extends AppLocalizations {
   String get preferencesShowClockOnTheLeft => '在移动设备上左侧显示';
 
   @override
+  String get preferencesInlineNotation => '紧凑棋谱';
+
+  @override
+  String get preferencesShowServerAnalysis => '显示服务器分析';
+
+  @override
+  String get preferencesShowBestMoveArrows => '显示最佳着法箭头';
+
+  @override
+  String get preferencesShowManeuverArrows => '显示战术组合箭头';
+
+  @override
+  String get preferencesShowGauge => '显示局面评估';
+
+  @override
+  String get preferencesShowMoveAnnotationsOnBoard => '显示着法评注';
+
+  @override
+  String get preferencesShowVariationArrows => '显示变着指示';
+
+  @override
+  String get preferencesShowLiveGlyphs => '实时引擎评注';
+
+  @override
+  String get preferencesShowUndefendedPieces => '显示无保护的棋子';
+
+  @override
+  String get preferencesShowPinnedPieces => '显示被牵制的棋子';
+
+  @override
+  String get preferencesShowCheckableKing => '显示可将军的王';
+
+  @override
+  String get preferencesDisclosureMode => '启用变着隐藏';
+
+  @override
+  String get preferencesGeneralSettings => '常规';
+
+  @override
+  String get preferencesMoveListSettings => '着法列表';
+
+  @override
+  String get preferencesBoardSettings => '棋盘';
+
+  @override
+  String get preferencesAnalysisSettings => '分析设置';
+
+  @override
+  String get preferencesManeuverArrowsHelp => '单个棋子的引擎着法序列';
+
+  @override
+  String get preferencesHoverOverSettingLabelsForHelp => '悬停至设置标签以获取帮助';
+
+  @override
   String get puzzlePuzzles => '谜题';
 
   @override
@@ -5105,6 +5159,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get enPassant => '吃过路兵';
 
   @override
+  String get settings => '设置';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5510,6 +5567,16 @@ class AppLocalizationsZh extends AppLocalizations {
       count,
       locale: localeName,
       other: '支持 $count 种语言！',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbAnonymous(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '匿名 ($count)',
     );
     return '$_temp0';
   }
@@ -8955,6 +9022,16 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   }
 
   @override
+  String minRatingX(String param) {
+    return '$param 的最低等級分';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return '$param 的最高等級分';
+  }
+
+  @override
   String get recentGames => '最近的棋局';
 
   @override
@@ -9040,10 +9117,28 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get showVariationArrows => '顯示變體箭頭';
 
   @override
+  String get visualMotifs => '視覺化模式';
+
+  @override
+  String get undefendedPieces => '無保護的棋子';
+
+  @override
+  String get pinnedPieces => '被牽制的棋子';
+
+  @override
+  String get checkableKing => '可將軍的王';
+
+  @override
   String get multipleLines => '路線分析線';
 
   @override
+  String get multipleLinesDescription => '設定棋盤上評估線路的數量並移動箭頭';
+
+  @override
   String get searchTime => '搜尋時間';
+
+  @override
+  String get searchTimeDescription => '設定評估新局面的時間';
 
   @override
   String get threads => '執行緒';
@@ -9052,10 +9147,16 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get threadsDescription => '設定此值低於您的 CPU 執行緒數，刻度標記處為安全的選擇';
 
   @override
+  String get threadsDescriptionMobile => '更多執行緒會消耗更多電量，藉此提升分析能力';
+
+  @override
   String get cpus => 'CPU 數量';
 
   @override
   String get memory => '記憶體';
+
+  @override
+  String get memoryDescription => '較高的數值可能提升效能';
 
   @override
   String get infiniteAnalysis => '無限分析';

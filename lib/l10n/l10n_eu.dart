@@ -1604,6 +1604,60 @@ class AppLocalizationsEu extends AppLocalizations {
   String get preferencesShowClockOnTheLeft => 'Erakutsi ezkerrean gailu mugikorretan';
 
   @override
+  String get preferencesInlineNotation => 'Lerroarteko oharrak';
+
+  @override
+  String get preferencesShowServerAnalysis => 'Show server analysis';
+
+  @override
+  String get preferencesShowBestMoveArrows => 'Show best move arrows';
+
+  @override
+  String get preferencesShowManeuverArrows => 'Show maneuver arrows';
+
+  @override
+  String get preferencesShowGauge => 'Show evaluation gauge';
+
+  @override
+  String get preferencesShowMoveAnnotationsOnBoard => 'Show move annotations';
+
+  @override
+  String get preferencesShowVariationArrows => 'Show variation arrows';
+
+  @override
+  String get preferencesShowLiveGlyphs => 'Live engine annotations';
+
+  @override
+  String get preferencesShowUndefendedPieces => 'Show undefended pieces';
+
+  @override
+  String get preferencesShowPinnedPieces => 'Show pinned pieces';
+
+  @override
+  String get preferencesShowCheckableKing => 'Show checkable king';
+
+  @override
+  String get preferencesDisclosureMode => 'Enable variation hiding';
+
+  @override
+  String get preferencesGeneralSettings => 'Orokorra';
+
+  @override
+  String get preferencesMoveListSettings => 'Jokaldi zerrenda';
+
+  @override
+  String get preferencesBoardSettings => 'Taula';
+
+  @override
+  String get preferencesAnalysisSettings => 'Analisiaren aukerak';
+
+  @override
+  String get preferencesManeuverArrowsHelp => 'Sequence of engine moves for one piece';
+
+  @override
+  String get preferencesHoverOverSettingLabelsForHelp => 'Hover over setting labels for help';
+
+  @override
   String get puzzlePuzzles => 'Ariketak';
 
   @override
@@ -5133,6 +5187,9 @@ class AppLocalizationsEu extends AppLocalizations {
   String get enPassant => 'Igarotzean harrapatzea';
 
   @override
+  String get settings => 'Ezarpenak';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5579,6 +5636,17 @@ class AppLocalizationsEu extends AppLocalizations {
       locale: localeName,
       other: '$count hizkuntzatan eskuragarri!',
       one: '$count hizkuntzatan eskuragarri!',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbAnonymous(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Anonymous ($count)',
+      one: 'Anonymous',
     );
     return '$_temp0';
   }

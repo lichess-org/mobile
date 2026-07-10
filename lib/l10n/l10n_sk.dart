@@ -251,43 +251,43 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileViewGame => 'Zobraziť hru';
 
   @override
-  String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
+  String get mobileCustomizeHomeTip => 'Tip: Na domovskú obrazovku môžete pridať ďalšie widgety alebo odstrániť tie, ktoré nepotrebujete!';
 
   @override
-  String get mobileCustomizeHomeTipDismiss => 'Dismiss';
+  String get mobileCustomizeHomeTipDismiss => 'Zrušiť';
 
   @override
-  String get mobileCustomizeButton => 'Customize';
+  String get mobileCustomizeButton => 'Prispôsobiť';
 
   @override
-  String get mobileStopShowingThreat => 'Stop showing threat';
+  String get mobileStopShowingThreat => 'Zrušiť zobrazovanie hrozieb';
 
   @override
-  String get mobileTournamentCompleted => 'Completed';
+  String get mobileTournamentCompleted => 'Ukončený';
 
   @override
-  String get mobileTournamentJumpToMyPage => 'Jump to my page';
+  String get mobileTournamentJumpToMyPage => 'Prejsť na moju stránku';
 
   @override
-  String get mobileDisplayModeCompact => 'Compact';
+  String get mobileDisplayModeCompact => 'Kompaktný';
 
   @override
-  String get mobileDisplayModeDetailed => 'Detailed';
+  String get mobileDisplayModeDetailed => 'Detailný';
 
   @override
-  String get mobileOpeningExplorerNotAvailableOffline => 'Opening Explorer is not available offline.';
+  String get mobileOpeningExplorerNotAvailableOffline => 'Prieskumník otvorení nie je k dispozícii v režime offline.';
 
   @override
-  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\nYou can access it from the home tab.';
+  String get mobileChallengeCreated => 'Výzva vytvorená: Budete upozornení po začatí partie.\nPrístup k nej nájdete na domovskej karte.';
 
   @override
-  String get mobilePreviousPage => 'Previous';
+  String get mobilePreviousPage => 'Predchádzajúca';
 
   @override
-  String get mobileOrImportPgnFile => 'Or import a PGN file';
+  String get mobileOrImportPgnFile => 'Alebo nahrajte súbor PGN';
 
   @override
-  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+  String get mobileGoodMoveButThereIsBetter => 'Dobrý ťah, ale existuje aj lepší';
 
   @override
   String get variantStandard => 'Štandard';
@@ -989,7 +989,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get broadcastOfficialStandings => 'Oficiálne poradie';
 
   @override
-  String get broadcastRegulations => 'Regulations';
+  String get broadcastRegulations => 'Smernice';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -1477,7 +1477,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get preferencesZenMode => 'Zen mód';
 
   @override
-  String get preferencesShowPlayerRatings => 'Ukázať hráčove ratingy';
+  String get preferencesShowPlayerRatings => 'Ukázať ratingy hráčov';
 
   @override
   String get preferencesShowFlairs => 'Zobraziť u hráčov ikonky štýlu';
@@ -1648,6 +1648,60 @@ class AppLocalizationsSk extends AppLocalizations {
   String get preferencesShowClockOnTheLeft => 'Zobraziť vľavo na mobilných zariadeniach';
 
   @override
+  String get preferencesInlineNotation => 'Vložená notácia';
+
+  @override
+  String get preferencesShowServerAnalysis => 'Zobraziť serverovú analýzu';
+
+  @override
+  String get preferencesShowBestMoveArrows => 'Zobraziť šípky najlepších ťahov';
+
+  @override
+  String get preferencesShowManeuverArrows => 'Zobraziť šípky manévrov';
+
+  @override
+  String get preferencesShowGauge => 'Zobraziť hodnotiaci ukazovateľ';
+
+  @override
+  String get preferencesShowMoveAnnotationsOnBoard => 'Zobraziť notácie pohybov';
+
+  @override
+  String get preferencesShowVariationArrows => 'Zobraziť šípky variácií';
+
+  @override
+  String get preferencesShowLiveGlyphs => 'Živé strojové anotácie';
+
+  @override
+  String get preferencesShowUndefendedPieces => 'Ukázať nechránené figúrky';
+
+  @override
+  String get preferencesShowPinnedPieces => 'Ukázať pripnuté figúrky';
+
+  @override
+  String get preferencesShowCheckableKing => 'Ukázať kráľa, ktorému možno dať šach';
+
+  @override
+  String get preferencesDisclosureMode => 'Zapnúť skrytie variácií';
+
+  @override
+  String get preferencesGeneralSettings => 'Všeobecné';
+
+  @override
+  String get preferencesMoveListSettings => 'Zoznam pohybov';
+
+  @override
+  String get preferencesBoardSettings => 'Šachovnica';
+
+  @override
+  String get preferencesAnalysisSettings => 'Nastavenia analýzy';
+
+  @override
+  String get preferencesManeuverArrowsHelp => 'Poradie strojových pohybov pre jednu figúrku';
+
+  @override
+  String get preferencesHoverOverSettingLabelsForHelp => 'Hover over setting labels for help';
+
+  @override
   String get puzzlePuzzles => 'Šachové úlohy';
 
   @override
@@ -1666,7 +1720,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get puzzleAdvanced => 'Pokročilé';
 
   @override
-  String get puzzleLengths => 'Dĺžka';
+  String get puzzleLengths => 'Podľa dĺžky';
 
   @override
   String get puzzleMates => 'Mat';
@@ -2168,10 +2222,10 @@ class AppLocalizationsSk extends AppLocalizations {
   String get puzzleThemeMorphysMateDescription => 'Strelec dáva kráľovi mat, zatiaľ čo veža obmedzuje jeho pohyb.';
 
   @override
-  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+  String get puzzleThemeSwallowstailMate => 'Mat lastovičí chvost';
 
   @override
-  String get puzzleThemeSwallowstailMateDescription => 'A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.';
+  String get puzzleThemeSwallowstailMateDescription => 'Šachmatový vzor, ktorý vizuálne pripomína tvar lastovičieho chvosta, podobný písmenu V.';
 
   @override
   String get puzzleThemeTriangleMate => 'Trojuholníkový mat';
@@ -2583,10 +2637,10 @@ class AppLocalizationsSk extends AppLocalizations {
   String get blackDidntMove => 'Čierny nepotiahol';
 
   @override
-  String get whiteAborted => 'White aborted the game';
+  String get whiteAborted => 'Biely opustil partiu';
 
   @override
-  String get blackAborted => 'Black aborted the game';
+  String get blackAborted => 'Čierny opustil partiu';
 
   @override
   String get requestAComputerAnalysis => 'Požiadať o počítačovú analýzu';
@@ -2612,13 +2666,13 @@ class AppLocalizationsSk extends AppLocalizations {
   String get usingServerAnalysis => 'Používa sa analýza servera';
 
   @override
-  String get loadingEngine => 'Zavádzanie motora ...';
+  String get loadingEngine => 'Šachový program sa nahráva...';
 
   @override
   String get calculatingMoves => 'Prebieha výpočet...';
 
   @override
-  String get engineFailed => 'Chyba pri načítavaní motora';
+  String get engineFailed => 'Chyba pri nahrávaní šachového programu';
 
   @override
   String get cloudAnalysis => 'Vzdialená analýza';
@@ -2657,7 +2711,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get copyVariationPgn => 'Kopírovať PGN variantu';
 
   @override
-  String get copyMainLinePgn => 'Kopírovať PNG hlavného variantu';
+  String get copyMainLinePgn => 'Kopírovať PGN hlavného variantu';
 
   @override
   String get move => 'Ťah';
@@ -5145,7 +5199,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get showMeEverything => 'Ukázať všetko';
 
   @override
-  String get lichessPatronInfo => 'Lichess je bezplatný a úplne slobodný/nezávislý softvér s otvoreným zdrojovým kódom. Všetky prevádzkové náklady, vývoj a obsah sú financované výlučne z darov používateľov.';
+  String get lichessPatronInfo => 'Lichess je bezplatný a úplne slobodný/nezávislý softvér s otvoreným zdrojovým kódom. Všetky prevádzkové náklady, vývoj a obsah sú financované výlučne z darov používateľov. Bez našej štedrej komunity by sme nedokázali udržať stránku v prevádzke. Ďakujeme, že ste sa k nám pridali!\n  ';
 
   @override
   String get nothingToSeeHere => 'Momentálne tu nie je nič k zobrazeniu.';
@@ -5187,6 +5241,9 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get enPassant => 'Právo na branie mimochodom';
+
+  @override
+  String get settings => 'Nastavenia';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5717,6 +5774,19 @@ class AppLocalizationsSk extends AppLocalizations {
       many: 'Dostupné v $count jazykoch!',
       few: 'Dostupné v $count jazykoch!',
       one: 'Dostupné v $count jazyku!',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbAnonymous(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Anonymní ($count)',
+      many: 'Anonymní ($count)',
+      few: 'Anonymní ($count)',
+      one: 'Anonym',
     );
     return '$_temp0';
   }

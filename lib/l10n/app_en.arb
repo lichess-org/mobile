@@ -915,6 +915,24 @@
   "preferencesBellNotificationSound": "Bell notification sound",
   "preferencesBlindfold": "Blindfold",
   "preferencesShowClockOnTheLeft": "Show on the left on mobile devices",
+  "preferencesInlineNotation": "Inline notation",
+  "preferencesShowServerAnalysis": "Show server analysis",
+  "preferencesShowBestMoveArrows": "Show best move arrows",
+  "preferencesShowManeuverArrows": "Show maneuver arrows",
+  "preferencesShowGauge": "Show evaluation gauge",
+  "preferencesShowMoveAnnotationsOnBoard": "Show move annotations",
+  "preferencesShowVariationArrows": "Show variation arrows",
+  "preferencesShowLiveGlyphs": "Live engine annotations",
+  "preferencesShowUndefendedPieces": "Show undefended pieces",
+  "preferencesShowPinnedPieces": "Show pinned pieces",
+  "preferencesShowCheckableKing": "Show checkable king",
+  "preferencesDisclosureMode": "Enable variation hiding",
+  "preferencesGeneralSettings": "General",
+  "preferencesMoveListSettings": "Move list",
+  "preferencesBoardSettings": "Board",
+  "preferencesAnalysisSettings": "Analysis settings",
+  "preferencesManeuverArrowsHelp": "Sequence of engine moves for one piece",
+  "preferencesHoverOverSettingLabelsForHelp": "Hover over setting labels for help",
   "puzzlePuzzles": "Puzzles",
   "puzzlePuzzleThemes": "Puzzle Themes",
   "puzzleRecommended": "Recommended",
@@ -2875,6 +2893,7 @@
   },
   "tags": "Tags",
   "enPassant": "En passant rights",
+  "settings": "Settings",
   "opponentLeftCounter": "{count, plural, =1{Your opponent left the game. You can claim victory in {count} second.} other{Your opponent left the game. You can claim victory in {count} seconds.}}",
   "@opponentLeftCounter": {
     "placeholders": {
@@ -3209,6 +3228,14 @@
   },
   "availableInNbLanguages": "{count, plural, =1{Available in {count} language!} other{Available in {count} languages!}}",
   "@availableInNbLanguages": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "nbAnonymous": "{count, plural, =1{Anonymous} other{Anonymous ({count})}}",
+  "@nbAnonymous": {
     "placeholders": {
       "count": {
         "type": "int"

@@ -1604,6 +1604,60 @@ class AppLocalizationsCa extends AppLocalizations {
   String get preferencesShowClockOnTheLeft => 'Mostrar a l\'esquerra en dispositius mòbils';
 
   @override
+  String get preferencesInlineNotation => 'Notació en línia';
+
+  @override
+  String get preferencesShowServerAnalysis => 'Mostra l\'anàlisi del servidor';
+
+  @override
+  String get preferencesShowBestMoveArrows => 'Mostra fletxes millors jugades';
+
+  @override
+  String get preferencesShowManeuverArrows => 'Mostra fletxes de maniobres';
+
+  @override
+  String get preferencesShowGauge => 'Mostra indicador d\'avaluació';
+
+  @override
+  String get preferencesShowMoveAnnotationsOnBoard => 'Mostra les anotacions de les jugades';
+
+  @override
+  String get preferencesShowVariationArrows => 'Mostra fletxes de variacions';
+
+  @override
+  String get preferencesShowLiveGlyphs => 'Anotacions en directe';
+
+  @override
+  String get preferencesShowUndefendedPieces => 'Mostra peces indefenses';
+
+  @override
+  String get preferencesShowPinnedPieces => 'Mostra peces clavades';
+
+  @override
+  String get preferencesShowCheckableKing => 'Mostrar possibles escacs';
+
+  @override
+  String get preferencesDisclosureMode => 'Permet amagar les variants';
+
+  @override
+  String get preferencesGeneralSettings => 'General';
+
+  @override
+  String get preferencesMoveListSettings => 'Llista de moviments';
+
+  @override
+  String get preferencesBoardSettings => 'Tauler';
+
+  @override
+  String get preferencesAnalysisSettings => 'Configuració de les anàlisis';
+
+  @override
+  String get preferencesManeuverArrowsHelp => 'Sequence of engine moves for one piece';
+
+  @override
+  String get preferencesHoverOverSettingLabelsForHelp => 'Posa el cursor per sobre de les etiquetes de configuració per veure l\'ajuda';
+
+  @override
   String get puzzlePuzzles => 'Problemes';
 
   @override
@@ -5133,6 +5187,9 @@ class AppLocalizationsCa extends AppLocalizations {
   String get enPassant => 'Captura al pas';
 
   @override
+  String get settings => 'Configuració';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5579,6 +5636,17 @@ class AppLocalizationsCa extends AppLocalizations {
       locale: localeName,
       other: 'Disponible en $count idiomes',
       one: 'Disponible en $count idiomes',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbAnonymous(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Anonymous ($count)',
+      one: 'Anonymous',
     );
     return '$_temp0';
   }

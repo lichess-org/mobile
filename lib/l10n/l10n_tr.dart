@@ -287,7 +287,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Veya bir PGN dosyası aktar';
 
   @override
-  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+  String get mobileGoodMoveButThereIsBetter => 'İyi hamle ama daha iyisi var';
 
   @override
   String get variantStandard => 'Standart';
@@ -1602,6 +1602,60 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get preferencesShowClockOnTheLeft => 'Mobil cihazlarda solda göster';
+
+  @override
+  String get preferencesInlineNotation => 'Notasyonu aynı satırda göster';
+
+  @override
+  String get preferencesShowServerAnalysis => 'Sunucu analizini göster';
+
+  @override
+  String get preferencesShowBestMoveArrows => 'En iyi hamle oklarını göster';
+
+  @override
+  String get preferencesShowManeuverArrows => 'Show maneuver arrows';
+
+  @override
+  String get preferencesShowGauge => 'Show evaluation gauge';
+
+  @override
+  String get preferencesShowMoveAnnotationsOnBoard => 'Show move annotations';
+
+  @override
+  String get preferencesShowVariationArrows => 'Show variation arrows';
+
+  @override
+  String get preferencesShowLiveGlyphs => 'Live engine annotations';
+
+  @override
+  String get preferencesShowUndefendedPieces => 'Show undefended pieces';
+
+  @override
+  String get preferencesShowPinnedPieces => 'Show pinned pieces';
+
+  @override
+  String get preferencesShowCheckableKing => 'Show checkable king';
+
+  @override
+  String get preferencesDisclosureMode => 'Enable variation hiding';
+
+  @override
+  String get preferencesGeneralSettings => 'Genel';
+
+  @override
+  String get preferencesMoveListSettings => 'Hamle listesi';
+
+  @override
+  String get preferencesBoardSettings => 'Tahta';
+
+  @override
+  String get preferencesAnalysisSettings => 'İnceleme Ayarları';
+
+  @override
+  String get preferencesManeuverArrowsHelp => 'Sequence of engine moves for one piece';
+
+  @override
+  String get preferencesHoverOverSettingLabelsForHelp => 'Hover over setting labels for help';
 
   @override
   String get puzzlePuzzles => 'Bulmacalar';
@@ -5133,6 +5187,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get enPassant => 'Geçerken alma';
 
   @override
+  String get settings => 'Ayarlar';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5579,6 +5636,17 @@ class AppLocalizationsTr extends AppLocalizations {
       locale: localeName,
       other: '$count farklı dili destekler!',
       one: '$count farklı dili destekler!',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbAnonymous(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Anonymous ($count)',
+      one: 'Anonymous',
     );
     return '$_temp0';
   }

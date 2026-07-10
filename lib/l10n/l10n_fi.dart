@@ -287,7 +287,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Tai tuo PGN-tiedosto';
 
   @override
-  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+  String get mobileGoodMoveButThereIsBetter => 'Hyvä siirto, mutta parempikin olisi';
 
   @override
   String get variantStandard => 'Normaali';
@@ -1602,6 +1602,60 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get preferencesShowClockOnTheLeft => 'Näytä mobiililaitteilla kello vasemmalla puolella';
+
+  @override
+  String get preferencesInlineNotation => 'Rivinsisäinen kommentointi';
+
+  @override
+  String get preferencesShowServerAnalysis => 'Näytä palvelinanalyysi';
+
+  @override
+  String get preferencesShowBestMoveArrows => 'Näytä parhaiden siirtojen nuolet';
+
+  @override
+  String get preferencesShowManeuverArrows => 'Näytä manööverien nuolet';
+
+  @override
+  String get preferencesShowGauge => 'Näytä arviopalkki';
+
+  @override
+  String get preferencesShowMoveAnnotationsOnBoard => 'Näytä siirtokommentit';
+
+  @override
+  String get preferencesShowVariationArrows => 'Näytä muunnelmien nuolet';
+
+  @override
+  String get preferencesShowLiveGlyphs => 'Reaaliaikaiset tietokoneen kommentit';
+
+  @override
+  String get preferencesShowUndefendedPieces => 'Näytä suojaamattomat nappulat';
+
+  @override
+  String get preferencesShowPinnedPieces => 'Näytä kiinnitetyt nappulat';
+
+  @override
+  String get preferencesShowCheckableKing => 'Näytä, kun kuningasta voi shakata';
+
+  @override
+  String get preferencesDisclosureMode => 'Ota käyttöön muunnelmien piilotus';
+
+  @override
+  String get preferencesGeneralSettings => 'Yleiset';
+
+  @override
+  String get preferencesMoveListSettings => 'Siirtoluettelo';
+
+  @override
+  String get preferencesBoardSettings => 'Lauta';
+
+  @override
+  String get preferencesAnalysisSettings => 'Analyysiasetukset';
+
+  @override
+  String get preferencesManeuverArrowsHelp => 'Tietokoneen laskema yhden nappulan siirtosarja';
+
+  @override
+  String get preferencesHoverOverSettingLabelsForHelp => 'Hover over setting labels for help';
 
   @override
   String get puzzlePuzzles => 'Tehtävät';
@@ -5133,6 +5187,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get enPassant => 'Ohestalyönti';
 
   @override
+  String get settings => 'Asetukset';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5579,6 +5636,17 @@ class AppLocalizationsFi extends AppLocalizations {
       locale: localeName,
       other: 'Saatavilla $count eri kielellä!',
       one: 'Saatavilla $count eri kielellä!',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbAnonymous(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Anonyymejä ($count)',
+      one: 'Anonyymi',
     );
     return '$_temp0';
   }

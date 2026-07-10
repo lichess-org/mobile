@@ -1604,6 +1604,60 @@ class AppLocalizationsSq extends AppLocalizations {
   String get preferencesShowClockOnTheLeft => 'Shfaqe në të majtë të pajisjesh celulare';
 
   @override
+  String get preferencesInlineNotation => 'Shënim brendazi';
+
+  @override
+  String get preferencesShowServerAnalysis => 'Shfaq analizë shërbyesi';
+
+  @override
+  String get preferencesShowBestMoveArrows => 'Shfaq shigjeta lëvizjesh më të mira';
+
+  @override
+  String get preferencesShowManeuverArrows => 'Shfaq shigjeta manovre';
+
+  @override
+  String get preferencesShowGauge => 'Show evaluation gauge';
+
+  @override
+  String get preferencesShowMoveAnnotationsOnBoard => 'Show move annotations';
+
+  @override
+  String get preferencesShowVariationArrows => 'Shfaq shigjeta variantesh';
+
+  @override
+  String get preferencesShowLiveGlyphs => 'Live engine annotations';
+
+  @override
+  String get preferencesShowUndefendedPieces => 'Shfaq gurë të pambrojtur';
+
+  @override
+  String get preferencesShowPinnedPieces => 'Shfaq gurë të fiksuar';
+
+  @override
+  String get preferencesShowCheckableKing => 'Shfaq mbret të cilit mund t’i jepet shah';
+
+  @override
+  String get preferencesDisclosureMode => 'Aktivizo fshehje variantesh';
+
+  @override
+  String get preferencesGeneralSettings => 'Të përgjithshme';
+
+  @override
+  String get preferencesMoveListSettings => 'Listë lëvizjesh';
+
+  @override
+  String get preferencesBoardSettings => 'Fushë';
+
+  @override
+  String get preferencesAnalysisSettings => 'Rregullime analize';
+
+  @override
+  String get preferencesManeuverArrowsHelp => 'Sequence of engine moves for one piece';
+
+  @override
+  String get preferencesHoverOverSettingLabelsForHelp => 'Për ndihmë, kalojeni kursorin sipër etiketave të rregullimeve';
+
+  @override
   String get puzzlePuzzles => 'Ushtrime';
 
   @override
@@ -5133,6 +5187,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get enPassant => 'En passant rights';
 
   @override
+  String get settings => 'Rregullime';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5579,6 +5636,17 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'I përdorshëm në $count gjuhë!',
       one: 'I përdorshëm në $count gjuhë!',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbAnonymous(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Anonimë ($count)',
+      one: 'Anonim',
     );
     return '$_temp0';
   }

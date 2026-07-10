@@ -1648,6 +1648,60 @@ class AppLocalizationsUk extends AppLocalizations {
   String get preferencesShowClockOnTheLeft => 'Показувати ліворуч на мобільних пристроях';
 
   @override
+  String get preferencesInlineNotation => 'Рядкова нотація';
+
+  @override
+  String get preferencesShowServerAnalysis => 'Показувати серверний аналіз';
+
+  @override
+  String get preferencesShowBestMoveArrows => 'Показувати найкращі ходи стрілками';
+
+  @override
+  String get preferencesShowManeuverArrows => 'Показувати маневри стрілками';
+
+  @override
+  String get preferencesShowGauge => 'Показувати шкалу оцінки';
+
+  @override
+  String get preferencesShowMoveAnnotationsOnBoard => 'Показувати анотації ходів';
+
+  @override
+  String get preferencesShowVariationArrows => 'Показувати варіанти стрілками';
+
+  @override
+  String get preferencesShowLiveGlyphs => 'Анотації рушія онлайн';
+
+  @override
+  String get preferencesShowUndefendedPieces => 'Показувати незахищені фігури';
+
+  @override
+  String get preferencesShowPinnedPieces => 'Показувати прив\'язані фігури';
+
+  @override
+  String get preferencesShowCheckableKing => 'Показувати загрозу шаху';
+
+  @override
+  String get preferencesDisclosureMode => 'Увімкнути приховання варіантів';
+
+  @override
+  String get preferencesGeneralSettings => 'Загальні';
+
+  @override
+  String get preferencesMoveListSettings => 'Список ходів';
+
+  @override
+  String get preferencesBoardSettings => 'Дошка';
+
+  @override
+  String get preferencesAnalysisSettings => 'Налаштування аналізу';
+
+  @override
+  String get preferencesManeuverArrowsHelp => 'Послідовність ходів рушія для однієї фігури';
+
+  @override
+  String get preferencesHoverOverSettingLabelsForHelp => 'Hover over setting labels for help';
+
+  @override
   String get puzzlePuzzles => 'Задачі';
 
   @override
@@ -5189,6 +5243,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get enPassant => 'Взяття на проході';
 
   @override
+  String get settings => 'Налаштування';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5717,6 +5774,17 @@ class AppLocalizationsUk extends AppLocalizations {
       many: 'Доступно $count мовами!',
       few: 'Доступно $count мовами!',
       one: 'Доступно $count мовою!',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbAnonymous(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Anonymous ($count)',
+      one: 'Anonymous',
     );
     return '$_temp0';
   }

@@ -2878,6 +2878,114 @@ abstract class AppLocalizations {
   /// **'Show on the left on mobile devices'**
   String get preferencesShowClockOnTheLeft;
 
+  /// No description provided for @preferencesInlineNotation.
+  ///
+  /// In en, this message translates to:
+  /// **'Inline notation'**
+  String get preferencesInlineNotation;
+
+  /// No description provided for @preferencesShowServerAnalysis.
+  ///
+  /// In en, this message translates to:
+  /// **'Show server analysis'**
+  String get preferencesShowServerAnalysis;
+
+  /// No description provided for @preferencesShowBestMoveArrows.
+  ///
+  /// In en, this message translates to:
+  /// **'Show best move arrows'**
+  String get preferencesShowBestMoveArrows;
+
+  /// No description provided for @preferencesShowManeuverArrows.
+  ///
+  /// In en, this message translates to:
+  /// **'Show maneuver arrows'**
+  String get preferencesShowManeuverArrows;
+
+  /// No description provided for @preferencesShowGauge.
+  ///
+  /// In en, this message translates to:
+  /// **'Show evaluation gauge'**
+  String get preferencesShowGauge;
+
+  /// No description provided for @preferencesShowMoveAnnotationsOnBoard.
+  ///
+  /// In en, this message translates to:
+  /// **'Show move annotations'**
+  String get preferencesShowMoveAnnotationsOnBoard;
+
+  /// No description provided for @preferencesShowVariationArrows.
+  ///
+  /// In en, this message translates to:
+  /// **'Show variation arrows'**
+  String get preferencesShowVariationArrows;
+
+  /// No description provided for @preferencesShowLiveGlyphs.
+  ///
+  /// In en, this message translates to:
+  /// **'Live engine annotations'**
+  String get preferencesShowLiveGlyphs;
+
+  /// No description provided for @preferencesShowUndefendedPieces.
+  ///
+  /// In en, this message translates to:
+  /// **'Show undefended pieces'**
+  String get preferencesShowUndefendedPieces;
+
+  /// No description provided for @preferencesShowPinnedPieces.
+  ///
+  /// In en, this message translates to:
+  /// **'Show pinned pieces'**
+  String get preferencesShowPinnedPieces;
+
+  /// No description provided for @preferencesShowCheckableKing.
+  ///
+  /// In en, this message translates to:
+  /// **'Show checkable king'**
+  String get preferencesShowCheckableKing;
+
+  /// No description provided for @preferencesDisclosureMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable variation hiding'**
+  String get preferencesDisclosureMode;
+
+  /// No description provided for @preferencesGeneralSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'General'**
+  String get preferencesGeneralSettings;
+
+  /// No description provided for @preferencesMoveListSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Move list'**
+  String get preferencesMoveListSettings;
+
+  /// No description provided for @preferencesBoardSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Board'**
+  String get preferencesBoardSettings;
+
+  /// No description provided for @preferencesAnalysisSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Analysis settings'**
+  String get preferencesAnalysisSettings;
+
+  /// No description provided for @preferencesManeuverArrowsHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Sequence of engine moves for one piece'**
+  String get preferencesManeuverArrowsHelp;
+
+  /// No description provided for @preferencesHoverOverSettingLabelsForHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Hover over setting labels for help'**
+  String get preferencesHoverOverSettingLabelsForHelp;
+
   /// No description provided for @puzzlePuzzles.
   ///
   /// In en, this message translates to:
@@ -9424,6 +9532,12 @@ abstract class AppLocalizations {
   /// **'En passant rights'**
   String get enPassant;
 
+  /// No description provided for @settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settings;
+
   /// No description provided for @opponentLeftCounter.
   ///
   /// In en, this message translates to:
@@ -9669,6 +9783,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =1{Available in {count} language!} other{Available in {count} languages!}}'**
   String availableInNbLanguages(int count);
+
+  /// No description provided for @nbAnonymous.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Anonymous} other{Anonymous ({count})}}'**
+  String nbAnonymous(int count);
 
   /// No description provided for @nbSecondsToPlayTheFirstMove.
   ///

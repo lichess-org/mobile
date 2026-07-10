@@ -1604,6 +1604,60 @@ class AppLocalizationsDa extends AppLocalizations {
   String get preferencesShowClockOnTheLeft => 'Vis til venstre på mobile enheder';
 
   @override
+  String get preferencesInlineNotation => 'Notation uden linjeskift';
+
+  @override
+  String get preferencesShowServerAnalysis => 'Vis serveranalyse';
+
+  @override
+  String get preferencesShowBestMoveArrows => 'Vis pile for bedste træk';
+
+  @override
+  String get preferencesShowManeuverArrows => 'Vis manøvrepile';
+
+  @override
+  String get preferencesShowGauge => 'Vis evalueringsindikator';
+
+  @override
+  String get preferencesShowMoveAnnotationsOnBoard => 'Vis træk-annotationer';
+
+  @override
+  String get preferencesShowVariationArrows => 'Vis variantpile';
+
+  @override
+  String get preferencesShowLiveGlyphs => 'Live skakprogram-annotationer';
+
+  @override
+  String get preferencesShowUndefendedPieces => 'Vis uforsvarede brikker';
+
+  @override
+  String get preferencesShowPinnedPieces => 'Vis bundne brikker';
+
+  @override
+  String get preferencesShowCheckableKing => 'Vis konge, der kan sættes skak';
+
+  @override
+  String get preferencesDisclosureMode => 'Aktiver skjulning af variation';
+
+  @override
+  String get preferencesGeneralSettings => 'Generelt';
+
+  @override
+  String get preferencesMoveListSettings => 'Trækliste';
+
+  @override
+  String get preferencesBoardSettings => 'Bræt';
+
+  @override
+  String get preferencesAnalysisSettings => 'Analyseindstillinger';
+
+  @override
+  String get preferencesManeuverArrowsHelp => 'Sekvens af skakprogramtræk for en brik';
+
+  @override
+  String get preferencesHoverOverSettingLabelsForHelp => 'Hold markøren over indstillingsetiketter for hjælp';
+
+  @override
   String get puzzlePuzzles => 'Taktikopgaver';
 
   @override
@@ -5133,6 +5187,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get enPassant => 'En passant';
 
   @override
+  String get settings => 'Indstillinger';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5579,6 +5636,17 @@ class AppLocalizationsDa extends AppLocalizations {
       locale: localeName,
       other: 'Tilgængelig på $count sprog!',
       one: 'Tilgængelig på $count sprog!',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbAnonymous(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Anonyme ($count)',
+      one: 'Anonym',
     );
     return '$_temp0';
   }

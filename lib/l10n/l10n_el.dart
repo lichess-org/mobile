@@ -287,7 +287,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Ή μεταφορτώστε ένα αρχείο PGN';
 
   @override
-  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+  String get mobileGoodMoveButThereIsBetter => 'Καλή κίνηση, αλλά υπάρχει καλύτερη';
 
   @override
   String get variantStandard => 'Κανονικό';
@@ -1602,6 +1602,60 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get preferencesShowClockOnTheLeft => 'Εμφάνιση στα αριστερά στις κινητές συσκευές';
+
+  @override
+  String get preferencesInlineNotation => 'Ενσωματωμένη σημειογραφία';
+
+  @override
+  String get preferencesShowServerAnalysis => 'Show server analysis';
+
+  @override
+  String get preferencesShowBestMoveArrows => 'Show best move arrows';
+
+  @override
+  String get preferencesShowManeuverArrows => 'Show maneuver arrows';
+
+  @override
+  String get preferencesShowGauge => 'Show evaluation gauge';
+
+  @override
+  String get preferencesShowMoveAnnotationsOnBoard => 'Show move annotations';
+
+  @override
+  String get preferencesShowVariationArrows => 'Show variation arrows';
+
+  @override
+  String get preferencesShowLiveGlyphs => 'Live engine annotations';
+
+  @override
+  String get preferencesShowUndefendedPieces => 'Show undefended pieces';
+
+  @override
+  String get preferencesShowPinnedPieces => 'Show pinned pieces';
+
+  @override
+  String get preferencesShowCheckableKing => 'Show checkable king';
+
+  @override
+  String get preferencesDisclosureMode => 'Enable variation hiding';
+
+  @override
+  String get preferencesGeneralSettings => 'Γενικές';
+
+  @override
+  String get preferencesMoveListSettings => 'Λίστα κινήσεων';
+
+  @override
+  String get preferencesBoardSettings => 'Σκακιέρα';
+
+  @override
+  String get preferencesAnalysisSettings => 'Ρυθμίσεις ανάλυσης';
+
+  @override
+  String get preferencesManeuverArrowsHelp => 'Sequence of engine moves for one piece';
+
+  @override
+  String get preferencesHoverOverSettingLabelsForHelp => 'Hover over setting labels for help';
 
   @override
   String get puzzlePuzzles => 'Γρίφοι';
@@ -5133,6 +5187,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String get enPassant => 'En passant';
 
   @override
+  String get settings => 'Ρυθμίσεις';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5579,6 +5636,17 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Διαθέσιμο σε $count γλώσσες!',
       one: 'Διαθέσιμο σε $count γλώσσες!',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbAnonymous(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Ανώνυμοι ($count)',
+      one: 'Ανώνυμος/η',
     );
     return '$_temp0';
   }

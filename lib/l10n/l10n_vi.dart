@@ -1582,6 +1582,60 @@ class AppLocalizationsVi extends AppLocalizations {
   String get preferencesShowClockOnTheLeft => 'Hiện ở bên trái trên thiết bị di động';
 
   @override
+  String get preferencesInlineNotation => 'Ký hiệu bên trong bàn cờ';
+
+  @override
+  String get preferencesShowServerAnalysis => 'Hiện phân tích từ máy chủ';
+
+  @override
+  String get preferencesShowBestMoveArrows => 'Hiện mũi tên cho nước đi tốt nhất';
+
+  @override
+  String get preferencesShowManeuverArrows => 'Show maneuver arrows';
+
+  @override
+  String get preferencesShowGauge => 'Hiện thanh lợi thế';
+
+  @override
+  String get preferencesShowMoveAnnotationsOnBoard => 'Hiện chú thích nước đi';
+
+  @override
+  String get preferencesShowVariationArrows => 'Hiện mũi tên cho các biến';
+
+  @override
+  String get preferencesShowLiveGlyphs => 'Live engine annotations';
+
+  @override
+  String get preferencesShowUndefendedPieces => 'Hiện quân không được phòng thủ';
+
+  @override
+  String get preferencesShowPinnedPieces => 'Hiện quân bị ghim';
+
+  @override
+  String get preferencesShowCheckableKing => 'Show checkable king';
+
+  @override
+  String get preferencesDisclosureMode => 'Enable variation hiding';
+
+  @override
+  String get preferencesGeneralSettings => 'Cài đặt chung';
+
+  @override
+  String get preferencesMoveListSettings => 'Biên bản ván đấu';
+
+  @override
+  String get preferencesBoardSettings => 'Bàn cờ';
+
+  @override
+  String get preferencesAnalysisSettings => 'Cài đặt phân tích';
+
+  @override
+  String get preferencesManeuverArrowsHelp => 'Sequence of engine moves for one piece';
+
+  @override
+  String get preferencesHoverOverSettingLabelsForHelp => 'Hover over setting labels for help';
+
+  @override
   String get puzzlePuzzles => 'Câu đố';
 
   @override
@@ -5105,6 +5159,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get enPassant => 'Bắt tốt qua đường';
 
   @override
+  String get settings => 'Cài đặt';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5510,6 +5567,16 @@ class AppLocalizationsVi extends AppLocalizations {
       count,
       locale: localeName,
       other: 'Hỗ trợ $count ngôn ngữ!',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbAnonymous(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Ẩn danh ($count)',
     );
     return '$_temp0';
   }
