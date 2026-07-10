@@ -122,7 +122,7 @@ class BoardPreferences extends Notifier<BoardPrefs> with PreferencesStorage<Boar
     return save(state.copyWith(shapeColor: shapeColor));
   }
 
-  Future<void> setHighlightColor(HighlightColor highlightColor) {
+  Future<void> setHighlightColor(HighlightColor? highlightColor) {
     return save(state.copyWith(highlightColor: highlightColor));
   }
 
@@ -177,8 +177,7 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
     required DragTargetKind dragTargetKind,
     @JsonKey(defaultValue: ShapeColor.green, unknownEnumValue: ShapeColor.green)
     required ShapeColor shapeColor,
-    @JsonKey(defaultValue: HighlightColor.yellow, unknownEnumValue: HighlightColor.yellow)
-    required HighlightColor highlightColor,
+    HighlightColor? highlightColor,
     @JsonKey(defaultValue: false) required bool showBorder,
     @JsonKey(defaultValue: kBoardDefaultBrightnessFilter) required double brightness,
     @JsonKey(defaultValue: kBoardDefaultHueFilter) required double hue,
@@ -205,7 +204,7 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
     magnifyDraggedPiece: true,
     dragTargetKind: DragTargetKind.circle,
     shapeColor: ShapeColor.green,
-    highlightColor: HighlightColor.yellow,
+    highlightColor: null,
     showBorder: false,
     brightness: kBoardDefaultBrightnessFilter,
     hue: kBoardDefaultHueFilter,
@@ -223,7 +222,9 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
         background: boardTheme.colors.background,
         whiteCoordBackground: boardTheme.colors.whiteCoordBackground,
         blackCoordBackground: boardTheme.colors.blackCoordBackground,
-        lastMove: HighlightDetails(solidColor: highlightColor.color),
+        lastMove: highlightColor != null
+        ? HighlightDetails(solidColor: highlightColor!.color)
+        : boardTheme.colors.lastMove,
         selected: boardTheme.colors.selected,
         validMoves: boardTheme.colors.validMoves,
         validPremoves: boardTheme.colors.validPremoves,

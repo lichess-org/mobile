@@ -177,12 +177,12 @@ class _BodyState extends ConsumerState<_Body> {
                     SettingsListTile(
                       icon: const Icon(Icons.highlight),
                       settingsLabel: const Text('Last move highlight color'),
-                      settingsValue: highlightColorL10n(boardPrefs.highlightColor),
+                      settingsValue: highlightColorL10n(boardPrefs.highlightColor ?? HighlightColor.yellow),
                       onTap: () {
                         showChoicePicker(
                           context,
                           choices: HighlightColor.values,
-                          selectedItem: boardPrefs.highlightColor,
+                          selectedItem: boardPrefs.highlightColor ?? HighlightColor.yellow,
                           labelBuilder: (t) => Text.rich(
                             TextSpan(
                               children: [
@@ -192,8 +192,10 @@ class _BodyState extends ConsumerState<_Body> {
                               ],
                             ),
                           ),
-                          onSelectedItemChanged: (HighlightColor value) {
-                            ref.read(boardPreferencesProvider.notifier).setHighlightColor(value);
+                          onSelectedItemChanged: (HighlightColor? value) {
+                            ref
+                                .read(boardPreferencesProvider.notifier)
+                                .setHighlightColor(value);
                           },
                         );
                       },
