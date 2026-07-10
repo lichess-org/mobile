@@ -63,7 +63,9 @@ class TournamentScreen extends ConsumerStatefulWidget {
   static Route<void> buildRoute(TournamentId id, {UserId? initialPlayerId}) {
     return buildScreenRoute(
       screen: TournamentScreen(id: id, initialPlayerId: initialPlayerId),
-      settings: const RouteSettings(name: routeName),
+      // The tournament id is carried in [RouteSettings.arguments] so that code
+      // can identify which tournament a route in the navigation stack belongs to.
+      settings: RouteSettings(name: routeName, arguments: id),
     );
   }
 
