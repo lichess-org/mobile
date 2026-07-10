@@ -3,33 +3,57 @@ import 'dart:convert';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 
-typedef AccountPrefState = ({
-  // game display
-  Zen zenMode,
-  PieceNotation pieceNotation,
-  ShowRatings showRatings,
-  // game behavior
-  BooleanPref premove,
-  AutoQueen autoQueen,
-  AutoThreefold autoThreefold,
-  Takeback takeback,
-  BooleanPref confirmResign,
-  SubmitMove submitMove,
-  // clock
-  Moretime moretime,
-  ClockTenths clockTenths,
-  BooleanPref clockSound,
-  // privacy
-  BooleanPref follow,
-  Challenge challenge,
-  Message message,
-});
+part 'account_preferences.freezed.dart';
+part 'account_preferences.g.dart';
+
+@Freezed(fromJson: true, toJson: true)
+sealed class AccountPrefState with _$AccountPrefState implements Serializable {
+  const AccountPrefState._();
+
+  const factory AccountPrefState({
+    // game display
+    @JsonKey(name: 'zen', fromJson: _zenFromJson, toJson: _zenToJson) required Zen zenMode,
+    @JsonKey(fromJson: _pieceNotationFromJson, toJson: _pieceNotationToJson)
+    required PieceNotation pieceNotation,
+    @JsonKey(name: 'ratings', fromJson: _showRatingsFromJson, toJson: _showRatingsToJson)
+    required ShowRatings showRatings,
+    // game behavior
+    @JsonKey(fromJson: _premoveFromJson, toJson: _booleanPrefToJson) required BooleanPref premove,
+    @JsonKey(fromJson: _autoQueenFromJson, toJson: _autoQueenToJson) required AutoQueen autoQueen,
+    @JsonKey(fromJson: _autoThreefoldFromJson, toJson: _autoThreefoldToJson)
+    required AutoThreefold autoThreefold,
+    @JsonKey(fromJson: _takebackFromJson, toJson: _takebackToJson) required Takeback takeback,
+    @JsonKey(fromJson: _confirmResignFromJson, toJson: _booleanPrefToJson)
+    required BooleanPref confirmResign,
+    @JsonKey(fromJson: _submitMoveFromJson, toJson: _submitMoveToJson)
+    required SubmitMove submitMove,
+    // clock
+    @JsonKey(fromJson: _moretimeFromJson, toJson: _moretimeToJson) required Moretime moretime,
+    @JsonKey(fromJson: _clockTenthsFromJson, toJson: _clockTenthsToJson)
+    required ClockTenths clockTenths,
+    @JsonKey(fromJson: _clockSoundFromJson, toJson: _booleanPrefToJson)
+    required BooleanPref clockSound,
+    // privacy
+    @JsonKey(fromJson: _followFromJson, toJson: _booleanPrefToJson) required BooleanPref follow,
+    @JsonKey(fromJson: _challengeFromJson, toJson: _challengeToJson) required Challenge challenge,
+    @JsonKey(fromJson: _messageFromJson, toJson: _messageToJson) required Message message,
+  }) = _AccountPrefState;
+
+  factory AccountPrefState.fromJson(Map<String, dynamic> json) {
+    try {
+      return _$AccountPrefStateFromJson(json);
+    } catch (_) {
+      return defaultAccountPreferences;
+    }
+  }
+}
 
 /// A provider that tells if the user wants to see ratings in the app.
 final showRatingsPrefProvider = FutureProvider<ShowRatings>((Ref ref) async {
@@ -55,7 +79,7 @@ final clockTenthsProvider = FutureProvider<ClockTenths>((Ref ref) async {
   return prefs.clockTenths;
 });
 
-final defaultAccountPreferences = (
+final defaultAccountPreferences = AccountPrefState(
   zenMode: Zen.no,
   pieceNotation: PieceNotation.symbol,
   showRatings: ShowRatings.yes,
@@ -101,36 +125,36 @@ class AccountPreferences extends AsyncNotifier<AccountPrefState> {
   }
 
   Future<void> setZen(Zen value) =>
-      _setPref('zen', value, (prefs) => _copyWith(prefs, zenMode: value));
+      _setPref('zen', value, (prefs) => prefs.copyWith(zenMode: value));
   Future<void> setPieceNotation(PieceNotation value) =>
-      _setPref('pieceNotation', value, (prefs) => _copyWith(prefs, pieceNotation: value));
+      _setPref('pieceNotation', value, (prefs) => prefs.copyWith(pieceNotation: value));
   Future<void> setShowRatings(ShowRatings value) =>
-      _setPref('ratings', value, (prefs) => _copyWith(prefs, showRatings: value));
+      _setPref('ratings', value, (prefs) => prefs.copyWith(showRatings: value));
 
   Future<void> setPremove(BooleanPref value) =>
-      _setPref('premove', value, (prefs) => _copyWith(prefs, premove: value));
+      _setPref('premove', value, (prefs) => prefs.copyWith(premove: value));
   Future<void> setTakeback(Takeback value) =>
-      _setPref('takeback', value, (prefs) => _copyWith(prefs, takeback: value));
+      _setPref('takeback', value, (prefs) => prefs.copyWith(takeback: value));
   Future<void> setAutoQueen(AutoQueen value) =>
-      _setPref('autoQueen', value, (prefs) => _copyWith(prefs, autoQueen: value));
+      _setPref('autoQueen', value, (prefs) => prefs.copyWith(autoQueen: value));
   Future<void> setAutoThreefold(AutoThreefold value) =>
-      _setPref('autoThreefold', value, (prefs) => _copyWith(prefs, autoThreefold: value));
+      _setPref('autoThreefold', value, (prefs) => prefs.copyWith(autoThreefold: value));
   Future<void> setMoretime(Moretime value) =>
-      _setPref('moretime', value, (prefs) => _copyWith(prefs, moretime: value));
+      _setPref('moretime', value, (prefs) => prefs.copyWith(moretime: value));
   Future<void> setClockTenths(ClockTenths value) =>
-      _setPref('clockTenths', value, (prefs) => _copyWith(prefs, clockTenths: value));
+      _setPref('clockTenths', value, (prefs) => prefs.copyWith(clockTenths: value));
   Future<void> setClockSound(BooleanPref value) =>
-      _setPref('clockSound', value, (prefs) => _copyWith(prefs, clockSound: value));
+      _setPref('clockSound', value, (prefs) => prefs.copyWith(clockSound: value));
   Future<void> setConfirmResign(BooleanPref value) =>
-      _setPref('confirmResign', value, (prefs) => _copyWith(prefs, confirmResign: value));
+      _setPref('confirmResign', value, (prefs) => prefs.copyWith(confirmResign: value));
   Future<void> setSubmitMove(SubmitMove value) =>
-      _setPref('submitMove', value, (prefs) => _copyWith(prefs, submitMove: value));
+      _setPref('submitMove', value, (prefs) => prefs.copyWith(submitMove: value));
   Future<void> setFollow(BooleanPref value) =>
-      _setPref('follow', value, (prefs) => _copyWith(prefs, follow: value));
+      _setPref('follow', value, (prefs) => prefs.copyWith(follow: value));
   Future<void> setChallenge(Challenge value) =>
-      _setPref('challenge', value, (prefs) => _copyWith(prefs, challenge: value));
+      _setPref('challenge', value, (prefs) => prefs.copyWith(challenge: value));
   Future<void> setMessage(Message value) =>
-      _setPref('message', value, (prefs) => _copyWith(prefs, message: value));
+      _setPref('message', value, (prefs) => prefs.copyWith(message: value));
 
   Future<void> _setPref<T>(
     String key,
@@ -151,7 +175,7 @@ class AccountPreferences extends AsyncNotifier<AccountPrefState> {
   Future<void> _saveLocal(AccountPrefState value) async {
     await LichessBinding.instance.sharedPreferences.setString(
       PrefCategory.account.storageKey,
-      jsonEncode(_accountPreferencesToJson(value)),
+      jsonEncode(value.toJson()),
     );
 
     if (!ref.mounted) return;
@@ -167,7 +191,7 @@ class AccountPreferences extends AsyncNotifier<AccountPrefState> {
       return defaultAccountPreferences;
     }
     try {
-      return _localAccountPreferencesFromJson(jsonDecode(stored) as Map<String, dynamic>);
+      return AccountPrefState.fromJson(jsonDecode(stored) as Map<String, dynamic>);
     } catch (e) {
       debugPrint('[AccountPreferences] Error reading local account preferences: $e');
       return defaultAccountPreferences;
@@ -175,112 +199,80 @@ class AccountPreferences extends AsyncNotifier<AccountPrefState> {
   }
 }
 
-AccountPrefState _copyWith(
-  AccountPrefState prefs, {
-  Zen? zenMode,
-  PieceNotation? pieceNotation,
-  ShowRatings? showRatings,
-  BooleanPref? premove,
-  AutoQueen? autoQueen,
-  AutoThreefold? autoThreefold,
-  Takeback? takeback,
-  BooleanPref? confirmResign,
-  SubmitMove? submitMove,
-  Moretime? moretime,
-  ClockTenths? clockTenths,
-  BooleanPref? clockSound,
-  BooleanPref? follow,
-  Challenge? challenge,
-  Message? message,
-}) {
-  return (
-    zenMode: zenMode ?? prefs.zenMode,
-    pieceNotation: pieceNotation ?? prefs.pieceNotation,
-    showRatings: showRatings ?? prefs.showRatings,
-    premove: premove ?? prefs.premove,
-    autoQueen: autoQueen ?? prefs.autoQueen,
-    autoThreefold: autoThreefold ?? prefs.autoThreefold,
-    takeback: takeback ?? prefs.takeback,
-    moretime: moretime ?? prefs.moretime,
-    clockTenths: clockTenths ?? prefs.clockTenths,
-    clockSound: clockSound ?? prefs.clockSound,
-    confirmResign: confirmResign ?? prefs.confirmResign,
-    submitMove: submitMove ?? prefs.submitMove,
-    follow: follow ?? prefs.follow,
-    challenge: challenge ?? prefs.challenge,
-    message: message ?? prefs.message,
-  );
-}
+Zen _zenFromJson(Object? value) =>
+    Zen.fromInt(_intValue(value, defaultAccountPreferences.zenMode.value));
 
-Map<String, dynamic> _accountPreferencesToJson(AccountPrefState prefs) {
-  return {
-    'zen': prefs.zenMode.value,
-    'pieceNotation': prefs.pieceNotation.value,
-    'ratings': prefs.showRatings.value,
-    'premove': prefs.premove.value,
-    'autoQueen': prefs.autoQueen.value,
-    'autoThreefold': prefs.autoThreefold.value,
-    'takeback': prefs.takeback.value,
-    'moretime': prefs.moretime.value,
-    'clockTenths': prefs.clockTenths.value,
-    'clockSound': prefs.clockSound.value,
-    'confirmResign': prefs.confirmResign.value,
-    'submitMove': prefs.submitMove.value,
-    'follow': prefs.follow.value,
-    'challenge': prefs.challenge.value,
-    'message': prefs.message.value,
-  };
-}
+int _zenToJson(Zen value) => value.value;
 
-AccountPrefState _localAccountPreferencesFromJson(Map<String, dynamic> json) {
-  return (
-    zenMode: Zen.fromInt(_intValue(json, 'zen', defaultAccountPreferences.zenMode.value)),
-    pieceNotation: PieceNotation.fromInt(
-      _intValue(json, 'pieceNotation', defaultAccountPreferences.pieceNotation.value),
-    ),
-    showRatings: ShowRatings.fromInt(
-      _intValue(json, 'ratings', defaultAccountPreferences.showRatings.value),
-    ),
-    premove: BooleanPref(_boolValue(json, 'premove', defaultAccountPreferences.premove.value)),
-    autoQueen: AutoQueen.fromInt(
-      _intValue(json, 'autoQueen', defaultAccountPreferences.autoQueen.value),
-    ),
-    autoThreefold: AutoThreefold.fromInt(
-      _intValue(json, 'autoThreefold', defaultAccountPreferences.autoThreefold.value),
-    ),
-    takeback: Takeback.fromInt(
-      _intValue(json, 'takeback', defaultAccountPreferences.takeback.value),
-    ),
-    moretime: Moretime.fromInt(
-      _intValue(json, 'moretime', defaultAccountPreferences.moretime.value),
-    ),
-    clockTenths: ClockTenths.fromInt(
-      _intValue(json, 'clockTenths', defaultAccountPreferences.clockTenths.value),
-    ),
-    clockSound: BooleanPref(
-      _boolValue(json, 'clockSound', defaultAccountPreferences.clockSound.value),
-    ),
-    confirmResign: BooleanPref(
-      _boolValue(json, 'confirmResign', defaultAccountPreferences.confirmResign.value),
-    ),
-    submitMove: SubmitMove.fromInt(
-      _intValue(json, 'submitMove', defaultAccountPreferences.submitMove.value),
-    ),
-    follow: BooleanPref(_boolValue(json, 'follow', defaultAccountPreferences.follow.value)),
-    challenge: Challenge.fromInt(
-      _intValue(json, 'challenge', defaultAccountPreferences.challenge.value),
-    ),
-    message: Message.fromInt(_intValue(json, 'message', defaultAccountPreferences.message.value)),
-  );
-}
+PieceNotation _pieceNotationFromJson(Object? value) =>
+    PieceNotation.fromInt(_intValue(value, defaultAccountPreferences.pieceNotation.value));
 
-int _intValue(Map<String, dynamic> json, String key, int fallback) {
-  final value = json[key];
+int _pieceNotationToJson(PieceNotation value) => value.value;
+
+ShowRatings _showRatingsFromJson(Object? value) =>
+    ShowRatings.fromInt(_intValue(value, defaultAccountPreferences.showRatings.value));
+
+int _showRatingsToJson(ShowRatings value) => value.value;
+
+BooleanPref _premoveFromJson(Object? value) =>
+    BooleanPref(_boolValue(value, defaultAccountPreferences.premove.value));
+
+AutoQueen _autoQueenFromJson(Object? value) =>
+    AutoQueen.fromInt(_intValue(value, defaultAccountPreferences.autoQueen.value));
+
+int _autoQueenToJson(AutoQueen value) => value.value;
+
+AutoThreefold _autoThreefoldFromJson(Object? value) =>
+    AutoThreefold.fromInt(_intValue(value, defaultAccountPreferences.autoThreefold.value));
+
+int _autoThreefoldToJson(AutoThreefold value) => value.value;
+
+Takeback _takebackFromJson(Object? value) =>
+    Takeback.fromInt(_intValue(value, defaultAccountPreferences.takeback.value));
+
+int _takebackToJson(Takeback value) => value.value;
+
+BooleanPref _confirmResignFromJson(Object? value) =>
+    BooleanPref(_boolValue(value, defaultAccountPreferences.confirmResign.value));
+
+SubmitMove _submitMoveFromJson(Object? value) =>
+    SubmitMove.fromInt(_intValue(value, defaultAccountPreferences.submitMove.value));
+
+int _submitMoveToJson(SubmitMove value) => value.value;
+
+Moretime _moretimeFromJson(Object? value) =>
+    Moretime.fromInt(_intValue(value, defaultAccountPreferences.moretime.value));
+
+int _moretimeToJson(Moretime value) => value.value;
+
+ClockTenths _clockTenthsFromJson(Object? value) =>
+    ClockTenths.fromInt(_intValue(value, defaultAccountPreferences.clockTenths.value));
+
+int _clockTenthsToJson(ClockTenths value) => value.value;
+
+BooleanPref _clockSoundFromJson(Object? value) =>
+    BooleanPref(_boolValue(value, defaultAccountPreferences.clockSound.value));
+
+BooleanPref _followFromJson(Object? value) =>
+    BooleanPref(_boolValue(value, defaultAccountPreferences.follow.value));
+
+Challenge _challengeFromJson(Object? value) =>
+    Challenge.fromInt(_intValue(value, defaultAccountPreferences.challenge.value));
+
+int _challengeToJson(Challenge value) => value.value;
+
+Message _messageFromJson(Object? value) =>
+    Message.fromInt(_intValue(value, defaultAccountPreferences.message.value));
+
+int _messageToJson(Message value) => value.value;
+
+bool _booleanPrefToJson(BooleanPref value) => value.value;
+
+int _intValue(Object? value, int fallback) {
   return value is num ? value.toInt() : fallback;
 }
 
-bool _boolValue(Map<String, dynamic> json, String key, bool fallback) {
-  final value = json[key];
+bool _boolValue(Object? value, bool fallback) {
   return switch (value) {
     final bool b => b,
     final num n => n != 0,

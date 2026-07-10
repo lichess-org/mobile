@@ -82,6 +82,22 @@ void main() {
       expect(prefs.clockTenths, defaultAccountPreferences.clockTenths);
     });
 
+    test('serializes local preferences using existing storage keys', () {
+      final json = defaultAccountPreferences
+          .copyWith(showRatings: ShowRatings.no, clockSound: const BooleanPref(false))
+          .toJson();
+
+      expect(json['ratings'], ShowRatings.no.value);
+      expect(json['showRatings'], isNull);
+      expect(json['clockSound'], isFalse);
+
+      json['clockSound'] = 0;
+      final prefs = AccountPrefState.fromJson(json);
+
+      expect(prefs.showRatings, ShowRatings.no);
+      expect(prefs.clockSound.value, isFalse);
+    });
+
     test('local settings feed public preference providers when signed out', () async {
       final container = await makeContainer();
 
