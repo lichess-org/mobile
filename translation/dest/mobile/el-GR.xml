@@ -90,4 +90,5 @@
   <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">Η πρόσκληση δημιουργήθηκε: Θα ειδοποιηθείτε μόλις ξεκινήσει η παρτίδα.\nΜπορείτε να έχετε πρόσβαση από την αρχική καρτέλα.</string>
   <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Προηγούμενη</string>
   <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">Ή μεταφορτώστε ένα αρχείο PGN</string>
+  <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">Καλή κίνηση, αλλά υπάρχει καλύτερη</string>
 </resources>
