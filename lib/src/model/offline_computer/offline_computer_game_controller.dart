@@ -152,38 +152,12 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   void makeMove(Move move) {
     if (state.isEngineThinking || state.isEvaluatingMove || !state.game.playable) return;
 
-    if (move case NormalMove() when isPromotionPawnMove(state.currentPosition, move)) {
-      state = state.copyWith(promotionMove: move);
-      return;
-    }
-
     if (state.game.practiceMode) {
       _makeMoveWithEvaluation(move);
     } else {
       _applyMove(move);
       if (state.game.playable) {
         _playEngineMoveAfterPlayerAnimation();
-      }
-    }
-  }
-
-  void onPromotionSelection(Role? role) {
-    if (role == null) {
-      state = state.copyWith(promotionMove: null);
-      return;
-    }
-    final promotionMove = state.promotionMove;
-    if (promotionMove != null) {
-      final move = promotionMove.withPromotion(role);
-      state = state.copyWith(promotionMove: null);
-
-      if (state.game.practiceMode) {
-        _makeMoveWithEvaluation(move);
-      } else {
-        _applyMove(move);
-        if (state.game.playable) {
-          _playEngineMoveAfterPlayerAnimation();
-        }
       }
     }
   }
@@ -758,13 +732,13 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
 
   void goForward() {
     if (state.canGoForward) {
-      state = state.copyWith(stepCursor: state.stepCursor + 1, promotionMove: null);
+      state = state.copyWith(stepCursor: state.stepCursor + 1);
     }
   }
 
   void goBack() {
     if (state.canGoBack) {
-      state = state.copyWith(stepCursor: state.stepCursor - 1, promotionMove: null);
+      state = state.copyWith(stepCursor: state.stepCursor - 1);
     }
   }
 
@@ -892,7 +866,6 @@ sealed class OfflineComputerGameState with _$OfflineComputerGameState {
   const factory OfflineComputerGameState({
     required OfflineComputerGame game,
     @Default(0) int stepCursor,
-    @Default(null) NormalMove? promotionMove,
     @Default(false) bool isEngineThinking,
     @Default(false) bool isLoadingHint,
 

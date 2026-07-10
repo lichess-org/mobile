@@ -143,6 +143,7 @@ class PlatformAppBar extends StatelessWidget implements PreferredSizeWidget {
       bottom: bottom,
       centerTitle: centerTitle,
       automaticallyImplyLeading: automaticallyImplyLeading,
+      animateColor: true,
     );
 
     return isIOS

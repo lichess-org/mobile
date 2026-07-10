@@ -21,17 +21,6 @@ const kEngineEvalEmissionThrottleDelay = Duration(milliseconds: 200);
 /// Variants supported by the official Stockfish engine.
 const officialStockfishVariants = {Variant.standard, Variant.chess960, Variant.fromPosition};
 
-/// Exception thrown when the engine does not support the requested variant.
-class EngineUnsupportedVariantException implements Exception {
-  const EngineUnsupportedVariantException(this.variant);
-
-  final Variant variant;
-
-  @override
-  String toString() =>
-      'EngineUnsupportedVariantException: variant $variant is not supported by the engine';
-}
-
 /// Exception thrown when a [EvaluationService.findMove] request is cancelled.
 ///
 /// This can happen when [EvaluationService.quit] is called, or when a new
@@ -62,8 +51,7 @@ final evaluationServiceProvider = Provider<EvaluationService>((Ref ref) {
 /// can run at a time - when a new evaluation is requested, it takes over from any
 /// previous one ("last caller wins").
 class EvaluationService {
-  EvaluationService({required this.maxMemory, required NnueService nnueService})
-    : _nnueService = nnueService {
+  EvaluationService({required this.maxMemory, required this._nnueService}) {
     _stdoutSubscription = _stockfish.stdout.listen(_protocol.received);
     _stockfish.state.addListener(_onStockfishStateChange);
     _protocol.isComputing.addListener(_onComputingChange);
@@ -86,6 +74,18 @@ class EvaluationService {
 
   final UCIProtocol _protocol = UCIProtocol();
 
+  // serialize engine start/quit operations to avoid races
+  Future<void> _engineOpQueue = Future<void>.value();
+
+  Future<void> _runStockfishOperation(Future<void> Function() op) {
+    final result = _engineOpQueue.then((_) => op());
+    // The queue tail swallows errors so a single failed operation doesn't block
+    // the ones chained after it, but the future returned to the caller keeps the
+    // error so awaiting callers (e.g. _initEngine) can still detect failures.
+    _engineOpQueue = result.catchError((_, _) {});
+    return result;
+  }
+
   late final StreamSubscription<String> _stdoutSubscription;
   late final StreamSubscription<EvalResult> _evalSubscription;
   late final StreamSubscription<MoveResult> _moveSubscription;
@@ -97,6 +97,7 @@ class EvaluationService {
   StockfishFlavor? _currentRequestedFlavor;
   Variant? _currentVariant;
   bool _initInProgress = false;
+  bool _quitInProgress = false;
   bool _discardEvalResults = false;
   bool _discardMoveResults = false;
 
@@ -313,6 +314,7 @@ class EvaluationService {
     // Compare against the originally requested flavor, not the effective one. This prevents restart
     // when latestNoNNUE fell back to sf16
     final needsRestart =
+        _quitInProgress ||
         _currentRequestedFlavor != flavor ||
         _currentVariant != work.variant ||
         stockfishState == StockfishState.initial ||
@@ -326,14 +328,17 @@ class EvaluationService {
     _logger.finer(
       'Engine restart needed: $needsRestart, new game needed: $needsNewGame, current engine state: $stockfishState',
     );
-
+    // Update work and flag other type of work to be discarded
     switch (work) {
       case final EvalWork evalWork:
         _setEvalWork(evalWork);
         _discardEvalResults = false;
+        _discardMoveResults = true;
+        _cancelPendingMoveRequest();
       case final MoveWork moveWork:
         _setMoveWork(moveWork);
         _discardMoveResults = false;
+        _discardEvalResults = true;
     }
 
     if (_initInProgress) {
@@ -363,7 +368,7 @@ class EvaluationService {
     try {
       _logger.fine('Initializing engine with flavor: $flavor');
 
-      await _stockfish.quit();
+      await _runStockfishOperation(() => _stockfish.quit());
 
       _protocol.reset();
 
@@ -382,12 +387,14 @@ class EvaluationService {
         }
       }
 
-      await _stockfish.start(
-        flavor: actualFlavor,
-        // We always pass the variant, but this is ignored if flavor is not StockfishFlavor.variant
-        variant: variant.fairy,
-        smallNetPath: smallNetPath,
-        bigNetPath: bigNetPath,
+      await _runStockfishOperation(
+        () => _stockfish.start(
+          flavor: actualFlavor,
+          // We always pass the variant, but this is ignored if flavor is not StockfishFlavor.variant
+          variant: variant.fairy,
+          smallNetPath: smallNetPath,
+          bigNetPath: bigNetPath,
+        ),
       );
 
       if (_stockfish.state.value == StockfishState.error) {
@@ -466,6 +473,8 @@ class EvaluationService {
     final pending = _pendingEvalResult;
     if (pending != null) {
       _pendingEvalResult = null;
+      // Drop results if they are flagged to be discarded
+      if (_discardEvalResults) return;
       _emitEval(pending);
       // Start new throttle window for trailing emission
       _evalThrottleTimer = Timer(kEngineEvalEmissionThrottleDelay, _onThrottleExpired);
@@ -473,8 +482,12 @@ class EvaluationService {
   }
 
   void _emitEval(EvalResult result) {
-    _setEval(result.$2);
+    if (_discardEvalResults) return;
     _evalController.add(result);
+    final currentWork = _evaluationState.value.currentWork ?? _currentMoveWork;
+    if (currentWork != null && result.$1 == currentWork) {
+      _setEval(result.$2);
+    }
   }
 
   void _onMoveResult(MoveResult result) {
@@ -497,7 +510,12 @@ class EvaluationService {
   /// This should be called when the engine is no longer needed (e.g., when leaving an analysis screen).
   /// The service can be reused after calling this method.
   void quit() {
+    if (_engineState == EngineState.initial && !_initInProgress) {
+      _logger.fine('Engine already quit or uninitialized. Ignoring duplicate quit call.');
+      return;
+    }
     _logger.info('Quitting engine');
+    _quitInProgress = true;
     _protocol.compute(null);
     _evalThrottleTimer?.cancel();
     _evalThrottleTimer = null;
@@ -506,7 +524,13 @@ class EvaluationService {
     _discardEvalResults = true;
     _discardMoveResults = true;
     _currentMoveWork = null;
-    _stockfish.quit();
+    _runStockfishOperation(() async {
+      try {
+        await _stockfish.quit();
+      } finally {
+        _quitInProgress = false;
+      }
+    });
     _currentRequestedFlavor = null;
     _currentVariant = null;
     _initInProgress = false;
@@ -532,7 +556,7 @@ class EvaluationService {
     _protocol.isComputing.removeListener(_onComputingChange);
     _protocol.engineName.removeListener(_onEngineNameChange);
     _protocol.dispose();
-    _stockfish.quit();
+    _runStockfishOperation(() => _stockfish.quit());
     _evalController.close();
     _moveController.close();
     _evaluationState.dispose();
@@ -565,22 +589,20 @@ class EngineEvaluationNotifier extends Notifier<EngineEvaluationState> {
 
   final EngineEvaluationFilters filters;
 
+  late ValueListenable<EngineEvaluationState> _listenable;
+
   @override
   EngineEvaluationState build() {
-    final listenable = ref.watch(evaluationServiceProvider).evaluationState;
+    _listenable = ref.watch(evaluationServiceProvider).evaluationState;
 
-    listenable.addListener(_listener);
+    _listenable.addListener(_listener);
 
     ref.onDispose(() {
-      listenable.removeListener(_listener);
+      _listenable.removeListener(_listener);
     });
 
-    final evalState = listenable.value;
-    if (_filter(evalState)) {
-      return evalState;
-    } else {
-      return EvaluationService._defaultState;
-    }
+    final evalState = _listenable.value;
+    return _filter(evalState) ? evalState : EvaluationService._defaultState;
   }
 
   void _listener() {
@@ -588,11 +610,12 @@ class EngineEvaluationNotifier extends Notifier<EngineEvaluationState> {
     // This is needed because notifications can be triggered during disposal
     // of other providers (e.g., when EngineEvaluationMixin's onDispose calls quit())
     Future.microtask(() {
-      if (ref.mounted) {
-        final evaluationState = ref.read(evaluationServiceProvider).evaluationState.value;
-        if (_filter(evaluationState)) {
-          state = evaluationState;
-        }
+      if (!ref.mounted) return;
+      final evaluationState = _listenable.value;
+      if (_filter(evaluationState)) {
+        state = evaluationState;
+      } else {
+        state = EvaluationService._defaultState;
       }
     });
   }

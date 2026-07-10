@@ -9,7 +9,8 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/user/countries.dart';
-import 'package:lichess_mobile/src/widgets/emoji_picker/widget.dart';
+import 'package:lichess_mobile/src/widgets/emoji_picker/emoji_item.dart';
+import 'package:lichess_mobile/src/widgets/emoji_picker/emoji_picker.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
@@ -199,8 +200,8 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                                       child: Dialog(
                                         child: ConstrainedBox(
                                           constraints: BoxConstraints(
-                                            maxHeight: MediaQuery.sizeOf(context).height * 0.5,
-                                            maxWidth: MediaQuery.sizeOf(context).width * 0.9,
+                                            maxHeight: MediaQuery.heightOf(context) * 0.5,
+                                            maxWidth: MediaQuery.widthOf(context) * 0.9,
                                           ),
                                           child: Column(
                                             children: [
@@ -254,8 +255,8 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                                     return Dialog(
                                       child: ConstrainedBox(
                                         constraints: BoxConstraints(
-                                          maxHeight: MediaQuery.sizeOf(context).height * 0.5,
-                                          maxWidth: MediaQuery.sizeOf(context).width * 0.9,
+                                          maxHeight: MediaQuery.heightOf(context) * 0.5,
+                                          maxWidth: MediaQuery.widthOf(context) * 0.9,
                                         ),
                                         child: const Center(
                                           child: CircularProgressIndicator.adaptive(),

@@ -242,7 +242,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileWaitingForOpponentToJoin => '等待对手加入...';
 
   @override
-  String get mobileWatchTab => '观战';
+  String get mobileWatchTab => '观看';
 
   @override
   String get mobileWelcomeToLichessApp => '欢迎使用 Lichess 应用！';
@@ -287,31 +287,64 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileOrImportPgnFile => '或者导入 PGN 文件';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => '好着，但有更好的着法';
+
+  @override
+  String get variantStandard => '标准';
+
+  @override
   String get variantStandardTitle => '国际象棋标准规则（国际棋联）';
+
+  @override
+  String get variantChess960 => 'Chess960';
 
   @override
   String get variantChess960Title => '底线棋子的起始位置随机生成';
 
   @override
+  String get variantKingOfTheHill => '山丘之王';
+
+  @override
   String get variantKingOfTheHillTitle => '将您的王移至中心区域即可获胜';
+
+  @override
+  String get variantThreeCheck => '三次将军';
 
   @override
   String get variantThreeCheckTitle => '将军对手 3 次即可获胜';
 
   @override
+  String get variantAntichess => '弃子棋';
+
+  @override
   String get variantAntichessTitle => '输掉所有棋子（或被逼和）即可获胜';
+
+  @override
+  String get variantAtomic => '原子棋';
 
   @override
   String get variantAtomicTitle => '“核爆”对手的王即可获胜';
 
   @override
+  String get variantHorde => '部落棋';
+
+  @override
   String get variantHordeTitle => '一方拥有大量兵，另一方拥有常规军队';
+
+  @override
+  String get variantRacingKings => '竞速棋';
 
   @override
   String get variantRacingKingsTitle => '将您的王移动至棋盘另一侧即可获胜';
 
   @override
+  String get variantCrazyhouse => 'Crazyhouse';
+
+  @override
   String get variantCrazyhouseTitle => '被吃掉的棋子可以放回棋盘上，代替走子';
+
+  @override
+  String get variantFromPosition => '自定义局面';
 
   @override
   String get variantFromPositionTitle => '来自自定义局面的标准国际象棋';
@@ -894,6 +927,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get broadcastOfficialStandings => '官方排名';
+
+  @override
+  String get broadcastRegulations => '规定';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -1544,6 +1580,60 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get preferencesShowClockOnTheLeft => '在移动设备上左侧显示';
+
+  @override
+  String get preferencesInlineNotation => '紧凑棋谱';
+
+  @override
+  String get preferencesShowServerAnalysis => '显示服务器分析';
+
+  @override
+  String get preferencesShowBestMoveArrows => '显示最佳着法箭头';
+
+  @override
+  String get preferencesShowManeuverArrows => '显示战术组合箭头';
+
+  @override
+  String get preferencesShowGauge => '显示局面评估';
+
+  @override
+  String get preferencesShowMoveAnnotationsOnBoard => '显示着法评注';
+
+  @override
+  String get preferencesShowVariationArrows => '显示变着指示';
+
+  @override
+  String get preferencesShowLiveGlyphs => '实时引擎评注';
+
+  @override
+  String get preferencesShowUndefendedPieces => '显示无保护的棋子';
+
+  @override
+  String get preferencesShowPinnedPieces => '显示被牵制的棋子';
+
+  @override
+  String get preferencesShowCheckableKing => '显示可将军的王';
+
+  @override
+  String get preferencesDisclosureMode => '启用变着隐藏';
+
+  @override
+  String get preferencesGeneralSettings => '常规';
+
+  @override
+  String get preferencesMoveListSettings => '着法列表';
+
+  @override
+  String get preferencesBoardSettings => '棋盘';
+
+  @override
+  String get preferencesAnalysisSettings => '分析设置';
+
+  @override
+  String get preferencesManeuverArrowsHelp => '单个棋子的引擎着法序列';
+
+  @override
+  String get preferencesHoverOverSettingLabelsForHelp => '悬停至设置标签以获取帮助';
 
   @override
   String get puzzlePuzzles => '谜题';
@@ -2461,6 +2551,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get blackDidntMove => '黑方未走棋';
+
+  @override
+  String get whiteAborted => '白方终止对局';
+
+  @override
+  String get blackAborted => '黑方终止对局';
 
   @override
   String get requestAComputerAnalysis => '请求电脑分析';
@@ -4111,7 +4207,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get averageCentipawnLoss => '平均厘兵损失';
 
   @override
-  String get accuracy => '准确率';
+  String get accuracy => '准确度';
 
   @override
   String get keyboardShortcuts => '键盘快捷键';
@@ -4150,7 +4246,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get togglePositionAnnotations => '开启局面评注';
 
   @override
-  String get toggleObservationAnnotations => '开启观战者评注';
+  String get toggleObservationAnnotations => '切换观战评注';
 
   @override
   String get variationArrowsInfo => '变着箭头让您无需使用着法列表即可导航';
@@ -4362,6 +4458,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String xLikesY(String param1, String param2) {
     return '$param1 喜欢 $param2';
   }
+
+  @override
+  String get like => '点赞';
+
+  @override
+  String get liked => '已赞';
 
   @override
   String get quickPairing => '快速匹配';
@@ -4761,6 +4863,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get theForumEtiquette => '论坛礼仪';
 
   @override
+  String get pleaseBeNiceInTheForum => '聊天时请注意文明用语！';
+
+  @override
   String get thisTopicIsArchived => '此话题已被归档，无法再回复。';
 
   @override
@@ -5052,6 +5157,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get enPassant => '吃过路兵';
+
+  @override
+  String get settings => '设置';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5464,6 +5572,16 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String nbAnonymous(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '匿名 ($count)',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbSecondsToPlayTheFirstMove(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5537,7 +5655,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get stormMoves => '着法数';
 
   @override
-  String get stormAccuracy => '准确率';
+  String get stormAccuracy => '准确度';
 
   @override
   String get stormCombo => '连击数';
@@ -5766,9 +5884,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get studyLike => '点赞';
-
-  @override
-  String get studyUnlike => '取消点赞';
 
   @override
   String get studyNewTag => '新建标签';
@@ -6486,6 +6601,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   AppLocalizationsZhTw(): super('zh_TW');
 
   @override
+  String get mobileAccount => '帳號';
+
+  @override
   String get mobileAccountPreferences => '帳號設定';
 
   @override
@@ -6725,10 +6843,103 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get mobileViewGame => '查看對局';
 
   @override
+  String get mobileCustomizeHomeTip => '提示：您可以將更多小工具新增至主畫面，或移除不需要的小工具！';
+
+  @override
+  String get mobileCustomizeHomeTipDismiss => '關閉';
+
+  @override
+  String get mobileCustomizeButton => '自訂';
+
+  @override
+  String get mobileStopShowingThreat => '停止顯示威脅';
+
+  @override
+  String get mobileTournamentCompleted => '已結束';
+
+  @override
+  String get mobileTournamentJumpToMyPage => '跳轉至我的頁面';
+
+  @override
+  String get mobileDisplayModeCompact => '精簡';
+
+  @override
+  String get mobileDisplayModeDetailed => '詳細';
+
+  @override
+  String get mobileOpeningExplorerNotAvailableOffline => '開局瀏覽器無法在離線狀態下使用。';
+
+  @override
+  String get mobileChallengeCreated => '挑戰已建立：對戰開始時您將收到通知。\n您可以在首頁分頁中查看。';
+
+  @override
+  String get mobilePreviousPage => '上一頁';
+
+  @override
+  String get mobileOrImportPgnFile => '或匯入 PGN 檔案';
+
+  @override
+  String get mobileGoodMoveButThereIsBetter => '好著，但有更好的選擇';
+
+  @override
+  String get variantStandard => '標準';
+
+  @override
   String get variantStandardTitle => '標準西洋棋規則';
 
   @override
+  String get variantChess960 => 'Chess960';
+
+  @override
+  String get variantChess960Title => '棋子的初始排列順序為隨機產生。';
+
+  @override
+  String get variantKingOfTheHill => '山丘之王';
+
+  @override
+  String get variantKingOfTheHillTitle => '將國王移至中心即可獲勝。';
+
+  @override
+  String get variantThreeCheck => '三次將軍';
+
+  @override
+  String get variantThreeCheckTitle => '將軍對手 3 次即可獲勝。';
+
+  @override
+  String get variantAntichess => '有子必吃';
+
+  @override
+  String get variantAntichessTitle => '失去所有棋子（或被逼和）即可獲勝。';
+
+  @override
+  String get variantAtomic => '原子棋';
+
+  @override
+  String get variantAtomicTitle => '炸毀對手的國王即可獲勝。';
+
+  @override
+  String get variantHorde => '部落棋';
+
+  @override
+  String get variantHordeTitle => '一方擁有大量的兵，另一方則擁有標準陣容。';
+
+  @override
+  String get variantRacingKings => '競速棋';
+
+  @override
+  String get variantRacingKingsTitle => '將國王移至棋盤的另一端即可獲勝。';
+
+  @override
+  String get variantCrazyhouse => 'Crazyhouse';
+
+  @override
   String get variantCrazyhouseTitle => '除了移動棋子以外，也可將吃掉的棋子打入回盤面。';
+
+  @override
+  String get variantFromPosition => '自訂局面';
+
+  @override
+  String get variantFromPositionTitle => '從自訂局面開始的標準西洋棋';
 
   @override
   String get activityActivity => '活動';
@@ -8538,6 +8749,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get gameMode => '遊戲模式';
 
   @override
+  String get createLobbyGame => '創建新遊戲';
+
+  @override
   String get toInviteSomeoneToPlayGiveThisUrl => '請分享此網址以邀人下棋';
 
   @override
@@ -8548,6 +8762,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get orLetYourOpponentScanQrCode => '或是讓對手掃描這個 QR code';
+
+  @override
+  String get reusableChallengeUrl => '可重複使用的挑戰連結';
 
   @override
   String get permanentLinkForAnyoneToChallengeYou => '任何人都可以此設定挑戰你的永久連結。';
@@ -8684,6 +8901,12 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get blackDidntMove => '黑方沒有走棋';
 
   @override
+  String get whiteAborted => '白方中止了遊戲';
+
+  @override
+  String get blackAborted => '黑方中止了遊戲';
+
+  @override
   String get requestAComputerAnalysis => '請求電腦分析';
 
   @override
@@ -8752,6 +8975,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get copyVariationPgn => '複製變體 PGN';
 
   @override
+  String get copyMainLinePgn => '複製主線 PGN';
+
+  @override
   String get move => '走棋';
 
   @override
@@ -8793,6 +9019,16 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   @override
   String averageRatingX(String param) {
     return '平均評分: $param';
+  }
+
+  @override
+  String minRatingX(String param) {
+    return '$param 的最低等級分';
+  }
+
+  @override
+  String maxRatingX(String param) {
+    return '$param 的最高等級分';
   }
 
   @override
@@ -8881,13 +9117,46 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get showVariationArrows => '顯示變體箭頭';
 
   @override
+  String get visualMotifs => '視覺化模式';
+
+  @override
+  String get undefendedPieces => '無保護的棋子';
+
+  @override
+  String get pinnedPieces => '被牽制的棋子';
+
+  @override
+  String get checkableKing => '可將軍的王';
+
+  @override
   String get multipleLines => '路線分析線';
+
+  @override
+  String get multipleLinesDescription => '設定棋盤上評估線路的數量並移動箭頭';
+
+  @override
+  String get searchTime => '搜尋時間';
+
+  @override
+  String get searchTimeDescription => '設定評估新局面的時間';
+
+  @override
+  String get threads => '執行緒';
+
+  @override
+  String get threadsDescription => '設定此值低於您的 CPU 執行緒數，刻度標記處為安全的選擇';
+
+  @override
+  String get threadsDescriptionMobile => '更多執行緒會消耗更多電量，藉此提升分析能力';
 
   @override
   String get cpus => 'CPU 數量';
 
   @override
   String get memory => '記憶體';
+
+  @override
+  String get memoryDescription => '較高的數值可能提升效能';
 
   @override
   String get infiniteAnalysis => '無限分析';
@@ -11841,9 +12110,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get studyLike => '喜歡';
-
-  @override
-  String get studyUnlike => '取消喜歡';
 
   @override
   String get studyNewTag => '新標籤';

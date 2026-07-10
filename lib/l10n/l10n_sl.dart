@@ -9,7 +9,7 @@ class AppLocalizationsSl extends AppLocalizations {
   AppLocalizationsSl([String locale = 'sl']) : super(locale);
 
   @override
-  String get mobileAccount => 'Account';
+  String get mobileAccount => 'Račun';
 
   @override
   String get mobileAccountPreferences => 'Nastavitve računa';
@@ -287,31 +287,64 @@ class AppLocalizationsSl extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Ali uvozite datoteko PGN';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Dobra poteza, ampak obstaja boljša';
+
+  @override
+  String get variantStandard => 'Običajno';
+
+  @override
   String get variantStandardTitle => 'Standardna pravila šaha (FIDE)';
+
+  @override
+  String get variantChess960 => 'Šah960';
 
   @override
   String get variantChess960Title => 'Začetni položaj figur v prvi vrstici je naključen.';
 
   @override
+  String get variantKingOfTheHill => 'Kralj hriba';
+
+  @override
   String get variantKingOfTheHillTitle => 'Pripelji svojega kralja v sredino, da zmagaš v igri.';
+
+  @override
+  String get variantThreeCheck => 'Trikratni šah';
 
   @override
   String get variantThreeCheckTitle => 'Za zmago v igri trikrat napadite nasprotnikovega kralja.';
 
   @override
+  String get variantAntichess => 'Antišah';
+
+  @override
   String get variantAntichessTitle => 'Izgubite vse svoje figure (ali se znajdete v pat poziciji), da zmagate v igri.';
+
+  @override
+  String get variantAtomic => 'Atomski šah';
 
   @override
   String get variantAtomicTitle => 'Za zmago uniči nasprotnikovega kralja.';
 
   @override
+  String get variantHorde => 'Horda';
+
+  @override
   String get variantHordeTitle => 'Ena stran ima veliko število kmetov, druga pa normalno vojsko.';
+
+  @override
+  String get variantRacingKings => 'Dirkanje kraljev';
 
   @override
   String get variantRacingKingsTitle => 'Premakni svojega kralja na drugo stran plošče, da zmagaš.';
 
   @override
+  String get variantCrazyhouse => 'Nora hiša';
+
+  @override
   String get variantCrazyhouseTitle => 'Zajete figure lahko namesto premikanja figure spustite nazaj na šahovnico.';
+
+  @override
+  String get variantFromPosition => 'From Position';
 
   @override
   String get variantFromPositionTitle => 'Standard chess from a custom position';
@@ -954,6 +987,9 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get broadcastOfficialStandings => 'Uradna lestvica';
+
+  @override
+  String get broadcastRegulations => 'Regulations';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -1610,6 +1646,60 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get preferencesShowClockOnTheLeft => 'Prikaži na levi strani na mobilnih napravah';
+
+  @override
+  String get preferencesInlineNotation => 'Inline notation';
+
+  @override
+  String get preferencesShowServerAnalysis => 'Show server analysis';
+
+  @override
+  String get preferencesShowBestMoveArrows => 'Show best move arrows';
+
+  @override
+  String get preferencesShowManeuverArrows => 'Show maneuver arrows';
+
+  @override
+  String get preferencesShowGauge => 'Show evaluation gauge';
+
+  @override
+  String get preferencesShowMoveAnnotationsOnBoard => 'Show move annotations';
+
+  @override
+  String get preferencesShowVariationArrows => 'Show variation arrows';
+
+  @override
+  String get preferencesShowLiveGlyphs => 'Live engine annotations';
+
+  @override
+  String get preferencesShowUndefendedPieces => 'Show undefended pieces';
+
+  @override
+  String get preferencesShowPinnedPieces => 'Show pinned pieces';
+
+  @override
+  String get preferencesShowCheckableKing => 'Show checkable king';
+
+  @override
+  String get preferencesDisclosureMode => 'Enable variation hiding';
+
+  @override
+  String get preferencesGeneralSettings => 'General';
+
+  @override
+  String get preferencesMoveListSettings => 'Move list';
+
+  @override
+  String get preferencesBoardSettings => 'Board';
+
+  @override
+  String get preferencesAnalysisSettings => 'Analysis settings';
+
+  @override
+  String get preferencesManeuverArrowsHelp => 'Sequence of engine moves for one piece';
+
+  @override
+  String get preferencesHoverOverSettingLabelsForHelp => 'Hover over setting labels for help';
 
   @override
   String get puzzlePuzzles => 'Šahovski problemi';
@@ -2545,6 +2635,12 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get blackDidntMove => 'Črni ni naredil poteze';
+
+  @override
+  String get whiteAborted => 'White aborted the game';
+
+  @override
+  String get blackAborted => 'Black aborted the game';
 
   @override
   String get requestAComputerAnalysis => 'Zahtevaj računalniško analizo';
@@ -4448,6 +4544,12 @@ class AppLocalizationsSl extends AppLocalizations {
   }
 
   @override
+  String get like => 'Like';
+
+  @override
+  String get liked => 'Liked';
+
+  @override
   String get quickPairing => 'Hitri pari';
 
   @override
@@ -4845,6 +4947,9 @@ class AppLocalizationsSl extends AppLocalizations {
   String get theForumEtiquette => 'forumski bonton';
 
   @override
+  String get pleaseBeNiceInTheForum => 'Please be nice in the forum.';
+
+  @override
   String get thisTopicIsArchived => 'Ta tema je arhivirana in nanjo ni mogoče več odgovarjati.';
 
   @override
@@ -5136,6 +5241,9 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get enPassant => 'En passant';
+
+  @override
+  String get settings => 'Settings';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5671,6 +5779,17 @@ class AppLocalizationsSl extends AppLocalizations {
   }
 
   @override
+  String nbAnonymous(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Anonymous ($count)',
+      one: 'Anonymous',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbSecondsToPlayTheFirstMove(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5988,9 +6107,6 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get studyLike => 'Všečkaj';
-
-  @override
-  String get studyUnlike => 'Ni mi všeč';
 
   @override
   String get studyNewTag => 'Nova oznaka';

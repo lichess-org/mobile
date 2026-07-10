@@ -287,31 +287,64 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileOrImportPgnFile => 'O importa un file PGN';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Buona mossa, ma c\'è di meglio';
+
+  @override
+  String get variantStandard => 'Standard';
+
+  @override
   String get variantStandardTitle => 'Regole standard degli scacchi (FIDE)';
+
+  @override
+  String get variantChess960 => 'Scacchi960';
 
   @override
   String get variantChess960Title => 'La posizione di partenza dei pezzi nelle traverse 1 e 8 è casuale.';
 
   @override
+  String get variantKingOfTheHill => 'King of the Hill';
+
+  @override
   String get variantKingOfTheHillTitle => 'Porta il tuo Re al centro per vincere la partita.';
+
+  @override
+  String get variantThreeCheck => 'Three-Check';
 
   @override
   String get variantThreeCheckTitle => 'Dai scacco 3 volte al tuo avversario per vincere la partita.';
 
   @override
+  String get variantAntichess => 'Antichess';
+
+  @override
   String get variantAntichessTitle => 'Perdi tutti i tuoi pezzi (o ottieni uno stallo) per vincere la partita.';
+
+  @override
+  String get variantAtomic => 'Atomic';
 
   @override
   String get variantAtomicTitle => 'Fai esplodere il re del tuo avversario per vincere.';
 
   @override
+  String get variantHorde => 'Horde';
+
+  @override
   String get variantHordeTitle => 'Un lato ha un gran numero di pedoni, l\'altro ha un esercito normale.';
+
+  @override
+  String get variantRacingKings => 'Racing Kings';
 
   @override
   String get variantRacingKingsTitle => 'Porta il tuo re dall\'altra parte della scacchiera per vincere.';
 
   @override
+  String get variantCrazyhouse => 'Crazyhouse';
+
+  @override
   String get variantCrazyhouseTitle => 'I pezzi catturati possono essere rimessi sulla scacchiera invece di spostare un pezzo.';
+
+  @override
+  String get variantFromPosition => 'Dalla posizione';
 
   @override
   String get variantFromPositionTitle => 'Scacchi tradizionali da una posizione personalizzata';
@@ -916,6 +949,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get broadcastOfficialStandings => 'Classifica Ufficiale';
 
   @override
+  String get broadcastRegulations => 'Normative';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'Altre opzioni si trovano nella $param';
   }
@@ -1358,7 +1394,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get preferencesPreferences => 'Preferenze';
 
   @override
-  String get preferencesDisplay => 'Mostra';
+  String get preferencesDisplay => 'Impostazioni visive';
 
   @override
   String get preferencesPrivacy => 'Privacy';
@@ -1566,6 +1602,60 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get preferencesShowClockOnTheLeft => 'Mostra sulla sinistra nei dispositivi mobili';
+
+  @override
+  String get preferencesInlineNotation => 'Inline notation';
+
+  @override
+  String get preferencesShowServerAnalysis => 'Show server analysis';
+
+  @override
+  String get preferencesShowBestMoveArrows => 'Show best move arrows';
+
+  @override
+  String get preferencesShowManeuverArrows => 'Show maneuver arrows';
+
+  @override
+  String get preferencesShowGauge => 'Show evaluation gauge';
+
+  @override
+  String get preferencesShowMoveAnnotationsOnBoard => 'Show move annotations';
+
+  @override
+  String get preferencesShowVariationArrows => 'Show variation arrows';
+
+  @override
+  String get preferencesShowLiveGlyphs => 'Live engine annotations';
+
+  @override
+  String get preferencesShowUndefendedPieces => 'Show undefended pieces';
+
+  @override
+  String get preferencesShowPinnedPieces => 'Show pinned pieces';
+
+  @override
+  String get preferencesShowCheckableKing => 'Show checkable king';
+
+  @override
+  String get preferencesDisclosureMode => 'Enable variation hiding';
+
+  @override
+  String get preferencesGeneralSettings => 'General';
+
+  @override
+  String get preferencesMoveListSettings => 'Move list';
+
+  @override
+  String get preferencesBoardSettings => 'Board';
+
+  @override
+  String get preferencesAnalysisSettings => 'Analysis settings';
+
+  @override
+  String get preferencesManeuverArrowsHelp => 'Sequence of engine moves for one piece';
+
+  @override
+  String get preferencesHoverOverSettingLabelsForHelp => 'Hover over setting labels for help';
 
   @override
   String get puzzlePuzzles => 'Problemi';
@@ -2491,6 +2581,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get blackDidntMove => 'Il nero non ha mosso';
 
   @override
+  String get whiteAborted => 'Il bianco ha annullato la partita';
+
+  @override
+  String get blackAborted => 'Il nero ha annullato la partita';
+
+  @override
   String get requestAComputerAnalysis => 'Chiedi un\'analisi del computer';
 
   @override
@@ -2607,12 +2703,12 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String minRatingX(String param) {
-    return 'Minimum rating of $param';
+    return 'Punteggio minimo di $param';
   }
 
   @override
   String maxRatingX(String param) {
-    return 'Maximum rating of $param';
+    return 'Punteggio massimo di $param';
   }
 
   @override
@@ -2725,7 +2821,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get searchTimeDescription => 'Tempo impostato per valutare posizioni nuove';
 
   @override
-  String get threads => 'Discussioni';
+  String get threads => 'Threads';
 
   @override
   String get threadsDescription => 'Impostare questo sotto il numero di thread della CPU, le spunte indicano una scelta sicura';
@@ -2979,7 +3075,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String sendEmailForAccountVerification(String param) {
-    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
+    return 'Se non trovi la tua email di conferma, invia un\'email a $param e confermeremo il tuo account per te.';
   }
 
   @override
@@ -3552,7 +3648,7 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
-  String get randomChess960Position => 'Random Chess960 position';
+  String get randomChess960Position => 'Posizione di Chess960 casuale';
 
   @override
   String get startPosition => 'Posizione iniziale';
@@ -4392,6 +4488,12 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
+  String get like => 'Mi piace';
+
+  @override
+  String get liked => 'Ti è piaciuto';
+
+  @override
   String get quickPairing => 'Accoppiamento rapido';
 
   @override
@@ -4789,6 +4891,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get theForumEtiquette => 'le regole del forum';
 
   @override
+  String get pleaseBeNiceInTheForum => 'Per favore sii rispettoso nel forum.';
+
+  @override
   String get thisTopicIsArchived => 'Questo argomento è stato archiviato e non è più possibile rispondervi.';
 
   @override
@@ -5080,6 +5185,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get enPassant => 'Regole En passant';
+
+  @override
+  String get settings => 'Settings';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5533,6 +5641,17 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
+  String nbAnonymous(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Anonimi ($count)',
+      one: 'Anonimo',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbSecondsToPlayTheFirstMove(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5840,9 +5959,6 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get studyLike => 'Mi piace';
-
-  @override
-  String get studyUnlike => 'Non mi piace più';
 
   @override
   String get studyNewTag => 'Nuovo tag';

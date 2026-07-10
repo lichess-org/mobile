@@ -464,8 +464,8 @@ class ChallengeAcceptedNotification extends LocalNotification {
 
 /// A notification for a challenge creation.
 ///
-/// This notification is shown when a challenge is created on the server while the user is not connected to lichess (e.g., app is in background).
-/// If the user is connected, challenges are handled by Websocket and a [ChallengeNotification] is shown instead.
+/// This notification is shown when a challenge is created on the server while the app is in the background.
+/// If the app is in the foreground, challenges are handled by WebSocket and a [ChallengeNotification] is shown instead.
 class ChallengeCreatedNotification extends LocalNotification {
   const ChallengeCreatedNotification(this.challengeId, String title, String body)
     : _title = title,
@@ -490,7 +490,7 @@ class ChallengeCreatedNotification extends LocalNotification {
   }
 
   @override
-  String get channelId => 'challengeAccept';
+  String get channelId => 'challengeCreate';
 
   @override
   int get id => challengeId.hashCode;

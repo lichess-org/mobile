@@ -287,31 +287,64 @@ class AppLocalizationsId extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Or import a PGN file';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+
+  @override
+  String get variantStandard => 'Standar';
+
+  @override
   String get variantStandardTitle => 'Aturan catur standar (FIDE)';
+
+  @override
+  String get variantChess960 => 'Catur960';
 
   @override
   String get variantChess960Title => 'Posisi awal buah-buah di baris belakang diacak.';
 
   @override
+  String get variantKingOfTheHill => 'Raja di Tengah';
+
+  @override
   String get variantKingOfTheHillTitle => 'Bawa raja Anda ke tengah papan untuk memenangkan permainan.';
+
+  @override
+  String get variantThreeCheck => 'Tiga Skak';
 
   @override
   String get variantThreeCheckTitle => 'Skak lawan 3 kali untuk memenangkan permainan.';
 
   @override
+  String get variantAntichess => 'Anticatur';
+
+  @override
   String get variantAntichessTitle => 'Kehilangan semua buah Anda (atau mengalami langkah buntu) untuk memenangkan permainan.';
+
+  @override
+  String get variantAtomic => 'Atomik';
 
   @override
   String get variantAtomicTitle => 'Ledakkan raja lawan untuk menang.';
 
   @override
+  String get variantHorde => 'Gerombolan';
+
+  @override
   String get variantHordeTitle => 'Satu sisi memiliki banyak pion, sisi lainnya memiliki pasukan normal.';
+
+  @override
+  String get variantRacingKings => 'Balapan Raja';
 
   @override
   String get variantRacingKingsTitle => 'Bawa raja Anda ke sisi seberang papan untuk menang.';
 
   @override
+  String get variantCrazyhouse => 'Crazyhouse';
+
+  @override
   String get variantCrazyhouseTitle => 'Buah yang ditangkap dapat diletakkan kembali ke papan alih-alih menggerakkan buah.';
+
+  @override
+  String get variantFromPosition => 'Dari Posisi';
 
   @override
   String get variantFromPositionTitle => 'Catur standar dari posisi kustom';
@@ -895,6 +928,9 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get broadcastOfficialStandings => 'Official standings';
+
+  @override
+  String get broadcastRegulations => 'Regulations';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -1547,6 +1583,60 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get preferencesShowClockOnTheLeft => 'Show on the left on mobile devices';
+
+  @override
+  String get preferencesInlineNotation => 'Inline notation';
+
+  @override
+  String get preferencesShowServerAnalysis => 'Show server analysis';
+
+  @override
+  String get preferencesShowBestMoveArrows => 'Show best move arrows';
+
+  @override
+  String get preferencesShowManeuverArrows => 'Show maneuver arrows';
+
+  @override
+  String get preferencesShowGauge => 'Show evaluation gauge';
+
+  @override
+  String get preferencesShowMoveAnnotationsOnBoard => 'Show move annotations';
+
+  @override
+  String get preferencesShowVariationArrows => 'Show variation arrows';
+
+  @override
+  String get preferencesShowLiveGlyphs => 'Live engine annotations';
+
+  @override
+  String get preferencesShowUndefendedPieces => 'Show undefended pieces';
+
+  @override
+  String get preferencesShowPinnedPieces => 'Show pinned pieces';
+
+  @override
+  String get preferencesShowCheckableKing => 'Show checkable king';
+
+  @override
+  String get preferencesDisclosureMode => 'Enable variation hiding';
+
+  @override
+  String get preferencesGeneralSettings => 'General';
+
+  @override
+  String get preferencesMoveListSettings => 'Move list';
+
+  @override
+  String get preferencesBoardSettings => 'Board';
+
+  @override
+  String get preferencesAnalysisSettings => 'Analysis settings';
+
+  @override
+  String get preferencesManeuverArrowsHelp => 'Sequence of engine moves for one piece';
+
+  @override
+  String get preferencesHoverOverSettingLabelsForHelp => 'Hover over setting labels for help';
 
   @override
   String get puzzlePuzzles => 'Teka-teki';
@@ -2465,6 +2555,12 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get blackDidntMove => 'Hitam tidak melangkah';
+
+  @override
+  String get whiteAborted => 'White aborted the game';
+
+  @override
+  String get blackAborted => 'Black aborted the game';
 
   @override
   String get requestAComputerAnalysis => 'Minta analisis komputer';
@@ -4368,6 +4464,12 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
+  String get like => 'Like';
+
+  @override
+  String get liked => 'Liked';
+
+  @override
   String get quickPairing => 'Pencarian cepat';
 
   @override
@@ -4765,6 +4867,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get theForumEtiquette => 'etika forum';
 
   @override
+  String get pleaseBeNiceInTheForum => 'Please be nice in the forum.';
+
+  @override
   String get thisTopicIsArchived => 'Topik ini sudah diarsipkan dan tidak dapat dibalas.';
 
   @override
@@ -5056,6 +5161,9 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get enPassant => 'En passant';
+
+  @override
+  String get settings => 'Settings';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5468,6 +5576,17 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
+  String nbAnonymous(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Anonymous ($count)',
+      one: 'Anonymous',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbSecondsToPlayTheFirstMove(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5770,9 +5889,6 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get studyLike => 'Suka';
-
-  @override
-  String get studyUnlike => 'Batal Suka';
 
   @override
   String get studyNewTag => 'Tagar baru';

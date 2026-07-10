@@ -36,12 +36,6 @@ extension type const GameFullId._(String value) implements StringId, GameAnyId {
   GameFullId.fromJson(dynamic json) : this(json as String);
 }
 
-extension type const GamePlayerId._(String value) implements StringId {
-  const GamePlayerId(this.value) : assert(value.length == 4);
-
-  GamePlayerId.fromJson(dynamic json) : this(json as String);
-}
-
 extension type const PuzzleId(String value) implements StringId {
   PuzzleId.fromJson(dynamic json) : this(json as String);
 }
@@ -285,5 +279,14 @@ extension IDPick on Pick {
       return TournamentId(value);
     }
     throw PickException("value $value at $debugParsingExit can't be casted to TournamentId");
+  }
+
+  TournamentId? asTournamentIdOrNull() {
+    if (value == null) return null;
+    try {
+      return asTournamentIdOrThrow();
+    } catch (_) {
+      return null;
+    }
   }
 }

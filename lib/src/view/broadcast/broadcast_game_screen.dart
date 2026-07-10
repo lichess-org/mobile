@@ -39,6 +39,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
+import 'package:lichess_mobile/src/widgets/variations_bar.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -353,24 +354,38 @@ class _BroadcastGameTreeView extends ConsumerWidget {
     final state = ref.watch(ctrlProvider).requireValue;
 
     final broadcastPrefs = ref.watch(broadcastPreferencesProvider);
+    final currentNode = state.root.branchesOn(state.currentPath).lastOrNull ?? state.root;
 
-    return SingleChildScrollView(
-      child: DebouncedPgnTreeView(
-        root: state.root,
-        currentPath: state.currentPath,
-        livePath: state.broadcastLivePath,
-        pgnRootComments: state.pgnRootComments,
-        // Avoid overlap with the divider of the tab bar
-        showTopDivider: false,
-        shouldShowComputerAnalysis: broadcastPrefs.enableServerAnalysis,
-        shouldShowComments: broadcastPrefs.enableServerAnalysis && broadcastPrefs.showPgnComments,
-        shouldShowAnnotations:
-            broadcastPrefs.enableServerAnalysis && broadcastPrefs.showAnnotations,
-        notifier: ref.read(ctrlProvider.notifier),
-        displayMode: broadcastPrefs.inlineNotation
-            ? PgnTreeDisplayMode.inlineNotation
-            : PgnTreeDisplayMode.twoColumn,
-      ),
+    return Column(
+      crossAxisAlignment: .stretch,
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            child: DebouncedPgnTreeView(
+              root: state.root,
+              currentPath: state.currentPath,
+              livePath: state.broadcastLivePath,
+              pgnRootComments: state.pgnRootComments,
+              // Avoid overlap with the divider of the tab bar
+              showTopDivider: false,
+              shouldShowComputerAnalysis: broadcastPrefs.enableServerAnalysis,
+              shouldShowComments:
+                  broadcastPrefs.enableServerAnalysis && broadcastPrefs.showPgnComments,
+              shouldShowAnnotations:
+                  broadcastPrefs.enableServerAnalysis && broadcastPrefs.showAnnotations,
+              notifier: ref.read(ctrlProvider.notifier),
+              displayMode: broadcastPrefs.inlineNotation ? .inlineNotation : .twoColumn,
+            ),
+          ),
+        ),
+
+        VariationsBar(
+          currentNode: currentNode,
+          currentPath: state.currentPath,
+          showAnnotations: broadcastPrefs.enableServerAnalysis && broadcastPrefs.showAnnotations,
+          onJump: (path) => ref.read(ctrlProvider.notifier).userJump(path),
+        ),
+      ],
     );
   }
 }
@@ -481,6 +496,13 @@ class _OpeningExplorerTab extends ConsumerWidget {
     return ExplorerView(
       pov: state.pov,
       position: state.currentNode.position,
+      opening: explorerOpening(
+        context,
+        variant: state.variant,
+        isRootNode: state.currentNode.isRoot,
+        nodeOpening: state.currentNode.opening,
+        branchOpening: state.currentBranchOpening,
+      ),
       onMoveSelected: ref.read(ctrlProvider.notifier).onUserMove,
       isComputerAnalysisAllowed: true,
     );
@@ -504,6 +526,22 @@ class BroadcastAnalysisBoard extends AnalysisBoard {
 
 class _BroadcastAnalysisBoardState
     extends AnalysisBoardState<BroadcastAnalysisBoard, BroadcastAnalysisState, BroadcastPrefs> {
+  @override
+  BroadcastAnalysisState? readCurrentState() => ref
+      .read(broadcastAnalysisControllerProvider((roundId: widget.roundId, gameId: widget.gameId)))
+      .value;
+
+  @override
+  void listenToStateChanges(
+    void Function(BroadcastAnalysisState? prev, BroadcastAnalysisState? next) listener,
+  ) => ref.listenManual<BroadcastAnalysisState?>(
+    broadcastAnalysisControllerProvider((
+      roundId: widget.roundId,
+      gameId: widget.gameId,
+    )).select((v) => v.value),
+    listener,
+  );
+
   @override
   BroadcastAnalysisState get analysisState => ref
       .watch(broadcastAnalysisControllerProvider((roundId: widget.roundId, gameId: widget.gameId)))
@@ -531,14 +569,7 @@ class _BroadcastAnalysisBoardState
       (id: analysisState.evaluationContext.id, path: analysisState.currentPath);
 
   @override
-  void onPromotionSelection(Role? role) => ref
-      .read(
-        broadcastAnalysisControllerProvider((
-          roundId: widget.roundId,
-          gameId: widget.gameId,
-        )).notifier,
-      )
-      .onPromotionSelection(role);
+  String computeFen(BroadcastAnalysisState state) => state.currentPosition.fen;
 }
 
 enum _PlayerWidgetPosition { bottom, top }

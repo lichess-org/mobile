@@ -287,31 +287,64 @@ class AppLocalizationsSv extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Or import a PGN file';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+
+  @override
+  String get variantStandard => 'Standard';
+
+  @override
   String get variantStandardTitle => 'Standardregler för schack (FIDE)';
+
+  @override
+  String get variantChess960 => 'Schack960';
 
   @override
   String get variantChess960Title => 'Pjäspositioner på bakre raden är slumpade.';
 
   @override
+  String get variantKingOfTheHill => 'Herre på täppan';
+
+  @override
   String get variantKingOfTheHillTitle => 'Ta din kung till centrum för att vinna spelet.';
+
+  @override
+  String get variantThreeCheck => 'Tre-schack';
 
   @override
   String get variantThreeCheckTitle => 'Schacka din motståndare 3 gånger för att vinna.';
 
   @override
+  String get variantAntichess => 'Antischack';
+
+  @override
   String get variantAntichessTitle => 'Förlora alla pjäser (eller hamna i patt) för att vinna spelet.';
+
+  @override
+  String get variantAtomic => 'Atomiskt';
 
   @override
   String get variantAtomicTitle => 'Spräng din motståndares kung för att vinna spelet.';
 
   @override
+  String get variantHorde => 'Hord';
+
+  @override
   String get variantHordeTitle => 'Ena sidan har ett stort antal bönder, den andra har normal pjäsuppställning.';
+
+  @override
+  String get variantRacingKings => 'Racingkungar';
 
   @override
   String get variantRacingKingsTitle => 'Få din kung till andra sidan av brädet för att vinna.';
 
   @override
+  String get variantCrazyhouse => 'Crazyhouse';
+
+  @override
   String get variantCrazyhouseTitle => 'Fångade pjäser kan återplaceras på brädet istället för att flytta en pjäs.';
+
+  @override
+  String get variantFromPosition => 'From Position';
 
   @override
   String get variantFromPositionTitle => 'Standard chess from a custom position';
@@ -796,7 +829,7 @@ class AppLocalizationsSv extends AppLocalizations {
   }
 
   @override
-  String get broadcastSourceSingleUrl => 'PNG-källans URL';
+  String get broadcastSourceSingleUrl => 'PGN-källans URL';
 
   @override
   String get broadcastSourceUrlHelp => 'URL som Lichess kan använda för att få PGN-uppdateringar. Den måste vara publikt tillgänglig från Internet.';
@@ -914,6 +947,9 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get broadcastOfficialStandings => 'Officiella ställningar';
+
+  @override
+  String get broadcastRegulations => 'Regulations';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -1566,6 +1602,60 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get preferencesShowClockOnTheLeft => 'Show on the left on mobile devices';
+
+  @override
+  String get preferencesInlineNotation => 'Inline notation';
+
+  @override
+  String get preferencesShowServerAnalysis => 'Show server analysis';
+
+  @override
+  String get preferencesShowBestMoveArrows => 'Show best move arrows';
+
+  @override
+  String get preferencesShowManeuverArrows => 'Show maneuver arrows';
+
+  @override
+  String get preferencesShowGauge => 'Show evaluation gauge';
+
+  @override
+  String get preferencesShowMoveAnnotationsOnBoard => 'Show move annotations';
+
+  @override
+  String get preferencesShowVariationArrows => 'Show variation arrows';
+
+  @override
+  String get preferencesShowLiveGlyphs => 'Live engine annotations';
+
+  @override
+  String get preferencesShowUndefendedPieces => 'Show undefended pieces';
+
+  @override
+  String get preferencesShowPinnedPieces => 'Show pinned pieces';
+
+  @override
+  String get preferencesShowCheckableKing => 'Show checkable king';
+
+  @override
+  String get preferencesDisclosureMode => 'Enable variation hiding';
+
+  @override
+  String get preferencesGeneralSettings => 'General';
+
+  @override
+  String get preferencesMoveListSettings => 'Move list';
+
+  @override
+  String get preferencesBoardSettings => 'Board';
+
+  @override
+  String get preferencesAnalysisSettings => 'Analysis settings';
+
+  @override
+  String get preferencesManeuverArrowsHelp => 'Sequence of engine moves for one piece';
+
+  @override
+  String get preferencesHoverOverSettingLabelsForHelp => 'Hover over setting labels for help';
 
   @override
   String get puzzlePuzzles => 'Problem';
@@ -2491,6 +2581,12 @@ class AppLocalizationsSv extends AppLocalizations {
   String get blackDidntMove => 'Svart flyttade ingen pjäs';
 
   @override
+  String get whiteAborted => 'White aborted the game';
+
+  @override
+  String get blackAborted => 'Black aborted the game';
+
+  @override
   String get requestAComputerAnalysis => 'Begär datoranalys';
 
   @override
@@ -3080,7 +3176,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get unlimited => 'Obegränsad';
 
   @override
-  String get unlimitedDescription => 'Take all the time you need';
+  String get unlimitedDescription => 'Ta den tid du behöver';
 
   @override
   String get mode => 'Läge';
@@ -4392,6 +4488,12 @@ class AppLocalizationsSv extends AppLocalizations {
   }
 
   @override
+  String get like => 'Like';
+
+  @override
+  String get liked => 'Liked';
+
+  @override
   String get quickPairing => 'Snabbparning';
 
   @override
@@ -4789,6 +4891,9 @@ class AppLocalizationsSv extends AppLocalizations {
   String get theForumEtiquette => 'forumets etikett';
 
   @override
+  String get pleaseBeNiceInTheForum => 'Please be nice in the forum.';
+
+  @override
   String get thisTopicIsArchived => 'Detta ämne har arkiverats och kan inte längre besvaras.';
 
   @override
@@ -5080,6 +5185,9 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get enPassant => 'En passant rights';
+
+  @override
+  String get settings => 'Settings';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5533,6 +5641,17 @@ class AppLocalizationsSv extends AppLocalizations {
   }
 
   @override
+  String nbAnonymous(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Anonymous ($count)',
+      one: 'Anonymous',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbSecondsToPlayTheFirstMove(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5840,9 +5959,6 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get studyLike => 'Gilla';
-
-  @override
-  String get studyUnlike => 'Sluta gilla';
 
   @override
   String get studyNewTag => 'Ny tag';

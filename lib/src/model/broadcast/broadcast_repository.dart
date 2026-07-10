@@ -428,8 +428,8 @@ BroadcastTeamStandingMatch _teamStandingMatchFromPick(RequiredPick pick) {
   return BroadcastTeamStandingMatch(
     roundId: pick('roundId').asBroadcastRoundIdOrThrow(),
     opponent: pick('opponent').asStringOrThrow(),
-    points: pick('points').asStringOrThrow(),
-    mp: pick('mp').asDoubleOrThrow(),
-    gp: pick('gp').asDoubleOrThrow(),
+    points: pick('points').asStringOrNull(),
+    mp: pick('mp').asDoubleOrNull(),
+    gp: pick('gp').asDoubleOrNull(),
   );
 }

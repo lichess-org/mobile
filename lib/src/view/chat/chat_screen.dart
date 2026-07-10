@@ -4,9 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/app_links_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/chat/chat.dart';
-import 'package:lichess_mobile/src/model/chat/chat_controller.dart';
+import 'package:lichess_mobile/src/model/chat/chat_mixin.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
+import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/chat/chat_context_menu.dart';
@@ -30,9 +31,7 @@ class ChatBottomBarButton extends ConsumerWidget {
     return BottomBarButton(
       label: context.l10n.chatRoom,
       showLabel: showLabel,
-      onTap: () {
-        Navigator.of(context).push(ChatScreen.buildRoute(options: options));
-      },
+      onTap: () => Navigator.of(context).push(ChatScreen.buildRoute(options: options)),
       icon: Icons.chat_bubble_outline,
       badgeLabel: switch (chatUnread) {
         AsyncData(:final value) =>
@@ -71,6 +70,14 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with RouteAware {
   }
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(chatNotifierProvider(widget.options)).onFocusRegained();
+    });
+  }
+
+  @override
   void dispose() {
     rootNavPageRouteObserver.unsubscribe(this);
     super.dispose();
@@ -78,18 +85,31 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with RouteAware {
 
   @override
   void didPop() {
-    ref.read(chatControllerProvider(widget.options).notifier).markMessagesAsRead();
+    ref.read(chatNotifierProvider(widget.options)).markMessagesAsRead();
     super.didPop();
   }
 
   @override
   Widget build(BuildContext context) {
     final authUser = ref.watch(authControllerProvider);
-    switch (ref.watch(chatControllerProvider(widget.options))) {
-      case AsyncData(:final value):
-        return Scaffold(
+    final chatState = ref.watch(chatProvider(widget.options));
+    return FocusDetector(
+      onFocusRegained: () {
+        if (context.mounted) {
+          ref.read(chatNotifierProvider(widget.options)).onFocusRegained();
+        }
+      },
+      onForegroundLost: () {
+        if (context.mounted) {
+          ref.read(chatNotifierProvider(widget.options)).onForegroundLost();
+        }
+      },
+      child: switch (chatState) {
+        AsyncValue(:final value?, hasValue: true) => Scaffold(
           appBar: AppBar(
-            title: widget.options.isPublic
+            title: widget.options is TvChatOptions
+                ? Text(context.l10n.spectatorRoom)
+                : widget.options.isPublic
                 ? Text(context.l10n.chatRoom)
                 : widget.options.opponent == null
                 ? Text(context.l10n.chatRoom)
@@ -98,12 +118,25 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with RouteAware {
           ),
           body: Column(
             children: [
+              // Display error if there is one, but still show the messages if they are available
+              if (chatState.hasError)
+                Material(
+                  color: Theme.of(context).colorScheme.errorContainer,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      chatState.error.toString(),
+                      style: TextStyle(color: Theme.of(context).colorScheme.onErrorContainer),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
               Expanded(
                 child: GestureDetector(
                   onTap: () => FocusScope.of(context).unfocus(),
+                  // remove the automatic bottom padding of the ListView which is here taken care
+                  // of by the _ChatBottomBar
                   child: ListView.builder(
-                    // remove the automatic bottom padding of the ListView which is here taken care
-                    // of by the _ChatBottomBar
                     padding: MediaQuery.paddingOf(context).copyWith(bottom: 0),
                     reverse: true,
                     itemCount: value.messages.length,
@@ -126,12 +159,11 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with RouteAware {
               if (widget.options.writeable) _ChatBottomBar(options: widget.options),
             ],
           ),
-        );
-      case AsyncError(:final error):
-        return Scaffold(body: Center(child: Text(error.toString())));
-      case _:
-        return const Scaffold(body: Center(child: CircularProgressIndicator.adaptive()));
-    }
+        ),
+        AsyncValue(:final error?) => Scaffold(body: Center(child: Text(error.toString()))),
+        _ => const Scaffold(body: Center(child: CircularProgressIndicator.adaptive())),
+      },
+    );
   }
 }
 
@@ -173,7 +205,7 @@ class _MessageBubble extends ConsumerWidget {
                 ),
               );
               if (result == true) {
-                ref.read(chatControllerProvider(options).notifier).reportMessage(message);
+                ref.read(chatNotifierProvider(options)).reportMessage(message);
               }
             },
             icon: Icons.report_problem_outlined,
@@ -257,10 +289,10 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
   @override
   void initState() {
     super.initState();
-    final draft = ref.read(chatControllerProvider(widget.options)).asData?.value.inputText ?? '';
+    final draft = ref.read(chatProvider(widget.options)).asData?.value?.inputText ?? '';
     _textController.text = draft;
     _textController.addListener(() {
-      ref.read(chatControllerProvider(widget.options).notifier).setInputText(_textController.text);
+      ref.read(chatNotifierProvider(widget.options)).setInputText(_textController.text);
     });
   }
 
@@ -278,11 +310,9 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
       builder: (context, value, child) => SemanticIconButton(
         onPressed: authUser != null && value.text.isNotEmpty
             ? () {
-                ref
-                    .read(chatControllerProvider(widget.options).notifier)
-                    .postMessage(_textController.text);
+                ref.read(chatNotifierProvider(widget.options)).postMessage(_textController.text);
                 _textController.clear();
-                ref.read(chatControllerProvider(widget.options).notifier).setInputText('');
+                ref.read(chatNotifierProvider(widget.options)).setInputText('');
               }
             : null,
         icon: const Icon(Icons.send),

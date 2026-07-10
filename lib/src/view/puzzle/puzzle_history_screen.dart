@@ -125,9 +125,9 @@ class _BodyState extends ConsumerState<_Body> {
         if (state.hasError) {
           showSnackBar(context, 'Error loading history', type: SnackBarType.error);
         }
-        final crossAxisCount = MediaQuery.sizeOf(context).width > FormFactor.tablet ? 4 : 2;
+        final crossAxisCount = MediaQuery.widthOf(context) > FormFactor.tablet ? 4 : 2;
         final columnsGap = _kPuzzlePadding * crossAxisCount + _kPuzzlePadding;
-        final boardWidth = (MediaQuery.sizeOf(context).width - columnsGap) / crossAxisCount;
+        final boardWidth = (MediaQuery.widthOf(context) - columnsGap) / crossAxisCount;
 
         // List prepared for the ListView.builder.
         // It includes the date headers, and puzzles are sliced into rows of `crossAxisCount` length.

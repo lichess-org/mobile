@@ -14,6 +14,10 @@ import flutter_local_notifications
   func didInitializeImplicitFlutterEngine(_ engineBridge: FlutterImplicitEngineBridge) {
     GeneratedPluginRegistrant.register(with: engineBridge.pluginRegistry)
 
+    if let shareRegistrar = engineBridge.pluginRegistry.registrar(forPlugin: "SharePlugin") {
+      SharePlugin.register(with: shareRegistrar)
+    }
+
     let BADGE_CHANNEL = FlutterMethodChannel(name: "mobile.lichess.org/badge",
                                                     binaryMessenger: engineBridge.applicationRegistrar.messenger())
 

@@ -287,31 +287,64 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Oder lad e PGN-Datei ufe';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+
+  @override
+  String get variantStandard => 'Schtandard';
+
+  @override
   String get variantStandardTitle => 'Schtandard-Schachregle (FIDE)';
+
+  @override
+  String get variantChess960 => 'Chess960';
 
   @override
   String get variantChess960Title => 'D\'Grundschtellig, vu de Figure, isch zuefällig.';
 
   @override
+  String get variantKingOfTheHill => 'König vum Hügel';
+
+  @override
   String get variantKingOfTheHillTitle => 'Bring din König is Zäntrum zum s\'Schpiel günne.';
+
+  @override
+  String get variantThreeCheck => 'Drü-Schach';
 
   @override
   String get variantThreeCheckTitle => 'Büt dim Gägner drümal Schach, zum s\'Schpiel günne.';
 
   @override
+  String get variantAntichess => 'Anti-Schach';
+
+  @override
   String get variantAntichessTitle => 'Verlür all Figure (oder mach es Patt) zum s\'Schpiel günne.';
+
+  @override
+  String get variantAtomic => 'Atom-Schach';
 
   @override
   String get variantAtomicTitle => 'Schpräng de gägnerisch Köng, zum günne.';
 
   @override
+  String get variantHorde => 'Horde';
+
+  @override
   String get variantHordeTitle => 'En hufe Pure gäge e ganz normali Armee.';
+
+  @override
+  String get variantRacingKings => 'Ränn-Könige';
 
   @override
   String get variantRacingKingsTitle => 'Bring din König, zum günne, uf die ander Site vum Brätt.';
 
   @override
+  String get variantCrazyhouse => 'Isetz-Schach';
+
+  @override
   String get variantCrazyhouseTitle => 'Anstatt en Zug z\'mache, gschlageni Figure zrugg ufs Brätt schtelle.';
+
+  @override
+  String get variantFromPosition => 'Vu Position';
 
   @override
   String get variantFromPositionTitle => 'Schtandard-Schach vunere g\'wählte Position';
@@ -914,6 +947,9 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get broadcastOfficialStandings => 'Offizielli Ranglischte';
+
+  @override
+  String get broadcastRegulations => 'Regulations';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -1566,6 +1602,60 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get preferencesShowClockOnTheLeft => 'Uf mobile Grät, links azeige';
+
+  @override
+  String get preferencesInlineNotation => 'Inline notation';
+
+  @override
+  String get preferencesShowServerAnalysis => 'Show server analysis';
+
+  @override
+  String get preferencesShowBestMoveArrows => 'Show best move arrows';
+
+  @override
+  String get preferencesShowManeuverArrows => 'Show maneuver arrows';
+
+  @override
+  String get preferencesShowGauge => 'Show evaluation gauge';
+
+  @override
+  String get preferencesShowMoveAnnotationsOnBoard => 'Show move annotations';
+
+  @override
+  String get preferencesShowVariationArrows => 'Show variation arrows';
+
+  @override
+  String get preferencesShowLiveGlyphs => 'Live engine annotations';
+
+  @override
+  String get preferencesShowUndefendedPieces => 'Show undefended pieces';
+
+  @override
+  String get preferencesShowPinnedPieces => 'Show pinned pieces';
+
+  @override
+  String get preferencesShowCheckableKing => 'Show checkable king';
+
+  @override
+  String get preferencesDisclosureMode => 'Enable variation hiding';
+
+  @override
+  String get preferencesGeneralSettings => 'General';
+
+  @override
+  String get preferencesMoveListSettings => 'Move list';
+
+  @override
+  String get preferencesBoardSettings => 'Board';
+
+  @override
+  String get preferencesAnalysisSettings => 'Analysis settings';
+
+  @override
+  String get preferencesManeuverArrowsHelp => 'Sequence of engine moves for one piece';
+
+  @override
+  String get preferencesHoverOverSettingLabelsForHelp => 'Hover over setting labels for help';
 
   @override
   String get puzzlePuzzles => 'Ufgabe';
@@ -2489,6 +2579,12 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get blackDidntMove => 'Schwarz hät nöd zoge';
+
+  @override
+  String get whiteAborted => 'White aborted the game';
+
+  @override
+  String get blackAborted => 'Black aborted the game';
 
   @override
   String get requestAComputerAnalysis => 'Computer-Analyse afordere';
@@ -4392,6 +4488,12 @@ class AppLocalizationsGsw extends AppLocalizations {
   }
 
   @override
+  String get like => 'Like';
+
+  @override
+  String get liked => 'Liked';
+
+  @override
   String get quickPairing => 'Schnälli Paarig';
 
   @override
@@ -4789,6 +4891,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get theForumEtiquette => 'd\'Forum Aschtandsregle';
 
   @override
+  String get pleaseBeNiceInTheForum => 'Please be nice in the forum.';
+
+  @override
   String get thisTopicIsArchived => 'Das Thema isch archiviert und chann nüme beantwortet werde.';
 
   @override
@@ -5080,6 +5185,9 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get enPassant => 'En passant';
+
+  @override
+  String get settings => 'Settings';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5533,6 +5641,17 @@ class AppLocalizationsGsw extends AppLocalizations {
   }
 
   @override
+  String nbAnonymous(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Anonymous ($count)',
+      one: 'Anonymous',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbSecondsToPlayTheFirstMove(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5840,9 +5959,6 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get studyLike => 'Gfallt mir';
-
-  @override
-  String get studyUnlike => 'Gfallt mir nümme';
 
   @override
   String get studyNewTag => 'Neue Tag';

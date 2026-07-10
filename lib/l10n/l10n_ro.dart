@@ -287,31 +287,64 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Sau încarcă un fișier PGN';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Mișcare bună, dar există una si mai bună';
+
+  @override
+  String get variantStandard => 'Standard';
+
+  @override
   String get variantStandardTitle => 'Reguli de șah standard (FIDE)';
+
+  @override
+  String get variantChess960 => 'Chess960';
 
   @override
   String get variantChess960Title => 'Poziţia de început a pieselor din prima linie este randomizată.';
 
   @override
+  String get variantKingOfTheHill => 'Regele Dealului';
+
+  @override
   String get variantKingOfTheHillTitle => 'Adu-ți regele în centru pentru a câștiga jocul.';
+
+  @override
+  String get variantThreeCheck => 'Șah triplu';
 
   @override
   String get variantThreeCheckTitle => 'Dă-i șah de 3 ori adversarului pentru a câștiga jocul.';
 
   @override
+  String get variantAntichess => 'Antișah';
+
+  @override
   String get variantAntichessTitle => 'Pierde-ți toate piesele (sau intră în pat) pentru a câștiga jocul.';
+
+  @override
+  String get variantAtomic => 'Atomic';
 
   @override
   String get variantAtomicTitle => 'Spulberă regele adversarului pentru a câștiga.';
 
   @override
+  String get variantHorde => 'Hoardă';
+
+  @override
   String get variantHordeTitle => 'O parte are un număr mare de pioni, cealaltă parte are o armată normală.';
+
+  @override
+  String get variantRacingKings => 'Cursa Regilor';
 
   @override
   String get variantRacingKingsTitle => 'Adu-ți regele în cealaltă parte a tablei pentru a câștiga.';
 
   @override
+  String get variantCrazyhouse => 'Crazyhouse';
+
+  @override
   String get variantCrazyhouseTitle => 'Piesele capturate pot fi așezate înapoi pe tablă în loc de a mișca o piesă.';
+
+  @override
+  String get variantFromPosition => 'Din poziția';
 
   @override
   String get variantFromPositionTitle => 'Șah standard dintr-o poziție personalizată';
@@ -934,6 +967,9 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get broadcastOfficialStandings => 'Clasament oficial';
+
+  @override
+  String get broadcastRegulations => 'Reglementări';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -1588,6 +1624,60 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get preferencesShowClockOnTheLeft => 'Afișează în partea stângă pe dispozitive mobile';
+
+  @override
+  String get preferencesInlineNotation => 'Notație integrată';
+
+  @override
+  String get preferencesShowServerAnalysis => 'Arată analiza serverului';
+
+  @override
+  String get preferencesShowBestMoveArrows => 'Arată săgeți cu cele mai bune mutări';
+
+  @override
+  String get preferencesShowManeuverArrows => 'Arată săgeți cu manevre';
+
+  @override
+  String get preferencesShowGauge => 'Arată indicator de evaluare';
+
+  @override
+  String get preferencesShowMoveAnnotationsOnBoard => 'Arată adnotările mutărilor';
+
+  @override
+  String get preferencesShowVariationArrows => 'Arată săgeţi cu variaţiile';
+
+  @override
+  String get preferencesShowLiveGlyphs => 'Adnotări direct de la motorul de analiză';
+
+  @override
+  String get preferencesShowUndefendedPieces => 'Arată piesele neapărate';
+
+  @override
+  String get preferencesShowPinnedPieces => 'Arată piesele legate';
+
+  @override
+  String get preferencesShowCheckableKing => 'Arată rege care poate fi pus in șah';
+
+  @override
+  String get preferencesDisclosureMode => 'Activează ascunderea variațiilor';
+
+  @override
+  String get preferencesGeneralSettings => 'General';
+
+  @override
+  String get preferencesMoveListSettings => 'Lista de mutări';
+
+  @override
+  String get preferencesBoardSettings => 'Tablă';
+
+  @override
+  String get preferencesAnalysisSettings => 'Setări analiză';
+
+  @override
+  String get preferencesManeuverArrowsHelp => 'Secvența de mutări a motorului pentru o piesă';
+
+  @override
+  String get preferencesHoverOverSettingLabelsForHelp => 'Plasați cursorul peste etichete pentru ajutor';
 
   @override
   String get puzzlePuzzles => 'Probleme de șah';
@@ -2517,6 +2607,12 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get blackDidntMove => 'Negrul nu a mutat';
+
+  @override
+  String get whiteAborted => 'Albul a anulat jocul';
+
+  @override
+  String get blackAborted => 'Negrul a anulat jocul';
 
   @override
   String get requestAComputerAnalysis => 'Cereți o analiză făcută de calculator';
@@ -4420,6 +4516,12 @@ class AppLocalizationsRo extends AppLocalizations {
   }
 
   @override
+  String get like => 'Apreciază';
+
+  @override
+  String get liked => 'Apreciat';
+
+  @override
   String get quickPairing => 'Potrivire rapidă';
 
   @override
@@ -4817,6 +4919,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get theForumEtiquette => 'normele de comportare în forum';
 
   @override
+  String get pleaseBeNiceInTheForum => 'Te rugăm să fii cu bun simț pe forum.';
+
+  @override
   String get thisTopicIsArchived => 'Acest subiect a fost arhivat și nu mai acceptă răspunsuri.';
 
   @override
@@ -5108,6 +5213,9 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get enPassant => 'En passant legale';
+
+  @override
+  String get settings => 'Setări';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5602,6 +5710,18 @@ class AppLocalizationsRo extends AppLocalizations {
   }
 
   @override
+  String nbAnonymous(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Anonimi ($count)',
+      few: 'Anonimi ($count)',
+      one: 'Anonim',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbSecondsToPlayTheFirstMove(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5914,9 +6034,6 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get studyLike => 'Apreciază';
-
-  @override
-  String get studyUnlike => 'Nu îmi mai place';
 
   @override
   String get studyNewTag => 'Etichetă nouă';

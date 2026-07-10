@@ -16,6 +16,27 @@ subprojects {
     project.evaluationDependsOn(":app")
 }
 
+// home_widget 0.9.2 skips applying the Kotlin Gradle Plugin when AGP >= 9, assuming the
+// project uses AGP's built-in Kotlin. We keep android.builtInKotlin=false (the app and all
+// other plugins still apply KGP), so home_widget's Kotlin sources would never compile,
+// producing "cannot find symbol HomeWidgetPlugin" at javac time. Apply KGP to it ourselves,
+// right after its android library plugin is applied so ordering is correct.
+subprojects {
+    if (name == "home_widget") {
+        pluginManager.withPlugin("com.android.library") {
+            pluginManager.apply("org.jetbrains.kotlin.android")
+        }
+        // home_widget's own `jvmTarget = "1.8"` is also gated behind the AGP < 9 check, so
+        // Kotlin defaults to a target that doesn't match its Java tasks (compiled at 1.8).
+        // Align Kotlin to 1.8 to avoid "Inconsistent JVM Target Compatibility".
+        tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+            compilerOptions {
+                jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8)
+            }
+        }
+    }
+}
+
 // Some plugins declare a compileSdk lower than what their transitive dependencies require.
 // gradle.afterProject fires after each project finishes its own configuration, so it
 // runs after the module has set its compileSdk and we can safely override it.

@@ -1,6 +1,4 @@
 import 'package:chessground/chessground.dart';
-import 'package:dartchess/dartchess.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -56,6 +54,10 @@ class BoardPreferences extends Notifier<BoardPrefs> with PreferencesStorage<Boar
 
   Future<void> setPieceShiftMethod(PieceShiftMethod pieceShiftMethod) async {
     await save(state.copyWith(pieceShiftMethod: pieceShiftMethod));
+  }
+
+  Future<void> toggleMoveOnRelease() async {
+    await save(state.copyWith(moveOnRelease: !state.moveOnRelease));
   }
 
   Future<void> setCastlingMethod(CastlingMethod castlingMethod) {
@@ -159,6 +161,7 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
     required LandscapeBoardPosition landscapeBoardPosition,
     @JsonKey(defaultValue: PieceShiftMethod.either, unknownEnumValue: PieceShiftMethod.either)
     required PieceShiftMethod pieceShiftMethod,
+    @JsonKey(defaultValue: false) required bool moveOnRelease,
     @JsonKey(
       defaultValue: CastlingMethod.kingOverRook,
       unknownEnumValue: CastlingMethod.kingOverRook,
@@ -196,6 +199,7 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
     premoves: true,
     confirmResignAndDraw: true,
     pieceShiftMethod: PieceShiftMethod.either,
+    moveOnRelease: false,
     castlingMethod: CastlingMethod.kingOverRook,
     enableShapeDrawings: true,
     magnifyDraggedPiece: true,
@@ -209,7 +213,7 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
   bool get hasColorAdjustments =>
       brightness != kBoardDefaultBrightnessFilter || hue != kBoardDefaultHueFilter;
 
-  ChessboardSettings toBoardSettings() {
+  ChessboardSettings toBoardSettings(Variant variant) {
     return ChessboardSettings(
       pieceAssets: pieceSet.assets,
       colorScheme: boardTheme.colors,
@@ -226,31 +230,9 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
       dragFeedbackOffset: Offset(0.0, magnifyDraggedPiece ? -1.0 : 0.0),
       dragTargetKind: dragTargetKind,
       pieceShiftMethod: pieceShiftMethod,
+      moveOnRelease: moveOnRelease,
       drawShape: DrawShapeOptions(enable: enableShapeDrawings, newShapeColor: shapeColor.color),
-    );
-  }
-
-  GameData toGameData({
-    required Variant variant,
-    required Position position,
-    required PlayerSide playerSide,
-    required NormalMove? promotionMove,
-    required void Function(Move, {bool? viaDragAndDrop}) onMove,
-    required void Function(Role? role) onPromotionSelection,
-    Premovable? premovable,
-  }) {
-    return GameData(
-      playerSide: playerSide,
-      onMove: onMove,
-      onPromotionSelection: onPromotionSelection,
-      premovable: premoves ? premovable : null,
-      promotionMove: promotionMove,
-      sideToMove: position.turn,
-      validMoves: _makeLegalMoves(position, variant: variant, castlingMethod: castlingMethod),
-      droppable: variant == Variant.crazyhouse
-          ? (validDropSquares: position.legalDrops.squares.toISet())
-          : null,
-      isCheck: boardHighlights && position.isCheck,
+      enableDrops: variant == Variant.crazyhouse,
       canPromoteToKing: variant == Variant.antichess,
     );
   }
@@ -261,40 +243,6 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
 
   Duration get pieceAnimationDuration =>
       pieceAnimation ? const Duration(milliseconds: 150) : Duration.zero;
-}
-
-IMap<Square, ISet<Square>> _makeLegalMoves(
-  Position pos, {
-  required CastlingMethod castlingMethod,
-  required Variant variant,
-}) {
-  final Map<Square, ISet<Square>> result = {};
-  for (final entry in pos.legalMoves.entries) {
-    final dests = entry.value.squares;
-    if (dests.isNotEmpty) {
-      final from = entry.key;
-      final destSet = dests.toSet();
-      if (variant != Variant.chess960 &&
-          from == pos.board.kingOf(pos.turn) &&
-          entry.key.file == 4) {
-        if (dests.contains(Square.a1)) {
-          destSet.add(Square.c1);
-        } else if (dests.contains(Square.a8)) {
-          destSet.add(Square.c8);
-        }
-        if (dests.contains(Square.h1)) {
-          destSet.add(Square.g1);
-        } else if (dests.contains(Square.h8)) {
-          destSet.add(Square.g8);
-        }
-        if (castlingMethod == CastlingMethod.kingTwoSquares) {
-          destSet.removeAll([Square.a1, Square.h1, Square.a8, Square.h8]);
-        }
-      }
-      result[from] = ISet(destSet);
-    }
-  }
-  return IMap(result);
 }
 
 /// Colors taken from lila: https://github.com/lichess-org/chessground/blob/54a7e71bf88701c1109d3b9b8106b464012b94cf/src/state.ts#L178

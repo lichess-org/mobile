@@ -75,7 +75,7 @@ abstract mixin class BaseGame {
   Position get lastPosition;
 
   String shareTitle(AppLocalizations l10n) =>
-      '${meta.perf.title} • ${l10n.resVsX(white.fullName(l10n), black.fullName(l10n))}';
+      '${meta.perf.label(l10n)} • ${l10n.resVsX(white.fullName(l10n), black.fullName(l10n))}';
 
   /// Returns the side of the player with the given id, or null if the player is not in the game.
   Side? playerSideOf(UserId id) {
@@ -196,7 +196,7 @@ abstract mixin class BaseGame {
           'WhiteRatingDiff': '${white.ratingDiff! > 0 ? '+' : ''}${white.ratingDiff!}',
         if (black.ratingDiff != null)
           'BlackRatingDiff': '${black.ratingDiff! > 0 ? '+' : ''}${black.ratingDiff!}',
-        'Variant': meta.variant.label,
+        'Variant': meta.variant.pgnName,
         if (meta.clock != null)
           'TimeControl': '${meta.clock!.initial.inSeconds}+${meta.clock!.increment.inSeconds}',
         if (initialFen != null) 'FEN': initialFen!,

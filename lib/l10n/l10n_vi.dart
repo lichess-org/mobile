@@ -9,7 +9,7 @@ class AppLocalizationsVi extends AppLocalizations {
   AppLocalizationsVi([String locale = 'vi']) : super(locale);
 
   @override
-  String get mobileAccount => 'Account';
+  String get mobileAccount => 'Tài khoản';
 
   @override
   String get mobileAccountPreferences => 'Tùy chỉnh tài khoản';
@@ -287,31 +287,64 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Hoặc nhập một tệp PGN';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Nước đi tốt, nhưng có nước đi tốt hơn nữa';
+
+  @override
+  String get variantStandard => 'Tiêu chuẩn';
+
+  @override
   String get variantStandardTitle => 'Luật cờ vua tiêu chuẩn (FIDE)';
+
+  @override
+  String get variantChess960 => 'Chess960';
 
   @override
   String get variantChess960Title => 'Vị trí bắt đầu của các quân cờ hàng 1 và  8 được sắp xếp ngẫu nhiên.';
 
   @override
+  String get variantKingOfTheHill => 'Vua lên đồi';
+
+  @override
   String get variantKingOfTheHillTitle => 'Mang quân Vua của bạn vào các ô trung tâm để chiến thắng.';
+
+  @override
+  String get variantThreeCheck => '3 lần chiếu tướng';
 
   @override
   String get variantThreeCheckTitle => 'Chiếu vua đối thủ 3 lần để giành chiến thắng.';
 
   @override
+  String get variantAntichess => 'Phản cờ vua';
+
+  @override
   String get variantAntichessTitle => 'Để mất toàn bộ quân cờ của bạn (bao gồm cả vua hoặc làm bị hết nước đi) để chiến thắng.';
+
+  @override
+  String get variantAtomic => 'Cờ nguyên tử';
 
   @override
   String get variantAtomicTitle => 'Cho nổ vua đối phương để giành chiến thắng.';
 
   @override
+  String get variantHorde => 'Đội quân tốt';
+
+  @override
   String get variantHordeTitle => 'Một bên có số lượng quân tốt lớn, bên kia chỉ có đội quân bình thường.';
+
+  @override
+  String get variantRacingKings => 'Vua chạy đua';
 
   @override
   String get variantRacingKingsTitle => 'Đưa vua của bạn sang phía bên kia của bàn cờ để giành chiến thắng.';
 
   @override
+  String get variantCrazyhouse => 'Ngôi nhà điên khùng';
+
+  @override
   String get variantCrazyhouseTitle => 'Các quân cờ bắt được có thể được thả lại vào bàn cờ thay vì chỉ di chuyển một quân cờ.';
+
+  @override
+  String get variantFromPosition => 'Từ thế cờ';
 
   @override
   String get variantFromPositionTitle => 'Cờ tiêu chuẩn từ một thế trận tùy chỉnh';
@@ -894,6 +927,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get broadcastOfficialStandings => 'Bảng xếp hạng Chính thức';
+
+  @override
+  String get broadcastRegulations => 'Quy định';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -1544,6 +1580,60 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get preferencesShowClockOnTheLeft => 'Hiện ở bên trái trên thiết bị di động';
+
+  @override
+  String get preferencesInlineNotation => 'Ký hiệu bên trong bàn cờ';
+
+  @override
+  String get preferencesShowServerAnalysis => 'Hiện phân tích từ máy chủ';
+
+  @override
+  String get preferencesShowBestMoveArrows => 'Hiện mũi tên cho nước đi tốt nhất';
+
+  @override
+  String get preferencesShowManeuverArrows => 'Show maneuver arrows';
+
+  @override
+  String get preferencesShowGauge => 'Hiện thanh lợi thế';
+
+  @override
+  String get preferencesShowMoveAnnotationsOnBoard => 'Hiện chú thích nước đi';
+
+  @override
+  String get preferencesShowVariationArrows => 'Hiện mũi tên cho các biến';
+
+  @override
+  String get preferencesShowLiveGlyphs => 'Live engine annotations';
+
+  @override
+  String get preferencesShowUndefendedPieces => 'Hiện quân không được phòng thủ';
+
+  @override
+  String get preferencesShowPinnedPieces => 'Hiện quân bị ghim';
+
+  @override
+  String get preferencesShowCheckableKing => 'Show checkable king';
+
+  @override
+  String get preferencesDisclosureMode => 'Enable variation hiding';
+
+  @override
+  String get preferencesGeneralSettings => 'Cài đặt chung';
+
+  @override
+  String get preferencesMoveListSettings => 'Biên bản ván đấu';
+
+  @override
+  String get preferencesBoardSettings => 'Bàn cờ';
+
+  @override
+  String get preferencesAnalysisSettings => 'Cài đặt phân tích';
+
+  @override
+  String get preferencesManeuverArrowsHelp => 'Sequence of engine moves for one piece';
+
+  @override
+  String get preferencesHoverOverSettingLabelsForHelp => 'Hover over setting labels for help';
 
   @override
   String get puzzlePuzzles => 'Câu đố';
@@ -2463,6 +2553,12 @@ class AppLocalizationsVi extends AppLocalizations {
   String get blackDidntMove => 'Bên đen không đi quân';
 
   @override
+  String get whiteAborted => 'Bên trắng đã hủy ván đấu';
+
+  @override
+  String get blackAborted => 'Bên đen đã hủy ván đấu';
+
+  @override
   String get requestAComputerAnalysis => 'Yêu cầu máy tính phân tích';
 
   @override
@@ -2579,12 +2675,12 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String minRatingX(String param) {
-    return 'Minimum rating of $param';
+    return 'Hệ số tối thiểu của $param';
   }
 
   @override
   String maxRatingX(String param) {
-    return 'Maximum rating of $param';
+    return 'Hệ số tối đa của $param';
   }
 
   @override
@@ -4364,6 +4460,12 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
+  String get like => 'Thích';
+
+  @override
+  String get liked => 'Đã Thích';
+
+  @override
   String get quickPairing => 'Xếp cặp nhanh';
 
   @override
@@ -4761,6 +4863,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get theForumEtiquette => 'quy tắc diễn đàn';
 
   @override
+  String get pleaseBeNiceInTheForum => 'Hãy cư xử thân thiện trong diễn đàn.';
+
+  @override
   String get thisTopicIsArchived => 'Chủ đề này đã được lưu trữ và không thể trả lời được nữa.';
 
   @override
@@ -5052,6 +5157,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get enPassant => 'Bắt tốt qua đường';
+
+  @override
+  String get settings => 'Cài đặt';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5464,6 +5572,16 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
+  String nbAnonymous(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Ẩn danh ($count)',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbSecondsToPlayTheFirstMove(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5766,9 +5884,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get studyLike => 'Thích';
-
-  @override
-  String get studyUnlike => 'Bỏ thích';
 
   @override
   String get studyNewTag => 'Nhãn mới';

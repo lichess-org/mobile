@@ -4,7 +4,7 @@ import 'dart:math';
 import 'package:dartchess/dartchess.dart' hide File;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:flutter_riverpod/experimental/mutation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
@@ -62,7 +63,9 @@ class TournamentScreen extends ConsumerStatefulWidget {
   static Route<void> buildRoute(TournamentId id, {UserId? initialPlayerId}) {
     return buildScreenRoute(
       screen: TournamentScreen(id: id, initialPlayerId: initialPlayerId),
-      settings: const RouteSettings(name: routeName),
+      // The tournament id is carried in [RouteSettings.arguments] so that code
+      // can identify which tournament a route in the navigation stack belongs to.
+      settings: RouteSettings(name: routeName, arguments: id),
     );
   }
 
@@ -156,9 +159,14 @@ class _Body extends ConsumerWidget {
     final timeLeft = state.tournament.timeToStart ?? state.tournament.timeToFinish;
 
     return FocusDetector(
-      onFocusRegained: () {
+      // Use `onFocusGained` (fires on the first focus too) rather than
+      // `onFocusRegained`: when a second `TournamentScreen` for the same
+      // tournament is pushed on top of a game, its `FocusDetector` gains focus
+      // for the first time, and the controller (kept alive, so `build` doesn't
+      // re-run) must reopen the socket that the game closed.
+      onFocusGained: () {
         if (context.mounted) {
-          ref.read(tournamentControllerProvider(id).notifier).onFocusRegained();
+          ref.read(tournamentControllerProvider(id).notifier).onFocusGained();
         }
       },
       child: PlatformScaffold(
@@ -438,20 +446,47 @@ class _TournamentHelp extends StatelessWidget {
                       ),
                     ),
                   ],
-                  rows: const [
-                    DataRow(
-                      cells: [DataCell(Text('Standard, Chess960, Horde')), DataCell(Text('30'))],
-                    ),
+                  rows: [
                     DataRow(
                       cells: [
-                        DataCell(Text('Antichess, Crazyhouse, King of the Hill')),
-                        DataCell(Text('20')),
+                        DataCell(
+                          Text(
+                            _variantLabels(context, [
+                              Variant.standard,
+                              Variant.chess960,
+                              Variant.horde,
+                            ]),
+                          ),
+                        ),
+                        const DataCell(Text('30')),
                       ],
                     ),
                     DataRow(
                       cells: [
-                        DataCell(Text('Three-check, Atomic, Racing Kings')),
-                        DataCell(Text('10')),
+                        DataCell(
+                          Text(
+                            _variantLabels(context, [
+                              Variant.antichess,
+                              Variant.crazyhouse,
+                              Variant.kingOfTheHill,
+                            ]),
+                          ),
+                        ),
+                        const DataCell(Text('20')),
+                      ],
+                    ),
+                    DataRow(
+                      cells: [
+                        DataCell(
+                          Text(
+                            _variantLabels(context, [
+                              Variant.threeCheck,
+                              Variant.atomic,
+                              Variant.racingKings,
+                            ]),
+                          ),
+                        ),
+                        const DataCell(Text('10')),
                       ],
                     ),
                   ],
@@ -464,6 +499,9 @@ class _TournamentHelp extends StatelessWidget {
     );
   }
 }
+
+String _variantLabels(BuildContext context, Iterable<Variant> variants) =>
+    variants.map((variant) => variant.label(context.l10n)).join(', ');
 
 class _ExpandableDescription extends ConsumerWidget {
   const _ExpandableDescription({required this.description});
@@ -785,7 +823,7 @@ class _TournamentInfo extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '${tournament.meta.timeIncrement.display} • ${tournament.meta.perf.title} • ${context.l10n.nbMinutes(tournament.meta.duration.inMinutes)}',
+                '${tournament.meta.timeIncrement.display} • ${tournament.meta.perf.label(context.l10n)} • ${context.l10n.nbMinutes(tournament.meta.duration.inMinutes)}',
               ),
               Text(
                 '${tournament.meta.rated ? context.l10n.rated : context.l10n.casual} • ${context.l10n.arenaArena}',

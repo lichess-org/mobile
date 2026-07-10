@@ -43,7 +43,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String mobileGoodEvening(String param) {
-    return '좋은 밤이에요, $param';
+    return '좋은 밤이에요, $param님';
   }
 
   @override
@@ -51,7 +51,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String mobileGoodDay(String param) {
-    return '좋은 날이에요, $param';
+    return '좋은 날이에요, $param님';
   }
 
   @override
@@ -287,31 +287,64 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileOrImportPgnFile => '또는 PGN 파일 가져오기';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => '좋은 수지만, 더 좋은 수가 있습니다';
+
+  @override
+  String get variantStandard => '스탠다드';
+
+  @override
   String get variantStandardTitle => '체스(FIDE)의 표준 규칙';
+
+  @override
+  String get variantChess960 => '체스960';
 
   @override
   String get variantChess960Title => '백의 1랭크, 흑의 8랭크에 있는 기물의 시작 위치가 무작위로 변경됩니다.';
 
   @override
+  String get variantKingOfTheHill => '언덕의 왕';
+
+  @override
   String get variantKingOfTheHillTitle => '킹을 중앙 칸에 놓으면 승리합니다.';
+
+  @override
+  String get variantThreeCheck => '3체크';
 
   @override
   String get variantThreeCheckTitle => '상대방을 세 번 체크하면 승리합니다.';
 
   @override
+  String get variantAntichess => '안티체스';
+
+  @override
   String get variantAntichessTitle => '모든 기물을 잃거나 스테일메이트되면 승리합니다.';
+
+  @override
+  String get variantAtomic => '아토믹';
 
   @override
   String get variantAtomicTitle => '상대의 킹을 터뜨려버리면 승리합니다.';
 
   @override
+  String get variantHorde => '호드';
+
+  @override
   String get variantHordeTitle => '한 쪽은 다수의 폰으로, 다른 쪽은 일반적인 기물로 경기합니다.';
+
+  @override
+  String get variantRacingKings => '킹 경주';
 
   @override
   String get variantRacingKingsTitle => '킹이 보드 반대편 끝까지 도달하면 승리합니다.';
 
   @override
+  String get variantCrazyhouse => '크레이지하우스';
+
+  @override
   String get variantCrazyhouseTitle => '자신의 차례일 때, 기물을 움직이는 대신 잡았던 기물을 자신의 색으로 보드에 소환할 수 있습니다.';
+
+  @override
+  String get variantFromPosition => '정해진 보드판에서 시작';
 
   @override
   String get variantFromPositionTitle => '사용자가 지정한 포지션으로 시작하는 일반 체스';
@@ -365,7 +398,7 @@ class AppLocalizationsKo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$param2를 $count회 플레이함',
+      other: '$param2(을)를 $count회 플레이함',
     );
     return '$_temp0';
   }
@@ -896,6 +929,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get broadcastOfficialStandings => '공식 순위';
 
   @override
+  String get broadcastRegulations => '규정';
+
+  @override
   String broadcastIframeHelp(String param) {
     return '$param에서 더 많은 정보를 확인하실 수 있습니다';
   }
@@ -1360,7 +1396,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get preferencesBoardCoordinates => '보드 좌표 (A-H, 1-8)';
 
   @override
-  String get preferencesMoveListWhilePlaying => '기물 움직임 기록';
+  String get preferencesMoveListWhilePlaying => '플레이 중 수 목록';
 
   @override
   String get preferencesPgnPieceNotation => 'PGN 기물 표기 방식';
@@ -1544,6 +1580,60 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get preferencesShowClockOnTheLeft => '모바일 기기에서 왼쪽에 보이기';
+
+  @override
+  String get preferencesInlineNotation => '기보법 가로쓰기';
+
+  @override
+  String get preferencesShowServerAnalysis => '서버 분석 표시';
+
+  @override
+  String get preferencesShowBestMoveArrows => '최선의 수 화살표 표시';
+
+  @override
+  String get preferencesShowManeuverArrows => '기동 화살표 표시';
+
+  @override
+  String get preferencesShowGauge => '엔진 평가치 표시';
+
+  @override
+  String get preferencesShowMoveAnnotationsOnBoard => '수 주석 표시';
+
+  @override
+  String get preferencesShowVariationArrows => '라인 화살표 표시';
+
+  @override
+  String get preferencesShowLiveGlyphs => '엔진 주석 표시';
+
+  @override
+  String get preferencesShowUndefendedPieces => '수비가 없는 기물들 표시';
+
+  @override
+  String get preferencesShowPinnedPieces => '핀에 걸린 기물들 표시';
+
+  @override
+  String get preferencesShowCheckableKing => '체크할 수 있는 킹 표시';
+
+  @override
+  String get preferencesDisclosureMode => '라인 숨기기 활성화';
+
+  @override
+  String get preferencesGeneralSettings => '일반';
+
+  @override
+  String get preferencesMoveListSettings => '수 목록';
+
+  @override
+  String get preferencesBoardSettings => '보드';
+
+  @override
+  String get preferencesAnalysisSettings => '분석 설정';
+
+  @override
+  String get preferencesManeuverArrowsHelp => '하나의 기물에 대한 일련의 엔진수';
+
+  @override
+  String get preferencesHoverOverSettingLabelsForHelp => '설정 라벨에 커서를 올려서 도움말을 볼 수 있습니다';
 
   @override
   String get puzzlePuzzles => '퍼즐';
@@ -2463,6 +2553,12 @@ class AppLocalizationsKo extends AppLocalizations {
   String get blackDidntMove => '흑이 수를 두지 않음';
 
   @override
+  String get whiteAborted => '백 게임 중단';
+
+  @override
+  String get blackAborted => '흑 게임 중단';
+
+  @override
   String get requestAComputerAnalysis => '컴퓨터 분석 요청하기';
 
   @override
@@ -2483,7 +2579,7 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get usingServerAnalysis => '서버 분석 사용하기';
+  String get usingServerAnalysis => '서버 분석 사용 중';
 
   @override
   String get loadingEngine => '엔진 로드 중...';
@@ -2595,7 +2691,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String masterDbExplanation(String param1, String param2, String param3) {
-    return '$param2년과 $param3년 사이 FIDE 레이팅이 최소 $param1였던 선수들의 기보가 약 2백만개 있습니다.';
+    return '$param2년과 $param3년 사이 FIDE 레이팅이 최소 $param1였던 선수들의 대면 경기';
   }
 
   @override
@@ -3037,10 +3133,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String get finished => '종료됨';
 
   @override
-  String get abortGame => '대국 취소';
+  String get abortGame => '대국 중단';
 
   @override
-  String get gameAborted => '대국 취소됨';
+  String get gameAborted => '대국 중단됨';
 
   @override
   String get standard => '스탠다드';
@@ -4364,6 +4460,12 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
+  String get like => '좋아요';
+
+  @override
+  String get liked => '좋아요함';
+
+  @override
   String get quickPairing => '빠른 상대 찾기';
 
   @override
@@ -4761,6 +4863,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get theForumEtiquette => '포럼 에티켓';
 
   @override
+  String get pleaseBeNiceInTheForum => '포럼을 건전히 이용해 주세요.';
+
+  @override
   String get thisTopicIsArchived => '이 주제는 보존되어서 댓글을 남기실 수 없습니다.';
 
   @override
@@ -5051,7 +5156,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String get tags => '태그';
 
   @override
-  String get enPassant => '앙파상';
+  String get enPassant => '앙파상 권리';
+
+  @override
+  String get settings => '설정';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5464,6 +5572,16 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
+  String nbAnonymous(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '익명 ($count)',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbSecondsToPlayTheFirstMove(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5667,7 +5785,7 @@ class AppLocalizationsKo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$param2 중$count개 플레이 함',
+      other: '$param2(을)를 $count회 플레이함',
     );
     return '$_temp0';
   }
@@ -5766,9 +5884,6 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get studyLike => '좋아요';
-
-  @override
-  String get studyUnlike => '좋아요 취소';
 
   @override
   String get studyNewTag => '새 태그';

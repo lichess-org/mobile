@@ -9,7 +9,7 @@ class AppLocalizationsNb extends AppLocalizations {
   AppLocalizationsNb([String locale = 'nb']) : super(locale);
 
   @override
-  String get mobileAccount => 'Account';
+  String get mobileAccount => 'Konto';
 
   @override
   String get mobileAccountPreferences => 'Kontoinnstillinger';
@@ -287,31 +287,64 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Eller importer en PGN-fil';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Bra trekk, men det finnes et bedre';
+
+  @override
+  String get variantStandard => 'Standard';
+
+  @override
   String get variantStandardTitle => 'Standardregler for sjakk (FIDE)';
+
+  @override
+  String get variantChess960 => 'Sjakk-960';
 
   @override
   String get variantChess960Title => 'Offiserene har tilfeldig rekkefølge.';
 
   @override
+  String get variantKingOfTheHill => 'Kongen på haugen';
+
+  @override
   String get variantKingOfTheHillTitle => 'Før kongen til midten for å vinne.';
+
+  @override
+  String get variantThreeCheck => 'Tre-sjakk';
 
   @override
   String get variantThreeCheckTitle => 'Sett motstanderen i sjakk tre ganger for å vinne.';
 
   @override
+  String get variantAntichess => 'Antisjakk';
+
+  @override
   String get variantAntichessTitle => 'Få alle brikkene dine slått (eller bli satt patt) for å vinne.';
+
+  @override
+  String get variantAtomic => 'Atomsjakk';
 
   @override
   String get variantAtomicTitle => 'Spreng motstanderens konge for å vinne.';
 
   @override
+  String get variantHorde => 'Horde';
+
+  @override
   String get variantHordeTitle => 'Den ene siden har mange bønder, den andre en vanlig hær.';
+
+  @override
+  String get variantRacingKings => 'Kongeløp';
 
   @override
   String get variantRacingKingsTitle => 'Før kongen over brettet for å vinne.';
 
   @override
+  String get variantCrazyhouse => 'Galimatias';
+
+  @override
   String get variantCrazyhouseTitle => 'Slåtte brikker kan droppes tilbake på brettet i stedet for å flytte en brikke.';
+
+  @override
+  String get variantFromPosition => 'Fra stilling';
 
   @override
   String get variantFromPositionTitle => 'Vanlig sjakk fra en egendefinert stilling';
@@ -914,6 +947,9 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get broadcastOfficialStandings => 'Offisiell tabell';
+
+  @override
+  String get broadcastRegulations => 'Reglement';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -1566,6 +1602,60 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get preferencesShowClockOnTheLeft => 'Vis til venstre på mobile enheter';
+
+  @override
+  String get preferencesInlineNotation => 'Inline notation';
+
+  @override
+  String get preferencesShowServerAnalysis => 'Show server analysis';
+
+  @override
+  String get preferencesShowBestMoveArrows => 'Show best move arrows';
+
+  @override
+  String get preferencesShowManeuverArrows => 'Show maneuver arrows';
+
+  @override
+  String get preferencesShowGauge => 'Show evaluation gauge';
+
+  @override
+  String get preferencesShowMoveAnnotationsOnBoard => 'Show move annotations';
+
+  @override
+  String get preferencesShowVariationArrows => 'Show variation arrows';
+
+  @override
+  String get preferencesShowLiveGlyphs => 'Live engine annotations';
+
+  @override
+  String get preferencesShowUndefendedPieces => 'Show undefended pieces';
+
+  @override
+  String get preferencesShowPinnedPieces => 'Show pinned pieces';
+
+  @override
+  String get preferencesShowCheckableKing => 'Show checkable king';
+
+  @override
+  String get preferencesDisclosureMode => 'Enable variation hiding';
+
+  @override
+  String get preferencesGeneralSettings => 'General';
+
+  @override
+  String get preferencesMoveListSettings => 'Move list';
+
+  @override
+  String get preferencesBoardSettings => 'Board';
+
+  @override
+  String get preferencesAnalysisSettings => 'Analysis settings';
+
+  @override
+  String get preferencesManeuverArrowsHelp => 'Sequence of engine moves for one piece';
+
+  @override
+  String get preferencesHoverOverSettingLabelsForHelp => 'Hover over setting labels for help';
 
   @override
   String get puzzlePuzzles => 'Sjakknøtter';
@@ -2491,6 +2581,12 @@ class AppLocalizationsNb extends AppLocalizations {
   String get blackDidntMove => 'Svart flyttet ikke';
 
   @override
+  String get whiteAborted => 'Hvit avbrøt partiet';
+
+  @override
+  String get blackAborted => 'Svart avbrøt partiet';
+
+  @override
   String get requestAComputerAnalysis => 'Be om computeranalyse';
 
   @override
@@ -2607,12 +2703,12 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String minRatingX(String param) {
-    return 'Minimum rating of $param';
+    return 'Minimumrating på $param';
   }
 
   @override
   String maxRatingX(String param) {
-    return 'Maximum rating of $param';
+    return 'Maksimumrating på $param';
   }
 
   @override
@@ -2979,7 +3075,7 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String sendEmailForAccountVerification(String param) {
-    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
+    return 'Finner du ikke bekreftelsen som ble sendt som e-post? Send e-post til $param, så bekrefter vi kontoen din.';
   }
 
   @override
@@ -4392,6 +4488,12 @@ class AppLocalizationsNb extends AppLocalizations {
   }
 
   @override
+  String get like => 'Lik';
+
+  @override
+  String get liked => 'Likt';
+
+  @override
   String get quickPairing => 'Raskt parti';
 
   @override
@@ -4789,6 +4891,9 @@ class AppLocalizationsNb extends AppLocalizations {
   String get theForumEtiquette => 'forumetiketten';
 
   @override
+  String get pleaseBeNiceInTheForum => 'Hold en god tone i forumet.';
+
+  @override
   String get thisTopicIsArchived => 'Dette emnet er arkivert og kan ikke lenger besvares.';
 
   @override
@@ -5080,6 +5185,9 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get enPassant => 'En passant';
+
+  @override
+  String get settings => 'Settings';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5533,6 +5641,17 @@ class AppLocalizationsNb extends AppLocalizations {
   }
 
   @override
+  String nbAnonymous(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Anonyme ($count)',
+      one: 'Anonym',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbSecondsToPlayTheFirstMove(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5840,9 +5959,6 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get studyLike => 'Lik';
-
-  @override
-  String get studyUnlike => 'Slutt å like';
 
   @override
   String get studyNewTag => 'Ny merkelapp';

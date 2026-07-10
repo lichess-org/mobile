@@ -117,15 +117,26 @@
   "mobileChallengeCreated": "Challenge created: You will be notified when the game starts.\nYou can access it from the home tab.",
   "mobilePreviousPage": "Previous",
   "mobileOrImportPgnFile": "Or import a PGN file",
+  "mobileGoodMoveButThereIsBetter": "Good move, but there's better",
+  "variantStandard": "Standard",
   "variantStandardTitle": "Standard rules of chess (FIDE)",
+  "variantChess960": "Chess960",
   "variantChess960Title": "The starting position of the home rank pieces is randomised.",
+  "variantKingOfTheHill": "King of the Hill",
   "variantKingOfTheHillTitle": "Bring your King to the centre to win the game.",
+  "variantThreeCheck": "Three-Check",
   "variantThreeCheckTitle": "Check your opponent 3 times to win the game.",
+  "variantAntichess": "Antichess",
   "variantAntichessTitle": "Lose all your pieces (or get stalemated) to win the game.",
+  "variantAtomic": "Atomic",
   "variantAtomicTitle": "Nuke your opponent's king to win.",
+  "variantHorde": "Horde",
   "variantHordeTitle": "One side has a large number of pawns, the other has a normal army.",
+  "variantRacingKings": "Racing Kings",
   "variantRacingKingsTitle": "Get your king to the other side of the board to win.",
+  "variantCrazyhouse": "Crazyhouse",
   "variantCrazyhouseTitle": "Captured pieces can be dropped back on the board instead of moving a piece.",
+  "variantFromPosition": "From Position",
   "variantFromPositionTitle": "Standard chess from a custom position",
   "activityActivity": "Activity",
   "activityHostedALiveStream": "Hosted a live stream",
@@ -494,6 +505,7 @@
   "broadcastNotYetStarted": "The broadcast has not yet started.",
   "broadcastOfficialWebsite": "Official website",
   "broadcastOfficialStandings": "Official standings",
+  "broadcastRegulations": "Regulations",
   "broadcastIframeHelp": "Find more options on the {param}.",
   "@broadcastIframeHelp": {
     "placeholders": {
@@ -903,6 +915,24 @@
   "preferencesBellNotificationSound": "Bell notification sound",
   "preferencesBlindfold": "Blindfold",
   "preferencesShowClockOnTheLeft": "Show on the left on mobile devices",
+  "preferencesInlineNotation": "Inline notation",
+  "preferencesShowServerAnalysis": "Show server analysis",
+  "preferencesShowBestMoveArrows": "Show best move arrows",
+  "preferencesShowManeuverArrows": "Show maneuver arrows",
+  "preferencesShowGauge": "Show evaluation gauge",
+  "preferencesShowMoveAnnotationsOnBoard": "Show move annotations",
+  "preferencesShowVariationArrows": "Show variation arrows",
+  "preferencesShowLiveGlyphs": "Live engine annotations",
+  "preferencesShowUndefendedPieces": "Show undefended pieces",
+  "preferencesShowPinnedPieces": "Show pinned pieces",
+  "preferencesShowCheckableKing": "Show checkable king",
+  "preferencesDisclosureMode": "Enable variation hiding",
+  "preferencesGeneralSettings": "General",
+  "preferencesMoveListSettings": "Move list",
+  "preferencesBoardSettings": "Board",
+  "preferencesAnalysisSettings": "Analysis settings",
+  "preferencesManeuverArrowsHelp": "Sequence of engine moves for one piece",
+  "preferencesHoverOverSettingLabelsForHelp": "Hover over setting labels for help",
   "puzzlePuzzles": "Puzzles",
   "puzzlePuzzleThemes": "Puzzle Themes",
   "puzzleRecommended": "Recommended",
@@ -1287,6 +1317,8 @@
   "blackLeftTheGame": "Black left the game",
   "whiteDidntMove": "White didn't move",
   "blackDidntMove": "Black didn't move",
+  "whiteAborted": "White aborted the game",
+  "blackAborted": "Black aborted the game",
   "requestAComputerAnalysis": "Request a computer analysis",
   "computerAnalysis": "Computer analysis",
   "computerAnalysisAvailable": "Computer analysis available",
@@ -2426,6 +2458,8 @@
       }
     }
   },
+  "like": "Like",
+  "liked": "Liked",
   "quickPairing": "Quick pairing",
   "lobby": "Lobby",
   "anonymous": "Anonymous",
@@ -2647,6 +2681,7 @@
     }
   },
   "theForumEtiquette": "the forum etiquette",
+  "pleaseBeNiceInTheForum": "Please be nice in the forum.",
   "thisTopicIsArchived": "This topic has been archived and can no longer be replied to.",
   "joinTheTeamXToPost": "Join the {param1}, to post in this forum",
   "@joinTheTeamXToPost": {
@@ -2858,6 +2893,7 @@
   },
   "tags": "Tags",
   "enPassant": "En passant rights",
+  "settings": "Settings",
   "opponentLeftCounter": "{count, plural, =1{Your opponent left the game. You can claim victory in {count} second.} other{Your opponent left the game. You can claim victory in {count} seconds.}}",
   "@opponentLeftCounter": {
     "placeholders": {
@@ -3198,6 +3234,14 @@
       }
     }
   },
+  "nbAnonymous": "{count, plural, =1{Anonymous} other{Anonymous ({count})}}",
+  "@nbAnonymous": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "nbSecondsToPlayTheFirstMove": "{count, plural, =1{{count} second to play the first move} other{{count} seconds to play the first move}}",
   "@nbSecondsToPlayTheFirstMove": {
     "placeholders": {
@@ -3351,7 +3395,6 @@
   "studyYouAreNowASpectator": "You are now a spectator",
   "studyPgnTags": "PGN tags",
   "studyLike": "Like",
-  "studyUnlike": "Unlike",
   "studyNewTag": "New tag",
   "studyCommentThisPosition": "Comment on this position",
   "studyCommentThisMove": "Comment on this move",

@@ -50,6 +50,22 @@ class OpeningNameHeader extends StatelessWidget {
   }
 }
 
+/// A centered, padded informational message shown in place of explorer or tablebase results
+/// (e.g. max depth reached, offline, no data).
+class ExplorerMessage extends StatelessWidget {
+  const ExplorerMessage(this.message, {super.key});
+
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Text(message, textAlign: TextAlign.center),
+    );
+  }
+}
+
 /// Table of moves for the opening explorer.
 class OpeningExplorerMoveTable extends ConsumerWidget {
   const OpeningExplorerMoveTable({

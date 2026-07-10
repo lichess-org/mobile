@@ -11,6 +11,18 @@ import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 
 import '../../test_provider_scope.dart';
 
+/// A [PlatformFile] that overrides [readAsBytes] to return in-memory bytes,
+/// avoiding the need for a real file path in tests.
+class _FakePlatformFile extends PlatformFile {
+  _FakePlatformFile({required super.name, required super.size, required this._fileBytes})
+    : super(path: '');
+
+  final Uint8List _fileBytes;
+
+  @override
+  Stream<Uint8List> readAsByteStream() => Stream.value(_fileBytes);
+}
+
 void _mockClipboard(String text) {
   TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
     SystemChannels.platform,
@@ -182,7 +194,7 @@ void main() {
       final app = await _makeApp(
         tester,
         pickResult: FilePickerResult([
-          PlatformFile(name: 'game.pgn', size: pgnBytes.length, bytes: pgnBytes),
+          _FakePlatformFile(name: 'game.pgn', size: pgnBytes.length, fileBytes: pgnBytes),
         ]),
       );
       await tester.pumpWidget(app);
@@ -219,7 +231,7 @@ void main() {
       final app = await _makeApp(
         tester,
         pickResult: FilePickerResult([
-          PlatformFile(name: 'games.pgn', size: pgnBytes.length, bytes: pgnBytes),
+          _FakePlatformFile(name: 'games.pgn', size: pgnBytes.length, fileBytes: pgnBytes),
         ]),
       );
       await tester.pumpWidget(app);
@@ -299,7 +311,7 @@ void main() {
       final app = await _makeApp(
         tester,
         pickResult: FilePickerResult([
-          PlatformFile(name: 'games.pgn', size: pgnBytes.length, bytes: pgnBytes),
+          _FakePlatformFile(name: 'games.pgn', size: pgnBytes.length, fileBytes: pgnBytes),
         ]),
       );
       await tester.pumpWidget(app);

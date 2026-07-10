@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/http_network_image.dart';
+import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
@@ -40,6 +41,34 @@ class ConnectedIcon extends StatelessWidget {
         color: isConnected ? null : textShade(context, 0.3),
         size: size,
       ),
+    );
+  }
+}
+
+/// App bar title for the user and profile screens.
+///
+/// Shows the user's avatar and name, with a subtitle displaying the online
+/// status, or the time they were last seen active if offline.
+class UserAppBarTitleWidget extends StatelessWidget {
+  const UserAppBarTitleWidget({required this.user, required this.isOnline, this.seenAt, super.key});
+
+  final LightUser user;
+  final bool isOnline;
+
+  /// The last time the user was seen active, shown when [isOnline] is false.
+  final DateTime? seenAt;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      contentPadding: EdgeInsets.zero,
+      leading: UserAvatar(user, radius: 16),
+      title: UserFullNameWidget(user: user, showFlair: false),
+      subtitle: isOnline
+          ? Text(context.l10n.online)
+          : seenAt != null
+          ? Text(context.l10n.lastSeenActive(relativeDate(context.l10n, seenAt!)))
+          : Text(context.l10n.offline),
     );
   }
 }

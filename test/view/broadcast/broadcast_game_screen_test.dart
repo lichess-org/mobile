@@ -1,10 +1,13 @@
 import 'dart:convert';
 
 import 'package:chessground/chessground.dart';
+import 'package:dartchess/dartchess.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
@@ -13,6 +16,7 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_button.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
+import 'package:lichess_mobile/src/widgets/variations_bar.dart';
 
 import '../../model/broadcast/example_data.dart';
 import '../../network/fake_websocket_channel.dart';
@@ -154,6 +158,69 @@ void main() {
       expect(find.text('6300014', findRichText: true), findsOne);
       expect(find.text('BlackFideId: '), findsOne);
       expect(find.text('6336760', findRichText: true), findsOne);
+    });
+    testWidgets('Variations bar displays variations and can be tapped', variant: kPlatformVariant, (
+      tester,
+    ) async {
+      const gameIdVariations = BroadcastGameId('VarTest1');
+      final customClient = MockClient((request) {
+        if (request.url.path == '/api/broadcast/-/-/$_roundId') {
+          return mockResponse(
+            broadcastRoundMockResponses[(_tournamentId, _roundId)]!,
+            200,
+            headers: {'content-type': 'application/json; charset=utf-8'},
+          );
+        }
+        if (request.url.path == '/api/study/$_roundId/$gameIdVariations.pgn') {
+          return mockResponse(
+            '1. d4 d5 (1... Nf6)',
+            200,
+            headers: {'content-type': 'application/x-chess-pgn'},
+          );
+        }
+        return mockResponse('', 404);
+      });
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const BroadcastGameScreen(
+          tournamentId: _tournamentId,
+          roundId: _roundId,
+          gameId: gameIdVariations,
+        ),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(customClient, ref),
+          ),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle(); // Loads the broadcast PGN
+
+      // Jump to 1. d4
+      await tester.tap(find.text('d4'));
+      await tester.pump();
+
+      // The variations bar should now display both d5 and Nf6
+      expect(find.byType(VariationsBar), findsOneWidget);
+
+      expect(
+        find.descendant(of: find.byType(VariationsBar), matching: find.text('d5')),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(of: find.byType(VariationsBar), matching: find.text('Nf6')),
+        findsOneWidget,
+      );
+
+      // Tap the 'Nf6' variation inside the VariationsBar widget
+      await tester.tap(find.descendant(of: find.byType(VariationsBar), matching: find.text('Nf6')));
+
+      await tester.pump();
+
+      // Verify the board advanced properly (a black knight is placed on f6)
+      expect(boardHasPiece(tester, Square.f6, Piece.blackKnight), isTrue);
     });
 
     testWidgets('PGN tags tab shows dash for empty FIDE ID', variant: kPlatformVariant, (
@@ -406,9 +473,133 @@ void main() {
       });
     });
   });
+
+  group('User-added moves', () {
+    testWidgets('extending the mainline renders the move in italic', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const BroadcastGameScreen(
+          tournamentId: _tournamentId,
+          roundId: _roundId,
+          gameId: _gameId,
+        ),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      // Load the broadcast analysis controller
+      await tester.pump();
+      // Load the broadcast round game provider
+      await tester.pump();
+
+      // Game ends at 11... Qc8, white to move.
+      // Play Ne5-c6 to extend the mainline beyond the broadcast game.
+      await playMove(tester, 'e5', 'c6');
+
+      expect(_hasMoveWithItalic(tester, 'Nc6'), isTrue);
+    });
+
+    testWidgets('promoting a sideline to mainline does not render the move in italic', (
+      tester,
+    ) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const BroadcastGameScreen(
+          tournamentId: _tournamentId,
+          roundId: _roundId,
+          gameId: _gameId,
+        ),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      // Load the broadcast analysis controller
+      await tester.pump();
+      // Load the broadcast round game provider
+      await tester.pump();
+
+      // Go back one move to after 11. Kxg2 (black to move).
+      await tester.tap(find.byKey(const ValueKey('goto-previous')));
+      await tester.pump();
+
+      // Play e7-e6 as a sideline (not italic because it is not on the mainline).
+      await playMove(tester, 'e7', 'e6');
+
+      final container = ProviderScope.containerOf(tester.element(find.byType(BroadcastGameScreen)));
+      final ctrlProvider = broadcastAnalysisControllerProvider((
+        roundId: _roundId,
+        gameId: _gameId,
+      ));
+
+      // Capture the sideline path, then promote it to mainline.
+      final sidelinePath = container.read(ctrlProvider).requireValue.currentPath;
+      container.read(ctrlProvider.notifier).promoteVariation(sidelinePath, true);
+      await tester.pump();
+
+      // promoteAt only reorders children — italic style stays false after promotion.
+      expect(_hasMoveWithItalic(tester, 'e6'), isFalse);
+    });
+
+    testWidgets('adding a sideline does not render the move in italic', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const BroadcastGameScreen(
+          tournamentId: _tournamentId,
+          roundId: _roundId,
+          gameId: _gameId,
+        ),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      // Load the broadcast analysis controller
+      await tester.pump();
+      // Load the broadcast round game provider
+      await tester.pump();
+
+      // Go back one move to after 11. Kxg2 (black to move).
+      await tester.tap(find.byKey(const ValueKey('goto-previous')));
+      await tester.pump();
+
+      // Play e7-e6 instead of the mainline 11... Qc8, creating a sideline.
+      await playMove(tester, 'e7', 'e6');
+
+      expect(_hasMoveWithItalic(tester, 'e6'), isFalse);
+    });
+  });
 }
 
 /// Checks if the cloud eval label is displayed in the EngineButton widget
 bool isCloudEvalDisplayed() {
   return find.widgetWithText(EngineButton, 'CLOUD').evaluate().isNotEmpty;
+}
+
+/// Returns true if any [RichText] in the widget tree contains a [TextSpan]
+/// with [text] rendered in italic.
+bool _hasMoveWithItalic(WidgetTester tester, String text) {
+  return tester
+      .widgetList<RichText>(find.byType(RichText))
+      .any((richText) => _spanHasItalicText(richText.text, text));
+}
+
+bool _spanHasItalicText(InlineSpan span, String text) {
+  if (span is TextSpan) {
+    if (span.text == text && span.style?.fontStyle == FontStyle.italic) return true;
+    for (final child in span.children ?? <InlineSpan>[]) {
+      if (_spanHasItalicText(child, text)) return true;
+    }
+  }
+  return false;
 }

@@ -287,31 +287,64 @@ class AppLocalizationsDe extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Oder importiere eine PGN-Datei';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Guter Zug, aber es gibt einen besseren';
+
+  @override
+  String get variantStandard => 'Standard';
+
+  @override
   String get variantStandardTitle => 'Standardschachregeln (FIDE)';
+
+  @override
+  String get variantChess960 => 'Schach960';
 
   @override
   String get variantChess960Title => 'Die Startposition der Figuren auf der Grundreihe wird zufällig ermittelt.';
 
   @override
+  String get variantKingOfTheHill => 'King of the Hill';
+
+  @override
   String get variantKingOfTheHillTitle => 'Bring deinen König in die Mitte, um die Partie zu gewinnen.';
+
+  @override
+  String get variantThreeCheck => 'Three-Check';
 
   @override
   String get variantThreeCheckTitle => 'Biete deinem Gegner dreimal Schach, um diese Partie zu gewinnen.';
 
   @override
+  String get variantAntichess => 'Räuberschach';
+
+  @override
   String get variantAntichessTitle => 'Verliere alle deine Figuren (oder werde Patt gesetzt), um diese Partie zu gewinnen.';
+
+  @override
+  String get variantAtomic => 'Atomschach';
 
   @override
   String get variantAtomicTitle => 'Jage den gegnerischen König in die Luft, um zu gewinnen.';
 
   @override
+  String get variantHorde => 'Horde';
+
+  @override
   String get variantHordeTitle => 'Die eine Seite besitzt eine große Anzahl an Bauern, die andere eine normale Armee.';
+
+  @override
+  String get variantRacingKings => 'Racing Kings';
 
   @override
   String get variantRacingKingsTitle => 'Bringe deinen König auf die andere Seite des Bretts, um zu gewinnen.';
 
   @override
+  String get variantCrazyhouse => 'Crazyhouse';
+
+  @override
   String get variantCrazyhouseTitle => 'Geschlagene Figuren können, statt eines regulären Zuges, auf das Brett zurückgebracht werden.';
+
+  @override
+  String get variantFromPosition => 'Von Stellung';
 
   @override
   String get variantFromPositionTitle => 'Standardschach mit einer selbstgewählten Stellung';
@@ -914,6 +947,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get broadcastOfficialStandings => 'Offizielle Rangliste';
+
+  @override
+  String get broadcastRegulations => 'Regeln';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -1566,6 +1602,60 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get preferencesShowClockOnTheLeft => 'Auf der linken Seite auf mobilen Geräten anzeigen';
+
+  @override
+  String get preferencesInlineNotation => 'Inline-Notation';
+
+  @override
+  String get preferencesShowServerAnalysis => 'Serveranalyse anzeigen';
+
+  @override
+  String get preferencesShowBestMoveArrows => 'Pfeile für die besten Züge anzeigen';
+
+  @override
+  String get preferencesShowManeuverArrows => 'Manöver-Pfeile anzeigen';
+
+  @override
+  String get preferencesShowGauge => 'Stellungsbewertungs-Balken anzeigen';
+
+  @override
+  String get preferencesShowMoveAnnotationsOnBoard => 'Zugnotation anzeigen';
+
+  @override
+  String get preferencesShowVariationArrows => 'Varianten-Pfeile anzeigen';
+
+  @override
+  String get preferencesShowLiveGlyphs => 'Live-Computeranalysen';
+
+  @override
+  String get preferencesShowUndefendedPieces => 'Nicht verteidigte Figuren anzeigen';
+
+  @override
+  String get preferencesShowPinnedPieces => 'Gefesselte Figuren anzeigen';
+
+  @override
+  String get preferencesShowCheckableKing => 'Mögliche Schachs anzeigen';
+
+  @override
+  String get preferencesDisclosureMode => 'Varianten ausblenden aktivieren';
+
+  @override
+  String get preferencesGeneralSettings => 'Allgemein';
+
+  @override
+  String get preferencesMoveListSettings => 'Zugliste';
+
+  @override
+  String get preferencesBoardSettings => 'Brett';
+
+  @override
+  String get preferencesAnalysisSettings => 'Analyse-Einstellungen';
+
+  @override
+  String get preferencesManeuverArrowsHelp => 'Reihenfolge der Computerzüge für eine Figur';
+
+  @override
+  String get preferencesHoverOverSettingLabelsForHelp => 'Fahre mit deinem Mauszeiger über die Einstellungs-Label, um Hilfe zu erhalten';
 
   @override
   String get puzzlePuzzles => 'Taktikaufgaben';
@@ -2489,6 +2579,12 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get blackDidntMove => 'Schwarz hat nicht gezogen';
+
+  @override
+  String get whiteAborted => 'Weiß hat die Partie verlassen';
+
+  @override
+  String get blackAborted => 'Schwarz hat die Partie verlassen';
 
   @override
   String get requestAComputerAnalysis => 'Computer-Analyse anfordern';
@@ -4392,6 +4488,12 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
+  String get like => 'Gefällt mir';
+
+  @override
+  String get liked => 'Gefällt mir';
+
+  @override
   String get quickPairing => 'Schnelles Spiel';
 
   @override
@@ -4789,6 +4891,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get theForumEtiquette => 'Die Forums-Etikette';
 
   @override
+  String get pleaseBeNiceInTheForum => 'Bitte sei freundlich im Forum.';
+
+  @override
   String get thisTopicIsArchived => 'Dieses Thema wurde archiviert und kann nicht mehr beantwortet werden.';
 
   @override
@@ -5080,6 +5185,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get enPassant => 'En passant';
+
+  @override
+  String get settings => 'Einstellungen';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5533,6 +5641,17 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
+  String nbAnonymous(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Anonym ($count)',
+      one: 'Anonym',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbSecondsToPlayTheFirstMove(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5840,9 +5959,6 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get studyLike => 'Gefällt mir';
-
-  @override
-  String get studyUnlike => 'Gefällt mir nicht mehr';
 
   @override
   String get studyNewTag => 'Neuer Tag';

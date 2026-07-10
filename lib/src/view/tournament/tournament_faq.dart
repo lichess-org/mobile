@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -114,20 +115,47 @@ class TournamentFAQScreen extends StatelessWidget {
                         ),
                       ),
                     ],
-                    rows: const [
-                      DataRow(
-                        cells: [DataCell(Text('Standard, Chess960, Horde')), DataCell(Text('30'))],
-                      ),
+                    rows: [
                       DataRow(
                         cells: [
-                          DataCell(Text('Antichess, Crazyhouse, King of the Hill')),
-                          DataCell(Text('20')),
+                          DataCell(
+                            Text(
+                              _variantLabels(context, [
+                                Variant.standard,
+                                Variant.chess960,
+                                Variant.horde,
+                              ]),
+                            ),
+                          ),
+                          const DataCell(Text('30')),
                         ],
                       ),
                       DataRow(
                         cells: [
-                          DataCell(Text('Three-check, Atomic, Racing Kings')),
-                          DataCell(Text('10')),
+                          DataCell(
+                            Text(
+                              _variantLabels(context, [
+                                Variant.antichess,
+                                Variant.crazyhouse,
+                                Variant.kingOfTheHill,
+                              ]),
+                            ),
+                          ),
+                          const DataCell(Text('20')),
+                        ],
+                      ),
+                      DataRow(
+                        cells: [
+                          DataCell(
+                            Text(
+                              _variantLabels(context, [
+                                Variant.threeCheck,
+                                Variant.atomic,
+                                Variant.racingKings,
+                              ]),
+                            ),
+                          ),
+                          const DataCell(Text('10')),
                         ],
                       ),
                     ],
@@ -141,3 +169,6 @@ class TournamentFAQScreen extends StatelessWidget {
     );
   }
 }
+
+String _variantLabels(BuildContext context, Iterable<Variant> variants) =>
+    variants.map((variant) => variant.label(context.l10n)).join(', ');

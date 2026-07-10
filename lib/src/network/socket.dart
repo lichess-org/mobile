@@ -160,6 +160,15 @@ class SocketClient {
   /// The list of acknowledgeable messages.
   final List<(DateTime, int, Map<String, dynamic>)> _acks = [];
 
+  /// Messages that were sent while the socket was not connected.
+  ///
+  /// Each entry is the ack id (null for non-ackable messages) and the encoded
+  /// message. They are flushed when the connection (re)opens, which prevents
+  /// losing messages. Ackable messages are queued here too (as the web client
+  /// does) so they are resent immediately on reconnect rather than waiting for
+  /// [_resendAcks]; they also stay in [_acks] as the retry-until-acked fallback.
+  final List<(int?, String)> _resendWhenOpen = [];
+
   /// The current number of connections attempted.
   int nbConnectionAttempts = 0;
 
@@ -212,7 +221,13 @@ class SocketClient {
     _ackResendTimer = Timer.periodic(resendAckDelay, (_) => _resendAcks());
 
     final authUser = getSession();
-    final uri = lichessWSUri(route.path, version != null ? {'v': version.toString()} : null);
+
+    final queryParameters = Map<String, String>.from(route.queryParameters);
+    if (version != null) {
+      queryParameters['v'] = version.toString();
+    }
+    final uri = lichessWSUri(route.path, queryParameters.isNotEmpty ? queryParameters : null);
+
     final Map<String, String> headers = authUser != null
         ? {'Authorization': 'Bearer ${signBearerToken(authUser.token)}'}
         : {};
@@ -262,6 +277,26 @@ class SocketClient {
       if (_socketOpenController.hasListener) {
         _socketOpenController.add(null);
       }
+
+      // Flush messages that were queued while the socket was not connected.
+      // This runs *before* [_resendAcks] and bumps each flushed ackable
+      // message's timestamp so that [_resendAcks] does not immediately send it a
+      // second time (the periodic resend-until-acked behavior is preserved).
+      if (_resendWhenOpen.isNotEmpty) {
+        final pending = List<(int?, String)>.of(_resendWhenOpen);
+        _resendWhenOpen.clear();
+        final now = clock_package.clock.now();
+        for (final (ackId, message) in pending) {
+          _sink?.add(message);
+          if (ackId != null) {
+            final index = _acks.indexWhere((rec) => rec.$2 == ackId);
+            if (index != -1) {
+              _acks[index] = (now, _acks[index].$2, _acks[index].$3);
+            }
+          }
+        }
+      }
+
       _resendAcks();
     } catch (error) {
       _logger.severe('WebSocket connection failed: $error', error);
@@ -273,9 +308,10 @@ class SocketClient {
   /// Sends a message to the websocket.
   void send(String topic, Object? data, {bool? ackable, bool? withLag}) {
     Map<String, Object> message;
+    int? ackId;
 
     if (ackable == true) {
-      final ackId = _ackId++;
+      ackId = _ackId++;
       message = {
         't': topic,
         'd': {
@@ -295,7 +331,15 @@ class SocketClient {
       };
     }
 
-    _sink?.add(jsonEncode(message));
+    final encoded = jsonEncode(message);
+    final sink = _sink;
+    if (sink != null) {
+      sink.add(encoded);
+    } else {
+      // Not connected: queue the message so it is sent once the connection
+      // (re)opens, instead of being silently dropped.
+      _resendWhenOpen.add((ackId, encoded));
+    }
   }
 
   /// Closes the WebSocket connection and disposes the client.
@@ -668,7 +712,7 @@ final socketPoolProvider = Provider<SocketPool>((Ref ref) {
   return pool;
 }, name: 'SocketPoolProvider');
 
-typedef SocketPingState = ({Duration averageLag, int rating});
+typedef SocketPingState = ({Duration averageLag, int rating, bool isActive});
 
 /// A provider that exposes the average lag and ping rating for a given socket route.
 final socketPingProvider = NotifierProvider.autoDispose
@@ -708,8 +752,17 @@ class SocketPingNotifier extends Notifier<SocketPingState> {
         : pool.averageLag.value;
   }
 
+  /// Whether the socket for this route is actively trying to connect or is connected.
+  bool get _currentRouteIsActive {
+    final pool = ref.read(socketPoolProvider);
+    return route != null
+        ? route == pool.currentClient.route && pool.currentClient.isActive
+        : pool.currentClient.isActive;
+  }
+
   SocketPingState _getPing(Duration lag) => (
     averageLag: lag,
+    isActive: _currentRouteIsActive,
     rating: lag.inMicroseconds == 0
         ? 0
         : lag.inMicroseconds < 150000
@@ -722,9 +775,9 @@ class SocketPingNotifier extends Notifier<SocketPingState> {
   );
 
   void _listener() {
-    final newLag = _currentRouteLag;
-    if (state.averageLag != newLag) {
-      state = _getPing(newLag);
+    final newState = _getPing(_currentRouteLag);
+    if (state != newState) {
+      state = newState;
     }
   }
 }

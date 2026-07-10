@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/gif_export.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -20,6 +21,7 @@ import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
 import 'package:lichess_mobile/src/view/game/gif_export_dialog.dart';
 import 'package:lichess_mobile/src/view/game/status_l10n.dart';
+import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -30,7 +32,7 @@ import 'package:share_plus/share_plus.dart';
 final _dateFormatter = DateFormat.yMMMd().add_Hm();
 
 /// A list tile for a game in a game list.
-class GameListTile extends StatelessWidget {
+class GameListTile extends ConsumerWidget {
   const GameListTile({required this.item, this.padding, this.onPressedBookmark});
 
   final LightExportedGameWithPov item;
@@ -38,7 +40,7 @@ class GameListTile extends StatelessWidget {
   final Future<void> Function(BuildContext context)? onPressedBookmark;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final (game: game, pov: youAre) = item;
     final me = youAre == Side.white ? game.white : game.black;
     final opponent = youAre == Side.white ? game.black : game.white;
@@ -173,6 +175,28 @@ class GameContextMenu extends ConsumerWidget {
                                 ),
                               ],
                             ),
+                            if (game.arenaTournamentId != null)
+                              Row(
+                                children: [
+                                  Icon(
+                                    LichessIcons.tournament_cup,
+                                    size: 13,
+                                    color: textShade(context, Styles.subtitleOpacity),
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Expanded(
+                                    child: Text(
+                                      game.arenaTournamentName ?? context.l10n.tournament,
+                                      maxLines: 2,
+                                      overflow: .ellipsis,
+                                      style: TextStyle(
+                                        color: textShade(context, Styles.subtitleOpacity),
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             if (game.lastFen != null)
                               Text(
                                 gameStatusL10n(
@@ -234,6 +258,14 @@ class GameContextMenu extends ConsumerWidget {
                     },
               child: Text(context.l10n.analysis),
             ),
+            if (game.arenaTournamentId != null)
+              BottomSheetContextMenuAction(
+                icon: LichessIcons.tournament_cup,
+                onPressed: () {
+                  Navigator.of(context).push(TournamentScreen.buildRoute(game.arenaTournamentId!));
+                },
+                child: Text(context.l10n.viewTournament),
+              ),
             if (isLoggedIn && onPressedBookmark != null)
               BottomSheetContextMenuAction(
                 onPressed: () => onPressedBookmark?.call(context),

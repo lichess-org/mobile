@@ -287,31 +287,64 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Ou importa un arquivo PGN';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Boa xogada, pero hai unha mellor';
+
+  @override
+  String get variantStandard => 'Estándar';
+
+  @override
   String get variantStandardTitle => 'Regras do xadrez estándar (FIDE)';
+
+  @override
+  String get variantChess960 => 'Xadrez 960';
 
   @override
   String get variantChess960Title => 'A posición inicial das pezas das filas 1 e 8 é aleatoria.';
 
   @override
+  String get variantKingOfTheHill => 'Rei da Cuíña';
+
+  @override
   String get variantKingOfTheHillTitle => 'Leva o teu Rei ó centro para gañar a partida.';
+
+  @override
+  String get variantThreeCheck => 'Tres-Xaques';
 
   @override
   String get variantThreeCheckTitle => 'Dálle xaque 3 veces ó teu rival para gañar a partida.';
 
   @override
+  String get variantAntichess => 'Antixadrez';
+
+  @override
   String get variantAntichessTitle => 'Perde todas as túas pezas (ou fica afogado) para gañar a partida.';
+
+  @override
+  String get variantAtomic => 'Atómico';
 
   @override
   String get variantAtomicTitle => 'Estoura o rei do rival para gañares.';
 
   @override
+  String get variantHorde => 'Horda';
+
+  @override
   String get variantHordeTitle => 'Un bando ten unha manchea de peóns e o outro ten un exército normal.';
+
+  @override
+  String get variantRacingKings => 'Reis a correr';
 
   @override
   String get variantRacingKingsTitle => 'Leva o teu rei ó outro lado do taboleiro para gañar.';
 
   @override
+  String get variantCrazyhouse => 'Casa de loucos';
+
+  @override
   String get variantCrazyhouseTitle => 'Ademais dos movementos convencionais, podes guindar as pezas capturadas no taboleiro.';
+
+  @override
+  String get variantFromPosition => 'A partir dunha posición';
 
   @override
   String get variantFromPositionTitle => 'Xadrez estándar a partir dunha posición personalizada';
@@ -914,6 +947,9 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get broadcastOfficialStandings => 'Clasificación oficial';
+
+  @override
+  String get broadcastRegulations => 'Regulamento';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -1568,6 +1604,60 @@ class AppLocalizationsGl extends AppLocalizations {
   String get preferencesShowClockOnTheLeft => 'Amosar na esquerda en dispositivos móbiles';
 
   @override
+  String get preferencesInlineNotation => 'Notación compacta';
+
+  @override
+  String get preferencesShowServerAnalysis => 'Análise do servidor';
+
+  @override
+  String get preferencesShowBestMoveArrows => 'Frechas coas mellores xogadas';
+
+  @override
+  String get preferencesShowManeuverArrows => 'Frechas das manobras';
+
+  @override
+  String get preferencesShowGauge => 'Indicador de avaliación';
+
+  @override
+  String get preferencesShowMoveAnnotationsOnBoard => 'Amosar as anotacións';
+
+  @override
+  String get preferencesShowVariationArrows => 'Frechas das variantes';
+
+  @override
+  String get preferencesShowLiveGlyphs => 'Anotacións por computador en vivo';
+
+  @override
+  String get preferencesShowUndefendedPieces => 'Pezas non defendidas';
+
+  @override
+  String get preferencesShowPinnedPieces => 'Pezas cravadas';
+
+  @override
+  String get preferencesShowCheckableKing => 'Rei exposto a xaque';
+
+  @override
+  String get preferencesDisclosureMode => 'Permitir agochar as variantes';
+
+  @override
+  String get preferencesGeneralSettings => 'Xeral';
+
+  @override
+  String get preferencesMoveListSettings => 'Lista de xogadas';
+
+  @override
+  String get preferencesBoardSettings => 'Taboleiro';
+
+  @override
+  String get preferencesAnalysisSettings => 'Axustes da análise';
+
+  @override
+  String get preferencesManeuverArrowsHelp => 'Secuencia de xogadas de computador para unha peza';
+
+  @override
+  String get preferencesHoverOverSettingLabelsForHelp => 'Pasa o rato sobre as opcións da configuración para obter axuda';
+
+  @override
   String get puzzlePuzzles => 'Crebacabezas';
 
   @override
@@ -1680,7 +1770,7 @@ class AppLocalizationsGl extends AppLocalizations {
   }
 
   @override
-  String get puzzleHidden => 'oculta';
+  String get puzzleHidden => 'Oculta';
 
   @override
   String puzzleFromGameLink(String param) {
@@ -1893,7 +1983,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Xaque mate na última fila, onde o rei está atrapado polas súas propias pezas.';
 
   @override
-  String get puzzleThemeBalestraMate => 'Mate da besta';
+  String get puzzleThemeBalestraMate => 'Mate da bésta';
 
   @override
   String get puzzleThemeBalestraMateDescription => 'O bispo dá xaque mate mentres a dama bloquea as casas de escape';
@@ -1938,7 +2028,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get puzzleThemeCornerMate => 'Mate do curruncho';
 
   @override
-  String get puzzleThemeCornerMateDescription => 'Confina o rei nun recuncho usando unha torre ou unha dama e un cabalo para facer xaque mate.';
+  String get puzzleThemeCornerMateDescription => 'Acurrala ó rei nun recanto cunha dama ou cunha torre e logo dá o xaque mate co cabalo.';
 
   @override
   String get puzzleThemeCrushing => 'Vantaxe decisiva';
@@ -2489,6 +2579,12 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get blackDidntMove => 'As negras non moveron';
+
+  @override
+  String get whiteAborted => 'As brancas abortaron a partida';
+
+  @override
+  String get blackAborted => 'As negras abortaron a partida';
 
   @override
   String get requestAComputerAnalysis => 'Solicitar unha análise por computador';
@@ -3324,10 +3420,10 @@ class AppLocalizationsGl extends AppLocalizations {
   String get gameAsGIF => 'Gardar a partida en formato GIF';
 
   @override
-  String get playerNames => 'Nomes das xogadoras/es';
+  String get playerNames => 'Nomes dos xogadores';
 
   @override
-  String get moveAnnotations => 'Mover anotacións';
+  String get moveAnnotations => 'Anotación das xogadas';
 
   @override
   String get pasteTheFenStringHere => 'Pega o texto FEN aquí';
@@ -4392,6 +4488,12 @@ class AppLocalizationsGl extends AppLocalizations {
   }
 
   @override
+  String get like => 'Gústame';
+
+  @override
+  String get liked => 'Gustoume';
+
+  @override
   String get quickPairing => 'Emparellamento rápido';
 
   @override
@@ -4789,6 +4891,9 @@ class AppLocalizationsGl extends AppLocalizations {
   String get theForumEtiquette => 'a etiqueta do foro';
 
   @override
+  String get pleaseBeNiceInTheForum => 'Por favor, sé amable no foro.';
+
+  @override
   String get thisTopicIsArchived => 'Este tema foi arquivado e non admite respostas.';
 
   @override
@@ -5080,6 +5185,9 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get enPassant => 'Captura ao paso';
+
+  @override
+  String get settings => 'Configuración';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5533,6 +5641,17 @@ class AppLocalizationsGl extends AppLocalizations {
   }
 
   @override
+  String nbAnonymous(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Anónimos ($count)',
+      one: 'Anónimo',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbSecondsToPlayTheFirstMove(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5840,9 +5959,6 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get studyLike => 'Gústame';
-
-  @override
-  String get studyUnlike => 'Xa non me gusta';
 
   @override
   String get studyNewTag => 'Nova etiqueta';

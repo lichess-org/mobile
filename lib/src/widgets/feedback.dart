@@ -25,7 +25,7 @@ class SocketPingRatingIcon extends ConsumerWidget {
 
     return SemanticIconButton(
       semanticsLabel: 'PING: ${ping.averageLag.inMilliseconds}ms',
-      icon: LagIndicator(lagRating: ping.rating, size: 24.0),
+      icon: LagIndicator(lagRating: ping.rating, isActive: ping.isActive, size: 24.0),
       onPressed: () {
         showPopover(
           context: context,
@@ -78,7 +78,7 @@ class SocketPingRatingListTile extends ConsumerWidget {
     final ping = ref.watch(socketPingProvider(socketUri));
 
     return ListTile(
-      leading: LagIndicator(lagRating: ping.rating),
+      leading: LagIndicator(lagRating: ping.rating, isActive: ping.isActive),
       title: ping.averageLag > Duration.zero
           ? Text.rich(
               TextSpan(
@@ -110,11 +110,18 @@ class SocketPingRatingListTile extends ConsumerWidget {
 
 /// An indicator that shows the lag rating of the connection.
 class LagIndicator extends StatelessWidget {
-  const LagIndicator({required this.lagRating, this.size = 20.0, super.key})
+  const LagIndicator({required this.lagRating, this.isActive = true, this.size = 20.0, super.key})
     : assert(lagRating >= 0 && lagRating <= 4);
 
   /// The lag rating from 0 to 4.
   final int lagRating;
+
+  /// Whether the connection is active (connected or trying to reconnect).
+  ///
+  /// When the lag rating is 0 and the connection is active, a loading animation
+  /// is shown to indicate a reconnection attempt. When inactive, no animation is
+  /// shown.
+  final bool isActive;
 
   /// Visual size of the indicator.
   final double size;
@@ -144,7 +151,7 @@ class LagIndicator extends StatelessWidget {
             inactiveColor: inactiveColor,
             levels: materialLevels,
           ),
-          if (lagRating == 0)
+          if (lagRating == 0 && isActive)
             Center(
               child: SpinKitThreeBounce(color: Colors.grey, size: size / 2),
             ),

@@ -76,14 +76,16 @@ class SmallBoardPreview extends ConsumerWidget {
                     fen: fen,
                     orientation: orientation,
                     lastMove: lastMove,
-                    pieceAssets: boardPrefs.pieceSet.assets,
-                    colorScheme: boardPrefs.boardTheme.colors,
-                    brightness: boardPrefs.brightness,
-                    hue: boardPrefs.hue,
-                    enableCoordinates: false,
-                    borderRadius: Styles.boardBorderRadius,
-                    boxShadow: boardShadows,
-                    animationDuration: const Duration(milliseconds: 150),
+                    settings: StaticChessboardSettings(
+                      pieceAssets: boardPrefs.pieceSet.assets,
+                      colorScheme: boardPrefs.boardTheme.colors,
+                      brightness: boardPrefs.brightness,
+                      hue: boardPrefs.hue,
+                      enableCoordinates: false,
+                      borderRadius: Styles.boardBorderRadius,
+                      boxShadow: boardShadows,
+                      animationDuration: const Duration(milliseconds: 150),
+                    ),
                   ),
                 const SizedBox(width: 10.0),
                 if (_showLoadingPlaceholder)
@@ -106,7 +108,7 @@ class SmallBoardPreview extends ConsumerWidget {
                             const SizedBox(height: 4.0),
                             Container(
                               height: 16.0,
-                              width: MediaQuery.sizeOf(context).width / 3,
+                              width: MediaQuery.widthOf(context) / 3,
                               decoration: const BoxDecoration(
                                 color: Colors.black,
                                 borderRadius: Styles.boardBorderRadius,

@@ -287,31 +287,64 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Vagy PGN fájl importálása';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+
+  @override
+  String get variantStandard => 'Normál';
+
+  @override
   String get variantStandardTitle => 'Standard sakk szabályok (FIDE)';
+
+  @override
+  String get variantChess960 => 'Fischer Random';
 
   @override
   String get variantChess960Title => 'Az alapsori bábuk véletlenszerű mezőről indulnak.';
 
   @override
+  String get variantKingOfTheHill => 'A hegy királya';
+
+  @override
   String get variantKingOfTheHillTitle => 'Juttasd a királyt a centrumba, hogy megnyerd a partit.';
+
+  @override
+  String get variantThreeCheck => 'Három sakk';
 
   @override
   String get variantThreeCheckTitle => 'Adj 3 sakkot a győzelemért.';
 
   @override
-  String get variantAntichessTitle => 'Lose all your pieces (or get stalemated) to win the game.';
+  String get variantAntichess => 'Francia sakk';
+
+  @override
+  String get variantAntichessTitle => 'Veszítsd el az összes bábudat (vagy kerülj patthelyzetbe) a játék megnyeréséhez.';
+
+  @override
+  String get variantAtomic => 'Atomsakk';
 
   @override
   String get variantAtomicTitle => 'Robbantsd fel az ellenfél királyát a győzelemért.';
 
   @override
+  String get variantHorde => 'Horda';
+
+  @override
   String get variantHordeTitle => 'Világos nagy számú gyaloggal kezd, sötétnek minden bábuja megvan.';
+
+  @override
+  String get variantRacingKings => 'Racing Kings';
 
   @override
   String get variantRacingKingsTitle => 'Juttasd királyod a tábla túloldalára a győzelemért.';
 
   @override
+  String get variantCrazyhouse => 'Crazyhouse';
+
+  @override
   String get variantCrazyhouseTitle => 'A leütött bábukat vissza lehet helyezni a táblára egy lépés helyett.';
+
+  @override
+  String get variantFromPosition => 'From Position';
 
   @override
   String get variantFromPositionTitle => 'Standard chess from a custom position';
@@ -914,6 +947,9 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get broadcastOfficialStandings => 'Hivatalos állás';
+
+  @override
+  String get broadcastRegulations => 'Regulations';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -1566,6 +1602,60 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get preferencesShowClockOnTheLeft => 'Mobil eszközökön a bal oldalon jelenjen meg';
+
+  @override
+  String get preferencesInlineNotation => 'Inline notation';
+
+  @override
+  String get preferencesShowServerAnalysis => 'Show server analysis';
+
+  @override
+  String get preferencesShowBestMoveArrows => 'Show best move arrows';
+
+  @override
+  String get preferencesShowManeuverArrows => 'Show maneuver arrows';
+
+  @override
+  String get preferencesShowGauge => 'Show evaluation gauge';
+
+  @override
+  String get preferencesShowMoveAnnotationsOnBoard => 'Show move annotations';
+
+  @override
+  String get preferencesShowVariationArrows => 'Show variation arrows';
+
+  @override
+  String get preferencesShowLiveGlyphs => 'Live engine annotations';
+
+  @override
+  String get preferencesShowUndefendedPieces => 'Show undefended pieces';
+
+  @override
+  String get preferencesShowPinnedPieces => 'Show pinned pieces';
+
+  @override
+  String get preferencesShowCheckableKing => 'Show checkable king';
+
+  @override
+  String get preferencesDisclosureMode => 'Enable variation hiding';
+
+  @override
+  String get preferencesGeneralSettings => 'General';
+
+  @override
+  String get preferencesMoveListSettings => 'Move list';
+
+  @override
+  String get preferencesBoardSettings => 'Board';
+
+  @override
+  String get preferencesAnalysisSettings => 'Analysis settings';
+
+  @override
+  String get preferencesManeuverArrowsHelp => 'Sequence of engine moves for one piece';
+
+  @override
+  String get preferencesHoverOverSettingLabelsForHelp => 'Hover over setting labels for help';
 
   @override
   String get puzzlePuzzles => 'Feladványok';
@@ -2489,6 +2579,12 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get blackDidntMove => 'Sötét nem lépett';
+
+  @override
+  String get whiteAborted => 'White aborted the game';
+
+  @override
+  String get blackAborted => 'Black aborted the game';
 
   @override
   String get requestAComputerAnalysis => 'Számítógépes elemzés kérése';
@@ -4392,6 +4488,12 @@ class AppLocalizationsHu extends AppLocalizations {
   }
 
   @override
+  String get like => 'Like';
+
+  @override
+  String get liked => 'Liked';
+
+  @override
   String get quickPairing => 'Gyors játszma';
 
   @override
@@ -4789,6 +4891,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get theForumEtiquette => 'a fórum etikettet';
 
   @override
+  String get pleaseBeNiceInTheForum => 'Please be nice in the forum.';
+
+  @override
   String get thisTopicIsArchived => 'Ezt a témát archiváltuk, ezért nem lehet már hozzászólni.';
 
   @override
@@ -5080,6 +5185,9 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get enPassant => 'En passant';
+
+  @override
+  String get settings => 'Settings';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5533,6 +5641,17 @@ class AppLocalizationsHu extends AppLocalizations {
   }
 
   @override
+  String nbAnonymous(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Anonymous ($count)',
+      one: 'Anonymous',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbSecondsToPlayTheFirstMove(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5840,9 +5959,6 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get studyLike => 'Tetszik';
-
-  @override
-  String get studyUnlike => 'Mégse tetszik';
 
   @override
   String get studyNewTag => 'Új címke';

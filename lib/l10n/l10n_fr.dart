@@ -287,31 +287,64 @@ class AppLocalizationsFr extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Importer un fichier PGN';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Bien joué, mais il y a mieux';
+
+  @override
+  String get variantStandard => 'Standard';
+
+  @override
   String get variantStandardTitle => 'Règles standard des échecs (FIDE)';
+
+  @override
+  String get variantChess960 => 'Échecs 960';
 
   @override
   String get variantChess960Title => 'La position de départ des pièces de la première rangée est randomisée.';
 
   @override
+  String get variantKingOfTheHill => 'Roi de la colline';
+
+  @override
   String get variantKingOfTheHillTitle => 'Amenez votre roi au centre pour gagner la partie.';
+
+  @override
+  String get variantThreeCheck => 'Trois-échecs';
 
   @override
   String get variantThreeCheckTitle => 'Mettez votre adversaire en échec trois fois pour gagner la partie.';
 
   @override
+  String get variantAntichess => 'Antiéchecs';
+
+  @override
   String get variantAntichessTitle => 'Si vous perdez toutes vos pièces (ou êtes en pat), vous gagnez la partie.';
+
+  @override
+  String get variantAtomic => 'Atomique';
 
   @override
   String get variantAtomicTitle => 'Faites exploser le roi adverse pour gagner la partie.';
 
   @override
+  String get variantHorde => 'Horde';
+
+  @override
   String get variantHordeTitle => 'Un camp a un grand nombre de pions, l\'autre a un nombre de pièces normales.';
 
   @override
-  String get variantRacingKingsTitle => 'Amenez votre roi de l\'autre côté de l\'échiquer pour gagner la partie.';
+  String get variantRacingKings => 'Sprint des rois';
+
+  @override
+  String get variantRacingKingsTitle => 'Amenez votre roi de l\'autre côté de l\'échiquier pour gagner la partie.';
+
+  @override
+  String get variantCrazyhouse => 'Crazyhouse';
 
   @override
   String get variantCrazyhouseTitle => 'Au lieu de bouger une pièce, vous pouvez replacer sur l\'échiquier une pièce capturée.';
+
+  @override
+  String get variantFromPosition => 'À partir d\'une position';
 
   @override
   String get variantFromPositionTitle => 'Échecs standard à partir d\'une position personnalisée';
@@ -916,6 +949,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get broadcastOfficialStandings => 'Résultats officiels';
 
   @override
+  String get broadcastRegulations => 'Règlements';
+
+  @override
   String broadcastIframeHelp(String param) {
     return 'Plus d\'options sur la $param';
   }
@@ -1050,7 +1086,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get broadcastFinals => 'Finales';
 
   @override
-  String get broadcastTiebreaks => 'Bris d\'égalité';
+  String get broadcastTiebreaks => 'Départage';
 
   @override
   String broadcastGameX(String param) {
@@ -1566,6 +1602,60 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get preferencesShowClockOnTheLeft => 'Afficher à gauche sur les appareils mobiles';
+
+  @override
+  String get preferencesInlineNotation => 'Notation en ligne';
+
+  @override
+  String get preferencesShowServerAnalysis => 'Afficher l\'analyse du serveur';
+
+  @override
+  String get preferencesShowBestMoveArrows => 'Afficher les flèches montrant les meilleurs coups';
+
+  @override
+  String get preferencesShowManeuverArrows => 'Afficher les flèches montrant les manœuvres';
+
+  @override
+  String get preferencesShowGauge => 'Afficher la barre d\'évaluation';
+
+  @override
+  String get preferencesShowMoveAnnotationsOnBoard => 'Afficher les annotations';
+
+  @override
+  String get preferencesShowVariationArrows => 'Afficher les flèches de variantes';
+
+  @override
+  String get preferencesShowLiveGlyphs => 'Annotations du moteur en direct';
+
+  @override
+  String get preferencesShowUndefendedPieces => 'Afficher les pièces non défendues';
+
+  @override
+  String get preferencesShowPinnedPieces => 'Afficher les pièces clouées';
+
+  @override
+  String get preferencesShowCheckableKing => 'Afficher les échecs possibles';
+
+  @override
+  String get preferencesDisclosureMode => 'Activer le masquage des variantes';
+
+  @override
+  String get preferencesGeneralSettings => 'Paramètres généraux';
+
+  @override
+  String get preferencesMoveListSettings => 'Liste des coups';
+
+  @override
+  String get preferencesBoardSettings => 'Échiquier';
+
+  @override
+  String get preferencesAnalysisSettings => 'Paramètres d\'analyse';
+
+  @override
+  String get preferencesManeuverArrowsHelp => 'Séquence de coups du moteur pour une pièce';
+
+  @override
+  String get preferencesHoverOverSettingLabelsForHelp => 'Placer la souris sur les étiquettes pour de l\'aide';
 
   @override
   String get puzzlePuzzles => 'Problèmes';
@@ -2491,6 +2581,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String get blackDidntMove => 'Les Noirs n\'ont pas bougé';
 
   @override
+  String get whiteAborted => 'Les Blancs ont quitté la partie';
+
+  @override
+  String get blackAborted => 'Les Noirs ont quitté la partie';
+
+  @override
   String get requestAComputerAnalysis => 'Demander une analyse automatique';
 
   @override
@@ -2612,7 +2708,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String maxRatingX(String param) {
-    return 'Maximum rating of $param';
+    return 'Classement maximal de $param';
   }
 
   @override
@@ -4392,6 +4488,12 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String get like => 'Aime';
+
+  @override
+  String get liked => 'Aimé';
+
+  @override
   String get quickPairing => 'Appariement rapide';
 
   @override
@@ -4789,6 +4891,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get theForumEtiquette => 'le règlement du forum';
 
   @override
+  String get pleaseBeNiceInTheForum => 'Faites preuve de courtoisie dans le forum.';
+
+  @override
   String get thisTopicIsArchived => 'Ce sujet a été archivé et il n\'est plus possible d\'y répondre.';
 
   @override
@@ -5080,6 +5185,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get enPassant => 'Prise en passant ?';
+
+  @override
+  String get settings => 'Paramètres';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5533,6 +5641,17 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String nbAnonymous(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Anonymous ($count)',
+      one: 'Anonymous',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbSecondsToPlayTheFirstMove(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5840,9 +5959,6 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get studyLike => 'Aimer';
-
-  @override
-  String get studyUnlike => 'Je n’aime pas';
 
   @override
   String get studyNewTag => 'Nouvelle étiquette';
