@@ -157,9 +157,14 @@ class _Body extends ConsumerWidget {
     final timeLeft = state.tournament.timeToStart ?? state.tournament.timeToFinish;
 
     return FocusDetector(
-      onFocusRegained: () {
+      // Use `onFocusGained` (fires on the first focus too) rather than
+      // `onFocusRegained`: when a second `TournamentScreen` for the same
+      // tournament is pushed on top of a game, its `FocusDetector` gains focus
+      // for the first time, and the controller (kept alive, so `build` doesn't
+      // re-run) must reopen the socket that the game closed.
+      onFocusGained: () {
         if (context.mounted) {
-          ref.read(tournamentControllerProvider(id).notifier).onFocusRegained();
+          ref.read(tournamentControllerProvider(id).notifier).onFocusGained();
         }
       },
       child: PlatformScaffold(

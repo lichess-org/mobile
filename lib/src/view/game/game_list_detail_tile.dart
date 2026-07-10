@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -16,7 +17,7 @@ import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 
 /// A list tile that shows more detailed game info than [GameListTile].
-class GameListDetailTile extends StatelessWidget {
+class GameListDetailTile extends ConsumerWidget {
   const GameListDetailTile({required this.item, this.onPressedBookmark});
 
   final LightExportedGameWithPov item;
@@ -25,7 +26,7 @@ class GameListDetailTile extends StatelessWidget {
   Side get mySide => item.pov;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final (game: game, pov: youAre) = item;
     final me = youAre == Side.white ? game.white : game.black;
     final opponent = youAre == Side.white ? game.black : game.white;
@@ -137,6 +138,31 @@ class GameListDetailTile extends StatelessWidget {
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
+                              if (game.arenaTournamentId != null) ...[
+                                const SizedBox(height: 2),
+                                Row(
+                                  children: [
+                                    Icon(
+                                      LichessIcons.tournament_cup,
+                                      size: subtitleFontSize + 1,
+                                      color: textShade(context, Styles.subtitleOpacity),
+                                    ),
+                                    const SizedBox(width: 4),
+                                    Expanded(
+                                      child: Text(
+                                        game.arenaTournamentName ?? context.l10n.tournament,
+                                        maxLines: 2,
+                                        overflow: .ellipsis,
+                                        style: TextStyle(
+                                          color: textShade(context, Styles.subtitleOpacity),
+                                          fontSize: subtitleFontSize,
+                                          fontWeight: .w600,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ],
                           ),
                           if (game.lastFen != null)
