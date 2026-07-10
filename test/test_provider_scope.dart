@@ -25,6 +25,7 @@ import 'package:lichess_mobile/src/network/aggregator.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
+import 'package:lichess_mobile/src/tab_scaffold.dart' show rootNavRouteStackObserver;
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -93,6 +94,9 @@ class _FakeAppState extends ConsumerState<_FakeApp> {
     return MaterialApp(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       home: widget.home,
+      // Mirror production (see app.dart) so navigation logic relying on the
+      // route stack observer behaves the same in tests.
+      navigatorObservers: [rootNavRouteStackObserver],
     );
   }
 }
@@ -140,6 +144,9 @@ Future<Widget> makeTestProviderScope(
   final binding = TestLichessBinding.ensureInitialized();
 
   addTearDown(binding.reset);
+
+  rootNavRouteStackObserver.clear();
+  addTearDown(rootNavRouteStackObserver.clear);
 
   await tester.binding.setSurfaceSize(surfaceSize);
   addTearDown(() {
