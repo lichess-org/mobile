@@ -148,7 +148,7 @@ class SettingsScreen extends ConsumerWidget {
                   if (Theme.of(context).platform == TargetPlatform.android) {
                     showChoicePicker<Locale>(
                       context,
-                      choices: AppLocalizations.supportedLocales,
+                      choices: localesSortedByLocalizedName(AppLocalizations.supportedLocales),
                       selectedItem: generalPrefs.locale ?? Localizations.localeOf(context),
                       labelBuilder: (t) => Text(localeToLocalizedName(t)),
                       onSelectedItemChanged: (Locale? locale) =>

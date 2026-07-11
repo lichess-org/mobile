@@ -287,7 +287,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileOrImportPgnFile => 'أو استيراد ملف PGN';
 
   @override
-  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+  String get mobileGoodMoveButThereIsBetter => 'نقلة جيدة، ولكن توجد نقلة أفضل';
 
   @override
   String get variantStandard => 'الأساسي';
@@ -1602,7 +1602,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get preferencesMoveConfirmation => 'تأكيد النقلة';
 
   @override
-  String get preferencesExplainCanThenBeTemporarilyDisabled => 'يمكن تعطيله أثناء اللعبة مع قائمة اللوحة';
+  String get preferencesExplainCanThenBeTemporarilyDisabled => 'يمكن تعطيله أثناء اللعبة من قائمة اللوحة';
 
   @override
   String get preferencesInCorrespondenceGames => 'فى العاب المراسلة';
@@ -4148,10 +4148,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get castling => 'تبييت';
 
   @override
-  String get whiteCastlingKingside => 'تبييت قصير للأبيض';
+  String get whiteCastlingKingside => 'تبييت قصير O-O للأبيض';
 
   @override
-  String get blackCastlingKingside => 'تبييت قصير للأسود';
+  String get blackCastlingKingside => 'تبييت قصير O-O للأسود';
 
   @override
   String tpTimeSpentPlaying(String param) {

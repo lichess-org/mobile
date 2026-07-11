@@ -22,11 +22,7 @@ class BroadcastTeamScreen extends ConsumerWidget {
   final BroadcastTournamentId tournamentId;
   final String teamName;
 
-  static Route<dynamic> buildRoute(
-    BuildContext context,
-    BroadcastTournamentId tournamentId,
-    String teamName,
-  ) {
+  static Route<dynamic> buildRoute(BroadcastTournamentId tournamentId, String teamName) {
     return buildScreenRoute(
       screen: BroadcastTeamScreen(tournamentId: tournamentId, teamName: teamName),
     );
@@ -95,8 +91,7 @@ class _OverallTeamStat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final statWidth =
-        (MediaQuery.sizeOf(context).width - Styles.bodyPadding.horizontal - 10 * 2) / 3;
+    final statWidth = (MediaQuery.widthOf(context) - Styles.bodyPadding.horizontal - 10 * 2) / 3;
     const cardSpacing = 10.0;
 
     return Padding(
@@ -495,9 +490,9 @@ class _MatchHistoryTable extends StatelessWidget {
               ),
               TableRowInkWell(
                 onTap: () {
-                  Navigator.of(context).push(
-                    BroadcastTeamScreen.buildRoute(context, tournament.data.id, match.opponent),
-                  );
+                  Navigator.of(
+                    context,
+                  ).push(BroadcastTeamScreen.buildRoute(tournament.data.id, match.opponent));
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: _kMatchHistoryRowVerticalPadding),

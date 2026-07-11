@@ -309,6 +309,12 @@
             "value": "المجتمع"
           }
         },
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Супольнасць"
+          }
+        },
         "bg": {
           "stringUnit": {
             "state": "translated",

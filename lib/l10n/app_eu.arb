@@ -89,6 +89,7 @@
   "mobileChallengeCreated": "Erronka sortu da: partida hasten denean jakinarazpena bidaliko duzugu.\nHasiera fitxatik sar zaitezke.",
   "mobilePreviousPage": "Aurrekoa",
   "mobileOrImportPgnFile": "Edo inportatu PGN fitxategi bat",
+  "mobileGoodMoveButThereIsBetter": "Jokaldi ona, baina hobea dago",
   "variantStandard": "Ohikoa",
   "variantStandardTitle": "Xakearen Lege arruntak (FIDE)",
   "variantChess960": "960 xakea",

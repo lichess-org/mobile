@@ -268,7 +268,7 @@ class StudyListItem extends StatelessWidget {
           useRootNavigator: true,
           isDismissible: true,
           isScrollControlled: true,
-          constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height * 0.5),
+          constraints: BoxConstraints(minHeight: MediaQuery.heightOf(context) * 0.5),
           builder: (context) => _ContextMenu(study: study),
         );
       },

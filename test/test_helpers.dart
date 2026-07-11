@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
@@ -39,9 +37,6 @@ const kTestSurfaceSize = Size(_kTestScreenWidth, _kTestScreenHeight);
 
 const kPlatformVariant = TargetPlatformVariant({TargetPlatform.android, TargetPlatform.iOS});
 
-Matcher sameRequest(http.BaseRequest request) => _SameRequest(request);
-Matcher sameHeaders(Map<String, String> headers) => _SameHeaders(headers);
-
 /// Mocks a surface with a given size.
 class TestSurface extends StatelessWidget {
   const TestSurface({required this.child, required this.size, super.key});
@@ -64,19 +59,6 @@ Future<http.Response> mockResponse(
   int code, {
   Map<String, String> headers = const {},
 }) => Future.value(http.Response(body, code, headers: headers));
-
-Future<http.StreamedResponse> mockStreamedResponse(String body, int code) =>
-    Future.value(http.StreamedResponse(Stream.value(body).map(utf8.encode), code));
-
-Future<http.StreamedResponse> mockHttpStreamFromIterable(Iterable<String> events) async {
-  return http.StreamedResponse(
-    _streamFromFutures(events.map((e) => Future.value(utf8.encode(e)))),
-    200,
-  );
-}
-
-Future<http.StreamedResponse> mockHttpStream(Stream<String> stream) =>
-    Future.value(http.StreamedResponse(stream.map(utf8.encode), 200));
 
 Future<void> meetsTapTargetGuideline(WidgetTester tester) async {
   if (debugDefaultTargetPlatformOverride == TargetPlatform.iOS) {
@@ -183,43 +165,4 @@ Future<void> playDropMove(
   final fromOffset = tester.getCenter(find.byKey(ValueKey('pocket-${side.name}${role.name}')));
   await tester.dragFrom(fromOffset, targetOffset - fromOffset);
   await tester.pumpAndSettle();
-}
-
-// --
-
-class _SameRequest extends Matcher {
-  const _SameRequest(this._expected);
-
-  final http.BaseRequest _expected;
-
-  @override
-  bool matches(Object? item, Map<dynamic, dynamic> matchState) =>
-      item is http.BaseRequest &&
-      item.method == _expected.method &&
-      item.url == _expected.url &&
-      mapEquals(item.headers, _expected.headers);
-
-  @override
-  Description describe(Description description) =>
-      description.add('same Request as ').addDescriptionOf(_expected);
-}
-
-class _SameHeaders extends Matcher {
-  const _SameHeaders(this._expected);
-
-  final Map<String, String> _expected;
-
-  @override
-  bool matches(Object? item, Map<dynamic, dynamic> matchState) =>
-      item is Map<String, String> && mapEquals(item, _expected);
-  @override
-  Description describe(Description description) =>
-      description.add('same headers as ').addDescriptionOf(_expected);
-}
-
-Stream<T> _streamFromFutures<T>(Iterable<Future<T>> futures) async* {
-  for (final future in futures) {
-    final result = await future;
-    yield result;
-  }
 }

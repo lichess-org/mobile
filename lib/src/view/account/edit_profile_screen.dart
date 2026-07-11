@@ -200,8 +200,8 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                                       child: Dialog(
                                         child: ConstrainedBox(
                                           constraints: BoxConstraints(
-                                            maxHeight: MediaQuery.sizeOf(context).height * 0.5,
-                                            maxWidth: MediaQuery.sizeOf(context).width * 0.9,
+                                            maxHeight: MediaQuery.heightOf(context) * 0.5,
+                                            maxWidth: MediaQuery.widthOf(context) * 0.9,
                                           ),
                                           child: Column(
                                             children: [
@@ -255,8 +255,8 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                                     return Dialog(
                                       child: ConstrainedBox(
                                         constraints: BoxConstraints(
-                                          maxHeight: MediaQuery.sizeOf(context).height * 0.5,
-                                          maxWidth: MediaQuery.sizeOf(context).width * 0.9,
+                                          maxHeight: MediaQuery.heightOf(context) * 0.5,
+                                          maxWidth: MediaQuery.widthOf(context) * 0.9,
                                         ),
                                         child: const Center(
                                           child: CircularProgressIndicator.adaptive(),

@@ -233,6 +233,19 @@ class _Body extends ConsumerWidget {
                 );
               },
             ),
+            SwitchSettingTile(
+              // TODO l10n
+              title: const Text('Move on release'),
+              subtitle: const Text(
+                'When moving a piece by tapping, the move is made when you lift '
+                'your finger, letting you slide to change the destination square.',
+                maxLines: 5,
+              ),
+              value: boardPrefs.moveOnRelease,
+              onChanged: (value) {
+                ref.read(boardPreferencesProvider.notifier).toggleMoveOnRelease();
+              },
+            ),
             SettingsListTile(
               settingsLabel: Text(
                 context.l10n.preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook,

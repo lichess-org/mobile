@@ -1,4 +1,4 @@
-import 'dart:ui' show Color, Locale;
+import 'dart:ui' show Locale;
 
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
@@ -58,27 +58,6 @@ class LocaleConverter implements JsonConverter<Locale?, Map<String, dynamic>?> {
             'scriptCode': locale.scriptCode,
           }
         : null;
-  }
-}
-
-class ColorConverter implements JsonConverter<Color?, Map<String, dynamic>?> {
-  const ColorConverter();
-
-  @override
-  Color? fromJson(Map<String, dynamic>? json) {
-    return json != null
-        ? Color.from(
-            alpha: json['a'] as double,
-            red: json['r'] as double,
-            green: json['g'] as double,
-            blue: json['b'] as double,
-          )
-        : null;
-  }
-
-  @override
-  Map<String, dynamic>? toJson(Color? color) {
-    return color != null ? {'a': color.a, 'r': color.r, 'g': color.g, 'b': color.b} : null;
   }
 }
 

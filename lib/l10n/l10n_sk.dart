@@ -9,7 +9,7 @@ class AppLocalizationsSk extends AppLocalizations {
   AppLocalizationsSk([String locale = 'sk']) : super(locale);
 
   @override
-  String get mobileAccount => 'Account';
+  String get mobileAccount => 'Účet';
 
   @override
   String get mobileAccountPreferences => 'Preferencie účtu';
@@ -70,7 +70,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Na zobrazenie tejto stránky musíte byť prihlásený.';
 
   @override
-  String get mobileNewGame => 'New game';
+  String get mobileNewGame => 'Nová hra';
 
   @override
   String get mobileNoSearchResults => 'Nič sa nenašlo';
@@ -248,7 +248,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileWelcomeToLichessApp => 'Vitajte v Lichess aplikácii!';
 
   @override
-  String get mobileViewGame => 'View Game';
+  String get mobileViewGame => 'Zobraziť hru';
 
   @override
   String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
@@ -4490,10 +4490,10 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
-  String get like => 'Like';
+  String get like => 'To sa mi páči';
 
   @override
-  String get liked => 'Liked';
+  String get liked => 'Páči sa mi';
 
   @override
   String get quickPairing => 'Rýchle nájdenie súpera';

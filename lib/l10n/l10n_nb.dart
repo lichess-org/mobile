@@ -2527,10 +2527,10 @@ class AppLocalizationsNb extends AppLocalizations {
   String get blackDidntMove => 'Svart flyttet ikke';
 
   @override
-  String get whiteAborted => 'White aborted the game';
+  String get whiteAborted => 'Hvit avbrøt partiet';
 
   @override
-  String get blackAborted => 'Black aborted the game';
+  String get blackAborted => 'Svart avbrøt partiet';
 
   @override
   String get requestAComputerAnalysis => 'Be om computeranalyse';
@@ -4437,7 +4437,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get like => 'Lik';
 
   @override
-  String get liked => 'Likte';
+  String get liked => 'Likt';
 
   @override
   String get quickPairing => 'Raskt parti';

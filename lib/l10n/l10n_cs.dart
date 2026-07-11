@@ -9,7 +9,7 @@ class AppLocalizationsCs extends AppLocalizations {
   AppLocalizationsCs([String locale = 'cs']) : super(locale);
 
   @override
-  String get mobileAccount => 'Account';
+  String get mobileAccount => 'Účet';
 
   @override
   String get mobileAccountPreferences => 'Předvolby účtu';
@@ -266,7 +266,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileTournamentCompleted => 'Completed';
 
   @override
-  String get mobileTournamentJumpToMyPage => 'Jump to my page';
+  String get mobileTournamentJumpToMyPage => 'Přejít na moji stránku';
 
   @override
   String get mobileDisplayModeCompact => 'Kompaktní';
@@ -302,7 +302,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get variantChess960Title => 'Počáteční pozice je zadních figur náhodná.';
 
   @override
-  String get variantKingOfTheHill => 'Král hory';
+  String get variantKingOfTheHill => 'King of the Hill';
 
   @override
   String get variantKingOfTheHillTitle => 'Přines svého krále do středu a vyhraj hru.';
@@ -323,13 +323,13 @@ class AppLocalizationsCs extends AppLocalizations {
   String get variantAtomic => 'Atomic';
 
   @override
-  String get variantAtomicTitle => 'Nuke your opponent\'s king to win.';
+  String get variantAtomicTitle => 'Pro výhru vyhoďte krále protistrany do povětří.';
 
   @override
   String get variantHorde => 'Horde';
 
   @override
-  String get variantHordeTitle => 'One side has a large number of pawns, the other has a normal army.';
+  String get variantHordeTitle => 'Jedna strana má velký počet pěšců, druhá má normální pěšcovou „armádu“.';
 
   @override
   String get variantRacingKings => 'Racing Kings';
@@ -341,13 +341,13 @@ class AppLocalizationsCs extends AppLocalizations {
   String get variantCrazyhouse => 'Crazyhouse';
 
   @override
-  String get variantCrazyhouseTitle => 'Captured pieces can be dropped back on the board instead of moving a piece.';
+  String get variantCrazyhouseTitle => 'Vzané figury mohou být vloženy zpět na šachovnici místo pohybu figury.';
 
   @override
   String get variantFromPosition => 'Z pozice';
 
   @override
-  String get variantFromPositionTitle => 'Standard chess from a custom position';
+  String get variantFromPositionTitle => 'Standardní šachy z vlastní pozice';
 
   @override
   String get activityActivity => 'Aktivita';
@@ -989,7 +989,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get broadcastOfficialStandings => 'Oficiální pořadí';
 
   @override
-  String get broadcastRegulations => 'Regulations';
+  String get broadcastRegulations => 'Předpisy';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -1012,7 +1012,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get broadcastScore => 'Skóre';
 
   @override
-  String get broadcastStandingsDisclaimer => 'Standings are calculated using broadcasted games and may differ from official results.';
+  String get broadcastStandingsDisclaimer => 'Předběžné výsledky se vypočítávají pomocí vysílaných her a mohou se lišit od skutečných výsledků.';
 
   @override
   String get broadcastAllTeams => 'Všechny týmy';
@@ -1059,23 +1059,23 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
-  String get broadcastMatchPoints => 'Match Points';
+  String get broadcastMatchPoints => 'Body zápasů';
 
   @override
-  String get broadcastGamePoints => 'Game Points';
+  String get broadcastGamePoints => 'Body hry';
 
   @override
-  String get broadcastMatches => 'Matches';
+  String get broadcastMatches => 'Hry';
 
   @override
-  String get broadcastMatchHistory => 'Match History';
+  String get broadcastMatchHistory => 'Historie zápasů';
 
   @override
-  String get broadcastTeamResults => 'Team Results';
+  String get broadcastTeamResults => 'Výsledky týmu';
 
   @override
   String broadcastTermsAutomaticallyTranslated(String param) {
-    return 'The following term(s) will be automatically translated: $param.';
+    return 'Následující termín či termíny budou automaticky přeloženy: $param.';
   }
 
   @override
@@ -1117,7 +1117,7 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
-  String get broadcastQuarterfinals => 'Quarterfinals';
+  String get broadcastQuarterfinals => 'Čtvrtfinále';
 
   @override
   String get broadcastSemifinals => 'Semifinále';
@@ -1130,7 +1130,7 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String broadcastGameX(String param) {
-    return 'Game $param';
+    return 'Hra $param';
   }
 
   @override
@@ -1621,7 +1621,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Turnaj brzy začne';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
+  String get preferencesNotifyBroadcasts => 'Vysílání, ke kterým jste se přihlásili';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Dochází čas na korespondenčních hodinách';
@@ -1645,7 +1645,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get preferencesBlindfold => 'Páska přes oči';
 
   @override
-  String get preferencesShowClockOnTheLeft => 'Show on the left on mobile devices';
+  String get preferencesShowClockOnTheLeft => 'Zobrazit vlevo na mobilních zařízeních';
 
   @override
   String get puzzlePuzzles => 'Úlohy';
@@ -1908,8 +1908,10 @@ class AppLocalizationsCs extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count puzzles found in games by $param2',
-      one: 'One puzzle found in games by $param2',
+      other: 'Nalezeno $count úloh z her od $param2',
+      many: 'Nalezeno $count úloh z her od $param2',
+      few: 'Nalezeny $count úlohy z her od $param2',
+      one: 'Nalezena jedna úloha z her od $param2',
     );
     return '$_temp0';
   }
@@ -1983,16 +1985,16 @@ class AppLocalizationsCs extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Mat krále na poslední řadě, kde je uvězněn vlastními figurami.';
 
   @override
-  String get puzzleThemeBalestraMate => 'Balestra mate';
+  String get puzzleThemeBalestraMate => 'Mat typu „Balestra“';
 
   @override
   String get puzzleThemeBalestraMateDescription => 'Střelec dává mat, zatímco královna blokuje zbylé únikové pole';
 
   @override
-  String get puzzleThemeBlindSwineMate => 'Blind Swine mate';
+  String get puzzleThemeBlindSwineMate => 'Mat typu „Blind Swine“';
 
   @override
-  String get puzzleThemeBlindSwineMateDescription => 'Two rooks team up to mate the king in an area of 2 by 2 squares.';
+  String get puzzleThemeBlindSwineMateDescription => 'Dva věže se spojí, aby daly mat králi v oblasti 2 krát 2 políčka.';
 
   @override
   String get puzzleThemeBishopEndgame => 'Střelcové koncovky';
@@ -2019,16 +2021,16 @@ class AppLocalizationsCs extends AppLocalizations {
   String get puzzleThemeCapturingDefenderDescription => 'Sebrání figury, která brání jinou figuru, a poté dalším tahem dobereme tuto nechráněnou figuru.';
 
   @override
-  String get puzzleThemeCollinearMove => 'Collinear move';
+  String get puzzleThemeCollinearMove => 'Kolineární tah';
 
   @override
-  String get puzzleThemeCollinearMoveDescription => 'Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.';
+  String get puzzleThemeCollinearMoveDescription => 'Dvě soupeřící figurky stojí proti sobě a jedna se posouvá podél útočné linie, aniž by zajala nepřátelskou figurku.';
 
   @override
   String get puzzleThemeCornerMate => 'Mat v rohu';
 
   @override
-  String get puzzleThemeCornerMateDescription => 'Confine the king to the corner using a rook or queen and a knight to engage the checkmate.';
+  String get puzzleThemeCornerMateDescription => 'Uvězněte krále v rohu pomocí věže nebo dámy a jezdce, abyste zaútočili na mat.';
 
   @override
   String get puzzleThemeCrushing => 'Potrestání';
@@ -2106,7 +2108,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Taktický prvek obsahující braní mimochodem, v rámci kterého může pěšec vzít pěšce soupeřova, který prošel přes ohrožené pole pomocí tahu o dvě pole z druhé řady.';
 
   @override
-  String get puzzleThemeEpauletteMate => 'Epaulette mate';
+  String get puzzleThemeEpauletteMate => 'Mat typu „Epaulette“';
 
   @override
   String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
@@ -2154,19 +2156,19 @@ class AppLocalizationsCs extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Věž je vedle soupeřova krále a je podporován dámou, která též blokuje úniková políčka krále. Věž a dáma tak společně uvězní soupeřova krále ve 3 krát 3 „smrtící zóně“.';
 
   @override
-  String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
+  String get puzzleThemePillsburysMate => 'Pillsburyho mat';
 
   @override
   String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
 
   @override
-  String get puzzleThemeMorphysMate => 'Morphy\'s mate';
+  String get puzzleThemeMorphysMate => 'Morphyův mat';
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
 
   @override
-  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+  String get puzzleThemeSwallowstailMate => 'Mat typu „Swallow\'s tail“';
 
   @override
   String get puzzleThemeSwallowstailMateDescription => 'A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.';
@@ -2262,7 +2264,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get puzzleThemeOpeningDescription => 'Taktický obrat v zahájení.';
 
   @override
-  String get puzzleThemeOperaMate => 'Opera mate';
+  String get puzzleThemeOperaMate => 'Mat typu „Opera“';
 
   @override
   String get puzzleThemeOperaMateDescription => 'Check the king with a rook and use a bishop to defend the rook.';
@@ -2429,7 +2431,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get gameMode => 'Herní mód';
 
   @override
-  String get createLobbyGame => 'Create lobby game';
+  String get createLobbyGame => 'Vytvořit hru v lobby';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Pro pozvání někoho ke hře využijte tento odkaz';
@@ -2444,10 +2446,10 @@ class AppLocalizationsCs extends AppLocalizations {
   String get orLetYourOpponentScanQrCode => 'Nebo nechte soupeře naskenovat tento QR kód';
 
   @override
-  String get reusableChallengeUrl => 'Reusable challenge URL';
+  String get reusableChallengeUrl => 'Znovupoužitelné URL výzvy';
 
   @override
-  String get permanentLinkForAnyoneToChallengeYou => 'A permanent link for anyone to challenge you with these exact settings.';
+  String get permanentLinkForAnyoneToChallengeYou => 'Trvalý odkaz pro každého, kdo vás vyzve, s tímto přesným nastavením.';
 
   @override
   String get waiting => 'Čeká se';
@@ -2581,10 +2583,10 @@ class AppLocalizationsCs extends AppLocalizations {
   String get blackDidntMove => 'Černý netáhl';
 
   @override
-  String get whiteAborted => 'White aborted the game';
+  String get whiteAborted => 'Bílý opustil hru';
 
   @override
-  String get blackAborted => 'Black aborted the game';
+  String get blackAborted => 'Černý opustil hru';
 
   @override
   String get requestAComputerAnalysis => 'Vyžádat počítačovou analýzu';
@@ -2703,12 +2705,12 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String minRatingX(String param) {
-    return 'Minimum rating of $param';
+    return 'Minimální rating: $param';
   }
 
   @override
   String maxRatingX(String param) {
-    return 'Maximum rating of $param';
+    return 'Maximální rating: $param';
   }
 
   @override
@@ -2797,16 +2799,16 @@ class AppLocalizationsCs extends AppLocalizations {
   String get showVariationArrows => 'Zobrazit šipky variant';
 
   @override
-  String get visualMotifs => 'Visual motifs';
+  String get visualMotifs => 'Vizuální motivy';
 
   @override
-  String get undefendedPieces => 'Undefended pieces';
+  String get undefendedPieces => 'Nebráněné figury';
 
   @override
-  String get pinnedPieces => 'Pinned pieces';
+  String get pinnedPieces => 'Připnuté figury';
 
   @override
-  String get checkableKing => 'Checkable king';
+  String get checkableKing => 'Král, kterého lze dát do šachu';
 
   @override
   String get multipleLines => 'Počet variant';
@@ -2815,19 +2817,19 @@ class AppLocalizationsCs extends AppLocalizations {
   String get multipleLinesDescription => 'Set number of evaluation lines and move arrows on the board';
 
   @override
-  String get searchTime => 'Search time';
+  String get searchTime => 'Čas hledání';
 
   @override
-  String get searchTimeDescription => 'Set time to evaluate fresh positions';
+  String get searchTimeDescription => 'Nastavit čas pro vyhodnocení čerstvých pozic';
 
   @override
-  String get threads => 'Threads';
+  String get threads => 'Vlákna';
 
   @override
   String get threadsDescription => 'Set this below your CPU\'s thread count, the ticks mark a good safe choice';
 
   @override
-  String get threadsDescriptionMobile => 'More threads will use more battery for better analysis';
+  String get threadsDescriptionMobile => 'Více vláken bude používat více baterie pro lepší analýzu';
 
   @override
   String get cpus => 'Procesor(y)';
@@ -2836,7 +2838,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get memory => 'Paměť';
 
   @override
-  String get memoryDescription => 'Higher values may improve performance';
+  String get memoryDescription => 'Vyšší hodnoty mohou zlepšit výkon';
 
   @override
   String get infiniteAnalysis => 'Nekonečná analýza';
@@ -2951,7 +2953,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get variants => 'Varianty';
 
   @override
-  String get variantsDescription => 'More ways to play';
+  String get variantsDescription => 'Více způsobů, jak hrát';
 
   @override
   String get timeControl => 'Tempo hry';
@@ -2996,7 +2998,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get signupUsernameHint => 'Zvolte si vhodné a nezávadné uživatelské jméno. Později ho nelze změnit a účty s nevhodnými uživatelskými jmény budou uzavřeny!';
 
   @override
-  String get signupEmailPromise => 'We will only send you emails about your account and never share your email.';
+  String get signupEmailPromise => 'Pošleme vám pouze e-maily týkající se vašeho účtu a váš e-mail nikdy nikomu nesdílíme.';
 
   @override
   String get password => 'Heslo';
@@ -3075,7 +3077,7 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String sendEmailForAccountVerification(String param) {
-    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
+    return 'Pokud nemůžete najít svůj potvrzovací e-mail, pošlete nám e-mail na adresu $param a potvrdíme vám váš účet.';
   }
 
   @override
@@ -3176,7 +3178,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get unlimited => 'Bez hodin';
 
   @override
-  String get unlimitedDescription => 'Take all the time you need';
+  String get unlimitedDescription => 'Vezměte si, kolik času potřebujete';
 
   @override
   String get mode => 'Režim hry';
@@ -3331,7 +3333,7 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
-  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Filtry hodnocení jsou uzamčeny, protože vaše hodnocení není stabilní. Hraní hodnocených her zvýší stabilitu vašeho hodnocení.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3423,7 +3425,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get playerNames => 'Jména hráčů';
 
   @override
-  String get moveAnnotations => 'Move annotations';
+  String get moveAnnotations => 'Anotace tahů';
 
   @override
   String get pasteTheFenStringHere => 'Zde vložte FEN řetězec';
@@ -3648,7 +3650,7 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
-  String get randomChess960Position => 'Random Chess960 position';
+  String get randomChess960Position => 'Náhodná pozice Chess960';
 
   @override
   String get startPosition => 'Základní postavení';
@@ -3744,7 +3746,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get autoSwitch => 'Přepnout automaticky';
 
   @override
-  String get puzzles => 'Puzzle';
+  String get puzzles => 'Úlohy';
 
   @override
   String get onlineBots => 'Online roboti';
@@ -3877,13 +3879,13 @@ class AppLocalizationsCs extends AppLocalizations {
   String get invalidAuthenticationCode => 'Neplatný ověřovací kód';
 
   @override
-  String get clearField => 'Clear field';
+  String get clearField => 'Vyčistit pole';
 
   @override
-  String get orSeparator => 'Or';
+  String get orSeparator => 'Nebo';
 
   @override
-  String get logInByEmail => 'Log in by email';
+  String get logInByEmail => 'Přihlásit se e-mailem';
 
   @override
   String get emailMeALink => 'Pošlete mi odkaz e-mailem';
@@ -4112,7 +4114,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get watch => 'Sledujte';
 
   @override
-  String get videoLibrary => 'Video knihovna';
+  String get videoLibrary => 'Videoknihovna';
 
   @override
   String get streamersMenu => 'Streameři';
@@ -4274,7 +4276,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get togglePositionAnnotations => 'Přepni zvýraznění pozice';
 
   @override
-  String get toggleObservationAnnotations => 'Toggle observation annotations';
+  String get toggleObservationAnnotations => 'Přepnout anotace pozorování';
 
   @override
   String get variationArrowsInfo => 'Šipky variant umožňují navigaci bez použití seznamu tahů.';
@@ -4488,10 +4490,10 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
-  String get like => 'Like';
+  String get like => 'To se mi líbí';
 
   @override
-  String get liked => 'Liked';
+  String get liked => 'Líbí se mi';
 
   @override
   String get quickPairing => 'Rychlá hra';
@@ -4826,7 +4828,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get bullet => 'Bullet';
 
   @override
-  String get blitz => 'Bleskové šachy';
+  String get blitz => 'Blitz';
 
   @override
   String get rapid => 'Rapid';
@@ -4891,7 +4893,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get theForumEtiquette => 'pravidla chování ve fórech';
 
   @override
-  String get pleaseBeNiceInTheForum => 'Please be nice in the forum.';
+  String get pleaseBeNiceInTheForum => 'Prosím, ve fóru buďte milí.';
 
   @override
   String get thisTopicIsArchived => 'Toto téma se archivovalo a nelze na něj dále odpovídat.';
@@ -5041,7 +5043,7 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String markdownIsAvailable(String param) {
-    return '$param is available for formatting.';
+    return '$param je k dispozici k formátování.';
   }
 
   @override
@@ -5177,7 +5179,7 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String thereAreNoResultsForX(String param) {
-    return 'No results for \"$param\"';
+    return 'Žádné výsledky pro „$param“';
   }
 
   @override

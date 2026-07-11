@@ -89,6 +89,7 @@
   "mobileChallengeCreated": "Вызов создан: вы получите уведомление о начале партии.\nВы можете получить доступ к нему с главной вкладки.",
   "mobilePreviousPage": "Предыдущие",
   "mobileOrImportPgnFile": "Или импортировать в PGN файл",
+  "mobileGoodMoveButThereIsBetter": "Хороший ход, но есть лучше",
   "variantStandard": "Шахматы",
   "variantStandardTitle": "Стандартные правила шахмат (FIDE)",
   "variantChess960": "Шахматы Фишера",

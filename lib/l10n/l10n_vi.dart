@@ -287,7 +287,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Hoặc nhập một tệp PGN';
 
   @override
-  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+  String get mobileGoodMoveButThereIsBetter => 'Nước đi tốt, nhưng có nước đi tốt hơn nữa';
 
   @override
   String get variantStandard => 'Tiêu chuẩn';
@@ -2626,7 +2626,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String maxRatingX(String param) {
-    return 'Maximum rating of $param';
+    return 'Hệ số tối đa của $param';
   }
 
   @override

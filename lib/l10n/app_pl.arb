@@ -89,6 +89,7 @@
   "mobileChallengeCreated": "Wyzwanie utworzone: otrzymasz powiadomienie, gdy partia się rozpocznie.\nMożesz zobaczyć je w głównej zakładce.",
   "mobilePreviousPage": "Wróć",
   "mobileOrImportPgnFile": "Lub zaimportuj plik PGN",
+  "mobileGoodMoveButThereIsBetter": "Dobry ruch, ale jest lepszy",
   "variantStandard": "Standardowe",
   "variantStandardTitle": "Standardowe zasady szachów (FIDE)",
   "variantChess960": "Szachy 960",

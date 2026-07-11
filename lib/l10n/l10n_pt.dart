@@ -6907,6 +6907,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get mobileOrImportPgnFile => 'Ou importe um arquivo PGN';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Bom lance, mas existe um ainda melhor';
+
+  @override
   String get variantStandard => 'Clássico';
 
   @override

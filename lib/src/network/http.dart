@@ -142,7 +142,7 @@ final defaultClientProvider = Provider<DefaultClient>((Ref ref) {
   final client = DefaultClient(ref.read(httpClientFactoryProvider)(), userAgent: userAgent);
   ref.onDispose(() => client.close());
   return client;
-});
+}, name: 'DefaultHttpClientProvider');
 
 /// The http client configured to make requests to the lichess API.
 ///
@@ -160,7 +160,7 @@ final lichessClientProvider = Provider<LichessClient>((Ref ref) {
   );
   ref.onDispose(() => client.close());
   return client;
-});
+}, name: 'LichessHttpClientProvider');
 
 Duration _defaultDelay(int retryCount) =>
     const Duration(milliseconds: 900) * math.pow(1.5, retryCount);
@@ -472,7 +472,7 @@ class LichessClient implements Client {
 /// * Sets the user-agent header with the app version, build number, and device info.
 /// * Logs all requests and responses with status code >= 400.
 class DefaultClient implements Client {
-  DefaultClient(this._inner, {required String userAgent}) : _userAgent = userAgent;
+  DefaultClient(this._inner, {required this._userAgent});
 
   final Client _inner;
   final String _userAgent;
@@ -839,14 +839,6 @@ extension ClientExtension on Client {
         response.request?.url,
       );
     }
-  }
-}
-
-extension ClientWidgetRefExtension on WidgetRef {
-  /// Runs [fn] with a [LichessClient].
-  Future<T> withClient<T>(Future<T> Function(LichessClient) fn) async {
-    final client = read(lichessClientProvider);
-    return await fn(client);
   }
 }
 

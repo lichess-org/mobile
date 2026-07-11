@@ -28,6 +28,8 @@ sealed class LightUser with _$LightUser {
 
   bool get isPatron => patronColor != null;
 
+  bool get isBot => title == 'BOT';
+
   factory LightUser.fromJson(Map<String, dynamic> json) => _$LightUserFromJson(json);
 }
 

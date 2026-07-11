@@ -287,7 +287,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileOrImportPgnFile => '또는 PGN 파일 가져오기';
 
   @override
-  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+  String get mobileGoodMoveButThereIsBetter => '좋은 수지만, 더 좋은 수가 있습니다';
 
   @override
   String get variantStandard => '스탠다드';
@@ -5102,7 +5102,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get tags => '태그';
 
   @override
-  String get enPassant => '앙파상';
+  String get enPassant => '앙파상 권리';
 
   @override
   String opponentLeftCounter(int count) {

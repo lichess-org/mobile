@@ -291,7 +291,7 @@ class _BodyState extends ConsumerState<_Body> {
   }
 
   void _showNewGameDialog({required Variant? initialVariant}) {
-    final double screenHeight = MediaQuery.sizeOf(context).height;
+    final double screenHeight = MediaQuery.heightOf(context);
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
@@ -472,7 +472,7 @@ class _Player extends ConsumerWidget {
     if (isStockfish) {
       return Row(
         children: [
-          Image.asset('assets/images/stockfish/icon.png', width: 44, height: 44),
+          Image.asset('assets/images/stockfish/icon.webp', width: 44, height: 44),
           const SizedBox(width: 8),
           Expanded(
             child: Column(
@@ -833,24 +833,6 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
               ),
             ),
             SettingsListTile(
-              settingsLabel: Text(context.l10n.side),
-              settingsValue: _sideChoiceLabel(context, _selectedSideChoice),
-              onTap: () {
-                showChoicePicker(
-                  context,
-                  choices: (widget.initialFen != null || _selectedVariant == Variant.fromPosition)
-                      ? SideChoice.values
-                      : SideChoice.values.where((c) => c != SideChoice.nextToPlay).toList(),
-                  selectedItem: _selectedSideChoice,
-                  labelBuilder: (SideChoice choice) => Text(_sideChoiceLabel(context, choice)),
-                  onSelectedItemChanged: (SideChoice choice) {
-                    setState(() => _selectedSideChoice = choice);
-                    ref.read(offlineComputerGamePreferencesProvider.notifier).setSideChoice(choice);
-                  },
-                );
-              },
-            ),
-            SettingsListTile(
               settingsLabel: Text(context.l10n.variant),
               settingsValue: _selectedVariant.label(context.l10n),
               onTap: () {
@@ -893,6 +875,24 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
                       )
                     : const SizedBox.shrink(),
               ),
+            SettingsListTile(
+              settingsLabel: Text(context.l10n.side),
+              settingsValue: _sideChoiceLabel(context, _selectedSideChoice),
+              onTap: () {
+                showChoicePicker(
+                  context,
+                  choices: (widget.initialFen != null || _selectedVariant == Variant.fromPosition)
+                      ? SideChoice.values
+                      : SideChoice.values.where((c) => c != SideChoice.nextToPlay).toList(),
+                  selectedItem: _selectedSideChoice,
+                  labelBuilder: (SideChoice choice) => Text(_sideChoiceLabel(context, choice)),
+                  onSelectedItemChanged: (SideChoice choice) {
+                    setState(() => _selectedSideChoice = choice);
+                    ref.read(offlineComputerGamePreferencesProvider.notifier).setSideChoice(choice);
+                  },
+                );
+              },
+            ),
             SwitchSettingTile(
               title: const Text('Practice mode'),
               subtitle: const Text('Get feedback on your moves'),

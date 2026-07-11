@@ -19,7 +19,7 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-const kDefaultBlogImage = AssetImage('assets/images/broadcast_image.png');
+const kDefaultBlogImage = AssetImage('assets/images/broadcast_image.webp');
 const kBlogCardItemContentPadding = EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0);
 const kDefaultCardOpacity = 0.9;
 
@@ -275,8 +275,7 @@ final Map<String, _CardColors?> _colorsCache = {};
 final _dateFormat = DateFormat.MMMd();
 
 class _BlogCardContent extends StatelessWidget {
-  const _BlogCardContent({required this.post, required _CardColors? cardColors})
-    : _cardColors = cardColors;
+  const _BlogCardContent({required this.post, required this._cardColors});
 
   final BlogPost post;
   final _CardColors? _cardColors;

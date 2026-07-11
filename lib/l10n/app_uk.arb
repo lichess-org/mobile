@@ -89,6 +89,7 @@
   "mobileChallengeCreated": "Виклик створено: Ви отримаєте повідомлення, коли почнеться гра.\nВи можете перейти до неї з головної сторінки.",
   "mobilePreviousPage": "Попередня",
   "mobileOrImportPgnFile": "Чи завантажте файл PGN",
+  "mobileGoodMoveButThereIsBetter": "Хороший хід, але є кращий",
   "variantStandard": "Стандартні шахи",
   "variantStandardTitle": "Стандартні правила шахів (FIDE)",
   "variantChess960": "Шахи-960",

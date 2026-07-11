@@ -287,7 +287,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Lub zaimportuj plik PGN';
 
   @override
-  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+  String get mobileGoodMoveButThereIsBetter => 'Dobry ruch, ale jest lepszy';
 
   @override
   String get variantStandard => 'Standardowe';

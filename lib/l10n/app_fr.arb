@@ -89,6 +89,7 @@
   "mobileChallengeCreated": "Défi créé : Vous recevrez une notification lorsque la partie commencera.\nVous pouvez y accéder depuis l’onglet Accueil.",
   "mobilePreviousPage": "Précédent",
   "mobileOrImportPgnFile": "Importer un fichier PGN",
+  "mobileGoodMoveButThereIsBetter": "Bien joué, mais il y a mieux",
   "variantStandard": "Standard",
   "variantStandardTitle": "Règles standard des échecs (FIDE)",
   "variantChess960": "Échecs 960",
