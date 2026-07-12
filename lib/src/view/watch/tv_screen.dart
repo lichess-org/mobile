@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/chat/chat.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/game/game_board_params.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/tv/tv_controller.dart';
@@ -67,11 +68,32 @@ class _TvScreenState extends ConsumerState<TvScreen> {
 
   final _whiteClockKey = GlobalKey(debugLabel: 'whiteClockOnTvScreen');
   final _blackClockKey = GlobalKey(debugLabel: 'blackClockOnTvScreen');
+  bool _showGameInfo = false;
 
   @override
   Widget build(BuildContext context) {
     final asyncGameParams = ref.watch(_tvCtrl);
     final gameParams = asyncGameParams.value;
+    final asyncGameState = gameParams != null
+        ? ref.watch(tvGameControllerProvider(gameParams))
+        : null;
+
+    final gameState = asyncGameState?.value;
+    String? gameInfoString;
+
+    if (gameState != null) {
+      final game = gameState.game;
+      final isStandardVariant = game.meta.variant == .standard;
+      final ratedOrCasual = game.meta.rated ? context.l10n.rated : context.l10n.casual;
+
+      final clockTime = game.meta.clock != null
+          ? '${clockLabelInMinutes(game.meta.clock!.initial.inSeconds)}+${game.meta.clock!.increment.inSeconds}'
+          : context.l10n.correspondence;
+
+      gameInfoString = isStandardVariant
+          ? '$clockTime • $ratedOrCasual • ${game.meta.speed.label(context.l10n)}'
+          : '$clockTime • $ratedOrCasual • ${game.meta.variant.label(context.l10n)}';
+    }
 
     return FocusDetector(
       onFocusRegained: () {
@@ -88,16 +110,27 @@ class _TvScreenState extends ConsumerState<TvScreen> {
       child: WakelockWidget(
         child: Scaffold(
           appBar: AppBar(
-            title: widget.channel != null
-                ? Text('${widget.channel!.label(context.l10n)} TV')
-                : Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      UserFullNameWidget(user: widget.user),
-                      const SizedBox(width: 4.0),
-                      const Icon(Icons.live_tv),
-                    ],
-                  ),
+            title: InkWell(
+              onTap: gameInfoString != null
+                  ? () => setState(() => _showGameInfo = !_showGameInfo)
+                  : null,
+              borderRadius: BorderRadius.circular(4.0),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+                child: (_showGameInfo && gameInfoString != null)
+                    ? Text(gameInfoString, style: const TextStyle(fontSize: 15.0))
+                    : (widget.channel != null
+                          ? Text('${widget.channel!.label(context.l10n)} TV')
+                          : Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                UserFullNameWidget(user: widget.user),
+                                const SizedBox(width: 4.0),
+                                const Icon(Icons.live_tv),
+                              ],
+                            )),
+              ),
+            ),
             actions: [
               if (gameParams != null) _WatcherButton(gameParams: gameParams),
               const ToggleSoundButton(),
