@@ -74,7 +74,43 @@ enum Perf {
   }
 
   String shortLabel(AppLocalizations l10n) {
-    return shortTitle;
+    switch (this) {
+      case Perf.ultraBullet:
+        return l10n.mobilePerfShortUltraBullet;
+      case Perf.bullet:
+        return l10n.mobilePerfShortBullet;
+      case Perf.blitz:
+        return l10n.mobilePerfShortBlitz;
+      case Perf.rapid:
+        return l10n.mobilePerfShortRapid;
+      case Perf.classical:
+        return l10n.mobilePerfShortClassical;
+      case Perf.correspondence:
+        return l10n.mobilePerfShortCorrespondence;
+      case Perf.fromPosition:
+        return l10n.mobilePerfShortFromPosition;
+      case Perf.chess960:
+        return l10n.mobilePerfShortChess960;
+      case Perf.antichess:
+        return l10n.mobilePerfShortAntichess;
+      case Perf.kingOfTheHill:
+        return l10n.mobilePerfShortKingOfTheHill;
+      case Perf.threeCheck:
+        return l10n.mobilePerfShortThreeCheck;
+      case Perf.atomic:
+        return l10n.mobilePerfShortAtomic;
+      case Perf.horde:
+        return l10n.mobilePerfShortHorde;
+      case Perf.racingKings:
+        return l10n.mobilePerfShortRacingKings;
+      case Perf.crazyhouse:
+        return l10n.mobilePerfShortCrazyhouse;
+      case Perf.puzzle:
+        return l10n.mobilePerfShortPuzzle;
+      case Perf.storm:
+      case Perf.streak:
+        return shortTitle;
+    }
   }
 
   factory Perf.fromVariantAndSpeed(Variant variant, Speed speed) {
