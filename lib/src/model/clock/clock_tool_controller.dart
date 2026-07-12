@@ -212,7 +212,8 @@ class ClockToolController extends Notifier<ClockState> {
     // has completed at least one move; otherwise behave normally.
     final bool hasActiveMoved = active != null && state.getMovesCount(active) > 0;
 
-    if (active != null && (state.options.getStartTime(active).inMilliseconds != 0 || hasActiveMoved)) {
+    if (active != null &&
+        (state.options.getStartTime(active).inMilliseconds != 0 || hasActiveMoved)) {
       final delay = _pausedDelayRemaining;
       _markDelay(delay);
       _clock.start(delay: delay);

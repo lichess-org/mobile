@@ -30,7 +30,9 @@ class ClockToolPreferences extends Notifier<ClockToolPrefs>
   }
 
   Future<void> setTimeIncrement(TimeIncrement timeIncrement) {
-    return save(state.copyWith(topTimeIncrement: timeIncrement, bottomTimeIncrement: timeIncrement));
+    return save(
+      state.copyWith(topTimeIncrement: timeIncrement, bottomTimeIncrement: timeIncrement),
+    );
   }
 
   Future<void> setTopTimeIncrement(TimeIncrement timeIncrement) {
