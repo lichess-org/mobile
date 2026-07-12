@@ -30,7 +30,15 @@ class ClockToolPreferences extends Notifier<ClockToolPrefs>
   }
 
   Future<void> setTimeIncrement(TimeIncrement timeIncrement) {
-    return save(state.copyWith(timeIncrement: timeIncrement));
+    return save(state.copyWith(topTimeIncrement: timeIncrement, bottomTimeIncrement: timeIncrement));
+  }
+
+  Future<void> setTopTimeIncrement(TimeIncrement timeIncrement) {
+    return save(state.copyWith(topTimeIncrement: timeIncrement));
+  }
+
+  Future<void> setBottomTimeIncrement(TimeIncrement timeIncrement) {
+    return save(state.copyWith(bottomTimeIncrement: timeIncrement));
   }
 }
 
@@ -38,9 +46,15 @@ class ClockToolPreferences extends Notifier<ClockToolPrefs>
 sealed class ClockToolPrefs with _$ClockToolPrefs implements Serializable {
   const ClockToolPrefs._();
 
-  const factory ClockToolPrefs({required TimeIncrement timeIncrement}) = _ClockToolPrefs;
+  const factory ClockToolPrefs({
+    required TimeIncrement topTimeIncrement,
+    required TimeIncrement bottomTimeIncrement,
+  }) = _ClockToolPrefs;
 
-  static const defaults = ClockToolPrefs(timeIncrement: TimeIncrement(600, 0));
+  static const defaults = ClockToolPrefs(
+    topTimeIncrement: TimeIncrement(600, 0),
+    bottomTimeIncrement: TimeIncrement(600, 0),
+  );
 
   factory ClockToolPrefs.fromJson(Map<String, dynamic> json) {
     try {

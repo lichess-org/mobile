@@ -33,7 +33,10 @@ class ClockToolController extends Notifier<ClockState> {
     ClockSide.top: false,
     ClockSide.bottom: false,
   };
-  late Duration _emergencyThreshold;
+  final Map<ClockSide, Duration> _emergencyThresholds = {
+    ClockSide.top: Duration.zero,
+    ClockSide.bottom: Duration.zero,
+  };
   DateTime? _delayStartedAt;
   Duration? _delayDuration;
   Duration? _pausedDelayRemaining;
@@ -43,19 +46,23 @@ class ClockToolController extends Notifier<ClockState> {
   ClockState build() {
     // using read is good enough as config change updates in-memory state which re-renders the ui
     // and prefs are also saved
-    final timeIncrement = ref.read(clockToolPreferencesProvider).timeIncrement;
-    final time = Duration(seconds: timeIncrement.time);
-    final increment = Duration(seconds: timeIncrement.increment);
-    _emergencyThreshold = _calculateEmergencyThreshold(time);
+    final topTimeIncrement = ref.read(clockToolPreferencesProvider).topTimeIncrement;
+    final topTime = Duration(seconds: topTimeIncrement.time);
+    final topIncrement = Duration(seconds: topTimeIncrement.increment);
+    final bottomTimeIncrement = ref.read(clockToolPreferencesProvider).bottomTimeIncrement;
+    final bottomTime = Duration(seconds: bottomTimeIncrement.time);
+    final bottomIncrement = Duration(seconds: bottomTimeIncrement.increment);
+    _emergencyThresholds[ClockSide.top] = _calculateEmergencyThreshold(topTime);
+    _emergencyThresholds[ClockSide.bottom] = _calculateEmergencyThreshold(bottomTime);
     final options = ClockOptions(
       type: ClockTimeControlType.increment,
-      topTime: time,
-      bottomTime: time,
-      topIncrement: increment,
-      bottomIncrement: increment,
+      topTime: topTime,
+      bottomTime: bottomTime,
+      topIncrement: topIncrement,
+      bottomIncrement: bottomIncrement,
     );
 
-    _clock = ChessClock(blackTime: time, whiteTime: time, onFlag: _onFlagged);
+    _clock = ChessClock(blackTime: topTime, whiteTime: bottomTime, onFlag: _onFlagged);
 
     // Add listeners for both clocks
     _clock.whiteTime.addListener(onClockEmergency);
@@ -88,7 +95,7 @@ class ClockToolController extends Notifier<ClockState> {
     final activeSideTime = activeSide == ClockSide.top
         ? _clock.blackTime.value
         : _clock.whiteTime.value;
-    if (activeSideTime <= _emergencyThreshold) {
+    if (activeSideTime <= _emergencyThresholds[activeSide]!) {
       ref.read(soundServiceProvider).play(Sound.lowTime);
       _hasPlayedLowTimeSound[activeSide] = true;
     }
@@ -117,20 +124,11 @@ class ClockToolController extends Notifier<ClockState> {
     _startActiveSide(playerType.opposite);
   }
 
-  void updateDuration(ClockSide playerType, Duration duration) {
-    if (state.flagged != null || state.paused) {
-      return;
-    }
-
-    _clock.setTimes(
-      whiteTime: playerType == ClockSide.bottom ? duration + state.options.topIncrement : null,
-      blackTime: playerType == ClockSide.top ? duration + state.options.bottomIncrement : null,
-    );
-  }
-
   void updateOptions(TimeIncrement timeIncrement) {
     final options = ClockOptions.fromTimeIncrement(timeIncrement, type: state.options.type);
-    _emergencyThreshold = _calculateEmergencyThreshold(Duration(seconds: timeIncrement.time));
+    final threshold = _calculateEmergencyThreshold(Duration(seconds: timeIncrement.time));
+    _emergencyThresholds[ClockSide.top] = threshold;
+    _emergencyThresholds[ClockSide.bottom] = threshold;
     _hasPlayedLowTimeSound[ClockSide.top] = false;
     _hasPlayedLowTimeSound[ClockSide.bottom] = false;
     _clock.setTimes(blackTime: options.topTime, whiteTime: options.bottomTime);
@@ -156,6 +154,8 @@ class ClockToolController extends Notifier<ClockState> {
           ? Duration(seconds: clock.increment)
           : state.options.bottomIncrement,
     );
+    _emergencyThresholds[player] = _calculateEmergencyThreshold(Duration(seconds: clock.time));
+    _hasPlayedLowTimeSound[player] = false;
     _clock.setTimes(blackTime: options.topTime, whiteTime: options.bottomTime);
     state = ClockState(
       options: options,
@@ -164,7 +164,12 @@ class ClockToolController extends Notifier<ClockState> {
       activeSide: state.activeSide,
       clockOrientation: state.clockOrientation,
     );
-    ref.read(clockToolPreferencesProvider.notifier).setTimeIncrement(clock);
+
+    if (player == ClockSide.top) {
+      ref.read(clockToolPreferencesProvider.notifier).setTopTimeIncrement(clock);
+    } else {
+      ref.read(clockToolPreferencesProvider.notifier).setBottomTimeIncrement(clock);
+    }
   }
 
   void updateClockType(ClockTimeControlType type) {
@@ -205,14 +210,9 @@ class ClockToolController extends Notifier<ClockState> {
     final active = state.activeSide;
     // If the active side started at zero, only resume ticking after that side
     // has completed at least one move; otherwise behave normally.
-    final Duration initialOfActive = active == ClockSide.top
-        ? state.options.topTime
-        : state.options.bottomTime;
-    final bool hasActiveMoved = active == ClockSide.top
-        ? state.topMoves > 0
-        : state.bottomMoves > 0;
+    final bool hasActiveMoved = active != null && state.getMovesCount(active) > 0;
 
-    if (active != null && (initialOfActive.inMilliseconds != 0 || hasActiveMoved)) {
+    if (active != null && (state.options.getStartTime(active).inMilliseconds != 0 || hasActiveMoved)) {
       final delay = _pausedDelayRemaining;
       _markDelay(delay);
       _clock.start(delay: delay);
@@ -229,13 +229,8 @@ class ClockToolController extends Notifier<ClockState> {
     // Start the countdown only if either this is not a zero-start clock
     // or the active side has already made at least one move.
     // This makes 0+increment modes usable.
-    final Duration initialOfActive = activeSide == ClockSide.top
-        ? state.options.topTime
-        : state.options.bottomTime;
-    final bool hasActiveMoved = activeSide == ClockSide.top
-        ? state.topMoves > 0
-        : state.bottomMoves > 0;
-    if (initialOfActive.inMilliseconds != 0 || hasActiveMoved) {
+    final bool hasActiveMoved = state.getMovesCount(activeSide) > 0;
+    if (state.options.getStartTime(activeSide).inMilliseconds != 0 || hasActiveMoved) {
       final delay = _delayFor(activeSide);
       _markDelay(delay);
       _activeTurnStartedWithTime = state.getDuration(activeSide).value;
@@ -339,6 +334,10 @@ sealed class ClockOptions with _$ClockOptions {
 
   bool hasIncrement(ClockSide playerType) {
     return getIncrement(playerType) > 0;
+  }
+
+  Duration getStartTime(ClockSide playerType) {
+    return playerType == ClockSide.top ? topTime : bottomTime;
   }
 }
 
