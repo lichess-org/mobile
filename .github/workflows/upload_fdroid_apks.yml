@@ -34,7 +34,7 @@ jobs:
           rm ${{ env.FLUTTER_ROOT }}/bin/cache/flutter_tools.snapshot
 
       - name: Install dependencies
-        run: flutter pub get
+        run: flutter pub get --enforce-lockfile
 
       - name: Patch dependencies
         run: |
