@@ -124,6 +124,18 @@ class ClockToolController extends Notifier<ClockState> {
     _startActiveSide(playerType.opposite);
   }
 
+  void addTime(ClockSide playerType, Duration duration) {
+    if (!state.started || state.flagged != null || duration <= Duration.zero) {
+      return;
+    }
+
+    final updatedTime = state.getDuration(playerType).value + duration;
+    _clock.setTime(playerType.chessClockSide, updatedTime);
+    if (updatedTime > _emergencyThresholds[playerType]!) {
+      _hasPlayedLowTimeSound[playerType] = false;
+    }
+  }
+
   void updateOptions(TimeIncrement timeIncrement) {
     final options = ClockOptions.fromTimeIncrement(timeIncrement, type: state.options.type);
     final threshold = _calculateEmergencyThreshold(Duration(seconds: timeIncrement.time));
