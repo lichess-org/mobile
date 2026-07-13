@@ -85,9 +85,6 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileOkButton => 'OKÉ';
 
   @override
-  String get mobileOtbBoardView => 'Board view';
-
-  @override
   String get mobileOverTheBoard => 'Asztali játék';
 
   @override

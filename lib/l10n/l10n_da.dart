@@ -85,9 +85,6 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileOkButton => 'Ok';
 
   @override
-  String get mobileOtbBoardView => 'Board view';
-
-  @override
   String get mobileOverTheBoard => 'Spil offline, brug som bræt';
 
   @override

@@ -85,9 +85,6 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileOkButton => 'OK';
 
   @override
-  String get mobileOtbBoardView => 'Board view';
-
-  @override
   String get mobileOverTheBoard => 'Hrať offline, na jednom zariadení';
 
   @override

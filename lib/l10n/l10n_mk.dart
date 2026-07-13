@@ -85,9 +85,6 @@ class AppLocalizationsMk extends AppLocalizations {
   String get mobileOkButton => 'ОК';
 
   @override
-  String get mobileOtbBoardView => 'Board view';
-
-  @override
   String get mobileOverTheBoard => 'Игра за двајца';
 
   @override

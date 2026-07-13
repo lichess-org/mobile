@@ -85,9 +85,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileOkButton => '확인';
 
   @override
-  String get mobileOtbBoardView => 'Board view';
-
-  @override
   String get mobileOverTheBoard => '로컬 게임';
 
   @override

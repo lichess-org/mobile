@@ -85,9 +85,6 @@ class AppLocalizationsEt extends AppLocalizations {
   String get mobileOkButton => 'Hüva';
 
   @override
-  String get mobileOtbBoardView => 'Board view';
-
-  @override
   String get mobileOverTheBoard => 'Üle laua';
 
   @override

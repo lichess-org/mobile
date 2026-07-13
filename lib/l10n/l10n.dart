@@ -340,12 +340,6 @@ abstract class AppLocalizations {
   /// **'OK'**
   String get mobileOkButton;
 
-  /// No description provided for @mobileOtbBoardView.
-  ///
-  /// In en, this message translates to:
-  /// **'Board view'**
-  String get mobileOtbBoardView;
-
   /// No description provided for @mobileOverTheBoard.
   ///
   /// In en, this message translates to:

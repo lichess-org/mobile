@@ -85,9 +85,6 @@ class AppLocalizationsLv extends AppLocalizations {
   String get mobileOkButton => 'Labi';
 
   @override
-  String get mobileOtbBoardView => 'Board view';
-
-  @override
   String get mobileOverTheBoard => 'Šaha galdiņš';
 
   @override

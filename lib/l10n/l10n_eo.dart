@@ -85,9 +85,6 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileOkButton => 'Bone';
 
   @override
-  String get mobileOtbBoardView => 'Board view';
-
-  @override
   String get mobileOverTheBoard => 'Ludi fizike kun aliulo';
 
   @override

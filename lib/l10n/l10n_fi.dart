@@ -85,9 +85,6 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileOkButton => 'OK';
 
   @override
-  String get mobileOtbBoardView => 'Board view';
-
-  @override
   String get mobileOverTheBoard => 'Kaveria vastaan offline-tilassa';
 
   @override

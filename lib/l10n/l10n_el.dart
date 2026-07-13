@@ -85,9 +85,6 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileOkButton => 'ΟΚ';
 
   @override
-  String get mobileOtbBoardView => 'Board view';
-
-  @override
   String get mobileOverTheBoard => 'Παρτίδα χωρίς σύνδεση';
 
   @override

@@ -85,9 +85,6 @@ class AppLocalizationsBn extends AppLocalizations {
   String get mobileOkButton => 'কোনো সমস্যা নেই';
 
   @override
-  String get mobileOtbBoardView => 'Board view';
-
-  @override
   String get mobileOverTheBoard => 'একই বোর্ড/ডিভাইসে';
 
   @override

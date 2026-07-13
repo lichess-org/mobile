@@ -85,9 +85,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileOkButton => 'موافق';
 
   @override
-  String get mobileOtbBoardView => 'Board view';
-
-  @override
   String get mobileOverTheBoard => 'على الرقعة';
 
   @override
