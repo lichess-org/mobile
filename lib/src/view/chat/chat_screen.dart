@@ -287,16 +287,6 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
   final _textController = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
-    final draft = ref.read(chatProvider(widget.options)).asData?.value?.inputText ?? '';
-    _textController.text = draft;
-    _textController.addListener(() {
-      ref.read(chatNotifierProvider(widget.options)).setInputText(_textController.text);
-    });
-  }
-
-  @override
   void dispose() {
     _textController.dispose();
     super.dispose();
@@ -304,15 +294,14 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
 
   @override
   Widget build(BuildContext context) {
-    final authUser = ref.watch(authControllerProvider);
+    final isLoggedIn = ref.watch(isLoggedInProvider);
     final sendButton = ValueListenableBuilder<TextEditingValue>(
       valueListenable: _textController,
       builder: (context, value, child) => SemanticIconButton(
-        onPressed: authUser != null && value.text.isNotEmpty
+        onPressed: isLoggedIn && value.text.isNotEmpty
             ? () {
                 ref.read(chatNotifierProvider(widget.options)).postMessage(_textController.text);
                 _textController.clear();
-                ref.read(chatNotifierProvider(widget.options)).setInputText('');
               }
             : null,
         icon: const Icon(Icons.send),
@@ -320,7 +309,7 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
         semanticsLabel: context.l10n.send,
       ),
     );
-    final placeholder = authUser != null ? context.l10n.talkInChat : context.l10n.loginToChat;
+    final placeholder = isLoggedIn ? context.l10n.talkInChat : context.l10n.loginToChat;
     return SafeArea(
       top: false,
       child: Padding(
@@ -337,7 +326,7 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
           minLines: 1,
           maxLines: 4,
           enableSuggestions: true,
-          readOnly: authUser == null,
+          readOnly: !isLoggedIn,
         ),
       ),
     );

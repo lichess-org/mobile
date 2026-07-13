@@ -51,9 +51,6 @@ class _FakeChatNotifier extends AsyncNotifier<_FakeChatState> with ChatMixin<_Fa
 
   @override
   void onForegroundLost() {}
-
-  @override
-  void setInputText(String text) {}
 }
 
 class HangNotifier extends Notifier<bool> {

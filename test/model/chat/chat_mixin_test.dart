@@ -357,30 +357,6 @@ void main() {
     });
   });
 
-  group('ChatMixin.setInputText', () {
-    test('updates the input text', () async {
-      final container = await makeContainer();
-      final provider = _makeProvider(initialData: _chatData([]));
-      final notifier = container.read(provider.notifier);
-      await container.read(provider.future);
-
-      notifier.setInputText('draw?');
-
-      expect(container.read(provider).requireValue.chatState!.inputText, 'draw?');
-    });
-
-    test('is a no-op when chat is not initialized', () async {
-      final container = await makeContainer();
-      final provider = _makeProvider();
-      final notifier = container.read(provider.notifier);
-      await container.read(provider.future);
-
-      notifier.setInputText('draw?');
-
-      expect(container.read(provider).requireValue.chatState, isNull);
-    });
-  });
-
   group('ChatMixin.postMessage', () {
     test('sends a talk message over the current socket', () async {
       final fakeChannel = FakeWebSocketChannel(Uri(path: kDefaultSocketRoute));
