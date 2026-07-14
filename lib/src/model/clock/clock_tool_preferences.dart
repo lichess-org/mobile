@@ -29,9 +29,15 @@ class ClockToolPreferences extends Notifier<ClockToolPrefs>
     return fetch();
   }
 
+  /// Sets both clocks to the same [timeIncrement] and remembers it as the last
+  /// global choice (used to seed the global clock settings modal).
   Future<void> setTimeIncrement(TimeIncrement timeIncrement) {
     return save(
-      state.copyWith(topTimeIncrement: timeIncrement, bottomTimeIncrement: timeIncrement),
+      state.copyWith(
+        timeIncrement: timeIncrement,
+        topTimeIncrement: timeIncrement,
+        bottomTimeIncrement: timeIncrement,
+      ),
     );
   }
 
@@ -49,11 +55,16 @@ sealed class ClockToolPrefs with _$ClockToolPrefs implements Serializable {
   const ClockToolPrefs._();
 
   const factory ClockToolPrefs({
+    /// The last time increment chosen from the global settings modal (which sets
+    /// both clocks at once). Used to seed that modal's sliders, so that editing a
+    /// single clock does not change what the global modal shows.
+    required TimeIncrement timeIncrement,
     required TimeIncrement topTimeIncrement,
     required TimeIncrement bottomTimeIncrement,
   }) = _ClockToolPrefs;
 
   static const defaults = ClockToolPrefs(
+    timeIncrement: TimeIncrement(600, 0),
     topTimeIncrement: TimeIncrement(600, 0),
     bottomTimeIncrement: TimeIncrement(600, 0),
   );

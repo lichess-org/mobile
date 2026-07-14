@@ -15,7 +15,11 @@ class FakeClockToolPreferences extends ClockToolPreferences {
   @override
   Future<void> setTimeIncrement(TimeIncrement timeIncrement) async {
     await Future<void>.delayed(Duration.zero);
-    state = state.copyWith(topTimeIncrement: timeIncrement, bottomTimeIncrement: timeIncrement);
+    state = state.copyWith(
+      timeIncrement: timeIncrement,
+      topTimeIncrement: timeIncrement,
+      bottomTimeIncrement: timeIncrement,
+    );
   }
 }
 
