@@ -19,4 +19,7 @@ class AuthLifecycle {
   final Future<void> Function() onSignOut;
 }
 
-final authLifecycleProvider = StateProvider<AuthLifecycle?>((Ref ref) => null, name: 'AuthLifecycleProvider');
+final authLifecycleProvider = StateProvider<AuthLifecycle?>(
+  (Ref ref) => null,
+  name: 'AuthLifecycleProvider',
+);
