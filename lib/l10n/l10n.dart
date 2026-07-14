@@ -742,6 +742,102 @@ abstract class AppLocalizations {
   /// **'Good move, but there\'s better'**
   String get mobileGoodMoveButThereIsBetter;
 
+  /// No description provided for @mobilePerfShortUltraBullet.
+  ///
+  /// In en, this message translates to:
+  /// **'Ultra'**
+  String get mobilePerfShortUltraBullet;
+
+  /// No description provided for @mobilePerfShortBullet.
+  ///
+  /// In en, this message translates to:
+  /// **'Bullet'**
+  String get mobilePerfShortBullet;
+
+  /// No description provided for @mobilePerfShortBlitz.
+  ///
+  /// In en, this message translates to:
+  /// **'Blitz'**
+  String get mobilePerfShortBlitz;
+
+  /// No description provided for @mobilePerfShortRapid.
+  ///
+  /// In en, this message translates to:
+  /// **'Rapid'**
+  String get mobilePerfShortRapid;
+
+  /// No description provided for @mobilePerfShortClassical.
+  ///
+  /// In en, this message translates to:
+  /// **'Classical'**
+  String get mobilePerfShortClassical;
+
+  /// No description provided for @mobilePerfShortCorrespondence.
+  ///
+  /// In en, this message translates to:
+  /// **'Corresp.'**
+  String get mobilePerfShortCorrespondence;
+
+  /// No description provided for @mobilePerfShortFromPosition.
+  ///
+  /// In en, this message translates to:
+  /// **'From Pos.'**
+  String get mobilePerfShortFromPosition;
+
+  /// No description provided for @mobilePerfShortChess960.
+  ///
+  /// In en, this message translates to:
+  /// **'960'**
+  String get mobilePerfShortChess960;
+
+  /// No description provided for @mobilePerfShortAntichess.
+  ///
+  /// In en, this message translates to:
+  /// **'Antichess'**
+  String get mobilePerfShortAntichess;
+
+  /// No description provided for @mobilePerfShortKingOfTheHill.
+  ///
+  /// In en, this message translates to:
+  /// **'KotH'**
+  String get mobilePerfShortKingOfTheHill;
+
+  /// No description provided for @mobilePerfShortThreeCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'3check'**
+  String get mobilePerfShortThreeCheck;
+
+  /// No description provided for @mobilePerfShortAtomic.
+  ///
+  /// In en, this message translates to:
+  /// **'Atomic'**
+  String get mobilePerfShortAtomic;
+
+  /// No description provided for @mobilePerfShortHorde.
+  ///
+  /// In en, this message translates to:
+  /// **'Horde'**
+  String get mobilePerfShortHorde;
+
+  /// No description provided for @mobilePerfShortRacingKings.
+  ///
+  /// In en, this message translates to:
+  /// **'Racing'**
+  String get mobilePerfShortRacingKings;
+
+  /// No description provided for @mobilePerfShortCrazyhouse.
+  ///
+  /// In en, this message translates to:
+  /// **'Crazy'**
+  String get mobilePerfShortCrazyhouse;
+
+  /// No description provided for @mobilePerfShortPuzzle.
+  ///
+  /// In en, this message translates to:
+  /// **'Puzzle'**
+  String get mobilePerfShortPuzzle;
+
   /// No description provided for @variantStandard.
   ///
   /// In en, this message translates to:
