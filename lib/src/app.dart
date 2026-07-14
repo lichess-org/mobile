@@ -146,9 +146,10 @@ class _AppState extends ConsumerState<Application> {
     ref.read(appLinksServiceProvider).start();
     ref.read(sharedPgnServiceProvider).start();
 
+    HomeWidget.saveWidgetData<String>('lichessHost', kLichessHost);
+
     if (Platform.isIOS) {
       HomeWidget.setAppGroupId(_kIosAppGroupId);
-      HomeWidget.saveWidgetData<String>('lichessHost', kLichessHost);
       ref.listenManual(kidModeProvider, (prev, state) {
         if (state.hasValue && prev?.value != state.value) {
           HomeWidget.saveWidgetData<bool>('isKidMode', state.value).then((_) {
