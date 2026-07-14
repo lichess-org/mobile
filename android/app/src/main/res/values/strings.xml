@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_broadcast_title">Lichess Broadcasts</string>
+    <string name="widget_live">LIVE</string>
+    <string name="widget_no_broadcasts">No active broadcasts</string>
+</resources>

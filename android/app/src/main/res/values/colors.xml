@@ -4,4 +4,8 @@
     <color name="bg_splash">#FFFFFF</color>
     <color name="ic_splash">#000000</color>
     <color name="ic_splash_grey">#AAAAAA</color>
+    <color name="widget_background">#F5F2ED</color>
+    <color name="widget_text_primary">#161512</color>
+    <color name="widget_text_secondary">#8C8A85</color>
+    <color name="widget_thumbnail_fallback">#E6E2DC</color>
 </resources>
