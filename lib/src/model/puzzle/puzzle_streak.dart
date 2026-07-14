@@ -7,7 +7,7 @@ import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/streak_storage.dart';
-import 'package:lichess_mobile/src/tab_scaffold.dart' show currentNavigatorKeyProvider;
+import 'package:lichess_mobile/src/tab_navigation.dart' show currentNavigatorKeyProvider;
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 
 part 'puzzle_streak.freezed.dart';

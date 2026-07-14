@@ -96,10 +96,10 @@ class NotificationService {
   /// This method should be called once the app is ready to receive notifications,
   /// and after [LichessBinding.initializeNotifications] has been called.
   Future<void> start() async {
-    _ref.read<StateController<AuthLifecycle?>>(authLifecycleProvider.notifier).state = AuthLifecycle(
-      onSignIn: registerDevice,
-      onSignOut: unregister,
-    );
+    Future.microtask(() {
+      _ref.read<StateController<AuthLifecycle?>>(authLifecycleProvider.notifier).state =
+          AuthLifecycle(onSignIn: registerDevice, onSignOut: unregister);
+    });
 
     // Listen for incoming messages while the app is in the foreground.
     LichessBinding.instance.firebaseMessagingOnMessage.listen((RemoteMessage message) {
