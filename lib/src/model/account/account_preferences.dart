@@ -13,37 +13,34 @@ import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 part 'account_preferences.freezed.dart';
 part 'account_preferences.g.dart';
 
+/// Represents the account preferences for a user.
+///
+/// If the user is authenticated, the preferences are fetched from the server. If the user is not authenticated, the preferences are fetched from local storage.
+/// Technically an anonymous user does not have account preferences, but we still store them locally for convenience, because some settings are useful even for anonymous users (e.g. piece notation, premoves, etc.).
 @Freezed(fromJson: true, toJson: true)
 sealed class AccountPrefState with _$AccountPrefState implements Serializable {
   const AccountPrefState._();
 
   const factory AccountPrefState({
     // game display
-    @JsonKey(name: 'zen', fromJson: _zenFromJson, toJson: _zenToJson) required Zen zenMode,
-    @JsonKey(fromJson: _pieceNotationFromJson, toJson: _pieceNotationToJson)
-    required PieceNotation pieceNotation,
-    @JsonKey(name: 'ratings', fromJson: _showRatingsFromJson, toJson: _showRatingsToJson)
-    required ShowRatings showRatings,
+    @JsonKey(unknownEnumValue: Zen.no) required Zen zenMode,
+    @JsonKey(unknownEnumValue: PieceNotation.symbol) required PieceNotation pieceNotation,
+    @JsonKey(unknownEnumValue: ShowRatings.yes) required ShowRatings showRatings,
     // game behavior
-    @JsonKey(fromJson: _premoveFromJson, toJson: _booleanPrefToJson) required BooleanPref premove,
-    @JsonKey(fromJson: _autoQueenFromJson, toJson: _autoQueenToJson) required AutoQueen autoQueen,
-    @JsonKey(fromJson: _autoThreefoldFromJson, toJson: _autoThreefoldToJson)
-    required AutoThreefold autoThreefold,
-    @JsonKey(fromJson: _takebackFromJson, toJson: _takebackToJson) required Takeback takeback,
-    @JsonKey(fromJson: _confirmResignFromJson, toJson: _booleanPrefToJson)
+    required BooleanPref premove,
+    @JsonKey(unknownEnumValue: AutoQueen.premove) required AutoQueen autoQueen,
+    @JsonKey(unknownEnumValue: AutoThreefold.always) required AutoThreefold autoThreefold,
+    @JsonKey(unknownEnumValue: Takeback.always) required Takeback takeback,
     required BooleanPref confirmResign,
-    @JsonKey(fromJson: _submitMoveFromJson, toJson: _submitMoveToJson)
     required SubmitMove submitMove,
     // clock
-    @JsonKey(fromJson: _moretimeFromJson, toJson: _moretimeToJson) required Moretime moretime,
-    @JsonKey(fromJson: _clockTenthsFromJson, toJson: _clockTenthsToJson)
-    required ClockTenths clockTenths,
-    @JsonKey(fromJson: _clockSoundFromJson, toJson: _booleanPrefToJson)
+    @JsonKey(unknownEnumValue: Moretime.always) required Moretime moretime,
+    @JsonKey(unknownEnumValue: ClockTenths.lessThan10s) required ClockTenths clockTenths,
     required BooleanPref clockSound,
     // privacy
-    @JsonKey(fromJson: _followFromJson, toJson: _booleanPrefToJson) required BooleanPref follow,
-    @JsonKey(fromJson: _challengeFromJson, toJson: _challengeToJson) required Challenge challenge,
-    @JsonKey(fromJson: _messageFromJson, toJson: _messageToJson) required Message message,
+    required BooleanPref follow,
+    @JsonKey(unknownEnumValue: Challenge.registered) required Challenge challenge,
+    @JsonKey(unknownEnumValue: Message.always) required Message message,
   }) = _AccountPrefState;
 
   factory AccountPrefState.fromJson(Map<String, dynamic> json) {
@@ -54,6 +51,24 @@ sealed class AccountPrefState with _$AccountPrefState implements Serializable {
     }
   }
 }
+
+final defaultAccountPreferences = AccountPrefState(
+  zenMode: Zen.no,
+  pieceNotation: PieceNotation.symbol,
+  showRatings: ShowRatings.yes,
+  premove: const BooleanPref(true),
+  autoQueen: AutoQueen.premove,
+  autoThreefold: AutoThreefold.always,
+  takeback: Takeback.always,
+  moretime: Moretime.always,
+  clockTenths: ClockTenths.lessThan10s,
+  clockSound: const BooleanPref(true),
+  confirmResign: const BooleanPref(true),
+  submitMove: SubmitMove({SubmitMoveChoice.correspondence}),
+  follow: const BooleanPref(true),
+  challenge: Challenge.registered,
+  message: Message.always,
+);
 
 /// A provider that tells if the user wants to see ratings in the app.
 final showRatingsPrefProvider = FutureProvider<ShowRatings>((Ref ref) async {
@@ -79,24 +94,6 @@ final clockTenthsProvider = FutureProvider<ClockTenths>((Ref ref) async {
   return prefs.clockTenths;
 });
 
-final defaultAccountPreferences = AccountPrefState(
-  zenMode: Zen.no,
-  pieceNotation: PieceNotation.symbol,
-  showRatings: ShowRatings.yes,
-  premove: const BooleanPref(true),
-  autoQueen: AutoQueen.premove,
-  autoThreefold: AutoThreefold.always,
-  takeback: Takeback.always,
-  moretime: Moretime.always,
-  clockTenths: ClockTenths.lessThan10s,
-  clockSound: const BooleanPref(true),
-  confirmResign: const BooleanPref(true),
-  submitMove: SubmitMove({SubmitMoveChoice.correspondence}),
-  follow: const BooleanPref(true),
-  challenge: Challenge.registered,
-  message: Message.always,
-);
-
 /// A provider that gives the account preferences for the current user.
 final accountPreferencesProvider = AsyncNotifierProvider<AccountPreferences, AccountPrefState>(
   AccountPreferences.new,
@@ -107,6 +104,9 @@ final accountPreferencesProvider = AsyncNotifierProvider<AccountPreferences, Acc
 ///
 /// The result is cached for the lifetime of the app, until refreshed.
 /// If the server returns an error, default values are returned.
+///
+/// If the user is authenticated, the preferences are fetched from the server. If the user is not authenticated, the preferences are fetched from local storage.
+/// See also [AccountPrefState] for more details.
 class AccountPreferences extends AsyncNotifier<AccountPrefState> {
   @override
   Future<AccountPrefState> build() async {
@@ -199,87 +199,6 @@ class AccountPreferences extends AsyncNotifier<AccountPrefState> {
   }
 }
 
-Zen _zenFromJson(Object? value) =>
-    Zen.fromInt(_intValue(value, defaultAccountPreferences.zenMode.value));
-
-int _zenToJson(Zen value) => value.value;
-
-PieceNotation _pieceNotationFromJson(Object? value) =>
-    PieceNotation.fromInt(_intValue(value, defaultAccountPreferences.pieceNotation.value));
-
-int _pieceNotationToJson(PieceNotation value) => value.value;
-
-ShowRatings _showRatingsFromJson(Object? value) =>
-    ShowRatings.fromInt(_intValue(value, defaultAccountPreferences.showRatings.value));
-
-int _showRatingsToJson(ShowRatings value) => value.value;
-
-BooleanPref _premoveFromJson(Object? value) =>
-    BooleanPref(_boolValue(value, defaultAccountPreferences.premove.value));
-
-AutoQueen _autoQueenFromJson(Object? value) =>
-    AutoQueen.fromInt(_intValue(value, defaultAccountPreferences.autoQueen.value));
-
-int _autoQueenToJson(AutoQueen value) => value.value;
-
-AutoThreefold _autoThreefoldFromJson(Object? value) =>
-    AutoThreefold.fromInt(_intValue(value, defaultAccountPreferences.autoThreefold.value));
-
-int _autoThreefoldToJson(AutoThreefold value) => value.value;
-
-Takeback _takebackFromJson(Object? value) =>
-    Takeback.fromInt(_intValue(value, defaultAccountPreferences.takeback.value));
-
-int _takebackToJson(Takeback value) => value.value;
-
-BooleanPref _confirmResignFromJson(Object? value) =>
-    BooleanPref(_boolValue(value, defaultAccountPreferences.confirmResign.value));
-
-SubmitMove _submitMoveFromJson(Object? value) =>
-    SubmitMove.fromInt(_intValue(value, defaultAccountPreferences.submitMove.value));
-
-int _submitMoveToJson(SubmitMove value) => value.value;
-
-Moretime _moretimeFromJson(Object? value) =>
-    Moretime.fromInt(_intValue(value, defaultAccountPreferences.moretime.value));
-
-int _moretimeToJson(Moretime value) => value.value;
-
-ClockTenths _clockTenthsFromJson(Object? value) =>
-    ClockTenths.fromInt(_intValue(value, defaultAccountPreferences.clockTenths.value));
-
-int _clockTenthsToJson(ClockTenths value) => value.value;
-
-BooleanPref _clockSoundFromJson(Object? value) =>
-    BooleanPref(_boolValue(value, defaultAccountPreferences.clockSound.value));
-
-BooleanPref _followFromJson(Object? value) =>
-    BooleanPref(_boolValue(value, defaultAccountPreferences.follow.value));
-
-Challenge _challengeFromJson(Object? value) =>
-    Challenge.fromInt(_intValue(value, defaultAccountPreferences.challenge.value));
-
-int _challengeToJson(Challenge value) => value.value;
-
-Message _messageFromJson(Object? value) =>
-    Message.fromInt(_intValue(value, defaultAccountPreferences.message.value));
-
-int _messageToJson(Message value) => value.value;
-
-bool _booleanPrefToJson(BooleanPref value) => value.value;
-
-int _intValue(Object? value, int fallback) {
-  return value is num ? value.toInt() : fallback;
-}
-
-bool _boolValue(Object? value, bool fallback) {
-  return switch (value) {
-    final bool b => b,
-    final num n => n != 0,
-    _ => fallback,
-  };
-}
-
 abstract class AccountPref<T> {
   T get value;
   String get toFormData;
@@ -294,6 +213,10 @@ class BooleanPref implements AccountPref<bool> {
   @override
   String get toFormData => value ? '1' : '0';
 
+  factory BooleanPref.fromJson(bool json) => BooleanPref(json);
+
+  bool toJson() => value;
+
   static BooleanPref fromInt(int value) {
     switch (value) {
       case 1:
@@ -307,8 +230,11 @@ class BooleanPref implements AccountPref<bool> {
 }
 
 enum Zen implements AccountPref<int> {
+  @JsonValue(0)
   no(0),
+  @JsonValue(1)
   yes(1),
+  @JsonValue(2)
   gameAuto(2);
 
   const Zen(this.value);
@@ -345,8 +271,11 @@ enum Zen implements AccountPref<int> {
 }
 
 enum ShowRatings implements AccountPref<int> {
+  @JsonValue(0)
   no(0),
+  @JsonValue(1)
   yes(1),
+  @JsonValue(2)
   exceptInGame(2);
 
   const ShowRatings(this.value);
@@ -383,7 +312,9 @@ enum ShowRatings implements AccountPref<int> {
 }
 
 enum PieceNotation implements AccountPref<int> {
+  @JsonValue(0)
   symbol(0),
+  @JsonValue(1)
   letter(1);
 
   const PieceNotation(this.value);
@@ -416,8 +347,11 @@ enum PieceNotation implements AccountPref<int> {
 }
 
 enum AutoQueen implements AccountPref<int> {
+  @JsonValue(1)
   never(1),
+  @JsonValue(2)
   premove(2),
+  @JsonValue(3)
   always(3);
 
   const AutoQueen(this.value);
@@ -454,8 +388,11 @@ enum AutoQueen implements AccountPref<int> {
 }
 
 enum AutoThreefold implements AccountPref<int> {
+  @JsonValue(1)
   never(1),
+  @JsonValue(2)
   time(2),
+  @JsonValue(3)
   always(3);
 
   const AutoThreefold(this.value);
@@ -492,8 +429,11 @@ enum AutoThreefold implements AccountPref<int> {
 }
 
 enum Takeback implements AccountPref<int> {
+  @JsonValue(1)
   never(1),
+  @JsonValue(2)
   casual(2),
+  @JsonValue(3)
   always(3);
 
   const Takeback(this.value);
@@ -530,8 +470,11 @@ enum Takeback implements AccountPref<int> {
 }
 
 enum Moretime implements AccountPref<int> {
+  @JsonValue(1)
   never(1),
+  @JsonValue(2)
   casual(2),
+  @JsonValue(3)
   always(3);
 
   const Moretime(this.value);
@@ -568,8 +511,11 @@ enum Moretime implements AccountPref<int> {
 }
 
 enum ClockTenths implements AccountPref<int> {
+  @JsonValue(0)
   never(0),
+  @JsonValue(1)
   lessThan10s(1),
+  @JsonValue(2)
   always(2);
 
   const ClockTenths(this.value);
@@ -606,10 +552,15 @@ enum ClockTenths implements AccountPref<int> {
 }
 
 enum Challenge implements AccountPref<int> {
+  @JsonValue(1)
   never(1),
+  @JsonValue(2)
   rating(2),
+  @JsonValue(3)
   friends(3),
+  @JsonValue(4)
   registered(4),
+  @JsonValue(5)
   always(5);
 
   const Challenge(this.value);
@@ -654,8 +605,11 @@ enum Challenge implements AccountPref<int> {
 }
 
 enum Message implements AccountPref<int> {
+  @JsonValue(1)
   never(1),
+  @JsonValue(2)
   friends(2),
+  @JsonValue(3)
   always(3);
 
   const Message(this.value);
@@ -712,6 +666,10 @@ class SubmitMove implements AccountPref<int> {
 
   factory SubmitMove.fromInt(int value) =>
       SubmitMove(SubmitMoveChoice.values.where((choice) => _bitPresent(value, choice.value)));
+
+  factory SubmitMove.fromJson(int json) => SubmitMove.fromInt(json);
+
+  int toJson() => value;
 }
 
 enum SubmitMoveChoice {

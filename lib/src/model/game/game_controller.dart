@@ -47,7 +47,8 @@ final gameControllerProvider = AsyncNotifierProvider.autoDispose
       name: 'GameControllerProvider',
     );
 
-PlayableGame _withAccountPrefsFallback(PlayableGame game, AccountPrefState prefs) {
+/// Returns the [PlayableGame] with the local account preferences applied if the server didn't send any preferences.
+PlayableGame _withLocalAccountPrefsFallback(PlayableGame game, AccountPrefState prefs) {
   if (game.prefs != null) {
     return game;
   }
@@ -152,7 +153,7 @@ class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> 
 
     final game = fullEvent.game.prefs != null
         ? fullEvent.game
-        : _withAccountPrefsFallback(
+        : _withLocalAccountPrefsFallback(
             fullEvent.game,
             await ref.read(accountPreferencesProvider.future),
           );
@@ -674,7 +675,7 @@ class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> 
 
         final curState = state.requireValue;
 
-        final newGame = _withAccountPrefsFallback(
+        final newGame = _withLocalAccountPrefsFallback(
           fullEvent.game,
           ref.read(accountPreferencesProvider).value ?? defaultAccountPreferences,
         );

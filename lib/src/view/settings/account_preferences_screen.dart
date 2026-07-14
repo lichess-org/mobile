@@ -87,6 +87,30 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
               ),
             ),
             ListSection(
+              header: SettingsSectionTitle(context.l10n.preferencesDisplay),
+              hasLeading: false,
+              children: [
+                SettingsListTile(
+                  settingsLabel: Text(context.l10n.preferencesShowPlayerRatings),
+                  settingsValue: data.showRatings.label(context.l10n),
+                  onTap: () => showChoicePicker(
+                    context,
+                    choices: ShowRatings.values,
+                    selectedItem: data.showRatings,
+                    labelBuilder: (t) => Text(t.label(context.l10n)),
+                    onSelectedItemChanged: (ShowRatings? value) {
+                      _setPref(
+                        () => ref
+                            .read(accountPreferencesProvider.notifier)
+                            .setShowRatings(value ?? data.showRatings),
+                      );
+                    },
+                  ),
+                  explanation: context.l10n.preferencesExplainShowPlayerRatings,
+                ),
+              ],
+            ),
+            ListSection(
               header: SettingsSectionTitle(context.l10n.preferencesPrivacy),
               hasLeading: false,
               children: [
