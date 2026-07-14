@@ -56,7 +56,7 @@ class AppLogService {
         if (_loggersToShowInTerminal.contains(record.loggerName) &&
             record.level >= Level.FINE &&
             !Platform.environment.containsKey('FLUTTER_TEST')) {
-          debugPrint('[${record.loggerName}] ${record.message}');
+          debugPrint('[${record.loggerName}] ${record.message} ${record.error}');
         }
       } else {
         if (record.loggerName == 'Stockfish' && record.level >= Level.SEVERE) {

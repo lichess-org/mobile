@@ -87,8 +87,8 @@ class SoundService {
               .soundTheme;
       await _soundEffectPlugin.initialize(maxStreams: _kMaxConcurrentStreams);
       await _loadAllSounds(theme);
-    } catch (e) {
-      _logger.warning('Failed to initialize sound service: $e');
+    } catch (e, st) {
+      _logger.warning('Failed to initialize sound service:', e, st);
     }
   }
 

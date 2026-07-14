@@ -85,7 +85,7 @@ class AppLinksService {
     try {
       await _handleUri(uri, animated: animated);
     } catch (e, st) {
-      _logger.severe('Error handling app link: $e\n$st');
+      _logger.severe('Error handling app link:', e, st);
     }
   }
 
@@ -282,7 +282,7 @@ class AppLinksService {
         } catch (e, st) {
           // Fall back to the current daily puzzle rather than leaving the tap
           // as a no-op when the widget's cached id is stale or unreachable.
-          _logger.info('Failed to load widget puzzle id $puzzleId, falling back: $e', e, st);
+          _logger.info('Failed to load widget puzzle id $puzzleId, falling back:', e, st);
           puzzle = dailyPuzzle;
         }
       }
@@ -297,7 +297,7 @@ class AppLinksService {
         animated: animated,
       );
     } catch (e, st) {
-      _logger.severe('Failed to open daily puzzle from widget: $e\n$st');
+      _logger.severe('Failed to open daily puzzle from widget:', e, st);
     }
   }
 
@@ -312,7 +312,7 @@ class AppLinksService {
 
       return true;
     } catch (e, st) {
-      _logger.info('Not a challenge link: $e', e, st);
+      _logger.info('Not a challenge link:', e, st);
     }
     return false;
   }
@@ -345,7 +345,7 @@ class AppLinksService {
         return [TvScreen.buildRoute(gameId: gameId, user: user, orientation: orientation)];
       }
     } catch (e, st) {
-      _logger.info('Not a game link: $e', e, st);
+      _logger.info('Not a game link:', e, st);
     }
 
     return null;
