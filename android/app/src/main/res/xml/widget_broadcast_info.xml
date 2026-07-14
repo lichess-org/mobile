@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:description="@string/widget_broadcast_description"
     android:minWidth="250dp"
     android:minHeight="110dp"
     android:minResizeWidth="150dp"
