@@ -47,6 +47,34 @@ final gameControllerProvider = AsyncNotifierProvider.autoDispose
       name: 'GameControllerProvider',
     );
 
+/// Returns the [PlayableGame] with the local account preferences applied if the server didn't send any preferences.
+PlayableGame _withLocalAccountPrefsFallback(PlayableGame game, AccountPrefState prefs) {
+  if (game.prefs != null) {
+    return game;
+  }
+
+  return game.copyWith(
+    prefs: ServerGamePrefs(
+      showRatings: prefs.showRatings == ShowRatings.yes,
+      enablePremove: prefs.premove.value,
+      autoQueen: prefs.autoQueen,
+      confirmResign: prefs.confirmResign.value,
+      submitMove: _submitMoveEnabledForSpeed(prefs.submitMove, game.meta.speed),
+      zenMode: prefs.zenMode,
+    ),
+  );
+}
+
+bool _submitMoveEnabledForSpeed(SubmitMove submitMove, Speed speed) {
+  return switch (speed) {
+    Speed.correspondence => submitMove.choices.contains(SubmitMoveChoice.correspondence),
+    Speed.classical => submitMove.choices.contains(SubmitMoveChoice.classical),
+    Speed.rapid => submitMove.choices.contains(SubmitMoveChoice.rapid),
+    Speed.blitz => submitMove.choices.contains(SubmitMoveChoice.blitz),
+    Speed.ultraBullet || Speed.bullet => false,
+  };
+}
+
 class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> {
   GameController(this.gameFullId);
 
@@ -123,7 +151,12 @@ class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> 
     final fullEvent = GameFullEvent.fromJson(rawFullEvent.data as Map<String, dynamic>);
     _socketClient.version = fullEvent.socketEventVersion;
 
-    final game = fullEvent.game;
+    final game = fullEvent.game.prefs != null
+        ? fullEvent.game
+        : _withLocalAccountPrefsFallback(
+            fullEvent.game,
+            await ref.read(accountPreferencesProvider.future),
+          );
 
     // Play "dong" sound when this is a new game and we're playing it (not spectating)
     final isMyGame = game.youAre != null;
@@ -642,7 +675,10 @@ class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> 
 
         final curState = state.requireValue;
 
-        final newGame = fullEvent.game;
+        final newGame = _withLocalAccountPrefsFallback(
+          fullEvent.game,
+          ref.read(accountPreferencesProvider).value ?? defaultAccountPreferences,
+        );
         final isOpponentOnGame =
             newGame.playerOf(newGame.youAre?.opposite ?? Side.white).onGame ?? false;
 
