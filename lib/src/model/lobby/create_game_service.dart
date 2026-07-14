@@ -101,10 +101,10 @@ class CreateGameService {
 
     try {
       await LobbyRepository(lichessClient).createSeek(actualSeek, sri: sri);
-    } catch (e) {
-      _log.warning('Failed to create seek', e);
+    } catch (e, st) {
+      _log.warning('Failed to create seek', e, st);
       if (!completer.isCompleted) {
-        completer.completeError(e);
+        completer.completeError(e, st);
       }
     }
 
@@ -182,15 +182,15 @@ class CreateGameService {
                   ),
                 );
               }
-            } catch (e) {
-              _log.warning('Failed to reload challenge', e);
+            } catch (e, st) {
+              _log.warning('Failed to reload challenge', e, st);
             }
           }
         }),
         completer,
       );
-    } catch (e) {
-      _log.warning('Failed to create challenge socket, completing with error', e);
+    } catch (e, st) {
+      _log.warning('Failed to create challenge socket, completing with error', e, st);
       // if the completer is not yet completed, complete it with an error
       if (!completer.isCompleted) {
         completer.completeError(e);
@@ -250,8 +250,8 @@ class CreateGameService {
                   updatedChallenge.declineReason ?? ChallengeDeclineReason.generic,
                 );
               }
-            } catch (e) {
-              _log.warning('Failed to reload challenge', e);
+            } catch (e, st) {
+              _log.warning('Failed to reload challenge', e, st);
             }
           }
         }),
@@ -263,8 +263,8 @@ class CreateGameService {
       if (!completer.isCompleted) {
         completer.complete(null);
       }
-    } catch (e) {
-      _log.warning('Failed to create challenge', e);
+    } catch (e, st) {
+      _log.warning('Failed to create challenge', e, st);
       // if the completer is not yet completed, complete it with an error
       if (!completer.isCompleted) {
         completer.completeError(e);
@@ -283,8 +283,8 @@ class CreateGameService {
       if (_lobbyConnection != null && _lobbyConnection!.$2.isCompleted == false) {
         _lobbyConnection!.$2.complete(const GameSeekCancelled());
       }
-    } catch (e) {
-      _log.warning('Failed to cancel seek: $e', e);
+    } catch (e, st) {
+      _log.warning('Failed to cancel seek: $e', e, st);
       rethrow;
     }
   }
@@ -299,8 +299,8 @@ class CreateGameService {
         if (_challengeConnection != null && _challengeConnection!.$4.isCompleted == false) {
           _challengeConnection!.$4.complete(const ChallengeResponseCancelled());
         }
-      } catch (e) {
-        _log.warning('Failed to cancel challenge: $e', e);
+      } catch (e, st) {
+        _log.warning('Failed to cancel challenge: $e', e, st);
         rethrow;
       }
     }

@@ -143,8 +143,8 @@ class ServerAnalysisService {
         _currentAnalysis.value = source;
         _socketClient!.firstConnection
             .timeout(const Duration(seconds: 3))
-            .onError((err, st) {
-              _logger.severe('Error connecting to analysis socket', err, st);
+            .onError((e, st) {
+              _logger.severe('Error connecting to analysis socket', e, st);
               _cancelAnalysis();
             })
             .whenComplete(() {

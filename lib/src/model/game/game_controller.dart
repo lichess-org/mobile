@@ -213,14 +213,14 @@ class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> 
     final (Position, String) sanResult;
     try {
       sanResult = curState.game.lastPosition.makeSan(move);
-    } on PlayException catch (e) {
+    } on PlayException catch (e, st) {
       LichessBinding.instance.firebaseCrashlytics.recordError(
         'Invalid user move: $e',
-        null,
+        st,
         reason: 'PlayException thrown when making SAN of user move',
         information: ['move: $move', 'position: ${curState.game.lastPosition}'],
       );
-      _logger.warning('Invalid user move: $e');
+      _logger.warning('Invalid user move:', e, st);
       return;
     }
     final (newPos, newSan) = sanResult;
@@ -279,14 +279,14 @@ class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> 
     final (Position, String) sanResult;
     try {
       sanResult = curState.game.lastPosition.makeSan(moveToConfirm);
-    } on PlayException catch (e) {
+    } on PlayException catch (e, st) {
       LichessBinding.instance.firebaseCrashlytics.recordError(
         'Invalid confirm move: $e',
-        null,
+        st,
         reason: 'PlayException thrown when making SAN of confirm move',
         information: ['move: $moveToConfirm', 'position: ${curState.game.lastPosition}'],
       );
-      _logger.warning('Invalid confirm move: $e');
+      _logger.warning('Invalid confirm move:', e, st);
       state = AsyncValue.data(curState.copyWith(moveToConfirm: null));
       return;
     }
@@ -1050,8 +1050,8 @@ class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> 
     try {
       final result = await _getPostGameData();
       gameWithPostData = _mergePostGameData(game, result, rewriteSteps: true);
-    } catch (e, s) {
-      _logger.warning('Could not get post game data', e, s);
+    } catch (e, st) {
+      _logger.warning('Could not get post game data', e, st);
     }
 
     await _storeGame(gameWithPostData);

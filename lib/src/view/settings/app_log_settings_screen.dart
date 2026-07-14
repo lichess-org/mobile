@@ -183,20 +183,34 @@ class _LogTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
+    const titleStyle = TextStyle(fontSize: 14, letterSpacing: -0.15);
+    final subtitleStyle = TextStyle(color: textShade(context, 0.7), fontSize: 12);
+
+    final leading = SizedBox(
+      width: 30,
+      child: Text(entry.levelName, style: const TextStyle(fontSize: 12)),
+    );
+    final title = Text('[${entry.loggerName}] ${entry.message}', style: titleStyle);
+    final subtitle = Text(_logDateFormatter.format(entry.logTime), style: subtitleStyle);
+
+    if (entry.error == null && entry.stackTrace == null) {
+      return ListTile(dense: true, leading: leading, title: title, subtitle: subtitle);
+    }
+
+    final error = entry.error;
+    final stackTrace = entry.stackTrace;
+    return ExpansionTile(
       dense: true,
-      leading: SizedBox(
-        width: 30,
-        child: Text(entry.levelName, style: const TextStyle(fontSize: 12)),
-      ),
-      title: Text(
-        '[${entry.loggerName}] ${entry.message}',
-        style: const TextStyle(fontSize: 14, letterSpacing: -0.15),
-      ),
-      subtitle: Text(
-        _logDateFormatter.format(entry.logTime),
-        style: TextStyle(color: textShade(context, 0.7), fontSize: 12),
-      ),
+      leading: leading,
+      title: title,
+      subtitle: subtitle,
+      children: [
+        ListTile(
+          dense: true,
+          title: error != null ? Text(error, style: titleStyle) : null,
+          subtitle: stackTrace != null ? Text(stackTrace, style: subtitleStyle) : null,
+        ),
+      ],
     );
   }
 }

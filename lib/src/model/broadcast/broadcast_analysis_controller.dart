@@ -257,8 +257,8 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
     final (UciPath? newPath, bool isNewNode) result;
     try {
       result = _root.addMoveAt(path, uciMove, clock: clock);
-    } on PlayException catch (e) {
-      _logger.warning('Could not add broadcast move $uciMove at $path: $e');
+    } on PlayException catch (e, st) {
+      _logger.warning('Could not add broadcast move $uciMove at $path:', e, st);
       _reloadPgn();
       return;
     }

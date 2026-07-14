@@ -408,8 +408,8 @@ class EvaluationService {
       _currentVariant = variant;
 
       _protocol.connected((cmd) => _stockfish.stdin = cmd);
-    } catch (e, s) {
-      _logger.severe('Error initializing engine', e, s);
+    } catch (e, st) {
+      _logger.severe('Error initializing engine', e, st);
       _setEngineState(EngineState.error);
     } finally {
       _initInProgress = false;
