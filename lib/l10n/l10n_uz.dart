@@ -15,8 +15,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get mobileAccountPreferences => 'Akkaunt sozlamalari';
 
   @override
-  String get mobileAccountPreferencesHelp =>
-      'Ushbu sozlamalar Lichess akkauntingizga saqlanadi va barcha qurilmalaringizda amal qiladi.';
+  String get mobileAccountPreferencesHelp => 'Ushbu sozlamalar Lichess akkauntingizga saqlanadi va barcha qurilmalaringizda amal qiladi.';
 
   @override
   String get mobileAllGames => 'Barcha oʻyinlar';
@@ -77,8 +76,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get mobileNoSearchResults => 'Natija yoʻq';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable =>
-      'Eski ilovadagi hamma funksiyalar mavjud emas, lekin biz muntazam ravishda yangi imkoniyatlar qoʻshmoqdamiz.';
+  String get mobileNotAllFeaturesAreAvailable => 'Eski ilovadagi hamma funksiyalar mavjud emas, lekin biz muntazam ravishda yangi imkoniyatlar qoʻshmoqdamiz.';
 
   @override
   String get mobileNotFollowingAnyUser => 'Siz hech kimga obuna boʻlmagansiz.';
@@ -107,23 +105,19 @@ class AppLocalizationsUz extends AppLocalizations {
   String get mobilePuzzleStormConfirmEndRun => 'Urinishni yakunlamoqchimisiz?';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow =>
-      'Hech narsa topilmadi, iltimos, filtrlarni oʻzgartiring';
+  String get mobilePuzzleStormFilterNothingToShow => 'Hech narsa topilmadi, iltimos, filtrlarni oʻzgartiring';
 
   @override
-  String get mobilePuzzleStormNothingToShow =>
-      'Koʻrsatish uchun hech narsa yoʻq. Puzzle Storm rejimida bir necha bor oʻynab koʻring.';
+  String get mobilePuzzleStormNothingToShow => 'Koʻrsatish uchun hech narsa yoʻq. Puzzle Storm rejimida bir necha bor oʻynab koʻring.';
 
   @override
   String get mobilePuzzleStormSubtitle => '3 minut ichida iloji boricha koʻproq masala yeching.';
 
   @override
-  String get mobilePuzzleStreakAbortWarning =>
-      'Joriy seriyangiz toʻxtatiladi va natijangiz saqlanadi.';
+  String get mobilePuzzleStreakAbortWarning => 'Joriy seriyangiz toʻxtatiladi va natijangiz saqlanadi.';
 
   @override
-  String get mobilePuzzleThemesSubtitle =>
-      'Sevimli debyutlaringizga oid masalalar yeching yoki biror mavzu tanlang.';
+  String get mobilePuzzleThemesSubtitle => 'Sevimli debyutlaringizga oid masalalar yeching yoki biror mavzu tanlang.';
 
   @override
   String get mobilePuzzlesTab => 'Masalalar';
@@ -159,8 +153,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get mobileSettingsImmersiveMode => 'Butun ekran rejimi';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle =>
-      'Oʻyin paytida tizim interfeysini yashirish. Agar ekran chetidagi tizim navigatsiyasi imo‑ishoralari sizga xalaqit bersa, shu rejimdan foydalaning. Oʻyin va masala ekranlariga amal qiladi.';
+  String get mobileSettingsImmersiveModeSubtitle => 'Oʻyin paytida tizim interfeysini yashirish. Agar ekran chetidagi tizim navigatsiyasi imo‑ishoralari sizga xalaqit bersa, shu rejimdan foydalaning. Oʻyin va masala ekranlariga amal qiladi.';
 
   @override
   String get mobileSettingsMaterialDifferenceCapturedPieces => 'Olingan donalar';
@@ -169,8 +162,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get mobileSettingsPickAnImage => 'Rasm tanlang';
 
   @override
-  String get mobileSettingsPickAnImageHelp =>
-      'Maxsus orqa fon faqat qorongʻu rejimda ishlaydi. Qorongʻu rasm tavsiya etiladi.';
+  String get mobileSettingsPickAnImageHelp => 'Maxsus orqa fon faqat qorongʻu rejimda ishlaydi. Qorongʻu rasm tavsiya etiladi.';
 
   @override
   String get mobileSettingsPickAnImageBlur => 'Tasvirni xiralashtirish';
@@ -194,8 +186,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get mobileSettingsShapeDrawing => 'Shakl chizish';
 
   @override
-  String get mobileSettingsShapeDrawingSubtitle =>
-      'Ikki barmoq yordamida shakllarni chizish: bir barmogʻingizni boʻsh katakda ushlab turing va shaklni chizish uchun boshqa barmogʻingizni suring.';
+  String get mobileSettingsShapeDrawingSubtitle => 'Ikki barmoq yordamida shakllarni chizish: bir barmogʻingizni boʻsh katakda ushlab turing va shaklni chizish uchun boshqa barmogʻingizni suring.';
 
   @override
   String get mobileSettingsShowBorder => 'Ramkani koʻrsatish';
@@ -204,8 +195,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get mobileSettingsTouchFeedback => 'Bosganda vibratsiya';
 
   @override
-  String get mobileSettingsTouchFeedbackSubtitle =>
-      'Yoqilgan boʻlsa, yurish qilganingizda yoki donani olganingizda qurilmangiz vibratsiya beradi.';
+  String get mobileSettingsTouchFeedbackSubtitle => 'Yoqilgan boʻlsa, yurish qilganingizda yoki donani olganingizda qurilmangiz vibratsiya beradi.';
 
   @override
   String get mobileSettingsTab => 'Sozlamalar';
@@ -261,8 +251,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get mobileViewGame => 'Oʻyinni koʻrish';
 
   @override
-  String get mobileCustomizeHomeTip =>
-      'Maslahat: asosiy ekranga vidjetlar qoʻshishingiz yoki keraksizlarini olib tashlashingiz mumkin!';
+  String get mobileCustomizeHomeTip => 'Maslahat: asosiy ekranga vidjetlar qoʻshishingiz yoki keraksizlarini olib tashlashingiz mumkin!';
 
   @override
   String get mobileCustomizeHomeTipDismiss => 'Yopish';
@@ -286,12 +275,10 @@ class AppLocalizationsUz extends AppLocalizations {
   String get mobileDisplayModeDetailed => 'Batafsil';
 
   @override
-  String get mobileOpeningExplorerNotAvailableOffline =>
-      'Oflayn rejimda debyutlar bazasi ishlamaydi.';
+  String get mobileOpeningExplorerNotAvailableOffline => 'Oflayn rejimda debyutlar bazasi ishlamaydi.';
 
   @override
-  String get mobileChallengeCreated =>
-      'Chorlov yaratildi: oʻyin boshlanganida bildirishnoma olasiz.\nUnga asosiy ekrandan kirishingiz mumkin.';
+  String get mobileChallengeCreated => 'Chorlov yaratildi: oʻyin boshlanganida bildirishnoma olasiz.\nUnga asosiy ekrandan kirishingiz mumkin.';
 
   @override
   String get mobilePreviousPage => 'Oldingi';
@@ -312,15 +299,13 @@ class AppLocalizationsUz extends AppLocalizations {
   String get variantChess960 => 'Fisher shaxmati';
 
   @override
-  String get variantChess960Title =>
-      'Donalarni boshlangʻich pozitsiyasi tasodifiy ravishda aniqlanadi.';
+  String get variantChess960Title => 'Donalarni boshlangʻich pozitsiyasi tasodifiy ravishda aniqlanadi.';
 
   @override
   String get variantKingOfTheHill => 'Shoh markazda';
 
   @override
-  String get variantKingOfTheHillTitle =>
-      'Gʻalaba qozonish uchun shohni taxtani markaziga olib keling.';
+  String get variantKingOfTheHillTitle => 'Gʻalaba qozonish uchun shohni taxtani markaziga olib keling.';
 
   @override
   String get variantThreeCheck => 'Uch shoh';
@@ -332,8 +317,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get variantAntichess => 'Antishaxmat';
 
   @override
-  String get variantAntichessTitle =>
-      'Gʻalaba qozonish uchun barcha donalaringizni boy bering (yoki pat oling).';
+  String get variantAntichessTitle => 'Gʻalaba qozonish uchun barcha donalaringizni boy bering (yoki pat oling).';
 
   @override
   String get variantAtomic => 'Atomik shaxmat';
@@ -345,22 +329,19 @@ class AppLocalizationsUz extends AppLocalizations {
   String get variantHorde => 'Oʻrda';
 
   @override
-  String get variantHordeTitle =>
-      'Bir tarafda koʻp miqdorda piyodalar boʻlsa, boshqa tarafda standart shaxmat donalari mavjud.';
+  String get variantHordeTitle => 'Bir tarafda koʻp miqdorda piyodalar boʻlsa, boshqa tarafda standart shaxmat donalari mavjud.';
 
   @override
   String get variantRacingKings => 'Shohlar poygasi';
 
   @override
-  String get variantRacingKingsTitle =>
-      'Gʻalaba qozonish uchun shohni taxtani narigi tarariga olib boring.';
+  String get variantRacingKingsTitle => 'Gʻalaba qozonish uchun shohni taxtani narigi tarariga olib boring.';
 
   @override
   String get variantCrazyhouse => 'Kreyzihaus';
 
   @override
-  String get variantCrazyhouseTitle =>
-      'Donani yurish oʻrniga yeyilgan donalarni taxtaga joylashtirishingiz mumkin.';
+  String get variantCrazyhouseTitle => 'Donani yurish oʻrniga yeyilgan donalarni taxtaga joylashtirishingiz mumkin.';
 
   @override
   String get variantFromPosition => 'Belgilangan pozitsiyadan';
@@ -590,15 +571,13 @@ class AppLocalizationsUz extends AppLocalizations {
   String get arenaIsItRated => 'Reytingga taʼsir qiladimi?';
 
   @override
-  String get arenaWillBeNotified =>
-      'Turnir boshlanganda sizga xabar beriladi, shuning uchun ushbu sahifani ochiq holda qoldirib, boshqa ishlar bilan shugʻullanishingiz mumkin.';
+  String get arenaWillBeNotified => 'Turnir boshlanganda sizga xabar beriladi, shuning uchun ushbu sahifani ochiq holda qoldirib, boshqa ishlar bilan shugʻullanishingiz mumkin.';
 
   @override
   String get arenaIsRated => 'Bu turnir reytingli va sizni reytingingizga ta\'sir etadi.';
 
   @override
-  String get arenaIsNotRated =>
-      'Bu turnir reytingli *emas* va sizni reytingingizga taʼsir *qilmaydi*.';
+  String get arenaIsNotRated => 'Bu turnir reytingli *emas* va sizni reytingingizga taʼsir *qilmaydi*.';
 
   @override
   String get arenaSomeRated => 'Baʼzi turnirlar reytingli va sizni reytingingizga taʼsir qiladi.';
@@ -607,43 +586,37 @@ class AppLocalizationsUz extends AppLocalizations {
   String get arenaHowAreScoresCalculated => 'Ochkolar qanday hisoblanadi?';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer =>
-      'Gʻalaba uchun 2 ochko, durang uchun 1 ochko beriladi, magʻlubiyat uchun esa ochko berilmaydi.\nAgar ketma‑ket ikki marta gʻalaba qozonsangiz, sizda olov belgisi bilan koʻrsatiladigan “ikki karrali ochkolar seriyasi” boshlanadi.\nKeyingi oʻyinlarda gʻalaba qozonganiz sayin, sizga ikki karra ochko yoziladi.\nYaʼni, gʻalaba 4 ochko, durang 2 ochko boʻladi, magʻlubiyat uchun esa ochko berilmaydi va “ochkolar seriyasi”ni toʻxtatadi.\n\nMasalan, ikkita gʻalaba va bitta durang jami 6 ochko beradi: 2 + 2 + (2 x 1)';
+  String get arenaHowAreScoresCalculatedAnswer => 'Gʻalaba uchun 2 ochko, durang uchun 1 ochko beriladi, magʻlubiyat uchun esa ochko berilmaydi.\nAgar ketma‑ket ikki marta gʻalaba qozonsangiz, sizda olov belgisi bilan koʻrsatiladigan “ikki karrali ochkolar seriyasi” boshlanadi.\nKeyingi oʻyinlarda gʻalaba qozonganiz sayin, sizga ikki karra ochko yoziladi.\nYaʼni, gʻalaba 4 ochko, durang 2 ochko boʻladi, magʻlubiyat uchun esa ochko berilmaydi va “ochkolar seriyasi”ni toʻxtatadi.\n\nMasalan, ikkita gʻalaba va bitta durang jami 6 ochko beradi: 2 + 2 + (2 x 1)';
 
   @override
   String get arenaBerserk => 'Berserk arena';
 
   @override
-  String get arenaBerserkAnswer =>
-      'Oʻyin boshida oʻyinchi “Berserk” tugmasini bossa, uning vaqti yarmiga qisqaradi, biroq gʻalaba uchun turnir jadvaliga qoʻshimcha bir ochko qoʻshiladi.\n\nVaqt qoʻshilishi bor (inkrementli) oʻyinlarda “Berserk” qilsangiz vaqt ortishidan voz kechasiz (1+2 vaqt nazorati bundan mustasno va 1+0 holatiga oʻtadi).\n\nBoshlangʻich vaqti nolga teng boʻlgan (0+1, 0+2) oʻyinlarda “Berserk” qilib boʻlmaydi.\n\n“Berserk” rejimida qoʻshimcha ochko olish uchun kamida 7 ta yurish amalga oshirishingiz kerak boʻladi.';
+  String get arenaBerserkAnswer => 'Oʻyin boshida oʻyinchi “Berserk” tugmasini bossa, uning vaqti yarmiga qisqaradi, biroq gʻalaba uchun turnir jadvaliga qoʻshimcha bir ochko qoʻshiladi.\n\nVaqt qoʻshilishi bor (inkrementli) oʻyinlarda “Berserk” qilsangiz vaqt ortishidan voz kechasiz (1+2 vaqt nazorati bundan mustasno va 1+0 holatiga oʻtadi).\n\nBoshlangʻich vaqti nolga teng boʻlgan (0+1, 0+2) oʻyinlarda “Berserk” qilib boʻlmaydi.\n\n“Berserk” rejimida qoʻshimcha ochko olish uchun kamida 7 ta yurish amalga oshirishingiz kerak boʻladi.';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'Gʻolib qanday aniqlanadi?';
 
   @override
-  String get arenaHowIsTheWinnerDecidedAnswer =>
-      'Turnirda belgilangan vaqt davomida eng ko\'p bal to\'plagan o\'yinchi(lar) g\'olib(lar) deb topiladi.\n\nKamida ikkita oʻyinchi bir xil natija qayd etsa turnir natijalari tay-breyk vazifasini oʻtaydi.';
+  String get arenaHowIsTheWinnerDecidedAnswer => 'Turnirda belgilangan vaqt davomida eng ko\'p bal to\'plagan o\'yinchi(lar) g\'olib(lar) deb topiladi.\n\nKamida ikkita oʻyinchi bir xil natija qayd etsa turnir natijalari tay-breyk vazifasini oʻtaydi.';
 
   @override
   String get arenaHowDoesPairingWork => 'Qura tashlash qanday amalga oshadi?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer =>
-      'Turnir boshida oʻyinchilar oʻz reytingiga mos ravishda bir biriga qarshi keladilar. \nOʻyin tugagach turnir kutish zaliga qayting: siz turnirda toʻplagan reytingingizga mos raqib bilan bellashasiz. Bu sizga minimal vaqt ichida raqib topib beradi‑yu, lekin siz turnirdagi barcha oʻyinchilar bilan oʻynashga ulgurmasligingiz mumkin.\nTezroq gʻalaba qozonib, kutish zaliga qayting — koʻproq oʻyin oʻynang va koʻproq ball toʻplang.';
+  String get arenaHowDoesPairingWorkAnswer => 'Turnir boshida oʻyinchilar oʻz reytingiga mos ravishda bir biriga qarshi keladilar. \nOʻyin tugagach turnir kutish zaliga qayting: siz turnirda toʻplagan reytingingizga mos raqib bilan bellashasiz. Bu sizga minimal vaqt ichida raqib topib beradi‑yu, lekin siz turnirdagi barcha oʻyinchilar bilan oʻynashga ulgurmasligingiz mumkin.\nTezroq gʻalaba qozonib, kutish zaliga qayting — koʻproq oʻyin oʻynang va koʻproq ball toʻplang.';
 
   @override
   String get arenaHowDoesItEnd => 'Turnir qanday yakunlanadi?';
 
   @override
-  String get arenaHowDoesItEndAnswer =>
-      'Turnirni taymeri bor. Qachonki taymer vaqti tugasa, turnir natijalari muzlatiladi va gʻolib eʼlon qilinadi. Davom etayotgan oʻyinlar oxirigacha oʻynalishi kerak, biroq ular turnir natijalari uchun hisobga olinmaydi.';
+  String get arenaHowDoesItEndAnswer => 'Turnirni taymeri bor. Qachonki taymer vaqti tugasa, turnir natijalari muzlatiladi va gʻolib eʼlon qilinadi. Davom etayotgan oʻyinlar oxirigacha oʻynalishi kerak, biroq ular turnir natijalari uchun hisobga olinmaydi.';
 
   @override
   String get arenaOtherRules => 'Boshqa muhim qoidalar';
 
   @override
-  String get arenaThereIsACountdown =>
-      'Birinchi yurish qilishingiz uchun muayyan bir vaqt beriladi. Bu vaqt ichida birinchi yurish qilmasangiz siz o\'yinni raqibingizga boy bergan boʻlasiz.';
+  String get arenaThereIsACountdown => 'Birinchi yurish qilishingiz uchun muayyan bir vaqt beriladi. Bu vaqt ichida birinchi yurish qilmasangiz siz o\'yinni raqibingizga boy bergan boʻlasiz.';
 
   @override
   String get arenaThisIsPrivate => 'Bu yopiq turnir';
@@ -659,8 +632,7 @@ class AppLocalizationsUz extends AppLocalizations {
   }
 
   @override
-  String get arenaDrawStreakVariants =>
-      'Durang oʻyinlar uchun ochko beriladigan minimal yurishlar soni shaxmat variantiga qarab farq qiladi. Quyidagi jadvalda har bir variant uchun belgilangan qiymatlar koʻrsatilgan.';
+  String get arenaDrawStreakVariants => 'Durang oʻyinlar uchun ochko beriladigan minimal yurishlar soni shaxmat variantiga qarab farq qiladi. Quyidagi jadvalda har bir variant uchun belgilangan qiymatlar koʻrsatilgan.';
 
   @override
   String get arenaVariant => 'Variant';
@@ -678,15 +650,13 @@ class AppLocalizationsUz extends AppLocalizations {
   String get arenaCustomStartDate => 'Boshlanish sanasini tanlash';
 
   @override
-  String get arenaCustomStartDateHelp =>
-      'Mahalliy vaqtingiz boʻyicha. Bu \"Turnir boshlanishigacha bo‘lgan vaqt\" sozlashini oʻzgartiradi';
+  String get arenaCustomStartDateHelp => 'Mahalliy vaqtingiz boʻyicha. Bu \"Turnir boshlanishigacha bo‘lgan vaqt\" sozlashini oʻzgartiradi';
 
   @override
   String get arenaAllowBerserk => 'Berserkka ruhsat berish';
 
   @override
-  String get arenaAllowBerserkHelp =>
-      'O‘yinchilar o‘z vaqtini yarmiga qisqartirsa, qo‘shimcha bal olishlariga ruhsat berish';
+  String get arenaAllowBerserkHelp => 'O‘yinchilar o‘z vaqtini yarmiga qisqartirsa, qo‘shimcha bal olishlariga ruhsat berish';
 
   @override
   String get arenaAllowChatHelp => 'Suhbatxonasida o‘yinchilarga muhokama qilishga ruhsat beradi';
@@ -695,8 +665,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get arenaArenaStreaks => 'Arena seriayalari';
 
   @override
-  String get arenaArenaStreaksHelp =>
-      '2 ta yutuqdan so‘ng, ketma‑ket yutuqdan so‘ng 4 bal hisoblanish boshlanadi 2 o‘rniga.';
+  String get arenaArenaStreaksHelp => '2 ta yutuqdan so‘ng, ketma‑ket yutuqdan so‘ng 4 bal hisoblanish boshlanadi 2 o‘rniga.';
 
   @override
   String get arenaNoBerserkAllowed => 'Berserkka ruhsat yo‘q';
@@ -726,12 +695,10 @@ class AppLocalizationsUz extends AppLocalizations {
   String get arenaPickYourTeam => 'Jamoangizni tanlang';
 
   @override
-  String get arenaWhichTeamWillYouRepresentInThisBattle =>
-      'Ushbu jangda qaysi jamoa nomidan qatnashasiz?';
+  String get arenaWhichTeamWillYouRepresentInThisBattle => 'Ushbu jangda qaysi jamoa nomidan qatnashasiz?';
 
   @override
-  String get arenaYouMustJoinOneOfTheseTeamsToParticipate =>
-      'Ishtirok etish uchun ushbu jamoalardan biriga qoʻshilishingiz kerak!';
+  String get arenaYouMustJoinOneOfTheseTeamsToParticipate => 'Ishtirok etish uchun ushbu jamoalardan biriga qoʻshilishingiz kerak!';
 
   @override
   String get arenaCreated => 'Yaratilgan';
@@ -746,8 +713,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get arenaTournamentStats => 'Turnir statistikasi';
 
   @override
-  String get arenaRankAvgHelp =>
-      'Oʻrtacha oʻrin — bu sizning turnirdagi oʻrningizning foizdagi ifodasidir. Pastroq qiymat — yaxshiroq degani.\n\nMasalan, 100 kishilik turnirda 3-oʻrinni egallash — 3% oʻrtacha oʻrin beradi. 1000 kishilik turnirda 10‑oʻrinni egallash — 1% oʻrtacha oʻrin beradi.';
+  String get arenaRankAvgHelp => 'Oʻrtacha oʻrin — bu sizning turnirdagi oʻrningizning foizdagi ifodasidir. Pastroq qiymat — yaxshiroq degani.\n\nMasalan, 100 kishilik turnirda 3-oʻrinni egallash — 3% oʻrtacha oʻrin beradi. 1000 kishilik turnirda 10‑oʻrinni egallash — 1% oʻrtacha oʻrin beradi.';
 
   @override
   String get arenaMedians => 'medianalar';
@@ -792,10 +758,8 @@ class AppLocalizationsUz extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other:
-          'Dastlabki $count ta yurish ichida durang qayd etilsa, har ikkala oʻyinchiga ham ochko berilmaydi.',
-      one:
-          'Dastlabki $count ta yurish ichida durang qayd etilsa, har ikkala oʻyinchiga ham ochko berilmaydi.',
+      other: 'Dastlabki $count ta yurish ichida durang qayd etilsa, har ikkala oʻyinchiga ham ochko berilmaydi.',
+      one: 'Dastlabki $count ta yurish ichida durang qayd etilsa, har ikkala oʻyinchiga ham ochko berilmaydi.',
     );
     return '$_temp0';
   }
@@ -833,12 +797,10 @@ class AppLocalizationsUz extends AppLocalizations {
   String get broadcastAboutBroadcasts => 'Translyatsiyalar haqida';
 
   @override
-  String get broadcastHowToUseLichessBroadcasts =>
-      'Lichess translyatsiyalaridan qanday foydalaniladi.';
+  String get broadcastHowToUseLichessBroadcasts => 'Lichess translyatsiyalaridan qanday foydalaniladi.';
 
   @override
-  String get broadcastTheNewRoundHelp =>
-      'Yangi turda oldingi turdagi aʼzolar va redaktorlar qatnashadi.';
+  String get broadcastTheNewRoundHelp => 'Yangi turda oldingi turdagi aʼzolar va redaktorlar qatnashadi.';
 
   @override
   String get broadcastAddRound => 'Tur qoʻshish';
@@ -870,12 +832,10 @@ class AppLocalizationsUz extends AppLocalizations {
   String get broadcastSourceSingleUrl => 'PGN manba URL manzili';
 
   @override
-  String get broadcastSourceUrlHelp =>
-      'Lichess PGN yangilanishlarini olishi uchun tekshiradigan URL manzili. U Internet orqali hamma uchun ochiq boʻlishi shart.';
+  String get broadcastSourceUrlHelp => 'Lichess PGN yangilanishlarini olishi uchun tekshiradigan URL manzili. U Internet orqali hamma uchun ochiq boʻlishi shart.';
 
   @override
-  String get broadcastSourceGameIds =>
-      'Boʻshliqlar bilan ajratilgan 64 tagacha Lichess oʻyin identifikatorlari.';
+  String get broadcastSourceGameIds => 'Boʻshliqlar bilan ajratilgan 64 tagacha Lichess oʻyin identifikatorlari.';
 
   @override
   String broadcastStartDateTimeZone(String param) {
@@ -898,12 +858,10 @@ class AppLocalizationsUz extends AppLocalizations {
   String get broadcastDeleteRound => 'Ushbu turni oʻchirish';
 
   @override
-  String get broadcastDefinitivelyDeleteRound =>
-      'Ushbu tur va unga tegishli barcha oʻyinlarni butunlay oʻchirish.';
+  String get broadcastDefinitivelyDeleteRound => 'Ushbu tur va unga tegishli barcha oʻyinlarni butunlay oʻchirish.';
 
   @override
-  String get broadcastDeleteAllGamesOfThisRound =>
-      'Ushbu turning barcha oʻyinlarini oʻchirib tashlash. Ularni qayta tiklash uchun manba faol holatda boʻlishi lozim.';
+  String get broadcastDeleteAllGamesOfThisRound => 'Ushbu turning barcha oʻyinlarini oʻchirib tashlash. Ularni qayta tiklash uchun manba faol holatda boʻlishi lozim.';
 
   @override
   String get broadcastEditRoundStudy => 'Tur sabogʻini tahrirlash';
@@ -912,16 +870,13 @@ class AppLocalizationsUz extends AppLocalizations {
   String get broadcastDeleteTournament => 'Ushbu turnirni oʻchirish';
 
   @override
-  String get broadcastDefinitivelyDeleteTournament =>
-      'Butun turnirni, uning barcha turlari va barcha oʻyinlarini butunlay oʻchirib tashlash.';
+  String get broadcastDefinitivelyDeleteTournament => 'Butun turnirni, uning barcha turlari va barcha oʻyinlarini butunlay oʻchirib tashlash.';
 
   @override
-  String get broadcastShowScores =>
-      'Oʻyin natijalari asosida oʻyinchilarning ochkolarini koʻrsatish';
+  String get broadcastShowScores => 'Oʻyin natijalari asosida oʻyinchilarning ochkolarini koʻrsatish';
 
   @override
-  String get broadcastReplacePlayerTags =>
-      'Ixtiyoriy: oʻyinchilar ismlari, reytinglari va unvonlarini oʻzgartirish';
+  String get broadcastReplacePlayerTags => 'Ixtiyoriy: oʻyinchilar ismlari, reytinglari va unvonlarini oʻzgartirish';
 
   @override
   String get broadcastFideFederations => 'FIDE federatsiyalari';
@@ -963,15 +918,13 @@ class AppLocalizationsUz extends AppLocalizations {
   String get broadcastOverview => 'Obzor';
 
   @override
-  String get broadcastSubscribeTitle =>
-      'Turlar boshlanishidan xabardor boʻlish uchun obuna boʻling. Bildirishnomalarni akkaunt sozlamalaridan boshqarish mumkin.';
+  String get broadcastSubscribeTitle => 'Turlar boshlanishidan xabardor boʻlish uchun obuna boʻling. Bildirishnomalarni akkaunt sozlamalaridan boshqarish mumkin.';
 
   @override
   String get broadcastUploadImage => 'Turnir rasmini yuklash';
 
   @override
-  String get broadcastNoBoardsYet =>
-      'Hozircha taxtalar yoʻq. Oʻyinlar yuklangach, ular shu yerda koʻrinadi.';
+  String get broadcastNoBoardsYet => 'Hozircha taxtalar yoʻq. Oʻyinlar yuklangach, ular shu yerda koʻrinadi.';
 
   @override
   String broadcastBoardsCanBeLoaded(String param) {
@@ -1019,8 +972,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get broadcastScore => 'Ochkolar';
 
   @override
-  String get broadcastStandingsDisclaimer =>
-      'Turnir jadvali translyatsiya qilingan oʻyinlar yordamida hisoblanadi va rasmiy natijalardan farq qilishi mumkin.';
+  String get broadcastStandingsDisclaimer => 'Turnir jadvali translyatsiya qilingan oʻyinlar yordamida hisoblanadi va rasmiy natijalardan farq qilishi mumkin.';
 
   @override
   String get broadcastAllTeams => 'Barcha jamoalar';
@@ -1053,8 +1005,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get broadcastBackToLiveMove => 'Jonli efirdagi yurishga qaytish';
 
   @override
-  String get broadcastSinceHideResults =>
-      'Natijalarni yashirishni tanlaganingiz sababli spoiler bermaslik uchun barcha obzor taxtalari boʻsh.';
+  String get broadcastSinceHideResults => 'Natijalarni yashirishni tanlaganingiz sababli spoiler bermaslik uchun barcha obzor taxtalari boʻsh.';
 
   @override
   String get broadcastLiveboard => 'Jonli efirdagi taxta';
@@ -1093,8 +1044,7 @@ class AppLocalizationsUz extends AppLocalizations {
   }
 
   @override
-  String get broadcastDefaultRoundNameHelp =>
-      'Birlamchi nomni saqlasangiz, avtomatik tarzda boshqa tillarga tarjima qilinadi.';
+  String get broadcastDefaultRoundNameHelp => 'Birlamchi nomni saqlasangiz, avtomatik tarzda boshqa tillarga tarjima qilinadi.';
 
   @override
   String get broadcastOpenTournament => 'Ochiq';
@@ -1196,8 +1146,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get challengeChallengeCanceled => 'Chorlov bekor qilindi.';
 
   @override
-  String get challengeRegisterToSendChallenges =>
-      'Ushbu foydalanuvchini oʻyinga chaqirish uchun roʻyxatdan oʻting.';
+  String get challengeRegisterToSendChallenges => 'Ushbu foydalanuvchini oʻyinga chaqirish uchun roʻyxatdan oʻting.';
 
   @override
   String challengeYouCannotChallengeX(String param) {
@@ -1231,16 +1180,13 @@ class AppLocalizationsUz extends AppLocalizations {
   String get challengeDeclineLater => 'Ayni dam men uchun qulay emas, iltimos keyinroq soʻrang.';
 
   @override
-  String get challengeDeclineTooFast =>
-      'Usbu vaqt boshqaruvi men uchun tezlik qiladi, iltimos sekinroq oʻynash uchun uzoqroq vaqt bilan oʻyinga chaqiring.';
+  String get challengeDeclineTooFast => 'Usbu vaqt boshqaruvi men uchun tezlik qiladi, iltimos sekinroq oʻynash uchun uzoqroq vaqt bilan oʻyinga chaqiring.';
 
   @override
-  String get challengeDeclineTooSlow =>
-      'Ushbu vaqt boshqaruvi men uchun sekin, iltimos tezroq oʻyin uchun qisqaroq vaqt bilan oʻyinga chaqiring.';
+  String get challengeDeclineTooSlow => 'Ushbu vaqt boshqaruvi men uchun sekin, iltimos tezroq oʻyin uchun qisqaroq vaqt bilan oʻyinga chaqiring.';
 
   @override
-  String get challengeDeclineTimeControl =>
-      'Men ushbu vaqt boshqaruvidagi chorlovni qabul qila olmayman.';
+  String get challengeDeclineTimeControl => 'Men ushbu vaqt boshqaruvidagi chorlovni qabul qila olmayman.';
 
   @override
   String get challengeDeclineRated => 'Iltimos menga reytingli chorlovni yuboring.';
@@ -1249,8 +1195,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get challengeDeclineCasual => 'Iltimos menga reytingsiz bellashuv chorlovini joʻnating.';
 
   @override
-  String get challengeDeclineStandard =>
-      'Xozir men bellashuvlar variantlarini qabul qila olmayman.';
+  String get challengeDeclineStandard => 'Xozir men bellashuvlar variantlarini qabul qila olmayman.';
 
   @override
   String get challengeDeclineVariant => 'Ayni damda ushbu variantda oʻynashga men tayyor emasman.';
@@ -1287,32 +1232,25 @@ class AppLocalizationsUz extends AppLocalizations {
   }
 
   @override
-  String get coordinatesKnowingTheChessBoard =>
-      'Shaxmat taxtasi koordinatalarini bilish bir necha sabablarga koʻra juda muhim mahoratdir:';
+  String get coordinatesKnowingTheChessBoard => 'Shaxmat taxtasi koordinatalarini bilish bir necha sabablarga koʻra juda muhim mahoratdir:';
 
   @override
-  String get coordinatesMostChessCourses =>
-      'Aksariyat shaxmat kurslari va mashqlari algebraik notatsiyadan keng foydalanadi.';
+  String get coordinatesMostChessCourses => 'Aksariyat shaxmat kurslari va mashqlari algebraik notatsiyadan keng foydalanadi.';
 
   @override
-  String get coordinatesTalkToYourChessFriends =>
-      'Bu shaxmatdagi doʻstlaringiz bilan muloqot qilishni osonlashtiradi, chunki ikkingiz ham bitta \"shaxmat tilini\" tushunasiz.';
+  String get coordinatesTalkToYourChessFriends => 'Bu shaxmatdagi doʻstlaringiz bilan muloqot qilishni osonlashtiradi, chunki ikkingiz ham bitta \"shaxmat tilini\" tushunasiz.';
 
   @override
-  String get coordinatesYouCanAnalyseAGameMoreEffectively =>
-      'Agar koordinatalarni tezda aniqlay olsangiz, oʻyinni samaraliroq tahlil qila olasiz.';
+  String get coordinatesYouCanAnalyseAGameMoreEffectively => 'Agar koordinatalarni tezda aniqlay olsangiz, oʻyinni samaraliroq tahlil qila olasiz.';
 
   @override
-  String get coordinatesACoordinateAppears =>
-      'Taxtada koordinata paydo boʻladi va siz unga mos keladigan katakchani bosishingiz kerak.';
+  String get coordinatesACoordinateAppears => 'Taxtada koordinata paydo boʻladi va siz unga mos keladigan katakchani bosishingiz kerak.';
 
   @override
-  String get coordinatesASquareIsHighlightedExplanation =>
-      'Taxtada biror katakcha rang bilan ajratiladi va siz uning koordinatasini kiritishingiz kerak (masalan, \"e4\").';
+  String get coordinatesASquareIsHighlightedExplanation => 'Taxtada biror katakcha rang bilan ajratiladi va siz uning koordinatasini kiritishingiz kerak (masalan, \"e4\").';
 
   @override
-  String get coordinatesYouHaveThirtySeconds =>
-      '30 sekund ichida imkon qadar koʻp katakchalarni toʻgʻri toping!';
+  String get coordinatesYouHaveThirtySeconds => '30 sekund ichida imkon qadar koʻp katakchalarni toʻgʻri toping!';
 
   @override
   String get coordinatesGoAsLongAsYouWant => 'Xohlaganingizcha davom eting, vaqt cheklanmagan!';
@@ -1336,8 +1274,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get coordinatesNameSquare => 'Katakchani nomlang';
 
   @override
-  String get coordinatesPracticeOnlySomeFilesAndRanks =>
-      'Faqat maʼlum vertikal va gorizontallar boʻyicha mashq qilish';
+  String get coordinatesPracticeOnlySomeFilesAndRanks => 'Faqat maʼlum vertikal va gorizontallar boʻyicha mashq qilish';
 
   @override
   String get patronDonate => 'Donat qilish';
@@ -1360,8 +1297,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get perfStatProvisional => 'aniqlanmagan';
 
   @override
-  String get perfStatNotEnoughRatedGames =>
-      'Aniq reytingni belgilash uchun reytingli oʻyinlar soni yetarli emas.';
+  String get perfStatNotEnoughRatedGames => 'Aniq reytingni belgilash uchun reytingli oʻyinlar soni yetarli emas.';
 
   @override
   String perfStatProgressOverLastXGames(String param) {
@@ -1476,8 +1412,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get preferencesBoardHighlights => 'Oxirgi yurish va shoh berish taxtada ko\'rsatilsin';
 
   @override
-  String get preferencesPieceDestinations =>
-      'Mumkin boʻlgan yurishlar koʻrsatilsin (qonuniy yurishlar va oldindan yurishlar)';
+  String get preferencesPieceDestinations => 'Mumkin boʻlgan yurishlar koʻrsatilsin (qonuniy yurishlar va oldindan yurishlar)';
 
   @override
   String get preferencesBoardCoordinates => 'Taxta koordinatalari (A–H, 1–8)';
@@ -1504,12 +1439,10 @@ class AppLocalizationsUz extends AppLocalizations {
   String get preferencesShowFlairs => 'Oʻyinchilar hisbelgilari koʻrsatilsin';
 
   @override
-  String get preferencesExplainShowPlayerRatings =>
-      'Ushbu sozlama butun Lichess boʻylab barcha reytinglarni yashiradi va bor eʼtiboringizni shaxmatga qaratishga yordam beradi. Reytingli oʻyinlar reytingingizga baribir taʼsir qiladi, bu sozlama faqat reytinglarni yashirish uchun.';
+  String get preferencesExplainShowPlayerRatings => 'Ushbu sozlama butun Lichess boʻylab barcha reytinglarni yashiradi va bor eʼtiboringizni shaxmatga qaratishga yordam beradi. Reytingli oʻyinlar reytingingizga baribir taʼsir qiladi, bu sozlama faqat reytinglarni yashirish uchun.';
 
   @override
-  String get preferencesDisplayBoardResizeHandle =>
-      'Taxta oʻlchamini oʻzgartirish tutqichi koʻrsatilsin';
+  String get preferencesDisplayBoardResizeHandle => 'Taxta oʻlchamini oʻzgartirish tutqichi koʻrsatilsin';
 
   @override
   String get preferencesOnlyOnInitialPosition => 'Faqat boshlangʻich pozitsiyada';
@@ -1530,12 +1463,10 @@ class AppLocalizationsUz extends AppLocalizations {
   String get preferencesWhenTimeRemainingLessThanTenSeconds => '10 sekunddan kam vaqt qolganda';
 
   @override
-  String get preferencesHorizontalGreenProgressBars =>
-      'Gorizantal yashil vaqt indikatori koʻrsatilsin';
+  String get preferencesHorizontalGreenProgressBars => 'Gorizantal yashil vaqt indikatori koʻrsatilsin';
 
   @override
-  String get preferencesSoundWhenTimeGetsCritical =>
-      'Vaqt oz qolganda tovush bilan ogohlantirilsin';
+  String get preferencesSoundWhenTimeGetsCritical => 'Vaqt oz qolganda tovush bilan ogohlantirilsin';
 
   @override
   String get preferencesGiveMoreTime => 'Vaqt berish';
@@ -1556,30 +1487,25 @@ class AppLocalizationsUz extends AppLocalizations {
   String get preferencesBothClicksAndDrag => 'Har ikkala usulda';
 
   @override
-  String get preferencesPremovesPlayingDuringOpponentTurn =>
-      'Oldindan yurish (raqib gali paytida yurish)';
+  String get preferencesPremovesPlayingDuringOpponentTurn => 'Oldindan yurish (raqib gali paytida yurish)';
 
   @override
-  String get preferencesTakebacksWithOpponentApproval =>
-      'Yurishni qaytarish (raqib roziligi bilan)';
+  String get preferencesTakebacksWithOpponentApproval => 'Yurishni qaytarish (raqib roziligi bilan)';
 
   @override
   String get preferencesInCasualGamesOnly => 'Faqat reytingsiz oʻyinlarda';
 
   @override
-  String get preferencesPromoteToQueenAutomatically =>
-      'Piyoda avtomatik ravishda farzinga aylanadi';
+  String get preferencesPromoteToQueenAutomatically => 'Piyoda avtomatik ravishda farzinga aylanadi';
 
   @override
-  String get preferencesExplainPromoteToQueenAutomatically =>
-      'Piyodani avtomatik almashtirishni vaqtinchalik oʻchirib turish uchun yurish vaqtida <ctrl> tugmasini bosib turing';
+  String get preferencesExplainPromoteToQueenAutomatically => 'Piyodani avtomatik almashtirishni vaqtinchalik oʻchirib turish uchun yurish vaqtida <ctrl> tugmasini bosib turing';
 
   @override
   String get preferencesWhenPremoving => 'Oldindan yurilganda';
 
   @override
-  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically =>
-      'Yurish uch marta takrorlanganda avtomatik tarzda durang talab qilish';
+  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Yurish uch marta takrorlanganda avtomatik tarzda durang talab qilish';
 
   @override
   String get preferencesWhenTimeRemainingLessThanThirtySeconds => '30 sekunddan kam vaqt qolganda';
@@ -1588,8 +1514,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get preferencesMoveConfirmation => 'Yurishni tasdiqlash';
 
   @override
-  String get preferencesExplainCanThenBeTemporarilyDisabled =>
-      'Oʻyin vaqtida taxta menyusi orqali vaqtinchalik oʻchirib turish mumkin';
+  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Oʻyin vaqtida taxta menyusi orqali vaqtinchalik oʻchirib turish mumkin';
 
   @override
   String get preferencesInCorrespondenceGames => 'Yozishmali oʻyinlarda';
@@ -1598,8 +1523,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get preferencesCorrespondenceAndUnlimited => 'Yozishmali va vaqti cheksiz oʻyinlarda';
 
   @override
-  String get preferencesConfirmResignationAndDrawOffers =>
-      'Taslim boʻlish va durang takliflarini tasdiqlash';
+  String get preferencesConfirmResignationAndDrawOffers => 'Taslim boʻlish va durang takliflarini tasdiqlash';
 
   @override
   String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Rokirovka usuli';
@@ -1617,23 +1541,19 @@ class AppLocalizationsUz extends AppLocalizations {
   String get preferencesInputMovesWithVoice => 'Yurishni ovoz orqali kiritish';
 
   @override
-  String get preferencesSnapArrowsToValidMoves =>
-      'Faqat mumkin boʻlgan yurishlar uchun strelka chizish';
+  String get preferencesSnapArrowsToValidMoves => 'Faqat mumkin boʻlgan yurishlar uchun strelka chizish';
 
   @override
-  String get preferencesSayGgWpAfterLosingOrDrawing =>
-      'Magʻlubiyat yoki durangdan keyin \"Good game, well played\" deb chatda yozish';
+  String get preferencesSayGgWpAfterLosingOrDrawing => 'Magʻlubiyat yoki durangdan keyin \"Good game, well played\" deb chatda yozish';
 
   @override
   String get preferencesYourPreferencesHaveBeenSaved => 'Sozlamalaringiz saqlandi.';
 
   @override
-  String get preferencesScrollOnTheBoardToReplayMoves =>
-      'Yurishlarni koʻrish uchun taxta ustida sichqonchani aylantirish';
+  String get preferencesScrollOnTheBoardToReplayMoves => 'Yurishlarni koʻrish uchun taxta ustida sichqonchani aylantirish';
 
   @override
-  String get preferencesCorrespondenceEmailNotification =>
-      'Yozishmali oʻyinlar haqida hisobotni e‑pochta orqali har kuni joʻnatish';
+  String get preferencesCorrespondenceEmailNotification => 'Yozishmali oʻyinlar haqida hisobotni e‑pochta orqali har kuni joʻnatish';
 
   @override
   String get preferencesNotifyStreamStart => 'Strimer translyatsiya boshlaganida';
@@ -1666,8 +1586,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get preferencesNotifyBell => 'Lichess ichida qoʻngʻiroq tovushli bildirishnoma';
 
   @override
-  String get preferencesNotifyPush =>
-      'Lichessʼdan tashqarida boʻlganingizda qurilma bildirishnomalari';
+  String get preferencesNotifyPush => 'Lichessʼdan tashqarida boʻlganingizda qurilma bildirishnomalari';
 
   @override
   String get preferencesNotifyWeb => 'Brauzer';
@@ -1736,8 +1655,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get preferencesManeuverArrowsHelp => 'Bitta dona uchun dvijokning yurishlar ketma‑ketligi';
 
   @override
-  String get preferencesHoverOverSettingLabelsForHelp =>
-      'Yordam olish uchun sozlama nomi ustiga kursorni qoʻying';
+  String get preferencesHoverOverSettingLabelsForHelp => 'Yordam olish uchun sozlama nomi ustiga kursorni qoʻying';
 
   @override
   String get puzzlePuzzles => 'Masalalar';
@@ -1785,8 +1703,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get puzzleDownVote => 'Masala yoqmadi';
 
   @override
-  String get puzzleYourPuzzleRatingWillNotChange =>
-      'Masalalar boʻyicha reytingingiz oʻzgarmaydi. Unutmang, masalalar yechish musobaqa emas. Reytingingiz shunchaki mahoratingizga mos keladigan eng yaxshi masalalarni tanlashga yordam beradi.';
+  String get puzzleYourPuzzleRatingWillNotChange => 'Masalalar boʻyicha reytingingiz oʻzgarmaydi. Unutmang, masalalar yechish musobaqa emas. Reytingingiz shunchaki mahoratingizga mos keladigan eng yaxshi masalalarni tanlashga yordam beradi.';
 
   @override
   String get puzzleFindTheBestMoveForWhite => 'Oqlar uchun eng yaxshi yurishni toping.';
@@ -1833,12 +1750,10 @@ class AppLocalizationsUz extends AppLocalizations {
   String get puzzlePuzzlesByOpenings => 'Debyutlar boʻyicha masalalar';
 
   @override
-  String get puzzleOpeningsYouPlayedTheMost =>
-      'Reytingli oʻyinlarda eng koʻp oʻynagan debyutlaringiz';
+  String get puzzleOpeningsYouPlayedTheMost => 'Reytingli oʻyinlarda eng koʻp oʻynagan debyutlaringiz';
 
   @override
-  String get puzzleUseFindInPage =>
-      'Yoqtirgan debyutlaringizni topish uchun brauzer menyusidagi \"Sahifadan izlash\" funksiyasidan foydalaning!';
+  String get puzzleUseFindInPage => 'Yoqtirgan debyutlaringizni topish uchun brauzer menyusidagi \"Sahifadan izlash\" funksiyasidan foydalaning!';
 
   @override
   String get puzzleUseCtrlF => 'Yoqtirgan debyutlaringizni topish uchun Ctrl+f tugmalarini bosing!';
@@ -1914,8 +1829,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get puzzleFailed => 'xato';
 
   @override
-  String get puzzleStreakDescription =>
-      'Borgan sari qiyinlashib boradigan masalalarni yeching va gʻalabalar seriyasini qayd eting. Vaqt chegaralanmagan, shuning uchun shoshilmasangiz ham boʻladi. Birgina xato yursangiz oʻyin tugaydi! Lekin har bir urinishda bitta yurishni oʻtkazib yuborish imkoniga egasiz.';
+  String get puzzleStreakDescription => 'Borgan sari qiyinlashib boradigan masalalarni yeching va gʻalabalar seriyasini qayd eting. Vaqt chegaralanmagan, shuning uchun shoshilmasangiz ham boʻladi. Birgina xato yursangiz oʻyin tugaydi! Lekin har bir urinishda bitta yurishni oʻtkazib yuborish imkoniga egasiz.';
 
   @override
   String puzzleYourStreakX(String param) {
@@ -1923,8 +1837,7 @@ class AppLocalizationsUz extends AppLocalizations {
   }
 
   @override
-  String get puzzleStreakSkipExplanation =>
-      'Seriyangizni saqlab qolish uchun ushbu yurishni oʻtkazib yuboring! Bu imkoniyatdan har bir urinishda faqat bir marta foydalanish mumkin.';
+  String get puzzleStreakSkipExplanation => 'Seriyangizni saqlab qolish uchun ushbu yurishni oʻtkazib yuboring! Bu imkoniyatdan har bir urinishda faqat bir marta foydalanish mumkin.';
 
   @override
   String get puzzleContinueTheStreak => 'Seriyani davom ettirish';
@@ -1942,8 +1855,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get puzzleSearchPuzzles => 'Masalalarni izlash';
 
   @override
-  String get puzzleFromMyGamesNone =>
-      'Bazada sizning oʻyinlaringizdan olingan masalalar hali yoʻq.\n\nOʻyinlaringiz asosida masala yaratilish imkoniyatini oshirish uchun rapid va klassik yoʻnalishlarida koʻproq partiyalar oʻynang!';
+  String get puzzleFromMyGamesNone => 'Bazada sizning oʻyinlaringizdan olingan masalalar hali yoʻq.\n\nOʻyinlaringiz asosida masala yaratilish imkoniyatini oshirish uchun rapid va klassik yoʻnalishlarida koʻproq partiyalar oʻynang!';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Shugʻullaning, tahlil qiling, rivojlaning';
@@ -1954,12 +1866,10 @@ class AppLocalizationsUz extends AppLocalizations {
   }
 
   @override
-  String get puzzleNoPuzzlesToShow =>
-      'Hali hech narsa yoʻq, avval bir nechta masala yechib koʻring!';
+  String get puzzleNoPuzzlesToShow => 'Hali hech narsa yoʻq, avval bir nechta masala yechib koʻring!';
 
   @override
-  String get puzzleImprovementAreasDescription =>
-      'Optimal oʻsish uchun bular ustida shugʻullaning!';
+  String get puzzleImprovementAreasDescription => 'Optimal oʻsish uchun bular ustida shugʻullaning!';
 
   @override
   String get puzzleStrengthDescription => 'Siz ushbu mavzularda eng yaxshi natija koʻrsatmoqdasiz';
@@ -2034,64 +1944,55 @@ class AppLocalizationsUz extends AppLocalizations {
   String get puzzleThemeAdvancedPawn => 'Ildamlagan piyoda';
 
   @override
-  String get puzzleThemeAdvancedPawnDescription =>
-      'Sizning piyodalaringizdan biri raqib pozitsiyasining ichkarisiga kirib borgan va, ehtimol, boshqa donaga aylanish bilan tahdid qilmoqda.';
+  String get puzzleThemeAdvancedPawnDescription => 'Sizning piyodalaringizdan biri raqib pozitsiyasining ichkarisiga kirib borgan va, ehtimol, boshqa donaga aylanish bilan tahdid qilmoqda.';
 
   @override
   String get puzzleThemeAdvantage => 'Ustunlik';
 
   @override
-  String get puzzleThemeAdvantageDescription =>
-      'Hal qiluvchi ustunlikka erishish imkoniyatidan foydalaning. (200cp ≤ eval ≤ 600cp)';
+  String get puzzleThemeAdvantageDescription => 'Hal qiluvchi ustunlikka erishish imkoniyatidan foydalaning. (200cp ≤ eval ≤ 600cp)';
 
   @override
   String get puzzleThemeAnastasiaMate => 'Anastasiya moti';
 
   @override
-  String get puzzleThemeAnastasiaMateDescription =>
-      'Ot va rux (yoki farzin) raqib shohini taxta cheti va oʻzining donasi orasida qisib qo‘yish uchun birlashadi.';
+  String get puzzleThemeAnastasiaMateDescription => 'Ot va rux (yoki farzin) raqib shohini taxta cheti va oʻzining donasi orasida qisib qo‘yish uchun birlashadi.';
 
   @override
   String get puzzleThemeArabianMate => 'Arabcha mot';
 
   @override
-  String get puzzleThemeArabianMateDescription =>
-      'Ot va rux raqib shohini taxta burchagida mot qiladi.';
+  String get puzzleThemeArabianMateDescription => 'Ot va rux raqib shohini taxta burchagida mot qiladi.';
 
   @override
   String get puzzleThemeAttackingF2F7 => 'f2 yoki f7 ga hujum qilish';
 
   @override
-  String get puzzleThemeAttackingF2F7Description =>
-      'f2 yoki f7 piyodasiga qaratilgan hujum (masalan, \"Qovurilgan jigar\" debyutidagidek).';
+  String get puzzleThemeAttackingF2F7Description => 'f2 yoki f7 piyodasiga qaratilgan hujum (masalan, \"Qovurilgan jigar\" debyutidagidek).';
 
   @override
   String get puzzleThemeAttraction => 'Jalb qilish';
 
   @override
-  String get puzzleThemeAttractionDescription =>
-      'Raqib donasini keyingi taktik zarba uchun qulay boʻlgan katakka kelishga majbur qiluvchi almashuv yoki qurbonlik.';
+  String get puzzleThemeAttractionDescription => 'Raqib donasini keyingi taktik zarba uchun qulay boʻlgan katakka kelishga majbur qiluvchi almashuv yoki qurbonlik.';
 
   @override
   String get puzzleThemeBackRankMate => 'Gorizontal yakun';
 
   @override
-  String get puzzleThemeBackRankMateDescription =>
-      'Shoh oʻz donalari orasida qisilib qolganida, uni eng chetki gorizontalda mot qilish.';
+  String get puzzleThemeBackRankMateDescription => 'Shoh oʻz donalari orasida qisilib qolganida, uni eng chetki gorizontalda mot qilish.';
 
   @override
   String get puzzleThemeBalestraMate => 'Balestra moti';
 
   @override
-  String get puzzleThemeBalestraMateDescription =>
-      'Fil bilan beriladigan mot; bunda farzin shohning boshqa qochishi yoʻllarini toʻsib qoʻyadi';
+  String get puzzleThemeBalestraMateDescription => 'Fil bilan beriladigan mot; bunda farzin shohning boshqa qochishi yoʻllarini toʻsib qoʻyadi';
 
   @override
   String get puzzleThemeBlindSwineMate => 'Blind Swine moti';
 
   @override
-  String get puzzleThemeBlindSwineMateDescription =>
-      'Ikkita rux 2x2 katakli maydonda shohga mot beradi.';
+  String get puzzleThemeBlindSwineMateDescription => 'Ikkita rux 2x2 katakli maydonda shohga mot beradi.';
 
   @override
   String get puzzleThemeBishopEndgame => 'Filli endshpil';
@@ -2103,113 +2004,97 @@ class AppLocalizationsUz extends AppLocalizations {
   String get puzzleThemeBodenMate => 'Boden moti';
 
   @override
-  String get puzzleThemeBodenMateDescription =>
-      'Ikkita hujumchi fil kesishuvchi diagonallar boʻylab oʻz donalari bilan qamalib qolgan shohga mot beradi.';
+  String get puzzleThemeBodenMateDescription => 'Ikkita hujumchi fil kesishuvchi diagonallar boʻylab oʻz donalari bilan qamalib qolgan shohga mot beradi.';
 
   @override
   String get puzzleThemeCastling => 'Rokirovka';
 
   @override
-  String get puzzleThemeCastlingDescription =>
-      'Shohni xavfsiz joyga oʻtkazing va ruxni hujumga tayyorlang.';
+  String get puzzleThemeCastlingDescription => 'Shohni xavfsiz joyga oʻtkazing va ruxni hujumga tayyorlang.';
 
   @override
   String get puzzleThemeCapturingDefender => 'Himoyachini yoʻq qilish';
 
   @override
-  String get puzzleThemeCapturingDefenderDescription =>
-      'Boshqa bir donani himoya qilayotgan muhim donani urib olish. Bu esa oʻsha himoyasiz qolgan donani keyingi yurishda qoʻlga kiritish imkonini beradi.';
+  String get puzzleThemeCapturingDefenderDescription => 'Boshqa bir donani himoya qilayotgan muhim donani urib olish. Bu esa oʻsha himoyasiz qolgan donani keyingi yurishda qoʻlga kiritish imkonini beradi.';
 
   @override
   String get puzzleThemeCollinearMove => 'Chiziqli yurish';
 
   @override
-  String get puzzleThemeCollinearMoveDescription =>
-      'Ikki donasi bir‑biriga roʻbaroʻ kelgan holatda, bir dona dushman donasini urmasdan hujum chizigʻi boʻylab harakatlanadi.';
+  String get puzzleThemeCollinearMoveDescription => 'Ikki donasi bir‑biriga roʻbaroʻ kelgan holatda, bir dona dushman donasini urmasdan hujum chizigʻi boʻylab harakatlanadi.';
 
   @override
   String get puzzleThemeCornerMate => 'Burchak moti';
 
   @override
-  String get puzzleThemeCornerMateDescription =>
-      'Rux yoki farzin yordamida shohni burchakka qamab, ot bilan mot qilish.';
+  String get puzzleThemeCornerMateDescription => 'Rux yoki farzin yordamida shohni burchakka qamab, ot bilan mot qilish.';
 
   @override
   String get puzzleThemeCrushing => 'Mutlaq ustunlik';
 
   @override
-  String get puzzleThemeCrushingDescription =>
-      'Raqib xatosidan foydalanib, hal qiluvchi ustunlikka erishing. (eval ≥ 600cp)';
+  String get puzzleThemeCrushingDescription => 'Raqib xatosidan foydalanib, hal qiluvchi ustunlikka erishing. (eval ≥ 600cp)';
 
   @override
   String get puzzleThemeDiscoveredCheck => 'Ochiq shoh';
 
   @override
-  String get puzzleThemeDiscoveredCheckDescription =>
-      'Bir donani surish orqali boshqa bir katakdagi dona bilan shoh bering. Bu usul koʻpincha hal qiluvchi ustunlikka olib keladi.';
+  String get puzzleThemeDiscoveredCheckDescription => 'Bir donani surish orqali boshqa bir katakdagi dona bilan shoh bering. Bu usul koʻpincha hal qiluvchi ustunlikka olib keladi.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Ikki fil moti';
 
   @override
-  String get puzzleThemeDoubleBishopMateDescription =>
-      'Ikkita hujumchi fil yonma‑yon diagonallar boʻylab oʻz donalari bilan qamalib qolgan shohga mot beradi.';
+  String get puzzleThemeDoubleBishopMateDescription => 'Ikkita hujumchi fil yonma‑yon diagonallar boʻylab oʻz donalari bilan qamalib qolgan shohga mot beradi.';
 
   @override
   String get puzzleThemeDovetailMate => 'Koziyo moti';
 
   @override
-  String get puzzleThemeDovetailMateDescription =>
-      'Farzin yordamida beriladigan mot; bunda farzin shohga yopishib turadi, shohning yagona ikkita qochish katagi esa oʻz donalari bilan toʻsilib qolgan boʻladi.';
+  String get puzzleThemeDovetailMateDescription => 'Farzin yordamida beriladigan mot; bunda farzin shohga yopishib turadi, shohning yagona ikkita qochish katagi esa oʻz donalari bilan toʻsilib qolgan boʻladi.';
 
   @override
   String get puzzleThemeEquality => 'Tenglik';
 
   @override
-  String get puzzleThemeEqualityDescription =>
-      'Yutqazayotgan pozitsiyadan chiqib, durang yoki teng pozitsiyaga erishish. (eval ≤ 200cp)';
+  String get puzzleThemeEqualityDescription => 'Yutqazayotgan pozitsiyadan chiqib, durang yoki teng pozitsiyaga erishish. (eval ≤ 200cp)';
 
   @override
   String get puzzleThemeKingsideAttack => 'Shoh qanotidagi hujum';
 
   @override
-  String get puzzleThemeKingsideAttackDescription =>
-      'Raqib shohi qisqa rokirovka qilganidan soʻng uyushtirilgan hujum.';
+  String get puzzleThemeKingsideAttackDescription => 'Raqib shohi qisqa rokirovka qilganidan soʻng uyushtirilgan hujum.';
 
   @override
   String get puzzleThemeClearance => 'Tozalash';
 
   @override
-  String get puzzleThemeClearanceDescription =>
-      'Navbatdagi taktik gʻoya uchun katak, liniya yoki diagonalni boʻshating (koʻpincha temp bilan).';
+  String get puzzleThemeClearanceDescription => 'Navbatdagi taktik gʻoya uchun katak, liniya yoki diagonalni boʻshating (koʻpincha temp bilan).';
 
   @override
   String get puzzleThemeDefensiveMove => 'Himoya yurishi';
 
   @override
-  String get puzzleThemeDefensiveMoveDescription =>
-      'Moddiy yoʻqotish yoki pozitsion ustunlikni boy bermaslik uchun zarur boʻlgan aniq yurish.';
+  String get puzzleThemeDefensiveMoveDescription => 'Moddiy yoʻqotish yoki pozitsion ustunlikni boy bermaslik uchun zarur boʻlgan aniq yurish.';
 
   @override
   String get puzzleThemeDeflection => 'Chalgʻitish';
 
   @override
-  String get puzzleThemeDeflectionDescription =>
-      'Raqib donasini oʻzining muhim vazifasidan (masalan, asosiy katakni himoya qilishdan) chalgʻituvchi yurish.';
+  String get puzzleThemeDeflectionDescription => 'Raqib donasini oʻzining muhim vazifasidan (masalan, asosiy katakni himoya qilishdan) chalgʻituvchi yurish.';
 
   @override
   String get puzzleThemeDiscoveredAttack => 'Ochiq hujum';
 
   @override
-  String get puzzleThemeDiscoveredAttackDescription =>
-      'Uzoq masofaga zarba beruvchi dona (masalan, rux) yoʻlini toʻsib turgan boshqa bir donani (masalan, otni) surish orqali hujum uyushtirish.';
+  String get puzzleThemeDiscoveredAttackDescription => 'Uzoq masofaga zarba beruvchi dona (masalan, rux) yoʻlini toʻsib turgan boshqa bir donani (masalan, otni) surish orqali hujum uyushtirish.';
 
   @override
   String get puzzleThemeDoubleCheck => 'Ikkiyoqlama shoh';
 
   @override
-  String get puzzleThemeDoubleCheckDescription =>
-      'Ochildi‑shoh berish natijasida bir vaqtning oʻzida ikkita dona bilan shoh berish; bunda ham joyidan qoʻzgʻalgan, ham yoʻli ochilgan dona raqib shohiga hujum qiladi.';
+  String get puzzleThemeDoubleCheckDescription => 'Ochildi‑shoh berish natijasida bir vaqtning oʻzida ikkita dona bilan shoh berish; bunda ham joyidan qoʻzgʻalgan, ham yoʻli ochilgan dona raqib shohiga hujum qiladi.';
 
   @override
   String get puzzleThemeEndgame => 'Endshpil';
@@ -2218,99 +2103,85 @@ class AppLocalizationsUz extends AppLocalizations {
   String get puzzleThemeEndgameDescription => 'Oʻyinning yakuniy bosqichidagi taktik usul.';
 
   @override
-  String get puzzleThemeEnPassantDescription =>
-      '\"En passant\" qoidasiga asoslangan taktika; raqib piyodasi ikki qadam yurib sizning piyodangiz bilan yonma-yon kelib qolsa, uni goʻyo bir qadam yurganidek urib olishingiz mumkin.';
+  String get puzzleThemeEnPassantDescription => '\"En passant\" qoidasiga asoslangan taktika; raqib piyodasi ikki qadam yurib sizning piyodangiz bilan yonma-yon kelib qolsa, uni goʻyo bir qadam yurganidek urib olishingiz mumkin.';
 
   @override
   String get puzzleThemeEpauletteMate => 'Epolet moti';
 
   @override
-  String get puzzleThemeEpauletteMateDescription =>
-      'Shohga shoh berilganda, uning ikki yonidagi kataklarni oʻzining donalari toʻsib turgan boʻladi.';
+  String get puzzleThemeEpauletteMateDescription => 'Shohga shoh berilganda, uning ikki yonidagi kataklarni oʻzining donalari toʻsib turgan boʻladi.';
 
   @override
   String get puzzleThemeExposedKing => 'Ochiq qolgan shoh';
 
   @override
-  String get puzzleThemeExposedKingDescription =>
-      'Atrofida himoyachilari kam qolgan shohga qarshi taktik zarba; bu holat koʻpincha mot bilan yakunlanadi.';
+  String get puzzleThemeExposedKingDescription => 'Atrofida himoyachilari kam qolgan shohga qarshi taktik zarba; bu holat koʻpincha mot bilan yakunlanadi.';
 
   @override
   String get puzzleThemeFork => 'Vilka';
 
   @override
-  String get puzzleThemeForkDescription =>
-      'Bitta yurish orqali raqibning ikki donasiga baravar hujum qilish.';
+  String get puzzleThemeForkDescription => 'Bitta yurish orqali raqibning ikki donasiga baravar hujum qilish.';
 
   @override
   String get puzzleThemeHangingPiece => 'Himoyasiz dona';
 
   @override
-  String get puzzleThemeHangingPieceDescription =>
-      'Raqibning yetarlicha himoya qilinmagan donasini tekinga urib olish imkonini beruvchi taktik holat.';
+  String get puzzleThemeHangingPieceDescription => 'Raqibning yetarlicha himoya qilinmagan donasini tekinga urib olish imkonini beruvchi taktik holat.';
 
   @override
   String get puzzleThemeHookMate => 'Qarmoq moti';
 
   @override
-  String get puzzleThemeHookMateDescription =>
-      'Rux, ot va piyoda ishtirokidagi mot; bunda raqibning oʻz piyodasi ham shohning qochish yoʻllarini cheklashda “yordam beradi”.';
+  String get puzzleThemeHookMateDescription => 'Rux, ot va piyoda ishtirokidagi mot; bunda raqibning oʻz piyodasi ham shohning qochish yoʻllarini cheklashda “yordam beradi”.';
 
   @override
   String get puzzleThemeInterference => 'Toʻsiq';
 
   @override
-  String get puzzleThemeInterferenceDescription =>
-      'Raqibning ikki donasi orasiga oʻz donangizni qoʻyib, ularning bir-birini himoya qilishiga toʻsqinlik qilish (masalan, ikkita rux orasidagi katakka otni qoʻyish).';
+  String get puzzleThemeInterferenceDescription => 'Raqibning ikki donasi orasiga oʻz donangizni qoʻyib, ularning bir-birini himoya qilishiga toʻsqinlik qilish (masalan, ikkita rux orasidagi katakka otni qoʻyish).';
 
   @override
   String get puzzleThemeIntermezzo => 'Oraliq yurish';
 
   @override
-  String get puzzleThemeIntermezzoDescription =>
-      'Kutilayotgan yurishni qilishdan oldin, raqib javob berishi shart boʻlgan xavfli hamla qilish. Bu usul nemis tilida \"Zwischenzug\" deb ham ataladi.';
+  String get puzzleThemeIntermezzoDescription => 'Kutilayotgan yurishni qilishdan oldin, raqib javob berishi shart boʻlgan xavfli hamla qilish. Bu usul nemis tilida \"Zwischenzug\" deb ham ataladi.';
 
   @override
   String get puzzleThemeKillBoxMate => 'Oʻlim qutisi moti';
 
   @override
-  String get puzzleThemeKillBoxMateDescription =>
-      'Rux shohning yonida turadi va farzin tomonidan himoya qilinadi, farzin esa qolgan qochish yoʻllarini ham toʻsib qoʻyadi. Rux va farzin raqib shohini 3 ga 3 katakli \"qopqon\"ga solib mot qiladi.';
+  String get puzzleThemeKillBoxMateDescription => 'Rux shohning yonida turadi va farzin tomonidan himoya qilinadi, farzin esa qolgan qochish yoʻllarini ham toʻsib qoʻyadi. Rux va farzin raqib shohini 3 ga 3 katakli \"qopqon\"ga solib mot qiladi.';
 
   @override
   String get puzzleThemePillsburysMate => 'Pillsbury moti';
 
   @override
-  String get puzzleThemePillsburysMateDescription =>
-      'Rux bilan beriladigan mot; bunda fil raqib shohini burchakka siqib chiqarishga va qochish yoʻllarini yopishga yordam beradi.';
+  String get puzzleThemePillsburysMateDescription => 'Rux bilan beriladigan mot; bunda fil raqib shohini burchakka siqib chiqarishga va qochish yoʻllarini yopishga yordam beradi.';
 
   @override
   String get puzzleThemeMorphysMate => 'Morphy moti';
 
   @override
-  String get puzzleThemeMorphysMateDescription =>
-      'Fil bilan shohga mot berish; bunda rux shohning qochish yoʻllarini toʻsib, uning harakatini cheklab turadi.';
+  String get puzzleThemeMorphysMateDescription => 'Fil bilan shohga mot berish; bunda rux shohning qochish yoʻllarini toʻsib, uning harakatini cheklab turadi.';
 
   @override
   String get puzzleThemeSwallowstailMate => 'Qaldirgʻoch dumi moti';
 
   @override
-  String get puzzleThemeSwallowstailMateDescription =>
-      'Tashqi koʻrinishi qaldirgʻoch dumiga yoki \"V\" shakliga oʻxshash boʻlgan mot turi.';
+  String get puzzleThemeSwallowstailMateDescription => 'Tashqi koʻrinishi qaldirgʻoch dumiga yoki \"V\" shakliga oʻxshash boʻlgan mot turi.';
 
   @override
   String get puzzleThemeTriangleMate => 'Uchburchak mot';
 
   @override
-  String get puzzleThemeTriangleMateDescription =>
-      'Farzin va rux bitta gorizontal yoki vertikalda raqib shohidan bir katak uzoqlikda joylashadi. Ular oʻzaro bir katak masofa bilan ajralib, shoh bilan birga uchburchak shaklini hosil qiladi.';
+  String get puzzleThemeTriangleMateDescription => 'Farzin va rux bitta gorizontal yoki vertikalda raqib shohidan bir katak uzoqlikda joylashadi. Ular oʻzaro bir katak masofa bilan ajralib, shoh bilan birga uchburchak shaklini hosil qiladi.';
 
   @override
   String get puzzleThemeVukovicMate => 'Vukovich moti';
 
   @override
-  String get puzzleThemeVukovicMateDescription =>
-      'Rux va ot bilan beriladigan mot. Bunda rux boshqa bir dona himoyasi ostida yakuniy zarbani beradi, ot esa shohning qochish yoʻllarini toʻsib turadi.';
+  String get puzzleThemeVukovicMateDescription => 'Rux va ot bilan beriladigan mot. Bunda rux boshqa bir dona himoyasi ostida yakuniy zarbani beradi, ot esa shohning qochish yoʻllarini toʻsib turadi.';
 
   @override
   String get puzzleThemeKnightEndgame => 'Otli endshpil';
@@ -2328,15 +2199,13 @@ class AppLocalizationsUz extends AppLocalizations {
   String get puzzleThemeMaster => 'Ustalar oʻyinlari';
 
   @override
-  String get puzzleThemeMasterDescription =>
-      'Unvonga ega shaxmatchilar oʻyinlaridan olingan masalalar.';
+  String get puzzleThemeMasterDescription => 'Unvonga ega shaxmatchilar oʻyinlaridan olingan masalalar.';
 
   @override
   String get puzzleThemeMasterVsMaster => 'Usta vs usta oʻyinlari';
 
   @override
-  String get puzzleThemeMasterVsMasterDescription =>
-      'Har ikkala ishtirokchi shaxmat unvoniga ega boʻlgan oʻyinlardan olingan masalalar.';
+  String get puzzleThemeMasterVsMasterDescription => 'Har ikkala ishtirokchi shaxmat unvoniga ega boʻlgan oʻyinlardan olingan masalalar.';
 
   @override
   String get puzzleThemeMate => 'Mot';
@@ -2396,8 +2265,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get puzzleThemeOperaMate => 'Opera moti';
 
   @override
-  String get puzzleThemeOperaMateDescription =>
-      'Rux bilan shohga mot berish; bunda fil ruxni himoya qilib turadi hamda shohning qochish yoʻllarini yopadi.';
+  String get puzzleThemeOperaMateDescription => 'Rux bilan shohga mot berish; bunda fil ruxni himoya qilib turadi hamda shohning qochish yoʻllarini yopadi.';
 
   @override
   String get puzzleThemePawnEndgame => 'Piyodali endshpil';
@@ -2409,15 +2277,13 @@ class AppLocalizationsUz extends AppLocalizations {
   String get puzzleThemePin => 'Ochmas';
 
   @override
-  String get puzzleThemePinDescription =>
-      '\"Bogʻlam\"ga asoslangan taktika; bunda bir dona oʻzidan qiymatliroq boshqa donani himoya qilib turgani sababli yurish imkoniyatidan mahrum boʻladi.';
+  String get puzzleThemePinDescription => '\"Bogʻlam\"ga asoslangan taktika; bunda bir dona oʻzidan qiymatliroq boshqa donani himoya qilib turgani sababli yurish imkoniyatidan mahrum boʻladi.';
 
   @override
   String get puzzleThemePromotion => 'Piyodani almashtirish';
 
   @override
-  String get puzzleThemePromotionDescription =>
-      'Piyodalaringizdan birini farzinga yoki sipohga aylantiring.';
+  String get puzzleThemePromotionDescription => 'Piyodalaringizdan birini farzinga yoki sipohga aylantiring.';
 
   @override
   String get puzzleThemeQueenEndgame => 'Farzinli endshpil';
@@ -2429,22 +2295,19 @@ class AppLocalizationsUz extends AppLocalizations {
   String get puzzleThemeQueenRookEndgame => 'Farzin va ruxli endshpil';
 
   @override
-  String get puzzleThemeQueenRookEndgameDescription =>
-      'Faqat farzinlar, ruxlar va piyodalardan iborat endshpil.';
+  String get puzzleThemeQueenRookEndgameDescription => 'Faqat farzinlar, ruxlar va piyodalardan iborat endshpil.';
 
   @override
   String get puzzleThemeQueensideAttack => 'Farzin qanotidagi hujum';
 
   @override
-  String get puzzleThemeQueensideAttackDescription =>
-      'Raqib shohi uzun rokirovka qilganidan soʻng uyushtirilgan hujum.';
+  String get puzzleThemeQueensideAttackDescription => 'Raqib shohi uzun rokirovka qilganidan soʻng uyushtirilgan hujum.';
 
   @override
   String get puzzleThemeQuietMove => 'Sokin yurish';
 
   @override
-  String get puzzleThemeQuietMoveDescription =>
-      'Shoh bermaydigan, biror donani urib olmaydigan va bevosita hujum qilmaydigan, ammo keyingi yurishlarda muqarrar va yashirin xavf tugʻdirishga tayyorgarlik koʻradigan yurish.';
+  String get puzzleThemeQuietMoveDescription => 'Shoh bermaydigan, biror donani urib olmaydigan va bevosita hujum qilmaydigan, ammo keyingi yurishlarda muqarrar va yashirin xavf tugʻdirishga tayyorgarlik koʻradigan yurish.';
 
   @override
   String get puzzleThemeRookEndgame => 'Ruxli endshpil';
@@ -2456,8 +2319,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get puzzleThemeSacrifice => 'Qurbon qilish';
 
   @override
-  String get puzzleThemeSacrificeDescription =>
-      'Vaqtinchalik moddiy yoʻqotish evaziga, majburiy yurishlar ketma‑ketligi orqali kattaroq ustunlikka erishish taktikasi.';
+  String get puzzleThemeSacrificeDescription => 'Vaqtinchalik moddiy yoʻqotish evaziga, majburiy yurishlar ketma‑ketligi orqali kattaroq ustunlikka erishish taktikasi.';
 
   @override
   String get puzzleThemeShort => 'Qisqa masala';
@@ -2469,29 +2331,25 @@ class AppLocalizationsUz extends AppLocalizations {
   String get puzzleThemeSkewer => 'Shampur';
 
   @override
-  String get puzzleThemeSkewerDescription =>
-      'Qiymati baland donaga hujum qilib, u qochganidan soʻng uning ortidagi kamroq qiymatli donani urib olish taktikasi. Bu ochmasning teskarisidir.';
+  String get puzzleThemeSkewerDescription => 'Qiymati baland donaga hujum qilib, u qochganidan soʻng uning ortidagi kamroq qiymatli donani urib olish taktikasi. Bu ochmasning teskarisidir.';
 
   @override
   String get puzzleThemeSmotheredMate => 'Boʻgʻiq mot';
 
   @override
-  String get puzzleThemeSmotheredMateDescription =>
-      'Ot yordamida beriladigan mot; bunda raqib shohi oʻz donalari qurshovida qolib ketgani sababli harakatlana olmaydi.';
+  String get puzzleThemeSmotheredMateDescription => 'Ot yordamida beriladigan mot; bunda raqib shohi oʻz donalari qurshovida qolib ketgani sababli harakatlana olmaydi.';
 
   @override
   String get puzzleThemeSuperGM => 'Super grossmeysterlar oʻyinlari';
 
   @override
-  String get puzzleThemeSuperGMDescription =>
-      'Dunyoning eng kuchli shaxmatchilari oʻyinlaridan olingan masalalar.';
+  String get puzzleThemeSuperGMDescription => 'Dunyoning eng kuchli shaxmatchilari oʻyinlaridan olingan masalalar.';
 
   @override
   String get puzzleThemeTrappedPiece => 'Qamalib qolgan dona';
 
   @override
-  String get puzzleThemeTrappedPieceDescription =>
-      'Dona harakatlanishi cheklangani sababli hujumdan qochib qutula olmaydi.';
+  String get puzzleThemeTrappedPieceDescription => 'Dona harakatlanishi cheklangani sababli hujumdan qochib qutula olmaydi.';
 
   @override
   String get puzzleThemeUnderPromotion => 'Boshqa donaga almashtirish';
@@ -2503,36 +2361,31 @@ class AppLocalizationsUz extends AppLocalizations {
   String get puzzleThemeVeryLong => 'Juda uzun masala';
 
   @override
-  String get puzzleThemeVeryLongDescription =>
-      'Yutish uchun toʻrt yoki undan koʻproq yurish talab qilinadi.';
+  String get puzzleThemeVeryLongDescription => 'Yutish uchun toʻrt yoki undan koʻproq yurish talab qilinadi.';
 
   @override
   String get puzzleThemeXRayAttack => 'Rentgen';
 
   @override
-  String get puzzleThemeXRayAttackDescription =>
-      'Donaning raqib donasi ortidagi katakka hujum qilishi yoki uni himoya qilishi.';
+  String get puzzleThemeXRayAttackDescription => 'Donaning raqib donasi ortidagi katakka hujum qilishi yoki uni himoya qilishi.';
 
   @override
   String get puzzleThemeZugzwang => 'Sugsvang';
 
   @override
-  String get puzzleThemeZugzwangDescription =>
-      'Raqib yurish qilishga majbur boʻlgan, ammo har qanday yurish uning pozitsiyasini yomonlashtiradigan holat.';
+  String get puzzleThemeZugzwangDescription => 'Raqib yurish qilishga majbur boʻlgan, ammo har qanday yurish uning pozitsiyasini yomonlashtiradigan holat.';
 
   @override
   String get puzzleThemeMix => 'Aralash';
 
   @override
-  String get puzzleThemeMixDescription =>
-      'Har turdan bir shingil. Oldinda nima kutayotganini bilmaysiz, shuning uchun har qanday holatga tayyor turasiz! Haqiqiy oʻyindagi kabi!';
+  String get puzzleThemeMixDescription => 'Har turdan bir shingil. Oldinda nima kutayotganini bilmaysiz, shuning uchun har qanday holatga tayyor turasiz! Haqiqiy oʻyindagi kabi!';
 
   @override
   String get puzzleThemePlayerGames => 'Oʻyinchilardan';
 
   @override
-  String get puzzleThemePlayerGamesDescription =>
-      'Oʻzingizning yoki boshqa oʻyinchilarning oʻyinlaridan olingan masalalarni topish.';
+  String get puzzleThemePlayerGamesDescription => 'Oʻzingizning yoki boshqa oʻyinchilarning oʻyinlaridan olingan masalalarni topish.';
 
   @override
   String puzzleThemePuzzleDownloadInformation(String param) {
@@ -2549,12 +2402,10 @@ class AppLocalizationsUz extends AppLocalizations {
   String get settingsCloseAccount => 'Akkauntni yopish';
 
   @override
-  String get settingsManagedAccountCannotBeClosed =>
-      'Akkauntingiz nazorat ostida, uni yopib boʻlmaydi.';
+  String get settingsManagedAccountCannotBeClosed => 'Akkauntingiz nazorat ostida, uni yopib boʻlmaydi.';
 
   @override
-  String get settingsCantOpenSimilarAccount =>
-      'Ushbu foydalanuvchi nomi bilan qayta roʻyxatdan oʻtib boʻlmaydi.';
+  String get settingsCantOpenSimilarAccount => 'Ushbu foydalanuvchi nomi bilan qayta roʻyxatdan oʻtib boʻlmaydi.';
 
   @override
   String get settingsCancelKeepAccount => 'Bekor qilish va akkauntni saqlab qolish';
@@ -2581,8 +2432,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get createLobbyGame => 'Kutish zalida oʻyin yarating';
 
   @override
-  String get toInviteSomeoneToPlayGiveThisUrl =>
-      'Kimnidir oʻyinga taklif qilish uchun ushbu havolani unga yuboring';
+  String get toInviteSomeoneToPlayGiveThisUrl => 'Kimnidir oʻyinga taklif qilish uchun ushbu havolani unga yuboring';
 
   @override
   String get gameOver => 'O‘yin tugadi';
@@ -2597,8 +2447,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get reusableChallengeUrl => 'Chorlov havolasi';
 
   @override
-  String get permanentLinkForAnyoneToChallengeYou =>
-      'Ushbu sozlamalar bilan sizni oʻyinga chaqirish mumkin bo\'lgan doimiy havola.';
+  String get permanentLinkForAnyoneToChallengeYou => 'Ushbu sozlamalar bilan sizni oʻyinga chaqirish mumkin bo\'lgan doimiy havola.';
 
   @override
   String get waiting => 'Kutib turing';
@@ -2699,8 +2548,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get blackPlays => 'Yurish qoralardan';
 
   @override
-  String get opponentLeftChoices =>
-      'Raqibingiz oʻyinni tark etdi. Gʻalaba yoki durang talab etishingiz mumkin yoki yana kutishingiz mumkin.';
+  String get opponentLeftChoices => 'Raqibingiz oʻyinni tark etdi. Gʻalaba yoki durang talab etishingiz mumkin yoki yana kutishingiz mumkin.';
 
   @override
   String get forceResignation => 'Gʻalaba talab qilish';
@@ -2712,8 +2560,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get talkInChat => 'Chatda odob saqlang!';
 
   @override
-  String get theFirstPersonToComeOnThisUrlWillPlayWithYou =>
-      'Ushbu havolaga boʻyicha birinchi kelgan odam siz bilan oʻynaydi.';
+  String get theFirstPersonToComeOnThisUrlWillPlayWithYou => 'Ushbu havolaga boʻyicha birinchi kelgan odam siz bilan oʻynaydi.';
 
   @override
   String get whiteResigned => 'Oqlar taslim boʻldi';
@@ -2876,8 +2723,7 @@ class AppLocalizationsUz extends AppLocalizations {
   }
 
   @override
-  String get dtzWithRounding =>
-      'Navbatdagi donani urish, piyoda yurishi yoki motgacha boʻlgan yarim-yurishlar soniga asoslangan, yaxlitlangan DTZ50\'\'';
+  String get dtzWithRounding => 'Navbatdagi donani urish, piyoda yurishi yoki motgacha boʻlgan yarim-yurishlar soniga asoslangan, yaxlitlangan DTZ50\'\'';
 
   @override
   String get noGameFound => 'Oʻyin topilmadi';
@@ -2886,8 +2732,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get maxDepthReached => 'Maksimal chuqurlikka yetdi!';
 
   @override
-  String get maybeIncludeMoreGamesFromThePreferencesMenu =>
-      'Balkim sozlamalar menyusidan boshqa oʻyinlarni yuklash kerakdir?';
+  String get maybeIncludeMoreGamesFromThePreferencesMenu => 'Balkim sozlamalar menyusidan boshqa oʻyinlarni yuklash kerakdir?';
 
   @override
   String get openings => 'Debyutlar';
@@ -2904,8 +2749,7 @@ class AppLocalizationsUz extends AppLocalizations {
   }
 
   @override
-  String get playFirstOpeningEndgameExplorerMove =>
-      'Birinchi debyut va endshpillar yurishlarini o‘ynash';
+  String get playFirstOpeningEndgameExplorerMove => 'Birinchi debyut va endshpillar yurishlarini o‘ynash';
 
   @override
   String get winPreventedBy50MoveRule => '50 ta yurish qoidasi sababli gʻalaba boy berildi';
@@ -2917,12 +2761,10 @@ class AppLocalizationsUz extends AppLocalizations {
   String get winOr50MovesByPriorMistake => 'Avvalgi xato tufayli gʻalaba yoki 50 ta yurish qoidasi';
 
   @override
-  String get lossOr50MovesByPriorMistake =>
-      'Avvalgi xato tufayli magʻlubiyat yoki 50 ta yurish qoidasi';
+  String get lossOr50MovesByPriorMistake => 'Avvalgi xato tufayli magʻlubiyat yoki 50 ta yurish qoidasi';
 
   @override
-  String get unknownDueToRounding =>
-      'Ga‘laba/Mag‘lubiyat kafolatlanadi agarda oxirgi donani olish yoki Syzygy jadvalidagi DTZ ning qiymatiga asosan aylanaga olingan piyoda yurishidan keyin tavsiya etilgan yurishlar ketma‑ketligiga rioya qilingan bo‘linsa.';
+  String get unknownDueToRounding => 'Ga‘laba/Mag‘lubiyat kafolatlanadi agarda oxirgi donani olish yoki Syzygy jadvalidagi DTZ ning qiymatiga asosan aylanaga olingan piyoda yurishidan keyin tavsiya etilgan yurishlar ketma‑ketligiga rioya qilingan bo‘linsa.';
 
   @override
   String get allSet => 'Tayyor!';
@@ -2970,8 +2812,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get multipleLines => 'Bir nechta variant';
 
   @override
-  String get multipleLinesDescription =>
-      'Tahlil variantlar sonini va taxtadagi yurish strelkalarni sonini sozlash';
+  String get multipleLinesDescription => 'Tahlil variantlar sonini va taxtadagi yurish strelkalarni sonini sozlash';
 
   @override
   String get searchTime => 'Qidiruv vaqti';
@@ -2983,12 +2824,10 @@ class AppLocalizationsUz extends AppLocalizations {
   String get threads => 'Oqimlar (Threads)';
 
   @override
-  String get threadsDescription =>
-      'Buni protsessoringiz oqimlari sonidan kamroq qilib sozlang; belgilangan chiziqlar xavfsiz tanlovni koʻrsatadi';
+  String get threadsDescription => 'Buni protsessoringiz oqimlari sonidan kamroq qilib sozlang; belgilangan chiziqlar xavfsiz tanlovni koʻrsatadi';
 
   @override
-  String get threadsDescriptionMobile =>
-      'Koʻproq oqimlar tahlilni kuchaytiradi, ammo batareyani tezroq sarflaydi';
+  String get threadsDescriptionMobile => 'Koʻproq oqimlar tahlilni kuchaytiradi, ammo batareyani tezroq sarflaydi';
 
   @override
   String get cpus => 'Protsessorlar';
@@ -3003,8 +2842,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get infiniteAnalysis => 'Cheksiz tahlil';
 
   @override
-  String get removesTheDepthLimit =>
-      'Chuqurlik cheagarasini olib tashlaydi lekin kompyuteringiz maksimal quvvatda ishlatadi';
+  String get removesTheDepthLimit => 'Chuqurlik cheagarasini olib tashlaydi lekin kompyuteringiz maksimal quvvatda ishlatadi';
 
   @override
   String get blunder => 'Qoʻpol xato';
@@ -3069,8 +2907,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get signUp => 'Roʻyxatdan oʻtish';
 
   @override
-  String get computersAreNotAllowedToPlay =>
-      'Kompyuter yordamida oʻynash taqiqlanadi. Oʻyin davomida shaxmat dvijoklari, maʼlumotlar bazalari yoki boshqa oʻyinchilar yordamidan foydalanmang. Shuningdek, bir nechta akkaunt ochish tavsiya etilmaydi — bu qoidani muntazam buzish bloklanishga olib keladi.';
+  String get computersAreNotAllowedToPlay => 'Kompyuter yordamida oʻynash taqiqlanadi. Oʻyin davomida shaxmat dvijoklari, maʼlumotlar bazalari yoki boshqa oʻyinchilar yordamidan foydalanmang. Shuningdek, bir nechta akkaunt ochish tavsiya etilmaydi — bu qoidani muntazam buzish bloklanishga olib keladi.';
 
   @override
   String get games => 'Oʻyinlar';
@@ -3150,20 +2987,16 @@ class AppLocalizationsUz extends AppLocalizations {
   String get changeUsername => 'Foydalanuvchi nomini oʻzgartirish';
 
   @override
-  String get changeUsernameNotSame =>
-      'Faqat harflar katta‑kichikligini oʻzgartirish mumkin. Masalan, \"johndoe\"dan \"JohnDoe\"ga.';
+  String get changeUsernameNotSame => 'Faqat harflar katta‑kichikligini oʻzgartirish mumkin. Masalan, \"johndoe\"dan \"JohnDoe\"ga.';
 
   @override
-  String get changeUsernameDescription =>
-      'Foydalanuvchi nomini oʻzgartiring. Bu faqat bir marta amalga oshirilishi mumkin va faqat harflar katta‑kichikligini oʻzgartirishingiz mumkin.';
+  String get changeUsernameDescription => 'Foydalanuvchi nomini oʻzgartiring. Bu faqat bir marta amalga oshirilishi mumkin va faqat harflar katta‑kichikligini oʻzgartirishingiz mumkin.';
 
   @override
-  String get signupUsernameHint =>
-      'Foydalanuvchi nomi barcha yoshdagilarga mos boʻlishi shart. Uni keyinchalik oʻzgartirib boʻlmaydi. Nooʻrin nom tanlagan akkauntlar bloklanadi!';
+  String get signupUsernameHint => 'Foydalanuvchi nomi barcha yoshdagilarga mos boʻlishi shart. Uni keyinchalik oʻzgartirib boʻlmaydi. Nooʻrin nom tanlagan akkauntlar bloklanadi!';
 
   @override
-  String get signupEmailPromise =>
-      'Biz sizga faqat akkauntizga oid xabarlarni yuboramiz va elektron pochtangizni hech kimga bermaymiz.';
+  String get signupEmailPromise => 'Biz sizga faqat akkauntizga oid xabarlarni yuboramiz va elektron pochtangizni hech kimga bermaymiz.';
 
   @override
   String get password => 'Parol';
@@ -3190,15 +3023,13 @@ class AppLocalizationsUz extends AppLocalizations {
   String get error_namePassword => 'Foydalanuvchi nomini parol sifatida ishlatmang.';
 
   @override
-  String get blankedPassword =>
-      'Siz boshqa saytda ham aynan shu paroldan foydalangansiz va oʻsha sayt xavfsizligiga putur yetgan. Lichess akkauntingiz xavfsizligini taʼminlash uchun yangi parol oʻrnatishingizni soʻraymiz. Toʻgʻri tushunasiz degan umiddamiz.';
+  String get blankedPassword => 'Siz boshqa saytda ham aynan shu paroldan foydalangansiz va oʻsha sayt xavfsizligiga putur yetgan. Lichess akkauntingiz xavfsizligini taʼminlash uchun yangi parol oʻrnatishingizni soʻraymiz. Toʻgʻri tushunasiz degan umiddamiz.';
 
   @override
   String get youAreLeavingLichess => 'Lichessʼni tark etmoqdasiz';
 
   @override
-  String get neverTypeYourPassword =>
-      'Lichess parolingizni boshqa saytlarda hech qachon kiritmang!';
+  String get neverTypeYourPassword => 'Lichess parolingizni boshqa saytlarda hech qachon kiritmang!';
 
   @override
   String proceedToX(String param) {
@@ -3206,23 +3037,19 @@ class AppLocalizationsUz extends AppLocalizations {
   }
 
   @override
-  String get passwordSuggestion =>
-      'Boshqa birov aytgan parolni oʻrnatmang. Ular oʻsha parolni akkauntingizni oʻgʻirlash uchun ishlatishlari mumkin.';
+  String get passwordSuggestion => 'Boshqa birov aytgan parolni oʻrnatmang. Ular oʻsha parolni akkauntingizni oʻgʻirlash uchun ishlatishlari mumkin.';
 
   @override
-  String get emailSuggestion =>
-      'Boshqa birov aytgan e‑pochta manzilini oʻrnatmang. Ular oʻsha e‑pochta manzilini akkauntingizni oʻgʻirlash uchun ishlatishlari mumkin.';
+  String get emailSuggestion => 'Boshqa birov aytgan e‑pochta manzilini oʻrnatmang. Ular oʻsha e‑pochta manzilini akkauntingizni oʻgʻirlash uchun ishlatishlari mumkin.';
 
   @override
   String get emailConfirmHelp => 'E‑pochtani tasdiqlash boʻyicha yordam';
 
   @override
-  String get emailConfirmNotReceived =>
-      'Roʻyxatdan oʻtganingizdan soʻng tasdiqlash xati kelmadimi?';
+  String get emailConfirmNotReceived => 'Roʻyxatdan oʻtganingizdan soʻng tasdiqlash xati kelmadimi?';
 
   @override
-  String get whatSignupUsername =>
-      'Roʻyxatdan oʻtishda qaysi foydalanuvchi nomidan foydalangansiz?';
+  String get whatSignupUsername => 'Roʻyxatdan oʻtishda qaysi foydalanuvchi nomidan foydalangansiz?';
 
   @override
   String usernameNotFound(String param) {
@@ -3230,8 +3057,7 @@ class AppLocalizationsUz extends AppLocalizations {
   }
 
   @override
-  String get usernameCanBeUsedForNewAccount =>
-      'Yangi akkaunt yaratish uchun ushbu foydalanuvchi nomidan ishlatishingiz mumkin';
+  String get usernameCanBeUsedForNewAccount => 'Yangi akkaunt yaratish uchun ushbu foydalanuvchi nomidan ishlatishingiz mumkin';
 
   @override
   String emailSent(String param) {
@@ -3245,8 +3071,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get refreshInboxAfterFiveMinutes => '5 minut kutib e‑pochta qutingizni yangilang.';
 
   @override
-  String get checkSpamFolder =>
-      'Shuningdek, spam jildini ham tekshiring, xat u yerga tushib qolgan boʻlishi mumkin. Agar shunday boʻlsa, uni “Spam emas” deb belgilang.';
+  String get checkSpamFolder => 'Shuningdek, spam jildini ham tekshiring, xat u yerga tushib qolgan boʻlishi mumkin. Agar shunday boʻlsa, uni “Spam emas” deb belgilang.';
 
   @override
   String sendEmailForAccountVerification(String param) {
@@ -3495,8 +3320,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get backToTournament => 'Turnirga qaytish';
 
   @override
-  String get noDrawBeforeSwissLimit =>
-      'Shveysarcha tizimdagi turnirlarda 30 ta yurish amalga oshirilmaguncha durangga kelishib boʻlmaydi.';
+  String get noDrawBeforeSwissLimit => 'Shveysarcha tizimdagi turnirlarda 30 ta yurish amalga oshirilmaguncha durangga kelishib boʻlmaydi.';
 
   @override
   String get thematic => 'Tematik';
@@ -3507,8 +3331,7 @@ class AppLocalizationsUz extends AppLocalizations {
   }
 
   @override
-  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional =>
-      'Reytingingiz barqaror boʻlmagani sababli, reyting filtrlari bloklangan. Reytingli oʻyinlarni o\'ynash reyting barqarorligini oshiradi.';
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Reytingingiz barqaror boʻlmagani sababli, reyting filtrlari bloklangan. Reytingli oʻyinlarni o\'ynash reyting barqarorligini oshiradi.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3549,8 +3372,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get backToGame => 'Oʻyinga qaytish';
 
   @override
-  String get siteDescription =>
-      'Bepul onlayn shaxmat serveri. Reklamalarsiz qulay interfeysda shaxmat oʻynang. Roʻyxatdan oʻtish yoki plagin oʻrnatish shart emas. Kompyuter, doʻstlaringiz yoki tasodifiy raqib bilan shaxmat oʻynang.';
+  String get siteDescription => 'Bepul onlayn shaxmat serveri. Reklamalarsiz qulay interfeysda shaxmat oʻynang. Roʻyxatdan oʻtish yoki plagin oʻrnatish shart emas. Kompyuter, doʻstlaringiz yoki tasodifiy raqib bilan shaxmat oʻynang.';
 
   @override
   String xJoinedTeamY(String param1, String param2) {
@@ -3622,19 +3444,16 @@ class AppLocalizationsUz extends AppLocalizations {
   String get importGame => 'Oʻyinni import qilish';
 
   @override
-  String get importGameExplanation =>
-      'Asosiy variantni koʻrish, kompyuter tahlili, oʻyin chati va hamma bilan ulashish mumkin boʻlgan URL manzilini olish uchun oʻyin PGN matnini joylashtiring.';
+  String get importGameExplanation => 'Asosiy variantni koʻrish, kompyuter tahlili, oʻyin chati va hamma bilan ulashish mumkin boʻlgan URL manzilini olish uchun oʻyin PGN matnini joylashtiring.';
 
   @override
-  String get importGameDataPrivacyWarning =>
-      'Ushbu PGN ommaga ochiq boʻladi. Oʻyinni yopiq holatda import qilish uchun saboq ishlating.';
+  String get importGameDataPrivacyWarning => 'Ushbu PGN ommaga ochiq boʻladi. Oʻyinni yopiq holatda import qilish uchun saboq ishlating.';
 
   @override
   String get thisIsAChessCaptcha => 'Bu shaxmat CAPTCHAʼsi.';
 
   @override
-  String get clickOnTheBoardToMakeYourMove =>
-      'Taxta ustiga bosib yurishni amalga oshiring va kompyuter emas inson ekanligingizni tasdiqlang.';
+  String get clickOnTheBoardToMakeYourMove => 'Taxta ustiga bosib yurishni amalga oshiring va kompyuter emas inson ekanligingizni tasdiqlang.';
 
   @override
   String get captcha_fail => 'Iltimos shaxmat captchaʼsini yeching.';
@@ -3744,16 +3563,13 @@ class AppLocalizationsUz extends AppLocalizations {
   String get safeTournamentName => 'Turnir uchun juda ham xavfsiz nom tanlash.';
 
   @override
-  String get inappropriateNameWarning =>
-      'Har qanday nomunosib xatti‑harakat akkauntingiz yopilishiga olib kelishi mumkin.';
+  String get inappropriateNameWarning => 'Har qanday nomunosib xatti‑harakat akkauntingiz yopilishiga olib kelishi mumkin.';
 
   @override
-  String get emptyTournamentName =>
-      'Turnirga taniqli shaxmat arbobi nomini berish uchun boʻsh qoldiring.';
+  String get emptyTournamentName => 'Turnirga taniqli shaxmat arbobi nomini berish uchun boʻsh qoldiring.';
 
   @override
-  String get makePrivateTournament =>
-      'Yopiq turnir yarating va ishtirokchilarga parol yordamida kirishga huquq bering';
+  String get makePrivateTournament => 'Yopiq turnir yarating va ishtirokchilarga parol yordamida kirishga huquq bering';
 
   @override
   String get join => 'Qoʻshilish';
@@ -3880,8 +3696,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get flair => 'Hisbelgi';
 
   @override
-  String get youCanHideFlair =>
-      'Butun saytda foydalanuvchi hisbelgilarini yashirish imkoniyati mavjud.';
+  String get youCanHideFlair => 'Butun saytda foydalanuvchi hisbelgilarini yashirish imkoniyati mavjud.';
 
   @override
   String get biography => 'Tarjimai hol';
@@ -3917,15 +3732,13 @@ class AppLocalizationsUz extends AppLocalizations {
   String get activePlayers => 'Faol oʻyinchilar';
 
   @override
-  String get bewareTheGameIsRatedButHasNoClock =>
-      'Diqqat qiling: oʻyin reytingli, biroq vaqt nazorati oʻrnatilmagan!';
+  String get bewareTheGameIsRatedButHasNoClock => 'Diqqat qiling: oʻyin reytingli, biroq vaqt nazorati oʻrnatilmagan!';
 
   @override
   String get success => 'Muvaffaqiyat';
 
   @override
-  String get automaticallyProceedToNextGameAfterMoving =>
-      'Yurishdan soʻng avtomatik tarzda keyingi oʻyinga oʻtish';
+  String get automaticallyProceedToNextGameAfterMoving => 'Yurishdan soʻng avtomatik tarzda keyingi oʻyinga oʻtish';
 
   @override
   String get autoSwitch => 'Avtomatik oʻtish';
@@ -3946,8 +3759,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get descPrivate => 'Yopiq tavsif';
 
   @override
-  String get descPrivateHelp =>
-      'Faqat jamoa aʻzolari koʻra oladigan matn. Agar uni kiritsangiz, jamoa aʼzolari uchun ommaviy tavsif oʻrniga koʻrsatiladi.';
+  String get descPrivateHelp => 'Faqat jamoa aʻzolari koʻra oladigan matn. Agar uni kiritsangiz, jamoa aʼzolari uchun ommaviy tavsif oʻrniga koʻrsatiladi.';
 
   @override
   String get no => 'Yoʻq';
@@ -4016,16 +3828,13 @@ class AppLocalizationsUz extends AppLocalizations {
   String get other => 'Boshqa';
 
   @override
-  String get reportCheatBoostHelp =>
-      'Oʻyin(lar) havolasini joylashtiring va bu foydalanuvchining xatti‑harakatlarida nima notoʻgʻri ekanligini tushuntiring. Shunchaki “gʻirromlik qilyapti” deb cheklanib qolmay, qanday qilib bu xulosaga kelganingizni ayting.';
+  String get reportCheatBoostHelp => 'Oʻyin(lar) havolasini joylashtiring va bu foydalanuvchining xatti‑harakatlarida nima notoʻgʻri ekanligini tushuntiring. Shunchaki “gʻirromlik qilyapti” deb cheklanib qolmay, qanday qilib bu xulosaga kelganingizni ayting.';
 
   @override
-  String get reportUsernameHelp =>
-      'Ushbu foydalanuvchi nomi nima uchun haqoratli ekanligini tushuntiring. Shunchaki “bu haqoratomuz/nooʻrin” deb qoʻya qolmasdan, nima sababdan bunday deb oʻylashingizni asoslab bering. Ayniqsa, haqorat yashirin boʻlsa, ingliz tilida boʻlmasa, jargon (sleng) boʻlsa yoki tarixiy/madaniy mazmunga ega boʻlsa.';
+  String get reportUsernameHelp => 'Ushbu foydalanuvchi nomi nima uchun haqoratli ekanligini tushuntiring. Shunchaki “bu haqoratomuz/nooʻrin” deb qoʻya qolmasdan, nima sababdan bunday deb oʻylashingizni asoslab bering. Ayniqsa, haqorat yashirin boʻlsa, ingliz tilida boʻlmasa, jargon (sleng) boʻlsa yoki tarixiy/madaniy mazmunga ega boʻlsa.';
 
   @override
-  String get reportProcessedFasterInEnglish =>
-      'Ingliz tilida shikoyat joʻnatsangiz, tezroq koʻrib chiqiladi.';
+  String get reportProcessedFasterInEnglish => 'Ingliz tilida shikoyat joʻnatsangiz, tezroq koʻrib chiqiladi.';
 
   @override
   String get error_provideOneCheatedGameLink => 'Iltimos kamida bitta o\'yinga havolani keltiring.';
@@ -4110,12 +3919,10 @@ class AppLocalizationsUz extends AppLocalizations {
   String get letOtherPlayersFollowYou => 'Boshqa oʻyinchilarga sizga obuna boʻlishga ruxsat berish';
 
   @override
-  String get letOtherPlayersChallengeYou =>
-      'Boshqa oʻyinchilarga sizni oʻyinga chaqirishga ruxsat berish';
+  String get letOtherPlayersChallengeYou => 'Boshqa oʻyinchilarga sizni oʻyinga chaqirishga ruxsat berish';
 
   @override
-  String get letOtherPlayersInviteYouToStudy =>
-      'Boshqa oʻyinchilar sizni saboqqa taklif qilishga ruxsat berish';
+  String get letOtherPlayersInviteYouToStudy => 'Boshqa oʻyinchilar sizni saboqqa taklif qilishga ruxsat berish';
 
   @override
   String get sound => 'Tovush';
@@ -4186,8 +3993,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get allInformationIsPublicAndOptional => 'Barcha maʼlumotlar ommaga ochiq va ixtiyoriy.';
 
   @override
-  String get biographyDescription =>
-      'Oʻzingiz haqingizda gapirib bering, oʻzingizni qiziqishlaringiz, sizga shaxmatda nima yoqadi, sizning yoqtirgan debyutlaringiz, siz yoqtirgan oʻyinchilar, ...';
+  String get biographyDescription => 'Oʻzingiz haqingizda gapirib bering, oʻzingizni qiziqishlaringiz, sizga shaxmatda nima yoqadi, sizning yoqtirgan debyutlaringiz, siz yoqtirgan oʻyinchilar, ...';
 
   @override
   String get listBlockedPlayers => 'Siz bloklagan oʻyinchilar roʻyxati';
@@ -4235,8 +4041,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get error_email => 'Ushbu e‑pochta manzil yaroqsiz';
 
   @override
-  String get error_email_acceptable =>
-      'Ushbu e‑pochta manzili qabul qilinmaydi. Iltimos, qaytadan tekshiring va urinib koʻring.';
+  String get error_email_acceptable => 'Ushbu e‑pochta manzili qabul qilinmaydi. Iltimos, qaytadan tekshiring va urinib koʻring.';
 
   @override
   String get error_email_unique => 'Ushbu e‑pochta manzili yaroqsiz yoki band etilgan';
@@ -4367,8 +4172,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get hostANewSimul => 'Yangi biryoʻla seans yaratish';
 
   @override
-  String get signUpToHostOrJoinASimul =>
-      'Biryoʻla seans oʻtkazish yoki seansda qatnashish uchun roʻyxatdan oʻting';
+  String get signUpToHostOrJoinASimul => 'Biryoʻla seans oʻtkazish yoki seansda qatnashish uchun roʻyxatdan oʻting';
 
   @override
   String get noSimulFound => 'Biryoʻla seans topilmadi';
@@ -4380,54 +4184,43 @@ class AppLocalizationsUz extends AppLocalizations {
   String get returnToSimulHomepage => 'Biryoʻla seanslar sahifasiga qaytish';
 
   @override
-  String get aboutSimul =>
-      'Biryoʻla seansda bir oʻyinchi bir vaqtning oʻzida bir nechta raqibga qarshi oʻynaydi.';
+  String get aboutSimul => 'Biryoʻla seansda bir oʻyinchi bir vaqtning oʻzida bir nechta raqibga qarshi oʻynaydi.';
 
   @override
-  String get aboutSimulImage =>
-      'Fisher 50 ta raqibdan 47 tasini magʻlub qilgan, 2 ta oʻyinda durang oʻynagan va bittasiga magʻlub boʻlgan.';
+  String get aboutSimulImage => 'Fisher 50 ta raqibdan 47 tasini magʻlub qilgan, 2 ta oʻyinda durang oʻynagan va bittasiga magʻlub boʻlgan.';
 
   @override
-  String get aboutSimulRealLife =>
-      'Ushbu tushuncha hayotiy voqealardan olingan. Real hayotda seans oʻtkazuvchisi stoldan‑stolga yurib bittadan yurish amalga oshiradi.';
+  String get aboutSimulRealLife => 'Ushbu tushuncha hayotiy voqealardan olingan. Real hayotda seans oʻtkazuvchisi stoldan‑stolga yurib bittadan yurish amalga oshiradi.';
 
   @override
-  String get aboutSimulRules =>
-      'Seans boshlanganda, har bir ishtirokchi seans oʻtkazuvchi bilan oʻyinni boshlaydi. Seans hamma oʻyinlar tugaganda yakunlanadi.';
+  String get aboutSimulRules => 'Seans boshlanganda, har bir ishtirokchi seans oʻtkazuvchi bilan oʻyinni boshlaydi. Seans hamma oʻyinlar tugaganda yakunlanadi.';
 
   @override
-  String get aboutSimulSettings =>
-      'Seanslar reytingsiz oʻynaladi. Revanshlar, yurishni ortga qaytarish va vaqt qoʻshib berish imkoniyatlari oʻchirilgan.';
+  String get aboutSimulSettings => 'Seanslar reytingsiz oʻynaladi. Revanshlar, yurishni ortga qaytarish va vaqt qoʻshib berish imkoniyatlari oʻchirilgan.';
 
   @override
   String get create => 'Yaratish';
 
   @override
-  String get whenCreateSimul =>
-      'Biryoʻla seans yaratganingizda bir vaqtni oʻzida bir nechta oʻyinchilar bilan oʻynaysiz.';
+  String get whenCreateSimul => 'Biryoʻla seans yaratganingizda bir vaqtni oʻzida bir nechta oʻyinchilar bilan oʻynaysiz.';
 
   @override
-  String get simulVariantsHint =>
-      'Bir nechta variant tanlasangiz, har bir oʻyinchi qaysi variantda oʻynashni oʻzi tanlaydi.';
+  String get simulVariantsHint => 'Bir nechta variant tanlasangiz, har bir oʻyinchi qaysi variantda oʻynashni oʻzi tanlaydi.';
 
   @override
-  String get simulClockHint =>
-      'Fisher soati sozlamalari. Raqiblaringiz qancha koʻp boʻlsa, sizga shuncha koʻp vaqt kerak boʻlishi mumkin.';
+  String get simulClockHint => 'Fisher soati sozlamalari. Raqiblaringiz qancha koʻp boʻlsa, sizga shuncha koʻp vaqt kerak boʻlishi mumkin.';
 
   @override
-  String get simulAddExtraTime =>
-      'Seans davomida ulgurishingiz uchun oʻz soatingizga qoʻshimcha boshlangʻich vaqt qoʻshishingiz mumkin.';
+  String get simulAddExtraTime => 'Seans davomida ulgurishingiz uchun oʻz soatingizga qoʻshimcha boshlangʻich vaqt qoʻshishingiz mumkin.';
 
   @override
   String get simulHostExtraTime => 'Seans oʻtkazuvchi uchun qoʻshimcha boshlangʻich vaqt';
 
   @override
-  String get simulAddExtraTimePerPlayer =>
-      'Seansga qoʻshilgan har bir oʻyinchi uchun soatingizga boshlangʻich vaqt qoʻshing.';
+  String get simulAddExtraTimePerPlayer => 'Seansga qoʻshilgan har bir oʻyinchi uchun soatingizga boshlangʻich vaqt qoʻshing.';
 
   @override
-  String get simulHostExtraTimePerPlayer =>
-      'Har bir oʻyinchi uchun qoʻshimcha vaqt (seans oʻtkazuvchi uchun)';
+  String get simulHostExtraTimePerPlayer => 'Har bir oʻyinchi uchun qoʻshimcha vaqt (seans oʻtkazuvchi uchun)';
 
   @override
   String get lichessTournaments => 'Lichess turnirlar';
@@ -4484,8 +4277,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get toggleObservationAnnotations => 'Kuzatish annotatsiyalarini yoqish/oʻchirish';
 
   @override
-  String get variationArrowsInfo =>
-      'Variatsiya strelkalari koʻchirish roʻyxatidan foydalanmasdan harakatlanish imkonini beradi.';
+  String get variationArrowsInfo => 'Variatsiya strelkalari koʻchirish roʻyxatidan foydalanmasdan harakatlanish imkonini beradi.';
 
   @override
   String get playSelectedMove => 'tanlangan yurishni oʻynash';
@@ -4494,12 +4286,10 @@ class AppLocalizationsUz extends AppLocalizations {
   String get newTournament => 'Yangi turnir';
 
   @override
-  String get tournamentHomeTitle =>
-      'Turli xil vaqtlar va variantlar bilan yaratilgan shahmat turnirlari';
+  String get tournamentHomeTitle => 'Turli xil vaqtlar va variantlar bilan yaratilgan shahmat turnirlari';
 
   @override
-  String get tournamentHomeDescription =>
-      'Tezkor shaxmat turnirlarida ishtirok eting! Rasmiy turnirlarga qoʻshiling yoki oʻz turniringizni yarating. Bullet, Blitz, Klassik shaxmat, Fisher shaxmati, Shoh markazda, Uch shoh va boshqa koʻplab variantlar mavjud.';
+  String get tournamentHomeDescription => 'Tezkor shaxmat turnirlarida ishtirok eting! Rasmiy turnirlarga qoʻshiling yoki oʻz turniringizni yarating. Bullet, Blitz, Klassik shaxmat, Fisher shaxmati, Shoh markazda, Uch shoh va boshqa koʻplab variantlar mavjud.';
 
   @override
   String get tournamentNotFound => 'Turnir topilmadi';
@@ -4508,8 +4298,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get tournamentDoesNotExist => 'Bu turnir mavjud emas.';
 
   @override
-  String get tournamentMayHaveBeenCanceled =>
-      'Agar turnir boshlanishidan oldin barcha oʻyinchilar chiqib ketgan boʻlsa, turnir bekor qilingan boʻlishi mumkin.';
+  String get tournamentMayHaveBeenCanceled => 'Agar turnir boshlanishidan oldin barcha oʻyinchilar chiqib ketgan boʻlsa, turnir bekor qilingan boʻlishi mumkin.';
 
   @override
   String get returnToTournamentsHomepage => 'Turnirlar bosh sahifasiga qaytish';
@@ -4557,19 +4346,16 @@ class AppLocalizationsUz extends AppLocalizations {
   String get checkYourEmail => 'E‑pochtangizni tekshiring';
 
   @override
-  String get weHaveSentYouAnEmailClickTheLink =>
-      'Sizga e‑pochta joʻnatdik. E‑pochtadagi havolani bosib akkauntingizni faollashtiring.';
+  String get weHaveSentYouAnEmailClickTheLink => 'Sizga e‑pochta joʻnatdik. E‑pochtadagi havolani bosib akkauntingizni faollashtiring.';
 
   @override
-  String get ifYouDoNotSeeTheEmailCheckOtherPlaces =>
-      'Agar e‑pochtani koʻrmasangiz, boshqa jildlarni tekshirib koʻring, masalan, spam, chiqindi, ijtimoiy yoki boshqa jildlar.';
+  String get ifYouDoNotSeeTheEmailCheckOtherPlaces => 'Agar e‑pochtani koʻrmasangiz, boshqa jildlarni tekshirib koʻring, masalan, spam, chiqindi, ijtimoiy yoki boshqa jildlar.';
 
   @override
   String get ifYouDoNotGetTheEmail => 'Agar 5 minut ichida e‑pochta olmasangiz:';
 
   @override
-  String get checkAllEmailFolders =>
-      'Barcha keraksiz, spam va boshqa e‑pochta jildlarni tekshiring';
+  String get checkAllEmailFolders => 'Barcha keraksiz, spam va boshqa e‑pochta jildlarni tekshiring';
 
   @override
   String verifyYourAddress(String param) {
@@ -4613,24 +4399,19 @@ class AppLocalizationsUz extends AppLocalizations {
   String get crosstable => 'Hisob';
 
   @override
-  String get youCanAlsoScrollOverTheBoardToMoveInTheGame =>
-      'Oʻyindagi yurishlarni koʻrib chiqish uchun taxta ustida sichqonchani aylantiring.';
+  String get youCanAlsoScrollOverTheBoardToMoveInTheGame => 'Oʻyindagi yurishlarni koʻrib chiqish uchun taxta ustida sichqonchani aylantiring.';
 
   @override
-  String get scrollOverComputerVariationsToPreviewThem =>
-      'Kompyuter variatsiyalarini koʻrib chiqish uchun ustida sichqonchani aylantiring.';
+  String get scrollOverComputerVariationsToPreviewThem => 'Kompyuter variatsiyalarini koʻrib chiqish uchun ustida sichqonchani aylantiring.';
 
   @override
-  String get analysisShapesHowTo =>
-      'Taxtada strelka yoki aylanala chizish uchun sichqonchani oʻng tugmasini (yoki shift+click) bosing. Boshqa ranglar hosil qilish uchun sichqonchani oʻng tugmasini quyidagi bilan bosing:';
+  String get analysisShapesHowTo => 'Taxtada strelka yoki aylanala chizish uchun sichqonchani oʻng tugmasini (yoki shift+click) bosing. Boshqa ranglar hosil qilish uchun sichqonchani oʻng tugmasini quyidagi bilan bosing:';
 
   @override
-  String get primaryColorArrowsHowTo =>
-      'Ctrl yoki shift = qizil; command, alt, yoki meta = koʻk; har bittasini birga = sariq.';
+  String get primaryColorArrowsHowTo => 'Ctrl yoki shift = qizil; command, alt, yoki meta = koʻk; har bittasini birga = sariq.';
 
   @override
-  String get letOtherPlayersMessageYou =>
-      'Boshqa oʻyinchilar sizga xabar joʻnatishga ruxsat bering';
+  String get letOtherPlayersMessageYou => 'Boshqa oʻyinchilar sizga xabar joʻnatishga ruxsat bering';
 
   @override
   String get receiveForumNotifications => 'Forumda sizni eslatib oʻtishganida bildirishnoma olish';
@@ -4654,8 +4435,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get kidModeIsEnabled => 'Bola rejimi yoqilgan.';
 
   @override
-  String get kidModeExplanation =>
-      'Bu xavfsizlik uchun. Bola rejimida saytdagi barcha muloqot imkoniyatlari oʻchirib qoʻyiladi. Farzandlaringizni va oʻquvchilaringizni boshqa internet foydalanuvchilaridan himoya qilishni istasangiz ushbu rejimni yoqing.';
+  String get kidModeExplanation => 'Bu xavfsizlik uchun. Bola rejimida saytdagi barcha muloqot imkoniyatlari oʻchirib qoʻyiladi. Farzandlaringizni va oʻquvchilaringizni boshqa internet foydalanuvchilaridan himoya qilishni istasangiz ushbu rejimni yoqing.';
 
   @override
   String inKidModeTheLichessLogoGetsIconX(String param) {
@@ -4663,8 +4443,7 @@ class AppLocalizationsUz extends AppLocalizations {
   }
 
   @override
-  String get askYourChessTeacherAboutLiftingKidMode =>
-      'Akkauntingiz nazorat ostida. Bola rejimini oʻchirish uchun shaxmat murabbiyingizga murojaat qiling.';
+  String get askYourChessTeacherAboutLiftingKidMode => 'Akkauntingiz nazorat ostida. Bola rejimini oʻchirish uchun shaxmat murabbiyingizga murojaat qiling.';
 
   @override
   String get enableKidMode => 'Bola rejimini yoqish';
@@ -4780,8 +4559,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get embedInYourWebsite => 'Oʻz veb‑saytingizga joylashtiring';
 
   @override
-  String get usernameAlreadyUsed =>
-      'Ushbu foydalanuvchi nomi egallangan, boshqasini sinab koʻring.';
+  String get usernameAlreadyUsed => 'Ushbu foydalanuvchi nomi egallangan, boshqasini sinab koʻring.';
 
   @override
   String get usernamePrefixInvalid => 'Foydalanuvchi nomi harf bilan boshlanishi kerak.';
@@ -4790,8 +4568,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get usernameSuffixInvalid => 'Foydalanuvchi nomi harf yoki son bilan tugashi kerak.';
 
   @override
-  String get usernameCharsInvalid =>
-      'Foydalanuvchi nomi faqat lotin harflar, raqamlar, pastki chiziqlar va chiziqchalardan iborat boʻlishi kerak. Bir necha pastki chiziq yoki chiziqchalarni ketma‑ket ishlatishga ruxsat berilmaydi.';
+  String get usernameCharsInvalid => 'Foydalanuvchi nomi faqat lotin harflar, raqamlar, pastki chiziqlar va chiziqchalardan iborat boʻlishi kerak. Bir necha pastki chiziq yoki chiziqchalarni ketma‑ket ishlatishga ruxsat berilmaydi.';
 
   @override
   String get usernameUnacceptable => 'Ushbu foydalanuvchi nomini ishlatib boʻlmaydi.';
@@ -4959,8 +4736,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get addCurrentVariation => 'Joriy variantni qoʻshish';
 
   @override
-  String get playVariationToCreateConditionalPremoves =>
-      'Shartli yurish yaratish uchun variantni oʻynab koʻring';
+  String get playVariationToCreateConditionalPremoves => 'Shartli yurish yaratish uchun variantni oʻynab koʻring';
 
   @override
   String get noConditionalPremoves => 'Shartli oldindan yurishlar yoʻq';
@@ -4985,19 +4761,16 @@ class AppLocalizationsUz extends AppLocalizations {
   String get sorry => 'Kechirasiz :(';
 
   @override
-  String get weHadToTimeYouOutForAWhile =>
-      'Biz sizni oʻyinlardan vaqtinchalik chetlashtirishga majbur boʻldik.';
+  String get weHadToTimeYouOutForAWhile => 'Biz sizni oʻyinlardan vaqtinchalik chetlashtirishga majbur boʻldik.';
 
   @override
   String get why => 'Nima uchun?';
 
   @override
-  String get pleasantChessExperience =>
-      'Biz barcha uchun yoqimli shaxmat muhitini yaratishni maqsad qilganmiz.';
+  String get pleasantChessExperience => 'Biz barcha uchun yoqimli shaxmat muhitini yaratishni maqsad qilganmiz.';
 
   @override
-  String get goodPractice =>
-      'Shuning uchun, barcha oʻyinchilardan belgilangan tartib‑qoidalarga amal qilishni talab qilamiz.';
+  String get goodPractice => 'Shuning uchun, barcha oʻyinchilardan belgilangan tartib‑qoidalarga amal qilishni talab qilamiz.';
 
   @override
   String get potentialProblem => 'Shubhali holat aniqlansa, ushbu xabar paydo boʻladi.';
@@ -5009,8 +4782,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get playEveryGame => 'Har bir boshlagan oʻyiningizni oxirgacha oʻynang.';
 
   @override
-  String get tryToWin =>
-      'Har bir oʻyinda yutishga uchun harakat qiling (yoki hech boʻlmaganda duranga).';
+  String get tryToWin => 'Har bir oʻyinda yutishga uchun harakat qiling (yoki hech boʻlmaganda duranga).';
 
   @override
   String get resignLostGames => 'Yutqazilgan oʻyinlarda taslim boʻling (vaqtni ataylab tugatmang).';
@@ -5031,12 +4803,10 @@ class AppLocalizationsUz extends AppLocalizations {
   String get currentMatchScore => 'Joriy match hisobi';
 
   @override
-  String get agreementAssistance =>
-      'Oʻyinlarim davomida hech qachon (shaxmat kompyuteri, kitob, maʼlumotlar bazasi yoki boshqa shaxsdan) yordam olmaslikka vaʼda beraman.';
+  String get agreementAssistance => 'Oʻyinlarim davomida hech qachon (shaxmat kompyuteri, kitob, maʼlumotlar bazasi yoki boshqa shaxsdan) yordam olmaslikka vaʼda beraman.';
 
   @override
-  String get agreementNice =>
-      'Boshqa oʻyinchilarga nisbatan har doim hurmatli munosabatda boʻlishga vaʼda beraman.';
+  String get agreementNice => 'Boshqa oʻyinchilarga nisbatan har doim hurmatli munosabatda boʻlishga vaʼda beraman.';
 
   @override
   String agreementMultipleAccounts(String param) {
@@ -5080,8 +4850,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get classicalDesc => 'Klassik oʻyinlar: 25 va undan ortiq minut';
 
   @override
-  String get correspondenceDesc =>
-      'Yozishmali oʻyinlar: har bir yurish uchun bir yoki bir necha kun';
+  String get correspondenceDesc => 'Yozishmali oʻyinlar: har bir yurish uchun bir yoki bir necha kun';
 
   @override
   String get puzzleDesc => 'Shaxmat taktikalari trenajyori';
@@ -5138,8 +4907,7 @@ class AppLocalizationsUz extends AppLocalizations {
   }
 
   @override
-  String get youCannotPostYetPlaySomeGames =>
-      'Siz hali forumlarda xabar yozolmaysiz. Bir nechta oʻyin oʻynang!';
+  String get youCannotPostYetPlaySomeGames => 'Siz hali forumlarda xabar yozolmaysiz. Bir nechta oʻyin oʻynang!';
 
   @override
   String get subscribe => 'Obuna bo‘lish';
@@ -5192,8 +4960,7 @@ class AppLocalizationsUz extends AppLocalizations {
   }
 
   @override
-  String get lostAgainstTOSViolator =>
-      'Siz Lichess foydalanish shartlarini buzgan oʻyinchiga reyting ochkolarini yutqazdingiz';
+  String get lostAgainstTOSViolator => 'Siz Lichess foydalanish shartlarini buzgan oʻyinchiga reyting ochkolarini yutqazdingiz';
 
   @override
   String refundXpointsTimeControlY(String param1, String param2) {
@@ -5222,8 +4989,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get tournDescription => 'Turnir haqida';
 
   @override
-  String get tournDescriptionHelp =>
-      'Ishtirokchilarga aytmoqchi boʻlgan biror muhim gapingiz bormi? Qisqa yozishga harakat qiling. Markdown havolalaridan foydalanish mumkin: [nom](https://url)';
+  String get tournDescriptionHelp => 'Ishtirokchilarga aytmoqchi boʻlgan biror muhim gapingiz bormi? Qisqa yozishga harakat qiling. Markdown havolalaridan foydalanish mumkin: [nom](https://url)';
 
   @override
   String get ratedFormHelp => 'Oʻyinlar reytingli va oʻyinchilar reytingiga taʼsir qiladi';
@@ -5324,8 +5090,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get reopenYourAccount => 'Akkauntingizni qayta tiklang';
 
   @override
-  String get reopenYourAccountDescription =>
-      'Agar siz akkauntingizni yopgan boʻlsangiz‑u, lekin keyinchalik fikringizdan qaytgan boʻlsangiz, uni qayta tiklash imkoniyati bor.';
+  String get reopenYourAccountDescription => 'Agar siz akkauntingizni yopgan boʻlsangiz‑u, lekin keyinchalik fikringizdan qaytgan boʻlsangiz, uni qayta tiklash imkoniyati bor.';
 
   @override
   String get emailAssociatedToaccount => 'Akkauntingizga bogʻlangan e‑pochta manzili';
@@ -5366,8 +5131,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get switchSides => 'Rangni almashtirish';
 
   @override
-  String get closingAccountWithdrawAppeal =>
-      'Akkauntingizni yopsangiz appelyatsiyangiz bekor qilinadi.';
+  String get closingAccountWithdrawAppeal => 'Akkauntingizni yopsangiz appelyatsiyangiz bekor qilinadi.';
 
   @override
   String get ourEventTips => 'Tadbirlarni tashkillashtirish boʻyicha tavsiyalarimiz';
@@ -5379,8 +5143,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get showMeEverything => 'Hammasini koʻrsat';
 
   @override
-  String get lichessPatronInfo =>
-      'Lichess — bu xayriya loyihasi boʻlib, mutlaqo bepul va ochiq kodli dasturdir.\nLoyiha faoliyati, uni rivojlantirish va barcha xarajatlar faqat foydalanuvchilarning ixtiyoriy donatlari orqali qoplanadi.\n  ';
+  String get lichessPatronInfo => 'Lichess — bu xayriya loyihasi boʻlib, mutlaqo bepul va ochiq kodli dasturdir.\nLoyiha faoliyati, uni rivojlantirish va barcha xarajatlar faqat foydalanuvchilarning ixtiyoriy donatlari orqali qoplanadi.\n  ';
 
   @override
   String get nothingToSeeHere => 'Ayni paytda bu yerda hech nima yoʻq.';
@@ -5431,10 +5194,8 @@ class AppLocalizationsUz extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other:
-          'Raqibingiz oʻyinni tark etdi. $count sekunddan soʻng gʻalabani talab etishingiz mumkin.',
-      one:
-          'Raqibingiz oʻyinni tark etdi. $count sekunddan soʻng gʻalabani talab etishingiz mumkin.',
+      other: 'Raqibingiz oʻyinni tark etdi. $count sekunddan soʻng gʻalabani talab etishingiz mumkin.',
+      one: 'Raqibingiz oʻyinni tark etdi. $count sekunddan soʻng gʻalabani talab etishingiz mumkin.',
     );
     return '$_temp0';
   }
@@ -6053,8 +5814,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get stormSkipHelp => 'Har bir poygada bitta yurishni oʻtkazib yuborishingiz mumkin:';
 
   @override
-  String get stormSkipExplanation =>
-      'Komboni saqlab qolish uchun bu yurishni oʻtkazib yuboring! Poyga davomida faqat bir marta foydalanish mumkin.';
+  String get stormSkipExplanation => 'Komboni saqlab qolish uchun bu yurishni oʻtkazib yuboring! Poyga davomida faqat bir marta foydalanish mumkin.';
 
   @override
   String get stormFailedPuzzles => 'Xato qilingan masalalar';
@@ -6171,8 +5931,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get studyInviteToTheStudy => 'Saboqqa taklif qilish';
 
   @override
-  String get studyPleaseOnlyInvitePeopleYouKnow =>
-      'Iltimos, faqat sizni taniydigan va ushbu saboqqa qoʻshilishni chin dildan xohlaydigan kishilarni taklif qiling.';
+  String get studyPleaseOnlyInvitePeopleYouKnow => 'Iltimos, faqat sizni taniydigan va ushbu saboqqa qoʻshilishni chin dildan xohlaydigan kishilarni taklif qiling.';
 
   @override
   String get studySearchByUsername => 'Foydalanuvchi nomi boʻyicha qidirish';
@@ -6217,24 +5976,19 @@ class AppLocalizationsUz extends AppLocalizations {
   String get studyTheChapterIsTooShortToBeAnalysed => 'Tahlil qilish uchun ushbu bob juda qisqa.';
 
   @override
-  String get studyOnlyContributorsCanRequestAnalysis =>
-      'Kompyuter tahlilini faqat saboq hammualliflari soʻrashi mumkin.';
+  String get studyOnlyContributorsCanRequestAnalysis => 'Kompyuter tahlilini faqat saboq hammualliflari soʻrashi mumkin.';
 
   @override
-  String get studyGetAFullComputerAnalysis =>
-      'Asosiy variantni server yordamida toʻliq kompyuter tahlilidan oʻtkazish.';
+  String get studyGetAFullComputerAnalysis => 'Asosiy variantni server yordamida toʻliq kompyuter tahlilidan oʻtkazish.';
 
   @override
-  String get studyMakeSureTheChapterIsComplete =>
-      'Eʼtibor bering, bob yakunlangan boʻlishi kerak. Tahlilni faqat bir marta soʻrash mumkin.';
+  String get studyMakeSureTheChapterIsComplete => 'Eʼtibor bering, bob yakunlangan boʻlishi kerak. Tahlilni faqat bir marta soʻrash mumkin.';
 
   @override
-  String get studyAllSyncMembersRemainOnTheSamePosition =>
-      'Barcha sinxronlangan aʼzolar bir xil pozitsiyada qoladilar';
+  String get studyAllSyncMembersRemainOnTheSamePosition => 'Barcha sinxronlangan aʼzolar bir xil pozitsiyada qoladilar';
 
   @override
-  String get studyShareChanges =>
-      'Oʻzgarishlarni kuzatuvchilar bilan boʻlishing va serverda saqlab qoʻying';
+  String get studyShareChanges => 'Oʻzgarishlarni kuzatuvchilar bilan boʻlishing va serverda saqlab qoʻying';
 
   @override
   String get studyPlaying => 'Oʻynalmoqda';
@@ -6276,8 +6030,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get studyCurrentChapterUrl => 'Joriy bob havolasi';
 
   @override
-  String get studyYouCanPasteThisInTheForumToEmbed =>
-      'Saboqni joylashtirish uchun ushbu havoladan forumda yoki Lichess blogingizda foydalanishingiz mumkin';
+  String get studyYouCanPasteThisInTheForumToEmbed => 'Saboqni joylashtirish uchun ushbu havoladan forumda yoki Lichess blogingizda foydalanishingiz mumkin';
 
   @override
   String get studyStartAtInitialPosition => 'Boshlangʻich pozitsiyadan boshlash';
@@ -6340,12 +6093,10 @@ class AppLocalizationsUz extends AppLocalizations {
   String get studyDeleteChapter => 'Bobni oʻchirish';
 
   @override
-  String get studyDeleteThisChapter =>
-      'Ushbu bob oʻchirilsinmi? Bu amalni ortga qaytarib boʻlmaydi!';
+  String get studyDeleteThisChapter => 'Ushbu bob oʻchirilsinmi? Bu amalni ortga qaytarib boʻlmaydi!';
 
   @override
-  String get studyClearAllCommentsInThisChapter =>
-      'Ushbu bobdagi barcha sharhlar, belgilar va chizmalarni oʻchirish';
+  String get studyClearAllCommentsInThisChapter => 'Ushbu bobdagi barcha sharhlar, belgilar va chizmalarni oʻchirish';
 
   @override
   String get studyRightUnderTheBoard => 'Taxta ostida';
@@ -6455,8 +6206,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get studyClearChat => 'Chatni oʻchirish';
 
   @override
-  String get studyDeleteTheStudyChatHistory =>
-      'Saboq chat tarixi oʻchirilsinmi? Bu amalni ortga qaytarib boʻlmaydi!';
+  String get studyDeleteTheStudyChatHistory => 'Saboq chat tarixi oʻchirilsinmi? Bu amalni ortga qaytarib boʻlmaydi!';
 
   @override
   String get studyDeleteStudy => 'Saboqni oʻchirish';
@@ -6586,15 +6336,13 @@ class AppLocalizationsUz extends AppLocalizations {
   String get studyWelcomeToLichessStudyTitle => 'Lichess saboqlariga xush kelibsiz!';
 
   @override
-  String get studyWelcomeToLichessStudyText =>
-      'Bu birgalikda tahlil qilish taxtasi.<br><br>Undan oʻyinlarni tahlil qilish va sharh berish,<br>doʻstlar bilan pozitsiyalarni muhokama qilish<br>va albatta, shaxmat darslari uchun foydalanishingiz mumkin!<br><br>Bu juda keng imkoniyatli vosita, keling, uning qanday ishlashini koʻrib chiqamiz.';
+  String get studyWelcomeToLichessStudyText => 'Bu birgalikda tahlil qilish taxtasi.<br><br>Undan oʻyinlarni tahlil qilish va sharh berish,<br>doʻstlar bilan pozitsiyalarni muhokama qilish<br>va albatta, shaxmat darslari uchun foydalanishingiz mumkin!<br><br>Bu juda keng imkoniyatli vosita, keling, uning qanday ishlashini koʻrib chiqamiz.';
 
   @override
   String get studySharedAndSaveTitle => 'Ulashilgan va saqlangan';
 
   @override
-  String get studySharedAndSavedText =>
-      'Boshqa aʼzolar yurishlaringizni real vaqtda koʻrib turishadi!<br>Bundan tashqari, hamma narsa abadiy saqlab qolinadi.';
+  String get studySharedAndSavedText => 'Boshqa aʼzolar yurishlaringizni real vaqtda koʻrib turishadi!<br>Bundan tashqari, hamma narsa abadiy saqlab qolinadi.';
 
   @override
   String get studyStudyMembersTitle => 'Saboq aʼzolari';
@@ -6613,8 +6361,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get studyStudyChaptersTitle => 'Saboq boblari';
 
   @override
-  String get studyStudyChaptersText =>
-      'Saboq bir nechta bobdan iborat boʻlishi mumkin.<br>Har bir bob oʻzining boshlangʻich pozitsiyasi va yurishlar iyerarxiyasiga ega.';
+  String get studyStudyChaptersText => 'Saboq bir nechta bobdan iborat boʻlishi mumkin.<br>Har bir bob oʻzining boshlangʻich pozitsiyasi va yurishlar iyerarxiyasiga ega.';
 
   @override
   String get studyCommentPositionTitle => 'Pozitsiyaga sharh berish';
@@ -6628,79 +6375,67 @@ class AppLocalizationsUz extends AppLocalizations {
   String get studyAnnotatePositionTitle => 'Pozitsiyaga belgilar qoʻshish';
 
   @override
-  String get studyAnnotatePositionText =>
-      '!? tugmasini bosing yoki oʻng tarafdagi yurishlar roʻyxati ustiga sichqonchani oʻng tugmasini bosing.<br>Tahlil belgilari saqlanadi va hamma uchun koʻrinadi.';
+  String get studyAnnotatePositionText => '!? tugmasini bosing yoki oʻng tarafdagi yurishlar roʻyxati ustiga sichqonchani oʻng tugmasini bosing.<br>Tahlil belgilari saqlanadi va hamma uchun koʻrinadi.';
 
   @override
   String get studyConclusionTitle => 'Vaqt ajratganingiz uchun rahmat';
 
   @override
-  String get studyConclusionText =>
-      '<a href=\'/study/mine/hot\'>Oldingi saboqlaringizni</a> profil sahifangizdan topishingiz mumkin.<br>Shuningdek, <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>saboqlar haqidagi blog‑post</a> bilan ham tanishib chiqing.<br>Tajribali foydalanuvchilar klaviatura yorliqlarini koʻrish uchun \"?\" belgisini bosishlari mumkin.<br>Omad tilaymiz!';
+  String get studyConclusionText => '<a href=\'/study/mine/hot\'>Oldingi saboqlaringizni</a> profil sahifangizdan topishingiz mumkin.<br>Shuningdek, <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>saboqlar haqidagi blog‑post</a> bilan ham tanishib chiqing.<br>Tajribali foydalanuvchilar klaviatura yorliqlarini koʻrish uchun \"?\" belgisini bosishlari mumkin.<br>Omad tilaymiz!';
 
   @override
   String get studyCreateChapterTitle => 'Saboq uchun bob yaratamiz';
 
   @override
-  String get studyCreateChapterText =>
-      'Saboq bir nechta bobdan iborat boʻlishi mumkin.<br>Har bir bobda alohida yurishlar varianti mavjud<br>va ularni turli usullar bilan yaratish mumkin.';
+  String get studyCreateChapterText => 'Saboq bir nechta bobdan iborat boʻlishi mumkin.<br>Har bir bobda alohida yurishlar varianti mavjud<br>va ularni turli usullar bilan yaratish mumkin.';
 
   @override
   String get studyFromInitialPositionTitle => 'Boshlangʻich pozitsiyadan';
 
   @override
-  String get studyFromInitialPositionText =>
-      'Yangi oʻyin uchun tayyorlangan pozitsiya.<br>Debyutlarni oʻrganish uchun qulay.';
+  String get studyFromInitialPositionText => 'Yangi oʻyin uchun tayyorlangan pozitsiya.<br>Debyutlarni oʻrganish uchun qulay.';
 
   @override
   String get studyCustomPositionTitle => 'Maxsus pozitsiya';
 
   @override
-  String get studyCustomPositionText =>
-      'Pozitsiyani oʻzingiz xohlagancha tering.<br>Endshpillarni oʻrganish uchun qulay.';
+  String get studyCustomPositionText => 'Pozitsiyani oʻzingiz xohlagancha tering.<br>Endshpillarni oʻrganish uchun qulay.';
 
   @override
   String get studyLoadExistingLichessGameTitle => 'Mavjud Lichess oʻyinini yuklash';
 
   @override
-  String get studyLoadExistingLichessGameText =>
-      'Bobga oʻyinni yuklash uchun<br>Lichess oʻyini havolasini (URL) kiriting<br>(masalan: lichess.org/7fHIU0XI).';
+  String get studyLoadExistingLichessGameText => 'Bobga oʻyinni yuklash uchun<br>Lichess oʻyini havolasini (URL) kiriting<br>(masalan: lichess.org/7fHIU0XI).';
 
   @override
   String get studyFromFenStringTitle => 'FEN satridan';
 
   @override
-  String get studyFromFenStringText =>
-      'Bobni maʼlum bir pozitsiyadan boshlash uchun<br>FEN formatidagi pozitsiyani kiriting:<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i>';
+  String get studyFromFenStringText => 'Bobni maʼlum bir pozitsiyadan boshlash uchun<br>FEN formatidagi pozitsiyani kiriting:<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i>';
 
   @override
   String get studyFromPgnGameTitle => 'PGN oʻyinidan';
 
   @override
-  String get studyFromPgnGameText =>
-      'Bobga yurishlar, sharhlar va variantlarni yuklash uchun<br>PGN formatidagi oʻyinni kiriting.';
+  String get studyFromPgnGameText => 'Bobga yurishlar, sharhlar va variantlarni yuklash uchun<br>PGN formatidagi oʻyinni kiriting.';
 
   @override
   String get studyVariantsAreSupportedTitle => 'Saboqlarda shaxmat variantlari ham mavjud';
 
   @override
-  String get studyVariantsAreSupportedText =>
-      'Ha, siz Kreyzihaus va boshqa<br>Lichess variantlarini oʻrganishingiz mumkin!';
+  String get studyVariantsAreSupportedText => 'Ha, siz Kreyzihaus va boshqa<br>Lichess variantlarini oʻrganishingiz mumkin!';
 
   @override
-  String get studyChapterConclusionText =>
-      'Boblar abadiy saqlanadi.<br>Shaxmat materiallaringizni zavq bilan tartiblang!';
+  String get studyChapterConclusionText => 'Boblar abadiy saqlanadi.<br>Shaxmat materiallaringizni zavq bilan tartiblang!';
 
   @override
   String get studyDoubleDefeat => 'Ikki tomonlama magʻlubiyat';
 
   @override
-  String get studyBlackDefeatWhiteCanNotWin =>
-      'Qoralar magʻlubiyati, ammo oqlar gʻalaba qozona olmaydi';
+  String get studyBlackDefeatWhiteCanNotWin => 'Qoralar magʻlubiyati, ammo oqlar gʻalaba qozona olmaydi';
 
   @override
-  String get studyWhiteDefeatBlackCanNotWin =>
-      'Oqlar magʻlubiyati, ammo qoralar gʻalaba qozona olmaydi';
+  String get studyWhiteDefeatBlackCanNotWin => 'Oqlar magʻlubiyati, ammo qoralar gʻalaba qozona olmaydi';
 
   @override
   String studyNbChapters(int count) {
