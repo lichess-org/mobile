@@ -162,7 +162,8 @@
             android:name="com.dexterous.flutterlocalnotifications.ActionBroadcastReceiver"/>
         <receiver android:name=".widgets.BroadcastWidgetProvider"
             android:label="@string/widget_broadcast_title"
-            android:exported="true">
+            android:exported="true"
+            android:permission="android.permission.BIND_APPWIDGET">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
