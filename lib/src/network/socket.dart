@@ -687,7 +687,7 @@ final socketPoolProvider = Provider<SocketPool>((Ref ref) {
 
   ref.listen<AuthUser?>(authControllerProvider, (previous, next) {
     pool.currentClient.connect();
-  });
+  }, fireImmediately: true);
 
   final appLifecycleListener = AppLifecycleListener(
     onHide: () {
