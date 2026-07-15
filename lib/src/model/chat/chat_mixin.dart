@@ -29,11 +29,8 @@ String _storeKey(StringId id) => 'chat.$id';
 sealed class ChatState with _$ChatState {
   const ChatState._();
 
-  const factory ChatState({
-    required IList<ChatMessage> messages,
-    required int unreadMessages,
-    @Default('') String inputText,
-  }) = _ChatState;
+  const factory ChatState({required IList<ChatMessage> messages, required int unreadMessages}) =
+      _ChatState;
 }
 
 /// Interface for a Notifier's State that uses [ChatMixin].
@@ -108,6 +105,13 @@ mixin ChatMixin<T extends ChatMixinState> on AnyNotifier<AsyncValue<T>, T> {
   bool get chatIsPublic;
 
   LightUser? get _me => ref.read(authControllerProvider)?.user;
+
+  /// The current draft of the chat input field (unsent text).
+  ///
+  /// This is intentionally kept out of the observable [ChatState] so that
+  /// updating it on every keystroke does not rebuild widgets watching the chat
+  /// state.
+  String chatInputDraft = '';
 
   /// Builds the initial [ChatState] from [initialData].
   ///
@@ -228,12 +232,5 @@ mixin ChatMixin<T extends ChatMixinState> on AnyNotifier<AsyncValue<T>, T> {
         ),
       );
     }
-  }
-
-  /// Updates the text of the chat input field.
-  void setInputText(String text) {
-    final chatState = state.value?.chatState;
-    if (chatState == null) return;
-    updateChatState(chatState.copyWith(inputText: text));
   }
 }
