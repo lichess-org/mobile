@@ -163,7 +163,8 @@ class AccountPreferences extends AsyncNotifier<AccountPrefState> {
   ) async {
     final authUser = ref.read(authControllerProvider);
     if (authUser == null) {
-      await _saveLocal(updateLocal(state.value ?? _fetchLocal()));
+      final local = _fetchLocal();
+      await _saveLocal(updateLocal(local));
       return;
     }
 
