@@ -74,7 +74,8 @@ class BroadcastWidgetProvider : AppWidgetProvider() {
 
         try {
             val prefs = context.getSharedPreferences("HomeWidgetPreferences", Context.MODE_PRIVATE)
-            val lichessHost = prefs.getString("lichessHost", "lichess.org") ?: "lichess.org"
+            val defaultHost = if (org.lichess.mobileV2.BuildConfig.DEBUG) "lichess.dev" else "lichess.org"
+            val lichessHost = prefs.getString("lichessHost", defaultHost) ?: defaultHost
             val broadcasts = fetchBroadcasts(lichessHost)
 
             remoteViews.removeAllViews(R.id.broadcast_list)
@@ -160,8 +161,15 @@ class BroadcastWidgetProvider : AppWidgetProvider() {
         }
 
         val scheme = if (lichessHost.startsWith("localhost")) "http" else "https"
-        val clickUrl = "$scheme://$lichessHost/broadcast/${item.tourSlug}/${item.roundSlug}/${item.id}"
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(clickUrl)).apply {
+        val clickUri = Uri.Builder()
+            .scheme(scheme)
+            .encodedAuthority(lichessHost)
+            .appendPath("broadcast")
+            .appendPath(item.tourSlug)
+            .appendPath(item.roundSlug)
+            .appendPath(item.id)
+            .build()
+        val intent = Intent(Intent.ACTION_VIEW, clickUri).apply {
             setClass(context, MainActivity::class.java)
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
@@ -190,31 +198,35 @@ class BroadcastWidgetProvider : AppWidgetProvider() {
             connection.readTimeout = 10000
             connection.setRequestProperty("Accept", "application/json")
             
-            return connection.inputStream.use { stream ->
-                val jsonString = stream.bufferedReader().use { it.readText() }
-                val active = JSONObject(jsonString).getJSONArray("active")
-                
-                (0 until active.length()).mapNotNull { i ->
-                    val item = active.getJSONObject(i)
-                    val tour = item.getJSONObject("tour")
+            try {
+                return connection.inputStream.use { stream ->
+                    val jsonString = stream.bufferedReader().use { it.readText() }
+                    val active = JSONObject(jsonString).getJSONArray("active")
                     
-                    if (tour.optInt("tier", 0) < 4) return@mapNotNull null
-                    
-                    val round = item.getJSONObject("round")
-                    val id = item.optJSONObject("roundToLink")?.optString("id") ?: round.getString("id")
-                    val title = item.optString("group").takeIf { !it.isNullOrBlank() } ?: tour.getString("name")
-                    
-                    BroadcastItem(
-                        id = id,
-                        title = title,
-                        roundName = round.getString("name"),
-                        tourSlug = tour.getString("slug"),
-                        roundSlug = round.getString("slug"),
-                        isLive = round.optBoolean("ongoing", false),
-                        startsAt = round.optLong("startsAt", 0),
-                        imageUrl = tour.optString("image").takeIf { !it.isNullOrBlank() }
-                    )
+                    (0 until active.length()).mapNotNull { i ->
+                        val item = active.getJSONObject(i)
+                        val tour = item.getJSONObject("tour")
+                        
+                        if (tour.optInt("tier", 0) < 4) return@mapNotNull null
+                        
+                        val round = item.getJSONObject("round")
+                        val id = item.optJSONObject("roundToLink")?.optString("id") ?: round.getString("id")
+                        val title = item.optString("group").takeIf { !it.isNullOrBlank() } ?: tour.getString("name")
+                        
+                        BroadcastItem(
+                            id = id,
+                            title = title,
+                            roundName = round.getString("name"),
+                            tourSlug = tour.getString("slug"),
+                            roundSlug = round.getString("slug"),
+                            isLive = round.optBoolean("ongoing", false),
+                            startsAt = round.optLong("startsAt", 0),
+                            imageUrl = tour.optString("image").takeIf { !it.isNullOrBlank() }
+                        )
+                    }
                 }
+            } finally {
+                connection.disconnect()
             }
         } catch (e: Exception) {
             Log.e("BroadcastWidget", "Error fetching broadcasts", e)
