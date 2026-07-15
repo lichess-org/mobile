@@ -30,6 +30,17 @@ import org.lichess.mobileV2.MainActivity
 
 class BroadcastWidgetProvider : AppWidgetProvider() {
 
+    override fun onReceive(context: Context, intent: Intent) {
+        val pendingResult = goAsync()
+        thread {
+            try {
+                super.onReceive(context, intent)
+            } finally {
+                pendingResult.finish()
+            }
+        }
+    }
+
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         super.onUpdate(context, appWidgetManager, appWidgetIds)
         appWidgetIds.forEach { updateWidget(context, appWidgetManager, it) }
@@ -61,45 +72,42 @@ class BroadcastWidgetProvider : AppWidgetProvider() {
         )
         remoteViews.setOnClickPendingIntent(R.id.widget_header, homePendingIntent)
 
-        thread {
-            try {
-                val prefs = context.getSharedPreferences("HomeWidgetPreferences", Context.MODE_PRIVATE)
-                val lichessHost = prefs.getString("lichessHost", "lichess.org") ?: "lichess.org"
-                val broadcasts = fetchBroadcasts(lichessHost)
+        try {
+            val prefs = context.getSharedPreferences("HomeWidgetPreferences", Context.MODE_PRIVATE)
+            val lichessHost = prefs.getString("lichessHost", "lichess.org") ?: "lichess.org"
+            val broadcasts = fetchBroadcasts(lichessHost)
 
-                remoteViews.removeAllViews(R.id.broadcast_list)
+            remoteViews.removeAllViews(R.id.broadcast_list)
 
-                if (broadcasts.isEmpty()) {
-                    remoteViews.setViewVisibility(R.id.empty_view, View.VISIBLE)
-                    remoteViews.setViewVisibility(R.id.broadcast_list, View.GONE)
-                } else {
-                    remoteViews.setViewVisibility(R.id.empty_view, View.GONE)
-                    remoteViews.setViewVisibility(R.id.broadcast_list, View.VISIBLE)
+            if (broadcasts.isEmpty()) {
+                remoteViews.setViewVisibility(R.id.empty_view, View.VISIBLE)
+                remoteViews.setViewVisibility(R.id.broadcast_list, View.GONE)
+            } else {
+                remoteViews.setViewVisibility(R.id.empty_view, View.GONE)
+                remoteViews.setViewVisibility(R.id.broadcast_list, View.VISIBLE)
 
-                    val options = appWidgetManager.getAppWidgetOptions(appWidgetId)
-                    val minWidth = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH)
-                    val minHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT)
-                    val maxHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT)
-                    val maxWidth = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH)
-                    val isPortrait = context.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT
-                    
-                    val availableHeight = if (isPortrait && maxHeight > 0) maxHeight else minHeight
+                val options = appWidgetManager.getAppWidgetOptions(appWidgetId)
+                val minWidth = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH)
+                val minHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT)
+                val maxHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT)
+                val isPortrait = context.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+                
+                val availableHeight = if (isPortrait && maxHeight > 0) maxHeight else minHeight
 
-                    val numRows = if (availableHeight == 0) 3 else ((availableHeight - 44) / 60).coerceIn(1, 4)
-                    val showThumbnails = minWidth == 0 || minWidth >= 200
-                    
-                    val displayItems = broadcasts.take(numRows)
-                    
-                    displayItems.forEachIndexed { index, item ->
-                        val itemViews = RemoteViews(context.packageName, R.layout.widget_broadcast_item)
-                        setupItemViews(context, itemViews, item, index, showThumbnails, lichessHost, appWidgetId)
-                        remoteViews.addView(R.id.broadcast_list, itemViews)
-                    }
+                val numRows = if (availableHeight == 0) 3 else ((availableHeight - 44) / 60).coerceIn(1, 4)
+                val showThumbnails = minWidth == 0 || minWidth >= 200
+                
+                val displayItems = broadcasts.take(numRows)
+                
+                displayItems.forEachIndexed { index, item ->
+                    val itemViews = RemoteViews(context.packageName, R.layout.widget_broadcast_item)
+                    setupItemViews(context, itemViews, item, index, showThumbnails, lichessHost, appWidgetId)
+                    remoteViews.addView(R.id.broadcast_list, itemViews)
                 }
-                appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
-            } catch (e: Exception) {
-                Log.e("BroadcastWidget", "Error updating widget $appWidgetId", e)
             }
+            appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
+        } catch (e: Exception) {
+            Log.e("BroadcastWidget", "Error updating widget $appWidgetId", e)
         }
     }
 
@@ -221,13 +229,17 @@ class BroadcastWidgetProvider : AppWidgetProvider() {
             connection.connectTimeout = 5000
             connection.readTimeout = 5000
             
-            connection.inputStream.use { stream ->
-                val src = BitmapFactory.decodeStream(stream) ?: return null
-                val square = cropToSquare(src, sizePx)
-                val rounded = getRoundedCornerBitmap(square, (sizePx * 0.12f).toInt())
-                if (square != src) square.recycle()
-                if (src != rounded) src.recycle()
-                rounded
+            try {
+                connection.inputStream.use { stream ->
+                    val src = BitmapFactory.decodeStream(stream) ?: return null
+                    val square = cropToSquare(src, sizePx)
+                    val rounded = getRoundedCornerBitmap(square, (sizePx * 0.12f).toInt())
+                    if (square != src) square.recycle()
+                    if (src != rounded) src.recycle()
+                    rounded
+                }
+            } finally {
+                connection.disconnect()
             }
         } catch (e: Exception) {
             Log.e("BroadcastWidget", "Failed to fetch thumbnail: $urlStr", e)
@@ -240,7 +252,13 @@ class BroadcastWidgetProvider : AppWidgetProvider() {
         val cropX = (src.width - size) / 2
         val cropY = (src.height - size) / 2
         val cropped = Bitmap.createBitmap(src, cropX, cropY, size, size)
-        return Bitmap.createScaledBitmap(cropped, targetSize, targetSize, true)
+        return if (size == targetSize) {
+            cropped
+        } else {
+            Bitmap.createScaledBitmap(cropped, targetSize, targetSize, true).also {
+                if (cropped != src) cropped.recycle()
+            }
+        }
     }
 
     private fun getRoundedCornerBitmap(bitmap: Bitmap, pixels: Int): Bitmap {
