@@ -47,7 +47,7 @@ class EngineSettingsWidget extends ConsumerWidget {
               value: prefs.engineSearchTime.inSeconds.toDouble(),
               values: kAvailableEngineSearchTimes.map((e) => e.inSeconds.toDouble()).toList(),
               labelBuilder: (value) =>
-                  value == kMaxEngineSearchTime.inSeconds.toDouble() ? '∞' : '${value.toInt()}s',
+                  value == kMaxEngineSearchTime.inSeconds.toDouble() ? '∞' : '${value.toInt()} s',
               onChangeEnd: (value) {
                 onSetEngineSearchTime(Duration(seconds: value.toInt()));
               },
