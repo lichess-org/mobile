@@ -27,7 +27,7 @@ IList<T> decodeObjectList<T>(Object? json, {required T? Function(Map<String, dyn
         list.add(mapped);
       }
     } catch (e, st) {
-      _logger.severe('Could not read JSON object as $T: $e', e, st);
+      _logger.severe('Could not read JSON object as $T:', e, st);
       throw Exception('Could not read JSON object as $T: $e');
     }
   }

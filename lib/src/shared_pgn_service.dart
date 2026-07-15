@@ -40,14 +40,14 @@ class SharedPgnService {
         final pgn = await _methods.invokeMethod<String>('getInitialPgn');
         if (pgn != null) _handlePgn(pgn);
       } catch (e, st) {
-        _logger.severe('Error handling initial shared PGN: $e\n$st');
+        _logger.severe('Error handling initial shared PGN:', e, st);
       }
     });
 
     // PGN shared while the app is already running.
     _subscription = _events.receiveBroadcastStream().listen((event) {
       if (event is String) _handlePgn(event);
-    }, onError: (Object e, StackTrace st) => _logger.severe('Error in shared PGN stream: $e\n$st'));
+    }, onError: (Object e, StackTrace st) => _logger.severe('Error in shared PGN stream:', e, st));
   }
 
   void _handlePgn(String pgnText) {

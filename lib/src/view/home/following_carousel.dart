@@ -1,6 +1,7 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/relation/following_user.dart';
 import 'package:lichess_mobile/src/model/relation/relation_repository.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -19,6 +20,10 @@ import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 
 final followingCarouselProvider = FutureProvider.autoDispose<IList<FollowingUser>>((ref) {
+  final authUser = ref.watch(authControllerProvider);
+  if (authUser == null) {
+    return Future.value(const IListConst<FollowingUser>([]));
+  }
   return ref.watch(relationRepositoryProvider).getRecentFollowing();
 }, name: 'FollowingCarouselProvider');
 

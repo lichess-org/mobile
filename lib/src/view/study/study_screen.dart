@@ -74,7 +74,7 @@ class _StudyScreenLoader extends ConsumerWidget {
       case AsyncData(:final value):
         return _StudyScreen(options: options, studyState: value);
       case AsyncError(:final error, :final stackTrace):
-        _logger.severe('Cannot load study: $error', stackTrace);
+        _logger.severe('Cannot load study:', error, stackTrace);
         return Scaffold(
           appBar: AppBar(title: const Text('')),
           body: DefaultTabController(

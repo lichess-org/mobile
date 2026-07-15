@@ -432,6 +432,7 @@ class _MessageContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final timeStyle = TextStyle(fontSize: 11, color: textColor.withValues(alpha: 0.6));
+    // workaround to prevent the message text from overlapping with the timestamp
     final spacer = WidgetSpan(
       alignment: PlaceholderAlignment.baseline,
       baseline: TextBaseline.alphabetic,
