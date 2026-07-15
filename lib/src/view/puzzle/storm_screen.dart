@@ -659,7 +659,7 @@ class _ComboState extends ConsumerState<_Combo> with SingleTickerProviderStateMi
                                 )
                               : null,
                           child: Text(
-                            '${level} s',
+                            '$level s',
                             style: TextStyle(
                               color: isCurrentLevel ? ColorScheme.of(context).onSecondary : null,
                             ),
