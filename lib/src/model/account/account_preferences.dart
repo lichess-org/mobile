@@ -10,8 +10,6 @@ import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 
 export 'account_pref_types.dart';
 
-
-
 /// Represents the account preferences for a user.
 ///
 /// If the user is authenticated, the preferences are fetched from the server. If the user is not authenticated, the preferences are fetched from local storage.

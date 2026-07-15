@@ -16,18 +16,23 @@ sealed class AccountPrefState with _$AccountPrefState implements Serializable {
     @JsonKey(unknownEnumValue: PieceNotation.symbol) required PieceNotation pieceNotation,
     @JsonKey(unknownEnumValue: ShowRatings.yes) required ShowRatings showRatings,
     // game behavior
-    @JsonKey(fromJson: _booleanPrefFromJson, toJson: _booleanPrefToJson) required BooleanPref premove,
+    @JsonKey(fromJson: _booleanPrefFromJson, toJson: _booleanPrefToJson)
+    required BooleanPref premove,
     @JsonKey(unknownEnumValue: AutoQueen.premove) required AutoQueen autoQueen,
     @JsonKey(unknownEnumValue: AutoThreefold.always) required AutoThreefold autoThreefold,
     @JsonKey(unknownEnumValue: Takeback.always) required Takeback takeback,
-    @JsonKey(fromJson: _booleanPrefFromJson, toJson: _booleanPrefToJson) required BooleanPref confirmResign,
-    @JsonKey(fromJson: _submitMoveFromJson, toJson: _submitMoveToJson) required SubmitMove submitMove,
+    @JsonKey(fromJson: _booleanPrefFromJson, toJson: _booleanPrefToJson)
+    required BooleanPref confirmResign,
+    @JsonKey(fromJson: _submitMoveFromJson, toJson: _submitMoveToJson)
+    required SubmitMove submitMove,
     // clock
     @JsonKey(unknownEnumValue: Moretime.always) required Moretime moretime,
     @JsonKey(unknownEnumValue: ClockTenths.lessThan10s) required ClockTenths clockTenths,
-    @JsonKey(fromJson: _booleanPrefFromJson, toJson: _booleanPrefToJson) required BooleanPref clockSound,
+    @JsonKey(fromJson: _booleanPrefFromJson, toJson: _booleanPrefToJson)
+    required BooleanPref clockSound,
     // privacy
-    @JsonKey(fromJson: _booleanPrefFromJson, toJson: _booleanPrefToJson) required BooleanPref follow,
+    @JsonKey(fromJson: _booleanPrefFromJson, toJson: _booleanPrefToJson)
+    required BooleanPref follow,
     @JsonKey(unknownEnumValue: Challenge.registered) required Challenge challenge,
     @JsonKey(unknownEnumValue: Message.always) required Message message,
   }) = _AccountPrefState;

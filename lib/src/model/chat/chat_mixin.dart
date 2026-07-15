@@ -16,7 +16,6 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:sqflite/sqflite.dart';
 
-
 part 'chat_mixin.freezed.dart';
 
 const _tableName = 'chat_read_messages';

@@ -8,7 +8,6 @@ import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 
-
 part 'ongoing_game.freezed.dart';
 
 @freezed
