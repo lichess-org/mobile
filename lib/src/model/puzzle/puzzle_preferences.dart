@@ -26,7 +26,12 @@ class PuzzlePreferences extends Notifier<PuzzlePrefs> with SessionPreferencesSto
 
   @override
   PuzzlePrefs build() {
-    return fetch();
+    final prefs = fetch();
+    // Clamp the offline queue length loaded from storage: corrupted or
+    // manually edited prefs could otherwise bypass the bounds enforced by
+    // [setNbOfflinePuzzles] and trigger very large downloads.
+    final clamped = prefs.nbOfflinePuzzles.clamp(kMinOfflinePuzzles, kMaxOfflinePuzzles);
+    return clamped == prefs.nbOfflinePuzzles ? prefs : prefs.copyWith(nbOfflinePuzzles: clamped);
   }
 
   Future<void> setDifficulty(PuzzleDifficulty difficulty) async {

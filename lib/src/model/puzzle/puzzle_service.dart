@@ -18,10 +18,6 @@ import 'package:result_extensions/result_extensions.dart';
 
 part 'puzzle_service.freezed.dart';
 
-/// Default size of puzzle local cache. Used as a fallback; the effective
-/// queue length is user-configurable via [PuzzlePrefs.nbOfflinePuzzles].
-const kPuzzleLocalQueueLength = 50;
-
 /// A provider for [PuzzleService].
 final puzzleServiceProvider = FutureProvider<PuzzleService>((Ref ref) {
   final nbOfflinePuzzles = ref.watch(

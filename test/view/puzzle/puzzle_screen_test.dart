@@ -123,6 +123,53 @@ void main() {
       expect(find.text('Your turn'), findsOneWidget);
     });
 
+    testWidgets(
+      'Changing the offline puzzles setting updates the displayed value',
+      variant: kPlatformVariant,
+      (tester) async {
+        final app = await makeTestProviderScopeApp(
+          tester,
+          home: PuzzleScreen(
+            angle: const PuzzleTheme(PuzzleThemeKey.mix),
+            puzzleId: puzzle.puzzle.id,
+          ),
+          overrides: {
+            puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith(
+              (ref) => mockBatchStorage,
+            ),
+            puzzleStorageProvider: puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
+          },
+        );
+
+        when(
+          () => mockHistoryStorage.fetch(puzzleId: puzzle.puzzle.id),
+        ).thenAnswer((_) async => puzzle);
+
+        await tester.pumpWidget(app);
+
+        // wait for the puzzle to load
+        await tester.pump(const Duration(milliseconds: 200));
+
+        // open settings
+        await tester.tap(find.byIcon(Icons.settings));
+        await tester.pumpAndSettle();
+
+        // the offline puzzles tile shows the default value
+        final tileFinder = find.widgetWithText(SettingsListTile, 'Offline puzzles');
+        expect(tileFinder, findsOneWidget);
+        expect(tester.widget<SettingsListTile>(tileFinder).settingsValue, '50');
+
+        // open the choice picker and select a larger value
+        await tester.tap(tileFinder);
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('200').last);
+        await tester.pumpAndSettle();
+
+        // the tile reflects the new value
+        expect(tester.widget<SettingsListTile>(tileFinder).settingsValue, '200');
+      },
+    );
+
     testWidgets('Loads next puzzle when no puzzleId is passed', (tester) async {
       final app = await makeTestProviderScopeApp(
         tester,
