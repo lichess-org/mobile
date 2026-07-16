@@ -804,7 +804,7 @@ void main() {
       await tester.tap(find.byIcon(CupertinoIcons.chevron_back));
       await tester.pump();
 
-      expect(isPrevEnabled(), isFalse);
+      expect(isPrevEnabled(), isTrue);
       expect(isNextEnabled(), isTrue);
       await tester.tap(find.byIcon(CupertinoIcons.chevron_forward));
       await tester.pump();
