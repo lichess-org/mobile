@@ -365,17 +365,14 @@ class PuzzleController extends Notifier<PuzzleState> {
   }
 
   String makePgn() {
-    final initPosition = _gameTree.nodeAt(state.initialPath).position;
+    final initPosition = _gameTree.position;
     var currentPosition = initPosition;
-    final pgnMoves = state.puzzle.puzzle.solution.fold<List<String>>([], (List<String> acc, move) {
-      final moveObj = Move.parse(move);
-      if (moveObj != null) {
-        final String san;
-        (currentPosition, san) = currentPosition.makeSan(moveObj);
-        return acc..add(san);
-      }
-      return acc;
+    final pgnMoves = _gameTree.mainline.map((branch) {
+      final String san;
+      (currentPosition, san) = currentPosition.makeSan(branch.sanMove.move);
+      return san;
     });
+
     final pgn =
         '[FEN "${initPosition.fen}"][Site "${lichessUri('/training/${state.puzzle.puzzle.id}')}"]${pgnMoves.join(' ')}';
     return pgn;
@@ -462,7 +459,7 @@ sealed class PuzzleState with _$PuzzleState {
       pgn: makePgn(),
       isComputerAnalysisAllowed: true,
       variant: Variant.standard,
-      initialMoveCursor: 0,
+      initialMoveCursor: initialPath.size,
     );
   }
 }
