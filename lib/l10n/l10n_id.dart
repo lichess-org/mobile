@@ -88,6 +88,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get mobileOverTheBoard => 'Di atas papan';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String mobilePlayersMatchingSearchTerm(String param) {
     return 'Pengguna dengan sebutan \"$param\"';
   }

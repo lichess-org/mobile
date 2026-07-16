@@ -88,6 +88,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileOverTheBoard => 'Mbi tabelën';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String mobilePlayersMatchingSearchTerm(String param) {
     return 'Lojtarët me \"$param\"';
   }

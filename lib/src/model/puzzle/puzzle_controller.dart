@@ -40,8 +40,9 @@ class PuzzleController extends Notifier<PuzzleState> {
   Timer? _viewSolutionTimer;
   IList<PuzzleId>? _replayRemaining;
 
-  Future<PuzzleService> get _service =>
-      ref.read(puzzleServiceFactoryProvider)(queueLength: kPuzzleLocalQueueLength);
+  Future<PuzzleService> get _service => ref.read(puzzleServiceFactoryProvider)(
+    queueLength: ref.read(puzzlePreferencesProvider).nbOfflinePuzzles,
+  );
 
   @override
   PuzzleState build() {

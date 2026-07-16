@@ -88,6 +88,9 @@ class AppLocalizationsHe extends AppLocalizations {
   String get mobileOverTheBoard => 'שח-חי (על גבי לוח!)';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String mobilePlayersMatchingSearchTerm(String param) {
     return 'שחקנים עם ״$param״';
   }

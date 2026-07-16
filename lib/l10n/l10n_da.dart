@@ -88,6 +88,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileOverTheBoard => 'Spil offline, brug som bræt';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String mobilePlayersMatchingSearchTerm(String param) {
     return 'Spillere med \"$param\"';
   }

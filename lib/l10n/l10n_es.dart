@@ -88,6 +88,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mobileOverTheBoard => 'Jugar sin conexión';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String mobilePlayersMatchingSearchTerm(String param) {
     return 'Jugadores con \"$param\"';
   }

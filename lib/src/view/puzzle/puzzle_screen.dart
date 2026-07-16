@@ -925,6 +925,9 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final authUser = ref.watch(authControllerProvider);
     final autoNext = ref.watch(puzzlePreferencesProvider.select((value) => value.autoNext));
+    final nbOfflinePuzzles = ref.watch(
+      puzzlePreferencesProvider.select((value) => value.nbOfflinePuzzles),
+    );
     final rated = ref.watch(puzzlePreferencesProvider.select((value) => value.rated));
     final ctrlProvider = puzzleControllerProvider(initialPuzzleContext);
     final puzzleState = ref.watch(ctrlProvider);
@@ -982,6 +985,23 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
               value: autoNext,
               onChanged: (value) {
                 ref.read(puzzlePreferencesProvider.notifier).setAutoNext(value);
+              },
+            ),
+            SettingsListTile(
+              settingsLabel: Text(context.l10n.mobileNbOfflinePuzzles),
+              settingsValue: nbOfflinePuzzles.toString(),
+              onTap: () {
+                showChoicePicker(
+                  context,
+                  choices: kOfflinePuzzlesChoices,
+                  selectedItem: nbOfflinePuzzles,
+                  labelBuilder: (t) => Text(t.toString()),
+                  onSelectedItemChanged: (int? nb) {
+                    if (nb != null) {
+                      ref.read(puzzlePreferencesProvider.notifier).setNbOfflinePuzzles(nb);
+                    }
+                  },
+                );
               },
             ),
             if (authUser != null && initialPuzzleContext.replayRemaining == null)

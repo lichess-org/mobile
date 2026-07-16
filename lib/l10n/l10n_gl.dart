@@ -88,6 +88,9 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileOverTheBoard => 'Xogar nun taboleiro virtual';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String mobilePlayersMatchingSearchTerm(String param) {
     return 'O nome de usuario contén \"$param\"';
   }

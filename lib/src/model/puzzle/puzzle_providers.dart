@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_batch_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_opening.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
@@ -20,9 +21,10 @@ final nextPuzzleProvider = FutureProvider.autoDispose.family<PuzzleContext?, Puz
   PuzzleAngle angle,
 ) async {
   final authUser = ref.watch(authControllerProvider);
-  final puzzleService = await ref.read(puzzleServiceFactoryProvider)(
-    queueLength: kPuzzleLocalQueueLength,
+  final nbOfflinePuzzles = ref.watch(
+    puzzlePreferencesProvider.select((prefs) => prefs.nbOfflinePuzzles),
   );
+  final puzzleService = await ref.read(puzzleServiceFactoryProvider)(queueLength: nbOfflinePuzzles);
   // useful for for preview puzzle list in puzzle tab (providers in a list can
   // be invalidated multiple times when the user scrolls the list)
   ref.cacheFor(const Duration(minutes: 1));

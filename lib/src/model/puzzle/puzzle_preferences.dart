@@ -40,7 +40,24 @@ class PuzzlePreferences extends Notifier<PuzzlePrefs> with SessionPreferencesSto
   Future<void> setRated(bool rated) async {
     save(state.copyWith(rated: rated));
   }
+
+  Future<void> setNbOfflinePuzzles(int nbOfflinePuzzles) async {
+    save(
+      state.copyWith(
+        nbOfflinePuzzles: nbOfflinePuzzles.clamp(kMinOfflinePuzzles, kMaxOfflinePuzzles),
+      ),
+    );
+  }
 }
+
+/// Minimum number of puzzles kept in the offline queue.
+const kMinOfflinePuzzles = 50;
+
+/// Maximum number of puzzles kept in the offline queue.
+const kMaxOfflinePuzzles = 500;
+
+/// Available choices for the size of the offline puzzle queue.
+const kOfflinePuzzlesChoices = [50, 100, 150, 200, 300, 500];
 
 @Freezed(fromJson: true, toJson: true)
 sealed class PuzzlePrefs with _$PuzzlePrefs implements Serializable {
@@ -56,10 +73,19 @@ sealed class PuzzlePrefs with _$PuzzlePrefs implements Serializable {
     /// If `true`, the puzzle will be rated for logged in users.
     /// Defaults to `true`.
     @Default(true) bool rated,
+
+    /// Number of puzzles to keep downloaded in the offline queue.
+    /// Defaults to `50`.
+    @Default(50) int nbOfflinePuzzles,
   }) = _PuzzlePrefs;
 
-  factory PuzzlePrefs.defaults({UserId? id}) =>
-      PuzzlePrefs(id: id, difficulty: PuzzleDifficulty.normal, autoNext: false, rated: true);
+  factory PuzzlePrefs.defaults({UserId? id}) => PuzzlePrefs(
+    id: id,
+    difficulty: PuzzleDifficulty.normal,
+    autoNext: false,
+    rated: true,
+    nbOfflinePuzzles: 50,
+  );
 
   factory PuzzlePrefs.fromJson(Map<String, dynamic> json) => _$PuzzlePrefsFromJson(json);
 }

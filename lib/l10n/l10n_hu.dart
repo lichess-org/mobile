@@ -88,6 +88,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileOverTheBoard => 'Asztali játék';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String mobilePlayersMatchingSearchTerm(String param) {
     return 'Játékosok \"$param\"felhasználónévvel';
   }
