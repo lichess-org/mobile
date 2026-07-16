@@ -35,7 +35,7 @@ class PuzzleController extends Notifier<PuzzleState> {
 
   static final Uri socketUri = Uri(path: '/analysis/socket/v5');
 
-  late Branch _gameTree;
+  late Root _gameTree;
   Timer? _firstMoveTimer;
   Timer? _viewSolutionTimer;
   IList<PuzzleId>? _replayRemaining;
@@ -74,18 +74,18 @@ class PuzzleController extends Notifier<PuzzleState> {
   }
 
   PuzzleState _loadNewContext(PuzzleContext context) {
-    final root = Root.fromPgnMoves(context.puzzle.game.pgn);
-    _gameTree = root.nodeAt(root.mainlinePath.penultimate) as Branch;
+    _gameTree = Root.fromPgnMoves(context.puzzle.game.pgn);
 
     // update puzzles that are remaining in replay
     _replayRemaining = context.replayRemaining;
 
+    final branchBeforeFirstMove = _gameTree.branchAt(_gameTree.mainlinePath.penultimate)!.view;
+    final initialPath = _gameTree.mainlinePath;
+
     // play first move after 1 second
     _firstMoveTimer = Timer(const Duration(seconds: 1), () {
-      _setPath(state.initialPath, firstMove: true);
+      _setPath(initialPath, firstMove: true);
     });
-
-    final initialPath = UciPath.fromId(_gameTree.children.first.id);
 
     return PuzzleState(
       puzzle: context.puzzle,
@@ -95,7 +95,7 @@ class PuzzleController extends Notifier<PuzzleState> {
       initialPosition: _gameTree.position,
       initialPath: initialPath,
       currentPath: UciPath.empty,
-      node: _gameTree.view,
+      node: branchBeforeFirstMove,
       pov: _gameTree.nodeAt(initialPath).position.ply.isEven ? Side.white : Side.black,
       hintShown: false,
       resultSent: false,
@@ -163,7 +163,7 @@ class PuzzleController extends Notifier<PuzzleState> {
 
     _mergeSolution();
 
-    state = state.copyWith(root: _gameTree.view, node: _gameTree.branchAt(state.currentPath).view);
+    state = state.copyWith(root: _gameTree.view, node: _gameTree.branchAt(state.currentPath)!.view);
 
     _onFailOrWin(PuzzleResult.lose);
 
@@ -258,7 +258,7 @@ class PuzzleController extends Notifier<PuzzleState> {
         state = state.copyWith(
           mode: PuzzleMode.view,
           root: _gameTree.view,
-          node: _gameTree.branchAt(state.currentPath).view,
+          node: _gameTree.nodeAt(state.currentPath).view,
         );
       }
     } else {
@@ -333,11 +333,11 @@ class PuzzleController extends Notifier<PuzzleState> {
   }
 
   void _setPath(UciPath path, {bool isNavigating = false, bool firstMove = false}) {
-    final newNode = _gameTree.branchAt(path).view;
+    final newNode = _gameTree.nodeAt(path).view;
     final sanMove = newNode.sanMove;
     if (!isNavigating) {
       final isForward = path.size > state.currentPath.size;
-      if (isForward) {
+      if (isForward && sanMove != null) {
         final isCheck = sanMove.isCheck;
         if (sanMove.isCapture) {
           ref.read(moveFeedbackServiceProvider).captureFeedback(Variant.standard, check: isCheck);
@@ -348,7 +348,7 @@ class PuzzleController extends Notifier<PuzzleState> {
     } else {
       // when isNavigating moves fast we don't want haptic feedback
       final soundService = ref.read(soundServiceProvider);
-      if (sanMove.isCapture) {
+      if (sanMove != null && sanMove.isCapture) {
         soundService.play(Sound.capture);
       } else {
         soundService.play(Sound.move);
@@ -359,7 +359,7 @@ class PuzzleController extends Notifier<PuzzleState> {
       currentPath: path,
       root: _gameTree.view,
       node: newNode,
-      lastMove: sanMove.move,
+      lastMove: sanMove?.move,
       shouldBlinkNextArrow: false,
     );
   }
@@ -429,7 +429,7 @@ sealed class PuzzleState with _$PuzzleState {
     required UciPath initialPath,
     required UciPath currentPath,
     required Side pov,
-    required ViewBranch node,
+    required ViewNode node,
     required ViewNode root,
     Move? lastMove,
     PuzzleResult? result,
@@ -448,7 +448,7 @@ sealed class PuzzleState with _$PuzzleState {
 
   bool get canGoNext => node.children.isNotEmpty;
 
-  bool get canGoBack => currentPath.size > initialPath.penultimate.size;
+  bool get canGoBack => currentPath.size > 0;
 
   NormalMove? get _nextSolutionMove {
     final uci = puzzle.puzzle.solution.getOrNull(currentPath.size - initialPath.size);
