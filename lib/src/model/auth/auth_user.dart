@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 
@@ -12,9 +10,3 @@ sealed class AuthUser with _$AuthUser {
 
   factory AuthUser.fromJson(Map<String, dynamic> json) => _$AuthUserFromJson(json);
 }
-
-enum AuthEvent { signIn, signOut }
-
-final authEventsController = StreamController<AuthEvent>.broadcast();
-
-Stream<AuthEvent> get authEventsStream => authEventsController.stream;

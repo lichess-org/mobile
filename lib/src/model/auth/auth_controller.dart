@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/experimental/mutation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
@@ -6,6 +8,12 @@ import 'package:lichess_mobile/src/model/auth/auth_user.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 
 export 'auth_user.dart';
+
+enum AuthEvent { signIn, signOut }
+
+final _authEventsController = StreamController<AuthEvent>.broadcast();
+
+Stream<AuthEvent> get authEventsStream => _authEventsController.stream;
 
 /// A provider for [AuthController].
 final authControllerProvider = NotifierProvider.autoDispose<AuthController, AuthUser?>(
@@ -36,14 +44,14 @@ class AuthController extends Notifier<AuthUser?> {
     if (!ref.mounted) return;
     state = authUser;
 
-    authEventsController.add(AuthEvent.signIn);
+    _authEventsController.add(AuthEvent.signIn);
   }
 
   /// Signs out the user.
   Future<void> signOut() async {
     await Future<void>.delayed(const Duration(milliseconds: 500));
 
-    authEventsController.add(AuthEvent.signOut);
+    _authEventsController.add(AuthEvent.signOut);
     await ref.read(authRepositoryProvider).signOut();
     await ref.read(authStorageProvider).delete();
     if (!ref.mounted) return;

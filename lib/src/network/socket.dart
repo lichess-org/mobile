@@ -687,6 +687,7 @@ final socketPoolProvider = Provider<SocketPool>((Ref ref) {
 
   pool.currentClient.connect();
 
+  // force reconnect to the current socket with the new token
   final subscription = authEventsStream.listen((_) {
     pool.currentClient.connect();
   });
