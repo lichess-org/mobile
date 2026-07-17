@@ -50,7 +50,7 @@ class ExportedGameTitle extends StatelessWidget {
             mainAxisSize: .min,
             crossAxisAlignment: .start,
             children: [
-              AppBarTitleText('$title$mode', maxLines: 1),
+              AppBarTitleText('$title$mode', maxLines: 1, maxFontSize: 18.0),
               if (lastMoveAt != null)
                 Text(
                   relativeDate(context.l10n, lastMoveAt!, shortDate: false),
