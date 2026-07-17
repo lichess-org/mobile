@@ -144,3 +144,28 @@ final puzzleOpeningsProvider = FutureProvider.autoDispose
         const Duration(days: 1),
       );
     }, name: 'PuzzleOpeningsProvider');
+
+/// Returns a flattened list of openings with their respective counts.
+final flatOpeningsListProvider = FutureProvider.autoDispose<IList<PuzzleOpeningData>>((
+  Ref ref,
+) async {
+  final families = await ref.watch(puzzleOpeningsProvider(PuzzleOpeningSort.popular).future);
+  return families
+      .map(
+        (f) => [
+          (key: f.key, name: f.name, count: f.count),
+          ...f.openings.map((o) => (key: o.key, name: '${f.name}: ${o.name}', count: o.count)),
+        ],
+      )
+      .expand((e) => e)
+      .toIList();
+}, name: 'FlatOpeningsListProvider');
+
+/// Provides the name of a puzzle opening given its key.
+final puzzleOpeningNameProvider = FutureProvider.autoDispose.family<String, String>((
+  Ref ref,
+  String key,
+) async {
+  final openings = await ref.watch(flatOpeningsListProvider.future);
+  return openings.firstWhere((element) => element.key == key).name;
+}, name: 'PuzzleOpeningNameProvider');
