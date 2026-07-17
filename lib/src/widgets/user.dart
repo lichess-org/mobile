@@ -68,21 +68,35 @@ class UserAppBarTitleWidget extends StatelessWidget {
       children: [
         UserAvatar(user, radius: 16),
         const SizedBox(width: 8),
-        Column(
-          mainAxisSize: .min,
-          crossAxisAlignment: .start,
-          children: [
-            UserFullNameWidget(user: user, showFlair: false),
-            if (isOnline)
-              Text(context.l10n.online, style: subtitleTextStyle)
-            else if (seenAt != null)
-              Text(
-                context.l10n.lastSeenActive(relativeDate(context.l10n, seenAt!)),
-                style: subtitleTextStyle,
-              )
-            else
-              Text(context.l10n.offline, style: subtitleTextStyle),
-          ],
+        Flexible(
+          child: Column(
+            mainAxisSize: .min,
+            crossAxisAlignment: .start,
+            children: [
+              UserFullNameWidget(user: user, showFlair: false),
+              if (isOnline)
+                Text(
+                  context.l10n.online,
+                  style: subtitleTextStyle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                )
+              else if (seenAt != null)
+                Text(
+                  context.l10n.lastSeenActive(relativeDate(context.l10n, seenAt!)),
+                  style: subtitleTextStyle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                )
+              else
+                Text(
+                  context.l10n.offline,
+                  style: subtitleTextStyle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+            ],
+          ),
         ),
       ],
     );

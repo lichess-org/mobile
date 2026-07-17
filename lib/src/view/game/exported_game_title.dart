@@ -45,19 +45,23 @@ class ExportedGameTitle extends StatelessWidget {
       children: [
         Icon(meta.perf.icon, color: DefaultTextStyle.of(context).style.color),
         const SizedBox(width: 8.0),
-        Column(
-          mainAxisSize: .min,
-          crossAxisAlignment: .start,
-          children: [
-            AppBarTitleText('$title$mode', maxLines: 1),
-            if (lastMoveAt != null)
-              Text(
-                relativeDate(context.l10n, lastMoveAt!, shortDate: false),
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+        Flexible(
+          child: Column(
+            mainAxisSize: .min,
+            crossAxisAlignment: .start,
+            children: [
+              AppBarTitleText('$title$mode', maxLines: 1),
+              if (lastMoveAt != null)
+                Text(
+                  relativeDate(context.l10n, lastMoveAt!, shortDate: false),
+                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
-              ),
-          ],
+            ],
+          ),
         ),
       ],
     );

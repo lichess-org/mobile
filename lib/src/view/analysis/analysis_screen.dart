@@ -641,16 +641,6 @@ class _BottomBar extends ConsumerWidget {
             orientation: analysisState.pov,
             finished: archivedGame.finished,
           ),
-        // Shares the current PGN, including local analysis and edited tags. Can be
-        // used to quickly analyze a position, so the engine must be allowed to access.
-        if (analysisState.isComputerAnalysisAllowed)
-          BottomSheetAction(
-            // TODO: l10n
-            makeLabel: (context) => const Text('Share current PGN'),
-            onPressed: () {
-              Navigator.of(context).push(AnalysisShareScreen.buildRoute(options: options));
-            },
-          ),
         // share position as FEN can be used to quickly analyze a position, so engine must be allowed to access
         if (analysisState.isComputerAnalysisAllowed)
           BottomSheetAction(
@@ -658,6 +648,16 @@ class _BottomBar extends ConsumerWidget {
             onPressed: () {
               final currentState = ref.read(analysisControllerProvider(options)).requireValue;
               launchShareDialog(context, ShareParams(text: currentState.currentPosition.fen));
+            },
+          ),
+        // Shares the current PGN, including local analysis and edited tags. Can be
+        // used to quickly analyze a position, so the engine must be allowed to access.
+        if (analysisState.isComputerAnalysisAllowed)
+          BottomSheetAction(
+            // TODO: l10n
+            makeLabel: (context) => const Text('Share current PGN (with your moves)'),
+            onPressed: () {
+              Navigator.of(context).push(AnalysisShareScreen.buildRoute(options: options));
             },
           ),
       ],
