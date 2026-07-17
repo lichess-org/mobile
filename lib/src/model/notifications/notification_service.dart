@@ -98,12 +98,22 @@ class NotificationService {
   /// This method should be called once the app is ready to receive notifications,
   /// and after [LichessBinding.initializeNotifications] has been called.
   Future<void> start() async {
+    await _authEventsSubscription?.cancel();
     _authEventsSubscription = authEventsStream.listen((event) {
       switch (event) {
         case AuthEvent.signIn:
-          registerDevice();
+          unawaited(
+            registerDevice().catchError((Object e, StackTrace st) {
+              _logger.severe('Could not register device after sign-in:', e, st);
+              return false;
+            }),
+          );
         case AuthEvent.signOut:
-          unregister();
+          unawaited(
+            unregister().catchError((Object e, StackTrace st) {
+              _logger.severe('Could not unregister device after sign-out:', e, st);
+            }),
+          );
       }
     });
 
