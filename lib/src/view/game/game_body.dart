@@ -15,39 +15,34 @@ import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/game_board_params.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_preferences.dart';
-import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
-import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/chessboard.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/chat/chat_screen.dart';
 import 'package:lichess_mobile/src/view/game/correspondence_clock_widget.dart';
+import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
 import 'package:lichess_mobile/src/view/game/game_loading_board.dart';
 import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/view/game/game_result_dialog.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/game/game_settings.dart';
-import 'package:lichess_mobile/src/view/game/gif_export_dialog.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
-import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 typedef LoadingParam = ({Variant variant, String? fen, Move? lastMove, Side? orientation});
@@ -1075,60 +1070,15 @@ class _GameBottomBar extends ConsumerWidget {
 
   Future<void> _showShareMenu(BuildContext context, WidgetRef ref) {
     final gameState = ref.read(gameControllerProvider(id)).requireValue;
-    final orientation = gameState.game.youAre ?? Side.white;
     return showAdaptiveActionSheet(
       context: context,
-      actions: [
-        BottomSheetAction(
-          makeLabel: (context) => Text(context.l10n.mobileShareGameURL),
-          onPressed: () {
-            launchShareDialog(
-              context,
-              ShareParams(uri: lichessUri('/${id.gameId}/${orientation.name}')),
-            );
-          },
-        ),
-        // GIF and PGN export are only available once the game is finished.
-        if (gameState.game.finished) ...[
-          BottomSheetAction(
-            makeLabel: (context) => Text(context.l10n.gameAsGIF),
-            onPressed: () => showModalBottomSheet<void>(
-              context: context,
-              builder: (_) => GifExport(gameId: id.gameId, orientation: orientation),
-            ),
-          ),
-          BottomSheetAction(
-            makeLabel: (context) => Text(context.l10n.downloadAnnotated),
-            onPressed: () async {
-              try {
-                final pgn = await ref.read(gameShareServiceProvider).annotatedPgn(id.gameId);
-                if (context.mounted) {
-                  launchShareDialog(context, ShareParams(text: pgn));
-                }
-              } catch (e) {
-                if (context.mounted) {
-                  showSnackBar(context, 'Failed to get PGN', type: SnackBarType.error);
-                }
-              }
-            },
-          ),
-          BottomSheetAction(
-            makeLabel: (context) => Text(context.l10n.downloadRaw),
-            onPressed: () async {
-              try {
-                final pgn = await ref.read(gameShareServiceProvider).rawPgn(id.gameId);
-                if (context.mounted) {
-                  launchShareDialog(context, ShareParams(text: pgn));
-                }
-              } catch (e) {
-                if (context.mounted) {
-                  showSnackBar(context, 'Failed to get PGN', type: SnackBarType.error);
-                }
-              }
-            },
-          ),
-        ],
-      ],
+      actions: makeFinishedGameShareBottomSheetActions(
+        context,
+        ref,
+        gameId: id.gameId,
+        orientation: gameState.game.youAre ?? Side.white,
+        finished: gameState.game.finished,
+      ),
     );
   }
 
