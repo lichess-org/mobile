@@ -146,7 +146,7 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
         return WakelockWidget(
           child: Scaffold(
             resizeToAvoidBottomInset: false,
-            appBar: AppBar(centerTitle: false, title: appBarTitle, actions: appBarActions),
+            appBar: AppBar(title: appBarTitle, actions: appBarActions),
             body: _Body(options: widget.options, controller: _tabController, tabs: tabs),
           ),
         );

@@ -60,15 +60,31 @@ class UserAppBarTitleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      contentPadding: EdgeInsets.zero,
-      leading: UserAvatar(user, radius: 16),
-      title: UserFullNameWidget(user: user, showFlair: false),
-      subtitle: isOnline
-          ? Text(context.l10n.online)
-          : seenAt != null
-          ? Text(context.l10n.lastSeenActive(relativeDate(context.l10n, seenAt!)))
-          : Text(context.l10n.offline),
+    final subtitleTextStyle = Theme.of(context).textTheme.titleSmall?.copyWith(
+      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: Styles.subtitleOpacity),
+    );
+    return Row(
+      mainAxisSize: .min,
+      children: [
+        UserAvatar(user, radius: 16),
+        const SizedBox(width: 8),
+        Column(
+          mainAxisSize: .min,
+          crossAxisAlignment: .start,
+          children: [
+            UserFullNameWidget(user: user, showFlair: false),
+            if (isOnline)
+              Text(context.l10n.online, style: subtitleTextStyle)
+            else if (seenAt != null)
+              Text(
+                context.l10n.lastSeenActive(relativeDate(context.l10n, seenAt!)),
+                style: subtitleTextStyle,
+              )
+            else
+              Text(context.l10n.offline, style: subtitleTextStyle),
+          ],
+        ),
+      ],
     );
   }
 }

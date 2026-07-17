@@ -1,4 +1,3 @@
-import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -12,27 +11,23 @@ import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
+import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_body.dart';
-import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
 import 'package:lichess_mobile/src/view/game/game_loading_board.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
-import 'package:lichess_mobile/src/view/game/game_settings.dart';
 import 'package:lichess_mobile/src/view/game/watcher_list_bottom_sheet.dart';
-import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
-import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 /// Screen to play a game, or to show a challenge or to show current user's past games.
@@ -213,10 +208,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
               monitorSocket: isRealTimePlayingGame,
               socketUri: socketUri,
             ),
-            actions: [
-              _WatcherButton(gameId: createdGameId),
-              _GameMenu(gameId: createdGameId),
-            ],
+            actions: [_WatcherButton(gameId: createdGameId)],
           ),
           body: Theme.of(context).platform == TargetPlatform.android
               ? AndroidGesturesExclusionWidget(
@@ -302,56 +294,6 @@ class _GameScreenState extends ConsumerState<GameScreen> {
   }
 }
 
-class _GameMenu extends ConsumerWidget {
-  const _GameMenu({required this.gameId});
-
-  final GameFullId gameId;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final isBookmarkedAsync = ref.watch(isGameBookmarkedProvider(gameId));
-
-    return ContextMenuIconButton(
-      icon: const Icon(Icons.more_horiz),
-      semanticsLabel: context.l10n.menu,
-      actions: [
-        ContextMenuAction(
-          icon: Icons.settings,
-          label: context.l10n.settingsSettings,
-          onPressed: () => showModalBottomSheet<void>(
-            context: context,
-            isDismissible: true,
-            isScrollControlled: true,
-            builder: (_) => GameSettings(id: gameId),
-          ),
-        ),
-        ToggleSoundContextMenuAction(
-          isEnabled: ref.watch(generalPreferencesProvider.select((prefs) => prefs.isSoundEnabled)),
-          onPressed: () => ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled(),
-        ),
-        GameBookmarkContextMenuAction(
-          id: gameId.gameId,
-          bookmarked: isBookmarkedAsync.value ?? false,
-          onToggleBookmark: () =>
-              ref.read(gameControllerProvider(gameId).notifier).toggleBookmark(),
-        ),
-        ...(switch (ref.watch(gameShareDataProvider(gameId))) {
-          AsyncData(:final value) =>
-            value.finished
-                ? makeFinishedGameShareContextMenuActions(
-                    context,
-                    ref,
-                    gameId: gameId.gameId,
-                    orientation: value.pov ?? Side.white,
-                  )
-                : [],
-          _ => [],
-        }),
-      ],
-    );
-  }
-}
-
 sealed class _GameTitleVariant {
   const _GameTitleVariant();
 }
@@ -403,7 +345,7 @@ class _GameTitle extends ConsumerWidget {
   static Widget _buildLobbyContent(BuildContext context, GameSeek seek) {
     final mode = seek.rated ? ' • ${context.l10n.rated}' : ' • ${context.l10n.casual}';
     return Row(
-      mainAxisAlignment: .center,
+      mainAxisSize: .min,
       children: [
         Icon(seek.perf.icon, color: DefaultTextStyle.of(context).style.color),
         const SizedBox(width: 4.0),
@@ -415,7 +357,7 @@ class _GameTitle extends ConsumerWidget {
   static Widget _buildChallengeContent(BuildContext context, ChallengeRequest challenge) {
     final mode = challenge.rated ? ' • ${context.l10n.rated}' : ' • ${context.l10n.casual}';
     return Row(
-      mainAxisAlignment: .center,
+      mainAxisSize: .min,
       children: [
         Icon(challenge.perf.icon, color: DefaultTextStyle.of(context).style.color),
         const SizedBox(width: 4.0),
@@ -436,9 +378,10 @@ class _TournamentGameTitle extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisSize: .min,
       children: [
         Flexible(child: AppBarTitleText(tournament.name)),
+        const SizedBox(width: 4.0),
         CountdownClockBuilder(
           timeLeft: tournament.clock.timeLeft,
           clockUpdatedAt: tournament.clock.at,
@@ -465,13 +408,13 @@ final _gameMetaProvider = FutureProvider.autoDispose.family<GameMeta, GameFullId
 }, name: 'GameMetaProvider');
 
 class _StandaloneGameTitle extends ConsumerWidget {
-  const _StandaloneGameTitle({required this.id, this.lastMoveAt});
+  _StandaloneGameTitle({required this.id, this.lastMoveAt});
 
   final GameFullId id;
 
   final DateTime? lastMoveAt;
 
-  static final _gameTitledateFormat = DateFormat.yMMMd();
+  final DateFormat _tooltipFormatter = DateFormat.yMMMMd().add_jm();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -482,34 +425,46 @@ class _StandaloneGameTitle extends ConsumerWidget {
           return _TournamentGameTitle(meta.tournament!);
         }
 
+        final title = meta.clock != null
+            ? TimeIncrement(meta.clock!.initial.inSeconds, meta.clock!.increment.inSeconds).display
+            : meta.daysPerTurn != null
+            ? context.l10n.nbDays(meta.daysPerTurn!)
+            : meta.perf.label(context.l10n);
+
         final mode = meta.rated ? ' • ${context.l10n.rated}' : ' • ${context.l10n.casual}';
 
-        final info = lastMoveAt != null ? ' • ${_gameTitledateFormat.format(lastMoveAt!)}' : mode;
-
-        return Row(
-          mainAxisSize: MainAxisSize.min,
+        final titleRow = Row(
+          mainAxisSize: .min,
           children: [
             Icon(meta.perf.icon, color: DefaultTextStyle.of(context).style.color),
-            const SizedBox(width: 4.0),
-            if (meta.clock != null)
-              Flexible(
-                child: AppBarTitleText(
-                  '${TimeIncrement(meta.clock!.initial.inSeconds, meta.clock!.increment.inSeconds).display}$info',
-                ),
-              )
-            else if (meta.daysPerTurn != null)
-              Flexible(child: AppBarTitleText('${context.l10n.nbDays(meta.daysPerTurn!)}$info'))
-            else
-              Flexible(child: AppBarTitleText('${meta.perf.label(context.l10n)}$info')),
+            const SizedBox(width: 8.0),
+            Column(
+              mainAxisSize: .min,
+              crossAxisAlignment: .start,
+              children: [
+                AppBarTitleText('$title$mode', maxLines: 1),
+                if (lastMoveAt != null)
+                  Text(
+                    relativeDate(context.l10n, lastMoveAt!, shortDate: false),
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+                    ),
+                  ),
+              ],
+            ),
           ],
         );
+
+        return lastMoveAt != null
+            ? Tooltip(message: _tooltipFormatter.format(lastMoveAt!), child: titleRow)
+            : titleRow;
       },
       loading: () => Shimmer(
         child: ShimmerLoading(
           isLoading: true,
           child: SizedBox(
-            height: 24.0,
-            width: 200.0,
+            height: 34.0,
+            width: 150.0,
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.black,
