@@ -36,20 +36,14 @@ class AuthController extends Notifier<AuthUser?> {
     if (!ref.mounted) return;
     state = authUser;
 
-    final lifecycle = ref.read<AuthLifecycle?>(authLifecycleProvider);
-    if (lifecycle != null) {
-      await lifecycle.onSignIn();
-    }
+    authEventsController.add(AuthEvent.signIn);
   }
 
   /// Signs out the user.
   Future<void> signOut() async {
     await Future<void>.delayed(const Duration(milliseconds: 500));
 
-    final lifecycle = ref.read<AuthLifecycle?>(authLifecycleProvider);
-    if (lifecycle != null) {
-      await lifecycle.onSignOut();
-    }
+    authEventsController.add(AuthEvent.signOut);
     await ref.read(authRepositoryProvider).signOut();
     await ref.read(authStorageProvider).delete();
     if (!ref.mounted) return;

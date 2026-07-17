@@ -5,7 +5,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/legacy.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/localizations.dart';
@@ -79,6 +78,9 @@ class NotificationService {
   /// The stream subscription for notification responses.
   StreamSubscription<NotificationResponse>? _responseStreamSubscription;
 
+  /// The stream subscription for authentication events.
+  StreamSubscription<AuthEvent>? _authEventsSubscription;
+
   /// Whether the device has been registered for push notifications.
   bool _registeredDevice = false;
 
@@ -96,9 +98,13 @@ class NotificationService {
   /// This method should be called once the app is ready to receive notifications,
   /// and after [LichessBinding.initializeNotifications] has been called.
   Future<void> start() async {
-    Future.microtask(() {
-      _ref.read<StateController<AuthLifecycle?>>(authLifecycleProvider.notifier).state =
-          AuthLifecycle(onSignIn: registerDevice, onSignOut: unregister);
+    _authEventsSubscription = authEventsStream.listen((event) {
+      switch (event) {
+        case AuthEvent.signIn:
+          registerDevice();
+        case AuthEvent.signOut:
+          unregister();
+      }
     });
 
     // Listen for incoming messages while the app is in the foreground.
@@ -186,6 +192,7 @@ class NotificationService {
     _fcmTokenRefreshSubscription?.cancel();
     _connectivitySubscription?.close();
     _responseStreamSubscription?.cancel();
+    _authEventsSubscription?.cancel();
   }
 
   /// Function called by the notification plugin when a notification has been tapped on.

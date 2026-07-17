@@ -685,9 +685,11 @@ final socketPoolProvider = Provider<SocketPool>((Ref ref) {
   final pool = SocketPool(ref);
   Timer? closeInBackgroundTimer;
 
-  ref.listen<AuthUser?>(authControllerProvider, (previous, next) {
+  pool.currentClient.connect();
+
+  final subscription = authEventsStream.listen((_) {
     pool.currentClient.connect();
-  }, fireImmediately: true);
+  });
 
   final appLifecycleListener = AppLifecycleListener(
     onHide: () {
@@ -708,6 +710,7 @@ final socketPoolProvider = Provider<SocketPool>((Ref ref) {
   );
 
   ref.onDispose(() {
+    subscription.cancel();
     pool.dispose();
     closeInBackgroundTimer?.cancel();
     appLifecycleListener.dispose();

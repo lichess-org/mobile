@@ -1,5 +1,5 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/legacy.dart';
+import 'dart:async';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 
@@ -13,13 +13,8 @@ sealed class AuthUser with _$AuthUser {
   factory AuthUser.fromJson(Map<String, dynamic> json) => _$AuthUserFromJson(json);
 }
 
-class AuthLifecycle {
-  AuthLifecycle({required this.onSignIn, required this.onSignOut});
-  final Future<void> Function() onSignIn;
-  final Future<void> Function() onSignOut;
-}
+enum AuthEvent { signIn, signOut }
 
-final authLifecycleProvider = StateProvider<AuthLifecycle?>(
-  (Ref ref) => null,
-  name: 'AuthLifecycleProvider',
-);
+final authEventsController = StreamController<AuthEvent>.broadcast();
+
+Stream<AuthEvent> get authEventsStream => authEventsController.stream;
