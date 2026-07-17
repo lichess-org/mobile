@@ -356,6 +356,75 @@ void main() {
       expect(data?.unsolved[0].puzzle.id, equals(const PuzzleId('20yWT')));
       expect(data?.unsolved[1].puzzle.id, equals(const PuzzleId('7H5EV')));
     });
+
+    test(
+      'fills queue in the background over multiple requests when server caps each batch',
+      () async {
+        // The server caps each batch at 50 puzzles, so a large queueLength is
+        // filled over several requests. The first request runs in the foreground
+        // (so the next puzzle shows immediately) and the rest fill in the
+        // background. Simulate the cap by returning one puzzle per request.
+        int nbReq = 0;
+        final mockClient = MockClient((request) {
+          if (request.url.path == '/api/puzzle/batch/mix') {
+            nbReq++;
+            // each request yields a single puzzle with a distinct id, so the
+            // background merge keeps appending until the queue reaches 3
+            return mockResponse(batchOf1.replaceFirst('"20yWT"', '"pz$nbReq"'), 200);
+          }
+          return mockResponse('', 404);
+        });
+
+        final container = await makeTestContainer(mockClient);
+        final storage = await container.read(puzzleBatchStorageProvider.future);
+        final service = await container.read(puzzleServiceFactoryProvider)(queueLength: 3);
+
+        final next = await service.nextPuzzle(userId: null);
+
+        // the first puzzle is available immediately after the foreground request
+        expect(next?.puzzle.puzzle.id, equals(const PuzzleId('pz1')));
+
+        // the background fill tops the queue up to queueLength
+        await _waitUntil(() async {
+          final data = await storage.fetch(userId: null);
+          return (data?.unsolved.length ?? 0) >= 3;
+        });
+
+        expect(nbReq, equals(3));
+        final data = await storage.fetch(userId: null);
+        expect(data?.unsolved.length, equals(3));
+      },
+    );
+
+    test('background fill stops when server returns no more puzzles', () async {
+      // If the server runs out of puzzles before the queue is full, the fill
+      // must stop instead of looping forever.
+      int nbReq = 0;
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/api/puzzle/batch/mix') {
+          nbReq++;
+          // first request returns 1 puzzle, subsequent requests return none
+          return mockResponse(nbReq == 1 ? batchOf1 : '{"puzzles":[]}', 200);
+        }
+        return mockResponse('', 404);
+      });
+
+      final container = await makeTestContainer(mockClient);
+      final storage = await container.read(puzzleBatchStorageProvider.future);
+      final service = await container.read(puzzleServiceFactoryProvider)(queueLength: 10);
+
+      final next = await service.nextPuzzle(userId: null);
+      expect(next?.puzzle.puzzle.id, equals(const PuzzleId('20yWT')));
+
+      // wait for the background fill to make its (empty) second request and stop
+      await _waitUntil(() async => nbReq >= 2);
+      // give the loop a tick to settle after the empty response
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+
+      expect(nbReq, equals(2));
+      final data = await storage.fetch(userId: null);
+      expect(data?.unsolved.length, equals(1));
+    });
   });
 }
 
@@ -422,4 +491,18 @@ PuzzleBatch _makePuzzleBatch({
         ),
     ]),
   );
+}
+
+/// Polls [condition] until it returns true or [timeout] elapses. Used to wait
+/// for the background queue fill, which runs after `nextPuzzle` returns.
+Future<void> _waitUntil(
+  Future<bool> Function() condition, {
+  Duration timeout = const Duration(seconds: 2),
+}) async {
+  final deadline = DateTime.now().add(timeout);
+  while (DateTime.now().isBefore(deadline)) {
+    if (await condition()) return;
+    await Future<void>.delayed(const Duration(milliseconds: 5));
+  }
+  throw StateError('Timed out waiting for condition');
 }

@@ -1,3 +1,4 @@
+import 'dart:async' show unawaited;
 import 'dart:math' show max;
 
 import 'package:async/async.dart';
@@ -8,6 +9,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_batch_storage.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
@@ -82,6 +84,10 @@ class PuzzleService {
   final PuzzleStorage puzzleStorage;
   final Logger _log = Logger('PuzzleService');
 
+  /// Guards [_backgroundFill] against overlapping runs issuing duplicate
+  /// requests.
+  bool _isFilling = false;
+
   /// Loads the next puzzle from database and the glicko rating if available.
   ///
   /// Will sync with server if necessary.
@@ -145,9 +151,10 @@ class PuzzleService {
 
   /// Synchronize offline puzzle queue with server and gets latest data.
   ///
-  /// This task will fetch missing puzzles so the queue length is always equal to
-  /// `queueLength`.
-  /// It will call [PuzzleRepository.solveBatch] if necessary.
+  /// Does a single request so the next puzzle is available without blocking.
+  /// A large offline queue can't be filled in one call (the server caps each
+  /// batch at 50), so any remaining deficit is filled by [_backgroundFill]
+  /// rather than making the user wait.
   ///
   /// This method should never fail, as if the network is down it will fallback
   /// to the local database.
@@ -162,48 +169,114 @@ class PuzzleService {
 
     final deficit = max(0, queueLength - unsolved.length);
 
-    if (deficit > 0 || solved.isNotEmpty) {
-      _log.fine('Will sync puzzles with lichess (deficit: $deficit, solved: ${solved.length})');
-
-      final difficulty = _ref.read(puzzlePreferencesProvider).difficulty;
-
-      // anonymous users can't solve puzzles so we just download the deficit
-      final batchResponse = _ref.withClient(
-        (client) => Result.capture(
-          solved.isNotEmpty && userId != null
-              ? PuzzleRepository(
-                  client,
-                ).solveBatch(nb: deficit, solved: solved, angle: angle, difficulty: difficulty)
-              : PuzzleRepository(
-                  client,
-                ).selectBatch(nb: deficit, angle: angle, difficulty: difficulty),
-        ),
-      );
-
-      return batchResponse
-          .fold(
-            (value) => Result.value((
-              PuzzleBatch(
-                solved: IList(const []),
-                unsolved: IList([...unsolved, ...value.puzzles]),
-              ),
-              value.glicko,
-              value.rounds,
-              true, // should save the batch
-            )),
-
-            // we don't need to save the batch if the request failed
-            (_, _) => Result.value((data, null, null, false)),
-          )
-          .flatMap((tuple) async {
-            final (newBatch, glicko, rounds, shouldSave) = tuple;
-            if (newBatch != null && shouldSave) {
-              await batchStorage.save(userId: userId, angle: angle, data: newBatch);
-            }
-            return Result.value((newBatch, glicko, rounds));
-          });
+    if (deficit <= 0 && solved.isEmpty) {
+      return Result.value((data, null, null));
     }
 
-    return Result.value((data, null, null));
+    final difficulty = _ref.read(puzzlePreferencesProvider).difficulty;
+
+    // One request keeps the next puzzle responsive; the rest fills in the
+    // background.
+    final batchResult = await _fetchBatch(
+      userId: userId,
+      angle: angle,
+      difficulty: difficulty,
+      nb: deficit,
+      solved: solved,
+    );
+
+    if (batchResult.isError) {
+      // Offline: fall back to the local database.
+      return Result.value((data, null, null));
+    }
+
+    final value = batchResult.asValue!.value;
+    final newBatch = PuzzleBatch(
+      solved: IList(const []),
+      unsolved: IList([...unsolved, ...value.puzzles]),
+    );
+    await batchStorage.save(userId: userId, angle: angle, data: newBatch);
+
+    // Fill the rest without blocking so a large queue is cached before the
+    // user goes offline.
+    if (value.puzzles.isNotEmpty && newBatch.unsolved.length < queueLength) {
+      unawaited(_backgroundFill(userId, angle, difficulty));
+    }
+
+    return Result.value((newBatch, value.glicko, value.rounds));
+  }
+
+  /// Downloads a single batch, submitting [solved] if there is anything to
+  /// report (and the user is logged in), otherwise just fetching new puzzles.
+  FutureResult<PuzzleBatchResponse> _fetchBatch({
+    required UserId? userId,
+    required PuzzleAngle angle,
+    required PuzzleDifficulty difficulty,
+    required int nb,
+    IList<PuzzleSolution> solved = const IListConst([]),
+  }) {
+    _log.fine('Will sync puzzles with lichess (nb: $nb, solved: ${solved.length})');
+    // anonymous users can't solve puzzles so we just download the deficit.
+    return _ref.withClient(
+      (client) => Result.capture(
+        solved.isNotEmpty && userId != null
+            ? PuzzleRepository(
+                client,
+              ).solveBatch(nb: nb, solved: solved, angle: angle, difficulty: difficulty)
+            : PuzzleRepository(client).selectBatch(nb: nb, angle: angle, difficulty: difficulty),
+      ),
+    );
+  }
+
+  /// Tops up the offline queue to `queueLength` in the background.
+  ///
+  /// Re-reads storage each pass and merges by puzzle id so a solve made while
+  /// the fill runs is never clobbered. Guarded by [_isFilling] so overlapping
+  /// calls can't double-fetch.
+  Future<void> _backgroundFill(
+    UserId? userId,
+    PuzzleAngle angle,
+    PuzzleDifficulty difficulty,
+  ) async {
+    if (_isFilling) return;
+    _isFilling = true;
+    try {
+      while (true) {
+        final current = await batchStorage.fetch(userId: userId, angle: angle);
+        final unsolved = current?.unsolved ?? IList(const []);
+        final deficit = max(0, queueLength - unsolved.length);
+        if (deficit <= 0) break;
+
+        final batchResult = await _fetchBatch(
+          userId: userId,
+          angle: angle,
+          difficulty: difficulty,
+          nb: deficit,
+        );
+        if (batchResult.isError) break;
+
+        final value = batchResult.asValue!.value;
+        // Server has no more puzzles: stop rather than spin forever below
+        // an unreachable `queueLength`.
+        if (value.puzzles.isEmpty) break;
+
+        // Skip ids already stored so a re-read after a mid-fill solve can't
+        // reintroduce a duplicate.
+        final existingIds = unsolved.map((p) => p.puzzle.id).toISet();
+        final additions = value.puzzles.where((p) => !existingIds.contains(p.puzzle.id));
+        if (additions.isEmpty) break;
+
+        await batchStorage.save(
+          userId: userId,
+          angle: angle,
+          data: PuzzleBatch(
+            solved: current?.solved ?? IList(const []),
+            unsolved: IList([...unsolved, ...additions]),
+          ),
+        );
+      }
+    } finally {
+      _isFilling = false;
+    }
   }
 }
