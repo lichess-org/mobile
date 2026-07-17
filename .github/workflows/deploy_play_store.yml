@@ -21,13 +21,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set up JDK 17
-        uses: actions/setup-java@v5.2.0
+        uses: actions/setup-java@v5.6.0
         with:
           java-version: 17
           distribution: temurin
 
       - name: Checkout mobile code
-        uses: actions/checkout@v6.0.3
+        uses: actions/checkout@v7.0.0
 
       - name: Install Flutter
         uses: subosito/flutter-action@v2.23.0
@@ -43,7 +43,7 @@ jobs:
         run: dart run build_runner build
 
       - name: Setup Fastlane
-        uses: ruby/setup-ruby@v1.313.0
+        uses: ruby/setup-ruby@v1.319.0
         with:
           ruby-version: "3.2"
           bundler-cache: true
