@@ -16,22 +16,17 @@ sealed class AccountPrefState with _$AccountPrefState implements Serializable {
     @JsonKey(unknownEnumValue: PieceNotation.symbol) required PieceNotation pieceNotation,
     @JsonKey(unknownEnumValue: ShowRatings.yes) required ShowRatings showRatings,
     // game behavior
-    @JsonKey(fromJson: _booleanPrefFromJson, toJson: _booleanPrefToJson)
     required BooleanPref premove,
     @JsonKey(unknownEnumValue: AutoQueen.premove) required AutoQueen autoQueen,
     @JsonKey(unknownEnumValue: AutoThreefold.always) required AutoThreefold autoThreefold,
     @JsonKey(unknownEnumValue: Takeback.always) required Takeback takeback,
-    @JsonKey(fromJson: _booleanPrefFromJson, toJson: _booleanPrefToJson)
     required BooleanPref confirmResign,
-    @JsonKey(fromJson: _submitMoveFromJson, toJson: _submitMoveToJson)
     required SubmitMove submitMove,
     // clock
     @JsonKey(unknownEnumValue: Moretime.always) required Moretime moretime,
     @JsonKey(unknownEnumValue: ClockTenths.lessThan10s) required ClockTenths clockTenths,
-    @JsonKey(fromJson: _booleanPrefFromJson, toJson: _booleanPrefToJson)
     required BooleanPref clockSound,
     // privacy
-    @JsonKey(fromJson: _booleanPrefFromJson, toJson: _booleanPrefToJson)
     required BooleanPref follow,
     @JsonKey(unknownEnumValue: Challenge.registered) required Challenge challenge,
     @JsonKey(unknownEnumValue: Message.always) required Message message,
@@ -64,26 +59,6 @@ final defaultAccountPreferences = AccountPrefState(
   message: Message.always,
 );
 
-BooleanPref _booleanPrefFromJson(dynamic json) {
-  if (json is bool) {
-    return BooleanPref(json);
-  } else if (json is int) {
-    return BooleanPref(json != 0);
-  }
-  return const BooleanPref(false);
-}
-
-bool _booleanPrefToJson(BooleanPref pref) => pref.value;
-
-SubmitMove _submitMoveFromJson(dynamic json) {
-  if (json is int) {
-    return SubmitMove.fromInt(json);
-  }
-  return SubmitMove([]);
-}
-
-int _submitMoveToJson(SubmitMove pref) => pref.value;
-
 abstract class AccountPref<T> {
   T get value;
   String get toFormData;
@@ -97,6 +72,17 @@ class BooleanPref implements AccountPref<bool> {
 
   @override
   String get toFormData => value ? '1' : '0';
+
+  factory BooleanPref.fromJson(dynamic json) {
+    if (json is bool) {
+      return BooleanPref(json);
+    } else if (json is int) {
+      return BooleanPref(json != 0);
+    }
+    return const BooleanPref(false);
+  }
+
+  bool toJson() => value;
 
   static BooleanPref fromInt(int value) {
     switch (value) {
@@ -547,6 +533,15 @@ class SubmitMove implements AccountPref<int> {
 
   factory SubmitMove.fromInt(int value) =>
       SubmitMove(SubmitMoveChoice.values.where((choice) => _bitPresent(value, choice.value)));
+
+  factory SubmitMove.fromJson(dynamic json) {
+    if (json is int) {
+      return SubmitMove.fromInt(json);
+    }
+    return SubmitMove([]);
+  }
+
+  int toJson() => value;
 }
 
 enum SubmitMoveChoice {
