@@ -148,7 +148,7 @@ class ClockToolController extends Notifier<ClockState> {
     if (player == ClockSide.top) {
       topIncrement = Duration(seconds: clock.increment);
       // Update stored preferences only if the clock hasn't started yet
-      if (state.activeSide == null) {
+      if (!state.started) {
         topTime = Duration(seconds: clock.time);
         ref.read(clockToolPreferencesProvider.notifier).setTopTimeIncrement(clock);
       }
@@ -159,7 +159,7 @@ class ClockToolController extends Notifier<ClockState> {
     } else {
       bottomIncrement = Duration(seconds: clock.increment);
       // Update stored preferences only if the clock hasn't started yet
-      if (state.activeSide == null) {
+      if (!state.started) {
         bottomTime = Duration(seconds: clock.time);
         ref.read(clockToolPreferencesProvider.notifier).setBottomTimeIncrement(clock);
       }
