@@ -288,9 +288,9 @@ class _ClockTileState extends ConsumerState<ClockTile> with SingleTickerProvider
                 Positioned(
                   bottom: MediaQuery.paddingOf(context).bottom + 48.0,
                   child: IgnorePointer(
-                    ignoring: clockState.started,
+                    ignoring: clockState.started && !clockState.paused,
                     child: AnimatedOpacity(
-                      opacity: clockState.started ? 0 : 1.0,
+                      opacity: (clockState.started && !clockState.paused) ? 0 : 1.0,
                       duration: const Duration(milliseconds: 300),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -300,7 +300,7 @@ class _ClockTileState extends ConsumerState<ClockTile> with SingleTickerProvider
                             iconSize: 32,
                             icon: const Icon(Icons.tune),
                             color: clockStyle.textColor,
-                            onPressed: clockState.started
+                            onPressed: (clockState.started && !clockState.paused)
                                 ? null
                                 : () => showModalBottomSheet<void>(
                                     context: context,
