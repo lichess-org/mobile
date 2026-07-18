@@ -7,14 +7,10 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
-import 'package:lichess_mobile/src/model/chat/chat.dart';
+import 'package:lichess_mobile/src/model/chat/chat_message.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
-import 'package:lichess_mobile/src/model/game/game_controller.dart';
-import 'package:lichess_mobile/src/model/study/study_controller.dart';
-import 'package:lichess_mobile/src/model/tournament/tournament_controller.dart';
-import 'package:lichess_mobile/src/model/tv/tv_game_controller.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
@@ -29,11 +25,8 @@ String _storeKey(StringId id) => 'chat.$id';
 sealed class ChatState with _$ChatState {
   const ChatState._();
 
-  const factory ChatState({
-    required IList<ChatMessage> messages,
-    required int unreadMessages,
-    @Default('') String inputText,
-  }) = _ChatState;
+  const factory ChatState({required IList<ChatMessage> messages, required int unreadMessages}) =
+      _ChatState;
 }
 
 /// Interface for a Notifier's State that uses [ChatMixin].
@@ -47,38 +40,6 @@ mixin ChatMixinState {
   /// Must imply [chatState] is non-null when `true`.
   bool get chatEnabled;
 }
-
-/// A provider that gets the current chat state
-final chatProvider = FutureProvider.autoDispose.family<ChatState?, ChatOptions>(
-  (ref, options) => ref.watch(
-    switch (options) {
-      GameChatOptions(:final id) => gameControllerProvider(id),
-      TournamentChatOptions(:final id) => tournamentControllerProvider(id),
-      StudyChatOptions(:final options) => studyControllerProvider(options),
-      TvChatOptions(:final params) => tvGameControllerProvider(params),
-    }.selectAsync((state) => state.chatState),
-  ),
-  name: 'ChatProvider',
-);
-
-/// A provider that gets the [ChatMixin] notifier for the given chat.
-final chatNotifierProvider = Provider.autoDispose.family<ChatMixin, ChatOptions>(
-  (ref, options) => ref.read(switch (options) {
-    GameChatOptions(:final id) => gameControllerProvider(id).notifier,
-    TournamentChatOptions(:final id) => tournamentControllerProvider(id).notifier,
-    StudyChatOptions(:final options) => studyControllerProvider(options).notifier,
-    TvChatOptions(:final params) => tvGameControllerProvider(params).notifier,
-  }),
-  name: 'ChatNotifierProvider',
-);
-
-/// A provider that gets the chat unread messages
-final chatUnreadProvider = FutureProvider.autoDispose.family<int, ChatOptions>((
-  Ref ref,
-  ChatOptions options,
-) async {
-  return (await ref.watch(chatProvider(options).future))?.unreadMessages ?? 0;
-}, name: 'ChatUnreadProvider');
 
 /// A mixin to provide chat functionality to an [AsyncNotifier].
 ///
@@ -108,6 +69,13 @@ mixin ChatMixin<T extends ChatMixinState> on AnyNotifier<AsyncValue<T>, T> {
   bool get chatIsPublic;
 
   LightUser? get _me => ref.read(authControllerProvider)?.user;
+
+  /// The current draft of the chat input field (unsent text).
+  ///
+  /// This is intentionally kept out of the observable [ChatState] so that
+  /// updating it on every keystroke does not rebuild widgets watching the chat
+  /// state.
+  String chatInputDraft = '';
 
   /// Builds the initial [ChatState] from [initialData].
   ///
@@ -228,12 +196,5 @@ mixin ChatMixin<T extends ChatMixinState> on AnyNotifier<AsyncValue<T>, T> {
         ),
       );
     }
-  }
-
-  /// Updates the text of the chat input field.
-  void setInputText(String text) {
-    final chatState = state.value?.chatState;
-    if (chatState == null) return;
-    updateChatState(chatState.copyWith(inputText: text));
   }
 }

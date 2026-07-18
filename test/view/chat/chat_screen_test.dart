@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/chat/chat.dart';
 import 'package:lichess_mobile/src/model/chat/chat_mixin.dart';
+import 'package:lichess_mobile/src/model/chat/chat_providers.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/view/chat/chat_screen.dart';
@@ -27,9 +28,12 @@ class _FakeChatState with ChatMixinState {
 /// A no-op [ChatMixin] used to stand in for the real controller-backed notifier.
 ///
 /// The [ChatScreen] only *reads* this notifier to call side-effecting methods
-/// (`onFocusRegained`, `setInputText`, ...). Since we drive the [chatProvider]
-/// state directly in these tests, the notifier's methods are made no-ops so the
-/// (unmounted) instance never touches `ref`/`state`.
+/// (`onFocusRegained`, ...) and to read/write the in-memory [chatInputDraft]. Since
+/// we drive the [chatProvider] state directly in these tests, the notifier's
+/// methods are made no-ops so the (unmounted) instance never touches
+/// `ref`/`state`. The [chatInputDraft] field is a plain field and is safe to use on
+/// an unmounted instance, so it is deliberately *not* overridden — this is what
+/// backs the draft-persistence tests below.
 class _FakeChatNotifier extends AsyncNotifier<_FakeChatState> with ChatMixin<_FakeChatState> {
   @override
   StringId get chatId => const StringId('test-chat');
@@ -51,9 +55,6 @@ class _FakeChatNotifier extends AsyncNotifier<_FakeChatState> with ChatMixin<_Fa
 
   @override
   void onForegroundLost() {}
-
-  @override
-  void setInputText(String text) {}
 }
 
 class HangNotifier extends Notifier<bool> {
@@ -80,7 +81,11 @@ void main() {
   // controller (see issue #3368 / PR #3417).
   final hangProvider = NotifierProvider<HangNotifier, bool>(HangNotifier.new);
 
-  Future<Widget> buildTestApp(WidgetTester tester) {
+  // Builds the chat screen. [notifier] backs `chatNotifierProvider`; pass a
+  // shared instance across two builds to simulate the same game controller
+  // surviving the chat window being closed and reopened.
+  Future<Widget> buildTestApp(WidgetTester tester, {_FakeChatNotifier? notifier}) {
+    final chatNotifier = notifier ?? _FakeChatNotifier();
     return makeTestProviderScopeApp(
       tester,
       home: const ChatScreen(options: options),
@@ -99,7 +104,7 @@ void main() {
         }),
         chatNotifierProvider(options): chatNotifierProvider(
           options,
-        ).overrideWith((ref) => _FakeChatNotifier()),
+        ).overrideWith((ref) => chatNotifier),
       },
     );
   }
@@ -131,5 +136,59 @@ void main() {
     expect(find.byType(TextField), findsOneWidget);
     expect(find.text('hello world'), findsOneWidget);
     expect(tester.testTextInput.isVisible, isTrue);
+  });
+
+  testWidgets('persists an unsent draft when the chat is closed and reopened on the same game', (
+    tester,
+  ) async {
+    // The same notifier instance backs both chat-screen mounts, standing in for
+    // the game controller that outlives the chat window in production.
+    final notifier = _FakeChatNotifier();
+
+    await tester.pumpWidget(await buildTestApp(tester, notifier: notifier));
+    await tester.pumpAndSettle();
+
+    await tester.enterText(find.byType(TextField), 'wait, let me offer a draw');
+    await tester.pump();
+    expect(notifier.chatInputDraft, 'wait, let me offer a draw');
+
+    // Close the chat window: replacing the whole tree disposes the ChatScreen.
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pump();
+
+    // Reopen the chat on the same game (same notifier instance).
+    await tester.pumpWidget(await buildTestApp(tester, notifier: notifier));
+    await tester.pumpAndSettle();
+
+    // The draft is restored into the input field.
+    expect(find.text('wait, let me offer a draw'), findsOneWidget);
+  });
+
+  testWidgets('persists an unsent draft when the app goes to the background', (tester) async {
+    final notifier = _FakeChatNotifier();
+
+    await tester.pumpWidget(await buildTestApp(tester, notifier: notifier));
+    await tester.pumpAndSettle();
+
+    await tester.enterText(find.byType(TextField), 'brb, phone call');
+    await tester.pump();
+
+    // Send the app to the background (lifecycle must move through the
+    // intermediate states to satisfy the framework's transition assertions).
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
+    await tester.pump();
+
+    // The draft is kept in memory on the notifier, not lost with the app going
+    // to the background.
+    expect(notifier.chatInputDraft, 'brb, phone call');
+
+    // On resume the input field still shows the draft.
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+    await tester.pump();
+    expect(find.text('brb, phone call'), findsOneWidget);
   });
 }

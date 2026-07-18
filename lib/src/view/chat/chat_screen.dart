@@ -4,9 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/app_links_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/chat/chat.dart';
-import 'package:lichess_mobile/src/model/chat/chat_mixin.dart';
+import 'package:lichess_mobile/src/model/chat/chat_providers.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/tab_scaffold.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -289,10 +289,9 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
   @override
   void initState() {
     super.initState();
-    final draft = ref.read(chatProvider(widget.options)).asData?.value?.inputText ?? '';
-    _textController.text = draft;
+    _textController.text = ref.read(chatNotifierProvider(widget.options)).chatInputDraft;
     _textController.addListener(() {
-      ref.read(chatNotifierProvider(widget.options)).setInputText(_textController.text);
+      ref.read(chatNotifierProvider(widget.options)).chatInputDraft = _textController.text;
     });
   }
 
@@ -312,7 +311,6 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
             ? () {
                 ref.read(chatNotifierProvider(widget.options)).postMessage(_textController.text);
                 _textController.clear();
-                ref.read(chatNotifierProvider(widget.options)).setInputText('');
               }
             : null,
         icon: const Icon(Icons.send),
