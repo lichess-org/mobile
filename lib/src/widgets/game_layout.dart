@@ -505,7 +505,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
 
           double effectiveBoardSize =
               (isTablet ? defaultBoardSize - kTabletBoardTableSidePadding * 2 : defaultBoardSize) -
-                  pocketsPadding;
+              pocketsPadding;
 
           if (isShortScreen) {
             effectiveBoardSize -= 16;
@@ -533,7 +533,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
             ),
           );
 
-// 3. IF NEAR-SQUARE: Overlay the clocks transparently on top of the board corners
+          // 3. IF NEAR-SQUARE: Overlay the clocks transparently on top of the board corners
           if (isNearSquare) {
             return Column(
               mainAxisSize: MainAxisSize.max,
@@ -543,16 +543,17 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                   alignment: Alignment.center,
                   children: [
                     boardWidget, // The base layer: full size chessboard
-
                     // Floating Top Clock/Player Bar
                     Positioned(
                       top: 6.0,
                       left: 12.0,
                       right: 12.0,
-                      child: IgnorePointer( // 💡 ADD THIS WIDGET: Pass taps to the board
+                      child: IgnorePointer(
+                        // 💡 ADD THIS WIDGET: Pass taps to the board
                         ignoring: true,
                         child: Opacity(
-                          opacity: 0.8, // 80% visible, pieces show through underneath
+                          opacity: 0.8,
+                          // 80% visible, pieces show through underneath
                           child: topTable(boardSize: effectiveBoardSize),
                         ),
                       ),
@@ -563,10 +564,12 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                       bottom: 6.0,
                       left: 12.0,
                       right: 12.0,
-                      child: IgnorePointer( // 💡 ADD THIS WIDGET: Pass taps to the board
+                      child: IgnorePointer(
+                        // 💡 ADD THIS WIDGET: Pass taps to the board
                         ignoring: true,
                         child: Opacity(
-                          opacity: 0.8, // 80% visible, pieces show through underneath
+                          opacity: 0.8,
+                          // 80% visible, pieces show through underneath
                           child: bottomTable(boardSize: effectiveBoardSize),
                         ),
                       ),
