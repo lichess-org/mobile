@@ -76,11 +76,17 @@
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Sledovat</string>
   <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">Vítejte v aplikaci Lichess!</string>
   <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">Zobrazit hru</string>
+  <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">Tip: Můžete přidat další widgety na domovskou obrazovku nebo odebrat ty, které nepotřebujete!</string>
+  <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">Zavřít</string>
   <string name="customizeButton" comment="Text of a button, so translation should be short.">Přizpůsobit</string>
   <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">Skrýt zobrazování hrozby</string>
+  <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word">Dokončené</string>
   <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">Přejít na moji stránku</string>
   <string name="displayModeCompact" comment="">Kompaktní</string>
+  <string name="displayModeDetailed" comment="">Podrobné</string>
+  <string name="openingExplorerNotAvailableOffline" comment="">Průzkumník otevření není dostupný offline.</string>
   <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">Byla vytvořena výzva: Budete upozorněni, až hra začne.\nMůžete se k ní dostat z domovské obrazovky.</string>
   <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Předchozí</string>
   <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">Nebo nahrajte soubor PGN</string>
+  <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">Dobrý tah, ale je i lepší</string>
 </resources>
