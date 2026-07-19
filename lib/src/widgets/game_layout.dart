@@ -505,12 +505,80 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
 
           double effectiveBoardSize =
               (isTablet ? defaultBoardSize - kTabletBoardTableSidePadding * 2 : defaultBoardSize) -
-              pocketsPadding;
+                  pocketsPadding;
 
           if (isShortScreen) {
             effectiveBoardSize -= 16;
           }
 
+          // 1. Calculate the aspect ratio to catch foldables/tablets
+          final double aspectRatio = constraints.maxWidth / constraints.maxHeight;
+          final bool isNearSquare = aspectRatio > 0.75;
+
+          // 2. Extract the BoardWidget so we can reuse it cleanly
+          final boardWidget = Padding(
+            padding: isTablet
+                ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)
+                : EdgeInsets.zero,
+            child: BoardWidget(
+              size: effectiveBoardSize,
+              orientation: widget.orientation,
+              controller: _controller!,
+              onMove: rawOnMove,
+              shapes: shapes,
+              settings: settings,
+              boardKey: widget.boardKey,
+              boardOverlay: widget.boardOverlay,
+              error: widget.errorMessage,
+            ),
+          );
+
+// 3. IF NEAR-SQUARE: Overlay the clocks transparently on top of the board corners
+          if (isNearSquare) {
+            return Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    boardWidget, // The base layer: full size chessboard
+
+                    // Floating Top Clock/Player Bar
+                    Positioned(
+                      top: 6.0,
+                      left: 12.0,
+                      right: 12.0,
+                      child: IgnorePointer( // 💡 ADD THIS WIDGET: Pass taps to the board
+                        ignoring: true,
+                        child: Opacity(
+                          opacity: 0.8, // 80% visible, pieces show through underneath
+                          child: topTable(boardSize: effectiveBoardSize),
+                        ),
+                      ),
+                    ),
+
+                    // Floating Bottom Clock/Player Bar
+                    Positioned(
+                      bottom: 6.0,
+                      left: 12.0,
+                      right: 12.0,
+                      child: IgnorePointer( // 💡 ADD THIS WIDGET: Pass taps to the board
+                        ignoring: true,
+                        child: Opacity(
+                          opacity: 0.8, // 80% visible, pieces show through underneath
+                          child: bottomTable(boardSize: effectiveBoardSize),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                if (widget.userActionsBar != null) widget.userActionsBar!,
+              ],
+            );
+          }
+
+          // 4. OTHERWISE (Normal phones): Fall back to the original vertical layout
           return Column(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -520,7 +588,6 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                   !isShortScreen &&
                   !(isTablet && pockets != null))
                 if (widget.zenMode)
-                  // display empty move list to keep the layout consistent in zen mode
                   const MoveList(type: MoveListType.inline, slicedMoves: [], currentMoveIndex: 0)
                 else
                   _moveListContent(MoveListType.inline),
@@ -533,22 +600,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                   child: topTable(boardSize: effectiveBoardSize),
                 ),
               ),
-              Padding(
-                padding: isTablet
-                    ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)
-                    : EdgeInsets.zero,
-                child: BoardWidget(
-                  size: effectiveBoardSize,
-                  orientation: widget.orientation,
-                  controller: _controller!,
-                  onMove: rawOnMove,
-                  shapes: shapes,
-                  settings: settings,
-                  boardKey: widget.boardKey,
-                  boardOverlay: widget.boardOverlay,
-                  error: widget.errorMessage,
-                ),
-              ),
+              boardWidget, // Uses the extracted widget here
               Expanded(
                 flex: widget.bottomTableFlex,
                 child: Padding(
