@@ -19,7 +19,7 @@ class SoundSettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.sound)),
+      appBar: AppBar(title: Text(context.l10n.sound), animateColor: true),
       body: _Body(),
     );
   }

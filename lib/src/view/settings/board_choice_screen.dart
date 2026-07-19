@@ -16,7 +16,7 @@ class BoardChoiceScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.board)),
+      appBar: AppBar(title: Text(context.l10n.board), animateColor: true),
       body: const _Body(),
     );
   }

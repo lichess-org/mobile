@@ -59,6 +59,7 @@ class _PieceSetScreenState extends ConsumerState<PieceSetScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(context.l10n.pieceSet),
+        animateColor: true,
         actions: [if (isLoading) const PlatformAppBarLoadingIndicator()],
       ),
       body: SafeArea(

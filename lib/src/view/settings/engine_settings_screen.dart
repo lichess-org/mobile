@@ -67,7 +67,7 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
     final prefs = ref.watch(engineEvaluationPreferencesProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Chess engine')),
+      appBar: AppBar(title: const Text('Chess engine'), animateColor: true),
       body: ListView(
         children: [
           if (_hasVerifiedNNUEFiles == null)
