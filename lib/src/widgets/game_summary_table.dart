@@ -119,6 +119,25 @@ class GameSummaryTable extends StatelessWidget {
                   context.l10n.numberBlunders(2).replaceAll('2', '').trim(),
                   blackAnalysis.blunders.toString(),
                 ),
+                if (whiteAnalysis.phases?.opening != null && blackAnalysis.phases?.opening != null)
+                  (
+                    '${whiteAnalysis.phases!.opening}%',
+                    context.l10n.opening,
+                    '${blackAnalysis.phases!.opening}%',
+                  ),
+                if (whiteAnalysis.phases?.middlegame != null &&
+                    blackAnalysis.phases?.middlegame != null)
+                  (
+                    '${whiteAnalysis.phases!.middlegame}%',
+                    context.l10n.middlegame,
+                    '${blackAnalysis.phases!.middlegame}%',
+                  ),
+                if (whiteAnalysis.phases?.endgame != null && blackAnalysis.phases?.endgame != null)
+                  (
+                    '${whiteAnalysis.phases!.endgame}%',
+                    context.l10n.endgame,
+                    '${blackAnalysis.phases!.endgame}%',
+                  ),
               ])
                 TableRow(
                   children: [
