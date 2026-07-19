@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/http_network_image.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/launch.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
@@ -237,7 +238,7 @@ class _AccountMenuScreenState extends ConsumerState<AccountMenuScreen> with Widg
                   ),
                   title: Text(context.l10n.patronDonate),
                   enabled: isOnline,
-                  onTap: () => launchUrl(Uri.parse('https://lichess.org/patron')),
+                  onTap: () => launchPatronPage(),
                 ),
               ListTile(
                 leading: const Icon(Icons.info_outline),
