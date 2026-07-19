@@ -8,4 +8,5 @@
     <color name="widget_text_primary">#161512</color>
     <color name="widget_text_secondary">#8C8A85</color>
     <color name="widget_thumbnail_fallback">#E6E2DC</color>
+    <color name="widget_live_indicator">#F44336</color>
 </resources>
