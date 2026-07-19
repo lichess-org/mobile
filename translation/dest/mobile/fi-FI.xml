@@ -91,4 +91,5 @@
   <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Edellinen</string>
   <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">Tai tuo PGN-tiedosto</string>
   <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">Hyvä siirto, mutta parempikin olisi</string>
+  <string name="perfShortPuzzle" comment="Short label for puzzle performance. Used in compact UI such as perf cards, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Tehtävä</string>
 </resources>

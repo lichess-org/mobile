@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="account" comment="The account screen title.">Налог</string>
   <string name="accountPreferences" comment="Displayed on settings screen. This is for preferences synced with website on the server.">Преференсе налога</string>
+  <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">Ова подешавања се примењују на Вашем налогу и користе се на свим уређајима.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Сви мечеви</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Да ли сте сигурни?</string>
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Подешавања табле</string>
@@ -17,7 +19,9 @@
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Почетна</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Личес стримери</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Морате се пријавити да бисте видели ову страницу.</string>
+  <string name="newGame" comment="New game button in OTB and play against offline computer features">Нова партија</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Нема резултата</string>
+  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Не пратите ниједног корисника.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">У реду</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Преко табле</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Играчи са \"%s\"</string>
@@ -29,31 +33,49 @@
   <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Нема ништа за приказ. Одиграте неколико вежби.</string>
   <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">Решите што више вежби можете у 3 минута.</string>
   <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">Изгубићете низ и ваш резултат биће сачуван.</string>
-  <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Играк вежбе ваших омињених отварања, или изаберите тему.</string>
+  <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Играј вежбе из ваших омиљених отварања, или изаберите тему.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Вежбе</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Скорашње претраге</string>
+  <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Уклоните из обележених</string>
+  <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.">Сервер анализа</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Позиција шаховског сата</string>
   <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">Круг</string>
   <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">Квадрат</string>
+  <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">Виџети на почетном екрану</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Режим целог екрана</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Склони системско корисничко окружење током играња. Користи ово ако ти сметају навигационе гестуре система на ивицама екрана. Примењује се на партијским и проблемским екранима.</string>
+  <string name="settingsMaterialDifferenceCapturedPieces" comment="A value of the material difference settings choice (to show all captured pieces instead of material difference).">Узете фигуре</string>
   <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick and image from the image library as app custom background.">Изабери слику</string>
   <string name="settingsPickAnImageHideBoard" comment="Displayed in theme background choice screen, to hide the board when viewing chosen image.">Сакриј таблу</string>
   <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">Прикажи таблу</string>
+  <string name="settingsPickAnImageSwipeToDisplay" comment="Displayed in theme background choice screen, when viewing colors presets to display other colors backgrounds.">Превуците како бисте приказали друге позадине</string>
+  <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">Или кликом или повлачењем</string>
+  <string name="settingsPieceShiftMethodTapTwoSquares" comment="A value of piece shift method settings entry.">Кликом на два поља</string>
+  <string name="settingsShapeDrawing" comment="Entry in the settings.">Цртање облика</string>
   <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.">Цртај облике користећи два прста: један прст држи на празном пољу и превуци други прст да нацрташ облик.</string>
+  <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Прикажи ивицу</string>
+  <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Када је укључено, уређај ће кратко вибрирати када померите или узмете фигуру.</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Подешавања</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Подели PNG</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Подели URL игре</string>
   <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Подели позицију као FEN</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Подели ову вежбу</string>
-  <string name="showComments" comment="Shown in the analysis screen.">Prikaži komentare</string>
+  <string name="showComments" comment="Shown in the analysis screen.">Прикажи коментаре</string>
   <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">Прикажи резултат</string>
   <string name="showVariations" comment="Shown in the analysis screen.">Прикажи стрелице за варијацију</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Нешто није у реду.</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Системске боје</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">Тема</string>
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Алати</string>
+  <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Варијанта %s није подржана у овој верзији.</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Чека се противник...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Гледај</string>
   <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">Добродошли у Lichess апликацију!</string>
+  <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">Савет: Можете додати још виџета на почетни екран или уклоните оне који Вам нису потребни!</string>
+  <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">Одбаци</string>
+  <string name="displayModeCompact" comment="">Компактно</string>
+  <string name="displayModeDetailed" comment="">Детаљно</string>
+  <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Претходна страна</string>
+  <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">Или увези PGN фајл</string>
+  <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">Добар потез, али постоји бољи</string>
 </resources>
