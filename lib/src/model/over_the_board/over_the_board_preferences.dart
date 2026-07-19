@@ -38,12 +38,12 @@ class OverTheBoardPreferencesNotifier extends Notifier<OverTheBoardPrefs>
     return fetch();
   }
 
-  Future<void> toggleFlipPiecesAfterMove() {
-    return save(state.copyWith(flipPiecesAfterMove: !state.flipPiecesAfterMove));
+  Future<void> toggleFlipOpponentInfo() {
+    return save(state.copyWith(flipOpponentInfo: !state.flipOpponentInfo));
   }
 
-  Future<void> toggleSymmetricPieces() {
-    return save(state.copyWith(symmetricPieces: !state.symmetricPieces));
+  Future<void> setMyView(OverTheBoardMyView myView) {
+    return save(state.copyWith(myView: myView));
   }
 
   Future<void> setTimeControlType(TimeControlType type) {
@@ -69,6 +69,27 @@ enum TimeControlType {
   }
 }
 
+enum OverTheBoardMyView {
+  whiteBottom,
+  symmetricPieces,
+  flipPieces,
+  flipBoard;
+
+  String label() => switch (this) {
+    whiteBottom => 'White at the bottom',
+    symmetricPieces => 'Symmetric pieces',
+    flipPieces => 'Flip pieces after move',
+    flipBoard => 'Same side (flip board after move)',
+  };
+
+  /// Whether the "flip opponent info" setting is user-configurable for this view.
+  ///
+  /// Only [symmetricPieces] exposes a toggle. The other views have fixed
+  /// behavior: [whiteBottom] always flips the opponent info, [flipBoard] never
+  /// does, and [flipPieces] flips both info bars to face whoever is to move.
+  bool get canConfigureFlipOpponentInfo => this == symmetricPieces;
+}
+
 @Freezed(fromJson: true, toJson: true)
 sealed class OverTheBoardPrefs with _$OverTheBoardPrefs implements Serializable {
   const OverTheBoardPrefs._();
@@ -76,15 +97,15 @@ sealed class OverTheBoardPrefs with _$OverTheBoardPrefs implements Serializable 
   static const _defaultTimeIncrement = TimeIncrement(300, 3);
 
   const factory OverTheBoardPrefs({
-    required bool flipPiecesAfterMove,
-    required bool symmetricPieces,
+    required bool flipOpponentInfo,
+    @Default(OverTheBoardMyView.whiteBottom) OverTheBoardMyView myView,
     @Default(TimeControlType.clock) TimeControlType timeControlType,
     @Default(OverTheBoardPrefs._defaultTimeIncrement) TimeIncrement timeIncrement,
   }) = _OverTheBoardPrefs;
 
   static const defaults = OverTheBoardPrefs(
-    flipPiecesAfterMove: false,
-    symmetricPieces: false,
+    flipOpponentInfo: true,
+    myView: OverTheBoardMyView.whiteBottom,
     timeControlType: TimeControlType.clock,
     timeIncrement: _defaultTimeIncrement,
   );

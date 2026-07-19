@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:chessground/chessground.dart';
@@ -18,6 +19,8 @@ import 'package:lichess_mobile/src/model/game/over_the_board_game.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_clock.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_game_controller.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_game_storage.dart';
+import 'package:lichess_mobile/src/model/over_the_board/over_the_board_preferences.dart';
+import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/over_the_board/over_the_board_screen.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
@@ -422,6 +425,76 @@ void main() {
     });
   });
 
+  group('Board view modes', () {
+    testWidgets('whiteBottom: orientation stays at white regardless of turn', (tester) async {
+      // Default myView is whiteBottom — white stays at the bottom after every move.
+      await initOverTheBoardGame(tester, const TimeIncrement(60, 0));
+
+      expect(tester.widget<Chessboard>(find.byType(Chessboard)).orientation, Side.white);
+
+      await playMove(tester, 'e2', 'e4');
+      await tester.pumpAndSettle();
+      expect(tester.widget<Chessboard>(find.byType(Chessboard)).orientation, Side.white);
+
+      await playMove(tester, 'e7', 'e5');
+      await tester.pumpAndSettle();
+      expect(tester.widget<Chessboard>(find.byType(Chessboard)).orientation, Side.white);
+    });
+
+    testWidgets('flipBoard: board orientation follows game turn after each move', (tester) async {
+      await initOverTheBoardGame(
+        tester,
+        const TimeIncrement(60, 0),
+        myView: OverTheBoardMyView.flipBoard,
+      );
+
+      // White to move initially → white at bottom.
+      expect(tester.widget<Chessboard>(find.byType(Chessboard)).orientation, Side.white);
+
+      await playMove(tester, 'e2', 'e4', orientation: Side.white);
+      await tester.pumpAndSettle();
+      // Black to move → board flips to black at bottom.
+      expect(tester.widget<Chessboard>(find.byType(Chessboard)).orientation, Side.black);
+
+      await playMove(tester, 'e7', 'e5', orientation: Side.black);
+      await tester.pumpAndSettle();
+      // White to move again → board flips back.
+      expect(tester.widget<Chessboard>(find.byType(Chessboard)).orientation, Side.white);
+    });
+
+    testWidgets('flipBoard: "Flip board" action is absent from the game menu', (tester) async {
+      await initOverTheBoardGame(
+        tester,
+        const TimeIncrement(60, 0),
+        myView: OverTheBoardMyView.flipBoard,
+      );
+
+      await tester.tap(find.byTooltip('Menu'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Flip board'), findsNothing);
+    });
+
+    testWidgets('flipPieces: board orientation stays fixed after moves', (tester) async {
+      await initOverTheBoardGame(
+        tester,
+        const TimeIncrement(60, 0),
+        myView: OverTheBoardMyView.flipPieces,
+      );
+
+      // Board doesn't flip — only pieces rotate.
+      expect(tester.widget<Chessboard>(find.byType(Chessboard)).orientation, Side.white);
+
+      await playMove(tester, 'e2', 'e4');
+      await tester.pumpAndSettle();
+      expect(tester.widget<Chessboard>(find.byType(Chessboard)).orientation, Side.white);
+
+      await playMove(tester, 'e7', 'e5');
+      await tester.pumpAndSettle();
+      expect(tester.widget<Chessboard>(find.byType(Chessboard)).orientation, Side.white);
+    });
+  });
+
   group('Custom starting position (initialFen)', () {
     testWidgets('Configure sheet shows mini board preview when initialFen is provided', (
       tester,
@@ -747,7 +820,11 @@ void main() {
   });
 }
 
-Future<Rect> initOverTheBoardGame(WidgetTester tester, TimeIncrement timeIncrement) async {
+Future<Rect> initOverTheBoardGame(
+  WidgetTester tester,
+  TimeIncrement timeIncrement, {
+  OverTheBoardMyView? myView,
+}) async {
   final gameStorage = MockOverTheBoardGameStorage();
 
   when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
@@ -768,6 +845,13 @@ Future<Rect> initOverTheBoardGame(WidgetTester tester, TimeIncrement timeIncreme
         (_) => gameStorage,
       ),
     },
+    defaultPreferences: myView != null
+        ? {
+            PrefCategory.overTheBoard.storageKey: jsonEncode(
+              OverTheBoardPrefs.defaults.copyWith(myView: myView).toJson(),
+            ),
+          }
+        : null,
   );
   await tester.pumpWidget(app);
 
