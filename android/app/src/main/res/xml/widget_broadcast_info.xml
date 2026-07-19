@@ -6,7 +6,7 @@
     android:minResizeWidth="150dp"
     android:minResizeHeight="110dp"
     android:maxResizeHeight="290dp"
-    android:updatePeriodMillis="1800000"
+    android:updatePeriodMillis="3600000"
     android:initialLayout="@layout/widget_broadcast"
     android:resizeMode="horizontal|vertical"
     android:widgetCategory="home_screen"

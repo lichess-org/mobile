@@ -24,6 +24,8 @@ import android.widget.RemoteViews
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
+import java.util.concurrent.Callable
+import java.util.concurrent.Executors
 import kotlin.concurrent.thread
 import org.lichess.mobileV2.R
 import org.lichess.mobileV2.MainActivity
@@ -97,12 +99,37 @@ class BroadcastWidgetProvider : AppWidgetProvider() {
 
                 val numRows = if (availableHeight == 0) 3 else ((availableHeight - 44) / 60).coerceIn(1, 4)
                 val showThumbnails = minWidth == 0 || minWidth >= 200
-                
+
                 val displayItems = broadcasts.take(numRows)
-                
+
+                // Fetch all thumbnails concurrently, mirroring the iOS withTaskGroup approach.
+                // Each item gets its own thread so all network requests run in parallel;
+                // total wait time ≈ slowest single request instead of sum of all requests.
+                val sizePx = (48 * context.resources.displayMetrics.density).toInt()
+                val bitmaps: List<Bitmap?> = if (showThumbnails) {
+                    val executor = Executors.newFixedThreadPool(displayItems.size.coerceAtLeast(1))
+                    try {
+                        val futures = displayItems.map { item ->
+                            executor.submit(Callable<Bitmap?> {
+                                item.imageUrl?.let { fetchRoundBitmap(it, sizePx) }
+                            })
+                        }
+                        futures.map { future ->
+                            try { future.get() } catch (e: Exception) {
+                                Log.e("BroadcastWidget", "Error fetching thumbnail", e)
+                                null
+                            }
+                        }
+                    } finally {
+                        executor.shutdown()
+                    }
+                } else {
+                    List(displayItems.size) { null }
+                }
+
                 displayItems.forEachIndexed { index, item ->
                     val itemViews = RemoteViews(context.packageName, R.layout.widget_broadcast_item)
-                    setupItemViews(context, itemViews, item, index, showThumbnails, lichessHost, appWidgetId)
+                    setupItemViews(context, itemViews, item, index, showThumbnails, bitmaps[index], lichessHost, appWidgetId)
                     remoteViews.addView(R.id.broadcast_list, itemViews)
                 }
             }
@@ -118,6 +145,7 @@ class BroadcastWidgetProvider : AppWidgetProvider() {
         item: BroadcastItem,
         index: Int,
         showThumbnails: Boolean,
+        bitmap: Bitmap?,  // Pre-fetched concurrently; null when thumbnails are disabled or fetch failed
         lichessHost: String,
         appWidgetId: Int
     ) {
@@ -126,7 +154,7 @@ class BroadcastWidgetProvider : AppWidgetProvider() {
         if (item.isLive) {
             itemViews.setViewVisibility(R.id.item_live_indicator, View.VISIBLE)
             itemViews.setTextViewText(R.id.item_status, "${context.getString(R.string.widget_live)} · ${item.roundName}")
-            itemViews.setTextColor(R.id.item_status, Color.parseColor("#FF3B30"))
+            itemViews.setTextColor(R.id.item_status, context.getColor(R.color.widget_live_indicator))
         } else {
             itemViews.setViewVisibility(R.id.item_live_indicator, View.GONE)
             val statusText = if (item.startsAt > 0) {
@@ -145,14 +173,8 @@ class BroadcastWidgetProvider : AppWidgetProvider() {
 
         if (showThumbnails) {
             itemViews.setViewVisibility(R.id.item_thumbnail_container, View.VISIBLE)
-            if (item.imageUrl != null) {
-                val sizePx = (48 * context.resources.displayMetrics.density).toInt()
-                val bitmap = fetchRoundBitmap(item.imageUrl, sizePx)
-                if (bitmap != null) {
-                    itemViews.setImageViewBitmap(R.id.item_thumbnail, bitmap)
-                } else {
-                    setFallbackThumbnail(itemViews)
-                }
+            if (bitmap != null) {
+                itemViews.setImageViewBitmap(R.id.item_thumbnail, bitmap)
             } else {
                 setFallbackThumbnail(itemViews)
             }
@@ -203,16 +225,13 @@ class BroadcastWidgetProvider : AppWidgetProvider() {
                     val jsonString = stream.bufferedReader().use { it.readText() }
                     val active = JSONObject(jsonString).getJSONArray("active")
                     
-                    (0 until active.length()).mapNotNull { i ->
+                    (0 until active.length()).map { i ->
                         val item = active.getJSONObject(i)
                         val tour = item.getJSONObject("tour")
-                        
-                        if (tour.optInt("tier", 0) < 4) return@mapNotNull null
-                        
                         val round = item.getJSONObject("round")
                         val id = item.optJSONObject("roundToLink")?.optString("id") ?: round.getString("id")
                         val title = item.optString("group").takeIf { !it.isNullOrBlank() } ?: tour.getString("name")
-                        
+
                         BroadcastItem(
                             id = id,
                             title = title,

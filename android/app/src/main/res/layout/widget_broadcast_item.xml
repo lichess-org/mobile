@@ -35,7 +35,7 @@
                 android:layout_width="6dp"
                 android:layout_height="6dp"
                 android:layout_marginEnd="4dp"
-                android:background="#FF3B30"
+                android:background="@color/widget_live_indicator"
                 android:visibility="gone" />
 
             <TextView
