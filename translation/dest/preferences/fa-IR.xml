@@ -88,5 +88,5 @@
   <string name="boardSettings">میز</string>
   <string name="analysisSettings">تنظیماتِ تحلیل</string>
   <string name="maneuverArrowsHelp">دنبالهٔ حرکت‌های موتور برای یک مُهره</string>
-  <string name="hoverOverSettingLabelsForHelp" comment="Instruction/guidance, explaining that hovering offer settings labels will show more information.&#10;&#10;Appears in the popover for &quot;Settings&quot; on game analysis for individual games.">برای راهنمایی، روی برچسب‌های تنظیمات پَرجایید</string>
+  <string name="hoverOverSettingLabelsForHelp">برای راهنمایی، روی برچسب‌های تنظیمات پَرجایید</string>
 </resources>

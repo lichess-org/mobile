@@ -78,5 +78,5 @@
   <string name="moveListSettings">Listë lëvizjesh</string>
   <string name="boardSettings">Fushë</string>
   <string name="analysisSettings">Rregullime analize</string>
-  <string name="hoverOverSettingLabelsForHelp" comment="Instruction/guidance, explaining that hovering offer settings labels will show more information.&#10;&#10;Appears in the popover for &quot;Settings&quot; on game analysis for individual games.">Për ndihmë, kalojeni kursorin sipër etiketave të rregullimeve</string>
+  <string name="hoverOverSettingLabelsForHelp">Për ndihmë, kalojeni kursorin sipër etiketave të rregullimeve</string>
 </resources>

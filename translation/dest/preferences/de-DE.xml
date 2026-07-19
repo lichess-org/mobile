@@ -88,5 +88,5 @@
   <string name="boardSettings">Brett</string>
   <string name="analysisSettings">Analyse-Einstellungen</string>
   <string name="maneuverArrowsHelp">Reihenfolge der Computerzüge für eine Figur</string>
-  <string name="hoverOverSettingLabelsForHelp" comment="Instruction/guidance, explaining that hovering offer settings labels will show more information.&#10;&#10;Appears in the popover for &quot;Settings&quot; on game analysis for individual games.">Fahre mit deinem Mauszeiger über die Einstellungs-Label, um Hilfe zu erhalten</string>
+  <string name="hoverOverSettingLabelsForHelp">Fahre mit deinem Mauszeiger über die Einstellungs-Label, um Hilfe zu erhalten</string>
 </resources>
