@@ -36,10 +36,37 @@ class _PieceSetScreenState extends ConsumerState<PieceSetScreen> {
           setState(() {
             isLoading = false;
           });
-        }
+	}
+	// unset 3D PieceSet
+	remove3DPieceSetFromPreferences();
       }
     }
   }
+
+// TODO: Possibly reduce repeated code while still supporting 3D  (?) 
+  void handlePieceSet3D(PieceSet3D? value) async {
+	  if (value != null) {
+	ref.read(boardPreferencesProvider.notifier).setPieceSet3D(value);
+		  setState(() {
+			isLoading = true;
+			});
+		  try {
+			  await precachePieceImages3D(value);
+		  } finally {
+			  if (mounted) {
+				  setState(() {
+						  isLoading = false;
+						  });
+			  }
+		  }
+	  }
+
+  }
+
+void remove3DPieceSetFromPreferences(){
+	ref.read(boardPreferencesProvider.notifier).setPieceSet3D(null);
+}
+
 
   List<AssetImage> getPieceImages(PieceSet set) {
     return [
@@ -82,7 +109,6 @@ class _PieceSetScreenState extends ConsumerState<PieceSetScreen> {
         ),
         body: TabBarView(
           children: [
-            // 2D Pieces Tab
             Center(
               child: SafeArea(
                 child: ListView.separated(
@@ -93,7 +119,7 @@ class _PieceSetScreenState extends ConsumerState<PieceSetScreen> {
                   itemBuilder: (context, index) {
                     final pieceSet = PieceSet.values[index];
                     return ListTile(
-                      trailing: boardPrefs.pieceSet == pieceSet ? const Icon(Icons.check) : null,
+                      trailing: (boardPrefs.pieceSet == pieceSet && boardPrefs.pieceSet3D == null) ? const Icon(Icons.check) : null,
                       title: Text(pieceSet.label),
                       subtitle: ConstrainedBox(
                         constraints: const BoxConstraints(maxWidth: 264),
@@ -120,7 +146,6 @@ class _PieceSetScreenState extends ConsumerState<PieceSetScreen> {
                 ),
               ),
             ),
-            // 3D Pieces Tab
             Center(
               child: SafeArea(
                 child: ListView.separated(
@@ -131,7 +156,7 @@ class _PieceSetScreenState extends ConsumerState<PieceSetScreen> {
                   itemBuilder: (context, index) {
                     final pieceSet = PieceSet3D.values[index];
                     return ListTile(
-                      trailing: boardPrefs.pieceSet == pieceSet ? const Icon(Icons.check) : null,
+                      trailing: boardPrefs.pieceSet3D == pieceSet ? const Icon(Icons.check) : null,
                       title: Text(pieceSet.label),
                       subtitle: ConstrainedBox(
                         constraints: const BoxConstraints(maxWidth: 264),
@@ -155,8 +180,8 @@ class _PieceSetScreenState extends ConsumerState<PieceSetScreen> {
                           ],
                         ),
                       ),
-                      onTap: isLoading ? null : () => onChanged(pieceSet as PieceSet?),
-                      selected: boardPrefs.pieceSet == pieceSet,
+                      onTap: isLoading ? null : () => handlePieceSet3D(pieceSet),
+                      selected: boardPrefs.pieceSet3D == pieceSet,
                     );
                   },
                 ),
