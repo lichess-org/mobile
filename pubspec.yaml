@@ -11,7 +11,7 @@ environment:
 
 dependencies:
   app_links: ^7.2.1
-  app_settings: ^7.0.0
+  app_settings: ^8.0.1
   async: ^2.13.1
   auto_size_text: ^3.0.0
   chessground: ^10.1.1
