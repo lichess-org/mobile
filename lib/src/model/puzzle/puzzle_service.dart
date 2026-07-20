@@ -20,6 +20,12 @@ import 'package:result_extensions/result_extensions.dart';
 
 part 'puzzle_service.freezed.dart';
 
+/// The server caps each batch request at 50 puzzles regardless of the
+/// requested `nb` (`nb.atMost(50)` in lila's `Puzzle` controller). A deficit
+/// larger than this can't be filled in a single request, so the remainder is
+/// topped up sequentially in the background.
+const _kServerBatchCap = 50;
+
 /// A provider for [PuzzleService].
 final puzzleServiceProvider = FutureProvider<PuzzleService>((Ref ref) {
   final nbOfflinePuzzles = ref.watch(
@@ -38,12 +44,16 @@ class PuzzleServiceFactory {
 
   final Ref _ref;
 
-  Future<PuzzleService> call({required int queueLength}) async {
+  Future<PuzzleService> call({
+    required int queueLength,
+    int serverBatchCap = _kServerBatchCap,
+  }) async {
     return PuzzleService(
       _ref,
       batchStorage: await _ref.read(puzzleBatchStorageProvider.future),
       puzzleStorage: await _ref.read(puzzleStorageProvider.future),
       queueLength: queueLength,
+      serverBatchCap: serverBatchCap,
     );
   }
 }
@@ -76,10 +86,15 @@ class PuzzleService {
     required this.batchStorage,
     required this.puzzleStorage,
     required this.queueLength,
+    this.serverBatchCap = _kServerBatchCap,
   });
 
   final Ref _ref;
   final int queueLength;
+
+  /// Max puzzles the server returns per batch request. Injectable so tests can
+  /// exercise the background-fill loop with a small simulated cap.
+  final int serverBatchCap;
   final PuzzleBatchStorage batchStorage;
   final PuzzleStorage puzzleStorage;
   final Logger _log = Logger('PuzzleService');
@@ -197,9 +212,10 @@ class PuzzleService {
     );
     await batchStorage.save(userId: userId, angle: angle, data: newBatch);
 
-    // Fill the rest without blocking so a large queue is cached before the
-    // user goes offline.
-    if (value.puzzles.isNotEmpty && newBatch.unsolved.length < queueLength) {
+    // The server caps each batch at 50, so a single fetch already covers any
+    // deficit up to that cap. Only spin up a background fill when the remaining
+    // deficit still exceeds one batch (i.e. the user raised the offline limit).
+    if (value.puzzles.isNotEmpty && queueLength - newBatch.unsolved.length >= serverBatchCap) {
       unawaited(_backgroundFill(userId, angle, difficulty));
     }
 
@@ -241,9 +257,15 @@ class PuzzleService {
     if (_isFilling) return;
     _isFilling = true;
     try {
+      // Tracks the stored queue length across passes. If a save doesn't grow
+      // the queue (e.g. the write silently no-ops), stop instead of looping
+      // forever re-requesting the same deficit.
+      int lastLength = -1;
       while (true) {
         final current = await batchStorage.fetch(userId: userId, angle: angle);
         final unsolved = current?.unsolved ?? IList(const []);
+        if (unsolved.length <= lastLength) break;
+        lastLength = unsolved.length;
         final deficit = max(0, queueLength - unsolved.length);
         if (deficit <= 0) break;
 

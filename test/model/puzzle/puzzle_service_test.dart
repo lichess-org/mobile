@@ -377,7 +377,11 @@ void main() {
 
         final container = await makeTestContainer(mockClient);
         final storage = await container.read(puzzleBatchStorageProvider.future);
-        final service = await container.read(puzzleServiceFactoryProvider)(queueLength: 3);
+        // Simulate a server cap of 1 puzzle per request so the loop must run.
+        final service = await container.read(puzzleServiceFactoryProvider)(
+          queueLength: 3,
+          serverBatchCap: 1,
+        );
 
         final next = await service.nextPuzzle(userId: null);
 
@@ -411,7 +415,12 @@ void main() {
 
       final container = await makeTestContainer(mockClient);
       final storage = await container.read(puzzleBatchStorageProvider.future);
-      final service = await container.read(puzzleServiceFactoryProvider)(queueLength: 10);
+      // Simulate a server cap of 1 so the background fill loop runs and must
+      // stop when the server returns no more puzzles.
+      final service = await container.read(puzzleServiceFactoryProvider)(
+        queueLength: 10,
+        serverBatchCap: 1,
+      );
 
       final next = await service.nextPuzzle(userId: null);
       expect(next?.puzzle.puzzle.id, equals(const PuzzleId('20yWT')));
