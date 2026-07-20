@@ -124,8 +124,8 @@ class CorrespondenceService {
             playableGame,
           ),
       ]);
-    } catch (e, s) {
-      _log.warning('Failed to sync correspondence games', e, s);
+    } catch (e, st) {
+      _log.warning('Failed to sync correspondence games', e, st);
     }
   }
 
@@ -204,8 +204,8 @@ class CorrespondenceService {
           _log.info('Cannot play game ${gameToSync.id} move because its state has changed');
           updateStoredGame(gameToSync.fullId, playableGame);
         }
-      } catch (e, s) {
-        _log.severe('Failed to sync correspondence game ${gameToSync.id}', e, s);
+      } catch (e, st) {
+        _log.severe('Failed to sync correspondence game ${gameToSync.id}', e, st);
       } finally {
         streamSubscription?.cancel();
         socket?.close();

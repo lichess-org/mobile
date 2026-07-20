@@ -190,7 +190,7 @@
   "broadcastTournamentDescription": "Mallonga turnira priskribo",
   "broadcastFullDescription": "Plena eventa priskribo",
   "broadcastFullDescriptionHelp": "Laŭvola longa priskribo de la elsendo. {param1} haveblas. Longeco devas esti malpli ol {param2} literoj.",
-  "broadcastSourceSingleUrl": "Retadreso de PNG",
+  "broadcastSourceSingleUrl": "Retadreso de PGN",
   "broadcastSourceUrlHelp": "URL kiun Lichess kontrolos por akiri PGN ĝisdatigojn. Ĝi devas esti publike alirebla en interreto.",
   "broadcastSourceGameIds": "Ĝis 64 identigiloj de ludoj en Lichess, apartigitaj de komoj.",
   "broadcastStartDateHelp": "Laŭvola, se vi scias, kiam komenciĝas la evento",

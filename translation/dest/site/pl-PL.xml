@@ -896,6 +896,12 @@
   <string name="quickPairing">Szybkie parowanie</string>
   <string name="lobby">Poczekalnia</string>
   <string name="anonymous">Anonimowy</string>
+  <plurals name="nbAnonymous">
+    <item quantity="one">Anonimowy</item>
+    <item quantity="few">Anonimowy (%s)</item>
+    <item quantity="many">Anonimowy (%s)</item>
+    <item quantity="other">Anonimowy (%s)</item>
+  </plurals>
   <string name="yourScore">Twój wynik: %s</string>
   <string name="language">Język</string>
   <string name="allLanguages">Wszystkie języki</string>
@@ -1127,4 +1133,5 @@ Wszystkie koszty operacyjne, rozwój i treści są finansowane wyłącznie z dar
   <string name="thereAreNoResultsForX">Brak wyników dla \"%s\"</string>
   <string name="tags">Tagi</string>
   <string name="enPassant">Bicie w przelocie</string>
+  <string name="settings">Ustawienia</string>
 </resources>

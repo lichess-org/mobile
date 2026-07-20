@@ -290,6 +290,54 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileGoodMoveButThereIsBetter => 'Boa xogada, pero hai unha mellor';
 
   @override
+  String get mobilePerfShortUltraBullet => 'Ultra';
+
+  @override
+  String get mobilePerfShortBullet => 'Bullet';
+
+  @override
+  String get mobilePerfShortBlitz => 'Blitz';
+
+  @override
+  String get mobilePerfShortRapid => 'Rapid';
+
+  @override
+  String get mobilePerfShortClassical => 'Classical';
+
+  @override
+  String get mobilePerfShortCorrespondence => 'Corresp.';
+
+  @override
+  String get mobilePerfShortFromPosition => 'From Pos.';
+
+  @override
+  String get mobilePerfShortChess960 => '960';
+
+  @override
+  String get mobilePerfShortAntichess => 'Antichess';
+
+  @override
+  String get mobilePerfShortKingOfTheHill => 'KotH';
+
+  @override
+  String get mobilePerfShortThreeCheck => '3check';
+
+  @override
+  String get mobilePerfShortAtomic => 'Atomic';
+
+  @override
+  String get mobilePerfShortHorde => 'Horde';
+
+  @override
+  String get mobilePerfShortRacingKings => 'Racing';
+
+  @override
+  String get mobilePerfShortCrazyhouse => 'Crazy';
+
+  @override
+  String get mobilePerfShortPuzzle => 'Puzzle';
+
+  @override
   String get variantStandard => 'Estándar';
 
   @override
@@ -1602,6 +1650,60 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get preferencesShowClockOnTheLeft => 'Amosar na esquerda en dispositivos móbiles';
+
+  @override
+  String get preferencesInlineNotation => 'Notación compacta';
+
+  @override
+  String get preferencesShowServerAnalysis => 'Análise do servidor';
+
+  @override
+  String get preferencesShowBestMoveArrows => 'Frechas coas mellores xogadas';
+
+  @override
+  String get preferencesShowManeuverArrows => 'Frechas das manobras';
+
+  @override
+  String get preferencesShowGauge => 'Indicador de avaliación';
+
+  @override
+  String get preferencesShowMoveAnnotationsOnBoard => 'Amosar as anotacións';
+
+  @override
+  String get preferencesShowVariationArrows => 'Frechas das variantes';
+
+  @override
+  String get preferencesShowLiveGlyphs => 'Anotacións por computador en vivo';
+
+  @override
+  String get preferencesShowUndefendedPieces => 'Pezas non defendidas';
+
+  @override
+  String get preferencesShowPinnedPieces => 'Pezas cravadas';
+
+  @override
+  String get preferencesShowCheckableKing => 'Rei exposto a xaque';
+
+  @override
+  String get preferencesDisclosureMode => 'Permitir agochar as variantes';
+
+  @override
+  String get preferencesGeneralSettings => 'Xeral';
+
+  @override
+  String get preferencesMoveListSettings => 'Lista de xogadas';
+
+  @override
+  String get preferencesBoardSettings => 'Taboleiro';
+
+  @override
+  String get preferencesAnalysisSettings => 'Axustes da análise';
+
+  @override
+  String get preferencesManeuverArrowsHelp => 'Secuencia de xogadas de computador para unha peza';
+
+  @override
+  String get preferencesHoverOverSettingLabelsForHelp => 'Pasa o rato sobre as opcións da configuración para obter axuda';
 
   @override
   String get puzzlePuzzles => 'Crebacabezas';
@@ -5133,6 +5235,9 @@ class AppLocalizationsGl extends AppLocalizations {
   String get enPassant => 'Captura ao paso';
 
   @override
+  String get settings => 'Configuración';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5579,6 +5684,17 @@ class AppLocalizationsGl extends AppLocalizations {
       locale: localeName,
       other: 'Dispoñible en $count idiomas!',
       one: 'Dispoñible en $count idioma!',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbAnonymous(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Anónimos ($count)',
+      one: 'Anónimo',
     );
     return '$_temp0';
   }

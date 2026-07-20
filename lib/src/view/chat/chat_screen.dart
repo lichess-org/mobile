@@ -92,6 +92,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with RouteAware {
   @override
   Widget build(BuildContext context) {
     final authUser = ref.watch(authControllerProvider);
+    final chatState = ref.watch(chatProvider(widget.options));
     return FocusDetector(
       onFocusRegained: () {
         if (context.mounted) {
@@ -103,8 +104,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with RouteAware {
           ref.read(chatNotifierProvider(widget.options)).onForegroundLost();
         }
       },
-      child: switch (ref.watch(chatProvider(widget.options))) {
-        AsyncData(:final value) when value != null => Scaffold(
+      child: switch (chatState) {
+        AsyncValue(:final value?, hasValue: true) => Scaffold(
           appBar: AppBar(
             title: widget.options is TvChatOptions
                 ? Text(context.l10n.spectatorRoom)
@@ -117,12 +118,25 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with RouteAware {
           ),
           body: Column(
             children: [
+              // Display error if there is one, but still show the messages if they are available
+              if (chatState.hasError)
+                Material(
+                  color: Theme.of(context).colorScheme.errorContainer,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      chatState.error.toString(),
+                      style: TextStyle(color: Theme.of(context).colorScheme.onErrorContainer),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
               Expanded(
                 child: GestureDetector(
                   onTap: () => FocusScope.of(context).unfocus(),
+                  // remove the automatic bottom padding of the ListView which is here taken care
+                  // of by the _ChatBottomBar
                   child: ListView.builder(
-                    // remove the automatic bottom padding of the ListView which is here taken care
-                    // of by the _ChatBottomBar
                     padding: MediaQuery.paddingOf(context).copyWith(bottom: 0),
                     reverse: true,
                     itemCount: value.messages.length,
@@ -146,7 +160,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with RouteAware {
             ],
           ),
         ),
-        AsyncError(:final error) => Scaffold(body: Center(child: Text(error.toString()))),
+        AsyncValue(:final error?) => Scaffold(body: Center(child: Text(error.toString()))),
         _ => const Scaffold(body: Center(child: CircularProgressIndicator.adaptive())),
       },
     );
@@ -275,10 +289,9 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
   @override
   void initState() {
     super.initState();
-    final draft = ref.read(chatProvider(widget.options)).asData?.value?.inputText ?? '';
-    _textController.text = draft;
+    _textController.text = ref.read(chatNotifierProvider(widget.options)).chatInputDraft;
     _textController.addListener(() {
-      ref.read(chatNotifierProvider(widget.options)).setInputText(_textController.text);
+      ref.read(chatNotifierProvider(widget.options)).chatInputDraft = _textController.text;
     });
   }
 
@@ -298,7 +311,6 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
             ? () {
                 ref.read(chatNotifierProvider(widget.options)).postMessage(_textController.text);
                 _textController.clear();
-                ref.read(chatNotifierProvider(widget.options)).setInputText('');
               }
             : null,
         icon: const Icon(Icons.send),

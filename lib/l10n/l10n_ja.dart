@@ -287,7 +287,55 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileOrImportPgnFile => 'または PGN ファイルをインポート';
 
   @override
-  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+  String get mobileGoodMoveButThereIsBetter => 'いい手ですがもっといい手があります';
+
+  @override
+  String get mobilePerfShortUltraBullet => 'Ultra';
+
+  @override
+  String get mobilePerfShortBullet => 'Bullet';
+
+  @override
+  String get mobilePerfShortBlitz => 'Blitz';
+
+  @override
+  String get mobilePerfShortRapid => 'Rapid';
+
+  @override
+  String get mobilePerfShortClassical => 'Classical';
+
+  @override
+  String get mobilePerfShortCorrespondence => 'Corresp.';
+
+  @override
+  String get mobilePerfShortFromPosition => 'From Pos.';
+
+  @override
+  String get mobilePerfShortChess960 => '960';
+
+  @override
+  String get mobilePerfShortAntichess => 'Antichess';
+
+  @override
+  String get mobilePerfShortKingOfTheHill => 'KotH';
+
+  @override
+  String get mobilePerfShortThreeCheck => '3check';
+
+  @override
+  String get mobilePerfShortAtomic => 'Atomic';
+
+  @override
+  String get mobilePerfShortHorde => 'Horde';
+
+  @override
+  String get mobilePerfShortRacingKings => 'Racing';
+
+  @override
+  String get mobilePerfShortCrazyhouse => 'Crazy';
+
+  @override
+  String get mobilePerfShortPuzzle => 'Puzzle';
 
   @override
   String get variantStandard => 'スタンダード';
@@ -1580,6 +1628,60 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get preferencesShowClockOnTheLeft => 'モバイル機器では左側に表示';
+
+  @override
+  String get preferencesInlineNotation => '棋譜を行書き';
+
+  @override
+  String get preferencesShowServerAnalysis => 'サーバ解析を表示';
+
+  @override
+  String get preferencesShowBestMoveArrows => '最善手の矢印を表示';
+
+  @override
+  String get preferencesShowManeuverArrows => '駒繰りの矢印を表示';
+
+  @override
+  String get preferencesShowGauge => '評価値ゲージを表示';
+
+  @override
+  String get preferencesShowMoveAnnotationsOnBoard => '手の注釈を表示';
+
+  @override
+  String get preferencesShowVariationArrows => '変化手順の矢印を表示';
+
+  @override
+  String get preferencesShowLiveGlyphs => 'ライブでのエンジン注釈';
+
+  @override
+  String get preferencesShowUndefendedPieces => '浮き駒を表示';
+
+  @override
+  String get preferencesShowPinnedPieces => 'ピンされた駒を表示';
+
+  @override
+  String get preferencesShowCheckableKing => 'チェックできるキングを表示';
+
+  @override
+  String get preferencesDisclosureMode => 'バリエーションの非表示を有効にする';
+
+  @override
+  String get preferencesGeneralSettings => '全般';
+
+  @override
+  String get preferencesMoveListSettings => '指し手リスト';
+
+  @override
+  String get preferencesBoardSettings => 'ボード';
+
+  @override
+  String get preferencesAnalysisSettings => '解析に関する設定';
+
+  @override
+  String get preferencesManeuverArrowsHelp => 'Sequence of engine moves for one piece';
+
+  @override
+  String get preferencesHoverOverSettingLabelsForHelp => '設定メニューにカーソルを合わせるとヘルプを表示';
 
   @override
   String get puzzlePuzzles => 'タクティクス問題';
@@ -5105,6 +5207,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get enPassant => 'アンパッサン';
 
   @override
+  String get settings => '設定';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5510,6 +5615,16 @@ class AppLocalizationsJa extends AppLocalizations {
       count,
       locale: localeName,
       other: '$count言語で利用可能',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbAnonymous(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '匿名（$count）',
     );
     return '$_temp0';
   }

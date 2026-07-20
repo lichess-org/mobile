@@ -298,8 +298,8 @@ class SocketClient {
       }
 
       _resendAcks();
-    } catch (error) {
-      _logger.severe('WebSocket connection failed: $error', error);
+    } catch (e, st) {
+      _logger.severe('WebSocket connection failed:', e, st);
       _averageLag.value = Duration.zero;
       _scheduleReconnect(autoReconnectDelay);
     }
@@ -392,7 +392,7 @@ class SocketClient {
               _averageLag.value = Duration.zero;
             })
             .catchError((Object? error) {
-              _logger.warning('WebSocket connection to $route could not be closed: $error', error);
+              _logger.warning('WebSocket connection to $route could not be closed:', error);
               if (isDisposed) {
                 return;
               }
@@ -712,7 +712,7 @@ final socketPoolProvider = Provider<SocketPool>((Ref ref) {
   return pool;
 }, name: 'SocketPoolProvider');
 
-typedef SocketPingState = ({Duration averageLag, int rating});
+typedef SocketPingState = ({Duration averageLag, int rating, bool isActive});
 
 /// A provider that exposes the average lag and ping rating for a given socket route.
 final socketPingProvider = NotifierProvider.autoDispose
@@ -752,8 +752,17 @@ class SocketPingNotifier extends Notifier<SocketPingState> {
         : pool.averageLag.value;
   }
 
+  /// Whether the socket for this route is actively trying to connect or is connected.
+  bool get _currentRouteIsActive {
+    final pool = ref.read(socketPoolProvider);
+    return route != null
+        ? route == pool.currentClient.route && pool.currentClient.isActive
+        : pool.currentClient.isActive;
+  }
+
   SocketPingState _getPing(Duration lag) => (
     averageLag: lag,
+    isActive: _currentRouteIsActive,
     rating: lag.inMicroseconds == 0
         ? 0
         : lag.inMicroseconds < 150000
@@ -766,9 +775,9 @@ class SocketPingNotifier extends Notifier<SocketPingState> {
   );
 
   void _listener() {
-    final newLag = _currentRouteLag;
-    if (state.averageLag != newLag) {
-      state = _getPing(newLag);
+    final newState = _getPing(_currentRouteLag);
+    if (state != newState) {
+      state = newState;
     }
   }
 }

@@ -290,6 +290,54 @@ class AppLocalizationsDe extends AppLocalizations {
   String get mobileGoodMoveButThereIsBetter => 'Guter Zug, aber es gibt einen besseren';
 
   @override
+  String get mobilePerfShortUltraBullet => 'Ultra';
+
+  @override
+  String get mobilePerfShortBullet => 'Bullet';
+
+  @override
+  String get mobilePerfShortBlitz => 'Blitz';
+
+  @override
+  String get mobilePerfShortRapid => 'Rapid';
+
+  @override
+  String get mobilePerfShortClassical => 'Classical';
+
+  @override
+  String get mobilePerfShortCorrespondence => 'Corresp.';
+
+  @override
+  String get mobilePerfShortFromPosition => 'From Pos.';
+
+  @override
+  String get mobilePerfShortChess960 => '960';
+
+  @override
+  String get mobilePerfShortAntichess => 'Antichess';
+
+  @override
+  String get mobilePerfShortKingOfTheHill => 'KotH';
+
+  @override
+  String get mobilePerfShortThreeCheck => '3check';
+
+  @override
+  String get mobilePerfShortAtomic => 'Atomic';
+
+  @override
+  String get mobilePerfShortHorde => 'Horde';
+
+  @override
+  String get mobilePerfShortRacingKings => 'Racing';
+
+  @override
+  String get mobilePerfShortCrazyhouse => 'Crazy';
+
+  @override
+  String get mobilePerfShortPuzzle => 'Puzzle';
+
+  @override
   String get variantStandard => 'Standard';
 
   @override
@@ -314,7 +362,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get variantThreeCheckTitle => 'Biete deinem Gegner dreimal Schach, um diese Partie zu gewinnen.';
 
   @override
-  String get variantAntichess => 'Antischach';
+  String get variantAntichess => 'Räuberschach';
 
   @override
   String get variantAntichessTitle => 'Verliere alle deine Figuren (oder werde Patt gesetzt), um diese Partie zu gewinnen.';
@@ -1602,6 +1650,60 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get preferencesShowClockOnTheLeft => 'Auf der linken Seite auf mobilen Geräten anzeigen';
+
+  @override
+  String get preferencesInlineNotation => 'Inline-Notation';
+
+  @override
+  String get preferencesShowServerAnalysis => 'Serveranalyse anzeigen';
+
+  @override
+  String get preferencesShowBestMoveArrows => 'Pfeile für die besten Züge anzeigen';
+
+  @override
+  String get preferencesShowManeuverArrows => 'Manöver-Pfeile anzeigen';
+
+  @override
+  String get preferencesShowGauge => 'Stellungsbewertungs-Balken anzeigen';
+
+  @override
+  String get preferencesShowMoveAnnotationsOnBoard => 'Zugnotation anzeigen';
+
+  @override
+  String get preferencesShowVariationArrows => 'Varianten-Pfeile anzeigen';
+
+  @override
+  String get preferencesShowLiveGlyphs => 'Live-Computeranalysen';
+
+  @override
+  String get preferencesShowUndefendedPieces => 'Nicht verteidigte Figuren anzeigen';
+
+  @override
+  String get preferencesShowPinnedPieces => 'Gefesselte Figuren anzeigen';
+
+  @override
+  String get preferencesShowCheckableKing => 'Mögliche Schachs anzeigen';
+
+  @override
+  String get preferencesDisclosureMode => 'Varianten ausblenden aktivieren';
+
+  @override
+  String get preferencesGeneralSettings => 'Allgemein';
+
+  @override
+  String get preferencesMoveListSettings => 'Zugliste';
+
+  @override
+  String get preferencesBoardSettings => 'Brett';
+
+  @override
+  String get preferencesAnalysisSettings => 'Analyse-Einstellungen';
+
+  @override
+  String get preferencesManeuverArrowsHelp => 'Reihenfolge der Computerzüge für eine Figur';
+
+  @override
+  String get preferencesHoverOverSettingLabelsForHelp => 'Fahre mit deinem Mauszeiger über die Einstellungs-Label, um Hilfe zu erhalten';
 
   @override
   String get puzzlePuzzles => 'Taktikaufgaben';
@@ -5133,6 +5235,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get enPassant => 'En passant';
 
   @override
+  String get settings => 'Einstellungen';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5579,6 +5684,17 @@ class AppLocalizationsDe extends AppLocalizations {
       locale: localeName,
       other: 'Verfügbar in $count Sprachen!',
       one: 'Verfügbar in $count Sprache!',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbAnonymous(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Anonym ($count)',
+      one: 'Anonym',
     );
     return '$_temp0';
   }

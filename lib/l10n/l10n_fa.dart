@@ -129,7 +129,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileRemoveBookmark => 'حذفِ نشانک';
 
   @override
-  String get mobileServerAnalysis => 'تحلیل زاوَر';
+  String get mobileServerAnalysis => 'تحلیلِ کارساز';
 
   @override
   String get mobileSettingsClockPosition => 'جای ساعت';
@@ -288,6 +288,54 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get mobileGoodMoveButThereIsBetter => 'حرکتِ خوب، اما بهتر هم هست';
+
+  @override
+  String get mobilePerfShortUltraBullet => 'Ultra';
+
+  @override
+  String get mobilePerfShortBullet => 'Bullet';
+
+  @override
+  String get mobilePerfShortBlitz => 'Blitz';
+
+  @override
+  String get mobilePerfShortRapid => 'Rapid';
+
+  @override
+  String get mobilePerfShortClassical => 'Classical';
+
+  @override
+  String get mobilePerfShortCorrespondence => 'Corresp.';
+
+  @override
+  String get mobilePerfShortFromPosition => 'From Pos.';
+
+  @override
+  String get mobilePerfShortChess960 => '960';
+
+  @override
+  String get mobilePerfShortAntichess => 'Antichess';
+
+  @override
+  String get mobilePerfShortKingOfTheHill => 'KotH';
+
+  @override
+  String get mobilePerfShortThreeCheck => '3check';
+
+  @override
+  String get mobilePerfShortAtomic => 'Atomic';
+
+  @override
+  String get mobilePerfShortHorde => 'Horde';
+
+  @override
+  String get mobilePerfShortRacingKings => 'Racing';
+
+  @override
+  String get mobilePerfShortCrazyhouse => 'Crazy';
+
+  @override
+  String get mobilePerfShortPuzzle => 'Puzzle';
 
   @override
   String get variantStandard => 'اِستانده';
@@ -909,7 +957,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get broadcastOpenLichess => 'آزاد در Lichess';
 
   @override
-  String get broadcastTeams => 'یَران‌ها';
+  String get broadcastTeams => 'تیم‌ها';
 
   @override
   String get broadcastBoards => 'میز‌ها';
@@ -975,7 +1023,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get broadcastStandingsDisclaimer => 'رده‌بندی با استفاده از بازی‌های پخش‌شده محاسبه می‌شود و ممکن است با نتایج رسمی متفاوت باشد.';
 
   @override
-  String get broadcastAllTeams => 'همهٔ یَران‌ها';
+  String get broadcastAllTeams => 'همهٔ تیم‌ها';
 
   @override
   String get broadcastTournamentFormat => 'ساختار مسابقات';
@@ -1602,6 +1650,60 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get preferencesShowClockOnTheLeft => 'در گوشی‌ها، نمایش در سمت چپ';
+
+  @override
+  String get preferencesInlineNotation => 'نشانه‌گذاریِ درخط';
+
+  @override
+  String get preferencesShowServerAnalysis => 'نمایشِ تحلیلِ کارساز';
+
+  @override
+  String get preferencesShowBestMoveArrows => 'نمایشِ پیکان‌های بهترین حرکت';
+
+  @override
+  String get preferencesShowManeuverArrows => 'نمایشِ پیکان‌های تَمهید';
+
+  @override
+  String get preferencesShowGauge => 'نمایشِ میلهٔ ارزیابی';
+
+  @override
+  String get preferencesShowMoveAnnotationsOnBoard => 'نمایشِ حرکت‌نویسی';
+
+  @override
+  String get preferencesShowVariationArrows => 'نمایش پیکان‌های وَرتِش';
+
+  @override
+  String get preferencesShowLiveGlyphs => 'حرکت‌نویسیِ زندهٔ موتور';
+
+  @override
+  String get preferencesShowUndefendedPieces => 'نمایشِ مُهره‌های بی‌دفاع';
+
+  @override
+  String get preferencesShowPinnedPieces => 'نمایشِ مُهرهای آچمزیده';
+
+  @override
+  String get preferencesShowCheckableKing => 'نمایشِ شاهِ کیش‌پذیر';
+
+  @override
+  String get preferencesDisclosureMode => 'فعالسازیِ پنهاندنِ وَرتِش';
+
+  @override
+  String get preferencesGeneralSettings => 'عمومی';
+
+  @override
+  String get preferencesMoveListSettings => 'فهرستِ حرکت';
+
+  @override
+  String get preferencesBoardSettings => 'میز';
+
+  @override
+  String get preferencesAnalysisSettings => 'تنظیماتِ تحلیل';
+
+  @override
+  String get preferencesManeuverArrowsHelp => 'دنبالهٔ حرکت‌های موتور برای یک مُهره';
+
+  @override
+  String get preferencesHoverOverSettingLabelsForHelp => 'برای راهنمایی، روی برچسب‌های تنظیمات پَرجایید';
 
   @override
   String get puzzlePuzzles => 'معماها';
@@ -3396,7 +3498,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get importGameDataPrivacyWarning => 'این PGN برای عموم در دسترس است، برای وارد کردن یک بازی خصوصی، از *مطالعه* استفاده کنید.';
 
   @override
-  String get thisIsAChessCaptcha => 'این یک کپچا [کد امنیتی] شطرنجی است';
+  String get thisIsAChessCaptcha => 'این «آجرا»یِ شطرنج [آزمونِ امنیتی] است.';
 
   @override
   String get clickOnTheBoardToMakeYourMove => 'روی میز بزنید تا حرکت‌تان را بروید و اثبات کنید که انسانید.';
@@ -3660,7 +3762,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get oneUrlPerLine => 'یک وب‌نشانی در هر خط.';
 
   @override
-  String get inlineNotation => 'نشانه‌گذاری خطی';
+  String get inlineNotation => 'نشانه‌گذاریِ درخط';
 
   @override
   String get makeAStudy => 'برای نگهداری مطمئن و همرسانی، ساخت یک مطالعه را در نظر بگیرید.';
@@ -3705,7 +3807,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get descPrivate => 'توضیحات خصوصی';
 
   @override
-  String get descPrivateHelp => 'متنی که فقط هم‌تیمی‌ها خواهند دید. در صورت تعیین، جایگزین وصف همگانی برای هم‌تیمی‌ها می‌شود خواهد شد.';
+  String get descPrivateHelp => 'متنی که فقط هم‌تیمی‌ها خواهند دید. در صورت تعیین، جایگزین وصف عمومی برای هم‌تیمی‌ها می‌شود.';
 
   @override
   String get no => 'نه';
@@ -4214,10 +4316,10 @@ class AppLocalizationsFa extends AppLocalizations {
   String get cyclePreviousOrNextVariation => 'چرخاندن پیشین/پسین وَرتِش';
 
   @override
-  String get toggleGlyphAnnotations => 'کلید علائم حرکت‌نویسی';
+  String get toggleGlyphAnnotations => 'کلید حرکت‌نویسی';
 
   @override
-  String get togglePositionAnnotations => 'تغییر حرکت‌نویسی وضعیت';
+  String get togglePositionAnnotations => 'کلید حرکت‌نویسی وضعیت';
 
   @override
   String get toggleObservationAnnotations => 'کلید مشاهدهٔ حرکت‌نویسی';
@@ -4552,7 +4654,7 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String yourRatingIsX(String param) {
-    return 'درجه‌بندی‌تان $param است ';
+    return 'درجه‌بندی‌تان $param است |  ';
   }
 
   @override
@@ -5015,10 +5117,10 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mouseTricks => 'ترفندهای موشواره';
 
   @override
-  String get toggleLocalAnalysis => 'تغییر در تحلیل رایانه‌ای محلی';
+  String get toggleLocalAnalysis => 'کلیدِ تحلیلِ رایانه‌ای محلی';
 
   @override
-  String get toggleAllAnalysis => 'تغییر در هرگونه تحلیل رایانه‌ای';
+  String get toggleAllAnalysis => 'کلیدِ هرگونه تحلیل رایانه‌ای';
 
   @override
   String get playComputerMove => 'بازی کردن بهترین حرکت رایانه‌ای';
@@ -5131,6 +5233,9 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get enPassant => 'اجازهٔ آن‌پاسان';
+
+  @override
+  String get settings => 'تنظیمات';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5584,6 +5689,17 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
+  String nbAnonymous(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'بی‌نام ($count)',
+      one: 'بی‌نام',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbSecondsToPlayTheFirstMove(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5929,7 +6045,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get studyShowResults => 'نمایش نتایج';
 
   @override
-  String get studyShowEvalBar => 'نوار ارزیابی';
+  String get studyShowEvalBar => 'میلهٔ ارزیابی';
 
   @override
   String get studyNext => 'بعدی';
@@ -6016,7 +6132,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get studySaveChapter => 'ذخیره بخش';
 
   @override
-  String get studyClearAnnotations => 'پاک کردن حرکت‌نویسی';
+  String get studyClearAnnotations => 'پاکیدنِ حرکت‌نویسی';
 
   @override
   String get studyClearVariations => 'پاکیدن وَرتِش‌ها';

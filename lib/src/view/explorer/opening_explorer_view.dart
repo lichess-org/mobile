@@ -55,22 +55,29 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.position.ply >= 50) {
-      return Center(child: Text(context.l10n.maxDepthReached));
-    }
-
     final isLoggedIn = ref.watch(isLoggedInProvider);
     if (!isLoggedIn) {
       return Center(child: Text(context.l10n.youNeedAnAccountToDoThat));
+    }
+
+    if (widget.position.ply >= 50) {
+      return _buildListView(children: [ExplorerMessage(context.l10n.maxDepthReached)]);
+    }
+
+    final isOnline = ref.watch(onlineStatusProvider).value ?? true;
+    if (!isOnline) {
+      return _buildListView(
+        children: [ExplorerMessage(context.l10n.mobileOpeningExplorerNotAvailableOffline)],
+      );
     }
 
     final prefs = ref.watch(openingExplorerPreferencesProvider);
     final variant = Variant.fromRule(widget.position.rule);
 
     if (prefs.db == OpeningDatabase.player && prefs.playerDb.username == null) {
-      return const Center(
-        // TODO: l10n
-        child: Text('Select a Lichess player in the settings.'),
+      // TODO: l10n
+      return _buildListView(
+        children: [const ExplorerMessage('Select a Lichess player in the settings.')],
       );
     }
 
@@ -94,20 +101,7 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
     switch (openingExplorerAsync) {
       case AsyncData(:final value):
         if (value == null) {
-          return _ExplorerListView(
-            scrollable: widget.scrollable,
-            isLoading: true,
-            children:
-                lastExplorerWidgets ??
-                [
-                  const Shimmer(
-                    child: ShimmerLoading(
-                      isLoading: true,
-                      child: OpeningExplorerMoveTable.loading(),
-                    ),
-                  ),
-                ],
-          );
+          return _buildListView(isLoading: true, children: lastExplorerWidgets ?? _loadingChildren);
         }
 
         final topGames = value.entry.topGames;
@@ -116,7 +110,6 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
         final ply = widget.position.ply;
 
         final children = [
-          if (widget.opening != null) OpeningNameHeader(opening: widget.opening!),
           OpeningExplorerMoveTable(
             moves: value.entry.moves,
             whiteWins: value.entry.white,
@@ -159,11 +152,7 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
 
         lastExplorerWidgets = children;
 
-        return _ExplorerListView(
-          scrollable: widget.scrollable,
-          isLoading: false,
-          children: children,
-        );
+        return _buildListView(children: children);
       case AsyncError(:final error):
         debugPrint('SEVERE: [OpeningExplorerView] could not load opening explorer data; $error');
         final connectivity = ref.watch(connectivityChangesProvider);
@@ -171,22 +160,27 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
           online: () => 'Could not load opening explorer data.',
           offline: () => context.l10n.mobileOpeningExplorerNotAvailableOffline,
         );
-        return Center(
-          child: Padding(padding: const EdgeInsets.all(16.0), child: Text(message)),
-        );
+        return _buildListView(children: [ExplorerMessage(message)]);
       case _:
-        return _ExplorerListView(
-          scrollable: widget.scrollable,
-          isLoading: true,
-          children:
-              lastExplorerWidgets ??
-              [
-                const Shimmer(
-                  child: ShimmerLoading(isLoading: true, child: OpeningExplorerMoveTable.loading()),
-                ),
-              ],
-        );
+        return _buildListView(isLoading: true, children: lastExplorerWidgets ?? _loadingChildren);
     }
+  }
+
+  static const List<Widget> _loadingChildren = [
+    Shimmer(child: ShimmerLoading(isLoading: true, child: OpeningExplorerMoveTable.loading())),
+  ];
+
+  /// Builds the explorer list, always prepending the [OpeningNameHeader] (when
+  /// an opening is known) so the opening name stays visible in every state.
+  Widget _buildListView({required List<Widget> children, bool isLoading = false}) {
+    return _ExplorerListView(
+      scrollable: widget.scrollable,
+      isLoading: isLoading,
+      children: [
+        if (widget.opening != null) OpeningNameHeader(opening: widget.opening!),
+        ...children,
+      ],
+    );
   }
 }
 

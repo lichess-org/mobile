@@ -287,7 +287,55 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileOrImportPgnFile => 'O importa un file PGN';
 
   @override
-  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+  String get mobileGoodMoveButThereIsBetter => 'Buona mossa, ma c\'è di meglio';
+
+  @override
+  String get mobilePerfShortUltraBullet => 'Ultra';
+
+  @override
+  String get mobilePerfShortBullet => 'Bullet';
+
+  @override
+  String get mobilePerfShortBlitz => 'Blitz';
+
+  @override
+  String get mobilePerfShortRapid => 'Rapid';
+
+  @override
+  String get mobilePerfShortClassical => 'Classical';
+
+  @override
+  String get mobilePerfShortCorrespondence => 'Corresp.';
+
+  @override
+  String get mobilePerfShortFromPosition => 'From Pos.';
+
+  @override
+  String get mobilePerfShortChess960 => '960';
+
+  @override
+  String get mobilePerfShortAntichess => 'Antichess';
+
+  @override
+  String get mobilePerfShortKingOfTheHill => 'KotH';
+
+  @override
+  String get mobilePerfShortThreeCheck => '3check';
+
+  @override
+  String get mobilePerfShortAtomic => 'Atomic';
+
+  @override
+  String get mobilePerfShortHorde => 'Horde';
+
+  @override
+  String get mobilePerfShortRacingKings => 'Racing';
+
+  @override
+  String get mobilePerfShortCrazyhouse => 'Crazy';
+
+  @override
+  String get mobilePerfShortPuzzle => 'Puzzle';
 
   @override
   String get variantStandard => 'Standard';
@@ -949,7 +997,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get broadcastOfficialStandings => 'Classifica Ufficiale';
 
   @override
-  String get broadcastRegulations => 'Regulations';
+  String get broadcastRegulations => 'Normative';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -1394,7 +1442,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get preferencesPreferences => 'Preferenze';
 
   @override
-  String get preferencesDisplay => 'Mostra';
+  String get preferencesDisplay => 'Impostazioni visive';
 
   @override
   String get preferencesPrivacy => 'Privacy';
@@ -1602,6 +1650,60 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get preferencesShowClockOnTheLeft => 'Mostra sulla sinistra nei dispositivi mobili';
+
+  @override
+  String get preferencesInlineNotation => 'Inline notation';
+
+  @override
+  String get preferencesShowServerAnalysis => 'Show server analysis';
+
+  @override
+  String get preferencesShowBestMoveArrows => 'Show best move arrows';
+
+  @override
+  String get preferencesShowManeuverArrows => 'Show maneuver arrows';
+
+  @override
+  String get preferencesShowGauge => 'Show evaluation gauge';
+
+  @override
+  String get preferencesShowMoveAnnotationsOnBoard => 'Show move annotations';
+
+  @override
+  String get preferencesShowVariationArrows => 'Show variation arrows';
+
+  @override
+  String get preferencesShowLiveGlyphs => 'Live engine annotations';
+
+  @override
+  String get preferencesShowUndefendedPieces => 'Show undefended pieces';
+
+  @override
+  String get preferencesShowPinnedPieces => 'Show pinned pieces';
+
+  @override
+  String get preferencesShowCheckableKing => 'Show checkable king';
+
+  @override
+  String get preferencesDisclosureMode => 'Enable variation hiding';
+
+  @override
+  String get preferencesGeneralSettings => 'General';
+
+  @override
+  String get preferencesMoveListSettings => 'Move list';
+
+  @override
+  String get preferencesBoardSettings => 'Board';
+
+  @override
+  String get preferencesAnalysisSettings => 'Analysis settings';
+
+  @override
+  String get preferencesManeuverArrowsHelp => 'Sequence of engine moves for one piece';
+
+  @override
+  String get preferencesHoverOverSettingLabelsForHelp => 'Hover over setting labels for help';
 
   @override
   String get puzzlePuzzles => 'Problemi';
@@ -2527,10 +2629,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get blackDidntMove => 'Il nero non ha mosso';
 
   @override
-  String get whiteAborted => 'White aborted the game';
+  String get whiteAborted => 'Il bianco ha annullato la partita';
 
   @override
-  String get blackAborted => 'Black aborted the game';
+  String get blackAborted => 'Il nero ha annullato la partita';
 
   @override
   String get requestAComputerAnalysis => 'Chiedi un\'analisi del computer';
@@ -2767,7 +2869,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get searchTimeDescription => 'Tempo impostato per valutare posizioni nuove';
 
   @override
-  String get threads => 'Discussioni';
+  String get threads => 'Threads';
 
   @override
   String get threadsDescription => 'Impostare questo sotto il numero di thread della CPU, le spunte indicano una scelta sicura';
@@ -4434,10 +4536,10 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
-  String get like => 'Like';
+  String get like => 'Mi piace';
 
   @override
-  String get liked => 'Liked';
+  String get liked => 'Ti è piaciuto';
 
   @override
   String get quickPairing => 'Accoppiamento rapido';
@@ -5133,6 +5235,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get enPassant => 'Regole En passant';
 
   @override
+  String get settings => 'Settings';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5579,6 +5684,17 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: 'Disponibile in $count lingue!',
       one: 'Disponibile in $count lingue!',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbAnonymous(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Anonimi ($count)',
+      one: 'Anonimo',
     );
     return '$_temp0';
   }

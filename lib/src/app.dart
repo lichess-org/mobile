@@ -230,7 +230,7 @@ class _AppState extends ConsumerState<Application> {
               ).copyWith(height: isShortVerticalScreen(context) ? 60 : null),
       ),
       home: const MainTabScaffold(),
-      navigatorObservers: [rootNavPageRouteObserver],
+      navigatorObservers: [rootNavPageRouteObserver, rootNavRouteStackObserver],
     );
   }
 }

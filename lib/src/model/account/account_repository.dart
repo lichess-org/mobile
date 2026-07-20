@@ -87,7 +87,7 @@ class AccountRepository {
 }
 
 AccountPrefState _accountPreferencesFromPick(RequiredPick pick) {
-  return (
+  return AccountPrefState(
     zenMode: Zen.fromInt(pick('zen').asIntOrThrow()),
     pieceNotation: PieceNotation.fromInt(pick('pieceNotation').asIntOrThrow()),
     showRatings: ShowRatings.fromInt(pick('ratings').asIntOrThrow()),

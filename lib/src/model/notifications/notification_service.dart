@@ -97,8 +97,8 @@ class NotificationService {
       await _notificationDisplay
           .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
           ?.requestNotificationsPermission();
-    } catch (err) {
-      _logger.warning('notification permission request failed with error: $err}');
+    } catch (e, st) {
+      _logger.warning('notification permission request failed with error:', e, st);
     }
 
     final isRegistered = await UnifiedPush.initialize(
@@ -225,8 +225,8 @@ class NotificationService {
     if (badge != null) {
       try {
         await BadgeService.instance.setBadge(int.parse(badge));
-      } catch (e) {
-        _logger.severe('Could not parse badge: $badge');
+      } catch (e, st) {
+        _logger.severe('Could not parse badge: $badge', e, st);
       }
     }
   }

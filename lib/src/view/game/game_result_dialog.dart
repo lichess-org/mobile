@@ -13,9 +13,12 @@ import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/over_the_board_game.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_controller.dart';
+import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/status_l10n.dart';
+import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 
 class GameResultDialog extends ConsumerStatefulWidget {
   const GameResultDialog({required this.id, required this.onNewOpponentCallback, super.key});
@@ -51,6 +54,59 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
     super.dispose();
   }
 
+  /// The rematch button action, or null to disable it. A socket offer if the
+  /// opponent is online, otherwise a challenge for offline clockless games.
+  VoidCallback? _rematchAction(BuildContext context, GameState value) {
+    if (!_activateButtons || value.game.opponent?.offeringRematch == true) {
+      return null;
+    }
+    final ctrlProvider = gameControllerProvider(widget.id);
+    if (value.game.opponent?.onGame == true) {
+      return () {
+        ref.read(ctrlProvider.notifier).proposeOrAcceptRematch();
+      };
+    }
+    if (value.game.clock == null &&
+        value.game.me?.user != null &&
+        value.game.opponent?.user != null) {
+      return () async {
+        try {
+          await ref.read(ctrlProvider.notifier).challengeRematch();
+        } catch (_) {
+          if (context.mounted) {
+            showSnackBar(context, 'Could not send the rematch challenge', type: SnackBarType.error);
+          }
+        }
+      };
+    }
+    return null;
+  }
+
+  /// Navigates back to the tournament this game belongs to.
+  ///
+  /// If we came from the tournament screen (the usual case: we were on the
+  /// tournament, the game was pushed on top and we played it), it is still in
+  /// the navigation stack, so we close the dialog and pop back to it. Otherwise
+  /// (e.g. the game was opened from the home recent games list) there is no
+  /// tournament screen to go back to, so we push a fresh one.
+  void _backToTournament(TournamentId tournamentId) {
+    final navigator = Navigator.of(context);
+    if (rootNavRouteStackObserver.containsRoute(
+      TournamentScreen.routeName,
+      arguments: tournamentId.value,
+    )) {
+      navigator.popUntil(
+        (route) =>
+            route.settings.name == TournamentScreen.routeName &&
+            route.settings.arguments == tournamentId.value,
+      );
+    } else {
+      // Close the dialog first, then push the tournament screen.
+      navigator.popUntil((route) => route is! PopupRoute);
+      navigator.push(TournamentScreen.buildRoute(tournamentId));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final ctrlProvider = gameControllerProvider(widget.id);
@@ -74,7 +130,8 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
               firstChild: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  if (value.game.me?.offeringRematch == true) ...[
+                  if (value.game.me?.offeringRematch == true ||
+                      value.correspondenceRematchId != null) ...[
                     Flexible(
                       flex: 3,
                       child: Text(
@@ -85,8 +142,22 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
                     ),
                     const Spacer(),
                     IconButton.outlined(
-                      onPressed: () {
-                        ref.read(ctrlProvider.notifier).declineRematch();
+                      onPressed: () async {
+                        if (value.game.me?.offeringRematch == true) {
+                          ref.read(ctrlProvider.notifier).declineRematch();
+                        } else {
+                          try {
+                            await ref.read(ctrlProvider.notifier).cancelRematchChallenge();
+                          } catch (_) {
+                            if (context.mounted) {
+                              showSnackBar(
+                                context,
+                                'Could not cancel the rematch challenge',
+                                type: SnackBarType.error,
+                              );
+                            }
+                          }
+                        }
                       },
                       tooltip: context.l10n.cancelRematchOffer,
                       icon: const Icon(Icons.cancel),
@@ -94,14 +165,7 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
                   ] else if (value.canOfferRematch)
                     Expanded(
                       child: FilledButton(
-                        onPressed:
-                            _activateButtons &&
-                                value.game.opponent?.onGame == true &&
-                                value.game.opponent?.offeringRematch != true
-                            ? () {
-                                ref.read(ctrlProvider.notifier).proposeOrAcceptRematch();
-                              }
-                            : null,
+                        onPressed: _rematchAction(context, value),
                         child: Text(context.l10n.rematch),
                       ),
                     )
@@ -167,14 +231,7 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
             if (value.tournament?.isOngoing == true) ...[
               FilledButton.icon(
                 icon: const Icon(Icons.play_arrow),
-                onPressed: () {
-                  // Close the dialog
-                  Navigator.of(context).popUntil((route) => route is! PopupRoute);
-                  // Close the game screen
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    Navigator.of(context).pop(); // Pop the screen after frame
-                  });
-                },
+                onPressed: () => _backToTournament(value.tournament!.id),
                 label: Text(context.l10n.backToTournament, textAlign: TextAlign.center),
               ),
               FilledButton.tonalIcon(
@@ -184,12 +241,7 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
                   ref
                       .read(tournamentControllerProvider(value.tournament!.id).notifier)
                       .joinOrPause();
-                  // Close the dialog
-                  Navigator.of(context).popUntil((route) => route is! PopupRoute);
-                  // Close the game screen
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    Navigator.of(context).pop(); // Pop the screen after frame
-                  });
+                  _backToTournament(value.tournament!.id);
                 },
                 label: Text(context.l10n.pause, textAlign: TextAlign.center),
               ),

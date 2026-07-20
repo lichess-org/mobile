@@ -290,6 +290,54 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileGoodMoveButThereIsBetter => 'Goede zet, maar er is een betere';
 
   @override
+  String get mobilePerfShortUltraBullet => 'Ultra';
+
+  @override
+  String get mobilePerfShortBullet => 'Bullet';
+
+  @override
+  String get mobilePerfShortBlitz => 'Blitz';
+
+  @override
+  String get mobilePerfShortRapid => 'Rapid';
+
+  @override
+  String get mobilePerfShortClassical => 'Classical';
+
+  @override
+  String get mobilePerfShortCorrespondence => 'Corresp.';
+
+  @override
+  String get mobilePerfShortFromPosition => 'From Pos.';
+
+  @override
+  String get mobilePerfShortChess960 => '960';
+
+  @override
+  String get mobilePerfShortAntichess => 'Antichess';
+
+  @override
+  String get mobilePerfShortKingOfTheHill => 'KotH';
+
+  @override
+  String get mobilePerfShortThreeCheck => '3check';
+
+  @override
+  String get mobilePerfShortAtomic => 'Atomic';
+
+  @override
+  String get mobilePerfShortHorde => 'Horde';
+
+  @override
+  String get mobilePerfShortRacingKings => 'Racing';
+
+  @override
+  String get mobilePerfShortCrazyhouse => 'Crazy';
+
+  @override
+  String get mobilePerfShortPuzzle => 'Puzzle';
+
+  @override
   String get variantStandard => 'Standaard';
 
   @override
@@ -1602,6 +1650,60 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get preferencesShowClockOnTheLeft => 'Toon links op mobiele apparaten';
+
+  @override
+  String get preferencesInlineNotation => 'Geïntegreerde notatie';
+
+  @override
+  String get preferencesShowServerAnalysis => 'Toon serveranalyse';
+
+  @override
+  String get preferencesShowBestMoveArrows => 'Toon beste zet-pijlen';
+
+  @override
+  String get preferencesShowManeuverArrows => 'Toon manoeuvre-pijlen';
+
+  @override
+  String get preferencesShowGauge => 'Toon evaluatiebalk';
+
+  @override
+  String get preferencesShowMoveAnnotationsOnBoard => 'Toon zetannotaties';
+
+  @override
+  String get preferencesShowVariationArrows => 'Toon variantpijlen';
+
+  @override
+  String get preferencesShowLiveGlyphs => 'Computerannotaties';
+
+  @override
+  String get preferencesShowUndefendedPieces => 'Toon onverdedigde stukken';
+
+  @override
+  String get preferencesShowPinnedPieces => 'Toon gepende stukken';
+
+  @override
+  String get preferencesShowCheckableKing => 'Toon schaakbare koning';
+
+  @override
+  String get preferencesDisclosureMode => 'Varianten verbergen';
+
+  @override
+  String get preferencesGeneralSettings => 'Algemeen';
+
+  @override
+  String get preferencesMoveListSettings => 'Zettenlijst';
+
+  @override
+  String get preferencesBoardSettings => 'Bord';
+
+  @override
+  String get preferencesAnalysisSettings => 'Analyse-instellingen';
+
+  @override
+  String get preferencesManeuverArrowsHelp => 'Volgorde van computerzetten voor één stuk';
+
+  @override
+  String get preferencesHoverOverSettingLabelsForHelp => 'Beweeg over instellingslabels voor hulp';
 
   @override
   String get puzzlePuzzles => 'Puzzels';
@@ -3369,7 +3471,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get playerNames => 'Spelersnamen';
 
   @override
-  String get moveAnnotations => 'Aantekeningen';
+  String get moveAnnotations => 'Annotaties';
 
   @override
   String get pasteTheFenStringHere => 'Plak de FEN-code hier';
@@ -4214,13 +4316,13 @@ class AppLocalizationsNl extends AppLocalizations {
   String get cyclePreviousOrNextVariation => 'Bekijk vorige/volgende variant';
 
   @override
-  String get toggleGlyphAnnotations => 'Zetaantekeningen in-/uitschakelen';
+  String get toggleGlyphAnnotations => 'Zetannotaties in-/uitschakelen';
 
   @override
-  String get togglePositionAnnotations => 'Stellingsaantekeningen in-/uitschakelen';
+  String get togglePositionAnnotations => 'Stellingsannotaties in-/uitschakelen';
 
   @override
-  String get toggleObservationAnnotations => 'Observatie-aantekeningen in-/uitschakelen';
+  String get toggleObservationAnnotations => 'Observatie-annotaties in-/uitschakelen';
 
   @override
   String get variationArrowsInfo => 'Met de variantpijlen kunt u navigeren zonder de zettenlijst te gebruiken.';
@@ -5133,6 +5235,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get enPassant => 'En passant';
 
   @override
+  String get settings => 'Instellingen';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5584,6 +5689,17 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
+  String nbAnonymous(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Anoniem ($count)',
+      one: 'Anoniem',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbSecondsToPlayTheFirstMove(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5902,7 +6018,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get studyCommentThisMove => 'Reageer op deze zet';
 
   @override
-  String get studyAnnotateWithGlyphs => 'Maak aantekeningen met symbolen';
+  String get studyAnnotateWithGlyphs => 'Maak annotaties met symbolen';
 
   @override
   String get studyTheChapterIsTooShortToBeAnalysed => 'Dit hoofdstuk is te kort om geanalyseerd te worden.';
@@ -6016,7 +6132,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get studySaveChapter => 'Hoofdstuk opslaan';
 
   @override
-  String get studyClearAnnotations => 'Wis aantekeningen';
+  String get studyClearAnnotations => 'Wis annotaties';
 
   @override
   String get studyClearVariations => 'Verwijder variaties';

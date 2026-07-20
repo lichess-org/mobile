@@ -38,7 +38,7 @@
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">معماها</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">جستجوهای اخیر</string>
   <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">حذفِ نشانک</string>
-  <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.">تحلیل زاوَر</string>
+  <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.">تحلیلِ کارساز</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">جای ساعت</string>
   <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">پیشفرض‌ها</string>
   <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">هدفِ مهرهٔ کشیده</string>

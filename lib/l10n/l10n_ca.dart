@@ -290,6 +290,54 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileGoodMoveButThereIsBetter => 'Bona jugada, però n\'hi ha una de millor';
 
   @override
+  String get mobilePerfShortUltraBullet => 'Ultra';
+
+  @override
+  String get mobilePerfShortBullet => 'Bullet';
+
+  @override
+  String get mobilePerfShortBlitz => 'Blitz';
+
+  @override
+  String get mobilePerfShortRapid => 'Rapid';
+
+  @override
+  String get mobilePerfShortClassical => 'Classical';
+
+  @override
+  String get mobilePerfShortCorrespondence => 'Corresp.';
+
+  @override
+  String get mobilePerfShortFromPosition => 'From Pos.';
+
+  @override
+  String get mobilePerfShortChess960 => '960';
+
+  @override
+  String get mobilePerfShortAntichess => 'Antichess';
+
+  @override
+  String get mobilePerfShortKingOfTheHill => 'KotH';
+
+  @override
+  String get mobilePerfShortThreeCheck => '3check';
+
+  @override
+  String get mobilePerfShortAtomic => 'Atomic';
+
+  @override
+  String get mobilePerfShortHorde => 'Horde';
+
+  @override
+  String get mobilePerfShortRacingKings => 'Racing';
+
+  @override
+  String get mobilePerfShortCrazyhouse => 'Crazy';
+
+  @override
+  String get mobilePerfShortPuzzle => 'Puzzle';
+
+  @override
   String get variantStandard => 'Estàndard';
 
   @override
@@ -1602,6 +1650,60 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get preferencesShowClockOnTheLeft => 'Mostrar a l\'esquerra en dispositius mòbils';
+
+  @override
+  String get preferencesInlineNotation => 'Notació en línia';
+
+  @override
+  String get preferencesShowServerAnalysis => 'Mostra l\'anàlisi del servidor';
+
+  @override
+  String get preferencesShowBestMoveArrows => 'Mostra fletxes millors jugades';
+
+  @override
+  String get preferencesShowManeuverArrows => 'Mostra fletxes de maniobres';
+
+  @override
+  String get preferencesShowGauge => 'Mostra indicador d\'avaluació';
+
+  @override
+  String get preferencesShowMoveAnnotationsOnBoard => 'Mostra les anotacions de les jugades';
+
+  @override
+  String get preferencesShowVariationArrows => 'Mostra fletxes de variacions';
+
+  @override
+  String get preferencesShowLiveGlyphs => 'Anotacions en directe';
+
+  @override
+  String get preferencesShowUndefendedPieces => 'Mostra peces indefenses';
+
+  @override
+  String get preferencesShowPinnedPieces => 'Mostra peces clavades';
+
+  @override
+  String get preferencesShowCheckableKing => 'Mostrar possibles escacs';
+
+  @override
+  String get preferencesDisclosureMode => 'Permet amagar les variants';
+
+  @override
+  String get preferencesGeneralSettings => 'General';
+
+  @override
+  String get preferencesMoveListSettings => 'Llista de moviments';
+
+  @override
+  String get preferencesBoardSettings => 'Tauler';
+
+  @override
+  String get preferencesAnalysisSettings => 'Configuració de les anàlisis';
+
+  @override
+  String get preferencesManeuverArrowsHelp => 'Sequence of engine moves for one piece';
+
+  @override
+  String get preferencesHoverOverSettingLabelsForHelp => 'Posa el cursor per sobre de les etiquetes de configuració per veure l\'ajuda';
 
   @override
   String get puzzlePuzzles => 'Problemes';
@@ -5133,6 +5235,9 @@ class AppLocalizationsCa extends AppLocalizations {
   String get enPassant => 'Captura al pas';
 
   @override
+  String get settings => 'Configuració';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5579,6 +5684,17 @@ class AppLocalizationsCa extends AppLocalizations {
       locale: localeName,
       other: 'Disponible en $count idiomes',
       one: 'Disponible en $count idiomes',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbAnonymous(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Anonymous ($count)',
+      one: 'Anonymous',
     );
     return '$_temp0';
   }

@@ -290,6 +290,54 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileGoodMoveButThereIsBetter => 'Mișcare bună, dar există una si mai bună';
 
   @override
+  String get mobilePerfShortUltraBullet => 'Ultra';
+
+  @override
+  String get mobilePerfShortBullet => 'Bullet';
+
+  @override
+  String get mobilePerfShortBlitz => 'Blitz';
+
+  @override
+  String get mobilePerfShortRapid => 'Rapid';
+
+  @override
+  String get mobilePerfShortClassical => 'Classical';
+
+  @override
+  String get mobilePerfShortCorrespondence => 'Corresp.';
+
+  @override
+  String get mobilePerfShortFromPosition => 'From Pos.';
+
+  @override
+  String get mobilePerfShortChess960 => '960';
+
+  @override
+  String get mobilePerfShortAntichess => 'Antichess';
+
+  @override
+  String get mobilePerfShortKingOfTheHill => 'KotH';
+
+  @override
+  String get mobilePerfShortThreeCheck => '3check';
+
+  @override
+  String get mobilePerfShortAtomic => 'Atomic';
+
+  @override
+  String get mobilePerfShortHorde => 'Horde';
+
+  @override
+  String get mobilePerfShortRacingKings => 'Racing';
+
+  @override
+  String get mobilePerfShortCrazyhouse => 'Crazy';
+
+  @override
+  String get mobilePerfShortPuzzle => 'Puzzle';
+
+  @override
   String get variantStandard => 'Standard';
 
   @override
@@ -1624,6 +1672,60 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get preferencesShowClockOnTheLeft => 'Afișează în partea stângă pe dispozitive mobile';
+
+  @override
+  String get preferencesInlineNotation => 'Notație integrată';
+
+  @override
+  String get preferencesShowServerAnalysis => 'Arată analiza serverului';
+
+  @override
+  String get preferencesShowBestMoveArrows => 'Arată săgeți cu cele mai bune mutări';
+
+  @override
+  String get preferencesShowManeuverArrows => 'Arată săgeți cu manevre';
+
+  @override
+  String get preferencesShowGauge => 'Arată indicator de evaluare';
+
+  @override
+  String get preferencesShowMoveAnnotationsOnBoard => 'Arată adnotările mutărilor';
+
+  @override
+  String get preferencesShowVariationArrows => 'Arată săgeţi cu variaţiile';
+
+  @override
+  String get preferencesShowLiveGlyphs => 'Adnotări direct de la motorul de analiză';
+
+  @override
+  String get preferencesShowUndefendedPieces => 'Arată piesele neapărate';
+
+  @override
+  String get preferencesShowPinnedPieces => 'Arată piesele legate';
+
+  @override
+  String get preferencesShowCheckableKing => 'Arată rege care poate fi pus in șah';
+
+  @override
+  String get preferencesDisclosureMode => 'Activează ascunderea variațiilor';
+
+  @override
+  String get preferencesGeneralSettings => 'General';
+
+  @override
+  String get preferencesMoveListSettings => 'Lista de mutări';
+
+  @override
+  String get preferencesBoardSettings => 'Tablă';
+
+  @override
+  String get preferencesAnalysisSettings => 'Setări analiză';
+
+  @override
+  String get preferencesManeuverArrowsHelp => 'Secvența de mutări a motorului pentru o piesă';
+
+  @override
+  String get preferencesHoverOverSettingLabelsForHelp => 'Plasați cursorul peste etichete pentru ajutor';
 
   @override
   String get puzzlePuzzles => 'Probleme de șah';
@@ -5161,6 +5263,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get enPassant => 'En passant legale';
 
   @override
+  String get settings => 'Setări';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5648,6 +5753,18 @@ class AppLocalizationsRo extends AppLocalizations {
       other: 'Disponibil în $count limbi!',
       few: 'Disponibil în $count limbi!',
       one: 'Disponibil într-o limbă!',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbAnonymous(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Anonimi ($count)',
+      few: 'Anonimi ($count)',
+      one: 'Anonim',
     );
     return '$_temp0';
   }

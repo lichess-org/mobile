@@ -360,8 +360,8 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       if (state.game.playable && state.turn != state.game.playerSide) {
         _playEngineMoveAfterPlayerAnimation();
       }
-    } catch (e) {
-      _logger.warning('Error evaluating move: $e');
+    } catch (e, st) {
+      _logger.warning('Error evaluating move:', e, st);
       if (ref.mounted) {
         state = state.copyWith(isEvaluatingMove: false);
         if (state.game.playable && state.turn != state.game.playerSide) {
@@ -489,8 +489,8 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         eval = CloudEval(depth: depth, nodes: nodes, pvs: pvs, position: work.position);
         break;
       }
-    } catch (e) {
-      _logger.fine('Could not get cloud eval: $e');
+    } catch (e, st) {
+      _logger.fine('Could not get cloud eval:', e, st);
     }
 
     return eval;
@@ -598,8 +598,8 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       return await repository
           .getMasterDatabase(fen, since: MasterDb.kEarliestYear)
           .timeout(const Duration(seconds: 2));
-    } catch (e) {
-      _logger.fine('Failed to fetch master database: $e');
+    } catch (e, st) {
+      _logger.fine('Failed to fetch master database:', e, st);
       return null;
     }
   }
@@ -613,8 +613,8 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
           .read(tablebaseRepositoryProvider)
           .getTablebaseEntry(position.fen, Variant.fromRule(position.rule));
       return tablebaseEntryToCloudEval(entry, position);
-    } catch (e) {
-      _logger.fine('Could not get tablebase eval: $e');
+    } catch (e, st) {
+      _logger.fine('Could not get tablebase eval:', e, st);
       return null;
     }
   }
@@ -656,9 +656,9 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     } on MoveRequestCancelledException {
       // Expected cancellation when evaluationService.stop() is called; ignore.
       return;
-    } catch (e, s) {
+    } catch (e, st) {
       // Unexpected engine error occurred.
-      _logger.warning('Failed to play engine move!', e, s);
+      _logger.warning('Failed to play engine move!', e, st);
     } finally {
       if (state.game.playable || state.game.finished) {
         state = state.copyWith(isEngineThinking: false);

@@ -814,6 +814,10 @@
   <string name="quickPairing">Emparejamiento rápido</string>
   <string name="lobby">Sala de espera</string>
   <string name="anonymous">Anónimo</string>
+  <plurals name="nbAnonymous">
+    <item quantity="one">Anónimo</item>
+    <item quantity="other">Anónimos (%s)</item>
+  </plurals>
   <string name="yourScore">Tu puntuación: %s</string>
   <string name="language">Idioma</string>
   <string name="allLanguages">Cualquier idioma</string>
@@ -1039,4 +1043,5 @@ Todos los gastos de funcionamiento, desarrollo y contenidos se financian exclusi
   <string name="thereAreNoResultsForX">Sin resultados para \"%s\"</string>
   <string name="tags">Etiquetas</string>
   <string name="enPassant">Al paso</string>
+  <string name="settings">Preferencias</string>
 </resources>

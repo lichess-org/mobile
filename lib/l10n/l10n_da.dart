@@ -290,6 +290,54 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileGoodMoveButThereIsBetter => 'Godt træk, men der findes et bedre';
 
   @override
+  String get mobilePerfShortUltraBullet => 'Ultra';
+
+  @override
+  String get mobilePerfShortBullet => 'Bullet';
+
+  @override
+  String get mobilePerfShortBlitz => 'Blitz';
+
+  @override
+  String get mobilePerfShortRapid => 'Rapid';
+
+  @override
+  String get mobilePerfShortClassical => 'Classical';
+
+  @override
+  String get mobilePerfShortCorrespondence => 'Corresp.';
+
+  @override
+  String get mobilePerfShortFromPosition => 'From Pos.';
+
+  @override
+  String get mobilePerfShortChess960 => '960';
+
+  @override
+  String get mobilePerfShortAntichess => 'Antichess';
+
+  @override
+  String get mobilePerfShortKingOfTheHill => 'KotH';
+
+  @override
+  String get mobilePerfShortThreeCheck => '3check';
+
+  @override
+  String get mobilePerfShortAtomic => 'Atomic';
+
+  @override
+  String get mobilePerfShortHorde => 'Horde';
+
+  @override
+  String get mobilePerfShortRacingKings => 'Racing';
+
+  @override
+  String get mobilePerfShortCrazyhouse => 'Crazy';
+
+  @override
+  String get mobilePerfShortPuzzle => 'Puzzle';
+
+  @override
   String get variantStandard => 'Standard';
 
   @override
@@ -1602,6 +1650,60 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get preferencesShowClockOnTheLeft => 'Vis til venstre på mobile enheder';
+
+  @override
+  String get preferencesInlineNotation => 'Notation uden linjeskift';
+
+  @override
+  String get preferencesShowServerAnalysis => 'Vis serveranalyse';
+
+  @override
+  String get preferencesShowBestMoveArrows => 'Vis pile for bedste træk';
+
+  @override
+  String get preferencesShowManeuverArrows => 'Vis manøvrepile';
+
+  @override
+  String get preferencesShowGauge => 'Vis evalueringsindikator';
+
+  @override
+  String get preferencesShowMoveAnnotationsOnBoard => 'Vis træk-annotationer';
+
+  @override
+  String get preferencesShowVariationArrows => 'Vis variantpile';
+
+  @override
+  String get preferencesShowLiveGlyphs => 'Live skakprogram-annotationer';
+
+  @override
+  String get preferencesShowUndefendedPieces => 'Vis uforsvarede brikker';
+
+  @override
+  String get preferencesShowPinnedPieces => 'Vis bundne brikker';
+
+  @override
+  String get preferencesShowCheckableKing => 'Vis konge, der kan sættes skak';
+
+  @override
+  String get preferencesDisclosureMode => 'Aktiver skjulning af variation';
+
+  @override
+  String get preferencesGeneralSettings => 'Generelt';
+
+  @override
+  String get preferencesMoveListSettings => 'Trækliste';
+
+  @override
+  String get preferencesBoardSettings => 'Bræt';
+
+  @override
+  String get preferencesAnalysisSettings => 'Analyseindstillinger';
+
+  @override
+  String get preferencesManeuverArrowsHelp => 'Sekvens af skakprogramtræk for en brik';
+
+  @override
+  String get preferencesHoverOverSettingLabelsForHelp => 'Hold markøren over indstillingsetiketter for hjælp';
 
   @override
   String get puzzlePuzzles => 'Taktikopgaver';
@@ -5133,6 +5235,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get enPassant => 'En passant';
 
   @override
+  String get settings => 'Indstillinger';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5579,6 +5684,17 @@ class AppLocalizationsDa extends AppLocalizations {
       locale: localeName,
       other: 'Tilgængelig på $count sprog!',
       one: 'Tilgængelig på $count sprog!',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbAnonymous(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Anonyme ($count)',
+      one: 'Anonym',
     );
     return '$_temp0';
   }

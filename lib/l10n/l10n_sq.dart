@@ -290,6 +290,54 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileGoodMoveButThereIsBetter => 'Lëvizje e mirë, por ka edhe më mirë';
 
   @override
+  String get mobilePerfShortUltraBullet => 'Ultra';
+
+  @override
+  String get mobilePerfShortBullet => 'Bullet';
+
+  @override
+  String get mobilePerfShortBlitz => 'Blitz';
+
+  @override
+  String get mobilePerfShortRapid => 'Rapid';
+
+  @override
+  String get mobilePerfShortClassical => 'Classical';
+
+  @override
+  String get mobilePerfShortCorrespondence => 'Corresp.';
+
+  @override
+  String get mobilePerfShortFromPosition => 'From Pos.';
+
+  @override
+  String get mobilePerfShortChess960 => '960';
+
+  @override
+  String get mobilePerfShortAntichess => 'Antichess';
+
+  @override
+  String get mobilePerfShortKingOfTheHill => 'KotH';
+
+  @override
+  String get mobilePerfShortThreeCheck => '3check';
+
+  @override
+  String get mobilePerfShortAtomic => 'Atomic';
+
+  @override
+  String get mobilePerfShortHorde => 'Horde';
+
+  @override
+  String get mobilePerfShortRacingKings => 'Racing';
+
+  @override
+  String get mobilePerfShortCrazyhouse => 'Crazy';
+
+  @override
+  String get mobilePerfShortPuzzle => 'Puzzle';
+
+  @override
   String get variantStandard => 'Standard';
 
   @override
@@ -1602,6 +1650,60 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get preferencesShowClockOnTheLeft => 'Shfaqe në të majtë të pajisjesh celulare';
+
+  @override
+  String get preferencesInlineNotation => 'Shënim brendazi';
+
+  @override
+  String get preferencesShowServerAnalysis => 'Shfaq analizë shërbyesi';
+
+  @override
+  String get preferencesShowBestMoveArrows => 'Shfaq shigjeta lëvizjesh më të mira';
+
+  @override
+  String get preferencesShowManeuverArrows => 'Shfaq shigjeta manovre';
+
+  @override
+  String get preferencesShowGauge => 'Show evaluation gauge';
+
+  @override
+  String get preferencesShowMoveAnnotationsOnBoard => 'Show move annotations';
+
+  @override
+  String get preferencesShowVariationArrows => 'Shfaq shigjeta variantesh';
+
+  @override
+  String get preferencesShowLiveGlyphs => 'Live engine annotations';
+
+  @override
+  String get preferencesShowUndefendedPieces => 'Shfaq gurë të pambrojtur';
+
+  @override
+  String get preferencesShowPinnedPieces => 'Shfaq gurë të fiksuar';
+
+  @override
+  String get preferencesShowCheckableKing => 'Shfaq mbret të cilit mund t’i jepet shah';
+
+  @override
+  String get preferencesDisclosureMode => 'Aktivizo fshehje variantesh';
+
+  @override
+  String get preferencesGeneralSettings => 'Të përgjithshme';
+
+  @override
+  String get preferencesMoveListSettings => 'Listë lëvizjesh';
+
+  @override
+  String get preferencesBoardSettings => 'Fushë';
+
+  @override
+  String get preferencesAnalysisSettings => 'Rregullime analize';
+
+  @override
+  String get preferencesManeuverArrowsHelp => 'Sequence of engine moves for one piece';
+
+  @override
+  String get preferencesHoverOverSettingLabelsForHelp => 'Për ndihmë, kalojeni kursorin sipër etiketave të rregullimeve';
 
   @override
   String get puzzlePuzzles => 'Ushtrime';
@@ -5133,6 +5235,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get enPassant => 'En passant rights';
 
   @override
+  String get settings => 'Rregullime';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5579,6 +5684,17 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'I përdorshëm në $count gjuhë!',
       one: 'I përdorshëm në $count gjuhë!',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbAnonymous(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Anonimë ($count)',
+      one: 'Anonim',
     );
     return '$_temp0';
   }
