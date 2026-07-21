@@ -285,6 +285,11 @@ class OverTheBoardDisplaySettings extends ConsumerWidget {
     return BottomSheetScrollableContainer(
       children: [
         SwitchSettingTile(
+          title: const Text('Same side mode'),
+          value: prefs.sameSideMode,
+          onChanged: (_) => ref.read(overTheBoardPreferencesProvider.notifier).toggleSameSideMode(),
+        ),
+        SwitchSettingTile(
           title: const Text('Use symmetric pieces'),
           value: prefs.symmetricPieces,
           onChanged: (_) =>

@@ -18,9 +18,11 @@ import 'package:lichess_mobile/src/model/game/over_the_board_game.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_clock.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_game_controller.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_game_storage.dart';
+import 'package:lichess_mobile/src/model/over_the_board/over_the_board_preferences.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/over_the_board/over_the_board_screen.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
+import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../test_helpers.dart';
@@ -743,6 +745,49 @@ void main() {
       expect(gameState.game.steps.length, 1);
       expect(boardHasPiece(tester, Square.e4, Piece.whitePawn), isTrue);
       expect(boardHasPiece(tester, Square.e5, Piece.blackPawn), isTrue);
+    });
+
+    testWidgets('Same side mode configures GameLayout and board settings correctly', (
+      tester,
+    ) async {
+      await initOverTheBoardGame(tester, const TimeIncrement(60, 5));
+
+      final element = tester.element(find.byType(Chessboard));
+      final container = ProviderScope.containerOf(element);
+
+      // Verify sameSideMode is false by default
+      expect(container.read(overTheBoardPreferencesProvider).sameSideMode, isFalse);
+
+      // Open Display Settings Sheet
+      await tester.tap(find.byIcon(Icons.settings));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Same side mode'), findsOneWidget);
+
+      // Toggle Same side mode on
+      final sameSideTile = find.ancestor(
+        of: find.text('Same side mode'),
+        matching: find.byType(ListTile),
+      );
+      await tester.tap(find.descendant(of: sameSideTile, matching: find.byType(Switch)));
+      await tester.pumpAndSettle();
+
+      expect(container.read(overTheBoardPreferencesProvider).sameSideMode, isTrue);
+
+      // Dismiss the bottom sheet
+      await tester.tapAt(const Offset(10, 10));
+      await tester.pumpAndSettle();
+
+      // Verify that topTableUpsideDown and bottomTableUpsideDown are both false in GameLayout
+      final gameLayout = tester.widget<GameLayout>(find.byType(GameLayout));
+      expect(gameLayout.topTableUpsideDown, isFalse);
+      expect(gameLayout.bottomTableUpsideDown, isFalse);
+
+      // Verify piece orientation behavior is facingUser
+      expect(
+        gameLayout.boardSettingsOverrides?.pieceOrientationBehavior,
+        PieceOrientationBehavior.facingUser,
+      );
     });
   });
 }

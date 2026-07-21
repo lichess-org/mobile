@@ -242,13 +242,15 @@ class _BodyState extends ConsumerState<_Body> {
                       clockKey: const ValueKey('topClock'),
                     ),
                     topTableUpsideDown:
-                        !overTheBoardPrefs.flipPiecesAfterMove || orientation != gameState.turn,
+                        !overTheBoardPrefs.sameSideMode &&
+                        (!overTheBoardPrefs.flipPiecesAfterMove || orientation != gameState.turn),
                     bottomTable: _Player(
                       side: orientation,
                       clockKey: const ValueKey('bottomClock'),
                     ),
                     bottomTableUpsideDown:
-                        overTheBoardPrefs.flipPiecesAfterMove && orientation != gameState.turn,
+                        !overTheBoardPrefs.sameSideMode &&
+                        (overTheBoardPrefs.flipPiecesAfterMove && orientation != gameState.turn),
                     orientation: orientation,
                     explosionSquares: gameState.stepCursor > 0
                         ? atomicExplosionSquares(
@@ -279,7 +281,9 @@ class _BodyState extends ConsumerState<_Body> {
                     currentMoveIndex: gameState.stepCursor,
                     boardSettingsOverrides: BoardSettingsOverrides(
                       drawShape: const DrawShapeOptions(enable: false),
-                      pieceOrientationBehavior: overTheBoardPrefs.flipPiecesAfterMove
+                      pieceOrientationBehavior: overTheBoardPrefs.sameSideMode
+                          ? PieceOrientationBehavior.facingUser
+                          : overTheBoardPrefs.flipPiecesAfterMove
                           ? PieceOrientationBehavior.sideToPlay
                           : PieceOrientationBehavior.opponentUpsideDown,
                       pieceAssets: overTheBoardPrefs.symmetricPieces
