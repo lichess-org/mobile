@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/view/analysis/engine_settings_widget.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
@@ -66,8 +67,8 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
   Widget build(BuildContext context) {
     final prefs = ref.watch(engineEvaluationPreferencesProvider);
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Chess engine'), animateColor: true),
+    return PlatformScaffold(
+      appBar: PlatformAppBar(title: const Text('Chess engine')),
       body: ListView(
         children: [
           if (_hasVerifiedNNUEFiles == null)

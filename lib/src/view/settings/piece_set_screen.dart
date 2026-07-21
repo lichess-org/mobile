@@ -56,10 +56,9 @@ class _PieceSetScreenState extends ConsumerState<PieceSetScreen> {
   Widget build(BuildContext context) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
 
-    return Scaffold(
-      appBar: AppBar(
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
         title: Text(context.l10n.pieceSet),
-        animateColor: true,
         actions: [if (isLoading) const PlatformAppBarLoadingIndicator()],
       ),
       body: SafeArea(
