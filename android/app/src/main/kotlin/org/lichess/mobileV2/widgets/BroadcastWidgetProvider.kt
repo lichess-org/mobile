@@ -34,6 +34,10 @@ import org.lichess.mobileV2.MainActivity
 
 class BroadcastWidgetProvider : AppWidgetProvider() {
 
+    companion object {
+        private val THUMBNAIL_TIMEOUT_NANOS = TimeUnit.SECONDS.toNanos(12)
+    }
+
     override fun onReceive(context: Context, intent: Intent) {
         val pendingResult = goAsync()
         thread {
@@ -115,14 +119,20 @@ class BroadcastWidgetProvider : AppWidgetProvider() {
                                 item.imageUrl?.let { fetchRoundBitmap(it, sizePx) }
                             })
                         }
+                        val deadline = System.nanoTime() + THUMBNAIL_TIMEOUT_NANOS
                         futures.map { future ->
-                            try { future.get() } catch (e: Exception) {
+                            try {
+                                val remaining = deadline - System.nanoTime()
+                                if (remaining <= 0) throw TimeoutException("Thumbnail deadline exceeded")
+                                future.get(remaining, TimeUnit.NANOSECONDS)
+                            } catch (e: Exception) {
                                 Log.e("BroadcastWidget", "Error fetching thumbnail", e)
+                                future.cancel(true)
                                 null
                             }
                         }
                     } finally {
-                        executor.shutdown()
+                        executor.shutdownNow()
                     }
                 } else {
                     List(displayItems.size) { null }
