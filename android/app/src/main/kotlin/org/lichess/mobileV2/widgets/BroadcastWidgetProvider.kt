@@ -176,7 +176,7 @@ class BroadcastWidgetProvider : AppWidgetProvider() {
             if (bitmap != null) {
                 itemViews.setImageViewBitmap(R.id.item_thumbnail, bitmap)
             } else {
-                setFallbackThumbnail(itemViews)
+                setFallbackThumbnail(context, itemViews)
             }
         } else {
             itemViews.setViewVisibility(R.id.item_thumbnail_container, View.GONE)
@@ -206,9 +206,11 @@ class BroadcastWidgetProvider : AppWidgetProvider() {
         itemViews.setOnClickPendingIntent(R.id.item_container, pendingIntent)
     }
 
-    private fun setFallbackThumbnail(itemViews: RemoteViews) {
+    private fun setFallbackThumbnail(context: Context, itemViews: RemoteViews) {
         itemViews.setImageViewResource(R.id.item_thumbnail, R.drawable.ic_stat_lichess_notification)
-        itemViews.setViewPadding(R.id.item_thumbnail, 12, 12, 12, 12)
+        val pad = (12 * context.resources.displayMetrics.density).toInt()
+        itemViews.setViewPadding(R.id.item_thumbnail, pad, pad, pad, pad)
+        itemViews.setInt(R.id.item_thumbnail, "setColorFilter", context.getColor(R.color.widget_text_secondary))
     }
 
     private fun fetchBroadcasts(lichessHost: String): List<BroadcastItem> {
@@ -229,7 +231,7 @@ class BroadcastWidgetProvider : AppWidgetProvider() {
                         val item = active.getJSONObject(i)
                         val tour = item.getJSONObject("tour")
                         val round = item.getJSONObject("round")
-                        val id = item.optJSONObject("roundToLink")?.optString("id") ?: round.getString("id")
+                        val id = item.optJSONObject("roundToLink")?.optString("id")?.takeIf { it.isNotBlank() } ?: round.getString("id")
                         val title = item.optString("group").takeIf { !it.isNullOrBlank() } ?: tour.getString("name")
 
                         BroadcastItem(
