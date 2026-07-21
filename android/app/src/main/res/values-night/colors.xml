@@ -7,4 +7,5 @@
     <color name="widget_text_primary">#FFFFFF</color>
     <color name="widget_text_secondary">#BAB8B5</color>
     <color name="widget_thumbnail_fallback">#36342B</color>
+    <color name="widget_live_indicator">#EF5350</color>
 </resources>
