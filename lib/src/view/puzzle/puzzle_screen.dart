@@ -780,12 +780,6 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
           ),
         if (puzzleState.mode == PuzzleMode.view)
           BottomBarButton(
-            label: context.l10n.flipBoard,
-            onTap: widget.onFlipBoard,
-            icon: CupertinoIcons.arrow_2_squarepath,
-          ),
-        if (puzzleState.mode == PuzzleMode.view)
-          BottomBarButton(
             label: context.l10n.menu,
             onTap: () {
               _showPuzzleMenu(context, ref);
@@ -850,6 +844,10 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
     return showAdaptiveActionSheet(
       context: context,
       actions: [
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.flipBoard),
+          onPressed: widget.onFlipBoard,
+        ),
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.mobileSharePuzzle),
           onPressed: () {
