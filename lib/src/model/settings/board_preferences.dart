@@ -40,6 +40,10 @@ class BoardPreferences extends Notifier<BoardPrefs> with PreferencesStorage<Boar
     return save(state.copyWith(pieceSet: pieceSet));
   }
 
+  Future<void> setPieceSet3D(PieceSet3D? pieceSet3D) {
+    return save(state.copyWith(pieceSet3D: pieceSet3D));
+  }
+
   Future<void> setBoardTheme(BoardTheme boardTheme) async {
     await save(state.copyWith(boardTheme: boardTheme));
   }
@@ -139,6 +143,7 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
   const factory BoardPrefs({
     @JsonKey(defaultValue: PieceSet.cburnett, unknownEnumValue: PieceSet.cburnett)
     required PieceSet pieceSet,
+    PieceSet3D? pieceSet3D,
     @JsonKey(defaultValue: BoardTheme.brown, unknownEnumValue: BoardTheme.brown)
     required BoardTheme boardTheme,
     bool? immersiveModeWhilePlaying,
