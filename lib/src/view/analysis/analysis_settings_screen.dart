@@ -49,6 +49,13 @@ class AnalysisSettingsScreen extends ConsumerWidget {
                         ref.read(analysisPreferencesProvider.notifier).toggleInlineNotation(),
                   ),
                   SwitchSettingTile(
+                    // TODO: l10n
+                    title: const Text('Show engine lines'),
+                    value: prefs.showEngineLines,
+                    onChanged: (value) =>
+                        ref.read(analysisPreferencesProvider.notifier).toggleShowEngineLines(),
+                  ),
+                  SwitchSettingTile(
                     title: const Text('Small board'), // TODO l10n
                     value: prefs.smallBoard,
                     onChanged: (value) =>

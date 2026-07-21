@@ -481,13 +481,6 @@ class _BottomBar extends ConsumerWidget {
           onPressed: () =>
               Navigator.of(context).push(AnalysisSettingsScreen.buildRoute(options: options)),
         ),
-        if (analysisState.isComputerAnalysisAllowed)
-          BottomSheetAction(
-            // TODO: l10n
-            makeLabel: (context) =>
-                Text(showEngineLines ? 'Hide Engine Lines' : 'Show Engine Lines'),
-            onPressed: () => ref.read(analysisPreferencesProvider.notifier).toggleShowEngineLines(),
-          ),
         if (options case Standalone()) ...[
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.clearSavedMoves),
@@ -655,7 +648,7 @@ class _BottomBar extends ConsumerWidget {
         if (analysisState.isComputerAnalysisAllowed)
           BottomSheetAction(
             // TODO: l10n
-            makeLabel: (context) => const Text('Share current PGN (with your moves)'),
+            makeLabel: (context) => const Text('Share local analysis PGN'),
             onPressed: () {
               Navigator.of(context).push(AnalysisShareScreen.buildRoute(options: options));
             },
