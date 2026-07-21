@@ -212,11 +212,18 @@ class PuzzleService {
     );
     await batchStorage.save(userId: userId, angle: angle, data: newBatch);
 
-    // The server caps each batch at 50, so a single fetch already covers any
-    // deficit up to that cap. Only spin up a background fill when the remaining
-    // deficit still exceeds one batch (i.e. the user raised the offline limit).
-    if (value.puzzles.isNotEmpty && queueLength - newBatch.unsolved.length >= serverBatchCap) {
-      unawaited(_backgroundFill(userId, angle, difficulty));
+    // A single fetch returns at most one server batch (capped at 50). If it
+    // came back cap-sized the server likely truncated a larger deficit, so top
+    // up the remainder in the background; a short batch already satisfied the
+    // deficit (or exhausted the server), so there is nothing left to fetch.
+    if (value.puzzles.length >= serverBatchCap && newBatch.unsolved.length < queueLength) {
+      unawaited(
+        _backgroundFill(userId, angle, difficulty).catchError((Object e, StackTrace st) {
+          // Fire-and-forget: swallow so a background fill failure (e.g. storage
+          // I/O) never surfaces as an unhandled async error.
+          _log.warning('Background puzzle fill failed', e, st);
+        }),
+      );
     }
 
     return Result.value((newBatch, value.glicko, value.rounds));
@@ -257,14 +264,15 @@ class PuzzleService {
     if (_isFilling) return;
     _isFilling = true;
     try {
-      // Tracks the stored queue length across passes. If a save doesn't grow
-      // the queue (e.g. the write silently no-ops), stop instead of looping
-      // forever re-requesting the same deficit.
+      // Tracks the stored queue length across passes. Stop only when a pass
+      // fails to grow the queue (e.g. the write silently no-ops), not when it
+      // shrinks: a solve made mid-fill lowers the count and legitimately
+      // widens the deficit, so that pass should still top up.
       int lastLength = -1;
       while (true) {
         final current = await batchStorage.fetch(userId: userId, angle: angle);
         final unsolved = current?.unsolved ?? IList(const []);
-        if (unsolved.length <= lastLength) break;
+        if (unsolved.length == lastLength) break;
         lastLength = unsolved.length;
         final deficit = max(0, queueLength - unsolved.length);
         if (deficit <= 0) break;
