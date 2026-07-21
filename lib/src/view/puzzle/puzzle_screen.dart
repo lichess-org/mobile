@@ -379,6 +379,7 @@ class _Body extends ConsumerStatefulWidget {
 
 class _BodyState extends ConsumerState<_Body> {
   late final ChessboardController _controller;
+  bool _isBoardTurned = false;
 
   @override
   void initState() {
@@ -512,7 +513,7 @@ class _BodyState extends ConsumerState<_Body> {
                       onMove: (move, {viaDragAndDrop}) {
                         ref.read(ctrlProvider.notifier).onUserMove(move);
                       },
-                      orientation: puzzleState.pov,
+                      orientation: _isBoardTurned ? puzzleState.pov.opposite : puzzleState.pov,
                       shapes: shapes,
                       settings: defaultSettings,
                     ),
@@ -561,6 +562,7 @@ class _BodyState extends ConsumerState<_Body> {
                             child: _BottomBar(
                               initialPuzzleContext: widget.initialPuzzleContext,
                               puzzleId: puzzleState.puzzle.puzzle.id,
+                              onFlipBoard: () => setState(() => _isBoardTurned = !_isBoardTurned),
                             ),
                           ),
                         ],
@@ -604,7 +606,7 @@ class _BodyState extends ConsumerState<_Body> {
                       onMove: (move, {viaDragAndDrop}) {
                         ref.read(ctrlProvider.notifier).onUserMove(move);
                       },
-                      orientation: puzzleState.pov,
+                      orientation: _isBoardTurned ? puzzleState.pov.opposite : puzzleState.pov,
                       shapes: shapes,
                       settings: defaultSettings,
                     ),
@@ -620,6 +622,7 @@ class _BodyState extends ConsumerState<_Body> {
                   _BottomBar(
                     initialPuzzleContext: widget.initialPuzzleContext,
                     puzzleId: puzzleState.puzzle.puzzle.id,
+                    onFlipBoard: () => setState(() => _isBoardTurned = !_isBoardTurned),
                   ),
                 ],
               );
@@ -685,10 +688,15 @@ class _PuzzleStatus extends ConsumerWidget {
 }
 
 class _BottomBar extends ConsumerStatefulWidget {
-  const _BottomBar({required this.initialPuzzleContext, required this.puzzleId});
+  const _BottomBar({
+    required this.initialPuzzleContext,
+    required this.puzzleId,
+    required this.onFlipBoard,
+  });
 
   final PuzzleContext initialPuzzleContext;
   final PuzzleId puzzleId;
+  final VoidCallback onFlipBoard;
 
   static const _repeatTriggerDelays = [
     Duration(milliseconds: 500),
@@ -769,6 +777,12 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
                     : null,
               );
             },
+          ),
+        if (puzzleState.mode == PuzzleMode.view)
+          BottomBarButton(
+            label: context.l10n.flipBoard,
+            onTap: widget.onFlipBoard,
+            icon: CupertinoIcons.arrow_2_squarepath,
           ),
         if (puzzleState.mode == PuzzleMode.view)
           BottomBarButton(
