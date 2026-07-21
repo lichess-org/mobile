@@ -26,6 +26,8 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.util.concurrent.Callable
 import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeoutException
 import kotlin.concurrent.thread
 import org.lichess.mobileV2.R
 import org.lichess.mobileV2.MainActivity
@@ -76,8 +78,7 @@ class BroadcastWidgetProvider : AppWidgetProvider() {
 
         try {
             val prefs = context.getSharedPreferences("HomeWidgetPreferences", Context.MODE_PRIVATE)
-            val defaultHost = if (org.lichess.mobileV2.BuildConfig.DEBUG) "lichess.dev" else "lichess.org"
-            val lichessHost = prefs.getString("lichessHost", defaultHost) ?: defaultHost
+            val lichessHost = prefs.getString("lichessHost", "lichess.org") ?: "lichess.org"
             val broadcasts = fetchBroadcasts(lichessHost)
 
             remoteViews.removeAllViews(R.id.broadcast_list)
