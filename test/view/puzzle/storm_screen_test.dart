@@ -130,7 +130,7 @@ void main() {
       await tester.tap(find.text('End run'));
       await tester.pumpAndSettle();
 
-      expect(find.text('1 puzzles solved'), findsOneWidget);
+      expect(find.text('1\u00A0puzzles solved'), findsOneWidget);
     });
 
     testWidgets('play wrong move', (tester) async {
