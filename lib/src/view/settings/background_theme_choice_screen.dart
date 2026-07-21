@@ -18,6 +18,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/background.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_color_utilities/score/score.dart';
 import 'package:path/path.dart';
@@ -31,8 +32,8 @@ class BackgroundChoiceScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.background)),
+    return PlatformScaffold(
+      appBar: PlatformAppBar(title: Text(context.l10n.background)),
       body: _Body(),
     );
   }
