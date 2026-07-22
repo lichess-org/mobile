@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/widgets/board.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
 import 'package:lichess_mobile/src/widgets/pockets.dart';
+import 'package:lichess_mobile/src/widgets/clock.dart';
 
 /// In crazyhouse, when displaying pockets above/below the board, add this much additional side padding to make the board smaller and avoid overflows.
 const _kAdditionalBoardSidePaddingForPockets = 70.0;
@@ -533,8 +534,50 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
             ),
           );
 
-          // 3. IF NEAR-SQUARE: Overlay the clocks transparently on top of the board corners
+          // 3. IF NEAR-SQUARE: Floating HUD Overlay with Scope-Gated Clock Style
           if (isNearSquare) {
+            const hudShadows = [
+              Shadow(offset: Offset(-1.5, -1.5), color: Colors.black),
+              Shadow(offset: Offset(1.5, -1.5), color: Colors.black),
+              Shadow(offset: Offset(-1.5, 1.5), color: Colors.black),
+              Shadow(offset: Offset(1.5, 1.5), color: Colors.black),
+              Shadow(offset: Offset(0, 0), blurRadius: 6.0, color: Colors.black),
+            ];
+
+            const hudTextStyle = TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              shadows: hudShadows,
+            );
+
+            final baseTheme = Theme.of(context);
+            final transparentHudTheme = baseTheme.copyWith(
+              cardColor: Colors.transparent,
+              canvasColor: Colors.transparent,
+              colorScheme: baseTheme.colorScheme.copyWith(
+                surface: Colors.transparent,
+                surfaceContainer: Colors.transparent,
+                onSurface: Colors.white,
+                onSurfaceVariant: Colors.white,
+              ),
+            );
+
+            Widget buildHudTable(Widget tableWidget) {
+              return IgnorePointer(
+                ignoring: true,
+                child: ClockOverlayTheme(
+                  isOverlay: true,
+                  child: Theme(
+                    data: transparentHudTheme,
+                    child: IconTheme.merge(
+                      data: const IconThemeData(color: Colors.white, shadows: hudShadows),
+                      child: DefaultTextStyle.merge(style: hudTextStyle, child: tableWidget),
+                    ),
+                  ),
+                ),
+              );
+            }
+
             return Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -542,37 +585,21 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                 Stack(
                   alignment: Alignment.center,
                   children: [
-                    boardWidget, // The base layer: full size chessboard
-                    // Floating Top Clock/Player Bar
+                    boardWidget, // Base layer: full size chessboard
+                    // Floating Top Clock & Player Bar
                     Positioned(
-                      top: 6.0,
+                      top: 8.0,
                       left: 12.0,
                       right: 12.0,
-                      child: IgnorePointer(
-                        // 💡 ADD THIS WIDGET: Pass taps to the board
-                        ignoring: true,
-                        child: Opacity(
-                          opacity: 0.8,
-                          // 80% visible, pieces show through underneath
-                          child: topTable(boardSize: effectiveBoardSize),
-                        ),
-                      ),
+                      child: buildHudTable(topTable(boardSize: effectiveBoardSize)),
                     ),
 
-                    // Floating Bottom Clock/Player Bar
+                    // Floating Bottom Clock & Player Bar
                     Positioned(
-                      bottom: 6.0,
+                      bottom: 8.0,
                       left: 12.0,
                       right: 12.0,
-                      child: IgnorePointer(
-                        // 💡 ADD THIS WIDGET: Pass taps to the board
-                        ignoring: true,
-                        child: Opacity(
-                          opacity: 0.8,
-                          // 80% visible, pieces show through underneath
-                          child: bottomTable(boardSize: effectiveBoardSize),
-                        ),
-                      ),
+                      child: buildHudTable(bottomTable(boardSize: effectiveBoardSize)),
                     ),
                   ],
                 ),
@@ -580,7 +607,6 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
               ],
             );
           }
-
           // 4. OTHERWISE (Normal phones): Fall back to the original vertical layout
           return Column(
             mainAxisSize: MainAxisSize.max,
