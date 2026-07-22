@@ -11,9 +11,9 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/widgets/board.dart';
+import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
 import 'package:lichess_mobile/src/widgets/pockets.dart';
-import 'package:lichess_mobile/src/widgets/clock.dart';
 
 /// In crazyhouse, when displaying pockets above/below the board, add this much additional side padding to make the board smaller and avoid overflows.
 const _kAdditionalBoardSidePaddingForPockets = 70.0;
@@ -541,7 +541,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
               Shadow(offset: Offset(1.5, -1.5), color: Colors.black),
               Shadow(offset: Offset(-1.5, 1.5), color: Colors.black),
               Shadow(offset: Offset(1.5, 1.5), color: Colors.black),
-              Shadow(offset: Offset(0, 0), blurRadius: 6.0, color: Colors.black),
+              Shadow(offset: Offset.zero, blurRadius: 6.0, color: Colors.black),
             ];
 
             const hudTextStyle = TextStyle(

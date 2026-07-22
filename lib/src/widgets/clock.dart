@@ -77,7 +77,7 @@ class Clock extends StatelessWidget {
       Shadow(offset: Offset(1.5, -1.5), color: Colors.black),
       Shadow(offset: Offset(-1.5, 1.5), color: Colors.black),
       Shadow(offset: Offset(1.5, 1.5), color: Colors.black),
-      Shadow(offset: Offset(0, 0), blurRadius: 6.0, color: Colors.black),
+      Shadow(offset: Offset.zero, blurRadius: 6.0, color: Colors.black),
     ];
 
     return LayoutBuilder(
