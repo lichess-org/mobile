@@ -56,13 +56,13 @@ class PuzzlePreferences extends Notifier<PuzzlePrefs> with SessionPreferencesSto
 }
 
 /// Minimum number of puzzles kept in the offline queue.
-const kMinOfflinePuzzles = 50;
+const kMinOfflinePuzzles = 100;
 
 /// Maximum number of puzzles kept in the offline queue.
 const kMaxOfflinePuzzles = 500;
 
 /// Available choices for the size of the offline puzzle queue.
-const kOfflinePuzzlesChoices = [50, 100, 150, 200, 300, 500];
+const kOfflinePuzzlesChoices = [100, 150, 200, 300, 500];
 
 @Freezed(fromJson: true, toJson: true)
 sealed class PuzzlePrefs with _$PuzzlePrefs implements Serializable {
@@ -80,8 +80,8 @@ sealed class PuzzlePrefs with _$PuzzlePrefs implements Serializable {
     @Default(true) bool rated,
 
     /// Number of puzzles to keep downloaded in the offline queue.
-    /// Defaults to `50`.
-    @Default(50) int nbOfflinePuzzles,
+    /// Defaults to `100`.
+    @Default(100) int nbOfflinePuzzles,
   }) = _PuzzlePrefs;
 
   factory PuzzlePrefs.defaults({UserId? id}) => PuzzlePrefs(
@@ -89,7 +89,7 @@ sealed class PuzzlePrefs with _$PuzzlePrefs implements Serializable {
     difficulty: PuzzleDifficulty.normal,
     autoNext: false,
     rated: true,
-    nbOfflinePuzzles: 50,
+    nbOfflinePuzzles: 100,
   );
 
   factory PuzzlePrefs.fromJson(Map<String, dynamic> json) => _$PuzzlePrefsFromJson(json);

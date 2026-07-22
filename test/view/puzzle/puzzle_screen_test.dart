@@ -53,6 +53,7 @@ void main() {
   setUpAll(() {
     registerFallbackValue(PuzzleBatch(solved: IList(const []), unsolved: IList([puzzle])));
     registerFallbackValue(puzzle);
+    registerFallbackValue(const PuzzleTheme(PuzzleThemeKey.mix));
   });
 
   final mockBatchStorage = MockPuzzleBatchStorage();
@@ -124,9 +125,26 @@ void main() {
     });
 
     testWidgets(
-      'Changing the offline puzzles setting updates the displayed value',
+      'Changing the offline puzzles setting updates the displayed value and fills the queue',
       variant: kPlatformVariant,
       (tester) async {
+        // The offline-puzzles setting change triggers a one-time queue fill, so
+        // the mocks must serve the fill's storage reads/writes and a batch
+        // response for the deficit request.
+        int nbSelectReq = 0;
+        final mockClient = MockClient((request) {
+          if (request.method == 'GET' && request.url.path == '/api/puzzle/batch/mix') {
+            nbSelectReq++;
+            return mockResponse(batchOf1, 200);
+          }
+          return mockResponse('', 404);
+        });
+
+        // Use fresh mocks local to this test so the fill's `any`-matcher stubs
+        // don't leak into other tests sharing the module-level mocks.
+        final batchStorage = MockPuzzleBatchStorage();
+        final historyStorage = MockPuzzleStorage();
+
         final app = await makeTestProviderScopeApp(
           tester,
           home: PuzzleScreen(
@@ -135,15 +153,32 @@ void main() {
           ),
           overrides: {
             puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith(
-              (ref) => mockBatchStorage,
+              (ref) => batchStorage,
             ),
-            puzzleStorageProvider: puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
+            puzzleStorageProvider: puzzleStorageProvider.overrideWith((ref) => historyStorage),
+            lichessClientProvider: lichessClientProvider.overrideWith(
+              (ref) => LichessClient(mockClient, ref),
+            ),
           },
         );
 
         when(
-          () => mockHistoryStorage.fetch(puzzleId: puzzle.puzzle.id),
+          () => historyStorage.fetch(puzzleId: puzzle.puzzle.id),
         ).thenAnswer((_) async => puzzle);
+        // Queue starts full enough for the deficit fetch to append once.
+        when(
+          () => batchStorage.fetch(
+            userId: any(named: 'userId'),
+            angle: any(named: 'angle'),
+          ),
+        ).thenAnswer((_) async => PuzzleBatch(solved: IList(const []), unsolved: IList([puzzle])));
+        when(
+          () => batchStorage.save(
+            userId: any(named: 'userId'),
+            angle: any(named: 'angle'),
+            data: any(named: 'data'),
+          ),
+        ).thenAnswer((_) async {});
 
         await tester.pumpWidget(app);
 
@@ -157,7 +192,7 @@ void main() {
         // the offline puzzles tile shows the default value
         final tileFinder = find.widgetWithText(SettingsListTile, 'Offline puzzles');
         expect(tileFinder, findsOneWidget);
-        expect(tester.widget<SettingsListTile>(tileFinder).settingsValue, '50');
+        expect(tester.widget<SettingsListTile>(tileFinder).settingsValue, '100');
 
         // open the choice picker and select a larger value
         await tester.tap(tileFinder);
@@ -167,6 +202,9 @@ void main() {
 
         // the tile reflects the new value
         expect(tester.widget<SettingsListTile>(tileFinder).settingsValue, '200');
+
+        // the change triggered the offline queue fill
+        expect(nbSelectReq, greaterThan(0));
       },
     );
 

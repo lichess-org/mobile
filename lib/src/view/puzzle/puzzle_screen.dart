@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_controller.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_queue_filler.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -932,6 +933,7 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
     final ctrlProvider = puzzleControllerProvider(initialPuzzleContext);
     final puzzleState = ref.watch(ctrlProvider);
     final difficulty = ref.watch(puzzlePreferencesProvider.select((state) => state.difficulty));
+    final isFillingQueue = ref.watch(puzzleQueueFillerProvider);
     final isOnline = ref.watch(onlineStatusProvider).value ?? false;
     return BottomSheetScrollableContainer(
       padding: const EdgeInsets.only(bottom: 16),
@@ -988,21 +990,52 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
               },
             ),
             SettingsListTile(
+              icon: isFillingQueue
+                  ? const SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: Center(
+                        child: SizedBox(
+                          width: 18,
+                          height: 18,
+                          child: CircularProgressIndicator.adaptive(strokeWidth: 2),
+                        ),
+                      ),
+                    )
+                  : null,
               settingsLabel: Text(context.l10n.mobileNbOfflinePuzzles),
               settingsValue: nbOfflinePuzzles.toString(),
-              onTap: () {
-                showChoicePicker(
-                  context,
-                  choices: kOfflinePuzzlesChoices,
-                  selectedItem: nbOfflinePuzzles,
-                  labelBuilder: (t) => Text(t.toString()),
-                  onSelectedItemChanged: (int? nb) {
-                    if (nb != null) {
-                      ref.read(puzzlePreferencesProvider.notifier).setNbOfflinePuzzles(nb);
-                    }
-                  },
-                );
-              },
+              enabled: !isFillingQueue,
+              onTap: isFillingQueue
+                  ? null
+                  : () {
+                      showChoicePicker(
+                        context,
+                        choices: kOfflinePuzzlesChoices,
+                        selectedItem: nbOfflinePuzzles,
+                        labelBuilder: (t) => Text(t.toString()),
+                        onSelectedItemChanged: (int? nb) {
+                          if (nb != null) {
+                            ref.read(puzzlePreferencesProvider.notifier).setNbOfflinePuzzles(nb);
+                          }
+                        },
+                      ).then((_) {
+                        if (nbOfflinePuzzles ==
+                            ref.read(puzzlePreferencesProvider).nbOfflinePuzzles) {
+                          return;
+                        }
+                        // Fill the offline queue up to the new count now, rather
+                        // than trickling in via the solve path. The setting is
+                        // the "about to go offline" signal, so the puzzles need
+                        // to be there before the user leaves the screen.
+                        ref
+                            .read(puzzleQueueFillerProvider.notifier)
+                            .fill(
+                              userId: initialPuzzleContext.userId,
+                              angle: initialPuzzleContext.angle,
+                            );
+                      });
+                    },
             ),
             if (authUser != null && initialPuzzleContext.replayRemaining == null)
               SwitchSettingTile(

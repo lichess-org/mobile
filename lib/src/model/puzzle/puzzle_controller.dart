@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_queue_filler.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
@@ -204,6 +205,15 @@ class PuzzleController extends Notifier<PuzzleState> {
     );
 
     state = state.copyWith(isChangingDifficulty: false);
+
+    // Difficulty invalidates the queue, so resetBatch only refetched one batch
+    // (capped at 50 by the server). Top the queue back up to the configured
+    // count in the background, matching the settings-change behaviour.
+    unawaited(
+      ref
+          .read(puzzleQueueFillerProvider.notifier)
+          .fill(userId: initialContext.userId, angle: initialContext.angle),
+    );
 
     return nextPuzzle;
   }

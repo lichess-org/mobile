@@ -1,4 +1,3 @@
-import 'dart:async' show unawaited;
 import 'dart:math' show max;
 
 import 'package:async/async.dart';
@@ -9,7 +8,6 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_batch_storage.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
@@ -19,12 +17,6 @@ import 'package:logging/logging.dart';
 import 'package:result_extensions/result_extensions.dart';
 
 part 'puzzle_service.freezed.dart';
-
-/// The server caps each batch request at 50 puzzles regardless of the
-/// requested `nb` (`nb.atMost(50)` in lila's `Puzzle` controller). A deficit
-/// larger than this can't be filled in a single request, so the remainder is
-/// topped up sequentially in the background.
-const _kServerBatchCap = 50;
 
 /// A provider for [PuzzleService].
 final puzzleServiceProvider = FutureProvider<PuzzleService>((Ref ref) {
@@ -44,16 +36,12 @@ class PuzzleServiceFactory {
 
   final Ref _ref;
 
-  Future<PuzzleService> call({
-    required int queueLength,
-    int serverBatchCap = _kServerBatchCap,
-  }) async {
+  Future<PuzzleService> call({required int queueLength}) async {
     return PuzzleService(
       _ref,
       batchStorage: await _ref.read(puzzleBatchStorageProvider.future),
       puzzleStorage: await _ref.read(puzzleStorageProvider.future),
       queueLength: queueLength,
-      serverBatchCap: serverBatchCap,
     );
   }
 }
@@ -86,22 +74,13 @@ class PuzzleService {
     required this.batchStorage,
     required this.puzzleStorage,
     required this.queueLength,
-    this.serverBatchCap = _kServerBatchCap,
   });
 
   final Ref _ref;
   final int queueLength;
-
-  /// Max puzzles the server returns per batch request. Injectable so tests can
-  /// exercise the background-fill loop with a small simulated cap.
-  final int serverBatchCap;
   final PuzzleBatchStorage batchStorage;
   final PuzzleStorage puzzleStorage;
   final Logger _log = Logger('PuzzleService');
-
-  /// Guards [_backgroundFill] against overlapping runs issuing duplicate
-  /// requests.
-  bool _isFilling = false;
 
   /// Loads the next puzzle from database and the glicko rating if available.
   ///
@@ -166,10 +145,9 @@ class PuzzleService {
 
   /// Synchronize offline puzzle queue with server and gets latest data.
   ///
-  /// Does a single request so the next puzzle is available without blocking.
-  /// A large offline queue can't be filled in one call (the server caps each
-  /// batch at 50), so any remaining deficit is filled by [_backgroundFill]
-  /// rather than making the user wait.
+  /// This task will fetch missing puzzles so the queue length is always equal to
+  /// `queueLength`.
+  /// It will call [PuzzleRepository.solveBatch] if necessary.
   ///
   /// This method should never fail, as if the network is down it will fallback
   /// to the local database.
@@ -184,129 +162,48 @@ class PuzzleService {
 
     final deficit = max(0, queueLength - unsolved.length);
 
-    if (deficit <= 0 && solved.isEmpty) {
-      return Result.value((data, null, null));
-    }
+    if (deficit > 0 || solved.isNotEmpty) {
+      _log.fine('Will sync puzzles with lichess (deficit: $deficit, solved: ${solved.length})');
 
-    final difficulty = _ref.read(puzzlePreferencesProvider).difficulty;
+      final difficulty = _ref.read(puzzlePreferencesProvider).difficulty;
 
-    // One request keeps the next puzzle responsive; the rest fills in the
-    // background.
-    final batchResult = await _fetchBatch(
-      userId: userId,
-      angle: angle,
-      difficulty: difficulty,
-      nb: deficit,
-      solved: solved,
-    );
-
-    if (batchResult.isError) {
-      // Offline: fall back to the local database.
-      return Result.value((data, null, null));
-    }
-
-    final value = batchResult.asValue!.value;
-    final newBatch = PuzzleBatch(
-      solved: IList(const []),
-      unsolved: IList([...unsolved, ...value.puzzles]),
-    );
-    await batchStorage.save(userId: userId, angle: angle, data: newBatch);
-
-    // A single fetch returns at most one server batch (capped at 50). If it
-    // came back cap-sized the server likely truncated a larger deficit, so top
-    // up the remainder in the background; a short batch already satisfied the
-    // deficit (or exhausted the server), so there is nothing left to fetch.
-    if (value.puzzles.length >= serverBatchCap && newBatch.unsolved.length < queueLength) {
-      unawaited(
-        _backgroundFill(userId, angle, difficulty).catchError((Object e, StackTrace st) {
-          // Fire-and-forget: swallow so a background fill failure (e.g. storage
-          // I/O) never surfaces as an unhandled async error.
-          _log.warning('Background puzzle fill failed', e, st);
-        }),
+      // anonymous users can't solve puzzles so we just download the deficit
+      final batchResponse = _ref.withClient(
+        (client) => Result.capture(
+          solved.isNotEmpty && userId != null
+              ? PuzzleRepository(
+                  client,
+                ).solveBatch(nb: deficit, solved: solved, angle: angle, difficulty: difficulty)
+              : PuzzleRepository(
+                  client,
+                ).selectBatch(nb: deficit, angle: angle, difficulty: difficulty),
+        ),
       );
+
+      return batchResponse
+          .fold(
+            (value) => Result.value((
+              PuzzleBatch(
+                solved: IList(const []),
+                unsolved: IList([...unsolved, ...value.puzzles]),
+              ),
+              value.glicko,
+              value.rounds,
+              true, // should save the batch
+            )),
+
+            // we don't need to save the batch if the request failed
+            (_, _) => Result.value((data, null, null, false)),
+          )
+          .flatMap((tuple) async {
+            final (newBatch, glicko, rounds, shouldSave) = tuple;
+            if (newBatch != null && shouldSave) {
+              await batchStorage.save(userId: userId, angle: angle, data: newBatch);
+            }
+            return Result.value((newBatch, glicko, rounds));
+          });
     }
 
-    return Result.value((newBatch, value.glicko, value.rounds));
-  }
-
-  /// Downloads a single batch, submitting [solved] if there is anything to
-  /// report (and the user is logged in), otherwise just fetching new puzzles.
-  FutureResult<PuzzleBatchResponse> _fetchBatch({
-    required UserId? userId,
-    required PuzzleAngle angle,
-    required PuzzleDifficulty difficulty,
-    required int nb,
-    IList<PuzzleSolution> solved = const IListConst([]),
-  }) {
-    _log.fine('Will sync puzzles with lichess (nb: $nb, solved: ${solved.length})');
-    // anonymous users can't solve puzzles so we just download the deficit.
-    return _ref.withClient(
-      (client) => Result.capture(
-        solved.isNotEmpty && userId != null
-            ? PuzzleRepository(
-                client,
-              ).solveBatch(nb: nb, solved: solved, angle: angle, difficulty: difficulty)
-            : PuzzleRepository(client).selectBatch(nb: nb, angle: angle, difficulty: difficulty),
-      ),
-    );
-  }
-
-  /// Tops up the offline queue to `queueLength` in the background.
-  ///
-  /// Re-reads storage each pass and merges by puzzle id so a solve made while
-  /// the fill runs is never clobbered. Guarded by [_isFilling] so overlapping
-  /// calls can't double-fetch.
-  Future<void> _backgroundFill(
-    UserId? userId,
-    PuzzleAngle angle,
-    PuzzleDifficulty difficulty,
-  ) async {
-    if (_isFilling) return;
-    _isFilling = true;
-    try {
-      // Tracks the stored queue length across passes. Stop only when a pass
-      // fails to grow the queue (e.g. the write silently no-ops), not when it
-      // shrinks: a solve made mid-fill lowers the count and legitimately
-      // widens the deficit, so that pass should still top up.
-      int lastLength = -1;
-      while (true) {
-        final current = await batchStorage.fetch(userId: userId, angle: angle);
-        final unsolved = current?.unsolved ?? IList(const []);
-        if (unsolved.length == lastLength) break;
-        lastLength = unsolved.length;
-        final deficit = max(0, queueLength - unsolved.length);
-        if (deficit <= 0) break;
-
-        final batchResult = await _fetchBatch(
-          userId: userId,
-          angle: angle,
-          difficulty: difficulty,
-          nb: deficit,
-        );
-        if (batchResult.isError) break;
-
-        final value = batchResult.asValue!.value;
-        // Server has no more puzzles: stop rather than spin forever below
-        // an unreachable `queueLength`.
-        if (value.puzzles.isEmpty) break;
-
-        // Skip ids already stored so a re-read after a mid-fill solve can't
-        // reintroduce a duplicate.
-        final existingIds = unsolved.map((p) => p.puzzle.id).toISet();
-        final additions = value.puzzles.where((p) => !existingIds.contains(p.puzzle.id));
-        if (additions.isEmpty) break;
-
-        await batchStorage.save(
-          userId: userId,
-          angle: angle,
-          data: PuzzleBatch(
-            solved: current?.solved ?? IList(const []),
-            unsolved: IList([...unsolved, ...additions]),
-          ),
-        );
-      }
-    } finally {
-      _isFilling = false;
-    }
+    return Result.value((data, null, null));
   }
 }
