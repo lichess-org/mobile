@@ -196,5 +196,7 @@
 	<false/>
 	<key>FirebaseMessagingAutoInitEnabled</key>
 	<false/>
+	<key>GCSupportsGameMode</key>
+	<false/>
 </dict>
 </plist>
