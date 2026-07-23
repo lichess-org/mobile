@@ -535,6 +535,7 @@ class _MessageInputState extends ConsumerState<_MessageInput> {
           ),
           controller: controller,
           keyboardType: TextInputType.text,
+          textCapitalization: TextCapitalization.sentences,
           minLines: 1,
           maxLines: 4,
           enableSuggestions: true,
