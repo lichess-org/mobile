@@ -118,6 +118,8 @@ void main() {
     // Chat content is displayed with its input field.
     expect(find.text('hello world'), findsOneWidget);
     expect(find.byType(TextField), findsOneWidget);
+    final textField = tester.widget<TextField>(find.byType(TextField));
+    expect(textField.textCapitalization, TextCapitalization.sentences);
 
     // Focus the input field: this opens the (fake) software keyboard.
     await tester.tap(find.byType(TextField));

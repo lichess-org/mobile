@@ -332,6 +332,7 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
           ),
           controller: _textController,
           keyboardType: TextInputType.text,
+          textCapitalization: TextCapitalization.sentences,
           minLines: 1,
           maxLines: 4,
           enableSuggestions: true,
