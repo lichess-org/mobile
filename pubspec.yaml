@@ -38,7 +38,7 @@ dependencies:
   flutter_displaymode: ^0.7.0
   flutter_layout_grid: ^2.0.8
   flutter_linkify: ^6.0.0
-  flutter_local_notifications: ^22.0.1
+  flutter_local_notifications: ^22.1.0
   flutter_localizations:
     sdk: flutter
   flutter_markdown_plus: ^1.0.12
