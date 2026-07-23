@@ -39,14 +39,20 @@ class PuzzleQueueFiller extends Notifier<bool> {
   /// This is a one-time, select-only action triggered when the offline puzzle
   /// count or the difficulty changes. It never submits solves, so it can't race
   /// with the solve/sync path over the stored `solved` list. Re-reads storage
-  /// on every pass and merges by puzzle id so a solve made while the fill runs
-  /// is never clobbered. Guarded by [state] so overlapping calls can't
-  /// double-fetch. Never throws: network and storage failures stop the fill.
+  /// *after* each network request and merges by puzzle id, so a solve made
+  /// while a request is in flight is never clobbered. Guarded by [state] so
+  /// overlapping calls can't double-fetch. No-op for anonymous users: the
+  /// configurable queue length is a logged-in-only feature. Never throws:
+  /// network and storage failures stop the fill.
   Future<void> fill({
     required UserId? userId,
     PuzzleAngle angle = const PuzzleTheme(PuzzleThemeKey.mix),
     @visibleForTesting int? queueLengthOverride,
   }) async {
+    // The larger offline queue is a logged-in-only feature: anonymous players
+    // face a much higher server rate limit for fetching puzzles, so the fill is
+    // a no-op for them.
+    if (userId == null) return;
     if (state) return;
     state = true;
     try {
@@ -87,9 +93,16 @@ class PuzzleQueueFiller extends Notifier<bool> {
         // unreachable `queueLength`.
         if (response.puzzles.isEmpty) break;
 
-        // Skip ids already stored so a re-read after a mid-fill solve can't
-        // reintroduce a duplicate.
-        final existingIds = unsolved.map((p) => p.puzzle.id).toISet();
+        // Re-read storage AFTER the network round-trip: a solve made while the
+        // request was in flight moves a puzzle unsolved->solved on this same
+        // row. Merging into the pre-request snapshot would restore it to
+        // unsolved and drop its solution. Merge into the fresh read instead.
+        final fresh = await batchStorage.fetch(userId: userId, angle: angle);
+        final freshUnsolved = fresh?.unsolved ?? IList(const []);
+
+        // Skip ids already stored (in the fresh read) so a re-read after a
+        // mid-fill solve can't reintroduce a duplicate.
+        final existingIds = freshUnsolved.map((p) => p.puzzle.id).toISet();
         final additions = response.puzzles.where((p) => !existingIds.contains(p.puzzle.id));
         if (additions.isEmpty) break;
 
@@ -97,8 +110,8 @@ class PuzzleQueueFiller extends Notifier<bool> {
           userId: userId,
           angle: angle,
           data: PuzzleBatch(
-            solved: current?.solved ?? IList(const []),
-            unsolved: IList([...unsolved, ...additions]),
+            solved: fresh?.solved ?? IList(const []),
+            unsolved: IList([...freshUnsolved, ...additions]),
           ),
         );
       }

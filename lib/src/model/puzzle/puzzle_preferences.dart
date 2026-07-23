@@ -59,10 +59,10 @@ class PuzzlePreferences extends Notifier<PuzzlePrefs> with SessionPreferencesSto
 const kMinOfflinePuzzles = 100;
 
 /// Maximum number of puzzles kept in the offline queue.
-const kMaxOfflinePuzzles = 500;
+const kMaxOfflinePuzzles = 300;
 
 /// Available choices for the size of the offline puzzle queue.
-const kOfflinePuzzlesChoices = [100, 150, 200, 300, 500];
+const kOfflinePuzzlesChoices = [100, 150, 200, 250, 300];
 
 @Freezed(fromJson: true, toJson: true)
 sealed class PuzzlePrefs with _$PuzzlePrefs implements Serializable {

@@ -160,6 +160,9 @@ void main() {
               (ref) => LichessClient(mockClient, ref),
             ),
           },
+          // The offline-puzzles setting is a logged-in-only feature, so the
+          // tile is only rendered for an authenticated user.
+          authUser: fakeAuthUser,
         );
 
         when(
@@ -205,6 +208,51 @@ void main() {
 
         // the change triggered the offline queue fill
         expect(nbSelectReq, greaterThan(0));
+      },
+    );
+
+    testWidgets(
+      'Offline puzzles setting is hidden for anonymous players',
+      variant: kPlatformVariant,
+      (tester) async {
+        final batchStorage = MockPuzzleBatchStorage();
+        final historyStorage = MockPuzzleStorage();
+
+        final app = await makeTestProviderScopeApp(
+          tester,
+          home: PuzzleScreen(
+            angle: const PuzzleTheme(PuzzleThemeKey.mix),
+            puzzleId: puzzle.puzzle.id,
+          ),
+          overrides: {
+            puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith(
+              (ref) => batchStorage,
+            ),
+            puzzleStorageProvider: puzzleStorageProvider.overrideWith((ref) => historyStorage),
+          },
+          // No authUser: an anonymous player must not see the setting, because
+          // the larger offline queue is a logged-in-only feature.
+        );
+
+        when(
+          () => historyStorage.fetch(puzzleId: puzzle.puzzle.id),
+        ).thenAnswer((_) async => puzzle);
+        when(
+          () => batchStorage.fetch(
+            userId: any(named: 'userId'),
+            angle: any(named: 'angle'),
+          ),
+        ).thenAnswer((_) async => PuzzleBatch(solved: IList(const []), unsolved: IList([puzzle])));
+
+        await tester.pumpWidget(app);
+        await tester.pump(const Duration(milliseconds: 200));
+
+        // open settings
+        await tester.tap(find.byIcon(Icons.settings));
+        await tester.pumpAndSettle();
+
+        // the offline puzzles tile is not shown for an anonymous player
+        expect(find.widgetWithText(SettingsListTile, 'Offline puzzles'), findsNothing);
       },
     );
 

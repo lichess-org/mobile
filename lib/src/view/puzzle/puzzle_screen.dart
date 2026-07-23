@@ -989,54 +989,58 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
                 ref.read(puzzlePreferencesProvider.notifier).setAutoNext(value);
               },
             ),
-            SettingsListTile(
-              icon: isFillingQueue
-                  ? const SizedBox(
-                      width: 24,
-                      height: 24,
-                      child: Center(
-                        child: SizedBox(
-                          width: 18,
-                          height: 18,
-                          child: CircularProgressIndicator.adaptive(strokeWidth: 2),
+            // Offline queue length is a logged-in-only feature: anonymous
+            // players face a much higher server rate limit for fetching
+            // puzzles, so the setting is hidden for them.
+            if (initialPuzzleContext.userId != null)
+              SettingsListTile(
+                icon: isFillingQueue
+                    ? const SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: Center(
+                          child: SizedBox(
+                            width: 18,
+                            height: 18,
+                            child: CircularProgressIndicator.adaptive(strokeWidth: 2),
+                          ),
                         ),
-                      ),
-                    )
-                  : null,
-              settingsLabel: Text(context.l10n.mobileNbOfflinePuzzles),
-              settingsValue: nbOfflinePuzzles.toString(),
-              enabled: !isFillingQueue,
-              onTap: isFillingQueue
-                  ? null
-                  : () {
-                      showChoicePicker(
-                        context,
-                        choices: kOfflinePuzzlesChoices,
-                        selectedItem: nbOfflinePuzzles,
-                        labelBuilder: (t) => Text(t.toString()),
-                        onSelectedItemChanged: (int? nb) {
-                          if (nb != null) {
-                            ref.read(puzzlePreferencesProvider.notifier).setNbOfflinePuzzles(nb);
+                      )
+                    : null,
+                settingsLabel: Text(context.l10n.mobileNbOfflinePuzzles),
+                settingsValue: nbOfflinePuzzles.toString(),
+                enabled: !isFillingQueue,
+                onTap: isFillingQueue
+                    ? null
+                    : () {
+                        showChoicePicker(
+                          context,
+                          choices: kOfflinePuzzlesChoices,
+                          selectedItem: nbOfflinePuzzles,
+                          labelBuilder: (t) => Text(t.toString()),
+                          onSelectedItemChanged: (int? nb) {
+                            if (nb != null) {
+                              ref.read(puzzlePreferencesProvider.notifier).setNbOfflinePuzzles(nb);
+                            }
+                          },
+                        ).then((_) {
+                          if (nbOfflinePuzzles ==
+                              ref.read(puzzlePreferencesProvider).nbOfflinePuzzles) {
+                            return;
                           }
-                        },
-                      ).then((_) {
-                        if (nbOfflinePuzzles ==
-                            ref.read(puzzlePreferencesProvider).nbOfflinePuzzles) {
-                          return;
-                        }
-                        // Fill the offline queue up to the new count now, rather
-                        // than trickling in via the solve path. The setting is
-                        // the "about to go offline" signal, so the puzzles need
-                        // to be there before the user leaves the screen.
-                        ref
-                            .read(puzzleQueueFillerProvider.notifier)
-                            .fill(
-                              userId: initialPuzzleContext.userId,
-                              angle: initialPuzzleContext.angle,
-                            );
-                      });
-                    },
-            ),
+                          // Fill the offline queue up to the new count now, rather
+                          // than trickling in via the solve path. The setting is
+                          // the "about to go offline" signal, so the puzzles need
+                          // to be there before the user leaves the screen.
+                          ref
+                              .read(puzzleQueueFillerProvider.notifier)
+                              .fill(
+                                userId: initialPuzzleContext.userId,
+                                angle: initialPuzzleContext.angle,
+                              );
+                        });
+                      },
+              ),
             if (authUser != null && initialPuzzleContext.replayRemaining == null)
               SwitchSettingTile(
                 title: Text(context.l10n.rated),

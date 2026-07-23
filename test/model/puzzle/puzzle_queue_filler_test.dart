@@ -15,6 +15,10 @@ import 'package:lichess_mobile/src/network/http.dart';
 import '../../test_container.dart';
 import '../../test_helpers.dart';
 
+// The offline queue length is a logged-in-only feature, so the fill runs for a
+// real user id. Anonymous behaviour is covered by its own no-op test.
+const _user = UserId('testUser');
+
 void main() {
   Future<ProviderContainer> makeTestContainer(MockClient mockClient) {
     return makeContainer(
@@ -46,10 +50,10 @@ void main() {
 
       await container
           .read(puzzleQueueFillerProvider.notifier)
-          .fill(userId: null, queueLengthOverride: 3);
+          .fill(userId: _user, queueLengthOverride: 3);
 
       expect(nbReq, equals(3), reason: 'three GET requests to reach a queue of 3');
-      final data = await storage.fetch(userId: null);
+      final data = await storage.fetch(userId: _user);
       expect(data?.unsolved.length, equals(3));
       expect(data?.solved, equals(IList(const [])));
     });
@@ -67,14 +71,17 @@ void main() {
 
       final container = await makeTestContainer(mockClient);
       final storage = await container.read(puzzleBatchStorageProvider.future);
-      await storage.save(userId: null, data: _makePuzzleBatch(unsolved: [const PuzzleId('pId3')]));
+      await storage.save(
+        userId: _user,
+        data: _makePuzzleBatch(unsolved: [const PuzzleId('pId3')]),
+      );
 
       await container
           .read(puzzleQueueFillerProvider.notifier)
-          .fill(userId: null, queueLengthOverride: 3);
+          .fill(userId: _user, queueLengthOverride: 3);
 
       expect(nbReq, equals(1));
-      final data = await storage.fetch(userId: null);
+      final data = await storage.fetch(userId: _user);
       expect(data?.unsolved.length, equals(3));
     });
 
@@ -87,14 +94,17 @@ void main() {
 
       final container = await makeTestContainer(mockClient);
       final storage = await container.read(puzzleBatchStorageProvider.future);
-      await storage.save(userId: null, data: _makePuzzleBatch(unsolved: [const PuzzleId('pId3')]));
+      await storage.save(
+        userId: _user,
+        data: _makePuzzleBatch(unsolved: [const PuzzleId('pId3')]),
+      );
 
       await container
           .read(puzzleQueueFillerProvider.notifier)
-          .fill(userId: null, queueLengthOverride: 1);
+          .fill(userId: _user, queueLengthOverride: 1);
 
       expect(nbReq, equals(0), reason: 'no request when there is no deficit');
-      final data = await storage.fetch(userId: null);
+      final data = await storage.fetch(userId: _user);
       expect(data?.unsolved.length, equals(1));
     });
 
@@ -114,10 +124,10 @@ void main() {
 
       await container
           .read(puzzleQueueFillerProvider.notifier)
-          .fill(userId: null, queueLengthOverride: 10);
+          .fill(userId: _user, queueLengthOverride: 10);
 
       expect(nbReq, equals(2), reason: 'one filling request, one empty response, then stop');
-      final data = await storage.fetch(userId: null);
+      final data = await storage.fetch(userId: _user);
       expect(data?.unsolved.length, equals(1));
     });
 
@@ -130,15 +140,18 @@ void main() {
 
       final container = await makeTestContainer(mockClient);
       final storage = await container.read(puzzleBatchStorageProvider.future);
-      await storage.save(userId: null, data: _makePuzzleBatch(unsolved: [const PuzzleId('pId3')]));
+      await storage.save(
+        userId: _user,
+        data: _makePuzzleBatch(unsolved: [const PuzzleId('pId3')]),
+      );
 
       // must not throw
       await container
           .read(puzzleQueueFillerProvider.notifier)
-          .fill(userId: null, queueLengthOverride: 5);
+          .fill(userId: _user, queueLengthOverride: 5);
 
       expect(nbReq, equals(1));
-      final data = await storage.fetch(userId: null);
+      final data = await storage.fetch(userId: _user);
       expect(data?.unsolved.length, equals(1));
     });
 
@@ -156,7 +169,7 @@ void main() {
       final storage = await container.read(puzzleBatchStorageProvider.future);
       // storage already holds a solved entry: the filler must not report it
       await storage.save(
-        userId: const UserId('u1'),
+        userId: _user,
         data: _makePuzzleBatch(
           unsolved: const [],
           solved: [const PuzzleSolution(id: PuzzleId('old'), win: true, rated: true)],
@@ -165,10 +178,10 @@ void main() {
 
       await container
           .read(puzzleQueueFillerProvider.notifier)
-          .fill(userId: const UserId('u1'), queueLengthOverride: 2);
+          .fill(userId: _user, queueLengthOverride: 2);
 
       expect(nbPost, equals(0), reason: 'fill must only GET, never POST solves');
-      final data = await storage.fetch(userId: const UserId('u1'));
+      final data = await storage.fetch(userId: _user);
       // pre-existing solved list is preserved untouched
       expect(data?.solved.length, equals(1));
       expect(data?.unsolved.length, equals(2));
@@ -190,14 +203,77 @@ void main() {
       final notifier = container.read(puzzleQueueFillerProvider.notifier);
 
       // fire two overlapping fills; the second must return immediately
-      final first = notifier.fill(userId: null, queueLengthOverride: 2);
-      final second = notifier.fill(userId: null);
+      final first = notifier.fill(userId: _user, queueLengthOverride: 2);
+      final second = notifier.fill(userId: _user);
       await Future.wait([first, second]);
 
       // only the first fill ran: exactly 2 requests to reach a queue of 2
       expect(nbReq, equals(2));
-      final data = await storage.fetch(userId: null);
+      final data = await storage.fetch(userId: _user);
       expect(data?.unsolved.length, equals(2));
+    });
+
+    test('is a no-op for anonymous users', () async {
+      int nbReq = 0;
+      final mockClient = MockClient((request) {
+        nbReq++;
+        return mockResponse('', 404);
+      });
+
+      final container = await makeTestContainer(mockClient);
+      final storage = await container.read(puzzleBatchStorageProvider.future);
+
+      await container
+          .read(puzzleQueueFillerProvider.notifier)
+          .fill(userId: null, queueLengthOverride: 5);
+
+      expect(nbReq, equals(0), reason: 'anonymous fill must never hit the server');
+      final data = await storage.fetch(userId: null);
+      expect(data, isNull, reason: 'no queue is written for an anonymous user');
+    });
+
+    test('a solve during an in-flight fetch is not clobbered (lost-update)', () async {
+      // Seed one unsolved puzzle. During the network request the filler must
+      // tolerate a concurrent solve that moves that puzzle unsolved -> solved
+      // on the same storage row. If the fill merged into its pre-request
+      // snapshot it would restore the solved puzzle to unsolved and drop its
+      // solution: the exact silent data loss this test guards against.
+      late final ProviderContainer container;
+      container = await makeTestContainer(
+        MockClient((request) async {
+          if (request.method == 'GET' && request.url.path == '/api/puzzle/batch/mix') {
+            // Simulate a solve landing while the request is in flight: the
+            // seeded puzzle 'seed' is now solved, unsolved is emptied.
+            final storage = await container.read(puzzleBatchStorageProvider.future);
+            await storage.save(
+              userId: _user,
+              data: PuzzleBatch(
+                solved: IList(const [PuzzleSolution(id: PuzzleId('seed'), win: true, rated: true)]),
+                unsolved: IList(const []),
+              ),
+            );
+            return mockResponse(_batchOf1, 200);
+          }
+          return mockResponse('', 404);
+        }),
+      );
+      final storage = await container.read(puzzleBatchStorageProvider.future);
+      await storage.save(
+        userId: _user,
+        data: _makePuzzleBatch(unsolved: [const PuzzleId('seed')]),
+      );
+
+      await container
+          .read(puzzleQueueFillerProvider.notifier)
+          .fill(userId: _user, queueLengthOverride: 3);
+
+      final data = await storage.fetch(userId: _user);
+      // The mid-fill solve survives: 'seed' stays in solved, its solution intact.
+      expect(data?.solved.map((s) => s.id).toList(), equals(const [PuzzleId('seed')]));
+      // The freshly fetched puzzle is appended to the post-solve unsolved list.
+      expect(data?.unsolved.any((p) => p.puzzle.id == const PuzzleId('20yWT')), isTrue);
+      // 'seed' was NOT restored to unsolved.
+      expect(data?.unsolved.any((p) => p.puzzle.id == const PuzzleId('seed')), isFalse);
     });
   });
 }
