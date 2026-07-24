@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/widgets/board.dart';
+import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
 import 'package:lichess_mobile/src/widgets/pockets.dart';
 
@@ -511,6 +512,102 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
             effectiveBoardSize -= 16;
           }
 
+          // 1. Calculate the aspect ratio to catch foldables/tablets
+          final double aspectRatio = constraints.maxWidth / constraints.maxHeight;
+          final bool isNearSquare = aspectRatio > 0.75;
+
+          // 2. Extract the BoardWidget so we can reuse it cleanly
+          final boardWidget = Padding(
+            padding: isTablet
+                ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)
+                : EdgeInsets.zero,
+            child: BoardWidget(
+              size: effectiveBoardSize,
+              orientation: widget.orientation,
+              controller: _controller!,
+              onMove: rawOnMove,
+              shapes: shapes,
+              settings: settings,
+              boardKey: widget.boardKey,
+              boardOverlay: widget.boardOverlay,
+              error: widget.errorMessage,
+            ),
+          );
+
+          // 3. IF NEAR-SQUARE: Floating HUD Overlay with Scope-Gated Clock Style
+          if (isNearSquare) {
+            const hudShadows = [
+              Shadow(offset: Offset(-1.5, -1.5), color: Colors.black),
+              Shadow(offset: Offset(1.5, -1.5), color: Colors.black),
+              Shadow(offset: Offset(-1.5, 1.5), color: Colors.black),
+              Shadow(offset: Offset(1.5, 1.5), color: Colors.black),
+              Shadow(offset: Offset.zero, blurRadius: 6.0, color: Colors.black),
+            ];
+
+            const hudTextStyle = TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              shadows: hudShadows,
+            );
+
+            final baseTheme = Theme.of(context);
+            final transparentHudTheme = baseTheme.copyWith(
+              cardColor: Colors.transparent,
+              canvasColor: Colors.transparent,
+              colorScheme: baseTheme.colorScheme.copyWith(
+                surface: Colors.transparent,
+                surfaceContainer: Colors.transparent,
+                onSurface: Colors.white,
+                onSurfaceVariant: Colors.white,
+              ),
+            );
+
+            Widget buildHudTable(Widget tableWidget) {
+              return IgnorePointer(
+                ignoring: true,
+                child: ClockOverlayTheme(
+                  isOverlay: true,
+                  child: Theme(
+                    data: transparentHudTheme,
+                    child: IconTheme.merge(
+                      data: const IconThemeData(color: Colors.white, shadows: hudShadows),
+                      child: DefaultTextStyle.merge(style: hudTextStyle, child: tableWidget),
+                    ),
+                  ),
+                ),
+              );
+            }
+
+            return Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    boardWidget, // Base layer: full size chessboard
+                    // Floating Top Clock & Player Bar
+                    Positioned(
+                      top: 8.0,
+                      left: 12.0,
+                      right: 12.0,
+                      child: buildHudTable(topTable(boardSize: effectiveBoardSize)),
+                    ),
+
+                    // Floating Bottom Clock & Player Bar
+                    Positioned(
+                      bottom: 8.0,
+                      left: 12.0,
+                      right: 12.0,
+                      child: buildHudTable(bottomTable(boardSize: effectiveBoardSize)),
+                    ),
+                  ],
+                ),
+                if (widget.userActionsBar != null) widget.userActionsBar!,
+              ],
+            );
+          }
+          // 4. OTHERWISE (Normal phones): Fall back to the original vertical layout
           return Column(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -520,7 +617,6 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                   !isShortScreen &&
                   !(isTablet && pockets != null))
                 if (widget.zenMode)
-                  // display empty move list to keep the layout consistent in zen mode
                   const MoveList(type: MoveListType.inline, slicedMoves: [], currentMoveIndex: 0)
                 else
                   _moveListContent(MoveListType.inline),
@@ -533,22 +629,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
                   child: topTable(boardSize: effectiveBoardSize),
                 ),
               ),
-              Padding(
-                padding: isTablet
-                    ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)
-                    : EdgeInsets.zero,
-                child: BoardWidget(
-                  size: effectiveBoardSize,
-                  orientation: widget.orientation,
-                  controller: _controller!,
-                  onMove: rawOnMove,
-                  shapes: shapes,
-                  settings: settings,
-                  boardKey: widget.boardKey,
-                  boardOverlay: widget.boardOverlay,
-                  error: widget.errorMessage,
-                ),
-              ),
+              boardWidget, // Uses the extracted widget here
               Expanded(
                 flex: widget.bottomTableFlex,
                 child: Padding(
