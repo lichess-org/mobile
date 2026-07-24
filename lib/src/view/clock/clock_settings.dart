@@ -76,11 +76,17 @@ class ClockSettings extends ConsumerWidget {
                           return ClockToolSettingsModal(
                             clockType: clockType,
                             timeIncrement: timeIncrement,
+                            started: state.started,
                             onClockTypeSelected: (type) {
                               ref.read(clockToolControllerProvider.notifier).updateClockType(type);
                             },
                             onTimeSelected: (choice) {
                               ref.read(clockToolControllerProvider.notifier).updateOptions(choice);
+                            },
+                            onAddTime: (playerType, duration) {
+                              ref
+                                  .read(clockToolControllerProvider.notifier)
+                                  .addTime(playerType, duration);
                             },
                           );
                         },

@@ -11,19 +11,25 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
+const _addTimeAmounts = [Duration(seconds: 10), Duration(seconds: 30), Duration(minutes: 1)];
+
 class ClockToolSettingsModal extends StatefulWidget {
   const ClockToolSettingsModal({
     required this.clockType,
     required this.timeIncrement,
+    required this.started,
     required this.onClockTypeSelected,
     required this.onTimeSelected,
+    required this.onAddTime,
     super.key,
   });
 
   final ClockTimeControlType clockType;
   final TimeIncrement timeIncrement;
+  final bool started;
   final ValueSetter<ClockTimeControlType> onClockTypeSelected;
   final ValueSetter<TimeIncrement> onTimeSelected;
+  final void Function(ClockSide playerType, Duration duration) onAddTime;
 
   @override
   State<ClockToolSettingsModal> createState() => _ClockToolSettingsModalState();
@@ -32,6 +38,7 @@ class ClockToolSettingsModal extends StatefulWidget {
 class _ClockToolSettingsModalState extends State<ClockToolSettingsModal> {
   late ClockTimeControlType _clockType;
   late TimeIncrement _timeIncrement;
+  ClockSide _playerType = ClockSide.bottom;
 
   @override
   void initState() {
@@ -56,6 +63,11 @@ class _ClockToolSettingsModalState extends State<ClockToolSettingsModal> {
     });
   }
 
+  void _addTime(BuildContext context, ClockSide playerType, Duration duration) {
+    widget.onAddTime(playerType, duration);
+    Navigator.of(context).pop();
+  }
+
   void _submit(BuildContext context) {
     widget.onClockTypeSelected(_clockType);
     widget.onTimeSelected(_timeIncrement);
@@ -65,73 +77,119 @@ class _ClockToolSettingsModalState extends State<ClockToolSettingsModal> {
   @override
   Widget build(BuildContext context) {
     return BottomSheetScrollableContainer(
+      padding: Styles.bodyPadding,
       children: [
-        ListSection(
-          materialFilledCard: true,
-          children: [
-            SettingsListTile(
-              settingsLabel: Text(context.l10n.timeControl),
-              settingsValue: _clockType.label(context.l10n),
-              onTap: () {
-                showChoicePicker<ClockTimeControlType>(
-                  context,
-                  title: Text(context.l10n.timeControl),
-                  choices: ClockTimeControlType.values,
-                  selectedItem: _clockType,
-                  labelBuilder: (type) => Text(type.label(context.l10n)),
-                  onSelectedItemChanged: _setClockType,
-                );
-              },
-            ),
-            ListTile(
-              title: Text.rich(
-                TextSpan(
-                  text: '${context.l10n.minutesPerSide}: ',
-                  children: [
-                    TextSpan(
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                      text: clockLabelInMinutes(_timeIncrement.time),
-                    ),
-                  ],
+        if (!widget.started)
+          ListSection(
+            materialFilledCard: true,
+            children: [
+              SettingsListTile(
+                settingsLabel: Text(context.l10n.timeControl),
+                settingsValue: _clockType.label(context.l10n),
+                onTap: () {
+                  showChoicePicker<ClockTimeControlType>(
+                    context,
+                    title: Text(context.l10n.timeControl),
+                    choices: ClockTimeControlType.values,
+                    selectedItem: _clockType,
+                    labelBuilder: (type) => Text(type.label(context.l10n)),
+                    onSelectedItemChanged: _setClockType,
+                  );
+                },
+              ),
+              ListTile(
+                title: Text.rich(
+                  TextSpan(
+                    text: '${context.l10n.minutesPerSide}: ',
+                    children: [
+                      TextSpan(
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                        text: clockLabelInMinutes(_timeIncrement.time),
+                      ),
+                    ],
+                  ),
+                ),
+                subtitle: NonLinearSlider(
+                  value: _timeIncrement.time,
+                  values: kAvailableTimesInSeconds,
+                  labelBuilder: clockLabelInMinutes,
+                  onChange: _setTotalTime,
+                  onChangeEnd: _setTotalTime,
                 ),
               ),
-              subtitle: NonLinearSlider(
-                value: _timeIncrement.time,
-                values: kAvailableTimesInSeconds,
-                labelBuilder: clockLabelInMinutes,
-                onChange: _setTotalTime,
-                onChangeEnd: _setTotalTime,
-              ),
-            ),
-            ListTile(
-              title: Text.rich(
-                TextSpan(
-                  text: '${_clockType.valueInSecondsLabel(context.l10n)}: ',
-                  children: [
-                    TextSpan(
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                      text: _timeIncrement.increment.toString(),
-                    ),
-                  ],
+              ListTile(
+                title: Text.rich(
+                  TextSpan(
+                    text: '${_clockType.valueInSecondsLabel(context.l10n)}: ',
+                    children: [
+                      TextSpan(
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                        text: _timeIncrement.increment.toString(),
+                      ),
+                    ],
+                  ),
+                ),
+                subtitle: NonLinearSlider(
+                  value: _timeIncrement.increment,
+                  values: kAvailableIncrementsInSeconds,
+                  onChange: _setIncrement,
+                  onChangeEnd: _setIncrement,
                 ),
               ),
-              subtitle: NonLinearSlider(
-                value: _timeIncrement.increment,
-                values: kAvailableIncrementsInSeconds,
-                onChange: _setIncrement,
-                onChangeEnd: _setIncrement,
+            ],
+          ),
+        if (widget.started) ...[
+          const SettingsSectionTitle('Add time'),
+          ListSection(
+            materialFilledCard: true,
+            children: [
+              SettingsListTile(
+                settingsLabel: const Text('Player'),
+                settingsValue: _playerLabel(context, _playerType),
+                onTap: () {
+                  showChoicePicker<ClockSide>(
+                    context,
+                    title: const Text('Player'),
+                    choices: ClockSide.values,
+                    selectedItem: _playerType,
+                    labelBuilder: (playerType) => Text(_playerLabel(context, playerType)),
+                    onSelectedItemChanged: (playerType) {
+                      setState(() => _playerType = playerType);
+                    },
+                  );
+                },
               ),
-            ),
-          ],
-        ),
+              for (final duration in _addTimeAmounts)
+                ListTile(
+                  title: Text(_addTimeLabel(duration)),
+                  onTap: () => _addTime(context, _playerType, duration),
+                ),
+            ],
+          ),
+        ],
         Padding(
           padding: Styles.horizontalBodyPadding,
           child: FilledButton(
-            onPressed: () => _submit(context),
-            child: Text(context.l10n.mobileOkButton, style: Styles.bold),
+            onPressed: widget.started ? () => Navigator.of(context).pop() : () => _submit(context),
+            child: Text(
+              widget.started ? context.l10n.close : context.l10n.mobileOkButton,
+              style: Styles.bold,
+            ),
           ),
         ),
       ],
     );
   }
+}
+
+String _playerLabel(BuildContext context, ClockSide playerType) {
+  return playerType == ClockSide.top ? 'Top' : 'Bottom';
+}
+
+String _addTimeLabel(Duration duration) {
+  final seconds = duration.inSeconds;
+  if (seconds % 60 == 0) {
+    return '+${seconds ~/ 60}m';
+  }
+  return '+${seconds}s';
 }
