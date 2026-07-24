@@ -56,8 +56,9 @@ class PuzzleQueueFiller extends Notifier<bool> {
     if (state) return;
     state = true;
     try {
-      final queueLength =
+      final configured =
           queueLengthOverride ?? ref.read(puzzlePreferencesProvider).nbOfflinePuzzles;
+      final queueLength = offlineQueueLengthForAngle(angle, configured);
       final difficulty = ref.read(puzzlePreferencesProvider).difficulty;
       final batchStorage = await ref.read(puzzleBatchStorageProvider.future);
 

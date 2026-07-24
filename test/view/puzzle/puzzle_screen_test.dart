@@ -256,6 +256,50 @@ void main() {
       },
     );
 
+    testWidgets('Offline puzzles setting is hidden for non-mix angles', variant: kPlatformVariant, (
+      tester,
+    ) async {
+      // Enter through the puzzle-stream path (no puzzleId) so the loaded context
+      // keeps the requested angle; loading a puzzle by id always tags the
+      // context as mix. The configurable queue is limited to mix, so the tile
+      // must not show for an opening angle, even for a logged-in user.
+      final batchStorage = MockPuzzleBatchStorage();
+      final historyStorage = MockPuzzleStorage();
+
+      // stored queue already covers the non-mix cap, so nextPuzzle needs no fetch
+      final fullQueue = PuzzleBatch(
+        solved: IList(const []),
+        unsolved: IList([for (var i = 0; i < kMinOfflinePuzzles; i++) puzzle]),
+      );
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const PuzzleScreen(angle: PuzzleOpening('A00')),
+        overrides: {
+          puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith(
+            (ref) => batchStorage,
+          ),
+          puzzleStorageProvider: puzzleStorageProvider.overrideWith((ref) => historyStorage),
+        },
+        authUser: fakeAuthUser,
+      );
+
+      when(
+        () => batchStorage.fetch(
+          userId: any(named: 'userId'),
+          angle: any(named: 'angle'),
+        ),
+      ).thenAnswer((_) async => fullQueue);
+
+      await tester.pumpWidget(app);
+      await tester.pump(const Duration(milliseconds: 200));
+
+      await tester.tap(find.byIcon(Icons.settings));
+      await tester.pumpAndSettle();
+
+      expect(find.widgetWithText(SettingsListTile, 'Offline puzzles'), findsNothing);
+    });
+
     testWidgets('Loads next puzzle when no puzzleId is passed', (tester) async {
       final app = await makeTestProviderScopeApp(
         tester,

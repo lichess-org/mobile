@@ -28,7 +28,9 @@ final nextPuzzleProvider = FutureProvider.autoDispose.family<PuzzleContext?, Puz
   // filling the queue up to the new length, and the two writers would overwrite
   // each other. The value is picked up again on the next rebuild anyway.
   final nbOfflinePuzzles = ref.read(puzzlePreferencesProvider).nbOfflinePuzzles;
-  final puzzleService = await ref.read(puzzleServiceFactoryProvider)(queueLength: nbOfflinePuzzles);
+  final puzzleService = await ref.read(puzzleServiceFactoryProvider)(
+    queueLength: offlineQueueLengthForAngle(angle, nbOfflinePuzzles),
+  );
   // useful for for preview puzzle list in puzzle tab (providers in a list can
   // be invalidated multiple times when the user scrolls the list)
   ref.cacheFor(const Duration(minutes: 1));

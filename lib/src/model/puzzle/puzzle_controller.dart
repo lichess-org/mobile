@@ -42,7 +42,10 @@ class PuzzleController extends Notifier<PuzzleState> {
   IList<PuzzleId>? _replayRemaining;
 
   Future<PuzzleService> get _service => ref.read(puzzleServiceFactoryProvider)(
-    queueLength: ref.read(puzzlePreferencesProvider).nbOfflinePuzzles,
+    queueLength: offlineQueueLengthForAngle(
+      initialContext.angle,
+      ref.read(puzzlePreferencesProvider).nbOfflinePuzzles,
+    ),
   );
 
   @override

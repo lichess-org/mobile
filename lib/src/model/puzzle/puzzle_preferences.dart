@@ -1,7 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 
@@ -63,6 +65,17 @@ const kMaxOfflinePuzzles = 300;
 
 /// Available choices for the size of the offline puzzle queue.
 const kOfflinePuzzlesChoices = [100, 150, 200, 250, 300];
+
+/// Whether the configurable offline-queue size ([PuzzlePrefs.nbOfflinePuzzles])
+/// applies to [angle]. Where it doesn't, the queue stays at [kMinOfflinePuzzles].
+bool isConfigurableOfflineQueueAngle(PuzzleAngle angle) =>
+    angle == const PuzzleTheme(PuzzleThemeKey.mix);
+
+/// The offline-queue length for [angle]: the configurable [nbOfflinePuzzles]
+/// where [isConfigurableOfflineQueueAngle] allows it, otherwise the fixed
+/// [kMinOfflinePuzzles].
+int offlineQueueLengthForAngle(PuzzleAngle angle, int nbOfflinePuzzles) =>
+    isConfigurableOfflineQueueAngle(angle) ? nbOfflinePuzzles : kMinOfflinePuzzles;
 
 @Freezed(fromJson: true, toJson: true)
 sealed class PuzzlePrefs with _$PuzzlePrefs implements Serializable {

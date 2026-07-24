@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_batch_storage.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_queue_filler.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -220,6 +221,45 @@ void main() {
       expect(nbReq, equals(2));
       final data = await storage.fetch(userId: _user);
       expect(data?.unsolved.length, equals(2));
+    });
+
+    test('caps a non-mix angle at kMinOfflinePuzzles regardless of the setting', () async {
+      // The configurable count applies only to the mix angle. A non-mix angle
+      // must never grow past kMinOfflinePuzzles, even when the setting (here the
+      // override) asks for more: per-angle queues would otherwise multiply into
+      // enough offline solves to blow the server's solve rate limit.
+      const nonMixAngle = PuzzleTheme(PuzzleThemeKey.advancedPawn);
+      int nbReq = 0;
+      final mockClient = MockClient((request) {
+        if (request.method == 'GET' && request.url.path == '/api/puzzle/batch/advancedPawn') {
+          nbReq++;
+          return mockResponse(_batchOf1.replaceFirst('"20yWT"', '"pz$nbReq"'), 200);
+        }
+        return mockResponse('', 404);
+      });
+
+      final container = await makeTestContainer(mockClient);
+      final storage = await container.read(puzzleBatchStorageProvider.future);
+      // one short of the cap, so a correct fill tops up by exactly one
+      await storage.save(
+        userId: _user,
+        angle: nonMixAngle,
+        data: _makePuzzleBatch(
+          unsolved: [for (var i = 0; i < kMinOfflinePuzzles - 1; i++) PuzzleId('p$i')],
+        ),
+      );
+
+      await container
+          .read(puzzleQueueFillerProvider.notifier)
+          .fill(userId: _user, angle: nonMixAngle, queueLengthOverride: 300);
+
+      expect(
+        nbReq,
+        equals(1),
+        reason: 'fills up to kMinOfflinePuzzles (one request), not to the requested 300',
+      );
+      final data = await storage.fetch(userId: _user, angle: nonMixAngle);
+      expect(data?.unsolved.length, equals(kMinOfflinePuzzles));
     });
 
     test('is a no-op for anonymous users', () async {

@@ -991,8 +991,10 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
             ),
             // Offline queue length is a logged-in-only feature: anonymous
             // players face a much higher server rate limit for fetching
-            // puzzles, so the setting is hidden for them.
-            if (initialPuzzleContext.userId != null)
+            // puzzles, so the setting is hidden for them. It is also limited to
+            // the mix angle (see [isConfigurableOfflineQueueAngle]).
+            if (initialPuzzleContext.userId != null &&
+                isConfigurableOfflineQueueAngle(initialPuzzleContext.angle))
               SettingsListTile(
                 icon: isFillingQueue
                     ? const SizedBox(
