@@ -70,6 +70,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Sinun täytyy olla kirjautuneena nähdäksesi tämän sivun.';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String get mobileNewGame => 'Uusi peli';
 
   @override

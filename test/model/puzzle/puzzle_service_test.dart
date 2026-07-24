@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_batch_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_solve_limit.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 
@@ -131,6 +132,100 @@ void main() {
       final data = await storage.fetch(userId: const UserId('testUserId'));
       expect(data?.unsolved.length, equals(1));
       expect(data?.solved.length, equals(0));
+    });
+
+    test('a 429 on a solve flush arms the back-off and preserves the solved list', () async {
+      int nbPOSTReq = 0;
+      final mockClient = MockClient((request) {
+        if (request.method == 'POST' && request.url.path == '/api/puzzle/batch/mix') {
+          nbPOSTReq++;
+          return mockResponse('', 429);
+        }
+        return mockResponse('', 404);
+      });
+
+      final container = await makeTestContainer(mockClient);
+      final storage = await container.read(puzzleBatchStorageProvider.future);
+      final service = await container.read(puzzleServiceFactoryProvider)(queueLength: 1);
+      await storage.save(
+        userId: const UserId('testUserId'),
+        data: _makePuzzleBatch(
+          unsolved: [const PuzzleId('pId3')],
+          solved: [const PuzzleSolution(id: PuzzleId('soAw'), win: true, rated: true)],
+        ),
+      );
+
+      final next = await service.nextPuzzle(userId: const UserId('testUserId'));
+
+      expect(nbPOSTReq, equals(1));
+      // still serves the next puzzle from the local unsolved queue
+      expect(next?.puzzle.puzzle.id, equals(const PuzzleId('pId3')));
+      // the solved list is preserved, not lost
+      final data = await storage.fetch(userId: const UserId('testUserId'));
+      expect(data?.solved.length, equals(1));
+      // the back-off is armed, carrying the rejected count
+      expect(container.read(puzzleSolveLimiterProvider.notifier).isLimited, isTrue);
+      expect(container.read(puzzleSolveLimiterProvider)?.solvedCount, equals(1));
+    });
+
+    test('does not attempt a solve flush while the back-off is armed', () async {
+      int nbPOSTReq = 0;
+      final mockClient = MockClient((request) {
+        if (request.method == 'POST') nbPOSTReq++;
+        return mockResponse('', 404);
+      });
+
+      final container = await makeTestContainer(mockClient);
+      final storage = await container.read(puzzleBatchStorageProvider.future);
+      final service = await container.read(puzzleServiceFactoryProvider)(queueLength: 1);
+      container.read(puzzleSolveLimiterProvider.notifier).markLimited(3);
+      await storage.save(
+        userId: const UserId('testUserId'),
+        data: _makePuzzleBatch(
+          unsolved: [const PuzzleId('pId3')],
+          solved: [const PuzzleSolution(id: PuzzleId('soAw'), win: true, rated: true)],
+        ),
+      );
+
+      final next = await service.nextPuzzle(userId: const UserId('testUserId'));
+
+      expect(nbPOSTReq, equals(0), reason: 'no solve flush is attempted while limited');
+      expect(next?.puzzle.puzzle.id, equals(const PuzzleId('pId3')));
+      // the pending solves are kept for a later flush
+      final data = await storage.fetch(userId: const UserId('testUserId'));
+      expect(data?.solved.length, equals(1));
+    });
+
+    test('attempts a solve flush again once the back-off has expired', () async {
+      int nbPOSTReq = 0;
+      final mockClient = MockClient((request) {
+        if (request.method == 'POST' && request.url.path == '/api/puzzle/batch/mix') {
+          nbPOSTReq++;
+          return mockResponse(emptyBatch, 200);
+        }
+        return mockResponse('', 404);
+      });
+
+      final container = await makeTestContainer(mockClient);
+      final storage = await container.read(puzzleBatchStorageProvider.future);
+      final service = await container.read(puzzleServiceFactoryProvider)(queueLength: 1);
+      // an expired back-off (its timestamp is well past the duration)
+      container
+          .read(puzzleSolveLimiterProvider.notifier)
+          .markLimitedAt(DateTime.now().subtract(kPuzzleSolveLimitDuration * 2), 3);
+      await storage.save(
+        userId: const UserId('testUserId'),
+        data: _makePuzzleBatch(
+          unsolved: [const PuzzleId('pId3')],
+          solved: [const PuzzleSolution(id: PuzzleId('soAw'), win: true, rated: true)],
+        ),
+      );
+
+      await service.nextPuzzle(userId: const UserId('testUserId'));
+
+      expect(nbPOSTReq, equals(1), reason: 'the flush is attempted again after expiry');
+      final data = await storage.fetch(userId: const UserId('testUserId'));
+      expect(data?.solved.length, equals(0), reason: 'the flush succeeded and cleared solved');
     });
 
     test('nextPuzzle will always get the first puzzle of unsolved queue', () async {

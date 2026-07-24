@@ -70,6 +70,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Bạn phải đăng nhập để xem trang này.';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String get mobileNewGame => 'Ván cờ mới';
 
   @override

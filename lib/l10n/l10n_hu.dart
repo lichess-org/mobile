@@ -70,6 +70,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Az oldal megtekintéséhez be kell jelentkezned.';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String get mobileNewGame => 'Új játék';
 
   @override
