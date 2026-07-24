@@ -19,11 +19,11 @@ import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_preferences.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_storage.dart';
 import 'package:lichess_mobile/src/model/offline_computer/practice_comment.dart';
+import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/offline_computer/offline_computer_game_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
-import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/pockets.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:mocktail/mocktail.dart';
@@ -257,6 +257,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Verify new game bottom sheet is shown with all options
+      await tester.ensureVisible(find.text('Side'));
       expect(find.text('Side'), findsOneWidget);
       expect(find.byType(Slider), findsOneWidget);
     });
@@ -1474,19 +1475,28 @@ void main() {
     testWidgets('inaccuracy card background is inaccuracyColor with low alpha', (tester) async {
       await pumpWithComment(tester, makeComment(.inaccuracy));
       final card = _findCommentCardContainer(tester, Icons.help);
-      expect((card.decoration! as BoxDecoration).color, inaccuracyColor.withValues(alpha: 0.1));
+      expect(
+        (card.decoration! as BoxDecoration).color,
+        LichessColors.inaccuracy.withValues(alpha: 0.1),
+      );
     });
 
     testWidgets('mistake card background is mistakeColor with low alpha', (tester) async {
       await pumpWithComment(tester, makeComment(.mistake));
       final card = _findCommentCardContainer(tester, Icons.error);
-      expect((card.decoration! as BoxDecoration).color, mistakeColor.withValues(alpha: 0.1));
+      expect(
+        (card.decoration! as BoxDecoration).color,
+        LichessColors.mistake.withValues(alpha: 0.1),
+      );
     });
 
     testWidgets('blunder card background is blunderColor with low alpha', (tester) async {
       await pumpWithComment(tester, makeComment(.blunder));
       final card = _findCommentCardContainer(tester, Icons.cancel);
-      expect((card.decoration! as BoxDecoration).color, blunderColor.withValues(alpha: 0.1));
+      expect(
+        (card.decoration! as BoxDecoration).color,
+        LichessColors.blunder.withValues(alpha: 0.1),
+      );
     });
 
     // --- suggested moves ---
@@ -2005,7 +2015,8 @@ Future<Rect> initPracticeModeGame(WidgetTester tester, {Side side = Side.white})
 /// Helper to select a side in the new game bottom sheet using the picker.
 Future<void> selectSide(WidgetTester tester, Side side) async {
   // Open the side picker by tapping on the side settings tile
-  await tester.tap(find.byType(SettingsListTile).first);
+  await tester.ensureVisible(find.text('Side'));
+  await tester.tap(find.text('Side'));
   await tester.pumpAndSettle();
 
   // Select the desired side from the picker

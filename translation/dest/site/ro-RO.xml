@@ -855,6 +855,11 @@
   <string name="quickPairing">Potrivire rapidă</string>
   <string name="lobby">Lobby</string>
   <string name="anonymous">Anonim</string>
+  <plurals name="nbAnonymous">
+    <item quantity="one">Anonim</item>
+    <item quantity="few">Anonimi (%s)</item>
+    <item quantity="other">Anonimi (%s)</item>
+  </plurals>
   <string name="yourScore">Scorul tău: %s</string>
   <string name="language">Limbă</string>
   <string name="allLanguages">Orice limbă</string>
@@ -1083,4 +1088,5 @@ Toate costurile de operare și de dezvoltare sunt finanțate doar din donațiile
   <string name="thereAreNoResultsForX">Niciun rezultat pentru \"%s\"</string>
   <string name="tags">Etichete</string>
   <string name="enPassant">En passant legale</string>
+  <string name="settings">Setări</string>
 </resources>

@@ -44,6 +44,7 @@ class SearchHistory extends Notifier<SearchHistoryState> {
     final newState = SearchHistoryState(history: currentList.toIList());
     final authUser = ref.read(authControllerProvider);
     await _prefs.setString(_storageKey(authUser), jsonEncode(newState.toJson()));
+    if (!ref.mounted) return;
     state = newState;
   }
 
@@ -51,6 +52,7 @@ class SearchHistory extends Notifier<SearchHistoryState> {
     final newState = state.copyWith(history: IList());
     final prefKey = _storageKey(ref.read(authControllerProvider));
     await _prefs.setString(prefKey, jsonEncode(newState.toJson()));
+    if (!ref.mounted) return;
     state = newState;
   }
 }

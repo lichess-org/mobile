@@ -190,6 +190,7 @@ class RecentGameSeek extends Notifier<RecentGameSeekPrefs>
 
   Future<void> clearRequests() async {
     await LichessBinding.instance.sharedPreferences.remove(prefCategory.storageKey);
+    if (!ref.mounted) return;
     state = RecentGameSeekPrefs.empty;
   }
 }

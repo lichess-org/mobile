@@ -8,7 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
-import 'package:lichess_mobile/src/model/chat/chat_controller.dart';
+import 'package:lichess_mobile/src/model/chat/chat.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
@@ -74,7 +74,7 @@ class _StudyScreenLoader extends ConsumerWidget {
       case AsyncData(:final value):
         return _StudyScreen(options: options, studyState: value);
       case AsyncError(:final error, :final stackTrace):
-        _logger.severe('Cannot load study: $error', stackTrace);
+        _logger.severe('Cannot load study:', error, stackTrace);
         return Scaffold(
           appBar: AppBar(title: const Text('')),
           body: DefaultTabController(
@@ -383,7 +383,7 @@ class _StudyMenu extends ConsumerWidget {
             showDragHandle: true,
             isScrollControlled: true,
             isDismissible: true,
-            constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.9),
+            constraints: BoxConstraints(maxHeight: MediaQuery.heightOf(context) * 0.9),
             builder: (_) => DraggableScrollableSheet(
               initialChildSize: 0.6,
               snap: true,
@@ -505,6 +505,13 @@ class _Body extends ConsumerWidget {
               return ExplorerView(
                 pov: pov,
                 position: studyState.currentNode.position!,
+                opening: explorerOpening(
+                  context,
+                  variant: studyState.variant,
+                  isRootNode: studyState.currentNode.isRoot,
+                  nodeOpening: studyState.currentNode.opening,
+                  branchOpening: studyState.currentBranchOpening,
+                ),
                 onMoveSelected: (move) {
                   ref.read(studyControllerProvider(options).notifier).onUserMove(move);
                 },

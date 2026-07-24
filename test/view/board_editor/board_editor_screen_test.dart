@@ -44,7 +44,9 @@ void main() {
     testWidgets('Opening with variant loads its starting position', (tester) async {
       final app = await makeTestProviderScopeApp(
         tester,
-        home: const BoardEditorScreen(params: (initialVariant: Variant.horde, initialFen: null)),
+        home: const BoardEditorScreen(
+          params: (initialVariant: Variant.horde, initialFen: null, initialOrientation: null),
+        ),
       );
       await tester.pumpWidget(app);
 

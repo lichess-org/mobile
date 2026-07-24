@@ -267,9 +267,12 @@ class _BodyState extends ConsumerState<_Body> {
                       lastMove: gameState.lastMove,
                       onMove: (move, {viaDragAndDrop}) {
                         ref.read(overTheBoardGameControllerProvider.notifier).makeMove(move);
-                        ref
-                            .read(overTheBoardClockProvider.notifier)
-                            .onMove(newSideToMove: gameState.turn.opposite);
+                        // Don't restart the clock on a game-ending move, or it keeps running.
+                        if (!ref.read(overTheBoardGameControllerProvider).finished) {
+                          ref
+                              .read(overTheBoardClockProvider.notifier)
+                              .onMove(newSideToMove: gameState.turn.opposite);
+                        }
                       },
                     ),
                     moves: gameState.moves,
@@ -467,9 +470,8 @@ class _Player extends ConsumerWidget {
     final gameState = ref.watch(overTheBoardGameControllerProvider);
     final boardPreferences = ref.watch(boardPreferencesProvider);
     final clock = ref.watch(overTheBoardClockProvider);
-    final clockTenths = ref.watch(
-      accountPreferencesProvider.select((prefs) => prefs.value?.clockTenths),
-    );
+    final clockTenths =
+        ref.watch(clockTenthsProvider).value ?? defaultAccountPreferences.clockTenths;
 
     return GamePlayer(
       game: gameState.game,

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="accountPreferences" comment="Displayed on settings screen.&#10;&#10;These preferences are applied to your Lichess account and will be used across all devices. They are not mobile-specific and will be synced with the server.">帳號設定</string>
+  <string name="account" comment="The account screen title.">帳號</string>
+  <string name="accountPreferences" comment="Displayed on settings screen. This is for preferences synced with website on the server.">帳號設定</string>
   <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">這些設定將應用於您帳號下的所有裝置。</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">所有棋局</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">您確定嗎？</string>
@@ -77,4 +78,17 @@
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">觀戰</string>
   <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">歡迎使用 Lichess 應用程式！</string>
   <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">查看對局</string>
+  <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">提示：您可以將更多小工具新增至主畫面，或移除不需要的小工具！</string>
+  <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">關閉</string>
+  <string name="customizeButton" comment="Text of a button, so translation should be short.">自訂</string>
+  <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">停止顯示威脅</string>
+  <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word">已結束</string>
+  <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">跳轉至我的頁面</string>
+  <string name="displayModeCompact" comment="">精簡</string>
+  <string name="displayModeDetailed" comment="">詳細</string>
+  <string name="openingExplorerNotAvailableOffline" comment="">開局瀏覽器無法在離線狀態下使用。</string>
+  <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">挑戰已建立：對戰開始時您將收到通知。\n您可以在首頁分頁中查看。</string>
+  <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">上一頁</string>
+  <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">或匯入 PGN 檔案</string>
+  <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">好著，但有更好的選擇</string>
 </resources>

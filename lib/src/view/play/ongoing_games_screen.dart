@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
+import 'package:lichess_mobile/src/model/account/ongoing_games_notifier.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -91,6 +92,7 @@ class OngoingGamePreview extends ConsumerWidget {
           GameScreen.buildRoute(
             source: ExistingGameSource(game.fullId),
             loadingPosition: (
+              variant: game.variant,
               fen: game.fen,
               orientation: game.orientation,
               lastMove: game.lastMove,

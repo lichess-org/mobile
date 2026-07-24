@@ -101,7 +101,7 @@
   <string name="maxRatingX">Classement maximal de %s</string>
   <string name="recentGames">Parties récentes</string>
   <string name="topGames">Meilleures parties</string>
-  <string name="masterDbExplanation">Deux millions de parties jouées en tournois FIDE >%1$s de %2$s à %3$s</string>
+  <string name="masterDbExplanation">Deux millions de parties jouées en tournois FIDE &gt;%1$s de %2$s à %3$s</string>
   <plurals name="mateInXHalfMoves">
     <item quantity="one">Mate en %s demi-coup</item>
     <item quantity="other">Mate en %s demi-coups</item>
@@ -1039,4 +1039,5 @@ Tous les coûts d\'exploitation, le développement et le contenu sont financés 
   <string name="thereAreNoResultsForX">Aucun résultat pour \"%s\"</string>
   <string name="tags">Étiquettes</string>
   <string name="enPassant">Prise en passant ?</string>
+  <string name="settings">Paramètres</string>
 </resources>

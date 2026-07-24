@@ -10,9 +10,8 @@ sealed class GameBoardParams with _$GameBoardParams {
   const GameBoardParams._();
 
   const factory GameBoardParams.readonly({
-    required String fen,
     required Variant variant,
-    required Pockets? pockets,
+    required Position position,
     Move? lastMove,
   }) = ReadonlyBoardParams;
 
@@ -24,25 +23,27 @@ sealed class GameBoardParams with _$GameBoardParams {
     Move? lastMove,
   }) = InteractiveBoardParams;
 
-  static const emptyBoard = ReadonlyBoardParams(
-    fen: kEmptyFEN,
-    variant: Variant.standard,
-    pockets: null,
-  );
+  const factory GameBoardParams.empty({@Default(Variant.standard) Variant variant}) =
+      EmptyBoardParams;
+
+  static const emptyBoard = EmptyBoardParams();
 
   String get fen => switch (this) {
-    ReadonlyBoardParams(:final fen) => fen,
+    ReadonlyBoardParams(:final position) => position.fen,
     InteractiveBoardParams(:final position) => position.fen,
+    EmptyBoardParams() => kEmptyFEN,
   };
 
   Pockets? get pockets => switch (this) {
-    ReadonlyBoardParams(:final pockets) => pockets,
+    ReadonlyBoardParams(:final position) => position.pockets,
     InteractiveBoardParams(:final position) => position.pockets,
+    EmptyBoardParams() => null,
   };
 
   PlayerSide get playerSide => switch (this) {
     ReadonlyBoardParams() => PlayerSide.none,
     InteractiveBoardParams(:final playerSide) => playerSide,
+    EmptyBoardParams() => PlayerSide.none,
   };
 }
 

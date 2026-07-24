@@ -56,7 +56,10 @@ class _ContactsScreenState extends ConsumerState<ContactsScreen> {
   }
 
   Future<void> pushConversationScreen(LightUser user) async {
-    await Navigator.push(context, ConversationScreen.buildRoute(user: user));
+    await Navigator.of(
+      context,
+      rootNavigator: true,
+    ).push(ConversationScreen.buildRoute(user: user));
     ref.invalidate(contactsProvider);
     ref.read(messageSearchQueryProvider.notifier).state = '';
     controller.clear();

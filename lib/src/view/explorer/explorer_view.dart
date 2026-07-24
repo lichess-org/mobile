@@ -1,6 +1,7 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/explorer/tablebase.dart';
@@ -26,6 +27,25 @@ Color whiteBoxColor(BuildContext context) => Theme.of(context).brightness == Bri
 Color blackBoxColor(BuildContext context) => Theme.of(context).brightness == Brightness.light
     ? Colors.black.withValues(alpha: 0.7)
     : Colors.black;
+
+/// Resolves the [Opening] to display in the opening explorer, or `null` when
+/// the variant has no opening book.
+///
+/// Falls back to the deepest ancestor opening ([branchOpening]) when the current
+/// node has no opening of its own.
+Opening? explorerOpening(
+  BuildContext context, {
+  required Variant variant,
+  required bool isRootNode,
+  required Opening? nodeOpening,
+  required Opening? branchOpening,
+}) {
+  if (!kOpeningAllowedVariants.contains(variant)) return null;
+  if (isRootNode) {
+    return LightOpening(eco: '', name: context.l10n.startPosition);
+  }
+  return nodeOpening ?? branchOpening;
+}
 
 class ExplorerView extends ConsumerWidget {
   const ExplorerView({

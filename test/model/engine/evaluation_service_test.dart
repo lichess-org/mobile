@@ -1187,6 +1187,48 @@ void main() {
         expect(results.last.$2.depth, 20); // 10th event (11 + 9)
       });
     });
+    test('_emitEval drops late evaluations from previous positions', () async {
+      final throttleEngine = ThrottleTestStockfish(evalEventCount: 1);
+      testBinding.stockfish = throttleEngine;
+      final container = await makeContainer();
+
+      fakeAsync((async) {
+        final service = container.read(evaluationServiceProvider);
+
+        final work1 = makeWork(
+          id: const StringId('position_1'),
+          path: UciPath.fromId(UciCharPair.fromUci('e2e4')),
+        );
+        final work2 = makeWork(
+          id: const StringId('position_2'),
+          path: UciPath.fromId(UciCharPair.fromUci('d2d4')),
+        );
+
+        // Start evaluating position 1
+        service.evaluate(work1);
+        async.flushMicrotasks();
+
+        // Emit the first event. This updates the state immediately and starts the throttle timer.
+        throttleEngine.emitEvalEvents();
+        async.flushMicrotasks();
+        expect(service.evaluationState.value.eval, isNotNull); // Confirm work1 has an active eval
+
+        // Emit a second event for work1. This gets trapped inside the service's trailing slot variable.
+        throttleEngine.emitEvalEvents();
+        async.flushMicrotasks();
+
+        // Now switch to position 2 while the timer is still ticking down
+        service.evaluate(work2);
+        async.flushMicrotasks();
+
+        // Elapse the remaining time to force the throttle timer to fire its trailing slot flush
+        async.elapse(kEngineEvalEmissionThrottleDelay);
+
+        // Drops the trapped eval because the target position doesn't match work2.
+        expect(service.evaluationState.value.currentWork, work2);
+        expect(service.evaluationState.value.eval, isNull);
+      });
+    });
   });
 
   group('EngineEvaluationNotifier', () {
@@ -1521,6 +1563,42 @@ void main() {
           reason: 'Eval results arriving after quit() should be discarded',
         );
         expect(latestState?.state, EngineState.initial);
+      });
+    });
+    test('Notifier resets state to default when filters no longer match', () async {
+      final container = await makeContainer();
+
+      fakeAsync((async) {
+        final service = container.read(evaluationServiceProvider);
+
+        const filters = (id: StringId('target_game'), path: null);
+        final provider = engineEvaluationProvider(filters);
+
+        var notifierState = container.read(provider);
+
+        final activeWork = makeWork(id: const StringId('target_game'));
+        service.evaluate(activeWork);
+        async.flushMicrotasks();
+
+        // Notifier state should accurately reflect the matching game evaluation details
+        notifierState = container.read(provider);
+        expect(notifierState.currentWork?.id, const StringId('target_game'));
+
+        // Switch evaluation service to a completely different game ID (violates active filters)
+        final rogueWork = makeWork(id: const StringId('different_game'));
+        service.evaluate(rogueWork);
+        async.flushMicrotasks();
+
+        // Force microtasks to flush out the deferred Future.microtask loop inside the notifier listener
+        async.flushMicrotasks();
+
+        // Read the updated state of our filter provider
+        notifierState = container.read(provider);
+
+        // resets the provider back to default fallback representation layout
+        expect(notifierState.currentWork, isNull);
+        expect(notifierState.eval, isNull);
+        expect(notifierState.state, EngineState.initial);
       });
     });
   });

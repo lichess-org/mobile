@@ -319,7 +319,7 @@ class _EnginePopup extends ConsumerWidget {
 
     return ListTile(
       contentPadding: const EdgeInsets.only(left: 16.0),
-      leading: Image.asset('assets/images/stockfish/icon.png', width: 44, height: 44),
+      leading: Image.asset('assets/images/stockfish/icon.webp', width: 44, height: 44),
       title: Text(fixedEngineName),
       subtitle: currentEval != null ? Text(context.l10n.depthX('${currentEval.depth}$knps')) : null,
       trailing: canGoDeeper

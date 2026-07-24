@@ -10,7 +10,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/message/message_repository.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/tab_scaffold.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/account/account_menu.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
@@ -127,6 +127,7 @@ class _Body extends ConsumerWidget {
                   BoardEditorScreen.buildRoute((
                     initialVariant: Variant.standard,
                     initialFen: null,
+                    initialOrientation: null,
                   )),
                 ),
               ),
@@ -230,7 +231,7 @@ class _AccountSection extends ConsumerWidget {
             enabled: connectionStatus == ConnectionStatus.online,
             onTap: () {
               ref.invalidate(accountProvider);
-              Navigator.of(context, rootNavigator: true).push(ProfileScreen.buildRoute());
+              Navigator.of(context).push(ProfileScreen.buildRoute());
             },
           ),
           if (!kidMode)
@@ -244,7 +245,7 @@ class _AccountSection extends ConsumerWidget {
               trailing: isIOS ? const CupertinoListTileChevron() : null,
               enabled: connectionStatus == ConnectionStatus.online,
               onTap: () {
-                Navigator.of(context, rootNavigator: true).push(ContactsScreen.buildRoute());
+                Navigator.of(context).push(ContactsScreen.buildRoute());
               },
             ),
         ],
@@ -253,7 +254,7 @@ class _AccountSection extends ConsumerWidget {
           title: Text(context.l10n.settingsSettings),
           trailing: isIOS ? const CupertinoListTileChevron() : null,
           onTap: () {
-            Navigator.of(context, rootNavigator: true).push(SettingsScreen.buildRoute());
+            Navigator.of(context).push(SettingsScreen.buildRoute());
           },
         ),
       ],

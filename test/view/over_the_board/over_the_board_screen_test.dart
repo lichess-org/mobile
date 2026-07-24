@@ -84,6 +84,28 @@ void main() {
       expect(activeClock(tester), null);
     });
 
+    testWidgets('Clock stops after checkmate when dismissing the result dialog', (tester) async {
+      // Regression test for https://github.com/lichess-org/mobile/issues/3346
+      await initOverTheBoardGame(tester, const TimeIncrement(60, 5));
+
+      // Fool's mate: 1. f3 e6 2. g4 Qh4#
+      await playMove(tester, 'f2', 'f3');
+      await playMove(tester, 'e7', 'e6');
+      await playMove(tester, 'g2', 'g4');
+      await playMove(tester, 'd8', 'h4');
+
+      await tester.pumpAndSettle(const Duration(milliseconds: 600));
+      expect(find.text('Checkmate • Black is victorious'), findsOneWidget);
+      expect(activeClock(tester), null);
+
+      // Dismiss the dialog by tapping the barrier instead of using Rematch.
+      await tester.tapAt(const Offset(10, 10));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Checkmate • Black is victorious'), findsNothing);
+      expect(activeClock(tester), null);
+    });
+
     testWidgets('Game ends when out of time', (tester) async {
       const time = Duration(seconds: 1);
       await initOverTheBoardGame(tester, TimeIncrement(time.inSeconds, 0));

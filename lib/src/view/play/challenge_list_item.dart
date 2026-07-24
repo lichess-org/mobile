@@ -60,7 +60,7 @@ class ChallengeListItem extends ConsumerWidget {
         : UserFullNameWidget(user: challengerUser, rating: challenge.challenger?.rating);
     final subtitle = Text(challenge.description(context.l10n));
 
-    final screenWidth = MediaQuery.sizeOf(context).width;
+    final screenWidth = MediaQuery.widthOf(context);
 
     return Slidable(
       enabled: onAccept != null || onDecline != null || (isMyChallenge && onCancel != null),

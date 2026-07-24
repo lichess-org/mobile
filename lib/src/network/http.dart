@@ -146,7 +146,7 @@ final defaultClientProvider = Provider<DefaultClient>((Ref ref) {
   final client = DefaultClient(ref.read(httpClientFactoryProvider)(), userAgent: userAgent);
   ref.onDispose(() => client.close());
   return client;
-});
+}, name: 'DefaultHttpClientProvider');
 
 /// The http client configured to make requests to the lichess API.
 ///
@@ -164,7 +164,7 @@ final lichessClientProvider = Provider<LichessClient>((Ref ref) {
   );
   ref.onDispose(() => client.close());
   return client;
-});
+}, name: 'LichessHttpClientProvider');
 
 Duration _defaultDelay(int retryCount) =>
     const Duration(milliseconds: 900) * math.pow(1.5, retryCount);
@@ -221,14 +221,14 @@ Future<bool> downloadFile(
           return s;
         })
         .pipe(sink);
-  } catch (e) {
-    _logger.warning('Failed to download file: $e');
+  } catch (e, st) {
+    _logger.warning('Failed to download file:', e, st);
   } finally {
     try {
       await sink.flush();
       await sink.close();
-    } on FileSystemException catch (e) {
-      _logger.warning('Failed to save file: $e');
+    } on FileSystemException catch (e, st) {
+      _logger.warning('Failed to save file:', e, st);
     }
   }
 
@@ -369,7 +369,7 @@ class LichessClient implements Client {
 
       return response;
     } catch (e, st) {
-      _logger.warning('Request to ${request.url} failed: $e', e, st);
+      _logger.warning('Request to ${request.url} failed:', e, st);
       rethrow;
     }
   }
@@ -476,7 +476,7 @@ class LichessClient implements Client {
 /// * Sets the user-agent header with the app version, build number, and device info.
 /// * Logs all requests and responses with status code >= 400.
 class DefaultClient implements Client {
-  DefaultClient(this._inner, {required String userAgent}) : _userAgent = userAgent;
+  DefaultClient(this._inner, {required this._userAgent});
 
   final Client _inner;
   final String _userAgent;
@@ -494,7 +494,7 @@ class DefaultClient implements Client {
 
       return response;
     } catch (e, st) {
-      _logger.warning('Request to ${request.url} failed: $e', e, st);
+      _logger.warning('Request to ${request.url} failed:', e, st);
       rethrow;
     }
   }
@@ -689,7 +689,7 @@ extension ClientExtension on Client {
     try {
       return mapper(json);
     } catch (e, st) {
-      _logger.severe('Could not read JSON object as $T: $e', e, st);
+      _logger.severe('Could not read JSON object as $T:', e, st);
       throw ClientException('Could not read JSON object as $T: $e\n$st', url);
     }
   }
@@ -725,7 +725,7 @@ extension ClientExtension on Client {
           list.add(mapped);
         }
       } catch (e, st) {
-        _logger.severe('Could not read JSON object as $T: $e', e, st);
+        _logger.severe('Could not read JSON object as $T:', e, st);
         throw ClientException('Could not read JSON object as $T: $e', url);
       }
     }
@@ -774,8 +774,8 @@ extension ClientExtension on Client {
         final json = jsonDecode(e) as Map<String, dynamic>;
         return mapper(json);
       });
-    } catch (e) {
-      _logger.severe('Could not read nd-json object as $T.');
+    } catch (e, st) {
+      _logger.severe('Could not read nd-json object as $T.', e, st);
       throw ClientException('Could not read nd-json object as $T: $e', url);
     }
   }
@@ -803,7 +803,7 @@ extension ClientExtension on Client {
     try {
       return mapper(json);
     } catch (e, st) {
-      _logger.severe('Could not read json as $T: $e', e, st);
+      _logger.severe('Could not read json as $T:', e, st);
       throw ClientException('Could not read json as $T: $e', url);
     }
   }
@@ -836,21 +836,13 @@ extension ClientExtension on Client {
           return mapper(json);
         }),
       );
-    } catch (e) {
-      _logger.severe('Could not read nd-json objects as List<$T>.');
+    } catch (e, st) {
+      _logger.severe('Could not read nd-json objects as List<$T>.', e, st);
       throw ClientException(
         'Could not read nd-json objects as List<$T>: $e',
         response.request?.url,
       );
     }
-  }
-}
-
-extension ClientWidgetRefExtension on WidgetRef {
-  /// Runs [fn] with a [LichessClient].
-  Future<T> withClient<T>(Future<T> Function(LichessClient) fn) async {
-    final client = read(lichessClientProvider);
-    return await fn(client);
   }
 }
 

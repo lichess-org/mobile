@@ -191,3 +191,11 @@ String localeToLocalizedName(Locale locale) => switch (locale) {
   Locale(languageCode: 'zu') => 'isiZulu',
   _ => locale.toString(),
 };
+
+/// Returns the given [locales] sorted alphabetically by their localized
+/// (native) name, following Unicode ordering.
+///
+/// This groups locales written in the same script together, instead of the
+/// default ordering by language code.
+List<Locale> localesSortedByLocalizedName(Iterable<Locale> locales) =>
+    [...locales]..sort((a, b) => localeToLocalizedName(a).compareTo(localeToLocalizedName(b)));

@@ -12,7 +12,7 @@ import 'package:lichess_mobile/src/model/analysis/analysis_player.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/common_analysis_state.dart';
 import 'package:lichess_mobile/src/model/analysis/forecast.dart';
-import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
+import 'package:lichess_mobile/src/model/analysis/opening_explorer_mixin.dart';
 import 'package:lichess_mobile/src/model/analysis/server_analysis_mixin.dart';
 import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -127,7 +127,10 @@ void clearSavedStandaloneAnalysis() {
 }
 
 class AnalysisController extends AsyncNotifier<AnalysisState>
-    with EngineEvaluationMixin, ServerAnalysisMixin<AnalysisState>
+    with
+        EngineEvaluationMixin,
+        ServerAnalysisMixin<AnalysisState>,
+        OpeningExplorerMixin<AnalysisState>
     implements PgnTreeNotifier {
   AnalysisController(this.options);
 
@@ -162,6 +165,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
     _socketSubscription = socketClient.stream.listen(_handleSocketEvent);
 
     isOnline(ref.read(defaultClientProvider)).then((online) {
+      if (!ref.mounted) return;
       if (!online) {
         socketClient.close();
       }
@@ -224,7 +228,6 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
     }
 
     UciPath path = UciPath.empty;
-    UciPath mainlinePath = UciPath.empty;
     Move? lastMove;
 
     final game = PgnGame.parsePgn(
@@ -257,8 +260,6 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
       ActiveCorrespondenceGame() => false,
     };
 
-    final List<Future<(UciPath, FullOpening)?>> openingFutures = [];
-
     _root = switch (options) {
       Standalone() when _savedStandalone != null => _savedStandalone!.root,
       _ => Root.fromPgnGame(
@@ -271,36 +272,9 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
             path = path + branch.id;
             lastMove = branch.sanMove.move;
           }
-          if (isMainline) {
-            mainlinePath = mainlinePath + branch.id;
-            if (branch.position.ply <= 30) {
-              openingFutures.add(_fetchOpening(branch.position.fen, mainlinePath));
-            }
-          }
         },
       ),
     };
-
-    // wait for the opening to be fetched to recompute the branch opening
-    Future.wait(openingFutures)
-        .then((list) {
-          bool hasOpening = false;
-          for (final updated in list) {
-            if (updated != null) {
-              hasOpening = true;
-              final (path, opening) = updated;
-              _root.updateAt(path, (node) => node.opening = opening);
-            }
-          }
-          return hasOpening;
-        })
-        .then((hasOpening) {
-          if (hasOpening) {
-            scheduleMicrotask(() {
-              _setPath(state.requireValue.currentPath);
-            });
-          }
-        });
 
     final currentPath = switch (options) {
       Standalone() when _savedStandalone != null => _savedStandalone!.path,
@@ -379,6 +353,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
         .timeout(const Duration(seconds: 3))
         .onError((_, _) {})
         .whenComplete(() {
+          if (!ref.mounted) return;
           if (state.requireValue.isEngineAvailable(evaluationPrefs)) {
             requestEval();
           } else if (options case ActiveCorrespondenceGame(:final gameFullId)) {
@@ -484,16 +459,21 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
     }
   }
 
-  void userPrevious() {
-    _setPath(state.requireValue.currentPath.penultimate, isNavigating: true);
+  void userPrevious({bool fastSeek = false}) {
+    _setPath(
+      state.requireValue.currentPath.penultimate,
+      isNavigating: true,
+      keepCollapsed: fastSeek,
+    );
   }
 
-  void userNext() {
+  void userNext({bool fastSeek = false}) {
     final curState = state.requireValue;
     if (!curState.currentNode.hasChild) return;
     _setPath(
       curState.currentPath + _root.nodeAt(curState.currentPath).children.first.id,
       isNavigating: true,
+      keepCollapsed: fastSeek,
     );
   }
 
@@ -635,15 +615,15 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
     state = AsyncData(state.requireValue.copyWith(pgnHeaders: headers));
   }
 
-  /// Gets the node and maybe the associated branch opening at the given path.
-  (Node, Opening?) _nodeOpeningAt(Node node, UciPath path, [Opening? opening]) {
-    if (path.isEmpty) return (node, opening);
-    final child = node.childById(path.head!);
-    if (child != null) {
-      return _nodeOpeningAt(child, path.tail, child.opening ?? opening);
-    } else {
-      return (node, opening);
-    }
+  @override
+  void refreshCurrentBranchOpening() {
+    final curState = state.requireValue;
+    state = AsyncData(
+      curState.copyWith(
+        currentNode: AnalysisCurrentNode.fromNode(_root.nodeAt(curState.currentPath)),
+        currentBranchOpening: currentBranchOpeningAt(curState.currentPath),
+      ),
+    );
   }
 
   /// Makes a full PGN string (including headers and comments) of the current game state.
@@ -664,6 +644,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
       if (game == null) return;
       final toggledBookmark = !(game.data.bookmarked ?? false);
       await ref.read(accountServiceProvider).setGameBookmark(game.id, bookmark: toggledBookmark);
+      if (!ref.mounted) return;
       state = AsyncValue.data(
         state.requireValue.copyWith(
           archivedGame: state.requireValue.archivedGame?.copyWith(
@@ -681,11 +662,22 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
 
     /// Whether the user is navigating through the moves (as opposed to playing a move).
     bool isNavigating = false,
+    bool keepCollapsed = false,
   }) {
     _currentPath = path;
     final curState = state.requireValue;
     final pathChange = curState.currentPath != path;
-    final (currentNode, opening) = _nodeOpeningAt(_root, path);
+    final (currentNode, opening) = nodeOpeningAt(_root, path);
+
+    bool pathWasExpanded = false;
+    if (pathChange && !keepCollapsed) {
+      for (final child in currentNode.children) {
+        if (child.isCollapsed) {
+          child.isCollapsed = false;
+          pathWasExpanded = true;
+        }
+      }
+    }
 
     // always show variation if the user plays a move
     if (shouldForceShowVariation && currentNode is Branch && currentNode.isCollapsed) {
@@ -697,7 +689,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
     // root view is only used to display move list, so we need to
     // recompute the root view only when the nodelist length changes
     // or a variation is hidden/shown
-    final rootView = shouldForceShowVariation || shouldRecomputeRootView
+    final rootView = shouldForceShowVariation || shouldRecomputeRootView || pathWasExpanded
         ? _root.view
         : curState.root;
 
@@ -722,14 +714,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
         }
       }
 
-      if (currentNode.opening == null && currentNode.position.ply <= 30) {
-        _fetchOpening(currentNode.position.fen, path).then((value) {
-          if (value != null) {
-            final (path, opening) = value;
-            _updateOpening(path, opening);
-          }
-        });
-      }
+      maybeFetchOpeningAt(currentNode, path);
 
       state = AsyncData(
         curState.copyWith(
@@ -765,30 +750,6 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
     super.requestServerAnalysis(side ?? options.orientation);
   }
 
-  Future<(UciPath, FullOpening)?> _fetchOpening(String fen, UciPath path) async {
-    if (!kOpeningAllowedVariants.contains(_variant)) return null;
-
-    final opening = await ref.read(openingServiceProvider).fetchFromFen(fen);
-    if (opening != null) {
-      return (path, opening);
-    }
-    return null;
-  }
-
-  void _updateOpening(UciPath path, FullOpening opening) {
-    _root.updateAt(path, (node) => node.opening = opening);
-
-    final curState = state.requireValue;
-    if (curState.currentPath == path) {
-      _refreshCurrentNode();
-    } else {
-      final (_, newOpening) = _nodeOpeningAt(_root, curState.currentPath);
-      if (newOpening != null && newOpening != curState.currentBranchOpening) {
-        state = AsyncData(curState.copyWith(currentBranchOpening: newOpening));
-      }
-    }
-  }
-
   @override
   Future<void> onServerAnalysisEvent(ServerEvalEvent event) async {
     state = AsyncData(
@@ -809,7 +770,8 @@ sealed class AnalysisState
         _$AnalysisState,
         AnalysisExplosionMixin,
         EvaluationMixinState<AnalysisState>,
-        ServerAnalysisMixinState
+        ServerAnalysisMixinState,
+        OpeningExplorerMixinState
     implements CommonAnalysisState {
   const AnalysisState._();
 

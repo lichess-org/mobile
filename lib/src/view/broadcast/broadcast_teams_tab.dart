@@ -214,9 +214,9 @@ class _TeamMatchCard extends StatelessWidget {
                     child: GestureDetector(
                       onTap: () {
                         if (showTeamScores) {
-                          Navigator.of(context).push(
-                            BroadcastTeamScreen.buildRoute(context, tournamentId, match.team1.name),
-                          );
+                          Navigator.of(
+                            context,
+                          ).push(BroadcastTeamScreen.buildRoute(tournamentId, match.team1.name));
                         }
                       },
                       child: Text(
@@ -255,9 +255,9 @@ class _TeamMatchCard extends StatelessWidget {
                     child: GestureDetector(
                       onTap: () {
                         if (showTeamScores) {
-                          Navigator.of(context).push(
-                            BroadcastTeamScreen.buildRoute(context, tournamentId, match.team2.name),
-                          );
+                          Navigator.of(
+                            context,
+                          ).push(BroadcastTeamScreen.buildRoute(tournamentId, match.team2.name));
                         }
                       },
                       child: Text(

@@ -81,7 +81,8 @@ class UserContextMenu extends ConsumerWidget {
                 if (authUser != null && value.canChallenge != null)
                   BottomSheetContextMenuAction(
                     onPressed: value.canChallenge == true
-                        ? () => UserScreen.challengeUser(value, context: context, ref: ref)
+                        ? () =>
+                              UserScreen.challengeUser(value.lightUser, context: context, ref: ref)
                         : () {
                             Navigator.of(context).pop();
                             showSnackBar(

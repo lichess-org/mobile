@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="account" comment="Title for the account screen.&#10;&#10;This is just a title for the account, NOT account preferences.">Konto</string>
-  <string name="accountPreferences" comment="Displayed on settings screen.&#10;&#10;These preferences are applied to your Lichess account and will be used across all devices. They are not mobile-specific and will be synced with the server.">Kontoeinstellungen</string>
+  <string name="account" comment="The account screen title.">Konto</string>
+  <string name="accountPreferences" comment="Displayed on settings screen. This is for preferences synced with website on the server.">Kontoeinstellungen</string>
   <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">Diese Einstellungen werden auf dein Lichess-Konto angewendet und werden auf allen Geräten verwendet.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Alle Partien</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Bist du sicher?</string>
@@ -90,4 +90,5 @@
   <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">Herausforderung erstellt: Du wirst benachrichtigt, wenn die Partie beginnt.\n Du kannst über den Home-Tab darauf zugreifen.</string>
   <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Zurück</string>
   <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">Oder importiere eine PGN-Datei</string>
+  <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">Guter Zug, aber es gibt einen besseren</string>
 </resources>

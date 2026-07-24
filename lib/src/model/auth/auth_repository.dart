@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/auth/auth_user.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
 import 'package:lichess_mobile/src/model/auth/sign_in_failure_reporter.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
@@ -73,13 +73,10 @@ class AuthRepository {
           scopes: oauthScopes,
         ),
       );
-    } on FlutterAppAuthUserCancelledException catch (e, st) {
-      // The user dismissed the auth session before completing it. This is also how broken-redirect
-      // failures surface (see [reportSignInFailure]), so it is still recorded for monitoring.
-      await reportSignInFailure(_ref, e, st, cancelled: true);
+    } on FlutterAppAuthUserCancelledException {
       throw const SignInCancelledException();
     } catch (e, st) {
-      await reportSignInFailure(_ref, e, st, cancelled: false);
+      await reportSignInFailure(_ref, e, st);
       rethrow;
     }
 

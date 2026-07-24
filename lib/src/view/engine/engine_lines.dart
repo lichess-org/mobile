@@ -118,8 +118,8 @@ class Engineline extends ConsumerWidget {
         final move = Move.parse(pvData.moves[0]);
         if (move != null) onTapMove?.call(move);
       },
-      child: SizedBox(
-        height: kEngineLineHeight,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: kEngineLineHeight),
         child: Padding(
           padding: const EdgeInsets.all(2.0),
           child: Row(

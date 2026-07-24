@@ -82,4 +82,9 @@ class ChallengeRepository {
     final uri = Uri(path: '/api/challenge/$id/cancel');
     await client.postRead(uri);
   }
+
+  Future<void> rematchOfGame(GameId id) async {
+    // don't add an /api/ prefix here; it's a web route, not an API endpoint
+    await client.postRead(Uri(path: '/challenge/rematch-of/$id'));
+  }
 }

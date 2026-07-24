@@ -3,7 +3,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/model/chat/chat.dart';
+import 'package:lichess_mobile/src/model/chat/chat_message.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
@@ -27,6 +27,7 @@ sealed class Study with _$Study {
     required StudyChapter chapter,
     required IMap<UserId, StudyMember> members,
     ChatData? chat,
+    int? socketVersion,
 
     /// Hints to display in "gamebook"/"interactive" mode
     /// Index corresponds to the current ply.
@@ -80,6 +81,7 @@ Study _studyFromPick(RequiredPick pick) {
     likes: study('likes').asIntOrThrow(),
     ownerId: study('ownerId').asUserIdOrNull(),
     chat: study('chat').letOrNull((p) => chatDataFromPick(p)),
+    socketVersion: study('socketVersion').asIntOrNull(),
     features: (
       cloneable: study('features', 'cloneable').asBoolOrFalse(),
       chat: study('features', 'chat').asBoolOrFalse(),

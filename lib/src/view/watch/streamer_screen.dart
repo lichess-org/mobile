@@ -79,8 +79,8 @@ class StreamerListTile extends StatelessWidget {
             )
           : Image.asset(
               Theme.of(context).brightness == Brightness.light
-                  ? 'assets/images/logo-black.png'
-                  : 'assets/images/logo-white.png',
+                  ? 'assets/images/logo-black.webp'
+                  : 'assets/images/logo-white.webp',
               width: thumbnailSize,
               height: thumbnailSize,
               fit: BoxFit.cover,

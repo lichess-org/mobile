@@ -6,7 +6,6 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lichess_mobile/src/model/relation/online_friends.dart';
 import 'package:lichess_mobile/src/model/relation/relation_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -21,7 +20,7 @@ import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
 
 final followingProvider = FutureProvider.autoDispose<IList<User>>((ref) {
-  return ref.withClient((client) => RelationRepository(client).getFollowing());
+  return ref.read(relationRepositoryProvider).getAllFollowing();
 });
 
 class FriendScreen extends ConsumerStatefulWidget {
@@ -135,7 +134,7 @@ class _OnlineFriendListTile extends ConsumerWidget {
         isDismissible: true,
         isScrollControlled: true,
         showDragHandle: true,
-        constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height * 0.5),
+        constraints: BoxConstraints(minHeight: MediaQuery.heightOf(context) * 0.5),
         builder: (context) => UserContextMenu(userId: user.id),
       ),
     );
@@ -204,9 +203,7 @@ class _Following extends ConsumerWidget {
                             following = following.removeWhere((v) => v.id == user.id);
                           });
                           try {
-                            await ref.withClient(
-                              (client) => RelationRepository(client).unfollow(user.id),
-                            );
+                            await ref.read(relationRepositoryProvider).unfollow(user.id);
                           } catch (_) {
                             setState(() {
                               following = oldState;

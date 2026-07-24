@@ -496,6 +496,13 @@ class _OpeningExplorerTab extends ConsumerWidget {
     return ExplorerView(
       pov: state.pov,
       position: state.currentNode.position,
+      opening: explorerOpening(
+        context,
+        variant: state.variant,
+        isRootNode: state.currentNode.isRoot,
+        nodeOpening: state.currentNode.opening,
+        branchOpening: state.currentBranchOpening,
+      ),
       onMoveSelected: ref.read(ctrlProvider.notifier).onUserMove,
       isComputerAnalysisAllowed: true,
     );

@@ -11,18 +11,8 @@ import 'package:lichess_mobile/src/utils/system.dart';
 /// Records a sign-in failure as a non-fatal error in Crashlytics, enriched with the browser, OS and
 /// device that produced it, so failure-prone OS/browser combos can be identified from the reports.
 ///
-/// [cancelled] is `true` when AppAuth reported a user cancellation. The broken-redirect failure
-/// modes (unverified App Links, "open links in apps = never", OEMs that drop the redirect) are
-/// indistinguishable from a genuine cancellation at the API level, so cancellations are recorded
-/// too — tagged with the `auth_cancelled` key so they can be filtered in/out in the console.
-///
 /// This never throws: telemetry must not interfere with the sign-in flow.
-Future<void> reportSignInFailure(
-  Ref ref,
-  Object error,
-  StackTrace stack, {
-  required bool cancelled,
-}) async {
+Future<void> reportSignInFailure(Ref ref, Object error, StackTrace stack) async {
   try {
     final crashlytics = LichessBinding.instance.firebaseCrashlytics;
 
@@ -43,7 +33,6 @@ Future<void> reportSignInFailure(
       _ => (Platform.operatingSystem, null, null),
     };
 
-    await crashlytics.setCustomKey('auth_cancelled', cancelled);
     await crashlytics.setCustomKey('auth_error_type', details?.type ?? 'unknown');
     await crashlytics.setCustomKey('auth_error_code', details?.code ?? 'unknown');
     await crashlytics.setCustomKey('auth_oauth_error', details?.error ?? 'none');
@@ -60,7 +49,7 @@ Future<void> reportSignInFailure(
       reason:
           'Sign-in failed '
           '(browser: ${browser?.package ?? 'unknown'}/${browser?.version ?? '?'}, '
-          'os: $osName/${osVersion ?? '?'}, cancelled: $cancelled)',
+          'os: $osName/${osVersion ?? '?'})',
       fatal: false,
     );
   } catch (e) {

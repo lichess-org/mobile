@@ -10,6 +10,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_summary.dart';
 import 'package:lichess_mobile/src/model/analysis/common_analysis_state.dart';
+import 'package:lichess_mobile/src/model/analysis/opening_explorer_mixin.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
@@ -45,7 +46,7 @@ final broadcastAnalysisControllerProvider = AsyncNotifierProvider.autoDispose
     );
 
 class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
-    with EngineEvaluationMixin
+    with EngineEvaluationMixin, OpeningExplorerMixin<BroadcastAnalysisState>
     implements PgnTreeNotifier {
   BroadcastAnalysisController(this.params);
 
@@ -122,11 +123,13 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
     _root = Root.fromPgnGame(game, isLichessAnalysis: true);
     final currentPath = _root.mainlinePath;
     final currentNode = _root.nodeAt(currentPath);
-    final lastMove = _root.branchAt(_root.mainlinePath)?.sanMove.move;
+    final lastMove = _root.branchAt(currentPath)?.sanMove.move;
 
     // don't use ref.watch here: we don't want to invalidate state when the
     // analysis preferences change
     final prefs = ref.read(broadcastPreferencesProvider);
+
+    final initialBranchOpening = currentBranchOpeningAt(currentPath);
 
     final broadcastState = BroadcastAnalysisState(
       id: params.gameId,
@@ -135,6 +138,7 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
       isOnMainline: _root.isOnMainline(currentPath),
       root: _root.view,
       currentNode: AnalysisCurrentNode.fromNode(currentNode),
+      currentBranchOpening: initialBranchOpening,
       pgnHeaders: pgnHeaders,
       pgnRootComments: rootComments,
       lastMove: lastMove,
@@ -176,7 +180,7 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
 
       final broadcastPath = newRoot.mainlinePath;
       final lastMove = wasOnLivePath
-          ? newRoot.branchAt(newRoot.mainlinePath)?.sanMove.move
+          ? newRoot.branchAt(broadcastPath)?.sanMove.move
           : curState.lastMove;
 
       newRoot.merge(_root);
@@ -253,8 +257,8 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
     final (UciPath? newPath, bool isNewNode) result;
     try {
       result = _root.addMoveAt(path, uciMove, clock: clock);
-    } on PlayException catch (e) {
-      _logger.warning('Could not add broadcast move $uciMove at $path: $e');
+    } on PlayException catch (e, st) {
+      _logger.warning('Could not add broadcast move $uciMove at $path:', e, st);
       _reloadPgn();
       return;
     }
@@ -301,7 +305,11 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
 
     if (!state.requireValue.currentPosition.isLegal(move)) return;
 
-    final (newPath, isNewNode) = _root.addMoveAt(state.requireValue.currentPath, move);
+    final (newPath, isNewNode) = _root.addMoveAt(
+      state.requireValue.currentPath,
+      move,
+      isUserAdded: true,
+    );
     if (newPath != null) {
       _setPath(newPath, shouldRecomputeRootView: isNewNode, shouldForceShowVariation: true);
     }
@@ -414,7 +422,7 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
     if (!state.hasValue) return;
 
     final pathChange = state.requireValue.currentPath != path;
-    final currentNode = _root.nodeAt(path);
+    final (currentNode, branchOpening) = nodeOpeningAt(_root, path);
 
     // always show variation if the user plays a move
     if (shouldForceShowVariation && currentNode is Branch && currentNode.isCollapsed) {
@@ -452,12 +460,16 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
           soundService.play(Sound.move);
         }
       }
+
+      maybeFetchOpeningAt(currentNode, path);
+
       state = AsyncData(
         state.requireValue.copyWith(
           currentPath: path,
           broadcastPath: broadcastPath ?? state.requireValue.broadcastPath,
           isOnMainline: _root.isOnMainline(path),
           currentNode: AnalysisCurrentNode.fromNode(currentNode),
+          currentBranchOpening: branchOpening,
           lastMove: currentNode.sanMove.move,
           root: rootView,
           clocks: _getClocks(path),
@@ -470,6 +482,7 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
           broadcastPath: broadcastPath ?? state.requireValue.broadcastPath,
           isOnMainline: _root.isOnMainline(path),
           currentNode: AnalysisCurrentNode.fromNode(currentNode),
+          currentBranchOpening: branchOpening,
           lastMove: null,
           root: rootView,
           clocks: _getClocks(path),
@@ -481,6 +494,17 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
       state = AsyncData(state.requireValue.copyWith(engineInThreatMode: false));
       requestEval();
     }
+  }
+
+  @override
+  void refreshCurrentBranchOpening() {
+    final curState = state.requireValue;
+    state = AsyncData(
+      curState.copyWith(
+        currentNode: AnalysisCurrentNode.fromNode(_root.nodeAt(curState.currentPath)),
+        currentBranchOpening: currentBranchOpeningAt(curState.currentPath),
+      ),
+    );
   }
 
   ({Duration? parentClock, Duration? clock}) _getClocks(UciPath path) {
@@ -533,7 +557,8 @@ sealed class BroadcastAnalysisState
     with
         _$BroadcastAnalysisState,
         AnalysisExplosionMixin,
-        EvaluationMixinState<BroadcastAnalysisState>
+        EvaluationMixinState<BroadcastAnalysisState>,
+        OpeningExplorerMixinState
     implements CommonAnalysisState {
   const BroadcastAnalysisState._();
 
@@ -593,6 +618,8 @@ sealed class BroadcastAnalysisState
     /// The analysis summary sent by the server.
     /// Contains the Accuracy, ACPL, Mistakes, Blunders, Inaccuracies of White and Black.
     AnalysisSummary? analysisSummary,
+
+    Opening? currentBranchOpening,
 
     @Default(false) bool engineInThreatMode,
   }) = _BroadcastGameState;

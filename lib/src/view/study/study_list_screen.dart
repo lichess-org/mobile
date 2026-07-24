@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/study/study.dart';
 import 'package:lichess_mobile/src/model/study/study_filter.dart';
 import 'package:lichess_mobile/src/model/study/study_list_paginator.dart';
+import 'package:lichess_mobile/src/model/study/study_preferences.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
@@ -37,7 +38,7 @@ class StudyListScreen extends ConsumerStatefulWidget {
 
 class _StudyListScreenState extends ConsumerState<StudyListScreen> {
   late StudyCategory category;
-  StudyListOrder order = StudyListOrder.hot;
+  late StudyListOrder order;
 
   String? search;
 
@@ -57,6 +58,7 @@ class _StudyListScreenState extends ConsumerState<StudyListScreen> {
   void initState() {
     super.initState();
     category = widget.initialCategory ?? StudyCategory.all;
+    order = ref.read(studyPreferencesProvider).listOrder;
     _scrollController.addListener(_scrollListener);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (currentCategoryKey.currentContext != null) {
@@ -86,6 +88,13 @@ class _StudyListScreenState extends ConsumerState<StudyListScreen> {
         ref.read(paginatorProvider.notifier).next();
       }
     }
+  }
+
+  void _onStudyOrderChange(StudyListOrder newOrder) {
+    setState(() {
+      order = newOrder;
+    });
+    ref.read(studyPreferencesProvider.notifier).setListOrder(newOrder);
   }
 
   @override
@@ -135,30 +144,22 @@ class _StudyListScreenState extends ConsumerState<StudyListScreen> {
               ContextMenuAction(
                 icon: order == StudyListOrder.hot ? Icons.check : null,
                 label: context.l10n.studyHot,
-                onPressed: () => setState(() {
-                  order = StudyListOrder.hot;
-                }),
+                onPressed: () => _onStudyOrderChange(StudyListOrder.hot),
               ),
               ContextMenuAction(
                 icon: order == StudyListOrder.newest ? Icons.check : null,
                 label: context.l10n.studyDateAddedNewest,
-                onPressed: () => setState(() {
-                  order = StudyListOrder.newest;
-                }),
+                onPressed: () => _onStudyOrderChange(StudyListOrder.newest),
               ),
               ContextMenuAction(
                 icon: order == StudyListOrder.updated ? Icons.check : null,
                 label: context.l10n.studyRecentlyUpdated,
-                onPressed: () => setState(() {
-                  order = StudyListOrder.updated;
-                }),
+                onPressed: () => _onStudyOrderChange(StudyListOrder.updated),
               ),
               ContextMenuAction(
                 icon: order == StudyListOrder.popular ? Icons.check : null,
                 label: context.l10n.studyMostPopular,
-                onPressed: () => setState(() {
-                  order = StudyListOrder.popular;
-                }),
+                onPressed: () => _onStudyOrderChange(StudyListOrder.popular),
               ),
             ],
           ),
@@ -268,7 +269,7 @@ class StudyListItem extends StatelessWidget {
           useRootNavigator: true,
           isDismissible: true,
           isScrollControlled: true,
-          constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height * 0.5),
+          constraints: BoxConstraints(minHeight: MediaQuery.heightOf(context) * 0.5),
           builder: (context) => _ContextMenu(study: study),
         );
       },

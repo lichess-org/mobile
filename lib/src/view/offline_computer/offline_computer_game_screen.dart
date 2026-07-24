@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_storage.dart';
 import 'package:lichess_mobile/src/model/offline_computer/practice_comment.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessboard.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
@@ -35,7 +36,6 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/material_diff.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
-import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
@@ -51,9 +51,9 @@ extension _MoveVerdictDisplay on MoveVerdict {
 
   Color get color => switch (this) {
     .goodMove || .notBest => Colors.lightGreen,
-    .inaccuracy => inaccuracyColor,
-    .mistake => mistakeColor,
-    .blunder => blunderColor,
+    .inaccuracy => LichessColors.inaccuracy,
+    .mistake => LichessColors.mistake,
+    .blunder => LichessColors.blunder,
   };
 }
 
@@ -291,7 +291,7 @@ class _BodyState extends ConsumerState<_Body> {
   }
 
   void _showNewGameDialog({required Variant? initialVariant}) {
-    final double screenHeight = MediaQuery.sizeOf(context).height;
+    final double screenHeight = MediaQuery.heightOf(context);
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
@@ -472,7 +472,7 @@ class _Player extends ConsumerWidget {
     if (isStockfish) {
       return Row(
         children: [
-          Image.asset('assets/images/stockfish/icon.png', width: 44, height: 44),
+          Image.asset('assets/images/stockfish/icon.webp', width: 44, height: 44),
           const SizedBox(width: 8),
           Expanded(
             child: Column(
@@ -833,24 +833,6 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
               ),
             ),
             SettingsListTile(
-              settingsLabel: Text(context.l10n.side),
-              settingsValue: _sideChoiceLabel(context, _selectedSideChoice),
-              onTap: () {
-                showChoicePicker(
-                  context,
-                  choices: (widget.initialFen != null || _selectedVariant == Variant.fromPosition)
-                      ? SideChoice.values
-                      : SideChoice.values.where((c) => c != SideChoice.nextToPlay).toList(),
-                  selectedItem: _selectedSideChoice,
-                  labelBuilder: (SideChoice choice) => Text(_sideChoiceLabel(context, choice)),
-                  onSelectedItemChanged: (SideChoice choice) {
-                    setState(() => _selectedSideChoice = choice);
-                    ref.read(offlineComputerGamePreferencesProvider.notifier).setSideChoice(choice);
-                  },
-                );
-              },
-            ),
-            SettingsListTile(
               settingsLabel: Text(context.l10n.variant),
               settingsValue: _selectedVariant.label(context.l10n),
               onTap: () {
@@ -893,6 +875,24 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
                       )
                     : const SizedBox.shrink(),
               ),
+            SettingsListTile(
+              settingsLabel: Text(context.l10n.side),
+              settingsValue: _sideChoiceLabel(context, _selectedSideChoice),
+              onTap: () {
+                showChoicePicker(
+                  context,
+                  choices: (widget.initialFen != null || _selectedVariant == Variant.fromPosition)
+                      ? SideChoice.values
+                      : SideChoice.values.where((c) => c != SideChoice.nextToPlay).toList(),
+                  selectedItem: _selectedSideChoice,
+                  labelBuilder: (SideChoice choice) => Text(_sideChoiceLabel(context, choice)),
+                  onSelectedItemChanged: (SideChoice choice) {
+                    setState(() => _selectedSideChoice = choice);
+                    ref.read(offlineComputerGamePreferencesProvider.notifier).setSideChoice(choice);
+                  },
+                );
+              },
+            ),
             SwitchSettingTile(
               title: const Text('Practice mode'),
               subtitle: const Text('Get feedback on your moves'),

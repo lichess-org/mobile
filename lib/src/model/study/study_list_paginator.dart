@@ -30,6 +30,8 @@ class StudyListPaginatorNotifier extends AsyncNotifier<StudyList> {
 
     final newStudyPage = await _nextPage();
 
+    if (!ref.mounted) return;
+
     state = AsyncData((
       nextPage: newStudyPage.nextPage,
       studies: studyList.studies.addAll(newStudyPage.studies),

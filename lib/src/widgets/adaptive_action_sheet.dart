@@ -139,7 +139,7 @@ Future<T?> showMaterialActionSheet<T>({
 }) {
   final actionTextStyle = TextTheme.of(context).titleMedium ?? const TextStyle(fontSize: 18);
 
-  final screenWidth = MediaQuery.sizeOf(context).width;
+  final screenWidth = MediaQuery.widthOf(context);
   return showDialog<T>(
     context: context,
     barrierDismissible: isDismissible,

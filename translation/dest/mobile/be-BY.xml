@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="accountPreferences" comment="Displayed on settings screen.&#10;&#10;These preferences are applied to your Lichess account and will be used across all devices. They are not mobile-specific and will be synced with the server.">Налады ўліковага запісу</string>
+  <string name="account" comment="The account screen title.">Уліковы запіс</string>
+  <string name="accountPreferences" comment="Displayed on settings screen. This is for preferences synced with website on the server.">Налады ўліковага запісу</string>
   <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">Гэтыя налады звязаны з уліковым запісам Lichess і будуць выкарыстаны на ўсіх дэвайсах.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Усе гульні</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Вы ўпэўнены?</string>
@@ -18,6 +19,7 @@
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Галоўная</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Стрымеры ў эфіры</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Вам патрэбна ўвайсці ў уліковы запіс каб паглядзець гэтую старонку.</string>
+  <string name="newGame" comment="New game button in OTB and play against offline computer features">Новая гульня</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Няма вынікаў</string>
   <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Калі ласка звярніце ўвагу, што не ўсе функцыі з старога дадатку або вэб-сайту на дадзены момант даступныя, але мы дадаем іх увесь час.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Вы не адсочваеце ні за якім карыстальнікам.</string>
@@ -39,6 +41,7 @@
   <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.">Аналіз серверам</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Размяшчэнне гадзінніка</string>
   <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">Шаблоны</string>
+  <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">Перацягнуць цэль</string>
   <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">Круг</string>
   <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">Квадрат</string>
   <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">Дамашнія віджеты</string>
@@ -46,6 +49,7 @@
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Хавае сістэмны UI пад час гульні. Карыстайцеся гэтым калі вас турбуюць жэсты навігацыі сістэмы па краях экрана. Прымяняецца да экранаў гульні і задач.</string>
   <string name="settingsMaterialDifferenceCapturedPieces" comment="A value of the material difference settings choice (to show all captured pieces instead of material difference).">Збітыя фігуры</string>
   <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick and image from the image library as app custom background.">Выбраць малюнак</string>
+  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">Карыстацкі фон працуе выключна ў цёмным рэжыме. Рэкамендуецца цёмны малюнак.</string>
   <string name="settingsPickAnImageBlur" comment="Displayed in theme background choice screen, to blur the chosen image.">Размыць малюнак</string>
   <string name="settingsPickAnImageHideBoard" comment="Displayed in theme background choice screen, to hide the board when viewing chosen image.">Схаваць дошку</string>
   <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">Паказаць дошку</string>
@@ -53,6 +57,7 @@
   <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">Націск, або перацягванне</string>
   <string name="settingsPieceShiftMethodTapTwoSquares" comment="A value of piece shift method settings entry.">Націскам на дзве клеткі</string>
   <string name="settingsShapeDrawing" comment="Entry in the settings.">Маляванне фігур</string>
+  <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.">Намалюйце фігуру двума пальцамі: трымайце адзін палец на пустым квадраце, рухай другім каб маляваць.</string>
   <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Паказаць мяжу</string>
   <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Кранальны водгук</string>
   <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Калі актыўна, ваш дэвайс будзе крыху вібраваць калі вы паходзіце або пры ўзяцці фігуры.</string>
@@ -72,4 +77,18 @@
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Чакаем пакуль апанент далучыцца...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Назіраць</string>
   <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">Вітаем у Lichess!</string>
+  <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">Паглядзець гульню</string>
+  <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">Падказка: вы можаце дабавіць больш віджэтаў на галоўны экран або выдаліць непатрэбныя!</string>
+  <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">Адхіліць</string>
+  <string name="customizeButton" comment="Text of a button, so translation should be short.">Наладзіць</string>
+  <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">Не паказваць пагроз</string>
+  <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word">Завершана</string>
+  <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">Да маёй старонкі</string>
+  <string name="displayModeCompact" comment="">Скарочана</string>
+  <string name="displayModeDetailed" comment="">Дэталёва</string>
+  <string name="openingExplorerNotAvailableOffline" comment="">Каталог дэбютаў недаступны ў афлайн рэжыме.</string>
+  <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">Выклік створаны: Вы атрымаеце паведамленне калі гульня пачнецца. \n Вы можаце перайсці да яе з галоўнай старонкі.</string>
+  <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Папярэдняя</string>
+  <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">Або імпартаваць PGN файл</string>
+  <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">Добры ход, але ёсць лепшы</string>
 </resources>

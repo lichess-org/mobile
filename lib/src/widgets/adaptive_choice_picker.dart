@@ -17,7 +17,7 @@ Future<void> showChoicePicker<T>(
 }) {
   switch (Theme.of(context).platform) {
     case TargetPlatform.android:
-      final deviceHeight = MediaQuery.sizeOf(context).height;
+      final deviceHeight = MediaQuery.heightOf(context);
       return showDialog<void>(
         context: context,
         builder: (context) {

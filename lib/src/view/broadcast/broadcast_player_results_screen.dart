@@ -271,11 +271,10 @@ class _OverallStatPlayer extends StatelessWidget {
 
     final pic = player.fideId != null ? tournament.photos?.get(player.fideId!) : null;
 
-    final statWidth =
-        (MediaQuery.sizeOf(context).width - Styles.bodyPadding.horizontal - 10 * 2) / 3;
+    final statWidth = (MediaQuery.widthOf(context) - Styles.bodyPadding.horizontal - 10 * 2) / 3;
     const cardSpacing = 10.0;
 
-    final picWidth = MediaQuery.sizeOf(context).width / 3;
+    final picWidth = MediaQuery.widthOf(context) / 3;
 
     return Padding(
       padding: Styles.bodyPadding,
@@ -302,7 +301,7 @@ class _OverallStatPlayer extends StatelessWidget {
                           Expanded(
                             child: Row(
                               children: [
-                                Image.asset('assets/images/fide-fed/$federation.png', height: 12),
+                                Image.asset('assets/images/fide-fed/$federation.webp', height: 12),
                                 const SizedBox(width: 5),
                                 Flexible(
                                   child: Text(
@@ -324,9 +323,9 @@ class _OverallStatPlayer extends StatelessWidget {
                       GestureDetector(
                         onTap: () {
                           if (tournament.data.showTeamScores == true) {
-                            Navigator.of(context).push(
-                              BroadcastTeamScreen.buildRoute(context, tournament.data.id, team),
-                            );
+                            Navigator.of(
+                              context,
+                            ).push(BroadcastTeamScreen.buildRoute(tournament.data.id, team));
                           }
                         },
                         child: Row(
@@ -543,7 +542,7 @@ class _GameResultListTile extends StatelessWidget {
           ? Row(
               mainAxisSize: .min,
               children: [
-                Image.asset('assets/images/fide-fed/$federation.png', height: 12),
+                Image.asset('assets/images/fide-fed/$federation.webp', height: 12),
                 const SizedBox(width: 5),
                 if (rating != null) Text(rating.toString()),
               ],

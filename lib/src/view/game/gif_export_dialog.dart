@@ -56,9 +56,11 @@ class _GifExportState extends ConsumerState<GifExport> {
         ).showSnackBar(SnackBar(content: Text('Failed to export GIF: $e')));
       }
     } finally {
-      setState(() {
-        loading = false;
-      });
+      if (mounted) {
+        setState(() {
+          loading = false;
+        });
+      }
     }
     if (mounted) {
       Navigator.pop(context);

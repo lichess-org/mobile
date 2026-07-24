@@ -723,6 +723,77 @@ void main() {
         expect(boardHasPiece(tester, Square.d4, Piece.whitePawn), isTrue);
       });
 
+      // Non-regression test for https://github.com/lichess-org/mobile/issues/2130:
+      // an auto-fired premove that the server never confirmed (because the player
+      // flagged) must be rolled back when the game ends, so the final position —
+      // and the result text derived from it — matches the server's state.
+      testWidgets('unconfirmed premove is rolled back when the game ends on time', (
+        WidgetTester tester,
+      ) async {
+        const gameFullId = GameFullId('qVChCOTcHSeW');
+        final gameSocketUri = GameController.socketUri(gameFullId);
+
+        // After e4 it's black's turn; white (us) is down to the last fraction of a
+        // second with a premove set.
+        await createTestGame(
+          tester,
+          pgn: 'e4',
+          clock: const (
+            running: true,
+            initial: Duration(minutes: 1),
+            increment: Duration.zero,
+            white: Duration(milliseconds: 300),
+            black: Duration(seconds: 27),
+            emerg: Duration(seconds: 10),
+          ),
+          serverPrefs: const ServerGamePrefs(
+            showRatings: true,
+            enablePremove: true,
+            autoQueen: .always,
+            confirmResign: true,
+            submitMove: false,
+            zenMode: .no,
+          ),
+        );
+
+        // white premoves d2-d4
+        await playMove(tester, 'd2', 'd4');
+        expect(boardHasPremove(tester, const NormalMove(from: Square.d2, to: Square.d4)), isTrue);
+
+        // opponent plays e7-e5 (ply 2): white's premove auto-fires and is applied
+        // optimistically, advancing the local turn to black.
+        sendServerSocketMessages(gameSocketUri, [
+          '{"t": "move", "v": 1, "d": {"ply": 2, "uci": "e7e5", "san": "e5", "clock": {"white": 0.3, "black": 27}}}',
+        ]);
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 1));
+        await tester.pump();
+        expect(boardHasPiece(tester, Square.d4, Piece.whitePawn), isTrue);
+
+        // The server never confirms the premove: white flagged, and with black left
+        // holding only insufficient mating material the game is scored a draw.
+        sendServerSocketMessages(gameSocketUri, [
+          '{"t":"endData","d":{"status":"outoftime","winner":null,"clock":{"wc":0,"bc":2700}}}',
+        ]);
+        await tester.pump(const Duration(milliseconds: 10));
+
+        // The unconfirmed premove has been rolled back: the d-pawn is back on d2
+        // and it is white to move again.
+        expect(boardHasPiece(tester, Square.d4, Piece.whitePawn), isFalse);
+        expect(boardHasPiece(tester, Square.d2, Piece.whitePawn), isTrue);
+        expect(boardHasPiece(tester, Square.e5, Piece.blackPawn), isTrue);
+
+        // Let the game-end dialog appear and check it names the side that actually
+        // flagged (white), not the side to move in the corrupted local position.
+        await tester.pump(const Duration(milliseconds: 400));
+        await tester.pump();
+        expect(find.text('White time out • Draw'), findsOneWidget);
+        expect(find.text('Black time out • Draw'), findsNothing);
+
+        // wait for the dong
+        await tester.pump(const Duration(seconds: 500));
+      });
+
       testWidgets('illegal premove is cancelled after opponent move with move confirmation', (
         WidgetTester tester,
       ) async {
@@ -793,6 +864,93 @@ void main() {
         expect(boardHasPiece(tester, Square.d5, Piece.blackPawn), isTrue);
         // d4 should still have white's pawn
         expect(boardHasPiece(tester, Square.d4, Piece.whitePawn), isTrue);
+      });
+
+      // Regression test for https://github.com/lichess-org/mobile/issues/3124:
+      // an invalidated premove was being played a couple of moves later.
+      testWidgets('invalidated premove is not replayed on a later move (move confirmation)', (
+        WidgetTester tester,
+      ) async {
+        const gameFullId = GameFullId('qVChCOTcHSeW');
+        final gameSocketUri = GameController.socketUri(gameFullId);
+
+        await createTestGame(
+          tester,
+          pgn: 'e4 e5',
+          clock: const (
+            running: true,
+            initial: Duration(minutes: 1),
+            increment: Duration.zero,
+            white: Duration(seconds: 58),
+            black: Duration(seconds: 54),
+            emerg: Duration(seconds: 10),
+          ),
+          serverPrefs: const ServerGamePrefs(
+            showRatings: true,
+            enablePremove: true,
+            autoQueen: .always,
+            confirmResign: true,
+            submitMove: true,
+            zenMode: .no,
+          ),
+        );
+
+        // white plays Bc4 with confirmation
+        await playMove(tester, 'f1', 'c4');
+        expect(find.text('Confirm move'), findsOneWidget);
+
+        // white premoves the capture Bc4xf7
+        await playMove(tester, 'c4', 'f7');
+        await tester.pump();
+        expect(boardHasPremove(tester, const NormalMove(from: Square.c4, to: Square.f7)), isTrue);
+
+        // confirm Bc4
+        await tester.tap(find.byIcon(CupertinoIcons.checkmark_rectangle_fill));
+        await tester.pump();
+
+        // server acknowledges white's Bc4 (ply 3)
+        sendServerSocketMessages(gameSocketUri, [
+          '{"t": "move", "v": 1, "d": {"ply": 3, "uci": "f1c4", "san": "Bc4", "clock": {"white": 57, "black": 54}}}',
+        ]);
+        await tester.pump();
+
+        // opponent plays d7-d5 (ply 4), blocking the bishop diagonal at d5,
+        // which makes Bc4xf7 illegal: the premove must be discarded.
+        sendServerSocketMessages(gameSocketUri, [
+          '{"t": "move", "v": 2, "d": {"ply": 4, "uci": "d7d5", "san": "d5", "clock": {"white": 57, "black": 52}}}',
+        ]);
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 1));
+        await tester.pump();
+
+        // premove is gone and the bishop has NOT captured on f7
+        expect(boardHasPremove(tester, const NormalMove(from: Square.c4, to: Square.f7)), isFalse);
+        expect(boardHasPiece(tester, Square.c4, Piece.whiteBishop), isTrue);
+        expect(boardHasPiece(tester, Square.f7, Piece.blackPawn), isTrue);
+        expect(boardHasPiece(tester, Square.d5, Piece.blackPawn), isTrue);
+
+        // Now play two more half-moves and make sure the stale premove never
+        // resurfaces ("two moves later").
+        // white plays exd5 with confirmation
+        await playMove(tester, 'e4', 'd5');
+        await tester.tap(find.byIcon(CupertinoIcons.checkmark_rectangle_fill));
+        await tester.pump();
+        sendServerSocketMessages(gameSocketUri, [
+          '{"t": "move", "v": 3, "d": {"ply": 5, "uci": "e4d5", "san": "exd5", "clock": {"white": 56, "black": 52}}}',
+        ]);
+        await tester.pump();
+
+        // opponent plays Qxd5 (ply 6)
+        sendServerSocketMessages(gameSocketUri, [
+          '{"t": "move", "v": 4, "d": {"ply": 6, "uci": "d8d5", "san": "Qxd5", "clock": {"white": 56, "black": 50}}}',
+        ]);
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 1));
+        await tester.pump();
+
+        // the bishop must still be on c4 — the old premove was never played
+        expect(boardHasPiece(tester, Square.c4, Piece.whiteBishop), isTrue);
+        expect(boardHasPiece(tester, Square.f7, Piece.blackPawn), isTrue);
       });
 
       testWidgets('can premove drop moves in Crazyhouse', (WidgetTester tester) async {
@@ -987,6 +1145,90 @@ void main() {
         expect(boardHasPiece(tester, Square.e5, Piece.blackPawn), isTrue);
         expect(boardHasPiece(tester, Square.d2, Piece.whitePawn), isFalse);
       });
+
+      // The premove must only be played when the opponent just moved (it is now
+      // our turn). A forward line change that lands on the opponent's turn — e.g.
+      // a reconnect that resyncs us further along — must keep the premove queued,
+      // not validate it against a position where it isn't our move and discard it.
+      testWidgets('queued premove is kept when a reconnect resyncs to the opponent turn', (
+        WidgetTester tester,
+      ) async {
+        const gameFullId = GameFullId('qVChCOTcHSeW');
+        final gameSocketUri = GameController.socketUri(gameFullId);
+
+        // After e4 it's black's turn; white queues a premove.
+        await createTestGame(
+          tester,
+          pgn: 'e4',
+          clock: const (
+            running: true,
+            initial: Duration(minutes: 1),
+            increment: Duration.zero,
+            white: Duration(seconds: 58),
+            black: Duration(seconds: 58),
+            emerg: Duration(seconds: 10),
+          ),
+          serverPrefs: const ServerGamePrefs(
+            showRatings: true,
+            enablePremove: true,
+            autoQueen: .always,
+            confirmResign: true,
+            submitMove: false,
+            zenMode: .no,
+          ),
+        );
+
+        await playMove(tester, 'd2', 'd4');
+        expect(boardHasPremove(tester, const NormalMove(from: Square.d2, to: Square.d4)), isTrue);
+
+        // A reconnect resyncs the game further along, but it is still black (the
+        // opponent) to move. The premove is not ours to play yet.
+        sendServerSocketMessages(gameSocketUri, [
+          makeFullEvent(
+            const GameId('qVChCOTc'),
+            'e4 e5 Nf3',
+            whiteUserName: 'Peter',
+            blackUserName: 'Steven',
+            youAre: Side.white,
+            socketVersion: 1,
+            clock: const (
+              running: true,
+              initial: Duration(minutes: 1),
+              increment: Duration.zero,
+              white: Duration(seconds: 58),
+              black: Duration(seconds: 56),
+              emerg: Duration(seconds: 10),
+            ),
+            serverPrefs: const ServerGamePrefs(
+              showRatings: true,
+              enablePremove: true,
+              autoQueen: .always,
+              confirmResign: true,
+              submitMove: false,
+              zenMode: .no,
+            ),
+          ),
+        ]);
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 1));
+        await tester.pump();
+
+        // premove preserved and the d-pawn has not moved (still black to move)
+        expect(boardHasPremove(tester, const NormalMove(from: Square.d2, to: Square.d4)), isTrue);
+        expect(boardHasPiece(tester, Square.d2, Piece.whitePawn), isTrue);
+        expect(boardHasPiece(tester, Square.d4, Piece.whitePawn), isFalse);
+
+        // once the opponent actually moves, it becomes our turn and the premove plays
+        sendServerSocketMessages(gameSocketUri, [
+          '{"t": "move", "v": 2, "d": {"ply": 4, "uci": "b8c6", "san": "Nc6", "clock": {"white": 58, "black": 54}}}',
+        ]);
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 1));
+        await tester.pump();
+
+        expect(boardHasPremove(tester, const NormalMove(from: Square.d2, to: Square.d4)), isFalse);
+        expect(boardHasPiece(tester, Square.d4, Piece.whitePawn), isTrue);
+      });
     });
 
     testWidgets('takeback', (WidgetTester tester) async {
@@ -1074,6 +1316,275 @@ void main() {
       await tester.pump(const Duration(seconds: 1));
       expect(findClockWithTime(Side.black, '0:51'), findsOneWidget);
       expect(findClockWithTime(Side.white, '0:55'), findsOneWidget);
+    });
+
+    testWidgets('full event after takeback clamps an out-of-bounds replay cursor', (
+      WidgetTester tester,
+    ) async {
+      const gameFullId = GameFullId('qVChCOTcHSeW');
+      final gameSocketUri = GameController.socketUri(gameFullId);
+
+      // 6 plies -> 7 steps (indices 0..6), live cursor at 6.
+      await createTestGame(
+        tester,
+        pgn: 'e4 e5 Nf3 Nc6 Bc4 Bc5',
+        clock: const (
+          running: true,
+          initial: Duration(minutes: 1),
+          increment: Duration.zero,
+          white: Duration(seconds: 58),
+          black: Duration(seconds: 54),
+          emerg: Duration(seconds: 10),
+        ),
+      );
+      expect(getBoardPieces(tester).length, 32);
+
+      final container = ProviderScope.containerOf(tester.element(find.byType(GameScreen)));
+      final ctrlProvider = gameControllerProvider(gameFullId);
+
+      // The user browses back to an earlier move: the controller is now replaying.
+      container.read(ctrlProvider.notifier).cursorAt(5);
+      await tester.pump();
+      expect(container.read(ctrlProvider).requireValue.isReplaying, isTrue);
+
+      // A takeback rolls the game back to 'e4 e5 Nf3' (4 steps, indices 0..3).
+      // The socket reconnects and the server resends the shortened game state.
+      // The replay cursor (5) now points past the last available step (3).
+      sendServerSocketMessages(gameSocketUri, [
+        makeFullEvent(
+          const GameId('qVChCOTc'),
+          'e4 e5 Nf3',
+          whiteUserName: 'Peter',
+          blackUserName: 'Steven',
+          youAre: Side.white,
+          socketVersion: 1,
+          clock: const (
+            running: true,
+            initial: Duration(minutes: 1),
+            increment: Duration.zero,
+            white: Duration(seconds: 55),
+            black: Duration(seconds: 53),
+            emerg: Duration(seconds: 10),
+          ),
+        ),
+      ]);
+      // Without the clamp the cursor would stay at 5 and rendering the board
+      // position (or calling cursorForward) would throw a RangeError here.
+      await tester.pump();
+
+      final state = container.read(ctrlProvider).requireValue;
+      // The cursor is clamped to the last available step.
+      expect(state.stepCursor, state.game.steps.length - 1);
+      expect(state.stepCursor, 3);
+
+      // The board renders the shortened game without throwing.
+      expect(boardHasPiece(tester, Square.f3, Piece.whiteKnight), isTrue);
+      expect(boardHasPiece(tester, Square.c6, Piece.blackKnight), isFalse);
+      expect(boardHasPiece(tester, Square.c4, Piece.whiteBishop), isFalse);
+      expect(getBoardPieces(tester).length, 32);
+
+      // cursorForward() must be safe to call (the bug this clamp guards against).
+      container.read(ctrlProvider.notifier).cursorForward();
+      await tester.pump();
+      expect(container.read(ctrlProvider).requireValue.stepCursor, 3);
+    });
+
+    testWidgets('full event keeps the replay cursor instead of jumping to the live position', (
+      WidgetTester tester,
+    ) async {
+      const gameFullId = GameFullId('qVChCOTcHSeW');
+      final gameSocketUri = GameController.socketUri(gameFullId);
+
+      // 4 plies -> 5 steps (indices 0..4), live cursor at 4.
+      await createTestGame(
+        tester,
+        pgn: 'e4 e5 Nf3 Nc6',
+        clock: const (
+          running: true,
+          initial: Duration(minutes: 1),
+          increment: Duration.zero,
+          white: Duration(seconds: 58),
+          black: Duration(seconds: 54),
+          emerg: Duration(seconds: 10),
+        ),
+      );
+
+      final container = ProviderScope.containerOf(tester.element(find.byType(GameScreen)));
+      final ctrlProvider = gameControllerProvider(gameFullId);
+
+      // The user browses back to the position after 2.e5: now replaying at step 2.
+      container.read(ctrlProvider.notifier).cursorAt(2);
+      await tester.pump();
+      expect(container.read(ctrlProvider).requireValue.isReplaying, isTrue);
+      expect(boardHasPiece(tester, Square.f3, Piece.whiteKnight), isFalse);
+
+      // A full event arrives (socket reconnect) with the game grown by one move
+      // (the opponent's reply Bc4... here a 5th ply Bc4). The step count changed,
+      // but the browse cursor (2) is still within bounds.
+      //
+      // Pre-PR behaviour: the cursor jumped to the live end (step 5).
+      // PR behaviour: the browse cursor is preserved (step 2).
+      sendServerSocketMessages(gameSocketUri, [
+        makeFullEvent(
+          const GameId('qVChCOTc'),
+          'e4 e5 Nf3 Nc6 Bc4',
+          whiteUserName: 'Peter',
+          blackUserName: 'Steven',
+          youAre: Side.white,
+          socketVersion: 1,
+          clock: const (
+            running: true,
+            initial: Duration(minutes: 1),
+            increment: Duration.zero,
+            white: Duration(seconds: 57),
+            black: Duration(seconds: 54),
+            emerg: Duration(seconds: 10),
+          ),
+        ),
+      ]);
+      await tester.pump();
+
+      final state = container.read(ctrlProvider).requireValue;
+      // The game grew, but the user's browsing position is kept.
+      expect(state.game.steps.length, 6);
+      expect(state.stepCursor, 2);
+      expect(state.isReplaying, isTrue);
+      // Board still shows the position after 2.e5 (Nf3 not yet played at this cursor).
+      expect(boardHasPiece(tester, Square.f3, Piece.whiteKnight), isFalse);
+      expect(boardHasPiece(tester, Square.e4, Piece.whitePawn), isTrue);
+      expect(boardHasPiece(tester, Square.e5, Piece.blackPawn), isTrue);
+    });
+
+    testWidgets('full event clears a pending move-to-confirm when the server position changed', (
+      WidgetTester tester,
+    ) async {
+      const gameFullId = GameFullId('qVChCOTcHSeW');
+      final gameSocketUri = GameController.socketUri(gameFullId);
+
+      // White to move after 2...Nc6, with move confirmation enabled.
+      await createTestGame(
+        tester,
+        pgn: 'e4 e5 Nf3 Nc6',
+        clock: const (
+          running: true,
+          initial: Duration(minutes: 1),
+          increment: Duration.zero,
+          white: Duration(seconds: 58),
+          black: Duration(seconds: 54),
+          emerg: Duration(seconds: 10),
+        ),
+        serverPrefs: const ServerGamePrefs(
+          showRatings: true,
+          enablePremove: true,
+          autoQueen: AutoQueen.always,
+          confirmResign: true,
+          submitMove: true,
+          zenMode: Zen.no,
+        ),
+      );
+
+      final container = ProviderScope.containerOf(tester.element(find.byType(GameScreen)));
+      final ctrlProvider = gameControllerProvider(gameFullId);
+
+      // White selects Nf3-g5 but has not confirmed it yet: the knight is shown on
+      // g5 (via currentPosition) and f3 is vacated.
+      await playMove(tester, 'f3', 'g5');
+      expect(container.read(ctrlProvider).requireValue.moveToConfirm, isNotNull);
+      expect(boardHasPiece(tester, Square.g5, Piece.whiteKnight), isTrue);
+
+      // A takeback is resynced via a full event, rolling the game back to 'e4 e5':
+      // the knight is back on g1 and f3 is empty. The pending Nf3-g5 now refers to
+      // a square (f3) that no longer holds a piece. Keeping it would make
+      // currentPosition play an illegal move on the new position.
+      sendServerSocketMessages(gameSocketUri, [
+        makeFullEvent(
+          const GameId('qVChCOTc'),
+          'e4 e5',
+          whiteUserName: 'Peter',
+          blackUserName: 'Steven',
+          youAre: Side.white,
+          socketVersion: 1,
+          clock: const (
+            running: true,
+            initial: Duration(minutes: 1),
+            increment: Duration.zero,
+            white: Duration(seconds: 57),
+            black: Duration(seconds: 54),
+            emerg: Duration(seconds: 10),
+          ),
+        ),
+      ]);
+      await tester.pump();
+
+      final state = container.read(ctrlProvider).requireValue;
+      // The stale pending move must be dropped...
+      expect(state.moveToConfirm, isNull);
+      // ...and the board renders the resynced position (knight back on g1).
+      expect(boardHasPiece(tester, Square.g1, Piece.whiteKnight), isTrue);
+      expect(boardHasPiece(tester, Square.g5, Piece.whiteKnight), isFalse);
+      expect(boardHasPiece(tester, Square.f3, Piece.whiteKnight), isFalse);
+      expect(getBoardPieces(tester).length, 32);
+    });
+
+    testWidgets('full event keeps a pending move-to-confirm when the position is unchanged', (
+      WidgetTester tester,
+    ) async {
+      const gameFullId = GameFullId('qVChCOTcHSeW');
+      final gameSocketUri = GameController.socketUri(gameFullId);
+
+      await createTestGame(
+        tester,
+        pgn: 'e4 e5 Nf3 Nc6',
+        clock: const (
+          running: true,
+          initial: Duration(minutes: 1),
+          increment: Duration.zero,
+          white: Duration(seconds: 58),
+          black: Duration(seconds: 54),
+          emerg: Duration(seconds: 10),
+        ),
+        serverPrefs: const ServerGamePrefs(
+          showRatings: true,
+          enablePremove: true,
+          autoQueen: AutoQueen.always,
+          confirmResign: true,
+          submitMove: true,
+          zenMode: Zen.no,
+        ),
+      );
+
+      final container = ProviderScope.containerOf(tester.element(find.byType(GameScreen)));
+      final ctrlProvider = gameControllerProvider(gameFullId);
+
+      await playMove(tester, 'f3', 'g5');
+      expect(container.read(ctrlProvider).requireValue.moveToConfirm, isNotNull);
+      expect(boardHasPiece(tester, Square.g5, Piece.whiteKnight), isTrue);
+
+      // A transient reconnect resends the same game state ('e4 e5 Nf3 Nc6'): the
+      // position the move was selected for is unchanged, so the pending move (and
+      // its confirmation dialog) must survive.
+      sendServerSocketMessages(gameSocketUri, [
+        makeFullEvent(
+          const GameId('qVChCOTc'),
+          'e4 e5 Nf3 Nc6',
+          whiteUserName: 'Peter',
+          blackUserName: 'Steven',
+          youAre: Side.white,
+          socketVersion: 1,
+          clock: const (
+            running: true,
+            initial: Duration(minutes: 1),
+            increment: Duration.zero,
+            white: Duration(seconds: 58),
+            black: Duration(seconds: 54),
+            emerg: Duration(seconds: 10),
+          ),
+        ),
+      ]);
+      await tester.pump();
+
+      expect(container.read(ctrlProvider).requireValue.moveToConfirm, isNotNull);
+      expect(boardHasPiece(tester, Square.g5, Piece.whiteKnight), isTrue);
     });
   });
 
@@ -1688,7 +2199,7 @@ void main() {
       await tester.tap(find.text('Analysis board'));
       await tester.pumpAndSettle(); // wait for analysis screen to open
       expect(
-        find.descendant(of: find.byType(AppBar), matching: find.textContaining('Rated')),
+        find.descendant(of: find.byType(AppBar), matching: find.text('2+1 • Rated')),
         findsOneWidget,
       ); // analysis screen is now open
       expect(find.byType(Chessboard), findsOneWidget);
@@ -1972,6 +2483,57 @@ void main() {
         reason: 'the bottom bar must not rebuild on an opponent move',
       );
     });
+
+    testWidgets(
+      'a chat message does not rebuild GameBody, GameLayout, the board or the bottom bar',
+      (tester) async {
+        await createTestGame(tester, pgn: 'e4 e5');
+        await tester.pump(const Duration(milliseconds: 50));
+
+        final gameBodyBefore = tester.widget<GameBody>(find.byType(GameBody));
+        final gameLayoutBefore = tester.widget<GameLayout>(find.byType(GameLayout));
+        final boardBefore = tester.widget<Chessboard>(find.byType(Chessboard));
+        final bottomBarBefore = tester.widget<BottomBar>(find.byType(BottomBar));
+
+        // A spectator/opponent chat message arrives from the server.
+        sendServerSocketMessages(testGameSocketUri, [
+          '{"t":"message","d":{"u":"Steven","t":"Hello!"}}',
+        ]);
+        await tester.pump();
+
+        // The chat state lives in the GameController, but receiving a message must
+        // not rebuild the expensive game widgets — only the isolated chat button
+        // (which renders the unread badge) is allowed to rebuild.
+        expect(
+          identical(tester.widget<GameBody>(find.byType(GameBody)), gameBodyBefore),
+          isTrue,
+          reason: 'GameScreen must not rebuild GameBody on a chat message',
+        );
+        expect(
+          identical(tester.widget<GameLayout>(find.byType(GameLayout)), gameLayoutBefore),
+          isTrue,
+          reason: 'the GameLayout shell must not rebuild on a chat message',
+        );
+        expect(
+          identical(tester.widget<Chessboard>(find.byType(Chessboard)), boardBefore),
+          isTrue,
+          reason: 'the board must not rebuild on a chat message',
+        );
+        expect(
+          identical(tester.widget<BottomBar>(find.byType(BottomBar)), bottomBarBefore),
+          isTrue,
+          reason: 'the bottom bar must not rebuild on a chat message',
+        );
+
+        // Sanity check that the message was actually delivered (so the test is not
+        // vacuously passing because the message never arrived): opening the chat
+        // shows it. The chat state lives in the GameController and was updated
+        // without rebuilding any of the game widgets asserted above.
+        await tester.tap(find.byType(ChatBottomBarButton));
+        await tester.pumpAndSettle();
+        expect(find.text('Hello!'), findsOneWidget);
+      },
+    );
   });
 
   group('Wakelock', () {
@@ -2045,41 +2607,34 @@ void main() {
       // No countdown until the opponent leaves.
       expect(find.byType(CountdownClockBuilder), findsNothing);
 
-      // 'goneIn' announces the opponent left and starts the claim-win countdown.
+      // The player clock is displayed before the opponent leaves.
+      expect(find.byKey(const ValueKey('white-clock')), findsOneWidget);
+
+      // 'goneIn' announces the opponent left and starts the claim-win countdown,
+      // shown inline in the player table (not as a dialog). The countdown takes
+      // over the table, so the player's clock is hidden.
       sendServerSocketMessages(testGameSocketUri, ['{"t": "goneIn", "v": 1, "d": 30}']);
       await tester.pump();
       expect(find.textContaining('claim victory in 30 seconds'), findsOneWidget);
-
-      final countdownButton = find.ancestor(
-        of: find.textContaining('claim victory in 30 seconds'),
-        matching: find.byType(InkWell),
-      );
+      expect(find.byKey(const ValueKey('white-clock')), findsNothing);
 
       // Victory is not claimable until the 'gone' threshold is reached, so the
-      // countdown is not tappable yet (InkWell.onTap is null).
-      await tester.tap(countdownButton, warnIfMissed: false);
-      await tester.pump();
+      // claim choices are not shown yet.
       expect(find.text('Claim victory'), findsNothing);
+      expect(find.text('Call draw'), findsNothing);
 
       // 'gone' confirms the opponent has been gone long enough to claim.
       sendServerSocketMessages(testGameSocketUri, ['{"t": "gone", "v": 2, "d": true}']);
       await tester.pump();
 
-      // Tapping the countdown now opens the claim-win dialog. (warnIfMissed: the
-      // tap reaches the InkWell's gesture listener, but layered widgets mean the
-      // InkWell RenderBox isn't the topmost hit-test object at its center.)
-      await tester.tap(countdownButton, warnIfMissed: false);
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 500));
+      // The two claim choices now appear inline in the player table.
       expect(find.text('Claim victory'), findsOneWidget);
       expect(find.text('Call draw'), findsOneWidget);
 
-      // Claiming victory sends the force-resign message and closes the dialog.
+      // Claiming victory sends the force-resign message.
       expectLater(socketFactory.outgoingMessages(testGameSocketUri), emits('{"t":"resign-force"}'));
       await tester.tap(find.text('Claim victory'));
       await tester.pump();
-      await tester.pump(const Duration(milliseconds: 500));
-      expect(find.text('Claim victory'), findsNothing);
     });
   });
 

@@ -56,6 +56,10 @@ class BoardPreferences extends Notifier<BoardPrefs> with PreferencesStorage<Boar
     await save(state.copyWith(pieceShiftMethod: pieceShiftMethod));
   }
 
+  Future<void> toggleMoveOnRelease() async {
+    await save(state.copyWith(moveOnRelease: !state.moveOnRelease));
+  }
+
   Future<void> setCastlingMethod(CastlingMethod castlingMethod) {
     return save(state.copyWith(castlingMethod: castlingMethod));
   }
@@ -157,6 +161,7 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
     required LandscapeBoardPosition landscapeBoardPosition,
     @JsonKey(defaultValue: PieceShiftMethod.either, unknownEnumValue: PieceShiftMethod.either)
     required PieceShiftMethod pieceShiftMethod,
+    @JsonKey(defaultValue: false) required bool moveOnRelease,
     @JsonKey(
       defaultValue: CastlingMethod.kingOverRook,
       unknownEnumValue: CastlingMethod.kingOverRook,
@@ -194,6 +199,7 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
     premoves: true,
     confirmResignAndDraw: true,
     pieceShiftMethod: PieceShiftMethod.either,
+    moveOnRelease: false,
     castlingMethod: CastlingMethod.kingOverRook,
     enableShapeDrawings: true,
     magnifyDraggedPiece: true,
@@ -224,6 +230,7 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
       dragFeedbackOffset: Offset(0.0, magnifyDraggedPiece ? -1.0 : 0.0),
       dragTargetKind: dragTargetKind,
       pieceShiftMethod: pieceShiftMethod,
+      moveOnRelease: moveOnRelease,
       drawShape: DrawShapeOptions(enable: enableShapeDrawings, newShapeColor: shapeColor.color),
       enableDrops: variant == Variant.crazyhouse,
       canPromoteToKing: variant == Variant.antichess,

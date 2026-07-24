@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="account" comment="Title for the account screen.&#10;&#10;This is just a title for the account, NOT account preferences.">Akkaunt</string>
-  <string name="accountPreferences" comment="Displayed on settings screen.&#10;&#10;These preferences are applied to your Lichess account and will be used across all devices. They are not mobile-specific and will be synced with the server.">Akkaunt sozlamalari</string>
+  <string name="account" comment="The account screen title.">Akkaunt</string>
+  <string name="accountPreferences" comment="Displayed on settings screen. This is for preferences synced with website on the server.">Akkaunt sozlamalari</string>
   <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">Ushbu sozlamalar Lichess akkauntingizga saqlanadi va barcha qurilmalaringizda amal qiladi.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Barcha oʻyinlar</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Ishonchingiz komilmi?</string>
@@ -32,7 +32,7 @@
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Urinishni yakunlamoqchimisiz?</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Hech narsa topilmadi, iltimos, filtrlarni oʻzgartiring</string>
   <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Koʻrsatish uchun hech narsa yoʻq. Puzzle Storm rejimida bir necha bor oʻynab koʻring.</string>
-  <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">3 daqiqa ichida iloji boricha koʻproq masala yeching.</string>
+  <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">3 minut ichida iloji boricha koʻproq masala yeching.</string>
   <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">Joriy seriyangiz toʻxtatiladi va natijangiz saqlanadi.</string>
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Sevimli debyutlaringizga oid masalalar yeching yoki biror mavzu tanlang.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Masalalar</string>
@@ -90,4 +90,5 @@
   <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">Chorlov yaratildi: oʻyin boshlanganida bildirishnoma olasiz.\nUnga asosiy ekrandan kirishingiz mumkin.</string>
   <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Oldingi</string>
   <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">Yoki PGN faylini import qiling</string>
+  <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">Yaxshi yurish, ammo bundan ham yaxshirogʻi bor</string>
 </resources>

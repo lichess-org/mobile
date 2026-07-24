@@ -50,23 +50,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final account = ref.watch(accountProvider);
-    final connectionStatus = ref.watch(connectionStatusProvider);
+    final online = ref.watch(onlineStatusProvider).value ?? false;
     return PlatformScaffold(
       appBar: PlatformAppBar(
         titleSpacing: 0,
         title: account.when(
           data: (user) => user == null
               ? const SizedBox.shrink()
-              : ListTile(
-                  contentPadding: EdgeInsets.zero,
-                  leading: UserAvatar(user.lightUser, radius: 16),
-                  title: UserFullNameWidget(user: user.lightUser, showFlair: false),
-                  subtitle: Text(
-                    connectionStatus == ConnectionStatus.online
-                        ? context.l10n.online
-                        : context.l10n.offline,
-                  ),
-                ),
+              : UserAppBarTitleWidget(user: user.lightUser, isOnline: online, seenAt: user.seenAt),
           loading: () => const SizedBox.shrink(),
           error: (error, _) => const SizedBox.shrink(),
         ),

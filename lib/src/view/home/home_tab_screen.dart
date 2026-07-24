@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/home_preferences.dart';
 import 'package:lichess_mobile/src/model/account/home_widgets.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
+import 'package:lichess_mobile/src/model/account/ongoing_games_notifier.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/blog/blog.dart';
 import 'package:lichess_mobile/src/model/blog/blog_repository.dart';
@@ -21,13 +22,14 @@ import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/message/message_repository.dart';
+import 'package:lichess_mobile/src/model/relation/following_user.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_providers.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/tab_scaffold.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
@@ -42,6 +44,7 @@ import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/game/offline_correspondence_games_screen.dart';
 import 'package:lichess_mobile/src/view/home/blog_carousel.dart';
+import 'package:lichess_mobile/src/view/home/following_carousel.dart';
 import 'package:lichess_mobile/src/view/home/games_carousel.dart';
 import 'package:lichess_mobile/src/view/home/server_outage.dart';
 import 'package:lichess_mobile/src/view/message/conversation_screen.dart';
@@ -52,7 +55,6 @@ import 'package:lichess_mobile/src/view/play/quick_game_matrix.dart';
 import 'package:lichess_mobile/src/view/settings/engine_settings_screen.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_list_screen.dart';
 import 'package:lichess_mobile/src/view/user/challenge_requests_screen.dart';
-import 'package:lichess_mobile/src/view/user/player_screen.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -161,6 +163,9 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
         final blogPosts = isOnline
             ? ref.watch(blogCarouselProvider)
             : const AsyncValue.data(IListConst<BlogPost>([]));
+        final followingAsync = authUser != null && isOnline
+            ? ref.watch(followingCarouselProvider)
+            : const AsyncValue.data(IListConst<FollowingUser>([]));
 
         final isKidMode = ref.watch(kidModeProvider).value ?? false;
 
@@ -270,6 +275,11 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                 shouldShow: authUser != null,
                 child: const AccountPerfCards(padding: Styles.bodySectionPadding),
               ),
+            _EditableWidget(
+              widget: HomeEditableWidget.friends,
+              shouldShow: authUser != null && isOnline,
+              child: FollowingCarousel(followingAsync),
+            ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -330,6 +340,11 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
               child: AccountPerfCards(
                 padding: Styles.horizontalBodyPadding.add(Styles.sectionBottomPadding),
               ),
+            ),
+            _EditableWidget(
+              widget: HomeEditableWidget.friends,
+              shouldShow: authUser != null && isOnline,
+              child: FollowingCarousel(followingAsync),
             ),
             _EditableWidget(
               widget: HomeEditableWidget.quickPairing,
@@ -399,11 +414,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                       titleTextStyle: Theme.of(context).platform == TargetPlatform.iOS
                           ? Theme.of(context).textTheme.headlineSmall
                           : null,
-                      actions: const [
-                        _ChallengeScreenButton(),
-                        _PlayerScreenButton(),
-                        AccountMenuButton(),
-                      ],
+                      actions: const [_ChallengeScreenButton(), AccountMenuButton()],
                     ),
               body: ref.watch(connectionStatusProvider) == ConnectionStatus.serverDown
                   ? HapticRefreshIndicator(
@@ -459,6 +470,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
       if (isOnline) ref.refresh(accountProvider.future),
       if (isOnline) ref.refresh(ongoingGamesProvider.future),
       if (isOnline) ref.refresh(featuredTournamentsProvider.future),
+      if (isOnline) ref.refresh(followingCarouselProvider.future),
     ]);
   }
 }
@@ -473,7 +485,7 @@ class _LichessMessageBanner extends ConsumerWidget {
       color: theme.colorScheme.tertiaryContainer,
       child: InkWell(
         onTap: () {
-          Navigator.of(context)
+          Navigator.of(context, rootNavigator: true)
               .push(
                 ConversationScreen.buildRoute(
                   user: const LightUser(id: UserId('lichess'), name: 'lichess'),
@@ -752,6 +764,7 @@ class _OngoingGamesCarousel extends ConsumerWidget {
               GameScreen.buildRoute(
                 source: ExistingGameSource(game.fullId),
                 loadingPosition: (
+                  variant: game.variant,
                   fen: game.fen,
                   orientation: game.orientation,
                   lastMove: game.lastMove,
@@ -905,25 +918,6 @@ class PreviewGameList<T> extends StatelessWidget {
           for (final data in list.take(maxGamesToShow)) builder(data),
         ],
       ),
-    );
-  }
-}
-
-class _PlayerScreenButton extends ConsumerWidget {
-  const _PlayerScreenButton();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final connectionStatus = ref.watch(connectionStatusProvider);
-
-    return SemanticIconButton(
-      icon: const Icon(Icons.group_outlined),
-      semanticsLabel: context.l10n.players,
-      onPressed: connectionStatus != ConnectionStatus.online
-          ? null
-          : () {
-              Navigator.of(context).push(PlayerScreen.buildRoute());
-            },
     );
   }
 }

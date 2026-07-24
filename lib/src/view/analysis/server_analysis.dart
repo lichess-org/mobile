@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/acpl_chart.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -17,6 +18,8 @@ class ServerAnalysisSummary extends ConsumerWidget {
     required this.pgnHeaders,
     required this.acplChartParams,
     required this.onRequestServerAnalysis,
+    this.whiteUser,
+    this.blackUser,
     super.key,
   });
 
@@ -25,6 +28,10 @@ class ServerAnalysisSummary extends ConsumerWidget {
   final PlayersAnalysis? playersAnalysis;
 
   final IMap<String, String> pgnHeaders;
+
+  final LightUser? whiteUser;
+
+  final LightUser? blackUser;
 
   final AcplChartParams? acplChartParams;
 
@@ -70,7 +77,12 @@ class ServerAnalysisSummary extends ConsumerWidget {
                 ),
 
               if (acplChartParams != null) AcplChart(params: acplChartParams!),
-              GameSummaryTable(pgnHeaders: pgnHeaders, playersAnalysis: playersAnalysis!),
+              GameSummaryTable(
+                pgnHeaders: pgnHeaders,
+                playersAnalysis: playersAnalysis!,
+                whiteUser: whiteUser,
+                blackUser: blackUser,
+              ),
             ],
           )
         : Column(
@@ -147,7 +159,7 @@ class WaitingForServerAnalysis extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.max,
       children: [
-        Image.asset('assets/images/stockfish/icon.png', width: 30, height: 30),
+        Image.asset('assets/images/stockfish/icon.webp', width: 30, height: 30),
         const SizedBox(width: 8.0),
         Text(context.l10n.waitingForAnalysis),
         const SizedBox(width: 8.0),
