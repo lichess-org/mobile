@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ServerOutage extends ConsumerWidget {
@@ -12,8 +11,8 @@ class ServerOutage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final brightness = Theme.of(context).brightness;
     final logo = brightness == Brightness.dark
-        ? 'assets/images/logo-white.png'
-        : 'assets/images/logo-black.png';
+        ? 'assets/images/logo-white.webp'
+        : 'assets/images/logo-black.webp';
     final mastodonLogo = brightness == Brightness.dark
         ? 'assets/images/mastodon-logo-purple.png'
         : 'assets/images/mastodon-logo-black.png';
@@ -37,10 +36,13 @@ class ServerOutage extends ConsumerWidget {
                     children: [
                       Image.asset(logo, width: 150),
                       const SizedBox(height: 16),
-                      Text(context.l10n.mobileServerOutageMessage, textAlign: TextAlign.center),
+                      const Text(
+                        "Lichess is undergoing technical difficulties. We're doing everything we can, and expect to be back up very soon.",
+                        textAlign: TextAlign.center,
+                      ),
                       const SizedBox(height: 16),
-                      Text(
-                        context.l10n.mobileServerOutageKeepInformed,
+                      const Text(
+                        'To get updates on the maintenance, checkout our social media channels.',
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 16),
