@@ -199,21 +199,30 @@ class PuzzleController extends Notifier<PuzzleState> {
 
     await ref.read(puzzlePreferencesProvider.notifier).setDifficulty(difficulty);
 
-    final nextPuzzle = (await _service).resetBatch(
+    final nextPuzzleFuture = (await _service).resetBatch(
       userId: initialContext.userId,
       angle: initialContext.angle,
     );
 
     state = state.copyWith(isChangingDifficulty: false);
 
+    // Wait for the reset to land before topping the queue back up: [resetBatch]
+    // saves a batch built from a snapshot taken before its own request, without
+    // merging, so a fill running concurrently would see its writes overwritten,
+    // and its "the queue did not grow" check would then stop it early, below
+    // the configured count.
+    final nextPuzzle = await nextPuzzleFuture;
+
     // Difficulty invalidates the queue, so resetBatch only refetched one batch
     // (capped at 50 by the server). Top the queue back up to the configured
     // count in the background, matching the settings-change behaviour.
-    unawaited(
-      ref
-          .read(puzzleQueueFillerProvider.notifier)
-          .fill(userId: initialContext.userId, angle: initialContext.angle),
-    );
+    if (ref.mounted) {
+      unawaited(
+        ref
+            .read(puzzleQueueFillerProvider.notifier)
+            .fill(userId: initialContext.userId, angle: initialContext.angle),
+      );
+    }
 
     return nextPuzzle;
   }
