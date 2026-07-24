@@ -3,6 +3,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
@@ -15,6 +16,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_solve_limit.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -122,6 +124,38 @@ void main() {
 
       expect(find.byType(Chessboard), findsOneWidget);
       expect(find.text('Your turn'), findsOneWidget);
+    });
+
+    testWidgets('Warns the user when the server rate-limits solve submissions', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: PuzzleScreen(
+          angle: const PuzzleTheme(PuzzleThemeKey.mix),
+          puzzleId: puzzle.puzzle.id,
+        ),
+        overrides: {
+          puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith(
+            (ref) => mockBatchStorage,
+          ),
+          puzzleStorageProvider: puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
+        },
+        authUser: fakeAuthUser,
+      );
+
+      when(
+        () => mockHistoryStorage.fetch(puzzleId: puzzle.puzzle.id),
+      ).thenAnswer((_) async => puzzle);
+
+      await tester.pumpWidget(app);
+      await tester.pump(const Duration(milliseconds: 200));
+
+      // arm the solve back-off, as a 429 on a solve flush would; the screen
+      // watches it and warns the user with the rejected count.
+      final container = ProviderScope.containerOf(tester.element(find.byType(PuzzleScreen)));
+      container.read(puzzleSolveLimiterProvider.notifier).markLimited(7);
+      await tester.pump();
+
+      expect(find.textContaining('You solved 7 puzzles'), findsOneWidget);
     });
 
     testWidgets(

@@ -177,23 +177,15 @@ void main() {
 
       final container = await makeTestContainer(mockClient);
       final storage = await container.read(puzzleBatchStorageProvider.future);
-      // storage already holds a solved entry: the filler must not report it
-      await storage.save(
-        userId: _user,
-        data: _makePuzzleBatch(
-          unsolved: const [],
-          solved: [const PuzzleSolution(id: PuzzleId('old'), win: true, rated: true)],
-        ),
-      );
 
+      // fills a queue with no pending solves: must download via GET, never POST
       await container
           .read(puzzleQueueFillerProvider.notifier)
           .fill(userId: _user, queueLengthOverride: 2);
 
       expect(nbPost, equals(0), reason: 'fill must only GET, never POST solves');
       final data = await storage.fetch(userId: _user);
-      // pre-existing solved list is preserved untouched
-      expect(data?.solved.length, equals(1));
+      expect(data?.solved, equals(IList(const [])));
       expect(data?.unsolved.length, equals(2));
     });
 
@@ -260,6 +252,36 @@ void main() {
       );
       final data = await storage.fetch(userId: _user, angle: nonMixAngle);
       expect(data?.unsolved.length, equals(kMinOfflinePuzzles));
+    });
+
+    test('does not refill while there are pending (unflushed) solves', () async {
+      // Solving is the binding constraint (lila caps solves at 400/h, far
+      // tighter than puzzle fetching), so while a solved backlog waits to flush
+      // the filler must not keep growing the unsolved queue.
+      int nbReq = 0;
+      final mockClient = MockClient((request) {
+        nbReq++;
+        return mockResponse('', 404);
+      });
+
+      final container = await makeTestContainer(mockClient);
+      final storage = await container.read(puzzleBatchStorageProvider.future);
+      await storage.save(
+        userId: _user,
+        data: _makePuzzleBatch(
+          unsolved: [const PuzzleId('pId3')],
+          solved: [const PuzzleSolution(id: PuzzleId('done'), win: true, rated: true)],
+        ),
+      );
+
+      await container
+          .read(puzzleQueueFillerProvider.notifier)
+          .fill(userId: _user, queueLengthOverride: 5);
+
+      expect(nbReq, equals(0), reason: 'no download while solves are pending flush');
+      final data = await storage.fetch(userId: _user);
+      expect(data?.unsolved.length, equals(1));
+      expect(data?.solved.length, equals(1));
     });
 
     test('is a no-op for anonymous users', () async {

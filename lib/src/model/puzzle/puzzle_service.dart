@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_batch_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_solve_limit.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -162,15 +163,26 @@ class PuzzleService {
 
     final deficit = max(0, queueLength - unsolved.length);
 
+    // anonymous users can't solve puzzles, so their sync only ever downloads
+    final isSolving = solved.isNotEmpty && userId != null;
+
+    // Back off while the server is rate-limiting solves: keep serving from the
+    // local unsolved queue instead of firing another solveBatch that will 429
+    // again. This also stops the queue from refilling (solveBatch is the only
+    // refill path once there are pending solves), so the solved backlog can't
+    // grow past the current unsolved queue.
+    if (isSolving && _ref.read(puzzleSolveLimiterProvider.notifier).isLimited) {
+      return Result.value((data, null, null));
+    }
+
     if (deficit > 0 || solved.isNotEmpty) {
       _log.fine('Will sync puzzles with lichess (deficit: $deficit, solved: ${solved.length})');
 
       final difficulty = _ref.read(puzzlePreferencesProvider).difficulty;
 
-      // anonymous users can't solve puzzles so we just download the deficit
       final batchResponse = _ref.withClient(
         (client) => Result.capture(
-          solved.isNotEmpty && userId != null
+          isSolving
               ? PuzzleRepository(
                   client,
                 ).solveBatch(nb: deficit, solved: solved, angle: angle, difficulty: difficulty)
@@ -193,7 +205,14 @@ class PuzzleService {
             )),
 
             // we don't need to save the batch if the request failed
-            (_, _) => Result.value((data, null, null, false)),
+            (error, _) {
+              // Arm the back-off when the server rejects a solve flush with 429,
+              // so later solves stop hammering it and the UI can warn the user.
+              if (isSolving && error is ServerException && error.statusCode == 429) {
+                _ref.read(puzzleSolveLimiterProvider.notifier).markLimited(solved.length);
+              }
+              return Result.value((data, null, null, false));
+            },
           )
           .flatMap((tuple) async {
             final (newBatch, glicko, rounds, shouldSave) = tuple;

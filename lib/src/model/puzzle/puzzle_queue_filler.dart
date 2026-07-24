@@ -78,6 +78,12 @@ class PuzzleQueueFiller extends Notifier<bool> {
         }
         final unsolved = current?.unsolved ?? IList(const []);
 
+        // Don't grow the unsolved queue while there are solves we still owe the
+        // server: fetching more only enlarges a backlog we can't flush yet.
+        // Solving is the binding constraint (lila caps solves at 400/h, far
+        // tighter than puzzle fetching), so nothing else throttles this refill.
+        if (current != null && current.solved.isNotEmpty) break;
+
         if (unsolved.length == lastLength) break;
         lastLength = unsolved.length;
 

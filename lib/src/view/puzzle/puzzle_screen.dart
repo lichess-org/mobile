@@ -19,6 +19,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_queue_filler.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_solve_limit.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
@@ -440,6 +441,18 @@ class _BodyState extends ConsumerState<_Body> {
     final boardPreferences = ref.watch(boardPreferencesProvider);
     final ctrlProvider = puzzleControllerProvider(widget.initialPuzzleContext);
     final puzzleState = ref.watch(ctrlProvider);
+
+    // Warn the user when the server starts rate-limiting solve submissions.
+    ref.listen(puzzleSolveLimiterProvider, (previous, next) {
+      if (next != null && next != previous) {
+        showSnackBar(
+          context,
+          'You solved ${next.solvedCount} puzzles very quickly. Please wait a while before '
+          'solving more so your results can be saved.',
+          type: SnackBarType.error,
+        );
+      }
+    });
 
     // Drive the board on position/interactivity changes without rebuilding it.
     ref.listen(
