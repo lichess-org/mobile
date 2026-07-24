@@ -10,7 +10,6 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:logging/logging.dart';
-import 'package:meta/meta.dart';
 
 /// The server caps each batch request at 50 puzzles regardless of the requested
 /// `nb` (`nb.atMost(50)` in lila's `Puzzle` controller), so a queue larger than
@@ -43,7 +42,6 @@ class PuzzleQueueFiller extends Notifier<bool> {
   Future<void> fill({
     required UserId? userId,
     PuzzleAngle angle = const PuzzleTheme(PuzzleThemeKey.mix),
-    @visibleForTesting int? queueLengthOverride,
   }) async {
     // The larger offline queue is a logged-in-only feature: anonymous players
     // face a much higher server rate limit for fetching puzzles, so the fill is
@@ -52,8 +50,7 @@ class PuzzleQueueFiller extends Notifier<bool> {
     if (state) return;
     state = true;
     try {
-      final configured =
-          queueLengthOverride ?? ref.read(puzzlePreferencesProvider).nbOfflinePuzzles;
+      final configured = ref.read(puzzlePreferencesProvider).nbOfflinePuzzles;
       final queueLength = offlineQueueLengthForAngle(angle, configured);
       final difficulty = ref.read(puzzlePreferencesProvider).difficulty;
       final batchStorage = await ref.read(puzzleBatchStorageProvider.future);

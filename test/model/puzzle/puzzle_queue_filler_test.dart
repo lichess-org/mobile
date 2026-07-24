@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_batch_storage.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_queue_filler.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
@@ -25,17 +26,36 @@ const _user = UserId('testUser');
 
 class _MockPuzzleBatchStorage extends Mock implements PuzzleBatchStorage {}
 
+/// A [PuzzlePreferences] that returns a fixed, unclamped offline queue length,
+/// so tests can drive the fill with small (cheap) values that the real,
+/// [kMinOfflinePuzzles]-clamped preference could never produce.
+class _FakePuzzlePreferences extends PuzzlePreferences {
+  _FakePuzzlePreferences(this._nbOfflinePuzzles);
+
+  final int _nbOfflinePuzzles;
+
+  @override
+  PuzzlePrefs build() => PuzzlePrefs(
+    id: null,
+    difficulty: PuzzleDifficulty.normal,
+    nbOfflinePuzzles: _nbOfflinePuzzles,
+  );
+}
+
 void main() {
   setUpAll(() {
     registerFallbackValue(const PuzzleTheme(PuzzleThemeKey.mix));
   });
 
-  Future<ProviderContainer> makeTestContainer(MockClient mockClient) {
+  Future<ProviderContainer> makeTestContainer(MockClient mockClient, {int nbOfflinePuzzles = 100}) {
     return makeContainer(
       overrides: {
         lichessClientProvider: lichessClientProvider.overrideWith((ref) {
           return LichessClient(mockClient, ref);
         }),
+        puzzlePreferencesProvider: puzzlePreferencesProvider.overrideWith(
+          () => _FakePuzzlePreferences(nbOfflinePuzzles),
+        ),
       },
     );
   }
@@ -55,12 +75,10 @@ void main() {
         return mockResponse('', 404);
       });
 
-      final container = await makeTestContainer(mockClient);
+      final container = await makeTestContainer(mockClient, nbOfflinePuzzles: 3);
       final storage = await container.read(puzzleBatchStorageProvider.future);
 
-      await container
-          .read(puzzleQueueFillerProvider.notifier)
-          .fill(userId: _user, queueLengthOverride: 3);
+      await container.read(puzzleQueueFillerProvider.notifier).fill(userId: _user);
 
       expect(nbReq, equals(3), reason: 'three GET requests to reach a queue of 3');
       final data = await storage.fetch(userId: _user);
@@ -79,16 +97,14 @@ void main() {
         return mockResponse('', 404);
       });
 
-      final container = await makeTestContainer(mockClient);
+      final container = await makeTestContainer(mockClient, nbOfflinePuzzles: 3);
       final storage = await container.read(puzzleBatchStorageProvider.future);
       await storage.save(
         userId: _user,
         data: _makePuzzleBatch(unsolved: [const PuzzleId('pId3')]),
       );
 
-      await container
-          .read(puzzleQueueFillerProvider.notifier)
-          .fill(userId: _user, queueLengthOverride: 3);
+      await container.read(puzzleQueueFillerProvider.notifier).fill(userId: _user);
 
       expect(nbReq, equals(1));
       final data = await storage.fetch(userId: _user);
@@ -102,16 +118,14 @@ void main() {
         return mockResponse('', 404);
       });
 
-      final container = await makeTestContainer(mockClient);
+      final container = await makeTestContainer(mockClient, nbOfflinePuzzles: 1);
       final storage = await container.read(puzzleBatchStorageProvider.future);
       await storage.save(
         userId: _user,
         data: _makePuzzleBatch(unsolved: [const PuzzleId('pId3')]),
       );
 
-      await container
-          .read(puzzleQueueFillerProvider.notifier)
-          .fill(userId: _user, queueLengthOverride: 1);
+      await container.read(puzzleQueueFillerProvider.notifier).fill(userId: _user);
 
       expect(nbReq, equals(0), reason: 'no request when there is no deficit');
       final data = await storage.fetch(userId: _user);
@@ -129,12 +143,10 @@ void main() {
         return mockResponse('', 404);
       });
 
-      final container = await makeTestContainer(mockClient);
+      final container = await makeTestContainer(mockClient, nbOfflinePuzzles: 10);
       final storage = await container.read(puzzleBatchStorageProvider.future);
 
-      await container
-          .read(puzzleQueueFillerProvider.notifier)
-          .fill(userId: _user, queueLengthOverride: 10);
+      await container.read(puzzleQueueFillerProvider.notifier).fill(userId: _user);
 
       expect(nbReq, equals(2), reason: 'one filling request, one empty response, then stop');
       final data = await storage.fetch(userId: _user);
@@ -148,7 +160,7 @@ void main() {
         throw const SocketException('offline');
       });
 
-      final container = await makeTestContainer(mockClient);
+      final container = await makeTestContainer(mockClient, nbOfflinePuzzles: 5);
       final storage = await container.read(puzzleBatchStorageProvider.future);
       await storage.save(
         userId: _user,
@@ -156,9 +168,7 @@ void main() {
       );
 
       // must not throw
-      await container
-          .read(puzzleQueueFillerProvider.notifier)
-          .fill(userId: _user, queueLengthOverride: 5);
+      await container.read(puzzleQueueFillerProvider.notifier).fill(userId: _user);
 
       expect(nbReq, equals(1));
       final data = await storage.fetch(userId: _user);
@@ -175,13 +185,11 @@ void main() {
         return mockResponse('', 404);
       });
 
-      final container = await makeTestContainer(mockClient);
+      final container = await makeTestContainer(mockClient, nbOfflinePuzzles: 2);
       final storage = await container.read(puzzleBatchStorageProvider.future);
 
       // fills a queue with no pending solves: must download via GET, never POST
-      await container
-          .read(puzzleQueueFillerProvider.notifier)
-          .fill(userId: _user, queueLengthOverride: 2);
+      await container.read(puzzleQueueFillerProvider.notifier).fill(userId: _user);
 
       expect(nbPost, equals(0), reason: 'fill must only GET, never POST solves');
       final data = await storage.fetch(userId: _user);
@@ -200,12 +208,12 @@ void main() {
         return mockResponse('', 404);
       });
 
-      final container = await makeTestContainer(mockClient);
+      final container = await makeTestContainer(mockClient, nbOfflinePuzzles: 2);
       final storage = await container.read(puzzleBatchStorageProvider.future);
       final notifier = container.read(puzzleQueueFillerProvider.notifier);
 
       // fire two overlapping fills; the second must return immediately
-      final first = notifier.fill(userId: _user, queueLengthOverride: 2);
+      final first = notifier.fill(userId: _user);
       final second = notifier.fill(userId: _user);
       await Future.wait([first, second]);
 
@@ -230,7 +238,7 @@ void main() {
         return mockResponse('', 404);
       });
 
-      final container = await makeTestContainer(mockClient);
+      final container = await makeTestContainer(mockClient, nbOfflinePuzzles: 300);
       final storage = await container.read(puzzleBatchStorageProvider.future);
       // one short of the cap, so a correct fill tops up by exactly one
       await storage.save(
@@ -243,7 +251,7 @@ void main() {
 
       await container
           .read(puzzleQueueFillerProvider.notifier)
-          .fill(userId: _user, angle: nonMixAngle, queueLengthOverride: 300);
+          .fill(userId: _user, angle: nonMixAngle);
 
       expect(
         nbReq,
@@ -274,9 +282,7 @@ void main() {
         ),
       );
 
-      await container
-          .read(puzzleQueueFillerProvider.notifier)
-          .fill(userId: _user, queueLengthOverride: 5);
+      await container.read(puzzleQueueFillerProvider.notifier).fill(userId: _user);
 
       expect(nbReq, equals(0), reason: 'no download while solves are pending flush');
       final data = await storage.fetch(userId: _user);
@@ -294,9 +300,7 @@ void main() {
       final container = await makeTestContainer(mockClient);
       final storage = await container.read(puzzleBatchStorageProvider.future);
 
-      await container
-          .read(puzzleQueueFillerProvider.notifier)
-          .fill(userId: null, queueLengthOverride: 5);
+      await container.read(puzzleQueueFillerProvider.notifier).fill(userId: null);
 
       expect(nbReq, equals(0), reason: 'anonymous fill must never hit the server');
       final data = await storage.fetch(userId: null);
@@ -311,6 +315,7 @@ void main() {
       // solution: the exact silent data loss this test guards against.
       late final ProviderContainer container;
       container = await makeTestContainer(
+        nbOfflinePuzzles: 3,
         MockClient((request) async {
           if (request.method == 'GET' && request.url.path == '/api/puzzle/batch/mix') {
             // Simulate a solve landing while the request is in flight: the
@@ -334,9 +339,7 @@ void main() {
         data: _makePuzzleBatch(unsolved: [const PuzzleId('seed')]),
       );
 
-      await container
-          .read(puzzleQueueFillerProvider.notifier)
-          .fill(userId: _user, queueLengthOverride: 3);
+      await container.read(puzzleQueueFillerProvider.notifier).fill(userId: _user);
 
       final data = await storage.fetch(userId: _user);
       // The mid-fill solve survives: 'seed' stays in solved, its solution intact.
@@ -369,9 +372,7 @@ void main() {
 
       // Must complete normally rather than throw.
       await expectLater(
-        container
-            .read(puzzleQueueFillerProvider.notifier)
-            .fill(userId: _user, queueLengthOverride: 5),
+        container.read(puzzleQueueFillerProvider.notifier).fill(userId: _user),
         completes,
       );
       // The single-flight guard is released so a later fill can run.
