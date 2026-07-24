@@ -141,35 +141,49 @@ class ClockToolController extends Notifier<ClockState> {
   }
 
   void updateOptionsCustom(TimeIncrement clock, ClockSide player) {
+    Duration topTime = state.options.topTime;
+    Duration bottomTime = state.options.bottomTime;
+    Duration topIncrement = state.options.topIncrement;
+    Duration bottomIncrement = state.options.bottomIncrement;
+    if (player == ClockSide.top) {
+      topIncrement = Duration(seconds: clock.increment);
+      // Update stored preferences only if the clock hasn't started yet
+      if (!state.started) {
+        topTime = Duration(seconds: clock.time);
+        ref.read(clockToolPreferencesProvider.notifier).setTopTimeIncrement(clock);
+      }
+      _clock.setTimes(
+        blackTime: Duration(seconds: clock.time),
+        whiteTime: state.bottomTime.value,
+      );
+    } else {
+      bottomIncrement = Duration(seconds: clock.increment);
+      // Update stored preferences only if the clock hasn't started yet
+      if (!state.started) {
+        bottomTime = Duration(seconds: clock.time);
+        ref.read(clockToolPreferencesProvider.notifier).setBottomTimeIncrement(clock);
+      }
+      _clock.setTimes(
+        blackTime: state.topTime.value,
+        whiteTime: Duration(seconds: clock.time),
+      );
+    }
+
     final options = ClockOptions(
       type: state.options.type,
-      topTime: player == ClockSide.top ? Duration(seconds: clock.time) : state.options.topTime,
-      bottomTime: player == ClockSide.bottom
-          ? Duration(seconds: clock.time)
-          : state.options.bottomTime,
-      topIncrement: player == ClockSide.top
-          ? Duration(seconds: clock.increment)
-          : state.options.topIncrement,
-      bottomIncrement: player == ClockSide.bottom
-          ? Duration(seconds: clock.increment)
-          : state.options.bottomIncrement,
+      topTime: topTime,
+      bottomTime: bottomTime,
+      topIncrement: topIncrement,
+      bottomIncrement: bottomIncrement,
     );
     _emergencyThresholds[player] = _calculateEmergencyThreshold(Duration(seconds: clock.time));
     _hasPlayedLowTimeSound[player] = false;
-    _clock.setTimes(blackTime: options.topTime, whiteTime: options.bottomTime);
-    state = ClockState(
+
+    state = state.copyWith(
       options: options,
       topTime: _clock.blackTime,
       bottomTime: _clock.whiteTime,
-      activeSide: state.activeSide,
-      clockOrientation: state.clockOrientation,
     );
-
-    if (player == ClockSide.top) {
-      ref.read(clockToolPreferencesProvider.notifier).setTopTimeIncrement(clock);
-    } else {
-      ref.read(clockToolPreferencesProvider.notifier).setBottomTimeIncrement(clock);
-    }
   }
 
   void updateClockType(ClockTimeControlType type) {
