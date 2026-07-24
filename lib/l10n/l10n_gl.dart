@@ -287,13 +287,55 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Ou importa un arquivo PGN';
 
   @override
-  String get mobileServerOutageMessage => 'Lichess is undergoing technical difficulties. We\'re doing everything we can, and expect to be back up very soon.';
+  String get mobileGoodMoveButThereIsBetter => 'Boa xogada, pero hai unha mellor';
 
   @override
-  String get mobileServerOutageKeepInformed => 'To get updates on the maintenance, checkout our social media channels.';
+  String get mobilePerfShortUltraBullet => 'Ultra';
 
   @override
-  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+  String get mobilePerfShortBullet => 'Bullet';
+
+  @override
+  String get mobilePerfShortBlitz => 'Blitz';
+
+  @override
+  String get mobilePerfShortRapid => 'Rapid';
+
+  @override
+  String get mobilePerfShortClassical => 'Classical';
+
+  @override
+  String get mobilePerfShortCorrespondence => 'Corresp.';
+
+  @override
+  String get mobilePerfShortFromPosition => 'From Pos.';
+
+  @override
+  String get mobilePerfShortChess960 => '960';
+
+  @override
+  String get mobilePerfShortAntichess => 'Antichess';
+
+  @override
+  String get mobilePerfShortKingOfTheHill => 'KotH';
+
+  @override
+  String get mobilePerfShortThreeCheck => '3check';
+
+  @override
+  String get mobilePerfShortAtomic => 'Atomic';
+
+  @override
+  String get mobilePerfShortHorde => 'Horde';
+
+  @override
+  String get mobilePerfShortRacingKings => 'Racing';
+
+  @override
+  String get mobilePerfShortCrazyhouse => 'Crazy';
+
+  @override
+  String get mobilePerfShortPuzzle => 'Puzzle';
 
   @override
   String get variantStandard => 'Estándar';
@@ -1610,6 +1652,60 @@ class AppLocalizationsGl extends AppLocalizations {
   String get preferencesShowClockOnTheLeft => 'Amosar na esquerda en dispositivos móbiles';
 
   @override
+  String get preferencesInlineNotation => 'Notación compacta';
+
+  @override
+  String get preferencesShowServerAnalysis => 'Análise do servidor';
+
+  @override
+  String get preferencesShowBestMoveArrows => 'Frechas coas mellores xogadas';
+
+  @override
+  String get preferencesShowManeuverArrows => 'Frechas das manobras';
+
+  @override
+  String get preferencesShowGauge => 'Indicador de avaliación';
+
+  @override
+  String get preferencesShowMoveAnnotationsOnBoard => 'Amosar as anotacións';
+
+  @override
+  String get preferencesShowVariationArrows => 'Frechas das variantes';
+
+  @override
+  String get preferencesShowLiveGlyphs => 'Anotacións por computador en vivo';
+
+  @override
+  String get preferencesShowUndefendedPieces => 'Pezas non defendidas';
+
+  @override
+  String get preferencesShowPinnedPieces => 'Pezas cravadas';
+
+  @override
+  String get preferencesShowCheckableKing => 'Rei exposto a xaque';
+
+  @override
+  String get preferencesDisclosureMode => 'Permitir agochar as variantes';
+
+  @override
+  String get preferencesGeneralSettings => 'Xeral';
+
+  @override
+  String get preferencesMoveListSettings => 'Lista de xogadas';
+
+  @override
+  String get preferencesBoardSettings => 'Taboleiro';
+
+  @override
+  String get preferencesAnalysisSettings => 'Axustes da análise';
+
+  @override
+  String get preferencesManeuverArrowsHelp => 'Secuencia de xogadas de computador para unha peza';
+
+  @override
+  String get preferencesHoverOverSettingLabelsForHelp => 'Pasa o rato sobre as opcións da configuración para obter axuda';
+
+  @override
   String get puzzlePuzzles => 'Crebacabezas';
 
   @override
@@ -1722,7 +1818,7 @@ class AppLocalizationsGl extends AppLocalizations {
   }
 
   @override
-  String get puzzleHidden => 'oculta';
+  String get puzzleHidden => 'Oculta';
 
   @override
   String puzzleFromGameLink(String param) {
@@ -1935,7 +2031,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get puzzleThemeBackRankMateDescription => 'Xaque mate na última fila, onde o rei está atrapado polas súas propias pezas.';
 
   @override
-  String get puzzleThemeBalestraMate => 'Mate da besta';
+  String get puzzleThemeBalestraMate => 'Mate da bésta';
 
   @override
   String get puzzleThemeBalestraMateDescription => 'O bispo dá xaque mate mentres a dama bloquea as casas de escape';
@@ -1980,7 +2076,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get puzzleThemeCornerMate => 'Mate do curruncho';
 
   @override
-  String get puzzleThemeCornerMateDescription => 'Confina o rei nun recuncho usando unha torre ou unha dama e un cabalo para facer xaque mate.';
+  String get puzzleThemeCornerMateDescription => 'Acurrala ó rei nun recanto cunha dama ou cunha torre e logo dá o xaque mate co cabalo.';
 
   @override
   String get puzzleThemeCrushing => 'Vantaxe decisiva';
@@ -3372,7 +3468,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get gameAsGIF => 'Gardar a partida en formato GIF';
 
   @override
-  String get playerNames => 'Nomes das xogadoras/es';
+  String get playerNames => 'Nomes dos xogadores';
 
   @override
   String get moveAnnotations => 'Anotación das xogadas';
@@ -4443,7 +4539,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get like => 'Gústame';
 
   @override
-  String get liked => 'Gustáronme';
+  String get liked => 'Gustoume';
 
   @override
   String get quickPairing => 'Emparellamento rápido';
@@ -5139,6 +5235,9 @@ class AppLocalizationsGl extends AppLocalizations {
   String get enPassant => 'Captura ao paso';
 
   @override
+  String get settings => 'Configuración';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5585,6 +5684,17 @@ class AppLocalizationsGl extends AppLocalizations {
       locale: localeName,
       other: 'Dispoñible en $count idiomas!',
       one: 'Dispoñible en $count idioma!',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbAnonymous(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Anónimos ($count)',
+      one: 'Anónimo',
     );
     return '$_temp0';
   }

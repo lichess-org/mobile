@@ -9,7 +9,7 @@ class AppLocalizationsBe extends AppLocalizations {
   AppLocalizationsBe([String locale = 'be']) : super(locale);
 
   @override
-  String get mobileAccount => 'Account';
+  String get mobileAccount => 'Уліковы запіс';
 
   @override
   String get mobileAccountPreferences => 'Налады ўліковага запісу';
@@ -70,7 +70,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Вам патрэбна ўвайсці ў уліковы запіс каб паглядзець гэтую старонку.';
 
   @override
-  String get mobileNewGame => 'New game';
+  String get mobileNewGame => 'Новая гульня';
 
   @override
   String get mobileNoSearchResults => 'Няма вынікаў';
@@ -138,7 +138,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobileSettingsCustomBackgroundPresets => 'Шаблоны';
 
   @override
-  String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
+  String get mobileSettingsDraggedPieceTarget => 'Перацягнуць цэль';
 
   @override
   String get mobileSettingsDraggedTargetCircle => 'Круг';
@@ -162,7 +162,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobileSettingsPickAnImage => 'Выбраць малюнак';
 
   @override
-  String get mobileSettingsPickAnImageHelp => 'Custom background works only in dark mode. A dark image is recommended.';
+  String get mobileSettingsPickAnImageHelp => 'Карыстацкі фон працуе выключна ў цёмным рэжыме. Рэкамендуецца цёмны малюнак.';
 
   @override
   String get mobileSettingsPickAnImageBlur => 'Размыць малюнак';
@@ -186,7 +186,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobileSettingsShapeDrawing => 'Маляванне фігур';
 
   @override
-  String get mobileSettingsShapeDrawingSubtitle => 'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
+  String get mobileSettingsShapeDrawingSubtitle => 'Намалюйце фігуру двума пальцамі: трымайце адзін палец на пустым квадраце, рухай другім каб маляваць.';
 
   @override
   String get mobileSettingsShowBorder => 'Паказаць мяжу';
@@ -248,52 +248,94 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobileWelcomeToLichessApp => 'Вітаем у Lichess!';
 
   @override
-  String get mobileViewGame => 'View Game';
+  String get mobileViewGame => 'Паглядзець гульню';
 
   @override
-  String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
+  String get mobileCustomizeHomeTip => 'Падказка: вы можаце дабавіць больш віджэтаў на галоўны экран або выдаліць непатрэбныя!';
 
   @override
-  String get mobileCustomizeHomeTipDismiss => 'Dismiss';
+  String get mobileCustomizeHomeTipDismiss => 'Адхіліць';
 
   @override
-  String get mobileCustomizeButton => 'Customize';
+  String get mobileCustomizeButton => 'Наладзіць';
 
   @override
-  String get mobileStopShowingThreat => 'Stop showing threat';
+  String get mobileStopShowingThreat => 'Не паказваць пагроз';
 
   @override
-  String get mobileTournamentCompleted => 'Completed';
+  String get mobileTournamentCompleted => 'Завершана';
 
   @override
-  String get mobileTournamentJumpToMyPage => 'Jump to my page';
+  String get mobileTournamentJumpToMyPage => 'Да маёй старонкі';
 
   @override
-  String get mobileDisplayModeCompact => 'Compact';
+  String get mobileDisplayModeCompact => 'Скарочана';
 
   @override
-  String get mobileDisplayModeDetailed => 'Detailed';
+  String get mobileDisplayModeDetailed => 'Дэталёва';
 
   @override
-  String get mobileOpeningExplorerNotAvailableOffline => 'Opening Explorer is not available offline.';
+  String get mobileOpeningExplorerNotAvailableOffline => 'Каталог дэбютаў недаступны ў афлайн рэжыме.';
 
   @override
-  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\nYou can access it from the home tab.';
+  String get mobileChallengeCreated => 'Выклік створаны: Вы атрымаеце паведамленне калі гульня пачнецца. \n Вы можаце перайсці да яе з галоўнай старонкі.';
 
   @override
-  String get mobilePreviousPage => 'Previous';
+  String get mobilePreviousPage => 'Папярэдняя';
 
   @override
-  String get mobileOrImportPgnFile => 'Or import a PGN file';
+  String get mobileOrImportPgnFile => 'Або імпартаваць PGN файл';
 
   @override
-  String get mobileServerOutageMessage => 'Lichess is undergoing technical difficulties. We\'re doing everything we can, and expect to be back up very soon.';
+  String get mobileGoodMoveButThereIsBetter => 'Добры ход, але ёсць лепшы';
 
   @override
-  String get mobileServerOutageKeepInformed => 'To get updates on the maintenance, checkout our social media channels.';
+  String get mobilePerfShortUltraBullet => 'Ultra';
 
   @override
-  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+  String get mobilePerfShortBullet => 'Bullet';
+
+  @override
+  String get mobilePerfShortBlitz => 'Blitz';
+
+  @override
+  String get mobilePerfShortRapid => 'Rapid';
+
+  @override
+  String get mobilePerfShortClassical => 'Classical';
+
+  @override
+  String get mobilePerfShortCorrespondence => 'Corresp.';
+
+  @override
+  String get mobilePerfShortFromPosition => 'From Pos.';
+
+  @override
+  String get mobilePerfShortChess960 => '960';
+
+  @override
+  String get mobilePerfShortAntichess => 'Antichess';
+
+  @override
+  String get mobilePerfShortKingOfTheHill => 'KotH';
+
+  @override
+  String get mobilePerfShortThreeCheck => '3check';
+
+  @override
+  String get mobilePerfShortAtomic => 'Atomic';
+
+  @override
+  String get mobilePerfShortHorde => 'Horde';
+
+  @override
+  String get mobilePerfShortRacingKings => 'Racing';
+
+  @override
+  String get mobilePerfShortCrazyhouse => 'Crazy';
+
+  @override
+  String get mobilePerfShortPuzzle => 'Puzzle';
 
   @override
   String get variantStandard => 'Звычайныя шахматы';
@@ -995,7 +1037,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get broadcastOfficialStandings => 'Афіцыяльная турнірная табліца';
 
   @override
-  String get broadcastRegulations => 'Regulations';
+  String get broadcastRegulations => 'Рэгламент';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -1024,25 +1066,25 @@ class AppLocalizationsBe extends AppLocalizations {
   String get broadcastAllTeams => 'Усе каманды';
 
   @override
-  String get broadcastTournamentFormat => 'Tournament format';
+  String get broadcastTournamentFormat => 'Фармат турніру';
 
   @override
-  String get broadcastTournamentLocation => 'Event location';
+  String get broadcastTournamentLocation => 'Месца турніру';
 
   @override
-  String get broadcastTopPlayers => 'Top players';
+  String get broadcastTopPlayers => 'Найлепшыя гульцы';
 
   @override
-  String get broadcastTimezone => 'Time zone';
+  String get broadcastTimezone => 'Часавы пояс';
 
   @override
-  String get broadcastFideRatingCategory => 'FIDE rating category';
+  String get broadcastFideRatingCategory => 'Катэгорыя рэйтынгу FIDE';
 
   @override
-  String get broadcastOptionalDetails => 'Optional details';
+  String get broadcastOptionalDetails => 'Дадатковыя звесткі';
 
   @override
-  String get broadcastPastBroadcasts => 'Past broadcasts';
+  String get broadcastPastBroadcasts => 'Папярэднія трансляцыі';
 
   @override
   String get broadcastAllBroadcastsByMonth => 'View all broadcasts by month';
@@ -1054,14 +1096,14 @@ class AppLocalizationsBe extends AppLocalizations {
   String get broadcastSinceHideResults => 'Since you chose to hide the results, all the preview boards are empty to avoid spoilers.';
 
   @override
-  String get broadcastLiveboard => 'Live board';
+  String get broadcastLiveboard => 'Дошка ў эфіры';
 
   @override
-  String get broadcastCommunityBroadcast => 'Community broadcast';
+  String get broadcastCommunityBroadcast => 'Трансляцыя суполкі';
 
   @override
   String broadcastCreatedAndManagedBy(String param) {
-    return 'Created and managed by $param.';
+    return 'Створана ды кіруецца $param.';
   }
 
   @override
@@ -1086,26 +1128,26 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String broadcastRoundX(String param) {
-    return 'Round $param';
+    return 'Раўнд $param';
   }
 
   @override
   String get broadcastDefaultRoundNameHelp => 'Keeping the default name will automatically translate it to all other languages.';
 
   @override
-  String get broadcastOpenTournament => 'Open';
+  String get broadcastOpenTournament => 'Адчынены';
 
   @override
-  String get broadcastWomenTournament => 'Women';
+  String get broadcastWomenTournament => 'Жанчыны';
 
   @override
-  String get broadcastMenTournament => 'Men';
+  String get broadcastMenTournament => 'Мужчыны';
 
   @override
-  String get broadcastGirlsTournament => 'Girls';
+  String get broadcastGirlsTournament => 'Дзяўчынкі';
 
   @override
-  String get broadcastBoysTournament => 'Boys';
+  String get broadcastBoysTournament => 'Хлопцы';
 
   @override
   String broadcastOpenUnderXAgeTournament(String param) {
@@ -1123,33 +1165,33 @@ class AppLocalizationsBe extends AppLocalizations {
   }
 
   @override
-  String get broadcastQuarterfinals => 'Quarterfinals';
+  String get broadcastQuarterfinals => 'Чвэрцьфіналы';
 
   @override
-  String get broadcastSemifinals => 'Semifinals';
+  String get broadcastSemifinals => 'Паўфіналы';
 
   @override
-  String get broadcastFinals => 'Finals';
+  String get broadcastFinals => 'Фіналы';
 
   @override
-  String get broadcastTiebreaks => 'Tiebreaks';
+  String get broadcastTiebreaks => 'Тайбрэйкі';
 
   @override
   String broadcastGameX(String param) {
-    return 'Game $param';
+    return 'Гульня $param';
   }
 
   @override
-  String get broadcastKnockouts => 'Knockouts';
+  String get broadcastKnockouts => 'Накаўты';
 
   @override
   String broadcastUnderXAgeTournament(String param) {
-    return 'U$param';
+    return 'До $param';
   }
 
   @override
   String broadcastUnderXEloTournament(String param) {
-    return 'U$param';
+    return 'До$param';
   }
 
   @override
@@ -1648,6 +1690,60 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get preferencesShowClockOnTheLeft => 'Паказваць слева на мабільных дэвайсах';
+
+  @override
+  String get preferencesInlineNotation => 'Inline notation';
+
+  @override
+  String get preferencesShowServerAnalysis => 'Show server analysis';
+
+  @override
+  String get preferencesShowBestMoveArrows => 'Show best move arrows';
+
+  @override
+  String get preferencesShowManeuverArrows => 'Show maneuver arrows';
+
+  @override
+  String get preferencesShowGauge => 'Show evaluation gauge';
+
+  @override
+  String get preferencesShowMoveAnnotationsOnBoard => 'Show move annotations';
+
+  @override
+  String get preferencesShowVariationArrows => 'Show variation arrows';
+
+  @override
+  String get preferencesShowLiveGlyphs => 'Live engine annotations';
+
+  @override
+  String get preferencesShowUndefendedPieces => 'Show undefended pieces';
+
+  @override
+  String get preferencesShowPinnedPieces => 'Show pinned pieces';
+
+  @override
+  String get preferencesShowCheckableKing => 'Show checkable king';
+
+  @override
+  String get preferencesDisclosureMode => 'Enable variation hiding';
+
+  @override
+  String get preferencesGeneralSettings => 'General';
+
+  @override
+  String get preferencesMoveListSettings => 'Move list';
+
+  @override
+  String get preferencesBoardSettings => 'Board';
+
+  @override
+  String get preferencesAnalysisSettings => 'Analysis settings';
+
+  @override
+  String get preferencesManeuverArrowsHelp => 'Sequence of engine moves for one piece';
+
+  @override
+  String get preferencesHoverOverSettingLabelsForHelp => 'Hover over setting labels for help';
 
   @override
   String get puzzlePuzzles => 'Задачы';
@@ -2828,7 +2924,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get threads => 'Threads';
 
   @override
-  String get threadsDescription => 'Set this below your CPU\'s thread count, the ticks mark a good safe choice';
+  String get threadsDescription => 'Устанавіць значэнне ніжэй за колькасць патокаў вашага працэсара. Галачкі пазначаюць добры бяспечны выбар';
 
   @override
   String get threadsDescriptionMobile => 'More threads will use more battery for better analysis';
@@ -2840,7 +2936,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get memory => 'Памяць';
 
   @override
-  String get memoryDescription => 'Higher values may improve performance';
+  String get memoryDescription => 'Высокія значэнні могуць палепшыць прадукцыйнасць';
 
   @override
   String get infiniteAnalysis => 'Бясконцы аналіз';
@@ -2870,7 +2966,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get claimADraw => 'Запатрабаваць нічыю';
 
   @override
-  String get drawClaimed => 'Draw claimed';
+  String get drawClaimed => 'Абвешчана нічыя';
 
   @override
   String get offerDraw => 'Прапанаваць нічыю';
@@ -2934,7 +3030,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get friends => 'Сябры';
 
   @override
-  String get otherPlayers => 'other players';
+  String get otherPlayers => 'другія гульцы';
 
   @override
   String get discussions => 'Размовы';
@@ -3838,7 +3934,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get reportUsernameHelp => 'Explain why this username is offensive. Don\'t just say \"it\'s offensive/inappropriate,\" but tell us how you came to this conclusion, especially if the offense is obscure, not in English, in slang, or a historical/cultural reference.';
 
   @override
-  String get reportProcessedFasterInEnglish => 'Your report will be processed faster if written in English.';
+  String get reportProcessedFasterInEnglish => 'Ваша справаздача будзе апрацавана хутчэй, калі яна будзе напісана на англійскай мове.';
 
   @override
   String get error_provideOneCheatedGameLink => 'Калі ласка, дадайце спасылку хаця б на адну гульню, дзе былі парушаны правілы.';
@@ -4492,10 +4588,10 @@ class AppLocalizationsBe extends AppLocalizations {
   }
 
   @override
-  String get like => 'Like';
+  String get like => 'Падабаецца';
 
   @override
-  String get liked => 'Liked';
+  String get liked => 'Спадабалася';
 
   @override
   String get quickPairing => 'Хуткі старт';
@@ -4548,7 +4644,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get brightness => 'Яркасць';
 
   @override
-  String get contrast => 'Contrast';
+  String get contrast => 'Кантраст';
 
   @override
   String get hue => 'Адценне';
@@ -4895,7 +4991,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get theForumEtiquette => 'этыкет форуму';
 
   @override
-  String get pleaseBeNiceInTheForum => 'Please be nice in the forum.';
+  String get pleaseBeNiceInTheForum => 'Калі ласка, будзьце ветлівыя на форуме.';
 
   @override
   String get thisTopicIsArchived => 'Гэта тэма была архівавана і абмяркаваць яе больш немагчыма.';
@@ -5159,13 +5255,13 @@ class AppLocalizationsBe extends AppLocalizations {
   String get accessibility => 'Спецыяльныя магчымасці';
 
   @override
-  String get enableBlindMode => 'Enable blind mode';
+  String get enableBlindMode => 'Уключыць рэжым для сляпых';
 
   @override
-  String get disableBlindMode => 'Disable blind mode';
+  String get disableBlindMode => 'Адключыць рэжым для сляпых';
 
   @override
-  String get copyToClipboard => 'Copy to clipboard';
+  String get copyToClipboard => 'Капіяваць у буфер абмену';
 
   @override
   String get online => 'у сетцы';
@@ -5181,7 +5277,7 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String thereAreNoResultsForX(String param) {
-    return 'No results for \"$param\"';
+    return 'Няма вынікаў для \"$param\"';
   }
 
   @override
@@ -5189,6 +5285,9 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get enPassant => 'Узяцце на праходзе';
+
+  @override
+  String get settings => 'Settings';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5715,6 +5814,17 @@ class AppLocalizationsBe extends AppLocalizations {
       many: 'Даступна на $count мовах!',
       few: 'Даступна на $count мовах!',
       one: 'Даступна на $count мове!',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbAnonymous(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Anonymous ($count)',
+      one: 'Anonymous',
     );
     return '$_temp0';
   }
@@ -6800,7 +6910,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get tfaTwoFactorAuth => 'Двухфактарная аўтэнтыфікацыя';
 
   @override
-  String get ublogCommunity => 'Community';
+  String get ublogCommunity => 'Супольнасць';
 
   @override
   String ublogXBlog(String param) {

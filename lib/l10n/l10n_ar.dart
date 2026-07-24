@@ -287,13 +287,55 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileOrImportPgnFile => 'أو استيراد ملف PGN';
 
   @override
-  String get mobileServerOutageMessage => 'Lichess is undergoing technical difficulties. We\'re doing everything we can, and expect to be back up very soon.';
+  String get mobileGoodMoveButThereIsBetter => 'نقلة جيدة، ولكن توجد نقلة أفضل';
 
   @override
-  String get mobileServerOutageKeepInformed => 'To get updates on the maintenance, checkout our social media channels.';
+  String get mobilePerfShortUltraBullet => 'Ultra';
 
   @override
-  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+  String get mobilePerfShortBullet => 'Bullet';
+
+  @override
+  String get mobilePerfShortBlitz => 'Blitz';
+
+  @override
+  String get mobilePerfShortRapid => 'Rapid';
+
+  @override
+  String get mobilePerfShortClassical => 'Classical';
+
+  @override
+  String get mobilePerfShortCorrespondence => 'Corresp.';
+
+  @override
+  String get mobilePerfShortFromPosition => 'From Pos.';
+
+  @override
+  String get mobilePerfShortChess960 => '960';
+
+  @override
+  String get mobilePerfShortAntichess => 'Antichess';
+
+  @override
+  String get mobilePerfShortKingOfTheHill => 'KotH';
+
+  @override
+  String get mobilePerfShortThreeCheck => '3check';
+
+  @override
+  String get mobilePerfShortAtomic => 'Atomic';
+
+  @override
+  String get mobilePerfShortHorde => 'Horde';
+
+  @override
+  String get mobilePerfShortRacingKings => 'Racing';
+
+  @override
+  String get mobilePerfShortCrazyhouse => 'Crazy';
+
+  @override
+  String get mobilePerfShortPuzzle => 'Puzzle';
 
   @override
   String get variantStandard => 'الأساسي';
@@ -1608,7 +1650,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get preferencesMoveConfirmation => 'تأكيد النقلة';
 
   @override
-  String get preferencesExplainCanThenBeTemporarilyDisabled => 'يمكن تعطيله أثناء اللعبة مع قائمة اللوحة';
+  String get preferencesExplainCanThenBeTemporarilyDisabled => 'يمكن تعطيله أثناء اللعبة من قائمة اللوحة';
 
   @override
   String get preferencesInCorrespondenceGames => 'فى العاب المراسلة';
@@ -1696,6 +1738,60 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get preferencesShowClockOnTheLeft => 'إظهار على اليسار على أجهزة الجوال';
+
+  @override
+  String get preferencesInlineNotation => 'التدوين داخل النص';
+
+  @override
+  String get preferencesShowServerAnalysis => 'عرض تحليل الخادم';
+
+  @override
+  String get preferencesShowBestMoveArrows => 'عرض أسهم أفضل النقلات';
+
+  @override
+  String get preferencesShowManeuverArrows => 'عرض أسهم المناورات';
+
+  @override
+  String get preferencesShowGauge => 'عرض شريط التقييم';
+
+  @override
+  String get preferencesShowMoveAnnotationsOnBoard => 'عرض تدوين الحركة';
+
+  @override
+  String get preferencesShowVariationArrows => 'إظهار أسهم النقلات البديلة';
+
+  @override
+  String get preferencesShowLiveGlyphs => 'تقييمات المحرك المباشرة';
+
+  @override
+  String get preferencesShowUndefendedPieces => 'إظهار القطع غير المحمية';
+
+  @override
+  String get preferencesShowPinnedPieces => 'إظهار القطع المثبتة';
+
+  @override
+  String get preferencesShowCheckableKing => 'إظهار الملك القابل للكش';
+
+  @override
+  String get preferencesDisclosureMode => 'تفعيل إخفاء النقلات البديلة';
+
+  @override
+  String get preferencesGeneralSettings => 'عام';
+
+  @override
+  String get preferencesMoveListSettings => 'قائمة النقلات';
+
+  @override
+  String get preferencesBoardSettings => 'الرقعة';
+
+  @override
+  String get preferencesAnalysisSettings => 'إعدادات التحليل';
+
+  @override
+  String get preferencesManeuverArrowsHelp => 'إظهار سلسلة النقلات التي يقترحها المحرك لقطعة واحدة';
+
+  @override
+  String get preferencesHoverOverSettingLabelsForHelp => 'مرّر المؤشر فوق تسميات الإعدادات لعرض تلميحات المساعدة';
 
   @override
   String get puzzlePuzzles => 'الألغاز';
@@ -4154,10 +4250,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get castling => 'تبييت';
 
   @override
-  String get whiteCastlingKingside => 'تبييت قصير للأبيض';
+  String get whiteCastlingKingside => 'تبييت قصير O-O للأبيض';
 
   @override
-  String get blackCastlingKingside => 'تبييت قصير للأسود';
+  String get blackCastlingKingside => 'تبييت قصير O-O للأسود';
 
   @override
   String tpTimeSpentPlaying(String param) {
@@ -5251,6 +5347,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get enPassant => 'حقوق  الأخذ بالتجاوز ';
 
   @override
+  String get settings => 'الإعدادات';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5861,6 +5960,21 @@ class AppLocalizationsAr extends AppLocalizations {
       two: 'متاح ب $count لغات!',
       one: 'متاح ب $count لغات!',
       zero: 'متاح ب $count لغات!',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbAnonymous(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'مجهولين ($count)',
+      many: 'مجهولين ($count)',
+      few: 'مجهولين ($count)',
+      two: 'مجهولين ($count)',
+      one: 'مجهول',
+      zero: 'مجهول ($count)',
     );
     return '$_temp0';
   }
