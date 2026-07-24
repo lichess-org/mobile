@@ -87,5 +87,5 @@
   <string name="moveListSettings">指し手リスト</string>
   <string name="boardSettings">ボード</string>
   <string name="analysisSettings">解析に関する設定</string>
-  <string name="hoverOverSettingLabelsForHelp" comment="Instruction/guidance, explaining that hovering offer settings labels will show more information.&#10;&#10;Appears in the popover for &quot;Settings&quot; on game analysis for individual games.">設定メニューにカーソルを合わせるとヘルプを表示</string>
+  <string name="hoverOverSettingLabelsForHelp">設定メニューにカーソルを合わせるとヘルプを表示</string>
 </resources>

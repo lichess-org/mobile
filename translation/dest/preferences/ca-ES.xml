@@ -87,5 +87,5 @@
   <string name="moveListSettings">Llista de moviments</string>
   <string name="boardSettings">Tauler</string>
   <string name="analysisSettings">Configuració de les anàlisis</string>
-  <string name="hoverOverSettingLabelsForHelp" comment="Instruction/guidance, explaining that hovering offer settings labels will show more information.&#10;&#10;Appears in the popover for &quot;Settings&quot; on game analysis for individual games.">Posa el cursor per sobre de les etiquetes de configuració per veure l\'ajuda</string>
+  <string name="hoverOverSettingLabelsForHelp">Posa el cursor per sobre de les etiquetes de configuració per veure l\'ajuda</string>
 </resources>

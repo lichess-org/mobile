@@ -88,5 +88,5 @@
   <string name="boardSettings">Tabuleiro</string>
   <string name="analysisSettings">Definições de análise</string>
   <string name="maneuverArrowsHelp">Sequência de jogados do motor para uma peça</string>
-  <string name="hoverOverSettingLabelsForHelp" comment="Instruction/guidance, explaining that hovering offer settings labels will show more information.&#10;&#10;Appears in the popover for &quot;Settings&quot; on game analysis for individual games.">Passa o cursor sobre os nomes das definições para obter ajuda</string>
+  <string name="hoverOverSettingLabelsForHelp">Passa o cursor sobre os nomes das definições para obter ajuda</string>
 </resources>

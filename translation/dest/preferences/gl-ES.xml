@@ -88,5 +88,5 @@
   <string name="boardSettings">Taboleiro</string>
   <string name="analysisSettings">Axustes da análise</string>
   <string name="maneuverArrowsHelp">Secuencia de xogadas de computador para unha peza</string>
-  <string name="hoverOverSettingLabelsForHelp" comment="Instruction/guidance, explaining that hovering offer settings labels will show more information.&#10;&#10;Appears in the popover for &quot;Settings&quot; on game analysis for individual games.">Pasa o rato sobre as opcións da configuración para obter axuda</string>
+  <string name="hoverOverSettingLabelsForHelp">Pasa o rato sobre as opcións da configuración para obter axuda</string>
 </resources>
