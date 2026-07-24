@@ -32,7 +32,7 @@ This project is currently using FVM 3.x.
 ## Lila Server
 
 By default, the app will target the [Lichess dev server](https://lichess.dev/),
-so you can start developing without setting up a local server.
+so you can start developing without setting up a local server. You can also use the [Lichess preview server](https://preview.test.lichess.app) by selecting the preview flavor.
 
 During development, you may need a local [lila](https://github.com/lichess-org/lila) (lichess server scala app)
 instance to work on this project.
@@ -152,7 +152,15 @@ It will run analysis continuously, watching the filesystem for changes. It is im
 
 ## Run
 
-Use the `flutter run` command to run the app on an emulator or a real device. If you need to change the lichess host you can do it like so:
+Use the `flutter run` command to run the app on an emulator or a real device.
+
+If you want to use the Lichess preview server, use the preview flavor like so:
+
+```bash
+flutter run --flavor preview
+```
+
+If you need to change the lichess host you can do it like so:
 
 ```bash
 flutter run \
