@@ -11,13 +11,13 @@ environment:
 
 dependencies:
   app_links: ^7.2.1
-  app_settings: ^8.0.1
+  app_settings: ^8.0.3
   async: ^2.13.1
   auto_size_text: ^3.0.0
   chessground: ^10.1.1
   clock: ^1.1.2
   collection: ^1.19.1
-  connectivity_plus: ^7.3.0
+  connectivity_plus: ^7.3.1
   cronet_http: ^1.9.0
   crypto: ^3.0.7
   cupertino_http: ^3.0.2
@@ -57,7 +57,7 @@ dependencies:
   linkify: ^5.0.0
   logging: ^1.3.0
   material_color_utilities: ^0.13.0
-  material_symbols_icons: ^4.2951.0
+  material_symbols_icons: ^4.2960.0
   meta: ^1.18.0
   multistockfish: ^0.5.0
   package_info_plus: ^10.2.1
@@ -68,7 +68,7 @@ dependencies:
   qr_flutter: ^4.1.0
   quick_actions: ^1.1.0
   result_extensions: ^0.2.0
-  share_plus: ^13.2.1
+  share_plus: ^13.3.0
   shared_preferences: ^2.5.5
   signal_strength_indicator: ^0.5.0
   sound_effect: ^0.2.0
@@ -77,7 +77,7 @@ dependencies:
   stream_transform: ^2.1.1
   url_launcher: ^6.3.2
   visibility_detector: ^0.4.0+2
-  wakelock_plus: ^1.6.1
+  wakelock_plus: ^1.7.0
   web_socket_channel: ^3.0.3
 
 dev_dependencies:
@@ -90,7 +90,7 @@ dev_dependencies:
   lint: ^2.8.0
   mocktail: ^1.0.5
   stream_channel: ^2.1.4
-  wakelock_plus_platform_interface: ^1.5.1
+  wakelock_plus_platform_interface: ^1.6.0
 
 flutter:
   # The following line ensures that the Material Icons font is
