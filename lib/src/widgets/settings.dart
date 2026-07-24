@@ -12,6 +12,7 @@ class SettingsListTile extends StatelessWidget {
     required this.settingsValue,
     required this.onTap,
     this.explanation,
+    this.trailing,
     this.enabled = true,
     super.key,
   });
@@ -30,6 +31,10 @@ class SettingsListTile extends StatelessWidget {
 
   /// The optional explanation of the settings.
   final String? explanation;
+
+  /// Optional widget shown in the trailing slot instead of [settingsValue],
+  /// e.g. a progress indicator while the value is being applied.
+  final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
@@ -52,16 +57,18 @@ class SettingsListTile extends StatelessWidget {
             : null,
         enabled: enabled,
         onTap: onTap,
-        trailing: ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: MediaQuery.widthOf(context) * 0.25),
-          child: Text(
-            settingsValue,
-            overflow: TextOverflow.ellipsis,
-            textAlign: TextAlign.end,
-            maxLines: kSettingsTileTitleMaxLines,
-            style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
-          ),
-        ),
+        trailing:
+            trailing ??
+            ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: MediaQuery.widthOf(context) * 0.25),
+              child: Text(
+                settingsValue,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.end,
+                maxLines: kSettingsTileTitleMaxLines,
+                style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
+              ),
+            ),
       ),
     );
   }

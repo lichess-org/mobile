@@ -1009,17 +1009,11 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
             if (initialPuzzleContext.userId != null &&
                 isConfigurableOfflineQueueAngle(initialPuzzleContext.angle))
               SettingsListTile(
-                icon: isFillingQueue
+                trailing: isFillingQueue
                     ? const SizedBox(
-                        width: 24,
-                        height: 24,
-                        child: Center(
-                          child: SizedBox(
-                            width: 18,
-                            height: 18,
-                            child: CircularProgressIndicator.adaptive(strokeWidth: 2),
-                          ),
-                        ),
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator.adaptive(strokeWidth: 2),
                       )
                     : null,
                 settingsLabel: Text(context.l10n.mobileNbOfflinePuzzles),
