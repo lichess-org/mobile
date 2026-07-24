@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
@@ -275,13 +276,11 @@ class AppLinksService {
       if (puzzleId == null || dailyPuzzle.puzzle.id == PuzzleId(puzzleId)) {
         puzzle = dailyPuzzle;
       } else {
-        // Widget cached a different puzzle than today's daily — fetch it, but
-        // don't mark as daily to avoid confusing the user.
+        // Widget cached a different puzzle than today's daily — fetch it, but don't mark as daily
+        // to avoid confusing the user.
         try {
-          puzzle = await ref.read(puzzleProvider(PuzzleId(puzzleId)).future);
+          puzzle = await ref.read(puzzleRepositoryProvider).fetch(PuzzleId(puzzleId));
         } catch (e, st) {
-          // Fall back to the current daily puzzle rather than leaving the tap
-          // as a no-op when the widget's cached id is stale or unreachable.
           _logger.info('Failed to load widget puzzle id $puzzleId, falling back:', e, st);
           puzzle = dailyPuzzle;
         }

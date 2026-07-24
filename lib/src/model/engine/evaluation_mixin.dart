@@ -18,6 +18,7 @@ import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
+import 'package:lichess_mobile/src/utils/riverpod.dart';
 
 part 'evaluation_mixin.freezed.dart';
 
@@ -113,7 +114,7 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState<T>> on AnyNotifier<As
   void onCurrentPathEvalChanged(bool isSameEvalString) {}
 
   @override
-  void runBuild() {
+  WhenComplete runBuild() {
     _evaluationService = ref.watch(evaluationServiceProvider);
 
     ref.onDispose(() {
@@ -123,9 +124,11 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState<T>> on AnyNotifier<As
       _evaluationService.quit();
     });
 
-    super.runBuild();
+    final whenComplete = super.runBuild();
 
     _socketSubscription = socketClient?.stream.listen(_handleSocketEvent);
+
+    return whenComplete;
   }
 
   /// Toggles the engine evaluation on/off.

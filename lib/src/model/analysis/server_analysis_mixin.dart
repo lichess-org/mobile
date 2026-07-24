@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
+import 'package:lichess_mobile/src/utils/riverpod.dart';
 
 /// Interface for Notifier's State that uses [ServerAnalysisMixin].
 mixin ServerAnalysisMixinState {
@@ -30,7 +31,7 @@ mixin ServerAnalysisMixin<T extends ServerAnalysisMixinState> on AnyNotifier<Asy
       _serverAnalysisService.currentAnalysis;
 
   @override
-  void runBuild() {
+  WhenComplete runBuild() {
     _serverAnalysisService = ref.watch(serverAnalysisServiceProvider);
 
     // Avoid registering the listener multiple times when the notifier is rebuilt.
@@ -41,7 +42,7 @@ mixin ServerAnalysisMixin<T extends ServerAnalysisMixinState> on AnyNotifier<Asy
       _serverAnalysisService.lastAnalysisEvent.removeListener(_onServerAnalysisEvent);
     });
 
-    super.runBuild();
+    return super.runBuild();
   }
 
   @mustCallSuper
