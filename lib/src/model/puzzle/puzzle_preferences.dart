@@ -34,20 +34,20 @@ class PuzzlePreferences extends Notifier<PuzzlePrefs> with SessionPreferencesSto
     return clamped == prefs.nbOfflinePuzzles ? prefs : prefs.copyWith(nbOfflinePuzzles: clamped);
   }
 
-  Future<void> setDifficulty(PuzzleDifficulty difficulty) async {
-    save(state.copyWith(difficulty: difficulty));
+  Future<void> setDifficulty(PuzzleDifficulty difficulty) {
+    return save(state.copyWith(difficulty: difficulty));
   }
 
-  Future<void> setAutoNext(bool autoNext) async {
-    save(state.copyWith(autoNext: autoNext));
+  Future<void> setAutoNext(bool autoNext) {
+    return save(state.copyWith(autoNext: autoNext));
   }
 
-  Future<void> setRated(bool rated) async {
-    save(state.copyWith(rated: rated));
+  Future<void> setRated(bool rated) {
+    return save(state.copyWith(rated: rated));
   }
 
-  Future<void> setNbOfflinePuzzles(int nbOfflinePuzzles) async {
-    save(
+  Future<void> setNbOfflinePuzzles(int nbOfflinePuzzles) {
+    return save(
       state.copyWith(
         nbOfflinePuzzles: nbOfflinePuzzles.clamp(kMinOfflinePuzzles, kMaxOfflinePuzzles),
       ),

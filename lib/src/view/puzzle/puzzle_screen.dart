@@ -1013,6 +1013,7 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
                 onTap: isFillingQueue
                     ? null
                     : () {
+                        int selectedNb = nbOfflinePuzzles;
                         showChoicePicker(
                           context,
                           choices: kOfflinePuzzlesChoices,
@@ -1020,24 +1021,32 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
                           labelBuilder: (t) => Text(t.toString()),
                           onSelectedItemChanged: (int? nb) {
                             if (nb != null) {
-                              ref.read(puzzlePreferencesProvider.notifier).setNbOfflinePuzzles(nb);
+                              selectedNb = nb;
                             }
                           },
-                        ).then((_) {
-                          if (nbOfflinePuzzles ==
-                              ref.read(puzzlePreferencesProvider).nbOfflinePuzzles) {
+                        ).then((_) async {
+                          if (selectedNb == nbOfflinePuzzles) {
                             return;
                           }
+                          // Await the save: the fill reads the count from the
+                          // preferences state, so it must be up to date before
+                          // the fill starts, or it would be a silent no-op.
+                          await ref
+                              .read(puzzlePreferencesProvider.notifier)
+                              .setNbOfflinePuzzles(selectedNb);
+                          if (!context.mounted) return;
                           // Fill the offline queue up to the new count now, rather
                           // than trickling in via the solve path. The setting is
                           // the "about to go offline" signal, so the puzzles need
                           // to be there before the user leaves the screen.
-                          ref
-                              .read(puzzleQueueFillerProvider.notifier)
-                              .fill(
-                                userId: initialPuzzleContext.userId,
-                                angle: initialPuzzleContext.angle,
-                              );
+                          unawaited(
+                            ref
+                                .read(puzzleQueueFillerProvider.notifier)
+                                .fill(
+                                  userId: initialPuzzleContext.userId,
+                                  angle: initialPuzzleContext.angle,
+                                ),
+                          );
                         });
                       },
               ),
