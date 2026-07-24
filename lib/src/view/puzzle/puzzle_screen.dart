@@ -1044,10 +1044,6 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
                               .read(puzzlePreferencesProvider.notifier)
                               .setNbOfflinePuzzles(selectedNb);
                           if (!context.mounted) return;
-                          // Fill the offline queue up to the new count now, rather
-                          // than trickling in via the solve path. The setting is
-                          // the "about to go offline" signal, so the puzzles need
-                          // to be there before the user leaves the screen.
                           unawaited(
                             ref
                                 .read(puzzleQueueFillerProvider.notifier)

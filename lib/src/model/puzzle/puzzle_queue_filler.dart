@@ -17,11 +17,7 @@ import 'package:meta/meta.dart';
 /// this is filled with several sequential requests, each asking for the current
 /// deficit and receiving at most 50.
 
-/// Whether a one-time offline-queue fill is currently running.
-///
-/// This is a top-level (stable) provider, not per-[PuzzleService] state, so the
-/// single-flight guard actually holds: the puzzle service factory builds a fresh
-/// service on every read, but this notifier is a single instance.
+/// Whether a one-time offline-queue background fill is currently running.
 final puzzleQueueFillerProvider = NotifierProvider<PuzzleQueueFiller, bool>(
   PuzzleQueueFiller.new,
   name: 'PuzzleQueueFillerProvider',

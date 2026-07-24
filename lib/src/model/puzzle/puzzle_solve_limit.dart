@@ -18,8 +18,7 @@ typedef PuzzleSolveLimit = ({DateTime since, int solvedCount});
 /// tell the user to wait.
 ///
 /// Global, not per-angle: the solve rate limit is account-wide, so hitting it on
-/// one angle means every angle is limited. In-memory only: after a restart the
-/// first flush re-hits the limit and re-arms this, so persistence buys little.
+/// one angle means every angle is limited.
 class PuzzleSolveLimiter extends Notifier<PuzzleSolveLimit?> {
   @override
   PuzzleSolveLimit? build() => null;
