@@ -69,10 +69,10 @@ packages:
     dependency: "direct main"
     description:
       name: app_settings
-      sha256: "64d50e666fd96ae90301bf71205f05019286f940ad6f5fed3d1be19c6af7546a"
+      sha256: "1532312e18aae83a8fc6486edcbb6f7a6c349338d55c89e5b948fc685140e402"
       url: "https://pub.dev"
     source: hosted
-    version: "7.0.0"
+    version: "8.0.1"
   archive:
     dependency: transitive
     description:
