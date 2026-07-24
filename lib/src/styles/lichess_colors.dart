@@ -87,4 +87,8 @@ class LichessColors {
   static const cyan = Color(0xFF56B4E9);
   static const blue = Color(0xFF0072B2);
   static const purple = Color(0xFF8572ff);
+
+  static const inaccuracy = cyan;
+  static const mistake = Color(0xFFe69f00);
+  static const blunder = Color(0xFFdf5353);
 }
