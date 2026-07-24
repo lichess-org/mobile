@@ -88,6 +88,9 @@ class AppLocalizationsUz extends AppLocalizations {
   String get mobileOverTheBoard => 'Oflayn oʻyin';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String mobilePlayersMatchingSearchTerm(String param) {
     return 'Ismida “$param” bor oʻyinchilar';
   }

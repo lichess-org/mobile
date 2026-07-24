@@ -88,6 +88,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileOverTheBoard => 'Παρτίδα χωρίς σύνδεση';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String mobilePlayersMatchingSearchTerm(String param) {
     return 'Παίκτες με \"$param\"';
   }

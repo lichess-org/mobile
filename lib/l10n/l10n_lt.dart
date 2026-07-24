@@ -88,6 +88,9 @@ class AppLocalizationsLt extends AppLocalizations {
   String get mobileOverTheBoard => 'Žaidimas lentoje';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String mobilePlayersMatchingSearchTerm(String param) {
     return 'Players with \"$param\"';
   }

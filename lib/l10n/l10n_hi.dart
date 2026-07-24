@@ -88,6 +88,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get mobileOverTheBoard => 'बोर्ड पर';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String mobilePlayersMatchingSearchTerm(String param) {
     return '\"$param\" नाम वाले खिलाड़ी';
   }

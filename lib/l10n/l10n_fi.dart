@@ -88,6 +88,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileOverTheBoard => 'Kaveria vastaan offline-tilassa';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String mobilePlayersMatchingSearchTerm(String param) {
     return 'Pelaajat, joiden tunnuksesta löytyy \"$param\"';
   }

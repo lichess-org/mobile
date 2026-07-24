@@ -38,6 +38,7 @@
   "mobileNotFollowingAnyUser": "You are not following any users.",
   "mobileOkButton": "OK",
   "mobileOverTheBoard": "Over the board",
+  "mobileNbOfflinePuzzles": "Offline puzzles",
   "mobilePlayersMatchingSearchTerm": "Players with \"{param}\"",
   "@mobilePlayersMatchingSearchTerm": {
     "placeholders": {

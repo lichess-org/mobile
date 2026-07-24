@@ -88,6 +88,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get mobileOverTheBoard => 'Тақтаны жаю';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String mobilePlayersMatchingSearchTerm(String param) {
     return 'Атауында \"$param\" бар ойыншылар';
   }

@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_controller.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_queue_filler.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -925,10 +926,14 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final authUser = ref.watch(authControllerProvider);
     final autoNext = ref.watch(puzzlePreferencesProvider.select((value) => value.autoNext));
+    final nbOfflinePuzzles = ref.watch(
+      puzzlePreferencesProvider.select((value) => value.nbOfflinePuzzles),
+    );
     final rated = ref.watch(puzzlePreferencesProvider.select((value) => value.rated));
     final ctrlProvider = puzzleControllerProvider(initialPuzzleContext);
     final puzzleState = ref.watch(ctrlProvider);
     final difficulty = ref.watch(puzzlePreferencesProvider.select((state) => state.difficulty));
+    final isFillingQueue = ref.watch(puzzleQueueFillerProvider);
     final isOnline = ref.watch(onlineStatusProvider).value ?? false;
     return BottomSheetScrollableContainer(
       padding: const EdgeInsets.only(bottom: 16),
@@ -984,6 +989,67 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
                 ref.read(puzzlePreferencesProvider.notifier).setAutoNext(value);
               },
             ),
+            // Offline queue length is a logged-in-only feature: anonymous
+            // players face a much higher server rate limit for fetching
+            // puzzles, so the setting is hidden for them.
+            if (initialPuzzleContext.userId != null)
+              SettingsListTile(
+                icon: isFillingQueue
+                    ? const SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: Center(
+                          child: SizedBox(
+                            width: 18,
+                            height: 18,
+                            child: CircularProgressIndicator.adaptive(strokeWidth: 2),
+                          ),
+                        ),
+                      )
+                    : null,
+                settingsLabel: Text(context.l10n.mobileNbOfflinePuzzles),
+                settingsValue: nbOfflinePuzzles.toString(),
+                enabled: !isFillingQueue,
+                onTap: isFillingQueue
+                    ? null
+                    : () {
+                        int selectedNb = nbOfflinePuzzles;
+                        showChoicePicker(
+                          context,
+                          choices: kOfflinePuzzlesChoices,
+                          selectedItem: nbOfflinePuzzles,
+                          labelBuilder: (t) => Text(t.toString()),
+                          onSelectedItemChanged: (int? nb) {
+                            if (nb != null) {
+                              selectedNb = nb;
+                            }
+                          },
+                        ).then((_) async {
+                          if (selectedNb == nbOfflinePuzzles) {
+                            return;
+                          }
+                          // Await the save: the fill reads the count from the
+                          // preferences state, so it must be up to date before
+                          // the fill starts, or it would be a silent no-op.
+                          await ref
+                              .read(puzzlePreferencesProvider.notifier)
+                              .setNbOfflinePuzzles(selectedNb);
+                          if (!context.mounted) return;
+                          // Fill the offline queue up to the new count now, rather
+                          // than trickling in via the solve path. The setting is
+                          // the "about to go offline" signal, so the puzzles need
+                          // to be there before the user leaves the screen.
+                          unawaited(
+                            ref
+                                .read(puzzleQueueFillerProvider.notifier)
+                                .fill(
+                                  userId: initialPuzzleContext.userId,
+                                  angle: initialPuzzleContext.angle,
+                                ),
+                          );
+                        });
+                      },
+              ),
             if (authUser != null && initialPuzzleContext.replayRemaining == null)
               SwitchSettingTile(
                 title: Text(context.l10n.rated),

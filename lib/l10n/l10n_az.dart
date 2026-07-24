@@ -88,6 +88,9 @@ class AppLocalizationsAz extends AppLocalizations {
   String get mobileOverTheBoard => 'Taxta üzərində';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String mobilePlayersMatchingSearchTerm(String param) {
     return '\"$param\" ilə oyunçular';
   }

@@ -88,6 +88,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileOverTheBoard => 'Hrať offline, na jednom zariadení';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String mobilePlayersMatchingSearchTerm(String param) {
     return 'Hráči s \"$param\"';
   }

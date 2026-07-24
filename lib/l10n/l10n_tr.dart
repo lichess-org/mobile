@@ -88,6 +88,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileOverTheBoard => 'Tahta üzerinde çevrimdışı oyna';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String mobilePlayersMatchingSearchTerm(String param) {
     return '\"$param\" ile başlayan oyuncularla';
   }

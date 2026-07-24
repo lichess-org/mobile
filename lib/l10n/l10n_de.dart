@@ -88,6 +88,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get mobileOverTheBoard => 'Spiele offline gegen Mensch';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String mobilePlayersMatchingSearchTerm(String param) {
     return 'Spieler mit \"$param\"';
   }

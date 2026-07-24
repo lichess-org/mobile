@@ -88,6 +88,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileOverTheBoard => 'Deasupra tablei';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String mobilePlayersMatchingSearchTerm(String param) {
     return 'Jucători cu \"$param\"';
   }

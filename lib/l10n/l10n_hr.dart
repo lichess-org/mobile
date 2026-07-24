@@ -88,6 +88,9 @@ class AppLocalizationsHr extends AppLocalizations {
   String get mobileOverTheBoard => 'Igraj bez mreže, preko uređaja';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String mobilePlayersMatchingSearchTerm(String param) {
     return 'Igrači s \"$param\"';
   }

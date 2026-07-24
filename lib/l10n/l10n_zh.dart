@@ -88,6 +88,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileOverTheBoard => '离线棋盘';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String mobilePlayersMatchingSearchTerm(String param) {
     return '用户名包含“$param”的棋手';
   }

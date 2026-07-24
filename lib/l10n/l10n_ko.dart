@@ -88,6 +88,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileOverTheBoard => '로컬 게임';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String mobilePlayersMatchingSearchTerm(String param) {
     return '닉네임에 \"$param\"가 포함된 플레이어';
   }

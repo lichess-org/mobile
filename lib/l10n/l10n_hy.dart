@@ -88,6 +88,9 @@ class AppLocalizationsHy extends AppLocalizations {
   String get mobileOverTheBoard => 'Երկուսով խաղատախտակի առջև';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String mobilePlayersMatchingSearchTerm(String param) {
     return 'Players with \"$param\"';
   }

@@ -18,12 +18,12 @@ import 'package:result_extensions/result_extensions.dart';
 
 part 'puzzle_service.freezed.dart';
 
-/// Size of puzzle local cache
-const kPuzzleLocalQueueLength = 50;
-
 /// A provider for [PuzzleService].
 final puzzleServiceProvider = FutureProvider<PuzzleService>((Ref ref) {
-  return ref.read(puzzleServiceFactoryProvider)(queueLength: kPuzzleLocalQueueLength);
+  final nbOfflinePuzzles = ref.watch(
+    puzzlePreferencesProvider.select((prefs) => prefs.nbOfflinePuzzles),
+  );
+  return ref.read(puzzleServiceFactoryProvider)(queueLength: nbOfflinePuzzles);
 }, name: 'PuzzleServiceProvider');
 
 /// A provider for [PuzzleServiceFactory].

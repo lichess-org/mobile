@@ -346,6 +346,12 @@ abstract class AppLocalizations {
   /// **'Over the board'**
   String get mobileOverTheBoard;
 
+  /// No description provided for @mobileNbOfflinePuzzles.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline puzzles'**
+  String get mobileNbOfflinePuzzles;
+
   /// No description provided for @mobilePlayersMatchingSearchTerm.
   ///
   /// In en, this message translates to:

@@ -88,6 +88,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileOverTheBoard => 'Schpill offline gäge en Mänsch';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String mobilePlayersMatchingSearchTerm(String param) {
     return 'Schpiller mit \"$param%';
   }

@@ -88,6 +88,9 @@ class AppLocalizationsEt extends AppLocalizations {
   String get mobileOverTheBoard => 'Üle laua';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String mobilePlayersMatchingSearchTerm(String param) {
     return 'Kasutajad sisuga \"$param\"';
   }
