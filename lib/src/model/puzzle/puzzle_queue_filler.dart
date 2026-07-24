@@ -67,7 +67,14 @@ class PuzzleQueueFiller extends Notifier<bool> {
       // the deficit, so that pass should still top up.
       int lastLength = -1;
       while (true) {
-        final current = await batchStorage.fetch(userId: userId, angle: angle);
+        final PuzzleBatch? current;
+        try {
+          current = await batchStorage.fetch(userId: userId, angle: angle);
+        } catch (e, st) {
+          // Corrupted prefs, decode error, or sqflite failure: stop the fill.
+          _log.warning('Offline puzzle queue fill: storage read failed', e, st);
+          break;
+        }
         final unsolved = current?.unsolved ?? IList(const []);
 
         if (unsolved.length == lastLength) break;
@@ -97,23 +104,30 @@ class PuzzleQueueFiller extends Notifier<bool> {
         // request was in flight moves a puzzle unsolved->solved on this same
         // row. Merging into the pre-request snapshot would restore it to
         // unsolved and drop its solution. Merge into the fresh read instead.
-        final fresh = await batchStorage.fetch(userId: userId, angle: angle);
-        final freshUnsolved = fresh?.unsolved ?? IList(const []);
+        try {
+          final fresh = await batchStorage.fetch(userId: userId, angle: angle);
+          final freshUnsolved = fresh?.unsolved ?? IList(const []);
 
-        // Skip ids already stored (in the fresh read) so a re-read after a
-        // mid-fill solve can't reintroduce a duplicate.
-        final existingIds = freshUnsolved.map((p) => p.puzzle.id).toISet();
-        final additions = response.puzzles.where((p) => !existingIds.contains(p.puzzle.id));
-        if (additions.isEmpty) break;
+          // Skip ids already stored (in the fresh read) so a re-read after a
+          // mid-fill solve can't reintroduce a duplicate.
+          final existingIds = freshUnsolved.map((p) => p.puzzle.id).toISet();
+          final additions = response.puzzles.where((p) => !existingIds.contains(p.puzzle.id));
+          if (additions.isEmpty) break;
 
-        await batchStorage.save(
-          userId: userId,
-          angle: angle,
-          data: PuzzleBatch(
-            solved: fresh?.solved ?? IList(const []),
-            unsolved: IList([...freshUnsolved, ...additions]),
-          ),
-        );
+          await batchStorage.save(
+            userId: userId,
+            angle: angle,
+            data: PuzzleBatch(
+              solved: fresh?.solved ?? IList(const []),
+              unsolved: IList([...freshUnsolved, ...additions]),
+            ),
+          );
+        } catch (e, st) {
+          // sqflite I/O or serialization failure on the merge read/write:
+          // stop the fill rather than surface an unhandled async error.
+          _log.warning('Offline puzzle queue fill: storage write failed', e, st);
+          break;
+        }
       }
     } finally {
       state = false;

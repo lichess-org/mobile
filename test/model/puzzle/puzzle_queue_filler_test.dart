@@ -8,9 +8,12 @@ import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_batch_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_queue_filler.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../../test_container.dart';
 import '../../test_helpers.dart';
@@ -19,7 +22,13 @@ import '../../test_helpers.dart';
 // real user id. Anonymous behaviour is covered by its own no-op test.
 const _user = UserId('testUser');
 
+class _MockPuzzleBatchStorage extends Mock implements PuzzleBatchStorage {}
+
 void main() {
+  setUpAll(() {
+    registerFallbackValue(const PuzzleTheme(PuzzleThemeKey.mix));
+  });
+
   Future<ProviderContainer> makeTestContainer(MockClient mockClient) {
     return makeContainer(
       overrides: {
@@ -274,6 +283,37 @@ void main() {
       expect(data?.unsolved.any((p) => p.puzzle.id == const PuzzleId('20yWT')), isTrue);
       // 'seed' was NOT restored to unsolved.
       expect(data?.unsolved.any((p) => p.puzzle.id == const PuzzleId('seed')), isFalse);
+    });
+
+    test('never throws when storage read fails (best-effort contract)', () async {
+      // fill() is documented "Never throws". A storage read failure (corrupt
+      // prefs, sqflite I/O) must stop the fill quietly, not surface an
+      // unhandled async error to the fire-and-forget caller.
+      final throwingStorage = _MockPuzzleBatchStorage();
+      when(
+        () => throwingStorage.fetch(
+          userId: any(named: 'userId'),
+          angle: any(named: 'angle'),
+        ),
+      ).thenThrow(const FormatException('corrupt puzzle batch'));
+
+      final container = await makeContainer(
+        overrides: {
+          puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith(
+            (ref) => Future.value(throwingStorage),
+          ),
+        },
+      );
+
+      // Must complete normally rather than throw.
+      await expectLater(
+        container
+            .read(puzzleQueueFillerProvider.notifier)
+            .fill(userId: _user, queueLengthOverride: 5),
+        completes,
+      );
+      // The single-flight guard is released so a later fill can run.
+      expect(container.read(puzzleQueueFillerProvider), isFalse);
     });
   });
 }
