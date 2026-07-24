@@ -16,6 +16,10 @@ import 'package:logging/logging.dart';
 /// this is filled with several sequential requests, each asking for the current
 /// deficit and receiving at most 50.
 
+/// Delay between successive fill requests, to spread the burst rather than fire
+/// it all at the server at once.
+const _kFillRequestDelay = Duration(milliseconds: 200);
+
 /// Whether a one-time offline-queue background fill is currently running.
 final puzzleQueueFillerProvider = NotifierProvider<PuzzleQueueFiller, bool>(
   PuzzleQueueFiller.new,
@@ -60,6 +64,7 @@ class PuzzleQueueFiller extends Notifier<bool> {
       // shrinks: a solve made mid-fill lowers the count and legitimately widens
       // the deficit, so that pass should still top up.
       int lastLength = -1;
+      bool isFirstRequest = true;
       while (true) {
         final PuzzleBatch? current;
         try {
@@ -82,6 +87,12 @@ class PuzzleQueueFiller extends Notifier<bool> {
 
         final deficit = max(0, queueLength - unsolved.length);
         if (deficit <= 0) break;
+
+        // Throttle: space out successive requests (no delay before the first).
+        if (!isFirstRequest) {
+          await Future<void>.delayed(_kFillRequestDelay);
+        }
+        isFirstRequest = false;
 
         final PuzzleBatchResponse response;
         try {
