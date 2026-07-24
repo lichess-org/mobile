@@ -4,4 +4,5 @@
     <string name="widget_broadcast_description">Shows ongoing and upcoming chess broadcasts.</string>
     <string name="widget_live">LIVE</string>
     <string name="widget_no_broadcasts">No active broadcasts</string>
+    <string name="app_name">Lichess</string>
 </resources>
