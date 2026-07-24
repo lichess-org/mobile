@@ -70,6 +70,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileMustBeLoggedIn => '您需要登录才能浏览此页面';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String get mobileNewGame => '新的对局';
 
   @override
@@ -86,9 +89,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get mobileOverTheBoard => '离线棋盘';
-
-  @override
-  String get mobileNbOfflinePuzzles => 'Offline puzzles';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {

@@ -70,6 +70,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Du muesch igloggt si, um die Site z\'gseh.';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String get mobileNewGame => 'Neus Schpiel';
 
   @override
@@ -86,9 +89,6 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get mobileOverTheBoard => 'Schpill offline gäge en Mänsch';
-
-  @override
-  String get mobileNbOfflinePuzzles => 'Offline puzzles';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {

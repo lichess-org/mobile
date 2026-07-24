@@ -70,6 +70,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'এই পাতাটি দেখতে লগইন করুন।';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String get mobileNewGame => 'New game';
 
   @override
@@ -86,9 +89,6 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get mobileOverTheBoard => 'একই বোর্ড/ডিভাইসে';
-
-  @override
-  String get mobileNbOfflinePuzzles => 'Offline puzzles';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {

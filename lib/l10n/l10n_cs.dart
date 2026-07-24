@@ -70,6 +70,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Pro zobrazení této stránky musíte být přihlášeni.';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String get mobileNewGame => 'Nová hra';
 
   @override
@@ -86,9 +89,6 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get mobileOverTheBoard => 'Jako na šachovnici';
-
-  @override
-  String get mobileNbOfflinePuzzles => 'Offline puzzles';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {

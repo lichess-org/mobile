@@ -70,6 +70,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Musisz być zalogowany, aby wyświetlić tę stronę.';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String get mobileNewGame => 'Nowa partia';
 
   @override
@@ -86,9 +89,6 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get mobileOverTheBoard => 'Ze znajomym';
-
-  @override
-  String get mobileNbOfflinePuzzles => 'Offline puzzles';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {

@@ -70,6 +70,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Je moet ingelogd zijn om deze pagina te bekijken.';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String get mobileNewGame => 'Nieuwe partij';
 
   @override
@@ -86,9 +89,6 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get mobileOverTheBoard => 'Op virtueel bord';
-
-  @override
-  String get mobileNbOfflinePuzzles => 'Offline puzzles';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {

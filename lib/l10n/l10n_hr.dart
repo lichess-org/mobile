@@ -70,6 +70,9 @@ class AppLocalizationsHr extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Morate biti prijavljeni kako bi vidjeli ovu stranicu.';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String get mobileNewGame => 'Nova partija';
 
   @override
@@ -86,9 +89,6 @@ class AppLocalizationsHr extends AppLocalizations {
 
   @override
   String get mobileOverTheBoard => 'Igraj bez mreže, preko uređaja';
-
-  @override
-  String get mobileNbOfflinePuzzles => 'Offline puzzles';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {

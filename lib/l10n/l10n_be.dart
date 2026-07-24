@@ -70,6 +70,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Вам патрэбна ўвайсці ў уліковы запіс каб паглядзець гэтую старонку.';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String get mobileNewGame => 'Новая гульня';
 
   @override
@@ -86,9 +89,6 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get mobileOverTheBoard => 'За дошкай';
-
-  @override
-  String get mobileNbOfflinePuzzles => 'Offline puzzles';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {

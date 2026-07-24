@@ -310,6 +310,12 @@ abstract class AppLocalizations {
   /// **'You must be logged in to view this page.'**
   String get mobileMustBeLoggedIn;
 
+  /// No description provided for @mobileNbOfflinePuzzles.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline puzzles'**
+  String get mobileNbOfflinePuzzles;
+
   /// No description provided for @mobileNewGame.
   ///
   /// In en, this message translates to:
@@ -345,12 +351,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Over the board'**
   String get mobileOverTheBoard;
-
-  /// No description provided for @mobileNbOfflinePuzzles.
-  ///
-  /// In en, this message translates to:
-  /// **'Offline puzzles'**
-  String get mobileNbOfflinePuzzles;
 
   /// No description provided for @mobilePlayersMatchingSearchTerm.
   ///

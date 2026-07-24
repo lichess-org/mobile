@@ -70,6 +70,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Që të shihni këtë faqe, duhet të keni bërë hyrjen në llogari.';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String get mobileNewGame => 'Lojë e re';
 
   @override
@@ -86,9 +89,6 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get mobileOverTheBoard => 'Mbi tabelën';
-
-  @override
-  String get mobileNbOfflinePuzzles => 'Offline puzzles';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {

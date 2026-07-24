@@ -70,6 +70,9 @@ class AppLocalizationsHe extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'יש להתחבר כדי לצפות בדף זה.';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String get mobileNewGame => 'New game';
 
   @override
@@ -86,9 +89,6 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get mobileOverTheBoard => 'שח-חי (על גבי לוח!)';
-
-  @override
-  String get mobileNbOfflinePuzzles => 'Offline puzzles';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {

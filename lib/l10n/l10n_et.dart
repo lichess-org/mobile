@@ -70,6 +70,9 @@ class AppLocalizationsEt extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Selle lehe vaatamiseks peab olema sisse logitud.';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String get mobileNewGame => 'Uus mäng';
 
   @override
@@ -86,9 +89,6 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get mobileOverTheBoard => 'Üle laua';
-
-  @override
-  String get mobileNbOfflinePuzzles => 'Offline puzzles';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {

@@ -70,6 +70,9 @@ class AppLocalizationsUz extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Ushbu sahifani koʻrish uchun tizimga kirishingiz kerak.';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String get mobileNewGame => 'Yangi oʻyin';
 
   @override
@@ -86,9 +89,6 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get mobileOverTheBoard => 'Oflayn oʻyin';
-
-  @override
-  String get mobileNbOfflinePuzzles => 'Offline puzzles';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {

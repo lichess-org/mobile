@@ -70,6 +70,9 @@ class AppLocalizationsEu extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Sartu egin behar zara orri hau ikusteko.';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String get mobileNewGame => 'Partida berria';
 
   @override
@@ -86,9 +89,6 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get mobileOverTheBoard => 'Taula gainean';
-
-  @override
-  String get mobileNbOfflinePuzzles => 'Offline puzzles';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
