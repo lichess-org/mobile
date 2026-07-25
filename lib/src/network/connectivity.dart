@@ -21,9 +21,7 @@ final connectivityPluginProvider = Provider<Connectivity>((Ref _) => Connectivit
 ///
 /// This is the synchronous, optimistic view of [connectivityChangesProvider]:
 /// while the check is still running the device is assumed to be online, as the
-/// check makes network requests and is therefore not instant. Reporting a
-/// network outage on a hunch would flash the offline UI on startup, and again
-/// whenever the check is re-run.
+/// check makes network requests and is therefore not instant.
 ///
 /// Use this to gate anything that merely needs a connection. Watch
 /// [connectivityChangesProvider] directly in the rare places that must not be

@@ -31,27 +31,16 @@ final serverStatusProvider = NotifierProvider<ServerStatusNotifier, ServerStatus
 /// are the only reliable indication of an outage. Responses from the opening
 /// explorer, the tablebase or the CDN are never taken into account, as those
 /// run on their own servers.
-///
-/// The websocket is deliberately not used as a signal: lila-ws is a separate
-/// service that talks to the backend through redis, so it keeps accepting
-/// connections and answering pings while the backend is down.
-///
-/// Recovery is not polled for; see [onAppResumed].
 class ServerStatusNotifier extends Notifier<ServerStatus> {
   /// The server is assumed to be up until a response says otherwise.
   @override
   ServerStatus build() => ServerStatus.up;
 
-  /// Assumes the server is back up, so that the widgets needing it are rebuilt
-  /// and make their requests again.
+  /// Called by [ConnectivityChangesNotifier] when the app is resumed.
   ///
-  /// Called by [ConnectivityChangesNotifier] when the app is resumed. Users are
-  /// unlikely to sit on the outage screen waiting for a recovery, so coming
-  /// back to the app is the moment worth re-checking. If the server is still
-  /// unavailable the next response puts us back in the outage state, which is
-  /// how the website behaves too, its outage page simply reloading itself.
-  /// Nothing is polled in the background, and no request is made beyond the
-  /// ones the app would make anyway on resume.
+  /// Assumes the server is back up, so that the widgets needing it are rebuilt and make their
+  /// requests again. If the server is still unavailable the next response puts us back in the
+  /// outage state, which is how the website behaves too.
   void onAppResumed() {
     if (state != ServerStatus.up) {
       _logger.info('App resumed, assuming the lichess server is reachable again.');
@@ -59,8 +48,7 @@ class ServerStatusNotifier extends Notifier<ServerStatus> {
     }
   }
 
-  /// Called by [LichessClient] for every response received from the lichess
-  /// main server.
+  /// Called by [LichessClient] for every response received from the lichess main server.
   ///
   /// Client errors are ignored: a 404 or a 401 says nothing about the health of
   /// the server, so they must neither trigger nor clear an outage.
