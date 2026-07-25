@@ -171,7 +171,7 @@ class _UserProfileListView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final UserScreenData(:user, :recentGames, :activity, :isPlayingLive, :crosstable) = data;
 
-    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
+    final isOnline = ref.watch(isDeviceOnlineProvider);
     final nbOfGames = user.count?.all ?? 0;
     final authUser = ref.watch(authControllerProvider);
     final kidMode = ref.watch(kidModeProvider);

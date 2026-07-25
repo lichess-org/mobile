@@ -64,7 +64,7 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
       return _buildListView(children: [ExplorerMessage(context.l10n.maxDepthReached)]);
     }
 
-    final isOnline = ref.watch(onlineStatusProvider).value ?? true;
+    final isOnline = ref.watch(isDeviceOnlineProvider);
     if (!isOnline) {
       return _buildListView(
         children: [ExplorerMessage(context.l10n.mobileOpeningExplorerNotAvailableOffline)],

@@ -28,6 +28,7 @@ import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/log/http_log_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/aggregator.dart';
+import 'package:lichess_mobile/src/network/server_status.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -42,6 +43,12 @@ Uri lichessUri(String unencodedPath, [Map<String, dynamic>? queryParameters]) =>
         kLichessHost.startsWith('192.168.')
     ? Uri.http(kLichessHost, unencodedPath, queryParameters)
     : Uri.https(kLichessHost, unencodedPath, queryParameters);
+
+/// The host of the lichess main server, without the port part.
+///
+/// Other lichess services, such as the opening explorer, the tablebase or the
+/// CDN, are served by different hosts.
+final _lichessMainHost = lichessUri('/').host;
 
 /// Creates the appropriate http client for the platform.
 ///
@@ -375,6 +382,13 @@ class LichessClient implements Client {
       final response = await _inner.send(request).timeout(defaultRequestTimeout);
 
       _logIfError(response);
+
+      // Only the main server can tell us whether lichess is up: the opening
+      // explorer and the tablebase run on their own servers and may well be
+      // available while lichess itself is down (and vice versa).
+      if (_ref.mounted && request.url.host == _lichessMainHost) {
+        _ref.read(serverStatusProvider.notifier).handleHttpResponse(response.statusCode);
+      }
 
       if (response.statusCode == 401 && authUser != null) {
         _ref.read(authControllerProvider.notifier).checkToken();

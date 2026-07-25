@@ -27,6 +27,7 @@ import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
 import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/server_outage_display.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 
@@ -64,10 +65,6 @@ class WatchTabScreen extends ConsumerStatefulWidget {
 class _WatchScreenState extends ConsumerState<WatchTabScreen> {
   final _androidRefreshKey = GlobalKey<RefreshIndicatorState>();
 
-  static const offlineWidget = Center(
-    child: Text('No internet connection.', style: Styles.noResultTextStyle),
-  );
-
   @override
   Widget build(BuildContext context) {
     ref.listen<BottomTab>(currentBottomTabProvider, (prev, current) {
@@ -80,7 +77,7 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
       }
     });
 
-    final isOnline = ref.watch(onlineStatusProvider).value ?? true;
+    final connectionStatus = ref.watch(lichessConnectionStatusProvider);
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, _) {
@@ -97,20 +94,37 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
               : null,
           actions: const [AccountMenuButton()],
         ),
-        body: isOnline
-            ? OrientationBuilder(
-                builder: (context, orientation) {
-                  return HapticRefreshIndicator(
-                    edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
-                        ? MediaQuery.paddingOf(context).top + kToolbarHeight
-                        : 0.0,
-                    key: _androidRefreshKey,
-                    onRefresh: _refreshData,
-                    child: _Body(orientation),
-                  );
-                },
-              )
-            : offlineWidget,
+        body: switch (connectionStatus) {
+          LichessConnectionStatus.online => OrientationBuilder(
+            builder: (context, orientation) {
+              return HapticRefreshIndicator(
+                edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
+                    ? MediaQuery.paddingOf(context).top + kToolbarHeight
+                    : 0.0,
+                key: _androidRefreshKey,
+                onRefresh: _refreshData,
+                child: _Body(orientation),
+              );
+            },
+          ),
+          LichessConnectionStatus.networkDown => const Center(
+            child: Text('No internet connection.', style: Styles.noResultTextStyle),
+          ),
+          // Nothing on this tab works without the server, so the outage message
+          // takes the whole screen. Pulling to refresh is the way out of it:
+          // the requests it makes update the server status on their own.
+          LichessConnectionStatus.serverMaintenance ||
+          LichessConnectionStatus.serverDown => HapticRefreshIndicator(
+            edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
+                ? MediaQuery.paddingOf(context).top + kToolbarHeight
+                : 0.0,
+            onRefresh: _refreshData,
+            child: const CustomScrollView(
+              physics: AlwaysScrollableScrollPhysics(),
+              slivers: [SliverFillRemaining(hasScrollBody: false, child: ServerOutageDisplay())],
+            ),
+          ),
+        },
       ),
     );
   }
@@ -184,12 +198,18 @@ class _BodyState extends ConsumerState<_Body> {
   }
 }
 
-Future<void> _doRefreshDataForRef(WidgetRef ref) {
-  return Future.wait([
-    ref.refresh(broadcastsPaginatorProvider.future),
-    ref.refresh(featuredChannelsProvider.future),
-    if (!(ref.read(kidModeProvider).value ?? false)) ref.refresh(liveStreamersProvider.future),
-  ]);
+Future<void> _doRefreshDataForRef(WidgetRef ref) async {
+  try {
+    await Future.wait([
+      ref.refresh(broadcastsPaginatorProvider.future),
+      ref.refresh(featuredChannelsProvider.future),
+      if (!(ref.read(kidModeProvider).value ?? false)) ref.refresh(liveStreamersProvider.future),
+    ]);
+  } catch (_) {
+    // Refreshing while the server is unavailable is expected to fail. Each
+    // provider surfaces its own error, and the failed responses are what keep
+    // the server status up to date, so there is nothing to do here.
+  }
 }
 
 class _BroadcastWidget extends ConsumerWidget {

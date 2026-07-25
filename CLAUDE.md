@@ -149,6 +149,11 @@ The formatter is configured via `analysis_options.yaml` (`formatter: page_width:
 - **Do not manually wrap lines** — let the formatter decide based on trailing commas and line length; hand-wrapping without trailing commas will be reformatted by the tool
 - The formatter may reformat code you didn't touch in the same expression if you change surrounding structure
 
+**Comments are the exception: the formatter never reflows them, so they are yours to wrap.**
+Wrap comments and doc comments (`//` and `///`) to the same 100 character page width, not to
+80. `dart format` leaves prose untouched, so a comment wrapped at 80 will simply stay that way
+and look inconsistent with the code around it. Fill each line before wrapping to the next.
+
 ## Translations (i18n)
 
 **CRITICAL**: Never manually edit `lib/l10n/app_*.arb` files - they are generated.
