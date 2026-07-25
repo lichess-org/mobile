@@ -588,6 +588,8 @@ void main() {
 
       expect(find.textContaining('Lichess is down'), findsOneWidget);
       expect(find.textContaining('scheduled maintenance'), findsNothing);
+      // The website shows this drawing on its outage page; mirror that.
+      expect(imageAssetNames(tester), contains('assets/images/maintenance.webp'));
     });
 
     testWidgets('a 503 shows the maintenance message', (tester) async {
@@ -606,6 +608,8 @@ void main() {
 
       expect(find.textContaining('scheduled maintenance'), findsOneWidget);
       expect(find.textContaining('Lichess is down'), findsNothing);
+      // The website's maintenance page has no drawing, only the logo.
+      expect(imageAssetNames(tester), isNot(contains('assets/images/maintenance.webp')));
     });
   });
 

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/network/server_status.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// Message shown in place of the content that needs the lichess server, when
@@ -29,6 +31,11 @@ class ServerOutageDisplay extends ConsumerWidget {
         : 'assets/images/discord-logo-black.webp';
 
     final isMaintenance = ref.watch(serverStatusProvider) == ServerStatus.maintenance;
+    // The drawing is a solid picture that would sit awkwardly on top of a background image, so it
+    // is only shown over a plain background.
+    final hasBackgroundImage = ref.watch(
+      generalPreferencesProvider.select((prefs) => prefs.backgroundImage != null),
+    );
     final textStyle = Theme.of(context).textTheme.bodyLarge;
 
     return Padding(
@@ -36,7 +43,24 @@ class ServerOutageDisplay extends ConsumerWidget {
       child: Column(
         mainAxisAlignment: .center,
         children: [
-          Image.asset(logo, width: 150),
+          if (isMaintenance || hasBackgroundImage)
+            Image.asset(logo, width: 150)
+          else ...[
+            ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: switch (getScreenType(context)) {
+                  ScreenType.tablet => 460.0,
+                  ScreenType.desktop => 560.0,
+                  _ => double.infinity,
+                },
+              ),
+              child: Image.asset('assets/images/maintenance.webp'),
+            ),
+            TextButton(
+              onPressed: () => launchUrl(Uri.parse(kMaintenanceDrawingAuthorUrl)),
+              child: Text('Drawing by Gia', style: Theme.of(context).textTheme.bodySmall),
+            ),
+          ],
           const SizedBox(height: 16),
           Text(
             isMaintenance
