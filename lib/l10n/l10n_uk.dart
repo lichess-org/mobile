@@ -2500,6 +2500,14 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
+  String get recapAwaitQuestion => 'Чим ви займалися цього року?';
+
+  @override
+  String recapRecapReady(String param) {
+    return 'Ваш підсумок $param-го готовий!';
+  }
+
+  @override
   String get searchSearch => 'Пошук';
 
   @override

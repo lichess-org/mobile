@@ -682,6 +682,8 @@
   "puzzleThemePlayerGames": "Các ván đấu của người chơi",
   "puzzleThemePlayerGamesDescription": "Những câu đố từ những ván cờ của bạn hoặc từ các ván cờ của những người chơi khác.",
   "puzzleThemePuzzleDownloadInformation": "Những câu đố này thuộc phạm vi công khai và có thể tải về từ {param}.",
+  "recapAwaitQuestion": "Bạn đã làm được những gì trong năm nay nhỉ?",
+  "recapRecapReady": "Bản tóm tắt năm {param} của bạn đã sẵn sàng rồi đây!",
   "searchSearch": "Tìm kiếm",
   "settingsSettings": "Cài đặt",
   "settingsCloseAccount": "Đóng tài khoản",

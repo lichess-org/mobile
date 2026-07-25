@@ -704,6 +704,8 @@
   "puzzleThemePlayerGames": "Oʻyinchilardan",
   "puzzleThemePlayerGamesDescription": "Oʻzingizning yoki boshqa oʻyinchilarning oʻyinlaridan olingan masalalarni topish.",
   "puzzleThemePuzzleDownloadInformation": "Ushbu masalalar jamoat mulki hisoblanadi va ularni ushbu manzilidan yuklab olishingiz mumkin: {param}",
+  "recapAwaitQuestion": "Bu yilingiz qanday oʻtdi?",
+  "recapRecapReady": "Sizning {param}‑yil sarhisobingiz tayyor!",
   "searchSearch": "Qidirish",
   "settingsSettings": "Sozlamalar",
   "settingsCloseAccount": "Akkauntni yopish",

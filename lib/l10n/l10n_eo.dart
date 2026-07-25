@@ -2444,6 +2444,14 @@ class AppLocalizationsEo extends AppLocalizations {
   }
 
   @override
+  String get recapAwaitQuestion => 'Kiel vi fartis dum ĉi tiu jaro?';
+
+  @override
+  String recapRecapReady(String param) {
+    return 'Your $param recap is ready!';
+  }
+
+  @override
   String get searchSearch => 'Serĉi';
 
   @override

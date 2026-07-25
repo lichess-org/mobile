@@ -2470,6 +2470,14 @@ class AppLocalizationsHr extends AppLocalizations {
   }
 
   @override
+  String get recapAwaitQuestion => 'Što si radio ove godine?';
+
+  @override
+  String recapRecapReady(String param) {
+    return 'Tvoj sažetak za $param je spreman!';
+  }
+
+  @override
   String get searchSearch => 'Traži';
 
   @override

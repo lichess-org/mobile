@@ -2500,6 +2500,14 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
+  String get recapAwaitQuestion => 'Čomu si sa venoval tento rok?';
+
+  @override
+  String recapRecapReady(String param) {
+    return 'Vaše zhrnutie $param je pripravené!';
+  }
+
+  @override
   String get searchSearch => 'Hľadať';
 
   @override

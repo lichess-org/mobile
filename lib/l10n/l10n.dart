@@ -4438,6 +4438,18 @@ abstract class AppLocalizations {
   /// **'These puzzles are in the public domain, and can be downloaded from {param}.'**
   String puzzleThemePuzzleDownloadInformation(String param);
 
+  /// No description provided for @recapAwaitQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'What have you been up to this year?'**
+  String get recapAwaitQuestion;
+
+  /// No description provided for @recapRecapReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Your {param} recap is ready!'**
+  String recapRecapReady(String param);
+
   /// No description provided for @searchSearch.
   ///
   /// In en, this message translates to:

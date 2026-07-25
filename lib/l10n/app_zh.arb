@@ -706,6 +706,8 @@
   "puzzleThemePlayerGames": "棋手对局",
   "puzzleThemePlayerGamesDescription": "查找由您的对局或其他棋手对局生成的谜题。",
   "puzzleThemePuzzleDownloadInformation": "这些谜题都是公开的，可以在 {param} 下载。",
+  "recapAwaitQuestion": "今年您都下了哪些棋？",
+  "recapRecapReady": "您的 {param} 年度回顾已就绪！",
   "searchSearch": "搜索",
   "settingsSettings": "设置",
   "settingsCloseAccount": "关闭账户",

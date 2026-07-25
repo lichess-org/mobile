@@ -2444,6 +2444,14 @@ class AppLocalizationsGsw extends AppLocalizations {
   }
 
   @override
+  String get recapAwaitQuestion => 'Was häsch das Jahr eso g\'macht?';
+
+  @override
+  String recapRecapReady(String param) {
+    return 'Dini Zämmefassig für $param isch parat!';
+  }
+
+  @override
   String get searchSearch => 'Suechi';
 
   @override

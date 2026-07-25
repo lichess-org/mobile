@@ -2500,6 +2500,14 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
+  String get recapAwaitQuestion => 'What have you been up to this year?';
+
+  @override
+  String recapRecapReady(String param) {
+    return 'Váš recap $param je připraven!';
+  }
+
+  @override
   String get searchSearch => 'Hledat';
 
   @override

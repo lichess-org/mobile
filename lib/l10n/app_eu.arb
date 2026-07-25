@@ -704,6 +704,8 @@
   "puzzleThemePlayerGames": "Jokalarien partidak",
   "puzzleThemePlayerGamesDescription": "Ikusi zure edo beste jokalarien partidetatik sortutako ariketak.",
   "puzzleThemePuzzleDownloadInformation": "Ariketa hauek publikoak dira, {param} helbidetik deskargatu daitezke.",
+  "recapAwaitQuestion": "Zertan aritu zara aurten?",
+  "recapRecapReady": "Zure {param} urteko laburpena prest dago!",
   "searchSearch": "Bilatu",
   "settingsSettings": "Ezarpenak",
   "settingsCloseAccount": "Kontua itxi",

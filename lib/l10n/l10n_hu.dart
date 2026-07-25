@@ -2444,6 +2444,14 @@ class AppLocalizationsHu extends AppLocalizations {
   }
 
   @override
+  String get recapAwaitQuestion => 'Mit csináltál idén?';
+
+  @override
+  String recapRecapReady(String param) {
+    return 'Elkészült az éves összefoglalód: $param!';
+  }
+
+  @override
   String get searchSearch => 'Keresés';
 
   @override

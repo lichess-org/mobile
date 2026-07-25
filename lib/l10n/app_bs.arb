@@ -614,6 +614,8 @@
   "puzzleThemePlayerGames": "Igračke igre",
   "puzzleThemePlayerGamesDescription": "Potražite zagonetke stvorene iz vaših igara ili iz igara drugog igrača.",
   "puzzleThemePuzzleDownloadInformation": "Ove zagonetke su u javnoj domeni i mogu se preuzeti sa {param}.",
+  "recapAwaitQuestion": "Šta si radio/la ove godine?",
+  "recapRecapReady": "Vaš sažetak za {param} je spreman!",
   "searchSearch": "Traži",
   "settingsSettings": "Postavke",
   "settingsCloseAccount": "Zatvorite račun",

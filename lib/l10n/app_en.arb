@@ -1262,6 +1262,15 @@
       }
     }
   },
+  "recapAwaitQuestion": "What have you been up to this year?",
+  "recapRecapReady": "Your {param} recap is ready!",
+  "@recapRecapReady": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
   "searchSearch": "Search",
   "settingsSettings": "Settings",
   "settingsCloseAccount": "Close account",

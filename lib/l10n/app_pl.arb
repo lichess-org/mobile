@@ -703,6 +703,8 @@
   "puzzleThemePlayerGames": "Partie gracza",
   "puzzleThemePlayerGamesDescription": "Wyszukaj zadania wygenerowane z Twoich partii lub z partii innego gracza.",
   "puzzleThemePuzzleDownloadInformation": "Te zadania dostępne są w domenie publicznej i mogą być pobrane z {param}.",
+  "recapAwaitQuestion": "Co robiłeś w tym roku?",
+  "recapRecapReady": "Twoje podsumowanie roku {param} jest gotowe!",
   "searchSearch": "Szukaj",
   "settingsSettings": "Ustawienia",
   "settingsCloseAccount": "Zamknij konto",

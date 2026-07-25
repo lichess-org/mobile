@@ -2416,6 +2416,14 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get recapAwaitQuestion => '今年您都下了哪些棋？';
+
+  @override
+  String recapRecapReady(String param) {
+    return '您的 $param 年度回顾已就绪！';
+  }
+
+  @override
   String get searchSearch => '搜索';
 
   @override
@@ -8762,6 +8770,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String puzzleThemePuzzleDownloadInformation(String param) {
     return '這些為公開謎題，並且在 $param 提供下載管道。';
   }
+
+  @override
+  String get recapAwaitQuestion => '這一年您過得如何？';
 
   @override
   String get searchSearch => '搜尋';

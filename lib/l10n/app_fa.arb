@@ -706,6 +706,8 @@
   "puzzleThemePlayerGames": "بازی‌های بازیکن",
   "puzzleThemePlayerGamesDescription": "دنبال معماهای ایجادشده از بازی‌های خودتان یا بازی‌های سایر بازیکنان، بگردید.",
   "puzzleThemePuzzleDownloadInformation": "این معماها به صورت همگانی هستند و می‌توانید از {param} بارگیریدشان.",
+  "recapAwaitQuestion": "امسال چه کرده‌اید؟",
+  "recapRecapReady": "سَرجمعِ سالِ {param} تان آماده است!",
   "searchSearch": "جستجو",
   "settingsSettings": "تنظیمات",
   "settingsCloseAccount": "بستن حساب",

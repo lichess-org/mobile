@@ -704,6 +704,8 @@
   "puzzleThemePlayerGames": "Ігри гравця",
   "puzzleThemePlayerGamesDescription": "Пошук задач, згенерованих з ваших ігор або з ігор інших гравців.",
   "puzzleThemePuzzleDownloadInformation": "Ці задачі є у публічному доступі та можуть бути завантажені з {param}.",
+  "recapAwaitQuestion": "Чим ви займалися цього року?",
+  "recapRecapReady": "Ваш підсумок {param}-го готовий!",
   "searchSearch": "Пошук",
   "settingsSettings": "Налаштування",
   "settingsCloseAccount": "Видалити обліковий запис",

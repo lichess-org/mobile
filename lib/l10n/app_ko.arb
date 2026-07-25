@@ -704,6 +704,8 @@
   "puzzleThemePlayerGames": "플레이어 게임",
   "puzzleThemePlayerGamesDescription": "당신의 게임이나 다른 플레이어의 게임에서 나온 퍼즐을 찾아보세요.",
   "puzzleThemePuzzleDownloadInformation": "이 퍼즐들은 자유 이용 저작물이며, {param}에서 다운로드할 수 있습니다.",
+  "recapAwaitQuestion": "올해는 어떻게 지내셨나요?",
+  "recapRecapReady": "당신의 {param}년 요약이 준비되었습니다!",
   "searchSearch": "검색",
   "settingsSettings": "설정",
   "settingsCloseAccount": "계정 폐쇄",

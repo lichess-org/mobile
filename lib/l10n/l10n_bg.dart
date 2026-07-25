@@ -2444,6 +2444,14 @@ class AppLocalizationsBg extends AppLocalizations {
   }
 
   @override
+  String get recapAwaitQuestion => 'С какво се занимаваше през тази година?';
+
+  @override
+  String recapRecapReady(String param) {
+    return 'Твоят обзор за $param е готов!';
+  }
+
+  @override
   String get searchSearch => 'Търсене';
 
   @override

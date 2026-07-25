@@ -2416,6 +2416,14 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String get recapAwaitQuestion => '今年はどんなだったでしょう。';
+
+  @override
+  String recapRecapReady(String param) {
+    return '$param 年のまとめが用意できました！';
+  }
+
+  @override
   String get searchSearch => '検索';
 
   @override

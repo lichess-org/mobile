@@ -682,6 +682,8 @@
   "puzzleThemePlayerGames": "Igralske igre",
   "puzzleThemePlayerGamesDescription": "Iskanje ugank, ustvarjenih iz vaših iger ali iz iger drugega igralca.",
   "puzzleThemePuzzleDownloadInformation": "Te uganke so v javni lasti in jih je mogoče prenesti s spletnega mesta {param}.",
+  "recapAwaitQuestion": "Kaj si počel letos?",
+  "recapRecapReady": "Vaš {param} povzetek je pripravljen!",
   "searchSearch": "Iskanje",
   "settingsSettings": "Nastavitve",
   "settingsCloseAccount": "Zapri račun",

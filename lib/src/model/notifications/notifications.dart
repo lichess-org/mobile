@@ -92,6 +92,14 @@ sealed class FcmMessage {
           } else {
             return MalformedFcmMessage(message.data);
           }
+        case 'recap':
+          final rawYear = message.data['lichess.year'] as String?;
+          final year = rawYear == null ? null : int.tryParse(rawYear);
+          if (year != null) {
+            return RecapFcmMessage(year, notification: message.notification);
+          } else {
+            return MalformedFcmMessage(message.data);
+          }
         default:
           return UnhandledFcmMessage(message.data);
       }
@@ -143,6 +151,17 @@ class ChallengeAcceptFcmMessage extends FcmMessage {
 
   final ChallengeId id;
   final GameFullId fullId;
+
+  @override
+  final RemoteNotification? notification;
+}
+
+/// An [FcmMessage] sent when the year-end recap is ready.
+@immutable
+class RecapFcmMessage extends FcmMessage {
+  const RecapFcmMessage(this.year, {required this.notification});
+
+  final int year;
 
   @override
   final RemoteNotification? notification;
@@ -229,6 +248,8 @@ sealed class LocalNotification {
         return ChallengeCreatedNotification.fromJson(json);
       case 'announce':
         return AnnounceNotification.fromJson(json);
+      case 'recap':
+        return RecapNotification.fromJson(json);
       default:
         throw ArgumentError('Unknown notification channel: $channel');
     }
@@ -272,7 +293,7 @@ class PlaybanNotification extends LocalNotification {
   NotificationDetails details(AppLocalizations l10n) => NotificationDetails(
     android: AndroidNotificationDetails(
       channelId,
-      'playban',
+      'Playban',
       importance: Importance.max,
       priority: Priority.max,
       autoCancel: false,
@@ -700,4 +721,43 @@ class ChallengeNotification extends LocalNotification {
           DarwinNotificationCategoryOption.hiddenPreviewShowTitle,
         },
       );
+}
+
+/// A notification for the year-end recap
+///
+/// This notification is shown when the year-end recap is received from the server
+class RecapNotification extends LocalNotification {
+  const RecapNotification(this.year);
+
+  final int year;
+
+  factory RecapNotification.fromJson(Map<String, dynamic> json) {
+    final year = json['year'] as int;
+    return RecapNotification(year);
+  }
+
+  factory RecapNotification.fromFcmMessage(RecapFcmMessage message) {
+    return RecapNotification(message.year);
+  }
+
+  @override
+  String get channelId => 'recap';
+
+  @override
+  int get id => year.hashCode;
+
+  @override
+  Map<String, dynamic> get _concretePayload => {'year': year};
+
+  @override
+  String title(AppLocalizations l10n) => l10n.recapRecapReady(year.toString());
+
+  @override
+  String body(AppLocalizations l10n) => l10n.recapAwaitQuestion;
+
+  @override
+  NotificationDetails details(AppLocalizations l10n) => NotificationDetails(
+    android: AndroidNotificationDetails(channelId, 'Annual recap', importance: Importance.high),
+    iOS: DarwinNotificationDetails(threadIdentifier: channelId),
+  );
 }

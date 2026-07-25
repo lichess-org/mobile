@@ -670,6 +670,8 @@
   "puzzleThemePlayerGames": "Spillerpartier",
   "puzzleThemePlayerGamesDescription": "Finn sjakknøtter generert fra dine eller andres partier.",
   "puzzleThemePuzzleDownloadInformation": "Disse sjakknøttene er offentlig eiendom og kan lastes ned fra {param}.",
+  "recapAwaitQuestion": "Hva har du holdt på med i år?",
+  "recapRecapReady": "Oppsummeringen din for {param} er klar!",
   "searchSearch": "Søk",
   "settingsSettings": "Innstillinger",
   "settingsCloseAccount": "Avslutt konto",

@@ -706,6 +706,8 @@
   "puzzleThemePlayerGames": "Partide jucători",
   "puzzleThemePlayerGamesDescription": "Caută puzzle-uri generate din partidele tale sau din partidele unui alt jucător.",
   "puzzleThemePuzzleDownloadInformation": "Aceste puzzle-uri sunt în domeniul public și pot fi descărcate de la {param}.",
+  "recapAwaitQuestion": "Cu ce te-ai ocupat anul acesta?",
+  "recapRecapReady": "Recapitularea ta pentru {param} este gata!",
   "searchSearch": "Căutare",
   "settingsSettings": "Setări",
   "settingsCloseAccount": "Închide contul",

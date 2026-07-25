@@ -705,6 +705,8 @@
   "puzzleThemePlayerGames": "مبارايات اللاعب",
   "puzzleThemePlayerGamesDescription": "ابحث عن ألغاز من مبارياتك أو من مباريات لاعبين آخرين.",
   "puzzleThemePuzzleDownloadInformation": "هذه الألغاز موجودة للعامة بإمكانك تحميلها من هنا {param}.",
+  "recapAwaitQuestion": "ماذا كنت حتى تفعل في هذا العام؟",
+  "recapRecapReady": "موجز {param} الخاص بك مُعَدّ!",
   "searchSearch": "بحث",
   "settingsSettings": "الإعدادات",
   "settingsCloseAccount": "إغلاق الحساب",

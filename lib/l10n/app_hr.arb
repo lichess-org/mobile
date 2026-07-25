@@ -607,6 +607,8 @@
   "puzzleThemePlayerGames": "Igračeve partije",
   "puzzleThemePlayerGamesDescription": "Pogledaj zadatke generirate iz vlastitih partija ili iz partija određenog igrača.",
   "puzzleThemePuzzleDownloadInformation": "Ovi zadaci su u javnom vlasništvu i mogu biti preuzeti sa {param}.",
+  "recapAwaitQuestion": "Što si radio ove godine?",
+  "recapRecapReady": "Tvoj sažetak za {param} je spreman!",
   "searchSearch": "Traži",
   "settingsSettings": "Postavke",
   "settingsCloseAccount": "Zatvori račun",

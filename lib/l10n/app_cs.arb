@@ -676,6 +676,7 @@
   "puzzleThemePlayerGames": "Z vašich her",
   "puzzleThemePlayerGamesDescription": "Vyhledejte úlohy vygenerované z vašich her, nebo z her jiného hráče.",
   "puzzleThemePuzzleDownloadInformation": "Tyto hádanky jsou ve veřejné doméně a lze je stáhnout z {param}.",
+  "recapRecapReady": "Váš recap {param} je připraven!",
   "searchSearch": "Hledat",
   "settingsSettings": "Nastavení",
   "settingsCloseAccount": "Zrušit účet",

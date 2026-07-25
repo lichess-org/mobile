@@ -2444,6 +2444,14 @@ class AppLocalizationsSq extends AppLocalizations {
   }
 
   @override
+  String get recapAwaitQuestion => 'Me se jeni marrë këtë vit?';
+
+  @override
+  String recapRecapReady(String param) {
+    return 'Përmbledhja juaj për $param është gati!';
+  }
+
+  @override
   String get searchSearch => 'Kërko';
 
   @override

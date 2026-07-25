@@ -2416,6 +2416,14 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
+  String get recapAwaitQuestion => '올해는 어떻게 지내셨나요?';
+
+  @override
+  String recapRecapReady(String param) {
+    return '당신의 $param년 요약이 준비되었습니다!';
+  }
+
+  @override
   String get searchSearch => '검색';
 
   @override

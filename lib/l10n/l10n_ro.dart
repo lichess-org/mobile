@@ -2472,6 +2472,14 @@ class AppLocalizationsRo extends AppLocalizations {
   }
 
   @override
+  String get recapAwaitQuestion => 'Cu ce te-ai ocupat anul acesta?';
+
+  @override
+  String recapRecapReady(String param) {
+    return 'Recapitularea ta pentru $param este gata!';
+  }
+
+  @override
   String get searchSearch => 'Căutare';
 
   @override
