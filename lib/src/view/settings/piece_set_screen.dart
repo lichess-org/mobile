@@ -96,8 +96,8 @@ void remove3DPieceSetFromPreferences(){
 
     return DefaultTabController(
       length: 2,
-      child: Scaffold(
-        appBar: AppBar(
+      child: PlatformScaffold(
+        appBar: PlatformAppBar(
           title: Text(context.l10n.pieceSet),
           actions: [if (isLoading) const PlatformAppBarLoadingIndicator()],
           bottom: const TabBar(
@@ -109,6 +109,44 @@ void remove3DPieceSetFromPreferences(){
         ),
         body: TabBarView(
           children: [
+        Center(
+              child: SafeArea(
+        child: ListView.separated(
+          itemCount: PieceSet.values.length,
+          separatorBuilder: (_, _) => Theme.of(context).platform == TargetPlatform.iOS
+              ? const PlatformDivider()
+              : const SizedBox.shrink(),
+          itemBuilder: (context, index) {
+            final pieceSet = PieceSet.values[index];
+            return ListTile(
+              trailing: boardPrefs.pieceSet == pieceSet  && boardPrefs.pieceSet3D == null ? const Icon(Icons.check) : null,
+              title: Text(pieceSet.label),
+              subtitle: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 264),
+                child: Stack(
+                  children: [
+                    BrightnessHueFilter(
+                      brightness: boardPrefs.brightness,
+                      hue: boardPrefs.hue,
+                      child: boardPrefs.boardTheme.thumbnail,
+                    ),
+                    Row(
+                      children: [
+                        for (final img in getPieceImages(pieceSet)) Image(image: img, height: 44),
+                      ],
+                    ),
+                  ],
+
+                        ),
+                      ),
+                      onTap: isLoading ? null : () => onChanged(pieceSet),
+                      selected: boardPrefs.pieceSet == pieceSet,
+                    );
+                  },
+		),
+              ),
+            ),
+
 	Center(
               child: SafeArea(
                 child: ListView.separated(
@@ -149,44 +187,7 @@ void remove3DPieceSetFromPreferences(){
                   },
                 ),
               ),
-            ),
-                      Center(
-              child: SafeArea(
-        child: ListView.separated(
-          itemCount: PieceSet.values.length,
-          separatorBuilder: (_, _) => Theme.of(context).platform == TargetPlatform.iOS
-              ? const PlatformDivider()
-              : const SizedBox.shrink(),
-          itemBuilder: (context, index) {
-            final pieceSet = PieceSet.values[index];
-            return ListTile(
-              trailing: boardPrefs.pieceSet == pieceSet ? const Icon(Icons.check) : null,
-              title: Text(pieceSet.label),
-              subtitle: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 264),
-                child: Stack(
-                  children: [
-                    BrightnessHueFilter(
-                      brightness: boardPrefs.brightness,
-                      hue: boardPrefs.hue,
-                      child: boardPrefs.boardTheme.thumbnail,
-                    ),
-                    Row(
-                      children: [
-                        for (final img in getPieceImages(pieceSet)) Image(image: img, height: 44),
-                      ],
-                    ),
-                  ],
-
-                        ),
-                      ),
-                      onTap: isLoading ? null : () => onChanged(pieceSet),
-                      selected: boardPrefs.pieceSet == pieceSet,
-                    );
-                  },
-		),
-              ),
-            ),
+            )
           ],
         ),
       ),
