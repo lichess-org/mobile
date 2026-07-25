@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -17,6 +19,19 @@ void main() {
       // Wait for onlineStatusProvider to resolve (FakeConnectivity returns wifi).
       await container.read(onlineStatusProvider.future);
 
+      expect(container.read(lichessConnectionStatusProvider), LichessConnectionStatus.online);
+    });
+
+    test('assumes online while the connectivity check is still running', () async {
+      final container = await makeContainer(
+        overrides: {
+          onlineStatusProvider: onlineStatusProvider.overrideWith(
+            (ref) => Completer<bool>().future,
+          ),
+        },
+      );
+
+      // No await: the check never completes, so the provider stays loading.
       expect(container.read(lichessConnectionStatusProvider), LichessConnectionStatus.online);
     });
 

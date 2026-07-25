@@ -53,7 +53,17 @@ enum LichessConnectionStatus {
 /// tablebase, run on their own servers and may well be reachable while the main
 /// server is down: keep using [onlineStatusProvider] for those.
 final lichessConnectionStatusProvider = Provider.autoDispose<LichessConnectionStatus>((ref) {
-  final isNetworkOnline = ref.watch(onlineStatusProvider).value ?? false;
+  final isNetworkOnline = switch (ref.watch(onlineStatusProvider)) {
+    // A check that failed does mean we could not reach anything.
+    AsyncValue(hasError: true) => false,
+    // The last known answer, whether it comes from a settled check or from a
+    // re-run that has not completed yet.
+    AsyncValue(:final value?) => value,
+    // The connectivity check makes network requests, so it is not instant.
+    // Assume the device is online until it has an answer: reporting a network
+    // outage on a hunch would flash the offline UI on startup.
+    _ => true,
+  };
   if (!isNetworkOnline) return LichessConnectionStatus.networkDown;
   return switch (ref.watch(serverStatusProvider)) {
     ServerStatus.up => LichessConnectionStatus.online,
