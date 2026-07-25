@@ -19,20 +19,19 @@ final connectivityPluginProvider = Provider<Connectivity>((Ref _) => Connectivit
 
 /// Whether the device has a network connection.
 ///
-/// This is the synchronous, optimistic view of [connectivityChangesProvider]:
-/// while the check is still running the device is assumed to be online, as the
-/// check makes network requests and is therefore not instant.
+/// This is the synchronous, optimistic view of [connectivityChangesProvider]: while the check is
+/// still running the device is assumed to be online, as the check makes network requests and is
+/// therefore not instant.
 ///
-/// Use this to gate anything that merely needs a connection. Watch
-/// [connectivityChangesProvider] directly in the rare places that must not be
-/// optimistic, and [lichessConnectionStatusProvider] where a lichess outage has
-/// to be shown.
+/// Use this to gate anything that merely needs a connection. Watch [connectivityChangesProvider]
+/// directly in the rare places that must not be optimistic, and [lichessConnectionStatusProvider]
+/// where a lichess outage has to be shown.
 final isDeviceOnlineProvider = Provider.autoDispose<bool>((ref) {
   return switch (ref.watch(connectivityChangesProvider)) {
     // A check that failed does mean we could not reach anything.
     AsyncValue(hasError: true) => false,
-    // The last known answer, whether it comes from a settled check or from a
-    // re-run that has not completed yet.
+    // The last known answer, whether it comes from a settled check or from a re-run that has not
+    // completed yet.
     AsyncValue(:final value?) => value.isOnline,
     _ => true,
   };
@@ -60,15 +59,13 @@ enum LichessConnectionStatus {
 
 /// A provider that exposes the current [LichessConnectionStatus].
 ///
-/// Reserve this for the tabs that show a [ServerOutageDisplay]: it is the only
-/// place where a lichess outage should change the UI. Elsewhere, gate on
-/// [isDeviceOnlineProvider] instead — a disabled link does not explain itself,
-/// so it is better to let the user follow it and see the error than to grey it
-/// out because the server happens to be down.
+/// Reserve this for the tabs that show a [ServerOutageDisplay]: it is the only place where a
+/// lichess outage should change the UI. Elsewhere, gate on [isDeviceOnlineProvider] instead — a
+/// disabled link does not explain itself, so it is better to let the user follow it and see the
+/// error than to grey it out because the server happens to be down.
 ///
-/// Beware too that other lichess services, such as the opening explorer or the
-/// tablebase, run on their own servers and may well be reachable while the main
-/// server is down.
+/// Beware too that other lichess services, such as the opening explorer or the tablebase, run on
+/// their own servers and may well be reachable while the main server is down.
 final lichessConnectionStatusProvider = Provider.autoDispose<LichessConnectionStatus>((ref) {
   if (!ref.watch(isDeviceOnlineProvider)) return LichessConnectionStatus.networkDown;
   return switch (ref.watch(serverStatusProvider)) {
@@ -78,12 +75,12 @@ final lichessConnectionStatusProvider = Provider.autoDispose<LichessConnectionSt
   };
 }, name: 'LichessConnectionStatusProvider');
 
-/// This provider is used to check the device's connectivity status, reacting to
-/// changes in connectivity and app lifecycle events.
+/// This provider is used to check the device's connectivity status, reacting to changes in
+/// connectivity and app lifecycle events.
 ///
-/// **Note**: to simply check whether the device is online, use
-/// [isDeviceOnlineProvider] instead. Watch this one only when the status being
-/// unknown has to be handled explicitly, rather than assumed to be online.
+/// **Note**: to simply check whether the device is online, use [isDeviceOnlineProvider] instead.
+/// Watch this one only when the status being unknown has to be handled explicitly, rather than
+/// assumed to be online.
 ///
 /// - Uses the [Connectivity] plugin to listen to connectivity changes
 /// - Uses [AppLifecycleListener] to check connectivity on app resume
@@ -124,8 +121,8 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
 
   Future<void> _onAppLifecycleChange(AppLifecycleState appState) async {
     if (appState == AppLifecycleState.resumed) {
-      // Give the lichess server the benefit of the doubt again whenever the
-      // user comes back to the app: see [ServerStatusNotifier.onAppResumed].
+      // Give the lichess server the benefit of the doubt again whenever the user comes back to
+      // the app: see [ServerStatusNotifier.onAppResumed].
       ref.read(serverStatusProvider.notifier).onAppResumed();
     }
 
