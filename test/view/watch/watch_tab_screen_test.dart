@@ -15,9 +15,7 @@ void main() {
       final app = await makeTestProviderScope(
         tester,
         child: const Application(),
-        overrides: {
-          onlineStatusProvider: onlineStatusProvider.overrideWith((ref) => Future.value(false)),
-        },
+        overrides: {isDeviceOnlineProvider: isDeviceOnlineProvider.overrideWithValue(false)},
       );
 
       await tester.pumpWidget(app);

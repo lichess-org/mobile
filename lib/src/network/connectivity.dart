@@ -17,12 +17,28 @@ const kConnectivityThrottleDelay = Duration(seconds: 5);
 /// A provider that exposes a [Connectivity] instance.
 final connectivityPluginProvider = Provider<Connectivity>((Ref _) => Connectivity());
 
-/// A provider that listens to connectivity changes and exposes a boolean indicating whether the device is online or not.
+/// Whether the device has a network connection.
 ///
-/// This provider is derived from [connectivityChangesProvider] and only exposes the `isOnline` field of the connectivity status.
-final onlineStatusProvider = FutureProvider.autoDispose<bool>((ref) {
-  return ref.watch(connectivityChangesProvider.selectAsync((status) => status.isOnline));
-}, name: 'OnlineStatusProvider');
+/// This is the synchronous, optimistic view of [connectivityChangesProvider]:
+/// while the check is still running the device is assumed to be online, as the
+/// check makes network requests and is therefore not instant. Reporting a
+/// network outage on a hunch would flash the offline UI on startup, and again
+/// whenever the check is re-run.
+///
+/// Use this to gate anything that merely needs a connection. Watch
+/// [connectivityChangesProvider] directly in the rare places that must not be
+/// optimistic, and [lichessConnectionStatusProvider] where a lichess outage has
+/// to be shown.
+final isDeviceOnlineProvider = Provider.autoDispose<bool>((ref) {
+  return switch (ref.watch(connectivityChangesProvider)) {
+    // A check that failed does mean we could not reach anything.
+    AsyncValue(hasError: true) => false,
+    // The last known answer, whether it comes from a settled check or from a
+    // re-run that has not completed yet.
+    AsyncValue(:final value?) => value.isOnline,
+    _ => true,
+  };
+}, name: 'IsDeviceOnlineProvider');
 
 /// Represents the connection state of the app with respect to the lichess server.
 enum LichessConnectionStatus {
@@ -46,25 +62,17 @@ enum LichessConnectionStatus {
 
 /// A provider that exposes the current [LichessConnectionStatus].
 ///
-/// Use this instead of [onlineStatusProvider] when the distinction between a
-/// local network drop and a server outage matters for the UI.
+/// Reserve this for the tabs that show a [ServerOutageDisplay]: it is the only
+/// place where a lichess outage should change the UI. Elsewhere, gate on
+/// [isDeviceOnlineProvider] instead — a disabled link does not explain itself,
+/// so it is better to let the user follow it and see the error than to grey it
+/// out because the server happens to be down.
 ///
-/// Beware that other lichess services, such as the opening explorer or the
+/// Beware too that other lichess services, such as the opening explorer or the
 /// tablebase, run on their own servers and may well be reachable while the main
-/// server is down: keep using [onlineStatusProvider] for those.
+/// server is down.
 final lichessConnectionStatusProvider = Provider.autoDispose<LichessConnectionStatus>((ref) {
-  final isNetworkOnline = switch (ref.watch(onlineStatusProvider)) {
-    // A check that failed does mean we could not reach anything.
-    AsyncValue(hasError: true) => false,
-    // The last known answer, whether it comes from a settled check or from a
-    // re-run that has not completed yet.
-    AsyncValue(:final value?) => value,
-    // The connectivity check makes network requests, so it is not instant.
-    // Assume the device is online until it has an answer: reporting a network
-    // outage on a hunch would flash the offline UI on startup.
-    _ => true,
-  };
-  if (!isNetworkOnline) return LichessConnectionStatus.networkDown;
+  if (!ref.watch(isDeviceOnlineProvider)) return LichessConnectionStatus.networkDown;
   return switch (ref.watch(serverStatusProvider)) {
     ServerStatus.up => LichessConnectionStatus.online,
     ServerStatus.maintenance => LichessConnectionStatus.serverMaintenance,
@@ -75,8 +83,9 @@ final lichessConnectionStatusProvider = Provider.autoDispose<LichessConnectionSt
 /// This provider is used to check the device's connectivity status, reacting to
 /// changes in connectivity and app lifecycle events.
 ///
-/// **Note**: do not use this provider directly to check if the device is online,
-/// use [onlineStatusProvider] instead, which only exposes the `isOnline` field of the connectivity status.
+/// **Note**: to simply check whether the device is online, use
+/// [isDeviceOnlineProvider] instead. Watch this one only when the status being
+/// unknown has to be handled explicitly, rather than assumed to be online.
 ///
 /// - Uses the [Connectivity] plugin to listen to connectivity changes
 /// - Uses [AppLifecycleListener] to check connectivity on app resume

@@ -66,10 +66,7 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final connectionStatus = ref.watch(lichessConnectionStatusProvider);
-    // The opening explorer runs on its own server, so it may well be available
-    // while the lichess main server is down.
-    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
+    final isOnline = ref.watch(isDeviceOnlineProvider);
     final authUser = ref.watch(authControllerProvider);
 
     return ListTileTheme.merge(
@@ -153,7 +150,7 @@ class _Body extends ConsumerWidget {
               ListTile(
                 leading: const Icon(Icons.groups_3_outlined),
                 title: Text(context.l10n.players),
-                enabled: connectionStatus == LichessConnectionStatus.online,
+                enabled: isOnline,
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
                     ? const CupertinoListTileChevron()
                     : null,
@@ -165,7 +162,7 @@ class _Body extends ConsumerWidget {
                 ListTile(
                   leading: const Icon(Icons.people_outline),
                   title: Text(context.l10n.friends),
-                  enabled: connectionStatus == LichessConnectionStatus.online,
+                  enabled: isOnline,
                   trailing: Theme.of(context).platform == TargetPlatform.iOS
                       ? const CupertinoListTileChevron()
                       : null,
@@ -184,7 +181,7 @@ class _Body extends ConsumerWidget {
                   leading: PatronIcon(color: 10, size: IconTheme.of(context).size),
                   title: Text(context.l10n.patronDonate),
                   subtitle: Text(context.l10n.patronBecomePatron),
-                  enabled: connectionStatus == LichessConnectionStatus.online,
+                  enabled: isOnline,
                   onTap: () {
                     launchUrl(Uri.parse('https://lichess.org/patron'));
                   },
@@ -213,7 +210,7 @@ class _AccountSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final connectionStatus = ref.watch(lichessConnectionStatusProvider);
+    final isOnline = ref.watch(isDeviceOnlineProvider);
     final account = ref.watch(accountProvider);
     final authUser = ref.watch(authControllerProvider);
     final kidMode = account.value?.kid ?? false;
@@ -231,7 +228,7 @@ class _AccountSection extends ConsumerWidget {
             leading: const Icon(Icons.person_outlined),
             title: Text(context.l10n.profile),
             trailing: isIOS ? const CupertinoListTileChevron() : null,
-            enabled: connectionStatus == LichessConnectionStatus.online,
+            enabled: isOnline,
             onTap: () {
               ref.invalidate(accountProvider);
               Navigator.of(context).push(ProfileScreen.buildRoute());
@@ -246,7 +243,7 @@ class _AccountSection extends ConsumerWidget {
               ),
               title: Text(context.l10n.inbox),
               trailing: isIOS ? const CupertinoListTileChevron() : null,
-              enabled: connectionStatus == LichessConnectionStatus.online,
+              enabled: isOnline,
               onTap: () {
                 Navigator.of(context).push(ContactsScreen.buildRoute());
               },

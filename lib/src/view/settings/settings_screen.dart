@@ -39,7 +39,7 @@ class SettingsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final connectionStatus = ref.watch(lichessConnectionStatusProvider);
+    final isOnline = ref.watch(isDeviceOnlineProvider);
     final generalPrefs = ref.watch(generalPreferencesProvider);
     final packageInfo = ref.read(preloadedDataProvider).requireValue.packageInfo;
     final authUser = ref.watch(authControllerProvider);
@@ -60,7 +60,7 @@ class SettingsScreen extends ConsumerWidget {
                       ? const CupertinoListTileChevron()
                       : null,
                   title: Text(context.l10n.mobileAccountPreferences),
-                  enabled: connectionStatus == LichessConnectionStatus.online,
+                  enabled: isOnline,
                   onTap: () {
                     Navigator.of(context).push(AccountPreferencesScreen.buildRoute());
                   },
@@ -220,7 +220,7 @@ class SettingsScreen extends ConsumerWidget {
                   _ => ListTile(
                     leading: const Icon(Icons.logout_outlined),
                     title: Text(context.l10n.logOut),
-                    enabled: connectionStatus == LichessConnectionStatus.online,
+                    enabled: isOnline,
                     onTap: () => _showSignOutConfirmDialog(context, ref),
                   ),
                 },

@@ -34,7 +34,9 @@ const _nbPerPage = 20;
 final myRecentGamesProvider = FutureProvider.autoDispose<IList<LightExportedGameWithPov>>((
   Ref ref,
 ) async {
-  final online = await ref.watch(onlineStatusProvider.future);
+  final online = await ref.watch(
+    connectivityChangesProvider.selectAsync((status) => status.isOnline),
+  );
   final isServerUp = ref.watch(serverStatusProvider) == ServerStatus.up;
   final authUser = ref.watch(authControllerProvider);
   if (authUser != null && online && isServerUp) {
@@ -65,7 +67,9 @@ final userNumberOfGamesProvider = FutureProvider.autoDispose.family<int, LightUs
   LightUser? user,
 ) async {
   final authUser = ref.watch(authControllerProvider);
-  final online = await ref.watch(onlineStatusProvider.future);
+  final online = await ref.watch(
+    connectivityChangesProvider.selectAsync((status) => status.isOnline),
+  );
   final isServerUp = ref.watch(serverStatusProvider) == ServerStatus.up;
   return user != null
       ? (await ref.watch(userProvider(user.id).future)).count?.all ?? 0
@@ -115,7 +119,9 @@ class UserGameHistoryNotifier extends AsyncNotifier<UserGameHistoryState> {
 
     final authUser = ref.watch(authControllerProvider);
     final prefs = ref.watch(gameHistoryPreferencesProvider);
-    final online = await ref.watch(onlineStatusProvider.future);
+    final online = await ref.watch(
+      connectivityChangesProvider.selectAsync((status) => status.isOnline),
+    );
     final storage = await ref.watch(gameStorageProvider.future);
 
     final id = params.userId ?? authUser?.user.id;
