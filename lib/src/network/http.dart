@@ -153,18 +153,35 @@ final defaultClientProvider = Provider<DefaultClient>((Ref ref) {
 /// Only one instance of this client is created and kept alive for the whole app.
 final lichessClientProvider = Provider<LichessClient>((Ref ref) {
   final client = LichessClient(
-    // Retry just once, after 500ms, on 429 Too Many Requests.
+    // Retry just once on 429 Too Many Requests.
     RetryClient(
       ref.read(httpClientFactoryProvider)(),
       retries: 1,
       delay: _defaultDelay,
-      when: (response) => response.statusCode == 429,
+      when: shouldRetryOn429,
     ),
     ref,
   );
   ref.onDispose(() => client.close());
   return client;
 }, name: 'LichessHttpClientProvider');
+
+/// Whether a response should be retried once by [lichessClientProvider].
+///
+/// Retries on 429 Too Many Requests, except for puzzle solve submissions
+/// (`POST /api/puzzle/batch/…`): those are rate-limited deliberately and handled
+/// with a back-off by `PuzzleSolveLimiter`, so retrying here only burns a request
+/// and delays arming the back-off.
+@visibleForTesting
+bool shouldRetryOn429(BaseResponse response) {
+  if (response.statusCode != 429) return false;
+  final request = response.request;
+  final isPuzzleSolve =
+      request != null &&
+      request.method == 'POST' &&
+      request.url.path.startsWith('/api/puzzle/batch/');
+  return !isPuzzleSolve;
+}
 
 Duration _defaultDelay(int retryCount) =>
     const Duration(milliseconds: 900) * math.pow(1.5, retryCount);

@@ -11,7 +11,7 @@ Finally, tag the release and push, this will automatically trigger a new version
 git checkout fdroid
 git merge v<new-version>
 
-# If neccessary, update the flutter-version file
+# If necessary, update the flutter-version file
 
 # Any tag that ends with ".fdroid" will be picked up by the f-droid server as a new release
 git push

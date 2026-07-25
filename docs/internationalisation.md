@@ -26,7 +26,7 @@ All three steps are combined in a single script:
 
 ## How to add new translations
 
-[Translations in Crowdin](../translation/sources) are organised by module.
+[Translations in Crowdin](../translation/source) are organised by module.
 
 There is one module for the mobile app: [mobile.xml](../translation/source/mobile.xml).
 

@@ -19,6 +19,39 @@ void main() {
     FakeClient.reset();
   });
 
+  group('shouldRetryOn429', () {
+    http.Response response(int status, {String method = 'GET', String path = '/api/test'}) {
+      return http.Response(
+        '',
+        status,
+        request: http.Request(method, Uri.parse('https://lichess.org$path')),
+      );
+    }
+
+    test('retries a generic 429', () {
+      expect(shouldRetryOn429(response(429)), isTrue);
+      expect(shouldRetryOn429(response(429, method: 'POST')), isTrue);
+    });
+
+    test('does not retry non-429 responses', () {
+      expect(shouldRetryOn429(response(200)), isFalse);
+      expect(shouldRetryOn429(response(503)), isFalse);
+    });
+
+    test('does not retry a puzzle solve submission (POST /api/puzzle/batch)', () {
+      // solveBatch handles 429 with a back-off, so the retry only wastes a call
+      expect(
+        shouldRetryOn429(response(429, method: 'POST', path: '/api/puzzle/batch/mix')),
+        isFalse,
+      );
+    });
+
+    test('still retries a puzzle batch download (GET /api/puzzle/batch)', () {
+      // selectBatch is a plain download, not the rate-limited solve path
+      expect(shouldRetryOn429(response(429, method: 'GET', path: '/api/puzzle/batch/mix')), isTrue);
+    });
+  });
+
   group('LichessClient', () {
     test('sends requests to lichess host when only path is provided', () async {
       final container = await makeContainer(

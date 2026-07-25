@@ -70,6 +70,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Pro zobrazení této stránky musíte být přihlášeni.';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String get mobileNewGame => 'Nová hra';
 
   @override

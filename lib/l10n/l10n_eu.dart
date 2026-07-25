@@ -70,6 +70,9 @@ class AppLocalizationsEu extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Sartu egin behar zara orri hau ikusteko.';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String get mobileNewGame => 'Partida berria';
 
   @override

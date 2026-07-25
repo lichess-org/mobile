@@ -70,6 +70,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Бұл бетті көру үшін тіркелгіге кіріңіз.';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String get mobileNewGame => 'Жаңа ойын';
 
   @override
