@@ -814,6 +814,10 @@
   <string name="quickPairing">Schnelles Spiel</string>
   <string name="lobby">Lobby</string>
   <string name="anonymous">Anonym</string>
+  <plurals name="nbAnonymous">
+    <item quantity="one">Anonym</item>
+    <item quantity="other">Anonym (%s)</item>
+  </plurals>
   <string name="yourScore">Punktestand: %s</string>
   <string name="language">Sprache</string>
   <string name="allLanguages">Alle Sprachen</string>
@@ -1039,4 +1043,5 @@ Alle Betriebskosten, Entwicklung und Inhalte werden ausschließlich durch Benutz
   <string name="thereAreNoResultsForX">Keine Ergebnisse für \"%s\"</string>
   <string name="tags">Schlagwörter</string>
   <string name="enPassant">En passant</string>
+  <string name="settings">Einstellungen</string>
 </resources>

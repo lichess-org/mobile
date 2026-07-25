@@ -1,7 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 
@@ -26,21 +28,54 @@ class PuzzlePreferences extends Notifier<PuzzlePrefs> with SessionPreferencesSto
 
   @override
   PuzzlePrefs build() {
-    return fetch();
+    final prefs = fetch();
+    // Clamp the offline queue length loaded from storage: corrupted or
+    // manually edited prefs could otherwise bypass the bounds enforced by
+    // [setNbOfflinePuzzles] and trigger very large downloads.
+    final clamped = prefs.nbOfflinePuzzles.clamp(kMinOfflinePuzzles, kMaxOfflinePuzzles);
+    return clamped == prefs.nbOfflinePuzzles ? prefs : prefs.copyWith(nbOfflinePuzzles: clamped);
   }
 
-  Future<void> setDifficulty(PuzzleDifficulty difficulty) async {
-    save(state.copyWith(difficulty: difficulty));
+  Future<void> setDifficulty(PuzzleDifficulty difficulty) {
+    return save(state.copyWith(difficulty: difficulty));
   }
 
-  Future<void> setAutoNext(bool autoNext) async {
-    save(state.copyWith(autoNext: autoNext));
+  Future<void> setAutoNext(bool autoNext) {
+    return save(state.copyWith(autoNext: autoNext));
   }
 
-  Future<void> setRated(bool rated) async {
-    save(state.copyWith(rated: rated));
+  Future<void> setRated(bool rated) {
+    return save(state.copyWith(rated: rated));
+  }
+
+  Future<void> setNbOfflinePuzzles(int nbOfflinePuzzles) {
+    return save(
+      state.copyWith(
+        nbOfflinePuzzles: nbOfflinePuzzles.clamp(kMinOfflinePuzzles, kMaxOfflinePuzzles),
+      ),
+    );
   }
 }
+
+/// Minimum number of puzzles kept in the offline queue.
+const kMinOfflinePuzzles = 100;
+
+/// Maximum number of puzzles kept in the offline queue.
+const kMaxOfflinePuzzles = 300;
+
+/// Available choices for the size of the offline puzzle queue.
+const kOfflinePuzzlesChoices = [100, 150, 200, 250, 300];
+
+/// Whether the configurable offline-queue size ([PuzzlePrefs.nbOfflinePuzzles])
+/// applies to [angle]. Where it doesn't, the queue stays at [kMinOfflinePuzzles].
+bool isConfigurableOfflineQueueAngle(PuzzleAngle angle) =>
+    angle == const PuzzleTheme(PuzzleThemeKey.mix);
+
+/// The offline-queue length for [angle]: the configurable [nbOfflinePuzzles]
+/// where [isConfigurableOfflineQueueAngle] allows it, otherwise the fixed
+/// [kMinOfflinePuzzles].
+int offlineQueueLengthForAngle(PuzzleAngle angle, int nbOfflinePuzzles) =>
+    isConfigurableOfflineQueueAngle(angle) ? nbOfflinePuzzles : kMinOfflinePuzzles;
 
 @Freezed(fromJson: true, toJson: true)
 sealed class PuzzlePrefs with _$PuzzlePrefs implements Serializable {
@@ -56,10 +91,19 @@ sealed class PuzzlePrefs with _$PuzzlePrefs implements Serializable {
     /// If `true`, the puzzle will be rated for logged in users.
     /// Defaults to `true`.
     @Default(true) bool rated,
+
+    /// Number of puzzles to keep downloaded in the offline queue.
+    /// Defaults to `100`.
+    @Default(100) int nbOfflinePuzzles,
   }) = _PuzzlePrefs;
 
-  factory PuzzlePrefs.defaults({UserId? id}) =>
-      PuzzlePrefs(id: id, difficulty: PuzzleDifficulty.normal, autoNext: false, rated: true);
+  factory PuzzlePrefs.defaults({UserId? id}) => PuzzlePrefs(
+    id: id,
+    difficulty: PuzzleDifficulty.normal,
+    autoNext: false,
+    rated: true,
+    nbOfflinePuzzles: 100,
+  );
 
   factory PuzzlePrefs.fromJson(Map<String, dynamic> json) => _$PuzzlePrefsFromJson(json);
 }

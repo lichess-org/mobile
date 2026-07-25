@@ -149,18 +149,35 @@ final defaultClientProvider = Provider<DefaultClient>((Ref ref) {
 /// Only one instance of this client is created and kept alive for the whole app.
 final lichessClientProvider = Provider<LichessClient>((Ref ref) {
   final client = LichessClient(
-    // Retry just once, after 500ms, on 429 Too Many Requests.
+    // Retry just once on 429 Too Many Requests.
     RetryClient(
       ref.read(httpClientFactoryProvider)(),
       retries: 1,
       delay: _defaultDelay,
-      when: (response) => response.statusCode == 429,
+      when: shouldRetryOn429,
     ),
     ref,
   );
   ref.onDispose(() => client.close());
   return client;
 }, name: 'LichessHttpClientProvider');
+
+/// Whether a response should be retried once by [lichessClientProvider].
+///
+/// Retries on 429 Too Many Requests, except for puzzle solve submissions
+/// (`POST /api/puzzle/batch/…`): those are rate-limited deliberately and handled
+/// with a back-off by `PuzzleSolveLimiter`, so retrying here only burns a request
+/// and delays arming the back-off.
+@visibleForTesting
+bool shouldRetryOn429(BaseResponse response) {
+  if (response.statusCode != 429) return false;
+  final request = response.request;
+  final isPuzzleSolve =
+      request != null &&
+      request.method == 'POST' &&
+      request.url.path.startsWith('/api/puzzle/batch/');
+  return !isPuzzleSolve;
+}
 
 Duration _defaultDelay(int retryCount) =>
     const Duration(milliseconds: 900) * math.pow(1.5, retryCount);
@@ -217,14 +234,14 @@ Future<bool> downloadFile(
           return s;
         })
         .pipe(sink);
-  } catch (e) {
-    _logger.warning('Failed to download file: $e');
+  } catch (e, st) {
+    _logger.warning('Failed to download file:', e, st);
   } finally {
     try {
       await sink.flush();
       await sink.close();
-    } on FileSystemException catch (e) {
-      _logger.warning('Failed to save file: $e');
+    } on FileSystemException catch (e, st) {
+      _logger.warning('Failed to save file:', e, st);
     }
   }
 
@@ -365,7 +382,7 @@ class LichessClient implements Client {
 
       return response;
     } catch (e, st) {
-      _logger.warning('Request to ${request.url} failed: $e', e, st);
+      _logger.warning('Request to ${request.url} failed:', e, st);
       rethrow;
     }
   }
@@ -490,7 +507,7 @@ class DefaultClient implements Client {
 
       return response;
     } catch (e, st) {
-      _logger.warning('Request to ${request.url} failed: $e', e, st);
+      _logger.warning('Request to ${request.url} failed:', e, st);
       rethrow;
     }
   }
@@ -685,7 +702,7 @@ extension ClientExtension on Client {
     try {
       return mapper(json);
     } catch (e, st) {
-      _logger.severe('Could not read JSON object as $T: $e', e, st);
+      _logger.severe('Could not read JSON object as $T:', e, st);
       throw ClientException('Could not read JSON object as $T: $e\n$st', url);
     }
   }
@@ -721,7 +738,7 @@ extension ClientExtension on Client {
           list.add(mapped);
         }
       } catch (e, st) {
-        _logger.severe('Could not read JSON object as $T: $e', e, st);
+        _logger.severe('Could not read JSON object as $T:', e, st);
         throw ClientException('Could not read JSON object as $T: $e', url);
       }
     }
@@ -770,8 +787,8 @@ extension ClientExtension on Client {
         final json = jsonDecode(e) as Map<String, dynamic>;
         return mapper(json);
       });
-    } catch (e) {
-      _logger.severe('Could not read nd-json object as $T.');
+    } catch (e, st) {
+      _logger.severe('Could not read nd-json object as $T.', e, st);
       throw ClientException('Could not read nd-json object as $T: $e', url);
     }
   }
@@ -799,7 +816,7 @@ extension ClientExtension on Client {
     try {
       return mapper(json);
     } catch (e, st) {
-      _logger.severe('Could not read json as $T: $e', e, st);
+      _logger.severe('Could not read json as $T:', e, st);
       throw ClientException('Could not read json as $T: $e', url);
     }
   }
@@ -832,8 +849,8 @@ extension ClientExtension on Client {
           return mapper(json);
         }),
       );
-    } catch (e) {
-      _logger.severe('Could not read nd-json objects as List<$T>.');
+    } catch (e, st) {
+      _logger.severe('Could not read nd-json objects as List<$T>.', e, st);
       throw ClientException(
         'Could not read nd-json objects as List<$T>: $e',
         response.request?.url,

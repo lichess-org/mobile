@@ -78,6 +78,13 @@ class TestLichessBinding extends LichessBinding {
     return _sharedPreferences ??= FakeSharedPreferences();
   }
 
+  /// Replaces the shared preferences fake, to test how a slow write behaves.
+  ///
+  /// Must be called before anything reads [sharedPreferences]. Reset by [reset].
+  set sharedPreferences(FakeSharedPreferences prefs) {
+    _sharedPreferences = prefs;
+  }
+
   /// Reset the binding instance.
   ///
   /// Should be called using [addTearDown] in tests.
@@ -366,4 +373,22 @@ class FakeFirebaseMessaging extends Fake implements FirebaseMessaging {
   /// Call [StreamController.add] to simulate a message received from FCM while
   /// the application is in background.
   StreamController<RemoteMessage> onBackgroundMessage = StreamController.broadcast();
+}
+
+/// A [FakeSharedPreferences] whose writes complete on the event queue, like the
+/// real ones do: [SharedPreferencesWithCache] goes through a platform channel,
+/// so its futures never complete in a microtask.
+///
+/// Use it to check that code awaiting a preference write actually observes the
+/// new value. Set [writeDelay] to exaggerate the latency.
+class SlowFakeSharedPreferences extends FakeSharedPreferences {
+  SlowFakeSharedPreferences({this.writeDelay = Duration.zero});
+
+  final Duration writeDelay;
+
+  @override
+  Future<bool> setString(String key, String value) async {
+    await Future<void>.delayed(writeDelay);
+    return super.setString(key, value);
+  }
 }

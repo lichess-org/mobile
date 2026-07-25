@@ -357,27 +357,20 @@ void main() {
     });
   });
 
-  group('ChatMixin.setInputText', () {
-    test('updates the input text', () async {
+  group('ChatMixin.chatInputDraft', () {
+    test('holds an unsent draft in memory without touching the chat state', () async {
       final container = await makeContainer();
-      final provider = _makeProvider(initialData: _chatData([]));
+      final provider = _makeProvider(initialData: _chatData([_msg('a', username: 'alice')]));
       final notifier = container.read(provider.notifier);
       await container.read(provider.future);
 
-      notifier.setInputText('draw?');
+      final stateBefore = container.read(provider).requireValue;
+      notifier.chatInputDraft = 'draw?';
 
-      expect(container.read(provider).requireValue.chatState!.inputText, 'draw?');
-    });
-
-    test('is a no-op when chat is not initialized', () async {
-      final container = await makeContainer();
-      final provider = _makeProvider();
-      final notifier = container.read(provider.notifier);
-      await container.read(provider.future);
-
-      notifier.setInputText('draw?');
-
-      expect(container.read(provider).requireValue.chatState, isNull);
+      expect(notifier.chatInputDraft, 'draw?');
+      // The observable chat state must be untouched (same instance) so that
+      // updating the draft does not trigger a rebuild of chat widgets.
+      expect(identical(container.read(provider).requireValue, stateBefore), isTrue);
     });
   });
 

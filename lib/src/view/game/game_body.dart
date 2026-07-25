@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
+import 'package:lichess_mobile/src/model/account/ongoing_games_notifier.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
@@ -45,7 +45,8 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 
 typedef LoadingParam = ({Variant variant, String? fen, Move? lastMove, Side? orientation});
 
-const _kGameEndDialogDelay = Duration(milliseconds: 500);
+/// Delay before the game end dialog is shown after a (non-bullet) game finishes.
+const kGameEndDialogDelay = Duration(milliseconds: 400);
 
 /// Game body for the [GameScreen].
 ///
@@ -177,11 +178,13 @@ class GameBody extends ConsumerWidget {
       // We want to show it only once, whether the game is already finished on
       // first load or not.
       if ((prev?.hasValue != true || prev!.requireValue.game.playable == true) &&
-          state.requireValue.game.playable == false) {
+          game.playable == false) {
         Timer(
-          (game.meta.speed == Speed.bullet || game.meta.speed == Speed.ultraBullet)
+          // already finished or bullet: show the dialog immediately
+          (prev?.hasValue != true && game.playable == false) ||
+                  (game.meta.speed == Speed.bullet || game.meta.speed == Speed.ultraBullet)
               ? Duration.zero
-              : _kGameEndDialogDelay,
+              : kGameEndDialogDelay,
           () {
             if (context.mounted) {
               showAdaptiveDialog<void>(
@@ -356,11 +359,19 @@ class _PlayableGameBoardState extends ConsumerState<_PlayableGameBoard> {
           )
         : null;
     if (explosion != null) _controller.triggerExplosion(explosion);
-    tryExecutePremove(
-      _controller,
-      state.currentPosition,
-      (move) => ref.read(_ctrlProvider.notifier).userMove(move, isPremove: true),
-    );
+
+    // Only play a queued premove when the opponent just moved, i.e. it is now
+    // our turn. This mirrors lila's `playedColor !== d.player.color` gate: a
+    // forward line change can also come from our own (optimistically applied)
+    // move, and attempting the premove then would validate it against a
+    // position where it isn't our turn and wrongly discard it.
+    if (state.currentPosition.turn == state.game.youAre) {
+      tryExecutePremove(
+        _controller,
+        state.currentPosition,
+        (move) => ref.read(_ctrlProvider.notifier).userMove(move, isPremove: true),
+      );
+    }
   }
 
   @override
@@ -549,9 +560,8 @@ class _GamePlayerTable extends ConsumerWidget {
     if (data == null) return const SizedBox.shrink();
 
     final boardPrefs = ref.watch(boardPreferencesProvider);
-    final clockTenths = ref.watch(
-      accountPreferencesProvider.select((prefs) => prefs.value?.clockTenths),
-    );
+    final clockTenths =
+        ref.watch(clockTenthsProvider).value ?? defaultAccountPreferences.clockTenths;
 
     final game = data.game;
     final youAre = game.youAre ?? Side.white;
@@ -972,6 +982,24 @@ class _GameBottomBar extends ConsumerWidget {
               ref.read(gameControllerProvider(id).notifier).declineRematch();
             },
           )
+        else if (gameState.correspondenceRematchId != null)
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.cancelRematchOffer),
+            dismissOnPress: true,
+            isDestructiveAction: true,
+            onPressed: () async {
+              // dismissOnPress unmounts this context before the request
+              // completes, so capture the messenger now.
+              final messenger = ScaffoldMessenger.of(context);
+              try {
+                await ref.read(gameControllerProvider(id).notifier).cancelRematchChallenge();
+              } catch (_) {
+                messenger.showSnackBar(
+                  const SnackBar(content: Text('Could not cancel the rematch challenge')),
+                );
+              }
+            },
+          )
         else if (gameState.canOfferRematch && gameState.game.opponent?.onGame == true)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.rematch),
@@ -979,13 +1007,34 @@ class _GameBottomBar extends ConsumerWidget {
             onPressed: () {
               ref.read(gameControllerProvider(id).notifier).proposeOrAcceptRematch();
             },
+          )
+        // Offline opponent in a clockless game: persistent challenge, not a socket offer.
+        else if (gameState.canOfferRematch &&
+            gameState.game.clock == null &&
+            gameState.game.me?.user != null &&
+            gameState.game.opponent?.user != null)
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.rematch),
+            dismissOnPress: true,
+            onPressed: () async {
+              // dismissOnPress unmounts this context before the request
+              // completes, so capture the messenger now.
+              final messenger = ScaffoldMessenger.of(context);
+              try {
+                await ref.read(gameControllerProvider(id).notifier).challengeRematch();
+              } catch (_) {
+                messenger.showSnackBar(
+                  const SnackBar(content: Text('Could not send the rematch challenge')),
+                );
+              }
+            },
           ),
         if (gameState.canGetNewOpponent)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.newOpponent),
             onPressed: () => onNewOpponentCallback(gameState.game),
           ),
-        if (gameState.tournament?.isFinished == true)
+        if (gameState.tournament != null)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.backToTournament),
             onPressed: () {

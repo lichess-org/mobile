@@ -1,4 +1,5 @@
 {
+  "mobileAccount": "Račun",
   "mobileAccountPreferences": "Nastavitve računa",
   "mobileAccountPreferencesHelp": "Te nastavitve se uporabijo za vaš račun Lichess in bodo uporabljene na vseh napravah.",
   "mobileAllGames": "Vse igre",
@@ -88,6 +89,7 @@
   "mobileChallengeCreated": "Izziv ustvarjen: Obveščeni boste, ko se igra začne. Do njega lahko dostopate na zavihku Domov.",
   "mobilePreviousPage": "Prejšnji",
   "mobileOrImportPgnFile": "Ali uvozite datoteko PGN",
+  "mobileGoodMoveButThereIsBetter": "Dobra poteza, ampak obstaja boljša",
   "variantStandard": "Običajno",
   "variantStandardTitle": "Standardna pravila šaha (FIDE)",
   "variantChess960": "Šah960",

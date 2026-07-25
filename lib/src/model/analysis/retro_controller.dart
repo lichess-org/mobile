@@ -141,9 +141,9 @@ class RetroController extends AsyncNotifier<RetroState>
       state = AsyncValue.data(retroState);
 
       if (currentServerAnalysis.value != ServerAnalysisSource.game(gameId: options.id)) {
-        requestServerAnalysis().catchError((Object e, StackTrace s) {
-          _logger.warning('Failed to request server analysis', e, s);
-          state = AsyncError(e, s);
+        requestServerAnalysis().catchError((Object e, StackTrace st) {
+          _logger.warning('Failed to request server analysis', e, st);
+          state = AsyncError(e, st);
         });
       }
 

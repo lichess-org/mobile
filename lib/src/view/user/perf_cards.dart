@@ -61,15 +61,24 @@ class PerfCards extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
+    final resolvedPadding = (padding ?? Styles.bodySectionPadding).resolve(
+      Directionality.of(context),
+    );
+
     return MediaQuery.withClampedTextScaling(
       maxScaleFactor: 1.4,
       child: RatingPrefAware(
         child: Padding(
-          padding: padding ?? Styles.bodySectionPadding,
+          padding: EdgeInsets.only(top: resolvedPadding.top, bottom: resolvedPadding.bottom),
           child: SizedBox(
             height: 106,
             child: ListView.separated(
-              padding: const EdgeInsets.symmetric(vertical: 3.0),
+              padding: EdgeInsets.only(
+                left: resolvedPadding.left,
+                right: resolvedPadding.right,
+                top: 3.0,
+                bottom: 3.0,
+              ),
               scrollDirection: Axis.horizontal,
               itemCount: userPerfs.length,
               itemBuilder: (context, index) {

@@ -15,11 +15,12 @@ import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository.dart';
-import 'package:lichess_mobile/src/tab_scaffold.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
@@ -85,7 +86,7 @@ class AppLinksService {
     try {
       await _handleUri(uri, animated: animated);
     } catch (e, st) {
-      _logger.severe('Error handling app link: $e\n$st');
+      _logger.severe('Error handling app link:', e, st);
     }
   }
 
@@ -275,14 +276,12 @@ class AppLinksService {
       if (puzzleId == null || dailyPuzzle.puzzle.id == PuzzleId(puzzleId)) {
         puzzle = dailyPuzzle;
       } else {
-        // Widget cached a different puzzle than today's daily — fetch it, but
-        // don't mark as daily to avoid confusing the user.
+        // Widget cached a different puzzle than today's daily — fetch it, but don't mark as daily
+        // to avoid confusing the user.
         try {
-          puzzle = await ref.read(puzzleProvider(PuzzleId(puzzleId)).future);
+          puzzle = await ref.read(puzzleRepositoryProvider).fetch(PuzzleId(puzzleId));
         } catch (e, st) {
-          // Fall back to the current daily puzzle rather than leaving the tap
-          // as a no-op when the widget's cached id is stale or unreachable.
-          _logger.info('Failed to load widget puzzle id $puzzleId, falling back: $e', e, st);
+          _logger.info('Failed to load widget puzzle id $puzzleId, falling back:', e, st);
           puzzle = dailyPuzzle;
         }
       }
@@ -297,7 +296,7 @@ class AppLinksService {
         animated: animated,
       );
     } catch (e, st) {
-      _logger.severe('Failed to open daily puzzle from widget: $e\n$st');
+      _logger.severe('Failed to open daily puzzle from widget:', e, st);
     }
   }
 
@@ -312,7 +311,7 @@ class AppLinksService {
 
       return true;
     } catch (e, st) {
-      _logger.info('Not a challenge link: $e', e, st);
+      _logger.info('Not a challenge link:', e, st);
     }
     return false;
   }
@@ -345,7 +344,7 @@ class AppLinksService {
         return [TvScreen.buildRoute(gameId: gameId, user: user, orientation: orientation)];
       }
     } catch (e, st) {
-      _logger.info('Not a game link: $e', e, st);
+      _logger.info('Not a game link:', e, st);
     }
 
     return null;

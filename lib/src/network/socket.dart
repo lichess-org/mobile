@@ -221,7 +221,13 @@ class SocketClient {
     _ackResendTimer = Timer.periodic(resendAckDelay, (_) => _resendAcks());
 
     final authUser = getSession();
-    final uri = lichessWSUri(route.path, version != null ? {'v': version.toString()} : null);
+
+    final queryParameters = Map<String, String>.from(route.queryParameters);
+    if (version != null) {
+      queryParameters['v'] = version.toString();
+    }
+    final uri = lichessWSUri(route.path, queryParameters.isNotEmpty ? queryParameters : null);
+
     final Map<String, String> headers = authUser != null
         ? {'Authorization': 'Bearer ${signBearerToken(authUser.token)}'}
         : {};
@@ -292,8 +298,8 @@ class SocketClient {
       }
 
       _resendAcks();
-    } catch (error) {
-      _logger.severe('WebSocket connection failed: $error', error);
+    } catch (e, st) {
+      _logger.severe('WebSocket connection failed:', e, st);
       _averageLag.value = Duration.zero;
       _scheduleReconnect(autoReconnectDelay);
     }
@@ -386,7 +392,7 @@ class SocketClient {
               _averageLag.value = Duration.zero;
             })
             .catchError((Object? error) {
-              _logger.warning('WebSocket connection to $route could not be closed: $error', error);
+              _logger.warning('WebSocket connection to $route could not be closed:', error);
               if (isDisposed) {
                 return;
               }
@@ -679,6 +685,13 @@ final socketPoolProvider = Provider<SocketPool>((Ref ref) {
   final pool = SocketPool(ref);
   Timer? closeInBackgroundTimer;
 
+  pool.currentClient.connect();
+
+  // force reconnect to the current socket with the new token
+  final subscription = authEventsStream.listen((_) {
+    pool.currentClient.connect();
+  });
+
   final appLifecycleListener = AppLifecycleListener(
     onHide: () {
       closeInBackgroundTimer?.cancel();
@@ -698,6 +711,7 @@ final socketPoolProvider = Provider<SocketPool>((Ref ref) {
   );
 
   ref.onDispose(() {
+    subscription.cancel();
     pool.dispose();
     closeInBackgroundTimer?.cancel();
     appLifecycleListener.dispose();
@@ -706,7 +720,7 @@ final socketPoolProvider = Provider<SocketPool>((Ref ref) {
   return pool;
 }, name: 'SocketPoolProvider');
 
-typedef SocketPingState = ({Duration averageLag, int rating});
+typedef SocketPingState = ({Duration averageLag, int rating, bool isActive});
 
 /// A provider that exposes the average lag and ping rating for a given socket route.
 final socketPingProvider = NotifierProvider.autoDispose
@@ -746,8 +760,17 @@ class SocketPingNotifier extends Notifier<SocketPingState> {
         : pool.averageLag.value;
   }
 
+  /// Whether the socket for this route is actively trying to connect or is connected.
+  bool get _currentRouteIsActive {
+    final pool = ref.read(socketPoolProvider);
+    return route != null
+        ? route == pool.currentClient.route && pool.currentClient.isActive
+        : pool.currentClient.isActive;
+  }
+
   SocketPingState _getPing(Duration lag) => (
     averageLag: lag,
+    isActive: _currentRouteIsActive,
     rating: lag.inMicroseconds == 0
         ? 0
         : lag.inMicroseconds < 150000
@@ -760,9 +783,9 @@ class SocketPingNotifier extends Notifier<SocketPingState> {
   );
 
   void _listener() {
-    final newLag = _currentRouteLag;
-    if (state.averageLag != newLag) {
-      state = _getPing(newLag);
+    final newState = _getPing(_currentRouteLag);
+    if (state != newState) {
+      state = newState;
     }
   }
 }

@@ -12,7 +12,7 @@ import 'package:lichess_mobile/src/model/blog/blog.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/tab_scaffold.dart' show homeTabInteraction;
+import 'package:lichess_mobile/src/tab_navigation.dart' show homeTabInteraction;
 import 'package:lichess_mobile/src/utils/http_network_image.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';

@@ -6,7 +6,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
+import 'package:lichess_mobile/src/model/account/ongoing_games_notifier.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -15,7 +15,7 @@ import 'package:lichess_mobile/src/model/notifications/notification_service.dart
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/tab_scaffold.dart' show currentNavigatorKeyProvider;
+import 'package:lichess_mobile/src/tab_navigation.dart' show currentNavigatorKeyProvider;
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
@@ -94,14 +94,22 @@ class ChallengeService {
     );
 
     // new incoming challenges
-    await Future.wait(
-      _current?.inward.whereNot((challenge) => prevInwardIds.contains(challenge.id)).map((
-            challenge,
-          ) async {
-            return await notificationService.show(ChallengeNotification(challenge));
-          }) ??
-          <Future<int>>[],
-    );
+    // only display the notifications if the app is in the foreground because FCM already
+    // shows notifications when the app is in the background
+    // TODO find a better solution to avoid duplicate notifications
+    final state = WidgetsBinding.instance.lifecycleState;
+    final isForeground =
+        state == null || state == AppLifecycleState.resumed || state == AppLifecycleState.inactive;
+    if (isForeground) {
+      await Future.wait(
+        _current?.inward.whereNot((challenge) => prevInwardIds.contains(challenge.id)).map((
+              challenge,
+            ) async {
+              return await notificationService.show(ChallengeNotification(challenge));
+            }) ??
+            <Future<int>>[],
+      );
+    }
   }
 
   /// Stop listening to challenge events from the server.

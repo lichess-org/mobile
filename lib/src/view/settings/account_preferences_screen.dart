@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -67,11 +68,12 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
   @override
   Widget build(BuildContext context) {
     final accountPrefs = ref.watch(accountPreferencesProvider);
+    final authUser = ref.watch(authControllerProvider);
     final kidMode = ref.watch(kidModeProvider).value ?? false;
 
     final content = accountPrefs.when(
       data: (data) {
-        if (data == null) {
+        if (authUser == null) {
           return Center(child: Text(context.l10n.mobileMustBeLoggedIn));
         }
 
@@ -89,221 +91,22 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
               hasLeading: false,
               children: [
                 SettingsListTile(
-                  settingsLabel: Text(context.l10n.preferencesZenMode),
-                  settingsValue: data.zenMode.label(context.l10n),
-                  onTap: () {
-                    showChoicePicker(
-                      context,
-                      choices: Zen.values,
-                      selectedItem: data.zenMode,
-                      labelBuilder: (t) => Text(t.label(context.l10n)),
-                      onSelectedItemChanged: isLoading
-                          ? null
-                          : (Zen? value) {
-                              _setPref(
-                                () => ref
-                                    .read(accountPreferencesProvider.notifier)
-                                    .setZen(value ?? data.zenMode),
-                              );
-                            },
-                    );
-                  },
-                ),
-                SettingsListTile(
-                  settingsLabel: Text(context.l10n.preferencesPgnPieceNotation),
-                  settingsValue: data.pieceNotation.label(context.l10n),
-                  onTap: () {
-                    showChoicePicker(
-                      context,
-                      choices: PieceNotation.values,
-                      selectedItem: data.pieceNotation,
-                      labelBuilder: (t) => Text(t.label(context.l10n)),
-                      onSelectedItemChanged: isLoading
-                          ? null
-                          : (PieceNotation? value) {
-                              _setPref(
-                                () => ref
-                                    .read(accountPreferencesProvider.notifier)
-                                    .setPieceNotation(value ?? data.pieceNotation),
-                              );
-                            },
-                    );
-                  },
-                ),
-                SettingsListTile(
                   settingsLabel: Text(context.l10n.preferencesShowPlayerRatings),
                   settingsValue: data.showRatings.label(context.l10n),
-                  onTap: () {
-                    showChoicePicker(
-                      context,
-                      choices: ShowRatings.values,
-                      selectedItem: data.showRatings,
-                      labelBuilder: (t) => Text(t.label(context.l10n)),
-                      onSelectedItemChanged: isLoading
-                          ? null
-                          : (ShowRatings? value) {
-                              _setPref(
-                                () => ref
-                                    .read(accountPreferencesProvider.notifier)
-                                    .setShowRatings(value ?? data.showRatings),
-                              );
-                            },
-                    );
-                  },
-                  explanation: context.l10n.preferencesExplainShowPlayerRatings,
-                ),
-              ],
-            ),
-            ListSection(
-              header: SettingsSectionTitle(context.l10n.preferencesGameBehavior),
-              hasLeading: false,
-              children: [
-                SettingsListTile(
-                  settingsLabel: Text(context.l10n.preferencesTakebacksWithOpponentApproval),
-                  settingsValue: data.takeback.label(context.l10n),
-                  onTap: () {
-                    showChoicePicker(
-                      context,
-                      choices: Takeback.values,
-                      selectedItem: data.takeback,
-                      labelBuilder: (t) => Text(t.label(context.l10n)),
-                      onSelectedItemChanged: isLoading
-                          ? null
-                          : (Takeback? value) {
-                              _setPref(
-                                () => ref
-                                    .read(accountPreferencesProvider.notifier)
-                                    .setTakeback(value ?? data.takeback),
-                              );
-                            },
-                    );
-                  },
-                ),
-                SettingsListTile(
-                  settingsLabel: Text(context.l10n.preferencesPromoteToQueenAutomatically),
-                  settingsValue: data.autoQueen.label(context.l10n),
-                  onTap: () {
-                    showChoicePicker(
-                      context,
-                      choices: AutoQueen.values,
-                      selectedItem: data.autoQueen,
-                      labelBuilder: (t) => Text(t.label(context.l10n)),
-                      onSelectedItemChanged: isLoading
-                          ? null
-                          : (AutoQueen? value) {
-                              _setPref(
-                                () => ref
-                                    .read(accountPreferencesProvider.notifier)
-                                    .setAutoQueen(value ?? data.autoQueen),
-                              );
-                            },
-                    );
-                  },
-                ),
-                SettingsListTile(
-                  settingsLabel: Text(
-                    context.l10n.preferencesClaimDrawOnThreefoldRepetitionAutomatically,
+                  onTap: () => showChoicePicker(
+                    context,
+                    choices: ShowRatings.values,
+                    selectedItem: data.showRatings,
+                    labelBuilder: (t) => Text(t.label(context.l10n)),
+                    onSelectedItemChanged: (ShowRatings? value) {
+                      _setPref(
+                        () => ref
+                            .read(accountPreferencesProvider.notifier)
+                            .setShowRatings(value ?? data.showRatings),
+                      );
+                    },
                   ),
-                  settingsValue: data.autoThreefold.label(context.l10n),
-                  onTap: () {
-                    showChoicePicker(
-                      context,
-                      choices: AutoThreefold.values,
-                      selectedItem: data.autoThreefold,
-                      labelBuilder: (t) => Text(t.label(context.l10n)),
-                      onSelectedItemChanged: isLoading
-                          ? null
-                          : (AutoThreefold? value) {
-                              _setPref(
-                                () => ref
-                                    .read(accountPreferencesProvider.notifier)
-                                    .setAutoThreefold(value ?? data.autoThreefold),
-                              );
-                            },
-                    );
-                  },
-                ),
-                SettingsListTile(
-                  settingsLabel: Text(context.l10n.preferencesMoveConfirmation),
-                  settingsValue: data.submitMove.label(context.l10n),
-                  onTap: () {
-                    showMultipleChoicesPicker(
-                      context,
-                      choices: SubmitMoveChoice.values,
-                      selectedItems: data.submitMove.choices,
-                      labelBuilder: (t) => Text(t.label(context.l10n)),
-                    ).then((value) {
-                      if (value != null) {
-                        _setPref(
-                          () => ref
-                              .read(accountPreferencesProvider.notifier)
-                              .setSubmitMove(SubmitMove(value)),
-                        );
-                      }
-                    });
-                  },
-                  explanation: context.l10n.preferencesExplainCanThenBeTemporarilyDisabled,
-                ),
-              ],
-            ),
-            ListSection(
-              header: SettingsSectionTitle(context.l10n.preferencesChessClock),
-              hasLeading: false,
-              children: [
-                SettingsListTile(
-                  settingsLabel: Text(context.l10n.preferencesGiveMoreTime),
-                  settingsValue: data.moretime.label(context.l10n),
-                  onTap: () {
-                    showChoicePicker(
-                      context,
-                      choices: Moretime.values,
-                      selectedItem: data.moretime,
-                      labelBuilder: (t) => Text(t.label(context.l10n)),
-                      onSelectedItemChanged: isLoading
-                          ? null
-                          : (Moretime? value) {
-                              _setPref(
-                                () => ref
-                                    .read(accountPreferencesProvider.notifier)
-                                    .setMoretime(value ?? data.moretime),
-                              );
-                            },
-                    );
-                  },
-                ),
-                SwitchSettingTile(
-                  title: Text(context.l10n.preferencesSoundWhenTimeGetsCritical),
-                  value: data.clockSound.value,
-                  onChanged: isLoading
-                      ? null
-                      : (value) {
-                          _setPref(
-                            () => ref
-                                .read(accountPreferencesProvider.notifier)
-                                .setClockSound(BooleanPref(value)),
-                          );
-                        },
-                ),
-                SettingsListTile(
-                  settingsLabel: Text(context.l10n.preferencesTenthsOfSeconds),
-                  settingsValue: data.clockTenths.label(context.l10n),
-                  onTap: () {
-                    showChoicePicker(
-                      context,
-                      choices: ClockTenths.values,
-                      selectedItem: data.clockTenths,
-                      labelBuilder: (t) => Text(t.label(context.l10n)),
-                      onSelectedItemChanged: isLoading
-                          ? null
-                          : (ClockTenths? value) {
-                              _setPref(
-                                () => ref
-                                    .read(accountPreferencesProvider.notifier)
-                                    .setClockTenths(value ?? data.clockTenths),
-                              );
-                            },
-                    );
-                  },
+                  explanation: context.l10n.preferencesExplainShowPlayerRatings,
                 ),
               ],
             ),

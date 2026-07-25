@@ -814,6 +814,10 @@
   <string name="quickPairing">Nopeasti peliin</string>
   <string name="lobby">Aula</string>
   <string name="anonymous">Nimetön</string>
+  <plurals name="nbAnonymous">
+    <item quantity="one">Anonyymi</item>
+    <item quantity="other">Anonyymejä (%s)</item>
+  </plurals>
   <string name="yourScore">Pisteesi: %s</string>
   <string name="language">Kieli</string>
   <string name="allLanguages">Kaikki kielet</string>
@@ -1039,4 +1043,5 @@ Kaikki toimintakustannukset, kehitystyö ja sisältö rahoitetaan yksinomaan kä
   <string name="thereAreNoResultsForX">Ei tuloksia haulla \"%s\"</string>
   <string name="tags">Tunnisteet</string>
   <string name="enPassant">Ohestalyönti</string>
+  <string name="settings">Asetukset</string>
 </resources>

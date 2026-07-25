@@ -90,4 +90,5 @@
   <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">Sfida creata: Sarai avvisato quando inizierà la partita.\nPotrai accedervi dalla scheda Home.</string>
   <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Precedente</string>
   <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">O importa un file PGN</string>
+  <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">Buona mossa, ma c\'è di meglio</string>
 </resources>

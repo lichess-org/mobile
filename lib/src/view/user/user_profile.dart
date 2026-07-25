@@ -25,7 +25,6 @@ class UserProfileWidget extends ConsumerWidget {
   final User user;
 
   final int bioMaxLines;
-  static const bioStyle = TextStyle(fontStyle: FontStyle.italic);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -69,7 +68,6 @@ class UserProfileWidget extends ConsumerWidget {
                 linkifiers: AppLinksService.kLichessLinkifiers,
                 text: user.profile!.bio!,
                 maxLines: bioMaxLines,
-                style: bioStyle,
                 overflow: TextOverflow.ellipsis,
                 linkStyle: Styles.linkStyle,
               ),
@@ -109,12 +107,12 @@ class UserProfileWidget extends ConsumerWidget {
                 padding: const EdgeInsets.only(bottom: 5),
                 child: Location(profile: user.profile!),
               ),
-            if (user.count != null) ...[
-              Text(context.l10n.nbGames(user.count!.all).localizeNumbers()),
-              const SizedBox(height: 5),
-            ],
             if (user.createdAt != null)
               Text('${context.l10n.memberSince} ${DateFormat.yMMMMd().format(user.createdAt!)}'),
+            if (user.count != null) ...[
+              const SizedBox(height: 5),
+              Text(context.l10n.nbGames(user.count!.all).localizeNumbers()),
+            ],
             if (user.playTime != null) ...[
               const SizedBox(height: 5),
               Text(

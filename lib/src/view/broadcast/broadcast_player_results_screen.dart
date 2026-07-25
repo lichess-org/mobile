@@ -271,11 +271,10 @@ class _OverallStatPlayer extends StatelessWidget {
 
     final pic = player.fideId != null ? tournament.photos?.get(player.fideId!) : null;
 
-    final statWidth =
-        (MediaQuery.sizeOf(context).width - Styles.bodyPadding.horizontal - 10 * 2) / 3;
+    final statWidth = (MediaQuery.widthOf(context) - Styles.bodyPadding.horizontal - 10 * 2) / 3;
     const cardSpacing = 10.0;
 
-    final picWidth = MediaQuery.sizeOf(context).width / 3;
+    final picWidth = MediaQuery.widthOf(context) / 3;
 
     return Padding(
       padding: Styles.bodyPadding,

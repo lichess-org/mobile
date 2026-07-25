@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/tab_scaffold.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/view/more/import_pgn_screen.dart';
 import 'package:logging/logging.dart';
 
@@ -40,14 +40,14 @@ class SharedPgnService {
         final pgn = await _methods.invokeMethod<String>('getInitialPgn');
         if (pgn != null) _handlePgn(pgn);
       } catch (e, st) {
-        _logger.severe('Error handling initial shared PGN: $e\n$st');
+        _logger.severe('Error handling initial shared PGN:', e, st);
       }
     });
 
     // PGN shared while the app is already running.
     _subscription = _events.receiveBroadcastStream().listen((event) {
       if (event is String) _handlePgn(event);
-    }, onError: (Object e, StackTrace st) => _logger.severe('Error in shared PGN stream: $e\n$st'));
+    }, onError: (Object e, StackTrace st) => _logger.severe('Error in shared PGN stream:', e, st));
   }
 
   void _handlePgn(String pgnText) {

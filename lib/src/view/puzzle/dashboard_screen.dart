@@ -88,7 +88,7 @@ class PuzzleDashboardWidget extends ConsumerWidget {
         );
       },
       loading: () {
-        final loaderHeight = MediaQuery.sizeOf(context).width;
+        final loaderHeight = MediaQuery.widthOf(context);
         return Shimmer(
           child: ShimmerLoading(
             isLoading: true,
@@ -260,7 +260,7 @@ class PuzzleChart extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: AspectRatio(
-        aspectRatio: MediaQuery.sizeOf(context).width > FormFactor.desktop ? 2.8 : 1.2,
+        aspectRatio: MediaQuery.widthOf(context) > FormFactor.desktop ? 2.8 : 1.2,
         child: RadarChart(
           RadarChartData(
             radarBorderData: BorderSide(width: 0.5, color: radarColor),

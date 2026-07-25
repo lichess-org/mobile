@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="account" comment="The account screen title.">Akoon</string>
+  <string name="accountPreferences" comment="Displayed on settings screen. This is for preferences synced with website on the server.">Habaynta Akoonka</string>
+  <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">Habayntani waxay ka hir-galeysaa akoonkaaga Lichess, waxayna ka shaqaynaysaa aaladahaaga oo dhan.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Ciyaarahoo dhan</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Ma hubtaa?</string>
+  <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Habaynta Looxa</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Ka diid \"ii celi-da\"</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Masax</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Masax dhaqaaqa kaydsan</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Ku biir ciyaar</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Jawaab celinta</string>
+  <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Fiid wanaagsan, %s</string>
+  <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Fiid wanaagsan</string>
+  <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Maalin wanaagsan, %s</string>
+  <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Maalin wanaagsan</string>
   <string name="hideVariation" comment="Shown in the analysis screen.">Qari faracyada</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Guriga</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Toos</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Waa inaad soo gashaa appka si aad u booqato halkan.</string>
+  <string name="newGame" comment="New game button in OTB and play against offline computer features">Ciyaar cusub</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Bilaa natiijo</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">OK</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Laba qof</string>

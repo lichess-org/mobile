@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="account" comment="The account screen title.">Račun</string>
   <string name="accountPreferences" comment="Displayed on settings screen. This is for preferences synced with website on the server.">Nastavitve računa</string>
   <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">Te nastavitve se uporabijo za vaš račun Lichess in bodo uporabljene na vseh napravah.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Vse igre</string>
@@ -89,4 +90,5 @@
   <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">Izziv ustvarjen: Obveščeni boste, ko se igra začne. Do njega lahko dostopate na zavihku Domov.</string>
   <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Prejšnji</string>
   <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">Ali uvozite datoteko PGN</string>
+  <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">Dobra poteza, ampak obstaja boljša</string>
 </resources>

@@ -187,7 +187,7 @@ class _Body extends ConsumerWidget {
 class _Loading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final containerHeight = MediaQuery.sizeOf(context).width / 2 * 0.8;
+    final containerHeight = MediaQuery.widthOf(context) / 2 * 0.8;
     return SafeArea(
       child: Shimmer(
         child: ShimmerLoading(

@@ -2,6 +2,7 @@ import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
@@ -11,7 +12,9 @@ import 'package:lichess_mobile/src/model/tournament/tournament.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_controller.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 
@@ -694,6 +697,82 @@ void main() {
       await tester.pump();
       expect(find.text('Steven'), findsOneWidget);
     });
+
+    testWidgets(
+      'Reconnects the tournament socket when the same tournament is pushed again over a game',
+      (WidgetTester tester) async {
+        // Non-regression test for the bug where pushing a second [TournamentScreen]
+        // for a tournament already in the route stack (tournament -> player -> game
+        // -> same tournament) did not reopen the tournament socket that the game
+        // had closed. The controller is kept alive by the first screen, so [build]
+        // (which opens the socket) does not re-run; the new screen must reconnect
+        // the socket when it gains focus.
+        const tournamentId = TournamentId('82QbxlJb');
+        const gameId = GameFullId('1234567890ab');
+
+        final mockClient = MockClient((request) {
+          if (request.url.path == '/api/tournament/82QbxlJb') {
+            return mockResponse(
+              makeTournamentJson(standings: makeTestPlayers(10), nbPlayers: 11),
+              200,
+            );
+          }
+          return mockResponse('', 404);
+        });
+
+        final app = await makeTestProviderScopeApp(
+          tester,
+          home: const TournamentScreen(id: tournamentId),
+          overrides: {
+            lichessClientProvider: lichessClientProvider.overrideWith((ref) {
+              return LichessClient(mockClient, ref);
+            }),
+          },
+        );
+        await tester.pumpWidget(app);
+
+        // Wait for tournament data to load and the socket to open.
+        await tester.pump();
+
+        final socketPool = ProviderScope.containerOf(
+          tester.element(find.byType(TournamentScreen)),
+        ).read(socketPoolProvider);
+
+        // The tournament socket is the active one.
+        expect(socketPool.currentClient.route, TournamentController.socketUri(tournamentId));
+
+        // Navigate to one of the tournament's games (like tapping an ongoing game):
+        // this opens the game socket and closes the tournament socket.
+        final navigator = Navigator.of(tester.element(find.byType(TournamentScreen)));
+        navigator.push(GameScreen.buildRoute(source: const ExistingGameSource(gameId)));
+        await tester.pump();
+        await tester.pump(kFakeWebSocketConnectionLag);
+        sendServerSocketMessages(GameController.socketUri(gameId), [
+          makeFullEvent(gameId.gameId, '', whiteUserName: 'White', blackUserName: 'Black'),
+        ]);
+        await tester.pump();
+
+        expect(find.byType(GameScreen), findsOneWidget);
+        // The game socket is now the active one; the tournament socket was closed.
+        expect(socketPool.currentClient.route, GameController.socketUri(gameId));
+
+        // Push the SAME tournament again on top of the game. The provider is kept
+        // alive by the first screen, so `build` doesn't re-run: the socket must be
+        // reopened by the newly focused screen.
+        navigator.push(TournamentScreen.buildRoute(tournamentId));
+        await tester.pump(); // start the route transition
+        // Complete the push transition so the new screen becomes fully visible
+        // and its `FocusDetector` reports a focus gain -> onFocusGained.
+        await tester.pump(const Duration(milliseconds: 400));
+        await tester.pump(); // onFocusGained -> invalidateSelf
+        await tester.pump(); // rebuild: getTournament resolves -> socket reopens
+        await tester.pump(kFakeWebSocketConnectionLag);
+
+        expect(find.byType(TournamentScreen), findsWidgets);
+        // The tournament socket must be reconnected.
+        expect(socketPool.currentClient.route, TournamentController.socketUri(tournamentId));
+      },
+    );
   });
   testWidgets('Shows player details when tapping on a player', (WidgetTester tester) async {
     final mockClient = MockClient((request) {

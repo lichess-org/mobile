@@ -134,7 +134,7 @@ class _OnlineFriendListTile extends ConsumerWidget {
         isDismissible: true,
         isScrollControlled: true,
         showDragHandle: true,
-        constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height * 0.5),
+        constraints: BoxConstraints(minHeight: MediaQuery.heightOf(context) * 0.5),
         builder: (context) => UserContextMenu(userId: user.id),
       ),
     );

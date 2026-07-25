@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/tab_scaffold.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -208,7 +208,7 @@ class _BoardCarouselItem extends ConsumerWidget {
       hsl.lightness,
     ).toColor();
 
-    final screenWidth = MediaQuery.sizeOf(context).width;
+    final screenWidth = MediaQuery.widthOf(context);
     final totalFlex = kGameCarouselFlexWeights.reduce((a, b) => a + b);
     final double width = screenWidth - 16.0;
     final boardSize =
