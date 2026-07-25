@@ -14,8 +14,10 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/account/account_menu.dart';
 import 'package:lichess_mobile/src/view/coordinate_training/coordinate_training_screen.dart';
 import 'package:lichess_mobile/src/view/study/study_list_screen.dart';
+import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/server_outage_display.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
 final _hotStudiesProvider = FutureProvider.autoDispose<IList<StudyPageItem>>((Ref ref) {
@@ -81,9 +83,23 @@ class LearnTabScreen extends ConsumerWidget {
 class _Body extends ConsumerWidget {
   const _Body();
 
+  Future<void> _refreshData(WidgetRef ref) async {
+    try {
+      await Future.wait([
+        ref.refresh(_hotStudiesProvider.future),
+        ref.refresh(_myStudiesLengthProvider.future),
+        ref.refresh(_myFavoriteStudiesLengthProvider.future),
+      ]);
+    } catch (_) {
+      // Refreshing while the server is unavailable is expected to fail. The
+      // failed responses are what keep the server status up to date, so there
+      // is nothing to do here.
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final connectionStatus = ref.watch(connectionStatusProvider);
+    final connectionStatus = ref.watch(lichessConnectionStatusProvider);
     final authUser = ref.watch(authControllerProvider);
     final haveIStudies = authUser != null && (ref.watch(_myStudiesLengthProvider).value ?? 0) > 0;
     final haveIFavoriteStudies =
@@ -91,77 +107,89 @@ class _Body extends ConsumerWidget {
 
     return ListTileTheme.merge(
       iconColor: Theme.of(context).colorScheme.primary,
-      child: ListView(
-        controller: learnScrollController,
-        children: [
-          ListSection(
-            hasLeading: true,
-            children: [
-              ListTile(
-                leading: const Icon(Symbols.where_to_vote),
-                trailing: Theme.of(context).platform == TargetPlatform.iOS
-                    ? const CupertinoListTileChevron()
-                    : null,
-                title: Text(context.l10n.coordinatesCoordinateTraining, style: Styles.callout),
-                onTap: () => Navigator.of(
-                  context,
-                  rootNavigator: true,
-                ).push(CoordinateTrainingScreen.buildRoute()),
-              ),
-            ],
-          ),
-          if (connectionStatus == ConnectionStatus.online) ...[
+      child: HapticRefreshIndicator(
+        edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
+            ? MediaQuery.paddingOf(context).top + kToolbarHeight
+            : 0.0,
+        onRefresh: () => _refreshData(ref),
+        child: ListView(
+          controller: learnScrollController,
+          // Keep the list scrollable even when it is short, so that pulling to
+          // refresh still works while the studies are hidden by an outage.
+          physics: const AlwaysScrollableScrollPhysics(),
+          children: [
             ListSection(
-              header: Text(context.l10n.studyMenu),
-              onHeaderTap: () =>
-                  Navigator.of(context, rootNavigator: true).push(StudyListScreen.buildRoute()),
               hasLeading: true,
               children: [
-                ...(switch (ref.watch(_hotStudiesProvider)) {
-                  AsyncData(:final value) =>
-                    value
-                        .take(5)
-                        .map((study) => StudyListItem(study: study, titleMaxLines: 1))
-                        .toList(growable: false),
-                  _ => [],
-                }),
+                ListTile(
+                  leading: const Icon(Symbols.where_to_vote),
+                  trailing: Theme.of(context).platform == TargetPlatform.iOS
+                      ? const CupertinoListTileChevron()
+                      : null,
+                  title: Text(context.l10n.coordinatesCoordinateTraining, style: Styles.callout),
+                  onTap: () => Navigator.of(
+                    context,
+                    rootNavigator: true,
+                  ).push(CoordinateTrainingScreen.buildRoute()),
+                ),
               ],
             ),
-            if (haveIStudies || haveIFavoriteStudies)
+            // Coordinate training works offline, so only the studies are
+            // replaced by the outage message.
+            if (connectionStatus.isServerUnavailable) const ServerOutageDisplay(),
+            if (connectionStatus == LichessConnectionStatus.online) ...[
               ListSection(
+                header: Text(context.l10n.studyMenu),
+                onHeaderTap: () =>
+                    Navigator.of(context, rootNavigator: true).push(StudyListScreen.buildRoute()),
                 hasLeading: true,
-                margin: Styles.horizontalBodyPadding.add(Styles.sectionBottomPadding),
                 children: [
-                  if (haveIStudies)
-                    ListTile(
-                      leading: const Icon(Symbols.local_library),
-                      trailing: Theme.of(context).platform == TargetPlatform.iOS
-                          ? const CupertinoListTileChevron()
-                          : null,
-                      title: Text(context.l10n.studyMyStudies),
-                      onTap: connectionStatus == ConnectionStatus.online
-                          ? () => Navigator.of(
-                              context,
-                            ).push(StudyListScreen.buildRoute(initialCategory: StudyCategory.mine))
-                          : null,
-                    ),
-                  if (haveIFavoriteStudies)
-                    ListTile(
-                      leading: const Icon(Symbols.favorite),
-                      trailing: Theme.of(context).platform == TargetPlatform.iOS
-                          ? const CupertinoListTileChevron()
-                          : null,
-                      title: Text(context.l10n.studyMyFavoriteStudies),
-                      onTap: connectionStatus == ConnectionStatus.online
-                          ? () => Navigator.of(
-                              context,
-                            ).push(StudyListScreen.buildRoute(initialCategory: StudyCategory.likes))
-                          : null,
-                    ),
+                  ...(switch (ref.watch(_hotStudiesProvider)) {
+                    AsyncData(:final value) =>
+                      value
+                          .take(5)
+                          .map((study) => StudyListItem(study: study, titleMaxLines: 1))
+                          .toList(growable: false),
+                    _ => [],
+                  }),
                 ],
               ),
+              if (haveIStudies || haveIFavoriteStudies)
+                ListSection(
+                  hasLeading: true,
+                  margin: Styles.horizontalBodyPadding.add(Styles.sectionBottomPadding),
+                  children: [
+                    if (haveIStudies)
+                      ListTile(
+                        leading: const Icon(Symbols.local_library),
+                        trailing: Theme.of(context).platform == TargetPlatform.iOS
+                            ? const CupertinoListTileChevron()
+                            : null,
+                        title: Text(context.l10n.studyMyStudies),
+                        onTap: connectionStatus == LichessConnectionStatus.online
+                            ? () => Navigator.of(context).push(
+                                StudyListScreen.buildRoute(initialCategory: StudyCategory.mine),
+                              )
+                            : null,
+                      ),
+                    if (haveIFavoriteStudies)
+                      ListTile(
+                        leading: const Icon(Symbols.favorite),
+                        trailing: Theme.of(context).platform == TargetPlatform.iOS
+                            ? const CupertinoListTileChevron()
+                            : null,
+                        title: Text(context.l10n.studyMyFavoriteStudies),
+                        onTap: connectionStatus == LichessConnectionStatus.online
+                            ? () => Navigator.of(context).push(
+                                StudyListScreen.buildRoute(initialCategory: StudyCategory.likes),
+                              )
+                            : null,
+                      ),
+                  ],
+                ),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }

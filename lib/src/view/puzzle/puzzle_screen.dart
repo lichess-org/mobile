@@ -946,7 +946,7 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
     final ctrlProvider = puzzleControllerProvider(initialPuzzleContext);
     final puzzleState = ref.watch(ctrlProvider);
     final difficulty = ref.watch(puzzlePreferencesProvider.select((state) => state.difficulty));
-    final connectionStatus = ref.watch(connectionStatusProvider);
+    final connectionStatus = ref.watch(lichessConnectionStatusProvider);
     final isFillingQueue = ref.watch(puzzleQueueFillerProvider);
     return BottomSheetScrollableContainer(
       padding: const EdgeInsets.only(bottom: 16),
@@ -958,7 +958,7 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
             if (initialPuzzleContext.userId != null &&
                 initialPuzzleContext.replayRemaining == null &&
                 puzzleState.mode != PuzzleMode.view &&
-                connectionStatus == ConnectionStatus.online)
+                connectionStatus == LichessConnectionStatus.online)
               StatefulBuilder(
                 builder: (context, setState) {
                   PuzzleDifficulty selectedDifficulty = difficulty;

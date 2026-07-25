@@ -44,6 +44,12 @@ Uri lichessUri(String unencodedPath, [Map<String, dynamic>? queryParameters]) =>
     ? Uri.http(kLichessHost, unencodedPath, queryParameters)
     : Uri.https(kLichessHost, unencodedPath, queryParameters);
 
+/// The host of the lichess main server, without the port part.
+///
+/// Other lichess services, such as the opening explorer, the tablebase or the
+/// CDN, are served by different hosts.
+final _lichessMainHost = lichessUri('/').host;
+
 /// Creates the appropriate http client for the platform.
 ///
 /// Do not use directly, use [defaultClientProvider] or [lichessClientProvider] instead.
@@ -108,9 +114,6 @@ final httpClientFactoryProvider = Provider<HttpClientFactory>((Ref ref) {
             responseCode: response.statusCode,
             responseDateTime: DateTime.now(),
           );
-          ref
-              .read(serverStatusProvider.notifier)
-              .handleHttpResponse(response.statusCode, response.request!.url);
         }
       },
       onError: (request, error, [st]) async {
@@ -379,6 +382,13 @@ class LichessClient implements Client {
       final response = await _inner.send(request).timeout(defaultRequestTimeout);
 
       _logIfError(response);
+
+      // Only the main server can tell us whether lichess is up: the opening
+      // explorer and the tablebase run on their own servers and may well be
+      // available while lichess itself is down (and vice versa).
+      if (_ref.mounted && request.url.host == _lichessMainHost) {
+        _ref.read(serverStatusProvider.notifier).handleHttpResponse(response.statusCode);
+      }
 
       if (response.statusCode == 401 && authUser != null) {
         _ref.read(authControllerProvider.notifier).checkToken();

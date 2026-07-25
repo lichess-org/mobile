@@ -17,7 +17,7 @@ class PlayMenu extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final connectionStatus = ref.watch(connectionStatusProvider);
+    final connectionStatus = ref.watch(lichessConnectionStatusProvider);
 
     return Column(
       children: [
@@ -28,7 +28,7 @@ class PlayMenu extends ConsumerWidget {
         _Section(
           children: [
             ListTile(
-              enabled: connectionStatus == ConnectionStatus.online,
+              enabled: connectionStatus == LichessConnectionStatus.online,
               onTap: () {
                 // Pops the play bottom sheet
                 Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
@@ -45,7 +45,7 @@ class PlayMenu extends ConsumerWidget {
               title: Text(context.l10n.challengeAFriend),
             ),
             ListTile(
-              enabled: connectionStatus == ConnectionStatus.online,
+              enabled: connectionStatus == LichessConnectionStatus.online,
               onTap: () {
                 // Pops the play bottom sheet
                 Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
@@ -58,7 +58,7 @@ class PlayMenu extends ConsumerWidget {
               title: Text(context.l10n.correspondence),
             ),
             ListTile(
-              enabled: connectionStatus == ConnectionStatus.online,
+              enabled: connectionStatus == LichessConnectionStatus.online,
               onTap: () {
                 // Pops the play bottom sheet
                 Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);

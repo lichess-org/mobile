@@ -32,7 +32,7 @@ class RecentGamesWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final connectionStatus = ref.watch(connectionStatusProvider);
+    final connectionStatus = ref.watch(lichessConnectionStatusProvider);
 
     return recentGames.when(
       data: (data) {
@@ -48,7 +48,7 @@ class RecentGamesWidget extends ConsumerWidget {
                   Navigator.of(context).push(
                     GameHistoryScreen.buildRoute(
                       user: user,
-                      isOnline: connectionStatus == ConnectionStatus.online,
+                      isOnline: connectionStatus == LichessConnectionStatus.online,
                     ),
                   );
                 }

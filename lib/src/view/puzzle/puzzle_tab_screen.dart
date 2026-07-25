@@ -244,7 +244,7 @@ class _PuzzleMenu extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final connectionStatus = ref.watch(connectionStatusProvider);
+    final connectionStatus = ref.watch(lichessConnectionStatusProvider);
     final authUser = ref.watch(authControllerProvider);
 
     return ListSection(
@@ -259,7 +259,7 @@ class _PuzzleMenu extends ConsumerWidget {
           },
         ),
         _PuzzleMenuListTile(
-          enabled: connectionStatus == ConnectionStatus.online,
+          enabled: connectionStatus == LichessConnectionStatus.online,
           icon: LichessIcons.streak,
           title: 'Puzzle Streak',
           badgeLabel: switch (ref.watch(savedStreakScoreProvider)) {
@@ -271,18 +271,18 @@ class _PuzzleMenu extends ConsumerWidget {
                   .takeWhile((c) => c != '.')
                   .toString() +
               (context.l10n.puzzleStreakDescription.contains('.') ? '.' : ''),
-          onTap: connectionStatus == ConnectionStatus.online
+          onTap: connectionStatus == LichessConnectionStatus.online
               ? () {
                   Navigator.of(context, rootNavigator: true).push(StreakScreen.buildRoute());
                 }
               : null,
         ),
         _PuzzleMenuListTile(
-          enabled: connectionStatus == ConnectionStatus.online,
+          enabled: connectionStatus == LichessConnectionStatus.online,
           icon: LichessIcons.storm,
           title: 'Puzzle Storm',
           subtitle: context.l10n.mobilePuzzleStormSubtitle,
-          onTap: connectionStatus == ConnectionStatus.online
+          onTap: connectionStatus == LichessConnectionStatus.online
               ? () {
                   Navigator.of(context, rootNavigator: true).push(StormScreen.buildRoute());
                 }
@@ -293,8 +293,8 @@ class _PuzzleMenu extends ConsumerWidget {
             icon: Icons.assessment_outlined,
             title: context.l10n.puzzlePuzzleDashboard,
             subtitle: context.l10n.puzzlePuzzleDashboardDescription,
-            enabled: connectionStatus == ConnectionStatus.online,
-            onTap: connectionStatus == ConnectionStatus.online
+            enabled: connectionStatus == LichessConnectionStatus.online,
+            onTap: connectionStatus == LichessConnectionStatus.online
                 ? () => Navigator.of(context).push(PuzzleDashboardScreen.buildRoute())
                 : null,
           ),
@@ -302,8 +302,8 @@ class _PuzzleMenu extends ConsumerWidget {
             icon: Icons.history_outlined,
             title: context.l10n.puzzleHistory,
             subtitle: 'Review your past puzzle attempts.',
-            enabled: connectionStatus == ConnectionStatus.online,
-            onTap: connectionStatus == ConnectionStatus.online
+            enabled: connectionStatus == LichessConnectionStatus.online,
+            onTap: connectionStatus == LichessConnectionStatus.online
                 ? () => Navigator.of(
                     context,
                     rootNavigator: true,
@@ -388,7 +388,7 @@ class DailyPuzzle extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final connectionStatus = ref.watch(connectionStatusProvider);
+    final connectionStatus = ref.watch(lichessConnectionStatusProvider);
     final puzzle = ref.watch(dailyPuzzleProvider);
 
     return puzzle.when(
@@ -441,13 +441,13 @@ class DailyPuzzle extends ConsumerWidget {
           },
         );
       },
-      loading: () => connectionStatus == ConnectionStatus.online
+      loading: () => connectionStatus == LichessConnectionStatus.online
           ? const Shimmer(
               child: ShimmerLoading(isLoading: true, child: SmallBoardPreview.loading()),
             )
           : const SizedBox.shrink(),
       error: (error, _) {
-        return connectionStatus == ConnectionStatus.online
+        return connectionStatus == LichessConnectionStatus.online
             ? const Padding(
                 padding: Styles.bodySectionPadding,
                 child: Text('Could not load the daily puzzle.'),

@@ -24,7 +24,6 @@ import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/network/aggregator.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
-import 'package:lichess_mobile/src/network/server_status.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart' show rootNavRouteStackObserver;
 import 'package:package_info_plus/package_info_plus.dart';
@@ -36,7 +35,6 @@ import 'binding.dart';
 import 'model/analysis/fake_opening_service.dart';
 import 'model/notifications/fake_notification_display.dart';
 import 'network/fake_http_client_factory.dart';
-import 'network/fake_online_server.dart';
 import 'network/fake_websocket_channel.dart';
 import 'test_helpers.dart';
 import 'utils/fake_connectivity.dart';
@@ -119,8 +117,6 @@ Future<Widget> makeOfflineTestProviderScope(
     httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
       return FakeHttpClientFactory(() => offlineClient);
     }),
-    serverStatusProvider: serverStatusProvider.overrideWith(FakeServerOnline.new),
-
     ...?overrides,
   },
   authUser: authUser,
@@ -255,7 +251,6 @@ Future<Widget> makeTestProviderScope(
         appSupportDirectory: null,
       );
     }),
-    serverStatusProvider: serverStatusProvider.overrideWith(FakeServerOnline.new),
     ...?overrides,
   };
 

@@ -82,8 +82,8 @@ class _AccountMenuScreenState extends ConsumerState<AccountMenuScreen> with Widg
   @override
   Widget build(BuildContext context) {
     final client = ref.read(defaultClientProvider);
-    final connectionStatus = ref.watch(connectionStatusProvider);
-    final isOnline = connectionStatus == ConnectionStatus.online;
+    final connectionStatus = ref.watch(lichessConnectionStatusProvider);
+    final isOnline = connectionStatus == LichessConnectionStatus.online;
     final signInState = ref.watch(signInMutation);
     final signOutState = ref.watch(signOutMutation);
 

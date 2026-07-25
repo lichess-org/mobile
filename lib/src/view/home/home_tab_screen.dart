@@ -46,7 +46,6 @@ import 'package:lichess_mobile/src/view/game/offline_correspondence_games_screen
 import 'package:lichess_mobile/src/view/home/blog_carousel.dart';
 import 'package:lichess_mobile/src/view/home/following_carousel.dart';
 import 'package:lichess_mobile/src/view/home/games_carousel.dart';
-import 'package:lichess_mobile/src/view/home/server_outage.dart';
 import 'package:lichess_mobile/src/view/message/conversation_screen.dart';
 import 'package:lichess_mobile/src/view/play/ongoing_games_screen.dart';
 import 'package:lichess_mobile/src/view/play/play_bottom_sheet.dart';
@@ -62,6 +61,7 @@ import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/server_outage_display.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -157,13 +157,23 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
         final recentGames = ref.watch(myRecentGamesProvider);
         final nbOfGames = ref.watch(userNumberOfGamesProvider(null)).value ?? 0;
         final isTablet = isTabletOrLarger(context);
-        final featuredTournaments = isOnline
+
+        // Everything the lichess server provides is unavailable both when the
+        // device is offline and when the server itself is down. Widgets backed
+        // by local data (recent games, offline correspondence games) keep
+        // working in either case, so only the server-backed ones are hidden,
+        // and a [ServerOutageDisplay] is shown in their place during an outage.
+        final isServerUnavailable = ref.watch(lichessConnectionStatusProvider).isServerUnavailable;
+        final hasServerContent = isOnline && !isServerUnavailable;
+        final showOutage = isServerUnavailable && !widget.editModeEnabled;
+
+        final featuredTournaments = hasServerContent
             ? ref.watch(featuredTournamentsProvider)
             : const AsyncValue.data(IListConst<LightTournament>([]));
-        final blogPosts = isOnline
+        final blogPosts = hasServerContent
             ? ref.watch(blogCarouselProvider)
             : const AsyncValue.data(IListConst<BlogPost>([]));
-        final followingAsync = authUser != null && isOnline
+        final followingAsync = authUser != null && hasServerContent
             ? ref.watch(followingCarouselProvider)
             : const AsyncValue.data(IListConst<FollowingUser>([]));
 
@@ -184,6 +194,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
               shouldShow: true,
               child: _GreetingWidget(),
             ),
+            if (showOutage) const ServerOutageDisplay(),
             if (!widget.editModeEnabled) ...[
               Padding(
                 padding: Styles.bodySectionPadding,
@@ -239,7 +250,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
               )
             else ...[
               ...welcomeWidgets,
-              if (isOnline)
+              if (hasServerContent)
                 const _EditableWidget(
                   widget: HomeEditableWidget.quickPairing,
                   shouldShow: true,
@@ -247,13 +258,13 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                 ),
               _EditableWidget(
                 widget: HomeEditableWidget.featuredTournaments,
-                shouldShow: isOnline,
+                shouldShow: hasServerContent,
                 child: FeaturedTournamentsWidget(featured: featuredTournaments),
               ),
               if (_worker != null && !isKidMode)
                 _EditableWidget(
                   widget: HomeEditableWidget.blogCarousel,
-                  shouldShow: isOnline,
+                  shouldShow: hasServerContent,
                   child: _BlogCarouselWidget(blogPosts, _worker!),
                 ),
             ],
@@ -269,7 +280,8 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
               const _HomeCustomizationTip(),
               const _NNUEFilesOutdatedTip(),
             ],
-            if (isOnline)
+            if (showOutage) const ServerOutageDisplay(),
+            if (hasServerContent)
               _EditableWidget(
                 widget: HomeEditableWidget.perfCards,
                 shouldShow: authUser != null,
@@ -277,7 +289,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
               ),
             _EditableWidget(
               widget: HomeEditableWidget.friends,
-              shouldShow: authUser != null && isOnline,
+              shouldShow: authUser != null && hasServerContent,
               child: FollowingCarousel(followingAsync),
             ),
             Row(
@@ -288,7 +300,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                     children: [
                       const SizedBox(height: 8.0),
                       const _TabletCreateAGameSection(),
-                      if (isOnline)
+                      if (hasServerContent)
                         _OngoingGamesPreview(ongoingGames, maxGamesToShow: 5)
                       else
                         _OfflineCorrespondencePreview(offlineCorresGames, maxGamesToShow: 5),
@@ -305,7 +317,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                       if (_worker != null && !isKidMode)
                         _EditableWidget(
                           widget: HomeEditableWidget.blogCarousel,
-                          shouldShow: isOnline,
+                          shouldShow: hasServerContent,
                           child: _BlogCarouselWidget(blogPosts, _worker!),
                         ),
                       RecentGamesWidget(recentGames: recentGames, nbOfGames: nbOfGames, user: null),
@@ -317,9 +329,9 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
           ];
         } else {
           final hasOngoingGames =
-              (isOnline &&
+              (hasServerContent &&
                   ongoingGames.maybeWhen(data: (data) => data.isNotEmpty, orElse: () => false)) ||
-              (!isOnline &&
+              (!hasServerContent &&
                   offlineCorresGames.maybeWhen(
                     data: (data) => data.isNotEmpty,
                     orElse: () => false,
@@ -334,39 +346,40 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
               const _HomeCustomizationTip(),
               const _NNUEFilesOutdatedTip(),
             ],
+            if (showOutage) const ServerOutageDisplay(),
             _EditableWidget(
               widget: HomeEditableWidget.perfCards,
-              shouldShow: authUser != null && isOnline,
+              shouldShow: authUser != null && hasServerContent,
               child: AccountPerfCards(
                 padding: Styles.horizontalBodyPadding.add(Styles.sectionBottomPadding),
               ),
             ),
             _EditableWidget(
               widget: HomeEditableWidget.friends,
-              shouldShow: authUser != null && isOnline,
+              shouldShow: authUser != null && hasServerContent,
               child: FollowingCarousel(followingAsync),
             ),
             _EditableWidget(
               widget: HomeEditableWidget.quickPairing,
-              shouldShow: isOnline,
+              shouldShow: hasServerContent,
               child: const Padding(padding: Styles.bodySectionPadding, child: QuickGameMatrix()),
             ),
             _EditableWidget(
               widget: HomeEditableWidget.ongoingGames,
               shouldShow: hasOngoingGames,
-              child: isOnline
+              child: hasServerContent
                   ? _OngoingGamesCarousel(ongoingGames, maxGamesToShow: 20)
                   : _OfflineCorrespondenceCarousel(offlineCorresGames, maxGamesToShow: 20),
             ),
             _EditableWidget(
               widget: HomeEditableWidget.featuredTournaments,
-              shouldShow: isOnline,
+              shouldShow: hasServerContent,
               child: FeaturedTournamentsWidget(featured: featuredTournaments),
             ),
             if (_worker != null && !isKidMode)
               _EditableWidget(
                 widget: HomeEditableWidget.blogCarousel,
-                shouldShow: isOnline,
+                shouldShow: hasServerContent,
                 child: _BlogCarouselWidget(blogPosts, _worker!),
               ),
             _EditableWidget(
@@ -416,15 +429,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                           : null,
                       actions: const [_ChallengeScreenButton(), AccountMenuButton()],
                     ),
-              body: ref.watch(connectionStatusProvider) == ConnectionStatus.serverDown
-                  ? HapticRefreshIndicator(
-                      edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
-                          ? MediaQuery.paddingOf(context).top + kToolbarHeight
-                          : 0.0,
-                      onRefresh: () => _refreshData(isOnline: isOnline),
-                      child: const ServerOutage(),
-                    )
-                  : widget.editModeEnabled
+              body: widget.editModeEnabled
                   ? content
                   : HapticRefreshIndicator(
                       edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
@@ -462,16 +467,22 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
     );
   }
 
-  Future<void> _refreshData({required bool isOnline}) {
-    return Future.wait([
-      ref.refresh(myRecentGamesProvider.future),
-      if (isOnline) ref.refresh(challengesProvider.future),
-      if (isOnline) ref.refresh(unreadMessagesProvider.future),
-      if (isOnline) ref.refresh(accountProvider.future),
-      if (isOnline) ref.refresh(ongoingGamesProvider.future),
-      if (isOnline) ref.refresh(featuredTournamentsProvider.future),
-      if (isOnline) ref.refresh(followingCarouselProvider.future),
-    ]);
+  Future<void> _refreshData({required bool isOnline}) async {
+    try {
+      await Future.wait([
+        ref.refresh(myRecentGamesProvider.future),
+        if (isOnline) ref.refresh(challengesProvider.future),
+        if (isOnline) ref.refresh(unreadMessagesProvider.future),
+        if (isOnline) ref.refresh(accountProvider.future),
+        if (isOnline) ref.refresh(ongoingGamesProvider.future),
+        if (isOnline) ref.refresh(featuredTournamentsProvider.future),
+        if (isOnline) ref.refresh(followingCarouselProvider.future),
+      ]);
+    } catch (_) {
+      // Refreshing while the server is unavailable is expected to fail. Each
+      // provider surfaces its own error, and the failed responses are what keep
+      // the server status up to date, so there is nothing to do here.
+    }
   }
 }
 
@@ -931,7 +942,7 @@ class _ChallengeScreenButton extends ConsumerWidget {
     if (authUser == null) {
       return const SizedBox.shrink();
     }
-    final connectionStatus = ref.watch(connectionStatusProvider);
+    final connectionStatus = ref.watch(lichessConnectionStatusProvider);
     final challenges = ref.watch(challengesProvider);
 
     final inwardCount = challenges.value?.inward.length ?? 0;
@@ -948,7 +959,7 @@ class _ChallengeScreenButton extends ConsumerWidget {
         child: const Icon(LichessIcons.crossed_swords, size: 18.0),
       ),
       semanticsLabel: context.l10n.preferencesNotifyChallenge,
-      onPressed: connectionStatus != ConnectionStatus.online
+      onPressed: connectionStatus != LichessConnectionStatus.online
           ? null
           : () {
               ref.invalidate(challengesProvider);

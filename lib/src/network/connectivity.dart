@@ -25,28 +25,42 @@ final onlineStatusProvider = FutureProvider.autoDispose<bool>((ref) {
 }, name: 'OnlineStatusProvider');
 
 /// Represents the connection state of the app with respect to the lichess server.
-enum ConnectionStatus {
+enum LichessConnectionStatus {
   /// The device is online and the lichess server is reachable.
   online,
 
   /// The device has no network connection.
   networkDown,
 
+  /// The device is online but the lichess server is undergoing planned maintenance.
+  serverMaintenance,
+
   /// The device is online but the lichess server is unreachable.
-  serverDown,
+  serverDown;
+
+  /// Whether the lichess server is unavailable, be it for maintenance or an outage.
+  ///
+  /// The device itself is online in both cases, so offline features keep working.
+  bool get isServerUnavailable => this == .serverMaintenance || this == .serverDown;
 }
 
-/// A provider that exposes the current [ConnectionStatus].
+/// A provider that exposes the current [LichessConnectionStatus].
 ///
 /// Use this instead of [onlineStatusProvider] when the distinction between a
 /// local network drop and a server outage matters for the UI.
-final connectionStatusProvider = Provider.autoDispose<ConnectionStatus>((ref) {
+///
+/// Beware that other lichess services, such as the opening explorer or the
+/// tablebase, run on their own servers and may well be reachable while the main
+/// server is down: keep using [onlineStatusProvider] for those.
+final lichessConnectionStatusProvider = Provider.autoDispose<LichessConnectionStatus>((ref) {
   final isNetworkOnline = ref.watch(onlineStatusProvider).value ?? false;
-  if (!isNetworkOnline) return ConnectionStatus.networkDown;
-  final isServerReachable = ref.watch(serverStatusProvider);
-  if (!isServerReachable) return ConnectionStatus.serverDown;
-  return ConnectionStatus.online;
-}, name: 'ConnectionStatusProvider');
+  if (!isNetworkOnline) return LichessConnectionStatus.networkDown;
+  return switch (ref.watch(serverStatusProvider)) {
+    ServerStatus.up => LichessConnectionStatus.online,
+    ServerStatus.maintenance => LichessConnectionStatus.serverMaintenance,
+    ServerStatus.down => LichessConnectionStatus.serverDown,
+  };
+}, name: 'LichessConnectionStatusProvider');
 
 /// This provider is used to check the device's connectivity status, reacting to
 /// changes in connectivity and app lifecycle events.
@@ -92,6 +106,12 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
   }
 
   Future<void> _onAppLifecycleChange(AppLifecycleState appState) async {
+    if (appState == AppLifecycleState.resumed) {
+      // Give the lichess server the benefit of the doubt again whenever the
+      // user comes back to the app: see [ServerStatusNotifier.onAppResumed].
+      ref.read(serverStatusProvider.notifier).onAppResumed();
+    }
+
     if (!state.hasValue) {
       return;
     }

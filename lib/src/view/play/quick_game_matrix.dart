@@ -94,7 +94,7 @@ class _SectionChoices extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authUser = ref.watch(authControllerProvider);
-    final connectionStatus = ref.watch(connectionStatusProvider);
+    final connectionStatus = ref.watch(lichessConnectionStatusProvider);
     final choiceWidgets = choices
         .mapIndexed((index, choice) {
           return [
@@ -110,7 +110,7 @@ class _SectionChoices extends ConsumerWidget {
                   style: const TextStyle(fontSize: 14.0),
                 ),
                 speed: choice.speed,
-                onTap: connectionStatus == ConnectionStatus.online
+                onTap: connectionStatus == LichessConnectionStatus.online
                     ? () {
                         Navigator.of(context, rootNavigator: true).push(
                           GameScreen.buildRoute(
@@ -137,7 +137,7 @@ class _SectionChoices extends ConsumerWidget {
             Expanded(
               child: _ChoiceChip(
                 title: Text(context.l10n.custom, textAlign: TextAlign.center),
-                onTap: connectionStatus == ConnectionStatus.online
+                onTap: connectionStatus == LichessConnectionStatus.online
                     ? () {
                         showModalBottomSheet<void>(
                           context: context,

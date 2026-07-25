@@ -21,13 +21,13 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/account/account_menu.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_carousel.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_list_screen.dart';
-import 'package:lichess_mobile/src/view/home/server_outage.dart';
 import 'package:lichess_mobile/src/view/watch/live_tv_channels_screen.dart';
 import 'package:lichess_mobile/src/view/watch/streamer_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
 import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/server_outage_display.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 
@@ -77,7 +77,7 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
       }
     });
 
-    final connectionStatus = ref.watch(connectionStatusProvider);
+    final connectionStatus = ref.watch(lichessConnectionStatusProvider);
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, _) {
@@ -95,7 +95,7 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
           actions: const [AccountMenuButton()],
         ),
         body: switch (connectionStatus) {
-          ConnectionStatus.online => OrientationBuilder(
+          LichessConnectionStatus.online => OrientationBuilder(
             builder: (context, orientation) {
               return HapticRefreshIndicator(
                 edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
@@ -107,10 +107,23 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
               );
             },
           ),
-          ConnectionStatus.networkDown => const Center(
+          LichessConnectionStatus.networkDown => const Center(
             child: Text('No internet connection.', style: Styles.noResultTextStyle),
           ),
-          ConnectionStatus.serverDown => const ServerOutage(),
+          // Nothing on this tab works without the server, so the outage message
+          // takes the whole screen. Pulling to refresh is the way out of it:
+          // the requests it makes update the server status on their own.
+          LichessConnectionStatus.serverMaintenance ||
+          LichessConnectionStatus.serverDown => HapticRefreshIndicator(
+            edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
+                ? MediaQuery.paddingOf(context).top + kToolbarHeight
+                : 0.0,
+            onRefresh: _refreshData,
+            child: const CustomScrollView(
+              physics: AlwaysScrollableScrollPhysics(),
+              slivers: [SliverFillRemaining(hasScrollBody: false, child: ServerOutageDisplay())],
+            ),
+          ),
         },
       ),
     );
@@ -185,12 +198,18 @@ class _BodyState extends ConsumerState<_Body> {
   }
 }
 
-Future<void> _doRefreshDataForRef(WidgetRef ref) {
-  return Future.wait([
-    ref.refresh(broadcastsPaginatorProvider.future),
-    ref.refresh(featuredChannelsProvider.future),
-    if (!(ref.read(kidModeProvider).value ?? false)) ref.refresh(liveStreamersProvider.future),
-  ]);
+Future<void> _doRefreshDataForRef(WidgetRef ref) async {
+  try {
+    await Future.wait([
+      ref.refresh(broadcastsPaginatorProvider.future),
+      ref.refresh(featuredChannelsProvider.future),
+      if (!(ref.read(kidModeProvider).value ?? false)) ref.refresh(liveStreamersProvider.future),
+    ]);
+  } catch (_) {
+    // Refreshing while the server is unavailable is expected to fail. Each
+    // provider surfaces its own error, and the failed responses are what keep
+    // the server status up to date, so there is nothing to do here.
+  }
 }
 
 class _BroadcastWidget extends ConsumerWidget {
