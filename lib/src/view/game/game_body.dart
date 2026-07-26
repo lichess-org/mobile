@@ -867,7 +867,7 @@ class _GameBottomBar extends ConsumerWidget {
                           ref.read(gameControllerProvider(id).notifier).resignGame();
                         }
                 : null,
-            icon: Icons.flag_outlined,
+            icon: Icons.flag,
           ),
         if (canShowChat) ChatBottomBarButton(options: data.chatOptions!),
         _MoveNavButton(id: id, forward: false),

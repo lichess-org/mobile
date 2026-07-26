@@ -32,7 +32,7 @@ class ChatBottomBarButton extends ConsumerWidget {
       label: context.l10n.chatRoom,
       showLabel: showLabel,
       onTap: () => Navigator.of(context).push(ChatScreen.buildRoute(options: options)),
-      icon: Icons.chat_bubble_outline,
+      icon: Icons.chat,
       badgeLabel: switch (chatUnread) {
         AsyncData(:final value) =>
           value > 0
