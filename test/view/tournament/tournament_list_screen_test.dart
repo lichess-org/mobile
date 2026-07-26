@@ -1,5 +1,9 @@
+import 'package:deep_pick/deep_pick.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
+import 'package:lichess_mobile/src/model/tournament/tournament.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_list_screen.dart';
 
@@ -50,7 +54,60 @@ void main() {
       expect(find.text('Hourly UltraBullet Arena'), findsOneWidget);
     });
   });
+
+  group('FeaturedTournamentsWidget', () {
+    testWidgets('hides entirely when the featured list is truly empty', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const FeaturedTournamentsWidget(featured: AsyncValue.data(IListConst([]))),
+      );
+      await tester.pumpWidget(app);
+      // No header should appear when there is no data (e.g. offline).
+      expect(find.text('Open tournaments'), findsNothing);
+    });
+
+    testWidgets(
+      'shows "Open tournaments" header when featured list has app-supported tournaments',
+      (tester) async {
+        final app = await makeTestProviderScopeApp(
+          tester,
+          home: FeaturedTournamentsWidget(
+            featured: AsyncValue.data(
+              IList(
+                kFeaturedResponse['featured']!
+                    .map((t) => LightTournament.fromPick(pick(t).required()))
+                    .toIList(),
+              ),
+            ),
+          ),
+        );
+        await tester.pumpWidget(app);
+        expect(find.text('Open tournaments'), findsOneWidget);
+      },
+    );
+  });
 }
+
+// A minimal /tournament/featured response used for FeaturedTournamentsWidget tests.
+const kFeaturedResponse = {
+  'featured': [
+    {
+      'id': 'JX6S5Xjz',
+      'createdBy': 'lichess',
+      'minutes': 57,
+      'clock': {'limit': 180, 'increment': 0},
+      'rated': true,
+      'fullName': '<=2000 SuperBlitz Arena',
+      'nbPlayers': 252,
+      'variant': {'key': 'standard', 'short': 'Std', 'name': 'Standard'},
+      'startsAt': 1741593600000,
+      'finishesAt': 1741597020000,
+      'status': 20,
+      'perf': {'key': 'blitz', 'name': 'Blitz', 'position': 1, 'icon': ')'},
+      'schedule': {'freq': 'hourly', 'speed': 'superBlitz'},
+    },
+  ],
+};
 
 // curl -X GET 'https://lichess.org/api/tournament' -H "Accept: application/json" 2> /dev/null | jq | sed 's/≤/<=/g'
 const kTournamentApiResponse = '''

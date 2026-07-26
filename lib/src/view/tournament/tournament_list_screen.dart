@@ -123,7 +123,7 @@ class FeaturedTournamentsWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     switch (featured) {
       case AsyncData(:final value):
-        if (value.where((t) => t.isSupportedInApp).isEmpty) {
+        if (value.isEmpty) {
           return const SizedBox.shrink();
         }
         return ListSection(
