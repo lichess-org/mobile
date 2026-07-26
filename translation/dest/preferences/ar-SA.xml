@@ -62,7 +62,6 @@
   <string name="notifyGameEvent">تحديثات مباراة المراسلة</string>
   <string name="notifyChallenge">تحديات</string>
   <string name="notifyTournamentSoon">البطولة ستبدأ قريباً</string>
-  <string name="notifyBroadcasts">البرامج التي اشتركت فيها</string>
   <string name="notifyTimeAlarm">ساعة المراسلة تنفد</string>
   <string name="notifyBell">إشعار الجرس داخل Lichess</string>
   <string name="notifyPush">إشعار الجهاز عندما لا تكون على Lichess</string>
@@ -88,5 +87,5 @@
   <string name="boardSettings">الرقعة</string>
   <string name="analysisSettings">إعدادات التحليل</string>
   <string name="maneuverArrowsHelp">إظهار سلسلة النقلات التي يقترحها المحرك لقطعة واحدة</string>
-  <string name="hoverOverSettingLabelsForHelp" comment="Instruction/guidance, explaining that hovering offer settings labels will show more information.&#10;&#10;Appears in the popover for &quot;Settings&quot; on game analysis for individual games.">مرّر المؤشر فوق تسميات الإعدادات لعرض تلميحات المساعدة</string>
+  <string name="hoverOverSettingLabelsForHelp">مرّر المؤشر فوق تسميات الإعدادات لعرض تلميحات المساعدة</string>
 </resources>
