@@ -89,6 +89,20 @@ final savedBatchesProvider = FutureProvider.autoDispose<IList<(PuzzleAngle, int)
   return storage.fetchAll(userId: authUser?.user.id);
 }, name: 'SavedBatchesProvider');
 
+/// Fetches the number of unsolved puzzles saved locally for the given [PuzzleAngle].
+///
+/// Unlike [savedBatchesProvider], which is backed by [PuzzleBatchStorage.fetchAll] and skips the
+/// mix angle, this queries the batch of a single angle, so it also reports the mix count.
+final savedBatchCountProvider = FutureProvider.autoDispose.family<int, PuzzleAngle>((
+  Ref ref,
+  PuzzleAngle angle,
+) async {
+  final authUser = ref.watch(authControllerProvider);
+  final storage = await ref.watch(puzzleBatchStorageProvider.future);
+  final batch = await storage.fetch(userId: authUser?.user.id, angle: angle);
+  return batch?.unsolved.length ?? 0;
+}, name: 'SavedBatchCountProvider');
+
 /// Fetches saved puzzle theme batches for the current user.
 final savedThemeBatchesProvider = FutureProvider.autoDispose<IMap<PuzzleThemeKey, int>>((
   Ref ref,

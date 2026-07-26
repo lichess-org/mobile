@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_batch_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/streak_storage.dart';
+import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_tab_screen.dart';
@@ -236,6 +237,71 @@ void main() {
       expect(find.widgetWithText(PuzzleAnglePreview, 'A00'), findsOneWidget);
     });
 
+    testWidgets('shows the number of remaining puzzles when offline', (WidgetTester tester) async {
+      when(
+        () => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)),
+      ).thenAnswer((_) async => twoPuzzlesBatch);
+      when(() => mockBatchStorage.fetchAll(userId: null)).thenAnswer((_) async => IList(const []));
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const PuzzleTabScreen(),
+        overrides: {
+          puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith(
+            (ref) => mockBatchStorage,
+          ),
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => mockClient);
+          }),
+          isDeviceOnlineProvider: isDeviceOnlineProvider.overrideWithValue(false),
+        },
+      );
+
+      await tester.pumpWidget(app);
+
+      // wait for connectivity and storage
+      await tester.pump(const Duration(milliseconds: 100));
+
+      // wait for the puzzles to load
+      await tester.pump(const Duration(milliseconds: 100));
+
+      expect(find.widgetWithText(PuzzleAnglePreview, '2 puzzles left'), findsOneWidget);
+    });
+
+    testWidgets('does not show the number of remaining puzzles when online', (
+      WidgetTester tester,
+    ) async {
+      when(
+        () => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)),
+      ).thenAnswer((_) async => twoPuzzlesBatch);
+      when(() => mockBatchStorage.fetchAll(userId: null)).thenAnswer((_) async => IList(const []));
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const PuzzleTabScreen(),
+        overrides: {
+          puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith(
+            (ref) => mockBatchStorage,
+          ),
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => mockClient);
+          }),
+          isDeviceOnlineProvider: isDeviceOnlineProvider.overrideWithValue(true),
+        },
+      );
+
+      await tester.pumpWidget(app);
+
+      // wait for connectivity and storage
+      await tester.pump(const Duration(milliseconds: 100));
+
+      // wait for the puzzles to load
+      await tester.pump(const Duration(milliseconds: 100));
+
+      expect(find.byType(PuzzleAnglePreview), findsOneWidget);
+      expect(find.text('2 puzzles left'), findsNothing);
+    });
+
     testWidgets('delete a saved puzzle batch', (WidgetTester tester) async {
       final testDb = await openAppDatabase(databaseFactoryFfiNoIsolate, inMemoryDatabasePath);
 
@@ -429,6 +495,8 @@ String _batchResponse(int count, int Function() nextPuzzleNumber) => jsonEncode(
       },
   ],
 });
+
+final twoPuzzlesBatch = PuzzleBatch(solved: IList(const []), unsolved: IList([puzzle, puzzle2]));
 
 final onePuzzleBatch = PuzzleBatch(
   solved: IList(const [

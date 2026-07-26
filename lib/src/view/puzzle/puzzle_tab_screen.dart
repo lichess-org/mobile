@@ -469,6 +469,10 @@ class PuzzleAnglePreview extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final puzzle = ref.watch(nextPuzzleProvider(angle));
     final flatOpenings = ref.watch(flatOpeningsListProvider);
+    final isOnline = ref.watch(isDeviceOnlineProvider);
+    // Only useful offline: online the queue is refilled as puzzles are solved, so the number of
+    // puzzles left says nothing about what the user can still do.
+    final savedCount = ref.watch(savedBatchCountProvider(angle)).value ?? 0;
 
     Widget buildPuzzlePreview(Puzzle? puzzle, {bool loading = false}) {
       final preview = puzzle != null ? PuzzlePreview.fromPuzzle(puzzle) : null;
@@ -565,7 +569,7 @@ class PuzzleAnglePreview extends ConsumerWidget {
                           color: DefaultTextStyle.of(context).style.color?.withValues(alpha: 0.6),
                         ),
                         const SizedBox(width: 8),
-                        if (puzzle != null)
+                        if (puzzle != null) ...[
                           Flexible(
                             child: Text(
                               puzzle.puzzle.sideToMove == Side.white
@@ -574,8 +578,21 @@ class PuzzleAnglePreview extends ConsumerWidget {
                               style: TextStyle(color: textShade(context, 0.8)),
                               overflow: TextOverflow.ellipsis,
                             ),
-                          )
-                        else
+                          ),
+                          if (!isOnline && savedCount > 0) ...[
+                            const SizedBox(width: 8),
+                            Flexible(
+                              child: Text(
+                                savedCount == 1 ? '1 puzzle left' : '$savedCount puzzles left',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: textShade(context, Styles.subtitleOpacity),
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ] else
                           const Flexible(
                             child: Text('No puzzles available, please go online to fetch them.'),
                           ),
