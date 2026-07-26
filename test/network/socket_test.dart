@@ -14,7 +14,7 @@ import 'fake_websocket_channel.dart';
 final defaultSocketUri = Uri(path: kDefaultSocketRoute);
 
 SocketClient makeTestSocketClient({
-  FakeWebSocketChannelFactory fakeChannelFactory = defaultFakeWebSocketChannelFactory,
+  WebSocketChannelFactory fakeChannelFactory = defaultFakeWebSocketChannelFactory,
   int? version,
   VoidCallback? onEventGapFailure,
 }) {
@@ -101,6 +101,63 @@ void main() {
       expect(socketClient.nbConnectionSuccess, 1);
 
       socketClient.close();
+    });
+
+    test('does not reconnect when closed while a connection attempt is in flight', () async {
+      int numConnectionAttempts = 0;
+
+      // Simulates a server that never accepts the connection: each attempt fails after a delay,
+      // like a connection timeout would.
+      final fakeChannelFactory = DelayedFakeWebSocketChannelFactory(
+        const Duration(milliseconds: 100),
+        (_) {
+          numConnectionAttempts++;
+          throw const SocketException('Connection failed');
+        },
+      );
+
+      final socketClient = makeTestSocketClient(fakeChannelFactory: fakeChannelFactory);
+      socketClient.connect();
+
+      // Close while the first attempt is still awaiting the channel creation.
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+      await socketClient.close();
+
+      // Long enough for the in-flight attempt to fail and for a reconnect to have been scheduled
+      // (autoReconnectDelay is 100ms) and fired.
+      await Future<void>.delayed(const Duration(milliseconds: 400));
+
+      expect(numConnectionAttempts, 1);
+      expect(socketClient.isActive, false);
+    });
+
+    test('discards a connection that succeeds after the client was closed', () async {
+      final Map<int, FakeWebSocketChannel> channels = {};
+      int numConnectionAttempts = 0;
+
+      final fakeChannelFactory = DelayedFakeWebSocketChannelFactory(
+        const Duration(milliseconds: 100),
+        (_) {
+          numConnectionAttempts++;
+          final channel = FakeWebSocketChannel(defaultSocketUri);
+          channels[numConnectionAttempts] = channel;
+          return channel;
+        },
+      );
+
+      final socketClient = makeTestSocketClient(fakeChannelFactory: fakeChannelFactory);
+      socketClient.connect();
+
+      // Close while the connection attempt is still awaiting the channel creation.
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+      await socketClient.close();
+
+      await Future<void>.delayed(const Duration(milliseconds: 200));
+
+      // The channel created by the stale attempt must not be adopted, and must be closed.
+      expect(channels[1]!.closeCode, isNotNull);
+      expect(socketClient.isConnected, false);
+      expect(socketClient.nbConnectionSuccess, 0);
     });
 
     test('reconnects automatically if pong is not received', () async {

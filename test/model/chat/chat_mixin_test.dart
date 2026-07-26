@@ -384,8 +384,10 @@ void main() {
           }),
         },
       );
+      // The pool already connects the default client on creation: just wait for it, instead of
+      // forcing a second connection attempt while the first one is still in flight.
       final client = container.read(socketPoolProvider).open(Uri(path: kDefaultSocketRoute));
-      await client.connect();
+      await client.firstConnection;
 
       final provider = _makeProvider(initialData: _chatData([]));
       final notifier = container.read(provider.notifier);
