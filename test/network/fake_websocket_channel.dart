@@ -77,6 +77,25 @@ class FakeWebSocketChannelFactory implements WebSocketChannelFactory {
   }
 }
 
+/// A [WebSocketChannelFactory] that resolves the channel creation after a delay.
+///
+/// Useful to simulate a connection attempt that is still in flight while the client state changes.
+class DelayedFakeWebSocketChannelFactory implements WebSocketChannelFactory {
+  const DelayedFakeWebSocketChannelFactory(this.delay, this.createFunction);
+
+  final Duration delay;
+  final FakeWebSocketChannel Function(Uri socketRoute) createFunction;
+
+  @override
+  Future<WebSocketChannel> create(
+    String url, {
+    Map<String, dynamic>? headers,
+    Duration timeout = const Duration(seconds: 1),
+  }) {
+    return Future.delayed(delay, () => createFunction(Uri.parse(url)));
+  }
+}
+
 /// The controller for incoming (from server) messages.
 final _incomingController = StreamController<(Uri, dynamic)>.broadcast();
 
