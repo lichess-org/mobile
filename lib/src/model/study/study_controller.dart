@@ -474,7 +474,6 @@ class StudyController extends AsyncNotifier<StudyState>
         _recordChange('anaMove', {
           'orig': move.from.name,
           'dest': move.to.name,
-          'variant': state.requireValue.variant.name,
           'fen': state.requireValue.currentPosition!.fen,
           'path': state.requireValue.currentPath.value,
         });
@@ -482,7 +481,6 @@ class StudyController extends AsyncNotifier<StudyState>
         _recordChange('anaDrop', {
           'role': move.role.name,
           'pos': move.to.name,
-          'variant': state.requireValue.variant.name,
           'fen': state.requireValue.currentPosition!.fen,
           'path': state.requireValue.currentPath.value,
         });
