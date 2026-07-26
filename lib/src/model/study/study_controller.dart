@@ -474,14 +474,12 @@ class StudyController extends AsyncNotifier<StudyState>
         _recordChange('anaMove', {
           'orig': move.from.name,
           'dest': move.to.name,
-          'fen': state.requireValue.currentPosition!.fen,
           'path': state.requireValue.currentPath.value,
         });
       case DropMove():
         _recordChange('anaDrop', {
           'role': move.role.name,
           'pos': move.to.name,
-          'fen': state.requireValue.currentPosition!.fen,
           'path': state.requireValue.currentPath.value,
         });
     }
