@@ -418,6 +418,7 @@ class _PlayerWidget extends StatelessWidget {
             Expanded(
               child: UserFullNameWidget.player(
                 user: player.user,
+                name: player.name,
                 rating: player.rating,
                 provisional: player.provisional,
                 aiLevel: player.aiLevel,

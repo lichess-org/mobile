@@ -57,6 +57,7 @@ class GameListDetailTile extends ConsumerWidget {
           builder: (context) => GameContextMenu(
             opponentTitle: UserFullNameWidget.player(
               user: opponent.user,
+              name: opponent.name,
               aiLevel: opponent.aiLevel,
               rating: opponent.rating,
             ),

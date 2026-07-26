@@ -59,6 +59,7 @@ class GameListTile extends ConsumerWidget {
 
     final opponentTitle = UserFullNameWidget.player(
       user: opponent.user,
+      name: opponent.name,
       aiLevel: opponent.aiLevel,
       rating: opponent.rating,
     );
