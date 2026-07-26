@@ -1,25 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">සියළුම ක්‍රීඩා</string>
+  <string name="account" comment="The account screen title.">ගිණුම</string>
+  <string name="accountPreferences" comment="Displayed on settings screen. This is for preferences synced with website on the server.">ගිණුම් මනාපයන්</string>
+  <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">මෙම මනාපයන් ඔබගේ Lichess ගිණුමට අදාළ වන අතර සියලු උපාංග හරහා භාවිතා කරනු ලැබේ.</string>
+  <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">සියළුම තරග</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">ඔබට විශ්වාස ද?</string>
+  <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">බෝඩ් පසුතලය</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">නැවත තරග කිරීමේ යෝජනාව අවලංගු කරන්න</string>
+  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">මකන්න</string>
+  <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">කළ පියවර මකන්න</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">ක්‍රීඩාවකට සම්බන්ධ වන්න</string>
+  <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">ප්‍රතිචාරයක් දක්වන්න</string>
+  <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">සුභ සන්ද්‍යාවක්, %s</string>
+  <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">සුභ සන්ද්‍යාවක්</string>
+  <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">සුභ දවසක්, %s</string>
+  <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">සුභ දවසක්</string>
+  <string name="hideVariation" comment="Shown in the analysis screen.">විචලනය සඟවන්න</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">ගෙදර</string>
-  <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">මෙම පිටුව නැරඹීමට ඔබ log වී සිටිය යුතුය.</string>
+  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">සජීවී විකාශකයින්</string>
+  <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">මෙම පිටුව නැරඹීමට ඔබ log වී සිටිය යුතුය.
+</string>
+  <string name="newGame" comment="New game button in OTB and play against offline computer features">නව ක්‍රීඩාවක් ආරම්භ කරන්න</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">ප්‍රතිඵල නොමැත</string>
+  <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">පැරණි යෙදුමේ හෝ වෙබ් අඩවියේ ඇති සියලුම විශේෂාංග දැනට නොමැති බව කරුණාවෙන් සලකන්න, නමුත් අපි සෑම විටම විශේෂාංග එකතු කරමින් සිටිමු.</string>
+  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">ඔබ කිසිදු පරිශීලකයෙකු අනුගමනය නොකරයි.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">හරි</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">පුවරුවට උඩින්</string>
+  <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">\"%s\" ඇති ක්‍රීඩකයින්</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">වම</string>
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">දකුණ</string>
+  <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">ඇදපු ඉත්තා විශාල කරන්න</string>
+  <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">ඔබට මෙම වටය අවසන් කිරීමට අවශ්‍යද?</string>
+  <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">පෙන්වීමට කිසිවක් නැත, කරුණාකර පෙරහන් වෙනස් කරන්න</string>
+  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">පෙන්වීමට කිසිවක් නැත. ප්‍රහේලිකා වට කිහිපයක් ක්‍රිඩා කරන්න.</string>
+  <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">මිනිත්තු 3ක් තුළ හැකි තරම් ප්‍රහේලිකා විසඳන්න.</string>
+  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">ඔබේ වත්මන් streak එක ඔබට අහිමි වන අතර ඔබේ ලකුණු සුරැකෙනු ඇත.</string>
+  <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">ඔබේ ප්‍රියතම විවෘත කිරීම් වලින් ප්‍රහේලිකා විසඳන්න, නැතහොත් තේමාවක් තෝරන්න.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">ප්‍රහේලිකා</string>
+  <string name="recentSearches" comment="Title of the recent searches section in the search screen.">මෑත සෙවීම්</string>
+  <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">පිටු සලකුණ ඉවත් කරන්න</string>
+  <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.">සේවාදායක විශ්ලේෂණය</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">ඔරලෝසු පිහිටීම</string>
+  <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">පෙර සැකසුම්</string>
+  <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">අදින ඉත්තාගේ ඉලක්ක පෙන්වන ආකාරය</string>
+  <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">රවුමක් ලෙස</string>
+  <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">කොටුවක් ලෙස</string>
+  <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">මුල් තිරයේ widget</string>
+  <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">ඉමර්සිව් ක්‍රමය</string>
+  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">ක්‍රීඩා කරන අතරතුර පද්ධති UI සඟවන්න. තිරයේ දාරවල පද්ධතියේ සංචාලන අභිනයන් නිසා ඔබට කරදරයක් නම් මෙය භාවිතා කරන්න. ක්‍රීඩා සහ ප්‍රහේලිකා තිර සඳහා අදාළ වේ.</string>
+  <string name="settingsMaterialDifferenceCapturedPieces" comment="A value of the material difference settings choice (to show all captured pieces instead of material difference).">අල්ලා ගන්නා ලද ඉත්තන්</string>
+  <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick and image from the image library as app custom background.">රූපයක් තෝරන්න</string>
+  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">තොරා ගන්නා පසුබිම අඳුරු ප්‍රකාරයේදී පමණක් ක්‍රියා කරයි. අඳුරු රූපයක් නිර්දේශ කෙරේ.</string>
+  <string name="settingsPickAnImageBlur" comment="Displayed in theme background choice screen, to blur the chosen image.">රූපය blur කරන්න</string>
+  <string name="settingsPickAnImageHideBoard" comment="Displayed in theme background choice screen, to hide the board when viewing chosen image.">පුවරුව සඟවන්න</string>
+  <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">පුවරුව පෙන්වන්න</string>
+  <string name="settingsPickAnImageSwipeToDisplay" comment="Displayed in theme background choice screen, when viewing colors presets to display other colors backgrounds.">වෙනත් පසුබිම් පෙන්වීමට ස්වයිප් කරන්න</string>
+  <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">තට්ටු කරන්න හෝ ඇදගෙන යන්න</string>
+  <string name="settingsPieceShiftMethodTapTwoSquares" comment="A value of piece shift method settings entry.">කොටු දෙකක් තට්ටු කරන්න</string>
+  <string name="settingsShapeDrawing" comment="Entry in the settings.">හැඩතල ඇඳීම</string>
+  <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.">ඇඟිලි දෙකක් භාවිතා කර හැඩතල අඳින්න: හිස් කොටුවක් මත එක් ඇඟිල්ලක් තබාගෙන හැඩයක් ඇඳීමට තවත් ඇඟිල්ලක් ඇදගෙන යන්න.</string>
+  <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">මායිම පෙන්වන්න</string>
+  <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">ප්‍රතිචාරය ස්පර්ශ කරන්න</string>
+  <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">සක්‍රිය කළ විට, ඔබ ඉත්තෙක් චලනය කරන විට හෝ අල්ලා ගන්නා විට කෙටි වේලාවකට vibrate වේ.</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">සැකසුම්</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PGN බෙදාගන්න</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">ක්‍රීඩා URL බෙදාගන්න</string>
+  <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">FEN වශයෙන් බෙදා හැරීම</string>
+  <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">මෙම puzzle එක බෙදා හැරීම</string>
   <string name="showComments" comment="Shown in the analysis screen.">අදහස් පෙන්වන්න</string>
-  <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">ප්රතිඵල පෙන්වන්න</string>
+  <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">ප්‍රතිඵලය පෙන්වන්න</string>
+  <string name="showVariations" comment="Shown in the analysis screen.">වෙනස් ඇදීම් පෙන්වන්න</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">යම්කිසි වරදක් සිදුවී ඇත.</string>
+  <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">පද්ධති වර්ණ</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">තේමාව</string>
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">උපකරණ</string>
+  <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">මෙම් ස්ංස්කරණයේදී මෙම ප්‍රභේදය %s ක්‍රියා කළ නොහැක.</string>
+  <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">ප්‍රතිවාදියා සම්බන්ධ වන තෙක් බලා සිටී...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">නරඹන්න</string>
+  <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">Lichess යෙදුමට සාදරයෙන් පිළිගනිමු!</string>
+  <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">ක්‍රීඩාව බලන්න</string>
+  <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">නොසලකා හරින්න</string>
+  <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">තර්ජනය කිරීම් පෙන්වීම නවත්වන්න</string>
+  <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word">සම්පූර්ණ කර ඇත</string>
+  <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">මගේ පිටුවට යන්න</string>
+  <string name="displayModeCompact" comment="">සංයුක්තව පෙන්වන්න</string>
+  <string name="displayModeDetailed" comment="">විස්තරාත්මකව පෙන්වන්න</string>
+  <string name="openingExplorerNotAvailableOffline" comment="">Explorer විවෘත කිරීම නොබැඳිව ලබා ගත නොහැක.</string>
+  <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">අභියෝගය නිර්මාණය කරන ලදී: ක්‍රීඩාව ආරම්භ වූ විට ඔබට දැනුම් දෙනු ලැබේ.\nඔබට මුල් පිටුවෙන් ප්‍රවේශ විය හැක.</string>
+  <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">පෙර පිටුව</string>
+  <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">හෝ PNG ගොනුවක් ආයාත කරන්න</string>
+  <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">හොඳ පියවරක්, නමුත් ඊට වඩා හොඳ විකල්පයක් තිබේ</string>
 </resources>
