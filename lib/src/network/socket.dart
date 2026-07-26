@@ -685,6 +685,13 @@ final socketPoolProvider = Provider<SocketPool>((Ref ref) {
   final pool = SocketPool(ref);
   Timer? closeInBackgroundTimer;
 
+  pool.currentClient.connect();
+
+  // force reconnect to the current socket with the new token
+  final subscription = authEventsStream.listen((_) {
+    pool.currentClient.connect();
+  });
+
   final appLifecycleListener = AppLifecycleListener(
     onHide: () {
       closeInBackgroundTimer?.cancel();
@@ -704,6 +711,7 @@ final socketPoolProvider = Provider<SocketPool>((Ref ref) {
   );
 
   ref.onDispose(() {
+    subscription.cancel();
     pool.dispose();
     closeInBackgroundTimer?.cancel();
     appLifecycleListener.dispose();

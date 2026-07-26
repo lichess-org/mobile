@@ -70,6 +70,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Na zobrazenie tejto stránky musíte byť prihlásený.';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String get mobileNewGame => 'Nová hra';
 
   @override

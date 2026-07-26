@@ -23,7 +23,7 @@ class CreateGameWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final playPrefs = ref.watch(gameSetupPreferencesProvider);
-    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
+    final connectionStatus = ref.watch(lichessConnectionStatusProvider);
     final account = ref.watch(accountProvider).value;
     final userPerf = account?.perfs[playPrefs.realTimePerf];
     final canUseRatingRange = userPerf != null && userPerf.provisional != true;
@@ -251,7 +251,7 @@ class CreateGameWidget extends ConsumerWidget {
         ],
         FilledButton.icon(
           icon: const Icon(Icons.groups),
-          onPressed: isOnline
+          onPressed: connectionStatus == LichessConnectionStatus.online
               ? () {
                   // Pops the play bottom sheet
                   Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);

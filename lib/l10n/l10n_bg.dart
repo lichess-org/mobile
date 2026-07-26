@@ -70,6 +70,9 @@ class AppLocalizationsBg extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Влезте в профила си, за да видите страницата.';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String get mobileNewGame => 'Нова партия';
 
   @override

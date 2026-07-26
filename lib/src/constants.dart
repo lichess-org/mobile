@@ -41,6 +41,11 @@ const kFideRatingsUrl = 'https://ratings.fide.com/profile/';
 const kProvisionalDeviation = 110;
 const kClueLessDeviation = 230;
 
+const kMaintenanceDrawingAuthorUrl = 'https://www.pixiv.net/member.php?id=34624';
+const kLichessMastodonUrl = 'https://mastodon.online/@lichess';
+const kLichessBlueskyUrl = 'https://bsky.app/profile/lichess.org';
+const kLichessDiscordUrl = 'https://discord.gg/lichess';
+
 // UI
 const double kCupertinoBarBlurSigma = 30.0;
 const double kCupertinoBarOpacity = 0.8;

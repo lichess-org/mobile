@@ -82,7 +82,7 @@ class _AccountMenuScreenState extends ConsumerState<AccountMenuScreen> with Widg
   @override
   Widget build(BuildContext context) {
     final client = ref.read(defaultClientProvider);
-    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
+    final isOnline = ref.watch(isDeviceOnlineProvider);
     final signInState = ref.watch(signInMutation);
     final signOutState = ref.watch(signOutMutation);
 

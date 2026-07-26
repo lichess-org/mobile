@@ -18,7 +18,9 @@ final _themesProvider =
     FutureProvider.autoDispose<
       (bool, IMap<PuzzleThemeKey, int>, IMap<PuzzleThemeKey, PuzzleThemeData>?, bool)
     >((ref) async {
-      final isOnline = await ref.watch(onlineStatusProvider.future);
+      final isOnline = await ref.watch(
+        connectivityChangesProvider.selectAsync((status) => status.isOnline),
+      );
       final savedThemes = await ref.watch(savedThemeBatchesProvider.future);
       IMap<PuzzleThemeKey, PuzzleThemeData>? onlineThemes;
       if (isOnline) {

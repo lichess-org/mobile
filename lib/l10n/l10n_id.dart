@@ -70,6 +70,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Anda harus masuk untuk melihat halaman ini.';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String get mobileNewGame => 'New game';
 
   @override

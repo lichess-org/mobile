@@ -70,6 +70,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Вам патрэбна ўвайсці ў уліковы запіс каб паглядзець гэтую старонку.';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String get mobileNewGame => 'Новая гульня';
 
   @override

@@ -100,7 +100,7 @@ class GameHistoryScreen extends ConsumerWidget {
       actions: [
         ContextMenuAction(
           icon: Icons.ballot_outlined,
-          label: 'Detailed view',
+          label: context.l10n.mobileDisplayModeDetailed,
           onPressed: () {
             ref
                 .read(gameHistoryPreferencesProvider.notifier)
@@ -109,7 +109,7 @@ class GameHistoryScreen extends ConsumerWidget {
         ),
         ContextMenuAction(
           icon: Icons.list_outlined,
-          label: 'Compact view',
+          label: context.l10n.mobileDisplayModeCompact,
           onPressed: () {
             ref
                 .read(gameHistoryPreferencesProvider.notifier)
