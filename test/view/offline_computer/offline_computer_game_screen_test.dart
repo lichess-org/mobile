@@ -105,7 +105,7 @@ void main() {
       expect(find.byType(BottomBar), findsOneWidget);
       expect(find.byIcon(Icons.menu), findsOneWidget);
       expect(find.byIcon(CupertinoIcons.arrow_uturn_left), findsOneWidget);
-      expect(find.byIcon(CupertinoIcons.flag), findsOneWidget);
+      expect(find.byIcon(CupertinoIcons.flag_fill), findsOneWidget);
       expect(find.byIcon(CupertinoIcons.lightbulb), findsOneWidget);
 
       // Verify Stockfish player info with default level (level 4)
@@ -204,7 +204,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Tap resign button
-      await tester.tap(find.byIcon(CupertinoIcons.flag));
+      await tester.tap(find.byIcon(CupertinoIcons.flag_fill));
       await tester.pumpAndSettle();
 
       // Verify confirmation dialog is shown
@@ -227,7 +227,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Tap resign button
-      await tester.tap(find.byIcon(CupertinoIcons.flag));
+      await tester.tap(find.byIcon(CupertinoIcons.flag_fill));
       await tester.pumpAndSettle();
 
       // Confirm resignation
@@ -321,7 +321,7 @@ void main() {
 
       // Find the resign button
       final resignButton = find.ancestor(
-        of: find.byIcon(CupertinoIcons.flag),
+        of: find.byIcon(CupertinoIcons.flag_fill),
         matching: find.byType(BottomBarButton),
       );
       expect(resignButton, findsOneWidget);
