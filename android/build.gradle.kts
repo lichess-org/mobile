@@ -35,6 +35,9 @@ subprojects {
             }
         }
     }
+    if (name == "flutter_local_notifications") {
+        pluginManager.apply("com.android.library")
+    }
 }
 
 // Some plugins declare a compileSdk lower than what their transitive dependencies require.
