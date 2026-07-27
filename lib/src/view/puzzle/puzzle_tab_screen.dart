@@ -599,6 +599,7 @@ class PuzzleAnglePreview extends ConsumerWidget {
                           Flexible(
                             child: Column(
                               mainAxisSize: .min,
+                              crossAxisAlignment: .start,
                               children: [
                                 Text(
                                   puzzle.puzzle.sideToMove == Side.white
@@ -609,7 +610,7 @@ class PuzzleAnglePreview extends ConsumerWidget {
                                 ),
                                 if (!isOnline && savedCount > 0)
                                   Text(
-                                    savedCount == 1 ? '1 puzzle left' : '$savedCount puzzles left',
+                                    '$savedCount',
                                     style: TextStyle(
                                       fontSize: Theme.of(context).textTheme.bodySmall?.fontSize,
                                       color: textShade(context, Styles.subtitleOpacity),
