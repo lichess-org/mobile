@@ -93,9 +93,9 @@ class _PuzzleTabScaffold extends ConsumerWidget {
 }
 
 class _MaterialTabBody extends ConsumerStatefulWidget {
-  const _MaterialTabBody(this.savedBatches);
+  const _MaterialTabBody(this.savedAngles);
 
-  final IList<(PuzzleAngle, int)> savedBatches;
+  final IList<PuzzleAngle> savedAngles;
 
   @override
   ConsumerState<_MaterialTabBody> createState() => _MaterialTabBodyState();
@@ -111,7 +111,7 @@ class _MaterialTabBodyState extends ConsumerState<_MaterialTabBody> {
     _angles = AnimatedListModel<PuzzleAngle>(
       listKey: _listKey,
       removedItemBuilder: _buildMainListRemovedItem,
-      initialItems: widget.savedBatches.map((e) => e.$1),
+      initialItems: widget.savedAngles,
       itemsOffset: 4,
     );
   }
@@ -119,8 +119,8 @@ class _MaterialTabBodyState extends ConsumerState<_MaterialTabBody> {
   @override
   void didUpdateWidget(covariant _MaterialTabBody oldWidget) {
     super.didUpdateWidget(oldWidget);
-    final oldKeys = ISet(oldWidget.savedBatches.map((e) => e.$1));
-    final newKeys = ISet(widget.savedBatches.map((e) => e.$1));
+    final oldKeys = ISet(oldWidget.savedAngles);
+    final newKeys = ISet(widget.savedAngles);
 
     if (oldKeys != newKeys) {
       final missings = oldKeys.difference(newKeys);

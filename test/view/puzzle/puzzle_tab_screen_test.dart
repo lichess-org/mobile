@@ -54,7 +54,9 @@ void main() {
     when(
       () => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)),
     ).thenAnswer((_) async => batch);
-    when(() => mockBatchStorage.fetchAll(userId: null)).thenAnswer((_) async => IList(const []));
+    when(
+      () => mockBatchStorage.fetchAllAngles(userId: null),
+    ).thenAnswer((_) async => IList(const []));
 
     final app = await makeTestProviderScopeApp(
       tester,
@@ -87,7 +89,9 @@ void main() {
     when(
       () => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)),
     ).thenAnswer((_) async => batch);
-    when(() => mockBatchStorage.fetchAll(userId: null)).thenAnswer((_) async => IList(const []));
+    when(
+      () => mockBatchStorage.fetchAllAngles(userId: null),
+    ).thenAnswer((_) async => IList(const []));
     final app = await makeTestProviderScopeApp(
       tester,
       home: const PuzzleTabScreen(),
@@ -120,7 +124,7 @@ void main() {
       () => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)),
     ).thenAnswer((_) async => batch);
     when(
-      () => mockBatchStorage.fetchAll(userId: null),
+      () => mockBatchStorage.fetchAllAngles(userId: null),
     ).thenThrow(const FormatException('cannot fetch puzzles'));
     final app = await makeTestProviderScopeApp(
       tester,
@@ -153,7 +157,9 @@ void main() {
     when(
       () => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)),
     ).thenAnswer((_) async => batch);
-    when(() => mockBatchStorage.fetchAll(userId: null)).thenAnswer((_) async => IList(const []));
+    when(
+      () => mockBatchStorage.fetchAllAngles(userId: null),
+    ).thenAnswer((_) async => IList(const []));
     final app = await makeTestProviderScopeApp(
       tester,
       home: const PuzzleTabScreen(),
@@ -186,7 +192,9 @@ void main() {
       when(
         () => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)),
       ).thenAnswer((_) async => batch);
-      when(() => mockBatchStorage.fetchAll(userId: null)).thenAnswer((_) async => IList(const []));
+      when(
+        () => mockBatchStorage.fetchAllAngles(userId: null),
+      ).thenAnswer((_) async => IList(const []));
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -238,11 +246,8 @@ void main() {
       when(
         () => mockBatchStorage.fetch(userId: null, angle: const PuzzleOpening('A00')),
       ).thenAnswer((_) async => batch);
-      when(() => mockBatchStorage.fetchAll(userId: null)).thenAnswer(
-        (_) async => IList(const [
-          (PuzzleTheme(PuzzleThemeKey.advancedPawn), 50),
-          (PuzzleOpening('A00'), 50),
-        ]),
+      when(() => mockBatchStorage.fetchAllAngles(userId: null)).thenAnswer(
+        (_) async => IList(const [PuzzleTheme(PuzzleThemeKey.advancedPawn), PuzzleOpening('A00')]),
       );
 
       final app = await makeTestProviderScopeApp(

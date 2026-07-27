@@ -82,11 +82,11 @@ final dailyPuzzleProvider = FutureProvider.autoDispose<Puzzle>((Ref ref) {
   );
 }, name: 'DailyPuzzleProvider');
 
-/// Fetches all saved puzzle batches for the current user.
-final savedBatchesProvider = FutureProvider.autoDispose<IList<(PuzzleAngle, int)>>((Ref ref) async {
+/// Fetches the angles of all saved puzzle batches for the current user.
+final savedBatchesProvider = FutureProvider.autoDispose<IList<PuzzleAngle>>((Ref ref) async {
   final authUser = ref.watch(authControllerProvider);
   final storage = await ref.watch(puzzleBatchStorageProvider.future);
-  return storage.fetchAll(userId: authUser?.user.id);
+  return storage.fetchAllAngles(userId: authUser?.user.id);
 }, name: 'SavedBatchesProvider');
 
 /// Fetches the number of unsolved puzzles saved locally for the given [PuzzleAngle].
@@ -112,12 +112,26 @@ final savedThemeBatchesProvider = FutureProvider.autoDispose<IMap<PuzzleThemeKey
   return storage.fetchSavedThemes(userId: authUser?.user.id);
 }, name: 'SavedThemeBatchesProvider');
 
-/// Fetches saved puzzle opening batches for the current user.
-final savedOpeningBatchesProvider = FutureProvider.autoDispose<IMap<String, int>>((Ref ref) async {
+/// Fetches the keys of the saved puzzle opening batches for the current user.
+final savedOpeningBatchesProvider = FutureProvider.autoDispose<ISet<String>>((Ref ref) async {
   final authUser = ref.watch(authControllerProvider);
   final storage = await ref.watch(puzzleBatchStorageProvider.future);
   return storage.fetchSavedOpenings(userId: authUser?.user.id);
 }, name: 'SavedOpeningBatchesProvider');
+
+/// Fetches the number of unsolved puzzles saved for the given [PuzzleAngle].
+final savedBatchNbUnsolvedProvider = FutureProvider.autoDispose.family<int, PuzzleAngle>((
+  Ref ref,
+  PuzzleAngle angle,
+) async {
+  final authUser = ref.watch(authControllerProvider);
+  final storage = await ref.watch(puzzleBatchStorageProvider.future);
+  // useful for the openings list, where providers can be disposed and recreated many times as the
+  // user scrolls
+  ref.cacheFor(const Duration(minutes: 1));
+
+  return storage.fetchNbUnsolved(userId: authUser?.user.id, angle: angle);
+}, name: 'SavedBatchNbUnsolvedProvider');
 
 /// Fetches the puzzle dashboard for the current user for the given number of [days].
 final puzzleDashboardProvider = FutureProvider.autoDispose.family<PuzzleDashboard?, int>((
