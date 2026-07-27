@@ -453,6 +453,11 @@ void main() {
       // Verify this by waiting the same duration as above
       await tester.pump(const Duration(seconds: 1));
 
+      // Regression test: there was a bug where the opponent's piece could be moved in this state:
+      await playMove(tester, 'c4', 'c7');
+      expect(boardHasPiece(tester, Square.c4, Piece.blackQueen), isTrue);
+      expect(boardHasPiece(tester, Square.c7, Piece.blackQueen), isFalse);
+
       expect(find.text('Not much to say after ...Qc7.'), findsOneWidget);
       expect(find.text(introText), findsNothing);
 

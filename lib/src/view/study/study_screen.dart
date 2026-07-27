@@ -599,6 +599,10 @@ class _StudyAnalysisBoardState
   StudyState get analysisState => ref.watch(studyControllerProvider(widget.options)).requireValue;
 
   @override
+  bool computeInteractive(StudyState state) =>
+      !state.gamebookActive || state.currentPosition?.turn == state.pov;
+
+  @override
   StudyPrefs get analysisPrefs => ref.watch(studyPreferencesProvider);
 
   @override
