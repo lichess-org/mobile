@@ -28,6 +28,7 @@ import 'package:lichess_mobile/src/view/puzzle/puzzle_themes_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/streak_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
@@ -40,13 +41,54 @@ class PuzzleTabScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final savedBatches = ref.watch(savedBatchesProvider).value;
+    // The saved batches are only used to show the extra angle previews at the bottom of the list,
+    // so a storage failure must not prevent the rest of the tab from being displayed. The listener
+    // only fires on state changes, so the user is warned once per failed load.
+    ref.listen(savedBatchesProvider, (_, next) {
+      if (next case AsyncError(:final error, :final stackTrace)) {
+        debugPrint('SEVERE: [PuzzleTabScreen] could not load saved batches; $error\n$stackTrace');
+        showSnackBar(context, 'Could not load the puzzles.', type: SnackBarType.error);
+      }
+    });
 
-    if (savedBatches == null) {
-      return const Center(child: CircularProgressIndicator.adaptive());
+    switch (ref.watch(savedBatchesProvider)) {
+      case AsyncData(:final value):
+        return _MaterialTabBody(value);
+      case AsyncError():
+        return const _MaterialTabBody(IList.empty());
+      case _:
+        return const _PuzzleTabScaffold(body: CenterLoadingIndicator());
     }
+  }
+}
 
-    return _MaterialTabBody(savedBatches);
+/// Scaffold of the puzzle tab, shared by all states of the [savedBatchesProvider].
+class _PuzzleTabScaffold extends ConsumerWidget {
+  const _PuzzleTabScaffold({required this.body});
+
+  final Widget body;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, _) {
+        if (!didPop) {
+          ref.read(currentBottomTabProvider.notifier).state = BottomTab.home;
+        }
+      },
+      child: PlatformScaffold(
+        appBar: PlatformAppBar(
+          title: Text(context.l10n.puzzles),
+          centerTitle: false,
+          titleTextStyle: Theme.of(context).platform == TargetPlatform.iOS
+              ? Theme.of(context).textTheme.headlineSmall
+              : null,
+          actions: const [AccountMenuButton()],
+        ),
+        body: body,
+      ),
+    );
   }
 }
 
@@ -107,44 +149,28 @@ class _MaterialTabBodyState extends ConsumerState<_MaterialTabBody> {
     Widget buildItem(BuildContext context, int index, Animation<double> animation) =>
         _buildMainListItem(context, index, animation, (index) => _angles[index]);
 
-    return PopScope(
-      canPop: false,
-      onPopInvokedWithResult: (bool didPop, _) {
-        if (!didPop) {
-          ref.read(currentBottomTabProvider.notifier).state = BottomTab.home;
-        }
-      },
-      child: PlatformScaffold(
-        appBar: PlatformAppBar(
-          title: Text(context.l10n.puzzles),
-          centerTitle: false,
-          titleTextStyle: Theme.of(context).platform == TargetPlatform.iOS
-              ? Theme.of(context).textTheme.headlineSmall
-              : null,
-          actions: const [AccountMenuButton()],
-        ),
-        body: isTablet
-            ? Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: AnimatedList(
-                      key: _listKey,
-                      initialItemCount: _angles.length,
-                      controller: puzzlesScrollController,
-                      itemBuilder: buildItem,
-                    ),
+    return _PuzzleTabScaffold(
+      body: isTablet
+          ? Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: AnimatedList(
+                    key: _listKey,
+                    initialItemCount: _angles.length,
+                    controller: puzzlesScrollController,
+                    itemBuilder: buildItem,
                   ),
-                  Expanded(child: ListView(children: const [PuzzleHistoryWidget()])),
-                ],
-              )
-            : AnimatedList(
-                key: _listKey,
-                controller: puzzlesScrollController,
-                initialItemCount: _angles.length,
-                itemBuilder: buildItem,
-              ),
-      ),
+                ),
+                Expanded(child: ListView(children: const [PuzzleHistoryWidget()])),
+              ],
+            )
+          : AnimatedList(
+              key: _listKey,
+              controller: puzzlesScrollController,
+              initialItemCount: _angles.length,
+              itemBuilder: buildItem,
+            ),
     );
   }
 }

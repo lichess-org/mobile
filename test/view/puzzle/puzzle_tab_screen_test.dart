@@ -113,6 +113,42 @@ void main() {
     expect(find.text('Puzzle Storm'), findsOneWidget);
   });
 
+  testWidgets('shows puzzle menu even if saved batches cannot be loaded', (
+    WidgetTester tester,
+  ) async {
+    when(
+      () => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)),
+    ).thenAnswer((_) async => batch);
+    when(
+      () => mockBatchStorage.fetchAll(userId: null),
+    ).thenThrow(const FormatException('cannot fetch puzzles'));
+    final app = await makeTestProviderScopeApp(
+      tester,
+      home: const PuzzleTabScreen(),
+      overrides: {
+        puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith(
+          (ref) => mockBatchStorage,
+        ),
+        httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+          return FakeHttpClientFactory(() => mockClient);
+        }),
+      },
+    );
+
+    await tester.pumpWidget(app);
+
+    // wait for connectivity and storage
+    await tester.pumpAndSettle(const Duration(milliseconds: 100));
+
+    expect(find.byType(CircularProgressIndicator), findsNothing);
+    expect(find.text('Puzzle Themes'), findsOneWidget);
+    expect(find.text('Puzzle Streak'), findsOneWidget);
+    expect(find.text('Puzzle Storm'), findsOneWidget);
+
+    // the user is warned once with a snackbar
+    expect(find.widgetWithText(SnackBar, 'Could not load the puzzles.'), findsOneWidget);
+  });
+
   testWidgets('shows daily puzzle', (WidgetTester tester) async {
     when(
       () => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)),
