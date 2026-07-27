@@ -233,7 +233,6 @@
 				413909FB1CFC01F2BB462F59 /* Info.plist */,
 				6EA7056170BE820041DA25AB /* ShareExtension.entitlements */,
 			);
-			name = ShareExtension;
 			path = ShareExtension;
 			sourceTree = "<group>";
 		};
