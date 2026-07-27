@@ -314,7 +314,7 @@ void main() {
       // wait for the puzzles to load
       await tester.pump(const Duration(milliseconds: 100));
 
-      expect(find.widgetWithText(PuzzleAnglePreview, '2 puzzles left'), findsOneWidget);
+      expect(find.widgetWithText(PuzzleAnglePreview, '2'), findsOneWidget);
     });
 
     testWidgets('does not show the number of remaining puzzles when online', (
@@ -356,7 +356,7 @@ void main() {
       await tester.pump(const Duration(milliseconds: 100));
 
       expect(find.byType(PuzzleAnglePreview), findsOneWidget);
-      expect(find.text('2 puzzles left'), findsNothing);
+      expect(find.widgetWithText(PuzzleAnglePreview, '2'), findsNothing);
     });
 
     testWidgets('delete a saved puzzle batch', (WidgetTester tester) async {
