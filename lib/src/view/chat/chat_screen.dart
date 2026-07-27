@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -32,7 +33,7 @@ class ChatBottomBarButton extends ConsumerWidget {
       label: context.l10n.chatRoom,
       showLabel: showLabel,
       onTap: () => Navigator.of(context).push(ChatScreen.buildRoute(options: options)),
-      icon: Icons.chat,
+      icon: CupertinoIcons.chat_bubble_text,
       badgeLabel: switch (chatUnread) {
         AsyncData(:final value) =>
           value > 0
