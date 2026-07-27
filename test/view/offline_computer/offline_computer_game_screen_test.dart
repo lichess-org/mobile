@@ -273,6 +273,44 @@ void main() {
       expect(find.text('New game'), findsWidgets);
     });
 
+    testWidgets(
+      'Settings icon in app bar is visible and opens unified settings sheet in standard mode',
+      (tester) async {
+        await initOfflineComputerGame(tester);
+
+        // Verify settings icon is present in app bar
+        final settingsIcon = find.byIcon(Icons.settings);
+        expect(settingsIcon, findsOneWidget);
+
+        await tester.tap(settingsIcon);
+        await tester.pumpAndSettle();
+
+        // In standard mode, only general settings (blindfold mode) are shown
+        expect(find.text('Blindfold'), findsOneWidget);
+        expect(find.text('Practice settings'), findsNothing);
+        expect(find.text('Hide best move'), findsNothing);
+      },
+    );
+
+    testWidgets(
+      'Settings icon opens unified settings sheet with practice settings in practice mode',
+      (tester) async {
+        await initPracticeModeGame(tester);
+        await tester.pumpAndSettle();
+
+        // Verify settings icon is visible
+        final settingsIcon = find.byIcon(Icons.settings);
+        expect(settingsIcon, findsOneWidget);
+
+        await tester.tap(settingsIcon);
+        await tester.pumpAndSettle();
+
+        // In practice mode, practice settings appear before general settings (blindfold mode)
+        expect(find.text('Practice settings'), findsOneWidget);
+        expect(find.text('Blindfold'), findsOneWidget);
+      },
+    );
+
     testWidgets('Playing as black shows board from black perspective', (tester) async {
       await initOfflineComputerGame(tester, side: Side.black);
 
