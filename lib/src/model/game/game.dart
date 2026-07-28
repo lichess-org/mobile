@@ -275,6 +275,9 @@ enum GameSource {
   unknown;
 
   static final nameMap = IMap(GameSource.values.asNameMap());
+
+  /// Whether the game was imported on lichess, and thus not played on the site.
+  bool get isImport => this == GameSource.import || this == GameSource.importLive;
 }
 
 enum GameRule {

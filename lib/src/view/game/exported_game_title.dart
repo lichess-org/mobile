@@ -16,13 +16,26 @@ import 'package:lichess_mobile/src/widgets/shimmer.dart';
 /// and optionally the date of the last move. Used both by the game screen and
 /// the analysis screen so their app bar titles stay consistent.
 class ExportedGameTitle extends StatelessWidget {
-  const ExportedGameTitle({required this.meta, this.lastMoveAt, super.key});
+  const ExportedGameTitle({
+    required this.meta,
+    this.lastMoveAt,
+    this.isImport = false,
+    this.importDate,
+    super.key,
+  });
 
   final GameMeta meta;
 
   /// The date of the last move played in the game. When set, the title shows the
   /// relative date and a tooltip with the full date.
   final DateTime? lastMoveAt;
+
+  /// Whether the game was imported on lichess, and thus not played on the site.
+  final bool isImport;
+
+  /// The raw PGN date of an imported game, shown in place of [lastMoveAt], which is the date of
+  /// the import itself.
+  final String? importDate;
 
   static final _tooltipFormatter = DateFormat.yMMMMd().add_jm();
 
@@ -40,20 +53,31 @@ class ExportedGameTitle extends StatelessWidget {
 
     final mode = meta.rated ? ' • ${context.l10n.rated}' : ' • ${context.l10n.casual}';
 
+    // An imported game was not played on lichess: the time control and the rated status are
+    // meaningless, so only show that it is an import, and the date of the game if we have it.
+    final subtitle = isImport && importDate != null
+        ? formatPgnDate(importDate!, shortDate: false)
+        : lastMoveAt != null
+        ? relativeDate(context.l10n, lastMoveAt!, shortDate: false)
+        : null;
+
     final titleRow = Row(
       mainAxisSize: .min,
       children: [
-        Icon(meta.perf.icon, color: DefaultTextStyle.of(context).style.color),
+        Icon(
+          isImport ? Icons.cloud_upload_outlined : meta.perf.icon,
+          color: DefaultTextStyle.of(context).style.color,
+        ),
         const SizedBox(width: 8.0),
         Flexible(
           child: Column(
             mainAxisSize: .min,
             crossAxisAlignment: .start,
             children: [
-              AppBarTitleText('$title$mode', maxLines: 1, maxFontSize: 18.0),
-              if (lastMoveAt != null)
+              AppBarTitleText(isImport ? 'IMPORT' : '$title$mode', maxLines: 1, maxFontSize: 18.0),
+              if (subtitle != null)
                 Text(
-                  relativeDate(context.l10n, lastMoveAt!, shortDate: false),
+                  subtitle,
                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
                     color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
                   ),

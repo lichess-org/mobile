@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_batch_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/streak_storage.dart';
+import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_tab_screen.dart';
@@ -53,7 +54,9 @@ void main() {
     when(
       () => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)),
     ).thenAnswer((_) async => batch);
-    when(() => mockBatchStorage.fetchAll(userId: null)).thenAnswer((_) async => IList(const []));
+    when(
+      () => mockBatchStorage.fetchAllAngles(userId: null),
+    ).thenAnswer((_) async => IList(const []));
 
     final app = await makeTestProviderScopeApp(
       tester,
@@ -86,7 +89,9 @@ void main() {
     when(
       () => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)),
     ).thenAnswer((_) async => batch);
-    when(() => mockBatchStorage.fetchAll(userId: null)).thenAnswer((_) async => IList(const []));
+    when(
+      () => mockBatchStorage.fetchAllAngles(userId: null),
+    ).thenAnswer((_) async => IList(const []));
     final app = await makeTestProviderScopeApp(
       tester,
       home: const PuzzleTabScreen(),
@@ -112,11 +117,49 @@ void main() {
     expect(find.text('Puzzle Storm'), findsOneWidget);
   });
 
+  testWidgets('shows puzzle menu even if saved batches cannot be loaded', (
+    WidgetTester tester,
+  ) async {
+    when(
+      () => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)),
+    ).thenAnswer((_) async => batch);
+    when(
+      () => mockBatchStorage.fetchAllAngles(userId: null),
+    ).thenThrow(const FormatException('cannot fetch puzzles'));
+    final app = await makeTestProviderScopeApp(
+      tester,
+      home: const PuzzleTabScreen(),
+      overrides: {
+        puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith(
+          (ref) => mockBatchStorage,
+        ),
+        httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+          return FakeHttpClientFactory(() => mockClient);
+        }),
+      },
+    );
+
+    await tester.pumpWidget(app);
+
+    // wait for connectivity and storage
+    await tester.pumpAndSettle(const Duration(milliseconds: 100));
+
+    expect(find.byType(CircularProgressIndicator), findsNothing);
+    expect(find.text('Puzzle Themes'), findsOneWidget);
+    expect(find.text('Puzzle Streak'), findsOneWidget);
+    expect(find.text('Puzzle Storm'), findsOneWidget);
+
+    // the user is warned once with a snackbar
+    expect(find.widgetWithText(SnackBar, 'Could not load the puzzles.'), findsOneWidget);
+  });
+
   testWidgets('shows daily puzzle', (WidgetTester tester) async {
     when(
       () => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)),
     ).thenAnswer((_) async => batch);
-    when(() => mockBatchStorage.fetchAll(userId: null)).thenAnswer((_) async => IList(const []));
+    when(
+      () => mockBatchStorage.fetchAllAngles(userId: null),
+    ).thenAnswer((_) async => IList(const []));
     final app = await makeTestProviderScopeApp(
       tester,
       home: const PuzzleTabScreen(),
@@ -149,7 +192,9 @@ void main() {
       when(
         () => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)),
       ).thenAnswer((_) async => batch);
-      when(() => mockBatchStorage.fetchAll(userId: null)).thenAnswer((_) async => IList(const []));
+      when(
+        () => mockBatchStorage.fetchAllAngles(userId: null),
+      ).thenAnswer((_) async => IList(const []));
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -201,11 +246,8 @@ void main() {
       when(
         () => mockBatchStorage.fetch(userId: null, angle: const PuzzleOpening('A00')),
       ).thenAnswer((_) async => batch);
-      when(() => mockBatchStorage.fetchAll(userId: null)).thenAnswer(
-        (_) async => IList(const [
-          (PuzzleTheme(PuzzleThemeKey.advancedPawn), 50),
-          (PuzzleOpening('A00'), 50),
-        ]),
+      when(() => mockBatchStorage.fetchAllAngles(userId: null)).thenAnswer(
+        (_) async => IList(const [PuzzleTheme(PuzzleThemeKey.advancedPawn), PuzzleOpening('A00')]),
       );
 
       final app = await makeTestProviderScopeApp(
@@ -234,6 +276,87 @@ void main() {
       expect(find.widgetWithText(PuzzleAnglePreview, 'Healthy mix'), findsOneWidget);
       expect(find.widgetWithText(PuzzleAnglePreview, 'Advanced pawn'), findsOneWidget);
       expect(find.widgetWithText(PuzzleAnglePreview, 'A00'), findsOneWidget);
+    });
+
+    testWidgets('shows the number of remaining puzzles when offline', (WidgetTester tester) async {
+      when(
+        () => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)),
+      ).thenAnswer((_) async => twoPuzzlesBatch);
+      when(
+        () => mockBatchStorage.fetchNbUnsolved(
+          userId: null,
+          angle: const PuzzleTheme(PuzzleThemeKey.mix),
+        ),
+      ).thenAnswer((_) async => twoPuzzlesBatch.unsolved.length);
+      when(
+        () => mockBatchStorage.fetchAllAngles(userId: null),
+      ).thenAnswer((_) async => IList(const []));
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const PuzzleTabScreen(),
+        overrides: {
+          puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith(
+            (ref) => mockBatchStorage,
+          ),
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => mockClient);
+          }),
+          isDeviceOnlineProvider: isDeviceOnlineProvider.overrideWithValue(false),
+        },
+      );
+
+      await tester.pumpWidget(app);
+
+      // wait for connectivity and storage
+      await tester.pump(const Duration(milliseconds: 100));
+
+      // wait for the puzzles to load
+      await tester.pump(const Duration(milliseconds: 100));
+
+      expect(find.widgetWithText(PuzzleAnglePreview, '2'), findsOneWidget);
+    });
+
+    testWidgets('does not show the number of remaining puzzles when online', (
+      WidgetTester tester,
+    ) async {
+      when(
+        () => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)),
+      ).thenAnswer((_) async => twoPuzzlesBatch);
+      when(
+        () => mockBatchStorage.fetchNbUnsolved(
+          userId: null,
+          angle: const PuzzleTheme(PuzzleThemeKey.mix),
+        ),
+      ).thenAnswer((_) async => twoPuzzlesBatch.unsolved.length);
+      when(
+        () => mockBatchStorage.fetchAllAngles(userId: null),
+      ).thenAnswer((_) async => IList(const []));
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const PuzzleTabScreen(),
+        overrides: {
+          puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith(
+            (ref) => mockBatchStorage,
+          ),
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => mockClient);
+          }),
+          isDeviceOnlineProvider: isDeviceOnlineProvider.overrideWithValue(true),
+        },
+      );
+
+      await tester.pumpWidget(app);
+
+      // wait for connectivity and storage
+      await tester.pump(const Duration(milliseconds: 100));
+
+      // wait for the puzzles to load
+      await tester.pump(const Duration(milliseconds: 100));
+
+      expect(find.byType(PuzzleAnglePreview), findsOneWidget);
+      expect(find.widgetWithText(PuzzleAnglePreview, '2'), findsNothing);
     });
 
     testWidgets('delete a saved puzzle batch', (WidgetTester tester) async {
@@ -429,6 +552,8 @@ String _batchResponse(int count, int Function() nextPuzzleNumber) => jsonEncode(
       },
   ],
 });
+
+final twoPuzzlesBatch = PuzzleBatch(solved: IList(const []), unsolved: IList([puzzle, puzzle2]));
 
 final onePuzzleBatch = PuzzleBatch(
   solved: IList(const [

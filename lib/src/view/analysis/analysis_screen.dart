@@ -119,6 +119,8 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
             ? ExportedGameTitle(
                 meta: value.archivedGame!.meta,
                 lastMoveAt: value.archivedGame!.data.lastMoveAt,
+                isImport: value.archivedGame!.source.isImport,
+                importDate: value.archivedGame!.data.importDate,
               )
             : VariantAppBarTitle(variant: value.variant, title: context.l10n.analysis);
 
@@ -335,6 +337,7 @@ class _PlayerWidget extends StatelessWidget {
             Expanded(
               child: UserFullNameWidget.player(
                 user: player.user,
+                name: player.name,
                 rating: player.rating,
                 provisional: player.provisional,
                 aiLevel: player.aiLevel,
@@ -471,7 +474,6 @@ class _BottomBar extends ConsumerWidget {
     final mySide = authUser != null
         ? analysisState.archivedGame?.playerSideOf(authUser.user.id)
         : null;
-    final showEngineLines = ref.read(analysisPreferencesProvider).showEngineLines;
 
     return showAdaptiveActionSheet(
       context: context,

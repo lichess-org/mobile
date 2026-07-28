@@ -28,6 +28,7 @@ import 'package:lichess_mobile/src/view/puzzle/puzzle_themes_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/streak_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
@@ -40,20 +41,61 @@ class PuzzleTabScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final savedBatches = ref.watch(savedBatchesProvider).value;
+    // The saved batches are only used to show the extra angle previews at the bottom of the list,
+    // so a storage failure must not prevent the rest of the tab from being displayed. The listener
+    // only fires on state changes, so the user is warned once per failed load.
+    ref.listen(savedBatchesProvider, (_, next) {
+      if (next case AsyncError(:final error, :final stackTrace)) {
+        debugPrint('SEVERE: [PuzzleTabScreen] could not load saved batches; $error\n$stackTrace');
+        showSnackBar(context, 'Could not load the puzzles.', type: SnackBarType.error);
+      }
+    });
 
-    if (savedBatches == null) {
-      return const Center(child: CircularProgressIndicator.adaptive());
+    switch (ref.watch(savedBatchesProvider)) {
+      case AsyncData(:final value):
+        return _MaterialTabBody(value);
+      case AsyncError():
+        return const _MaterialTabBody(IList.empty());
+      case _:
+        return const _PuzzleTabScaffold(body: CenterLoadingIndicator());
     }
+  }
+}
 
-    return _MaterialTabBody(savedBatches);
+/// Scaffold of the puzzle tab, shared by all states of the [savedBatchesProvider].
+class _PuzzleTabScaffold extends ConsumerWidget {
+  const _PuzzleTabScaffold({required this.body});
+
+  final Widget body;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, _) {
+        if (!didPop) {
+          ref.read(currentBottomTabProvider.notifier).state = BottomTab.home;
+        }
+      },
+      child: PlatformScaffold(
+        appBar: PlatformAppBar(
+          title: Text(context.l10n.puzzles),
+          centerTitle: false,
+          titleTextStyle: Theme.of(context).platform == TargetPlatform.iOS
+              ? Theme.of(context).textTheme.headlineSmall
+              : null,
+          actions: const [AccountMenuButton()],
+        ),
+        body: body,
+      ),
+    );
   }
 }
 
 class _MaterialTabBody extends ConsumerStatefulWidget {
-  const _MaterialTabBody(this.savedBatches);
+  const _MaterialTabBody(this.savedAngles);
 
-  final IList<(PuzzleAngle, int)> savedBatches;
+  final IList<PuzzleAngle> savedAngles;
 
   @override
   ConsumerState<_MaterialTabBody> createState() => _MaterialTabBodyState();
@@ -69,7 +111,7 @@ class _MaterialTabBodyState extends ConsumerState<_MaterialTabBody> {
     _angles = AnimatedListModel<PuzzleAngle>(
       listKey: _listKey,
       removedItemBuilder: _buildMainListRemovedItem,
-      initialItems: widget.savedBatches.map((e) => e.$1),
+      initialItems: widget.savedAngles,
       itemsOffset: 4,
     );
   }
@@ -77,8 +119,8 @@ class _MaterialTabBodyState extends ConsumerState<_MaterialTabBody> {
   @override
   void didUpdateWidget(covariant _MaterialTabBody oldWidget) {
     super.didUpdateWidget(oldWidget);
-    final oldKeys = ISet(oldWidget.savedBatches.map((e) => e.$1));
-    final newKeys = ISet(widget.savedBatches.map((e) => e.$1));
+    final oldKeys = ISet(oldWidget.savedAngles);
+    final newKeys = ISet(widget.savedAngles);
 
     if (oldKeys != newKeys) {
       final missings = oldKeys.difference(newKeys);
@@ -107,44 +149,28 @@ class _MaterialTabBodyState extends ConsumerState<_MaterialTabBody> {
     Widget buildItem(BuildContext context, int index, Animation<double> animation) =>
         _buildMainListItem(context, index, animation, (index) => _angles[index]);
 
-    return PopScope(
-      canPop: false,
-      onPopInvokedWithResult: (bool didPop, _) {
-        if (!didPop) {
-          ref.read(currentBottomTabProvider.notifier).state = BottomTab.home;
-        }
-      },
-      child: PlatformScaffold(
-        appBar: PlatformAppBar(
-          title: Text(context.l10n.puzzles),
-          centerTitle: false,
-          titleTextStyle: Theme.of(context).platform == TargetPlatform.iOS
-              ? Theme.of(context).textTheme.headlineSmall
-              : null,
-          actions: const [AccountMenuButton()],
-        ),
-        body: isTablet
-            ? Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: AnimatedList(
-                      key: _listKey,
-                      initialItemCount: _angles.length,
-                      controller: puzzlesScrollController,
-                      itemBuilder: buildItem,
-                    ),
+    return _PuzzleTabScaffold(
+      body: isTablet
+          ? Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: AnimatedList(
+                    key: _listKey,
+                    initialItemCount: _angles.length,
+                    controller: puzzlesScrollController,
+                    itemBuilder: buildItem,
                   ),
-                  Expanded(child: ListView(children: const [PuzzleHistoryWidget()])),
-                ],
-              )
-            : AnimatedList(
-                key: _listKey,
-                controller: puzzlesScrollController,
-                initialItemCount: _angles.length,
-                itemBuilder: buildItem,
-              ),
-      ),
+                ),
+                Expanded(child: ListView(children: const [PuzzleHistoryWidget()])),
+              ],
+            )
+          : AnimatedList(
+              key: _listKey,
+              controller: puzzlesScrollController,
+              initialItemCount: _angles.length,
+              itemBuilder: buildItem,
+            ),
     );
   }
 }
@@ -469,6 +495,10 @@ class PuzzleAnglePreview extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final puzzle = ref.watch(nextPuzzleProvider(angle));
     final flatOpenings = ref.watch(flatOpeningsListProvider);
+    final isOnline = ref.watch(isDeviceOnlineProvider);
+    // Only useful offline: online the queue is refilled as puzzles are solved, so the number of
+    // puzzles left says nothing about what the user can still do.
+    final savedCount = ref.watch(savedBatchNbUnsolvedProvider(angle)).value ?? 0;
 
     Widget buildPuzzlePreview(Puzzle? puzzle, {bool loading = false}) {
       final preview = puzzle != null ? PuzzlePreview.fromPuzzle(puzzle) : null;
@@ -561,18 +591,33 @@ class PuzzleAnglePreview extends ConsumerWidget {
                             PuzzleTheme(themeKey: final themeKey) => themeKey.icon,
                             PuzzleOpening() => PuzzleIcons.opening,
                           },
-                          size: 32,
+                          size: 34,
                           color: DefaultTextStyle.of(context).style.color?.withValues(alpha: 0.6),
                         ),
                         const SizedBox(width: 8),
                         if (puzzle != null)
                           Flexible(
-                            child: Text(
-                              puzzle.puzzle.sideToMove == Side.white
-                                  ? context.l10n.whitePlays
-                                  : context.l10n.blackPlays,
-                              style: TextStyle(color: textShade(context, 0.8)),
-                              overflow: TextOverflow.ellipsis,
+                            child: Column(
+                              mainAxisSize: .min,
+                              crossAxisAlignment: .start,
+                              children: [
+                                Text(
+                                  puzzle.puzzle.sideToMove == Side.white
+                                      ? context.l10n.whitePlays
+                                      : context.l10n.blackPlays,
+                                  style: TextStyle(color: textShade(context, 0.9)),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                if (!isOnline && savedCount > 0)
+                                  Text(
+                                    '$savedCount',
+                                    style: TextStyle(
+                                      fontSize: Theme.of(context).textTheme.bodySmall?.fontSize,
+                                      color: textShade(context, Styles.subtitleOpacity),
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                              ],
                             ),
                           )
                         else

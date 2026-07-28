@@ -157,6 +157,7 @@ class PatronIcon extends StatelessWidget {
 class UserFullNameWidget extends ConsumerWidget {
   const UserFullNameWidget({
     required this.user,
+    this.name,
     this.aiLevel,
     this.rating,
     this.provisional,
@@ -170,6 +171,7 @@ class UserFullNameWidget extends ConsumerWidget {
 
   const UserFullNameWidget.player({
     required this.user,
+    this.name,
     required this.aiLevel,
     this.rating,
     this.provisional,
@@ -182,6 +184,7 @@ class UserFullNameWidget extends ConsumerWidget {
   });
 
   final LightUser? user;
+  final String? name;
   final int? rating;
 
   /// The AI level, if the user is lichess AI.
@@ -215,6 +218,7 @@ class UserFullNameWidget extends ConsumerWidget {
 
     final displayName =
         user?.name ??
+        name ??
         (aiLevel != null
             ? context.l10n.aiNameLevelAiLevel('Stockfish', aiLevel.toString())
             : context.l10n.anonymous);
