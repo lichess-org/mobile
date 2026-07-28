@@ -2,6 +2,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_player.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
@@ -14,6 +15,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
+import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
@@ -59,6 +61,8 @@ extension _AnalysisGameResultColor on AnalysisGameResult {
 }
 
 final _logger = Logger('AnalysisScreen');
+
+final _dateFormatter = DateFormat.yMMMd();
 
 class AnalysisScreen extends StatelessWidget {
   const AnalysisScreen({required this.options, super.key});
@@ -123,14 +127,28 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
         Widget appBarTitle;
         if (value.archivedGame != null) {
           final meta = value.archivedGame!.meta;
+          final isImport = value.archivedGame!.source.isImport;
           // On mobile space is constrained, so unlike the web we omit the speed for standard chess
           final isStandardVariant = value.variant == .standard || value.variant == .fromPosition;
           final ratedOrCasual = meta.rated ? context.l10n.rated : context.l10n.casual;
           final clockDisplay = value.archivedGame!.data.clockDisplay(context.l10n);
-          final title = isStandardVariant
+          final pgnDate = value.archivedGame!.data.importDate;
+          // The PGN date of the imported game, falling back to the date it was imported on.
+          final importDate = isImport
+              ? pgnDate != null
+                    ? formatPgnDate(pgnDate)
+                    : _dateFormatter.format(meta.createdAt)
+              : null;
+          final title = isImport
+              ? 'IMPORT • $importDate'
+              : isStandardVariant
               ? '$clockDisplay • $ratedOrCasual'
               : '$clockDisplay • $ratedOrCasual • ${value.variant.label(context.l10n)}';
-          final icon = isStandardVariant ? meta.speed.icon : value.variant.icon;
+          final icon = isImport
+              ? Icons.cloud_upload_outlined
+              : isStandardVariant
+              ? meta.speed.icon
+              : value.variant.icon;
           appBarTitle = Row(
             mainAxisSize: .min,
             children: [
@@ -418,6 +436,7 @@ class _PlayerWidget extends StatelessWidget {
             Expanded(
               child: UserFullNameWidget.player(
                 user: player.user,
+                name: player.name,
                 rating: player.rating,
                 provisional: player.provisional,
                 aiLevel: player.aiLevel,
