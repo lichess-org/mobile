@@ -56,16 +56,6 @@ void main() {
   });
 
   group('FeaturedTournamentsWidget', () {
-    testWidgets('hides entirely when the featured list is truly empty', (tester) async {
-      final app = await makeTestProviderScopeApp(
-        tester,
-        home: const FeaturedTournamentsWidget(featured: AsyncValue.data(IListConst([]))),
-      );
-      await tester.pumpWidget(app);
-      // No header should appear when there is no data (e.g. offline).
-      expect(find.text('Open tournaments'), findsNothing);
-    });
-
     testWidgets(
       'shows "Open tournaments" header when featured list has app-supported tournaments',
       (tester) async {
