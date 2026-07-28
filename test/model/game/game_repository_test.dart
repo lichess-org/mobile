@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
+import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 
 import '../../test_container.dart';
@@ -86,6 +87,47 @@ void main() {
 
       expect(game.data.id, const GameId('qVChCOTc'));
       expect(game.meta.opening?.eco, 'C20');
+    });
+
+    test('imported game', () async {
+      const testResponse = '''
+{"id":"aBcDeFgH","rated":false,"source":"import","import":{"date":"1972.08.31"},"variant":"standard","speed":"classical","perf":"classical","createdAt":1673443822389,"lastMoveAt":1673444036416,"status":"resign","players":{"white":{"name":"Fischer, Robert J. (2785)"},"black":{"name":"Spassky, Boris V. (2660)"}},"winner":"white","moves":"e4 e5 Nf3"}
+''';
+
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/game/export/aBcDeFgH') {
+          return mockResponse(testResponse, 200);
+        }
+        return mockResponse('', 404);
+      });
+
+      final container = await lichessClientContainer(mockClient);
+      final repo = container.read(gameRepositoryProvider);
+      final game = await repo.getGame(const GameId('aBcDeFgH'));
+
+      expect(game.source, GameSource.import);
+      expect(game.data.isImported, true);
+      expect(game.data.importDate, '1972.08.31');
+    });
+
+    test('imported game without a date tag', () async {
+      const testResponse = '''
+{"id":"aBcDeFgH","rated":false,"source":"import","import":{},"variant":"standard","speed":"classical","perf":"classical","createdAt":1673443822389,"lastMoveAt":1673444036416,"status":"resign","players":{"white":{"name":"Fischer, Robert J."},"black":{"name":"Spassky, Boris V."}},"winner":"white","moves":"e4 e5 Nf3"}
+''';
+
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/game/export/aBcDeFgH') {
+          return mockResponse(testResponse, 200);
+        }
+        return mockResponse('', 404);
+      });
+
+      final container = await lichessClientContainer(mockClient);
+      final repo = container.read(gameRepositoryProvider);
+      final game = await repo.getGame(const GameId('aBcDeFgH'));
+
+      expect(game.data.isImported, true);
+      expect(game.data.importDate, isNull);
     });
 
     test('threeCheck game', () async {

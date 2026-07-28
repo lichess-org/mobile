@@ -42,6 +42,30 @@ Text l10nWithWidget<T extends Widget>(
 
 final _dateFormatterWithYear = DateFormat.yMMMMd();
 final _dateFormatterWithYearShort = DateFormat.yMMMd();
+final _monthFormatterWithYear = DateFormat.yMMMM();
+final _monthFormatterWithYearShort = DateFormat.yMMM();
+
+/// Formats a raw PGN date string, as found in the tags of an imported game.
+///
+/// PGN dates are partially unknown more often than not, so we show as much of [date] as we can
+/// parse: '1972.08.31' gives a localized date, '1972.08.??' a localized month, '1972.??.??' the
+/// year alone, and anything else '????'.
+String formatPgnDate(String date, {bool shortDate = true}) {
+  final parts = date.split('.');
+  final year = int.tryParse(parts.first);
+  if (year == null) return '????';
+  final month = parts.length > 1 ? int.tryParse(parts[1]) : null;
+  if (month == null || month < 1 || month > 12) return year.toString();
+  final day = parts.length > 2 ? int.tryParse(parts[2]) : null;
+  final parsed = day != null ? DateTime(year, month, day) : null;
+  // A day out of the month's range (e.g. '1972.02.31') rolls over to the next month
+  if (parsed == null || parsed.day != day) {
+    final monthFormatter = shortDate ? _monthFormatterWithYearShort : _monthFormatterWithYear;
+    return monthFormatter.format(DateTime(year, month));
+  }
+  final dateFormatter = shortDate ? _dateFormatterWithYearShort : _dateFormatterWithYear;
+  return dateFormatter.format(parsed);
+}
 
 /// Formats a date as a relative date string from now.
 String relativeDate(AppLocalizations l10n, DateTime date, {bool shortDate = true}) {

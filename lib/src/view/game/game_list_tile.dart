@@ -57,12 +57,29 @@ class GameListTile extends ConsumerWidget {
       }
     }
 
-    final opponentTitle = UserFullNameWidget.player(
-      user: opponent.user,
-      name: opponent.name,
-      aiLevel: opponent.aiLevel,
-      rating: opponent.rating,
-    );
+    // An imported game is not tied to a lichess account: the point of view is arbitrary, so show
+    // both players and no result icon.
+    final title = game.isImported
+        ? Text(
+            context.l10n.resVsX(
+              game.white.fullName(context.l10n),
+              game.black.fullName(context.l10n),
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          )
+        : UserFullNameWidget.player(
+            user: opponent.user,
+            name: opponent.name,
+            aiLevel: opponent.aiLevel,
+            rating: opponent.rating,
+          );
+
+    final trailing = <Widget>[
+      if (me.analysis != null)
+        Icon(CupertinoIcons.chart_bar_alt_fill, color: textShade(context, 0.5)),
+      if (!game.isImported) getResultIcon(game, youAre),
+    ];
 
     return ListTile(
       onTap: () => openGameScreen(
@@ -79,27 +96,21 @@ class GameListTile extends ConsumerWidget {
           useRootNavigator: true,
           isDismissible: true,
           isScrollControlled: true,
-          builder: (context) => GameContextMenu(
-            game: game,
-            mySide: youAre,
-            opponentTitle: opponentTitle,
-            onPressedBookmark: onPressedBookmark,
-          ),
+          builder: (context) =>
+              GameContextMenu(game: game, mySide: youAre, onPressedBookmark: onPressedBookmark),
         );
       },
-      leading: Icon(game.perf.icon),
-      title: opponentTitle,
-      subtitle: Text(relativeDate(context.l10n, game.lastMoveAt, shortDate: false)),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (me.analysis != null) ...[
-            Icon(CupertinoIcons.chart_bar_alt_fill, color: textShade(context, 0.5)),
-            const SizedBox(width: 5),
-          ],
-          getResultIcon(game, youAre),
-        ],
+      leading: Icon(game.isImported ? Icons.cloud_upload_outlined : game.perf.icon),
+      title: title,
+      // For an imported game, `lastMoveAt` is the import date, so prefer the PGN date if we have it.
+      subtitle: Text(
+        game.importDate != null
+            ? formatPgnDate(game.importDate!, shortDate: false)
+            : relativeDate(context.l10n, game.lastMoveAt, shortDate: false),
       ),
+      trailing: trailing.isEmpty
+          ? null
+          : Row(mainAxisSize: MainAxisSize.min, spacing: 5, children: trailing),
     );
   }
 }
@@ -108,13 +119,11 @@ class GameContextMenu extends ConsumerWidget {
   const GameContextMenu({
     required this.game,
     required this.mySide,
-    required this.opponentTitle,
     required this.onPressedBookmark,
   });
 
   final LightExportedGame game;
   final Side mySide;
-  final Widget opponentTitle;
   final Future<void> Function(BuildContext context)? onPressedBookmark;
 
   @override

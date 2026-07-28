@@ -51,6 +51,32 @@ void main() {
     });
   });
 
+  group('formatPgnDate', () {
+    test('full date', () {
+      expect(formatPgnDate('1972.08.31'), 'Aug 31, 1972');
+      expect(formatPgnDate('1972.08.31', shortDate: false), 'August 31, 1972');
+    });
+
+    test('unknown day falls back to the month', () {
+      expect(formatPgnDate('1972.08.??'), 'Aug 1972');
+      expect(formatPgnDate('1972.08'), 'Aug 1972');
+      expect(formatPgnDate('1972.08.??', shortDate: false), 'August 1972');
+      // out of range days are not rolled over to the next month
+      expect(formatPgnDate('1972.02.31'), 'Feb 1972');
+    });
+
+    test('unknown month falls back to the year', () {
+      expect(formatPgnDate('1972.??.??'), '1972');
+      expect(formatPgnDate('1972'), '1972');
+      expect(formatPgnDate('1972.13.01'), '1972');
+    });
+
+    test('unknown date', () {
+      expect(formatPgnDate('????.??.??'), '????');
+      expect(formatPgnDate(''), '????');
+    });
+  });
+
   group('localesSortedByLocalizedName', () {
     test('sorts by native name, grouping scripts together', () {
       const locales = [

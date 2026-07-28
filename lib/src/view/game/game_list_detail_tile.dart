@@ -54,17 +54,8 @@ class GameListDetailTile extends ConsumerWidget {
           useRootNavigator: true,
           isDismissible: true,
           isScrollControlled: true,
-          builder: (context) => GameContextMenu(
-            opponentTitle: UserFullNameWidget.player(
-              user: opponent.user,
-              name: opponent.name,
-              aiLevel: opponent.aiLevel,
-              rating: opponent.rating,
-            ),
-            game: game,
-            mySide: mySide,
-            onPressedBookmark: onPressedBookmark,
-          ),
+          builder: (context) =>
+              GameContextMenu(game: game, mySide: mySide, onPressedBookmark: onPressedBookmark),
         );
       },
       onTap: () => openGameScreen(
@@ -107,7 +98,12 @@ class GameListDetailTile extends ConsumerWidget {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    relativeDate(context.l10n, game.lastMoveAt).toUpperCase(),
+                                    // For an imported game, `lastMoveAt` is the import date, so
+                                    // prefer the PGN date if we have it.
+                                    (game.importDate != null
+                                            ? formatPgnDate(game.importDate!)
+                                            : relativeDate(context.l10n, game.lastMoveAt))
+                                        .toUpperCase(),
                                     style: dateStyle,
                                   ),
                                   Row(
@@ -122,7 +118,9 @@ class GameListDetailTile extends ConsumerWidget {
                                         const SizedBox(width: 2),
                                       ],
                                       Icon(
-                                        game.perf.icon,
+                                        game.isImported
+                                            ? Icons.cloud_upload_outlined
+                                            : game.perf.icon,
                                         size: subtitleFontSize + 3,
                                         color: textShade(context, 0.7),
                                       ),
@@ -131,14 +129,32 @@ class GameListDetailTile extends ConsumerWidget {
                                 ],
                               ),
                               const SizedBox(height: 2),
-                              UserFullNameWidget(
-                                user: opponent.user,
-                                rating: opponent.rating,
-                                style: TextStyle(
-                                  fontSize: titleFontSize,
-                                  fontWeight: FontWeight.w600,
+                              // An imported game is not tied to a lichess account: the point of
+                              // view is arbitrary, so show both players.
+                              if (game.isImported)
+                                Text(
+                                  context.l10n.resVsX(
+                                    game.white.fullName(context.l10n),
+                                    game.black.fullName(context.l10n),
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: titleFontSize,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                )
+                              else
+                                UserFullNameWidget.player(
+                                  user: opponent.user,
+                                  name: opponent.name,
+                                  aiLevel: opponent.aiLevel,
+                                  rating: opponent.rating,
+                                  style: TextStyle(
+                                    fontSize: titleFontSize,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
-                              ),
                               if (game.arenaTournamentId != null) ...[
                                 const SizedBox(height: 2),
                                 Row(
