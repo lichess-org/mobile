@@ -124,8 +124,19 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState<T>> on AnyNotifier<As
       _evaluationService.quit();
     });
 
+    // if socketClient is null it may be because it has been initialized asynchronously
+    var socketSubInitialized = false;
+    listenSelf((_, next) {
+      if (next.hasValue && !socketSubInitialized) {
+        socketSubInitialized = true;
+        _socketSubscription?.cancel();
+        _socketSubscription = socketClient?.stream.listen(_handleSocketEvent);
+      }
+    });
+
     final whenComplete = super.runBuild();
 
+    _socketSubscription?.cancel();
     _socketSubscription = socketClient?.stream.listen(_handleSocketEvent);
 
     return whenComplete;

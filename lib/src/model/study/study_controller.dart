@@ -62,11 +62,11 @@ class StudyController extends AsyncNotifier<StudyState>
   StreamSubscription<SocketEvent>? _socketSubscription;
   final _likeDebouncer = Debouncer(const Duration(milliseconds: 500));
 
-  late SocketClient _socketClient;
+  SocketClient? _socketClient;
 
   @override
   @protected
-  SocketClient get socketClient => _socketClient;
+  SocketClient? get socketClient => _socketClient;
 
   @override
   @protected
@@ -96,11 +96,23 @@ class StudyController extends AsyncNotifier<StudyState>
       _socketSubscription?.cancel();
       _likeDebouncer.cancel();
     });
+    final socketPool = ref.watch(socketPoolProvider);
+    final (study, analysisSummary, pgn) = await ref
+        .read(studyRepositoryProvider)
+        .getStudy(id: options.id, chapterId: options.initialChapter);
 
-    final chapter = await _fetchChapter(
-      options.id,
+    _socketClient = socketPool.open(
+      Uri(path: '/study/${options.id}/socket/v6'),
+      version: study.socketVersion,
+    );
+    _socketSubscription?.cancel();
+    _socketSubscription = _socketClient?.stream.listen(handleSocketEvent);
+
+    final chapter = await _loadChapter(
+      study,
+      pgn,
+      analysisSummary: analysisSummary,
       chapterId: options.initialChapter,
-      initSocket: true,
     );
 
     return chapter.copyWith(chatState: await initChat(chapter.study.chat));
@@ -142,33 +154,23 @@ class StudyController extends AsyncNotifier<StudyState>
   }
 
   Future<void> goToChapter(StudyChapterId chapterId) async {
-    await _fetchChapter(state.requireValue.study.id, chapterId: chapterId);
+    final (study, analysisSummary, pgn) = await ref
+        .read(studyRepositoryProvider)
+        .getStudy(id: options.id, chapterId: chapterId);
+
+    await _loadChapter(study, pgn, chapterId: chapterId, analysisSummary: analysisSummary);
     // Switching chapters does not re-run [runBuild], so fetch the new mainline's
     // openings explicitly here.
     if (state.hasValue) initMainlineOpenings();
     _ensureItsOurTurnIfGamebook();
   }
 
-  Future<StudyState> _fetchChapter(
-    StudyId id, {
+  Future<StudyState> _loadChapter(
+    Study study,
+    String pgn, {
+    AnalysisSummary? analysisSummary,
     StudyChapterId? chapterId,
-    bool initSocket = false,
   }) async {
-    final (study, analysisSummary, pgn) = await ref
-        .read(studyRepositoryProvider)
-        .getStudy(id: id, chapterId: chapterId);
-
-    // We receive the socket version from the study API, so we can only initialize the socket connection after fetching the study for the first time.
-    if (initSocket) {
-      final socketPool = ref.watch(socketPoolProvider);
-      _socketClient = socketPool.open(
-        Uri(path: '/study/${options.id}/socket/v6'),
-        version: study.socketVersion,
-      );
-      _socketSubscription?.cancel();
-      _socketSubscription = _socketClient.stream.listen(handleSocketEvent);
-    }
-
     final game = PgnGame.parsePgn(pgn);
 
     final pgnHeaders = IMap(game.headers);
@@ -256,7 +258,7 @@ class StudyController extends AsyncNotifier<StudyState>
     state = AsyncData(studyState);
 
     if (state.requireValue.isEngineAvailable(evaluationPrefs)) {
-      socketClient.firstConnection.then((_) {
+      socketClient?.firstConnection.then((_) {
         if (!ref.mounted) return;
         requestEval();
       });
@@ -269,7 +271,7 @@ class StudyController extends AsyncNotifier<StudyState>
     _likeDebouncer(() {
       if (!state.hasValue) return;
       final liked = state.requireValue.study.liked;
-      _socketClient.send('like', {'liked': !liked});
+      _socketClient?.send('like', {'liked': !liked});
       state = AsyncValue.data(
         state.requireValue.copyWith(study: state.requireValue.study.copyWith(liked: !liked)),
       );
@@ -489,7 +491,7 @@ class StudyController extends AsyncNotifier<StudyState>
     if (!state.hasValue) return;
     if (state.requireValue.isWriteable == false) return;
 
-    _socketClient.send(socketEvent, {...data, 'ch': state.requireValue.study.chapter.id.value});
+    _socketClient?.send(socketEvent, {...data, 'ch': state.requireValue.study.chapter.id.value});
   }
 
   void _setPath(
