@@ -74,12 +74,19 @@ class ExportedGameTitle extends StatelessWidget {
             mainAxisSize: .min,
             crossAxisAlignment: .start,
             children: [
-              AppBarTitleText(isImport ? 'IMPORT' : '$title$mode', maxLines: 1, maxFontSize: 18.0),
+              AppBarTitleText(
+                isImport ? 'IMPORT' : '$title$mode',
+                maxLines: 1,
+                minFontSize: 13.0,
+                maxFontSize: 16.0,
+              ),
               if (subtitle != null)
                 Text(
                   subtitle,
                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
                     color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+                    // tighten the gap with the title above
+                    height: 1.0,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,

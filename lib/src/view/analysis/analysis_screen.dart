@@ -40,6 +40,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 import 'package:logging/logging.dart';
@@ -127,7 +128,10 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
         return WakelockWidget(
           child: Scaffold(
             resizeToAvoidBottomInset: false,
-            appBar: AppBar(title: appBarTitle),
+            appBar: AppBar(
+              title: appBarTitle,
+              actions: [_AnalysisMenu(options: widget.options)],
+            ),
             body: _Body(options: widget.options, controller: _tabController, tabs: tabs),
           ),
         );
@@ -602,19 +606,73 @@ class _BottomBar extends ConsumerWidget {
             makeLabel: (context) => Text(context.l10n.continueFromHere),
             onPressed: () => _showContinueFromHereMenu(context, ref),
           ),
-        if (analysisState.archivedGame != null)
-          BottomSheetAction(
-            makeLabel: (context) => Text(
-              analysisState.archivedGame!.data.bookmarked == true
-                  ? context.l10n.mobileRemoveBookmark
-                  : context.l10n.bookmarkThisGame,
+      ],
+    );
+  }
+
+  Future<void> _showContinueFromHereMenu(BuildContext context, WidgetRef ref) {
+    final analysisState = ref.read(analysisControllerProvider(options)).requireValue;
+    final boardFen = analysisState.currentPosition.fen;
+    return showAdaptiveActionSheet(
+      context: context,
+      actions: [
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.playAgainstComputer),
+          onPressed: () => Navigator.of(context).push(
+            OfflineComputerGameScreen.buildRoute(
+              initialVariant: analysisState.variant,
+              initialFen: boardFen,
             ),
+          ),
+        ),
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.mobileOverTheBoard),
+          onPressed: () => Navigator.of(context).push(
+            OverTheBoardScreen.buildRoute(
+              initialVariant: analysisState.variant,
+              initialFen: boardFen,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// App bar menu holding the game actions: bookmark, share and export.
+class _AnalysisMenu extends ConsumerWidget {
+  const _AnalysisMenu({required this.options});
+
+  final AnalysisOptions options;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final analysisState = ref.watch(analysisControllerProvider(options)).value;
+    if (analysisState == null) return const SizedBox.shrink();
+
+    final archivedGame = analysisState.archivedGame;
+
+    return ContextMenuIconButton(
+      icon: const Icon(Icons.more_horiz),
+      semanticsLabel: context.l10n.menu,
+      actions: [
+        if (archivedGame != null)
+          ContextMenuAction(
+            icon: archivedGame.data.bookmarked == true
+                ? Icons.bookmark_remove_outlined
+                : Icons.bookmark_add_outlined,
+            label: archivedGame.data.bookmarked == true
+                ? context.l10n.mobileRemoveBookmark
+                : context.l10n.bookmarkThisGame,
             onPressed: () =>
                 ref.read(analysisControllerProvider(options).notifier).toggleBookmark(),
           ),
         if (analysisState.gameId != null || analysisState.isComputerAnalysisAllowed)
-          BottomSheetAction(
-            makeLabel: (context) => Text(context.l10n.studyShareAndExport),
+          ContextMenuAction(
+            icon: Theme.of(context).platform == TargetPlatform.iOS
+                ? Icons.ios_share_outlined
+                : Icons.share_outlined,
+            label: context.l10n.studyShareAndExport,
             onPressed: () => _showShareMenu(context, ref),
           ),
       ],
@@ -655,34 +713,6 @@ class _BottomBar extends ConsumerWidget {
               Navigator.of(context).push(AnalysisShareScreen.buildRoute(options: options));
             },
           ),
-      ],
-    );
-  }
-
-  Future<void> _showContinueFromHereMenu(BuildContext context, WidgetRef ref) {
-    final analysisState = ref.read(analysisControllerProvider(options)).requireValue;
-    final boardFen = analysisState.currentPosition.fen;
-    return showAdaptiveActionSheet(
-      context: context,
-      actions: [
-        BottomSheetAction(
-          makeLabel: (context) => Text(context.l10n.playAgainstComputer),
-          onPressed: () => Navigator.of(context).push(
-            OfflineComputerGameScreen.buildRoute(
-              initialVariant: analysisState.variant,
-              initialFen: boardFen,
-            ),
-          ),
-        ),
-        BottomSheetAction(
-          makeLabel: (context) => Text(context.l10n.mobileOverTheBoard),
-          onPressed: () => Navigator.of(context).push(
-            OverTheBoardScreen.buildRoute(
-              initialVariant: analysisState.variant,
-              initialFen: boardFen,
-            ),
-          ),
-        ),
       ],
     );
   }

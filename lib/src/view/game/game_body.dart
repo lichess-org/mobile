@@ -27,7 +27,6 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/chat/chat_screen.dart';
 import 'package:lichess_mobile/src/view/game/correspondence_clock_widget.dart';
-import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
 import 'package:lichess_mobile/src/view/game/game_loading_board.dart';
 import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/view/game/game_result_dialog.dart';
@@ -1052,33 +1051,7 @@ class _GameBottomBar extends ConsumerWidget {
               Navigator.of(context).push(TournamentScreen.buildRoute(gameState.tournament!.id));
             },
           ),
-        BottomSheetAction(
-          makeLabel: (context) => Text(
-            gameState.game.bookmarked == true
-                ? context.l10n.mobileRemoveBookmark
-                : context.l10n.bookmarkThisGame,
-          ),
-          onPressed: () => ref.read(gameControllerProvider(id).notifier).toggleBookmark(),
-        ),
-        BottomSheetAction(
-          makeLabel: (context) => Text(context.l10n.studyShareAndExport),
-          onPressed: () => _showShareMenu(context, ref),
-        ),
       ],
-    );
-  }
-
-  Future<void> _showShareMenu(BuildContext context, WidgetRef ref) {
-    final gameState = ref.read(gameControllerProvider(id)).requireValue;
-    return showAdaptiveActionSheet(
-      context: context,
-      actions: makeFinishedGameShareBottomSheetActions(
-        context,
-        ref,
-        gameId: id.gameId,
-        orientation: gameState.game.youAre ?? Side.white,
-        finished: gameState.game.finished,
-      ),
     );
   }
 

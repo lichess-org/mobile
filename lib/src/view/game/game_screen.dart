@@ -1,3 +1,4 @@
+import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
@@ -17,13 +18,15 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/exported_game_title.dart';
 import 'package:lichess_mobile/src/view/game/game_body.dart';
+import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
 import 'package:lichess_mobile/src/view/game/game_loading_board.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/game/watcher_list_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
+import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 
 /// Screen to play a game, or to show a challenge or to show current user's past games.
 ///
@@ -203,7 +206,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
               monitorSocket: isRealTimePlayingGame,
               socketUri: socketUri,
             ),
-            actions: [_WatcherButton(gameId: createdGameId)],
+            actions: [_GameMenu(gameId: createdGameId)],
           ),
           body: Theme.of(context).platform == TargetPlatform.android
               ? AndroidGesturesExclusionWidget(
@@ -391,36 +394,61 @@ class _ExportedGameTitle extends ConsumerWidget {
   }
 }
 
-class _WatcherButton extends ConsumerWidget {
-  const _WatcherButton({required this.gameId});
+/// App bar menu holding the game actions: spectators, bookmark, share and export.
+class _GameMenu extends ConsumerWidget {
+  const _GameMenu({required this.gameId});
+
   final GameFullId gameId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final (nb, isZenModeActive) = ref.watch(
-      gameControllerProvider(gameId).select((s) {
-        final state = s.value;
-        return (state?.nbWatchers ?? 0, state?.isZenModeActive ?? false);
-      }),
-    );
-    if (nb <= 0 || isZenModeActive) return const SizedBox.shrink();
-    return SemanticIconButton(
-      semanticsLabel: context.l10n.spectatorRoom,
-      onPressed: () {
-        final s = ref.read(gameControllerProvider(gameId)).value;
-        if (s == null) return;
-        showModalBottomSheet<void>(
-          context: context,
-          builder: (_) =>
-              WatcherListBottomSheet(nbWatchers: s.nbWatchers, watcherNames: s.watcherNames),
-        );
-      },
-      icon: Badge(
-        label: Text('$nb'),
-        backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
-        textColor: Theme.of(context).colorScheme.onSurfaceVariant,
-        child: const Icon(Icons.person_outline),
-      ),
+    final gameState = ref.watch(gameControllerProvider(gameId)).value;
+    if (gameState == null) return const SizedBox.shrink();
+
+    return ContextMenuIconButton(
+      icon: const Icon(Icons.more_horiz),
+      semanticsLabel: context.l10n.menu,
+      actions: [
+        if (gameState.nbWatchers > 0)
+          ContextMenuAction(
+            icon: Icons.person_outline,
+            label: 'Spectators (${gameState.nbWatchers})',
+            onPressed: () {
+              final s = ref.read(gameControllerProvider(gameId)).value;
+              if (s == null) return;
+              showModalBottomSheet<void>(
+                context: context,
+                builder: (_) =>
+                    WatcherListBottomSheet(nbWatchers: s.nbWatchers, watcherNames: s.watcherNames),
+              );
+            },
+          ),
+        ContextMenuAction(
+          icon: gameState.game.bookmarked == true
+              ? Icons.bookmark_remove_outlined
+              : Icons.bookmark_add_outlined,
+          label: gameState.game.bookmarked == true
+              ? context.l10n.mobileRemoveBookmark
+              : context.l10n.bookmarkThisGame,
+          onPressed: () => ref.read(gameControllerProvider(gameId).notifier).toggleBookmark(),
+        ),
+        ContextMenuAction(
+          icon: Theme.of(context).platform == TargetPlatform.iOS
+              ? Icons.ios_share_outlined
+              : Icons.share_outlined,
+          label: context.l10n.studyShareAndExport,
+          onPressed: () => showAdaptiveActionSheet<void>(
+            context: context,
+            actions: makeFinishedGameShareBottomSheetActions(
+              context,
+              ref,
+              gameId: gameId.gameId,
+              orientation: gameState.game.youAre ?? Side.white,
+              finished: gameState.game.finished,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
