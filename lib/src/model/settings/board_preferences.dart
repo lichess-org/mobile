@@ -220,7 +220,7 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
 
   ChessboardSettings toBoardSettings(Variant variant) {
     return ChessboardSettings(
-      pieceAssets: pieceSet.assets,
+      pieceAssets: pieceSet3D?.assets ?? pieceSet.assets,
       colorScheme: boardTheme.colors,
       brightness: brightness,
       hue: hue,
