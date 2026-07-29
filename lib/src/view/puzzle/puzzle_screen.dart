@@ -946,7 +946,7 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
     final isSoundEnabled = ref.watch(generalPreferencesProvider).isSoundEnabled;
     final isOnline = ref.watch(isDeviceOnlineProvider);
     final isFillingQueue = ref.watch(puzzleQueueFillerProvider);
-    
+
     return BottomSheetScrollableContainer(
       padding: const EdgeInsets.only(bottom: 16),
       children: [
