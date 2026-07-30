@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -124,20 +125,24 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState<T>> on AnyNotifier<As
       _evaluationService.quit();
     });
 
-    // if socketClient is null it may be because it has been initialized asynchronously
-    var socketSubInitialized = false;
-    listenSelf((_, next) {
-      if (next.hasValue && !socketSubInitialized) {
-        socketSubInitialized = true;
-        _socketSubscription?.cancel();
-        _socketSubscription = socketClient?.stream.listen(_handleSocketEvent);
-      }
-    });
-
     final whenComplete = super.runBuild();
 
-    _socketSubscription?.cancel();
-    _socketSubscription = socketClient?.stream.listen(_handleSocketEvent);
+    if (socketClient != null) {
+      _socketSubscription?.cancel();
+      _socketSubscription = socketClient!.stream.listen(_handleSocketEvent);
+    } else {
+      // if socketClient is null it may be because it has been initialized asynchronously
+      var socketSubInitialized = false;
+      VoidCallback? stopListen;
+      stopListen = listenSelf((_, next) {
+        if (next.hasValue && !socketSubInitialized) {
+          _socketSubscription?.cancel();
+          _socketSubscription = socketClient?.stream.listen(_handleSocketEvent);
+          socketSubInitialized = true;
+          stopListen?.call();
+        }
+      });
+    }
 
     return whenComplete;
   }
