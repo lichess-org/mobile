@@ -9,7 +9,7 @@ class AppLocalizationsSv extends AppLocalizations {
   AppLocalizationsSv([String locale = 'sv']) : super(locale);
 
   @override
-  String get mobileAccount => 'Account';
+  String get mobileAccount => 'Konto';
 
   @override
   String get mobileAccountPreferences => 'Kontoinställningar';
@@ -5167,7 +5167,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get resignTheGame => 'Ge upp partiet';
 
   @override
-  String get youCantStartNewGame => 'Du kan inte starta ett nytt parti förräm detta är klart.';
+  String get youCantStartNewGame => 'You can\'t start a new game until this one is finished.';
 
   @override
   String get since => 'Sedan';

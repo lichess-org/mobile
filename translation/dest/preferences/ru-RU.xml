@@ -62,7 +62,6 @@
   <string name="notifyGameEvent">Обновления, касающиеся игры по переписке</string>
   <string name="notifyChallenge">Вызовы на игру</string>
   <string name="notifyTournamentSoon">Турнир скоро начнётся</string>
-  <string name="notifyBroadcasts">Трансляции, на которые вы подписаны</string>
   <string name="notifyTimeAlarm">В игре по переписке скоро упадёт флажок</string>
   <string name="notifyBell">Звуковое оповещение на Личесс</string>
   <string name="notifyPush">Оповещение на устройстве, когда вы не находитесь на сайте Lichess</string>
@@ -88,4 +87,5 @@
   <string name="boardSettings">Доска</string>
   <string name="analysisSettings">Настройки анализа</string>
   <string name="maneuverArrowsHelp">Последовательность предлагаемых движком ходов для одной фигуры</string>
+  <string name="hoverOverSettingLabelsForHelp">Наведите поверх метки настройки для подсказки</string>
 </resources>

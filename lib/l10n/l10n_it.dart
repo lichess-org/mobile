@@ -70,7 +70,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Devi aver effettuato l\'accesso per visualizzare questa pagina.';
 
   @override
-  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+  String get mobileNbOfflinePuzzles => 'Problemi di scacchi offline';
 
   @override
   String get mobileNewGame => 'Nuova partita';
@@ -1628,7 +1628,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Il torneo sta per iniziare';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Canali a cui ti sei iscritto';
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Il tempo sta per scadere in una partita per corrispondenza';
@@ -5167,7 +5167,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get resignTheGame => 'Rinuncia alla partita';
 
   @override
-  String get youCantStartNewGame => 'Non puoi avviare una nuova partita finché questa non è terminata.';
+  String get youCantStartNewGame => 'You can\'t start a new game until this one is finished.';
 
   @override
   String get since => 'Da';

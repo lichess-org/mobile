@@ -12,10 +12,10 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileAccount => 'حساب';
 
   @override
-  String get mobileAccountPreferences => 'ترجیح‌های حساب';
+  String get mobileAccountPreferences => 'ترجیحات حساب';
 
   @override
-  String get mobileAccountPreferencesHelp => 'این ترجیح‌ها به حساب Lichess تان اعمال می‌شود و در همه دستگاه‌ها استفاده خواهد شد.';
+  String get mobileAccountPreferencesHelp => 'این ترجیحات به حساب Lichess تان اعمال می‌شود و در همه دستگاه‌ها استفاده خواهد شد.';
 
   @override
   String get mobileAllGames => 'همه بازی‌ها';
@@ -24,7 +24,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileAreYouSure => 'مطمئنید؟';
 
   @override
-  String get mobileBoardSettings => 'تنظیماتِ تخته';
+  String get mobileBoardSettings => 'تنظیمات تخته';
 
   @override
   String get mobileCancelTakebackOffer => 'رد درخواست برگرداندن';
@@ -33,7 +33,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileClearButton => 'پاکسازی';
 
   @override
-  String get mobileCorrespondenceClearSavedMove => 'پاکیدن حرکت ذخیره‌شده';
+  String get mobileCorrespondenceClearSavedMove => 'پاکسازی حرکت ذخیره‌ شده';
 
   @override
   String get mobileCustomGameJoinAGame => 'به بازی بپیوندید';
@@ -58,7 +58,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileGoodDayWithoutName => 'روز بخیر';
 
   @override
-  String get mobileHideVariation => 'پنهانیدن وَرتِش';
+  String get mobileHideVariation => 'بستن وَرتِش';
 
   @override
   String get mobileHomeTab => 'خانه';
@@ -67,10 +67,10 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileLiveStreamers => 'بَرخَط-محتواسازان زنده';
 
   @override
-  String get mobileMustBeLoggedIn => 'برای دیدن این برگه باید وارد شده باشید.';
+  String get mobileMustBeLoggedIn => 'برای دیدن این صفحه باید وارد شده باشید.';
 
   @override
-  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+  String get mobileNbOfflinePuzzles => 'معمای آفلاین';
 
   @override
   String get mobileNewGame => 'بازی جدید';
@@ -293,52 +293,52 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileGoodMoveButThereIsBetter => 'حرکتِ خوب، اما بهتر هم هست';
 
   @override
-  String get mobilePerfShortUltraBullet => 'Ultra';
+  String get mobilePerfShortUltraBullet => 'اولا';
 
   @override
-  String get mobilePerfShortBullet => 'Bullet';
+  String get mobilePerfShortBullet => 'گلوله';
 
   @override
-  String get mobilePerfShortBlitz => 'Blitz';
+  String get mobilePerfShortBlitz => 'برق‌آسا';
 
   @override
-  String get mobilePerfShortRapid => 'Rapid';
+  String get mobilePerfShortRapid => 'سریع';
 
   @override
-  String get mobilePerfShortClassical => 'Classical';
+  String get mobilePerfShortClassical => 'فکری';
 
   @override
-  String get mobilePerfShortCorrespondence => 'Corresp.';
+  String get mobilePerfShortCorrespondence => 'مُکات.';
 
   @override
-  String get mobilePerfShortFromPosition => 'From Pos.';
+  String get mobilePerfShortFromPosition => 'از وَض.';
 
   @override
-  String get mobilePerfShortChess960 => '960';
+  String get mobilePerfShortChess960 => '۹۶۰';
 
   @override
-  String get mobilePerfShortAntichess => 'Antichess';
+  String get mobilePerfShortAntichess => 'مَطرَنج';
 
   @override
-  String get mobilePerfShortKingOfTheHill => 'KotH';
+  String get mobilePerfShortKingOfTheHill => 'په.ته';
 
   @override
-  String get mobilePerfShortThreeCheck => '3check';
+  String get mobilePerfShortThreeCheck => 'سه‌کیش';
 
   @override
-  String get mobilePerfShortAtomic => 'Atomic';
+  String get mobilePerfShortAtomic => 'اِنفجار';
 
   @override
-  String get mobilePerfShortHorde => 'Horde';
+  String get mobilePerfShortHorde => 'لشکر';
 
   @override
-  String get mobilePerfShortRacingKings => 'Racing';
+  String get mobilePerfShortRacingKings => 'دو';
 
   @override
-  String get mobilePerfShortCrazyhouse => 'Crazy';
+  String get mobilePerfShortCrazyhouse => 'دیوانه';
 
   @override
-  String get mobilePerfShortPuzzle => 'Puzzle';
+  String get mobilePerfShortPuzzle => 'معما';
 
   @override
   String get variantStandard => 'اِستانده';
@@ -371,7 +371,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get variantAntichessTitle => 'برای پیروزی در بازی، همهٔ مُهره‌های‌تان را ببازید (یا پات شوید).';
 
   @override
-  String get variantAtomic => 'اِنفجاری';
+  String get variantAtomic => 'اِنفجار';
 
   @override
   String get variantAtomicTitle => 'برای پیروزی، شاهِ حریف را بِپُکانید.';
@@ -1628,7 +1628,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'مسابقات به‌زودی می‌آغازد';
 
   @override
-  String get preferencesNotifyBroadcasts => 'پخش‌هایی که مشترک آن‌ها شده‌اید';
+  String get preferencesNotifyBroadcasts => 'پخش همگانی';
 
   @override
   String get preferencesNotifyTimeAlarm => 'هشدار تنگی زمان';
@@ -5167,7 +5167,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get resignTheGame => 'تسلیم';
 
   @override
-  String get youCantStartNewGame => 'تا وقتی که این بازی تمام نشده، نمی‌توانید بازی جدیدی را بیاغازید.';
+  String get youCantStartNewGame => 'تا وقتی نوبتت است، نمی‌توانی بازیِ جدیدی را بیاغازی.';
 
   @override
   String get since => 'از وقتی که';

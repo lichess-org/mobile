@@ -5165,7 +5165,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get resignTheGame => 'हार मान ले';
 
   @override
-  String get youCantStartNewGame => 'जब तक यह गेम समाप्त नहीं हो जाता तब तक आप एक नया गेम शुरू नहीं कर सकते।';
+  String get youCantStartNewGame => 'You can\'t start a new game until this one is finished.';
 
   @override
   String get since => 'दिनांक से';

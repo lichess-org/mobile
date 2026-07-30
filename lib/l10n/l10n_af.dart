@@ -5167,7 +5167,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get resignTheGame => 'Bedank die spel';
 
   @override
-  String get youCantStartNewGame => 'Jy kan nie \'n nuwe spel begin nie, tot hierdie spel klaar is.';
+  String get youCantStartNewGame => 'You can\'t start a new game until this one is finished.';
 
   @override
   String get since => 'Sedert';

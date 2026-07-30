@@ -5193,7 +5193,7 @@ class AppLocalizationsHr extends AppLocalizations {
   String get resignTheGame => 'Odustani od igre';
 
   @override
-  String get youCantStartNewGame => 'Ne možete započeti novu igru dok se ova ne završi.';
+  String get youCantStartNewGame => 'You can\'t start a new game until this one is finished.';
 
   @override
   String get since => 'Od';

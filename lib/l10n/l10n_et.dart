@@ -350,19 +350,19 @@ class AppLocalizationsEt extends AppLocalizations {
   String get variantChess960 => 'Male960';
 
   @override
-  String get variantChess960Title => 'The starting position of the home rank pieces is randomised.';
+  String get variantChess960Title => 'Kodurea malendite algpositsioonid määratakse juhuslikult.';
 
   @override
-  String get variantKingOfTheHill => 'King of the Hill';
+  String get variantKingOfTheHill => 'Mäekuningas';
 
   @override
-  String get variantKingOfTheHillTitle => 'Bring your King to the centre to win the game.';
+  String get variantKingOfTheHillTitle => 'Võitmiseks liigu oma kuningaga keskele.';
 
   @override
-  String get variantThreeCheck => 'Three-Check';
+  String get variantThreeCheck => 'Kolmetulemale';
 
   @override
-  String get variantThreeCheckTitle => 'Check your opponent 3 times to win the game.';
+  String get variantThreeCheckTitle => 'Võitmiseks ründa vastase kuningat 3 korda.';
 
   @override
   String get variantAntichess => 'Antimale';
@@ -371,10 +371,10 @@ class AppLocalizationsEt extends AppLocalizations {
   String get variantAntichessTitle => 'Mängu võitmiseks kaota kõik oma malendid (või satu patiseisu).';
 
   @override
-  String get variantAtomic => 'Atomic';
+  String get variantAtomic => 'Aatomimale';
 
   @override
-  String get variantAtomicTitle => 'Nuke your opponent\'s king to win.';
+  String get variantAtomicTitle => 'Võitmiseks hävita vastase kuningas.';
 
   @override
   String get variantHorde => 'Hord';
@@ -383,22 +383,22 @@ class AppLocalizationsEt extends AppLocalizations {
   String get variantHordeTitle => 'Ühel poolel on suur hulk ettureid, teisel tavalised malendid.';
 
   @override
-  String get variantRacingKings => 'Kuningate võiduajamine';
+  String get variantRacingKings => 'Kuningate võidujooks';
 
   @override
   String get variantRacingKingsTitle => 'Võitmiseks jõua oma kuningaga malelaua teise otsa.';
 
   @override
-  String get variantCrazyhouse => 'Crazyhouse';
+  String get variantCrazyhouse => 'Pealepanemismale';
 
   @override
-  String get variantCrazyhouseTitle => 'Captured pieces can be dropped back on the board instead of moving a piece.';
+  String get variantCrazyhouseTitle => 'Malendi liigutamise asemel saab löödud malendi lauale tagasi panna.';
 
   @override
-  String get variantFromPosition => 'From Position';
+  String get variantFromPosition => 'Positsioonilt';
 
   @override
-  String get variantFromPositionTitle => 'Standard chess from a custom position';
+  String get variantFromPositionTitle => 'Tavaline male kohandatud positsioonilt';
 
   @override
   String get activityActivity => 'Aktiivsus';
@@ -1733,7 +1733,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get puzzleMates => 'Matid';
 
   @override
-  String get puzzleMateThemes => 'Mate themes';
+  String get puzzleMateThemes => 'Matt-teemad';
 
   @override
   String get puzzleGoals => 'Eesmärgid';
@@ -1748,10 +1748,10 @@ class AppLocalizationsEt extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Kas sulle meeldis see pusle?';
 
   @override
-  String get puzzleUpVote => 'Hääleta poolt';
+  String get puzzleUpVote => 'Hääleta poolt!';
 
   @override
-  String get puzzleDownVote => 'Hääleta vastu';
+  String get puzzleDownVote => 'Hääleta vastu!';
 
   @override
   String get puzzleYourPuzzleRatingWillNotChange => 'Teie pusle reiting ei muutu. Pidage meeles, et pusled ei ole võistlus. Teie reiting aitab valida kõige sobilikumad pusled olenevalt teie oskustele.';
@@ -1795,19 +1795,19 @@ class AppLocalizationsEt extends AppLocalizations {
   String get puzzlePuzzleComplete => 'Pusle lahendatud!';
 
   @override
-  String get puzzleByOpenings => 'By openings';
+  String get puzzleByOpenings => 'Avangute kaupa';
 
   @override
-  String get puzzlePuzzlesByOpenings => 'Puzzles by openings';
+  String get puzzlePuzzlesByOpenings => 'Pusled avangute kaupa';
 
   @override
-  String get puzzleOpeningsYouPlayedTheMost => 'Openings you played the most in rated games';
+  String get puzzleOpeningsYouPlayedTheMost => 'Avangud, mida oled reitingumängudes kõige sagedamini mänginud';
 
   @override
-  String get puzzleUseFindInPage => 'Use \"Find in page\" in the browser menu to find your favourite opening!';
+  String get puzzleUseFindInPage => 'Kasuta brauseri menüüs funktsiooni \"Leia lehelt\", et leida oma lemmikavang!';
 
   @override
-  String get puzzleUseCtrlF => 'Use Ctrl+f to find your favourite opening!';
+  String get puzzleUseCtrlF => 'Kasuta Ctrl+f, et leida oma lemmikavang!';
 
   @override
   String get puzzleNotTheMove => 'See ei ole õige käik!';
@@ -2459,10 +2459,10 @@ class AppLocalizationsEt extends AppLocalizations {
   String get settingsCantOpenSimilarAccount => 'Uut samanimelist kontot ei saa luua, isegi kui sümbolite register on erinev.';
 
   @override
-  String get settingsCancelKeepAccount => 'Cancel and keep my account';
+  String get settingsCancelKeepAccount => 'Tühista ja säilita minu konto';
 
   @override
-  String get settingsCloseAccountAreYouSure => 'Are you sure you want to close your account?';
+  String get settingsCloseAccountAreYouSure => 'Kas oled kindel, et soovid oma konto sulgeda?';
 
   @override
   String get settingsThisAccountIsClosed => 'See konto on suletud.';
@@ -4871,10 +4871,10 @@ class AppLocalizationsEt extends AppLocalizations {
   String get edit => 'Muuda';
 
   @override
-  String get ultraBullet => 'UltraBullet';
+  String get ultraBullet => 'Ultravälkmale';
 
   @override
-  String get bullet => 'Bullet';
+  String get bullet => 'Supervälkmale';
 
   @override
   String get blitz => 'Välkmale';
@@ -5167,7 +5167,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get resignTheGame => 'Alistu';
 
   @override
-  String get youCantStartNewGame => 'Uut mängu ei saa alustada enne, kui see mäng on lõpetatud.';
+  String get youCantStartNewGame => 'You can\'t start a new game until this one is finished.';
 
   @override
   String get since => 'Alates';
@@ -5238,7 +5238,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get enPassant => 'En passant õigused';
 
   @override
-  String get settings => 'Settings';
+  String get settings => 'Seaded';
 
   @override
   String opponentLeftCounter(int count) {

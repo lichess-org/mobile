@@ -299,46 +299,46 @@ class AppLocalizationsUz extends AppLocalizations {
   String get mobilePerfShortBullet => 'Bullet';
 
   @override
-  String get mobilePerfShortBlitz => 'Blitz';
+  String get mobilePerfShortBlitz => 'Blits';
 
   @override
   String get mobilePerfShortRapid => 'Rapid';
 
   @override
-  String get mobilePerfShortClassical => 'Classical';
+  String get mobilePerfShortClassical => 'Klassik';
 
   @override
-  String get mobilePerfShortCorrespondence => 'Corresp.';
+  String get mobilePerfShortCorrespondence => 'Yozishma';
 
   @override
-  String get mobilePerfShortFromPosition => 'From Pos.';
+  String get mobilePerfShortFromPosition => 'Pozitsiya';
 
   @override
-  String get mobilePerfShortChess960 => '960';
+  String get mobilePerfShortChess960 => 'Fisher';
 
   @override
-  String get mobilePerfShortAntichess => 'Antichess';
+  String get mobilePerfShortAntichess => 'Antishax.';
 
   @override
-  String get mobilePerfShortKingOfTheHill => 'KotH';
+  String get mobilePerfShortKingOfTheHill => 'Q. Markaz.';
 
   @override
-  String get mobilePerfShortThreeCheck => '3check';
+  String get mobilePerfShortThreeCheck => ' Uch shoh';
 
   @override
-  String get mobilePerfShortAtomic => 'Atomic';
+  String get mobilePerfShortAtomic => 'Atomik';
 
   @override
-  String get mobilePerfShortHorde => 'Horde';
+  String get mobilePerfShortHorde => 'Oʻrda';
 
   @override
-  String get mobilePerfShortRacingKings => 'Racing';
+  String get mobilePerfShortRacingKings => 'Poyga';
 
   @override
-  String get mobilePerfShortCrazyhouse => 'Crazy';
+  String get mobilePerfShortCrazyhouse => 'Kreyzi';
 
   @override
-  String get mobilePerfShortPuzzle => 'Puzzle';
+  String get mobilePerfShortPuzzle => 'Masala';
 
   @override
   String get variantStandard => 'Standart';
@@ -1628,7 +1628,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Turnir boshlanishiga vaqt oz qolganda';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Siz obuna boʻlgan translyatsiyalar';
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Yozishmali oʻyin vaqti oz qolganda';
@@ -5167,7 +5167,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get resignTheGame => 'Taslim boʻlish';
 
   @override
-  String get youCantStartNewGame => 'Ushbu oʻyin tugamaguncha yangisini boshlay olmaysiz.';
+  String get youCantStartNewGame => 'Oʻzingizning galingizda yangi oʻyin boshlay olmaysiz.';
 
   @override
   String get since => 'Shu sanadan';

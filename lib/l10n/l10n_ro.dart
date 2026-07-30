@@ -70,7 +70,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Trebuie să te autentifici pentru a accesa această pagină.';
 
   @override
-  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+  String get mobileNbOfflinePuzzles => 'Puzzle-uri offline';
 
   @override
   String get mobileNewGame => 'Joc nou';
@@ -305,40 +305,40 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobilePerfShortRapid => 'Rapid';
 
   @override
-  String get mobilePerfShortClassical => 'Classical';
+  String get mobilePerfShortClassical => 'Clasic';
 
   @override
-  String get mobilePerfShortCorrespondence => 'Corresp.';
+  String get mobilePerfShortCorrespondence => 'Coresp.';
 
   @override
-  String get mobilePerfShortFromPosition => 'From Pos.';
+  String get mobilePerfShortFromPosition => 'Din poz.';
 
   @override
   String get mobilePerfShortChess960 => '960';
 
   @override
-  String get mobilePerfShortAntichess => 'Antichess';
+  String get mobilePerfShortAntichess => 'Antișah';
 
   @override
-  String get mobilePerfShortKingOfTheHill => 'KotH';
+  String get mobilePerfShortKingOfTheHill => 'Rege deal';
 
   @override
-  String get mobilePerfShortThreeCheck => '3check';
+  String get mobilePerfShortThreeCheck => '3 șah';
 
   @override
   String get mobilePerfShortAtomic => 'Atomic';
 
   @override
-  String get mobilePerfShortHorde => 'Horde';
+  String get mobilePerfShortHorde => 'Hoardă';
 
   @override
-  String get mobilePerfShortRacingKings => 'Racing';
+  String get mobilePerfShortRacingKings => 'Cursă';
 
   @override
   String get mobilePerfShortCrazyhouse => 'Crazy';
 
   @override
-  String get mobilePerfShortPuzzle => 'Puzzle';
+  String get mobilePerfShortPuzzle => 'Problemă';
 
   @override
   String get variantStandard => 'Standard';
@@ -1650,7 +1650,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Turneul începe în curând';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Transmisiuni la care te-ai abonat';
+  String get preferencesNotifyBroadcasts => 'Transmisiuni';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Timpul rămas la jocurile prin corespondență e scurt';
@@ -4563,7 +4563,7 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String xLikesY(String param1, String param2) {
-    return '$param1 îi place $param2';
+    return '$param1 a plăcut $param2';
   }
 
   @override
@@ -5195,7 +5195,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get resignTheGame => 'Cedează jocul';
 
   @override
-  String get youCantStartNewGame => 'Nu poți începe un joc nou până când acesta nu se termină.';
+  String get youCantStartNewGame => 'Nu poți începe un joc nou în timp ce este rândul tău.';
 
   @override
   String get since => 'De la';
@@ -5309,9 +5309,9 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count de Gafe',
+      other: '$count Gafe',
       few: '$count Gafe',
-      one: 'O Gafă',
+      one: '$count Gafă',
     );
     return '$_temp0';
   }
@@ -5333,9 +5333,9 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count de Greșeli',
+      other: '$count Greșeli',
       few: '$count Greșeli',
-      one: 'O Greșeală',
+      one: '$count Greșeală',
     );
     return '$_temp0';
   }
@@ -5357,9 +5357,9 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count de Inexactități',
+      other: '$count Inexactități',
       few: '$count Inexactități',
-      one: 'O Inexactitate',
+      one: '$count Inexactitate',
     );
     return '$_temp0';
   }

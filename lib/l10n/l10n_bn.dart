@@ -5167,7 +5167,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get resignTheGame => 'খেলা সমর্পণ(resign) করুন';
 
   @override
-  String get youCantStartNewGame => 'আপনি এই খেলা শেষ না করে নতুন খেলা শুরু করতে পারবেন না।';
+  String get youCantStartNewGame => 'You can\'t start a new game until this one is finished.';
 
   @override
   String get since => 'Since/শুরু';

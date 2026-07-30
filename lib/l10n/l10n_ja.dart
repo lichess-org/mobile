@@ -70,7 +70,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'このページを見るにはログインが必要です。';
 
   @override
-  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+  String get mobileNbOfflinePuzzles => 'オフラインでの問題数';
 
   @override
   String get mobileNewGame => '新しい対局';
@@ -293,52 +293,52 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileGoodMoveButThereIsBetter => 'いい手ですがもっといい手があります';
 
   @override
-  String get mobilePerfShortUltraBullet => 'Ultra';
+  String get mobilePerfShortUltraBullet => 'ウルトラ';
 
   @override
-  String get mobilePerfShortBullet => 'Bullet';
+  String get mobilePerfShortBullet => 'ブレット';
 
   @override
-  String get mobilePerfShortBlitz => 'Blitz';
+  String get mobilePerfShortBlitz => 'ブリッツ';
 
   @override
-  String get mobilePerfShortRapid => 'Rapid';
+  String get mobilePerfShortRapid => 'ラピッド';
 
   @override
-  String get mobilePerfShortClassical => 'Classical';
+  String get mobilePerfShortClassical => '長時間';
 
   @override
-  String get mobilePerfShortCorrespondence => 'Corresp.';
+  String get mobilePerfShortCorrespondence => '通信戦';
 
   @override
-  String get mobilePerfShortFromPosition => 'From Pos.';
+  String get mobilePerfShortFromPosition => '指定局面';
 
   @override
   String get mobilePerfShortChess960 => '960';
 
   @override
-  String get mobilePerfShortAntichess => 'Antichess';
+  String get mobilePerfShortAntichess => 'アンチ';
 
   @override
-  String get mobilePerfShortKingOfTheHill => 'KotH';
+  String get mobilePerfShortKingOfTheHill => 'KOTH';
 
   @override
-  String get mobilePerfShortThreeCheck => '3check';
+  String get mobilePerfShortThreeCheck => '3チェ';
 
   @override
-  String get mobilePerfShortAtomic => 'Atomic';
+  String get mobilePerfShortAtomic => 'アトミック';
 
   @override
-  String get mobilePerfShortHorde => 'Horde';
+  String get mobilePerfShortHorde => 'ホード';
 
   @override
-  String get mobilePerfShortRacingKings => 'Racing';
+  String get mobilePerfShortRacingKings => 'レース';
 
   @override
-  String get mobilePerfShortCrazyhouse => 'Crazy';
+  String get mobilePerfShortCrazyhouse => 'クレージ';
 
   @override
-  String get mobilePerfShortPuzzle => 'Puzzle';
+  String get mobilePerfShortPuzzle => '問題';
 
   @override
   String get variantStandard => 'スタンダード';
@@ -1606,7 +1606,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'トーナメントが間もなく開始';
 
   @override
-  String get preferencesNotifyBroadcasts => 'あなたがフォローしている配信';
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
 
   @override
   String get preferencesNotifyTimeAlarm => '通信戦の時間切迫';
@@ -5139,7 +5139,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get resignTheGame => '投了する';
 
   @override
-  String get youCantStartNewGame => 'この対局が終わるまで、別の対局は開始できません。';
+  String get youCantStartNewGame => '自分の手番の間は別の対局は開始できません。';
 
   @override
   String get since => '開始';

@@ -299,16 +299,16 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobilePerfShortBullet => 'Bullet';
 
   @override
-  String get mobilePerfShortBlitz => 'Blitz';
+  String get mobilePerfShortBlitz => 'Yıldırım';
 
   @override
-  String get mobilePerfShortRapid => 'Rapid';
+  String get mobilePerfShortRapid => 'Hızlı';
 
   @override
-  String get mobilePerfShortClassical => 'Classical';
+  String get mobilePerfShortClassical => 'Klasik';
 
   @override
-  String get mobilePerfShortCorrespondence => 'Corresp.';
+  String get mobilePerfShortCorrespondence => 'Yazışma';
 
   @override
   String get mobilePerfShortFromPosition => 'From Pos.';
@@ -338,7 +338,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobilePerfShortCrazyhouse => 'Crazy';
 
   @override
-  String get mobilePerfShortPuzzle => 'Puzzle';
+  String get mobilePerfShortPuzzle => 'Bulmaca';
 
   @override
   String get variantStandard => 'Standart';
@@ -1628,7 +1628,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Yakında başlayan turnuva';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Abone olduğunuz canlı turnuvalar';
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Yazışmalı oyununuzda süreniz azalıyor';
@@ -1667,19 +1667,19 @@ class AppLocalizationsTr extends AppLocalizations {
   String get preferencesShowManeuverArrows => 'Show maneuver arrows';
 
   @override
-  String get preferencesShowGauge => 'Show evaluation gauge';
+  String get preferencesShowGauge => 'Değerlendirme çubuğunu göster';
 
   @override
   String get preferencesShowMoveAnnotationsOnBoard => 'Show move annotations';
 
   @override
-  String get preferencesShowVariationArrows => 'Show variation arrows';
+  String get preferencesShowVariationArrows => 'Varyasyon oklarını göster';
 
   @override
   String get preferencesShowLiveGlyphs => 'Live engine annotations';
 
   @override
-  String get preferencesShowUndefendedPieces => 'Show undefended pieces';
+  String get preferencesShowUndefendedPieces => 'Savunulmayan taşları göster';
 
   @override
   String get preferencesShowPinnedPieces => 'Show pinned pieces';
@@ -1712,7 +1712,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get puzzlePuzzles => 'Bulmacalar';
 
   @override
-  String get puzzlePuzzleThemes => 'Bulmaca temaları';
+  String get puzzlePuzzleThemes => 'Bulmaca temaları\n';
 
   @override
   String get puzzleRecommended => 'Önerilen';
@@ -5167,7 +5167,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get resignTheGame => 'Maçı terk et';
 
   @override
-  String get youCantStartNewGame => 'Mevcut oyun bitene kadar yeni bir oyuna başlayamazsın.';
+  String get youCantStartNewGame => 'You can\'t start a new game until this one is finished.';
 
   @override
   String get since => 'Seçili tarihten beri';

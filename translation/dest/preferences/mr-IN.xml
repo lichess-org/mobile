@@ -62,7 +62,6 @@
   <string name="notifyGameEvent">पत्रव्यवहार खेळ अद्यतने</string>
   <string name="notifyChallenge">आव्हाने</string>
   <string name="notifyTournamentSoon">लवकरच सुरू होणारी स्पर्धा</string>
-  <string name="notifyBroadcasts">प्रसरणे ज्यांचे तुम्ही सदस्यत्व घेतले आहे</string>
   <string name="notifyTimeAlarm">पत्रव्यवहार खेळाचा वेळ संपत आहे</string>
   <string name="notifyBell">Lichess मधिल बेल सूचना</string>
   <string name="notifyPush">तुम्ही Lichess वर नसतानाच्या डिव्हाइस सूचना</string>
@@ -88,4 +87,5 @@
   <string name="boardSettings">पट</string>
   <string name="analysisSettings">विशलेषण प्राधान्ये</string>
   <string name="maneuverArrowsHelp">एका सोंगट्यासाठी डावयंत्राचे डावक्रम</string>
+  <string name="hoverOverSettingLabelsForHelp">समर्थनासाठी प्राधान्य शिक्कांवर द्विधा अवस्थेत राहा</string>
 </resources>

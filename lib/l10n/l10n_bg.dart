@@ -338,7 +338,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get mobilePerfShortCrazyhouse => 'Crazy';
 
   @override
-  String get mobilePerfShortPuzzle => 'Puzzle';
+  String get mobilePerfShortPuzzle => 'Задача';
 
   @override
   String get variantStandard => 'Стандартен';
@@ -1000,7 +1000,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get broadcastOfficialStandings => 'Официално класиране';
 
   @override
-  String get broadcastRegulations => 'Regulations';
+  String get broadcastRegulations => 'Регламенти';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -1628,7 +1628,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Турнирът започва скоро';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Излъчвания, за които сте абонирани';
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Времето в кореспондентска игра изтича';
@@ -5167,7 +5167,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get resignTheGame => 'Предаване';
 
   @override
-  String get youCantStartNewGame => 'Не можете да започнете нова игра преди тази да е приключила.';
+  String get youCantStartNewGame => 'You can\'t start a new game until this one is finished.';
 
   @override
   String get since => 'От';

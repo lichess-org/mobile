@@ -70,7 +70,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Prijavite se za ogled te strani.';
 
   @override
-  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+  String get mobileNbOfflinePuzzles => 'Uganke brez povezave';
 
   @override
   String get mobileNewGame => 'Nova igra';
@@ -296,49 +296,49 @@ class AppLocalizationsSl extends AppLocalizations {
   String get mobilePerfShortUltraBullet => 'Ultra';
 
   @override
-  String get mobilePerfShortBullet => 'Bullet';
+  String get mobilePerfShortBullet => 'Hitri šah';
 
   @override
   String get mobilePerfShortBlitz => 'Blitz';
 
   @override
-  String get mobilePerfShortRapid => 'Rapid';
+  String get mobilePerfShortRapid => 'Pospešeni';
 
   @override
   String get mobilePerfShortClassical => 'Classical';
 
   @override
-  String get mobilePerfShortCorrespondence => 'Corresp.';
+  String get mobilePerfShortCorrespondence => 'Dopis šah.';
 
   @override
-  String get mobilePerfShortFromPosition => 'From Pos.';
+  String get mobilePerfShortFromPosition => 'Iz poz.';
 
   @override
   String get mobilePerfShortChess960 => '960';
 
   @override
-  String get mobilePerfShortAntichess => 'Antichess';
+  String get mobilePerfShortAntichess => 'Antišah';
 
   @override
-  String get mobilePerfShortKingOfTheHill => 'KotH';
+  String get mobilePerfShortKingOfTheHill => 'Krna vrhu';
 
   @override
-  String get mobilePerfShortThreeCheck => '3check';
+  String get mobilePerfShortThreeCheck => '3šah';
 
   @override
-  String get mobilePerfShortAtomic => 'Atomic';
+  String get mobilePerfShortAtomic => 'Atom. šah';
 
   @override
-  String get mobilePerfShortHorde => 'Horde';
+  String get mobilePerfShortHorde => 'Horda';
 
   @override
-  String get mobilePerfShortRacingKings => 'Racing';
+  String get mobilePerfShortRacingKings => 'Dirkanje';
 
   @override
-  String get mobilePerfShortCrazyhouse => 'Crazy';
+  String get mobilePerfShortCrazyhouse => 'Noro';
 
   @override
-  String get mobilePerfShortPuzzle => 'Puzzle';
+  String get mobilePerfShortPuzzle => 'Uganka';
 
   @override
   String get variantStandard => 'Običajno';
@@ -1672,7 +1672,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Turnir se bo kmalu začel';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Oddaje, na katere ste naročeni';
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Potekel vam bo čas';
@@ -5223,7 +5223,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get resignTheGame => 'Predaj igro';
 
   @override
-  String get youCantStartNewGame => 'Ne morete začeti nove igre, dokler se ta ne konča.';
+  String get youCantStartNewGame => 'You can\'t start a new game until this one is finished.';
 
   @override
   String get since => 'Od';
