@@ -68,6 +68,18 @@ class Clock extends StatelessWidget {
     final effectiveClockStyle =
         clockStyle ?? ClockStyle.defaultStyle(brightness, colorScheme, context.lichessColors);
 
+    // Read whether we are running in overlay mode (foldable screens)
+    final isOverlay = ClockOverlayTheme.of(context);
+
+    // Black 360-degree outline shadow for overlay HUD mode
+    const hudClockShadows = [
+      Shadow(offset: Offset(-1.5, -1.5), color: Colors.black),
+      Shadow(offset: Offset(1.5, -1.5), color: Colors.black),
+      Shadow(offset: Offset(-1.5, 1.5), color: Colors.black),
+      Shadow(offset: Offset(1.5, 1.5), color: Colors.black),
+      Shadow(offset: Offset.zero, blurRadius: 6.0, color: Colors.black),
+    ];
+
     return LayoutBuilder(
       builder: (context, constraints) {
         final maxWidth = constraints.maxWidth;
@@ -76,13 +88,15 @@ class Clock extends StatelessWidget {
         return Container(
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-            color: timeLeft > Duration.zero
-                ? active
-                      ? isEmergency
-                            ? effectiveClockStyle.emergencyBackgroundColor
-                            : effectiveClockStyle.activeBackgroundColor
-                      : effectiveClockStyle.backgroundColor
-                : effectiveClockStyle.emergencyBackgroundColor,
+            color: isOverlay
+                ? Colors.transparent
+                : (timeLeft > Duration.zero
+                      ? active
+                            ? isEmergency
+                                  ? effectiveClockStyle.emergencyBackgroundColor
+                                  : effectiveClockStyle.activeBackgroundColor
+                            : effectiveClockStyle.backgroundColor
+                      : effectiveClockStyle.emergencyBackgroundColor),
           ),
           child: Padding(
             padding: padding,
@@ -94,13 +108,16 @@ class Clock extends StatelessWidget {
                       ? '$hoursDisplay:${mins.toString().padLeft(2, '0')}:$secs'
                       : '$minsDisplay:$secs',
                   style: TextStyle(
-                    color: timeLeft > Duration.zero
-                        ? active
-                              ? isEmergency
-                                    ? effectiveClockStyle.emergencyTextColor
-                                    : effectiveClockStyle.activeTextColor
-                              : effectiveClockStyle.textColor
-                        : effectiveClockStyle.emergencyTextColor,
+                    color: isOverlay
+                        ? (isEmergency ? effectiveClockStyle.emergencyTextColor : Colors.white)
+                        : (timeLeft > Duration.zero
+                              ? active
+                                    ? isEmergency
+                                          ? effectiveClockStyle.emergencyTextColor
+                                          : effectiveClockStyle.activeTextColor
+                                    : effectiveClockStyle.textColor
+                              : effectiveClockStyle.emergencyTextColor),
+                    shadows: isOverlay ? hudClockShadows : null,
                     fontSize: _kClockFontSize * fontScaleFactor,
                     height: isShortVerticalScreen(context) ? 1.0 : null,
                     fontFeatures: const [FontFeature.tabularFigures()],
@@ -109,12 +126,20 @@ class Clock extends StatelessWidget {
                     if (showTenths)
                       TextSpan(
                         text: '.${timeLeft.inMilliseconds.remainder(1000) ~/ 100}',
-                        style: TextStyle(fontSize: _kClockTenthFontSize * fontScaleFactor),
+                        style: TextStyle(
+                          fontSize: _kClockTenthFontSize * fontScaleFactor,
+                          color: isOverlay ? Colors.white : null,
+                          shadows: isOverlay ? hudClockShadows : null,
+                        ),
                       ),
                     if (!active && timeLeft < const Duration(seconds: 1))
                       TextSpan(
                         text: '${timeLeft.inMilliseconds.remainder(1000) ~/ 10 % 10}',
-                        style: TextStyle(fontSize: _kClockHundredsFontSize * fontScaleFactor),
+                        style: TextStyle(
+                          fontSize: _kClockHundredsFontSize * fontScaleFactor,
+                          color: isOverlay ? Colors.white : null,
+                          shadows: isOverlay ? hudClockShadows : null,
+                        ),
                       ),
                   ],
                 ),
@@ -323,4 +348,18 @@ class _CountdownClockState extends State<CountdownClockBuilder> {
   Widget build(BuildContext context) {
     return RepaintBoundary(child: widget.builder(context, timeLeft));
   }
+}
+
+/// Scope flag to trigger transparent HUD clock styling on overlay screens (foldables)
+class ClockOverlayTheme extends InheritedWidget {
+  final bool isOverlay;
+
+  const ClockOverlayTheme({super.key, required this.isOverlay, required super.child});
+
+  static bool of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<ClockOverlayTheme>()?.isOverlay ?? false;
+  }
+
+  @override
+  bool updateShouldNotify(ClockOverlayTheme oldWidget) => isOverlay != oldWidget.isOverlay;
 }
