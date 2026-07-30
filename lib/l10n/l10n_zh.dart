@@ -70,7 +70,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileMustBeLoggedIn => '您需要登录才能浏览此页面';
 
   @override
-  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+  String get mobileNbOfflinePuzzles => '离线谜题';
 
   @override
   String get mobileNewGame => '新的对局';
@@ -293,52 +293,52 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileGoodMoveButThereIsBetter => '好着，但有更好的着法';
 
   @override
-  String get mobilePerfShortUltraBullet => 'Ultra';
+  String get mobilePerfShortUltraBullet => '超子弹棋';
 
   @override
-  String get mobilePerfShortBullet => 'Bullet';
+  String get mobilePerfShortBullet => '子弹棋';
 
   @override
-  String get mobilePerfShortBlitz => 'Blitz';
+  String get mobilePerfShortBlitz => '超快棋';
 
   @override
-  String get mobilePerfShortRapid => 'Rapid';
+  String get mobilePerfShortRapid => '快棋';
 
   @override
-  String get mobilePerfShortClassical => 'Classical';
+  String get mobilePerfShortClassical => '慢棋';
 
   @override
-  String get mobilePerfShortCorrespondence => 'Corresp.';
+  String get mobilePerfShortCorrespondence => '通讯棋';
 
   @override
-  String get mobilePerfShortFromPosition => 'From Pos.';
+  String get mobilePerfShortFromPosition => '来自局面';
 
   @override
-  String get mobilePerfShortChess960 => '960';
+  String get mobilePerfShortChess960 => 'Chess960';
 
   @override
-  String get mobilePerfShortAntichess => 'Antichess';
+  String get mobilePerfShortAntichess => '弃子棋';
 
   @override
-  String get mobilePerfShortKingOfTheHill => 'KotH';
+  String get mobilePerfShortKingOfTheHill => '山丘之王';
 
   @override
-  String get mobilePerfShortThreeCheck => '3check';
+  String get mobilePerfShortThreeCheck => '三次将军';
 
   @override
-  String get mobilePerfShortAtomic => 'Atomic';
+  String get mobilePerfShortAtomic => '原子棋';
 
   @override
-  String get mobilePerfShortHorde => 'Horde';
+  String get mobilePerfShortHorde => '部落棋';
 
   @override
-  String get mobilePerfShortRacingKings => 'Racing';
+  String get mobilePerfShortRacingKings => '竞速棋';
 
   @override
   String get mobilePerfShortCrazyhouse => 'Crazy';
 
   @override
-  String get mobilePerfShortPuzzle => 'Puzzle';
+  String get mobilePerfShortPuzzle => '谜题';
 
   @override
   String get variantStandard => '标准';
@@ -1362,10 +1362,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get perfStatAverageOpponent => '对手平均等级分';
 
   @override
-  String get perfStatVictories => '胜';
+  String get perfStatVictories => '胜局';
 
   @override
-  String get perfStatDefeats => '负';
+  String get perfStatDefeats => '负局';
 
   @override
   String get perfStatDisconnections => '断线';
@@ -1444,7 +1444,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get preferencesPieceDestinations => '棋子落点（有效着法及预走棋）';
 
   @override
-  String get preferencesBoardCoordinates => '棋盘坐标（A-H，1-8）';
+  String get preferencesBoardCoordinates => '棋盘坐标 (A-H, 1-8)';
 
   @override
   String get preferencesMoveListWhilePlaying => '对局时显示可走着法';
@@ -1456,7 +1456,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get preferencesChessPieceSymbol => '棋子符号';
 
   @override
-  String get preferencesPgnLetter => '字母（K，Q，R，B，N）';
+  String get preferencesPgnLetter => '字母 (K, Q, R, B, N)';
 
   @override
   String get preferencesZenMode => '禅意模式';
@@ -1606,7 +1606,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => '锦标赛即将开始';
 
   @override
-  String get preferencesNotifyBroadcasts => '订阅的转播';
+  String get preferencesNotifyBroadcasts => '转播';
 
   @override
   String get preferencesNotifyTimeAlarm => '通讯棋即将超时';
@@ -1858,7 +1858,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get puzzleFailed => '失败';
 
   @override
-  String get puzzleStreakDescription => '逐步挑战更难的谜题，构建您的连胜纪录。这里没有时间限制，所以请慢慢思考。一步走错，挑战即告结束！但每次挑战过程中，您可以跳过一步棋。';
+  String get puzzleStreakDescription => '逐步挑战更难的谜题，构建您的连胜纪录。没有时间限制，请从容思考。一步走错，挑战即告结束！每次挑战，均可跳过一步棋。';
 
   @override
   String puzzleYourStreakX(String param) {
@@ -3358,17 +3358,17 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
-    return '您的 $param1 等级分（$param2）过高';
+    return '您的 $param1 等级分 ($param2) 过高';
   }
 
   @override
   String yourTopWeeklyPerfRatingIsTooHigh(String param1, String param2) {
-    return '您本周的最高 $param1 等级分（$param2）过高';
+    return '您本周最高 $param1 等级分 ($param2) 过高';
   }
 
   @override
   String yourPerfRatingIsTooLow(String param1, String param2) {
-    return '您的 $param1 等级分（$param2）过低';
+    return '您的 $param1 等级分 ($param2) 过低';
   }
 
   @override
@@ -4128,7 +4128,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String tpTimeSpentOnTV(String param) {
-    return '在 Lichess TV 上的总时长：$param';
+    return 'Lichess TV：$param';
   }
 
   @override
@@ -4392,12 +4392,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String byRegisteringYouAgreeToBeBoundByOur(String param) {
-    return '注册即表示您同意 $param。';
+    return '注册即表示您同意$param。';
   }
 
   @override
   String readAboutOur(String param) {
-    return '请阅读我们的 $param。';
+    return '请阅读我们的$param。';
   }
 
   @override
@@ -4833,7 +4833,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String agreementMultipleAccounts(String param) {
-    return '我同意我不会创建多个账户（除非出于 $param 中所述的原因）。';
+    return '我同意我不会创建多个账户（除非出于$param中所述的原因）。';
   }
 
   @override
@@ -5139,7 +5139,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get resignTheGame => '认输';
 
   @override
-  String get youCantStartNewGame => '在此对局结束前，您无法开始新对局。';
+  String get youCantStartNewGame => '轮到您行棋时，您无法开始新的对局！';
 
   @override
   String get since => '自';
@@ -11391,9 +11391,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get resignTheGame => '認輸';
-
-  @override
-  String get youCantStartNewGame => '直到當下這局下完之前，你無法開始新的棋局';
 
   @override
   String get since => '自';

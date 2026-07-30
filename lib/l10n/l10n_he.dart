@@ -5219,7 +5219,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get resignTheGame => 'כניעה';
 
   @override
-  String get youCantStartNewGame => 'לא תוכל/י להתחיל משחק חדש עד גמר הנוכחי.';
+  String get youCantStartNewGame => 'You can\'t start a new game until this one is finished.';
 
   @override
   String get since => 'מאז';

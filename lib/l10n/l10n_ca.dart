@@ -70,7 +70,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Has d\'estar connectat per veure aquesta pàgina.';
 
   @override
-  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+  String get mobileNbOfflinePuzzles => 'Problemes fora de línia';
 
   @override
   String get mobileNewGame => 'Nova partida';
@@ -296,49 +296,49 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobilePerfShortUltraBullet => 'Ultra';
 
   @override
-  String get mobilePerfShortBullet => 'Bullet';
+  String get mobilePerfShortBullet => 'Bala';
 
   @override
-  String get mobilePerfShortBlitz => 'Blitz';
+  String get mobilePerfShortBlitz => 'Llampec';
 
   @override
-  String get mobilePerfShortRapid => 'Rapid';
+  String get mobilePerfShortRapid => 'Ràpides';
 
   @override
-  String get mobilePerfShortClassical => 'Classical';
+  String get mobilePerfShortClassical => 'Clàssic';
 
   @override
   String get mobilePerfShortCorrespondence => 'Corresp.';
 
   @override
-  String get mobilePerfShortFromPosition => 'From Pos.';
+  String get mobilePerfShortFromPosition => 'De la pos.';
 
   @override
   String get mobilePerfShortChess960 => '960';
 
   @override
-  String get mobilePerfShortAntichess => 'Antichess';
+  String get mobilePerfShortAntichess => 'Antiescacs';
 
   @override
   String get mobilePerfShortKingOfTheHill => 'KotH';
 
   @override
-  String get mobilePerfShortThreeCheck => '3check';
+  String get mobilePerfShortThreeCheck => '3escacs';
 
   @override
-  String get mobilePerfShortAtomic => 'Atomic';
+  String get mobilePerfShortAtomic => 'Atòmic';
 
   @override
-  String get mobilePerfShortHorde => 'Horde';
+  String get mobilePerfShortHorde => 'Horda';
 
   @override
-  String get mobilePerfShortRacingKings => 'Racing';
+  String get mobilePerfShortRacingKings => 'Cursa';
 
   @override
-  String get mobilePerfShortCrazyhouse => 'Crazy';
+  String get mobilePerfShortCrazyhouse => 'Boig';
 
   @override
-  String get mobilePerfShortPuzzle => 'Puzzle';
+  String get mobilePerfShortPuzzle => 'Problema';
 
   @override
   String get variantStandard => 'Estàndard';
@@ -1628,7 +1628,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Un torneig comença aviat';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Retransmissions a les quals t\'has subscrit';
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
 
   @override
   String get preferencesNotifyTimeAlarm => 'S\'està esgotant el rellotge d\'una partida per correspondència';
@@ -5167,7 +5167,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get resignTheGame => 'Rendir-se';
 
   @override
-  String get youCantStartNewGame => 'No pots començar un joc nou fins que aquest acabi.';
+  String get youCantStartNewGame => 'No pots començar una nova partida mentre és el teu torn.';
 
   @override
   String get since => 'Des de';
@@ -5696,8 +5696,8 @@ class AppLocalizationsCa extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Anonymous ($count)',
-      one: 'Anonymous',
+      other: 'Anònims ($count)',
+      one: 'Anònim',
     );
     return '$_temp0';
   }

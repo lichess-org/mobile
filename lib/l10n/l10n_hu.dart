@@ -1628,7 +1628,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Hamarosan kezdődő verseny';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Közvetítések amikre feliratkoztál';
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Hamarosan lejár az idő levelezős játszmában';
@@ -5167,7 +5167,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get resignTheGame => 'Játszma feladása';
 
   @override
-  String get youCantStartNewGame => 'Nem kezdhetsz új játszmát amíg ezt be nem fejezted.';
+  String get youCantStartNewGame => 'You can\'t start a new game until this one is finished.';
 
   @override
   String get since => 'Ettől';

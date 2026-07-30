@@ -1606,7 +1606,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Giải đấu sắp bắt đầu';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Những phát sóng bạn đã đăng ký theo dõi';
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Thời gian đánh cờ qua thư sắp hết';
@@ -5139,7 +5139,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get resignTheGame => 'Chịu thua';
 
   @override
-  String get youCantStartNewGame => 'Bạn không thể chơi ván mới cho đến khi xong ván này.';
+  String get youCantStartNewGame => 'You can\'t start a new game until this one is finished.';
 
   @override
   String get since => 'Từ';

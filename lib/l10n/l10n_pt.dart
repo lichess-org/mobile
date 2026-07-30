@@ -27,7 +27,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileBoardSettings => 'Configurações do tabuleiro';
 
   @override
-  String get mobileCancelTakebackOffer => 'Cancelar o pedido de desforra';
+  String get mobileCancelTakebackOffer => 'Cancelar pedido de voltar';
 
   @override
   String get mobileClearButton => 'Limpar';
@@ -79,7 +79,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileNoSearchResults => 'Sem resultados';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'Por favor, repara que nem todas as funcionalidades da aplicação antiga ou do website estão atualmente disponíveis, mas estamos a adicionar novas funcionalidades o tempo o momento.';
+  String get mobileNotAllFeaturesAreAvailable => 'Por favor, repara que nem todas as funcionalidades da aplicação antiga ou do website estão atualmente disponíveis, mas estamos a adicionar novas funcionalidades a todo o momento.';
 
   @override
   String get mobileNotFollowingAnyUser => 'Não estás a seguir nenhum utilizador.';
@@ -1628,7 +1628,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'O torneio começará em breve';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Transmissões que subscreveste';
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Está a acabar o tempo no jogo por correspondência';
@@ -5167,7 +5167,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get resignTheGame => 'Abandonar o jogo';
 
   @override
-  String get youCantStartNewGame => 'Não pode iniciar um novo jogo antes de este estar terminado.';
+  String get youCantStartNewGame => 'Não pode começar um novo jogo enquanto for a sua vez.';
 
   @override
   String get since => 'Desde';
@@ -6809,6 +6809,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get mobileMustBeLoggedIn => 'Você precisa estar logado para ver essa pagina.';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Problemas offline';
+
+  @override
   String get mobileNewGame => 'Nova partida';
 
   @override
@@ -7027,6 +7030,54 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get mobileGoodMoveButThereIsBetter => 'Bom lance, mas existe um ainda melhor';
+
+  @override
+  String get mobilePerfShortUltraBullet => 'Ultra';
+
+  @override
+  String get mobilePerfShortBullet => 'Bullet';
+
+  @override
+  String get mobilePerfShortBlitz => 'Blitz';
+
+  @override
+  String get mobilePerfShortRapid => 'Rápida';
+
+  @override
+  String get mobilePerfShortClassical => 'Clássico';
+
+  @override
+  String get mobilePerfShortCorrespondence => 'Corresp.';
+
+  @override
+  String get mobilePerfShortFromPosition => 'Da Pos.';
+
+  @override
+  String get mobilePerfShortChess960 => '960';
+
+  @override
+  String get mobilePerfShortAntichess => 'Antichess';
+
+  @override
+  String get mobilePerfShortKingOfTheHill => 'KotH';
+
+  @override
+  String get mobilePerfShortThreeCheck => '3 xeques';
+
+  @override
+  String get mobilePerfShortAtomic => 'Atómico';
+
+  @override
+  String get mobilePerfShortHorde => 'Horda';
+
+  @override
+  String get mobilePerfShortRacingKings => 'Corrida';
+
+  @override
+  String get mobilePerfShortCrazyhouse => 'Crazy';
+
+  @override
+  String get mobilePerfShortPuzzle => 'Problemas';
 
   @override
   String get variantStandard => 'Clássico';
@@ -8316,7 +8367,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get preferencesNotifyTournamentSoon => 'O torneio vai começar em breve';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Transmissões nas quais você se inscreveu';
+  String get preferencesNotifyBroadcasts => 'Transmissões';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Tempo de partida por correspondência esgotando';
@@ -11855,7 +11906,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get resignTheGame => 'Abandonar a partida';
 
   @override
-  String get youCantStartNewGame => 'Você não pode iniciar um novo jogo até que este acabe.';
+  String get youCantStartNewGame => 'Você não pode começar uma nova partida enquanto for a sua vez.';
 
   @override
   String get since => 'Desde';

@@ -1628,7 +1628,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Turnier schtarted bald';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Vu dir abonnierti Überträgige';
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Korreschpondänzzit lauft ab';
@@ -3819,7 +3819,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get yes => 'Ja';
 
   @override
-  String get website => 'Website';
+  String get website => 'Website\n';
 
   @override
   String get mobile => 'Mobil';
@@ -5167,7 +5167,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get resignTheGame => 'Schpiel ufgeh';
 
   @override
-  String get youCantStartNewGame => 'Du chasch kei neus Schpiel schtarte, bevor s\'Laufende nöd fertig isch.';
+  String get youCantStartNewGame => 'You can\'t start a new game until this one is finished.';
 
   @override
   String get since => 'Sit';

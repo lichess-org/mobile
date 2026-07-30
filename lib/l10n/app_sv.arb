@@ -1,4 +1,5 @@
 {
+  "mobileAccount": "Konto",
   "mobileAccountPreferences": "Kontoinställningar",
   "mobileAllGames": "Alla spel",
   "mobileAreYouSure": "Är du säker?",
@@ -1373,7 +1374,6 @@
   "gameInProgress": "Du har ett pågående parti med {param}.",
   "abortTheGame": "Avbryt partiet",
   "resignTheGame": "Ge upp partiet",
-  "youCantStartNewGame": "Du kan inte starta ett nytt parti förräm detta är klart.",
   "since": "Sedan",
   "until": "Tills",
   "lichessDbExplanation": "Rankade spel från alla Lichess spelare",

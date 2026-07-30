@@ -1431,7 +1431,6 @@
   "gameInProgress": "您正在與 {param} 進行對局。",
   "abortTheGame": "中止本局",
   "resignTheGame": "認輸",
-  "youCantStartNewGame": "直到當下這局下完之前，你無法開始新的棋局",
   "since": "自",
   "until": "直到",
   "lichessDbExplanation": "來自 Lichess 用戶的所有評分遊戲",

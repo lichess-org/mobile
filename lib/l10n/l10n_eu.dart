@@ -299,46 +299,46 @@ class AppLocalizationsEu extends AppLocalizations {
   String get mobilePerfShortBullet => 'Bullet';
 
   @override
-  String get mobilePerfShortBlitz => 'Blitz';
+  String get mobilePerfShortBlitz => 'Azkarra';
 
   @override
-  String get mobilePerfShortRapid => 'Rapid';
+  String get mobilePerfShortRapid => 'Aktiboa';
 
   @override
-  String get mobilePerfShortClassical => 'Classical';
+  String get mobilePerfShortClassical => 'Klasikoa';
 
   @override
-  String get mobilePerfShortCorrespondence => 'Corresp.';
+  String get mobilePerfShortCorrespondence => 'Posta.';
 
   @override
-  String get mobilePerfShortFromPosition => 'From Pos.';
+  String get mobilePerfShortFromPosition => 'Pos-tik.';
 
   @override
   String get mobilePerfShortChess960 => '960';
 
   @override
-  String get mobilePerfShortAntichess => 'Antichess';
+  String get mobilePerfShortAntichess => 'Antixakea';
 
   @override
   String get mobilePerfShortKingOfTheHill => 'KotH';
 
   @override
-  String get mobilePerfShortThreeCheck => '3check';
+  String get mobilePerfShortThreeCheck => '3xake';
 
   @override
-  String get mobilePerfShortAtomic => 'Atomic';
+  String get mobilePerfShortAtomic => 'Atomikoa';
 
   @override
   String get mobilePerfShortHorde => 'Horde';
 
   @override
-  String get mobilePerfShortRacingKings => 'Racing';
+  String get mobilePerfShortRacingKings => 'Lasterketa';
 
   @override
   String get mobilePerfShortCrazyhouse => 'Crazy';
 
   @override
-  String get mobilePerfShortPuzzle => 'Puzzle';
+  String get mobilePerfShortPuzzle => 'Ariketak';
 
   @override
   String get variantStandard => 'Ohikoa';
@@ -1628,7 +1628,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Txapelketa laster hasiko da';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Harpidetu zaren zuzenekoak';
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Posta bidezko partidaren denbora amaitzen ari da';
@@ -1658,37 +1658,37 @@ class AppLocalizationsEu extends AppLocalizations {
   String get preferencesInlineNotation => 'Lerroarteko oharrak';
 
   @override
-  String get preferencesShowServerAnalysis => 'Show server analysis';
+  String get preferencesShowServerAnalysis => 'Erakutsi zerbitzariaren analisia';
 
   @override
-  String get preferencesShowBestMoveArrows => 'Show best move arrows';
+  String get preferencesShowBestMoveArrows => 'Erakutsi jokaldi onenen geziak';
 
   @override
-  String get preferencesShowManeuverArrows => 'Show maneuver arrows';
+  String get preferencesShowManeuverArrows => 'Erakutsi maniobren geziak';
 
   @override
-  String get preferencesShowGauge => 'Show evaluation gauge';
+  String get preferencesShowGauge => 'Erakutsi ebaluazioaren langa';
 
   @override
-  String get preferencesShowMoveAnnotationsOnBoard => 'Show move annotations';
+  String get preferencesShowMoveAnnotationsOnBoard => 'Erakutsi jokaldien komentarioak';
 
   @override
-  String get preferencesShowVariationArrows => 'Show variation arrows';
+  String get preferencesShowVariationArrows => 'Erakutsi aldaeren geziak';
 
   @override
-  String get preferencesShowLiveGlyphs => 'Live engine annotations';
+  String get preferencesShowLiveGlyphs => 'Motorearen zuzeneko komentarioak';
 
   @override
-  String get preferencesShowUndefendedPieces => 'Show undefended pieces';
+  String get preferencesShowUndefendedPieces => 'Erakutsi defentsarik ez duten piezak';
 
   @override
-  String get preferencesShowPinnedPieces => 'Show pinned pieces';
+  String get preferencesShowPinnedPieces => 'Erakutsi iltzatutako piezak';
 
   @override
-  String get preferencesShowCheckableKing => 'Show checkable king';
+  String get preferencesShowCheckableKing => 'Erakutsi xake egin dakiokeen erregea';
 
   @override
-  String get preferencesDisclosureMode => 'Enable variation hiding';
+  String get preferencesDisclosureMode => 'Erakutsi aldaerak ezkutatzea';
 
   @override
   String get preferencesGeneralSettings => 'Orokorra';
@@ -1703,10 +1703,10 @@ class AppLocalizationsEu extends AppLocalizations {
   String get preferencesAnalysisSettings => 'Analisiaren aukerak';
 
   @override
-  String get preferencesManeuverArrowsHelp => 'Sequence of engine moves for one piece';
+  String get preferencesManeuverArrowsHelp => 'Pieza batentzat motorearen joladi segida';
 
   @override
-  String get preferencesHoverOverSettingLabelsForHelp => 'Hover over setting labels for help';
+  String get preferencesHoverOverSettingLabelsForHelp => 'Jarri etiketen gainean ezarpenen laguntza lortzeko';
 
   @override
   String get puzzlePuzzles => 'Ariketak';
@@ -5167,7 +5167,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get resignTheGame => 'Partida utzi';
 
   @override
-  String get youCantStartNewGame => 'Ezin duzu beste partidarik hasi hau bukatu arte.';
+  String get youCantStartNewGame => 'Ezin duzu beste partida bat hasi zure txanda den artean.';
 
   @override
   String get since => 'Noiztik';
@@ -5696,8 +5696,8 @@ class AppLocalizationsEu extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Anonymous ($count)',
-      one: 'Anonymous',
+      other: 'Anonimoak ($count)',
+      one: 'Anonimoa',
     );
     return '$_temp0';
   }

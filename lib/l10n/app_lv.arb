@@ -1204,7 +1204,6 @@
   "gameInProgress": "Jums ir nepageigta spēle ar {param}.",
   "abortTheGame": "Atcelt spēli",
   "resignTheGame": "Padoties",
-  "youCantStartNewGame": "Kamēr neesat pabeidzis šo spēli, nevarat sākt jaunu partiju.",
   "since": "Kopš",
   "until": "Līdz",
   "lichessDbExplanation": "Vērtērtu spēļu paraugi no visiem Lichess spēlētājiem",

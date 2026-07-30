@@ -70,7 +70,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Je moet ingelogd zijn om deze pagina te bekijken.';
 
   @override
-  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+  String get mobileNbOfflinePuzzles => 'Offline puzzels';
 
   @override
   String get mobileNewGame => 'Nieuwe partij';
@@ -305,40 +305,40 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobilePerfShortRapid => 'Rapid';
 
   @override
-  String get mobilePerfShortClassical => 'Classical';
+  String get mobilePerfShortClassical => 'Klassiek';
 
   @override
   String get mobilePerfShortCorrespondence => 'Corresp.';
 
   @override
-  String get mobilePerfShortFromPosition => 'From Pos.';
+  String get mobilePerfShortFromPosition => 'Stelling';
 
   @override
   String get mobilePerfShortChess960 => '960';
 
   @override
-  String get mobilePerfShortAntichess => 'Antichess';
+  String get mobilePerfShortAntichess => 'Weggeef';
 
   @override
-  String get mobilePerfShortKingOfTheHill => 'KotH';
+  String get mobilePerfShortKingOfTheHill => 'Heuvel';
 
   @override
-  String get mobilePerfShortThreeCheck => '3check';
+  String get mobilePerfShortThreeCheck => 'Driemaal';
 
   @override
-  String get mobilePerfShortAtomic => 'Atomic';
+  String get mobilePerfShortAtomic => 'Atoom';
 
   @override
   String get mobilePerfShortHorde => 'Horde';
 
   @override
-  String get mobilePerfShortRacingKings => 'Racing';
+  String get mobilePerfShortRacingKings => 'Rennen';
 
   @override
-  String get mobilePerfShortCrazyhouse => 'Crazy';
+  String get mobilePerfShortCrazyhouse => 'Gek';
 
   @override
-  String get mobilePerfShortPuzzle => 'Puzzle';
+  String get mobilePerfShortPuzzle => 'Puzzel';
 
   @override
   String get variantStandard => 'Standaard';
@@ -1628,7 +1628,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Toernooi begint binnenkort';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Uitzendingen waarop je bent geabonneerd';
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Klok met correspondentie bijna leeg';
@@ -4598,7 +4598,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get contrast => 'Contrast';
 
   @override
-  String get hue => 'Kleurschakering';
+  String get hue => 'Tint';
 
   @override
   String get boardReset => 'Kleuren terugzetten naar standaard';
@@ -5167,7 +5167,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get resignTheGame => 'Partij opgeven';
 
   @override
-  String get youCantStartNewGame => 'Je kunt geen nieuwe partij beginnen voordat deze is afgelopen.';
+  String get youCantStartNewGame => 'Je kunt geen nieuwe partij starten terwijl het jouw beurt is.';
 
   @override
   String get since => 'Vanaf';

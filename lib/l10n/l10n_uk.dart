@@ -293,52 +293,52 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileGoodMoveButThereIsBetter => 'Хороший хід, але є кращий';
 
   @override
-  String get mobilePerfShortUltraBullet => 'Ultra';
+  String get mobilePerfShortUltraBullet => 'Ультра';
 
   @override
-  String get mobilePerfShortBullet => 'Bullet';
+  String get mobilePerfShortBullet => 'Куля';
 
   @override
-  String get mobilePerfShortBlitz => 'Blitz';
+  String get mobilePerfShortBlitz => 'Бліц';
 
   @override
-  String get mobilePerfShortRapid => 'Rapid';
+  String get mobilePerfShortRapid => 'Швидкі';
 
   @override
-  String get mobilePerfShortClassical => 'Classical';
+  String get mobilePerfShortClassical => 'Класичні';
 
   @override
-  String get mobilePerfShortCorrespondence => 'Corresp.';
+  String get mobilePerfShortCorrespondence => 'Заочні';
 
   @override
-  String get mobilePerfShortFromPosition => 'From Pos.';
+  String get mobilePerfShortFromPosition => 'З позиції';
 
   @override
   String get mobilePerfShortChess960 => '960';
 
   @override
-  String get mobilePerfShortAntichess => 'Antichess';
+  String get mobilePerfShortAntichess => 'Антишахи';
 
   @override
-  String get mobilePerfShortKingOfTheHill => 'KotH';
+  String get mobilePerfShortKingOfTheHill => 'К-ль гори';
 
   @override
-  String get mobilePerfShortThreeCheck => '3check';
+  String get mobilePerfShortThreeCheck => '3 шахи';
 
   @override
-  String get mobilePerfShortAtomic => 'Atomic';
+  String get mobilePerfShortAtomic => 'Атомічні';
 
   @override
-  String get mobilePerfShortHorde => 'Horde';
+  String get mobilePerfShortHorde => 'Орда';
 
   @override
-  String get mobilePerfShortRacingKings => 'Racing';
+  String get mobilePerfShortRacingKings => 'Перегони';
 
   @override
-  String get mobilePerfShortCrazyhouse => 'Crazy';
+  String get mobilePerfShortCrazyhouse => 'Шалені';
 
   @override
-  String get mobilePerfShortPuzzle => 'Puzzle';
+  String get mobilePerfShortPuzzle => 'Задачі';
 
   @override
   String get variantStandard => 'Стандартні шахи';
@@ -814,7 +814,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get arenaTotal => 'Загальні';
 
   @override
-  String get arenaPointsAvg => 'Середні значення очків';
+  String get arenaPointsAvg => 'Середня кількість очок';
 
   @override
   String get arenaPointsSum => 'Сума очок';
@@ -1406,7 +1406,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
-    return 'Чим менше значення, тим стабільніше рейтинг. Вище $param1, рейтинг вважається умовним. Для включення до рейтингу це значення має бути нижче $param2 (стандартні шахи) або $param3 (варіанти).';
+    return 'Що менше значення, то стабільніший рейтинг. Рейтинг вищий за $param1 вважається умовним. Для включення до рейтингу це значення повинне бути до $param2 (стандартні шахи) або $param3 (варіанти).';
   }
 
   @override
@@ -1672,7 +1672,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Турнір скоро почнеться';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Трансляції, на які ви підписані';
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Час на відповідь закінчується';
@@ -1750,7 +1750,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get preferencesManeuverArrowsHelp => 'Послідовність ходів рушія для однієї фігури';
 
   @override
-  String get preferencesHoverOverSettingLabelsForHelp => 'Hover over setting labels for help';
+  String get preferencesHoverOverSettingLabelsForHelp => 'Наведіть курсор на налаштування для деталей';
 
   @override
   String get puzzlePuzzles => 'Задачі';
@@ -3682,7 +3682,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get join => 'Приєднатись';
 
   @override
-  String get withdraw => 'Відступити';
+  String get withdraw => 'Вийти';
 
   @override
   String get points => 'Очки';
@@ -4942,7 +4942,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get classical => 'Класичні';
 
   @override
-  String get ultraBulletDesc => 'Шалено швидкі ігри: менше 30 секунд';
+  String get ultraBulletDesc => 'Неймовірно швидкі ігри: менш ніж 30 секунд';
 
   @override
   String get bulletDesc => 'Дуже швидкі ігри: менш ніж 3 хвилини';
@@ -5223,7 +5223,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get resignTheGame => 'Здатися';
 
   @override
-  String get youCantStartNewGame => 'Ви не можете розпочати нову гру поки не закінчите активну гру.';
+  String get youCantStartNewGame => 'Ви не можете розпочати нову гру, коли ваша черга ходити.';
 
   @override
   String get since => 'Від';
@@ -5834,8 +5834,10 @@ class AppLocalizationsUk extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Anonymous ($count)',
-      one: 'Anonymous',
+      other: '$count аноніма',
+      many: '$count анонімів',
+      few: '$count аноніми',
+      one: 'Анонім',
     );
     return '$_temp0';
   }

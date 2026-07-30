@@ -1395,7 +1395,6 @@
   "gameInProgress": "U tijeku je igra s {param}.",
   "abortTheGame": "Prekini igru",
   "resignTheGame": "Odustani od igre",
-  "youCantStartNewGame": "Ne možete započeti novu igru dok se ova ne završi.",
   "since": "Od",
   "until": "Do",
   "lichessDbExplanation": "Odabrane bodovane partije svih igrača na Lichessu",

@@ -5167,7 +5167,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get resignTheGame => 'Հանձնվել';
 
   @override
-  String get youCantStartNewGame => 'Դուք չեք կարող սկսել նոր խաղ, քանի դեռ չի ավարտվել ընթացիկը։';
+  String get youCantStartNewGame => 'You can\'t start a new game until this one is finished.';
 
   @override
   String get since => 'Սկսած';
