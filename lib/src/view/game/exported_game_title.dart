@@ -97,7 +97,7 @@ class ExportedGameTitle extends StatelessWidget {
       ],
     );
 
-    return lastMoveAt != null
+    return lastMoveAt != null && importDate == null
         ? Tooltip(message: _tooltipFormatter.format(lastMoveAt!), child: titleRow)
         : titleRow;
   }
