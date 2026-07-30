@@ -1257,7 +1257,6 @@
   "gameInProgress": "Jou het 'n spel met {param} aan die gang.",
   "abortTheGame": "Staak die spel",
   "resignTheGame": "Bedank die spel",
-  "youCantStartNewGame": "Jy kan nie 'n nuwe spel begin nie, tot hierdie spel klaar is.",
   "since": "Sedert",
   "until": "Tot",
   "lichessDbExplanation": "Gegradeerde spelle gekies uit alle Lichess-spelers",

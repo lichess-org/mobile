@@ -1171,7 +1171,6 @@
   "gameInProgress": "Դուք խաղի մեջ եք {param}-ի հետ։",
   "abortTheGame": "Ընդհատել խաղը",
   "resignTheGame": "Հանձնվել",
-  "youCantStartNewGame": "Դուք չեք կարող սկսել նոր խաղ, քանի դեռ չի ավարտվել ընթացիկը։",
   "since": "Սկսած",
   "until": "Մինչև",
   "lichessDbExplanation": "Lichess-ի բոլոր խաղացողների վարկանիշային խաղեր",

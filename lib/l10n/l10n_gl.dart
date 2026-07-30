@@ -70,7 +70,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Debes iniciar sesión para ver esta páxina.';
 
   @override
-  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+  String get mobileNbOfflinePuzzles => 'Crebacabezas sen conexión';
 
   @override
   String get mobileNewGame => 'Nova partida';
@@ -296,49 +296,49 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobilePerfShortUltraBullet => 'Ultra';
 
   @override
-  String get mobilePerfShortBullet => 'Bullet';
+  String get mobilePerfShortBullet => 'Bala';
 
   @override
-  String get mobilePerfShortBlitz => 'Blitz';
+  String get mobilePerfShortBlitz => 'Lóstrego';
 
   @override
-  String get mobilePerfShortRapid => 'Rapid';
+  String get mobilePerfShortRapid => 'Rápidas';
 
   @override
-  String get mobilePerfShortClassical => 'Classical';
+  String get mobilePerfShortClassical => 'Clásicas';
 
   @override
   String get mobilePerfShortCorrespondence => 'Corresp.';
 
   @override
-  String get mobilePerfShortFromPosition => 'From Pos.';
+  String get mobilePerfShortFromPosition => 'Dende pos.';
 
   @override
   String get mobilePerfShortChess960 => '960';
 
   @override
-  String get mobilePerfShortAntichess => 'Antichess';
+  String get mobilePerfShortAntichess => 'Antixadrez';
 
   @override
-  String get mobilePerfShortKingOfTheHill => 'KotH';
+  String get mobilePerfShortKingOfTheHill => 'Rei Cuíña';
 
   @override
-  String get mobilePerfShortThreeCheck => '3check';
+  String get mobilePerfShortThreeCheck => '3-Xaques';
 
   @override
-  String get mobilePerfShortAtomic => 'Atomic';
+  String get mobilePerfShortAtomic => 'Atómico';
 
   @override
-  String get mobilePerfShortHorde => 'Horde';
+  String get mobilePerfShortHorde => 'Horda';
 
   @override
-  String get mobilePerfShortRacingKings => 'Racing';
+  String get mobilePerfShortRacingKings => 'R.a Correr';
 
   @override
-  String get mobilePerfShortCrazyhouse => 'Crazy';
+  String get mobilePerfShortCrazyhouse => 'CasLoucos';
 
   @override
-  String get mobilePerfShortPuzzle => 'Puzzle';
+  String get mobilePerfShortPuzzle => 'Crebacab';
 
   @override
   String get variantStandard => 'Estándar';
@@ -1628,7 +1628,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'O torneo comeza pronto';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Emisións ás que te subscribiches';
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Pouco tempo restante na partida por correspondencia';
@@ -5167,7 +5167,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get resignTheGame => 'Renderse';
 
   @override
-  String get youCantStartNewGame => 'Non podes comezar unha nova partida ata que esta remate.';
+  String get youCantStartNewGame => 'Non podes comezar unha nova partida estando na túa quenda.';
 
   @override
   String get since => 'Desde';

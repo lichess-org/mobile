@@ -299,46 +299,46 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobilePerfShortBullet => 'Bullet';
 
   @override
-  String get mobilePerfShortBlitz => 'Blitz';
+  String get mobilePerfShortBlitz => 'Pikapeli';
 
   @override
-  String get mobilePerfShortRapid => 'Rapid';
+  String get mobilePerfShortRapid => 'Nopea';
 
   @override
-  String get mobilePerfShortClassical => 'Classical';
+  String get mobilePerfShortClassical => 'Klassinen';
 
   @override
-  String get mobilePerfShortCorrespondence => 'Corresp.';
+  String get mobilePerfShortCorrespondence => 'Kirje';
 
   @override
-  String get mobilePerfShortFromPosition => 'From Pos.';
+  String get mobilePerfShortFromPosition => 'Asemasta';
 
   @override
   String get mobilePerfShortChess960 => '960';
 
   @override
-  String get mobilePerfShortAntichess => 'Antichess';
+  String get mobilePerfShortAntichess => 'Antishakki';
 
   @override
-  String get mobilePerfShortKingOfTheHill => 'KotH';
+  String get mobilePerfShortKingOfTheHill => 'Kukkulan';
 
   @override
-  String get mobilePerfShortThreeCheck => '3check';
+  String get mobilePerfShortThreeCheck => '3shakk.';
 
   @override
-  String get mobilePerfShortAtomic => 'Atomic';
+  String get mobilePerfShortAtomic => 'Atomi';
 
   @override
-  String get mobilePerfShortHorde => 'Horde';
+  String get mobilePerfShortHorde => 'Lauma';
 
   @override
-  String get mobilePerfShortRacingKings => 'Racing';
+  String get mobilePerfShortRacingKings => 'KunKilpa';
 
   @override
   String get mobilePerfShortCrazyhouse => 'Crazy';
 
   @override
-  String get mobilePerfShortPuzzle => 'Puzzle';
+  String get mobilePerfShortPuzzle => 'Tehtävä';
 
   @override
   String get variantStandard => 'Normaali';
@@ -1628,7 +1628,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Turnaus alkamassa pian';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Lähetykset, jotka olet tilannut';
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Kirjeshakkipelin aika loppumassa';
@@ -1706,7 +1706,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get preferencesManeuverArrowsHelp => 'Tietokoneen laskema yhden nappulan siirtosarja';
 
   @override
-  String get preferencesHoverOverSettingLabelsForHelp => 'Hover over setting labels for help';
+  String get preferencesHoverOverSettingLabelsForHelp => 'Saat ohjeita asetuksista viemällä osoittimen niiden päälle';
 
   @override
   String get puzzlePuzzles => 'Tehtävät';
@@ -3008,7 +3008,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get timeControl => 'Aikajärjestelmä';
 
   @override
-  String get realTime => 'Pikapeli';
+  String get realTime => 'Reaaliaikainen';
 
   @override
   String get correspondence => 'Kirjeshakki';
@@ -5167,7 +5167,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get resignTheGame => 'Luovuta peli';
 
   @override
-  String get youCantStartNewGame => 'Et voi aloittaa uutta peliä ennen kuin tämä peli on päättynyt.';
+  String get youCantStartNewGame => 'Et voi aloittaa uutta peliä, kun olet siirtovuorossa.';
 
   @override
   String get since => 'Alkaen';

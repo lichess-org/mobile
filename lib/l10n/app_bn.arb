@@ -1168,7 +1168,6 @@
   "gameInProgress": "{param} এর সাথে এখনো আপনার খেলা চলছে।",
   "abortTheGame": "খেলা ত্যাগ(abort) করুন",
   "resignTheGame": "খেলা সমর্পণ(resign) করুন",
-  "youCantStartNewGame": "আপনি এই খেলা শেষ না করে নতুন খেলা শুরু করতে পারবেন না।",
   "since": "Since/শুরু",
   "until": "Until/পর্যন্ত",
   "lichessDbExplanation": "লিচেস এর সকল খেলোয়াড়দের রেটেড খেলা থেকে সংগ্রহকৃত",

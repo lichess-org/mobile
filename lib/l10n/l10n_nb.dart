@@ -1628,7 +1628,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Turnering starter snart';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Overføringer du abonnerer på';
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Fjernsjakkur i ferd med å løpe ut';
@@ -5167,7 +5167,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get resignTheGame => 'Gi opp partiet';
 
   @override
-  String get youCantStartNewGame => 'Du kan ikke starte et nytt parti før dette er avsluttet.';
+  String get youCantStartNewGame => 'You can\'t start a new game until this one is finished.';
 
   @override
   String get since => 'Fra';

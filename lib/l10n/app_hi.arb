@@ -1231,7 +1231,6 @@
   "gameInProgress": "{param} के साथ आपका खेल समाप्त नही हुआ है।",
   "abortTheGame": "खेल रद्द करें",
   "resignTheGame": "हार मान ले",
-  "youCantStartNewGame": "जब तक यह गेम समाप्त नहीं हो जाता तब तक आप एक नया गेम शुरू नहीं कर सकते।",
   "since": "दिनांक से",
   "until": "दिनांक तक​",
   "lichessDbExplanation": "मुल्यांकित खेल Lichess के सभी खिलाड़ियो से",

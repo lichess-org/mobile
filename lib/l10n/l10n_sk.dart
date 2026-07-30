@@ -1672,7 +1672,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Onedlho začínajúci turnaj';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Vysielania, ktoré odoberáte';
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Dochádza čas v korešpondenčnej partii';
@@ -5223,7 +5223,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get resignTheGame => 'Vzdať partiu';
 
   @override
-  String get youCantStartNewGame => 'Kým neukončíte túto partiu, nemôžete začať novú.';
+  String get youCantStartNewGame => 'You can\'t start a new game until this one is finished.';
 
   @override
   String get since => 'Od';

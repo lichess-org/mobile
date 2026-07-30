@@ -183,7 +183,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileSettingsPieceShiftMethodEither => 'Either tap or drag';
 
   @override
-  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tap two squares';
+  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Klaku du kvadratojn';
 
   @override
   String get mobileSettingsShapeDrawing => 'Shape drawing';
@@ -251,7 +251,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
 
   @override
-  String get mobileViewGame => 'View Game';
+  String get mobileViewGame => 'Rigardi ludon';
 
   @override
   String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
@@ -3888,7 +3888,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get reportProcessedFasterInEnglish => 'Via raporto estos pritraktita pli rapide se vi ĝin skribas en la angla.';
 
   @override
-  String get error_provideOneCheatedGameLink => 'Bonvolu doni almenaŭ unu ligilon al ludo en kiu oni friponis.';
+  String get error_provideOneCheatedGameLink => 'Bonvolu doni almenaŭ unu ligilon al ludo por kontrolo.';
 
   @override
   String by(String param) {
@@ -5167,7 +5167,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get resignTheGame => 'Rezignu la ludo';
 
   @override
-  String get youCantStartNewGame => 'Vi ne povas komenci novan ludon ĝis ĉi tiu finiĝos.';
+  String get youCantStartNewGame => 'You can\'t start a new game until this one is finished.';
 
   @override
   String get since => 'Ekde';

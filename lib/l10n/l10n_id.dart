@@ -5143,7 +5143,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get resignTheGame => 'Menyerah dari permainan';
 
   @override
-  String get youCantStartNewGame => 'Anda tidak dapat memulai permainan baru sampai permainan ini selesai.';
+  String get youCantStartNewGame => 'You can\'t start a new game until this one is finished.';
 
   @override
   String get since => 'Sejak';

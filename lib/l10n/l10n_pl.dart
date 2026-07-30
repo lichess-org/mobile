@@ -70,7 +70,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Musisz być zalogowany, aby wyświetlić tę stronę.';
 
   @override
-  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+  String get mobileNbOfflinePuzzles => 'Zadania offline';
 
   @override
   String get mobileNewGame => 'Nowa partia';
@@ -302,43 +302,43 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobilePerfShortBlitz => 'Blitz';
 
   @override
-  String get mobilePerfShortRapid => 'Rapid';
+  String get mobilePerfShortRapid => 'Szybkie';
 
   @override
-  String get mobilePerfShortClassical => 'Classical';
+  String get mobilePerfShortClassical => 'Klasyczne';
 
   @override
-  String get mobilePerfShortCorrespondence => 'Corresp.';
+  String get mobilePerfShortCorrespondence => 'Korespond.';
 
   @override
-  String get mobilePerfShortFromPosition => 'From Pos.';
+  String get mobilePerfShortFromPosition => 'Z pozycji.';
 
   @override
   String get mobilePerfShortChess960 => '960';
 
   @override
-  String get mobilePerfShortAntichess => 'Antichess';
+  String get mobilePerfShortAntichess => 'Antyszachy';
 
   @override
   String get mobilePerfShortKingOfTheHill => 'KotH';
 
   @override
-  String get mobilePerfShortThreeCheck => '3check';
+  String get mobilePerfShortThreeCheck => '3 szachy';
 
   @override
-  String get mobilePerfShortAtomic => 'Atomic';
+  String get mobilePerfShortAtomic => 'Atomowe';
 
   @override
-  String get mobilePerfShortHorde => 'Horde';
+  String get mobilePerfShortHorde => 'Horda';
 
   @override
-  String get mobilePerfShortRacingKings => 'Racing';
+  String get mobilePerfShortRacingKings => 'Wyścig';
 
   @override
-  String get mobilePerfShortCrazyhouse => 'Crazy';
+  String get mobilePerfShortCrazyhouse => 'Szalone';
 
   @override
-  String get mobilePerfShortPuzzle => 'Puzzle';
+  String get mobilePerfShortPuzzle => 'Zadania';
 
   @override
   String get variantStandard => 'Standardowe';
@@ -1672,7 +1672,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Turniej rozpocznie się wkrótce';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Transmisje subskrybowane przez Ciebie';
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Czas w partii korespondencyjnej dobiega końca';
@@ -2216,7 +2216,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get puzzleThemeEpauletteMate => 'Mat naramiennikowy';
 
   @override
-  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+  String get puzzleThemeEpauletteMateDescription => 'Oba pola ucieczki w bok są zajęte przez inne bierki.';
 
   @override
   String get puzzleThemeExposedKing => 'Odsłonięty król';
@@ -5223,7 +5223,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get resignTheGame => 'Poddaj się';
 
   @override
-  String get youCantStartNewGame => 'Nie możesz rozpocząć nowej partii, dopóki ta nie zostanie zakończona.';
+  String get youCantStartNewGame => 'Nie możesz rozpocząć nowej gry, kiedy to Twoja kolej.';
 
   @override
   String get since => 'Od';

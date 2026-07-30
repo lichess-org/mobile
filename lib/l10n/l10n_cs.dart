@@ -254,10 +254,10 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileViewGame => 'Zobrazit hru';
 
   @override
-  String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
+  String get mobileCustomizeHomeTip => 'Tip: Můžete přidat další widgety na domovskou obrazovku nebo odebrat ty, které nepotřebujete!';
 
   @override
-  String get mobileCustomizeHomeTipDismiss => 'Dismiss';
+  String get mobileCustomizeHomeTipDismiss => 'Zavřít';
 
   @override
   String get mobileCustomizeButton => 'Přizpůsobit';
@@ -266,7 +266,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileStopShowingThreat => 'Skrýt zobrazování hrozby';
 
   @override
-  String get mobileTournamentCompleted => 'Completed';
+  String get mobileTournamentCompleted => 'Dokončené';
 
   @override
   String get mobileTournamentJumpToMyPage => 'Přejít na moji stránku';
@@ -275,10 +275,10 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileDisplayModeCompact => 'Kompaktní';
 
   @override
-  String get mobileDisplayModeDetailed => 'Detailed';
+  String get mobileDisplayModeDetailed => 'Podrobné';
 
   @override
-  String get mobileOpeningExplorerNotAvailableOffline => 'Opening Explorer is not available offline.';
+  String get mobileOpeningExplorerNotAvailableOffline => 'Průzkumník otevření není dostupný offline.';
 
   @override
   String get mobileChallengeCreated => 'Byla vytvořena výzva: Budete upozorněni, až hra začne.\nMůžete se k ní dostat z domovské obrazovky.';
@@ -290,7 +290,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Nebo nahrajte soubor PGN';
 
   @override
-  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+  String get mobileGoodMoveButThereIsBetter => 'Dobrý tah, ale je i lepší';
 
   @override
   String get mobilePerfShortUltraBullet => 'Ultra';
@@ -1177,7 +1177,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get broadcastFinals => 'Finále';
 
   @override
-  String get broadcastTiebreaks => 'Tiebreaks';
+  String get broadcastTiebreaks => 'Rozstřely';
 
   @override
   String broadcastGameX(String param) {
@@ -1185,7 +1185,7 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
-  String get broadcastKnockouts => 'Knockouts';
+  String get broadcastKnockouts => 'Porážky';
 
   @override
   String broadcastUnderXAgeTournament(String param) {
@@ -1672,7 +1672,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Turnaj brzy začne';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Vysílání, ke kterým jste se přihlásili';
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Dochází čas na korespondenčních hodinách';
@@ -1699,52 +1699,52 @@ class AppLocalizationsCs extends AppLocalizations {
   String get preferencesShowClockOnTheLeft => 'Zobrazit vlevo na mobilních zařízeních';
 
   @override
-  String get preferencesInlineNotation => 'Inline notation';
+  String get preferencesInlineNotation => 'Řádková notace';
 
   @override
-  String get preferencesShowServerAnalysis => 'Show server analysis';
+  String get preferencesShowServerAnalysis => 'Zobrazit serverovou analýzu';
 
   @override
-  String get preferencesShowBestMoveArrows => 'Show best move arrows';
+  String get preferencesShowBestMoveArrows => 'Zobrazit šipky nejlepšího tahu';
 
   @override
-  String get preferencesShowManeuverArrows => 'Show maneuver arrows';
+  String get preferencesShowManeuverArrows => 'Zobrazit šipky manévru';
 
   @override
-  String get preferencesShowGauge => 'Show evaluation gauge';
+  String get preferencesShowGauge => 'Zobrazit měřítko hodnocení';
 
   @override
-  String get preferencesShowMoveAnnotationsOnBoard => 'Show move annotations';
+  String get preferencesShowMoveAnnotationsOnBoard => 'Zobrazit anotace tahů';
 
   @override
-  String get preferencesShowVariationArrows => 'Show variation arrows';
+  String get preferencesShowVariationArrows => 'Zobrazit šipky variant';
 
   @override
-  String get preferencesShowLiveGlyphs => 'Live engine annotations';
+  String get preferencesShowLiveGlyphs => 'Živé anotace od počítače';
 
   @override
-  String get preferencesShowUndefendedPieces => 'Show undefended pieces';
+  String get preferencesShowUndefendedPieces => 'Zobrazit nebráněné figury';
 
   @override
-  String get preferencesShowPinnedPieces => 'Show pinned pieces';
+  String get preferencesShowPinnedPieces => 'Zobrazit „připnuté“ figury';
 
   @override
   String get preferencesShowCheckableKing => 'Show checkable king';
 
   @override
-  String get preferencesDisclosureMode => 'Enable variation hiding';
+  String get preferencesDisclosureMode => 'Povolit skrývání variant';
 
   @override
-  String get preferencesGeneralSettings => 'General';
+  String get preferencesGeneralSettings => 'Obecné';
 
   @override
-  String get preferencesMoveListSettings => 'Move list';
+  String get preferencesMoveListSettings => 'Seznam tahů';
 
   @override
-  String get preferencesBoardSettings => 'Board';
+  String get preferencesBoardSettings => 'Šachovnice';
 
   @override
-  String get preferencesAnalysisSettings => 'Analysis settings';
+  String get preferencesAnalysisSettings => 'Nastavení analýzy';
 
   @override
   String get preferencesManeuverArrowsHelp => 'Sequence of engine moves for one piece';
@@ -2931,7 +2931,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get threads => 'Vlákna';
 
   @override
-  String get threadsDescription => 'Set this below your CPU\'s thread count, the ticks mark a good safe choice';
+  String get threadsDescription => 'Nastavte tuto hodnotu nižší než je počet vláken vašho procesoru; hodnoty označené fajfkou představují dobrou a bezpečnou volbu';
 
   @override
   String get threadsDescriptionMobile => 'Více vláken bude používat více baterie pro lepší analýzu';
@@ -4515,7 +4515,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get analysisShapesHowTo => 'Kliknutím se shiftem či kliknutím pravým tlačítkem lze kreslit do šachovnice kolečka a šipky.';
 
   @override
-  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+  String get primaryColorArrowsHowTo => 'Ctrl nebo shift = červená; command, alt nebo meta = modrá; klávesa z každé skupiny (tedy jedna klávesa ze skupiny ctrl nebo shift a druhá klávesa ze skupiny command, alt nebo meta - obě klávesy musí být stisknuty současně) = žlutá.';
 
   @override
   String get letOtherPlayersMessageYou => 'Povolit zprávy od ostatních hráčů';
@@ -5223,7 +5223,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get resignTheGame => 'Vzdát hru';
 
   @override
-  String get youCantStartNewGame => 'Nemůžete začít novou hru, dokud nebude tato dokončena.';
+  String get youCantStartNewGame => 'You can\'t start a new game until this one is finished.';
 
   @override
   String get since => 'Od';
@@ -5294,7 +5294,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get enPassant => 'Braní mimochodem';
 
   @override
-  String get settings => 'Settings';
+  String get settings => 'Nastavení';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5834,8 +5834,10 @@ class AppLocalizationsCs extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Anonymous ($count)',
-      one: 'Anonymous',
+      other: 'Anonymních ($count)',
+      many: 'Anonymních ($count)',
+      few: 'Anonymní ($count)',
+      one: 'Anonymní',
     );
     return '$_temp0';
   }

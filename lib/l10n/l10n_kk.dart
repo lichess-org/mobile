@@ -5167,7 +5167,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get resignTheGame => 'Берілу';
 
   @override
-  String get youCantStartNewGame => 'Бұл ойын аяқталмағанша, сіз жаңа ойын бастай алмайсыз.';
+  String get youCantStartNewGame => 'You can\'t start a new game until this one is finished.';
 
   @override
   String get since => 'Бастап';

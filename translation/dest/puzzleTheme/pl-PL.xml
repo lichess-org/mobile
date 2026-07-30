@@ -55,6 +55,7 @@
   <string name="endgameDescription">Taktyka w ostatniej fazie gry.</string>
   <string name="enPassantDescription">Taktyka wykorzystująca bicie w przelocie, gdzie pion może zbić piona przeciwnika, który minął go, wykonawszy swoje początkowe posunięcie o dwa pola.</string>
   <string name="epauletteMate">Mat naramiennikowy</string>
+  <string name="epauletteMateDescription">Oba pola ucieczki w bok są zajęte przez inne bierki.</string>
   <string name="exposedKing">Odsłonięty król</string>
   <string name="exposedKingDescription">Taktyka z udziałem króla z kilkoma jego obrońcami, często prowadząca do mata.</string>
   <string name="fork">Widełki</string>
@@ -76,7 +77,7 @@
   <string name="swallowstailMate">Mat \"jaskółczy ogon\"</string>
   <string name="triangleMate">Mat trójkątny</string>
   <string name="triangleMateDescription">Hetman i wieża ustawione na tej samej linii matują króla przeciwnika, stojąc bezpośrednio przy nim i tworząc trójkąt.</string>
-  <string name="vukovicMate" comment="This was previously &quot;Vukovic&quot;. It can be safely updated to &quot;Vuković&quot;">Mat Vukovic\'a</string>
+  <string name="vukovicMate">Mat Vukovic\'a</string>
   <string name="vukovicMateDescription">Para wieża i skoczek matują króla przeciwnika. Wieża wspierana przez trzecią bierkę daje mata, podczas gdy skoczek blokuje królowi przeciwnika wszystkie pola ucieczki.</string>
   <string name="knightEndgame">Końcówka skoczkowa</string>
   <string name="knightEndgameDescription">Gra końcowa wyłącznie ze skoczkami i pionami.</string>

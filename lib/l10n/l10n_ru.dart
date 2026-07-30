@@ -70,7 +70,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Вы должны войти для просмотра этой страницы.';
 
   @override
-  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+  String get mobileNbOfflinePuzzles => 'Задачи офлайн';
 
   @override
   String get mobileNewGame => 'Новая игра';
@@ -293,52 +293,52 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileGoodMoveButThereIsBetter => 'Хороший ход, но есть лучше';
 
   @override
-  String get mobilePerfShortUltraBullet => 'Ultra';
+  String get mobilePerfShortUltraBullet => 'Ультра';
 
   @override
-  String get mobilePerfShortBullet => 'Bullet';
+  String get mobilePerfShortBullet => 'Пуля';
 
   @override
-  String get mobilePerfShortBlitz => 'Blitz';
+  String get mobilePerfShortBlitz => 'Блиц';
 
   @override
-  String get mobilePerfShortRapid => 'Rapid';
+  String get mobilePerfShortRapid => 'Рапид';
 
   @override
-  String get mobilePerfShortClassical => 'Classical';
+  String get mobilePerfShortClassical => 'Классика';
 
   @override
-  String get mobilePerfShortCorrespondence => 'Corresp.';
+  String get mobilePerfShortCorrespondence => 'Переп.';
 
   @override
-  String get mobilePerfShortFromPosition => 'From Pos.';
+  String get mobilePerfShortFromPosition => 'С поз.';
 
   @override
   String get mobilePerfShortChess960 => '960';
 
   @override
-  String get mobilePerfShortAntichess => 'Antichess';
+  String get mobilePerfShortAntichess => 'Поддавки';
 
   @override
-  String get mobilePerfShortKingOfTheHill => 'KotH';
+  String get mobilePerfShortKingOfTheHill => 'ЦарьГоры';
 
   @override
-  String get mobilePerfShortThreeCheck => '3check';
+  String get mobilePerfShortThreeCheck => '3 шаха';
 
   @override
-  String get mobilePerfShortAtomic => 'Atomic';
+  String get mobilePerfShortAtomic => 'Атом';
 
   @override
-  String get mobilePerfShortHorde => 'Horde';
+  String get mobilePerfShortHorde => 'Орда';
 
   @override
-  String get mobilePerfShortRacingKings => 'Racing';
+  String get mobilePerfShortRacingKings => 'Гонки';
 
   @override
-  String get mobilePerfShortCrazyhouse => 'Crazy';
+  String get mobilePerfShortCrazyhouse => 'Крейзи';
 
   @override
-  String get mobilePerfShortPuzzle => 'Puzzle';
+  String get mobilePerfShortPuzzle => 'Задача';
 
   @override
   String get variantStandard => 'Шахматы';
@@ -1672,7 +1672,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Турнир скоро начнётся';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Трансляции, на которые вы подписаны';
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
 
   @override
   String get preferencesNotifyTimeAlarm => 'В игре по переписке скоро упадёт флажок';
@@ -1750,7 +1750,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get preferencesManeuverArrowsHelp => 'Последовательность предлагаемых движком ходов для одной фигуры';
 
   @override
-  String get preferencesHoverOverSettingLabelsForHelp => 'Hover over setting labels for help';
+  String get preferencesHoverOverSettingLabelsForHelp => 'Наведите поверх метки настройки для подсказки';
 
   @override
   String get puzzlePuzzles => 'Задачи';
@@ -5223,7 +5223,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get resignTheGame => 'Сдаться';
 
   @override
-  String get youCantStartNewGame => 'Вы не можете начать новую игру, пока не завершена текущая.';
+  String get youCantStartNewGame => 'Вы не можете начать новую партию если сейчас ваш ход.';
 
   @override
   String get since => 'С';

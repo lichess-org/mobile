@@ -5221,7 +5221,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get resignTheGame => 'Pasiduoti';
 
   @override
-  String get youCantStartNewGame => 'Jūs negalite pradėti naujos partijos kol nepabaigta ši.';
+  String get youCantStartNewGame => 'You can\'t start a new game until this one is finished.';
 
   @override
   String get since => 'Nuo';

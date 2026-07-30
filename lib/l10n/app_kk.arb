@@ -1340,7 +1340,6 @@
   "gameInProgress": "{param} сізді қазір ойында күтіп тұр.",
   "abortTheGame": "Ойынды үзу",
   "resignTheGame": "Берілу",
-  "youCantStartNewGame": "Бұл ойын аяқталмағанша, сіз жаңа ойын бастай алмайсыз.",
   "since": "Бастап",
   "until": "Дейін",
   "lichessDbExplanation": "Личес-тегі бағалы ойындар",

@@ -1628,7 +1628,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Turne që fillon së shpejti';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Transmetime te të cilat jeni pajtuar';
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Correspondence time running out';
@@ -5167,7 +5167,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get resignTheGame => 'Dorëzohuni';
 
   @override
-  String get youCantStartNewGame => 'S’mund të filloni një lojë të re pa mbaruar këtë lojë.';
+  String get youCantStartNewGame => 'You can\'t start a new game until this one is finished.';
 
   @override
   String get since => 'Që nga';

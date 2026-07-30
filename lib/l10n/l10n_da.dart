@@ -299,34 +299,34 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobilePerfShortBullet => 'Bullet';
 
   @override
-  String get mobilePerfShortBlitz => 'Blitz';
+  String get mobilePerfShortBlitz => 'Lyn';
 
   @override
-  String get mobilePerfShortRapid => 'Rapid';
+  String get mobilePerfShortRapid => 'Hurtig';
 
   @override
-  String get mobilePerfShortClassical => 'Classical';
+  String get mobilePerfShortClassical => 'Klassisk';
 
   @override
-  String get mobilePerfShortCorrespondence => 'Corresp.';
+  String get mobilePerfShortCorrespondence => 'Korresp.';
 
   @override
-  String get mobilePerfShortFromPosition => 'From Pos.';
+  String get mobilePerfShortFromPosition => 'Fra pos.';
 
   @override
   String get mobilePerfShortChess960 => '960';
 
   @override
-  String get mobilePerfShortAntichess => 'Antichess';
+  String get mobilePerfShortAntichess => 'Antiskak';
 
   @override
   String get mobilePerfShortKingOfTheHill => 'KotH';
 
   @override
-  String get mobilePerfShortThreeCheck => '3check';
+  String get mobilePerfShortThreeCheck => '3skak';
 
   @override
-  String get mobilePerfShortAtomic => 'Atomic';
+  String get mobilePerfShortAtomic => 'Atom';
 
   @override
   String get mobilePerfShortHorde => 'Horde';
@@ -1628,7 +1628,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Turneringsstart nærmer sig';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Udsendelser, du abonnerer på';
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Ur i korrespondance er ved at løbe ud';
@@ -5167,7 +5167,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get resignTheGame => 'Giv op i partiet';
 
   @override
-  String get youCantStartNewGame => 'Du kan ikke starte et nyt parti, før dette er afsluttet.';
+  String get youCantStartNewGame => 'Du kan ikke starte et nyt parti, mens det er din tur.';
 
   @override
   String get since => 'Siden';

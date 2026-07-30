@@ -70,7 +70,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Du musst eingeloggt sein, um diese Seite anzuzeigen.';
 
   @override
-  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+  String get mobileNbOfflinePuzzles => 'Offline-Aufgaben';
 
   @override
   String get mobileNewGame => 'Neue Partie';
@@ -305,40 +305,40 @@ class AppLocalizationsDe extends AppLocalizations {
   String get mobilePerfShortRapid => 'Rapid';
 
   @override
-  String get mobilePerfShortClassical => 'Classical';
+  String get mobilePerfShortClassical => 'Klassisch';
 
   @override
-  String get mobilePerfShortCorrespondence => 'Corresp.';
+  String get mobilePerfShortCorrespondence => 'Korresp.';
 
   @override
-  String get mobilePerfShortFromPosition => 'From Pos.';
+  String get mobilePerfShortFromPosition => 'Stellung';
 
   @override
   String get mobilePerfShortChess960 => '960';
 
   @override
-  String get mobilePerfShortAntichess => 'Antichess';
+  String get mobilePerfShortAntichess => 'Anti';
 
   @override
   String get mobilePerfShortKingOfTheHill => 'KotH';
 
   @override
-  String get mobilePerfShortThreeCheck => '3check';
+  String get mobilePerfShortThreeCheck => '3Schach';
 
   @override
-  String get mobilePerfShortAtomic => 'Atomic';
+  String get mobilePerfShortAtomic => 'Atom';
 
   @override
   String get mobilePerfShortHorde => 'Horde';
 
   @override
-  String get mobilePerfShortRacingKings => 'Racing';
+  String get mobilePerfShortRacingKings => 'Rennen';
 
   @override
   String get mobilePerfShortCrazyhouse => 'Crazy';
 
   @override
-  String get mobilePerfShortPuzzle => 'Puzzle';
+  String get mobilePerfShortPuzzle => 'Aufgabe';
 
   @override
   String get variantStandard => 'Standard';
@@ -1628,7 +1628,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Turnier beginnt bald';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Übertragungen, die du abonniert hast';
+  String get preferencesNotifyBroadcasts => 'Übertragungen';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Zeit in Fernschachpartie neigt sich dem Ende zu';
@@ -5167,7 +5167,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get resignTheGame => 'Partie aufgeben';
 
   @override
-  String get youCantStartNewGame => 'Du kannst keine neue Partie starten, bevor diese beendet ist.';
+  String get youCantStartNewGame => 'Du kannst keine neue Partie starten, während du am Zug bist.';
 
   @override
   String get since => 'Seit';
@@ -6561,7 +6561,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get timeagoJustNow => 'in Kürze';
 
   @override
-  String get timeagoRightNow => 'vor Kurzem';
+  String get timeagoRightNow => 'gerade eben';
 
   @override
   String get timeagoCompleted => 'abgeschlossen';

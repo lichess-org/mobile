@@ -2385,10 +2385,10 @@ class AppLocalizationsMk extends AppLocalizations {
   String get puzzleThemeSkewerDescription => 'A motif involving a high value piece being attacked, moving out the way, and allowing a lower value piece behind it to be captured or attacked, the inverse of a pin.';
 
   @override
-  String get puzzleThemeSmotheredMate => 'Smothered mate';
+  String get puzzleThemeSmotheredMate => 'Задушен мат';
 
   @override
-  String get puzzleThemeSmotheredMateDescription => 'A checkmate delivered by a knight in which the mated king is unable to move because it is surrounded (or smothered) by its own pieces.';
+  String get puzzleThemeSmotheredMateDescription => 'Мат зададен од коњ при кој кралот не може да се движи бидејќи го опкружуваат (односно задушуваат) сопствените фигури.';
 
   @override
   String get puzzleThemeSuperGM => 'Super GM games';
@@ -2468,22 +2468,22 @@ class AppLocalizationsMk extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Овој профил е затворен.';
 
   @override
-  String get gameSetup => 'Game setup';
+  String get gameSetup => 'Поставки на партијата';
 
   @override
-  String get challengeAFriend => 'Challenge a friend';
+  String get challengeAFriend => 'Покани пријател';
 
   @override
-  String get playAgainstComputer => 'Play against computer';
+  String get playAgainstComputer => 'Играј против компјутер';
 
   @override
-  String get gameMode => 'Game mode';
+  String get gameMode => 'Режим на партија';
 
   @override
-  String get createLobbyGame => 'Create lobby game';
+  String get createLobbyGame => 'Создади барање за игра';
 
   @override
-  String get toInviteSomeoneToPlayGiveThisUrl => 'Да поканиш некој да игра, прати му го овој линк';
+  String get toInviteSomeoneToPlayGiveThisUrl => 'Споделете ја оваа адреса за да поканите некого на заедничка игра';
 
   @override
   String get gameOver => 'Крај на играта';
@@ -2551,7 +2551,7 @@ class AppLocalizationsMk extends AppLocalizations {
   String get createAGame => 'Создади игра';
 
   @override
-  String get createTheGame => 'Create the game';
+  String get createTheGame => 'Создади партија';
 
   @override
   String get whiteIsVictorious => 'Белите победија';
@@ -2560,7 +2560,7 @@ class AppLocalizationsMk extends AppLocalizations {
   String get blackIsVictorious => 'Црните победија';
 
   @override
-  String get youPlayTheWhitePieces => 'Ти си со белите фигури';
+  String get youPlayTheWhitePieces => 'Играте со белите фигури';
 
   @override
   String get youPlayTheBlackPieces => 'Ти си со црните фигури';
@@ -5167,7 +5167,7 @@ class AppLocalizationsMk extends AppLocalizations {
   String get resignTheGame => 'Предади ја играта';
 
   @override
-  String get youCantStartNewGame => 'Не можете да започнете нова игра додека моменталната не заврши.';
+  String get youCantStartNewGame => 'You can\'t start a new game until this one is finished.';
 
   @override
   String get since => 'Од';

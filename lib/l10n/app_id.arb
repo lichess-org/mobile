@@ -1319,7 +1319,6 @@
   "gameInProgress": "Permainan anda dengan {param} masih sedang berlangsung.",
   "abortTheGame": "Batalkan permainan",
   "resignTheGame": "Menyerah dari permainan",
-  "youCantStartNewGame": "Anda tidak dapat memulai permainan baru sampai permainan ini selesai.",
   "since": "Sejak",
   "until": "Hingga",
   "lichessDbExplanation": "Partai diambil dari semua pemain rated Lichess",

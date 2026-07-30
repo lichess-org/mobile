@@ -293,52 +293,52 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileGoodMoveButThereIsBetter => '좋은 수지만, 더 좋은 수가 있습니다';
 
   @override
-  String get mobilePerfShortUltraBullet => 'Ultra';
+  String get mobilePerfShortUltraBullet => '울트라';
 
   @override
-  String get mobilePerfShortBullet => 'Bullet';
+  String get mobilePerfShortBullet => '불렛';
 
   @override
-  String get mobilePerfShortBlitz => 'Blitz';
+  String get mobilePerfShortBlitz => '블리츠';
 
   @override
-  String get mobilePerfShortRapid => 'Rapid';
+  String get mobilePerfShortRapid => '래피드';
 
   @override
-  String get mobilePerfShortClassical => 'Classical';
+  String get mobilePerfShortClassical => '클래시컬';
 
   @override
-  String get mobilePerfShortCorrespondence => 'Corresp.';
+  String get mobilePerfShortCorrespondence => '통신';
 
   @override
-  String get mobilePerfShortFromPosition => 'From Pos.';
+  String get mobilePerfShortFromPosition => '커스텀';
 
   @override
   String get mobilePerfShortChess960 => '960';
 
   @override
-  String get mobilePerfShortAntichess => 'Antichess';
+  String get mobilePerfShortAntichess => '안티체스';
 
   @override
-  String get mobilePerfShortKingOfTheHill => 'KotH';
+  String get mobilePerfShortKingOfTheHill => '언덕의왕';
 
   @override
-  String get mobilePerfShortThreeCheck => '3check';
+  String get mobilePerfShortThreeCheck => '3체크';
 
   @override
-  String get mobilePerfShortAtomic => 'Atomic';
+  String get mobilePerfShortAtomic => '아토믹';
 
   @override
-  String get mobilePerfShortHorde => 'Horde';
+  String get mobilePerfShortHorde => '호드';
 
   @override
-  String get mobilePerfShortRacingKings => 'Racing';
+  String get mobilePerfShortRacingKings => '킹 경주';
 
   @override
-  String get mobilePerfShortCrazyhouse => 'Crazy';
+  String get mobilePerfShortCrazyhouse => '크레이지';
 
   @override
-  String get mobilePerfShortPuzzle => 'Puzzle';
+  String get mobilePerfShortPuzzle => '퍼즐';
 
   @override
   String get variantStandard => '스탠다드';
@@ -1606,7 +1606,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => '곧 토너먼트 시작할 때';
 
   @override
-  String get preferencesNotifyBroadcasts => '구독한 방송';
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
 
   @override
   String get preferencesNotifyTimeAlarm => '통신 대국 시간 곧 만료됨';
@@ -1979,13 +1979,13 @@ class AppLocalizationsKo extends AppLocalizations {
   String get puzzleThemeAnastasiaMate => '아나스타시아 메이트';
 
   @override
-  String get puzzleThemeAnastasiaMateDescription => '나이트와 룩 또는 퀸이 힘을 합쳐 상대 킹을 보드 가장자리와 자신의 기물 사이의 함정에 빠트립니다.';
+  String get puzzleThemeAnastasiaMateDescription => '나이트와 룩 또는 퀸이 힘을 합쳐 상대 킹을 보드 가장자리와 자신의 기물 사이에 가둡니다.';
 
   @override
   String get puzzleThemeArabianMate => '아라비안 메이트';
 
   @override
-  String get puzzleThemeArabianMateDescription => '나이트와 룩이 힘을 합쳐 상대 킹을 보드 구석에서 함정에 빠트립니다.';
+  String get puzzleThemeArabianMateDescription => '나이트와 룩이 힘을 합쳐 상대 킹을 보드 구석에 가둡니다.';
 
   @override
   String get puzzleThemeAttackingF2F7 => 'f2나 f7 공격하기';
@@ -2375,7 +2375,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get puzzleThemeTrappedPieceDescription => '기물의 움직임이 제한되어 있어 잡히는걸 막을 수 없습니다.';
 
   @override
-  String get puzzleThemeUnderPromotion => '하향 승진';
+  String get puzzleThemeUnderPromotion => '언더프로모션';
 
   @override
   String get puzzleThemeUnderPromotionDescription => '나이트, 비숍, 룩으로 승진';
@@ -3467,7 +3467,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get importGame => '대국 불러오기';
 
   @override
-  String get importGameExplanation => '체스 대국의 PGN 을 붙여 넣으면, 복기와 컴퓨터 분석을 진행할 수 있고, 채팅을 칠 수도 있으며, 대국을 공유할 수 있는 URL 링크도 생성할 수 있습니다.';
+  String get importGameExplanation => '체스 대국의 PGN을 붙여넣어 복기와 컴퓨터 분석을 진행하고, 채팅을 치고, 공유 가능한 링크를 생성하세요.';
 
   @override
   String get importGameDataPrivacyWarning => '이 PGN은 모두가 볼 수 있게 됩니다. 비공개로 대국을 불러오려면, 연구 기능을 이용하세요.';
@@ -3633,7 +3633,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get performance => '퍼포먼스 레이팅';
 
   @override
-  String get tournamentComplete => '대회 종료';
+  String get tournamentComplete => '토너먼트 종료';
 
   @override
   String get movesPlayed => '말 이동 횟수';
@@ -3755,7 +3755,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get activePlayers => '활동적인 플레이어';
 
   @override
-  String get bewareTheGameIsRatedButHasNoClock => '주의하세요, 공식 대국이지만 시간 제한이 없습니다!';
+  String get bewareTheGameIsRatedButHasNoClock => '주의하세요, 레이팅 대국이지만 시간 제한이 없습니다!';
 
   @override
   String get success => '성공!';
@@ -3860,7 +3860,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get reportProcessedFasterInEnglish => '귀하의 신고가 영어로 적혀있을 경우 빠르게 처리될 것입니다.';
 
   @override
-  String get error_provideOneCheatedGameLink => '부정행위가 존재하는 대국의 링크를 제공해주세요.';
+  String get error_provideOneCheatedGameLink => '검토할 대국의 링크를 하나 이상 제공해 주세요.';
 
   @override
   String by(String param) {
@@ -4392,12 +4392,12 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String byRegisteringYouAgreeToBeBoundByOur(String param) {
-    return '이곳에 등록하면 당신은 이곳의 $param 약관에 동의하시는 것입니다.';
+    return '회원가입하시면 $param에 동의한 것으로 간주됩니다.';
   }
 
   @override
   String readAboutOur(String param) {
-    return '$param를 읽어보세요.';
+    return '$param을 읽어보세요.';
   }
 
   @override
@@ -4514,7 +4514,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get like => '좋아요';
 
   @override
-  String get liked => '좋아요함';
+  String get liked => '좋아함';
 
   @override
   String get quickPairing => '빠른 상대 찾기';
@@ -4591,7 +4591,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get usernameSuffixInvalid => '사용자 이름의 끝 글자는 알파벳이나 숫자여야 합니다.';
 
   @override
-  String get usernameCharsInvalid => '사용자 이름에는 알파벳, 숫자, 언더스코어 ( _ ), 하이픈 ( - ) 만을 사용할 수 있습니다.';
+  String get usernameCharsInvalid => '사용자 이름에는 알파벳, 숫자, 언더스코어 ( _ ), 하이픈 ( - ) 만을 사용할 수 있습니다. 언더스코어와 하이픈은 연속으로 사용할 수 없습니다.';
 
   @override
   String get usernameUnacceptable => '사용자 이름을 사용할 수 없습니다.';
@@ -4756,7 +4756,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get conditionalPremoves => '수 예측';
 
   @override
-  String get addCurrentVariation => '현재의 변화를 추가';
+  String get addCurrentVariation => '현재 라인 추가';
 
   @override
   String get playVariationToCreateConditionalPremoves => '기물을 움직여 조건적인 수를 만들기';
@@ -4887,7 +4887,7 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get inTheFAQ => 'F.A.Q';
+  String get inTheFAQ => 'FAQ';
 
   @override
   String toReportSomeoneForCheatingOrBadBehavior(String param1) {
@@ -4907,7 +4907,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String makeSureToRead(String param1) {
-    return '$param1를 꼭 읽으세요';
+    return '$param1을 꼭 읽으세요';
   }
 
   @override
@@ -5139,7 +5139,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get resignTheGame => '대국 기권';
 
   @override
-  String get youCantStartNewGame => '이 대국이 끝나기 전까지 새 대국을 시작할 수 없습니다.';
+  String get youCantStartNewGame => '당신 턴에는 새로운 대국을 시작할 수 없습니다.';
 
   @override
   String get since => '부터';
@@ -5166,7 +5166,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get showMeEverything => '모두 보기';
 
   @override
-  String get lichessPatronInfo => 'Lichess는 비영리 기구이며 완전한 무료/자유 오픈소스 소프트웨어입니다.\n모든 운영 비용, 개발, 컨텐츠 조달은 전적으로 사용자들의 기부로 이루어집니다.';
+  String get lichessPatronInfo => 'Lichess는 비영리 기구이며 완전한 무료/자유 오픈소스 소프트웨어입니다. 모든 운영 비용, 개발, 컨텐츠 조달은 전적으로 사용자들의 기부로 이루어집니다. 마음씨 좋은 사용자 분들이 없었더라면, 이 사이트는 유지될 수 없을 겁니다. 함께해 주셔서 감사합니다!  ';
 
   @override
   String get nothingToSeeHere => '지금은 여기에 볼 것이 없습니다.';

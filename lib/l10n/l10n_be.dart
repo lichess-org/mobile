@@ -299,25 +299,25 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobilePerfShortBullet => 'Bullet';
 
   @override
-  String get mobilePerfShortBlitz => 'Blitz';
+  String get mobilePerfShortBlitz => 'Бліц';
 
   @override
   String get mobilePerfShortRapid => 'Rapid';
 
   @override
-  String get mobilePerfShortClassical => 'Classical';
+  String get mobilePerfShortClassical => 'Клясічныя';
 
   @override
   String get mobilePerfShortCorrespondence => 'Corresp.';
 
   @override
-  String get mobilePerfShortFromPosition => 'From Pos.';
+  String get mobilePerfShortFromPosition => 'З пазіцыі';
 
   @override
   String get mobilePerfShortChess960 => '960';
 
   @override
-  String get mobilePerfShortAntichess => 'Antichess';
+  String get mobilePerfShortAntichess => 'Паддаўкі';
 
   @override
   String get mobilePerfShortKingOfTheHill => 'KotH';
@@ -1668,7 +1668,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'У хуткім часе пачынаецца турнір';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Трансляцыі, на якія вы падпісаны';
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Час зыходзіць у гульні па перепісцы';
@@ -2684,10 +2684,10 @@ class AppLocalizationsBe extends AppLocalizations {
   String get blackDidntMove => 'Чорныя не зрабілі ход';
 
   @override
-  String get whiteAborted => 'White aborted the game';
+  String get whiteAborted => 'Белыя скасавалі гульню';
 
   @override
-  String get blackAborted => 'Black aborted the game';
+  String get blackAborted => 'Чорныя скасавалі гульню';
 
   @override
   String get requestAComputerAnalysis => 'Запытаць кампутарны аналіз';
@@ -3375,19 +3375,19 @@ class AppLocalizationsBe extends AppLocalizations {
   String get proposeATakeback => 'Прапанаваць скасаваць ход';
 
   @override
-  String get whiteProposesTakeback => 'White proposes takeback';
+  String get whiteProposesTakeback => 'Белыя прапануюць скасаваць ход';
 
   @override
-  String get blackProposesTakeback => 'Black proposes takeback';
+  String get blackProposesTakeback => 'Чорныя прапануюць скасаваць ход';
 
   @override
   String get takebackPropositionSent => 'Прапанова скасаваць ход даслана';
 
   @override
-  String get whiteDeclinesTakeback => 'White declines takeback';
+  String get whiteDeclinesTakeback => 'Белыя адхіляюць скасаванне хода';
 
   @override
-  String get blackDeclinesTakeback => 'Black declines takeback';
+  String get blackDeclinesTakeback => 'Чорныя адхіляюць скасаванне хода';
 
   @override
   String get whiteAcceptsTakeback => 'White accepts takeback';
@@ -5219,7 +5219,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get resignTheGame => 'Здацца';
 
   @override
-  String get youCantStartNewGame => 'Вы не можаце пачаць новую гульню, пакуль гэта няскончана.';
+  String get youCantStartNewGame => 'You can\'t start a new game until this one is finished.';
 
   @override
   String get since => 'З';

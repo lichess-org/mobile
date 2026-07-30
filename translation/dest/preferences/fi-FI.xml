@@ -62,7 +62,6 @@
   <string name="notifyGameEvent">Kirjeshakkipelien uudet tapahtumat</string>
   <string name="notifyChallenge">Haasteet</string>
   <string name="notifyTournamentSoon">Turnaus alkamassa pian</string>
-  <string name="notifyBroadcasts">Lähetykset, jotka olet tilannut</string>
   <string name="notifyTimeAlarm">Kirjeshakkipelin aika loppumassa</string>
   <string name="notifyBell">Kilahtava ilmoitus Lichessissä</string>
   <string name="notifyPush">Laitteen ilmoitus, kun et ole Lichessissä</string>
@@ -88,4 +87,5 @@
   <string name="boardSettings">Lauta</string>
   <string name="analysisSettings">Analyysiasetukset</string>
   <string name="maneuverArrowsHelp">Tietokoneen laskema yhden nappulan siirtosarja</string>
+  <string name="hoverOverSettingLabelsForHelp">Saat ohjeita asetuksista viemällä osoittimen niiden päälle</string>
 </resources>

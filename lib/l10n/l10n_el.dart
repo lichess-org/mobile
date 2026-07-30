@@ -70,7 +70,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Πρέπει να συνδεθείτε για να δείτε αυτή τη σελίδα.';
 
   @override
-  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+  String get mobileNbOfflinePuzzles => 'Γρίφοι εκτός σύνδεσης';
 
   @override
   String get mobileNewGame => 'Νέα παρτίδα';
@@ -305,40 +305,40 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobilePerfShortRapid => 'Rapid';
 
   @override
-  String get mobilePerfShortClassical => 'Classical';
+  String get mobilePerfShortClassical => 'Κλασικό';
 
   @override
-  String get mobilePerfShortCorrespondence => 'Corresp.';
+  String get mobilePerfShortCorrespondence => 'Αλληλογρ.';
 
   @override
-  String get mobilePerfShortFromPosition => 'From Pos.';
+  String get mobilePerfShortFromPosition => 'Από θέση';
 
   @override
   String get mobilePerfShortChess960 => '960';
 
   @override
-  String get mobilePerfShortAntichess => 'Antichess';
+  String get mobilePerfShortAntichess => 'Φάτο';
 
   @override
-  String get mobilePerfShortKingOfTheHill => 'KotH';
+  String get mobilePerfShortKingOfTheHill => 'Βασ. Λόφου';
 
   @override
-  String get mobilePerfShortThreeCheck => '3check';
+  String get mobilePerfShortThreeCheck => 'Τριών σαχ';
 
   @override
-  String get mobilePerfShortAtomic => 'Atomic';
+  String get mobilePerfShortAtomic => 'Πυρηνικό';
 
   @override
-  String get mobilePerfShortHorde => 'Horde';
+  String get mobilePerfShortHorde => 'Ορδής';
 
   @override
-  String get mobilePerfShortRacingKings => 'Racing';
+  String get mobilePerfShortRacingKings => 'Αγώνας';
 
   @override
-  String get mobilePerfShortCrazyhouse => 'Crazy';
+  String get mobilePerfShortCrazyhouse => 'Τρελάδικο';
 
   @override
-  String get mobilePerfShortPuzzle => 'Puzzle';
+  String get mobilePerfShortPuzzle => 'Γρίφος';
 
   @override
   String get variantStandard => 'Κανονικό';
@@ -1628,7 +1628,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Το τουρνουά ξεκινά σύντομα';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Μεταδόσεις στις οποίες έχετε εγγραφεί';
+  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Λίγος χρόνος σε παρτίδα δι\' αλληλογραφίας';
@@ -1658,37 +1658,37 @@ class AppLocalizationsEl extends AppLocalizations {
   String get preferencesInlineNotation => 'Ενσωματωμένη σημειογραφία';
 
   @override
-  String get preferencesShowServerAnalysis => 'Show server analysis';
+  String get preferencesShowServerAnalysis => 'Εμφάνιση ανάλυσης διακομιστή';
 
   @override
-  String get preferencesShowBestMoveArrows => 'Show best move arrows';
+  String get preferencesShowBestMoveArrows => 'Εμφάνιση βέλους καλύτερης κίνησης';
 
   @override
-  String get preferencesShowManeuverArrows => 'Show maneuver arrows';
+  String get preferencesShowManeuverArrows => 'Εμφάνιση βελών ελιγμών';
 
   @override
-  String get preferencesShowGauge => 'Show evaluation gauge';
+  String get preferencesShowGauge => 'Εμφάνιση μπάρας υπεροχής';
 
   @override
-  String get preferencesShowMoveAnnotationsOnBoard => 'Show move annotations';
+  String get preferencesShowMoveAnnotationsOnBoard => 'Εμφάνιση σχολιασμού κινήσεων';
 
   @override
-  String get preferencesShowVariationArrows => 'Show variation arrows';
+  String get preferencesShowVariationArrows => 'Εμφάνιση βελών βαριάντας';
 
   @override
-  String get preferencesShowLiveGlyphs => 'Live engine annotations';
+  String get preferencesShowLiveGlyphs => 'Σχόλια από την μηχανή σε πραγματικό χρόνο';
 
   @override
-  String get preferencesShowUndefendedPieces => 'Show undefended pieces';
+  String get preferencesShowUndefendedPieces => 'Εμφάνιση ανυπεράσπιστων κομματιών';
 
   @override
-  String get preferencesShowPinnedPieces => 'Show pinned pieces';
+  String get preferencesShowPinnedPieces => 'Εμφάνιση καρφωμένων κομματιών';
 
   @override
-  String get preferencesShowCheckableKing => 'Show checkable king';
+  String get preferencesShowCheckableKing => 'Εμφάνιση βασιλιά που απειλείται';
 
   @override
-  String get preferencesDisclosureMode => 'Enable variation hiding';
+  String get preferencesDisclosureMode => 'Ενεργοποίηση απόκρυψης βαριάντας';
 
   @override
   String get preferencesGeneralSettings => 'Γενικές';
@@ -1703,10 +1703,10 @@ class AppLocalizationsEl extends AppLocalizations {
   String get preferencesAnalysisSettings => 'Ρυθμίσεις ανάλυσης';
 
   @override
-  String get preferencesManeuverArrowsHelp => 'Sequence of engine moves for one piece';
+  String get preferencesManeuverArrowsHelp => 'Ακολουθία κινήσεων μηχανής για το κομμάτι';
 
   @override
-  String get preferencesHoverOverSettingLabelsForHelp => 'Hover over setting labels for help';
+  String get preferencesHoverOverSettingLabelsForHelp => 'Τοποθετήστε τον δείκτη πάνω από τις ετικέτες των ρυθμίσεων για βοήθεια';
 
   @override
   String get puzzlePuzzles => 'Γρίφοι';
@@ -2157,10 +2157,10 @@ class AppLocalizationsEl extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Τακτικά που αφορούν τον κανόνα en passant, σύμφωνα με τον οποίο ένα πιόνι μπορεί να αιχμαλωτίσει ένα αντίπαλο πιόνι το οποίο προσπέρασε κινούμενο από την αρχική του θέση δύο τετράγωνα μπροστά.';
 
   @override
-  String get puzzleThemeEpauletteMate => 'Epaulette mate';
+  String get puzzleThemeEpauletteMate => 'Ματ των επωμίδων';
 
   @override
-  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+  String get puzzleThemeEpauletteMateDescription => 'Ένας βασιλιάς στην άκρη της σκακιέρας δέχεται σαχ και τα δύο γειτονικά τετράγωνα διαφυγής του είναι κατειλημμένα από φιλικά κομμάτια.';
 
   @override
   String get puzzleThemeExposedKing => 'Ευάλωτος βασιλιάς';
@@ -2217,10 +2217,10 @@ class AppLocalizationsEl extends AppLocalizations {
   String get puzzleThemeMorphysMateDescription => 'Ένας αξιωματικός κάνει σαχ στον αντίπαλο βασιλιά, περιορίζοντάς τον με τη βοήθεια ενός πύργου.';
 
   @override
-  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+  String get puzzleThemeSwallowstailMate => 'Ματ χελιδονοουράς';
 
   @override
-  String get puzzleThemeSwallowstailMateDescription => 'A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.';
+  String get puzzleThemeSwallowstailMateDescription => 'Ένα μοτίβο ματ που οπτικά μοιάζει με την ουρά ενός χελιδονιού, παρόμοιο με το σχήμα V.';
 
   @override
   String get puzzleThemeTriangleMate => 'Τριγωνικό ματ';
@@ -5167,7 +5167,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get resignTheGame => 'Παραίτηση';
 
   @override
-  String get youCantStartNewGame => 'Δεν μπορείτε να ξεκινήσετε μια καινούργια παρτίδα εάν δεν ολοκληρώσετε προηγουμένως αυτήν.';
+  String get youCantStartNewGame => 'Δεν μπορείτε να ξεκινήσετε νέα παρτίδα ενώ είναι η σειρά σας.';
 
   @override
   String get since => 'Από';
