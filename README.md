@@ -17,7 +17,7 @@ codebase.
 tl;dr: Install Flutter, clone the repo, run in order:
 - `flutter pub get`
 - `dart run build_runner watch`
-- `flutter analyze --watch`,
+- `flutter analyze --watch`
 
 and you're ready to code!
 
