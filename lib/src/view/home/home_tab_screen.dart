@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/experimental/mutation.dart';
@@ -217,7 +218,14 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                         onPressed: () {
                           launchUrl(Uri.parse('https://lichess.org/patron'));
                         },
-                        child: Text(context.l10n.patronDonate),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          spacing: 5,
+                          children: [
+                            const Icon(CupertinoIcons.heart),
+                            Text(context.l10n.patronDonate),
+                          ],
+                        ),
                       ),
                     ),
                     const SizedBox(height: 16.0),
@@ -227,7 +235,14 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                       onPressed: () {
                         launchUrl(Uri.parse('https://lichess.org/about'));
                       },
-                      child: Text(context.l10n.aboutX('Lichess...')),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        spacing: 5,
+                        children: [
+                          const Icon(CupertinoIcons.info_circle),
+                          Text(context.l10n.aboutX('Lichess')),
+                        ],
+                      ),
                     ),
                   ),
                   const _WelcomeMessageCard(),
@@ -568,7 +583,11 @@ class _SignInWidget extends ConsumerWidget {
           }).ignore();
         },
       },
-      child: Text(context.l10n.signIn),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        spacing: 5,
+        children: [const Icon(CupertinoIcons.person), Text(context.l10n.signIn)],
+      ),
     );
   }
 }
