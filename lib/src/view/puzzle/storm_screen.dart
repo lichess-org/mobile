@@ -49,10 +49,7 @@ class _StormScreenState extends ConsumerState<StormScreen> {
   Widget build(BuildContext context) {
     return WakelockWidget(
       child: Scaffold(
-        appBar: AppBar(
-          actions: [_StormDashboardButton(), const ToggleSoundButton()],
-          title: const Text('Puzzle Storm'),
-        ),
+        appBar: AppBar(actions: const [ToggleSoundButton()], title: const Text('Puzzle Storm')),
         body: const _Load(),
       ),
     );
@@ -701,6 +698,7 @@ class _BottomBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrl = stormControllerProvider((data.puzzles, data.timestamp));
     final stormState = ref.watch(ctrl);
+    final authUser = ref.watch(authControllerProvider);
     return BottomBar(
       children: [
         if (stormState.mode == StormMode.initial)
@@ -735,6 +733,16 @@ class _BottomBar extends ConsumerWidget {
             label: 'Result',
             showLabel: true,
             onTap: () => _showStats(context, stormState.stats!),
+          ),
+        if (authUser != null)
+          BottomBarButton(
+            icon: Icons.history,
+            label: context.l10n.stormHighscores,
+            showLabel: true,
+            onTap: () => Navigator.of(
+              context,
+              rootNavigator: true,
+            ).push(StormDashboardModal.buildRoute(authUser.user)),
           ),
       ],
     );
@@ -920,24 +928,4 @@ class _StatsRow extends StatelessWidget {
       ),
     );
   }
-}
-
-class _StormDashboardButton extends ConsumerWidget {
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final authUser = ref.watch(authControllerProvider);
-    if (authUser != null) {
-      return IconButton(
-        tooltip: 'Storm History',
-        onPressed: () => _showDashboard(context, authUser),
-        icon: const Icon(Icons.history),
-      );
-    }
-    return const SizedBox.shrink();
-  }
-
-  void _showDashboard(BuildContext context, AuthUser authUser) => Navigator.of(
-    context,
-    rootNavigator: true,
-  ).push(StormDashboardModal.buildRoute(authUser.user));
 }

@@ -41,6 +41,13 @@ class StudySettingsScreen extends ConsumerWidget {
                     ref.read(studyPreferencesProvider.notifier).toggleInlineNotation(),
               ),
               SwitchSettingTile(
+                // TODO: l10n
+                title: const Text('Show engine lines'),
+                value: studyPrefs.showEngineLines,
+                onChanged: (value) =>
+                    ref.read(studyPreferencesProvider.notifier).toggleShowEngineLines(),
+              ),
+              SwitchSettingTile(
                 title: const Text('Small board'), // TODO l10n
                 value: studyPrefs.smallBoard,
                 onChanged: (value) =>

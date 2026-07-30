@@ -5,7 +5,6 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
-import 'package:lichess_mobile/src/model/game/gif_export.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
@@ -13,6 +12,7 @@ import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/game/gif_export_dialog.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:share_plus/share_plus.dart';
@@ -116,62 +116,63 @@ class _GameBookmarkContextMenuActionState extends State<GameBookmarkContextMenuA
   }
 }
 
-/// Makes a list of [ContextMenuAction] for game sharing options.
-List<Widget> makeFinishedGameShareContextMenuActions(
+/// Makes a list of [BottomSheetAction] for game sharing options, meant to be
+/// used in a "Share & export" bottom sheet.
+///
+/// The game URL can always be shared; the GIF and PGN exports are only available
+/// once the game is [finished].
+List<BottomSheetAction> makeFinishedGameShareBottomSheetActions(
   BuildContext context,
   WidgetRef ref, {
   required GameId gameId,
   required Side orientation,
+  required bool finished,
 }) {
   return [
-    ContextMenuAction(
-      icon: Theme.of(context).platform == TargetPlatform.iOS
-          ? Icons.ios_share_outlined
-          : Icons.share_outlined,
-      label: context.l10n.mobileShareGameURL,
+    BottomSheetAction(
+      makeLabel: (context) => Text(context.l10n.mobileShareGameURL),
       onPressed: () {
         launchShareDialog(context, ShareParams(uri: lichessUri('/$gameId/${orientation.name}')));
       },
     ),
-    ContextMenuAction(
-      icon: Icons.gif_outlined,
-      label: context.l10n.gameAsGIF,
-      onPressed: () => showModalBottomSheet<GifExportOptions>(
-        context: context,
-        builder: (_) => GifExport(gameId: gameId, orientation: orientation),
+    if (finished) ...[
+      BottomSheetAction(
+        makeLabel: (context) => Text(context.l10n.gameAsGIF),
+        onPressed: () => showModalBottomSheet<void>(
+          context: context,
+          builder: (_) => GifExport(gameId: gameId, orientation: orientation),
+        ),
       ),
-    ),
-    ContextMenuAction(
-      icon: Icons.text_snippet_outlined,
-      label: context.l10n.downloadAnnotated,
-      onPressed: () async {
-        try {
-          final pgn = await ref.read(gameShareServiceProvider).annotatedPgn(gameId);
-          if (context.mounted) {
-            launchShareDialog(context, ShareParams(text: pgn));
+      BottomSheetAction(
+        makeLabel: (context) => Text(context.l10n.downloadAnnotated),
+        onPressed: () async {
+          try {
+            final pgn = await ref.read(gameShareServiceProvider).annotatedPgn(gameId);
+            if (context.mounted) {
+              launchShareDialog(context, ShareParams(text: pgn));
+            }
+          } catch (e) {
+            if (context.mounted) {
+              showSnackBar(context, 'Failed to get PGN', type: SnackBarType.error);
+            }
           }
-        } catch (e) {
-          if (context.mounted) {
-            showSnackBar(context, 'Failed to get PGN', type: SnackBarType.error);
+        },
+      ),
+      BottomSheetAction(
+        makeLabel: (context) => Text(context.l10n.downloadRaw),
+        onPressed: () async {
+          try {
+            final pgn = await ref.read(gameShareServiceProvider).rawPgn(gameId);
+            if (context.mounted) {
+              launchShareDialog(context, ShareParams(text: pgn));
+            }
+          } catch (e) {
+            if (context.mounted) {
+              showSnackBar(context, 'Failed to get PGN', type: SnackBarType.error);
+            }
           }
-        }
-      },
-    ),
-    ContextMenuAction(
-      icon: Icons.description_outlined,
-      label: context.l10n.downloadRaw,
-      onPressed: () async {
-        try {
-          final pgn = await ref.read(gameShareServiceProvider).rawPgn(gameId);
-          if (context.mounted) {
-            launchShareDialog(context, ShareParams(text: pgn));
-          }
-        } catch (e) {
-          if (context.mounted) {
-            showSnackBar(context, 'Failed to get PGN', type: SnackBarType.error);
-          }
-        }
-      },
-    ),
+        },
+      ),
+    ],
   ];
 }
