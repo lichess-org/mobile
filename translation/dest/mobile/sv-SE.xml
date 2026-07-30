@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="account" comment="The account screen title.">Konto</string>
   <string name="accountPreferences" comment="Displayed on settings screen. This is for preferences synced with website on the server.">Kontoinställningar</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Alla spel</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Är du säker?</string>
