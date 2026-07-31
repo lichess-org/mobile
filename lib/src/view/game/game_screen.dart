@@ -34,6 +34,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// Screen to play a game, or to show a challenge or to show current user's past games.
 ///
@@ -310,6 +311,8 @@ class _GameMenu extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isBookmarkedAsync = ref.watch(isGameBookmarkedProvider(gameId));
+    final gameState = ref.watch(gameControllerProvider(gameId));
+    final opponentUsername = gameState.value?.game.opponent?.user?.name;
 
     return ContextMenuIconButton(
       icon: const Icon(Icons.more_horiz),
@@ -335,6 +338,17 @@ class _GameMenu extends ConsumerWidget {
           onToggleBookmark: () =>
               ref.read(gameControllerProvider(gameId).notifier).toggleBookmark(),
         ),
+        if (opponentUsername != null)
+          ContextMenuAction(
+            icon: Icons.flag_outlined,
+            label: context.l10n.reportXToModerators(opponentUsername),
+            onPressed: () => launchUrl(
+              lichessUri('/report', {
+                'username': opponentUsername,
+                'login': gameState.value?.game.me?.user?.id,
+              }),
+            ),
+          ),
         ...(switch (ref.watch(gameShareDataProvider(gameId))) {
           AsyncData(:final value) =>
             value.finished
