@@ -64,6 +64,7 @@ import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/server_outage_display.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
+import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// Number of cold app starts before hiding the home customization tip.
@@ -222,7 +223,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                           mainAxisSize: MainAxisSize.min,
                           spacing: 5,
                           children: [
-                            const Icon(CupertinoIcons.heart),
+                            const Icon(LichessIcons.patron),
                             Text(context.l10n.patronDonate),
                           ],
                         ),
@@ -235,14 +236,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                       onPressed: () {
                         launchUrl(Uri.parse('https://lichess.org/about'));
                       },
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        spacing: 5,
-                        children: [
-                          const Icon(CupertinoIcons.info_circle),
-                          Text(context.l10n.aboutX('Lichess')),
-                        ],
-                      ),
+                      child: Text(context.l10n.aboutX('Lichess')),
                     ),
                   ),
                   const _WelcomeMessageCard(),
