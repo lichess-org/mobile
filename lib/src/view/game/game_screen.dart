@@ -344,7 +344,7 @@ class _GameMenu extends ConsumerWidget {
             label: context.l10n.reportXToModerators(opponentUsername),
             onPressed: () => launchUrl(
               lichessUri('/report', {
-                'username': opponentUsername,
+                'username': gameState.value?.game.opponent?.user?.id,
                 'login': gameState.value?.game.me?.user?.id,
               }),
             ),
