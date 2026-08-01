@@ -224,11 +224,10 @@ void main() {
     });
 
     test('caps a non-mix angle at kFixedOfflineQueueLength regardless of the setting', () async {
-      // The configurable count applies only to the mix angle. A non-mix angle
-      // must never grow past kFixedOfflineQueueLength, even when the setting
-      // (here the override) asks for more: per-angle queues would otherwise
-      // multiply into enough offline solves to blow the server's solve rate
-      // limit.
+      // The configurable count applies only to the mix angle. A non-mix angle must never grow past
+      // kFixedOfflineQueueLength, even when the setting (here the override) asks for more:
+      // per-angle queues would otherwise multiply into enough offline solves to blow the server's
+      // solve rate limit.
       const nonMixAngle = PuzzleTheme(PuzzleThemeKey.advancedPawn);
       int nbReq = 0;
       final mockClient = MockClient((request) {

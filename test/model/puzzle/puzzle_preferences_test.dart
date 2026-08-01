@@ -33,10 +33,9 @@ void main() {
     });
 
     test('a full non-mix queue leaves no deficit for the server to fill', () {
-      // Regression test for the request burst on the puzzle tab: the fixed
-      // queue length must not exceed what one batch request can return, or
-      // every saved angle stays permanently short and re-downloads on every
-      // read of its next puzzle.
+      // Regression test for the request burst on the puzzle tab: the fixed queue length must not
+      // exceed what one batch request can return, or every saved angle stays permanently short and
+      // re-downloads on every read of its next puzzle.
       expect(kFixedOfflineQueueLength, lessThanOrEqualTo(kServerPuzzleBatchCap));
     });
   });

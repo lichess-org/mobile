@@ -493,7 +493,7 @@ class PuzzleAnglePreview extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final puzzle = ref.watch(nextPuzzleProvider(angle));
+    final puzzle = ref.watch(nextPuzzlePreviewProvider(angle));
     final flatOpenings = ref.watch(flatOpeningsListProvider);
     final isOnline = ref.watch(isDeviceOnlineProvider);
     // Only useful offline: online the queue is refilled as puzzles are solved, so the number of
@@ -621,21 +621,30 @@ class PuzzleAnglePreview extends ConsumerWidget {
                             ),
                           )
                         else
-                          const Flexible(
-                            child: Text('No puzzles available, please go online to fetch them.'),
+                          Flexible(
+                            child: Text(
+                              isOnline
+                                  // The queue is only refilled when a puzzle is opened, so an empty
+                                  // one online is not a dead end.
+                                  ? 'Tap to fetch new puzzles.'
+                                  : 'No puzzles available, please go online to fetch them.',
+                            ),
                           ),
                       ],
                     ),
                   ],
                 ),
-                onTap: puzzle != null ? onTap : null,
+                // Tappable even with an empty queue: the puzzle screen is what fetches new puzzles.
+                onTap: onTap,
               ),
             );
     }
 
-    return puzzle.maybeWhen(
-      data: (data) => buildPuzzlePreview(data?.puzzle),
-      orElse: () => buildPuzzlePreview(null, loading: true),
-    );
+    return switch (puzzle) {
+      AsyncData(:final value) => buildPuzzlePreview(value),
+      // A storage failure leaves nothing to preview, but the angle can still be opened.
+      AsyncError() => buildPuzzlePreview(null),
+      _ => buildPuzzlePreview(null, loading: true),
+    };
   }
 }

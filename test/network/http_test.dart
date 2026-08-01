@@ -47,8 +47,8 @@ void main() {
     });
 
     test('does not retry a puzzle batch download (GET /api/puzzle/batch)', () {
-      // Batch downloads are issued once per angle, so retrying doubles a burst
-      // the server has just refused.
+      // Batch downloads are issued once per angle, so retrying doubles a burst the server has just
+      // refused.
       expect(
         shouldRetryOn429(response(429, method: 'GET', path: '/api/puzzle/batch/mix')),
         isFalse,
