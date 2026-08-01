@@ -754,6 +754,7 @@
   "coordinatesShowCoordsOnAllSquares": "Coordinates on every square",
   "coordinatesShowPieces": "Show pieces",
   "coordinatesStartTraining": "Start training",
+  "coordinatesAbortTraining": "Abort training",
   "coordinatesFindSquare": "Find square",
   "coordinatesNameSquare": "Name square",
   "coordinatesPracticeOnlySomeFilesAndRanks": "Practice only some files & ranks",
