@@ -303,7 +303,7 @@ void main() {
       // stored queue already covers the non-mix cap, so nextPuzzle needs no fetch
       final fullQueue = PuzzleBatch(
         solved: IList(const []),
-        unsolved: IList([for (var i = 0; i < kMinOfflinePuzzles; i++) puzzle]),
+        unsolved: IList([for (var i = 0; i < kFixedOfflineQueueLength; i++) puzzle]),
       );
 
       final app = await makeTestProviderScopeApp(

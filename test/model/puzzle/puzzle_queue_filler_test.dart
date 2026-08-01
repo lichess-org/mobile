@@ -223,11 +223,12 @@ void main() {
       expect(data?.unsolved.length, equals(2));
     });
 
-    test('caps a non-mix angle at kMinOfflinePuzzles regardless of the setting', () async {
+    test('caps a non-mix angle at kFixedOfflineQueueLength regardless of the setting', () async {
       // The configurable count applies only to the mix angle. A non-mix angle
-      // must never grow past kMinOfflinePuzzles, even when the setting (here the
-      // override) asks for more: per-angle queues would otherwise multiply into
-      // enough offline solves to blow the server's solve rate limit.
+      // must never grow past kFixedOfflineQueueLength, even when the setting
+      // (here the override) asks for more: per-angle queues would otherwise
+      // multiply into enough offline solves to blow the server's solve rate
+      // limit.
       const nonMixAngle = PuzzleTheme(PuzzleThemeKey.advancedPawn);
       int nbReq = 0;
       final mockClient = MockClient((request) {
@@ -245,7 +246,7 @@ void main() {
         userId: _user,
         angle: nonMixAngle,
         data: _makePuzzleBatch(
-          unsolved: [for (var i = 0; i < kMinOfflinePuzzles - 1; i++) PuzzleId('p$i')],
+          unsolved: [for (var i = 0; i < kFixedOfflineQueueLength - 1; i++) PuzzleId('p$i')],
         ),
       );
 
@@ -256,10 +257,10 @@ void main() {
       expect(
         nbReq,
         equals(1),
-        reason: 'fills up to kMinOfflinePuzzles (one request), not to the requested 300',
+        reason: 'fills up to kFixedOfflineQueueLength (one request), not to the requested 300',
       );
       final data = await storage.fetch(userId: _user, angle: nonMixAngle);
-      expect(data?.unsolved.length, equals(kMinOfflinePuzzles));
+      expect(data?.unsolved.length, equals(kFixedOfflineQueueLength));
     });
 
     test('does not refill while there are pending (unflushed) solves', () async {

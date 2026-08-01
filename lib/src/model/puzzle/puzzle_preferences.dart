@@ -66,16 +66,27 @@ const kMaxOfflinePuzzles = 300;
 /// Available choices for the size of the offline puzzle queue.
 const kOfflinePuzzlesChoices = [100, 150, 200, 250, 300];
 
+/// Maximum number of puzzles a single batch request can return, whatever `nb`
+/// asks for (`nb.atMost(50)` in lila's `Puzzle` controller).
+const kServerPuzzleBatchCap = 50;
+
+/// Offline-queue length of the angles the configurable size does not apply to.
+///
+/// Deliberately equal to [kServerPuzzleBatchCap]: a single request fills such a
+/// queue exactly, so it never keeps a standing deficit.
+const kFixedOfflineQueueLength = kServerPuzzleBatchCap;
+
 /// Whether the configurable offline-queue size ([PuzzlePrefs.nbOfflinePuzzles])
-/// applies to [angle]. Where it doesn't, the queue stays at [kMinOfflinePuzzles].
+/// applies to [angle]. Where it doesn't, the queue stays at
+/// [kFixedOfflineQueueLength].
 bool isConfigurableOfflineQueueAngle(PuzzleAngle angle) =>
     angle == const PuzzleTheme(PuzzleThemeKey.mix);
 
 /// The offline-queue length for [angle]: the configurable [nbOfflinePuzzles]
 /// where [isConfigurableOfflineQueueAngle] allows it, otherwise the fixed
-/// [kMinOfflinePuzzles].
+/// [kFixedOfflineQueueLength].
 int offlineQueueLengthForAngle(PuzzleAngle angle, int nbOfflinePuzzles) =>
-    isConfigurableOfflineQueueAngle(angle) ? nbOfflinePuzzles : kMinOfflinePuzzles;
+    isConfigurableOfflineQueueAngle(angle) ? nbOfflinePuzzles : kFixedOfflineQueueLength;
 
 @Freezed(fromJson: true, toJson: true)
 sealed class PuzzlePrefs with _$PuzzlePrefs implements Serializable {
