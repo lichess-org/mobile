@@ -46,6 +46,10 @@ class OverTheBoardPreferencesNotifier extends Notifier<OverTheBoardPrefs>
     return save(state.copyWith(symmetricPieces: !state.symmetricPieces));
   }
 
+  Future<void> toggleSameSideMode() {
+    return save(state.copyWith(sameSideMode: !state.sameSideMode));
+  }
+
   Future<void> setTimeControlType(TimeControlType type) {
     return save(state.copyWith(timeControlType: type));
   }
@@ -78,6 +82,7 @@ sealed class OverTheBoardPrefs with _$OverTheBoardPrefs implements Serializable 
   const factory OverTheBoardPrefs({
     required bool flipPiecesAfterMove,
     required bool symmetricPieces,
+    @Default(false) bool sameSideMode,
     @Default(TimeControlType.clock) TimeControlType timeControlType,
     @Default(OverTheBoardPrefs._defaultTimeIncrement) TimeIncrement timeIncrement,
   }) = _OverTheBoardPrefs;
@@ -85,6 +90,7 @@ sealed class OverTheBoardPrefs with _$OverTheBoardPrefs implements Serializable 
   static const defaults = OverTheBoardPrefs(
     flipPiecesAfterMove: false,
     symmetricPieces: false,
+    sameSideMode: false,
     timeControlType: TimeControlType.clock,
     timeIncrement: _defaultTimeIncrement,
   );
