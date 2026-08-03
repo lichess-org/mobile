@@ -3,6 +3,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 
@@ -173,3 +174,15 @@ Iterable<String> imageAssetNames(WidgetTester tester) => tester
     .map((image) => image.image)
     .whereType<AssetImage>()
     .map((provider) => provider.assetName);
+
+void mockClipboard(String text) {
+  TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
+    SystemChannels.platform,
+    (methodCall) async {
+      if (methodCall.method == 'Clipboard.getData') {
+        return {'text': text};
+      }
+      return null;
+    },
+  );
+}
