@@ -31,3 +31,19 @@ Future<void> precachePieceImages(PieceSet pieceSet) async {
     debugPrint('Failed to preload piece images: $e');
   }
 }
+
+Future<void> precachePieceImages3D(PieceSet3D pieceSet) async {
+  try {
+    final devicePixelRatio =
+        WidgetsBinding.instance.platformDispatcher.implicitView?.devicePixelRatio ?? 1.0;
+
+    ChessgroundImages.instance.clear();
+
+    for (final asset in pieceSet.assets.values) {
+      await ChessgroundImages.instance.load(asset, devicePixelRatio: devicePixelRatio);
+      debugPrint('Preloaded 3D piece image: ${asset.assetName}');
+    }
+  } catch (e) {
+    debugPrint('Failed to preload 3D piece images: $e');
+  }
+}
