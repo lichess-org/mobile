@@ -257,7 +257,7 @@ class _PuzzleResult extends StatelessWidget {
             const SizedBox(width: 2),
             if (entry.solvingTime != null)
               Text(
-                '${entry.solvingTime!.inSeconds}s',
+                '${entry.solvingTime!.inSeconds} s',
                 overflow: TextOverflow.fade,
                 style: const TextStyle(color: Colors.white, fontSize: 10, height: 1.0),
               )

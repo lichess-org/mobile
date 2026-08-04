@@ -152,7 +152,7 @@ class _Body extends ConsumerWidget {
                               ),
                               Text(
                                 textAlign: TextAlign.center,
-                                '${data.dayHighscores[entryIndex].time}s',
+                                '${data.dayHighscores[entryIndex].time} s',
                               ),
                               Text(
                                 textAlign: TextAlign.center,
