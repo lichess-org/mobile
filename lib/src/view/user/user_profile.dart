@@ -71,7 +71,7 @@ class UserProfileWidget extends ConsumerWidget {
                 overflow: TextOverflow.ellipsis,
                 linkStyle: Styles.linkStyle,
               ),
-            const SizedBox(height: 10),
+            if (userFullName != null || user.profile?.bio != null) const SizedBox(height: 10),
             if (user.profile?.fideRating != null)
               Padding(
                 padding: const EdgeInsets.only(bottom: 5),
