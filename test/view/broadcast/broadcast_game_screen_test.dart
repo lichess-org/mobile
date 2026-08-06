@@ -537,6 +537,7 @@ void main() {
       final ctrlProvider = broadcastAnalysisControllerProvider((
         roundId: _roundId,
         gameId: _gameId,
+        initialPov: Side.white,
       ));
 
       // Capture the sideline path, then promote it to mainline.
