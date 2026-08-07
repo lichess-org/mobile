@@ -39,6 +39,7 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/account/account_menu.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/auth/sign_in_error.dart';
+import 'package:lichess_mobile/src/view/auth/sign_in_options.dart';
 import 'package:lichess_mobile/src/view/correspondence/offline_correspondence_game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
@@ -560,13 +561,7 @@ class _SignInWidget extends ConsumerWidget {
     return FilledButton(
       onPressed: switch (signInState) {
         MutationPending() => null,
-        _ => () {
-          // The error is surfaced via the [ref.listen] above; ignore the
-          // rethrown future so it does not become an unhandled exception.
-          signInMutation.run(ref, (tsx) async {
-            await tsx.get(authControllerProvider.notifier).signIn();
-          }).ignore();
-        },
+        _ => () => showSignInOptions(context, ref),
       },
       child: Text(context.l10n.signIn),
     );
