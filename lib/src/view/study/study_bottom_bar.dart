@@ -86,6 +86,12 @@ class _AnalysisBottomBar extends ConsumerWidget {
               );
             },
           ),
+        _NextChapterButton(
+          options: options,
+          chapterId: state.study.chapter.id,
+          hasNextChapter: state.hasNextChapter,
+          blink: state.isAtEndOfChapter && state.hasNextChapter,
+        ),
         RepeatButton(
           onLongPress: state.canGoBack
               ? () =>
