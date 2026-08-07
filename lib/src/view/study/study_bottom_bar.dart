@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/chat/chat_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_button.dart';
+import 'package:lichess_mobile/src/view/study/create_study_chapter_bottom_sheet.dart';
 import 'package:lichess_mobile/src/view/study/study_settings.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
@@ -413,9 +414,14 @@ class _StudyChaptersMenuState extends ConsumerState<_StudyChaptersMenu> {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Text(
-            context.l10n.studyNbChapters(state.study.chapters.length),
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                context.l10n.studyNbChapters(state.study.chapters.length),
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ],
           ),
         ),
         const SizedBox(height: 16),
@@ -439,6 +445,32 @@ class _StudyChaptersMenuState extends ConsumerState<_StudyChaptersMenu> {
               Navigator.of(context).pop();
             },
             selected: chapter.id == state.currentChapter.id,
+          ),
+        if (state.canIContribute)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: FilledButton.tonalIcon(
+              onPressed: () {
+                final studyNotifier = ref.read(studyControllerProvider(widget.options).notifier);
+                Navigator.of(context).pop();
+                if (!context.mounted) return;
+
+                showModalBottomSheet<void>(
+                  context: context,
+                  isScrollControlled: true,
+                  useRootNavigator: true,
+                  builder: (context) => CreateStudyChapterBottomSheet(
+                    params: CreateChapterOfExistingStudy(state.study.id),
+                    chapterNumber: state.study.chapters.length + 1,
+                    onChaptersCreated: (_, chapters) {
+                      studyNotifier.goToChapter(chapters.first);
+                    },
+                  ),
+                );
+              },
+              label: Text(context.l10n.studyNewChapter),
+              icon: const Icon(Icons.add),
+            ),
           ),
       ],
     );

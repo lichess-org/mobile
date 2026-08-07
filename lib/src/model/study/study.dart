@@ -2,11 +2,13 @@ import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/chat/chat_message.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
 part 'study.freezed.dart';
 part 'study.g.dart';
@@ -187,4 +189,56 @@ sealed class StudyMember with _$StudyMember {
   const factory StudyMember({required LightUser user, required String role}) = _StudyMember;
 
   factory StudyMember.fromJson(Map<String, Object?> json) => _$StudyMemberFromJson(json);
+}
+
+@freezed
+sealed class CreateStudyChapterPayload with _$CreateStudyChapterPayload {
+  const factory CreateStudyChapterPayload({
+    required String pgn,
+    required String name,
+    required Side orientation,
+    @Default(null) Variant? variant,
+  }) = _CreateStudyChapterPayload;
+}
+
+@Freezed(toJson: true)
+sealed class CreateStudyPayload with _$CreateStudyPayload {
+  const factory CreateStudyPayload({
+    required String name,
+    required StudyFeatureAccess chat,
+    required StudyFeatureAccess cloneable,
+    required StudyFeatureAccess computer,
+    required StudyFeatureAccess explorer,
+    required StudyFeatureAccess shareable,
+    required StudyVisibility visibility,
+    required bool sticky,
+  }) = _CreateStudyPayload;
+}
+
+enum StudyVisibility {
+  public,
+  unlisted,
+  private;
+
+  String l10(BuildContext context) => switch (this) {
+    StudyVisibility.public => context.l10n.studyPublic,
+    StudyVisibility.unlisted => context.l10n.studyUnlisted,
+    StudyVisibility.private => context.l10n.studyInviteOnly,
+  };
+}
+
+enum StudyFeatureAccess {
+  nobody,
+  owner,
+  contributor,
+  member,
+  everyone;
+
+  String l10(BuildContext context) => switch (this) {
+    StudyFeatureAccess.nobody => context.l10n.studyNobody,
+    StudyFeatureAccess.owner => context.l10n.studyOnlyMe,
+    StudyFeatureAccess.contributor => context.l10n.studyContributors,
+    StudyFeatureAccess.member => context.l10n.studyMembers,
+    StudyFeatureAccess.everyone => context.l10n.studyEveryone,
+  };
 }

@@ -97,4 +97,50 @@ class StudyRepository {
 
     return utf8.decode(pgnBytes);
   }
+
+  /// Creates one or more (if the PGN contains multiple games) chapters in the study with the given [studyId].
+  Future<IList<StudyChapterId>> createChapter(
+    StudyId studyId,
+    CreateStudyChapterPayload chapter,
+  ) async {
+    return await client.postReadJson<IList<StudyChapterId>>(
+      Uri(path: '/api/study/$studyId/import-pgn'),
+      body: {
+        'pgn': chapter.pgn,
+        'name': chapter.name,
+        'orientation': chapter.orientation.name,
+        if (chapter.variant != null) 'variant': chapter.variant!.name,
+      },
+      mapper: (json) => pick(
+        json,
+        'chapters',
+      ).asListOrThrow((pick) => StudyChapterId(pick.required()('id').asStringOrThrow())).lock,
+    );
+  }
+
+  Future<void> deleteChapter(StudyId studyId, StudyChapterId chapterId) async {
+    await client.deleteRead(Uri(path: '/api/study/$studyId/$chapterId'));
+  }
+
+  Future<(StudyId, IList<StudyChapterId>)> createStudy(
+    CreateStudyPayload study,
+    CreateStudyChapterPayload chapter,
+  ) async {
+    final studyId = await client.postReadJson<StudyId>(
+      Uri(path: '/api/study'),
+      body: study.toJson().map((key, value) => MapEntry(key, value.toString())),
+      mapper: (json) => StudyId(pick(json, 'id').asStringOrThrow()),
+    );
+
+    final (createdStudy, _, _) = await getStudy(id: studyId);
+
+    // The API creates an initial empty chapter when creating a study, but we want to replace it with
+    // our own chapter created from the provided payload.
+    final initialEmptyChapterId = createdStudy.chapter.id;
+
+    final createdChapters = await createChapter(studyId, chapter);
+    await deleteChapter(studyId, initialEmptyChapterId);
+
+    return (studyId, createdChapters);
+  }
 }
