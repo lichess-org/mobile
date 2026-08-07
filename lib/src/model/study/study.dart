@@ -188,3 +188,13 @@ sealed class StudyMember with _$StudyMember {
 
   factory StudyMember.fromJson(Map<String, Object?> json) => _$StudyMemberFromJson(json);
 }
+
+@freezed
+sealed class CreateStudyChapterPayload with _$CreateStudyChapterPayload {
+  const factory CreateStudyChapterPayload({
+    required String pgn,
+    required String name,
+    required Side orientation,
+    @Default(null) Variant? variant,
+  }) = _CreateStudyChapterPayload;
+}
