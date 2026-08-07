@@ -392,12 +392,7 @@ void main() {
         await tester.tap(find.byIcon(Icons.edit));
         await tester.pumpAndSettle();
 
-        expect(find.byType(AlertDialog), findsOneWidget);
-
-        await tester.tap(find.byIcon(Icons.paste));
-        await tester.pumpAndSettle();
-
-        // Dialog is gone, board editor is still on screen
+        // Dialog is automatically processed and closed, board editor is still on screen
         expect(find.byType(AlertDialog), findsNothing);
         expect(find.byType(BoardEditorScreen), findsOneWidget);
 
@@ -417,9 +412,6 @@ void main() {
         await tester.tap(find.byIcon(Icons.edit));
         await tester.pumpAndSettle();
 
-        await tester.tap(find.byIcon(Icons.paste));
-        await tester.pumpAndSettle();
-
         final container = ProviderScope.containerOf(tester.element(find.byType(BoardEditorScreen)));
         final state = container.read(boardEditorControllerProvider(null));
         expect(state.sideToPlay, Side.black);
@@ -437,9 +429,6 @@ void main() {
         await tester.tap(find.byIcon(Icons.edit));
         await tester.pumpAndSettle();
 
-        await tester.tap(find.byIcon(Icons.paste));
-        await tester.pumpAndSettle();
-
         final container = ProviderScope.containerOf(tester.element(find.byType(BoardEditorScreen)));
         final state = container.read(boardEditorControllerProvider(null));
 
@@ -449,7 +438,7 @@ void main() {
         expect(state.castlingRights[CastlingRight.blackQueen], isTrue);
       });
 
-      testWidgets('Pasting invalid FEN closes dialog and shows snackbar', (tester) async {
+      testWidgets('Pasting invalid FEN keeps dialog open and displays error', (tester) async {
         _mockClipboard('not a valid fen');
 
         final app = await makeTestProviderScopeApp(tester, home: const BoardEditorScreen());
@@ -458,11 +447,8 @@ void main() {
         await tester.tap(find.byIcon(Icons.edit));
         await tester.pumpAndSettle();
 
-        await tester.tap(find.byIcon(Icons.paste));
-        await tester.pumpAndSettle();
-
-        expect(find.byType(AlertDialog), findsNothing);
-        expect(find.text('Invalid FEN'), findsOneWidget);
+        expect(find.byType(AlertDialog), findsOneWidget);
+        expect(find.text('Invalid FEN'), findsWidgets);
       });
     });
 
