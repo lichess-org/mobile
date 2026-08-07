@@ -359,6 +359,7 @@
   "coordinatesShowCoordsOnAllSquares": "Координаты на каждом поле",
   "coordinatesShowPieces": "Показывать фигуры",
   "coordinatesStartTraining": "Начать тренировку",
+  "coordinatesAbortTraining": "Прервать тренировку",
   "coordinatesFindSquare": "Найти поле",
   "coordinatesNameSquare": "Обозначить поле",
   "coordinatesPracticeOnlySomeFilesAndRanks": "Потренироваться только с некоторыми вертикалями и горизонталями",
