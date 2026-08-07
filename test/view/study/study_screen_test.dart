@@ -621,7 +621,11 @@ void main() {
         chapter: makeChapter(id: const StudyChapterId('1')),
         chapters: IList(const [
           StudyChapterMeta(id: StudyChapterId('1'), name: 'Legal Chapter', fen: null),
-          StudyChapterMeta(id: StudyChapterId('2'), name: 'Illegal Chapter', fen: null),
+          StudyChapterMeta(
+            id: StudyChapterId('2'),
+            name: 'Illegal Chapter',
+            fen: '8/8/8/8/8/8/8/8 w - - 0 1',
+          ),
         ]),
       );
 
@@ -674,6 +678,11 @@ void main() {
 
       // Second chapter should still load, but with static board
       expect(find.text('2. Illegal Chapter'), findsOneWidget);
+
+      expect(find.byType(Chessboard), findsNothing);
+      expect(find.byType(StaticChessboard), findsOneWidget);
+      final staticBoard = tester.widget<StaticChessboard>(find.byType(StaticChessboard));
+      expect(staticBoard.fen, '8/8/8/8/8/8/8/8 w - - 0 1');
 
       // Verify we can navigate back to first chapter
       await tester.tap(find.byTooltip('2 Chapters'));
