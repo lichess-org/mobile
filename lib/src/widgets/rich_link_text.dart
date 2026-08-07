@@ -63,6 +63,12 @@ final _urlRegex = RegExp(r'^(.*?)(https?:\/\/\S+|www\.\S+)', caseSensitive: fals
 
 final _protocolRegex = RegExp(r'^https?:\/\/', caseSensitive: false);
 
+final _trailingPunctRegex = RegExp(r'[.,;:!?)]$');
+
+final _mailtoRegex = RegExp('^mailto:', caseSensitive: false);
+
+final _wordBoundaryRegex = RegExp(r'[\w@]$');
+
 class UrlLinkifier extends Linkifier {
   const UrlLinkifier();
 
@@ -100,7 +106,7 @@ class UrlLinkifier extends Linkifier {
           remaining = '';
         } else {
           while (true) {
-            final punct = RegExp(r'[.,;:!?)]$').firstMatch(matchedUrl);
+            final punct = _trailingPunctRegex.firstMatch(matchedUrl);
             if (punct != null) {
               trailing = punct.group(0)! + trailing;
               matchedUrl = matchedUrl.substring(0, matchedUrl.length - 1);
@@ -167,7 +173,7 @@ class EmailLinkifier extends Linkifier {
       }
 
       if (match.group(2)?.isNotEmpty ?? false) {
-        final email = match.group(2)!.replaceFirst(RegExp('^mailto:', caseSensitive: false), '');
+        final email = match.group(2)!.replaceFirst(_mailtoRegex, '');
         result.add(EmailElement(email));
       }
 
@@ -204,7 +210,7 @@ class UserTagLinkifier extends Linkifier {
       var textRemaining = element.text.replaceFirst(match.group(0)!, '');
       final preText = StringBuffer();
 
-      while (match?.group(1)?.contains(RegExp(r'[\w@]$')) ?? false) {
+      while (match?.group(1)?.contains(_wordBoundaryRegex) ?? false) {
         preText.write(match!.group(0));
         match = _userTagRegex.firstMatch(textRemaining);
         if (match == null) {
