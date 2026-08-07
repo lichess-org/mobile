@@ -136,13 +136,13 @@ void main() {
 
       when(
         () => mockRepository.getStudy(id: testId),
-      ).thenAnswer((_) async => (studyChapter1, null, '{pgn 1}'));
+      ).thenAnswer((_) async => (studyChapter1, null, '{pgn 1} 1. e4 {wow} e5 {such chess}'));
       when(
         () => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('1')),
-      ).thenAnswer((_) async => (studyChapter1, null, '{pgn 1}'));
+      ).thenAnswer((_) async => (studyChapter1, null, '{pgn 1} 1. e4 {wow} e5 {such chess}'));
       when(
         () => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('2')),
-      ).thenAnswer((_) async => (studyChapter2, null, '{pgn 2}'));
+      ).thenAnswer((_) async => (studyChapter2, null, '{pgn 2} 1. e4 {wow} e5 {such chess}'));
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -194,8 +194,8 @@ void main() {
       expect(find.text('1. Chapter 1'), findsNothing);
       expect(find.text('2. Chapter 2'), findsOneWidget);
 
-      expect(find.text('pgn 1'), findsNothing);
-      expect(find.text('pgn 2'), findsOneWidget);
+      expect(find.textContaining('pgn 1'), findsNothing);
+      expect(find.textContaining('pgn 2'), findsOneWidget);
     });
 
     testWidgets('Loads initial chapter if given', (WidgetTester tester) async {
