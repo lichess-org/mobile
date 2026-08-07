@@ -820,7 +820,7 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
         children: [
           if (highScoreWidgets != null) ...highScoreWidgets,
           ListSection(
-            header: Text('${widget.stats.score} ${context.l10n.stormPuzzlesSolved}'),
+            header: Text('${widget.stats.score}\u00A0${context.l10n.stormPuzzlesSolved}'),
             children: [
               _StatsRow(context.l10n.stormMoves, widget.stats.moves.toString()),
               _StatsRow(

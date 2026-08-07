@@ -351,7 +351,7 @@ class _BottomBar extends ConsumerWidget {
         BottomBarButton(
           label: context.l10n.resign,
           onTap: gameState.game.resignable ? () => _showResignDialog(context, ref) : null,
-          icon: CupertinoIcons.flag,
+          icon: CupertinoIcons.flag_fill,
         ),
         BottomBarButton(
           label: context.l10n.takeback,
