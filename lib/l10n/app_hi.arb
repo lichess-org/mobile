@@ -1181,7 +1181,6 @@
   "xInvitedYouToY": "{param1} ने आपको \"{param2}\" के लिए आमंत्रित किया।",
   "youAreNowPartOfTeam": "अब आप टीम का हिस्सा हैं।",
   "youHaveJoinedTeamX": "आप \"{param1}\" में शामिल हो गए हैं।",
-  "someoneYouReportedWasBanned": "आपके द्वारा सूचित किसी पर प्रतिबंध लगा दिया गया था",
   "congratsYouWon": "बधाई हो, आप जीत गए!",
   "gameVsX": "खेल बनाम {param1}",
   "resVsX": "{param1} बनाम {param2}",
