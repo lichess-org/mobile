@@ -33,6 +33,8 @@ import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:lichess_mobile/src/view/auth/sign_in_error.dart';
+import 'package:lichess_mobile/src/view/auth/sign_in_options.dart';
 import 'package:lichess_mobile/src/view/chat/chat_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
@@ -1174,6 +1176,8 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
     final signInState = ref.watch(signInMutation);
     final kidModeAsync = ref.watch(kidModeProvider);
 
+    ref.listen(signInMutation, (_, next) => showSignInErrorSnackBar(context, next));
+
     ref.listen(
       tournamentControllerProvider(widget.state.id).select((value) => value.value?.joined),
       (prevJoined, joined) {
@@ -1298,11 +1302,7 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
             icon: Icons.login,
             onTap: switch (signInState) {
               MutationPending() => null,
-              _ => () {
-                signInMutation.run(ref, (tsx) async {
-                  await tsx.get(authControllerProvider.notifier).signIn();
-                });
-              },
+              _ => () => showSignInOptions(context, ref),
             },
           ),
       ],

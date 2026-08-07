@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
+import 'package:lichess_mobile/src/view/auth/email_login_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/view/home/games_carousel.dart';
 import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
@@ -613,6 +614,21 @@ void main() {
     });
   });
 
+  group('Sign in options', () {
+    testWidgets('opens the email login screen', (tester) async {
+      final app = await makeTestProviderScope(tester, child: const Application());
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Sign in'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Sign in with an email'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(EmailLoginScreen), findsOneWidget);
+    });
+  });
+
   group('Sign in error handling', () {
     testWidgets('shows an error snackbar when sign-in fails', (tester) async {
       final app = await makeTestProviderScope(
@@ -630,6 +646,8 @@ void main() {
       expect(find.text('Sign in'), findsOneWidget);
 
       await tester.tap(find.text('Sign in'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Sign in with the browser'));
       await tester.pumpAndSettle();
 
       expect(find.text('Something went wrong.'), findsOneWidget);
@@ -651,6 +669,8 @@ void main() {
       expect(find.text('Sign in'), findsOneWidget);
 
       await tester.tap(find.text('Sign in'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Sign in with the browser'));
       await tester.pumpAndSettle();
 
       expect(find.text('Something went wrong.'), findsNothing);
