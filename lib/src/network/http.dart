@@ -29,6 +29,7 @@ import 'package:lichess_mobile/src/model/log/http_log_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/aggregator.dart';
 import 'package:lichess_mobile/src/network/server_status.dart';
+import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -153,9 +154,10 @@ final defaultClientProvider = Provider<DefaultClient>((Ref ref) {
 
 /// The http client configured to make requests to the lichess API.
 ///
-/// Only one instance of this client is created and kept alive for the whole app.
+/// Only one instance of this client is created and kept alive for the whole app, so the rate
+/// limiting it applies (see [RateLimitLichessClient]) covers every caller.
 final lichessClientProvider = Provider<LichessClient>((Ref ref) {
-  final client = LichessClient(
+  final client = RateLimitLichessClient(
     // Retry just once on 429 Too Many Requests.
     RetryClient(
       ref.read(httpClientFactoryProvider)(),
@@ -169,10 +171,18 @@ final lichessClientProvider = Provider<LichessClient>((Ref ref) {
   return client;
 }, name: 'LichessHttpClientProvider');
 
+/// Whether [request] targets a puzzle batch endpoint (`/api/puzzle/batch/…`).
+///
+/// Those are rate-limited by lila much more tightly than the rest of the API, so
+/// [RateLimitLichessClient] sends them one at a time.
+@visibleForTesting
+bool isPuzzleBatchRequest(BaseRequest? request) =>
+    request != null && request.url.path.startsWith('/api/puzzle/batch/');
+
 /// Whether a response should be retried once by [lichessClientProvider].
 ///
-/// Retries on 429 Too Many Requests, except for the puzzle batch endpoints (`/api/puzzle/batch/…`),
-/// which are rate-limited deliberately:
+/// Retries on 429 Too Many Requests, except for the puzzle batch endpoints, which are rate-limited
+/// deliberately:
 /// - solve submissions (`POST`) are handled with a back-off by `PuzzleSolveLimiter`, so retrying
 ///   here only burns a request and delays arming the back-off;
 /// - batch downloads (`GET`) are issued once per puzzle angle, so a retry doubles an already large
@@ -180,9 +190,7 @@ final lichessClientProvider = Provider<LichessClient>((Ref ref) {
 @visibleForTesting
 bool shouldRetryOn429(BaseResponse response) {
   if (response.statusCode != 429) return false;
-  final request = response.request;
-  final isPuzzleBatch = request != null && request.url.path.startsWith('/api/puzzle/batch/');
-  return !isPuzzleBatch;
+  return !isPuzzleBatchRequest(response.request);
 }
 
 Duration _defaultDelay(int retryCount) =>
@@ -495,6 +503,35 @@ class LichessClient implements Client {
 
     return Response.fromStream(await send(request));
   }
+}
+
+/// A [LichessClient] that serializes the endpoints lila rate-limits much more tightly than the
+/// rest of the API, so that unrelated callers cannot hit them all at once.
+///
+/// Today that means the puzzle batch endpoints ([isPuzzleBatchRequest]): the offline queue sync,
+/// the queue filler and the rating probe all reach them from independent code paths, and nothing
+/// else keeps those from overlapping — a puzzle tab listing many angles used to fire one request
+/// per angle at once, and the server answered 429 to the lot. Every other request is sent straight
+/// away.
+///
+/// This only removes *concurrency*. A caller that issues many requests in a row is still
+/// responsible for spacing them out, as `PuzzleQueueFiller` does.
+///
+/// Rate limiting lives here rather than in [LichessClient] so that the rule is stated in one
+/// place, and so that a client without it can still be built (tests do).
+class RateLimitLichessClient extends LichessClient {
+  RateLimitLichessClient(super.inner, super.ref);
+
+  /// Shared by every caller: a single client instance is kept alive for the whole app.
+  ///
+  /// A queued request waits for the one before it to be answered, which [defaultRequestTimeout]
+  /// bounds.
+  final _puzzleBatchQueue = SerialTaskQueue();
+
+  @override
+  Future<StreamedResponse> send(BaseRequest request) => isPuzzleBatchRequest(request)
+      ? _puzzleBatchQueue.run(() => super.send(request))
+      : super.send(request);
 }
 
 /// Default HTTP client.
