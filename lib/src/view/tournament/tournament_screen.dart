@@ -31,8 +31,11 @@ import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:lichess_mobile/src/view/auth/sign_in_error.dart';
+import 'package:lichess_mobile/src/view/auth/sign_in_options.dart';
 import 'package:lichess_mobile/src/view/chat/chat_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
@@ -158,6 +161,27 @@ class _Body extends ConsumerWidget {
     final authUser = ref.watch(authControllerProvider);
     final timeLeft = state.tournament.timeToStart ?? state.tournament.timeToFinish;
 
+    final standingWidgets = [
+      if (state.tournament.teamStanding != null) ...[
+        _TeamStanding(state),
+        const SizedBox(height: 16),
+      ],
+      _Standing(state),
+    ];
+
+    final tournamentSecondaryInfoWidgets = [
+      if (state.tournament.isStarted != true && state.tournament.isFinished != true)
+        _TournamentHelp(state: state)
+      else if (state.tournament.isFinished == true)
+        _TournamentCompleteWidget(state: state)
+      else if (state.tournament.featuredGame != null)
+        _FeaturedGame(state.tournament.featuredGame!),
+    ];
+
+    final bottomSheetSpacer = (authUser != null && state.joined)
+        ? const SizedBox(height: 35)
+        : const SizedBox.shrink();
+
     return FocusDetector(
       // Use `onFocusGained` (fires on the first focus too) rather than
       // `onFocusRegained`: when a second `TournamentScreen` for the same
@@ -208,61 +232,45 @@ class _Body extends ConsumerWidget {
               ),
           ],
         ),
-        body: Padding(
-          padding: Styles.horizontalBodyPadding,
-          child: ListView(
-            children: [
-              Card(
-                child: Padding(
-                  padding: Styles.bodySectionPadding,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _TournamentInfo(state.tournament),
-                      if (state.tournament.meta.teamBattle != null) ...[
-                        const SizedBox(height: 10),
-                        _TeamInfo(state.tournament.meta.teamBattle!),
-                      ],
-                      if (state.tournament.verdicts.list.isNotEmpty) ...[
-                        const SizedBox(height: 10),
-                        _Verdicts(state.tournament.verdicts),
-                      ],
-                      if (!state.tournament.berserkable) ...[
-                        const SizedBox(height: 10),
-                        Text.rich(
-                          TextSpan(
+        body: LayoutBuilder(
+          builder: (context, constraints) {
+            final isTabletLandscape =
+                constraints.maxWidth > constraints.maxHeight && isTabletOrLarger(context);
+            return Padding(
+              padding: Styles.horizontalBodyPadding,
+              child: isTabletLandscape
+                  ? Row(
+                      spacing: 16.0,
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: ListView(
                             children: [
-                              const WidgetSpan(child: Icon(LichessIcons.body_cut, size: 16)),
-                              TextSpan(text: ' ${context.l10n.arenaNoBerserkAllowed}'),
+                              _TournamentInfoCard(tournament: state.tournament),
+                              const SizedBox(height: 16),
+                              ...tournamentSecondaryInfoWidgets,
+                              bottomSheetSpacer,
                             ],
                           ),
                         ),
+                        Expanded(
+                          flex: 2,
+                          child: ListView(children: [...standingWidgets, bottomSheetSpacer]),
+                        ),
                       ],
-                      if (state.tournament.description != null &&
-                          state.tournament.description!.isNotEmpty) ...[
-                        const SizedBox(height: 10),
-                        _ExpandableDescription(description: state.tournament.description!),
+                    )
+                  : ListView(
+                      children: [
+                        _TournamentInfoCard(tournament: state.tournament),
+                        const SizedBox(height: 16),
+                        ...standingWidgets,
+                        const SizedBox(height: 16),
+                        ...tournamentSecondaryInfoWidgets,
+                        bottomSheetSpacer,
                       ],
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              if (state.tournament.teamStanding != null) ...[
-                _TeamStanding(state),
-                const SizedBox(height: 16),
-              ],
-              _Standing(state),
-              const SizedBox(height: 16),
-              if (state.tournament.isStarted != true && state.tournament.isFinished != true)
-                _TournamentHelp(state: state)
-              else if (state.tournament.isFinished == true)
-                _TournamentCompleteWidget(state: state)
-              else if (state.tournament.featuredGame != null)
-                _FeaturedGame(state.tournament.featuredGame!),
-              if (authUser != null && state.joined) const SizedBox(height: 35),
-            ],
-          ),
+                    ),
+            );
+          },
         ),
         bottomSheet: authUser != null && state.joined && state.tournament.isFinished != true
             ? Material(
@@ -288,6 +296,50 @@ class _Body extends ConsumerWidget {
               )
             : const SizedBox.shrink(),
         bottomNavigationBar: _BottomBar(state),
+      ),
+    );
+  }
+}
+
+class _TournamentInfoCard extends StatelessWidget {
+  const _TournamentInfoCard({required this.tournament});
+
+  final Tournament tournament;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: Styles.bodySectionPadding,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _TournamentInfo(tournament),
+            if (tournament.meta.teamBattle != null) ...[
+              const SizedBox(height: 10),
+              _TeamInfo(tournament.meta.teamBattle!),
+            ],
+            if (tournament.verdicts.list.isNotEmpty) ...[
+              const SizedBox(height: 10),
+              _Verdicts(tournament.verdicts),
+            ],
+            if (!tournament.berserkable) ...[
+              const SizedBox(height: 10),
+              Text.rich(
+                TextSpan(
+                  children: [
+                    const WidgetSpan(child: Icon(LichessIcons.body_cut, size: 16)),
+                    TextSpan(text: ' ${context.l10n.arenaNoBerserkAllowed}'),
+                  ],
+                ),
+              ),
+            ],
+            if (tournament.description != null && tournament.description!.isNotEmpty) ...[
+              const SizedBox(height: 10),
+              _ExpandableDescription(description: tournament.description!),
+            ],
+          ],
+        ),
       ),
     );
   }
@@ -1174,6 +1226,8 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
     final signInState = ref.watch(signInMutation);
     final kidModeAsync = ref.watch(kidModeProvider);
 
+    ref.listen(signInMutation, (_, next) => showSignInErrorSnackBar(context, next));
+
     ref.listen(
       tournamentControllerProvider(widget.state.id).select((value) => value.value?.joined),
       (prevJoined, joined) {
@@ -1298,11 +1352,7 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
             icon: Icons.login,
             onTap: switch (signInState) {
               MutationPending() => null,
-              _ => () {
-                signInMutation.run(ref, (tsx) async {
-                  await tsx.get(authControllerProvider.notifier).signIn();
-                });
-              },
+              _ => () => showSignInOptions(context, ref),
             },
           ),
       ],

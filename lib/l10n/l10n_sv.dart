@@ -767,6 +767,9 @@ class AppLocalizationsSv extends AppLocalizations {
   String get arenaRankAvgHelp => 'Rankningsgenomsnittet är en procentsats baserad på din rankning. Lägre är bättre.\n\nTill exempel: Rankad 3 i en turnering på 100 spelare = 3%. Rankad 10 i en turnering på 1000 spelare = 1%.';
 
   @override
+  String get arenaRankAverageHelp => 'Your rank average represents your typical finishing position, relative to the total number of players in each tournament.\nThis is a measure of your tournament placement, not your general rating.\n\nFor example, a rank average of 3% means you typically finish in the top 3% (such as 30th place out of 1,000 players).';
+
+  @override
   String get arenaMedians => 'medianer';
 
   @override
@@ -922,6 +925,9 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get broadcastDefinitivelyDeleteTournament => 'Definitivt radera turnering.';
+
+  @override
+  String get broadcastPermanentlyDeleteTournament => 'Permanently delete this tournament, including all rounds and games?';
 
   @override
   String get broadcastShowScores => 'Visa spelares poäng efter matchresultat';
@@ -1613,10 +1619,19 @@ class AppLocalizationsSv extends AppLocalizations {
   String get preferencesNotifyInboxMsg => 'Nytt meddelande i inkorgen';
 
   @override
+  String get preferencesNotifyDirectMessage => 'New direct message';
+
+  @override
   String get preferencesNotifyForumMention => 'Forumkommentar nämner dig';
 
   @override
+  String get preferencesNotifyForumMentions => 'Forum mentions';
+
+  @override
   String get preferencesNotifyInvitedStudy => 'Inbjudan till studier';
+
+  @override
+  String get preferencesNotifyStudyInvites => 'Study invites';
 
   @override
   String get preferencesNotifyGameEvent => 'Korrespondensspelsuppdateringar';
@@ -1628,7 +1643,10 @@ class AppLocalizationsSv extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Turneringen startar snart';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
+  String get preferencesNotifyTournamentStartReminders => 'Tournaments start reminders';
+
+  @override
+  String get preferencesNotifyBroadcasts => 'Broadcasts';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Korrespondensklockans tid tar slut';
@@ -2157,6 +2175,9 @@ class AppLocalizationsSv extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'En taktik som involverar \"en passant\"-regeln, där en bonde kan slå en bonde som har passerat den med ett tvåstegsdrag.';
 
   @override
+  String get puzzleThemeEnPassantAdjacentCaptureDescription => 'A tactic involving the en passant rule, where a pawn can capture an opposing pawn that has just moved next to it with its initial two-square move.';
+
+  @override
   String get puzzleThemeEpauletteMate => 'Epaulette mate';
 
   @override
@@ -2175,6 +2196,9 @@ class AppLocalizationsSv extends AppLocalizations {
   String get puzzleThemeForkDescription => 'Ett drag där den rörda pjäsen attackerar två motståndarpjäser samtidigt.';
 
   @override
+  String get puzzleThemeForkOpposingPiecesDescription => 'A move where a piece attacks two or more opposing pieces simultaneously.';
+
+  @override
   String get puzzleThemeHangingPiece => 'Ogarderad pjäs';
 
   @override
@@ -2185,6 +2209,9 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get puzzleThemeHookMateDescription => 'Schackmatta med ett torn, en springare och en bonde tillsammans med en motståndarbonde för att begränsa motståndarkungens undanflykt.';
+
+  @override
+  String get puzzleThemeHookMateOpposingPawnDescription => 'Checkmate using a rook, knight, and pawn, where an opposing pawn blocks the king\'s escape.';
 
   @override
   String get puzzleThemeInterference => 'Interference';
@@ -3125,6 +3152,9 @@ class AppLocalizationsSv extends AppLocalizations {
   String get checkSpamFolder => 'Kontrollera även din skräppost, det kan hamna där. I så fall, markera det som ej skräppost.';
 
   @override
+  String get checkSpamOrJunkFolder => 'If you do not receive a confirmation email, check your Spam or Junk folder. Be sure to indicate messages from lichess.org as safe and \"not spam\", so you can stay informed of important communications.';
+
+  @override
   String sendEmailForAccountVerification(String param) {
     return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
   }
@@ -3852,6 +3882,15 @@ class AppLocalizationsSv extends AppLocalizations {
   String get reply => 'Svara';
 
   @override
+  String get reopen => 'Reopen';
+
+  @override
+  String get quote => 'Quote';
+
+  @override
+  String get postEdited => 'edited';
+
+  @override
   String get message => 'Meddelande';
 
   @override
@@ -3886,6 +3925,9 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get reportProcessedFasterInEnglish => 'Din rapport kommer att behandlas snabbare om den skrivs på engelska.';
+
+  @override
+  String get processReportFasterInEnglish => 'We can process your report faster if you write in English.';
 
   @override
   String get error_provideOneCheatedGameLink => 'Ange minst en länk till ett spel där användaren fuskade.';
@@ -4256,6 +4298,9 @@ class AppLocalizationsSv extends AppLocalizations {
   String get whenCreateSimul => 'När du skapar en simultan får du spela mot flera spelare samtidigt.';
 
   @override
+  String get creatingASimul => 'Creating a simul lets you play against multiple opponents at the same time.';
+
+  @override
   String get simulVariantsHint => 'Om du väljer flera varianter får varje spelare välja vilken de vill spela.';
 
   @override
@@ -4568,6 +4613,9 @@ class AppLocalizationsSv extends AppLocalizations {
   String get background => 'Bakgrund';
 
   @override
+  String get theme => 'Theme';
+
+  @override
   String get light => 'Ljus';
 
   @override
@@ -4577,7 +4625,13 @@ class AppLocalizationsSv extends AppLocalizations {
   String get transparent => 'Genomskinlig';
 
   @override
+  String get picture => 'Picture';
+
+  @override
   String get deviceTheme => 'Enhetstema';
+
+  @override
+  String get roundness => 'Roundness';
 
   @override
   String get backgroundImageUrl => 'Bakgrundsbild URL:';
@@ -4995,9 +5049,6 @@ class AppLocalizationsSv extends AppLocalizations {
   }
 
   @override
-  String get someoneYouReportedWasBanned => 'Någon du rapporterade blev avstängd';
-
-  @override
   String get congratsYouWon => 'Grattis, du vann!';
 
   @override
@@ -5096,6 +5147,11 @@ class AppLocalizationsSv extends AppLocalizations {
   }
 
   @override
+  String youCanFormatTextUsing(String param) {
+    return 'You can format text using $param.';
+  }
+
+  @override
   String get embedsAvailable => 'Klistra in en spel-länk eller en studiekapitel-länk för att infoga den.';
 
   @override
@@ -5115,6 +5171,9 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get navigateMoveTree => 'Navigera i dragträdet';
+
+  @override
+  String get moveListNavigation => 'Move list navigation';
 
   @override
   String get mouseTricks => 'Mus-trick';
@@ -5167,7 +5226,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get resignTheGame => 'Ge upp partiet';
 
   @override
-  String get youCantStartNewGame => 'You can\'t start a new game until this one is finished.';
+  String get youCantStartNewGame => 'You can\'t start a new game while it\'s your turn.';
 
   @override
   String get since => 'Sedan';

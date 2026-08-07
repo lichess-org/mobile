@@ -540,8 +540,8 @@ class AppLocalizationsFa extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count مسابقه هم‌زمان برگزار کرد',
-      one: '$count مسابقه هم‌زمان برگزار کرد',
+      other: 'برگزاردهٔ $count بازیِ هَمگاه',
+      one: 'برگزاردهٔ $count بازیِ هَمگاه',
     );
     return '$_temp0';
   }
@@ -551,8 +551,8 @@ class AppLocalizationsFa extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'در $count مسابقه هم‌زمان شرکت کرد',
-      one: 'در $count مسابقه هم‌زمان شرکت کرد',
+      other: 'شرکت‌کرده در $count بازیِ هَمگاه',
+      one: 'شرکت‌کرده در $count بازیِ هَمگاه',
     );
     return '$_temp0';
   }
@@ -767,6 +767,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get arenaRankAvgHelp => 'میانگین رتبه دهی، درصدبندی از جایگاه شما است. پایین‌تر بهتر است.\n\nبه عنوان مثال، رتبه 3 در مسابقاتی با 100 بازیکن = 3٪. رتبه 10 در مسابقاتی با 1000 بازیکن = 1٪.';
 
   @override
+  String get arenaRankAverageHelp => 'میانگینِ رتبه‌تان نشان‌دهندهٔ وضعیتِ معمولِ پایانی‌تان، نسبت به تعدادِ کلِ بازیکنان در هر مسابقه است.\nاین معیاری برای جایگاه‌تان در مسابقات است، نه درجه‌بندیِ عمومی‌تان.\n\nبرای مثال، میانگین‌رتبهٔ ۳٪ به این معنا است که شما معمولاً جزء ۳٪ برترید (مانند رتبه ۳۰-ام میانِ ۱٬۰۰۰ بازیکن).';
+
+  @override
   String get arenaMedians => 'میانه';
 
   @override
@@ -922,6 +925,9 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get broadcastDefinitivelyDeleteTournament => 'کل مسابقات، شامل همه دورها و بازی‌هایش را به طور کامل حذف کن.';
+
+  @override
+  String get broadcastPermanentlyDeleteTournament => 'آیا این مسابقه، شاملِ همهٔ دورها و بازی‌ها، برای همیشه حذف می‌شود؟';
 
   @override
   String get broadcastShowScores => 'نمایش امتیاز بازیکنان بر پایه نتیجه بازی‌ها';
@@ -1613,10 +1619,19 @@ class AppLocalizationsFa extends AppLocalizations {
   String get preferencesNotifyInboxMsg => 'پیام جدید';
 
   @override
+  String get preferencesNotifyDirectMessage => 'پیامِ مستقیمِ جدید';
+
+  @override
   String get preferencesNotifyForumMention => 'در انجمن از شما نام‌بُرده‌اند';
 
   @override
+  String get preferencesNotifyForumMentions => 'نام‌بریِ انجمن';
+
+  @override
   String get preferencesNotifyInvitedStudy => 'دعوت به مطالعه';
+
+  @override
+  String get preferencesNotifyStudyInvites => 'دعوت به مطالعه';
 
   @override
   String get preferencesNotifyGameEvent => 'به‌روزرسانی‌های بازی مکاتبه‌ای';
@@ -1626,6 +1641,9 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get preferencesNotifyTournamentSoon => 'مسابقات به‌زودی می‌آغازد';
+
+  @override
+  String get preferencesNotifyTournamentStartReminders => 'یادآورِ آغازِ مسابقات';
 
   @override
   String get preferencesNotifyBroadcasts => 'پخش همگانی';
@@ -2157,6 +2175,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'گرفتن پیاده در حال عبور با پیاده دیگر.';
 
   @override
+  String get puzzleThemeEnPassantAdjacentCaptureDescription => 'راهکُنشی که شاملِ قاعدهٔ «آن‌پاسان» است، که در آن پیاده می‌تواند با حرکتِ نخستینِ دو-خانه‌ای خود، پیادهٔ حریف در ستونِ همجوار را، بزند.';
+
+  @override
   String get puzzleThemeEpauletteMate => 'ماتِ سَردوشی';
 
   @override
@@ -2175,6 +2196,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get puzzleThemeForkDescription => 'حرکتی که در آن مهره ای که حرکت می کند دو مهره حریف را به صورت همزمان مورد حمله قرار می دهد.';
 
   @override
+  String get puzzleThemeForkOpposingPiecesDescription => 'حرکتی که در آن مهره‌ای، همزمان به دو یا چند مهرهٔ حریف حمله می‌کند.';
+
+  @override
   String get puzzleThemeHangingPiece => 'مهره بی دفاع';
 
   @override
@@ -2185,6 +2209,9 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get puzzleThemeHookMateDescription => 'مات با یک رخ، اسب و یک پیاده در برابر یک پیاده حریف برای محدود کردن راه های فرار شاه دشمن.';
+
+  @override
+  String get puzzleThemeHookMateOpposingPawnDescription => 'مات با استفاده از رخ، اسب و پیاده، که در آن پیادهٔ حریف، راهِ فرارِ شاه را سد می‌کند.';
 
   @override
   String get puzzleThemeInterference => 'میان‌زَنِش';
@@ -3125,6 +3152,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get checkSpamFolder => 'پوشه هرزنامه خود را نیز بررسی کنید، ممکن است در آنجا باشد. اگر چنین است، آن را به عنوان غیر هرزنامه علامت‌گذاری کنید.';
 
   @override
+  String get checkSpamOrJunkFolder => 'اگر رایانامهٔ تایید دریافت نکردید، پوشه هرزنامه یا بُنجُل خود را بررسید. حتماً پیام‌های lichess.org را ایمن و \"نا-هرزنامه\" مشخص کنید تا بتوانید از ارتباطاتِ مهم آگاه شوید.';
+
+  @override
   String sendEmailForAccountVerification(String param) {
     return 'اگر نمی‌توانید رایانامهٔ تاییدتان را بیابید، رایانامه‌ای به $param ارسال کنید تا حساب‌تان را تایید کنیم.';
   }
@@ -3852,6 +3882,15 @@ class AppLocalizationsFa extends AppLocalizations {
   String get reply => 'پاسخ';
 
   @override
+  String get reopen => 'بازگشایی';
+
+  @override
+  String get quote => 'نقل‌قول';
+
+  @override
+  String get postEdited => 'ویراسته';
+
+  @override
   String get message => 'پیام';
 
   @override
@@ -3886,6 +3925,9 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get reportProcessedFasterInEnglish => 'اگر انگلیسی بنویسید، زودتر به گزارش‌تان رسیدگی خواهد شد.';
+
+  @override
+  String get processReportFasterInEnglish => 'اگر به انگلیسی بنویسید، می‌توانیم سریع‌تر به گزارش‌تان رسیدگی کنیم.';
 
   @override
   String get error_provideOneCheatedGameLink => 'لطفآ حداقل یک نمونه تقلب در بازی را مطرح کنید.';
@@ -4203,7 +4245,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get sourceCode => 'کد منبع';
 
   @override
-  String get simultaneousExhibitions => 'نمایش هم زمان';
+  String get simultaneousExhibitions => 'بازیِ هَمگاه';
 
   @override
   String get host => 'میزبان';
@@ -4214,46 +4256,49 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String get yourPendingSimuls => 'بازی های سیمولتانه در جریان شما';
+  String get yourPendingSimuls => 'هَمگاه‌های درانتظار';
 
   @override
-  String get createdSimuls => 'نمایش هم زمان  به تازگی ایجاد شده';
+  String get createdSimuls => 'هَمگاه‌های تازه‌ساخته';
 
   @override
-  String get hostANewSimul => 'میزبانی نمایش همزمان جدید';
+  String get hostANewSimul => 'میزبانیِ بازیِ هَمگاهِ جدید';
 
   @override
-  String get signUpToHostOrJoinASimul => 'ثبت‌نام کنید تا در بازی های سیمولتانه شرکت، یا برگزار کنید';
+  String get signUpToHostOrJoinASimul => 'ثبت‌نام برای پیوستن یا میزبانیِ هَمگاه';
 
   @override
-  String get noSimulFound => 'نمایش هم زمان پیدا نشد';
+  String get noSimulFound => 'هَمگاه پیدا نشد';
 
   @override
-  String get noSimulExplanation => 'نمایش همزمان برای نمایش وجود ندارد';
+  String get noSimulExplanation => 'این بازیِ هَمگاه وجود ندارد.';
 
   @override
-  String get returnToSimulHomepage => 'برگشت به صحفه اصلی نمایش های همزمان';
+  String get returnToSimulHomepage => 'بازگشت به صفحهٔ آغازِ هَمگاه';
 
   @override
-  String get aboutSimul => 'نمایش هم زمان، بازی هم زمان یک نفر با چندین حریف است.';
+  String get aboutSimul => 'هَمگاه‌ها شامل رویاروییِ یک بازیکن با چندین بازیکن، توأم است.';
 
   @override
   String get aboutSimulImage => 'از ۵۰ بازی فیشر موفق به کسب ۴۷ برد و ۲ تساوی و یک باخت شد.';
 
   @override
-  String get aboutSimulRealLife => 'این مفهوم از رویدادهای واقعی الهام گرفته شده است. در آن جا میزبان میز به میز برای انجام حرکت خود، حرکت می کند.';
+  String get aboutSimulRealLife => 'این مفهوم برگرفته از رویدادهای واقعی است. در آنجا میزبانِ هَمگاه، میزبه‌میز می‌رود و تک‌حرکتی را بازی می‌کند.';
 
   @override
-  String get aboutSimulRules => 'وقتی نمایش همزمان شروع شود، هر بازیکن یک بازی را با میزبان که با مهره سفید بازی میکند آغاز میکند. نمایش وقتی تمام می شود که تمام بازی ها تمام شده باشند.';
+  String get aboutSimulRules => 'وقتی هَمگاه می‌آغازد، هر بازیکن بازی‌ای را با میزبان شروع می‌کند. هَمگاه وقتی پایان می‌یابد که همهٔ بازی‌ها تمام شوند.';
 
   @override
-  String get aboutSimulSettings => 'نمایشگاه همزمان همیشه نارسمی است. بازرویارویی، برگرداندن و زمان افزاینده نافعال شده‌اند.';
+  String get aboutSimulSettings => 'هَمگاه همیشه نارَسمی است. بازرویارویی، برگرداندن و زمانِ افزاینده نافعال شده‌اند.';
 
   @override
   String get create => 'ساختن';
 
   @override
-  String get whenCreateSimul => 'وقتی یک نمایش همزمان ایجاد میکنید باید با چند نفر همزمان بازی کنید.';
+  String get whenCreateSimul => 'وقتی هَمگاه-ی را ایجاد می‌کنید، می‌توانید توأم با چندین بازیکن بازی کنید.';
+
+  @override
+  String get creatingASimul => 'ایجادِ هَمگاه به شما امکان می‌دهد همزمان مقابلِ چندین حریف بازی کنید.';
 
   @override
   String get simulVariantsHint => 'اگر چندین وَرتا را برگزینید، هر بازیکن می‌تواند انتخاب کند که کدام‌یک را بازی کند.';
@@ -4262,13 +4307,13 @@ class AppLocalizationsFa extends AppLocalizations {
   String get simulClockHint => 'تنظیم ساعت فیشر. هرچه از بازیکنان بیشتری برنده شوید، زمان بیشتری نیاز دارید';
 
   @override
-  String get simulAddExtraTime => 'برای کمک به شما میتوانید برای خود زمان اضافی در نظر بگیرید.';
+  String get simulAddExtraTime => 'برای کمک در چالشِ هَمگاه، می‌توانید زمانِ اضافیِ اولیه به خودتان بیفزایید.';
 
   @override
   String get simulHostExtraTime => 'زمان اضافی میزبان';
 
   @override
-  String get simulAddExtraTimePerPlayer => 'به ازای پیوستن هر بازیکن، به زمان اولیه خود اضافه کنید.';
+  String get simulAddExtraTimePerPlayer => 'به ازای پیوستنِ هر بازیکن به هَمگاه، به زمان اولیه‌تان بیفزایید.';
 
   @override
   String get simulHostExtraTimePerPlayer => 'زمان اضافه میزبان به ازای بازیکن';
@@ -4568,6 +4613,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get background => 'زمینه';
 
   @override
+  String get theme => 'پوسته';
+
+  @override
   String get light => 'روشن';
 
   @override
@@ -4577,7 +4625,13 @@ class AppLocalizationsFa extends AppLocalizations {
   String get transparent => 'شفاف';
 
   @override
+  String get picture => 'تصویر';
+
+  @override
   String get deviceTheme => 'پوستهٔ اَفزاره';
+
+  @override
+  String get roundness => 'گِردی';
 
   @override
   String get backgroundImageUrl => 'وب‌نشانی تصویر پس‌زمینه:';
@@ -4995,9 +5049,6 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String get someoneYouReportedWasBanned => 'شخصی که گزارش کردید مسدود شد';
-
-  @override
   String get congratsYouWon => 'شادباش، شما بُردید!';
 
   @override
@@ -5066,7 +5117,7 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String get cancelSimul => 'بازی هم‌زمان (سیمولتانه) را لغو نمایید';
+  String get cancelSimul => 'لغوِ هَمگاه';
 
   @override
   String get simulHostcolor => 'رنگ مربوط به نمایش‌دهنده یا میزبان برای هر بازی';
@@ -5081,11 +5132,11 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String simulFeaturedHelp(String param) {
-    return 'بازی هم‌زمان خود را برای همه بر روی لینک $param نشان بدهید. برای دسترسی خصوصی آن را غیرفعال نمایید.';
+    return 'نمایشِ هَمگاه‌تان در $param به همه. نافعال برای هَمگاه‌های خصوصی.';
   }
 
   @override
-  String get simulDescription => 'توصیف بازی هم‌زمان';
+  String get simulDescription => 'وصفِ هَمگاه';
 
   @override
   String get simulDescriptionHelp => 'آیا می‌خواهید مطلبی را به شرکت‌کنندگان بگویید؟';
@@ -5093,6 +5144,11 @@ class AppLocalizationsFa extends AppLocalizations {
   @override
   String markdownIsAvailable(String param) {
     return 'امکان $param برای قالب‌دِهی وجود دارد.';
+  }
+
+  @override
+  String youCanFormatTextUsing(String param) {
+    return 'می‌توانید متن را با استفاده از $param قالب‌بندی کنید.';
   }
 
   @override
@@ -5115,6 +5171,9 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get navigateMoveTree => 'ناویدن فهرست حرکت‌ها';
+
+  @override
+  String get moveListNavigation => 'ناوِشِ فهرستِ حرکت';
 
   @override
   String get mouseTricks => 'ترفندهای موشواره';
@@ -5531,8 +5590,8 @@ class AppLocalizationsFa extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count همزمان',
-      one: '$count همزمان',
+      other: '$count هَمگاه',
+      one: '$count هَمگاه',
     );
     return '$_temp0';
   }
