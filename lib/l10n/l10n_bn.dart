@@ -27,6 +27,51 @@ class AppLocalizationsBn extends AppLocalizations {
   String get mobileBoardSettings => 'বোর্ড সেটিংস';
 
   @override
+  String get mobileBoardEditorErrorWhiteKing => 'White king missing or duplicated';
+
+  @override
+  String get mobileBoardEditorErrorBlackKing => 'Black king missing or duplicated';
+
+  @override
+  String get mobileBoardEditorErrorOppositeCheck => 'Side not to move is in check';
+
+  @override
+  String get mobileBoardEditorErrorPawnsOnBackrank => 'Pawns cannot be on the 1st or 8th rank';
+
+  @override
+  String get mobileBoardEditorErrorInvalidEpSquare => 'Invalid en passant square for position';
+
+  @override
+  String get mobileBoardEditorErrorBadCastlingRights => 'Castling rights invalid for current piece positions';
+
+  @override
+  String get mobileBoardEditorErrorFenFormat => 'Invalid FEN format';
+
+  @override
+  String get mobileBoardEditorErrorFenBoard => 'Invalid board setup in FEN';
+
+  @override
+  String get mobileBoardEditorErrorFenTurn => 'Invalid side to move in FEN';
+
+  @override
+  String get mobileBoardEditorErrorFenCastling => 'Invalid castling rights in FEN';
+
+  @override
+  String get mobileBoardEditorErrorFenEnPassant => 'Invalid en passant square in FEN';
+
+  @override
+  String get mobileBoardEditorErrorFenHalfmove => 'Invalid halfmove clock in FEN';
+
+  @override
+  String get mobileBoardEditorErrorFenFullmove => 'Invalid fullmove number in FEN';
+
+  @override
+  String get mobileBoardEditorErrorFenRemainingChecks => 'Invalid remaining checks in FEN';
+
+  @override
+  String get mobileBoardEditorErrorFenPockets => 'Invalid pockets in FEN';
+
+  @override
   String get mobileCancelTakebackOffer => 'চাল ফেরত নেওয়ার প্রস্তাব বাতিল করুন';
 
   @override
