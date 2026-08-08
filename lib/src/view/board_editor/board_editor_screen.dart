@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
@@ -488,11 +489,48 @@ class _FenDialogState extends State<_FenDialog> {
     try {
       final pos = Chess.fromSetup(Setup.parseFen(text));
       widget.onFenLoaded(pos.fen);
+    } on PositionSetupException catch (e) {
+      showSnackBar(
+        context,
+        _getPositionSetupErrorMessage(e.cause, context.l10n),
+        type: SnackBarType.error,
+      );
+    } on FenException catch (e) {
+      showSnackBar(
+        context,
+        _getFenSyntaxErrorMessage(e.cause, context.l10n),
+        type: SnackBarType.error,
+      );
     } catch (_) {
       showSnackBar(context, context.l10n.invalidFen, type: SnackBarType.error);
     } finally {
       Navigator.of(context, rootNavigator: true).pop();
     }
+  }
+
+  String _getPositionSetupErrorMessage(IllegalSetupCause cause, AppLocalizations l10n) {
+    return switch (cause) {
+      IllegalSetupCause.kings => l10n.mobileBoardEditorErrorWhiteKing,
+      IllegalSetupCause.oppositeCheck => l10n.mobileBoardEditorErrorOppositeCheck,
+      IllegalSetupCause.pawnsOnBackrank => l10n.mobileBoardEditorErrorPawnsOnBackrank,
+      IllegalSetupCause.impossibleCheck => l10n.mobileBoardEditorErrorOppositeCheck,
+      IllegalSetupCause.empty => l10n.mobileBoardEditorErrorFenBoard,
+      IllegalSetupCause.variant => l10n.invalidFen,
+    };
+  }
+
+  String _getFenSyntaxErrorMessage(IllegalFenCause cause, AppLocalizations l10n) {
+    return switch (cause) {
+      IllegalFenCause.format => l10n.mobileBoardEditorErrorFenFormat,
+      IllegalFenCause.board => l10n.mobileBoardEditorErrorFenBoard,
+      IllegalFenCause.turn => l10n.mobileBoardEditorErrorFenTurn,
+      IllegalFenCause.castling => l10n.mobileBoardEditorErrorFenCastling,
+      IllegalFenCause.enPassant => l10n.mobileBoardEditorErrorFenEnPassant,
+      IllegalFenCause.halfmoveClock => l10n.mobileBoardEditorErrorFenHalfmove,
+      IllegalFenCause.fullmoveNumber => l10n.mobileBoardEditorErrorFenFullmove,
+      IllegalFenCause.remainingChecks => l10n.mobileBoardEditorErrorFenRemainingChecks,
+      IllegalFenCause.pockets => l10n.mobileBoardEditorErrorFenPockets,
+    };
   }
 
   @override
