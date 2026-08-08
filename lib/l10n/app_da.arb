@@ -709,6 +709,8 @@
   "puzzleThemePlayerGames": "Spiller-partier",
   "puzzleThemePlayerGamesDescription": "Find taktikopgaver lavet ud fra dine egne partier eller fra en anden spillers partier.",
   "puzzleThemePuzzleDownloadInformation": "Disse opgaver er i offentligt domæne og kan downloades fra {param}.",
+  "recapAwaitQuestion": "Hvordan har dit år været?",
+  "recapRecapReady": "Dit {param} resumé er klar!",
   "searchSearch": "Søg",
   "settingsSettings": "Indstillinger",
   "settingsCloseAccount": "Luk konto",

@@ -681,6 +681,8 @@
   "puzzleThemePlayerGames": "Player games",
   "puzzleThemePlayerGamesDescription": "View puzzles generated from your games, or from another player's games",
   "puzzleThemePuzzleDownloadInformation": "These puzzles are in the public domain, and can be downloaded from {param}.",
+  "recapAwaitQuestion": "What have you been up to this year?",
+  "recapRecapReady": "Your {param} recap is ready!",
   "searchSearch": "Search",
   "settingsSettings": "Settings",
   "settingsCloseAccount": "Close account",

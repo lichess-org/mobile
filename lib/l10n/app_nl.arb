@@ -714,6 +714,8 @@
   "puzzleThemePlayerGames": "Eigen partijen",
   "puzzleThemePlayerGamesDescription": "Zoek puzzels gegenereerd uit jouw partijen, of uit partijen van een andere speler.",
   "puzzleThemePuzzleDownloadInformation": "Deze puzzels zijn beschikbaar in het publieke domein en kunnen worden gedownload op {param}.",
+  "recapAwaitQuestion": "Wat heb je dit jaar gedaan?",
+  "recapRecapReady": "Je samenvatting van {param} is klaar!",
   "searchSearch": "Zoek",
   "settingsSettings": "Instellingen",
   "settingsCloseAccount": "Verwijder account",

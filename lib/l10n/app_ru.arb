@@ -714,6 +714,8 @@
   "puzzleThemePlayerGames": "Партии игрока",
   "puzzleThemePlayerGamesDescription": "Найти задачи, созданные из ваших партий, или партий других игроков.",
   "puzzleThemePuzzleDownloadInformation": "Эти задачи находятся в общественном достоянии и вы можете скачать их: {param}.",
+  "recapAwaitQuestion": "Чем вы занимались в этом году?",
+  "recapRecapReady": "Ваши итоги {param} года готовы!",
   "searchSearch": "Поиск",
   "settingsSettings": "Настройки",
   "settingsCloseAccount": "Удалить учётную запись",

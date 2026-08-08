@@ -715,6 +715,8 @@
   "puzzleThemePlayerGames": "Partien von Spielern",
   "puzzleThemePlayerGamesDescription": "Suche Aufgaben, die aus deinen Partien, oder den Partien eines anderen Spielers generiert wurden.",
   "puzzleThemePuzzleDownloadInformation": "Diese Aufgaben sind öffentlich zugänglich und können unter {param} heruntergeladen werden.",
+  "recapAwaitQuestion": "Was hast du dieses Jahr alles gemacht?",
+  "recapRecapReady": "Deine {param} Zusammenfassung ist da!",
   "searchSearch": "Suche",
   "settingsSettings": "Einstellungen",
   "settingsCloseAccount": "Benutzerkonto schließen",
