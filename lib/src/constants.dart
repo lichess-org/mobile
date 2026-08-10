@@ -1,11 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-const kLichessHost = String.fromEnvironment('LICHESS_HOST', defaultValue: 'lichess.dev');
+const kLichessHost = String.fromEnvironment(
+  'LICHESS_HOST',
+  defaultValue: (appFlavor == 'preview') ? 'preview.test.lichess.app' : 'lichess.dev',
+);
 
 const kLichessWSHost = String.fromEnvironment(
   'LICHESS_WS_HOST',
-  defaultValue: 'socket.lichess.dev',
+  defaultValue: (appFlavor == 'preview') ? 'preview.test.lichess.app' : 'socket.lichess.dev',
 );
 
 const kLichessWSSecret = String.fromEnvironment(
@@ -20,7 +24,7 @@ const kLichessCDNHost = String.fromEnvironment(
 
 const kLichessOpeningExplorerHost = String.fromEnvironment(
   'LICHESS_OPENING_EXPLORER_HOST',
-  defaultValue: 'explorer.lichess.org',
+  defaultValue: (appFlavor == 'preview') ? 'preview.explorer.lichess.app' : 'explorer.lichess.org',
 );
 
 const kLichessTablebaseHost = String.fromEnvironment(
