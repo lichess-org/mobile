@@ -155,8 +155,18 @@ void main() {
         final isShortScreen =
             surface.height - surface.width - kToolbarHeight - kBottomBarHeight <
             kSmallHeightMinusBoard;
-        final baseBoardSize = isTablet ? surface.width - 32.0 : surface.width;
-        final expectedBoardSize = isShortScreen ? baseBoardSize - 16.0 : baseBoardSize;
+
+        double expectedBoardSize = isTablet ? surface.width - 32.0 : surface.width;
+
+        final maxAllowedBoardSize = surface.height - 180.0;
+        if (expectedBoardSize > maxAllowedBoardSize) {
+          expectedBoardSize = maxAllowedBoardSize;
+        }
+
+        if (isShortScreen) {
+          expectedBoardSize -= 16.0;
+        }
+
         expect(
           boardSize,
           Size(expectedBoardSize, expectedBoardSize),
