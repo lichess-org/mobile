@@ -129,6 +129,7 @@ class UserFullNameWidget extends ConsumerWidget {
     required this.user,
     this.aiLevel,
     this.rating,
+    this.ratingDiff,
     this.provisional,
     this.shouldShowOnline = false,
     this.showFlair = true,
@@ -142,6 +143,7 @@ class UserFullNameWidget extends ConsumerWidget {
     required this.user,
     required this.aiLevel,
     this.rating,
+    this.ratingDiff,
     this.provisional,
     this.shouldShowOnline = false,
     this.showFlair = true,
@@ -153,6 +155,8 @@ class UserFullNameWidget extends ConsumerWidget {
 
   final LightUser? user;
   final int? rating;
+
+  final int? ratingDiff;
 
   /// The AI level, if the user is lichess AI.
   final int? aiLevel;
@@ -236,6 +240,21 @@ class UserFullNameWidget extends ConsumerWidget {
               fontWeight: FontWeight.w400,
               fontSize: contextTextStyle.fontSize != null ? contextTextStyle.fontSize! - 3 : 13,
               color: textShade(context, 0.8),
+            ),
+          ),
+        ],
+        if (shouldShowRating && ratingDiff != null) ...[
+          const SizedBox(width: 5),
+          Text(
+            ratingDiff! > 0 ? '+$ratingDiff' : '$ratingDiff',
+            style: contextTextStyle.copyWith(
+              fontWeight: .w400,
+              fontSize: contextTextStyle.fontSize != null ? contextTextStyle.fontSize! - 3 : 13,
+              color: ratingDiff! > 0
+                  ? context.lichessColors.good
+                  : ratingDiff! == 0
+                  ? context.lichessColors.brag
+                  : context.lichessColors.error,
             ),
           ),
         ],
