@@ -437,8 +437,8 @@ class _PgnTagsView extends ConsumerWidget {
                         final value = pgnHeaders[tag.tagName]!;
                         final url = tag.isLink ? tag.buildUrl(value) : null;
                         if (url != null) {
-                          return RichText(
-                            text: TextSpan(
+                          return Text.rich(
+                            TextSpan(
                               text: value,
                               style: Styles.linkStyle,
                               recognizer: TapGestureRecognizer()

@@ -88,8 +88,8 @@ class Clock extends StatelessWidget {
             padding: padding,
             child: MediaQuery.withClampedTextScaling(
               maxScaleFactor: kMaxClockTextScaleFactor,
-              child: RichText(
-                text: TextSpan(
+              child: Text.rich(
+                TextSpan(
                   text: hours > 0
                       ? '$hoursDisplay:${mins.toString().padLeft(2, '0')}:$secs'
                       : '$minsDisplay:$secs',
