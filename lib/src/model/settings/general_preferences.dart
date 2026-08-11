@@ -141,7 +141,10 @@ enum BackgroundThemeMode {
   light,
 
   /// Always use the dark mode (if available) regardless of system preference.
-  dark;
+  dark,
+
+  /// Pure black for amoled screens.
+  amoled;
 
   String title(AppLocalizations l10n) {
     switch (this) {
@@ -151,6 +154,8 @@ enum BackgroundThemeMode {
         return l10n.dark;
       case BackgroundThemeMode.light:
         return l10n.light;
+      case BackgroundThemeMode.amoled:
+        return 'Amoled black';
     }
   }
 }
