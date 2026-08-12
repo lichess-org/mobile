@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/experimental/mutation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
+import 'package:lichess_mobile/src/model/user/user_repository.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -105,6 +106,10 @@ class _EmailFormState extends ConsumerState<_EmailForm> {
   late final usernameController = TextEditingController(text: widget.initialUsername);
   late final emailController = TextEditingController(text: widget.initialEmail);
 
+  /// The name the server did not recognise, if any. Kept so the validator can flag it without
+  /// re-querying, until the user edits the field and submits again.
+  String? unknownUsername;
+
   @override
   void dispose() {
     usernameController.dispose();
@@ -123,11 +128,36 @@ class _EmailFormState extends ConsumerState<_EmailForm> {
     // The error is surfaced via the [ref.listen] in [build]; ignore the rethrown future so it does
     // not become an unhandled exception.
     emailLoginCodeRequestMutation.run(ref, (tsx) async {
+      if (!await usernameExists(tsx, username)) {
+        if (!mounted) return;
+        setState(() {
+          unknownUsername = username;
+        });
+        formKey.currentState?.validate();
+        return;
+      }
+
       await tsx
           .get(authControllerProvider.notifier)
           .requestEmailLoginCode(username: username, email: email);
       widget.onCodeSent(username: username, email: email);
     }).ignore();
+  }
+
+  /// Checks the name against the server, catching typos before a code is requested.
+  ///
+  /// This is the only feedback the flow can give about the name: the login request answers the
+  /// same way whether or not the account exists, so that it cannot be used to enumerate accounts.
+  ///
+  /// A check that could not be made — no network, a rate limit — lets the name through. That
+  /// leaves the user without feedback, but it is the lesser evil: the alternative is refusing to
+  /// sign in an account that does exist.
+  Future<bool> usernameExists(MutationTransaction tsx, String username) async {
+    try {
+      return await tsx.get(userRepositoryProvider).usernameExists(username);
+    } catch (_) {
+      return true;
+    }
   }
 
   @override
@@ -156,10 +186,14 @@ class _EmailFormState extends ConsumerState<_EmailForm> {
               border: const OutlineInputBorder(),
             ),
             validator: (value) {
-              // Deliberately lenient, like the email check below: the server is the authority on
-              // which account names exist.
-              if ((value?.trim() ?? '').isEmpty) {
+              final username = value?.trim() ?? '';
+              if (username.isEmpty) {
                 return 'Please enter your username.';
+              }
+              // Set by [submit] when the server did not know the name. Usernames are
+              // case-insensitive, so a case-only edit is still the same rejected account.
+              if (username.toLowerCase() == unknownUsername?.toLowerCase()) {
+                return context.l10n.usernameNotFound(username);
               }
               return null;
             },
@@ -261,8 +295,8 @@ class _CodeFormState extends ConsumerState<_CodeForm> {
         padding: Styles.bodySectionPadding,
         children: [
           Text(
-            'If ${widget.username} matches ${widget.email}, a $_kLoginCodeLength character code '
-            'was sent to it. Check your inbox and enter the code below.',
+            'If an account matches ${widget.email}, a $_kLoginCodeLength character code was sent '
+            'to it. Check your inbox and enter the code below.',
           ),
           const SizedBox(height: 24.0),
           TextFormField(
