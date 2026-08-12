@@ -113,8 +113,7 @@ class _EmailFormState extends ConsumerState<_EmailForm> {
   late final usernameController = TextEditingController(text: widget.initialUsername);
   late final emailController = TextEditingController(text: widget.initialEmail);
 
-  /// The name the server did not recognise, if any. Kept so the validator can flag it without
-  /// re-querying, until the user edits the field and submits again.
+  /// The name the server did not recognise, if any.
   String? unknownUsername;
 
   @override
@@ -153,12 +152,7 @@ class _EmailFormState extends ConsumerState<_EmailForm> {
 
   /// Checks the name against the server, catching typos before a code is requested.
   ///
-  /// This is the only feedback the flow can give about the name: the login request answers the
-  /// same way whether or not the account exists, so that it cannot be used to enumerate accounts.
-  ///
-  /// A check that could not be made — no network, a rate limit — lets the name through. That
-  /// leaves the user without feedback, but it is the lesser evil: the alternative is refusing to
-  /// sign in an account that does exist.
+  /// A check that could not be made lets the name through.
   Future<bool> usernameExists(MutationTransaction tsx, String username) async {
     try {
       return await tsx.get(userRepositoryProvider).usernameExists(username);
