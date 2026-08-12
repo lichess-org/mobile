@@ -120,10 +120,8 @@ class _CorrespondenceClockState extends State<CorrespondenceClock> {
           padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5.0),
           child: MediaQuery.withClampedTextScaling(
             maxScaleFactor: kMaxClockTextScaleFactor,
-            child: RichText(
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              text: TextSpan(
+            child: Text.rich(
+              TextSpan(
                 text: '$daysStr$hoursStr',
                 style: TextStyle(
                   color: widget.active ? clockStyle.activeTextColor : clockStyle.textColor,
@@ -147,6 +145,8 @@ class _CorrespondenceClockState extends State<CorrespondenceClock> {
                   ],
                 ],
               ),
+              textAlign: TextAlign.center,
+              maxLines: 2,
             ),
           ),
         ),
