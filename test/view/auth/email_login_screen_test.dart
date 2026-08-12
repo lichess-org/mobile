@@ -46,8 +46,12 @@ Future<Widget> makeApp(WidgetTester tester, MockClientHandler handler) {
   );
 }
 
-Future<void> submitEmail(WidgetTester tester, String email) async {
-  await tester.enterText(find.byType(TextFormField), email);
+Future<void> submitEmail(WidgetTester tester, {String username = 'johndoe', String? email}) async {
+  await tester.enterText(find.widgetWithText(TextFormField, 'Username'), username);
+  await tester.enterText(
+    find.widgetWithText(TextFormField, 'Email'),
+    email ?? 'johndoe@lichess.org',
+  );
   await tester.tap(find.widgetWithText(FilledButton, 'Send me a code'));
   await tester.pumpAndSettle();
 }
@@ -66,10 +70,10 @@ void main() {
     );
     await tester.pumpWidget(app);
 
-    await submitEmail(tester, 'johndoe@lichess.org');
+    await submitEmail(tester);
 
     expect(urls.single.path, '/auth/mobile-code/email');
-    expect(urls.single.queryParameters, {'email': 'johndoe@lichess.org'});
+    expect(urls.single.queryParameters, {'email': 'johndoe@lichess.org', 'username': 'johndoe'});
     expect(find.textContaining('johndoe@lichess.org'), findsOneWidget);
     expect(find.widgetWithText(FilledButton, 'Sign in'), findsOneWidget);
   });
@@ -78,7 +82,7 @@ void main() {
     final app = await makeApp(tester, happyPath(emailStatus: 429));
     await tester.pumpWidget(app);
 
-    await submitEmail(tester, 'johndoe@lichess.org');
+    await submitEmail(tester);
 
     expect(find.widgetWithText(FilledButton, 'Send me a code'), findsOneWidget);
     expect(find.text('Too many attempts. Please try again later.'), findsOneWidget);
@@ -92,10 +96,24 @@ void main() {
     });
     await tester.pumpWidget(app);
 
-    await submitEmail(tester, 'not-an-email');
+    await submitEmail(tester, email: 'not-an-email');
 
     expect(requests, 0);
     expect(find.text('Please enter a valid email address.'), findsOneWidget);
+  });
+
+  testWidgets('does not send a request without a username', (tester) async {
+    var requests = 0;
+    final app = await makeApp(tester, (request) {
+      requests++;
+      return mockResponse('', 204);
+    });
+    await tester.pumpWidget(app);
+
+    await submitEmail(tester, username: '');
+
+    expect(requests, 0);
+    expect(find.text('Please enter your username.'), findsOneWidget);
   });
 
   testWidgets('signs the user in and pops when the code is accepted', (tester) async {
@@ -118,14 +136,18 @@ void main() {
     // popped, and can be read at the end of the test.
     container.listen(authControllerProvider, (_, _) {});
 
-    await submitEmail(tester, 'johndoe@lichess.org');
+    await submitEmail(tester);
 
     await tester.enterText(find.byType(TextFormField), 'xxxxxx');
     await tester.tap(find.widgetWithText(FilledButton, 'Sign in'));
     await tester.pumpAndSettle();
 
     final bearerUrl = urls.firstWhere((url) => url.path == '/auth/mobile-code/bearer');
-    expect(bearerUrl.queryParameters, {'email': 'johndoe@lichess.org', 'code': 'xxxxxx'});
+    expect(bearerUrl.queryParameters, {
+      'email': 'johndoe@lichess.org',
+      'username': 'johndoe',
+      'code': 'xxxxxx',
+    });
 
     final authUser = container.read(authControllerProvider);
     expect(authUser?.token, 'lio_token');
@@ -139,7 +161,7 @@ void main() {
     final app = await makeApp(tester, happyPath(bearerStatus: 404));
     await tester.pumpWidget(app);
 
-    await submitEmail(tester, 'johndoe@lichess.org');
+    await submitEmail(tester);
 
     await tester.enterText(find.byType(TextFormField), 'expire');
     await tester.tap(find.widgetWithText(FilledButton, 'Sign in'));
@@ -154,15 +176,19 @@ void main() {
     final app = await makeApp(tester, happyPath());
     await tester.pumpWidget(app);
 
-    await submitEmail(tester, 'johndoe@lichess.org');
+    await submitEmail(tester);
 
     await tester.tap(find.byIcon(Icons.arrow_back));
     await tester.pumpAndSettle();
 
     expect(find.widgetWithText(FilledButton, 'Send me a code'), findsOneWidget);
-    // The address is kept, so a typo can be fixed without retyping it all.
+    // Both fields are kept, so a typo can be fixed without retyping it all.
     expect(
-      tester.widget<TextFormField>(find.byType(TextFormField)).controller?.text,
+      tester.widget<TextFormField>(find.widgetWithText(TextFormField, 'Username')).controller?.text,
+      'johndoe',
+    );
+    expect(
+      tester.widget<TextFormField>(find.widgetWithText(TextFormField, 'Email')).controller?.text,
       'johndoe@lichess.org',
     );
   });
