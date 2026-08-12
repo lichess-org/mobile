@@ -187,13 +187,13 @@ class NnueService {
           );
           if (isOk == true) {
             await doDownload();
-            return checkNNUEFiles();
+            return await checkNNUEFiles();
           } else {
-            return Future.value(false);
+            return await Future.value(false);
           }
         }
       } else {
-        return doDownload();
+        return await doDownload();
       }
     } finally {
       _nnueOperationInProgress = false;

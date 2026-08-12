@@ -156,7 +156,7 @@ String _buildGameSubtitle(PgnLazyGame game) {
 
   return [
     if (event != null && event.isNotEmpty && event != '?')
-      (round != null && round.isNotEmpty && round != '?') ? '$event ($round)' : event,
+      if (round != null && round.isNotEmpty && round != '?') '$event ($round)' else event,
     if (site != null && site.isNotEmpty && site != '?') site,
     if (date != null && date.isNotEmpty && date != '?') date,
   ].join(' • ');
