@@ -155,8 +155,18 @@ void main() {
         final isShortScreen =
             surface.height - surface.width - kToolbarHeight - kBottomBarHeight <
             kSmallHeightMinusBoard;
-        final baseBoardSize = isTablet ? surface.width - 32.0 : surface.width;
-        final expectedBoardSize = isShortScreen ? baseBoardSize - 16.0 : baseBoardSize;
+
+        double expectedBoardSize = isTablet ? surface.width - 32.0 : surface.width;
+
+        final maxAllowedBoardSize = surface.height - 180.0;
+        if (expectedBoardSize > maxAllowedBoardSize) {
+          expectedBoardSize = maxAllowedBoardSize;
+        }
+
+        if (isShortScreen) {
+          expectedBoardSize -= 16.0;
+        }
+
         expect(
           boardSize,
           Size(expectedBoardSize, expectedBoardSize),
@@ -248,48 +258,45 @@ void main() {
     );
   });
 
-  testWidgets(
-    'owned board becomes interactive when boardParams transitions from readonly',
-    (WidgetTester tester) async {
-      final paramsNotifier = ValueNotifier<GameBoardParams>(GameBoardParams.emptyBoard);
-      addTearDown(paramsNotifier.dispose);
-      final playedMoves = <Move>[];
+  testWidgets('owned board becomes interactive when boardParams transitions from readonly', (
+    WidgetTester tester,
+  ) async {
+    final paramsNotifier = ValueNotifier<GameBoardParams>(GameBoardParams.emptyBoard);
+    addTearDown(paramsNotifier.dispose);
+    final playedMoves = <Move>[];
 
-      final app = await makeTestProviderScope(
-        tester,
-        child: MaterialApp(
-          home: ValueListenableBuilder<GameBoardParams>(
-            valueListenable: paramsNotifier,
-            builder: (context, params, _) =>
-                GameLayout(orientation: Side.white, boardParams: params),
-          ),
+    final app = await makeTestProviderScope(
+      tester,
+      child: MaterialApp(
+        home: ValueListenableBuilder<GameBoardParams>(
+          valueListenable: paramsNotifier,
+          builder: (context, params, _) => GameLayout(orientation: Side.white, boardParams: params),
         ),
-      );
-      await tester.pumpWidget(app);
+      ),
+    );
+    await tester.pumpWidget(app);
 
-      // Readonly boards are controller-backed but non-interactive (PlayerSide.none).
-      expect(tester.widget<Chessboard>(find.byType(Chessboard)).interactive, isFalse);
+    // Readonly boards are controller-backed but non-interactive (PlayerSide.none).
+    expect(tester.widget<Chessboard>(find.byType(Chessboard)).interactive, isFalse);
 
-      // Transition the same GameLayout to interactive params (triggers didUpdateWidget).
-      paramsNotifier.value = GameBoardParams.interactive(
-        variant: Variant.standard,
-        position: Chess.initial,
-        playerSide: PlayerSide.white,
-        onMove: (move, {viaDragAndDrop}) {
-          playedMoves.add(move);
-        },
-      );
-      await tester.pump();
+    // Transition the same GameLayout to interactive params (triggers didUpdateWidget).
+    paramsNotifier.value = GameBoardParams.interactive(
+      variant: Variant.standard,
+      position: Chess.initial,
+      playerSide: PlayerSide.white,
+      onMove: (move, {viaDragAndDrop}) {
+        playedMoves.add(move);
+      },
+    );
+    await tester.pump();
 
-      // The same board is now interactive.
-      expect(tester.widget<Chessboard>(find.byType(Chessboard)).interactive, isTrue);
+    // The same board is now interactive.
+    expect(tester.widget<Chessboard>(find.byType(Chessboard)).interactive, isTrue);
 
-      // And user interaction reaches the onMove callback.
-      await playMove(tester, 'e2', 'e4');
-      expect(playedMoves, [const NormalMove(from: Square.e2, to: Square.e4)]);
-    },
-    variant: kPlatformVariant,
-  );
+    // And user interaction reaches the onMove callback.
+    await playMove(tester, 'e2', 'e4');
+    expect(playedMoves, [const NormalMove(from: Square.e2, to: Square.e4)]);
+  }, variant: kPlatformVariant);
 
   testWidgets('Crazyhouse displays pockets and supports drop moves', (WidgetTester tester) async {
     final playedMoves = <Move>[];

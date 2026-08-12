@@ -343,6 +343,7 @@ class _PlayerWidget extends StatelessWidget {
                 user: player.user,
                 name: player.name,
                 rating: player.rating,
+                ratingDiff: player.ratingDiff,
                 provisional: player.provisional,
                 aiLevel: player.aiLevel,
                 style: const TextStyle(fontWeight: FontWeight.bold),
