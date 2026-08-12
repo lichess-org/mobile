@@ -17,7 +17,7 @@ ThemeData makeAppTheme(BuildContext context, GeneralPrefs generalPrefs, BoardPre
       ? Brightness.dark
       : switch (generalPrefs.themeMode) {
           BackgroundThemeMode.light => Brightness.light,
-          BackgroundThemeMode.dark => Brightness.dark,
+          BackgroundThemeMode.dark || BackgroundThemeMode.amoled => Brightness.dark,
           BackgroundThemeMode.system => MediaQuery.platformBrightnessOf(context),
         };
 
@@ -123,7 +123,9 @@ ThemeData _makeDefaultTheme(
       ? ThemeData.from(colorScheme: systemScheme, textTheme: textTheme)
       : ThemeData.from(colorScheme: boardScheme, textTheme: textTheme);
 
-  return theme.copyWith(
+  final isAmoled = generalPrefs.themeMode == BackgroundThemeMode.amoled;
+
+  final finalTheme = theme.copyWith(
     cupertinoOverrideTheme: _makeCupertinoThemeData(theme.colorScheme, brightness),
     splashFactory: isIOS ? NoSplash.splashFactory : null,
     appBarTheme: _appBarTheme.copyWith(
@@ -166,6 +168,24 @@ ThemeData _makeDefaultTheme(
     bottomSheetTheme: isIOS ? _kCupertinoBottomSheetTheme : null,
     sliderTheme: kSliderTheme,
     extensions: [lichessCustomColors.harmonized(theme.colorScheme)],
+  );
+
+  if (!isAmoled) return finalTheme;
+
+  return finalTheme.copyWith(
+    scaffoldBackgroundColor: const Color(0xFF000000),
+    appBarTheme: finalTheme.appBarTheme.copyWith(
+      backgroundColor: const Color(0xFF000000),
+      surfaceTintColor: Colors.transparent,
+    ),
+    bottomAppBarTheme: finalTheme.bottomAppBarTheme.copyWith(color: const Color(0xFF000000)),
+    colorScheme: finalTheme.colorScheme.copyWith(
+      surface: const Color(0xFF000000),
+      surfaceContainerLowest: const Color(0xFF000000),
+      surfaceContainerLow: const Color(0xFF000000),
+      surfaceContainer: const Color(0xFF000000),
+      surfaceTint: Colors.transparent,
+    ),
   );
 }
 
