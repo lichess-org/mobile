@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/experimental/mutation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
+import 'package:lichess_mobile/src/model/user/user_repository.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -12,6 +13,13 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 
 /// Number of characters of a login code.
 const _kLoginCodeLength = 6;
+
+/// Address shapes accepted before a code is requested.
+final _emailRegExp = RegExp(
+  r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+"
+  '@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?'
+  r'(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$',
+);
 
 /// The two steps of the email login flow.
 enum _EmailLoginStep { email, code }
@@ -31,12 +39,16 @@ class EmailLoginScreen extends StatefulWidget {
 class _EmailLoginScreenState extends State<EmailLoginScreen> {
   _EmailLoginStep step = _EmailLoginStep.email;
 
+  /// The account the code was requested for. Only set once the first step succeeded.
+  String? username;
+
   /// The address the code was sent to. Only set once the first step succeeded.
   String? email;
 
-  void onCodeSent(String value) {
+  void onCodeSent({required String username, required String email}) {
     setState(() {
-      email = value;
+      this.username = username;
+      this.email = email;
       step = _EmailLoginStep.code;
     });
   }
@@ -67,8 +79,12 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
         },
         child: SafeArea(
           child: switch (step) {
-            .email => _EmailForm(initialValue: email, onCodeSent: onCodeSent),
-            .code => _CodeForm(email: email!),
+            .email => _EmailForm(
+              initialUsername: username,
+              initialEmail: email,
+              onCodeSent: onCodeSent,
+            ),
+            .code => _CodeForm(username: username!, email: email!),
           },
         ),
       ),
@@ -76,12 +92,17 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
   }
 }
 
-/// First step: asks for the email address and requests a login code for it.
+/// First step: asks for the account name and email address, and requests a login code for them.
 class _EmailForm extends ConsumerStatefulWidget {
-  const _EmailForm({required this.initialValue, required this.onCodeSent});
+  const _EmailForm({
+    required this.initialUsername,
+    required this.initialEmail,
+    required this.onCodeSent,
+  });
 
-  final String? initialValue;
-  final void Function(String email) onCodeSent;
+  final String? initialUsername;
+  final String? initialEmail;
+  final void Function({required String username, required String email}) onCodeSent;
 
   @override
   ConsumerState<_EmailForm> createState() => _EmailFormState();
@@ -89,27 +110,55 @@ class _EmailForm extends ConsumerStatefulWidget {
 
 class _EmailFormState extends ConsumerState<_EmailForm> {
   final formKey = GlobalKey<FormState>();
-  late final TextEditingController controller = TextEditingController(text: widget.initialValue);
+  late final usernameController = TextEditingController(text: widget.initialUsername);
+  late final emailController = TextEditingController(text: widget.initialEmail);
+
+  /// The name the server did not recognise, if any.
+  String? unknownUsername;
 
   @override
   void dispose() {
-    controller.dispose();
+    usernameController.dispose();
+    emailController.dispose();
     super.dispose();
   }
 
   void submit() {
     if (formKey.currentState?.validate() != true) return;
 
-    final email = controller.text.trim();
+    final username = usernameController.text.trim();
+    final email = emailController.text.trim();
 
     FocusScope.of(context).unfocus();
 
     // The error is surfaced via the [ref.listen] in [build]; ignore the rethrown future so it does
     // not become an unhandled exception.
     emailLoginCodeRequestMutation.run(ref, (tsx) async {
-      await tsx.get(authControllerProvider.notifier).requestEmailLoginCode(email);
-      widget.onCodeSent(email);
+      if (!await usernameExists(tsx, username)) {
+        if (!mounted) return;
+        setState(() {
+          unknownUsername = username;
+        });
+        formKey.currentState?.validate();
+        return;
+      }
+
+      await tsx
+          .get(authControllerProvider.notifier)
+          .requestEmailLoginCode(username: username, email: email);
+      widget.onCodeSent(username: username, email: email);
     }).ignore();
+  }
+
+  /// Checks the name against the server, catching typos before a code is requested.
+  ///
+  /// A check that could not be made lets the name through.
+  Future<bool> usernameExists(MutationTransaction tsx, String username) async {
+    try {
+      return await tsx.get(userRepositoryProvider).usernameExists(username);
+    } catch (_) {
+      return true;
+    }
   }
 
   @override
@@ -126,8 +175,33 @@ class _EmailFormState extends ConsumerState<_EmailForm> {
           const Text('We will email you a code to sign in with.'),
           const SizedBox(height: 24.0),
           TextFormField(
-            controller: controller,
+            controller: usernameController,
             autofocus: true,
+            autofillHints: const [AutofillHints.username],
+            textInputAction: TextInputAction.next,
+            autocorrect: false,
+            enableSuggestions: false,
+            textCapitalization: TextCapitalization.none,
+            decoration: InputDecoration(
+              labelText: context.l10n.username,
+              border: const OutlineInputBorder(),
+            ),
+            validator: (value) {
+              final username = value?.trim() ?? '';
+              if (username.isEmpty) {
+                return 'Please enter your username.';
+              }
+              // Set by [submit] when the server did not know the name. Usernames are
+              // case-insensitive, so a case-only edit is still the same rejected account.
+              if (username.toLowerCase() == unknownUsername?.toLowerCase()) {
+                return context.l10n.usernameNotFound(username);
+              }
+              return null;
+            },
+          ),
+          const SizedBox(height: 16.0),
+          TextFormField(
+            controller: emailController,
             autofillHints: const [AutofillHints.email],
             keyboardType: TextInputType.emailAddress,
             textInputAction: TextInputAction.done,
@@ -138,9 +212,7 @@ class _EmailFormState extends ConsumerState<_EmailForm> {
             ),
             validator: (value) {
               final email = value?.trim() ?? '';
-              // Deliberately lenient: the server is the authority on what a valid address is, this
-              // only catches obvious typos before spending a request.
-              if (email.isEmpty || !email.contains('@') || email.contains(' ')) {
+              if (!_emailRegExp.hasMatch(email)) {
                 return 'Please enter a valid email address.';
               }
               return null;
@@ -163,8 +235,9 @@ class _EmailFormState extends ConsumerState<_EmailForm> {
 
 /// Second step: asks for the code that was emailed, and exchanges it for a session.
 class _CodeForm extends ConsumerStatefulWidget {
-  const _CodeForm({required this.email});
+  const _CodeForm({required this.username, required this.email});
 
+  final String username;
   final String email;
 
   @override
@@ -193,7 +266,7 @@ class _CodeFormState extends ConsumerState<_CodeForm> {
     emailLoginCodeSignInMutation.run(ref, (tsx) async {
       await tsx
           .get(authControllerProvider.notifier)
-          .signInWithEmailCode(email: widget.email, code: code);
+          .signInWithEmailCode(username: widget.username, email: widget.email, code: code);
     }).ignore();
   }
 

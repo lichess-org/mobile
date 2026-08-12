@@ -100,11 +100,11 @@ class AuthRepository {
     return _fetchAuthUser(token);
   }
 
-  /// Asks lichess to email a 6 character login code to [email].
+  /// Asks lichess to email a 6 character login code for the [username] account to [email].
   ///
   /// Throws an [EmailLoginRateLimitException] if the request is rate-limited.
-  Future<void> requestEmailLoginCode(String email) async {
-    final url = lichessUri('/auth/mobile-code/email', {'email': email});
+  Future<void> requestEmailLoginCode({required String username, required String email}) async {
+    final url = lichessUri('/auth/mobile-code/email', {'email': email, 'username': username});
     // The default client is used on purpose: this endpoint is unauthenticated, and its 429 responses
     // are deliberate rate limiting that must not be retried like [lichessClientProvider] does.
     final response = await _ref.read(defaultClientProvider).post(url);
@@ -122,13 +122,21 @@ class AuthRepository {
     }
   }
 
-  /// Exchanges the login [code] received by [email] for an OAuth token, and fetches the account it
-  /// belongs to.
+  /// Exchanges the login [code] received by [email] for an OAuth token on the [username] account,
+  /// and fetches the account it belongs to.
   ///
   /// Throws an [InvalidEmailLoginCodeException] if the code is unknown, expired, or already used,
   /// and an [EmailLoginRateLimitException] if the request is rate-limited.
-  Future<AuthUser> signInWithEmailCode({required String email, required String code}) async {
-    final url = lichessUri('/auth/mobile-code/bearer', {'email': email, 'code': code});
+  Future<AuthUser> signInWithEmailCode({
+    required String username,
+    required String email,
+    required String code,
+  }) async {
+    final url = lichessUri('/auth/mobile-code/bearer', {
+      'email': email,
+      'username': username,
+      'code': code,
+    });
     final response = await _ref.read(defaultClientProvider).post(url);
 
     switch (response.statusCode) {
