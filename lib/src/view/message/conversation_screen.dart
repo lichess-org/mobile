@@ -454,7 +454,7 @@ class _MessageContent extends StatelessWidget {
 
     return Stack(
       children: [
-        RichText(text: TextSpan(children: [linkSpan, spacer])),
+        Text.rich(TextSpan(children: [linkSpan, spacer])),
         Positioned(right: 0, bottom: 0, child: Text(time, style: timeStyle)),
       ],
     );
