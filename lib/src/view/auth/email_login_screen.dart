@@ -14,6 +14,13 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 /// Number of characters of a login code.
 const _kLoginCodeLength = 6;
 
+/// Address shapes accepted before a code is requested.
+final _emailRegExp = RegExp(
+  r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+"
+  '@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?'
+  r'(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$',
+);
+
 /// The two steps of the email login flow.
 enum _EmailLoginStep { email, code }
 
@@ -211,9 +218,7 @@ class _EmailFormState extends ConsumerState<_EmailForm> {
             ),
             validator: (value) {
               final email = value?.trim() ?? '';
-              // Deliberately lenient: the server is the authority on what a valid address is, this
-              // only catches obvious typos before spending a request.
-              if (email.isEmpty || !email.contains('@') || email.contains(' ')) {
+              if (!_emailRegExp.hasMatch(email)) {
                 return 'Please enter a valid email address.';
               }
               return null;

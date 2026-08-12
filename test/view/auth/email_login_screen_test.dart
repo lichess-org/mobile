@@ -96,18 +96,65 @@ void main() {
     expect(find.text('Too many attempts. Please try again later.'), findsOneWidget);
   });
 
-  testWidgets('does not send a request for an obviously invalid address', (tester) async {
-    var requests = 0;
-    final app = await makeApp(tester, (request) {
-      requests++;
-      return mockResponse('', 204);
-    });
-    await tester.pumpWidget(app);
+  group('rejects a malformed address without any request', () {
+    for (final email in const [
+      '',
+      'not-an-email',
+      'johndoe@',
+      '@lichess.org',
+      // A single-label host: almost always a truncated 'lichess.org'.
+      'johndoe@lichess',
+      'john doe@lichess.org',
+      'johndoe@lichess org',
+      'john@doe@lichess.org',
+      'johndoe@lichess..org',
+      'johndoe@-lichess.org',
+      'johndoe@lichess.org.',
+    ]) {
+      testWidgets(email.isEmpty ? '(empty)' : email, (tester) async {
+        var requests = 0;
+        final app = await makeApp(tester, (request) {
+          requests++;
+          return mockResponse('', 204);
+        });
+        await tester.pumpWidget(app);
 
-    await submitEmail(tester, email: 'not-an-email');
+        await submitEmail(tester, email: email);
 
-    expect(requests, 0);
-    expect(find.text('Please enter a valid email address.'), findsOneWidget);
+        expect(requests, 0);
+        expect(find.text('Please enter a valid email address.'), findsOneWidget);
+      });
+    }
+  });
+
+  group('accepts a well formed address', () {
+    for (final email in const [
+      'johndoe@lichess.org',
+      'john.doe+chess@mail.lichess.org',
+      "o'brien@lichess.org",
+      'john_doe-42@li-chess.org',
+      'johndoe@lichess.co.uk',
+    ]) {
+      testWidgets(email, (tester) async {
+        final urls = <Uri>[];
+        final app = await makeApp(
+          tester,
+          happyPath(
+            recordUrl: (url) {
+              urls.add(url);
+              return url;
+            },
+          ),
+        );
+        await tester.pumpWidget(app);
+
+        await submitEmail(tester, email: email);
+
+        expect(find.text('Please enter a valid email address.'), findsNothing);
+        final emailUrl = urls.firstWhere((url) => url.path == '/auth/mobile-code/email');
+        expect(emailUrl.queryParameters['email'], email);
+      });
+    }
   });
 
   testWidgets('does not send a request without a username', (tester) async {
