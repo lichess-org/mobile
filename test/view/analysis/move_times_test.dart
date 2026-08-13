@@ -101,6 +101,10 @@ void main() {
       await tester.pumpAndSettle();
       await openComputerAnalysisTab(tester);
 
+      // Without a server analysis the reserved eval chart area can push the chart below the fold.
+      await tester.ensureVisible(find.byType(MoveTimesChart));
+      await tester.pumpAndSettle();
+
       final plot = chartPlotRect(tester);
 
       // The chart is divided in as many columns as there are moves: tapping in the middle of the

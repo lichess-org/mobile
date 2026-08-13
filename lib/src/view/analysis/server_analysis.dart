@@ -59,11 +59,20 @@ class ServerAnalysisSummary extends ConsumerWidget {
 
     // The move times chart needs no server analysis, so it is appended below whatever the tab
     // shows: the computer analysis, or the button to request one.
+    //
+    // Without a server analysis the space the eval chart would take is reserved and the content
+    // centred in it, so the button keeps floating in the middle of that area instead of being
+    // pushed against the top of the chart below it.
     Widget layout(Widget content) => moveTimesChart == null
         ? Center(child: content)
         : ListView(
             children: [
-              Padding(padding: const EdgeInsets.symmetric(vertical: 16.0), child: content),
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: AspectRatio(aspectRatio: 2.5, child: Center(child: content)),
+                ),
+              ),
               moveTimesChart,
             ],
           );
