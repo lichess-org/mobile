@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
@@ -9,6 +8,7 @@ import 'package:lichess_mobile/src/view/game/game_body.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../network/fake_websocket_channel.dart';
 import '../../test_helpers.dart';

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -15,6 +14,7 @@ import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/user/countries.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const _userNameStyle = TextStyle(fontSize: 20, fontWeight: FontWeight.w500);

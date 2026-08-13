@@ -3,8 +3,8 @@ import 'dart:ui';
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:dynamic_system_colors/dynamic_system_colors.dart';
-import 'package:flutter/material.dart' show ColorScheme;
 import 'package:material_color_utilities/material_color_utilities.dart';
+import 'package:material_ui/material_ui.dart' show ColorScheme;
 
 typedef ColorSchemes = ({ColorScheme light, ColorScheme dark});
 

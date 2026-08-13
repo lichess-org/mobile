@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -17,6 +16,7 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 import 'package:linkify/linkify.dart' show linkify;
+import 'package:material_ui/material_ui.dart';
 
 sealed class DisplayItem {}
 

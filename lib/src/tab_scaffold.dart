@@ -1,8 +1,7 @@
 import 'dart:ui' show ImageFilter;
 
-import 'package:flutter/cupertino.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
@@ -13,6 +12,7 @@ import 'package:lichess_mobile/src/view/more/more_tab_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_tab_screen.dart';
 import 'package:lichess_mobile/src/view/watch/watch_tab_screen.dart';
 import 'package:lichess_mobile/src/widgets/background.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Main scaffold that provides the bottom navigation bar and tab switching view.
 class MainTabScaffold extends ConsumerWidget {

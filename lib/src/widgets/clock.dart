@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:clock/clock.dart';
-import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
+import 'package:material_ui/material_ui.dart';
 
 const _kClockFontSize = 26.0;
 const _kClockTenthFontSize = 20.0;

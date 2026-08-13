@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class LichessColors {
   // This class is not meant to be instantiated or extended; this constructor
