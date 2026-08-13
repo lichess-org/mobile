@@ -434,17 +434,17 @@ class _MatchHistoryTable extends StatelessWidget {
       },
       defaultVerticalAlignment: .middle,
       children: [
-        const TableRow(
+        TableRow(
           children: [
-            Padding(
+            const Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
               child: Text('Round', style: TextStyle(fontWeight: .bold)),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 12.0),
-              child: Text('Team', style: TextStyle(fontWeight: .bold)),
+              padding: const EdgeInsets.symmetric(vertical: 12.0),
+              child: Text(context.l10n.teamTeam, style: const TextStyle(fontWeight: .bold)),
             ),
-            Padding(
+            const Padding(
               padding: EdgeInsets.symmetric(vertical: 12.0),
               child: Text(
                 'MP',
@@ -452,7 +452,7 @@ class _MatchHistoryTable extends StatelessWidget {
                 style: TextStyle(fontWeight: .bold),
               ),
             ),
-            Padding(
+            const Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
               child: Text(
                 'GP',
