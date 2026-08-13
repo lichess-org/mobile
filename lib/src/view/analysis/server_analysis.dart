@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/acpl_chart.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -54,7 +55,13 @@ class ServerAnalysisSummary extends ConsumerWidget {
     final serverAnalysisAllowed = serverAnalysisSource != null;
 
     final moveTimesChart = moveTimesChartParams != null
-        ? MoveTimesChart(params: moveTimesChartParams!)
+        ? Column(
+            crossAxisAlignment: .stretch,
+            children: [
+              _SectionHeader(context.l10n.moveTimes),
+              MoveTimesChart(params: moveTimesChartParams!),
+            ],
+          )
         : null;
 
     // The move times chart needs no server analysis, so it is appended below whatever the tab
@@ -100,7 +107,11 @@ class ServerAnalysisSummary extends ConsumerWidget {
         children: [
           if (serverAnalysisSource == currentGameAnalysis)
             const Padding(padding: EdgeInsets.only(top: 16.0), child: WaitingForServerAnalysis()),
-          if (acplChartParams != null) AcplChart(params: acplChartParams!),
+          if (acplChartParams != null) ...[
+            _SectionHeader(context.l10n.computerAnalysis),
+            AcplChart(params: acplChartParams!),
+          ],
+          _SectionHeader(context.l10n.stats),
           GameSummaryTable(
             pgnHeaders: pgnHeaders,
             playersAnalysis: playersAnalysis!,
@@ -149,6 +160,21 @@ class ServerAnalysisSummary extends ConsumerWidget {
           );
         },
       ),
+    );
+  }
+}
+
+/// Title of one of the blocks stacked in the computer analysis tab, to tell them apart.
+class _SectionHeader extends StatelessWidget {
+  const _SectionHeader(this.title);
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 4.0),
+      child: Text(title, style: Styles.sectionTitle),
     );
   }
 }
