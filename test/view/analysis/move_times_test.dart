@@ -60,8 +60,8 @@ Future<Widget> makeTestApp(WidgetTester tester, {List<int> clocks = _clocks}) {
   );
 }
 
-Future<void> openComputerAnalysisTab(WidgetTester tester) async {
-  await tester.tap(find.bySemanticsLabel(RegExp('Computer analysis')));
+Future<void> openMoveTimesTab(WidgetTester tester) async {
+  await tester.tap(find.bySemanticsLabel(RegExp('Move times')));
   await tester.pumpAndSettle();
 }
 
@@ -72,44 +72,32 @@ Rect chartPlotRect(WidgetTester tester) => tester.getRect(
 
 void main() {
   group('Move times chart', () {
-    testWidgets('is displayed in the computer analysis tab for a game played with a clock', (
-      tester,
-    ) async {
+    testWidgets('has its own tab for a game played with a clock', (tester) async {
       await tester.pumpWidget(await makeTestApp(tester));
       await tester.pumpAndSettle();
 
       expect(find.byType(MoveTimesChart), findsNothing);
 
-      await openComputerAnalysisTab(tester);
+      await openMoveTimesTab(tester);
 
-      // No server analysis has been requested, so the chart sits below the request button.
-      expect(find.textContaining('Request a computer analysis'), findsOneWidget);
       expect(find.byType(MoveTimesChart), findsOneWidget);
-
-      await tester.ensureVisible(find.byType(MoveTimesChart));
-      await tester.pumpAndSettle();
 
       // Total duration of the game, in the corner under the chart.
       expect(find.textContaining('Duration:'), findsOneWidget);
     });
 
-    testWidgets('is not displayed for a game without clocks', (tester) async {
+    testWidgets('has no tab for a game without clocks', (tester) async {
       await tester.pumpWidget(await makeTestApp(tester, clocks: []));
       await tester.pumpAndSettle();
 
-      await openComputerAnalysisTab(tester);
-
+      expect(find.bySemanticsLabel(RegExp('Move times')), findsNothing);
       expect(find.byType(MoveTimesChart), findsNothing);
     });
 
     testWidgets('tapping the chart seeks the board to that ply', (tester) async {
       await tester.pumpWidget(await makeTestApp(tester));
       await tester.pumpAndSettle();
-      await openComputerAnalysisTab(tester);
-
-      // Without a server analysis the reserved eval chart area can push the chart below the fold.
-      await tester.ensureVisible(find.byType(MoveTimesChart));
-      await tester.pumpAndSettle();
+      await openMoveTimesTab(tester);
 
       final plot = chartPlotRect(tester);
 
