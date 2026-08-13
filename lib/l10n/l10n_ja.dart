@@ -6513,6 +6513,9 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String get teamTeam => 'チーム';
+
+  @override
   String get teamIncorrectEntryCode => '参加コードが違います。';
 
   @override

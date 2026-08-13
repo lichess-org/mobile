@@ -6750,6 +6750,9 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
+  String get teamTeam => 'Družstvo';
+
+  @override
   String get teamIncorrectEntryCode => 'Nesprávny vstupný kód.';
 
   @override

@@ -6590,6 +6590,9 @@ class AppLocalizationsAz extends AppLocalizations {
   }
 
   @override
+  String get teamTeam => 'Komanda';
+
+  @override
   String get teamIncorrectEntryCode => 'Incorrect entry code.';
 
   @override

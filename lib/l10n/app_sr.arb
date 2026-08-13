@@ -1467,6 +1467,7 @@
   "studyNbGames": "{count, plural, =1{{count} Партија} few{{count} Партијe} other{{count} Партија}}",
   "studyNbMembers": "{count, plural, =1{{count} Члан} few{{count} Чланa} other{{count} Чланова}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Налепи свој PGN текст овде, до {count} партије} few{Налепи партије као PGN текст овде. За сваку партију, ново поглавље је направљено. Студија може садржати до {count} поглавља.} other{Налепи партије као PGN текст овде. За сваку партију, ново поглавље је направљено. Студија може садржати до {count} поглавља.}}",
+  "teamTeam": "Тим",
   "timeagoJustNow": "управо сада",
   "timeagoRightNow": "управо сад",
   "timeagoCompleted": "завршено",

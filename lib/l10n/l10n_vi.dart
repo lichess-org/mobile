@@ -6513,6 +6513,9 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
+  String get teamTeam => 'Đội';
+
+  @override
   String get teamIncorrectEntryCode => 'Mã không chính xác.';
 
   @override

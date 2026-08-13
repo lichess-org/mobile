@@ -6592,6 +6592,9 @@ class AppLocalizationsAf extends AppLocalizations {
   }
 
   @override
+  String get teamTeam => 'Span';
+
+  @override
   String get teamIncorrectEntryCode => 'Verkeerde insluitings kode.';
 
   @override
