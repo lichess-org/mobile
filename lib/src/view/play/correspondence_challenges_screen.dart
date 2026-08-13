@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:deep_pick/deep_pick.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -20,6 +19,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:material_ui/material_ui.dart';
 
 class CorrespondenceChallengesScreen extends ConsumerStatefulWidget {
   const CorrespondenceChallengesScreen({super.key});

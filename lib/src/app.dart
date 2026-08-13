@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:home_widget/home_widget.dart';
@@ -33,6 +32,7 @@ import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
+import 'package:material_ui/material_ui.dart';
 
 const String _kIosAppGroupId = 'group.org.lichess.mobileV2.LichessWidgets';
 const List<String> _kIosBlogWidgetKinds = [
@@ -218,8 +218,12 @@ class _AppState extends ConsumerState<Application> {
 
     return MaterialApp(
       navigatorKey: _navigatorKey,
+      // [AppLocalizations.localizationsDelegates] cannot be used: it is generated with the
+      // `flutter_localizations` delegates, which localize the Flutter material and cupertino
+      // libraries, not the `material_ui` and `cupertino_ui` ones the app is built with.
       localizationsDelegates: const [
-        ...AppLocalizations.localizationsDelegates,
+        AppLocalizations.delegate,
+        ...GlobalMaterialLocalizations.delegates,
         MaterialLocalizationsEo.delegate,
         CupertinoLocalizationsEo.delegate,
       ],

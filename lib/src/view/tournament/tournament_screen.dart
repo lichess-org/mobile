@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:dartchess/dartchess.dart' hide File;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:flutter_riverpod/experimental/mutation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -51,6 +50,7 @@ import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/side_indicator.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:path_provider/path_provider.dart' show getTemporaryDirectory;
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -1246,105 +1246,103 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
           ChatBottomBarButton(options: widget.state.chatOptions!, showLabel: true),
 
         if (widget.state.tournament.isFinished != true && authUser != null)
-          joinOrLeaveInProgress
-              ? const Center(child: CircularProgressIndicator.adaptive())
-              : BottomBarButton(
-                  label: widget.state.joined ? context.l10n.pause : context.l10n.join,
-                  icon: widget.state.joined ? Icons.pause : Icons.play_arrow,
-                  showLabel: true,
-                  onTap: widget.state.canJoin
-                      ? () async {
-                          final teamBattle = widget.state.tournament.meta.teamBattle;
+          if (joinOrLeaveInProgress)
+            const Center(child: CircularProgressIndicator.adaptive())
+          else
+            BottomBarButton(
+              label: widget.state.joined ? context.l10n.pause : context.l10n.join,
+              icon: widget.state.joined ? Icons.pause : Icons.play_arrow,
+              showLabel: true,
+              onTap: widget.state.canJoin
+                  ? () async {
+                      final teamBattle = widget.state.tournament.meta.teamBattle;
 
-                          // If user is joining a team battle tournament
-                          if (!widget.state.joined &&
-                              teamBattle != null &&
-                              teamBattle.joinWith != null) {
-                            // Check if user has no teams participating
-                            if (teamBattle.joinWith!.isEmpty) {
-                              showSnackBar(
-                                context,
-                                'None of your teams are participating in this tournament',
-                                type: SnackBarType.error,
-                              );
-                              return;
-                            }
-                            // Only one team available or if the user previously joined, join directly
-                            if (teamBattle.joinWith!.length == 1 ||
-                                (widget.state.tournament.me != null)) {
-                              setState(() {
-                                joinOrLeaveInProgress = true;
-                              });
+                      // If user is joining a team battle tournament
+                      if (!widget.state.joined &&
+                          teamBattle != null &&
+                          teamBattle.joinWith != null) {
+                        // Check if user has no teams participating
+                        if (teamBattle.joinWith!.isEmpty) {
+                          showSnackBar(
+                            context,
+                            'None of your teams are participating in this tournament',
+                            type: SnackBarType.error,
+                          );
+                          return;
+                        }
+                        // Only one team available or if the user previously joined, join directly
+                        if (teamBattle.joinWith!.length == 1 ||
+                            (widget.state.tournament.me != null)) {
+                          setState(() {
+                            joinOrLeaveInProgress = true;
+                          });
 
-                              ref
-                                  .read(tournamentControllerProvider(widget.state.id).notifier)
-                                  .joinOrPause(teamId: teamBattle.joinWith!.first);
-                              return;
-                            }
+                          ref
+                              .read(tournamentControllerProvider(widget.state.id).notifier)
+                              .joinOrPause(teamId: teamBattle.joinWith!.first);
+                          return;
+                        }
 
-                            final selectedTeamId = await _showTeamSelectionDialog(
+                        final selectedTeamId = await _showTeamSelectionDialog(context, teamBattle);
+
+                        if (selectedTeamId == null) {
+                          return; // User cancelled
+                        }
+                        if (!mounted) return;
+                        setState(() {
+                          joinOrLeaveInProgress = true;
+                        });
+
+                        ref
+                            .read(tournamentControllerProvider(widget.state.id).notifier)
+                            .joinOrPause(teamId: selectedTeamId);
+                      } else if (!widget.state.joined &&
+                          widget.state.tournament.private &&
+                          !widget.state.hasJoined) {
+                        // Joining a private tournament
+                        final entryCode = await _showEntryCodeDialog(context);
+                        if (entryCode == null || entryCode.isEmpty) {
+                          return;
+                        }
+                        if (!mounted) return;
+                        setState(() {
+                          joinOrLeaveInProgress = true;
+                        });
+
+                        try {
+                          await ref
+                              .read(tournamentControllerProvider(widget.state.id).notifier)
+                              .joinOrPause(entryCode: entryCode);
+                        } catch (e) {
+                          if (!mounted) return;
+                          setState(() {
+                            joinOrLeaveInProgress = false;
+                          });
+                          if (e is ServerException && e.statusCode == 400) {
+                            // Invalid entry code
+                            if (!context.mounted) return;
+                            showSnackBar(
                               context,
-                              teamBattle,
+                              context.l10n.teamIncorrectEntryCode,
+                              type: SnackBarType.error,
                             );
-
-                            if (selectedTeamId == null) {
-                              return; // User cancelled
-                            }
-                            if (!mounted) return;
-                            setState(() {
-                              joinOrLeaveInProgress = true;
-                            });
-
-                            ref
-                                .read(tournamentControllerProvider(widget.state.id).notifier)
-                                .joinOrPause(teamId: selectedTeamId);
-                          } else if (!widget.state.joined &&
-                              widget.state.tournament.private &&
-                              !widget.state.hasJoined) {
-                            // Joining a private tournament
-                            final entryCode = await _showEntryCodeDialog(context);
-                            if (entryCode == null || entryCode.isEmpty) {
-                              return;
-                            }
-                            if (!mounted) return;
-                            setState(() {
-                              joinOrLeaveInProgress = true;
-                            });
-
-                            try {
-                              await ref
-                                  .read(tournamentControllerProvider(widget.state.id).notifier)
-                                  .joinOrPause(entryCode: entryCode);
-                            } catch (e) {
-                              if (!mounted) return;
-                              setState(() {
-                                joinOrLeaveInProgress = false;
-                              });
-                              if (e is ServerException && e.statusCode == 400) {
-                                // Invalid entry code
-                                if (!context.mounted) return;
-                                showSnackBar(
-                                  context,
-                                  context.l10n.teamIncorrectEntryCode,
-                                  type: SnackBarType.error,
-                                );
-                              } else {
-                                rethrow;
-                              }
-                            }
                           } else {
-                            // Normal join/pause flow
-                            setState(() {
-                              joinOrLeaveInProgress = true;
-                            });
-
-                            ref
-                                .read(tournamentControllerProvider(widget.state.id).notifier)
-                                .joinOrPause();
+                            rethrow;
                           }
                         }
-                      : null,
-                )
+                      } else {
+                        // Normal join/pause flow
+                        setState(() {
+                          joinOrLeaveInProgress = true;
+                        });
+
+                        ref
+                            .read(tournamentControllerProvider(widget.state.id).notifier)
+                            .joinOrPause();
+                      }
+                    }
+                  : null,
+            )
         else if (widget.state.tournament.isFinished != true)
           BottomBarButton(
             label: context.l10n.signIn,

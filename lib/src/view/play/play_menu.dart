@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
@@ -11,6 +10,7 @@ import 'package:lichess_mobile/src/view/play/create_challenge_bottom_sheet.dart'
 import 'package:lichess_mobile/src/view/play/create_game_widget.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_list_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:material_ui/material_ui.dart';
 
 class PlayMenu extends ConsumerWidget {
   const PlayMenu();
