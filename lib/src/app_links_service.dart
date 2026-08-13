@@ -418,7 +418,7 @@ class AppLinksService {
     return route;
   }
 
-  static const kLichessLinkifiers = [UrlLinkifier(), EmailLinkifier(), UserTagLinkifier()];
+  static const kLichessLinkifiers = [_BalancedUrlLinkifier(), EmailLinkifier(), UserTagLinkifier()];
 
   /// Handles link clicks in Linkify widgets throughout the app.
   Future<void> onLinkifyOpen(BuildContext context, LinkableElement link) async {
@@ -436,5 +436,61 @@ class AppLinksService {
     } else {
       launchUrl(Uri.parse(link.url));
     }
+  }
+}
+
+/// A [UrlLinkifier] that strips unbalanced trailing parentheses from URLs.
+///
+/// The default [UrlLinkifier] greedily matches any non-whitespace after the
+/// scheme, so a URL wrapped in parentheses like `(https://example.com)` will
+/// include the closing `)` in the URL. This subclass strips trailing `)`
+/// characters that have no matching `(` inside the URL, while preserving
+/// balanced parentheses (e.g. Wikipedia links).
+class _BalancedUrlLinkifier extends UrlLinkifier {
+  const _BalancedUrlLinkifier();
+
+  @override
+  List<LinkifyElement> parse(List<LinkifyElement> elements, LinkifyOptions options) {
+    final parsed = super.parse(elements, options);
+    final result = <LinkifyElement>[];
+
+    for (final element in parsed) {
+      if (element is UrlElement) {
+        var url = element.url;
+        var stripCount = 0;
+
+        while (url.endsWith(')') && ')'.allMatches(url).length > '('.allMatches(url).length) {
+          url = url.substring(0, url.length - 1);
+          stripCount++;
+        }
+
+        if (stripCount == 0) {
+          result.add(element);
+        } else {
+          result.add(
+            UrlElement(
+              url,
+              _stripTrailing(element.text, ')', stripCount),
+              _stripTrailing(element.originText, ')', stripCount),
+            ),
+          );
+          result.add(TextElement(')' * stripCount));
+        }
+      } else {
+        result.add(element);
+      }
+    }
+
+    return result;
+  }
+
+  static String _stripTrailing(String s, String char, int count) {
+    var result = s;
+    for (var i = 0; i < count; i++) {
+      if (result.endsWith(char)) {
+        result = result.substring(0, result.length - 1);
+      }
+    }
+    return result;
   }
 }

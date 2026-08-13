@@ -36,6 +36,7 @@ import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
+import 'package:linkify/linkify.dart';
 import 'package:mocktail/mocktail.dart';
 
 import 'example_data.dart';
@@ -141,6 +142,45 @@ Future<void> triggerDailyPuzzleLink(
 }
 
 void main() {
+  group('kLichessLinkifiers – balanced URL parentheses', () {
+    List<LinkifyElement> parse(String text) {
+      return linkify(text, linkifiers: AppLinksService.kLichessLinkifiers);
+    }
+
+    test('plain URL is unchanged', () {
+      final elements = parse('visit https://example.com please');
+      final url = elements.whereType<UrlElement>().single;
+      expect(url.url, 'https://example.com');
+    });
+
+    test('strips unbalanced trailing ) from URL in parentheses', () {
+      final elements = parse('see (https://example.com/path)');
+      final url = elements.whereType<UrlElement>().single;
+      expect(url.url, 'https://example.com/path');
+      // The closing ) should be plain text, not part of the link
+      final texts = elements.whereType<TextElement>().map((e) => e.text).join();
+      expect(texts, contains(')'));
+    });
+
+    test('preserves balanced parentheses in URLs (e.g. Wikipedia)', () {
+      final elements = parse('https://en.wikipedia.org/wiki/Dart_(programming_language)');
+      final url = elements.whereType<UrlElement>().single;
+      expect(url.url, 'https://en.wikipedia.org/wiki/Dart_(programming_language)');
+    });
+
+    test('strips only unbalanced ) from Wikipedia URL in parentheses', () {
+      final elements = parse('(https://en.wikipedia.org/wiki/Dart_(programming_language))');
+      final url = elements.whereType<UrlElement>().single;
+      expect(url.url, 'https://en.wikipedia.org/wiki/Dart_(programming_language)');
+    });
+
+    test('strips multiple unbalanced trailing parentheses', () {
+      final elements = parse('(see https://example.com))');
+      final url = elements.whereType<UrlElement>().single;
+      expect(url.url, 'https://example.com');
+    });
+  });
+
   group('handleDailyPuzzleLink', () {
     // Builds an httpClientFactoryProvider override whose mock client routes
     // puzzle API endpoints to controlled responses.
