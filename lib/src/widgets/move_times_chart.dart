@@ -4,7 +4,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
 typedef MoveTimesChartParams = ({
@@ -71,82 +71,89 @@ class MoveTimesChart extends StatelessWidget {
     final outline = colorScheme.outline;
     final isLight = Theme.of(context).brightness == .light;
     final currentIndex = _currentIndex;
+    final total = params.moveTimes.fold(Duration.zero, (sum, time) => sum + time);
 
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: AspectRatio(
-          aspectRatio: 2.5,
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              void jumpToOffset(Offset offset) {
-                final index = (offset.dx / constraints.maxWidth * params.moveTimes.length)
-                    .floor()
-                    .clamp(0, params.moveTimes.length - 1);
-                params.onJumpToNode(index);
-              }
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            AspectRatio(
+              aspectRatio: 2.5,
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  void jumpToOffset(Offset offset) {
+                    final index = (offset.dx / constraints.maxWidth * params.moveTimes.length)
+                        .floor()
+                        .clamp(0, params.moveTimes.length - 1);
+                    params.onJumpToNode(index);
+                  }
 
-              return GestureDetector(
-                behavior: .opaque,
-                onTapDown: (details) => jumpToOffset(details.localPosition),
-                onHorizontalDragUpdate: (details) => jumpToOffset(details.localPosition),
-                child: CustomPaint(
-                  size: Size.infinite,
-                  painter: _MoveTimesPainter(
-                    params: params,
-                    currentIndex: currentIndex,
-                    whiteColor: isLight ? surface : outline,
-                    blackColor: isLight ? outline : surface,
-                    axisColor: colorScheme.outlineVariant,
-                    lineColor: colorScheme.secondary,
-                    // The web client draws the remaining clocks in blue; the app's own blue keeps
-                    // that reading while still belonging here, one shade either side of it so the
-                    // line stays legible over the grey bars in both themes.
-                    clockColor: isLight
-                        ? LichessColors.primary.shade600
-                        : LichessColors.primary.shade300,
-                    divisionColor: const Color(0xFF707070),
-                    divisionLabelColor:
-                        labelStyle?.color?.withValues(alpha: 0.3) ?? colorScheme.outline,
-                    divisionLabels: (
-                      opening: context.l10n.opening,
-                      middlegame: context.l10n.middlegame,
-                      endgame: context.l10n.endgame,
+                  return GestureDetector(
+                    behavior: .opaque,
+                    onTapDown: (details) => jumpToOffset(details.localPosition),
+                    onHorizontalDragUpdate: (details) => jumpToOffset(details.localPosition),
+                    child: CustomPaint(
+                      size: Size.infinite,
+                      painter: _MoveTimesPainter(
+                        params: params,
+                        currentIndex: currentIndex,
+                        whiteColor: isLight ? surface : outline,
+                        blackColor: isLight ? outline : surface,
+                        axisColor: colorScheme.outlineVariant,
+                        lineColor: colorScheme.secondary,
+                        // The web client draws the remaining clocks in blue; the app's own
+                        // blue keeps that reading while still belonging here, one shade either
+                        // side of it so the line stays legible over the grey bars in both themes.
+                        clockColor: isLight
+                            ? LichessColors.primary.shade600
+                            : LichessColors.primary.shade300,
+                        divisionColor: const Color(0xFF707070),
+                        divisionLabelColor:
+                            labelStyle?.color?.withValues(alpha: 0.3) ?? colorScheme.outline,
+                        divisionLabels: (
+                          opening: context.l10n.opening,
+                          middlegame: context.l10n.middlegame,
+                          endgame: context.l10n.endgame,
+                        ),
+                      ),
                     ),
-                    tooltip: currentIndex != null ? _tooltip(context, currentIndex) : null,
-                    tooltipColor: Styles.chartColor(context).withValues(alpha: 0.5),
-                    tooltipTextColor: colorScheme.onSurface,
-                  ),
-                ),
-              );
-            },
-          ),
+                  );
+                },
+              ),
+            ),
+            // The time of the selected move over the total, in the corner. The line is kept even
+            // with no move selected, so the chart does not jump as the board moves.
+            Padding(
+              padding: const EdgeInsets.only(top: 4.0),
+              child: SizedBox(
+                height: 18.0,
+                child: currentIndex != null
+                    ? Text('Move time: ${_moveTimeLabel(context, currentIndex)}', style: labelStyle)
+                    : null,
+              ),
+            ),
+            Text('${context.l10n.duration}: ${total.toHoursMinutesSeconds()}', style: labelStyle),
+          ],
         ),
       ),
     );
   }
 
-  /// The two lines of the bubble pinned to the ply cursor.
-  _Tooltip _tooltip(BuildContext context, int index) {
-    final moveNumber = (params.rootPly + index + 2) ~/ 2;
+  /// The time spent on the move at [index], as shown next to the chart.
+  String _moveTimeLabel(BuildContext context, int index) {
     final moveTime = params.moveTimes[index];
     // Below two seconds a tenth of a second is meaningful, above it is noise. This is the same
     // precision rule the web client uses. `nbSeconds` only takes whole seconds, so shorter times
     // fall back to an untranslated 'x.ys'.
-    final timeLabel = moveTime.inMilliseconds >= 2000
+    return moveTime.inMilliseconds >= 2000
         ? context.l10n.nbSeconds((moveTime.inMilliseconds / 1000).round())
         : '${(moveTime.inMilliseconds / 1000).toStringAsFixed(1)}s';
-
-    return (
-      move: '${context.l10n.move}: $moveNumber',
-      duration: '${context.l10n.duration}: $timeLabel',
-    );
   }
 }
 
 typedef _DivisionLabels = ({String opening, String middlegame, String endgame});
-
-typedef _Tooltip = ({String move, String duration});
 
 class _MoveTimesPainter extends CustomPainter {
   _MoveTimesPainter({
@@ -160,9 +167,6 @@ class _MoveTimesPainter extends CustomPainter {
     required this.divisionColor,
     required this.divisionLabelColor,
     required this.divisionLabels,
-    required this.tooltip,
-    required this.tooltipColor,
-    required this.tooltipTextColor,
   });
 
   final MoveTimesChartParams params;
@@ -179,11 +183,6 @@ class _MoveTimesPainter extends CustomPainter {
   final Color divisionColor;
   final Color divisionLabelColor;
   final _DivisionLabels divisionLabels;
-
-  /// The bubble drawn at the ply cursor, or null when no move is selected.
-  final _Tooltip? tooltip;
-  final Color tooltipColor;
-  final Color tooltipTextColor;
 
   /// Whether the move at [index] was played by white.
   bool _isWhiteMove(int index) => (params.rootPly + index + 1).isOdd;
@@ -264,57 +263,7 @@ class _MoveTimesPainter extends CustomPainter {
           ..color = lineColor
           ..strokeWidth = 1.0,
       );
-      _paintTooltip(canvas, size, x);
     }
-  }
-
-  /// Draws the move/duration bubble at the ply cursor, in the style of the rating history chart's
-  /// touch tooltip.
-  void _paintTooltip(Canvas canvas, Size size, double cursorX) {
-    final labels = tooltip;
-    if (labels == null) return;
-
-    const padding = EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0);
-    final text = TextPainter(
-      text: TextSpan(
-        text: '${labels.move}\n',
-        style: TextStyle(
-          color: tooltipTextColor,
-          fontSize: 12,
-          fontWeight: FontWeight.bold,
-          height: 1.3,
-        ),
-        children: [
-          TextSpan(
-            text: labels.duration,
-            style: TextStyle(
-              color: tooltipTextColor,
-              fontSize: 10,
-              fontWeight: FontWeight.bold,
-              height: 1.3,
-            ),
-          ),
-        ],
-      ),
-      textDirection: TextDirection.ltr,
-    )..layout();
-
-    final boxWidth = text.width + padding.horizontal;
-    final boxHeight = text.height + padding.vertical;
-    // Kept inside the chart on both axes, the way fl_chart fits its own tooltips.
-    final left = (cursorX - boxWidth / 2)
-        .clamp(0.0, math.max(0.0, size.width - boxWidth))
-        .toDouble();
-    final top = math.min(4.0, math.max(0.0, size.height - boxHeight));
-
-    canvas.drawRRect(
-      RRect.fromRectAndRadius(
-        Rect.fromLTWH(left, top, boxWidth, boxHeight),
-        const Radius.circular(4.0),
-      ),
-      Paint()..color = tooltipColor,
-    );
-    text.paint(canvas, Offset(left + padding.left, top + padding.top));
   }
 
   void _paintDivisionLines(Canvas canvas, Size size, double columnWidth) {
@@ -373,8 +322,5 @@ class _MoveTimesPainter extends CustomPainter {
       oldDelegate.lineColor != lineColor ||
       oldDelegate.clockColor != clockColor ||
       oldDelegate.divisionColor != divisionColor ||
-      oldDelegate.divisionLabelColor != divisionLabelColor ||
-      oldDelegate.tooltip != tooltip ||
-      oldDelegate.tooltipColor != tooltipColor ||
-      oldDelegate.tooltipTextColor != tooltipTextColor;
+      oldDelegate.divisionLabelColor != divisionLabelColor;
 }

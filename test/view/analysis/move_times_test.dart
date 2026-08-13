@@ -85,6 +85,12 @@ void main() {
       // No server analysis has been requested, so the chart sits below the request button.
       expect(find.textContaining('Request a computer analysis'), findsOneWidget);
       expect(find.byType(MoveTimesChart), findsOneWidget);
+
+      await tester.ensureVisible(find.byType(MoveTimesChart));
+      await tester.pumpAndSettle();
+
+      // Total duration of the game, in the corner under the chart.
+      expect(find.textContaining('Duration:'), findsOneWidget);
     });
 
     testWidgets('is not displayed for a game without clocks', (tester) async {
@@ -113,6 +119,9 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(tester.widget<MoveTimesChart>(find.byType(MoveTimesChart)).params.currentNodePly, 4);
+      // Black's 4th ply: 12000 centis left after their previous move, 11700 after this one, plus
+      // the 1s increment.
+      expect(find.text('Move time: 4 seconds'), findsOneWidget);
     });
   });
 }
