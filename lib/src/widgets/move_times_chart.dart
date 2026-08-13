@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
@@ -98,6 +99,12 @@ class MoveTimesChart extends StatelessWidget {
                     blackColor: isLight ? outline : surface,
                     axisColor: colorScheme.outlineVariant,
                     lineColor: colorScheme.secondary,
+                    // The web client draws the remaining clocks in blue; the app's own blue keeps
+                    // that reading while still belonging here, one shade either side of it so the
+                    // line stays legible over the grey bars in both themes.
+                    clockColor: isLight
+                        ? LichessColors.primary.shade600
+                        : LichessColors.primary.shade300,
                     divisionColor: const Color(0xFF707070),
                     divisionLabelColor:
                         labelStyle?.color?.withValues(alpha: 0.3) ?? colorScheme.outline,
@@ -149,6 +156,7 @@ class _MoveTimesPainter extends CustomPainter {
     required this.blackColor,
     required this.axisColor,
     required this.lineColor,
+    required this.clockColor,
     required this.divisionColor,
     required this.divisionLabelColor,
     required this.divisionLabels,
@@ -163,8 +171,11 @@ class _MoveTimesPainter extends CustomPainter {
   final Color blackColor;
   final Color axisColor;
 
-  /// Color of the remaining clock lines and of the current ply cursor.
+  /// Color of the current ply cursor.
   final Color lineColor;
+
+  /// Color of the remaining clock lines.
+  final Color clockColor;
   final Color divisionColor;
   final Color divisionLabelColor;
   final _DivisionLabels divisionLabels;
@@ -211,7 +222,7 @@ class _MoveTimesPainter extends CustomPainter {
     if (maxClock > Duration.zero) {
       // The same weight and alpha as the eval chart's line.
       final linePaint = Paint()
-        ..color = lineColor.withValues(alpha: 0.7)
+        ..color = clockColor.withValues(alpha: 0.7)
         ..strokeWidth = 1.0
         ..style = PaintingStyle.stroke;
       for (final isWhite in const [true, false]) {
@@ -360,6 +371,7 @@ class _MoveTimesPainter extends CustomPainter {
       oldDelegate.blackColor != blackColor ||
       oldDelegate.axisColor != axisColor ||
       oldDelegate.lineColor != lineColor ||
+      oldDelegate.clockColor != clockColor ||
       oldDelegate.divisionColor != divisionColor ||
       oldDelegate.divisionLabelColor != divisionLabelColor ||
       oldDelegate.tooltip != tooltip ||
