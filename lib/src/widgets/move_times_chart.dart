@@ -1,11 +1,11 @@
 import 'dart:math' as math;
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:material_ui/material_ui.dart';
 
 typedef MoveTimesChartParams = ({
   /// Time spent on each move, in ply order, starting at the ply following [rootPly]
