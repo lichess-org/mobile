@@ -218,10 +218,12 @@ class _AppState extends ConsumerState<Application> {
 
     return MaterialApp(
       navigatorKey: _navigatorKey,
+      // [AppLocalizations.localizationsDelegates] cannot be used: it is generated with the
+      // `flutter_localizations` delegates, which localize the Flutter material and cupertino
+      // libraries, not the `material_ui` and `cupertino_ui` ones the app is built with.
       localizationsDelegates: const [
-        ...AppLocalizations.localizationsDelegates,
-        MaterialLocalizationsEo.delegate,
-        CupertinoLocalizationsEo.delegate,
+        AppLocalizations.delegate,
+        ...GlobalMaterialLocalizations.delegates,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
       title: 'lichess.org',

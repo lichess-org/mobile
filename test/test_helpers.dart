@@ -1,5 +1,4 @@
 import 'package:chessground/chessground.dart';
-import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -173,3 +172,13 @@ Iterable<String> imageAssetNames(WidgetTester tester) => tester
     .map((image) => image.image)
     .whereType<AssetImage>()
     .map((provider) => provider.assetName);
+
+/// Finds widgets by their tooltip message.
+///
+/// [CommonFinders.byTooltip] cannot be used, because it only matches the [Tooltip] widget of the
+/// Flutter material library, whereas the app renders the one of the `material_ui` package.
+Finder findByTooltip(String message, {bool skipOffstage = true}) => find.byWidgetPredicate(
+  (widget) => widget is Tooltip && widget.message == message,
+  description: 'tooltip "$message"',
+  skipOffstage: skipOffstage,
+);

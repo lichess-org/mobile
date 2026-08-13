@@ -1498,8 +1498,8 @@ void main() {
     await dragFromTo(tester, 'd7', 'd5');
 
     //Open analysis from editor
-    expect(find.byTooltip('Analysis board'), findsOneWidget);
-    await tester.tap(find.byTooltip('Analysis board'));
+    expect(findByTooltip('Analysis board'), findsOneWidget);
+    await tester.tap(findByTooltip('Analysis board'));
     await tester.pumpAndSettle();
 
     // Verify board state is correct and previous analysis was overwritten

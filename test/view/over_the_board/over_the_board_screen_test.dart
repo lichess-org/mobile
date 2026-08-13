@@ -133,20 +133,20 @@ void main() {
       await playMove(tester, 'e2', 'e4');
       await playMove(tester, 'e7', 'e5');
 
-      await tester.tap(find.byTooltip('Pause'));
+      await tester.tap(findByTooltip('Pause'));
       await tester.pump();
 
       expect(activeClock(tester), null);
 
-      await tester.tap(find.byTooltip('Resume'));
+      await tester.tap(findByTooltip('Resume'));
       await tester.pump();
 
       expect(activeClock(tester), Side.white);
 
       // Going back a move should not unpause...
-      await tester.tap(find.byTooltip('Pause'));
+      await tester.tap(findByTooltip('Pause'));
       await tester.pump();
-      await tester.tap(find.byTooltip('Previous'));
+      await tester.tap(findByTooltip('Previous'));
       await tester.pump();
 
       expect(activeClock(tester), null);
@@ -244,24 +244,24 @@ void main() {
       await playMove(tester, 'e2', 'e4');
       await playMove(tester, 'e7', 'e5');
 
-      await tester.tap(find.byTooltip('Previous'));
+      await tester.tap(findByTooltip('Previous'));
       await tester.pumpAndSettle();
       expect(boardHasPiece(tester, Square.e7, Piece.blackPawn), isTrue);
 
       expect(activeClock(tester), Side.black);
 
-      await tester.tap(find.byTooltip('Next'));
+      await tester.tap(findByTooltip('Next'));
       await tester.pumpAndSettle();
       expect(boardHasPiece(tester, Square.e5, Piece.blackPawn), isTrue);
 
       expect(activeClock(tester), Side.white);
 
       // Go back all the way to the initial position
-      await tester.tap(find.byTooltip('Previous'));
+      await tester.tap(findByTooltip('Previous'));
       await tester.pumpAndSettle();
-      await tester.tap(find.byTooltip('Previous'));
+      await tester.tap(findByTooltip('Previous'));
       await tester.pumpAndSettle();
-      await tester.tap(find.byTooltip('Previous'));
+      await tester.tap(findByTooltip('Previous'));
       await tester.pumpAndSettle();
       expect(boardHasPiece(tester, Square.e2, Piece.whitePawn), isTrue);
       expect(boardHasPiece(tester, Square.e7, Piece.blackPawn), isTrue);
@@ -402,7 +402,7 @@ void main() {
       expect(findBlackClock(tester).timeLeft, const Duration(minutes: 1));
 
       // Start white's clock
-      await tester.tap(find.byTooltip('Resume'));
+      await tester.tap(findByTooltip('Resume'));
       await tester.pump();
       expect(activeClock(tester), Side.white);
 
@@ -630,7 +630,7 @@ void main() {
 
       // Now open the configure sheet again without an initialFen (normal new game).
       // The sheet must not crash and must default to Variant.standard.
-      await tester.tap(find.byTooltip('Menu'));
+      await tester.tap(findByTooltip('Menu'));
       await tester.pumpAndSettle();
       await tester.tap(find.text('New game'));
       await tester.pumpAndSettle();
