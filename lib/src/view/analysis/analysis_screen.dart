@@ -40,7 +40,6 @@ import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:lichess_mobile/src/widgets/move_times_chart.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
@@ -84,7 +83,33 @@ class _AnalysisScreen extends ConsumerStatefulWidget {
   ConsumerState<_AnalysisScreen> createState() => _AnalysisScreenState();
 }
 
-class _AnalysisScreenState extends ConsumerState<_AnalysisScreen> {
+class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
+    with SingleTickerProviderStateMixin {
+  late final List<AnalysisTab> tabs;
+  late final TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    tabs = [
+      AnalysisTab.explorer,
+      AnalysisTab.moves,
+      if (widget.options case ArchivedGame())
+        AnalysisTab.summary
+      else if (widget.options case ActiveCorrespondenceGame())
+        AnalysisTab.conditionalPremoves,
+    ];
+
+    _tabController = TabController(vsync: this, initialIndex: 1, length: tabs.length);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final ctrlProvider = analysisControllerProvider(widget.options);
@@ -108,11 +133,7 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen> {
               title: appBarTitle,
               actions: [_AnalysisMenu(options: widget.options)],
             ),
-            body: _TabbedBody(
-              options: widget.options,
-              // Move times can only be shown for games played with a clock.
-              showMoveTimes: value.archivedGame?.clocks?.isNotEmpty ?? false,
-            ),
+            body: _Body(options: widget.options, controller: _tabController, tabs: tabs),
           ),
         );
       case AsyncError(:final error, :final stackTrace):
@@ -125,57 +146,6 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen> {
           body: const Center(child: CircularProgressIndicator.adaptive()),
         );
     }
-  }
-}
-
-/// Owns the tab list and its controller.
-///
-/// Which tabs are available depends on the loaded game, so the list can only be built once the
-/// analysis state is available.
-class _TabbedBody extends StatefulWidget {
-  const _TabbedBody({required this.options, required this.showMoveTimes});
-
-  final AnalysisOptions options;
-  final bool showMoveTimes;
-
-  @override
-  State<_TabbedBody> createState() => _TabbedBodyState();
-}
-
-class _TabbedBodyState extends State<_TabbedBody> with SingleTickerProviderStateMixin {
-  late final List<AnalysisTab> tabs;
-  late final TabController _tabController;
-
-  @override
-  void initState() {
-    super.initState();
-
-    tabs = [
-      AnalysisTab.explorer,
-      AnalysisTab.moves,
-      if (widget.options case ArchivedGame()) ...[
-        AnalysisTab.summary,
-        if (widget.showMoveTimes) AnalysisTab.moveTimes,
-      ] else if (widget.options case ActiveCorrespondenceGame())
-        AnalysisTab.conditionalPremoves,
-    ];
-
-    _tabController = TabController(
-      vsync: this,
-      initialIndex: tabs.indexOf(AnalysisTab.moves),
-      length: tabs.length,
-    );
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return _Body(options: widget.options, controller: _tabController, tabs: tabs);
   }
 }
 
@@ -329,31 +299,28 @@ class _Body extends ConsumerWidget {
                           .jumpToNthNodeOnMainline,
                     )
                   : null,
+              // Move times are only known for games played with a clock.
+              moveTimesChartParams: (analysisState.archivedGame?.clocks?.isNotEmpty ?? false)
+                  ? (
+                      moveTimes: analysisState.archivedGame!.moveTimes,
+                      clocks: analysisState.archivedGame!.clocks!,
+                      sanMoves: analysisState.archivedGame!.steps
+                          .skip(1)
+                          .map((step) => step.sanMove?.san ?? '')
+                          .toIList(),
+                      division: analysisState.division,
+                      rootPly: analysisState.root.position.ply,
+                      currentNodePly: analysisState.currentPosition.ply,
+                      isOnMainline: analysisState.isOnMainline,
+                      onJumpToNode: ref
+                          .read(analysisControllerProvider(options).notifier)
+                          .jumpToNthNodeOnMainline,
+                    )
+                  : null,
               onRequestServerAnalysis: ref.read(ctrlProvider.notifier).requestServerAnalysis,
-            ),
-          if (tabs.contains(AnalysisTab.moveTimes))
-            ListView(
-              children: [
-                MoveTimesChart(
-                  params: (
-                    moveTimes: analysisState.archivedGame!.moveTimes,
-                    clocks: analysisState.archivedGame!.clocks ?? const IListConst<Duration>([]),
-                    sanMoves: analysisState.archivedGame!.steps
-                        .skip(1)
-                        .map((step) => step.sanMove?.san ?? '')
-                        .toIList(),
-                    division: analysisState.division,
-                    rootPly: analysisState.root.position.ply,
-                    currentNodePly: analysisState.currentPosition.ply,
-                    isOnMainline: analysisState.isOnMainline,
-                    onJumpToNode: ref
-                        .read(analysisControllerProvider(options).notifier)
-                        .jumpToNthNodeOnMainline,
-                  ),
-                ),
-              ],
-            ),
-          if (options case ActiveCorrespondenceGame()) ConditionalPremoves(options),
+            )
+          else if (options case ActiveCorrespondenceGame())
+            ConditionalPremoves(options),
         ],
       ),
     );

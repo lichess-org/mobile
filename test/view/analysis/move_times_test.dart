@@ -60,21 +60,30 @@ Future<Widget> makeTestApp(WidgetTester tester, {List<int> clocks = _clocks}) {
   );
 }
 
-Future<void> openMoveTimesTab(WidgetTester tester) async {
-  await tester.tap(find.bySemanticsLabel(RegExp('Move times')));
+Future<void> openComputerAnalysisTab(WidgetTester tester) async {
+  await tester.tap(find.bySemanticsLabel(RegExp('Computer analysis')));
   await tester.pumpAndSettle();
 }
 
+/// The painted area of the chart, which is what the gestures are measured against.
+Rect chartPlotRect(WidgetTester tester) => tester.getRect(
+  find.descendant(of: find.byType(MoveTimesChart), matching: find.byType(AspectRatio)),
+);
+
 void main() {
-  group('Move times tab', () {
-    testWidgets('is displayed for a game played with a clock', (tester) async {
+  group('Move times chart', () {
+    testWidgets('is displayed in the computer analysis tab for a game played with a clock', (
+      tester,
+    ) async {
       await tester.pumpWidget(await makeTestApp(tester));
       await tester.pumpAndSettle();
 
-      expect(find.bySemanticsLabel(RegExp('Move times')), findsOneWidget);
+      expect(find.byType(MoveTimesChart), findsNothing);
 
-      await openMoveTimesTab(tester);
+      await openComputerAnalysisTab(tester);
 
+      // No server analysis has been requested, so the chart sits below the request button.
+      expect(find.textContaining('Request a computer analysis'), findsOneWidget);
       expect(find.byType(MoveTimesChart), findsOneWidget);
       // Total duration of the game, displayed under the chart.
       expect(find.textContaining('Duration'), findsOneWidget);
@@ -84,26 +93,24 @@ void main() {
       await tester.pumpWidget(await makeTestApp(tester, clocks: []));
       await tester.pumpAndSettle();
 
-      expect(find.bySemanticsLabel(RegExp('Move times')), findsNothing);
+      await openComputerAnalysisTab(tester);
+
       expect(find.byType(MoveTimesChart), findsNothing);
     });
 
     testWidgets('tapping the chart seeks the board to that ply', (tester) async {
       await tester.pumpWidget(await makeTestApp(tester));
       await tester.pumpAndSettle();
-      await openMoveTimesTab(tester);
+      await openComputerAnalysisTab(tester);
 
-      final chartFinder = find.byType(MoveTimesChart);
-      final chartRect = tester.getRect(chartFinder);
+      final plot = chartPlotRect(tester);
 
       // The chart is divided in as many columns as there are moves: tapping in the middle of the
       // 4th one seeks to the 4th ply.
-      await tester.tapAt(
-        Offset(chartRect.left + chartRect.width * 3.5 / _clocks.length, chartRect.center.dy),
-      );
+      await tester.tapAt(Offset(plot.left + plot.width * 3.5 / _clocks.length, plot.center.dy));
       await tester.pumpAndSettle();
 
-      expect(tester.widget<MoveTimesChart>(chartFinder).params.currentNodePly, 4);
+      expect(tester.widget<MoveTimesChart>(find.byType(MoveTimesChart)).params.currentNodePly, 4);
     });
   });
 }

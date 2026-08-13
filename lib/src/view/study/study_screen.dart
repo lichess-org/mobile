@@ -475,6 +475,8 @@ class _Body extends ConsumerWidget {
                               .jumpToNthNodeOnMainline,
                         )
                       : null,
+                  // Studies have no clock information.
+                  moveTimesChartParams: null,
                   onRequestServerAnalysis: ref
                       .read(studyControllerProvider(options).notifier)
                       .requestServerAnalysis,

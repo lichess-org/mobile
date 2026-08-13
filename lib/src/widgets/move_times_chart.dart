@@ -32,9 +32,6 @@ typedef MoveTimesChartParams = ({
   void Function(int nodeIndex) onJumpToNode,
 });
 
-/// The blue used by the web client for the remaining clock series.
-const _clockLineColor = Color(0xFF3893E8);
-
 /// Everything above 20 minutes is flattened, as on the web client.
 const _maxMoveTimeCentis = 120000;
 
@@ -69,71 +66,74 @@ class MoveTimesChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = ColorScheme.of(context);
+    final labelStyle = Theme.of(context).textTheme.labelMedium;
+    // The same colors as the eval chart: the lighter of the two greys stands for white in either
+    // theme.
+    final surface = colorScheme.surfaceContainerHighest;
+    final outline = colorScheme.outline;
+    final isLight = Theme.of(context).brightness == .light;
     final currentIndex = _currentIndex;
     final total = params.moveTimes.fold(Duration.zero, (sum, time) => sum + time);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            height: 20.0,
-            child: currentIndex != null
-                ? Text(
-                    _moveLabel(context, currentIndex),
-                    style: Theme.of(context).textTheme.labelMedium,
-                    overflow: .ellipsis,
-                  )
-                : null,
-          ),
-          AspectRatio(
-            aspectRatio: 2.5,
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                void jumpToOffset(Offset offset) {
-                  final index = (offset.dx / constraints.maxWidth * params.moveTimes.length)
-                      .floor()
-                      .clamp(0, params.moveTimes.length - 1);
-                  params.onJumpToNode(index);
-                }
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 20.0,
+              child: currentIndex != null
+                  ? Text(_moveLabel(context, currentIndex), style: labelStyle, overflow: .ellipsis)
+                  : null,
+            ),
+            AspectRatio(
+              aspectRatio: 2.5,
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  void jumpToOffset(Offset offset) {
+                    final index = (offset.dx / constraints.maxWidth * params.moveTimes.length)
+                        .floor()
+                        .clamp(0, params.moveTimes.length - 1);
+                    params.onJumpToNode(index);
+                  }
 
-                return GestureDetector(
-                  behavior: .opaque,
-                  onTapDown: (details) => jumpToOffset(details.localPosition),
-                  onHorizontalDragUpdate: (details) => jumpToOffset(details.localPosition),
-                  child: CustomPaint(
-                    size: Size.infinite,
-                    painter: _MoveTimesPainter(
-                      params: params,
-                      currentIndex: currentIndex,
-                      whiteColor: colorScheme.surfaceContainerHighest,
-                      blackColor: colorScheme.outline,
-                      axisColor: colorScheme.outlineVariant,
-                      cursorColor: colorScheme.secondary,
-                      divisionColor: const Color(0xFF707070),
-                      divisionLabelColor:
-                          Theme.of(context).textTheme.labelMedium?.color?.withValues(alpha: 0.3) ??
-                          colorScheme.outline,
-                      divisionLabels: (
-                        opening: context.l10n.opening,
-                        middlegame: context.l10n.middlegame,
-                        endgame: context.l10n.endgame,
+                  return GestureDetector(
+                    behavior: .opaque,
+                    onTapDown: (details) => jumpToOffset(details.localPosition),
+                    onHorizontalDragUpdate: (details) => jumpToOffset(details.localPosition),
+                    child: CustomPaint(
+                      size: Size.infinite,
+                      painter: _MoveTimesPainter(
+                        params: params,
+                        currentIndex: currentIndex,
+                        whiteColor: isLight ? surface : outline,
+                        blackColor: isLight ? outline : surface,
+                        axisColor: colorScheme.outlineVariant,
+                        lineColor: colorScheme.secondary,
+                        divisionColor: const Color(0xFF707070),
+                        divisionLabelColor:
+                            labelStyle?.color?.withValues(alpha: 0.3) ?? colorScheme.outline,
+                        divisionLabels: (
+                          opening: context.l10n.opening,
+                          middlegame: context.l10n.middlegame,
+                          endgame: context.l10n.endgame,
+                        ),
                       ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 4.0),
-            child: Text(
-              '${context.l10n.duration} ${total.toHoursMinutesSeconds()}',
-              style: Theme.of(context).textTheme.labelMedium,
+            Padding(
+              padding: const EdgeInsets.only(top: 4.0),
+              child: Text(
+                '${context.l10n.duration} ${total.toHoursMinutesSeconds()}',
+                style: labelStyle,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -165,7 +165,7 @@ class _MoveTimesPainter extends CustomPainter {
     required this.whiteColor,
     required this.blackColor,
     required this.axisColor,
-    required this.cursorColor,
+    required this.lineColor,
     required this.divisionColor,
     required this.divisionLabelColor,
     required this.divisionLabels,
@@ -176,7 +176,9 @@ class _MoveTimesPainter extends CustomPainter {
   final Color whiteColor;
   final Color blackColor;
   final Color axisColor;
-  final Color cursorColor;
+
+  /// Color of the remaining clock lines and of the current ply cursor.
+  final Color lineColor;
   final Color divisionColor;
   final Color divisionLabelColor;
   final _DivisionLabels divisionLabels;
@@ -216,9 +218,10 @@ class _MoveTimesPainter extends CustomPainter {
 
     // Remaining clock, one line per color, mirrored the same way as the bars.
     if (maxClock > Duration.zero) {
+      // The same weight and alpha as the eval chart's line.
       final linePaint = Paint()
-        ..color = _clockLineColor
-        ..strokeWidth = 1.5
+        ..color = lineColor.withValues(alpha: 0.7)
+        ..strokeWidth = 1.0
         ..style = PaintingStyle.stroke;
       for (final isWhite in const [true, false]) {
         final path = Path();
@@ -256,7 +259,7 @@ class _MoveTimesPainter extends CustomPainter {
         Offset(x, 0),
         Offset(x, size.height),
         Paint()
-          ..color = cursorColor
+          ..color = lineColor
           ..strokeWidth = 1.0,
       );
     }
@@ -275,14 +278,19 @@ class _MoveTimesPainter extends CustomPainter {
           ..color = divisionColor
           ..strokeWidth = 0.5,
       );
+      // Rotated to read top-to-bottom on the right of the line, as the eval chart draws it.
       final textPainter = TextPainter(
         text: TextSpan(
           text: label,
           style: TextStyle(fontSize: 10, color: divisionLabelColor),
         ),
         textDirection: TextDirection.ltr,
-      )..layout(maxWidth: size.width);
-      textPainter.paint(canvas, Offset(math.min(x + 2, size.width - textPainter.width), 0));
+      )..layout(maxWidth: size.height);
+      canvas.save();
+      canvas.translate(math.min(x + 1 + textPainter.height, size.width), 1);
+      canvas.rotate(math.pi / 2);
+      textPainter.paint(canvas, Offset.zero);
+      canvas.restore();
     }
 
     if (division.middlegame != null) {
@@ -310,7 +318,7 @@ class _MoveTimesPainter extends CustomPainter {
       oldDelegate.whiteColor != whiteColor ||
       oldDelegate.blackColor != blackColor ||
       oldDelegate.axisColor != axisColor ||
-      oldDelegate.cursorColor != cursorColor ||
+      oldDelegate.lineColor != lineColor ||
       oldDelegate.divisionColor != divisionColor ||
       oldDelegate.divisionLabelColor != divisionLabelColor;
 }
