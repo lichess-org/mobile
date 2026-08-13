@@ -85,8 +85,6 @@ void main() {
       // No server analysis has been requested, so the chart sits below the request button.
       expect(find.textContaining('Request a computer analysis'), findsOneWidget);
       expect(find.byType(MoveTimesChart), findsOneWidget);
-      // Total duration of the game, displayed under the chart.
-      expect(find.textContaining('Duration'), findsOneWidget);
     });
 
     testWidgets('is not displayed for a game without clocks', (tester) async {

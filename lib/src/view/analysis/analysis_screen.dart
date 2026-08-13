@@ -1,6 +1,5 @@
 import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_player.dart';
@@ -304,10 +303,6 @@ class _Body extends ConsumerWidget {
                   ? (
                       moveTimes: analysisState.archivedGame!.moveTimes,
                       clocks: analysisState.archivedGame!.clocks!,
-                      sanMoves: analysisState.archivedGame!.steps
-                          .skip(1)
-                          .map((step) => step.sanMove?.san ?? '')
-                          .toIList(),
                       division: analysisState.division,
                       rootPly: analysisState.root.position.ply,
                       currentNodePly: analysisState.currentPosition.ply,
