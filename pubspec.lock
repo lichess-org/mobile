@@ -960,11 +960,12 @@ packages:
   l10n_esperanto:
     dependency: "direct main"
     description:
-      name: l10n_esperanto
-      sha256: bc584875ed5de76bd7216c6b2ee93614eac59b110cb0730f3a4b1fa97e39778d
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.14"
+      path: "."
+      ref: material-ui
+      resolved-ref: ed44622c2bd5368f6e9b701410b8c8bdb27aec09
+      url: "https://github.com/veloce/l10n_esperanto.git"
+    source: git
+    version: "3.0.0"
   leak_tracker:
     dependency: transitive
     description:
