@@ -92,7 +92,7 @@ class _BodyState extends ConsumerState<_Body> {
                 ListSection(
                   hasLeading: true,
                   children: [
-                    if (getCorePalette() != null)
+                    if (getSystemCorePalettes() != null)
                       SwitchSettingTile(
                         leading: const Icon(Icons.colorize_outlined),
                         title: Text(context.l10n.mobileSystemColors),

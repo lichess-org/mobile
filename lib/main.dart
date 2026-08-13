@@ -22,6 +22,12 @@ Future<void> main() async {
 
   await preloadPieceImages();
 
+  // Must run before [initializeApp], which uses the system colors to pick the default board theme
+  // on first run.
+  if (defaultTargetPlatform == TargetPlatform.android) {
+    await androidDisplayInitialization(widgetsBinding);
+  }
+
   await initializeApp();
 
   await SoundService.initialize();
@@ -32,10 +38,6 @@ Future<void> main() async {
 
   if (defaultTargetPlatform != TargetPlatform.linux) {
     await lichessBinding.initializeFirebase();
-  }
-
-  if (defaultTargetPlatform == TargetPlatform.android) {
-    await androidDisplayInitialization(widgetsBinding);
   }
 
   runApp(

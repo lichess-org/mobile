@@ -30,7 +30,7 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final boardTheme = ref.watch(boardPreferencesProvider.select((p) => p.boardTheme));
 
-    final hasSystemColors = getCorePalette() != null;
+    final hasSystemColors = getSystemCorePalettes() != null;
 
     final choices = BoardTheme.values
         .where((t) => t != BoardTheme.system || hasSystemColors)
