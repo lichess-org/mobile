@@ -23,6 +23,7 @@ import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -219,35 +220,43 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
                     }
                   },
                 ),
-            SemanticIconButton(
-              icon: const Icon(Icons.settings),
-              onPressed: () {
-                final games = asyncRound.value.games.values;
-                final allCount = games.length;
-                final ongoingCount = games.where((g) => g.isOngoing).length;
+            ContextMenuIconButton(
+              icon: const Icon(Icons.more_horiz),
+              semanticsLabel: context.l10n.menu,
+              actions: [
+                ContextMenuAction(
+                  icon: Icons.settings,
+                  label: context.l10n.settingsSettings,
+                  onPressed: () {
+                    final games = asyncRound.value.games.values;
+                    final allCount = games.length;
+                    final ongoingCount = games.where((g) => g.isOngoing).length;
 
-                showModalBottomSheet<void>(
-                  context: context,
-                  isDismissible: true,
-                  isScrollControlled: true,
-                  builder: (_) => _BroadcastSettingsBottomSheet(
-                    filter,
-                    allGamesCount: allCount,
-                    ongoingGamesCount: ongoingCount,
-                    onGameFilterChange: setGameFilter,
+                    showModalBottomSheet<void>(
+                      context: context,
+                      isDismissible: true,
+                      isScrollControlled: true,
+                      builder: (_) => _BroadcastSettingsBottomSheet(
+                        filter,
+                        allGamesCount: allCount,
+                        ongoingGamesCount: ongoingCount,
+                        onGameFilterChange: setGameFilter,
+                      ),
+                    );
+                  },
+                ),
+                ContextMenuAction(
+                  icon: Theme.of(context).platform == TargetPlatform.iOS
+                      ? Icons.ios_share_outlined
+                      : Icons.share_outlined,
+                  label: context.l10n.studyShareAndExport,
+                  onPressed: () => showBroadcastShareMenu(
+                    context,
+                    asyncTournament.value?.data ?? widget.broadcast.tour,
+                    roundState.round,
                   ),
-                );
-              },
-              semanticsLabel: context.l10n.settingsSettings,
-            ),
-            SemanticIconButton(
-              icon: const PlatformShareIcon(),
-              semanticsLabel: context.l10n.studyShareAndExport,
-              onPressed: () => showBroadcastShareMenu(
-                context,
-                asyncTournament.value?.data ?? widget.broadcast.tour,
-                roundState.round,
-              ),
+                ),
+              ],
             ),
           ],
         ),
