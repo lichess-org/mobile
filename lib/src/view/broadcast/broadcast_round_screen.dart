@@ -18,6 +18,7 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_teams_tab.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
@@ -197,6 +198,27 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
             ],
           ),
           actions: [
+            if (roundState.isSubscribed case final isSubscribed?)
+              if (_selectedRoundId ?? asyncTournament.value?.defaultRoundId case final roundId?)
+                SemanticIconButton(
+                  icon: Icon(isSubscribed ? Icons.notifications : Icons.notifications_none),
+                  semanticsLabel: isSubscribed ? context.l10n.unsubscribe : context.l10n.subscribe,
+                  onPressed: () async {
+                    try {
+                      await ref
+                          .read(broadcastRoundControllerProvider(roundId).notifier)
+                          .setSubscribed(_selectedTournamentId, !isSubscribed);
+                    } catch (_) {
+                      if (context.mounted) {
+                        showSnackBar(
+                          context,
+                          'Could not update the subscription',
+                          type: SnackBarType.error,
+                        );
+                      }
+                    }
+                  },
+                ),
             SemanticIconButton(
               icon: const Icon(Icons.settings),
               onPressed: () {

@@ -179,6 +179,11 @@ typedef BroadcastRoundResponse = ({
   BroadcastRound round,
   BroadcastRoundGames games,
   BroadcastPhotos? photos,
+
+  /// Whether the user is subscribed to the tournament this round belongs to.
+  ///
+  /// `null` when the user is not logged in.
+  bool? isSubscribed,
 });
 
 typedef BroadcastRoundGames = IMap<BroadcastGameId, BroadcastGame>;
@@ -276,6 +281,11 @@ typedef BroadcastPlayerWithGameResults = ({
   BroadcastPlayerWithOverallResult playerWithOverallResult,
   BroadcastFideData fideData,
   IList<BroadcastPlayerGameResult> games,
+
+  /// Whether the user follows this FIDE player.
+  ///
+  /// `null` when the user is not logged in, or when the player is not a FIDE player.
+  bool? isFollowing,
 });
 
 enum BroadcastPoints {
