@@ -24,7 +24,11 @@ Future<T?> showPopover<T extends Object?>({
 }) {
   return popover.showPopover<T>(
     context: context,
-    bodyBuilder: bodyBuilder,
+    // `popover` wraps the body in Flutter's own [Material], which `material_ui` widgets do not
+    // recognize, so provide one they do. It is transparent because `popover` already paints
+    // [backgroundColor] behind it.
+    bodyBuilder: (context) =>
+        Material(type: MaterialType.transparency, child: bodyBuilder(context)),
     direction: direction,
     backgroundColor: backgroundColor,
     barrierColor: barrierColor,
