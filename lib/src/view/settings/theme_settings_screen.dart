@@ -43,6 +43,7 @@ String shapeColorL10n(ShapeColor shapeColor) => switch (shapeColor) {
 };
 
 String highlightColorL10n(HighlightColor highlightColor) => switch (highlightColor) {
+  HighlightColor.default_ => 'Default',
   HighlightColor.yellow => 'Yellow',
   HighlightColor.green => 'Green',
   HighlightColor.red => 'Red',
@@ -177,14 +178,12 @@ class _BodyState extends ConsumerState<_Body> {
                     SettingsListTile(
                       icon: const Icon(Icons.highlight),
                       settingsLabel: const Text('Last move highlight color'),
-                      settingsValue: highlightColorL10n(
-                        boardPrefs.highlightColor ?? HighlightColor.yellow,
-                      ),
+                      settingsValue: highlightColorL10n(boardPrefs.highlightColor),
                       onTap: () {
                         showChoicePicker(
                           context,
                           choices: HighlightColor.values,
-                          selectedItem: boardPrefs.highlightColor ?? HighlightColor.yellow,
+                          selectedItem: boardPrefs.highlightColor,
                           labelBuilder: (t) => Text.rich(
                             TextSpan(
                               children: [
@@ -194,7 +193,7 @@ class _BodyState extends ConsumerState<_Body> {
                               ],
                             ),
                           ),
-                          onSelectedItemChanged: (HighlightColor? value) {
+                          onSelectedItemChanged: (HighlightColor value) {
                             ref.read(boardPreferencesProvider.notifier).setHighlightColor(value);
                           },
                         );

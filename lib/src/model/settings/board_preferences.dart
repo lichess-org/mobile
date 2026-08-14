@@ -122,7 +122,7 @@ class BoardPreferences extends Notifier<BoardPrefs> with PreferencesStorage<Boar
     return save(state.copyWith(shapeColor: shapeColor));
   }
 
-  Future<void> setHighlightColor(HighlightColor? highlightColor) {
+  Future<void> setHighlightColor(HighlightColor highlightColor) {
     return save(state.copyWith(highlightColor: highlightColor));
   }
 
@@ -177,7 +177,8 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
     required DragTargetKind dragTargetKind,
     @JsonKey(defaultValue: ShapeColor.green, unknownEnumValue: ShapeColor.green)
     required ShapeColor shapeColor,
-    HighlightColor? highlightColor,
+    @JsonKey(defaultValue: HighlightColor.default_, unknownEnumValue: HighlightColor.default_)
+    required HighlightColor highlightColor,
     @JsonKey(defaultValue: false) required bool showBorder,
     @JsonKey(defaultValue: kBoardDefaultBrightnessFilter) required double brightness,
     @JsonKey(defaultValue: kBoardDefaultHueFilter) required double hue,
@@ -204,7 +205,7 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
     magnifyDraggedPiece: true,
     dragTargetKind: DragTargetKind.circle,
     shapeColor: ShapeColor.green,
-    highlightColor: null,
+    highlightColor: HighlightColor.default_,
     showBorder: false,
     brightness: kBoardDefaultBrightnessFilter,
     hue: kBoardDefaultHueFilter,
@@ -216,18 +217,10 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
   ChessboardSettings toBoardSettings(Variant variant) {
     return ChessboardSettings(
       pieceAssets: pieceSet.assets,
-      colorScheme: ChessboardColorScheme(
-        lightSquare: boardTheme.colors.lightSquare,
-        darkSquare: boardTheme.colors.darkSquare,
-        background: boardTheme.colors.background,
-        whiteCoordBackground: boardTheme.colors.whiteCoordBackground,
-        blackCoordBackground: boardTheme.colors.blackCoordBackground,
-        lastMove: highlightColor != null
-            ? HighlightDetails(solidColor: highlightColor!.color)
-            : boardTheme.colors.lastMove,
-        selected: boardTheme.colors.selected,
-        validMoves: boardTheme.colors.validMoves,
-        validPremoves: boardTheme.colors.validPremoves,
+      colorScheme: boardTheme.colors.copyWith(
+        lastMove: highlightColor == HighlightColor.default_
+            ? boardTheme.colors.lastMove
+            : HighlightDetails(solidColor: highlightColor.color),
       ),
       brightness: brightness,
       hue: hue,
@@ -273,19 +266,21 @@ enum ShapeColor {
 
 /// Colors for the last move highlight on the board.
 enum HighlightColor {
+  default_,
   yellow,
   green,
   red,
   blue,
   white;
 
-  Color get color => Color(switch (this) {
-    HighlightColor.yellow => 0x9cc700,
-    HighlightColor.green => 0x15781B,
-    HighlightColor.red => 0x882020,
-    HighlightColor.blue => 0x003088,
-    HighlightColor.white => 0xFFFFFF,
-  }).withAlpha(0x80);
+  Color get color => switch (this) {
+    HighlightColor.default_ => const Color(0x00000000),
+    HighlightColor.yellow => const Color(0x809cc700),
+    HighlightColor.green => const Color(0x8015781B),
+    HighlightColor.red => const Color(0x80882020),
+    HighlightColor.blue => const Color(0x80003088),
+    HighlightColor.white => const Color(0x80FFFFFF),
+  };
 }
 
 /// The chessboard theme.
