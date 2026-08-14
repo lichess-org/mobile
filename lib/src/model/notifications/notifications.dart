@@ -247,6 +247,14 @@ sealed class LocalNotification {
   /// It must match the channel identifier of the notification details.
   String get channelId;
 
+  /// The discriminator used to reconstruct the concrete notification type from its payload.
+  ///
+  /// Defaults to [channelId], which is enough as long as a channel carries a single notification
+  /// type. Types sharing a channel with another type must override this with a unique value.
+  ///
+  /// See [LocalNotification.fromJson].
+  String get payloadType => channelId;
+
   /// The localized title of the notification.
   String title(AppLocalizations l10n);
 
@@ -257,13 +265,15 @@ sealed class LocalNotification {
   ///
   /// Implementations must not override this getter, but [_concretePayload] instead.
   ///
-  /// See [LocalNotification.fromJson] where the [channelId] is used to determine the
+  /// See [LocalNotification.fromJson] where the [payloadType] is used to determine the
   /// concrete type of the notification, to be able to deserialize it.
-  Map<String, dynamic> get payload => {'channel': channelId, ..._concretePayload};
+  // The 'channel' key predates [payloadType] and is kept as is, so that notifications posted by
+  // a previous version of the app and still sitting in the tray remain readable.
+  Map<String, dynamic> get payload => {'channel': payloadType, ..._concretePayload};
 
   /// The actual payload of the notification.
   ///
-  /// Will be merged with the channel:[channelId] entry to form the final payload.
+  /// Will be merged with the channel:[payloadType] entry to form the final payload.
   Map<String, dynamic> get _concretePayload;
 
   /// The localized details of the notification for each platform.
@@ -271,8 +281,8 @@ sealed class LocalNotification {
 
   /// Retrives a local notification from a JSON payload.
   factory LocalNotification.fromJson(Map<String, dynamic> json) {
-    final channel = json['channel'] as String;
-    switch (channel) {
+    final type = json['channel'] as String;
+    switch (type) {
       case 'corresGameUpdate':
         return CorresGameUpdateNotification.fromJson(json);
       case 'challenge':
@@ -292,7 +302,7 @@ sealed class LocalNotification {
       case 'broadcastPlayerFollow':
         return BroadcastPlayerFollowNotification.fromJson(json);
       default:
-        throw ArgumentError('Unknown notification channel: $channel');
+        throw ArgumentError('Unknown notification payload type: $type');
     }
   }
 }
@@ -764,6 +774,9 @@ class ChallengeNotification extends LocalNotification {
       );
 }
 
+/// The Android notification channel shared by all broadcast notifications.
+const _kBroadcastChannelId = 'broadcast';
+
 /// A notification for when a broadcast round starts.
 ///
 /// This notification is shown when a broadcast round the user subscribed to starts.
@@ -776,9 +789,6 @@ class BroadcastRoundNotification extends LocalNotification {
 
   final String _title;
   final String _body;
-
-  // The Android notification channel ID
-  static const _channelId = 'broadcast';
 
   factory BroadcastRoundNotification.fromJson(Map<String, dynamic> json) {
     final roundId = BroadcastRoundId(json['roundId'] as String);
@@ -796,10 +806,10 @@ class BroadcastRoundNotification extends LocalNotification {
   }
 
   @override
-  // Used to identify the notification type when reconstructing it from the
-  // Android local notification payload. This is not the Android notification
-  // channel ID.
-  String get channelId => 'broadcastRound';
+  String get channelId => _kBroadcastChannelId;
+
+  @override
+  String get payloadType => 'broadcastRound';
 
   @override
   int get id => roundId.hashCode;
@@ -819,8 +829,8 @@ class BroadcastRoundNotification extends LocalNotification {
 
   @override
   NotificationDetails details(AppLocalizations l10n) => NotificationDetails(
-    android: AndroidNotificationDetails(_channelId, l10n.broadcastBroadcasts),
-    iOS: const DarwinNotificationDetails(threadIdentifier: _channelId),
+    android: AndroidNotificationDetails(channelId, l10n.broadcastBroadcasts),
+    iOS: DarwinNotificationDetails(threadIdentifier: channelId),
   );
 }
 
@@ -844,9 +854,6 @@ class BroadcastPlayerFollowNotification extends LocalNotification {
   final String _title;
   final String _body;
 
-  // The Android notification channel ID
-  static const _channelId = 'broadcast';
-
   factory BroadcastPlayerFollowNotification.fromJson(Map<String, dynamic> json) {
     final roundId = BroadcastRoundId(json['roundId'] as String);
     final gameId = BroadcastGameId(json['gameId'] as String);
@@ -869,10 +876,10 @@ class BroadcastPlayerFollowNotification extends LocalNotification {
   }
 
   @override
-  // Used to identify the notification type when reconstructing it from the
-  // Android local notification payload. This is not the Android notification
-  // channel ID.
-  String get channelId => 'broadcastPlayerFollow';
+  String get channelId => _kBroadcastChannelId;
+
+  @override
+  String get payloadType => 'broadcastPlayerFollow';
 
   @override
   int get id => gameId.hashCode;
@@ -894,7 +901,7 @@ class BroadcastPlayerFollowNotification extends LocalNotification {
 
   @override
   NotificationDetails details(AppLocalizations l10n) => NotificationDetails(
-    android: AndroidNotificationDetails(_channelId, l10n.broadcastBroadcasts),
-    iOS: const DarwinNotificationDetails(threadIdentifier: _channelId),
+    android: AndroidNotificationDetails(channelId, l10n.broadcastBroadcasts),
+    iOS: DarwinNotificationDetails(threadIdentifier: channelId),
   );
 }
