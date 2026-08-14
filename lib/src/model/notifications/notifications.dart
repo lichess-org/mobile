@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -107,7 +108,7 @@ sealed class FcmMessage {
               pathSegments: ['broadcast', _, _, final roundId, final gameId],
               queryParameters: {'pov': final pov},
             ):
-              final side = Side.values.where((s) => s.name == pov).firstOrNull;
+              final side = Side.values.firstWhereOrNull((s) => s.name == pov);
               if (side == null) {
                 return MalformedFcmMessage(message.data);
               }

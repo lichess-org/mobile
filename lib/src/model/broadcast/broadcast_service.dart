@@ -38,7 +38,9 @@ class BroadcastService {
     });
   }
 
-  NavigatorState? _getRootNavigator() {
+  /// Returns the root navigator, popped back to its first route so that broadcast screens are
+  /// pushed on a clean stack.
+  NavigatorState? _resetToRootNavigator() {
     final context = ref.read(currentNavigatorKeyProvider).currentContext;
     if (context == null || !context.mounted) return null;
 
@@ -51,20 +53,20 @@ class BroadcastService {
     return navigator;
   }
 
-  Future<void> _onBroadcastRoundNotification(BroadcastRoundId roundId) async {
-    final navigator = _getRootNavigator();
+  void _onBroadcastRoundNotification(BroadcastRoundId roundId) {
+    final navigator = _resetToRootNavigator();
     if (navigator == null) return;
     navigator.push(
       BroadcastRoundScreenLoading.buildRoute(roundId, initialTab: BroadcastRoundTab.boards),
     );
   }
 
-  Future<void> _onBroadcastPlayerFollowNotification(
+  void _onBroadcastPlayerFollowNotification(
     BroadcastRoundId roundId,
     BroadcastGameId gameId,
     Side pov,
-  ) async {
-    final navigator = _getRootNavigator();
+  ) {
+    final navigator = _resetToRootNavigator();
     if (navigator == null) return;
     navigator.push(
       BroadcastRoundScreenLoading.buildRoute(roundId, initialTab: BroadcastRoundTab.boards),
