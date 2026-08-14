@@ -5,8 +5,8 @@ import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/popover.dart';
 import 'package:material_ui/material_ui.dart';
-import 'package:popover/popover.dart';
 import 'package:signal_strength_indicator/signal_strength_indicator.dart';
 import 'package:url_launcher/url_launcher.dart';
 
