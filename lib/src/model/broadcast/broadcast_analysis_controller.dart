@@ -36,11 +36,7 @@ part 'broadcast_analysis_controller.freezed.dart';
 
 final _logger = Logger('BroadcastAnalysisController');
 
-typedef BroadcastAnalysisControllerParams = ({
-  BroadcastRoundId roundId,
-  BroadcastGameId gameId,
-  Side initialPov,
-});
+typedef BroadcastAnalysisControllerParams = ({BroadcastRoundId roundId, BroadcastGameId gameId});
 
 /// A provider for [BroadcastAnalysisController].
 final broadcastAnalysisControllerProvider = AsyncNotifierProvider.autoDispose
@@ -146,7 +142,7 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
       pgnHeaders: pgnHeaders,
       pgnRootComments: rootComments,
       lastMove: lastMove,
-      pov: params.initialPov,
+      pov: Side.white,
       isServerAnalysisEnabled: prefs.enableServerAnalysis,
       clocks: _getClocks(currentPath),
       analysisSummary: pgnWithAnalysisSummary.analysisSummary,
@@ -361,6 +357,16 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
     if (!state.hasValue) return;
 
     state = AsyncData(state.requireValue.copyWith(pov: state.requireValue.pov.opposite));
+  }
+
+  /// Sets the side the board is viewed from.
+  ///
+  /// Used to open the game from the point of view of a specific player, for instance when the
+  /// screen is opened from a notification about a followed player.
+  void setPov(Side pov) {
+    if (!state.hasValue) return;
+
+    state = AsyncData(state.requireValue.copyWith(pov: pov));
   }
 
   @override

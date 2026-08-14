@@ -2,19 +2,21 @@ import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_analysis_controller.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/widgets/acpl_chart.dart';
 import 'package:lichess_mobile/src/widgets/game_summary_table.dart';
 import 'package:material_ui/material_ui.dart';
 
 class BroadcastGameSummary extends ConsumerWidget {
-  const BroadcastGameSummary(this.controllerParams);
+  const BroadcastGameSummary({required this.roundId, required this.gameId, super.key});
 
-  final BroadcastAnalysisControllerParams controllerParams;
+  final BroadcastRoundId roundId;
+  final BroadcastGameId gameId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final broadcastPrefs = ref.watch(broadcastPreferencesProvider);
-    final ctrlProvider = broadcastAnalysisControllerProvider(controllerParams);
+    final ctrlProvider = broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId));
     final analysisState = ref.watch(ctrlProvider).requireValue;
 
     if (!broadcastPrefs.enableServerAnalysis || analysisState.analysisSummary == null) {
@@ -23,21 +25,22 @@ class BroadcastGameSummary extends ConsumerWidget {
 
     return ListView(
       children: [
-        _BroadcastAcplChart(controllerParams: controllerParams),
-        _GameSummaryTable(controllerParams: controllerParams),
+        _BroadcastAcplChart(roundId: roundId, gameId: gameId),
+        _GameSummaryTable(roundId: roundId, gameId: gameId),
       ],
     );
   }
 }
 
 class _BroadcastAcplChart extends ConsumerWidget {
-  const _BroadcastAcplChart({required this.controllerParams});
+  const _BroadcastAcplChart({required this.roundId, required this.gameId});
 
-  final BroadcastAnalysisControllerParams controllerParams;
+  final BroadcastRoundId roundId;
+  final BroadcastGameId gameId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = broadcastAnalysisControllerProvider(controllerParams);
+    final ctrlProvider = broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId));
     final state = ref.watch(ctrlProvider).requireValue;
     final acplChartData = state.acplChartData;
 
@@ -61,13 +64,14 @@ class _BroadcastAcplChart extends ConsumerWidget {
 }
 
 class _GameSummaryTable extends ConsumerWidget {
-  const _GameSummaryTable({required this.controllerParams});
+  const _GameSummaryTable({required this.roundId, required this.gameId});
 
-  final BroadcastAnalysisControllerParams controllerParams;
+  final BroadcastRoundId roundId;
+  final BroadcastGameId gameId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = broadcastAnalysisControllerProvider(controllerParams);
+    final ctrlProvider = broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId));
     final analysisState = ref.watch(ctrlProvider).requireValue;
 
     return GameSummaryTable(

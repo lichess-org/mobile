@@ -60,13 +60,7 @@ void main() {
   BroadcastAnalysisState readState(WidgetTester tester) {
     final container = ProviderScope.containerOf(tester.element(find.byType(BroadcastGameScreen)));
     return container
-        .read(
-          broadcastAnalysisControllerProvider((
-            roundId: _roundId,
-            gameId: _gameId,
-            initialPov: Side.white,
-          )),
-        )
+        .read(broadcastAnalysisControllerProvider((roundId: _roundId, gameId: _gameId)))
         .requireValue;
   }
 

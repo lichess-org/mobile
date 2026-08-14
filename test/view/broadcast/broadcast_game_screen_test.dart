@@ -98,6 +98,57 @@ void main() {
       expect(find.text('Gokerkan, Cem Kaan'), findsOne);
     });
 
+    testWidgets('board is oriented as white by default', variant: kPlatformVariant, (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const BroadcastGameScreen(
+          tournamentId: _tournamentId,
+          roundId: _roundId,
+          gameId: _gameId,
+        ),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      // Load the broadcast analysis controller
+      await tester.pump();
+
+      expect(tester.widget<Chessboard>(find.byType(Chessboard)).orientation, Side.white);
+    });
+
+    testWidgets(
+      'initialPov orients the board once the controller is loaded',
+      variant: kPlatformVariant,
+      (tester) async {
+        final app = await makeTestProviderScopeApp(
+          tester,
+          home: const BroadcastGameScreen(
+            tournamentId: _tournamentId,
+            roundId: _roundId,
+            gameId: _gameId,
+            initialPov: Side.black,
+          ),
+          overrides: {
+            lichessClientProvider: lichessClientProvider.overrideWith(
+              (ref) => LichessClient(client, ref),
+            ),
+          },
+        );
+
+        await tester.pumpWidget(app);
+        // Load the broadcast analysis controller
+        await tester.pump();
+        // Apply the initial point of view, which is deferred to a microtask
+        await tester.pump();
+
+        expect(tester.widget<Chessboard>(find.byType(Chessboard)).orientation, Side.black);
+      },
+    );
+
     // TODO investigate this failing test
 
     // testWidgets('Receives a new move of the game', variant: kPlatformVariant, (tester) async {
@@ -537,7 +588,6 @@ void main() {
       final ctrlProvider = broadcastAnalysisControllerProvider((
         roundId: _roundId,
         gameId: _gameId,
-        initialPov: Side.white,
       ));
 
       // Capture the sideline path, then promote it to mainline.

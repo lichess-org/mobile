@@ -49,7 +49,9 @@ class BroadcastGameScreen extends ConsumerStatefulWidget {
   final String? tournamentSlug;
   final String? roundSlug;
   final String? title;
-  final Side initialPov;
+
+  /// The side to view the board from, if it should differ from the default (white).
+  final Side? initialPov;
 
   const BroadcastGameScreen({
     this.tournamentId,
@@ -58,7 +60,7 @@ class BroadcastGameScreen extends ConsumerStatefulWidget {
     this.tournamentSlug,
     this.roundSlug,
     this.title,
-    this.initialPov = Side.white,
+    this.initialPov,
   });
 
   static Route<dynamic> buildRoute({
@@ -68,7 +70,7 @@ class BroadcastGameScreen extends ConsumerStatefulWidget {
     String? tournamentSlug,
     String? roundSlug,
     String? title,
-    Side initialPov = Side.white,
+    Side? initialPov,
   }) {
     return buildScreenRoute(
       screen: BroadcastGameScreen(
@@ -99,6 +101,26 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
     tabs = [AnalysisTab.pgn, AnalysisTab.explorer, AnalysisTab.moves, AnalysisTab.summary];
 
     _tabController = TabController(vsync: this, initialIndex: 2, length: tabs.length);
+
+    final initialPov = widget.initialPov;
+    if (initialPov != null) {
+      final ctrlProvider = broadcastAnalysisControllerProvider((
+        roundId: widget.roundId,
+        gameId: widget.gameId,
+      ));
+      // The controller loads asynchronously, so the point of view can only be set once its state
+      // is available. `fireImmediately` covers the case where the controller is already loaded.
+      // The write is deferred to a microtask because assigning the controller state from within
+      // the notification of its own first `AsyncData` value gets overwritten by Riverpod.
+      ref.listenManual<BroadcastAnalysisState?>(ctrlProvider.select((v) => v.value), (prev, next) {
+        if (prev == null && next != null) {
+          Future.microtask(() {
+            if (!mounted) return;
+            ref.read(ctrlProvider.notifier).setPov(initialPov);
+          });
+        }
+      }, fireImmediately: true);
+    }
   }
 
   @override
@@ -119,12 +141,6 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
             ),
             _ => const SizedBox.shrink(),
           };
-    final roundControllerParams = (roundId: widget.roundId, gameId: widget.gameId);
-    final controllerParams = (
-      roundId: widget.roundId,
-      gameId: widget.gameId,
-      initialPov: widget.initialPov,
-    );
 
     return Scaffold(
       appBar: AppBar(
@@ -133,7 +149,6 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
           _BroadcastGameMenu(
             roundId: widget.roundId,
             gameId: widget.gameId,
-            controllerParams: controllerParams,
             tournamentSlug: widget.tournamentSlug,
             roundSlug: widget.roundSlug,
           ),
@@ -142,8 +157,7 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
       body: _Body(
         widget.tournamentId,
         widget.roundId,
-        roundControllerParams,
-        controllerParams,
+        widget.gameId,
         widget.tournamentSlug,
         widget.roundSlug,
         tabController: _tabController,
@@ -157,14 +171,12 @@ class _BroadcastGameMenu extends ConsumerWidget {
   const _BroadcastGameMenu({
     required this.roundId,
     required this.gameId,
-    required this.controllerParams,
     this.tournamentSlug,
     this.roundSlug,
   });
 
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;
-  final BroadcastAnalysisControllerParams controllerParams;
   final String? tournamentSlug;
   final String? roundSlug;
 
@@ -237,8 +249,7 @@ class _Body extends ConsumerWidget {
   const _Body(
     this.tournamentId,
     this.roundId,
-    this.roundGameParams,
-    this.controllerParams,
+    this.gameId,
     this.tournamentSlug,
     this.roundSlug, {
     required this.tabController,
@@ -247,8 +258,7 @@ class _Body extends ConsumerWidget {
 
   final BroadcastTournamentId? tournamentId;
   final BroadcastRoundId roundId;
-  final BroadcastRoundGameParams roundGameParams;
-  final BroadcastAnalysisControllerParams controllerParams;
+  final BroadcastGameId gameId;
   final String? tournamentSlug;
   final String? roundSlug;
   final TabController tabController;
@@ -256,7 +266,7 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    switch (ref.watch(broadcastAnalysisControllerProvider(controllerParams))) {
+    switch (ref.watch(broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId)))) {
       case AsyncValue(value: final state?, hasValue: true):
         final broadcastPrefs = ref.watch(broadcastPreferencesProvider);
         final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
@@ -274,7 +284,8 @@ class _Body extends ConsumerWidget {
             tabController: tabController,
             tabs: tabs,
             boardBuilder: (context, boardSize, borderRadius) => BroadcastAnalysisBoard(
-              controllerParams: controllerParams,
+              roundId: roundId,
+              gameId: gameId,
               boardSize: boardSize,
               boardRadius: borderRadius,
             ),
@@ -282,15 +293,13 @@ class _Body extends ConsumerWidget {
             boardHeader: _PlayerWidget(
               tournamentId: tournamentId,
               roundId: roundId,
-              roundGameParams: roundGameParams,
-              controllerParams: controllerParams,
+              gameId: gameId,
               widgetPosition: _PlayerWidgetPosition.top,
             ),
             boardFooter: _PlayerWidget(
               tournamentId: tournamentId,
               roundId: roundId,
-              roundGameParams: roundGameParams,
-              controllerParams: controllerParams,
+              gameId: gameId,
               widgetPosition: _PlayerWidgetPosition.bottom,
             ),
             engineGaugeBuilder: state.hasAvailableEval(enginePrefs) && showEvaluationGauge
@@ -304,20 +313,26 @@ class _Body extends ConsumerWidget {
                     filters: (id: state.evaluationContext.id, path: state.currentPath),
                     analysisState: state,
                     onTapMove: ref
-                        .read(broadcastAnalysisControllerProvider(controllerParams).notifier)
+                        .read(
+                          broadcastAnalysisControllerProvider((
+                            roundId: roundId,
+                            gameId: gameId,
+                          )).notifier,
+                        )
                         .onUserMove,
                   )
                 : null,
             bottomBar: _BroadcastGameBottomBar(
-              controllerParams: controllerParams,
+              roundId: roundId,
+              gameId: gameId,
               tournamentSlug: tournamentSlug,
               roundSlug: roundSlug,
             ),
             children: [
-              _PgnTagsView(controllerParams),
-              _OpeningExplorerTab(controllerParams),
-              _BroadcastGameTreeView(controllerParams),
-              BroadcastGameSummary(controllerParams),
+              _PgnTagsView(roundId, gameId),
+              _OpeningExplorerTab(roundId, gameId),
+              _BroadcastGameTreeView(roundId, gameId),
+              BroadcastGameSummary(roundId: roundId, gameId: gameId),
             ],
           ),
         );
@@ -330,13 +345,14 @@ class _Body extends ConsumerWidget {
 }
 
 class _BroadcastGameTreeView extends ConsumerWidget {
-  const _BroadcastGameTreeView(this.controllerParams);
+  const _BroadcastGameTreeView(this.roundId, this.gameId);
 
-  final BroadcastAnalysisControllerParams controllerParams;
+  final BroadcastRoundId roundId;
+  final BroadcastGameId gameId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = broadcastAnalysisControllerProvider(controllerParams);
+    final ctrlProvider = broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId));
     final state = ref.watch(ctrlProvider).requireValue;
 
     final broadcastPrefs = ref.watch(broadcastPreferencesProvider);
@@ -409,13 +425,14 @@ enum PgnTags {
 }
 
 class _PgnTagsView extends ConsumerWidget {
-  const _PgnTagsView(this.controllerParams);
+  const _PgnTagsView(this.roundId, this.gameId);
 
-  final BroadcastAnalysisControllerParams controllerParams;
+  final BroadcastRoundId roundId;
+  final BroadcastGameId gameId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = broadcastAnalysisControllerProvider(controllerParams);
+    final ctrlProvider = broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId));
     final state = ref.watch(ctrlProvider).requireValue;
     final pgnHeaders = state.pgnHeaders;
 
@@ -468,13 +485,14 @@ class _PgnTagsView extends ConsumerWidget {
 }
 
 class _OpeningExplorerTab extends ConsumerWidget {
-  const _OpeningExplorerTab(this.controllerParams);
+  const _OpeningExplorerTab(this.roundId, this.gameId);
 
-  final BroadcastAnalysisControllerParams controllerParams;
+  final BroadcastRoundId roundId;
+  final BroadcastGameId gameId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = broadcastAnalysisControllerProvider(controllerParams);
+    final ctrlProvider = broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId));
     final state = ref.watch(ctrlProvider).requireValue;
 
     return ExplorerView(
@@ -495,12 +513,14 @@ class _OpeningExplorerTab extends ConsumerWidget {
 
 class BroadcastAnalysisBoard extends AnalysisBoard {
   const BroadcastAnalysisBoard({
-    required this.controllerParams,
+    required this.roundId,
+    required this.gameId,
     required super.boardSize,
     super.boardRadius,
   });
 
-  final BroadcastAnalysisControllerParams controllerParams;
+  final BroadcastRoundId roundId;
+  final BroadcastGameId gameId;
 
   @override
   ConsumerState<BroadcastAnalysisBoard> createState() => _BroadcastAnalysisBoardState();
@@ -509,20 +529,25 @@ class BroadcastAnalysisBoard extends AnalysisBoard {
 class _BroadcastAnalysisBoardState
     extends AnalysisBoardState<BroadcastAnalysisBoard, BroadcastAnalysisState, BroadcastPrefs> {
   @override
-  BroadcastAnalysisState? readCurrentState() =>
-      ref.read(broadcastAnalysisControllerProvider(widget.controllerParams)).value;
+  BroadcastAnalysisState? readCurrentState() => ref
+      .read(broadcastAnalysisControllerProvider((roundId: widget.roundId, gameId: widget.gameId)))
+      .value;
 
   @override
   void listenToStateChanges(
     void Function(BroadcastAnalysisState? prev, BroadcastAnalysisState? next) listener,
   ) => ref.listenManual<BroadcastAnalysisState?>(
-    broadcastAnalysisControllerProvider(widget.controllerParams).select((v) => v.value),
+    broadcastAnalysisControllerProvider((
+      roundId: widget.roundId,
+      gameId: widget.gameId,
+    )).select((v) => v.value),
     listener,
   );
 
   @override
-  BroadcastAnalysisState get analysisState =>
-      ref.watch(broadcastAnalysisControllerProvider(widget.controllerParams)).requireValue;
+  BroadcastAnalysisState get analysisState => ref
+      .watch(broadcastAnalysisControllerProvider((roundId: widget.roundId, gameId: widget.gameId)))
+      .requireValue;
 
   @override
   BroadcastPrefs get analysisPrefs => ref.watch(broadcastPreferencesProvider);
@@ -533,7 +558,12 @@ class _BroadcastAnalysisBoardState
 
   @override
   void onUserMove(Move move) => ref
-      .read(broadcastAnalysisControllerProvider(widget.controllerParams).notifier)
+      .read(
+        broadcastAnalysisControllerProvider((
+          roundId: widget.roundId,
+          gameId: widget.gameId,
+        )).notifier,
+      )
       .onUserMove(move);
 
   @override
@@ -550,23 +580,21 @@ class _PlayerWidget extends ConsumerWidget {
   const _PlayerWidget({
     this.tournamentId,
     required this.roundId,
-    required this.roundGameParams,
-    required this.controllerParams,
+    required this.gameId,
     required this.widgetPosition,
   });
 
   final BroadcastTournamentId? tournamentId;
   final BroadcastRoundId roundId;
-  final BroadcastRoundGameParams roundGameParams;
-  final BroadcastAnalysisControllerParams controllerParams;
+  final BroadcastGameId gameId;
   final _PlayerWidgetPosition widgetPosition;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    switch (ref.watch(broadcastRoundGameProvider(roundGameParams))) {
+    switch (ref.watch(broadcastRoundGameProvider((roundId: roundId, gameId: gameId)))) {
       case AsyncValue(value: final game?, hasValue: true):
         final broadcastAnalysisState = ref
-            .watch(broadcastAnalysisControllerProvider(controllerParams))
+            .watch(broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId)))
             .requireValue;
 
         final isCursorOnLiveMove =
@@ -690,18 +718,20 @@ class _Clock extends StatelessWidget {
 
 class _BroadcastGameBottomBar extends ConsumerWidget {
   const _BroadcastGameBottomBar({
-    required this.controllerParams,
+    required this.roundId,
+    required this.gameId,
     this.tournamentSlug,
     this.roundSlug,
   });
 
-  final BroadcastAnalysisControllerParams controllerParams;
+  final BroadcastRoundId roundId;
+  final BroadcastGameId gameId;
   final String? tournamentSlug;
   final String? roundSlug;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = broadcastAnalysisControllerProvider(controllerParams);
+    final ctrlProvider = broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId));
     final broadcastAnalysisState = ref.watch(ctrlProvider).requireValue;
 
     return BottomBar(
@@ -764,7 +794,7 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
   }
 
   Future<void> _showMenu(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = broadcastAnalysisControllerProvider(controllerParams);
+    final ctrlProvider = broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId));
 
     return showAdaptiveActionSheet(
       context: context,
@@ -773,7 +803,7 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
           makeLabel: (context) => Text(context.l10n.settingsSettings),
           onPressed: () => Navigator.of(
             context,
-          ).push(BroadcastGameSettingsScreen.buildRoute(controllerParams: controllerParams)),
+          ).push(BroadcastGameSettingsScreen.buildRoute(roundId: roundId, gameId: gameId)),
         ),
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.flipBoard),
@@ -783,8 +813,10 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
     );
   }
 
-  void _moveForward(WidgetRef ref) =>
-      ref.read(broadcastAnalysisControllerProvider(controllerParams).notifier).userNext();
-  void _moveBackward(WidgetRef ref) =>
-      ref.read(broadcastAnalysisControllerProvider(controllerParams).notifier).userPrevious();
+  void _moveForward(WidgetRef ref) => ref
+      .read(broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId)).notifier)
+      .userNext();
+  void _moveBackward(WidgetRef ref) => ref
+      .read(broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId)).notifier)
+      .userPrevious();
 }
