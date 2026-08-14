@@ -2527,6 +2527,14 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String get recapAwaitQuestion => 'Чем вы занимались в этом году?';
+
+  @override
+  String recapRecapReady(String param) {
+    return 'Ваши итоги $param года готовы!';
+  }
+
+  @override
   String get searchSearch => 'Поиск';
 
   @override

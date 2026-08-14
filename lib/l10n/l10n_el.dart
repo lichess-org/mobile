@@ -2471,6 +2471,14 @@ class AppLocalizationsEl extends AppLocalizations {
   }
 
   @override
+  String get recapAwaitQuestion => 'Πώς περάσατε φέτος;';
+
+  @override
+  String recapRecapReady(String param) {
+    return 'Η ανασκόπηση του έτους $param είναι έτοιμη!';
+  }
+
+  @override
   String get searchSearch => 'Αναζήτηση';
 
   @override

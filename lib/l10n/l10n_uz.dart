@@ -2471,6 +2471,14 @@ class AppLocalizationsUz extends AppLocalizations {
   }
 
   @override
+  String get recapAwaitQuestion => 'Bu yilingiz qanday oʻtdi?';
+
+  @override
+  String recapRecapReady(String param) {
+    return 'Sizning $param‑yil sarhisobingiz tayyor!';
+  }
+
+  @override
   String get searchSearch => 'Qidirish';
 
   @override

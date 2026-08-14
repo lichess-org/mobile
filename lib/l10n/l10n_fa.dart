@@ -2471,6 +2471,14 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
+  String get recapAwaitQuestion => 'امسال چه کرده‌اید؟';
+
+  @override
+  String recapRecapReady(String param) {
+    return 'سَرجمعِ سالِ $param تان آماده است!';
+  }
+
+  @override
   String get searchSearch => 'جستجو';
 
   @override

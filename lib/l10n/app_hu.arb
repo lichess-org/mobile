@@ -645,6 +645,8 @@
   "puzzleThemePlayerGames": "Felhasználók játszmái",
   "puzzleThemePlayerGamesDescription": "A saját vagy mások játszmáiból generált feladványok keresése.",
   "puzzleThemePuzzleDownloadInformation": "Ezek a feladványok közkincsnek minősülnek és innen letölthetők: {param}.",
+  "recapAwaitQuestion": "Mit csináltál idén?",
+  "recapRecapReady": "Elkészült az éves összefoglalód: {param}!",
   "searchSearch": "Keresés",
   "settingsSettings": "Beállítások",
   "settingsCloseAccount": "Fiók zárolása",

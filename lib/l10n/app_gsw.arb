@@ -665,6 +665,8 @@
   "puzzleThemePlayerGames": "Schpiller-Schpiel",
   "puzzleThemePlayerGamesDescription": "Suech nach Ufgabe us dine Schpiel oder Ufgabe us Schpiel vu Andere.",
   "puzzleThemePuzzleDownloadInformation": "Die Ufgabe sind öffentlich, mer channs abelade under {param}.",
+  "recapAwaitQuestion": "Was häsch das Jahr eso g'macht?",
+  "recapRecapReady": "Dini Zämmefassig für {param} isch parat!",
   "searchSearch": "Suechi",
   "settingsSettings": "Ischtellige",
   "settingsCloseAccount": "Benutzerkonto schlüsse",

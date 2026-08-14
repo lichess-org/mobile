@@ -714,6 +714,8 @@
   "puzzleThemePlayerGames": "プレイヤーの対局",
   "puzzleThemePlayerGamesDescription": "自分の対局、他のプレイヤーの対局から取られた問題を検索します。",
   "puzzleThemePuzzleDownloadInformation": "これらの問題はパブリックドメインにあり、{param} でダウンロードできます。",
+  "recapAwaitQuestion": "今年はどんなだったでしょう。",
+  "recapRecapReady": "{param} 年のまとめが用意できました！",
   "searchSearch": "検索",
   "settingsSettings": "設定",
   "settingsCloseAccount": "アカウント停止",

@@ -2471,6 +2471,14 @@ class AppLocalizationsEu extends AppLocalizations {
   }
 
   @override
+  String get recapAwaitQuestion => 'Zertan aritu zara aurten?';
+
+  @override
+  String recapRecapReady(String param) {
+    return 'Zure $param urteko laburpena prest dago!';
+  }
+
+  @override
   String get searchSearch => 'Bilatu';
 
   @override

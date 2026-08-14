@@ -2471,6 +2471,14 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String get recapAwaitQuestion => 'O que tem feito neste ano?';
+
+  @override
+  String recapRecapReady(String param) {
+    return 'O teu resumo de $param está pronto!';
+  }
+
+  @override
   String get searchSearch => 'Procurar';
 
   @override
@@ -9251,6 +9259,14 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   @override
   String puzzleThemePuzzleDownloadInformation(String param) {
     return 'Esses problemas estão em domínio público, e você pode baixá-los em $param.';
+  }
+
+  @override
+  String get recapAwaitQuestion => 'O que você será que você fez nesse ano?';
+
+  @override
+  String recapRecapReady(String param) {
+    return 'Sua recapitulação de $param está pronta!';
   }
 
   @override

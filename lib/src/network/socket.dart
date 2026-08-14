@@ -54,9 +54,7 @@ final socketGlobalStream = _globalStreamController.stream;
 
 /// Creates a WebSocket URI for the lichess server.
 Uri lichessWSUri(String unencodedPath, [Map<String, String>? queryParameters]) =>
-    kLichessWSHost.startsWith('localhost') ||
-        kLichessWSHost.startsWith('10.') ||
-        kLichessWSHost.startsWith('192.168.')
+    guessIsUnsecureSchemeFromHost(kLichessWSHost)
     ? Uri(
         scheme: 'ws',
         host: kLichessWSHost.split(':')[0],

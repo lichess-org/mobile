@@ -670,6 +670,8 @@
   "puzzleThemePlayerGames": "Partite tra giocatori",
   "puzzleThemePlayerGamesDescription": "Trova problemi tratti dalle tue partite o dalle partite di altri giocatori.",
   "puzzleThemePuzzleDownloadInformation": "Questi problemi sono nel pubblico dominio e possono essere scaricati da {param}.",
+  "recapAwaitQuestion": "Com'è andata quest'anno?",
+  "recapRecapReady": "Il riassunto del tuo {param} è pronto!",
   "searchSearch": "Cerca",
   "settingsSettings": "Impostazioni",
   "settingsCloseAccount": "Elimina account",

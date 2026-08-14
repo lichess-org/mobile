@@ -697,6 +697,8 @@
   "puzzleThemePlayerGames": "Bireysel oyunlar",
   "puzzleThemePlayerGamesDescription": "Sizin veya başka bir oyuncunun maçlarından üretilen bulmacalar.",
   "puzzleThemePuzzleDownloadInformation": "Bütün bulmacalar kamuya açıktır ve {param} adresinden indirilebilir.",
+  "recapAwaitQuestion": "Bu yıl neler yaptın?",
+  "recapRecapReady": "{param} özetiniz hazır!",
   "searchSearch": "Ara",
   "settingsSettings": "Ayarlar",
   "settingsCloseAccount": "Hesabı kapat",
