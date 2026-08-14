@@ -8,6 +8,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
+import 'package:l10n_esperanto/l10n_esperanto.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/db/database.dart';
@@ -93,7 +94,17 @@ class _FakeAppState extends ConsumerState<_FakeApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      // Mirror production (see app.dart): [AppLocalizations.localizationsDelegates] would pull in
+      // the `flutter_localizations` delegates, which localize the Flutter material and cupertino
+      // libraries rather than the `material_ui` and `cupertino_ui` ones the app is built with.
+      // Using them here would hide from tests any code that wrongly depends on Flutter's own
+      // MaterialLocalizations.
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        ...GlobalMaterialLocalizations.delegates,
+        MaterialLocalizationsEo.delegate,
+        CupertinoLocalizationsEo.delegate,
+      ],
       home: widget.home,
       // Mirror production (see app.dart) so navigation logic relying on the
       // route stack observer behaves the same in tests.

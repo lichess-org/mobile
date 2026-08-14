@@ -50,6 +50,9 @@ class BroadcastGameScreen extends ConsumerStatefulWidget {
   final String? roundSlug;
   final String? title;
 
+  /// The side to view the board from, if it should differ from the default (white).
+  final Side? initialPov;
+
   const BroadcastGameScreen({
     this.tournamentId,
     required this.roundId,
@@ -57,6 +60,7 @@ class BroadcastGameScreen extends ConsumerStatefulWidget {
     this.tournamentSlug,
     this.roundSlug,
     this.title,
+    this.initialPov,
   });
 
   static Route<dynamic> buildRoute({
@@ -66,6 +70,7 @@ class BroadcastGameScreen extends ConsumerStatefulWidget {
     String? tournamentSlug,
     String? roundSlug,
     String? title,
+    Side? initialPov,
   }) {
     return buildScreenRoute(
       screen: BroadcastGameScreen(
@@ -75,6 +80,7 @@ class BroadcastGameScreen extends ConsumerStatefulWidget {
         tournamentSlug: tournamentSlug,
         roundSlug: roundSlug,
         title: title,
+        initialPov: initialPov,
       ),
     );
   }
@@ -95,6 +101,26 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
     tabs = [AnalysisTab.pgn, AnalysisTab.explorer, AnalysisTab.moves, AnalysisTab.summary];
 
     _tabController = TabController(vsync: this, initialIndex: 2, length: tabs.length);
+
+    final initialPov = widget.initialPov;
+    if (initialPov != null) {
+      final ctrlProvider = broadcastAnalysisControllerProvider((
+        roundId: widget.roundId,
+        gameId: widget.gameId,
+      ));
+      // The controller loads asynchronously, so the point of view can only be set once its state
+      // is available. `fireImmediately` covers the case where the controller is already loaded.
+      // The write is deferred to a microtask because assigning the controller state from within
+      // the notification of its own first `AsyncData` value gets overwritten by Riverpod.
+      ref.listenManual<BroadcastAnalysisState?>(ctrlProvider.select((v) => v.value), (prev, next) {
+        if (prev == null && next != null) {
+          Future.microtask(() {
+            if (!mounted) return;
+            ref.read(ctrlProvider.notifier).setPov(initialPov);
+          });
+        }
+      }, fireImmediately: true);
+    }
   }
 
   @override
