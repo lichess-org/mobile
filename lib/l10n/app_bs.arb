@@ -1373,7 +1373,6 @@
   "xInvitedYouToY": "{param1} vas je pozvao u \"{param2}\".",
   "youAreNowPartOfTeam": "Sada ste dio tima.",
   "youHaveJoinedTeamX": "Pridružili ste se \"{param1}\".",
-  "someoneYouReportedWasBanned": "Neko koga ste prijavili dobio je zabranu",
   "congratsYouWon": "Čestitamo, pobijedili ste!",
   "gameVsX": "Partija protiv {param1}",
   "resVsX": "{param1} protiv {param2}",

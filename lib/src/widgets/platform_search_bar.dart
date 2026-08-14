@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Displays a [SearchBar] with platform adaptations.
 class PlatformSearchBar extends StatefulWidget {

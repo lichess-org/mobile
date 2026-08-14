@@ -136,13 +136,13 @@ void main() {
 
       when(
         () => mockRepository.getStudy(id: testId),
-      ).thenAnswer((_) async => (studyChapter1, null, '{pgn 1}'));
+      ).thenAnswer((_) async => (studyChapter1, null, '{pgn 1} 1. e4 {wow} e5 {such chess}'));
       when(
         () => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('1')),
-      ).thenAnswer((_) async => (studyChapter1, null, '{pgn 1}'));
+      ).thenAnswer((_) async => (studyChapter1, null, '{pgn 1} 1. e4 {wow} e5 {such chess}'));
       when(
         () => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('2')),
-      ).thenAnswer((_) async => (studyChapter2, null, '{pgn 2}'));
+      ).thenAnswer((_) async => (studyChapter2, null, '{pgn 2} 1. e4 {wow} e5 {such chess}'));
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -165,7 +165,7 @@ void main() {
       expect(find.bySemanticsLabel(RegExp('Opening explorer & tablebase')), findsNothing);
 
       // Open chapter selection dialog
-      await tester.tap(find.byTooltip('2 Chapters'));
+      await tester.tap(findByTooltip('2 Chapters'));
       // Wait for dialog to open
       await tester.pumpAndSettle();
 
@@ -194,8 +194,8 @@ void main() {
       expect(find.text('1. Chapter 1'), findsNothing);
       expect(find.text('2. Chapter 2'), findsOneWidget);
 
-      expect(find.text('pgn 1'), findsNothing);
-      expect(find.text('pgn 2'), findsOneWidget);
+      expect(find.textContaining('pgn 1'), findsNothing);
+      expect(find.textContaining('pgn 2'), findsOneWidget);
     });
 
     testWidgets('Loads initial chapter if given', (WidgetTester tester) async {
@@ -359,7 +359,7 @@ void main() {
 
       expect(tester.widget<Chessboard>(find.byType(Chessboard)).orientation, Side.white);
 
-      await tester.tap(find.byTooltip('Menu'));
+      await tester.tap(findByTooltip('Menu'));
       await tester.pumpAndSettle(); // Wait for menu to open
 
       await tester.tap(find.text('Flip board'));
@@ -446,7 +446,7 @@ void main() {
       expect(find.text('Not much to say after ...Qc7.'), findsOneWidget);
       expect(find.text(introText), findsNothing);
 
-      await tester.tap(find.byTooltip('Retry'));
+      await tester.tap(findByTooltip('Retry'));
       await tester.pump(); // Wait for move to be taken back
 
       expect(find.text(introText), findsOneWidget);
@@ -467,7 +467,7 @@ void main() {
         findsOneWidget,
       );
 
-      await tester.tap(find.byTooltip('Next'));
+      await tester.tap(findByTooltip('Next'));
       await tester.pump(); // Wait for opponent move to be played
 
       expect(find.text('What would you play in this position?'), findsOneWidget);
@@ -483,7 +483,7 @@ void main() {
       await playMove(tester, 'c3', 'g3');
       expect(find.text('A fork, threatening Rg7 & b3.'), findsOneWidget);
 
-      await tester.tap(find.byTooltip('Next'));
+      await tester.tap(findByTooltip('Next'));
       await tester.pump(); // Wait for opponent move to be played
 
       expect(find.text('What would you play in this position?'), findsOneWidget);
@@ -497,9 +497,9 @@ void main() {
         findsOneWidget,
       );
 
-      expect(find.byTooltip('Play again'), findsOneWidget);
-      expect(find.byTooltip('Next chapter'), findsOneWidget);
-      expect(find.byTooltip('Analysis board'), findsOneWidget);
+      expect(findByTooltip('Play again'), findsOneWidget);
+      expect(findByTooltip('Next chapter'), findsOneWidget);
+      expect(findByTooltip('Analysis board'), findsOneWidget);
     });
 
     testWidgets('Interactive study hints and deviation comments', (WidgetTester tester) async {
@@ -561,7 +561,7 @@ void main() {
 
       await playMove(tester, 'e2', 'e3');
       expect(find.text('Shown if any move other than d4 is played'), findsOneWidget);
-      await tester.tap(find.byTooltip('Retry'));
+      await tester.tap(findByTooltip('Retry'));
       await tester.pump(); // Wait for move to be taken back
 
       // Hint should still be shown after incorrect move
@@ -569,11 +569,11 @@ void main() {
 
       await playMove(tester, 'd2', 'd4');
       expect(find.text('Shown if d4 is played'), findsOneWidget);
-      await tester.tap(find.byTooltip('Retry'));
+      await tester.tap(findByTooltip('Retry'));
       await tester.pump(); // Wait for move to be taken back
 
-      expect(find.byTooltip('View the solution'), findsOneWidget);
-      await tester.tap(find.byTooltip('View the solution'));
+      expect(findByTooltip('View the solution'), findsOneWidget);
+      await tester.tap(findByTooltip('View the solution'));
       // Wait for correct move and opponent's response to be played
       await tester.pump(const Duration(seconds: 1));
 
@@ -599,7 +599,7 @@ void main() {
       expect(find.text('Hint 2'), findsOneWidget);
 
       // Open chapter selection dialog
-      await tester.tap(find.byTooltip('2 Chapters'));
+      await tester.tap(findByTooltip('2 Chapters'));
       // Wait for dialog to open
       await tester.pumpAndSettle();
 
@@ -621,7 +621,11 @@ void main() {
         chapter: makeChapter(id: const StudyChapterId('1')),
         chapters: IList(const [
           StudyChapterMeta(id: StudyChapterId('1'), name: 'Legal Chapter', fen: null),
-          StudyChapterMeta(id: StudyChapterId('2'), name: 'Illegal Chapter', fen: null),
+          StudyChapterMeta(
+            id: StudyChapterId('2'),
+            name: 'Illegal Chapter',
+            fen: '8/8/8/8/8/8/8/8 w - - 0 1',
+          ),
         ]),
       );
 
@@ -667,7 +671,7 @@ void main() {
       expect(find.text('1. Legal Chapter'), findsOneWidget);
 
       // Navigate to second chapter with illegal position
-      await tester.tap(find.byTooltip('2 Chapters'));
+      await tester.tap(findByTooltip('2 Chapters'));
       await tester.pumpAndSettle();
       await tester.tap(find.text('2 Illegal Chapter', findRichText: true));
       await tester.pumpAndSettle();
@@ -675,8 +679,13 @@ void main() {
       // Second chapter should still load, but with static board
       expect(find.text('2. Illegal Chapter'), findsOneWidget);
 
+      expect(find.byType(Chessboard), findsNothing);
+      expect(find.byType(StaticChessboard), findsOneWidget);
+      final staticBoard = tester.widget<StaticChessboard>(find.byType(StaticChessboard));
+      expect(staticBoard.fen, '8/8/8/8/8/8/8/8 w - - 0 1');
+
       // Verify we can navigate back to first chapter
-      await tester.tap(find.byTooltip('2 Chapters'));
+      await tester.tap(findByTooltip('2 Chapters'));
       await tester.pumpAndSettle();
 
       await tester.tap(find.text('1 Legal Chapter', findRichText: true));
@@ -684,7 +693,7 @@ void main() {
 
       expect(find.text('1. Legal Chapter'), findsOneWidget);
       // Verify we can navigate back to first chapter
-      await tester.tap(find.byTooltip('2 Chapters'));
+      await tester.tap(findByTooltip('2 Chapters'));
       await tester.pumpAndSettle();
 
       //Check that also via the chapter list the illegal chapter can be navigated to
@@ -753,11 +762,11 @@ void main() {
 
     // each pumpAndSettle() call waits for move to be played and potential annotation to appear
 
-    await tester.tap(find.byTooltip('Next'));
+    await tester.tap(findByTooltip('Next'));
     await tester.pumpAndSettle();
     expectAnnotations([]);
 
-    await tester.tap(find.byTooltip('Next'));
+    await tester.tap(findByTooltip('Next'));
     await tester.pumpAndSettle();
 
     // 4. Rg1!!
@@ -765,19 +774,19 @@ void main() {
       containsPair(Square.g1, predicate<Annotation>((annotation) => annotation.symbol == '!!')),
     ]);
 
-    await tester.tap(find.byTooltip('Next'));
+    await tester.tap(findByTooltip('Next'));
     await tester.pumpAndSettle(); // Wait for move to be played
     expectAnnotations([]);
 
-    await tester.tap(find.byTooltip('Next'));
+    await tester.tap(findByTooltip('Next'));
     await tester.pumpAndSettle(); // Wait for move to be played
     expectAnnotations([]);
 
-    await tester.tap(find.byTooltip('Next'));
+    await tester.tap(findByTooltip('Next'));
     await tester.pumpAndSettle(); // Wait for move to be played
     expectAnnotations([]);
 
-    await tester.tap(find.byTooltip('Next'));
+    await tester.tap(findByTooltip('Next'));
     await tester.pumpAndSettle(); // Wait for move to be played
 
     // Regression test for https://github.com/lichess-org/mobile/issues/2231
@@ -827,7 +836,7 @@ void main() {
     // Wait for study to load
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byTooltip('Next'));
+    await tester.tap(findByTooltip('Next'));
     await tester.pumpAndSettle(); // Wait for O-O-O move to be played
 
     final board = tester.widget<Chessboard>(find.byType(Chessboard));

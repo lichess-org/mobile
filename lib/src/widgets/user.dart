@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
@@ -12,6 +11,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// A Wifi icon representing that the user is currently connected (online) or not.
 class ConnectedIcon extends StatelessWidget {
@@ -160,6 +160,7 @@ class UserFullNameWidget extends ConsumerWidget {
     this.name,
     this.aiLevel,
     this.rating,
+    this.ratingDiff,
     this.provisional,
     this.shouldShowOnline = false,
     this.showFlair = true,
@@ -174,6 +175,7 @@ class UserFullNameWidget extends ConsumerWidget {
     this.name,
     required this.aiLevel,
     this.rating,
+    this.ratingDiff,
     this.provisional,
     this.shouldShowOnline = false,
     this.showFlair = true,
@@ -186,6 +188,8 @@ class UserFullNameWidget extends ConsumerWidget {
   final LightUser? user;
   final String? name;
   final int? rating;
+
+  final int? ratingDiff;
 
   /// The AI level, if the user is lichess AI.
   final int? aiLevel;
@@ -270,6 +274,21 @@ class UserFullNameWidget extends ConsumerWidget {
               fontWeight: FontWeight.w400,
               fontSize: contextTextStyle.fontSize != null ? contextTextStyle.fontSize! - 3 : 13,
               color: textShade(context, 0.8),
+            ),
+          ),
+        ],
+        if (shouldShowRating && ratingDiff != null) ...[
+          const SizedBox(width: 5),
+          Text(
+            ratingDiff! > 0 ? '+$ratingDiff' : '$ratingDiff',
+            style: contextTextStyle.copyWith(
+              fontWeight: .w400,
+              fontSize: contextTextStyle.fontSize != null ? contextTextStyle.fontSize! - 3 : 13,
+              color: ratingDiff! > 0
+                  ? context.lichessColors.good
+                  : ratingDiff! == 0
+                  ? context.lichessColors.brag
+                  : context.lichessColors.error,
             ),
           ),
         ],

@@ -29,16 +29,42 @@ final isLoggedInProvider = Provider.autoDispose<bool>((Ref ref) {
 final signInMutation = Mutation<void>();
 final signOutMutation = Mutation<void>();
 
+/// Mutation for requesting the login code email.
+final emailLoginCodeRequestMutation = Mutation<void>();
+
+/// Mutation for exchanging the login code for a session.
+final emailLoginCodeSignInMutation = Mutation<void>();
+
 class AuthController extends Notifier<AuthUser?> {
   @override
   AuthUser? build() {
     return ref.read(preloadedDataProvider).requireValue.authUser;
   }
 
-  /// Signs in the user.
+  /// Signs in the user with the OAuth browser flow.
   Future<void> signIn() async {
     final authUser = await ref.read(authRepositoryProvider).signIn();
+    await _onSignedIn(authUser);
+  }
 
+  /// Asks lichess to email a login code for the [username] account to [email].
+  Future<void> requestEmailLoginCode({required String username, required String email}) {
+    return ref.read(authRepositoryProvider).requestEmailLoginCode(username: username, email: email);
+  }
+
+  /// Signs in the user on the [username] account with the login code they received by [email].
+  Future<void> signInWithEmailCode({
+    required String username,
+    required String email,
+    required String code,
+  }) async {
+    final authUser = await ref
+        .read(authRepositoryProvider)
+        .signInWithEmailCode(username: username, email: email, code: code);
+    await _onSignedIn(authUser);
+  }
+
+  Future<void> _onSignedIn(AuthUser authUser) async {
     await ref.read(authStorageProvider).write(authUser);
 
     if (!ref.mounted) return;

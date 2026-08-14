@@ -171,19 +171,18 @@ final lichessClientProvider = Provider<LichessClient>((Ref ref) {
 
 /// Whether a response should be retried once by [lichessClientProvider].
 ///
-/// Retries on 429 Too Many Requests, except for puzzle solve submissions
-/// (`POST /api/puzzle/batch/…`): those are rate-limited deliberately and handled
-/// with a back-off by `PuzzleSolveLimiter`, so retrying here only burns a request
-/// and delays arming the back-off.
+/// Retries on 429 Too Many Requests, except for the puzzle batch endpoints (`/api/puzzle/batch/…`),
+/// which are rate-limited deliberately:
+/// - solve submissions (`POST`) are handled with a back-off by `PuzzleSolveLimiter`, so retrying
+///   here only burns a request and delays arming the back-off;
+/// - batch downloads (`GET`) are issued once per puzzle angle, so a retry doubles an already large
+///   burst against an endpoint that has just said it is receiving too many requests.
 @visibleForTesting
 bool shouldRetryOn429(BaseResponse response) {
   if (response.statusCode != 429) return false;
   final request = response.request;
-  final isPuzzleSolve =
-      request != null &&
-      request.method == 'POST' &&
-      request.url.path.startsWith('/api/puzzle/batch/');
-  return !isPuzzleSolve;
+  final isPuzzleBatch = request != null && request.url.path.startsWith('/api/puzzle/batch/');
+  return !isPuzzleBatch;
 }
 
 Duration _defaultDelay(int retryCount) =>

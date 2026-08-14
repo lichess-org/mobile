@@ -17,7 +17,7 @@ void main() {
       expect(offlineQueueLengthForAngle(mix, 250), equals(250));
     });
 
-    test('caps every non-mix angle at kMinOfflinePuzzles', () {
+    test('caps every non-mix angle at kFixedOfflineQueueLength', () {
       for (final angle in const <PuzzleAngle>[
         PuzzleTheme(PuzzleThemeKey.advancedPawn),
         PuzzleTheme(PuzzleThemeKey.opening),
@@ -26,10 +26,17 @@ void main() {
         expect(isConfigurableOfflineQueueAngle(angle), isFalse, reason: '$angle');
         expect(
           offlineQueueLengthForAngle(angle, 300),
-          equals(kMinOfflinePuzzles),
+          equals(kFixedOfflineQueueLength),
           reason: '$angle',
         );
       }
+    });
+
+    test('a full non-mix queue leaves no deficit for the server to fill', () {
+      // Regression test for the request burst on the puzzle tab: the fixed queue length must not
+      // exceed what one batch request can return, or every saved angle stays permanently short and
+      // re-downloads on every read of its next puzzle.
+      expect(kFixedOfflineQueueLength, lessThanOrEqualTo(kServerPuzzleBatchCap));
     });
   });
 

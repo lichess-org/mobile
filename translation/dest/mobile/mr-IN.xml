@@ -4,14 +4,13 @@
   <string name="accountPreferences" comment="Displayed on settings screen. This is for preferences synced with website on the server.">खाते प्राधान्ये</string>
   <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">हे प्राधान्ये तुमच्या Lichess खात्यावर लागू केले जातील आणि सर्व उपकरणांवर वापरले जातील.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">सर्व खेळ</string>
-  <string name="areYouSure" comment="This is shown in confirmation dialogs.">तुम्हाला खात्री आहे का ? </string>
+  <string name="areYouSure" comment="This is shown in confirmation dialogs.">तुम्हाला खात्री आहे का?</string>
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">पटाची प्राधान्ये</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">चाल परत घेण्याचा प्रस्ताव रद्द करा</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">पुसा</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">जतन केलेली चाल पुसा</string>
-  <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">खेळात सामील व्हा </string>
-  <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">
-अभिप्राय</string>
+  <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">खेळात सामील व्हा</string>
+  <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">अभिप्राय</string>
   <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">नमस्कार, %s</string>
   <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">नमस्कार</string>
   <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">नमस्कार, %s</string>

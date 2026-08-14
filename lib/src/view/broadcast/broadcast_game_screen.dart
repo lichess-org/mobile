@@ -1,7 +1,6 @@
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
@@ -39,6 +38,7 @@ import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/variations_bar.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -446,8 +446,8 @@ class _PgnTagsView extends ConsumerWidget {
                         final value = pgnHeaders[tag.tagName]!;
                         final url = tag.isLink ? tag.buildUrl(value) : null;
                         if (url != null) {
-                          return RichText(
-                            text: TextSpan(
+                          return Text.rich(
+                            TextSpan(
                               text: value,
                               style: Styles.linkStyle,
                               recognizer: TapGestureRecognizer()

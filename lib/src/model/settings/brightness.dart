@@ -20,13 +20,10 @@ class CurrentBrightness extends Notifier<Brightness> {
       }
     };
 
-    switch (themeMode) {
-      case BackgroundThemeMode.dark:
-        return Brightness.dark;
-      case BackgroundThemeMode.light:
-        return Brightness.light;
-      case BackgroundThemeMode.system:
-        return WidgetsBinding.instance.platformDispatcher.platformBrightness;
-    }
+    return switch (themeMode) {
+      BackgroundThemeMode.dark || BackgroundThemeMode.amoled => Brightness.dark,
+      BackgroundThemeMode.light => Brightness.light,
+      BackgroundThemeMode.system => WidgetsBinding.instance.platformDispatcher.platformBrightness,
+    };
   }
 }

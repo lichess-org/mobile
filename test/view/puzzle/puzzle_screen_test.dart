@@ -1,8 +1,7 @@
 import 'package:chessground/chessground.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
@@ -24,6 +23,7 @@ import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../model/auth/fake_auth_storage.dart';
@@ -303,7 +303,7 @@ void main() {
       // stored queue already covers the non-mix cap, so nextPuzzle needs no fetch
       final fullQueue = PuzzleBatch(
         solved: IList(const []),
-        unsolved: IList([for (var i = 0; i < kMinOfflinePuzzles; i++) puzzle]),
+        unsolved: IList([for (var i = 0; i < kFixedOfflineQueueLength; i++) puzzle]),
       );
 
       final app = await makeTestProviderScopeApp(
