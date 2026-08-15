@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_players_tab.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_share_menu.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_teams_tab.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -122,6 +123,8 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
 
   _BroadcastGameFilter filter = _BroadcastGameFilter.all;
 
+  String? teamFilter;
+
   @override
   void initState() {
     super.initState();
@@ -161,10 +164,11 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
     });
   }
 
-  void setGameFilter(_BroadcastGameFilter filter) {
+  void setGameFilter(_BroadcastGameFilter filter, String? team) {
     _tabController.index = 1;
     setState(() {
       this.filter = filter;
+      teamFilter = team == context.l10n.broadcastAllTeams ? null : team;
     });
   }
 
@@ -231,6 +235,13 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
                     final games = asyncRound.value.games.values;
                     final allCount = games.length;
                     final ongoingCount = games.where((g) => g.isOngoing).length;
+                    final teams = games
+                        .expand((g) => g.players.values.map((p) => p.player.team))
+                        .toISet()
+                        .nonNulls
+                        .toIList()
+                        .sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()))
+                        .insert(0, context.l10n.broadcastAllTeams);
 
                     showModalBottomSheet<void>(
                       context: context,
@@ -238,9 +249,11 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
                       isScrollControlled: true,
                       builder: (_) => _BroadcastSettingsBottomSheet(
                         filter,
+                        teamFilter,
                         allGamesCount: allCount,
                         ongoingGamesCount: ongoingCount,
                         onGameFilterChange: setGameFilter,
+                        teams: teams.isNotEmpty ? teams : null,
                       ),
                     );
                   },
@@ -270,6 +283,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
                 roundId: _selectedRoundId ?? value.defaultRoundId,
                 tournamentSlug: value.data.slug,
                 showOnlyOngoingGames: filter == _BroadcastGameFilter.ongoing,
+                teamFilter: teamFilter,
               ),
               _ => const SizedBox.shrink(),
             },
@@ -548,16 +562,20 @@ class _TournamentSelectorState extends ConsumerState<_TournamentSelectorMenu> {
 
 class _BroadcastSettingsBottomSheet extends ConsumerStatefulWidget {
   const _BroadcastSettingsBottomSheet(
-    this.selectedFilter, {
+    this.selectedFilter,
+    this.selectedTeam, {
     required this.allGamesCount,
     required this.ongoingGamesCount,
     required this.onGameFilterChange,
+    required this.teams,
   });
 
   final _BroadcastGameFilter selectedFilter;
+  final String? selectedTeam;
   final int allGamesCount;
   final int ongoingGamesCount;
-  final void Function(_BroadcastGameFilter filter) onGameFilterChange;
+  final void Function(_BroadcastGameFilter filter, String? team) onGameFilterChange;
+  final IList<String>? teams;
 
   @override
   ConsumerState<_BroadcastSettingsBottomSheet> createState() =>
@@ -566,17 +584,20 @@ class _BroadcastSettingsBottomSheet extends ConsumerStatefulWidget {
 
 class _BroadcastSettingsBottomSheetState extends ConsumerState<_BroadcastSettingsBottomSheet> {
   late _BroadcastGameFilter filter;
+  late String? selectedTeam;
 
   @override
   void initState() {
     super.initState();
     filter = widget.selectedFilter;
+    selectedTeam = widget.selectedTeam;
   }
 
   @override
   void didUpdateWidget(covariant _BroadcastSettingsBottomSheet oldWidget) {
     super.didUpdateWidget(oldWidget);
     filter = widget.selectedFilter;
+    selectedTeam = widget.selectedTeam;
   }
 
   @override
@@ -606,9 +627,32 @@ class _BroadcastSettingsBottomSheetState extends ConsumerState<_BroadcastSetting
                 },
                 onSelected: (value, selected) {
                   setState(() => filter = value);
-                  widget.onGameFilterChange.call(value);
+                  widget.onGameFilterChange.call(value, widget.selectedTeam);
                 },
               ),
+              if (widget.teams != null)
+                FilterChip(
+                  label: selectedTeam != null
+                      ? Text('${context.l10n.teamTeam}: $selectedTeam')
+                      : Text(context.l10n.teamTeam),
+                  selected: selectedTeam != null,
+                  showCheckmark: selectedTeam != null,
+                  onSelected: (_) {
+                    showChoicePicker(
+                      context,
+                      title: Text(context.l10n.teamTeam),
+                      choices: widget.teams!.toList(),
+                      selectedItem: selectedTeam ?? widget.teams?.first ?? '',
+                      labelBuilder: (team) => Text(team),
+                      onSelectedItemChanged: (team) {
+                        setState(
+                          () => selectedTeam = team == context.l10n.broadcastAllTeams ? null : team,
+                        );
+                        widget.onGameFilterChange.call(filter, team);
+                      },
+                    );
+                  },
+                ),
             ],
           ),
         ),
