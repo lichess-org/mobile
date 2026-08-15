@@ -321,6 +321,48 @@ void main() {
       expect(find.textContaining('Invalid FEN'), findsOneWidget);
     });
 
+    testWidgets('Sheet content is padded by the keyboard height', (tester) async {
+      final callback = OnChaptersCreatedCallback();
+
+      const keyboardHeight = 300.0;
+
+      // The sheet is rendered directly, rather than through `showModalBottomSheet`, so that the
+      // simulated keyboard inset reaches it: `TestSurface` wraps the whole app in a `MediaQuery`
+      // holding a fresh `MediaQueryData`, which zeroes out `tester.view.viewInsets`.
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: Builder(
+          builder: (context) => MediaQuery(
+            data: MediaQuery.of(
+              context,
+            ).copyWith(viewInsets: const EdgeInsets.only(bottom: keyboardHeight)),
+            child: CreateStudyChapterBottomSheet(
+              params: CreateChapterOfExistingStudy(const StudyId('test-id')),
+              chapterNumber: 1,
+              onChaptersCreated: callback.call,
+            ),
+          ),
+        ),
+        authUser: fakeAuthUser,
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      // The sheet grows upwards from the bottom of the screen, so padding its content by the
+      // keyboard height is what lifts the submit button clear of the keyboard.
+      final scrollView = tester.widget<SingleChildScrollView>(
+        find.descendant(
+          of: find.byType(CreateStudyChapterBottomSheet),
+          matching: find.byType(SingleChildScrollView),
+        ),
+      );
+      expect(
+        scrollView.padding!.resolve(TextDirection.ltr).bottom,
+        greaterThanOrEqualTo(keyboardHeight),
+      );
+    });
+
     testWidgets('Invalid PGN', (tester) async {
       final callback = OnChaptersCreatedCallback();
 

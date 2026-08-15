@@ -126,7 +126,12 @@ class _CreateStudyChapterBottomSheetState extends ConsumerState<CreateStudyChapt
   @override
   Widget build(BuildContext context) {
     return BottomSheetScrollableContainer(
-      padding: Styles.verticalBodyPadding,
+      // The sheet grows upwards from the bottom of the screen and does no keyboard avoidance of
+      // its own, so without this the on-screen keyboard covers the orientation row and the submit
+      // button while the chapter name is being edited.
+      padding: Styles.verticalBodyPadding.add(
+        EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
+      ),
       children: [
         Card.filled(
           margin: Styles.bodySectionPadding,
@@ -336,11 +341,15 @@ class _CreateStudyChapterBottomSheetState extends ConsumerState<CreateStudyChapt
 
   Future<void> _getClipboardData() async {
     final ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain);
-    if (data?.text == null) return;
     if (!mounted) return;
 
-    final text = data!.text!.trim();
-    if (text.isEmpty) return;
+    final text = data?.text?.trim() ?? '';
+    // The input fields are read-only and pasting is their only affordance, so failing silently
+    // here would be indistinguishable from a broken button.
+    if (text.isEmpty) {
+      showSnackBar(context, 'Nothing to paste: the clipboard is empty', type: SnackBarType.error);
+      return;
+    }
 
     _onTextChanged(text);
   }
