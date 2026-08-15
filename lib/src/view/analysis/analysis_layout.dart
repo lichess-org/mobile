@@ -28,7 +28,7 @@ enum AnalysisTab {
   explorer(Icons.explore),
   moves(LichessIcons.flow_cascade),
   summary(Icons.area_chart),
-  moveTimes(Icons.schedule),
+  moveTimes(Icons.punch_clock),
   conditionalPremoves(Icons.save);
 
   const AnalysisTab(this.icon);
@@ -437,9 +437,12 @@ class _AnalysisTabView extends StatelessWidget {
               controller: controller,
               tabs: tabs!
                   .map(
-                    (tab) => Tab(
-                      height: iconSize + 8.0,
-                      icon: Icon(tab.icon, size: iconSize, semanticLabel: tab.l10n(context.l10n)),
+                    (tab) => Tooltip(
+                      message: tab.l10n(context.l10n),
+                      child: Tab(
+                        height: iconSize + 8.0,
+                        icon: Icon(tab.icon, size: iconSize, semanticLabel: tab.l10n(context.l10n)),
+                      ),
                     ),
                   )
                   .toList(),
