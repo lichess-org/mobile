@@ -15,7 +15,6 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:material_ui/material_ui.dart';
 
 sealed class CreateStudyChapterParams {}
@@ -104,127 +103,137 @@ class _CreateStudyChapterBottomSheetState extends ConsumerState<CreateStudyChapt
     return BottomSheetScrollableContainer(
       padding: Styles.verticalBodyPadding,
       children: [
-        ListSection(
-          materialFilledCard: true,
-          children: [
-            ListTile(
-              title: Text(context.l10n.name),
-              subtitle: TextField(
-                controller: _nameController,
-                onChanged: (value) => setState(() => chapterName = value),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: SegmentedButton<_ChapterSource>(
-                segments: [
-                  ButtonSegment(value: _ChapterSource.empty, label: Text(context.l10n.studyEmpty)),
-                  const ButtonSegment(value: _ChapterSource.fen, label: Text('FEN')),
-                  const ButtonSegment(value: _ChapterSource.pgn, label: Text('PGN')),
-                ],
-                selected: {_source},
-                onSelectionChanged: (selection) {
-                  setState(() {
-                    _source = selection.first;
-                    errorText = null;
-                    switch (_source) {
-                      case _ChapterSource.empty:
-                        break;
-                      case _ChapterSource.fen || _ChapterSource.pgn:
-                        _onTextChanged('');
-                    }
-                  });
-                },
-              ),
-            ),
-            switch (_source) {
-              _ChapterSource.empty => const SizedBox.shrink(),
-              _ChapterSource.fen => SmallBoardPreview(
-                orientation: orientation,
-                fen: errorText == null ? _textController.text : kEmptyFEN,
-                description: TextField(
-                  maxLines: 5,
-                  decoration: InputDecoration(
-                    errorText: errorText,
-                    labelText: context.l10n.pasteTheFenStringHere,
-                    suffixIcon: IconButton(
-                      icon: const Icon(Icons.paste),
-                      onPressed: _getClipboardData,
-                      tooltip: 'Paste from clipboard', // TODO l10n
+        Card.filled(
+          margin: Styles.bodySectionPadding,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 8.0,
+              children: [
+                ListTile(
+                  title: Text(context.l10n.name),
+                  subtitle: TextField(
+                    controller: _nameController,
+                    onChanged: (value) => setState(() => chapterName = value),
+                  ),
+                ),
+                // [expandedInsets] makes the button fill the available width, so its size does not
+                // depend on which segment is selected: the selected segment carries an extra check
+                // icon, which would otherwise make the whole button resize on every switch.
+                SegmentedButton<_ChapterSource>(
+                  expandedInsets: const EdgeInsets.symmetric(horizontal: 20.0),
+                  segments: [
+                    ButtonSegment(
+                      value: _ChapterSource.empty,
+                      label: Text(context.l10n.studyEmpty),
+                    ),
+                    const ButtonSegment(value: _ChapterSource.fen, label: Text('FEN')),
+                    const ButtonSegment(value: _ChapterSource.pgn, label: Text('PGN')),
+                  ],
+                  selected: {_source},
+                  onSelectionChanged: (selection) {
+                    setState(() {
+                      _source = selection.first;
+                      errorText = null;
+                      switch (_source) {
+                        case _ChapterSource.empty:
+                          break;
+                        case _ChapterSource.fen || _ChapterSource.pgn:
+                          _onTextChanged('');
+                      }
+                    });
+                  },
+                ),
+                if (_source == _ChapterSource.fen)
+                  SmallBoardPreview(
+                    orientation: orientation,
+                    fen: errorText == null ? _textController.text : kEmptyFEN,
+                    description: TextField(
+                      maxLines: 5,
+                      decoration: InputDecoration(
+                        errorText: errorText,
+                        labelText: context.l10n.pasteTheFenStringHere,
+                        suffixIcon: IconButton(
+                          icon: const Icon(Icons.paste),
+                          onPressed: _getClipboardData,
+                          tooltip: 'Paste from clipboard', // TODO l10n
+                        ),
+                      ),
+                      controller: _textController,
+                      readOnly: true,
+                      onTap: () => _getClipboardData(),
                     ),
                   ),
-                  controller: _textController,
-                  readOnly: true,
-                  onTap: () => _getClipboardData(),
-                ),
-              ),
-              _ChapterSource.pgn => Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    SizedBox(
-                      height: 150,
-                      child: TextField(
-                        expands: true,
-                        maxLines: null,
-                        decoration: InputDecoration(
-                          hintText: context.l10n.pasteThePgnStringHere,
-                          errorText: errorText,
-                          suffixIcon: IconButton(
-                            icon: const Icon(Icons.paste),
-                            onPressed: _getClipboardData,
-                            tooltip: 'Paste from clipboard', // TODO l10n
+                if (_source == _ChapterSource.pgn)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      spacing: 8.0,
+                      children: [
+                        SizedBox(
+                          height: 150,
+                          child: TextField(
+                            expands: true,
+                            maxLines: null,
+                            decoration: InputDecoration(
+                              hintText: context.l10n.pasteThePgnStringHere,
+                              errorText: errorText,
+                              suffixIcon: IconButton(
+                                icon: const Icon(Icons.paste),
+                                onPressed: _getClipboardData,
+                                tooltip: 'Paste from clipboard', // TODO l10n
+                              ),
+                            ),
+                            readOnly: true,
+                            onTap: _getClipboardData,
+                            controller: _textController,
                           ),
                         ),
-                        readOnly: true,
-                        onTap: _getClipboardData,
-                        controller: _textController,
-                      ),
+                        OutlinedButton.icon(
+                          onPressed: _pickPgnFile,
+                          icon: const Icon(Icons.upload_file),
+                          label: Text(context.l10n.mobileOrImportPgnFile),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 8),
-                    OutlinedButton.icon(
-                      onPressed: _pickPgnFile,
-                      icon: const Icon(Icons.upload_file),
-                      label: Text(context.l10n.mobileOrImportPgnFile),
+                  ),
+                if (_source != _ChapterSource.pgn)
+                  ListTile(
+                    title: Text(context.l10n.variant),
+                    trailing: TextButton(
+                      onPressed: () {
+                        showChoicePicker(
+                          context,
+                          choices: Variant.values,
+                          selectedItem: variant,
+                          labelBuilder: (Variant variant) => Text(variant.label(context.l10n)),
+                          onSelectedItemChanged: (Variant variant) =>
+                              setState(() => this.variant = variant),
+                        );
+                      },
+                      child: Text(variant.label(context.l10n)),
                     ),
-                  ],
+                  ),
+                ListTile(
+                  title: Text(context.l10n.studyOrientation),
+                  trailing: TextButton(
+                    onPressed: () {
+                      showChoicePicker(
+                        context,
+                        choices: Side.values,
+                        selectedItem: orientation,
+                        labelBuilder: (Side side) => Text(_sideL10n(context, side)),
+                        onSelectedItemChanged: (Side side) => setState(() => orientation = side),
+                      );
+                    },
+                    child: Text(_sideL10n(context, orientation)),
+                  ),
                 ),
-              ),
-            },
-            if (_source != _ChapterSource.pgn)
-              ListTile(
-                title: Text(context.l10n.variant),
-                trailing: TextButton(
-                  onPressed: () {
-                    showChoicePicker(
-                      context,
-                      choices: Variant.values,
-                      selectedItem: variant,
-                      labelBuilder: (Variant variant) => Text(variant.label(context.l10n)),
-                      onSelectedItemChanged: (Variant variant) =>
-                          setState(() => this.variant = variant),
-                    );
-                  },
-                  child: Text(variant.label(context.l10n)),
-                ),
-              ),
-            ListTile(
-              title: Text(context.l10n.studyOrientation),
-              trailing: TextButton(
-                onPressed: () {
-                  showChoicePicker(
-                    context,
-                    choices: Side.values,
-                    selectedItem: orientation,
-                    labelBuilder: (Side side) => Text(_sideL10n(context, side)),
-                    onSelectedItemChanged: (Side side) => setState(() => orientation = side),
-                  );
-                },
-                child: Text(_sideL10n(context, orientation)),
-              ),
+              ],
             ),
-          ],
+          ),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
