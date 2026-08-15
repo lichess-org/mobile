@@ -18,6 +18,7 @@ import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_actions.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen_providers.dart';
@@ -29,6 +30,7 @@ import 'package:lichess_mobile/src/view/engine/engine_button.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/explorer/explorer_view.dart';
+
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -795,6 +797,8 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
 
   Future<void> _showMenu(BuildContext context, WidgetRef ref) {
     final ctrlProvider = broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId));
+    final state = ref.read(ctrlProvider).requireValue;
+    final evalPrefs = ref.read(engineEvaluationPreferencesProvider);
 
     return showAdaptiveActionSheet(
       context: context,
@@ -808,6 +812,25 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.flipBoard),
           onPressed: () => ref.read(ctrlProvider.notifier).toggleBoard(),
+        ),
+        if (state.isEngineAvailable(evalPrefs) && state.canShowThreat)
+          BottomSheetAction(
+            makeLabel: (context) => Text(
+              state.engineInThreatMode
+                  ? context.l10n.mobileStopShowingThreat
+                  : context.l10n.showThreat,
+            ),
+            onPressed: () => ref.read(ctrlProvider.notifier).toggleEngineThreatMode(),
+          ),
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.boardEditor),
+          onPressed: () =>
+              openBoardEditor(context, state.variant, state.currentPosition.fen, state.pov),
+        ),
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.continueFromHere),
+          onPressed: () =>
+              showContinueFromHereMenu(context, state.variant, state.currentPosition.fen),
         ),
       ],
     );
