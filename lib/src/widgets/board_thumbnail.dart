@@ -113,7 +113,7 @@ class _BoardThumbnailState extends ConsumerState<BoardThumbnail> {
                   child: (widget.whiteWinningChances != null)
                       ? _BoardThumbnailEvalGauge(
                           height: widget.size,
-                          whiteWinnigChances: widget.whiteWinningChances!,
+                          whiteWinningChances: widget.whiteWinningChances!,
                           orientation: widget.orientation,
                         )
                       : Container(
@@ -164,18 +164,18 @@ const boardThumbnailEvalGaugeAspectRatio = 1 / 20;
 
 class _BoardThumbnailEvalGauge extends StatelessWidget {
   final double height;
-  final double whiteWinnigChances;
+  final double whiteWinningChances;
   final Side orientation;
 
   const _BoardThumbnailEvalGauge({
     required this.height,
-    required this.whiteWinnigChances,
+    required this.whiteWinningChances,
     required this.orientation,
   });
 
   @override
   Widget build(BuildContext context) {
-    final whiteBarHeight = height * (whiteWinnigChances + 1) / 2;
+    final whiteBarHeight = height * (whiteWinningChances + 1) / 2;
 
     final children = [
       Container(height: height - whiteBarHeight, color: EngineGauge.backgroundColor(context)),
