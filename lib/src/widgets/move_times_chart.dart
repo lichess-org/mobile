@@ -1,6 +1,9 @@
 import 'dart:math' as math;
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+// Only these two: intl also exports a `TextDirection` that would shadow the one used when
+// painting labels.
+import 'package:intl/intl.dart' show Intl, NumberFormat;
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
@@ -72,84 +75,103 @@ class MoveTimesChart extends StatelessWidget {
     final isLight = Theme.of(context).brightness == .light;
     final currentIndex = _currentIndex;
     final total = params.moveTimes.fold(Duration.zero, (sum, time) => sum + time);
+    // The labels sit on top of the chart, so they are faded enough for the bars and lines to stay
+    // readable underneath them.
+    final overlayStyle = labelStyle?.copyWith(
+      color: labelStyle.color?.withValues(alpha: 0.6) ?? colorScheme.onSurface,
+    );
 
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            AspectRatio(
-              aspectRatio: 2.5,
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  void jumpToOffset(Offset offset) {
-                    final index = (offset.dx / constraints.maxWidth * params.moveTimes.length)
-                        .floor()
-                        .clamp(0, params.moveTimes.length - 1);
-                    params.onJumpToNode(index);
-                  }
+        child: AspectRatio(
+          aspectRatio: 2.5,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              void jumpToOffset(Offset offset) {
+                final index = (offset.dx / constraints.maxWidth * params.moveTimes.length)
+                    .floor()
+                    .clamp(0, params.moveTimes.length - 1);
+                params.onJumpToNode(index);
+              }
 
-                  return GestureDetector(
-                    behavior: .opaque,
-                    onTapDown: (details) => jumpToOffset(details.localPosition),
-                    onHorizontalDragUpdate: (details) => jumpToOffset(details.localPosition),
-                    child: CustomPaint(
-                      size: Size.infinite,
-                      painter: _MoveTimesPainter(
-                        params: params,
-                        currentIndex: currentIndex,
-                        whiteColor: isLight ? surface : outline,
-                        blackColor: isLight ? outline : surface,
-                        axisColor: colorScheme.outlineVariant,
-                        lineColor: colorScheme.secondary,
-                        // The web client draws the remaining clocks in blue; the app's own
-                        // blue keeps that reading while still belonging here, one shade either
-                        // side of it so the line stays legible over the grey bars in both themes.
-                        clockColor: isLight
-                            ? LichessColors.primary.shade600
-                            : LichessColors.primary.shade300,
-                        divisionColor: const Color(0xFF707070),
-                        divisionLabelColor:
-                            labelStyle?.color?.withValues(alpha: 0.3) ?? colorScheme.outline,
-                        divisionLabels: (
-                          opening: context.l10n.opening,
-                          middlegame: context.l10n.middlegame,
-                          endgame: context.l10n.endgame,
+              return Stack(
+                children: [
+                  Positioned.fill(
+                    child: GestureDetector(
+                      behavior: .opaque,
+                      onTapDown: (details) => jumpToOffset(details.localPosition),
+                      onHorizontalDragUpdate: (details) => jumpToOffset(details.localPosition),
+                      child: CustomPaint(
+                        size: Size.infinite,
+                        painter: _MoveTimesPainter(
+                          params: params,
+                          currentIndex: currentIndex,
+                          whiteColor: isLight ? surface : outline,
+                          blackColor: isLight ? outline : surface,
+                          axisColor: colorScheme.outlineVariant,
+                          lineColor: colorScheme.secondary,
+                          // The web client draws the remaining clocks in blue; the app's own
+                          // blue keeps that reading while still belonging here, one shade either
+                          // side of it so the line stays legible over the grey bars in both
+                          // themes.
+                          clockColor: isLight
+                              ? LichessColors.primary.shade600
+                              : LichessColors.primary.shade300,
+                          divisionColor: const Color(0xFF707070),
+                          divisionLabelColor:
+                              labelStyle?.color?.withValues(alpha: 0.3) ?? colorScheme.outline,
+                          divisionLabels: (
+                            opening: context.l10n.opening,
+                            middlegame: context.l10n.middlegame,
+                            endgame: context.l10n.endgame,
+                          ),
                         ),
                       ),
                     ),
-                  );
-                },
-              ),
-            ),
-            // The time of the selected move over the total, in the corner. The line is kept even
-            // with no move selected, so the chart does not jump as the board moves.
-            Padding(
-              padding: const EdgeInsets.only(top: 4.0),
-              child: SizedBox(
-                height: 18.0,
-                child: currentIndex != null
-                    ? Text('Move time: ${_moveTimeLabel(context, currentIndex)}', style: labelStyle)
-                    : null,
-              ),
-            ),
-            Text('${context.l10n.duration}: ${total.toHoursMinutesSeconds()}', style: labelStyle),
-          ],
+                  ),
+                  // The time spent on the selected move, in the top corner.
+                  if (currentIndex != null)
+                    Positioned(
+                      top: 0,
+                      right: 0,
+                      child: IgnorePointer(
+                        child: Text(_moveTimeLabel(context, currentIndex), style: overlayStyle),
+                      ),
+                    ),
+                  // The total time of the game, in the opposite corner.
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: IgnorePointer(
+                      child: Text(
+                        '${context.l10n.duration}: ${total.toHoursMinutesSeconds()}',
+                        style: overlayStyle,
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
         ),
       ),
     );
   }
 
-  /// The time spent on the move at [index], as shown next to the chart.
+  /// The time spent on the move at [index], as shown over the chart.
   String _moveTimeLabel(BuildContext context, int index) {
-    final moveTime = params.moveTimes[index];
-    // Below two seconds a tenth of a second is meaningful, above it is noise. This is the same
-    // precision rule the web client uses. `nbSeconds` only takes whole seconds, so shorter times
-    // fall back to an untranslated 'x.ys'.
-    return moveTime.inMilliseconds >= 2000
-        ? context.l10n.nbSeconds((moveTime.inMilliseconds / 1000).round())
-        : '${(moveTime.inMilliseconds / 1000).toStringAsFixed(1)}s';
+    final seconds = params.moveTimes[index].inMilliseconds / 1000;
+    if (seconds == 1) return context.l10n.nbSeconds(1);
+    // Move times come in centiseconds, so two decimals are exact. The decimal separator and any
+    // grouping follow the locale, and trailing zeros are dropped, so a whole move time reads as
+    // '4 seconds' rather than '4.00 seconds'.
+    final formatted = (NumberFormat.decimalPattern(
+      Intl.getCurrentLocale(),
+    )..maximumFractionDigits = 2).format(seconds);
+    // `nbSeconds` only takes a whole count, so the plural form is taken from a sample count and
+    // the number swapped for the decimal one.
+    return context.l10n.nbSeconds(2).replaceFirst('2', formatted);
   }
 }
 

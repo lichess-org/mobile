@@ -8,9 +8,9 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/widgets/move_times_chart.dart';
 
-import '../../network/fake_http_client_factory.dart';
-import '../../test_helpers.dart';
-import '../../test_provider_scope.dart';
+import '../network/fake_http_client_factory.dart';
+import '../test_helpers.dart';
+import '../test_provider_scope.dart';
 
 const _gameId = GameId('abcdefgh');
 
@@ -82,7 +82,7 @@ void main() {
 
       expect(find.byType(MoveTimesChart), findsOneWidget);
 
-      // Total duration of the game, in the corner under the chart.
+      // Total duration of the game, in the bottom corner of the chart.
       expect(find.textContaining('Duration:'), findsOneWidget);
     });
 
@@ -108,8 +108,27 @@ void main() {
 
       expect(tester.widget<MoveTimesChart>(find.byType(MoveTimesChart)).params.currentNodePly, 4);
       // Black's 4th ply: 12000 centis left after their previous move, 11700 after this one, plus
-      // the 1s increment.
-      expect(find.text('Move time: 4 seconds'), findsOneWidget);
+      // the 1s increment. A whole move time is shown without decimals.
+      expect(find.text('4 seconds'), findsOneWidget);
+    });
+
+    testWidgets('shows the decimals of a move time that is not whole seconds', (tester) async {
+      // Same as [_clocks], but black's 4th ply leaves 11712 centis: 12000 - 11712, plus the 1s
+      // increment, is 3.88 seconds.
+      await tester.pumpWidget(
+        await makeTestApp(
+          tester,
+          clocks: const [12000, 12000, 11800, 11712, 11500, 11000, 11300, 10600],
+        ),
+      );
+      await tester.pumpAndSettle();
+      await openMoveTimesTab(tester);
+
+      final plot = chartPlotRect(tester);
+      await tester.tapAt(Offset(plot.left + plot.width * 3.5 / _clocks.length, plot.center.dy));
+      await tester.pumpAndSettle();
+
+      expect(find.text('3.88 seconds'), findsOneWidget);
     });
   });
 }
