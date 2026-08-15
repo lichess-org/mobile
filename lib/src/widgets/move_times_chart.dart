@@ -313,14 +313,26 @@ class _MoveTimesPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant _MoveTimesPainter oldDelegate) =>
-      oldDelegate.params != params ||
-      oldDelegate.currentIndex != currentIndex ||
-      oldDelegate.whiteColor != whiteColor ||
-      oldDelegate.blackColor != blackColor ||
-      oldDelegate.axisColor != axisColor ||
-      oldDelegate.lineColor != lineColor ||
-      oldDelegate.clockColor != clockColor ||
-      oldDelegate.divisionColor != divisionColor ||
-      oldDelegate.divisionLabelColor != divisionLabelColor;
+  bool shouldRepaint(covariant _MoveTimesPainter oldDelegate) {
+    // Compare cheap scalar fields first to avoid deep equality on IList fields inside `params`.
+    if (oldDelegate.currentIndex != currentIndex ||
+        oldDelegate.whiteColor != whiteColor ||
+        oldDelegate.blackColor != blackColor ||
+        oldDelegate.axisColor != axisColor ||
+        oldDelegate.lineColor != lineColor ||
+        oldDelegate.clockColor != clockColor ||
+        oldDelegate.divisionColor != divisionColor ||
+        oldDelegate.divisionLabelColor != divisionLabelColor ||
+        oldDelegate.params.rootPly != params.rootPly ||
+        oldDelegate.params.currentNodePly != params.currentNodePly ||
+        oldDelegate.params.isOnMainline != params.isOnMainline ||
+        oldDelegate.params.division != params.division) {
+      return true;
+    }
+
+    // Only fall back to list/function equality when all scalar inputs are unchanged.
+    return oldDelegate.params.moveTimes != params.moveTimes ||
+        oldDelegate.params.clocks != params.clocks ||
+        oldDelegate.params.onJumpToNode != params.onJumpToNode;
+  }
 }
