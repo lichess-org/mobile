@@ -489,7 +489,13 @@ class _StudyChaptersMenuState extends ConsumerState<_StudyChaptersMenu> {
                     params: CreateChapterOfExistingStudy(state.study.id),
                     chapterNumber: state.study.chapters.length + 1,
                     onChaptersCreated: (_, chapters) {
-                      studyNotifier.goToChapter(chapters.first);
+                      // The server always answers with the created chapters, but the response
+                      // mapper tolerates an empty list, and this runs after the sheet was popped:
+                      // an exception here would surface as an unhandled error.
+                      final chapterId = chapters.firstOrNull;
+                      if (chapterId != null) {
+                        studyNotifier.goToChapter(chapterId);
+                      }
                     },
                   ),
                 );

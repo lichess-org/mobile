@@ -8,6 +8,7 @@ import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/study/create_study_chapter_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../model/auth/fake_auth_storage.dart';
@@ -280,6 +281,138 @@ void main() {
       await tester.tap(find.byIcon(Icons.paste));
       await tester.pump();
       expect(find.textContaining('Invalid FEN'), findsOneWidget);
+    });
+
+    testWidgets('FEN is re-validated when the variant changes', (tester) async {
+      final callback = OnChaptersCreatedCallback();
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: TestBottomSheetOpener(
+          builder: (_) => CreateStudyChapterBottomSheet(
+            params: CreateChapterOfExistingStudy(const StudyId('test-id')),
+            chapterNumber: 1,
+            onChaptersCreated: callback.call,
+          ),
+        ),
+        authUser: fakeAuthUser,
+      );
+
+      await tester.pumpWidget(app);
+
+      await TestBottomSheetOpener.openBottomSheet(tester);
+
+      await tester.tap(find.text('FEN'));
+      await tester.pumpAndSettle(); // wait for content to switch to FEN input
+
+      // a standard position, valid under the default Standard variant
+      mockClipboard('r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3');
+      await tester.tap(find.byIcon(Icons.paste));
+      await tester.pump();
+      expect(find.textContaining('Invalid FEN'), findsNothing);
+
+      // Horde rejects it: it expects a pawn horde in place of White's pieces, so a setup with two
+      // kings fails `Horde.fromSetup`
+      await tester.tap(find.text('Standard'));
+      await tester.pumpAndSettle(); // wait for the dialog to open
+      await tester.tap(find.text('Horde'));
+      await tester.pumpAndSettle(); // wait for the dialog to close
+
+      expect(find.textContaining('Invalid FEN'), findsOneWidget);
+    });
+
+    testWidgets('Invalid PGN', (tester) async {
+      final callback = OnChaptersCreatedCallback();
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: TestBottomSheetOpener(
+          builder: (_) => CreateStudyChapterBottomSheet(
+            params: CreateChapterOfExistingStudy(const StudyId('test-id')),
+            chapterNumber: 1,
+            onChaptersCreated: callback.call,
+          ),
+        ),
+        authUser: fakeAuthUser,
+      );
+
+      await tester.pumpWidget(app);
+
+      await TestBottomSheetOpener.openBottomSheet(tester);
+
+      await tester.tap(find.text('PGN'));
+      await tester.pumpAndSettle(); // wait for content to switch to PGN input
+
+      // `PgnGame.parseMultiGameLazy` parses arbitrary text into a single game with no moves, so
+      // this only shows an error if the moves are actually looked at.
+      mockClipboard('this is not a pgn at all');
+      await tester.tap(find.byIcon(Icons.paste));
+      await tester.pump();
+      expect(find.textContaining('Invalid PGN'), findsOneWidget);
+
+      // a bare FEN header and no moves is a legitimate chapter: a starting position
+      mockClipboard('[FEN "8/8/8/8/8/8/8/K6k w - - 0 1"]\n\n*');
+      await tester.tap(find.byIcon(Icons.paste));
+      await tester.pump();
+      expect(find.textContaining('Invalid PGN'), findsNothing);
+    });
+
+    testWidgets('Chapter creation failure keeps the sheet open and shows an error', (tester) async {
+      final callback = OnChaptersCreatedCallback();
+
+      var requestCount = 0;
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: TestBottomSheetOpener(
+          builder: (_) => CreateStudyChapterBottomSheet(
+            params: CreateChapterOfExistingStudy(const StudyId('test-id')),
+            chapterNumber: 1,
+            onChaptersCreated: callback.call,
+          ),
+        ),
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+            (ref) => FakeHttpClientFactory(
+              () => MockClient((request) {
+                if (request.url.path == '/api/study/test-id/import-pgn' &&
+                    request.method == 'POST') {
+                  requestCount++;
+                  // delayed so that the in-flight state lasts long enough to be rendered
+                  return Future.delayed(
+                    const Duration(milliseconds: 50),
+                    () => mockResponse('', 400),
+                  );
+                }
+                return mockResponse('', 404);
+              }),
+            ),
+          ),
+        },
+        authUser: fakeAuthUser,
+      );
+
+      await tester.pumpWidget(app);
+
+      await TestBottomSheetOpener.openBottomSheet(tester);
+
+      await tester.tap(find.text('Create chapter'));
+      await tester.pump(); // start the request, button goes into its submitting state
+
+      // a second tap while the request is in flight must not send another one: the button is
+      // disabled and shows a spinner in place of its label
+      expect(find.byType(ButtonLoadingIndicator), findsOneWidget);
+      await tester.tap(find.byType(ButtonLoadingIndicator));
+
+      await tester.pump(const Duration(milliseconds: 100)); // let the request fail
+      await tester.pumpAndSettle();
+
+      expect(requestCount, 1);
+
+      // the sheet stays open so the user can retry, and the failure is reported
+      expect(find.byType(CreateStudyChapterBottomSheet), findsOneWidget);
+      expect(find.textContaining('Could not create chapter'), findsOneWidget);
+      verifyZeroInteractions(callback);
     });
   });
 }

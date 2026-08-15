@@ -53,6 +53,9 @@ class _CreateStudyChapterBottomSheetState extends ConsumerState<CreateStudyChapt
   Variant variant = Variant.standard;
   String? errorText;
 
+  /// Whether a chapter creation request is in flight.
+  bool _isSubmitting = false;
+
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -73,30 +76,52 @@ class _CreateStudyChapterBottomSheetState extends ConsumerState<CreateStudyChapt
 
   void _onTextChanged(String value) {
     setState(() {
-      errorText = null;
       _textController.text = value;
-      if (value.trim().isEmpty) {
-        return;
-      }
-      switch (_source) {
-        case _ChapterSource.empty:
-          break;
-        case _ChapterSource.fen:
-          try {
-            Position.setupPosition(variant.rule, Setup.parseFen(value.trim()));
-          } catch (_) {
-            errorText = context.l10n.invalidFen;
-          }
-        case _ChapterSource.pgn:
-          try {
-            final games = PgnGame.parseMultiGameLazy(value);
-            errorText = games.isEmpty ? context.l10n.invalidPgn : null;
-          } catch (_) {
-            errorText = context.l10n.invalidPgn;
-          }
-      }
+      _validateInput();
     });
   }
+
+  /// Recomputes [errorText] from the current input, source and variant.
+  void _validateInput() {
+    errorText = null;
+
+    final value = _textController.text.trim();
+    if (value.isEmpty) {
+      return;
+    }
+
+    switch (_source) {
+      case _ChapterSource.empty:
+        break;
+      case _ChapterSource.fen:
+        try {
+          Position.setupPosition(variant.rule, Setup.parseFen(value));
+        } catch (_) {
+          errorText = context.l10n.invalidFen;
+        }
+      case _ChapterSource.pgn:
+        try {
+          errorText = _hasAnyPlayableGame(PgnGame.parseMultiGameLazy(value))
+              ? null
+              : context.l10n.invalidPgn;
+        } catch (_) {
+          errorText = context.l10n.invalidPgn;
+        }
+    }
+  }
+
+  /// Whether at least one of the [games] holds something we can make a chapter out of.
+  ///
+  /// [PgnGame.parseMultiGameLazy] never rejects input: arbitrary text parses into a single game
+  /// with default headers and an empty move tree, so its emptiness cannot be used to tell a PGN
+  /// from prose. A game is only meaningful here if it has at least one move, or a FEN header
+  /// setting up a starting position.
+  ///
+  /// Games are parsed lazily and [Iterable.any] short-circuits, so a well-formed PGN — however
+  /// many games it holds — costs a single full parse.
+  bool _hasAnyPlayableGame(Iterable<PgnLazyGame> games) => games.any(
+    (game) => game.headers.containsKey('FEN') || game.toPgnGame().moves.children.isNotEmpty,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -119,8 +144,7 @@ class _CreateStudyChapterBottomSheetState extends ConsumerState<CreateStudyChapt
                   ),
                 ),
                 // [expandedInsets] makes the button fill the available width, so its size does not
-                // depend on which segment is selected: the selected segment carries an extra check
-                // icon, which would otherwise make the whole button resize on every switch.
+                // depend on which segment is selected
                 SegmentedButton<_ChapterSource>(
                   expandedInsets: const EdgeInsets.symmetric(horizontal: 20.0),
                   segments: [
@@ -209,8 +233,10 @@ class _CreateStudyChapterBottomSheetState extends ConsumerState<CreateStudyChapt
                           choices: Variant.values,
                           selectedItem: variant,
                           labelBuilder: (Variant variant) => Text(variant.label(context.l10n)),
-                          onSelectedItemChanged: (Variant variant) =>
-                              setState(() => this.variant = variant),
+                          onSelectedItemChanged: (Variant variant) => setState(() {
+                            this.variant = variant;
+                            _validateInput();
+                          }),
                         );
                       },
                       child: Text(variant.label(context.l10n)),
@@ -257,7 +283,9 @@ class _CreateStudyChapterBottomSheetState extends ConsumerState<CreateStudyChapt
                     await _createChapter(pgn);
                   }
                 : null,
-            child: Text(context.l10n.studyCreateChapter, style: Styles.bold),
+            child: _isSubmitting
+                ? const ButtonLoadingIndicator()
+                : Text(context.l10n.studyCreateChapter, style: Styles.bold),
           ),
         ),
       ],
@@ -271,20 +299,31 @@ class _CreateStudyChapterBottomSheetState extends ConsumerState<CreateStudyChapt
       orientation: orientation,
       variant: _source == _ChapterSource.pgn ? null : variant,
     );
-    final (studyId, chapterIds) = switch (widget.params) {
-      CreateChapterOfExistingStudy(:final studyId) => (
-        studyId,
-        await ref.read(studyRepositoryProvider).createChapter(studyId, chapterPayload),
-      ),
-    };
 
-    if (!mounted) return;
-    Navigator.of(context).pop();
+    setState(() => _isSubmitting = true);
 
-    widget.onChaptersCreated?.call(studyId, chapterIds);
+    try {
+      final (studyId, chapterIds) = switch (widget.params) {
+        CreateChapterOfExistingStudy(:final studyId) => (
+          studyId,
+          await ref.read(studyRepositoryProvider).createChapter(studyId, chapterPayload),
+        ),
+      };
+
+      if (!mounted) return;
+      Navigator.of(context).pop();
+
+      widget.onChaptersCreated?.call(studyId, chapterIds);
+    } catch (e) {
+      if (!mounted) return;
+      // Keep the sheet open so the user can amend the input and retry.
+      setState(() => _isSubmitting = false);
+      showSnackBar(context, 'Could not create chapter: $e', type: SnackBarType.error);
+    }
   }
 
   bool _canSubmit() {
+    if (_isSubmitting) return false;
     if (chapterName.trim().isEmpty) return false;
 
     switch (_source) {
