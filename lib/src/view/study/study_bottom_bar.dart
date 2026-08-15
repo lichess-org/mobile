@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/view/analysis/analysis_actions.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/chat/chat_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_button.dart';
+import 'package:lichess_mobile/src/view/study/create_study_chapter_bottom_sheet.dart';
 import 'package:lichess_mobile/src/view/study/study_settings.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
@@ -470,6 +471,38 @@ class _StudyChaptersMenuState extends ConsumerState<_StudyChaptersMenu> {
               Navigator.of(context).pop();
             },
             selected: chapter.id == state.currentChapter.id,
+          ),
+        if (state.canIContribute)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: FilledButton.tonalIcon(
+              onPressed: () {
+                final studyNotifier = ref.read(studyControllerProvider(widget.options).notifier);
+                Navigator.of(context).pop();
+                if (!context.mounted) return;
+
+                showModalBottomSheet<void>(
+                  context: context,
+                  isScrollControlled: true,
+                  useRootNavigator: true,
+                  builder: (context) => CreateStudyChapterBottomSheet(
+                    params: CreateChapterOfExistingStudy(state.study.id),
+                    chapterNumber: state.study.chapters.length + 1,
+                    onChaptersCreated: (_, chapters) {
+                      // The server always answers with the created chapters, but the response
+                      // mapper tolerates an empty list, and this runs after the sheet was popped:
+                      // an exception here would surface as an unhandled error.
+                      final chapterId = chapters.firstOrNull;
+                      if (chapterId != null) {
+                        studyNotifier.goToChapter(chapterId);
+                      }
+                    },
+                  ),
+                );
+              },
+              label: Text(context.l10n.studyNewChapter),
+              icon: const Icon(Icons.add),
+            ),
           ),
       ],
     );
