@@ -110,6 +110,8 @@ class OverTheBoardGameController extends Notifier<OverTheBoardGameState> {
       }
     } else if (state.currentPosition.isStalemate) {
       state = state.copyWith(game: state.game.copyWith(status: GameStatus.stalemate));
+    } else if (state.currentPosition.isInsufficientMaterial) {
+      state = state.copyWith(game: state.game.copyWith(status: GameStatus.draw));
     }
 
     _moveFeedback(sanMove);
