@@ -627,7 +627,7 @@ class _BroadcastSettingsBottomSheetState extends ConsumerState<_BroadcastSetting
                 },
                 onSelected: (value, selected) {
                   setState(() => filter = value);
-                  widget.onGameFilterChange.call(value, widget.selectedTeam);
+                  widget.onGameFilterChange.call(value, selectedTeam);
                 },
               ),
               if (widget.teams != null)
