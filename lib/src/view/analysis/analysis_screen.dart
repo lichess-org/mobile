@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_actions.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_settings_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_share_screen.dart';
@@ -23,15 +24,12 @@ import 'package:lichess_mobile/src/view/analysis/game_analysis_board.dart';
 import 'package:lichess_mobile/src/view/analysis/retro_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/server_analysis.dart';
 import 'package:lichess_mobile/src/view/analysis/tree_view.dart';
-import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_button.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/explorer/explorer_view.dart';
 import 'package:lichess_mobile/src/view/game/exported_game_title.dart';
 import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
-import 'package:lichess_mobile/src/view/offline_computer/offline_computer_game_screen.dart';
-import 'package:lichess_mobile/src/view/over_the_board/over_the_board_screen.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
@@ -591,50 +589,22 @@ class _BottomBar extends ConsumerWidget {
         if (analysisState.isComputerAnalysisAllowed)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.boardEditor),
-            onPressed: () {
-              final boardFen = analysisState.currentPosition.fen;
-              Navigator.of(context).push(
-                BoardEditorScreen.buildRoute((
-                  initialVariant: analysisState.variant,
-                  initialFen: boardFen,
-                  initialOrientation: null,
-                )),
-              );
-            },
+            onPressed: () => openBoardEditor(
+              context,
+              analysisState.variant,
+              analysisState.currentPosition.fen,
+              analysisState.pov,
+            ),
           ),
         if (analysisState.isComputerAnalysisAllowed)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.continueFromHere),
-            onPressed: () => _showContinueFromHereMenu(context, ref),
-          ),
-      ],
-    );
-  }
-
-  Future<void> _showContinueFromHereMenu(BuildContext context, WidgetRef ref) {
-    final analysisState = ref.read(analysisControllerProvider(options)).requireValue;
-    final boardFen = analysisState.currentPosition.fen;
-    return showAdaptiveActionSheet(
-      context: context,
-      actions: [
-        BottomSheetAction(
-          makeLabel: (context) => Text(context.l10n.playAgainstComputer),
-          onPressed: () => Navigator.of(context).push(
-            OfflineComputerGameScreen.buildRoute(
-              initialVariant: analysisState.variant,
-              initialFen: boardFen,
+            onPressed: () => showContinueFromHereMenu(
+              context,
+              analysisState.variant,
+              analysisState.currentPosition.fen,
             ),
           ),
-        ),
-        BottomSheetAction(
-          makeLabel: (context) => Text(context.l10n.mobileOverTheBoard),
-          onPressed: () => Navigator.of(context).push(
-            OverTheBoardScreen.buildRoute(
-              initialVariant: analysisState.variant,
-              initialFen: boardFen,
-            ),
-          ),
-        ),
       ],
     );
   }
