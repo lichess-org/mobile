@@ -1,5 +1,6 @@
+import 'dart:async';
+
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/gif_export.dart';
@@ -8,6 +9,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
+import 'package:material_ui/material_ui.dart';
 
 class GifExport extends ConsumerStatefulWidget {
   const GifExport({super.key, required this.gameId, required this.orientation});
@@ -30,12 +32,35 @@ class _GifExportState extends ConsumerState<GifExport> {
   bool showPlayerRatings = true;
   bool moveAnnotations = false;
   bool chessClock = false;
-  bool loading = false;
+  String? loadingMessage;
+  final List<Timer> _timers = [];
+
+  void _addMessageTimer(Duration delay, String message) {
+    _timers.add(
+      Timer(delay, () {
+        if (mounted) {
+          setState(() {
+            loadingMessage = message;
+          });
+        }
+      }),
+    );
+  }
+
+  void _clearTimers() {
+    for (final timer in _timers) {
+      timer.cancel();
+    }
+    _timers.clear();
+  }
 
   Future<void> _export() async {
     setState(() {
-      loading = true;
+      loadingMessage = 'Generating GIF...';
     });
+    _addMessageTimer(const Duration(seconds: 10), 'Long games take a bit more time...');
+    _addMessageTimer(const Duration(seconds: 30), 'Almost there! Finalizing the GIF...');
+
     try {
       await shareGameGif(
         context,
@@ -56,15 +81,22 @@ class _GifExportState extends ConsumerState<GifExport> {
         ).showSnackBar(SnackBar(content: Text('Failed to export GIF: $e')));
       }
     } finally {
+      _clearTimers();
       if (mounted) {
         setState(() {
-          loading = false;
+          loadingMessage = null;
         });
       }
     }
     if (mounted) {
       Navigator.pop(context);
     }
+  }
+
+  @override
+  void dispose() {
+    _clearTimers();
+    super.dispose();
   }
 
   @override
@@ -116,15 +148,29 @@ class _GifExportState extends ConsumerState<GifExport> {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: FilledButton(
-            onPressed: loading ? null : _export,
-            child: loading
-                ? const SizedBox(
-                    height: 20,
-                    width: 20,
-                    child: CircularProgressIndicator.adaptive(strokeWidth: 3),
-                  )
-                : Text(context.l10n.next, textAlign: TextAlign.center),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              FilledButton(
+                onPressed: loadingMessage != null ? null : _export,
+                child: loadingMessage != null
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator.adaptive(strokeWidth: 3),
+                      )
+                    : Text(context.l10n.next, textAlign: TextAlign.center),
+              ),
+              if (loadingMessage != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Text(
+                    loadingMessage!,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ),
+            ],
           ),
         ),
       ],

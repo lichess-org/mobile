@@ -1,6 +1,5 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
@@ -18,6 +17,7 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_team_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_team_standings_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 const _kScoreContainerWidth = 75.0;

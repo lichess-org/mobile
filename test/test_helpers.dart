@@ -1,11 +1,10 @@
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
+import 'package:material_ui/material_ui.dart';
 
 const double _kTestScreenWidth = 390.0;
 const double _kTestScreenHeight = 844.0;
@@ -186,3 +185,13 @@ void mockClipboard(String text) {
     },
   );
 }
+
+/// Finds widgets by their tooltip message.
+///
+/// [CommonFinders.byTooltip] cannot be used, because it only matches the [Tooltip] widget of the
+/// Flutter material library, whereas the app renders the one of the `material_ui` package.
+Finder findByTooltip(String message, {bool skipOffstage = true}) => find.byWidgetPredicate(
+  (widget) => widget is Tooltip && widget.message == message,
+  description: 'tooltip "$message"',
+  skipOffstage: skipOffstage,
+);

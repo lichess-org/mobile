@@ -1,6 +1,6 @@
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_player.dart';
@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_actions.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_settings_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_share_screen.dart';
@@ -24,15 +25,12 @@ import 'package:lichess_mobile/src/view/analysis/game_analysis_board.dart';
 import 'package:lichess_mobile/src/view/analysis/retro_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/server_analysis.dart';
 import 'package:lichess_mobile/src/view/analysis/tree_view.dart';
-import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_button.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/explorer/explorer_view.dart';
 import 'package:lichess_mobile/src/view/game/exported_game_title.dart';
 import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
-import 'package:lichess_mobile/src/view/offline_computer/offline_computer_game_screen.dart';
-import 'package:lichess_mobile/src/view/over_the_board/over_the_board_screen.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
@@ -40,10 +38,12 @@ import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/move_times_chart.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 import 'package:logging/logging.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:share_plus/share_plus.dart';
 
 extension _AnalysisGameResultColor on AnalysisGameResult {
@@ -82,33 +82,7 @@ class _AnalysisScreen extends ConsumerStatefulWidget {
   ConsumerState<_AnalysisScreen> createState() => _AnalysisScreenState();
 }
 
-class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
-    with SingleTickerProviderStateMixin {
-  late final List<AnalysisTab> tabs;
-  late final TabController _tabController;
-
-  @override
-  void initState() {
-    super.initState();
-
-    tabs = [
-      AnalysisTab.explorer,
-      AnalysisTab.moves,
-      if (widget.options case ArchivedGame())
-        AnalysisTab.summary
-      else if (widget.options case ActiveCorrespondenceGame())
-        AnalysisTab.conditionalPremoves,
-    ];
-
-    _tabController = TabController(vsync: this, initialIndex: 1, length: tabs.length);
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
-
+class _AnalysisScreenState extends ConsumerState<_AnalysisScreen> {
   @override
   Widget build(BuildContext context) {
     final ctrlProvider = analysisControllerProvider(widget.options);
@@ -132,7 +106,11 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
               title: appBarTitle,
               actions: [_AnalysisMenu(options: widget.options)],
             ),
-            body: _Body(options: widget.options, controller: _tabController, tabs: tabs),
+            body: _TabbedBody(
+              options: widget.options,
+              // Move times can only be shown for games played with a clock.
+              showMoveTimes: value.archivedGame?.clocks?.isNotEmpty ?? false,
+            ),
           ),
         );
       case AsyncError(:final error, :final stackTrace):
@@ -145,6 +123,57 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
           body: const Center(child: CircularProgressIndicator.adaptive()),
         );
     }
+  }
+}
+
+/// Owns the tab list and its controller.
+///
+/// Which tabs are available depends on the loaded game, so the list can only be built once the
+/// analysis state is available.
+class _TabbedBody extends StatefulWidget {
+  const _TabbedBody({required this.options, required this.showMoveTimes});
+
+  final AnalysisOptions options;
+  final bool showMoveTimes;
+
+  @override
+  State<_TabbedBody> createState() => _TabbedBodyState();
+}
+
+class _TabbedBodyState extends State<_TabbedBody> with SingleTickerProviderStateMixin {
+  late final List<AnalysisTab> tabs;
+  late final TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    tabs = [
+      AnalysisTab.explorer,
+      AnalysisTab.moves,
+      if (widget.options case ArchivedGame()) ...[
+        AnalysisTab.summary,
+        if (widget.showMoveTimes) AnalysisTab.moveTimes,
+      ] else if (widget.options case ActiveCorrespondenceGame())
+        AnalysisTab.conditionalPremoves,
+    ];
+
+    _tabController = TabController(
+      vsync: this,
+      initialIndex: tabs.indexOf(AnalysisTab.moves),
+      length: tabs.length,
+    );
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _Body(options: widget.options, controller: _tabController, tabs: tabs);
   }
 }
 
@@ -299,9 +328,26 @@ class _Body extends ConsumerWidget {
                     )
                   : null,
               onRequestServerAnalysis: ref.read(ctrlProvider.notifier).requestServerAnalysis,
-            )
-          else if (options case ActiveCorrespondenceGame())
-            ConditionalPremoves(options),
+            ),
+          if (tabs.contains(AnalysisTab.moveTimes))
+            ListView(
+              children: [
+                MoveTimesChart(
+                  params: (
+                    moveTimes: analysisState.archivedGame!.moveTimes,
+                    clocks: analysisState.archivedGame!.clocks ?? const IListConst<Duration>([]),
+                    division: analysisState.division,
+                    rootPly: analysisState.root.position.ply,
+                    currentNodePly: analysisState.currentPosition.ply,
+                    isOnMainline: analysisState.isOnMainline,
+                    onJumpToNode: ref
+                        .read(analysisControllerProvider(options).notifier)
+                        .jumpToNthNodeOnMainline,
+                  ),
+                ),
+              ],
+            ),
+          if (options case ActiveCorrespondenceGame()) ConditionalPremoves(options),
         ],
       ),
     );
@@ -343,6 +389,7 @@ class _PlayerWidget extends StatelessWidget {
                 user: player.user,
                 name: player.name,
                 rating: player.rating,
+                ratingDiff: player.ratingDiff,
                 provisional: player.provisional,
                 aiLevel: player.aiLevel,
                 style: const TextStyle(fontWeight: FontWeight.bold),
@@ -590,50 +637,22 @@ class _BottomBar extends ConsumerWidget {
         if (analysisState.isComputerAnalysisAllowed)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.boardEditor),
-            onPressed: () {
-              final boardFen = analysisState.currentPosition.fen;
-              Navigator.of(context).push(
-                BoardEditorScreen.buildRoute((
-                  initialVariant: analysisState.variant,
-                  initialFen: boardFen,
-                  initialOrientation: null,
-                )),
-              );
-            },
+            onPressed: () => openBoardEditor(
+              context,
+              analysisState.variant,
+              analysisState.currentPosition.fen,
+              analysisState.pov,
+            ),
           ),
         if (analysisState.isComputerAnalysisAllowed)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.continueFromHere),
-            onPressed: () => _showContinueFromHereMenu(context, ref),
-          ),
-      ],
-    );
-  }
-
-  Future<void> _showContinueFromHereMenu(BuildContext context, WidgetRef ref) {
-    final analysisState = ref.read(analysisControllerProvider(options)).requireValue;
-    final boardFen = analysisState.currentPosition.fen;
-    return showAdaptiveActionSheet(
-      context: context,
-      actions: [
-        BottomSheetAction(
-          makeLabel: (context) => Text(context.l10n.playAgainstComputer),
-          onPressed: () => Navigator.of(context).push(
-            OfflineComputerGameScreen.buildRoute(
-              initialVariant: analysisState.variant,
-              initialFen: boardFen,
+            onPressed: () => showContinueFromHereMenu(
+              context,
+              analysisState.variant,
+              analysisState.currentPosition.fen,
             ),
           ),
-        ),
-        BottomSheetAction(
-          makeLabel: (context) => Text(context.l10n.mobileOverTheBoard),
-          onPressed: () => Navigator.of(context).push(
-            OverTheBoardScreen.buildRoute(
-              initialVariant: analysisState.variant,
-              initialFen: boardFen,
-            ),
-          ),
-        ),
       ],
     );
   }

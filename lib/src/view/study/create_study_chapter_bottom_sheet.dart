@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -17,6 +16,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:material_ui/material_ui.dart';
 
 sealed class CreateStudyChapterParams {}
 
@@ -299,12 +299,12 @@ class _CreateStudyChapterBottomSheetState extends ConsumerState<CreateStudyChapt
 
   Future<void> _pickPgnFile() async {
     try {
-      final result = await ref.read(pickPgnFileProvider)();
+      final file = await ref.read(pickPgnFileProvider)();
 
-      if (result != null) {
+      if (file != null) {
         final content = await const Utf8Decoder(
           allowMalformed: true,
-        ).bind(result.files.single.readAsByteStream()).join();
+        ).bind(file.readAsByteStream()).join();
         if (mounted) {
           _onTextChanged(content);
         }

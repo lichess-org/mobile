@@ -1,12 +1,13 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/chat/chat.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/study/study_controller.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_actions.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/chat/chat_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_button.dart';
@@ -18,6 +19,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
+import 'package:material_ui/material_ui.dart';
 
 class StudyBottomBar extends ConsumerWidget {
   const StudyBottomBar({required this.options});
@@ -87,6 +89,12 @@ class _AnalysisBottomBar extends ConsumerWidget {
               );
             },
           ),
+        _NextChapterButton(
+          options: options,
+          chapterId: state.study.chapter.id,
+          hasNextChapter: state.hasNextChapter,
+          blink: state.isAtEndOfChapter && state.hasNextChapter,
+        ),
         RepeatButton(
           onLongPress: state.canGoBack
               ? () =>
@@ -294,6 +302,7 @@ class _StudyMenuButton extends ConsumerWidget {
 
   Future<void> _showStudyMenu(BuildContext context, WidgetRef ref) {
     final state = ref.read(studyControllerProvider(options)).requireValue;
+    final evalPrefs = ref.read(engineEvaluationPreferencesProvider);
     final isKidMode = ref.read(kidModeProvider).value == true;
 
     final chatOptions = state.study.chat != null
@@ -325,6 +334,28 @@ class _StudyMenuButton extends ConsumerWidget {
             onPressed: () =>
                 Navigator.of(context).push(ChatScreen.buildRoute(options: chatOptions)),
           ),
+        if (state.isEngineAvailable(evalPrefs) && state.canShowThreat)
+          BottomSheetAction(
+            makeLabel: (context) => Text(
+              state.engineInThreatMode
+                  ? context.l10n.mobileStopShowingThreat
+                  : context.l10n.showThreat,
+            ),
+            onPressed: () =>
+                ref.read(studyControllerProvider(options).notifier).toggleEngineThreatMode(),
+          ),
+        if (state.isComputerAnalysisAllowed && state.currentPosition != null) ...[
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.boardEditor),
+            onPressed: () =>
+                openBoardEditor(context, state.variant, state.currentPosition!.fen, state.pov),
+          ),
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.continueFromHere),
+            onPressed: () =>
+                showContinueFromHereMenu(context, state.variant, state.currentPosition!.fen),
+          ),
+        ],
       ],
     );
   }
