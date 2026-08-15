@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math' as math;
 
+import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -67,6 +68,10 @@ mixin ChatMixin<T extends ChatMixinState> on AnyNotifier<AsyncValue<T>, T> {
   /// do not.
   @protected
   bool get chatIsPublic;
+
+  /// The side the current user is playing
+  @protected
+  Side? get chatPlayerSide => null;
 
   LightUser? get _me => ref.read(authControllerProvider)?.user;
 
@@ -138,6 +143,31 @@ mixin ChatMixin<T extends ChatMixinState> on AnyNotifier<AsyncValue<T>, T> {
     updateChatState(chatState.copyWith(unreadMessages: 0));
   }
 
+  /// Returns `true` when [message] was sent by the current user and should
+  /// therefore not increment the unread badge counter.
+  bool _isOwnMessage(ChatMessage message) {
+    final username = message.username;
+    if (username == null) return false;
+
+    // Regular user message sent by the current user.
+    final me = _me;
+    if (me != null && username.toLowerCase() == me.id.value) return true;
+
+    // Lichess system messages about draw offers/declines by the current user's side.
+    if (username == 'lichess') {
+      final side = chatPlayerSide;
+      if (side != null) {
+        final text = message.message;
+        if (side == .white && text == 'White offers draw') return true;
+        if (side == .black && text == 'Black offers draw') return true;
+        if (side == .white && text == 'White declines draw') return true;
+        if (side == .black && text == 'Black declines draw') return true;
+      }
+    }
+
+    return false;
+  }
+
   IList<ChatMessage> _selectMessages(IList<ChatMessage> all) {
     return all
         .where(
@@ -185,7 +215,9 @@ mixin ChatMixin<T extends ChatMixinState> on AnyNotifier<AsyncValue<T>, T> {
 
       final oldMessages = chatState.messages;
       final newMessages = _selectMessages(oldMessages.add(message));
-      final newUnread = newMessages.length - oldMessages.length;
+      final addedCount = newMessages.length - oldMessages.length;
+      final isOwn = addedCount > 0 && _isOwnMessage(message);
+      final newUnread = isOwn ? 0 : addedCount;
       if (chatIsPublic == false && newUnread > 0) {
         ref.read(soundServiceProvider).play(Sound.confirmation, volume: 0.5);
       }
