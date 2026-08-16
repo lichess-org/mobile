@@ -9,33 +9,37 @@ import 'package:lichess_mobile/src/view/more/import_pgn_screen.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:material_ui/material_ui.dart';
 
+import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 
-/// A [PlatformFile] that overrides [readAsBytes] to return in-memory bytes,
-/// avoiding the need for a real file path in tests.
-class _FakePlatformFile extends PlatformFile {
-  _FakePlatformFile({required super.name, required super.size, required this._fileBytes})
-    : super(path: '');
+/// A [PlatformFile] backed by in-memory bytes, avoiding the need for a real file path in tests.
+final class _FakePlatformFile extends PlatformFile {
+  _FakePlatformFile({required this.name, required this.fileBytes});
 
-  final Uint8List _fileBytes;
+  final Uint8List fileBytes;
 
   @override
-  Stream<Uint8List> readAsByteStream() => Stream.value(_fileBytes);
+  final String name;
+
+  @override
+  Uri get uri => Uri.file(name);
+
+  /// [Never] is used as the return type so that no `package:cross_file` import is needed: the
+  /// screen only ever reads the file as a byte stream.
+  @override
+  Never get xFile => throw UnimplementedError();
+
+  @override
+  Future<int> length() async => fileBytes.length;
+
+  @override
+  Future<Uint8List> readAsBytes() async => fileBytes;
+
+  @override
+  Stream<Uint8List> readAsByteStream() => Stream.value(fileBytes);
 }
 
-void _mockClipboard(String text) {
-  TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
-    SystemChannels.platform,
-    (methodCall) async {
-      if (methodCall.method == 'Clipboard.getData') {
-        return {'text': text};
-      }
-      return null;
-    },
-  );
-}
-
-Future<Widget> _makeApp(WidgetTester tester, {FilePickerResult? pickResult}) =>
+Future<Widget> _makeApp(WidgetTester tester, {PlatformFile? pickResult}) =>
     makeTestProviderScopeApp(
       tester,
       home: const ImportPgnScreen(),
@@ -60,7 +64,7 @@ void main() {
   group('Clipboard paste', () {
     testWidgets('Valid single-game PGN navigates to analysis screen immediately', (tester) async {
       const pgn = '[White "A"]\n[Black "B"]\n\n1. e4 e5 *';
-      _mockClipboard(pgn);
+      mockClipboard(pgn);
 
       final app = await _makeApp(tester);
       await tester.pumpWidget(app);
@@ -75,7 +79,7 @@ void main() {
 
     testWidgets('Tapping the text field also pastes and navigates for valid PGN', (tester) async {
       const pgn = '1. e4 e5 *';
-      _mockClipboard(pgn);
+      mockClipboard(pgn);
 
       final app = await _makeApp(tester);
       await tester.pumpWidget(app);
@@ -102,7 +106,7 @@ void main() {
           '\n'
           '1. d4 d5 0-1\n';
 
-      _mockClipboard(pgn);
+      mockClipboard(pgn);
 
       final app = await _makeApp(tester);
       await tester.pumpWidget(app);
@@ -133,7 +137,7 @@ void main() {
           '\n'
           '1. d4 d5 0-1\n';
 
-      _mockClipboard(pgn);
+      mockClipboard(pgn);
 
       final app = await _makeApp(tester);
       await tester.pumpWidget(app);
@@ -163,7 +167,7 @@ void main() {
 
 1. e4 e5 2. Nf3 Nc6 3. Bb5''';
 
-      _mockClipboard(pgn);
+      mockClipboard(pgn);
 
       final app = await _makeApp(tester);
       await tester.pumpWidget(app);
@@ -193,9 +197,7 @@ void main() {
       final pgnBytes = utf8.encode(pgn);
       final app = await _makeApp(
         tester,
-        pickResult: FilePickerResult([
-          _FakePlatformFile(name: 'game.pgn', size: pgnBytes.length, fileBytes: pgnBytes),
-        ]),
+        pickResult: _FakePlatformFile(name: 'game.pgn', fileBytes: pgnBytes),
       );
       await tester.pumpWidget(app);
 
@@ -230,9 +232,7 @@ void main() {
       final pgnBytes = utf8.encode(pgn);
       final app = await _makeApp(
         tester,
-        pickResult: FilePickerResult([
-          _FakePlatformFile(name: 'games.pgn', size: pgnBytes.length, fileBytes: pgnBytes),
-        ]),
+        pickResult: _FakePlatformFile(name: 'games.pgn', fileBytes: pgnBytes),
       );
       await tester.pumpWidget(app);
 
@@ -310,9 +310,7 @@ void main() {
       final pgnBytes = utf8.encode(pgn);
       final app = await _makeApp(
         tester,
-        pickResult: FilePickerResult([
-          _FakePlatformFile(name: 'games.pgn', size: pgnBytes.length, fileBytes: pgnBytes),
-        ]),
+        pickResult: _FakePlatformFile(name: 'games.pgn', fileBytes: pgnBytes),
       );
       await tester.pumpWidget(app);
 

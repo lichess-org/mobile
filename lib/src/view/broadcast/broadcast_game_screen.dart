@@ -18,6 +18,7 @@ import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_actions.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen_providers.dart';
@@ -29,6 +30,7 @@ import 'package:lichess_mobile/src/view/engine/engine_button.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/explorer/explorer_view.dart';
+
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -50,6 +52,9 @@ class BroadcastGameScreen extends ConsumerStatefulWidget {
   final String? roundSlug;
   final String? title;
 
+  /// The side to view the board from, if it should differ from the default (white).
+  final Side? initialPov;
+
   const BroadcastGameScreen({
     this.tournamentId,
     required this.roundId,
@@ -57,6 +62,7 @@ class BroadcastGameScreen extends ConsumerStatefulWidget {
     this.tournamentSlug,
     this.roundSlug,
     this.title,
+    this.initialPov,
   });
 
   static Route<dynamic> buildRoute({
@@ -66,6 +72,7 @@ class BroadcastGameScreen extends ConsumerStatefulWidget {
     String? tournamentSlug,
     String? roundSlug,
     String? title,
+    Side? initialPov,
   }) {
     return buildScreenRoute(
       screen: BroadcastGameScreen(
@@ -75,6 +82,7 @@ class BroadcastGameScreen extends ConsumerStatefulWidget {
         tournamentSlug: tournamentSlug,
         roundSlug: roundSlug,
         title: title,
+        initialPov: initialPov,
       ),
     );
   }
@@ -95,6 +103,26 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
     tabs = [AnalysisTab.pgn, AnalysisTab.explorer, AnalysisTab.moves, AnalysisTab.summary];
 
     _tabController = TabController(vsync: this, initialIndex: 2, length: tabs.length);
+
+    final initialPov = widget.initialPov;
+    if (initialPov != null) {
+      final ctrlProvider = broadcastAnalysisControllerProvider((
+        roundId: widget.roundId,
+        gameId: widget.gameId,
+      ));
+      // The controller loads asynchronously, so the point of view can only be set once its state
+      // is available. `fireImmediately` covers the case where the controller is already loaded.
+      // The write is deferred to a microtask because assigning the controller state from within
+      // the notification of its own first `AsyncData` value gets overwritten by Riverpod.
+      ref.listenManual<BroadcastAnalysisState?>(ctrlProvider.select((v) => v.value), (prev, next) {
+        if (prev == null && next != null) {
+          Future.microtask(() {
+            if (!mounted) return;
+            ref.read(ctrlProvider.notifier).setPov(initialPov);
+          });
+        }
+      }, fireImmediately: true);
+    }
   }
 
   @override
@@ -769,6 +797,8 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
 
   Future<void> _showMenu(BuildContext context, WidgetRef ref) {
     final ctrlProvider = broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId));
+    final state = ref.read(ctrlProvider).requireValue;
+    final evalPrefs = ref.read(engineEvaluationPreferencesProvider);
 
     return showAdaptiveActionSheet(
       context: context,
@@ -782,6 +812,25 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.flipBoard),
           onPressed: () => ref.read(ctrlProvider.notifier).toggleBoard(),
+        ),
+        if (state.isEngineAvailable(evalPrefs) && state.canShowThreat)
+          BottomSheetAction(
+            makeLabel: (context) => Text(
+              state.engineInThreatMode
+                  ? context.l10n.mobileStopShowingThreat
+                  : context.l10n.showThreat,
+            ),
+            onPressed: () => ref.read(ctrlProvider.notifier).toggleEngineThreatMode(),
+          ),
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.boardEditor),
+          onPressed: () =>
+              openBoardEditor(context, state.variant, state.currentPosition.fen, state.pov),
+        ),
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.continueFromHere),
+          onPressed: () =>
+              showContinueFromHereMenu(context, state.variant, state.currentPosition.fen),
         ),
       ],
     );

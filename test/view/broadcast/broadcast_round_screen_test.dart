@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
@@ -538,7 +539,154 @@ void main() {
       expect(find.text('Team A'), findsOneWidget);
     });
   });
+
+  group('Subscribe button', () {
+    Future<void> pumpRoundScreen(
+      WidgetTester tester, {
+      required bool? isSubscribed,
+      List<http.Request>? recordedRequests,
+    }) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: BroadcastRoundScreen(broadcast: _finishedBroadcast),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(
+              _subscribableBroadcastClient(isSubscribed, recordedRequests: recordedRequests),
+              ref,
+            ),
+          ),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      // Load the tournament
+      await tester.pump();
+      // Load the round
+      await tester.pump();
+    }
+
+    testWidgets('is not shown when logged out', variant: kPlatformVariant, (tester) async {
+      // lila omits 'isSubscribed' when the user is not logged in.
+      await pumpRoundScreen(tester, isSubscribed: null);
+
+      expect(find.byIcon(Icons.notifications), findsNothing);
+      expect(find.byIcon(Icons.notifications_none), findsNothing);
+    });
+
+    testWidgets('is filled when already subscribed', variant: kPlatformVariant, (tester) async {
+      await pumpRoundScreen(tester, isSubscribed: true);
+
+      expect(find.byIcon(Icons.notifications), findsOneWidget);
+    });
+
+    testWidgets('subscribes to the tournament when tapped', variant: kPlatformVariant, (
+      tester,
+    ) async {
+      final requests = <http.Request>[];
+      await pumpRoundScreen(tester, isSubscribed: false, recordedRequests: requests);
+
+      expect(find.byIcon(Icons.notifications_none), findsOneWidget);
+
+      await tester.tap(find.byIcon(Icons.notifications_none));
+      await tester.pump();
+
+      expect(find.byIcon(Icons.notifications), findsOneWidget);
+
+      final request = requests.firstWhere((r) => r.url.path == '/broadcast/AQ28hmmO/subscribe');
+      expect(request.method, 'POST');
+      expect(request.url.queryParameters['set'], 'true');
+    });
+
+    testWidgets('unsubscribes when tapped while subscribed', variant: kPlatformVariant, (
+      tester,
+    ) async {
+      final requests = <http.Request>[];
+      await pumpRoundScreen(tester, isSubscribed: true, recordedRequests: requests);
+
+      await tester.tap(find.byIcon(Icons.notifications));
+      await tester.pump();
+
+      expect(find.byIcon(Icons.notifications_none), findsOneWidget);
+
+      final request = requests.firstWhere((r) => r.url.path == '/broadcast/AQ28hmmO/subscribe');
+      expect(request.url.queryParameters['set'], 'false');
+    });
+
+    testWidgets('reverts the icon when the request fails', variant: kPlatformVariant, (
+      tester,
+    ) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: BroadcastRoundScreen(broadcast: _finishedBroadcast),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(
+              _subscribableBroadcastClient(
+                false,
+                subscribeStatusCode: 500,
+                subscribeDelay: const Duration(seconds: 1),
+              ),
+              ref,
+            ),
+          ),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pump();
+      await tester.pump();
+
+      await tester.tap(find.byIcon(Icons.notifications_none));
+      await tester.pump();
+
+      // Toggled right away, while the request is still in flight...
+      expect(find.byIcon(Icons.notifications), findsOneWidget);
+
+      await tester.pump(const Duration(seconds: 1));
+      await tester.pump();
+
+      // ...then reverted once the request failed.
+      expect(find.byIcon(Icons.notifications_none), findsOneWidget);
+    });
+  });
 }
+
+/// Returns [_finishedRoundResponse] with lila's `isSubscribed` flag, which is only sent to logged
+/// in users.
+String _finishedRoundResponseWith(bool? isSubscribed) => isSubscribed == null
+    ? _finishedRoundResponse
+    : _finishedRoundResponse.replaceFirst('{', '{\n  "isSubscribed": $isSubscribed,');
+
+MockClient _subscribableBroadcastClient(
+  bool? isSubscribed, {
+  List<http.Request>? recordedRequests,
+  int subscribeStatusCode = 200,
+  Duration subscribeDelay = Duration.zero,
+}) => MockClient((request) async {
+  recordedRequests?.add(request);
+  if (request.url.path == '/broadcast/AQ28hmmO/subscribe') {
+    if (subscribeDelay > Duration.zero) {
+      await Future<void>.delayed(subscribeDelay);
+    }
+    return mockResponse('{"ok":true}', subscribeStatusCode);
+  }
+  if (request.url.path == '/api/broadcast/AQ28hmmO') {
+    return mockResponse(
+      _finishedTournamentResponse,
+      200,
+      headers: {'content-type': 'application/json; charset=utf-8'},
+    );
+  }
+  if (request.url.path == '/api/broadcast/-/-/S5VCwuVn') {
+    return mockResponse(
+      _finishedRoundResponseWith(isSubscribed),
+      200,
+      headers: {'content-type': 'application/json; charset=utf-8'},
+    );
+  }
+  return mockResponse('', 404);
+});
 
 final _finishedBroadcastClient = MockClient((request) {
   if (request.url.path == '/api/broadcast/AQ28hmmO') {

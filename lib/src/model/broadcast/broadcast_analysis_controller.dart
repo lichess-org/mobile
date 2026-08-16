@@ -359,6 +359,16 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
     state = AsyncData(state.requireValue.copyWith(pov: state.requireValue.pov.opposite));
   }
 
+  /// Sets the side the board is viewed from.
+  ///
+  /// Used to open the game from the point of view of a specific player, for instance when the
+  /// screen is opened from a notification about a followed player.
+  void setPov(Side pov) {
+    if (!state.hasValue) return;
+
+    state = AsyncData(state.requireValue.copyWith(pov: pov));
+  }
+
   @override
   void userJump(UciPath path) {
     _setPath(path);

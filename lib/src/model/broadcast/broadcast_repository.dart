@@ -101,6 +101,27 @@ class BroadcastRepository {
       mapper: (json) => _teamStandingFromPick(pick(json).required()),
     );
   }
+
+  /// Subscribes to, or unsubscribes from, a tournament.
+  ///
+  /// Subscribers get a notification when each round of the tournament starts.
+  Future<void> setSubscribed(BroadcastTournamentId tournamentId, bool subscribed) async {
+    await client.postRead(
+      Uri(
+        path: '/broadcast/$tournamentId/subscribe',
+        queryParameters: {'set': subscribed.toString()},
+      ),
+    );
+  }
+
+  /// Follows, or unfollows, a FIDE player.
+  ///
+  /// Followers get a notification when the player starts a game in an official broadcast.
+  Future<void> setFollowingPlayer(FideId fideId, bool following) async {
+    await client.postRead(
+      Uri(path: '/fide/$fideId/follow', queryParameters: {'follow': following.toString()}),
+    );
+  }
 }
 
 BroadcastList broadcastListFromServerJson(Map<String, dynamic> json) {
@@ -229,6 +250,7 @@ BroadcastRoundResponse _makeRoundWithGamesFromJson(Map<String, dynamic> json) {
     round: _roundFromPick(round),
     games: _gamesFromPick(games),
     photos: _photosFromJson(json),
+    isSubscribed: pick(json, 'isSubscribed').asBoolOrNull(),
   );
 }
 
@@ -328,6 +350,7 @@ BroadcastPlayerWithGameResults _makePlayerWithGameResultsFromJson(Map<String, dy
     playerWithOverallResult: _playerWithOverallResultFromPick(pick(json).required()),
     fideData: _fideDataFromPick(pick(json, 'fide')),
     games: pick(json, 'games').asListOrThrow(_playerGameResultFromPick).toIList(),
+    isFollowing: pick(json, 'fide', 'follow').asBoolOrNull(),
   );
 }
 

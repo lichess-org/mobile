@@ -126,6 +126,10 @@ class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> 
   @override
   bool get chatIsPublic => false;
 
+  @protected
+  @override
+  Side? get chatPlayerSide => state.value?.game.youAre;
+
   @override
   Future<GameState> build() async {
     _socketClient = _openSocket();
