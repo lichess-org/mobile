@@ -293,6 +293,14 @@ class _PlayableGameBoardState extends ConsumerState<_PlayableGameBoard> {
         boardHighlights: boardPrefs.boardHighlights,
       ),
     );
+    _applyPremoveMode(boardPrefs.premoveMode);
+  }
+
+  void _applyPremoveMode(PremoveMode mode) {
+    if (!mode.enabled && _controller.premove != null) {
+      _controller.clearPremoves();
+    }
+    _controller.maxPremoveCount = mode.maxCount;
   }
 
   @override
@@ -392,6 +400,11 @@ class _PlayableGameBoardState extends ConsumerState<_PlayableGameBoard> {
       (prev, next) {
         if (next != null) _applyBoardUpdate();
       },
+    );
+
+    ref.listen(
+      boardPreferencesProvider.select((prefs) => prefs.premoveMode),
+      (previous, next) => _applyPremoveMode(next),
     );
 
     final boardPrefs = ref.watch(boardPreferencesProvider);

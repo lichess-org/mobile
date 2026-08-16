@@ -13,6 +13,7 @@ part 'board_preferences.g.dart';
 
 const kBoardDefaultBrightnessFilter = 1.0;
 const kBoardDefaultHueFilter = 0.0;
+const kMultiplePremoveLimit = 10;
 
 final boardPreferencesProvider = NotifierProvider<BoardPreferences, BoardPrefs>(
   BoardPreferences.new,
@@ -44,6 +45,17 @@ class BoardPreferences extends Notifier<BoardPrefs> with PreferencesStorage<Boar
     await save(state.copyWith(boardTheme: boardTheme));
   }
 
+  Future<void> setPremoveMode(PremoveMode mode) async {
+    await save(
+      state.copyWith(
+        premoves: mode != PremoveMode.disabled,
+        multiplePremoves: mode == PremoveMode.multiple,
+      ),
+    );
+  }
+
+  /// Compatibility helper for callers that still expose the old on/off switch.
+  /// New UI should use [setPremoveMode].
   Future<void> togglePremoves() async {
     await save(state.copyWith(premoves: !state.premoves));
   }
@@ -131,6 +143,28 @@ class BoardPreferences extends Notifier<BoardPrefs> with PreferencesStorage<Boar
   }
 }
 
+/// User-facing premove behavior.
+///
+/// The storage model intentionally keeps the historical [BoardPrefs.premoves]
+/// boolean and adds [BoardPrefs.multiplePremoves]. That makes migration automatic:
+/// an existing install that has `premoves: true` but no new key loads as [single],
+/// and fresh installs remain [single] until the user opts into multiple premoves.
+enum PremoveMode {
+  multiple,
+  single,
+  disabled;
+
+  bool get enabled => this != PremoveMode.disabled;
+
+  int get maxCount => this == PremoveMode.multiple ? kMultiplePremoveLimit : 1;
+
+  String get label => switch (this) {
+    PremoveMode.multiple => 'Multiple',
+    PremoveMode.single => 'One',
+    PremoveMode.disabled => 'Disabled',
+  };
+}
+
 @Freezed(fromJson: true, toJson: true)
 sealed class BoardPrefs with _$BoardPrefs implements Serializable {
   const BoardPrefs._();
@@ -169,6 +203,7 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
     required CastlingMethod castlingMethod,
     @JsonKey(defaultValue: true) required bool moveListDisplay,
     @JsonKey(defaultValue: true) required bool premoves,
+    @JsonKey(defaultValue: false) required bool multiplePremoves,
     @JsonKey(defaultValue: true) required bool confirmResignAndDraw,
 
     /// Whether to enable shape drawings on the board for games and puzzles.
@@ -197,6 +232,7 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
     landscapeBoardPosition: LandscapeBoardPosition.left,
     moveListDisplay: true,
     premoves: true,
+    multiplePremoves: false,
     confirmResignAndDraw: true,
     pieceShiftMethod: PieceShiftMethod.either,
     moveOnRelease: false,
@@ -209,6 +245,11 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
     brightness: kBoardDefaultBrightnessFilter,
     hue: kBoardDefaultHueFilter,
   );
+
+  PremoveMode get premoveMode {
+    if (!premoves) return PremoveMode.disabled;
+    return multiplePremoves ? PremoveMode.multiple : PremoveMode.single;
+  }
 
   bool get hasColorAdjustments =>
       brightness != kBoardDefaultBrightnessFilter || hue != kBoardDefaultHueFilter;

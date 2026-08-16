@@ -283,11 +283,21 @@ class _BoardSettingsScreenState extends ConsumerState<BoardSettingsScreen> {
             header: SettingsSectionTitle(context.l10n.preferencesGameBehavior),
             hasLeading: false,
             children: [
-              SwitchSettingTile(
-                title: Text(context.l10n.preferencesPremovesPlayingDuringOpponentTurn),
-                value: boardPrefs.premoves,
-                onChanged: (value) {
-                  ref.read(boardPreferencesProvider.notifier).togglePremoves();
+              SettingsListTile(
+                settingsLabel: Text(context.l10n.preferencesPremovesPlayingDuringOpponentTurn),
+                settingsValue: boardPrefs.premoveMode.label,
+                onTap: () {
+                  showChoicePicker(
+                    context,
+                    choices: PremoveMode.values,
+                    selectedItem: boardPrefs.premoveMode,
+                    labelBuilder: (mode) => Text(mode.label),
+                    onSelectedItemChanged: (PremoveMode? mode) {
+                      ref
+                          .read(boardPreferencesProvider.notifier)
+                          .setPremoveMode(mode ?? boardPrefs.premoveMode);
+                    },
+                  );
                 },
               ),
               // takebacks are always enabled for anonymous players, so hide the setting.

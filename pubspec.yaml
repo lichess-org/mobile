@@ -14,7 +14,10 @@ dependencies:
   app_settings: ^8.0.3
   async: ^2.13.1
   auto_size_text: ^3.0.0
-  chessground: ^10.1.1
+  chessground:
+    git:
+      url: https://github.com/AlexZander85/flutter-chessground.git
+      ref: cb95459a4e5771bfbc7e7db2c477f6a319ab81bc
   clock: ^1.1.2
   collection: ^1.19.1
   connectivity_plus: ^7.3.1

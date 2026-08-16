@@ -99,24 +99,32 @@ class _ErrorWidget extends StatelessWidget {
   }
 }
 
-/// Executes a pending premove on [ctrl] if it is legal in [position], calling [onMove] via
-/// [scheduleMicrotask] to avoid modifying Riverpod providers inside widget lifecycle callbacks.
-/// Clears the premove if it is illegal.
+/// Executes the head of the pending premove queue if it is legal in [position],
+/// calling [onMove] via [scheduleMicrotask] to avoid modifying Riverpod providers
+/// inside widget lifecycle callbacks.
+///
+/// Only the validated head is consumed. The remaining premoves stay queued and
+/// are reconsidered after the next real opponent move. If the head is illegal,
+/// the whole dependent queue is cleared. A promotion that needs user input also
+/// clears the tail because later premoves cannot safely depend on an unresolved
+/// promotion role.
 void tryExecutePremove(ChessboardController ctrl, Position position, void Function(Move) onMove) {
   final premove = ctrl.premove;
   if (premove == null) return;
-  if (position.isLegal(premove)) {
-    if (premove is NormalMove && isPromotionPawnMove(position, premove)) {
-      ctrl.premove = null;
-      ctrl.pendingPromotion = premove;
-    } else {
-      ctrl.premove = null;
-      scheduleMicrotask(() => onMove(premove));
-    }
-  } else {
-    // Premove became illegal (e.g. after a takeback) — clear it.
-    ctrl.premove = null;
+
+  if (!position.isLegal(premove)) {
+    ctrl.clearPremoves();
+    return;
   }
+
+  if (premove is NormalMove && isPromotionPawnMove(position, premove)) {
+    ctrl.clearPremoves();
+    ctrl.pendingPromotion = premove;
+    return;
+  }
+
+  ctrl.consumePremove();
+  scheduleMicrotask(() => onMove(premove));
 }
 
 /// Builds a [GameData] object for the given position and variant, including legal moves, check status, and crazyhouse drops.
