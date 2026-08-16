@@ -246,9 +246,8 @@ void main() {
 
       final richText = tester.widget<RichText>(find.byType(RichText));
       final outer = richText.text as TextSpan;
-      final hasRecognizer = outer.children!.any(
-        (c) => c is TextSpan && (c as TextSpan).recognizer != null,
-      );
+      final inner = outer.children!.first as TextSpan;
+      final hasRecognizer = inner.children!.any((c) => c is TextSpan && c.recognizer != null);
       expect(hasRecognizer, isTrue);
     });
 
