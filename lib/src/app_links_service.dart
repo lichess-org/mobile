@@ -459,13 +459,13 @@ class _BalancedUrlLinkifier extends UrlLinkifier {
         var url = element.url;
         var stripCount = 0;
 
-         final openCount = '('.allMatches(url).length;
-         var closeCount = ')'.allMatches(url).length;
-         while (url.endsWith(')') && closeCount > openCount) {
-           url = url.substring(0, url.length - 1);
-           closeCount--;
-           stripCount++;
-         }
+        final openCount = '('.allMatches(url).length;
+        var closeCount = ')'.allMatches(url).length;
+        while (url.endsWith(')') && closeCount > openCount) {
+          url = url.substring(0, url.length - 1);
+          closeCount--;
+          stripCount++;
+        }
 
         if (stripCount == 0) {
           result.add(element);
