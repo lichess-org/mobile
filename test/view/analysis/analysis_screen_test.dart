@@ -2,10 +2,9 @@ import 'dart:convert';
 
 import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
@@ -29,6 +28,7 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/pockets.dart';
 import 'package:lichess_mobile/src/widgets/variations_bar.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:multistockfish/multistockfish.dart';
 
 import '../../binding.dart';
@@ -1498,8 +1498,8 @@ void main() {
     await dragFromTo(tester, 'd7', 'd5');
 
     //Open analysis from editor
-    expect(find.byTooltip('Analysis board'), findsOneWidget);
-    await tester.tap(find.byTooltip('Analysis board'));
+    expect(findByTooltip('Analysis board'), findsOneWidget);
+    await tester.tap(findByTooltip('Analysis board'));
     await tester.pumpAndSettle();
 
     // Verify board state is correct and previous analysis was overwritten

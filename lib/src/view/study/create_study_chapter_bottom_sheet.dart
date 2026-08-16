@@ -1,0 +1,380 @@
+import 'dart:convert';
+
+import 'package:dartchess/dartchess.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/study/study.dart';
+import 'package:lichess_mobile/src/model/study/study_repository.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/view/more/import_pgn_screen.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
+import 'package:lichess_mobile/src/widgets/board_preview.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:material_ui/material_ui.dart';
+
+sealed class CreateStudyChapterParams {}
+
+class CreateChapterOfExistingStudy extends CreateStudyChapterParams {
+  CreateChapterOfExistingStudy(this.studyId);
+  final StudyId studyId;
+}
+
+enum _ChapterSource { empty, fen, pgn }
+
+class CreateStudyChapterBottomSheet extends ConsumerStatefulWidget {
+  const CreateStudyChapterBottomSheet({
+    required this.params,
+    required this.chapterNumber,
+    this.onChaptersCreated,
+  });
+
+  final CreateStudyChapterParams params;
+  final int chapterNumber;
+  final void Function(StudyId, IList<StudyChapterId>)? onChaptersCreated;
+
+  @override
+  ConsumerState<CreateStudyChapterBottomSheet> createState() =>
+      _CreateStudyChapterBottomSheetState();
+}
+
+class _CreateStudyChapterBottomSheetState extends ConsumerState<CreateStudyChapterBottomSheet> {
+  String chapterName = '';
+
+  final _nameController = TextEditingController();
+  final _textController = TextEditingController();
+
+  _ChapterSource _source = _ChapterSource.empty;
+  Side orientation = Side.white;
+  Variant variant = Variant.standard;
+  String? errorText;
+
+  /// Whether a chapter creation request is in flight.
+  bool _isSubmitting = false;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        chapterName = context.l10n.studyChapterX(widget.chapterNumber.toString());
+        _nameController.text = chapterName;
+      });
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _textController.dispose();
+    super.dispose();
+  }
+
+  void _onTextChanged(String value) {
+    setState(() {
+      _textController.text = value;
+      _validateInput();
+    });
+  }
+
+  /// Recomputes [errorText] from the current input, source and variant.
+  void _validateInput() {
+    errorText = null;
+
+    final value = _textController.text.trim();
+    if (value.isEmpty) {
+      return;
+    }
+
+    switch (_source) {
+      case _ChapterSource.empty:
+        break;
+      case _ChapterSource.fen:
+        try {
+          Position.setupPosition(variant.rule, Setup.parseFen(value));
+        } catch (_) {
+          errorText = context.l10n.invalidFen;
+        }
+      case _ChapterSource.pgn:
+        try {
+          errorText = _hasAnyPlayableGame(PgnGame.parseMultiGameLazy(value))
+              ? null
+              : context.l10n.invalidPgn;
+        } catch (_) {
+          errorText = context.l10n.invalidPgn;
+        }
+    }
+  }
+
+  /// Whether at least one of the [games] holds something we can make a chapter out of.
+  ///
+  /// [PgnGame.parseMultiGameLazy] never rejects input: arbitrary text parses into a single game
+  /// with default headers and an empty move tree, so its emptiness cannot be used to tell a PGN
+  /// from prose. A game is only meaningful here if it has at least one move, or a FEN header
+  /// setting up a starting position.
+  ///
+  /// Games are parsed lazily and [Iterable.any] short-circuits, so a well-formed PGN — however
+  /// many games it holds — costs a single full parse.
+  bool _hasAnyPlayableGame(Iterable<PgnLazyGame> games) => games.any(
+    (game) => game.headers.containsKey('FEN') || game.toPgnGame().moves.children.isNotEmpty,
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return BottomSheetScrollableContainer(
+      // The sheet grows upwards from the bottom of the screen and does no keyboard avoidance of
+      // its own, so without this the on-screen keyboard covers the orientation row and the submit
+      // button while the chapter name is being edited.
+      padding: Styles.verticalBodyPadding.add(
+        EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
+      ),
+      children: [
+        Card.filled(
+          margin: Styles.bodySectionPadding,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 8.0,
+              children: [
+                ListTile(
+                  title: Text(context.l10n.name),
+                  subtitle: TextField(
+                    controller: _nameController,
+                    onChanged: (value) => setState(() => chapterName = value),
+                  ),
+                ),
+                // [expandedInsets] makes the button fill the available width, so its size does not
+                // depend on which segment is selected
+                SegmentedButton<_ChapterSource>(
+                  expandedInsets: const EdgeInsets.symmetric(horizontal: 20.0),
+                  segments: [
+                    ButtonSegment(
+                      value: _ChapterSource.empty,
+                      label: Text(context.l10n.studyEmpty),
+                    ),
+                    const ButtonSegment(value: _ChapterSource.fen, label: Text('FEN')),
+                    const ButtonSegment(value: _ChapterSource.pgn, label: Text('PGN')),
+                  ],
+                  selected: {_source},
+                  onSelectionChanged: (selection) {
+                    setState(() {
+                      _source = selection.first;
+                      errorText = null;
+                      switch (_source) {
+                        case _ChapterSource.empty:
+                          break;
+                        case _ChapterSource.fen || _ChapterSource.pgn:
+                          _onTextChanged('');
+                      }
+                    });
+                  },
+                ),
+                if (_source == _ChapterSource.fen)
+                  SmallBoardPreview(
+                    orientation: orientation,
+                    fen: errorText == null ? _textController.text : kEmptyFEN,
+                    description: TextField(
+                      maxLines: 5,
+                      decoration: InputDecoration(
+                        errorText: errorText,
+                        labelText: context.l10n.pasteTheFenStringHere,
+                        suffixIcon: IconButton(
+                          icon: const Icon(Icons.paste),
+                          onPressed: _getClipboardData,
+                          tooltip: 'Paste from clipboard', // TODO l10n
+                        ),
+                      ),
+                      controller: _textController,
+                      readOnly: true,
+                      onTap: () => _getClipboardData(),
+                    ),
+                  ),
+                if (_source == _ChapterSource.pgn)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      spacing: 8.0,
+                      children: [
+                        SizedBox(
+                          height: 150,
+                          child: TextField(
+                            expands: true,
+                            maxLines: null,
+                            decoration: InputDecoration(
+                              hintText: context.l10n.pasteThePgnStringHere,
+                              errorText: errorText,
+                              suffixIcon: IconButton(
+                                icon: const Icon(Icons.paste),
+                                onPressed: _getClipboardData,
+                                tooltip: 'Paste from clipboard', // TODO l10n
+                              ),
+                            ),
+                            readOnly: true,
+                            onTap: _getClipboardData,
+                            controller: _textController,
+                          ),
+                        ),
+                        OutlinedButton.icon(
+                          onPressed: _pickPgnFile,
+                          icon: const Icon(Icons.upload_file),
+                          label: Text(context.l10n.mobileOrImportPgnFile),
+                        ),
+                      ],
+                    ),
+                  ),
+                if (_source != _ChapterSource.pgn)
+                  ListTile(
+                    title: Text(context.l10n.variant),
+                    trailing: TextButton(
+                      onPressed: () {
+                        showChoicePicker(
+                          context,
+                          choices: Variant.values,
+                          selectedItem: variant,
+                          labelBuilder: (Variant variant) => Text(variant.label(context.l10n)),
+                          onSelectedItemChanged: (Variant variant) => setState(() {
+                            this.variant = variant;
+                            _validateInput();
+                          }),
+                        );
+                      },
+                      child: Text(variant.label(context.l10n)),
+                    ),
+                  ),
+                ListTile(
+                  title: Text(context.l10n.studyOrientation),
+                  trailing: TextButton(
+                    onPressed: () {
+                      showChoicePicker(
+                        context,
+                        choices: Side.values,
+                        selectedItem: orientation,
+                        labelBuilder: (Side side) => Text(_sideL10n(context, side)),
+                        onSelectedItemChanged: (Side side) => setState(() => orientation = side),
+                      );
+                    },
+                    child: Text(_sideL10n(context, orientation)),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: FilledButton(
+            onPressed: _canSubmit()
+                ? () async {
+                    final pgn = switch (_source) {
+                      _ChapterSource.empty => PgnGame.parsePgn(
+                        '',
+                        initHeaders: () => {'Variant': variant.pgnName},
+                      ).makePgn(),
+                      _ChapterSource.fen => PgnGame.parsePgn(
+                        '',
+                        initHeaders: () => {
+                          'FEN': _textController.text.trim(),
+                          'Variant': variant.pgnName,
+                        },
+                      ).makePgn(),
+                      _ChapterSource.pgn => _textController.text.trim(),
+                    };
+                    await _createChapter(pgn);
+                  }
+                : null,
+            child: _isSubmitting
+                ? const ButtonLoadingIndicator()
+                : Text(context.l10n.studyCreateChapter, style: Styles.bold),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Future<void> _createChapter(String pgn) async {
+    final chapterPayload = CreateStudyChapterPayload(
+      pgn: pgn,
+      name: chapterName,
+      orientation: orientation,
+      variant: _source == _ChapterSource.pgn ? null : variant,
+    );
+
+    setState(() => _isSubmitting = true);
+
+    try {
+      final (studyId, chapterIds) = switch (widget.params) {
+        CreateChapterOfExistingStudy(:final studyId) => (
+          studyId,
+          await ref.read(studyRepositoryProvider).createChapter(studyId, chapterPayload),
+        ),
+      };
+
+      if (!mounted) return;
+      Navigator.of(context).pop();
+
+      widget.onChaptersCreated?.call(studyId, chapterIds);
+    } catch (e) {
+      if (!mounted) return;
+      // Keep the sheet open so the user can amend the input and retry.
+      setState(() => _isSubmitting = false);
+      showSnackBar(context, 'Could not create chapter: $e', type: SnackBarType.error);
+    }
+  }
+
+  bool _canSubmit() {
+    if (_isSubmitting) return false;
+    if (chapterName.trim().isEmpty) return false;
+
+    switch (_source) {
+      case _ChapterSource.empty:
+        return true;
+      case _ChapterSource.fen || _ChapterSource.pgn:
+        return errorText == null && _textController.text.trim().isNotEmpty;
+    }
+  }
+
+  Future<void> _getClipboardData() async {
+    final ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain);
+    if (!mounted) return;
+
+    final text = data?.text?.trim() ?? '';
+    // The input fields are read-only and pasting is their only affordance, so failing silently
+    // here would be indistinguishable from a broken button.
+    if (text.isEmpty) {
+      showSnackBar(context, 'Nothing to paste: the clipboard is empty', type: SnackBarType.error);
+      return;
+    }
+
+    _onTextChanged(text);
+  }
+
+  Future<void> _pickPgnFile() async {
+    try {
+      final file = await ref.read(pickPgnFileProvider)();
+
+      if (file != null) {
+        final content = await const Utf8Decoder(
+          allowMalformed: true,
+        ).bind(file.readAsByteStream()).join();
+        if (mounted) {
+          _onTextChanged(content);
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        showSnackBar(context, 'Error loading file: $e', type: SnackBarType.error);
+      }
+    }
+  }
+}
+
+String _sideL10n(BuildContext context, Side side) => switch (side) {
+  Side.white => context.l10n.white,
+  Side.black => context.l10n.black,
+};

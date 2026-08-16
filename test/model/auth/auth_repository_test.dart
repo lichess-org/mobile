@@ -143,17 +143,24 @@ void main() {
         return mockResponse('', 204);
       });
 
-      await container.read(authRepositoryProvider).requestEmailLoginCode('johndoe@lichess.org');
+      await container
+          .read(authRepositoryProvider)
+          .requestEmailLoginCode(username: 'johndoe', email: 'johndoe@lichess.org');
 
       expect(requestedUrl?.path, '/auth/mobile-code/email');
-      expect(requestedUrl?.queryParameters, {'email': 'johndoe@lichess.org'});
+      expect(requestedUrl?.queryParameters, {
+        'email': 'johndoe@lichess.org',
+        'username': 'johndoe',
+      });
     });
 
     test('throws EmailLoginRateLimitException on 429', () async {
       final container = await emailLoginContainer((request) => mockResponse('', 429));
 
       await expectLater(
-        container.read(authRepositoryProvider).requestEmailLoginCode('johndoe@lichess.org'),
+        container
+            .read(authRepositoryProvider)
+            .requestEmailLoginCode(username: 'johndoe', email: 'johndoe@lichess.org'),
         throwsA(isA<EmailLoginRateLimitException>()),
       );
     });
@@ -162,7 +169,9 @@ void main() {
       final container = await emailLoginContainer((request) => mockResponse('', 500));
 
       await expectLater(
-        container.read(authRepositoryProvider).requestEmailLoginCode('johndoe@lichess.org'),
+        container
+            .read(authRepositoryProvider)
+            .requestEmailLoginCode(username: 'johndoe', email: 'johndoe@lichess.org'),
         throwsA(isA<ServerException>()),
       );
     });
@@ -185,9 +194,13 @@ void main() {
 
       final authUser = await container
           .read(authRepositoryProvider)
-          .signInWithEmailCode(email: 'johndoe@lichess.org', code: 'xxxxxx');
+          .signInWithEmailCode(username: 'johndoe', email: 'johndoe@lichess.org', code: 'xxxxxx');
 
-      expect(requestedUrl?.queryParameters, {'email': 'johndoe@lichess.org', 'code': 'xxxxxx'});
+      expect(requestedUrl?.queryParameters, {
+        'email': 'johndoe@lichess.org',
+        'username': 'johndoe',
+        'code': 'xxxxxx',
+      });
       expect(authUser.token, 'lio_token');
       expect(authUser.user.name, 'test');
     });
@@ -208,7 +221,7 @@ void main() {
 
       await container
           .read(authRepositoryProvider)
-          .signInWithEmailCode(email: 'johndoe@lichess.org', code: 'xxxxxx');
+          .signInWithEmailCode(username: 'johndoe', email: 'johndoe@lichess.org', code: 'xxxxxx');
 
       expect(authorization, 'Bearer ${signBearerToken('lio_token')}');
     });
@@ -219,7 +232,7 @@ void main() {
       await expectLater(
         container
             .read(authRepositoryProvider)
-            .signInWithEmailCode(email: 'johndoe@lichess.org', code: 'expire'),
+            .signInWithEmailCode(username: 'johndoe', email: 'johndoe@lichess.org', code: 'expire'),
         throwsA(isA<InvalidEmailLoginCodeException>()),
       );
     });
@@ -230,7 +243,7 @@ void main() {
       await expectLater(
         container
             .read(authRepositoryProvider)
-            .signInWithEmailCode(email: 'johndoe@lichess.org', code: 'xxxxxx'),
+            .signInWithEmailCode(username: 'johndoe', email: 'johndoe@lichess.org', code: 'xxxxxx'),
         throwsA(isA<EmailLoginRateLimitException>()),
       );
     });
@@ -241,7 +254,7 @@ void main() {
       await expectLater(
         container
             .read(authRepositoryProvider)
-            .signInWithEmailCode(email: 'johndoe@lichess.org', code: 'xxxxxx'),
+            .signInWithEmailCode(username: 'johndoe', email: 'johndoe@lichess.org', code: 'xxxxxx'),
         throwsA(isA<Exception>()),
       );
     });

@@ -271,6 +271,28 @@ class NotificationService {
           notification,
         ));
 
+      case final BroadcastRoundFcmMessage roundMessage:
+        final notification = BroadcastRoundNotification.fromFcmMessage(roundMessage);
+        _responseStreamController.add((
+          NotificationResponse(
+            notificationResponseType: NotificationResponseType.selectedNotification,
+            id: notification.id,
+            payload: jsonEncode(notification.payload),
+          ),
+          notification,
+        ));
+
+      case final BroadcastPlayerFollowFcmMessage playerFollowMessage:
+        final notification = BroadcastPlayerFollowNotification.fromFcmMessage(playerFollowMessage);
+        _responseStreamController.add((
+          NotificationResponse(
+            notificationResponseType: NotificationResponseType.selectedNotification,
+            id: notification.id,
+            payload: jsonEncode(notification.payload),
+          ),
+          notification,
+        ));
+
       // TODO: handle other notification types
       case UnhandledFcmMessage(data: final data):
         _logger.warning('Received unhandled FCM notification type: ${data['lichess.type']}');
@@ -326,6 +348,29 @@ class NotificationService {
         if (fromBackground == false && notification != null) {
           await show(
             ChallengeAcceptedNotification(fullId, notification.title!, notification.body!),
+          );
+        }
+
+      case BroadcastRoundFcmMessage(:final roundId, :final notification):
+        if (fromBackground == false && notification != null) {
+          await show(BroadcastRoundNotification(roundId, notification.title!, notification.body!));
+        }
+
+      case BroadcastPlayerFollowFcmMessage(
+        :final roundId,
+        :final gameId,
+        :final pov,
+        :final notification,
+      ):
+        if (fromBackground == false && notification != null) {
+          await show(
+            BroadcastPlayerFollowNotification(
+              roundId,
+              gameId,
+              pov,
+              notification.title!,
+              notification.body!,
+            ),
           );
         }
 
