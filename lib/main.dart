@@ -8,7 +8,7 @@ import 'package:lichess_mobile/src/init.dart';
 import 'package:lichess_mobile/src/intl.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/log/app_log_service.dart';
-import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/utils/riverpod.dart';
 
 Future<void> main(List<String> args) async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -48,12 +48,7 @@ Future<void> main(List<String> args) async {
   runApp(
     ProviderScope(
       observers: [ProviderLogger()],
-      retry: (retryCount, error) {
-        if (error is ServerException && error.statusCode != 503) return null;
-        if (retryCount > 5) return null;
-
-        return Duration(milliseconds: 500 * (1 << retryCount));
-      },
+      retry: lichessProviderRetry,
       child: const AppInitializationScreen(),
     ),
   );

@@ -79,6 +79,9 @@ class NotificationService {
   /// The stream subscription for notification responses.
   StreamSubscription<NotificationResponse>? _responseStreamSubscription;
 
+  /// The stream subscription for authentication events.
+  StreamSubscription<AuthEvent>? _authEventsSubscription;
+
   AppLocalizations get _l10n => _ref.read(localizationsProvider).strings;
 
   FlutterLocalNotificationsPlugin get _notificationDisplay =>
@@ -93,6 +96,25 @@ class NotificationService {
   /// This method should be called once the app is ready to receive notifications,
   /// and after [LichessBinding.initializeNotifications] has been called.
   Future<void> start() async {
+    await _authEventsSubscription?.cancel();
+    _authEventsSubscription = authEventsStream.listen((event) {
+      switch (event) {
+        case AuthEvent.signIn:
+          unawaited(
+            registerDevice().catchError((Object e, StackTrace st) {
+              _logger.severe('Could not register device after sign-in:', e, st);
+              return false;
+            }),
+          );
+        case AuthEvent.signOut:
+          unawaited(
+            unregister().catchError((Object e, StackTrace st) {
+              _logger.severe('Could not unregister device after sign-out:', e, st);
+            }),
+          );
+      }
+    });
+
     try {
       await _notificationDisplay
           .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
@@ -143,6 +165,7 @@ class NotificationService {
     _fcmTokenRefreshSubscription?.cancel();
     _connectivitySubscription?.close();
     _responseStreamSubscription?.cancel();
+    _authEventsSubscription?.cancel();
   }
 
   /// Function called by the notification plugin when a notification has been tapped on.

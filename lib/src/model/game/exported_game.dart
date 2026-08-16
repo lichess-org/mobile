@@ -98,6 +98,11 @@ sealed class LightExportedGame with _$LightExportedGame {
     required Player black,
     required Variant variant,
     GameSource? source,
+
+    /// The date of an imported game, as found in the PGN tags at import time.
+    ///
+    /// This is a raw PGN date string, which may be partially unknown (e.g. '1972.08.??').
+    String? importDate,
     LightOpening? opening,
     String? lastFen,
     String? moves,
@@ -142,6 +147,9 @@ sealed class LightExportedGame with _$LightExportedGame {
       _$LightExportedGameFromJson(json);
 
   bool get isBookmarked => bookmarked == true;
+
+  /// Whether the game was imported on lichess, and thus not played on the site.
+  bool get isImported => source?.isImport == true;
 
   String clockDisplay(AppLocalizations l10n) {
     return daysPerTurn != null
@@ -250,6 +258,7 @@ LightExportedGame _lightExportedGameFromPick(
     source: pick(
       'source',
     ).letOrNull((pick) => GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown),
+    importDate: pick('import', 'date').asStringOrNull(),
     rated: pick('rated').asBoolOrThrow(),
     speed: pick('speed').asSpeedOrThrow(),
     perf: pick('perf').asPerfOrThrow(),
@@ -322,6 +331,13 @@ PlayerAnalysis _playerAnalysisFromPick(RequiredPick pick) {
     blunders: pick('blunder').asIntOrThrow(),
     acpl: pick('acpl').asIntOrNull(),
     accuracy: pick('accuracy').asIntOrNull(),
+    phases: pick('phases').letOrNull(
+      (p) => (
+        opening: p('opening').asIntOrNull(),
+        middlegame: p('middlegame').asIntOrNull(),
+        endgame: p('endgame').asIntOrNull(),
+      ),
+    ),
   );
 }
 

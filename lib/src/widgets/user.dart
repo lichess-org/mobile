@@ -60,15 +60,45 @@ class UserAppBarTitleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      contentPadding: EdgeInsets.zero,
-      leading: UserAvatar(user, radius: 16),
-      title: UserFullNameWidget(user: user, showFlair: false),
-      subtitle: isOnline
-          ? Text(context.l10n.online)
-          : seenAt != null
-          ? Text(context.l10n.lastSeenActive(relativeDate(context.l10n, seenAt!)))
-          : Text(context.l10n.offline),
+    final subtitleTextStyle = Theme.of(context).textTheme.titleSmall?.copyWith(
+      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: Styles.subtitleOpacity),
+    );
+    return Row(
+      mainAxisSize: .min,
+      children: [
+        UserAvatar(user, radius: 16),
+        const SizedBox(width: 8),
+        Flexible(
+          child: Column(
+            mainAxisSize: .min,
+            crossAxisAlignment: .start,
+            children: [
+              UserFullNameWidget(user: user, showFlair: false),
+              if (isOnline)
+                Text(
+                  context.l10n.online,
+                  style: subtitleTextStyle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                )
+              else if (seenAt != null)
+                Text(
+                  context.l10n.lastSeenActive(relativeDate(context.l10n, seenAt!)),
+                  style: subtitleTextStyle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                )
+              else
+                Text(
+                  context.l10n.offline,
+                  style: subtitleTextStyle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
@@ -127,8 +157,10 @@ class PatronIcon extends StatelessWidget {
 class UserFullNameWidget extends ConsumerWidget {
   const UserFullNameWidget({
     required this.user,
+    this.name,
     this.aiLevel,
     this.rating,
+    this.ratingDiff,
     this.provisional,
     this.shouldShowOnline = false,
     this.showFlair = true,
@@ -140,8 +172,10 @@ class UserFullNameWidget extends ConsumerWidget {
 
   const UserFullNameWidget.player({
     required this.user,
+    this.name,
     required this.aiLevel,
     this.rating,
+    this.ratingDiff,
     this.provisional,
     this.shouldShowOnline = false,
     this.showFlair = true,
@@ -152,7 +186,10 @@ class UserFullNameWidget extends ConsumerWidget {
   });
 
   final LightUser? user;
+  final String? name;
   final int? rating;
+
+  final int? ratingDiff;
 
   /// The AI level, if the user is lichess AI.
   final int? aiLevel;
@@ -185,6 +222,7 @@ class UserFullNameWidget extends ConsumerWidget {
 
     final displayName =
         user?.name ??
+        name ??
         (aiLevel != null
             ? context.l10n.aiNameLevelAiLevel('Stockfish', aiLevel.toString())
             : context.l10n.anonymous);
@@ -236,6 +274,21 @@ class UserFullNameWidget extends ConsumerWidget {
               fontWeight: FontWeight.w400,
               fontSize: contextTextStyle.fontSize != null ? contextTextStyle.fontSize! - 3 : 13,
               color: textShade(context, 0.8),
+            ),
+          ),
+        ],
+        if (shouldShowRating && ratingDiff != null) ...[
+          const SizedBox(width: 5),
+          Text(
+            ratingDiff! > 0 ? '+$ratingDiff' : '$ratingDiff',
+            style: contextTextStyle.copyWith(
+              fontWeight: .w400,
+              fontSize: contextTextStyle.fontSize != null ? contextTextStyle.fontSize! - 3 : 13,
+              color: ratingDiff! > 0
+                  ? context.lichessColors.good
+                  : ratingDiff! == 0
+                  ? context.lichessColors.brag
+                  : context.lichessColors.error,
             ),
           ),
         ],

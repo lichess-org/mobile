@@ -28,6 +28,7 @@ import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/log/http_log_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/aggregator.dart';
+import 'package:lichess_mobile/src/network/server_status.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -42,6 +43,12 @@ Uri lichessUri(String unencodedPath, [Map<String, dynamic>? queryParameters]) =>
         kLichessHost.startsWith('192.168.')
     ? Uri.http(kLichessHost, unencodedPath, queryParameters)
     : Uri.https(kLichessHost, unencodedPath, queryParameters);
+
+/// The host of the lichess main server, without the port part.
+///
+/// Other lichess services, such as the opening explorer, the tablebase or the
+/// CDN, are served by different hosts.
+final _lichessMainHost = lichessUri('/').host;
 
 /// Creates the appropriate http client for the platform.
 ///
@@ -149,18 +156,34 @@ final defaultClientProvider = Provider<DefaultClient>((Ref ref) {
 /// Only one instance of this client is created and kept alive for the whole app.
 final lichessClientProvider = Provider<LichessClient>((Ref ref) {
   final client = LichessClient(
-    // Retry just once, after 500ms, on 429 Too Many Requests.
+    // Retry just once on 429 Too Many Requests.
     RetryClient(
       ref.read(httpClientFactoryProvider)(),
       retries: 1,
       delay: _defaultDelay,
-      when: (response) => response.statusCode == 429,
+      when: shouldRetryOn429,
     ),
     ref,
   );
   ref.onDispose(() => client.close());
   return client;
 }, name: 'LichessHttpClientProvider');
+
+/// Whether a response should be retried once by [lichessClientProvider].
+///
+/// Retries on 429 Too Many Requests, except for the puzzle batch endpoints (`/api/puzzle/batch/…`),
+/// which are rate-limited deliberately:
+/// - solve submissions (`POST`) are handled with a back-off by `PuzzleSolveLimiter`, so retrying
+///   here only burns a request and delays arming the back-off;
+/// - batch downloads (`GET`) are issued once per puzzle angle, so a retry doubles an already large
+///   burst against an endpoint that has just said it is receiving too many requests.
+@visibleForTesting
+bool shouldRetryOn429(BaseResponse response) {
+  if (response.statusCode != 429) return false;
+  final request = response.request;
+  final isPuzzleBatch = request != null && request.url.path.startsWith('/api/puzzle/batch/');
+  return !isPuzzleBatch;
+}
 
 Duration _defaultDelay(int retryCount) =>
     const Duration(milliseconds: 900) * math.pow(1.5, retryCount);
@@ -358,6 +381,13 @@ class LichessClient implements Client {
       final response = await _inner.send(request).timeout(defaultRequestTimeout);
 
       _logIfError(response);
+
+      // Only the main server can tell us whether lichess is up: the opening
+      // explorer and the tablebase run on their own servers and may well be
+      // available while lichess itself is down (and vice versa).
+      if (_ref.mounted && request.url.host == _lichessMainHost) {
+        _ref.read(serverStatusProvider.notifier).handleHttpResponse(response.statusCode);
+      }
 
       if (response.statusCode == 401 && authUser != null) {
         _ref.read(authControllerProvider.notifier).checkToken();

@@ -70,6 +70,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'इस पेज को देखने के लिए आपको लॉगिन करना होगा।';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String get mobileNewGame => 'New game';
 
   @override
@@ -764,6 +767,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get arenaRankAvgHelp => 'रैंक औसत आपकी रैंकिंग का एक प्रतिशत है। कम बेहतर है।\n\nउदाहरण के लिए, 100 खिलाड़ियों के टूर्नामेंट में तीसरा स्थान प्राप्त होना = 3%। 1000 खिलाड़ियों के टूर्नामेंट में 10वें स्थान पर होना = 1%।';
 
   @override
+  String get arenaRankAverageHelp => 'Your rank average represents your typical finishing position, relative to the total number of players in each tournament.\nThis is a measure of your tournament placement, not your general rating.\n\nFor example, a rank average of 3% means you typically finish in the top 3% (such as 30th place out of 1,000 players).';
+
+  @override
   String get arenaMedians => 'माध्यिकाओं';
 
   @override
@@ -919,6 +925,9 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get broadcastDefinitivelyDeleteTournament => 'संपूर्ण टूर्नामेंट, उसके सभी राउंड और उसके सभी गेम को निश्चित रूप से हटा दें।';
+
+  @override
+  String get broadcastPermanentlyDeleteTournament => 'Permanently delete this tournament, including all rounds and games?';
 
   @override
   String get broadcastShowScores => 'Show player scores based on game results';
@@ -1610,10 +1619,19 @@ class AppLocalizationsHi extends AppLocalizations {
   String get preferencesNotifyInboxMsg => 'New inbox message';
 
   @override
+  String get preferencesNotifyDirectMessage => 'New direct message';
+
+  @override
   String get preferencesNotifyForumMention => 'Forum comment mentions you';
 
   @override
+  String get preferencesNotifyForumMentions => 'Forum mentions';
+
+  @override
   String get preferencesNotifyInvitedStudy => 'Study invite';
+
+  @override
+  String get preferencesNotifyStudyInvites => 'Study invites';
 
   @override
   String get preferencesNotifyGameEvent => 'Correspondence game updates';
@@ -1625,7 +1643,10 @@ class AppLocalizationsHi extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Tournament starting soon';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
+  String get preferencesNotifyTournamentStartReminders => 'Tournaments start reminders';
+
+  @override
+  String get preferencesNotifyBroadcasts => 'Broadcasts';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Correspondence time running out';
@@ -2152,6 +2173,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'एन पास के नियम को शामिल करने वाली एक रणनीति, जहां एक मोहरा एक प्रतिद्वंद्वी मोहरे को पकड़ सकता है जिसने अपने शुरुआती दो-वर्ग चाल का उपयोग करके इसे बाईपास किया है।';
 
   @override
+  String get puzzleThemeEnPassantAdjacentCaptureDescription => 'A tactic involving the en passant rule, where a pawn can capture an opposing pawn that has just moved next to it with its initial two-square move.';
+
+  @override
   String get puzzleThemeEpauletteMate => 'Epaulette mate';
 
   @override
@@ -2170,6 +2194,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get puzzleThemeForkDescription => 'एक चाल जहां स्थानांतरित टुकड़ा एक बार में दो प्रतिद्वंद्वी टुकड़ों पर हमला करता है।';
 
   @override
+  String get puzzleThemeForkOpposingPiecesDescription => 'A move where a piece attacks two or more opposing pieces simultaneously.';
+
+  @override
   String get puzzleThemeHangingPiece => 'लटकता हुआ टुकड़ा';
 
   @override
@@ -2180,6 +2207,9 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get puzzleThemeHookMateDescription => 'शत्रु राजा के भागने को सीमित करने के लिए एक शत्रु प्यादा के साथ एक हाथी, घोड़ा और प्यादा के साथ चेकमेट।';
+
+  @override
+  String get puzzleThemeHookMateOpposingPawnDescription => 'Checkmate using a rook, knight, and pawn, where an opposing pawn blocks the king\'s escape.';
 
   @override
   String get puzzleThemeInterference => 'दखल अंदाजी';
@@ -3120,6 +3150,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get checkSpamFolder => 'अपना स्पैम फ़ोल्डर भी जांचें, हो सकता है कि वह वहां हो। यदि हां, तो इसे स्पैम नहीं के रूप में चिह्नित करें।';
 
   @override
+  String get checkSpamOrJunkFolder => 'If you do not receive a confirmation email, check your Spam or Junk folder. Be sure to indicate messages from lichess.org as safe and \"not spam\", so you can stay informed of important communications.';
+
+  @override
   String sendEmailForAccountVerification(String param) {
     return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
   }
@@ -3847,6 +3880,15 @@ class AppLocalizationsHi extends AppLocalizations {
   String get reply => 'उत्तर दें';
 
   @override
+  String get reopen => 'Reopen';
+
+  @override
+  String get quote => 'Quote';
+
+  @override
+  String get postEdited => 'edited';
+
+  @override
   String get message => 'संदेश';
 
   @override
@@ -3881,6 +3923,9 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get reportProcessedFasterInEnglish => 'Your report will be processed faster if written in English.';
+
+  @override
+  String get processReportFasterInEnglish => 'We can process your report faster if you write in English.';
 
   @override
   String get error_provideOneCheatedGameLink => 'कृपया ठगे गए खेल के लिए कम से कम एक लिंक प्रदान करें।';
@@ -4251,6 +4296,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get whenCreateSimul => 'जब आप सिमुल बनाते हैं तो आपको कई खिलाडियों के साथ एक साथ खेलने का मौका मिलता है';
 
   @override
+  String get creatingASimul => 'Creating a simul lets you play against multiple opponents at the same time.';
+
+  @override
   String get simulVariantsHint => 'अगर आप कई सारे रूपांतर लेते हैं तो हर खिलाडी को यह चुनने का हक़ होती है की वो क्या खेले';
 
   @override
@@ -4563,6 +4611,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get background => 'पृष्ठभूमि';
 
   @override
+  String get theme => 'Theme';
+
+  @override
   String get light => 'हल्का';
 
   @override
@@ -4572,7 +4623,13 @@ class AppLocalizationsHi extends AppLocalizations {
   String get transparent => 'पारदर्शी';
 
   @override
+  String get picture => 'Picture';
+
+  @override
   String get deviceTheme => 'Device theme';
+
+  @override
+  String get roundness => 'Roundness';
 
   @override
   String get backgroundImageUrl => 'पृष्ठभूमि छवि URL:';
@@ -4990,9 +5047,6 @@ class AppLocalizationsHi extends AppLocalizations {
   }
 
   @override
-  String get someoneYouReportedWasBanned => 'आपके द्वारा सूचित किसी पर प्रतिबंध लगा दिया गया था';
-
-  @override
   String get congratsYouWon => 'बधाई हो, आप जीत गए!';
 
   @override
@@ -5091,6 +5145,11 @@ class AppLocalizationsHi extends AppLocalizations {
   }
 
   @override
+  String youCanFormatTextUsing(String param) {
+    return 'You can format text using $param.';
+  }
+
+  @override
   String get embedsAvailable => 'खेल अथवा अध्ययन का URL paste करे एमबेड करने के लिये|';
 
   @override
@@ -5110,6 +5169,9 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get navigateMoveTree => 'चालों की सूची पर जाएं';
+
+  @override
+  String get moveListNavigation => 'Move list navigation';
 
   @override
   String get mouseTricks => 'माउस की तरकीबें';
@@ -5162,7 +5224,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get resignTheGame => 'हार मान ले';
 
   @override
-  String get youCantStartNewGame => 'जब तक यह गेम समाप्त नहीं हो जाता तब तक आप एक नया गेम शुरू नहीं कर सकते।';
+  String get youCantStartNewGame => 'You can\'t start a new game while it\'s your turn.';
 
   @override
   String get since => 'दिनांक से';

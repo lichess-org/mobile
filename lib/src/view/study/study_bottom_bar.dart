@@ -1,15 +1,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/chat/chat.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/study/study_controller.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:lichess_mobile/src/view/chat/chat_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_button.dart';
+import 'package:lichess_mobile/src/view/study/study_settings.dart';
+import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/user.dart';
 
 class StudyBottomBar extends ConsumerWidget {
   const StudyBottomBar({required this.options});
@@ -47,13 +54,8 @@ class _AnalysisBottomBar extends ConsumerWidget {
 
     return BottomBar(
       children: [
+        _StudyMenuButton(options: options),
         _ChapterButton(options: options),
-        _NextChapterButton(
-          options: options,
-          chapterId: state.study.chapter.id,
-          hasNextChapter: state.hasNextChapter,
-          blink: !state.isIntroductoryChapter && state.isAtEndOfChapter && state.hasNextChapter,
-        ),
         if (state.isComputerAnalysisAllowed)
           Builder(
             builder: (context) {
@@ -84,6 +86,12 @@ class _AnalysisBottomBar extends ConsumerWidget {
               );
             },
           ),
+        _NextChapterButton(
+          options: options,
+          chapterId: state.study.chapter.id,
+          hasNextChapter: state.hasNextChapter,
+          blink: state.isAtEndOfChapter && state.hasNextChapter,
+        ),
         RepeatButton(
           onLongPress: state.canGoBack
               ? () =>
@@ -93,7 +101,6 @@ class _AnalysisBottomBar extends ConsumerWidget {
             key: const ValueKey('goto-previous'),
             onTap: onGoBack,
             label: context.l10n.studyBack,
-            showLabel: true,
             icon: CupertinoIcons.chevron_back,
             showTooltip: false,
           ),
@@ -107,7 +114,6 @@ class _AnalysisBottomBar extends ConsumerWidget {
             icon: CupertinoIcons.chevron_forward,
             onTap: onGoForward,
             label: context.l10n.studyNext,
-            showLabel: true,
             showTooltip: false,
           ),
         ),
@@ -127,6 +133,7 @@ class _GamebookBottomBar extends ConsumerWidget {
 
     return BottomBar(
       children: [
+        _StudyMenuButton(options: options),
         _ChapterButton(options: options),
         ...switch (state.gamebookState) {
           GamebookState.findTheMove => [
@@ -136,12 +143,10 @@ class _GamebookBottomBar extends ConsumerWidget {
                   : null,
               icon: Icons.skip_previous,
               label: context.l10n.studyBack,
-              showLabel: true,
             ),
             BottomBarButton(
               icon: Icons.flag_outlined,
               label: context.l10n.viewTheSolution,
-              showLabel: true,
               onTap: ref.read(studyControllerProvider(options).notifier).showGamebookSolution,
             ),
           ],
@@ -152,13 +157,11 @@ class _GamebookBottomBar extends ConsumerWidget {
                   : null,
               icon: Icons.skip_previous,
               label: context.l10n.studyBack,
-              showLabel: true,
             ),
             BottomBarButton(
               onTap: ref.read(studyControllerProvider(options).notifier).userNext,
               icon: Icons.play_arrow,
               label: context.l10n.studyNext,
-              showLabel: true,
               blink: state.gamebookComment != null && !state.isIntroductoryChapter,
             ),
           ],
@@ -169,12 +172,10 @@ class _GamebookBottomBar extends ConsumerWidget {
                   : null,
               icon: Icons.skip_previous,
               label: context.l10n.studyBack,
-              showLabel: true,
             ),
             BottomBarButton(
               onTap: ref.read(studyControllerProvider(options).notifier).userPrevious,
               label: context.l10n.retry,
-              showLabel: true,
               icon: Icons.refresh,
               blink: state.gamebookComment != null,
             ),
@@ -185,7 +186,6 @@ class _GamebookBottomBar extends ConsumerWidget {
                 onTap: ref.read(studyControllerProvider(options).notifier).reset,
                 icon: Icons.refresh,
                 label: context.l10n.studyPlayAgain,
-                showLabel: true,
               ),
             _NextChapterButton(
               options: options,
@@ -208,7 +208,6 @@ class _GamebookBottomBar extends ConsumerWidget {
                 ),
                 icon: Icons.biotech,
                 label: context.l10n.analysis,
-                showLabel: true,
               ),
           ],
         },
@@ -258,9 +257,81 @@ class _NextChapterButtonState extends ConsumerState<_NextChapterButton> {
                 : null,
             icon: Icons.play_arrow,
             label: context.l10n.studyNextChapter,
-            showLabel: true,
             blink: widget.blink,
           );
+  }
+}
+
+/// Opens a bottom sheet, filling most of the screen, to browse a study.
+Future<void> _showStudySheet(
+  BuildContext context, {
+  required Widget Function(BuildContext, ScrollController) builder,
+}) {
+  return showModalBottomSheet<void>(
+    context: context,
+    showDragHandle: true,
+    isScrollControlled: true,
+    isDismissible: true,
+    constraints: BoxConstraints(maxHeight: MediaQuery.heightOf(context) * 0.9),
+    builder: (_) => DraggableScrollableSheet(
+      initialChildSize: 0.6,
+      snap: true,
+      expand: false,
+      builder: builder,
+    ),
+  );
+}
+
+/// Menu holding the study actions that don't fit in the bottom bar.
+class _StudyMenuButton extends ConsumerWidget {
+  const _StudyMenuButton({required this.options});
+
+  final StudyOptions options;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return BottomBarButton(
+      label: context.l10n.menu,
+      icon: Icons.menu,
+      onTap: () => _showStudyMenu(context, ref),
+    );
+  }
+
+  Future<void> _showStudyMenu(BuildContext context, WidgetRef ref) {
+    final state = ref.read(studyControllerProvider(options)).requireValue;
+    final isKidMode = ref.read(kidModeProvider).value == true;
+
+    final chatOptions = state.study.chat != null
+        ? StudyChatOptions(options: options, writeable: state.study.chat!.writeable)
+        : null;
+
+    return showAdaptiveActionSheet(
+      context: context,
+      actions: [
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.settingsSettings),
+          onPressed: () => Navigator.of(context).push(StudySettingsScreen.buildRoute(options)),
+        ),
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.studyMembers),
+          onPressed: () => _showStudySheet(
+            context,
+            builder: (context, scrollController) =>
+                _StudyMembersSheet(options: options, scrollController: scrollController),
+          ),
+        ),
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.flipBoard),
+          onPressed: () => ref.read(studyControllerProvider(options).notifier).toggleBoard(),
+        ),
+        if (chatOptions != null && !isKidMode)
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.chatRoom),
+            onPressed: () =>
+                Navigator.of(context).push(ChatScreen.buildRoute(options: chatOptions)),
+          ),
+      ],
+    );
   }
 }
 
@@ -275,24 +346,46 @@ class _ChapterButton extends ConsumerWidget {
       studyControllerProvider(options).select((s) => s.requireValue.study.chapters.length),
     );
     return BottomBarButton(
-      onTap: () => showModalBottomSheet<void>(
-        context: context,
-        showDragHandle: true,
-        isScrollControlled: true,
-        isDismissible: true,
-        constraints: BoxConstraints(maxHeight: MediaQuery.heightOf(context) * 0.9),
-        builder: (_) => DraggableScrollableSheet(
-          initialChildSize: 0.6,
-          snap: true,
-          expand: false,
-          builder: (context, scrollController) {
-            return _StudyChaptersMenu(options: options, scrollController: scrollController);
-          },
-        ),
+      onTap: () => _showStudySheet(
+        context,
+        builder: (context, scrollController) =>
+            _StudyChaptersMenu(options: options, scrollController: scrollController),
       ),
       label: context.l10n.studyNbChapters(nbChapters),
-      showLabel: true,
       icon: Icons.menu_book,
+    );
+  }
+}
+
+class _StudyMembersSheet extends ConsumerWidget {
+  const _StudyMembersSheet({required this.options, required this.scrollController});
+
+  final StudyOptions options;
+  final ScrollController scrollController;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(studyControllerProvider(options)).requireValue;
+
+    return BottomSheetScrollableContainer(
+      scrollController: scrollController,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Text(
+            context.l10n.studyNbMembers(state.study.members.length),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+        ),
+        const SizedBox(height: 16),
+        for (final member in state.study.members.values)
+          ListTile(
+            title: UserFullNameWidget(user: member.user),
+            onTap: () {
+              Navigator.of(context).push(UserOrProfileScreen.buildRoute(member.user));
+            },
+          ),
+      ],
     );
   }
 }

@@ -12,7 +12,6 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
-import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
@@ -31,7 +30,7 @@ import 'package:lichess_mobile/src/view/engine/engine_button.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/explorer/explorer_view.dart';
-import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
@@ -157,33 +156,10 @@ class _BroadcastGameMenu extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final showEngineLines = ref.watch(
-      broadcastPreferencesProvider.select((prefs) => prefs.showEngineLines),
-    );
     return ContextMenuIconButton(
       icon: const Icon(Icons.more_horiz),
       semanticsLabel: context.l10n.menu,
       actions: [
-        ToggleSoundContextMenuAction(
-          isEnabled: ref.watch(generalPreferencesProvider.select((prefs) => prefs.isSoundEnabled)),
-          onPressed: () => ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled(),
-        ),
-        ContextMenuAction(
-          icon: Icons.settings,
-          label: context.l10n.settingsSettings,
-          onPressed: () {
-            Navigator.of(
-              context,
-            ).push(BroadcastGameSettingsScreen.buildRoute(roundId: roundId, gameId: gameId));
-          },
-        ),
-        ContextMenuAction(
-          icon: showEngineLines ? Icons.subtitles_outlined : Icons.subtitles_off_outlined,
-          label: showEngineLines ? 'Hide Engine Lines' : 'Show Engine Lines',
-          onPressed: () {
-            ref.read(broadcastPreferencesProvider.notifier).toggleShowEngineLines();
-          },
-        ),
         ContextMenuAction(
           icon: Theme.of(context).platform == TargetPlatform.iOS
               ? Icons.ios_share_outlined
@@ -461,8 +437,8 @@ class _PgnTagsView extends ConsumerWidget {
                         final value = pgnHeaders[tag.tagName]!;
                         final url = tag.isLink ? tag.buildUrl(value) : null;
                         if (url != null) {
-                          return RichText(
-                            text: TextSpan(
+                          return Text.rich(
+                            TextSpan(
                               text: value,
                               style: Styles.linkStyle,
                               recognizer: TapGestureRecognizer()
@@ -735,11 +711,9 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
     return BottomBar(
       children: [
         BottomBarButton(
-          label: context.l10n.flipBoard,
-          onTap: () {
-            ref.read(ctrlProvider.notifier).toggleBoard();
-          },
-          icon: CupertinoIcons.arrow_2_squarepath,
+          label: context.l10n.menu,
+          onTap: () => _showMenu(context, ref),
+          icon: Icons.menu,
         ),
         Builder(
           builder: (context) {
@@ -788,6 +762,26 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
             onTap: broadcastAnalysisState.canGoNext ? () => _moveForward(ref) : null,
             showTooltip: false,
           ),
+        ),
+      ],
+    );
+  }
+
+  Future<void> _showMenu(BuildContext context, WidgetRef ref) {
+    final ctrlProvider = broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId));
+
+    return showAdaptiveActionSheet(
+      context: context,
+      actions: [
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.settingsSettings),
+          onPressed: () => Navigator.of(
+            context,
+          ).push(BroadcastGameSettingsScreen.buildRoute(roundId: roundId, gameId: gameId)),
+        ),
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.flipBoard),
+          onPressed: () => ref.read(ctrlProvider.notifier).toggleBoard(),
         ),
       ],
     );

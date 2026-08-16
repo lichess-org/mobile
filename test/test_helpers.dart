@@ -166,3 +166,10 @@ Future<void> playDropMove(
   await tester.dragFrom(fromOffset, targetOffset - fromOffset);
   await tester.pumpAndSettle();
 }
+
+/// The asset names of every [Image] currently rendered.
+Iterable<String> imageAssetNames(WidgetTester tester) => tester
+    .widgetList<Image>(find.byType(Image))
+    .map((image) => image.image)
+    .whereType<AssetImage>()
+    .map((provider) => provider.assetName);

@@ -15,7 +15,6 @@ import 'package:lichess_mobile/src/model/study/study_preferences.dart';
 import 'package:lichess_mobile/src/model/study/study_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
-import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/variations_bar.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -137,13 +136,13 @@ void main() {
 
       when(
         () => mockRepository.getStudy(id: testId),
-      ).thenAnswer((_) async => (studyChapter1, null, '{pgn 1}'));
+      ).thenAnswer((_) async => (studyChapter1, null, '{pgn 1} 1. e4 {wow} e5 {such chess}'));
       when(
         () => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('1')),
-      ).thenAnswer((_) async => (studyChapter1, null, '{pgn 1}'));
+      ).thenAnswer((_) async => (studyChapter1, null, '{pgn 1} 1. e4 {wow} e5 {such chess}'));
       when(
         () => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('2')),
-      ).thenAnswer((_) async => (studyChapter2, null, '{pgn 2}'));
+      ).thenAnswer((_) async => (studyChapter2, null, '{pgn 2} 1. e4 {wow} e5 {such chess}'));
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -164,20 +163,6 @@ void main() {
 
       // First chapter does not allow opening explorer
       expect(find.bySemanticsLabel(RegExp('Opening explorer & tablebase')), findsNothing);
-
-      // 2nd press should not have any effect, we're already at the last chapter
-      await tester.tap(find.text('Next chapter'));
-      // Wait for next chapter to load
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('Next chapter'));
-      // Wait for next chapter to load (even though it shouldn't)
-      await tester.pumpAndSettle();
-
-      expect(find.text('1. Chapter 1'), findsNothing);
-      expect(find.text('2. Chapter 2'), findsOneWidget);
-
-      expect(find.text('pgn 1'), findsNothing);
-      expect(find.text('pgn 2'), findsOneWidget);
 
       // Open chapter selection dialog
       await tester.tap(find.byTooltip('2 Chapters'));
@@ -209,8 +194,8 @@ void main() {
       expect(find.text('1. Chapter 1'), findsNothing);
       expect(find.text('2. Chapter 2'), findsOneWidget);
 
-      expect(find.text('pgn 1'), findsNothing);
-      expect(find.text('pgn 2'), findsOneWidget);
+      expect(find.textContaining('pgn 1'), findsNothing);
+      expect(find.textContaining('pgn 2'), findsOneWidget);
     });
 
     testWidgets('Loads initial chapter if given', (WidgetTester tester) async {
@@ -374,7 +359,7 @@ void main() {
 
       expect(tester.widget<Chessboard>(find.byType(Chessboard)).orientation, Side.white);
 
-      await tester.tap(find.byType(ContextMenuIconButton));
+      await tester.tap(find.byTooltip('Menu'));
       await tester.pumpAndSettle(); // Wait for menu to open
 
       await tester.tap(find.text('Flip board'));
@@ -452,6 +437,11 @@ void main() {
       // If there's an explicit comment, the move is not taken back automatically
       // Verify this by waiting the same duration as above
       await tester.pump(const Duration(seconds: 1));
+
+      // Regression test: there was a bug where the opponent's piece could be moved in this state:
+      await playMove(tester, 'c4', 'c7');
+      expect(boardHasPiece(tester, Square.c4, Piece.blackQueen), isTrue);
+      expect(boardHasPiece(tester, Square.c7, Piece.blackQueen), isFalse);
 
       expect(find.text('Not much to say after ...Qc7.'), findsOneWidget);
       expect(find.text(introText), findsNothing);
@@ -582,7 +572,7 @@ void main() {
       await tester.tap(find.byTooltip('Retry'));
       await tester.pump(); // Wait for move to be taken back
 
-      expect(find.text('View the solution'), findsOneWidget);
+      expect(find.byTooltip('View the solution'), findsOneWidget);
       await tester.tap(find.byTooltip('View the solution'));
       // Wait for correct move and opponent's response to be played
       await tester.pump(const Duration(seconds: 1));
@@ -631,7 +621,11 @@ void main() {
         chapter: makeChapter(id: const StudyChapterId('1')),
         chapters: IList(const [
           StudyChapterMeta(id: StudyChapterId('1'), name: 'Legal Chapter', fen: null),
-          StudyChapterMeta(id: StudyChapterId('2'), name: 'Illegal Chapter', fen: null),
+          StudyChapterMeta(
+            id: StudyChapterId('2'),
+            name: 'Illegal Chapter',
+            fen: '8/8/8/8/8/8/8/8 w - - 0 1',
+          ),
         ]),
       );
 
@@ -677,11 +671,18 @@ void main() {
       expect(find.text('1. Legal Chapter'), findsOneWidget);
 
       // Navigate to second chapter with illegal position
-      await tester.tap(find.text('Next chapter'));
+      await tester.tap(find.byTooltip('2 Chapters'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('2 Illegal Chapter', findRichText: true));
       await tester.pumpAndSettle();
 
       // Second chapter should still load, but with static board
       expect(find.text('2. Illegal Chapter'), findsOneWidget);
+
+      expect(find.byType(Chessboard), findsNothing);
+      expect(find.byType(StaticChessboard), findsOneWidget);
+      final staticBoard = tester.widget<StaticChessboard>(find.byType(StaticChessboard));
+      expect(staticBoard.fen, '8/8/8/8/8/8/8/8 w - - 0 1');
 
       // Verify we can navigate back to first chapter
       await tester.tap(find.byTooltip('2 Chapters'));

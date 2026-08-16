@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
+import 'package:lichess_mobile/src/utils/riverpod.dart';
 import 'package:meta/meta.dart';
 
 /// Openings only exist for the first moves, so we don't look them up beyond this ply.
@@ -41,13 +42,14 @@ mixin OpeningExplorerMixin<T extends OpeningExplorerMixinState> on AsyncNotifier
   bool get canFetchMainlineOpenings => true;
 
   @override
-  void runBuild() {
-    super.runBuild();
+  WhenComplete runBuild() {
+    final whenComplete = super.runBuild();
     // [future] resolves with the first non-loading state, i.e. once [positionTree]
     // is populated. Fire-and-forget: openings are a non-critical enhancement.
     future.then((_) {
       if (ref.mounted && state.hasValue) initMainlineOpenings();
     }).ignore();
+    return whenComplete;
   }
 
   /// Fetches the opening for each mainline branch (up to [_kMaxOpeningPly]),

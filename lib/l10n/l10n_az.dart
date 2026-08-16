@@ -70,6 +70,9 @@ class AppLocalizationsAz extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Bu səhifəni görmək üçün daxil olmalısınız.';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String get mobileNewGame => 'New game';
 
   @override
@@ -764,6 +767,9 @@ class AppLocalizationsAz extends AppLocalizations {
   String get arenaRankAvgHelp => 'The rank average is a percentage of your ranking. Lower is better.\n\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.';
 
   @override
+  String get arenaRankAverageHelp => 'Your rank average represents your typical finishing position, relative to the total number of players in each tournament.\nThis is a measure of your tournament placement, not your general rating.\n\nFor example, a rank average of 3% means you typically finish in the top 3% (such as 30th place out of 1,000 players).';
+
+  @override
   String get arenaMedians => 'medians';
 
   @override
@@ -919,6 +925,9 @@ class AppLocalizationsAz extends AppLocalizations {
 
   @override
   String get broadcastDefinitivelyDeleteTournament => 'Definitively delete the entire tournament, all its rounds and all its games.';
+
+  @override
+  String get broadcastPermanentlyDeleteTournament => 'Permanently delete this tournament, including all rounds and games?';
 
   @override
   String get broadcastShowScores => 'Show player scores based on game results';
@@ -1610,10 +1619,19 @@ class AppLocalizationsAz extends AppLocalizations {
   String get preferencesNotifyInboxMsg => 'New inbox message';
 
   @override
+  String get preferencesNotifyDirectMessage => 'New direct message';
+
+  @override
   String get preferencesNotifyForumMention => 'Forum comment mentions you';
 
   @override
+  String get preferencesNotifyForumMentions => 'Forum mentions';
+
+  @override
   String get preferencesNotifyInvitedStudy => 'Study invite';
+
+  @override
+  String get preferencesNotifyStudyInvites => 'Study invites';
 
   @override
   String get preferencesNotifyGameEvent => 'Correspondence game updates';
@@ -1625,7 +1643,10 @@ class AppLocalizationsAz extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Tournament starting soon';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
+  String get preferencesNotifyTournamentStartReminders => 'Tournaments start reminders';
+
+  @override
+  String get preferencesNotifyBroadcasts => 'Broadcasts';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Correspondence time running out';
@@ -2152,6 +2173,9 @@ class AppLocalizationsAz extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Başlanğıcda iki xana irəli gedən piyadanın, rəqib piyada ilə yan yana gəlməsindən sonra, keçiddə götürmə qaydasına əsasən, vurulan piyadanı əhatə edən taktikalar.';
 
   @override
+  String get puzzleThemeEnPassantAdjacentCaptureDescription => 'A tactic involving the en passant rule, where a pawn can capture an opposing pawn that has just moved next to it with its initial two-square move.';
+
+  @override
   String get puzzleThemeEpauletteMate => 'Epaulette mate';
 
   @override
@@ -2170,6 +2194,9 @@ class AppLocalizationsAz extends AppLocalizations {
   String get puzzleThemeForkDescription => 'Bir fiqurun eyni anda iki rəqib fiquruna hücum etdiyi gediş.';
 
   @override
+  String get puzzleThemeForkOpposingPiecesDescription => 'A move where a piece attacks two or more opposing pieces simultaneously.';
+
+  @override
   String get puzzleThemeHangingPiece => 'Qorunmasız fiqur';
 
   @override
@@ -2180,6 +2207,9 @@ class AppLocalizationsAz extends AppLocalizations {
 
   @override
   String get puzzleThemeHookMateDescription => 'Top, at, piyada və rəqib şahının qaçışını məhdudlaşdırmaq üçün bir rəqib piyadası ilə birlikdə edilən mat.';
+
+  @override
+  String get puzzleThemeHookMateOpposingPawnDescription => 'Checkmate using a rook, knight, and pawn, where an opposing pawn blocks the king\'s escape.';
 
   @override
   String get puzzleThemeInterference => 'Yolukəsmə';
@@ -3120,6 +3150,9 @@ class AppLocalizationsAz extends AppLocalizations {
   String get checkSpamFolder => 'Spam qutusunu da yoxlayın, məktub oradada ola bilər. Elədirsə, zəhmət olmasa qeyri-spam kimi qeyd edin.';
 
   @override
+  String get checkSpamOrJunkFolder => 'If you do not receive a confirmation email, check your Spam or Junk folder. Be sure to indicate messages from lichess.org as safe and \"not spam\", so you can stay informed of important communications.';
+
+  @override
   String sendEmailForAccountVerification(String param) {
     return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
   }
@@ -3847,6 +3880,15 @@ class AppLocalizationsAz extends AppLocalizations {
   String get reply => 'Rəy';
 
   @override
+  String get reopen => 'Reopen';
+
+  @override
+  String get quote => 'Quote';
+
+  @override
+  String get postEdited => 'edited';
+
+  @override
   String get message => 'Mesaj';
 
   @override
@@ -3881,6 +3923,9 @@ class AppLocalizationsAz extends AppLocalizations {
 
   @override
   String get reportProcessedFasterInEnglish => 'Your report will be processed faster if written in English.';
+
+  @override
+  String get processReportFasterInEnglish => 'We can process your report faster if you write in English.';
 
   @override
   String get error_provideOneCheatedGameLink => 'Lütfən ən azı bir hiyləli oyun linki daxil edin.';
@@ -4251,6 +4296,9 @@ class AppLocalizationsAz extends AppLocalizations {
   String get whenCreateSimul => 'Bir Seans yaratdığınızda eyni anda bir neçə oyunçu ilə oynamağa başlayırsınız.';
 
   @override
+  String get creatingASimul => 'Creating a simul lets you play against multiple opponents at the same time.';
+
+  @override
   String get simulVariantsHint => 'Əgər bir neçə oyun variantı seçsəniz, hər bir oyunçu oynamaq istədiyi variantı seçə biləcək.';
 
   @override
@@ -4563,6 +4611,9 @@ class AppLocalizationsAz extends AppLocalizations {
   String get background => 'Arxa fon';
 
   @override
+  String get theme => 'Theme';
+
+  @override
   String get light => 'Yüngül';
 
   @override
@@ -4572,7 +4623,13 @@ class AppLocalizationsAz extends AppLocalizations {
   String get transparent => 'Şəffaf';
 
   @override
+  String get picture => 'Picture';
+
+  @override
   String get deviceTheme => 'Device theme';
+
+  @override
+  String get roundness => 'Roundness';
 
   @override
   String get backgroundImageUrl => 'Arxa fon rəsm URL-i:';
@@ -4990,9 +5047,6 @@ class AppLocalizationsAz extends AppLocalizations {
   }
 
   @override
-  String get someoneYouReportedWasBanned => 'Şikayət etdiyiniz şəxsin hesabı ban edilmişdir';
-
-  @override
   String get congratsYouWon => 'Təbriklər, siz qalib gəldiniz!';
 
   @override
@@ -5091,6 +5145,11 @@ class AppLocalizationsAz extends AppLocalizations {
   }
 
   @override
+  String youCanFormatTextUsing(String param) {
+    return 'You can format text using $param.';
+  }
+
+  @override
   String get embedsAvailable => 'Paste a game URL or a study chapter URL to embed it.';
 
   @override
@@ -5110,6 +5169,9 @@ class AppLocalizationsAz extends AppLocalizations {
 
   @override
   String get navigateMoveTree => 'Navigate the move tree';
+
+  @override
+  String get moveListNavigation => 'Move list navigation';
 
   @override
   String get mouseTricks => 'Mouse tricks';
@@ -5162,7 +5224,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get resignTheGame => 'Resign the game';
 
   @override
-  String get youCantStartNewGame => 'You can\'t start a new game until this one is finished.';
+  String get youCantStartNewGame => 'You can\'t start a new game while it\'s your turn.';
 
   @override
   String get since => 'Since';

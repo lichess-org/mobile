@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_preferences.dart';
+import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/settings/board_settings_screen.dart';
@@ -21,6 +22,7 @@ class GameSettings extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final gamePrefs = ref.watch(gamePreferencesProvider);
     final userPrefsAsync = ref.watch(userGamePrefsProvider(id));
+    final isSoundEnabled = ref.watch(generalPreferencesProvider).isSoundEnabled;
 
     return BottomSheetScrollableContainer(
       padding: const EdgeInsets.only(bottom: 16),
@@ -29,6 +31,13 @@ class GameSettings extends ConsumerWidget {
           header: Text(context.l10n.settingsSettings),
           materialFilledCard: true,
           children: [
+            SwitchSettingTile(
+              title: Text(context.l10n.sound),
+              value: isSoundEnabled,
+              onChanged: (value) {
+                ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled();
+              },
+            ),
             ...userPrefsAsync.maybeWhen(
               data: (data) {
                 return [

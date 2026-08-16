@@ -98,10 +98,7 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                       const Icon(Icons.live_tv),
                     ],
                   ),
-            actions: [
-              if (gameParams != null) _WatcherButton(gameParams: gameParams),
-              const ToggleSoundButton(),
-            ],
+            actions: const [ToggleSoundButton()],
           ),
           body: SafeArea(
             child: Column(
@@ -335,29 +332,6 @@ class _TvErrorBoard extends StatelessWidget {
       boardParams: GameBoardParams.emptyBoard,
       errorMessage: 'Could not load TV stream.',
       moves: [],
-    );
-  }
-}
-
-class _WatcherButton extends ConsumerWidget {
-  const _WatcherButton({required this.gameParams});
-
-  final TvGameControllerParams gameParams;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final nb = ref.watch(
-      tvGameControllerProvider(gameParams).select((s) => s.value?.nbWatchers ?? 0),
-    );
-    if (nb <= 0) return const SizedBox.shrink();
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: Badge(
-        label: Text('$nb'),
-        backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
-        textColor: Theme.of(context).colorScheme.onSurfaceVariant,
-        child: const Icon(Icons.person_outlined),
-      ),
     );
   }
 }

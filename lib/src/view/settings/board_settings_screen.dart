@@ -65,7 +65,7 @@ class _BoardSettingsScreenState extends ConsumerState<BoardSettingsScreen> {
     final accountPrefsAsync = ref.watch(accountPreferencesProvider);
     final accountPrefs = accountPrefsAsync.value ?? defaultAccountPreferences;
     final authUser = ref.watch(authControllerProvider);
-    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
+    final isOnline = ref.watch(isDeviceOnlineProvider);
     // We only allow changing account preferences if the user is logged out (prefs are local in that
     // case) or if the user is logged in and online (prefs are stored on the server in that case).
     final accountPrefsEnabled =

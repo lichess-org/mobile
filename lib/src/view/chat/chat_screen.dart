@@ -4,9 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/app_links_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/chat/chat.dart';
-import 'package:lichess_mobile/src/model/chat/chat_mixin.dart';
+import 'package:lichess_mobile/src/model/chat/chat_providers.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/tab_scaffold.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -332,6 +332,7 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
           ),
           controller: _textController,
           keyboardType: TextInputType.text,
+          textCapitalization: TextCapitalization.sentences,
           minLines: 1,
           maxLines: 4,
           enableSuggestions: true,

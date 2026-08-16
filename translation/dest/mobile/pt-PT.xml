@@ -6,7 +6,7 @@
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Todos os jogos</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Tens a certeza?</string>
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Configurações do tabuleiro</string>
-  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Cancelar o pedido de desforra</string>
+  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Cancelar pedido de voltar</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Limpar</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Limpar movimento salvo</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Entrar num jogo</string>
@@ -21,7 +21,7 @@
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Tens de iniciar sessão para visualizar esta página.</string>
   <string name="newGame" comment="New game button in OTB and play against offline computer features">Novo jogo</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Sem resultados</string>
-  <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Por favor, repara que nem todas as funcionalidades da aplicação antiga ou do website estão atualmente disponíveis, mas estamos a adicionar novas funcionalidades o tempo o momento.</string>
+  <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Por favor, repara que nem todas as funcionalidades da aplicação antiga ou do website estão atualmente disponíveis, mas estamos a adicionar novas funcionalidades a todo o momento.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Não estás a seguir nenhum utilizador.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">OK</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Jogar offline contra um amigo</string>
@@ -91,4 +91,5 @@
   <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Anterior</string>
   <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">Ou importar um ficheiro PGN</string>
   <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">Boa jogada, mas há melhor</string>
+  <string name="perfShortChess960" comment="Short label for the Chess960 performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">960</string>
 </resources>
