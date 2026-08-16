@@ -23,7 +23,10 @@ class PieceSetScreen extends ConsumerStatefulWidget {
 class _PieceSetScreenState extends ConsumerState<PieceSetScreen> {
   bool isLoading = false;
 
-  Future<void> onChanged(PieceSet? value) async {
+  Future<void> onChanged(PieceSet? value, bool toggle3d) async {
+    if(toggle3d == null ){
+	ref.read(boardPreferencesProvider.notifier).toggleEnable3dAssets(toggle3d);
+    }
     if (value != null) {
       ref.read(boardPreferencesProvider.notifier).setPieceSet(value);
       setState(() {
@@ -37,35 +40,9 @@ class _PieceSetScreenState extends ConsumerState<PieceSetScreen> {
             isLoading = false;
           });
 	}
-	// unset 3D PieceSet
-	remove3DPieceSetFromPreferences();
       }
     }
   }
-
-// TODO: Possibly reduce repeated code while still supporting 3D  (?) 
-  void handlePieceSet3D(PieceSet3D? value) async {
-	  if (value != null) {
-	ref.read(boardPreferencesProvider.notifier).setPieceSet3D(value);
-		  setState(() {
-			isLoading = true;
-			});
-		  try {
-			  await precachePieceImages3D(value);
-		  } finally {
-			  if (mounted) {
-				  setState(() {
-						  isLoading = false;
-						  });
-			  }
-		  }
-	  }
-
-  }
-
-void remove3DPieceSetFromPreferences(){
-	ref.read(boardPreferencesProvider.notifier).setPieceSet3D(null);
-}
 
 
   List<AssetImage> getPieceImages(PieceSet set) {
@@ -79,7 +56,7 @@ void remove3DPieceSetFromPreferences(){
     ];
   }
 
-  List<AssetImage> get3DPieceImages(PieceSet3D set) {
+  List<AssetImage> get3DPieceImages(PieceSet set) {
     return [
       set.assets[PieceKind.whiteKing]!,
       set.assets[PieceKind.blackQueen]!,
@@ -112,14 +89,14 @@ void remove3DPieceSetFromPreferences(){
         Center(
               child: SafeArea(
         child: ListView.separated(
-          itemCount: PieceSet.values.length,
+          itemCount: PieceSet.pieceSets2d.length,
           separatorBuilder: (_, _) => Theme.of(context).platform == TargetPlatform.iOS
               ? const PlatformDivider()
               : const SizedBox.shrink(),
           itemBuilder: (context, index) {
-            final pieceSet = PieceSet.values[index];
+            final pieceSet = PieceSet.pieceSets2d[index];
             return ListTile(
-              trailing: boardPrefs.pieceSet == pieceSet  && boardPrefs.pieceSet3D == null ? const Icon(Icons.check) : null,
+              trailing: boardPrefs.pieceSet == pieceSet ? const Icon(Icons.check) : null,
               title: Text(pieceSet.label),
               subtitle: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 264),
@@ -139,7 +116,7 @@ void remove3DPieceSetFromPreferences(){
 
                         ),
                       ),
-                      onTap: isLoading ? null : () => onChanged(pieceSet),
+                      onTap: isLoading ? null : () => onChanged(pieceSet, false),
                       selected: boardPrefs.pieceSet == pieceSet,
                     );
                   },
@@ -150,14 +127,14 @@ void remove3DPieceSetFromPreferences(){
 	Center(
               child: SafeArea(
                 child: ListView.separated(
-                  itemCount: PieceSet3D.values.length,
+                  itemCount: PieceSet.pieceSets3d.length,
                   separatorBuilder: (_, _) => Theme.of(context).platform == TargetPlatform.iOS
                       ? const PlatformDivider()
                       : const SizedBox.shrink(),
                   itemBuilder: (context, index) {
-                    final pieceSet = PieceSet3D.values[index];
+                    final pieceSet = PieceSet.pieceSets3d[index];
                     return ListTile(
-                      trailing: boardPrefs.pieceSet3D == pieceSet ? const Icon(Icons.check) : null,
+                      trailing: boardPrefs.pieceSet == pieceSet ? const Icon(Icons.check) : null,
                       title: Text(pieceSet.label),
                       subtitle: ConstrainedBox(
                         constraints: const BoxConstraints(maxWidth: 264),
@@ -181,8 +158,9 @@ void remove3DPieceSetFromPreferences(){
                           ],
                         ),
                       ),
-                      onTap: isLoading ? null : () => handlePieceSet3D(pieceSet),
-                      selected: boardPrefs.pieceSet3D == pieceSet,
+                      onTap: isLoading ? null : () => onChanged(pieceSet, true),
+                      selected: boardPrefs.pieceSet == pieceSet,
+		      
                     );
                   },
                 ),

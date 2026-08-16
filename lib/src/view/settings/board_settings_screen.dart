@@ -103,7 +103,7 @@ class _BoardSettingsScreenState extends ConsumerState<BoardSettingsScreen> {
               ),
               SettingsListTile(
                 settingsLabel: Text(context.l10n.pieceSet),
-                settingsValue: boardPrefs.pieceSet3D?.label ?? boardPrefs.pieceSet.label,
+                settingsValue: boardPrefs.pieceSet.label,
                 onTap: () {
                   Navigator.of(context).push(PieceSetScreen.buildRoute());
                 },
