@@ -62,7 +62,7 @@ class UserProfileWidget extends ConsumerWidget {
             if (userFullName != null)
               Padding(padding: const EdgeInsets.only(bottom: 5), child: userFullName),
             if (user.profile?.bio != null)
-              Linkify(
+              RichLinkText(
                 onOpen: (link) async =>
                     await ref.read(appLinksServiceProvider).onLinkifyOpen(context, link),
                 linkifiers: AppLinksService.kLichessLinkifiers,

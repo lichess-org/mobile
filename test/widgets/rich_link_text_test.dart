@@ -35,38 +35,54 @@ void main() {
       expect(url.url, 'http://www.example.com');
     });
 
-    test('www URL with defaultToHttps adds https', () {
-      final result = linkify(
-        'visit www.example.com now',
-        options: const LinkifyOptions(defaultToHttps: true),
-      );
-      final url = result.firstWhere((e) => e is UrlElement) as UrlElement;
-      expect(url.url, 'https://www.example.com');
-    });
-
     test('humanizes URL display text', () {
-      final result = linkify(
-        'visit https://example.com/path now',
-        options: const LinkifyOptions(humanize: true),
-      );
+      final result = linkify('visit https://example.com/path now');
       final url = result.firstWhere((e) => e is UrlElement) as UrlElement;
       expect(url.text, isNot(contains('https://')));
       expect(url.url, contains('https://'));
     });
 
-    test('does not humanize when humanize is false', () {
-      final result = linkify(
-        'visit https://example.com now',
-        options: const LinkifyOptions(humanize: false),
-      );
-      final url = result.firstWhere((e) => e is UrlElement) as UrlElement;
-      expect(url.text, equals(url.url));
-    });
-
-    test('excludeLastPeriod removes trailing dot from URL', () {
+    test('removes trailing period from URL', () {
       final result = linkify('visit https://example.com. now');
       final url = result.firstWhere((e) => e is UrlElement) as UrlElement;
       expect(url.url, isNot(endsWith('.')));
+    });
+
+    test('linkifies multiple URLs that end with a period', () {
+      final result = linkify('https://a.com. more text https://b.com. end');
+      final urls = result.whereType<UrlElement>().toList();
+      expect(urls, hasLength(2));
+      expect(urls[0].url, 'https://a.com');
+      expect(urls[1].url, 'https://b.com');
+      final texts = result.whereType<TextElement>().map((e) => e.text).join();
+      expect(texts, contains('more text'));
+      expect(texts, contains('end'));
+    });
+
+    test('preserves balanced parentheses in URLs (e.g. Wikipedia)', () {
+      final result = linkify('http://en.wikipedia.org/wiki/Saw_(film)');
+      final url = result.firstWhere((e) => e is UrlElement) as UrlElement;
+      expect(url.url, 'http://en.wikipedia.org/wiki/Saw_(film)');
+    });
+
+    test('strips unbalanced trailing ) from URL in parentheses', () {
+      final result = linkify('see (https://example.com/path)');
+      final url = result.firstWhere((e) => e is UrlElement) as UrlElement;
+      expect(url.url, 'https://example.com/path');
+      final texts = result.whereType<TextElement>().map((e) => e.text).join();
+      expect(texts, contains(')'));
+    });
+
+    test('strips only unbalanced ) from Wikipedia URL in parentheses', () {
+      final result = linkify('(https://en.wikipedia.org/wiki/Dart_(programming_language))');
+      final url = result.firstWhere((e) => e is UrlElement) as UrlElement;
+      expect(url.url, 'https://en.wikipedia.org/wiki/Dart_(programming_language)');
+    });
+
+    test('strips multiple unbalanced trailing parentheses', () {
+      final result = linkify('(see https://example.com))');
+      final url = result.firstWhere((e) => e is UrlElement) as UrlElement;
+      expect(url.url, 'https://example.com');
     });
 
     test('detects email address', () {
@@ -204,14 +220,16 @@ void main() {
     });
   });
 
-  group('Linkify widget', () {
+  group('RichLinkText widget', () {
     testWidgets('renders plain text', (WidgetTester tester) async {
-      await tester.pumpWidget(const MaterialApp(home: Linkify(text: 'hello world')));
+      await tester.pumpWidget(const MaterialApp(home: RichLinkText(text: 'hello world')));
       expect(find.text('hello world'), findsOneWidget);
     });
 
     testWidgets('renders multiple elements', (WidgetTester tester) async {
-      await tester.pumpWidget(const MaterialApp(home: Linkify(text: 'before https://a.com after')));
+      await tester.pumpWidget(
+        const MaterialApp(home: RichLinkText(text: 'before https://a.com after')),
+      );
       expect(find.byType(RichText), findsOneWidget);
       final richText = tester.widget<RichText>(find.byType(RichText));
       final plainText = richText.text.toPlainText();
@@ -222,7 +240,7 @@ void main() {
     testWidgets('onOpen callback is wired into TextSpan recognizer', (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
-          home: Linkify(text: 'tap https://example.com', onOpen: (_) {}),
+          home: RichLinkText(text: 'tap https://example.com', onOpen: (_) {}),
         ),
       );
 
@@ -233,12 +251,29 @@ void main() {
       expect(hasRecognizer, isTrue);
     });
 
+    testWidgets('onOpen is called when a link is tapped', (WidgetTester tester) async {
+      LinkableElement? tappedLink;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Center(
+            child: IntrinsicWidth(
+              child: RichLinkText(text: 'https://example.com', onOpen: (link) => tappedLink = link),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('example.com'));
+      expect(tappedLink, isNotNull);
+      expect(tappedLink!.url, 'https://example.com');
+    });
+
     testWidgets('passes maxLines and overflow', (WidgetTester tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: SizedBox(
             width: 100,
-            child: Linkify(
+            child: RichLinkText(
               text: 'very long text that should definitely overflow the given width',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
@@ -257,7 +292,7 @@ void main() {
 
       await tester.pumpWidget(
         const MaterialApp(
-          home: Linkify(text: 'plain text no links', style: customStyle),
+          home: RichLinkText(text: 'plain text no links', style: customStyle),
         ),
       );
 

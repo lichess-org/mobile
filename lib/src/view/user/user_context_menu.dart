@@ -44,7 +44,7 @@ class UserContextMenu extends ConsumerWidget {
                   UserFullNameWidget(user: value.lightUser, style: Styles.title),
                   const SizedBox(height: 8.0),
                   if (value.profile?.bio != null)
-                    Linkify(
+                    RichLinkText(
                       onOpen: (link) async =>
                           await ref.read(appLinksServiceProvider).onLinkifyOpen(context, link),
                       linkifiers: AppLinksService.kLichessLinkifiers,

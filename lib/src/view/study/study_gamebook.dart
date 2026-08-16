@@ -63,7 +63,7 @@ class _CommentState extends ConsumerState<_Comment> {
           controller: _scrollController,
           child: Padding(
             padding: const EdgeInsets.only(right: 5),
-            child: Linkify(
+            child: RichLinkText(
               text: comment,
               style: const TextStyle(fontSize: 16),
               onOpen: (link) {

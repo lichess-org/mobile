@@ -235,7 +235,7 @@ class _MessageBubble extends ConsumerWidget {
                     onTap: () =>
                         Navigator.of(context).push(UserOrProfileScreen.buildRoute(message.user!)),
                   ),
-                Linkify(
+                RichLinkText(
                   onOpen: (link) async =>
                       await ref.read(appLinksServiceProvider).onLinkifyOpen(context, link),
                   linkifiers: AppLinksService.kLichessLinkifiers,

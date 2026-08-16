@@ -420,7 +420,7 @@ class AppLinksService {
 
   static const kLichessLinkifiers = [UrlLinkifier(), EmailLinkifier(), UserTagLinkifier()];
 
-  /// Handles link clicks in Linkify widgets throughout the app.
+  /// Handles link clicks in RichLinkText widgets throughout the app.
   Future<void> onLinkifyOpen(BuildContext context, LinkableElement link) async {
     if (link is UrlElement && link.url.startsWith(RegExp('https?:\\/\\/$kLichessHost'))) {
       // Handle Lichess links specifically

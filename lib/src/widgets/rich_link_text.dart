@@ -3,6 +3,119 @@ import 'package:flutter/material.dart';
 
 typedef LinkCallback = void Function(LinkableElement link);
 
+/// A widget that renders [text] with URLs, email addresses and user tags
+/// turned into tappable links.
+class RichLinkText extends StatefulWidget {
+  final String text;
+  final List<Linkifier> linkifiers;
+  final LinkCallback? onOpen;
+  final TextStyle? style;
+  final TextStyle? linkStyle;
+  final TextAlign textAlign;
+  final TextDirection? textDirection;
+  final int? maxLines;
+  final TextOverflow overflow;
+  final TextScaler? textScaler;
+
+  const RichLinkText({
+    super.key,
+    required this.text,
+    this.linkifiers = defaultLinkifiers,
+    this.onOpen,
+    this.style,
+    this.linkStyle,
+    this.textAlign = TextAlign.start,
+    this.textDirection,
+    this.maxLines,
+    this.overflow = TextOverflow.clip,
+    this.textScaler,
+  });
+
+  @override
+  State<RichLinkText> createState() => _RichLinkTextState();
+}
+
+class _RichLinkTextState extends State<RichLinkText> {
+  late List<LinkifyElement> _elements;
+  final List<TapGestureRecognizer> _recognizers = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _elements = linkify(widget.text, linkifiers: widget.linkifiers);
+    _createRecognizers();
+  }
+
+  @override
+  void didUpdateWidget(RichLinkText oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.text != widget.text ||
+        oldWidget.linkifiers != widget.linkifiers ||
+        oldWidget.onOpen != widget.onOpen) {
+      _disposeRecognizers();
+      _elements = linkify(widget.text, linkifiers: widget.linkifiers);
+      _createRecognizers();
+    }
+  }
+
+  @override
+  void dispose() {
+    _disposeRecognizers();
+    super.dispose();
+  }
+
+  void _createRecognizers() {
+    if (widget.onOpen == null) return;
+    for (final element in _elements) {
+      if (element is LinkableElement) {
+        _recognizers.add(TapGestureRecognizer()..onTap = () => widget.onOpen!(element));
+      }
+    }
+  }
+
+  void _disposeRecognizers() {
+    for (final recognizer in _recognizers) {
+      recognizer.dispose();
+    }
+    _recognizers.clear();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final defaultStyle = widget.style ?? DefaultTextStyle.of(context).style;
+
+    final children = <InlineSpan>[];
+    var recognizerIndex = 0;
+    for (final element in _elements) {
+      if (element is LinkableElement) {
+        children.add(
+          TextSpan(
+            text: element.text,
+            style:
+                widget.linkStyle ??
+                defaultStyle.copyWith(
+                  color: Colors.blueAccent,
+                  decoration: TextDecoration.underline,
+                ),
+            recognizer: widget.onOpen != null ? _recognizers[recognizerIndex++] : null,
+          ),
+        );
+      } else {
+        children.add(TextSpan(text: element.text, style: defaultStyle));
+      }
+    }
+
+    return Text.rich(
+      TextSpan(children: children),
+      textAlign: widget.textAlign,
+      textDirection: widget.textDirection,
+      maxLines: widget.maxLines,
+      overflow: widget.overflow,
+      textScaler: widget.textScaler,
+    );
+  }
+}
+
 abstract class LinkifyElement {
   final String text;
   final String originText;
@@ -41,22 +154,10 @@ class UserTagElement extends LinkableElement {
   UserTagElement(this.userTag) : super(userTag, userTag);
 }
 
-class LinkifyOptions {
-  final bool humanize;
-  final bool defaultToHttps;
-  final bool excludeLastPeriod;
-
-  const LinkifyOptions({
-    this.humanize = true,
-    this.defaultToHttps = false,
-    this.excludeLastPeriod = true,
-  });
-}
-
 abstract class Linkifier {
   const Linkifier();
 
-  List<LinkifyElement> parse(List<LinkifyElement> elements, LinkifyOptions options);
+  List<LinkifyElement> parse(List<LinkifyElement> elements);
 }
 
 final _urlRegex = RegExp(r'^(.*?)(https?:\/\/\S+|www\.\S+)', caseSensitive: false, dotAll: true);
@@ -73,7 +174,7 @@ class UrlLinkifier extends Linkifier {
   const UrlLinkifier();
 
   @override
-  List<LinkifyElement> parse(List<LinkifyElement> elements, LinkifyOptions options) {
+  List<LinkifyElement> parse(List<LinkifyElement> elements) {
     final result = <LinkifyElement>[];
 
     for (final element in elements) {
@@ -88,7 +189,7 @@ class UrlLinkifier extends Linkifier {
         continue;
       }
 
-      var remaining = element.text.replaceFirst(match.group(0)!, '');
+      final remaining = element.text.replaceFirst(match.group(0)!, '');
 
       if (match.group(1)?.isNotEmpty ?? false) {
         result.add(TextElement(match.group(1)!));
@@ -96,36 +197,21 @@ class UrlLinkifier extends Linkifier {
 
       if (match.group(2)?.isNotEmpty ?? false) {
         var matchedUrl = match.group(2)!;
-        var originText = matchedUrl;
+        final originText = matchedUrl;
         var trailing = '';
 
-        if (options.excludeLastPeriod && matchedUrl.endsWith('.')) {
+        while (true) {
+          final punct = _trailingPunctRegex.firstMatch(matchedUrl);
+          if (punct == null) break;
+          if (punct.group(0)! == ')' && !_hasUnbalancedTrailingParens(matchedUrl)) break;
+          trailing = punct.group(0)! + trailing;
           matchedUrl = matchedUrl.substring(0, matchedUrl.length - 1);
-          originText = originText.substring(0, originText.length - 1);
-          trailing = '.$remaining';
-          remaining = '';
-        } else {
-          while (true) {
-            final punct = _trailingPunctRegex.firstMatch(matchedUrl);
-            if (punct != null) {
-              trailing = punct.group(0)! + trailing;
-              matchedUrl = matchedUrl.substring(0, matchedUrl.length - 1);
-            } else {
-              break;
-            }
-          }
-        }
-        var fullUrl = matchedUrl;
-        if (!fullUrl.startsWith(_protocolRegex)) {
-          fullUrl = '${options.defaultToHttps ? 'https' : 'http'}://$matchedUrl';
         }
 
-        if (options.humanize) {
-          final displayText = fullUrl.replaceFirst(_protocolRegex, '');
-          result.add(UrlElement(fullUrl, displayText, originText));
-        } else {
-          result.add(UrlElement(fullUrl, null, originText));
-        }
+        final fullUrl = matchedUrl.startsWith(_protocolRegex) ? matchedUrl : 'http://$matchedUrl';
+        final displayText = fullUrl.replaceFirst(_protocolRegex, '');
+
+        result.add(UrlElement(fullUrl, displayText, originText));
 
         if (trailing.isNotEmpty) {
           result.add(TextElement(trailing));
@@ -133,12 +219,24 @@ class UrlLinkifier extends Linkifier {
       }
 
       if (remaining.isNotEmpty) {
-        result.addAll(parse([TextElement(remaining)], options));
+        result.addAll(parse([TextElement(remaining)]));
       }
     }
 
     return result;
   }
+}
+
+bool _hasUnbalancedTrailingParens(String url) {
+  var balance = 0;
+  for (final char in url.split('')) {
+    if (char == '(') {
+      balance++;
+    } else if (char == ')') {
+      balance--;
+    }
+  }
+  return balance < 0;
 }
 
 final _emailRegex = RegExp(
@@ -151,7 +249,7 @@ class EmailLinkifier extends Linkifier {
   const EmailLinkifier();
 
   @override
-  List<LinkifyElement> parse(List<LinkifyElement> elements, LinkifyOptions options) {
+  List<LinkifyElement> parse(List<LinkifyElement> elements) {
     final result = <LinkifyElement>[];
 
     for (final element in elements) {
@@ -178,7 +276,7 @@ class EmailLinkifier extends Linkifier {
       }
 
       if (remaining.isNotEmpty) {
-        result.addAll(parse([TextElement(remaining)], options));
+        result.addAll(parse([TextElement(remaining)]));
       }
     }
 
@@ -192,7 +290,7 @@ class UserTagLinkifier extends Linkifier {
   const UserTagLinkifier();
 
   @override
-  List<LinkifyElement> parse(List<LinkifyElement> elements, LinkifyOptions options) {
+  List<LinkifyElement> parse(List<LinkifyElement> elements) {
     final result = <LinkifyElement>[];
 
     for (final element in elements) {
@@ -230,7 +328,7 @@ class UserTagLinkifier extends Linkifier {
       }
 
       if (textRemaining.isNotEmpty) {
-        result.addAll(parse([TextElement(textRemaining)], options));
+        result.addAll(parse([TextElement(textRemaining)]));
       }
     }
 
@@ -240,19 +338,15 @@ class UserTagLinkifier extends Linkifier {
 
 const List<Linkifier> defaultLinkifiers = [UrlLinkifier(), EmailLinkifier()];
 
-List<LinkifyElement> linkify(
-  String text, {
-  LinkifyOptions options = const LinkifyOptions(),
-  List<Linkifier> linkifiers = defaultLinkifiers,
-}) {
-  var elements = <LinkifyElement>[TextElement(text)];
-
+List<LinkifyElement> linkify(String text, {List<Linkifier> linkifiers = defaultLinkifiers}) {
   if (text.isEmpty) {
     return [];
   }
 
+  var elements = <LinkifyElement>[TextElement(text)];
+
   for (final linkifier in linkifiers) {
-    elements = linkifier.parse(elements, options);
+    elements = linkifier.parse(elements);
   }
 
   return elements;
@@ -283,56 +377,4 @@ TextSpan buildTextSpan(
   }
 
   return TextSpan(children: children);
-}
-
-class Linkify extends StatelessWidget {
-  final String text;
-  final List<Linkifier> linkifiers;
-  final LinkCallback? onOpen;
-  final LinkifyOptions options;
-  final TextStyle? style;
-  final TextStyle? linkStyle;
-  final TextAlign textAlign;
-  final TextDirection? textDirection;
-  final int? maxLines;
-  final TextOverflow overflow;
-  final TextScaler? textScaler;
-
-  const Linkify({
-    super.key,
-    required this.text,
-    this.linkifiers = defaultLinkifiers,
-    this.onOpen,
-    this.options = const LinkifyOptions(),
-    this.style,
-    this.linkStyle,
-    this.textAlign = TextAlign.start,
-    this.textDirection,
-    this.maxLines,
-    this.overflow = TextOverflow.clip,
-    this.textScaler,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final elements = linkify(text, options: options, linkifiers: linkifiers);
-
-    final defaultStyle = style ?? DefaultTextStyle.of(context).style;
-
-    return Text.rich(
-      buildTextSpan(
-        elements,
-        style: defaultStyle,
-        onOpen: onOpen,
-        linkStyle:
-            linkStyle ??
-            defaultStyle.copyWith(color: Colors.blueAccent, decoration: TextDecoration.underline),
-      ),
-      textAlign: textAlign,
-      textDirection: textDirection,
-      maxLines: maxLines,
-      overflow: overflow,
-      textScaler: textScaler,
-    );
-  }
 }
