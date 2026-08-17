@@ -193,8 +193,8 @@ class _BroadcastPreviewState extends ConsumerState<BroadcastPreview> {
         SliverPadding(
           padding: Styles.bodyPadding.add(
             EdgeInsetsGeometry.only(
-              // top media query padding is already included in the SliverSafeArea above
-              top: showSearchBar ? 0.0 : mediaQueryPadding.top,
+              // top media query padding is already included in one of the SliverSafeArea above
+              top: hasComment || showSearchBar ? 0.0 : mediaQueryPadding.top,
               bottom: mediaQueryPadding.bottom,
             ),
           ),
