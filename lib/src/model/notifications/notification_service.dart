@@ -98,6 +98,15 @@ class NotificationService {
   /// This method should be called once the app is ready to receive notifications,
   /// and after [LichessBinding.initializeNotifications] has been called.
   Future<void> start() async {
+    // Firebase auto-init is disabled at build time (`FirebaseMessagingAutoInitEnabled` in
+    // Info.plist, `firebase_messaging_auto_init_enabled` in AndroidManifest.xml) so that nothing
+    // is registered with Firebase before the app actually starts its notification service.
+    // Since firebase_messaging 16.5.0, the iOS plugin skips `registerForRemoteNotifications` and
+    // ignores the APNS device token entirely while auto-init is disabled, so we have to enable it
+    // explicitly here, otherwise `getAPNSToken()` always returns null and the device can never be
+    // registered for push notifications.
+    await LichessBinding.instance.firebaseMessaging.setAutoInitEnabled(true);
+
     await _authEventsSubscription?.cancel();
     _authEventsSubscription = authEventsStream.listen((event) {
       switch (event) {
