@@ -353,6 +353,7 @@ class _ObservedBoardThumbnailState extends ConsumerState<ObservedBoardThumbnail>
               tournamentSlug: widget.tournamentSlug,
               roundSlug: widget.roundSlug,
               title: widget.title,
+              initialPov: orientation,
             ),
           );
         },
