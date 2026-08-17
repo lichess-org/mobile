@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_round_controller.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -67,6 +68,7 @@ class BroadcastBoardsTab extends ConsumerWidget {
                 tournamentSlug: tournamentSlug,
                 roundSlug: value.round.slug,
                 customScoring: value.round.customScoring,
+                pinnedComment: value.round.pinnedComment,
               ),
       AsyncError(:final error) => Center(child: Text('Could not load broadcast: $error')),
       _ => const Center(child: CircularProgressIndicator.adaptive()),
@@ -83,6 +85,7 @@ class BroadcastPreview extends ConsumerStatefulWidget {
     required this.tournamentSlug,
     required this.roundSlug,
     required this.customScoring,
+    required this.pinnedComment,
   });
 
   // A circular progress indicator is used instead of shimmers currently
@@ -93,7 +96,8 @@ class BroadcastPreview extends ConsumerStatefulWidget {
       title = '',
       tournamentSlug = '',
       roundSlug = '',
-      customScoring = null;
+      customScoring = null,
+      pinnedComment = null;
 
   final BroadcastTournamentId tournamentId;
   final BroadcastRoundId roundId;
@@ -102,6 +106,7 @@ class BroadcastPreview extends ConsumerStatefulWidget {
   final String tournamentSlug;
   final String roundSlug;
   final BroadcastCustomScoring? customScoring;
+  final String? pinnedComment;
   @override
   ConsumerState<BroadcastPreview> createState() => _BroadcastPreviewState();
 }
@@ -147,12 +152,23 @@ class _BroadcastPreviewState extends ConsumerState<BroadcastPreview> {
         ? widget.games
         : widget.games!.where((game) => _containsPlayer(game, _searchQuery)).toIList();
     final showSearchBar = widget.games != null && widget.games!.length > 6;
+    final hasComment = widget.pinnedComment != null && widget.pinnedComment!.isNotEmpty;
     final mediaQueryPadding = MediaQuery.paddingOf(context);
 
     return CustomScrollView(
       slivers: [
+        if (hasComment)
+          SliverSafeArea(
+            bottom: false,
+            sliver: SliverPadding(
+              padding: Styles.bodyPadding.copyWith(bottom: 0.0),
+              sliver: SliverToBoxAdapter(child: _PinnedCommentCard(text: widget.pinnedComment!)),
+            ),
+          ),
+
         if (showSearchBar)
           SliverSafeArea(
+            top: !hasComment,
             bottom: false,
             sliver: SliverPadding(
               padding: Styles.bodyPadding.copyWith(bottom: 0.0),
@@ -416,4 +432,21 @@ class _PlayerWidget extends StatelessWidget {
 bool _containsPlayer(BroadcastGame game, String query) {
   final q = query.toLowerCase();
   return game.players.values.any((pwc) => pwc.player.name?.toLowerCase().contains(q) ?? false);
+}
+
+class _PinnedCommentCard extends StatelessWidget {
+  const _PinnedCommentCard({required this.text});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: EdgeInsets.zero,
+      child: ListTile(
+        leading: const Icon(LichessIcons.radio_tower_lichess, size: 28),
+        title: Text(text, style: TextStyle(fontSize: _kPlayerWidgetTextStyle.fontSize)),
+      ),
+    );
+  }
 }

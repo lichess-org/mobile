@@ -165,6 +165,7 @@ sealed class BroadcastRound with _$BroadcastRound {
     required DateTime? finishedAt,
     required bool startsAfterPrevious,
     required BroadcastCustomScoring? customScoring,
+    String? pinnedComment,
   }) = _BroadcastRound;
 }
 
