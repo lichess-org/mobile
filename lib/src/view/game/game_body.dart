@@ -898,14 +898,6 @@ class _GameBottomBar extends ConsumerWidget {
             ref.read(isBoardTurnedProvider.notifier).toggle();
           },
         ),
-        if (gameState.game.playable && gameState.game.meta.speed == Speed.correspondence ||
-            gameState.game.finished)
-          BottomSheetAction(
-            makeLabel: (context) => Text(context.l10n.analysis),
-            onPressed: () {
-              Navigator.of(context).push(AnalysisScreen.buildRoute(gameState.analysisOptions));
-            },
-          ),
         if (gameState.game.abortable)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.abortGame),
@@ -1049,6 +1041,14 @@ class _GameBottomBar extends ConsumerWidget {
             makeLabel: (context) => Text(context.l10n.backToTournament),
             onPressed: () {
               Navigator.of(context).push(TournamentScreen.buildRoute(gameState.tournament!.id));
+            },
+          ),
+        if (gameState.game.playable && gameState.game.meta.speed == Speed.correspondence ||
+            gameState.game.finished)
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.analysis),
+            onPressed: () {
+              Navigator.of(context).push(AnalysisScreen.buildRoute(gameState.analysisOptions));
             },
           ),
       ],
