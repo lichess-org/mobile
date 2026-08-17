@@ -240,14 +240,15 @@ BroadcastRoundResponse _makeRoundWithGamesFromJson(Map<String, dynamic> json) {
   final groupName = pick(json, 'group', 'name').asStringOrNull();
   final group = pick(json, 'group', 'tours').asListOrNull(_tournamentGroupFromPick)?.toIList();
   final tournament = pick(json, 'tour').required();
-  final round = pick(json, 'round').required();
+  final roundPick = pick(json, 'round').required();
   final games = pick(json, 'games').required();
+  final pinnedComment = pick(json, 'study', 'pinnedComment').asStringOrNull();
 
   return (
     groupName: groupName,
     group: group,
     tournament: _tournamentDataFromPick(tournament),
-    round: _roundFromPick(round),
+    round: _roundFromPick(roundPick).copyWith(pinnedComment: pinnedComment),
     games: _gamesFromPick(games),
     photos: _photosFromJson(json),
     isSubscribed: pick(json, 'isSubscribed').asBoolOrNull(),
