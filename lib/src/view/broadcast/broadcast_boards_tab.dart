@@ -47,8 +47,9 @@ class BroadcastBoardsTab extends ConsumerWidget {
     final round = ref.watch(broadcastRoundControllerProvider(roundId));
 
     return switch (round) {
-      AsyncData(:final value) =>
-        value.games.isEmpty
+      AsyncData(:final value) => (() {
+        final filteredGames = _filteredGames(value.games, showOnlyOngoingGames, teamFilter);
+        return value.games.isEmpty || filteredGames.isEmpty
             ? Padding(
                 padding: Styles.bodyPadding,
                 child: Column(
@@ -57,12 +58,17 @@ class BroadcastBoardsTab extends ConsumerWidget {
                   children: [
                     const Icon(Icons.info, size: 30),
                     const SizedBox(height: 8.0),
-                    Text(context.l10n.broadcastNoBoardsYet, textAlign: TextAlign.center),
+                    Text(
+                      value.games.isEmpty
+                          ? context.l10n.broadcastNoBoardsYet
+                          : 'No games matching filter criteria.',
+                      textAlign: TextAlign.center,
+                    ),
                   ],
                 ),
               )
             : BroadcastPreview(
-                games: filteredGames(value.games, showOnlyOngoingGames, teamFilter),
+                games: filteredGames,
                 tournamentId: tournamentId,
                 roundId: roundId,
                 title: value.round.name,
@@ -71,13 +77,14 @@ class BroadcastBoardsTab extends ConsumerWidget {
                 customScoring: value.round.customScoring,
                 pinnedComment: value.round.pinnedComment,
                 teamFilter: teamFilter,
-              ),
+              );
+      })(),
       AsyncError(:final error) => Center(child: Text('Could not load broadcast: $error')),
       _ => const Center(child: CircularProgressIndicator.adaptive()),
     };
   }
 
-  IList<BroadcastGame> filteredGames(
+  IList<BroadcastGame> _filteredGames(
     IMap<BroadcastGameId, BroadcastGame> games,
     bool showOnlyOngoingGames,
     String? teamFilter,
