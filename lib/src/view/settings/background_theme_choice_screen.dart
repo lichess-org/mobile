@@ -73,6 +73,10 @@ class _Body extends ConsumerWidget {
                     maxWidth: maxDimension,
                     maxHeight: maxDimension,
                     imageQuality: 80,
+                    // We only need the pixels to build the background and extract its colors, so
+                    // skip the EXIF metadata. This avoids the iOS photo library permission prompt
+                    // entirely: the picker runs out of process and only hands back the chosen file.
+                    requestFullMetadata: false,
                   );
 
                   if (image != null) {
