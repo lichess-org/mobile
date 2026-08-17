@@ -2,13 +2,13 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart' show Override, ProviderOrFamily;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
+import 'package:l10n_esperanto/l10n_esperanto.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/db/database.dart';
@@ -25,7 +25,9 @@ import 'package:lichess_mobile/src/network/aggregator.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
-import 'package:lichess_mobile/src/tab_scaffold.dart' show rootNavRouteStackObserver;
+import 'package:lichess_mobile/src/tab_navigation.dart' show rootNavRouteStackObserver;
+import 'package:lichess_mobile/src/utils/riverpod.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -92,7 +94,17 @@ class _FakeAppState extends ConsumerState<_FakeApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      // Mirror production (see app.dart): [AppLocalizations.localizationsDelegates] would pull in
+      // the `flutter_localizations` delegates, which localize the Flutter material and cupertino
+      // libraries rather than the `material_ui` and `cupertino_ui` ones the app is built with.
+      // Using them here would hide from tests any code that wrongly depends on Flutter's own
+      // MaterialLocalizations.
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        ...GlobalMaterialLocalizations.delegates,
+        MaterialLocalizationsEo.delegate,
+        CupertinoLocalizationsEo.delegate,
+      ],
       home: widget.home,
       // Mirror production (see app.dart) so navigation logic relying on the
       // route stack observer behaves the same in tests.
@@ -256,6 +268,8 @@ Future<Widget> makeTestProviderScope(
 
   return ProviderScope(
     key: key,
+    // Use the same retry policy as the app, so tests see production behaviour.
+    retry: lichessProviderRetry,
     overrides: overrideMap.values.toList(),
     child: TestSurface(size: surfaceSize, child: child),
   );

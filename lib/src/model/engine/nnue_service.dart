@@ -4,16 +4,16 @@ import 'dart:isolate';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart' show AlertDialog, Navigator, Text, showAdaptiveDialog;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
-import 'package:lichess_mobile/src/tab_scaffold.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:logging/logging.dart';
+import 'package:material_ui/material_ui.dart' show AlertDialog, Navigator, Text, showAdaptiveDialog;
 import 'package:multistockfish/multistockfish.dart';
 
 final _logger = Logger('NnueService');
@@ -187,13 +187,13 @@ class NnueService {
           );
           if (isOk == true) {
             await doDownload();
-            return checkNNUEFiles();
+            return await checkNNUEFiles();
           } else {
-            return Future.value(false);
+            return await Future.value(false);
           }
         }
       } else {
-        return doDownload();
+        return await doDownload();
       }
     } finally {
       _nnueOperationInProgress = false;

@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/model/notifications/notification_service.dart
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
+import 'package:lichess_mobile/src/utils/riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
@@ -104,7 +105,11 @@ Future<ProviderContainer> makeContainer({
     ...?overrides,
   };
 
-  final container = ProviderContainer(overrides: overrideMap.values.toList());
+  final container = ProviderContainer(
+    // Use the same retry policy as the app, so tests see production behaviour.
+    retry: lichessProviderRetry,
+    overrides: overrideMap.values.toList(),
+  );
 
   addTearDown(binding.reset);
   addTearDown(container.dispose);

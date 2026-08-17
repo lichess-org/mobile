@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// A platform agnostic list section.
 ///

@@ -2,13 +2,12 @@ import 'dart:async';
 
 import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
+import 'package:lichess_mobile/src/model/account/ongoing_games_notifier.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
@@ -31,6 +30,7 @@ import 'package:lichess_mobile/src/view/game/game_loading_board.dart';
 import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/view/game/game_result_dialog.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
+import 'package:lichess_mobile/src/view/game/game_settings.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board.dart';
@@ -41,6 +41,7 @@ import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 typedef LoadingParam = ({Variant variant, String? fen, Move? lastMove, Side? orientation});
@@ -882,6 +883,15 @@ class _GameBottomBar extends ConsumerWidget {
     return showAdaptiveActionSheet(
       context: context,
       actions: [
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.settingsSettings),
+          onPressed: () => showModalBottomSheet<void>(
+            context: context,
+            isDismissible: true,
+            isScrollControlled: true,
+            builder: (_) => GameSettings(id: id),
+          ),
+        ),
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.flipBoard),
           onPressed: () {

@@ -3,9 +3,8 @@ import 'dart:math' show max;
 import 'dart:ui' as ui;
 
 import 'package:chessground/chessground.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart' show Side, kInitialFEN;
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -18,8 +17,10 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/background.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_color_utilities/score/score.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:path/path.dart';
 
 class BackgroundChoiceScreen extends StatelessWidget {
@@ -31,8 +32,8 @@ class BackgroundChoiceScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.background)),
+    return PlatformScaffold(
+      appBar: PlatformAppBar(title: Text(context.l10n.background)),
       body: _Body(),
     );
   }

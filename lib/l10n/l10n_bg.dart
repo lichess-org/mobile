@@ -70,6 +70,9 @@ class AppLocalizationsBg extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Влезте в профила си, за да видите страницата.';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String get mobileNewGame => 'Нова партия';
 
   @override
@@ -335,7 +338,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get mobilePerfShortCrazyhouse => 'Crazy';
 
   @override
-  String get mobilePerfShortPuzzle => 'Puzzle';
+  String get mobilePerfShortPuzzle => 'Задача';
 
   @override
   String get variantStandard => 'Стандартен';
@@ -764,6 +767,9 @@ class AppLocalizationsBg extends AppLocalizations {
   String get arenaRankAvgHelp => 'Средното класиране е процентно изражение на вашето място. По-ниското е по-добро.\n\nНапример: 3-то място в турнир със 100 играчи = 3%. 10-о място в турнир с 1000 играчи = 1%.';
 
   @override
+  String get arenaRankAverageHelp => 'Your rank average represents your typical finishing position, relative to the total number of players in each tournament.\nThis is a measure of your tournament placement, not your general rating.\n\nFor example, a rank average of 3% means you typically finish in the top 3% (such as 30th place out of 1,000 players).';
+
+  @override
   String get arenaMedians => 'медиани';
 
   @override
@@ -921,6 +927,9 @@ class AppLocalizationsBg extends AppLocalizations {
   String get broadcastDefinitivelyDeleteTournament => 'Окончателно изтриване на целия турнир, всички негови кръгове и партии.';
 
   @override
+  String get broadcastPermanentlyDeleteTournament => 'Permanently delete this tournament, including all rounds and games?';
+
+  @override
   String get broadcastShowScores => 'Резултати на играчите от изиграните партии';
 
   @override
@@ -997,7 +1006,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get broadcastOfficialStandings => 'Официално класиране';
 
   @override
-  String get broadcastRegulations => 'Regulations';
+  String get broadcastRegulations => 'Регламенти';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -1610,10 +1619,19 @@ class AppLocalizationsBg extends AppLocalizations {
   String get preferencesNotifyInboxMsg => 'Ново входящо съобщение';
 
   @override
+  String get preferencesNotifyDirectMessage => 'New direct message';
+
+  @override
   String get preferencesNotifyForumMention => 'Споменати сте във форум';
 
   @override
+  String get preferencesNotifyForumMentions => 'Forum mentions';
+
+  @override
   String get preferencesNotifyInvitedStudy => 'Покана към казус';
+
+  @override
+  String get preferencesNotifyStudyInvites => 'Study invites';
 
   @override
   String get preferencesNotifyGameEvent => 'Известия от кореспондентски игри';
@@ -1625,7 +1643,10 @@ class AppLocalizationsBg extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Турнирът започва скоро';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Излъчвания, за които сте абонирани';
+  String get preferencesNotifyTournamentStartReminders => 'Tournaments start reminders';
+
+  @override
+  String get preferencesNotifyBroadcasts => 'Broadcasts';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Времето в кореспондентска игра изтича';
@@ -2154,6 +2175,9 @@ class AppLocalizationsBg extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Тактика включваща вземане \"ан пасан\", където пешка може да вземе противникова пешка, която я е подминала правейки двоен ход.';
 
   @override
+  String get puzzleThemeEnPassantAdjacentCaptureDescription => 'A tactic involving the en passant rule, where a pawn can capture an opposing pawn that has just moved next to it with its initial two-square move.';
+
+  @override
   String get puzzleThemeEpauletteMate => 'Еполетен мат';
 
   @override
@@ -2172,6 +2196,9 @@ class AppLocalizationsBg extends AppLocalizations {
   String get puzzleThemeForkDescription => 'Ход, в който фигура атакува едновременно поне две противникови фигури.';
 
   @override
+  String get puzzleThemeForkOpposingPiecesDescription => 'A move where a piece attacks two or more opposing pieces simultaneously.';
+
+  @override
   String get puzzleThemeHangingPiece => 'Висяща фигура';
 
   @override
@@ -2182,6 +2209,9 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get puzzleThemeHookMateDescription => 'Шах и мат с топ, кон и пешка заедно с противникова пешка ограничаваща движението на противниковия цар.';
+
+  @override
+  String get puzzleThemeHookMateOpposingPawnDescription => 'Checkmate using a rook, knight, and pawn, where an opposing pawn blocks the king\'s escape.';
 
   @override
   String get puzzleThemeInterference => 'Вмешателство';
@@ -3122,6 +3152,9 @@ class AppLocalizationsBg extends AppLocalizations {
   String get checkSpamFolder => 'Проверете и папката спам, може да попадне там. Ако е така, моля отбележете го като \"не спам\".';
 
   @override
+  String get checkSpamOrJunkFolder => 'If you do not receive a confirmation email, check your Spam or Junk folder. Be sure to indicate messages from lichess.org as safe and \"not spam\", so you can stay informed of important communications.';
+
+  @override
   String sendEmailForAccountVerification(String param) {
     return 'Ако не можете да откриете имейла за потвърждение, изпратете съобщение до $param и ние ще потвърдим профила ви вместо вас.';
   }
@@ -3849,6 +3882,15 @@ class AppLocalizationsBg extends AppLocalizations {
   String get reply => 'Отговор';
 
   @override
+  String get reopen => 'Reopen';
+
+  @override
+  String get quote => 'Quote';
+
+  @override
+  String get postEdited => 'edited';
+
+  @override
   String get message => 'Съобщение';
 
   @override
@@ -3883,6 +3925,9 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get reportProcessedFasterInEnglish => 'Докладът ви ще бъде обработен по-бързо, ако е написан на английски.';
+
+  @override
+  String get processReportFasterInEnglish => 'We can process your report faster if you write in English.';
 
   @override
   String get error_provideOneCheatedGameLink => 'Моля дай поне един линк до измамна игра.';
@@ -4253,6 +4298,9 @@ class AppLocalizationsBg extends AppLocalizations {
   String get whenCreateSimul => 'Когато създадете сеанс, трябва да можете да играете с много играчи наведнъж.';
 
   @override
+  String get creatingASimul => 'Creating a simul lets you play against multiple opponents at the same time.';
+
+  @override
   String get simulVariantsHint => 'Ако изберете няколко варианта, всеки играч може да избере кой да играе.';
 
   @override
@@ -4565,6 +4613,9 @@ class AppLocalizationsBg extends AppLocalizations {
   String get background => 'Фон';
 
   @override
+  String get theme => 'Theme';
+
+  @override
   String get light => 'Светъл';
 
   @override
@@ -4574,7 +4625,13 @@ class AppLocalizationsBg extends AppLocalizations {
   String get transparent => 'Прозрачен';
 
   @override
+  String get picture => 'Picture';
+
+  @override
   String get deviceTheme => 'Тема на устройството';
+
+  @override
+  String get roundness => 'Roundness';
 
   @override
   String get backgroundImageUrl => 'URL адрес на фоновия образ:';
@@ -4992,9 +5049,6 @@ class AppLocalizationsBg extends AppLocalizations {
   }
 
   @override
-  String get someoneYouReportedWasBanned => 'Някого когото сте докладвали беше блокиран';
-
-  @override
   String get congratsYouWon => 'Поздравления, спечелихте!';
 
   @override
@@ -5093,6 +5147,11 @@ class AppLocalizationsBg extends AppLocalizations {
   }
 
   @override
+  String youCanFormatTextUsing(String param) {
+    return 'You can format text using $param.';
+  }
+
+  @override
   String get embedsAvailable => 'Постави URL на партия или на глава от студия, за да ги вградиш.';
 
   @override
@@ -5112,6 +5171,9 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get navigateMoveTree => 'Навигирайте листа на ходовете';
+
+  @override
+  String get moveListNavigation => 'Move list navigation';
 
   @override
   String get mouseTricks => 'Миши трик';
@@ -5164,7 +5226,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get resignTheGame => 'Предаване';
 
   @override
-  String get youCantStartNewGame => 'Не можете да започнете нова игра преди тази да е приключила.';
+  String get youCantStartNewGame => 'You can\'t start a new game while it\'s your turn.';
 
   @override
   String get since => 'От';

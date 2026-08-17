@@ -90,4 +90,5 @@
   <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">Предизвикателството е създадено: Ще получите известие, когато партията започне.\nМожете да го отворите от началния раздел.</string>
   <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Предишна</string>
   <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">Или зареди PGN файл</string>
+  <string name="perfShortPuzzle" comment="Short label for puzzle performance. Used in compact UI such as perf cards, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Задача</string>
 </resources>

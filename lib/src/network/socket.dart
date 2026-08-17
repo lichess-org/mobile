@@ -181,6 +181,14 @@ class SocketClient {
   /// The current WebSocket channel.
   WebSocketChannel? _channel;
 
+  /// Identifies the current connection attempt.
+  ///
+  /// Incremented by [_disconnect] (and thus by [connect], [close] and [dispose]), so that a
+  /// connection attempt still awaiting the channel creation can tell it has been superseded: opening
+  /// a channel is not cancellable and can take up to [_kDefaultConnectTimeout], during which the
+  /// client may have been closed or reconnected.
+  int _connectionEpoch = 0;
+
   /// Gets the current WebSocket sink
   WebSocketSink? get _sink => _channel?.sink;
 
@@ -215,6 +223,7 @@ class SocketClient {
     }
 
     _disconnect();
+    final epoch = _connectionEpoch;
     _pongCount = 0;
     _reconnectTimer?.cancel();
     _ackResendTimer?.cancel();
@@ -244,8 +253,13 @@ class SocketClient {
         timeout: _kDefaultConnectTimeout,
       );
 
-      if (isDisposed) {
-        _logger.warning('SocketClient is disposed, cannot connect.');
+      // The client was disposed, closed or reconnected while we were waiting for the channel:
+      // discard it, so it doesn't stay open and doesn't schedule a reconnect below.
+      if (isDisposed || epoch != _connectionEpoch) {
+        _logger.fine('Discarding stale WebSocket connection to $route.');
+        if (!identical(channel, _channel)) {
+          unawaited(channel.sink.close());
+        }
         return;
       }
 
@@ -299,6 +313,12 @@ class SocketClient {
 
       _resendAcks();
     } catch (e, st) {
+      // Don't revive a client that was closed or reconnected while the failed attempt was in
+      // flight, otherwise it would keep reconnecting in the background forever.
+      if (isDisposed || epoch != _connectionEpoch) {
+        _logger.fine('Stale WebSocket connection to $route failed:', e);
+        return;
+      }
       _logger.severe('WebSocket connection failed:', e, st);
       _averageLag.value = Duration.zero;
       _scheduleReconnect(autoReconnectDelay);
@@ -376,6 +396,7 @@ class SocketClient {
   ///
   /// Returns a [Future] that completes when the connection is closed.
   Future<void> _disconnect() {
+    _connectionEpoch++;
     _socketStreamSubscription?.cancel();
     _pingTimer?.cancel();
     _reconnectTimer?.cancel();
@@ -685,6 +706,13 @@ final socketPoolProvider = Provider<SocketPool>((Ref ref) {
   final pool = SocketPool(ref);
   Timer? closeInBackgroundTimer;
 
+  pool.currentClient.connect();
+
+  // force reconnect to the current socket with the new token
+  final subscription = authEventsStream.listen((_) {
+    pool.currentClient.connect();
+  });
+
   final appLifecycleListener = AppLifecycleListener(
     onHide: () {
       closeInBackgroundTimer?.cancel();
@@ -704,6 +732,7 @@ final socketPoolProvider = Provider<SocketPool>((Ref ref) {
   );
 
   ref.onDispose(() {
+    subscription.cancel();
     pool.dispose();
     closeInBackgroundTimer?.cancel();
     appLifecycleListener.dispose();

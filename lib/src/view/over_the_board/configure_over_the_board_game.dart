@@ -1,5 +1,4 @@
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
@@ -16,6 +15,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
+import 'package:material_ui/material_ui.dart';
 
 void showConfigureGameSheet(
   BuildContext context, {

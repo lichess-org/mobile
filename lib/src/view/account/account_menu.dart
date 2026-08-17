@@ -1,6 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:flutter_riverpod/experimental/mutation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
@@ -18,6 +17,7 @@ import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/auth/sign_in_error.dart';
+import 'package:lichess_mobile/src/view/auth/sign_in_options.dart';
 import 'package:lichess_mobile/src/view/message/contacts_screen.dart';
 import 'package:lichess_mobile/src/view/settings/settings_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
@@ -25,6 +25,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// Account menu screen opened by [AccountMenuButton].
@@ -82,7 +83,7 @@ class _AccountMenuScreenState extends ConsumerState<AccountMenuScreen> with Widg
   @override
   Widget build(BuildContext context) {
     final client = ref.read(defaultClientProvider);
-    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
+    final isOnline = ref.watch(isDeviceOnlineProvider);
     final signInState = ref.watch(signInMutation);
     final signOutState = ref.watch(signOutMutation);
 
@@ -169,14 +170,7 @@ class _AccountMenuScreenState extends ConsumerState<AccountMenuScreen> with Widg
                 onPressed: isOnline
                     ? switch (signInState) {
                         MutationPending() => null,
-                        _ => () {
-                          // The error is surfaced via the [ref.listen] above;
-                          // ignore the rethrown future so it does not become an
-                          // unhandled exception.
-                          signInMutation.run(ref, (tsx) async {
-                            await tsx.get(authControllerProvider.notifier).signIn();
-                          }).ignore();
-                        },
+                        _ => () => showSignInOptions(context, ref),
                       }
                     : null,
                 child: Text(context.l10n.signIn),

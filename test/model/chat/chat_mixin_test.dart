@@ -1,3 +1,4 @@
+import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -38,11 +39,17 @@ class _FakeChatState with ChatMixinState {
 // A minimal notifier that mixes in [ChatMixin] so its logic can be exercised in
 // isolation. Test helpers expose the protected members.
 class _TestChatNotifier extends AsyncNotifier<_FakeChatState> with ChatMixin<_FakeChatState> {
-  _TestChatNotifier({required this.initialData, required this.isPublic, required this.enabled});
+  _TestChatNotifier({
+    required this.initialData,
+    required this.isPublic,
+    required this.enabled,
+    this.playerSide,
+  });
 
   final ChatData? initialData;
   final bool isPublic;
   final bool enabled;
+  final Side? playerSide;
 
   @override
   StringId get chatId => const StringId('test-chat-id');
@@ -52,6 +59,9 @@ class _TestChatNotifier extends AsyncNotifier<_FakeChatState> with ChatMixin<_Fa
 
   @override
   bool get chatIsPublic => isPublic;
+
+  @override
+  Side? get chatPlayerSide => playerSide;
 
   @override
   Future<_FakeChatState> build() async {
@@ -91,9 +101,15 @@ AsyncNotifierProvider<_TestChatNotifier, _FakeChatState> _makeProvider({
   ChatData? initialData,
   bool isPublic = false,
   bool enabled = true,
+  Side? playerSide,
 }) {
   return AsyncNotifierProvider<_TestChatNotifier, _FakeChatState>(
-    () => _TestChatNotifier(initialData: initialData, isPublic: isPublic, enabled: enabled),
+    () => _TestChatNotifier(
+      initialData: initialData,
+      isPublic: isPublic,
+      enabled: enabled,
+      playerSide: playerSide,
+    ),
   );
 }
 
@@ -303,6 +319,113 @@ void main() {
       expect(container.read(provider).requireValue.chatState!.messages, isEmpty);
     });
 
+    test('does not increment unread for own message', () async {
+      final container = await makeContainer(
+        authUser: const AuthUser(
+          token: 'token',
+          user: LightUser(id: UserId('myname'), name: 'MyName'),
+        ),
+        overrides: {kidModeProvider: kidModeProvider.overrideWith((ref) => false)},
+      );
+      await _warmKidMode(container);
+      final provider = _makeProvider(initialData: _chatData([]));
+      final notifier = container.read(provider.notifier);
+      await container.read(provider.future);
+
+      notifier.dispatch(
+        SocketEvent(
+          topic: 'message',
+          data: _msgData('Good game, well played', username: 'MyName'),
+        ),
+      );
+
+      final state = container.read(provider).requireValue;
+      expect(state.chatState!.messages.length, 1);
+      expect(state.chatState!.unreadMessages, 0);
+    });
+
+    test('does not increment unread for own draw offer', () async {
+      final container = await makeContainer(
+        authUser: const AuthUser(
+          token: 'token',
+          user: LightUser(id: UserId('myname'), name: 'MyName'),
+        ),
+        overrides: {kidModeProvider: kidModeProvider.overrideWith((ref) => false)},
+      );
+      await _warmKidMode(container);
+      final provider = _makeProvider(initialData: _chatData([]), playerSide: Side.black);
+      final notifier = container.read(provider.notifier);
+      await container.read(provider.future);
+
+      notifier.dispatch(
+        SocketEvent(
+          topic: 'message',
+          data: _msgData('Black offers draw', username: 'lichess'),
+        ),
+      );
+
+      final state = container.read(provider).requireValue;
+      expect(state.chatState!.messages.length, 1);
+      expect(state.chatState!.unreadMessages, 0);
+    });
+
+    test('increments unread when the opponent offers a draw', () async {
+      final container = await makeContainer(
+        authUser: const AuthUser(
+          token: 'token',
+          user: LightUser(id: UserId('myname'), name: 'MyName'),
+        ),
+        overrides: {kidModeProvider: kidModeProvider.overrideWith((ref) => false)},
+      );
+      await _warmKidMode(container);
+      // We are Black, so a White draw offer is from the opponent.
+      final provider = _makeProvider(initialData: _chatData([]), playerSide: Side.black);
+      final notifier = container.read(provider.notifier);
+      await container.read(provider.future);
+
+      notifier.dispatch(
+        SocketEvent(
+          topic: 'message',
+          data: _msgData('White offers draw', username: 'lichess'),
+        ),
+      );
+
+      final state = container.read(provider).requireValue;
+      expect(state.chatState!.messages.length, 1);
+      expect(state.chatState!.unreadMessages, 1);
+    });
+
+    test('does not reset existing unread count when own draw offer arrives', () async {
+      final container = await makeContainer(
+        authUser: const AuthUser(
+          token: 'token',
+          user: LightUser(id: UserId('myname'), name: 'MyName'),
+        ),
+        overrides: {kidModeProvider: kidModeProvider.overrideWith((ref) => false)},
+      );
+      await _warmKidMode(container);
+      // Start with one unread message from the opponent.
+      final provider = _makeProvider(
+        initialData: _chatData([_msg('hello', username: 'opponent')]),
+        playerSide: Side.white,
+      );
+      final notifier = container.read(provider.notifier);
+      await container.read(provider.future);
+      expect(container.read(provider).requireValue.chatState!.unreadMessages, 1);
+
+      notifier.dispatch(
+        SocketEvent(
+          topic: 'message',
+          data: _msgData('White offers draw', username: 'lichess'),
+        ),
+      );
+
+      final state = container.read(provider).requireValue;
+      expect(state.chatState!.messages.length, 2);
+      // The existing unread from the opponent must not be cleared.
+      expect(state.chatState!.unreadMessages, 1);
+    });
+
     test('ignores non-message topics', () async {
       final container = await makeContainer();
       await _warmKidMode(container);
@@ -357,27 +480,20 @@ void main() {
     });
   });
 
-  group('ChatMixin.setInputText', () {
-    test('updates the input text', () async {
+  group('ChatMixin.chatInputDraft', () {
+    test('holds an unsent draft in memory without touching the chat state', () async {
       final container = await makeContainer();
-      final provider = _makeProvider(initialData: _chatData([]));
+      final provider = _makeProvider(initialData: _chatData([_msg('a', username: 'alice')]));
       final notifier = container.read(provider.notifier);
       await container.read(provider.future);
 
-      notifier.setInputText('draw?');
+      final stateBefore = container.read(provider).requireValue;
+      notifier.chatInputDraft = 'draw?';
 
-      expect(container.read(provider).requireValue.chatState!.inputText, 'draw?');
-    });
-
-    test('is a no-op when chat is not initialized', () async {
-      final container = await makeContainer();
-      final provider = _makeProvider();
-      final notifier = container.read(provider.notifier);
-      await container.read(provider.future);
-
-      notifier.setInputText('draw?');
-
-      expect(container.read(provider).requireValue.chatState, isNull);
+      expect(notifier.chatInputDraft, 'draw?');
+      // The observable chat state must be untouched (same instance) so that
+      // updating the draft does not trigger a rebuild of chat widgets.
+      expect(identical(container.read(provider).requireValue, stateBefore), isTrue);
     });
   });
 
@@ -391,8 +507,10 @@ void main() {
           }),
         },
       );
+      // The pool already connects the default client on creation: just wait for it, instead of
+      // forcing a second connection attempt while the first one is still in flight.
       final client = container.read(socketPoolProvider).open(Uri(path: kDefaultSocketRoute));
-      await client.connect();
+      await client.firstConnection;
 
       final provider = _makeProvider(initialData: _chatData([]));
       final notifier = container.read(provider.notifier);

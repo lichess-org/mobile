@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -8,7 +7,7 @@ import 'package:lichess_mobile/src/model/message/message.dart';
 import 'package:lichess_mobile/src/model/message/message_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/tab_scaffold.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/chat/chat_context_menu.dart';
@@ -17,6 +16,7 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 import 'package:linkify/linkify.dart' show linkify;
+import 'package:material_ui/material_ui.dart';
 
 sealed class DisplayItem {}
 
@@ -454,7 +454,7 @@ class _MessageContent extends StatelessWidget {
 
     return Stack(
       children: [
-        RichText(text: TextSpan(children: [linkSpan, spacer])),
+        Text.rich(TextSpan(children: [linkSpan, spacer])),
         Positioned(right: 0, bottom: 0, child: Text(time, style: timeStyle)),
       ],
     );
@@ -535,6 +535,7 @@ class _MessageInputState extends ConsumerState<_MessageInput> {
           ),
           controller: controller,
           keyboardType: TextInputType.text,
+          textCapitalization: TextCapitalization.sentences,
           minLines: 1,
           maxLines: 4,
           enableSuggestions: true,

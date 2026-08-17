@@ -964,7 +964,6 @@ análise de computador, sala de chat do jogo e link de partilha.</string>
   <string name="xInvitedYouToY">%1$s convidou-te para \"%2$s\".</string>
   <string name="youAreNowPartOfTeam">Já fazes parte da equipa.</string>
   <string name="youHaveJoinedTeamX">Juntaste-te a \"%1$s\".</string>
-  <string name="someoneYouReportedWasBanned">Alguém que denunciaste foi banido</string>
   <string name="congratsYouWon">Parabéns! Ganhaste!</string>
   <string name="gameVsX">Jogo vs %1$s</string>
   <string name="resVsX">%1$s vs %2$s</string>
@@ -1019,7 +1018,7 @@ Deixa em branco para iniciar jogos da posição inicial normal.</string>
   <string name="gameInProgress">Tem um jogo em curso com %s.</string>
   <string name="abortTheGame">Cancelar o jogo</string>
   <string name="resignTheGame">Abandonar o jogo</string>
-  <string name="youCantStartNewGame">Não pode iniciar um novo jogo antes de este estar terminado.</string>
+  <string name="youCantStartNewGame">Não pode começar um novo jogo enquanto for a sua vez.</string>
   <string name="since">Desde</string>
   <string name="until">Até</string>
   <string name="lichessDbExplanation">Jogos avaliados por amostragem de todos os jogadores Lichess</string>

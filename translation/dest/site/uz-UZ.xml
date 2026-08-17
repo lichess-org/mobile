@@ -580,6 +580,9 @@
   <string name="replies">Javoblar soni</string>
   <string name="replyToThisTopic">Ushbu mavzuda javob qoldirish</string>
   <string name="reply">Javob yozish</string>
+  <string name="reopen">Qayta ochish</string>
+  <string name="quote">Iqtibos qilish</string>
+  <string name="postEdited">tahrirlangan</string>
   <string name="message">Xabar</string>
   <string name="createTheTopic">Mavzuni yaratish</string>
   <string name="reportAUser">Foydalanuvchi haqida shikoyat qilish</string>
@@ -963,7 +966,6 @@
   <string name="xInvitedYouToY">%1$s sizni \"%2$s\"ga taklif qildi.</string>
   <string name="youAreNowPartOfTeam">Siz endi jamoa a‘zosisiz.</string>
   <string name="youHaveJoinedTeamX">Siz \"%1$s\" ga qo‘shildingiz.</string>
-  <string name="someoneYouReportedWasBanned">Siz shikoyat qilgan odam ban qilindi</string>
   <string name="congratsYouWon">Tabriklaymiz siz yutdingiz!</string>
   <string name="gameVsX">%1$sga qarshi o‘yin</string>
   <string name="resVsX">%1$s vs %2$s</string>
@@ -1018,7 +1020,7 @@ Oʻyinlarni boshlangʻich pozitsiyadan boshlash uchun boʻsh qoldiring.</string>
   <string name="gameInProgress">Sizni %s bilan tugallanmagan oʻyiningiz bor.</string>
   <string name="abortTheGame">O‘yinni bekor qilish</string>
   <string name="resignTheGame">Taslim boʻlish</string>
-  <string name="youCantStartNewGame">Ushbu oʻyin tugamaguncha yangisini boshlay olmaysiz.</string>
+  <string name="youCantStartNewGame">Oʻzingizning galingizda yangi oʻyin boshlay olmaysiz.</string>
   <string name="since">Shu sanadan</string>
   <string name="until">Shu sanagacha</string>
   <string name="lichessDbExplanation">Lichessʼda oʻynalgan reytingli oʻyinlar</string>

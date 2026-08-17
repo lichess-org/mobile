@@ -2,35 +2,36 @@ name: lichess_mobile
 description: Lichess mobile app V2
 publish_to: "none"
 
-version: 0.25.4+002504 # See README.md for details about versioning
+version: 0.27.0+002700 # See README.md for details about versioning
 
 environment:
   sdk: ^3.12.2
   # this should be updated with every new flutter stable release
-  flutter: 3.44.6
+  flutter: 3.47.0
 
 dependencies:
-  app_links: ^7.2.0
-  app_settings: ^7.0.0
+  app_links: ^7.2.1
+  app_settings: ^8.0.3
   async: ^2.13.1
   auto_size_text: ^3.0.0
   chessground: ^10.1.1
   clock: ^1.1.2
   collection: ^1.19.1
-  connectivity_plus: ^7.2.0
+  connectivity_plus: ^7.3.1
   cronet_http: ^1.9.0
   crypto: ^3.0.7
   cupertino_http: ^3.0.2
   cupertino_icons: ^1.0.9
+  cupertino_ui: ^1.0.0
   dartchess: ^0.13.1
   deep_pick: ^1.1.0
   device_info_plus: ^13.2.0
   dynamic_system_colors: ^1.9.0
   fast_immutable_collections: ^11.2.0
-  file_picker: ^12.0.0-beta
-  firebase_core: ^4.11.0
-  firebase_crashlytics: ^5.2.4
-  firebase_messaging: ^16.4.1
+  file_picker: ^12.0.0-beta.7
+  firebase_core: ^4.13.0
+  firebase_crashlytics: ^5.2.7
+  firebase_messaging: ^16.5.0
   fl_chart: ^1.2.0
   flutter:
     sdk: flutter
@@ -38,29 +39,30 @@ dependencies:
   flutter_displaymode: ^0.7.0
   flutter_layout_grid: ^2.0.8
   flutter_linkify: ^6.0.0
-  flutter_local_notifications: ^22.0.1
+  flutter_local_notifications: ^22.3.0
   flutter_localizations:
     sdk: flutter
-  flutter_markdown_plus: ^1.0.7
+  flutter_markdown_plus: ^1.0.12
   flutter_native_splash: ^2.4.8
-  flutter_riverpod: 3.3.1 # 3.3.2 version has a breaking change
-  flutter_secure_storage: ^10.3.1
+  flutter_riverpod: ^3.4.2
+  flutter_secure_storage: ^11.0.0
   flutter_slidable: ^4.0.3
   flutter_spinkit: ^5.2.2
   freezed_annotation: ^3.1.0
   home_widget: ^0.9.3
   http: ^1.6.0
   image_picker: ^1.2.3
-  intl: ^0.20.2
+  intl: ^0.20.3
   json_annotation: ^4.12.0
-  l10n_esperanto: ^2.0.14
+  l10n_esperanto: ^3.0.0
   linkify: ^5.0.0
   logging: ^1.3.0
   material_color_utilities: ^0.13.0
-  material_symbols_icons: ^4.2951.0
-  meta: ^1.18.0
+  material_symbols_icons: ^4.2960.0
+  material_ui: ^1.0.0
+  meta: ^1.19.0
   multistockfish: ^0.5.0
-  package_info_plus: ^10.2.0
+  package_info_plus: ^10.2.1
   path: ^1.9.1
   path_provider: ^2.1.6
   popover: ^0.4.0
@@ -68,7 +70,7 @@ dependencies:
   qr_flutter: ^4.1.0
   quick_actions: ^1.1.0
   result_extensions: ^0.2.0
-  share_plus: ^13.2.0
+  share_plus: ^13.3.0
   shared_preferences: ^2.5.5
   signal_strength_indicator: ^0.5.0
   sound_effect: ^0.2.0
@@ -77,20 +79,20 @@ dependencies:
   stream_transform: ^2.1.1
   url_launcher: ^6.3.2
   visibility_detector: ^0.4.0+2
-  wakelock_plus: ^1.6.1
+  wakelock_plus: ^1.7.0
   web_socket_channel: ^3.0.3
 
 dev_dependencies:
-  build_runner: ^2.15.0
+  build_runner: ^2.15.1
   fake_async: ^1.3.3
   flutter_test:
     sdk: flutter
   freezed: ^3.2.5
-  json_serializable: ^6.14.0
+  json_serializable: ^6.14.1
   lint: ^2.8.0
   mocktail: ^1.0.5
   stream_channel: ^2.1.4
-  wakelock_plus_platform_interface: ^1.5.1
+  wakelock_plus_platform_interface: ^1.6.0
 
 flutter:
   # The following line ensures that the Material Icons font is

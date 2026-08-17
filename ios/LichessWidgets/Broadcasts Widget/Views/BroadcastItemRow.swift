@@ -51,7 +51,7 @@ struct BroadcastItemRow: View {
         if item.isLive {
             return "LIVE · \(item.roundName)"
         } else if let startsAt = item.startsAt {
-            return "\(item.roundName) · \(startsAt.formatted(startsAt.widgetDateFormat))"
+            return "\(item.roundName) · \(startsAt.formatted(startsAt.widgetDateTimeFormat))"
         } else {
             return item.roundName
         }

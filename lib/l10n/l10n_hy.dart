@@ -70,6 +70,9 @@ class AppLocalizationsHy extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'You must be logged in to view this page.';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String get mobileNewGame => 'New game';
 
   @override
@@ -764,6 +767,9 @@ class AppLocalizationsHy extends AppLocalizations {
   String get arenaRankAvgHelp => 'The rank average is a percentage of your ranking. Lower is better.\n\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.';
 
   @override
+  String get arenaRankAverageHelp => 'Your rank average represents your typical finishing position, relative to the total number of players in each tournament.\nThis is a measure of your tournament placement, not your general rating.\n\nFor example, a rank average of 3% means you typically finish in the top 3% (such as 30th place out of 1,000 players).';
+
+  @override
   String get arenaMedians => 'medians';
 
   @override
@@ -919,6 +925,9 @@ class AppLocalizationsHy extends AppLocalizations {
 
   @override
   String get broadcastDefinitivelyDeleteTournament => 'Վերջնականապես հեռացնել ամբողջ մրցաշարը, նրա խաղափուլերը և պարտիաները։';
+
+  @override
+  String get broadcastPermanentlyDeleteTournament => 'Permanently delete this tournament, including all rounds and games?';
 
   @override
   String get broadcastShowScores => 'Show player scores based on game results';
@@ -1610,10 +1619,19 @@ class AppLocalizationsHy extends AppLocalizations {
   String get preferencesNotifyInboxMsg => 'New inbox message';
 
   @override
+  String get preferencesNotifyDirectMessage => 'New direct message';
+
+  @override
   String get preferencesNotifyForumMention => 'Forum comment mentions you';
 
   @override
+  String get preferencesNotifyForumMentions => 'Forum mentions';
+
+  @override
   String get preferencesNotifyInvitedStudy => 'Ստուդիայի հրավեր';
+
+  @override
+  String get preferencesNotifyStudyInvites => 'Study invites';
 
   @override
   String get preferencesNotifyGameEvent => 'Նամակագրական խաղին առնչվող թարմացումներ';
@@ -1625,7 +1643,10 @@ class AppLocalizationsHy extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Մրցաշարը շուտով կսկսվի';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
+  String get preferencesNotifyTournamentStartReminders => 'Tournaments start reminders';
+
+  @override
+  String get preferencesNotifyBroadcasts => 'Broadcasts';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Նամակագրական խաղում ժամանակը շուտով կսպառվի';
@@ -2154,6 +2175,9 @@ class AppLocalizationsHy extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Մարտավարություն «կողանցիկ հարված» կանոնի կիրառմամբ, որտեղ զինվորը կարող է հարվածել մրցակցի զինվորը, որը առաջին քայլն է կատարել՝ տեղաշարժվելով երկու դաշտ, ընդ որում՝ հատվող դաշտը գտնվում է մրցակցի զինվորի հարվածի տակ, որը կարող է վերցնել այդ զինվորը։';
 
   @override
+  String get puzzleThemeEnPassantAdjacentCaptureDescription => 'A tactic involving the en passant rule, where a pawn can capture an opposing pawn that has just moved next to it with its initial two-square move.';
+
+  @override
   String get puzzleThemeEpauletteMate => 'Epaulette mate';
 
   @override
@@ -2172,6 +2196,9 @@ class AppLocalizationsHy extends AppLocalizations {
   String get puzzleThemeForkDescription => 'Քայլ, որի դեպքում հարվածի տակ է հայտնվում մրցակցի երկու խաղաքար։';
 
   @override
+  String get puzzleThemeForkOpposingPiecesDescription => 'A move where a piece attacks two or more opposing pieces simultaneously.';
+
+  @override
   String get puzzleThemeHangingPiece => 'Անպաշտպան խաղաքար';
 
   @override
@@ -2182,6 +2209,9 @@ class AppLocalizationsHy extends AppLocalizations {
 
   @override
   String get puzzleThemeHookMateDescription => 'Մատ զինվորով պաշտպանված ձիով և նավակով, ընդ որում` մրցակցի զինվորներից մեկը զբաղեցնում է նրա արքայի նահանջի միակ դաշտը։';
+
+  @override
+  String get puzzleThemeHookMateOpposingPawnDescription => 'Checkmate using a rook, knight, and pawn, where an opposing pawn blocks the king\'s escape.';
 
   @override
   String get puzzleThemeInterference => 'Ծածկում';
@@ -3122,6 +3152,9 @@ class AppLocalizationsHy extends AppLocalizations {
   String get checkSpamFolder => 'Ստուգեք նաև սպամի պանակը, նամակը կարող է հայտնվել այնտեղ: Եթե ​​այդպես է, այն նշեք որպես ոչ սպամ:';
 
   @override
+  String get checkSpamOrJunkFolder => 'If you do not receive a confirmation email, check your Spam or Junk folder. Be sure to indicate messages from lichess.org as safe and \"not spam\", so you can stay informed of important communications.';
+
+  @override
   String sendEmailForAccountVerification(String param) {
     return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
   }
@@ -3849,6 +3882,15 @@ class AppLocalizationsHy extends AppLocalizations {
   String get reply => 'Պատասխանել';
 
   @override
+  String get reopen => 'Reopen';
+
+  @override
+  String get quote => 'Quote';
+
+  @override
+  String get postEdited => 'edited';
+
+  @override
   String get message => 'Հաղորդագրություն';
 
   @override
@@ -3883,6 +3925,9 @@ class AppLocalizationsHy extends AppLocalizations {
 
   @override
   String get reportProcessedFasterInEnglish => 'Your report will be processed faster if written in English.';
+
+  @override
+  String get processReportFasterInEnglish => 'We can process your report faster if you write in English.';
 
   @override
   String get error_provideOneCheatedGameLink => 'Խնդրում ենք ավելացնել առնվազն մեկ խաղի հղում, որտեղ ձեր կարծիքով խախտվել են կանոնները:';
@@ -4253,6 +4298,9 @@ class AppLocalizationsHy extends AppLocalizations {
   String get whenCreateSimul => 'Եթե ստեղծեք միաժամանակյա խաղաշար, ստիպված կլինեք խաղալու միաժամանակ մի քանի խաղացողի դեմ։';
 
   @override
+  String get creatingASimul => 'Creating a simul lets you play against multiple opponents at the same time.';
+
+  @override
   String get simulVariantsHint => 'Եթե ընտրեք խաղի մի քանի տարբերակ, յուրաքանչյուր խաղացող կընտրի դրանցից այն մեկը, որը կցանկանա խաղալ ձեզ հետ։';
 
   @override
@@ -4565,6 +4613,9 @@ class AppLocalizationsHy extends AppLocalizations {
   String get background => 'Ֆոն';
 
   @override
+  String get theme => 'Theme';
+
+  @override
   String get light => 'Բաց';
 
   @override
@@ -4574,7 +4625,13 @@ class AppLocalizationsHy extends AppLocalizations {
   String get transparent => 'Թափանցիկ';
 
   @override
+  String get picture => 'Picture';
+
+  @override
   String get deviceTheme => 'Սարքի թեման';
+
+  @override
+  String get roundness => 'Roundness';
 
   @override
   String get backgroundImageUrl => 'Հետնաշերտի պատկերի հղում`';
@@ -4992,9 +5049,6 @@ class AppLocalizationsHy extends AppLocalizations {
   }
 
   @override
-  String get someoneYouReportedWasBanned => 'Ինչ-որ մենք արգելափակվել է Ձեր դիմումով';
-
-  @override
   String get congratsYouWon => 'Շնորհավորո՜ւմ ենք, Դուք հաղթեցիք։';
 
   @override
@@ -5093,6 +5147,11 @@ class AppLocalizationsHy extends AppLocalizations {
   }
 
   @override
+  String youCanFormatTextUsing(String param) {
+    return 'You can format text using $param.';
+  }
+
+  @override
   String get embedsAvailable => 'Ներդնելու համար տեղադրեք պարտիայի կամ ստուդիայի URL-հասցեն։';
 
   @override
@@ -5112,6 +5171,9 @@ class AppLocalizationsHy extends AppLocalizations {
 
   @override
   String get navigateMoveTree => 'Անցում ըստ քայլերի';
+
+  @override
+  String get moveListNavigation => 'Move list navigation';
 
   @override
   String get mouseTricks => 'Շարժումներ մկնիկով';
@@ -5164,7 +5226,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get resignTheGame => 'Հանձնվել';
 
   @override
-  String get youCantStartNewGame => 'Դուք չեք կարող սկսել նոր խաղ, քանի դեռ չի ավարտվել ընթացիկը։';
+  String get youCantStartNewGame => 'You can\'t start a new game while it\'s your turn.';
 
   @override
   String get since => 'Սկսած';

@@ -78,6 +78,9 @@ class NotificationService {
   /// The stream subscription for notification responses.
   StreamSubscription<NotificationResponse>? _responseStreamSubscription;
 
+  /// The stream subscription for authentication events.
+  StreamSubscription<AuthEvent>? _authEventsSubscription;
+
   /// Whether the device has been registered for push notifications.
   bool _registeredDevice = false;
 
@@ -95,6 +98,25 @@ class NotificationService {
   /// This method should be called once the app is ready to receive notifications,
   /// and after [LichessBinding.initializeNotifications] has been called.
   Future<void> start() async {
+    await _authEventsSubscription?.cancel();
+    _authEventsSubscription = authEventsStream.listen((event) {
+      switch (event) {
+        case AuthEvent.signIn:
+          unawaited(
+            registerDevice().catchError((Object e, StackTrace st) {
+              _logger.severe('Could not register device after sign-in:', e, st);
+              return false;
+            }),
+          );
+        case AuthEvent.signOut:
+          unawaited(
+            unregister().catchError((Object e, StackTrace st) {
+              _logger.severe('Could not unregister device after sign-out:', e, st);
+            }),
+          );
+      }
+    });
+
     // Listen for incoming messages while the app is in the foreground.
     LichessBinding.instance.firebaseMessagingOnMessage.listen((RemoteMessage message) {
       _processFcmMessage(message, fromBackground: false);
@@ -180,6 +202,7 @@ class NotificationService {
     _fcmTokenRefreshSubscription?.cancel();
     _connectivitySubscription?.close();
     _responseStreamSubscription?.cancel();
+    _authEventsSubscription?.cancel();
   }
 
   /// Function called by the notification plugin when a notification has been tapped on.
@@ -248,6 +271,28 @@ class NotificationService {
           notification,
         ));
 
+      case final BroadcastRoundFcmMessage roundMessage:
+        final notification = BroadcastRoundNotification.fromFcmMessage(roundMessage);
+        _responseStreamController.add((
+          NotificationResponse(
+            notificationResponseType: NotificationResponseType.selectedNotification,
+            id: notification.id,
+            payload: jsonEncode(notification.payload),
+          ),
+          notification,
+        ));
+
+      case final BroadcastPlayerFollowFcmMessage playerFollowMessage:
+        final notification = BroadcastPlayerFollowNotification.fromFcmMessage(playerFollowMessage);
+        _responseStreamController.add((
+          NotificationResponse(
+            notificationResponseType: NotificationResponseType.selectedNotification,
+            id: notification.id,
+            payload: jsonEncode(notification.payload),
+          ),
+          notification,
+        ));
+
       // TODO: handle other notification types
       case UnhandledFcmMessage(data: final data):
         _logger.warning('Received unhandled FCM notification type: ${data['lichess.type']}');
@@ -303,6 +348,29 @@ class NotificationService {
         if (fromBackground == false && notification != null) {
           await show(
             ChallengeAcceptedNotification(fullId, notification.title!, notification.body!),
+          );
+        }
+
+      case BroadcastRoundFcmMessage(:final roundId, :final notification):
+        if (fromBackground == false && notification != null) {
+          await show(BroadcastRoundNotification(roundId, notification.title!, notification.body!));
+        }
+
+      case BroadcastPlayerFollowFcmMessage(
+        :final roundId,
+        :final gameId,
+        :final pov,
+        :final notification,
+      ):
+        if (fromBackground == false && notification != null) {
+          await show(
+            BroadcastPlayerFollowNotification(
+              roundId,
+              gameId,
+              pov,
+              notification.title!,
+              notification.body!,
+            ),
           );
         }
 

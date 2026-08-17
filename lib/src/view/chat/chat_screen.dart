@@ -5,9 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/app_links_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/chat/chat.dart';
-import 'package:lichess_mobile/src/model/chat/chat_mixin.dart';
+import 'package:lichess_mobile/src/model/chat/chat_providers.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/tab_scaffold.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -18,6 +18,7 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
+import 'package:material_ui/material_ui.dart';
 
 class ChatBottomBarButton extends ConsumerWidget {
   const ChatBottomBarButton({required this.options, this.showLabel = false, super.key});
@@ -290,10 +291,9 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
   @override
   void initState() {
     super.initState();
-    final draft = ref.read(chatProvider(widget.options)).asData?.value?.inputText ?? '';
-    _textController.text = draft;
+    _textController.text = ref.read(chatNotifierProvider(widget.options)).chatInputDraft;
     _textController.addListener(() {
-      ref.read(chatNotifierProvider(widget.options)).setInputText(_textController.text);
+      ref.read(chatNotifierProvider(widget.options)).chatInputDraft = _textController.text;
     });
   }
 
@@ -313,7 +313,6 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
             ? () {
                 ref.read(chatNotifierProvider(widget.options)).postMessage(_textController.text);
                 _textController.clear();
-                ref.read(chatNotifierProvider(widget.options)).setInputText('');
               }
             : null,
         icon: const Icon(Icons.send),
@@ -335,6 +334,7 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
           ),
           controller: _textController,
           keyboardType: TextInputType.text,
+          textCapitalization: TextCapitalization.sentences,
           minLines: 1,
           maxLines: 4,
           enableSuggestions: true,

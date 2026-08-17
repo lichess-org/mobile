@@ -1,5 +1,4 @@
 import 'package:chessground/chessground.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
@@ -17,6 +16,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
+import 'package:material_ui/material_ui.dart';
 
 class BoardSettingsScreen extends ConsumerStatefulWidget {
   const BoardSettingsScreen({super.key});
@@ -65,7 +65,7 @@ class _BoardSettingsScreenState extends ConsumerState<BoardSettingsScreen> {
     final accountPrefsAsync = ref.watch(accountPreferencesProvider);
     final accountPrefs = accountPrefsAsync.value ?? defaultAccountPreferences;
     final authUser = ref.watch(authControllerProvider);
-    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
+    final isOnline = ref.watch(isDeviceOnlineProvider);
     // We only allow changing account preferences if the user is logged out (prefs are local in that
     // case) or if the user is logged in and online (prefs are stored on the server in that case).
     final accountPrefsEnabled =

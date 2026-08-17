@@ -1,6 +1,5 @@
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
@@ -30,6 +29,7 @@ import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
+import 'package:material_ui/material_ui.dart';
 
 class TvScreen extends ConsumerStatefulWidget {
   const TvScreen({this.channel, this.initialGame, this.user, super.key})
@@ -98,10 +98,7 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                       const Icon(Icons.live_tv),
                     ],
                   ),
-            actions: [
-              if (gameParams != null) _WatcherButton(gameParams: gameParams),
-              const ToggleSoundButton(),
-            ],
+            actions: const [ToggleSoundButton()],
           ),
           body: SafeArea(
             child: Column(
@@ -335,29 +332,6 @@ class _TvErrorBoard extends StatelessWidget {
       boardParams: GameBoardParams.emptyBoard,
       errorMessage: 'Could not load TV stream.',
       moves: [],
-    );
-  }
-}
-
-class _WatcherButton extends ConsumerWidget {
-  const _WatcherButton({required this.gameParams});
-
-  final TvGameControllerParams gameParams;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final nb = ref.watch(
-      tvGameControllerProvider(gameParams).select((s) => s.value?.nbWatchers ?? 0),
-    );
-    if (nb <= 0) return const SizedBox.shrink();
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: Badge(
-        label: Text('$nb'),
-        backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
-        textColor: Theme.of(context).colorScheme.onSurfaceVariant,
-        child: const Icon(Icons.person_outlined),
-      ),
     );
   }
 }

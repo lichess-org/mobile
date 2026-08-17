@@ -11,4 +11,9 @@ extension Date {
         let base = Date.FormatStyle(locale: .current).month(.abbreviated).day()
         return sameYear ? base : base.year()
     }
+
+    /// "14 avr. 14:53" / "Apr 14, 2:53 PM" — `widgetDateFormat` plus the hour and minute.
+    var widgetDateTimeFormat: Date.FormatStyle {
+        widgetDateFormat.hour().minute()
+    }
 }
