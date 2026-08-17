@@ -249,6 +249,14 @@ class FakeFirebaseMessaging extends Fake implements FirebaseMessaging {
   /// Whether [requestPermission] will grant permission.
   bool _willGrantPermission = true;
 
+  /// Whether [setAutoInitEnabled] was last called with `true`.
+  bool autoInitEnabled = false;
+
+  @override
+  Future<void> setAutoInitEnabled(bool enabled) async {
+    autoInitEnabled = enabled;
+  }
+
   /// Set whether [requestPermission] will grant permission.
   // ignore: avoid_setters_without_getters
   set willGrantPermission(bool value) {
