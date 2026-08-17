@@ -18,7 +18,7 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
-import 'package:material_ui/material_ui.dart';
+
 
 class ChatBottomBarButton extends ConsumerWidget {
   const ChatBottomBarButton({required this.options, this.showLabel = false, super.key});
