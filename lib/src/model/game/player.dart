@@ -64,6 +64,8 @@ sealed class Player with _$Player {
   }
 }
 
+typedef PhaseAccuracies = ({int? opening, int? middlegame, int? endgame});
+
 @Freezed(fromJson: true, toJson: true)
 sealed class PlayerAnalysis with _$PlayerAnalysis {
   const factory PlayerAnalysis({
@@ -72,6 +74,7 @@ sealed class PlayerAnalysis with _$PlayerAnalysis {
     required int blunders,
     int? acpl,
     int? accuracy,
+    PhaseAccuracies? phases,
   }) = _PlayerAnalysis;
 
   factory PlayerAnalysis.fromJson(Map<String, dynamic> json) => _$PlayerAnalysisFromJson(json);

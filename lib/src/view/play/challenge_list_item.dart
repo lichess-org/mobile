@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
@@ -18,6 +17,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
+import 'package:material_ui/material_ui.dart';
 
 class ChallengeListItem extends ConsumerWidget {
   const ChallengeListItem({
@@ -60,7 +60,7 @@ class ChallengeListItem extends ConsumerWidget {
         : UserFullNameWidget(user: challengerUser, rating: challenge.challenger?.rating);
     final subtitle = Text(challenge.description(context.l10n));
 
-    final screenWidth = MediaQuery.sizeOf(context).width;
+    final screenWidth = MediaQuery.widthOf(context);
 
     return Slidable(
       enabled: onAccept != null || onDecline != null || (isMyChallenge && onCancel != null),

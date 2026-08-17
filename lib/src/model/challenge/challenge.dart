@@ -54,6 +54,7 @@ sealed class Challenge with _$Challenge, BaseChallenge implements BaseChallenge 
     ChallengeDeclineReason? declineReason,
     String? initialFen,
     ChallengeDirection? direction,
+    GameId? rematchOf,
   }) = _Challenge;
 
   factory Challenge.fromJson(Map<String, dynamic> json) => _$ChallengeFromJson(json);
@@ -424,5 +425,6 @@ Challenge _challengeFromPick(RequiredPick pick) {
     initialFen: pick('initialFen').asStringOrNull(),
     direction: pick('direction').asChallengeDirectionOrNull(),
     declineReason: pick('declineReasonKey').asDeclineReasonOrNull(),
+    rematchOf: pick('rematchOf').asGameIdOrNull(),
   );
 }

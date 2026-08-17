@@ -1,6 +1,5 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_summary.dart';
@@ -8,6 +7,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:material_ui/material_ui.dart';
 
 part 'broadcast.freezed.dart';
 
@@ -165,6 +165,7 @@ sealed class BroadcastRound with _$BroadcastRound {
     required DateTime? finishedAt,
     required bool startsAfterPrevious,
     required BroadcastCustomScoring? customScoring,
+    String? pinnedComment,
   }) = _BroadcastRound;
 }
 
@@ -179,6 +180,11 @@ typedef BroadcastRoundResponse = ({
   BroadcastRound round,
   BroadcastRoundGames games,
   BroadcastPhotos? photos,
+
+  /// Whether the user is subscribed to the tournament this round belongs to.
+  ///
+  /// `null` when the user is not logged in.
+  bool? isSubscribed,
 });
 
 typedef BroadcastRoundGames = IMap<BroadcastGameId, BroadcastGame>;
@@ -276,6 +282,11 @@ typedef BroadcastPlayerWithGameResults = ({
   BroadcastPlayerWithOverallResult playerWithOverallResult,
   BroadcastFideData fideData,
   IList<BroadcastPlayerGameResult> games,
+
+  /// Whether the user follows this FIDE player.
+  ///
+  /// `null` when the user is not logged in, or when the player is not a FIDE player.
+  bool? isFollowing,
 });
 
 enum BroadcastPoints {

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -18,6 +19,7 @@ import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
+import 'package:lichess_mobile/src/utils/riverpod.dart';
 
 part 'evaluation_mixin.freezed.dart';
 
@@ -113,7 +115,7 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState<T>> on AnyNotifier<As
   void onCurrentPathEvalChanged(bool isSameEvalString) {}
 
   @override
-  void runBuild() {
+  WhenComplete runBuild() {
     _evaluationService = ref.watch(evaluationServiceProvider);
 
     ref.onDispose(() {
@@ -123,9 +125,26 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState<T>> on AnyNotifier<As
       _evaluationService.quit();
     });
 
-    super.runBuild();
+    final whenComplete = super.runBuild();
 
-    _socketSubscription = socketClient?.stream.listen(_handleSocketEvent);
+    if (socketClient != null) {
+      _socketSubscription?.cancel();
+      _socketSubscription = socketClient!.stream.listen(_handleSocketEvent);
+    } else {
+      // if socketClient is null it may be because it has been initialized asynchronously
+      var socketSubInitialized = false;
+      VoidCallback? stopListen;
+      stopListen = listenSelf((_, next) {
+        if (next.hasValue && !socketSubInitialized) {
+          _socketSubscription?.cancel();
+          _socketSubscription = socketClient?.stream.listen(_handleSocketEvent);
+          socketSubInitialized = true;
+          stopListen?.call();
+        }
+      });
+    }
+
+    return whenComplete;
   }
 
   /// Toggles the engine evaluation on/off.

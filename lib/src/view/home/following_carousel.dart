@@ -1,7 +1,6 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/relation/following_user.dart';
 import 'package:lichess_mobile/src/model/relation/relation_repository.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -18,51 +17,15 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
+import 'package:material_ui/material_ui.dart';
 
 final followingCarouselProvider = FutureProvider.autoDispose<IList<FollowingUser>>((ref) {
+  final authUser = ref.watch(authControllerProvider);
+  if (authUser == null) {
+    return Future.value(const IListConst<FollowingUser>([]));
+  }
   return ref.watch(relationRepositoryProvider).getRecentFollowing();
 }, name: 'FollowingCarouselProvider');
-
-/// Sorts following users for display in the carousel.
-///
-/// Order:
-///   1. non-bot playing users
-///   2. non-bot online users
-///   3. bot users (at the end of the playing/online sublist)
-///   4. offline users, sorted by most recently seen
-///
-/// Bot users are pushed to the end of the playing/online sublist (even if they
-/// are playing), but still appear before offline users.
-List<FollowingUser> sortFollowingUsers(Iterable<FollowingUser> users) {
-  return users.toList()..sort((a, b) {
-    final aRank = _onlineSortRank(a);
-    final bRank = _onlineSortRank(b);
-    if (aRank != bRank) return aRank.compareTo(bRank);
-
-    final aSeen = a.seenAt;
-    final bSeen = b.seenAt;
-
-    if (aSeen == null && bSeen == null) return 0;
-    if (aSeen == null) return 1;
-    if (bSeen == null) return -1;
-
-    return bSeen.compareTo(aSeen);
-  });
-}
-
-/// Sort rank for a following user; lower ranks are displayed first.
-int _onlineSortRank(FollowingUser user) {
-  final playing = user.playing == true;
-  final online = user.user.isOnline == true;
-
-  // Offline users are sorted last (then by last seen date).
-  if (!playing && !online) return 4;
-
-  // Bots are pushed to the end of the playing/online sublist.
-  if (user.user.isBot) return playing ? 2 : 3;
-
-  return playing ? 0 : 1;
-}
 
 /// A carousel widget that displays a list of users that the current user is following.
 class FollowingCarousel extends ConsumerStatefulWidget {
@@ -84,11 +47,6 @@ class _FollowingWidgetState extends ConsumerState<FollowingCarousel> {
         if (users.isEmpty) {
           return const SizedBox.shrink();
         }
-
-        final sortedUsers = sortFollowingUsers(
-          // Filter out the lichess non-account user
-          users.where((u) => u.user.id != const UserId('lichess')),
-        );
 
         return Padding(
           padding: Styles.verticalBodyPadding,
@@ -112,7 +70,7 @@ class _FollowingWidgetState extends ConsumerState<FollowingCarousel> {
                   itemCount: users.length,
                   separatorBuilder: (context, index) => const SizedBox(width: 10),
                   itemBuilder: (context, index) {
-                    final friend = sortedUsers[index];
+                    final friend = users[index];
 
                     return SizedBox(
                       width: 160,

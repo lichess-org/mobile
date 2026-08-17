@@ -70,6 +70,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Je moet ingelogd zijn om deze pagina te bekijken.';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzels';
+
+  @override
   String get mobileNewGame => 'Nieuwe partij';
 
   @override
@@ -288,6 +291,54 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get mobileGoodMoveButThereIsBetter => 'Goede zet, maar er is een betere';
+
+  @override
+  String get mobilePerfShortUltraBullet => 'Ultra';
+
+  @override
+  String get mobilePerfShortBullet => 'Bullet';
+
+  @override
+  String get mobilePerfShortBlitz => 'Blitz';
+
+  @override
+  String get mobilePerfShortRapid => 'Rapid';
+
+  @override
+  String get mobilePerfShortClassical => 'Klassiek';
+
+  @override
+  String get mobilePerfShortCorrespondence => 'Corresp.';
+
+  @override
+  String get mobilePerfShortFromPosition => 'Stelling';
+
+  @override
+  String get mobilePerfShortChess960 => '960';
+
+  @override
+  String get mobilePerfShortAntichess => 'Weggeef';
+
+  @override
+  String get mobilePerfShortKingOfTheHill => 'Heuvel';
+
+  @override
+  String get mobilePerfShortThreeCheck => 'Driemaal';
+
+  @override
+  String get mobilePerfShortAtomic => 'Atoom';
+
+  @override
+  String get mobilePerfShortHorde => 'Horde';
+
+  @override
+  String get mobilePerfShortRacingKings => 'Rennen';
+
+  @override
+  String get mobilePerfShortCrazyhouse => 'Gek';
+
+  @override
+  String get mobilePerfShortPuzzle => 'Puzzel';
 
   @override
   String get variantStandard => 'Standaard';
@@ -716,6 +767,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get arenaRankAvgHelp => 'Het gemiddelde klassering is een percentage van uw klassering. Lager is beter.\n\nBijvoorbeeld, wanneer je de derde plaats staat in een tornooi van 100 deelnemers = 3%. Tiende plaats zijn in een tornooi van 1000 deelnemers = 1%.';
 
   @override
+  String get arenaRankAverageHelp => 'Your rank average represents your typical finishing position, relative to the total number of players in each tournament.\nThis is a measure of your tournament placement, not your general rating.\n\nFor example, a rank average of 3% means you typically finish in the top 3% (such as 30th place out of 1,000 players).';
+
+  @override
   String get arenaMedians => 'medianen';
 
   @override
@@ -871,6 +925,9 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get broadcastDefinitivelyDeleteTournament => 'Verwijder definitief het hele toernooi, inclusief alle rondes en partijen.';
+
+  @override
+  String get broadcastPermanentlyDeleteTournament => 'Dit toernooi permanent verwijderen, inclusief alle rondes en partijen?';
 
   @override
   String get broadcastShowScores => 'Toon scores van spelers op basis van partij-uitslagen';
@@ -1562,10 +1619,19 @@ class AppLocalizationsNl extends AppLocalizations {
   String get preferencesNotifyInboxMsg => 'Nieuw bericht inbox';
 
   @override
+  String get preferencesNotifyDirectMessage => 'Nieuw privébericht';
+
+  @override
   String get preferencesNotifyForumMention => 'Opmerking op het forum noemt u';
 
   @override
+  String get preferencesNotifyForumMentions => 'Forumvermeldingen';
+
+  @override
   String get preferencesNotifyInvitedStudy => 'Studie uitnodiging';
+
+  @override
+  String get preferencesNotifyStudyInvites => 'Studie-uitnodigingen';
 
   @override
   String get preferencesNotifyGameEvent => 'Spelupdates voor correspondentiepartijen';
@@ -1577,7 +1643,10 @@ class AppLocalizationsNl extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Toernooi begint binnenkort';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Uitzendingen waarop je bent geabonneerd';
+  String get preferencesNotifyTournamentStartReminders => 'Toernooien sturen een herinnering';
+
+  @override
+  String get preferencesNotifyBroadcasts => 'Uitzendingen';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Klok met correspondentie bijna leeg';
@@ -1602,6 +1671,60 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get preferencesShowClockOnTheLeft => 'Toon links op mobiele apparaten';
+
+  @override
+  String get preferencesInlineNotation => 'Geïntegreerde notatie';
+
+  @override
+  String get preferencesShowServerAnalysis => 'Toon serveranalyse';
+
+  @override
+  String get preferencesShowBestMoveArrows => 'Toon beste zet-pijlen';
+
+  @override
+  String get preferencesShowManeuverArrows => 'Toon manoeuvre-pijlen';
+
+  @override
+  String get preferencesShowGauge => 'Toon evaluatiebalk';
+
+  @override
+  String get preferencesShowMoveAnnotationsOnBoard => 'Toon zetannotaties';
+
+  @override
+  String get preferencesShowVariationArrows => 'Toon variantpijlen';
+
+  @override
+  String get preferencesShowLiveGlyphs => 'Computerannotaties';
+
+  @override
+  String get preferencesShowUndefendedPieces => 'Toon onverdedigde stukken';
+
+  @override
+  String get preferencesShowPinnedPieces => 'Toon gepende stukken';
+
+  @override
+  String get preferencesShowCheckableKing => 'Toon schaakbare koning';
+
+  @override
+  String get preferencesDisclosureMode => 'Varianten verbergen';
+
+  @override
+  String get preferencesGeneralSettings => 'Algemeen';
+
+  @override
+  String get preferencesMoveListSettings => 'Zettenlijst';
+
+  @override
+  String get preferencesBoardSettings => 'Bord';
+
+  @override
+  String get preferencesAnalysisSettings => 'Analyse-instellingen';
+
+  @override
+  String get preferencesManeuverArrowsHelp => 'Volgorde van computerzetten voor één stuk';
+
+  @override
+  String get preferencesHoverOverSettingLabelsForHelp => 'Beweeg over instellingslabels voor hulp';
 
   @override
   String get puzzlePuzzles => 'Puzzels';
@@ -2052,6 +2175,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Tactiek met betrekking tot de en passant-regel, waarbij een pion een vijandelijke pion die vanuit zijn beginpositie twee velden tegelijk wordt opgespeeld, kan slaan.';
 
   @override
+  String get puzzleThemeEnPassantAdjacentCaptureDescription => 'Tactiek met betrekking tot de en passant-regel, waarbij een pion een vijandelijke pion kan slaan die vanuit zijn beginpositie twee velden naar voren wordt gezet.';
+
+  @override
   String get puzzleThemeEpauletteMate => 'Epaulettenmat';
 
   @override
@@ -2070,6 +2196,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get puzzleThemeForkDescription => 'Een zet waarbij het gespeelde stuk twee vijandelijke stukken tegelijk aanvalt.';
 
   @override
+  String get puzzleThemeForkOpposingPiecesDescription => 'Een zet waar één stuk twee of meer stukken tegelijk aanvalt.';
+
+  @override
   String get puzzleThemeHangingPiece => 'Ongedekt stuk';
 
   @override
@@ -2080,6 +2209,9 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get puzzleThemeHookMateDescription => 'Mat met een toren, paard en pion tezamen met een vijandelijke pion om de vluchtvelden van de koning in te perken.';
+
+  @override
+  String get puzzleThemeHookMateOpposingPawnDescription => 'Mat met een toren, paard en pion, en een vijandelijke pion om de vluchtvelden van de koning in te perken.';
 
   @override
   String get puzzleThemeInterference => 'Tussenplaatsing';
@@ -3020,6 +3152,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get checkSpamFolder => 'Controleer ook uw spammap, het kan daar terechtkomen. Als dat zo is, markeer het als geen spam.';
 
   @override
+  String get checkSpamOrJunkFolder => 'Als je geen bevestigingsmail ontvangt, controleer dan de map Spam of Junk. Zorg ervoor dat je berichten van lichess.org markeert als veilig en \"geen spam\", zodat je op de hoogte kunt blijven van belangrijke communicatie.';
+
+  @override
   String sendEmailForAccountVerification(String param) {
     return 'Als u uw bevestigingsmail niet kunt vinden, stuur dan een e-mail naar $param en we zullen uw account voor u bevestigen.';
   }
@@ -3369,7 +3504,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get playerNames => 'Spelersnamen';
 
   @override
-  String get moveAnnotations => 'Aantekeningen';
+  String get moveAnnotations => 'Annotaties';
 
   @override
   String get pasteTheFenStringHere => 'Plak de FEN-code hier';
@@ -3747,6 +3882,15 @@ class AppLocalizationsNl extends AppLocalizations {
   String get reply => 'Reageer';
 
   @override
+  String get reopen => 'Opnieuw openen';
+
+  @override
+  String get quote => 'Citeren';
+
+  @override
+  String get postEdited => 'bewerkt';
+
+  @override
   String get message => 'Bericht';
 
   @override
@@ -3781,6 +3925,9 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get reportProcessedFasterInEnglish => 'Je melding wordt sneller verwerkt als deze in het Engels is geschreven.';
+
+  @override
+  String get processReportFasterInEnglish => 'Als je in het Engels schrijft, kunnen we je rapportage sneller verwerken.';
 
   @override
   String get error_provideOneCheatedGameLink => 'Geef ten minste één link naar een partij waarin vals gespeeld is.';
@@ -4151,6 +4298,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get whenCreateSimul => 'Wanneer je een simultaan creëert, kun je tegen meerdere spelers tegelijk spelen.';
 
   @override
+  String get creatingASimul => 'Door een simultaan te maken kun je tegelijkertijd tegen meerdere tegenstanders spelen.';
+
+  @override
   String get simulVariantsHint => 'Als je meerdere varianten selecteert, kan iedere speler kiezen welke variant hij wil spelen.';
 
   @override
@@ -4214,13 +4364,13 @@ class AppLocalizationsNl extends AppLocalizations {
   String get cyclePreviousOrNextVariation => 'Bekijk vorige/volgende variant';
 
   @override
-  String get toggleGlyphAnnotations => 'Zetaantekeningen in-/uitschakelen';
+  String get toggleGlyphAnnotations => 'Zetannotaties in-/uitschakelen';
 
   @override
-  String get togglePositionAnnotations => 'Stellingsaantekeningen in-/uitschakelen';
+  String get togglePositionAnnotations => 'Stellingsannotaties in-/uitschakelen';
 
   @override
-  String get toggleObservationAnnotations => 'Observatie-aantekeningen in-/uitschakelen';
+  String get toggleObservationAnnotations => 'Observatie-annotaties in-/uitschakelen';
 
   @override
   String get variationArrowsInfo => 'Met de variantpijlen kunt u navigeren zonder de zettenlijst te gebruiken.';
@@ -4463,6 +4613,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get background => 'Achtergrond';
 
   @override
+  String get theme => 'Theme';
+
+  @override
   String get light => 'Licht';
 
   @override
@@ -4472,7 +4625,13 @@ class AppLocalizationsNl extends AppLocalizations {
   String get transparent => 'Transparant';
 
   @override
+  String get picture => 'Picture';
+
+  @override
   String get deviceTheme => 'Apparaatthema';
+
+  @override
+  String get roundness => 'Roundness';
 
   @override
   String get backgroundImageUrl => 'Achtergrondafbeelding URL:';
@@ -4493,7 +4652,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get contrast => 'Contrast';
 
   @override
-  String get hue => 'Kleurschakering';
+  String get hue => 'Tint';
 
   @override
   String get boardReset => 'Kleuren terugzetten naar standaard';
@@ -4890,9 +5049,6 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get someoneYouReportedWasBanned => 'Iemand die je hebt gerapporteerd is geband';
-
-  @override
   String get congratsYouWon => 'Gefeliciteerd, je hebt gewonnen!';
 
   @override
@@ -4991,6 +5147,11 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
+  String youCanFormatTextUsing(String param) {
+    return 'Je kunt tekst opmaken met $param.';
+  }
+
+  @override
   String get embedsAvailable => 'Plak de URL van een partij of een studie om deze in te voegen.';
 
   @override
@@ -5012,6 +5173,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get navigateMoveTree => 'Navigeer door de zettenlijst';
 
   @override
+  String get moveListNavigation => 'Zettenlijst';
+
+  @override
   String get mouseTricks => 'Muistrucs';
 
   @override
@@ -5024,7 +5188,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get playComputerMove => 'Doe de beste computerzet';
 
   @override
-  String get analysisOptions => 'Analyse opties';
+  String get analysisOptions => 'Analyse';
 
   @override
   String get focusChat => 'Selecteer chat';
@@ -5062,7 +5226,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get resignTheGame => 'Partij opgeven';
 
   @override
-  String get youCantStartNewGame => 'Je kunt geen nieuwe partij beginnen voordat deze is afgelopen.';
+  String get youCantStartNewGame => 'Je kunt geen nieuwe partij starten terwijl het jouw beurt is.';
 
   @override
   String get since => 'Vanaf';
@@ -5131,6 +5295,9 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get enPassant => 'En passant';
+
+  @override
+  String get settings => 'Instellingen';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5584,6 +5751,17 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
+  String nbAnonymous(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Anoniem ($count)',
+      one: 'Anoniem',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbSecondsToPlayTheFirstMove(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5902,7 +6080,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get studyCommentThisMove => 'Reageer op deze zet';
 
   @override
-  String get studyAnnotateWithGlyphs => 'Maak aantekeningen met symbolen';
+  String get studyAnnotateWithGlyphs => 'Maak annotaties met symbolen';
 
   @override
   String get studyTheChapterIsTooShortToBeAnalysed => 'Dit hoofdstuk is te kort om geanalyseerd te worden.';
@@ -6016,7 +6194,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get studySaveChapter => 'Hoofdstuk opslaan';
 
   @override
-  String get studyClearAnnotations => 'Wis aantekeningen';
+  String get studyClearAnnotations => 'Wis annotaties';
 
   @override
   String get studyClearVariations => 'Verwijder variaties';
@@ -6230,7 +6408,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get studyPrevChapter => 'Vorige hoofdstuk';
 
   @override
-  String get studyStudyActions => 'Studie sneltoetsen';
+  String get studyStudyActions => 'Studie';
 
   @override
   String get studyTopics => 'Onderwerpen';

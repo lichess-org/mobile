@@ -62,11 +62,11 @@ class StudyController extends AsyncNotifier<StudyState>
   StreamSubscription<SocketEvent>? _socketSubscription;
   final _likeDebouncer = Debouncer(const Duration(milliseconds: 500));
 
-  late SocketClient _socketClient;
+  SocketClient? _socketClient;
 
   @override
   @protected
-  SocketClient get socketClient => _socketClient;
+  SocketClient? get socketClient => _socketClient;
 
   @override
   @protected
@@ -96,11 +96,23 @@ class StudyController extends AsyncNotifier<StudyState>
       _socketSubscription?.cancel();
       _likeDebouncer.cancel();
     });
+    final socketPool = ref.watch(socketPoolProvider);
+    final (study, analysisSummary, pgn) = await ref
+        .read(studyRepositoryProvider)
+        .getStudy(id: options.id, chapterId: options.initialChapter);
 
-    final chapter = await _fetchChapter(
-      options.id,
+    _socketClient = socketPool.open(
+      Uri(path: '/study/${options.id}/socket/v6'),
+      version: study.socketVersion,
+    );
+    _socketSubscription?.cancel();
+    _socketSubscription = _socketClient?.stream.listen(handleSocketEvent);
+
+    final chapter = await _loadChapter(
+      study,
+      pgn,
+      analysisSummary: analysisSummary,
       chapterId: options.initialChapter,
-      initSocket: true,
     );
 
     return chapter.copyWith(chatState: await initChat(chapter.study.chat));
@@ -141,34 +153,27 @@ class StudyController extends AsyncNotifier<StudyState>
     }
   }
 
-  Future<void> goToChapter(StudyChapterId chapterId) async {
-    await _fetchChapter(state.requireValue.study.id, chapterId: chapterId);
+  Future<void> goToChapter(StudyChapterId chapterId) => _reloadStudy(chapterId: chapterId);
+
+  /// Re-fetches the study and loads [chapterId], or the study's default chapter when it is null.
+  Future<void> _reloadStudy({StudyChapterId? chapterId}) async {
+    final (study, analysisSummary, pgn) = await ref
+        .read(studyRepositoryProvider)
+        .getStudy(id: options.id, chapterId: chapterId);
+
+    await _loadChapter(study, pgn, chapterId: chapterId, analysisSummary: analysisSummary);
     // Switching chapters does not re-run [runBuild], so fetch the new mainline's
     // openings explicitly here.
     if (state.hasValue) initMainlineOpenings();
     _ensureItsOurTurnIfGamebook();
   }
 
-  Future<StudyState> _fetchChapter(
-    StudyId id, {
+  Future<StudyState> _loadChapter(
+    Study study,
+    String pgn, {
+    AnalysisSummary? analysisSummary,
     StudyChapterId? chapterId,
-    bool initSocket = false,
   }) async {
-    final (study, analysisSummary, pgn) = await ref
-        .read(studyRepositoryProvider)
-        .getStudy(id: id, chapterId: chapterId);
-
-    // We receive the socket version from the study API, so we can only initialize the socket connection after fetching the study for the first time.
-    if (initSocket) {
-      final socketPool = ref.watch(socketPoolProvider);
-      _socketClient = socketPool.open(
-        Uri(path: '/study/${options.id}/socket/v6'),
-        version: study.socketVersion,
-      );
-      _socketSubscription?.cancel();
-      _socketSubscription = _socketClient.stream.listen(handleSocketEvent);
-    }
-
     final game = PgnGame.parsePgn(pgn);
 
     final pgnHeaders = IMap(game.headers);
@@ -256,7 +261,7 @@ class StudyController extends AsyncNotifier<StudyState>
     state = AsyncData(studyState);
 
     if (state.requireValue.isEngineAvailable(evaluationPrefs)) {
-      socketClient.firstConnection.then((_) {
+      socketClient?.firstConnection.then((_) {
         if (!ref.mounted) return;
         requestEval();
       });
@@ -269,7 +274,7 @@ class StudyController extends AsyncNotifier<StudyState>
     _likeDebouncer(() {
       if (!state.hasValue) return;
       final liked = state.requireValue.study.liked;
-      _socketClient.send('like', {'liked': !liked});
+      _socketClient?.send('like', {'liked': !liked});
       state = AsyncValue.data(
         state.requireValue.copyWith(study: state.requireValue.study.copyWith(liked: !liked)),
       );
@@ -291,7 +296,7 @@ class StudyController extends AsyncNotifier<StudyState>
     final study = state.requireValue.study;
     final chapters = study.chapters;
 
-    _socketClient.send('deleteChapter', chapterId.value);
+    _socketClient?.send('deleteChapter', chapterId.value);
 
     if (chapters.length > 1) {
       final isCurrentChapter = chapterId == study.chapter.id;
@@ -301,7 +306,7 @@ class StudyController extends AsyncNotifier<StudyState>
         final nextId = index < chapters.length - 1
             ? chapters[index + 1].id
             : chapters[index - 1].id;
-        await _fetchChapter(study.id, chapterId: nextId);
+        await _reloadStudy(chapterId: nextId);
       } else {
         // Stay on the current chapter but update the chapter list.
         final updatedChapters = chapters.removeWhere((c) => c.id == chapterId);
@@ -312,7 +317,7 @@ class StudyController extends AsyncNotifier<StudyState>
     } else {
       // Deleting the last chapter: wait for the server to create the empty replacement.
       await Future<void>.delayed(const Duration(milliseconds: 300));
-      await _fetchChapter(study.id);
+      await _reloadStudy();
     }
   }
 
@@ -336,7 +341,7 @@ class StudyController extends AsyncNotifier<StudyState>
               : 'normal')
         : 'normal';
 
-    _socketClient.send('editChapter', {
+    _socketClient?.send('editChapter', {
       'id': chapterId.value,
       'name': name ?? currentName,
       'orientation': (orientation ?? currentOrientation).name,
@@ -550,16 +555,12 @@ class StudyController extends AsyncNotifier<StudyState>
         _recordChange('anaMove', {
           'orig': move.from.name,
           'dest': move.to.name,
-          'variant': state.requireValue.variant.name,
-          'fen': state.requireValue.currentPosition!.fen,
           'path': state.requireValue.currentPath.value,
         });
       case DropMove():
         _recordChange('anaDrop', {
           'role': move.role.name,
           'pos': move.to.name,
-          'variant': state.requireValue.variant.name,
-          'fen': state.requireValue.currentPosition!.fen,
           'path': state.requireValue.currentPath.value,
         });
     }
@@ -569,7 +570,7 @@ class StudyController extends AsyncNotifier<StudyState>
     if (!state.hasValue) return;
     if (state.requireValue.isWriteable == false) return;
 
-    _socketClient.send(socketEvent, {...data, 'ch': state.requireValue.study.chapter.id.value});
+    _socketClient?.send(socketEvent, {...data, 'ch': state.requireValue.study.chapter.id.value});
   }
 
   void _setPath(

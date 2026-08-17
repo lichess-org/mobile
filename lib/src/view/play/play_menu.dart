@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
@@ -11,13 +10,14 @@ import 'package:lichess_mobile/src/view/play/create_challenge_bottom_sheet.dart'
 import 'package:lichess_mobile/src/view/play/create_game_widget.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_list_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:material_ui/material_ui.dart';
 
 class PlayMenu extends ConsumerWidget {
   const PlayMenu();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
+    final connectionStatus = ref.watch(lichessConnectionStatusProvider);
 
     return Column(
       children: [
@@ -28,7 +28,7 @@ class PlayMenu extends ConsumerWidget {
         _Section(
           children: [
             ListTile(
-              enabled: isOnline,
+              enabled: connectionStatus == LichessConnectionStatus.online,
               onTap: () {
                 // Pops the play bottom sheet
                 Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
@@ -45,7 +45,7 @@ class PlayMenu extends ConsumerWidget {
               title: Text(context.l10n.challengeAFriend),
             ),
             ListTile(
-              enabled: isOnline,
+              enabled: connectionStatus == LichessConnectionStatus.online,
               onTap: () {
                 // Pops the play bottom sheet
                 Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
@@ -58,7 +58,7 @@ class PlayMenu extends ConsumerWidget {
               title: Text(context.l10n.correspondence),
             ),
             ListTile(
-              enabled: isOnline,
+              enabled: connectionStatus == LichessConnectionStatus.online,
               onTap: () {
                 // Pops the play bottom sheet
                 Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);

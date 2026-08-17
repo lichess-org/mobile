@@ -1,10 +1,10 @@
 import 'package:collection/collection.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -14,9 +14,10 @@ import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/view/game/status_l10n.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// A list tile that shows more detailed game info than [GameListTile].
-class GameListDetailTile extends StatelessWidget {
+class GameListDetailTile extends ConsumerWidget {
   const GameListDetailTile({required this.item, this.onPressedBookmark});
 
   final LightExportedGameWithPov item;
@@ -25,7 +26,7 @@ class GameListDetailTile extends StatelessWidget {
   Side get mySide => item.pov;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final (game: game, pov: youAre) = item;
     final me = youAre == Side.white ? game.white : game.black;
     final opponent = youAre == Side.white ? game.black : game.white;
@@ -53,16 +54,8 @@ class GameListDetailTile extends StatelessWidget {
           useRootNavigator: true,
           isDismissible: true,
           isScrollControlled: true,
-          builder: (context) => GameContextMenu(
-            opponentTitle: UserFullNameWidget.player(
-              user: opponent.user,
-              aiLevel: opponent.aiLevel,
-              rating: opponent.rating,
-            ),
-            game: game,
-            mySide: mySide,
-            onPressedBookmark: onPressedBookmark,
-          ),
+          builder: (context) =>
+              GameContextMenu(game: game, mySide: mySide, onPressedBookmark: onPressedBookmark),
         );
       },
       onTap: () => openGameScreen(
@@ -105,7 +98,12 @@ class GameListDetailTile extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    relativeDate(context.l10n, game.lastMoveAt).toUpperCase(),
+                                    // For an imported game, `lastMoveAt` is the import date, so
+                                    // prefer the PGN date if we have it.
+                                    (game.importDate != null
+                                            ? formatPgnDate(game.importDate!)
+                                            : relativeDate(context.l10n, game.lastMoveAt))
+                                        .toUpperCase(),
                                     style: dateStyle,
                                   ),
                                   Row(
@@ -120,7 +118,9 @@ class GameListDetailTile extends StatelessWidget {
                                         const SizedBox(width: 2),
                                       ],
                                       Icon(
-                                        game.perf.icon,
+                                        game.isImported
+                                            ? Icons.cloud_upload_outlined
+                                            : game.perf.icon,
                                         size: subtitleFontSize + 3,
                                         color: textShade(context, 0.7),
                                       ),
@@ -129,14 +129,57 @@ class GameListDetailTile extends StatelessWidget {
                                 ],
                               ),
                               const SizedBox(height: 2),
-                              UserFullNameWidget(
-                                user: opponent.user,
-                                rating: opponent.rating,
-                                style: TextStyle(
-                                  fontSize: titleFontSize,
-                                  fontWeight: FontWeight.w600,
+                              // An imported game is not tied to a lichess account: the point of
+                              // view is arbitrary, so show both players.
+                              if (game.isImported)
+                                Text(
+                                  context.l10n.resVsX(
+                                    game.white.fullName(context.l10n),
+                                    game.black.fullName(context.l10n),
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: titleFontSize,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                )
+                              else
+                                UserFullNameWidget.player(
+                                  user: opponent.user,
+                                  name: opponent.name,
+                                  aiLevel: opponent.aiLevel,
+                                  rating: opponent.rating,
+                                  style: TextStyle(
+                                    fontSize: titleFontSize,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
-                              ),
+                              if (game.arenaTournamentId != null) ...[
+                                const SizedBox(height: 2),
+                                Row(
+                                  children: [
+                                    Icon(
+                                      LichessIcons.tournament_cup,
+                                      size: subtitleFontSize + 1,
+                                      color: textShade(context, Styles.subtitleOpacity),
+                                    ),
+                                    const SizedBox(width: 4),
+                                    Expanded(
+                                      child: Text(
+                                        game.arenaTournamentName ?? context.l10n.tournament,
+                                        maxLines: 2,
+                                        overflow: .ellipsis,
+                                        style: TextStyle(
+                                          color: textShade(context, Styles.subtitleOpacity),
+                                          fontSize: subtitleFontSize,
+                                          fontWeight: .w600,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ],
                           ),
                           if (game.lastFen != null)

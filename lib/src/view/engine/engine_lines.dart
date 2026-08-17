@@ -1,7 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/common_analysis_state.dart';
@@ -10,6 +9,7 @@ import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
+import 'package:material_ui/material_ui.dart';
 
 const kEngineLineHeight = 24.0;
 const kEngineLineFontSize = 11.0;
@@ -118,8 +118,8 @@ class Engineline extends ConsumerWidget {
         final move = Move.parse(pvData.moves[0]);
         if (move != null) onTapMove?.call(move);
       },
-      child: SizedBox(
-        height: kEngineLineHeight,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: kEngineLineHeight),
         child: Padding(
           padding: const EdgeInsets.all(2.0),
           child: Row(

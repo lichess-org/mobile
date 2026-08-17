@@ -1,10 +1,10 @@
 import 'dart:math';
 
 import 'package:collection/collection.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// A action bottom sheet that adapts to the platform (Android/iOS).
 ///
@@ -139,7 +139,7 @@ Future<T?> showMaterialActionSheet<T>({
 }) {
   final actionTextStyle = TextTheme.of(context).titleMedium ?? const TextStyle(fontSize: 18);
 
-  final screenWidth = MediaQuery.sizeOf(context).width;
+  final screenWidth = MediaQuery.widthOf(context);
   return showDialog<T>(
     context: context,
     barrierDismissible: isDismissible,

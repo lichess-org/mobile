@@ -1,6 +1,5 @@
 import 'package:fake_async/fake_async.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -15,8 +14,9 @@ import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
-import 'package:lichess_mobile/src/tab_scaffold.dart' show currentNavigatorKeyProvider;
+import 'package:lichess_mobile/src/tab_navigation.dart' show currentNavigatorKeyProvider;
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../network/fake_websocket_channel.dart';
@@ -62,7 +62,7 @@ class _ShowDeclineDialogWidget extends ConsumerWidget {
 }
 
 void main() {
-  TestWidgetsFlutterBinding.ensureInitialized();
+  final binding = TestWidgetsFlutterBinding.ensureInitialized();
 
   setUpAll(() {
     registerFallbackValue(const ChallengeId(''));
@@ -192,6 +192,70 @@ void main() {
       async.flushMicrotasks();
 
       // same notification should not be shown again
+      verifyNever(
+        () => notificationDisplayMock.show(
+          id: any(named: 'id'),
+          title: any(named: 'title'),
+          body: any(named: 'body'),
+          notificationDetails: any(named: 'notificationDetails'),
+          payload: any(named: 'payload'),
+        ),
+      );
+
+      // closing the socket client to be able to flush the timers
+      socketClient.close();
+      async.flushTimers();
+    });
+  });
+
+  test('Does not show local notification when app is in background', () async {
+    // when app is in background, socket notifications should not be displayed
+    binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
+    addTearDown(() {
+      binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+    });
+
+    when(
+      () => notificationDisplayMock.show(
+        id: any(named: 'id'),
+        title: any(named: 'title'),
+        body: any(named: 'body'),
+        notificationDetails: any(named: 'notificationDetails'),
+        payload: any(named: 'payload'),
+      ),
+    ).thenAnswer((_) => Future.value());
+
+    final container = await makeContainer(
+      authUser: fakeAuthUser,
+      overrides: {
+        notificationDisplayProvider: notificationDisplayProvider.overrideWithValue(
+          notificationDisplayMock,
+        ),
+      },
+    );
+
+    final notificationService = container.read(notificationServiceProvider);
+    final challengeService = container.read(challengeServiceProvider);
+
+    fakeAsync((async) {
+      final socketClient = makeTestSocketClient();
+      socketClient.connect();
+      notificationService.start();
+      challengeService.start();
+
+      // wait for the socket to connect
+      async.elapse(const Duration(milliseconds: 100));
+      async.flushMicrotasks();
+
+      sendServerSocketMessages(Uri(path: kDefaultSocketRoute), [
+        '''
+{"t": "challenges", "d": {"in": [ { "socketVersion": 0, "id": "H9fIRZUk", "url": "https://lichess.org/H9fIRZUk", "status": "created", "challenger": { "id": "bot1", "name": "Bot1", "rating": 1500, "title": "BOT", "provisional": true, "online": true, "lag": 4 }, "destUser": { "id": "bobby", "name": "Bobby", "rating": 1635, "title": "GM", "provisional": true, "online": true, "lag": 4 }, "variant": { "key": "standard", "name": "Standard", "short": "Std" }, "rated": true, "speed": "rapid", "timeControl": { "type": "clock", "limit": 600, "increment": 0, "show": "10+0" }, "color": "random", "finalColor": "black", "perf": { "icon": "", "name": "Rapid" }, "direction": "in" } ] }, "v": 0 }
+''',
+      ]);
+
+      async.flushMicrotasks();
+
+      // ensure no notification is shown while app is backgrounded
       verifyNever(
         () => notificationDisplayMock.show(
           id: any(named: 'id'),
@@ -376,74 +440,66 @@ void main() {
       expect(find.text('Decline'), findsOneWidget);
     }, variant: kPlatformVariant);
 
-    testWidgets(
-      'fromLink: shows Cancel instead of Decline on Android',
-      (tester) async {
-        const challenge = Challenge(
-          id: ChallengeId('H9fIRZUk'),
-          status: ChallengeStatus.created,
-          challenger: (
-            user: LightUser(id: UserId('bot1'), name: 'Bot1', isOnline: true),
-            rating: 1500,
-            provisionalRating: null,
-            lagRating: null,
-          ),
-          variant: Variant.standard,
-          rated: true,
-          speed: Speed.rapid,
-          timeControl: ChallengeTimeControlType.clock,
-          clock: (time: Duration(seconds: 600), increment: Duration.zero),
-          sideChoice: SideChoice.random,
-        );
+    testWidgets('fromLink: shows Cancel instead of Decline on Android', (tester) async {
+      const challenge = Challenge(
+        id: ChallengeId('H9fIRZUk'),
+        status: ChallengeStatus.created,
+        challenger: (
+          user: LightUser(id: UserId('bot1'), name: 'Bot1', isOnline: true),
+          rating: 1500,
+          provisionalRating: null,
+          lagRating: null,
+        ),
+        variant: Variant.standard,
+        rated: true,
+        speed: Speed.rapid,
+        timeControl: ChallengeTimeControlType.clock,
+        clock: (time: Duration(seconds: 600), increment: Duration.zero),
+        sideChoice: SideChoice.random,
+      );
 
-        final app = await makeTestProviderScopeApp(
-          tester,
-          home: const _ShowConfirmDialogWidget(challenge: challenge, fromLink: true),
-        );
-        await tester.pumpWidget(app);
-        await tester.tap(find.text('Open Dialog'));
-        await tester.pumpAndSettle();
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const _ShowConfirmDialogWidget(challenge: challenge, fromLink: true),
+      );
+      await tester.pumpWidget(app);
+      await tester.tap(find.text('Open Dialog'));
+      await tester.pumpAndSettle();
 
-        expect(find.text('Cancel'), findsOneWidget);
-        expect(find.text('Decline'), findsNothing);
-      },
-      variant: const TargetPlatformVariant({TargetPlatform.android}),
-    );
+      expect(find.text('Cancel'), findsOneWidget);
+      expect(find.text('Decline'), findsNothing);
+    }, variant: const TargetPlatformVariant({TargetPlatform.android}));
 
-    testWidgets(
-      'fromLink: shows no Decline or Cancel action on iOS',
-      (tester) async {
-        const challenge = Challenge(
-          id: ChallengeId('H9fIRZUk'),
-          status: ChallengeStatus.created,
-          challenger: (
-            user: LightUser(id: UserId('bot1'), name: 'Bot1', isOnline: true),
-            rating: 1500,
-            provisionalRating: null,
-            lagRating: null,
-          ),
-          variant: Variant.standard,
-          rated: true,
-          speed: Speed.rapid,
-          timeControl: ChallengeTimeControlType.clock,
-          clock: (time: Duration(seconds: 600), increment: Duration.zero),
-          sideChoice: SideChoice.random,
-        );
+    testWidgets('fromLink: shows no Decline or Cancel action on iOS', (tester) async {
+      const challenge = Challenge(
+        id: ChallengeId('H9fIRZUk'),
+        status: ChallengeStatus.created,
+        challenger: (
+          user: LightUser(id: UserId('bot1'), name: 'Bot1', isOnline: true),
+          rating: 1500,
+          provisionalRating: null,
+          lagRating: null,
+        ),
+        variant: Variant.standard,
+        rated: true,
+        speed: Speed.rapid,
+        timeControl: ChallengeTimeControlType.clock,
+        clock: (time: Duration(seconds: 600), increment: Duration.zero),
+        sideChoice: SideChoice.random,
+      );
 
-        final app = await makeTestProviderScopeApp(
-          tester,
-          home: const _ShowConfirmDialogWidget(challenge: challenge, fromLink: true),
-        );
-        await tester.pumpWidget(app);
-        await tester.tap(find.text('Open Dialog'));
-        await tester.pumpAndSettle();
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const _ShowConfirmDialogWidget(challenge: challenge, fromLink: true),
+      );
+      await tester.pumpWidget(app);
+      await tester.tap(find.text('Open Dialog'));
+      await tester.pumpAndSettle();
 
-        expect(find.text('Decline'), findsNothing);
-        // The built-in CupertinoActionSheet cancel button is present
-        expect(find.text('Cancel'), findsOneWidget);
-      },
-      variant: const TargetPlatformVariant({TargetPlatform.iOS}),
-    );
+      expect(find.text('Decline'), findsNothing);
+      // The built-in CupertinoActionSheet cancel button is present
+      expect(find.text('Cancel'), findsOneWidget);
+    }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
   });
 
   group('showDeclineDialog', () {

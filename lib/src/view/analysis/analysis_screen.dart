@@ -1,6 +1,6 @@
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_player.dart';
@@ -9,7 +9,6 @@ import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
-import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
@@ -17,6 +16,7 @@ import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_actions.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_settings_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_share_screen.dart';
@@ -25,26 +25,25 @@ import 'package:lichess_mobile/src/view/analysis/game_analysis_board.dart';
 import 'package:lichess_mobile/src/view/analysis/retro_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/server_analysis.dart';
 import 'package:lichess_mobile/src/view/analysis/tree_view.dart';
-import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_button.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/explorer/explorer_view.dart';
+import 'package:lichess_mobile/src/view/game/exported_game_title.dart';
 import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
-import 'package:lichess_mobile/src/view/offline_computer/offline_computer_game_screen.dart';
-import 'package:lichess_mobile/src/view/over_the_board/over_the_board_screen.dart';
-import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
+import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:lichess_mobile/src/widgets/misc.dart';
+import 'package:lichess_mobile/src/widgets/move_times_chart.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 import 'package:logging/logging.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:share_plus/share_plus.dart';
 
 extension _AnalysisGameResultColor on AnalysisGameResult {
@@ -83,8 +82,65 @@ class _AnalysisScreen extends ConsumerStatefulWidget {
   ConsumerState<_AnalysisScreen> createState() => _AnalysisScreenState();
 }
 
-class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
-    with SingleTickerProviderStateMixin {
+class _AnalysisScreenState extends ConsumerState<_AnalysisScreen> {
+  @override
+  Widget build(BuildContext context) {
+    final ctrlProvider = analysisControllerProvider(widget.options);
+    final asyncState = ref.watch(ctrlProvider);
+
+    switch (asyncState) {
+      case AsyncData(:final value):
+        final appBarTitle = value.archivedGame != null
+            ? ExportedGameTitle(
+                meta: value.archivedGame!.meta,
+                lastMoveAt: value.archivedGame!.data.lastMoveAt,
+                isImport: value.archivedGame!.source.isImport,
+                importDate: value.archivedGame!.data.importDate,
+              )
+            : VariantAppBarTitle(variant: value.variant, title: context.l10n.analysis);
+
+        return WakelockWidget(
+          child: Scaffold(
+            resizeToAvoidBottomInset: false,
+            appBar: AppBar(
+              title: appBarTitle,
+              actions: [_AnalysisMenu(options: widget.options)],
+            ),
+            body: _TabbedBody(
+              options: widget.options,
+              // Move times can only be shown for games played with a clock.
+              showMoveTimes: value.archivedGame?.clocks?.isNotEmpty ?? false,
+            ),
+          ),
+        );
+      case AsyncError(:final error, :final stackTrace):
+        _logger.severe('Cannot load analysis:', error, stackTrace);
+        return FullScreenRetryRequest(onRetry: () => ref.invalidate(ctrlProvider));
+      case _:
+        return Scaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: AppBar(title: const ExportedGameTitleLoading()),
+          body: const Center(child: CircularProgressIndicator.adaptive()),
+        );
+    }
+  }
+}
+
+/// Owns the tab list and its controller.
+///
+/// Which tabs are available depends on the loaded game, so the list can only be built once the
+/// analysis state is available.
+class _TabbedBody extends StatefulWidget {
+  const _TabbedBody({required this.options, required this.showMoveTimes});
+
+  final AnalysisOptions options;
+  final bool showMoveTimes;
+
+  @override
+  State<_TabbedBody> createState() => _TabbedBodyState();
+}
+
+class _TabbedBodyState extends State<_TabbedBody> with SingleTickerProviderStateMixin {
   late final List<AnalysisTab> tabs;
   late final TabController _tabController;
 
@@ -95,13 +151,18 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
     tabs = [
       AnalysisTab.explorer,
       AnalysisTab.moves,
-      if (widget.options case ArchivedGame())
-        AnalysisTab.summary
-      else if (widget.options case ActiveCorrespondenceGame())
+      if (widget.options case ArchivedGame()) ...[
+        AnalysisTab.summary,
+        if (widget.showMoveTimes) AnalysisTab.moveTimes,
+      ] else if (widget.options case ActiveCorrespondenceGame())
         AnalysisTab.conditionalPremoves,
     ];
 
-    _tabController = TabController(vsync: this, initialIndex: 1, length: tabs.length);
+    _tabController = TabController(
+      vsync: this,
+      initialIndex: tabs.indexOf(AnalysisTab.moves),
+      length: tabs.length,
+    );
   }
 
   @override
@@ -112,115 +173,7 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen>
 
   @override
   Widget build(BuildContext context) {
-    final ctrlProvider = analysisControllerProvider(widget.options);
-    final asyncState = ref.watch(ctrlProvider);
-
-    final appBarActions = [_AnalysisMenu(options: widget.options, state: asyncState)];
-
-    switch (asyncState) {
-      case AsyncData(:final value):
-        Widget appBarTitle;
-        if (value.archivedGame != null) {
-          final meta = value.archivedGame!.meta;
-          // On mobile space is constrained, so unlike the web we omit the speed for standard chess
-          final isStandardVariant = value.variant == .standard || value.variant == .fromPosition;
-          final ratedOrCasual = meta.rated ? context.l10n.rated : context.l10n.casual;
-          final clockDisplay = value.archivedGame!.data.clockDisplay(context.l10n);
-          final title = isStandardVariant
-              ? '$clockDisplay • $ratedOrCasual'
-              : '$clockDisplay • $ratedOrCasual • ${value.variant.label(context.l10n)}';
-          final icon = isStandardVariant ? meta.speed.icon : value.variant.icon;
-          appBarTitle = Row(
-            mainAxisSize: .min,
-            children: [
-              Icon(icon),
-              const SizedBox(width: 5.0),
-              Flexible(child: AppBarTitleText(title)),
-            ],
-          );
-        } else {
-          appBarTitle = VariantAppBarTitle(variant: value.variant, title: context.l10n.analysis);
-        }
-
-        return WakelockWidget(
-          child: Scaffold(
-            resizeToAvoidBottomInset: false,
-            appBar: AppBar(centerTitle: false, title: appBarTitle, actions: appBarActions),
-            body: _Body(options: widget.options, controller: _tabController, tabs: tabs),
-          ),
-        );
-      case AsyncError(:final error, :final stackTrace):
-        _logger.severe('Cannot load analysis: $error', stackTrace);
-        return FullScreenRetryRequest(onRetry: () => ref.invalidate(ctrlProvider));
-      case _:
-        return Scaffold(
-          resizeToAvoidBottomInset: false,
-          appBar: AppBar(
-            centerTitle: false,
-            title: VariantAppBarTitle(variant: Variant.standard, title: context.l10n.analysis),
-            actions: appBarActions,
-          ),
-          body: const Center(child: CircularProgressIndicator.adaptive()),
-        );
-    }
-  }
-}
-
-class _AnalysisMenu extends ConsumerWidget {
-  const _AnalysisMenu({required this.options, required this.state});
-
-  final AnalysisOptions options;
-  final AsyncValue<AnalysisState> state;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final showEngineLines = ref.watch(
-      analysisPreferencesProvider.select((prefs) => prefs.showEngineLines),
-    );
-    return ContextMenuIconButton(
-      icon: const Icon(Icons.more_horiz),
-      semanticsLabel: context.l10n.menu,
-      actions: [
-        ToggleSoundContextMenuAction(
-          isEnabled: ref.watch(generalPreferencesProvider.select((prefs) => prefs.isSoundEnabled)),
-          onPressed: () => ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled(),
-        ),
-        ContextMenuAction(
-          icon: Icons.settings,
-          label: context.l10n.settingsSettings,
-          onPressed: () =>
-              Navigator.of(context).push(AnalysisSettingsScreen.buildRoute(options: options)),
-        ),
-        ContextMenuAction(
-          icon: showEngineLines ? Icons.subtitles_outlined : Icons.subtitles_off_outlined,
-          label: showEngineLines ? 'Hide Engine Lines' : 'Show Engine Lines',
-          onPressed: () {
-            ref.read(analysisPreferencesProvider.notifier).toggleShowEngineLines();
-          },
-        ),
-        ...(switch (state) {
-          AsyncData(:final value) =>
-            value.archivedGame != null
-                ? [
-                    GameBookmarkContextMenuAction(
-                      id: value.archivedGame!.id,
-                      bookmarked: value.archivedGame!.data.bookmarked ?? false,
-                      onToggleBookmark: () =>
-                          ref.read(analysisControllerProvider(options).notifier).toggleBookmark(),
-                    ),
-                    if (value.archivedGame!.finished)
-                      ...makeFinishedGameShareContextMenuActions(
-                        context,
-                        ref,
-                        gameId: value.archivedGame!.id,
-                        orientation: value.pov,
-                      ),
-                  ]
-                : [],
-          _ => [],
-        }),
-      ],
-    );
+    return _Body(options: widget.options, controller: _tabController, tabs: tabs);
   }
 }
 
@@ -375,9 +328,26 @@ class _Body extends ConsumerWidget {
                     )
                   : null,
               onRequestServerAnalysis: ref.read(ctrlProvider.notifier).requestServerAnalysis,
-            )
-          else if (options case ActiveCorrespondenceGame())
-            ConditionalPremoves(options),
+            ),
+          if (tabs.contains(AnalysisTab.moveTimes))
+            ListView(
+              children: [
+                MoveTimesChart(
+                  params: (
+                    moveTimes: analysisState.archivedGame!.moveTimes,
+                    clocks: analysisState.archivedGame!.clocks ?? const IListConst<Duration>([]),
+                    division: analysisState.division,
+                    rootPly: analysisState.root.position.ply,
+                    currentNodePly: analysisState.currentPosition.ply,
+                    isOnMainline: analysisState.isOnMainline,
+                    onJumpToNode: ref
+                        .read(analysisControllerProvider(options).notifier)
+                        .jumpToNthNodeOnMainline,
+                  ),
+                ),
+              ],
+            ),
+          if (options case ActiveCorrespondenceGame()) ConditionalPremoves(options),
         ],
       ),
     );
@@ -417,7 +387,9 @@ class _PlayerWidget extends StatelessWidget {
             Expanded(
               child: UserFullNameWidget.player(
                 user: player.user,
+                name: player.name,
                 rating: player.rating,
+                ratingDiff: player.ratingDiff,
                 provisional: player.provisional,
                 aiLevel: player.aiLevel,
                 style: const TextStyle(fontWeight: FontWeight.bold),
@@ -479,6 +451,11 @@ class _BottomBar extends ConsumerWidget {
             _showAnalysisMenu(context, ref);
           },
           icon: Icons.menu,
+        ),
+        BottomBarButton(
+          label: context.l10n.flipBoard,
+          onTap: () => ref.read(ctrlProvider.notifier).toggleBoard(),
+          icon: CupertinoIcons.arrow_2_squarepath,
         ),
         if (analysisState.isComputerAnalysisAllowed)
           Builder(
@@ -552,6 +529,11 @@ class _BottomBar extends ConsumerWidget {
     return showAdaptiveActionSheet(
       context: context,
       actions: [
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.settingsSettings),
+          onPressed: () =>
+              Navigator.of(context).push(AnalysisSettingsScreen.buildRoute(options: options)),
+        ),
         if (options case Standalone()) ...[
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.clearSavedMoves),
@@ -599,10 +581,15 @@ class _BottomBar extends ConsumerWidget {
             onPressed: () =>
                 ref.read(analysisControllerProvider(options).notifier).toggleEngineThreatMode(),
           ),
-        BottomSheetAction(
-          makeLabel: (context) => Text(context.l10n.flipBoard),
-          onPressed: () => ref.read(analysisControllerProvider(options).notifier).toggleBoard(),
-        ),
+        if (analysisState.archivedGame?.data.arenaTournamentId != null)
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.viewTournament),
+            onPressed: () {
+              Navigator.of(context).push(
+                TournamentScreen.buildRoute(analysisState.archivedGame!.data.arenaTournamentId!),
+              );
+            },
+          ),
         if (options case ArchivedGame())
           if (analysisState.canRequestServerAnalysis)
             BottomSheetAction(
@@ -650,25 +637,61 @@ class _BottomBar extends ConsumerWidget {
         if (analysisState.isComputerAnalysisAllowed)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.boardEditor),
-            onPressed: () {
-              final boardFen = analysisState.currentPosition.fen;
-              Navigator.of(context).push(
-                BoardEditorScreen.buildRoute((
-                  initialVariant: analysisState.variant,
-                  initialFen: boardFen,
-                  initialOrientation: null,
-                )),
-              );
-            },
+            onPressed: () => openBoardEditor(
+              context,
+              analysisState.variant,
+              analysisState.currentPosition.fen,
+              analysisState.pov,
+            ),
           ),
         if (analysisState.isComputerAnalysisAllowed)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.continueFromHere),
-            onPressed: () => _showContinueFromHereMenu(context, ref),
+            onPressed: () => showContinueFromHereMenu(
+              context,
+              analysisState.variant,
+              analysisState.currentPosition.fen,
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+/// App bar menu holding the game actions: bookmark, share and export.
+class _AnalysisMenu extends ConsumerWidget {
+  const _AnalysisMenu({required this.options});
+
+  final AnalysisOptions options;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final analysisState = ref.watch(analysisControllerProvider(options)).value;
+    if (analysisState == null) return const SizedBox.shrink();
+
+    final archivedGame = analysisState.archivedGame;
+
+    return ContextMenuIconButton(
+      icon: const Icon(Icons.more_horiz),
+      semanticsLabel: context.l10n.menu,
+      actions: [
+        if (archivedGame != null)
+          ContextMenuAction(
+            icon: archivedGame.data.bookmarked == true
+                ? Icons.bookmark_remove_outlined
+                : Icons.bookmark_add_outlined,
+            label: archivedGame.data.bookmarked == true
+                ? context.l10n.mobileRemoveBookmark
+                : context.l10n.bookmarkThisGame,
+            onPressed: () =>
+                ref.read(analysisControllerProvider(options).notifier).toggleBookmark(),
           ),
         if (analysisState.gameId != null || analysisState.isComputerAnalysisAllowed)
-          BottomSheetAction(
-            makeLabel: (context) => Text(context.l10n.studyShareAndExport),
+          ContextMenuAction(
+            icon: Theme.of(context).platform == TargetPlatform.iOS
+                ? Icons.ios_share_outlined
+                : Icons.share_outlined,
+            label: context.l10n.studyShareAndExport,
             onPressed: () => _showShareMenu(context, ref),
           ),
       ],
@@ -677,54 +700,38 @@ class _BottomBar extends ConsumerWidget {
 
   Future<void> _showShareMenu(BuildContext context, WidgetRef ref) {
     final analysisState = ref.read(analysisControllerProvider(options)).requireValue;
+    final archivedGame = analysisState.archivedGame;
     return showAdaptiveActionSheet(
       context: context,
       actions: [
-        // PGN share can be used to quickly analyze a position, so engine must be allowed to access
-        if (analysisState.isComputerAnalysisAllowed)
-          BottomSheetAction(
-            makeLabel: (context) => Text(context.l10n.mobileShareGamePGN),
-            onPressed: () {
-              Navigator.of(context).push(AnalysisShareScreen.buildRoute(options: options));
-            },
+        // Share the original game from the server: URL, GIF and PGN downloads.
+        if (archivedGame != null)
+          ...makeFinishedGameShareBottomSheetActions(
+            context,
+            ref,
+            gameId: archivedGame.id,
+            orientation: analysisState.pov,
+            finished: archivedGame.finished,
           ),
         // share position as FEN can be used to quickly analyze a position, so engine must be allowed to access
         if (analysisState.isComputerAnalysisAllowed)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.mobileSharePositionAsFEN),
             onPressed: () {
-              final analysisState = ref.read(analysisControllerProvider(options)).requireValue;
-              launchShareDialog(context, ShareParams(text: analysisState.currentPosition.fen));
+              final currentState = ref.read(analysisControllerProvider(options)).requireValue;
+              launchShareDialog(context, ShareParams(text: currentState.currentPosition.fen));
             },
           ),
-      ],
-    );
-  }
-
-  Future<void> _showContinueFromHereMenu(BuildContext context, WidgetRef ref) {
-    final analysisState = ref.read(analysisControllerProvider(options)).requireValue;
-    final boardFen = analysisState.currentPosition.fen;
-    return showAdaptiveActionSheet(
-      context: context,
-      actions: [
-        BottomSheetAction(
-          makeLabel: (context) => Text(context.l10n.playAgainstComputer),
-          onPressed: () => Navigator.of(context).push(
-            OfflineComputerGameScreen.buildRoute(
-              initialVariant: analysisState.variant,
-              initialFen: boardFen,
-            ),
+        // Shares the current PGN, including local analysis and edited tags. Can be
+        // used to quickly analyze a position, so the engine must be allowed to access.
+        if (analysisState.isComputerAnalysisAllowed)
+          BottomSheetAction(
+            // TODO: l10n
+            makeLabel: (context) => const Text('Share local analysis PGN'),
+            onPressed: () {
+              Navigator.of(context).push(AnalysisShareScreen.buildRoute(options: options));
+            },
           ),
-        ),
-        BottomSheetAction(
-          makeLabel: (context) => Text(context.l10n.mobileOverTheBoard),
-          onPressed: () => Navigator.of(context).push(
-            OverTheBoardScreen.buildRoute(
-              initialVariant: analysisState.variant,
-              initialFen: boardFen,
-            ),
-          ),
-        ),
       ],
     );
   }

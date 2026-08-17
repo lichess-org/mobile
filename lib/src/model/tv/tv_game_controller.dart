@@ -103,10 +103,20 @@ class TvGameController extends AsyncNotifier<TvGameState> with ChatMixin<TvGameS
           },
         );
 
+    // The initial 'full' event is awaited through the controller's own subscription, so that
+    // cancelling it on dispose always releases the socket client. A `stream.firstWhere` would add a
+    // second listener that outlives the controller when the event never arrives (socket unable to
+    // connect), keeping the client alive and reconnecting in the background forever.
+    final fullEventCompleter = Completer<SocketEvent>();
     _socketSubscription?.cancel();
-    _socketSubscription = socketClient.stream.listen(handleSocketEvent);
+    _socketSubscription = socketClient.stream.listen((event) {
+      handleSocketEvent(event);
+      if (event.topic == 'full' && !fullEventCompleter.isCompleted) {
+        fullEventCompleter.complete(event);
+      }
+    });
 
-    final rawFullEvent = await socketClient.stream.firstWhere((e) => e.topic == 'full');
+    final rawFullEvent = await fullEventCompleter.future;
     final fullEvent = GameFullEvent.fromJson(rawFullEvent.data as Map<String, dynamic>);
     socketClient.version = fullEvent.socketEventVersion;
 
@@ -180,18 +190,34 @@ class TvGameController extends AsyncNotifier<TvGameState> with ChatMixin<TvGameS
     state = AsyncValue.data(state.requireValue.copyWith(chatState: newState));
   }
 
+  Future<void> _onResyncOrRematchTaken() async {
+    if (!ref.mounted) return;
+    if (params.source.userId != null) {
+      await ref.read(tvControllerProvider(params.source).notifier).resolveCurrentGame();
+    } else {
+      _onReload?.call();
+    }
+  }
+
   @protected
   @override
   void handleSocketEvent(SocketEvent event) {
     super.handleSocketEvent(event);
+
+    if (event.topic == 'resync' || event.topic == 'rematchTaken') {
+      unawaited(
+        _onResyncOrRematchTaken().catchError((_) {
+          _onReload?.call();
+        }),
+      );
+      return;
+    }
 
     if (!state.hasValue) {
       return;
     }
 
     switch (event.topic) {
-      case 'resync':
-        _onReload?.call();
       case 'reload':
         if (event.data is Map<String, dynamic>) {
           final data = event.data as Map<String, dynamic>;
@@ -214,8 +240,6 @@ class TvGameController extends AsyncNotifier<TvGameState> with ChatMixin<TvGameS
               const IList.empty();
           state = AsyncData(state.requireValue.copyWith(nbWatchers: nb, watcherNames: users));
         }
-      case 'rematchTaken':
-        _onReload?.call();
       case 'move' || 'drop':
         final curState = state.requireValue;
         final data = MoveEvent.fromJson(event.data as Map<String, dynamic>);

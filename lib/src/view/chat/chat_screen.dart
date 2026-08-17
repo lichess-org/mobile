@@ -1,12 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/app_links_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/chat/chat.dart';
-import 'package:lichess_mobile/src/model/chat/chat_mixin.dart';
+import 'package:lichess_mobile/src/model/chat/chat_providers.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/tab_scaffold.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -15,8 +13,10 @@ import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/rich_link_text.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
+import 'package:material_ui/material_ui.dart';
 
 class ChatBottomBarButton extends ConsumerWidget {
   const ChatBottomBarButton({required this.options, this.showLabel = false, super.key});
@@ -92,6 +92,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with RouteAware {
   @override
   Widget build(BuildContext context) {
     final authUser = ref.watch(authControllerProvider);
+    final chatState = ref.watch(chatProvider(widget.options));
     return FocusDetector(
       onFocusRegained: () {
         if (context.mounted) {
@@ -103,8 +104,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with RouteAware {
           ref.read(chatNotifierProvider(widget.options)).onForegroundLost();
         }
       },
-      child: switch (ref.watch(chatProvider(widget.options))) {
-        AsyncData(:final value) when value != null => Scaffold(
+      child: switch (chatState) {
+        AsyncValue(:final value?, hasValue: true) => Scaffold(
           appBar: AppBar(
             title: widget.options is TvChatOptions
                 ? Text(context.l10n.spectatorRoom)
@@ -117,12 +118,25 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with RouteAware {
           ),
           body: Column(
             children: [
+              // Display error if there is one, but still show the messages if they are available
+              if (chatState.hasError)
+                Material(
+                  color: Theme.of(context).colorScheme.errorContainer,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      chatState.error.toString(),
+                      style: TextStyle(color: Theme.of(context).colorScheme.onErrorContainer),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
               Expanded(
                 child: GestureDetector(
                   onTap: () => FocusScope.of(context).unfocus(),
+                  // remove the automatic bottom padding of the ListView which is here taken care
+                  // of by the _ChatBottomBar
                   child: ListView.builder(
-                    // remove the automatic bottom padding of the ListView which is here taken care
-                    // of by the _ChatBottomBar
                     padding: MediaQuery.paddingOf(context).copyWith(bottom: 0),
                     reverse: true,
                     itemCount: value.messages.length,
@@ -146,7 +160,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with RouteAware {
             ],
           ),
         ),
-        AsyncError(:final error) => Scaffold(body: Center(child: Text(error.toString()))),
+        AsyncValue(:final error?) => Scaffold(body: Center(child: Text(error.toString()))),
         _ => const Scaffold(body: Center(child: CircularProgressIndicator.adaptive())),
       },
     );
@@ -221,7 +235,7 @@ class _MessageBubble extends ConsumerWidget {
                     onTap: () =>
                         Navigator.of(context).push(UserOrProfileScreen.buildRoute(message.user!)),
                   ),
-                Linkify(
+                RichLinkText(
                   onOpen: (link) async =>
                       await ref.read(appLinksServiceProvider).onLinkifyOpen(context, link),
                   linkifiers: AppLinksService.kLichessLinkifiers,
@@ -275,10 +289,9 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
   @override
   void initState() {
     super.initState();
-    final draft = ref.read(chatProvider(widget.options)).asData?.value?.inputText ?? '';
-    _textController.text = draft;
+    _textController.text = ref.read(chatNotifierProvider(widget.options)).chatInputDraft;
     _textController.addListener(() {
-      ref.read(chatNotifierProvider(widget.options)).setInputText(_textController.text);
+      ref.read(chatNotifierProvider(widget.options)).chatInputDraft = _textController.text;
     });
   }
 
@@ -298,7 +311,6 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
             ? () {
                 ref.read(chatNotifierProvider(widget.options)).postMessage(_textController.text);
                 _textController.clear();
-                ref.read(chatNotifierProvider(widget.options)).setInputText('');
               }
             : null,
         icon: const Icon(Icons.send),
@@ -320,6 +332,7 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
           ),
           controller: _textController,
           keyboardType: TextInputType.text,
+          textCapitalization: TextCapitalization.sentences,
           minLines: 1,
           maxLines: 4,
           enableSuggestions: true,

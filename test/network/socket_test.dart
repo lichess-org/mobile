@@ -14,7 +14,7 @@ import 'fake_websocket_channel.dart';
 final defaultSocketUri = Uri(path: kDefaultSocketRoute);
 
 SocketClient makeTestSocketClient({
-  FakeWebSocketChannelFactory fakeChannelFactory = defaultFakeWebSocketChannelFactory,
+  WebSocketChannelFactory fakeChannelFactory = defaultFakeWebSocketChannelFactory,
   int? version,
   VoidCallback? onEventGapFailure,
 }) {
@@ -101,6 +101,63 @@ void main() {
       expect(socketClient.nbConnectionSuccess, 1);
 
       socketClient.close();
+    });
+
+    test('does not reconnect when closed while a connection attempt is in flight', () async {
+      int numConnectionAttempts = 0;
+
+      // Simulates a server that never accepts the connection: each attempt fails after a delay,
+      // like a connection timeout would.
+      final fakeChannelFactory = DelayedFakeWebSocketChannelFactory(
+        const Duration(milliseconds: 100),
+        (_) {
+          numConnectionAttempts++;
+          throw const SocketException('Connection failed');
+        },
+      );
+
+      final socketClient = makeTestSocketClient(fakeChannelFactory: fakeChannelFactory);
+      socketClient.connect();
+
+      // Close while the first attempt is still awaiting the channel creation.
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+      await socketClient.close();
+
+      // Long enough for the in-flight attempt to fail and for a reconnect to have been scheduled
+      // (autoReconnectDelay is 100ms) and fired.
+      await Future<void>.delayed(const Duration(milliseconds: 400));
+
+      expect(numConnectionAttempts, 1);
+      expect(socketClient.isActive, false);
+    });
+
+    test('discards a connection that succeeds after the client was closed', () async {
+      final Map<int, FakeWebSocketChannel> channels = {};
+      int numConnectionAttempts = 0;
+
+      final fakeChannelFactory = DelayedFakeWebSocketChannelFactory(
+        const Duration(milliseconds: 100),
+        (_) {
+          numConnectionAttempts++;
+          final channel = FakeWebSocketChannel(defaultSocketUri);
+          channels[numConnectionAttempts] = channel;
+          return channel;
+        },
+      );
+
+      final socketClient = makeTestSocketClient(fakeChannelFactory: fakeChannelFactory);
+      socketClient.connect();
+
+      // Close while the connection attempt is still awaiting the channel creation.
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+      await socketClient.close();
+
+      await Future<void>.delayed(const Duration(milliseconds: 200));
+
+      // The channel created by the stale attempt must not be adopted, and must be closed.
+      expect(channels[1]!.closeCode, isNotNull);
+      expect(socketClient.isConnected, false);
+      expect(socketClient.nbConnectionSuccess, 0);
     });
 
     test('reconnects automatically if pong is not received', () async {
@@ -220,6 +277,116 @@ void main() {
       await expectLater(fakeChannel.sentMessagesExceptPing, emitsInOrder([]));
 
       socketClient.close();
+    });
+
+    test(
+      'queues non-ackable messages sent while not connected and flushes them on connect',
+      () async {
+        final fakeChannel = FakeWebSocketChannel(defaultSocketUri);
+
+        final socketClient = makeTestSocketClient(
+          fakeChannelFactory: FakeWebSocketChannelFactory((_) => fakeChannel),
+        );
+
+        // Messages sent before the connection is open must be queued, not dropped.
+        socketClient.send('test1', null);
+        socketClient.send('test2', {'foo': 'bar'});
+
+        // They are flushed, in order, once the connection opens. Subscribe before
+        // connecting, since the flush happens as soon as the connection is ready
+        // and [sentMessages] is a broadcast stream.
+        final expectation = expectLater(
+          fakeChannel.sentMessagesExceptPing,
+          emitsInOrder(['{"t":"test1"}', '{"t":"test2","d":{"foo":"bar"}}']),
+        );
+
+        await socketClient.connect();
+        await expectation;
+
+        socketClient.close();
+      },
+    );
+
+    test('queues a message sent while the socket is connecting and sends it once open', () async {
+      final fakeChannel = FakeWebSocketChannel(defaultSocketUri);
+
+      final socketClient = makeTestSocketClient(
+        fakeChannelFactory: FakeWebSocketChannelFactory((_) => fakeChannel),
+      );
+
+      // Start connecting but don't await: the connection is in progress (the
+      // attempt is counted but not yet successful).
+      final connectFuture = socketClient.connect();
+      expect(socketClient.nbConnectionAttempts, 1);
+      expect(socketClient.nbConnectionSuccess, 0);
+
+      // Sent while connecting: must be queued, not dropped.
+      socketClient.send('test', null);
+
+      // Subscribe before the connection opens, since the flush is immediate and
+      // [sentMessages] is a broadcast stream.
+      final expectation = expectLater(
+        fakeChannel.sentMessagesExceptPing,
+        emitsThrough('{"t":"test"}'),
+      );
+
+      await connectFuture;
+      expect(socketClient.nbConnectionSuccess, 1);
+      await expectation;
+
+      socketClient.close();
+    });
+
+    test('queues an ackable message sent while not connected and sends it on connect', () async {
+      final fakeChannel = FakeWebSocketChannel(defaultSocketUri);
+
+      final socketClient = makeTestSocketClient(
+        fakeChannelFactory: FakeWebSocketChannelFactory((_) => fakeChannel),
+      );
+
+      // An ackable message (e.g. a move) sent before the connection is open must
+      // be sent as soon as it opens, not only after the ack-resend delay.
+      socketClient.send('move', {'u': 'e2e4'}, ackable: true);
+
+      final expectation = expectLater(
+        fakeChannel.sentMessagesExceptPing,
+        emitsThrough('{"t":"move","d":{"u":"e2e4","a":1}}'),
+      );
+
+      await socketClient.connect();
+      await expectation;
+
+      socketClient.close();
+    });
+
+    test('does not double-send a queued ackable message whose ack is past the resend cutoff', () {
+      fakeAsync((async) {
+        final fakeChannel = FakeWebSocketChannel(defaultSocketUri);
+
+        final socketClient = makeTestSocketClient(
+          fakeChannelFactory: FakeWebSocketChannelFactory((_) => fakeChannel),
+        );
+
+        final sent = <dynamic>[];
+        fakeChannel.sentMessagesExceptPing.listen(sent.add);
+
+        // Sent while disconnected: queued and also tracked in _acks.
+        socketClient.send('move', {'u': 'e2e4'}, ackable: true);
+
+        // Let enough time pass that the ack is older than the resend cutoff
+        // (2500ms), so _resendAcks() would otherwise resend it on connect.
+        async.elapse(const Duration(seconds: 3));
+
+        socketClient.connect();
+        async.elapse(kFakeWebSocketConnectionLag);
+        async.flushMicrotasks();
+
+        // It is sent exactly once on reconnect (by the flush), not twice (flush
+        // + _resendAcks).
+        expect(sent.where((m) => m == '{"t":"move","d":{"u":"e2e4","a":1}}').length, 1);
+
+        socketClient.close();
+      });
     });
 
     test('handles batch message', () async {

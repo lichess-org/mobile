@@ -28,6 +28,7 @@ class CoordinateTrainingController extends Notifier<CoordinateTrainingState> {
   CoordinateTrainingState build() {
     ref.onDispose(() {
       _updateTimer?.cancel();
+      _stopwatch.stop();
     });
     final sideChoice = ref.watch(
       coordinateTrainingPreferencesProvider.select((value) => value.sideChoice),
@@ -62,6 +63,7 @@ class CoordinateTrainingController extends Notifier<CoordinateTrainingState> {
     // TODO save score in local storage here (and display high score and/or average score in UI)
     final orientation = _getOrientation(ref.read(coordinateTrainingPreferencesProvider).sideChoice);
     _updateTimer?.cancel();
+    _stopwatch.stop();
     state = CoordinateTrainingState(
       lastGuess: state.lastGuess,
       lastScore: state.score,
@@ -72,6 +74,7 @@ class CoordinateTrainingController extends Notifier<CoordinateTrainingState> {
   void abortTraining() {
     final orientation = _getOrientation(ref.read(coordinateTrainingPreferencesProvider).sideChoice);
     _updateTimer?.cancel();
+    _stopwatch.stop();
     state = CoordinateTrainingState(orientation: orientation);
   }
 

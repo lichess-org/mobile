@@ -1,5 +1,4 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
@@ -13,12 +12,15 @@ import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
+import 'package:material_ui/material_ui.dart';
 
 final _themesProvider =
     FutureProvider.autoDispose<
       (bool, IMap<PuzzleThemeKey, int>, IMap<PuzzleThemeKey, PuzzleThemeData>?, bool)
     >((ref) async {
-      final isOnline = await ref.watch(onlineStatusProvider.future);
+      final isOnline = await ref.watch(
+        connectivityChangesProvider.selectAsync((status) => status.isOnline),
+      );
       final savedThemes = await ref.watch(savedThemeBatchesProvider.future);
       IMap<PuzzleThemeKey, PuzzleThemeData>? onlineThemes;
       if (isOnline) {

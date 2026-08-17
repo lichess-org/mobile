@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:home_widget/home_widget.dart';
@@ -12,10 +11,11 @@ import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
-import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
+import 'package:lichess_mobile/src/model/account/ongoing_games_notifier.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/announce/announce_service.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_service.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
@@ -29,9 +29,11 @@ import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/quick_actions.dart';
 import 'package:lichess_mobile/src/shared_pgn_service.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
+import 'package:material_ui/material_ui.dart';
 
 const String _kIosAppGroupId = 'group.org.lichess.mobileV2.LichessWidgets';
 const List<String> _kIosBlogWidgetKinds = [
@@ -145,10 +147,14 @@ class _AppState extends ConsumerState<Application> {
     ref.read(announceServiceProvider).start();
     ref.read(appLinksServiceProvider).start();
     ref.read(sharedPgnServiceProvider).start();
+    ref.read(broadcastServiceProvider).start();
 
     if (Platform.isIOS) {
       HomeWidget.setAppGroupId(_kIosAppGroupId);
-      HomeWidget.saveWidgetData<String>('lichessHost', kLichessHost);
+    }
+    HomeWidget.saveWidgetData<String>('lichessHost', kLichessHost);
+
+    if (Platform.isIOS) {
       ref.listenManual(kidModeProvider, (prev, state) {
         if (state.hasValue && prev?.value != state.value) {
           HomeWidget.saveWidgetData<bool>('isKidMode', state.value).then((_) {
@@ -214,8 +220,12 @@ class _AppState extends ConsumerState<Application> {
 
     return MaterialApp(
       navigatorKey: _navigatorKey,
+      // [AppLocalizations.localizationsDelegates] cannot be used: it is generated with the
+      // `flutter_localizations` delegates, which localize the Flutter material and cupertino
+      // libraries, not the `material_ui` and `cupertino_ui` ones the app is built with.
       localizationsDelegates: const [
-        ...AppLocalizations.localizationsDelegates,
+        AppLocalizations.delegate,
+        ...GlobalMaterialLocalizations.delegates,
         MaterialLocalizationsEo.delegate,
         CupertinoLocalizationsEo.delegate,
       ],
@@ -230,7 +240,7 @@ class _AppState extends ConsumerState<Application> {
               ).copyWith(height: isShortVerticalScreen(context) ? 60 : null),
       ),
       home: const MainTabScaffold(),
-      navigatorObservers: [rootNavPageRouteObserver],
+      navigatorObservers: [rootNavPageRouteObserver, rootNavRouteStackObserver],
     );
   }
 }

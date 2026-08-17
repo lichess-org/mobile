@@ -21,17 +21,6 @@ const kEngineEvalEmissionThrottleDelay = Duration(milliseconds: 200);
 /// Variants supported by the official Stockfish engine.
 const officialStockfishVariants = {Variant.standard, Variant.chess960, Variant.fromPosition};
 
-/// Exception thrown when the engine does not support the requested variant.
-class EngineUnsupportedVariantException implements Exception {
-  const EngineUnsupportedVariantException(this.variant);
-
-  final Variant variant;
-
-  @override
-  String toString() =>
-      'EngineUnsupportedVariantException: variant $variant is not supported by the engine';
-}
-
 /// Exception thrown when a [EvaluationService.findMove] request is cancelled.
 ///
 /// This can happen when [EvaluationService.quit] is called, or when a new
@@ -62,8 +51,7 @@ final evaluationServiceProvider = Provider<EvaluationService>((Ref ref) {
 /// can run at a time - when a new evaluation is requested, it takes over from any
 /// previous one ("last caller wins").
 class EvaluationService {
-  EvaluationService({required this.maxMemory, required NnueService nnueService})
-    : _nnueService = nnueService {
+  EvaluationService({required this.maxMemory, required this._nnueService}) {
     _stdoutSubscription = _stockfish.stdout.listen(_protocol.received);
     _stockfish.state.addListener(_onStockfishStateChange);
     _protocol.isComputing.addListener(_onComputingChange);
@@ -109,6 +97,7 @@ class EvaluationService {
   StockfishFlavor? _currentRequestedFlavor;
   Variant? _currentVariant;
   bool _initInProgress = false;
+  bool _quitInProgress = false;
   bool _discardEvalResults = false;
   bool _discardMoveResults = false;
 
@@ -325,6 +314,7 @@ class EvaluationService {
     // Compare against the originally requested flavor, not the effective one. This prevents restart
     // when latestNoNNUE fell back to sf16
     final needsRestart =
+        _quitInProgress ||
         _currentRequestedFlavor != flavor ||
         _currentVariant != work.variant ||
         stockfishState == StockfishState.initial ||
@@ -418,8 +408,8 @@ class EvaluationService {
       _currentVariant = variant;
 
       _protocol.connected((cmd) => _stockfish.stdin = cmd);
-    } catch (e, s) {
-      _logger.severe('Error initializing engine', e, s);
+    } catch (e, st) {
+      _logger.severe('Error initializing engine', e, st);
       _setEngineState(EngineState.error);
     } finally {
       _initInProgress = false;
@@ -525,6 +515,7 @@ class EvaluationService {
       return;
     }
     _logger.info('Quitting engine');
+    _quitInProgress = true;
     _protocol.compute(null);
     _evalThrottleTimer?.cancel();
     _evalThrottleTimer = null;
@@ -533,7 +524,13 @@ class EvaluationService {
     _discardEvalResults = true;
     _discardMoveResults = true;
     _currentMoveWork = null;
-    _runStockfishOperation(() => _stockfish.quit());
+    _runStockfishOperation(() async {
+      try {
+        await _stockfish.quit();
+      } finally {
+        _quitInProgress = false;
+      }
+    });
     _currentRequestedFlavor = null;
     _currentVariant = null;
     _initInProgress = false;

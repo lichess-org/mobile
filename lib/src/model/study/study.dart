@@ -3,7 +3,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/model/chat/chat.dart';
+import 'package:lichess_mobile/src/model/chat/chat_message.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
@@ -187,4 +187,14 @@ sealed class StudyMember with _$StudyMember {
   const factory StudyMember({required LightUser user, required String role}) = _StudyMember;
 
   factory StudyMember.fromJson(Map<String, Object?> json) => _$StudyMemberFromJson(json);
+}
+
+@freezed
+sealed class CreateStudyChapterPayload with _$CreateStudyChapterPayload {
+  const factory CreateStudyChapterPayload({
+    required String pgn,
+    required String name,
+    required Side orientation,
+    @Default(null) Variant? variant,
+  }) = _CreateStudyChapterPayload;
 }

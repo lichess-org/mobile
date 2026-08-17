@@ -3,7 +3,7 @@ Copying Lichess Mobile
 
 Any file in this project that does not state otherwise and is not listed as an
 exception below is part of *Lichess Mobile*, the mobile app for
-[lichess.org](lichess.org/mobile), and copyright (c) 2022-2023 Lichess Mobile
+[lichess.org](https://lichess.org/mobile), and copyright (c) 2022-2023 Lichess Mobile
 contributors.
 
 For a list of the authors see the commit log or

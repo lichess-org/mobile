@@ -39,6 +39,7 @@
   <string name="editRoundStudy">ویرایش مطالعه دور</string>
   <string name="deleteTournament">حذف این مسابقات</string>
   <string name="definitivelyDeleteTournament">کل مسابقات، شامل همه دورها و بازی‌هایش را به طور کامل حذف کن.</string>
+  <string name="permanentlyDeleteTournament" comment="definitivelyDeleteTournament&#10;&#10;Confirmation prompt, when attempting to delete a broadcast on https://lichess.org/broadcast Replaces old string definitivelyDeleteTournament">آیا این مسابقه، شاملِ همهٔ دورها و بازی‌ها، برای همیشه حذف می‌شود؟</string>
   <string name="showScores">نمایش امتیاز بازیکنان بر پایه نتیجه بازی‌ها</string>
   <string name="replacePlayerTags">اختیاری: عوض کردن نام، درجه‌بندی و عنوان بازیکنان</string>
   <string name="fideFederations">کشورگان‌های فیده</string>
@@ -51,7 +52,7 @@
   <string name="unrated">بی‌درجه‌بندی</string>
   <string name="recentTournaments">مسابقاتِ اخیر</string>
   <string name="openLichess">آزاد در Lichess</string>
-  <string name="teams">یَران‌ها</string>
+  <string name="teams">تیم‌ها</string>
   <string name="boards">میز‌ها</string>
   <string name="overview">نمای کلی</string>
   <string name="subscribeTitle">مشترک شوید تا از آغاز هر دور باخبر شوید. می‌توانید اعلان‌های زنگی یا رانشی برای پخش‌های زنده را در تنظیمات حساب‌تان تغییر دهید.</string>
@@ -71,7 +72,7 @@
   <string name="gamesThisTournament">بازی‌های این مسابقات</string>
   <string name="score">امتیاز</string>
   <string name="standingsDisclaimer">رده‌بندی با استفاده از بازی‌های پخش‌شده محاسبه می‌شود و ممکن است با نتایج رسمی متفاوت باشد.</string>
-  <string name="allTeams">همهٔ یَران‌ها</string>
+  <string name="allTeams">همهٔ تیم‌ها</string>
   <string name="tournamentFormat">ساختار مسابقات</string>
   <string name="tournamentLocation">مکان مسابقات</string>
   <string name="topPlayers">بازیکنان برتر</string>

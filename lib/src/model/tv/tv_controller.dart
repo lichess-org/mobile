@@ -46,9 +46,11 @@ class TvController extends AsyncNotifier<TvGameControllerParams> {
     state = AsyncValue.data((gameId: game.$1, orientation: game.$2, source: params));
   }
 
-  /// Re-resolves the current game (the channel may have switched while the app
-  /// was in the background).
-  Future<void> onFocusRegained() async {
+  /// Looks up which game should be watched now and switches to it.
+  ///
+  /// For channel TV this re-fetches the channel's featured game; for user TV it
+  /// fetches the user's current game from the API.
+  Future<void> resolveCurrentGame() async {
     state = AsyncValue.data(await _resolveGame(null));
   }
 

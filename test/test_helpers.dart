@@ -1,12 +1,10 @@
-import 'dart:convert';
-
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
+import 'package:material_ui/material_ui.dart';
 
 const double _kTestScreenWidth = 390.0;
 const double _kTestScreenHeight = 844.0;
@@ -39,9 +37,6 @@ const kTestSurfaceSize = Size(_kTestScreenWidth, _kTestScreenHeight);
 
 const kPlatformVariant = TargetPlatformVariant({TargetPlatform.android, TargetPlatform.iOS});
 
-Matcher sameRequest(http.BaseRequest request) => _SameRequest(request);
-Matcher sameHeaders(Map<String, String> headers) => _SameHeaders(headers);
-
 /// Mocks a surface with a given size.
 class TestSurface extends StatelessWidget {
   const TestSurface({required this.child, required this.size, super.key});
@@ -64,19 +59,6 @@ Future<http.Response> mockResponse(
   int code, {
   Map<String, String> headers = const {},
 }) => Future.value(http.Response(body, code, headers: headers));
-
-Future<http.StreamedResponse> mockStreamedResponse(String body, int code) =>
-    Future.value(http.StreamedResponse(Stream.value(body).map(utf8.encode), code));
-
-Future<http.StreamedResponse> mockHttpStreamFromIterable(Iterable<String> events) async {
-  return http.StreamedResponse(
-    _streamFromFutures(events.map((e) => Future.value(utf8.encode(e)))),
-    200,
-  );
-}
-
-Future<http.StreamedResponse> mockHttpStream(Stream<String> stream) =>
-    Future.value(http.StreamedResponse(stream.map(utf8.encode), 200));
 
 Future<void> meetsTapTargetGuideline(WidgetTester tester) async {
   if (debugDefaultTargetPlatformOverride == TargetPlatform.iOS) {
@@ -185,41 +167,31 @@ Future<void> playDropMove(
   await tester.pumpAndSettle();
 }
 
-// --
+/// The asset names of every [Image] currently rendered.
+Iterable<String> imageAssetNames(WidgetTester tester) => tester
+    .widgetList<Image>(find.byType(Image))
+    .map((image) => image.image)
+    .whereType<AssetImage>()
+    .map((provider) => provider.assetName);
 
-class _SameRequest extends Matcher {
-  const _SameRequest(this._expected);
-
-  final http.BaseRequest _expected;
-
-  @override
-  bool matches(Object? item, Map<dynamic, dynamic> matchState) =>
-      item is http.BaseRequest &&
-      item.method == _expected.method &&
-      item.url == _expected.url &&
-      mapEquals(item.headers, _expected.headers);
-
-  @override
-  Description describe(Description description) =>
-      description.add('same Request as ').addDescriptionOf(_expected);
+void mockClipboard(String text) {
+  TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
+    SystemChannels.platform,
+    (methodCall) async {
+      if (methodCall.method == 'Clipboard.getData') {
+        return {'text': text};
+      }
+      return null;
+    },
+  );
 }
 
-class _SameHeaders extends Matcher {
-  const _SameHeaders(this._expected);
-
-  final Map<String, String> _expected;
-
-  @override
-  bool matches(Object? item, Map<dynamic, dynamic> matchState) =>
-      item is Map<String, String> && mapEquals(item, _expected);
-  @override
-  Description describe(Description description) =>
-      description.add('same headers as ').addDescriptionOf(_expected);
-}
-
-Stream<T> _streamFromFutures<T>(Iterable<Future<T>> futures) async* {
-  for (final future in futures) {
-    final result = await future;
-    yield result;
-  }
-}
+/// Finds widgets by their tooltip message.
+///
+/// [CommonFinders.byTooltip] cannot be used, because it only matches the [Tooltip] widget of the
+/// Flutter material library, whereas the app renders the one of the `material_ui` package.
+Finder findByTooltip(String message, {bool skipOffstage = true}) => find.byWidgetPredicate(
+  (widget) => widget is Tooltip && widget.message == message,
+  description: 'tooltip "$message"',
+  skipOffstage: skipOffstage,
+);

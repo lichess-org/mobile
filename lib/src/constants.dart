@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 const kLichessHost = String.fromEnvironment('LICHESS_HOST', defaultValue: 'lichess.dev');
 
@@ -40,6 +40,11 @@ const kFideRatingsUrl = 'https://ratings.fide.com/profile/';
 // https://github.com/lichess-org/lila/blob/4562a83cdb263c3ebf7e148c0f666f0ff92b91c7/modules/rating/src/main/Glicko.scala#L71
 const kProvisionalDeviation = 110;
 const kClueLessDeviation = 230;
+
+const kMaintenanceDrawingAuthorUrl = 'https://www.pixiv.net/member.php?id=34624';
+const kLichessMastodonUrl = 'https://mastodon.online/@lichess';
+const kLichessBlueskyUrl = 'https://bsky.app/profile/lichess.org';
+const kLichessDiscordUrl = 'https://discord.gg/lichess';
 
 // UI
 const double kCupertinoBarBlurSigma = 30.0;

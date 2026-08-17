@@ -53,6 +53,7 @@
   <string name="settingsPickAnImageBlur" comment="Displayed in theme background choice screen, to blur the chosen image.">Malfokusigi la bildon</string>
   <string name="settingsPickAnImageHideBoard" comment="Displayed in theme background choice screen, to hide the board when viewing chosen image.">Kaŝi la tabulon</string>
   <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">Montri tabulon</string>
+  <string name="settingsPieceShiftMethodTapTwoSquares" comment="A value of piece shift method settings entry.">Klaku du kvadratojn</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Agordoj</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Kunhavigi PGN-on</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Kunhavigi ludan URL-on</string>
@@ -68,4 +69,5 @@
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Varianto %s ne estas subtenata en ĉi tiu versio.</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Atendante ke la kontraŭulo aliĝu...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Spekti</string>
+  <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">Rigardi ludon</string>
 </resources>

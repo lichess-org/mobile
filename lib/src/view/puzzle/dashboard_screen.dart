@@ -1,7 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:http/http.dart' show ClientException;
@@ -21,6 +20,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
+import 'package:material_ui/material_ui.dart';
 
 final daysProvider = StateProvider<Days>((ref) => Days.month);
 
@@ -88,7 +88,7 @@ class PuzzleDashboardWidget extends ConsumerWidget {
         );
       },
       loading: () {
-        final loaderHeight = MediaQuery.sizeOf(context).width;
+        final loaderHeight = MediaQuery.widthOf(context);
         return Shimmer(
           child: ShimmerLoading(
             isLoading: true,
@@ -260,7 +260,7 @@ class PuzzleChart extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: AspectRatio(
-        aspectRatio: MediaQuery.sizeOf(context).width > FormFactor.desktop ? 2.8 : 1.2,
+        aspectRatio: MediaQuery.widthOf(context) > FormFactor.desktop ? 2.8 : 1.2,
         child: RadarChart(
           RadarChartData(
             radarBorderData: BorderSide(width: 0.5, color: radarColor),

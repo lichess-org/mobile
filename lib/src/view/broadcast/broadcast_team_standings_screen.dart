@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
@@ -14,6 +13,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_team_screen.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:material_ui/material_ui.dart';
 
 enum _SortingTypes { elo, score }
 
@@ -142,7 +142,7 @@ class _BroadcastTeamStandingsListState extends ConsumerState<BroadcastTeamStandi
 
   @override
   Widget build(BuildContext context) {
-    final scoreWidth = max(MediaQuery.sizeOf(context).width * 0.15, 90.0);
+    final scoreWidth = max(MediaQuery.widthOf(context) * 0.15, 90.0);
     final sortIcon = reverse ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down;
     final mediaQueryPadding = MediaQuery.paddingOf(context);
     final scoreFormat = NumberFormat('#.#');

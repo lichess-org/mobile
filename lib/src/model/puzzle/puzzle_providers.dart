@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_batch_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_opening.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
@@ -14,14 +15,56 @@ import 'package:lichess_mobile/src/model/puzzle/storm.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/riverpod.dart';
 
-/// Fetches the next puzzle for the given [PuzzleAngle].
+/// Reads the next unsolved puzzle of [angle] from the local queue, without ever syncing with the
+/// server.
+///
+/// This is what the puzzle tab previews use: merely listing angles must not download anything, or
+/// opening the tab fires one batch request per saved angle at once. Refilling the queue is
+/// [nextPuzzleProvider]'s job, and only happens when the user actually opens a puzzle.
+///
+/// The one exception is the mix angle: it is the tab's main entry, and the only preview shown
+/// before anything has ever been downloaded, so an empty queue there falls back to
+/// [nextPuzzleProvider].
+final nextPuzzlePreviewProvider = FutureProvider.autoDispose.family<Puzzle?, PuzzleAngle>((
+  Ref ref,
+  PuzzleAngle angle,
+) async {
+  final authUser = ref.watch(authControllerProvider);
+  // Watched, so that saving a batch (which invalidates the storage provider) refreshes the preview:
+  // the puzzle just solved must not stay on display.
+  final storage = await ref.watch(puzzleBatchStorageProvider.future);
+  // useful for the preview puzzle list in the puzzle tab (providers in a list can be invalidated
+  // multiple times when the user scrolls the list)
+  ref.cacheFor(const Duration(minutes: 1));
+
+  final batch = await storage.fetch(userId: authUser?.user.id, angle: angle);
+  final next = batch?.unsolved.firstOrNull;
+  if (next != null) return next;
+
+  return isConfigurableOfflineQueueAngle(angle)
+      ? (await ref.watch(nextPuzzleProvider(angle).future))?.puzzle
+      : null;
+}, name: 'NextPuzzlePreviewProvider');
+
+/// Fetches the next puzzle for the given [PuzzleAngle], syncing the offline queue with the server
+/// if it is short.
+///
+/// Because reading it downloads puzzles, it belongs to the screens that play them. Use
+/// [nextPuzzlePreviewProvider] to only display a puzzle.
 final nextPuzzleProvider = FutureProvider.autoDispose.family<PuzzleContext?, PuzzleAngle>((
   Ref ref,
   PuzzleAngle angle,
 ) async {
   final authUser = ref.watch(authControllerProvider);
+  // Read, don't watch: rebuilding this provider runs a queue sync, which saves
+  // a batch built from a snapshot taken before its own request, without
+  // merging. Watching the offline queue length would make a change of that
+  // setting start such a sync at the very moment [PuzzleQueueFiller] starts
+  // filling the queue up to the new length, and the two writers would overwrite
+  // each other. The value is picked up again on the next rebuild anyway.
+  final nbOfflinePuzzles = ref.read(puzzlePreferencesProvider).nbOfflinePuzzles;
   final puzzleService = await ref.read(puzzleServiceFactoryProvider)(
-    queueLength: kPuzzleLocalQueueLength,
+    queueLength: offlineQueueLengthForAngle(angle, nbOfflinePuzzles),
   );
   // useful for for preview puzzle list in puzzle tab (providers in a list can
   // be invalidated multiple times when the user scrolls the list)
@@ -74,11 +117,11 @@ final dailyPuzzleProvider = FutureProvider.autoDispose<Puzzle>((Ref ref) {
   );
 }, name: 'DailyPuzzleProvider');
 
-/// Fetches all saved puzzle batches for the current user.
-final savedBatchesProvider = FutureProvider.autoDispose<IList<(PuzzleAngle, int)>>((Ref ref) async {
+/// Fetches the angles of all saved puzzle batches for the current user.
+final savedBatchesProvider = FutureProvider.autoDispose<IList<PuzzleAngle>>((Ref ref) async {
   final authUser = ref.watch(authControllerProvider);
   final storage = await ref.watch(puzzleBatchStorageProvider.future);
-  return storage.fetchAll(userId: authUser?.user.id);
+  return storage.fetchAllAngles(userId: authUser?.user.id);
 }, name: 'SavedBatchesProvider');
 
 /// Fetches saved puzzle theme batches for the current user.
@@ -90,12 +133,26 @@ final savedThemeBatchesProvider = FutureProvider.autoDispose<IMap<PuzzleThemeKey
   return storage.fetchSavedThemes(userId: authUser?.user.id);
 }, name: 'SavedThemeBatchesProvider');
 
-/// Fetches saved puzzle opening batches for the current user.
-final savedOpeningBatchesProvider = FutureProvider.autoDispose<IMap<String, int>>((Ref ref) async {
+/// Fetches the keys of the saved puzzle opening batches for the current user.
+final savedOpeningBatchesProvider = FutureProvider.autoDispose<ISet<String>>((Ref ref) async {
   final authUser = ref.watch(authControllerProvider);
   final storage = await ref.watch(puzzleBatchStorageProvider.future);
   return storage.fetchSavedOpenings(userId: authUser?.user.id);
 }, name: 'SavedOpeningBatchesProvider');
+
+/// Fetches the number of unsolved puzzles saved for the given [PuzzleAngle].
+final savedBatchNbUnsolvedProvider = FutureProvider.autoDispose.family<int, PuzzleAngle>((
+  Ref ref,
+  PuzzleAngle angle,
+) async {
+  final authUser = ref.watch(authControllerProvider);
+  final storage = await ref.watch(puzzleBatchStorageProvider.future);
+  // useful for the openings list and the puzzle tab, where providers can be disposed and recreated
+  // many times as the user scrolls
+  ref.cacheFor(const Duration(minutes: 1));
+
+  return storage.fetchNbUnsolved(userId: authUser?.user.id, angle: angle);
+}, name: 'SavedBatchNbUnsolvedProvider');
 
 /// Fetches the puzzle dashboard for the current user for the given number of [days].
 final puzzleDashboardProvider = FutureProvider.autoDispose.family<PuzzleDashboard?, int>((
@@ -144,3 +201,28 @@ final puzzleOpeningsProvider = FutureProvider.autoDispose
         const Duration(days: 1),
       );
     }, name: 'PuzzleOpeningsProvider');
+
+/// Returns a flattened list of openings with their respective counts.
+final flatOpeningsListProvider = FutureProvider.autoDispose<IList<PuzzleOpeningData>>((
+  Ref ref,
+) async {
+  final families = await ref.watch(puzzleOpeningsProvider(PuzzleOpeningSort.popular).future);
+  return families
+      .map(
+        (f) => [
+          (key: f.key, name: f.name, count: f.count),
+          ...f.openings.map((o) => (key: o.key, name: '${f.name}: ${o.name}', count: o.count)),
+        ],
+      )
+      .expand((e) => e)
+      .toIList();
+}, name: 'FlatOpeningsListProvider');
+
+/// Provides the name of a puzzle opening given its key.
+final puzzleOpeningNameProvider = FutureProvider.autoDispose.family<String, String>((
+  Ref ref,
+  String key,
+) async {
+  final openings = await ref.watch(flatOpeningsListProvider.future);
+  return openings.firstWhere((element) => element.key == key).name;
+}, name: 'PuzzleOpeningNameProvider');

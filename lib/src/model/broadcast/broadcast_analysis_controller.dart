@@ -257,8 +257,8 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
     final (UciPath? newPath, bool isNewNode) result;
     try {
       result = _root.addMoveAt(path, uciMove, clock: clock);
-    } on PlayException catch (e) {
-      _logger.warning('Could not add broadcast move $uciMove at $path: $e');
+    } on PlayException catch (e, st) {
+      _logger.warning('Could not add broadcast move $uciMove at $path:', e, st);
       _reloadPgn();
       return;
     }
@@ -305,7 +305,11 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
 
     if (!state.requireValue.currentPosition.isLegal(move)) return;
 
-    final (newPath, isNewNode) = _root.addMoveAt(state.requireValue.currentPath, move);
+    final (newPath, isNewNode) = _root.addMoveAt(
+      state.requireValue.currentPath,
+      move,
+      isUserAdded: true,
+    );
     if (newPath != null) {
       _setPath(newPath, shouldRecomputeRootView: isNewNode, shouldForceShowVariation: true);
     }
@@ -353,6 +357,16 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
     if (!state.hasValue) return;
 
     state = AsyncData(state.requireValue.copyWith(pov: state.requireValue.pov.opposite));
+  }
+
+  /// Sets the side the board is viewed from.
+  ///
+  /// Used to open the game from the point of view of a specific player, for instance when the
+  /// screen is opened from a notification about a followed player.
+  void setPov(Side pov) {
+    if (!state.hasValue) return;
+
+    state = AsyncData(state.requireValue.copyWith(pov: pov));
   }
 
   @override

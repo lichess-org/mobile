@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/model/user/game_history_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
+import 'package:lichess_mobile/src/network/server_status.dart';
 import 'package:lichess_mobile/src/utils/riverpod.dart';
 
 part 'game_history.freezed.dart';
@@ -28,14 +29,17 @@ const _nbPerPage = 20;
 /// A provider that fetches the current app user's recent games.
 ///
 /// If the user is logged in, the recent games are fetched from the server.
-/// If the user is not logged in, or there is no connectivity, the recent games
-/// stored locally are fetched instead.
+/// If the user is not logged in, there is no connectivity, or the lichess
+/// server is unavailable, the recent games stored locally are fetched instead.
 final myRecentGamesProvider = FutureProvider.autoDispose<IList<LightExportedGameWithPov>>((
   Ref ref,
 ) async {
-  final online = await ref.watch(onlineStatusProvider.future);
+  final online = await ref.watch(
+    connectivityChangesProvider.selectAsync((status) => status.isOnline),
+  );
+  final isServerUp = ref.watch(serverStatusProvider) == ServerStatus.up;
   final authUser = ref.watch(authControllerProvider);
-  if (authUser != null && online) {
+  if (authUser != null && online && isServerUp) {
     return ref
         .read(gameRepositoryProvider)
         .getUserGames(authUser.user.id, max: kNumberOfRecentGames);
@@ -56,17 +60,20 @@ final myRecentGamesProvider = FutureProvider.autoDispose<IList<LightExportedGame
 /// A provider that fetches the total number of games played by given user, or the current app user if no user is provided.
 ///
 /// If the user is logged in, the number of games is fetched from the server.
-/// If the user is not logged in, or there is no connectivity, the number of games
-/// stored locally are fetched instead.
+/// If the user is not logged in, there is no connectivity, or the lichess
+/// server is unavailable, the number of games stored locally are fetched instead.
 final userNumberOfGamesProvider = FutureProvider.autoDispose.family<int, LightUser?>((
   Ref ref,
   LightUser? user,
 ) async {
   final authUser = ref.watch(authControllerProvider);
-  final online = await ref.watch(onlineStatusProvider.future);
+  final online = await ref.watch(
+    connectivityChangesProvider.selectAsync((status) => status.isOnline),
+  );
+  final isServerUp = ref.watch(serverStatusProvider) == ServerStatus.up;
   return user != null
       ? (await ref.watch(userProvider(user.id).future)).count?.all ?? 0
-      : authUser != null && online
+      : authUser != null && online && isServerUp
       ? (await ref.watch(accountProvider.future))?.count?.all ?? 0
       : (await ref.watch(gameStorageProvider.future)).count(userId: user?.id);
 }, name: 'UserNumberOfGamesProvider');
@@ -112,7 +119,9 @@ class UserGameHistoryNotifier extends AsyncNotifier<UserGameHistoryState> {
 
     final authUser = ref.watch(authControllerProvider);
     final prefs = ref.watch(gameHistoryPreferencesProvider);
-    final online = await ref.watch(onlineStatusProvider.future);
+    final online = await ref.watch(
+      connectivityChangesProvider.selectAsync((status) => status.isOnline),
+    );
     final storage = await ref.watch(gameStorageProvider.future);
 
     final id = params.userId ?? authUser?.user.id;
@@ -196,7 +205,7 @@ class UserGameHistoryNotifier extends AsyncNotifier<UserGameHistoryState> {
           hasMore: value.length == _nbPerPage,
         ),
       );
-    } catch (error, _) {
+    } catch (error) {
       state = AsyncData(currentVal.copyWith(isLoading: false, hasError: true));
     }
   }
