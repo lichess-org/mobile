@@ -16,7 +16,6 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_players_tab.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_share_menu.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_teams_tab.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -247,6 +246,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
                       context: context,
                       isDismissible: true,
                       isScrollControlled: true,
+                      constraints: BoxConstraints(maxHeight: MediaQuery.heightOf(context) * 0.6),
                       builder: (_) => _BroadcastSettingsBottomSheet(
                         filter,
                         teamFilter,
@@ -585,6 +585,7 @@ class _BroadcastSettingsBottomSheet extends ConsumerStatefulWidget {
 class _BroadcastSettingsBottomSheetState extends ConsumerState<_BroadcastSettingsBottomSheet> {
   late _BroadcastGameFilter filter;
   late String? selectedTeam;
+  bool showingTeamPicker = false;
 
   @override
   void initState() {
@@ -604,72 +605,121 @@ class _BroadcastSettingsBottomSheetState extends ConsumerState<_BroadcastSetting
   Widget build(BuildContext context) {
     final broadcastPreferences = ref.watch(broadcastPreferencesProvider);
 
-    return BottomSheetScrollableContainer(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SettingsSectionTitle(context.l10n.filterGames),
-              const SizedBox(height: 6),
-              Filter<_BroadcastGameFilter>(
-                filterType: FilterType.singleChoice,
-                choices: _BroadcastGameFilter.values,
-                choiceSelected: (choice) => filter == choice,
-                choiceLabel: (category) {
-                  final label = category.l10n(context.l10n);
-                  final count = category == _BroadcastGameFilter.all
-                      ? widget.allGamesCount
-                      : widget.ongoingGamesCount;
-                  return Text('$label ($count)');
-                },
-                onSelected: (value, selected) {
-                  setState(() => filter = value);
-                  widget.onGameFilterChange.call(value, selectedTeam);
-                },
-              ),
-              if (widget.teams != null)
-                FilterChip(
-                  label: selectedTeam != null
-                      ? Text('${context.l10n.teamTeam}: $selectedTeam')
-                      : Text(context.l10n.teamTeam),
-                  selected: selectedTeam != null,
-                  showCheckmark: selectedTeam != null,
-                  onSelected: (_) {
-                    showChoicePicker(
-                      context,
-                      title: Text(context.l10n.teamTeam),
-                      choices: widget.teams!.toList(),
-                      selectedItem: selectedTeam ?? widget.teams?.first ?? '',
-                      labelBuilder: (team) => Text(team),
-                      onSelectedItemChanged: (team) {
-                        setState(
-                          () => selectedTeam = team == context.l10n.broadcastAllTeams ? null : team,
-                        );
-                        widget.onGameFilterChange.call(filter, team);
-                      },
-                    );
-                  },
+    return PopScope(
+      canPop: !showingTeamPicker,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop && showingTeamPicker) {
+          setState(() => showingTeamPicker = false);
+        }
+      },
+      child: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 220),
+        transitionBuilder: (child, animation) {
+          final isTeamPicker = child.key == const ValueKey('team-picker');
+          final offset = Tween<Offset>(
+            begin: isTeamPicker ? const Offset(1, 0) : const Offset(-1, 0),
+            end: Offset.zero,
+          ).animate(animation);
+          return ClipRect(
+            child: SlideTransition(position: offset, child: child),
+          );
+        },
+        child: showingTeamPicker
+            ? KeyedSubtree(
+                key: const ValueKey('team-picker'),
+                child: SafeArea(
+                  child: Column(
+                    children: [
+                      ListTile(
+                        leading: IconButton(
+                          icon: const Icon(Icons.arrow_back),
+                          tooltip: context.l10n.cancel,
+                          onPressed: () => setState(() => showingTeamPicker = false),
+                        ),
+                        title: Text(context.l10n.teamTeam),
+                      ),
+                      Expanded(
+                        child: ListView(
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          children: [
+                            for (final team in widget.teams!)
+                              ListTile(
+                                selected: team == (selectedTeam ?? context.l10n.broadcastAllTeams),
+                                title: Text(team),
+                                onTap: () {
+                                  setState(() {
+                                    selectedTeam = team == context.l10n.broadcastAllTeams
+                                        ? null
+                                        : team;
+                                    showingTeamPicker = false;
+                                  });
+                                  widget.onGameFilterChange.call(filter, team);
+                                },
+                              ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-            ],
-          ),
-        ),
-        ListSection(
-          header: SettingsSectionTitle(context.l10n.preferencesDisplay),
-          materialFilledCard: true,
-          children: [
-            SwitchSettingTile(
-              title: Text(context.l10n.studyShowEvalBar),
-              value: broadcastPreferences.showRoundEvaluationGauges,
-              onChanged: (value) {
-                ref.read(broadcastPreferencesProvider.notifier).toggleEvaluationBar();
-              },
-            ),
-          ],
-        ),
-      ],
+              )
+            : KeyedSubtree(
+                key: const ValueKey('settings'),
+                child: BottomSheetScrollableContainer(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SettingsSectionTitle(context.l10n.filterGames),
+                          const SizedBox(height: 6),
+                          Filter<_BroadcastGameFilter>(
+                            filterType: FilterType.singleChoice,
+                            choices: _BroadcastGameFilter.values,
+                            choiceSelected: (choice) => filter == choice,
+                            choiceLabel: (category) {
+                              final label = category.l10n(context.l10n);
+                              final count = category == _BroadcastGameFilter.all
+                                  ? widget.allGamesCount
+                                  : widget.ongoingGamesCount;
+                              return Text('$label ($count)');
+                            },
+                            onSelected: (value, selected) {
+                              setState(() => filter = value);
+                              widget.onGameFilterChange.call(value, selectedTeam);
+                            },
+                          ),
+                          if (widget.teams != null)
+                            FilterChip(
+                              label: selectedTeam != null
+                                  ? Text('${context.l10n.teamTeam}: $selectedTeam')
+                                  : Text(context.l10n.teamTeam),
+                              selected: selectedTeam != null,
+                              showCheckmark: selectedTeam != null,
+                              onSelected: (_) => setState(() => showingTeamPicker = true),
+                            ),
+                        ],
+                      ),
+                    ),
+                    ListSection(
+                      header: SettingsSectionTitle(context.l10n.preferencesDisplay),
+                      materialFilledCard: true,
+                      children: [
+                        SwitchSettingTile(
+                          title: Text(context.l10n.studyShowEvalBar),
+                          value: broadcastPreferences.showRoundEvaluationGauges,
+                          onChanged: (value) {
+                            ref.read(broadcastPreferencesProvider.notifier).toggleEvaluationBar();
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+      ),
     );
   }
 }
