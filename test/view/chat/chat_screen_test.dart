@@ -11,7 +11,6 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/view/chat/chat_screen.dart';
 import 'package:material_ui/material_ui.dart';
-
 import '../../test_provider_scope.dart';
 
 // A minimal [ChatMixinState] for the fake notifier below.

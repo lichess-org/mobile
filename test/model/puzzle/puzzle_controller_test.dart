@@ -24,6 +24,7 @@ import '../auth/fake_auth_storage.dart';
 final _userId = fakeAuthUser.user.id;
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   group('PuzzleController.changeDifficulty', () {
     test('does not start the offline queue fill while resetBatch is in flight', () async {
       // Regression test: `resetBatch` saves a batch built from a snapshot taken
