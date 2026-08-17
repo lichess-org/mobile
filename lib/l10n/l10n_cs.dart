@@ -70,7 +70,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Pro zobrazení této stránky musíte být přihlášeni.';
 
   @override
-  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+  String get mobileNbOfflinePuzzles => 'Offline úlohy';
 
   @override
   String get mobileNewGame => 'Nová hra';
@@ -189,7 +189,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileSettingsShapeDrawing => 'Kreslení tvarů';
 
   @override
-  String get mobileSettingsShapeDrawingSubtitle => 'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
+  String get mobileSettingsShapeDrawingSubtitle => 'Pomocí dvou prstů kreslete tvary: podržte jeden prst na prázdném poli a tahem druhého prstu nakreslete tvar.';
 
   @override
   String get mobileSettingsShowBorder => 'Zobrazit okraj';
@@ -198,7 +198,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileSettingsTouchFeedback => 'Odezva při klepnutí';
 
   @override
-  String get mobileSettingsTouchFeedbackSubtitle => 'When enabled, the device will vibrate shortly when you move or capture a piece.';
+  String get mobileSettingsTouchFeedbackSubtitle => 'Je-li zapnuto, zařízení po tahu nebo braní figury krátce zavibruje.';
 
   @override
   String get mobileSettingsTab => 'Nastavení';
@@ -305,13 +305,13 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobilePerfShortRapid => 'Rapid';
 
   @override
-  String get mobilePerfShortClassical => 'Classical';
+  String get mobilePerfShortClassical => 'Klasické';
 
   @override
-  String get mobilePerfShortCorrespondence => 'Corresp.';
+  String get mobilePerfShortCorrespondence => 'Koresp.';
 
   @override
-  String get mobilePerfShortFromPosition => 'From Pos.';
+  String get mobilePerfShortFromPosition => 'Z pozice.';
 
   @override
   String get mobilePerfShortChess960 => '960';
@@ -323,10 +323,10 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobilePerfShortKingOfTheHill => 'KotH';
 
   @override
-  String get mobilePerfShortThreeCheck => '3check';
+  String get mobilePerfShortThreeCheck => '3šachy';
 
   @override
-  String get mobilePerfShortAtomic => 'Atomic';
+  String get mobilePerfShortAtomic => 'Atomové';
 
   @override
   String get mobilePerfShortHorde => 'Horde';
@@ -338,7 +338,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobilePerfShortCrazyhouse => 'Crazy';
 
   @override
-  String get mobilePerfShortPuzzle => 'Puzzle';
+  String get mobilePerfShortPuzzle => 'Úlohy';
 
   @override
   String get variantStandard => 'Standardní';

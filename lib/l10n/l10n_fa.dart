@@ -12,7 +12,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileAccount => 'حساب';
 
   @override
-  String get mobileAccountPreferences => 'ترجیحات حساب';
+  String get mobileAccountPreferences => 'تنظیمات حساب کاربری';
 
   @override
   String get mobileAccountPreferencesHelp => 'این ترجیحات به حساب Lichess تان اعمال می‌شود و در همه دستگاه‌ها استفاده خواهد شد.';
