@@ -105,6 +105,7 @@ class _FakeAppState extends ConsumerState<_FakeApp> {
         MaterialLocalizationsEo.delegate,
         CupertinoLocalizationsEo.delegate,
       ],
+      supportedLocales: AppLocalizations.supportedLocales,
       home: widget.home,
       // Mirror production (see app.dart) so navigation logic relying on the
       // route stack observer behaves the same in tests.
