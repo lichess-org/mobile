@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:chessground/chessground.dart';
 import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
@@ -8,8 +9,10 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/board_editor/board_editor_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/chess960.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -303,20 +306,35 @@ class _BottomBar extends ConsumerWidget {
                         .loadFen(editorState.variant.initialPosition.fen);
                   },
                 ),
-              BottomSheetAction(
-                makeLabel: (context) => Text(context.l10n.loadPosition),
-                onPressed: () {
-                  final notifier = ref.read(editorController.notifier);
-                  Navigator.of(context).push(
-                    BoardEditorPositionsScreen.buildRoute(
-                      onPositionSelected: (position) => {
-                        notifier.loadFen(position.fen),
-                        Navigator.of(context).pop(),
-                      },
-                    ),
-                  );
-                },
-              ),
+              if (editorState.variant == .chess960)
+                BottomSheetAction(
+                  makeLabel: (context) => const Text('Chess960 Position'),
+                  onPressed: () {
+                    showDialog<void>(
+                      context: context,
+                      builder: (_) => _Chess960PositionDialog(
+                        onFenLoaded: (fen) {
+                          ref.read(editorController.notifier).loadFen(fen);
+                        },
+                      ),
+                    );
+                  },
+                ),
+              if (editorState.variant == .standard)
+                BottomSheetAction(
+                  makeLabel: (context) => Text(context.l10n.loadPosition),
+                  onPressed: () {
+                    final notifier = ref.read(editorController.notifier);
+                    Navigator.of(context).push(
+                      BoardEditorPositionsScreen.buildRoute(
+                        onPositionSelected: (position) => {
+                          notifier.loadFen(position.fen),
+                          Navigator.of(context).pop(),
+                        },
+                      ),
+                    );
+                  },
+                ),
               if (editorState.variant == Variant.standard)
                 BottomSheetAction(
                   // TODO: l10n
@@ -364,10 +382,7 @@ class _BottomBar extends ConsumerWidget {
                 onPressed: () => showChoicePicker<Variant>(
                   context,
                   choices: readSupportedVariants
-                      .where(
-                        // TODO, for chess960 to be meaningful here, we'd need to display a dialog to load one of the starting positions
-                        (variant) => variant != Variant.fromPosition && variant != Variant.chess960,
-                      )
+                      .where((variant) => variant != .fromPosition)
                       .toList(),
                   selectedItem: editorState.variant,
                   labelBuilder: (variant) => VariantLabel(variant),
@@ -414,9 +429,7 @@ class _BottomBar extends ConsumerWidget {
                         orientation: editorState.orientation,
                         pgn: editorState.pgn!,
                         isComputerAnalysisAllowed: true,
-                        variant: editorState.variant.rule == Rule.chess
-                            ? Variant.fromPosition
-                            : editorState.variant,
+                        variant: editorState.variant,
                       ),
                     ),
                   );
@@ -511,6 +524,75 @@ class _FenDialogState extends State<_FenDialog> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _Chess960PositionDialog extends StatefulWidget {
+  const _Chess960PositionDialog({required this.onFenLoaded});
+
+  final void Function(String fen) onFenLoaded;
+
+  @override
+  State<_Chess960PositionDialog> createState() => _Chess960PositionDialogState();
+}
+
+class _Chess960PositionDialogState extends State<_Chess960PositionDialog> {
+  final _controller = TextEditingController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _generateRandom() {
+    // Chess960 IDs range from 0 to 959.
+    final randomId = math.Random().nextInt(960);
+    _controller.text = randomId.toString();
+  }
+
+  void _loadPosition() {
+    final id = int.tryParse(_controller.text);
+    if (id == null || id < 0 || id > 959) {
+      showSnackBar(context, 'Please enter a number between 0 and 959', type: .error);
+      return;
+    }
+    final fen = chess960Position(id).fen;
+    widget.onFenLoaded(fen);
+    Navigator.of(context, rootNavigator: true).pop();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Chess960 Position'),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TextField(
+            controller: _controller,
+            keyboardType: .number,
+            decoration: InputDecoration(
+              hintText: 'Position ID (0-959)',
+              suffixIcon: IconButton(
+                icon: const Icon(LichessIcons.die_six),
+                onPressed: _generateRandom,
+                tooltip: context.l10n.randomChess960Position,
+              ),
+            ),
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            onSubmitted: (_) => _loadPosition(),
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
+          child: Text(context.l10n.cancel),
+        ),
+        TextButton(onPressed: _loadPosition, child: Text(context.l10n.loadPosition)),
+      ],
     );
   }
 }
