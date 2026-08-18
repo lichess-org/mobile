@@ -1,6 +1,5 @@
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -11,6 +10,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/pockets.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// The height of the board header or footer in the analysis layout.
 const kAnalysisBoardHeaderOrFooterHeight = 26.0;
@@ -28,6 +28,7 @@ enum AnalysisTab {
   explorer(Icons.explore),
   moves(LichessIcons.flow_cascade),
   summary(Icons.area_chart),
+  moveTimes(Icons.punch_clock),
   conditionalPremoves(Icons.save);
 
   const AnalysisTab(this.icon);
@@ -44,6 +45,8 @@ enum AnalysisTab {
         return l10n.movesPlayed;
       case AnalysisTab.summary:
         return l10n.computerAnalysis;
+      case AnalysisTab.moveTimes:
+        return l10n.moveTimes;
       case AnalysisTab.conditionalPremoves:
         return l10n.conditionalPremoves;
     }
@@ -72,6 +75,7 @@ class AnalysisLayout extends ConsumerWidget {
     this.engineGaugeBuilder,
     this.engineLines,
     this.bottomBar,
+    this.smallBoard = false,
     this.pockets,
     super.key,
   });
@@ -117,6 +121,11 @@ class AnalysisLayout extends ConsumerWidget {
 
   /// A widget to show at the bottom of the screen.
   final Widget? bottomBar;
+
+  /// If true, the board is displayed in a small size on portrait orientation.
+  ///
+  /// This is `false` by default.
+  final bool smallBoard;
 
   /// Current state of the pockets, in variants like crazyhouse.
   ///
@@ -278,18 +287,22 @@ class AnalysisLayout extends ConsumerWidget {
                     ),
                   );
                 } else {
-                  final evalGaugeWidth = getEvalGaugeWidth(context);
-                  final defaultBoardSize = constraints.biggest.shortestSide;
+                  final evalGaugeSize = engineGaugeBuilder != null
+                      ? getEvalGaugeWidth(context)
+                      : 0.0;
+
+                  final defaultBoardSize =
+                      (smallBoard ? kSmallBoardScale : 1.0) *
+                      (constraints.biggest.shortestSide - evalGaugeSize);
+
                   final remainingHeight = constraints.maxHeight - defaultBoardSize;
                   final isSmallScreen = remainingHeight < kSmallHeightMinusBoard;
-                  final evalGaugeSize = engineGaugeBuilder != null ? evalGaugeWidth : 0.0;
                   final additionalBoardSidePaddingForPockets = isSmallScreen ? 70.0 : 16.0;
-                  final boardSize = isTablet || isSmallScreen || pockets != null
-                      ? defaultBoardSize -
-                            evalGaugeSize -
-                            kTabletBoardTableSidePadding * 2 -
-                            (pockets != null ? additionalBoardSidePaddingForPockets : 0.0)
-                      : defaultBoardSize - evalGaugeSize;
+
+                  final boardSize =
+                      defaultBoardSize -
+                      (isTablet ? kTabletBoardTableSidePadding * 2 : 0) -
+                      (pockets != null ? additionalBoardSidePaddingForPockets : 0.0);
 
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -424,9 +437,12 @@ class _AnalysisTabView extends StatelessWidget {
               controller: controller,
               tabs: tabs!
                   .map(
-                    (tab) => Tab(
-                      height: iconSize + 8.0,
-                      icon: Icon(tab.icon, size: iconSize, semanticLabel: tab.l10n(context.l10n)),
+                    (tab) => Tooltip(
+                      message: tab.l10n(context.l10n),
+                      child: Tab(
+                        height: iconSize + 8.0,
+                        icon: Icon(tab.icon, size: iconSize, semanticLabel: tab.l10n(context.l10n)),
+                      ),
                     ),
                   )
                   .toList(),

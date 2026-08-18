@@ -1,6 +1,4 @@
 import 'dart:math' as math;
-
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
@@ -9,7 +7,8 @@ import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:popover/popover.dart';
+import 'package:lichess_mobile/src/widgets/popover.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// A button to toggle engine evaluation and show engine depth.
 class EngineButton extends ConsumerStatefulWidget {
@@ -319,7 +318,7 @@ class _EnginePopup extends ConsumerWidget {
 
     return ListTile(
       contentPadding: const EdgeInsets.only(left: 16.0),
-      leading: Image.asset('assets/images/stockfish/icon.png', width: 44, height: 44),
+      leading: Image.asset('assets/images/stockfish/icon.webp', width: 44, height: 44),
       title: Text(fixedEngineName),
       subtitle: currentEval != null ? Text(context.l10n.depthX('${currentEval.depth}$knps')) : null,
       trailing: canGoDeeper

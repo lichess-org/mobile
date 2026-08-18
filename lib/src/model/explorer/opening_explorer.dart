@@ -4,7 +4,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
-import 'package:lichess_mobile/src/model/explorer/opening_explorer_preferences.dart';
 
 part 'opening_explorer.freezed.dart';
 part 'opening_explorer.g.dart';
@@ -97,11 +96,3 @@ sealed class OpeningExplorerGame with _$OpeningExplorerGame {
 }
 
 enum GameMode { casual, rated }
-
-@freezed
-sealed class OpeningExplorerCacheKey with _$OpeningExplorerCacheKey {
-  const factory OpeningExplorerCacheKey({
-    required String fen,
-    required OpeningExplorerPrefs prefs,
-  }) = _OpeningExplorerCacheKey;
-}

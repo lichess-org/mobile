@@ -43,7 +43,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String mobileGoodEvening(String param) {
-    return '좋은 밤이에요, $param';
+    return '좋은 밤이에요, $param님';
   }
 
   @override
@@ -51,7 +51,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String mobileGoodDay(String param) {
-    return '좋은 날이에요, $param';
+    return '좋은 날이에요, $param님';
   }
 
   @override
@@ -68,6 +68,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get mobileMustBeLoggedIn => '이 페이지를 보려면 로그인해야 합니다.';
+
+  @override
+  String get mobileNbOfflinePuzzles => '오프라인 퍼즐';
 
   @override
   String get mobileNewGame => '새 게임';
@@ -287,31 +290,112 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileOrImportPgnFile => '또는 PGN 파일 가져오기';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => '좋은 수지만, 더 좋은 수가 있습니다';
+
+  @override
+  String get mobilePerfShortUltraBullet => '울트라';
+
+  @override
+  String get mobilePerfShortBullet => '불렛';
+
+  @override
+  String get mobilePerfShortBlitz => '블리츠';
+
+  @override
+  String get mobilePerfShortRapid => '래피드';
+
+  @override
+  String get mobilePerfShortClassical => '클래시컬';
+
+  @override
+  String get mobilePerfShortCorrespondence => '통신';
+
+  @override
+  String get mobilePerfShortFromPosition => '커스텀';
+
+  @override
+  String get mobilePerfShortChess960 => '960';
+
+  @override
+  String get mobilePerfShortAntichess => '안티체스';
+
+  @override
+  String get mobilePerfShortKingOfTheHill => '언덕의왕';
+
+  @override
+  String get mobilePerfShortThreeCheck => '3체크';
+
+  @override
+  String get mobilePerfShortAtomic => '아토믹';
+
+  @override
+  String get mobilePerfShortHorde => '호드';
+
+  @override
+  String get mobilePerfShortRacingKings => '킹 경주';
+
+  @override
+  String get mobilePerfShortCrazyhouse => '크레이지';
+
+  @override
+  String get mobilePerfShortPuzzle => '퍼즐';
+
+  @override
+  String get variantStandard => '스탠다드';
+
+  @override
   String get variantStandardTitle => '체스(FIDE)의 표준 규칙';
+
+  @override
+  String get variantChess960 => '체스960';
 
   @override
   String get variantChess960Title => '백의 1랭크, 흑의 8랭크에 있는 기물의 시작 위치가 무작위로 변경됩니다.';
 
   @override
+  String get variantKingOfTheHill => '언덕의 왕';
+
+  @override
   String get variantKingOfTheHillTitle => '킹을 중앙 칸에 놓으면 승리합니다.';
+
+  @override
+  String get variantThreeCheck => '3체크';
 
   @override
   String get variantThreeCheckTitle => '상대방을 세 번 체크하면 승리합니다.';
 
   @override
+  String get variantAntichess => '안티체스';
+
+  @override
   String get variantAntichessTitle => '모든 기물을 잃거나 스테일메이트되면 승리합니다.';
+
+  @override
+  String get variantAtomic => '아토믹';
 
   @override
   String get variantAtomicTitle => '상대의 킹을 터뜨려버리면 승리합니다.';
 
   @override
+  String get variantHorde => '호드';
+
+  @override
   String get variantHordeTitle => '한 쪽은 다수의 폰으로, 다른 쪽은 일반적인 기물로 경기합니다.';
+
+  @override
+  String get variantRacingKings => '킹 경주';
 
   @override
   String get variantRacingKingsTitle => '킹이 보드 반대편 끝까지 도달하면 승리합니다.';
 
   @override
+  String get variantCrazyhouse => '크레이지하우스';
+
+  @override
   String get variantCrazyhouseTitle => '자신의 차례일 때, 기물을 움직이는 대신 잡았던 기물을 자신의 색으로 보드에 소환할 수 있습니다.';
+
+  @override
+  String get variantFromPosition => '정해진 보드판에서 시작';
 
   @override
   String get variantFromPositionTitle => '사용자가 지정한 포지션으로 시작하는 일반 체스';
@@ -365,7 +449,7 @@ class AppLocalizationsKo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$param2를 $count회 플레이함',
+      other: '$param2(을)를 $count회 플레이함',
     );
     return '$_temp0';
   }
@@ -665,6 +749,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get arenaRankAvgHelp => '백분위 순위는 말 그대로 순위의 백분율입니다. 즉, 백분위 순위는 낮을수록 더 높은 순위를 의미합니다. \n\n예를 들어, 100명의 참가자가 참여하는 토너먼트에서 3위를 차지하면 3%가 되고, 1000명의 참가자가 참여하는 토너먼트에서 10위를 차지하면 1%가 됩니다.';
 
   @override
+  String get arenaRankAverageHelp => '백분위 순위는 각 토너먼트에서 전체 플레이어 수에 비례한 당신의 평균적인 최종 순위를 나타냅니다.\n이는 당신의 일반적인 레이팅이 아닌, 토너먼트 순위에 대한 수치입니다.\n\n예를 들어, 백분위 순위 3%는 토너먼트가 끝났을 때 당신의 최종 순위가 일반적으로 상위 3%(예시: 1,000명의 플레이어 중 30등)임을 의미합니다.';
+
+  @override
   String get arenaMedians => '중앙값';
 
   @override
@@ -820,6 +907,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get broadcastDefinitivelyDeleteTournament => '토너먼트 전체의 모든 라운드와 게임을 완전히 삭제합니다.';
 
   @override
+  String get broadcastPermanentlyDeleteTournament => '이 토너먼트를 모든 라운드와 게임을 포함하여 영구적으로 삭제하시겠습니까?';
+
+  @override
   String get broadcastShowScores => '게임 결과에 따라 플레이어 점수 표시';
 
   @override
@@ -894,6 +984,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get broadcastOfficialStandings => '공식 순위';
+
+  @override
+  String get broadcastRegulations => '규정';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -1360,7 +1453,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get preferencesBoardCoordinates => '보드 좌표 (A-H, 1-8)';
 
   @override
-  String get preferencesMoveListWhilePlaying => '기물 움직임 기록';
+  String get preferencesMoveListWhilePlaying => '플레이 중 수 목록';
 
   @override
   String get preferencesPgnPieceNotation => 'PGN 기물 표기 방식';
@@ -1504,10 +1597,19 @@ class AppLocalizationsKo extends AppLocalizations {
   String get preferencesNotifyInboxMsg => '새로운 받은 편지함 메시지';
 
   @override
+  String get preferencesNotifyDirectMessage => '새 다이렉트 메시지';
+
+  @override
   String get preferencesNotifyForumMention => '포럼 댓글에서 당신이 언급됨';
 
   @override
+  String get preferencesNotifyForumMentions => '포럼 멘션';
+
+  @override
   String get preferencesNotifyInvitedStudy => '연구 초대';
+
+  @override
+  String get preferencesNotifyStudyInvites => '연구 초대';
 
   @override
   String get preferencesNotifyGameEvent => '통신 대국 업데이트';
@@ -1519,7 +1621,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => '곧 토너먼트 시작할 때';
 
   @override
-  String get preferencesNotifyBroadcasts => '구독한 방송';
+  String get preferencesNotifyTournamentStartReminders => '토너먼트 시작 알림';
+
+  @override
+  String get preferencesNotifyBroadcasts => '방송';
 
   @override
   String get preferencesNotifyTimeAlarm => '통신 대국 시간 곧 만료됨';
@@ -1544,6 +1649,60 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get preferencesShowClockOnTheLeft => '모바일 기기에서 왼쪽에 보이기';
+
+  @override
+  String get preferencesInlineNotation => '기보법 가로쓰기';
+
+  @override
+  String get preferencesShowServerAnalysis => '서버 분석 표시';
+
+  @override
+  String get preferencesShowBestMoveArrows => '최선의 수 화살표 표시';
+
+  @override
+  String get preferencesShowManeuverArrows => '기동 화살표 표시';
+
+  @override
+  String get preferencesShowGauge => '엔진 평가치 표시';
+
+  @override
+  String get preferencesShowMoveAnnotationsOnBoard => '수 주석 표시';
+
+  @override
+  String get preferencesShowVariationArrows => '라인 화살표 표시';
+
+  @override
+  String get preferencesShowLiveGlyphs => '엔진 주석 표시';
+
+  @override
+  String get preferencesShowUndefendedPieces => '수비가 없는 기물들 표시';
+
+  @override
+  String get preferencesShowPinnedPieces => '핀에 걸린 기물들 표시';
+
+  @override
+  String get preferencesShowCheckableKing => '체크할 수 있는 킹 표시';
+
+  @override
+  String get preferencesDisclosureMode => '라인 숨기기 활성화';
+
+  @override
+  String get preferencesGeneralSettings => '일반';
+
+  @override
+  String get preferencesMoveListSettings => '수 목록';
+
+  @override
+  String get preferencesBoardSettings => '보드';
+
+  @override
+  String get preferencesAnalysisSettings => '분석 설정';
+
+  @override
+  String get preferencesManeuverArrowsHelp => '하나의 기물에 대한 일련의 엔진수';
+
+  @override
+  String get preferencesHoverOverSettingLabelsForHelp => '설정 라벨에 커서를 올려서 도움말을 볼 수 있습니다';
 
   @override
   String get puzzlePuzzles => '퍼즐';
@@ -1838,13 +1997,13 @@ class AppLocalizationsKo extends AppLocalizations {
   String get puzzleThemeAnastasiaMate => '아나스타시아 메이트';
 
   @override
-  String get puzzleThemeAnastasiaMateDescription => '나이트와 룩 또는 퀸이 힘을 합쳐 상대 킹을 보드 가장자리와 자신의 기물 사이의 함정에 빠트립니다.';
+  String get puzzleThemeAnastasiaMateDescription => '나이트와 룩 또는 퀸이 힘을 합쳐 상대 킹을 보드 가장자리와 자신의 기물 사이에 가둡니다.';
 
   @override
   String get puzzleThemeArabianMate => '아라비안 메이트';
 
   @override
-  String get puzzleThemeArabianMateDescription => '나이트와 룩이 힘을 합쳐 상대 킹을 보드 구석에서 함정에 빠트립니다.';
+  String get puzzleThemeArabianMateDescription => '나이트와 룩이 힘을 합쳐 상대 킹을 보드 구석에 가둡니다.';
 
   @override
   String get puzzleThemeAttackingF2F7 => 'f2나 f7 공격하기';
@@ -1988,6 +2147,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => '앙파상 규칙을 포함한 전술입니다. 상대 폰이 처음에 두 칸 이동해서 내 폰을 지나쳤을 경우, 그 폰을 잡을 수 있습니다.';
 
   @override
+  String get puzzleThemeEnPassantAdjacentCaptureDescription => '앙파상 규칙을 포함한 전술입니다. 상대 폰이 처음에 두 칸 이동해서 자신의 폰 바로 옆 칸으로 이동했을 경우, 그 폰을 잡을 수 있습니다.';
+
+  @override
   String get puzzleThemeEpauletteMate => '에팔레트 메이트';
 
   @override
@@ -2006,6 +2168,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get puzzleThemeForkDescription => '이동한 기물이 두 개의 상대 기물을 동시에 공격하는 수입니다.';
 
   @override
+  String get puzzleThemeForkOpposingPiecesDescription => '기물이 두 개 이상의 상대 기물을 동시에 공격하는 수입니다.';
+
+  @override
   String get puzzleThemeHangingPiece => '보호받지 않는 기물';
 
   @override
@@ -2016,6 +2181,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get puzzleThemeHookMateDescription => '상대의 폰에 의해 탈출로가 막힌 킹을 룩, 나이트, 폰으로 체크메이트 합니다.';
+
+  @override
+  String get puzzleThemeHookMateOpposingPawnDescription => '상대 폰이 킹의 탈출로를 막고 있는 상태에서 룩, 나이트, 폰으로 가하는 체크메이트입니다.';
 
   @override
   String get puzzleThemeInterference => '간섭';
@@ -2234,7 +2402,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get puzzleThemeTrappedPieceDescription => '기물의 움직임이 제한되어 있어 잡히는걸 막을 수 없습니다.';
 
   @override
-  String get puzzleThemeUnderPromotion => '하향 승진';
+  String get puzzleThemeUnderPromotion => '언더프로모션';
 
   @override
   String get puzzleThemeUnderPromotionDescription => '나이트, 비숍, 룩으로 승진';
@@ -2463,6 +2631,12 @@ class AppLocalizationsKo extends AppLocalizations {
   String get blackDidntMove => '흑이 수를 두지 않음';
 
   @override
+  String get whiteAborted => '백 게임 중단';
+
+  @override
+  String get blackAborted => '흑 게임 중단';
+
+  @override
   String get requestAComputerAnalysis => '컴퓨터 분석 요청하기';
 
   @override
@@ -2483,7 +2657,7 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get usingServerAnalysis => '서버 분석 사용하기';
+  String get usingServerAnalysis => '서버 분석 사용 중';
 
   @override
   String get loadingEngine => '엔진 로드 중...';
@@ -2595,7 +2769,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String masterDbExplanation(String param1, String param2, String param3) {
-    return '$param2년과 $param3년 사이 FIDE 레이팅이 최소 $param1였던 선수들의 기보가 약 2백만개 있습니다.';
+    return '$param2년과 $param3년 사이 FIDE 레이팅이 최소 $param1였던 선수들의 대면 경기';
   }
 
   @override
@@ -2950,6 +3124,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get checkSpamFolder => '또한 스팸 메일함에 들어가 있을 수 있습니다. 만약 그런 경우, 스팸이 아님으로 표시해 두세요.';
 
   @override
+  String get checkSpamOrJunkFolder => '만약 확인 이메일을 받지 못하셨다면, 스팸함이나 휴지통을 확인하세요. 중요한 연락을 계속 통보받기 위해서는 lichess.org에서 발송된 메시지를 안전함 및 \"스팸이 아님\"으로 설정하세요.';
+
+  @override
   String sendEmailForAccountVerification(String param) {
     return '확인 이메일을 찾을 수 없는 경우 $param에 이메일을 보내주시면 계정을 확인해 드리겠습니다.';
   }
@@ -3037,10 +3214,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String get finished => '종료됨';
 
   @override
-  String get abortGame => '대국 취소';
+  String get abortGame => '대국 중단';
 
   @override
-  String get gameAborted => '대국 취소됨';
+  String get gameAborted => '대국 중단됨';
 
   @override
   String get standard => '스탠다드';
@@ -3320,7 +3497,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get importGame => '대국 불러오기';
 
   @override
-  String get importGameExplanation => '체스 대국의 PGN 을 붙여 넣으면, 복기와 컴퓨터 분석을 진행할 수 있고, 채팅을 칠 수도 있으며, 대국을 공유할 수 있는 URL 링크도 생성할 수 있습니다.';
+  String get importGameExplanation => '체스 대국의 PGN을 붙여넣어 복기와 컴퓨터 분석을 진행하고, 채팅을 치고, 공유 가능한 링크를 생성하세요.';
 
   @override
   String get importGameDataPrivacyWarning => '이 PGN은 모두가 볼 수 있게 됩니다. 비공개로 대국을 불러오려면, 연구 기능을 이용하세요.';
@@ -3486,7 +3663,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get performance => '퍼포먼스 레이팅';
 
   @override
-  String get tournamentComplete => '대회 종료';
+  String get tournamentComplete => '토너먼트 종료';
 
   @override
   String get movesPlayed => '말 이동 횟수';
@@ -3608,7 +3785,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get activePlayers => '활동적인 플레이어';
 
   @override
-  String get bewareTheGameIsRatedButHasNoClock => '주의하세요, 공식 대국이지만 시간 제한이 없습니다!';
+  String get bewareTheGameIsRatedButHasNoClock => '주의하세요, 레이팅 대국이지만 시간 제한이 없습니다!';
 
   @override
   String get success => '성공!';
@@ -3677,6 +3854,15 @@ class AppLocalizationsKo extends AppLocalizations {
   String get reply => '전송';
 
   @override
+  String get reopen => '다시 열기';
+
+  @override
+  String get quote => '인용하기';
+
+  @override
+  String get postEdited => '수정됨';
+
+  @override
   String get message => '내용';
 
   @override
@@ -3713,7 +3899,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String get reportProcessedFasterInEnglish => '귀하의 신고가 영어로 적혀있을 경우 빠르게 처리될 것입니다.';
 
   @override
-  String get error_provideOneCheatedGameLink => '부정행위가 존재하는 대국의 링크를 제공해주세요.';
+  String get processReportFasterInEnglish => '신고를 영어로 작성하시면 더 빠르게 처리해 드릴 수 있습니다.';
+
+  @override
+  String get error_provideOneCheatedGameLink => '검토할 대국의 링크를 하나 이상 제공해 주세요.';
 
   @override
   String by(String param) {
@@ -4081,6 +4270,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get whenCreateSimul => '다면기를 생성하면 한 번에 여러 명의 플레이어와 게임하게 됩니다.';
 
   @override
+  String get creatingASimul => '다면기를 생성하여 여러 명의 상대와 동시에 대국할 수 있습니다.';
+
+  @override
   String get simulVariantsHint => '게임 방식을 한 개 이상 선택할 경우, 상대방 측에서 게임 방식을 선택하게 됩니다.';
 
   @override
@@ -4245,12 +4437,12 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String byRegisteringYouAgreeToBeBoundByOur(String param) {
-    return '이곳에 등록하면 당신은 이곳의 $param 약관에 동의하시는 것입니다.';
+    return '회원가입하시면 $param에 동의한 것으로 간주됩니다.';
   }
 
   @override
   String readAboutOur(String param) {
-    return '$param를 읽어보세요.';
+    return '$param을 읽어보세요.';
   }
 
   @override
@@ -4364,6 +4556,12 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
+  String get like => '좋아요';
+
+  @override
+  String get liked => '좋아함';
+
+  @override
   String get quickPairing => '빠른 상대 찾기';
 
   @override
@@ -4387,6 +4585,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get background => '배경';
 
   @override
+  String get theme => '테마';
+
+  @override
   String get light => '밝게';
 
   @override
@@ -4396,7 +4597,13 @@ class AppLocalizationsKo extends AppLocalizations {
   String get transparent => '투명하게';
 
   @override
+  String get picture => '사진';
+
+  @override
   String get deviceTheme => '기기 테마';
+
+  @override
+  String get roundness => '둥글기';
 
   @override
   String get backgroundImageUrl => '배경 이미지 URL:';
@@ -4438,7 +4645,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get usernameSuffixInvalid => '사용자 이름의 끝 글자는 알파벳이나 숫자여야 합니다.';
 
   @override
-  String get usernameCharsInvalid => '사용자 이름에는 알파벳, 숫자, 언더스코어 ( _ ), 하이픈 ( - ) 만을 사용할 수 있습니다.';
+  String get usernameCharsInvalid => '사용자 이름에는 알파벳, 숫자, 언더스코어 ( _ ), 하이픈 ( - ) 만을 사용할 수 있습니다. 언더스코어와 하이픈은 연속으로 사용할 수 없습니다.';
 
   @override
   String get usernameUnacceptable => '사용자 이름을 사용할 수 없습니다.';
@@ -4603,7 +4810,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get conditionalPremoves => '수 예측';
 
   @override
-  String get addCurrentVariation => '현재의 변화를 추가';
+  String get addCurrentVariation => '현재 라인 추가';
 
   @override
   String get playVariationToCreateConditionalPremoves => '기물을 움직여 조건적인 수를 만들기';
@@ -4734,7 +4941,7 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get inTheFAQ => 'F.A.Q';
+  String get inTheFAQ => 'FAQ';
 
   @override
   String toReportSomeoneForCheatingOrBadBehavior(String param1) {
@@ -4754,11 +4961,14 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String makeSureToRead(String param1) {
-    return '$param1를 꼭 읽으세요';
+    return '$param1을 꼭 읽으세요';
   }
 
   @override
   String get theForumEtiquette => '포럼 에티켓';
+
+  @override
+  String get pleaseBeNiceInTheForum => '포럼을 건전히 이용해 주세요.';
 
   @override
   String get thisTopicIsArchived => '이 주제는 보존되어서 댓글을 남기실 수 없습니다.';
@@ -4809,9 +5019,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String youHaveJoinedTeamX(String param1) {
     return '\"$param1\"에 가입되었습니다.';
   }
-
-  @override
-  String get someoneYouReportedWasBanned => '당신이 신고한 플레이어가 차단되었습니다.';
 
   @override
   String get congratsYouWon => '축하합니다. 승리하셨습니다!';
@@ -4912,6 +5119,11 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
+  String youCanFormatTextUsing(String param) {
+    return '$param으로 텍스트 서식을 설정할 수 있습니다.';
+  }
+
+  @override
   String get embedsAvailable => '포함할 대국 URL 또는 연구 챕터 URL을 붙여넣으세요.';
 
   @override
@@ -4931,6 +5143,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get navigateMoveTree => '수순 트리 탐색';
+
+  @override
+  String get moveListNavigation => '수순 리스트 탐색';
 
   @override
   String get mouseTricks => '마우스 기능';
@@ -4983,7 +5198,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get resignTheGame => '대국 기권';
 
   @override
-  String get youCantStartNewGame => '이 대국이 끝나기 전까지 새 대국을 시작할 수 없습니다.';
+  String get youCantStartNewGame => '당신 턴에는 새로운 대국을 시작할 수 없습니다.';
 
   @override
   String get since => '부터';
@@ -5010,7 +5225,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get showMeEverything => '모두 보기';
 
   @override
-  String get lichessPatronInfo => 'Lichess는 비영리 기구이며 완전한 무료/자유 오픈소스 소프트웨어입니다.\n모든 운영 비용, 개발, 컨텐츠 조달은 전적으로 사용자들의 기부로 이루어집니다.';
+  String get lichessPatronInfo => 'Lichess는 비영리 기구이며 완전한 무료/자유 오픈소스 소프트웨어입니다. 모든 운영 비용, 개발, 컨텐츠 조달은 전적으로 사용자들의 기부로 이루어집니다. 마음씨 좋은 사용자 분들이 없었더라면, 이 사이트는 유지될 수 없을 겁니다. 함께해 주셔서 감사합니다!  ';
 
   @override
   String get nothingToSeeHere => '지금은 여기에 볼 것이 없습니다.';
@@ -5051,7 +5266,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String get tags => '태그';
 
   @override
-  String get enPassant => '앙파상';
+  String get enPassant => '앙파상 권리';
+
+  @override
+  String get settings => '설정';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5464,6 +5682,16 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
+  String nbAnonymous(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '익명 ($count)',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbSecondsToPlayTheFirstMove(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5667,7 +5895,7 @@ class AppLocalizationsKo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$param2 중$count개 플레이 함',
+      other: '$param2(을)를 $count회 플레이함',
     );
     return '$_temp0';
   }
@@ -5766,9 +5994,6 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get studyLike => '좋아요';
-
-  @override
-  String get studyUnlike => '좋아요 취소';
 
   @override
   String get studyNewTag => '새 태그';

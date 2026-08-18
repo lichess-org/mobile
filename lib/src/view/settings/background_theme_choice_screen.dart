@@ -3,11 +3,11 @@ import 'dart:math' show max;
 import 'dart:ui' as ui;
 
 import 'package:chessground/chessground.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart' show Side, kInitialFEN;
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
@@ -17,8 +17,10 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/background.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_color_utilities/score/score.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:path/path.dart';
 
 class BackgroundChoiceScreen extends StatelessWidget {
@@ -30,8 +32,8 @@ class BackgroundChoiceScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.background)),
+    return PlatformScaffold(
+      appBar: PlatformAppBar(title: Text(context.l10n.background)),
       body: _Body(),
     );
   }
@@ -71,6 +73,10 @@ class _Body extends ConsumerWidget {
                     maxWidth: maxDimension,
                     maxHeight: maxDimension,
                     imageQuality: 80,
+                    // We only need the pixels to build the background and extract its colors, so
+                    // skip the EXIF metadata. This avoids the iOS photo library permission prompt
+                    // entirely: the picker runs out of process and only hands back the chosen file.
+                    requestFullMetadata: false,
                   );
 
                   if (image != null) {
@@ -256,13 +262,15 @@ class _ConfirmColorBackgroundScreenState extends State<ConfirmColorBackgroundScr
                         padding: EdgeInsets.only(
                           left: orientation == Orientation.portrait ? 0 : 16.0,
                         ),
-                        child: Chessboard.fixed(
+                        child: StaticChessboard(
                           size: orientation == Orientation.portrait
                               ? constraints.maxWidth
                               : constraints.maxHeight - landscapeBoardPadding * 2,
                           fen: kInitialFEN,
                           orientation: Side.white,
-                          settings: widget.boardPrefs.toBoardSettings(),
+                          settings: StaticChessboardSettings.fromBoardSettings(
+                            widget.boardPrefs.toBoardSettings(Variant.standard),
+                          ),
                         ),
                       ),
                     ),
@@ -431,13 +439,15 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
                       padding: EdgeInsets.only(
                         left: widget.viewportOrientation == Orientation.portrait ? 0 : 16.0,
                       ),
-                      child: Chessboard.fixed(
+                      child: StaticChessboard(
                         size: widget.viewportOrientation == Orientation.portrait
                             ? widget.viewport.width
                             : widget.viewport.height - landscapeBoardPadding * 2,
                         fen: kInitialFEN,
                         orientation: Side.white,
-                        settings: widget.boardPrefs.toBoardSettings(),
+                        settings: StaticChessboardSettings.fromBoardSettings(
+                          widget.boardPrefs.toBoardSettings(Variant.standard),
+                        ),
                       ),
                     ),
                   ),

@@ -152,38 +152,12 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   void makeMove(Move move) {
     if (state.isEngineThinking || state.isEvaluatingMove || !state.game.playable) return;
 
-    if (move case NormalMove() when isPromotionPawnMove(state.currentPosition, move)) {
-      state = state.copyWith(promotionMove: move);
-      return;
-    }
-
     if (state.game.practiceMode) {
       _makeMoveWithEvaluation(move);
     } else {
       _applyMove(move);
       if (state.game.playable) {
         _playEngineMoveAfterPlayerAnimation();
-      }
-    }
-  }
-
-  void onPromotionSelection(Role? role) {
-    if (role == null) {
-      state = state.copyWith(promotionMove: null);
-      return;
-    }
-    final promotionMove = state.promotionMove;
-    if (promotionMove != null) {
-      final move = promotionMove.withPromotion(role);
-      state = state.copyWith(promotionMove: null);
-
-      if (state.game.practiceMode) {
-        _makeMoveWithEvaluation(move);
-      } else {
-        _applyMove(move);
-        if (state.game.playable) {
-          _playEngineMoveAfterPlayerAnimation();
-        }
       }
     }
   }
@@ -386,8 +360,8 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       if (state.game.playable && state.turn != state.game.playerSide) {
         _playEngineMoveAfterPlayerAnimation();
       }
-    } catch (e) {
-      _logger.warning('Error evaluating move: $e');
+    } catch (e, st) {
+      _logger.warning('Error evaluating move:', e, st);
       if (ref.mounted) {
         state = state.copyWith(isEvaluatingMove: false);
         if (state.game.playable && state.turn != state.game.playerSide) {
@@ -515,8 +489,8 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         eval = CloudEval(depth: depth, nodes: nodes, pvs: pvs, position: work.position);
         break;
       }
-    } catch (e) {
-      _logger.fine('Could not get cloud eval: $e');
+    } catch (e, st) {
+      _logger.fine('Could not get cloud eval:', e, st);
     }
 
     return eval;
@@ -624,8 +598,8 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       return await repository
           .getMasterDatabase(fen, since: MasterDb.kEarliestYear)
           .timeout(const Duration(seconds: 2));
-    } catch (e) {
-      _logger.fine('Failed to fetch master database: $e');
+    } catch (e, st) {
+      _logger.fine('Failed to fetch master database:', e, st);
       return null;
     }
   }
@@ -635,10 +609,12 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   /// Returns null if the network request fails or the entry is not conclusive.
   Future<ClientEval?> _fetchTablebaseEval(Position position) async {
     try {
-      final entry = await ref.read(tablebaseRepositoryProvider).getTablebaseEntry(position.fen);
+      final entry = await ref
+          .read(tablebaseRepositoryProvider)
+          .getTablebaseEntry(position.fen, Variant.fromRule(position.rule));
       return tablebaseEntryToCloudEval(entry, position);
-    } catch (e) {
-      _logger.fine('Could not get tablebase eval: $e');
+    } catch (e, st) {
+      _logger.fine('Could not get tablebase eval:', e, st);
       return null;
     }
   }
@@ -671,16 +647,18 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       if (state.game.playable) {
         _applyMove(move!);
         // After engine move, precompute hints for player's turn (in casual or practice mode)
+        // Wait for the engine move animation to complete before computing hints to avoid stuttering.
         if (state.game.playable && (state.game.casual || state.game.practiceMode)) {
-          _computeHints();
+          await _waitForPlayerMoveAnimation();
+          if (ref.mounted && state.game.playable) _computeHints();
         }
       }
     } on MoveRequestCancelledException {
       // Expected cancellation when evaluationService.stop() is called; ignore.
       return;
-    } catch (e, s) {
+    } catch (e, st) {
       // Unexpected engine error occurred.
-      _logger.warning('Failed to play engine move!', e, s);
+      _logger.warning('Failed to play engine move!', e, st);
     } finally {
       if (state.game.playable || state.game.finished) {
         state = state.copyWith(isEngineThinking: false);
@@ -754,13 +732,13 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
 
   void goForward() {
     if (state.canGoForward) {
-      state = state.copyWith(stepCursor: state.stepCursor + 1, promotionMove: null);
+      state = state.copyWith(stepCursor: state.stepCursor + 1);
     }
   }
 
   void goBack() {
     if (state.canGoBack) {
-      state = state.copyWith(stepCursor: state.stepCursor - 1, promotionMove: null);
+      state = state.copyWith(stepCursor: state.stepCursor - 1);
     }
   }
 
@@ -888,7 +866,6 @@ sealed class OfflineComputerGameState with _$OfflineComputerGameState {
   const factory OfflineComputerGameState({
     required OfflineComputerGame game,
     @Default(0) int stepCursor,
-    @Default(null) NormalMove? promotionMove,
     @Default(false) bool isEngineThinking,
     @Default(false) bool isLoadingHint,
 

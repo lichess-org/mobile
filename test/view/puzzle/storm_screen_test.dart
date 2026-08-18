@@ -76,29 +76,29 @@ void main() {
       await tester.pumpWidget(app);
 
       // before the first move is played, puzzle is not interactable
-      expect(find.byKey(const Key('h5-whiterook')), findsOneWidget);
-      await tester.tap(find.byKey(const Key('h5-whiterook')));
+      expect(boardHasPiece(tester, Square.h5, Piece.whiteRook), isTrue);
+      await tester.tapAt(squareOffset(Square.h5, tester.getRect(find.byType(Chessboard))));
       await tester.pump();
       expect(find.byKey(const Key('h5-selected')), findsNothing);
 
       // wait for first move to be played
       await tester.pump(const Duration(seconds: 1));
 
-      expect(find.byKey(const Key('g8-blackking')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.g8, Piece.blackKing), isTrue);
 
       await playMove(tester, 'h5', 'h7', orientation: Side.white);
 
       await tester.pump(const Duration(milliseconds: 500));
       await tester.pumpAndSettle();
-      expect(find.byKey(const Key('h7-whiterook')), findsOneWidget);
-      expect(find.byKey(const Key('d1-blackqueen')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.h7, Piece.whiteRook), isTrue);
+      expect(boardHasPiece(tester, Square.d1, Piece.blackQueen), isTrue);
 
       await playMove(tester, 'e3', 'g1', orientation: Side.white);
 
       await tester.pump(const Duration(milliseconds: 500));
 
       // should have loaded next puzzle
-      expect(find.byKey(const Key('h6-blackking')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.h6, Piece.blackKing), isTrue);
     }, variant: kPlatformVariant);
 
     testWidgets('shows end run result', (tester) async {
@@ -125,7 +125,7 @@ void main() {
 
       await tester.pump(const Duration(milliseconds: 500));
       // should have loaded next puzzle
-      expect(find.byKey(const Key('h6-blackking')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.h6, Piece.blackKing), isTrue);
 
       await tester.tap(find.text('End run'));
       await tester.pumpAndSettle();
@@ -152,7 +152,7 @@ void main() {
       await playMove(tester, 'h5', 'h6');
 
       await tester.pump(const Duration(milliseconds: 500));
-      expect(find.byKey(const Key('h6-blackking')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.h6, Piece.blackKing), isTrue);
     });
 
     testWidgets('play again starts new run', (tester) async {

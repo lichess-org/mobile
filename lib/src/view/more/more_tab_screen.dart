@@ -1,6 +1,5 @@
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
@@ -10,7 +9,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/message/message_repository.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/tab_scaffold.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/account/account_menu.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
@@ -28,6 +27,7 @@ import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MoreTabScreen extends ConsumerWidget {
@@ -66,7 +66,7 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
+    final isOnline = ref.watch(isDeviceOnlineProvider);
     final authUser = ref.watch(authControllerProvider);
 
     return ListTileTheme.merge(
@@ -127,6 +127,7 @@ class _Body extends ConsumerWidget {
                   BoardEditorScreen.buildRoute((
                     initialVariant: Variant.standard,
                     initialFen: null,
+                    initialOrientation: null,
                   )),
                 ),
               ),
@@ -209,7 +210,7 @@ class _AccountSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
+    final isOnline = ref.watch(isDeviceOnlineProvider);
     final account = ref.watch(accountProvider);
     final authUser = ref.watch(authControllerProvider);
     final kidMode = account.value?.kid ?? false;
@@ -230,7 +231,7 @@ class _AccountSection extends ConsumerWidget {
             enabled: isOnline,
             onTap: () {
               ref.invalidate(accountProvider);
-              Navigator.of(context, rootNavigator: true).push(ProfileScreen.buildRoute());
+              Navigator.of(context).push(ProfileScreen.buildRoute());
             },
           ),
           if (!kidMode)
@@ -244,7 +245,7 @@ class _AccountSection extends ConsumerWidget {
               trailing: isIOS ? const CupertinoListTileChevron() : null,
               enabled: isOnline,
               onTap: () {
-                Navigator.of(context, rootNavigator: true).push(ContactsScreen.buildRoute());
+                Navigator.of(context).push(ContactsScreen.buildRoute());
               },
             ),
         ],
@@ -253,7 +254,7 @@ class _AccountSection extends ConsumerWidget {
           title: Text(context.l10n.settingsSettings),
           trailing: isIOS ? const CupertinoListTileChevron() : null,
           onTap: () {
-            Navigator.of(context, rootNavigator: true).push(SettingsScreen.buildRoute());
+            Navigator.of(context).push(SettingsScreen.buildRoute());
           },
         ),
       ],

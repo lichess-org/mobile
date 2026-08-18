@@ -1,6 +1,5 @@
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 
 /// Computes the set of squares that should have an atomic explosion animation
@@ -8,10 +7,10 @@ import 'package:flutter/widgets.dart';
 ///
 /// Returns `null` if [positionBefore] is not an atomic position, [move] is
 /// null, or the move was not a capture (no explosion occurs).
-ISet<Square>? atomicExplosionSquares(Position positionBefore, Move? move) {
+Set<Square>? atomicExplosionSquares(Position positionBefore, Move? move) {
   if (move == null || positionBefore is! Atomic) return null;
   final squareSet = positionBefore.explosionSquares(move);
-  return squareSet.isEmpty ? null : squareSet.squares.toISet();
+  return squareSet.isEmpty ? null : squareSet.squares.toSet();
 }
 
 /// Preload piece images from the specified [PieceSet] into Chessground's image cache.

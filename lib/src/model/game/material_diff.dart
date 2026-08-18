@@ -41,13 +41,17 @@ sealed class MaterialDiff with _$MaterialDiff {
     }
 
     int score = 0;
-    final IMap<Role, int> blackCount = position.board.materialCount(Side.black);
-    final IMap<Role, int> whiteCount = position.board.materialCount(Side.white);
+    final IMap<Role, int> blackCount = position.board.materialCount(Side.black).toIMap();
+    final IMap<Role, int> whiteCount = position.board.materialCount(Side.white).toIMap();
 
     final startingPosition = Position.initialPosition(position.rule);
 
-    final IMap<Role, int> blackStartingCount = startingPosition.board.materialCount(Side.black);
-    final IMap<Role, int> whiteStartingCount = startingPosition.board.materialCount(Side.white);
+    final IMap<Role, int> blackStartingCount = startingPosition.board
+        .materialCount(Side.black)
+        .toIMap();
+    final IMap<Role, int> whiteStartingCount = startingPosition.board
+        .materialCount(Side.white)
+        .toIMap();
 
     IMap<Role, int> subtractPieceCounts(
       IMap<Role, int> startingCount,

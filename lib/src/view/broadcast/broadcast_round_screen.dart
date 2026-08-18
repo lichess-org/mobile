@@ -1,5 +1,4 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
@@ -19,11 +18,14 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_teams_tab.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
+import 'package:material_ui/material_ui.dart';
 
 enum BroadcastRoundTab {
   overview,
@@ -197,35 +199,64 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
             ],
           ),
           actions: [
-            SemanticIconButton(
-              icon: const Icon(Icons.settings),
-              onPressed: () {
-                final games = asyncRound.value.games.values;
-                final allCount = games.length;
-                final ongoingCount = games.where((g) => g.isOngoing).length;
+            if (roundState.isSubscribed case final isSubscribed?)
+              if (_selectedRoundId ?? asyncTournament.value?.defaultRoundId case final roundId?)
+                SemanticIconButton(
+                  icon: Icon(isSubscribed ? Icons.notifications : Icons.notifications_none),
+                  semanticsLabel: isSubscribed ? context.l10n.unsubscribe : context.l10n.subscribe,
+                  onPressed: () async {
+                    try {
+                      await ref
+                          .read(broadcastRoundControllerProvider(roundId).notifier)
+                          .setSubscribed(_selectedTournamentId, !isSubscribed);
+                    } catch (_) {
+                      if (context.mounted) {
+                        showSnackBar(
+                          context,
+                          'Could not update the subscription',
+                          type: SnackBarType.error,
+                        );
+                      }
+                    }
+                  },
+                ),
+            ContextMenuIconButton(
+              icon: const Icon(Icons.more_horiz),
+              semanticsLabel: context.l10n.menu,
+              actions: [
+                ContextMenuAction(
+                  icon: Icons.settings,
+                  label: context.l10n.settingsSettings,
+                  onPressed: () {
+                    final games = asyncRound.value.games.values;
+                    final allCount = games.length;
+                    final ongoingCount = games.where((g) => g.isOngoing).length;
 
-                showModalBottomSheet<void>(
-                  context: context,
-                  isDismissible: true,
-                  isScrollControlled: true,
-                  builder: (_) => _BroadcastSettingsBottomSheet(
-                    filter,
-                    allGamesCount: allCount,
-                    ongoingGamesCount: ongoingCount,
-                    onGameFilterChange: setGameFilter,
+                    showModalBottomSheet<void>(
+                      context: context,
+                      isDismissible: true,
+                      isScrollControlled: true,
+                      builder: (_) => _BroadcastSettingsBottomSheet(
+                        filter,
+                        allGamesCount: allCount,
+                        ongoingGamesCount: ongoingCount,
+                        onGameFilterChange: setGameFilter,
+                      ),
+                    );
+                  },
+                ),
+                ContextMenuAction(
+                  icon: Theme.of(context).platform == TargetPlatform.iOS
+                      ? Icons.ios_share_outlined
+                      : Icons.share_outlined,
+                  label: context.l10n.studyShareAndExport,
+                  onPressed: () => showBroadcastShareMenu(
+                    context,
+                    asyncTournament.value?.data ?? widget.broadcast.tour,
+                    roundState.round,
                   ),
-                );
-              },
-              semanticsLabel: context.l10n.settingsSettings,
-            ),
-            SemanticIconButton(
-              icon: const PlatformShareIcon(),
-              semanticsLabel: context.l10n.studyShareAndExport,
-              onPressed: () => showBroadcastShareMenu(
-                context,
-                asyncTournament.value?.data ?? widget.broadcast.tour,
-                roundState.round,
-              ),
+                ),
+              ],
             ),
           ],
         ),
@@ -249,6 +280,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
                   roundId: _selectedRoundId ?? value.defaultRoundId,
                   tournamentId: _selectedTournamentId,
                   tournamentSlug: value.data.slug,
+                  showTeamScores: value.data.showTeamScores == true,
                 ),
                 _ => const SizedBox.shrink(),
               },
@@ -331,7 +363,7 @@ class _BottomBar extends ConsumerWidget {
               showDragHandle: true,
               isScrollControlled: true,
               isDismissible: true,
-              constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.9),
+              constraints: BoxConstraints(maxHeight: MediaQuery.heightOf(context) * 0.9),
               builder: (_) => DraggableScrollableSheet(
                 initialChildSize: 0.4,
                 snap: true,
@@ -358,7 +390,7 @@ class _BottomBar extends ConsumerWidget {
             showDragHandle: true,
             isScrollControlled: true,
             isDismissible: true,
-            constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.9),
+            constraints: BoxConstraints(maxHeight: MediaQuery.heightOf(context) * 0.9),
             builder: (_) => DraggableScrollableSheet(
               initialChildSize: 0.6,
               snap: true,

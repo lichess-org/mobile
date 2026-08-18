@@ -113,6 +113,47 @@
 			</array>
 		</dict>
 	</array>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Chess PGN</string>
+			<key>LSHandlerRank</key>
+			<string>Default</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.lichess.pgn</string>
+			</array>
+		</dict>
+	</array>
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>org.lichess.pgn</string>
+			<key>UTTypeDescription</key>
+			<string>Chess PGN</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.plain-text</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>pgn</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/x-chess-pgn</string>
+					<string>application/vnd.chess-pgn</string>
+					<string>text/x-chess-pgn</string>
+				</array>
+			</dict>
+		</dict>
+	</array>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>FlutterDeepLinkingEnabled</key>
@@ -126,7 +167,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Photo Library Access Warning</string>
+	<string>Lichess needs access to your photo library so you can pick one of your own photos to use as a custom background for the app. For example, you can choose a photo from your library and it will be displayed behind the chessboard and menus. The photo you select stays on this device and is never uploaded.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>
@@ -154,6 +195,8 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>FirebaseMessagingAutoInitEnabled</key>
+	<false/>
+	<key>GCSupportsGameMode</key>
 	<false/>
 </dict>
 </plist>

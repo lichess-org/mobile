@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -10,8 +9,9 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
+import 'package:material_ui/material_ui.dart';
 
-const _kDefaultBroadcastImage = AssetImage('assets/images/broadcast_image.png');
+const _kDefaultBroadcastImage = AssetImage('assets/images/broadcast_image.webp');
 const _kHandsetThumbnailSize = 80.0;
 const _kTabletThumbnailSize = 250.0;
 
@@ -233,7 +233,7 @@ class _BroadcastNextPageTileState extends State<BroadcastNextPageTile> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: null,
+      future: nextPageFuture,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           if (kDebugMode) {

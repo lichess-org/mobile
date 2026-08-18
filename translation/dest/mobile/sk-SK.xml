@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="accountPreferences" comment="Displayed on settings screen.&#10;&#10;These preferences are applied to your Lichess account and will be used across all devices. They are not mobile-specific and will be synced with the server.">Preferencie účtu</string>
+  <string name="account" comment="The account screen title.">Účet</string>
+  <string name="accountPreferences" comment="Displayed on settings screen. This is for preferences synced with website on the server.">Preferencie účtu</string>
   <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">Tieto preferencie sa použijú na Vaše konto Lichess a budú sa používať vo všetkých zariadeniach.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Všetky partie</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Ste si istý?</string>
@@ -18,6 +19,7 @@
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Domov</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Vysielajúci strímeri</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Na zobrazenie tejto stránky musíte byť prihlásený.</string>
+  <string name="newGame" comment="New game button in OTB and play against offline computer features">Nová hra</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Nič sa nenašlo</string>
   <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Upozorňujeme, že v súčasnosti nie sú k dispozícii všetky funkcie zo starej aplikácie alebo webstránky. Funkcie však neustále pridávame.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Nesledujete žiadnych užívateľov.</string>
@@ -75,4 +77,18 @@
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Čaká sa na pripojenie súpera...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Sledovať</string>
   <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">Vitajte v Lichess aplikácii!</string>
+  <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">Zobraziť hru</string>
+  <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">Tip: Na domovskú obrazovku môžete pridať ďalšie widgety alebo odstrániť tie, ktoré nepotrebujete!</string>
+  <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">Zrušiť</string>
+  <string name="customizeButton" comment="Text of a button, so translation should be short.">Prispôsobiť</string>
+  <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">Zrušiť zobrazovanie hrozieb</string>
+  <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word">Ukončený</string>
+  <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">Prejsť na moju stránku</string>
+  <string name="displayModeCompact" comment="">Kompaktný</string>
+  <string name="displayModeDetailed" comment="">Detailný</string>
+  <string name="openingExplorerNotAvailableOffline" comment="">Prieskumník otvorení nie je k dispozícii v režime offline.</string>
+  <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">Výzva vytvorená: Budete upozornení po začatí partie.\nPrístup k nej nájdete na domovskej karte.</string>
+  <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Predchádzajúca</string>
+  <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">Alebo nahrajte súbor PGN</string>
+  <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">Dobrý ťah, ale existuje aj lepší</string>
 </resources>

@@ -1,7 +1,6 @@
 import 'package:chessground/chessground.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -30,6 +29,7 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:share_plus/share_plus.dart';
 
 class BoardEditorScreen extends ConsumerWidget {
@@ -143,10 +143,12 @@ class _BoardEditor extends ConsumerWidget {
       size: boardSize,
       pieces: pieces,
       orientation: orientation,
-      settings: boardPrefs.toBoardSettings().copyWith(
-        borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
-        boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
-      ),
+      settings: boardPrefs
+          .toBoardSettings(editorState.variant)
+          .copyWith(
+            borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
+            boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
+          ),
       pointerMode: editorState.editorPointerMode,
       onDiscardedPiece: (Square square) =>
           ref.read(boardEditorControllerProvider(params).notifier).discardPiece(square),
@@ -385,7 +387,7 @@ class _BottomBar extends ConsumerWidget {
               BottomSheetAction(
                 makeLabel: (context) => Text(context.l10n.clearBoard),
                 onPressed: () {
-                  ref.read(editorController.notifier).loadFen(kEmptyFEN);
+                  ref.read(editorController.notifier).clearBoard();
                 },
               ),
             ],
@@ -428,7 +430,7 @@ class _BottomBar extends ConsumerWidget {
             context: context,
             builder: (BuildContext context) => BoardEditorFilters(params: params),
             showDragHandle: true,
-            constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height * 0.5),
+            constraints: BoxConstraints(minHeight: MediaQuery.heightOf(context) * 0.5),
           ),
           icon: Icons.tune,
         ),

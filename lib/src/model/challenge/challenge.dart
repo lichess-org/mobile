@@ -54,6 +54,7 @@ sealed class Challenge with _$Challenge, BaseChallenge implements BaseChallenge 
     ChallengeDeclineReason? declineReason,
     String? initialFen,
     ChallengeDirection? direction,
+    GameId? rematchOf,
   }) = _Challenge;
 
   factory Challenge.fromJson(Map<String, dynamic> json) => _$ChallengeFromJson(json);
@@ -67,7 +68,7 @@ sealed class Challenge with _$Challenge, BaseChallenge implements BaseChallenge 
   /// The description of the challenge.
   String description(AppLocalizations l10n) {
     if (!variant.isPlaySupported) {
-      return l10n.mobileUnsupportedVariant(variant.label);
+      return l10n.mobileUnsupportedVariant(variant.label(l10n));
     }
 
     final time = switch (timeControl) {
@@ -85,7 +86,7 @@ sealed class Challenge with _$Challenge, BaseChallenge implements BaseChallenge 
       ChallengeTimeControlType.unlimited => '∞',
     };
 
-    final variantStr = variant == Variant.standard ? '' : ' • ${variant.label}';
+    final variantStr = variant == Variant.standard ? '' : ' • ${variant.label(l10n)}';
 
     final sidePiece = sideChoice == SideChoice.black
         ? '♔ '
@@ -424,5 +425,6 @@ Challenge _challengeFromPick(RequiredPick pick) {
     initialFen: pick('initialFen').asStringOrNull(),
     direction: pick('direction').asChallengeDirectionOrNull(),
     declineReason: pick('declineReasonKey').asDeclineReasonOrNull(),
+    rematchOf: pick('rematchOf').asGameIdOrNull(),
   );
 }

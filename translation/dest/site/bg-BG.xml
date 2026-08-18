@@ -943,6 +943,7 @@
   <string name="tryTheContactPage">опитайте страницата за контакти</string>
   <string name="makeSureToRead">Моля прочетете %1$s</string>
   <string name="theForumEtiquette">правилата за етикет на форума</string>
+  <string name="pleaseBeNiceInTheForum">Моля бъдете учтиви във форума.</string>
   <string name="thisTopicIsArchived">Тази тема е архивирана и не може да получава повече мнения.</string>
   <string name="joinTheTeamXToPost">Присъединете се към %1$s, за да публикувате в този форум</string>
   <string name="teamNamedX">отбора %1$s</string>
@@ -955,7 +956,6 @@
   <string name="xInvitedYouToY">%1$s Ви покани на \"%2$s\".</string>
   <string name="youAreNowPartOfTeam">Сега сте в отбора.</string>
   <string name="youHaveJoinedTeamX">Присъединихте се към \"%1$s\".</string>
-  <string name="someoneYouReportedWasBanned">Някого когото сте докладвали беше блокиран</string>
   <string name="congratsYouWon">Поздравления, спечелихте!</string>
   <string name="gameVsX">Партия срещу %1$s</string>
   <string name="resVsX">%1$s срещу %2$s</string>
@@ -1009,7 +1009,6 @@
   <string name="gameInProgress">Имате текуща игра с %s.</string>
   <string name="abortTheGame">Прекъсване на играта</string>
   <string name="resignTheGame">Предаване</string>
-  <string name="youCantStartNewGame">Не можете да започнете нова игра преди тази да е приключила.</string>
   <string name="since">От</string>
   <string name="until">До</string>
   <string name="lichessDbExplanation">Игри с рейтинг измежду всички Lichess играчи</string>

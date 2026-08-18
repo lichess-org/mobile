@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
+import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/engine_settings_widget.dart';
@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/view/explorer/opening_explorer_settings.dart'
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
+import 'package:material_ui/material_ui.dart';
 
 class AnalysisSettingsScreen extends ConsumerWidget {
   const AnalysisSettingsScreen(this.options);
@@ -24,6 +25,7 @@ class AnalysisSettingsScreen extends ConsumerWidget {
     final ctrlProvider = analysisControllerProvider(options);
     final prefs = ref.watch(analysisPreferencesProvider);
     final asyncState = ref.watch(ctrlProvider);
+    final isSoundEnabled = ref.watch(generalPreferencesProvider).isSoundEnabled;
 
     switch (asyncState) {
       case AsyncData(:final value):
@@ -34,10 +36,30 @@ class AnalysisSettingsScreen extends ConsumerWidget {
               ListSection(
                 children: [
                   SwitchSettingTile(
+                    title: Text(context.l10n.sound),
+                    value: isSoundEnabled,
+                    onChanged: (value) {
+                      ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled();
+                    },
+                  ),
+                  SwitchSettingTile(
                     title: Text(context.l10n.inlineNotation),
                     value: prefs.inlineNotation,
                     onChanged: (value) =>
                         ref.read(analysisPreferencesProvider.notifier).toggleInlineNotation(),
+                  ),
+                  SwitchSettingTile(
+                    // TODO: l10n
+                    title: const Text('Show engine lines'),
+                    value: prefs.showEngineLines,
+                    onChanged: (value) =>
+                        ref.read(analysisPreferencesProvider.notifier).toggleShowEngineLines(),
+                  ),
+                  SwitchSettingTile(
+                    title: const Text('Small board'), // TODO l10n
+                    value: prefs.smallBoard,
+                    onChanged: (value) =>
+                        ref.read(analysisPreferencesProvider.notifier).toggleSmallBoard(),
                   ),
                   ListTile(
                     title: Text(context.l10n.openingExplorer),

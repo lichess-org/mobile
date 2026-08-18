@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
@@ -25,6 +24,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
+import 'package:material_ui/material_ui.dart';
 
 class CreateChallengeBottomSheet extends ConsumerStatefulWidget {
   const CreateChallengeBottomSheet({this.user, this.positionFen});
@@ -247,7 +247,7 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
                     },
                   );
                 },
-                child: Text(preferences.variant.label),
+                child: Text(preferences.variant.label(context.l10n)),
               ),
             ),
             ExpandedSection(

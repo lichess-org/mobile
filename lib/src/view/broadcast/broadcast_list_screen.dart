@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
@@ -12,6 +11,7 @@ import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
+import 'package:material_ui/material_ui.dart';
 
 enum _BroadcastFilter {
   all,
@@ -59,7 +59,7 @@ class _BroadcastListScreenState extends State<BroadcastListScreen> {
       onPressed: () => showModalBottomSheet<void>(
         context: context,
         isScrollControlled: true,
-        constraints: BoxConstraints(minHeight: MediaQuery.sizeOf(context).height * 0.4),
+        constraints: BoxConstraints(minHeight: MediaQuery.heightOf(context) * 0.4),
         builder: (_) => StatefulBuilder(
           builder: (context, setLocalState) {
             return BottomSheetScrollableContainer(
@@ -84,10 +84,14 @@ class _BroadcastListScreenState extends State<BroadcastListScreen> {
       ),
     );
 
+    final appBarBackground = ColorScheme.of(context).surfaceContainerHigh.withValues(alpha: 1);
+
     return Scaffold(
       body: _Body(filter),
       appBar: AppBar(
-        backgroundColor: ColorScheme.of(context).surfaceContainerHigh.withValues(alpha: 1),
+        backgroundColor: appBarBackground,
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
         title: title,
         actions: [searchButton, filterButton],
       ),
@@ -136,6 +140,7 @@ class _Body extends ConsumerWidget {
                           backgroundColor: ColorScheme.of(
                             context,
                           ).surfaceContainerHigh.withValues(alpha: 1),
+                          scrolledUnderElevation: 0,
                           automaticallyImplyLeading: false,
                           primary: false,
                           title: AppBarTitleText(section.$2),

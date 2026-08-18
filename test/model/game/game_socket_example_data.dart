@@ -93,8 +93,8 @@ String makeFullEvent(
       "id": "$id",
         "variant": {
           "key": "${variant?.name ?? 'standard'}",
-          "name": "${variant?.label ?? 'Standard'}",
-          "short": "${variant?.label ?? 'Std'}"
+          "name": "${variant?.pgnName ?? 'Standard'}",
+          "short": "${variant?.pgnName ?? 'Std'}"
         },
         "speed": "${clock != null ? 'blitz' : 'correspondence'}",
         "perf": "${clock != null ? 'blitz' : 'correspondence'}",

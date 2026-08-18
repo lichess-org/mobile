@@ -1,5 +1,4 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
@@ -13,6 +12,7 @@ import 'package:lichess_mobile/src/view/user/game_history_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/rating.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
+import 'package:material_ui/material_ui.dart';
 
 final _dateFormatter = DateFormat.yMMMd();
 
@@ -84,7 +84,7 @@ class UserActivityEntry extends ConsumerWidget {
               leading: Icon(gameEntry.key.icon, size: leadingIconSize),
               title: context.l10n.activityPlayedNbGames(
                 gameEntry.value.win + gameEntry.value.draw + gameEntry.value.loss,
-                gameEntry.key.title,
+                gameEntry.key.label(context.l10n),
               ),
               subtitle: RatingPrefAware(
                 child: Row(
@@ -192,7 +192,7 @@ class UserActivityEntry extends ConsumerWidget {
                       corresEndEntry.value.win +
                           corresEndEntry.value.draw +
                           corresEndEntry.value.loss,
-                      corresEndEntry.key.title,
+                      corresEndEntry.key.label(context.l10n),
                     ),
               subtitle: emptySubtitle,
               trailing: BriefGameResultBox(

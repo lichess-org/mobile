@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -16,6 +15,7 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/explorer/opening_explorer_screen.dart';
 import 'package:lichess_mobile/src/view/more/more_tab_screen.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../network/fake_http_client_factory.dart';
 import '../../test_helpers.dart';
@@ -205,7 +205,7 @@ void main() {
       await tester.pumpAndSettle(); // wait for analysis screen to open
 
       await playMove(tester, 'e2', 'e4');
-      expect(find.byKey(const ValueKey('e4-whitepawn')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.e4, Piece.whitePawn), isTrue);
 
       // Go back to "more" screen and open opening explorer
       await tester.pageBack();
@@ -215,12 +215,12 @@ void main() {
       await tester.pumpAndSettle(); // wait for opening explorer screen to open
 
       // Should not use saved standalone analysis here
-      expect(find.byKey(const ValueKey('e2-whitepawn')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.e2, Piece.whitePawn), isTrue);
 
       // There was a bug where the opening explorer would partially load saved analysis,
       // leading to not being to move any pieces.
       await playMove(tester, 'd2', 'd4');
-      expect(find.byKey(const ValueKey('d4-whitepawn')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.d4, Piece.whitePawn), isTrue);
     });
   });
 }

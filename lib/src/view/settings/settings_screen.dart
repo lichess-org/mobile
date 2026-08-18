@@ -1,6 +1,5 @@
 import 'package:app_settings/app_settings.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:flutter_riverpod/experimental/mutation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
@@ -28,6 +27,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsScreen extends ConsumerWidget {
@@ -39,7 +39,7 @@ class SettingsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
+    final isOnline = ref.watch(isDeviceOnlineProvider);
     final generalPrefs = ref.watch(generalPreferencesProvider);
     final packageInfo = ref.read(preloadedDataProvider).requireValue.packageInfo;
     final authUser = ref.watch(authControllerProvider);
@@ -148,7 +148,7 @@ class SettingsScreen extends ConsumerWidget {
                   if (Theme.of(context).platform == TargetPlatform.android) {
                     showChoicePicker<Locale>(
                       context,
-                      choices: AppLocalizations.supportedLocales,
+                      choices: localesSortedByLocalizedName(AppLocalizations.supportedLocales),
                       selectedItem: generalPrefs.locale ?? Localizations.localeOf(context),
                       labelBuilder: (t) => Text(localeToLocalizedName(t)),
                       onSelectedItemChanged: (Locale? locale) =>

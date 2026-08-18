@@ -1,143 +1,171 @@
-import 'dart:async';
-import 'dart:convert';
-import 'dart:math';
-
-import 'package:crypto/crypto.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/auth/auth_user.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
-import 'package:lichess_mobile/src/model/auth/oauth_callback.dart';
+import 'package:lichess_mobile/src/model/auth/sign_in_failure_reporter.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:logging/logging.dart';
-import 'package:url_launcher/url_launcher.dart';
 
-const kLichessUriScheme = 'org.lichess.mobile';
-const kOAuthRedirectUriHost = 'login-callback';
-const kOAuthRedirectUri = '$kLichessUriScheme://$kOAuthRedirectUriHost';
+/// Host of the custom URI scheme callback. Must stay in sync with the
+/// intent-filter for `net.openid.appauth.RedirectUriReceiverActivity` in
+/// `android/app/src/main/AndroidManifest.xml` and the `CFBundleURLSchemes` entry in `ios/Runner/Info.plist`.
+const _kOAuthCustomSchemeCallbackHost = 'login-callback';
+
+/// The custom URI scheme redirect for OAuth.
+///
+/// Custom schemes are more universally supported across Android browsers/OEMs than
+/// HTTPS App Link redirects, so they are used on every platform and host.
+const kOAuthRedirectUri = '$kLichessCustomUriSchemeName://$_kOAuthCustomSchemeCallbackHost';
 const oauthScopes = ['web:mobile'];
 
+/// Thrown when the user dismisses the OAuth session before completing it.
+///
+/// This is distinct from a genuine sign-in failure: the UI should silently
+/// ignore it rather than surfacing an error.
+class SignInCancelledException implements Exception {
+  const SignInCancelledException();
+
+  @override
+  String toString() => 'Sign-in was cancelled.';
+}
+
+/// Thrown when the server rate-limits one of the email login requests (429).
+class EmailLoginRateLimitException implements Exception {
+  const EmailLoginRateLimitException();
+
+  @override
+  String toString() => 'Too many email login requests.';
+}
+
+/// Thrown when the submitted login code is unknown, expired, or already used (404).
+class InvalidEmailLoginCodeException implements Exception {
+  const InvalidEmailLoginCodeException();
+
+  @override
+  String toString() => 'Invalid or expired email login code.';
+}
+
+/// A provider for [FlutterAppAuth].
+final appAuthProvider = Provider<FlutterAppAuth>((Ref ref) {
+  return const FlutterAppAuth();
+}, name: 'AppAuthProvider');
+
 final authRepositoryProvider = Provider<AuthRepository>((Ref ref) {
-  return AuthRepository(ref);
+  final appAuth = ref.read(appAuthProvider);
+  return AuthRepository(ref, appAuth);
 }, name: 'AuthRepositoryProvider');
 
 class AuthRepository {
-  AuthRepository(Ref ref) : _ref = ref;
+  AuthRepository(Ref ref, FlutterAppAuth appAuth) : _ref = ref, _appAuth = appAuth;
 
   final Ref _ref;
   final Logger _log = Logger('AuthRepository');
-  final _random = Random.secure();
+  final FlutterAppAuth _appAuth;
 
   LichessClient get _client => _ref.read(lichessClientProvider);
 
-  /// Sign in with Lichess using OAuth 2.0 PKCE.
-  ///
-  /// Opens an in-app browser (or fallback to the system default browser) to the Lichess
-  /// authorization page.
-  /// After the user authorizes, the browser redirects to [kOAuthRedirectUri] which
-  /// is caught by the app links handler and forwarded to [oauthCallbackProvider].
+  /// Sign in with Lichess using OAuth 2.0 PKCE using the system browser.
   Future<AuthUser> signIn() async {
-    final codeVerifier = _generateCodeVerifier();
-    final codeChallenge = _generateCodeChallenge(codeVerifier);
-    final state = _generateState();
-
-    final authUrl = lichessUri('/oauth').replace(
-      queryParameters: {
-        'response_type': 'code',
-        'client_id': kLichessClientId,
-        'redirect_uri': kOAuthRedirectUri,
-        'scope': oauthScopes.join(' '),
-        'code_challenge': codeChallenge,
-        'code_challenge_method': 'S256',
-        'state': state,
-      },
-    );
-
-    final launched = await launchUrl(authUrl, mode: .inAppBrowserView);
-    if (!launched) {
-      throw Exception('Could not open browser for authentication.');
-    }
-
-    final callbackCompleter = Completer<Uri>();
-
-    // Listen for the redirect callback URI from the browser.
-    // Mismatched URIs (stale callbacks, unrelated deep links) are silently ignored and the listener
-    // keeps waiting.
-    final callbackSub = _ref
-        .read(oauthCallbackProvider)
-        .stream
-        .listen(
-          (uri) {
-            if (!callbackCompleter.isCompleted &&
-                uri.scheme == kLichessUriScheme &&
-                uri.host == kOAuthRedirectUriHost &&
-                uri.queryParameters['state'] == state) {
-              callbackCompleter.complete(uri);
-            }
-          },
-          onError: (Object error) {
-            if (!callbackCompleter.isCompleted) {
-              callbackCompleter.completeError(error);
-            }
-          },
-        );
-
-    // Cancel the flow when the user dismisses the browser without completing auth. When a redirect
-    // succeeds, the callback URI arrives in Dart before (or very shortly after) the resumed
-    // lifecycle event — a short delay prevents a false cancellation in the success path.
-    final lifecycleListener = AppLifecycleListener(
-      onResume: () => Future<void>.delayed(const Duration(milliseconds: 300), () {
-        if (!callbackCompleter.isCompleted) {
-          callbackCompleter.completeError(Exception('Sign-in was cancelled.'));
-        }
-      }),
-    );
-
-    final Uri callbackUri;
+    final AuthorizationTokenResponse authResp;
     try {
-      callbackUri = await callbackCompleter.future.timeout(const Duration(minutes: 5));
-    } finally {
-      // Dismiss the in-app browser in all cases (no-op if already closed).
-      unawaited(closeInAppWebView());
-      unawaited(callbackSub.cancel());
-      lifecycleListener.dispose();
+      authResp = await _appAuth.authorizeAndExchangeCode(
+        AuthorizationTokenRequest(
+          kLichessClientId,
+          kOAuthRedirectUri,
+          allowInsecureConnections: kDebugMode,
+          serviceConfiguration: AuthorizationServiceConfiguration(
+            authorizationEndpoint: lichessUri('/oauth').toString(),
+            tokenEndpoint: lichessUri('/api/token').toString(),
+          ),
+          scopes: oauthScopes,
+        ),
+      );
+    } on FlutterAppAuthUserCancelledException {
+      throw const SignInCancelledException();
+    } catch (e, st) {
+      await reportSignInFailure(_ref, e, st);
+      rethrow;
     }
-
-    final error = callbackUri.queryParameters['error'];
-    if (error != null) {
-      final errorDescription = callbackUri.queryParameters['error_description'];
-      final message = errorDescription != null
-          ? 'OAuth error: $error - $errorDescription'
-          : 'OAuth error: $error';
-      throw Exception(message);
-    }
-
-    final code = callbackUri.queryParameters['code'];
-    if (code == null) {
-      throw Exception('Authorization code not found.');
-    }
-
-    final tokenResponse = await _client.postReadJson(
-      Uri(path: '/api/token'),
-      body: {
-        'grant_type': 'authorization_code',
-        'code': code,
-        'code_verifier': codeVerifier,
-        'redirect_uri': kOAuthRedirectUri,
-        'client_id': kLichessClientId,
-      },
-      mapper: (json) => json,
-    );
 
     _log.fine('Got OAuth token response');
 
-    final token = tokenResponse['access_token'] as String?;
+    final token = authResp.accessToken;
     if (token == null) {
       throw Exception('Access token not found.');
     }
 
+    return _fetchAuthUser(token);
+  }
+
+  /// Asks lichess to email a 6 character login code for the [username] account to [email].
+  ///
+  /// Throws an [EmailLoginRateLimitException] if the request is rate-limited.
+  Future<void> requestEmailLoginCode({required String username, required String email}) async {
+    final url = lichessUri('/auth/mobile-code/email', {'email': email, 'username': username});
+    // The default client is used on purpose: this endpoint is unauthenticated, and its 429 responses
+    // are deliberate rate limiting that must not be retried like [lichessClientProvider] does.
+    final response = await _ref.read(defaultClientProvider).post(url);
+
+    if (response.statusCode == 429) {
+      throw const EmailLoginRateLimitException();
+    }
+    if (response.statusCode >= 400) {
+      throw ServerException(
+        response.statusCode,
+        'Could not request an email login code: ${response.statusCode}',
+        url,
+        null,
+      );
+    }
+  }
+
+  /// Exchanges the login [code] received by [email] for an OAuth token on the [username] account,
+  /// and fetches the account it belongs to.
+  ///
+  /// Throws an [InvalidEmailLoginCodeException] if the code is unknown, expired, or already used,
+  /// and an [EmailLoginRateLimitException] if the request is rate-limited.
+  Future<AuthUser> signInWithEmailCode({
+    required String username,
+    required String email,
+    required String code,
+  }) async {
+    final url = lichessUri('/auth/mobile-code/bearer', {
+      'email': email,
+      'username': username,
+      'code': code,
+    });
+    final response = await _ref.read(defaultClientProvider).post(url);
+
+    switch (response.statusCode) {
+      case 429:
+        throw const EmailLoginRateLimitException();
+      case 404:
+        throw const InvalidEmailLoginCodeException();
+    }
+    if (response.statusCode >= 400) {
+      throw ServerException(
+        response.statusCode,
+        'Could not exchange the email login code: ${response.statusCode}',
+        url,
+        null,
+      );
+    }
+
+    final token = response.body.trim();
+    if (token.isEmpty) {
+      throw Exception('Access token not found.');
+    }
+
+    _log.fine('Got a token from the email login code');
+
+    return _fetchAuthUser(token);
+  }
+
+  /// Fetches the account owning [token] and pairs it with the token.
+  Future<AuthUser> _fetchAuthUser(String token) async {
     final user = await _client.readJson(
       Uri(path: '/api/account'),
       headers: {'Authorization': 'Bearer ${signBearerToken(token)}'},
@@ -158,20 +186,5 @@ class AuthRepository {
         .postReadJson(lichessUri('/api/token/test'), mapper: (json) => json, body: authUser.token)
         .timeout(const Duration(seconds: 5));
     return data[authUser.token] != null;
-  }
-
-  String _generateCodeVerifier() {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
-    return List.generate(64, (_) => chars[_random.nextInt(chars.length)]).join();
-  }
-
-  String _generateCodeChallenge(String codeVerifier) {
-    final digest = sha256.convert(utf8.encode(codeVerifier));
-    return base64Url.encode(digest.bytes).replaceAll('=', '');
-  }
-
-  String _generateState() {
-    final bytes = List<int>.generate(16, (_) => _random.nextInt(256));
-    return base64Url.encode(bytes).replaceAll('=', '');
   }
 }

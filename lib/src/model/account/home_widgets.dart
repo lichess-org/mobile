@@ -4,6 +4,7 @@ import 'package:lichess_mobile/l10n/l10n.dart';
 enum HomeEditableWidget {
   hello(false),
   perfCards(false),
+  friends(false),
   ongoingGames(true),
   blogCarousel(false),
   quickPairing(false),
@@ -14,6 +15,7 @@ enum HomeEditableWidget {
     HomeEditableWidget.ongoingGames => 'Ongoing Games',
     HomeEditableWidget.hello => 'Hello',
     HomeEditableWidget.perfCards => 'Performance Cards',
+    HomeEditableWidget.friends => l10n.friends,
     HomeEditableWidget.quickPairing => l10n.quickPairing,
     HomeEditableWidget.featuredTournaments => l10n.openTournaments,
     HomeEditableWidget.recentGames => l10n.recentGames,

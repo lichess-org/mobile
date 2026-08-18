@@ -1,6 +1,5 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
@@ -9,6 +8,7 @@ import 'package:lichess_mobile/src/model/explorer/opening_explorer_preferences.d
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/user/search_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:material_ui/material_ui.dart';
 
 class OpeningExplorerSettings extends ConsumerWidget {
   const OpeningExplorerSettings();
@@ -49,7 +49,7 @@ class OpeningExplorerSettings extends ConsumerWidget {
                     String.fromCharCode(speed.icon.codePoint),
                     style: TextStyle(fontFamily: speed.icon.fontFamily, fontSize: 18.0),
                   ),
-                  tooltip: Perf.fromVariantAndSpeed(Variant.standard, speed).title,
+                  tooltip: Perf.fromVariantAndSpeed(Variant.standard, speed).label(context.l10n),
                   selected: prefs.lichessDb.speeds.contains(speed),
                   onSelected: (_) => ref
                       .read(openingExplorerPreferencesProvider.notifier)
@@ -159,7 +159,7 @@ class OpeningExplorerSettings extends ConsumerWidget {
                     String.fromCharCode(speed.icon.codePoint),
                     style: TextStyle(fontFamily: speed.icon.fontFamily, fontSize: 18.0),
                   ),
-                  tooltip: Perf.fromVariantAndSpeed(Variant.standard, speed).title,
+                  tooltip: Perf.fromVariantAndSpeed(Variant.standard, speed).label(context.l10n),
                   selected: prefs.playerDb.speeds.contains(speed),
                   onSelected: (_) => ref
                       .read(openingExplorerPreferencesProvider.notifier)

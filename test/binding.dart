@@ -78,6 +78,13 @@ class TestLichessBinding extends LichessBinding {
     return _sharedPreferences ??= FakeSharedPreferences();
   }
 
+  /// Replaces the shared preferences fake, to test how a slow write behaves.
+  ///
+  /// Must be called before anything reads [sharedPreferences]. Reset by [reset].
+  set sharedPreferences(FakeSharedPreferences prefs) {
+    _sharedPreferences = prefs;
+  }
+
   /// Reset the binding instance.
   ///
   /// Should be called using [addTearDown] in tests.
@@ -233,11 +240,22 @@ class FakeFirebaseCrashlytics extends Fake implements FirebaseCrashlytics {
     bool? printDetails,
     bool fatal = false,
   }) async {}
+
+  @override
+  Future<void> setCustomKey(String key, Object value) async {}
 }
 
 class FakeFirebaseMessaging extends Fake implements FirebaseMessaging {
   /// Whether [requestPermission] will grant permission.
   bool _willGrantPermission = true;
+
+  /// Whether [setAutoInitEnabled] was last called with `true`.
+  bool autoInitEnabled = false;
+
+  @override
+  Future<void> setAutoInitEnabled(bool enabled) async {
+    autoInitEnabled = enabled;
+  }
 
   /// Set whether [requestPermission] will grant permission.
   // ignore: avoid_setters_without_getters
@@ -333,7 +351,7 @@ class FakeFirebaseMessaging extends Fake implements FirebaseMessaging {
   final StreamController<String> _tokenController = StreamController<String>.broadcast();
 
   @override
-  Future<String?> getToken({String? vapidKey}) async {
+  Future<String?> getToken({String? serviceWorkerScriptPath, String? vapidKey}) async {
     assert(vapidKey == null);
     return _token;
   }
@@ -363,4 +381,22 @@ class FakeFirebaseMessaging extends Fake implements FirebaseMessaging {
   /// Call [StreamController.add] to simulate a message received from FCM while
   /// the application is in background.
   StreamController<RemoteMessage> onBackgroundMessage = StreamController.broadcast();
+}
+
+/// A [FakeSharedPreferences] whose writes complete on the event queue, like the
+/// real ones do: [SharedPreferencesWithCache] goes through a platform channel,
+/// so its futures never complete in a microtask.
+///
+/// Use it to check that code awaiting a preference write actually observes the
+/// new value. Set [writeDelay] to exaggerate the latency.
+class SlowFakeSharedPreferences extends FakeSharedPreferences {
+  SlowFakeSharedPreferences({this.writeDelay = Duration.zero});
+
+  final Duration writeDelay;
+
+  @override
+  Future<bool> setString(String key, String value) async {
+    await Future<void>.delayed(writeDelay);
+    return super.setString(key, value);
+  }
 }

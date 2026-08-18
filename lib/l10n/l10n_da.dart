@@ -70,6 +70,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Du skal være logget ind for at se denne side.';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline opgaver';
+
+  @override
   String get mobileNewGame => 'Nyt parti';
 
   @override
@@ -287,31 +290,112 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Eller importer en PGN-fil';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Godt træk, men der findes et bedre';
+
+  @override
+  String get mobilePerfShortUltraBullet => 'Ultra';
+
+  @override
+  String get mobilePerfShortBullet => 'Bullet';
+
+  @override
+  String get mobilePerfShortBlitz => 'Lyn';
+
+  @override
+  String get mobilePerfShortRapid => 'Hurtig';
+
+  @override
+  String get mobilePerfShortClassical => 'Klassisk';
+
+  @override
+  String get mobilePerfShortCorrespondence => 'Korresp.';
+
+  @override
+  String get mobilePerfShortFromPosition => 'Fra pos.';
+
+  @override
+  String get mobilePerfShortChess960 => '960';
+
+  @override
+  String get mobilePerfShortAntichess => 'Antiskak';
+
+  @override
+  String get mobilePerfShortKingOfTheHill => 'KotH';
+
+  @override
+  String get mobilePerfShortThreeCheck => '3skak';
+
+  @override
+  String get mobilePerfShortAtomic => 'Atom';
+
+  @override
+  String get mobilePerfShortHorde => 'Horde';
+
+  @override
+  String get mobilePerfShortRacingKings => 'Racing';
+
+  @override
+  String get mobilePerfShortCrazyhouse => 'Crazy';
+
+  @override
+  String get mobilePerfShortPuzzle => 'Puzzle';
+
+  @override
+  String get variantStandard => 'Standard';
+
+  @override
   String get variantStandardTitle => 'Standardregler for skak (FIDE)';
+
+  @override
+  String get variantChess960 => 'Skak960';
 
   @override
   String get variantChess960Title => 'Startopstillingen af den bageste rækkes brikker er tilfældig.';
 
   @override
+  String get variantKingOfTheHill => 'Kongen i centrum';
+
+  @override
   String get variantKingOfTheHillTitle => 'Få din konge ind i centrum for at vinde partiet.';
+
+  @override
+  String get variantThreeCheck => 'Tre-skak';
 
   @override
   String get variantThreeCheckTitle => 'Sæt din modstander skak 3 gange for at vinde partiet.';
 
   @override
+  String get variantAntichess => 'Antiskak';
+
+  @override
   String get variantAntichessTitle => 'Du vinder partiet ved at miste alle dine brikker (eller blive pat).';
+
+  @override
+  String get variantAtomic => 'Eksplosion';
 
   @override
   String get variantAtomicTitle => 'Spring din modstanders konge i luften for at vinde.';
 
   @override
+  String get variantHorde => 'Horde';
+
+  @override
   String get variantHordeTitle => 'Den ene side har et stort antal bønder, den anden har en normal hær.';
+
+  @override
+  String get variantRacingKings => 'Kongeløb';
 
   @override
   String get variantRacingKingsTitle => 'Få din konge til den anden side af brættet for at vinde.';
 
   @override
+  String get variantCrazyhouse => 'Galehus';
+
+  @override
   String get variantCrazyhouseTitle => 'Erobrede brikker kan genindsættes på brættet i stedet for at foretage et træk.';
+
+  @override
+  String get variantFromPosition => 'Fra stilling';
 
   @override
   String get variantFromPositionTitle => 'Standard skak fra en brugerdefineret position';
@@ -683,6 +767,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get arenaRankAvgHelp => 'Den gennemsnitlige rangering er en procentdel af din rangering. Lavere er bedre.\n\nEksempelvis er en rangering som nummer 3 i en turnering med 100 spillere = 3%. At være rangeret som nummer 10 i en turnering med 1000 spillere = 1%.';
 
   @override
+  String get arenaRankAverageHelp => 'Dit ranggennemsnit repræsenterer din typiske slutplacering i forhold til det samlede antal spillere i hver turnering.\nDette er et mål for din placering i turneringen, ikke din generelle rating.\n\nEt ranggennemsnit på 3 % betyder for eksempel, at du typisk ender blandt de øverste 3 % (f.eks. på 30. pladsen ud af 1.000 spillere).';
+
+  @override
   String get arenaMedians => 'medianer';
 
   @override
@@ -840,6 +927,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get broadcastDefinitivelyDeleteTournament => 'Slet hele turneringen, alle dens runder og alle dens partier.';
 
   @override
+  String get broadcastPermanentlyDeleteTournament => 'Slet denne turnering permanent, herunder alle runder og partier?';
+
+  @override
   String get broadcastShowScores => 'Vis spilleres point baseret på resultater fra partier';
 
   @override
@@ -914,6 +1004,9 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get broadcastOfficialStandings => 'Officiel stilling';
+
+  @override
+  String get broadcastRegulations => 'Regulativer';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -1526,10 +1619,19 @@ class AppLocalizationsDa extends AppLocalizations {
   String get preferencesNotifyInboxMsg => 'Ny besked i indbakke';
 
   @override
+  String get preferencesNotifyDirectMessage => 'Ny direkte besked';
+
+  @override
   String get preferencesNotifyForumMention => 'Kommentar i forum nævner dig';
 
   @override
+  String get preferencesNotifyForumMentions => 'Omtaler på forummet';
+
+  @override
   String get preferencesNotifyInvitedStudy => 'Invitation til studie';
+
+  @override
+  String get preferencesNotifyStudyInvites => 'Invitationer til studie';
 
   @override
   String get preferencesNotifyGameEvent => 'Opdateringer af korrespondancepartier';
@@ -1541,7 +1643,10 @@ class AppLocalizationsDa extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Turneringsstart nærmer sig';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Udsendelser, du abonnerer på';
+  String get preferencesNotifyTournamentStartReminders => 'Påmindelser om turneringsstart';
+
+  @override
+  String get preferencesNotifyBroadcasts => 'Broadcasts';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Ur i korrespondance er ved at løbe ud';
@@ -1566,6 +1671,60 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get preferencesShowClockOnTheLeft => 'Vis til venstre på mobile enheder';
+
+  @override
+  String get preferencesInlineNotation => 'Notation uden linjeskift';
+
+  @override
+  String get preferencesShowServerAnalysis => 'Vis serveranalyse';
+
+  @override
+  String get preferencesShowBestMoveArrows => 'Vis pile for bedste træk';
+
+  @override
+  String get preferencesShowManeuverArrows => 'Vis manøvrepile';
+
+  @override
+  String get preferencesShowGauge => 'Vis evalueringsindikator';
+
+  @override
+  String get preferencesShowMoveAnnotationsOnBoard => 'Vis træk-annotationer';
+
+  @override
+  String get preferencesShowVariationArrows => 'Vis variantpile';
+
+  @override
+  String get preferencesShowLiveGlyphs => 'Live skakprogram-annotationer';
+
+  @override
+  String get preferencesShowUndefendedPieces => 'Vis uforsvarede brikker';
+
+  @override
+  String get preferencesShowPinnedPieces => 'Vis bundne brikker';
+
+  @override
+  String get preferencesShowCheckableKing => 'Vis konge, der kan sættes skak';
+
+  @override
+  String get preferencesDisclosureMode => 'Aktiver skjulning af variation';
+
+  @override
+  String get preferencesGeneralSettings => 'Generelt';
+
+  @override
+  String get preferencesMoveListSettings => 'Trækliste';
+
+  @override
+  String get preferencesBoardSettings => 'Bræt';
+
+  @override
+  String get preferencesAnalysisSettings => 'Analyseindstillinger';
+
+  @override
+  String get preferencesManeuverArrowsHelp => 'Sekvens af skakprogramtræk for en brik';
+
+  @override
+  String get preferencesHoverOverSettingLabelsForHelp => 'Hold markøren over indstillingsetiketter for hjælp';
 
   @override
   String get puzzlePuzzles => 'Taktikopgaver';
@@ -2016,10 +2175,13 @@ class AppLocalizationsDa extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'En taktik som inkluderer En passant-reglen, hvor en bonde kan tage en modstanderbonde, der er flyttet forbi med dens første to-felts-træk.';
 
   @override
-  String get puzzleThemeEpauletteMate => 'Epaulette mate';
+  String get puzzleThemeEnPassantAdjacentCaptureDescription => 'En taktik som inkluderer En passant-reglen, hvor en bonde kan tage en modstanderbonde, der er flyttet forbi med dens første to-felts-træk.';
 
   @override
-  String get puzzleThemeEpauletteMateDescription => 'Two adjacent escape squares for a checked king are occupied by other pieces.';
+  String get puzzleThemeEpauletteMate => 'Epaulet-mat';
+
+  @override
+  String get puzzleThemeEpauletteMateDescription => 'To tilstødende flugtfelter for en konge i skak er blokeret af andre brikker.';
 
   @override
   String get puzzleThemeExposedKing => 'Eksponeret konge';
@@ -2034,6 +2196,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get puzzleThemeForkDescription => 'Et træk hvor den flyttede brik angriber to af modstanderens brikker på én gang.';
 
   @override
+  String get puzzleThemeForkOpposingPiecesDescription => 'Et træk, hvor en brik angriber to eller flere modstanderbrikker på samme tid.';
+
+  @override
   String get puzzleThemeHangingPiece => 'Hængende brik';
 
   @override
@@ -2044,6 +2209,9 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get puzzleThemeHookMateDescription => 'Skakmat med tårn, springer og bonde, som sammen med en fjendtlig bonde hindrer modstanderens konge i at undslippe.';
+
+  @override
+  String get puzzleThemeHookMateOpposingPawnDescription => 'Skakmat ved hjælp af et tårn, en springer og en bonde, hvor en af modstanderens bønder blokerer kongens flugtvej.';
 
   @override
   String get puzzleThemeInterference => 'Obstruktion';
@@ -2076,10 +2244,10 @@ class AppLocalizationsDa extends AppLocalizations {
   String get puzzleThemeMorphysMateDescription => 'Brug løberen til at sætte kongen skak, mens tårnet hjælper med at spærre den inde.';
 
   @override
-  String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
+  String get puzzleThemeSwallowstailMate => 'Svalehale-mat';
 
   @override
-  String get puzzleThemeSwallowstailMateDescription => 'A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.';
+  String get puzzleThemeSwallowstailMateDescription => 'Et skakmatmønster, der visuelt minder om en svalehale, svarende til en V-form.';
 
   @override
   String get puzzleThemeTriangleMate => 'Trekantmat';
@@ -2489,6 +2657,12 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get blackDidntMove => 'Sort trak ikke';
+
+  @override
+  String get whiteAborted => 'Hvid forlod partiet';
+
+  @override
+  String get blackAborted => 'Sort forlod partiet';
 
   @override
   String get requestAComputerAnalysis => 'Anmod om en computeranalyse';
@@ -2976,6 +3150,9 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get checkSpamFolder => 'Tjek også din spam-mappe, det kan være, at den havner der. Hvis det er tilfældet, skal du markere den som ikke-spam.';
+
+  @override
+  String get checkSpamOrJunkFolder => 'Modtager du ikke en bekræftelses-e-mail, skal du tjekke din spam- eller junk-mappe. Sørg for at markere beskeder fra lichess.org som sikre og \"ikke spam\", så du kan holde dig opdateret om vigtige meddelelser.';
 
   @override
   String sendEmailForAccountVerification(String param) {
@@ -3705,6 +3882,15 @@ class AppLocalizationsDa extends AppLocalizations {
   String get reply => 'Svar';
 
   @override
+  String get reopen => 'Genåbn';
+
+  @override
+  String get quote => 'Citér';
+
+  @override
+  String get postEdited => 'redigeret';
+
+  @override
   String get message => 'Meddelelse';
 
   @override
@@ -3739,6 +3925,9 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get reportProcessedFasterInEnglish => 'Din indberetning vil blive behandlet hurtigere, hvis den er skrevet på engelsk.';
+
+  @override
+  String get processReportFasterInEnglish => 'Vi kan behandle din anmeldelse hurtigere, hvis du skriver på engelsk.';
 
   @override
   String get error_provideOneCheatedGameLink => 'Angiv mindst ét link til et parti med snyd.';
@@ -4109,6 +4298,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get whenCreateSimul => 'Når du opretter et simultanspil, spiller du mod adskillige modstandere på én gang.';
 
   @override
+  String get creatingASimul => 'Når du opretter en simul, kan du spille mod flere modstandere på samme tid.';
+
+  @override
   String get simulVariantsHint => 'Hvis du vælger flere varianter, kan hver enkelt spiller vælge, hvilken der skal spilles.';
 
   @override
@@ -4392,6 +4584,12 @@ class AppLocalizationsDa extends AppLocalizations {
   }
 
   @override
+  String get like => 'Synes godt om';
+
+  @override
+  String get liked => 'Syntes godt om';
+
+  @override
   String get quickPairing => 'Hurtig parring';
 
   @override
@@ -4415,6 +4613,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get background => 'Baggrund';
 
   @override
+  String get theme => 'Theme';
+
+  @override
   String get light => 'Lys';
 
   @override
@@ -4424,7 +4625,13 @@ class AppLocalizationsDa extends AppLocalizations {
   String get transparent => 'Gennemsigtigt';
 
   @override
+  String get picture => 'Picture';
+
+  @override
   String get deviceTheme => 'Enhedstema';
+
+  @override
+  String get roundness => 'Roundness';
 
   @override
   String get backgroundImageUrl => 'Baggrundsbillede URL:';
@@ -4789,6 +4996,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get theForumEtiquette => 'forummets etikette';
 
   @override
+  String get pleaseBeNiceInTheForum => 'Hold en god tone i forummet.';
+
+  @override
   String get thisTopicIsArchived => 'Dette emne er arkiveret og kan ikke længere besvares.';
 
   @override
@@ -4837,9 +5047,6 @@ class AppLocalizationsDa extends AppLocalizations {
   String youHaveJoinedTeamX(String param1) {
     return 'Du har sluttet dig til \"$param1\".';
   }
-
-  @override
-  String get someoneYouReportedWasBanned => 'Nogen du rapporterede blev udelukket';
 
   @override
   String get congratsYouWon => 'Tillykke, du vandt!';
@@ -4940,6 +5147,11 @@ class AppLocalizationsDa extends AppLocalizations {
   }
 
   @override
+  String youCanFormatTextUsing(String param) {
+    return 'Du kan formatere tekst ved hjælp af $param.';
+  }
+
+  @override
   String get embedsAvailable => 'Indsæt URL på et parti eller på et studiekaptitel for at indlejre det.';
 
   @override
@@ -4959,6 +5171,9 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get navigateMoveTree => 'Navigér i træk-træet';
+
+  @override
+  String get moveListNavigation => 'Trækliste-navigation';
 
   @override
   String get mouseTricks => 'Tricks med mus';
@@ -5011,7 +5226,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get resignTheGame => 'Giv op i partiet';
 
   @override
-  String get youCantStartNewGame => 'Du kan ikke starte et nyt parti, før dette er afsluttet.';
+  String get youCantStartNewGame => 'Du kan ikke starte et nyt parti, mens det er din tur.';
 
   @override
   String get since => 'Siden';
@@ -5080,6 +5295,9 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get enPassant => 'En passant';
+
+  @override
+  String get settings => 'Indstillinger';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5533,6 +5751,17 @@ class AppLocalizationsDa extends AppLocalizations {
   }
 
   @override
+  String nbAnonymous(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Anonyme ($count)',
+      one: 'Anonym',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbSecondsToPlayTheFirstMove(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5840,9 +6069,6 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get studyLike => 'Synes godt om';
-
-  @override
-  String get studyUnlike => 'Synes ikke godt om';
 
   @override
   String get studyNewTag => 'Nyt tag';

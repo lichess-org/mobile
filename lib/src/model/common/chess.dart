@@ -114,21 +114,70 @@ const IList<Variant> playSupportedVariants = IListConst([
 ]);
 
 enum Variant {
-  standard('Standard', LichessIcons.crown),
-  chess960('Chess960', LichessIcons.die_six),
-  fromPosition('From Position', LichessIcons.feather),
-  antichess('Antichess', LichessIcons.antichess),
-  kingOfTheHill('King of the Hill', LichessIcons.flag),
-  threeCheck('Three Check', LichessIcons.three_check),
-  atomic('Atomic', LichessIcons.atom),
-  horde('Horde', LichessIcons.horde),
-  racingKings('Racing Kings', LichessIcons.racing_kings),
-  crazyhouse('Crazyhouse', LichessIcons.h_square);
+  standard(LichessIcons.crown),
+  chess960(LichessIcons.die_six),
+  fromPosition(LichessIcons.feather),
+  antichess(LichessIcons.antichess),
+  kingOfTheHill(LichessIcons.flag),
+  threeCheck(LichessIcons.three_check),
+  atomic(LichessIcons.atom),
+  horde(LichessIcons.horde),
+  racingKings(LichessIcons.racing_kings),
+  crazyhouse(LichessIcons.h_square);
 
-  const Variant(this.label, this.icon);
+  const Variant(this.icon);
 
-  final String label;
   final IconData icon;
+
+  String label(AppLocalizations l10n) {
+    switch (this) {
+      case .standard:
+        return l10n.variantStandard;
+      case .chess960:
+        return l10n.variantChess960;
+      case .fromPosition:
+        return l10n.variantFromPosition;
+      case .antichess:
+        return l10n.variantAntichess;
+      case .kingOfTheHill:
+        return l10n.variantKingOfTheHill;
+      case .threeCheck:
+        return l10n.variantThreeCheck;
+      case .atomic:
+        return l10n.variantAtomic;
+      case .horde:
+        return l10n.variantHorde;
+      case .racingKings:
+        return l10n.variantRacingKings;
+      case .crazyhouse:
+        return l10n.variantCrazyhouse;
+    }
+  }
+
+  String get pgnName {
+    switch (this) {
+      case .standard:
+        return 'Standard';
+      case .chess960:
+        return 'Chess960';
+      case .fromPosition:
+        return 'From Position';
+      case .antichess:
+        return 'Antichess';
+      case .kingOfTheHill:
+        return 'King of the Hill';
+      case .threeCheck:
+        return 'Three Check';
+      case .atomic:
+        return 'Atomic';
+      case .horde:
+        return 'Horde';
+      case .racingKings:
+        return 'Racing Kings';
+      case .crazyhouse:
+        return 'Crazyhouse';
+    }
+  }
 
   String description(AppLocalizations l10n) {
     switch (this) {

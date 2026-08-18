@@ -11,6 +11,7 @@
 	<key>com.apple.security.application-groups</key>
 	<array>
 		<string>group.org.lichess.mobileV2.LichessWidgets</string>
+		<string>group.org.lichess.mobileV2.share</string>
 	</array>
 </dict>
 </plist>

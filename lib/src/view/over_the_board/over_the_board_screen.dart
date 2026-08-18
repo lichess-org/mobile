@@ -2,9 +2,8 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:chessground/chessground.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
@@ -32,6 +31,7 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
+import 'package:material_ui/material_ui.dart';
 
 class OverTheBoardScreen extends StatelessWidget {
   const OverTheBoardScreen({this.initialFen, this.initialVariant, super.key});
@@ -250,7 +250,6 @@ class _BodyState extends ConsumerState<_Body> {
                     bottomTableUpsideDown:
                         overTheBoardPrefs.flipPiecesAfterMove && orientation != gameState.turn,
                     orientation: orientation,
-                    lastMove: gameState.lastMove,
                     explosionSquares: gameState.stepCursor > 0
                         ? atomicExplosionSquares(
                             gameState.game.stepAt(gameState.stepCursor - 1).position,
@@ -265,27 +264,16 @@ class _BodyState extends ConsumerState<_Body> {
                           : gameState.turn == Side.white
                           ? PlayerSide.white
                           : PlayerSide.black,
-                      onPromotionSelection: (role) {
-                        ref
-                            .read(overTheBoardGameControllerProvider.notifier)
-                            .onPromotionSelection(role);
-                        if (role != null) {
-                          ref
-                              .read(overTheBoardClockProvider.notifier)
-                              .onMove(newSideToMove: gameState.turn.opposite);
-                        }
-                      },
-                      promotionMove: gameState.promotionMove,
+                      lastMove: gameState.lastMove,
                       onMove: (move, {viaDragAndDrop}) {
-                        if (move is! NormalMove ||
-                            !isPromotionPawnMove(gameState.currentPosition, move)) {
+                        ref.read(overTheBoardGameControllerProvider.notifier).makeMove(move);
+                        // Don't restart the clock on a game-ending move, or it keeps running.
+                        if (!ref.read(overTheBoardGameControllerProvider).finished) {
                           ref
                               .read(overTheBoardClockProvider.notifier)
                               .onMove(newSideToMove: gameState.turn.opposite);
                         }
-                        ref.read(overTheBoardGameControllerProvider.notifier).makeMove(move);
                       },
-                      premovable: null,
                     ),
                     moves: gameState.moves,
                     currentMoveIndex: gameState.stepCursor,
@@ -297,6 +285,7 @@ class _BodyState extends ConsumerState<_Body> {
                       pieceAssets: overTheBoardPrefs.symmetricPieces
                           ? PieceSet.symmetric.assets
                           : null,
+                      enablePremoves: false,
                     ),
                     userActionsBar: _BottomBar(
                       onFlipBoard: () {
@@ -481,9 +470,8 @@ class _Player extends ConsumerWidget {
     final gameState = ref.watch(overTheBoardGameControllerProvider);
     final boardPreferences = ref.watch(boardPreferencesProvider);
     final clock = ref.watch(overTheBoardClockProvider);
-    final clockTenths = ref.watch(
-      accountPreferencesProvider.select((prefs) => prefs.value?.clockTenths),
-    );
+    final clockTenths =
+        ref.watch(clockTenthsProvider).value ?? defaultAccountPreferences.clockTenths;
 
     return GamePlayer(
       game: gameState.game,

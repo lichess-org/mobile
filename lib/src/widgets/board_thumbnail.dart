@@ -1,11 +1,11 @@
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// A board thumbnail widget
 class BoardThumbnail extends ConsumerStatefulWidget {
@@ -89,16 +89,18 @@ class _BoardThumbnailState extends ConsumerState<BoardThumbnail> {
       fen: widget.fen,
       orientation: widget.orientation,
       lastMove: widget.lastMove,
-      enableCoordinates: false,
-      borderRadius: (widget.showEvaluationGauge)
-          ? Styles.boardBorderRadius.copyWith(topRight: Radius.zero, bottomRight: Radius.zero)
-          : Styles.boardBorderRadius,
-      boxShadow: (widget.showEvaluationGauge) ? [] : boardShadows,
-      pieceAssets: boardPrefs.pieceSet.assets,
-      colorScheme: boardPrefs.boardTheme.colors,
-      animationDuration: widget.animationDuration,
-      hue: boardPrefs.hue,
-      brightness: boardPrefs.brightness,
+      settings: StaticChessboardSettings(
+        enableCoordinates: false,
+        borderRadius: (widget.showEvaluationGauge)
+            ? Styles.boardBorderRadius.copyWith(topRight: Radius.zero, bottomRight: Radius.zero)
+            : Styles.boardBorderRadius,
+        boxShadow: (widget.showEvaluationGauge) ? [] : boardShadows,
+        pieceAssets: boardPrefs.pieceSet.assets,
+        colorScheme: boardPrefs.boardTheme.colors,
+        animationDuration: widget.animationDuration,
+        hue: boardPrefs.hue,
+        brightness: boardPrefs.brightness,
+      ),
     );
 
     final boardWithMaybeEvalBar = widget.showEvaluationGauge

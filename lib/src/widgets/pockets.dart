@@ -1,9 +1,9 @@
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Visualization of captured pieces in variants like Crazyhouse.
 class PocketsMenu extends ConsumerWidget {
@@ -125,6 +125,7 @@ class _Pocket extends StatelessWidget {
       ignoring: !interactive || count == 0,
       child: Draggable(
         key: ValueKey('pocket-${side.name}${role.name}'),
+        dragAnchorStrategy: pointerDragAnchorStrategy,
         data: Piece(role: role, color: side),
         feedback: RotatedBox(
           quarterTurns: isUpsideDown ? 2 : 0,

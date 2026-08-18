@@ -1,6 +1,5 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/localizations.dart';
@@ -10,11 +9,12 @@ import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
-import 'package:lichess_mobile/src/tab_scaffold.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/offline_computer/offline_computer_game_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:quick_actions/quick_actions.dart';
 
 /// Provider for the [QuickActionService].
@@ -87,7 +87,7 @@ class QuickActionService {
         final variant = (seek.variant == Variant.standard)
             ? ''
             : (seek.variant != null && seek.timeIncrement != null)
-            ? ' • ${Perf.fromVariantAndSpeed(seek.variant!, Speed.fromTimeIncrement(seek.timeIncrement!)).shortTitle}'
+            ? ' • ${Perf.fromVariantAndSpeed(seek.variant!, Speed.fromTimeIncrement(seek.timeIncrement!)).shortLabel(l10n)}'
             : '';
 
         return ShortcutItem(

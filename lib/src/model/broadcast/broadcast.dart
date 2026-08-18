@@ -1,6 +1,5 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_summary.dart';
@@ -8,6 +7,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:material_ui/material_ui.dart';
 
 part 'broadcast.freezed.dart';
 
@@ -107,6 +107,7 @@ sealed class BroadcastTournamentData with _$BroadcastTournamentData {
     // PRIVATE=-1, NORMAL=3, HIGH=4, BEST=5
     int? tier,
     bool? teamTable,
+    bool? showTeamScores,
     required BroadcastTournamentInformation information,
   }) = _BroadcastTournamentData;
 }
@@ -131,26 +132,22 @@ typedef BroadcastTournamentGroup = ({
 });
 
 typedef BroadcastCustomPointsPerColor = ({double win, double draw});
-typedef BroadcastCustomScoring = BySide<BroadcastCustomPointsPerColor>;
+typedef BroadcastCustomScoring = IMap<Side, BroadcastCustomPointsPerColor>;
 
 extension BroadcastCustomScoringExt on BroadcastCustomScoring {
   String pointsForResult(Side side, BroadcastResult result) {
-    final customScore =
-        (side == Side.white
-            ? switch (result) {
-                BroadcastResult.whiteWins => this[side]?.win,
-                BroadcastResult.draw || BroadcastResult.whiteHalfWins => this[side]?.draw,
-                _ => 0.0,
-              }
-            : switch (result) {
-                BroadcastResult.blackWins => this[side]?.win,
-                BroadcastResult.draw || BroadcastResult.blackHalfWins => this[side]?.draw,
-                _ => 0.0,
-              }) ??
-        0.0;
-    return customScore == 0.5
-        ? result.resultToString(side) // '½' looks nicer than '0.5'
-        : NumberFormat('0.##').format(customScore);
+    final customScore = (side == Side.white
+        ? switch (result) {
+            BroadcastResult.whiteWins => this[side]?.win,
+            BroadcastResult.draw || BroadcastResult.whiteHalfWins => this[side]?.draw,
+            _ => 0.0,
+          }
+        : switch (result) {
+            BroadcastResult.blackWins => this[side]?.win,
+            BroadcastResult.draw || BroadcastResult.blackHalfWins => this[side]?.draw,
+            _ => 0.0,
+          });
+    return customScore == 0.5 ? '½' : NumberFormat('0.##').format(customScore);
   }
 }
 
@@ -168,6 +165,7 @@ sealed class BroadcastRound with _$BroadcastRound {
     required DateTime? finishedAt,
     required bool startsAfterPrevious,
     required BroadcastCustomScoring? customScoring,
+    String? pinnedComment,
   }) = _BroadcastRound;
 }
 
@@ -182,6 +180,11 @@ typedef BroadcastRoundResponse = ({
   BroadcastRound round,
   BroadcastRoundGames games,
   BroadcastPhotos? photos,
+
+  /// Whether the user is subscribed to the tournament this round belongs to.
+  ///
+  /// `null` when the user is not logged in.
+  bool? isSubscribed,
 });
 
 typedef BroadcastRoundGames = IMap<BroadcastGameId, BroadcastGame>;
@@ -192,7 +195,7 @@ sealed class BroadcastGame with _$BroadcastGame {
 
   const factory BroadcastGame({
     required BroadcastGameId id,
-    required BySide<BroadcastPlayerWithClock> players,
+    required IMap<Side, BroadcastPlayerWithClock> players,
     required String fen,
     required Move? lastMove,
     required Duration? thinkTime,
@@ -279,6 +282,11 @@ typedef BroadcastPlayerWithGameResults = ({
   BroadcastPlayerWithOverallResult playerWithOverallResult,
   BroadcastFideData fideData,
   IList<BroadcastPlayerGameResult> games,
+
+  /// Whether the user follows this FIDE player.
+  ///
+  /// `null` when the user is not logged in, or when the player is not a FIDE player.
+  bool? isFollowing,
 });
 
 enum BroadcastPoints {
@@ -336,4 +344,27 @@ sealed class BroadcastTeamMatch with _$BroadcastTeamMatch {
     required BroadcastTeam team2,
     required IList<BroadcastTeamGame> games,
   }) = _BroadcastTeamMatch;
+}
+
+@freezed
+sealed class BroadcastTeamStandingMatch with _$BroadcastTeamStandingMatch {
+  const factory BroadcastTeamStandingMatch({
+    required BroadcastRoundId roundId,
+    required String opponent,
+    required String? points,
+    required double? mp,
+    required double? gp,
+  }) = _BroadcastTeamStandingMatch;
+}
+
+@freezed
+sealed class BroadcastTeamStanding with _$BroadcastTeamStanding {
+  const factory BroadcastTeamStanding({
+    required String name,
+    required double mp,
+    required double gp,
+    required IList<BroadcastTeamStandingMatch> matches,
+    required IList<BroadcastPlayerWithOverallResult> players,
+    required int? averageRating,
+  }) = _BroadcastTeamStanding;
 }

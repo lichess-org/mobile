@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="accountPreferences" comment="Displayed on settings screen.&#10;&#10;These preferences are applied to your Lichess account and will be used across all devices. They are not mobile-specific and will be synced with the server.">Kontoastellungen</string>
+  <string name="accountPreferences" comment="Displayed on settings screen. This is for preferences synced with website on the server.">Kontoastellungen</string>
   <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">Dës Astellunge ginn op däi Lichess-Konto applizéiert a gëlle fir all Geräter.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">All Partien</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Bass de sécher?</string>
@@ -76,4 +76,11 @@
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Kucken</string>
   <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">Wëllkomm an der Lichess-App!</string>
   <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">Partie weisen</string>
+  <string name="displayModeCompact" comment="">Kompakt</string>
+  <string name="displayModeDetailed" comment="">Detailléiert</string>
+  <string name="perfShortUltraBullet" comment="Short label for the UltraBullet chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Ultra</string>
+  <string name="perfShortBullet" comment="Short label for the Bullet chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Bullet</string>
+  <string name="perfShortBlitz" comment="Short label for the Blitz chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Blitz</string>
+  <string name="perfShortRapid" comment="Short label for the Rapid chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Rapid</string>
+  <string name="perfShortClassical" comment="Short label for the Classical chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Klassesch</string>
 </resources>

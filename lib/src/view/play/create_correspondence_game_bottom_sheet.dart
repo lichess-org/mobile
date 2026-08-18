@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -17,6 +16,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/expanded_section.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
+import 'package:material_ui/material_ui.dart';
 
 class CreateCorrespondenceGameBottomSheet extends ConsumerStatefulWidget {
   const CreateCorrespondenceGameBottomSheet({super.key});
@@ -95,7 +95,7 @@ class _CreateGameBodyState extends ConsumerState<CreateCorrespondenceGameBottomS
                     },
                   );
                 },
-                child: Text(preferences.customVariant.label),
+                child: Text(preferences.customVariant.label(context.l10n)),
               ),
             ),
             ExpandedSection(

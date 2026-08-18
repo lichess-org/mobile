@@ -1,7 +1,4 @@
-import 'dart:math';
-
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
@@ -16,6 +13,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:lichess_mobile/src/widgets/progression_widget.dart';
+import 'package:material_ui/material_ui.dart';
 
 final playersAndTournamentProvider = FutureProvider.autoDispose
     .family<
@@ -107,6 +105,7 @@ class _BroadcastPlayersListState extends ConsumerState<BroadcastPlayersList> {
   ) => (p1, p2) {
     final field1 = picker(p1);
     final field2 = picker(p2);
+    if (field1 == null && field2 == null) return 0;
     if (field1 == null) return -1;
     if (field2 == null) return 1;
 
@@ -162,7 +161,6 @@ class _BroadcastPlayersListState extends ConsumerState<BroadcastPlayersList> {
 
   @override
   Widget build(BuildContext context) {
-    final double scoreWidth = max(MediaQuery.sizeOf(context).width * 0.15, 90);
     final sortIcon = (reverse ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down);
     final withRank = players.any((p) => p.rank != null);
     final showSearchBar = players.length >= 15;
@@ -205,15 +203,15 @@ class _BroadcastPlayersListState extends ConsumerState<BroadcastPlayersList> {
                 if (withRank)
                   Padding(
                     padding: Styles.bodyPadding.copyWith(top: 8.0, bottom: 0.0),
-                    child: const Row(
+                    child: Row(
                       children: [
-                        Icon(Icons.info, size: 16),
-                        SizedBox(width: 8),
+                        const Icon(Icons.info, size: 16),
+                        const SizedBox(width: 8),
                         Expanded(
                           child: Text(
-                            'Standings are calculated using broadcasted games and may differ from official results.',
-                            maxLines: 2,
-                            style: TextStyle(fontSize: 13),
+                            context.l10n.broadcastStandingsDisclaimer,
+                            maxLines: 3,
+                            style: const TextStyle(fontSize: 13, overflow: .ellipsis),
                           ),
                         ),
                       ],
@@ -230,16 +228,13 @@ class _BroadcastPlayersListState extends ConsumerState<BroadcastPlayersList> {
                           sortIcon: (currentSort == _SortingTypes.elo) ? sortIcon : null,
                         ),
                       ),
-                    SizedBox(
-                      width: scoreWidth,
-                      child: _TableTitleCell(
-                        title: Text(
-                          withScores ? context.l10n.broadcastScore : context.l10n.games,
-                          style: _kHeaderTextStyle,
-                        ),
-                        onTap: () => toggleSort(_SortingTypes.score),
-                        sortIcon: (currentSort == _SortingTypes.score) ? sortIcon : null,
+                    _TableTitleCell(
+                      title: Text(
+                        withScores ? context.l10n.broadcastScore : context.l10n.games,
+                        style: _kHeaderTextStyle,
                       ),
+                      onTap: () => toggleSort(_SortingTypes.score),
+                      sortIcon: (currentSort == _SortingTypes.score) ? sortIcon : null,
                     ),
                   ],
                 ),
@@ -284,15 +279,23 @@ class _TableTitleCell extends StatelessWidget {
         child: Padding(
           padding: _kTableRowPadding,
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: .min,
+            crossAxisAlignment: .center,
             children: [
-              Expanded(child: title),
-              if (sortIcon != null)
-                Text(
-                  String.fromCharCode(sortIcon!.codePoint),
-                  style: _kHeaderTextStyle.copyWith(fontSize: 16, fontFamily: sortIcon!.fontFamily),
-                ),
+              Flexible(child: title),
+              const SizedBox(width: 4),
+              SizedBox(
+                width: 16,
+                child: sortIcon != null
+                    ? Text(
+                        String.fromCharCode(sortIcon!.codePoint),
+                        style: _kHeaderTextStyle.copyWith(
+                          fontSize: 16,
+                          fontFamily: sortIcon!.fontFamily,
+                        ),
+                      )
+                    : null,
+              ),
             ],
           ),
         ),
@@ -417,7 +420,8 @@ class BroadcastPlayerRow extends StatelessWidget {
         mainAxisSize: .min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          if (federation != null) Image.asset('assets/images/fide-fed/$federation.png', height: 12),
+          if (federation != null)
+            Image.asset('assets/images/fide-fed/$federation.webp', height: 12),
           if (ratingsMap != null)
             Column(
               mainAxisAlignment: .start,

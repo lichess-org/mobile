@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 
 /// A provider that fetches a paginated list of broadcasts.
 final broadcastsPaginatorProvider =
@@ -104,3 +105,14 @@ final broadcastTeamMatchesProvider = FutureProvider.autoDispose
     .family<IList<BroadcastTeamMatch>, BroadcastRoundId>((Ref ref, BroadcastRoundId roundId) {
       return ref.read(broadcastRepositoryProvider).getTeamMatches(roundId);
     }, name: 'BroadcastTeamMatchesProvider');
+
+final broadcastTeamStandingsProvider = FutureProvider.autoDispose
+    .family<IList<BroadcastTeamStanding>, BroadcastTournamentId>((
+      Ref ref,
+      BroadcastTournamentId tournamentId,
+    ) {
+      return ref.withClientCacheFor(
+        (client) => ref.read(broadcastRepositoryProvider).getTeamStandings(tournamentId),
+        const Duration(seconds: 30),
+      );
+    }, name: 'BroadcastTeamStandingsProvider');

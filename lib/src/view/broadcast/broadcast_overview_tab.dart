@@ -1,6 +1,5 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
+import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
@@ -9,6 +8,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 final _dateFormatter = DateFormat.MMMd();
@@ -81,6 +81,7 @@ class BroadcastOverviewTab extends ConsumerWidget {
                   if (url == null) return;
                   launchUrl(Uri.https('lichess.org').resolve(url));
                 },
+                softLineBreak: true,
               ),
             ],
           ],

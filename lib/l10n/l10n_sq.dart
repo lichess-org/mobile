@@ -70,6 +70,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Që të shihni këtë faqe, duhet të keni bërë hyrjen në llogari.';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String get mobileNewGame => 'Lojë e re';
 
   @override
@@ -287,31 +290,112 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Ose importoni një kartelë PNG';
 
   @override
+  String get mobileGoodMoveButThereIsBetter => 'Lëvizje e mirë, por ka edhe më mirë';
+
+  @override
+  String get mobilePerfShortUltraBullet => 'Ultra';
+
+  @override
+  String get mobilePerfShortBullet => 'Bullet';
+
+  @override
+  String get mobilePerfShortBlitz => 'Blitz';
+
+  @override
+  String get mobilePerfShortRapid => 'Rapid';
+
+  @override
+  String get mobilePerfShortClassical => 'Classical';
+
+  @override
+  String get mobilePerfShortCorrespondence => 'Corresp.';
+
+  @override
+  String get mobilePerfShortFromPosition => 'From Pos.';
+
+  @override
+  String get mobilePerfShortChess960 => '960';
+
+  @override
+  String get mobilePerfShortAntichess => 'Antichess';
+
+  @override
+  String get mobilePerfShortKingOfTheHill => 'KotH';
+
+  @override
+  String get mobilePerfShortThreeCheck => '3check';
+
+  @override
+  String get mobilePerfShortAtomic => 'Atomic';
+
+  @override
+  String get mobilePerfShortHorde => 'Horde';
+
+  @override
+  String get mobilePerfShortRacingKings => 'Racing';
+
+  @override
+  String get mobilePerfShortCrazyhouse => 'Crazy';
+
+  @override
+  String get mobilePerfShortPuzzle => 'Puzzle';
+
+  @override
+  String get variantStandard => 'Standard';
+
+  @override
   String get variantStandardTitle => 'Rregulla standarde shahu (FIDE)';
+
+  @override
+  String get variantChess960 => 'Chess960';
 
   @override
   String get variantChess960Title => 'The starting position of the home rank pieces is randomised.';
 
   @override
+  String get variantKingOfTheHill => 'King of the Hill';
+
+  @override
   String get variantKingOfTheHillTitle => 'Bring your King to the centre to win the game.';
+
+  @override
+  String get variantThreeCheck => 'Three-Check';
 
   @override
   String get variantThreeCheckTitle => 'Check your opponent 3 times to win the game.';
 
   @override
+  String get variantAntichess => 'Antishah';
+
+  @override
   String get variantAntichessTitle => 'Lose all your pieces (or get stalemated) to win the game.';
+
+  @override
+  String get variantAtomic => 'Atomic';
 
   @override
   String get variantAtomicTitle => 'Nuke your opponent\'s king to win.';
 
   @override
+  String get variantHorde => 'Horde';
+
+  @override
   String get variantHordeTitle => 'One side has a large number of pawns, the other has a normal army.';
+
+  @override
+  String get variantRacingKings => 'Racing Kings';
 
   @override
   String get variantRacingKingsTitle => 'Get your king to the other side of the board to win.';
 
   @override
+  String get variantCrazyhouse => 'Crazyhouse';
+
+  @override
   String get variantCrazyhouseTitle => 'Captured pieces can be dropped back on the board instead of moving a piece.';
+
+  @override
+  String get variantFromPosition => 'Nga Pozicion';
 
   @override
   String get variantFromPositionTitle => 'Shah standard nga një pozicion vetjak';
@@ -683,6 +767,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get arenaRankAvgHelp => 'Renditja mesatare është një përqindje e renditjes tuaj. Sa më e ulët, aq më mirë.\n\nPër shembull, të qenët i renditur i 3-i në një turne me 100 lojtarë = 3%. Renditja si i 10-it në një turne me 1000 lojtarë = 1%.';
 
   @override
+  String get arenaRankAverageHelp => 'Your rank average represents your typical finishing position, relative to the total number of players in each tournament.\nThis is a measure of your tournament placement, not your general rating.\n\nFor example, a rank average of 3% means you typically finish in the top 3% (such as 30th place out of 1,000 players).';
+
+  @override
   String get arenaMedians => 'mesatare';
 
   @override
@@ -840,6 +927,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get broadcastDefinitivelyDeleteTournament => 'Fshihe përfundimisht krejt turneun, krejt raundet e tij dhe krejt lojërat në të.';
 
   @override
+  String get broadcastPermanentlyDeleteTournament => 'Permanently delete this tournament, including all rounds and games?';
+
+  @override
   String get broadcastShowScores => 'Shfaq pikë lojtatësh bazuar në përfundime lojërash';
 
   @override
@@ -914,6 +1004,9 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get broadcastOfficialStandings => 'Official standings';
+
+  @override
+  String get broadcastRegulations => 'Rregullore';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -1526,10 +1619,19 @@ class AppLocalizationsSq extends AppLocalizations {
   String get preferencesNotifyInboxMsg => 'Mesazh i ri te Të marrë';
 
   @override
+  String get preferencesNotifyDirectMessage => 'New direct message';
+
+  @override
   String get preferencesNotifyForumMention => 'Koment forumi ku përmendeni';
 
   @override
+  String get preferencesNotifyForumMentions => 'Forum mentions';
+
+  @override
   String get preferencesNotifyInvitedStudy => 'Ftesë për ushtrim';
+
+  @override
+  String get preferencesNotifyStudyInvites => 'Study invites';
 
   @override
   String get preferencesNotifyGameEvent => 'Përditësime loje me korrespondencë';
@@ -1541,7 +1643,10 @@ class AppLocalizationsSq extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Turne që fillon së shpejti';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Transmetime te të cilat jeni pajtuar';
+  String get preferencesNotifyTournamentStartReminders => 'Tournaments start reminders';
+
+  @override
+  String get preferencesNotifyBroadcasts => 'Broadcasts';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Correspondence time running out';
@@ -1566,6 +1671,60 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get preferencesShowClockOnTheLeft => 'Shfaqe në të majtë të pajisjesh celulare';
+
+  @override
+  String get preferencesInlineNotation => 'Shënim brendazi';
+
+  @override
+  String get preferencesShowServerAnalysis => 'Shfaq analizë shërbyesi';
+
+  @override
+  String get preferencesShowBestMoveArrows => 'Shfaq shigjeta lëvizjesh më të mira';
+
+  @override
+  String get preferencesShowManeuverArrows => 'Shfaq shigjeta manovre';
+
+  @override
+  String get preferencesShowGauge => 'Show evaluation gauge';
+
+  @override
+  String get preferencesShowMoveAnnotationsOnBoard => 'Show move annotations';
+
+  @override
+  String get preferencesShowVariationArrows => 'Shfaq shigjeta variantesh';
+
+  @override
+  String get preferencesShowLiveGlyphs => 'Live engine annotations';
+
+  @override
+  String get preferencesShowUndefendedPieces => 'Shfaq gurë të pambrojtur';
+
+  @override
+  String get preferencesShowPinnedPieces => 'Shfaq gurë të fiksuar';
+
+  @override
+  String get preferencesShowCheckableKing => 'Shfaq mbret të cilit mund t’i jepet shah';
+
+  @override
+  String get preferencesDisclosureMode => 'Aktivizo fshehje variantesh';
+
+  @override
+  String get preferencesGeneralSettings => 'Të përgjithshme';
+
+  @override
+  String get preferencesMoveListSettings => 'Listë lëvizjesh';
+
+  @override
+  String get preferencesBoardSettings => 'Fushë';
+
+  @override
+  String get preferencesAnalysisSettings => 'Rregullime analize';
+
+  @override
+  String get preferencesManeuverArrowsHelp => 'Sequence of engine moves for one piece';
+
+  @override
+  String get preferencesHoverOverSettingLabelsForHelp => 'Për ndihmë, kalojeni kursorin sipër etiketave të rregullimeve';
 
   @override
   String get puzzlePuzzles => 'Ushtrime';
@@ -2016,6 +2175,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Një taktikë që përfshin rregullin “me prerje”, ku një ushtar mund të marrë një ushtar kundërshtar që e ka kaluar atë duke përdorur lëvizjen e vet fillestare të dy kuadrateve.';
 
   @override
+  String get puzzleThemeEnPassantAdjacentCaptureDescription => 'A tactic involving the en passant rule, where a pawn can capture an opposing pawn that has just moved next to it with its initial two-square move.';
+
+  @override
   String get puzzleThemeEpauletteMate => 'Mat spaletë';
 
   @override
@@ -2034,6 +2196,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get puzzleThemeForkDescription => 'Një lëvizje ku guri i lëvizur sulmon njëherësh dy gurë të kundërshtarit.';
 
   @override
+  String get puzzleThemeForkOpposingPiecesDescription => 'A move where a piece attacks two or more opposing pieces simultaneously.';
+
+  @override
   String get puzzleThemeHangingPiece => 'Gur i pambrojtur';
 
   @override
@@ -2044,6 +2209,9 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get puzzleThemeHookMateDescription => 'Shat mat me një torrë, kalë dhe një ushtar, tok me një ushtar të kundërshtarit, për të kufizuar arratisjen e mbretit të kundërshtarit.';
+
+  @override
+  String get puzzleThemeHookMateOpposingPawnDescription => 'Checkmate using a rook, knight, and pawn, where an opposing pawn blocks the king\'s escape.';
 
   @override
   String get puzzleThemeInterference => 'Ndërhyrje';
@@ -2489,6 +2657,12 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get blackDidntMove => 'I ziu s’bëri lëvizje';
+
+  @override
+  String get whiteAborted => 'White aborted the game';
+
+  @override
+  String get blackAborted => 'Black aborted the game';
 
   @override
   String get requestAComputerAnalysis => 'Kërko analizë kompjuterike';
@@ -2976,6 +3150,9 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get checkSpamFolder => 'Shihni gjithashtu edhe te dosja juaj e të padëshiruarve, mund të përfundojë atje. Në ndodhtë kështu, i hiqni shenjën si i padëshiruar.';
+
+  @override
+  String get checkSpamOrJunkFolder => 'If you do not receive a confirmation email, check your Spam or Junk folder. Be sure to indicate messages from lichess.org as safe and \"not spam\", so you can stay informed of important communications.';
 
   @override
   String sendEmailForAccountVerification(String param) {
@@ -3705,6 +3882,15 @@ class AppLocalizationsSq extends AppLocalizations {
   String get reply => 'Përgjigjuni';
 
   @override
+  String get reopen => 'Reopen';
+
+  @override
+  String get quote => 'Quote';
+
+  @override
+  String get postEdited => 'edited';
+
+  @override
   String get message => 'Mesazh';
 
   @override
@@ -3739,6 +3925,9 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get reportProcessedFasterInEnglish => 'Raportimi juaj do të shqyrtohet më shpejt, nëse është shkruar në anglisht.';
+
+  @override
+  String get processReportFasterInEnglish => 'We can process your report faster if you write in English.';
 
   @override
   String get error_provideOneCheatedGameLink => 'Ju lutemi, jepni të paktën një lidhje te një lojë me hile.';
@@ -4109,6 +4298,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get whenCreateSimul => 'Kur krijon një simultane, luan kundër disa lojtarëve njëkohësisht.';
 
   @override
+  String get creatingASimul => 'Creating a simul lets you play against multiple opponents at the same time.';
+
+  @override
   String get simulVariantsHint => 'Nëse përzgjidhni disa variante, çdo lojtar zgjedh vetë cilin variant të luajë.';
 
   @override
@@ -4392,6 +4584,12 @@ class AppLocalizationsSq extends AppLocalizations {
   }
 
   @override
+  String get like => 'Like';
+
+  @override
+  String get liked => 'Liked';
+
+  @override
   String get quickPairing => 'Çiftim i shpejtë';
 
   @override
@@ -4415,6 +4613,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get background => 'Sfond';
 
   @override
+  String get theme => 'Theme';
+
+  @override
   String get light => 'I çelët';
 
   @override
@@ -4424,7 +4625,13 @@ class AppLocalizationsSq extends AppLocalizations {
   String get transparent => 'I tejdukshëm';
 
   @override
+  String get picture => 'Picture';
+
+  @override
   String get deviceTheme => 'Temën e pajisjes';
+
+  @override
+  String get roundness => 'Roundness';
 
   @override
   String get backgroundImageUrl => 'URL figure sfondi:';
@@ -4789,6 +4996,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get theForumEtiquette => 'rregullat e etiketës në forum';
 
   @override
+  String get pleaseBeNiceInTheForum => 'Ju lutemi, jini i sjellshëm në forum.';
+
+  @override
   String get thisTopicIsArchived => 'Kjo temë është arkivuar dhe në të s’mund të përgjigjen më.';
 
   @override
@@ -4837,9 +5047,6 @@ class AppLocalizationsSq extends AppLocalizations {
   String youHaveJoinedTeamX(String param1) {
     return 'U bëtë pjesë e “$param1”.';
   }
-
-  @override
-  String get someoneYouReportedWasBanned => 'Dikush që raportuat, u dëbua';
 
   @override
   String get congratsYouWon => 'Urime, fituat!';
@@ -4940,6 +5147,11 @@ class AppLocalizationsSq extends AppLocalizations {
   }
 
   @override
+  String youCanFormatTextUsing(String param) {
+    return 'You can format text using $param.';
+  }
+
+  @override
   String get embedsAvailable => 'Ngjitni një URL loje ose URL kapitulli mësimi, për ta trupëzuar.';
 
   @override
@@ -4959,6 +5171,9 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get navigateMoveTree => 'Lëvizni nëpër pemën e lëvizjeve';
+
+  @override
+  String get moveListNavigation => 'Move list navigation';
 
   @override
   String get mouseTricks => 'Gjeste miu';
@@ -5011,7 +5226,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get resignTheGame => 'Dorëzohuni';
 
   @override
-  String get youCantStartNewGame => 'S’mund të filloni një lojë të re pa mbaruar këtë lojë.';
+  String get youCantStartNewGame => 'You can\'t start a new game while it\'s your turn.';
 
   @override
   String get since => 'Që nga';
@@ -5080,6 +5295,9 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get enPassant => 'En passant rights';
+
+  @override
+  String get settings => 'Rregullime';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5533,6 +5751,17 @@ class AppLocalizationsSq extends AppLocalizations {
   }
 
   @override
+  String nbAnonymous(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Anonimë ($count)',
+      one: 'Anonim',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbSecondsToPlayTheFirstMove(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5840,9 +6069,6 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get studyLike => 'Pëlqejeni';
-
-  @override
-  String get studyUnlike => 'Shpëlqejeni';
 
   @override
   String get studyNewTag => 'Etiketë e re';

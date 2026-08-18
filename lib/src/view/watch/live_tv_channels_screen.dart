@@ -1,15 +1,16 @@
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/tv/live_tv_channels.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
+import 'package:material_ui/material_ui.dart';
 
 class LiveTvChannelsScreen extends ConsumerWidget {
   const LiveTvChannelsScreen({super.key});
@@ -50,7 +51,7 @@ class _Body extends ConsumerWidget {
             if (games[channel] != null) games[channel]!,
         ];
         return ListView.builder(
-          itemCount: games.length,
+          itemCount: list.length,
           itemBuilder: (context, index) {
             final game = list[index];
             return SmallBoardPreview(
@@ -71,7 +72,7 @@ class _Body extends ConsumerWidget {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(game.channel.label, style: Styles.boardPreviewTitle),
+                  Text(game.channel.label(context.l10n), style: Styles.boardPreviewTitle),
                   Icon(game.channel.icon, size: 32),
                   UserFullNameWidget.player(
                     user: game.player.asPlayer.user,

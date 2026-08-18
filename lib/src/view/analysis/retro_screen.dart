@@ -2,10 +2,9 @@ import 'dart:math' as math;
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:chessground/chessground.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/retro_controller.dart';
@@ -31,6 +30,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
+import 'package:material_ui/material_ui.dart';
 
 class RetroScreen extends ConsumerWidget {
   const RetroScreen({required this.options, super.key});
@@ -167,6 +167,16 @@ class RetroAnalysisBoard extends AnalysisBoard {
 class _RetroAnalysisBoardState
     extends AnalysisBoardState<RetroAnalysisBoard, RetroState, AnalysisPrefs> {
   @override
+  RetroState? readCurrentState() => ref.read(retroControllerProvider(widget.options)).value;
+
+  @override
+  void listenToStateChanges(void Function(RetroState? prev, RetroState? next) listener) =>
+      ref.listenManual<RetroState?>(
+        retroControllerProvider(widget.options).select((v) => v.value),
+        listener,
+      );
+
+  @override
   RetroState get analysisState => ref.watch(retroControllerProvider(widget.options)).requireValue;
 
   @override
@@ -178,9 +188,8 @@ class _RetroAnalysisBoardState
   @override
   bool get hideBestMoveArrow => true;
 
-  // Disable interaction while the engine is evaluating the move
   @override
-  bool get interactive => analysisState.feedback != RetroFeedback.evalMove;
+  bool computeInteractive(RetroState state) => state.feedback != RetroFeedback.evalMove;
 
   @override
   void onUserMove(Move move) {
@@ -192,12 +201,7 @@ class _RetroAnalysisBoardState
       (id: analysisState.evaluationContext.id, path: analysisState.currentPath);
 
   @override
-  void onPromotionSelection(Role? role) {
-    ref.read(retroControllerProvider(widget.options).notifier).onPromotionSelection(role);
-  }
-
-  @override
-  String get fen => analysisState.currentPosition.board.fen;
+  String computeFen(RetroState state) => state.currentPosition.board.fen;
 
   @override
   ISet<Shape> get extraShapes {

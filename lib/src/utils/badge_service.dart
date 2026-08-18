@@ -20,8 +20,8 @@ class BadgeService {
 
     try {
       await _channel.invokeMethod<int>('setBadge', <String, dynamic>{'badge': value});
-    } on PlatformException catch (e) {
-      _log.severe(e);
+    } on PlatformException catch (e, st) {
+      _log.severe(e, st);
     }
   }
 }

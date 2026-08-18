@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:material_ui/material_ui.dart';
 
 const _customOpacity = 0.6;
 const _defaultStatFontSize = 12.0;
@@ -76,23 +75,9 @@ class StatCardRow extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: _divideRow(cards).map((e) => Expanded(child: e)).toList(growable: false),
+        spacing: 8,
+        children: cards.map((e) => Expanded(child: e)).toList(growable: false),
       ),
     );
   }
-}
-
-@allowedWidgetReturn
-Iterable<Widget> _divideRow(Iterable<Widget> elements) {
-  final list = elements.toList();
-
-  if (list.isEmpty || list.length == 1) {
-    return list;
-  }
-
-  Widget wrapElement(Widget el) {
-    return Container(margin: const EdgeInsets.only(right: 8), child: el);
-  }
-
-  return <Widget>[...list.take(list.length - 1).map(wrapElement), list.last];
 }

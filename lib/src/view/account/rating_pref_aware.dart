@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// A widget that knows if the user has enabled ratings in their settings.
 class RatingPrefAware extends ConsumerWidget {

@@ -9,7 +9,7 @@ class AppLocalizationsKk extends AppLocalizations {
   AppLocalizationsKk([String locale = 'kk']) : super(locale);
 
   @override
-  String get mobileAccount => 'Account';
+  String get mobileAccount => 'Тіркелгі';
 
   @override
   String get mobileAccountPreferences => 'Тіркелгіні баптау';
@@ -70,6 +70,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Бұл бетті көру үшін тіркелгіге кіріңіз.';
 
   @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
   String get mobileNewGame => 'Жаңа ойын';
 
   @override
@@ -123,7 +126,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get mobilePuzzlesTab => 'Жұмбақ';
 
   @override
-  String get mobileRecentSearches => 'Соңғы іздеулер';
+  String get mobileRecentSearches => 'Кейінгі іздеулер';
 
   @override
   String get mobileRemoveBookmark => 'Бетбелгіні алып тастау';
@@ -153,7 +156,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get mobileSettingsImmersiveMode => 'Оқшау көрініс';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'Телефон жүйесінің UI жасыру. Телефонның шолу батырмалары сіздің мазаңызды алып тұрса, бұл пайдалы болар. Әсері ойын мен жұмбақ кезінде көрінеді.';
+  String get mobileSettingsImmersiveModeSubtitle => 'Ойын кезінде жүйенің UI жасыру. Телефонның шолу батырмалары мазаңызды алып тұрса, бұл пайдалы болар. Әсері ойын мен жұмбақ кезінде шығады.';
 
   @override
   String get mobileSettingsMaterialDifferenceCapturedPieces => 'Басып алынған тастар';
@@ -162,40 +165,40 @@ class AppLocalizationsKk extends AppLocalizations {
   String get mobileSettingsPickAnImage => 'Суретті таңдау';
 
   @override
-  String get mobileSettingsPickAnImageHelp => 'Custom background works only in dark mode. A dark image is recommended.';
+  String get mobileSettingsPickAnImageHelp => 'Артқы суретті қою үшін қарағы кейіп орнатылсын. Суреттің күнгірт болғаны дұрыс.';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'Blur the image';
+  String get mobileSettingsPickAnImageBlur => 'Суретті бұлдыр ету';
 
   @override
-  String get mobileSettingsPickAnImageHideBoard => 'Hide board';
+  String get mobileSettingsPickAnImageHideBoard => 'Тақтаны жасыру';
 
   @override
-  String get mobileSettingsPickAnImageShowBoard => 'Show board';
+  String get mobileSettingsPickAnImageShowBoard => 'Тақтаны көрсету';
 
   @override
-  String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
+  String get mobileSettingsPickAnImageSwipeToDisplay => 'Басқа артқы кескін шығару үшін сырғытыңыз';
 
   @override
-  String get mobileSettingsPieceShiftMethodEither => 'Either tap or drag';
+  String get mobileSettingsPieceShiftMethodEither => 'Басу не тарту';
 
   @override
-  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tap two squares';
+  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Екі шаршыны басыңыз';
 
   @override
-  String get mobileSettingsShapeDrawing => 'Shape drawing';
+  String get mobileSettingsShapeDrawing => 'Пішін салу';
 
   @override
-  String get mobileSettingsShapeDrawingSubtitle => 'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
+  String get mobileSettingsShapeDrawingSubtitle => 'Пішінді екі саусақпен салыңыз: бір саусақты бос шаршыға қойып, екінші саусақпен сырғып пішін салыңыз.';
 
   @override
   String get mobileSettingsShowBorder => 'Шетін көрсету';
 
   @override
-  String get mobileSettingsTouchFeedback => 'Touch feedback';
+  String get mobileSettingsTouchFeedback => 'Діріл жауап';
 
   @override
-  String get mobileSettingsTouchFeedbackSubtitle => 'When enabled, the device will vibrate shortly when you move or capture a piece.';
+  String get mobileSettingsTouchFeedbackSubtitle => 'Қосулы болса, жүріс не басып алудан кейін құрылғыңыз діріл етеді.';
 
   @override
   String get mobileSettingsTab => 'Баптау';
@@ -245,73 +248,154 @@ class AppLocalizationsKk extends AppLocalizations {
   String get mobileWatchTab => 'Бақылау';
 
   @override
-  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
+  String get mobileWelcomeToLichessApp => 'Личес-ке қош келдіңіз!';
 
   @override
-  String get mobileViewGame => 'View Game';
+  String get mobileViewGame => 'Ойынды көру';
 
   @override
-  String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
+  String get mobileCustomizeHomeTip => 'Кеңес: Қосымша виджет қосу не артығын алып тастауыңызға болады!';
 
   @override
-  String get mobileCustomizeHomeTipDismiss => 'Dismiss';
+  String get mobileCustomizeHomeTipDismiss => 'Алып тастау';
 
   @override
-  String get mobileCustomizeButton => 'Customize';
+  String get mobileCustomizeButton => 'Өзгерту';
 
   @override
-  String get mobileStopShowingThreat => 'Stop showing threat';
+  String get mobileStopShowingThreat => 'Қауіпті көрсетпеу';
 
   @override
-  String get mobileTournamentCompleted => 'Completed';
+  String get mobileTournamentCompleted => 'Аяқталды';
 
   @override
-  String get mobileTournamentJumpToMyPage => 'Jump to my page';
+  String get mobileTournamentJumpToMyPage => 'Парақшама өту';
 
   @override
-  String get mobileDisplayModeCompact => 'Compact';
+  String get mobileDisplayModeCompact => 'Жинақы';
 
   @override
-  String get mobileDisplayModeDetailed => 'Detailed';
+  String get mobileDisplayModeDetailed => 'Жайылған';
 
   @override
-  String get mobileOpeningExplorerNotAvailableOffline => 'Opening Explorer is not available offline.';
+  String get mobileOpeningExplorerNotAvailableOffline => 'Желіден тыс кезде Бастамалар Қоры ашылмайды.';
 
   @override
-  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\nYou can access it from the home tab.';
+  String get mobileChallengeCreated => 'Шақыру құрылды: Ойын басталғанда хабар келеді.\nОйынға басты беттен кіре алатын боласыз.';
 
   @override
-  String get mobilePreviousPage => 'Previous';
+  String get mobilePreviousPage => 'Алдыңғы';
 
   @override
-  String get mobileOrImportPgnFile => 'Or import a PGN file';
+  String get mobileOrImportPgnFile => 'Не PGN файлды салу';
+
+  @override
+  String get mobileGoodMoveButThereIsBetter => 'Жақсы жүріс, бірақ одан да жақсысы бар';
+
+  @override
+  String get mobilePerfShortUltraBullet => 'Ultra';
+
+  @override
+  String get mobilePerfShortBullet => 'Bullet';
+
+  @override
+  String get mobilePerfShortBlitz => 'Blitz';
+
+  @override
+  String get mobilePerfShortRapid => 'Rapid';
+
+  @override
+  String get mobilePerfShortClassical => 'Classical';
+
+  @override
+  String get mobilePerfShortCorrespondence => 'Corresp.';
+
+  @override
+  String get mobilePerfShortFromPosition => 'From Pos.';
+
+  @override
+  String get mobilePerfShortChess960 => '960';
+
+  @override
+  String get mobilePerfShortAntichess => 'Antichess';
+
+  @override
+  String get mobilePerfShortKingOfTheHill => 'KotH';
+
+  @override
+  String get mobilePerfShortThreeCheck => '3check';
+
+  @override
+  String get mobilePerfShortAtomic => 'Atomic';
+
+  @override
+  String get mobilePerfShortHorde => 'Horde';
+
+  @override
+  String get mobilePerfShortRacingKings => 'Racing';
+
+  @override
+  String get mobilePerfShortCrazyhouse => 'Crazy';
+
+  @override
+  String get mobilePerfShortPuzzle => 'Puzzle';
+
+  @override
+  String get variantStandard => 'Standard';
 
   @override
   String get variantStandardTitle => 'Standard rules of chess (FIDE)';
 
   @override
+  String get variantChess960 => 'Chess960';
+
+  @override
   String get variantChess960Title => 'The starting position of the home rank pieces is randomised.';
+
+  @override
+  String get variantKingOfTheHill => 'King of the Hill';
 
   @override
   String get variantKingOfTheHillTitle => 'Bring your King to the centre to win the game.';
 
   @override
+  String get variantThreeCheck => 'Three-Check';
+
+  @override
   String get variantThreeCheckTitle => 'Check your opponent 3 times to win the game.';
+
+  @override
+  String get variantAntichess => 'Antichess';
 
   @override
   String get variantAntichessTitle => 'Lose all your pieces (or get stalemated) to win the game.';
 
   @override
+  String get variantAtomic => 'Atomic';
+
+  @override
   String get variantAtomicTitle => 'Nuke your opponent\'s king to win.';
+
+  @override
+  String get variantHorde => 'Horde';
 
   @override
   String get variantHordeTitle => 'One side has a large number of pawns, the other has a normal army.';
 
   @override
+  String get variantRacingKings => 'Racing Kings';
+
+  @override
   String get variantRacingKingsTitle => 'Get your king to the other side of the board to win.';
 
   @override
+  String get variantCrazyhouse => 'Crazyhouse';
+
+  @override
   String get variantCrazyhouseTitle => 'Captured pieces can be dropped back on the board instead of moving a piece.';
+
+  @override
+  String get variantFromPosition => 'From Position';
 
   @override
   String get variantFromPositionTitle => 'Standard chess from a custom position';
@@ -671,7 +755,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get arenaCreated => 'Құрылды';
 
   @override
-  String get arenaRecentlyPlayed => 'Соңғы ойындар';
+  String get arenaRecentlyPlayed => 'Кейінгі ойындар';
 
   @override
   String get arenaBestResults => 'Үздік нәтиже';
@@ -681,6 +765,9 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get arenaRankAvgHelp => 'Орын орташасы деген орныңыздың пайыздық мөлшері. Азы жақсы.\nМысалы, 100 ойыншы қатысқан жарыста орныңыз 3-інші болса, орын орташасы 3%-ға тең. 1000 ойыншының арасында 10-ыншы болсаңыз, 1%-ға тең.';
+
+  @override
+  String get arenaRankAverageHelp => 'Your rank average represents your typical finishing position, relative to the total number of players in each tournament.\nThis is a measure of your tournament placement, not your general rating.\n\nFor example, a rank average of 3% means you typically finish in the top 3% (such as 30th place out of 1,000 players).';
 
   @override
   String get arenaMedians => 'медианалар';
@@ -840,6 +927,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get broadcastDefinitivelyDeleteTournament => 'Жарысты айналым мен ойындарымен бірге толығымен жою.';
 
   @override
+  String get broadcastPermanentlyDeleteTournament => 'Permanently delete this tournament, including all rounds and games?';
+
+  @override
   String get broadcastShowScores => 'Show player scores based on game results';
 
   @override
@@ -914,6 +1004,9 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get broadcastOfficialStandings => 'Official standings';
+
+  @override
+  String get broadcastRegulations => 'Regulations';
 
   @override
   String broadcastIframeHelp(String param) {
@@ -1067,7 +1160,7 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String broadcastUnderXEloTournament(String param) {
-    return 'U$param';
+    return '$paramдейін';
   }
 
   @override
@@ -1265,7 +1358,7 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String perfStatProgressOverLastXGames(String param) {
-    return 'Соңғы $param ойынның қорытындысы:';
+    return 'Кейінгі $param ойынның қорытындысы:';
   }
 
   @override
@@ -1526,10 +1619,19 @@ class AppLocalizationsKk extends AppLocalizations {
   String get preferencesNotifyInboxMsg => 'Жаңа хабар';
 
   @override
+  String get preferencesNotifyDirectMessage => 'New direct message';
+
+  @override
   String get preferencesNotifyForumMention => 'Форумда сіз туралы айтты';
 
   @override
+  String get preferencesNotifyForumMentions => 'Forum mentions';
+
+  @override
   String get preferencesNotifyInvitedStudy => 'Зерттеуге шақырды';
+
+  @override
+  String get preferencesNotifyStudyInvites => 'Study invites';
 
   @override
   String get preferencesNotifyGameEvent => 'Хат-хабарлы ойын барысы';
@@ -1541,7 +1643,10 @@ class AppLocalizationsKk extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Жарыс жақында басталады';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
+  String get preferencesNotifyTournamentStartReminders => 'Tournaments start reminders';
+
+  @override
+  String get preferencesNotifyBroadcasts => 'Broadcasts';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Хат-хабарлы ойын уақыты бітер алдында';
@@ -1566,6 +1671,60 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get preferencesShowClockOnTheLeft => 'Show on the left on mobile devices';
+
+  @override
+  String get preferencesInlineNotation => 'Inline notation';
+
+  @override
+  String get preferencesShowServerAnalysis => 'Show server analysis';
+
+  @override
+  String get preferencesShowBestMoveArrows => 'Show best move arrows';
+
+  @override
+  String get preferencesShowManeuverArrows => 'Show maneuver arrows';
+
+  @override
+  String get preferencesShowGauge => 'Show evaluation gauge';
+
+  @override
+  String get preferencesShowMoveAnnotationsOnBoard => 'Show move annotations';
+
+  @override
+  String get preferencesShowVariationArrows => 'Show variation arrows';
+
+  @override
+  String get preferencesShowLiveGlyphs => 'Live engine annotations';
+
+  @override
+  String get preferencesShowUndefendedPieces => 'Show undefended pieces';
+
+  @override
+  String get preferencesShowPinnedPieces => 'Show pinned pieces';
+
+  @override
+  String get preferencesShowCheckableKing => 'Show checkable king';
+
+  @override
+  String get preferencesDisclosureMode => 'Enable variation hiding';
+
+  @override
+  String get preferencesGeneralSettings => 'General';
+
+  @override
+  String get preferencesMoveListSettings => 'Move list';
+
+  @override
+  String get preferencesBoardSettings => 'Board';
+
+  @override
+  String get preferencesAnalysisSettings => 'Analysis settings';
+
+  @override
+  String get preferencesManeuverArrowsHelp => 'Sequence of engine moves for one piece';
+
+  @override
+  String get preferencesHoverOverSettingLabelsForHelp => 'Hover over setting labels for help';
 
   @override
   String get puzzlePuzzles => 'Жұмбақтар';
@@ -2016,6 +2175,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Бір сазбаз, қасынан қарсыластың сарбазы өткенде, оны басып алатын жағдайды, яғни жолай басып алуды қамтитын тактика.';
 
   @override
+  String get puzzleThemeEnPassantAdjacentCaptureDescription => 'A tactic involving the en passant rule, where a pawn can capture an opposing pawn that has just moved next to it with its initial two-square move.';
+
+  @override
   String get puzzleThemeEpauletteMate => 'Epaulette mate';
 
   @override
@@ -2034,6 +2196,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get puzzleThemeForkDescription => 'Қарсыластың бірден екі тасын ұратын тас жүрісі.';
 
   @override
+  String get puzzleThemeForkOpposingPiecesDescription => 'A move where a piece attacks two or more opposing pieces simultaneously.';
+
+  @override
   String get puzzleThemeHangingPiece => 'Олжа тас';
 
   @override
@@ -2044,6 +2209,9 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get puzzleThemeHookMateDescription => 'Қарсылас патшасына өз сарбазы бөгет бола тұра, ат, тура мен сарбаз арқылы қойылған мат.';
+
+  @override
+  String get puzzleThemeHookMateOpposingPawnDescription => 'Checkmate using a rook, knight, and pawn, where an opposing pawn blocks the king\'s escape.';
 
   @override
   String get puzzleThemeInterference => 'Бөгет';
@@ -2327,10 +2495,10 @@ class AppLocalizationsKk extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Бұл тіркелгі жабылды.';
 
   @override
-  String get gameSetup => 'Game setup';
+  String get gameSetup => 'Ойын пішімі';
 
   @override
-  String get challengeAFriend => 'Challenge a friend';
+  String get challengeAFriend => 'Досты шақыру';
 
   @override
   String get playAgainstComputer => 'Компьютермен ойнау';
@@ -2339,7 +2507,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get gameMode => 'Game mode';
 
   @override
-  String get createLobbyGame => 'Create lobby game';
+  String get createLobbyGame => 'Ойын құру';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Ойынға біреуді шақыру үшін бұл сілтемені жіберіңіз';
@@ -2491,6 +2659,12 @@ class AppLocalizationsKk extends AppLocalizations {
   String get blackDidntMove => 'Қара жүрмей қойды';
 
   @override
+  String get whiteAborted => 'White aborted the game';
+
+  @override
+  String get blackAborted => 'Black aborted the game';
+
+  @override
   String get requestAComputerAnalysis => 'Компьютерлік талдауды сұрау';
 
   @override
@@ -2616,7 +2790,7 @@ class AppLocalizationsKk extends AppLocalizations {
   }
 
   @override
-  String get recentGames => 'Соңғы ойындар';
+  String get recentGames => 'Кейінгі ойындар';
 
   @override
   String get topGames => 'Үздік ойындар';
@@ -2642,18 +2816,18 @@ class AppLocalizationsKk extends AppLocalizations {
   String get openings => 'Бастаулар';
 
   @override
-  String get openingExplorer => 'Бастаулар қазынасы';
+  String get openingExplorer => 'Бастама қоры';
 
   @override
-  String get openingEndgameExplorer => 'Бастау/ойынсоңы қоры';
+  String get openingEndgameExplorer => 'Бастама/ойынсоңы қоры';
 
   @override
   String xOpeningExplorer(String param) {
-    return '$param бастаулар қазынасы';
+    return '$param Бастама Қоры';
   }
 
   @override
-  String get playFirstOpeningEndgameExplorerMove => 'Бастау/ойынсоңы қорынан бірінші қадам жасау';
+  String get playFirstOpeningEndgameExplorerMove => 'Бастама/ойынсоңы қорының бірінші жүрісін жасау';
 
   @override
   String get winPreventedBy50MoveRule => '50 жүрістік ережемен жеңіске жеткізбеу';
@@ -2978,6 +3152,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get checkSpamFolder => 'Сонымен қатар, Спам қалтасында қарап көріңіз. Хат сонда болса, \"Спам емес\" деп белгілеу жөн болар.';
 
   @override
+  String get checkSpamOrJunkFolder => 'If you do not receive a confirmation email, check your Spam or Junk folder. Be sure to indicate messages from lichess.org as safe and \"not spam\", so you can stay informed of important communications.';
+
+  @override
   String sendEmailForAccountVerification(String param) {
     return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
   }
@@ -3161,13 +3338,13 @@ class AppLocalizationsKk extends AppLocalizations {
   String get exportGames => 'Ойынды жүктеп алу';
 
   @override
-  String get ratingFilter => 'Rating filter';
+  String get ratingFilter => 'Қарсылас рейтинг ауқымы';
 
   @override
   String get thisAccountViolatedTos => 'Бұл тіркелгі Личес-тің Қызмет көрсету шартын бұзды';
 
   @override
-  String get openingExplorerAndTablebase => 'Бастаулар мен ойынсоңдарының қоры';
+  String get openingExplorerAndTablebase => 'Бастама мен ойынсоңы қоры';
 
   @override
   String get takeback => 'Қайтару';
@@ -3690,7 +3867,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get posts => 'Жазба';
 
   @override
-  String get lastPost => 'Соңғы хабар';
+  String get lastPost => 'Кейінгі хабар';
 
   @override
   String get views => 'Қаралған';
@@ -3703,6 +3880,15 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get reply => 'Жауап беру';
+
+  @override
+  String get reopen => 'Reopen';
+
+  @override
+  String get quote => 'Quote';
+
+  @override
+  String get postEdited => 'edited';
 
   @override
   String get message => 'Мәтіні';
@@ -3739,6 +3925,9 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get reportProcessedFasterInEnglish => 'Шағымды ағылшынша жазсаңыз, шешім тезірек шығатын болады.';
+
+  @override
+  String get processReportFasterInEnglish => 'We can process your report faster if you write in English.';
 
   @override
   String get error_provideOneCheatedGameLink => 'Кемі бір ойынның сілтемесін беруіңізді сұраймыз.';
@@ -4109,6 +4298,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get whenCreateSimul => 'Сіз қалың ойын құрғанда, бір мезгілде бірнеше қарсыласпен ойнайсыз.';
 
   @override
+  String get creatingASimul => 'Creating a simul lets you play against multiple opponents at the same time.';
+
+  @override
   String get simulVariantsHint => 'Егер сіз бірнеше шахмат түрін таңдасаңыз, әр ойыншы соның арасынан біреуін таңдайды.';
 
   @override
@@ -4371,7 +4563,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get everybodyGetsAllFeaturesForFree => 'Барлық құралдары барлық адам үшін тегін';
 
   @override
-  String get viewTheSolution => 'Жауабын қарау';
+  String get viewTheSolution => 'Шешімін көру';
 
   @override
   String get noChallenges => 'Шақыру жоқ.';
@@ -4390,6 +4582,12 @@ class AppLocalizationsKk extends AppLocalizations {
   String xLikesY(String param1, String param2) {
     return '$param1 $param2-ны ұнатады';
   }
+
+  @override
+  String get like => 'Like';
+
+  @override
+  String get liked => 'Liked';
 
   @override
   String get quickPairing => 'Қалыптар';
@@ -4412,7 +4610,10 @@ class AppLocalizationsKk extends AppLocalizations {
   String get allLanguages => 'Барлық тілдер';
 
   @override
-  String get background => 'Фон';
+  String get background => 'Артқы кескін';
+
+  @override
+  String get theme => 'Theme';
 
   @override
   String get light => 'Жарық';
@@ -4424,10 +4625,16 @@ class AppLocalizationsKk extends AppLocalizations {
   String get transparent => 'Мөлдір';
 
   @override
+  String get picture => 'Picture';
+
+  @override
   String get deviceTheme => 'Құрылғы кейпі';
 
   @override
-  String get backgroundImageUrl => 'Фон суретіне сілтеме:';
+  String get roundness => 'Roundness';
+
+  @override
+  String get backgroundImageUrl => 'Артқы сурет сілтемесі:';
 
   @override
   String get board => 'Тақта';
@@ -4504,7 +4711,7 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String yourRatingIsX(String param) {
-    return 'Your rating is $param';
+    return 'Сіздің рейтингіңіз $param';
   }
 
   @override
@@ -4789,6 +4996,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get theForumEtiquette => 'форумдағы әдеп';
 
   @override
+  String get pleaseBeNiceInTheForum => 'Please be nice in the forum.';
+
+  @override
   String get thisTopicIsArchived => 'Бұл тақырып мұрағатталды, енді жауап жазуға болмайды.';
 
   @override
@@ -4837,9 +5047,6 @@ class AppLocalizationsKk extends AppLocalizations {
   String youHaveJoinedTeamX(String param1) {
     return 'Сіз $param1 қосылдыңыз.';
   }
-
-  @override
-  String get someoneYouReportedWasBanned => 'Сіздің шағымыңыздан кейін біреу бұғауланды';
 
   @override
   String get congratsYouWon => 'Құтты болсын, сіз жеңдіңіз!';
@@ -4940,6 +5147,11 @@ class AppLocalizationsKk extends AppLocalizations {
   }
 
   @override
+  String youCanFormatTextUsing(String param) {
+    return 'You can format text using $param.';
+  }
+
+  @override
   String get embedsAvailable => 'Еңгізу үшін ойынның не зерттеу бөлімінің URL-ын қойыңыз.';
 
   @override
@@ -4959,6 +5171,9 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get navigateMoveTree => 'Жүрістер тізімін шолу';
+
+  @override
+  String get moveListNavigation => 'Move list navigation';
 
   @override
   String get mouseTricks => 'Тіңтуір әдістері';
@@ -5011,7 +5226,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get resignTheGame => 'Берілу';
 
   @override
-  String get youCantStartNewGame => 'Бұл ойын аяқталмағанша, сіз жаңа ойын бастай алмайсыз.';
+  String get youCantStartNewGame => 'You can\'t start a new game while it\'s your turn.';
 
   @override
   String get since => 'Бастап';
@@ -5080,6 +5295,9 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get enPassant => 'En passant rights';
+
+  @override
+  String get settings => 'Settings';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5533,6 +5751,17 @@ class AppLocalizationsKk extends AppLocalizations {
   }
 
   @override
+  String nbAnonymous(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Anonymous ($count)',
+      one: 'Anonymous',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String nbSecondsToPlayTheFirstMove(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5840,9 +6069,6 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get studyLike => 'Ұнату';
-
-  @override
-  String get studyUnlike => 'Ұнатпаймын';
 
   @override
   String get studyNewTag => 'Жаңа тэг';

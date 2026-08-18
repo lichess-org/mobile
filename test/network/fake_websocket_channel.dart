@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:async/src/stream_sink_transformer.dart';
-import 'package:flutter/material.dart' show debugPrint;
 import 'package:lichess_mobile/src/network/socket.dart';
+import 'package:material_ui/material_ui.dart' show debugPrint;
 import 'package:stream_channel/stream_channel.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -73,7 +73,26 @@ class FakeWebSocketChannelFactory implements WebSocketChannelFactory {
     Map<String, dynamic>? headers,
     Duration timeout = const Duration(seconds: 1),
   }) {
-    return Future.value(createFunction(Uri(path: Uri.parse(url).path)));
+    return Future.value(createFunction(Uri.parse(url)));
+  }
+}
+
+/// A [WebSocketChannelFactory] that resolves the channel creation after a delay.
+///
+/// Useful to simulate a connection attempt that is still in flight while the client state changes.
+class DelayedFakeWebSocketChannelFactory implements WebSocketChannelFactory {
+  const DelayedFakeWebSocketChannelFactory(this.delay, this.createFunction);
+
+  final Duration delay;
+  final FakeWebSocketChannel Function(Uri socketRoute) createFunction;
+
+  @override
+  Future<WebSocketChannel> create(
+    String url, {
+    Map<String, dynamic>? headers,
+    Duration timeout = const Duration(seconds: 1),
+  }) {
+    return Future.delayed(delay, () => createFunction(Uri.parse(url)));
   }
 }
 
@@ -109,10 +128,11 @@ typedef FakeSocketServerHandlers =
 /// verify that the client sends the expected messages.
 class FakeWebSocketChannel implements WebSocketChannel {
   FakeWebSocketChannel(
-    this.route, {
+    Uri socketRoute, {
     this.connectionLag = kFakeWebSocketConnectionLag,
     this.serverHandlers = const {},
-  }) : assert(route.path.isNotEmpty, 'Route path must not be empty'),
+  }) : route = Uri(path: socketRoute.path),
+       assert(socketRoute.path.isNotEmpty, 'Route path must not be empty'),
        assert(connectionLag > Duration.zero, 'Connection lag must be greater than 0') {
     _sink = _FakeWebSocketSink(this, serverHandlers);
   }

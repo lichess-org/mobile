@@ -1,10 +1,9 @@
 import 'dart:io';
 
 import 'package:chessground/chessground.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -21,6 +20,7 @@ import 'package:lichess_mobile/src/model/over_the_board/over_the_board_game_stor
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/over_the_board/over_the_board_screen.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../test_helpers.dart';
@@ -56,13 +56,10 @@ void main() {
 
   group('Playing over the board (offline)', () {
     testWidgets('Checkmate and Rematch', (tester) async {
-      final boardRect = await initOverTheBoardGame(tester, const TimeIncrement(60, 5));
+      await initOverTheBoardGame(tester, const TimeIncrement(60, 5));
 
       // Default orientation is white at the bottom
-      expect(
-        tester.getBottomLeft(find.byKey(const ValueKey('a1-whiterook'))),
-        boardRect.bottomLeft,
-      );
+      expect(tester.widget<Chessboard>(find.byType(Chessboard)).orientation, Side.white);
 
       await playMove(tester, 'e2', 'e4');
       await playMove(tester, 'f7', 'f6');
@@ -82,8 +79,30 @@ void main() {
       expect(gameState.game.steps.first.position, Chess.initial);
 
       // Rematch should flip orientation
-      expect(tester.getTopRight(find.byKey(const ValueKey('a1-whiterook'))), boardRect.topRight);
+      expect(tester.widget<Chessboard>(find.byType(Chessboard)).orientation, Side.black);
 
+      expect(activeClock(tester), null);
+    });
+
+    testWidgets('Clock stops after checkmate when dismissing the result dialog', (tester) async {
+      // Regression test for https://github.com/lichess-org/mobile/issues/3346
+      await initOverTheBoardGame(tester, const TimeIncrement(60, 5));
+
+      // Fool's mate: 1. f3 e6 2. g4 Qh4#
+      await playMove(tester, 'f2', 'f3');
+      await playMove(tester, 'e7', 'e6');
+      await playMove(tester, 'g2', 'g4');
+      await playMove(tester, 'd8', 'h4');
+
+      await tester.pumpAndSettle(const Duration(milliseconds: 600));
+      expect(find.text('Checkmate • Black is victorious'), findsOneWidget);
+      expect(activeClock(tester), null);
+
+      // Dismiss the dialog by tapping the barrier instead of using Rematch.
+      await tester.tapAt(const Offset(10, 10));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Checkmate • Black is victorious'), findsNothing);
       expect(activeClock(tester), null);
     });
 
@@ -114,20 +133,20 @@ void main() {
       await playMove(tester, 'e2', 'e4');
       await playMove(tester, 'e7', 'e5');
 
-      await tester.tap(find.byTooltip('Pause'));
+      await tester.tap(findByTooltip('Pause'));
       await tester.pump();
 
       expect(activeClock(tester), null);
 
-      await tester.tap(find.byTooltip('Resume'));
+      await tester.tap(findByTooltip('Resume'));
       await tester.pump();
 
       expect(activeClock(tester), Side.white);
 
       // Going back a move should not unpause...
-      await tester.tap(find.byTooltip('Pause'));
+      await tester.tap(findByTooltip('Pause'));
       await tester.pump();
-      await tester.tap(find.byTooltip('Previous'));
+      await tester.tap(findByTooltip('Previous'));
       await tester.pump();
 
       expect(activeClock(tester), null);
@@ -138,6 +157,85 @@ void main() {
       expect(activeClock(tester), Side.white);
     });
 
+    testWidgets('Last move is highlighted after playing a move', (tester) async {
+      // Regression test: interactive boards read the last move from
+      // InteractiveBoardParams.lastMove. If the screen passes lastMove to
+      // GameLayout.lastMove (only used for readonly boards) instead, the move
+      // highlight never reaches the board controller.
+      await initOverTheBoardGame(tester, const TimeIncrement(60, 0));
+
+      // No last move highlight before any move is played.
+      expect(getBoardLastMove(tester), isNull);
+
+      await playMove(tester, 'e2', 'e4');
+      await tester.pumpAndSettle();
+
+      expect(getBoardLastMove(tester), Move.parse('e2e4'));
+
+      await playMove(tester, 'e7', 'e5');
+      await tester.pumpAndSettle();
+
+      expect(getBoardLastMove(tester), Move.parse('e7e5'));
+    });
+
+    testWidgets('Last move is highlighted when loading a saved game', (tester) async {
+      // Regression test: the last move of a restored game must be highlighted on
+      // the interactive board right away (via InteractiveBoardParams.lastMove).
+      final gameStorage = MockOverTheBoardGameStorage();
+
+      when(() => gameStorage.fetchOngoingGame()).thenAnswer(
+        (_) async => SavedOtbGame(
+          game: OverTheBoardGame(
+            id: const StringId('otb_test01'),
+            steps: [
+              const GameStep(position: Chess.initial),
+              GameStep(
+                position: Position.setupPosition(
+                  Rule.chess,
+                  Setup.parseFen('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1'),
+                ),
+                sanMove: SanMove('e4', Move.parse('e2e4')!),
+              ),
+              GameStep(
+                position: Position.setupPosition(
+                  Rule.chess,
+                  Setup.parseFen('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2'),
+                ),
+                sanMove: SanMove('e5', Move.parse('e7e5')!),
+              ),
+            ].lock,
+            meta: GameMeta(
+              createdAt: DateTime.now(),
+              rated: false,
+              variant: Variant.standard,
+              speed: Speed.rapid,
+              perf: Perf.rapid,
+            ),
+            initialFen: null,
+            status: GameStatus.started,
+          ),
+          whiteTimeLeft: const Duration(minutes: 2),
+          blackTimeLeft: const Duration(minutes: 1),
+          timeIncrement: const TimeIncrement(5, 3),
+        ),
+      );
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const OverTheBoardScreen(),
+        overrides: {
+          overTheBoardGameStorageProvider: overTheBoardGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      // The last move (e7e5) must be highlighted on the restored board.
+      expect(getBoardLastMove(tester), Move.parse('e7e5'));
+    });
+
     testWidgets('Go back and Forward', (tester) async {
       const time = Duration(seconds: 10);
 
@@ -146,32 +244,32 @@ void main() {
       await playMove(tester, 'e2', 'e4');
       await playMove(tester, 'e7', 'e5');
 
-      await tester.tap(find.byTooltip('Previous'));
+      await tester.tap(findByTooltip('Previous'));
       await tester.pumpAndSettle();
-      expect(find.byKey(const ValueKey('e7-blackpawn')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.e7, Piece.blackPawn), isTrue);
 
       expect(activeClock(tester), Side.black);
 
-      await tester.tap(find.byTooltip('Next'));
+      await tester.tap(findByTooltip('Next'));
       await tester.pumpAndSettle();
-      expect(find.byKey(const ValueKey('e5-blackpawn')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.e5, Piece.blackPawn), isTrue);
 
       expect(activeClock(tester), Side.white);
 
       // Go back all the way to the initial position
-      await tester.tap(find.byTooltip('Previous'));
+      await tester.tap(findByTooltip('Previous'));
       await tester.pumpAndSettle();
-      await tester.tap(find.byTooltip('Previous'));
+      await tester.tap(findByTooltip('Previous'));
       await tester.pumpAndSettle();
-      await tester.tap(find.byTooltip('Previous'));
+      await tester.tap(findByTooltip('Previous'));
       await tester.pumpAndSettle();
-      expect(find.byKey(const ValueKey('e2-whitepawn')), findsOneWidget);
-      expect(find.byKey(const ValueKey('e7-blackpawn')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.e2, Piece.whitePawn), isTrue);
+      expect(boardHasPiece(tester, Square.e7, Piece.blackPawn), isTrue);
 
       expect(activeClock(tester), Side.white);
 
       await playMove(tester, 'e2', 'e4');
-      expect(find.byKey(const ValueKey('e4-whitepawn')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.e4, Piece.whitePawn), isTrue);
 
       expect(activeClock(tester), Side.black);
     });
@@ -293,18 +391,18 @@ void main() {
       expect(find.text('Play'), findsNothing);
 
       // Should load the game's current position, i.e. e4 and e5 were played
-      expect(find.byKey(const ValueKey('e2-whitepawn')), findsNothing);
-      expect(find.byKey(const ValueKey('e4-whitepawn')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.e2, Piece.whitePawn), isFalse);
+      expect(boardHasPiece(tester, Square.e4, Piece.whitePawn), isTrue);
 
-      expect(find.byKey(const ValueKey('e7-blackpawn')), findsNothing);
-      expect(find.byKey(const ValueKey('e5-blackpawn')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.e7, Piece.blackPawn), isFalse);
+      expect(boardHasPiece(tester, Square.e5, Piece.blackPawn), isTrue);
 
       expect(activeClock(tester), null);
       expect(findWhiteClock(tester).timeLeft, const Duration(minutes: 2));
       expect(findBlackClock(tester).timeLeft, const Duration(minutes: 1));
 
       // Start white's clock
-      await tester.tap(find.byTooltip('Resume'));
+      await tester.tap(findByTooltip('Resume'));
       await tester.pump();
       expect(activeClock(tester), Side.white);
 
@@ -452,10 +550,10 @@ void main() {
         expect(gameState.game.meta.variant, Variant.fromPosition);
         expect(gameState.game.initialFen, _customFen);
         // Board should show the custom position (e4 pawn on e4, black pawn on e5)
-        expect(find.byKey(const ValueKey('e2-whitepawn')), findsNothing);
-        expect(find.byKey(const ValueKey('e4-whitepawn')), findsOneWidget);
-        expect(find.byKey(const ValueKey('e7-blackpawn')), findsNothing);
-        expect(find.byKey(const ValueKey('e5-blackpawn')), findsOneWidget);
+        expect(boardHasPiece(tester, Square.e2, Piece.whitePawn), isFalse);
+        expect(boardHasPiece(tester, Square.e4, Piece.whitePawn), isTrue);
+        expect(boardHasPiece(tester, Square.e7, Piece.blackPawn), isFalse);
+        expect(boardHasPiece(tester, Square.e5, Piece.blackPawn), isTrue);
       },
     );
 
@@ -532,7 +630,7 @@ void main() {
 
       // Now open the configure sheet again without an initialFen (normal new game).
       // The sheet must not crash and must default to Variant.standard.
-      await tester.tap(find.byTooltip('Menu'));
+      await tester.tap(findByTooltip('Menu'));
       await tester.pumpAndSettle();
       await tester.tap(find.text('New game'));
       await tester.pumpAndSettle();
@@ -643,8 +741,8 @@ void main() {
       expect(gameState.game.initialFen, _customFen);
       expect(gameState.game.meta.variant, Variant.atomic);
       expect(gameState.game.steps.length, 1);
-      expect(find.byKey(const ValueKey('e4-whitepawn')), findsOneWidget);
-      expect(find.byKey(const ValueKey('e5-blackpawn')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.e4, Piece.whitePawn), isTrue);
+      expect(boardHasPiece(tester, Square.e5, Piece.blackPawn), isTrue);
     });
   });
 }

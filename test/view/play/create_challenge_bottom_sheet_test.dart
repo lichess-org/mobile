@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
@@ -11,11 +10,13 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/play/create_challenge_bottom_sheet.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../mock_server_responses.dart';
 import '../../model/auth/fake_auth_storage.dart';
 import '../../network/fake_http_client_factory.dart';
 import '../../network/fake_websocket_channel.dart';
+import '../../test_bottom_sheet_opener.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 
@@ -31,7 +32,7 @@ void main() {
       ) async {
         final app = await makeTestProviderScopeApp(
           tester,
-          home: const _TestBottomSheetOpener(user: _testDestUser),
+          home: TestBottomSheetOpener(builder: _makeBottomSheetBuilder(user: _testDestUser)),
           overrides: {
             httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
               (ref) => FakeHttpClientFactory(() => _makeClockMockClient()),
@@ -44,9 +45,7 @@ void main() {
         // let account provider load
         await tester.pump(const Duration(milliseconds: 50));
 
-        // open the bottom sheet
-        await tester.tap(find.text('Open'));
-        await tester.pumpAndSettle();
+        await TestBottomSheetOpener.openBottomSheet(tester);
 
         expect(find.byType(CreateChallengeBottomSheet), findsOneWidget);
 
@@ -63,65 +62,61 @@ void main() {
     });
 
     group('correspondence/unlimited challenge', () {
-      testWidgets(
-        'creates correspondence challenge, closes the sheet, and shows snackbar',
-        (tester) async {
-          final app = await makeTestProviderScopeApp(
-            tester,
-            home: const _TestBottomSheetOpener(user: _testDestUser),
-            overrides: {
-              httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
-                (ref) => FakeHttpClientFactory(() => _makeCorrespondenceMockClient()),
-              ),
-            },
-            authUser: fakeAuthUser,
-            defaultPreferences: {
-              '${PrefCategory.challenge.storageKey}.${fakeAuthUser.user.id}': jsonEncode(
-                ChallengePrefs.defaults
-                    .copyWith(timeControl: ChallengeTimeControlType.correspondence, rated: false)
-                    .toJson(),
-              ),
-            },
-          );
+      testWidgets('creates correspondence challenge, closes the sheet, and shows snackbar', (
+        tester,
+      ) async {
+        final app = await makeTestProviderScopeApp(
+          tester,
+          home: TestBottomSheetOpener(builder: _makeBottomSheetBuilder(user: _testDestUser)),
+          overrides: {
+            httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+              (ref) => FakeHttpClientFactory(() => _makeCorrespondenceMockClient()),
+            ),
+          },
+          authUser: fakeAuthUser,
+          defaultPreferences: {
+            '${PrefCategory.challenge.storageKey}.${fakeAuthUser.user.id}': jsonEncode(
+              ChallengePrefs.defaults
+                  .copyWith(timeControl: ChallengeTimeControlType.correspondence, rated: false)
+                  .toJson(),
+            ),
+          },
+        );
 
-          await tester.pumpWidget(app);
-          await tester.pump(const Duration(milliseconds: 50));
+        await tester.pumpWidget(app);
+        await tester.pump(const Duration(milliseconds: 50));
 
-          // open the bottom sheet
-          await tester.tap(find.text('Open'));
-          await tester.pumpAndSettle();
+        await TestBottomSheetOpener.openBottomSheet(tester);
 
-          expect(find.byType(CreateChallengeBottomSheet), findsOneWidget);
+        expect(find.byType(CreateChallengeBottomSheet), findsOneWidget);
 
-          // tap challenge button
-          await tester.tap(find.text('Challenge ${_testDestUser.name}'));
-          await tester.pump(); // start the async challenge creation
+        // tap challenge button
+        await tester.tap(find.text('Challenge ${_testDestUser.name}'));
+        await tester.pump(); // start the async challenge creation
 
-          // let the HTTP request for challenge creation complete
-          await tester.pump(const Duration(milliseconds: 50));
+        // let the HTTP request for challenge creation complete
+        await tester.pump(const Duration(milliseconds: 50));
 
-          // let the socket connect
-          await tester.pump(kFakeWebSocketConnectionLag);
+        // let the socket connect
+        await tester.pump(kFakeWebSocketConnectionLag);
 
-          // let the 1-second delay in newCorrespondenceChallenge fire
-          await tester.pump(const Duration(seconds: 1));
-          await tester.pumpAndSettle();
+        // let the 1-second delay in newCorrespondenceChallenge fire
+        await tester.pump(const Duration(seconds: 1));
+        await tester.pumpAndSettle();
 
-          // the bottom sheet should be closed
-          expect(find.byType(CreateChallengeBottomSheet), findsNothing);
+        // the bottom sheet should be closed
+        expect(find.byType(CreateChallengeBottomSheet), findsNothing);
 
-          // snackbar should confirm the challenge was created
-          expect(find.textContaining('Challenge created'), findsOneWidget);
-        },
-        variant: kPlatformVariant,
-      );
+        // snackbar should confirm the challenge was created
+        expect(find.textContaining('Challenge created'), findsOneWidget);
+      }, variant: kPlatformVariant);
 
       testWidgets('creating an open correspondence challenge opens the game screen', (
         tester,
       ) async {
         final app = await makeTestProviderScopeApp(
           tester,
-          home: const _TestBottomSheetOpener(user: null),
+          home: TestBottomSheetOpener(builder: _makeBottomSheetBuilder(user: null)),
           overrides: {
             httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
               (ref) => FakeHttpClientFactory(() => _makeCorrespondenceMockClient()),
@@ -141,9 +136,7 @@ void main() {
         // let account provider load
         await tester.pump(const Duration(milliseconds: 50));
 
-        // open the bottom sheet
-        await tester.tap(find.text('Open'));
-        await tester.pumpAndSettle();
+        await TestBottomSheetOpener.openBottomSheet(tester);
 
         expect(find.byType(CreateChallengeBottomSheet), findsOneWidget);
 
@@ -160,7 +153,7 @@ void main() {
       testWidgets('shows decline reason when challenge is immediately declined', (tester) async {
         final app = await makeTestProviderScopeApp(
           tester,
-          home: const _TestBottomSheetOpener(user: _testDestUser),
+          home: TestBottomSheetOpener(builder: _makeBottomSheetBuilder(user: _testDestUser)),
           overrides: {
             httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
               (ref) => FakeHttpClientFactory(() => _makeCorrespondenceDeclinedMockClient()),
@@ -179,9 +172,7 @@ void main() {
         await tester.pumpWidget(app);
         await tester.pump(const Duration(milliseconds: 50));
 
-        // open the bottom sheet
-        await tester.tap(find.text('Open'));
-        await tester.pumpAndSettle();
+        await TestBottomSheetOpener.openBottomSheet(tester);
 
         expect(find.byType(CreateChallengeBottomSheet), findsOneWidget);
 
@@ -217,32 +208,8 @@ void main() {
   });
 }
 
-/// A simple wrapper widget that shows a button to open [CreateChallengeBottomSheet].
-class _TestBottomSheetOpener extends StatelessWidget {
-  const _TestBottomSheetOpener({required this.user});
-
-  final LightUser? user;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Builder(
-        builder: (context) {
-          return Center(
-            child: ElevatedButton(
-              onPressed: () => showModalBottomSheet<void>(
-                context: context,
-                isScrollControlled: true,
-                useRootNavigator: true,
-                builder: (_) => CreateChallengeBottomSheet(user: user),
-              ),
-              child: const Text('Open'),
-            ),
-          );
-        },
-      ),
-    );
-  }
+WidgetBuilder _makeBottomSheetBuilder({required LightUser? user}) {
+  return (_) => CreateChallengeBottomSheet(user: user);
 }
 
 MockClient _makeClockMockClient() => MockClient((request) {

@@ -28,6 +28,7 @@ import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/log/http_log_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/aggregator.dart';
+import 'package:lichess_mobile/src/network/server_status.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -42,6 +43,12 @@ Uri lichessUri(String unencodedPath, [Map<String, dynamic>? queryParameters]) =>
         kLichessHost.startsWith('192.168.')
     ? Uri.http(kLichessHost, unencodedPath, queryParameters)
     : Uri.https(kLichessHost, unencodedPath, queryParameters);
+
+/// The host of the lichess main server, without the port part.
+///
+/// Other lichess services, such as the opening explorer, the tablebase or the
+/// CDN, are served by different hosts.
+final _lichessMainHost = lichessUri('/').host;
 
 /// Creates the appropriate http client for the platform.
 ///
@@ -142,25 +149,41 @@ final defaultClientProvider = Provider<DefaultClient>((Ref ref) {
   final client = DefaultClient(ref.read(httpClientFactoryProvider)(), userAgent: userAgent);
   ref.onDispose(() => client.close());
   return client;
-});
+}, name: 'DefaultHttpClientProvider');
 
 /// The http client configured to make requests to the lichess API.
 ///
 /// Only one instance of this client is created and kept alive for the whole app.
 final lichessClientProvider = Provider<LichessClient>((Ref ref) {
   final client = LichessClient(
-    // Retry just once, after 500ms, on 429 Too Many Requests.
+    // Retry just once on 429 Too Many Requests.
     RetryClient(
       ref.read(httpClientFactoryProvider)(),
       retries: 1,
       delay: _defaultDelay,
-      when: (response) => response.statusCode == 429,
+      when: shouldRetryOn429,
     ),
     ref,
   );
   ref.onDispose(() => client.close());
   return client;
-});
+}, name: 'LichessHttpClientProvider');
+
+/// Whether a response should be retried once by [lichessClientProvider].
+///
+/// Retries on 429 Too Many Requests, except for the puzzle batch endpoints (`/api/puzzle/batch/…`),
+/// which are rate-limited deliberately:
+/// - solve submissions (`POST`) are handled with a back-off by `PuzzleSolveLimiter`, so retrying
+///   here only burns a request and delays arming the back-off;
+/// - batch downloads (`GET`) are issued once per puzzle angle, so a retry doubles an already large
+///   burst against an endpoint that has just said it is receiving too many requests.
+@visibleForTesting
+bool shouldRetryOn429(BaseResponse response) {
+  if (response.statusCode != 429) return false;
+  final request = response.request;
+  final isPuzzleBatch = request != null && request.url.path.startsWith('/api/puzzle/batch/');
+  return !isPuzzleBatch;
+}
 
 Duration _defaultDelay(int retryCount) =>
     const Duration(milliseconds: 900) * math.pow(1.5, retryCount);
@@ -217,14 +240,14 @@ Future<bool> downloadFile(
           return s;
         })
         .pipe(sink);
-  } catch (e) {
-    _logger.warning('Failed to download file: $e');
+  } catch (e, st) {
+    _logger.warning('Failed to download file:', e, st);
   } finally {
     try {
       await sink.flush();
       await sink.close();
-    } on FileSystemException catch (e) {
-      _logger.warning('Failed to save file: $e');
+    } on FileSystemException catch (e, st) {
+      _logger.warning('Failed to save file:', e, st);
     }
   }
 
@@ -359,13 +382,20 @@ class LichessClient implements Client {
 
       _logIfError(response);
 
+      // Only the main server can tell us whether lichess is up: the opening
+      // explorer and the tablebase run on their own servers and may well be
+      // available while lichess itself is down (and vice versa).
+      if (_ref.mounted && request.url.host == _lichessMainHost) {
+        _ref.read(serverStatusProvider.notifier).handleHttpResponse(response.statusCode);
+      }
+
       if (response.statusCode == 401 && authUser != null) {
         _ref.read(authControllerProvider.notifier).checkToken();
       }
 
       return response;
     } catch (e, st) {
-      _logger.warning('Request to ${request.url} failed: $e', e, st);
+      _logger.warning('Request to ${request.url} failed:', e, st);
       rethrow;
     }
   }
@@ -472,7 +502,7 @@ class LichessClient implements Client {
 /// * Sets the user-agent header with the app version, build number, and device info.
 /// * Logs all requests and responses with status code >= 400.
 class DefaultClient implements Client {
-  DefaultClient(this._inner, {required String userAgent}) : _userAgent = userAgent;
+  DefaultClient(this._inner, {required this._userAgent});
 
   final Client _inner;
   final String _userAgent;
@@ -490,7 +520,7 @@ class DefaultClient implements Client {
 
       return response;
     } catch (e, st) {
-      _logger.warning('Request to ${request.url} failed: $e', e, st);
+      _logger.warning('Request to ${request.url} failed:', e, st);
       rethrow;
     }
   }
@@ -685,7 +715,7 @@ extension ClientExtension on Client {
     try {
       return mapper(json);
     } catch (e, st) {
-      _logger.severe('Could not read JSON object as $T: $e', e, st);
+      _logger.severe('Could not read JSON object as $T:', e, st);
       throw ClientException('Could not read JSON object as $T: $e\n$st', url);
     }
   }
@@ -721,7 +751,7 @@ extension ClientExtension on Client {
           list.add(mapped);
         }
       } catch (e, st) {
-        _logger.severe('Could not read JSON object as $T: $e', e, st);
+        _logger.severe('Could not read JSON object as $T:', e, st);
         throw ClientException('Could not read JSON object as $T: $e', url);
       }
     }
@@ -770,8 +800,8 @@ extension ClientExtension on Client {
         final json = jsonDecode(e) as Map<String, dynamic>;
         return mapper(json);
       });
-    } catch (e) {
-      _logger.severe('Could not read nd-json object as $T.');
+    } catch (e, st) {
+      _logger.severe('Could not read nd-json object as $T.', e, st);
       throw ClientException('Could not read nd-json object as $T: $e', url);
     }
   }
@@ -799,7 +829,7 @@ extension ClientExtension on Client {
     try {
       return mapper(json);
     } catch (e, st) {
-      _logger.severe('Could not read json as $T: $e', e, st);
+      _logger.severe('Could not read json as $T:', e, st);
       throw ClientException('Could not read json as $T: $e', url);
     }
   }
@@ -832,21 +862,13 @@ extension ClientExtension on Client {
           return mapper(json);
         }),
       );
-    } catch (e) {
-      _logger.severe('Could not read nd-json objects as List<$T>.');
+    } catch (e, st) {
+      _logger.severe('Could not read nd-json objects as List<$T>.', e, st);
       throw ClientException(
         'Could not read nd-json objects as List<$T>: $e',
         response.request?.url,
       );
     }
-  }
-}
-
-extension ClientWidgetRefExtension on WidgetRef {
-  /// Runs [fn] with a [LichessClient].
-  Future<T> withClient<T>(Future<T> Function(LichessClient) fn) async {
-    final client = read(lichessClientProvider);
-    return await fn(client);
   }
 }
 

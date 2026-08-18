@@ -1,5 +1,4 @@
 import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -8,6 +7,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
+import 'package:material_ui/material_ui.dart';
 
 class TimeControlModal extends StatelessWidget {
   const TimeControlModal({
@@ -83,7 +83,7 @@ class TimeControlModal extends StatelessWidget {
                     const TimeIncrement(60, 1),
                     const TimeIncrement(120, 1),
                   ],
-                  title: const _SectionTitle(title: 'Bullet', icon: LichessIcons.bullet),
+                  title: _SectionTitle(title: context.l10n.bullet, icon: LichessIcons.bullet),
                   onSelected: onSelected,
                 ),
                 _sectionSpacing,
@@ -95,7 +95,7 @@ class TimeControlModal extends StatelessWidget {
                     TimeIncrement(300, 0),
                     TimeIncrement(300, 3),
                   ],
-                  title: const _SectionTitle(title: 'Blitz', icon: LichessIcons.blitz),
+                  title: _SectionTitle(title: context.l10n.blitz, icon: LichessIcons.blitz),
                   onSelected: onSelected,
                 ),
                 _sectionSpacing,
@@ -107,7 +107,7 @@ class TimeControlModal extends StatelessWidget {
                     TimeIncrement(900, 0),
                     TimeIncrement(900, 10),
                   ],
-                  title: const _SectionTitle(title: 'Rapid', icon: LichessIcons.rapid),
+                  title: _SectionTitle(title: context.l10n.rapid, icon: LichessIcons.rapid),
                   onSelected: onSelected,
                 ),
                 _sectionSpacing,
@@ -119,7 +119,7 @@ class TimeControlModal extends StatelessWidget {
                     TimeIncrement(1800, 20),
                     TimeIncrement(3600, 0),
                   ],
-                  title: const _SectionTitle(title: 'Classical', icon: LichessIcons.classical),
+                  title: _SectionTitle(title: context.l10n.classical, icon: LichessIcons.classical),
                   onSelected: onSelected,
                 ),
               ],

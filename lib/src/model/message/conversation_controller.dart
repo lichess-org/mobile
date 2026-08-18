@@ -127,17 +127,18 @@ class ConversationController extends AsyncNotifier<ConversationState> {
       case 'msgNew':
         _handleIncomingMessage(event.data as Map<String, dynamic>);
       case 'msgType':
-        _handleContactTyping();
+        _handleContactTyping(event.data);
     }
   }
 
   void _handleIncomingMessage(Map<String, dynamic> data) {
     final message = Message.fromServerJson(data);
+    if (message.userId != userId) {
+      return;
+    }
     final convo = state.requireValue.convo;
     final newMessages = convo.messages.insert(0, message);
-    if (message.userId == userId) {
-      markAsRead();
-    }
+    markAsRead();
     state = AsyncData(
       state.requireValue.copyWith(
         convo: convo.copyWith(messages: newMessages),
@@ -146,7 +147,10 @@ class ConversationController extends AsyncNotifier<ConversationState> {
     );
   }
 
-  void _handleContactTyping() {
+  void _handleContactTyping(dynamic data) {
+    if (data is! String || UserId(data) != userId) {
+      return;
+    }
     state = AsyncData(state.requireValue.copyWith(contactTyping: true));
 
     _contactTypingTimer?.cancel();

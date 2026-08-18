@@ -25,6 +25,28 @@ class System {
     }
   }
 
+  /// Returns the default browser's package name and version, or `null` if it can't be determined.
+  ///
+  /// Only available on Android (returns `null` on other platforms).
+  Future<({String package, String? version})?> getDefaultBrowser() async {
+    if (!Platform.isAndroid) {
+      return null;
+    }
+    try {
+      final info = await _channel.invokeMapMethod<String, String?>('getDefaultBrowser');
+      final package = info?['package'];
+      if (package == null) {
+        return null;
+      }
+      return (package: package, version: info?['version']);
+    } on PlatformException catch (e) {
+      debugPrint('Failed to get default browser: ${e.message}');
+      return null;
+    } on MissingPluginException catch (_) {
+      return null;
+    }
+  }
+
   /// Clear all user data from the app.
   ///
   /// Only available on Android.

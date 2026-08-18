@@ -1,12 +1,12 @@
 import 'dart:math';
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_federation.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -16,18 +16,33 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_team_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/progression_widget.dart';
 import 'package:lichess_mobile/src/widgets/side_indicator.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:share_plus/share_plus.dart';
 
 final broadcastTournamentIdProvider = FutureProvider.autoDispose
     .family<BroadcastTournamentId, BroadcastRoundId>((Ref ref, BroadcastRoundId roundId) async {
       return (await ref.watch(broadcastRoundProvider(roundId).future)).tournament.id;
     }, name: 'BroadcastTournamentIdProvider');
+
+/// Returns the year that should be used as the reference point for the
+/// player's age display, matching lichess.org behaviour: the year the
+/// tournament took place (preferring its end date when known, otherwise its
+/// start date). Falls back to the current year only if no dates are known.
+int tournamentReferenceYear(BroadcastTournament tournament) {
+  final dates = tournament.data.information.dates;
+  if (dates == null) {
+    return DateTime.now().year;
+  }
+  return (dates.endsAt ?? dates.startsAt).year;
+}
 
 class BroadcastPlayerResultsScreenLoading extends ConsumerWidget {
   final BroadcastRoundId roundId;
@@ -112,12 +127,18 @@ class BroadcastPlayerResultsScreen extends ConsumerWidget {
           _ => null,
         };
 
+    final playerResults = asyncData.value?.$1;
+    final fideId = playerResults?.playerWithOverallResult.player.fideId;
+    final isFollowing = playerResults?.isFollowing;
+
     return PlatformScaffold(
       appBar: PlatformAppBar(
         title: displayPlayer != null
             ? BroadcastPlayerWidget(player: displayPlayer, showFederation: false, showRating: false)
             : const SizedBox.shrink(),
         actions: [
+          if (fideId != null && isFollowing != null)
+            _FollowPlayerButton(fideId: fideId, isFollowing: isFollowing),
           if (asyncData case AsyncData(value: final data))
             SemanticIconButton(
               icon: const PlatformShareIcon(),
@@ -140,6 +161,52 @@ class BroadcastPlayerResultsScreen extends ConsumerWidget {
         ],
       ),
       body: _Body(tournamentId, playerId),
+    );
+  }
+}
+
+/// App bar button to follow or unfollow a FIDE player.
+///
+/// The toggled value is kept locally so the button reacts immediately, without refetching the
+/// player. It is reverted if the request fails.
+class _FollowPlayerButton extends ConsumerStatefulWidget {
+  const _FollowPlayerButton({required this.fideId, required this.isFollowing});
+
+  final FideId fideId;
+  final bool isFollowing;
+
+  @override
+  ConsumerState<_FollowPlayerButton> createState() => _FollowPlayerButtonState();
+}
+
+class _FollowPlayerButtonState extends ConsumerState<_FollowPlayerButton> {
+  bool? _isFollowing;
+
+  bool get _value => _isFollowing ?? widget.isFollowing;
+
+  Future<void> _toggle() async {
+    final newValue = !_value;
+    setState(() {
+      _isFollowing = newValue;
+    });
+
+    try {
+      await ref.read(broadcastRepositoryProvider).setFollowingPlayer(widget.fideId, newValue);
+    } catch (_) {
+      if (!mounted) return;
+      setState(() {
+        _isFollowing = !newValue;
+      });
+      showSnackBar(context, 'Could not update the follow status', type: SnackBarType.error);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SemanticIconButton(
+      icon: Icon(_value ? Icons.star : Icons.star_border),
+      semanticsLabel: _value ? context.l10n.unfollow : context.l10n.follow,
+      onPressed: _toggle,
     );
   }
 }
@@ -258,11 +325,10 @@ class _OverallStatPlayer extends StatelessWidget {
 
     final pic = player.fideId != null ? tournament.photos?.get(player.fideId!) : null;
 
-    final statWidth =
-        (MediaQuery.sizeOf(context).width - Styles.bodyPadding.horizontal - 10 * 2) / 3;
+    final statWidth = (MediaQuery.widthOf(context) - Styles.bodyPadding.horizontal - 10 * 2) / 3;
     const cardSpacing = 10.0;
 
-    final picWidth = MediaQuery.sizeOf(context).width / 3;
+    final picWidth = MediaQuery.widthOf(context) / 3;
 
     return Padding(
       padding: Styles.bodyPadding,
@@ -289,7 +355,7 @@ class _OverallStatPlayer extends StatelessWidget {
                           Expanded(
                             child: Row(
                               children: [
-                                Image.asset('assets/images/fide-fed/$federation.png', height: 12),
+                                Image.asset('assets/images/fide-fed/$federation.webp', height: 12),
                                 const SizedBox(width: 5),
                                 Flexible(
                                   child: Text(
@@ -308,13 +374,22 @@ class _OverallStatPlayer extends StatelessWidget {
                       ),
                     const SizedBox(height: 16),
                     if (team != null) ...[
-                      Row(
-                        children: [
-                          const SizedBox(width: 100, child: Text('Team')),
-                          Expanded(
-                            child: Text(team.trim(), style: Theme.of(context).textTheme.bodyLarge),
-                          ),
-                        ],
+                      GestureDetector(
+                        onTap: () {
+                          if (tournament.data.showTeamScores == true) {
+                            Navigator.of(
+                              context,
+                            ).push(BroadcastTeamScreen.buildRoute(tournament.data.id, team));
+                          }
+                        },
+                        child: Row(
+                          children: [
+                            const SizedBox(width: 100, child: Text('Team')),
+                            Expanded(
+                              child: Text(team, style: Theme.of(context).textTheme.bodyLarge),
+                            ),
+                          ],
+                        ),
                       ),
                       const SizedBox(height: 16),
                     ],
@@ -324,7 +399,7 @@ class _OverallStatPlayer extends StatelessWidget {
                           SizedBox(width: 100, child: Text(context.l10n.broadcastAge)),
                           Expanded(
                             child: Text(
-                              (DateTime.now().year - birthYear).toString(),
+                              (tournamentReferenceYear(tournament) - birthYear).toString(),
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
                           ),
@@ -521,7 +596,7 @@ class _GameResultListTile extends StatelessWidget {
           ? Row(
               mainAxisSize: .min,
               children: [
-                Image.asset('assets/images/fide-fed/$federation.png', height: 12),
+                Image.asset('assets/images/fide-fed/$federation.webp', height: 12),
                 const SizedBox(width: 5),
                 if (rating != null) Text(rating.toString()),
               ],
@@ -548,7 +623,7 @@ class _GameResultListTile extends StatelessWidget {
                     mainAxisSize: .min,
                     children: [
                       Text(
-                        customPoints != null && customPoints != 0.0 && customPoints != points?.value
+                        customPoints != null && customPoints != points?.value
                             ? NumberFormat('0.##').format(customPoints)
                             : points?.resultFor(color).resultToString(color) ??
                                   (ongoing ? '*' : ''),

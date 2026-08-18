@@ -1,5 +1,4 @@
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
@@ -9,7 +8,6 @@ import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/game.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
-
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/user/game_history_preferences.dart';
@@ -32,15 +30,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
-
-String displayModeL10n(BuildContext context, GameHistoryDisplayMode mode) {
-  switch (mode) {
-    case GameHistoryDisplayMode.compact:
-      return context.l10n.mobileDisplayModeCompact;
-    case GameHistoryDisplayMode.detail:
-      return context.l10n.mobileDisplayModeDetailed;
-  }
-}
+import 'package:material_ui/material_ui.dart';
 
 class GameHistoryScreen extends ConsumerWidget {
   const GameHistoryScreen({
@@ -109,7 +99,7 @@ class GameHistoryScreen extends ConsumerWidget {
       actions: [
         ContextMenuAction(
           icon: Icons.ballot_outlined,
-          label: 'Detailed view',
+          label: context.l10n.mobileDisplayModeDetailed,
           onPressed: () {
             ref
                 .read(gameHistoryPreferencesProvider.notifier)
@@ -118,7 +108,7 @@ class GameHistoryScreen extends ConsumerWidget {
         ),
         ContextMenuAction(
           icon: Icons.list_outlined,
-          label: 'Compact view',
+          label: context.l10n.mobileDisplayModeCompact,
           onPressed: () {
             ref
                 .read(gameHistoryPreferencesProvider.notifier)
@@ -480,7 +470,7 @@ class _FilterGamesState extends ConsumerState<_FilterGames> {
     filterType: FilterType.multipleChoice,
     choices: choices,
     choiceSelected: (choice) => filter.perfs.contains(choice),
-    choiceLabel: (t) => Text(t.shortTitle),
+    choiceLabel: (t) => Text(t.shortLabel(context.l10n)),
     onSelected: (value, selected) => setState(() {
       filter = filter.copyWith(
         perfs: selected ? filter.perfs.add(value) : filter.perfs.remove(value),

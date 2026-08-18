@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:material_ui/material_ui.dart';
 
 class BroadcastPlayerWidget extends ConsumerWidget {
   const BroadcastPlayerWidget({
@@ -24,7 +24,7 @@ class BroadcastPlayerWidget extends ConsumerWidget {
       children: [
         if (federation != null && showFederation) ...[
           Image.asset(
-            'assets/images/fide-fed/$federation.png',
+            'assets/images/fide-fed/$federation.webp',
             height: ((textStyle ?? DefaultTextStyle.of(context).style).fontSize ?? 14) - 2,
           ),
           const SizedBox(width: 5),

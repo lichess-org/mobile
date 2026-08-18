@@ -1,6 +1,7 @@
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
+import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 
@@ -34,20 +35,20 @@ enum Speed {
     }
   }
 
-  String get label {
+  String label(AppLocalizations l10n) {
     switch (this) {
       case Speed.ultraBullet:
-        return 'UltraBullet';
+        return l10n.ultraBullet;
       case Speed.bullet:
-        return 'Bullet';
+        return l10n.bullet;
       case Speed.blitz:
-        return 'Blitz';
+        return l10n.blitz;
       case Speed.rapid:
-        return 'Rapid';
+        return l10n.rapid;
       case Speed.classical:
-        return 'Classical';
+        return l10n.classical;
       case Speed.correspondence:
-        return 'Correspondence';
+        return l10n.correspondence;
     }
   }
 

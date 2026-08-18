@@ -1,6 +1,5 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
@@ -11,6 +10,7 @@ import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/explorer/explorer_view.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class OpeningNameHeader extends StatelessWidget {
@@ -46,6 +46,22 @@ class OpeningNameHeader extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+/// A centered, padded informational message shown in place of explorer or tablebase results
+/// (e.g. max depth reached, offline, no data).
+class ExplorerMessage extends StatelessWidget {
+  const ExplorerMessage(this.message, {super.key});
+
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Text(message, textAlign: TextAlign.center),
     );
   }
 }

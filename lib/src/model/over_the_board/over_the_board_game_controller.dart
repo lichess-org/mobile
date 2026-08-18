@@ -64,11 +64,6 @@ class OverTheBoardGameController extends Notifier<OverTheBoardGameState> {
   }
 
   void makeMove(Move move) {
-    if (move case NormalMove() when isPromotionPawnMove(state.currentPosition, move)) {
-      state = state.copyWith(promotionMove: move);
-      return;
-    }
-
     final (newPos, newSan) = state.currentPosition.makeSan(Move.parse(move.uci)!);
     final sanMove = SanMove(newSan, move);
     final newStep = GameStep(
@@ -115,22 +110,11 @@ class OverTheBoardGameController extends Notifier<OverTheBoardGameState> {
       }
     } else if (state.currentPosition.isStalemate) {
       state = state.copyWith(game: state.game.copyWith(status: GameStatus.stalemate));
+    } else if (state.currentPosition.isInsufficientMaterial) {
+      state = state.copyWith(game: state.game.copyWith(status: GameStatus.draw));
     }
 
     _moveFeedback(sanMove);
-  }
-
-  void onPromotionSelection(Role? role) {
-    if (role == null) {
-      state = state.copyWith(promotionMove: null);
-      return;
-    }
-    final promotionMove = state.promotionMove;
-    if (promotionMove != null) {
-      final move = promotionMove.withPromotion(role);
-      makeMove(move);
-      state = state.copyWith(promotionMove: null);
-    }
   }
 
   void onFlag(Side side) {
@@ -141,13 +125,13 @@ class OverTheBoardGameController extends Notifier<OverTheBoardGameState> {
 
   void goForward() {
     if (state.canGoForward) {
-      state = state.copyWith(stepCursor: state.stepCursor + 1, promotionMove: null);
+      state = state.copyWith(stepCursor: state.stepCursor + 1);
     }
   }
 
   void goBack() {
     if (state.canGoBack) {
-      state = state.copyWith(stepCursor: state.stepCursor - 1, promotionMove: null);
+      state = state.copyWith(stepCursor: state.stepCursor - 1);
     }
   }
 
@@ -170,7 +154,6 @@ sealed class OverTheBoardGameState with _$OverTheBoardGameState {
   const factory OverTheBoardGameState({
     required OverTheBoardGame game,
     @Default(0) int stepCursor,
-    @Default(null) NormalMove? promotionMove,
   }) = _OverTheBoardGameState;
 
   factory OverTheBoardGameState.fromVariant(Variant variant, Speed speed, {String? initialFen}) {

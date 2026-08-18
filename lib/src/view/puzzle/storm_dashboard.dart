@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
@@ -11,6 +10,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
+import 'package:material_ui/material_ui.dart';
 
 class StormDashboardModal extends StatelessWidget {
   const StormDashboardModal({super.key, required this.user});
@@ -187,7 +187,7 @@ class _Body extends ConsumerWidget {
 class _Loading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final containerHeight = MediaQuery.sizeOf(context).width / 2 * 0.8;
+    final containerHeight = MediaQuery.widthOf(context) / 2 * 0.8;
     return SafeArea(
       child: Shimmer(
         child: ShimmerLoading(

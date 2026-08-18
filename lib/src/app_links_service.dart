@@ -7,22 +7,23 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
-import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
-import 'package:lichess_mobile/src/model/auth/oauth_callback.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository.dart';
-import 'package:lichess_mobile/src/tab_scaffold.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_results_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
@@ -32,7 +33,7 @@ import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:linkify/linkify.dart';
+import 'package:lichess_mobile/src/widgets/rich_link_text.dart';
 import 'package:logging/logging.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -50,36 +51,43 @@ final appLinksServiceProvider = Provider<AppLinksService>((ref) {
 });
 
 class AppLinksService {
-  AppLinksService(this.ref);
+  /// Creates the service. [appLinks] is injectable so tests can supply a fake
+  /// in place of the real (singleton, platform-channel backed) [AppLinks].
+  AppLinksService(this.ref, {AppLinks? appLinks}) : _appLinks = appLinks ?? AppLinks();
 
   final Ref ref;
 
-  final _appLinks = AppLinks();
+  final AppLinks _appLinks;
   StreamSubscription<Uri>? _linkSubscription;
 
   Future<void> start() async {
-    // Handle the link that cold-started the app (if any) after the first frame
-    // so the navigator is ready. Push without animation — the user launched the
-    // app via this link so the target screen should just be there.
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      try {
-        final initialUri = await _appLinks.getInitialLink();
-        if (initialUri != null) {
-          await _handleUri(initialUri, animated: false);
-        }
-      } catch (e, st) {
-        _logger.severe('Error handling initial app link: $e\n$st');
+    // app_links' uriLinkStream emits the link that cold-started the app as its
+    // first event, followed by any links received while the app is running, so a
+    // single subscription covers both. (Also calling getInitialLink() would
+    // deliver the cold-start link a second time, running its side effects twice.)
+    var isColdStart = true;
+    _linkSubscription = _appLinks.uriLinkStream.listen((uri) {
+      if (isColdStart) {
+        isColdStart = false;
+        // The cold-start link can arrive before the first frame, so defer until
+        // the navigator is ready. Push without a transition — the user launched
+        // the app via this link so the target screen should just be there.
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          unawaited(_handleUriLogged(uri, animated: false));
+        });
+      } else {
+        // Links received while the app is already running get a normal transition.
+        unawaited(_handleUriLogged(uri, animated: true));
       }
     });
+  }
 
-    // Links received while the app is already running get a normal transition.
-    _linkSubscription = _appLinks.uriLinkStream.listen((uri) async {
-      try {
-        await _handleUri(uri, animated: true);
-      } catch (e, st) {
-        _logger.severe('Error handling app link: $e\n$st');
-      }
-    });
+  Future<void> _handleUriLogged(Uri uri, {required bool animated}) async {
+    try {
+      await _handleUri(uri, animated: animated);
+    } catch (e, st) {
+      _logger.severe('Error handling app link:', e, st);
+    }
   }
 
   Future<void> _handleUri(Uri uri, {required bool animated}) async {
@@ -87,16 +95,17 @@ class AppLinksService {
     if (uri.scheme == 'file' || uri.scheme == 'content') {
       return;
     }
-    if (uri.scheme == kLichessUriScheme && uri.host == kOAuthRedirectUriHost) {
-      ref.read(oauthCallbackProvider).add(uri);
+    // Shared PGN deeplinks (from the iOS Share Extension) are handled natively by
+    // SharePlugin, which reads the PGN from the shared App Group container.
+    if (uri.scheme == kLichessCustomUriSchemeName && uri.host == 'shared-pgn') {
       return;
     }
-    if (uri.scheme == kLichessUriScheme && uri.host == 'open-web') {
+    if (uri.scheme == kLichessCustomUriSchemeName && uri.host == 'open-web') {
       _handleOpenWebLink(uri);
       return;
     }
     final context = ref.read(currentNavigatorKeyProvider).currentContext;
-    if (uri.scheme == kLichessUriScheme &&
+    if (uri.scheme == kLichessCustomUriSchemeName &&
         uri.host == _kDailyPuzzleDeeplinkHost &&
         uri.pathSegments.firstOrNull == _kDailyPuzzleDeeplinkPath) {
       if (context != null && context.mounted) {
@@ -157,10 +166,35 @@ class AppLinksService {
         }
       case 'tournament':
         final tournamentId = TournamentId(appLinkUri.pathSegments[1]);
-        return [TournamentScreen.buildRoute(tournamentId)];
+        final playerName = appLinkUri.queryParameters['player'];
+        final playerId = playerName != null ? UserId.fromUserName(playerName) : null;
+        return [TournamentScreen.buildRoute(tournamentId, initialPlayerId: playerId)];
       case 'training':
         final id = appLinkUri.pathSegments[1];
         return [PuzzleScreen.buildRoute(angle: PuzzleAngle.fromKey('mix'), puzzleId: PuzzleId(id))];
+      case 'editor':
+        final orientation = appLinkUri.queryParameters['color'] == 'black'
+            ? Side.black
+            : Side.white;
+        final fen = appLinkUri.pathSegments.sublist(1).join('/').replaceAll('_', ' ').trim();
+        String? initialFen;
+        if (fen.isNotEmpty) {
+          try {
+            Setup.parseFen(fen);
+            initialFen = fen;
+          } catch (_) {
+            if (context.mounted) {
+              showSnackBar(context, 'Invalid FEN: $fen', type: SnackBarType.error);
+            }
+          }
+        }
+        return [
+          BoardEditorScreen.buildRoute((
+            initialVariant: Variant.standard,
+            initialFen: initialFen,
+            initialOrientation: orientation,
+          )),
+        ];
       case 'tv':
         if (appLinkUri.pathSegments.length < 2) return null;
         final channel = TvChannel.nameMap.entryOrNull(appLinkUri.pathSegments[1]);
@@ -242,14 +276,12 @@ class AppLinksService {
       if (puzzleId == null || dailyPuzzle.puzzle.id == PuzzleId(puzzleId)) {
         puzzle = dailyPuzzle;
       } else {
-        // Widget cached a different puzzle than today's daily — fetch it, but
-        // don't mark as daily to avoid confusing the user.
+        // Widget cached a different puzzle than today's daily — fetch it, but don't mark as daily
+        // to avoid confusing the user.
         try {
-          puzzle = await ref.read(puzzleProvider(PuzzleId(puzzleId)).future);
+          puzzle = await ref.read(puzzleRepositoryProvider).fetch(PuzzleId(puzzleId));
         } catch (e, st) {
-          // Fall back to the current daily puzzle rather than leaving the tap
-          // as a no-op when the widget's cached id is stale or unreachable.
-          _logger.info('Failed to load widget puzzle id $puzzleId, falling back: $e', e, st);
+          _logger.info('Failed to load widget puzzle id $puzzleId, falling back:', e, st);
           puzzle = dailyPuzzle;
         }
       }
@@ -264,7 +296,7 @@ class AppLinksService {
         animated: animated,
       );
     } catch (e, st) {
-      _logger.severe('Failed to open daily puzzle from widget: $e\n$st');
+      _logger.severe('Failed to open daily puzzle from widget:', e, st);
     }
   }
 
@@ -279,7 +311,7 @@ class AppLinksService {
 
       return true;
     } catch (e, st) {
-      _logger.info('Not a challenge link: $e', e, st);
+      _logger.info('Not a challenge link:', e, st);
     }
     return false;
   }
@@ -312,7 +344,7 @@ class AppLinksService {
         return [TvScreen.buildRoute(gameId: gameId, user: user, orientation: orientation)];
       }
     } catch (e, st) {
-      _logger.info('Not a game link: $e', e, st);
+      _logger.info('Not a game link:', e, st);
     }
 
     return null;
@@ -388,7 +420,7 @@ class AppLinksService {
 
   static const kLichessLinkifiers = [UrlLinkifier(), EmailLinkifier(), UserTagLinkifier()];
 
-  /// Handles link clicks in Linkify widgets throughout the app.
+  /// Handles link clicks in RichLinkText widgets throughout the app.
   Future<void> onLinkifyOpen(BuildContext context, LinkableElement link) async {
     if (link is UrlElement && link.url.startsWith(RegExp('https?:\\/\\/$kLichessHost'))) {
       // Handle Lichess links specifically

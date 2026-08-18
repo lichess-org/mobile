@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
@@ -7,10 +6,12 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/http_network_image.dart';
+import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// A Wifi icon representing that the user is currently connected (online) or not.
 class ConnectedIcon extends StatelessWidget {
@@ -40,6 +41,64 @@ class ConnectedIcon extends StatelessWidget {
         color: isConnected ? null : textShade(context, 0.3),
         size: size,
       ),
+    );
+  }
+}
+
+/// App bar title for the user and profile screens.
+///
+/// Shows the user's avatar and name, with a subtitle displaying the online
+/// status, or the time they were last seen active if offline.
+class UserAppBarTitleWidget extends StatelessWidget {
+  const UserAppBarTitleWidget({required this.user, required this.isOnline, this.seenAt, super.key});
+
+  final LightUser user;
+  final bool isOnline;
+
+  /// The last time the user was seen active, shown when [isOnline] is false.
+  final DateTime? seenAt;
+
+  @override
+  Widget build(BuildContext context) {
+    final subtitleTextStyle = Theme.of(context).textTheme.titleSmall?.copyWith(
+      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: Styles.subtitleOpacity),
+    );
+    return Row(
+      mainAxisSize: .min,
+      children: [
+        UserAvatar(user, radius: 16),
+        const SizedBox(width: 8),
+        Flexible(
+          child: Column(
+            mainAxisSize: .min,
+            crossAxisAlignment: .start,
+            children: [
+              UserFullNameWidget(user: user, showFlair: false),
+              if (isOnline)
+                Text(
+                  context.l10n.online,
+                  style: subtitleTextStyle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                )
+              else if (seenAt != null)
+                Text(
+                  context.l10n.lastSeenActive(relativeDate(context.l10n, seenAt!)),
+                  style: subtitleTextStyle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                )
+              else
+                Text(
+                  context.l10n.offline,
+                  style: subtitleTextStyle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
@@ -98,8 +157,10 @@ class PatronIcon extends StatelessWidget {
 class UserFullNameWidget extends ConsumerWidget {
   const UserFullNameWidget({
     required this.user,
+    this.name,
     this.aiLevel,
     this.rating,
+    this.ratingDiff,
     this.provisional,
     this.shouldShowOnline = false,
     this.showFlair = true,
@@ -111,8 +172,10 @@ class UserFullNameWidget extends ConsumerWidget {
 
   const UserFullNameWidget.player({
     required this.user,
+    this.name,
     required this.aiLevel,
     this.rating,
+    this.ratingDiff,
     this.provisional,
     this.shouldShowOnline = false,
     this.showFlair = true,
@@ -123,7 +186,10 @@ class UserFullNameWidget extends ConsumerWidget {
   });
 
   final LightUser? user;
+  final String? name;
   final int? rating;
+
+  final int? ratingDiff;
 
   /// The AI level, if the user is lichess AI.
   final int? aiLevel;
@@ -156,6 +222,7 @@ class UserFullNameWidget extends ConsumerWidget {
 
     final displayName =
         user?.name ??
+        name ??
         (aiLevel != null
             ? context.l10n.aiNameLevelAiLevel('Stockfish', aiLevel.toString())
             : context.l10n.anonymous);
@@ -207,6 +274,21 @@ class UserFullNameWidget extends ConsumerWidget {
               fontWeight: FontWeight.w400,
               fontSize: contextTextStyle.fontSize != null ? contextTextStyle.fontSize! - 3 : 13,
               color: textShade(context, 0.8),
+            ),
+          ),
+        ],
+        if (shouldShowRating && ratingDiff != null) ...[
+          const SizedBox(width: 5),
+          Text(
+            ratingDiff! > 0 ? '+$ratingDiff' : '$ratingDiff',
+            style: contextTextStyle.copyWith(
+              fontWeight: .w400,
+              fontSize: contextTextStyle.fontSize != null ? contextTextStyle.fontSize! - 3 : 13,
+              color: ratingDiff! > 0
+                  ? context.lichessColors.good
+                  : ratingDiff! == 0
+                  ? context.lichessColors.brag
+                  : context.lichessColors.error,
             ),
           ),
         ],

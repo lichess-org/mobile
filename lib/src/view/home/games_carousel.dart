@@ -1,16 +1,16 @@
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/tab_scaffold.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
+import 'package:material_ui/material_ui.dart';
 
 const _kDefaultCardOpacity = 0.9;
 const kGameCarouselFlexWeights = [6, 2];
@@ -208,7 +208,7 @@ class _BoardCarouselItem extends ConsumerWidget {
       hsl.lightness,
     ).toColor();
 
-    final screenWidth = MediaQuery.sizeOf(context).width;
+    final screenWidth = MediaQuery.widthOf(context);
     final totalFlex = kGameCarouselFlexWeights.reduce((a, b) => a + b);
     final double width = screenWidth - 16.0;
     final boardSize =
@@ -224,21 +224,23 @@ class _BoardCarouselItem extends ConsumerWidget {
             SizedBox(
               height: boardSize,
               child: StaticChessboard(
-                hue: boardPrefs.hue,
-                brightness: boardPrefs.brightness,
                 size: boardSize,
                 fen: fen,
                 orientation: orientation,
                 lastMove: lastMove,
-                enableCoordinates: false,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(10.0),
-                  topRight: Radius.circular(10.0),
+                settings: StaticChessboardSettings(
+                  hue: boardPrefs.hue,
+                  brightness: boardPrefs.brightness,
+                  enableCoordinates: false,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(10.0),
+                    topRight: Radius.circular(10.0),
+                  ),
+                  pieceAssets: boardPrefs.pieceSet.assets,
+                  colorScheme: isRealTimeGame
+                      ? realTimeColors(context)
+                      : boardPrefs.boardTheme.colors,
                 ),
-                pieceAssets: boardPrefs.pieceSet.assets,
-                colorScheme: isRealTimeGame
-                    ? realTimeColors(context)
-                    : boardPrefs.boardTheme.colors,
               ),
             ),
             Positioned(

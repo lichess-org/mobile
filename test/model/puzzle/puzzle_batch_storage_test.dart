@@ -70,11 +70,28 @@ void main() {
 
       expect(
         storage.fetchSavedOpenings(userId: null),
-        completion(equals(IMap(const {'test_opening': 1, 'test_opening2': 1}))),
+        completion(equals(ISet(const {'test_opening', 'test_opening2'}))),
       );
     });
 
-    test('fetchAll', () async {
+    test('fetchNbUnsolved', () async {
+      final container = await makeContainer();
+
+      final storage = await container.read(puzzleBatchStorageProvider.future);
+
+      await storage.save(userId: null, angle: const PuzzleOpening('test_opening'), data: data);
+
+      expect(
+        storage.fetchNbUnsolved(userId: null, angle: const PuzzleOpening('test_opening')),
+        completion(equals(1)),
+      );
+      expect(
+        storage.fetchNbUnsolved(userId: null, angle: const PuzzleOpening('not_saved')),
+        completion(equals(0)),
+      );
+    });
+
+    test('fetchAllAngles', () async {
       final container = await makeContainer();
 
       final database = await container.read(databaseProvider.future);
@@ -95,15 +112,15 @@ void main() {
       await save(const PuzzleOpening('test_opening2'), data, '2021-01-04T80:00:00Z');
 
       expect(
-        storage.fetchAll(userId: null),
+        storage.fetchAllAngles(userId: null),
         completion(
           equals(
-            [
-              const PuzzleOpening('test_opening2'),
-              const PuzzleOpening('test_opening'),
-              const PuzzleTheme(PuzzleThemeKey.doubleBishopMate),
-              const PuzzleTheme(PuzzleThemeKey.rookEndgame),
-            ].map((angle) => (angle, 1)).toIList(),
+            const [
+              PuzzleOpening('test_opening2'),
+              PuzzleOpening('test_opening'),
+              PuzzleTheme(PuzzleThemeKey.doubleBishopMate),
+              PuzzleTheme(PuzzleThemeKey.rookEndgame),
+            ].toIList(),
           ),
         ),
       );

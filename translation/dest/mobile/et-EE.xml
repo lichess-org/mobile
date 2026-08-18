@@ -1,15 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="account" comment="The account screen title.">Konto</string>
+  <string name="accountPreferences" comment="Displayed on settings screen. This is for preferences synced with website on the server.">Konto eelistused</string>
+  <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">Need eelistused salvestatakse sinu Lichess kontol ja kehtivad kõigil seadmetel.</string>
+  <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Kõik mängud</string>
+  <string name="areYouSure" comment="This is shown in confirmation dialogs.">Kas oled kindel?</string>
+  <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Mängulaua seaded</string>
+  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Tühista tagasivõtmise pakkumine</string>
+  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Tühjenda</string>
+  <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Salvestatud käigu tühistamine</string>
+  <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Liitu mänguga</string>
+  <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Tagasiside</string>
+  <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Tere õhtust, %s</string>
+  <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Tere õhtust</string>
+  <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Tere päevast, %s</string>
+  <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Tere päevast</string>
+  <string name="hideVariation" comment="Shown in the analysis screen.">Peida variatsioon</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Kodu</string>
+  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Reaalajas striimijad</string>
+  <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Selle lehe vaatamiseks peab olema sisse logitud.</string>
+  <string name="newGame" comment="New game button in OTB and play against offline computer features">Uus mäng</string>
+  <string name="noSearchResults" comment="This is shown when the search did not return any results.">Tulemused puuduvad</string>
+  <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Palun arvesta, et hetkel ei ole kõik vana rakenduse või veebisaidi funktsioonid veel kättesaadavad, kuid lisame neid pidevalt juurde.</string>
+  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Sa pole jälgimas ühtki kasutajat.</string>
+  <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">Hüva</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Üle laua</string>
+  <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Kasutajad sisuga \"%s\"</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Vasakul</string>
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Paremal</string>
-  <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Pusle</string>
+  <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">Suurenda tiritud malendit</string>
+  <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Kas soovid partii lõpetada?</string>
+  <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Tulemused puuduvad, palun muuda filtreid</string>
+  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Tulemused puuduvad. Mängi paar Puzzle Storm vooru.</string>
+  <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">Lahenda 3 minuti jooksul nii palju puslesid kui võimalik.</string>
+  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">Sa kaotad praeguse seeria ja sinu punktisumma salvestatakse.</string>
+  <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Mängi oma lemmikavangute puslesid või vali teema.</string>
+  <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Pusled</string>
+  <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Hiljutised otsingud</string>
+  <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Eemalda järjehoidja</string>
+  <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.">Serveri analüüs</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Kella asukoht</string>
+  <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">Taustad</string>
+  <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">Lohistatud malendi siht</string>
+  <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">Ring</string>
+  <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">Ruut</string>
+  <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">Kodu vidinad</string>
+  <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Haarav seisund</string>
+  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Peida mängimise ajal süsteemi UI. Kasuta seda, kui sind segavad ekraani servades süsteemi juhtimise väljad. Kehtib mängu- ja pusleekraanide kohta.</string>
+  <string name="settingsMaterialDifferenceCapturedPieces" comment="A value of the material difference settings choice (to show all captured pieces instead of material difference).">Võetud malendid</string>
+  <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick and image from the image library as app custom background.">Vali pilt</string>
+  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">Kohandatud taust töötab ainult tumedas olekus. Soovitatav on kasutada tumedat pilti.</string>
+  <string name="settingsPickAnImageBlur" comment="Displayed in theme background choice screen, to blur the chosen image.">Hägusta pilti</string>
+  <string name="settingsPickAnImageHideBoard" comment="Displayed in theme background choice screen, to hide the board when viewing chosen image.">Peida mängulaud</string>
+  <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">Näita mängulauda</string>
+  <string name="settingsPickAnImageSwipeToDisplay" comment="Displayed in theme background choice screen, when viewing colors presets to display other colors backgrounds.">Libista, et näha teisi taustapilte</string>
+  <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">Puuduta või lohista</string>
+  <string name="settingsPieceShiftMethodTapTwoSquares" comment="A value of piece shift method settings entry.">Puuduta kahte ruutu</string>
+  <string name="settingsShapeDrawing" comment="Entry in the settings.">Kuju joonistamine</string>
+  <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.">Joonista kujundeid kahe sõrmega: hoia üht sõrme tühjal ruudul ja tõmba teisega, et kujundit joonistada.</string>
+  <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Näita piire</string>
+  <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Puutetagasiside</string>
+  <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Kui lubatud, vibreerib seade lühidalt, kui liigutad või võtad lööd malendit.</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Seaded</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Jaga PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Jaga mängu URL</string>
+  <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Jaga positsiooni FEN-ina</string>
+  <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Jaga seda puslet</string>
+  <string name="showComments" comment="Shown in the analysis screen.">Näita kommentaare</string>
+  <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">Näita tulemust</string>
+  <string name="showVariations" comment="Shown in the analysis screen.">Näita variatsioone</string>
+  <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Midagi läks valesti.</string>
+  <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Süsteemi värvid</string>
+  <string name="theme" comment="Graphic theme section in the global app settings.">Teema</string>
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Tööriistad</string>
-  <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Variant %s ei ole toetatud sellel versioonil.</string>
+  <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Variant %s ei ole selles versioonis saadaval.</string>
+  <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Vastase ühinemise ootamine...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Vaata</string>
+  <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">Tere tulemast Lichess rakendusse!</string>
+  <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">Vaata mängu</string>
+  <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">Nõuanne: võid avalehele lisada veel vidinaid või eemaldada need, mida enam ei vaja!</string>
+  <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">Taganda</string>
+  <string name="customizeButton" comment="Text of a button, so translation should be short.">Kohanda</string>
+  <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">Lõpeta ohu näitamine</string>
+  <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word">Lõpetatud</string>
+  <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">Mine minu lehele</string>
+  <string name="displayModeCompact" comment="">Kompaktne</string>
+  <string name="displayModeDetailed" comment="">Detailne</string>
+  <string name="openingExplorerNotAvailableOffline" comment="">Maleavangute uurija pole võrguühenduseta saadaval.</string>
+  <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">Väljakutse on loodud: saad teate, kui mäng algab.\nSelle leiad avalehelt.</string>
+  <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Eelmine</string>
+  <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">Või importi PGN-fail</string>
+  <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">Hea käik, aga on olemas parem</string>
 </resources>

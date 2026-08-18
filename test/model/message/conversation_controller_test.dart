@@ -170,4 +170,61 @@ void main() {
       expect(state.isBot, isFalse);
     });
   });
+
+  group('ConversationController socket events', () {
+    Future<ConversationState> loadState(ProviderContainer container) async {
+      container.listen(conversationControllerProvider(_userId), (_, _) {});
+      return container.read(conversationControllerProvider(_userId).future);
+    }
+
+    test('adds incoming message from open contact', () async {
+      final container = await _makeContainer(_inboxResponse, _userNotBlockedResponse);
+      await loadState(container);
+
+      sendServerSocketMessages(Uri(path: kDefaultSocketRoute), [
+        '{"t":"msgNew","d":{"user":"opponent","text":"hello","date":1621533013388}}',
+      ]);
+      await Future<void>.delayed(.zero);
+
+      final state = container.read(conversationControllerProvider(_userId)).requireValue;
+      expect(state.convo.messages.length, 1);
+      expect(state.convo.messages[0].text, 'hello');
+      expect(state.convo.messages[0].userId, _userId);
+    });
+
+    test('ignores incoming message from other contact', () async {
+      final container = await _makeContainer(_inboxResponse, _userNotBlockedResponse);
+      await loadState(container);
+
+      sendServerSocketMessages(Uri(path: kDefaultSocketRoute), [
+        '{"t":"msgNew","d":{"user":"other","text":"wrong thread","date":1621533013388}}',
+      ]);
+      await Future<void>.delayed(.zero);
+
+      final state = container.read(conversationControllerProvider(_userId)).requireValue;
+      expect(state.convo.messages, isEmpty);
+    });
+
+    test('shows typing indicator for open contact', () async {
+      final container = await _makeContainer(_inboxResponse, _userNotBlockedResponse);
+      await loadState(container);
+
+      sendServerSocketMessages(Uri(path: kDefaultSocketRoute), ['{"t":"msgType","d":"opponent"}']);
+      await Future<void>.delayed(.zero);
+
+      final state = container.read(conversationControllerProvider(_userId)).requireValue;
+      expect(state.contactTyping, isTrue);
+    });
+
+    test('ignores typing indicator from other contact', () async {
+      final container = await _makeContainer(_inboxResponse, _userNotBlockedResponse);
+      await loadState(container);
+
+      sendServerSocketMessages(Uri(path: kDefaultSocketRoute), ['{"t":"msgType","d":"other"}']);
+      await Future<void>.delayed(.zero);
+
+      final state = container.read(conversationControllerProvider(_userId)).requireValue;
+      expect(state.contactTyping, isNot(true));
+    });
+  });
 }

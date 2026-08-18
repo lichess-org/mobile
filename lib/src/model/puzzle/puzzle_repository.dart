@@ -14,7 +14,6 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_opening.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_streak.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/storm.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -170,12 +169,14 @@ class PuzzleRepository {
     );
   }
 
-  Future<IList<PuzzleOpeningFamily>> puzzleOpenings() {
-    return client.readJson(
+  Future<IList<PuzzleOpeningFamily>> puzzleOpenings({bool alphabetical = false}) async {
+    final result = await client.readJson(
       Uri(path: '/training/openings'),
       headers: {'Accept': 'application/json'},
       mapper: _puzzleOpeningFromJson,
     );
+    if (!alphabetical) return result;
+    return result.sort((a, b) => a.name.compareTo(b.name));
   }
 
   Future<IList<PuzzleId>> puzzleReplay(int days, String theme) {
@@ -220,7 +221,7 @@ sealed class PuzzleBatchResponse with _$PuzzleBatchResponse {
 sealed class PuzzleStreakResponse with _$PuzzleStreakResponse {
   const factory PuzzleStreakResponse({
     required Puzzle puzzle,
-    required Streak streak,
+    required IList<PuzzleId> streak,
 
     /// Timestamp of the response, used as streak unique identifier.
     ///

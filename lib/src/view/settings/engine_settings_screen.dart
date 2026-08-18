@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
@@ -10,9 +9,11 @@ import 'package:lichess_mobile/src/view/analysis/engine_settings_widget.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
+import 'package:material_ui/material_ui.dart';
 
 class EngineSettingsScreen extends ConsumerStatefulWidget {
   const EngineSettingsScreen({super.key});
@@ -66,8 +67,8 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
   Widget build(BuildContext context) {
     final prefs = ref.watch(engineEvaluationPreferencesProvider);
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Chess engine')),
+    return PlatformScaffold(
+      appBar: PlatformAppBar(title: const Text('Chess engine')),
       body: ListView(
         children: [
           if (_hasVerifiedNNUEFiles == null)

@@ -1,8 +1,6 @@
 import 'package:chessground/chessground.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
@@ -12,6 +10,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_controller.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_streak.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_streak_controller.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -32,6 +31,7 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:share_plus/share_plus.dart';
 
 class StreakScreen extends StatelessWidget {
@@ -91,8 +91,59 @@ class _Body extends ConsumerStatefulWidget {
 }
 
 class _BodyState extends ConsumerState<_Body> {
-  ISet<Shape> userShapes = ISet();
   final _boardKey = GlobalKey(debugLabel: 'boardOnPuzzleStreakScreen');
+  late final ChessboardController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = ChessboardController(game: _buildGameData());
+  }
+
+  @override
+  void didUpdateWidget(_Body oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // The streak feeds new puzzles by swapping the puzzle context (and thus the
+    // controller provider), so push the new puzzle onto the board.
+    if (oldWidget.initialPuzzleContext != widget.initialPuzzleContext) {
+      _applyBoardUpdate();
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  PlayerSide _playerSide(PuzzleState state) {
+    return state.mode == PuzzleMode.load || state.currentPosition.isGameOver
+        ? PlayerSide.none
+        : state.mode == PuzzleMode.view
+        ? PlayerSide.both
+        : state.pov == Side.white
+        ? PlayerSide.white
+        : PlayerSide.black;
+  }
+
+  GameData _buildGameData() {
+    final state = ref.read(puzzleControllerProvider(widget.initialPuzzleContext));
+    final boardPreferences = ref.read(boardPreferencesProvider);
+    return buildGameData(
+      fen: state.currentPosition.fen,
+      variant: Variant.standard,
+      position: state.currentPosition,
+      playerSide: _playerSide(state),
+      lastMove: state.lastMove,
+      castlingMethod: boardPreferences.castlingMethod,
+      boardHighlights: boardPreferences.boardHighlights,
+    );
+  }
+
+  /// Pushes the latest puzzle position to the board controller without rebuilding it.
+  void _applyBoardUpdate() {
+    _controller.updatePosition(_buildGameData());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +157,7 @@ class _BodyState extends ConsumerState<_Body> {
       if (previous?.hasValue == true && next.hasValue) {
         if (next.requireValue.streak.finished == false &&
             previous!.requireValue.streak.finished == true) {
-          _onClearShapes();
+          _controller.clearDrawnShapes();
           final authUser = ref.read(authControllerProvider);
           ref
               .read(ctrlProvider.notifier)
@@ -129,24 +180,16 @@ class _BodyState extends ConsumerState<_Body> {
       }
     });
 
-    final gameData = boardPreferences.toGameData(
-      variant: Variant.standard,
-      position: puzzleState.currentPosition,
-      playerSide: puzzleState.mode == PuzzleMode.load || puzzleState.currentPosition.isGameOver
-          ? PlayerSide.none
-          : puzzleState.mode == PuzzleMode.view
-          ? PlayerSide.both
-          : puzzleState.pov == Side.white
-          ? PlayerSide.white
-          : PlayerSide.black,
-      promotionMove: puzzleState.promotionMove,
-      onMove: (move, {viaDragAndDrop}) {
-        ref.read(ctrlProvider.notifier).onUserMove(move);
-      },
-      onPromotionSelection: (role) {
-        ref.read(ctrlProvider.notifier).onPromotionSelection(role);
-      },
-      premovable: null,
+    // Drive the board on position/interactivity changes without rebuilding it.
+    ref.listen(
+      ctrlProvider.select(
+        (s) => (fen: s.currentPosition.fen, lastMoveUci: s.lastMove?.uci, side: _playerSide(s)),
+      ),
+      (_, _) => _applyBoardUpdate(),
+    );
+    ref.listen(
+      boardPreferencesProvider.select((p) => (p.castlingMethod, p.boardHighlights)),
+      (_, _) => _applyBoardUpdate(),
     );
 
     final content = PopScope(
@@ -185,16 +228,16 @@ class _BodyState extends ConsumerState<_Body> {
                           : Orientation.portrait;
                       final isTablet = isTabletOrLarger(context);
 
-                      final defaultSettings = boardPreferences.toBoardSettings().copyWith(
-                        borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
-                        boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
-                        drawShape: DrawShapeOptions(
-                          enable: boardPreferences.enableShapeDrawings,
-                          onCompleteShape: _onCompleteShape,
-                          onClearShapes: _onClearShapes,
-                          newShapeColor: boardPreferences.shapeColor.color,
-                        ),
-                      );
+                      final defaultSettings = boardPreferences
+                          .toBoardSettings(Variant.standard)
+                          .copyWith(
+                            borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
+                            boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
+                            drawShape: DrawShapeOptions(
+                              enable: boardPreferences.enableShapeDrawings,
+                              newShapeColor: boardPreferences.shapeColor.color,
+                            ),
+                          );
 
                       if (orientation == Orientation.landscape) {
                         final defaultBoardSize =
@@ -212,11 +255,11 @@ class _BodyState extends ConsumerState<_Body> {
                               BoardWidget(
                                 boardKey: _boardKey,
                                 size: boardSize,
-                                fen: puzzleState.currentPosition.fen,
+                                controller: _controller,
+                                onMove: (move, {viaDragAndDrop}) {
+                                  ref.read(ctrlProvider.notifier).onUserMove(move);
+                                },
                                 orientation: puzzleState.pov,
-                                gameData: gameData,
-                                lastMove: puzzleState.lastMove,
-                                shapes: userShapes,
                                 settings: defaultSettings,
                               ),
                               const SizedBox(width: 16.0),
@@ -345,11 +388,11 @@ class _BodyState extends ConsumerState<_Body> {
                               child: BoardWidget(
                                 boardKey: _boardKey,
                                 size: boardSize,
-                                fen: puzzleState.currentPosition.fen,
+                                controller: _controller,
+                                onMove: (move, {viaDragAndDrop}) {
+                                  ref.read(ctrlProvider.notifier).onUserMove(move);
+                                },
                                 orientation: puzzleState.pov,
-                                gameData: gameData,
-                                lastMove: puzzleState.lastMove,
-                                shapes: userShapes,
                                 settings: defaultSettings,
                               ),
                             ),
@@ -425,29 +468,6 @@ class _BodyState extends ConsumerState<_Body> {
             child: content,
           )
         : content;
-  }
-
-  void _onCompleteShape(Shape shape) {
-    if (!mounted) return;
-
-    if (userShapes.any((element) => element == shape)) {
-      setState(() {
-        userShapes = userShapes.remove(shape);
-      });
-      return;
-    } else {
-      setState(() {
-        userShapes = userShapes.add(shape);
-      });
-    }
-  }
-
-  void _onClearShapes() {
-    if (!mounted) return;
-
-    setState(() {
-      userShapes = ISet();
-    });
   }
 }
 
@@ -536,7 +556,7 @@ class _BottomBar extends ConsumerWidget {
                 : null,
             highlighted: true,
             label: context.l10n.puzzleNewStreak,
-            icon: CupertinoIcons.play_arrow_solid,
+            icon: Icons.refresh,
           ),
       ],
     );

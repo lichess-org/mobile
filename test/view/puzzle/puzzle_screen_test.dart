@@ -1,8 +1,8 @@
 import 'package:chessground/chessground.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_solve_limit.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -22,6 +23,7 @@ import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../model/auth/fake_auth_storage.dart';
@@ -53,6 +55,7 @@ void main() {
   setUpAll(() {
     registerFallbackValue(PuzzleBatch(solved: IList(const []), unsolved: IList([puzzle])));
     registerFallbackValue(puzzle);
+    registerFallbackValue(const PuzzleTheme(PuzzleThemeKey.mix));
   });
 
   final mockBatchStorage = MockPuzzleBatchStorage();
@@ -121,6 +124,214 @@ void main() {
 
       expect(find.byType(Chessboard), findsOneWidget);
       expect(find.text('Your turn'), findsOneWidget);
+    });
+
+    testWidgets('Warns the user when the server rate-limits solve submissions', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: PuzzleScreen(
+          angle: const PuzzleTheme(PuzzleThemeKey.mix),
+          puzzleId: puzzle.puzzle.id,
+        ),
+        overrides: {
+          puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith(
+            (ref) => mockBatchStorage,
+          ),
+          puzzleStorageProvider: puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
+        },
+        authUser: fakeAuthUser,
+      );
+
+      when(
+        () => mockHistoryStorage.fetch(puzzleId: puzzle.puzzle.id),
+      ).thenAnswer((_) async => puzzle);
+
+      await tester.pumpWidget(app);
+      await tester.pump(const Duration(milliseconds: 200));
+
+      // arm the solve back-off, as a 429 on a solve flush would; the screen
+      // watches it and warns the user with the rejected count.
+      final container = ProviderScope.containerOf(tester.element(find.byType(PuzzleScreen)));
+      container.read(puzzleSolveLimiterProvider.notifier).markLimited(7);
+      await tester.pump();
+
+      expect(find.textContaining('You solved 7 puzzles'), findsOneWidget);
+    });
+
+    testWidgets(
+      'Changing the offline puzzles setting updates the displayed value and fills the queue',
+      variant: kPlatformVariant,
+      (tester) async {
+        // The offline-puzzles setting change triggers a one-time queue fill, so
+        // the mocks must serve the fill's storage reads/writes and a batch
+        // response for the deficit request.
+        int nbSelectReq = 0;
+        final mockClient = MockClient((request) {
+          if (request.method == 'GET' && request.url.path == '/api/puzzle/batch/mix') {
+            nbSelectReq++;
+            return mockResponse(batchOf1, 200);
+          }
+          return mockResponse('', 404);
+        });
+
+        // Use fresh mocks local to this test so the fill's `any`-matcher stubs
+        // don't leak into other tests sharing the module-level mocks.
+        final batchStorage = MockPuzzleBatchStorage();
+        final historyStorage = MockPuzzleStorage();
+
+        final app = await makeTestProviderScopeApp(
+          tester,
+          home: PuzzleScreen(
+            angle: const PuzzleTheme(PuzzleThemeKey.mix),
+            puzzleId: puzzle.puzzle.id,
+          ),
+          overrides: {
+            puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith(
+              (ref) => batchStorage,
+            ),
+            puzzleStorageProvider: puzzleStorageProvider.overrideWith((ref) => historyStorage),
+            lichessClientProvider: lichessClientProvider.overrideWith(
+              (ref) => LichessClient(mockClient, ref),
+            ),
+          },
+          // The offline-puzzles setting is a logged-in-only feature, so the
+          // tile is only rendered for an authenticated user.
+          authUser: fakeAuthUser,
+        );
+
+        when(
+          () => historyStorage.fetch(puzzleId: puzzle.puzzle.id),
+        ).thenAnswer((_) async => puzzle);
+        // Queue starts full enough for the deficit fetch to append once.
+        when(
+          () => batchStorage.fetch(
+            userId: any(named: 'userId'),
+            angle: any(named: 'angle'),
+          ),
+        ).thenAnswer((_) async => PuzzleBatch(solved: IList(const []), unsolved: IList([puzzle])));
+        when(
+          () => batchStorage.save(
+            userId: any(named: 'userId'),
+            angle: any(named: 'angle'),
+            data: any(named: 'data'),
+          ),
+        ).thenAnswer((_) async {});
+
+        await tester.pumpWidget(app);
+
+        // wait for the puzzle to load
+        await tester.pump(const Duration(milliseconds: 200));
+
+        // open settings
+        await tester.tap(find.byIcon(Icons.settings));
+        await tester.pumpAndSettle();
+
+        // the offline puzzles tile shows the default value
+        final tileFinder = find.widgetWithText(SettingsListTile, 'Offline puzzles');
+        expect(tileFinder, findsOneWidget);
+        expect(tester.widget<SettingsListTile>(tileFinder).settingsValue, '100');
+
+        // open the choice picker and select a larger value
+        await tester.tap(tileFinder);
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('200').last);
+        await tester.pumpAndSettle();
+
+        // the tile reflects the new value
+        expect(tester.widget<SettingsListTile>(tileFinder).settingsValue, '200');
+
+        // the change triggered the offline queue fill
+        expect(nbSelectReq, greaterThan(0));
+      },
+    );
+
+    testWidgets(
+      'Offline puzzles setting is hidden for anonymous players',
+      variant: kPlatformVariant,
+      (tester) async {
+        final batchStorage = MockPuzzleBatchStorage();
+        final historyStorage = MockPuzzleStorage();
+
+        final app = await makeTestProviderScopeApp(
+          tester,
+          home: PuzzleScreen(
+            angle: const PuzzleTheme(PuzzleThemeKey.mix),
+            puzzleId: puzzle.puzzle.id,
+          ),
+          overrides: {
+            puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith(
+              (ref) => batchStorage,
+            ),
+            puzzleStorageProvider: puzzleStorageProvider.overrideWith((ref) => historyStorage),
+          },
+          // No authUser: an anonymous player must not see the setting, because
+          // the larger offline queue is a logged-in-only feature.
+        );
+
+        when(
+          () => historyStorage.fetch(puzzleId: puzzle.puzzle.id),
+        ).thenAnswer((_) async => puzzle);
+        when(
+          () => batchStorage.fetch(
+            userId: any(named: 'userId'),
+            angle: any(named: 'angle'),
+          ),
+        ).thenAnswer((_) async => PuzzleBatch(solved: IList(const []), unsolved: IList([puzzle])));
+
+        await tester.pumpWidget(app);
+        await tester.pump(const Duration(milliseconds: 200));
+
+        // open settings
+        await tester.tap(find.byIcon(Icons.settings));
+        await tester.pumpAndSettle();
+
+        // the offline puzzles tile is not shown for an anonymous player
+        expect(find.widgetWithText(SettingsListTile, 'Offline puzzles'), findsNothing);
+      },
+    );
+
+    testWidgets('Offline puzzles setting is hidden for non-mix angles', variant: kPlatformVariant, (
+      tester,
+    ) async {
+      // Enter through the puzzle-stream path (no puzzleId) so the loaded context
+      // keeps the requested angle; loading a puzzle by id always tags the
+      // context as mix. The configurable queue is limited to mix, so the tile
+      // must not show for an opening angle, even for a logged-in user.
+      final batchStorage = MockPuzzleBatchStorage();
+      final historyStorage = MockPuzzleStorage();
+
+      // stored queue already covers the non-mix cap, so nextPuzzle needs no fetch
+      final fullQueue = PuzzleBatch(
+        solved: IList(const []),
+        unsolved: IList([for (var i = 0; i < kFixedOfflineQueueLength; i++) puzzle]),
+      );
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const PuzzleScreen(angle: PuzzleOpening('A00')),
+        overrides: {
+          puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith(
+            (ref) => batchStorage,
+          ),
+          puzzleStorageProvider: puzzleStorageProvider.overrideWith((ref) => historyStorage),
+        },
+        authUser: fakeAuthUser,
+      );
+
+      when(
+        () => batchStorage.fetch(
+          userId: any(named: 'userId'),
+          angle: any(named: 'angle'),
+        ),
+      ).thenAnswer((_) async => fullQueue);
+
+      await tester.pumpWidget(app);
+      await tester.pump(const Duration(milliseconds: 200));
+
+      await tester.tap(find.byIcon(Icons.settings));
+      await tester.pumpAndSettle();
+
+      expect(find.widgetWithText(SettingsListTile, 'Offline puzzles'), findsNothing);
     });
 
     testWidgets('Loads next puzzle when no puzzleId is passed', (tester) async {
@@ -205,8 +416,9 @@ void main() {
       expect(find.text('Your turn'), findsOneWidget);
 
       // before the first move is played, puzzle is not interactable
-      expect(find.byKey(const Key('g4-blackrook')), findsOneWidget);
-      await tester.tap(find.byKey(const Key('g4-blackrook')));
+      expect(boardHasPiece(tester, Square.g4, Piece.blackRook), isTrue);
+      final boardRect = tester.getRect(find.byType(Chessboard));
+      await tester.tapAt(squareOffset(Square.g4, boardRect, orientation: Side.black));
       await tester.pump();
       expect(find.byKey(const Key('g4-selected')), findsNothing);
 
@@ -220,23 +432,23 @@ void main() {
       // in play mode we see the solution button
       expect(find.byIcon(Icons.flag_outlined), findsOneWidget);
 
-      expect(find.byKey(const Key('g4-blackrook')), findsOneWidget);
-      expect(find.byKey(const Key('h8-whitequeen')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.g4, Piece.blackRook), isTrue);
+      expect(boardHasPiece(tester, Square.h8, Piece.whiteQueen), isTrue);
 
       await playMove(tester, 'g4', 'h4', orientation: orientation);
 
-      expect(find.byKey(const Key('h4-blackrook')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.h4, Piece.blackRook), isTrue);
       expect(find.text('Best move!'), findsOneWidget);
 
       // wait for line reply and move animation
       await tester.pump(const Duration(milliseconds: 500));
       await tester.pumpAndSettle();
 
-      expect(find.byKey(const Key('h4-whitequeen')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.h4, Piece.whiteQueen), isTrue);
 
       await playMove(tester, 'b4', 'h4', orientation: orientation);
 
-      expect(find.byKey(const Key('h4-blackrook')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.h4, Piece.blackRook), isTrue);
       expect(find.text('Success!'), findsOneWidget);
 
       // wait for move animation
@@ -317,7 +529,7 @@ void main() {
         // await for first move to be played
         await tester.pump(const Duration(milliseconds: 1500));
 
-        expect(find.byKey(const Key('g4-blackrook')), findsOneWidget);
+        expect(boardHasPiece(tester, Square.g4, Piece.blackRook), isTrue);
 
         await playMove(tester, 'g4', 'f4', orientation: orientation);
 
@@ -328,11 +540,11 @@ void main() {
         await tester.pumpAndSettle();
 
         // can still play the puzzle
-        expect(find.byKey(const Key('g4-blackrook')), findsOneWidget);
+        expect(boardHasPiece(tester, Square.g4, Piece.blackRook), isTrue);
 
         await playMove(tester, 'g4', 'h4', orientation: orientation);
 
-        expect(find.byKey(const Key('h4-blackrook')), findsOneWidget);
+        expect(boardHasPiece(tester, Square.h4, Piece.blackRook), isTrue);
         expect(find.text('Best move!'), findsOneWidget);
 
         // wait for line reply and move animation
@@ -341,7 +553,7 @@ void main() {
 
         await playMove(tester, 'b4', 'h4', orientation: orientation);
 
-        expect(find.byKey(const Key('h4-blackrook')), findsOneWidget);
+        expect(boardHasPiece(tester, Square.h4, Piece.blackRook), isTrue);
         expect(find.text('Puzzle complete!'), findsOneWidget);
         final expectedPlayedXTimes =
             'Played ${puzzle2.puzzle.plays.toString().localizeNumbers()} times.';
@@ -414,7 +626,7 @@ void main() {
       // await for first move to be played
       await tester.pump(const Duration(milliseconds: 1500));
 
-      expect(find.byKey(const Key('g4-blackrook')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.g4, Piece.blackRook), isTrue);
 
       // Help button should still be disabled
       expect(find.byIcon(Icons.flag_outlined), findsOneWidget);
@@ -438,8 +650,8 @@ void main() {
       // wait for solution replay animation to finish
       await tester.pump(const Duration(seconds: 1));
 
-      expect(find.byKey(const Key('h4-blackrook')), findsOneWidget);
-      expect(find.byKey(const Key('h8-whitequeen')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.h4, Piece.blackRook), isTrue);
+      expect(boardHasPiece(tester, Square.h8, Piece.whiteQueen), isTrue);
       expect(find.text('Puzzle complete!'), findsOneWidget);
 
       final nextMoveBtnEnabled = find.byWidgetPredicate(
@@ -778,7 +990,7 @@ void main() {
       // wait for previous opponent's move to be played
       await tester.pump(const Duration(milliseconds: 1500));
 
-      expect(find.byKey(const Key('g4-blackrook')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.g4, Piece.blackRook), isTrue);
 
       bool isPrevEnabled() {
         return tester
@@ -816,7 +1028,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // computer replied by capturing our rook with its queen
-      expect(find.byKey(const Key('h4-whitequeen')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.h4, Piece.whiteQueen), isTrue);
 
       expect(isPrevEnabled(), isTrue);
 
@@ -825,19 +1037,19 @@ void main() {
       await tester.pump();
 
       // verify we see our original bold move (black rook on h4)
-      expect(find.byKey(const Key('h4-blackrook')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.h4, Piece.blackRook), isTrue);
 
       // tap "Previous" again to undo our first move
       await tester.tap(find.byIcon(CupertinoIcons.chevron_back));
       await tester.pump();
 
       // verify we are back at the start (black rook on g4)
-      expect(find.byKey(const Key('g4-blackrook')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.g4, Piece.blackRook), isTrue);
 
       // check that the user can not play a different move in the starting position
       await playMove(tester, 'g4', 'g5', orientation: orientation);
       // check that the rook stayed on g4
-      expect(find.byKey(const Key('g4-blackrook')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.g4, Piece.blackRook), isTrue);
 
       // check that the "Next" button is now enabled
       expect(isNextEnabled(), isTrue);
@@ -849,7 +1061,7 @@ void main() {
       await tester.pump();
 
       // verify we are back to the current state (computer's white queen on h4)
-      expect(find.byKey(const Key('h4-whitequeen')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.h4, Piece.whiteQueen), isTrue);
     },
   );
 
@@ -922,7 +1134,7 @@ void main() {
       // await for first move to be played
       await tester.pump(const Duration(milliseconds: 1500));
 
-      expect(find.byKey(const Key('b2-blackrook')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.b2, Piece.blackRook), isTrue);
 
       await playMove(tester, 'e8', 'a8', orientation: Side.white);
 
@@ -1005,7 +1217,7 @@ void main() {
       // await for first move to be played (Nxc3)
       await tester.pump(const Duration(milliseconds: 1500));
 
-      expect(find.byKey(const Key('e1-whiteking')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.e1, Piece.whiteKing), isTrue);
 
       // Play castling move (O-O) by moving king to g1
       await playMove(tester, 'e1', 'g1', orientation: Side.white);
@@ -1023,7 +1235,7 @@ void main() {
       // Wait for the move animation to complete
       await tester.pumpAndSettle();
 
-      expect(find.byKey(const Key('h6-whitebishop')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.h6, Piece.whiteBishop), isTrue);
     },
   );
 
@@ -1149,22 +1361,22 @@ void main() {
       // wait for first move to be played
       await tester.pump(const Duration(milliseconds: 1500));
 
-      expect(find.byKey(const Key('g4-blackrook')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.g4, Piece.blackRook), isTrue);
 
       await playMove(tester, 'g4', 'h4', orientation: orientation);
 
-      expect(find.byKey(const Key('h4-blackrook')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.h4, Piece.blackRook), isTrue);
       expect(find.text('Best move!'), findsOneWidget);
 
       // wait for line reply and move animation
       await tester.pump(const Duration(milliseconds: 500));
       await tester.pumpAndSettle();
 
-      expect(find.byKey(const Key('h4-whitequeen')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.h4, Piece.whiteQueen), isTrue);
 
       await playMove(tester, 'b4', 'h4', orientation: orientation);
 
-      expect(find.byKey(const Key('h4-blackrook')), findsOneWidget);
+      expect(boardHasPiece(tester, Square.h4, Piece.blackRook), isTrue);
       expect(find.text('Success!'), findsOneWidget);
 
       // wait for move animation

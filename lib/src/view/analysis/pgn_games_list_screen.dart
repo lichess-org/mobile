@@ -1,6 +1,5 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_player.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -11,6 +10,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
+import 'package:material_ui/material_ui.dart';
 
 typedef _GameData = ({
   AnalysisPlayer? white,
@@ -24,9 +24,9 @@ typedef _GameData = ({
 class PgnGamesListScreen extends StatefulWidget {
   const PgnGamesListScreen({required this.games, super.key});
 
-  final IList<PgnGame> games;
+  final IList<PgnLazyGame> games;
 
-  static Route<dynamic> buildRoute(IList<PgnGame> games) {
+  static Route<dynamic> buildRoute(IList<PgnLazyGame> games) {
     return buildScreenRoute(screen: PgnGamesListScreen(games: games));
   }
 
@@ -113,22 +113,22 @@ class _PgnGamesListScreenState extends State<PgnGamesListScreen> {
         separatorBuilder: (context, index) =>
             const Divider(height: 1, thickness: 1, indent: 16, endIndent: 16),
         itemBuilder: (context, index) {
-          final game = widget.games[filteredIndices[index]];
           final gameData = _gameData[filteredIndices[index]];
           return ListTile(
             title: Text(gameData.title, maxLines: 2, overflow: .ellipsis),
             subtitle: Text(gameData.subtitle, overflow: .ellipsis, maxLines: 1),
             onTap: () {
+              final game = widget.games[filteredIndices[index]];
               Navigator.of(context, rootNavigator: true).push(
                 AnalysisScreen.buildRoute(
                   AnalysisOptions.pgn(
                     // TODO generate unique id for each game, maybe based on the PGN headers?
                     id: const StringId('pgn_import_game'),
                     orientation: .white,
-                    pgn: game.makePgn(),
+                    pgn: game.rawPgn,
                     variant: gameData.variant,
                     isComputerAnalysisAllowed: true,
-                    initialMoveCursor: game.moves.mainline().isEmpty ? 0 : 1,
+                    initialMoveCursor: 1,
                   ),
                 ),
               );
@@ -148,7 +148,7 @@ bool _matchesSearchQuery(_GameData gameData, String query) {
       gameData.subtitle.toLowerCase().contains(lowerQuery);
 }
 
-String _buildGameSubtitle(PgnGame game) {
+String _buildGameSubtitle(PgnLazyGame game) {
   final event = game.headers['Event'];
   final round = game.headers['Round'];
   final site = game.headers['Site'];
@@ -156,7 +156,7 @@ String _buildGameSubtitle(PgnGame game) {
 
   return [
     if (event != null && event.isNotEmpty && event != '?')
-      (round != null && round.isNotEmpty && round != '?') ? '$event ($round)' : event,
+      if (round != null && round.isNotEmpty && round != '?') '$event ($round)' else event,
     if (site != null && site.isNotEmpty && site != '?') site,
     if (date != null && date.isNotEmpty && date != '?') date,
   ].join(' • ');

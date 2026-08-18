@@ -3,7 +3,7 @@ import 'dart:math';
 
 import 'package:dartchess/dartchess.dart' hide File;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:flutter_riverpod/experimental/mutation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
@@ -22,15 +23,18 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/tab_scaffold.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:lichess_mobile/src/view/auth/sign_in_error.dart';
+import 'package:lichess_mobile/src/view/auth/sign_in_options.dart';
 import 'package:lichess_mobile/src/view/chat/chat_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
@@ -46,20 +50,25 @@ import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/side_indicator.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:path_provider/path_provider.dart' show getTemporaryDirectory;
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class TournamentScreen extends ConsumerStatefulWidget {
-  const TournamentScreen({required this.id});
+  const TournamentScreen({required this.id, this.initialPlayerId});
 
   final TournamentId id;
+  final UserId? initialPlayerId;
 
   static const String routeName = '/tournament';
 
-  static Route<void> buildRoute(TournamentId id) {
+  static Route<void> buildRoute(TournamentId id, {UserId? initialPlayerId}) {
     return buildScreenRoute(
-      screen: TournamentScreen(id: id),
-      settings: const RouteSettings(name: routeName),
+      screen: TournamentScreen(id: id, initialPlayerId: initialPlayerId),
+      // The tournament id is carried in [RouteSettings.arguments] so that code
+      // can identify which tournament a route in the navigation stack belongs to.
+      settings: RouteSettings(name: routeName, arguments: id),
     );
   }
 
@@ -68,6 +77,18 @@ class TournamentScreen extends ConsumerStatefulWidget {
 }
 
 class _TournamentScreenState extends ConsumerState<TournamentScreen> with RouteAware {
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialPlayerId != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _showPlayerDetails(context, widget.id, widget.initialPlayerId!);
+        }
+      });
+    }
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -140,10 +161,36 @@ class _Body extends ConsumerWidget {
     final authUser = ref.watch(authControllerProvider);
     final timeLeft = state.tournament.timeToStart ?? state.tournament.timeToFinish;
 
+    final standingWidgets = [
+      if (state.tournament.teamStanding != null) ...[
+        _TeamStanding(state),
+        const SizedBox(height: 16),
+      ],
+      _Standing(state),
+    ];
+
+    final tournamentSecondaryInfoWidgets = [
+      if (state.tournament.isStarted != true && state.tournament.isFinished != true)
+        _TournamentHelp(state: state)
+      else if (state.tournament.isFinished == true)
+        _TournamentCompleteWidget(state: state)
+      else if (state.tournament.featuredGame != null)
+        _FeaturedGame(state.tournament.featuredGame!),
+    ];
+
+    final bottomSheetSpacer = (authUser != null && state.joined)
+        ? const SizedBox(height: 35)
+        : const SizedBox.shrink();
+
     return FocusDetector(
-      onFocusRegained: () {
+      // Use `onFocusGained` (fires on the first focus too) rather than
+      // `onFocusRegained`: when a second `TournamentScreen` for the same
+      // tournament is pushed on top of a game, its `FocusDetector` gains focus
+      // for the first time, and the controller (kept alive, so `build` doesn't
+      // re-run) must reopen the socket that the game closed.
+      onFocusGained: () {
         if (context.mounted) {
-          ref.read(tournamentControllerProvider(id).notifier).onFocusRegained();
+          ref.read(tournamentControllerProvider(id).notifier).onFocusGained();
         }
       },
       child: PlatformScaffold(
@@ -185,56 +232,45 @@ class _Body extends ConsumerWidget {
               ),
           ],
         ),
-        body: Padding(
-          padding: Styles.horizontalBodyPadding,
-          child: ListView(
-            children: [
-              Card(
-                child: Padding(
-                  padding: Styles.bodySectionPadding,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _TournamentInfo(state.tournament),
-                      if (state.tournament.meta.teamBattle != null) ...[
-                        const SizedBox(height: 10),
-                        _TeamInfo(state.tournament.meta.teamBattle!),
-                      ],
-                      if (state.tournament.verdicts.list.isNotEmpty) ...[
-                        const SizedBox(height: 10),
-                        _Verdicts(state.tournament.verdicts),
-                      ],
-                      if (!state.tournament.berserkable) ...[
-                        const SizedBox(height: 10),
-                        Text.rich(
-                          TextSpan(
+        body: LayoutBuilder(
+          builder: (context, constraints) {
+            final isTabletLandscape =
+                constraints.maxWidth > constraints.maxHeight && isTabletOrLarger(context);
+            return Padding(
+              padding: Styles.horizontalBodyPadding,
+              child: isTabletLandscape
+                  ? Row(
+                      spacing: 16.0,
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: ListView(
                             children: [
-                              const WidgetSpan(child: Icon(LichessIcons.body_cut, size: 16)),
-                              TextSpan(text: ' ${context.l10n.arenaNoBerserkAllowed}'),
+                              _TournamentInfoCard(tournament: state.tournament),
+                              const SizedBox(height: 16),
+                              ...tournamentSecondaryInfoWidgets,
+                              bottomSheetSpacer,
                             ],
                           ),
                         ),
+                        Expanded(
+                          flex: 2,
+                          child: ListView(children: [...standingWidgets, bottomSheetSpacer]),
+                        ),
                       ],
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              if (state.tournament.teamStanding != null) ...[
-                _TeamStanding(state),
-                const SizedBox(height: 16),
-              ],
-              _Standing(state),
-              const SizedBox(height: 16),
-              if (state.tournament.isStarted != true && state.tournament.isFinished != true)
-                _TournamentHelp(state: state)
-              else if (state.tournament.isFinished == true)
-                _TournamentCompleteWidget(state: state)
-              else if (state.tournament.featuredGame != null)
-                _FeaturedGame(state.tournament.featuredGame!),
-              if (authUser != null && state.joined) const SizedBox(height: 35),
-            ],
-          ),
+                    )
+                  : ListView(
+                      children: [
+                        _TournamentInfoCard(tournament: state.tournament),
+                        const SizedBox(height: 16),
+                        ...standingWidgets,
+                        const SizedBox(height: 16),
+                        ...tournamentSecondaryInfoWidgets,
+                        bottomSheetSpacer,
+                      ],
+                    ),
+            );
+          },
         ),
         bottomSheet: authUser != null && state.joined && state.tournament.isFinished != true
             ? Material(
@@ -260,6 +296,50 @@ class _Body extends ConsumerWidget {
               )
             : const SizedBox.shrink(),
         bottomNavigationBar: _BottomBar(state),
+      ),
+    );
+  }
+}
+
+class _TournamentInfoCard extends StatelessWidget {
+  const _TournamentInfoCard({required this.tournament});
+
+  final Tournament tournament;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: Styles.bodySectionPadding,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _TournamentInfo(tournament),
+            if (tournament.meta.teamBattle != null) ...[
+              const SizedBox(height: 10),
+              _TeamInfo(tournament.meta.teamBattle!),
+            ],
+            if (tournament.verdicts.list.isNotEmpty) ...[
+              const SizedBox(height: 10),
+              _Verdicts(tournament.verdicts),
+            ],
+            if (!tournament.berserkable) ...[
+              const SizedBox(height: 10),
+              Text.rich(
+                TextSpan(
+                  children: [
+                    const WidgetSpan(child: Icon(LichessIcons.body_cut, size: 16)),
+                    TextSpan(text: ' ${context.l10n.arenaNoBerserkAllowed}'),
+                  ],
+                ),
+              ),
+            ],
+            if (tournament.description != null && tournament.description!.isNotEmpty) ...[
+              const SizedBox(height: 10),
+              _ExpandableDescription(description: tournament.description!),
+            ],
+          ],
+        ),
       ),
     );
   }
@@ -418,20 +498,47 @@ class _TournamentHelp extends StatelessWidget {
                       ),
                     ),
                   ],
-                  rows: const [
-                    DataRow(
-                      cells: [DataCell(Text('Standard, Chess960, Horde')), DataCell(Text('30'))],
-                    ),
+                  rows: [
                     DataRow(
                       cells: [
-                        DataCell(Text('Antichess, Crazyhouse, King of the Hill')),
-                        DataCell(Text('20')),
+                        DataCell(
+                          Text(
+                            _variantLabels(context, [
+                              Variant.standard,
+                              Variant.chess960,
+                              Variant.horde,
+                            ]),
+                          ),
+                        ),
+                        const DataCell(Text('30')),
                       ],
                     ),
                     DataRow(
                       cells: [
-                        DataCell(Text('Three-check, Atomic, Racing Kings')),
-                        DataCell(Text('10')),
+                        DataCell(
+                          Text(
+                            _variantLabels(context, [
+                              Variant.antichess,
+                              Variant.crazyhouse,
+                              Variant.kingOfTheHill,
+                            ]),
+                          ),
+                        ),
+                        const DataCell(Text('20')),
+                      ],
+                    ),
+                    DataRow(
+                      cells: [
+                        DataCell(
+                          Text(
+                            _variantLabels(context, [
+                              Variant.threeCheck,
+                              Variant.atomic,
+                              Variant.racingKings,
+                            ]),
+                          ),
+                        ),
+                        const DataCell(Text('10')),
                       ],
                     ),
                   ],
@@ -441,6 +548,40 @@ class _TournamentHelp extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+String _variantLabels(BuildContext context, Iterable<Variant> variants) =>
+    variants.map((variant) => variant.label(context.l10n)).join(', ');
+
+class _ExpandableDescription extends ConsumerWidget {
+  const _ExpandableDescription({required this.description});
+
+  final String description;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ExpansionTile(
+      leading: const Icon(Icons.info_outline),
+      title: Text(context.l10n.description),
+      tilePadding: EdgeInsets.zero,
+      splashColor: Colors.transparent,
+      shape: LinearBorder.none,
+      collapsedShape: LinearBorder.none,
+      expandedCrossAxisAlignment: .start,
+      expandedAlignment: .centerLeft,
+      children: [
+        MarkdownBody(
+          data: description,
+          softLineBreak: true,
+          onTapLink: (text, url, title) {
+            if (url != null) {
+              launchUrl(Uri.parse(url));
+            }
+          },
+        ),
+      ],
     );
   }
 }
@@ -734,7 +875,7 @@ class _TournamentInfo extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '${tournament.meta.timeIncrement.display} • ${tournament.meta.perf.title} • ${context.l10n.nbMinutes(tournament.meta.duration.inMinutes)}',
+                '${tournament.meta.timeIncrement.display} • ${tournament.meta.perf.label(context.l10n)} • ${context.l10n.nbMinutes(tournament.meta.duration.inMinutes)}',
               ),
               Text(
                 '${tournament.meta.rated ? context.l10n.rated : context.l10n.casual} • ${context.l10n.arenaArena}',
@@ -1085,6 +1226,8 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
     final signInState = ref.watch(signInMutation);
     final kidModeAsync = ref.watch(kidModeProvider);
 
+    ref.listen(signInMutation, (_, next) => showSignInErrorSnackBar(context, next));
+
     ref.listen(
       tournamentControllerProvider(widget.state.id).select((value) => value.value?.joined),
       (prevJoined, joined) {
@@ -1103,105 +1246,103 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
           ChatBottomBarButton(options: widget.state.chatOptions!, showLabel: true),
 
         if (widget.state.tournament.isFinished != true && authUser != null)
-          joinOrLeaveInProgress
-              ? const Center(child: CircularProgressIndicator.adaptive())
-              : BottomBarButton(
-                  label: widget.state.joined ? context.l10n.pause : context.l10n.join,
-                  icon: widget.state.joined ? Icons.pause : Icons.play_arrow,
-                  showLabel: true,
-                  onTap: widget.state.canJoin
-                      ? () async {
-                          final teamBattle = widget.state.tournament.meta.teamBattle;
+          if (joinOrLeaveInProgress)
+            const Center(child: CircularProgressIndicator.adaptive())
+          else
+            BottomBarButton(
+              label: widget.state.joined ? context.l10n.pause : context.l10n.join,
+              icon: widget.state.joined ? Icons.pause : Icons.play_arrow,
+              showLabel: true,
+              onTap: widget.state.canJoin
+                  ? () async {
+                      final teamBattle = widget.state.tournament.meta.teamBattle;
 
-                          // If user is joining a team battle tournament
-                          if (!widget.state.joined &&
-                              teamBattle != null &&
-                              teamBattle.joinWith != null) {
-                            // Check if user has no teams participating
-                            if (teamBattle.joinWith!.isEmpty) {
-                              showSnackBar(
-                                context,
-                                'None of your teams are participating in this tournament',
-                                type: SnackBarType.error,
-                              );
-                              return;
-                            }
-                            // Only one team available or if the user previously joined, join directly
-                            if (teamBattle.joinWith!.length == 1 ||
-                                (widget.state.tournament.me != null)) {
-                              setState(() {
-                                joinOrLeaveInProgress = true;
-                              });
+                      // If user is joining a team battle tournament
+                      if (!widget.state.joined &&
+                          teamBattle != null &&
+                          teamBattle.joinWith != null) {
+                        // Check if user has no teams participating
+                        if (teamBattle.joinWith!.isEmpty) {
+                          showSnackBar(
+                            context,
+                            'None of your teams are participating in this tournament',
+                            type: SnackBarType.error,
+                          );
+                          return;
+                        }
+                        // Only one team available or if the user previously joined, join directly
+                        if (teamBattle.joinWith!.length == 1 ||
+                            (widget.state.tournament.me != null)) {
+                          setState(() {
+                            joinOrLeaveInProgress = true;
+                          });
 
-                              ref
-                                  .read(tournamentControllerProvider(widget.state.id).notifier)
-                                  .joinOrPause(teamId: teamBattle.joinWith!.first);
-                              return;
-                            }
+                          ref
+                              .read(tournamentControllerProvider(widget.state.id).notifier)
+                              .joinOrPause(teamId: teamBattle.joinWith!.first);
+                          return;
+                        }
 
-                            final selectedTeamId = await _showTeamSelectionDialog(
+                        final selectedTeamId = await _showTeamSelectionDialog(context, teamBattle);
+
+                        if (selectedTeamId == null) {
+                          return; // User cancelled
+                        }
+                        if (!mounted) return;
+                        setState(() {
+                          joinOrLeaveInProgress = true;
+                        });
+
+                        ref
+                            .read(tournamentControllerProvider(widget.state.id).notifier)
+                            .joinOrPause(teamId: selectedTeamId);
+                      } else if (!widget.state.joined &&
+                          widget.state.tournament.private &&
+                          !widget.state.hasJoined) {
+                        // Joining a private tournament
+                        final entryCode = await _showEntryCodeDialog(context);
+                        if (entryCode == null || entryCode.isEmpty) {
+                          return;
+                        }
+                        if (!mounted) return;
+                        setState(() {
+                          joinOrLeaveInProgress = true;
+                        });
+
+                        try {
+                          await ref
+                              .read(tournamentControllerProvider(widget.state.id).notifier)
+                              .joinOrPause(entryCode: entryCode);
+                        } catch (e) {
+                          if (!mounted) return;
+                          setState(() {
+                            joinOrLeaveInProgress = false;
+                          });
+                          if (e is ServerException && e.statusCode == 400) {
+                            // Invalid entry code
+                            if (!context.mounted) return;
+                            showSnackBar(
                               context,
-                              teamBattle,
+                              context.l10n.teamIncorrectEntryCode,
+                              type: SnackBarType.error,
                             );
-
-                            if (selectedTeamId == null) {
-                              return; // User cancelled
-                            }
-                            if (!mounted) return;
-                            setState(() {
-                              joinOrLeaveInProgress = true;
-                            });
-
-                            ref
-                                .read(tournamentControllerProvider(widget.state.id).notifier)
-                                .joinOrPause(teamId: selectedTeamId);
-                          } else if (!widget.state.joined &&
-                              widget.state.tournament.private &&
-                              !widget.state.hasJoined) {
-                            // Joining a private tournament
-                            final entryCode = await _showEntryCodeDialog(context);
-                            if (entryCode == null || entryCode.isEmpty) {
-                              return;
-                            }
-                            if (!mounted) return;
-                            setState(() {
-                              joinOrLeaveInProgress = true;
-                            });
-
-                            try {
-                              await ref
-                                  .read(tournamentControllerProvider(widget.state.id).notifier)
-                                  .joinOrPause(entryCode: entryCode);
-                            } catch (e) {
-                              if (!mounted) return;
-                              setState(() {
-                                joinOrLeaveInProgress = false;
-                              });
-                              if (e is ServerException && e.statusCode == 400) {
-                                // Invalid entry code
-                                if (!context.mounted) return;
-                                showSnackBar(
-                                  context,
-                                  context.l10n.teamIncorrectEntryCode,
-                                  type: SnackBarType.error,
-                                );
-                              } else {
-                                rethrow;
-                              }
-                            }
                           } else {
-                            // Normal join/pause flow
-                            setState(() {
-                              joinOrLeaveInProgress = true;
-                            });
-
-                            ref
-                                .read(tournamentControllerProvider(widget.state.id).notifier)
-                                .joinOrPause();
+                            rethrow;
                           }
                         }
-                      : null,
-                )
+                      } else {
+                        // Normal join/pause flow
+                        setState(() {
+                          joinOrLeaveInProgress = true;
+                        });
+
+                        ref
+                            .read(tournamentControllerProvider(widget.state.id).notifier)
+                            .joinOrPause();
+                      }
+                    }
+                  : null,
+            )
         else if (widget.state.tournament.isFinished != true)
           BottomBarButton(
             label: context.l10n.signIn,
@@ -1209,11 +1350,7 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
             icon: Icons.login,
             onTap: switch (signInState) {
               MutationPending() => null,
-              _ => () {
-                signInMutation.run(ref, (tsx) async {
-                  await tsx.get(authControllerProvider.notifier).signIn();
-                });
-              },
+              _ => () => showSignInOptions(context, ref),
             },
           ),
       ],

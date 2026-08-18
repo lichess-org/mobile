@@ -3,9 +3,9 @@ import 'dart:isolate';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_color_utilities/material_color_utilities.dart';
+import 'package:material_ui/material_ui.dart';
 
 typedef ImageColors = ({int primaryContainer, int onPrimaryContainer});
 
@@ -100,8 +100,10 @@ class ImageColorWorker {
         final Map<int, int> colorToCount = quantizerResult.colorToCount.map(
           (int key, int value) => MapEntry<int, int>(getArgbFromAbgr(key), value),
         );
-        final significantColors = Map<int, int>.from(colorToCount)
-          ..removeWhere((key, value) => value < 10);
+        final significantColors = {
+          for (final entry in colorToCount.entries)
+            if (entry.value >= 10) entry.key: entry.value,
+        };
         final meanTone =
             colorToCount.entries.fold<double>(
               0,

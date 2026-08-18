@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/explorer/tablebase.dart';
 import 'package:lichess_mobile/src/model/explorer/tablebase_repository.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -174,7 +175,10 @@ void main() {
 
       final repo = TablebaseRepository(client);
 
-      final result = await repo.getTablebaseEntry('4k3/8/4q3/4PR2/5P2/6NK/8/8 w - - 3 131');
+      final result = await repo.getTablebaseEntry(
+        '4k3/8/4q3/4PR2/5P2/6NK/8/8 w - - 3 131',
+        Variant.standard,
+      );
       expect(result, isA<TablebaseEntry>());
       expect(result.moves.length, 9);
       expect(result.checkmate, false);
@@ -203,6 +207,36 @@ void main() {
       expect(winMove.san, 'Nf1');
       expect(winMove.category, TablebaseCategory.win);
       expect(winMove.dtz, 1);
+    });
+
+    test('uses variant endpoint', () async {
+      final paths = <String>[];
+      final mockClient = MockClient((request) {
+        paths.add(request.url.path);
+        return mockResponse('''
+{
+  "checkmate": false,
+  "stalemate": false,
+  "insufficient_material": false,
+  "dtz": 0,
+  "dtc": null,
+  "dtm": null,
+  "category": "draw",
+  "moves": []
+}
+          ''', 200);
+      });
+
+      final container = await lichessClientContainer(mockClient);
+      final client = container.read(lichessClientProvider);
+      final repo = TablebaseRepository(client);
+
+      await repo.getTablebaseEntry('fen', Variant.standard);
+      await repo.getTablebaseEntry('fen', Variant.chess960);
+      await repo.getTablebaseEntry('fen', Variant.atomic);
+      await repo.getTablebaseEntry('fen', Variant.antichess);
+
+      expect(paths, ['/standard', '/standard', '/atomic', '/antichess']);
     });
   });
 }

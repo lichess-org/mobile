@@ -1,9 +1,12 @@
-import 'package:flutter/material.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_results_screen.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../network/fake_http_client_factory.dart';
 import '../../test_helpers.dart';
@@ -26,16 +29,27 @@ const _tournamentResponse = '''
 
 /// Builds a player results JSON response with a single game having the
 /// given `points` ("1", "1/2", "0", or null for ongoing) and [customPoints].
-String playerResponse({required String? points, required double? customPoints}) {
+///
+/// [follow] mirrors lila's `fide.follow`: `null` when the user is logged out or the player is not
+/// a FIDE player, otherwise whether the user follows them.
+String playerResponse({
+  required String? points,
+  required double? customPoints,
+  bool? follow,
+  int? fideId,
+}) {
   final pointsField = points == null ? 'null' : '"$points"';
   final customField = customPoints == null ? 'null' : '$customPoints';
   final ongoing = points == null;
   final ongoingField = ongoing ? '"ongoing": true,' : '';
+  final fideIdField = fideId == null ? '' : '"fideId": $fideId,';
+  final fideBlock = follow == null ? '{}' : '{"follow": $follow}';
   return '''
 {
   "name": "Test Player",
   "played": 1,
-  "fide": {},
+  $fideIdField
+  "fide": $fideBlock,
   "games": [
     {
       "round": "testRond",
@@ -52,9 +66,24 @@ String playerResponse({required String? points, required double? customPoints}) 
 ''';
 }
 
-MockClient mockClientForPlayer({required String? points, required double? customPoints}) {
-  final playerBody = playerResponse(points: points, customPoints: customPoints);
+MockClient mockClientForPlayer({
+  required String? points,
+  required double? customPoints,
+  bool? follow,
+  int? fideId,
+  List<http.Request>? recordedRequests,
+}) {
+  final playerBody = playerResponse(
+    points: points,
+    customPoints: customPoints,
+    follow: follow,
+    fideId: fideId,
+  );
   return MockClient((request) {
+    recordedRequests?.add(request);
+    if (request.url.path == '/fide/$fideId/follow') {
+      return mockResponse('{"ok":true}', 200);
+    }
     if (request.url.path == '/api/broadcast/$_tournamentId') {
       return mockResponse(
         _tournamentResponse,
@@ -77,8 +106,17 @@ Future<void> pumpPlayerResultsScreen(
   WidgetTester tester, {
   required String? points,
   required double? customPoints,
+  bool? follow,
+  int? fideId,
+  List<http.Request>? recordedRequests,
 }) async {
-  final client = mockClientForPlayer(points: points, customPoints: customPoints);
+  final client = mockClientForPlayer(
+    points: points,
+    customPoints: customPoints,
+    follow: follow,
+    fideId: fideId,
+    recordedRequests: recordedRequests,
+  );
   final app = await makeTestProviderScopeApp(
     tester,
     home: const BroadcastPlayerResultsScreen(tournamentId: _tournamentId, playerId: _playerId),
@@ -151,7 +189,7 @@ void main() {
         tester,
       ) async {
         await pumpPlayerResultsScreen(tester, points: '1/2', customPoints: 0.0);
-        expectGameTileShows('½');
+        expectGameTileShows('0');
       });
     });
 
@@ -170,6 +208,128 @@ void main() {
         await pumpPlayerResultsScreen(tester, points: '0', customPoints: 0.0);
         expectGameTileShows('0');
       });
+    });
+  });
+
+  group('BroadcastPlayerResultsScreen follow button', () {
+    const fideId = 1503014;
+
+    testWidgets('is not shown when logged out', variant: kPlatformVariant, (tester) async {
+      // lila omits 'fide.follow' when the user is not logged in.
+      await pumpPlayerResultsScreen(tester, points: '1', customPoints: null, fideId: fideId);
+
+      expect(find.byIcon(Icons.star), findsNothing);
+      expect(find.byIcon(Icons.star_border), findsNothing);
+    });
+
+    testWidgets('is not shown when the player has no FIDE id', variant: kPlatformVariant, (
+      tester,
+    ) async {
+      await pumpPlayerResultsScreen(tester, points: '1', customPoints: null, follow: false);
+
+      expect(find.byIcon(Icons.star), findsNothing);
+      expect(find.byIcon(Icons.star_border), findsNothing);
+    });
+
+    testWidgets('is filled when already following', variant: kPlatformVariant, (tester) async {
+      await pumpPlayerResultsScreen(
+        tester,
+        points: '1',
+        customPoints: null,
+        follow: true,
+        fideId: fideId,
+      );
+
+      expect(find.byIcon(Icons.star), findsOneWidget);
+    });
+
+    testWidgets('follows the player when tapped', variant: kPlatformVariant, (tester) async {
+      final requests = <http.Request>[];
+      await pumpPlayerResultsScreen(
+        tester,
+        points: '1',
+        customPoints: null,
+        follow: false,
+        fideId: fideId,
+        recordedRequests: requests,
+      );
+
+      expect(find.byIcon(Icons.star_border), findsOneWidget);
+
+      await tester.tap(find.byIcon(Icons.star_border));
+      await tester.pump();
+
+      expect(find.byIcon(Icons.star), findsOneWidget);
+
+      final followRequest = requests.firstWhere((r) => r.url.path == '/fide/$fideId/follow');
+      expect(followRequest.method, 'POST');
+      expect(followRequest.url.queryParameters['follow'], 'true');
+    });
+
+    testWidgets('unfollows the player when tapped while following', variant: kPlatformVariant, (
+      tester,
+    ) async {
+      final requests = <http.Request>[];
+      await pumpPlayerResultsScreen(
+        tester,
+        points: '1',
+        customPoints: null,
+        follow: true,
+        fideId: fideId,
+        recordedRequests: requests,
+      );
+
+      await tester.tap(find.byIcon(Icons.star));
+      await tester.pump();
+
+      expect(find.byIcon(Icons.star_border), findsOneWidget);
+
+      final followRequest = requests.firstWhere((r) => r.url.path == '/fide/$fideId/follow');
+      expect(followRequest.url.queryParameters['follow'], 'false');
+    });
+  });
+
+  group('tournamentReferenceYear', () {
+    BroadcastTournament makeTournament({DateTime? startsAt, DateTime? endsAt}) {
+      return BroadcastTournament(
+        data: BroadcastTournamentData(
+          id: const BroadcastTournamentId('t'),
+          name: 'Test',
+          slug: 'test',
+          imageUrl: null,
+          description: null,
+          information: (
+            format: null,
+            timeControl: null,
+            players: null,
+            location: null,
+            dates: startsAt == null ? null : (startsAt: startsAt, endsAt: endsAt),
+            website: null,
+            standings: null,
+          ),
+        ),
+        rounds: const IListConst([]),
+        defaultRoundId: const BroadcastRoundId('r'),
+        group: null,
+      );
+    }
+
+    test('uses end year when the tournament has ended', () {
+      final tournament = makeTournament(
+        startsAt: DateTime.utc(2021, 1, 10),
+        endsAt: DateTime.utc(2021, 12, 20),
+      );
+      expect(tournamentReferenceYear(tournament), 2021);
+    });
+
+    test('uses start year when no end date is set', () {
+      final tournament = makeTournament(startsAt: DateTime.utc(2018, 6, 5));
+      expect(tournamentReferenceYear(tournament), 2018);
+    });
+
+    test('falls back to current year when no dates are available', () {
+      final tournament = makeTournament();
+      expect(tournamentReferenceYear(tournament), DateTime.now().year);
     });
   });
 }

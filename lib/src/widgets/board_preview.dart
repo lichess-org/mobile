@@ -1,6 +1,5 @@
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -8,6 +7,7 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// A board preview with a description.
 class SmallBoardPreview extends ConsumerWidget {
@@ -76,14 +76,16 @@ class SmallBoardPreview extends ConsumerWidget {
                     fen: fen,
                     orientation: orientation,
                     lastMove: lastMove,
-                    pieceAssets: boardPrefs.pieceSet.assets,
-                    colorScheme: boardPrefs.boardTheme.colors,
-                    brightness: boardPrefs.brightness,
-                    hue: boardPrefs.hue,
-                    enableCoordinates: false,
-                    borderRadius: Styles.boardBorderRadius,
-                    boxShadow: boardShadows,
-                    animationDuration: const Duration(milliseconds: 150),
+                    settings: StaticChessboardSettings(
+                      pieceAssets: boardPrefs.pieceSet.assets,
+                      colorScheme: boardPrefs.boardTheme.colors,
+                      brightness: boardPrefs.brightness,
+                      hue: boardPrefs.hue,
+                      enableCoordinates: false,
+                      borderRadius: Styles.boardBorderRadius,
+                      boxShadow: boardShadows,
+                      animationDuration: const Duration(milliseconds: 150),
+                    ),
                   ),
                 const SizedBox(width: 10.0),
                 if (_showLoadingPlaceholder)
@@ -106,7 +108,7 @@ class SmallBoardPreview extends ConsumerWidget {
                             const SizedBox(height: 4.0),
                             Container(
                               height: 16.0,
-                              width: MediaQuery.sizeOf(context).width / 3,
+                              width: MediaQuery.widthOf(context) / 3,
                               decoration: const BoxDecoration(
                                 color: Colors.black,
                                 borderRadius: Styles.boardBorderRadius,

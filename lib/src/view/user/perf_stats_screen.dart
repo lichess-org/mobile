@@ -4,7 +4,6 @@ import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
@@ -31,6 +30,7 @@ import 'package:lichess_mobile/src/widgets/progression_widget.dart';
 import 'package:lichess_mobile/src/widgets/rating.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
+import 'package:material_ui/material_ui.dart';
 
 final _dateFormatter = DateFormat.yMMMd();
 
@@ -89,7 +89,10 @@ class _Title extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(perf.icon),
-            Text(' ${context.l10n.perfStatPerfStats(perf.title)}', overflow: TextOverflow.ellipsis),
+            Text(
+              ' ${context.l10n.perfStatPerfStats(perf.label(context.l10n))}',
+              overflow: TextOverflow.ellipsis,
+            ),
             const Icon(Icons.arrow_drop_down),
           ],
         ),
@@ -106,7 +109,7 @@ class _Title extends StatelessWidget {
                       Icon(p.icon),
                       const SizedBox(width: 6),
                       Text(
-                        context.l10n.perfStatPerfStats(p.title),
+                        context.l10n.perfStatPerfStats(p.label(context.l10n)),
                         overflow: TextOverflow.ellipsis,
                       ),
                     ],
@@ -235,12 +238,12 @@ class _Body extends ConsumerWidget {
                           (loggedInUser != null && loggedInUser.user.id == user.id)
                               ? context.l10n.youAreBetterThanPercentOfPerfTypePlayers(
                                   '${data.percentile!.toStringAsFixed(2)}%',
-                                  perf.title,
+                                  perf.label(context.l10n),
                                 )
                               : context.l10n.userIsBetterThanPercentOfPerfTypePlayers(
                                   user.username,
                                   '${data.percentile!.toStringAsFixed(2)}%',
-                                  perf.title,
+                                  perf.label(context.l10n),
                                 ),
                           style: TextStyle(color: textShade(context, 0.7)),
                         ),
@@ -522,7 +525,8 @@ class _PercentageValueWidget extends StatelessWidget {
   const _PercentageValueWidget(this.value, this.denominator, {this.color, this.isShaded = false});
 
   String _getPercentageString(num numerator, num denominator) {
-    return '${((numerator / denominator) * 100).round()}%';
+    final fraction = denominator == 0 ? 0 : numerator / denominator;
+    return NumberFormat.percentPattern().format(fraction);
   }
 
   @override

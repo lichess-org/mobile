@@ -78,6 +78,9 @@ class NotificationService {
   /// The stream subscription for notification responses.
   StreamSubscription<NotificationResponse>? _responseStreamSubscription;
 
+  /// The stream subscription for authentication events.
+  StreamSubscription<AuthEvent>? _authEventsSubscription;
+
   /// Whether the device has been registered for push notifications.
   bool _registeredDevice = false;
 
@@ -95,6 +98,34 @@ class NotificationService {
   /// This method should be called once the app is ready to receive notifications,
   /// and after [LichessBinding.initializeNotifications] has been called.
   Future<void> start() async {
+    // Firebase auto-init is disabled at build time (`FirebaseMessagingAutoInitEnabled` in
+    // Info.plist, `firebase_messaging_auto_init_enabled` in AndroidManifest.xml) so that nothing
+    // is registered with Firebase before the app actually starts its notification service.
+    // Since firebase_messaging 16.5.0, the iOS plugin skips `registerForRemoteNotifications` and
+    // ignores the APNS device token entirely while auto-init is disabled, so we have to enable it
+    // explicitly here, otherwise `getAPNSToken()` always returns null and the device can never be
+    // registered for push notifications.
+    await LichessBinding.instance.firebaseMessaging.setAutoInitEnabled(true);
+
+    await _authEventsSubscription?.cancel();
+    _authEventsSubscription = authEventsStream.listen((event) {
+      switch (event) {
+        case AuthEvent.signIn:
+          unawaited(
+            registerDevice().catchError((Object e, StackTrace st) {
+              _logger.severe('Could not register device after sign-in:', e, st);
+              return false;
+            }),
+          );
+        case AuthEvent.signOut:
+          unawaited(
+            unregister().catchError((Object e, StackTrace st) {
+              _logger.severe('Could not unregister device after sign-out:', e, st);
+            }),
+          );
+      }
+    });
+
     // Listen for incoming messages while the app is in the foreground.
     LichessBinding.instance.firebaseMessagingOnMessage.listen((RemoteMessage message) {
       _processFcmMessage(message, fromBackground: false);
@@ -133,7 +164,7 @@ class NotificationService {
           final success = await registerDevice();
           if (success) _registeredDevice = true;
         } catch (e, st) {
-          _logger.severe('Could not setup push notifications; $e\n$st');
+          _logger.severe('Could not setup push notifications:', e, st);
         }
       }
     });
@@ -180,6 +211,7 @@ class NotificationService {
     _fcmTokenRefreshSubscription?.cancel();
     _connectivitySubscription?.close();
     _responseStreamSubscription?.cancel();
+    _authEventsSubscription?.cancel();
   }
 
   /// Function called by the notification plugin when a notification has been tapped on.
@@ -248,6 +280,28 @@ class NotificationService {
           notification,
         ));
 
+      case final BroadcastRoundFcmMessage roundMessage:
+        final notification = BroadcastRoundNotification.fromFcmMessage(roundMessage);
+        _responseStreamController.add((
+          NotificationResponse(
+            notificationResponseType: NotificationResponseType.selectedNotification,
+            id: notification.id,
+            payload: jsonEncode(notification.payload),
+          ),
+          notification,
+        ));
+
+      case final BroadcastPlayerFollowFcmMessage playerFollowMessage:
+        final notification = BroadcastPlayerFollowNotification.fromFcmMessage(playerFollowMessage);
+        _responseStreamController.add((
+          NotificationResponse(
+            notificationResponseType: NotificationResponseType.selectedNotification,
+            id: notification.id,
+            payload: jsonEncode(notification.payload),
+          ),
+          notification,
+        ));
+
       // TODO: handle other notification types
       case UnhandledFcmMessage(data: final data):
         _logger.warning('Received unhandled FCM notification type: ${data['lichess.type']}');
@@ -306,6 +360,29 @@ class NotificationService {
           );
         }
 
+      case BroadcastRoundFcmMessage(:final roundId, :final notification):
+        if (fromBackground == false && notification != null) {
+          await show(BroadcastRoundNotification(roundId, notification.title!, notification.body!));
+        }
+
+      case BroadcastPlayerFollowFcmMessage(
+        :final roundId,
+        :final gameId,
+        :final pov,
+        :final notification,
+      ):
+        if (fromBackground == false && notification != null) {
+          await show(
+            BroadcastPlayerFollowNotification(
+              roundId,
+              gameId,
+              pov,
+              notification.title!,
+              notification.body!,
+            ),
+          );
+        }
+
       case UnhandledFcmMessage(data: final data):
         _logger.warning('Received unhandled FCM notification type: ${data['lichess.type']}');
 
@@ -318,8 +395,8 @@ class NotificationService {
     if (badge != null) {
       try {
         await BadgeService.instance.setBadge(int.parse(badge));
-      } catch (e) {
-        _logger.severe('Could not parse badge: $badge');
+      } catch (e, st) {
+        _logger.severe('Could not parse badge: $badge', e, st);
       }
     }
   }
@@ -354,7 +431,7 @@ class NotificationService {
     try {
       await _ref.withClient((client) => client.post(Uri(path: '/mobile/unregister')));
     } catch (e, st) {
-      _logger.severe('could not unregister device; $e', e, st);
+      _logger.severe('could not unregister device:', e, st);
     }
   }
 
@@ -372,7 +449,7 @@ class NotificationService {
       await _ref.withClient((client) => client.post(Uri(path: '/mobile/register/firebase/$token')));
       return true;
     } catch (e, st) {
-      _logger.severe('could not register device; $e', e, st);
+      _logger.severe('could not register device:', e, st);
       return false;
     }
   }
@@ -390,8 +467,8 @@ class NotificationService {
       await ref.read(notificationServiceProvider)._processFcmMessage(message, fromBackground: true);
 
       ref.dispose();
-    } catch (e) {
-      _logger.severe('Error when processing an FCM background message: $e');
+    } catch (e, st) {
+      _logger.severe('Error when processing an FCM background message:', e, st);
       ref.dispose();
     }
   }

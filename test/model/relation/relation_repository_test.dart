@@ -3,7 +3,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/relation/relation_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/network/http.dart';
 
 import '../../test_container.dart';
 import '../../test_helpers.dart';
@@ -23,9 +22,8 @@ void main() {
       });
 
       final container = await lichessClientContainer(mockClient);
-      final client = container.read(lichessClientProvider);
-      final repo = RelationRepository(client);
-      final result = await repo.getFollowing();
+      final repo = container.read(relationRepositoryProvider);
+      final result = await repo.getAllFollowing();
 
       expect(result, isA<IList<User>>());
     });
@@ -42,9 +40,8 @@ void main() {
       });
 
       final container = await lichessClientContainer(mockClient);
-      final client = container.read(lichessClientProvider);
-      final repo = RelationRepository(client);
-      final result = await repo.getFollowing();
+      final repo = container.read(relationRepositoryProvider);
+      final result = await repo.getAllFollowing();
 
       expect(result, isA<IList<User>>());
     });
