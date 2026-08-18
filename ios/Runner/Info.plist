@@ -167,7 +167,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Photo Library Access Warning</string>
+	<string>Lichess needs access to your photo library so you can pick one of your own photos to use as a custom background for the app. For example, you can choose a photo from your library and it will be displayed behind the chessboard and menus. The photo you select stays on this device and is never uploaded.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>

@@ -111,13 +111,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobilePuzzleStormFilterNothingToShow => '暂无内容，请调整筛选条件';
 
   @override
-  String get mobilePuzzleStormNothingToShow => '暂无内容，请先进行几轮“Puzzle Storm”挑战。';
+  String get mobilePuzzleStormNothingToShow => '暂无内容，请先进行几轮 Puzzle Storm 挑战。';
 
   @override
   String get mobilePuzzleStormSubtitle => '在 3 分钟内尽可能多地解答谜题';
 
   @override
-  String get mobilePuzzleStreakAbortWarning => '您将失去当前连胜记录，但得分会被保存';
+  String get mobilePuzzleStreakAbortWarning => '您将失去当前连胜记录，但得分将被保存。';
 
   @override
   String get mobilePuzzleThemesSubtitle => '解答您喜爱的开局谜题，或选择特定主题';
