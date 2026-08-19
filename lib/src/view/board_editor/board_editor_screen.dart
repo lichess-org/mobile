@@ -539,6 +539,7 @@ class _Chess960PositionDialog extends StatefulWidget {
 
 class _Chess960PositionDialogState extends State<_Chess960PositionDialog> {
   final _controller = TextEditingController();
+  String? _errorText;
 
   @override
   void dispose() {
@@ -547,17 +548,28 @@ class _Chess960PositionDialogState extends State<_Chess960PositionDialog> {
   }
 
   void _generateRandom() {
-    // Chess960 IDs range from 0 to 959.
     final randomId = math.Random().nextInt(960);
-    _controller.text = randomId.toString();
+    setState(() {
+      _controller.text = randomId.toString();
+      _errorText = null;
+    });
+  }
+
+  void _validateInput(String value) {
+    final id = int.tryParse(value);
+    setState(() {
+      if (id != null && id > 959) {
+        _errorText = 'Max ID is 959';
+      } else {
+        _errorText = null;
+      }
+    });
   }
 
   void _loadPosition() {
     final id = int.tryParse(_controller.text);
-    if (id == null || id < 0 || id > 959) {
-      showSnackBar(context, 'Please enter a number between 0 and 959', type: .error);
-      return;
-    }
+    if (id == null) return;
+
     final fen = chess960Position(id).fen;
     widget.onFenLoaded(fen);
     Navigator.of(context, rootNavigator: true).pop();
@@ -568,13 +580,15 @@ class _Chess960PositionDialogState extends State<_Chess960PositionDialog> {
     return AlertDialog(
       title: const Text('Chess960 Position'),
       content: Column(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: .min,
         children: [
           TextField(
             controller: _controller,
             keyboardType: .number,
+            onChanged: _validateInput,
             decoration: InputDecoration(
               hintText: 'Position ID (0-959)',
+              errorText: _errorText,
               suffixIcon: IconButton(
                 icon: const Icon(LichessIcons.die_six),
                 onPressed: _generateRandom,
@@ -591,7 +605,10 @@ class _Chess960PositionDialogState extends State<_Chess960PositionDialog> {
           onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
           child: Text(context.l10n.cancel),
         ),
-        TextButton(onPressed: _loadPosition, child: Text(context.l10n.loadPosition)),
+        TextButton(
+          onPressed: _errorText == null && _controller.text.isNotEmpty ? _loadPosition : null,
+          child: Text(context.l10n.loadPosition),
+        ),
       ],
     );
   }
