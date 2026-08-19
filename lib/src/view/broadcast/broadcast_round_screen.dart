@@ -234,13 +234,15 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
                     final games = asyncRound.value.games.values;
                     final allCount = games.length;
                     final ongoingCount = games.where((g) => g.isOngoing).length;
-                    final teams = games
+                    final uniqueTeams = games
                         .expand((g) => g.players.values.map((p) => p.player.team))
                         .nonNulls
                         .toIList()
                         .removeDuplicates()
-                        .sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()))
-                        .insert(0, context.l10n.broadcastAllTeams);
+                        .sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
+                    final teams = uniqueTeams.isNotEmpty
+                        ? uniqueTeams.insert(0, context.l10n.broadcastAllTeams)
+                        : null;
 
                     showModalBottomSheet<void>(
                       context: context,
@@ -253,7 +255,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
                         allGamesCount: allCount,
                         ongoingGamesCount: ongoingCount,
                         onGameFilterChange: setGameFilter,
-                        teams: teams.isNotEmpty ? teams : null,
+                        teams: teams,
                       ),
                     );
                   },
