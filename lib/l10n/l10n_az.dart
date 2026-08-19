@@ -341,6 +341,9 @@ class AppLocalizationsAz extends AppLocalizations {
   String get mobilePerfShortPuzzle => 'Puzzle';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get variantStandard => 'Standard';
 
   @override

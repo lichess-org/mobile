@@ -532,7 +532,7 @@ class _StudyChaptersMenuState extends ConsumerState<_StudyChaptersMenu> {
       context: context,
       actions: [
         BottomSheetAction(
-          makeLabel: (_) => const Text('Rename'),
+          makeLabel: (context) => Text(context.l10n.mobileRenameChapter),
           onPressed: () => _showRenameDialog(context, ref, chapter: chapter),
         ),
         BottomSheetAction(
@@ -543,6 +543,9 @@ class _StudyChaptersMenuState extends ConsumerState<_StudyChaptersMenu> {
           makeLabel: (_) => Text(context.l10n.studyDeleteChapter),
           isDestructiveAction: true,
           onPressed: () {
+            // Confirming pops the chapters sheet, which unmounts [context], so hold on to a
+            // context that outlives it to be able to report a failure.
+            final rootContext = Navigator.of(context, rootNavigator: true).context;
             showConfirmDialog<void>(
               context,
               title: Text(context.l10n.studyDeleteThisChapter),
@@ -553,8 +556,8 @@ class _StudyChaptersMenuState extends ConsumerState<_StudyChaptersMenu> {
                     .read(studyControllerProvider(widget.options).notifier)
                     .deleteChapter(chapter.id)
                     .catchError((Object e) {
-                      if (context.mounted) {
-                        showSnackBar(context, e.toString(), type: SnackBarType.error);
+                      if (rootContext.mounted) {
+                        showSnackBar(rootContext, e.toString(), type: SnackBarType.error);
                       }
                     });
               },
@@ -571,7 +574,7 @@ class _StudyChaptersMenuState extends ConsumerState<_StudyChaptersMenu> {
       context: context,
       builder: (context) {
         return AlertDialog.adaptive(
-          title: const Text('Rename'),
+          title: Text(context.l10n.mobileRenameChapter),
           content: TextField(
             controller: textController,
             autofocus: true,

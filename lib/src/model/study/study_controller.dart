@@ -301,9 +301,12 @@ class StudyController extends AsyncNotifier<StudyState>
     if (chapters.length > 1) {
       final isCurrentChapter = chapterId == study.chapter.id;
       if (isCurrentChapter) {
-        // Navigate to an adjacent chapter.
+        // Navigate to an adjacent chapter. If the chapter is somehow missing from the
+        // list, fall back to the study's default chapter.
         final index = chapters.indexWhere((c) => c.id == chapterId);
-        final nextId = index < chapters.length - 1
+        final nextId = index == -1
+            ? null
+            : index < chapters.length - 1
             ? chapters[index + 1].id
             : chapters[index - 1].id;
         await _reloadStudy(chapterId: nextId);
@@ -323,42 +326,49 @@ class StudyController extends AsyncNotifier<StudyState>
 
   /// Edit a chapter's metadata (name, orientation).
   ///
-  /// Sends the full chapter edit data to the server via socket.
+  /// The `editChapter` socket message replaces the whole chapter configuration, so all of
+  /// `mode` and `description` must be sent along with the edited fields. Those are only
+  /// known for the chapter that is currently loaded, hence [chapterId] is loaded first when
+  /// it is not the current one, instead of sending defaults that would overwrite the
+  /// chapter settings stored on the server.
   Future<void> editChapter(StudyChapterId chapterId, {String? name, Side? orientation}) async {
     if (!state.hasValue || !state.requireValue.canIContribute) return;
 
+    if (state.requireValue.study.chapter.id != chapterId) {
+      if (!state.requireValue.study.chapters.any((c) => c.id == chapterId)) return;
+      await _reloadStudy(chapterId: chapterId);
+      if (!state.hasValue || state.requireValue.study.chapter.id != chapterId) return;
+    }
+
     final study = state.requireValue.study;
     final chapter = study.chapter;
-    final chapterMeta = study.chapters.firstWhere((c) => c.id == chapterId);
+    final chapterMeta = study.chapters.firstWhereOrNull((c) => c.id == chapterId);
+    if (chapterMeta == null) return;
 
-    final currentName = chapterMeta.name;
-    final currentOrientation = chapter.id == chapterId ? chapter.setup.orientation : Side.white;
-    final currentMode = chapter.id == chapterId
-        ? (chapter.gamebook
-              ? 'gamebook'
-              : chapter.practise
-              ? 'practice'
-              : 'normal')
-        : 'normal';
+    final newName = name?.trim();
 
     _socketClient?.send('editChapter', {
       'id': chapterId.value,
-      'name': name ?? currentName,
-      'orientation': (orientation ?? currentOrientation).name,
-      'mode': currentMode,
-      'description': '',
+      'name': newName == null || newName.isEmpty ? chapterMeta.name : newName,
+      'orientation': (orientation ?? chapter.setup.orientation).name,
+      'mode': chapter.gamebook
+          ? 'gamebook'
+          : chapter.practise
+          ? 'practice'
+          : 'normal',
+      'description': chapter.description ?? '',
     });
 
     // Update local state
-    if (name != null) {
+    if (newName != null && newName.isNotEmpty) {
       final updatedChapters = study.chapters
-          .map((c) => c.id == chapterId ? c.copyWith(name: name.trim()) : c)
+          .map((c) => c.id == chapterId ? c.copyWith(name: newName) : c)
           .toIList();
       state = AsyncData(
         state.requireValue.copyWith(study: study.copyWith(chapters: updatedChapters)),
       );
     }
-    if (orientation != null && chapterId == chapter.id) {
+    if (orientation != null) {
       state = AsyncData(state.requireValue.copyWith(pov: orientation));
     }
   }
