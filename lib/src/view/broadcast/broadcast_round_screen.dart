@@ -236,9 +236,9 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
                     final ongoingCount = games.where((g) => g.isOngoing).length;
                     final teams = games
                         .expand((g) => g.players.values.map((p) => p.player.team))
-                        .toISet()
                         .nonNulls
                         .toIList()
+                        .removeDuplicates()
                         .sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()))
                         .insert(0, context.l10n.broadcastAllTeams);
 
