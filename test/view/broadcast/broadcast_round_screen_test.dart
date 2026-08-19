@@ -224,7 +224,7 @@ void main() {
       expect(find.byType(BoardThumbnail), findsNWidgets(2));
 
       await tester.tap(find.byType(ContextMenuIconButton));
-      await tester.pumpAndSettle();
+      await tester.pump();
       await tester.tap(find.text('Settings'));
       await tester.pumpAndSettle();
 
@@ -251,14 +251,14 @@ void main() {
 
       await tester.tap(find.text('Team C'));
 
-      await tester.pumpAndSettle();
+      await tester.pump();
 
       expect(find.text('Team: Team C'), findsOneWidget);
 
       // Close the settings bottom sheet by tapping outside it
       await tester.tapAt(const Offset(195, 100));
 
-      await tester.pumpAndSettle();
+      await tester.pump();
 
       // Filtered to one game
       final filteredGame = find.byType(BoardThumbnail);
@@ -267,9 +267,9 @@ void main() {
       expect(tester.widget<BoardThumbnail>(find.byType(BoardThumbnail)).orientation, Side.black);
 
       // Clear the filter by opening settings again
-      await tester.pumpAndSettle();
+      await tester.pump();
       await tester.tap(find.byType(ContextMenuIconButton));
-      await tester.pumpAndSettle();
+      await tester.pump();
       await tester.tap(find.text('Settings'));
       await tester.pumpAndSettle();
 
@@ -296,7 +296,7 @@ void main() {
       // Close the settings bottom sheet by tapping outside it
       await tester.tapAt(const Offset(195, 100));
 
-      await tester.pumpAndSettle();
+      await tester.pump();
 
       // Filter cleared -> all results restored
       expect(find.byType(BoardThumbnail), findsNWidgets(2));
