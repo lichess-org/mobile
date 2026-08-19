@@ -658,16 +658,14 @@ void main() {
 
     // Enter an out-of-bounds ID
     await tester.enterText(find.byType(TextField), '999');
-
-    // Tap the Load button (which is the last TextButton in the dialog actions)
-    await tester.tap(find.text('Load position'));
     await tester.pump();
+
+    // Verify the 'Load position' button is actually disabled
+    final loadButton = tester.widget<TextButton>(find.widgetWithText(TextButton, 'Load position'));
+    expect(loadButton.onPressed, isNull);
 
     // The dialog should remain open because validation failed
     expect(find.byType(AlertDialog), findsOneWidget);
-
-    // The error SnackBar should appear
-    expect(find.textContaining('0 and 959'), findsOneWidget);
   });
 }
 
