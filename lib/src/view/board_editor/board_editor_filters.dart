@@ -61,14 +61,17 @@ class BoardEditorFilters extends ConsumerWidget {
                     ),
                   ),
                   ...[CastlingSide.king, CastlingSide.queen].map((castlingSide) {
+                    final isPossible = editorState.isCastlingPossible(side, castlingSide);
                     return ChoiceChip(
                       label: Text(castlingSide == CastlingSide.king ? 'O-O' : 'O-O-O'),
-                      selected: editorState.isCastlingAllowed(side, castlingSide),
-                      onSelected: (selected) {
-                        ref
-                            .read(editorController.notifier)
-                            .setCastling(side, castlingSide, selected);
-                      },
+                      selected: isPossible && editorState.isCastlingAllowed(side, castlingSide),
+                      onSelected: isPossible
+                          ? (selected) {
+                              ref
+                                  .read(editorController.notifier)
+                                  .setCastling(side, castlingSide, selected);
+                            }
+                          : null,
                     );
                   }),
                 ],
