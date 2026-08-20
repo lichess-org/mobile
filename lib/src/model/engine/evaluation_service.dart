@@ -121,6 +121,16 @@ class EvaluationService {
   bool _discardEvalResults = false;
   bool _discardMoveResults = false;
 
+  /// Identifies the latest [_initEngine] attempt.
+  ///
+  /// [quit] clears [_initInProgress] without waiting for the attempt in flight, so a later work
+  /// request can start a second [_initEngine] while the first is still awaiting a native
+  /// operation. Both then race to cancel [_initWatchdog] and clear [_initInProgress]; without a
+  /// token to tell them apart, the older attempt disarms the newer one's watchdog and a start that
+  /// never completes is never reported. Only the attempt still holding the current generation
+  /// touches that shared state.
+  int _initGeneration = 0;
+
   /// Fires if a (re)start neither succeeds nor fails within [kEngineInitTimeout].
   Timer? _initWatchdog;
 
@@ -434,9 +444,14 @@ class EvaluationService {
   }
 
   /// Arms the watchdog that catches a (re)start which never completes at all.
-  void _startInitWatchdog(StockfishFlavor flavor, Variant variant) {
+  ///
+  /// [generation] is the attempt the watchdog belongs to: it fires only while that attempt is
+  /// still the current one, so a superseded start cannot report a failure against the one that
+  /// replaced it.
+  void _startInitWatchdog(int generation, StockfishFlavor flavor, Variant variant) {
     _cancelInitWatchdog();
     _initWatchdog = Timer(kEngineInitTimeout, () {
+      if (generation != _initGeneration) return;
       _initWatchdog = null;
       if (!_initInProgress) return;
 
@@ -535,7 +550,9 @@ class EvaluationService {
     // outside the try so that a failure report names the flavor that actually failed.
     StockfishFlavor actualFlavor = flavor;
 
-    _startInitWatchdog(flavor, variant);
+    final generation = ++_initGeneration;
+
+    _startInitWatchdog(generation, flavor, variant);
 
     try {
       _logger.fine(
@@ -609,8 +626,12 @@ class EvaluationService {
       );
       _failEngine();
     } finally {
-      _cancelInitWatchdog();
-      _initInProgress = false;
+      // A superseded attempt owns none of this any more: the start that replaced it — or the
+      // quit that cancelled it — is what the watchdog and the in-progress flag now describe.
+      if (generation == _initGeneration) {
+        _cancelInitWatchdog();
+        _initInProgress = false;
+      }
     }
   }
 

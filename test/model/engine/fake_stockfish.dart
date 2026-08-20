@@ -1362,3 +1362,38 @@ class PracticeModeStockfish with FakeStockfishDiagnostics implements Stockfish {
   @override
   Stream<String> get stdout => _stdoutController.stream;
 }
+
+/// A fake Stockfish that starts normally the first time and then wedges on the next start.
+///
+/// Models the engine breaking on a restart rather than on the first boot: quits keep completing,
+/// so an initialization attempt that was superseded still runs to completion, while the attempt
+/// that replaced it waits on a start that never answers.
+class WedgesOnRestartStockfish extends FakeStockfish {
+  /// How many times the engine was asked to start.
+  int startCount = 0;
+
+  @override
+  Future<void> start({
+    StockfishFlavor flavor = StockfishFlavor.sf16,
+    String? variant,
+    String? smallNetPath,
+    String? bigNetPath,
+  }) {
+    startCount++;
+    if (startCount > 1) {
+      diagnostics = const StockfishDiagnostics(
+        phase: StockfishPhase.engineBooting,
+        step: 'engine_boot',
+        elapsed: Duration(minutes: 1),
+        lastError: null,
+      );
+      return Completer<void>().future;
+    }
+    return super.start(
+      flavor: flavor,
+      variant: variant,
+      smallNetPath: smallNetPath,
+      bigNetPath: bigNetPath,
+    );
+  }
+}

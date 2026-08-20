@@ -908,6 +908,42 @@ void main() {
       });
     });
 
+    test(
+      'A superseded initialization does not disarm the watchdog of the one that replaced it',
+      () async {
+        // Non-regression test: quit() releases the in-progress flag without waiting for the
+        // initialization it interrupted, so the next work request starts a second one while the
+        // first is still running. The first must not cancel the second's watchdog on its way out,
+        // or a restart that never completes is never reported.
+        final stockfish = WedgesOnRestartStockfish();
+        testBinding.stockfish = stockfish;
+        final container = await makeContainer();
+        final crashlytics = testBinding.firebaseCrashlytics;
+        crashlytics.recordedErrors.clear();
+
+        fakeAsync((async) {
+          final service = container.read(evaluationServiceProvider);
+
+          service.evaluate(makeWork());
+          service.quit();
+          service.evaluate(makeWork(id: const StringId('test2')));
+
+          async.flushMicrotasks();
+
+          // The first attempt has run to completion, the second is still waiting on its start.
+          expect(stockfish.startCount, 2);
+
+          async.elapse(kEngineInitTimeout + const Duration(seconds: 1));
+          async.flushMicrotasks();
+
+          expect(service.evaluationState.value.state, EngineState.error);
+          expect(crashlytics.customKeys['engine_failure_kind'], 'stuck');
+          expect(crashlytics.customKeys['engine_phase'], 'engineBooting');
+          expect(crashlytics.customKeys['engine_phase_step'], 'engine_boot');
+        });
+      },
+    );
+
     test('A stuck engine releases pending work and refuses new work', () async {
       testBinding.stockfish = StuckStockfish();
       final container = await makeContainer();
