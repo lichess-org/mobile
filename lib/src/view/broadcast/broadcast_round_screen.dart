@@ -61,12 +61,26 @@ enum _BroadcastGameFilter {
 class BroadcastRoundScreenLoading extends ConsumerWidget {
   final BroadcastRoundId roundId;
   final BroadcastRoundTab? initialTab;
+  final String? teamFilter;
 
-  const BroadcastRoundScreenLoading({super.key, required this.roundId, this.initialTab});
+  const BroadcastRoundScreenLoading({
+    super.key,
+    required this.roundId,
+    this.initialTab,
+    this.teamFilter,
+  });
 
-  static Route<dynamic> buildRoute(BroadcastRoundId roundId, {BroadcastRoundTab? initialTab}) {
+  static Route<dynamic> buildRoute(
+    BroadcastRoundId roundId, {
+    BroadcastRoundTab? initialTab,
+    String? teamFilter,
+  }) {
     return buildScreenRoute(
-      screen: BroadcastRoundScreenLoading(roundId: roundId, initialTab: initialTab),
+      screen: BroadcastRoundScreenLoading(
+        roundId: roundId,
+        initialTab: initialTab,
+        teamFilter: teamFilter,
+      ),
     );
   }
 
@@ -83,6 +97,7 @@ class BroadcastRoundScreenLoading extends ConsumerWidget {
           roundToLinkId: roundId,
         ),
         initialTab: initialTab,
+        teamFilter: teamFilter,
       ),
       AsyncError(:final error) => Scaffold(
         appBar: AppBar(title: const Text('')),
@@ -99,8 +114,9 @@ class BroadcastRoundScreenLoading extends ConsumerWidget {
 class BroadcastRoundScreen extends ConsumerStatefulWidget {
   final Broadcast broadcast;
   final BroadcastRoundTab? initialTab;
+  final String? teamFilter;
 
-  const BroadcastRoundScreen({required this.broadcast, this.initialTab});
+  const BroadcastRoundScreen({required this.broadcast, this.initialTab, this.teamFilter});
 
   static Route<dynamic> buildRoute(Broadcast broadcast, {BroadcastRoundTab? initialTab}) {
     return buildScreenRoute(
@@ -117,12 +133,11 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
   late final TabController _tabController;
   late BroadcastTournamentId _selectedTournamentId;
   BroadcastRoundId? _selectedRoundId;
+  String? _teamFilter;
 
   bool roundLoaded = false;
 
   _BroadcastGameFilter filter = _BroadcastGameFilter.all;
-
-  String? teamFilter;
 
   @override
   void initState() {
@@ -139,6 +154,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
 
     _selectedTournamentId = widget.broadcast.tour.id;
     _selectedRoundId = widget.broadcast.roundToLinkId;
+    _teamFilter = widget.teamFilter;
   }
 
   @override
@@ -167,7 +183,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
     _tabController.index = 1;
     setState(() {
       this.filter = filter;
-      teamFilter = team == context.l10n.broadcastAllTeams ? null : team;
+      _teamFilter = team == context.l10n.broadcastAllTeams ? null : team;
     });
   }
 
@@ -264,7 +280,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
                       constraints: BoxConstraints(maxHeight: MediaQuery.heightOf(context) * 0.6),
                       builder: (_) => _BroadcastGamesFilterBottomSheet(
                         filter,
-                        teamFilter,
+                        _teamFilter,
                         allGamesCount: allCount,
                         ongoingGamesCount: ongoingCount,
                         onGameFilterChange: setGameFilter,
@@ -298,7 +314,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
                 roundId: _selectedRoundId ?? value.defaultRoundId,
                 tournamentSlug: value.data.slug,
                 showOnlyOngoingGames: filter == _BroadcastGameFilter.ongoing,
-                teamFilter: teamFilter,
+                teamFilter: _teamFilter,
               ),
               _ => const SizedBox.shrink(),
             },

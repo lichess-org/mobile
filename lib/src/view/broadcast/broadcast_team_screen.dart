@@ -479,6 +479,7 @@ class _MatchHistoryTable extends StatelessWidget {
             ),
             children: [
               _TableTapCell(
+                teamName: team.name,
                 match: match,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
@@ -505,6 +506,7 @@ class _MatchHistoryTable extends StatelessWidget {
                 ),
               ),
               _TableTapCell(
+                teamName: team.name,
                 match: match,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: _kMatchHistoryRowVerticalPadding),
@@ -518,6 +520,7 @@ class _MatchHistoryTable extends StatelessWidget {
                 ),
               ),
               _TableTapCell(
+                teamName: team.name,
                 match: match,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
@@ -538,8 +541,9 @@ class _MatchHistoryTable extends StatelessWidget {
 }
 
 class _TableTapCell extends StatelessWidget {
-  const _TableTapCell({required this.match, required this.child});
+  const _TableTapCell({required this.teamName, required this.match, required this.child});
 
+  final String teamName;
   final BroadcastTeamStandingMatch match;
   final Widget child;
 
@@ -547,9 +551,13 @@ class _TableTapCell extends StatelessWidget {
   Widget build(BuildContext context) {
     return TableRowInkWell(
       onTap: () {
-        Navigator.of(
-          context,
-        ).push(BroadcastRoundScreenLoading.buildRoute(match.roundId, initialTab: .teams));
+        Navigator.of(context).push(
+          BroadcastRoundScreenLoading.buildRoute(
+            match.roundId,
+            initialTab: .boards,
+            teamFilter: teamName,
+          ),
+        );
       },
       child: child,
     );
