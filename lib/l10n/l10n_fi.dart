@@ -6592,6 +6592,9 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
+  String get teamTeam => 'Joukkue';
+
+  @override
   String get teamIncorrectEntryCode => 'Virheellinen sisäänpääsykoodi.';
 
   @override

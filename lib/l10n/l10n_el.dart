@@ -6592,6 +6592,9 @@ class AppLocalizationsEl extends AppLocalizations {
   }
 
   @override
+  String get teamTeam => 'Ομάδα';
+
+  @override
   String get teamIncorrectEntryCode => 'Ο κωδικός εισόδου είναι λανθασμένος.';
 
   @override

@@ -6592,6 +6592,9 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
+  String get teamTeam => 'Team';
+
+  @override
   String get teamIncorrectEntryCode => 'Falscher Beitrittscode.';
 
   @override

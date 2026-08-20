@@ -6592,6 +6592,9 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
+  String get teamTeam => 'تیم';
+
+  @override
   String get teamIncorrectEntryCode => 'کد ورودی اشتباه است.';
 
   @override

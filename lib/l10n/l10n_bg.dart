@@ -6592,6 +6592,9 @@ class AppLocalizationsBg extends AppLocalizations {
   }
 
   @override
+  String get teamTeam => 'Отбор';
+
+  @override
   String get teamIncorrectEntryCode => 'Грешен код за включване.';
 
   @override

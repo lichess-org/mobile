@@ -6750,6 +6750,9 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String get teamTeam => 'Клуб';
+
+  @override
   String get teamIncorrectEntryCode => 'Неверный код для вступления.';
 
   @override

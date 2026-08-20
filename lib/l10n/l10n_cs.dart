@@ -6750,6 +6750,9 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
+  String get teamTeam => 'Tým';
+
+  @override
   String get teamIncorrectEntryCode => 'Špatné heslo.';
 
   @override

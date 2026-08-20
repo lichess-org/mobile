@@ -224,6 +224,7 @@ sealed class BroadcastPlayer with _$BroadcastPlayer {
     required int? rating,
     required String? federation,
     required FideId? fideId,
+    required String? team,
   }) = _BroadcastPlayer;
 
   String? get id => (fideId != null) ? fideId.toString() : name;

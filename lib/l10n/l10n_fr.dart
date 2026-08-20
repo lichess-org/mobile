@@ -6592,6 +6592,9 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String get teamTeam => 'Équipe';
+
+  @override
   String get teamIncorrectEntryCode => 'Mot de passe incorrect.';
 
   @override

@@ -6592,6 +6592,9 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
+  String get teamTeam => 'Takım';
+
+  @override
   String get teamIncorrectEntryCode => 'Giriş kodu yanlış.';
 
   @override

@@ -6592,6 +6592,9 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
+  String get teamTeam => 'দল';
+
+  @override
   String get teamIncorrectEntryCode => 'Incorrect entry code.';
 
   @override

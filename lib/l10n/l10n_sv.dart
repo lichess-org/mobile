@@ -6592,6 +6592,9 @@ class AppLocalizationsSv extends AppLocalizations {
   }
 
   @override
+  String get teamTeam => 'Lag';
+
+  @override
   String get teamIncorrectEntryCode => 'Felaktig kod.';
 
   @override
