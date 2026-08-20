@@ -231,6 +231,19 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
                   icon: Icons.settings,
                   label: context.l10n.settingsSettings,
                   onPressed: () {
+                    showModalBottomSheet<void>(
+                      context: context,
+                      isDismissible: true,
+                      isScrollControlled: true,
+                      constraints: BoxConstraints(maxHeight: MediaQuery.heightOf(context) * 0.6),
+                      builder: (_) => const _BroadcastSettingsBottomSheet(),
+                    );
+                  },
+                ),
+                ContextMenuAction(
+                  icon: Icons.filter_list,
+                  label: context.l10n.filterGames,
+                  onPressed: () {
                     final games = asyncRound.value.games.values;
                     final allCount = games.length;
                     final ongoingCount = games.where((g) => g.isOngoing).length;
@@ -249,7 +262,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
                       isDismissible: true,
                       isScrollControlled: true,
                       constraints: BoxConstraints(maxHeight: MediaQuery.heightOf(context) * 0.6),
-                      builder: (_) => _BroadcastSettingsBottomSheet(
+                      builder: (_) => _BroadcastGamesFilterBottomSheet(
                         filter,
                         teamFilter,
                         allGamesCount: allCount,
@@ -563,7 +576,40 @@ class _TournamentSelectorState extends ConsumerState<_TournamentSelectorMenu> {
 }
 
 class _BroadcastSettingsBottomSheet extends ConsumerStatefulWidget {
-  const _BroadcastSettingsBottomSheet(
+  const _BroadcastSettingsBottomSheet();
+
+  @override
+  ConsumerState<_BroadcastSettingsBottomSheet> createState() =>
+      _BroadcastSettingsBottomSheetState();
+}
+
+class _BroadcastSettingsBottomSheetState extends ConsumerState<_BroadcastSettingsBottomSheet> {
+  @override
+  Widget build(BuildContext context) {
+    final broadcastPreferences = ref.watch(broadcastPreferencesProvider);
+
+    return BottomSheetScrollableContainer(
+      children: [
+        ListSection(
+          header: SettingsSectionTitle(context.l10n.preferencesDisplay),
+          materialFilledCard: true,
+          children: [
+            SwitchSettingTile(
+              title: Text(context.l10n.studyShowEvalBar),
+              value: broadcastPreferences.showRoundEvaluationGauges,
+              onChanged: (value) {
+                ref.read(broadcastPreferencesProvider.notifier).toggleEvaluationBar();
+              },
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _BroadcastGamesFilterBottomSheet extends ConsumerStatefulWidget {
+  const _BroadcastGamesFilterBottomSheet(
     this.selectedFilter,
     this.selectedTeam, {
     required this.allGamesCount,
@@ -580,11 +626,12 @@ class _BroadcastSettingsBottomSheet extends ConsumerStatefulWidget {
   final IList<String>? teams;
 
   @override
-  ConsumerState<_BroadcastSettingsBottomSheet> createState() =>
-      _BroadcastSettingsBottomSheetState();
+  ConsumerState<_BroadcastGamesFilterBottomSheet> createState() =>
+      _BroadcastGamesFilterBottomSheetState();
 }
 
-class _BroadcastSettingsBottomSheetState extends ConsumerState<_BroadcastSettingsBottomSheet> {
+class _BroadcastGamesFilterBottomSheetState
+    extends ConsumerState<_BroadcastGamesFilterBottomSheet> {
   late _BroadcastGameFilter filter;
   late String? selectedTeam;
   bool showingTeamPicker = false;
@@ -597,7 +644,7 @@ class _BroadcastSettingsBottomSheetState extends ConsumerState<_BroadcastSetting
   }
 
   @override
-  void didUpdateWidget(covariant _BroadcastSettingsBottomSheet oldWidget) {
+  void didUpdateWidget(covariant _BroadcastGamesFilterBottomSheet oldWidget) {
     super.didUpdateWidget(oldWidget);
     filter = widget.selectedFilter;
     selectedTeam = widget.selectedTeam;
@@ -605,8 +652,6 @@ class _BroadcastSettingsBottomSheetState extends ConsumerState<_BroadcastSetting
 
   @override
   Widget build(BuildContext context) {
-    final broadcastPreferences = ref.watch(broadcastPreferencesProvider);
-
     return PopScope(
       canPop: !showingTeamPicker,
       onPopInvokedWithResult: (didPop, _) {
@@ -704,19 +749,6 @@ class _BroadcastSettingsBottomSheetState extends ConsumerState<_BroadcastSetting
                             ),
                         ],
                       ),
-                    ),
-                    ListSection(
-                      header: SettingsSectionTitle(context.l10n.preferencesDisplay),
-                      materialFilledCard: true,
-                      children: [
-                        SwitchSettingTile(
-                          title: Text(context.l10n.studyShowEvalBar),
-                          value: broadcastPreferences.showRoundEvaluationGauges,
-                          onChanged: (value) {
-                            ref.read(broadcastPreferencesProvider.notifier).toggleEvaluationBar();
-                          },
-                        ),
-                      ],
                     ),
                   ],
                 ),
