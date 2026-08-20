@@ -1,1154 +1,1221 @@
 {
-  "sourceLanguage": "en",
-  "strings": {
-    "Daily Puzzle": {
-      "extractionState": "manual",
-      "localizations": {
-        "af": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Daaglikse Raaisel"
-          }
-        },
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "اللغز اليومي"
-          }
-        },
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Штодзённыя задачы"
-          }
-        },
-        "bg": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Задача на деня"
-          }
-        },
-        "bn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "দৈনিক ধাঁধা"
-          }
-        },
-        "bs": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Problem dana"
-          }
-        },
-        "ca": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Problema del dia"
-          }
-        },
-        "cs": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Denní úloha"
-          }
-        },
-        "da": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Daglig taktikopgave"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Taktikaufgabe des Tages"
-          }
-        },
-        "el": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Τακτικό της ημέρας"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Daily Puzzle"
-          }
-        },
-        "eo": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Taga puzlo"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ejercicio del día"
-          }
-        },
-        "et": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Päeva pusle"
-          }
-        },
-        "eu": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Eguneroko ariketa"
-          }
-        },
-        "fa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "معمای روزانه"
-          }
-        },
-        "fi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Päivän tehtävä"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Problème du jour"
-          }
-        },
-        "gl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Crebacabezas do día"
-          }
-        },
-        "gsw": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Täglichi Ufgab"
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "החידה היומית"
-          }
-        },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "दैनिक पहेली"
-          }
-        },
-        "hr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dnevna zagonetka"
-          }
-        },
-        "hu": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Napi feladvány"
-          }
-        },
-        "hy": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ամենօրյա Խնդիր"
-          }
-        },
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Teka-teki harian"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tattica di oggi"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "本日の問題"
-          }
-        },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Күнделікті жұмбақ"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "일일 퍼즐"
-          }
-        },
-        "lt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dienos Galvosūkis"
-          }
-        },
-        "lv": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Šodienas uzdevums"
-          }
-        },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dagens nøtt"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dagelijkse Puzzel"
-          }
-        },
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Zadanie dnia"
-          }
-        },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Problema diário"
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Problema diário"
-          }
-        },
-        "ro": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Puzzle Zilnic"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Задача дня"
-          }
-        },
-        "sk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Úloha na tento deň"
-          }
-        },
-        "sl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Uganka dneva"
-          }
-        },
-        "sv": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dagens problem"
-          }
-        },
-        "tr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Günlük Bulmaca"
-          }
-        },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Щоденна задача"
-          }
-        },
-        "uz": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kun masalasi"
-          }
-        },
-        "vi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Câu đố Hàng ngày"
-          }
-        },
-        "zh": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "每日棋谜"
-          }
-        },
-        "zh-TW": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "每日謎題"
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%@ · %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ · %2$@"
           }
         }
       }
     },
-    "Community": {
-      "extractionState": "manual",
-      "localizations": {
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "المجتمع"
+    "All Broadcasts" : {
+
+    },
+    "Broadcasts" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uitsendings"
           }
         },
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Супольнасць"
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "البثوث"
           }
         },
-        "bg": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Общност"
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yayım"
           }
         },
-        "bs": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Zajednica"
+        "be" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Трансляцыі"
           }
         },
-        "ca": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Comunitat"
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Излъчвания"
           }
         },
-        "cs": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Komunita"
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "সম্প্রচার"
           }
         },
-        "da": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fællesskab"
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Emitovanja"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gemeinschaft"
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retransmissions"
           }
         },
-        "el": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Κοινότητα"
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vysílání"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Community"
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Udsendelser"
           }
         },
-        "eo": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Komunumo"
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Übertragungen"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Comunidad"
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Μεταδόσεις"
           }
         },
-        "eu": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Komunitatea"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Broadcasts"
           }
         },
-        "fa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "همدارگان"
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elsendoj"
           }
         },
-        "fi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Yhteisön blogit"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Emisiones"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Communauté"
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otseülekanded"
           }
         },
-        "gl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Comunidade"
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Emanaldiak"
           }
         },
-        "gsw": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "G'meinschaft"
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "پخش همگانی"
           }
         },
-        "hu": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Közösség"
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lähetykset"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Comunità"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diffusions"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "コミュニティ"
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Emisións en directo"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "커뮤니티"
+        "gsw" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Überträgige"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fellesskap"
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הקרנות"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gemeenschap"
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "प्रसारण"
           }
         },
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Społeczność"
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prijenosi"
           }
         },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Comunidade"
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Versenyközvetítések"
           }
         },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Comunidade"
+        "hy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Հեռարձակումներ"
           }
         },
-        "ro": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Comunitate"
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Siaran"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Сообщество"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dirette"
           }
         },
-        "sk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Komunita"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "イベント中継"
           }
         },
-        "sl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Skupnost"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Көрсетілімдер"
           }
         },
-        "sq": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bashkësi"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "방송"
           }
         },
-        "tr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Topluluk"
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transliacijos"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Спільнота"
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Raidījumi"
           }
         },
-        "uz": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hamjamiyat"
+        "mk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Емитувања"
           }
         },
-        "vi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cộng đồng"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Overføringer"
           }
         },
-        "zh": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "社区"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uitzendingen"
           }
         },
-        "zh-TW": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "社群"
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transmisje"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transmissões"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transmissões"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transmisiuni"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Трансляции"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vysielanie"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prenosi"
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transmetime"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Преноси"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sändningar"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Canlı Turnuvalar"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Трансляції"
+          }
+        },
+        "uz" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Translyatsiyalar"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Các phát sóng"
+          }
+        },
+        "zh" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "转播"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "比賽直播"
           }
         }
       }
     },
-    "xBlog %@": {
-      "extractionState": "manual",
-      "localizations": {
-        "af": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ se webjoernaal"
+    "Broadcasts Filter" : {
+
+    },
+    "Choose which Lichess user blog to display." : {
+
+    },
+    "Community" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "المجتمع"
           }
         },
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "مدونة %@"
+        "be" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Супольнасць"
           }
         },
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Блог %@"
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Общност"
           }
         },
-        "bg": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Блогът на %@"
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zajednica"
           }
         },
-        "bs": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Blog korisnika %@"
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comunitat"
           }
         },
-        "ca": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Blog de %@"
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Komunita"
           }
         },
-        "cs": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Blog hráče %@"
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fællesskab"
           }
         },
-        "da": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Blog - %@"
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gemeinschaft"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Blog von %@"
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Κοινότητα"
           }
         },
-        "el": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ιστολόγιο του χρήστη %@"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Community"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@'s Blog"
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Komunumo"
           }
         },
-        "eo": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Blogo de %@"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comunidad"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Blog de %@"
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Komunitatea"
           }
         },
-        "et": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Kasutaja %@ blogi"
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "همدارگان"
           }
         },
-        "eu": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ erabiltzailearen Bloga"
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yhteisön blogit"
           }
         },
-        "fa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "وبنوشتِ %@"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Communauté"
           }
         },
-        "fi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Käyttäjän %@ blogi"
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comunidade"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Blogue de %@"
+        "gsw" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "G'meinschaft"
           }
         },
-        "gl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "O Blog de %@"
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Közösség"
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "הבלוג של %@"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comunità"
           }
         },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ का ब्लॉग"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "コミュニティ"
           }
         },
-        "hr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Blog korisnika %@"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "커뮤니티"
           }
         },
-        "hu": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ blogja"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fellesskap"
           }
         },
-        "hy": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@-ի բլոգ"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gemeenschap"
           }
         },
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Blog dari %@"
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Społeczność"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Blog di %@"
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comunidade"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ のブログ"
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comunidade"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ блогі"
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comunitate"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@의 블로그"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сообщество"
           }
         },
-        "lt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ Tinklaraštis"
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Komunita"
           }
         },
-        "lv": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Lietotāja %@ blogs"
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skupnost"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bloggen til %@"
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bashkësi"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Blog van %@"
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Topluluk"
           }
         },
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Blog gracza %@"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Спільнота"
           }
         },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Blog de %@"
+        "uz" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hamjamiyat"
           }
         },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Blog do(a) %@"
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cộng đồng"
           }
         },
-        "ro": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Blog-ul lui %@"
+        "zh" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "社区"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Блог %@"
-          }
-        },
-        "sk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Blog užívateľa %@"
-          }
-        },
-        "sl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ blog"
-          }
-        },
-        "sq": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Blogu i %@"
-          }
-        },
-        "sv": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@s blogg"
-          }
-        },
-        "tr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ Bloğu"
-          }
-        },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Блог %@"
-          }
-        },
-        "uz": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ blogi"
-          }
-        },
-        "vi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bài viết của %@"
-          }
-        },
-        "zh": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ 的博客"
-          }
-        },
-        "zh-TW": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@的部落格"
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "社群"
           }
         }
       }
     },
-    "Broadcasts": {
-      "extractionState": "manual",
-      "localizations": {
-        "af": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Uitsendings"
+    "Community Blog" : {
+
+    },
+    "Configure which broadcasts to display." : {
+
+    },
+    "Daily Puzzle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daaglikse Raaisel"
           }
         },
-        "ar": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "البثوث"
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اللغز اليومي"
           }
         },
-        "az": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Yayım"
+        "be" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Штодзённыя задачы"
           }
         },
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Трансляцыі"
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Задача на деня"
           }
         },
-        "bg": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Излъчвания"
+        "bn" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "দৈনিক ধাঁধা"
           }
         },
-        "bn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "সম্প্রচার"
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Problem dana"
           }
         },
-        "bs": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Emitovanja"
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Problema del dia"
           }
         },
-        "ca": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Retransmissions"
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Denní úloha"
           }
         },
-        "cs": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vysílání"
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daglig taktikopgave"
           }
         },
-        "da": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Udsendelser"
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Taktikaufgabe des Tages"
           }
         },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Übertragungen"
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Τακτικό της ημέρας"
           }
         },
-        "el": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Μεταδόσεις"
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daily Puzzle"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Broadcasts"
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Taga puzlo"
           }
         },
-        "eo": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Elsendoj"
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ejercicio del día"
           }
         },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Emisiones"
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Päeva pusle"
           }
         },
-        "et": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Otseülekanded"
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eguneroko ariketa"
           }
         },
-        "eu": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Emanaldiak"
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "معمای روزانه"
           }
         },
-        "fa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "پخش همگانی"
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Päivän tehtävä"
           }
         },
-        "fi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Lähetykset"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Problème du jour"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Diffusions"
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Crebacabezas do día"
           }
         },
-        "gl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Emisións en directo"
+        "gsw" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Täglichi Ufgab"
           }
         },
-        "gsw": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Überträgige"
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "החידה היומית"
           }
         },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "הקרנות"
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "दैनिक पहेली"
           }
         },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "प्रसारण"
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dnevna zagonetka"
           }
         },
-        "hr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Prijenosi"
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Napi feladvány"
           }
         },
-        "hu": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Versenyközvetítések"
+        "hy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ամենօրյա Խնդիր"
           }
         },
-        "hy": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Հեռարձակումներ"
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Teka-teki harian"
           }
         },
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Siaran"
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tattica di oggi"
           }
         },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dirette"
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "本日の問題"
           }
         },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "イベント中継"
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Күнделікті жұмбақ"
           }
         },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Көрсетілімдер"
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "일일 퍼즐"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "방송"
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dienos Galvosūkis"
           }
         },
-        "lt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Transliacijos"
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Šodienas uzdevums"
           }
         },
-        "lv": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Raidījumi"
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dagens nøtt"
           }
         },
-        "mk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Емитувања"
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dagelijkse Puzzel"
           }
         },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Overføringer"
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zadanie dnia"
           }
         },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Uitzendingen"
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Problema diário"
           }
         },
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Transmisje"
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Problema diário"
           }
         },
-        "pt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Transmissões"
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Puzzle Zilnic"
           }
         },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Transmissões"
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Задача дня"
           }
         },
-        "ro": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Transmisiuni"
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Úloha na tento deň"
           }
         },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Трансляции"
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uganka dneva"
           }
         },
-        "sk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vysielanie"
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dagens problem"
           }
         },
-        "sl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Prenosi"
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Günlük Bulmaca"
           }
         },
-        "sq": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Transmetime"
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Щоденна задача"
           }
         },
-        "sr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Преноси"
+        "uz" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kun masalasi"
           }
         },
-        "sv": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sändningar"
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Câu đố Hàng ngày"
           }
         },
-        "tr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Canlı Turnuvalar"
+        "zh" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "每日棋谜"
           }
         },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Трансляції"
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "每日謎題"
+          }
+        }
+      }
+    },
+    "Filter" : {
+
+    },
+    "Latest posts from the Lichess community blog." : {
+
+    },
+    "Latest posts from the Lichess official blog." : {
+
+    },
+    "No broadcasts available" : {
+
+    },
+    "No items available" : {
+
+    },
+    "Not available in Kid Mode" : {
+
+    },
+    "Official Blog" : {
+
+    },
+    "Show ${filter}" : {
+
+    },
+    "Show blog for ${username}" : {
+
+    },
+    "Shows ongoing and upcoming chess broadcasts." : {
+
+    },
+    "Shows the latest posts from a Lichess user blog." : {
+
+    },
+    "Top Broadcasts" : {
+
+    },
+    "User Blog" : {
+
+    },
+    "Username" : {
+
+    },
+    "xBlog %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "af" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ se webjoernaal"
           }
         },
-        "uz": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Translyatsiyalar"
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مدونة %@"
           }
         },
-        "vi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Các phát sóng"
+        "be" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Блог %@"
           }
         },
-        "zh": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "转播"
+        "bg" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Блогът на %@"
           }
         },
-        "zh-TW": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "比賽直播"
+        "bs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blog korisnika %@"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blog de %@"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blog hráče %@"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blog - %@"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blog von %@"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ιστολόγιο του χρήστη %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@'s Blog"
+          }
+        },
+        "eo" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blogo de %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blog de %@"
+          }
+        },
+        "et" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kasutaja %@ blogi"
+          }
+        },
+        "eu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ erabiltzailearen Bloga"
+          }
+        },
+        "fa" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "وبنوشتِ %@"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Käyttäjän %@ blogi"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blogue de %@"
+          }
+        },
+        "gl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O Blog de %@"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "הבלוג של %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ का ब्लॉग"
+          }
+        },
+        "hr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blog korisnika %@"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ blogja"
+          }
+        },
+        "hy" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@-ի բլոգ"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blog dari %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blog di %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ のブログ"
+          }
+        },
+        "kk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ блогі"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@의 블로그"
+          }
+        },
+        "lt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ Tinklaraštis"
+          }
+        },
+        "lv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lietotāja %@ blogs"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bloggen til %@"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blog van %@"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blog gracza %@"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blog de %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blog do(a) %@"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blog-ul lui %@"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Блог %@"
+          }
+        },
+        "sk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blog užívateľa %@"
+          }
+        },
+        "sl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ blog"
+          }
+        },
+        "sq" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blogu i %@"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@s blogg"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ Bloğu"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Блог %@"
+          }
+        },
+        "uz" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ blogi"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bài viết của %@"
+          }
+        },
+        "zh" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 的博客"
+          }
+        },
+        "zh-TW" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@的部落格"
           }
         }
       }
     }
   },
-  "version": "1.0"
+  "version" : "1.0"
 }

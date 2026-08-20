@@ -1112,35 +1112,36 @@ packages:
   multistockfish:
     dependency: "direct main"
     description:
-      name: multistockfish
-      sha256: "604da8568e8d3d43b3f571885080006461d52243e0b178cbef07f328d7622160"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.5.0"
+      path: "pkgs/multistockfish"
+      ref: "2458f34b58d220ab74dd4c14db03ebe356e01b54"
+      resolved-ref: "2458f34b58d220ab74dd4c14db03ebe356e01b54"
+      url: "https://github.com/lichess-org/dart-multistockfish.git"
+    source: git
+    version: "0.6.0"
   multistockfish_chess:
     dependency: transitive
     description:
       name: multistockfish_chess
-      sha256: d0487def56c742687e21ee6c2730bff069fc216cafdf1c6b5849cff55a939344
+      sha256: c0c04c78f7b4ea14d2df76162a9526f0913371cdfd23a79223f1b3fe049a3d02
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.0"
+    version: "0.5.0"
   multistockfish_sf16:
     dependency: transitive
     description:
       name: multistockfish_sf16
-      sha256: b32eb392d8036668b0f0fd9ed53fff65a12efcf4178e58205147aab27df1b1a9
+      sha256: "57016a8d391efecb9f7d49fdc75753ef545f14032714ba5da81f67c69eb0cb68"
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.1"
+    version: "0.3.0"
   multistockfish_variant:
     dependency: transitive
     description:
       name: multistockfish_variant
-      sha256: "24ef2781ae65d6ccdcd95c4b000dbdcdba8368b9fa2f02810eb7f932e6698dc4"
+      sha256: "538bb27a51f7567b6dc2f6afbb8f3d8daea731ef2620dccc5a8859879a31c3c0"
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.1"
+    version: "0.3.0"
   native_toolchain_c:
     dependency: transitive
     description:
