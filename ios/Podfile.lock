@@ -1,33 +1,15 @@
 PODS:
   - Flutter (1.0.0)
-  - multistockfish_chess (0.3.0):
-    - Flutter
-  - multistockfish_sf16 (0.1.1):
-    - Flutter
-  - multistockfish_variant (0.1.1):
-    - Flutter
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
-  - multistockfish_chess (from `.symlinks/plugins/multistockfish_chess/ios`)
-  - multistockfish_sf16 (from `.symlinks/plugins/multistockfish_sf16/ios`)
-  - multistockfish_variant (from `.symlinks/plugins/multistockfish_variant/ios`)
 
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
-  multistockfish_chess:
-    :path: ".symlinks/plugins/multistockfish_chess/ios"
-  multistockfish_sf16:
-    :path: ".symlinks/plugins/multistockfish_sf16/ios"
-  multistockfish_variant:
-    :path: ".symlinks/plugins/multistockfish_variant/ios"
 
 SPEC CHECKSUMS:
   Flutter: 71a624a5bc0c04062bf19101d501e466baf2fb47
-  multistockfish_chess: 826a3fb3746cbf66496bb1388eb664084fac393c
-  multistockfish_sf16: dfd62eb23f5caaad596fa61e88624ead35f0a5e8
-  multistockfish_variant: fba6f8034da46db2a1745a0fab420000c3db5cd9
 
 PODFILE CHECKSUM: 5d2ab20fea2b68bc8d26fad47359f4c9158ad6f4
 

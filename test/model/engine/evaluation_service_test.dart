@@ -879,6 +879,85 @@ void main() {
       expect(service.evaluationState.value.state, EngineState.error);
     });
 
+    test('An engine that never finishes starting is reported as stuck', () async {
+      testBinding.stockfish = StuckStockfish();
+      final container = await makeContainer();
+      final crashlytics = testBinding.firebaseCrashlytics;
+      crashlytics.recordedErrors.clear();
+
+      fakeAsync((async) {
+        final service = container.read(evaluationServiceProvider);
+
+        service.evaluate(makeWork());
+        async.flushMicrotasks();
+
+        // Nothing has failed yet: the engine is simply still loading.
+        expect(service.evaluationState.value.state, EngineState.loading);
+        expect(crashlytics.recordedErrors, isEmpty);
+
+        async.elapse(kEngineInitTimeout + const Duration(seconds: 1));
+        async.flushMicrotasks();
+
+        expect(service.evaluationState.value.state, EngineState.error);
+        expect(crashlytics.customKeys['engine_failure_kind'], 'stuck');
+        expect(crashlytics.customKeys['engine_unrecoverable'], true);
+        // The native diagnostics say where the engine wedged, which is the point of the report.
+        expect(crashlytics.customKeys['engine_phase'], 'shuttingDown');
+        expect(crashlytics.customKeys['engine_phase_step'], 'engine_teardown');
+        expect(crashlytics.recordedErrors, hasLength(1));
+      });
+    });
+
+    test('A stuck engine releases pending work and refuses new work', () async {
+      testBinding.stockfish = StuckStockfish();
+      final container = await makeContainer();
+
+      fakeAsync((async) {
+        final service = container.read(evaluationServiceProvider);
+
+        Object? pendingMoveError;
+        service
+            .findMove(makeMoveWork())
+            .then<void>((_) {}, onError: (Object e) => pendingMoveError = e);
+        async.flushMicrotasks();
+        expect(pendingMoveError, isNull);
+
+        async.elapse(kEngineInitTimeout + const Duration(seconds: 1));
+        async.flushMicrotasks();
+
+        // The move request can never be answered, so its caller is released rather than left
+        // waiting forever.
+        expect(pendingMoveError, isA<MoveRequestCancelledException>());
+
+        // The engine is gone for the rest of the process's life, so later work fails at once
+        // instead of queueing behind an operation that will never complete.
+        Object? nextMoveError;
+        service
+            .findMove(makeMoveWork())
+            .then<void>((_) {}, onError: (Object e) => nextMoveError = e);
+        async.flushMicrotasks();
+        expect(nextMoveError, isA<MoveRequestCancelledException>());
+        expect(service.evaluationState.value.state, EngineState.error);
+      });
+    });
+
+    test('A command the engine refuses is reported instead of thrown at the caller', () async {
+      testBinding.stockfish = RefusingCommandStockfish();
+      final container = await makeContainer();
+      final crashlytics = testBinding.firebaseCrashlytics;
+      crashlytics.recordedErrors.clear();
+
+      final service = container.read(evaluationServiceProvider);
+
+      expect(() => service.evaluate(makeWork()), returnsNormally);
+
+      await pumpEventQueue();
+
+      expect(service.evaluationState.value.state, EngineState.error);
+      expect(crashlytics.customKeys['engine_failure_kind'], 'command');
+      expect(crashlytics.recordedErrors.last.exception, isA<StateError>());
+    });
+
     test('Engine name is correctly set after restarting stockfish', () async {
       final fakeStockfish = FakeStockfish();
       testBinding.stockfish = fakeStockfish;

@@ -8,15 +8,34 @@ import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
+import 'package:lichess_mobile/src/model/engine/engine_failure.dart';
 import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
 import 'package:lichess_mobile/src/model/engine/uci_protocol.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:logging/logging.dart';
 import 'package:multistockfish/multistockfish.dart';
 
 final _logger = Logger('EvaluationService');
 
 const kEngineEvalEmissionThrottleDelay = Duration(milliseconds: 200);
+
+/// How long a single engine (re)start is given before the engine is declared stuck.
+///
+/// The plugin bounds the start itself — 5s to reach the engine's greeting, 5s more to reach
+/// `uciok` — but nothing bounds the quit that precedes a restart. An engine wedged while joining
+/// its search threads never reports the exit that `quit()` waits for, so that future, and the
+/// whole operation queue chained onto it, stays pending forever. This watchdog is what turns that
+/// silence into a reported failure instead of an engine that is loading and always will be.
+const kEngineInitTimeout = Duration(seconds: 20);
+
+/// The minimum delay between two engine failure messages shown to the user.
+const _kUserNotificationThrottle = Duration(seconds: 10);
+
+/// The message shown to the user when the engine is gone for good.
+const _kUnrecoverableEngineMessage =
+    'The chess engine stopped responding. Please restart the app to use it again.';
 
 /// Variants supported by the official Stockfish engine.
 const officialStockfishVariants = {Variant.standard, Variant.chess960, Variant.fromPosition};
@@ -36,7 +55,7 @@ class MoveRequestCancelledException implements Exception {
 final evaluationServiceProvider = Provider<EvaluationService>((Ref ref) {
   final maxMemory = ref.read(preloadedDataProvider).requireValue.engineMaxMemoryInMb;
   final nnueService = ref.read(nnueServiceProvider);
-  final service = EvaluationService(maxMemory: maxMemory, nnueService: nnueService);
+  final service = EvaluationService(ref: ref, maxMemory: maxMemory, nnueService: nnueService);
 
   ref.onDispose(() {
     service._dispose();
@@ -51,7 +70,7 @@ final evaluationServiceProvider = Provider<EvaluationService>((Ref ref) {
 /// can run at a time - when a new evaluation is requested, it takes over from any
 /// previous one ("last caller wins").
 class EvaluationService {
-  EvaluationService({required this.maxMemory, required this._nnueService}) {
+  EvaluationService({required this._ref, required this.maxMemory, required this._nnueService}) {
     _stdoutSubscription = _stockfish.stdout.listen(_protocol.received);
     _stockfish.state.addListener(_onStockfishStateChange);
     _protocol.isComputing.addListener(_onComputingChange);
@@ -67,6 +86,7 @@ class EvaluationService {
     currentWork: null,
   );
 
+  final Ref _ref;
   final int maxMemory;
   final NnueService _nnueService;
 
@@ -100,6 +120,19 @@ class EvaluationService {
   bool _quitInProgress = false;
   bool _discardEvalResults = false;
   bool _discardMoveResults = false;
+
+  /// Fires if a (re)start neither succeeds nor fails within [kEngineInitTimeout].
+  Timer? _initWatchdog;
+
+  /// The failure that killed the engine for the rest of the process's life, if it happened.
+  ///
+  /// Latched rather than acted upon once: the native engine keeps its state in process globals
+  /// that a wedged engine still owns, so every later start is refused. Work requested afterwards
+  /// is rejected on the spot instead of piling more pending operations onto a jammed queue.
+  EngineFailure? _unrecoverableFailure;
+
+  /// When the user was last told about an engine failure.
+  DateTime? _lastUserNotification;
 
   // Throttling state for eval emissions
   Timer? _evalThrottleTimer;
@@ -303,8 +336,115 @@ class EvaluationService {
     }
   }
 
+  /// Builds a failure report from the engine's current situation.
+  ///
+  /// [diagnostics] should be passed when it was captured earlier: quitting a stalled engine moves
+  /// it on to another phase, which erases the evidence of where it stalled.
+  EngineFailure _describeFailure(
+    EngineFailureKind kind,
+    String message, {
+    required StockfishFlavor flavor,
+    required Variant variant,
+    StockfishDiagnostics? diagnostics,
+    Object? error,
+    StackTrace? stackTrace,
+  }) => EngineFailure(
+    kind: kind,
+    message: message,
+    flavor: flavor,
+    variant: variant,
+    engineState: _stockfish.state.value,
+    diagnostics: diagnostics ?? _stockfish.diagnostics,
+    maxMemoryInMb: maxMemory,
+    error: error,
+    stackTrace: stackTrace,
+  );
+
+  /// Logs a failure, reports it to Crashlytics, and tells the user about it if the engine is not
+  /// coming back.
+  void _handleFailure(EngineFailure failure) {
+    _logger.severe(failure.toString(), failure.error, failure.stackTrace);
+
+    if (failure.isUnrecoverable) {
+      _unrecoverableFailure = failure;
+    }
+
+    // Fire and forget: reportEngineFailure never throws.
+    reportEngineFailure(failure);
+
+    _notifyUser(failure);
+  }
+
+  /// Shows the user a snackbar for a failure they cannot work around.
+  ///
+  /// Recoverable failures are left to the engine button, which already shows an error state; only
+  /// an engine that will not come back until the app is restarted is worth interrupting for.
+  void _notifyUser(EngineFailure failure) {
+    if (!failure.isUnrecoverable) return;
+
+    final now = DateTime.now();
+    if (_lastUserNotification != null &&
+        now.difference(_lastUserNotification!) < _kUserNotificationThrottle) {
+      return;
+    }
+
+    try {
+      final context = _ref.read(currentNavigatorKeyProvider).currentContext;
+      if (context == null || !context.mounted) return;
+
+      showSnackBar(context, _kUnrecoverableEngineMessage, type: SnackBarType.error);
+      _lastUserNotification = now;
+    } catch (e) {
+      // There may be no widget tree to show anything in. Telling the user is best effort and must
+      // never take the failure handling around it down.
+      _logger.fine('Could not show the engine failure message: $e');
+    }
+  }
+
+  /// Arms the watchdog that catches a (re)start which never completes at all.
+  void _startInitWatchdog(StockfishFlavor flavor, Variant variant) {
+    _cancelInitWatchdog();
+    _initWatchdog = Timer(kEngineInitTimeout, () {
+      _initWatchdog = null;
+      if (!_initInProgress) return;
+
+      _handleFailure(
+        _describeFailure(
+          EngineFailureKind.stuck,
+          'The engine neither started nor failed within '
+          '${kEngineInitTimeout.inSeconds}s. The operation it is blocked on will never complete, '
+          'so no further engine work is possible until the app is restarted',
+          flavor: flavor,
+          variant: variant,
+        ),
+      );
+
+      // Nothing will ever answer the work that was waiting on this start, so release its callers
+      // instead of leaving them thinking forever.
+      _cancelPendingMoveRequest();
+      _setEvalWork(null);
+      _currentMoveWork = null;
+      _setEngineState(EngineState.error);
+    });
+  }
+
+  void _cancelInitWatchdog() {
+    _initWatchdog?.cancel();
+    _initWatchdog = null;
+  }
+
   /// Start the given [work], restarting the engine if necessary.
   void _startWork(Work work) {
+    if (_unrecoverableFailure case final failure?) {
+      _logger.severe('Refusing engine work: the engine is unusable. $failure');
+      _cancelPendingMoveRequest();
+      _setEvalWork(null);
+      _currentMoveWork = null;
+      _setEngineState(EngineState.error);
+      _notifyUser(failure);
+      return;
+    }
+
     final flavor = officialStockfishVariants.contains(work.variant)
         ? work.stockfishFlavor
         : StockfishFlavor.variant;
@@ -365,8 +505,17 @@ class EvaluationService {
   }
 
   Future<void> _initEngine(StockfishFlavor flavor, Variant variant) async {
+    // The effective flavor, which differs from the requested one when NNUE files are missing. Kept
+    // outside the try so that a failure report names the flavor that actually failed.
+    StockfishFlavor actualFlavor = flavor;
+
+    _startInitWatchdog(flavor, variant);
+
     try {
-      _logger.fine('Initializing engine with flavor: $flavor');
+      _logger.fine(
+        'Initializing engine: flavor=${flavor.name}, variant=${variant.name}, '
+        'hash=${maxMemory}MB, engine state=${_stockfish.state.value.name}',
+      );
 
       await _runStockfishOperation(() => _stockfish.quit());
 
@@ -374,7 +523,6 @@ class EvaluationService {
 
       String? smallNetPath;
       String? bigNetPath;
-      StockfishFlavor actualFlavor = flavor;
 
       if (flavor == StockfishFlavor.latestNoNNUE) {
         if (await _nnueService.checkNNUEFiles()) {
@@ -398,21 +546,70 @@ class EvaluationService {
       );
 
       if (_stockfish.state.value == StockfishState.error) {
+        _handleFailure(
+          _describeFailure(
+            EngineFailureKind.start,
+            'The engine reported an error state instead of becoming ready',
+            flavor: actualFlavor,
+            variant: variant,
+          ),
+        );
         _setEngineState(EngineState.error);
         return;
       }
 
-      _logger.fine('Engine initialized successfully with flavor: $actualFlavor');
+      _logger.fine(
+        'Engine initialized successfully: flavor=${actualFlavor.name}, '
+        'diagnostics: ${_stockfish.diagnostics}',
+      );
 
       _currentRequestedFlavor = flavor;
       _currentVariant = variant;
 
-      _protocol.connected((cmd) => _stockfish.stdin = cmd);
+      _protocol.connected(_sendToEngine);
     } catch (e, st) {
-      _logger.severe('Error initializing engine', e, st);
+      // start() reports where it gave up in its own TimeoutException, but the diagnostics read
+      // here still say which phase the engine is sitting in now, which is what tells a failed boot
+      // apart from a shutdown that never finished.
+      _handleFailure(
+        _describeFailure(
+          EngineFailureKind.start,
+          'The engine failed to start',
+          flavor: actualFlavor,
+          variant: variant,
+          error: e,
+          stackTrace: st,
+        ),
+      );
       _setEngineState(EngineState.error);
     } finally {
+      _cancelInitWatchdog();
       _initInProgress = false;
+    }
+  }
+
+  /// Sends a command to a running engine, reporting a refusal rather than throwing it at the
+  /// caller.
+  ///
+  /// The plugin's `stdin` setter throws when the engine is no longer ready — which happens on its
+  /// own, without anything here asking for it, when a write breaks the command stream. It is
+  /// called from deep inside [UCIProtocol], so letting it throw would surface as a crash in
+  /// whatever UI happened to request the evaluation.
+  void _sendToEngine(String command) {
+    try {
+      _stockfish.stdin = command;
+    } catch (e, st) {
+      _handleFailure(
+        _describeFailure(
+          EngineFailureKind.command,
+          'The engine refused the command "$command"',
+          flavor: _currentRequestedFlavor ?? _stockfish.flavor,
+          variant: _currentVariant ?? Variant.standard,
+          error: e,
+          stackTrace: st,
+        ),
+      );
+      _setEngineState(EngineState.error);
     }
   }
 
@@ -430,6 +627,21 @@ class EvaluationService {
           _setEngineState(EngineState.idle);
         }
       case StockfishState.error:
+        // A start failure is already reported by _initEngine, with the flavor and variant it was
+        // starting; anything else is a running engine that broke under us — including one that
+        // could not even be asked to quit, which the plugin reports the same way.
+        if (!_initInProgress) {
+          _handleFailure(
+            _describeFailure(
+              EngineFailureKind.runtime,
+              _quitInProgress
+                  ? 'The engine failed while shutting down'
+                  : 'The engine failed while it was running',
+              flavor: _currentRequestedFlavor ?? _stockfish.flavor,
+              variant: _currentVariant ?? Variant.standard,
+            ),
+          );
+        }
         _setEngineState(EngineState.error);
     }
   }
@@ -516,6 +728,7 @@ class EvaluationService {
     }
     _logger.info('Quitting engine');
     _quitInProgress = true;
+    _cancelInitWatchdog();
     _protocol.compute(null);
     _evalThrottleTimer?.cancel();
     _evalThrottleTimer = null;
@@ -544,6 +757,7 @@ class EvaluationService {
   }
 
   void _dispose() {
+    _cancelInitWatchdog();
     _evalThrottleTimer?.cancel();
     _evalThrottleTimer = null;
     _pendingEvalResult = null;

@@ -22,8 +22,22 @@ Rule ruleFromUciVariant(String uciVariant) => switch (uciVariant) {
   _ => throw ArgumentError('Unexpected uci variant: $uciVariant'),
 };
 
+/// Supplies [Stockfish.diagnostics] to the fakes below.
+///
+/// The native phase counters have no meaning without a native engine, so the default is an engine
+/// with nothing to report. Tests that need the app to see a wedged engine assign a stuck snapshot
+/// to [diagnostics].
+mixin FakeStockfishDiagnostics {
+  StockfishDiagnostics diagnostics = const StockfishDiagnostics(
+    phase: StockfishPhase.idle,
+    step: 'idle',
+    elapsed: Duration.zero,
+    lastError: null,
+  );
+}
+
 /// A fake implementation of [Stockfish] for testing.
-class FakeStockfish implements Stockfish {
+class FakeStockfish with FakeStockfishDiagnostics implements Stockfish {
   FakeStockfish();
 
   final _state = ValueNotifier<StockfishState>(StockfishState.initial);
@@ -137,7 +151,7 @@ class FakeStockfish implements Stockfish {
 
 /// A fake Stockfish for crazyhouse that emits a drop move in its principal variation.
 /// Used to test that engine lines correctly handle drop moves.
-class FakeCrazyhouseDropMoveStockfish implements Stockfish {
+class FakeCrazyhouseDropMoveStockfish with FakeStockfishDiagnostics implements Stockfish {
   FakeCrazyhouseDropMoveStockfish();
 
   final _state = ValueNotifier<StockfishState>(StockfishState.initial);
@@ -212,7 +226,7 @@ class FakeCrazyhouseDropMoveStockfish implements Stockfish {
 }
 
 /// A fake Stockfish with configurable delays for testing race conditions.
-class DelayedFakeStockfish implements Stockfish {
+class DelayedFakeStockfish with FakeStockfishDiagnostics implements Stockfish {
   DelayedFakeStockfish({
     this.startDelay = Duration.zero,
     this.quitDelay = Duration.zero,
@@ -350,7 +364,7 @@ class DelayedFakeStockfish implements Stockfish {
 
 /// A fake Stockfish that emits multiple eval events with controllable timing.
 /// Used for testing throttle behavior.
-class ThrottleTestStockfish implements Stockfish {
+class ThrottleTestStockfish with FakeStockfishDiagnostics implements Stockfish {
   ThrottleTestStockfish({this.evalEventCount = 5, this.evalEventInterval = Duration.zero});
 
   /// Number of eval events to emit per `go` command.
@@ -465,7 +479,7 @@ const kMinEngineDepth = 6;
 /// - Position-dependent cp values (different positions get different, but deterministic, evals)
 /// - Manual control over when evals are emitted
 /// - Tracks all 'go' commands to verify debouncing
-class AnalysisTestStockfish implements Stockfish {
+class AnalysisTestStockfish with FakeStockfishDiagnostics implements Stockfish {
   AnalysisTestStockfish();
 
   final _state = ValueNotifier<StockfishState>(StockfishState.initial);
@@ -633,7 +647,7 @@ class AnalysisTestStockfish implements Stockfish {
 /// Both [start] and [quit] take a real (small) delay so that, if the service
 /// ever issued two operations without waiting for the previous one,
 /// [maxConcurrentOps] would observe a value greater than 1.
-class ConcurrencyTrackingStockfish implements Stockfish {
+class ConcurrencyTrackingStockfish with FakeStockfishDiagnostics implements Stockfish {
   ConcurrencyTrackingStockfish({this.opDelay = const Duration(milliseconds: 15)});
 
   /// Duration each native start/quit operation takes.
@@ -748,7 +762,7 @@ class ConcurrencyTrackingStockfish implements Stockfish {
 
 /// A fake Stockfish that returns the first legal move from the current position.
 /// This is useful for tests that need realistic game progression.
-class LegalMoveFakeStockfish implements Stockfish {
+class LegalMoveFakeStockfish with FakeStockfishDiagnostics implements Stockfish {
   LegalMoveFakeStockfish();
 
   final _state = ValueNotifier<StockfishState>(StockfishState.initial);
@@ -865,7 +879,7 @@ class LegalMoveFakeStockfish implements Stockfish {
 
 /// A fake Stockfish that returns multiPv evaluation data for hint testing.
 /// Emits multiple principal variations with decreasing scores.
-class MultiPvFakeStockfish implements Stockfish {
+class MultiPvFakeStockfish with FakeStockfishDiagnostics implements Stockfish {
   MultiPvFakeStockfish();
 
   final _state = ValueNotifier<StockfishState>(StockfishState.initial);
@@ -987,7 +1001,7 @@ class MultiPvFakeStockfish implements Stockfish {
 
 /// A fake Stockfish that transitions to error state instead of ready.
 /// This simulates initialization failure scenarios.
-class ErrorStockfish implements Stockfish {
+class ErrorStockfish with FakeStockfishDiagnostics implements Stockfish {
   ErrorStockfish();
 
   final _state = ValueNotifier<StockfishState>(StockfishState.initial);
@@ -1041,7 +1055,7 @@ class ErrorStockfish implements Stockfish {
 /// Used to verify that [EvaluationService] still surfaces such failures as
 /// [EngineState.error] even though start/quit calls go through an error-
 /// swallowing serialization queue.
-class ThrowingStartStockfish implements Stockfish {
+class ThrowingStartStockfish with FakeStockfishDiagnostics implements Stockfish {
   ThrowingStartStockfish();
 
   final _state = ValueNotifier<StockfishState>(StockfishState.initial);
@@ -1089,11 +1103,125 @@ class ThrowingStartStockfish implements Stockfish {
   Stream<String> get stdout => _stdoutController.stream;
 }
 
+/// A fake Stockfish that never finishes anything it is asked to do.
+///
+/// Models the native wedge the plugin cannot time out on its own: an engine stuck joining its
+/// search threads never reports the exit `quit()` waits for, so that future — and every operation
+/// chained behind it — stays pending forever.
+class StuckStockfish with FakeStockfishDiagnostics implements Stockfish {
+  StuckStockfish() {
+    diagnostics = const StockfishDiagnostics(
+      phase: StockfishPhase.shuttingDown,
+      step: 'engine_teardown',
+      elapsed: Duration(minutes: 1),
+      lastError: 'init: refused, the previous engine is still running',
+    );
+  }
+
+  final _state = ValueNotifier<StockfishState>(StockfishState.initial);
+  final _stdoutController = StreamController<String>.broadcast();
+
+  @override
+  StockfishFlavor get flavor => StockfishFlavor.sf16;
+
+  @override
+  String? get variant => null;
+
+  @override
+  String? get bigNetPath => null;
+
+  @override
+  String? get smallNetPath => null;
+
+  @override
+  Future<void> start({
+    StockfishFlavor flavor = StockfishFlavor.sf16,
+    String? variant,
+    String? smallNetPath,
+    String? bigNetPath,
+  }) {
+    _state.value = StockfishState.starting;
+    return Completer<void>().future;
+  }
+
+  @override
+  Future<void> quit() => Completer<void>().future;
+
+  @override
+  set stdin(String line) {
+    // The engine is not reading its input any more.
+  }
+
+  @override
+  ValueListenable<StockfishState> get state => _state;
+
+  @override
+  Stream<String> get stdout => _stdoutController.stream;
+}
+
+/// A fake Stockfish that starts normally but refuses every command afterwards.
+///
+/// Models a write that broke the command stream: the plugin fails the session itself, so the next
+/// `stdin` write throws from deep inside [UCIProtocol].
+class RefusingCommandStockfish with FakeStockfishDiagnostics implements Stockfish {
+  RefusingCommandStockfish();
+
+  final _state = ValueNotifier<StockfishState>(StockfishState.initial);
+  final _stdoutController = StreamController<String>.broadcast();
+
+  /// The commands that were refused, in order.
+  final List<String> refusedCommands = [];
+
+  @override
+  StockfishFlavor get flavor => StockfishFlavor.sf16;
+
+  @override
+  String? get variant => null;
+
+  @override
+  String? get bigNetPath => null;
+
+  @override
+  String? get smallNetPath => null;
+
+  @override
+  Future<void> start({
+    StockfishFlavor flavor = StockfishFlavor.sf16,
+    String? variant,
+    String? smallNetPath,
+    String? bigNetPath,
+  }) async {
+    _state.value = StockfishState.starting;
+    await Future.microtask(() {});
+    _state.value = StockfishState.ready;
+    _stdoutController.add('id name Stockfish 16\n');
+    _stdoutController.add('uciok\n');
+  }
+
+  @override
+  Future<void> quit() async {
+    await Future.microtask(() {});
+    _state.value = StockfishState.initial;
+  }
+
+  @override
+  set stdin(String line) {
+    refusedCommands.add(line);
+    throw StateError('Stockfish is not ready (error)');
+  }
+
+  @override
+  ValueListenable<StockfishState> get state => _state;
+
+  @override
+  Stream<String> get stdout => _stdoutController.stream;
+}
+
 /// A fake Stockfish for testing practice mode with configurable eval shifts.
 ///
 /// This stockfish emits multiPv evaluations and can be configured to simulate
 /// different move quality scenarios (good move, inaccuracy, mistake, blunder).
-class PracticeModeStockfish implements Stockfish {
+class PracticeModeStockfish with FakeStockfishDiagnostics implements Stockfish {
   PracticeModeStockfish({this.initialEvalCp = 30, this.evalShiftCp = 0});
 
   /// The initial evaluation in centipawns (before the player's move).
