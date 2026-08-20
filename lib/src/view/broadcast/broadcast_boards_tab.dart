@@ -95,9 +95,7 @@ class BroadcastBoardsTab extends ConsumerWidget {
     return teamFilter == null
         ? ongoingFiltered
         : ongoingFiltered
-              .where(
-                (game) => Side.values.map((s) => game.players[s]?.player.team).contains(teamFilter),
-              )
+              .where((game) => Side.values.any((s) => game.players[s]?.player.team == teamFilter))
               .toIList();
   }
 }
