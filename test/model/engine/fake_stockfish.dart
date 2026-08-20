@@ -94,6 +94,12 @@ class FakeStockfish with FakeStockfishDiagnostics implements Stockfish {
     _state.value = StockfishState.initial;
   }
 
+  /// Marks the session unusable, the way the plugin does when a write fails with a fatal code.
+  @protected
+  void failSession() {
+    _state.value = StockfishState.error;
+  }
+
   @override
   set stdin(String line) {
     final parts = line.trim().split(RegExp(r'\s+'));
@@ -1159,26 +1165,34 @@ class StuckStockfish with FakeStockfishDiagnostics implements Stockfish {
   Stream<String> get stdout => _stdoutController.stream;
 }
 
-/// A fake Stockfish that starts normally but refuses commands afterwards.
+/// A fake Stockfish that starts normally and then breaks the command stream.
 ///
-/// Models a write that broke the command stream: the plugin fails the session itself, so the next
-/// `stdin` write throws from deep inside [UCIProtocol].
+/// Models the plugin's write contract, which is not the obvious one: a write the native side
+/// could not deliver never throws. It is logged, and only the codes that leave the session
+/// unusable — [StockfishWriteResult.failed] and [StockfishWriteResult.partial] — additionally move
+/// the state to [StockfishState.error]. Throwing is what the setter does *afterwards*, for any
+/// write attempted on a session that is no longer [StockfishState.ready].
 ///
-/// By default every command is refused. Pass [refuses] to break the engine part-way through an
+/// So a failing write here is silent, and it is the command after it that throws from deep inside
+/// [UCIProtocol].
+///
+/// The recoverable code, [StockfishWriteResult.pipeFull], is not modelled: it drops the command
+/// without failing the session or throwing, which no observer on the Dart side can distinguish
+/// from a delivered command.
+///
+/// By default the very first write fails. Pass [fails] to break the engine part-way through an
 /// exchange instead — a session that answers `isready` and then chokes on `go` is what a real
 /// engine looks like when it dies under load, and it is the only way the protocol gets far enough
 /// to announce that it is computing on an engine that cannot compute.
-///
-/// Note that the state stays [StockfishState.ready]: the plugin only fails the session itself for
-/// writes it can tell are fatal, so the service cannot rely on that transition to know the engine
-/// needs restarting.
-class RefusingCommandStockfish extends FakeStockfish {
-  RefusingCommandStockfish({bool Function(String command)? refuses})
-    : _refuses = refuses ?? ((_) => true);
+class FatalWriteStockfish extends FakeStockfish {
+  FatalWriteStockfish({bool Function(String command)? fails}) : _fails = fails ?? ((_) => true);
 
-  final bool Function(String command) _refuses;
+  final bool Function(String command) _fails;
 
-  /// The commands that were refused, in order.
+  /// The commands whose write failed, in order.
+  final List<String> failedCommands = [];
+
+  /// The commands the setter refused outright, in order.
   final List<String> refusedCommands = [];
 
   /// How many times the engine was asked to start.
@@ -1202,9 +1216,16 @@ class RefusingCommandStockfish extends FakeStockfish {
 
   @override
   set stdin(String line) {
-    if (_refuses(line)) {
+    final stateValue = state.value;
+    if (stateValue != StockfishState.ready) {
       refusedCommands.add(line);
-      throw StateError('Stockfish is not ready (error)');
+      throw StateError('Stockfish is not ready ($stateValue)');
+    }
+    if (_fails(line)) {
+      // Logged natively and dropped. The engine is told nothing, and neither is the caller.
+      failedCommands.add(line);
+      failSession();
+      return;
     }
     super.stdin = line;
   }

@@ -978,7 +978,10 @@ void main() {
     });
 
     test('A command the engine refuses is reported instead of thrown at the caller', () async {
-      testBinding.stockfish = RefusingCommandStockfish();
+      // The write that breaks the session is silent; it is the next command, refused by the
+      // plugin because the session is no longer ready, that throws from inside UCIProtocol.
+      final stockfish = FatalWriteStockfish();
+      testBinding.stockfish = stockfish;
       final container = await makeContainer();
       final crashlytics = testBinding.firebaseCrashlytics;
       crashlytics.recordedErrors.clear();
@@ -989,18 +992,20 @@ void main() {
 
       await pumpEventQueue();
 
+      expect(stockfish.failedCommands, hasLength(1));
+      expect(stockfish.refusedCommands, isNotEmpty);
       expect(service.evaluationState.value.state, EngineState.error);
       expect(crashlytics.customKeys['engine_failure_kind'], 'command');
       expect(crashlytics.recordedErrors.last.exception, isA<StateError>());
     });
 
-    test('A refused command releases the pending move request', () async {
-      testBinding.stockfish = RefusingCommandStockfish();
+    test('A broken command stream releases the pending move request', () async {
+      testBinding.stockfish = FatalWriteStockfish();
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
 
-      // The engine will never answer a search it would not accept the commands for, and findMove
-      // has no timeout of its own, so its caller has to be failed explicitly.
+      // The engine will never answer a search whose commands never reached it, and findMove has no
+      // timeout of its own, so its caller has to be failed explicitly.
       await expectLater(
         service.findMove(makeMoveWork()),
         throwsA(isA<MoveRequestCancelledException>()),
@@ -1009,13 +1014,11 @@ void main() {
       expect(service.evaluationState.value.state, EngineState.error);
     });
 
-    test('A command refused mid-search leaves the engine in the error state', () async {
-      // The refusal is reported rather than thrown, so UCIProtocol carries on with the exchange
-      // and ends it by announcing that it is computing. That announcement must not be taken for a
+    test('A write that fails mid-search leaves the engine in the error state', () async {
+      // The failed write is not thrown back at UCIProtocol, so it carries on with the exchange and
+      // ends it by announcing that it is computing. That announcement must not be taken for a
       // working engine.
-      testBinding.stockfish = RefusingCommandStockfish(
-        refuses: (command) => command.startsWith('go'),
-      );
+      testBinding.stockfish = FatalWriteStockfish(fails: (command) => command.startsWith('go'));
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
 
@@ -1026,11 +1029,10 @@ void main() {
       expect(service.evaluationState.value.state, EngineState.error);
     });
 
-    test('Work requested after a refused command restarts the engine', () async {
-      // The plugin fails the session itself only for writes it can tell are fatal, so a refusal
-      // can leave StockfishState at ready. The service must not conclude from that state that the
-      // engine it just failed to talk to is still usable.
-      final stockfish = RefusingCommandStockfish();
+    test('Work requested after a broken command stream restarts the engine', () async {
+      // Nothing recovers a failed session but a new start: the plugin refuses every write until
+      // one happens.
+      final stockfish = FatalWriteStockfish();
       testBinding.stockfish = stockfish;
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
@@ -1038,7 +1040,6 @@ void main() {
       service.evaluate(makeWork());
       await pumpEventQueue();
 
-      expect(stockfish.state.value, StockfishState.ready);
       expect(stockfish.startCount, 1);
 
       service.evaluate(makeWork(path: UciPath.fromId(UciCharPair.fromMove(Move.parse('e2e4')!))));

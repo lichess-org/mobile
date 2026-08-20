@@ -637,11 +637,6 @@ class EvaluationService {
 
   /// Sends a command to a running engine, reporting a refusal rather than throwing it at the
   /// caller.
-  ///
-  /// The plugin's `stdin` setter throws when the engine is no longer ready — which happens on its
-  /// own, without anything here asking for it, when a write breaks the command stream. It is
-  /// called from deep inside [UCIProtocol], so letting it throw would surface as a crash in
-  /// whatever UI happened to request the evaluation.
   void _sendToEngine(String command) {
     try {
       _stockfish.stdin = command;
