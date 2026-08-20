@@ -401,6 +401,38 @@ class EvaluationService {
     }
   }
 
+  /// Puts the service into [EngineState.error] and lets go of everything that was waiting on the
+  /// engine.
+  ///
+  /// Three things have to happen together, which is why they live here rather than at each failure
+  /// site.
+  ///
+  /// Nothing is going to answer the work that was in flight, so its callers are failed instead of
+  /// being left waiting forever — a pending [findMove] has no timeout of its own.
+  ///
+  /// The engine identity is forgotten, so that the next [_startWork] restarts the engine rather
+  /// than talking to one this service already knows is unusable: the flavor and variant are what
+  /// [_startWork] compares to decide, and an engine can break without the plugin moving its own
+  /// state to [StockfishState.error].
+  ///
+  /// And anything the broken engine still emits is dropped. A failed command does not stop the
+  /// protocol mid-exchange — [_sendToEngine] reports the refusal rather than throwing it back into
+  /// [UCIProtocol], which carries on and announces that it is computing — so without this the
+  /// engine state set here is overwritten by the very call that failed.
+  void _failEngine() {
+    _cancelPendingMoveRequest();
+    _setEvalWork(null);
+    _currentMoveWork = null;
+    _currentRequestedFlavor = null;
+    _currentVariant = null;
+    _evalThrottleTimer?.cancel();
+    _evalThrottleTimer = null;
+    _pendingEvalResult = null;
+    _discardEvalResults = true;
+    _discardMoveResults = true;
+    _setEngineState(EngineState.error);
+  }
+
   /// Arms the watchdog that catches a (re)start which never completes at all.
   void _startInitWatchdog(StockfishFlavor flavor, Variant variant) {
     _cancelInitWatchdog();
@@ -421,10 +453,7 @@ class EvaluationService {
 
       // Nothing will ever answer the work that was waiting on this start, so release its callers
       // instead of leaving them thinking forever.
-      _cancelPendingMoveRequest();
-      _setEvalWork(null);
-      _currentMoveWork = null;
-      _setEngineState(EngineState.error);
+      _failEngine();
     });
   }
 
@@ -437,10 +466,7 @@ class EvaluationService {
   void _startWork(Work work) {
     if (_unrecoverableFailure case final failure?) {
       _logger.severe('Refusing engine work: the engine is unusable. $failure');
-      _cancelPendingMoveRequest();
-      _setEvalWork(null);
-      _currentMoveWork = null;
-      _setEngineState(EngineState.error);
+      _failEngine();
       _notifyUser(failure);
       return;
     }
@@ -554,7 +580,7 @@ class EvaluationService {
             variant: variant,
           ),
         );
-        _setEngineState(EngineState.error);
+        _failEngine();
         return;
       }
 
@@ -581,7 +607,7 @@ class EvaluationService {
           stackTrace: st,
         ),
       );
-      _setEngineState(EngineState.error);
+      _failEngine();
     } finally {
       _cancelInitWatchdog();
       _initInProgress = false;
@@ -609,7 +635,7 @@ class EvaluationService {
           stackTrace: st,
         ),
       );
-      _setEngineState(EngineState.error);
+      _failEngine();
     }
   }
 
@@ -627,10 +653,14 @@ class EvaluationService {
           _setEngineState(EngineState.idle);
         }
       case StockfishState.error:
-        // A start failure is already reported by _initEngine, with the flavor and variant it was
-        // starting; anything else is a running engine that broke under us — including one that
-        // could not even be asked to quit, which the plugin reports the same way.
-        if (!_initInProgress) {
+        if (_initInProgress) {
+          // The (re)start in flight owns this outcome: _initEngine reports the failure with the
+          // flavor and variant it was starting, and a start that recovers from a failed shutdown
+          // still has work to run, so nothing is given up on here.
+          _setEngineState(EngineState.error);
+        } else {
+          // A running engine broke under us — including one that could not even be asked to quit,
+          // which the plugin reports the same way.
           _handleFailure(
             _describeFailure(
               EngineFailureKind.runtime,
@@ -641,13 +671,14 @@ class EvaluationService {
               variant: _currentVariant ?? Variant.standard,
             ),
           );
+          _failEngine();
         }
-        _setEngineState(EngineState.error);
     }
   }
 
   void _onComputingChange() {
-    // When both discard flags are set, a quit is in progress; ignore computing state changes.
+    // When both discard flags are set, the engine is being quit or has failed; its computing
+    // state says nothing about work this service still cares about.
     if (_discardEvalResults && _discardMoveResults) return;
 
     if (_protocol.isComputing.value) {

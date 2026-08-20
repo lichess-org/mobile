@@ -958,6 +958,59 @@ void main() {
       expect(crashlytics.recordedErrors.last.exception, isA<StateError>());
     });
 
+    test('A refused command releases the pending move request', () async {
+      testBinding.stockfish = RefusingCommandStockfish();
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      // The engine will never answer a search it would not accept the commands for, and findMove
+      // has no timeout of its own, so its caller has to be failed explicitly.
+      await expectLater(
+        service.findMove(makeMoveWork()),
+        throwsA(isA<MoveRequestCancelledException>()),
+      );
+
+      expect(service.evaluationState.value.state, EngineState.error);
+    });
+
+    test('A command refused mid-search leaves the engine in the error state', () async {
+      // The refusal is reported rather than thrown, so UCIProtocol carries on with the exchange
+      // and ends it by announcing that it is computing. That announcement must not be taken for a
+      // working engine.
+      testBinding.stockfish = RefusingCommandStockfish(
+        refuses: (command) => command.startsWith('go'),
+      );
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      service.evaluate(makeWork());
+
+      await pumpEventQueue();
+
+      expect(service.evaluationState.value.state, EngineState.error);
+    });
+
+    test('Work requested after a refused command restarts the engine', () async {
+      // The plugin fails the session itself only for writes it can tell are fatal, so a refusal
+      // can leave StockfishState at ready. The service must not conclude from that state that the
+      // engine it just failed to talk to is still usable.
+      final stockfish = RefusingCommandStockfish();
+      testBinding.stockfish = stockfish;
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      service.evaluate(makeWork());
+      await pumpEventQueue();
+
+      expect(stockfish.state.value, StockfishState.ready);
+      expect(stockfish.startCount, 1);
+
+      service.evaluate(makeWork(path: UciPath.fromId(UciCharPair.fromMove(Move.parse('e2e4')!))));
+      await pumpEventQueue();
+
+      expect(stockfish.startCount, 2);
+    });
+
     test('Engine name is correctly set after restarting stockfish', () async {
       final fakeStockfish = FakeStockfish();
       testBinding.stockfish = fakeStockfish;

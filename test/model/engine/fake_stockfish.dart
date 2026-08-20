@@ -1159,30 +1159,30 @@ class StuckStockfish with FakeStockfishDiagnostics implements Stockfish {
   Stream<String> get stdout => _stdoutController.stream;
 }
 
-/// A fake Stockfish that starts normally but refuses every command afterwards.
+/// A fake Stockfish that starts normally but refuses commands afterwards.
 ///
 /// Models a write that broke the command stream: the plugin fails the session itself, so the next
 /// `stdin` write throws from deep inside [UCIProtocol].
-class RefusingCommandStockfish with FakeStockfishDiagnostics implements Stockfish {
-  RefusingCommandStockfish();
+///
+/// By default every command is refused. Pass [refuses] to break the engine part-way through an
+/// exchange instead — a session that answers `isready` and then chokes on `go` is what a real
+/// engine looks like when it dies under load, and it is the only way the protocol gets far enough
+/// to announce that it is computing on an engine that cannot compute.
+///
+/// Note that the state stays [StockfishState.ready]: the plugin only fails the session itself for
+/// writes it can tell are fatal, so the service cannot rely on that transition to know the engine
+/// needs restarting.
+class RefusingCommandStockfish extends FakeStockfish {
+  RefusingCommandStockfish({bool Function(String command)? refuses})
+    : _refuses = refuses ?? ((_) => true);
 
-  final _state = ValueNotifier<StockfishState>(StockfishState.initial);
-  final _stdoutController = StreamController<String>.broadcast();
+  final bool Function(String command) _refuses;
 
   /// The commands that were refused, in order.
   final List<String> refusedCommands = [];
 
-  @override
-  StockfishFlavor get flavor => StockfishFlavor.sf16;
-
-  @override
-  String? get variant => null;
-
-  @override
-  String? get bigNetPath => null;
-
-  @override
-  String? get smallNetPath => null;
+  /// How many times the engine was asked to start.
+  int startCount = 0;
 
   @override
   Future<void> start({
@@ -1190,31 +1190,24 @@ class RefusingCommandStockfish with FakeStockfishDiagnostics implements Stockfis
     String? variant,
     String? smallNetPath,
     String? bigNetPath,
-  }) async {
-    _state.value = StockfishState.starting;
-    await Future.microtask(() {});
-    _state.value = StockfishState.ready;
-    _stdoutController.add('id name Stockfish 16\n');
-    _stdoutController.add('uciok\n');
-  }
-
-  @override
-  Future<void> quit() async {
-    await Future.microtask(() {});
-    _state.value = StockfishState.initial;
+  }) {
+    startCount++;
+    return super.start(
+      flavor: flavor,
+      variant: variant,
+      smallNetPath: smallNetPath,
+      bigNetPath: bigNetPath,
+    );
   }
 
   @override
   set stdin(String line) {
-    refusedCommands.add(line);
-    throw StateError('Stockfish is not ready (error)');
+    if (_refuses(line)) {
+      refusedCommands.add(line);
+      throw StateError('Stockfish is not ready (error)');
+    }
+    super.stdin = line;
   }
-
-  @override
-  ValueListenable<StockfishState> get state => _state;
-
-  @override
-  Stream<String> get stdout => _stdoutController.stream;
 }
 
 /// A fake Stockfish for testing practice mode with configurable eval shifts.
