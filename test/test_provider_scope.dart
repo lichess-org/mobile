@@ -58,12 +58,17 @@ final offlineClient = MockClient((request) {
 /// The [overrides] parameter can be used to override any provider in the app.
 /// The [authUser] parameter can be used to set the initial user authUser state.
 /// The [defaultPreferences] parameter can be used to set the initial shared preferences.
+/// The [surfaceSize] parameter controls the simulated logical screen size.
+/// The [devicePixelRatio] and [physicalViewPadding] parameters control the simulated view metrics.
 Future<Widget> makeTestProviderScopeApp(
   WidgetTester tester, {
   required Widget home,
   Map<ProviderOrFamily, Override>? overrides,
   AuthUser? authUser,
   Map<String, Object>? defaultPreferences,
+  Size surfaceSize = kTestSurfaceSize,
+  double? devicePixelRatio,
+  EdgeInsets? physicalViewPadding,
 }) {
   return makeTestProviderScope(
     tester,
@@ -71,6 +76,9 @@ Future<Widget> makeTestProviderScopeApp(
     overrides: overrides,
     authUser: authUser,
     defaultPreferences: defaultPreferences,
+    surfaceSize: surfaceSize,
+    devicePixelRatio: devicePixelRatio,
+    physicalViewPadding: physicalViewPadding,
   );
 }
 
@@ -151,11 +159,31 @@ Future<Widget> makeTestProviderScope(
   AuthUser? authUser,
   Map<String, Object>? defaultPreferences,
   Size surfaceSize = kTestSurfaceSize,
+  double? devicePixelRatio,
+  EdgeInsets? physicalViewPadding,
   Key? key,
 }) async {
   final binding = TestLichessBinding.ensureInitialized();
 
   addTearDown(binding.reset);
+
+  if (devicePixelRatio != null) {
+    tester.view.devicePixelRatio = devicePixelRatio;
+    addTearDown(tester.view.resetDevicePixelRatio);
+  }
+
+  if (physicalViewPadding != null) {
+    final fakeViewPadding = FakeViewPadding(
+      left: physicalViewPadding.left,
+      top: physicalViewPadding.top,
+      right: physicalViewPadding.right,
+      bottom: physicalViewPadding.bottom,
+    );
+    tester.view.padding = fakeViewPadding;
+    tester.view.viewPadding = fakeViewPadding;
+    addTearDown(tester.view.resetPadding);
+    addTearDown(tester.view.resetViewPadding);
+  }
 
   rootNavRouteStackObserver.clear();
   addTearDown(rootNavRouteStackObserver.clear);
