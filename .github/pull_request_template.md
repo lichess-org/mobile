@@ -12,8 +12,9 @@ For more information, see the [AI-assisted code contribution policy](https://git
 
 # General guidelines for pull requests
 
+- Make sure to check the [existing pull requests](https://github.com/lichess-org/mobile/pulls) to avoid duplicated work.
 - Explain why the change is needed and what problem it solves.
-- If your change touches the UI in any way, please provide a screen recording 
+- If your change touches the UI in any way, please provide a screen recording
 - Link to any relevant issues or discussions.
 - Prefer small, focused pull requests that only change one thing at a time.
 - Mark the pull request as a draft if you have not run the code.
