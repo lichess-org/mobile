@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/binding.dart';
@@ -50,7 +51,28 @@ class StreakStorage {
     ref.invalidate(savedStreakScoreProvider);
   }
 
+  /// A streak run waiting to be posted because [PuzzleRepository.postStreakRun]
+  /// failed (e.g. offline at game over).
+  Future<int?> loadPendingScore() async => _store.getInt(_pendingScoreKey);
+
+  /// Saves a streak [run] that could not be posted, keeping the best one if one
+  /// is already pending.
+  ///
+  /// Collapsing several offline runs into one post is a deliberate trade-off, not a lossless one:
+  /// the server keeps the best score (`score.atLeast`), but it also counts one run per post in the
+  /// user's activity feed, so the runs that are folded away are not reported there.
+  Future<void> savePendingScore(int run) async {
+    final existing = _store.getInt(_pendingScoreKey);
+    await _store.setInt(_pendingScoreKey, existing == null ? run : max(existing, run));
+  }
+
+  Future<void> clearPendingScore() async {
+    await _store.remove(_pendingScoreKey);
+  }
+
   SharedPreferencesWithCache get _store => LichessBinding.instance.sharedPreferences;
 
   String get _storageKey => 'puzzle_streak.${userId ?? '**anon**'}';
+
+  String get _pendingScoreKey => 'puzzle_streak.pending_score.${userId ?? '**anon**'}';
 }
