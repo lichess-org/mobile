@@ -55,7 +55,12 @@ Study _makeStudy({
 }) {
   const chapter = StudyChapter(
     id: StudyChapterId('1'),
-    setup: StudyChapterSetup(id: null, orientation: Side.white, variant: Variant.standard, fromFen: null),
+    setup: StudyChapterSetup(
+      id: null,
+      orientation: Side.white,
+      variant: Variant.standard,
+      fromFen: null,
+    ),
     conceal: null,
     features: (computer: true, explorer: true),
     gamebook: false,
@@ -74,7 +79,10 @@ Study _makeStudy({
     chapters: IList(const [StudyChapterMeta(id: StudyChapterId('1'), name: '', fen: null)]),
     chapter: chapter,
     members: IMap(const {
-      UserId('me'): StudyMember(user: LightUser(id: UserId('me'), name: 'me'), role: 'w'),
+      UserId('me'): StudyMember(
+        user: LightUser(id: UserId('me'), name: 'me'),
+        role: 'w',
+      ),
     }),
     hints: const IList.empty(),
     deviationComments: const IList.empty(),
@@ -86,10 +94,15 @@ void main() {
     test('sends the message the server expects and updates state optimistically', () async {
       final mockRepository = MockStudyRepository();
       when(
-        () => mockRepository.getStudy(id: _testId, chapterId: any(named: 'chapterId')),
+        () => mockRepository.getStudy(
+          id: _testId,
+          chapterId: any(named: 'chapterId'),
+        ),
       ).thenAnswer((_) async => (_makeStudy(), null as AnalysisSummary?, ''));
 
-      final socketFactory = ListenableFakeWebSocketChannelFactory(createDefaultFakeWebSocketChannel);
+      final socketFactory = ListenableFakeWebSocketChannelFactory(
+        createDefaultFakeWebSocketChannel,
+      );
 
       final container = await makeContainer(
         overrides: {
@@ -103,9 +116,7 @@ void main() {
       // studyControllerProvider is autoDispose: a bare .read() doesn't keep it alive, and it would
       // get torn down (losing all state) during editStudy's multi-second retry delay below. A
       // persistent listener is what a real widget's ref.watch would provide.
-      addTearDown(
-        container.listen(studyControllerProvider(_testOptions), (_, _) {}).close,
-      );
+      addTearDown(container.listen(studyControllerProvider(_testOptions), (_, _) {}).close);
 
       await container.read(studyControllerProvider(_testOptions).future);
 
@@ -145,83 +156,79 @@ void main() {
       await pending;
     });
 
-    test(
-      'confirms success once the server-side change is read back',
-      () async {
-        final mockRepository = MockStudyRepository();
-        var editApplied = false;
-        when(() => mockRepository.getStudy(id: _testId, chapterId: any(named: 'chapterId'))).thenAnswer(
-          (_) async => (
-            editApplied
-                ? _makeStudy(
-                    name: 'New name',
-                    visibility: StudyVisibility.unlisted,
-                    settings: _newSettings,
-                  )
-                : _makeStudy(),
-            null as AnalysisSummary?,
-            '',
-          ),
-        );
+    test('confirms success once the server-side change is read back', () async {
+      final mockRepository = MockStudyRepository();
+      var editApplied = false;
+      when(
+        () => mockRepository.getStudy(
+          id: _testId,
+          chapterId: any(named: 'chapterId'),
+        ),
+      ).thenAnswer(
+        (_) async => (
+          editApplied
+              ? _makeStudy(
+                  name: 'New name',
+                  visibility: StudyVisibility.unlisted,
+                  settings: _newSettings,
+                )
+              : _makeStudy(),
+          null as AnalysisSummary?,
+          '',
+        ),
+      );
 
-        final container = await makeContainer(
-          overrides: {
-            studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
-          },
-        );
-        addTearDown(
-          container.listen(studyControllerProvider(_testOptions), (_, _) {}).close,
-        );
+      final container = await makeContainer(
+        overrides: {
+          studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
+        },
+      );
+      addTearDown(container.listen(studyControllerProvider(_testOptions), (_, _) {}).close);
 
-        await container.read(studyControllerProvider(_testOptions).future);
-        editApplied = true;
+      await container.read(studyControllerProvider(_testOptions).future);
+      editApplied = true;
 
-        final succeeded = await container
-            .read(studyControllerProvider(_testOptions).notifier)
-            .editStudy(_editPayload);
+      final succeeded = await container
+          .read(studyControllerProvider(_testOptions).notifier)
+          .editStudy(_editPayload);
 
-        expect(succeeded, isTrue);
-        final study = container.read(studyControllerProvider(_testOptions)).requireValue.study;
-        expect(study.name, 'New name');
-        expect(study.settings, _newSettings);
-      },
-      timeout: const Timeout(Duration(seconds: 10)),
-    );
+      expect(succeeded, isTrue);
+      final study = container.read(studyControllerProvider(_testOptions)).requireValue.study;
+      expect(study.name, 'New name');
+      expect(study.settings, _newSettings);
+    }, timeout: const Timeout(Duration(seconds: 10)));
 
-    test(
-      'reports failure and reverts local state when the server silently rejects the change '
-      '(e.g. the caller lost owner/admin permissions)',
-      () async {
-        final mockRepository = MockStudyRepository();
-        // The server never actually applies the edit — this is exactly what happens when
-        // `canActAsOwner` returns false: no error is sent back, the message is just dropped.
-        when(
-          () => mockRepository.getStudy(id: _testId, chapterId: any(named: 'chapterId')),
-        ).thenAnswer((_) async => (_makeStudy(), null as AnalysisSummary?, ''));
+    test('reports failure and reverts local state when the server silently rejects the change '
+        '(e.g. the caller lost owner/admin permissions)', () async {
+      final mockRepository = MockStudyRepository();
+      // The server never actually applies the edit — this is exactly what happens when
+      // `canActAsOwner` returns false: no error is sent back, the message is just dropped.
+      when(
+        () => mockRepository.getStudy(
+          id: _testId,
+          chapterId: any(named: 'chapterId'),
+        ),
+      ).thenAnswer((_) async => (_makeStudy(), null as AnalysisSummary?, ''));
 
-        final container = await makeContainer(
-          overrides: {
-            studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
-          },
-        );
-        addTearDown(
-          container.listen(studyControllerProvider(_testOptions), (_, _) {}).close,
-        );
+      final container = await makeContainer(
+        overrides: {
+          studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
+        },
+      );
+      addTearDown(container.listen(studyControllerProvider(_testOptions), (_, _) {}).close);
 
-        await container.read(studyControllerProvider(_testOptions).future);
+      await container.read(studyControllerProvider(_testOptions).future);
 
-        final succeeded = await container
-            .read(studyControllerProvider(_testOptions).notifier)
-            .editStudy(_editPayload);
+      final succeeded = await container
+          .read(studyControllerProvider(_testOptions).notifier)
+          .editStudy(_editPayload);
 
-        expect(succeeded, isFalse);
-        // Local state must be rolled back to the server's truth, not left showing the rejected
-        // optimistic update.
-        final study = container.read(studyControllerProvider(_testOptions)).requireValue.study;
-        expect(study.name, 'Original name');
-        expect(study.settings, _originalSettings);
-      },
-      timeout: const Timeout(Duration(seconds: 10)),
-    );
+      expect(succeeded, isFalse);
+      // Local state must be rolled back to the server's truth, not left showing the rejected
+      // optimistic update.
+      final study = container.read(studyControllerProvider(_testOptions)).requireValue.study;
+      expect(study.name, 'Original name');
+      expect(study.settings, _originalSettings);
+    }, timeout: const Timeout(Duration(seconds: 10)));
   });
 }
