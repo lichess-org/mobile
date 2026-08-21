@@ -273,6 +273,12 @@ class _PuzzleMenu extends ConsumerWidget {
     final isOnline = ref.watch(isDeviceOnlineProvider);
     final authUser = ref.watch(authControllerProvider);
 
+    final savedStreakScore = ref.watch(savedStreakScoreProvider);
+    // A saved streak resumes offline from the cache; only a brand-new streak needs the network
+    // (the streak screen surfaces that as an error).
+    final hasSavedStreak = savedStreakScore.value != null;
+    final canPlayStreak = isOnline || hasSavedStreak;
+
     return ListSection(
       hasLeading: true,
       children: [
@@ -285,11 +291,12 @@ class _PuzzleMenu extends ConsumerWidget {
           },
         ),
         _PuzzleMenuListTile(
-          enabled: isOnline,
+          enabled: canPlayStreak,
           icon: LichessIcons.streak,
           title: 'Puzzle Streak',
-          badgeLabel: switch (ref.watch(savedStreakScoreProvider)) {
-            AsyncData(:final value?) => value.toString(),
+          // An unstarted saved streak (index 0) is resumable but not worth a badge.
+          badgeLabel: switch (savedStreakScore) {
+            AsyncData(:final value?) when value > 0 => value.toString(),
             _ => null,
           },
           subtitle:
@@ -297,7 +304,7 @@ class _PuzzleMenu extends ConsumerWidget {
                   .takeWhile((c) => c != '.')
                   .toString() +
               (context.l10n.puzzleStreakDescription.contains('.') ? '.' : ''),
-          onTap: isOnline
+          onTap: canPlayStreak
               ? () {
                   Navigator.of(context, rootNavigator: true).push(StreakScreen.buildRoute());
                 }

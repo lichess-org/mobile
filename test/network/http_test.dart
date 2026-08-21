@@ -58,6 +58,17 @@ void main() {
         isFalse,
       );
     });
+
+    test('does not retry a streak look-ahead refill (GET /api/puzzle/many)', () {
+      // Shares the server's per-IP puzzle fetch budget with /api/puzzle/batch/, and the refill is
+      // best-effort: it is retried on the next advance or on reconnect.
+      expect(shouldRetryOn429(response(429, path: '/api/puzzle/many')), isFalse);
+    });
+
+    test('retries other puzzle endpoints', () {
+      expect(shouldRetryOn429(response(429, path: '/api/puzzle/abcde')), isTrue);
+      expect(shouldRetryOn429(response(429, path: '/api/puzzle/manyfold')), isTrue);
+    });
   });
 
   group('LichessClient', () {

@@ -171,18 +171,23 @@ final lichessClientProvider = Provider<LichessClient>((Ref ref) {
 
 /// Whether a response should be retried once by [lichessClientProvider].
 ///
-/// Retries on 429 Too Many Requests, except for the puzzle batch endpoints (`/api/puzzle/batch/…`),
-/// which are rate-limited deliberately:
-/// - solve submissions (`POST`) are handled with a back-off by `PuzzleSolveLimiter`, so retrying
-///   here only burns a request and delays arming the back-off;
-/// - batch downloads (`GET`) are issued once per puzzle angle, so a retry doubles an already large
-///   burst against an endpoint that has just said it is receiving too many requests.
+/// Retries on 429 Too Many Requests, except for the puzzle fetch endpoints, which are
+/// rate-limited deliberately and share a single per-IP budget on the server:
+/// - solve submissions (`POST /api/puzzle/batch/…`) are handled with a back-off by
+///   `PuzzleSolveLimiter`, so retrying here only burns a request and delays arming the back-off;
+/// - batch downloads (`GET /api/puzzle/batch/…`) are issued once per puzzle angle, so a retry
+///   doubles an already large burst against an endpoint that has just said it is receiving too
+///   many requests;
+/// - streak look-ahead refills (`GET /api/puzzle/many`) are best-effort and retried on the next
+///   advance or on reconnect, so a retry only spends budget the puzzle queue also needs.
 @visibleForTesting
 bool shouldRetryOn429(BaseResponse response) {
   if (response.statusCode != 429) return false;
   final request = response.request;
-  final isPuzzleBatch = request != null && request.url.path.startsWith('/api/puzzle/batch/');
-  return !isPuzzleBatch;
+  if (request == null) return true;
+  final path = request.url.path;
+  final isPuzzleFetch = path.startsWith('/api/puzzle/batch/') || path == '/api/puzzle/many';
+  return !isPuzzleFetch;
 }
 
 Duration _defaultDelay(int retryCount) =>
