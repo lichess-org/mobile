@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/chat/chat_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_button.dart';
 import 'package:lichess_mobile/src/view/study/create_study_chapter_bottom_sheet.dart';
+import 'package:lichess_mobile/src/view/study/edit_study_screen.dart';
 import 'package:lichess_mobile/src/view/study/study_settings.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
@@ -316,6 +317,11 @@ class _StudyMenuButton extends ConsumerWidget {
           makeLabel: (context) => Text(context.l10n.settingsSettings),
           onPressed: () => Navigator.of(context).push(StudySettingsScreen.buildRoute(options)),
         ),
+        if (state.amIOwner)
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.studyEditStudy),
+            onPressed: () => Navigator.of(context).push(EditStudyScreen.buildRoute(options)),
+          ),
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.studyMembers),
           onPressed: () => _showStudySheet(
@@ -466,6 +472,20 @@ class _StudyChaptersMenuState extends ConsumerState<_StudyChaptersMenu> {
               ),
               maxLines: 2,
             ),
+            trailing: state.canIContribute && state.study.chapters.length > 1
+                ? IconButton(
+                    icon: const Icon(Icons.delete_outline),
+                    tooltip: context.l10n.studyDeleteChapter,
+                    onPressed: () => showConfirmDialog<void>(
+                      context,
+                      title: Text(context.l10n.studyDeleteChapter),
+                      isDestructiveAction: true,
+                      onConfirm: () => ref
+                          .read(studyControllerProvider(widget.options).notifier)
+                          .deleteChapter(chapter.id),
+                    ),
+                  )
+                : null,
             onTap: () {
               ref.read(studyControllerProvider(widget.options).notifier).goToChapter(chapter.id);
               Navigator.of(context).pop();

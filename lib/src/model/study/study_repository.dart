@@ -98,6 +98,28 @@ class StudyRepository {
     return utf8.decode(pgnBytes);
   }
 
+  /// Creates a new study and returns its id.
+  ///
+  /// The study is created with a single empty chapter, which [createChapter] replaces when passed
+  /// a payload with `initial: true`.
+  Future<StudyId> createStudy(CreateStudyPayload study) async {
+    return await client.postReadJson<StudyId>(
+      Uri(path: '/api/study'),
+      body: {
+        'name': study.name,
+        'visibility': study.visibility.name,
+        'computer': 'everyone',
+        'explorer': 'everyone',
+        'cloneable': 'everyone',
+        'shareable': 'everyone',
+        'chat': 'member',
+        'sticky': 'true',
+        'description': 'false',
+      },
+      mapper: (json) => StudyId(pick(json, 'id').asStringOrThrow()),
+    );
+  }
+
   /// Creates one or more (if the PGN contains multiple games) chapters in the study with the given [studyId].
   Future<IList<StudyChapterId>> createChapter(
     StudyId studyId,
@@ -110,11 +132,19 @@ class StudyRepository {
         'name': chapter.name,
         'orientation': chapter.orientation.name,
         if (chapter.variant != null) 'variant': chapter.variant!.name,
+        'initial': chapter.initial.toString(),
       },
       mapper: (json) => pick(
         json,
         'chapters',
       ).asListOrThrow((pick) => StudyChapterId(pick.required()('id').asStringOrThrow())).lock,
     );
+  }
+
+  /// Deletes the chapter with the given [chapterId] from the study with the given [studyId].
+  ///
+  /// The server refuses to delete a study's only chapter.
+  Future<void> deleteChapter(StudyId studyId, StudyChapterId chapterId) async {
+    await client.deleteRead(Uri(path: '/api/study/$studyId/$chapterId'));
   }
 }

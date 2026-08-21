@@ -4,6 +4,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/study/study.dart';
@@ -24,6 +25,9 @@ class CreateChapterOfExistingStudy extends CreateStudyChapterParams {
   final StudyId studyId;
 }
 
+/// Create a brand new study, whose first chapter is the one described by the sheet.
+class CreateChapterOfNewStudy extends CreateStudyChapterParams {}
+
 enum _ChapterSource { empty, fen, pgn }
 
 class CreateStudyChapterBottomSheet extends ConsumerStatefulWidget {
@@ -43,7 +47,8 @@ class CreateStudyChapterBottomSheet extends ConsumerStatefulWidget {
 }
 
 class _CreateStudyChapterBottomSheetState extends ConsumerState<CreateStudyChapterBottomSheet> {
-  String chapterName = '';
+  /// The contents of the name field: the study's name when creating one, the chapter's otherwise.
+  String name = '';
 
   final _nameController = TextEditingController();
   final _textController = TextEditingController();
@@ -51,17 +56,30 @@ class _CreateStudyChapterBottomSheetState extends ConsumerState<CreateStudyChapt
   _ChapterSource _source = _ChapterSource.empty;
   Side orientation = Side.white;
   Variant variant = Variant.standard;
+
+  /// Only used when creating a new study.
+  StudyVisibility visibility = StudyVisibility.public;
+
   String? errorText;
 
   /// Whether a chapter creation request is in flight.
   bool _isSubmitting = false;
 
+  bool get _isNewStudy => widget.params is CreateChapterOfNewStudy;
+
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      final user = ref.read(authControllerProvider)?.user;
       setState(() {
-        chapterName = context.l10n.studyChapterX(widget.chapterNumber.toString());
-        _nameController.text = chapterName;
+        name = switch (widget.params) {
+          CreateChapterOfExistingStudy() => context.l10n.studyChapterX(
+            widget.chapterNumber.toString(),
+          ),
+          // TODO l10n
+          CreateChapterOfNewStudy() => user != null ? "${user.name}'s study" : 'New study',
+        };
+        _nameController.text = name;
       });
     });
     super.initState();
@@ -145,9 +163,27 @@ class _CreateStudyChapterBottomSheetState extends ConsumerState<CreateStudyChapt
                   title: Text(context.l10n.name),
                   subtitle: TextField(
                     controller: _nameController,
-                    onChanged: (value) => setState(() => chapterName = value),
+                    onChanged: (value) => setState(() => name = value),
                   ),
                 ),
+                if (_isNewStudy)
+                  ListTile(
+                    title: Text(context.l10n.studyVisibility),
+                    trailing: TextButton(
+                      onPressed: () {
+                        showChoicePicker(
+                          context,
+                          choices: StudyVisibility.values,
+                          selectedItem: visibility,
+                          labelBuilder: (StudyVisibility visibility) =>
+                              Text(visibility.l10n(context.l10n)),
+                          onSelectedItemChanged: (StudyVisibility visibility) =>
+                              setState(() => this.visibility = visibility),
+                        );
+                      },
+                      child: Text(visibility.l10n(context.l10n)),
+                    ),
+                  ),
                 // [expandedInsets] makes the button fill the available width, so its size does not
                 // depend on which segment is selected
                 SegmentedButton<_ChapterSource>(
@@ -290,7 +326,10 @@ class _CreateStudyChapterBottomSheetState extends ConsumerState<CreateStudyChapt
                 : null,
             child: _isSubmitting
                 ? const ButtonLoadingIndicator()
-                : Text(context.l10n.studyCreateChapter, style: Styles.bold),
+                : Text(
+                    _isNewStudy ? context.l10n.studyCreateStudy : context.l10n.studyCreateChapter,
+                    style: Styles.bold,
+                  ),
           ),
         ),
       ],
@@ -300,19 +339,24 @@ class _CreateStudyChapterBottomSheetState extends ConsumerState<CreateStudyChapt
   Future<void> _createChapter(String pgn) async {
     final chapterPayload = CreateStudyChapterPayload(
       pgn: pgn,
-      name: chapterName,
+      // The name field names the study itself when creating one, so its first chapter falls back
+      // to the same default name a chapter gets anywhere else.
+      name: _isNewStudy ? context.l10n.studyChapterX('1') : name,
       orientation: orientation,
       variant: _source == _ChapterSource.pgn ? null : variant,
+      initial: _isNewStudy,
     );
 
     setState(() => _isSubmitting = true);
 
     try {
+      final repository = ref.read(studyRepositoryProvider);
       final (studyId, chapterIds) = switch (widget.params) {
         CreateChapterOfExistingStudy(:final studyId) => (
           studyId,
-          await ref.read(studyRepositoryProvider).createChapter(studyId, chapterPayload),
+          await repository.createChapter(studyId, chapterPayload),
         ),
+        CreateChapterOfNewStudy() => await _createStudy(repository, chapterPayload),
       };
 
       if (!mounted) return;
@@ -323,13 +367,30 @@ class _CreateStudyChapterBottomSheetState extends ConsumerState<CreateStudyChapt
       if (!mounted) return;
       // Keep the sheet open so the user can amend the input and retry.
       setState(() => _isSubmitting = false);
-      showSnackBar(context, 'Could not create chapter: $e', type: SnackBarType.error);
+      showSnackBar(
+        context,
+        _isNewStudy ? 'Could not create study: $e' : 'Could not create chapter: $e',
+        type: SnackBarType.error,
+      );
     }
+  }
+
+  /// Creates a study and makes [chapter] its first chapter.
+  Future<(StudyId, IList<StudyChapterId>)> _createStudy(
+    StudyRepository repository,
+    CreateStudyChapterPayload chapter,
+  ) async {
+    final studyId = await repository.createStudy(
+      CreateStudyPayload(name: name.trim(), visibility: visibility),
+    );
+    // A study is always born with an empty chapter. The payload's `initial` flag makes this
+    // request replace it rather than add alongside it.
+    return (studyId, await repository.createChapter(studyId, chapter));
   }
 
   bool _canSubmit() {
     if (_isSubmitting) return false;
-    if (chapterName.trim().isEmpty) return false;
+    if (name.trim().isEmpty) return false;
 
     switch (_source) {
       case _ChapterSource.empty:

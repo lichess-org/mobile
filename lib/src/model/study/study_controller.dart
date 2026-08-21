@@ -165,6 +165,26 @@ class StudyController extends AsyncNotifier<StudyState>
     _ensureItsOurTurnIfGamebook();
   }
 
+  /// Deletes the chapter with the given [chapterId] and reloads the study.
+  ///
+  /// The server refuses to delete a study's only chapter, so this does nothing in that case.
+  Future<void> deleteChapter(StudyChapterId chapterId) async {
+    if (!state.hasValue) return;
+    final study = state.requireValue.study;
+    if (study.chapters.length <= 1) return;
+
+    await ref.read(studyRepositoryProvider).deleteChapter(options.id, chapterId);
+
+    // [goToChapter] refetches the study, which is what makes the shortened chapter list show up.
+    // Deleting the chapter that is currently on screen leaves nothing to go back to, so fall back
+    // to the first remaining one.
+    await goToChapter(
+      chapterId == study.chapter.id
+          ? study.chapters.firstWhere((chapter) => chapter.id != chapterId).id
+          : study.chapter.id,
+    );
+  }
+
   Future<StudyState> _loadChapter(
     Study study,
     String pgn, {
@@ -265,6 +285,89 @@ class StudyController extends AsyncNotifier<StudyState>
     }
 
     return studyState;
+  }
+
+  /// Updates the study's name, visibility and permission settings.
+  ///
+  /// Only the study owner (or an admin member) is allowed to do this. Returns whether the change
+  /// was confirmed by the server.
+  ///
+  /// The `editStudy` socket message is not acknowledged: on success the server broadcasts a
+  /// `reload` to the room, but on failure (e.g. insufficient permissions) it does nothing at all —
+  /// no error, no `validationError`, no signal of any kind. So a purely optimistic local update
+  /// (as used by e.g. [toggleLike]) would silently "succeed" in the UI even when the server
+  /// rejected the change outright. Instead, the change is verified by reading the study back a
+  /// moment later; if it didn't actually take, local state is rolled back to the server's truth.
+  Future<bool> editStudy(EditStudyPayload payload) async {
+    if (!state.hasValue) return false;
+    final previousStudy = state.requireValue.study;
+    final settings = payload.settings;
+    _socketClient?.send('editStudy', {
+      'name': payload.name,
+      // The server treats a missing `flair` key as "clear it", so the current value must be sent
+      // back unchanged since there is no UI to edit it yet.
+      if (previousStudy.flair != null) 'flair': previousStudy.flair,
+      'visibility': payload.visibility.name,
+      'computer': settings.computer.name,
+      'explorer': settings.explorer.name,
+      'cloneable': settings.cloneable.name,
+      'shareable': settings.shareable.name,
+      'chat': settings.chat.name,
+      'sticky': settings.sticky,
+      'description': settings.description,
+    });
+
+    state = AsyncValue.data(
+      state.requireValue.copyWith(
+        study: previousStudy.copyWith(
+          name: payload.name,
+          visibility: payload.visibility,
+          settings: settings,
+        ),
+      ),
+    );
+
+    // A single fixed delay risks a false negative if the server round-trip (over a real network,
+    // as opposed to a local/test one) is merely slow rather than actually rejected. So this
+    // retries a couple of times, growing the wait, before concluding the edit was dropped.
+    Study? freshStudy;
+    for (final delay in const [
+      Duration(milliseconds: 700),
+      Duration(seconds: 2),
+      Duration(seconds: 3),
+    ]) {
+      await Future<void>.delayed(delay);
+      if (!ref.mounted || !state.hasValue) return false;
+
+      freshStudy =
+          (await ref
+                  .read(studyRepositoryProvider)
+                  .getStudy(id: options.id, chapterId: state.requireValue.study.chapter.id))
+              .$1;
+      final matches =
+          freshStudy.name == payload.name &&
+          freshStudy.visibility == payload.visibility &&
+          freshStudy.settings == settings;
+      if (matches) break;
+    }
+
+    final succeeded =
+        freshStudy!.name == payload.name &&
+        freshStudy.visibility == payload.visibility &&
+        freshStudy.settings == settings;
+
+    if (!ref.mounted || !state.hasValue) return succeeded;
+    state = AsyncValue.data(
+      state.requireValue.copyWith(
+        study: state.requireValue.study.copyWith(
+          name: freshStudy.name,
+          visibility: freshStudy.visibility,
+          settings: freshStudy.settings,
+          flair: freshStudy.flair,
+        ),
+      ),
+    );
+    return succeeded;
   }
 
   void toggleLike() {

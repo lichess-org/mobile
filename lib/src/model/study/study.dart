@@ -3,6 +3,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/chat/chat_message.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -22,12 +23,20 @@ sealed class Study with _$Study {
     required int likes,
     required UserId? ownerId,
     required StudyFeatures features,
+    required StudyVisibility visibility,
+    required StudySettings settings,
     required IList<String> topics,
     required IList<StudyChapterMeta> chapters,
     required StudyChapter chapter,
     required IMap<UserId, StudyMember> members,
     ChatData? chat,
     int? socketVersion,
+
+    /// The study's flair emoji, if any.
+    ///
+    /// Not editable from the app yet, but must be round-tripped through [EditStudyPayload]:
+    /// the server's `editStudy` reads a missing `flair` key as "clear it".
+    String? flair,
 
     /// Hints to display in "gamebook"/"interactive" mode
     /// Index corresponds to the current ply.
@@ -87,6 +96,9 @@ Study _studyFromPick(RequiredPick pick) {
       chat: study('features', 'chat').asBoolOrFalse(),
       sticky: study('features', 'sticky').asBoolOrFalse(),
     ),
+    visibility: StudyVisibility.values.byName(study('visibility').asStringOrThrow()),
+    settings: StudySettings.fromJson(study('settings').asMapOrThrow()),
+    flair: study('flair').asStringOrNull(),
     topics: study('topics').asListOrThrow((pick) => pick.asStringOrThrow()).lock,
     chapters: study(
       'chapters',
@@ -189,6 +201,72 @@ sealed class StudyMember with _$StudyMember {
   factory StudyMember.fromJson(Map<String, Object?> json) => _$StudyMemberFromJson(json);
 }
 
+/// Who is allowed to see a study.
+///
+/// The enum names are the keys expected by the lichess API, so do not rename them.
+enum StudyVisibility {
+  public,
+  unlisted,
+  private;
+
+  String l10n(AppLocalizations l10n) => switch (this) {
+    StudyVisibility.public => l10n.studyPublic,
+    StudyVisibility.unlisted => l10n.studyUnlisted,
+    StudyVisibility.private => l10n.studyInviteOnly,
+  };
+}
+
+/// Who is allowed to use a given study permission (e.g. the engine, or cloning the study).
+///
+/// The enum names are the keys expected by the lichess API, so do not rename them.
+enum UserSelection {
+  nobody,
+  owner,
+  contributor,
+  member,
+  everyone;
+
+  String l10n(AppLocalizations l10n) => switch (this) {
+    UserSelection.nobody => l10n.studyNobody,
+    UserSelection.owner => l10n.studyOnlyMe,
+    UserSelection.contributor => l10n.studyContributors,
+    UserSelection.member => l10n.studyMembers,
+    UserSelection.everyone => l10n.studyEveryone,
+  };
+}
+
+/// A study's owner-configurable permissions, as returned by the server under the `settings` key.
+@Freezed(fromJson: true)
+sealed class StudySettings with _$StudySettings {
+  const factory StudySettings({
+    required UserSelection computer,
+    required UserSelection explorer,
+    required UserSelection cloneable,
+    required UserSelection shareable,
+    required UserSelection chat,
+    required bool sticky,
+    required bool description,
+  }) = _StudySettings;
+
+  factory StudySettings.fromJson(Map<String, Object?> json) => _$StudySettingsFromJson(json);
+}
+
+@freezed
+sealed class CreateStudyPayload with _$CreateStudyPayload {
+  const factory CreateStudyPayload({required String name, required StudyVisibility visibility}) =
+      _CreateStudyPayload;
+}
+
+/// Everything the owner can change from the "Edit study" screen.
+@freezed
+sealed class EditStudyPayload with _$EditStudyPayload {
+  const factory EditStudyPayload({
+    required String name,
+    required StudyVisibility visibility,
+    required StudySettings settings,
+  }) = _EditStudyPayload;
+}
+
 @freezed
 sealed class CreateStudyChapterPayload with _$CreateStudyChapterPayload {
   const factory CreateStudyChapterPayload({
@@ -196,5 +274,11 @@ sealed class CreateStudyChapterPayload with _$CreateStudyChapterPayload {
     required String name,
     required Side orientation,
     @Default(null) Variant? variant,
+
+    /// Whether this chapter replaces the study's initial chapter.
+    ///
+    /// Creating a study always creates an empty first chapter along with it. Setting this drops
+    /// that chapter, so that a newly created study holds only the chapter the user asked for.
+    @Default(false) bool initial,
   }) = _CreateStudyChapterPayload;
 }

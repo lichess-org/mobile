@@ -1,6 +1,7 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/study/study.dart';
 import 'package:lichess_mobile/src/model/study/study_filter.dart';
 import 'package:lichess_mobile/src/model/study/study_list_paginator.dart';
@@ -11,6 +12,7 @@ import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/study/create_study_chapter_bottom_sheet.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -95,6 +97,30 @@ class _StudyListScreenState extends ConsumerState<StudyListScreen> {
       order = newOrder;
     });
     ref.read(studyPreferencesProvider.notifier).setListOrder(newOrder);
+  }
+
+  Future<void> _createStudy(BuildContext context) async {
+    StudyId? createdStudyId;
+
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      useRootNavigator: true,
+      builder: (context) => CreateStudyChapterBottomSheet(
+        params: CreateChapterOfNewStudy(),
+        chapterNumber: 1,
+        onChaptersCreated: (studyId, _) => createdStudyId = studyId,
+      ),
+    );
+
+    // The sheet pops itself as soon as the study is created, so pushing the new screen from
+    // outside it (once the pop has settled) avoids navigating with a context that's being torn
+    // down.
+    if (!context.mounted || createdStudyId == null) return;
+    Navigator.of(
+      context,
+      rootNavigator: true,
+    ).push(StudyScreen.buildRoute((id: createdStudyId!, initialChapter: null)));
   }
 
   @override
@@ -220,6 +246,13 @@ class _StudyListScreenState extends ConsumerState<StudyListScreen> {
               )
             : null,
       ),
+      floatingActionButton: authUser == null
+          ? null
+          : FloatingActionButton.extended(
+              onPressed: () => _createStudy(context),
+              label: Text(context.l10n.studyCreateStudy),
+              icon: const Icon(Icons.add_circle_outline),
+            ),
       body: switch (studiesAsync) {
         AsyncData(value: final studies) => ListView.separated(
           shrinkWrap: true,

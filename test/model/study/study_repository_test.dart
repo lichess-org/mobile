@@ -396,6 +396,17 @@ void main() {
         Study(
           id: const StudyId('JbWtuaeK'),
           name: 'How to Solve Puzzles Correctly',
+          flair: 'activity.puzzle-piece',
+          visibility: StudyVisibility.public,
+          settings: const StudySettings(
+            explorer: UserSelection.contributor,
+            description: false,
+            computer: UserSelection.contributor,
+            chat: UserSelection.everyone,
+            sticky: false,
+            shareable: UserSelection.contributor,
+            cloneable: UserSelection.contributor,
+          ),
           members: IMap(const {
             UserId('kyle-and-jess'): StudyMember(
               user: LightUser(
