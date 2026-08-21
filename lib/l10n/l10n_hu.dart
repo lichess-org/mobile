@@ -6592,6 +6592,9 @@ class AppLocalizationsHu extends AppLocalizations {
   }
 
   @override
+  String get teamTeam => 'Csapat';
+
+  @override
   String get teamIncorrectEntryCode => 'Érvénytelen belépési kód.';
 
   @override

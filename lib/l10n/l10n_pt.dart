@@ -6592,6 +6592,9 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String get teamTeam => 'Equipa';
+
+  @override
   String get teamIncorrectEntryCode => 'Código incorreto.';
 
   @override
@@ -13359,6 +13362,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
     );
     return '$_temp0';
   }
+
+  @override
+  String get teamTeam => 'Equipe';
 
   @override
   String get teamIncorrectEntryCode => 'Código de entrada incorreto.';

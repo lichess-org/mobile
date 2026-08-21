@@ -6666,6 +6666,9 @@ class AppLocalizationsLv extends AppLocalizations {
   }
 
   @override
+  String get teamTeam => 'Komanda';
+
+  @override
   String get teamIncorrectEntryCode => 'Nepareizs pievienošanās kods.';
 
   @override

@@ -1330,6 +1330,7 @@
   "studyNbGames": "{count, plural, =1{{count}টি খেলা} other{{count}টি খেলা}}",
   "studyNbMembers": "{count, plural, =1{{count} জন সদস্য} other{{count} জন সদস্য}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{PGN টেক্সট এখানে পেস্ট করুন, {count} টি খেলা পর্যন্ত} other{PGN টেক্সট এখানে পেস্ট করুন, {count} টি খেলা পর্যন্ত}}",
+  "teamTeam": "দল",
   "timeagoJustNow": "এখনই",
   "timeagoRightNow": "এই মুহূর্তে",
   "timeagoCompleted": "সম্পন্ন হয়েছে",

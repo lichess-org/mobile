@@ -6668,6 +6668,9 @@ class AppLocalizationsHr extends AppLocalizations {
   }
 
   @override
+  String get teamTeam => 'Tim';
+
+  @override
   String get teamIncorrectEntryCode => 'Netočan ulazni kod.';
 
   @override

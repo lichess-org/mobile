@@ -6744,6 +6744,9 @@ class AppLocalizationsHe extends AppLocalizations {
   }
 
   @override
+  String get teamTeam => 'קבוצה';
+
+  @override
   String get teamIncorrectEntryCode => 'סיסמא שגויה.';
 
   @override

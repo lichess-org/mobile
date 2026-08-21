@@ -6670,6 +6670,9 @@ class AppLocalizationsBs extends AppLocalizations {
   }
 
   @override
+  String get teamTeam => 'Tim';
+
+  @override
   String get teamIncorrectEntryCode => 'Netačna ulazna koda.';
 
   @override

@@ -6592,6 +6592,9 @@ class AppLocalizationsSq extends AppLocalizations {
   }
 
   @override
+  String get teamTeam => 'Ekip';
+
+  @override
   String get teamIncorrectEntryCode => 'Kod hyrjeje i pasaktë.';
 
   @override

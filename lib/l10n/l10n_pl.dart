@@ -6750,6 +6750,9 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
+  String get teamTeam => 'Klub';
+
+  @override
   String get teamIncorrectEntryCode => 'Niepoprawny kod dostępu.';
 
   @override

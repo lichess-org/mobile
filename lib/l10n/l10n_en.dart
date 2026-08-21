@@ -6590,6 +6590,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get teamTeam => 'Team';
+
+  @override
   String get teamIncorrectEntryCode => 'Incorrect entry code.';
 
   @override
@@ -13259,6 +13262,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
     );
     return '$_temp0';
   }
+
+  @override
+  String get teamTeam => 'Team';
 
   @override
   String get teamIncorrectEntryCode => 'Incorrect entry code.';
