@@ -21,6 +21,11 @@ import 'package:lichess_mobile/src/utils/json.dart';
 
 part 'puzzle_repository.freezed.dart';
 
+/// Maximum number of puzzle ids accepted by `/api/puzzle/many` in one request.
+///
+/// The server silently drops any id beyond this cap, so callers must window their requests.
+const maxPuzzlesPerFetch = 50;
+
 /// A provider for the [PuzzleRepository].
 final puzzleRepositoryProvider = Provider<PuzzleRepository>((ref) {
   final client = ref.watch(lichessClientProvider);
@@ -67,6 +72,38 @@ class PuzzleRepository {
 
   Future<Puzzle> fetch(PuzzleId id) {
     return client.readJson(Uri(path: '/api/puzzle/$id'), mapper: _puzzleFromJson);
+  }
+
+  /// Fetches several puzzles by id in a single request via `/api/puzzle/many`.
+  ///
+  /// The endpoint serves anonymous sessions as well as `web:mobile` ones, but every caller draws
+  /// down a per-IP rate limit budget shared with `/api/puzzle/batch/` — the endpoint that fills the
+  /// normal puzzle queue. The cost per request is `ids.length / 10` for a signed-in app session,
+  /// `ids.length / 5` for an anonymous one carrying the app's User-Agent, and `ids.length`
+  /// otherwise, floored at 1. So a 429 is expected, and callers must treat the whole call as
+  /// best-effort rather than spend the queue's allowance retrying it.
+  ///
+  /// The server drops any id it cannot serve — an unknown id, but also a valid one whose game it
+  /// could not read — so the returned list may be shorter than [ids] and is not index-aligned with
+  /// it. Callers must match results by puzzle id and treat a short response as a hole, not as a
+  /// successfully warmed range.
+  ///
+  /// At most [maxPuzzlesPerFetch] ids are requested: the assert catches a caller that forgot to
+  /// window, and the clamp keeps the release build from spending a rate limit request on ids the
+  /// server would drop anyway.
+  Future<IList<Puzzle>> fetchMany(IList<PuzzleId> ids) {
+    assert(ids.length <= maxPuzzlesPerFetch, 'the /api/puzzle/many endpoint drops ids beyond 50');
+    if (ids.isEmpty) return Future.value(const IListConst([]));
+    final window = ids.take(maxPuzzlesPerFetch);
+    return client
+        .readJson(
+          Uri(
+            path: '/api/puzzle/many',
+            queryParameters: {'ids': window.map((id) => id.value).join(',')},
+          ),
+          mapper: _decodeBatchResponse,
+        )
+        .then((response) => response.puzzles);
   }
 
   Future<PuzzleStreakResponse> streak() {
