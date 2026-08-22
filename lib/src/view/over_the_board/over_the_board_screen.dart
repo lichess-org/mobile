@@ -191,6 +191,8 @@ class _BodyState extends ConsumerState<_Body> {
       }
     });
 
+    final blindfoldMode = overTheBoardPrefs.blindfoldMode;
+
     return WakelockWidget(
       child: PopScope(
         canPop: false,
@@ -286,6 +288,7 @@ class _BodyState extends ConsumerState<_Body> {
                           ? PieceSet.symmetric.assets
                           : null,
                       enablePremoves: false,
+                      blindfoldMode: blindfoldMode,
                     ),
                     userActionsBar: _BottomBar(
                       onFlipBoard: () {
