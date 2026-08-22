@@ -6,6 +6,21 @@
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">All games</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Are you sure?</string>
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Board settings</string>
+  <string name="boardEditorErrorWhiteKing" comment="Shown in board editor when FEN has invalid white king count">White king missing or duplicated</string>
+  <string name="boardEditorErrorBlackKing" comment="Shown in board editor when FEN has invalid black king count">Black king missing or duplicated</string>
+  <string name="boardEditorErrorOppositeCheck" comment="Shown in board editor when non-active side is in check">Side not to move is in check</string>
+  <string name="boardEditorErrorPawnsOnBackrank" comment="Shown in board editor when pawns are on back ranks">Pawns cannot be on the 1st or 8th rank</string>
+  <string name="boardEditorErrorInvalidEpSquare" comment="Shown in board editor when en passant square is illegal for position">Invalid en passant square for position</string>
+  <string name="boardEditorErrorBadCastlingRights" comment="Shown in board editor when castling rooks or kings are missing">Castling rights invalid for current piece positions</string>
+  <string name="boardEditorErrorFenFormat" comment="Shown in board editor for general malformed FEN syntax">Invalid FEN format</string>
+  <string name="boardEditorErrorFenBoard" comment="Shown in board editor when board ranks/files are invalid">Invalid board setup in FEN</string>
+  <string name="boardEditorErrorFenTurn" comment="Shown in board editor when side to move is invalid">Invalid side to move in FEN</string>
+  <string name="boardEditorErrorFenCastling" comment="Shown in board editor when castling rights format is invalid">Invalid castling rights in FEN</string>
+  <string name="boardEditorErrorFenEnPassant" comment="Shown in board editor when en passant format is invalid">Invalid en passant square in FEN</string>
+  <string name="boardEditorErrorFenHalfmove" comment="Shown in board editor when halfmove clock is invalid">Invalid halfmove clock in FEN</string>
+  <string name="boardEditorErrorFenFullmove" comment="Shown in board editor when fullmove number is invalid">Invalid fullmove number in FEN</string>
+  <string name="boardEditorErrorFenRemainingChecks" comment="Shown in board editor when 3-check format is invalid">Invalid remaining checks in FEN</string>
+  <string name="boardEditorErrorFenPockets" comment="Shown in board editor when Crazyhouse pockets are invalid">Invalid pockets in FEN</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Cancel takeback offer</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Clear</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Clear saved move</string>
