@@ -54,6 +54,7 @@
   <string name="endgame">Końcówka</string>
   <string name="endgameDescription">Taktyka w ostatniej fazie gry.</string>
   <string name="enPassantDescription">Taktyka wykorzystująca bicie w przelocie, gdzie pion może zbić piona przeciwnika, który minął go, wykonawszy swoje początkowe posunięcie o dwa pola.</string>
+  <string name="enPassantAdjacentCaptureDescription" comment="Replaces old string enPassantDescription">Taktyka wykorzystująca bicie w przelocie, gdzie pion może zbić piona przeciwnika, który minął go, wykonawszy swoje początkowe posunięcie o dwa pola.</string>
   <string name="epauletteMate">Mat naramiennikowy</string>
   <string name="epauletteMateDescription">Oba pola ucieczki w bok są zajęte przez inne bierki.</string>
   <string name="exposedKing">Odsłonięty król</string>
@@ -77,6 +78,7 @@
   <string name="morphysMate">Mat Morphy\'ego</string>
   <string name="morphysMateDescription">Goniec daje mata w narożniku, a wieża blokuje pola ucieczki w sąsiedniej kolumnie.</string>
   <string name="swallowstailMate">Mat \"jaskółczy ogon\"</string>
+  <string name="swallowstailMateDescription">Wzorzec mata, który wizualnie przypomina jaskółczy ogon w kształcie litery V.</string>
   <string name="triangleMate">Mat trójkątny</string>
   <string name="triangleMateDescription">Hetman i wieża ustawione na tej samej linii matują króla przeciwnika, stojąc bezpośrednio przy nim i tworząc trójkąt.</string>
   <string name="vukovicMate">Mat Vukovic\'a</string>
