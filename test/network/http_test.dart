@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math' as math;
 
 import 'package:fake_async/fake_async.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -57,6 +58,101 @@ void main() {
         shouldRetryOn429(response(429, method: 'GET', path: '/api/puzzle/batch/advancedPawn')),
         isFalse,
       );
+    });
+  });
+
+  group('RateLimitLichessClient', () {
+    /// Runs [nbRequests] concurrent requests to [path] and reports how many were ever in flight at
+    /// the same time.
+    Future<int> maxConcurrentRequests(String path, {int nbRequests = 5}) async {
+      var inFlight = 0;
+      var maxInFlight = 0;
+      final mockClient = MockClient((request) async {
+        inFlight++;
+        maxInFlight = math.max(maxInFlight, inFlight);
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+        inFlight--;
+        return http.Response('{}', 200);
+      });
+
+      final container = await makeContainer(
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith((ref) {
+            return RateLimitLichessClient(mockClient, ref);
+          }),
+        },
+      );
+      final client = container.read(lichessClientProvider);
+
+      await Future.wait([for (var i = 0; i < nbRequests; i++) client.get(Uri(path: path))]);
+
+      return maxInFlight;
+    }
+
+    test('sends puzzle batch requests one at a time', () async {
+      // Regression test: the puzzle tab used to fire a batch request per saved angle at once, and
+      // the server answered 429 to the lot. Whatever asks for them, they must go out serially.
+      expect(await maxConcurrentRequests('/api/puzzle/batch/mix'), equals(1));
+    });
+
+    test('serializes puzzle batch requests across angles', () async {
+      // The rate limit is per account, not per angle, so a queue per angle would not help.
+      var inFlight = 0;
+      var maxInFlight = 0;
+      final mockClient = MockClient((request) async {
+        inFlight++;
+        maxInFlight = math.max(maxInFlight, inFlight);
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+        inFlight--;
+        return http.Response('{}', 200);
+      });
+
+      final container = await makeContainer(
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith((ref) {
+            return RateLimitLichessClient(mockClient, ref);
+          }),
+        },
+      );
+      final client = container.read(lichessClientProvider);
+
+      await Future.wait([
+        for (final angle in ['mix', 'advancedPawn', 'pin', 'skewer', 'A00'])
+          client.get(Uri(path: '/api/puzzle/batch/$angle')),
+      ]);
+
+      expect(maxInFlight, equals(1));
+    });
+
+    test('leaves the rest of the API alone', () async {
+      // Only the puzzle batch endpoints are paced: everything else must still run in parallel.
+      expect(await maxConcurrentRequests('/api/test'), equals(5));
+    });
+
+    test('sends puzzle batch requests in submission order', () async {
+      final sent = <String>[];
+      final mockClient = MockClient((request) async {
+        sent.add(request.url.queryParameters['nb']!);
+        // a later request answering faster must not let it be sent earlier
+        await Future<void>.delayed(Duration(milliseconds: 30 - sent.length * 10));
+        return http.Response('{}', 200);
+      });
+
+      final container = await makeContainer(
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith((ref) {
+            return RateLimitLichessClient(mockClient, ref);
+          }),
+        },
+      );
+      final client = container.read(lichessClientProvider);
+
+      await Future.wait([
+        for (var i = 0; i < 3; i++)
+          client.get(Uri(path: '/api/puzzle/batch/mix', queryParameters: {'nb': '$i'})),
+      ]);
+
+      expect(sent, equals(['0', '1', '2']));
     });
   });
 
