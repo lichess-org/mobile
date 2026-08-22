@@ -287,6 +287,7 @@ class _BottomBar extends ConsumerWidget {
               // TODO: translate
               label: 'Next mistake',
               showLabel: true,
+              blink: true,
               onTap: ref.read(retroControllerProvider(options).notifier).nextMistake,
             ),
         ],
