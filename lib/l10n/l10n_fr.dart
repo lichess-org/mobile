@@ -341,6 +341,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get mobilePerfShortPuzzle => 'Problème';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get variantStandard => 'Standard';
 
   @override

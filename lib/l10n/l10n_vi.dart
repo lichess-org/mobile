@@ -341,6 +341,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobilePerfShortPuzzle => 'Câu đố';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get variantStandard => 'Tiêu chuẩn';
 
   @override
