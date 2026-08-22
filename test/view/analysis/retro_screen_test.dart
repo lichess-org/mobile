@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/model/explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/analysis/retro_screen.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../network/fake_http_client_factory.dart';
@@ -229,6 +230,10 @@ void main() {
 
       expect(find.text('Good move'), findsOneWidget);
       expect(find.text('Next'), findsOneWidget);
+      expect(
+        tester.widget<BottomBarButton>(find.widgetWithText(BottomBarButton, 'Next mistake')).blink,
+        isTrue,
+      );
 
       await tester.tap(find.text('Next mistake'));
       await tester.pump();
@@ -251,6 +256,10 @@ void main() {
       expect(boardHasPiece(tester, Square.c5, Piece.blackPawn), isTrue);
 
       expect(find.text('Next mistake'), findsOneWidget);
+      expect(
+        tester.widget<BottomBarButton>(find.widgetWithText(BottomBarButton, 'Next mistake')).blink,
+        isTrue,
+      );
       await tester.tap(find.text('Next mistake'));
       await tester.pump();
 
