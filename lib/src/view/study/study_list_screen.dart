@@ -385,6 +385,11 @@ class _StudySubtitle extends StatelessWidget {
     return Text.rich(
       TextSpan(
         children: [
+          if (study.visibility != StudyVisibility.public)
+            const WidgetSpan(
+              alignment: PlaceholderAlignment.middle,
+              child: Icon(Icons.lock_rounded, size: 14),
+            ),
           WidgetSpan(
             alignment: PlaceholderAlignment.middle,
             child: Icon(study.liked ? Icons.favorite : Icons.favorite_outline, size: 14),
