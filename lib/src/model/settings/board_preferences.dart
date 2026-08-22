@@ -40,6 +40,11 @@ class BoardPreferences extends Notifier<BoardPrefs> with PreferencesStorage<Boar
     return save(state.copyWith(pieceSet: pieceSet));
   }
 
+  Future<void> toggleEnable3dAssets(bool enable3dAssets) {
+    return save(
+      state.copyWith(enable3dAssets: enable3dAssets));
+  }
+
   Future<void> setBoardTheme(BoardTheme boardTheme) async {
     await save(state.copyWith(boardTheme: boardTheme));
   }
@@ -139,6 +144,7 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
   const factory BoardPrefs({
     @JsonKey(defaultValue: PieceSet.cburnett, unknownEnumValue: PieceSet.cburnett)
     required PieceSet pieceSet,
+    required bool enable3dAssets,
     @JsonKey(defaultValue: BoardTheme.brown, unknownEnumValue: BoardTheme.brown)
     required BoardTheme boardTheme,
     bool? immersiveModeWhilePlaying,
@@ -185,6 +191,7 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
 
   static const defaults = BoardPrefs(
     pieceSet: PieceSet.cburnett,
+    enable3dAssets: false,
     boardTheme: BoardTheme.brown,
     immersiveModeWhilePlaying: false,
     hapticFeedback: true,
@@ -287,7 +294,18 @@ enum BoardTheme {
   purple('Purple', 'purple'),
   purpleDiag('Purple-Diag', 'purple-diag'),
   pinkPyramid('Pink', 'pink'),
-  horsey('Horsey', 'horsey');
+  horsey('Horsey', 'horsey'),
+  /// 3D boards
+  blackwhitealuminium('Black White Aluminium','blackwhitealuminium'),
+  chinablue('China Blue','chinablue'),
+  chinagreen('China Green','chinagreen'),
+  chinagrey('China Grey','chinagrey'),
+  chinascarlet('China Scarlet','chinascarlet'),
+  jade('Jade','jade'),
+  lightwood('Light Wood','lightwood'),
+  powercoated('Power Coated','powercoated'),
+  rosewood('Rosewood','rosewood'),
+  wax('Wax','wax');
 
   final String label;
   final String gifApiName;
@@ -348,6 +366,28 @@ enum BoardTheme {
         return ChessboardColorScheme.pinkPyramid;
       case BoardTheme.horsey:
         return ChessboardColorScheme.horsey;
+
+	/// 3D Boards
+      case BoardTheme.blackwhitealuminium:
+	return ChessboardColorScheme.blackwhitealuminium;
+      case BoardTheme.chinablue:
+	return ChessboardColorScheme.chinablue;
+      case BoardTheme.chinagreen:
+	return ChessboardColorScheme.chinagreen;
+      case BoardTheme.chinagrey:
+	return ChessboardColorScheme.chinagrey;
+      case BoardTheme.chinascarlet:
+	return ChessboardColorScheme.chinascarlet;
+      case BoardTheme.rosewood:
+	return ChessboardColorScheme.rosewood;
+      case BoardTheme.powercoated:
+	return ChessboardColorScheme.powercoated;
+      case BoardTheme.lightwood:
+	return ChessboardColorScheme.lightwood;
+      case BoardTheme.jade:
+	return ChessboardColorScheme.jade;
+      case BoardTheme.wax:
+	return ChessboardColorScheme.wax;   
     }
   }
 
