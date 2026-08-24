@@ -31,10 +31,10 @@ class EngineFailure {
     required this.kind,
     required this.message,
     required this.flavor,
-    required this.variant,
-    required this.engineState,
-    required this.diagnostics,
-    required this.maxMemoryInMb,
+    this.engineState,
+    this.variant,
+    this.diagnostics,
+    this.maxMemoryInMb,
     this.error,
     this.stackTrace,
   });
@@ -48,21 +48,29 @@ class EngineFailure {
   /// The engine flavor that was being started or used.
   final StockfishFlavor flavor;
 
-  /// The chess variant the engine was configured for.
-  final Variant variant;
+  /// The chess variant the engine was searching, when the failure was detected somewhere that
+  /// knows it. The variant is a per-search option now, so the layers close to the engine — where
+  /// most failures surface — do not.
+  final Variant? variant;
 
-  /// The state the plugin reported for the engine when the failure was detected.
-  final StockfishState engineState;
+  /// The state the plugin reported for the engine when the failure was detected, or null when
+  /// there was no engine handle to ask — a start that never handed one back.
+  final StockfishState? engineState;
 
   /// What the native engine was doing when the failure was detected.
   ///
   /// Must be read as early as possible: asking a stalled engine to quit moves it on to another
   /// phase and erases the evidence of where it stalled.
-  final StockfishDiagnostics diagnostics;
+  ///
+  /// Null when there was no engine handle to read them from — a start that timed out before the
+  /// plugin handed one back. The plugin puts its own reading of them into the [TimeoutException]
+  /// it throws, so that case still reports where the engine stalled, in [error] rather than here.
+  final StockfishDiagnostics? diagnostics;
 
   /// The hash size the engine is configured with, in MB. A boot that dies loading the network is
-  /// usually a device that could not spare this much.
-  final int maxMemoryInMb;
+  /// usually a device that could not spare this much. Filled in by whoever owns the memory budget;
+  /// null below that layer.
+  final int? maxMemoryInMb;
 
   /// The error that surfaced the failure, if it came from a throw.
   final Object? error;
@@ -78,13 +86,29 @@ class EngineFailure {
   /// operation that never returns at all jams the queue every later operation is chained onto.
   /// Either way only restarting the app gives the user an engine again, which is why this is the
   /// one engine failure worth interrupting them about.
-  bool get isUnrecoverable => kind == EngineFailureKind.stuck || diagnostics.looksStuck;
+  bool get isUnrecoverable => kind == EngineFailureKind.stuck || diagnostics?.looksStuck == true;
+
+  /// The same failure, with the context known only further up: what was being played, and how much
+  /// memory the engine had been given.
+  EngineFailure withContext({Variant? variant, int? maxMemoryInMb}) => EngineFailure(
+    kind: kind,
+    message: message,
+    flavor: flavor,
+    engineState: engineState,
+    variant: this.variant ?? variant,
+    diagnostics: diagnostics,
+    maxMemoryInMb: this.maxMemoryInMb ?? maxMemoryInMb,
+    error: error,
+    stackTrace: stackTrace,
+  );
 
   @override
   String toString() =>
       'EngineFailure(${kind.name}): $message '
-      '[flavor=${flavor.name}, variant=${variant.name}, state=${engineState.name}, '
-      'hash=${maxMemoryInMb}MB]. $diagnostics'
+      '[flavor=${flavor.name}, variant=${variant?.name ?? 'unknown'}, '
+      'state=${engineState?.name ?? 'unknown'}, '
+      'hash=${maxMemoryInMb == null ? 'unknown' : '${maxMemoryInMb}MB'}]. '
+      '${diagnostics ?? 'No diagnostics.'}'
       '${error == null ? '' : ' Error: $error'}';
 }
 
@@ -100,16 +124,19 @@ Future<void> reportEngineFailure(EngineFailure failure) async {
 
     await crashlytics.setCustomKey('engine_failure_kind', failure.kind.name);
     await crashlytics.setCustomKey('engine_flavor', failure.flavor.name);
-    await crashlytics.setCustomKey('engine_variant', failure.variant.name);
-    await crashlytics.setCustomKey('engine_state', failure.engineState.name);
-    await crashlytics.setCustomKey('engine_max_memory_mb', failure.maxMemoryInMb);
-    await crashlytics.setCustomKey('engine_phase', diagnostics.phase.name);
+    await crashlytics.setCustomKey('engine_variant', failure.variant?.name ?? 'unknown');
+    await crashlytics.setCustomKey('engine_state', failure.engineState?.name ?? 'unknown');
+    await crashlytics.setCustomKey('engine_max_memory_mb', failure.maxMemoryInMb ?? -1);
+    await crashlytics.setCustomKey('engine_phase', diagnostics?.phase.name ?? 'unknown');
     await crashlytics.setCustomKey(
       'engine_phase_step',
-      diagnostics.step.isEmpty ? 'unknown' : diagnostics.step,
+      diagnostics == null || diagnostics.step.isEmpty ? 'unknown' : diagnostics.step,
     );
-    await crashlytics.setCustomKey('engine_phase_elapsed_ms', diagnostics.elapsed.inMilliseconds);
-    await crashlytics.setCustomKey('engine_native_error', diagnostics.lastError ?? 'none');
+    await crashlytics.setCustomKey(
+      'engine_phase_elapsed_ms',
+      diagnostics?.elapsed.inMilliseconds ?? -1,
+    );
+    await crashlytics.setCustomKey('engine_native_error', diagnostics?.lastError ?? 'none');
     await crashlytics.setCustomKey('engine_unrecoverable', failure.isUnrecoverable);
 
     await crashlytics.recordError(

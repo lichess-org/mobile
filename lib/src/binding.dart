@@ -85,8 +85,17 @@ abstract class LichessBinding {
   /// Wraps [FirebaseMessaging.onBackgroundMessage].
   void firebaseMessagingOnBackgroundMessage(BackgroundMessageHandler handler);
 
-  /// The Stockfish singleton instance.
-  Stockfish get stockfish;
+  /// Starts a Stockfish engine of [flavor] and completes when it is ready for commands.
+  ///
+  /// [onStdout] receives every line the engine writes, starting from its first. It has to be given
+  /// up front because the plugin runs the `uci` handshake inside the create: a listener attached
+  /// afterwards has already missed the engine's name and its option declarations.
+  Future<Stockfish> createStockfish({
+    required StockfishFlavor flavor,
+    String? smallNetPath,
+    String? bigNetPath,
+    void Function(String line)? onStdout,
+  });
 }
 
 /// A concrete implementation of [LichessBinding] for the app.
@@ -180,5 +189,15 @@ class AppLichessBinding extends LichessBinding {
       FirebaseMessaging.onMessageOpenedApp;
 
   @override
-  Stockfish get stockfish => Stockfish.instance;
+  Future<Stockfish> createStockfish({
+    required StockfishFlavor flavor,
+    String? smallNetPath,
+    String? bigNetPath,
+    void Function(String line)? onStdout,
+  }) => Stockfish.create(
+    flavor: flavor,
+    smallNetPath: smallNetPath,
+    bigNetPath: bigNetPath,
+    onStdout: onStdout,
+  );
 }

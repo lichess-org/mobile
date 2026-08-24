@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
+import 'package:lichess_mobile/src/model/engine/engine_factory.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
 import 'package:lichess_mobile/src/model/engine/stockfish_level.dart';
@@ -270,13 +271,12 @@ void main() {
 
       // Engine should only be started once despite multiple evaluate() calls
       expect(delayedStockfish.startCallCount, 1);
-      // quit is called once in _initEngine before start
-      expect(delayedStockfish.quitCallCount, 1);
-      // compute() is called only once (with work3) after _initEngine completes, because
-      // when _initInProgress is true, evaluate() just returns a stream without calling compute().
-      // That one compute() call doesn't send 'stop' because _work is null (reset in _initEngine).
-      // The 1 stop comes from the info handler: elapsedMs (1500) > searchTime (1000).
-      expect(delayedStockfish.stopCallCount, 1);
+      // Nothing is quit: there was no engine to replace, and a start is no longer preceded by a
+      // quit of whatever happened to be running.
+      expect(delayedStockfish.quitCallCount, 0);
+      // Only work3 ever reaches the engine — the requests made while it was starting were
+      // superseded before it was ready — so there is no running search to stop.
+      expect(delayedStockfish.stopCallCount, 0);
 
       // stream1 is filtered to work1, so it should not have received any results
       // (the engine only computed work3)
@@ -331,8 +331,8 @@ void main() {
 
       // Should only have one start call (no restart when state was starting)
       expect(delayedStockfish.startCallCount, 1);
-      // quit is only called once during _initEngine before the first start
-      expect(delayedStockfish.quitCallCount, 1);
+      // And nothing is quit: the second request joined the engine that was already starting.
+      expect(delayedStockfish.quitCallCount, 0);
     });
 
     test('stop() during init clears work but init continues', () async {
@@ -378,8 +378,8 @@ void main() {
 
       // startCallCount is 3 (one per evaluate cycle)
       expect(delayedStockfish.startCallCount, 3);
-      // quitCallCount is 5: 3 from _initEngine (before each start) + 2 explicit quit() calls
-      expect(delayedStockfish.quitCallCount, 5);
+      // quitCallCount is 2, one per explicit quit(). Starting an engine no longer quits one first.
+      expect(delayedStockfish.quitCallCount, 2);
     });
 
     test('multiple quit() calls are idempotent', () async {
@@ -419,8 +419,8 @@ void main() {
       final stream = service.evaluate(makeWork());
       await stream!.first;
 
-      // One quit from _initEngine (before start) so far.
-      expect(delayedStockfish.quitCallCount, 1);
+      // Starting an engine does not quit one first, so nothing has been quit yet.
+      expect(delayedStockfish.quitCallCount, 0);
 
       service.quit();
       service.quit();
@@ -431,7 +431,7 @@ void main() {
 
       expect(
         delayedStockfish.quitCallCount,
-        2,
+        1,
         reason: 'only the first quit() reaches the engine; subsequent quits are no-ops',
       );
     });
@@ -895,54 +895,52 @@ void main() {
         expect(service.evaluationState.value.state, EngineState.loading);
         expect(crashlytics.recordedErrors, isEmpty);
 
-        async.elapse(kEngineInitTimeout + const Duration(seconds: 1));
+        async.elapse(kEngineCreateTimeout + const Duration(seconds: 1));
         async.flushMicrotasks();
 
         expect(service.evaluationState.value.state, EngineState.error);
         expect(crashlytics.customKeys['engine_failure_kind'], 'stuck');
         expect(crashlytics.customKeys['engine_unrecoverable'], true);
-        // The native diagnostics say where the engine wedged, which is the point of the report.
-        expect(crashlytics.customKeys['engine_phase'], 'shuttingDown');
-        expect(crashlytics.customKeys['engine_phase_step'], 'engine_teardown');
+        // A create that never returns never hands back an engine to read the native diagnostics
+        // from, so the report says so rather than inventing a phase. In production the plugin
+        // bounds every step it takes and puts its own reading of them in the TimeoutException it
+        // throws, which is what this backstop reports when it does fire.
+        expect(crashlytics.customKeys['engine_phase'], 'unknown');
+        expect(crashlytics.customKeys['engine_phase_step'], 'unknown');
         expect(crashlytics.recordedErrors, hasLength(1));
       });
     });
 
-    test(
-      'A superseded initialization does not disarm the watchdog of the one that replaced it',
-      () async {
-        // Non-regression test: quit() releases the in-progress flag without waiting for the
-        // initialization it interrupted, so the next work request starts a second one while the
-        // first is still running. The first must not cancel the second's watchdog on its way out,
-        // or a restart that never completes is never reported.
-        final stockfish = WedgesOnRestartStockfish();
-        testBinding.stockfish = stockfish;
-        final container = await makeContainer();
-        final crashlytics = testBinding.firebaseCrashlytics;
-        crashlytics.recordedErrors.clear();
+    test('A superseded start does not swallow the failure of the one that replaced it', () async {
+      // Non-regression test: quit() lets go of the start in flight without waiting for it, so
+      // the next work request starts a second engine once the first attempt finishes. The
+      // superseded attempt must report nothing and take nothing down with it, or a start that
+      // never completes is never reported.
+      final stockfish = WedgesOnRestartStockfish();
+      testBinding.stockfish = stockfish;
+      final container = await makeContainer();
+      final crashlytics = testBinding.firebaseCrashlytics;
+      crashlytics.recordedErrors.clear();
 
-        fakeAsync((async) {
-          final service = container.read(evaluationServiceProvider);
+      fakeAsync((async) {
+        final service = container.read(evaluationServiceProvider);
 
-          service.evaluate(makeWork());
-          service.quit();
-          service.evaluate(makeWork(id: const StringId('test2')));
+        service.evaluate(makeWork());
+        service.quit();
+        service.evaluate(makeWork(id: const StringId('test2')));
 
-          async.flushMicrotasks();
+        async.flushMicrotasks();
 
-          // The first attempt has run to completion, the second is still waiting on its start.
-          expect(stockfish.startCount, 2);
+        // The first attempt has run to completion, the second is still waiting on its start.
+        expect(stockfish.startCount, 2);
 
-          async.elapse(kEngineInitTimeout + const Duration(seconds: 1));
-          async.flushMicrotasks();
+        async.elapse(kEngineCreateTimeout + const Duration(seconds: 1));
+        async.flushMicrotasks();
 
-          expect(service.evaluationState.value.state, EngineState.error);
-          expect(crashlytics.customKeys['engine_failure_kind'], 'stuck');
-          expect(crashlytics.customKeys['engine_phase'], 'engineBooting');
-          expect(crashlytics.customKeys['engine_phase_step'], 'engine_boot');
-        });
-      },
-    );
+        expect(service.evaluationState.value.state, EngineState.error);
+        expect(crashlytics.customKeys['engine_failure_kind'], 'stuck');
+      });
+    });
 
     test('A stuck engine releases pending work and refuses new work', () async {
       testBinding.stockfish = StuckStockfish();
@@ -958,7 +956,7 @@ void main() {
         async.flushMicrotasks();
         expect(pendingMoveError, isNull);
 
-        async.elapse(kEngineInitTimeout + const Duration(seconds: 1));
+        async.elapse(kEngineCreateTimeout + const Duration(seconds: 1));
         async.flushMicrotasks();
 
         // The move request can never be answered, so its caller is released rather than left
@@ -978,8 +976,10 @@ void main() {
     });
 
     test('A command the engine refuses is reported instead of thrown at the caller', () async {
-      // The write that breaks the session is silent; it is the next command, refused by the
-      // plugin because the session is no longer ready, that throws from inside UCIProtocol.
+      // The write that breaks the session is silent: the plugin reports it by moving the engine's
+      // state, not by throwing. The transport is listening for that while it writes, so the
+      // failure names the command that caused it and the session is closed there and then —
+      // nothing else is sent to an engine that cannot read it.
       final stockfish = FatalWriteStockfish();
       testBinding.stockfish = stockfish;
       final container = await makeContainer();
@@ -993,10 +993,14 @@ void main() {
       await pumpEventQueue();
 
       expect(stockfish.failedCommands, hasLength(1));
-      expect(stockfish.refusedCommands, isNotEmpty);
+      expect(
+        stockfish.refusedCommands,
+        isEmpty,
+        reason: 'a dead session is not written to again, so nothing is left for it to refuse',
+      );
       expect(service.evaluationState.value.state, EngineState.error);
       expect(crashlytics.customKeys['engine_failure_kind'], 'command');
-      expect(crashlytics.recordedErrors.last.exception, isA<StateError>());
+      expect(crashlytics.recordedErrors.last.reason, contains(stockfish.failedCommands.single));
     });
 
     test('A broken command stream releases the pending move request', () async {
@@ -1877,8 +1881,9 @@ void main() {
 
       expect(delayedStockfish.options['Skill Level'], equals('9'));
 
-      // Now do an evaluate
-      final evalWork = makeWork();
+      // Now evaluate on the same engine — Fairy-Stockfish plays both roles here — so the weakened
+      // `Skill Level` the opponent set is still on it and has to be undone.
+      final evalWork = makeWork(flavor: StockfishFlavor.variant);
       final stream = service.evaluate(evalWork);
       await stream!.first;
 

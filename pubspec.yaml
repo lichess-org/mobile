@@ -60,11 +60,14 @@ dependencies:
   material_ui: ^1.0.1
   meta: ^1.19.0
   # multistockfish: ^0.5.0
+  # Local checkout while the engine refactor lands; restore the git ref before merging.
   multistockfish:
-    git:
-      url: https://github.com/lichess-org/dart-multistockfish.git
-      ref: 2458f34b58d220ab74dd4c14db03ebe356e01b54
-      path: pkgs/multistockfish
+    path: ../dart-multistockfish/pkgs/multistockfish
+  # multistockfish:
+  #   git:
+  #     url: https://github.com/lichess-org/dart-multistockfish.git
+  #     ref: 2458f34b58d220ab74dd4c14db03ebe356e01b54
+  #     path: pkgs/multistockfish
   package_info_plus: ^10.2.1
   path: ^1.9.1
   path_provider: ^2.1.6
@@ -96,6 +99,17 @@ dev_dependencies:
   mocktail: ^1.0.5
   stream_channel: ^2.1.4
   wakelock_plus_platform_interface: ^1.6.0
+
+# Local checkout of the engine plugin while the engine refactor lands: the branch pins native
+# package versions that are not published yet. Remove this whole block, and restore the git ref
+# under `multistockfish` above, before merging.
+dependency_overrides:
+  multistockfish_chess:
+    path: ../dart-multistockfish/pkgs/multistockfish_chess
+  multistockfish_sf16:
+    path: ../dart-multistockfish/pkgs/multistockfish_sf16
+  multistockfish_variant:
+    path: ../dart-multistockfish/pkgs/multistockfish_variant
 
 flutter:
   # The following line ensures that the Material Icons font is

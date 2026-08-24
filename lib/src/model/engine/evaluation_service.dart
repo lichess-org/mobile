@@ -1,16 +1,21 @@
 import 'dart:async';
+import 'dart:math' as math;
 
+import 'package:dartchess/dartchess.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
+import 'package:lichess_mobile/src/model/engine/engine.dart';
+import 'package:lichess_mobile/src/model/engine/engine_factory.dart';
 import 'package:lichess_mobile/src/model/engine/engine_failure.dart';
+import 'package:lichess_mobile/src/model/engine/engine_spec.dart';
+import 'package:lichess_mobile/src/model/engine/engine_utils.dart';
 import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
-import 'package:lichess_mobile/src/model/engine/uci_protocol.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -21,14 +26,8 @@ final _logger = Logger('EvaluationService');
 
 const kEngineEvalEmissionThrottleDelay = Duration(milliseconds: 200);
 
-/// How long a single engine (re)start is given before the engine is declared stuck.
-///
-/// The plugin bounds the start itself — 5s to reach the engine's greeting, 5s more to reach
-/// `uciok` — but nothing bounds the quit that precedes a restart. An engine wedged while joining
-/// its search threads never reports the exit that `quit()` waits for, so that future, and the
-/// whole operation queue chained onto it, stays pending forever. This watchdog is what turns that
-/// silence into a reported failure instead of an engine that is loading and always will be.
-const kEngineInitTimeout = Duration(seconds: 20);
+/// The shallowest depth worth reporting. Below it the engine is still guessing.
+const minDepth = 6;
 
 /// The minimum delay between two engine failure messages shown to the user.
 const _kUserNotificationThrottle = Duration(seconds: 10);
@@ -36,9 +35,6 @@ const _kUserNotificationThrottle = Duration(seconds: 10);
 /// The message shown to the user when the engine is gone for good.
 const _kUnrecoverableEngineMessage =
     'The chess engine stopped responding. Please restart the app to use it again.';
-
-/// Variants supported by the official Stockfish engine.
-const officialStockfishVariants = {Variant.standard, Variant.chess960, Variant.fromPosition};
 
 /// Exception thrown when a [EvaluationService.findMove] request is cancelled.
 ///
@@ -64,20 +60,12 @@ final evaluationServiceProvider = Provider<EvaluationService>((Ref ref) {
   return service;
 }, name: 'EvaluationServiceProvider');
 
-/// A service to evaluate chess positions using Stockfish.
+/// A service to evaluate chess positions, and to ask the engine for a move to play.
 ///
-/// This is a singleton service that wraps the Stockfish engine. Only one evaluation
-/// can run at a time - when a new evaluation is requested, it takes over from any
-/// previous one ("last caller wins").
+/// It owns one [Engine] at a time and multiplexes both roles onto it: only one search can run at
+/// a time, and a new request takes over from whatever was running ("last caller wins").
 class EvaluationService {
-  EvaluationService({required this._ref, required this.maxMemory, required this._nnueService}) {
-    _stdoutSubscription = _stockfish.stdout.listen(_protocol.received);
-    _stockfish.state.addListener(_onStockfishStateChange);
-    _protocol.isComputing.addListener(_onComputingChange);
-    _protocol.engineName.addListener(_onEngineNameChange);
-    _evalSubscription = _protocol.evalStream.listen(_onEvalResult);
-    _moveSubscription = _protocol.moveStream.listen(_onMoveResult);
-  }
+  EvaluationService({required this._ref, required this.maxMemory, required this._nnueService});
 
   static const _defaultState = (
     engineName: null,
@@ -90,55 +78,34 @@ class EvaluationService {
   final int maxMemory;
   final NnueService _nnueService;
 
-  Stockfish get _stockfish => LichessBinding.instance.stockfish;
+  /// The live engine, or null while there is none.
+  Engine? _engine;
 
-  final UCIProtocol _protocol = UCIProtocol();
-
-  // serialize engine start/quit operations to avoid races
-  Future<void> _engineOpQueue = Future<void>.value();
-
-  Future<void> _runStockfishOperation(Future<void> Function() op) {
-    final result = _engineOpQueue.then((_) => op());
-    // The queue tail swallows errors so a single failed operation doesn't block
-    // the ones chained after it, but the future returned to the caller keeps the
-    // error so awaiting callers (e.g. _initEngine) can still detect failures.
-    _engineOpQueue = result.catchError((_, _) {});
-    return result;
-  }
-
-  late final StreamSubscription<String> _stdoutSubscription;
-  late final StreamSubscription<EvalResult> _evalSubscription;
-  late final StreamSubscription<MoveResult> _moveSubscription;
-
-  /// The flavor that was originally requested when the engine was last (re)started.
+  /// The flavor the live engine was resolved from.
   ///
-  /// Used for restart comparisons so that a latestNoNNUE→sf16 fallback doesn't cause restarts on
-  /// subsequent latestNoNNUE requests.
-  StockfishFlavor? _currentRequestedFlavor;
-  Variant? _currentVariant;
-  bool _initInProgress = false;
-  bool _quitInProgress = false;
-  bool _discardEvalResults = false;
-  bool _discardMoveResults = false;
+  /// The *requested* flavor, not the effective one, so that a latestNoNNUE→sf16 fallback does not
+  /// make every later latestNoNNUE request look like a change of engine. The variant is not part
+  /// of this: it is a per-search option now, so two variants share one Fairy-Stockfish engine.
+  StockfishFlavor? _engineFlavor;
 
-  /// Identifies the latest [_initEngine] attempt.
-  ///
-  /// [quit] clears [_initInProgress] without waiting for the attempt in flight, so a later work
-  /// request can start a second [_initEngine] while the first is still awaiting a native
-  /// operation. Both then race to cancel [_initWatchdog] and clear [_initInProgress]; without a
-  /// token to tell them apart, the older attempt disarms the newer one's watchdog and a start that
-  /// never completes is never reported. Only the attempt still holding the current generation
-  /// touches that shared state.
-  int _initGeneration = 0;
+  bool _startInProgress = false;
 
-  /// Fires if a (re)start neither succeeds nor fails within [kEngineInitTimeout].
-  Timer? _initWatchdog;
+  /// Distinguishes the engine the service is currently interested in from one a [quit] or a
+  /// failure has already let go of, so that a start still in flight cannot resurrect it.
+  int _generation = 0;
+
+  /// The search currently running, whatever role asked for it.
+  Search? _currentSearch;
+
+  /// The evaluation being accumulated from the running search's `info` lines.
+  LocalEval? _currentEval;
+  int _expectedPvs = 1;
 
   /// The failure that killed the engine for the rest of the process's life, if it happened.
   ///
-  /// Latched rather than acted upon once: the native engine keeps its state in process globals
-  /// that a wedged engine still owns, so every later start is refused. Work requested afterwards
-  /// is rejected on the spot instead of piling more pending operations onto a jammed queue.
+  /// Latched rather than acted upon once: a native engine stuck in a transitional phase owns the
+  /// process globals the next one would need, so every later start is refused. Work requested
+  /// afterwards is rejected on the spot instead of piling more work onto a jammed engine.
   EngineFailure? _unrecoverableFailure;
 
   /// When the user was last told about an engine failure.
@@ -175,42 +142,9 @@ class EvaluationService {
 
   MoveWork? _currentMoveWork;
 
-  void _setEngineState(EngineState newState) {
-    _logger.fine('Engine state: ${newState.name}');
-    if (_engineState != newState) {
-      _setState(state: newState);
-    }
-  }
-
-  void _setEval(LocalEval? eval) {
-    _setState(evalFn: () => eval);
-  }
-
-  void _setEvalWork(EvalWork? work) {
-    _setState(workFn: () => work);
-  }
-
-  // ignore: use_setters_to_change_properties
-  void _setMoveWork(MoveWork? work) {
-    _currentMoveWork = work;
-  }
-
-  void _setState({
-    EngineState? state,
-    LocalEval? Function()? evalFn,
-    EvalWork? Function()? workFn,
-  }) {
-    final current = _evaluationState.value;
-    final newState = (
-      engineName: _protocol.engineName.value,
-      eval: evalFn != null ? evalFn() : current.eval,
-      state: state ?? current.state,
-      currentWork: workFn != null ? workFn() : current.currentWork,
-    );
-    if (current != newState) {
-      _evaluationState.value = newState;
-    }
-  }
+  // ---------------------------------------------------------------------------
+  // Public API
+  // ---------------------------------------------------------------------------
 
   /// Start evaluating the given [work].
   ///
@@ -336,6 +270,295 @@ class EvaluationService {
     return completer.future;
   }
 
+  /// Stop the current work (evaluation or move search).
+  ///
+  /// This method stops the engine from computing further but does not clear the evaluation state.
+  /// The engine can still emit results for the current work until it fully stops.
+  void stop() {
+    // The search is not forgotten: the engine goes on reporting until its `bestmove`, and that
+    // last word on the position is worth having.
+    _engine?.stop();
+    _currentMoveWork = null;
+    _setEvalWork(null);
+  }
+
+  /// Quit the engine entirely.
+  ///
+  /// This should be called when the engine is no longer needed (e.g., when leaving an analysis screen).
+  /// The service can be reused after calling this method.
+  void quit() {
+    if (_engine == null && !_startInProgress) {
+      _logger.fine('Engine already quit or uninitialized. Ignoring duplicate quit call.');
+      return;
+    }
+    _logger.info('Quitting engine');
+    _generation++;
+    _cancelEvalThrottle();
+    _cancelPendingMoveRequest();
+    _currentMoveWork = null;
+    _currentEval = null;
+    unawaited(_disposeEngine());
+    _evaluationState.value = _defaultState;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Engine lifecycle
+  // ---------------------------------------------------------------------------
+
+  /// Start the given [work], starting or replacing the engine if necessary.
+  void _startWork(Work work) {
+    if (_unrecoverableFailure case final failure?) {
+      _logger.severe('Refusing engine work: the engine is unusable. $failure');
+      _failEngine();
+      _notifyUser(failure);
+      return;
+    }
+
+    final previousWork = _evaluationState.value.currentWork ?? _currentMoveWork;
+    final needsNewGame =
+        previousWork != null &&
+        (previousWork.id != work.id || previousWork.initialPosition != work.initialPosition);
+
+    switch (work) {
+      case final EvalWork evalWork:
+        _setEvalWork(evalWork);
+        _cancelPendingMoveRequest();
+      case final MoveWork moveWork:
+        _currentMoveWork = moveWork;
+    }
+
+    final flavor = _flavorFor(work);
+
+    if (_engine != null && _engineFlavor == flavor) {
+      _compute(work, newGame: needsNewGame);
+      return;
+    }
+
+    if (_startInProgress) {
+      // The start in flight picks up whatever work is current when it finishes, and starts another
+      // engine itself if that work needs a different one.
+      _logger.fine('Work requested while the engine is starting; it will run when it is ready');
+      return;
+    }
+
+    unawaited(_startEngine(flavor));
+  }
+
+  Future<void> _startEngine(StockfishFlavor flavor) async {
+    final generation = _generation;
+    _startInProgress = true;
+    _setEngineState(EngineState.loading);
+
+    try {
+      final spec = await _resolveSpec(flavor);
+      await _disposeEngine();
+
+      _logger.fine('Starting engine: $spec, hash=${maxMemory}MB');
+      final engine = await _ref.read(engineFactoryProvider).create(spec);
+
+      if (generation != _generation) {
+        // A quit, or a failure, let go of this attempt while it was starting.
+        unawaited(engine.dispose());
+      } else {
+        _engine = engine;
+        _engineFlavor = flavor;
+        engine.name.addListener(_onEngineNameChange);
+        engine.isSearching.addListener(_onSearchingChange);
+        unawaited(engine.death.then((failure) => _onEngineDeath(engine, failure)));
+        _setEngineState(EngineState.idle);
+      }
+    } catch (e, st) {
+      if (generation != _generation) return;
+      _handleFailure(
+        switch (e) {
+          final EngineCreationException creation => creation.failure,
+          _ => EngineFailure(
+            kind: EngineFailureKind.start,
+            message: 'The engine failed to start',
+            flavor: flavor,
+            error: e,
+            stackTrace: st,
+          ),
+        }.withContext(maxMemoryInMb: maxMemory),
+      );
+      _failEngine();
+      return;
+    } finally {
+      _startInProgress = false;
+    }
+
+    // Work requested while the engine was starting was left waiting for it, and may not even want
+    // the engine that has just started — a quit and a fresh request can have replaced it entirely.
+    final currentWork = _evaluationState.value.currentWork ?? _currentMoveWork;
+    if (currentWork != null) _startWork(currentWork);
+  }
+
+  /// The spec for [flavor], falling back to SF 16 when the NNUE files are not on disk.
+  Future<EngineSpec> _resolveSpec(StockfishFlavor flavor) async {
+    switch (flavor) {
+      case StockfishFlavor.variant:
+        return const StockfishSpec.fairy();
+      case StockfishFlavor.sf16:
+        return const StockfishSpec.sf16();
+      case StockfishFlavor.latestNoNNUE:
+        if (await _nnueService.checkNNUEFiles()) {
+          final files = _nnueService.nnueFiles;
+          return StockfishSpec.latest(
+            bigNetPath: files.bigNet.path,
+            smallNetPath: files.smallNet.path,
+          );
+        }
+        _logger.warning('NNUE files not found or corrupted. Falling back to SF16.');
+        return const StockfishSpec.sf16();
+    }
+  }
+
+  /// The flavor [work] needs: everything Stockfish does not know how to play goes to Fairy.
+  StockfishFlavor _flavorFor(Work work) => officialStockfishVariants.contains(work.variant)
+      ? work.stockfishFlavor
+      : StockfishFlavor.variant;
+
+  Future<void> _disposeEngine() async {
+    final engine = _engine;
+    if (engine == null) return;
+    _engine = null;
+    _engineFlavor = null;
+    _currentSearch = null;
+    engine.name.removeListener(_onEngineNameChange);
+    engine.isSearching.removeListener(_onSearchingChange);
+    await engine.dispose();
+  }
+
+  void _onEngineDeath(Engine engine, EngineFailure? failure) {
+    // An engine this service has already let go of is not news: either it was disposed on purpose,
+    // or the failure that killed it was reported when it was detected.
+    if (!identical(_engine, engine) || failure == null) return;
+
+    _handleFailure(failure.withContext(maxMemoryInMb: maxMemory));
+    _failEngine();
+  }
+
+  /// Puts the service into [EngineState.error] and lets go of everything that was waiting on the
+  /// engine.
+  ///
+  /// Nothing is going to answer the work that was in flight, so its callers are failed instead of
+  /// being left waiting forever — a pending [findMove] has no timeout of its own. The engine is
+  /// let go of too, so that the next [_startWork] starts a fresh one rather than talking to one
+  /// this service already knows is unusable.
+  void _failEngine() {
+    _generation++;
+    _cancelPendingMoveRequest();
+    _setEvalWork(null);
+    _currentMoveWork = null;
+    _currentEval = null;
+    _cancelEvalThrottle();
+    unawaited(_disposeEngine());
+    _setEngineState(EngineState.error);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Searching
+  // ---------------------------------------------------------------------------
+
+  void _compute(Work work, {bool newGame = false}) {
+    final engine = _engine;
+    if (engine == null) return;
+
+    _currentEval = null;
+    _expectedPvs = 1;
+
+    final search = engine.search(_searchRequestFor(work, newGame: newGame));
+    _currentSearch = search;
+
+    switch (work) {
+      case final EvalWork evalWork:
+        search.infos.listen((info) => _onSearchInfo(evalWork, search, info));
+        unawaited(search.bestMove.then((_) => _onEvalSearchDone(evalWork, search)));
+      case final MoveWork moveWork:
+        unawaited(search.bestMove.then((move) => _onMoveSearchDone(moveWork, move)));
+    }
+  }
+
+  SearchRequest _searchRequestFor(Work work, {required bool newGame}) {
+    final threatMode = work is EvalWork && work.threatMode;
+    return SearchRequest(
+      initialPosition: work.initialPosition,
+      moves: IList(work.steps.map((step) => step.sanMove.normalizeUci(work.variant))),
+      variant: work.variant,
+      limit: SearchLimit.movetime(work.searchTime),
+      fenOverride: threatMode ? threatModePosition(work.position).fen : null,
+      threads: work.threads,
+      hashSize: work.hashSize ?? 16,
+      multiPv: work.multiPv,
+      // The complete option set for this search: whatever an evaluation does not name here — the
+      // opponent's `Skill Level`, most of all — is put back to its default by the engine before
+      // the search starts.
+      options: switch (work) {
+        final MoveWork moveWork => IMap({'Skill Level': moveWork.skill.toString()}),
+        EvalWork() => const IMapConst({}),
+      },
+      newGame: newGame,
+    );
+  }
+
+  /// Accumulates one `info` line into the evaluation of [work].
+  void _onSearchInfo(EvalWork work, Search search, UciInfo info) {
+    if (!identical(_currentSearch, search)) return;
+
+    // Track max pv index to determine when pv prints are done.
+    if (_expectedPvs < info.multiPv) _expectedPvs = info.multiPv;
+
+    if (info.depth < minDepth && info.pv.isNotEmpty) return;
+
+    final isMate = info.mate != null;
+    final povEv = info.mate ?? info.cp!;
+
+    final pivot = work.threatMode ? Side.black : Side.white;
+    final ev = work.position.turn == pivot ? povEv : -povEv;
+
+    // For now, ignore most upperbound/lowerbound messages.
+    // However non-primary pvs may only have an upperbound.
+    if ((info.isLowerBound || info.isUpperBound) && info.multiPv == 1) return;
+
+    final pvData = PvData(moves: info.pv, cp: isMate ? null : ev, mate: isMate ? ev : null);
+
+    if (info.multiPv == 1) {
+      _currentEval = LocalEval(
+        position: work.threatMode ? threatModePosition(work.position) : work.position,
+        searchTime: info.elapsed,
+        depth: info.depth,
+        nodes: info.nodes,
+        cp: isMate ? null : ev,
+        mate: isMate ? ev : null,
+        pvs: IList([pvData]),
+        millis: info.elapsed.inMilliseconds,
+        threatMode: work.threatMode,
+      );
+    } else if (_currentEval != null) {
+      _currentEval = _currentEval!.copyWith(
+        pvs: _currentEval!.pvs.add(pvData),
+        depth: math.min(_currentEval!.depth, info.depth),
+      );
+    }
+
+    if (info.multiPv == _expectedPvs && _currentEval != null) {
+      _onEvalResult((work, _currentEval!));
+    }
+  }
+
+  void _onEvalSearchDone(EvalWork work, Search search) {
+    if (!identical(_currentSearch, search)) return;
+    // The engine's last word on this position, which the throttle may otherwise have swallowed.
+    if (_currentEval case final eval?) _onEvalResult((work, eval));
+  }
+
+  void _onMoveSearchDone(MoveWork work, UCIMove? move) {
+    // A superseded search has no move to report; whoever superseded it has already failed the
+    // request that was waiting.
+    if (move == null) return;
+    if (!_moveController.isClosed) _moveController.add((work, move));
+  }
+
   void _cancelPendingMoveRequest() {
     if (_pendingMoveRequest case (final completer, final subscription)) {
       subscription.cancel();
@@ -346,29 +569,54 @@ class EvaluationService {
     }
   }
 
-  /// Builds a failure report from the engine's current situation.
+  // ---------------------------------------------------------------------------
+  // Eval emission
+  // ---------------------------------------------------------------------------
+
+  /// Handles eval results with throttling.
   ///
-  /// [diagnostics] should be passed when it was captured earlier: quitting a stalled engine moves
-  /// it on to another phase, which erases the evidence of where it stalled.
-  EngineFailure _describeFailure(
-    EngineFailureKind kind,
-    String message, {
-    required StockfishFlavor flavor,
-    required Variant variant,
-    StockfishDiagnostics? diagnostics,
-    Object? error,
-    StackTrace? stackTrace,
-  }) => EngineFailure(
-    kind: kind,
-    message: message,
-    flavor: flavor,
-    variant: variant,
-    engineState: _stockfish.state.value,
-    diagnostics: diagnostics ?? _stockfish.diagnostics,
-    maxMemoryInMb: maxMemory,
-    error: error,
-    stackTrace: stackTrace,
-  );
+  /// Implements trailing throttle: emits immediately if no throttle is active,
+  /// otherwise stores the result to emit when the throttle window expires.
+  void _onEvalResult(EvalResult result) {
+    if (_evalThrottleTimer == null) {
+      // No active throttle - emit immediately and start throttle window
+      _emitEval(result);
+      _evalThrottleTimer = Timer(kEngineEvalEmissionThrottleDelay, _onThrottleExpired);
+    } else {
+      // Within throttle window - store for trailing emission
+      _pendingEvalResult = result;
+    }
+  }
+
+  void _onThrottleExpired() {
+    _evalThrottleTimer = null;
+    final pending = _pendingEvalResult;
+    if (pending != null) {
+      _pendingEvalResult = null;
+      _emitEval(pending);
+      // Start new throttle window for trailing emission
+      _evalThrottleTimer = Timer(kEngineEvalEmissionThrottleDelay, _onThrottleExpired);
+    }
+  }
+
+  void _emitEval(EvalResult result) {
+    if (_evalController.isClosed) return;
+    _evalController.add(result);
+    final currentWork = _evaluationState.value.currentWork ?? _currentMoveWork;
+    if (currentWork != null && result.$1 == currentWork) {
+      _setEval(result.$2);
+    }
+  }
+
+  void _cancelEvalThrottle() {
+    _evalThrottleTimer?.cancel();
+    _evalThrottleTimer = null;
+    _pendingEvalResult = null;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Failure reporting
+  // ---------------------------------------------------------------------------
 
   /// Logs a failure, reports it to Crashlytics, and tells the user about it if the engine is not
   /// coming back.
@@ -411,413 +659,59 @@ class EvaluationService {
     }
   }
 
-  /// Puts the service into [EngineState.error] and lets go of everything that was waiting on the
-  /// engine.
-  ///
-  /// Three things have to happen together, which is why they live here rather than at each failure
-  /// site.
-  ///
-  /// Nothing is going to answer the work that was in flight, so its callers are failed instead of
-  /// being left waiting forever — a pending [findMove] has no timeout of its own.
-  ///
-  /// The engine identity is forgotten, so that the next [_startWork] restarts the engine rather
-  /// than talking to one this service already knows is unusable: the flavor and variant are what
-  /// [_startWork] compares to decide, and an engine can break without the plugin moving its own
-  /// state to [StockfishState.error].
-  ///
-  /// And anything the broken engine still emits is dropped. A failed command does not stop the
-  /// protocol mid-exchange — [_sendToEngine] reports the refusal rather than throwing it back into
-  /// [UCIProtocol], which carries on and announces that it is computing — so without this the
-  /// engine state set here is overwritten by the very call that failed.
-  void _failEngine() {
-    _cancelPendingMoveRequest();
-    _setEvalWork(null);
-    _currentMoveWork = null;
-    _currentRequestedFlavor = null;
-    _currentVariant = null;
-    _evalThrottleTimer?.cancel();
-    _evalThrottleTimer = null;
-    _pendingEvalResult = null;
-    _discardEvalResults = true;
-    _discardMoveResults = true;
-    _setEngineState(EngineState.error);
-  }
+  // ---------------------------------------------------------------------------
+  // State bookkeeping
+  // ---------------------------------------------------------------------------
 
-  /// Arms the watchdog that catches a (re)start which never completes at all.
-  ///
-  /// [generation] is the attempt the watchdog belongs to: it fires only while that attempt is
-  /// still the current one, so a superseded start cannot report a failure against the one that
-  /// replaced it.
-  void _startInitWatchdog(int generation, StockfishFlavor flavor, Variant variant) {
-    _cancelInitWatchdog();
-    _initWatchdog = Timer(kEngineInitTimeout, () {
-      if (generation != _initGeneration) return;
-      _initWatchdog = null;
-      if (!_initInProgress) return;
-
-      _handleFailure(
-        _describeFailure(
-          EngineFailureKind.stuck,
-          'The engine neither started nor failed within '
-          '${kEngineInitTimeout.inSeconds}s. The operation it is blocked on will never complete, '
-          'so no further engine work is possible until the app is restarted',
-          flavor: flavor,
-          variant: variant,
-        ),
-      );
-
-      // Nothing will ever answer the work that was waiting on this start, so release its callers
-      // instead of leaving them thinking forever.
-      _failEngine();
-    });
-  }
-
-  void _cancelInitWatchdog() {
-    _initWatchdog?.cancel();
-    _initWatchdog = null;
-  }
-
-  /// Start the given [work], restarting the engine if necessary.
-  void _startWork(Work work) {
-    if (_unrecoverableFailure case final failure?) {
-      _logger.severe('Refusing engine work: the engine is unusable. $failure');
-      _failEngine();
-      _notifyUser(failure);
-      return;
+  void _setEngineState(EngineState newState) {
+    _logger.fine('Engine state: ${newState.name}');
+    if (_engineState != newState) {
+      _setState(state: newState);
     }
+  }
 
-    final flavor = officialStockfishVariants.contains(work.variant)
-        ? work.stockfishFlavor
-        : StockfishFlavor.variant;
+  void _setEval(LocalEval? eval) {
+    _setState(evalFn: () => eval);
+  }
 
-    final stockfishState = _stockfish.state.value;
+  void _setEvalWork(EvalWork? work) {
+    _setState(workFn: () => work);
+  }
 
-    // Compare against the originally requested flavor, not the effective one. This prevents restart
-    // when latestNoNNUE fell back to sf16
-    final needsRestart =
-        _quitInProgress ||
-        _currentRequestedFlavor != flavor ||
-        _currentVariant != work.variant ||
-        stockfishState == StockfishState.initial ||
-        stockfishState == StockfishState.error;
-
-    final previousWork = _evaluationState.value.currentWork ?? _currentMoveWork;
-    final needsNewGame =
-        previousWork != null &&
-        (previousWork.id != work.id || previousWork.initialPosition != work.initialPosition);
-
-    _logger.finer(
-      'Engine restart needed: $needsRestart, new game needed: $needsNewGame, current engine state: $stockfishState',
+  void _setState({
+    EngineState? state,
+    LocalEval? Function()? evalFn,
+    EvalWork? Function()? workFn,
+  }) {
+    final current = _evaluationState.value;
+    final newState = (
+      engineName: _engine?.name.value,
+      eval: evalFn != null ? evalFn() : current.eval,
+      state: state ?? current.state,
+      currentWork: workFn != null ? workFn() : current.currentWork,
     );
-    // Update work and flag other type of work to be discarded
-    switch (work) {
-      case final EvalWork evalWork:
-        _setEvalWork(evalWork);
-        _discardEvalResults = false;
-        _discardMoveResults = true;
-        _cancelPendingMoveRequest();
-      case final MoveWork moveWork:
-        _setMoveWork(moveWork);
-        _discardMoveResults = false;
-        _discardEvalResults = true;
-    }
-
-    if (_initInProgress) {
-      _logger.fine('Work requested while engine initialization is in progress, queuing work');
-
-      // Init in progress, work will be computed when init finishes
-      // (the _initEngine callback checks the current work state)
-      return;
-    }
-
-    if (needsRestart) {
-      _initInProgress = true;
-      _setEngineState(EngineState.loading);
-      _initEngine(flavor, work.variant).then((_) {
-        // Compute the current work (might be different from original if another request came in)
-        final currentWork = _evaluationState.value.currentWork ?? _currentMoveWork;
-        if (currentWork != null) {
-          _protocol.compute(currentWork);
-        }
-      });
-    } else {
-      _protocol.compute(work, newGame: needsNewGame);
+    if (current != newState) {
+      _evaluationState.value = newState;
     }
   }
 
-  Future<void> _initEngine(StockfishFlavor flavor, Variant variant) async {
-    // The effective flavor, which differs from the requested one when NNUE files are missing. Kept
-    // outside the try so that a failure report names the flavor that actually failed.
-    StockfishFlavor actualFlavor = flavor;
-
-    final generation = ++_initGeneration;
-
-    _startInitWatchdog(generation, flavor, variant);
-
-    try {
-      _logger.fine(
-        'Initializing engine: flavor=${flavor.name}, variant=${variant.name}, '
-        'hash=${maxMemory}MB, engine state=${_stockfish.state.value.name}',
-      );
-
-      await _runStockfishOperation(() => _stockfish.quit());
-
-      _protocol.reset();
-
-      String? smallNetPath;
-      String? bigNetPath;
-
-      if (flavor == StockfishFlavor.latestNoNNUE) {
-        if (await _nnueService.checkNNUEFiles()) {
-          final nnueFiles = _nnueService.nnueFiles;
-          smallNetPath = nnueFiles.smallNet.path;
-          bigNetPath = nnueFiles.bigNet.path;
-        } else {
-          _logger.warning('NNUE files not found or corrupted. Falling back to SF16.');
-          actualFlavor = StockfishFlavor.sf16;
-        }
-      }
-
-      await _runStockfishOperation(
-        () => _stockfish.start(
-          flavor: actualFlavor,
-          // We always pass the variant, but this is ignored if flavor is not StockfishFlavor.variant
-          variant: variant.fairy,
-          smallNetPath: smallNetPath,
-          bigNetPath: bigNetPath,
-        ),
-      );
-
-      if (_stockfish.state.value == StockfishState.error) {
-        _handleFailure(
-          _describeFailure(
-            EngineFailureKind.start,
-            'The engine reported an error state instead of becoming ready',
-            flavor: actualFlavor,
-            variant: variant,
-          ),
-        );
-        _failEngine();
-        return;
-      }
-
-      _logger.fine(
-        'Engine initialized successfully: flavor=${actualFlavor.name}, '
-        'diagnostics: ${_stockfish.diagnostics}',
-      );
-
-      _currentRequestedFlavor = flavor;
-      _currentVariant = variant;
-
-      _protocol.connected(_sendToEngine);
-    } catch (e, st) {
-      // start() reports where it gave up in its own TimeoutException, but the diagnostics read
-      // here still say which phase the engine is sitting in now, which is what tells a failed boot
-      // apart from a shutdown that never finished.
-      _handleFailure(
-        _describeFailure(
-          EngineFailureKind.start,
-          'The engine failed to start',
-          flavor: actualFlavor,
-          variant: variant,
-          error: e,
-          stackTrace: st,
-        ),
-      );
-      _failEngine();
-    } finally {
-      // A superseded attempt owns none of this any more: the start that replaced it — or the
-      // quit that cancelled it — is what the watchdog and the in-progress flag now describe.
-      if (generation == _initGeneration) {
-        _cancelInitWatchdog();
-        _initInProgress = false;
-      }
-    }
-  }
-
-  /// Sends a command to a running engine, reporting a refusal rather than throwing it at the
-  /// caller.
-  void _sendToEngine(String command) {
-    try {
-      _stockfish.stdin = command;
-    } catch (e, st) {
-      _handleFailure(
-        _describeFailure(
-          EngineFailureKind.command,
-          'The engine refused the command "$command"',
-          flavor: _currentRequestedFlavor ?? _stockfish.flavor,
-          variant: _currentVariant ?? Variant.standard,
-          error: e,
-          stackTrace: st,
-        ),
-      );
-      _failEngine();
-    }
-  }
-
-  void _onStockfishStateChange() {
-    switch (_stockfish.state.value) {
-      case StockfishState.initial:
-        // Don't overwrite loading state during engine restart
-        if (_engineState != EngineState.loading) {
-          _setEngineState(EngineState.initial);
-        }
-      case StockfishState.starting:
-        _setEngineState(EngineState.loading);
-      case StockfishState.ready:
-        if (_engineState != EngineState.computing) {
-          _setEngineState(EngineState.idle);
-        }
-      case StockfishState.error:
-        if (_initInProgress) {
-          // The (re)start in flight owns this outcome: _initEngine reports the failure with the
-          // flavor and variant it was starting, and a start that recovers from a failed shutdown
-          // still has work to run, so nothing is given up on here.
-          _setEngineState(EngineState.error);
-        } else {
-          // A running engine broke under us — including one that could not even be asked to quit,
-          // which the plugin reports the same way.
-          _handleFailure(
-            _describeFailure(
-              EngineFailureKind.runtime,
-              _quitInProgress
-                  ? 'The engine failed while shutting down'
-                  : 'The engine failed while it was running',
-              flavor: _currentRequestedFlavor ?? _stockfish.flavor,
-              variant: _currentVariant ?? Variant.standard,
-            ),
-          );
-          _failEngine();
-        }
-    }
-  }
-
-  void _onComputingChange() {
-    // When both discard flags are set, the engine is being quit or has failed; its computing
-    // state says nothing about work this service still cares about.
-    if (_discardEvalResults && _discardMoveResults) return;
-
-    if (_protocol.isComputing.value) {
-      _setEngineState(EngineState.computing);
-    } else {
-      _setEngineState(EngineState.idle);
-    }
+  void _onSearchingChange() {
+    final engine = _engine;
+    if (engine == null) return;
+    _setEngineState(engine.isSearching.value ? EngineState.computing : EngineState.idle);
   }
 
   void _onEngineNameChange() {
-    // engineName is always read from _protocol.engineName.value in _setState,
-    // so we just need to trigger a state update
+    // engineName is always read from the engine in _setState, so this just triggers an update.
     _setState();
   }
 
-  /// Handles incoming eval results with throttling.
-  ///
-  /// Implements trailing throttle: emits immediately if no throttle is active,
-  /// otherwise stores the result to emit when the throttle window expires.
-  void _onEvalResult(EvalResult result) {
-    if (_discardEvalResults) return;
-
-    if (_evalThrottleTimer == null) {
-      // No active throttle - emit immediately and start throttle window
-      _emitEval(result);
-      _evalThrottleTimer = Timer(kEngineEvalEmissionThrottleDelay, _onThrottleExpired);
-    } else {
-      // Within throttle window - store for trailing emission
-      _pendingEvalResult = result;
-    }
-  }
-
-  void _onThrottleExpired() {
-    _evalThrottleTimer = null;
-    final pending = _pendingEvalResult;
-    if (pending != null) {
-      _pendingEvalResult = null;
-      // Drop results if they are flagged to be discarded
-      if (_discardEvalResults) return;
-      _emitEval(pending);
-      // Start new throttle window for trailing emission
-      _evalThrottleTimer = Timer(kEngineEvalEmissionThrottleDelay, _onThrottleExpired);
-    }
-  }
-
-  void _emitEval(EvalResult result) {
-    if (_discardEvalResults) return;
-    _evalController.add(result);
-    final currentWork = _evaluationState.value.currentWork ?? _currentMoveWork;
-    if (currentWork != null && result.$1 == currentWork) {
-      _setEval(result.$2);
-    }
-  }
-
-  void _onMoveResult(MoveResult result) {
-    if (_discardMoveResults) return;
-    _moveController.add(result);
-  }
-
-  /// Stop the current work (evaluation or move search).
-  ///
-  /// This method stops the engine from computing further but does not clear the evaluation state.
-  /// The engine can still emit results for the current work until it fully stops.
-  void stop() {
-    _protocol.compute(null);
-    _currentMoveWork = null;
-    _setEvalWork(null);
-  }
-
-  /// Quit the engine entirely.
-  ///
-  /// This should be called when the engine is no longer needed (e.g., when leaving an analysis screen).
-  /// The service can be reused after calling this method.
-  void quit() {
-    if (_engineState == EngineState.initial && !_initInProgress) {
-      _logger.fine('Engine already quit or uninitialized. Ignoring duplicate quit call.');
-      return;
-    }
-    _logger.info('Quitting engine');
-    _quitInProgress = true;
-    _cancelInitWatchdog();
-    _protocol.compute(null);
-    _evalThrottleTimer?.cancel();
-    _evalThrottleTimer = null;
-    _pendingEvalResult = null;
-    _cancelPendingMoveRequest();
-    _discardEvalResults = true;
-    _discardMoveResults = true;
-    _currentMoveWork = null;
-    _runStockfishOperation(() async {
-      try {
-        await _stockfish.quit();
-      } finally {
-        _quitInProgress = false;
-      }
-    });
-    _currentRequestedFlavor = null;
-    _currentVariant = null;
-    _initInProgress = false;
-
-    _evaluationState.value = (
-      engineName: null,
-      eval: null,
-      state: EngineState.initial,
-      currentWork: null,
-    );
-  }
-
   void _dispose() {
-    _cancelInitWatchdog();
-    _evalThrottleTimer?.cancel();
-    _evalThrottleTimer = null;
-    _pendingEvalResult = null;
+    _generation++;
+    _cancelEvalThrottle();
     _cancelPendingMoveRequest();
     _currentMoveWork = null;
-    _stdoutSubscription.cancel();
-    _evalSubscription.cancel();
-    _moveSubscription.cancel();
-    _stockfish.state.removeListener(_onStockfishStateChange);
-    _protocol.isComputing.removeListener(_onComputingChange);
-    _protocol.engineName.removeListener(_onEngineNameChange);
-    _protocol.dispose();
-    _runStockfishOperation(() => _stockfish.quit());
+    unawaited(_disposeEngine());
     _evalController.close();
     _moveController.close();
     _evaluationState.dispose();
@@ -922,20 +816,4 @@ ClientEval? pickBestClientEval({
       pickBestEval(localEval: localEval, savedEval: savedEval, serverEval: null) as ClientEval?;
 
   return eval;
-}
-
-extension FairyVariantExtension on Variant {
-  /// The Fairy-Stockfish variant name
-  String get fairy => switch (this) {
-    Variant.standard => 'chess',
-    Variant.chess960 => 'chess',
-    Variant.fromPosition => 'chess',
-    Variant.antichess => 'antichess',
-    Variant.kingOfTheHill => 'kingofthehill',
-    Variant.threeCheck => '3check',
-    Variant.atomic => 'atomic',
-    Variant.horde => 'horde',
-    Variant.racingKings => 'racingkings',
-    Variant.crazyhouse => 'crazyhouse',
-  };
 }

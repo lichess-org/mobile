@@ -123,13 +123,32 @@ class TestLichessBinding extends LichessBinding {
   Stream<RemoteMessage> get firebaseMessagingOnMessageOpenedApp =>
       firebaseMessaging.onMessageOpenedApp.stream;
 
-  Stockfish _stockfish = FakeStockfish();
+  /// The engine every [createStockfish] hands out.
+  ///
+  /// Unlike the real plugin, which mints a fresh handle on every create, this is one long-lived
+  /// fake that tests configure up front and inspect afterwards. It is restarted on each create, so
+  /// a test that watches an engine being replaced still sees the start and the quit.
+  Stockfish stockfish = FakeStockfish();
 
   @override
-  Stockfish get stockfish => _stockfish;
-
-  set stockfish(Stockfish instance) {
-    _stockfish = instance;
+  Future<Stockfish> createStockfish({
+    required StockfishFlavor flavor,
+    String? smallNetPath,
+    String? bigNetPath,
+    void Function(String line)? onStdout,
+  }) async {
+    final stockfish = this.stockfish;
+    // Attached before the engine starts, the way the plugin attaches it: the handshake the fake
+    // emits from start() is what tells the app the engine's name.
+    final subscription = onStdout == null ? null : stockfish.stdout.listen(onStdout);
+    try {
+      // ignore: deprecated_member_use
+      await stockfish.start(flavor: flavor, smallNetPath: smallNetPath, bigNetPath: bigNetPath);
+    } catch (_) {
+      await subscription?.cancel();
+      rethrow;
+    }
+    return stockfish;
   }
 }
 

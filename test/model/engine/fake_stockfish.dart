@@ -36,8 +36,19 @@ mixin FakeStockfishDiagnostics {
   );
 }
 
+/// Maps the plugin's handle API onto the `start`/`quit` pair the fakes implement.
+///
+/// A fake is a long-lived stand-in for what the plugin mints fresh on every create, so disposing
+/// one means quitting it: the same instance is handed out again by the next create.
+mixin FakeStockfishDispose implements Stockfish {
+  @override
+  Future<void> dispose() =>
+      // ignore: deprecated_member_use
+      quit();
+}
+
 /// A fake implementation of [Stockfish] for testing.
-class FakeStockfish with FakeStockfishDiagnostics implements Stockfish {
+class FakeStockfish with FakeStockfishDiagnostics, FakeStockfishDispose implements Stockfish {
   FakeStockfish();
 
   final _state = ValueNotifier<StockfishState>(StockfishState.initial);
@@ -106,6 +117,8 @@ class FakeStockfish with FakeStockfishDiagnostics implements Stockfish {
     switch (parts.first) {
       case 'isready':
         _emit('readyok\n');
+      case 'setoption' when parts.length >= 5 && parts[2] == 'UCI_Variant':
+        _variant = parts[4];
       case 'position':
         if (parts.length > 1 && parts[1] == 'fen') {
           final movesPartIndex = parts.indexWhere((p) => p == 'moves');
@@ -157,7 +170,9 @@ class FakeStockfish with FakeStockfishDiagnostics implements Stockfish {
 
 /// A fake Stockfish for crazyhouse that emits a drop move in its principal variation.
 /// Used to test that engine lines correctly handle drop moves.
-class FakeCrazyhouseDropMoveStockfish with FakeStockfishDiagnostics implements Stockfish {
+class FakeCrazyhouseDropMoveStockfish
+    with FakeStockfishDiagnostics, FakeStockfishDispose
+    implements Stockfish {
   FakeCrazyhouseDropMoveStockfish();
 
   final _state = ValueNotifier<StockfishState>(StockfishState.initial);
@@ -212,6 +227,8 @@ class FakeCrazyhouseDropMoveStockfish with FakeStockfishDiagnostics implements S
     switch (parts.first) {
       case 'isready':
         _emitCrazyhouse('readyok\n');
+      case 'setoption' when parts.length >= 5 && parts[2] == 'UCI_Variant':
+        _variant = parts[4];
       case 'go':
         // Emit two info lines with a drop move as the first PV move, then bestmove.
         _emitCrazyhouse(
@@ -232,7 +249,9 @@ class FakeCrazyhouseDropMoveStockfish with FakeStockfishDiagnostics implements S
 }
 
 /// A fake Stockfish with configurable delays for testing race conditions.
-class DelayedFakeStockfish with FakeStockfishDiagnostics implements Stockfish {
+class DelayedFakeStockfish
+    with FakeStockfishDiagnostics, FakeStockfishDispose
+    implements Stockfish {
   DelayedFakeStockfish({
     this.startDelay = Duration.zero,
     this.quitDelay = Duration.zero,
@@ -370,7 +389,9 @@ class DelayedFakeStockfish with FakeStockfishDiagnostics implements Stockfish {
 
 /// A fake Stockfish that emits multiple eval events with controllable timing.
 /// Used for testing throttle behavior.
-class ThrottleTestStockfish with FakeStockfishDiagnostics implements Stockfish {
+class ThrottleTestStockfish
+    with FakeStockfishDiagnostics, FakeStockfishDispose
+    implements Stockfish {
   ThrottleTestStockfish({this.evalEventCount = 5, this.evalEventInterval = Duration.zero});
 
   /// Number of eval events to emit per `go` command.
@@ -485,7 +506,9 @@ const kMinEngineDepth = 6;
 /// - Position-dependent cp values (different positions get different, but deterministic, evals)
 /// - Manual control over when evals are emitted
 /// - Tracks all 'go' commands to verify debouncing
-class AnalysisTestStockfish with FakeStockfishDiagnostics implements Stockfish {
+class AnalysisTestStockfish
+    with FakeStockfishDiagnostics, FakeStockfishDispose
+    implements Stockfish {
   AnalysisTestStockfish();
 
   final _state = ValueNotifier<StockfishState>(StockfishState.initial);
@@ -653,7 +676,9 @@ class AnalysisTestStockfish with FakeStockfishDiagnostics implements Stockfish {
 /// Both [start] and [quit] take a real (small) delay so that, if the service
 /// ever issued two operations without waiting for the previous one,
 /// [maxConcurrentOps] would observe a value greater than 1.
-class ConcurrencyTrackingStockfish with FakeStockfishDiagnostics implements Stockfish {
+class ConcurrencyTrackingStockfish
+    with FakeStockfishDiagnostics, FakeStockfishDispose
+    implements Stockfish {
   ConcurrencyTrackingStockfish({this.opDelay = const Duration(milliseconds: 15)});
 
   /// Duration each native start/quit operation takes.
@@ -768,7 +793,9 @@ class ConcurrencyTrackingStockfish with FakeStockfishDiagnostics implements Stoc
 
 /// A fake Stockfish that returns the first legal move from the current position.
 /// This is useful for tests that need realistic game progression.
-class LegalMoveFakeStockfish with FakeStockfishDiagnostics implements Stockfish {
+class LegalMoveFakeStockfish
+    with FakeStockfishDiagnostics, FakeStockfishDispose
+    implements Stockfish {
   LegalMoveFakeStockfish();
 
   final _state = ValueNotifier<StockfishState>(StockfishState.initial);
@@ -825,6 +852,8 @@ class LegalMoveFakeStockfish with FakeStockfishDiagnostics implements Stockfish 
     switch (parts.first) {
       case 'isready':
         _emit('readyok\n');
+      case 'setoption' when parts.length >= 5 && parts[2] == 'UCI_Variant':
+        _variant = parts[4];
       case 'position':
         if (parts.length > 1 && parts[1] == 'fen') {
           final movesPartIndex = parts.indexWhere((p) => p == 'moves');
@@ -885,7 +914,9 @@ class LegalMoveFakeStockfish with FakeStockfishDiagnostics implements Stockfish 
 
 /// A fake Stockfish that returns multiPv evaluation data for hint testing.
 /// Emits multiple principal variations with decreasing scores.
-class MultiPvFakeStockfish with FakeStockfishDiagnostics implements Stockfish {
+class MultiPvFakeStockfish
+    with FakeStockfishDiagnostics, FakeStockfishDispose
+    implements Stockfish {
   MultiPvFakeStockfish();
 
   final _state = ValueNotifier<StockfishState>(StockfishState.initial);
@@ -1007,7 +1038,7 @@ class MultiPvFakeStockfish with FakeStockfishDiagnostics implements Stockfish {
 
 /// A fake Stockfish that transitions to error state instead of ready.
 /// This simulates initialization failure scenarios.
-class ErrorStockfish with FakeStockfishDiagnostics implements Stockfish {
+class ErrorStockfish with FakeStockfishDiagnostics, FakeStockfishDispose implements Stockfish {
   ErrorStockfish();
 
   final _state = ValueNotifier<StockfishState>(StockfishState.initial);
@@ -1061,7 +1092,9 @@ class ErrorStockfish with FakeStockfishDiagnostics implements Stockfish {
 /// Used to verify that [EvaluationService] still surfaces such failures as
 /// [EngineState.error] even though start/quit calls go through an error-
 /// swallowing serialization queue.
-class ThrowingStartStockfish with FakeStockfishDiagnostics implements Stockfish {
+class ThrowingStartStockfish
+    with FakeStockfishDiagnostics, FakeStockfishDispose
+    implements Stockfish {
   ThrowingStartStockfish();
 
   final _state = ValueNotifier<StockfishState>(StockfishState.initial);
@@ -1114,7 +1147,7 @@ class ThrowingStartStockfish with FakeStockfishDiagnostics implements Stockfish 
 /// Models the native wedge the plugin cannot time out on its own: an engine stuck joining its
 /// search threads never reports the exit `quit()` waits for, so that future — and every operation
 /// chained behind it — stays pending forever.
-class StuckStockfish with FakeStockfishDiagnostics implements Stockfish {
+class StuckStockfish with FakeStockfishDiagnostics, FakeStockfishDispose implements Stockfish {
   StuckStockfish() {
     diagnostics = const StockfishDiagnostics(
       phase: StockfishPhase.shuttingDown,
@@ -1235,7 +1268,9 @@ class FatalWriteStockfish extends FakeStockfish {
 ///
 /// This stockfish emits multiPv evaluations and can be configured to simulate
 /// different move quality scenarios (good move, inaccuracy, mistake, blunder).
-class PracticeModeStockfish with FakeStockfishDiagnostics implements Stockfish {
+class PracticeModeStockfish
+    with FakeStockfishDiagnostics, FakeStockfishDispose
+    implements Stockfish {
   PracticeModeStockfish({this.initialEvalCp = 30, this.evalShiftCp = 0});
 
   /// The initial evaluation in centipawns (before the player's move).
