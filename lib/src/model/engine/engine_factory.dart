@@ -19,6 +19,12 @@ final _logger = Logger('EngineFactory');
 /// app showing an engine that is loading and always will be.
 const kEngineCreateTimeout = Duration(seconds: 20);
 
+/// Starts an engine for [spec] and hands back a transport that is already answering.
+///
+/// This is the seam the tests replace: a fake connector hands out fake transports, so nothing
+/// process-wide has to be faked or reset between tests.
+typedef EngineConnector = Future<EngineTransport> Function(EngineSpec spec);
+
 /// Thrown when two engines are asked for on one [EngineSlot] at the same time.
 ///
 /// This is a programming error, not a runtime condition: it means the spec→slot mapping is wrong,
@@ -52,6 +58,10 @@ class EngineCreationException implements Exception {
 /// create that follows a dispose waits for the previous engine to finish exiting, so callers never
 /// see the plugin refuse an engine as a result of ordinary provider churn.
 class EngineFactory {
+  EngineFactory({EngineConnector? connect}) : _connect = connect ?? _connectToPlugin;
+
+  final EngineConnector _connect;
+
   /// The engine holding each slot, until it reports that it is gone.
   final Map<EngineSlot, Engine> _live = {};
 
@@ -118,11 +128,11 @@ class EngineFactory {
 
     return engine;
   }
-
-  Future<EngineTransport> _connect(EngineSpec spec) => switch (spec) {
-    final StockfishSpec stockfish => StockfishTransport.connect(stockfish),
-  };
 }
+
+Future<EngineTransport> _connectToPlugin(EngineSpec spec) => switch (spec) {
+  final StockfishSpec stockfish => StockfishTransport.connect(stockfish),
+};
 
 /// The app's [EngineFactory].
 ///

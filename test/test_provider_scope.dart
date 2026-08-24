@@ -18,6 +18,7 @@ import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_storage.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
+import 'package:lichess_mobile/src/model/engine/engine_factory.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
@@ -35,6 +36,7 @@ import 'package:visibility_detector/visibility_detector.dart';
 import './model/common/service/fake_sound_service.dart';
 import 'binding.dart';
 import 'model/analysis/fake_opening_service.dart';
+import 'model/engine/fake_engine.dart';
 import 'model/notifications/fake_notification_display.dart';
 import 'network/fake_http_client_factory.dart';
 import 'network/fake_websocket_channel.dart';
@@ -236,6 +238,11 @@ Future<Widget> makeTestProviderScope(
       return pool;
     }),
     connectivityPluginProvider: connectivityPluginProvider.overrideWith((_) => FakeConnectivity()),
+    // Every engine in tests is a [FakeEngine] over a fake transport. Read lazily, so a test can
+    // configure [fakeEngine] right up to the moment it pumps its widget.
+    engineFactoryProvider: engineFactoryProvider.overrideWith(
+      (ref) => EngineFactory(connect: (spec) => fakeEngine.connect(spec)),
+    ),
     showRatingsPrefProvider: showRatingsPrefProvider.overrideWith((ref) => ShowRatings.yes),
     soundServiceProvider: soundServiceProvider.overrideWithValue(FakeSoundService()),
     openingServiceProvider: openingServiceProvider.overrideWithValue(const FakeOpeningService()),

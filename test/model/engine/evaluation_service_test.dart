@@ -1,11 +1,13 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:fake_async/fake_async.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/engine_factory.dart';
+import 'package:lichess_mobile/src/model/engine/engine_providers.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
 import 'package:lichess_mobile/src/model/engine/stockfish_level.dart';
@@ -14,8 +16,27 @@ import 'package:multistockfish/multistockfish.dart';
 
 import '../../binding.dart';
 import '../../test_container.dart';
+import 'fake_engine.dart';
 import 'fake_nnue_service.dart';
-import 'fake_stockfish.dart';
+
+/// The engine's lifecycle, as these tests read it off [EngineEvaluationState].
+///
+/// The service no longer keeps a state machine of its own: the engine is an [AsyncValue], and
+/// whether it is searching is a flag beside it. This is the mapping the views apply, named so that
+/// the assertions below stay about behaviour rather than about record fields.
+enum EngineState { initial, loading, idle, computing, error }
+
+extension EngineEvaluationStateTest on EngineEvaluationState {
+  /// The engine's `id name`, once it has one.
+  String? get engineName => engine?.value;
+
+  EngineState get engineState => switch (engine) {
+    null => EngineState.initial,
+    AsyncError() => EngineState.error,
+    AsyncValue(isLoading: true) => EngineState.loading,
+    _ => isComputing ? EngineState.computing : EngineState.idle,
+  };
+}
 
 EvalWork makeWork({
   StringId? id,
@@ -58,7 +79,7 @@ void main() {
   TestLichessBinding.ensureInitialized();
 
   setUp(() {
-    testBinding.stockfish = FakeStockfish();
+    fakeEngine = FakeEngine();
   });
 
   group('EvaluationService state transitions', () {
@@ -66,7 +87,7 @@ void main() {
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
 
-      expect(service.evaluationState.value.state, EngineState.initial);
+      expect(service.evaluationState.value.engineState, EngineState.initial);
       expect(service.evaluationState.value.currentWork, isNull);
       expect(service.evaluationState.value.eval, isNull);
     });
@@ -78,7 +99,7 @@ void main() {
       // Track state transitions (filter out consecutive duplicates)
       final states = <EngineState>[];
       service.evaluationState.addListener(() {
-        final newState = service.evaluationState.value.state;
+        final newState = service.evaluationState.value.engineState;
         if (states.isEmpty || states.last != newState) {
           states.add(newState);
         }
@@ -103,7 +124,7 @@ void main() {
       await stream!.first;
 
       // Verify we have non-initial state before quit
-      expect(service.evaluationState.value.state, isNot(EngineState.initial));
+      expect(service.evaluationState.value.engineState, isNot(EngineState.initial));
       expect(service.evaluationState.value.currentWork, isNotNull);
       expect(service.evaluationState.value.eval, isNotNull);
       expect(service.evaluationState.value.engineName, isNotNull);
@@ -111,7 +132,7 @@ void main() {
       service.quit();
 
       // quit() should immediately reset all fields to initial state
-      expect(service.evaluationState.value.state, EngineState.initial);
+      expect(service.evaluationState.value.engineState, EngineState.initial);
       expect(service.evaluationState.value.currentWork, isNull);
       expect(service.evaluationState.value.eval, isNull);
       expect(service.evaluationState.value.engineName, isNull);
@@ -127,17 +148,17 @@ void main() {
       await initStream!.first;
 
       // Wait for state to settle to idle
-      while (service.evaluationState.value.state != EngineState.idle) {
+      while (service.evaluationState.value.engineState != EngineState.idle) {
         await Future<void>.delayed(const Duration(milliseconds: 10));
       }
-      expect(service.evaluationState.value.state, EngineState.idle);
+      expect(service.evaluationState.value.engineState, EngineState.idle);
 
       // Track state transitions for the next evaluation (filter out consecutive duplicates)
       // Initialize with current state to only capture actual transitions
-      var lastState = service.evaluationState.value.state;
+      var lastState = service.evaluationState.value.engineState;
       final states = <EngineState>[];
       service.evaluationState.addListener(() {
-        final newState = service.evaluationState.value.state;
+        final newState = service.evaluationState.value.engineState;
         if (newState != lastState) {
           states.add(newState);
           lastState = newState;
@@ -153,7 +174,7 @@ void main() {
       await stream!.first;
 
       // Wait for state to settle back to idle
-      while (service.evaluationState.value.state != EngineState.idle) {
+      while (service.evaluationState.value.engineState != EngineState.idle) {
         await Future<void>.delayed(const Duration(milliseconds: 10));
       }
 
@@ -169,7 +190,7 @@ void main() {
       final initStream = service.evaluate(initWork);
       await initStream!.first;
 
-      while (service.evaluationState.value.state != EngineState.idle) {
+      while (service.evaluationState.value.engineState != EngineState.idle) {
         await Future<void>.delayed(const Duration(milliseconds: 10));
       }
 
@@ -208,7 +229,7 @@ void main() {
       final (resultWork2, _) = await stream2!.first;
       expect(resultWork2, work2);
 
-      while (service.evaluationState.value.state != EngineState.idle) {
+      while (service.evaluationState.value.engineState != EngineState.idle) {
         await Future<void>.delayed(const Duration(milliseconds: 10));
       }
 
@@ -216,9 +237,9 @@ void main() {
       expect(stream1ResultsAfterWork2, isEmpty);
     });
 
-    test('evaluate() after quit() restarts engine', () async {
-      final delayedStockfish = DelayedFakeStockfish();
-      testBinding.stockfish = delayedStockfish;
+    test('evaluate() after quit() reuses the engine within the grace window', () async {
+      final delayedStockfish = FakeEngine();
+      fakeEngine = delayedStockfish;
 
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
@@ -227,24 +248,47 @@ void main() {
       final stream1 = service.evaluate(work);
       await stream1!.first;
 
-      expect(delayedStockfish.startCallCount, 1);
+      expect(delayedStockfish.startCount, 1);
 
       service.quit();
-
-      // Let the queued quit operation drain before re-evaluating.
       await pumpEventQueue();
 
       final stream2 = service.evaluate(work);
       await stream2!.first;
 
-      expect(delayedStockfish.startCallCount, 2);
+      // Leaving one analysis screen for another is what the grace window exists for: the engine is
+      // handed over instead of being quit and started again in between.
+      expect(delayedStockfish.startCount, 1);
+      expect(delayedStockfish.quitCount, 0);
+    });
+
+    test('an engine nobody comes back for is quit once the grace window passes', () async {
+      final delayedStockfish = FakeEngine();
+      fakeEngine = delayedStockfish;
+
+      final container = await makeContainer();
+
+      fakeAsync((async) {
+        final service = container.read(evaluationServiceProvider);
+
+        service.evaluate(makeWork());
+        async.elapse(const Duration(seconds: 1));
+        expect(delayedStockfish.startCount, 1);
+
+        service.quit();
+        async.elapse(const Duration(seconds: 1));
+        expect(delayedStockfish.quitCount, 0, reason: 'still inside the grace window');
+
+        async.elapse(kEngineDisposeDelay);
+        expect(delayedStockfish.quitCount, 1);
+      });
     });
   });
 
   group('EvaluationService race conditions', () {
     test('rapid evaluate() calls during init - last caller wins', () async {
-      final delayedStockfish = DelayedFakeStockfish(startDelay: const Duration(milliseconds: 50));
-      testBinding.stockfish = delayedStockfish;
+      final delayedStockfish = FakeEngine(startDelay: const Duration(milliseconds: 50));
+      fakeEngine = delayedStockfish;
 
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
@@ -270,14 +314,14 @@ void main() {
       expect(resultWork, work3);
 
       // Engine should only be started once despite multiple evaluate() calls
-      expect(delayedStockfish.startCallCount, 1);
+      expect(delayedStockfish.startCount, 1);
       // Nothing is quit: there was no engine to replace, and a start is no longer preceded by a
       // quit of whatever happened to be running.
-      expect(delayedStockfish.quitCallCount, 0);
+      expect(delayedStockfish.quitCount, 0);
       // Only work3 ever reaches the engine — the requests made while it was starting were
       // superseded before it was ready — so the single stop is the engine being cut short once it
       // reported past its own movetime (elapsed 1500ms > searchTime 1000ms).
-      expect(delayedStockfish.stopCallCount, 1);
+      expect(delayedStockfish.stopCount, 1);
 
       // stream1 is filtered to work1, so it should not have received any results
       // (the engine only computed work3)
@@ -285,8 +329,8 @@ void main() {
     });
 
     test('evaluate() while init in progress does not start new init', () async {
-      final delayedStockfish = DelayedFakeStockfish(startDelay: const Duration(milliseconds: 100));
-      testBinding.stockfish = delayedStockfish;
+      final delayedStockfish = FakeEngine(startDelay: const Duration(milliseconds: 100));
+      fakeEngine = delayedStockfish;
 
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
@@ -295,7 +339,7 @@ void main() {
       final work2 = makeWork(path: UciPath.fromId(UciCharPair.fromUci('e2e4')));
 
       service.evaluate(work1);
-      expect(service.evaluationState.value.state, EngineState.loading);
+      expect(service.evaluationState.value.engineState, EngineState.loading);
 
       final stream2 = service.evaluate(work2);
       expect(service.evaluationState.value.currentWork, work2);
@@ -304,12 +348,12 @@ void main() {
       await stream2!.first;
 
       // Still only one start call
-      expect(delayedStockfish.startCallCount, 1);
+      expect(delayedStockfish.startCount, 1);
     });
 
     test('evaluate() does not restart when stockfish is in starting state', () async {
-      final delayedStockfish = DelayedFakeStockfish(startDelay: const Duration(milliseconds: 100));
-      testBinding.stockfish = delayedStockfish;
+      final delayedStockfish = FakeEngine(startDelay: const Duration(milliseconds: 100));
+      fakeEngine = delayedStockfish;
 
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
@@ -317,11 +361,11 @@ void main() {
       final work1 = makeWork();
       service.evaluate(work1);
 
-      // Wait for stockfish to be in starting state
-      while (delayedStockfish.state.value != StockfishState.starting) {
+      // Wait for the engine to be starting.
+      while (delayedStockfish.startCount == 0) {
         await Future<void>.delayed(const Duration(milliseconds: 5));
       }
-      expect(delayedStockfish.state.value, StockfishState.starting);
+      expect(delayedStockfish.isRunning, isFalse, reason: 'still starting');
 
       // Call evaluate again while stockfish is starting
       final work2 = makeWork(path: UciPath.fromId(UciCharPair.fromUci('e2e4')));
@@ -331,14 +375,14 @@ void main() {
       await stream2!.first;
 
       // Should only have one start call (no restart when state was starting)
-      expect(delayedStockfish.startCallCount, 1);
+      expect(delayedStockfish.startCount, 1);
       // And nothing is quit: the second request joined the engine that was already starting.
-      expect(delayedStockfish.quitCallCount, 0);
+      expect(delayedStockfish.quitCount, 0);
     });
 
     test('stop() during init clears work but init continues', () async {
-      final delayedStockfish = DelayedFakeStockfish(startDelay: const Duration(milliseconds: 50));
-      testBinding.stockfish = delayedStockfish;
+      final delayedStockfish = FakeEngine(startDelay: const Duration(milliseconds: 50));
+      fakeEngine = delayedStockfish;
 
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
@@ -346,7 +390,7 @@ void main() {
       final work = makeWork();
       service.evaluate(work);
 
-      expect(service.evaluationState.value.state, EngineState.loading);
+      expect(service.evaluationState.value.engineState, EngineState.loading);
 
       service.stop();
 
@@ -355,8 +399,8 @@ void main() {
     });
 
     test('rapid quit/evaluate cycles are handled correctly', () async {
-      final delayedStockfish = DelayedFakeStockfish();
-      testBinding.stockfish = delayedStockfish;
+      final delayedStockfish = FakeEngine();
+      fakeEngine = delayedStockfish;
 
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
@@ -377,15 +421,15 @@ void main() {
       final stream3 = service.evaluate(work);
       await stream3!.first;
 
-      // startCallCount is 3 (one per evaluate cycle)
-      expect(delayedStockfish.startCallCount, 3);
-      // quitCallCount is 2, one per explicit quit(). Starting an engine no longer quits one first.
-      expect(delayedStockfish.quitCallCount, 2);
+      // One engine for all three cycles: each quit() lets go of it, and each evaluate() picks the
+      // same one back up before the grace window has passed.
+      expect(delayedStockfish.startCount, 1);
+      expect(delayedStockfish.quitCount, 0);
     });
 
     test('multiple quit() calls are idempotent', () async {
-      final delayedStockfish = DelayedFakeStockfish();
-      testBinding.stockfish = delayedStockfish;
+      final delayedStockfish = FakeEngine();
+      fakeEngine = delayedStockfish;
 
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
@@ -411,38 +455,40 @@ void main() {
       // back in its initial state, further quit() calls must short-circuit and
       // not reach the native engine again (quitting an already-quit engine is
       // what crashed it in #2870).
-      final delayedStockfish = DelayedFakeStockfish();
-      testBinding.stockfish = delayedStockfish;
+      final delayedStockfish = FakeEngine();
+      fakeEngine = delayedStockfish;
 
       final container = await makeContainer();
-      final service = container.read(evaluationServiceProvider);
 
-      final stream = service.evaluate(makeWork());
-      await stream!.first;
+      fakeAsync((async) {
+        final service = container.read(evaluationServiceProvider);
 
-      // Starting an engine does not quit one first, so nothing has been quit yet.
-      expect(delayedStockfish.quitCallCount, 0);
+        service.evaluate(makeWork());
+        async.elapse(const Duration(seconds: 1));
 
-      service.quit();
-      service.quit();
-      service.quit();
+        // Starting an engine does not quit one first, so nothing has been quit yet.
+        expect(delayedStockfish.quitCount, 0);
 
-      // Allow the single queued quit to run.
-      await pumpEventQueue();
+        service.quit();
+        service.quit();
+        service.quit();
 
-      expect(
-        delayedStockfish.quitCallCount,
-        1,
-        reason: 'only the first quit() reaches the engine; subsequent quits are no-ops',
-      );
+        async.elapse(kEngineDisposeDelay + const Duration(seconds: 1));
+
+        expect(
+          delayedStockfish.quitCount,
+          1,
+          reason: 'the engine is quit once, however many times it was let go of',
+        );
+      });
     });
 
     test('engine start/quit operations never overlap during rapid open/close cycles', () async {
       // Non-regression test for #2870: repeatedly opening and closing the
       // analysis page crashed the engine because native start/quit calls ran
       // concurrently. They must now be serialized through a single queue.
-      final stockfish = ConcurrencyTrackingStockfish();
-      testBinding.stockfish = stockfish;
+      final stockfish = FakeEngine();
+      fakeEngine = stockfish;
 
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
@@ -524,8 +570,8 @@ void main() {
     });
 
     test('ucinewgame is sent when initialPosition changes', () async {
-      final delayedStockfish = DelayedFakeStockfish();
-      testBinding.stockfish = delayedStockfish;
+      final delayedStockfish = FakeEngine();
+      fakeEngine = delayedStockfish;
 
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
@@ -534,7 +580,7 @@ void main() {
       final stream1 = service.evaluate(work1);
       await stream1!.first;
 
-      delayedStockfish.stdinCommands.clear();
+      delayedStockfish.commands.clear();
 
       // Different initialPosition (after e4)
       final positionAfterE4 = Chess.initial.play(Move.parse('e2e4')!);
@@ -542,12 +588,12 @@ void main() {
       final stream2 = service.evaluate(work2);
       await stream2!.first;
 
-      expect(delayedStockfish.stdinCommands, contains('ucinewgame'));
+      expect(delayedStockfish.commands, contains('ucinewgame'));
     });
 
     test('ucinewgame is sent when variant changes (engine restart)', () async {
-      final delayedStockfish = DelayedFakeStockfish();
-      testBinding.stockfish = delayedStockfish;
+      final delayedStockfish = FakeEngine();
+      fakeEngine = delayedStockfish;
 
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
@@ -556,18 +602,18 @@ void main() {
       final stream1 = service.evaluate(work1);
       await stream1!.first;
 
-      delayedStockfish.stdinCommands.clear();
+      delayedStockfish.commands.clear();
 
       final work2 = makeWork(id: const StringId('game1'), variant: Variant.atomic);
       final stream2 = service.evaluate(work2);
       await stream2!.first;
 
-      expect(delayedStockfish.stdinCommands, contains('ucinewgame'));
+      expect(delayedStockfish.commands, contains('ucinewgame'));
     });
 
     test('ucinewgame is sent when flavor changes (engine restart)', () async {
-      final delayedStockfish = DelayedFakeStockfish();
-      testBinding.stockfish = delayedStockfish;
+      final delayedStockfish = FakeEngine();
+      fakeEngine = delayedStockfish;
 
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
@@ -576,18 +622,18 @@ void main() {
       final stream1 = service.evaluate(work1);
       await stream1!.first;
 
-      delayedStockfish.stdinCommands.clear();
+      delayedStockfish.commands.clear();
 
       final work2 = makeWork(id: const StringId('game1'), flavor: StockfishFlavor.latestNoNNUE);
       final stream2 = service.evaluate(work2);
       await stream2!.first;
 
-      expect(delayedStockfish.stdinCommands, contains('ucinewgame'));
+      expect(delayedStockfish.commands, contains('ucinewgame'));
     });
 
     test('ucinewgame is sent when work id changes', () async {
-      final delayedStockfish = DelayedFakeStockfish();
-      testBinding.stockfish = delayedStockfish;
+      final delayedStockfish = FakeEngine();
+      fakeEngine = delayedStockfish;
 
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
@@ -596,18 +642,18 @@ void main() {
       final stream1 = service.evaluate(work1);
       await stream1!.first;
 
-      delayedStockfish.stdinCommands.clear();
+      delayedStockfish.commands.clear();
 
       final work2 = makeWork(id: const StringId('game2'));
       final stream2 = service.evaluate(work2);
       await stream2!.first;
 
-      expect(delayedStockfish.stdinCommands, contains('ucinewgame'));
+      expect(delayedStockfish.commands, contains('ucinewgame'));
     });
 
     test('ucinewgame is not sent when work context is the same', () async {
-      final delayedStockfish = DelayedFakeStockfish();
-      testBinding.stockfish = delayedStockfish;
+      final delayedStockfish = FakeEngine();
+      fakeEngine = delayedStockfish;
 
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
@@ -616,7 +662,7 @@ void main() {
       final stream1 = service.evaluate(work1);
       await stream1!.first;
 
-      delayedStockfish.stdinCommands.clear();
+      delayedStockfish.commands.clear();
 
       // Same id and initialPosition, just different path
       final work2 = makeWork(
@@ -626,14 +672,14 @@ void main() {
       final stream2 = service.evaluate(work2);
       await stream2!.first;
 
-      expect(delayedStockfish.stdinCommands, isNot(contains('ucinewgame')));
+      expect(delayedStockfish.commands, isNot(contains('ucinewgame')));
     });
 
     test(
       'latestNoNNUE falling back to sf16 does not cause restart on subsequent latestNoNNUE requests',
       () async {
-        final delayedStockfish = DelayedFakeStockfish();
-        testBinding.stockfish = delayedStockfish;
+        final delayedStockfish = FakeEngine();
+        fakeEngine = delayedStockfish;
 
         // NNUE files are unavailable: latestNoNNUE will fall back to sf16
         final container = await makeContainer(
@@ -649,7 +695,7 @@ void main() {
         final stream1 = service.evaluate(work1);
         await stream1!.first;
 
-        expect(delayedStockfish.startCallCount, 1);
+        expect(delayedStockfish.startCount, 1);
 
         // A second request with latestNoNNUE should reuse the running sf16 engine.
         final work2 = makeWork(
@@ -660,7 +706,7 @@ void main() {
         await stream2!.first;
 
         expect(
-          delayedStockfish.startCallCount,
+          delayedStockfish.startCount,
           1,
           reason:
               'Engine must not restart when latestNoNNUE already fell back to sf16 '
@@ -803,7 +849,7 @@ void main() {
       service.evaluate(work);
       service.stop();
 
-      expect(service.evaluationState.value.state, isNot(EngineState.computing));
+      expect(service.evaluationState.value.engineState, isNot(EngineState.computing));
     });
 
     test('Engine evaluation with fake stockfish', () async {
@@ -833,8 +879,8 @@ void main() {
     });
 
     test('Engine transitions to error state on startup failure', () async {
-      final errorStockfish = ErrorStockfish();
-      testBinding.stockfish = errorStockfish;
+      final errorStockfish = ErrorEngine();
+      fakeEngine = errorStockfish;
 
       final container = await makeContainer();
 
@@ -858,7 +904,7 @@ void main() {
 
         async.flushMicrotasks();
 
-        expect(service.evaluationState.value.state, EngineState.error);
+        expect(service.evaluationState.value.engineState, EngineState.error);
       });
     });
 
@@ -867,7 +913,7 @@ void main() {
       // serialization queue, but a thrown failure from start() must still be
       // surfaced as EngineState.error rather than leaving the engine stuck in
       // the loading state.
-      testBinding.stockfish = ThrowingStartStockfish();
+      fakeEngine = ThrowingStartEngine();
 
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
@@ -877,11 +923,11 @@ void main() {
       // Wait for the failing initialization to settle.
       await pumpEventQueue();
 
-      expect(service.evaluationState.value.state, EngineState.error);
+      expect(service.evaluationState.value.engineState, EngineState.error);
     });
 
     test('An engine that never finishes starting is reported as stuck', () async {
-      testBinding.stockfish = StuckStockfish();
+      fakeEngine = StuckEngine();
       final container = await makeContainer();
       final crashlytics = testBinding.firebaseCrashlytics;
       crashlytics.recordedErrors.clear();
@@ -893,13 +939,13 @@ void main() {
         async.flushMicrotasks();
 
         // Nothing has failed yet: the engine is simply still loading.
-        expect(service.evaluationState.value.state, EngineState.loading);
+        expect(service.evaluationState.value.engineState, EngineState.loading);
         expect(crashlytics.recordedErrors, isEmpty);
 
         async.elapse(kEngineCreateTimeout + const Duration(seconds: 1));
         async.flushMicrotasks();
 
-        expect(service.evaluationState.value.state, EngineState.error);
+        expect(service.evaluationState.value.engineState, EngineState.error);
         expect(crashlytics.customKeys['engine_failure_kind'], 'stuck');
         expect(crashlytics.customKeys['engine_unrecoverable'], true);
         // A create that never returns never hands back an engine to read the native diagnostics
@@ -912,13 +958,12 @@ void main() {
       });
     });
 
-    test('A superseded start does not swallow the failure of the one that replaced it', () async {
-      // Non-regression test: quit() lets go of the start in flight without waiting for it, so
-      // the next work request starts a second engine once the first attempt finishes. The
-      // superseded attempt must report nothing and take nothing down with it, or a start that
-      // never completes is never reported.
-      final stockfish = WedgesOnRestartStockfish();
-      testBinding.stockfish = stockfish;
+    test('An engine that wedges on a later start is still reported as stuck', () async {
+      // The first engine starts and is let go of normally; the one that replaces it never becomes
+      // ready. A start that follows a healthy engine has to be reported like any other, or a
+      // restart that never completes is never reported.
+      final stockfish = WedgesOnRestartEngine();
+      fakeEngine = stockfish;
       final container = await makeContainer();
       final crashlytics = testBinding.firebaseCrashlytics;
       crashlytics.recordedErrors.clear();
@@ -927,24 +972,29 @@ void main() {
         final service = container.read(evaluationServiceProvider);
 
         service.evaluate(makeWork());
+        async.elapse(const Duration(seconds: 1));
+        expect(stockfish.startCount, 1);
+        expect(service.evaluationState.value.engineState, EngineState.idle);
+
         service.quit();
+        // Past the grace window, so the engine really is gone and the next request has to start
+        // another one.
+        async.elapse(kEngineDisposeDelay + const Duration(seconds: 1));
+
         service.evaluate(makeWork(id: const StringId('test2')));
-
         async.flushMicrotasks();
-
-        // The first attempt has run to completion, the second is still waiting on its start.
         expect(stockfish.startCount, 2);
 
         async.elapse(kEngineCreateTimeout + const Duration(seconds: 1));
         async.flushMicrotasks();
 
-        expect(service.evaluationState.value.state, EngineState.error);
+        expect(service.evaluationState.value.engineState, EngineState.error);
         expect(crashlytics.customKeys['engine_failure_kind'], 'stuck');
       });
     });
 
     test('A stuck engine releases pending work and refuses new work', () async {
-      testBinding.stockfish = StuckStockfish();
+      fakeEngine = StuckEngine();
       final container = await makeContainer();
 
       fakeAsync((async) {
@@ -972,7 +1022,7 @@ void main() {
             .then<void>((_) {}, onError: (Object e) => nextMoveError = e);
         async.flushMicrotasks();
         expect(nextMoveError, isA<MoveRequestCancelledException>());
-        expect(service.evaluationState.value.state, EngineState.error);
+        expect(service.evaluationState.value.engineState, EngineState.error);
       });
     });
 
@@ -981,8 +1031,8 @@ void main() {
       // state, not by throwing. The transport is listening for that while it writes, so the
       // failure names the command that caused it and the session is closed there and then —
       // nothing else is sent to an engine that cannot read it.
-      final stockfish = FatalWriteStockfish();
-      testBinding.stockfish = stockfish;
+      final stockfish = FatalWriteEngine();
+      fakeEngine = stockfish;
       final container = await makeContainer();
       final crashlytics = testBinding.firebaseCrashlytics;
       crashlytics.recordedErrors.clear();
@@ -995,17 +1045,19 @@ void main() {
 
       expect(stockfish.failedCommands, hasLength(1));
       expect(
-        stockfish.refusedCommands,
-        isEmpty,
-        reason: 'a dead session is not written to again, so nothing is left for it to refuse',
+        stockfish.commands,
+        stockfish.failedCommands,
+        reason:
+            'a dead session is not written to again, so nothing follows the command that '
+            'killed it',
       );
-      expect(service.evaluationState.value.state, EngineState.error);
+      expect(service.evaluationState.value.engineState, EngineState.error);
       expect(crashlytics.customKeys['engine_failure_kind'], 'command');
       expect(crashlytics.recordedErrors.last.reason, contains(stockfish.failedCommands.single));
     });
 
     test('A broken command stream releases the pending move request', () async {
-      testBinding.stockfish = FatalWriteStockfish();
+      fakeEngine = FatalWriteEngine();
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
 
@@ -1016,14 +1068,14 @@ void main() {
         throwsA(isA<MoveRequestCancelledException>()),
       );
 
-      expect(service.evaluationState.value.state, EngineState.error);
+      expect(service.evaluationState.value.engineState, EngineState.error);
     });
 
     test('A write that fails mid-search leaves the engine in the error state', () async {
       // The failed write is not thrown back at UCIProtocol, so it carries on with the exchange and
       // ends it by announcing that it is computing. That announcement must not be taken for a
       // working engine.
-      testBinding.stockfish = FatalWriteStockfish(fails: (command) => command.startsWith('go'));
+      fakeEngine = FatalWriteEngine(fails: (command) => command.startsWith('go'));
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
 
@@ -1031,14 +1083,14 @@ void main() {
 
       await pumpEventQueue();
 
-      expect(service.evaluationState.value.state, EngineState.error);
+      expect(service.evaluationState.value.engineState, EngineState.error);
     });
 
     test('Work requested after a broken command stream restarts the engine', () async {
       // Nothing recovers a failed session but a new start: the plugin refuses every write until
       // one happens.
-      final stockfish = FatalWriteStockfish();
-      testBinding.stockfish = stockfish;
+      final stockfish = FatalWriteEngine();
+      fakeEngine = stockfish;
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
 
@@ -1054,8 +1106,8 @@ void main() {
     });
 
     test('Engine name is correctly set after restarting stockfish', () async {
-      final fakeStockfish = FakeStockfish();
-      testBinding.stockfish = fakeStockfish;
+      final fakeStockfish = FakeEngine();
+      fakeEngine = fakeStockfish;
       final container = await makeContainer();
 
       final service = container.read(evaluationServiceProvider);
@@ -1084,8 +1136,8 @@ void main() {
 
   group('EvaluationService throttle behavior', () {
     test('first eval event is emitted immediately without throttle delay', () async {
-      final throttleStockfish = ThrottleTestStockfish();
-      testBinding.stockfish = throttleStockfish;
+      final throttleStockfish = ThrottleTestEngine();
+      fakeEngine = throttleStockfish;
 
       final container = await makeContainer();
 
@@ -1112,8 +1164,8 @@ void main() {
     });
 
     test('events during throttle window are collected, only trailing is emitted', () async {
-      final throttleStockfish = ThrottleTestStockfish(evalEventCount: 1);
-      testBinding.stockfish = throttleStockfish;
+      final throttleStockfish = ThrottleTestEngine(evalEventCount: 1);
+      fakeEngine = throttleStockfish;
 
       final container = await makeContainer();
 
@@ -1156,8 +1208,8 @@ void main() {
     });
 
     test('multiple throttle windows emit correctly', () async {
-      final throttleStockfish = ThrottleTestStockfish(evalEventCount: 1);
-      testBinding.stockfish = throttleStockfish;
+      final throttleStockfish = ThrottleTestEngine(evalEventCount: 1);
+      fakeEngine = throttleStockfish;
 
       final container = await makeContainer();
 
@@ -1207,8 +1259,8 @@ void main() {
     });
 
     test('quit() cancels pending throttle timer - no pending timers', () async {
-      final throttleStockfish = ThrottleTestStockfish(evalEventCount: 1);
-      testBinding.stockfish = throttleStockfish;
+      final throttleStockfish = ThrottleTestEngine(evalEventCount: 1);
+      fakeEngine = throttleStockfish;
 
       final container = await makeContainer();
 
@@ -1247,8 +1299,8 @@ void main() {
     });
 
     test('stop() does not cancel throttle timer - pending event still emits', () async {
-      final throttleStockfish = ThrottleTestStockfish(evalEventCount: 1);
-      testBinding.stockfish = throttleStockfish;
+      final throttleStockfish = ThrottleTestEngine(evalEventCount: 1);
+      fakeEngine = throttleStockfish;
 
       final container = await makeContainer();
 
@@ -1285,8 +1337,8 @@ void main() {
     });
 
     test('evaluationState.eval is updated with throttled events', () async {
-      final throttleStockfish = ThrottleTestStockfish(evalEventCount: 1);
-      testBinding.stockfish = throttleStockfish;
+      final throttleStockfish = ThrottleTestEngine(evalEventCount: 1);
+      fakeEngine = throttleStockfish;
 
       final container = await makeContainer();
 
@@ -1326,8 +1378,8 @@ void main() {
     });
 
     test('rapid events only result in first + trailing emissions', () async {
-      final throttleStockfish = ThrottleTestStockfish(evalEventCount: 1);
-      testBinding.stockfish = throttleStockfish;
+      final throttleStockfish = ThrottleTestEngine(evalEventCount: 1);
+      fakeEngine = throttleStockfish;
 
       final container = await makeContainer();
 
@@ -1362,8 +1414,8 @@ void main() {
       });
     });
     test('_emitEval drops late evaluations from previous positions', () async {
-      final throttleEngine = ThrottleTestStockfish(evalEventCount: 1);
-      testBinding.stockfish = throttleEngine;
+      final throttleEngine = ThrottleTestEngine(evalEventCount: 1);
+      fakeEngine = throttleEngine;
       final container = await makeContainer();
 
       fakeAsync((async) {
@@ -1407,8 +1459,8 @@ void main() {
 
   group('EngineEvaluationNotifier', () {
     test('updates engineName after engine restart', () async {
-      final fakeStockfish = FakeStockfish();
-      testBinding.stockfish = fakeStockfish;
+      final fakeStockfish = FakeEngine();
+      fakeEngine = fakeStockfish;
       final container = await makeContainer();
 
       fakeAsync((async) {
@@ -1450,8 +1502,8 @@ void main() {
     });
 
     test('notifier with id filter ignores eval results from work with different id', () async {
-      final throttleStockfish = ThrottleTestStockfish(evalEventCount: 1);
-      testBinding.stockfish = throttleStockfish;
+      final throttleStockfish = ThrottleTestEngine(evalEventCount: 1);
+      fakeEngine = throttleStockfish;
       final container = await makeContainer();
 
       fakeAsync((async) {
@@ -1481,13 +1533,13 @@ void main() {
           isNull,
           reason: 'Notifier should not receive eval updates from work with a different id',
         );
-        expect(game1State?.state, EngineState.initial);
+        expect(game1State?.engineState, EngineState.initial);
       });
     });
 
     test('notifier with path filter ignores eval results from work with different path', () async {
-      final throttleStockfish = ThrottleTestStockfish(evalEventCount: 1);
-      testBinding.stockfish = throttleStockfish;
+      final throttleStockfish = ThrottleTestEngine(evalEventCount: 1);
+      fakeEngine = throttleStockfish;
       final container = await makeContainer();
 
       fakeAsync((async) {
@@ -1519,13 +1571,13 @@ void main() {
           isNull,
           reason: 'Notifier should not receive eval updates from work with a different path',
         );
-        expect(e4State?.state, EngineState.initial);
+        expect(e4State?.engineState, EngineState.initial);
       });
     });
 
     test('notifier receives eval results for matching id and path', () async {
-      final throttleStockfish = ThrottleTestStockfish(evalEventCount: 1);
-      testBinding.stockfish = throttleStockfish;
+      final throttleStockfish = ThrottleTestEngine(evalEventCount: 1);
+      fakeEngine = throttleStockfish;
       final container = await makeContainer();
 
       fakeAsync((async) {
@@ -1557,8 +1609,8 @@ void main() {
     });
 
     test('notifier does not filter work.path when path filter is null', () async {
-      final throttleStockfish = ThrottleTestStockfish(evalEventCount: 1);
-      testBinding.stockfish = throttleStockfish;
+      final throttleStockfish = ThrottleTestEngine(evalEventCount: 1);
+      fakeEngine = throttleStockfish;
       final container = await makeContainer();
 
       fakeAsync((async) {
@@ -1591,8 +1643,8 @@ void main() {
     test(
       'two notifiers with different ids are isolated: only the matching one receives updates',
       () async {
-        final throttleStockfish = ThrottleTestStockfish(evalEventCount: 1);
-        testBinding.stockfish = throttleStockfish;
+        final throttleStockfish = ThrottleTestEngine(evalEventCount: 1);
+        fakeEngine = throttleStockfish;
         final container = await makeContainer();
 
         fakeAsync((async) {
@@ -1637,14 +1689,14 @@ void main() {
             isNull,
             reason: 'game2 notifier should not receive updates for game1 work',
           );
-          expect(game2State?.state, EngineState.initial);
+          expect(game2State?.engineState, EngineState.initial);
         });
       },
     );
 
     test('all notifiers are reset to initial state when quit() is called', () async {
-      final throttleStockfish = ThrottleTestStockfish(evalEventCount: 1);
-      testBinding.stockfish = throttleStockfish;
+      final throttleStockfish = ThrottleTestEngine(evalEventCount: 1);
+      fakeEngine = throttleStockfish;
       final container = await makeContainer();
 
       fakeAsync((async) {
@@ -1672,14 +1724,18 @@ void main() {
         service.quit();
         async.flushMicrotasks();
 
-        expect(game1State?.state, EngineState.initial, reason: 'game1 notifier should be reset');
+        expect(
+          game1State?.engineState,
+          EngineState.initial,
+          reason: 'game1 notifier should be reset',
+        );
         expect(game1State?.eval, isNull, reason: 'game1 notifier eval should be cleared');
       });
     });
 
     test('discards eval results that arrive after quit()', () async {
-      final throttleStockfish = ThrottleTestStockfish(evalEventCount: 1);
-      testBinding.stockfish = throttleStockfish;
+      final throttleStockfish = ThrottleTestEngine(evalEventCount: 1);
+      fakeEngine = throttleStockfish;
       final container = await makeContainer();
 
       fakeAsync((async) {
@@ -1720,7 +1776,7 @@ void main() {
         async.flushMicrotasks();
 
         // State should be reset
-        expect(latestState?.state, EngineState.initial);
+        expect(latestState?.engineState, EngineState.initial);
         expect(latestState?.eval, isNull);
         expect(latestState?.currentWork, isNull);
 
@@ -1736,7 +1792,7 @@ void main() {
           isNull,
           reason: 'Eval results arriving after quit() should be discarded',
         );
-        expect(latestState?.state, EngineState.initial);
+        expect(latestState?.engineState, EngineState.initial);
       });
     });
     test('Notifier resets state to default when filters no longer match', () async {
@@ -1772,7 +1828,7 @@ void main() {
         // resets the provider back to default fallback representation layout
         expect(notifierState.currentWork, isNull);
         expect(notifierState.eval, isNull);
-        expect(notifierState.state, EngineState.initial);
+        expect(notifierState.engineState, EngineState.initial);
       });
     });
   });
@@ -1790,8 +1846,8 @@ void main() {
     });
 
     test('findMove sets Skill Level', () async {
-      final delayedStockfish = DelayedFakeStockfish();
-      testBinding.stockfish = delayedStockfish;
+      final delayedStockfish = FakeEngine();
+      fakeEngine = delayedStockfish;
 
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
@@ -1803,8 +1859,8 @@ void main() {
     });
 
     test('findMove uses multiPv scaled by level', () async {
-      final delayedStockfish = DelayedFakeStockfish();
-      testBinding.stockfish = delayedStockfish;
+      final delayedStockfish = FakeEngine();
+      fakeEngine = delayedStockfish;
 
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
@@ -1856,7 +1912,7 @@ void main() {
 
       final states = <EngineState>[];
       service.evaluationState.addListener(() {
-        final newState = service.evaluationState.value.state;
+        final newState = service.evaluationState.value.engineState;
         if (states.isEmpty || states.last != newState) {
           states.add(newState);
         }
@@ -1870,8 +1926,8 @@ void main() {
     });
 
     test('evaluate after findMove resets Skill Level to 20', () async {
-      final delayedStockfish = DelayedFakeStockfish();
-      testBinding.stockfish = delayedStockfish;
+      final delayedStockfish = FakeEngine();
+      fakeEngine = delayedStockfish;
 
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
@@ -1924,8 +1980,8 @@ void main() {
     });
 
     test('quit discards pending move results', () async {
-      final throttleStockfish = ThrottleTestStockfish();
-      testBinding.stockfish = throttleStockfish;
+      final throttleStockfish = ThrottleTestEngine();
+      fakeEngine = throttleStockfish;
 
       final container = await makeContainer();
 
@@ -1958,8 +2014,8 @@ void main() {
     });
 
     test('findMove throws MoveRequestCancelledException when quit() is called', () async {
-      final throttleStockfish = ThrottleTestStockfish();
-      testBinding.stockfish = throttleStockfish;
+      final throttleStockfish = ThrottleTestEngine();
+      fakeEngine = throttleStockfish;
 
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);
@@ -1996,8 +2052,8 @@ void main() {
     });
 
     test('second findMove cancels the first one with MoveRequestCancelledException', () async {
-      final delayedStockfish = DelayedFakeStockfish();
-      testBinding.stockfish = delayedStockfish;
+      final delayedStockfish = FakeEngine();
+      fakeEngine = delayedStockfish;
 
       final container = await makeContainer();
       final service = container.read(evaluationServiceProvider);

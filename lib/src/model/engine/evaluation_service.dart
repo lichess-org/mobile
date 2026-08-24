@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/engine_factory.dart';
 import 'package:lichess_mobile/src/model/engine/engine_failure.dart';
+import 'package:lichess_mobile/src/model/engine/engine_providers.dart';
 import 'package:lichess_mobile/src/model/engine/engine_spec.dart';
 import 'package:lichess_mobile/src/model/engine/engine_utils.dart';
 import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
@@ -67,12 +68,7 @@ final evaluationServiceProvider = Provider<EvaluationService>((Ref ref) {
 class EvaluationService {
   EvaluationService({required this._ref, required this.maxMemory, required this._nnueService});
 
-  static const _defaultState = (
-    engineName: null,
-    eval: null,
-    state: EngineState.initial,
-    currentWork: null,
-  );
+  static const _defaultState = (engine: null, eval: null, isComputing: false, currentWork: null);
 
   final Ref _ref;
   final int maxMemory;
@@ -81,17 +77,26 @@ class EvaluationService {
   /// The live engine, or null while there is none.
   Engine? _engine;
 
-  /// The flavor the live engine was resolved from.
+  /// The spec [_engineSubscription] is watching, or null when nothing is.
+  EngineSpec? _spec;
+
+  /// What keeps the engine alive. Closing it is the whole of letting go of an engine: the provider
+  /// disposes it once the grace window passes with nobody else watching.
+  ProviderSubscription<AsyncValue<Engine>>? _engineSubscription;
+
+  /// The flavor [_spec] was resolved from.
   ///
   /// The *requested* flavor, not the effective one, so that a latestNoNNUE→sf16 fallback does not
   /// make every later latestNoNNUE request look like a change of engine. The variant is not part
   /// of this: it is a per-search option now, so two variants share one Fairy-Stockfish engine.
   StockfishFlavor? _engineFlavor;
 
-  bool _startInProgress = false;
+  /// Set while the spec for a flavor is being resolved, which is async because it depends on
+  /// whether the NNUE files are on disk.
+  bool _resolvingSpec = false;
 
   /// Distinguishes the engine the service is currently interested in from one a [quit] or a
-  /// failure has already let go of, so that a start still in flight cannot resurrect it.
+  /// failure has already let go of, so that a resolution still in flight cannot resurrect it.
   int _generation = 0;
 
   /// The search whose `info` lines are being accumulated into [_currentEval].
@@ -138,11 +143,8 @@ class EvaluationService {
 
   final ValueNotifier<EngineEvaluationState> _evaluationState = ValueNotifier(_defaultState);
 
-  /// The current engine evaluation state, combining engine name, eval, state, and current work.
+  /// The current engine evaluation state, combining the engine, eval, and current work.
   ValueListenable<EngineEvaluationState> get evaluationState => _evaluationState;
-
-  /// The current engine state.
-  EngineState get _engineState => _evaluationState.value.state;
 
   MoveWork? _currentMoveWork;
 
@@ -291,18 +293,18 @@ class EvaluationService {
   /// This should be called when the engine is no longer needed (e.g., when leaving an analysis screen).
   /// The service can be reused after calling this method.
   void quit() {
-    if (_engine == null && !_startInProgress) {
-      _logger.fine('Engine already quit or uninitialized. Ignoring duplicate quit call.');
+    if (_spec == null && !_resolvingSpec) {
+      _logger.fine('Engine already released or never asked for. Ignoring duplicate quit call.');
       return;
     }
-    _logger.info('Quitting engine');
+    _logger.info('Releasing the engine');
     _generation++;
     _cancelEvalThrottle();
     _cancelPendingMoveRequest();
     _currentMoveWork = null;
     _currentEval = null;
     _accumulatingFor = null;
-    unawaited(_disposeEngine());
+    _releaseEngine();
     _evaluationState.value = _defaultState;
   }
 
@@ -314,7 +316,9 @@ class EvaluationService {
   void _startWork(Work work) {
     if (_unrecoverableFailure case final failure?) {
       _logger.severe('Refusing engine work: the engine is unusable. $failure');
-      _failEngine();
+      _abandonPendingWork();
+      _releaseEngine();
+      _setEngine(AsyncError(failure, StackTrace.current));
       _notifyUser(failure);
       return;
     }
@@ -334,69 +338,124 @@ class EvaluationService {
 
     final flavor = _flavorFor(work);
 
-    if (_engine != null && _engineFlavor == flavor) {
-      _compute(work, newGame: needsNewGame);
+    if (_engineFlavor == flavor) {
+      // Already asking for the right engine. It may not be ready yet, in which case the work runs
+      // when it is.
+      if (_engine != null) _compute(work, newGame: needsNewGame);
       return;
     }
 
-    if (_startInProgress) {
-      // The start in flight picks up whatever work is current when it finishes, and starts another
-      // engine itself if that work needs a different one.
-      _logger.fine('Work requested while the engine is starting; it will run when it is ready');
+    if (_resolvingSpec) {
+      _logger.fine('Work requested while the engine is being chosen; it will run when it is ready');
       return;
     }
 
-    unawaited(_startEngine(flavor));
+    unawaited(_acquireEngine(flavor));
   }
 
-  Future<void> _startEngine(StockfishFlavor flavor) async {
+  /// Points the service at the engine [flavor] needs, and lets go of the previous one.
+  Future<void> _acquireEngine(StockfishFlavor flavor) async {
     final generation = _generation;
-    _startInProgress = true;
-    _setEngineState(EngineState.loading);
+    _resolvingSpec = true;
+    _setEngine(const AsyncLoading());
 
     try {
       final spec = await _resolveSpec(flavor);
-      await _disposeEngine();
-
-      _logger.fine('Starting engine: $spec, hash=${maxMemory}MB');
-      final engine = await _ref.read(engineFactoryProvider).create(spec);
-
-      if (generation != _generation) {
-        // A quit, or a failure, let go of this attempt while it was starting.
-        unawaited(engine.dispose());
-      } else {
-        _engine = engine;
-        _engineFlavor = flavor;
-        engine.name.addListener(_onEngineNameChange);
-        engine.isSearching.addListener(_onSearchingChange);
-        unawaited(engine.death.then((failure) => _onEngineDeath(engine, failure)));
-        _setEngineState(EngineState.idle);
-      }
-    } catch (e, st) {
       if (generation != _generation) return;
-      _handleFailure(
-        switch (e) {
-          final EngineCreationException creation => creation.failure,
-          _ => EngineFailure(
-            kind: EngineFailureKind.start,
-            message: 'The engine failed to start',
-            flavor: flavor,
-            error: e,
-            stackTrace: st,
-          ),
-        }.withContext(maxMemoryInMb: maxMemory),
-      );
-      _failEngine();
-      return;
+
+      _logger.fine('Using engine: $spec, hash=${maxMemory}MB');
+      _engineFlavor = flavor;
+      _watchEngine(spec);
     } finally {
-      _startInProgress = false;
+      if (generation == _generation) _resolvingSpec = false;
+    }
+  }
+
+  /// Subscribes to [spec]'s engine, replacing whatever was subscribed to before.
+  void _watchEngine(EngineSpec spec) {
+    if (_spec == spec) return;
+
+    _detachEngine();
+    _engineSubscription?.close();
+    _spec = spec;
+    _engineSubscription = _ref.listen<AsyncValue<Engine>>(
+      engineProvider(spec),
+      (_, next) => _onEngineChanged(spec, next),
+      fireImmediately: true,
+    );
+  }
+
+  void _onEngineChanged(EngineSpec spec, AsyncValue<Engine> value) {
+    // An update for an engine this service has already moved on from.
+    if (_spec != spec) return;
+
+    if (value case AsyncError(:final error, :final stackTrace)) {
+      _detachEngine();
+      _handleFailure(_asFailure(error, stackTrace, spec));
+      _releaseEngine(invalidate: true);
+      _setEngine(AsyncError(error, stackTrace));
+      _abandonPendingWork();
+      return;
     }
 
-    // Work requested while the engine was starting was left waiting for it, and may not even want
-    // the engine that has just started — a quit and a fresh request can have replaced it entirely.
-    final currentWork = _evaluationState.value.currentWork ?? _currentMoveWork;
-    if (currentWork != null) _startWork(currentWork);
+    if (value.value case final Engine engine) {
+      _attachEngine(engine);
+      _computeCurrentWork();
+      return;
+    }
+
+    _detachEngine();
+    _setEngine(const AsyncLoading());
   }
+
+  void _attachEngine(Engine engine) {
+    if (identical(_engine, engine)) return;
+    _detachEngine();
+    _engine = engine;
+    engine.name.addListener(_onEngineNameChange);
+    engine.isSearching.addListener(_onSearchingChange);
+    _setEngine(AsyncData(engine.name.value));
+  }
+
+  void _detachEngine() {
+    final engine = _engine;
+    if (engine == null) return;
+    _engine = null;
+    _accumulatingFor = null;
+    engine.name.removeListener(_onEngineNameChange);
+    engine.isSearching.removeListener(_onSearchingChange);
+  }
+
+  /// Lets go of the engine.
+  ///
+  /// The engine itself is not quit here: the provider disposes it once the grace window passes
+  /// with nobody watching, which is what lets one analysis screen hand its engine to the next.
+  /// [invalidate] skips that, for an engine that is already broken.
+  void _releaseEngine({bool invalidate = false}) {
+    // The engine outlives this release, so it must not be left searching for a screen that is
+    // gone. (Once several evaluators share one engine this has to stop only *our* search.)
+    _engine?.stop();
+    _detachEngine();
+    _engineSubscription?.close();
+    _engineSubscription = null;
+    final spec = _spec;
+    _spec = null;
+    _engineFlavor = null;
+    _resolvingSpec = false;
+    if (invalidate && spec != null) _ref.invalidate(engineProvider(spec));
+  }
+
+  EngineFailure _asFailure(Object error, StackTrace stackTrace, EngineSpec spec) => switch (error) {
+    final EngineCreationException creation => creation.failure,
+    final EngineFailure failure => failure,
+    _ => EngineFailure(
+      kind: EngineFailureKind.start,
+      message: 'The engine failed to start',
+      flavor: spec.flavor,
+      error: error,
+      stackTrace: stackTrace,
+    ),
+  }.withContext(maxMemoryInMb: maxMemory);
 
   /// The spec for [flavor], falling back to SF 16 when the NNUE files are not on disk.
   Future<EngineSpec> _resolveSpec(StockfishFlavor flavor) async {
@@ -423,34 +482,17 @@ class EvaluationService {
       ? work.stockfishFlavor
       : StockfishFlavor.variant;
 
-  Future<void> _disposeEngine() async {
-    final engine = _engine;
-    if (engine == null) return;
-    _engine = null;
-    _engineFlavor = null;
-    _accumulatingFor = null;
-    engine.name.removeListener(_onEngineNameChange);
-    engine.isSearching.removeListener(_onSearchingChange);
-    await engine.dispose();
+  /// Runs whatever work is current on the engine that has just become available.
+  void _computeCurrentWork() {
+    final work = _evaluationState.value.currentWork ?? _currentMoveWork;
+    if (work != null) _startWork(work);
   }
 
-  void _onEngineDeath(Engine engine, EngineFailure? failure) {
-    // An engine this service has already let go of is not news: either it was disposed on purpose,
-    // or the failure that killed it was reported when it was detected.
-    if (!identical(_engine, engine) || failure == null) return;
-
-    _handleFailure(failure.withContext(maxMemoryInMb: maxMemory));
-    _failEngine();
-  }
-
-  /// Puts the service into [EngineState.error] and lets go of everything that was waiting on the
-  /// engine.
+  /// Lets go of everything that was waiting on an engine that is not coming back.
   ///
   /// Nothing is going to answer the work that was in flight, so its callers are failed instead of
-  /// being left waiting forever — a pending [findMove] has no timeout of its own. The engine is
-  /// let go of too, so that the next [_startWork] starts a fresh one rather than talking to one
-  /// this service already knows is unusable.
-  void _failEngine() {
+  /// being left waiting forever — a pending [findMove] has no timeout of its own.
+  void _abandonPendingWork() {
     _generation++;
     _cancelPendingMoveRequest();
     _setEvalWork(null);
@@ -458,8 +500,6 @@ class EvaluationService {
     _currentEval = null;
     _accumulatingFor = null;
     _cancelEvalThrottle();
-    unawaited(_disposeEngine());
-    _setEngineState(EngineState.error);
   }
 
   // ---------------------------------------------------------------------------
@@ -505,6 +545,9 @@ class EvaluationService {
 
   /// Accumulates one `info` line into the evaluation of [work].
   void _onSearchInfo(EvalWork work, Search search, UciInfo info) {
+    // The engine has been let go of: whatever it is still saying is for nobody.
+    if (_engine == null) return;
+
     if (!identical(_accumulatingFor, search)) {
       _accumulatingFor = search;
       _currentEval = null;
@@ -566,8 +609,9 @@ class EvaluationService {
 
   void _onMoveSearchDone(MoveWork work, UCIMove? move) {
     // A superseded search has no move to report; whoever superseded it has already failed the
-    // request that was waiting.
-    if (move == null) return;
+    // request that was waiting. Nor is there anyone to report to once the engine has been let go
+    // of — a move that arrives after a quit belongs to a game the app has moved on from.
+    if (move == null || _engine == null) return;
     if (!_moveController.isClosed) _moveController.add((work, move));
   }
 
@@ -675,11 +719,8 @@ class EvaluationService {
   // State bookkeeping
   // ---------------------------------------------------------------------------
 
-  void _setEngineState(EngineState newState) {
-    _logger.fine('Engine state: ${newState.name}');
-    if (_engineState != newState) {
-      _setState(state: newState);
-    }
+  void _setEngine(AsyncValue<String?> engine) {
+    _setState(engineFn: () => engine);
   }
 
   void _setEval(LocalEval? eval) {
@@ -691,15 +732,15 @@ class EvaluationService {
   }
 
   void _setState({
-    EngineState? state,
+    AsyncValue<String?>? Function()? engineFn,
     LocalEval? Function()? evalFn,
     EvalWork? Function()? workFn,
   }) {
     final current = _evaluationState.value;
     final newState = (
-      engineName: _engine?.name.value,
+      engine: engineFn != null ? engineFn() : current.engine,
       eval: evalFn != null ? evalFn() : current.eval,
-      state: state ?? current.state,
+      isComputing: _engine?.isSearching.value ?? false,
       currentWork: workFn != null ? workFn() : current.currentWork,
     );
     if (current != newState) {
@@ -707,15 +748,12 @@ class EvaluationService {
     }
   }
 
-  void _onSearchingChange() {
-    final engine = _engine;
-    if (engine == null) return;
-    _setEngineState(engine.isSearching.value ? EngineState.computing : EngineState.idle);
-  }
+  void _onSearchingChange() => _setState();
 
   void _onEngineNameChange() {
-    // engineName is always read from the engine in _setState, so this just triggers an update.
-    _setState();
+    final engine = _engine;
+    if (engine == null) return;
+    _setEngine(AsyncData(engine.name.value));
   }
 
   void _dispose() {
@@ -723,21 +761,26 @@ class EvaluationService {
     _cancelEvalThrottle();
     _cancelPendingMoveRequest();
     _currentMoveWork = null;
-    unawaited(_disposeEngine());
+    _releaseEngine();
     _evalController.close();
     _moveController.close();
     _evaluationState.dispose();
   }
 }
 
-/// Engine state.
-enum EngineState { initial, loading, idle, computing, error }
-
 /// A record type holding the current engine evaluation state.
 typedef EngineEvaluationState = ({
-  String? engineName,
+  /// The engine backing the evaluation.
+  ///
+  /// Null when none has been asked for, [AsyncLoading] while one is starting, its `id name` once
+  /// it is ready, and [AsyncError] when it could not start or has died. This is the whole of the
+  /// engine's lifecycle as the UI sees it — there is no separate state machine to keep in step.
+  AsyncValue<String?>? engine,
   LocalEval? eval,
-  EngineState state,
+
+  /// Whether the engine is searching right now.
+  bool isComputing,
+
   EvalWork? currentWork,
 });
 

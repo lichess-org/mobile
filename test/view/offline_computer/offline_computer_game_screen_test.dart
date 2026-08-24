@@ -29,7 +29,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../binding.dart';
-import '../../model/engine/fake_stockfish.dart';
+import '../../model/engine/fake_engine.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 
@@ -62,8 +62,8 @@ void main() {
 
   group('Offline computer game', () {
     setUp(() {
-      // Use LegalMoveFakeStockfish which returns valid moves for each position
-      testBinding.stockfish = LegalMoveFakeStockfish();
+      // Use LegalMoveEngine which returns valid moves for each position
+      fakeEngine = LegalMoveEngine();
     });
 
     testWidgets('New game dialog is shown on startup with all options', (tester) async {
@@ -676,8 +676,8 @@ void main() {
 
   group('Hint feature', () {
     setUp(() {
-      // Use MultiPvFakeStockfish which returns multiPv evaluation data
-      testBinding.stockfish = MultiPvFakeStockfish();
+      // Use MultiPvEngine which returns multiPv evaluation data
+      fakeEngine = MultiPvEngine();
     });
 
     testWidgets('Hint button shows lightbulb icon', (tester) async {
@@ -952,8 +952,8 @@ void main() {
     });
 
     testWidgets('Hint button is disabled when not player turn', (tester) async {
-      // Use LegalMoveFakeStockfish for this test as we need engine to play
-      testBinding.stockfish = LegalMoveFakeStockfish();
+      // Use LegalMoveEngine for this test as we need engine to play
+      fakeEngine = LegalMoveEngine();
       await initOfflineComputerGame(tester, side: Side.black);
 
       // When playing as black, it's white's turn initially (engine's turn)
@@ -977,7 +977,7 @@ void main() {
 
   group('Custom starting position', () {
     setUp(() {
-      testBinding.stockfish = LegalMoveFakeStockfish();
+      fakeEngine = LegalMoveEngine();
     });
 
     testWidgets('New game dialog shows mini board when initialFen is provided', (tester) async {
@@ -1366,7 +1366,7 @@ void main() {
 
   group('Practice comment card', () {
     setUp(() {
-      testBinding.stockfish = LegalMoveFakeStockfish();
+      fakeEngine = LegalMoveEngine();
     });
 
     Future<void> pumpWithComment(WidgetTester tester, PracticeComment comment) async {
@@ -1640,7 +1640,7 @@ void main() {
     });
 
     testWidgets('title is shown when practice mode is enabled', (tester) async {
-      testBinding.stockfish = PracticeModeStockfish();
+      fakeEngine = PracticeModeEngine();
       await initPracticeModeGame(tester);
 
       // Verify the title shows "Practice with computer"
@@ -1648,7 +1648,7 @@ void main() {
     });
 
     testWidgets('game is started with practiceMode flag set', (tester) async {
-      testBinding.stockfish = PracticeModeStockfish();
+      fakeEngine = PracticeModeEngine();
 
       late WidgetRef ref;
       final gameStorage = MockOfflineComputerGameStorage();
@@ -1693,7 +1693,7 @@ void main() {
 
     // testWidgets('Practice mode shows verdict after playing a move', (tester) async {
     //   // Use a fake stockfish that returns an inaccuracy (-60cp shift)
-    //   testBinding.stockfish = PracticeModeStockfish(initialEvalCp: 50, evalShiftCp: -60);
+    //   fakeEngine = PracticeModeEngine(initialEvalCp: 50, evalShiftCp: -60);
 
     //   late WidgetRef ref;
     //   final gameStorage = MockOfflineComputerGameStorage();

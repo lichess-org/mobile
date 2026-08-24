@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/engine/engine_failure.dart';
 import 'package:lichess_mobile/src/model/engine/engine_spec.dart';
 import 'package:logging/logging.dart';
@@ -77,7 +76,7 @@ class StockfishTransport implements EngineTransport {
     StockfishTransport? transport;
     final buffered = <String>[];
 
-    final stockfish = await LichessBinding.instance.createStockfish(
+    final stockfish = await Stockfish.create(
       flavor: spec.flavor,
       bigNetPath: spec.bigNetPath,
       smallNetPath: spec.smallNetPath,
