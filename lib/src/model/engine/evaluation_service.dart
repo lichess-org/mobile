@@ -94,10 +94,14 @@ class EvaluationService {
   /// failure has already let go of, so that a start still in flight cannot resurrect it.
   int _generation = 0;
 
-  /// The search currently running, whatever role asked for it.
-  Search? _currentSearch;
+  /// The search whose `info` lines are being accumulated into [_currentEval].
+  ///
+  /// Tracked rather than assumed, because a search that has been superseded goes on reporting
+  /// until its own `bestmove`: the accumulation belongs to whichever search the engine is actually
+  /// answering, and is started over when a different one starts to speak.
+  Search? _accumulatingFor;
 
-  /// The evaluation being accumulated from the running search's `info` lines.
+  /// The evaluation being accumulated from that search's `info` lines.
   LocalEval? _currentEval;
   int _expectedPvs = 1;
 
@@ -297,6 +301,7 @@ class EvaluationService {
     _cancelPendingMoveRequest();
     _currentMoveWork = null;
     _currentEval = null;
+    _accumulatingFor = null;
     unawaited(_disposeEngine());
     _evaluationState.value = _defaultState;
   }
@@ -423,7 +428,7 @@ class EvaluationService {
     if (engine == null) return;
     _engine = null;
     _engineFlavor = null;
-    _currentSearch = null;
+    _accumulatingFor = null;
     engine.name.removeListener(_onEngineNameChange);
     engine.isSearching.removeListener(_onSearchingChange);
     await engine.dispose();
@@ -451,6 +456,7 @@ class EvaluationService {
     _setEvalWork(null);
     _currentMoveWork = null;
     _currentEval = null;
+    _accumulatingFor = null;
     _cancelEvalThrottle();
     unawaited(_disposeEngine());
     _setEngineState(EngineState.error);
@@ -464,11 +470,7 @@ class EvaluationService {
     final engine = _engine;
     if (engine == null) return;
 
-    _currentEval = null;
-    _expectedPvs = 1;
-
     final search = engine.search(_searchRequestFor(work, newGame: newGame));
-    _currentSearch = search;
 
     switch (work) {
       case final EvalWork evalWork:
@@ -503,7 +505,11 @@ class EvaluationService {
 
   /// Accumulates one `info` line into the evaluation of [work].
   void _onSearchInfo(EvalWork work, Search search, UciInfo info) {
-    if (!identical(_currentSearch, search)) return;
+    if (!identical(_accumulatingFor, search)) {
+      _accumulatingFor = search;
+      _currentEval = null;
+      _expectedPvs = 1;
+    }
 
     // Track max pv index to determine when pv prints are done.
     if (_expectedPvs < info.multiPv) _expectedPvs = info.multiPv;
@@ -543,11 +549,17 @@ class EvaluationService {
 
     if (info.multiPv == _expectedPvs && _currentEval != null) {
       _onEvalResult((work, _currentEval!));
+
+      // Engines report past their own `movetime` — they only check the clock between nodes — so
+      // the search is ended here rather than waited out.
+      if (info.elapsed > work.searchTime) {
+        search.stop();
+      }
     }
   }
 
   void _onEvalSearchDone(EvalWork work, Search search) {
-    if (!identical(_currentSearch, search)) return;
+    if (!identical(_accumulatingFor, search)) return;
     // The engine's last word on this position, which the throttle may otherwise have swallowed.
     if (_currentEval case final eval?) _onEvalResult((work, eval));
   }

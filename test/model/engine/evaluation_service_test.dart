@@ -275,8 +275,9 @@ void main() {
       // quit of whatever happened to be running.
       expect(delayedStockfish.quitCallCount, 0);
       // Only work3 ever reaches the engine — the requests made while it was starting were
-      // superseded before it was ready — so there is no running search to stop.
-      expect(delayedStockfish.stopCallCount, 0);
+      // superseded before it was ready — so the single stop is the engine being cut short once it
+      // reported past its own movetime (elapsed 1500ms > searchTime 1000ms).
+      expect(delayedStockfish.stopCallCount, 1);
 
       // stream1 is filtered to work1, so it should not have received any results
       // (the engine only computed work3)

@@ -57,7 +57,10 @@ void main() {
       engine.search(makeRequest());
       await pumpEventQueue();
 
-      expect(transport.takeCommands(), ['isready']);
+      // A fresh engine has never been told what it is playing, and `ucinewgame` goes in front of
+      // the handshake: clearing the hash takes the engine a moment, and `readyok` is how it says
+      // it is done.
+      expect(transport.takeCommands(), ['ucinewgame', 'isready']);
       expect(engine.isSearching.value, isFalse);
 
       transport.emit('readyok');
@@ -65,8 +68,6 @@ void main() {
 
       expect(transport.commands, [
         'setoption name UCI_Chess960 value true',
-        // A fresh engine has never been told what it is playing.
-        'ucinewgame',
         'position fen ${Chess.initial.fen}',
         'go movetime 1000',
       ]);
@@ -148,11 +149,14 @@ void main() {
         await pumpEventQueue();
 
         await startSearch(engine, transport, makeRequest(variant: Variant.crazyhouse));
+        // The fresh engine's own `ucinewgame` already covers the variant it starts on, so the
+        // variant change does not send a second one.
         expect(
           transport.takeCommands(),
           containsAllInOrder(<String>[
-            'setoption name UCI_Variant value crazyhouse',
             'ucinewgame',
+            'isready',
+            'setoption name UCI_Variant value crazyhouse',
             'position fen ${Chess.initial.fen}',
           ]),
         );

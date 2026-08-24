@@ -64,6 +64,7 @@ final class InfiniteLimit extends SearchLimit {
 }
 
 /// Everything a search needs, and nothing about why it was asked for.
+@immutable
 class SearchRequest {
   const SearchRequest({
     required this.initialPosition,
@@ -110,6 +111,7 @@ class SearchRequest {
 }
 
 /// One `info` line, in the engine's point of view.
+@immutable
 class UciInfo {
   const UciInfo({
     required this.depth,
@@ -233,6 +235,16 @@ class Engine {
     _next = search;
     if (request.newGame) _newGamePending = true;
     _stopRunning();
+
+    // Before the handshake, not after it: clearing the hash takes the engine a moment, and
+    // `readyok` is how it says it is done. This is the order the protocol asks for, and the one
+    // the app has always used.
+    if (_newGamePending) {
+      _newGamePending = false;
+      search._newGameSent = true;
+      _transport.send('ucinewgame');
+    }
+
     _transport.send('isready');
     return search;
   }
@@ -449,19 +461,19 @@ class Engine {
     _lastVariant = next.request.variant;
     _lastHashSize = next.request.hashSize;
 
-    _applyOptions(next.request);
-
-    if (_newGamePending) {
-      _newGamePending = false;
-      _transport.send('ucinewgame');
-    }
+    // Fairy-Stockfish rebuilds its rules when the variant changes, and it must not still be
+    // holding a position set up under the old ones. This one cannot go in front of the handshake
+    // like the [newGame] above, because the option it answers is only sent here.
+    final variantChanged = _applyOptions(next.request);
+    if (variantChanged && !next._newGameSent) _transport.send('ucinewgame');
 
     _transport.send(_positionCommand(next.request));
     _transport.send('go ${_goArguments(next.request.limit)}');
     _isSearching.value = true;
   }
 
-  void _applyOptions(SearchRequest request) {
+  /// Brings the engine's options in line with [request], and says whether the variant changed.
+  bool _applyOptions(SearchRequest request) {
     final wanted = <String, String>{
       'Threads': math.min(request.threads, maxEngineCores).toString(),
       'Hash': request.hashSize.toString(),
@@ -473,8 +485,6 @@ class Engine {
       ...request.options.unlock,
     };
 
-    // Fairy-Stockfish rebuilds its rules when the variant changes, and the position it is holding
-    // was set up under the old ones.
     final variantChanged =
         wanted.containsKey('UCI_Variant') && _options['UCI_Variant'] != wanted['UCI_Variant'];
 
@@ -494,7 +504,7 @@ class Engine {
       _setOption(name, value);
     }
 
-    if (variantChanged) _newGamePending = true;
+    return variantChanged;
   }
 
   void _setOption(String name, String value) {
@@ -525,6 +535,10 @@ class _RunningSearch implements Search {
 
   @override
   final SearchRequest request;
+
+  /// Whether `ucinewgame` was already sent on this search's behalf, so that a variant change does
+  /// not send a second one.
+  bool _newGameSent = false;
 
   final _infos = StreamController<UciInfo>.broadcast();
   final _bestMove = Completer<UCIMove?>();
