@@ -215,6 +215,13 @@ ServerEvalEvent _serverEvalEventFromPick(RequiredPick pick) {
             blunders: pa('blunder').asIntOrThrow(),
             acpl: pa('acpl').asIntOrNull(),
             accuracy: pa('accuracy').asIntOrNull(),
+            phases: pa('phases').letOrNull(
+              (p) => (
+                opening: p('opening').asIntOrNull(),
+                middlegame: p('middlegame').asIntOrNull(),
+                endgame: p('endgame').asIntOrNull(),
+              ),
+            ),
           ),
         ),
         black: it('black').letOrThrow(
@@ -224,6 +231,13 @@ ServerEvalEvent _serverEvalEventFromPick(RequiredPick pick) {
             blunders: pa('blunder').asIntOrThrow(),
             acpl: pa('acpl').asIntOrNull(),
             accuracy: pa('accuracy').asIntOrNull(),
+            phases: pa('phases').letOrNull(
+              (p) => (
+                opening: p('opening').asIntOrNull(),
+                middlegame: p('middlegame').asIntOrNull(),
+                endgame: p('endgame').asIntOrNull(),
+              ),
+            ),
           ),
         ),
       ),
