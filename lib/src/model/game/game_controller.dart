@@ -610,7 +610,12 @@ class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> 
 
   /// Move feedback while playing
   void _playMoveFeedback(SanMove sanMove, {bool skipAnimationDelay = false}) {
-    final animationDuration = ref.read(boardPreferencesProvider).pieceAnimationDuration;
+    final speed = state.value?.game.meta.speed;
+    final isBullet = speed == Speed.bullet || speed == Speed.ultraBullet;
+
+    final animationDuration = isBullet
+        ? Duration.zero
+        : ref.read(boardPreferencesProvider).pieceAnimationDuration;
 
     final delay = animationDuration ~/ 2;
 
