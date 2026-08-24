@@ -1,4 +1,5 @@
 import 'package:lichess_mobile/src/model/engine/engine_slot.dart';
+import 'package:meta/meta.dart';
 import 'package:multistockfish/multistockfish.dart';
 
 /// What engine to create.
@@ -21,6 +22,7 @@ sealed class EngineSpec {
 }
 
 /// A Stockfish engine, in one of the three flavors the app ships.
+@immutable
 final class StockfishSpec extends EngineSpec {
   /// Stockfish 16, NNUE embedded in the binary.
   const StockfishSpec.sf16()

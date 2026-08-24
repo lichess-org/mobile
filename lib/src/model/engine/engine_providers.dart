@@ -12,9 +12,7 @@ final _logger = Logger('EngineProvider');
 /// How long an engine outlives its last watcher.
 ///
 /// Leaving one analysis screen for another disposes the first watcher before the second one
-/// appears; without this window the engine would be quit and started again in between, which is
-/// the restart dance this whole layer exists to remove. Safe to have a real engine sitting idle
-/// for a moment because engines no longer hijack the process's stdin and stdout.
+/// appears; without this window the engine would be quit and started again in between.
 const kEngineDisposeDelay = Duration(seconds: 10);
 
 /// A live engine for [EngineSpec], shared by every watcher.
