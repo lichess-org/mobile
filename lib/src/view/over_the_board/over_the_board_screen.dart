@@ -136,6 +136,34 @@ class _BodyState extends ConsumerState<_Body> {
     final gameState = ref.watch(overTheBoardGameControllerProvider);
     final overTheBoardPrefs = ref.watch(overTheBoardPreferencesProvider);
 
+    final myView = overTheBoardPrefs.myView;
+    final effectiveOrientation = myView == OverTheBoardMyView.flipBoard
+        ? gameState.turn
+        : orientation;
+
+    final (
+      bool topUpsideDown,
+      bool bottomUpsideDown,
+      PieceOrientationBehavior pieceBehavior,
+    ) = switch (myView) {
+      // White always at the bottom: the opponent's info is always flipped to face them.
+      OverTheBoardMyView.whiteBottom => (true, false, PieceOrientationBehavior.opponentUpsideDown),
+      // Symmetric pieces: flipping the opponent's info is user-configurable.
+      OverTheBoardMyView.symmetricPieces => (
+        overTheBoardPrefs.flipOpponentInfo,
+        false,
+        PieceOrientationBehavior.opponentUpsideDown,
+      ),
+      // Flip pieces after move: both info bars face whoever is to move.
+      OverTheBoardMyView.flipPieces => (
+        orientation != gameState.turn,
+        orientation != gameState.turn,
+        PieceOrientationBehavior.sideToPlay,
+      ),
+      // Same side: both players share a side, so the opponent's info is never flipped.
+      OverTheBoardMyView.flipBoard => (false, false, PieceOrientationBehavior.facingUser),
+    };
+
     ref.listen(overTheBoardClockProvider.select((value) => value.flagSide), (previous, flagSide) {
       if (previous == null && flagSide != null) {
         ref.read(overTheBoardGameControllerProvider.notifier).onFlag(flagSide);
@@ -153,7 +181,9 @@ class _BodyState extends ConsumerState<_Body> {
                 game: newGameState.game,
                 onRematch: () {
                   setState(() {
-                    orientation = orientation.opposite;
+                    if (myView != OverTheBoardMyView.flipBoard) {
+                      orientation = orientation.opposite;
+                    }
                     ref.read(overTheBoardGameControllerProvider.notifier).rematch();
                     ref.read(overTheBoardClockProvider.notifier).restart();
                     Navigator.pop(context);
@@ -238,18 +268,16 @@ class _BodyState extends ConsumerState<_Body> {
                   child: GameLayout(
                     key: _boardKey,
                     topTable: _Player(
-                      side: orientation.opposite,
+                      side: effectiveOrientation.opposite,
                       clockKey: const ValueKey('topClock'),
                     ),
-                    topTableUpsideDown:
-                        !overTheBoardPrefs.flipPiecesAfterMove || orientation != gameState.turn,
+                    topTableUpsideDown: topUpsideDown,
                     bottomTable: _Player(
-                      side: orientation,
+                      side: effectiveOrientation,
                       clockKey: const ValueKey('bottomClock'),
                     ),
-                    bottomTableUpsideDown:
-                        overTheBoardPrefs.flipPiecesAfterMove && orientation != gameState.turn,
-                    orientation: orientation,
+                    bottomTableUpsideDown: bottomUpsideDown,
+                    orientation: effectiveOrientation,
                     explosionSquares: gameState.stepCursor > 0
                         ? atomicExplosionSquares(
                             gameState.game.stepAt(gameState.stepCursor - 1).position,
@@ -279,10 +307,8 @@ class _BodyState extends ConsumerState<_Body> {
                     currentMoveIndex: gameState.stepCursor,
                     boardSettingsOverrides: BoardSettingsOverrides(
                       drawShape: const DrawShapeOptions(enable: false),
-                      pieceOrientationBehavior: overTheBoardPrefs.flipPiecesAfterMove
-                          ? PieceOrientationBehavior.sideToPlay
-                          : PieceOrientationBehavior.opponentUpsideDown,
-                      pieceAssets: overTheBoardPrefs.symmetricPieces
+                      pieceOrientationBehavior: pieceBehavior,
+                      pieceAssets: myView == OverTheBoardMyView.symmetricPieces
                           ? PieceSet.symmetric.assets
                           : null,
                       enablePremoves: false,
@@ -386,6 +412,10 @@ class _BottomBar extends ConsumerWidget {
 
   Future<void> _showOtbGameMenu(BuildContext context, WidgetRef ref) {
     final gameState = ref.read(overTheBoardGameControllerProvider);
+    final overTheBoardPrefs = ref.read(overTheBoardPreferencesProvider);
+
+    final myView = overTheBoardPrefs.myView;
+
     return showAdaptiveActionSheet(
       context: context,
       actions: [
@@ -412,10 +442,11 @@ class _BottomBar extends ConsumerWidget {
               ),
             ),
           ),
-        BottomSheetAction(
-          makeLabel: (context) => Text(context.l10n.flipBoard),
-          onPressed: onFlipBoard,
-        ),
+        if (myView != OverTheBoardMyView.flipBoard)
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.flipBoard),
+            onPressed: onFlipBoard,
+          ),
         if (gameState.game.drawable)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.offerDraw),
