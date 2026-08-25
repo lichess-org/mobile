@@ -415,9 +415,9 @@ class _PlayableGameBoardState extends ConsumerState<_PlayableGameBoard> {
     final topSide = topPlayerIsBlack ? Side.black : Side.white;
     final bottomSide = topPlayerIsBlack ? Side.white : Side.black;
 
-    final animationDuration = shell.speed == Speed.ultraBullet || shell.speed == Speed.bullet
-        ? Duration.zero
-        : boardPrefs.pieceAnimationDuration;
+    final animationDuration = shell.hasPieceAnimation
+        ? boardPrefs.pieceAnimationDuration
+        : Duration.zero;
 
     return FocusDetector(
       onFocusRegained: () {
@@ -480,7 +480,7 @@ class _PlayableGameBoardState extends ConsumerState<_PlayableGameBoard> {
 typedef _ShellData = ({
   Variant variant,
   Side youAre,
-  Speed speed,
+  bool hasPieceAnimation,
   bool zen,
   bool playable,
   bool canPremove,
@@ -498,7 +498,7 @@ _ShellData? _shellOf(AsyncValue<GameState> state) {
   return (
     variant: s.game.meta.variant,
     youAre: s.game.youAre ?? Side.white,
-    speed: s.game.meta.speed,
+    hasPieceAnimation: s.hasPieceAnimation,
     zen: s.isZenModeActive,
     playable: s.game.playable,
     canPremove: s.canPremove,
