@@ -5,7 +5,6 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/engine_failure.dart';
 import 'package:lichess_mobile/src/model/engine/engine_spec.dart';
-import 'package:multistockfish/multistockfish.dart';
 
 import 'fake_transport.dart';
 
@@ -316,11 +315,7 @@ void main() {
       final search = await startSearch(engine, transport, makeRequest());
 
       transport.die(
-        const EngineFailure(
-          kind: EngineFailureKind.runtime,
-          message: 'boom',
-          flavor: StockfishFlavor.sf16,
-        ),
+        const EngineFailure(kind: EngineFailureKind.runtime, message: 'boom', engine: 'sf16'),
       );
       await pumpEventQueue();
 

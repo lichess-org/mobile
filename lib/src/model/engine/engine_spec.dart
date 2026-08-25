@@ -17,8 +17,8 @@ sealed class EngineSpec {
   /// The native library this engine runs in.
   EngineSlot get slot;
 
-  /// The plugin flavor this spec starts.
-  StockfishFlavor get flavor;
+  /// A short name for the engine, for logs and failure reports.
+  String get label;
 }
 
 /// A Stockfish engine, in one of the three flavors the app ships.
@@ -46,8 +46,11 @@ final class StockfishSpec extends EngineSpec {
   @override
   final EngineSlot slot;
 
-  @override
+  /// The plugin flavor this spec starts.
   final StockfishFlavor flavor;
+
+  @override
+  String get label => flavor.name;
 
   /// The big NNUE network, for [StockfishSpec.latest] only.
   final String? bigNetPath;
@@ -68,4 +71,30 @@ final class StockfishSpec extends EngineSpec {
 
   @override
   String toString() => 'StockfishSpec(${flavor.name})';
+}
+
+/// Leela Chess Zero.
+///
+/// Note what this does *not* carry: the network. `setoption name WeightsFile` is
+/// honoured at runtime — `Engine::SetPosition` rebuilds the backend when the
+/// options it was built from have changed — so the network is a per-search
+/// option like any other. Two Maia ratings are therefore the same spec, and
+/// share one engine, rather than being two engines fighting over one slot.
+final class Lc0Spec extends EngineSpec {
+  const Lc0Spec();
+
+  @override
+  EngineSlot get slot => EngineSlot.lc0;
+
+  @override
+  String get label => 'lc0';
+
+  @override
+  bool operator ==(Object other) => other is Lc0Spec;
+
+  @override
+  int get hashCode => (Lc0Spec).hashCode;
+
+  @override
+  String toString() => 'Lc0Spec()';
 }

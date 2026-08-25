@@ -27,7 +27,6 @@ import 'package:lichess_mobile/src/widgets/pockets.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:multistockfish/multistockfish.dart';
 
 import '../../binding.dart';
 import '../../model/engine/fake_engine.dart';
@@ -153,9 +152,9 @@ void main() {
       await tester.pump(const Duration(seconds: 1));
       await tester.pumpAndSettle();
 
-      expect(engine.sessions.map((session) => session.spec.flavor).toSet(), {
-        StockfishFlavor.variant,
-        StockfishFlavor.sf16,
+      expect(engine.sessions.map((session) => session.spec.label).toSet(), {
+        'variant',
+        'sf16',
       }, reason: 'the opponent plays on Fairy while the hints are computed on Stockfish 16');
       expect(
         engine.quitCount,

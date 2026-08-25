@@ -46,7 +46,7 @@ void main() {
 
       // Only Fairy-Stockfish has the negative skill levels the weakest opponents need, and it is
       // the only engine that can play every variant.
-      expect(engine.spec?.flavor.name, 'variant');
+      expect(engine.spec?.label, 'variant');
     });
 
     test('turns the level into skill, candidate moves, threads and search time', () async {

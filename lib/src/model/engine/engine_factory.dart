@@ -6,6 +6,8 @@ import 'package:lichess_mobile/src/model/engine/engine_failure.dart';
 import 'package:lichess_mobile/src/model/engine/engine_slot.dart';
 import 'package:lichess_mobile/src/model/engine/engine_spec.dart';
 import 'package:lichess_mobile/src/model/engine/engine_transport.dart';
+import 'package:lichess_mobile/src/model/engine/lc0_transport.dart';
+import 'package:lichess_mobile/src/model/engine/stockfish_transport.dart';
 import 'package:logging/logging.dart';
 
 final _logger = Logger('EngineFactory');
@@ -79,7 +81,7 @@ class EngineFactory {
               'The engine neither started nor failed within ${kEngineCreateTimeout.inSeconds}s. '
               'The operation it is blocked on will never complete, so no further engine work is '
               'possible until the app is restarted',
-          flavor: spec.flavor,
+          engine: spec.label,
           error: e,
           stackTrace: st,
         ),
@@ -91,7 +93,7 @@ class EngineFactory {
         EngineFailure(
           kind: EngineFailureKind.start,
           message: 'The engine failed to start',
-          flavor: spec.flavor,
+          engine: spec.label,
           error: e,
           stackTrace: st,
         ),
@@ -132,6 +134,7 @@ class EngineFactory {
 
 Future<EngineTransport> _connectToPlugin(EngineSpec spec) => switch (spec) {
   final StockfishSpec stockfish => StockfishTransport.connect(stockfish),
+  final Lc0Spec lc0 => Lc0Transport.connect(lc0),
 };
 
 /// The app's [EngineFactory].

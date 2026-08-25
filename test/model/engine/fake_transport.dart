@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:lichess_mobile/src/model/engine/engine_diagnostics.dart';
 import 'package:lichess_mobile/src/model/engine/engine_failure.dart';
 import 'package:lichess_mobile/src/model/engine/engine_spec.dart';
 import 'package:lichess_mobile/src/model/engine/engine_transport.dart';
-import 'package:multistockfish/multistockfish.dart';
 
 /// The `option` declarations a Stockfish-like engine prints during its `uci` handshake.
 ///
@@ -85,11 +85,11 @@ class FakeTransport implements EngineTransport {
   Future<EngineFailure?> get death => _death.future;
 
   @override
-  EngineDiagnostics? get diagnostics => const StockfishDiagnostics(
-    phase: StockfishPhase.idle,
+  EngineDiagnostics? get diagnostics => const EngineDiagnostics(
+    phase: 'idle',
     step: 'idle',
     elapsed: Duration.zero,
-    lastError: null,
+    looksStuck: false,
   );
 
   @override

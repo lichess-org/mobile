@@ -402,7 +402,7 @@ class PositionEvaluator extends Notifier<EngineEvaluationState> {
     _ => EngineFailure(
       kind: EngineFailureKind.start,
       message: 'The engine failed to start',
-      flavor: spec.flavor,
+      engine: spec.label,
       error: error,
       stackTrace: stackTrace,
     ),

@@ -1,12 +1,24 @@
 import 'dart:async';
 
+import 'package:dartchess/dartchess.dart';
 import 'package:fake_async/fake_async.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/engine_factory.dart';
 import 'package:lichess_mobile/src/model/engine/engine_failure.dart';
 import 'package:lichess_mobile/src/model/engine/engine_spec.dart';
 
 import 'fake_engine.dart';
+
+/// A minimal search, for checking which engine answers it.
+SearchRequest makeRequest() => const SearchRequest(
+  initialPosition: Chess.initial,
+  moves: IListConst([]),
+  variant: Variant.standard,
+  limit: SearchLimit.movetime(Duration(seconds: 1)),
+);
 
 /// A factory that starts [engine] instead of a real one.
 EngineFactory factoryFor(FakeEngine engine) => EngineFactory(connect: engine.connect);
@@ -125,6 +137,44 @@ void main() {
 
       expect(engine.quitCount, 0);
       expect(sf16.spec, isNot(fairy.spec));
+    });
+
+    test('an LC0 engine and a Stockfish engine are live at once, each with its '
+        'own output', () async {
+      // The point of giving both plugins private I/O. Before it, whichever
+      // engine booted second took the process's fd 0 and fd 1 with it, and the
+      // first one's output arrived on the second one's channel.
+      // An engine that answers nothing by itself, so that every line below is
+      // put on a session on purpose.
+      final engine = ThrottleTestEngine();
+      final factory = factoryFor(engine);
+
+      final stockfish = await factory.create(const StockfishSpec.sf16());
+      addTearDown(stockfish.dispose);
+      final lc0 = await factory.create(const Lc0Spec());
+      addTearDown(lc0.dispose);
+      await pumpEventQueue();
+
+      expect(engine.sessions, hasLength(2));
+      expect(engine.quitCount, 0, reason: 'neither is quit to make room');
+
+      // Each engine read its own handshake, from its own session.
+      expect(stockfish.name.value, 'Stockfish 16');
+      expect(lc0.name.value, 'Lc0 v0.32.1');
+
+      // And each search is answered by the engine it was given to.
+      final stockfishSearch = stockfish.search(makeRequest());
+      final lc0Search = lc0.search(makeRequest());
+      await pumpEventQueue();
+      engine.sessions[0].emit('readyok');
+      engine.sessions[1].emit('readyok');
+      await pumpEventQueue();
+
+      engine.sessions[0].emit('bestmove e2e4');
+      engine.sessions[1].emit('bestmove d2d4');
+
+      expect(await stockfishSearch.bestMove, 'e2e4');
+      expect(await lc0Search.bestMove, 'd2d4');
     });
   });
 }

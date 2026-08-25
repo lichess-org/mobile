@@ -997,6 +997,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
+  lc0:
+    dependency: "direct main"
+    description:
+      path: "../dart-lc0"
+      relative: true
+    source: path
+    version: "1.0.0"
   leak_tracker:
     dependency: transitive
     description:

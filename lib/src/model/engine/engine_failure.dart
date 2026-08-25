@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:multistockfish/multistockfish.dart';
+import 'package:lichess_mobile/src/model/engine/engine_diagnostics.dart';
 
 /// What the engine was doing when it failed.
 enum EngineFailureKind {
@@ -30,7 +30,7 @@ class EngineFailure {
   const EngineFailure({
     required this.kind,
     required this.message,
-    required this.flavor,
+    required this.engine,
     this.engineState,
     this.variant,
     this.diagnostics,
@@ -45,8 +45,8 @@ class EngineFailure {
   /// A human-readable description of what went wrong, without the diagnostics.
   final String message;
 
-  /// The engine flavor that was being started or used.
-  final StockfishFlavor flavor;
+  /// A short name for the engine that failed: `sf16`, `variant`, `lc0`.
+  final String engine;
 
   /// The chess variant the engine was searching, when the failure was detected somewhere that
   /// knows it. The variant is a per-search option now, so the layers close to the engine — where
@@ -55,7 +55,7 @@ class EngineFailure {
 
   /// The state the plugin reported for the engine when the failure was detected, or null when
   /// there was no engine handle to ask — a start that never handed one back.
-  final StockfishState? engineState;
+  final String? engineState;
 
   /// What the native engine was doing when the failure was detected.
   ///
@@ -65,7 +65,7 @@ class EngineFailure {
   /// Null when there was no engine handle to read them from — a start that timed out before the
   /// plugin handed one back. The plugin puts its own reading of them into the [TimeoutException]
   /// it throws, so that case still reports where the engine stalled, in [error] rather than here.
-  final StockfishDiagnostics? diagnostics;
+  final EngineDiagnostics? diagnostics;
 
   /// The hash size the engine is configured with, in MB. A boot that dies loading the network is
   /// usually a device that could not spare this much. Filled in by whoever owns the memory budget;
@@ -93,7 +93,7 @@ class EngineFailure {
   EngineFailure withContext({Variant? variant, int? maxMemoryInMb}) => EngineFailure(
     kind: kind,
     message: message,
-    flavor: flavor,
+    engine: engine,
     engineState: engineState,
     variant: this.variant ?? variant,
     diagnostics: diagnostics,
@@ -105,8 +105,8 @@ class EngineFailure {
   @override
   String toString() =>
       'EngineFailure(${kind.name}): $message '
-      '[flavor=${flavor.name}, variant=${variant?.name ?? 'unknown'}, '
-      'state=${engineState?.name ?? 'unknown'}, '
+      '[engine=$engine, variant=${variant?.name ?? 'unknown'}, '
+      'state=${engineState ?? 'unknown'}, '
       'hash=${maxMemoryInMb == null ? 'unknown' : '${maxMemoryInMb}MB'}]. '
       '${diagnostics ?? 'No diagnostics.'}'
       '${error == null ? '' : ' Error: $error'}';
@@ -123,11 +123,11 @@ Future<void> reportEngineFailure(EngineFailure failure) async {
     final diagnostics = failure.diagnostics;
 
     await crashlytics.setCustomKey('engine_failure_kind', failure.kind.name);
-    await crashlytics.setCustomKey('engine_flavor', failure.flavor.name);
+    await crashlytics.setCustomKey('engine_backend', failure.engine);
     await crashlytics.setCustomKey('engine_variant', failure.variant?.name ?? 'unknown');
-    await crashlytics.setCustomKey('engine_state', failure.engineState?.name ?? 'unknown');
+    await crashlytics.setCustomKey('engine_state', failure.engineState ?? 'unknown');
     await crashlytics.setCustomKey('engine_max_memory_mb', failure.maxMemoryInMb ?? -1);
-    await crashlytics.setCustomKey('engine_phase', diagnostics?.phase.name ?? 'unknown');
+    await crashlytics.setCustomKey('engine_phase', diagnostics?.phase ?? 'unknown');
     await crashlytics.setCustomKey(
       'engine_phase_step',
       diagnostics == null || diagnostics.step.isEmpty ? 'unknown' : diagnostics.step,

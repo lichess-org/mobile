@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/foundation.dart';
+import 'package:lichess_mobile/src/model/engine/engine_diagnostics.dart';
 import 'package:lichess_mobile/src/model/engine/engine_failure.dart';
 import 'package:lichess_mobile/src/model/engine/engine_spec.dart';
 import 'package:lichess_mobile/src/model/engine/engine_transport.dart';
@@ -26,10 +27,11 @@ Rule ruleFromUciVariant(String uciVariant) => switch (uciVariant) {
   _ => throw ArgumentError('Unexpected uci variant: $uciVariant'),
 };
 
-String _engineNameFor(StockfishFlavor flavor) => switch (flavor) {
-  StockfishFlavor.sf16 => 'Stockfish 16',
-  StockfishFlavor.latestNoNNUE => 'Stockfish 18',
-  StockfishFlavor.variant => 'Fairy-Stockfish',
+String _engineNameFor(EngineSpec spec) => switch (spec) {
+  StockfishSpec(flavor: StockfishFlavor.sf16) => 'Stockfish 16',
+  StockfishSpec(flavor: StockfishFlavor.latestNoNNUE) => 'Stockfish 18',
+  StockfishSpec(flavor: StockfishFlavor.variant) => 'Fairy-Stockfish',
+  Lc0Spec() => 'Lc0 v0.32.1',
 };
 
 /// Minimum depth for an eval to be accepted by the evaluation service.
@@ -150,7 +152,7 @@ class FakeEngine {
   /// The lines the engine writes before anyone can listen, replayed to the first listener.
   @protected
   List<String> handshakeLines(EngineSpec spec) => [
-    'id name ${engineName ?? _engineNameFor(spec.flavor)}',
+    'id name ${engineName ?? _engineNameFor(spec)}',
     // No `option` declarations: an engine that lists none is the harder case for option hygiene,
     // and it is what [Engine]'s fallback defaults exist for.
     'uciok',
@@ -209,7 +211,7 @@ class FakeEngine {
         EngineFailure(
           kind: EngineFailureKind.command,
           message: 'The engine could not be sent the command "$command"',
-          flavor: session.spec.flavor,
+          engine: session.spec.label,
         ),
       );
       return;
@@ -315,11 +317,11 @@ class FakeEngineSession implements EngineTransport {
   EngineDiagnostics? get diagnostics => diagnosticsOverride;
 
   /// What the engine reports it was doing, for failure reports.
-  EngineDiagnostics? diagnosticsOverride = const StockfishDiagnostics(
-    phase: StockfishPhase.idle,
+  EngineDiagnostics? diagnosticsOverride = const EngineDiagnostics(
+    phase: 'idle',
     step: 'idle',
     elapsed: Duration.zero,
-    lastError: null,
+    looksStuck: false,
   );
 
   @override

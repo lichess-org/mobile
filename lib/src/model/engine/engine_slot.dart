@@ -13,4 +13,8 @@ enum EngineSlot {
 
   /// Fairy-Stockfish: chess variants, and negative skill levels.
   fairy,
+
+  /// Leela Chess Zero, which is also how Maia is played: Maia is LC0 with a
+  /// Maia network.
+  lc0,
 }
