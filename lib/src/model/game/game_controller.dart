@@ -610,14 +610,10 @@ class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> 
 
   /// Move feedback while playing
   void _playMoveFeedback(SanMove sanMove, {bool skipAnimationDelay = false}) {
-    final speed = state.value?.game.meta.speed;
-    final isBullet = speed == Speed.bullet || speed == Speed.ultraBullet;
-
-    final animationDuration = isBullet
-        ? Duration.zero
-        : ref.read(boardPreferencesProvider).pieceAnimationDuration;
-
-    final delay = animationDuration ~/ 2;
+    final pieceAnimationDuration = state.value?.hasPieceAnimation == true
+        ? ref.read(boardPreferencesProvider).pieceAnimationDuration
+        : Duration.zero;
+    final delay = pieceAnimationDuration ~/ 2;
 
     if (skipAnimationDelay || delay <= Duration.zero) {
       _moveFeedback(sanMove);
@@ -1215,6 +1211,9 @@ sealed class GameState with _$GameState, ChatMixinState {
       Zen.gameAuto => true,
     };
   }
+
+  /// Whether piece animations are enabled for this game. Animations are disabled for bullet and ultrabullet games.
+  bool get hasPieceAnimation => game.meta.speed != .bullet && game.meta.speed != .ultraBullet;
 
   bool get canPremove => game.meta.speed != Speed.correspondence;
   bool get canAutoQueen => autoQueenSettingOverride ?? (game.prefs?.autoQueen == AutoQueen.always);
