@@ -6,7 +6,6 @@ import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
-import 'package:multistockfish/multistockfish.dart';
 
 part 'work.freezed.dart';
 
@@ -21,10 +20,6 @@ sealed class EvalWork with _$EvalWork {
     /// Identifier to associate this work with a game, puzzle, etc.
     required StringId id,
 
-    /// The engine flavor to use for variants supported by Stockfish (e.g., Standard,
-    /// Chess960, or from-position setups). For other variants, [StockfishFlavor.variant]
-    /// will be used instead.
-    required StockfishFlavor stockfishFlavor,
     required Variant variant,
     required int threads,
     int? hashSize,

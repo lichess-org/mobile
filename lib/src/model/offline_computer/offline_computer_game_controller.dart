@@ -19,6 +19,7 @@ import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
+import 'package:lichess_mobile/src/model/engine/engine_budget.dart';
 import 'package:lichess_mobile/src/model/engine/engine_opponent.dart';
 import 'package:lichess_mobile/src/model/engine/engine_utils.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_context.dart';
@@ -41,7 +42,6 @@ import 'package:lichess_mobile/src/model/offline_computer/tablebase_eval.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:logging/logging.dart';
-import 'package:multistockfish/multistockfish.dart';
 
 part 'offline_computer_game_controller.freezed.dart';
 
@@ -82,12 +82,6 @@ const _kEngineMoveAnimationBuffer = Duration(milliseconds: 50);
 /// The search is done with multipv=1 here, so we can reach higher depths.
 const _kMoveEvalMinDepth = kDebugMode ? 14 : 18;
 
-/// Stockfish flavor to use for hint generation and move evaluation.
-///
-/// Fairy-Stockfish, so that this shares the opponent's engine: pointing it at the analysis engine
-/// is step 4 of the engine refactor, once the memory budget is split between two resident engines.
-const _kComputerStockfishFlavor = StockfishFlavor.variant;
-
 final offlineComputerGameControllerProvider =
     NotifierProvider.autoDispose<OfflineComputerGameController, OfflineComputerGameState>(
       OfflineComputerGameController.new,
@@ -114,6 +108,10 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     _opponent.stop();
     _evaluator.stop();
   }
+
+  /// The evaluator here runs beside the opponent's engine, so it takes the smaller share of the
+  /// memory budget.
+  EngineBudget get _budget => ref.read(engineBudgetProvider);
 
   EvaluationContext get _evaluationContext => EvaluationContext(
     id: state.game.id,
@@ -419,10 +417,9 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   EvalWork _makeMoveEvalWork(IList<Step> steps) {
     return EvalWork(
       id: state.game.id,
-      stockfishFlavor: _kComputerStockfishFlavor,
       variant: state.game.meta.variant,
-      threads: numberOfCoresForEvaluation,
-      hashSize: _evaluator.maxMemory,
+      threads: _budget.threadsFor(numberOfCoresForEvaluation),
+      hashSize: _budget.evaluatorHash,
       searchTime: _kMoveEvalMaxSearchTime,
       // We want the fastest search here and we only need the eval
       multiPv: 1,
@@ -818,10 +815,9 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
 
       final work = EvalWork(
         id: state.game.id,
-        stockfishFlavor: _kComputerStockfishFlavor,
         variant: state.game.meta.variant,
-        threads: numberOfCoresForEvaluation,
-        hashSize: _evaluator.maxMemory,
+        threads: _budget.threadsFor(numberOfCoresForEvaluation),
+        hashSize: _budget.evaluatorHash,
         searchTime: _kHintsMaxSearchTime,
         multiPv: 2, // 2 lines of hints to show an alternative move
         threatMode: false,

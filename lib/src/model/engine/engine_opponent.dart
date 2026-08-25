@@ -1,12 +1,11 @@
 import 'dart:async';
-import 'dart:math' as math;
 
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/engine/engine.dart';
+import 'package:lichess_mobile/src/model/engine/engine_budget.dart';
 import 'package:lichess_mobile/src/model/engine/engine_providers.dart';
 import 'package:lichess_mobile/src/model/engine/opponent_level.dart';
 import 'package:logging/logging.dart';
@@ -50,13 +49,13 @@ abstract class EngineOpponent {
 /// The whole of "how strong is the computer" lives here: the skill level, the number of candidate
 /// moves it picks from, how long it thinks and how many cores it gets.
 class StockfishOpponent implements EngineOpponent {
-  StockfishOpponent({required this._ref, required this.spec, required this.maxMemory});
+  StockfishOpponent({required this._ref, required this.spec, required this.budget});
 
   final Ref _ref;
   final StockfishOpponentSpec spec;
 
-  /// The hash the opponent is allowed, in MB.
-  final int maxMemory;
+  /// How this device's engines share it.
+  final EngineBudget budget;
 
   StockfishLevel get level => spec.level;
 
@@ -105,8 +104,8 @@ class StockfishOpponent implements EngineOpponent {
           moves: moves,
           variant: variant,
           limit: SearchLimit.movetime(level.searchTime),
-          threads: level.threads,
-          hashSize: maxMemory,
+          threads: budget.threadsFor(level.threads),
+          hashSize: budget.opponentHash,
           multiPv: level.multiPv,
           // The complete option set for this search. Stockfish's strength limiting works by
           // biasing the scores of slightly worse moves among the candidates, so the MultiPV above
@@ -160,16 +159,11 @@ final engineOpponentProvider = Provider.autoDispose.family<EngineOpponent, Oppon
   // the opponent every time the engine's [AsyncValue] moves on.
   ref.listen(engineProvider(spec.engineSpec), (_, _) {});
 
-  final maxMemory = ref.read(preloadedDataProvider).requireValue.engineMaxMemoryInMb;
-
   final opponent = switch (spec) {
     final StockfishOpponentSpec stockfish => StockfishOpponent(
       ref: ref,
       spec: stockfish,
-      // Both engines hold their transposition table for as long as they are resident, so the
-      // opponent takes the smaller share: it searches for a second or two at levels that gain
-      // very little from a large table. Split properly in step 4.
-      maxMemory: math.max(16, maxMemory ~/ 4),
+      budget: ref.read(engineBudgetProvider),
     ),
   };
 

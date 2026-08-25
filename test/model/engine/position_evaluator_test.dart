@@ -10,10 +10,10 @@ import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/engine_factory.dart';
 import 'package:lichess_mobile/src/model/engine/engine_providers.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_context.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
 import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
-import 'package:multistockfish/multistockfish.dart';
 
 import '../../binding.dart';
 import '../../test_container.dart';
@@ -49,6 +49,10 @@ EvaluationContext makeContext({
   initialPosition: initialPosition ?? Chess.initial,
 );
 
+/// Chooses the engine the evaluator will use for the official chess variants.
+Future<void> setEnginePref(ProviderContainer container, ChessEnginePref pref) =>
+    container.read(engineEvaluationPreferencesProvider.notifier).setEvaluationFunction(pref);
+
 /// The evaluator for [context], or for the context [makeWork] builds work in by default.
 ///
 /// Listened to as well as read, because the evaluator is autoDispose: a bare `read` would hand
@@ -62,14 +66,12 @@ PositionEvaluator readEvaluator(ProviderContainer container, [EvaluationContext?
 EvalWork makeWork({
   StringId? id,
   UciPath? path,
-  StockfishFlavor flavor = StockfishFlavor.sf16,
   Variant variant = Variant.standard,
   Duration searchTime = const Duration(seconds: 1),
   Position? initialPosition,
 }) {
   return EvalWork(
     id: id ?? const StringId('test'),
-    stockfishFlavor: flavor,
     variant: variant,
     threads: 1,
     path: path ?? UciPath.empty,
@@ -624,13 +626,14 @@ void main() {
       final container = await makeContainer();
       final service = readEvaluator(container);
 
-      final work1 = makeWork(id: const StringId('game1'), flavor: StockfishFlavor.sf16);
+      final work1 = makeWork(id: const StringId('game1'));
       final stream1 = service.evaluate(work1);
       await stream1!.first;
 
       delayedStockfish.commands.clear();
 
-      final work2 = makeWork(id: const StringId('game1'), flavor: StockfishFlavor.latestNoNNUE);
+      await setEnginePref(container, ChessEnginePref.sfLatest);
+      final work2 = makeWork(id: const StringId('game1'));
       final stream2 = service.evaluate(work2);
       await stream2!.first;
 
@@ -677,17 +680,14 @@ void main() {
         );
         final service = readEvaluator(container);
 
-        final work1 = makeWork(flavor: StockfishFlavor.latestNoNNUE);
+        final work1 = makeWork();
         final stream1 = service.evaluate(work1);
         await stream1!.first;
 
         expect(delayedStockfish.startCount, 1);
 
         // A second request with latestNoNNUE should reuse the running sf16 engine.
-        final work2 = makeWork(
-          flavor: StockfishFlavor.latestNoNNUE,
-          path: UciPath.fromId(UciCharPair.fromUci('e2e4')),
-        );
+        final work2 = makeWork(path: UciPath.fromId(UciCharPair.fromUci('e2e4')));
         final stream2 = service.evaluate(work2);
         await stream2!.first;
 
@@ -703,44 +703,25 @@ void main() {
   });
 
   group('PositionEvaluator', () {
-    test('Can use StockfishFlavor.variant for standard chess and 960', () async {
+    test('Uses the engine the user asked for on the variants Stockfish can play', () async {
       final container = await makeContainer();
-      final service = readEvaluator(container);
+      final service = readEvaluator(container, makeContext(variant: Variant.chess960));
 
-      final workStandard = makeWork(
-        id: const StringId('testStandard'),
-        flavor: StockfishFlavor.variant,
-        variant: Variant.standard,
-      );
-      final streamStandard = service.evaluate(workStandard);
-      expect(streamStandard, isNotNull);
-      await streamStandard!.first;
-      expect(service.state.engineName, 'Fairy-Stockfish');
-
-      final work960 = makeWork(
-        id: const StringId('test960'),
-        flavor: StockfishFlavor.variant,
-        variant: Variant.chess960,
-      );
-      final stream960 = service.evaluate(work960);
-      expect(stream960, isNotNull);
-      await stream960!.first;
-      expect(service.state.engineName, 'Fairy-Stockfish');
-    });
-
-    test('Cannot override StockfishFlavor for non standard chess variants', () async {
-      final container = await makeContainer();
-      final service = readEvaluator(container);
-
-      final work = makeWork(
-        id: const StringId('test'),
-        flavor: StockfishFlavor.sf16,
-        variant: Variant.atomic,
-      );
-      final stream = service.evaluate(work);
+      final stream = service.evaluate(makeWork(variant: Variant.chess960));
       expect(stream, isNotNull);
       await stream!.first;
-      // Should ignore the requested sf16 flavor and fall back to variant for non-standard variants
+      expect(service.state.engineName, 'Stockfish 16');
+    });
+
+    test('Falls back to Fairy-Stockfish for the variants Stockfish cannot play', () async {
+      final container = await makeContainer();
+      // Even asked for the latest Stockfish, an atomic game can only be evaluated by Fairy.
+      await setEnginePref(container, ChessEnginePref.sfLatest);
+      final service = readEvaluator(container, makeContext(variant: Variant.atomic));
+
+      final stream = service.evaluate(makeWork(variant: Variant.atomic));
+      expect(stream, isNotNull);
+      await stream!.first;
       expect(service.state.engineName, 'Fairy-Stockfish');
     });
 
@@ -750,7 +731,6 @@ void main() {
 
       final work1 = EvalWork(
         id: const StringId('test'),
-        stockfishFlavor: StockfishFlavor.sf16,
         variant: Variant.standard,
         threads: 1,
         path: UciPath.empty,
@@ -763,7 +743,6 @@ void main() {
 
       final work2 = EvalWork(
         id: const StringId('test'),
-        stockfishFlavor: StockfishFlavor.sf16,
         variant: Variant.standard,
         threads: 1,
         path: UciPath.fromId(UciCharPair.fromUci('e2e4')),
@@ -796,7 +775,6 @@ void main() {
 
       final work = EvalWork(
         id: const StringId('test'),
-        stockfishFlavor: StockfishFlavor.sf16,
         variant: Variant.standard,
         threads: 1,
         path: UciPath.empty,
@@ -821,7 +799,6 @@ void main() {
 
       final work = EvalWork(
         id: const StringId('test'),
-        stockfishFlavor: StockfishFlavor.sf16,
         variant: Variant.standard,
         threads: 1,
         path: UciPath.empty,
@@ -845,7 +822,6 @@ void main() {
 
       final work = EvalWork(
         id: const StringId('test'),
-        stockfishFlavor: StockfishFlavor.sf16,
         variant: Variant.standard,
         threads: 1,
         path: UciPath.empty,
@@ -875,7 +851,6 @@ void main() {
 
         final work = EvalWork(
           id: const StringId('test'),
-          stockfishFlavor: StockfishFlavor.sf16,
           variant: Variant.standard,
           threads: 1,
           path: UciPath.empty,
@@ -1092,12 +1067,12 @@ void main() {
       expect(service.state.engineName, 'Stockfish 16');
 
       service.release();
-      // Let the queued quit drain before restarting with a different flavor.
       await pumpEventQueue();
 
-      final stream2 = service.evaluate(
-        work.copyWith(stockfishFlavor: StockfishFlavor.latestNoNNUE),
-      );
+      // Changing the preference is what changes the engine now.
+      await setEnginePref(container, ChessEnginePref.sfLatest);
+
+      final stream2 = service.evaluate(work);
       expect(stream2, isNotNull);
       await stream2!.first;
 
@@ -1458,12 +1433,14 @@ void main() {
         // Notifier should have the first engine name
         expect(latestState?.engineName, 'Stockfish 16');
 
-        // Quit engine
+        // Let go of the engine, then ask for a different one.
         service.release();
         async.elapse(const Duration(seconds: 1));
 
-        // Restart with different engine name
-        service.evaluate(work.copyWith(stockfishFlavor: StockfishFlavor.latestNoNNUE));
+        setEnginePref(container, ChessEnginePref.sfLatest);
+        async.flushMicrotasks();
+
+        service.evaluate(work);
         async.elapse(const Duration(seconds: 2));
 
         // Notifier should have the updated engine name

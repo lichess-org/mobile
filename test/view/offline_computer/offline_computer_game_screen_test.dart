@@ -27,6 +27,7 @@ import 'package:lichess_mobile/src/widgets/pockets.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:multistockfish/multistockfish.dart';
 
 import '../../binding.dart';
 import '../../model/engine/fake_engine.dart';
@@ -133,6 +134,34 @@ void main() {
 
       // Engine should have responded - at least 2 moves now
       expect(find.byType(InlineMoveItem), findsAtLeast(2));
+    });
+
+    testWidgets('Hints run on the analysis engine, beside the resident opponent', (tester) async {
+      // The payoff of two resident engines. The opponent needs Fairy-Stockfish for its negative
+      // skill levels, but the hints no longer have to be computed by it: they go to the engine the
+      // user chose for analysis, and neither engine is quit to make room for the other.
+      final engine = MultiPvEngine();
+      fakeEngine = engine;
+
+      await initOfflineComputerGame(tester);
+
+      await playMove(tester, 'e2', 'e4');
+      await tester.pump(const Duration(milliseconds: 200));
+      await tester.pumpAndSettle();
+
+      // The opponent has answered, and the hints for the player's turn have been computed.
+      await tester.pump(const Duration(seconds: 1));
+      await tester.pumpAndSettle();
+
+      expect(engine.sessions.map((session) => session.spec.flavor).toSet(), {
+        StockfishFlavor.variant,
+        StockfishFlavor.sf16,
+      }, reason: 'the opponent plays on Fairy while the hints are computed on Stockfish 16');
+      expect(
+        engine.quitCount,
+        0,
+        reason: 'neither engine is quit between the opponent move and the hints',
+      );
     });
 
     testWidgets('Can play drop moves in crazyhouse', (tester) async {

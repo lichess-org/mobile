@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
+import 'package:lichess_mobile/src/model/engine/engine_budget.dart';
 import 'package:lichess_mobile/src/model/engine/engine_utils.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_context.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
@@ -102,6 +103,8 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState<T>> on AnyNotifier<As
   Node get positionTree;
 
   EngineEvaluationPrefState get evaluationPrefs => ref.read(engineEvaluationPreferencesProvider);
+
+  EngineBudget get budget => ref.read(engineBudgetProvider);
 
   EngineEvaluationPreferences get _evaluationPreferencesNotifier =>
       ref.read(engineEvaluationPreferencesProvider.notifier);
@@ -329,10 +332,10 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState<T>> on AnyNotifier<As
 
     final work = EvalWork(
       id: curState.evaluationContext.id,
-      stockfishFlavor: evaluationPrefs.enginePref.flavor,
       variant: curState.evaluationContext.variant,
-      threads: evaluationPrefs.numEngineCores,
-      hashSize: _evaluator.maxMemory,
+      threads: budget.threadsFor(evaluationPrefs.numEngineCores),
+      // An analysis screen has the device to itself: nothing else is resident beside it.
+      hashSize: budget.soleHash,
       path: curState.currentPath,
       searchTime: searchTime,
       multiPv: evaluationPrefs.numEvalLines,

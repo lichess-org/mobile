@@ -35,11 +35,13 @@ String _engineNameFor(StockfishFlavor flavor) => switch (flavor) {
 /// Minimum depth for an eval to be accepted by the evaluation service.
 const kMinEngineDepth = 6;
 
-/// A fake engine, standing in for one of the plugin's per-flavour native libraries.
+/// A fake engine, standing in for the plugin as a whole.
 ///
-/// It can be started and quit over and over, handing out a fresh [EngineTransport] session each
-/// time, so the counters and the recorded commands accumulate across restarts — which is what
-/// lets a test say "the engine was started twice" without holding on to two objects.
+/// It can be started and quit over and over, handing out a fresh [FakeEngineSession] each time, so
+/// the counters and the recorded commands accumulate across restarts — which is what lets a test
+/// say "the engine was started twice" without holding on to two objects. Several sessions can be
+/// live at once, as several flavours can: an offline game runs its opponent on Fairy-Stockfish
+/// while its hints are computed on the analysis engine, and each session keeps its own position.
 ///
 /// Subclass it and override [onGo] / [onStop] to control what the engine answers; the lifecycle
 /// oddities a test might want (a start that throws, one that never returns, a write that kills the
@@ -95,19 +97,22 @@ class FakeEngine {
 
   int get stopCount => commands.where((command) => command.startsWith('stop')).length;
 
-  /// The position the last `position` command set up, if it could be parsed.
-  Position? position;
+  /// The position the last `position` command set up, on the session that got it.
+  Position? get position => _sessions.lastOrNull?.position;
 
   /// The variant last set with `setoption name UCI_Variant`.
-  String? variant;
+  String? get variant => _sessions.lastOrNull?.variant;
 
   /// The spec of the last start.
   EngineSpec? spec;
 
-  _FakeSession? _session;
+  final List<FakeEngineSession> _sessions = [];
 
-  /// Whether a session is live.
-  bool get isRunning => _session != null;
+  /// The sessions that are live, oldest first.
+  List<FakeEngineSession> get sessions => List.unmodifiable(_sessions);
+
+  /// Whether any session is live.
+  bool get isRunning => _sessions.isNotEmpty;
 
   /// Starts the engine, as [EngineFactory] does through its connector.
   Future<EngineTransport> connect(EngineSpec spec) async {
@@ -136,8 +141,8 @@ class FakeEngine {
       throw StateError('The engine reported error instead of becoming ready');
     }
 
-    final session = _FakeSession(this, spec);
-    _session = session;
+    final session = FakeEngineSession(this, spec);
+    _sessions.add(session);
     _exit();
     return session;
   }
@@ -151,36 +156,39 @@ class FakeEngine {
     'uciok',
   ];
 
-  /// Writes a line, as the engine would.
-  void emit(String line) => _session?._receiveLine(line);
+  /// Writes a line from the session that most recently started.
+  ///
+  /// Enough for a test driving a single engine; a subclass answering a command writes to the
+  /// session that was asked.
+  void emit(String line) => _sessions.lastOrNull?._receiveLine(line);
 
   /// What the engine answers a `go` with. The default is two info lines and a bestmove, enough for
   /// the throttle to have something to swallow.
   @protected
-  void onGo(List<String> parts) {
+  void onGo(FakeEngineSession session, List<String> parts) {
     if (parts.length < 3 || parts[1] != 'movetime') return;
     if (int.tryParse(parts[2]) == null) return;
     for (var i = 1; i < 3; i++) {
-      emit(
+      session.emit(
         'info depth ${14 + i} seldepth 8 multipv 1 score cp '
-        '${position?.turn == Side.black ? '-' : ''}23 nodes ${359 * (i + 14)} nps 359000 '
+        '${session.position?.turn == Side.black ? '-' : ''}23 nodes ${359 * (i + 14)} nps 359000 '
         'hashfull 0 tbhits 0 time ${100 * (i + 14)} pv e2e4 e7e5 g1f3 b8c6 f1b5 g8f6',
       );
     }
-    emit('bestmove e2e4 ponder e7e5');
+    session.emit('bestmove e2e4 ponder e7e5');
   }
 
   /// What the engine answers a `stop` with. Nothing, by default: the search that was running has
   /// already said its last word.
   @protected
-  void onStop() {}
+  void onStop(FakeEngineSession session) {}
 
   /// Called when a session ends, so that a subclass can forget what it was counting.
   @protected
   void onQuit() {}
 
-  /// Kills the running session, as an engine that breaks under load would.
-  void kill(EngineFailure failure) => _session?._die(failure);
+  /// Kills the most recent session, as an engine that breaks under load would.
+  void kill(EngineFailure failure) => _sessions.lastOrNull?._die(failure);
 
   void _enter() {
     _inFlightOps++;
@@ -189,8 +197,8 @@ class FakeEngine {
 
   void _exit() => _inFlightOps--;
 
-  void _receive(_FakeSession session, String command) {
-    if (!identical(_session, session)) return;
+  void _receive(FakeEngineSession session, String command) {
+    if (!_sessions.contains(session)) return;
     commands.add(command);
 
     if (failWrite?.call(command) ?? false) {
@@ -210,38 +218,40 @@ class FakeEngine {
     final parts = command.split(RegExp(r'\s+'));
     switch (parts.first) {
       case 'isready':
-        emit('readyok');
+        session.emit('readyok');
       case 'setoption' when parts.length >= 5 && parts[1] == 'name':
         final valueIndex = parts.indexOf('value');
         final name = parts.sublist(2, valueIndex).join(' ');
         final value = parts.sublist(valueIndex + 1).join(' ');
         options[name] = value;
-        if (name == 'UCI_Variant') variant = value;
+        if (name == 'UCI_Variant') session.variant = value;
       case 'position':
-        _setUpPosition(parts);
+        _setUpPosition(session, parts);
       case 'go':
-        onGo(parts);
+        onGo(session, parts);
       case 'stop':
-        onStop();
+        onStop(session);
     }
   }
 
-  void _setUpPosition(List<String> parts) {
+  void _setUpPosition(FakeEngineSession session, List<String> parts) {
     if (parts.length < 3 || parts[1] != 'fen') return;
     final movesIndex = parts.indexWhere((part) => part == 'moves');
-    position = Position.setupPosition(
-      variant != null ? ruleFromUciVariant(variant!) : Rule.chess,
+    var position = Position.setupPosition(
+      session.variant != null ? ruleFromUciVariant(session.variant!) : Rule.chess,
       Setup.parseFen(parts.sublist(2, movesIndex != -1 ? movesIndex : null).join(' ')),
     );
-    if (movesIndex == -1) return;
-    for (var i = movesIndex + 1; i < parts.length; i++) {
-      final move = Move.parse(parts[i]);
-      if (move != null) position = position!.play(move);
+    if (movesIndex != -1) {
+      for (var i = movesIndex + 1; i < parts.length; i++) {
+        final move = Move.parse(parts[i]);
+        if (move != null) position = position.play(move);
+      }
     }
+    session.position = position;
   }
 
-  Future<void> _quit(_FakeSession session) async {
-    if (!identical(_session, session)) return;
+  Future<void> _quit(FakeEngineSession session) async {
+    if (!_sessions.contains(session)) return;
     _enter();
     quitCount++;
 
@@ -251,15 +261,16 @@ class FakeEngine {
       await Future.microtask(() {});
     }
 
-    _session = null;
+    _sessions.remove(session);
     onQuit();
     session._die(null);
     _exit();
   }
 }
 
-class _FakeSession implements EngineTransport {
-  _FakeSession(this._engine, this.spec) {
+/// One live engine: what a single [Stockfish.create] hands back.
+class FakeEngineSession implements EngineTransport {
+  FakeEngineSession(this._engine, this.spec) {
     _pending.addAll(_engine.handshakeLines(spec));
     _controller.onListen = () {
       if (_replayed) return;
@@ -281,6 +292,15 @@ class _FakeSession implements EngineTransport {
   final _death = Completer<EngineFailure?>();
   final _pending = <String>[];
   bool _replayed = false;
+
+  /// The position this session's last `position` command set up.
+  Position? position;
+
+  /// The variant this session was last told to play.
+  String? variant;
+
+  /// Writes a line, as this engine would.
+  void emit(String line) => _receiveLine(line);
 
   @override
   Stream<String> get lines => _controller.stream;
@@ -335,16 +355,16 @@ class CrazyhouseDropMoveEngine extends FakeEngine {
   CrazyhouseDropMoveEngine() : super(engineName: 'Fairy-Stockfish');
 
   @override
-  void onGo(List<String> parts) {
-    emit(
+  void onGo(FakeEngineSession session, List<String> parts) {
+    session.emit(
       'info depth 15 seldepth 8 multipv 1 score cp 50 nodes 5000 nps 359000 hashfull 0 tbhits 0 '
       'time 1500 pv P@c4 d5c4 d2d4',
     );
-    emit(
+    session.emit(
       'info depth 16 seldepth 8 multipv 1 score cp 50 nodes 5359 nps 359000 hashfull 0 tbhits 0 '
       'time 1600 pv P@c4 d5c4 d2d4',
     );
-    emit('bestmove P@c4 ponder d5c4');
+    session.emit('bestmove P@c4 ponder d5c4');
   }
 }
 
@@ -376,7 +396,7 @@ class ThrottleTestEngine extends FakeEngine {
   void emitBestMove() => emit('bestmove e2e4 ponder e7e5');
 
   @override
-  void onGo(List<String> parts) {}
+  void onGo(FakeEngineSession session, List<String> parts) {}
 
   @override
   void onQuit() => emittedEvalCount = 0;
@@ -432,17 +452,17 @@ class AnalysisTestEngine extends FakeEngine {
   }
 
   @override
-  void onGo(List<String> parts) {
-    if (position case final position?) requestedPositions.add(position.fen);
+  void onGo(FakeEngineSession session, List<String> parts) {
+    if (session.position case final position?) requestedPositions.add(position.fen);
   }
 
   @override
-  void onStop() {
+  void onStop(FakeEngineSession session) {
     // The search is over as soon as it is asked to stop, which is what tests drive it with.
-    final current = position;
+    final current = session.position;
     final best = current == null ? null : _firstLegalMove(current);
     if (current == null || best == null) return;
-    emit('bestmove ${best.uci}${_ponder(current)}');
+    session.emit('bestmove ${best.uci}${_ponder(current)}');
   }
 
   @override
@@ -452,25 +472,25 @@ class AnalysisTestEngine extends FakeEngine {
 /// A fake engine that plays the first legal move it finds.
 class LegalMoveEngine extends FakeEngine {
   @override
-  void onGo(List<String> parts) {
-    final current = position;
+  void onGo(FakeEngineSession session, List<String> parts) {
+    final current = session.position;
     final best = current == null ? null : _firstLegalMove(current);
     if (current == null || best == null) return;
 
     final signedCp = current.turn == Side.white ? '23' : '-23';
-    emit(
+    session.emit(
       'info depth 15 seldepth 8 multipv 1 score cp $signedCp nodes 5000 nps 359000 hashfull 0 '
       'tbhits 0 time 1500 pv ${best.uci}',
     );
-    emit('bestmove ${best.uci}${_ponder(current)}');
+    session.emit('bestmove ${best.uci}${_ponder(current)}');
   }
 }
 
 /// A fake engine that answers with several principal variations, for hint tests.
 class MultiPvEngine extends FakeEngine {
   @override
-  void onGo(List<String> parts) {
-    final current = position;
+  void onGo(FakeEngineSession session, List<String> parts) {
+    final current = session.position;
     if (current == null) return;
     final moves = _firstLegalMoves(current, 5);
     if (moves.isEmpty) return;
@@ -479,12 +499,12 @@ class MultiPvEngine extends FakeEngine {
     final baseCp = current.turn == Side.white ? 30 : -30;
     for (var i = 0; i < moves.length; i++) {
       final cp = current.turn == Side.white ? baseCp - (i * 5) : baseCp + (i * 5);
-      emit(
+      session.emit(
         'info depth 15 seldepth 8 multipv ${i + 1} score cp $cp nodes 5000 nps 359000 '
         'hashfull 0 tbhits 0 time 1500 pv ${moves[i].uci}',
       );
     }
-    emit('bestmove ${moves.first.uci}${_ponder(current)}');
+    session.emit('bestmove ${moves.first.uci}${_ponder(current)}');
   }
 }
 
@@ -503,9 +523,9 @@ class PracticeModeEngine extends FakeEngine {
   List<NormalMove>? _lastMoves;
 
   @override
-  void onGo(List<String> parts) {
+  void onGo(FakeEngineSession session, List<String> parts) {
     _goCount++;
-    final current = position;
+    final current = session.position;
     if (current == null) return;
     final moves = _firstLegalMoves(current, 4);
     if (moves.isEmpty) return;
@@ -518,21 +538,21 @@ class PracticeModeEngine extends FakeEngine {
     for (var depth = 16; depth <= 18; depth++) {
       for (var i = 0; i < moves.length; i++) {
         final cp = current.turn == Side.white ? baseCp - (i * 5) : -(baseCp - (i * 5));
-        emit(
+        session.emit(
           'info depth $depth seldepth ${depth + 2} multipv ${i + 1} score cp $cp nodes 50000 '
           'nps 500000 hashfull 100 tbhits 0 time ${depth * 100} pv ${moves[i].uci}',
         );
       }
     }
 
-    emit('bestmove ${moves.first.uci}${_ponder(current)}');
+    session.emit('bestmove ${moves.first.uci}${_ponder(current)}');
   }
 
   @override
-  void onStop() {
-    final current = position;
+  void onStop(FakeEngineSession session) {
+    final current = session.position;
     if (current == null || _lastMoves == null || _lastMoves!.isEmpty) return;
-    emit('bestmove ${_lastMoves!.first.uci}${_ponder(current)}');
+    session.emit('bestmove ${_lastMoves!.first.uci}${_ponder(current)}');
   }
 
   @override

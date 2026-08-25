@@ -4,16 +4,18 @@ import 'dart:math' as math;
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
-import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/engine.dart';
+import 'package:lichess_mobile/src/model/engine/engine_budget.dart';
 import 'package:lichess_mobile/src/model/engine/engine_factory.dart';
 import 'package:lichess_mobile/src/model/engine/engine_failure.dart';
 import 'package:lichess_mobile/src/model/engine/engine_providers.dart';
 import 'package:lichess_mobile/src/model/engine/engine_spec.dart';
 import 'package:lichess_mobile/src/model/engine/engine_utils.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_context.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
@@ -68,8 +70,8 @@ class PositionEvaluator extends Notifier<EngineEvaluationState> {
     return defaultState;
   }
 
-  /// The hash the engine is allowed, in MB.
-  int get maxMemory => ref.read(preloadedDataProvider).requireValue.engineMaxMemoryInMb;
+  /// How this device's engines share it.
+  EngineBudget get budget => ref.read(engineBudgetProvider);
 
   NnueService get _nnueService => ref.read(nnueServiceProvider);
 
@@ -169,7 +171,7 @@ class PositionEvaluator extends Notifier<EngineEvaluationState> {
 
     _logger.info(
       'Starting evaluation at ply ${work.position.ply} with options: '
-      'flavor=${work.stockfishFlavor}, multiPv=${work.multiPv}, cores=${work.threads}, '
+      'multiPv=${work.multiPv}, cores=${work.threads}, hash=${work.hashSize}MB, '
       'searchTime=${work.searchTime.inMilliseconds}ms, threatMode=${work.threatMode}',
     );
 
@@ -193,7 +195,7 @@ class PositionEvaluator extends Notifier<EngineEvaluationState> {
 
     _logger.info(
       'Finding evaluation at ply ${work.position.ply} with options: '
-      'flavor=${work.stockfishFlavor}, multiPv=${work.multiPv}, cores=${work.threads}, '
+      'multiPv=${work.multiPv}, cores=${work.threads}, hash=${work.hashSize}MB, '
       'searchTime=${work.searchTime.inMilliseconds}ms, threatMode=${work.threatMode}',
     );
 
@@ -284,7 +286,7 @@ class PositionEvaluator extends Notifier<EngineEvaluationState> {
 
     _setEvalWork(work);
 
-    final flavor = _flavorFor(work);
+    final flavor = _flavorFor(work.variant);
 
     if (_engineFlavor == flavor) {
       // Already asking for the right engine. It may not be ready yet, in which case the work runs
@@ -311,7 +313,7 @@ class PositionEvaluator extends Notifier<EngineEvaluationState> {
       final spec = await _resolveSpec(flavor);
       if (generation != _generation) return;
 
-      _logger.fine('Using engine: $spec, hash=${maxMemory}MB');
+      _logger.fine('Using engine: $spec, budget: $budget');
       _engineFlavor = flavor;
       _watchEngine(spec);
     } finally {
@@ -404,7 +406,7 @@ class PositionEvaluator extends Notifier<EngineEvaluationState> {
       error: error,
       stackTrace: stackTrace,
     ),
-  }.withContext(maxMemoryInMb: maxMemory);
+  }.withContext(maxMemoryInMb: budget.maxMemoryInMb);
 
   /// The spec for [flavor], falling back to SF 16 when the NNUE files are not on disk.
   Future<EngineSpec> _resolveSpec(StockfishFlavor flavor) async {
@@ -426,9 +428,13 @@ class PositionEvaluator extends Notifier<EngineEvaluationState> {
     }
   }
 
-  /// The flavor [work] needs: everything Stockfish does not know how to play goes to Fairy.
-  StockfishFlavor _flavorFor(EvalWork work) => officialStockfishVariants.contains(work.variant)
-      ? work.stockfishFlavor
+  /// The flavor to evaluate [variant] with.
+  ///
+  /// The user's preference, except for the variants Stockfish does not know how to play, which
+  /// only Fairy-Stockfish can evaluate. Read when the work starts rather than carried on it, so
+  /// that changing the preference is picked up by the next evaluation wherever it comes from.
+  StockfishFlavor _flavorFor(Variant variant) => officialStockfishVariants.contains(variant)
+      ? ref.read(engineEvaluationPreferencesProvider).enginePref.flavor
       : StockfishFlavor.variant;
 
   /// Runs whatever work is current on the engine that has just become available.
