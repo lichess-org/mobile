@@ -6,49 +6,24 @@ import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
-import 'package:lichess_mobile/src/model/engine/stockfish_level.dart';
 import 'package:multistockfish/multistockfish.dart';
 
 part 'work.freezed.dart';
 
 typedef EvalResult = (EvalWork, LocalEval);
-typedef MoveResult = (MoveWork, UCIMove);
 
-/// Base sealed class for engine work items.
-sealed class Work {
-  const Work();
-
-  /// Identifier to associate this work with a game, puzzle, etc.
-  StringId get id;
-
-  /// The engine flavor to use for variants supported by Stockfish (e.g., Standard,
-  /// Chess960, or from-position setups). For other variants, [StockfishFlavor.variant]
-  /// will be used instead.
-  StockfishFlavor get stockfishFlavor;
-  Variant get variant;
-  int get threads;
-  int? get hashSize;
-  Position get initialPosition;
-  IList<Step> get steps;
-
-  /// The search time for this work.
-  Duration get searchTime;
-
-  /// The number of principal variations to compute.
-  int get multiPv;
-
-  Position get position => steps.lastOrNull?.position ?? initialPosition;
-}
-
-/// A work item for position evaluation.
+/// A position to evaluate, and the settings to evaluate it with.
 @freezed
-sealed class EvalWork extends Work with _$EvalWork {
-  const EvalWork._() : super();
+sealed class EvalWork with _$EvalWork {
+  const EvalWork._();
 
   const factory EvalWork({
     /// Identifier to associate this work with a game, puzzle, etc.
     required StringId id,
 
+    /// The engine flavor to use for variants supported by Stockfish (e.g., Standard,
+    /// Chess960, or from-position setups). For other variants, [StockfishFlavor.variant]
+    /// will be used instead.
     required StockfishFlavor stockfishFlavor,
     required Variant variant,
     required int threads,
@@ -56,58 +31,26 @@ sealed class EvalWork extends Work with _$EvalWork {
 
     /// The path in the position tree. Nullable for contexts without a tree (e.g., offline games).
     UciPath? path,
+
+    /// How long the engine may search.
     required Duration searchTime,
+
+    /// The number of principal variations to compute.
     required int multiPv,
+
+    /// Whether to pretend it is the opposite side's turn.
     required bool threatMode,
+
     bool? isDeeper,
     required Position initialPosition,
     required IList<Step> steps,
   }) = _EvalWork;
 
-  @override
+  /// The position to evaluate.
   Position get position => steps.lastOrNull?.position ?? initialPosition;
 
   /// Cached eval for the work position.
   ClientEval? get evalCache => steps.lastOrNull?.eval;
-}
-
-/// A work item for finding the best move at a given engine strength level.
-@freezed
-sealed class MoveWork extends Work with _$MoveWork {
-  const MoveWork._() : super();
-
-  const factory MoveWork({
-    /// Identifier to associate this work with a game, puzzle, etc.
-    required StringId id,
-    required Variant variant,
-    int? hashSize,
-    required Position initialPosition,
-    required IList<Step> steps,
-
-    /// The Stockfish strength level.
-    required StockfishLevel level,
-  }) = _MoveWork;
-
-  /// The Stockfish flavor to use with MoveWork.
-  ///
-  /// It is always set to [StockfishFlavor.variant] since only Fairy-Stockfish supports negative skill levels.
-  @override
-  StockfishFlavor get stockfishFlavor => StockfishFlavor.variant;
-
-  @override
-  Position get position => steps.lastOrNull?.position ?? initialPosition;
-
-  /// The skill level from -20 to 20. For Stockfish option "Skill Level".
-  int get skill => level.skill;
-
-  @override
-  int get threads => level.threads;
-
-  @override
-  int get multiPv => level.multiPv;
-
-  @override
-  Duration get searchTime => level.searchTime;
 }
 
 @freezed

@@ -3,11 +3,8 @@ import 'dart:math' as math;
 
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/engine.dart';
@@ -16,6 +13,7 @@ import 'package:lichess_mobile/src/model/engine/engine_failure.dart';
 import 'package:lichess_mobile/src/model/engine/engine_providers.dart';
 import 'package:lichess_mobile/src/model/engine/engine_spec.dart';
 import 'package:lichess_mobile/src/model/engine/engine_utils.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_context.dart';
 import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
@@ -23,7 +21,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:logging/logging.dart';
 import 'package:multistockfish/multistockfish.dart';
 
-final _logger = Logger('EvaluationService');
+final _logger = Logger('PositionEvaluator');
 
 const kEngineEvalEmissionThrottleDelay = Duration(milliseconds: 200);
 
@@ -37,42 +35,43 @@ const _kUserNotificationThrottle = Duration(seconds: 10);
 const _kUnrecoverableEngineMessage =
     'The chess engine stopped responding. Please restart the app to use it again.';
 
-/// Exception thrown when a [EvaluationService.findMove] request is cancelled.
+/// The evaluator for one [EvaluationContext] — one game, study, puzzle or offline game.
 ///
-/// This can happen when [EvaluationService.quit] is called, or when a new
-/// [EvaluationService.findMove] request supersedes the current one.
-class MoveRequestCancelledException implements Exception {
-  const MoveRequestCancelledException();
+/// Per context rather than app-wide, so results never have to be demultiplexed: a screen watching
+/// its own evaluator cannot see another screen's evaluation, and the engine underneath is shared
+/// through [engineProvider] rather than by sharing the evaluator.
+final positionEvaluatorProvider = NotifierProvider.autoDispose
+    .family<PositionEvaluator, EngineEvaluationState, EvaluationContext>(
+      PositionEvaluator.new,
+      name: 'PositionEvaluatorProvider',
+    );
+
+/// Evaluates positions for analysis.
+///
+/// It does not play moves, does not start engines, and does not know what a skill level is: an
+/// opponent is [EngineOpponent], and the engine is [engineProvider]'s to own.
+///
+/// Only one evaluation runs at a time; a new request takes over from whatever was running ("last
+/// caller wins").
+class PositionEvaluator extends Notifier<EngineEvaluationState> {
+  PositionEvaluator(this.context);
+
+  /// What is being evaluated: a game, a study, a puzzle.
+  final EvaluationContext context;
+
+  /// What the UI sees before anything has been asked of the engine.
+  static const defaultState = (engine: null, eval: null, isComputing: false, currentWork: null);
 
   @override
-  String toString() => 'MoveRequestCancelledException: the move request was cancelled';
-}
+  EngineEvaluationState build() {
+    ref.onDispose(_dispose);
+    return defaultState;
+  }
 
-/// A provider for [EvaluationService].
-final evaluationServiceProvider = Provider<EvaluationService>((Ref ref) {
-  final maxMemory = ref.read(preloadedDataProvider).requireValue.engineMaxMemoryInMb;
-  final nnueService = ref.read(nnueServiceProvider);
-  final service = EvaluationService(ref: ref, maxMemory: maxMemory, nnueService: nnueService);
+  /// The hash the engine is allowed, in MB.
+  int get maxMemory => ref.read(preloadedDataProvider).requireValue.engineMaxMemoryInMb;
 
-  ref.onDispose(() {
-    service._dispose();
-  });
-
-  return service;
-}, name: 'EvaluationServiceProvider');
-
-/// A service to evaluate chess positions, and to ask the engine for a move to play.
-///
-/// It owns one [Engine] at a time and multiplexes both roles onto it: only one search can run at
-/// a time, and a new request takes over from whatever was running ("last caller wins").
-class EvaluationService {
-  EvaluationService({required this._ref, required this.maxMemory, required this._nnueService});
-
-  static const _defaultState = (engine: null, eval: null, isComputing: false, currentWork: null);
-
-  final Ref _ref;
-  final int maxMemory;
-  final NnueService _nnueService;
+  NnueService get _nnueService => ref.read(nnueServiceProvider);
 
   /// The live engine, or null while there is none.
   Engine? _engine;
@@ -106,6 +105,10 @@ class EvaluationService {
   /// answering, and is started over when a different one starts to speak.
   Search? _accumulatingFor;
 
+  /// The search this evaluator started, so that stopping stops only its own work: the engine
+  /// underneath is shared, and an offline game's opponent may be thinking on it.
+  Search? _currentSearch;
+
   /// The evaluation being accumulated from that search's `info` lines.
   LocalEval? _currentEval;
   int _expectedPvs = 1;
@@ -124,11 +127,7 @@ class EvaluationService {
   Timer? _evalThrottleTimer;
   EvalResult? _pendingEvalResult;
 
-  /// Pending move request state.
-  (Completer<UCIMove>, StreamSubscription<MoveResult>)? _pendingMoveRequest;
-
   final _evalController = StreamController<EvalResult>.broadcast();
-  final _moveController = StreamController<MoveResult>.broadcast();
 
   /// Stream of evaluation results tagged with their [EvalWork].
   ///
@@ -137,16 +136,6 @@ class EvaluationService {
   ///
   /// This stream is throttled to avoid excessive UI updates.
   Stream<EvalResult> get evalStream => _evalController.stream;
-
-  /// Stream of move results tagged with their [MoveWork].
-  Stream<MoveResult> get moveStream => _moveController.stream;
-
-  final ValueNotifier<EngineEvaluationState> _evaluationState = ValueNotifier(_defaultState);
-
-  /// The current engine evaluation state, combining the engine, eval, and current work.
-  ValueListenable<EngineEvaluationState> get evaluationState => _evaluationState;
-
-  MoveWork? _currentMoveWork;
 
   // ---------------------------------------------------------------------------
   // Public API
@@ -229,7 +218,7 @@ class EvaluationService {
         }
       }
     } on TimeoutException {
-      if (_evaluationState.value.currentWork == work) {
+      if (state.currentWork == work) {
         stop();
       }
     }
@@ -243,77 +232,43 @@ class EvaluationService {
     return finalEval;
   }
 
-  /// Find the best move for the given [work] at the specified engine strength level.
+  /// The work being evaluated, if any.
+  EvalWork? get currentWork => state.currentWork;
+
+  /// Stops the current evaluation.
   ///
-  /// This will stop any current work and start a new move search. Last caller wins.
-  ///
-  /// Returns a [Future] that completes with the best move found by the engine.
-  ///
-  /// Throws [MoveRequestCancelledException] if the request is cancelled by [quit] or
-  /// superseded by another [findMove] call.
-  Future<UCIMove> findMove(MoveWork work) {
-    _logger.info(
-      'Finding move at ply ${work.position.ply} with options: '
-      'flavor=${work.stockfishFlavor}, skill=${work.skill}, cores=${work.threads}, '
-      'searchTime=${work.searchTime.inMilliseconds}ms',
-    );
-
-    _cancelPendingMoveRequest();
-
-    final completer = Completer<UCIMove>();
-    final subscription = moveStream.where((result) => result.$1 == work).listen((result) {
-      if (!completer.isCompleted) {
-        completer.complete(result.$2);
-      }
-      _pendingMoveRequest?.$2.cancel();
-      _pendingMoveRequest = null;
-    });
-
-    _pendingMoveRequest = (completer, subscription);
-
-    _startWork(work);
-
-    return completer.future;
-  }
-
-  /// Stop the current work (evaluation or move search).
-  ///
-  /// This method stops the engine from computing further but does not clear the evaluation state.
-  /// The engine can still emit results for the current work until it fully stops.
+  /// The engine stops computing further but the evaluation state is not cleared: it goes on
+  /// reporting until its `bestmove`, and that last word on the position is worth having.
   void stop() {
-    // The search is not forgotten: the engine goes on reporting until its `bestmove`, and that
-    // last word on the position is worth having.
-    _engine?.stop();
-    _currentMoveWork = null;
+    _currentSearch?.stop();
     _setEvalWork(null);
   }
 
-  /// Quit the engine entirely.
+  /// Lets go of the engine.
   ///
-  /// This should be called when the engine is no longer needed (e.g., when leaving an analysis screen).
-  /// The service can be reused after calling this method.
-  void quit() {
+  /// Called when the user turns the engine off; leaving the screen disposes the evaluator, which
+  /// does the same thing. The engine itself outlives this by the length of its grace window, so
+  /// coming straight back does not pay for another start.
+  void release() {
     if (_spec == null && !_resolvingSpec) {
-      _logger.fine('Engine already released or never asked for. Ignoring duplicate quit call.');
+      _logger.fine('Engine already released or never asked for. Ignoring duplicate release call.');
       return;
     }
     _logger.info('Releasing the engine');
     _generation++;
     _cancelEvalThrottle();
-    _cancelPendingMoveRequest();
-    _currentMoveWork = null;
     _currentEval = null;
     _accumulatingFor = null;
     _releaseEngine();
-    _evaluationState.value = _defaultState;
+    if (ref.mounted) state = defaultState;
   }
 
   // ---------------------------------------------------------------------------
   // Engine lifecycle
   // ---------------------------------------------------------------------------
 
-  /// Start the given [work], starting or replacing the engine if necessary.
-  void _startWork(Work work) {
+  /// Starts the given [work], asking for a different engine first if it needs one.
+  void _startWork(EvalWork work) {
     if (_unrecoverableFailure case final failure?) {
       _logger.severe('Refusing engine work: the engine is unusable. $failure');
       _abandonPendingWork();
@@ -323,18 +278,11 @@ class EvaluationService {
       return;
     }
 
-    final previousWork = _evaluationState.value.currentWork ?? _currentMoveWork;
+    final previousWork = state.currentWork;
     final needsNewGame =
-        previousWork != null &&
-        (previousWork.id != work.id || previousWork.initialPosition != work.initialPosition);
+        previousWork != null && previousWork.initialPosition != work.initialPosition;
 
-    switch (work) {
-      case final EvalWork evalWork:
-        _setEvalWork(evalWork);
-        _cancelPendingMoveRequest();
-      case final MoveWork moveWork:
-        _currentMoveWork = moveWork;
-    }
+    _setEvalWork(work);
 
     final flavor = _flavorFor(work);
 
@@ -378,7 +326,7 @@ class EvaluationService {
     _detachEngine();
     _engineSubscription?.close();
     _spec = spec;
-    _engineSubscription = _ref.listen<AsyncValue<Engine>>(
+    _engineSubscription = ref.listen<AsyncValue<Engine>>(
       engineProvider(spec),
       (_, next) => _onEngineChanged(spec, next),
       fireImmediately: true,
@@ -432,9 +380,10 @@ class EvaluationService {
   /// with nobody watching, which is what lets one analysis screen hand its engine to the next.
   /// [invalidate] skips that, for an engine that is already broken.
   void _releaseEngine({bool invalidate = false}) {
-    // The engine outlives this release, so it must not be left searching for a screen that is
-    // gone. (Once several evaluators share one engine this has to stop only *our* search.)
-    _engine?.stop();
+    // The engine outlives this release, so it must not be left evaluating for a screen that is
+    // gone — but it is shared, so only this evaluator's own search is stopped.
+    _currentSearch?.stop();
+    _currentSearch = null;
     _detachEngine();
     _engineSubscription?.close();
     _engineSubscription = null;
@@ -442,7 +391,7 @@ class EvaluationService {
     _spec = null;
     _engineFlavor = null;
     _resolvingSpec = false;
-    if (invalidate && spec != null) _ref.invalidate(engineProvider(spec));
+    if (invalidate && spec != null) ref.invalidate(engineProvider(spec));
   }
 
   EngineFailure _asFailure(Object error, StackTrace stackTrace, EngineSpec spec) => switch (error) {
@@ -478,25 +427,20 @@ class EvaluationService {
   }
 
   /// The flavor [work] needs: everything Stockfish does not know how to play goes to Fairy.
-  StockfishFlavor _flavorFor(Work work) => officialStockfishVariants.contains(work.variant)
+  StockfishFlavor _flavorFor(EvalWork work) => officialStockfishVariants.contains(work.variant)
       ? work.stockfishFlavor
       : StockfishFlavor.variant;
 
   /// Runs whatever work is current on the engine that has just become available.
   void _computeCurrentWork() {
-    final work = _evaluationState.value.currentWork ?? _currentMoveWork;
+    final work = state.currentWork;
     if (work != null) _startWork(work);
   }
 
-  /// Lets go of everything that was waiting on an engine that is not coming back.
-  ///
-  /// Nothing is going to answer the work that was in flight, so its callers are failed instead of
-  /// being left waiting forever — a pending [findMove] has no timeout of its own.
+  /// Lets go of the work that was waiting on an engine that is not coming back.
   void _abandonPendingWork() {
     _generation++;
-    _cancelPendingMoveRequest();
     _setEvalWork(null);
-    _currentMoveWork = null;
     _currentEval = null;
     _accumulatingFor = null;
     _cancelEvalThrottle();
@@ -506,23 +450,19 @@ class EvaluationService {
   // Searching
   // ---------------------------------------------------------------------------
 
-  void _compute(Work work, {bool newGame = false}) {
+  void _compute(EvalWork work, {bool newGame = false}) {
     final engine = _engine;
     if (engine == null) return;
 
     final search = engine.search(_searchRequestFor(work, newGame: newGame));
+    _currentSearch = search;
 
-    switch (work) {
-      case final EvalWork evalWork:
-        search.infos.listen((info) => _onSearchInfo(evalWork, search, info));
-        unawaited(search.bestMove.then((_) => _onEvalSearchDone(evalWork, search)));
-      case final MoveWork moveWork:
-        unawaited(search.bestMove.then((move) => _onMoveSearchDone(moveWork, move)));
-    }
+    search.infos.listen((info) => _onSearchInfo(work, search, info));
+    unawaited(search.bestMove.then((_) => _onEvalSearchDone(work, search)));
   }
 
-  SearchRequest _searchRequestFor(Work work, {required bool newGame}) {
-    final threatMode = work is EvalWork && work.threatMode;
+  SearchRequest _searchRequestFor(EvalWork work, {required bool newGame}) {
+    final threatMode = work.threatMode;
     return SearchRequest(
       initialPosition: work.initialPosition,
       moves: IList(work.steps.map((step) => step.sanMove.normalizeUci(work.variant))),
@@ -532,13 +472,8 @@ class EvaluationService {
       threads: work.threads,
       hashSize: work.hashSize ?? 16,
       multiPv: work.multiPv,
-      // The complete option set for this search: whatever an evaluation does not name here — the
-      // opponent's `Skill Level`, most of all — is put back to its default by the engine before
-      // the search starts.
-      options: switch (work) {
-        final MoveWork moveWork => IMap({'Skill Level': moveWork.skill.toString()}),
-        EvalWork() => const IMapConst({}),
-      },
+      // Nothing beyond the defaults: an evaluation names no options of its own, so the engine puts
+      // back whatever the opponent set — its `Skill Level`, most of all — before this search runs.
       newGame: newGame,
     );
   }
@@ -607,24 +542,6 @@ class EvaluationService {
     if (_currentEval case final eval?) _onEvalResult((work, eval));
   }
 
-  void _onMoveSearchDone(MoveWork work, UCIMove? move) {
-    // A superseded search has no move to report; whoever superseded it has already failed the
-    // request that was waiting. Nor is there anyone to report to once the engine has been let go
-    // of — a move that arrives after a quit belongs to a game the app has moved on from.
-    if (move == null || _engine == null) return;
-    if (!_moveController.isClosed) _moveController.add((work, move));
-  }
-
-  void _cancelPendingMoveRequest() {
-    if (_pendingMoveRequest case (final completer, final subscription)) {
-      subscription.cancel();
-      if (!completer.isCompleted) {
-        completer.completeError(const MoveRequestCancelledException());
-      }
-      _pendingMoveRequest = null;
-    }
-  }
-
   // ---------------------------------------------------------------------------
   // Eval emission
   // ---------------------------------------------------------------------------
@@ -658,10 +575,7 @@ class EvaluationService {
   void _emitEval(EvalResult result) {
     if (_evalController.isClosed) return;
     _evalController.add(result);
-    final currentWork = _evaluationState.value.currentWork ?? _currentMoveWork;
-    if (currentWork != null && result.$1 == currentWork) {
-      _setEval(result.$2);
-    }
+    if (result.$1 == state.currentWork) _setEval(result.$2);
   }
 
   void _cancelEvalThrottle() {
@@ -703,10 +617,10 @@ class EvaluationService {
     }
 
     try {
-      final context = _ref.read(currentNavigatorKeyProvider).currentContext;
-      if (context == null || !context.mounted) return;
+      final navigatorContext = ref.read(currentNavigatorKeyProvider).currentContext;
+      if (navigatorContext == null || !navigatorContext.mounted) return;
 
-      showSnackBar(context, _kUnrecoverableEngineMessage, type: SnackBarType.error);
+      showSnackBar(navigatorContext, _kUnrecoverableEngineMessage, type: SnackBarType.error);
       _lastUserNotification = now;
     } catch (e) {
       // There may be no widget tree to show anything in. Telling the user is best effort and must
@@ -736,16 +650,15 @@ class EvaluationService {
     LocalEval? Function()? evalFn,
     EvalWork? Function()? workFn,
   }) {
-    final current = _evaluationState.value;
+    if (!ref.mounted) return;
+    final current = state;
     final newState = (
       engine: engineFn != null ? engineFn() : current.engine,
       eval: evalFn != null ? evalFn() : current.eval,
       isComputing: _engine?.isSearching.value ?? false,
       currentWork: workFn != null ? workFn() : current.currentWork,
     );
-    if (current != newState) {
-      _evaluationState.value = newState;
-    }
+    if (current != newState) state = newState;
   }
 
   void _onSearchingChange() => _setState();
@@ -759,12 +672,8 @@ class EvaluationService {
   void _dispose() {
     _generation++;
     _cancelEvalThrottle();
-    _cancelPendingMoveRequest();
-    _currentMoveWork = null;
     _releaseEngine();
     _evalController.close();
-    _moveController.close();
-    _evaluationState.dispose();
   }
 }
 
@@ -784,58 +693,21 @@ typedef EngineEvaluationState = ({
   EvalWork? currentWork,
 });
 
-/// A provider that exposes the current engine evaluation state to the UI.
-final engineEvaluationProvider = NotifierProvider.autoDispose
-    .family<EngineEvaluationNotifier, EngineEvaluationState, EngineEvaluationFilters>(
-      EngineEvaluationNotifier.new,
-      name: 'EngineEvaluationProvider',
-    );
+/// The evaluation state for [filters], with results for other paths filtered out.
+///
+/// The identity filtering another screen's results used to need is structural now — evaluators are
+/// per [EvaluationContext] — so all that is left is the path: a widget showing the eval of one node
+/// must not show the eval of the node the user has just moved on to.
+final engineEvaluationProvider = Provider.autoDispose
+    .family<EngineEvaluationState, EngineEvaluationFilters>((ref, filters) {
+      final state = ref.watch(positionEvaluatorProvider(filters.context));
+      final work = state.currentWork;
+      if (work == null || filters.path == null || work.path == filters.path) return state;
+      return PositionEvaluator.defaultState;
+    }, name: 'EngineEvaluationProvider');
 
 /// A type for filtering engine evaluation notifications.
-typedef EngineEvaluationFilters = ({StringId id, UciPath? path});
-
-class EngineEvaluationNotifier extends Notifier<EngineEvaluationState> {
-  EngineEvaluationNotifier(this.filters);
-
-  final EngineEvaluationFilters filters;
-
-  late ValueListenable<EngineEvaluationState> _listenable;
-
-  @override
-  EngineEvaluationState build() {
-    _listenable = ref.watch(evaluationServiceProvider).evaluationState;
-
-    _listenable.addListener(_listener);
-
-    ref.onDispose(() {
-      _listenable.removeListener(_listener);
-    });
-
-    final evalState = _listenable.value;
-    return _filter(evalState) ? evalState : EvaluationService._defaultState;
-  }
-
-  void _listener() {
-    // Defer state update to run outside Riverpod's callback stack
-    // This is needed because notifications can be triggered during disposal
-    // of other providers (e.g., when EngineEvaluationMixin's onDispose calls quit())
-    Future.microtask(() {
-      if (!ref.mounted) return;
-      final evaluationState = _listenable.value;
-      if (_filter(evaluationState)) {
-        state = evaluationState;
-      } else {
-        state = EvaluationService._defaultState;
-      }
-    });
-  }
-
-  bool _filter(EngineEvaluationState state) {
-    final (id: id, path: path) = filters;
-    final work = state.currentWork;
-    return work == null || (work.id == id && (path == null || work.path == path));
-  }
-}
+typedef EngineEvaluationFilters = ({EvaluationContext context, UciPath? path});
 
 /// A function to choose the eval that should be displayed.
 Eval? pickBestEval({

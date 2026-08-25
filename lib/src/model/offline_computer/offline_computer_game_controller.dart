@@ -19,8 +19,10 @@ import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
+import 'package:lichess_mobile/src/model/engine/engine_opponent.dart';
 import 'package:lichess_mobile/src/model/engine/engine_utils.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_context.dart';
+import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer_preferences.dart';
@@ -80,9 +82,10 @@ const _kEngineMoveAnimationBuffer = Duration(milliseconds: 50);
 /// The search is done with multipv=1 here, so we can reach higher depths.
 const _kMoveEvalMinDepth = kDebugMode ? 14 : 18;
 
-/// Stockfish flavor to use for the engine opponent and hint generation.
+/// Stockfish flavor to use for hint generation and move evaluation.
 ///
-/// We use Fairy-Stockfish here for the negative skill levels and variant support.
+/// Fairy-Stockfish, so that this shares the opponent's engine: pointing it at the analysis engine
+/// is step 4 of the engine refactor, once the memory budget is split between two resident engines.
 const _kComputerStockfishFlavor = StockfishFlavor.variant;
 
 final offlineComputerGameControllerProvider =
@@ -96,16 +99,58 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   StreamSubscription<SocketEvent>? _socketSubscription;
   Timer? _getEvalTimer;
 
+  /// What keeps the evaluator and the opponent — and through them, their engines — alive.
+  ///
+  /// Acquired lazily rather than watched in [build], because both are keyed by something that
+  /// only exists once the state does: the game being played, and the level it is played at.
+  ProviderSubscription<EngineEvaluationState>? _evaluatorSubscription;
+  EvaluationContext? _evaluatorContext;
+  ProviderSubscription<EngineOpponent>? _opponentSubscription;
+  OpponentSpec? _opponentSpec;
+
+  /// Stops whatever the engines are doing for this game: the opponent's search, and any hint or
+  /// move evaluation in flight.
+  void _stopThinking() {
+    _opponent.stop();
+    _evaluator.stop();
+  }
+
+  EvaluationContext get _evaluationContext => EvaluationContext(
+    id: state.game.id,
+    variant: state.game.meta.variant,
+    initialPosition: state.game.initialPosition,
+  );
+
+  PositionEvaluator get _evaluator {
+    final context = _evaluationContext;
+    if (_evaluatorContext != context) {
+      _evaluatorSubscription?.close();
+      _evaluatorContext = context;
+      _evaluatorSubscription = ref.listen(positionEvaluatorProvider(context), (_, _) {});
+    }
+    return ref.read(positionEvaluatorProvider(context).notifier);
+  }
+
+  EngineOpponent get _opponent {
+    final spec = StockfishOpponentSpec(state.game.stockfishLevel);
+    if (_opponentSpec != spec) {
+      _opponentSubscription?.close();
+      _opponentSpec = spec;
+      _opponentSubscription = ref.listen(engineOpponentProvider(spec), (_, _) {});
+    }
+    return ref.read(engineOpponentProvider(spec));
+  }
+
   @override
   OfflineComputerGameState build() {
     socketClient = ref.watch(socketPoolProvider).open(AnalysisController.socketUri);
     _socketSubscription?.cancel();
     _socketSubscription = socketClient.stream.listen(_handleSocketEvent);
-    final evaluationService = ref.watch(evaluationServiceProvider);
     ref.onDispose(() {
-      evaluationService.quit();
       _socketSubscription?.cancel();
       _getEvalTimer?.cancel();
+      _evaluatorSubscription?.close();
+      _opponentSubscription?.close();
     });
     return OfflineComputerGameState.initial(
       stockfishLevel: StockfishLevel.defaultLevel,
@@ -377,7 +422,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       stockfishFlavor: _kComputerStockfishFlavor,
       variant: state.game.meta.variant,
       threads: numberOfCoresForEvaluation,
-      hashSize: ref.read(evaluationServiceProvider).maxMemory,
+      hashSize: _evaluator.maxMemory,
       searchTime: _kMoveEvalMaxSearchTime,
       // We want the fastest search here and we only need the eval
       multiPv: 1,
@@ -398,7 +443,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     /// Optional position for doing a tablebase lookup in parallel. If provided, the tablebase eval will be returned if it's conclusive and returned before the engine eval.
     Position? tablebaseLookupPosition,
   }) {
-    final evaluationService = ref.read(evaluationServiceProvider);
+    final evaluator = _evaluator;
     final Completer<ClientEval?> completer = Completer();
     // Fallback timer in case neither engine nor cloud eval return in time (should not happen for
     // engine).
@@ -408,20 +453,20 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         completer.complete(null);
       }
     });
-    evaluationService
-        .findEval(work, depthThreshold: depthThreshold, minSearchTime: minSearchTime)
-        .then((eval) {
-          if (!completer.isCompleted && eval != null) {
-            completer.complete(eval);
-          }
-        });
+    evaluator.findEval(work, depthThreshold: depthThreshold, minSearchTime: minSearchTime).then((
+      eval,
+    ) {
+      if (!completer.isCompleted && eval != null) {
+        completer.complete(eval);
+      }
+    });
 
     if (state.game.meta.variant == Variant.standard && work.position.ply < _kOpeningPlyThreshold) {
       _getCloudEval(work, numEvalLines: work.multiPv).then((cloudEval) {
         if (!completer.isCompleted && cloudEval != null) {
           completer.complete(cloudEval);
-          if (evaluationService.evaluationState.value.currentWork == work) {
-            evaluationService.stop();
+          if (evaluator.currentWork == work) {
+            evaluator.stop();
           }
         }
       });
@@ -431,8 +476,8 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         _fetchTablebaseEval(tablebaseLookupPosition).then((tablebaseEval) {
           if (!completer.isCompleted && tablebaseEval != null) {
             completer.complete(tablebaseEval);
-            if (evaluationService.evaluationState.value.currentWork == work) {
-              evaluationService.stop();
+            if (evaluator.currentWork == work) {
+              evaluator.stop();
             }
           }
         });
@@ -625,23 +670,12 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     state = state.copyWith(isEngineThinking: true);
 
     try {
-      final evaluationService = ref.read(evaluationServiceProvider);
-
-      final steps = state.game.steps
-          .skip(1)
-          .map((s) => Step(position: s.position, sanMove: s.sanMove!))
-          .toIList();
-
-      final work = MoveWork(
-        id: state.game.id,
-        variant: state.game.meta.variant,
-        hashSize: evaluationService.maxMemory,
+      final variant = state.game.meta.variant;
+      final uciMove = await _opponent.findMove(
         initialPosition: state.game.initialPosition,
-        steps: steps,
-        level: state.game.stockfishLevel,
+        moves: state.game.steps.skip(1).map((s) => s.sanMove!.normalizeUci(variant)).toIList(),
+        variant: variant,
       );
-
-      final uciMove = await evaluationService.findMove(work);
       final move = Move.parse(uciMove);
 
       if (state.game.playable) {
@@ -653,8 +687,8 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
           if (ref.mounted && state.game.playable) _computeHints();
         }
       }
-    } on MoveRequestCancelledException {
-      // Expected cancellation when evaluationService.stop() is called; ignore.
+    } on MoveSearchCancelled {
+      // Expected when the search is superseded or stopped; ignore.
       return;
     } catch (e, st) {
       // Unexpected engine error occurred.
@@ -692,7 +726,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   /// Claim a draw due to threefold repetition.
   void claimThreefoldDraw() {
     if (!state.game.playable || state.game.isThreefoldRepetition != true) return;
-    ref.read(evaluationServiceProvider).stop();
+    _stopThinking();
     state = state.copyWith(
       game: state.game.copyWith(status: GameStatus.draw, isThreefoldRepetition: false),
       isEngineThinking: false,
@@ -703,7 +737,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     if (!state.canTakeback) return;
     if (!state.game.casual && !state.game.practiceMode) return;
 
-    ref.read(evaluationServiceProvider).stop();
+    _stopThinking();
 
     int stepsToRemove = 1;
     if (state.game.steps.length > 2 && state.turn == state.game.playerSide) {
@@ -777,8 +811,6 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     state = state.copyWith(isLoadingHint: true, hintIndex: null);
 
     try {
-      final evaluationService = ref.read(evaluationServiceProvider);
-
       final steps = state.game.steps
           .skip(1)
           .map((s) => Step(position: s.position, sanMove: s.sanMove!))
@@ -789,7 +821,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         stockfishFlavor: _kComputerStockfishFlavor,
         variant: state.game.meta.variant,
         threads: numberOfCoresForEvaluation,
-        hashSize: evaluationService.maxMemory,
+        hashSize: _evaluator.maxMemory,
         searchTime: _kHintsMaxSearchTime,
         multiPv: 2, // 2 lines of hints to show an alternative move
         threatMode: false,

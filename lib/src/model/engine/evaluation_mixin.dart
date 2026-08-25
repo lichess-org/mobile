@@ -5,23 +5,22 @@ import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/engine_utils.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_context.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
+import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/utils/riverpod.dart';
 
-part 'evaluation_mixin.freezed.dart';
+export 'package:lichess_mobile/src/model/engine/evaluation_context.dart';
 
 /// The debounce delay for requesting an eval.
 ///
@@ -35,16 +34,6 @@ const kRequestEvalDebounceDelay = Duration(milliseconds: 250);
 /// This is superior to the `kRequestEvalDebounceDelay` to avoid running the local engine too soon
 /// to get a chance to get the cloud eval first.
 const kLocalEngineAfterCloudEvalDelay = Duration(milliseconds: 600);
-
-@freezed
-sealed class EvaluationContext with _$EvaluationContext {
-  const factory EvaluationContext({
-    /// Identifier to associate the evaluation with a game, puzzle, study, etc.
-    required StringId id,
-    required Variant variant,
-    required Position initialPosition,
-  }) = _EvaluationContext;
-}
 
 /// Interface for Notifiers's State that uses [EngineEvaluationMixin].
 mixin EvaluationMixinState<State extends EvaluationMixinState<State>> {
@@ -92,7 +81,22 @@ mixin EvaluationMixinState<State extends EvaluationMixinState<State>> {
 /// The parent can implement:
 /// - [onCurrentPathEvalChanged] to refresh the current node after an evaluation.
 mixin EngineEvaluationMixin<T extends EvaluationMixinState<T>> on AnyNotifier<AsyncValue<T>, T> {
-  late EvaluationService _evaluationService;
+  /// What keeps this screen's evaluator — and through it, its engine — alive.
+  ///
+  /// Acquired lazily rather than watched in [runBuild], because the [EvaluationContext] that keys
+  /// it only exists once the state does.
+  ProviderSubscription<EngineEvaluationState>? _evaluatorSubscription;
+  EvaluationContext? _evaluatorContext;
+
+  PositionEvaluator get _evaluator {
+    final context = state.requireValue.evaluationContext;
+    if (_evaluatorContext != context) {
+      _evaluatorSubscription?.close();
+      _evaluatorContext = context;
+      _evaluatorSubscription = ref.listen(positionEvaluatorProvider(context), (_, _) {});
+    }
+    return ref.read(positionEvaluatorProvider(context).notifier);
+  }
 
   SocketClient? get socketClient;
   Node get positionTree;
@@ -116,13 +120,15 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState<T>> on AnyNotifier<As
 
   @override
   WhenComplete runBuild() {
-    _evaluationService = ref.watch(evaluationServiceProvider);
-
     ref.onDispose(() {
       _evalRequestDebounce.cancel();
       _localEngineAfterDelayDebounce.cancel();
       _socketSubscription?.cancel();
-      _evaluationService.quit();
+      // Letting go of the evaluator disposes it, which releases the engine; the grace window is
+      // what makes navigating to another analysis screen free.
+      _evaluatorSubscription?.close();
+      _evaluatorSubscription = null;
+      _evaluatorContext = null;
     });
 
     final whenComplete = super.runBuild();
@@ -155,7 +161,7 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState<T>> on AnyNotifier<As
     if (state.requireValue.isEngineAvailable(evaluationPrefs)) {
       requestEval();
     } else {
-      _evaluationService.quit();
+      _evaluator.release();
     }
   }
 
@@ -326,7 +332,7 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState<T>> on AnyNotifier<As
       stockfishFlavor: evaluationPrefs.enginePref.flavor,
       variant: curState.evaluationContext.variant,
       threads: evaluationPrefs.numEngineCores,
-      hashSize: _evaluationService.maxMemory,
+      hashSize: _evaluator.maxMemory,
       path: curState.currentPath,
       searchTime: searchTime,
       multiPv: evaluationPrefs.numEvalLines,
@@ -336,7 +342,7 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState<T>> on AnyNotifier<As
       steps: positionTree.branchesOn(curState.currentPath).map(Step.fromNode).toIList(),
     );
 
-    _evaluationService.evaluate(work, goDeeper: goDeeper)?.forEach((event) {
+    _evaluator.evaluate(work, goDeeper: goDeeper)?.forEach((event) {
       if (curState.engineInThreatMode) {
         return;
       }
@@ -358,7 +364,7 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState<T>> on AnyNotifier<As
             // if the cloud eval is likely better, stop the local engine
             // nps varies with positional complexity so this is rough, but save planet earth
             if (likelyNodes < nodeEval.nodes) {
-              _evaluationService.stop();
+              _evaluator.stop();
             }
             return;
           }

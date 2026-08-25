@@ -1,3 +1,5 @@
+import 'package:lichess_mobile/src/model/engine/engine_spec.dart';
+
 /// Stockfish strength levels. Level 1 is the easiest, level 12 is the hardest.
 enum StockfishLevel {
   level1(skill: -12, multiPv: 10, searchTime: Duration(milliseconds: 500), threads: 1),
@@ -44,4 +46,43 @@ enum StockfishLevel {
 
   /// The default level for new games.
   static const defaultLevel = StockfishLevel.level4;
+}
+
+/// What the computer opponent should be.
+///
+/// A value type, because it is the identity of an [EngineOpponent]: two screens asking for the
+/// same opponent get the same one, and with it the same engine.
+sealed class OpponentSpec {
+  const OpponentSpec();
+
+  /// The engine this opponent plays on.
+  EngineSpec get engineSpec;
+
+  /// A short label for the UI.
+  String get displayName;
+}
+
+/// Stockfish at one of its twelve levels.
+final class StockfishOpponentSpec extends OpponentSpec {
+  const StockfishOpponentSpec(this.level);
+
+  final StockfishLevel level;
+
+  /// Always Fairy-Stockfish: the weakest levels need negative skill levels, which only Fairy
+  /// supports, and it is the only engine that can play every variant.
+  @override
+  EngineSpec get engineSpec => const StockfishSpec.fairy();
+
+  @override
+  String get displayName => 'Stockfish level ${level.level}';
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) || other is StockfishOpponentSpec && other.level == level;
+
+  @override
+  int get hashCode => level.hashCode;
+
+  @override
+  String toString() => 'StockfishOpponentSpec(${level.name})';
 }
