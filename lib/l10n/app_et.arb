@@ -1598,6 +1598,7 @@
   "studyNbGames": "{count, plural, =1{{count} mäng} other{{count} mängu}}",
   "studyNbMembers": "{count, plural, =1{{count} liige} other{{count} liiget}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Aseta oma PGN tekst siia, kuni {count} mäng} other{Aseta oma PGN tekst siia, kuni {count} mängu}}",
+  "teamTeam": "Võistkond",
   "timeagoJustNow": "äsja",
   "timeagoRightNow": "praegu",
   "timeagoCompleted": "lõppenud",

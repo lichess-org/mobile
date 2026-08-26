@@ -17,10 +17,10 @@ labels on GitHub.
 These tags are useful, but there are many other good issues that are not tagged with
 them, and you can also contribute by fixing bugs or adding features that are not
 listed in the issues.
-Note that new feature requests may be rejected if they
-don't fit the project's goals. It is best to discuss them with the maintainers
-before starting to work on them, either on Discord or by opening a discussion on
-GitHub.
+Note that new feature requests may be rejected if they don't fit the project's goals.
+It is best to discuss them with the maintainers before starting to work on them,
+either on Discord or by opening a discussion on GitHub. That is especially
+important for larger features, or non-existing features.
 
 Most appreciated contributions are those that:
 - **Fix bugs**
@@ -36,10 +36,13 @@ mode if it's not ready yet) to let others know that you're working on it.
 
 - Make sure to read [AI Usage Policy](./AI_POLICY.md) and follow it when
   contributing code if you used AI tools to help you write code.
+- Make sure to check the [existing pull requests](https://github.com/lichess-org/mobile/pulls) to avoid duplicated work.
 - Make sure your code follows the [coding style guide](https://github.com/lichess-org/mobile/blob/main/docs/coding_style.md)
 - Don't manually edit the `app_en.arb` file! See the [internalizations docs](https://github.com/lichess-org/mobile/blob/main/docs/internationalisation.md) for instructions on how to add new translations.
 - If possible, write a new widget test for your bugfix or new feature.
 - Consider adding a screenshot and/or screen recording to the PR description.
+  This is mandatory for UI changes, as it is very helpful for reviewers to
+  understand the changes.
 - Run the linter and tests:
 ```sh
 flutter analyze

@@ -6592,6 +6592,9 @@ class AppLocalizationsEu extends AppLocalizations {
   }
 
   @override
+  String get teamTeam => 'Taldea';
+
+  @override
   String get teamIncorrectEntryCode => 'Sarrera-kode okerra.';
 
   @override

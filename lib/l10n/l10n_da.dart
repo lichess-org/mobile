@@ -6592,6 +6592,9 @@ class AppLocalizationsDa extends AppLocalizations {
   }
 
   @override
+  String get teamTeam => 'Hold';
+
+  @override
   String get teamIncorrectEntryCode => 'Forkert adgangskode.';
 
   @override

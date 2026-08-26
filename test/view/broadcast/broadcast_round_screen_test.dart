@@ -1,3 +1,4 @@
+import 'package:dartchess/dartchess.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
@@ -8,6 +9,7 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_players_tab.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
+import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../../test_helpers.dart';
@@ -193,6 +195,114 @@ void main() {
       // Clear the field -> results restored
       await tester.pump();
       expect(find.byType(BoardThumbnail), findsAtLeastNWidgets(6));
+    });
+
+    testWidgets('Test boards tab when filtering by team', variant: kPlatformVariant, (
+      tester,
+    ) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: BroadcastRoundScreen(
+          broadcast: _liveTeamBroadcast,
+          initialTab: BroadcastRoundTab.boards,
+        ),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(_teamFilteringTestBroadcastClient, ref),
+          ),
+        },
+      );
+
+      await tester.pumpWidget(app);
+
+      // Load the tournament
+      await tester.pump();
+
+      // Load the round
+      await tester.pump();
+
+      expect(find.byType(BoardThumbnail), findsNWidgets(2));
+
+      await tester.tap(find.byType(ContextMenuIconButton));
+      await tester.pump();
+
+      final filterGames = find.byWidgetPredicate(
+        (widget) => widget is ContextMenuAction && widget.label == 'Filter games',
+      );
+      await tester.tap(filterGames);
+      await tester.pumpAndSettle();
+      final teamChip = find.descendant(of: find.byType(FilterChip), matching: find.text('Team'));
+
+      expect(teamChip, findsOneWidget);
+
+      // Try to scroll the bottom sheet content to make the team chip visible
+      // Find the scrollable within the bottom sheet
+      await tester.scrollUntilVisible(teamChip, 100, scrollable: find.byType(Scrollable).first);
+
+      await tester.tap(teamChip);
+
+      await tester.pumpAndSettle();
+
+      expect(find.text('All teams'), findsOneWidget);
+      expect(
+        find.descendant(
+          of: find.byKey(const ValueKey('team-picker')),
+          matching: find.byType(ListTile),
+        ),
+        findsNWidgets(5),
+      ); // Back + "All teams" + 3 teams
+
+      await tester.tap(find.text('Team C'));
+
+      await tester.pump();
+
+      expect(find.text('Team: Team C'), findsOneWidget);
+
+      // Close the settings bottom sheet by tapping outside it
+      await tester.tapAt(const Offset(195, 100));
+
+      await tester.pump();
+
+      // Filtered to one game
+      final filteredGame = find.byType(BoardThumbnail);
+
+      expect(filteredGame, findsOneWidget);
+      expect(tester.widget<BoardThumbnail>(find.byType(BoardThumbnail)).orientation, Side.black);
+
+      // Clear the filter by opening settings again
+      await tester.pump();
+      await tester.tap(find.byType(ContextMenuIconButton));
+      await tester.pump();
+      await tester.tap(filterGames);
+      await tester.pumpAndSettle();
+
+      // Tap the team filter chip
+      final teamFilterChip = find.descendant(
+        of: find.byType(FilterChip),
+        matching: find.byWidgetPredicate((widget) {
+          if (widget is Text) {
+            final text = widget.data;
+            return text != null && (text.startsWith('Team'));
+          }
+          return false;
+        }),
+      );
+      await tester.tap(teamFilterChip);
+
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('All teams'));
+
+      await tester.pumpAndSettle();
+
+      expect(find.text('Team'), findsOneWidget);
+
+      // Close the settings bottom sheet by tapping outside it
+      await tester.tapAt(const Offset(195, 100));
+
+      await tester.pump();
+
+      // Filter cleared -> all results restored
+      expect(find.byType(BoardThumbnail), findsNWidgets(2));
     });
   });
 
@@ -2283,6 +2393,84 @@ const _livePlayersWithoutScoresResponse = '''
 ]
 ''';
 
+/// Simplified round response for team filtering test: 6 games with 2 teams
+const _teamFilteringTestRoundResponse = '''
+{
+  "round": {
+    "id": "00000000",
+    "name": "Test round",
+    "slug": "test-round",
+    "ongoing": true
+  },
+  "tour": {
+    "id": "AAAAAAAA",
+    "name": "Test tournament",
+    "slug": "test-tournament",
+    "dates": [1735671720000],
+    "image": ""
+  },
+  "study": {
+    "writeable": false
+  },
+  "games": [
+    {
+      "id": "11111111",
+      "name": "Player1 - Player2",
+      "fen": "8/8/8/8/8/8/8/8",
+      "players": [
+        {
+          "name": "Player1",
+          "title": "GM",
+          "rating": 2600,
+          "fideId": 1,
+          "fed": "USA",
+          "clock": 2000,
+          "team": "Team A"
+        },
+        {
+          "name": "Player2",
+          "title": "GM",
+          "rating": 2600,
+          "fideId": 2,
+          "fed": "USA",
+          "clock": 2000,
+          "team": "Team B"
+        }
+      ],
+      "lastMove": "e2e4",
+      "status": "*"
+    },
+    {
+      "id": "22222222",
+      "name": "Player3 - Player4",
+      "fen": "8/8/8/8/8/8/8/8",
+      "players": [
+        {
+          "name": "Player3",
+          "title": "GM",
+          "rating": 2600,
+          "fideId": 3,
+          "fed": "USA",
+          "clock": 2000,
+          "team": "Team B"
+        },
+        {
+          "name": "Player4",
+          "title": "GM",
+          "rating": 2600,
+          "fideId": 4,
+          "fed": "USA",
+          "clock": 2000,
+          "team": "Team C"
+        }
+      ],
+      "lastMove": "e2e4",
+      "status": "*"
+    }
+  ]
+}
+''';
+
 final _liveTeamBroadcastClient = MockClient((request) {
   if (request.url.path == '/api/broadcast/AAAAAAAA') {
     return mockResponse(
@@ -2294,6 +2482,46 @@ final _liveTeamBroadcastClient = MockClient((request) {
   if (request.url.path == '/api/broadcast/-/-/00000000') {
     return mockResponse(
       _liveRoundResponse,
+      200,
+      headers: {'content-type': 'application/json; charset=utf-8'},
+    );
+  }
+  if (request.url.path == '/broadcast/AAAAAAAA/players') {
+    return mockResponse(
+      _livePlayersResponse,
+      200,
+      headers: {'content-type': 'application/json; charset=utf-8'},
+    );
+  }
+  if (request.url.path == '/broadcast/00000000/teams') {
+    return mockResponse(
+      _teamMatchesResponse,
+      200,
+      headers: {'content-type': 'application/json; charset=utf-8'},
+    );
+  }
+  if (request.url.path == '/broadcast/AAAAAAAA/teams/standings') {
+    return mockResponse(
+      _teamStandingsResponse,
+      200,
+      headers: {'content-type': 'application/json; charset=utf-8'},
+    );
+  }
+  return mockResponse('', 404);
+});
+
+/// Simplified mock client for team filtering test with just 6 games and 3 teams
+final _teamFilteringTestBroadcastClient = MockClient((request) {
+  if (request.url.path == '/api/broadcast/AAAAAAAA') {
+    return mockResponse(
+      _liveTeamTournamentResponse,
+      200,
+      headers: {'content-type': 'application/json; charset=utf-8'},
+    );
+  }
+  if (request.url.path == '/api/broadcast/-/-/00000000') {
+    return mockResponse(
+      _teamFilteringTestRoundResponse,
       200,
       headers: {'content-type': 'application/json; charset=utf-8'},
     );

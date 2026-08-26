@@ -6592,6 +6592,9 @@ class AppLocalizationsCa extends AppLocalizations {
   }
 
   @override
+  String get teamTeam => 'Equip';
+
+  @override
   String get teamIncorrectEntryCode => 'Codi d\'entrada incorrecte.';
 
   @override

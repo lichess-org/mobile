@@ -252,50 +252,64 @@ sealed class BoardEditorState with _$BoardEditorState {
     },
   };
 
-  /// Returns the castling rights part of the FEN string.
-  ///
-  /// If the rook is missing on one side of the king, or the king is missing on the
-  /// backrank, the castling right is removed.
-  String get _castlingRightsPart {
-    final parts = <String>[];
-    final Map<CastlingRight, bool> hasRook = {};
-    final Board board = Board.parseFen(writeFen(pieces.unlock));
-    for (final side in Side.values) {
+  /// Checks if the pieces are in the correct positions so that castling is possible.
+  bool isCastlingPossible(Side side, CastlingSide castlingSide) {
+    if (variant == .chess960) {
+      final board = Board.parseFen(writeFen(pieces.unlock));
       final backrankKing = SquareSet.backrankOf(side) & board.kings;
       final rooksAndKings =
           (board.bySide(side) & SquareSet.backrankOf(side)) & (board.rooks | board.kings);
-      for (final castlingSide in CastlingSide.values) {
-        final candidate = castlingSide == CastlingSide.king
-            ? rooksAndKings.squares.lastOrNull
-            : rooksAndKings.squares.firstOrNull;
-        final isCastlingPossible =
-            candidate != null && board.rooks.has(candidate) && backrankKing.singleSquare != null;
-        switch ((side, castlingSide)) {
-          case (Side.white, CastlingSide.king):
-            hasRook[CastlingRight.whiteKing] = isCastlingPossible;
-          case (Side.white, CastlingSide.queen):
-            hasRook[CastlingRight.whiteQueen] = isCastlingPossible;
-          case (Side.black, CastlingSide.king):
-            hasRook[CastlingRight.blackKing] = isCastlingPossible;
-          case (Side.black, CastlingSide.queen):
-            hasRook[CastlingRight.blackQueen] = isCastlingPossible;
-        }
-      }
+
+      final candidate = castlingSide == .king
+          ? rooksAndKings.squares.lastOrNull
+          : rooksAndKings.squares.firstOrNull;
+
+      return candidate != null && board.rooks.has(candidate) && backrankKing.singleSquare != null;
+    } else {
+      final Square kingSquare = side == .white ? .e1 : .e8;
+      final Square rookSquare = castlingSide == .king
+          ? (side == .white ? .h1 : .h8)
+          : (side == .white ? .a1 : .a8);
+
+      return pieces[kingSquare]?.role == .king &&
+          pieces[kingSquare]?.color == side &&
+          pieces[rookSquare]?.role == .rook &&
+          pieces[rookSquare]?.color == side;
     }
-    for (final right in CastlingRight.values) {
-      if (hasRook[right]! && castlingRights[right]!) {
-        switch (right) {
-          case CastlingRight.whiteKing:
-            parts.add('K');
-          case CastlingRight.whiteQueen:
-            parts.add('Q');
-          case CastlingRight.blackKing:
-            parts.add('k');
-          case CastlingRight.blackQueen:
-            parts.add('q');
-        }
-      }
+  }
+
+  /// Returns the castling rights part of the FEN string.
+  ///
+  /// For standard variants, checks if the kings and rooks are on their normal starting squares.
+  /// For Chess960, dynamically checks the backrank for rooks relative to the king.
+  /// Returns the castling rights part of the FEN string.
+  ///
+  /// For standard variants, checks if the kings and rooks are on their normal starting squares.
+  /// For Chess960, dynamically checks the backrank for rooks relative to the king.
+  String get _castlingRightsPart {
+    final parts = <String>[];
+
+    if (variant.sideCanCastle(.white) &&
+        castlingRights[.whiteKing]! &&
+        isCastlingPossible(.white, .king)) {
+      parts.add('K');
     }
+    if (variant.sideCanCastle(.white) &&
+        castlingRights[.whiteQueen]! &&
+        isCastlingPossible(.white, .queen)) {
+      parts.add('Q');
+    }
+    if (variant.sideCanCastle(.black) &&
+        castlingRights[.blackKing]! &&
+        isCastlingPossible(.black, .king)) {
+      parts.add('k');
+    }
+    if (variant.sideCanCastle(.black) &&
+        castlingRights[.blackQueen]! &&
+        isCastlingPossible(.black, .queen)) {
+      parts.add('q');
+    }
+
     return parts.isEmpty ? '-' : parts.join('');
   }
 

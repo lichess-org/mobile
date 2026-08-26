@@ -384,7 +384,7 @@ class _OverallStatPlayer extends StatelessWidget {
                         },
                         child: Row(
                           children: [
-                            const SizedBox(width: 100, child: Text('Team')),
+                            SizedBox(width: 100, child: Text(context.l10n.teamTeam)),
                             Expanded(
                               child: Text(team, style: Theme.of(context).textTheme.bodyLarge),
                             ),

@@ -6908,6 +6908,9 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String get teamTeam => 'فريق';
+
+  @override
   String get teamIncorrectEntryCode => 'رمز خاطئ.';
 
   @override

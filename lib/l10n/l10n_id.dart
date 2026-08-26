@@ -6518,6 +6518,9 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
+  String get teamTeam => 'Tim';
+
+  @override
   String get teamIncorrectEntryCode => 'Kode masuk salah.';
 
   @override

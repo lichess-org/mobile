@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -32,20 +33,23 @@ class BroadcastBoardsTab extends ConsumerWidget {
     required this.roundId,
     required this.tournamentSlug,
     required this.showOnlyOngoingGames,
+    required this.teamFilter,
   });
 
   final BroadcastTournamentId tournamentId;
   final BroadcastRoundId roundId;
   final String tournamentSlug;
   final bool showOnlyOngoingGames;
+  final String? teamFilter;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final round = ref.watch(broadcastRoundControllerProvider(roundId));
 
     return switch (round) {
-      AsyncData(:final value) =>
-        value.games.isEmpty
+      AsyncData(:final value) => (() {
+        final filteredGames = _filteredGames(value.games, showOnlyOngoingGames, teamFilter);
+        return value.games.isEmpty || filteredGames.isEmpty
             ? Padding(
                 padding: Styles.bodyPadding,
                 child: Column(
@@ -54,14 +58,17 @@ class BroadcastBoardsTab extends ConsumerWidget {
                   children: [
                     const Icon(Icons.info, size: 30),
                     const SizedBox(height: 8.0),
-                    Text(context.l10n.broadcastNoBoardsYet, textAlign: TextAlign.center),
+                    Text(
+                      value.games.isEmpty
+                          ? context.l10n.broadcastNoBoardsYet
+                          : 'No games matching filter criteria.',
+                      textAlign: TextAlign.center,
+                    ),
                   ],
                 ),
               )
             : BroadcastPreview(
-                games: showOnlyOngoingGames
-                    ? value.games.values.where((game) => game.isOngoing).toIList()
-                    : value.games.values.toIList(),
+                games: filteredGames,
                 tournamentId: tournamentId,
                 roundId: roundId,
                 title: value.round.name,
@@ -69,10 +76,27 @@ class BroadcastBoardsTab extends ConsumerWidget {
                 roundSlug: value.round.slug,
                 customScoring: value.round.customScoring,
                 pinnedComment: value.round.pinnedComment,
-              ),
+                teamFilter: teamFilter,
+              );
+      })(),
       AsyncError(:final error) => Center(child: Text('Could not load broadcast: $error')),
       _ => const Center(child: CircularProgressIndicator.adaptive()),
     };
+  }
+
+  IList<BroadcastGame> _filteredGames(
+    IMap<BroadcastGameId, BroadcastGame> games,
+    bool showOnlyOngoingGames,
+    String? teamFilter,
+  ) {
+    final ongoingFiltered = showOnlyOngoingGames
+        ? games.values.where((game) => game.isOngoing).toIList()
+        : games.values.toIList();
+    return teamFilter == null
+        ? ongoingFiltered
+        : ongoingFiltered
+              .where((game) => Side.values.any((s) => game.players[s]?.player.team == teamFilter))
+              .toIList();
   }
 }
 
@@ -86,6 +110,7 @@ class BroadcastPreview extends ConsumerStatefulWidget {
     required this.roundSlug,
     required this.customScoring,
     required this.pinnedComment,
+    required this.teamFilter,
   });
 
   // A circular progress indicator is used instead of shimmers currently
@@ -97,7 +122,8 @@ class BroadcastPreview extends ConsumerStatefulWidget {
       tournamentSlug = '',
       roundSlug = '',
       customScoring = null,
-      pinnedComment = null;
+      pinnedComment = null,
+      teamFilter = null;
 
   final BroadcastTournamentId tournamentId;
   final BroadcastRoundId roundId;
@@ -107,6 +133,7 @@ class BroadcastPreview extends ConsumerStatefulWidget {
   final String roundSlug;
   final BroadcastCustomScoring? customScoring;
   final String? pinnedComment;
+  final String? teamFilter;
   @override
   ConsumerState<BroadcastPreview> createState() => _BroadcastPreviewState();
 }
@@ -229,6 +256,7 @@ class _BroadcastPreviewState extends ConsumerState<BroadcastPreview> {
                 boardWithMaybeEvalBarWidth: boardWithMaybeEvalBarWidth,
                 playingSide: playingSide,
                 customScoring: widget.customScoring,
+                teamFilter: widget.teamFilter,
               );
             }, childCount: games == null ? numberLoadingBoards : games.length),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -258,6 +286,7 @@ class ObservedBoardThumbnail extends ConsumerStatefulWidget {
     required this.boardWithMaybeEvalBarWidth,
     required this.playingSide,
     required this.customScoring,
+    required this.teamFilter,
   });
 
   final BroadcastRoundId roundId;
@@ -271,6 +300,7 @@ class ObservedBoardThumbnail extends ConsumerStatefulWidget {
   final double boardWithMaybeEvalBarWidth;
   final Side playingSide;
   final BroadcastCustomScoring? customScoring;
+  final String? teamFilter;
 
   @override
   ConsumerState<ObservedBoardThumbnail> createState() => _ObservedBoardThumbnailState();
@@ -281,6 +311,12 @@ class _ObservedBoardThumbnailState extends ConsumerState<ObservedBoardThumbnail>
 
   @override
   Widget build(BuildContext context) {
+    final orientation = widget.teamFilter != null
+        ? widget.game.players.entries
+                  .firstWhereOrNull((entry) => entry.value.player.team == widget.teamFilter)
+                  ?.key ??
+              Side.white
+        : Side.white;
     return VisibilityDetector(
       key: ValueKey(widget.game.id),
       onVisibilityChanged: (visibilityInfo) {
@@ -315,10 +351,11 @@ class _ObservedBoardThumbnailState extends ConsumerState<ObservedBoardThumbnail>
               tournamentSlug: widget.tournamentSlug,
               roundSlug: widget.roundSlug,
               title: widget.title,
+              initialPov: orientation,
             ),
           );
         },
-        orientation: Side.white,
+        orientation: orientation,
         fen: widget.game.fen,
         showEvaluationGauge: widget.showEvaluationGauge,
         whiteWinningChances: (widget.game.cp != null || widget.game.mate != null)
@@ -329,14 +366,14 @@ class _ObservedBoardThumbnailState extends ConsumerState<ObservedBoardThumbnail>
         header: _PlayerWidget(
           width: widget.boardWithMaybeEvalBarWidth,
           game: widget.game,
-          side: Side.black,
+          side: orientation.opposite,
           playingSide: widget.playingSide,
           customScoring: widget.customScoring,
         ),
         footer: _PlayerWidget(
           width: widget.boardWithMaybeEvalBarWidth,
           game: widget.game,
-          side: Side.white,
+          side: orientation,
           playingSide: widget.playingSide,
           customScoring: widget.customScoring,
         ),

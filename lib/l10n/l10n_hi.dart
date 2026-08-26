@@ -6590,6 +6590,9 @@ class AppLocalizationsHi extends AppLocalizations {
   }
 
   @override
+  String get teamTeam => 'टीम';
+
+  @override
   String get teamIncorrectEntryCode => 'अवैध प्रवेश कूट';
 
   @override

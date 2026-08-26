@@ -100,7 +100,7 @@ class MoveTimesChart extends StatelessWidget {
                   Positioned.fill(
                     child: GestureDetector(
                       behavior: .opaque,
-                      onTapDown: (details) => jumpToOffset(details.localPosition),
+                      onTapUp: (details) => jumpToOffset(details.localPosition),
                       onHorizontalDragUpdate: (details) => jumpToOffset(details.localPosition),
                       child: CustomPaint(
                         size: Size.infinite,

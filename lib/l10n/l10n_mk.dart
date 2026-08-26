@@ -6592,6 +6592,9 @@ class AppLocalizationsMk extends AppLocalizations {
   }
 
   @override
+  String get teamTeam => 'Тим';
+
+  @override
   String get teamIncorrectEntryCode => 'Incorrect entry code.';
 
   @override

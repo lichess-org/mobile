@@ -1815,6 +1815,7 @@
   "studyNbGames": "{count, plural, =1{{count} Игра} other{{count} Игри}}",
   "studyNbMembers": "{count, plural, =1{{count} Член} other{{count} Членове}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Постави твоя PGN текст тук, до {count} партия} other{Постави твоя PGN текст тук, до {count} партии}}",
+  "teamTeam": "Отбор",
   "teamIncorrectEntryCode": "Грешен код за включване.",
   "teamBattleOfNbTeams": "{count, plural, =1{Битка между {count} отбор} other{Битка между {count} отбора}}",
   "teamNbLeadersPerTeam": "{count, plural, =1{Един лидер на отбор} other{{count} лидери на отбор}}",

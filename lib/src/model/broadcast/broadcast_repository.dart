@@ -300,6 +300,7 @@ BroadcastPlayer _playerFromPick(RequiredPick pick) {
     rating: pick('rating').asIntOrNull(),
     federation: pick('fed').asStringOrNull(),
     fideId: pick('fideId').asFideIdOrNull(),
+    team: pick('team').asStringOrNull(),
   );
 }
 

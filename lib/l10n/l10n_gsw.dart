@@ -6592,6 +6592,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   }
 
   @override
+  String get teamTeam => 'Team';
+
+  @override
   String get teamIncorrectEntryCode => 'Falsche Bitrittscode.';
 
   @override
