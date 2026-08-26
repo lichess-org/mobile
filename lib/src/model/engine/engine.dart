@@ -33,6 +33,11 @@ const _fallbackOptionDefaults = {
   'UCI_Chess960': 'false',
   'UCI_Variant': 'chess',
   'UCI_LimitStrength': 'false',
+  // LC0's sampling options. It accepts them by name but declares them "pro only", so they never
+  // appear in its handshake and there would otherwise be no value to put them back to.
+  'Temperature': '0',
+  'TempDecayMoves': '0',
+  'TempDecayDelayMoves': '0',
 };
 
 /// How long a search may run.
@@ -475,7 +480,13 @@ class Engine {
 
   /// Brings the engine's options in line with [request], and says whether the variant changed.
   bool _applyOptions(SearchRequest request) {
-    final wanted = <String, String>{
+    // What [Engine] asks for on its own behalf. These names are Stockfish's vocabulary and are a
+    // guess at any other engine's — LC0 has no `Hash`, and sending it one is an
+    // `error Unknown option` on every search — so they are dropped when the engine did not declare
+    // them. The caller's own options are not: it named them deliberately, and an engine may accept
+    // an option it does not advertise (LC0's `Temperature` is declared "pro only" and never
+    // listed).
+    final own = <String, String>{
       'Threads': math.min(request.threads, maxEngineCores).toString(),
       'Hash': request.hashSize.toString(),
       'MultiPV': math.max(1, request.multiPv).toString(),
@@ -483,8 +494,9 @@ class Engine {
       // this mode.
       'UCI_Chess960': 'true',
       if (spec.slot == EngineSlot.fairy) 'UCI_Variant': request.variant.fairy,
-      ...request.options.unlock,
-    };
+    }..removeWhere((name, _) => !_declaresOption(name));
+
+    final wanted = {...own, ...request.options.unlock};
 
     final variantChanged =
         wanted.containsKey('UCI_Variant') && _options['UCI_Variant'] != wanted['UCI_Variant'];
@@ -502,21 +514,18 @@ class Engine {
     }
 
     for (final MapEntry(key: name, value: value) in wanted.entries) {
-      if (!_supportsOption(name)) continue;
       _setOption(name, value);
     }
 
     return variantChanged;
   }
 
-  /// Whether the engine takes an option, so that a search does not have to know which engine it
-  /// landed on.
+  /// Whether the engine declared [name] in its handshake.
   ///
-  /// The options above are Stockfish's vocabulary, and LC0 shares only part of it: it has no
-  /// `Hash`, and sending it one is an `error Unknown option` on every search. An engine that
-  /// declared nothing at all is taken at its word instead — that is what [_fallbackOptionDefaults]
-  /// is for — because refusing every option would leave it running on its own defaults.
-  bool _supportsOption(String name) =>
+  /// An engine that declared nothing at all is taken at its word instead, because refusing every
+  /// option would leave it running on its own defaults; that is the case
+  /// [_fallbackOptionDefaults] exists for.
+  bool _declaresOption(String name) =>
       _declaredDefaults.isEmpty || _declaredDefaults.containsKey(name);
 
   void _setOption(String name, String value) {

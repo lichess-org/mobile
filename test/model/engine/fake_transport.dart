@@ -18,6 +18,19 @@ const kFakeOptionDeclarations = [
   'option name UCI_Variant type combo default chess var chess var crazyhouse var atomic',
 ];
 
+/// The `option` declarations LC0 prints during its `uci` handshake, as far as the app cares.
+///
+/// Two differences from [kFakeOptionDeclarations] carry the whole point: there is **no `Hash`**,
+/// and there is no `Temperature` — LC0 accepts that one by name but declares it "pro only", so it
+/// never reaches the handshake.
+const kFakeLc0OptionDeclarations = [
+  'option name Threads type spin default 2 min 1 max 128',
+  'option name MultiPV type spin default 1 min 1 max 500',
+  'option name WeightsFile type string default <autodiscover>',
+  'option name MinibatchSize type spin default 256 min 1 max 1024',
+  'option name UCI_Chess960 type check default false',
+];
+
 /// An [EngineTransport] that records what was sent to it and lets a test answer by hand.
 ///
 /// This is the seam for testing the UCI protocol itself: no plugin, no isolates, no engine — just

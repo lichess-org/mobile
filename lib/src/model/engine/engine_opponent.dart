@@ -14,6 +14,26 @@ import 'package:meta/meta.dart';
 
 final _logger = Logger('EngineOpponent');
 
+/// How much of Maia's policy to sample, rather than always playing the move it likes best.
+///
+/// Maia's policy *is* the distribution of human choices — "45% of 1500-rated players played e4
+/// here" — so sampling it is a more faithful reading of the network than taking the argmax, which
+/// collapses every game from a given position into the same game. Upstream hits this and gives its
+/// lichess bots an opening book; LC0 samples the policy for us instead, because at one node no root
+/// child has a visit and its temperature falls back to the priors.
+///
+/// Below 1 because the far tail holds moves almost nobody plays, and it is where the network's
+/// approximation of the distribution is worst.
+const _kMaiaTemperature = 0.5;
+
+/// How long the temperature holds before it starts falling, and over how many moves it reaches 0.
+///
+/// Variety is worth most in the opening, where there really are several reasonable human choices,
+/// and worst in a sharp endgame, where sampling the 3% move throws the game away. So: full
+/// temperature to move 10, none from move 40.
+const _kMaiaTempDecayDelayMoves = 10;
+const _kMaiaTempDecayMoves = 30;
+
 /// Thrown when a [EngineOpponent.findMove] request does not produce a move.
 ///
 /// Either it was superseded by another one, or the engine was stopped or died before answering.
@@ -183,9 +203,10 @@ class StockfishOpponent extends EngineOpponentBase<StockfishOpponentSpec> {
 
 /// Maia: LC0 with a network trained on human games in one rating band.
 ///
-/// There is no search to speak of. Maia is a policy network, and what makes it play like a human
-/// of its rating is the move the network likes best, not the move a tree search rescues — so it
-/// runs at one node, and none of the strength dials [StockfishOpponent] turns apply.
+/// There is no search to speak of. Maia is a policy network, and what makes it play like a human of
+/// its rating is which moves that network expects such a human to choose, not the move a tree
+/// search rescues — so it runs at one node, samples the policy rather than taking its top move (see
+/// [_kMaiaTemperature]), and none of the strength dials [StockfishOpponent] turns apply.
 class MaiaOpponent extends EngineOpponentBase<MaiaOpponentSpec> {
   MaiaOpponent({required super.ref, required super.spec, required this.weights});
 
@@ -214,9 +235,15 @@ class MaiaOpponent extends EngineOpponentBase<MaiaOpponentSpec> {
       limit: const SearchLimit.nodes(1),
       threads: 1,
       multiPv: 1,
-      // A minibatch is a set of positions evaluated together, and at one node there is only ever
-      // the one, so the default of 256 would size buffers for work that never arrives.
-      options: IMap({'WeightsFile': path, 'MinibatchSize': '1'}),
+      options: IMap({
+        'WeightsFile': path,
+        // A minibatch is a set of positions evaluated together, and at one node there is only ever
+        // the one, so the default of 256 would size buffers for work that never arrives.
+        'MinibatchSize': '1',
+        'Temperature': '$_kMaiaTemperature',
+        'TempDecayDelayMoves': '$_kMaiaTempDecayDelayMoves',
+        'TempDecayMoves': '$_kMaiaTempDecayMoves',
+      }),
       newGame: moves.isEmpty,
     );
   }

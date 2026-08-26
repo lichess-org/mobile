@@ -192,6 +192,26 @@ void main() {
       expect(engine.commands, contains('go nodes 1'));
     });
 
+    test('samples the policy instead of always playing the top move', () async {
+      final engine = FakeEngine();
+      fakeEngine = engine;
+      final container = await makeMaiaContainer(FakeMaiaWeightsService());
+
+      await readOpponentFor(container, const MaiaOpponentSpec(MaiaRating.maia1500)).findMove(
+        initialPosition: Chess.initial,
+        moves: const IListConst([]),
+        variant: Variant.standard,
+      );
+
+      // At one node no root child has a visit, so LC0's temperature falls back to the policy
+      // priors — which is Maia's own distribution of human choices. Without this every game from
+      // a given position is the same game.
+      expect(engine.options['Temperature'], '0.5');
+      // Variety is worth most in the opening and worst in a sharp endgame.
+      expect(engine.options['TempDecayDelayMoves'], '10');
+      expect(engine.options['TempDecayMoves'], '30');
+    });
+
     test('downloads the network it needs before playing', () async {
       fakeEngine = FakeEngine();
       final weights = FakeMaiaWeightsService();

@@ -177,6 +177,52 @@ void main() {
       },
     );
 
+    test("an option the engine did not declare is not sent on the engine's behalf", () async {
+      // LC0 has no `Hash`, and sending it one is an `error Unknown option` on every search.
+      final transport = FakeTransport(
+        spec: const Lc0Spec(),
+        startupLines: const ['id name Lc0 v0.32.1', ...kFakeLc0OptionDeclarations, 'uciok'],
+      );
+      final engine = Engine(transport);
+      addTearDown(engine.dispose);
+      await pumpEventQueue();
+
+      await startSearch(engine, transport, makeRequest());
+
+      final commands = transport.takeCommands().join(' ');
+      expect(commands, isNot(contains('Hash')));
+      // The ones it did declare still go out.
+      expect(commands, contains('setoption name UCI_Chess960 value true'));
+    });
+
+    test('an option the caller named is sent even when the engine did not declare it', () async {
+      // LC0 accepts `Temperature` by name but declares it "pro only", so it never reaches the
+      // handshake. A caller that names an option meant it; only the engine's own guesses at the
+      // vocabulary are dropped.
+      final transport = FakeTransport(
+        spec: const Lc0Spec(),
+        startupLines: const ['id name Lc0 v0.32.1', ...kFakeLc0OptionDeclarations, 'uciok'],
+      );
+      final engine = Engine(transport);
+      addTearDown(engine.dispose);
+      await pumpEventQueue();
+
+      await startSearch(
+        engine,
+        transport,
+        makeRequest(options: const IMapConst({'Temperature': '0.5'})),
+      );
+      expect(transport.takeCommands(), contains('setoption name Temperature value 0.5'));
+
+      transport.emit('bestmove e2e4');
+      await pumpEventQueue();
+
+      // And it is still put back afterwards, from the fallback defaults, since the engine never
+      // declared one to put it back to.
+      await startSearch(engine, transport, makeRequest());
+      expect(transport.takeCommands(), contains('setoption name Temperature value 0'));
+    });
+
     test('a standard engine is never told about UCI_Variant', () async {
       final transport = FakeTransport();
       final engine = Engine(transport);
