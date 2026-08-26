@@ -1,4 +1,6 @@
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/engine/engine_spec.dart';
+import 'package:lichess_mobile/src/model/engine/engine_utils.dart';
 
 /// Stockfish strength levels. Level 1 is the easiest, level 12 is the hardest.
 enum StockfishLevel {
@@ -46,6 +48,54 @@ enum StockfishLevel {
 
   /// The default level for new games.
   static const defaultLevel = StockfishLevel.level4;
+
+  static StockfishLevel? fromLevel(int level) =>
+      level >= 1 && level <= values.length ? values[level - 1] : null;
+}
+
+/// The Maia networks the app can play against.
+///
+/// Each one is a policy network trained on human games in a rating band, so the rating is not a
+/// strength dial the way [StockfishLevel] is: it is *which* humans the network learned from, and
+/// what it plays is the move players of that strength would most often play.
+///
+/// Only [defaultRating] ships with the app; the others are downloaded on demand. See
+/// `MaiaWeightsService`.
+enum MaiaRating {
+  maia1100(rating: 1100, sha256Prefix: 'e1cf1cd0c96b', expectedSize: 1313193),
+  maia1200(rating: 1200, sha256Prefix: 'ead4ba953f23', expectedSize: 1249692),
+  maia1300(rating: 1300, sha256Prefix: '36195f87bf47', expectedSize: 1244431),
+  maia1400(rating: 1400, sha256Prefix: 'd5353ea67663', expectedSize: 1328977),
+  maia1500(rating: 1500, sha256Prefix: '35ab6f20421d', expectedSize: 1258199),
+  maia1600(rating: 1600, sha256Prefix: 'd2c9e5948581', expectedSize: 1313870),
+  maia1700(rating: 1700, sha256Prefix: 'd277eacd792d', expectedSize: 1313415),
+  maia1800(rating: 1800, sha256Prefix: '0031ad7c4256', expectedSize: 1289431),
+  maia1900(rating: 1900, sha256Prefix: 'e2f565f42d7c', expectedSize: 1262607);
+
+  const MaiaRating({required this.rating, required this.sha256Prefix, required this.expectedSize});
+
+  /// The rating band the network was trained on.
+  final int rating;
+
+  /// The first 12 digits of the network's SHA-256, checked after a download.
+  final String sha256Prefix;
+
+  /// The size of the network in bytes, for progress reporting.
+  final int expectedSize;
+
+  /// The name the network is stored under, both in the asset bundle and on disk.
+  String get fileName => 'maia-$rating.pb.gz';
+
+  /// Whether this network ships with the app rather than being downloaded.
+  ///
+  /// One of them has to: a computer opponent that cannot play until a download succeeds is a dead
+  /// end, and this is the network everything falls back to.
+  bool get isBundled => this == defaultRating;
+
+  /// The network that ships with the app, and the one a new game plays by default.
+  static const defaultRating = MaiaRating.maia1500;
+
+  static MaiaRating? fromRating(int rating) => values.where((r) => r.rating == rating).firstOrNull;
 }
 
 /// What the computer opponent should be.
@@ -55,11 +105,33 @@ enum StockfishLevel {
 sealed class OpponentSpec {
   const OpponentSpec();
 
+  /// Reads a spec back from its [toJson].
+  ///
+  /// Falls back to the default Stockfish opponent rather than throwing: this is read from a saved
+  /// game and from the preferences, and neither is worth losing over an opponent the app no longer
+  /// knows about.
+  factory OpponentSpec.fromJson(Map<String, dynamic> json) {
+    switch (json['type']) {
+      case 'stockfish':
+        final level = StockfishLevel.values.asNameMap()[json['level']];
+        if (level != null) return StockfishOpponentSpec(level);
+      case 'maia':
+        final rating = MaiaRating.values.asNameMap()[json['rating']];
+        if (rating != null) return MaiaOpponentSpec(rating);
+    }
+    return const StockfishOpponentSpec(StockfishLevel.defaultLevel);
+  }
+
   /// The engine this opponent plays on.
   EngineSpec get engineSpec;
 
   /// A short label for the UI.
   String get displayName;
+
+  /// Whether this opponent can play [variant] at all.
+  bool supportsVariant(Variant variant);
+
+  Map<String, dynamic> toJson();
 }
 
 /// Stockfish at one of its twelve levels.
@@ -77,6 +149,12 @@ final class StockfishOpponentSpec extends OpponentSpec {
   String get displayName => 'Stockfish level ${level.level}';
 
   @override
+  bool supportsVariant(Variant variant) => true;
+
+  @override
+  Map<String, dynamic> toJson() => {'type': 'stockfish', 'level': level.name};
+
+  @override
   bool operator ==(Object other) =>
       identical(this, other) || other is StockfishOpponentSpec && other.level == level;
 
@@ -85,4 +163,37 @@ final class StockfishOpponentSpec extends OpponentSpec {
 
   @override
   String toString() => 'StockfishOpponentSpec(${level.name})';
+}
+
+/// Maia at one of its rating bands.
+final class MaiaOpponentSpec extends OpponentSpec {
+  const MaiaOpponentSpec(this.rating);
+
+  final MaiaRating rating;
+
+  /// Maia is LC0 with a Maia network, and the network is a per-search option — so every rating is
+  /// the same spec, and they all share one engine.
+  @override
+  EngineSpec get engineSpec => const Lc0Spec();
+
+  @override
+  String get displayName => 'Maia ${rating.rating}';
+
+  /// The networks were trained on standard human games, so Maia plays the variants that are
+  /// standard chess under another name and nothing else.
+  @override
+  bool supportsVariant(Variant variant) => officialStockfishVariants.contains(variant);
+
+  @override
+  Map<String, dynamic> toJson() => {'type': 'maia', 'rating': rating.name};
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) || other is MaiaOpponentSpec && other.rating == rating;
+
+  @override
+  int get hashCode => rating.hashCode;
+
+  @override
+  String toString() => 'MaiaOpponentSpec(${rating.name})';
 }

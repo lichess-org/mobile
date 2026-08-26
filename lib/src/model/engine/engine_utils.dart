@@ -36,6 +36,21 @@ const smallNetExpectedSize = 7 * 512 * 1024;
 /// Total expected NNUE download size formatted as a human-readable string (e.g. "113MB").
 const nnueTotalSizeMB = '${(bigNetExpectedSize + smallNetExpectedSize) ~/ (1024 * 1024)}MB';
 
+/// Where the Maia networks that do not ship with the app are downloaded from.
+///
+/// The upstream research repository, because lichess does not host these yet. Moving them onto
+/// the CDN alongside the NNUE networks is a one-line change here.
+const _maiaDownloadUrl = 'https://raw.githubusercontent.com/CSSLab/maia-chess/master/maia_weights/';
+
+/// The directory, under the app support directory, that Maia networks are kept in.
+const kMaiaWeightsDirName = 'maia';
+
+/// The asset the bundled Maia network is read from. See [MaiaRating.isBundled].
+const kBundledMaiaAsset = 'assets/maia/maia-1500.pb.gz';
+
+/// URL to download the Maia network for [fileName].
+Uri maiaWeightsUrl(String fileName) => Uri.parse('$_maiaDownloadUrl$fileName');
+
 final _sfVersionPattern = RegExp(r'Stockfish\s+(\d+)');
 
 /// Extracts a short label like "SF 16" from a UCI engine name like "Stockfish 16.1".

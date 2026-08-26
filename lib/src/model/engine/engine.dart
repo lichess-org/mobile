@@ -502,11 +502,22 @@ class Engine {
     }
 
     for (final MapEntry(key: name, value: value) in wanted.entries) {
+      if (!_supportsOption(name)) continue;
       _setOption(name, value);
     }
 
     return variantChanged;
   }
+
+  /// Whether the engine takes an option, so that a search does not have to know which engine it
+  /// landed on.
+  ///
+  /// The options above are Stockfish's vocabulary, and LC0 shares only part of it: it has no
+  /// `Hash`, and sending it one is an `error Unknown option` on every search. An engine that
+  /// declared nothing at all is taken at its word instead — that is what [_fallbackOptionDefaults]
+  /// is for — because refusing every option would leave it running on its own defaults.
+  bool _supportsOption(String name) =>
+      _declaredDefaults.isEmpty || _declaredDefaults.containsKey(name);
 
   void _setOption(String name, String value) {
     if (_options[name] == value) return;

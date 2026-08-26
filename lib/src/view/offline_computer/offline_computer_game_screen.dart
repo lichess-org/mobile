@@ -25,6 +25,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/status_l10n.dart';
+import 'package:lichess_mobile/src/view/offline_computer/opponent_picker.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
@@ -34,7 +35,6 @@ import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/material_diff.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
-import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
@@ -462,17 +462,17 @@ class _Player extends ConsumerWidget {
     final gameState = ref.watch(offlineComputerGameControllerProvider);
     final boardPreferences = ref.watch(boardPreferencesProvider);
     final game = gameState.game;
-    final isStockfish = side != game.playerSide;
+    final isEngine = side != game.playerSide;
     final materialDiff = boardPreferences.materialDifferenceFormat.visible
         ? gameState.currentMaterialDiff(side)
         : null;
 
     final isShortScreen = isShortVerticalScreen(context);
 
-    if (isStockfish) {
+    if (isEngine) {
       return Row(
         children: [
-          Image.asset('assets/images/stockfish/icon.webp', width: 44, height: 44),
+          OpponentIcon(game.opponentSpec),
           const SizedBox(width: 8),
           Expanded(
             child: Column(
@@ -482,10 +482,7 @@ class _Player extends ConsumerWidget {
                 Row(
                   children: [
                     Text(
-                      context.l10n.aiNameLevelAiLevel(
-                        'Stockfish',
-                        game.stockfishLevel.level.toString(),
-                      ),
+                      game.opponentSpec.displayName,
                       style: const TextStyle(fontWeight: FontWeight.w600),
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -720,7 +717,7 @@ class _NewGameSheet extends ConsumerStatefulWidget {
 }
 
 class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
-  late StockfishLevel _selectedLevel;
+  late OpponentSpec _selectedOpponent;
   late SideChoice _selectedSideChoice;
   late Variant _selectedVariant;
   late bool _casual;
@@ -740,7 +737,7 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
   void initState() {
     super.initState();
     final prefs = ref.read(offlineComputerGamePreferencesProvider);
-    _selectedLevel = prefs.stockfishLevel;
+    _selectedOpponent = prefs.opponentSpec;
     _selectedSideChoice = widget.initialFen != null ? SideChoice.nextToPlay : prefs.sideChoice;
     final preferredVariant = widget.initialVariant ?? prefs.variant;
     _selectedVariant = widget.initialFen == null && preferredVariant == Variant.fromPosition
@@ -802,35 +799,11 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
         ListSection(
           materialFilledCard: true,
           children: [
-            ListTile(
-              title: Text.rich(
-                TextSpan(
-                  text: '${context.l10n.level}: ',
-                  children: [
-                    TextSpan(
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                      text: '${_selectedLevel.level}',
-                    ),
-                  ],
-                ),
-              ),
-              subtitle: NonLinearSlider(
-                value: _selectedLevel.level,
-                values: StockfishLevel.values.map((l) => l.level).toList(),
-                onChange: (value) {
-                  setState(() {
-                    _selectedLevel = StockfishLevel.values[value.toInt() - 1];
-                  });
-                },
-                onChangeEnd: (value) {
-                  setState(() {
-                    _selectedLevel = StockfishLevel.values[value.toInt() - 1];
-                  });
-                  ref
-                      .read(offlineComputerGamePreferencesProvider.notifier)
-                      .setStockfishLevel(_selectedLevel);
-                },
-              ),
+            SettingsListTile(
+              icon: OpponentIcon(_selectedOpponent, size: 32),
+              settingsLabel: Text(context.l10n.opponent),
+              settingsValue: _selectedOpponent.displayName,
+              onTap: _pickOpponent,
             ),
             SettingsListTile(
               settingsLabel: Text(context.l10n.variant),
@@ -846,6 +819,14 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
                       _selectedVariant = variant;
                       if (variant == Variant.crazyhouse) {
                         _practiceMode = false;
+                      }
+                      // Maia only knows standard chess, so picking a variant it cannot play hands
+                      // the game back to Stockfish rather than leaving an opponent that would
+                      // have to refuse to move.
+                      if (!_selectedOpponent.supportsVariant(variant)) {
+                        _selectedOpponent = const StockfishOpponentSpec(
+                          StockfishLevel.defaultLevel,
+                        );
                       }
                     });
                     ref.read(offlineComputerGamePreferencesProvider.notifier).setVariant(variant);
@@ -933,7 +914,7 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
                     ref
                         .read(offlineComputerGameControllerProvider.notifier)
                         .startNewGame(
-                          stockfishLevel: _selectedLevel,
+                          opponentSpec: _selectedOpponent,
                           playerSide: side,
                           casual: _practiceMode || _casual,
                           practiceMode: _practiceMode,
@@ -948,6 +929,17 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
         ),
       ],
     );
+  }
+
+  Future<void> _pickOpponent() async {
+    final opponent = await showOpponentPicker(
+      context,
+      selected: _selectedOpponent,
+      variant: _selectedVariant,
+    );
+    if (opponent == null || !mounted) return;
+    setState(() => _selectedOpponent = opponent);
+    await ref.read(offlineComputerGamePreferencesProvider.notifier).setOpponent(opponent);
   }
 
   bool get _isPlayEnabled =>

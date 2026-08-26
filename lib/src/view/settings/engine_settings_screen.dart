@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/engine/engine_utils.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
+import 'package:lichess_mobile/src/model/engine/opponent_level.dart';
+import 'package:lichess_mobile/src/model/engine/weights_service.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/engine_settings_widget.dart';
@@ -171,6 +173,7 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
                   ),
               ],
             ),
+          const _MaiaNetworksSection(),
           EngineSettingsWidget(
             onSetEngineSearchTime: (value) {
               ref.read(engineEvaluationPreferencesProvider.notifier).setEngineSearchTime(value);
@@ -184,6 +187,81 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// The Maia networks that have been downloaded, and a way to get the space back.
+///
+/// Nothing is shown until there is something to delete: one network ships with the app, and the
+/// rest arrive only if someone chose that rating to play against.
+class _MaiaNetworksSection extends ConsumerStatefulWidget {
+  const _MaiaNetworksSection();
+
+  @override
+  ConsumerState<_MaiaNetworksSection> createState() => _MaiaNetworksSectionState();
+}
+
+class _MaiaNetworksSectionState extends ConsumerState<_MaiaNetworksSection> {
+  Set<MaiaRating>? _downloaded;
+
+  @override
+  void initState() {
+    super.initState();
+    _refresh();
+  }
+
+  void _refresh() {
+    ref.read(maiaWeightsServiceProvider).availableRatings().then((available) {
+      if (mounted) {
+        setState(() => _downloaded = available.where((r) => !r.isBundled).toSet());
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final downloaded = _downloaded;
+    if (downloaded == null || downloaded.isEmpty) return const SizedBox.shrink();
+
+    final totalBytes = downloaded.fold(0, (sum, rating) => sum + rating.expectedSize);
+    final ratings = (downloaded.toList()..sort((a, b) => a.rating - b.rating))
+        .map((r) => r.rating.toString())
+        .join(', ');
+
+    return ListSection(
+      header: const Text('Maia networks'),
+      children: [
+        ListTile(
+          trailing: const Icon(Icons.delete_outline),
+          title: Text(ratings),
+          subtitle: Text('${(totalBytes / (1024 * 1024)).toStringAsFixed(1)} MB (tap to delete)'),
+          onTap: () async {
+            final isOk = await showAdaptiveDialog<bool>(
+              context: context,
+              barrierDismissible: true,
+              builder: (context) {
+                return AlertDialog.adaptive(
+                  content: const Text('Do you want to delete the downloaded Maia networks?'),
+                  actions: [
+                    PlatformDialogAction(
+                      child: const Text('OK'),
+                      onPressed: () => Navigator.of(context).pop(true),
+                    ),
+                    PlatformDialogAction(
+                      child: Text(context.l10n.cancel),
+                      onPressed: () => Navigator.of(context).pop(false),
+                    ),
+                  ],
+                );
+              },
+            );
+            if (isOk != true) return;
+            await ref.read(maiaWeightsServiceProvider).deleteWeights();
+            if (mounted) _refresh();
+          },
+        ),
+      ],
     );
   }
 }

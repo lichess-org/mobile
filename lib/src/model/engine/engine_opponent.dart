@@ -8,7 +8,9 @@ import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/engine_budget.dart';
 import 'package:lichess_mobile/src/model/engine/engine_providers.dart';
 import 'package:lichess_mobile/src/model/engine/opponent_level.dart';
+import 'package:lichess_mobile/src/model/engine/weights_service.dart';
 import 'package:logging/logging.dart';
+import 'package:meta/meta.dart';
 
 final _logger = Logger('EngineOpponent');
 
@@ -24,11 +26,11 @@ class MoveSearchCancelled implements Exception {
 
 /// An opponent that plays moves.
 ///
-/// It knows how to turn "level 4" into UCI options and a search limit, and knows nothing about
-/// evaluation, hints or practice comments — those belong to the evaluator, even when both happen
-/// to be running on the same engine.
+/// It knows how to turn "level 4" or "Maia 1500" into UCI options and a search limit, and knows
+/// nothing about evaluation, hints or practice comments — those belong to the evaluator, even when
+/// both happen to be running on the same engine.
 abstract class EngineOpponent {
-  /// A short label for the UI: "Stockfish level 4".
+  /// A short label for the UI: "Stockfish level 4", "Maia 1500".
   String get displayName;
 
   /// The opponent's move for the position reached by [moves] from [initialPosition].
@@ -44,20 +46,18 @@ abstract class EngineOpponent {
   void stop();
 }
 
-/// Stockfish playing at one of its levels.
+/// What every opponent does around its search, which is everything except what to ask the engine.
 ///
-/// The whole of "how strong is the computer" lives here: the skill level, the number of candidate
-/// moves it picks from, how long it thinks and how many cores it gets.
-class StockfishOpponent implements EngineOpponent {
-  StockfishOpponent({required this._ref, required this.spec, required this.budget});
+/// Last caller wins: the search it replaces is failed rather than left waiting, because a search
+/// the engine has already begun still answers, but that answer is for a position the game has
+/// moved on from.
+abstract class EngineOpponentBase<S extends OpponentSpec> implements EngineOpponent {
+  EngineOpponentBase({required this.ref, required this.spec});
 
-  final Ref _ref;
-  final StockfishOpponentSpec spec;
+  @protected
+  final Ref ref;
 
-  /// How this device's engines share it.
-  final EngineBudget budget;
-
-  StockfishLevel get level => spec.level;
+  final S spec;
 
   @override
   String get displayName => spec.displayName;
@@ -65,21 +65,23 @@ class StockfishOpponent implements EngineOpponent {
   Search? _search;
   Completer<UCIMove>? _pending;
 
+  /// What to ask the engine for this position.
+  ///
+  /// Asynchronous because an opponent may have to get hold of something first — Maia has to find
+  /// its network — and that has to happen while the caller is still waiting for a move.
+  @protected
+  Future<SearchRequest> buildRequest({
+    required Position initialPosition,
+    required IList<UCIMove> moves,
+    required Variant variant,
+  });
+
   @override
   Future<UCIMove> findMove({
     required Position initialPosition,
     required IList<UCIMove> moves,
     required Variant variant,
   }) {
-    _logger.info(
-      'Finding a move at ply ${initialPosition.ply + moves.length}: '
-      'level=${level.level}, skill=${level.skill}, cores=${level.threads}, '
-      'searchTime=${level.searchTime.inMilliseconds}ms',
-    );
-
-    // Last caller wins, and the one it replaces is failed rather than left waiting: a search the
-    // engine has already begun still answers, but that answer is for a position the game has
-    // moved on from.
     stop();
 
     final completer = Completer<UCIMove>();
@@ -95,26 +97,17 @@ class StockfishOpponent implements EngineOpponent {
     Variant variant,
   ) async {
     try {
-      final engine = await _ref.read(engineProvider(spec.engineSpec).future);
+      final request = await buildRequest(
+        initialPosition: initialPosition,
+        moves: moves,
+        variant: variant,
+      );
       if (!identical(_pending, completer)) return;
 
-      final search = engine.search(
-        SearchRequest(
-          initialPosition: initialPosition,
-          moves: moves,
-          variant: variant,
-          limit: SearchLimit.movetime(level.searchTime),
-          threads: budget.threadsFor(level.threads),
-          hashSize: budget.opponentHash,
-          multiPv: level.multiPv,
-          // The complete option set for this search. Stockfish's strength limiting works by
-          // biasing the scores of slightly worse moves among the candidates, so the MultiPV above
-          // is part of how weak the opponent is, not a display setting.
-          options: IMap({'Skill Level': level.skill.toString()}),
-          // A search from the starting position is the first move of a game.
-          newGame: moves.isEmpty,
-        ),
-      );
+      final engine = await ref.read(engineProvider(spec.engineSpec).future);
+      if (!identical(_pending, completer)) return;
+
+      final search = engine.search(request);
       _search = search;
 
       final move = await search.bestMove;
@@ -146,6 +139,89 @@ class StockfishOpponent implements EngineOpponent {
   }
 }
 
+/// Stockfish playing at one of its levels.
+///
+/// The whole of "how strong is the computer" lives here: the skill level, the number of candidate
+/// moves it picks from, how long it thinks and how many cores it gets.
+class StockfishOpponent extends EngineOpponentBase<StockfishOpponentSpec> {
+  StockfishOpponent({required super.ref, required super.spec, required this.budget});
+
+  /// How this device's engines share it.
+  final EngineBudget budget;
+
+  StockfishLevel get level => spec.level;
+
+  @override
+  Future<SearchRequest> buildRequest({
+    required Position initialPosition,
+    required IList<UCIMove> moves,
+    required Variant variant,
+  }) async {
+    _logger.info(
+      'Finding a move at ply ${initialPosition.ply + moves.length}: '
+      'level=${level.level}, skill=${level.skill}, cores=${level.threads}, '
+      'searchTime=${level.searchTime.inMilliseconds}ms',
+    );
+
+    return SearchRequest(
+      initialPosition: initialPosition,
+      moves: moves,
+      variant: variant,
+      limit: SearchLimit.movetime(level.searchTime),
+      threads: budget.threadsFor(level.threads),
+      hashSize: budget.opponentHash,
+      multiPv: level.multiPv,
+      // The complete option set for this search. Stockfish's strength limiting works by
+      // biasing the scores of slightly worse moves among the candidates, so the MultiPV above
+      // is part of how weak the opponent is, not a display setting.
+      options: IMap({'Skill Level': level.skill.toString()}),
+      // A search from the starting position is the first move of a game.
+      newGame: moves.isEmpty,
+    );
+  }
+}
+
+/// Maia: LC0 with a network trained on human games in one rating band.
+///
+/// There is no search to speak of. Maia is a policy network, and what makes it play like a human
+/// of its rating is the move the network likes best, not the move a tree search rescues — so it
+/// runs at one node, and none of the strength dials [StockfishOpponent] turns apply.
+class MaiaOpponent extends EngineOpponentBase<MaiaOpponentSpec> {
+  MaiaOpponent({required super.ref, required super.spec, required this.weights});
+
+  @protected
+  final MaiaWeightsService weights;
+
+  MaiaRating get rating => spec.rating;
+
+  @override
+  Future<SearchRequest> buildRequest({
+    required Position initialPosition,
+    required IList<UCIMove> moves,
+    required Variant variant,
+  }) async {
+    final (rating: playing, :path) = await weights.ensureWeights(rating);
+
+    _logger.info(
+      'Finding a move at ply ${initialPosition.ply + moves.length}: network=${playing.fileName}',
+    );
+
+    return SearchRequest(
+      initialPosition: initialPosition,
+      moves: moves,
+      variant: variant,
+      // One node is the whole point: the network's own move, with nothing searched on top of it.
+      limit: const SearchLimit.nodes(1),
+      threads: 1,
+      multiPv: 1,
+      // A minibatch is a set of positions evaluated together, and at one node there is only ever
+      // the one, so the default of 256 would size buffers for work that never arrives.
+      options: IMap({'WeightsFile': path, 'MinibatchSize': '1'}),
+      newGame: moves.isEmpty,
+    );
+  }
+}
+
 /// The opponent for [OpponentSpec], and the engine it plays on.
 ///
 /// Watching this is what keeps that engine alive: an offline game holds its opponent for as long
@@ -164,6 +240,11 @@ final engineOpponentProvider = Provider.autoDispose.family<EngineOpponent, Oppon
       ref: ref,
       spec: stockfish,
       budget: ref.read(engineBudgetProvider),
+    ),
+    final MaiaOpponentSpec maia => MaiaOpponent(
+      ref: ref,
+      spec: maia,
+      weights: ref.read(maiaWeightsServiceProvider),
     ),
   };
 

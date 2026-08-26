@@ -19,6 +19,7 @@ import 'package:lichess_mobile/src/model/auth/auth_storage.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/engine/engine_factory.dart';
+import 'package:lichess_mobile/src/model/engine/weights_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
@@ -37,6 +38,7 @@ import './model/common/service/fake_sound_service.dart';
 import 'binding.dart';
 import 'model/analysis/fake_opening_service.dart';
 import 'model/engine/fake_engine.dart';
+import 'model/engine/fake_weights_service.dart';
 import 'model/notifications/fake_notification_display.dart';
 import 'network/fake_http_client_factory.dart';
 import 'network/fake_websocket_channel.dart';
@@ -242,6 +244,11 @@ Future<Widget> makeTestProviderScope(
     // configure [fakeEngine] right up to the moment it pumps its widget.
     engineFactoryProvider: engineFactoryProvider.overrideWith(
       (ref) => EngineFactory(connect: (spec) => fakeEngine.connect(spec)),
+    ),
+    // No disk and no asset bundle behind the Maia networks: only the bundled one is there, which
+    // is what a device that has never downloaded one looks like.
+    maiaWeightsServiceProvider: maiaWeightsServiceProvider.overrideWithValue(
+      FakeMaiaWeightsService(),
     ),
     showRatingsPrefProvider: showRatingsPrefProvider.overrideWith((ref) => ShowRatings.yes),
     soundServiceProvider: soundServiceProvider.overrideWithValue(FakeSoundService()),

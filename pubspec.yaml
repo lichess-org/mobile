@@ -125,6 +125,7 @@ flutter:
     - assets/chess_openings.db
     - assets/images/
     - assets/images/stockfish/
+    - assets/images/maia/
     - assets/images/fide-fed/
     - assets/sounds/futuristic/
     - assets/sounds/lisp/
@@ -133,6 +134,7 @@ flutter:
     - assets/sounds/standard/
     - assets/sounds/sfx/
     - assets/board-thumbnails/
+    - assets/maia/maia-1500.pb.gz
     - assets/positions.json
     - assets/endgames.json
 

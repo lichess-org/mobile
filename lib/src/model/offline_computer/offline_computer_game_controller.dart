@@ -130,7 +130,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   }
 
   EngineOpponent get _opponent {
-    final spec = StockfishOpponentSpec(state.game.stockfishLevel);
+    final spec = state.game.opponentSpec;
     if (_opponentSpec != spec) {
       _opponentSubscription?.close();
       _opponentSpec = spec;
@@ -151,13 +151,13 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       _opponentSubscription?.close();
     });
     return OfflineComputerGameState.initial(
-      stockfishLevel: StockfishLevel.defaultLevel,
+      opponentSpec: const StockfishOpponentSpec(StockfishLevel.defaultLevel),
       playerSide: Side.white,
     );
   }
 
   void startNewGame({
-    required StockfishLevel stockfishLevel,
+    required OpponentSpec opponentSpec,
     required Side playerSide,
     required bool casual,
     required bool practiceMode,
@@ -165,7 +165,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     String? initialFen,
   }) {
     state = OfflineComputerGameState.initial(
-      stockfishLevel: stockfishLevel,
+      opponentSpec: opponentSpec,
       playerSide: playerSide,
       casual: casual,
       practiceMode: practiceMode,
@@ -908,7 +908,7 @@ sealed class OfflineComputerGameState with _$OfflineComputerGameState {
   }) = _OfflineComputerGameState;
 
   factory OfflineComputerGameState.initial({
-    required StockfishLevel stockfishLevel,
+    required OpponentSpec opponentSpec,
     required Side playerSide,
     Variant variant = Variant.standard,
     bool casual = true,
@@ -948,11 +948,11 @@ sealed class OfflineComputerGameState with _$OfflineComputerGameState {
           perf: Perf.fromVariantAndSpeed(effectiveVariant, Speed.classical),
         ),
         playerSide: playerSide,
-        stockfishLevel: stockfishLevel,
+        opponentSpec: opponentSpec,
         casual: casual,
         practiceMode: practiceMode,
         humanPlayer: const Player(onGame: true),
-        enginePlayer: stockfishPlayer(),
+        enginePlayer: enginePlayerFor(opponentSpec),
       ),
     );
   }

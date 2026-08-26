@@ -6,15 +6,22 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/engine/engine_opponent.dart';
 import 'package:lichess_mobile/src/model/engine/opponent_level.dart';
 
+import 'package:lichess_mobile/src/model/engine/weights_service.dart';
+
 import '../../test_container.dart';
 import 'fake_engine.dart';
+import 'fake_weights_service.dart';
 
-/// The opponent for [level], kept alive for the duration of the test.
-EngineOpponent readOpponent(ProviderContainer container, [StockfishLevel? level]) {
-  final provider = engineOpponentProvider(StockfishOpponentSpec(level ?? StockfishLevel.level3));
+/// The opponent for [spec], kept alive for the duration of the test.
+EngineOpponent readOpponentFor(ProviderContainer container, OpponentSpec spec) {
+  final provider = engineOpponentProvider(spec);
   container.listen(provider, (_, _) {});
   return container.read(provider);
 }
+
+/// The opponent for [level], kept alive for the duration of the test.
+EngineOpponent readOpponent(ProviderContainer container, [StockfishLevel? level]) =>
+    readOpponentFor(container, StockfishOpponentSpec(level ?? StockfishLevel.level3));
 
 void main() {
   group('StockfishOpponent', () {
@@ -154,6 +161,115 @@ void main() {
         ),
         throwsA(isA<MoveSearchCancelled>()),
       );
+    });
+  });
+
+  group('MaiaOpponent', () {
+    Future<ProviderContainer> makeMaiaContainer(FakeMaiaWeightsService weights) => makeContainer(
+      overrides: {
+        maiaWeightsServiceProvider: maiaWeightsServiceProvider.overrideWithValue(weights),
+      },
+    );
+
+    test("plays the network's own move on LC0, with no search on top of it", () async {
+      final engine = FakeEngine();
+      fakeEngine = engine;
+      final weights = FakeMaiaWeightsService();
+      final container = await makeMaiaContainer(weights);
+
+      final move = await readOpponentFor(container, const MaiaOpponentSpec(MaiaRating.maia1500))
+          .findMove(
+            initialPosition: Chess.initial,
+            moves: const IListConst([]),
+            variant: Variant.standard,
+          );
+
+      expect(move, isNotEmpty);
+      expect(engine.spec?.label, 'lc0');
+      expect(engine.options['WeightsFile'], '/fake/maia/maia-1500.pb.gz');
+      // Maia is a policy network: what makes it human-like is the move it likes best, not a tree
+      // search on top of it.
+      expect(engine.commands, contains('go nodes 1'));
+    });
+
+    test('downloads the network it needs before playing', () async {
+      fakeEngine = FakeEngine();
+      final weights = FakeMaiaWeightsService();
+      final container = await makeMaiaContainer(weights);
+
+      await readOpponentFor(container, const MaiaOpponentSpec(MaiaRating.maia1900)).findMove(
+        initialPosition: Chess.initial,
+        moves: const IListConst([]),
+        variant: Variant.standard,
+      );
+
+      expect(weights.downloads, [MaiaRating.maia1900]);
+      expect(fakeEngine.options['WeightsFile'], '/fake/maia/maia-1900.pb.gz');
+    });
+
+    test('falls back to the bundled network when the download fails', () async {
+      final engine = FakeEngine();
+      fakeEngine = engine;
+      final weights = FakeMaiaWeightsService(downloadSucceeds: false);
+      final container = await makeMaiaContainer(weights);
+
+      final move = await readOpponentFor(container, const MaiaOpponentSpec(MaiaRating.maia1900))
+          .findMove(
+            initialPosition: Chess.initial,
+            moves: const IListConst([]),
+            variant: Variant.standard,
+          );
+
+      // A game against a Maia of the wrong strength beats no game at all.
+      expect(move, isNotEmpty);
+      expect(engine.options['WeightsFile'], '/fake/maia/maia-1500.pb.gz');
+    });
+
+    test('every rating shares one LC0 engine', () async {
+      final engine = FakeEngine();
+      fakeEngine = engine;
+      final weights = FakeMaiaWeightsService(available: MaiaRating.values.toSet());
+      final container = await makeMaiaContainer(weights);
+
+      for (final rating in [MaiaRating.maia1100, MaiaRating.maia1900]) {
+        await readOpponentFor(container, MaiaOpponentSpec(rating)).findMove(
+          initialPosition: Chess.initial,
+          moves: const IListConst([]),
+          variant: Variant.standard,
+        );
+      }
+
+      // The network is a per-search option, so two ratings are the same spec and never fight over
+      // the one LC0 slot.
+      expect(engine.startCount, 1);
+      expect(engine.options['WeightsFile'], '/fake/maia/maia-1900.pb.gz');
+    });
+  });
+
+  group('OpponentSpec', () {
+    test('round-trips through JSON', () {
+      for (final spec in <OpponentSpec>[
+        const StockfishOpponentSpec(StockfishLevel.level7),
+        const MaiaOpponentSpec(MaiaRating.maia1300),
+      ]) {
+        expect(OpponentSpec.fromJson(spec.toJson()), spec);
+      }
+    });
+
+    test('falls back to the default rather than throwing on an unknown opponent', () {
+      expect(
+        OpponentSpec.fromJson(const {'type': 'leela', 'rating': 'maia9000'}),
+        const StockfishOpponentSpec(StockfishLevel.defaultLevel),
+      );
+    });
+
+    test('only Stockfish plays the variants', () {
+      expect(
+        const StockfishOpponentSpec(StockfishLevel.level1).supportsVariant(Variant.atomic),
+        isTrue,
+      );
+      expect(const MaiaOpponentSpec(MaiaRating.maia1500).supportsVariant(Variant.atomic), isFalse);
+      expect(const MaiaOpponentSpec(MaiaRating.maia1500).supportsVariant(Variant.standard), isTrue);
     });
   });
 }

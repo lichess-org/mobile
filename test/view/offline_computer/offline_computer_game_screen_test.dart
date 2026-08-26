@@ -52,9 +52,9 @@ void main() {
       initialFen: null,
       status: GameStatus.started,
       playerSide: Side.white,
-      stockfishLevel: StockfishLevel.level1,
+      opponentSpec: const StockfishOpponentSpec(StockfishLevel.level1),
       humanPlayer: const Player(onGame: true),
-      enginePlayer: stockfishPlayer(),
+      enginePlayer: enginePlayerFor(const StockfishOpponentSpec(StockfishLevel.level1)),
     );
     registerFallbackValue(game);
     registerFallbackValue(SavedOfflineComputerGame(game: game));
@@ -84,9 +84,10 @@ void main() {
 
       // Verify new game bottom sheet is displayed
 
-      // Verify level slider is shown
-      expect(find.textContaining('Level'), findsOneWidget);
-      expect(find.byType(Slider), findsOneWidget);
+      // Verify the opponent tile is shown, with the default opponent on it
+      expect(find.text('Opponent'), findsOneWidget);
+      // Once on the tile, once on the engine player behind the sheet.
+      expect(find.text('Stockfish level 4'), findsNWidgets(2));
 
       // Verify side selection (label is "Side" with value showing default "Random side")
       expect(find.text('Side'), findsOneWidget);
@@ -287,7 +288,7 @@ void main() {
       // Verify new game bottom sheet is shown with all options
       await tester.ensureVisible(find.text('Side'));
       expect(find.text('Side'), findsOneWidget);
-      expect(find.byType(Slider), findsOneWidget);
+      expect(find.text('Opponent'), findsOneWidget);
     });
 
     testWidgets('Menu button opens action sheet', (tester) async {
@@ -368,20 +369,20 @@ void main() {
       await tester.tap(find.text('New game'));
       await tester.pumpAndSettle();
 
-      // Verify bottom sheet is shown (has Play button and Level slider)
+      // Verify bottom sheet is shown (has Play button and the opponent tile)
       expect(find.text('Play'), findsOneWidget);
-      expect(find.byType(Slider), findsOneWidget);
+      expect(find.text('Opponent'), findsOneWidget);
 
       // Dismiss the bottom sheet by tapping the barrier (scrim)
       await tester.tapAt(Offset.zero);
       await tester.pumpAndSettle();
 
       // Bottom sheet should be closed, game should still be visible
-      expect(find.byType(Slider), findsNothing);
+      expect(find.text('Opponent'), findsNothing);
       expect(find.byType(Chessboard), findsOneWidget);
     });
 
-    testWidgets('Can start game with different level', (tester) async {
+    testWidgets('Can start game with a different Stockfish level', (tester) async {
       final gameStorage = MockOfflineComputerGameStorage();
       when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
 
@@ -397,13 +398,22 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pumpAndSettle();
 
-      // Find and drag the level slider
+      // The level lives in the opponent picker now
+      await tester.tap(find.text('Opponent'));
+      await tester.pumpAndSettle();
+
       final slider = find.byType(Slider);
       expect(slider, findsOneWidget);
 
       // Drag slider to change level (drag to the right for higher level)
       await tester.drag(slider, const Offset(100, 0));
       await tester.pumpAndSettle();
+
+      await tester.tap(find.text('OK'));
+      await tester.pumpAndSettle();
+
+      // Only the engine player behind the sheet still says level 4; the tile has moved on.
+      expect(find.text('Stockfish level 4'), findsOneWidget);
 
       // Select white and start game
       await selectSide(tester, Side.white);
@@ -526,9 +536,9 @@ void main() {
             initialFen: kInitialFEN,
             status: GameStatus.started,
             playerSide: Side.white,
-            stockfishLevel: StockfishLevel.level1,
+            opponentSpec: const StockfishOpponentSpec(StockfishLevel.level1),
             humanPlayer: const Player(onGame: true),
-            enginePlayer: stockfishPlayer(),
+            enginePlayer: enginePlayerFor(const StockfishOpponentSpec(StockfishLevel.level1)),
           ),
         ),
       );
@@ -616,9 +626,9 @@ void main() {
             initialFen: kInitialFEN,
             status: GameStatus.started,
             playerSide: Side.white,
-            stockfishLevel: StockfishLevel.level1,
+            opponentSpec: const StockfishOpponentSpec(StockfishLevel.level1),
             humanPlayer: const Player(onGame: true),
-            enginePlayer: stockfishPlayer(),
+            enginePlayer: enginePlayerFor(const StockfishOpponentSpec(StockfishLevel.level1)),
           ),
         ),
       );
@@ -1892,9 +1902,9 @@ OfflineComputerGameState _stateWithPracticeComment(PracticeComment comment) {
     initialFen: kInitialFEN,
     status: GameStatus.started,
     playerSide: Side.black,
-    stockfishLevel: StockfishLevel.level1,
+    opponentSpec: const StockfishOpponentSpec(StockfishLevel.level1),
     humanPlayer: const Player(onGame: true),
-    enginePlayer: stockfishPlayer(),
+    enginePlayer: enginePlayerFor(const StockfishOpponentSpec(StockfishLevel.level1)),
     practiceMode: true,
     casual: true,
   );
@@ -1926,9 +1936,9 @@ OfflineComputerGameState _stateGameFinished() {
     status: GameStatus.mate,
     winner: Side.white,
     playerSide: Side.black,
-    stockfishLevel: StockfishLevel.level1,
+    opponentSpec: const StockfishOpponentSpec(StockfishLevel.level1),
     humanPlayer: const Player(onGame: true),
-    enginePlayer: stockfishPlayer(),
+    enginePlayer: enginePlayerFor(const StockfishOpponentSpec(StockfishLevel.level1)),
     practiceMode: true,
     casual: true,
   );
@@ -1953,9 +1963,9 @@ OfflineComputerGameState _statePlayerTurn({ComputerAnalysis? analysis}) {
     initialFen: kInitialFEN,
     status: GameStatus.started,
     playerSide: Side.white,
-    stockfishLevel: StockfishLevel.level1,
+    opponentSpec: const StockfishOpponentSpec(StockfishLevel.level1),
     humanPlayer: const Player(onGame: true),
-    enginePlayer: stockfishPlayer(),
+    enginePlayer: enginePlayerFor(const StockfishOpponentSpec(StockfishLevel.level1)),
     practiceMode: true,
     casual: true,
   );
@@ -1993,9 +2003,9 @@ OfflineComputerGameState _stateEvaluatingMove() {
     initialFen: kInitialFEN,
     status: GameStatus.started,
     playerSide: Side.black,
-    stockfishLevel: StockfishLevel.level1,
+    opponentSpec: const StockfishOpponentSpec(StockfishLevel.level1),
     humanPlayer: const Player(onGame: true),
-    enginePlayer: stockfishPlayer(),
+    enginePlayer: enginePlayerFor(const StockfishOpponentSpec(StockfishLevel.level1)),
     practiceMode: true,
     casual: true,
   );

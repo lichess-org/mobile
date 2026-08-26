@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/engine/engine_factory.dart';
 import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
+import 'package:lichess_mobile/src/model/engine/weights_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -24,6 +25,7 @@ import './model/common/service/fake_sound_service.dart';
 import 'binding.dart';
 import 'model/engine/fake_engine.dart';
 import 'model/engine/fake_nnue_service.dart';
+import 'model/engine/fake_weights_service.dart';
 import 'model/notifications/fake_notification_display.dart';
 import 'network/fake_http_client_factory.dart';
 import 'network/fake_websocket_channel.dart';
@@ -57,6 +59,11 @@ Future<ProviderContainer> makeContainer({
 
   final Map<ProviderOrFamily, Override> overrideMap = {
     nnueServiceProvider: nnueServiceProvider.overrideWithValue(FakeNnueService()),
+    // Neither the disk nor the asset bundle is involved: a fake hands out paths for networks it
+    // pretends to have, and a test that cares configures its own.
+    maiaWeightsServiceProvider: maiaWeightsServiceProvider.overrideWithValue(
+      FakeMaiaWeightsService(),
+    ),
     // Every engine in tests is a [FakeEngine] over a fake transport: no plugin, no isolates, and
     // nothing process-wide to reset. Read lazily so a test can configure [fakeEngine] right up to
     // the moment it makes its container.

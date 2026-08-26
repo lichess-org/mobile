@@ -166,9 +166,13 @@ class FakeEngine {
 
   /// What the engine answers a `go` with. The default is two info lines and a bestmove, enough for
   /// the throttle to have something to swallow.
+  ///
+  /// A bounded search answers; `go infinite` does not, because an engine told to search forever
+  /// only stops when it is told to.
   @protected
   void onGo(FakeEngineSession session, List<String> parts) {
-    if (parts.length < 3 || parts[1] != 'movetime') return;
+    if (parts.length < 3) return;
+    if (!const {'movetime', 'nodes', 'depth'}.contains(parts[1])) return;
     if (int.tryParse(parts[2]) == null) return;
     for (var i = 1; i < 3; i++) {
       session.emit(
