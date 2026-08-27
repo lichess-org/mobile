@@ -201,9 +201,23 @@ class Engine {
   bool _newGamePending = true;
   bool _disposed = false;
 
-  /// The context of the last search started, so that a failure can name what the engine was doing.
+  /// The variant of the last search started, so that a failure can name what the engine was doing.
   Variant? _lastVariant;
-  int? _lastHashSize;
+
+  /// The `Hash` this engine is running with: the largest any search has asked for.
+  ///
+  /// A high-water mark rather than whatever the current search wants, because **the transposition
+  /// table belongs to the engine, not to the search**. `setoption name Hash` frees the old table
+  /// and allocates and zeroes a new one, on the thread running the UCI loop — so an engine two
+  /// callers share, each asking for a different size, would rebuild its table on every hand-off
+  /// and be unable to read a command, `quit` included, while it did. That is not a hypothetical:
+  /// on a variant offline game the opponent and the evaluator are literally the same engine, and
+  /// they ask for different sizes on alternating moves.
+  ///
+  /// Growing only is what makes this safe to do behind the callers' backs. Nobody gets a smaller
+  /// table than they asked for, and the engine settles at the largest of the roles it has served
+  /// after one resize instead of one per move.
+  int? _hashSize;
 
   EngineSpec get spec => _transport.spec;
 
@@ -340,7 +354,7 @@ class Engine {
     _running = null;
     _isSearching.value = false;
     if (!_death.isCompleted) {
-      _death.complete(failure?.withContext(variant: _lastVariant, maxMemoryInMb: _lastHashSize));
+      _death.complete(failure?.withContext(variant: _lastVariant, maxMemoryInMb: _hashSize));
     }
   }
 
@@ -465,7 +479,6 @@ class Engine {
 
     _running = next;
     _lastVariant = next.request.variant;
-    _lastHashSize = next.request.hashSize;
 
     // Fairy-Stockfish rebuilds its rules when the variant changes, and it must not still be
     // holding a position set up under the old ones. This one cannot go in front of the handshake
@@ -486,9 +499,14 @@ class Engine {
     // them. The caller's own options are not: it named them deliberately, and an engine may accept
     // an option it does not advertise (LC0's `Temperature` is declared "pro only" and never
     // listed).
+
+    // See [_hashSize]: the table is the engine's, so a search can raise it but never shrink it.
+    final hashSize = math.max(_hashSize ?? 0, request.hashSize);
+    _hashSize = hashSize;
+
     final own = <String, String>{
       'Threads': math.min(request.threads, maxEngineCores).toString(),
-      'Hash': request.hashSize.toString(),
+      'Hash': hashSize.toString(),
       'MultiPV': math.max(1, request.multiPv).toString(),
       // Affects notation only. Life would be easier if everyone would always unconditionally use
       // this mode.
