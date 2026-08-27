@@ -98,6 +98,28 @@ class StudyRepository {
     return utf8.decode(pgnBytes);
   }
 
+  /// Creates a new study named [name], with the same settings as the website gives a study
+  /// created from a game: unlisted, and open to everyone except for the chat.
+  ///
+  /// The study starts with an empty placeholder chapter, which [createChapter] can replace.
+  Future<StudyId> createStudy({required String name}) {
+    return client.postReadJson<StudyId>(
+      Uri(path: '/api/study'),
+      body: {
+        'name': name,
+        'visibility': 'unlisted',
+        'computer': 'everyone',
+        'explorer': 'everyone',
+        'cloneable': 'everyone',
+        'shareable': 'everyone',
+        'chat': 'member',
+        'sticky': 'true',
+        'description': 'false',
+      },
+      mapper: (json) => pick(json, 'id').asStudyIdOrThrow(),
+    );
+  }
+
   /// Creates one or more (if the PGN contains multiple games) chapters in the study with the given [studyId].
   Future<IList<StudyChapterId>> createChapter(
     StudyId studyId,
@@ -107,9 +129,10 @@ class StudyRepository {
       Uri(path: '/api/study/$studyId/import-pgn'),
       body: {
         'pgn': chapter.pgn,
-        'name': chapter.name,
+        if (chapter.name != null) 'name': chapter.name!,
         'orientation': chapter.orientation.name,
         if (chapter.variant != null) 'variant': chapter.variant!.name,
+        'initial': chapter.initial.toString(),
       },
       mapper: (json) => pick(
         json,

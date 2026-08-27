@@ -513,4 +513,48 @@ void main() {
       );
     });
   });
+
+  group('StudyRepository.createStudy', () {
+    test('posts the study settings and returns the new study id', () async {
+      final mockClient = MockClient((request) {
+        if (request.method == 'POST' && request.url.path == '/api/study') {
+          expect(request.bodyFields, containsPair('name', 'My study'));
+          expect(request.bodyFields, containsPair('visibility', 'unlisted'));
+          expect(request.bodyFields, containsPair('chat', 'member'));
+          return mockResponse('{"id": "abcd1234"}', 200);
+        }
+        return mockResponse('', 404);
+      });
+      final container = await makeTestContainer(mockClient);
+      final repo = container.read(studyRepositoryProvider);
+
+      expect(await repo.createStudy(name: 'My study'), const StudyId('abcd1234'));
+    });
+  });
+
+  group('StudyRepository.createChapter', () {
+    test('omits the name when it is null and sends the initial flag', () async {
+      final mockClient = MockClient((request) {
+        if (request.method == 'POST' && request.url.path == '/api/study/abcd1234/import-pgn') {
+          expect(request.bodyFields, containsPair('pgn', '1. e4 *'));
+          expect(request.bodyFields, containsPair('orientation', 'black'));
+          expect(request.bodyFields, containsPair('initial', 'true'));
+          expect(request.bodyFields, isNot(contains('name')));
+          expect(request.bodyFields, isNot(contains('variant')));
+          return mockResponse('{"chapters": [{"id": "chap1234"}]}', 200);
+        }
+        return mockResponse('', 404);
+      });
+      final container = await makeTestContainer(mockClient);
+      final repo = container.read(studyRepositoryProvider);
+
+      expect(
+        await repo.createChapter(
+          const StudyId('abcd1234'),
+          const CreateStudyChapterPayload(pgn: '1. e4 *', orientation: Side.black, initial: true),
+        ),
+        [const StudyChapterId('chap1234')].lock,
+      );
+    });
+  });
 }

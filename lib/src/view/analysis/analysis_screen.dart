@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
+import 'package:lichess_mobile/src/model/study/study_controller.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
@@ -31,6 +32,8 @@ import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/explorer/explorer_view.dart';
 import 'package:lichess_mobile/src/view/game/exported_game_title.dart';
 import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
+import 'package:lichess_mobile/src/view/study/save_to_study_bottom_sheet.dart';
+import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
@@ -652,6 +655,28 @@ class _BottomBar extends ConsumerWidget {
               analysisState.variant,
               analysisState.currentPosition.fen,
             ),
+          ),
+        // Saving the moves to a study gives access to the engine, so it must be allowed here. Like
+        // on the website, this also excludes ongoing games.
+        if (analysisState.isComputerAnalysisAllowed)
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.toStudy),
+            onPressed: () async {
+              if (authUser == null) {
+                showSnackBar(context, context.l10n.youNeedAnAccountToDoThat);
+                return;
+              }
+              final pgn = ref.read(analysisControllerProvider(options).notifier).makeExportPgn();
+              final studyOptions = await showModalBottomSheet<StudyOptions>(
+                context: context,
+                isScrollControlled: true,
+                useRootNavigator: true,
+                builder: (_) => SaveToStudyBottomSheet(pgn: pgn, orientation: analysisState.pov),
+              );
+              if (studyOptions != null && context.mounted) {
+                Navigator.of(context).push(StudyScreen.buildRoute(studyOptions));
+              }
+            },
           ),
       ],
     );

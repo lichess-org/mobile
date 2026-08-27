@@ -193,8 +193,14 @@ sealed class StudyMember with _$StudyMember {
 sealed class CreateStudyChapterPayload with _$CreateStudyChapterPayload {
   const factory CreateStudyChapterPayload({
     required String pgn,
-    required String name,
+
+    /// The chapter name. If null, the server derives it from the PGN tags.
+    @Default(null) String? name,
     required Side orientation,
     @Default(null) Variant? variant,
+
+    /// Whether the chapter replaces the placeholder chapter a study is created with, if that
+    /// chapter is still empty.
+    @Default(false) bool initial,
   }) = _CreateStudyChapterPayload;
 }

@@ -5,6 +5,7 @@ import 'package:collection/collection.dart';
 import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
@@ -24,6 +25,7 @@ import 'package:lichess_mobile/src/view/engine/engine_button.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/more/more_tab_screen.dart';
+import 'package:lichess_mobile/src/view/study/save_to_study_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/pockets.dart';
@@ -32,7 +34,9 @@ import 'package:material_ui/material_ui.dart';
 import 'package:multistockfish/multistockfish.dart';
 
 import '../../binding.dart';
+import '../../model/auth/fake_auth_storage.dart';
 import '../../model/engine/fake_stockfish.dart';
+import '../../network/fake_http_client_factory.dart';
 import '../../network/fake_websocket_channel.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
@@ -342,6 +346,76 @@ void main() {
       await tester.pumpAndSettle(); // wait for play menu to open
       // Variant we set previously should be preselected
       expect(find.text('Atomic'), findsOneWidget);
+    });
+
+    testWidgets('Study action opens the sheet to save the analysis to a study', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const AnalysisScreen(
+          options: AnalysisOptions.pgn(
+            id: StringId('standalone'),
+            orientation: Side.white,
+            pgn: '1. e4',
+            isComputerAnalysisAllowed: true,
+            variant: Variant.standard,
+          ),
+        ),
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+            (ref) => FakeHttpClientFactory(() => MockClient((request) => mockResponse('', 404))),
+          ),
+        },
+        authUser: fakeAuthUser,
+      );
+
+      await tester.pumpWidget(app);
+
+      await tester.tap(find.bySemanticsLabel('Menu'));
+      await tester.pumpAndSettle(); // wait for menu to open
+      await tester.tap(find.text('Study'));
+      await tester.pumpAndSettle(); // wait for sheet to open
+
+      expect(find.byType(SaveToStudyBottomSheet), findsOneWidget);
+      expect(find.text('Create study'), findsOneWidget);
+    });
+
+    testWidgets('Copy main line PGN from the move context menu', (tester) async {
+      String? copiedText;
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
+        SystemChannels.platform,
+        (methodCall) async {
+          if (methodCall.method == 'Clipboard.setData') {
+            copiedText = (methodCall.arguments as Map<Object?, Object?>)['text'] as String?;
+          }
+          return null;
+        },
+      );
+      addTearDown(
+        () => TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+            .setMockMethodCallHandler(SystemChannels.platform, null),
+      );
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const AnalysisScreen(
+          options: AnalysisOptions.pgn(
+            id: StringId('standalone'),
+            orientation: Side.white,
+            pgn: '1. e4 e5 (1... c5) 2. Nf3',
+            isComputerAnalysisAllowed: true,
+            variant: Variant.standard,
+          ),
+        ),
+      );
+
+      await tester.pumpWidget(app);
+
+      await tester.longPress(find.text('e5'));
+      await tester.pumpAndSettle(); // wait for context menu to open
+      await tester.tap(find.text('Copy main line PGN'));
+      await tester.pumpAndSettle(); // wait for context menu to close
+
+      expect(copiedText, '1. e4 e5 2. Nf3 *');
     });
   });
 
