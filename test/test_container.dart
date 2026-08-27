@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/engine/engine_factory.dart';
 import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
+import 'package:lichess_mobile/src/model/engine/thinking_time.dart';
 import 'package:lichess_mobile/src/model/engine/weights_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
@@ -64,6 +65,8 @@ Future<ProviderContainer> makeContainer({
     maiaWeightsServiceProvider: maiaWeightsServiceProvider.overrideWithValue(
       FakeMaiaWeightsService(),
     ),
+    // Otherwise every engine move in the suite would wait out a human-looking think.
+    thinkingTimeProvider: thinkingTimeProvider.overrideWithValue(const ThinkingTime.instant()),
     // Every engine in tests is a [FakeEngine] over a fake transport: no plugin, no isolates, and
     // nothing process-wide to reset. Read lazily so a test can configure [fakeEngine] right up to
     // the moment it makes its container.

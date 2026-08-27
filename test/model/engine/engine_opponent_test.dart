@@ -6,11 +6,23 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/engine/engine_opponent.dart';
 import 'package:lichess_mobile/src/model/engine/opponent_level.dart';
 
+import 'package:lichess_mobile/src/model/engine/thinking_time.dart';
 import 'package:lichess_mobile/src/model/engine/weights_service.dart';
 
 import '../../test_container.dart';
 import 'fake_engine.dart';
 import 'fake_weights_service.dart';
+
+/// A [ThinkingTime] that always asks for the same wait, so a test can time the wiring rather than
+/// the distribution — which `thinking_time_test.dart` covers on its own.
+class FixedThinkingTime extends ThinkingTime {
+  FixedThinkingTime(this.duration);
+
+  final Duration duration;
+
+  @override
+  Duration forMove({required Position position, required Move move, Move? lastMove}) => duration;
+}
 
 /// The opponent for [spec], kept alive for the duration of the test.
 EngineOpponent readOpponentFor(ProviderContainer container, OpponentSpec spec) {
@@ -263,6 +275,71 @@ void main() {
       // the one LC0 slot.
       expect(engine.startCount, 1);
       expect(engine.options['WeightsFile'], '/fake/maia/maia-1900.pb.gz');
+    });
+  });
+
+  group('MaiaOpponent thinking time', () {
+    /// A container whose Maia opponent waits [think] before answering, however fast the engine is.
+    Future<ProviderContainer> makeSlowContainer(Duration think) => makeContainer(
+      overrides: {
+        maiaWeightsServiceProvider: maiaWeightsServiceProvider.overrideWithValue(
+          FakeMaiaWeightsService(),
+        ),
+        thinkingTimeProvider: thinkingTimeProvider.overrideWithValue(FixedThinkingTime(think)),
+      },
+    );
+
+    test('sits on the move instead of answering the instant the engine does', () async {
+      fakeEngine = FakeEngine();
+      final container = await makeSlowContainer(const Duration(milliseconds: 200));
+      final opponent = readOpponentFor(container, const MaiaOpponentSpec(MaiaRating.maia1500));
+
+      final elapsed = Stopwatch()..start();
+      await opponent.findMove(
+        initialPosition: Chess.initial,
+        moves: const IListConst([]),
+        variant: Variant.standard,
+      );
+
+      // The fake engine answers immediately; without the wait this would be a couple of
+      // milliseconds, and a move landing the instant you finish yours is the tell.
+      expect(elapsed.elapsed, greaterThanOrEqualTo(const Duration(milliseconds: 180)));
+    });
+
+    test('the wait covers the search rather than being added to it', () async {
+      // An engine that takes 150ms of the 200ms think, so only 50ms should be left to wait.
+      fakeEngine = SlowEngine(const Duration(milliseconds: 150));
+      final container = await makeSlowContainer(const Duration(milliseconds: 200));
+      final opponent = readOpponentFor(container, const MaiaOpponentSpec(MaiaRating.maia1500));
+
+      final elapsed = Stopwatch()..start();
+      await opponent.findMove(
+        initialPosition: Chess.initial,
+        moves: const IListConst([]),
+        variant: Variant.standard,
+      );
+
+      expect(elapsed.elapsed, greaterThanOrEqualTo(const Duration(milliseconds: 180)));
+      expect(elapsed.elapsed, lessThan(const Duration(milliseconds: 340)));
+    });
+
+    test('a stop during the wait cancels the move rather than playing it late', () async {
+      fakeEngine = FakeEngine();
+      final container = await makeSlowContainer(const Duration(seconds: 5));
+      final opponent = readOpponentFor(container, const MaiaOpponentSpec(MaiaRating.maia1500));
+
+      final move = opponent.findMove(
+        initialPosition: Chess.initial,
+        moves: const IListConst([]),
+        variant: Variant.standard,
+      );
+
+      // Long enough for the engine to have answered and the wait to be all that is left. A
+      // takeback or a resignation here must not be followed by the move landing five seconds on.
+      await pumpEventQueue();
+      opponent.stop();
+
+      await expectLater(move, throwsA(isA<MoveSearchCancelled>()));
     });
   });
 

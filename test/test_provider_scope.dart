@@ -19,6 +19,7 @@ import 'package:lichess_mobile/src/model/auth/auth_storage.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/engine/engine_factory.dart';
+import 'package:lichess_mobile/src/model/engine/thinking_time.dart';
 import 'package:lichess_mobile/src/model/engine/weights_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -250,6 +251,8 @@ Future<Widget> makeTestProviderScope(
     maiaWeightsServiceProvider: maiaWeightsServiceProvider.overrideWithValue(
       FakeMaiaWeightsService(),
     ),
+    // Otherwise every engine move in the suite would wait out a human-looking think.
+    thinkingTimeProvider: thinkingTimeProvider.overrideWithValue(const ThinkingTime.instant()),
     showRatingsPrefProvider: showRatingsPrefProvider.overrideWith((ref) => ShowRatings.yes),
     soundServiceProvider: soundServiceProvider.overrideWithValue(FakeSoundService()),
     openingServiceProvider: openingServiceProvider.overrideWithValue(const FakeOpeningService()),

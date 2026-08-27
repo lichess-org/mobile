@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/engine_budget.dart';
 import 'package:lichess_mobile/src/model/engine/engine_providers.dart';
 import 'package:lichess_mobile/src/model/engine/opponent_level.dart';
+import 'package:lichess_mobile/src/model/engine/thinking_time.dart';
 import 'package:lichess_mobile/src/model/engine/weights_service.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
@@ -96,6 +97,18 @@ abstract class EngineOpponentBase<S extends OpponentSpec> implements EngineOppon
     required Variant variant,
   });
 
+  /// How long this opponent should appear to have taken, measured from the start of the search.
+  ///
+  /// A wait, not a search limit: [move] is already decided by the time this is asked, and nothing
+  /// here changes it. The default is nothing, because an engine whose own search time already
+  /// paces it — Stockfish thinks for half a second to two seconds — needs no wait on top.
+  @protected
+  Duration thinkingTimeFor({
+    required Position initialPosition,
+    required IList<UCIMove> moves,
+    required UCIMove move,
+  }) => Duration.zero;
+
   @override
   Future<UCIMove> findMove({
     required Position initialPosition,
@@ -116,6 +129,11 @@ abstract class EngineOpponentBase<S extends OpponentSpec> implements EngineOppon
     IList<UCIMove> moves,
     Variant variant,
   ) async {
+    // Started before anything else, so that the wait below covers the search rather than being
+    // added to it: an opponent that takes two seconds takes two seconds whether its engine
+    // answered instantly or after a second and a half.
+    final elapsed = Stopwatch()..start();
+
     try {
       final request = await buildRequest(
         initialPosition: initialPosition,
@@ -132,14 +150,27 @@ abstract class EngineOpponentBase<S extends OpponentSpec> implements EngineOppon
 
       final move = await search.bestMove;
       if (!identical(_pending, completer)) return;
-      _pending = null;
       if (identical(_search, search)) _search = null;
 
       if (move == null) {
+        _pending = null;
         completer.completeError(const MoveSearchCancelled());
-      } else {
-        completer.complete(move);
+        return;
       }
+
+      // [_pending] deliberately still points at this search: a stop during the wait has to be able
+      // to cancel it, and clearing it early would leave the caller waiting on a completer nobody
+      // owns any more.
+      final remaining =
+          thinkingTimeFor(initialPosition: initialPosition, moves: moves, move: move) -
+          elapsed.elapsed;
+      if (remaining > Duration.zero) {
+        await Future<void>.delayed(remaining);
+        if (!identical(_pending, completer)) return;
+      }
+
+      _pending = null;
+      completer.complete(move);
     } catch (error, stackTrace) {
       if (!identical(_pending, completer)) return;
       _pending = null;
@@ -208,12 +239,59 @@ class StockfishOpponent extends EngineOpponentBase<StockfishOpponentSpec> {
 /// search rescues — so it runs at one node, samples the policy rather than taking its top move (see
 /// [_kMaiaTemperature]), and none of the strength dials [StockfishOpponent] turns apply.
 class MaiaOpponent extends EngineOpponentBase<MaiaOpponentSpec> {
-  MaiaOpponent({required super.ref, required super.spec, required this.weights});
+  MaiaOpponent({
+    required super.ref,
+    required super.spec,
+    required this.weights,
+    required this.thinkingTime,
+  });
 
   @protected
   final MaiaWeightsService weights;
 
+  /// How long it sits on a move before playing it. Maia answers in a few tens of milliseconds, and
+  /// a move that lands the instant you finish yours is the most obviously inhuman thing about it.
+  @protected
+  final ThinkingTime thinkingTime;
+
   MaiaRating get rating => spec.rating;
+
+  @override
+  Duration thinkingTimeFor({
+    required Position initialPosition,
+    required IList<UCIMove> moves,
+    required UCIMove move,
+  }) {
+    final chosen = Move.parse(move);
+    final position = _replay(initialPosition, moves);
+    if (chosen == null || position == null) return Duration.zero;
+
+    return thinkingTime.forMove(
+      position: position,
+      move: chosen,
+      lastMove: moves.isEmpty ? null : Move.parse(moves.last),
+    );
+  }
+
+  /// The position the opponent is moving from.
+  ///
+  /// Replayed rather than passed in, because [EngineOpponent.findMove] speaks UCI's language — a
+  /// start position and the moves since. Null if the game cannot be replayed, which would be a bug
+  /// elsewhere and is not worth failing a move over: the opponent just answers at once.
+  Position? _replay(Position initialPosition, IList<UCIMove> moves) {
+    try {
+      var position = initialPosition;
+      for (final uci in moves) {
+        final move = Move.parse(uci);
+        if (move == null) return null;
+        position = position.play(move);
+      }
+      return position;
+    } catch (e, st) {
+      _logger.warning('Could not replay the game to time the opponent', e, st);
+      return null;
+    }
+  }
 
   @override
   Future<SearchRequest> buildRequest({
@@ -272,6 +350,7 @@ final engineOpponentProvider = Provider.autoDispose.family<EngineOpponent, Oppon
       ref: ref,
       spec: maia,
       weights: ref.read(maiaWeightsServiceProvider),
+      thinkingTime: ref.read(thinkingTimeProvider),
     ),
   };
 

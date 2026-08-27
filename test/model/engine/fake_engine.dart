@@ -375,6 +375,23 @@ class CrazyhouseDropMoveEngine extends FakeEngine {
 }
 
 /// A fake engine that says nothing until the test tells it to, for throttle tests.
+/// A fake engine that takes its time answering, so that a test can tell a search that ran from a
+/// wait that was imposed on top of one.
+class SlowEngine extends FakeEngine {
+  SlowEngine(this.searchDuration);
+
+  /// How long the engine takes to reach its `bestmove`.
+  final Duration searchDuration;
+
+  @override
+  void onGo(FakeEngineSession session, List<String> parts) {
+    Future<void>.delayed(searchDuration, () {
+      // The session may have been disposed while the search was running.
+      if (sessions.contains(session)) session.emit('bestmove e2e4');
+    });
+  }
+}
+
 class ThrottleTestEngine extends FakeEngine {
   ThrottleTestEngine({this.evalEventCount = 5});
 
