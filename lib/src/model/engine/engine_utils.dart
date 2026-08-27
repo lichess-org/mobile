@@ -9,6 +9,28 @@ import 'package:multistockfish/multistockfish.dart';
 /// Maximum number of CPU cores available for engine use.
 final maxEngineCores = max(Platform.numberOfProcessors - 1, 1);
 
+/// The most memory the app will ever hand out for transposition tables, in MB.
+///
+/// A hard cap, not a share, because the risk does not scale with the device. `Hash` is allocated
+/// and zeroed the moment the option is set, on the thread running the UCI loop, so a large table
+/// buys three bad things: Stockfish calls `exit(EXIT_FAILURE)` — killing the app, not the engine —
+/// when the allocation fails; the loop cannot read `quit` while the table is being cleared, which
+/// is how an engine misses the plugin's quit timeout and is abandoned still holding its native
+/// slot; and a variant offline game resizes it on every hand-off between the opponent and the
+/// evaluator, which share one engine.
+///
+/// What it costs is nothing much: a mobile analysis search runs for one to three seconds, and a
+/// table this size is already far more than such a search can fill.
+const kMaxEngineMemoryInMb = 192;
+
+/// How much of a device's RAM engines may hold, in MB, given its [physicalMemoryInMb].
+///
+/// A sixteenth of the device, capped by [kMaxEngineMemoryInMb]. The fraction is what keeps small
+/// devices from being asked for more than they have; the cap is what keeps large ones from being
+/// given more than is safe to allocate in one go.
+int engineMaxMemoryFor(int physicalMemoryInMb) =>
+    min(kMaxEngineMemoryInMb, (physicalMemoryInMb / 16).ceil());
+
 const _nnueDownloadUrl = '$kLichessCDNHost/assets/lifat/nnue/';
 
 /// URL to download the latest big NNUE network.
