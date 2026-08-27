@@ -191,6 +191,7 @@ class StudyController extends AsyncNotifier<StudyState>
         variant: variant,
         study: study,
         currentPath: UciPath.empty,
+        clocks: null,
         isOnMainline: true,
         root: null,
         currentNode: StudyCurrentNode.illegalPosition(),
@@ -233,6 +234,7 @@ class StudyController extends AsyncNotifier<StudyState>
       variant: variant,
       study: study,
       currentPath: currentPath,
+      clocks: _getClocks(currentPath),
       isOnMainline: true,
       root: _root.view,
       currentNode: StudyCurrentNode.fromNode(_root),
@@ -559,6 +561,7 @@ class StudyController extends AsyncNotifier<StudyState>
       this.state = AsyncValue.data(
         state.copyWith(
           currentPath: path,
+          clocks: _getClocks(path),
           isOnMainline: _root.isOnMainline(path),
           currentNode: StudyCurrentNode.fromNode(currentNode),
           currentBranchOpening: branchOpening,
@@ -570,6 +573,7 @@ class StudyController extends AsyncNotifier<StudyState>
       this.state = AsyncValue.data(
         state.copyWith(
           currentPath: path,
+          clocks: _getClocks(path),
           isOnMainline: _root.isOnMainline(path),
           currentNode: StudyCurrentNode.fromNode(currentNode),
           currentBranchOpening: branchOpening,
@@ -601,6 +605,16 @@ class StudyController extends AsyncNotifier<StudyState>
             : null,
         root: _root.view,
       ),
+    );
+  }
+
+  ({Duration? parentClock, Duration? clock}) _getClocks(UciPath path) {
+    final node = _root.nodeAt(path);
+    final parent = _root.parentAt(path);
+
+    return (
+      parentClock: (parent is Branch) ? parent.clock : null,
+      clock: (node is Branch) ? node.clock : null,
     );
   }
 }
@@ -659,6 +673,9 @@ sealed class StudyState
 
     /// Whether local evaluation is allowed for this study.
     required bool isComputerAnalysisAllowed,
+
+    /// Clocks if available.
+    required ({Duration? parentClock, Duration? clock})? clocks,
 
     /// Whether we're currently in gamebook mode, where the user has to find the right moves.
     required bool gamebookActive,
