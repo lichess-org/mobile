@@ -56,11 +56,17 @@ abstract class EngineOpponent {
 
   /// The opponent's move for the position reached by [moves] from [initialPosition].
   ///
+  /// [sharesEngineWithEvaluator] is the caller's answer to a question the opponent cannot see: on
+  /// every variant it plays on the same engine as the evaluator computing the game's hints, and
+  /// the two roles then have to ask that engine for the same `Hash` and `Threads` or clear its
+  /// transposition table on every hand-off. See [EngineBudget].
+  ///
   /// Throws [MoveSearchCancelled] if the search is superseded or stopped.
   Future<UCIMove> findMove({
     required Position initialPosition,
     required IList<UCIMove> moves,
     required Variant variant,
+    bool sharesEngineWithEvaluator = false,
   });
 
   /// Abandons the search in progress, if there is one.
@@ -95,6 +101,7 @@ abstract class EngineOpponentBase<S extends OpponentSpec> implements EngineOppon
     required Position initialPosition,
     required IList<UCIMove> moves,
     required Variant variant,
+    required bool sharesEngineWithEvaluator,
   });
 
   /// How long this opponent should appear to have taken, measured from the start of the search.
@@ -114,12 +121,13 @@ abstract class EngineOpponentBase<S extends OpponentSpec> implements EngineOppon
     required Position initialPosition,
     required IList<UCIMove> moves,
     required Variant variant,
+    bool sharesEngineWithEvaluator = false,
   }) {
     stop();
 
     final completer = Completer<UCIMove>();
     _pending = completer;
-    unawaited(_runSearch(completer, initialPosition, moves, variant));
+    unawaited(_runSearch(completer, initialPosition, moves, variant, sharesEngineWithEvaluator));
     return completer.future;
   }
 
@@ -128,6 +136,7 @@ abstract class EngineOpponentBase<S extends OpponentSpec> implements EngineOppon
     Position initialPosition,
     IList<UCIMove> moves,
     Variant variant,
+    bool sharesEngineWithEvaluator,
   ) async {
     // Started before anything else, so that the wait below covers the search rather than being
     // added to it: an opponent that takes two seconds takes two seconds whether its engine
@@ -139,6 +148,7 @@ abstract class EngineOpponentBase<S extends OpponentSpec> implements EngineOppon
         initialPosition: initialPosition,
         moves: moves,
         variant: variant,
+        sharesEngineWithEvaluator: sharesEngineWithEvaluator,
       );
       if (!identical(_pending, completer)) return;
 
@@ -207,11 +217,18 @@ class StockfishOpponent extends EngineOpponentBase<StockfishOpponentSpec> {
     required Position initialPosition,
     required IList<UCIMove> moves,
     required Variant variant,
+    required bool sharesEngineWithEvaluator,
   }) async {
+    final share = budget.opponentShare(
+      sharesEngineWithEvaluator: sharesEngineWithEvaluator,
+      threads: level.threads,
+    );
+
     _logger.info(
       'Finding a move at ply ${initialPosition.ply + moves.length}: '
-      'level=${level.level}, skill=${level.skill}, cores=${level.threads}, '
-      'searchTime=${level.searchTime.inMilliseconds}ms',
+      'level=${level.level}, skill=${level.skill}, cores=${share.threads}, '
+      'searchTime=${level.searchTime.inMilliseconds}ms, '
+      'hash=${share.hash}MB${sharesEngineWithEvaluator ? ' (shared with the evaluator)' : ''}',
     );
 
     return SearchRequest(
@@ -219,8 +236,8 @@ class StockfishOpponent extends EngineOpponentBase<StockfishOpponentSpec> {
       moves: moves,
       variant: variant,
       limit: SearchLimit.movetime(level.searchTime),
-      threads: budget.threadsFor(level.threads),
-      hashSize: budget.opponentHash,
+      threads: share.threads,
+      hashSize: share.hash,
       multiPv: level.multiPv,
       // The complete option set for this search. Stockfish's strength limiting works by
       // biasing the scores of slightly worse moves among the candidates, so the MultiPV above
@@ -298,6 +315,8 @@ class MaiaOpponent extends EngineOpponentBase<MaiaOpponentSpec> {
     required Position initialPosition,
     required IList<UCIMove> moves,
     required Variant variant,
+    // Maia is LC0 and the evaluator is always a Stockfish, so they never share an engine.
+    required bool sharesEngineWithEvaluator,
   }) async {
     final (rating: playing, :path) = await weights.ensureWeights(rating);
 

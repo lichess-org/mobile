@@ -21,7 +21,6 @@ import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/engine_budget.dart';
 import 'package:lichess_mobile/src/model/engine/engine_opponent.dart';
-import 'package:lichess_mobile/src/model/engine/engine_utils.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_context.dart';
 import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
@@ -48,9 +47,6 @@ part 'offline_computer_game_controller.freezed.dart';
 final _random = Random();
 
 final _logger = Logger('OfflineComputerGameController');
-
-/// The number of CPU cores to use for engine evaluation.
-final numberOfCoresForEvaluation = max(1, maxEngineCores - 1);
 
 /// Ply threshold for opening phase. Below this, we check the master database
 /// to consider book moves as good regardless of engine evaluation.
@@ -109,9 +105,25 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     _evaluator.stop();
   }
 
-  /// The evaluator here runs beside the opponent's engine, so it takes the smaller share of the
-  /// memory budget.
+  /// How this device's engines share it.
   EngineBudget get _budget => ref.read(engineBudgetProvider);
+
+  /// Whether the evaluator and the opponent are the same engine, and so must be asked for the
+  /// same options.
+  ///
+  /// True on every variant Stockfish cannot play: Fairy-Stockfish is then both the only engine
+  /// that can evaluate the position and the one the opponent plays on, and the same [EngineSpec]
+  /// is the same [Engine]. False when this game never evaluates at all — the opponent then has
+  /// the engine to itself, and a table sized for hints nobody asks for would be held for nothing.
+  bool get _sharesOneEngine {
+    if (!state.game.casual && !state.game.practiceMode) return false;
+    final variant = state.game.meta.variant;
+    return state.game.opponentSpec.engineSpec.slot == evaluatorEngineSlotFor(ref, variant);
+  }
+
+  /// What the evaluator asks its engine for, given whether the opponent is on it too.
+  EngineShare get _evaluatorShare =>
+      _budget.evaluatorShare(sharesEngineWithOpponent: _sharesOneEngine);
 
   EvaluationContext get _evaluationContext => EvaluationContext(
     id: state.game.id,
@@ -415,11 +427,12 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   }
 
   EvalWork _makeMoveEvalWork(IList<Step> steps) {
+    final share = _evaluatorShare;
     return EvalWork(
       id: state.game.id,
       variant: state.game.meta.variant,
-      threads: _budget.threadsFor(numberOfCoresForEvaluation),
-      hashSize: _budget.evaluatorHash,
+      threads: share.threads,
+      hashSize: share.hash,
       searchTime: _kMoveEvalMaxSearchTime,
       // We want the fastest search here and we only need the eval
       multiPv: 1,
@@ -672,6 +685,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         initialPosition: state.game.initialPosition,
         moves: state.game.steps.skip(1).map((s) => s.sanMove!.normalizeUci(variant)).toIList(),
         variant: variant,
+        sharesEngineWithEvaluator: _sharesOneEngine,
       );
       final move = Move.parse(uciMove);
 
@@ -813,11 +827,12 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
           .map((s) => Step(position: s.position, sanMove: s.sanMove!))
           .toIList();
 
+      final share = _evaluatorShare;
       final work = EvalWork(
         id: state.game.id,
         variant: state.game.meta.variant,
-        threads: _budget.threadsFor(numberOfCoresForEvaluation),
-        hashSize: _budget.evaluatorHash,
+        threads: share.threads,
+        hashSize: share.hash,
         searchTime: _kHintsMaxSearchTime,
         multiPv: 2, // 2 lines of hints to show an alternative move
         threatMode: false,

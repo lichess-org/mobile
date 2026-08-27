@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/model/engine/engine_budget.dart';
 import 'package:lichess_mobile/src/model/engine/engine_factory.dart';
 import 'package:lichess_mobile/src/model/engine/engine_failure.dart';
 import 'package:lichess_mobile/src/model/engine/engine_providers.dart';
+import 'package:lichess_mobile/src/model/engine/engine_slot.dart';
 import 'package:lichess_mobile/src/model/engine/engine_spec.dart';
 import 'package:lichess_mobile/src/model/engine/engine_utils.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_context.dart';
@@ -47,6 +48,30 @@ final positionEvaluatorProvider = NotifierProvider.autoDispose
       PositionEvaluator.new,
       name: 'PositionEvaluatorProvider',
     );
+
+/// The flavor the evaluator will use for [variant].
+///
+/// The user's preference, except for the variants Stockfish does not know how to play, which only
+/// Fairy-Stockfish can evaluate. Read when the work starts rather than carried on it, so that
+/// changing the preference is picked up by the next evaluation wherever it comes from.
+StockfishFlavor evaluatorFlavorFor(Ref ref, Variant variant) =>
+    officialStockfishVariants.contains(variant)
+    ? ref.read(engineEvaluationPreferencesProvider).enginePref.flavor
+    : StockfishFlavor.variant;
+
+/// The engine the evaluator will run [variant] on.
+///
+/// The slot rather than the [EngineSpec] because resolving a spec is asynchronous — it depends on
+/// whether the NNUE files are on disk — while the caller needs the answer now, in order to build a
+/// search request. What it is asked is whether some other role shares the evaluator's engine, and
+/// the slot settles that: the `latestNoNNUE` → `sf16` fallback can make this name the wrong
+/// Stockfish, but only a variant ever resolves to Fairy.
+EngineSlot evaluatorEngineSlotFor(Ref ref, Variant variant) =>
+    switch (evaluatorFlavorFor(ref, variant)) {
+      StockfishFlavor.variant => EngineSlot.fairy,
+      StockfishFlavor.sf16 => EngineSlot.sf16,
+      StockfishFlavor.latestNoNNUE => EngineSlot.sfLatest,
+    };
 
 /// Evaluates positions for analysis.
 ///
@@ -429,13 +454,7 @@ class PositionEvaluator extends Notifier<EngineEvaluationState> {
   }
 
   /// The flavor to evaluate [variant] with.
-  ///
-  /// The user's preference, except for the variants Stockfish does not know how to play, which
-  /// only Fairy-Stockfish can evaluate. Read when the work starts rather than carried on it, so
-  /// that changing the preference is picked up by the next evaluation wherever it comes from.
-  StockfishFlavor _flavorFor(Variant variant) => officialStockfishVariants.contains(variant)
-      ? ref.read(engineEvaluationPreferencesProvider).enginePref.flavor
-      : StockfishFlavor.variant;
+  StockfishFlavor _flavorFor(Variant variant) => evaluatorFlavorFor(ref, variant);
 
   /// Runs whatever work is current on the engine that has just become available.
   void _computeCurrentWork() {

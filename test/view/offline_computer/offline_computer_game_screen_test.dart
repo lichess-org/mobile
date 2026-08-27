@@ -164,6 +164,34 @@ void main() {
       );
     });
 
+    testWidgets('A variant game sizes its one engine once, and keeps it', (tester) async {
+      // On a variant the opponent and the hints are the same Fairy-Stockfish, so they have to ask
+      // it for the same options: `setoption name Hash` reallocates and clears the transposition
+      // table, and two roles disagreeing about it would throw the search away several times a move.
+      final engine = MultiPvEngine();
+      fakeEngine = engine;
+
+      await initOfflineComputerGame(tester, variant: Variant.crazyhouse);
+
+      await playMove(tester, 'e2', 'e4');
+      await tester.pump(const Duration(milliseconds: 200));
+      await tester.pumpAndSettle();
+
+      // The opponent has answered, and the hints for the player's turn have been computed.
+      await tester.pump(const Duration(seconds: 1));
+      await tester.pumpAndSettle();
+
+      expect(engine.sessions.map((session) => session.spec.label).toSet(), {'variant'});
+      expect(
+        engine.commands.where((command) => command.startsWith('setoption name Hash')),
+        hasLength(1),
+      );
+      expect(
+        engine.commands.where((command) => command.startsWith('setoption name Threads')),
+        hasLength(1),
+      );
+    });
+
     testWidgets('Can play drop moves in crazyhouse', (tester) async {
       await initOfflineComputerGame(
         tester,

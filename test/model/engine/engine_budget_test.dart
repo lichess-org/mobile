@@ -37,6 +37,42 @@ void main() {
       }
     });
 
+    test('the two roles of an offline game agree when they are one engine', () {
+      const budget = EngineBudget(maxMemoryInMb: 1200, maxCores: 8);
+
+      final evaluator = budget.evaluatorShare(sharesEngineWithOpponent: true);
+      final opponent = budget.opponentShare(sharesEngineWithEvaluator: true, threads: 2);
+
+      // Anything else is a `setoption name Hash` — and a cleared transposition table — on every
+      // hand-off between the opponent and the hints.
+      expect(evaluator, opponent);
+      // One engine holds one table, so it gets what the two shares came to together.
+      expect(evaluator.hash, budget.soleHash);
+    });
+
+    test('the two roles keep their own shares when they are two engines', () {
+      const budget = EngineBudget(maxMemoryInMb: 1200, maxCores: 8);
+
+      final evaluator = budget.evaluatorShare(sharesEngineWithOpponent: false);
+      final opponent = budget.opponentShare(sharesEngineWithEvaluator: false, threads: 2);
+
+      expect(evaluator.hash, budget.evaluatorHash);
+      expect(opponent.hash, budget.opponentHash);
+      expect(opponent.threads, 2);
+    });
+
+    test('a shared engine searches on the threads the evaluator asks for', () {
+      const budget = EngineBudget(maxMemoryInMb: 300, maxCores: 3);
+
+      // The larger of the two: every level asks for one or two threads, and the evaluator's figure
+      // is the one deliberately chosen to leave a core for the UI.
+      expect(
+        budget.opponentShare(sharesEngineWithEvaluator: true, threads: 1).threads,
+        budget.sharedThreads,
+      );
+      expect(budget.sharedThreads, greaterThanOrEqualTo(1));
+    });
+
     test('cores are clamped but never split: one engine searches at a time', () {
       const budget = EngineBudget(maxMemoryInMb: 300, maxCores: 3);
       expect(budget.threadsFor(1), 1);

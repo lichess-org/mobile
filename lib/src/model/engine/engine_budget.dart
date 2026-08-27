@@ -13,6 +13,9 @@ const _kMaxOpponentHashInMb = 64;
 /// The smallest table worth giving an engine at all.
 const _kMinHashInMb = 16;
 
+/// What one role of an offline game asks its engine for.
+typedef EngineShare = ({int hash, int threads});
+
 /// How the engines that can be resident at once share the device.
 ///
 /// The two axes behave differently. **Cores are not split**: only one engine searches at a time —
@@ -20,6 +23,14 @@ const _kMinHashInMb = 16;
 /// so whoever is searching can have the whole core budget. **Memory is**: `Hash` is allocated when
 /// the option is set, not when a search starts, so two resident engines hold two tables for as
 /// long as they are both loaded.
+///
+/// **Whether there are two engines at all is a property of the game.** An offline game's evaluator
+/// and its opponent both run on Fairy-Stockfish on every variant, and the same [EngineSpec] means
+/// literally the same [Engine] — so the split above would have the two roles asking one engine for
+/// two different `Hash` values, and `setoption name Hash` makes Stockfish reallocate and clear its
+/// transposition table. Several times a move, that throws away the search each role is about to
+/// want. `Threads` re-initialises the thread pool and clears it too. Hence [evaluatorShare] and
+/// [opponentShare], which agree when the roles share an engine.
 class EngineBudget {
   const EngineBudget({required this.maxMemoryInMb, required this.maxCores});
 
@@ -41,6 +52,30 @@ class EngineBudget {
 
   /// The hash for an evaluator running beside an opponent.
   int get evaluatorHash => math.max(_kMinHashInMb, maxMemoryInMb - opponentHash);
+
+  /// The hash both roles ask for when they are the same engine.
+  ///
+  /// The whole budget, because there is then only one table: the split above exists to stop two
+  /// resident engines holding two of them, and one engine holding one costs exactly what the two
+  /// shares came to together.
+  int get sharedHash => soleHash;
+
+  /// The threads both roles ask for when they are the same engine.
+  ///
+  /// The evaluator's figure, which is the larger of the two — every [StockfishLevel] asks for one
+  /// or two threads — and is the one deliberately chosen to leave a core for the UI.
+  int get sharedThreads => threadsFor(numberOfCoresForEvaluation);
+
+  /// The evaluator's share of an offline game's device.
+  EngineShare evaluatorShare({required bool sharesEngineWithOpponent}) => sharesEngineWithOpponent
+      ? (hash: sharedHash, threads: sharedThreads)
+      : (hash: evaluatorHash, threads: threadsFor(numberOfCoresForEvaluation));
+
+  /// The opponent's share of an offline game's device, given the [threads] its level asks for.
+  EngineShare opponentShare({required bool sharesEngineWithEvaluator, required int threads}) =>
+      sharesEngineWithEvaluator
+      ? (hash: sharedHash, threads: sharedThreads)
+      : (hash: opponentHash, threads: threadsFor(threads));
 
   @override
   String toString() =>

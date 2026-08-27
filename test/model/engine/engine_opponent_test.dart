@@ -3,6 +3,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/engine/engine_budget.dart';
 import 'package:lichess_mobile/src/model/engine/engine_opponent.dart';
 import 'package:lichess_mobile/src/model/engine/opponent_level.dart';
 
@@ -85,6 +86,42 @@ void main() {
       expect(engine.options['MultiPV'], '4');
       expect(engine.options['Threads'], '2');
       expect(engine.commands, contains('go movetime 1075'));
+    });
+
+    test("asks for the evaluator's options when it shares its engine", () async {
+      final engine = FakeEngine();
+      fakeEngine = engine;
+      final container = await makeContainer();
+      final budget = container.read(engineBudgetProvider);
+
+      await readOpponent(container, StockfishLevel.level6).findMove(
+        initialPosition: Chess.initial,
+        moves: const IListConst([]),
+        variant: Variant.crazyhouse,
+        sharesEngineWithEvaluator: true,
+      );
+
+      // On a variant the opponent and the hints are the same Fairy-Stockfish, and a `Hash` or
+      // `Threads` the two roles disagree about is re-sent — and the transposition table cleared —
+      // on every hand-off.
+      expect(engine.options['Hash'], budget.sharedHash.toString());
+      expect(engine.options['Threads'], budget.sharedThreads.toString());
+    });
+
+    test('keeps its own small table when the evaluator is on another engine', () async {
+      final engine = FakeEngine();
+      fakeEngine = engine;
+      final container = await makeContainer();
+      final budget = container.read(engineBudgetProvider);
+
+      await readOpponent(container, StockfishLevel.level6).findMove(
+        initialPosition: Chess.initial,
+        moves: const IListConst([]),
+        variant: Variant.standard,
+      );
+
+      expect(engine.options['Hash'], budget.opponentHash.toString());
+      expect(engine.options['Threads'], '2');
     });
 
     test('tells the engine when a game starts', () async {
