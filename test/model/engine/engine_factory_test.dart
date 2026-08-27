@@ -125,6 +125,62 @@ void main() {
       });
     });
 
+    test('an engine that arrives after its create gave up is disposed', () {
+      // The engine starts, but not before the create waiting for it has timed out.
+      final engine = FakeEngine(startDelay: kEngineCreateTimeout + const Duration(seconds: 5));
+      final factory = factoryFor(engine);
+
+      fakeAsync((async) {
+        Object? error;
+        factory
+            .create(const StockfishSpec.sf16())
+            .then<void>((_) {}, onError: (Object e) => error = e);
+
+        async.elapse(kEngineCreateTimeout + const Duration(seconds: 1));
+        expect(error, isA<EngineCreationException>());
+
+        // A future cannot be cancelled, so the create runs on and the engine still arrives. It
+        // has no owner and nobody will ever quit it, so it must be quit here: a native slot an
+        // abandoned engine holds is not free again until the app restarts.
+        async.elapse(const Duration(seconds: 10));
+
+        expect(engine.startCount, 1);
+        expect(engine.quitCount, 1);
+        expect(engine.isRunning, isFalse);
+      });
+    });
+
+    test('a second create on one slot never runs beside the first', () async {
+      final engine = FakeEngine(startDelay: const Duration(milliseconds: 50));
+      final factory = factoryFor(engine);
+
+      final firstRequest = factory.create(const StockfishSpec.sf16());
+
+      // Listened to straight away: this one is expected to fail, and an error nobody is waiting
+      // for yet would surface as an unhandled async error instead.
+      Object? secondError;
+      final secondRequest = factory
+          .create(const StockfishSpec.sf16())
+          .then<Engine?>(
+            (engine) => engine,
+            onError: (Object e) {
+              secondError = e;
+              return null;
+            },
+          );
+
+      final first = await firstRequest;
+      addTearDown(first.dispose);
+
+      expect(await secondRequest, isNull, reason: 'one slot cannot host two engines');
+      expect(secondError, isA<EngineCreationException>());
+
+      // The native library hosts one engine per slot, so it must never be asked to start a second
+      // one while the first is still starting.
+      expect(engine.startCount, 1);
+      expect(engine.maxConcurrentOps, 1);
+    });
+
     test('engines for different slots are independent', () async {
       // Two flavours, two native libraries: nothing has to be quit to make room.
       final engine = FakeEngine();

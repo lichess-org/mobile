@@ -354,7 +354,7 @@ class Engine {
     _running = null;
     _isSearching.value = false;
     if (!_death.isCompleted) {
-      _death.complete(failure?.withContext(variant: _lastVariant, maxMemoryInMb: _hashSize));
+      _death.complete(failure?.withContext(variant: _lastVariant, hashSizeInMb: _hashSize));
     }
   }
 

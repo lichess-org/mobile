@@ -55,9 +55,8 @@ void main() {
     });
 
     test('caps a large device rather than scaling with it', () {
-      // The device this was reported from: 7.2GB of RAM was giving the analysis engine a 722MB
-      // transposition table, which Stockfish allocates and zeroes on the thread running its UCI
-      // loop.
+      // A share of a 7.2GB phone would be hundreds of megabytes, and Stockfish allocates and
+      // zeroes the whole table on the thread running its UCI loop.
       expect(engineMaxMemoryFor(7220), kMaxEngineMemoryInMb);
       expect(engineMaxMemoryFor(16384), kMaxEngineMemoryInMb);
     });

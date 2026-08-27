@@ -35,6 +35,7 @@ class EngineFailure {
     this.variant,
     this.diagnostics,
     this.maxMemoryInMb,
+    this.hashSizeInMb,
     this.error,
     this.stackTrace,
   });
@@ -67,10 +68,15 @@ class EngineFailure {
   /// it throws, so that case still reports where the engine stalled, in [error] rather than here.
   final EngineDiagnostics? diagnostics;
 
-  /// The hash size the engine is configured with, in MB. A boot that dies loading the network is
-  /// usually a device that could not spare this much. Filled in by whoever owns the memory budget;
-  /// null below that layer.
+  /// The whole memory budget for engines on this device, in MB. A boot that dies loading the
+  /// network is usually a device that could not spare this much. Filled in by whoever owns the
+  /// budget; null below that layer.
   final int? maxMemoryInMb;
+
+  /// The `Hash` the engine is actually running with, in MB, which is a share of [maxMemoryInMb]
+  /// rather than all of it whenever two engines are resident. Filled in by the engine itself; null
+  /// before it has run a search.
+  final int? hashSizeInMb;
 
   /// The error that surfaced the failure, if it came from a throw.
   final Object? error;
@@ -90,24 +96,27 @@ class EngineFailure {
 
   /// The same failure, with the context known only further up: what was being played, and how much
   /// memory the engine had been given.
-  EngineFailure withContext({Variant? variant, int? maxMemoryInMb}) => EngineFailure(
-    kind: kind,
-    message: message,
-    engine: engine,
-    engineState: engineState,
-    variant: this.variant ?? variant,
-    diagnostics: diagnostics,
-    maxMemoryInMb: this.maxMemoryInMb ?? maxMemoryInMb,
-    error: error,
-    stackTrace: stackTrace,
-  );
+  EngineFailure withContext({Variant? variant, int? maxMemoryInMb, int? hashSizeInMb}) =>
+      EngineFailure(
+        kind: kind,
+        message: message,
+        engine: engine,
+        engineState: engineState,
+        variant: this.variant ?? variant,
+        diagnostics: diagnostics,
+        maxMemoryInMb: this.maxMemoryInMb ?? maxMemoryInMb,
+        hashSizeInMb: this.hashSizeInMb ?? hashSizeInMb,
+        error: error,
+        stackTrace: stackTrace,
+      );
 
   @override
   String toString() =>
       'EngineFailure(${kind.name}): $message '
       '[engine=$engine, variant=${variant?.name ?? 'unknown'}, '
       'state=${engineState ?? 'unknown'}, '
-      'hash=${maxMemoryInMb == null ? 'unknown' : '${maxMemoryInMb}MB'}]. '
+      'budget=${maxMemoryInMb == null ? 'unknown' : '${maxMemoryInMb}MB'}, '
+      'hash=${hashSizeInMb == null ? 'unknown' : '${hashSizeInMb}MB'}]. '
       '${diagnostics ?? 'No diagnostics.'}'
       '${error == null ? '' : ' Error: $error'}';
 }
@@ -127,6 +136,7 @@ Future<void> reportEngineFailure(EngineFailure failure) async {
     await crashlytics.setCustomKey('engine_variant', failure.variant?.name ?? 'unknown');
     await crashlytics.setCustomKey('engine_state', failure.engineState ?? 'unknown');
     await crashlytics.setCustomKey('engine_max_memory_mb', failure.maxMemoryInMb ?? -1);
+    await crashlytics.setCustomKey('engine_hash_mb', failure.hashSizeInMb ?? -1);
     await crashlytics.setCustomKey('engine_phase', diagnostics?.phase ?? 'unknown');
     await crashlytics.setCustomKey(
       'engine_phase_step',

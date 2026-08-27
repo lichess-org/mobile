@@ -67,13 +67,32 @@ class EngineFactory {
   /// The engine holding each slot, until it reports that it is gone.
   final Map<EngineSlot, Engine> _live = {};
 
+  /// The create in flight on each slot, if there is one.
+  ///
+  /// Claimed before the first await and held until the engine exists, so a second create queues
+  /// behind the first instead of racing it into a native library that hosts one engine at a time.
+  /// Never completes with an error, so a failed create does not take its successor down with it.
+  final Map<EngineSlot, Future<void>> _starting = {};
+
   /// Creates and starts an engine, completing when it answers `uciok`.
   ///
   /// Throws an [EngineCreationException] describing what went wrong if it does not get that far.
   Future<Engine> create(EngineSpec spec) async {
+    final attempt = _Attempt();
+    final queued = _starting[spec.slot];
+
+    final started = _create(spec, attempt, after: queued);
+    final claim = started.then((_) {}, onError: (Object _) {});
+    attempt.claim = claim;
+    _starting[spec.slot] = claim;
+
     try {
-      return await _create(spec).timeout(kEngineCreateTimeout);
+      return await started.timeout(kEngineCreateTimeout);
     } on TimeoutException catch (e, st) {
+      // The create goes on regardless -- a future cannot be cancelled -- so the engine it is
+      // starting may still arrive. Saying here that nobody wants it any more is what keeps it from
+      // being left running with no owner, holding its native slot for the life of the process.
+      attempt.abandoned = true;
       throw EngineCreationException(
         EngineFailure(
           kind: EngineFailureKind.stuck,
@@ -101,7 +120,19 @@ class EngineFactory {
     }
   }
 
-  Future<Engine> _create(EngineSpec spec) async {
+  Future<Engine> _create(EngineSpec spec, _Attempt attempt, {required Future<void>? after}) async {
+    try {
+      if (after != null) {
+        _logger.fine('Waiting for the create already running on ${spec.slot.name}');
+        await after;
+      }
+      return await _connectAndRegister(spec, attempt);
+    } finally {
+      if (identical(_starting[spec.slot], attempt.claim)) _starting.remove(spec.slot);
+    }
+  }
+
+  Future<Engine> _connectAndRegister(EngineSpec spec, _Attempt attempt) async {
     if (_live[spec.slot] case final incumbent?) {
       assert(
         incumbent.isDisposed,
@@ -121,6 +152,16 @@ class EngineFactory {
 
     final transport = await _connect(spec);
     final engine = Engine(transport);
+
+    if (attempt.abandoned) {
+      // Nobody is waiting for this engine any more, and an engine nobody owns is never disposed:
+      // it keeps its native slot until the process restarts, and every later engine of this kind
+      // is refused.
+      _logger.warning('Disposing the $spec that arrived after its create had given up');
+      await engine.dispose();
+      throw StateError('The create for $spec gave up before the engine had started');
+    }
+
     _live[spec.slot] = engine;
     unawaited(
       engine.death.then((_) {
@@ -130,6 +171,17 @@ class EngineFactory {
 
     return engine;
   }
+}
+
+/// One call to [EngineFactory.create], as the create running underneath it sees it.
+class _Attempt {
+  /// Whether the caller has given up. An engine that arrives after this is disposed rather than
+  /// handed over.
+  bool abandoned = false;
+
+  /// The entry this attempt put in [EngineFactory._starting], so that it only ever removes its
+  /// own.
+  Future<void>? claim;
 }
 
 Future<EngineTransport> _connectToPlugin(EngineSpec spec) => switch (spec) {
