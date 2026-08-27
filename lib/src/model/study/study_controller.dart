@@ -468,6 +468,13 @@ class StudyController extends AsyncNotifier<StudyState>
     _setPath(path.penultimate, shouldRecomputeRootView: true);
   }
 
+  @override
+  String makeLinePgn(UciPath path, {required bool includeVariations}) => _root.makeLinePgn(
+    path,
+    variant: state.requireValue.variant,
+    includeVariations: includeVariations,
+  );
+
   void _sendMoveToSocket(Move move) {
     if (state.requireValue.isWriteable == false) return;
 

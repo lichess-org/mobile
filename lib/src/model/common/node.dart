@@ -353,6 +353,52 @@ abstract class Node {
 
     return pgnGame.makePgn();
   }
+
+  /// Exports the line going through [path] as a PGN string.
+  ///
+  /// This mirrors the "Copy main line PGN" and "Copy variation PGN" actions of the website: the
+  /// moves leading to [path] are exported as a single line, ignoring the sidelines branching off
+  /// them, and the line then continues with the first child of each node until it ends. Sidelines
+  /// branching off after the end of [path] are only exported when [includeVariations] is true.
+  ///
+  /// Comments and annotations are not exported, but a `Variant` and a `FEN` tag are added when
+  /// needed to make the moves replayable from this node's position.
+  String makeLinePgn(UciPath path, {required Variant variant, required bool includeVariations}) {
+    final pgnRoot = PgnNode<PgnNodeData>();
+
+    PgnNode<PgnNodeData> pgnNode = pgnRoot;
+    Node node = this;
+    for (final branch in branchesOn(path)) {
+      final pgnChild = PgnChildNode(PgnNodeData(san: branch.sanMove.san));
+      pgnNode.children.add(pgnChild);
+      pgnNode = pgnChild;
+      node = branch;
+    }
+
+    final List<({Node from, PgnNode<PgnNodeData> to})> stack = [(from: node, to: pgnNode)];
+    while (stack.isNotEmpty) {
+      final frame = stack.removeLast();
+      final children = includeVariations ? frame.from.children : frame.from.children.take(1);
+      for (final childFrom in children) {
+        final childTo = PgnChildNode(PgnNodeData(san: childFrom.sanMove.san));
+        frame.to.children.add(childTo);
+        stack.add((from: childFrom, to: childTo));
+      }
+    }
+
+    final pgn = PgnGame(
+      headers: {
+        if (variant != Variant.standard) 'Variant': variant.pgnName,
+        if (position.fen != kInitialFEN) 'FEN': position.fen,
+      },
+      moves: pgnRoot,
+      comments: [],
+    ).makePgn();
+
+    // Unlike a PGN file, the line is meant to be pasted somewhere, so it should not end with a
+    // newline.
+    return pgn.trimRight();
+  }
 }
 
 /// A branch node of a game tree

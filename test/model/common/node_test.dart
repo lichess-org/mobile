@@ -536,6 +536,53 @@ void main() {
         expect(root.mainline.last.sanMove.move, move);
       });
     });
+
+    group('makeLinePgn', () {
+      const pgn = '1. e4 e5 (1... c5 2. Nf3 (2. c3)) 2. Nf3 Nc6 (2... d6) 3. Bb5';
+      final root = Root.fromPgnGame(PgnGame.parsePgn(pgn));
+
+      test('main line, without the sidelines branching off it', () {
+        expect(
+          root.makeLinePgn(
+            UciPath.fromUciMoves(['e2e4', 'e7e5']),
+            variant: Variant.standard,
+            includeVariations: false,
+          ),
+          '1. e4 e5 2. Nf3 Nc6 3. Bb5 *',
+        );
+      });
+
+      test('variation, with the sidelines after the end of the path', () {
+        expect(
+          root.makeLinePgn(
+            UciPath.fromUciMoves(['e2e4', 'c7c5']),
+            variant: Variant.standard,
+            includeVariations: true,
+          ),
+          '1. e4 c5 2. Nf3 ( 2. c3 ) *',
+        );
+      });
+
+      test('from the root', () {
+        expect(
+          root.makeLinePgn(UciPath.empty, variant: Variant.standard, includeVariations: false),
+          '1. e4 e5 2. Nf3 Nc6 3. Bb5 *',
+        );
+      });
+
+      test('adds the tags needed to replay a non standard game', () {
+        const fen = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
+        final root = Root.fromPgnGame(PgnGame.parsePgn('[FEN "$fen"]\n\n3. Bb5 a6'));
+        expect(
+          root.makeLinePgn(
+            root.mainlinePath,
+            variant: Variant.fromPosition,
+            includeVariations: false,
+          ),
+          '[Variant "From Position"]\n[FEN "$fen"]\n\n3. Bb5 a6 *',
+        );
+      });
+    });
   });
 
   group('addMoveAt isUserAdded', () {
