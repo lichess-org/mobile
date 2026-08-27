@@ -36,6 +36,7 @@ import 'package:lichess_mobile/src/model/game/offline_computer_game.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/offline_computer/computer_analysis.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_storage.dart';
+import 'package:lichess_mobile/src/model/offline_computer/practice_analyser.dart';
 import 'package:lichess_mobile/src/model/offline_computer/practice_comment.dart';
 import 'package:lichess_mobile/src/model/offline_computer/tablebase_eval.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -52,15 +53,14 @@ final _logger = Logger('OfflineComputerGameController');
 /// to consider book moves as good regardless of engine evaluation.
 const _kOpeningPlyThreshold = 30;
 
-/// Max search time for hints evaluation.
-const _kHintsMaxSearchTime = Duration(milliseconds: 3000);
-
-/// Depth threshold for using an engine evaluation for hints.
+/// How long the player's move waits for the analysis of the position it was played in.
 ///
-/// Lower end devices will probably not reach it so the evaluation will run for the full search time
-/// but it helps to get faster feedback on move quality and hints on higher end devices.
-// TODO: consider using searched nodes instead of depth
-const _kHintsEvalMinDepth = kDebugMode ? 14 : 18;
+/// The analysis has normally been running for as long as the player was thinking, so this only
+/// bites when the move came faster than the search did.
+const _kPreMoveEvalWait = Duration(seconds: 4);
+
+/// How long the hints wait to become available before the spinner gives up.
+final _kHintWait = kPracticeMaxSearchTime + const Duration(seconds: 1);
 
 /// Min search time for a move evaluation in practice mode when the move is not in the pre-move PVs.
 const _kMoveEvalMinSearchTime = Duration(milliseconds: 1000);
@@ -102,6 +102,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   /// move evaluation in flight.
   void _stopThinking() {
     _opponent.stop();
+    _analyser.yieldEngine();
     _evaluator.stop();
   }
 
@@ -124,6 +125,43 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   /// What the evaluator asks its engine for, given whether the opponent is on it too.
   EngineShare get _evaluatorShare =>
       _budget.evaluatorShare(sharesEngineWithOpponent: _sharesOneEngine);
+
+  /// The analysis that runs on the position the game is at, for hints and move feedback.
+  late final PracticeAnalyser _analyser = PracticeAnalyser(
+    evaluator: () => _evaluator,
+    onEval: _onAnalysisEval,
+  );
+
+  /// Stops the analysis while the game is out of sight.
+  ///
+  /// The search now runs for as long as the player thinks, so it would otherwise go on burning the
+  /// battery under another screen or with the app in the background — which the old one-burst-per-
+  /// move model never could. The opponent's search is left alone: it is bounded, and the move it
+  /// is about to play is still wanted.
+  void suspendAnalysis() {
+    // Called from a widget that may be on its way out, and whose provider may already be gone.
+    if (!ref.mounted) return;
+    _analyser.yieldEngine();
+  }
+
+  /// Starts analysing again when the game comes back into view.
+  ///
+  /// Deliberately not "restart what was suspended": the game may have moved on while the screen was
+  /// away, and what is worth analysing is the position it is at now — which [_analyseCurrentPosition]
+  /// works out, and which is nothing at all when it is the opponent's turn.
+  void resumeAnalysis() {
+    if (!ref.mounted) return;
+    _analyseCurrentPosition();
+  }
+
+  /// Stores an evaluation the analysis has just improved on the step it belongs to.
+  void _onAnalysisEval(Position position, ClientEval eval) {
+    if (!ref.mounted) return;
+    final index = state.game.steps.lastIndexWhere((step) => step.position == position);
+    // A takeback may have removed the step while the search was running.
+    if (index == -1) return;
+    _setStepEval(index, eval);
+  }
 
   EvaluationContext get _evaluationContext => EvaluationContext(
     id: state.game.id,
@@ -159,6 +197,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     ref.onDispose(() {
       _socketSubscription?.cancel();
       _getEvalTimer?.cancel();
+      _analyser.dispose();
       _evaluatorSubscription?.close();
       _opponentSubscription?.close();
     });
@@ -176,6 +215,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     Variant variant = Variant.standard,
     String? initialFen,
   }) {
+    _analyser.clear();
     state = OfflineComputerGameState.initial(
       opponentSpec: opponentSpec,
       playerSide: playerSide,
@@ -188,17 +228,18 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     if (state.turn != playerSide) {
       _playEngineMove();
     } else if (casual || practiceMode) {
-      _computeHints();
+      _analyseCurrentPosition();
     }
   }
 
   /// Load a game from storage.
   void loadGame(SavedOfflineComputerGame savedGame) {
+    _analyser.clear();
     final game = savedGame.game;
     state = OfflineComputerGameState(game: game, stepCursor: game.steps.length - 1);
 
     if (game.playable && state.turn == game.playerSide && (game.casual || game.practiceMode)) {
-      _computeHints();
+      _analyseCurrentPosition();
     } else if (game.playable && state.turn != game.playerSide) {
       _playEngineMove();
     }
@@ -230,6 +271,8 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       game: state.game.copyWith(steps: state.game.steps.add(newStep)),
       stepCursor: state.stepCursor + 1,
       hintIndex: null,
+      // Whatever the analysis was about to unlock, it was for the position before this move.
+      isLoadingHint: false,
       showingSuggestedMove: null,
     );
 
@@ -263,23 +306,17 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
 
   /// Make a player move with practice mode evaluation.
   ///
-  /// Uses the cached PV data from _computeHints as the "before" state,
-  /// then evaluates the position after the move to determine how good the move was.
-  /// If hint computation is still in progress, waits for it to complete first.
+  /// The "before" state is the analysis that has been running on the position the player was
+  /// thinking in; the move is judged against it, either from the lines it already holds or, when
+  /// the move was not one of them, from an evaluation of the position it leads to.
   ///
   /// In the opening phase (before [_kOpeningPlyThreshold]), also fetches the master
   /// database to consider book moves as good regardless of engine evaluation.
   Future<void> _makeMoveWithEvaluation(Move move) async {
     if (!state.game.practiceMode || !state.game.playable) return;
 
-    var preMoveAnalysis = state.currentAnalysis;
-    final cursorBeforeMove = state.stepCursor;
     final positionBefore = state.currentPosition;
-    final plyBeforeMove = state.currentPosition.ply;
-    final stepsBeforeMove = state.game.steps
-        .skip(1)
-        .map((s) => Step(position: s.position, sanMove: s.sanMove!))
-        .toIList();
+    final plyBeforeMove = positionBefore.ply;
 
     state = state.copyWith(isEvaluatingMove: true);
 
@@ -288,44 +325,18 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     final stepCursorAfterMove = state.stepCursor;
 
     if (!state.game.playable) {
+      _analyser.yieldEngine();
       state = state.copyWith(isEvaluatingMove: false);
       return;
     }
 
-    // If hints were still loading when we made the move, wait for them to complete so we can get
-    // the "before" evaluation for comparison.
-    // Wait time must be longer than _kHintsMaxSearchTime to account for engine startup overhead.
-    if (state.isLoadingHint) {
-      final maxWaitTime = _kHintsMaxSearchTime + const Duration(milliseconds: 1000);
-      final deadline = DateTime.now().add(maxWaitTime);
-      while (state.isLoadingHint && ref.mounted && DateTime.now().isBefore(deadline)) {
-        await Future<void>.delayed(const Duration(milliseconds: 50));
-      }
+    // Normally already in hand: the analysis has been running on this position for as long as the
+    // player was thinking. It only waits when the move came faster than the search.
+    final preMoveEval = await _analyser.usableEval(positionBefore, timeout: _kPreMoveEvalWait);
 
-      if (!ref.mounted) return;
+    if (!ref.mounted) return;
 
-      preMoveAnalysis = state.game.steps[cursorBeforeMove].computerAnalysis;
-    } else if (preMoveAnalysis?.eval == null) {
-      // Not loading hints and hints are null? Let's run a quick evaluation
-      final evalBefore = await _getEval(
-        _makeMoveEvalWork(stepsBeforeMove),
-        minSearchTime: _kMoveEvalMinSearchTime,
-        depthThreshold: _kMoveEvalMinDepth,
-        tablebaseLookupPosition: positionBefore,
-      );
-      _logger.info(
-        'Before move eval fallback: depth=${evalBefore?.depth}, searchTime=${evalBefore is LocalEval ? evalBefore.searchTime : null} nodes=${evalBefore?.nodes} score=${evalBefore?.evalString}',
-      );
-      if (!ref.mounted) return;
-      if (evalBefore != null) {
-        preMoveAnalysis = ComputerAnalysis(eval: evalBefore);
-        _setStepAnalysis(cursorBeforeMove, preMoveAnalysis);
-      }
-    }
-
-    final preMoveEval = preMoveAnalysis?.eval;
-
-    // If we still don't have cached evaluation, proceed without practice comment
+    // Without a pre-move evaluation there is nothing to judge the move against.
     if (preMoveEval == null || preMoveEval.pvs.isEmpty) {
       state = state.copyWith(isEvaluatingMove: false);
       if (state.turn != state.game.playerSide) {
@@ -372,8 +383,13 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       return;
     }
 
-    // Slow path: move not in computed hints PVs, evaluate the resulting position.
+    // Slow path: the move was not one of the analysed lines, so the position it leads to has to be
+    // evaluated on its own.
     _logger.info('Move not in computed hints PVs, evaluating: ${move.uci}');
+
+    // On a variant that is the engine the analysis is running on, and a search started there
+    // supersedes it silently. Hand it over instead.
+    _analyser.yieldEngine();
 
     try {
       final stepsAfter = state.game.steps
@@ -677,6 +693,10 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   Future<void> _playEngineMove() async {
     if (!state.game.playable) return;
 
+    // The opponent has the floor: on a variant it plays on the very engine the analysis runs on,
+    // and even when it does not, only one engine searches at a time (see [EngineBudget]).
+    _analyser.yieldEngine();
+
     state = state.copyWith(isEngineThinking: true);
 
     try {
@@ -695,7 +715,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         // Wait for the engine move animation to complete before computing hints to avoid stuttering.
         if (state.game.playable && (state.game.casual || state.game.practiceMode)) {
           await _waitForPlayerMoveAnimation();
-          if (ref.mounted && state.game.playable) _computeHints();
+          if (ref.mounted && state.game.playable) _analyseCurrentPosition();
         }
       }
     } on MoveSearchCancelled {
@@ -771,7 +791,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     if (state.turn != state.game.playerSide && state.game.playable) {
       _playEngineMove();
     } else if (state.game.playable && (state.game.casual || state.game.practiceMode)) {
-      _computeHints();
+      _analyseCurrentPosition();
     }
   }
 
@@ -808,63 +828,75 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     }
   }
 
-  /// Precompute hints for the current position.
+  /// Analyses the position the player is thinking about, and unlocks the hints once it is deep
+  /// enough to be worth showing.
   ///
-  /// Called automatically when it's the player's turn (in casual or practice mode).
-  /// In practice mode, also caches the evaluation for later comparison.
-  Future<void> _computeHints() async {
+  /// Called whenever it becomes the player's turn (in casual or practice mode). The analysis runs
+  /// on past that point, deepening the evaluation for as long as the player thinks — it is ended
+  /// by the opponent taking the engine, not by this returning.
+  Future<void> _analyseCurrentPosition() async {
     if (!state.game.casual && !state.game.practiceMode) return;
     if (!state.game.playable || state.turn != state.game.playerSide) return;
-    if (state.currentAnalysis?.eval != null) return;
 
-    final hintStepCursor = state.stepCursor;
-    final hintPosition = state.currentPosition;
+    final position = state.currentPosition;
+    _analysePosition();
+
+    if (state.currentAnalysis?.eval case final eval? when eval.depth >= kPracticeUsableDepth) {
+      return;
+    }
+
     state = state.copyWith(isLoadingHint: true, hintIndex: null);
+    await _analyser.usableEval(position, timeout: _kHintWait);
+    // The wait may have outlived the position it was for, and the hints for the position the game
+    // is at now are somebody else's to unlock.
+    if (!ref.mounted || state.currentPosition != position) return;
+    state = state.copyWith(isLoadingHint: false);
+  }
 
-    try {
-      final steps = state.game.steps
-          .skip(1)
-          .map((s) => Step(position: s.position, sanMove: s.sanMove!))
-          .toIList();
+  /// Starts the continuous analysis of the position the game is at.
+  void _analysePosition() {
+    final share = _evaluatorShare;
+    final steps = state.game.steps
+        .skip(1)
+        .map((s) => Step(position: s.position, sanMove: s.sanMove!))
+        .toIList();
 
-      final share = _evaluatorShare;
-      final work = EvalWork(
-        id: state.game.id,
-        variant: state.game.meta.variant,
-        threads: share.threads,
-        hashSize: share.hash,
-        searchTime: _kHintsMaxSearchTime,
-        multiPv: 2, // 2 lines of hints to show an alternative move
-        threatMode: false,
-        initialPosition: state.game.initialPosition,
-        steps: steps,
-      );
+    final work = EvalWork(
+      id: state.game.id,
+      variant: state.game.meta.variant,
+      threads: share.threads,
+      hashSize: share.hash,
+      searchTime: kPracticeMaxSearchTime,
+      multiPv: 2, // a second line, for the alternative move a hint offers
+      threatMode: false,
+      initialPosition: state.game.initialPosition,
+      steps: steps,
+    );
 
-      final finalEval = await _getEval(
-        work,
-        // Let's use a longer minimal search here because of the multipv and because it is computed
-        // during player's turn
-        minSearchTime: const Duration(milliseconds: 1500),
-        depthThreshold: _kHintsEvalMinDepth,
-      );
+    _analyser.analyse(work);
+    _raceTheSearch(work);
+  }
 
-      if (!ref.mounted) return;
+  /// Asks the network for the evaluations that would beat the search: a cloud eval in the opening,
+  /// a tablebase lookup in an endgame. Whatever comes back is offered to the analysis.
+  void _raceTheSearch(EvalWork work) {
+    final position = work.position;
 
-      _logger.info(
-        'Hints computed for ply=${work.position.ply} depth=${finalEval?.depth}, searchTime=${finalEval is LocalEval ? finalEval.searchTime : null} nodes=${finalEval?.nodes} score=${finalEval?.evalString}',
-      );
+    // Nothing to beat: this position has already been analysed as deeply as it is going to be.
+    if (_analyser.evalFor(position) case final known? when known.depth >= kPracticeTargetDepth) {
+      return;
+    }
 
-      // Guard against a stale call: a takeback may have removed steps so the cursor is
-      // out of bounds, or the position at that cursor has changed.
-      if (finalEval != null &&
-          hintStepCursor < state.game.steps.length &&
-          state.game.steps[hintStepCursor].position == hintPosition) {
-        _setStepAnalysis(hintStepCursor, ComputerAnalysis(eval: finalEval));
-      }
-    } finally {
-      if (ref.mounted) {
-        state = state.copyWith(isLoadingHint: false);
-      }
+    if (state.game.meta.variant == Variant.standard && position.ply < _kOpeningPlyThreshold) {
+      _getCloudEval(work, numEvalLines: work.multiPv).then((cloudEval) {
+        if (ref.mounted && cloudEval != null) _analyser.offer(position, cloudEval);
+      });
+    }
+
+    if (isTablebaseRelevant(position)) {
+      _fetchTablebaseEval(position).then((tablebaseEval) {
+        if (ref.mounted && tablebaseEval != null) _analyser.offer(position, tablebaseEval);
+      });
     }
   }
 
@@ -896,9 +928,16 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     );
   }
 
-  /// Saves a practice comment on the game step at [stepIndex].
+  /// Stores an evaluation on the game step at [stepIndex], keeping whatever else is on it.
+  void _setStepEval(int stepIndex, ClientEval eval) {
+    final analysis = state.game.steps[stepIndex].computerAnalysis ?? const ComputerAnalysis();
+    _setStepAnalysis(stepIndex, analysis.copyWith(eval: eval));
+  }
+
+  /// Saves a practice comment on the game step at [stepIndex], keeping whatever else is on it.
   void _setComment(int stepIndex, PracticeComment comment) {
-    _setStepAnalysis(stepIndex, ComputerAnalysis(practiceComment: comment));
+    final analysis = state.game.steps[stepIndex].computerAnalysis ?? const ComputerAnalysis();
+    _setStepAnalysis(stepIndex, analysis.copyWith(practiceComment: comment));
   }
 }
 

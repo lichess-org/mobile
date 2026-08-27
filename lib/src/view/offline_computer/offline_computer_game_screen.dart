@@ -200,6 +200,7 @@ class _BodyState extends ConsumerState<_Body> {
       }
     });
 
+    final controller = ref.read(offlineComputerGameControllerProvider.notifier);
     final isBoardFlipped = ref.watch(_isBoardFlippedProvider);
     final orientation = gameState.game.playerSide;
     final isPlayerTurn = gameState.turn == orientation && !gameState.isEngineThinking;
@@ -238,6 +239,12 @@ class _BodyState extends ConsumerState<_Body> {
         },
         child: FocusDetector(
           onForegroundLost: _saveGameState,
+          // The practice analysis searches for as long as the player thinks, so it must not
+          // outlive the screen being looked at. The controller is held rather than read inside the
+          // callbacks: losing focus is also what leaving the screen looks like, and `ref` is not
+          // safe to use from a widget that is on its way out.
+          onFocusLost: controller.suspendAnalysis,
+          onFocusRegained: controller.resumeAnalysis,
           child: Column(
             children: [
               Expanded(

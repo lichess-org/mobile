@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
+import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/offline_computer_game.dart';
@@ -17,6 +18,7 @@ import 'package:lichess_mobile/src/model/offline_computer/computer_analysis.dart
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_controller.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_preferences.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_storage.dart';
+import 'package:lichess_mobile/src/model/offline_computer/practice_analyser.dart';
 import 'package:lichess_mobile/src/model/offline_computer/practice_comment.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -161,6 +163,63 @@ void main() {
         engine.quitCount,
         0,
         reason: 'neither engine is quit between the opponent move and the hints',
+      );
+    });
+
+    testWidgets('The analysis keeps running after the hints unlock', (tester) async {
+      // The point of the continuous analysis: a usable eval unlocks the hints promptly, and the
+      // search then runs on to the target depth while the player thinks, instead of the engine
+      // sitting idle exactly when the device is free.
+      final engine = AnalysisTestEngine();
+      fakeEngine = engine;
+
+      await initOfflineComputerGame(tester, variant: Variant.crazyhouse);
+
+      engine.emitDepthRange(toDepth: kPracticeUsableDepth);
+      await tester.pump(kEngineEvalEmissionThrottleDelay * 2);
+
+      final hintButton = find.ancestor(
+        of: find.byIcon(CupertinoIcons.lightbulb),
+        matching: find.byType(BottomBarButton),
+      );
+      expect(
+        tester.widget<BottomBarButton>(hintButton).onTap,
+        isNotNull,
+        reason: 'the hints unlock at the usable depth',
+      );
+      expect(engine.stopCount, 0, reason: 'and the search is still running');
+
+      engine.emitDepthRange(toDepth: kPracticeTargetDepth);
+      await tester.pump(kEngineEvalEmissionThrottleDelay * 2);
+
+      expect(engine.stopCount, 1, reason: 'the target depth is where the engine is let go idle');
+    });
+
+    testWidgets('The analysis does not survive the app going to the background', (tester) async {
+      // A search that runs for as long as the player thinks must not go on running with the app
+      // out of sight — which is a problem the old one-burst-per-move model never had.
+      final engine = AnalysisTestEngine();
+      fakeEngine = engine;
+
+      await initOfflineComputerGame(tester, variant: Variant.crazyhouse);
+
+      engine.emitDepthRange(toDepth: kPracticeUsableDepth - 2);
+      await tester.pump(kEngineEvalEmissionThrottleDelay * 2);
+      expect(engine.stopCount, 0);
+
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
+      await tester.pump();
+
+      expect(engine.stopCount, 1, reason: 'the analysis is given up when the screen goes away');
+
+      engine.resetTracking();
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+      await tester.pump();
+
+      expect(
+        engine.requestedPositions,
+        hasLength(1),
+        reason: 'and the position the game is at is analysed again when it comes back',
       );
     });
 
@@ -1018,12 +1077,13 @@ void main() {
     });
 
     testWidgets('Hint button is disabled when not player turn', (tester) async {
-      // Use LegalMoveEngine for this test as we need engine to play
-      fakeEngine = LegalMoveEngine();
+      // An opponent that takes its time, so that it is still thinking when the button is checked.
+      // The analysis of the player's own position now unlocks the hints as soon as the search is
+      // deep enough, which with an engine that answers instantly is immediately.
+      fakeEngine = SlowEngine(const Duration(seconds: 2));
       await initOfflineComputerGame(tester, side: Side.black);
 
       // When playing as black, it's white's turn initially (engine's turn)
-      // Wait briefly for engine to start thinking
       await tester.pump(const Duration(milliseconds: 100));
 
       // Find the hint button
@@ -1036,7 +1096,10 @@ void main() {
       final button = tester.widget<BottomBarButton>(hintButton);
       expect(button.onTap, isNull);
 
-      // Wait for engine move
+      // Let the opponent answer and the analysis of the player's turn give up, so that nothing is
+      // left running behind the test.
+      await tester.pump(const Duration(seconds: 3));
+      await tester.pump(kPracticeMaxSearchTime + const Duration(seconds: 2));
       await tester.pumpAndSettle();
     });
   });
@@ -2104,6 +2167,8 @@ Future<Rect> initOfflineComputerGame(
 }) async {
   final gameStorage = MockOfflineComputerGameStorage();
   when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
+  // Sending the app to the background saves the game as well as stopping the analysis.
+  when(() => gameStorage.save(any())).thenAnswer((_) async {});
 
   final app = await makeTestProviderScopeApp(
     tester,
