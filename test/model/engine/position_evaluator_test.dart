@@ -22,20 +22,24 @@ import 'fake_nnue_service.dart';
 
 /// The engine's lifecycle, as these tests read it off [EngineEvaluationState].
 ///
-/// The service no longer keeps a state machine of its own: the engine is an [AsyncValue], and
-/// whether it is searching is a flag beside it. This is the mapping the views apply, named so that
-/// the assertions below stay about behaviour rather than about record fields.
-enum EngineState { initial, loading, idle, computing, error }
+/// The evaluator keeps no state machine of its own: the engine is an [AsyncValue], and whether it
+/// is searching is a flag beside it. This is the mapping the views apply, named so that the
+/// assertions below stay about behaviour rather than about record fields.
+///
+/// Deliberately not called `EngineState`: that name belongs to the plugin's own reading of a
+/// native engine (`EngineFailure.engineState`), which is a different thing entirely. This is a
+/// test's way of reading two fields as one word, and exists nowhere in the app.
+enum EngineLifecycle { initial, loading, idle, computing, error }
 
 extension EngineEvaluationStateTest on EngineEvaluationState {
   /// The engine's `id name`, once it has one.
   String? get engineName => engine?.value;
 
-  EngineState get engineState => switch (engine) {
-    null => EngineState.initial,
-    AsyncError() => EngineState.error,
-    AsyncValue(isLoading: true) => EngineState.loading,
-    _ => isComputing ? EngineState.computing : EngineState.idle,
+  EngineLifecycle get lifecycle => switch (engine) {
+    null => EngineLifecycle.initial,
+    AsyncError() => EngineLifecycle.error,
+    AsyncValue(isLoading: true) => EngineLifecycle.loading,
+    _ => isComputing ? EngineLifecycle.computing : EngineLifecycle.idle,
   };
 }
 
@@ -91,11 +95,11 @@ void main() {
   });
 
   group('PositionEvaluator state transitions', () {
-    test('initial state is EngineState.initial', () async {
+    test('initial state is EngineLifecycle.initial', () async {
       final container = await makeContainer();
       final service = readEvaluator(container);
 
-      expect(service.state.engineState, EngineState.initial);
+      expect(service.state.lifecycle, EngineLifecycle.initial);
       expect(service.state.currentWork, isNull);
       expect(service.state.eval, isNull);
     });
@@ -105,9 +109,9 @@ void main() {
       final service = readEvaluator(container);
 
       // Track state transitions (filter out consecutive duplicates)
-      final states = <EngineState>[];
+      final states = <EngineLifecycle>[];
       container.listen(positionEvaluatorProvider(makeContext()), (_, _) {
-        final newState = service.state.engineState;
+        final newState = service.state.lifecycle;
         if (states.isEmpty || states.last != newState) {
           states.add(newState);
         }
@@ -119,8 +123,8 @@ void main() {
 
       await stream!.first;
 
-      expect(states, contains(EngineState.loading));
-      expect(states.last, anyOf(EngineState.idle, EngineState.computing));
+      expect(states, contains(EngineLifecycle.loading));
+      expect(states.last, anyOf(EngineLifecycle.idle, EngineLifecycle.computing));
     });
 
     test('quit() resets evaluationState to initial state immediately', () async {
@@ -132,7 +136,7 @@ void main() {
       await stream!.first;
 
       // Verify we have non-initial state before quit
-      expect(service.state.engineState, isNot(EngineState.initial));
+      expect(service.state.lifecycle, isNot(EngineLifecycle.initial));
       expect(service.state.currentWork, isNotNull);
       expect(service.state.eval, isNotNull);
       expect(service.state.engineName, isNotNull);
@@ -140,7 +144,7 @@ void main() {
       service.release();
 
       // quit() should immediately reset all fields to initial state
-      expect(service.state.engineState, EngineState.initial);
+      expect(service.state.lifecycle, EngineLifecycle.initial);
       expect(service.state.currentWork, isNull);
       expect(service.state.eval, isNull);
       expect(service.state.engineName, isNull);
@@ -156,17 +160,17 @@ void main() {
       await initStream!.first;
 
       // Wait for state to settle to idle
-      while (service.state.engineState != EngineState.idle) {
+      while (service.state.lifecycle != EngineLifecycle.idle) {
         await Future<void>.delayed(const Duration(milliseconds: 10));
       }
-      expect(service.state.engineState, EngineState.idle);
+      expect(service.state.lifecycle, EngineLifecycle.idle);
 
       // Track state transitions for the next evaluation (filter out consecutive duplicates)
       // Initialize with current state to only capture actual transitions
-      var lastState = service.state.engineState;
-      final states = <EngineState>[];
+      var lastState = service.state.lifecycle;
+      final states = <EngineLifecycle>[];
       container.listen(positionEvaluatorProvider(makeContext()), (_, _) {
-        final newState = service.state.engineState;
+        final newState = service.state.lifecycle;
         if (newState != lastState) {
           states.add(newState);
           lastState = newState;
@@ -182,11 +186,11 @@ void main() {
       await stream!.first;
 
       // Wait for state to settle back to idle
-      while (service.state.engineState != EngineState.idle) {
+      while (service.state.lifecycle != EngineLifecycle.idle) {
         await Future<void>.delayed(const Duration(milliseconds: 10));
       }
 
-      expect(states, [EngineState.computing, EngineState.idle]);
+      expect(states, [EngineLifecycle.computing, EngineLifecycle.idle]);
     });
 
     test('new work while computing: stream1 receives results before work2, not after', () async {
@@ -198,7 +202,7 @@ void main() {
       final initStream = service.evaluate(initWork);
       await initStream!.first;
 
-      while (service.state.engineState != EngineState.idle) {
+      while (service.state.lifecycle != EngineLifecycle.idle) {
         await Future<void>.delayed(const Duration(milliseconds: 10));
       }
 
@@ -237,7 +241,7 @@ void main() {
       final (resultWork2, _) = await stream2!.first;
       expect(resultWork2, work2);
 
-      while (service.state.engineState != EngineState.idle) {
+      while (service.state.lifecycle != EngineLifecycle.idle) {
         await Future<void>.delayed(const Duration(milliseconds: 10));
       }
 
@@ -347,7 +351,7 @@ void main() {
       final work2 = makeWork(path: UciPath.fromId(UciCharPair.fromUci('e2e4')));
 
       service.evaluate(work1);
-      expect(service.state.engineState, EngineState.loading);
+      expect(service.state.lifecycle, EngineLifecycle.loading);
 
       final stream2 = service.evaluate(work2);
       expect(service.state.currentWork, work2);
@@ -398,7 +402,7 @@ void main() {
       final work = makeWork();
       service.evaluate(work);
 
-      expect(service.state.engineState, EngineState.loading);
+      expect(service.state.lifecycle, EngineLifecycle.loading);
 
       service.stop();
 
@@ -812,7 +816,7 @@ void main() {
       service.evaluate(work);
       service.stop();
 
-      expect(service.state.engineState, isNot(EngineState.computing));
+      expect(service.state.lifecycle, isNot(EngineLifecycle.computing));
     });
 
     test('Engine evaluation with fake stockfish', () async {
@@ -865,14 +869,14 @@ void main() {
 
         async.flushMicrotasks();
 
-        expect(service.state.engineState, EngineState.error);
+        expect(service.state.lifecycle, EngineLifecycle.error);
       });
     });
 
     test('Engine transitions to error state when start() throws', () async {
       // Non-regression test: start/quit go through an error-swallowing
       // serialization queue, but a thrown failure from start() must still be
-      // surfaced as EngineState.error rather than leaving the engine stuck in
+      // surfaced as EngineLifecycle.error rather than leaving the engine stuck in
       // the loading state.
       fakeEngine = ThrowingStartEngine();
 
@@ -884,7 +888,7 @@ void main() {
       // Wait for the failing initialization to settle.
       await pumpEventQueue();
 
-      expect(service.state.engineState, EngineState.error);
+      expect(service.state.lifecycle, EngineLifecycle.error);
     });
 
     test('An engine that never finishes starting is reported as stuck', () async {
@@ -900,13 +904,13 @@ void main() {
         async.flushMicrotasks();
 
         // Nothing has failed yet: the engine is simply still loading.
-        expect(service.state.engineState, EngineState.loading);
+        expect(service.state.lifecycle, EngineLifecycle.loading);
         expect(crashlytics.recordedErrors, isEmpty);
 
         async.elapse(kEngineCreateTimeout + const Duration(seconds: 1));
         async.flushMicrotasks();
 
-        expect(service.state.engineState, EngineState.error);
+        expect(service.state.lifecycle, EngineLifecycle.error);
         expect(crashlytics.customKeys['engine_failure_kind'], 'stuck');
         expect(crashlytics.customKeys['engine_unrecoverable'], true);
         // A create that never returns never hands back an engine to read the native diagnostics
@@ -935,7 +939,7 @@ void main() {
         service.evaluate(makeWork());
         async.elapse(const Duration(seconds: 1));
         expect(stockfish.startCount, 1);
-        expect(service.state.engineState, EngineState.idle);
+        expect(service.state.lifecycle, EngineLifecycle.idle);
 
         service.release();
         // Past the grace window, so the engine really is gone and the next request has to start
@@ -949,7 +953,7 @@ void main() {
         async.elapse(kEngineCreateTimeout + const Duration(seconds: 1));
         async.flushMicrotasks();
 
-        expect(service.state.engineState, EngineState.error);
+        expect(service.state.lifecycle, EngineLifecycle.error);
         expect(crashlytics.customKeys['engine_failure_kind'], 'stuck');
       });
     });
@@ -977,13 +981,13 @@ void main() {
         // released rather than left waiting forever.
         expect(answered, isTrue);
         expect(eval, isNull);
-        expect(service.state.engineState, EngineState.error);
+        expect(service.state.lifecycle, EngineLifecycle.error);
 
         // The engine is gone for the rest of the process's life, so later work is refused on the
         // spot instead of queueing behind an operation that will never complete.
         service.evaluate(makeWork());
         async.flushMicrotasks();
-        expect(service.state.engineState, EngineState.error);
+        expect(service.state.lifecycle, EngineLifecycle.error);
       });
     });
 
@@ -1012,7 +1016,7 @@ void main() {
             'a dead session is not written to again, so nothing follows the command that '
             'killed it',
       );
-      expect(service.state.engineState, EngineState.error);
+      expect(service.state.lifecycle, EngineLifecycle.error);
       expect(crashlytics.customKeys['engine_failure_kind'], 'command');
       expect(crashlytics.recordedErrors.last.reason, contains(stockfish.failedCommands.single));
     });
@@ -1029,7 +1033,7 @@ void main() {
 
       await pumpEventQueue();
 
-      expect(service.state.engineState, EngineState.error);
+      expect(service.state.lifecycle, EngineLifecycle.error);
     });
 
     test('Work requested after a broken command stream restarts the engine', () async {
@@ -1403,7 +1407,7 @@ void main() {
     });
   });
 
-  group('EngineEvaluationNotifier', () {
+  group('engineEvaluationProvider', () {
     test('updates engineName after engine restart', () async {
       final fakeStockfish = FakeEngine();
       fakeEngine = fakeStockfish;
@@ -1447,7 +1451,7 @@ void main() {
         expect(
           latestState?.engineName,
           'Stockfish 18',
-          reason: 'EngineEvaluationNotifier should update engineName when engine restarts',
+          reason: 'engineEvaluationProvider should surface the new engine name after a restart',
         );
       });
     });
@@ -1489,7 +1493,7 @@ void main() {
           isNull,
           reason: 'an evaluator should not see the results of another context',
         );
-        expect(game1State?.engineState, EngineState.initial);
+        expect(game1State?.lifecycle, EngineLifecycle.initial);
       });
     });
 
@@ -1531,7 +1535,7 @@ void main() {
           isNull,
           reason: 'Notifier should not receive eval updates from work with a different path',
         );
-        expect(e4State?.engineState, EngineState.initial);
+        expect(e4State?.lifecycle, EngineLifecycle.initial);
       });
     });
 
@@ -1659,7 +1663,7 @@ void main() {
             isNull,
             reason: 'game2 notifier should not receive updates for game1 work',
           );
-          expect(game2State?.engineState, EngineState.initial);
+          expect(game2State?.lifecycle, EngineLifecycle.initial);
         });
       },
     );
@@ -1696,8 +1700,8 @@ void main() {
         async.elapse(Duration.zero);
 
         expect(
-          game1State?.engineState,
-          EngineState.initial,
+          game1State?.lifecycle,
+          EngineLifecycle.initial,
           reason: 'game1 notifier should be reset',
         );
         expect(game1State?.eval, isNull, reason: 'game1 notifier eval should be cleared');
@@ -1748,7 +1752,7 @@ void main() {
         async.elapse(Duration.zero);
 
         // State should be reset
-        expect(latestState?.engineState, EngineState.initial);
+        expect(latestState?.lifecycle, EngineLifecycle.initial);
         expect(latestState?.eval, isNull);
         expect(latestState?.currentWork, isNull);
 
@@ -1762,7 +1766,7 @@ void main() {
           isNull,
           reason: 'Eval results arriving after quit() should be discarded',
         );
-        expect(latestState?.engineState, EngineState.initial);
+        expect(latestState?.lifecycle, EngineLifecycle.initial);
       });
     });
     test('the filter falls back to the default state when the path no longer matches', () async {
@@ -1787,7 +1791,7 @@ void main() {
         final filtered = container.read(provider);
         expect(filtered.currentWork, isNull);
         expect(filtered.eval, isNull);
-        expect(filtered.engineState, EngineState.initial);
+        expect(filtered.lifecycle, EngineLifecycle.initial);
       });
     });
   });
