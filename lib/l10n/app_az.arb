@@ -1048,7 +1048,6 @@
   "xInvitedYouToY": "{param1} səni \"{param2}\"-ə dəvət etdi.",
   "youAreNowPartOfTeam": "Siz artıq komandanın üzvüsünüz.",
   "youHaveJoinedTeamX": "\"{param1}\"-yə qatıldın.",
-  "someoneYouReportedWasBanned": "Şikayət etdiyiniz şəxsin hesabı ban edilmişdir",
   "congratsYouWon": "Təbriklər, siz qalib gəldiniz!",
   "gameVsX": "{param1}-ya qarşı oyun",
   "resVsX": "{param1} vs {param2}",
@@ -1285,6 +1284,7 @@
   "studyNbGames": "{count, plural, =1{{count} Oyun} other{{count} Oyun}}",
   "studyNbMembers": "{count, plural, =1{{count} Üzv} other{{count} Üzv}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{PGN mətninizi bura yapışdırın, ən çox {count} oyuna qədər} other{PGN mətninizi bura yapışdırın, ən çox {count} oyuna qədər}}",
+  "teamTeam": "Komanda",
   "timeagoJustNow": "elə indi",
   "timeagoRightNow": "indicə",
   "tfaTwoFactorAuth": "2 mərhələli təsdiqləmə"

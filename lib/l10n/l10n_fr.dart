@@ -70,7 +70,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Vous devez être connecté pour voir cette page.';
 
   @override
-  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+  String get mobileNbOfflinePuzzles => 'Problèmes hors ligne';
 
   @override
   String get mobileNewGame => 'Nouvelle partie';
@@ -302,43 +302,43 @@ class AppLocalizationsFr extends AppLocalizations {
   String get mobilePerfShortBlitz => 'Blitz';
 
   @override
-  String get mobilePerfShortRapid => 'Rapid';
+  String get mobilePerfShortRapid => 'Rapide';
 
   @override
-  String get mobilePerfShortClassical => 'Classical';
+  String get mobilePerfShortClassical => 'Classique';
 
   @override
-  String get mobilePerfShortCorrespondence => 'Corresp.';
+  String get mobilePerfShortCorrespondence => 'Corr.';
 
   @override
-  String get mobilePerfShortFromPosition => 'From Pos.';
+  String get mobilePerfShortFromPosition => 'De la pos.';
 
   @override
   String get mobilePerfShortChess960 => '960';
 
   @override
-  String get mobilePerfShortAntichess => 'Antichess';
+  String get mobilePerfShortAntichess => 'Antiéchecs';
 
   @override
-  String get mobilePerfShortKingOfTheHill => 'KotH';
+  String get mobilePerfShortKingOfTheHill => 'RDLC';
 
   @override
-  String get mobilePerfShortThreeCheck => '3check';
+  String get mobilePerfShortThreeCheck => '3 échecs';
 
   @override
-  String get mobilePerfShortAtomic => 'Atomic';
+  String get mobilePerfShortAtomic => 'Atom.';
 
   @override
   String get mobilePerfShortHorde => 'Horde';
 
   @override
-  String get mobilePerfShortRacingKings => 'Racing';
+  String get mobilePerfShortRacingKings => 'Sprint';
 
   @override
   String get mobilePerfShortCrazyhouse => 'Crazy';
 
   @override
-  String get mobilePerfShortPuzzle => 'Puzzle';
+  String get mobilePerfShortPuzzle => 'Problème';
 
   @override
   String get variantStandard => 'Standard';
@@ -441,7 +441,7 @@ class AppLocalizationsFr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'A résolu $count problème(s) tactique(s)',
+      other: 'A résolu $count problèmes tactiques',
       one: 'A résolu $count problème tactique',
     );
     return '$_temp0';
@@ -552,7 +552,7 @@ class AppLocalizationsFr extends AppLocalizations {
       count,
       locale: localeName,
       other: 'A participé à $count simultanées',
-      one: 'A participé à $count simultanée(s)',
+      one: 'A participé à $count simultanée',
     );
     return '$_temp0';
   }
@@ -767,6 +767,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get arenaRankAvgHelp => 'Le classement moyen est un pourcentage de votre classement. Plus il est bas, mieux c\'est.\n\nPar exemple, être classé 3e dans un tournoi de 100 joueurs = 3 %. Être classé 10e dans un tournoi de 1 000 joueurs = 1 %.';
 
   @override
+  String get arenaRankAverageHelp => 'Votre rang moyen correspond à votre rang final habituel, relativement au nombre total de joueurs par tournoi. C\'est une mesure de votre rang dans les tournois et non de votre classement (c.-à-d. de votre cote).\n\nPar exemple, un rang moyen de 3 % signifie que vous êtes habituellement parmi la première tranche de 3 % des joueurs (p. ex. la 30e place dans un groupe de 1 000 joueurs).';
+
+  @override
   String get arenaMedians => 'médianes';
 
   @override
@@ -922,6 +925,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get broadcastDefinitivelyDeleteTournament => 'Supprimer définitivement le tournoi, toutes ses rondes et toutes ses parties.';
+
+  @override
+  String get broadcastPermanentlyDeleteTournament => 'Supprimer définitivement ce tournoi, y compris les rondes et les parties?';
 
   @override
   String get broadcastShowScores => 'Afficher les résultats des joueurs en fonction des résultats des parties';
@@ -1613,10 +1619,19 @@ class AppLocalizationsFr extends AppLocalizations {
   String get preferencesNotifyInboxMsg => 'Nouveau message';
 
   @override
+  String get preferencesNotifyDirectMessage => 'Nouveau message';
+
+  @override
   String get preferencesNotifyForumMention => 'Un commentaire du forum vous mentionne';
 
   @override
+  String get preferencesNotifyForumMentions => 'Nom mentionné dans le forum';
+
+  @override
   String get preferencesNotifyInvitedStudy => 'Invitation à une étude';
+
+  @override
+  String get preferencesNotifyStudyInvites => 'Invitations à une étude';
 
   @override
   String get preferencesNotifyGameEvent => 'Mise à jour des parties par correspondance';
@@ -1628,7 +1643,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Le tournoi va bientôt commencer';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Diffusions auxquelles vous vous êtes abonnées';
+  String get preferencesNotifyTournamentStartReminders => 'Rappel de début de tournois';
+
+  @override
+  String get preferencesNotifyBroadcasts => 'Diffusions';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Le temps de la partie par correspondance est presque épuisé';
@@ -2157,6 +2175,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Une tactique impliquant la règle de la prise en passant, où un pion peut capturer un pion adverse qui l\'a croisé lors de son déplacement initial de deux cases.';
 
   @override
+  String get puzzleThemeEnPassantAdjacentCaptureDescription => 'Tactique utilisant la « prise en passant », où un pion peut capturer un pion adverse qui vient de se placer à côté de lui en se déplaçant de deux cases au premier coup.';
+
+  @override
   String get puzzleThemeEpauletteMate => 'Mat des épaulettes';
 
   @override
@@ -2175,6 +2196,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get puzzleThemeForkDescription => 'Un coup où la pièce déplacée attaque deux pièces de l\'adversaire à la fois.';
 
   @override
+  String get puzzleThemeForkOpposingPiecesDescription => 'Un coup où une pièce attaque simultanément deux pièces ou plus.';
+
+  @override
   String get puzzleThemeHangingPiece => 'Pièce en prise';
 
   @override
@@ -2185,6 +2209,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get puzzleThemeHookMateDescription => 'Mat avec une Tour, un Cavalier et un pion, avec un pion adverse qui empêche la fuite du roi ennemi.';
+
+  @override
+  String get puzzleThemeHookMateOpposingPawnDescription => 'Faire mat en utilisant une tour, un cavalier et un pion lorsque le roi adverse est bloqué par un de ses pions.';
 
   @override
   String get puzzleThemeInterference => 'Interception';
@@ -2462,7 +2489,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get settingsCancelKeepAccount => 'Annuler l\'opération et conserver mon compte';
 
   @override
-  String get settingsCloseAccountAreYouSure => 'Êtes-vous sûr de vouloir fermer votre compte?';
+  String get settingsCloseAccountAreYouSure => 'Êtes-vous sûr de vouloir fermer votre compte ?';
 
   @override
   String get settingsThisAccountIsClosed => 'Ce compte a été fermé.';
@@ -2498,7 +2525,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get reusableChallengeUrl => 'URL réutilisable pour les défis';
 
   @override
-  String get permanentLinkForAnyoneToChallengeYou => 'Lien permanent qui permet à quiconque de vous défier avec ces paramètres';
+  String get permanentLinkForAnyoneToChallengeYou => 'Lien permanent qui permet à quiconque de vous défier avec ces paramètres.';
 
   @override
   String get waiting => 'En attente';
@@ -2815,7 +2842,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get lossOr50MovesByPriorMistake => 'Défaite ou 50 coups par suite d\'une erreur';
 
   @override
-  String get unknownDueToRounding => 'Victoire/défaite garantie uniquement si la variante recommandée de la table de finale a été suivie depuis la dernière capture ou le dernier coup de pion, en raison de l’arrondissement possible de valeurs DTZ faisant partie de tables de finale Syzygy.';
+  String get unknownDueToRounding => 'Victoire/défaite garantie uniquement si la variante recommandée de la table de finale a été suivie depuis la dernière capture ou le dernier coup de pion, en raison de l’arrondi possible de valeurs DTZ faisant partie de tables de finale Syzygy.';
 
   @override
   String get allSet => 'Tout est prêt !';
@@ -2872,10 +2899,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get searchTimeDescription => 'Établir le temps d\'analyse des nouvelles positions';
 
   @override
-  String get threads => 'Coeurs';
+  String get threads => 'Cœurs';
 
   @override
-  String get threadsDescription => 'Sélectionnez une valeur en dessous du nombre de coeurs de votre processeur. Les flèches indiquent le choix optimal.';
+  String get threadsDescription => 'Sélectionnez une valeur en dessous du nombre de cœurs de votre processeur. Les flèches indiquent le choix optimal';
 
   @override
   String get threadsDescriptionMobile => 'Utiliser plus de coeurs consomme plus d\'énergie, mais permet une meilleure analyse.';
@@ -2887,7 +2914,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get memory => 'Mémoire';
 
   @override
-  String get memoryDescription => 'Des valeurs plus élevées pourraient améliorer les performances.';
+  String get memoryDescription => 'Des valeurs plus élevées pourraient améliorer les performances';
 
   @override
   String get infiniteAnalysis => 'Analyse infinie';
@@ -2917,7 +2944,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get claimADraw => 'Revendiquer la partie nulle';
 
   @override
-  String get drawClaimed => 'Offre de nulle';
+  String get drawClaimed => 'Nulle revendiquée';
 
   @override
   String get offerDraw => 'Proposer la nulle';
@@ -3123,6 +3150,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get checkSpamFolder => 'Vérifiez aussi votre dossier de pourriel, il pourrait s\'y trouver. Si c\'est le cas, marquez-le comme non-pourriel.';
+
+  @override
+  String get checkSpamOrJunkFolder => 'Si vous n\'avez pas reçu de courriel de confirmation, vérifiez votre boîte de pourriels. Assurez-vous de mettre les messages de Lichess sur votre liste blanche pour recevoir les communications importantes.';
 
   @override
   String sendEmailForAccountVerification(String param) {
@@ -3852,6 +3882,15 @@ class AppLocalizationsFr extends AppLocalizations {
   String get reply => 'Répondre';
 
   @override
+  String get reopen => 'Rouvrir';
+
+  @override
+  String get quote => 'Citer';
+
+  @override
+  String get postEdited => 'Modifié';
+
+  @override
   String get message => 'Message';
 
   @override
@@ -3886,6 +3925,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get reportProcessedFasterInEnglish => 'Votre rapport sera traité plus rapidement s\'il est rédigé en anglais.';
+
+  @override
+  String get processReportFasterInEnglish => 'Nous pouvons traiter votre rapport plus rapidement si vous l\'écrivez en anglais.';
 
   @override
   String get error_provideOneCheatedGameLink => 'Merci de fournir au moins un lien vers une partie où il y a eu triche.';
@@ -4256,6 +4298,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get whenCreateSimul => 'Lorsque vous créez une simultanée, vouz affrontez plusieurs adversaires à la fois.';
 
   @override
+  String get creatingASimul => 'Créer un simultanée vous permet de jouer contre plusieurs adversaires en même temps.';
+
+  @override
   String get simulVariantsHint => 'Si vous sélectionnez plusieurs variantes, chaque joueur doit choisir laquelle jouer.';
 
   @override
@@ -4568,6 +4613,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get background => 'Arrière-plan';
 
   @override
+  String get theme => 'Thème';
+
+  @override
   String get light => 'Lumineux';
 
   @override
@@ -4577,7 +4625,13 @@ class AppLocalizationsFr extends AppLocalizations {
   String get transparent => 'Transparent';
 
   @override
+  String get picture => 'Photo';
+
+  @override
   String get deviceTheme => 'Thème de l\'appareil';
+
+  @override
+  String get roundness => 'Coins arrondis';
 
   @override
   String get backgroundImageUrl => 'URL de l\'image de fond :';
@@ -4995,9 +5049,6 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get someoneYouReportedWasBanned => 'Quelqu\'un que vous avez signalé a été banni.';
-
-  @override
   String get congratsYouWon => 'Bravo, vous avez gagné !';
 
   @override
@@ -5096,6 +5147,11 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String youCanFormatTextUsing(String param) {
+    return 'Vous pouvez utiliser $param pour formater du texte.';
+  }
+
+  @override
   String get embedsAvailable => 'Collez l\'URL d\'une partie ou d\'un chapitre d\'étude pour l\'intégrer.';
 
   @override
@@ -5115,6 +5171,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get navigateMoveTree => 'Naviguer dans l\'arborescence';
+
+  @override
+  String get moveListNavigation => 'Navigation dans la liste de coups';
 
   @override
   String get mouseTricks => 'Astuces pour la souris';
@@ -5167,7 +5226,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get resignTheGame => 'Abandonner la partie';
 
   @override
-  String get youCantStartNewGame => 'Vous ne pouvez pas commencer une nouvelle partie tant que celle-ci n\'est pas terminée.';
+  String get youCantStartNewGame => 'Vous ne pouvez pas commencer une nouvelle partie si c\'est à votre tour de jouer.';
 
   @override
   String get since => 'De';
@@ -5696,8 +5755,8 @@ class AppLocalizationsFr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Anonymous ($count)',
-      one: 'Anonymous',
+      other: 'Anonymes ($count)',
+      one: 'Anonyme',
     );
     return '$_temp0';
   }
@@ -6533,6 +6592,9 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String get teamTeam => 'Équipe';
+
+  @override
   String get teamIncorrectEntryCode => 'Mot de passe incorrect.';
 
   @override
@@ -6541,7 +6603,7 @@ class AppLocalizationsFr extends AppLocalizations {
       count,
       locale: localeName,
       other: 'Bataille entre $count équipes',
-      one: 'Bataille entre $count équipes',
+      one: 'Bataille entre $count équipe',
     );
     return '$_temp0';
   }

@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/study/study_controller.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/widgets/rich_link_text.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class StudyGamebook extends StatelessWidget {
@@ -63,7 +63,7 @@ class _CommentState extends ConsumerState<_Comment> {
           controller: _scrollController,
           child: Padding(
             padding: const EdgeInsets.only(right: 5),
-            child: Linkify(
+            child: RichLinkText(
               text: comment,
               style: const TextStyle(fontSize: 16),
               onOpen: (link) {

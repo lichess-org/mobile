@@ -1,6 +1,30 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart';
+import 'package:lichess_mobile/src/network/http.dart';
+
+/// The retry policy used by every provider in the app.
+///
+/// A provider that is retrying stays in [AsyncLoading], so retries are only worth it for failures
+/// that might resolve on their own: a flaky connection, a dropped request. A response the server
+/// actually sent is not one of those, and retrying it just leaves spinners and shimmers on screen
+/// for the whole back-off.
+///
+/// That includes the 503 of a planned maintenance and the 502 of an outage: both are surfaced by
+/// [ServerStatusNotifier] and shown as a [ServerOutageDisplay], and recovery is driven by
+/// pull-to-refresh and by coming back to the app, not by retrying in the background.
+Duration? lichessProviderRetry(int retryCount, Object error) {
+  if (error is ServerException) return null;
+
+  // Everything else keeps riverpod's own policy, which notably never retries an [Error]: those are
+  // programming mistakes, and retrying one only hides it behind a spinner.
+  return ProviderContainer.defaultRetry(
+    retryCount,
+    error,
+    maxRetries: 6,
+    minDelay: const Duration(milliseconds: 500),
+  );
+}
 
 /// Return type of `Notifier.runBuild` since riverpod 3.3.2.
 ///

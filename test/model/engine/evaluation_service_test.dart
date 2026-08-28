@@ -879,6 +879,175 @@ void main() {
       expect(service.evaluationState.value.state, EngineState.error);
     });
 
+    test('An engine that never finishes starting is reported as stuck', () async {
+      testBinding.stockfish = StuckStockfish();
+      final container = await makeContainer();
+      final crashlytics = testBinding.firebaseCrashlytics;
+      crashlytics.recordedErrors.clear();
+
+      fakeAsync((async) {
+        final service = container.read(evaluationServiceProvider);
+
+        service.evaluate(makeWork());
+        async.flushMicrotasks();
+
+        // Nothing has failed yet: the engine is simply still loading.
+        expect(service.evaluationState.value.state, EngineState.loading);
+        expect(crashlytics.recordedErrors, isEmpty);
+
+        async.elapse(kEngineInitTimeout + const Duration(seconds: 1));
+        async.flushMicrotasks();
+
+        expect(service.evaluationState.value.state, EngineState.error);
+        expect(crashlytics.customKeys['engine_failure_kind'], 'stuck');
+        expect(crashlytics.customKeys['engine_unrecoverable'], true);
+        // The native diagnostics say where the engine wedged, which is the point of the report.
+        expect(crashlytics.customKeys['engine_phase'], 'shuttingDown');
+        expect(crashlytics.customKeys['engine_phase_step'], 'engine_teardown');
+        expect(crashlytics.recordedErrors, hasLength(1));
+      });
+    });
+
+    test(
+      'A superseded initialization does not disarm the watchdog of the one that replaced it',
+      () async {
+        // Non-regression test: quit() releases the in-progress flag without waiting for the
+        // initialization it interrupted, so the next work request starts a second one while the
+        // first is still running. The first must not cancel the second's watchdog on its way out,
+        // or a restart that never completes is never reported.
+        final stockfish = WedgesOnRestartStockfish();
+        testBinding.stockfish = stockfish;
+        final container = await makeContainer();
+        final crashlytics = testBinding.firebaseCrashlytics;
+        crashlytics.recordedErrors.clear();
+
+        fakeAsync((async) {
+          final service = container.read(evaluationServiceProvider);
+
+          service.evaluate(makeWork());
+          service.quit();
+          service.evaluate(makeWork(id: const StringId('test2')));
+
+          async.flushMicrotasks();
+
+          // The first attempt has run to completion, the second is still waiting on its start.
+          expect(stockfish.startCount, 2);
+
+          async.elapse(kEngineInitTimeout + const Duration(seconds: 1));
+          async.flushMicrotasks();
+
+          expect(service.evaluationState.value.state, EngineState.error);
+          expect(crashlytics.customKeys['engine_failure_kind'], 'stuck');
+          expect(crashlytics.customKeys['engine_phase'], 'engineBooting');
+          expect(crashlytics.customKeys['engine_phase_step'], 'engine_boot');
+        });
+      },
+    );
+
+    test('A stuck engine releases pending work and refuses new work', () async {
+      testBinding.stockfish = StuckStockfish();
+      final container = await makeContainer();
+
+      fakeAsync((async) {
+        final service = container.read(evaluationServiceProvider);
+
+        Object? pendingMoveError;
+        service
+            .findMove(makeMoveWork())
+            .then<void>((_) {}, onError: (Object e) => pendingMoveError = e);
+        async.flushMicrotasks();
+        expect(pendingMoveError, isNull);
+
+        async.elapse(kEngineInitTimeout + const Duration(seconds: 1));
+        async.flushMicrotasks();
+
+        // The move request can never be answered, so its caller is released rather than left
+        // waiting forever.
+        expect(pendingMoveError, isA<MoveRequestCancelledException>());
+
+        // The engine is gone for the rest of the process's life, so later work fails at once
+        // instead of queueing behind an operation that will never complete.
+        Object? nextMoveError;
+        service
+            .findMove(makeMoveWork())
+            .then<void>((_) {}, onError: (Object e) => nextMoveError = e);
+        async.flushMicrotasks();
+        expect(nextMoveError, isA<MoveRequestCancelledException>());
+        expect(service.evaluationState.value.state, EngineState.error);
+      });
+    });
+
+    test('A command the engine refuses is reported instead of thrown at the caller', () async {
+      // The write that breaks the session is silent; it is the next command, refused by the
+      // plugin because the session is no longer ready, that throws from inside UCIProtocol.
+      final stockfish = FatalWriteStockfish();
+      testBinding.stockfish = stockfish;
+      final container = await makeContainer();
+      final crashlytics = testBinding.firebaseCrashlytics;
+      crashlytics.recordedErrors.clear();
+
+      final service = container.read(evaluationServiceProvider);
+
+      expect(() => service.evaluate(makeWork()), returnsNormally);
+
+      await pumpEventQueue();
+
+      expect(stockfish.failedCommands, hasLength(1));
+      expect(stockfish.refusedCommands, isNotEmpty);
+      expect(service.evaluationState.value.state, EngineState.error);
+      expect(crashlytics.customKeys['engine_failure_kind'], 'command');
+      expect(crashlytics.recordedErrors.last.exception, isA<StateError>());
+    });
+
+    test('A broken command stream releases the pending move request', () async {
+      testBinding.stockfish = FatalWriteStockfish();
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      // The engine will never answer a search whose commands never reached it, and findMove has no
+      // timeout of its own, so its caller has to be failed explicitly.
+      await expectLater(
+        service.findMove(makeMoveWork()),
+        throwsA(isA<MoveRequestCancelledException>()),
+      );
+
+      expect(service.evaluationState.value.state, EngineState.error);
+    });
+
+    test('A write that fails mid-search leaves the engine in the error state', () async {
+      // The failed write is not thrown back at UCIProtocol, so it carries on with the exchange and
+      // ends it by announcing that it is computing. That announcement must not be taken for a
+      // working engine.
+      testBinding.stockfish = FatalWriteStockfish(fails: (command) => command.startsWith('go'));
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      service.evaluate(makeWork());
+
+      await pumpEventQueue();
+
+      expect(service.evaluationState.value.state, EngineState.error);
+    });
+
+    test('Work requested after a broken command stream restarts the engine', () async {
+      // Nothing recovers a failed session but a new start: the plugin refuses every write until
+      // one happens.
+      final stockfish = FatalWriteStockfish();
+      testBinding.stockfish = stockfish;
+      final container = await makeContainer();
+      final service = container.read(evaluationServiceProvider);
+
+      service.evaluate(makeWork());
+      await pumpEventQueue();
+
+      expect(stockfish.startCount, 1);
+
+      service.evaluate(makeWork(path: UciPath.fromId(UciCharPair.fromMove(Move.parse('e2e4')!))));
+      await pumpEventQueue();
+
+      expect(stockfish.startCount, 2);
+    });
+
     test('Engine name is correctly set after restarting stockfish', () async {
       final fakeStockfish = FakeStockfish();
       testBinding.stockfish = fakeStockfish;

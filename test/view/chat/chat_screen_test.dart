@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
@@ -11,6 +10,7 @@ import 'package:lichess_mobile/src/model/chat/chat_providers.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/view/chat/chat_screen.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../test_provider_scope.dart';
 

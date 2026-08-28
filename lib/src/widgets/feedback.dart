@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
@@ -6,7 +5,8 @@ import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:popover/popover.dart';
+import 'package:lichess_mobile/src/widgets/popover.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:signal_strength_indicator/signal_strength_indicator.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -166,39 +166,32 @@ class OfflineBanner extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isOnlineAsync = ref.watch(onlineStatusProvider);
     final theme = Theme.of(context);
-    return isOnlineAsync.when(
-      data: (isOnline) {
-        if (isOnline) {
-          return const SizedBox.shrink();
-        }
-        return Material(
-          child: Container(
-            height: 40,
-            color: theme.colorScheme.tertiaryContainer,
-            child: Padding(
-              padding: Styles.horizontalBodyPadding,
-              child: Row(
-                children: [
-                  Icon(Icons.report_outlined, color: theme.colorScheme.onTertiaryContainer),
-                  const SizedBox(width: 5),
-                  Flexible(
-                    child: Text(
-                      'Network connectivity unavailable.',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(color: theme.colorScheme.onTertiaryContainer),
-                    ),
-                  ),
-                ],
+    if (ref.watch(isDeviceOnlineProvider)) {
+      return const SizedBox.shrink();
+    }
+    return Material(
+      child: Container(
+        height: 40,
+        color: theme.colorScheme.tertiaryContainer,
+        child: Padding(
+          padding: Styles.horizontalBodyPadding,
+          child: Row(
+            children: [
+              Icon(Icons.report_outlined, color: theme.colorScheme.onTertiaryContainer),
+              const SizedBox(width: 5),
+              Flexible(
+                child: Text(
+                  'Network connectivity unavailable.',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(color: theme.colorScheme.onTertiaryContainer),
+                ),
               ),
-            ),
+            ],
           ),
-        );
-      },
-      loading: () => const SizedBox.shrink(),
-      error: (error, stack) => const SizedBox.shrink(),
+        ),
+      ),
     );
   }
 }

@@ -1,9 +1,8 @@
 import 'dart:async';
 
 import 'package:chessground/chessground.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
@@ -22,6 +21,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_solve_limit.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -38,7 +38,6 @@ import 'package:lichess_mobile/src/view/puzzle/puzzle_error_board_widget.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_feedback_widget.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_session_widget.dart';
 import 'package:lichess_mobile/src/view/settings/board_settings_screen.dart';
-import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
@@ -49,6 +48,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:share_plus/share_plus.dart';
 
 class PuzzleScreen extends ConsumerStatefulWidget {
@@ -357,10 +357,7 @@ class _PuzzleScaffold extends StatelessWidget {
               Navigator.of(context).pop();
             },
           ),
-          actions: [
-            const ToggleSoundButton(),
-            if (initialPuzzleContext != null) _PuzzleSettingsButton(initialPuzzleContext!),
-          ],
+          actions: [if (initialPuzzleContext != null) _PuzzleSettingsButton(initialPuzzleContext!)],
           title: _Title(angle: angle, initialPuzzleContext: initialPuzzleContext),
         ),
         body: body,
@@ -946,8 +943,10 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
     final ctrlProvider = puzzleControllerProvider(initialPuzzleContext);
     final puzzleState = ref.watch(ctrlProvider);
     final difficulty = ref.watch(puzzlePreferencesProvider.select((state) => state.difficulty));
+    final isSoundEnabled = ref.watch(generalPreferencesProvider).isSoundEnabled;
+    final isOnline = ref.watch(isDeviceOnlineProvider);
     final isFillingQueue = ref.watch(puzzleQueueFillerProvider);
-    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
+
     return BottomSheetScrollableContainer(
       padding: const EdgeInsets.only(bottom: 16),
       children: [
@@ -955,6 +954,13 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
           header: Text(context.l10n.settingsSettings),
           materialFilledCard: true,
           children: [
+            SwitchSettingTile(
+              title: Text(context.l10n.sound),
+              value: isSoundEnabled,
+              onChanged: (value) {
+                ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled();
+              },
+            ),
             if (initialPuzzleContext.userId != null &&
                 initialPuzzleContext.replayRemaining == null &&
                 puzzleState.mode != PuzzleMode.view &&

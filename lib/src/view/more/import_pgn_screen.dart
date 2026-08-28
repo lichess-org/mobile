@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
@@ -15,10 +14,11 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/pgn_games_list_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// A provider for picking PGN files. Can be overridden in tests.
-final pickPgnFileProvider = Provider<Future<FilePickerResult?> Function()>((ref) {
-  return () => FilePicker.pickFiles(type: FileType.custom, allowedExtensions: ['pgn']);
+final pickPgnFileProvider = Provider<Future<PlatformFile?> Function()>((ref) {
+  return () => FilePicker.pickFile(type: .custom, allowedExtensions: ['pgn']);
 });
 
 class ImportPgnScreen extends StatelessWidget {
@@ -128,12 +128,12 @@ class _BodyState extends ConsumerState<_Body> {
 
   Future<void> _pickPgnFile() async {
     try {
-      final result = await ref.read(pickPgnFileProvider)();
+      final file = await ref.read(pickPgnFileProvider)();
 
-      if (result != null) {
+      if (file != null) {
         final content = await const Utf8Decoder(
           allowMalformed: true,
-        ).bind(result.files.single.readAsByteStream()).join();
+        ).bind(file.readAsByteStream()).join();
         if (mounted) {
           ImportPgnScreen.handlePgnText(context, content);
         }

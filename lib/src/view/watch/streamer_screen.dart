@@ -1,5 +1,4 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/model/user/streamer.dart';
 import 'package:lichess_mobile/src/styles/social_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -8,6 +7,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const _kThumbnailSize = 75.0;

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 enum FilterType {
   /// Only one choice is intended to be selected at a time. Uses [ChoiceChip] to display choices.

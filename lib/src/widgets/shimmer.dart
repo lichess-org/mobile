@@ -1,7 +1,7 @@
 import 'dart:math' show max;
 
-import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:material_ui/material_ui.dart';
 
 class Shimmer extends StatefulWidget {
   static ShimmerState? of(BuildContext context) {

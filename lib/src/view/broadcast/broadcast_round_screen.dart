@@ -1,5 +1,4 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
@@ -19,11 +18,14 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_teams_tab.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
+import 'package:material_ui/material_ui.dart';
 
 enum BroadcastRoundTab {
   overview,
@@ -59,12 +61,26 @@ enum _BroadcastGameFilter {
 class BroadcastRoundScreenLoading extends ConsumerWidget {
   final BroadcastRoundId roundId;
   final BroadcastRoundTab? initialTab;
+  final String? teamFilter;
 
-  const BroadcastRoundScreenLoading({super.key, required this.roundId, this.initialTab});
+  const BroadcastRoundScreenLoading({
+    super.key,
+    required this.roundId,
+    this.initialTab,
+    this.teamFilter,
+  });
 
-  static Route<dynamic> buildRoute(BroadcastRoundId roundId, {BroadcastRoundTab? initialTab}) {
+  static Route<dynamic> buildRoute(
+    BroadcastRoundId roundId, {
+    BroadcastRoundTab? initialTab,
+    String? teamFilter,
+  }) {
     return buildScreenRoute(
-      screen: BroadcastRoundScreenLoading(roundId: roundId, initialTab: initialTab),
+      screen: BroadcastRoundScreenLoading(
+        roundId: roundId,
+        initialTab: initialTab,
+        teamFilter: teamFilter,
+      ),
     );
   }
 
@@ -81,6 +97,7 @@ class BroadcastRoundScreenLoading extends ConsumerWidget {
           roundToLinkId: roundId,
         ),
         initialTab: initialTab,
+        teamFilter: teamFilter,
       ),
       AsyncError(:final error) => Scaffold(
         appBar: AppBar(title: const Text('')),
@@ -97,8 +114,9 @@ class BroadcastRoundScreenLoading extends ConsumerWidget {
 class BroadcastRoundScreen extends ConsumerStatefulWidget {
   final Broadcast broadcast;
   final BroadcastRoundTab? initialTab;
+  final String? teamFilter;
 
-  const BroadcastRoundScreen({required this.broadcast, this.initialTab});
+  const BroadcastRoundScreen({required this.broadcast, this.initialTab, this.teamFilter});
 
   static Route<dynamic> buildRoute(Broadcast broadcast, {BroadcastRoundTab? initialTab}) {
     return buildScreenRoute(
@@ -115,6 +133,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
   late final TabController _tabController;
   late BroadcastTournamentId _selectedTournamentId;
   BroadcastRoundId? _selectedRoundId;
+  String? _teamFilter;
 
   bool roundLoaded = false;
 
@@ -135,6 +154,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
 
     _selectedTournamentId = widget.broadcast.tour.id;
     _selectedRoundId = widget.broadcast.roundToLinkId;
+    _teamFilter = widget.teamFilter;
   }
 
   @override
@@ -159,10 +179,11 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
     });
   }
 
-  void setGameFilter(_BroadcastGameFilter filter) {
+  void setGameFilter(_BroadcastGameFilter filter, String? team) {
     _tabController.index = 1;
     setState(() {
       this.filter = filter;
+      _teamFilter = team == context.l10n.broadcastAllTeams ? null : team;
     });
   }
 
@@ -197,35 +218,89 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
             ],
           ),
           actions: [
-            SemanticIconButton(
-              icon: const Icon(Icons.settings),
-              onPressed: () {
-                final games = asyncRound.value.games.values;
-                final allCount = games.length;
-                final ongoingCount = games.where((g) => g.isOngoing).length;
+            if (roundState.isSubscribed case final isSubscribed?)
+              if (_selectedRoundId ?? asyncTournament.value?.defaultRoundId case final roundId?)
+                SemanticIconButton(
+                  icon: Icon(isSubscribed ? Icons.notifications : Icons.notifications_none),
+                  semanticsLabel: isSubscribed ? context.l10n.unsubscribe : context.l10n.subscribe,
+                  onPressed: () async {
+                    try {
+                      await ref
+                          .read(broadcastRoundControllerProvider(roundId).notifier)
+                          .setSubscribed(_selectedTournamentId, !isSubscribed);
+                    } catch (_) {
+                      if (context.mounted) {
+                        showSnackBar(
+                          context,
+                          'Could not update the subscription',
+                          type: SnackBarType.error,
+                        );
+                      }
+                    }
+                  },
+                ),
+            ContextMenuIconButton(
+              icon: const Icon(Icons.more_horiz),
+              semanticsLabel: context.l10n.menu,
+              actions: [
+                ContextMenuAction(
+                  icon: Icons.settings,
+                  label: context.l10n.settingsSettings,
+                  onPressed: () {
+                    showModalBottomSheet<void>(
+                      context: context,
+                      isDismissible: true,
+                      isScrollControlled: true,
+                      constraints: BoxConstraints(maxHeight: MediaQuery.heightOf(context) * 0.6),
+                      builder: (_) => const _BroadcastSettingsBottomSheet(),
+                    );
+                  },
+                ),
+                ContextMenuAction(
+                  icon: Icons.filter_list,
+                  label: context.l10n.filterGames,
+                  onPressed: () {
+                    final games = asyncRound.value.games.values;
+                    final allCount = games.length;
+                    final ongoingCount = games.where((g) => g.isOngoing).length;
+                    final uniqueTeams = games
+                        .expand((g) => g.players.values.map((p) => p.player.team))
+                        .nonNulls
+                        .toIList()
+                        .removeDuplicates()
+                        .sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
+                    final teams = uniqueTeams.isNotEmpty
+                        ? uniqueTeams.insert(0, context.l10n.broadcastAllTeams)
+                        : null;
 
-                showModalBottomSheet<void>(
-                  context: context,
-                  isDismissible: true,
-                  isScrollControlled: true,
-                  builder: (_) => _BroadcastSettingsBottomSheet(
-                    filter,
-                    allGamesCount: allCount,
-                    ongoingGamesCount: ongoingCount,
-                    onGameFilterChange: setGameFilter,
+                    showModalBottomSheet<void>(
+                      context: context,
+                      isDismissible: true,
+                      isScrollControlled: true,
+                      constraints: BoxConstraints(maxHeight: MediaQuery.heightOf(context) * 0.6),
+                      builder: (_) => _BroadcastGamesFilterBottomSheet(
+                        filter,
+                        _teamFilter,
+                        allGamesCount: allCount,
+                        ongoingGamesCount: ongoingCount,
+                        onGameFilterChange: setGameFilter,
+                        teams: teams,
+                      ),
+                    );
+                  },
+                ),
+                ContextMenuAction(
+                  icon: Theme.of(context).platform == TargetPlatform.iOS
+                      ? Icons.ios_share_outlined
+                      : Icons.share_outlined,
+                  label: context.l10n.studyShareAndExport,
+                  onPressed: () => showBroadcastShareMenu(
+                    context,
+                    asyncTournament.value?.data ?? widget.broadcast.tour,
+                    roundState.round,
                   ),
-                );
-              },
-              semanticsLabel: context.l10n.settingsSettings,
-            ),
-            SemanticIconButton(
-              icon: const PlatformShareIcon(),
-              semanticsLabel: context.l10n.studyShareAndExport,
-              onPressed: () => showBroadcastShareMenu(
-                context,
-                asyncTournament.value?.data ?? widget.broadcast.tour,
-                roundState.round,
-              ),
+                ),
+              ],
             ),
           ],
         ),
@@ -239,6 +314,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
                 roundId: _selectedRoundId ?? value.defaultRoundId,
                 tournamentSlug: value.data.slug,
                 showOnlyOngoingGames: filter == _BroadcastGameFilter.ongoing,
+                teamFilter: _teamFilter,
               ),
               _ => const SizedBox.shrink(),
             },
@@ -516,17 +592,7 @@ class _TournamentSelectorState extends ConsumerState<_TournamentSelectorMenu> {
 }
 
 class _BroadcastSettingsBottomSheet extends ConsumerStatefulWidget {
-  const _BroadcastSettingsBottomSheet(
-    this.selectedFilter, {
-    required this.allGamesCount,
-    required this.ongoingGamesCount,
-    required this.onGameFilterChange,
-  });
-
-  final _BroadcastGameFilter selectedFilter;
-  final int allGamesCount;
-  final int ongoingGamesCount;
-  final void Function(_BroadcastGameFilter filter) onGameFilterChange;
+  const _BroadcastSettingsBottomSheet();
 
   @override
   ConsumerState<_BroadcastSettingsBottomSheet> createState() =>
@@ -534,53 +600,12 @@ class _BroadcastSettingsBottomSheet extends ConsumerStatefulWidget {
 }
 
 class _BroadcastSettingsBottomSheetState extends ConsumerState<_BroadcastSettingsBottomSheet> {
-  late _BroadcastGameFilter filter;
-
-  @override
-  void initState() {
-    super.initState();
-    filter = widget.selectedFilter;
-  }
-
-  @override
-  void didUpdateWidget(covariant _BroadcastSettingsBottomSheet oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    filter = widget.selectedFilter;
-  }
-
   @override
   Widget build(BuildContext context) {
     final broadcastPreferences = ref.watch(broadcastPreferencesProvider);
 
     return BottomSheetScrollableContainer(
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SettingsSectionTitle(context.l10n.filterGames),
-              const SizedBox(height: 6),
-              Filter<_BroadcastGameFilter>(
-                filterType: FilterType.singleChoice,
-                choices: _BroadcastGameFilter.values,
-                choiceSelected: (choice) => filter == choice,
-                choiceLabel: (category) {
-                  final label = category.l10n(context.l10n);
-                  final count = category == _BroadcastGameFilter.all
-                      ? widget.allGamesCount
-                      : widget.ongoingGamesCount;
-                  return Text('$label ($count)');
-                },
-                onSelected: (value, selected) {
-                  setState(() => filter = value);
-                  widget.onGameFilterChange.call(value);
-                },
-              ),
-            ],
-          ),
-        ),
         ListSection(
           header: SettingsSectionTitle(context.l10n.preferencesDisplay),
           materialFilledCard: true,
@@ -595,6 +620,156 @@ class _BroadcastSettingsBottomSheetState extends ConsumerState<_BroadcastSetting
           ],
         ),
       ],
+    );
+  }
+}
+
+class _BroadcastGamesFilterBottomSheet extends ConsumerStatefulWidget {
+  const _BroadcastGamesFilterBottomSheet(
+    this.selectedFilter,
+    this.selectedTeam, {
+    required this.allGamesCount,
+    required this.ongoingGamesCount,
+    required this.onGameFilterChange,
+    required this.teams,
+  });
+
+  final _BroadcastGameFilter selectedFilter;
+  final String? selectedTeam;
+  final int allGamesCount;
+  final int ongoingGamesCount;
+  final void Function(_BroadcastGameFilter filter, String? team) onGameFilterChange;
+  final IList<String>? teams;
+
+  @override
+  ConsumerState<_BroadcastGamesFilterBottomSheet> createState() =>
+      _BroadcastGamesFilterBottomSheetState();
+}
+
+class _BroadcastGamesFilterBottomSheetState
+    extends ConsumerState<_BroadcastGamesFilterBottomSheet> {
+  late _BroadcastGameFilter filter;
+  late String? selectedTeam;
+  bool showingTeamPicker = false;
+
+  @override
+  void initState() {
+    super.initState();
+    filter = widget.selectedFilter;
+    selectedTeam = widget.selectedTeam;
+  }
+
+  @override
+  void didUpdateWidget(covariant _BroadcastGamesFilterBottomSheet oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    filter = widget.selectedFilter;
+    selectedTeam = widget.selectedTeam;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PopScope(
+      canPop: !showingTeamPicker,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop && showingTeamPicker) {
+          setState(() => showingTeamPicker = false);
+        }
+      },
+      child: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 220),
+        transitionBuilder: (child, animation) {
+          final isTeamPicker = child.key == const ValueKey('team-picker');
+          final offset = Tween<Offset>(
+            begin: isTeamPicker ? const Offset(1, 0) : const Offset(-1, 0),
+            end: Offset.zero,
+          ).animate(animation);
+          return ClipRect(
+            child: SlideTransition(position: offset, child: child),
+          );
+        },
+        child: showingTeamPicker
+            ? KeyedSubtree(
+                key: const ValueKey('team-picker'),
+                child: SafeArea(
+                  child: Column(
+                    children: [
+                      ListTile(
+                        leading: IconButton(
+                          icon: const Icon(Icons.arrow_back),
+                          tooltip: context.l10n.cancel,
+                          onPressed: () => setState(() => showingTeamPicker = false),
+                        ),
+                        title: Text(context.l10n.teamTeam),
+                      ),
+                      Expanded(
+                        child: ListView(
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          children: [
+                            for (final team in widget.teams!)
+                              ListTile(
+                                selected: team == (selectedTeam ?? context.l10n.broadcastAllTeams),
+                                title: Text(team),
+                                onTap: () {
+                                  setState(() {
+                                    selectedTeam = team == context.l10n.broadcastAllTeams
+                                        ? null
+                                        : team;
+                                    showingTeamPicker = false;
+                                  });
+                                  widget.onGameFilterChange.call(filter, team);
+                                },
+                              ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            : KeyedSubtree(
+                key: const ValueKey('settings'),
+                child: BottomSheetScrollableContainer(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SettingsSectionTitle(context.l10n.filterGames),
+                          const SizedBox(height: 6),
+                          Filter<_BroadcastGameFilter>(
+                            filterType: FilterType.singleChoice,
+                            choices: _BroadcastGameFilter.values,
+                            choiceSelected: (choice) => filter == choice,
+                            choiceLabel: (category) {
+                              final label = category.l10n(context.l10n);
+                              final count = category == _BroadcastGameFilter.all
+                                  ? widget.allGamesCount
+                                  : widget.ongoingGamesCount;
+                              return Text('$label ($count)');
+                            },
+                            onSelected: (value, selected) {
+                              setState(() => filter = value);
+                              widget.onGameFilterChange.call(value, selectedTeam);
+                            },
+                          ),
+                          if (widget.teams != null)
+                            FilterChip(
+                              label: selectedTeam != null
+                                  ? Text('${context.l10n.teamTeam}: $selectedTeam')
+                                  : Text(context.l10n.teamTeam),
+                              selected: selectedTeam != null,
+                              showCheckmark: selectedTeam != null,
+                              onSelected: (_) => setState(() => showingTeamPicker = true),
+                            ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+      ),
     );
   }
 }

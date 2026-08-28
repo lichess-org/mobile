@@ -803,6 +803,9 @@ class AppLocalizationsHe extends AppLocalizations {
   String get arenaRankAvgHelp => 'ממוצע הדירוג הוא האחוזון של הדירוגים שלך. ככל שהוא נמוך יותר, כך הוא טוב יותר!\n\nלדוגמה, מי שזוכה מקום שלישי בטורניר עם 100 משתתפים הוא באחוזון השלישי (3%).\n\nמי שזוכה במקום העשירי מתוך אלף משתתפים הוא באחוזון העליון (1%).';
 
   @override
+  String get arenaRankAverageHelp => 'Your rank average represents your typical finishing position, relative to the total number of players in each tournament.\nThis is a measure of your tournament placement, not your general rating.\n\nFor example, a rank average of 3% means you typically finish in the top 3% (such as 30th place out of 1,000 players).';
+
+  @override
   String get arenaMedians => 'חציונים';
 
   @override
@@ -962,6 +965,9 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get broadcastDefinitivelyDeleteTournament => 'מחיקה לצמיתות של הטורניר הזה, על כל סבביו והמשחקים שבו.';
+
+  @override
+  String get broadcastPermanentlyDeleteTournament => 'Permanently delete this tournament, including all rounds and games?';
 
   @override
   String get broadcastShowScores => 'הצגת הניקוד של השחקנים בהתבסס על תוצאות המשחקים';
@@ -1655,10 +1661,19 @@ class AppLocalizationsHe extends AppLocalizations {
   String get preferencesNotifyInboxMsg => 'הודעה חדשה בתיבת הדואר';
 
   @override
+  String get preferencesNotifyDirectMessage => 'New direct message';
+
+  @override
   String get preferencesNotifyForumMention => 'מזכירים אותך בתגובה בפורום';
 
   @override
+  String get preferencesNotifyForumMentions => 'Forum mentions';
+
+  @override
   String get preferencesNotifyInvitedStudy => 'הזמנה ללוח למידה';
+
+  @override
+  String get preferencesNotifyStudyInvites => 'Study invites';
 
   @override
   String get preferencesNotifyGameEvent => 'עדכונים לגבי משחקים בהתכתבות';
@@ -1670,7 +1685,10 @@ class AppLocalizationsHe extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'טורניר מתחיל בקרוב';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
+  String get preferencesNotifyTournamentStartReminders => 'Tournaments start reminders';
+
+  @override
+  String get preferencesNotifyBroadcasts => 'Broadcasts';
 
   @override
   String get preferencesNotifyTimeAlarm => 'אוזל הזמן במשחק התכתבות';
@@ -2209,6 +2227,9 @@ class AppLocalizationsHe extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'טקטיקה המשלבת את חוק ״הכאה דרך הילוכו\", בו רגלי יכול להכות רגלי יריב שעבר אותו בתנועתו על ידי מסע של שתי משבצות לפנים מהמשבצת ההתחלתית.';
 
   @override
+  String get puzzleThemeEnPassantAdjacentCaptureDescription => 'A tactic involving the en passant rule, where a pawn can capture an opposing pawn that has just moved next to it with its initial two-square move.';
+
+  @override
   String get puzzleThemeEpauletteMate => 'Epaulette mate';
 
   @override
@@ -2227,6 +2248,9 @@ class AppLocalizationsHe extends AppLocalizations {
   String get puzzleThemeForkDescription => 'מסע בו הכלי הנע מאיים על שני כלי יריב במקביל.';
 
   @override
+  String get puzzleThemeForkOpposingPiecesDescription => 'A move where a piece attacks two or more opposing pieces simultaneously.';
+
+  @override
   String get puzzleThemeHangingPiece => 'כלי תלוי ללא חיפוי';
 
   @override
@@ -2237,6 +2261,9 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get puzzleThemeHookMateDescription => 'מט עם צריח, פרש ורגלי יחד עם רגלי יריב המגבילים את בריחת המלך היריב.';
+
+  @override
+  String get puzzleThemeHookMateOpposingPawnDescription => 'Checkmate using a rook, knight, and pawn, where an opposing pawn blocks the king\'s escape.';
 
   @override
   String get puzzleThemeInterference => 'קטיעת קו הגנה';
@@ -3177,6 +3204,9 @@ class AppLocalizationsHe extends AppLocalizations {
   String get checkSpamFolder => 'בדקו גם את תיבת דואר הזבל (״ספאם״). יתכן שההודעה הגיעה לשם בטעות. אם זה מה שקרה, סמנו אותה כלא־ספאם.';
 
   @override
+  String get checkSpamOrJunkFolder => 'If you do not receive a confirmation email, check your Spam or Junk folder. Be sure to indicate messages from lichess.org as safe and \"not spam\", so you can stay informed of important communications.';
+
+  @override
   String sendEmailForAccountVerification(String param) {
     return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
   }
@@ -3904,6 +3934,15 @@ class AppLocalizationsHe extends AppLocalizations {
   String get reply => 'תגובה';
 
   @override
+  String get reopen => 'Reopen';
+
+  @override
+  String get quote => 'Quote';
+
+  @override
+  String get postEdited => 'edited';
+
+  @override
   String get message => 'הודעה';
 
   @override
@@ -3938,6 +3977,9 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get reportProcessedFasterInEnglish => 'הדיווח שלך יטופל מהר יותר אם ייכתב באנגלית.';
+
+  @override
+  String get processReportFasterInEnglish => 'We can process your report faster if you write in English.';
 
   @override
   String get error_provideOneCheatedGameLink => 'בבקשה לספק לפחות קישור אחד למשחק עם רמאות.';
@@ -4308,6 +4350,9 @@ class AppLocalizationsHe extends AppLocalizations {
   String get whenCreateSimul => 'כאשר יוצרים משחק סימולטני, זוכים לשחק עם שחקנים רבים בו זמנית.';
 
   @override
+  String get creatingASimul => 'Creating a simul lets you play against multiple opponents at the same time.';
+
+  @override
   String get simulVariantsHint => 'אם ייבחרו מספר נגזרות שחמט, כל שחקן יריב יזכה לבחור באיזו לשחק.';
 
   @override
@@ -4620,6 +4665,9 @@ class AppLocalizationsHe extends AppLocalizations {
   String get background => 'רקע';
 
   @override
+  String get theme => 'Theme';
+
+  @override
   String get light => 'בהיר';
 
   @override
@@ -4629,7 +4677,13 @@ class AppLocalizationsHe extends AppLocalizations {
   String get transparent => 'שקוף';
 
   @override
+  String get picture => 'Picture';
+
+  @override
   String get deviceTheme => 'לפי הגדרות המכשיר';
+
+  @override
+  String get roundness => 'Roundness';
 
   @override
   String get backgroundImageUrl => 'כתובת תמונת רקע (URL):';
@@ -5047,9 +5101,6 @@ class AppLocalizationsHe extends AppLocalizations {
   }
 
   @override
-  String get someoneYouReportedWasBanned => 'מישהו שדיווחת עליו נחסם';
-
-  @override
   String get congratsYouWon => 'כל הכבוד, ניצחתם!';
 
   @override
@@ -5148,6 +5199,11 @@ class AppLocalizationsHe extends AppLocalizations {
   }
 
   @override
+  String youCanFormatTextUsing(String param) {
+    return 'You can format text using $param.';
+  }
+
+  @override
   String get embedsAvailable => 'הדביקו כתובת משחק (URL) או כתובת של פרק לוח למידה כדי להטמיע אותם.';
 
   @override
@@ -5167,6 +5223,9 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get navigateMoveTree => 'נווט ברשימת המהלכים';
+
+  @override
+  String get moveListNavigation => 'Move list navigation';
 
   @override
   String get mouseTricks => 'קיצורי עכבר';
@@ -5219,7 +5278,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get resignTheGame => 'כניעה';
 
   @override
-  String get youCantStartNewGame => 'לא תוכל/י להתחיל משחק חדש עד גמר הנוכחי.';
+  String get youCantStartNewGame => 'You can\'t start a new game while it\'s your turn.';
 
   @override
   String get since => 'מאז';
@@ -6683,6 +6742,9 @@ class AppLocalizationsHe extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get teamTeam => 'קבוצה';
 
   @override
   String get teamIncorrectEntryCode => 'סיסמא שגויה.';

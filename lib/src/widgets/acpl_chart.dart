@@ -2,10 +2,10 @@ import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:material_ui/material_ui.dart';
 
 typedef AcplChartParams = ({
   /// The evaluation data points to display on the chart
@@ -57,58 +57,65 @@ class AcplChart extends StatelessWidget {
         aspectRatio: 2.5,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: LineChart(
-            LineChartData(
-              lineTouchData: LineTouchData(
-                enabled: true,
-                handleBuiltInTouches: false,
-                touchCallback: (FlTouchEvent event, LineTouchResponse? touchResponse) {
-                  if (event is FlTapUpEvent ||
-                      event is FlPanUpdateEvent ||
-                      event is FlLongPressMoveUpdate) {
-                    final touchX = event.localPosition!.dx;
-                    final chartWidth =
-                        context.size!.width - 32; // Insets on both sides of the chart of 16
-                    final minX = spots.first.x;
-                    final maxX = spots.last.x;
-                    final touchXDataValue = minX + (touchX / chartWidth) * (maxX - minX);
-                    final closestSpot = spots.reduce(
-                      (a, b) =>
-                          (a.x - touchXDataValue).abs() < (b.x - touchXDataValue).abs() ? a : b,
-                    );
-                    final closestNodeIndex = closestSpot.x.round();
-                    params.onJumpToNode(closestNodeIndex);
-                  }
-                },
-              ),
-              minY: -1.0,
-              maxY: 1.0,
-              lineBarsData: [
-                LineChartBarData(
-                  spots: spots,
-                  isCurved: false,
-                  barWidth: 1,
-                  color: mainLineColor.withValues(alpha: 0.7),
-                  aboveBarData: BarAreaData(show: true, color: aboveLineColor, applyCutOffY: true),
-                  belowBarData: BarAreaData(show: true, color: belowLineColor, applyCutOffY: true),
-                  dotData: const FlDotData(show: false),
-                ),
-              ],
-              extraLinesData: ExtraLinesData(
-                verticalLines: [
-                  if (params.isOnMainline)
-                    VerticalLine(
-                      x: (params.currentNodePly - 1 - params.rootPly).toDouble(),
-                      color: mainLineColor,
-                      strokeWidth: 1.0,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              // The chart is drawn without axis titles or border, so the spots span the full
+              // width of the constraints.
+              void jumpToOffset(Offset offset) {
+                if (spots.length < 2) return;
+                final index = (offset.dx / constraints.maxWidth * (spots.length - 1)).round().clamp(
+                  0,
+                  spots.length - 1,
+                );
+                params.onJumpToNode(index);
+              }
+
+              return GestureDetector(
+                behavior: .opaque,
+                onTapUp: (details) => jumpToOffset(details.localPosition),
+                onHorizontalDragUpdate: (details) => jumpToOffset(details.localPosition),
+                child: LineChart(
+                  LineChartData(
+                    lineTouchData: const LineTouchData(enabled: false),
+                    minY: -1.0,
+                    maxY: 1.0,
+                    lineBarsData: [
+                      LineChartBarData(
+                        spots: spots,
+                        isCurved: false,
+                        barWidth: 1,
+                        color: mainLineColor.withValues(alpha: 0.7),
+                        aboveBarData: BarAreaData(
+                          show: true,
+                          color: aboveLineColor,
+                          applyCutOffY: true,
+                        ),
+                        belowBarData: BarAreaData(
+                          show: true,
+                          color: belowLineColor,
+                          applyCutOffY: true,
+                        ),
+                        dotData: const FlDotData(show: false),
+                      ),
+                    ],
+                    extraLinesData: ExtraLinesData(
+                      verticalLines: [
+                        if (params.isOnMainline)
+                          VerticalLine(
+                            x: (params.currentNodePly - 1 - params.rootPly).toDouble(),
+                            color: mainLineColor,
+                            strokeWidth: 1.0,
+                          ),
+                        ...divisionLines,
+                      ],
                     ),
-                  ...divisionLines,
-                ],
-              ),
-              gridData: const FlGridData(show: false),
-              borderData: FlBorderData(show: false),
-              titlesData: const FlTitlesData(show: false),
-            ),
+                    gridData: const FlGridData(show: false),
+                    borderData: FlBorderData(show: false),
+                    titlesData: const FlTitlesData(show: false),
+                  ),
+                ),
+              );
+            },
           ),
         ),
       ),

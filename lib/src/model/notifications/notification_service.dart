@@ -98,6 +98,15 @@ class NotificationService {
   /// This method should be called once the app is ready to receive notifications,
   /// and after [LichessBinding.initializeNotifications] has been called.
   Future<void> start() async {
+    // Firebase auto-init is disabled at build time (`FirebaseMessagingAutoInitEnabled` in
+    // Info.plist, `firebase_messaging_auto_init_enabled` in AndroidManifest.xml) so that nothing
+    // is registered with Firebase before the app actually starts its notification service.
+    // Since firebase_messaging 16.5.0, the iOS plugin skips `registerForRemoteNotifications` and
+    // ignores the APNS device token entirely while auto-init is disabled, so we have to enable it
+    // explicitly here, otherwise `getAPNSToken()` always returns null and the device can never be
+    // registered for push notifications.
+    await LichessBinding.instance.firebaseMessaging.setAutoInitEnabled(true);
+
     await _authEventsSubscription?.cancel();
     _authEventsSubscription = authEventsStream.listen((event) {
       switch (event) {
@@ -271,6 +280,28 @@ class NotificationService {
           notification,
         ));
 
+      case final BroadcastRoundFcmMessage roundMessage:
+        final notification = BroadcastRoundNotification.fromFcmMessage(roundMessage);
+        _responseStreamController.add((
+          NotificationResponse(
+            notificationResponseType: NotificationResponseType.selectedNotification,
+            id: notification.id,
+            payload: jsonEncode(notification.payload),
+          ),
+          notification,
+        ));
+
+      case final BroadcastPlayerFollowFcmMessage playerFollowMessage:
+        final notification = BroadcastPlayerFollowNotification.fromFcmMessage(playerFollowMessage);
+        _responseStreamController.add((
+          NotificationResponse(
+            notificationResponseType: NotificationResponseType.selectedNotification,
+            id: notification.id,
+            payload: jsonEncode(notification.payload),
+          ),
+          notification,
+        ));
+
       // TODO: handle other notification types
       case UnhandledFcmMessage(data: final data):
         _logger.warning('Received unhandled FCM notification type: ${data['lichess.type']}');
@@ -326,6 +357,29 @@ class NotificationService {
         if (fromBackground == false && notification != null) {
           await show(
             ChallengeAcceptedNotification(fullId, notification.title!, notification.body!),
+          );
+        }
+
+      case BroadcastRoundFcmMessage(:final roundId, :final notification):
+        if (fromBackground == false && notification != null) {
+          await show(BroadcastRoundNotification(roundId, notification.title!, notification.body!));
+        }
+
+      case BroadcastPlayerFollowFcmMessage(
+        :final roundId,
+        :final gameId,
+        :final pov,
+        :final notification,
+      ):
+        if (fromBackground == false && notification != null) {
+          await show(
+            BroadcastPlayerFollowNotification(
+              roundId,
+              gameId,
+              pov,
+              notification.title!,
+              notification.body!,
+            ),
           );
         }
 

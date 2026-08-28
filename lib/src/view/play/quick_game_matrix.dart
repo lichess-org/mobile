@@ -1,7 +1,6 @@
 import 'package:collection/collection.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/home_preferences.dart';
@@ -16,6 +15,7 @@ import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/play/play_bottom_sheet.dart';
 import 'package:lichess_mobile/src/view/play/playban.dart';
+import 'package:material_ui/material_ui.dart';
 
 const _kMatrixSpacing = 8.0;
 
@@ -94,7 +94,7 @@ class _SectionChoices extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authUser = ref.watch(authControllerProvider);
-    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
+    final connectionStatus = ref.watch(lichessConnectionStatusProvider);
     final choiceWidgets = choices
         .mapIndexed((index, choice) {
           return [
@@ -110,7 +110,7 @@ class _SectionChoices extends ConsumerWidget {
                   style: const TextStyle(fontSize: 14.0),
                 ),
                 speed: choice.speed,
-                onTap: isOnline
+                onTap: connectionStatus == LichessConnectionStatus.online
                     ? () {
                         Navigator.of(context, rootNavigator: true).push(
                           GameScreen.buildRoute(
@@ -137,7 +137,7 @@ class _SectionChoices extends ConsumerWidget {
             Expanded(
               child: _ChoiceChip(
                 title: Text(context.l10n.custom, textAlign: TextAlign.center),
-                onTap: isOnline
+                onTap: connectionStatus == LichessConnectionStatus.online
                     ? () {
                         showModalBottomSheet<void>(
                           context: context,

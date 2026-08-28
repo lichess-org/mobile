@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/experimental/mutation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/binding.dart';
@@ -39,6 +38,7 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/account/account_menu.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/auth/sign_in_error.dart';
+import 'package:lichess_mobile/src/view/auth/sign_in_options.dart';
 import 'package:lichess_mobile/src/view/correspondence/offline_correspondence_game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
@@ -61,7 +61,9 @@ import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/server_outage_display.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// Number of cold app starts before hiding the home customization tip.
@@ -144,325 +146,364 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
       }
     });
 
-    final isOnlineAsync = ref.watch(onlineStatusProvider);
+    // Watched directly rather than through [isDeviceOnlineProvider], because
+    // this screen shows a spinner until the connectivity status is known.
+    return ref
+        .watch(connectivityChangesProvider)
+        .when(
+          skipLoadingOnReload: true,
+          data: (connectivity) {
+            final isOnline = connectivity.isOnline;
+            final authUser = ref.watch(authControllerProvider);
+            final unreadLichessMessage = ref.watch(unreadMessagesProvider).value?.lichess == true;
+            final ongoingGames = ref.watch(ongoingGamesProvider);
+            final offlineCorresGames = ref.watch(offlineOngoingCorrespondenceGamesProvider);
+            final recentGames = ref.watch(myRecentGamesProvider);
+            final nbOfGames = ref.watch(userNumberOfGamesProvider(null)).value ?? 0;
+            final isTablet = isTabletOrLarger(context);
 
-    return isOnlineAsync.when(
-      skipLoadingOnReload: true,
-      data: (isOnline) {
-        final authUser = ref.watch(authControllerProvider);
-        final unreadLichessMessage = ref.watch(unreadMessagesProvider).value?.lichess == true;
-        final ongoingGames = ref.watch(ongoingGamesProvider);
-        final offlineCorresGames = ref.watch(offlineOngoingCorrespondenceGamesProvider);
-        final recentGames = ref.watch(myRecentGamesProvider);
-        final nbOfGames = ref.watch(userNumberOfGamesProvider(null)).value ?? 0;
-        final isTablet = isTabletOrLarger(context);
-        final featuredTournaments = isOnline
-            ? ref.watch(featuredTournamentsProvider)
-            : const AsyncValue.data(IListConst<LightTournament>([]));
-        final blogPosts = isOnline
-            ? ref.watch(blogCarouselProvider)
-            : const AsyncValue.data(IListConst<BlogPost>([]));
-        final followingAsync = authUser != null && isOnline
-            ? ref.watch(followingCarouselProvider)
-            : const AsyncValue.data(IListConst<FollowingUser>([]));
+            // Everything the lichess server provides is unavailable both when the
+            // device is offline and when the server itself is down. Widgets backed
+            // by local data (recent games, offline correspondence games) keep
+            // working in either case, so only the server-backed ones are hidden,
+            // and a [ServerOutageDisplay] is shown in their place during an outage.
+            final isServerUnavailable = ref
+                .watch(lichessConnectionStatusProvider)
+                .isServerUnavailable;
+            final hasServerContent = isOnline && !isServerUnavailable;
+            final showOutage = isServerUnavailable && !widget.editModeEnabled;
 
-        final isKidMode = ref.watch(kidModeProvider).value ?? false;
+            final featuredTournaments = hasServerContent
+                ? ref.watch(featuredTournamentsProvider)
+                : const AsyncValue.data(IListConst<LightTournament>([]));
+            final blogPosts = hasServerContent
+                ? ref.watch(blogCarouselProvider)
+                : const AsyncValue.data(IListConst<BlogPost>([]));
+            final followingAsync = authUser != null && hasServerContent
+                ? ref.watch(followingCarouselProvider)
+                : const AsyncValue.data(IListConst<FollowingUser>([]));
 
-        // Show the welcome screen if not logged in and there are no recent games and no stored games
-        // (i.e. first installation, or the user has never played a game)
-        final shouldShowWelcomeScreen =
-            authUser == null &&
-            recentGames.maybeWhen(data: (data) => data.isEmpty, orElse: () => false);
+            final isKidMode = ref.watch(kidModeProvider).value ?? false;
 
-        List<Widget> widgets;
+            // Show the welcome screen if not logged in and there are no recent games and no stored games
+            // (i.e. first installation, or the user has never played a game)
+            final shouldShowWelcomeScreen =
+                authUser == null &&
+                recentGames.maybeWhen(data: (data) => data.isEmpty, orElse: () => false);
 
-        if (shouldShowWelcomeScreen) {
-          final welcomeWidgets = [
-            const _EditableWidget(
-              widget: HomeEditableWidget.hello,
-              shouldShow: true,
-              child: _GreetingWidget(),
-            ),
-            if (!widget.editModeEnabled) ...[
-              Padding(
-                padding: Styles.bodySectionPadding,
-                child: LichessMessage(style: TextTheme.of(context).bodyLarge),
-              ),
-              const SizedBox(height: 8.0),
-              if (authUser == null) ...[
-                const Center(child: _SignInWidget()),
-                const SizedBox(height: 16.0),
-              ],
-              if (Theme.of(context).platform != TargetPlatform.iOS &&
-                  (authUser == null || authUser.user.isPatron != true)) ...[
-                Center(
-                  child: FilledButton.tonal(
-                    onPressed: () {
-                      launchUrl(Uri.parse('https://lichess.org/patron'));
-                    },
-                    child: Text(context.l10n.patronDonate),
-                  ),
-                ),
-                const SizedBox(height: 16.0),
-              ],
-              Center(
-                child: FilledButton.tonal(
-                  onPressed: () {
-                    launchUrl(Uri.parse('https://lichess.org/about'));
-                  },
-                  child: Text(context.l10n.aboutX('Lichess...')),
-                ),
-              ),
-              const _WelcomeMessageCard(),
-              const _HomeCustomizationTip(),
-            ],
-          ];
+            List<Widget> widgets;
 
-          widgets = [
-            if (isTablet)
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ...welcomeWidgets,
-                        const SizedBox(height: 32.0),
-                        const _TabletCreateAGameSection(),
-                      ],
-                    ),
-                  ),
-                  Expanded(child: FeaturedTournamentsWidget(featured: featuredTournaments)),
-                ],
-              )
-            else ...[
-              ...welcomeWidgets,
-              if (isOnline)
+            if (shouldShowWelcomeScreen) {
+              final welcomeWidgets = [
                 const _EditableWidget(
-                  widget: HomeEditableWidget.quickPairing,
+                  widget: HomeEditableWidget.hello,
                   shouldShow: true,
-                  child: Padding(padding: Styles.bodySectionPadding, child: QuickGameMatrix()),
+                  child: _GreetingWidget(),
                 ),
-              _EditableWidget(
-                widget: HomeEditableWidget.featuredTournaments,
-                shouldShow: isOnline,
-                child: FeaturedTournamentsWidget(featured: featuredTournaments),
-              ),
-              if (_worker != null && !isKidMode)
-                _EditableWidget(
-                  widget: HomeEditableWidget.blogCarousel,
-                  shouldShow: isOnline,
-                  child: _BlogCarouselWidget(blogPosts, _worker!),
-                ),
-            ],
-          ];
-        } else if (isTablet) {
-          widgets = [
-            const _EditableWidget(
-              widget: HomeEditableWidget.hello,
-              shouldShow: true,
-              child: _GreetingWidget(),
-            ),
-            if (!widget.editModeEnabled) ...[
-              const _HomeCustomizationTip(),
-              const _NNUEFilesOutdatedTip(),
-            ],
-            if (isOnline)
-              _EditableWidget(
-                widget: HomeEditableWidget.perfCards,
-                shouldShow: authUser != null,
-                child: const AccountPerfCards(padding: Styles.bodySectionPadding),
-              ),
-            _EditableWidget(
-              widget: HomeEditableWidget.friends,
-              shouldShow: authUser != null && isOnline,
-              child: FollowingCarousel(followingAsync),
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Flexible(
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 8.0),
-                      const _TabletCreateAGameSection(),
-                      if (isOnline)
-                        _OngoingGamesPreview(ongoingGames, maxGamesToShow: 5)
-                      else
-                        _OfflineCorrespondencePreview(offlineCorresGames, maxGamesToShow: 5),
-                    ],
+                if (showOutage) const ServerOutageDisplay(),
+                if (!widget.editModeEnabled) ...[
+                  Padding(
+                    padding: Styles.bodySectionPadding,
+                    child: LichessMessage(style: TextTheme.of(context).bodyLarge),
                   ),
-                ),
-                Flexible(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.start,
+                  const SizedBox(height: 8.0),
+                  if (authUser == null) ...[
+                    const Center(child: _SignInWidget()),
+                    const SizedBox(height: 16.0),
+                  ],
+                  if (Theme.of(context).platform != TargetPlatform.iOS &&
+                      (authUser == null || authUser.user.isPatron != true)) ...[
+                    Center(
+                      child: FilledButton.tonal(
+                        onPressed: () {
+                          launchUrl(Uri.parse('https://lichess.org/patron'));
+                        },
+                        child: Text(context.l10n.patronDonate),
+                      ),
+                    ),
+                    const SizedBox(height: 16.0),
+                  ],
+                  Center(
+                    child: FilledButton.tonal(
+                      onPressed: () {
+                        launchUrl(Uri.parse('https://lichess.org/about'));
+                      },
+                      child: Text(context.l10n.aboutX('Lichess...')),
+                    ),
+                  ),
+                  const _WelcomeMessageCard(),
+                  const _HomeCustomizationTip(),
+                ],
+              ];
+
+              widgets = [
+                if (isTablet)
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 8.0),
-                      FeaturedTournamentsWidget(featured: featuredTournaments),
-                      if (_worker != null && !isKidMode)
-                        _EditableWidget(
-                          widget: HomeEditableWidget.blogCarousel,
-                          shouldShow: isOnline,
-                          child: _BlogCarouselWidget(blogPosts, _worker!),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ...welcomeWidgets,
+                            const SizedBox(height: 32.0),
+                            const _TabletCreateAGameSection(),
+                          ],
                         ),
-                      RecentGamesWidget(recentGames: recentGames, nbOfGames: nbOfGames, user: null),
+                      ),
+                      Expanded(child: FeaturedTournamentsWidget(featured: featuredTournaments)),
                     ],
+                  )
+                else ...[
+                  ...welcomeWidgets,
+                  if (hasServerContent)
+                    const _EditableWidget(
+                      widget: HomeEditableWidget.quickPairing,
+                      shouldShow: true,
+                      child: Padding(padding: Styles.bodySectionPadding, child: QuickGameMatrix()),
+                    ),
+                  _EditableWidget(
+                    widget: HomeEditableWidget.featuredTournaments,
+                    shouldShow: hasServerContent,
+                    child: FeaturedTournamentsWidget(featured: featuredTournaments),
                   ),
+                  if (_worker != null && !isKidMode)
+                    _EditableWidget(
+                      widget: HomeEditableWidget.blogCarousel,
+                      shouldShow: hasServerContent,
+                      child: _BlogCarouselWidget(blogPosts, _worker!),
+                    ),
+                ],
+              ];
+            } else if (isTablet) {
+              widgets = [
+                const _EditableWidget(
+                  widget: HomeEditableWidget.hello,
+                  shouldShow: true,
+                  child: _GreetingWidget(),
                 ),
-              ],
-            ),
-          ];
-        } else {
-          final hasOngoingGames =
-              (isOnline &&
-                  ongoingGames.maybeWhen(data: (data) => data.isNotEmpty, orElse: () => false)) ||
-              (!isOnline &&
-                  offlineCorresGames.maybeWhen(
-                    data: (data) => data.isNotEmpty,
-                    orElse: () => false,
-                  ));
-          widgets = [
-            const _EditableWidget(
-              widget: HomeEditableWidget.hello,
-              shouldShow: true,
-              child: _GreetingWidget(),
-            ),
-            if (!widget.editModeEnabled) ...[
-              const _HomeCustomizationTip(),
-              const _NNUEFilesOutdatedTip(),
-            ],
-            _EditableWidget(
-              widget: HomeEditableWidget.perfCards,
-              shouldShow: authUser != null && isOnline,
-              child: AccountPerfCards(
-                padding: Styles.horizontalBodyPadding.add(Styles.sectionBottomPadding),
-              ),
-            ),
-            _EditableWidget(
-              widget: HomeEditableWidget.friends,
-              shouldShow: authUser != null && isOnline,
-              child: FollowingCarousel(followingAsync),
-            ),
-            _EditableWidget(
-              widget: HomeEditableWidget.quickPairing,
-              shouldShow: isOnline,
-              child: const Padding(padding: Styles.bodySectionPadding, child: QuickGameMatrix()),
-            ),
-            _EditableWidget(
-              widget: HomeEditableWidget.ongoingGames,
-              shouldShow: hasOngoingGames,
-              child: isOnline
-                  ? _OngoingGamesCarousel(ongoingGames, maxGamesToShow: 20)
-                  : _OfflineCorrespondenceCarousel(offlineCorresGames, maxGamesToShow: 20),
-            ),
-            _EditableWidget(
-              widget: HomeEditableWidget.featuredTournaments,
-              shouldShow: isOnline,
-              child: FeaturedTournamentsWidget(featured: featuredTournaments),
-            ),
-            if (_worker != null && !isKidMode)
-              _EditableWidget(
-                widget: HomeEditableWidget.blogCarousel,
-                shouldShow: isOnline,
-                child: _BlogCarouselWidget(blogPosts, _worker!),
-              ),
-            _EditableWidget(
-              widget: HomeEditableWidget.recentGames,
-              shouldShow: true,
-              child: RecentGamesWidget(recentGames: recentGames, nbOfGames: nbOfGames, user: null),
-            ),
-          ];
-        }
-
-        final content = ListView(
-          controller: homeScrollController,
-          children: [if (unreadLichessMessage) const _LichessMessageBanner(), ...widgets],
-        );
-
-        return FocusDetector(
-          onFocusLost: () {
-            _focusLostAt = DateTime.now();
-          },
-          onFocusRegained: () {
-            if (context.mounted && _focusLostAt != null) {
-              final duration = DateTime.now().difference(_focusLostAt!);
-              if (duration.inSeconds < 10) {
-                return;
-              }
-              _refreshData(isOnline: isOnline);
-            }
-          },
-          child: _IsEditingHome(
-            isEditingWidgets: widget.editModeEnabled,
-            child: PlatformScaffold(
-              appBar: widget.editModeEnabled
-                  ? PlatformAppBar(
-                      title: Text(context.l10n.mobileSettingsHomeWidgets),
-                      leading: const BackButton(),
-                      automaticallyImplyLeading: false,
-                    )
-                  : PlatformAppBar(
-                      title: Theme.of(context).platform == TargetPlatform.iOS
-                          ? AppBarLichessTitle(
-                              iconSize: Theme.of(context).textTheme.headlineSmall?.fontSize ?? 24,
-                            )
-                          : const AppBarLichessTitle(),
-                      centerTitle: false,
-                      titleTextStyle: Theme.of(context).platform == TargetPlatform.iOS
-                          ? Theme.of(context).textTheme.headlineSmall
-                          : null,
-                      actions: const [_ChallengeScreenButton(), AccountMenuButton()],
-                    ),
-              body: widget.editModeEnabled
-                  ? content
-                  : HapticRefreshIndicator(
-                      edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
-                          ? MediaQuery.paddingOf(context).top + kToolbarHeight
-                          : 0.0,
-                      key: _refreshKey,
-                      onRefresh: () => _refreshData(isOnline: isOnline),
-                      child: content,
-                    ),
-              bottomNavigationBar: widget.editModeEnabled
-                  ? BottomAppBar(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                if (!widget.editModeEnabled) ...[
+                  const _HomeCustomizationTip(),
+                  const _NNUEFilesOutdatedTip(),
+                ],
+                if (showOutage) const ServerOutageDisplay(),
+                if (hasServerContent)
+                  _EditableWidget(
+                    widget: HomeEditableWidget.perfCards,
+                    shouldShow: authUser != null,
+                    child: const AccountPerfCards(padding: Styles.bodySectionPadding),
+                  ),
+                _EditableWidget(
+                  widget: HomeEditableWidget.friends,
+                  shouldShow: authUser != null && hasServerContent,
+                  child: FollowingCarousel(followingAsync),
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Flexible(
+                      child: Column(
                         children: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: Text(context.l10n.ok),
+                          const SizedBox(height: 8.0),
+                          const _TabletCreateAGameSection(),
+                          if (hasServerContent)
+                            _OngoingGamesPreview(ongoingGames, maxGamesToShow: 5)
+                          else
+                            _OfflineCorrespondencePreview(offlineCorresGames, maxGamesToShow: 5),
+                        ],
+                      ),
+                    ),
+                    Flexible(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 8.0),
+                          FeaturedTournamentsWidget(featured: featuredTournaments),
+                          if (_worker != null && !isKidMode)
+                            _EditableWidget(
+                              widget: HomeEditableWidget.blogCarousel,
+                              shouldShow: hasServerContent,
+                              child: _BlogCarouselWidget(blogPosts, _worker!),
+                            ),
+                          RecentGamesWidget(
+                            recentGames: recentGames,
+                            nbOfGames: nbOfGames,
+                            user: null,
                           ),
                         ],
                       ),
-                    )
-                  : null,
-              floatingActionButton: widget.editModeEnabled || isTablet
-                  ? null
-                  : const FloatingPlayButton(),
-              bottomSheet: widget.editModeEnabled ? null : const OfflineBanner(),
-            ),
-          ),
+                    ),
+                  ],
+                ),
+              ];
+            } else {
+              final hasOngoingGames =
+                  (hasServerContent &&
+                      ongoingGames.maybeWhen(
+                        data: (data) => data.isNotEmpty,
+                        orElse: () => false,
+                      )) ||
+                  (!hasServerContent &&
+                      offlineCorresGames.maybeWhen(
+                        data: (data) => data.isNotEmpty,
+                        orElse: () => false,
+                      ));
+              widgets = [
+                const _EditableWidget(
+                  widget: HomeEditableWidget.hello,
+                  shouldShow: true,
+                  child: _GreetingWidget(),
+                ),
+                if (!widget.editModeEnabled) ...[
+                  const _HomeCustomizationTip(),
+                  const _NNUEFilesOutdatedTip(),
+                ],
+                if (showOutage) const ServerOutageDisplay(),
+                _EditableWidget(
+                  widget: HomeEditableWidget.perfCards,
+                  shouldShow: authUser != null && hasServerContent,
+                  child: AccountPerfCards(
+                    padding: Styles.horizontalBodyPadding.add(Styles.sectionBottomPadding),
+                  ),
+                ),
+                _EditableWidget(
+                  widget: HomeEditableWidget.friends,
+                  shouldShow: authUser != null && hasServerContent,
+                  child: FollowingCarousel(followingAsync),
+                ),
+                _EditableWidget(
+                  widget: HomeEditableWidget.quickPairing,
+                  shouldShow: hasServerContent,
+                  child: const Padding(
+                    padding: Styles.bodySectionPadding,
+                    child: QuickGameMatrix(),
+                  ),
+                ),
+                _EditableWidget(
+                  widget: HomeEditableWidget.ongoingGames,
+                  shouldShow: hasOngoingGames,
+                  child: hasServerContent
+                      ? _OngoingGamesCarousel(ongoingGames, maxGamesToShow: 20)
+                      : _OfflineCorrespondenceCarousel(offlineCorresGames, maxGamesToShow: 20),
+                ),
+                _EditableWidget(
+                  widget: HomeEditableWidget.featuredTournaments,
+                  shouldShow: hasServerContent,
+                  child: FeaturedTournamentsWidget(featured: featuredTournaments),
+                ),
+                if (_worker != null && !isKidMode)
+                  _EditableWidget(
+                    widget: HomeEditableWidget.blogCarousel,
+                    shouldShow: hasServerContent,
+                    child: _BlogCarouselWidget(blogPosts, _worker!),
+                  ),
+                _EditableWidget(
+                  widget: HomeEditableWidget.recentGames,
+                  shouldShow: true,
+                  child: RecentGamesWidget(
+                    recentGames: recentGames,
+                    nbOfGames: nbOfGames,
+                    user: null,
+                  ),
+                ),
+              ];
+            }
+
+            final content = ListView(
+              controller: homeScrollController,
+              children: [if (unreadLichessMessage) const _LichessMessageBanner(), ...widgets],
+            );
+
+            return FocusDetector(
+              onFocusLost: () {
+                _focusLostAt = DateTime.now();
+              },
+              onFocusRegained: () {
+                if (context.mounted && _focusLostAt != null) {
+                  final duration = DateTime.now().difference(_focusLostAt!);
+                  if (duration.inSeconds < 10) {
+                    return;
+                  }
+                  _refreshData(isOnline: isOnline);
+                }
+              },
+              child: _IsEditingHome(
+                isEditingWidgets: widget.editModeEnabled,
+                child: PlatformScaffold(
+                  appBar: widget.editModeEnabled
+                      ? PlatformAppBar(
+                          title: Text(context.l10n.mobileSettingsHomeWidgets),
+                          leading: const BackButton(),
+                          automaticallyImplyLeading: false,
+                        )
+                      : PlatformAppBar(
+                          title: Theme.of(context).platform == TargetPlatform.iOS
+                              ? AppBarLichessTitle(
+                                  iconSize:
+                                      Theme.of(context).textTheme.headlineSmall?.fontSize ?? 24,
+                                )
+                              : const AppBarLichessTitle(),
+                          centerTitle: false,
+                          titleTextStyle: Theme.of(context).platform == TargetPlatform.iOS
+                              ? Theme.of(context).textTheme.headlineSmall
+                              : null,
+                          actions: const [_ChallengeScreenButton(), AccountMenuButton()],
+                        ),
+                  body: widget.editModeEnabled
+                      ? content
+                      : HapticRefreshIndicator(
+                          edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
+                              ? MediaQuery.paddingOf(context).top + kToolbarHeight
+                              : 0.0,
+                          key: _refreshKey,
+                          onRefresh: () => _refreshData(isOnline: isOnline),
+                          child: content,
+                        ),
+                  bottomNavigationBar: widget.editModeEnabled
+                      ? BottomAppBar(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text(context.l10n.ok),
+                              ),
+                            ],
+                          ),
+                        )
+                      : null,
+                  floatingActionButton: widget.editModeEnabled || isTablet
+                      ? null
+                      : const FloatingPlayButton(),
+                  bottomSheet: widget.editModeEnabled ? null : const OfflineBanner(),
+                ),
+              ),
+            );
+          },
+          error: (_, _) => const CenterLoadingIndicator(),
+          loading: () => const CenterLoadingIndicator(),
         );
-      },
-      error: (_, _) => const CenterLoadingIndicator(),
-      loading: () => const CenterLoadingIndicator(),
-    );
   }
 
-  Future<void> _refreshData({required bool isOnline}) {
-    return Future.wait([
-      ref.refresh(myRecentGamesProvider.future),
-      if (isOnline) ref.refresh(challengesProvider.future),
-      if (isOnline) ref.refresh(unreadMessagesProvider.future),
-      if (isOnline) ref.refresh(accountProvider.future),
-      if (isOnline) ref.refresh(ongoingGamesProvider.future),
-      if (isOnline) ref.refresh(featuredTournamentsProvider.future),
-      if (isOnline) ref.refresh(followingCarouselProvider.future),
-    ]);
+  Future<void> _refreshData({required bool isOnline}) async {
+    try {
+      await Future.wait([
+        ref.refresh(myRecentGamesProvider.future),
+        if (isOnline) ref.refresh(challengesProvider.future),
+        if (isOnline) ref.refresh(unreadMessagesProvider.future),
+        if (isOnline) ref.refresh(accountProvider.future),
+        if (isOnline) ref.refresh(ongoingGamesProvider.future),
+        if (isOnline) ref.refresh(featuredTournamentsProvider.future),
+        if (isOnline) ref.refresh(followingCarouselProvider.future),
+      ]);
+    } catch (_) {
+      // Refreshing while the server is unavailable is expected to fail. Each
+      // provider surfaces its own error, and the failed responses are what keep
+      // the server status up to date, so there is nothing to do here.
+    }
   }
 }
 
@@ -520,13 +561,7 @@ class _SignInWidget extends ConsumerWidget {
     return FilledButton(
       onPressed: switch (signInState) {
         MutationPending() => null,
-        _ => () {
-          // The error is surfaced via the [ref.listen] above; ignore the
-          // rethrown future so it does not become an unhandled exception.
-          signInMutation.run(ref, (tsx) async {
-            await tsx.get(authControllerProvider.notifier).signIn();
-          }).ignore();
-        },
+        _ => () => showSignInOptions(context, ref),
       },
       child: Text(context.l10n.signIn),
     );
@@ -922,7 +957,9 @@ class _ChallengeScreenButton extends ConsumerWidget {
     if (authUser == null) {
       return const SizedBox.shrink();
     }
-    final isOnlineAsync = ref.watch(onlineStatusProvider);
+    // The home tab shows the outage message, so it is clear why this is
+    // disabled when the server is down.
+    final connectionStatus = ref.watch(lichessConnectionStatusProvider);
     final challenges = ref.watch(challengesProvider);
 
     final inwardCount = challenges.value?.inward.length ?? 0;
@@ -932,27 +969,20 @@ class _ChallengeScreenButton extends ConsumerWidget {
       return const SizedBox.shrink();
     }
 
-    return switch (isOnlineAsync) {
-      AsyncData(value: final isOnline) => SemanticIconButton(
-        icon: Badge.count(
-          count: inwardCount,
-          isLabelVisible: inwardCount > 0,
-          child: const Icon(LichessIcons.crossed_swords, size: 18.0),
-        ),
-        semanticsLabel: context.l10n.preferencesNotifyChallenge,
-        onPressed: !isOnline
-            ? null
-            : () {
-                ref.invalidate(challengesProvider);
-                Navigator.of(context).push(ChallengeRequestsScreen.buildRoute());
-              },
+    return SemanticIconButton(
+      icon: Badge.count(
+        count: inwardCount,
+        isLabelVisible: inwardCount > 0,
+        child: const Icon(LichessIcons.crossed_swords, size: 18.0),
       ),
-      _ => SemanticIconButton(
-        icon: const Icon(LichessIcons.crossed_swords, size: 18.0),
-        semanticsLabel: context.l10n.preferencesNotifyChallenge,
-        onPressed: null,
-      ),
-    };
+      semanticsLabel: context.l10n.preferencesNotifyChallenge,
+      onPressed: connectionStatus != LichessConnectionStatus.online
+          ? null
+          : () {
+              ref.invalidate(challengesProvider);
+              Navigator.of(context).push(ChallengeRequestsScreen.buildRoute());
+            },
+    );
   }
 }
 

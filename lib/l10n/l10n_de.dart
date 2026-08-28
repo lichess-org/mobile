@@ -70,7 +70,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Du musst eingeloggt sein, um diese Seite anzuzeigen.';
 
   @override
-  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+  String get mobileNbOfflinePuzzles => 'Offline-Aufgaben';
 
   @override
   String get mobileNewGame => 'Neue Partie';
@@ -305,40 +305,40 @@ class AppLocalizationsDe extends AppLocalizations {
   String get mobilePerfShortRapid => 'Rapid';
 
   @override
-  String get mobilePerfShortClassical => 'Classical';
+  String get mobilePerfShortClassical => 'Klassisch';
 
   @override
-  String get mobilePerfShortCorrespondence => 'Corresp.';
+  String get mobilePerfShortCorrespondence => 'Korresp.';
 
   @override
-  String get mobilePerfShortFromPosition => 'From Pos.';
+  String get mobilePerfShortFromPosition => 'Stellung';
 
   @override
   String get mobilePerfShortChess960 => '960';
 
   @override
-  String get mobilePerfShortAntichess => 'Antichess';
+  String get mobilePerfShortAntichess => 'Anti';
 
   @override
   String get mobilePerfShortKingOfTheHill => 'KotH';
 
   @override
-  String get mobilePerfShortThreeCheck => '3check';
+  String get mobilePerfShortThreeCheck => '3Schach';
 
   @override
-  String get mobilePerfShortAtomic => 'Atomic';
+  String get mobilePerfShortAtomic => 'Atom';
 
   @override
   String get mobilePerfShortHorde => 'Horde';
 
   @override
-  String get mobilePerfShortRacingKings => 'Racing';
+  String get mobilePerfShortRacingKings => 'Rennen';
 
   @override
   String get mobilePerfShortCrazyhouse => 'Crazy';
 
   @override
-  String get mobilePerfShortPuzzle => 'Puzzle';
+  String get mobilePerfShortPuzzle => 'Aufgabe';
 
   @override
   String get variantStandard => 'Standard';
@@ -767,6 +767,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get arenaRankAvgHelp => 'Der Platzierungs-Durchschnitt ist ein Prozentwert deiner Platzierungen. Niedriger ist besser.\n\nEin Beispiel: Wenn man in einem Turnier von 100 Spielern Platz 3 erreicht hat = Top 3%. In einem Turnier mit 1000 Spielern den Rang 10 zu erreichen = Top 1%.';
 
   @override
+  String get arenaRankAverageHelp => 'Dein Tabellenplatz-Durchschnitt repräsentiert deine typische Tabellenplazierung im Verhältnis zur Gesamtzahl der Spieler in jedem Turnier.\nDas ist ein Maß für deine Turnierleistung, nicht deiner allgemeine Spielstärke.\n\nZum Beispiel bedeutet ein Tabellenplatz-Durchschnitt von 3% typischerweise das Erreichen der Top 3% (also 30. Platz von 1.000 Spielern).';
+
+  @override
   String get arenaMedians => 'Medianwerte';
 
   @override
@@ -922,6 +925,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get broadcastDefinitivelyDeleteTournament => 'Lösche definitiv das gesamte Turnier, alle seine Runden und Partien.';
+
+  @override
+  String get broadcastPermanentlyDeleteTournament => 'Dieses Turnier dauerhaft löschen, einschließlich aller Runden und Partien?';
 
   @override
   String get broadcastShowScores => 'Punktestand der Spieler basierend auf Spielergebnissen anzeigen';
@@ -1613,10 +1619,19 @@ class AppLocalizationsDe extends AppLocalizations {
   String get preferencesNotifyInboxMsg => 'Neue Nachricht im Posteingang';
 
   @override
+  String get preferencesNotifyDirectMessage => 'Neue Direktnachricht';
+
+  @override
   String get preferencesNotifyForumMention => 'Forenkommentar erwähnt dich';
 
   @override
+  String get preferencesNotifyForumMentions => 'Forumserwähnungen';
+
+  @override
   String get preferencesNotifyInvitedStudy => 'Einladung zu Studie';
+
+  @override
+  String get preferencesNotifyStudyInvites => 'Einladungen zu Studien';
 
   @override
   String get preferencesNotifyGameEvent => 'Neuigkeiten in Fernschachpartie';
@@ -1628,7 +1643,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Turnier beginnt bald';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Übertragungen, die du abonniert hast';
+  String get preferencesNotifyTournamentStartReminders => 'Turnierstart-Erinnerungen';
+
+  @override
+  String get preferencesNotifyBroadcasts => 'Übertragungen';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Zeit in Fernschachpartie neigt sich dem Ende zu';
@@ -2157,6 +2175,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Eine Taktik, die die Schachregel \"en passant\" einbezieht, bei der ein Bauer einen gegnerischen Bauer schlagen kann, der an ihm mit seinem Doppelschritt aus der Ausgangsstellung vorbeigegangen ist.';
 
   @override
+  String get puzzleThemeEnPassantAdjacentCaptureDescription => 'Eine Taktik, die die Schachregel \"en passant\" einbezieht, bei der ein Bauer einen gegnerischen Bauer schlagen kann, der an ihm mit seinem Doppelschritt aus der Ausgangsstellung vorbeigegangen ist.';
+
+  @override
   String get puzzleThemeEpauletteMate => 'Epaulette-Matt';
 
   @override
@@ -2175,6 +2196,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get puzzleThemeForkDescription => 'Ein Zug, bei dem die gezogene Figur zwei gegnerische Figuren auf einmal angreift.';
 
   @override
+  String get puzzleThemeForkOpposingPiecesDescription => 'Ein Zug, bei dem eine Figur zwei oder mehr gegnerische Figuren gleichzeitig angreift.';
+
+  @override
   String get puzzleThemeHangingPiece => 'Hängende Figur';
 
   @override
@@ -2185,6 +2209,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get puzzleThemeHookMateDescription => 'Matt mit Turm, Springer und Bauer, zusammen mit einem gegnerischen Bauern, der dessen König ein Fluchtfeld nimmt.';
+
+  @override
+  String get puzzleThemeHookMateOpposingPawnDescription => 'Schachmatt mit einem Turm, Springer und Bauern, bei dem ein gegnerischer Bauer den Fluchtweg des Königs blockiert.';
 
   @override
   String get puzzleThemeInterference => 'Unterbrechung';
@@ -3125,6 +3152,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get checkSpamFolder => 'Überprüfe auch dein Spam-Verzeichnis, sie könnte darin gelandet sein. Falls dem so ist, markiere sie als kein Spam.';
 
   @override
+  String get checkSpamOrJunkFolder => 'Überprüfe deinen Spam- oder Junk-Ordner, falls du keine Bestätigungs-E-Mail erhälst. Stelle sicher, dass Nachrichten von lichess als sicher angezeigt werden und nicht als \"Spam\", so dass du über wichtige Nachrichten informiert bleibst.';
+
+  @override
   String sendEmailForAccountVerification(String param) {
     return 'Wenn du deine Bestätigungs-Mail nicht finden kannst, sende eine E-Mail an $param und wir bestätigen deinen Account.';
   }
@@ -3852,6 +3882,15 @@ class AppLocalizationsDe extends AppLocalizations {
   String get reply => 'Antworten';
 
   @override
+  String get reopen => 'Wieder öffnen';
+
+  @override
+  String get quote => 'Zitat';
+
+  @override
+  String get postEdited => 'bearbeitet';
+
+  @override
   String get message => 'Nachricht';
 
   @override
@@ -3886,6 +3925,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get reportProcessedFasterInEnglish => 'Ihr Bericht wird schneller bearbeitet, wenn er auf Englisch verfasst ist.';
+
+  @override
+  String get processReportFasterInEnglish => 'Wir können deinen Bericht schneller bearbeiten, wenn du auf Englisch schreibst.';
 
   @override
   String get error_provideOneCheatedGameLink => 'Bitte gib mindestens einen Link zu einem Spiel an, in dem betrogen wurde.';
@@ -4256,6 +4298,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get whenCreateSimul => 'Wenn du ein Simultan erstellst, spielst du mit mehreren Gegnern gleichzeitig.';
 
   @override
+  String get creatingASimul => 'Durch das Erstellen eines Simultans kannst du gleichzeitig gegen mehrere Gegner spielen.';
+
+  @override
   String get simulVariantsHint => 'Wurden mehrere Varianten gewählt, kann jeder Spieler sich eine Variante aussuchen.';
 
   @override
@@ -4568,6 +4613,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get background => 'Hintergrund';
 
   @override
+  String get theme => 'Thema';
+
+  @override
   String get light => 'Hell';
 
   @override
@@ -4577,7 +4625,13 @@ class AppLocalizationsDe extends AppLocalizations {
   String get transparent => 'Transparent';
 
   @override
+  String get picture => 'Bild';
+
+  @override
   String get deviceTheme => 'Mit Gerät synchronisieren';
+
+  @override
+  String get roundness => 'Rundheit';
 
   @override
   String get backgroundImageUrl => 'Hintergrundbild-URL:';
@@ -4995,9 +5049,6 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String get someoneYouReportedWasBanned => 'Jemand, den du gemeldet hast, wurde gebannt';
-
-  @override
   String get congratsYouWon => 'Glückwunsch, du hast gewonnen!';
 
   @override
@@ -5096,6 +5147,11 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
+  String youCanFormatTextUsing(String param) {
+    return 'Du kannst Text mittels $param formatieren.';
+  }
+
+  @override
   String get embedsAvailable => 'Füge eine Partie-URL oder eine Studienkapitel-URL ein, um sie einzubetten.';
 
   @override
@@ -5115,6 +5171,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get navigateMoveTree => 'Durch den Zugbaum navigieren';
+
+  @override
+  String get moveListNavigation => 'Zuglisten-Navigation';
 
   @override
   String get mouseTricks => 'Maus-Tricks';
@@ -5167,7 +5226,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get resignTheGame => 'Partie aufgeben';
 
   @override
-  String get youCantStartNewGame => 'Du kannst keine neue Partie starten, bevor diese beendet ist.';
+  String get youCantStartNewGame => 'Du kannst keine neue Partie starten, während du am Zug bist.';
 
   @override
   String get since => 'Seit';
@@ -6533,6 +6592,9 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
+  String get teamTeam => 'Team';
+
+  @override
   String get teamIncorrectEntryCode => 'Falscher Beitrittscode.';
 
   @override
@@ -6561,7 +6623,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get timeagoJustNow => 'in Kürze';
 
   @override
-  String get timeagoRightNow => 'vor Kurzem';
+  String get timeagoRightNow => 'gerade eben';
 
   @override
   String get timeagoCompleted => 'abgeschlossen';

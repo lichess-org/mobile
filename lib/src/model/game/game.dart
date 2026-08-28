@@ -24,6 +24,10 @@ part 'game.g.dart';
 
 final _dateFormat = DateFormat('yyyy.MM.dd');
 
+/// Clamps negative durations to zero, so that lag compensation cannot produce a negative move
+/// time.
+Duration _atLeastZero(Duration duration) => duration < Duration.zero ? Duration.zero : duration;
+
 /// Common interface for all games.
 abstract mixin class BaseGame {
   StringId get id;
@@ -95,6 +99,27 @@ abstract mixin class BaseGame {
   PlayersAnalysis? get playersAnalysis => white.analysis != null && black.analysis != null
       ? (white: white.analysis!, black: black.analysis!)
       : null;
+
+  /// The time spent on each move, in ply order.
+  ///
+  /// Derived from [clocks]: the time spent on a move is the clock the player had left after their
+  /// previous move, plus the increment, minus the clock they have left after this one. Each side's
+  /// first move is reported as [Duration.zero], since the clock is not running before it. This
+  /// matches lila's own derivation in `GameExt.computeMoveTimes`.
+  ///
+  /// Returns an empty list for games without clock data (correspondence, unclocked games and most
+  /// PGN imports).
+  IList<Duration> get moveTimes {
+    final gameClocks = clocks;
+    if (gameClocks == null || gameClocks.isEmpty) {
+      return const IListConst<Duration>([]);
+    }
+    final increment = meta.clock?.increment ?? Duration.zero;
+    return IList([
+      for (var i = 0; i < gameClocks.length; i++)
+        if (i < 2) Duration.zero else _atLeastZero(gameClocks[i - 2] + increment - gameClocks[i]),
+    ]);
+  }
 
   /// Converts the game to a tree representation
   Root makeTree() {
@@ -275,6 +300,9 @@ enum GameSource {
   unknown;
 
   static final nameMap = IMap(GameSource.values.asNameMap());
+
+  /// Whether the game was imported on lichess, and thus not played on the site.
+  bool get isImport => this == GameSource.import || this == GameSource.importLive;
 }
 
 enum GameRule {

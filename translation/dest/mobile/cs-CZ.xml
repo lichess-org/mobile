@@ -19,6 +19,7 @@
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Domů</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Streameři</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Pro zobrazení této stránky musíte být přihlášeni.</string>
+  <string name="nbOfflinePuzzles" comment="Label for the puzzle setting that controls how many puzzles are downloaded and kept available for offline play.">Offline úlohy</string>
   <string name="newGame" comment="New game button in OTB and play against offline computer features">Nová hra</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Žádné výsledky</string>
   <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Vezmi prosím na vědomí, že všechny funkce z původní aplikace nebo webové stránky nejsou momentálně k dispozici. Funkce však neustále přidáváme.</string>
@@ -57,8 +58,10 @@
   <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">Klikni nebo přetáhni</string>
   <string name="settingsPieceShiftMethodTapTwoSquares" comment="A value of piece shift method settings entry.">Kliknout na dva pole</string>
   <string name="settingsShapeDrawing" comment="Entry in the settings.">Kreslení tvarů</string>
+  <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.">Pomocí dvou prstů kreslete tvary: podržte jeden prst na prázdném poli a tahem druhého prstu nakreslete tvar.</string>
   <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Zobrazit okraj</string>
   <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Odezva při klepnutí</string>
+  <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Je-li zapnuto, zařízení po tahu nebo braní figury krátce zavibruje.</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Nastavení</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Sdílet PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Sdílet URL hry</string>
@@ -76,11 +79,28 @@
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Sledovat</string>
   <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">Vítejte v aplikaci Lichess!</string>
   <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">Zobrazit hru</string>
+  <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">Tip: Můžete přidat další widgety na domovskou obrazovku nebo odebrat ty, které nepotřebujete!</string>
+  <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">Zavřít</string>
   <string name="customizeButton" comment="Text of a button, so translation should be short.">Přizpůsobit</string>
   <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">Skrýt zobrazování hrozby</string>
+  <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word">Dokončené</string>
   <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">Přejít na moji stránku</string>
   <string name="displayModeCompact" comment="">Kompaktní</string>
+  <string name="displayModeDetailed" comment="">Podrobné</string>
+  <string name="openingExplorerNotAvailableOffline" comment="">Průzkumník otevření není dostupný offline.</string>
   <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">Byla vytvořena výzva: Budete upozorněni, až hra začne.\nMůžete se k ní dostat z domovské obrazovky.</string>
   <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Předchozí</string>
   <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">Nebo nahrajte soubor PGN</string>
+  <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">Dobrý tah, ale je i lepší</string>
+  <string name="perfShortBullet" comment="Short label for the Bullet chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Bullet</string>
+  <string name="perfShortBlitz" comment="Short label for the Blitz chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Blitz</string>
+  <string name="perfShortRapid" comment="Short label for the Rapid chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Rapid</string>
+  <string name="perfShortClassical" comment="Short label for the Classical chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Klasické</string>
+  <string name="perfShortCorrespondence" comment="Short label for the Correspondence chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Koresp.</string>
+  <string name="perfShortFromPosition" comment="Short label for the From Position chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Z pozice.</string>
+  <string name="perfShortAntichess" comment="Short label for the Antichess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Antichess</string>
+  <string name="perfShortThreeCheck" comment="Short label for the Three-check performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">3šachy</string>
+  <string name="perfShortAtomic" comment="Short label for the Atomic performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Atomové</string>
+  <string name="perfShortHorde" comment="Short label for the Horde performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Horde</string>
+  <string name="perfShortPuzzle" comment="Short label for puzzle performance. Used in compact UI such as perf cards, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Úlohy</string>
 </resources>

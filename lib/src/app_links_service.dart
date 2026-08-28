@@ -33,7 +33,7 @@ import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:linkify/linkify.dart';
+import 'package:lichess_mobile/src/widgets/rich_link_text.dart';
 import 'package:logging/logging.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -420,7 +420,7 @@ class AppLinksService {
 
   static const kLichessLinkifiers = [UrlLinkifier(), EmailLinkifier(), UserTagLinkifier()];
 
-  /// Handles link clicks in Linkify widgets throughout the app.
+  /// Handles link clicks in RichLinkText widgets throughout the app.
   Future<void> onLinkifyOpen(BuildContext context, LinkableElement link) async {
     if (link is UrlElement && link.url.startsWith(RegExp('https?:\\/\\/$kLichessHost'))) {
       // Handle Lichess links specifically

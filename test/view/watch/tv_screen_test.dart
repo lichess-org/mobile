@@ -1,6 +1,5 @@
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -10,6 +9,7 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../example_data.dart';
 import '../../model/game/game_socket_example_data.dart';

@@ -10,7 +10,15 @@ import 'package:lichess_mobile/src/model/settings/log_preferences.dart';
 import 'package:lichess_mobile/src/utils/lru_list.dart';
 import 'package:logging/logging.dart';
 
-const _loggersToShowInTerminal = {'HttpClient', 'Socket', 'EvaluationService'};
+const _loggersToShowInTerminal = {'HttpClient', 'Socket', 'EvaluationService', 'Stockfish'};
+
+/// Loggers whose severe records are worth a non-fatal Crashlytics report on their own.
+///
+/// The engine plugin logs the native diagnostics it can see — the lifecycle phase a start stalled
+/// in, the reason a write to the engine failed — and none of that reaches the app any other way.
+/// [EvaluationService] is deliberately absent: it reports its own failures through
+/// `reportEngineFailure`, with the flavor, variant and diagnostics attached as custom keys.
+const _loggersReportedToCrashlytics = {'Stockfish'};
 
 /// Provides an instance of [AppLogService] using Riverpod.
 final appLogServiceProvider = Provider<AppLogService>(
@@ -56,14 +64,20 @@ class AppLogService {
         if (_loggersToShowInTerminal.contains(record.loggerName) &&
             record.level >= Level.FINE &&
             !Platform.environment.containsKey('FLUTTER_TEST')) {
-          debugPrint('[${record.loggerName}] ${record.message} ${record.error}');
+          debugPrint(
+            '[${record.loggerName}] ${record.message}${record.error != null ? ' (${record.error})' : ''}',
+          );
         }
       } else {
-        if (record.loggerName == 'Stockfish' && record.level >= Level.SEVERE) {
-          // help debugging engine in error state issues in production
+        if (_loggersReportedToCrashlytics.contains(record.loggerName) &&
+            record.level >= Level.SEVERE) {
+          // Help debugging engine failures in production. The message carries the diagnostics, so
+          // it goes in as the reason, which Crashlytics shows on the report itself.
           LichessBinding.instance.firebaseCrashlytics.recordError(
-            record.message,
+            record.error ?? record.message,
             record.stackTrace,
+            reason: '[${record.loggerName}] ${record.message}',
+            fatal: false,
           );
         }
       }

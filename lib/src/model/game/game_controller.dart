@@ -126,6 +126,10 @@ class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> 
   @override
   bool get chatIsPublic => false;
 
+  @protected
+  @override
+  Side? get chatPlayerSide => state.value?.game.youAre;
+
   @override
   Future<GameState> build() async {
     _socketClient = _openSocket();
@@ -144,10 +148,20 @@ class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> 
       _onFullReload = null;
     });
 
+    // The initial 'full' event is awaited through the controller's own subscription, so that
+    // cancelling it on dispose always releases the socket client. A `stream.firstWhere` would add a
+    // second listener that outlives the controller when the event never arrives (socket unable to
+    // connect), keeping the client alive and reconnecting in the background forever.
+    final fullEventCompleter = Completer<SocketEvent>();
     _socketSubscription?.cancel();
-    _socketSubscription = _socketClient.stream.listen(handleSocketEvent);
+    _socketSubscription = _socketClient.stream.listen((event) {
+      handleSocketEvent(event);
+      if (event.topic == 'full' && !fullEventCompleter.isCompleted) {
+        fullEventCompleter.complete(event);
+      }
+    });
 
-    final rawFullEvent = await _socketClient.stream.firstWhere((e) => e.topic == 'full');
+    final rawFullEvent = await fullEventCompleter.future;
     final fullEvent = GameFullEvent.fromJson(rawFullEvent.data as Map<String, dynamic>);
     _socketClient.version = fullEvent.socketEventVersion;
 
@@ -596,9 +610,10 @@ class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> 
 
   /// Move feedback while playing
   void _playMoveFeedback(SanMove sanMove, {bool skipAnimationDelay = false}) {
-    final animationDuration = ref.read(boardPreferencesProvider).pieceAnimationDuration;
-
-    final delay = animationDuration ~/ 2;
+    final pieceAnimationDuration = state.value?.hasPieceAnimation == true
+        ? ref.read(boardPreferencesProvider).pieceAnimationDuration
+        : Duration.zero;
+    final delay = pieceAnimationDuration ~/ 2;
 
     if (skipAnimationDelay || delay <= Duration.zero) {
       _moveFeedback(sanMove);
@@ -1196,6 +1211,9 @@ sealed class GameState with _$GameState, ChatMixinState {
       Zen.gameAuto => true,
     };
   }
+
+  /// Whether piece animations are enabled for this game. Animations are disabled for bullet and ultrabullet games.
+  bool get hasPieceAnimation => game.meta.speed != .bullet && game.meta.speed != .ultraBullet;
 
   bool get canPremove => game.meta.speed != Speed.correspondence;
   bool get canAutoQueen => autoQueenSettingOverride ?? (game.prefs?.autoQueen == AutoQueen.always);

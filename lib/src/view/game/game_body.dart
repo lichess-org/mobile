@@ -2,9 +2,8 @@ import 'dart:async';
 
 import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
@@ -31,6 +30,7 @@ import 'package:lichess_mobile/src/view/game/game_loading_board.dart';
 import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/view/game/game_result_dialog.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
+import 'package:lichess_mobile/src/view/game/game_settings.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board.dart';
@@ -41,6 +41,7 @@ import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 typedef LoadingParam = ({Variant variant, String? fen, Move? lastMove, Side? orientation});
@@ -414,9 +415,9 @@ class _PlayableGameBoardState extends ConsumerState<_PlayableGameBoard> {
     final topSide = topPlayerIsBlack ? Side.black : Side.white;
     final bottomSide = topPlayerIsBlack ? Side.white : Side.black;
 
-    final animationDuration = shell.speed == Speed.ultraBullet || shell.speed == Speed.bullet
-        ? Duration.zero
-        : boardPrefs.pieceAnimationDuration;
+    final animationDuration = shell.hasPieceAnimation
+        ? boardPrefs.pieceAnimationDuration
+        : Duration.zero;
 
     return FocusDetector(
       onFocusRegained: () {
@@ -479,7 +480,7 @@ class _PlayableGameBoardState extends ConsumerState<_PlayableGameBoard> {
 typedef _ShellData = ({
   Variant variant,
   Side youAre,
-  Speed speed,
+  bool hasPieceAnimation,
   bool zen,
   bool playable,
   bool canPremove,
@@ -497,7 +498,7 @@ _ShellData? _shellOf(AsyncValue<GameState> state) {
   return (
     variant: s.game.meta.variant,
     youAre: s.game.youAre ?? Side.white,
-    speed: s.game.meta.speed,
+    hasPieceAnimation: s.hasPieceAnimation,
     zen: s.isZenModeActive,
     playable: s.game.playable,
     canPremove: s.canPremove,
@@ -883,19 +884,20 @@ class _GameBottomBar extends ConsumerWidget {
       context: context,
       actions: [
         BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.settingsSettings),
+          onPressed: () => showModalBottomSheet<void>(
+            context: context,
+            isDismissible: true,
+            isScrollControlled: true,
+            builder: (_) => GameSettings(id: id),
+          ),
+        ),
+        BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.flipBoard),
           onPressed: () {
             ref.read(isBoardTurnedProvider.notifier).toggle();
           },
         ),
-        if (gameState.game.playable && gameState.game.meta.speed == Speed.correspondence ||
-            gameState.game.finished)
-          BottomSheetAction(
-            makeLabel: (context) => Text(context.l10n.analysis),
-            onPressed: () {
-              Navigator.of(context).push(AnalysisScreen.buildRoute(gameState.analysisOptions));
-            },
-          ),
         if (gameState.game.abortable)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.abortGame),
@@ -1039,6 +1041,14 @@ class _GameBottomBar extends ConsumerWidget {
             makeLabel: (context) => Text(context.l10n.backToTournament),
             onPressed: () {
               Navigator.of(context).push(TournamentScreen.buildRoute(gameState.tournament!.id));
+            },
+          ),
+        if (gameState.game.playable && gameState.game.meta.speed == Speed.correspondence ||
+            gameState.game.finished)
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.analysis),
+            onPressed: () {
+              Navigator.of(context).push(AnalysisScreen.buildRoute(gameState.analysisOptions));
             },
           ),
       ],

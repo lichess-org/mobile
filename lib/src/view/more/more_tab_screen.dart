@@ -1,6 +1,5 @@
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
@@ -28,6 +27,7 @@ import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MoreTabScreen extends ConsumerWidget {
@@ -66,7 +66,7 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
+    final isOnline = ref.watch(isDeviceOnlineProvider);
     final authUser = ref.watch(authControllerProvider);
 
     return ListTileTheme.merge(
@@ -210,7 +210,7 @@ class _AccountSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
+    final isOnline = ref.watch(isDeviceOnlineProvider);
     final account = ref.watch(accountProvider);
     final authUser = ref.watch(authControllerProvider);
     final kidMode = account.value?.kid ?? false;

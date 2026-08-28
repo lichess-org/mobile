@@ -46,9 +46,17 @@ void main() {
       );
     });
 
-    test('still retries a puzzle batch download (GET /api/puzzle/batch)', () {
-      // selectBatch is a plain download, not the rate-limited solve path
-      expect(shouldRetryOn429(response(429, method: 'GET', path: '/api/puzzle/batch/mix')), isTrue);
+    test('does not retry a puzzle batch download (GET /api/puzzle/batch)', () {
+      // Batch downloads are issued once per angle, so retrying doubles a burst the server has just
+      // refused.
+      expect(
+        shouldRetryOn429(response(429, method: 'GET', path: '/api/puzzle/batch/mix')),
+        isFalse,
+      );
+      expect(
+        shouldRetryOn429(response(429, method: 'GET', path: '/api/puzzle/batch/advancedPawn')),
+        isFalse,
+      );
     });
   });
 

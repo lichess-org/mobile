@@ -907,7 +907,6 @@
   <string name="xInvitedYouToY">%1$s നിങ്ങളെ %2$s ഇലേക്കു ക്ഷണിക്കുന്നു.</string>
   <string name="youAreNowPartOfTeam">നിങ്ങളിപ്പോൾ ടീമിന്റെ ഭാഗമായി.</string>
   <string name="youHaveJoinedTeamX">നിങ്ങൾ %1$s ഇൽ ചേർന്നു.</string>
-  <string name="someoneYouReportedWasBanned">നിങ്ങൾ റിപ്പോർട്ടുചെയ്‌ത ഒരു കളിക്കാരനെ നിരോധിച്ചിരിക്കുന്നു</string>
   <string name="congratsYouWon">അഭിനന്ദനങ്ങൾ, നിങ്ങൾ ജയിച്ചു!</string>
   <string name="gameVsX">%1$s ഇന് എതിരെയുള്ള കളി</string>
   <string name="resVsX">%1$s വസ് %2$s</string>
@@ -954,7 +953,6 @@
   <string name="gameInProgress">താങ്ങൾ ഇപ്പോഴ് %s-ിന്റെ കൂടെ കളിക്കുന്നുണ്ട്.</string>
   <string name="abortTheGame">കളി കയ്യൊഴിഞ്ഞ് പോവുക</string>
   <string name="resignTheGame">കളി വഴങ്ങികൊടുക്കുക</string>
-  <string name="youCantStartNewGame">ഈ കളി പൂർത്തികരിക്കുന്നവരെ താങ്ങൾക്കു് പുതിയ കളി തുടങ്ങാൻ സാധിക്കത്തില്ല.</string>
   <string name="since">മുതൽ</string>
   <string name="until">വരേ</string>
   <string name="lichessDbExplanation">Lichess-ൽ കളിച്ചതുള്ള റേറ്റിങ്ങുള്ള കളികൾ</string>
