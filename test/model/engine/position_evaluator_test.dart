@@ -4,7 +4,6 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/engine_factory.dart';
@@ -965,22 +964,16 @@ void main() {
       fakeAsync((async) {
         final service = readEvaluator(container);
 
-        LocalEval? eval;
-        bool answered = false;
-        service.findEval(makeWork()).then((value) {
-          answered = true;
-          eval = value;
-        });
+        expect(service.evaluate(makeWork()), isNotNull);
         async.flushMicrotasks();
-        expect(answered, isFalse);
+        expect(service.currentWork, isNotNull);
 
         async.elapse(kEngineCreateTimeout + const Duration(seconds: 1));
         async.flushMicrotasks();
 
-        // Nothing is going to answer the work that was waiting on this engine, so its caller is
-        // released rather than left waiting forever.
-        expect(answered, isTrue);
-        expect(eval, isNull);
+        // Nothing is going to answer the work that was waiting on this engine, so it is let go of
+        // rather than left pending against an engine that is never coming back.
+        expect(service.currentWork, isNull);
         expect(service.state.lifecycle, EngineLifecycle.error);
 
         // The engine is gone for the rest of the process's life, so later work is refused on the
@@ -1793,19 +1786,6 @@ void main() {
         expect(filtered.eval, isNull);
         expect(filtered.lifecycle, EngineLifecycle.initial);
       });
-    });
-  });
-
-  group('PositionEvaluator.findEval', () {
-    test('findEval returns evaluation result', () async {
-      final container = await makeContainer();
-      final service = readEvaluator(container);
-
-      final work = makeWork(searchTime: const Duration(seconds: 1));
-      final eval = await service.findEval(work);
-
-      expect(eval, isNotNull);
-      expect(eval!.bestMove, const NormalMove(from: Square.e2, to: Square.e4));
     });
   });
 }

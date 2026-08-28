@@ -1819,90 +1819,64 @@ void main() {
       final gameState = ref.read(offlineComputerGameControllerProvider);
       expect(gameState.game.practiceMode, isTrue);
     });
+    testWidgets('a move outside the analysed lines is judged on its own analysis', (tester) async {
+      // The slow path. The analysis running while the player thinks holds two lines, and e4 is not
+      // one of the two the fake engine offers — so the position the move led to has no eval yet and
+      // has to be analysed on its own before there is anything to judge the move by.
+      fakeEngine = PracticeModeEngine(initialEvalCp: 50, evalShiftCp: -60);
 
-    // testWidgets('Practice mode shows verdict after playing a move', (tester) async {
-    //   // Use a fake stockfish that returns an inaccuracy (-60cp shift)
-    //   fakeEngine = PracticeModeEngine(initialEvalCp: 50, evalShiftCp: -60);
+      late WidgetRef ref;
+      final gameStorage = MockOfflineComputerGameStorage();
+      when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
+      when(() => gameStorage.save(any())).thenAnswer((_) async {});
 
-    //   late WidgetRef ref;
-    //   final gameStorage = MockOfflineComputerGameStorage();
-    //   when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: Consumer(
+          builder: (context, r, _) {
+            ref = r;
+            return const OfflineComputerGameScreen();
+          },
+        ),
+        overrides: {
+          offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
 
-    //   final app = await makeTestProviderScopeApp(
-    //     tester,
-    //     home: Consumer(
-    //       builder: (context, r, _) {
-    //         ref = r;
-    //         return const OfflineComputerGameScreen();
-    //       },
-    //     ),
-    //     overrides: {
-    //       offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
-    //         (_) => gameStorage,
-    //       ),
-    //     },
-    //   );
-    //   await tester.pumpWidget(app);
-    //   await tester.pump(const Duration(milliseconds: 50));
+      final practiceSwitch = find.descendant(
+        of: find.ancestor(of: find.text('Practice mode'), matching: find.byType(SwitchSettingTile)),
+        matching: find.byType(Switch),
+      );
+      await tester.tap(practiceSwitch);
+      await tester.pump();
 
-    //   // Enable practice mode
-    //   final practiceSwitch = find.descendant(
-    //     of: find.ancestor(of: find.text('Practice mode'), matching: find.byType(SwitchListTile)),
-    //     matching: find.byType(Switch),
-    //   );
-    //   await tester.tap(practiceSwitch);
-    //   await tester.pump();
+      await selectSide(tester, Side.white);
+      await tester.tap(find.text('Play'));
+      await tester.pumpAndSettle();
 
-    //   // Start game as white
-    //   await selectSide(tester, Side.white);
-    //   await tester.tap(find.text('Play'));
-    //   await tester.pump();
-    //   await tester.pump(const Duration(milliseconds: 100));
+      await playMove(tester, 'e2', 'e4');
+      await tester.pump(const Duration(seconds: 1));
+      await tester.pumpAndSettle();
 
-    //   // Verify the game started
-    //   expect(find.text('Practice with computer'), findsOneWidget);
-    //   expect(find.byType(Chessboard), findsOneWidget);
+      final state = ref.read(offlineComputerGameControllerProvider);
+      expect(state.isEvaluatingMove, isFalse, reason: 'the verdict is in, one way or another');
 
-    //   // Check initial state
-    //   var state = ref.read(offlineComputerGameControllerProvider);
-    //   expect(state.game.practiceMode, isTrue);
+      final comment = state.game.steps
+          .map((step) => step.computerAnalysis?.practiceComment)
+          .nonNulls
+          .singleOrNull;
+      expect(comment, isNotNull, reason: 'the move was judged');
 
-    //   // Play a move (e2-e4)
-    //   await playMove(tester, 'e2', 'e4');
-    //   await tester.pump(const Duration(seconds: 3));
-
-    //   // After playing a move in practice mode, either:
-    //   // 1. Still evaluating (shows spinner), OR
-    //   // 2. Evaluation completed (shows verdict icon)
-    //   state = ref.read(offlineComputerGameControllerProvider);
-
-    //   // Print debug info
-    //   debugPrint('isEvaluatingMove: ${state.isEvaluatingMove}');
-    //   debugPrint('practiceComment: ${state.practiceComment}');
-    //   debugPrint('cachedWinningChances: ${state.cachedWinningChances}');
-
-    //   // The evaluation might complete instantly with fake stockfish
-    //   // Check that either evaluating state or verdict is shown
-    //   // Note: The localized text is "Evaluating your move ..." with spaces and ellipsis
-    //   final evaluatingText = find.textContaining('Evaluating your move');
-    //   final helpIcon = find.byIcon(Icons.help);
-    //   final errorIcon = find.byIcon(Icons.error);
-    //   final checkIcon = find.byIcon(Icons.check_circle);
-    //   final cancelIcon = find.byIcon(Icons.cancel);
-
-    //   final isEvaluating = evaluatingText.evaluate().isNotEmpty;
-    //   final hasVerdictIcon =
-    //       helpIcon.evaluate().isNotEmpty ||
-    //       errorIcon.evaluate().isNotEmpty ||
-    //       checkIcon.evaluate().isNotEmpty ||
-    //       cancelIcon.evaluate().isNotEmpty;
-
-    //   expect(
-    //     isEvaluating || hasVerdictIcon,
-    //     isTrue,
-    //     reason: 'Should show either evaluating state or verdict icon',
-    //   );
-    // });
+      // The engine only drops its eval by [evalShiftCp] on a search *after* the move, so a verdict
+      // that sees the drop is proof the position the move led to was analysed on its own rather
+      // than read off the lines the pre-move analysis already held.
+      expect(comment!.verdict, isNot(MoveVerdict.goodMove));
+    });
   });
 }
 

@@ -62,13 +62,16 @@ const _kPreMoveEvalWait = Duration(seconds: 4);
 /// How long the hints wait to become available before the spinner gives up.
 final _kHintWait = kPracticeMaxSearchTime + const Duration(seconds: 1);
 
-/// Min search time for a move evaluation in practice mode when the move is not in the pre-move PVs.
-const _kMoveEvalMinSearchTime = Duration(milliseconds: 1000);
-
 /// Max search time for a move evaluation in practice mode when the move is not in the pre-move PVs.
 ///
 /// We want a fast feedback here, and since multipv=1 the search should be fast.
 const _kMoveEvalMaxSearchTime = Duration(milliseconds: 2000);
+
+/// How long the verdict on such a move waits for that evaluation.
+///
+/// The search's own [_kMoveEvalMaxSearchTime] limit is what actually ends it; this only has to
+/// outlast that, so that giving up is the engine's decision and not a race between two clocks.
+final _kMoveEvalWait = _kMoveEvalMaxSearchTime + const Duration(seconds: 1);
 
 /// Extra breathing room after the configured piece animation before starting local engine work.
 const _kEngineMoveAnimationBuffer = Duration(milliseconds: 50);
@@ -87,7 +90,6 @@ final offlineComputerGameControllerProvider =
 class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   late SocketClient socketClient;
   StreamSubscription<SocketEvent>? _socketSubscription;
-  Timer? _getEvalTimer;
 
   /// What keeps the evaluator and the opponent — and through them, their engines — alive.
   ///
@@ -196,7 +198,6 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     _socketSubscription = socketClient.stream.listen(_handleSocketEvent);
     ref.onDispose(() {
       _socketSubscription?.cancel();
-      _getEvalTimer?.cancel();
       _analyser.dispose();
       _evaluatorSubscription?.close();
       _opponentSubscription?.close();
@@ -387,10 +388,6 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     // evaluated on its own.
     _logger.info('Move not in computed hints PVs, evaluating: ${move.uci}');
 
-    // On a variant that is the engine the analysis is running on, and a search started there
-    // supersedes it silently. Hand it over instead.
-    _analyser.yieldEngine();
-
     try {
       final stepsAfter = state.game.steps
           .skip(1)
@@ -401,11 +398,16 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
 
       final positionAfterMove = state.currentPosition;
 
-      final evalAfter = await _getEval(
-        workAfter,
-        minSearchTime: _kMoveEvalMinSearchTime,
-        depthThreshold: _kMoveEvalMinDepth,
-        tablebaseLookupPosition: positionAfterMove,
+      // The same three sources the analysis always runs against — the engine, a cloud eval, a
+      // tablebase lookup — asked for the position the move led to. [PracticeAnalyser.analyse]
+      // takes the engine over from whatever it was searching, so no hand-off is needed here.
+      _analyser.analyse(workAfter);
+      _raceTheSearch(workAfter);
+
+      final evalAfter = await _analyser.usableEval(
+        positionAfterMove,
+        minDepth: _kMoveEvalMinDepth,
+        timeout: _kMoveEvalWait,
       );
 
       if (!ref.mounted) return;
@@ -456,61 +458,6 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       initialPosition: state.game.initialPosition,
       steps: steps,
     );
-  }
-
-  /// Gets an evaluation by requesting at the same time the local engine and a cloud eval and optionnally doing a tablebase lookup.
-  ///
-  /// Returns the first eval that comes back with a valid score.
-  Future<ClientEval?> _getEval(
-    EvalWork work, {
-    int? depthThreshold,
-    Duration? minSearchTime,
-
-    /// Optional position for doing a tablebase lookup in parallel. If provided, the tablebase eval will be returned if it's conclusive and returned before the engine eval.
-    Position? tablebaseLookupPosition,
-  }) {
-    final evaluator = _evaluator;
-    final Completer<ClientEval?> completer = Completer();
-    // Fallback timer in case neither engine nor cloud eval return in time (should not happen for
-    // engine).
-    _getEvalTimer?.cancel();
-    _getEvalTimer = Timer(work.searchTime + const Duration(seconds: 3), () {
-      if (!completer.isCompleted) {
-        completer.complete(null);
-      }
-    });
-    evaluator.findEval(work, depthThreshold: depthThreshold, minSearchTime: minSearchTime).then((
-      eval,
-    ) {
-      if (!completer.isCompleted && eval != null) {
-        completer.complete(eval);
-      }
-    });
-
-    if (state.game.meta.variant == Variant.standard && work.position.ply < _kOpeningPlyThreshold) {
-      _getCloudEval(work, numEvalLines: work.multiPv).then((cloudEval) {
-        if (!completer.isCompleted && cloudEval != null) {
-          completer.complete(cloudEval);
-          if (evaluator.currentWork == work) {
-            evaluator.stop();
-          }
-        }
-      });
-    }
-    if (tablebaseLookupPosition != null) {
-      if (isTablebaseRelevant(tablebaseLookupPosition)) {
-        _fetchTablebaseEval(tablebaseLookupPosition).then((tablebaseEval) {
-          if (!completer.isCompleted && tablebaseEval != null) {
-            completer.complete(tablebaseEval);
-            if (evaluator.currentWork == work) {
-              evaluator.stop();
-            }
-          }
-        });
-      }
-    }
-
-    return completer.future;
   }
 
   void _handleSocketEvent(SocketEvent event) {

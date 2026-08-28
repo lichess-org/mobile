@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -118,6 +120,48 @@ void main() {
       await settleEvals();
 
       expect((await waiting)?.depth, greaterThanOrEqualTo(kPracticeUsableDepth));
+    });
+
+    test('waiters asking for different depths are served at their own depth', () async {
+      final container = await makeContainer();
+      final analyser = PracticeAnalyser(
+        evaluator: () => readEvaluator(container),
+        onEval: (_, _) {},
+      );
+      addTearDown(analyser.dispose);
+
+      analyser.analyse(makeWork());
+      await settleEvals();
+
+      // Judging a move played asks for more depth than unlocking a hint does, and both can be
+      // waiting on the same position at once.
+      ClientEval? shallow;
+      ClientEval? deep;
+      unawaited(
+        analyser
+            .usableEval(Chess.initial, timeout: const Duration(seconds: 5))
+            .then((eval) => shallow = eval),
+      );
+      unawaited(
+        analyser
+            .usableEval(
+              Chess.initial,
+              minDepth: kPracticeUsableDepth + 3,
+              timeout: const Duration(seconds: 5),
+            )
+            .then((eval) => deep = eval),
+      );
+
+      engine.emitDepthRange(toDepth: kPracticeUsableDepth);
+      await settleEvals();
+
+      expect(shallow?.depth, kPracticeUsableDepth);
+      expect(deep, isNull, reason: 'the deeper waiter is not served by an eval it did not ask for');
+
+      engine.emitDepthRange(toDepth: kPracticeUsableDepth + 3);
+      await settleEvals();
+
+      expect(deep?.depth, kPracticeUsableDepth + 3);
     });
 
     test('usableEval gives up with the best it has when the deadline passes', () async {

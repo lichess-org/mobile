@@ -205,60 +205,6 @@ class PositionEvaluator extends Notifier<EngineEvaluationState> {
     return evalStream.where((result) => result.$1 == work);
   }
 
-  /// Find the evaluation for the given [work].
-  ///
-  /// This will stop any current work and start a new evaluation. Last caller wins.
-  ///
-  /// Returns a [Future] that completes with the evaluation, or `null` if no evaluation
-  /// could be obtained (e.g. the engine fails).
-  ///
-  /// If provided, the evaluation will stop at [depthThreshold], if the [minSearchTime] has passed.
-  /// This allows for better evaluations in high end devices while still providing quick responses in low end devices.
-  /// Even if [depthThreshold] is not reached, the evaluation will still stop at [EvalWork.searchTime].
-  Future<LocalEval?> findEval(EvalWork work, {int? depthThreshold, Duration? minSearchTime}) async {
-    _setEval(null);
-
-    _logger.info(
-      'Finding evaluation at ply ${work.position.ply} with options: '
-      'multiPv=${work.multiPv}, cores=${work.threads}, hash=${work.hashSize}MB, '
-      'searchTime=${work.searchTime.inMilliseconds}ms, threatMode=${work.threatMode}',
-    );
-
-    _startWork(work);
-
-    LocalEval? finalEval;
-
-    try {
-      await for (final (_, eval)
-          in evalStream
-              .where((result) => result.$1 == work)
-              .timeout(work.searchTime + const Duration(milliseconds: 1000))) {
-        finalEval = eval;
-        // if depth threshold is reached quickly, let's still wait min search time (but skip for
-        // higher depths)
-        if ((eval.depth >= 25 || minSearchTime == null || eval.searchTime >= minSearchTime) &&
-            (depthThreshold != null && eval.depth >= depthThreshold)) {
-          stop();
-          break;
-        } else if (eval.searchTime >= work.searchTime) {
-          break;
-        }
-      }
-    } on TimeoutException {
-      if (state.currentWork == work) {
-        stop();
-      }
-    }
-
-    _logger.info(
-      'Final eval at ply ${work.position.ply}: '
-      'depth=${finalEval?.depth}, cp=${finalEval?.cp}, mate=${finalEval?.mate}, '
-      'nodes=${finalEval?.nodes}, time=${finalEval?.searchTime.inMilliseconds}ms',
-    );
-
-    return finalEval;
-  }
-
   /// The work being evaluated, if any.
   EvalWork? get currentWork => state.currentWork;
 

@@ -150,19 +150,27 @@ class PracticeAnalyser {
     _completeAll();
   }
 
-  /// The evaluation of [position] once it is at least [kPracticeUsableDepth] deep.
+  /// The evaluation of [position] once it is at least [minDepth] deep.
   ///
   /// Completes at once when it already is — which, with the analysis running throughout the
   /// player's turn, is the ordinary case. Otherwise it completes with the first eval that reaches
   /// the depth, or, when [timeout] passes first, with the best one reached by then (null if the
   /// search produced nothing at all).
   ///
+  /// [minDepth] defaults to [kPracticeUsableDepth], which is what unlocking a hint asks for.
+  /// Judging a move the player has already played is allowed to ask for more: nobody is waiting on
+  /// a board for it, and the verdict is worth more than the promptness.
+  ///
   /// The caller is expected to have [analyse]d the position: nothing here starts a search.
-  Future<ClientEval?> usableEval(Position position, {required Duration timeout}) {
+  Future<ClientEval?> usableEval(
+    Position position, {
+    required Duration timeout,
+    int minDepth = kPracticeUsableDepth,
+  }) {
     final known = _evals[position];
-    if (known != null && known.depth >= kPracticeUsableDepth) return Future.value(known);
+    if (known != null && known.depth >= minDepth) return Future.value(known);
 
-    final waiter = _Waiter();
+    final waiter = _Waiter(minDepth);
     (_waiters[position] ??= []).add(waiter);
 
     waiter.deadline = Timer(timeout, () {
@@ -196,12 +204,16 @@ class PracticeAnalyser {
   void _publish(Position position, ClientEval eval) {
     _evals[position] = eval;
     onEval(position, eval);
-    if (eval.depth < kPracticeUsableDepth) return;
-    final waiters = _waiters.remove(position);
+    final waiters = _waiters[position];
     if (waiters == null) return;
-    for (final waiter in waiters) {
+    // Only the waiters this eval is deep enough for: they do not all ask for the same depth, and
+    // one waiting on a deeper eval must stay waiting while a shallower one is served.
+    waiters.removeWhere((waiter) {
+      if (eval.depth < waiter.minDepth) return false;
       waiter.complete(eval);
-    }
+      return true;
+    });
+    if (waiters.isEmpty) _waiters.remove(position);
   }
 
   /// Stops the search, if this analyser started one. The engine is shared, so only its own work is
@@ -226,8 +238,13 @@ class PracticeAnalyser {
   }
 }
 
-/// Somebody waiting on a position reaching [kPracticeUsableDepth], and the deadline they gave it.
+/// Somebody waiting on a position reaching a depth, and the deadline they gave it.
 class _Waiter {
+  _Waiter(this.minDepth);
+
+  /// The depth this waiter is waiting for.
+  final int minDepth;
+
   final _completer = Completer<ClientEval?>();
 
   /// Cancelled when the wait ends another way, so that nothing is left ticking behind it.
