@@ -15,6 +15,7 @@ SearchRequest makeRequest({
   Duration searchTime = const Duration(seconds: 1),
   String? fenOverride,
   int multiPv = 1,
+  int hashSize = 16,
   bool newGame = false,
 }) => SearchRequest(
   initialPosition: Chess.initial,
@@ -23,6 +24,7 @@ SearchRequest makeRequest({
   limit: SearchLimit.movetime(searchTime),
   fenOverride: fenOverride,
   multiPv: multiPv,
+  hashSize: hashSize,
   options: options,
   newGame: newGame,
 );
@@ -176,6 +178,33 @@ void main() {
         );
       },
     );
+
+    test('the hash grows to the largest a search asks for and never shrinks again', () async {
+      // On a variant offline game the opponent and the evaluator share one engine and ask for
+      // different sizes on alternating moves. Honouring each one would rebuild the transposition
+      // table every hand-off, on the thread running the UCI loop, which is where an engine stops
+      // being able to read `quit`.
+      final transport = FakeTransport();
+      final engine = Engine(transport);
+      addTearDown(engine.dispose);
+      await pumpEventQueue();
+
+      // The opponent's turn: a small table.
+      await startSearch(engine, transport, makeRequest(hashSize: 48));
+      expect(transport.takeCommands(), contains('setoption name Hash value 48'));
+      transport.emit('bestmove e2e4');
+      await pumpEventQueue();
+
+      // The evaluator's turn: a larger one, which the engine does grow to.
+      await startSearch(engine, transport, makeRequest(hashSize: 144));
+      expect(transport.takeCommands(), contains('setoption name Hash value 144'));
+      transport.emit('bestmove e2e4');
+      await pumpEventQueue();
+
+      // Back to the opponent. The table it gets is the one already allocated, not a new one.
+      await startSearch(engine, transport, makeRequest(hashSize: 48));
+      expect(transport.takeCommands().join(' '), isNot(contains('Hash')));
+    });
 
     test("an option the engine did not declare is not sent on the engine's behalf", () async {
       // LC0 has no `Hash`, and sending it one is an `error Unknown option` on every search.

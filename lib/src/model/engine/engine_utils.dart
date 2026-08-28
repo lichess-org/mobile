@@ -15,6 +15,9 @@ final maxEngineCores = max(Platform.numberOfProcessors - 1, 1);
 /// board is being interacted with, rather than while the user waits for the opponent.
 final numberOfCoresForEvaluation = max(1, maxEngineCores - 1);
 
+/// How much of a device's RAM engines may hold, in MB, given its [physicalMemoryInMb].
+int engineMaxMemoryFor(int physicalMemoryInMb) => (physicalMemoryInMb / 16).ceil();
+
 const _nnueDownloadUrl = '$kLichessCDNHost/assets/lifat/nnue/';
 
 /// URL to download the latest big NNUE network.

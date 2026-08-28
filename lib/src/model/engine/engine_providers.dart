@@ -40,6 +40,26 @@ class EngineHolder extends AsyncNotifier<Engine> {
   Future<Engine> build() async {
     final engine = await ref.read(engineFactoryProvider).create(spec);
 
+    // The provider is autoDispose and starting an engine takes a moment, so the last watcher can
+    // go away while this is suspended — leaving one analysis screen, or switching to another
+    // engine, is enough. Riverpod has disposed the element by the time this resumes, every `ref`
+    // method below would throw, and the engine created above would be left running with nobody
+    // holding it: a native slot occupied for the rest of the process's life, which is what the
+    // plugin refuses the next engine over.
+    if (!ref.mounted) {
+      _logger.info('Nobody is waiting for $spec any more; disposing the engine that just started');
+      unawaited(engine.dispose());
+      throw StateError('The engine provider was disposed while $spec was starting');
+    }
+
+    // Registered before anything else can throw, so that from here on the engine has an owner
+    // whatever else happens in this build.
+    ref.onDispose(() {
+      // Fire and forget: the factory holds the slot until the engine has actually exited, and
+      // makes the next create wait for it.
+      unawaited(engine.dispose());
+    });
+
     // Only a working engine is worth holding on to: a failed one should be built again from
     // scratch by whoever asks next, not served from the cache for the length of the window.
     ref.cacheFor(kEngineDisposeDelay);
@@ -54,12 +74,6 @@ class EngineHolder extends AsyncNotifier<Engine> {
         state = AsyncError(failure, StackTrace.current);
       }),
     );
-
-    ref.onDispose(() {
-      // Fire and forget: the factory holds the slot until the engine has actually exited, and
-      // makes the next create wait for it.
-      unawaited(engine.dispose());
-    });
 
     return engine;
   }

@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/engine/engine_budget.dart';
+import 'package:lichess_mobile/src/model/engine/engine_utils.dart';
 
 void main() {
   group('EngineBudget', () {
@@ -79,6 +80,21 @@ void main() {
       expect(budget.threadsFor(3), 3);
       expect(budget.threadsFor(8), 3);
       expect(budget.threadsFor(0), 1);
+    });
+  });
+
+  group('engineMaxMemoryFor', () {
+    test('gives a small device a share of what it has', () {
+      expect(engineMaxMemoryFor(512), 32);
+      expect(engineMaxMemoryFor(1024), 64);
+      expect(engineMaxMemoryFor(2048), 128);
+    });
+
+    test('a capped budget still leaves both resident engines a usable table', () {
+      const budget = EngineBudget(maxMemoryInMb: 192, maxCores: 4);
+      expect(budget.soleHash, 192);
+      expect(budget.opponentHash, 48);
+      expect(budget.evaluatorHash, 144);
     });
   });
 }

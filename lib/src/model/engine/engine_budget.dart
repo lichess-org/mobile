@@ -35,6 +35,9 @@ class EngineBudget {
   const EngineBudget({required this.maxMemoryInMb, required this.maxCores});
 
   /// The whole memory budget for engines on this device, in MB.
+  ///
+  /// A share of the device's RAM under a hard cap — see [engineMaxMemoryFor] — so this is small
+  /// enough that handing all of it to one engine is safe.
   final int maxMemoryInMb;
 
   /// The most cores an engine may search on.
