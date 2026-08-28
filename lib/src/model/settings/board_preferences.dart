@@ -40,9 +40,9 @@ class BoardPreferences extends Notifier<BoardPrefs> with PreferencesStorage<Boar
     return save(state.copyWith(pieceSet: pieceSet));
   }
 
-  Future<void> toggleEnable3dAssets(bool enable3dAssets) {
-    return save(
-      state.copyWith(enable3dAssets: enable3dAssets));
+  Future<void> toggleEnable3dAssets(bool enable3dAssets) async {
+    state = state.copyWith(enable3dAssets: enable3dAssets);
+    await save(state);
   }
 
   Future<void> setBoardTheme(BoardTheme boardTheme) async {
@@ -144,6 +144,7 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
   const factory BoardPrefs({
     @JsonKey(defaultValue: PieceSet.cburnett, unknownEnumValue: PieceSet.cburnett)
     required PieceSet pieceSet,
+    @JsonKey(defaultValue: false)
     required bool enable3dAssets,
     @JsonKey(defaultValue: BoardTheme.brown, unknownEnumValue: BoardTheme.brown)
     required BoardTheme boardTheme,
@@ -221,8 +222,9 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
       brightness != kBoardDefaultBrightnessFilter || hue != kBoardDefaultHueFilter;
 
   ChessboardSettings toBoardSettings(Variant variant) {
-    return ChessboardSettings(
+    final settings = ChessboardSettings(
       pieceAssets: pieceSet.assets,
+      enable3dAssets: enable3dAssets,
       colorScheme: boardTheme.colors,
       brightness: brightness,
       hue: hue,
@@ -242,6 +244,8 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
       enableDrops: variant == Variant.crazyhouse,
       canPromoteToKing: variant == Variant.antichess,
     );
+   debugPrint('Created ChessBoardSettings - enable3dAssets: ${settings.enable3dAssets}');
+   return settings;
   }
 
   factory BoardPrefs.fromJson(Map<String, dynamic> json) {

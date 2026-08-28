@@ -24,8 +24,8 @@ class _PieceSetScreenState extends ConsumerState<PieceSetScreen> {
   bool isLoading = false;
 
   Future<void> onChanged(PieceSet? value, bool toggle3d) async {
-    if(toggle3d == null ){
-	ref.read(boardPreferencesProvider.notifier).toggleEnable3dAssets(toggle3d);
+    if(toggle3d != null ){
+      ref.read(boardPreferencesProvider.notifier).toggleEnable3dAssets(toggle3d);
     }
     if (value != null) {
       ref.read(boardPreferencesProvider.notifier).setPieceSet(value);
@@ -39,7 +39,7 @@ class _PieceSetScreenState extends ConsumerState<PieceSetScreen> {
           setState(() {
             isLoading = false;
           });
-	}
+        }
       }
     }
   }
