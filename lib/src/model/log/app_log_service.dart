@@ -107,12 +107,15 @@ final class ProviderLogger extends ProviderObserver {
 
   @override
   void didAddProvider(ProviderObserverContext context, Object? value) {
-    _logger.fine('${context.provider.name ?? context.provider.runtimeType} initialized', value);
+    _logger.finer('${context.provider.name ?? context.provider.runtimeType} initialized', value);
   }
 
+  /// Riverpod calls this whenever a provider's `onDispose` listeners run, which a rebuild does as
+  /// much as a disposal: `_performRebuild` and `invalidateSelf` both go through `runOnDispose`, so
+  /// a provider that merely recomputed logs this twice without going anywhere.
   @override
   void didDisposeProvider(ProviderObserverContext context) {
-    _logger.fine('${context.provider.name ?? context.provider.runtimeType} disposed');
+    _logger.finer('${context.provider.name ?? context.provider.runtimeType} disposed or rebuilt');
   }
 
   @override
