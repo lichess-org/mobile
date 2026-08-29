@@ -271,7 +271,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     state = state.copyWith(
       game: state.game.copyWith(steps: state.game.steps.add(newStep)),
       stepCursor: state.stepCursor + 1,
-      hintIndex: null,
+      hintMove: null,
       // Whatever the analysis was about to unlock, it was for the position before this move.
       isLoadingHint: false,
       showingSuggestedMove: null,
@@ -731,7 +731,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       stepCursor: finalSteps.length - 1,
       isEngineThinking: false,
       isEvaluatingMove: false,
-      hintIndex: null,
+      hintMove: null,
       showingSuggestedMove: null,
     );
 
@@ -766,13 +766,9 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     final existingHints = state.hintMoves;
     if (existingHints == null || existingHints.isEmpty) return;
 
-    final currentIndex = state.hintIndex;
-    // Show the first hint, or cycle to the next one
-    if (currentIndex == null) {
-      state = state.copyWith(hintIndex: 0);
-    } else {
-      state = state.copyWith(hintIndex: (currentIndex + 1) % existingHints.length);
-    }
+    final current = state.hintMove;
+    final currentIndex = current != null ? existingHints.indexOf(current) : -1;
+    state = state.copyWith(hintMove: existingHints[(currentIndex + 1) % existingHints.length]);
   }
 
   /// Analyses the position the player is thinking about, and unlocks the hints once it is deep
@@ -792,7 +788,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       return;
     }
 
-    state = state.copyWith(isLoadingHint: true, hintIndex: null);
+    state = state.copyWith(isLoadingHint: true, hintMove: null);
     await _analyser.usableEval(position, timeout: _kHintWait);
     // The wait may have outlived the position it was for, and the hints for the position the game
     // is at now are somebody else's to unlock.
@@ -898,8 +894,8 @@ sealed class OfflineComputerGameState with _$OfflineComputerGameState {
     @Default(false) bool isEngineThinking,
     @Default(false) bool isLoadingHint,
 
-    /// Current hint index for cycling through hints. Null means no hint is shown yet.
-    @Default(null) int? hintIndex,
+    /// The hint move currently shown on the board. Null means no hint is shown yet.
+    @Default(null) Move? hintMove,
 
     /// Whether the engine is evaluating the player's move in practice mode.
     @Default(false) bool isEvaluatingMove,
@@ -993,10 +989,8 @@ sealed class OfflineComputerGameState with _$OfflineComputerGameState {
 
   /// The square to highlight for the current hint.
   Square? get hintSquare {
-    final moves = hintMoves;
-    final index = hintIndex;
-    if (moves == null || moves.isEmpty || index == null) return null;
-    final move = moves[index];
+    final move = hintMove;
+    if (move == null) return null;
     return switch (move) {
       NormalMove(:final from) => from,
       DropMove() => null,

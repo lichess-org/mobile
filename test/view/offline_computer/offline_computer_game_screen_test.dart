@@ -909,7 +909,7 @@ void main() {
 
         // Hint square should now be set
         final updatedState = ref.read(offlineComputerGameControllerProvider);
-        expect(updatedState.hintIndex, equals(0));
+        expect(updatedState.hintMove, equals(gameState.hintMoves!.first));
         expect(updatedState.hintSquare, isNotNull);
       }
     });
@@ -953,7 +953,7 @@ void main() {
         await tester.pump();
 
         final firstHintState = ref.read(offlineComputerGameControllerProvider);
-        expect(firstHintState.hintIndex, equals(0));
+        expect(firstHintState.hintMove, equals(gameState.hintMoves![0]));
         final firstHintSquare = firstHintState.hintSquare;
 
         // Press hint button second time
@@ -961,12 +961,73 @@ void main() {
         await tester.pump();
 
         final secondHintState = ref.read(offlineComputerGameControllerProvider);
-        expect(secondHintState.hintIndex, equals(1));
+        expect(secondHintState.hintMove, equals(gameState.hintMoves![1]));
         final secondHintSquare = secondHintState.hintSquare;
 
         // Hint square should be different (different origin)
         expect(secondHintSquare, isNot(equals(firstHintSquare)));
       }
+    });
+
+    testWidgets('A deeper eval that drops a hint leaves the shown hint where it is', (
+      tester,
+    ) async {
+      // The analysis keeps running while a hint is on screen, and every evaluation re-sorts and
+      // re-filters the hint moves. What is shown is the move the player cycled to, so it neither
+      // jumps to another square under them nor — as an index into the list would — points past the
+      // end of a list the new eval has shortened.
+      final engine = NarrowingHintEngine();
+      fakeEngine = engine;
+
+      final gameStorage = MockOfflineComputerGameStorage();
+      when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
+      when(() => gameStorage.save(any())).thenAnswer((_) async {});
+
+      late WidgetRef ref;
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: Consumer(
+          builder: (context, r, _) {
+            ref = r;
+            return const OfflineComputerGameScreen();
+          },
+        ),
+        overrides: {
+          offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      await selectSide(tester, Side.white);
+      await tester.tap(find.text('Play'));
+      await tester.pumpAndSettle();
+
+      final gameState = ref.read(offlineComputerGameControllerProvider);
+      expect(gameState.hintMoves, hasLength(2));
+
+      // Cycle to the second hint.
+      await tester.tap(find.byIcon(CupertinoIcons.lightbulb));
+      await tester.pump();
+      await tester.tap(find.byIcon(CupertinoIcons.lightbulb));
+      await tester.pump();
+
+      final shownState = ref.read(offlineComputerGameControllerProvider);
+      expect(shownState.hintMove, equals(gameState.hintMoves![1]));
+      final shownSquare = shownState.hintSquare;
+      expect(shownSquare, isNotNull);
+
+      // A deeper eval leaves the second line far enough behind that it is no longer a hint.
+      engine.emitNarrowedDepth();
+      await tester.pump();
+
+      expect(tester.takeException(), isNull);
+      final narrowedState = ref.read(offlineComputerGameControllerProvider);
+      expect(narrowedState.hintMoves, hasLength(1));
+      expect(narrowedState.hintMove, equals(shownState.hintMove));
+      expect(narrowedState.hintSquare, equals(shownSquare));
     });
 
     testWidgets('Hints are cleared when a move is made', (tester) async {
@@ -1016,7 +1077,7 @@ void main() {
 
         // Hints should be cleared
         final afterMoveState = ref.read(offlineComputerGameControllerProvider);
-        expect(afterMoveState.hintIndex, isNull);
+        expect(afterMoveState.hintMove, isNull);
       }
     });
 

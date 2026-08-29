@@ -531,6 +531,47 @@ class MultiPvEngine extends FakeEngine {
   }
 }
 
+/// A fake engine whose second line falls behind as the search deepens, for the hint tests.
+///
+/// The shallow pair it answers with is close enough that both moves are offered as hints; the
+/// deeper pair, emitted on demand, leaves the second one far enough behind that the hint filter
+/// drops it — which is what a hint the player is looking at has to survive.
+class NarrowingHintEngine extends FakeEngine {
+  @override
+  void onGo(FakeEngineSession session, List<String> parts) =>
+      _emitPair(session, depth: 15, secondCp: 180);
+
+  /// Emits the deeper pair. Tests call this to control the timing.
+  void emitNarrowedDepth() {
+    final session = sessions.lastOrNull;
+    if (session != null) _emitPair(session, depth: 17, secondCp: 0);
+  }
+
+  void _emitPair(FakeEngineSession session, {required int depth, required int secondCp}) {
+    final current = session.position;
+    if (current == null) return;
+    final moves = _firstLegalMoves(current, 2);
+    if (moves.length < 2) return;
+
+    final cps = [200, secondCp];
+    for (var i = 0; i < moves.length; i++) {
+      final cp = current.turn == Side.white ? cps[i] : -cps[i];
+      session.emit(
+        'info depth $depth seldepth ${depth + 2} multipv ${i + 1} score cp $cp nodes 50000 '
+        'nps 500000 hashfull 100 tbhits 0 time ${depth * 100} pv ${moves[i].uci}',
+      );
+    }
+  }
+
+  @override
+  void onStop(FakeEngineSession session) {
+    final current = session.position;
+    final best = current == null ? null : _firstLegalMove(current);
+    if (current == null || best == null) return;
+    session.emit('bestmove ${best.uci}${_ponder(current)}');
+  }
+}
+
 /// A fake engine for practice mode, whose eval can be made to drop by a set amount after the
 /// player's move so that a test can produce any move quality it wants.
 class PracticeModeEngine extends FakeEngine {
