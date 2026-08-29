@@ -62,8 +62,19 @@ Future<void> setEnginePref(ProviderContainer container, ChessEnginePref pref) =>
 /// back one that is disposed again before the test can use it.
 PositionEvaluator readEvaluator(ProviderContainer container, [EvaluationContext? context]) {
   final provider = positionEvaluatorProvider(context ?? makeContext());
-  container.listen(provider, (_, _) {});
+  _screens[context ?? makeContext()] = container.listen(provider, (_, _) {});
   return container.read(provider.notifier);
+}
+
+final _screens = <EvaluationContext, ProviderSubscription<EngineEvaluationState>>{};
+
+/// Leaves the screen the evaluator belongs to.
+///
+/// The evaluator is autoDispose, so closing the last subscription disposes it — which is what lets
+/// go of the engine. Turning the engine off with `release` no longer does: it keeps the engine for
+/// as long as the screen is open.
+void leaveEvaluatorScreen(ProviderContainer container, [EvaluationContext? context]) {
+  _screens.remove(context ?? makeContext())?.close();
 }
 
 EvalWork makeWork({
@@ -273,6 +284,59 @@ void main() {
       expect(delayedStockfish.quitCount, 0);
     });
 
+    test('turning the engine off and on again keeps the same engine', () async {
+      final stockfish = FakeEngine();
+      fakeEngine = stockfish;
+
+      final container = await makeContainer();
+      final service = readEvaluator(container);
+
+      await service.evaluate(makeWork())!.first;
+      expect(stockfish.startCount, 1);
+
+      // The engine button, turned off and left off for longer than the grace window: the engine is
+      // the screen's for as long as the screen is open, however often the button is tapped.
+      service.release();
+      expect(service.state.engineName, isNull, reason: 'nothing to show for an engine that is off');
+      await Future<void>.delayed(kEngineDisposeDelay + const Duration(milliseconds: 100));
+      expect(stockfish.quitCount, 0, reason: 'still inside the pause window');
+
+      await service.evaluate(makeWork())!.first;
+      expect(stockfish.startCount, 1, reason: 'the engine was never let go of');
+      expect(stockfish.quitCount, 0);
+      expect(service.state.engineName, isNotNull, reason: 'the button shows the engine again');
+    });
+
+    test('an engine left turned off is let go of', () async {
+      final stockfish = FakeEngine();
+      fakeEngine = stockfish;
+
+      final container = await makeContainer();
+
+      fakeAsync((async) {
+        final service = readEvaluator(container);
+
+        service.evaluate(makeWork());
+        async.elapse(const Duration(seconds: 1));
+        expect(stockfish.startCount, 1);
+
+        service.release();
+        async.elapse(kEnginePauseDelay - const Duration(seconds: 1));
+        expect(stockfish.quitCount, 0, reason: 'still inside the pause window');
+
+        // The engine the user turned off must not go on holding its table for a screen that is
+        // evaluating nothing: past the pause window it is let go of, and the provider's own window
+        // quits it.
+        async.elapse(const Duration(seconds: 1) + kEngineDisposeDelay + const Duration(seconds: 1));
+        expect(stockfish.quitCount, 1);
+
+        // And it is a new engine that a later request starts, not a resurrected one.
+        service.evaluate(makeWork());
+        async.elapse(const Duration(seconds: 1));
+        expect(stockfish.startCount, 2);
+      });
+    });
+
     test('an engine nobody comes back for is quit once the grace window passes', () async {
       final delayedStockfish = FakeEngine();
       fakeEngine = delayedStockfish;
@@ -286,7 +350,7 @@ void main() {
         async.elapse(const Duration(seconds: 1));
         expect(delayedStockfish.startCount, 1);
 
-        service.release();
+        leaveEvaluatorScreen(container);
         async.elapse(const Duration(seconds: 1));
         expect(delayedStockfish.quitCount, 0, reason: 'still inside the grace window');
 
@@ -483,6 +547,7 @@ void main() {
         service.release();
         service.release();
         service.release();
+        leaveEvaluatorScreen(container);
 
         async.elapse(kEngineDisposeDelay + const Duration(seconds: 1));
 
@@ -940,19 +1005,20 @@ void main() {
         expect(stockfish.startCount, 1);
         expect(service.state.lifecycle, EngineLifecycle.idle);
 
-        service.release();
+        leaveEvaluatorScreen(container);
         // Past the grace window, so the engine really is gone and the next request has to start
         // another one.
         async.elapse(kEngineDisposeDelay + const Duration(seconds: 1));
 
-        service.evaluate(makeWork(id: const StringId('test2')));
+        final nextScreen = readEvaluator(container);
+        nextScreen.evaluate(makeWork(id: const StringId('test2')));
         async.flushMicrotasks();
         expect(stockfish.startCount, 2);
 
         async.elapse(kEngineCreateTimeout + const Duration(seconds: 1));
         async.flushMicrotasks();
 
-        expect(service.state.lifecycle, EngineLifecycle.error);
+        expect(nextScreen.state.lifecycle, EngineLifecycle.error);
         expect(crashlytics.customKeys['engine_failure_kind'], 'stuck');
       });
     });

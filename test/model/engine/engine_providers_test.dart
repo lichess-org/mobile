@@ -56,5 +56,61 @@ void main() {
       expect(fakeEngine.quitCount, 1);
       expect(fakeEngine.isRunning, isFalse);
     });
+
+    test('the grace window is idle time, not a lifetime', () async {
+      fakeEngine = FakeEngine();
+      final container = await makeContainer();
+      addTearDown(container.dispose);
+
+      final subscription = container.listen<AsyncValue<Engine>>(
+        engineProvider(const StockfishSpec.sf16()),
+        (_, _) {},
+      );
+      await container.read(engineProvider(const StockfishSpec.sf16()).future);
+
+      // Watched for longer than the window: a timer started when the engine was built would have
+      // fired by now, and the engine would be quit the moment its last watcher went away.
+      await Future<void>.delayed(kEngineDisposeDelay + const Duration(milliseconds: 50));
+      subscription.close();
+      await pumpEventQueue();
+      expect(
+        fakeEngine.isRunning,
+        isTrue,
+        reason: 'the window starts when the last watcher leaves',
+      );
+
+      await Future<void>.delayed(kEngineDisposeDelay + const Duration(milliseconds: 50));
+      await pumpEventQueue();
+      expect(fakeEngine.quitCount, 1);
+      expect(fakeEngine.isRunning, isFalse);
+    });
+
+    test('quits an engine waiting out its window before starting one on another slot', () async {
+      fakeEngine = FakeEngine();
+      final container = await makeContainer();
+      addTearDown(container.dispose);
+
+      final subscription = container.listen<AsyncValue<Engine>>(
+        engineProvider(const StockfishSpec.sf16()),
+        (_, _) {},
+      );
+      await container.read(engineProvider(const StockfishSpec.sf16()).future);
+      subscription.close();
+      await pumpEventQueue();
+      expect(fakeEngine.isRunning, isTrue, reason: 'still inside the grace window');
+
+      final other = container.listen<AsyncValue<Engine>>(
+        engineProvider(const StockfishSpec.fairy()),
+        (_, _) {},
+      );
+      addTearDown(other.close);
+      await container.read(engineProvider(const StockfishSpec.fairy()).future);
+
+      // Two engines resident at once each hold the transposition table they were given, and the
+      // memory budget is the device's: the one nobody is watching goes first.
+      expect(fakeEngine.quitCount, 1);
+      expect(fakeEngine.sessions.length, 1);
+      expect(fakeEngine.spec, const StockfishSpec.fairy());
+    });
   });
 }

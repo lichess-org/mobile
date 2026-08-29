@@ -31,6 +31,9 @@ const kEngineEvalEmissionThrottleDelay = Duration(milliseconds: 200);
 /// The shallowest depth worth reporting. Below it the engine is still guessing.
 const minDepth = 6;
 
+/// How long a paused evaluator keeps the engine it is not using.
+const kEnginePauseDelay = Duration(seconds: 3);
+
 /// The minimum delay between two engine failure messages shown to the user.
 const _kUserNotificationThrottle = Duration(seconds: 10);
 
@@ -120,6 +123,15 @@ class PositionEvaluator extends Notifier<EngineEvaluationState> {
   /// Set while the spec for a flavor is being resolved, which is async because it depends on
   /// whether the NNUE files are on disk.
   bool _resolvingSpec = false;
+
+  /// Whether the user has turned the engine off with [release].
+  ///
+  /// A paused evaluator still holds its engine, but says nothing about it: the UI's view of the
+  /// engine is what the button shows, and there is nothing to show for an engine nobody asked for.
+  bool _paused = false;
+
+  /// What lets go of a paused engine nobody turned back on, after [kEnginePauseDelay].
+  Timer? _pauseTimer;
 
   /// Distinguishes the engine the service is currently interested in from one a [quit] or a
   /// failure has already let go of, so that a resolution still in flight cannot resurrect it.
@@ -217,22 +229,33 @@ class PositionEvaluator extends Notifier<EngineEvaluationState> {
     _setEvalWork(null);
   }
 
-  /// Lets go of the engine.
+  /// Stops evaluating, keeping the engine for a moment.
   ///
-  /// Called when the user turns the engine off; leaving the screen disposes the evaluator, which
-  /// does the same thing. The engine itself outlives this by the length of its grace window, so
-  /// coming straight back does not pay for another start.
+  /// Called when the user turns the engine off. The engine is kept — attached, idle, and reporting
+  /// nothing — for [kEnginePauseDelay], so that flicking the button off and on is free: letting go
+  /// of it on the first tap would quit an engine the second one starts again, and the plugin makes
+  /// that start wait for the quit it follows. Nobody turning it back on within the window lets go
+  /// of it for real, as leaving the screen does.
   void release() {
     if (_spec == null && !_resolvingSpec) {
       _logger.fine('Engine already released or never asked for. Ignoring duplicate release call.');
       return;
     }
-    _logger.info('Releasing the engine');
-    _generation++;
+    _logger.info('Pausing the engine');
+    _paused = true;
+    _currentSearch?.stop();
+    _currentSearch = null;
     _cancelEvalThrottle();
     _currentEval = null;
     _accumulatingFor = null;
-    _releaseEngine();
+
+    _pauseTimer?.cancel();
+    _pauseTimer = Timer(kEnginePauseDelay, () {
+      _pauseTimer = null;
+      _logger.info('Releasing the engine nobody turned back on');
+      _releaseEngine();
+    });
+
     if (ref.mounted) state = defaultState;
   }
 
@@ -242,6 +265,11 @@ class PositionEvaluator extends Notifier<EngineEvaluationState> {
 
   /// Starts the given [work], asking for a different engine first if it needs one.
   void _startWork(EvalWork work) {
+    // Work asked for means the engine is wanted again, whatever [release] did.
+    _paused = false;
+    _pauseTimer?.cancel();
+    _pauseTimer = null;
+
     if (_unrecoverableFailure case final failure?) {
       _logger.severe('Refusing engine work: the engine is unusable. $failure');
       _abandonPendingWork();
@@ -262,7 +290,12 @@ class PositionEvaluator extends Notifier<EngineEvaluationState> {
     if (_engineFlavor == flavor) {
       // Already asking for the right engine. It may not be ready yet, in which case the work runs
       // when it is.
-      if (_engine != null) _compute(work, newGame: needsNewGame);
+      if (_engine case final engine?) {
+        // A pause hid the engine rather than letting go of it, so coming back is a matter of
+        // saying which one it is again and searching on it.
+        _setEngine(AsyncData(engine.name.value));
+        _compute(work, newGame: needsNewGame);
+      }
       return;
     }
 
@@ -353,6 +386,9 @@ class PositionEvaluator extends Notifier<EngineEvaluationState> {
   /// with nobody watching, which is what lets one analysis screen hand its engine to the next.
   /// [invalidate] skips that, for an engine that is already broken.
   void _releaseEngine({bool invalidate = false}) {
+    _pauseTimer?.cancel();
+    _pauseTimer = null;
+
     // The engine outlives this release, so it must not be left evaluating for a screen that is
     // gone — but it is shared, so only this evaluator's own search is stopped.
     _currentSearch?.stop();
@@ -605,6 +641,8 @@ class PositionEvaluator extends Notifier<EngineEvaluationState> {
   // ---------------------------------------------------------------------------
 
   void _setEngine(AsyncValue<String?> engine) {
+    // A paused evaluator keeps its engine but shows none: see [release].
+    if (_paused) return;
     _setState(engineFn: () => engine);
   }
 
