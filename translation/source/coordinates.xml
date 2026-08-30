@@ -16,6 +16,7 @@
   <string name="showCoordsOnAllSquares">Coordinates on every square</string>
   <string name="showPieces">Show pieces</string>
   <string name="startTraining">Start training</string>
+  <string name="abortTraining">Abort training</string>
   <string name="findSquare">Find square</string>
   <string name="nameSquare">Name square</string>
   <string name="practiceOnlySomeFilesAndRanks" comment="Label for a checkbox, keep it very short">Practice only some files &amp; ranks</string>
