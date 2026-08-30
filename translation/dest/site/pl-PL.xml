@@ -301,6 +301,7 @@
   <string name="emailCanTakeSomeTime">Dostarczenie email\'a może zająć trochę czasu.</string>
   <string name="refreshInboxAfterFiveMinutes">Poczekaj 5 minut i odśwież swoją skrzynkę pocztową.</string>
   <string name="checkSpamFolder">Sprawdź również folder spamu, gdzie mógł trafić nasz e-mail. Jeśli tak, oznacz go jako nie spam.</string>
+  <string name="checkSpamOrJunkFolder" comment="checkSpamFolder&#10;It = The confirmation email Replaces old string checkSpamFolder">Jeśli nie otrzymasz wiadomości e-mail z potwierdzeniem, sprawdź folder Spam lub Śmieci. Upewnij się, że oznaczyłeś wiadomości z lichess.org jako bezpieczne i \"to nie spam\", dzięki czemu będziesz mógł otrzymywać ważne komunikaty.</string>
   <string name="sendEmailForAccountVerification">Jeśli nie możesz znaleźć wiadomości e-mail z potwierdzeniem, wyślij wiadomość do %s, a potwierdzimy Twoje konto.</string>
   <string name="accountConfirmed">Użytkownik %s został pomyślnie potwierdzony.</string>
   <string name="accountCanLogin">Teraz możesz się zalogować jako %s.</string>
@@ -331,7 +332,9 @@
   <string name="ok">OK</string>
   <string name="cancel">Anuluj</string>
   <string name="whiteTimeOut">Upłynął czas białych</string>
+  <string name="whiteRanOutOfTime" comment="whiteTimeOut&#10;&#10;Shows when White's time has run out. Is followed by the end condition, for example&#10;'White ran out of time · Draw' Replaces old string whiteTimeOut">Upłynął czas białych</string>
   <string name="blackTimeOut">Upłynął czas czarnych</string>
+  <string name="blackRanOutOfTime" comment="blackTimeOut&#10;&#10;Shows when Black's time has run out. Is followed by the end condition, for example&#10;'Black ran out of time · Draw' Replaces old string blackTimeOut">Upłynął czas czarnych</string>
   <string name="drawOfferSent">Wysłano propozycję remisu</string>
   <string name="drawOfferAccepted">Przyjęto propozycję remisu</string>
   <string name="whiteOffersDraw">Białe proponują remis</string>
@@ -479,6 +482,8 @@
   </plurals>
   <string name="yourPerfRatingIsProvisional">Twój ranking (%s) jest prowizoryczny</string>
   <string name="ratingRangeIsDisabledBecauseYourRatingIsProvisional" comment="Tooltip to explain why the control is disabled">Filtry rankingu są zablokowane, ponieważ Twój ranking nie jest stabilny. Rozegranie partii rankingowych zwiększy tę stabilność.</string>
+  <string name="cannotFilterByUnstableRating" comment="Tooltip to explain why the control for filtering by rating is disabled Replaces old string ratingRangeIsDisabledBecauseYourRatingIsProvisional">Nie można filtrować według rankingu, ponieważ Twój ranking nie jest stabilny.
+Partie rankingowe zwiększą stabilność rankingu.</string>
   <string name="yourPerfRatingIsTooHigh">Twój ranking %2$s (%1$s) jest za wysoki</string>
   <string name="yourTopWeeklyPerfRatingIsTooHigh">Twój ranking tygodniowy %2$s (%1$s) jest za wysoki</string>
   <string name="yourPerfRatingIsTooLow">Twój ranking %2$s (%1$s) jest za niski</string>
@@ -500,6 +505,7 @@
   <string name="save">Zapisz</string>
   <string name="leaderboard">Najlepsi gracze</string>
   <string name="screenshotCurrentPosition">Zrzut ekranu aktualnej pozycji</string>
+  <string name="positionAsImage" comment="screenshotCurrentPosition&#10;&#10;Screenshot is used as a verb here.&#10;Download/share a picture of the current position. Replaces old string screenshotCurrentPosition">Pozycja jako obraz</string>
   <string name="gameAsGIF">Zapisz jako GIF</string>
   <string name="playerNames">Nazwy graczy</string>
   <string name="moveAnnotations">Adnotacje do posunięcia</string>
@@ -554,6 +560,7 @@
     <item quantity="many">%s obserwowanych</item>
     <item quantity="other">%s obserwowanych</item>
   </plurals>
+  <string name="less">Mniej</string>
   <string name="more">Więcej</string>
   <string name="memberSince">Zarejestrowano</string>
   <string name="lastSeenActive">Widziano %s</string>
@@ -583,13 +590,13 @@
   <string name="pause">Pauza</string>
   <string name="resume">Wznów</string>
   <string name="youArePlaying">Grasz!</string>
-  <string name="winRate">Współczynnik zwycięstw</string>
+  <string name="winRate">Zwycięstw</string>
   <string name="performance">Wynik</string>
   <string name="tournamentComplete">Turniej zakończony</string>
   <string name="movesPlayed">Wykonanych ruchów</string>
-  <string name="whiteWins">Wygranych białych</string>
-  <string name="blackWins">Wygranych czarnych</string>
-  <string name="drawRate">Częstość remisowania</string>
+  <string name="whiteWins">Wygrana białych</string>
+  <string name="blackWins">Wygrana czarnych</string>
+  <string name="drawRate">Remisów</string>
   <string name="draws">Remisów</string>
   <string name="averageOpponent">Średni ranking przeciwnika</string>
   <string name="boardEditor">Edytor pozycji</string>
@@ -803,6 +810,7 @@
   <string name="simulClockHint">Ustawienia zegara Fischera. W przypadku większej liczby graczy możesz potrzebować więcej czasu.</string>
   <string name="simulAddExtraTime">Aby ułatwić sobie rozegranie symultany możesz ustawić dodatkowy czas dla siebie.</string>
   <string name="simulHostExtraTime">Dodatkowy czas dla symultanisty</string>
+  <string name="extraClockTimeForHost" comment="Appears on: https://lichess.org/simul/new&#10;&#10;Allows a simul host to select extra time for the simul.&#10;&#10;Please note this string used to state &quot;Host extra clock time&quot;, without the word &quot;initial&quot; Replaces old string simulHostExtraTime">Dodatkowy czas zegara dla prowadzącego symultanę:</string>
   <string name="simulAddExtraTimePerPlayer">Dodaj początkowy czas do zegara dla każdego gracza dołączającego do symultany.</string>
   <string name="simulHostExtraTimePerPlayer">Dodatkowy czas dla symultanisty za każdego gracza</string>
   <string name="lichessTournaments">Turnieje Lichess</string>
@@ -911,14 +919,16 @@
   <string name="language">Język</string>
   <string name="allLanguages">Wszystkie języki</string>
   <string name="background">Tło</string>
-  <string name="theme" comment="A menu option which lets you select the background colour and other theme-related options.">Motyw</string>
+  <string name="theme">Motyw</string>
   <string name="light">Jasne</string>
   <string name="dark">Ciemne</string>
   <string name="transparent">Przezroczyste</string>
-  <string name="picture" comment="An option to set the background on lichess.org to a custom image.">Zdjęcie</string>
+  <string name="picture">Zdjęcie</string>
   <string name="deviceTheme">Motyw urządzenia</string>
-  <string name="roundness" comment="A menu option which lets you select how round or square the corners are in different elements of the user interface.">Zaokrąglone</string>
+  <string name="roundness">Zaokrąglone</string>
+  <string name="backgroundImage">Zdjęcie w tle</string>
   <string name="backgroundImageUrl">Adres do obrazu tła:</string>
+  <string name="imageOpacity">Przezroczystość obrazu</string>
   <string name="board">Szachownica</string>
   <string name="size">Rozmiar</string>
   <string name="opacity">Przezroczystość</string>
@@ -942,6 +952,7 @@
   <string name="notifications">Powiadomienia</string>
   <string name="notificationsX">Powiadomienia: %1$s</string>
   <string name="perfRatingX">Ranking: %s</string>
+  <string name="perfRatingLabel" comment="Replaces old string perfRatingX">Ranking: %s.</string>
   <string name="yourRatingIsX">Twój ranking wynosi %s</string>
   <plurals name="nbSecondsToPlayTheFirstMove">
     <item quantity="one">%s sekunda na wykonanie pierwszego ruchu</item>
@@ -1007,6 +1018,7 @@
   </plurals>
   <string name="showUnreadLichessMessage">Otrzymałeś prywatną wiadomość od Lichess.</string>
   <string name="clickHereToReadIt">Kliknij tutaj, aby ją odczytać</string>
+  <string name="readTheMessage" comment="'It' refers to a private message. This text follows after a different string which advises players they have received a private message from Lichess. For users, this is appears as a regular private message from the Lichess account: https://lichess.org/@/Lichess Replaces old string clickHereToReadIt">Przeczytaj wiadomość</string>
   <string name="sorry">Przykro nam :(</string>
   <string name="weHadToTimeYouOutForAWhile">Na pewien czas musieliśmy wykluczyć Cię z gry.</string>
   <string name="why">Dlaczego?</string>
@@ -1101,6 +1113,7 @@ Pozostaw puste, aby rozpoczynać partie z normalnej pozycji początkowej.</strin
   <string name="onlyTeamLeaders">Tylko liderzy klubu</string>
   <string name="onlyTeamMembers">Tylko członkowie klubu</string>
   <string name="navigateMoveTree">Nawiguj drzewo ruchów</string>
+  <string name="moveListNavigation" comment="navigateMoveTree&#10;&#10;Appears in the keyboard shortcuts/help screen. The 'move tree' is simply the list of moves. Replaces old string navigateMoveTree">Nawigacja na liście posunięć</string>
   <string name="mouseTricks">Gesty myszy</string>
   <string name="toggleLocalAnalysis">Włącz/wyłącz analizę lokalnego komputera</string>
   <string name="toggleAllAnalysis">Włącz/wyłącz analizę komputera</string>

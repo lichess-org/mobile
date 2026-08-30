@@ -30,6 +30,7 @@
   <string name="collinearMoveDescription">Dos piezas opuestas se enfrentan entre sí, y una se desliza a lo largo de la línea de ataque sin capturar la pieza enemiga.</string>
   <string name="cornerMate">Mate de la esquina</string>
   <string name="cornerMateDescription">Encierra al rey en una esquina usando una torre o dama y un caballo para dar mate.</string>
+  <string name="cornerMateKnightDeliversDescription" comment="Description for the &quot;Corner mate&quot; puzzle theme. Replaces old string cornerMateDescription">Encierra al rey en una esquina usando una torre o dama y un caballo para dar mate.</string>
   <string name="crushing">Aplastante</string>
   <string name="crushingDescription">Detecta el error del oponente para obtener una ventaja ganadora. (eval ≥ 600cp)</string>
   <string name="discoveredCheck">Jaque a la descubierta</string>
@@ -76,8 +77,10 @@
   <string name="killBoxMateDescription">Una torre está cerca del rey enemigo apoyada por una dama que también bloquea las casillas de escape del rey. La torre y la dama capturan al rey enemigo en un recuadro mortal de 3 por 3.</string>
   <string name="pillsburysMate">Mate de Pillsbury</string>
   <string name="pillsburysMateDescription">La torre da jaque mate, al tiempo que el alfil ayuda a confinar al rey enemigo.</string>
+  <string name="pillsburyMateRookAndBishopDescription" comment="Replaces old string pillsburysMateDescription">La torre da jaque mate mientras el alfil ayuda a confinar al rey enemigo.</string>
   <string name="morphysMate">Mate de Morphy</string>
   <string name="morphysMateDescription">Utiliza el alfil para dar jaque al rey, mientras que tu torre ayuda a mantenerlo confinado.</string>
+  <string name="morphyMateBishopAndRookDescription" comment="Replaces old string morphysMateDescription">El alfil da jaque mate mientras la torre ayuda a confinar al rey enemigo.</string>
   <string name="swallowstailMate">Mate cola de golondrina</string>
   <string name="swallowstailMateDescription">Un patrón de mate que se asemeja visualmente a la cola de una golondrina, en forma de V.</string>
   <string name="triangleMate">Mate del triángulo</string>
@@ -118,6 +121,7 @@
   <string name="pinDescription">Una táctica donde una pieza no puede moverse sin revelar un ataque a una pieza de mayor valor.</string>
   <string name="promotion">Promoción</string>
   <string name="promotionDescription">Promover uno de sus peones a una dama o una pieza menor.</string>
+  <string name="promotePawnToQueenRookOrMinor" comment="Replaces old string promotionDescription">Promueve uno de tus peones a una dama, torre o una pieza menor.</string>
   <string name="queenEndgame">Final de damas</string>
   <string name="queenEndgameDescription">Un final solo con damas y peones.</string>
   <string name="queenRookEndgame">Final de dama y torre</string>
