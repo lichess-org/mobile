@@ -485,6 +485,7 @@
     <item quantity="one">Seguint %s jugadors</item>
     <item quantity="other">Seguint %s jugadors</item>
   </plurals>
+  <string name="less">Menys</string>
   <string name="more">Més</string>
   <string name="memberSince">Membre des del</string>
   <string name="lastSeenActive">Darrer accés %s</string>
@@ -832,7 +833,10 @@
   <string name="dark">Fosc</string>
   <string name="transparent">Transparent</string>
   <string name="deviceTheme">Tema del dispositiu</string>
+  <string name="roundness">Rodonesa</string>
+  <string name="backgroundImage">Imatge de fons</string>
   <string name="backgroundImageUrl">Imatge de fons URL:</string>
+  <string name="imageOpacity">Transparència de la imatge</string>
   <string name="board">Tauler</string>
   <string name="size">Mida</string>
   <string name="opacity">Opacitat</string>
