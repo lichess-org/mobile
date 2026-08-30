@@ -33,6 +33,36 @@ import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 import 'package:material_ui/material_ui.dart';
 
+/// Computes the OTB game board layout from the [BoardArrangement]
+/// preference, whose turn it is, and the current manual board orientation.
+({
+  Side orientation,
+  bool topTableUpsideDown,
+  bool bottomTableUpsideDown,
+  PieceOrientationBehavior pieceOrientationBehavior,
+})
+overTheBoardLayout({
+  required BoardArrangement boardArrangement,
+  required Side turn,
+  required Side orientation,
+}) {
+  final boardOrientation = boardArrangement == .sideBySideRotateBoard ? turn : orientation;
+
+  return (
+    orientation: boardOrientation,
+    topTableUpsideDown:
+        boardArrangement == .faceToFaceOpponentUpsideDown ||
+        (boardArrangement == .faceToFaceFlipToCurrentPlayer && turn != orientation),
+    bottomTableUpsideDown:
+        boardArrangement == .faceToFaceFlipToCurrentPlayer && turn != orientation,
+    pieceOrientationBehavior: switch (boardArrangement) {
+      .faceToFaceFlipToCurrentPlayer => .sideToPlay,
+      .faceToFaceOpponentUpsideDown => .opponentUpsideDown,
+      .sideBySideWhiteStaysDown || .sideBySideRotateBoard => .facingUser,
+    },
+  );
+}
+
 class OverTheBoardScreen extends StatelessWidget {
   const OverTheBoardScreen({this.initialFen, this.initialVariant, super.key});
 
@@ -191,6 +221,12 @@ class _BodyState extends ConsumerState<_Body> {
       }
     });
 
+    final layout = overTheBoardLayout(
+      boardArrangement: overTheBoardPrefs.boardArrangement,
+      turn: gameState.turn,
+      orientation: orientation,
+    );
+
     return WakelockWidget(
       child: PopScope(
         canPop: false,
@@ -238,18 +274,16 @@ class _BodyState extends ConsumerState<_Body> {
                   child: GameLayout(
                     key: _boardKey,
                     topTable: _Player(
-                      side: orientation.opposite,
+                      side: layout.orientation.opposite,
                       clockKey: const ValueKey('topClock'),
                     ),
-                    topTableUpsideDown:
-                        !overTheBoardPrefs.flipPiecesAfterMove || orientation != gameState.turn,
+                    topTableUpsideDown: layout.topTableUpsideDown,
                     bottomTable: _Player(
-                      side: orientation,
+                      side: layout.orientation,
                       clockKey: const ValueKey('bottomClock'),
                     ),
-                    bottomTableUpsideDown:
-                        overTheBoardPrefs.flipPiecesAfterMove && orientation != gameState.turn,
-                    orientation: orientation,
+                    bottomTableUpsideDown: layout.bottomTableUpsideDown,
+                    orientation: layout.orientation,
                     explosionSquares: gameState.stepCursor > 0
                         ? atomicExplosionSquares(
                             gameState.game.stepAt(gameState.stepCursor - 1).position,
@@ -279,12 +313,7 @@ class _BodyState extends ConsumerState<_Body> {
                     currentMoveIndex: gameState.stepCursor,
                     boardSettingsOverrides: BoardSettingsOverrides(
                       drawShape: const DrawShapeOptions(enable: false),
-                      pieceOrientationBehavior: overTheBoardPrefs.flipPiecesAfterMove
-                          ? PieceOrientationBehavior.sideToPlay
-                          : PieceOrientationBehavior.opponentUpsideDown,
-                      pieceAssets: overTheBoardPrefs.symmetricPieces
-                          ? PieceSet.symmetric.assets
-                          : null,
+                      pieceOrientationBehavior: layout.pieceOrientationBehavior,
                       enablePremoves: false,
                     ),
                     userActionsBar: _BottomBar(

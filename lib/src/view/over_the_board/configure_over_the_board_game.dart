@@ -275,28 +275,78 @@ void showConfigureDisplaySettings(BuildContext context) {
   );
 }
 
+const _kIconElementSize = 12.0;
+
+List<Widget> _buildFaceToFaceIcon(Color? color) => [
+  Icon(Icons.person, size: _kIconElementSize, color: color),
+  Icon(Icons.phone_iphone, size: _kIconElementSize, color: color),
+  Icon(Icons.person, size: _kIconElementSize, color: color),
+];
+
+List<Widget> _buildSideBySideIcon(Color? color) => [
+  Icon(Icons.phone_iphone, size: _kIconElementSize, color: color),
+  Row(
+    mainAxisAlignment: .center,
+    children: [
+      Icon(Icons.person, size: _kIconElementSize, color: color),
+      Icon(Icons.person, size: _kIconElementSize, color: color),
+    ],
+  ),
+];
+
+String _boardArrangementOptionLabel(BoardArrangement arrangement) => switch (arrangement) {
+  .faceToFaceOpponentUpsideDown => "Opponent's pieces are upside down",
+  .faceToFaceFlipToCurrentPlayer => 'Pieces flip to face current player',
+  .sideBySideWhiteStaysDown => 'White stays at the bottom',
+  .sideBySideRotateBoard => 'Board rotates to face current player',
+};
+
+Widget _buildConfigSection(
+  String headerTitle, {
+  required List<Widget> trailingIconElements,
+  required List<BoardArrangement> choices,
+  required WidgetRef ref,
+}) {
+  final selected = ref.watch(overTheBoardPreferencesProvider.select((p) => p.boardArrangement));
+  return ListSection(
+    header: SettingsSectionTitle(headerTitle),
+    headerTrailing: SizedBox(
+      height: 40,
+      width: 40,
+      child: Column(mainAxisAlignment: .center, children: trailingIconElements),
+    ),
+    children: choices
+        .map(
+          (choice) => SettingsListTile(
+            settingsLabel: Text(_boardArrangementOptionLabel(choice)),
+            settingsValue: '', // We're showing a checkmark image instead of value's string
+            trailing: selected == choice ? const Icon(Icons.check) : null,
+            onTap: () =>
+                ref.read(overTheBoardPreferencesProvider.notifier).setBoardArrangement(choice),
+          ),
+        )
+        .toList(),
+  );
+}
+
 class OverTheBoardDisplaySettings extends ConsumerWidget {
   const OverTheBoardDisplaySettings();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final prefs = ref.watch(overTheBoardPreferencesProvider);
-
-    return BottomSheetScrollableContainer(
-      children: [
-        SwitchSettingTile(
-          title: const Text('Use symmetric pieces'),
-          value: prefs.symmetricPieces,
-          onChanged: (_) =>
-              ref.read(overTheBoardPreferencesProvider.notifier).toggleSymmetricPieces(),
-        ),
-        SwitchSettingTile(
-          title: const Text('Flip pieces and opponent info after move'),
-          value: prefs.flipPiecesAfterMove,
-          onChanged: (_) =>
-              ref.read(overTheBoardPreferencesProvider.notifier).toggleFlipPiecesAfterMove(),
-        ),
-      ],
-    );
-  }
+  Widget build(BuildContext context, WidgetRef ref) => BottomSheetScrollableContainer(
+    children: [
+      _buildConfigSection(
+        'Players face to face',
+        trailingIconElements: _buildFaceToFaceIcon(textShade(context, 0.5)),
+        choices: [.faceToFaceOpponentUpsideDown, .faceToFaceFlipToCurrentPlayer],
+        ref: ref,
+      ),
+      _buildConfigSection(
+        'Players side by side',
+        trailingIconElements: _buildSideBySideIcon(textShade(context, 0.5)),
+        choices: [.sideBySideWhiteStaysDown, .sideBySideRotateBoard],
+        ref: ref,
+      ),
+    ],
+  );
 }

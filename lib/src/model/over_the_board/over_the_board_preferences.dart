@@ -30,6 +30,11 @@ class OverTheBoardPreferencesNotifier extends Notifier<OverTheBoardPrefs>
         migratedJson['timeControlType'] == 'increment') {
       migratedJson['timeControlType'] = 'clock';
     }
+    if (migratedJson['boardArrangement'] == null) {
+      migratedJson['boardArrangement'] = migratedJson['flipPiecesAfterMove'] == true
+          ? BoardArrangement.faceToFaceFlipToCurrentPlayer.name
+          : BoardArrangement.faceToFaceOpponentUpsideDown.name;
+    }
     return OverTheBoardPrefs.fromJson(migratedJson);
   }
 
@@ -38,13 +43,8 @@ class OverTheBoardPreferencesNotifier extends Notifier<OverTheBoardPrefs>
     return fetch();
   }
 
-  Future<void> toggleFlipPiecesAfterMove() {
-    return save(state.copyWith(flipPiecesAfterMove: !state.flipPiecesAfterMove));
-  }
-
-  Future<void> toggleSymmetricPieces() {
-    return save(state.copyWith(symmetricPieces: !state.symmetricPieces));
-  }
+  Future<void> setBoardArrangement(BoardArrangement arrangement) =>
+      save(state.copyWith(boardArrangement: arrangement));
 
   Future<void> setTimeControlType(TimeControlType type) {
     return save(state.copyWith(timeControlType: type));
@@ -69,6 +69,27 @@ enum TimeControlType {
   }
 }
 
+/// How the board and pieces are arranged when playing over the board.
+///
+/// Determines the board orientation and piece facing depending on the seating
+/// arrangement (face to face vs. side by side).
+enum BoardArrangement {
+  /// Players sit across from each other; the opponent's pieces are shown
+  /// upside down.
+  faceToFaceOpponentUpsideDown,
+
+  /// Players sit across from each other; pieces flip to face the current
+  /// player.
+  faceToFaceFlipToCurrentPlayer,
+
+  /// Players sit side by side; white stays at the bottom.
+  sideBySideWhiteStaysDown,
+
+  /// Players sit side by side; the board rotates to face the current
+  /// player.
+  sideBySideRotateBoard,
+}
+
 @Freezed(fromJson: true, toJson: true)
 sealed class OverTheBoardPrefs with _$OverTheBoardPrefs implements Serializable {
   const OverTheBoardPrefs._();
@@ -76,15 +97,13 @@ sealed class OverTheBoardPrefs with _$OverTheBoardPrefs implements Serializable 
   static const _defaultTimeIncrement = TimeIncrement(300, 3);
 
   const factory OverTheBoardPrefs({
-    required bool flipPiecesAfterMove,
-    required bool symmetricPieces,
+    required BoardArrangement boardArrangement,
     @Default(TimeControlType.clock) TimeControlType timeControlType,
     @Default(OverTheBoardPrefs._defaultTimeIncrement) TimeIncrement timeIncrement,
   }) = _OverTheBoardPrefs;
 
   static const defaults = OverTheBoardPrefs(
-    flipPiecesAfterMove: false,
-    symmetricPieces: false,
+    boardArrangement: .faceToFaceOpponentUpsideDown,
     timeControlType: TimeControlType.clock,
     timeIncrement: _defaultTimeIncrement,
   );
