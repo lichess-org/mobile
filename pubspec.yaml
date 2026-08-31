@@ -134,7 +134,7 @@ flutter:
     - assets/sounds/standard/
     - assets/sounds/sfx/
     - assets/board-thumbnails/
-    - assets/maia/maia-1500.pb.gz
+    - assets/maia/
     - assets/positions.json
     - assets/endgames.json
 

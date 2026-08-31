@@ -171,12 +171,12 @@ class MaiaWeightsService {
     return file.path;
   }
 
-  /// Writes the bundled network out of the asset bundle, so that LC0 has a path to read.
+  /// Writes a bundled network out of the asset bundle, so that LC0 has a path to read.
   Future<String?> _writeBundledWeights(MaiaRating rating) async {
     try {
       final file = weightsFile(rating);
       await file.parent.create(recursive: true);
-      final bytes = await rootBundle.load(kBundledMaiaAsset);
+      final bytes = await rootBundle.load(bundledMaiaAsset(rating.fileName));
       await file.writeAsBytes(bytes.buffer.asUint8List(), flush: true);
       _verified.add(rating);
       _logger.info('Wrote the bundled ${rating.fileName} to ${file.path}');

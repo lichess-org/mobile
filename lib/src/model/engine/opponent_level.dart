@@ -59,18 +59,19 @@ enum StockfishLevel {
 /// strength dial the way [StockfishLevel] is: it is *which* humans the network learned from, and
 /// what it plays is the move players of that strength would most often play.
 ///
-/// Only [defaultRating] ships with the app; the others are downloaded on demand. See
+/// Only [bundledRatings] ship with the app; the others are downloaded on demand. See
 /// `MaiaWeightsService`.
 enum MaiaRating {
-  maia1100(rating: 1100, sha256Prefix: 'e1cf1cd0c96b', expectedSize: 1313193),
-  maia1200(rating: 1200, sha256Prefix: 'ead4ba953f23', expectedSize: 1249692),
-  maia1300(rating: 1300, sha256Prefix: '36195f87bf47', expectedSize: 1244431),
-  maia1400(rating: 1400, sha256Prefix: 'd5353ea67663', expectedSize: 1328977),
-  maia1500(rating: 1500, sha256Prefix: '35ab6f20421d', expectedSize: 1258199),
-  maia1600(rating: 1600, sha256Prefix: 'd2c9e5948581', expectedSize: 1313870),
-  maia1700(rating: 1700, sha256Prefix: 'd277eacd792d', expectedSize: 1313415),
-  maia1800(rating: 1800, sha256Prefix: '0031ad7c4256', expectedSize: 1289431),
-  maia1900(rating: 1900, sha256Prefix: 'e2f565f42d7c', expectedSize: 1262607);
+  maia1100(rating: 1100, sha256Prefix: '1a9616e14c2c', expectedSize: 1314927),
+  maia1200(rating: 1200, sha256Prefix: 'c37c4f6c0c05', expectedSize: 1251582),
+  maia1300(rating: 1300, sha256Prefix: '153640826ca6', expectedSize: 1248733),
+  maia1400(rating: 1400, sha256Prefix: '98b2d297cfd2', expectedSize: 1332237),
+  maia1500(rating: 1500, sha256Prefix: '46eac500f16f', expectedSize: 1259887),
+  maia1600(rating: 1600, sha256Prefix: '9f95c1b668fe', expectedSize: 1317232),
+  maia1700(rating: 1700, sha256Prefix: 'fb80c0d9b4a8', expectedSize: 1315274),
+  maia1800(rating: 1800, sha256Prefix: '5c24c3d8185f', expectedSize: 1292215),
+  maia1900(rating: 1900, sha256Prefix: '80893d373885', expectedSize: 1265805),
+  maia2200(rating: 2200, sha256Prefix: 'ef114b96bb0d', expectedSize: 1160069);
 
   const MaiaRating({required this.rating, required this.sha256Prefix, required this.expectedSize});
 
@@ -87,12 +88,12 @@ enum MaiaRating {
   String get fileName => 'maia-$rating.pb.gz';
 
   /// Whether this network ships with the app rather than being downloaded.
-  ///
-  /// One of them has to: a computer opponent that cannot play until a download succeeds is a dead
-  /// end, and this is the network everything falls back to.
-  bool get isBundled => this == defaultRating;
+  bool get isBundled => bundledRatings.contains(this);
 
-  /// The network that ships with the app, and the one a new game plays by default.
+  /// The network(s) that ship with the app.
+  static const bundledRatings = {MaiaRating.maia1500};
+
+  /// The network a new game plays by default.
   static const defaultRating = MaiaRating.maia1500;
 
   static MaiaRating? fromRating(int rating) => values.where((r) => r.rating == rating).firstOrNull;

@@ -114,11 +114,11 @@ void main() {
       await tester.drag(find.byType(Slider), const Offset(500, 0));
       await tester.pumpAndSettle();
 
-      expect(weights.downloads, [MaiaRating.maia1900]);
+      expect(weights.downloads, [MaiaRating.maia2200]);
 
       await tester.tap(find.text('OK'));
       await tester.pumpAndSettle();
-      expect(host.picked, const MaiaOpponentSpec(MaiaRating.maia1900));
+      expect(host.picked, const MaiaOpponentSpec(MaiaRating.maia2200));
     });
 
     testWidgets('a download that fails leaves the bundled network selected', (tester) async {

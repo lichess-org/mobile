@@ -46,16 +46,17 @@ const smallNetExpectedSize = 7 * 512 * 1024;
 const nnueTotalSizeMB = '${(bigNetExpectedSize + smallNetExpectedSize) ~/ (1024 * 1024)}MB';
 
 /// Where the Maia networks that do not ship with the app are downloaded from.
-///
-/// The upstream research repository, because lichess does not host these yet. Moving them onto
-/// the CDN alongside the NNUE networks is a one-line change here.
-const _maiaDownloadUrl = 'https://raw.githubusercontent.com/CSSLab/maia-chess/master/maia_weights/';
+const _maiaDownloadUrl = '$kLichessCDNHost/assets/lifat/maia/';
 
 /// The directory, under the app support directory, that Maia networks are kept in.
 const kMaiaWeightsDirName = 'maia';
 
-/// The asset the bundled Maia network is read from. See [MaiaRating.isBundled].
-const kBundledMaiaAsset = 'assets/maia/maia-1500.pb.gz';
+/// The asset bundle directory the bundled Maia networks are read from.
+/// See [MaiaRating.isBundled].
+const kBundledMaiaAssetDir = 'assets/maia';
+
+/// The asset the bundled Maia network for [fileName] is read from.
+String bundledMaiaAsset(String fileName) => '$kBundledMaiaAssetDir/$fileName';
 
 /// URL to download the Maia network for [fileName].
 Uri maiaWeightsUrl(String fileName) => Uri.parse('$_maiaDownloadUrl$fileName');

@@ -59,13 +59,13 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group('MaiaWeightsService', () {
-    test('the bundled network is available before anything has been downloaded', () async {
+    test('the bundled networks are available before anything has been downloaded', () async {
       final container = makeWeightsContainer(appSupportDirectory: await makeTempDir());
       final service = container.read(maiaWeightsServiceProvider);
 
       expect(await service.isAvailable(MaiaRating.defaultRating), isTrue);
-      expect(await service.isAvailable(MaiaRating.maia1900), isFalse);
-      expect(await service.availableRatings(), {MaiaRating.defaultRating});
+      expect(await service.isAvailable(MaiaRating.maia1700), isFalse);
+      expect(await service.availableRatings(), MaiaRating.bundledRatings);
     });
 
     test('writes the bundled network out of the asset bundle, once', () async {
@@ -84,6 +84,21 @@ void main() {
       final again = await service.ensureWeights(MaiaRating.defaultRating);
       expect(again.path, path);
     });
+
+    // test('writes a bundled network that is not the default one, without the network', () async {
+    //   final dir = await makeTempDir();
+    //   final container = makeWeightsContainer(
+    //     appSupportDirectory: dir,
+    //     mockClient: MockClient((_) async => http.Response('', 404)),
+    //   );
+    //   final service = container.read(maiaWeightsServiceProvider);
+
+    //   final (:rating, :path) = await service.ensureWeights(MaiaRating.maia1900);
+
+    //   expect(rating, MaiaRating.maia1900);
+    //   expect(path, '${dir.path}/maia/maia-1900.pb.gz');
+    //   expect(await File(path).length(), MaiaRating.maia1900.expectedSize);
+    // });
 
     test('downloads a network that is not there, and checks what it got', () async {
       final dir = await makeTempDir();
@@ -114,9 +129,9 @@ void main() {
       );
       final service = container.read(maiaWeightsServiceProvider);
 
-      expect(await service.download(MaiaRating.maia1900), isNull);
-      expect(await service.isAvailable(MaiaRating.maia1900), isFalse);
-      expect(await File('${dir.path}/maia/maia-1900.pb.gz').exists(), isFalse);
+      expect(await service.download(MaiaRating.maia1700), isNull);
+      expect(await service.isAvailable(MaiaRating.maia1700), isFalse);
+      expect(await File('${dir.path}/maia/maia-1700.pb.gz').exists(), isFalse);
     });
 
     test('a rating that cannot be downloaded falls back to the bundled network', () async {
@@ -127,7 +142,7 @@ void main() {
       );
       final service = container.read(maiaWeightsServiceProvider);
 
-      final (:rating, :path) = await service.ensureWeights(MaiaRating.maia1900);
+      final (:rating, :path) = await service.ensureWeights(MaiaRating.maia1700);
 
       // An opponent that cannot move because a download did not work is a dead end.
       expect(rating, MaiaRating.defaultRating);
@@ -172,8 +187,8 @@ void main() {
       final container = makeWeightsContainer(appSupportDirectory: null);
       final service = container.read(maiaWeightsServiceProvider);
 
-      expect(await service.isAvailable(MaiaRating.maia1900), isFalse);
-      expect(await service.download(MaiaRating.maia1900), isNull);
+      expect(await service.isAvailable(MaiaRating.maia1700), isFalse);
+      expect(await service.download(MaiaRating.maia1700), isNull);
     });
   });
 }
