@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:chessground/chessground.dart';
 import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
@@ -20,6 +22,7 @@ import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_storage.dart';
 import 'package:lichess_mobile/src/model/offline_computer/practice_analyser.dart';
 import 'package:lichess_mobile/src/model/offline_computer/practice_comment.dart';
+import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/offline_computer/offline_computer_game_screen.dart';
@@ -89,7 +92,7 @@ void main() {
       // Verify the opponent tile is shown, with the default opponent on it
       expect(find.text('Opponent'), findsOneWidget);
       // Once on the tile, once on the engine player behind the sheet.
-      expect(find.text('Stockfish level 4'), findsNWidgets(2));
+      expect(find.text('Maia 1500'), findsNWidgets(2));
 
       // Verify side selection (label is "Side" with value showing default "Random side")
       expect(find.text('Side'), findsOneWidget);
@@ -481,6 +484,13 @@ void main() {
             (_) => gameStorage,
           ),
         },
+        defaultPreferences: {
+          PrefCategory.offlineComputerGame.storageKey: jsonEncode(
+            OfflineComputerGamePrefs.defaults
+                .copyWith(opponentSpec: const StockfishOpponentSpec(StockfishLevel.level4))
+                .toJson(),
+          ),
+        },
       );
       await tester.pumpWidget(app);
       await tester.pumpAndSettle();
@@ -499,8 +509,9 @@ void main() {
       await tester.tap(find.text('OK'));
       await tester.pumpAndSettle();
 
-      // Only the engine player behind the sheet still says level 4; the tile has moved on.
-      expect(find.text('Stockfish level 4'), findsOneWidget);
+      // The tile has moved on from the level the sheet opened at.
+      expect(find.text('Stockfish level 4'), findsNothing);
+      expect(find.textContaining('Stockfish level'), findsOneWidget);
 
       // Select white and start game
       await selectSide(tester, Side.white);
@@ -2199,6 +2210,7 @@ Future<Rect> initOfflineComputerGame(
   Variant? variant,
   String? fen,
   Side side = Side.white,
+  OpponentSpec opponent = const StockfishOpponentSpec(StockfishLevel.level4),
 }) async {
   final gameStorage = MockOfflineComputerGameStorage();
   when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
@@ -2211,6 +2223,13 @@ Future<Rect> initOfflineComputerGame(
     overrides: {
       offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
         (_) => gameStorage,
+      ),
+    },
+    // Stockfish rather than the default Maia, so that the games these tests play run on the fake
+    // engine instead of needing a Maia network on disk.
+    defaultPreferences: {
+      PrefCategory.offlineComputerGame.storageKey: jsonEncode(
+        OfflineComputerGamePrefs.defaults.copyWith(opponentSpec: opponent).toJson(),
       ),
     },
   );

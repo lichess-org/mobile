@@ -744,12 +744,16 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
   void initState() {
     super.initState();
     final prefs = ref.read(offlineComputerGamePreferencesProvider);
-    _selectedOpponent = prefs.opponentSpec;
     _selectedSideChoice = widget.initialFen != null ? SideChoice.nextToPlay : prefs.sideChoice;
     final preferredVariant = widget.initialVariant ?? prefs.variant;
     _selectedVariant = widget.initialFen == null && preferredVariant == Variant.fromPosition
         ? Variant.standard
         : preferredVariant;
+    // The variant is not always the one the preferred opponent was chosen for: a game started from
+    // a variant screen brings its own.
+    _selectedOpponent = prefs.opponentSpec.supportsVariant(_selectedVariant)
+        ? prefs.opponentSpec
+        : OpponentSpec.defaultFor(_selectedVariant);
     _casual = prefs.casual;
     _practiceMode = prefs.practiceMode;
     _fenController.addListener(() {
@@ -831,9 +835,7 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
                       // the game back to Stockfish rather than leaving an opponent that would
                       // have to refuse to move.
                       if (!_selectedOpponent.supportsVariant(variant)) {
-                        _selectedOpponent = const StockfishOpponentSpec(
-                          StockfishLevel.defaultLevel,
-                        );
+                        _selectedOpponent = OpponentSpec.defaultFor(variant);
                       }
                     });
                     ref.read(offlineComputerGamePreferencesProvider.notifier).setVariant(variant);

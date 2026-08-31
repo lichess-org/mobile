@@ -9,15 +9,9 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:material_ui/material_ui.dart';
 
-/// The engines a game can be played against, as the picker presents them.
+/// The engines a game can be played against, in the order the picker presents them: Maia
+/// first, because it is what a new game plays.
 enum OpponentEngine {
-  stockfish(
-    name: 'Stockfish',
-    iconAsset: 'assets/images/stockfish/icon.webp',
-    description:
-        'Free, open-source, and cross-platform chess engine, trusted by grandmasters and '
-        'leading chess platforms worldwide.',
-  ),
   maia(
     name: 'Maia',
     iconAsset: 'assets/images/maia/icon.webp',
@@ -26,6 +20,13 @@ enum OpponentEngine {
         'from over 10 million Lichess games between 1500s. Maia Chess is an ongoing research '
         'project aiming to make a more human-friendly, useful, and fun chess AI. For more '
         'information go to maiachess.com.',
+  ),
+  stockfish(
+    name: 'Stockfish',
+    iconAsset: 'assets/images/stockfish/icon.webp',
+    description:
+        'Free, open-source, and cross-platform chess engine, trusted by grandmasters and '
+        'leading chess platforms worldwide.',
   );
 
   const OpponentEngine({required this.name, required this.iconAsset, required this.description});

@@ -203,7 +203,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       _opponentSubscription?.close();
     });
     return OfflineComputerGameState.initial(
-      opponentSpec: const StockfishOpponentSpec(StockfishLevel.defaultLevel),
+      opponentSpec: const MaiaOpponentSpec(MaiaRating.defaultRating),
       playerSide: Side.white,
     );
   }

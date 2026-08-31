@@ -101,7 +101,7 @@ sealed class OfflineComputerGamePrefs with _$OfflineComputerGamePrefs implements
   }) = _OfflineComputerGamePrefs;
 
   static const defaults = OfflineComputerGamePrefs(
-    opponentSpec: StockfishOpponentSpec(StockfishLevel.defaultLevel),
+    opponentSpec: MaiaOpponentSpec(MaiaRating.defaultRating),
     sideChoice: SideChoice.random,
     variant: Variant.standard,
     casual: true,
