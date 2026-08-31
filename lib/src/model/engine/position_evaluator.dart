@@ -208,7 +208,7 @@ class PositionEvaluator extends Notifier<EngineEvaluationState> {
 
     _logger.info(
       'Starting evaluation at ply ${work.position.ply} with options: '
-      'multiPv=${work.multiPv}, cores=${work.threads}, hash=${work.hashSize}MB, '
+      'multiPv=${work.multiPv}, cores=${work.threads}, '
       'searchTime=${work.searchTime.inMilliseconds}ms, threatMode=${work.threatMode}',
     );
 
@@ -477,7 +477,6 @@ class PositionEvaluator extends Notifier<EngineEvaluationState> {
       limit: SearchLimit.movetime(work.searchTime),
       fenOverride: threatMode ? threatModePosition(work.position).fen : null,
       threads: work.threads,
-      hashSize: work.hashSize ?? 16,
       multiPv: work.multiPv,
       // Nothing beyond the defaults: an evaluation names no options of its own, so the engine puts
       // back whatever the opponent set — its `Skill Level`, most of all — before this search runs.

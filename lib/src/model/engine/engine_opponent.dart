@@ -58,8 +58,9 @@ abstract class EngineOpponent {
   ///
   /// [sharesEngineWithEvaluator] is the caller's answer to a question the opponent cannot see: on
   /// every variant it plays on the same engine as the evaluator computing the game's hints, and
-  /// the two roles then have to ask that engine for the same `Hash` and `Threads` or clear its
-  /// transposition table on every hand-off. See [EngineBudget].
+  /// the two roles then have to ask that engine for the same `Threads`. Anything else tears the
+  /// thread pool down and rebuilds it — clearing the transposition table with it — on every
+  /// hand-off between them, several times a move. See [EngineBudget].
   ///
   /// Throws [MoveSearchCancelled] if the search is superseded or stopped.
   Future<UCIMove> findMove({
@@ -219,16 +220,16 @@ class StockfishOpponent extends EngineOpponentBase<StockfishOpponentSpec> {
     required Variant variant,
     required bool sharesEngineWithEvaluator,
   }) async {
-    final share = budget.opponentShare(
+    final threads = budget.opponentThreads(
       sharesEngineWithEvaluator: sharesEngineWithEvaluator,
       threads: level.threads,
     );
 
     _logger.info(
       'Finding a move at ply ${initialPosition.ply + moves.length}: '
-      'level=${level.level}, skill=${level.skill}, cores=${share.threads}, '
-      'searchTime=${level.searchTime.inMilliseconds}ms, '
-      'hash=${share.hash}MB${sharesEngineWithEvaluator ? ' (shared with the evaluator)' : ''}',
+      'level=${level.level}, skill=${level.skill}, cores=$threads, '
+      'searchTime=${level.searchTime.inMilliseconds}ms'
+      '${sharesEngineWithEvaluator ? ' (engine shared with the evaluator)' : ''}',
     );
 
     return SearchRequest(
@@ -236,8 +237,7 @@ class StockfishOpponent extends EngineOpponentBase<StockfishOpponentSpec> {
       moves: moves,
       variant: variant,
       limit: SearchLimit.movetime(level.searchTime),
-      threads: share.threads,
-      hashSize: share.hash,
+      threads: threads,
       multiPv: level.multiPv,
       // The complete option set for this search. Stockfish's strength limiting works by
       // biasing the scores of slightly worse moves among the candidates, so the MultiPV above

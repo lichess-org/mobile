@@ -22,7 +22,6 @@ sealed class EvalWork with _$EvalWork {
 
     required Variant variant,
     required int threads,
-    int? hashSize,
 
     /// The path in the position tree. Nullable for contexts without a tree (e.g., offline games).
     UciPath? path,

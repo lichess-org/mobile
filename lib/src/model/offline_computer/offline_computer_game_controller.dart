@@ -124,9 +124,9 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     return state.game.opponentSpec.engineSpec.slot == evaluatorEngineSlotFor(ref, variant);
   }
 
-  /// What the evaluator asks its engine for, given whether the opponent is on it too.
-  EngineShare get _evaluatorShare =>
-      _budget.evaluatorShare(sharesEngineWithOpponent: _sharesOneEngine);
+  /// The cores the evaluator asks for. The table it gets is the engine's own, settled when the
+  /// engine was created.
+  int get _evaluatorThreads => _budget.evaluatorThreads;
 
   /// The analysis that runs on the position the game is at, for hints and move feedback.
   late final PracticeAnalyser _analyser = PracticeAnalyser(
@@ -445,12 +445,10 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   }
 
   EvalWork _makeMoveEvalWork(IList<Step> steps) {
-    final share = _evaluatorShare;
     return EvalWork(
       id: state.game.id,
       variant: state.game.meta.variant,
-      threads: share.threads,
-      hashSize: share.hash,
+      threads: _evaluatorThreads,
       searchTime: _kMoveEvalMaxSearchTime,
       // We want the fastest search here and we only need the eval
       multiPv: 1,
@@ -798,7 +796,6 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
 
   /// Starts the continuous analysis of the position the game is at.
   void _analysePosition() {
-    final share = _evaluatorShare;
     final steps = state.game.steps
         .skip(1)
         .map((s) => Step(position: s.position, sanMove: s.sanMove!))
@@ -807,8 +804,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     final work = EvalWork(
       id: state.game.id,
       variant: state.game.meta.variant,
-      threads: share.threads,
-      hashSize: share.hash,
+      threads: _evaluatorThreads,
       searchTime: kPracticeMaxSearchTime,
       multiPv: 2, // a second line, for the alternative move a hint offers
       threatMode: false,

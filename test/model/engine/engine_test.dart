@@ -15,7 +15,7 @@ SearchRequest makeRequest({
   Duration searchTime = const Duration(seconds: 1),
   String? fenOverride,
   int multiPv = 1,
-  int hashSize = 16,
+  int threads = 1,
   bool newGame = false,
 }) => SearchRequest(
   initialPosition: Chess.initial,
@@ -24,7 +24,7 @@ SearchRequest makeRequest({
   limit: SearchLimit.movetime(searchTime),
   fenOverride: fenOverride,
   multiPv: multiPv,
-  hashSize: hashSize,
+  threads: threads,
   options: options,
   newGame: newGame,
 );
@@ -179,31 +179,43 @@ void main() {
       },
     );
 
-    test('the hash grows to the largest a search asks for and never shrinks again', () async {
-      // On a variant offline game the opponent and the evaluator share one engine and ask for
-      // different sizes on alternating moves. Honouring each one would rebuild the transposition
-      // table every hand-off, on the thread running the UCI loop, which is where an engine stops
-      // being able to read `quit`.
+    test('the hash is the one the engine was created with, and is never re-sent', () async {
+      // The table belongs to the engine, not to the search: `setoption name Hash` frees it and
+      // allocates and zeroes a new one on the thread running the UCI loop, which is where an engine
+      // stops being able to read `quit`. On a variant offline game the opponent and the evaluator
+      // are literally the same engine, so a per-search size would rebuild it on every hand-off.
       final transport = FakeTransport();
-      final engine = Engine(transport);
+      final engine = Engine(transport, hashSizeInMb: 96);
       addTearDown(engine.dispose);
       await pumpEventQueue();
 
-      // The opponent's turn: a small table.
-      await startSearch(engine, transport, makeRequest(hashSize: 48));
-      expect(transport.takeCommands(), contains('setoption name Hash value 48'));
+      await startSearch(engine, transport, makeRequest());
+      expect(transport.takeCommands(), contains('setoption name Hash value 96'));
       transport.emit('bestmove e2e4');
       await pumpEventQueue();
 
-      // The evaluator's turn: a larger one, which the engine does grow to.
-      await startSearch(engine, transport, makeRequest(hashSize: 144));
-      expect(transport.takeCommands(), contains('setoption name Hash value 144'));
-      transport.emit('bestmove e2e4');
-      await pumpEventQueue();
-
-      // Back to the opponent. The table it gets is the one already allocated, not a new one.
-      await startSearch(engine, transport, makeRequest(hashSize: 48));
+      // Every later search runs on the table already allocated, whoever asked for it.
+      await startSearch(engine, transport, makeRequest(multiPv: 3));
       expect(transport.takeCommands().join(' '), isNot(contains('Hash')));
+    });
+
+    test('threads are set before the hash', () async {
+      // `setoption name Threads` reallocates and zeroes the table at whatever `Hash` currently is
+      // (`Engine::resize_threads` -> `set_tt_size(options["Hash"])`). This way round costs one
+      // zeroing of the 16MB default plus one of the real size; reversed, it costs two of the real
+      // size on every engine that starts.
+      final transport = FakeTransport();
+      final engine = Engine(transport, hashSizeInMb: 96);
+      addTearDown(engine.dispose);
+      await pumpEventQueue();
+
+      await startSearch(engine, transport, makeRequest(threads: 2));
+
+      final commands = transport.takeCommands();
+      final threads = commands.indexWhere((c) => c.startsWith('setoption name Threads'));
+      final hash = commands.indexWhere((c) => c.startsWith('setoption name Hash'));
+      expect(threads, greaterThanOrEqualTo(0));
+      expect(hash, greaterThan(threads));
     });
 
     test("an option the engine did not declare is not sent on the engine's behalf", () async {

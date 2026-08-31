@@ -101,14 +101,15 @@ void main() {
         sharesEngineWithEvaluator: true,
       );
 
-      // On a variant the opponent and the hints are the same Fairy-Stockfish, and a `Hash` or
-      // `Threads` the two roles disagree about is re-sent — and the transposition table cleared —
-      // on every hand-off.
-      expect(engine.options['Hash'], budget.sharedHash.toString());
-      expect(engine.options['Threads'], budget.sharedThreads.toString());
+      // On a variant the opponent and the hints are the same Fairy-Stockfish, and a `Threads` the
+      // two roles disagree about tears the thread pool down and rebuilds it — clearing the
+      // transposition table with it — on every hand-off.
+      expect(engine.options['Threads'], budget.evaluatorThreads.toString());
+      // The table is the engine's own, settled when it was created.
+      expect(engine.options['Hash'], budget.engineHash.toString());
     });
 
-    test('keeps its own small table when the evaluator is on another engine', () async {
+    test('searches on the threads its level asks for when it has its own engine', () async {
       final engine = FakeEngine();
       fakeEngine = engine;
       final container = await makeContainer();
@@ -120,8 +121,8 @@ void main() {
         variant: Variant.standard,
       );
 
-      expect(engine.options['Hash'], budget.opponentHash.toString());
       expect(engine.options['Threads'], '2');
+      expect(engine.options['Hash'], budget.engineHash.toString());
     });
 
     test('tells the engine when a game starts', () async {

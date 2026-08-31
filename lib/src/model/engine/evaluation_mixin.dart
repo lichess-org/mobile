@@ -334,8 +334,6 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState<T>> on AnyNotifier<As
       id: curState.evaluationContext.id,
       variant: curState.evaluationContext.variant,
       threads: budget.threadsFor(evaluationPrefs.numEngineCores),
-      // An analysis screen has the device to itself: nothing else is resident beside it.
-      hashSize: budget.soleHash,
       path: curState.currentPath,
       searchTime: searchTime,
       multiPv: evaluationPrefs.numEvalLines,

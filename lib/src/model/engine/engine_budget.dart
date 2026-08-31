@@ -4,40 +4,47 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/engine/engine_utils.dart';
 
-/// The most the opponent's transposition table is ever worth.
-///
-/// It searches for half a second to two seconds at levels 1–12 and gains very little from a large
-/// table; a share of a big device's budget would be hundreds of megabytes held for nothing.
-const _kMaxOpponentHashInMb = 64;
-
 /// The smallest table worth giving an engine at all.
 const _kMinHashInMb = 16;
 
-/// What one role of an offline game asks its engine for.
-typedef EngineShare = ({int hash, int threads});
+/// The most any one engine may hold, whatever the device has.
+///
+/// A mobile analysis runs a few seconds to half a minute on one or two threads and cannot fill a
+/// table this size, so the unlimited search time is the only setting this constrains at all.
+const kMaxHashPerEngineInMb = 256;
+
+/// The most engines that can hold a transposition table at the same time.
+///
+/// An offline game runs an evaluator and an opponent. Every other screen runs one engine, and the
+/// engine provider releases an unwatched engine before the next one allocates, so this is the
+/// worst case rather than the usual one.
+const kMaxResidentEngines = 2;
 
 /// How the engines that can be resident at once share the device.
 ///
-/// The two axes behave differently. **Cores are not split**: only one engine searches at a time —
-/// an offline game's opponent thinks, its move is played, and only then are the hints computed —
-/// so whoever is searching can have the whole core budget. **Memory is**: `Hash` is allocated when
-/// the option is set, not when a search starts, so two resident engines hold two tables for as
-/// long as they are both loaded.
+/// The two axes are settled at different times, and that asymmetry is the whole of this class.
 ///
-/// **Whether there are two engines at all is a property of the game.** An offline game's evaluator
-/// and its opponent both run on Fairy-Stockfish on every variant, and the same [EngineSpec] means
-/// literally the same [Engine] — so the split above would have the two roles asking one engine for
-/// two different `Hash` values, and `setoption name Hash` makes Stockfish reallocate and clear its
-/// transposition table. Several times a move, that throws away the search each role is about to
-/// want. `Threads` re-initialises the thread pool and clears it too. Hence [evaluatorShare] and
-/// [opponentShare], which agree when the roles share an engine.
+/// **Memory is fixed when the engine is created.** `Hash` is allocated when the option is set and
+/// freed when the engine exits, so the table belongs to the engine and not to any one search —
+/// and no caller has a reason to want a different one, which is what lets [engineHash] be a single
+/// number nobody passes around. See [engineHash] for what bounds it.
+///
+/// **Cores are negotiated per search**, because two callers legitimately disagree about them: a
+/// weak [StockfishLevel] plays on one thread deliberately, and the analysis screen has a slider.
+/// That freedom is not free. `setoption name Threads` destroys and recreates the thread pool,
+/// clears the search history, reallocates and zeroes the table *at the current `Hash`*, and
+/// re-runs `Search::init()` — all synchronously on the thread running the UCI loop. So the one
+/// case where two roles share an engine has to make them agree: on a variant offline game the
+/// evaluator and the opponent are literally the same Fairy-Stockfish, and a `Threads` they
+/// disagreed about would tear the pool down several times a move. Hence the
+/// [opponentThreads] `sharesEngineWithEvaluator` argument below.
 class EngineBudget {
   const EngineBudget({required this.maxMemoryInMb, required this.maxCores});
 
   /// The whole memory budget for engines on this device, in MB.
   ///
-  /// A share of the device's RAM under a hard cap — see [engineMaxMemoryFor] — so this is small
-  /// enough that handing all of it to one engine is safe.
+  /// A share of the device's RAM — see [engineMaxMemoryFor] — divided between the engines that can
+  /// be resident at once rather than handed to any one of them.
   final int maxMemoryInMb;
 
   /// The most cores an engine may search on.
@@ -46,44 +53,40 @@ class EngineBudget {
   /// The threads to ask for, given what the caller would like.
   int threadsFor(int requested) => math.min(math.max(1, requested), maxCores);
 
-  /// The hash for an engine that has the device to itself, as on an analysis screen.
-  int get soleHash => math.max(_kMinHashInMb, maxMemoryInMb);
-
-  /// The hash for the opponent, which shares the device with the evaluator computing the hints.
-  int get opponentHash =>
-      math.min(_kMaxOpponentHashInMb, math.max(_kMinHashInMb, maxMemoryInMb ~/ 4));
-
-  /// The hash for an evaluator running beside an opponent.
-  int get evaluatorHash => math.max(_kMinHashInMb, maxMemoryInMb - opponentHash);
-
-  /// The hash both roles ask for when they are the same engine.
+  /// The transposition table every engine is created with.
   ///
-  /// The whole budget, because there is then only one table: the split above exists to stop two
-  /// resident engines holding two of them, and one engine holding one costs exactly what the two
-  /// shares came to together.
-  int get sharedHash => soleHash;
-
-  /// The threads both roles ask for when they are the same engine.
+  /// One number for every engine, whatever it is going to be used for, because the table is not a
+  /// role's: it is allocated when the engine starts and freed when it exits, and one engine serves
+  /// whichever roles happen to want it — the evaluator, the opponent, or both at once on a
+  /// variant. Sizing it per role would mean either resizing on every hand-off, which clears the
+  /// table and blocks the UCI loop while it does, or a number that silently depends on which role
+  /// happened to create the engine.
   ///
-  /// The evaluator's figure, which is the larger of the two — every [StockfishLevel] asks for one
-  /// or two threads — and is the one deliberately chosen to leave a core for the UI.
-  int get sharedThreads => threadsFor(numberOfCoresForEvaluation);
+  /// A share *and* a cap, because the two protect against different things: the share keeps two
+  /// resident engines from asking a small device for more than it has, the cap keeps a large one
+  /// from being asked to find [kMaxHashPerEngineInMb] more than once in a single block.
+  int get engineHash => math.min(
+    kMaxHashPerEngineInMb,
+    math.max(_kMinHashInMb, maxMemoryInMb ~/ kMaxResidentEngines),
+  );
 
-  /// The evaluator's share of an offline game's device.
-  EngineShare evaluatorShare({required bool sharesEngineWithOpponent}) => sharesEngineWithOpponent
-      ? (hash: sharedHash, threads: sharedThreads)
-      : (hash: evaluatorHash, threads: threadsFor(numberOfCoresForEvaluation));
+  /// The threads the evaluator of an offline game asks for.
+  ///
+  /// One fewer than the budget allows: it runs during the player's turn, while the board is being
+  /// interacted with, rather than while the user waits for the opponent.
+  int get evaluatorThreads => threadsFor(numberOfCoresForEvaluation);
 
-  /// The opponent's share of an offline game's device, given the [threads] its level asks for.
-  EngineShare opponentShare({required bool sharesEngineWithEvaluator, required int threads}) =>
-      sharesEngineWithEvaluator
-      ? (hash: sharedHash, threads: sharedThreads)
-      : (hash: opponentHash, threads: threadsFor(threads));
+  /// The threads the opponent of an offline game asks for, given what its level wants.
+  ///
+  /// The evaluator's figure when they are the same engine — the larger of the two, since every
+  /// [StockfishLevel] asks for one or two threads — because the alternative is tearing the thread
+  /// pool down and back up on every hand-off between them.
+  int opponentThreads({required bool sharesEngineWithEvaluator, required int threads}) =>
+      sharesEngineWithEvaluator ? evaluatorThreads : threadsFor(threads);
 
   @override
   String toString() =>
-      'EngineBudget(memory: ${maxMemoryInMb}MB, cores: $maxCores, '
-      'sole: ${soleHash}MB, opponent: ${opponentHash}MB, evaluator: ${evaluatorHash}MB)';
+      'EngineBudget(memory: ${maxMemoryInMb}MB, cores: $maxCores, hash: ${engineHash}MB)';
 }
 
 /// The device's engine budget.

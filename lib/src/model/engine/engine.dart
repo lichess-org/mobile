@@ -79,7 +79,6 @@ class SearchRequest {
     required this.limit,
     this.fenOverride,
     this.threads = 1,
-    this.hashSize = 16,
     this.multiPv = 1,
     this.options = const IMapConst({}),
     this.newGame = false,
@@ -101,15 +100,9 @@ class SearchRequest {
   final String? fenOverride;
 
   final int threads;
-  final int hashSize;
   final int multiPv;
 
   /// The complete option set for this search, beyond the ones named above.
-  ///
-  /// Complete is the point: any option not named here is returned to its default before the search
-  /// starts, so a search can never inherit the settings of whoever ran last — an evaluation cannot
-  /// silently run at the opponent's `Skill Level`, and no caller has to know which other callers
-  /// exist.
   final IMap<String, String> options;
 
   /// Whether the engine should be told this is a new game before the search.
@@ -173,7 +166,7 @@ abstract class Search {
 /// It has no idea whether it is being used to analyse or to play. Skill levels, evaluation
 /// perspective and search-time policy all live above it.
 class Engine {
-  Engine(this._transport) {
+  Engine(this._transport, {this.hashSizeInMb = 16}) {
     _linesSubscription = _transport.lines.listen(_onLine);
     unawaited(_transport.death.then(_onDeath));
   }
@@ -204,20 +197,19 @@ class Engine {
   /// The variant of the last search started, so that a failure can name what the engine was doing.
   Variant? _lastVariant;
 
-  /// The `Hash` this engine is running with: the largest any search has asked for.
+  /// The transposition table this engine was created with, in MB.
   ///
-  /// A high-water mark rather than whatever the current search wants, because **the transposition
-  /// table belongs to the engine, not to the search**. `setoption name Hash` frees the old table
-  /// and allocates and zeroes a new one, on the thread running the UCI loop — so an engine two
-  /// callers share, each asking for a different size, would rebuild its table on every hand-off
-  /// and be unable to read a command, `quit` included, while it did. That is not a hypothetical:
-  /// on a variant offline game the opponent and the evaluator are literally the same engine, and
-  /// they ask for different sizes on alternating moves.
+  /// A creation parameter and not a search one, because **the table belongs to the engine**:
+  /// `setoption name Hash` frees the old table and allocates and zeroes a new one, synchronously,
+  /// on the thread running the UCI loop — so an engine two callers shared, each asking for a
+  /// different size, would rebuild its table on every hand-off and be unable to read a command,
+  /// `quit` included, while it did. That is not a hypothetical: on a variant offline game the
+  /// opponent and the evaluator are literally the same engine.
   ///
-  /// Growing only is what makes this safe to do behind the callers' backs. Nobody gets a smaller
-  /// table than they asked for, and the engine settles at the largest of the roles it has served
-  /// after one resize instead of one per move.
-  int? _hashSize;
+  /// Nobody has a reason to want a different value either, since the table is sized by what the
+  /// device can spare rather than by what any one search intends to do with it. See
+  /// `EngineBudget.engineHash`.
+  final int hashSizeInMb;
 
   EngineSpec get spec => _transport.spec;
 
@@ -354,7 +346,7 @@ class Engine {
     _running = null;
     _isSearching.value = false;
     if (!_death.isCompleted) {
-      _death.complete(failure?.withContext(variant: _lastVariant, hashSizeInMb: _hashSize));
+      _death.complete(failure?.withContext(variant: _lastVariant, hashSizeInMb: hashSizeInMb));
     }
   }
 
@@ -500,13 +492,15 @@ class Engine {
     // an option it does not advertise (LC0's `Temperature` is declared "pro only" and never
     // listed).
 
-    // See [_hashSize]: the table is the engine's, so a search can raise it but never shrink it.
-    final hashSize = math.max(_hashSize ?? 0, request.hashSize);
-    _hashSize = hashSize;
-
+    // `Threads` before `Hash`, and the order is load-bearing. Setting `Threads` reallocates and
+    // zeroes the table at whatever `Hash` currently is, so on a new engine this way round costs one
+    // zeroing of the 16MB default plus one of the real size; the other way round costs two of the
+    // real size. See `EngineBudget`.
     final own = <String, String>{
       'Threads': math.min(request.threads, maxEngineCores).toString(),
-      'Hash': hashSize.toString(),
+      // Not from the request: see [hashSizeInMb]. Sent once, on the first search, and then held by
+      // the deduplication in [_setOption] for the life of the engine.
+      'Hash': hashSizeInMb.toString(),
       'MultiPV': math.max(1, request.multiPv).toString(),
       // Affects notation only. Life would be easier if everyone would always unconditionally use
       // this mode.

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/engine/engine.dart';
+import 'package:lichess_mobile/src/model/engine/engine_budget.dart';
 import 'package:lichess_mobile/src/model/engine/engine_factory.dart';
 import 'package:lichess_mobile/src/model/engine/engine_spec.dart';
 import 'package:logging/logging.dart';
@@ -90,7 +91,11 @@ class EngineHolder extends AsyncNotifier<Engine> {
       onTimeout: () => _logger.warning('An unwatched engine did not exit; starting $spec anyway'),
     );
 
-    final engine = await ref.read(engineFactoryProvider).create(spec);
+    // The table is settled here and never again: it belongs to the engine, not to any search that
+    // runs on it. See [Engine.hashSizeInMb].
+    final engine = await ref
+        .read(engineFactoryProvider)
+        .create(spec, hashSizeInMb: ref.read(engineBudgetProvider).engineHash);
 
     // The provider is autoDispose and starting an engine takes a moment, so the last watcher can
     // go away while this is suspended — leaving one analysis screen, or switching to another

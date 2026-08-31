@@ -76,12 +76,15 @@ class EngineFactory {
 
   /// Creates and starts an engine, completing when it answers `uciok`.
   ///
+  /// [hashSizeInMb] is the transposition table the engine will hold for its whole life; see
+  /// [Engine.hashSizeInMb].
+  ///
   /// Throws an [EngineCreationException] describing what went wrong if it does not get that far.
-  Future<Engine> create(EngineSpec spec) async {
+  Future<Engine> create(EngineSpec spec, {int hashSizeInMb = 16}) async {
     final attempt = _Attempt();
     final queued = _starting[spec.slot];
 
-    final started = _create(spec, attempt, after: queued);
+    final started = _create(spec, attempt, hashSizeInMb: hashSizeInMb, after: queued);
     final claim = started.then((_) {}, onError: (Object _) {});
     attempt.claim = claim;
     _starting[spec.slot] = claim;
@@ -120,19 +123,24 @@ class EngineFactory {
     }
   }
 
-  Future<Engine> _create(EngineSpec spec, _Attempt attempt, {required Future<void>? after}) async {
+  Future<Engine> _create(
+    EngineSpec spec,
+    _Attempt attempt, {
+    required int hashSizeInMb,
+    required Future<void>? after,
+  }) async {
     try {
       if (after != null) {
         _logger.fine('Waiting for the create already running on ${spec.slot.name}');
         await after;
       }
-      return await _connectAndRegister(spec, attempt);
+      return await _connectAndRegister(spec, attempt, hashSizeInMb);
     } finally {
       if (identical(_starting[spec.slot], attempt.claim)) _starting.remove(spec.slot);
     }
   }
 
-  Future<Engine> _connectAndRegister(EngineSpec spec, _Attempt attempt) async {
+  Future<Engine> _connectAndRegister(EngineSpec spec, _Attempt attempt, int hashSizeInMb) async {
     if (_live[spec.slot] case final incumbent?) {
       assert(
         incumbent.isDisposed,
@@ -151,7 +159,7 @@ class EngineFactory {
     _logger.fine('Creating engine: $spec');
 
     final transport = await _connect(spec);
-    final engine = Engine(transport);
+    final engine = Engine(transport, hashSizeInMb: hashSizeInMb);
 
     if (attempt.abandoned) {
       // Nobody is waiting for this engine any more, and an engine nobody owns is never disposed:
