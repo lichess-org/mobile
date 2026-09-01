@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
@@ -7,6 +8,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/engine_budget.dart';
 import 'package:lichess_mobile/src/model/engine/engine_providers.dart';
+import 'package:lichess_mobile/src/model/engine/maia_book.dart';
 import 'package:lichess_mobile/src/model/engine/opponent_level.dart';
 import 'package:lichess_mobile/src/model/engine/thinking_time.dart';
 import 'package:lichess_mobile/src/model/engine/weights_service.dart';
@@ -17,10 +19,8 @@ final _logger = Logger('EngineOpponent');
 
 /// The softmax temperature LC0 turns the network's policy logits into priors with.
 ///
-/// Pinned to 1, which is the temperature Maia's policy head was trained at, so that the priors are
-/// the distribution the network actually learned. LC0's own default is 1.359 — a value chosen to
-/// widen a *search*, which is the opposite of what we want from a network whose output is already
-/// the answer.
+/// 1 is the identity, i.e. the scale the logits were fit at. LC0 defaults to 1.359, which is
+/// chosen to widen a search.
 const _kMaiaPolicyTemperature = 1.0;
 
 /// How much of Maia's policy to sample, rather than always playing the move it likes best.
@@ -33,10 +33,9 @@ const _kMaiaTemperature = 0.8;
 
 /// How long the temperature holds before it starts falling, and over how many moves it reaches 0.
 ///
-/// Variety is worth most in the opening, where there really are several reasonable human choices,
-/// and worst in a sharp endgame, where sampling the 3% move throws the game away.
-const _kMaiaTempDecayDelayMoves = 10;
-const _kMaiaTempDecayMoves = 30;
+/// The delay ends where the offline opening book does.
+const _kMaiaTempDecayDelayMoves = 5;
+const _kMaiaTempDecayMoves = 35;
 
 /// The floor the decay above never falls through, so that a long game does not become deterministic.
 const _kMaiaTempEndgame = 0.2;
@@ -111,6 +110,18 @@ abstract class EngineOpponentBase<S extends OpponentSpec> implements EngineOppon
     required bool sharesEngineWithEvaluator,
   });
 
+  /// A move played out of an opening book rather than searched for, if this opponent has one.
+  ///
+  /// Consulted before the engine is asked for anything. Returning null — no book, or a position
+  /// the book does not know — falls through to the search, which is what an opponent without a
+  /// book always does.
+  @protected
+  Future<UCIMove?> bookMove({
+    required Position initialPosition,
+    required IList<UCIMove> moves,
+    required Variant variant,
+  }) async => null;
+
   /// How long this opponent should appear to have taken, measured from the start of the search.
   ///
   /// A wait, not a search limit: [move] is already decided by the time this is asked, and nothing
@@ -151,6 +162,25 @@ abstract class EngineOpponentBase<S extends OpponentSpec> implements EngineOppon
     final elapsed = Stopwatch()..start();
 
     try {
+      // Inside the search rather than in [findMove], so that a book move waits out the thinking
+      // time and answers to [stop] exactly as a searched move does.
+      final fromBook = await bookMove(
+        initialPosition: initialPosition,
+        moves: moves,
+        variant: variant,
+      );
+      if (!identical(_pending, completer)) return;
+      if (fromBook != null) {
+        await _completeAfterThinking(
+          completer,
+          fromBook,
+          initialPosition: initialPosition,
+          moves: moves,
+          elapsed: elapsed,
+        );
+        return;
+      }
+
       final request = await buildRequest(
         initialPosition: initialPosition,
         moves: moves,
@@ -175,24 +205,42 @@ abstract class EngineOpponentBase<S extends OpponentSpec> implements EngineOppon
         return;
       }
 
-      // [_pending] deliberately still points at this search: a stop during the wait has to be able
-      // to cancel it, and clearing it early would leave the caller waiting on a completer nobody
-      // owns any more.
-      final remaining =
-          thinkingTimeFor(initialPosition: initialPosition, moves: moves, move: move) -
-          elapsed.elapsed;
-      if (remaining > Duration.zero) {
-        await Future<void>.delayed(remaining);
-        if (!identical(_pending, completer)) return;
-      }
-
-      _pending = null;
-      completer.complete(move);
+      await _completeAfterThinking(
+        completer,
+        move,
+        initialPosition: initialPosition,
+        moves: moves,
+        elapsed: elapsed,
+      );
     } catch (error, stackTrace) {
       if (!identical(_pending, completer)) return;
       _pending = null;
       completer.completeError(error, stackTrace);
     }
+  }
+
+  /// Completes [completer] with [move] once this opponent has appeared to think for long enough.
+  ///
+  /// [_pending] deliberately still points at this search while it waits: a stop during the wait
+  /// has to be able to cancel it, and clearing it early would leave the caller waiting on a
+  /// completer nobody owns any more.
+  Future<void> _completeAfterThinking(
+    Completer<UCIMove> completer,
+    UCIMove move, {
+    required Position initialPosition,
+    required IList<UCIMove> moves,
+    required Stopwatch elapsed,
+  }) async {
+    final remaining =
+        thinkingTimeFor(initialPosition: initialPosition, moves: moves, move: move) -
+        elapsed.elapsed;
+    if (remaining > Duration.zero) {
+      await Future<void>.delayed(remaining);
+      if (!identical(_pending, completer)) return;
+    }
+
+    _pending = null;
+    completer.complete(move);
   }
 
   @override
@@ -266,11 +314,20 @@ class MaiaOpponent extends EngineOpponentBase<MaiaOpponentSpec> {
     required super.ref,
     required super.spec,
     required this.weights,
+    required this.books,
     required this.thinkingTime,
-  });
+    Random? random,
+  }) : random = random ?? Random();
 
   @protected
   final MaiaWeightsService weights;
+
+  @protected
+  final MaiaBookService books;
+
+  /// Injected so that a game can be replayed move for move in tests.
+  @protected
+  final Random random;
 
   /// How long it sits on a move before playing it. Maia answers in a few tens of milliseconds, and
   /// a move that lands the instant you finish yours is the most obviously inhuman thing about it.
@@ -314,6 +371,35 @@ class MaiaOpponent extends EngineOpponentBase<MaiaOpponentSpec> {
       _logger.warning('Could not replay the game to time the opponent', e, st);
       return null;
     }
+  }
+
+  /// The opening the network would otherwise have to invent.
+  ///
+  /// Maia's policy is sharper than the human distribution it was trained on, so left to itself it
+  /// opens the same way nearly every game. The book plays the moves humans of its rating actually
+  /// played, at the frequencies they played them, for as long as it knows the position.
+  ///
+  /// Skipped outside standard chess, and from a position other than the standard start: the book
+  /// was crawled from there, and a hash it does not hold is a miss anyway, but there is no reason
+  /// to read it to find that out.
+  @override
+  Future<UCIMove?> bookMove({
+    required Position initialPosition,
+    required IList<UCIMove> moves,
+    required Variant variant,
+  }) async {
+    if (variant != Variant.standard) return null;
+    if (initialPosition != Chess.initial) return null;
+
+    final position = _replay(initialPosition, moves);
+    if (position == null) return null;
+
+    final book = await books.bookFor(rating);
+    final move = book?.chooseMove(position, random);
+    if (move != null) {
+      _logger.info('Playing $move from the ${MaiaBookTier.forRating(rating).name} opening book');
+    }
+    return move;
   }
 
   @override
@@ -377,6 +463,7 @@ final engineOpponentProvider = Provider.autoDispose.family<EngineOpponent, Oppon
       ref: ref,
       spec: maia,
       weights: ref.read(maiaWeightsServiceProvider),
+      books: ref.read(maiaBookServiceProvider),
       thinkingTime: ref.read(thinkingTimeProvider),
     ),
   };

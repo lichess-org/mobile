@@ -108,6 +108,10 @@ dev_dependencies:
 # package versions that are not published yet. Remove this whole block, and restore the git ref
 # under `multistockfish` above, before merging.
 dependency_overrides:
+  # Local checkout of dartchess for the Zobrist hashing the opening book keys on (0.14.0,
+  # unreleased). Remove once dartchess 0.14.0 is on pub.dev and the constraint above is bumped.
+  dartchess:
+    path: ../dartchess
   multistockfish_chess:
     path: ../dart-multistockfish/pkgs/multistockfish_chess
   multistockfish_sf16:

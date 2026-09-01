@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/engine/engine_budget.dart';
 import 'package:lichess_mobile/src/model/engine/engine_opponent.dart';
+import 'package:lichess_mobile/src/model/engine/maia_book.dart';
 import 'package:lichess_mobile/src/model/engine/opponent_level.dart';
 
 import 'package:lichess_mobile/src/model/engine/thinking_time.dart';
@@ -12,7 +13,9 @@ import 'package:lichess_mobile/src/model/engine/weights_service.dart';
 
 import '../../test_container.dart';
 import 'fake_engine.dart';
+import 'fake_maia_book_service.dart';
 import 'fake_weights_service.dart';
+import 'polyglot_fixture.dart';
 
 /// A [ThinkingTime] that always asks for the same wait, so a test can time the wiring rather than
 /// the distribution — which `thinking_time_test.dart` covers on its own.
@@ -215,11 +218,15 @@ void main() {
   });
 
   group('MaiaOpponent', () {
-    Future<ProviderContainer> makeMaiaContainer(FakeMaiaWeightsService weights) => makeContainer(
-      overrides: {
-        maiaWeightsServiceProvider: maiaWeightsServiceProvider.overrideWithValue(weights),
-      },
-    );
+    Future<ProviderContainer> makeMaiaContainer(FakeMaiaWeightsService weights, {MaiaBook? book}) =>
+        makeContainer(
+          overrides: {
+            maiaWeightsServiceProvider: maiaWeightsServiceProvider.overrideWithValue(weights),
+            maiaBookServiceProvider: maiaBookServiceProvider.overrideWithValue(
+              FakeMaiaBookService(book: book),
+            ),
+          },
+        );
 
     test("plays the network's own move on LC0, with no search on top of it", () async {
       final engine = FakeEngine();
@@ -258,8 +265,9 @@ void main() {
       // is what makes the second one readable.
       expect(engine.options['PolicyTemperature'], '1.0');
       expect(engine.options['Temperature'], '0.8');
-      expect(engine.options['TempDecayDelayMoves'], '10');
-      expect(engine.options['TempDecayMoves'], '30');
+      // The full temperature holds until the opening book runs out at move 5, then fades.
+      expect(engine.options['TempDecayDelayMoves'], '5');
+      expect(engine.options['TempDecayMoves'], '35');
       // Not a phase of the game: with no `TempCutoffMove` this is the floor the decay stops at.
       expect(engine.options['TempEndgame'], '0.2');
     });
@@ -318,14 +326,129 @@ void main() {
     });
   });
 
+  group('MaiaOpponent opening book', () {
+    /// A book that answers the initial position and nothing else.
+    MaiaBook firstMoveBook() => MaiaBook(bookFor(Chess.initial, {'e2e4': 1000}));
+
+    Future<ProviderContainer> makeBookContainer(MaiaBook? book) => makeContainer(
+      overrides: {
+        maiaWeightsServiceProvider: maiaWeightsServiceProvider.overrideWithValue(
+          FakeMaiaWeightsService(),
+        ),
+        maiaBookServiceProvider: maiaBookServiceProvider.overrideWithValue(
+          FakeMaiaBookService(book: book),
+        ),
+      },
+    );
+
+    test('plays a book move without asking the engine for one', () async {
+      final engine = FakeEngine();
+      fakeEngine = engine;
+      final container = await makeBookContainer(firstMoveBook());
+
+      final move = await readOpponentFor(container, const MaiaOpponentSpec(MaiaRating.maia1500))
+          .findMove(
+            initialPosition: Chess.initial,
+            moves: const IListConst([]),
+            variant: Variant.standard,
+          );
+
+      expect(move, 'e2e4');
+      // The opponent keeps an engine alive for the game either way; what the book saves is the
+      // search, which is the whole point of putting it in front of the engine.
+      expect(engine.commands.where((command) => command.startsWith('go')), isEmpty);
+    });
+
+    test('falls through to the engine once out of book', () async {
+      final engine = FakeEngine();
+      fakeEngine = engine;
+      final container = await makeBookContainer(firstMoveBook());
+
+      final move = await readOpponentFor(container, const MaiaOpponentSpec(MaiaRating.maia1500))
+          .findMove(
+            initialPosition: Chess.initial,
+            moves: const IListConst(['e2e4', 'e7e5']),
+            variant: Variant.standard,
+          );
+
+      expect(move, isNotEmpty);
+      expect(engine.commands.where((command) => command.startsWith('go')), hasLength(1));
+    });
+
+    test('plays its own moves when there is no book to read', () async {
+      final engine = FakeEngine();
+      fakeEngine = engine;
+      final container = await makeBookContainer(null);
+
+      await readOpponentFor(container, const MaiaOpponentSpec(MaiaRating.maia1500)).findMove(
+        initialPosition: Chess.initial,
+        moves: const IListConst([]),
+        variant: Variant.standard,
+      );
+
+      expect(engine.commands.where((command) => command.startsWith('go')), hasLength(1));
+    });
+
+    test('skips the book from a position other than the standard start', () async {
+      final engine = FakeEngine();
+      fakeEngine = engine;
+      final container = await makeBookContainer(firstMoveBook());
+      final books = container.read(maiaBookServiceProvider) as FakeMaiaBookService;
+
+      await readOpponentFor(container, const MaiaOpponentSpec(MaiaRating.maia1500)).findMove(
+        initialPosition: Chess.fromSetup(
+          Setup.parseFen('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1'),
+        ),
+        moves: const IListConst([]),
+        variant: Variant.standard,
+      );
+
+      expect(books.requests, isEmpty);
+      expect(engine.commands.where((command) => command.startsWith('go')), hasLength(1));
+    });
+
+    test('skips the book outside standard chess', () async {
+      final engine = FakeEngine();
+      fakeEngine = engine;
+      final container = await makeBookContainer(firstMoveBook());
+      final books = container.read(maiaBookServiceProvider) as FakeMaiaBookService;
+
+      await readOpponentFor(container, const MaiaOpponentSpec(MaiaRating.maia1500)).findMove(
+        initialPosition: Chess.initial,
+        moves: const IListConst([]),
+        variant: Variant.chess960,
+      );
+
+      expect(books.requests, isEmpty);
+      expect(engine.commands.where((command) => command.startsWith('go')), hasLength(1));
+    });
+
+    test('reads the book of the rating it is playing at', () async {
+      fakeEngine = FakeEngine();
+      final container = await makeBookContainer(firstMoveBook());
+      final books = container.read(maiaBookServiceProvider) as FakeMaiaBookService;
+
+      await readOpponentFor(container, const MaiaOpponentSpec(MaiaRating.maia1900)).findMove(
+        initialPosition: Chess.initial,
+        moves: const IListConst([]),
+        variant: Variant.standard,
+      );
+
+      expect(books.requests, [MaiaRating.maia1900]);
+    });
+  });
+
   group('MaiaOpponent thinking time', () {
     /// A container whose Maia opponent waits [think] before answering, however fast the engine is.
-    Future<ProviderContainer> makeSlowContainer(Duration think) => makeContainer(
+    Future<ProviderContainer> makeSlowContainer(Duration think, {MaiaBook? book}) => makeContainer(
       overrides: {
         maiaWeightsServiceProvider: maiaWeightsServiceProvider.overrideWithValue(
           FakeMaiaWeightsService(),
         ),
         thinkingTimeProvider: thinkingTimeProvider.overrideWithValue(FixedThinkingTime(think)),
+        maiaBookServiceProvider: maiaBookServiceProvider.overrideWithValue(
+          FakeMaiaBookService(book: book),
+        ),
       },
     );
 
@@ -361,6 +484,27 @@ void main() {
 
       expect(elapsed.elapsed, greaterThanOrEqualTo(const Duration(milliseconds: 180)));
       expect(elapsed.elapsed, lessThan(const Duration(milliseconds: 340)));
+    });
+
+    test('a book move waits as long as a searched one', () async {
+      fakeEngine = FakeEngine();
+      final container = await makeSlowContainer(
+        const Duration(milliseconds: 200),
+        book: MaiaBook(bookFor(Chess.initial, {'e2e4': 1000})),
+      );
+      final opponent = readOpponentFor(container, const MaiaOpponentSpec(MaiaRating.maia1500));
+
+      final elapsed = Stopwatch()..start();
+      final move = await opponent.findMove(
+        initialPosition: Chess.initial,
+        moves: const IListConst([]),
+        variant: Variant.standard,
+      );
+
+      // A book lookup is instant, which would make the opening the most obviously inhuman part of
+      // the game if the wait did not cover it too.
+      expect(move, 'e2e4');
+      expect(elapsed.elapsed, greaterThanOrEqualTo(const Duration(milliseconds: 180)));
     });
 
     test('a stop during the wait cancels the move rather than playing it late', () async {
