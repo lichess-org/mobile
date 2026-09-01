@@ -753,7 +753,7 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
     // a variant screen brings its own.
     _selectedOpponent = prefs.opponentSpec.supportsVariant(_selectedVariant)
         ? prefs.opponentSpec
-        : OpponentSpec.defaultFor(_selectedVariant);
+        : OpponentSpec.defaultSpec;
     _casual = prefs.casual;
     _practiceMode = prefs.practiceMode;
     _fenController.addListener(() {
@@ -835,7 +835,7 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
                       // the game back to Stockfish rather than leaving an opponent that would
                       // have to refuse to move.
                       if (!_selectedOpponent.supportsVariant(variant)) {
-                        _selectedOpponent = OpponentSpec.defaultFor(variant);
+                        _selectedOpponent = OpponentSpec.defaultSpec;
                       }
                     });
                     ref.read(offlineComputerGamePreferencesProvider.notifier).setVariant(variant);

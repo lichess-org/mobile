@@ -599,20 +599,5 @@ void main() {
       expect(const MaiaOpponentSpec(MaiaRating.maia1500).supportsVariant(Variant.atomic), isFalse);
       expect(const MaiaOpponentSpec(MaiaRating.maia1500).supportsVariant(Variant.standard), isTrue);
     });
-
-    test('the default opponent is Maia wherever it can play', () {
-      expect(
-        OpponentSpec.defaultFor(Variant.standard),
-        const MaiaOpponentSpec(MaiaRating.maia1500),
-      );
-      expect(
-        OpponentSpec.defaultFor(Variant.chess960),
-        const MaiaOpponentSpec(MaiaRating.maia1500),
-      );
-      expect(
-        OpponentSpec.defaultFor(Variant.atomic),
-        const StockfishOpponentSpec(StockfishLevel.defaultLevel),
-      );
-    });
   });
 }

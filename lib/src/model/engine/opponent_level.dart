@@ -123,17 +123,8 @@ sealed class OpponentSpec {
     return const StockfishOpponentSpec(StockfishLevel.defaultLevel);
   }
 
-  /// The opponent a new game plays by default.
-  ///
-  /// Maia wherever it can play: an opponent that plays the moves a human of its rating would play
-  /// is a better game than a weakened engine, so Stockfish is only the default for the variants
-  /// Maia was never trained on.
-  static OpponentSpec defaultFor(Variant variant) {
-    const maia = MaiaOpponentSpec(MaiaRating.defaultRating);
-    return maia.supportsVariant(variant)
-        ? maia
-        : const StockfishOpponentSpec(StockfishLevel.defaultLevel);
-  }
+  /// The opponent a new game plays by default. Stockfish, which can play every variant.
+  static const defaultSpec = StockfishOpponentSpec(StockfishLevel.defaultLevel);
 
   /// The engine this opponent plays on.
   EngineSpec get engineSpec;
