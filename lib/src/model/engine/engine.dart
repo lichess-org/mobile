@@ -38,6 +38,7 @@ const _fallbackOptionDefaults = {
   'Temperature': '0',
   'TempDecayMoves': '0',
   'TempDecayDelayMoves': '0',
+  'TempEndgame': '0',
 };
 
 /// How long a search may run.

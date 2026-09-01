@@ -15,25 +15,31 @@ import 'package:meta/meta.dart';
 
 final _logger = Logger('EngineOpponent');
 
+/// The softmax temperature LC0 turns the network's policy logits into priors with.
+///
+/// Pinned to 1, which is the temperature Maia's policy head was trained at, so that the priors are
+/// the distribution the network actually learned. LC0's own default is 1.359 — a value chosen to
+/// widen a *search*, which is the opposite of what we want from a network whose output is already
+/// the answer.
+const _kMaiaPolicyTemperature = 1.0;
+
 /// How much of Maia's policy to sample, rather than always playing the move it likes best.
 ///
-/// Maia's policy *is* the distribution of human choices — "45% of 1500-rated players played e4
-/// here" — so sampling it is a more faithful reading of the network than taking the argmax, which
-/// collapses every game from a given position into the same game. Upstream hits this and gives its
-/// lichess bots an opening book; LC0 samples the policy for us instead, because at one node no root
-/// child has a visit and its temperature falls back to the priors.
-///
-/// Below 1 because the far tail holds moves almost nobody plays, and it is where the network's
-/// approximation of the distribution is worst.
-const _kMaiaTemperature = 0.5;
+/// Read against [_kMaiaPolicyTemperature], which fixes the scale: 1 samples the network's human
+/// distribution exactly as trained, below 1 sharpens towards its favourite move, and above 1
+/// flattens towards the tail — the range LC0 accepts runs to 100, which is very nearly a uniform
+/// pick among legal moves. 0 turns sampling off and takes the top move every time.
+const _kMaiaTemperature = 0.8;
 
 /// How long the temperature holds before it starts falling, and over how many moves it reaches 0.
 ///
 /// Variety is worth most in the opening, where there really are several reasonable human choices,
-/// and worst in a sharp endgame, where sampling the 3% move throws the game away. So: full
-/// temperature to move 10, none from move 40.
+/// and worst in a sharp endgame, where sampling the 3% move throws the game away.
 const _kMaiaTempDecayDelayMoves = 10;
 const _kMaiaTempDecayMoves = 30;
+
+/// The floor the decay above never falls through, so that a long game does not become deterministic.
+const _kMaiaTempEndgame = 0.2;
 
 /// Thrown when a [EngineOpponent.findMove] request does not produce a move.
 ///
@@ -337,9 +343,11 @@ class MaiaOpponent extends EngineOpponentBase<MaiaOpponentSpec> {
         // A minibatch is a set of positions evaluated together, and at one node there is only ever
         // the one, so the default of 256 would size buffers for work that never arrives.
         'MinibatchSize': '1',
+        'PolicyTemperature': '$_kMaiaPolicyTemperature',
         'Temperature': '$_kMaiaTemperature',
         'TempDecayDelayMoves': '$_kMaiaTempDecayDelayMoves',
         'TempDecayMoves': '$_kMaiaTempDecayMoves',
+        'TempEndgame': '$_kMaiaTempEndgame',
       }),
       newGame: moves.isEmpty,
     );

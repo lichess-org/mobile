@@ -253,13 +253,15 @@ void main() {
         variant: Variant.standard,
       );
 
-      // At one node no root child has a visit, so LC0's temperature falls back to the policy
-      // priors — which is Maia's own distribution of human choices. Without this every game from
-      // a given position is the same game.
-      expect(engine.options['Temperature'], '0.5');
-      // Variety is worth most in the opening and worst in a sharp endgame.
+      // The two temperatures compose: the priors are softmaxed at `PolicyTemperature`, then each
+      // move is weighted `pow(prior, 1 / Temperature)`. Pinning the first to Maia's training value
+      // is what makes the second one readable.
+      expect(engine.options['PolicyTemperature'], '1.0');
+      expect(engine.options['Temperature'], '0.8');
       expect(engine.options['TempDecayDelayMoves'], '10');
       expect(engine.options['TempDecayMoves'], '30');
+      // Not a phase of the game: with no `TempCutoffMove` this is the floor the decay stops at.
+      expect(engine.options['TempEndgame'], '0.2');
     });
 
     test('downloads the network it needs before playing', () async {
