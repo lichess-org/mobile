@@ -76,6 +76,13 @@ class EngineBudget {
   /// touched and animated, so an engine that saturates the device shows up as dropped frames.
   int get evaluatorThreads => math.max(1, maxCores ~/ 2);
 
+  /// The lines the evaluator of an offline game asks for.
+  ///
+  /// A third line is another whole search tree, so it is only worth asking for on a device with
+  /// cores to spare — where it buys a hint a third good move to choose between, instead of a
+  /// slower one with two.
+  int get evaluatorMultiPv => maxCores >= 6 ? 3 : 2;
+
   /// The threads the opponent of an offline game asks for, given what its level wants.
   ///
   /// The evaluator's figure when they are the same engine, because the alternative is tearing the

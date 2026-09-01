@@ -806,7 +806,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       variant: state.game.meta.variant,
       threads: _evaluatorThreads,
       searchTime: kPracticeMaxSearchTime,
-      multiPv: 2, // a second line, for the alternative move a hint offers
+      multiPv: _budget.evaluatorMultiPv, // extra lines, for the alternatives a hint offers
       threatMode: false,
       initialPosition: state.game.initialPosition,
       steps: steps,

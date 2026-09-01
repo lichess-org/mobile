@@ -28,11 +28,16 @@ const kPracticeUsableDepth = kDebugMode ? 13 : 15;
 /// The depth at which the search stops and lets the engine idle.
 ///
 /// Not infinite: the analysis runs for as long as the player thinks, and an engine searching for
-/// minutes on end is a battery and thermal problem the old burst model never had.
-const kPracticeTargetDepth = kDebugMode ? 18 : 26;
+/// minutes on end is a battery and thermal problem the old burst model never had. Kept close to
+/// [kPracticeUsableDepth] for the same reason — the last few plies of a practice-game eval change
+/// the hint almost never, and cost more battery than everything before them put together.
+const kPracticeTargetDepth = kDebugMode ? 18 : 20;
 
 /// The wall-clock cap on analysing one position, for a device that would never reach either depth.
-const kPracticeMaxSearchTime = Duration(seconds: 10);
+///
+/// Short, because it is a battery cap and not a quality one: a device still searching after this
+/// long is not about to find something better, and the player is waiting on the hint behind it.
+const kPracticeMaxSearchTime = Duration(seconds: 5);
 
 /// Keeps an evaluation running on the position the game is at, for as long as it is worth running.
 ///
