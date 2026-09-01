@@ -263,7 +263,7 @@ class _StockfishLevelTile extends StatelessWidget {
   }
 }
 
-class _MaiaRatingTile extends ConsumerWidget {
+class _MaiaRatingTile extends ConsumerStatefulWidget {
   const _MaiaRatingTile({
     required this.rating,
     required this.available,
@@ -279,7 +279,22 @@ class _MaiaRatingTile extends ConsumerWidget {
   final ValueChanged<MaiaRating> onChanged;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_MaiaRatingTile> createState() => _MaiaRatingTileState();
+}
+
+class _MaiaRatingTileState extends ConsumerState<_MaiaRatingTile> {
+  MaiaRating? _dragged;
+
+  @override
+  void didUpdateWidget(_MaiaRatingTile oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.rating != oldWidget.rating) _dragged = null;
+  }
+
+  MaiaRating get _shown => _dragged ?? widget.rating;
+
+  @override
+  Widget build(BuildContext context) {
     return ListTile(
       title: Text.rich(
         TextSpan(
@@ -287,7 +302,7 @@ class _MaiaRatingTile extends ConsumerWidget {
           children: [
             TextSpan(
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-              text: '${rating.rating}',
+              text: '${_shown.rating}',
             ),
           ],
         ),
@@ -297,71 +312,71 @@ class _MaiaRatingTile extends ConsumerWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           NonLinearSlider(
-            value: rating.rating,
+            value: _shown.rating,
             values: MaiaRating.values.map((r) => r.rating).toList(),
-            // Only on change end: every step is a network the device may not have yet, and a drag
-            // across the whole range would otherwise start eight downloads on the way past.
-            onChangeEnd: (value) => onChanged(MaiaRating.fromRating(value.toInt())!),
+            onChange: (value) => setState(() => _dragged = MaiaRating.fromRating(value.toInt())),
+            onChangeEnd: (value) {
+              setState(() => _dragged = null);
+              widget.onChanged(MaiaRating.fromRating(value.toInt())!);
+            },
           ),
-          _MaiaWeightsStatus(
-            rating: rating,
-            available: available,
-            downloading: downloading,
-            failed: failed,
-          ),
+          if (widget.failed != null)
+            Text(
+              'Maia ${widget.failed!.rating} could not be downloaded. Maia '
+              '${MaiaRating.defaultRating.rating} will play instead.',
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
+            ),
         ],
+      ),
+      trailing: _MaiaWeightsStatus(
+        rating: _shown,
+        available: widget.available,
+        downloading: widget.downloading,
       ),
     );
   }
 }
 
-/// Says whether the selected network is on the device, being fetched, or could not be had.
+/// Says whether the selected network is on the device or being fetched.
 class _MaiaWeightsStatus extends ConsumerWidget {
   const _MaiaWeightsStatus({
     required this.rating,
     required this.available,
     required this.downloading,
-    required this.failed,
   });
 
   final MaiaRating rating;
   final Set<MaiaRating>? available;
   final MaiaRating? downloading;
-  final MaiaRating? failed;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (downloading != null) {
-      return Row(
+      return ValueListenableBuilder(
+        valueListenable: ref.read(maiaWeightsServiceProvider).downloadProgress,
+        builder: (context, progress, _) => SizedBox.square(
+          dimension: 24,
+          child: CircularProgressIndicator.adaptive(value: progress > 0 ? progress : null),
+        ),
+      );
+    }
+
+    // Until we have looked at what is on the device there is nothing truthful to show.
+    if (available == null) return const SizedBox.shrink();
+
+    if (!available!.contains(rating)) {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Expanded(
-            child: ValueListenableBuilder(
-              valueListenable: ref.read(maiaWeightsServiceProvider).downloadProgress,
-              builder: (context, progress, _) =>
-                  LinearProgressIndicator(value: progress > 0 ? progress : null),
-            ),
+          const Icon(Icons.cloud_download_outlined),
+          Text(
+            '${(rating.expectedSize / (1024 * 1024)).toStringAsFixed(1)} MB',
+            style: TextStyle(fontSize: 12, color: textShade(context, Styles.subtitleOpacity)),
           ),
-          const SizedBox(width: 12),
-          Text('Downloading Maia ${downloading!.rating}…'),
         ],
       );
     }
 
-    if (failed != null) {
-      return Text(
-        'Maia ${failed!.rating} could not be downloaded. Maia '
-        '${MaiaRating.defaultRating.rating} will play instead.',
-        style: TextStyle(color: Theme.of(context).colorScheme.error),
-      );
-    }
-
-    if (available != null && !available!.contains(rating)) {
-      return Text(
-        '${(rating.expectedSize / (1024 * 1024)).toStringAsFixed(1)} MB to download',
-        style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
-      );
-    }
-
-    return const SizedBox.shrink();
+    return const Icon(Icons.cloud_done_outlined);
   }
 }
