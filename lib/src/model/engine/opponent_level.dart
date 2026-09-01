@@ -1,6 +1,5 @@
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/engine/engine_spec.dart';
-import 'package:lichess_mobile/src/model/engine/engine_utils.dart';
 
 /// Stockfish strength levels. Level 1 is the easiest, level 12 is the hardest.
 enum StockfishLevel {
@@ -183,10 +182,9 @@ final class MaiaOpponentSpec extends OpponentSpec {
   @override
   String get displayName => 'Maia ${rating.rating}';
 
-  /// The networks were trained on standard human games, so Maia plays the variants that are
-  /// standard chess under another name and nothing else.
   @override
-  bool supportsVariant(Variant variant) => officialStockfishVariants.contains(variant);
+  bool supportsVariant(Variant variant) =>
+      variant == Variant.standard || variant == Variant.fromPosition;
 
   @override
   Map<String, dynamic> toJson() => {'type': 'maia', 'rating': rating.name};

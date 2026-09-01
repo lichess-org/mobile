@@ -596,8 +596,20 @@ void main() {
         const StockfishOpponentSpec(StockfishLevel.level1).supportsVariant(Variant.atomic),
         isTrue,
       );
+      expect(
+        const StockfishOpponentSpec(StockfishLevel.level1).supportsVariant(Variant.chess960),
+        isTrue,
+      );
       expect(const MaiaOpponentSpec(MaiaRating.maia1500).supportsVariant(Variant.atomic), isFalse);
+      expect(
+        const MaiaOpponentSpec(MaiaRating.maia1500).supportsVariant(Variant.chess960),
+        isFalse,
+      );
       expect(const MaiaOpponentSpec(MaiaRating.maia1500).supportsVariant(Variant.standard), isTrue);
+      expect(
+        const MaiaOpponentSpec(MaiaRating.maia1500).supportsVariant(Variant.fromPosition),
+        isTrue,
+      );
     });
   });
 }
