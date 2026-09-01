@@ -9,12 +9,6 @@ import 'package:multistockfish/multistockfish.dart';
 /// Maximum number of CPU cores available for engine use.
 final maxEngineCores = max(Platform.numberOfProcessors - 1, 1);
 
-/// The cores an offline game's evaluator asks for while it computes hints and move feedback.
-///
-/// One fewer than the engine budget allows, because this runs during the player's turn, while the
-/// board is being interacted with, rather than while the user waits for the opponent.
-final numberOfCoresForEvaluation = max(1, maxEngineCores - 1);
-
 /// How much of a device's RAM engines may hold, in MB, given its [physicalMemoryInMb].
 int engineMaxMemoryFor(int physicalMemoryInMb) => (physicalMemoryInMb / 16).ceil();
 

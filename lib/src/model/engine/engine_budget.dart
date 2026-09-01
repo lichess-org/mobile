@@ -72,15 +72,14 @@ class EngineBudget {
 
   /// The threads the evaluator of an offline game asks for.
   ///
-  /// One fewer than the budget allows: it runs during the player's turn, while the board is being
-  /// interacted with, rather than while the user waits for the opponent.
-  int get evaluatorThreads => threadsFor(numberOfCoresForEvaluation);
+  /// Half the budget, floored at 1. It searches during the player's turn, while the board is being
+  /// touched and animated, so an engine that saturates the device shows up as dropped frames.
+  int get evaluatorThreads => math.max(1, maxCores ~/ 2);
 
   /// The threads the opponent of an offline game asks for, given what its level wants.
   ///
-  /// The evaluator's figure when they are the same engine — the larger of the two, since every
-  /// [StockfishLevel] asks for one or two threads — because the alternative is tearing the thread
-  /// pool down and back up on every hand-off between them.
+  /// The evaluator's figure when they are the same engine, because the alternative is tearing the
+  /// thread pool down and back up on every hand-off between them.
   int opponentThreads({required bool sharesEngineWithEvaluator, required int threads}) =>
       sharesEngineWithEvaluator ? evaluatorThreads : threadsFor(threads);
 

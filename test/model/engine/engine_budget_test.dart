@@ -32,12 +32,24 @@ void main() {
       expect(big.engineHash, kMaxHashPerEngineInMb);
     });
 
+    test('the evaluator leaves at least half the cores to the UI', () {
+      // It searches while the board is being touched and animated, so saturating the device shows
+      // up as dropped frames in the move animation.
+      for (final cores in [1, 2, 3, 4, 7, 8]) {
+        final budget = EngineBudget(maxMemoryInMb: 300, maxCores: cores);
+        expect(budget.evaluatorThreads, greaterThanOrEqualTo(1));
+        expect(budget.evaluatorThreads, lessThanOrEqualTo(cores - budget.evaluatorThreads + 1));
+      }
+
+      expect(const EngineBudget(maxMemoryInMb: 300, maxCores: 7).evaluatorThreads, 3);
+      expect(const EngineBudget(maxMemoryInMb: 300, maxCores: 1).evaluatorThreads, 1);
+    });
+
     test('a shared engine searches on the threads the evaluator asks for', () {
       const budget = EngineBudget(maxMemoryInMb: 300, maxCores: 3);
 
-      // The larger of the two: every level asks for one or two threads, and the evaluator's figure
-      // is the one deliberately chosen to leave a core for the UI. Anything else tears the thread
-      // pool down and rebuilds it on every hand-off, clearing the table with it.
+      // Anything else tears the thread pool down and rebuilds it on every hand-off, clearing the
+      // table with it.
       expect(
         budget.opponentThreads(sharesEngineWithEvaluator: true, threads: 1),
         budget.evaluatorThreads,
