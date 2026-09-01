@@ -9,6 +9,8 @@ import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/engine_budget.dart';
 import 'package:lichess_mobile/src/model/engine/engine_providers.dart';
 import 'package:lichess_mobile/src/model/engine/maia_book.dart';
+import 'package:lichess_mobile/src/model/engine/maia_online_book.dart';
+import 'package:lichess_mobile/src/model/engine/opening_book.dart';
 import 'package:lichess_mobile/src/model/engine/opponent_level.dart';
 import 'package:lichess_mobile/src/model/engine/thinking_time.dart';
 import 'package:lichess_mobile/src/model/engine/weights_service.dart';
@@ -315,6 +317,7 @@ class MaiaOpponent extends EngineOpponentBase<MaiaOpponentSpec> {
     required super.spec,
     required this.weights,
     required this.books,
+    required this.onlineBook,
     required this.thinkingTime,
     Random? random,
   }) : random = random ?? Random();
@@ -324,6 +327,9 @@ class MaiaOpponent extends EngineOpponentBase<MaiaOpponentSpec> {
 
   @protected
   final MaiaBookService books;
+
+  @protected
+  final MaiaOnlineBook onlineBook;
 
   /// Injected so that a game can be replayed move for move in tests.
   @protected
@@ -375,13 +381,9 @@ class MaiaOpponent extends EngineOpponentBase<MaiaOpponentSpec> {
 
   /// The opening the network would otherwise have to invent.
   ///
-  /// Maia's policy is sharper than the human distribution it was trained on, so left to itself it
-  /// opens the same way nearly every game. The book plays the moves humans of its rating actually
-  /// played, at the frequencies they played them, for as long as it knows the position.
-  ///
-  /// Skipped outside standard chess, and from a position other than the standard start: the book
-  /// was crawled from there, and a hash it does not hold is a miss anyway, but there is no reason
-  /// to read it to find that out.
+  /// Maia's policy is sharper than the human distribution, so left to itself it opens the same way
+  /// nearly every game. Skipped outside standard chess and from a custom start, which no book
+  /// covers.
   @override
   Future<UCIMove?> bookMove({
     required Position initialPosition,
@@ -394,10 +396,19 @@ class MaiaOpponent extends EngineOpponentBase<MaiaOpponentSpec> {
     final position = _replay(initialPosition, moves);
     if (position == null) return null;
 
-    final book = await books.bookFor(rating);
-    final move = book?.chooseMove(position, random);
+    // The explorer knows this network's own rating band, where the bundled book merges three of
+    // them; it answers empty whenever it cannot be reached, which is when the bundled one is read.
+    final online = await onlineBook.movesFor(position, rating);
+    final source = online.isNotEmpty ? 'online' : 'bundled';
+    final candidates = online.isNotEmpty
+        ? online
+        : await books
+              .bookFor(rating)
+              .then((book) => book?.movesFor(position) ?? const <BookMove>[]);
+
+    final move = chooseWeighted(candidates, random);
     if (move != null) {
-      _logger.info('Playing $move from the ${MaiaBookTier.forRating(rating).name} opening book');
+      _logger.info('Playing $move from the $source opening book');
     }
     return move;
   }
@@ -464,6 +475,7 @@ final engineOpponentProvider = Provider.autoDispose.family<EngineOpponent, Oppon
       spec: maia,
       weights: ref.read(maiaWeightsServiceProvider),
       books: ref.read(maiaBookServiceProvider),
+      onlineBook: ref.read(maiaOnlineBookProvider),
       thinkingTime: ref.read(thinkingTimeProvider),
     ),
   };

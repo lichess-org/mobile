@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/engine/engine_factory.dart';
+import 'package:lichess_mobile/src/model/engine/maia_online_book.dart';
 import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
 import 'package:lichess_mobile/src/model/engine/thinking_time.dart';
 import 'package:lichess_mobile/src/model/engine/weights_service.dart';
@@ -25,6 +26,7 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import './model/common/service/fake_sound_service.dart';
 import 'binding.dart';
 import 'model/engine/fake_engine.dart';
+import 'model/engine/fake_maia_online_book.dart';
 import 'model/engine/fake_nnue_service.dart';
 import 'model/engine/fake_weights_service.dart';
 import 'model/notifications/fake_notification_display.dart';
@@ -65,6 +67,8 @@ Future<ProviderContainer> makeContainer({
     maiaWeightsServiceProvider: maiaWeightsServiceProvider.overrideWithValue(
       FakeMaiaWeightsService(),
     ),
+    // No test reaches the opening explorer unless it configures its own.
+    maiaOnlineBookProvider: maiaOnlineBookProvider.overrideWithValue(FakeMaiaOnlineBook()),
     // Otherwise every engine move in the suite would wait out a human-looking think.
     thinkingTimeProvider: thinkingTimeProvider.overrideWithValue(const ThinkingTime.instant()),
     // Every engine in tests is a [FakeEngine] over a fake transport: no plugin, no isolates, and

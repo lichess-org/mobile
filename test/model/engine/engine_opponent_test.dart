@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/engine/engine_budget.dart';
 import 'package:lichess_mobile/src/model/engine/engine_opponent.dart';
 import 'package:lichess_mobile/src/model/engine/maia_book.dart';
+import 'package:lichess_mobile/src/model/engine/maia_online_book.dart';
 import 'package:lichess_mobile/src/model/engine/opponent_level.dart';
 
 import 'package:lichess_mobile/src/model/engine/thinking_time.dart';
@@ -14,6 +15,7 @@ import 'package:lichess_mobile/src/model/engine/weights_service.dart';
 import '../../test_container.dart';
 import 'fake_engine.dart';
 import 'fake_maia_book_service.dart';
+import 'fake_maia_online_book.dart';
 import 'fake_weights_service.dart';
 import 'polyglot_fixture.dart';
 
@@ -330,16 +332,19 @@ void main() {
     /// A book that answers the initial position and nothing else.
     MaiaBook firstMoveBook() => MaiaBook(bookFor(Chess.initial, {'e2e4': 1000}));
 
-    Future<ProviderContainer> makeBookContainer(MaiaBook? book) => makeContainer(
-      overrides: {
-        maiaWeightsServiceProvider: maiaWeightsServiceProvider.overrideWithValue(
-          FakeMaiaWeightsService(),
-        ),
-        maiaBookServiceProvider: maiaBookServiceProvider.overrideWithValue(
-          FakeMaiaBookService(book: book),
-        ),
-      },
-    );
+    Future<ProviderContainer> makeBookContainer(MaiaBook? book, {MaiaOnlineBook? online}) =>
+        makeContainer(
+          overrides: {
+            maiaWeightsServiceProvider: maiaWeightsServiceProvider.overrideWithValue(
+              FakeMaiaWeightsService(),
+            ),
+            maiaBookServiceProvider: maiaBookServiceProvider.overrideWithValue(
+              FakeMaiaBookService(book: book),
+            ),
+            if (online != null)
+              maiaOnlineBookProvider: maiaOnlineBookProvider.overrideWithValue(online),
+          },
+        );
 
     test('plays a book move without asking the engine for one', () async {
       final engine = FakeEngine();
@@ -356,6 +361,48 @@ void main() {
       expect(move, 'e2e4');
       // The opponent keeps an engine alive for the game either way; what the book saves is the
       // search, which is the whole point of putting it in front of the engine.
+      expect(engine.commands.where((command) => command.startsWith('go')), isEmpty);
+    });
+
+    test('prefers the online book, which knows its own rating band', () async {
+      final engine = FakeEngine();
+      fakeEngine = engine;
+      final container = await makeBookContainer(
+        firstMoveBook(),
+        online: FakeMaiaOnlineBook(
+          moves: {
+            Chess.initial.fen: [(uci: 'd2d4', weight: 1000)],
+          },
+        ),
+      );
+
+      final move = await readOpponentFor(container, const MaiaOpponentSpec(MaiaRating.maia1500))
+          .findMove(
+            initialPosition: Chess.initial,
+            moves: const IListConst([]),
+            variant: Variant.standard,
+          );
+
+      // The bundled book only ever plays e2e4 here.
+      expect(move, 'd2d4');
+      expect(engine.commands.where((command) => command.startsWith('go')), isEmpty);
+    });
+
+    test('falls back to the bundled book when the online one cannot answer', () async {
+      final engine = FakeEngine();
+      fakeEngine = engine;
+      final online = FakeMaiaOnlineBook();
+      final container = await makeBookContainer(firstMoveBook(), online: online);
+
+      final move = await readOpponentFor(container, const MaiaOpponentSpec(MaiaRating.maia1500))
+          .findMove(
+            initialPosition: Chess.initial,
+            moves: const IListConst([]),
+            variant: Variant.standard,
+          );
+
+      expect(online.requests, [Chess.initial.fen]);
+      expect(move, 'e2e4');
       expect(engine.commands.where((command) => command.startsWith('go')), isEmpty);
     });
 

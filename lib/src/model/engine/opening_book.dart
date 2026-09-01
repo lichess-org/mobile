@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:dartchess/dartchess.dart';
@@ -8,6 +9,39 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 /// Weights are relative within a position and carry no meaning across positions: a move of weight
 /// 500 is played five times as often as one of weight 100 in the same position.
 typedef BookMove = ({UCIMove uci, int weight});
+
+/// Shapes explorer game counts into book moves.
+///
+/// [cutoff] is the least share of a position's games a move needs to be offered, and [max] the
+/// most moves offered at once. The defaults are the ones `scripts/gen_maia_book.dart` bakes into
+/// the bundled book; a caller that is not paying for the bytes can keep more of the tail.
+List<BookMove> shapeBookMoves(Map<UCIMove, int> games, {double cutoff = 0.02, int max = 6}) {
+  final total = games.values.fold(0, (sum, count) => sum + count);
+  if (total == 0) return const [];
+
+  final kept = games.entries.where((move) => move.value / total >= cutoff).toList()
+    ..sort((a, b) => b.value.compareTo(a.value));
+  final top = kept.take(max).toList();
+
+  final keptTotal = top.fold(0, (sum, move) => sum + move.value);
+  return [
+    for (final move in top)
+      (uci: move.key, weight: (move.value / keptTotal * 1000).round().clamp(1, 0xffff)),
+  ];
+}
+
+/// One of [moves], with probability proportional to its weight.
+UCIMove? chooseWeighted(List<BookMove> moves, Random random) {
+  final total = moves.fold(0, (sum, move) => sum + move.weight);
+  if (total <= 0) return null;
+
+  var choice = random.nextInt(total);
+  for (final move in moves) {
+    choice -= move.weight;
+    if (choice < 0) return move.uci;
+  }
+  return moves.last.uci;
+}
 
 /// A [Polyglot](http://hgm.nubati.net/book_format.html) opening book, held in memory.
 ///

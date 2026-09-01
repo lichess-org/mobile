@@ -43,24 +43,15 @@ class MaiaBook {
 
   final PolyglotBook book;
 
+  /// The moves the book offers in [position], most played first.
+  List<BookMove> movesFor(Position position) => book.movesFor(position);
+
   /// A move for [position], chosen with probability proportional to how often humans played it.
   ///
   /// Null when the position is not in the book, which is the signal to fall through to the
   /// network. [random] is injected so a game can be replayed in tests.
-  UCIMove? chooseMove(Position position, Random random) {
-    final moves = book.movesFor(position);
-    if (moves.isEmpty) return null;
-
-    final total = moves.fold(0, (sum, move) => sum + move.weight);
-    if (total <= 0) return null;
-
-    var choice = random.nextInt(total);
-    for (final move in moves) {
-      choice -= move.weight;
-      if (choice < 0) return move.uci;
-    }
-    return moves.last.uci;
-  }
+  UCIMove? chooseMove(Position position, Random random) =>
+      chooseWeighted(book.movesFor(position), random);
 }
 
 /// Loads the Maia opening books out of the asset bundle, once each.
