@@ -21,6 +21,10 @@ import 'package:lichess_mobile/src/utils/json.dart';
 
 part 'puzzle_repository.freezed.dart';
 
+/// Maximum number of puzzles `/api/puzzle/many` serves in one request, whatever the number of
+/// ids asked for (`ids.take(50)` in lila's `Puzzle` controller).
+const kServerPuzzleManyCap = 50;
+
 /// A provider for the [PuzzleRepository].
 final puzzleRepositoryProvider = Provider<PuzzleRepository>((ref) {
   final client = ref.watch(lichessClientProvider);
@@ -67,6 +71,21 @@ class PuzzleRepository {
 
   Future<Puzzle> fetch(PuzzleId id) {
     return client.readJson(Uri(path: '/api/puzzle/$id'), mapper: _puzzleFromJson);
+  }
+
+  /// Fetches up to [kServerPuzzleManyCap] puzzles by id in one `/api/puzzle/many` request.
+  ///
+  /// Meant for prefetching: the endpoint is rate limited per IP, on a budget shared with
+  /// `/api/puzzle/batch/`, whereas [fetch] is not. It drops any id it cannot serve, so the result
+  /// may be shorter than [ids].
+  Future<IList<Puzzle>> fetchMany(IList<PuzzleId> ids) async {
+    assert(ids.isNotEmpty, '/api/puzzle/many charges for a request with no ids');
+    assert(ids.length <= kServerPuzzleManyCap, 'ids beyond $kServerPuzzleManyCap are ignored');
+    final response = await client.readJson(
+      Uri(path: '/api/puzzle/many', queryParameters: {'ids': ids.join(',')}),
+      mapper: _decodeBatchResponse,
+    );
+    return response.puzzles;
   }
 
   Future<PuzzleStreakResponse> streak() {
