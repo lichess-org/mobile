@@ -85,7 +85,30 @@ class StockfishNnueService {
     return false;
   }
 
+  /// Whether there is any NNUE file on disk, current or not, intact or not.
+  ///
+  /// Useful to offer to reclaim the space taken by files the engine cannot use: the networks of a
+  /// previous Stockfish version, or a pair that did not survive its download.
+  Future<bool> hasNNUEFilesOnDisk() async {
+    final appSupportDirectory = _ref.read(preloadedDataProvider).requireValue.appSupportDirectory;
+    if (appSupportDirectory == null) {
+      return false;
+    }
+
+    try {
+      await for (final entity in appSupportDirectory.list(followLinks: false)) {
+        if (entity is File && entity.path.endsWith('.nnue')) return true;
+      }
+    } catch (e, st) {
+      _logger.warning('Error listing NNUE files:', e, st);
+    }
+    return false;
+  }
+
   /// Check the presence and integrity of the NNUE files.
+  ///
+  /// Files that fail the checksum are deleted: they are useless to the engine, they take up more
+  /// than 100MB, and leaving them on disk makes the next download look like it has nothing to do.
   Future<bool> checkNNUEFiles() async {
     final NNUEFiles files;
     try {
@@ -108,7 +131,8 @@ class StockfishNnueService {
         if (_nnueSumCheckResult == true) {
           return true;
         } else {
-          _logger.warning('NNUE files are corrupted.');
+          _logger.warning('NNUE files are corrupted, deleting them.');
+          await deleteNNUEFiles();
         }
       }
 
@@ -141,9 +165,12 @@ class StockfishNnueService {
       // delete any existing nnue files before downloading
       await deleteNNUEFiles();
 
-      Future<bool> doDownload() {
+      // The download only counts as a success if what landed on disk is what the engine needs:
+      // a file that arrives truncated or garbled is deleted rather than kept and reported as
+      // downloaded, which would leave the engine falling back to SF16 with no way out.
+      Future<bool> doDownload() async {
         final client = _ref.read(defaultClientProvider);
-        return downloadFiles(
+        final downloaded = await downloadFiles(
           client,
           [bigNetUrl, smallNetUrl],
           [bigNet, smallNet],
@@ -152,6 +179,12 @@ class StockfishNnueService {
             _nnueDownloadProgress.value = received / length;
           },
         );
+        if (!downloaded) {
+          await deleteNNUEFiles();
+          return false;
+        }
+        // Deletes the files itself if they do not check out.
+        return checkNNUEFiles();
       }
 
       final connectivityResult = await _ref.read(connectivityPluginProvider).checkConnectivity();
@@ -188,10 +221,9 @@ class StockfishNnueService {
             },
           );
           if (isOk == true) {
-            await doDownload();
-            return await checkNNUEFiles();
+            return await doDownload();
           } else {
-            return await Future.value(false);
+            return false;
           }
         }
       } else {
@@ -211,11 +243,14 @@ class StockfishNnueService {
 
     _nnueSumCheckResult = null;
 
-    // delete any existing nnue files before downloading
     await for (final entity in appSupportDirectory.list(followLinks: false)) {
       if (entity is File && entity.path.endsWith('.nnue')) {
         _logger.info('Deleting existing nnue ${entity.path}');
-        await entity.delete();
+        try {
+          await entity.delete();
+        } catch (e, st) {
+          _logger.warning('Could not delete ${entity.path}:', e, st);
+        }
       }
     }
   }

@@ -31,23 +31,34 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
   /// null = loading, true = has files with checked integrity, false = doesn't have files
   bool? _hasVerifiedNNUEFiles;
 
+  /// Whether there are NNUE files on disk the engine cannot use: the networks of a previous
+  /// Stockfish version, or a pair that did not survive its download.
+  bool _hasUnusableNNUEFiles = false;
+
   Future<bool>? _downloadNNUEFilesFuture;
 
   late final ValueListenable<double> _downloadProgress;
 
   @override
   void initState() {
-    ref.read(stockfishNnueServiceProvider).checkNNUEFiles().then((good) {
-      if (mounted) {
-        setState(() {
-          _hasVerifiedNNUEFiles = good;
-        });
-      }
-    });
+    _checkFiles();
 
     _downloadProgress = ref.read(stockfishNnueServiceProvider).nnueDownloadProgress;
 
     super.initState();
+  }
+
+  Future<void> _checkFiles() async {
+    final nnueService = ref.read(stockfishNnueServiceProvider);
+    // Deletes the files itself if they are corrupted, so whatever is left over afterwards is
+    // either usable or from another Stockfish version.
+    final good = await nnueService.checkNNUEFiles();
+    final leftOver = !good && await nnueService.hasNNUEFilesOnDisk();
+    if (!mounted) return;
+    setState(() {
+      _hasVerifiedNNUEFiles = good;
+      _hasUnusableNNUEFiles = leftOver;
+    });
   }
 
   void _startDownload() {
@@ -56,6 +67,7 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
       if (mounted && downloaded) {
         setState(() {
           _hasVerifiedNNUEFiles = true;
+          _hasUnusableNNUEFiles = false;
         });
       }
     });
@@ -126,6 +138,7 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
                           if (context.mounted && downloaded) {
                             setState(() {
                               _hasVerifiedNNUEFiles = true;
+                              _hasUnusableNNUEFiles = false;
                             });
                           }
                         },
@@ -167,8 +180,25 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
                         if (!mounted) return;
                         setState(() {
                           _hasVerifiedNNUEFiles = false;
+                          _hasUnusableNNUEFiles = false;
                         });
                       }
+                    },
+                  ),
+                if (_hasVerifiedNNUEFiles == false && _hasUnusableNNUEFiles)
+                  ListTile(
+                    trailing: const Icon(Icons.delete),
+                    title: const Text('Delete unusable NNUE files'),
+                    subtitle: const Text(
+                      'Some NNUE files on this device cannot be used by the engine. Deleting them '
+                      'frees up space and lets you download them again.',
+                    ),
+                    onTap: () async {
+                      await ref.read(stockfishNnueServiceProvider).deleteNNUEFiles();
+                      if (!mounted) return;
+                      setState(() {
+                        _hasUnusableNNUEFiles = false;
+                      });
                     },
                   ),
               ],

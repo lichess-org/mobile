@@ -38,6 +38,11 @@ class FakeStockfishNnueService implements StockfishNnueService {
   }
 
   @override
+  Future<bool> hasNNUEFilesOnDisk() async {
+    return true;
+  }
+
+  @override
   Future<bool> downloadNNUEFiles({bool inBackground = true}) async {
     return false;
   }
@@ -77,6 +82,11 @@ class FakeStockfishNnueServiceUnavailable implements StockfishNnueService {
   @override
   Future<bool> hasOutdatedNNUEFiles() async {
     return true;
+  }
+
+  @override
+  Future<bool> hasNNUEFilesOnDisk() async {
+    return false;
   }
 
   @override
