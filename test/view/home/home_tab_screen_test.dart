@@ -6,7 +6,7 @@ import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/app.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
+import 'package:lichess_mobile/src/model/engine/weights_service.dart';
 import 'package:lichess_mobile/src/model/game/game_storage.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -29,7 +29,7 @@ import '../../mock_server_responses.dart';
 import '../../model/auth/auth_repository_test.dart';
 import '../../model/auth/fake_auth_storage.dart';
 import '../../model/challenge/challenge_repository_test.dart';
-import '../../model/engine/fake_nnue_service.dart';
+import '../../model/engine/fake_stockfish_nnue_service.dart';
 import '../../network/fake_http_client_factory.dart';
 import '../../network/server_down_client.dart';
 import '../../test_helpers.dart';
@@ -442,8 +442,8 @@ void main() {
         final app = await makeTestProviderScope(
           tester,
           overrides: {
-            nnueServiceProvider: nnueServiceProvider.overrideWithValue(
-              FakeNnueServiceUnavailable(),
+            stockfishNnueServiceProvider: stockfishNnueServiceProvider.overrideWithValue(
+              FakeStockfishNnueServiceUnavailable(),
             ),
           },
           authUser: fakeAuthUser,
@@ -469,7 +469,9 @@ void main() {
         final app = await makeTestProviderScope(
           tester,
           overrides: {
-            nnueServiceProvider: nnueServiceProvider.overrideWithValue(FakeNnueService()),
+            stockfishNnueServiceProvider: stockfishNnueServiceProvider.overrideWithValue(
+              FakeStockfishNnueService(),
+            ),
           },
           authUser: fakeAuthUser,
           defaultPreferences: {
@@ -494,8 +496,8 @@ void main() {
         final app = await makeTestProviderScope(
           tester,
           overrides: {
-            nnueServiceProvider: nnueServiceProvider.overrideWithValue(
-              FakeNnueServiceUnavailable(),
+            stockfishNnueServiceProvider: stockfishNnueServiceProvider.overrideWithValue(
+              FakeStockfishNnueServiceUnavailable(),
             ),
           },
           authUser: fakeAuthUser,

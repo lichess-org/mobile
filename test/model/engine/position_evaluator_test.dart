@@ -10,14 +10,14 @@ import 'package:lichess_mobile/src/model/engine/engine_factory.dart';
 import 'package:lichess_mobile/src/model/engine/engine_providers.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_context.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
 import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
+import 'package:lichess_mobile/src/model/engine/weights_service.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 
 import '../../binding.dart';
 import '../../test_container.dart';
 import 'fake_engine.dart';
-import 'fake_nnue_service.dart';
+import 'fake_stockfish_nnue_service.dart';
 
 /// The engine's lifecycle, as these tests read it off [EngineEvaluationState].
 ///
@@ -741,8 +741,8 @@ void main() {
         // NNUE files are unavailable: latestNoNNUE will fall back to sf16
         final container = await makeContainer(
           overrides: {
-            nnueServiceProvider: nnueServiceProvider.overrideWithValue(
-              FakeNnueServiceUnavailable(),
+            stockfishNnueServiceProvider: stockfishNnueServiceProvider.overrideWithValue(
+              FakeStockfishNnueServiceUnavailable(),
             ),
           },
         );

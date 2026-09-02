@@ -7,7 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
-import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
+import 'package:lichess_mobile/src/model/engine/weights_service.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:multistockfish/multistockfish.dart';
@@ -72,7 +72,7 @@ Future<ProviderContainer> makeNnueTestContainer({
 }
 
 void main() {
-  group('NnueService', () {
+  group('StockfishNnueService', () {
     group('nnueFiles', () {
       test('returns correct file paths when appSupportDirectory is available', () async {
         final tempDir = await Directory.systemTemp.createTemp('nnue_test_');
@@ -81,7 +81,7 @@ void main() {
         final container = await makeNnueTestContainer(appSupportDirectory: tempDir);
         addTearDown(container.dispose);
 
-        final service = container.read(nnueServiceProvider);
+        final service = container.read(stockfishNnueServiceProvider);
         final files = service.nnueFiles;
 
         expect(files.bigNet.path, '${tempDir.path}/${Stockfish.latestBigNNUE}');
@@ -92,7 +92,7 @@ void main() {
         final container = await makeNnueTestContainer(appSupportDirectory: null);
         addTearDown(container.dispose);
 
-        final service = container.read(nnueServiceProvider);
+        final service = container.read(stockfishNnueServiceProvider);
 
         expect(() => service.nnueFiles, throwsException);
       });
@@ -103,7 +103,7 @@ void main() {
         final container = await makeNnueTestContainer(appSupportDirectory: null);
         addTearDown(container.dispose);
 
-        final service = container.read(nnueServiceProvider);
+        final service = container.read(stockfishNnueServiceProvider);
         final result = await service.checkNNUEFiles();
 
         expect(result, isFalse);
@@ -116,7 +116,7 @@ void main() {
         final container = await makeNnueTestContainer(appSupportDirectory: tempDir);
         addTearDown(container.dispose);
 
-        final service = container.read(nnueServiceProvider);
+        final service = container.read(stockfishNnueServiceProvider);
         final result = await service.checkNNUEFiles();
 
         expect(result, isFalse);
@@ -133,7 +133,7 @@ void main() {
         final container = await makeNnueTestContainer(appSupportDirectory: tempDir);
         addTearDown(container.dispose);
 
-        final service = container.read(nnueServiceProvider);
+        final service = container.read(stockfishNnueServiceProvider);
         final result = await service.checkNNUEFiles();
 
         expect(result, isFalse);
@@ -152,7 +152,7 @@ void main() {
         final container = await makeNnueTestContainer(appSupportDirectory: tempDir);
         addTearDown(container.dispose);
 
-        final service = container.read(nnueServiceProvider);
+        final service = container.read(stockfishNnueServiceProvider);
         final result = await service.checkNNUEFiles();
 
         expect(result, isFalse);
@@ -164,7 +164,7 @@ void main() {
         final container = await makeNnueTestContainer(appSupportDirectory: null);
         addTearDown(container.dispose);
 
-        final service = container.read(nnueServiceProvider);
+        final service = container.read(stockfishNnueServiceProvider);
         final result = await service.hasOutdatedNNUEFiles();
 
         expect(result, isFalse);
@@ -179,7 +179,7 @@ void main() {
         final container = await makeNnueTestContainer(appSupportDirectory: tempDir);
         addTearDown(container.dispose);
 
-        final service = container.read(nnueServiceProvider);
+        final service = container.read(stockfishNnueServiceProvider);
         final result = await service.hasOutdatedNNUEFiles();
 
         expect(result, isTrue);
@@ -191,7 +191,7 @@ void main() {
         final container = await makeNnueTestContainer(appSupportDirectory: null);
         addTearDown(container.dispose);
 
-        final service = container.read(nnueServiceProvider);
+        final service = container.read(stockfishNnueServiceProvider);
 
         expect(() => service.deleteNNUEFiles(), throwsException);
       });
@@ -211,7 +211,7 @@ void main() {
         final container = await makeNnueTestContainer(appSupportDirectory: tempDir);
         addTearDown(container.dispose);
 
-        final service = container.read(nnueServiceProvider);
+        final service = container.read(stockfishNnueServiceProvider);
         await service.deleteNNUEFiles();
 
         expect(await nnueFile1.exists(), isFalse);
@@ -225,7 +225,7 @@ void main() {
         final container = await makeNnueTestContainer(appSupportDirectory: null);
         addTearDown(container.dispose);
 
-        final service = container.read(nnueServiceProvider);
+        final service = container.read(stockfishNnueServiceProvider);
         final result = await service.downloadNNUEFiles(inBackground: true);
 
         expect(result, isFalse);
@@ -248,7 +248,7 @@ void main() {
         );
         addTearDown(container.dispose);
 
-        final service = container.read(nnueServiceProvider);
+        final service = container.read(stockfishNnueServiceProvider);
 
         // Start first download
         final firstDownload = service.downloadNNUEFiles(inBackground: true);
@@ -272,7 +272,7 @@ void main() {
         );
         addTearDown(container.dispose);
 
-        final service = container.read(nnueServiceProvider);
+        final service = container.read(stockfishNnueServiceProvider);
 
         expect(() => service.downloadNNUEFiles(inBackground: true), throwsException);
       });
@@ -294,7 +294,7 @@ void main() {
         );
         addTearDown(container.dispose);
 
-        final service = container.read(nnueServiceProvider);
+        final service = container.read(stockfishNnueServiceProvider);
 
         // First download
         await service.downloadNNUEFiles(inBackground: true);
@@ -312,7 +312,7 @@ void main() {
         final container = await makeNnueTestContainer(appSupportDirectory: null);
         addTearDown(container.dispose);
 
-        final service = container.read(nnueServiceProvider);
+        final service = container.read(stockfishNnueServiceProvider);
 
         expect(service.isDownloadingNNUEFiles, isFalse);
       });
@@ -321,7 +321,7 @@ void main() {
         final container = await makeNnueTestContainer(appSupportDirectory: null);
         addTearDown(container.dispose);
 
-        final service = container.read(nnueServiceProvider);
+        final service = container.read(stockfishNnueServiceProvider);
         // We can't easily set progress to 1 without downloading, but we can verify the logic
         // Progress starts at 0, so isDownloadingNNUEFiles should be false
         expect(service.nnueDownloadProgress.value, 0.0);

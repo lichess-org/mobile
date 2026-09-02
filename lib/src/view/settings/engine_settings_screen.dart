@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/engine/engine_utils.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
 import 'package:lichess_mobile/src/model/engine/opponent_level.dart';
 import 'package:lichess_mobile/src/model/engine/weights_service.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -38,7 +37,7 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
 
   @override
   void initState() {
-    ref.read(nnueServiceProvider).checkNNUEFiles().then((good) {
+    ref.read(stockfishNnueServiceProvider).checkNNUEFiles().then((good) {
       if (mounted) {
         setState(() {
           _hasVerifiedNNUEFiles = good;
@@ -46,13 +45,13 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
       }
     });
 
-    _downloadProgress = ref.read(nnueServiceProvider).nnueDownloadProgress;
+    _downloadProgress = ref.read(stockfishNnueServiceProvider).nnueDownloadProgress;
 
     super.initState();
   }
 
   void _startDownload() {
-    final future = ref.read(nnueServiceProvider).downloadNNUEFiles(inBackground: false);
+    final future = ref.read(stockfishNnueServiceProvider).downloadNNUEFiles(inBackground: false);
     future.then((downloaded) {
       if (mounted && downloaded) {
         setState(() {
@@ -103,8 +102,9 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
                 if (prefs.enginePref == ChessEnginePref.sfLatest && _hasVerifiedNNUEFiles == false)
                   LoadingButtonBuilder(
                     initialFuture: _downloadNNUEFilesFuture,
-                    fetchData: () =>
-                        ref.read(nnueServiceProvider).downloadNNUEFiles(inBackground: false),
+                    fetchData: () => ref
+                        .read(stockfishNnueServiceProvider)
+                        .downloadNNUEFiles(inBackground: false),
                     builder: (context, isLoading, fetchData) {
                       return ListTile(
                         trailing: isLoading
@@ -163,7 +163,7 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
                         },
                       );
                       if (isOk == true) {
-                        await ref.read(nnueServiceProvider).deleteNNUEFiles();
+                        await ref.read(stockfishNnueServiceProvider).deleteNNUEFiles();
                         if (!mounted) return;
                         setState(() {
                           _hasVerifiedNNUEFiles = false;

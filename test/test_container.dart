@@ -12,7 +12,6 @@ import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/engine/engine_factory.dart';
 import 'package:lichess_mobile/src/model/engine/maia_online_book.dart';
-import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
 import 'package:lichess_mobile/src/model/engine/thinking_time.dart';
 import 'package:lichess_mobile/src/model/engine/weights_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
@@ -27,7 +26,7 @@ import './model/common/service/fake_sound_service.dart';
 import 'binding.dart';
 import 'model/engine/fake_engine.dart';
 import 'model/engine/fake_maia_online_book.dart';
-import 'model/engine/fake_nnue_service.dart';
+import 'model/engine/fake_stockfish_nnue_service.dart';
 import 'model/engine/fake_weights_service.dart';
 import 'model/notifications/fake_notification_display.dart';
 import 'network/fake_http_client_factory.dart';
@@ -61,7 +60,9 @@ Future<ProviderContainer> makeContainer({
   FlutterSecureStorage.setMockInitialValues({kSRIStorageKey: 'test'});
 
   final Map<ProviderOrFamily, Override> overrideMap = {
-    nnueServiceProvider: nnueServiceProvider.overrideWithValue(FakeNnueService()),
+    stockfishNnueServiceProvider: stockfishNnueServiceProvider.overrideWithValue(
+      FakeStockfishNnueService(),
+    ),
     // Neither the disk nor the asset bundle is involved: a fake hands out paths for networks it
     // pretends to have, and a test that cares configures its own.
     maiaWeightsServiceProvider: maiaWeightsServiceProvider.overrideWithValue(

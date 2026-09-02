@@ -17,7 +17,7 @@ import 'package:lichess_mobile/src/model/engine/engine_spec.dart';
 import 'package:lichess_mobile/src/model/engine/engine_utils.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_context.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
+import 'package:lichess_mobile/src/model/engine/weights_service.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -101,7 +101,7 @@ class PositionEvaluator extends Notifier<EngineEvaluationState> {
   /// How this device's engines share it.
   EngineBudget get budget => ref.read(engineBudgetProvider);
 
-  NnueService get _nnueService => ref.read(nnueServiceProvider);
+  StockfishNnueService get _nnueService => ref.read(stockfishNnueServiceProvider);
 
   /// The live engine, or null while there is none.
   Engine? _engine;

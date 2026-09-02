@@ -31,7 +31,7 @@ final class StockfishSpec extends EngineSpec {
       bigNetPath = null,
       smallNetPath = null;
 
-  /// The latest Stockfish, with its nets loaded from disk (see `NnueService`).
+  /// The latest Stockfish, with its nets loaded from disk (see `StockfishNnueService`).
   const StockfishSpec.latest({required String this.bigNetPath, required String this.smallNetPath})
     : slot = EngineSlot.sfLatest,
       flavor = StockfishFlavor.latestNoNNUE;
