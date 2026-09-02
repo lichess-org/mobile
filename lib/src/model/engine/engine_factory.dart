@@ -29,11 +29,12 @@ typedef EngineConnector = Future<EngineTransport> Function(EngineSpec spec);
 
 /// Thrown when two engines are asked for on one [EngineSlot] at the same time.
 ///
-/// This is a programming error, not a runtime condition: it means the spec→slot mapping is wrong,
-/// or that someone got hold of an engine without going through the factory. Killing the incumbent
-/// would hide the bug and take away an engine somebody else is using.
-class EngineSlotConflict implements Exception {
-  const EngineSlotConflict(this.requested, this.live);
+/// This is a programming error rather than a runtime condition: it means the spec→slot mapping is
+/// wrong, or that someone got hold of an engine without going through the factory. Nothing can
+/// sensibly catch it — killing the incumbent would hide the bug and take away an engine somebody
+/// else is using.
+class EngineSlotConflict extends Error {
+  EngineSlotConflict(this.requested, this.live);
 
   final EngineSpec requested;
   final EngineSpec live;
