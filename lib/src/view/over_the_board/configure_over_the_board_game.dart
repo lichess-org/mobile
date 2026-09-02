@@ -296,6 +296,12 @@ class OverTheBoardDisplaySettings extends ConsumerWidget {
           onChanged: (_) =>
               ref.read(overTheBoardPreferencesProvider.notifier).toggleFlipPiecesAfterMove(),
         ),
+        SwitchSettingTile(
+          title: Text(context.l10n.preferencesBlindfold),
+          value: prefs.blindfoldMode,
+          onChanged: (_) =>
+              ref.read(overTheBoardPreferencesProvider.notifier).toggleBlindfoldMode(),
+        ),
       ],
     );
   }

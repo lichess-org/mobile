@@ -92,17 +92,16 @@ class OfflineComputerGameScreen extends ConsumerWidget {
       appBar: AppBar(
         title: AppBarTitleText(title),
         actions: [
-          if (practiceMode)
-            IconButton(
-              icon: const Icon(Icons.settings),
-              tooltip: 'Practice settings',
-              onPressed: () {
-                showModalBottomSheet<void>(
-                  context: context,
-                  builder: (_) => const _PracticeSettingsSheet(),
-                );
-              },
-            ),
+          IconButton(
+            icon: const Icon(Icons.settings),
+            tooltip: context.l10n.settingsSettings,
+            onPressed: () {
+              showModalBottomSheet<void>(
+                context: context,
+                builder: (_) => const _OfflineComputerGameSettingsSheet(),
+              );
+            },
+          ),
         ],
       ),
       body: _Body(initialVariant: initialVariant, initialFen: initialFen),
@@ -205,6 +204,10 @@ class _BodyState extends ConsumerState<_Body> {
     final orientation = gameState.game.playerSide;
     final isPlayerTurn = gameState.turn == orientation && !gameState.isEngineThinking;
 
+    final blindfoldMode = ref.watch(
+      offlineComputerGamePreferencesProvider.select((p) => p.blindfoldMode),
+    );
+
     return WakelockWidget(
       child: PopScope(
         canPop: false,
@@ -267,7 +270,10 @@ class _BodyState extends ConsumerState<_Body> {
                           )
                         : null,
                     shapes: _buildBoardShapes(gameState, boardColorScheme),
-                    boardSettingsOverrides: const BoardSettingsOverrides(enablePremoves: false),
+                    boardSettingsOverrides: BoardSettingsOverrides(
+                      enablePremoves: false,
+                      blindfoldMode: blindfoldMode,
+                    ),
                     boardParams: GameBoardParams.interactive(
                       variant: gameState.game.meta.variant,
                       position: gameState.currentPosition,
@@ -957,31 +963,48 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
       (_fromPositionFen != null && _fromPositionFen!.isNotEmpty);
 }
 
-class _PracticeSettingsSheet extends ConsumerWidget {
-  const _PracticeSettingsSheet();
+class _OfflineComputerGameSettingsSheet extends ConsumerWidget {
+  const _OfflineComputerGameSettingsSheet();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final prefs = ref.watch(offlineComputerGamePreferencesProvider);
+    final practiceMode = ref.watch(
+      offlineComputerGameControllerProvider.select((s) => s.game.practiceMode),
+    );
 
     return BottomSheetScrollableContainer(
       children: [
+        if (practiceMode)
+          ListSection(
+            header: const Text('Practice settings'),
+            materialFilledCard: true,
+            children: [
+              SwitchSettingTile(
+                title: Text(context.l10n.hideBestMove),
+                value: prefs.hideBestMove,
+                onChanged: (_) {
+                  ref.read(offlineComputerGamePreferencesProvider.notifier).toggleHideBestMove();
+                },
+              ),
+              SwitchSettingTile(
+                title: const Text('Hide evaluation'),
+                value: prefs.hideEvaluation,
+                onChanged: (_) {
+                  ref.read(offlineComputerGamePreferencesProvider.notifier).toggleHideEvaluation();
+                },
+              ),
+            ],
+          ),
         ListSection(
-          header: const Text('Practice settings'),
+          header: Text(context.l10n.settingsSettings),
           materialFilledCard: true,
           children: [
             SwitchSettingTile(
-              title: Text(context.l10n.hideBestMove),
-              value: prefs.hideBestMove,
+              title: Text(context.l10n.preferencesBlindfold),
+              value: prefs.blindfoldMode,
               onChanged: (_) {
-                ref.read(offlineComputerGamePreferencesProvider.notifier).toggleHideBestMove();
-              },
-            ),
-            SwitchSettingTile(
-              title: const Text('Hide evaluation'),
-              value: prefs.hideEvaluation,
-              onChanged: (_) {
-                ref.read(offlineComputerGamePreferencesProvider.notifier).toggleHideEvaluation();
+                ref.read(offlineComputerGamePreferencesProvider.notifier).toggleBlindfoldMode();
               },
             ),
           ],

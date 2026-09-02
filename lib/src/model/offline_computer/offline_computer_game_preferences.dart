@@ -59,6 +59,10 @@ class OfflineComputerGamePreferences extends Notifier<OfflineComputerGamePrefs>
   Future<void> toggleHideEvaluation() {
     return save(state.copyWith(hideEvaluation: !state.hideEvaluation));
   }
+
+  Future<void> toggleBlindfoldMode() {
+    return save(state.copyWith(blindfoldMode: !state.blindfoldMode));
+  }
 }
 
 /// Represents the player's color choice for offline computer games.
@@ -98,6 +102,7 @@ sealed class OfflineComputerGamePrefs with _$OfflineComputerGamePrefs implements
     @Default(false) bool practiceMode,
     @Default(false) bool hideBestMove,
     @Default(false) bool hideEvaluation,
+    @Default(false) bool blindfoldMode,
   }) = _OfflineComputerGamePrefs;
 
   static const defaults = OfflineComputerGamePrefs(
@@ -108,6 +113,7 @@ sealed class OfflineComputerGamePrefs with _$OfflineComputerGamePrefs implements
     practiceMode: false,
     hideBestMove: false,
     hideEvaluation: false,
+    blindfoldMode: false,
   );
 
   factory OfflineComputerGamePrefs.fromJson(Map<String, dynamic> json) {
