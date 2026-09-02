@@ -10,7 +10,10 @@ import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
-import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
+import 'package:lichess_mobile/src/model/engine/engine_factory.dart';
+import 'package:lichess_mobile/src/model/engine/opening_book.dart';
+import 'package:lichess_mobile/src/model/engine/thinking_time.dart';
+import 'package:lichess_mobile/src/model/engine/weights_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -21,7 +24,10 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import './model/common/service/fake_sound_service.dart';
 import 'binding.dart';
-import 'model/engine/fake_nnue_service.dart';
+import 'model/engine/fake_engine.dart';
+import 'model/engine/fake_maia_online_book.dart';
+import 'model/engine/fake_stockfish_nnue_service.dart';
+import 'model/engine/fake_weights_service.dart';
 import 'model/notifications/fake_notification_display.dart';
 import 'network/fake_http_client_factory.dart';
 import 'network/fake_websocket_channel.dart';
@@ -54,7 +60,24 @@ Future<ProviderContainer> makeContainer({
   FlutterSecureStorage.setMockInitialValues({kSRIStorageKey: 'test'});
 
   final Map<ProviderOrFamily, Override> overrideMap = {
-    nnueServiceProvider: nnueServiceProvider.overrideWithValue(FakeNnueService()),
+    stockfishNnueServiceProvider: stockfishNnueServiceProvider.overrideWithValue(
+      FakeStockfishNnueService(),
+    ),
+    // Neither the disk nor the asset bundle is involved: a fake hands out paths for networks it
+    // pretends to have, and a test that cares configures its own.
+    maiaWeightsServiceProvider: maiaWeightsServiceProvider.overrideWithValue(
+      FakeMaiaWeightsService(),
+    ),
+    // No test reaches the opening explorer unless it configures its own.
+    maiaOnlineBookProvider: maiaOnlineBookProvider.overrideWithValue(FakeMaiaOnlineBook()),
+    // Otherwise every engine move in the suite would wait out a human-looking think.
+    thinkingTimeProvider: thinkingTimeProvider.overrideWithValue(const ThinkingTime.instant()),
+    // Every engine in tests is a [FakeEngine] over a fake transport: no plugin, no isolates, and
+    // nothing process-wide to reset. Read lazily so a test can configure [fakeEngine] right up to
+    // the moment it makes its container.
+    engineFactoryProvider: engineFactoryProvider.overrideWith(
+      (ref) => EngineFactory(connect: (spec) => fakeEngine.connect(spec)),
+    ),
     connectivityPluginProvider: connectivityPluginProvider.overrideWith((_) {
       return FakeConnectivity();
     }),

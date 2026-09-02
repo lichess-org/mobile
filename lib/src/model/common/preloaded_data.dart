@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/db/secure_storage.dart';
 import 'package:lichess_mobile/src/model/auth/auth_storage.dart';
 import 'package:lichess_mobile/src/model/auth/auth_user.dart';
+import 'package:lichess_mobile/src/model/engine/engine_utils.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/utils/system.dart';
@@ -68,14 +69,12 @@ final preloadedDataProvider = FutureProvider<PreloadedData>((Ref ref) async {
         });
   }
 
-  final engineMaxMemory = ((physicalMemory ?? 256.0) / 10).ceil();
-
   return (
     packageInfo: pInfo,
     deviceInfo: deviceInfo,
     authUser: authUser,
     sri: sri,
-    engineMaxMemoryInMb: engineMaxMemory,
+    engineMaxMemoryInMb: engineMaxMemoryFor(physicalMemory ?? 256),
     appDocumentsDirectory: appDocumentsDirectory,
     appSupportDirectory: appSupportDirectory,
   );

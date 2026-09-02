@@ -32,8 +32,8 @@ class OfflineComputerGamePreferences extends Notifier<OfflineComputerGamePrefs>
     return fetch();
   }
 
-  Future<void> setStockfishLevel(StockfishLevel level) {
-    return save(state.copyWith(stockfishLevel: level));
+  Future<void> setOpponent(OpponentSpec opponent) {
+    return save(state.copyWith(opponentSpec: opponent));
   }
 
   Future<void> setSideChoice(SideChoice sideChoice) {
@@ -91,7 +91,7 @@ sealed class OfflineComputerGamePrefs with _$OfflineComputerGamePrefs implements
   const OfflineComputerGamePrefs._();
 
   const factory OfflineComputerGamePrefs({
-    required StockfishLevel stockfishLevel,
+    @JsonKey(readValue: readOpponent) required OpponentSpec opponentSpec,
     required SideChoice sideChoice,
     @Default(Variant.standard) Variant variant,
     @Default(true) bool casual,
@@ -101,7 +101,7 @@ sealed class OfflineComputerGamePrefs with _$OfflineComputerGamePrefs implements
   }) = _OfflineComputerGamePrefs;
 
   static const defaults = OfflineComputerGamePrefs(
-    stockfishLevel: StockfishLevel.defaultLevel,
+    opponentSpec: StockfishOpponentSpec(StockfishLevel.defaultLevel),
     sideChoice: SideChoice.random,
     variant: Variant.standard,
     casual: true,

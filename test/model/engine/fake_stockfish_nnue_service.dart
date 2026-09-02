@@ -1,17 +1,17 @@
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
+import 'package:lichess_mobile/src/model/engine/weights_service.dart';
 
-/// A fake implementation of [NnueService] for testing.
+/// A fake implementation of [StockfishNnueService] for testing.
 ///
 /// This implementation:
 /// - Always returns true for [checkNNUEFiles] (NNUE files are available)
 /// - Returns dummy file paths for [nnueFiles] (not used by FakeStockfish)
 /// - Returns false for [downloadNNUEFiles]
 /// - Does nothing for [deleteNNUEFiles]
-class FakeNnueService implements NnueService {
-  FakeNnueService();
+class FakeStockfishNnueService implements StockfishNnueService {
+  FakeStockfishNnueService();
 
   final ValueNotifier<double> _nnueDownloadProgress = ValueNotifier(0.0);
 
@@ -38,6 +38,11 @@ class FakeNnueService implements NnueService {
   }
 
   @override
+  Future<bool> hasNNUEFilesOnDisk() async {
+    return true;
+  }
+
+  @override
   Future<bool> downloadNNUEFiles({bool inBackground = true}) async {
     return false;
   }
@@ -48,13 +53,13 @@ class FakeNnueService implements NnueService {
   }
 }
 
-/// A fake [NnueService] that simulates missing/unavailable NNUE files.
+/// A fake [StockfishNnueService] that simulates missing/unavailable NNUE files.
 ///
 /// - Always returns false for [checkNNUEFiles]
 /// - Always returns true for [hasOutdatedNNUEFiles]
-/// - All other behaviour is identical to [FakeNnueService]
-class FakeNnueServiceUnavailable implements NnueService {
-  FakeNnueServiceUnavailable();
+/// - All other behaviour is identical to [FakeStockfishNnueService]
+class FakeStockfishNnueServiceUnavailable implements StockfishNnueService {
+  FakeStockfishNnueServiceUnavailable();
 
   final ValueNotifier<double> _nnueDownloadProgress = ValueNotifier(0.0);
 
@@ -77,6 +82,11 @@ class FakeNnueServiceUnavailable implements NnueService {
   @override
   Future<bool> hasOutdatedNNUEFiles() async {
     return true;
+  }
+
+  @override
+  Future<bool> hasNNUEFilesOnDisk() async {
+    return false;
   }
 
   @override

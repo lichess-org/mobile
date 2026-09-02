@@ -735,7 +735,7 @@ sealed class StudyState
           position: currentPosition!,
           savedEval: currentNode.eval,
           serverEval: null,
-          filters: (id: evaluationContext.id, path: currentPath),
+          filters: (context: evaluationContext, path: currentPath),
         )
       : null;
 

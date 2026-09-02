@@ -939,7 +939,7 @@ sealed class AnalysisState
     position: currentPosition,
     savedEval: currentNode.eval,
     serverEval: currentNode.serverEval,
-    filters: (id: evaluationContext.id, path: currentPath),
+    filters: (context: evaluationContext, path: currentPath),
   );
 
   /// Creates an AnalysisPlayer from PGN headers for the given side.

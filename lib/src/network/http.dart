@@ -214,7 +214,9 @@ String makeUserAgent(PackageInfo info, BaseDeviceInfo deviceInfo, String sri, Li
 
 /// Downloads a file from the given [url] and saves it to the [file].
 ///
-/// Returns true if the download was successful, false otherwise.
+/// Returns true if the download was successful, false otherwise. A download that fails halfway
+/// through leaves nothing behind: the partial file is deleted, so that a later attempt starts from
+/// a clean slate instead of finding a file that looks downloaded but is truncated.
 Future<bool> downloadFile(
   Client client,
   Uri url,
@@ -224,11 +226,37 @@ Future<bool> downloadFile(
 }) async {
   _logger.fine('Downloading $url to ${file.path}');
 
-  final response = await client.send(Request('GET', url));
+  Future<bool> discard(String reason, [Object? error, StackTrace? stackTrace]) async {
+    _logger.warning('Download of $url failed: $reason', error, stackTrace);
+    try {
+      if (await file.exists()) await file.delete();
+    } catch (e, st) {
+      _logger.warning('Could not delete the incomplete ${file.path}:', e, st);
+    }
+    return false;
+  }
+
+  final StreamedResponse response;
+  try {
+    response = await client.send(Request('GET', url));
+  } catch (e, st) {
+    return discard('the request failed', e, st);
+  }
+
+  if (response.statusCode != 200) {
+    // The body is an error page, not the file we asked for.
+    await response.stream.drain<void>().catchError((Object _) {});
+    return discard('unexpected status ${response.statusCode}');
+  }
+
   final sink = file.openWrite();
 
   int received = 0;
-  final totalLength = response.contentLength ?? expectedLength;
+  final contentLength = response.contentLength;
+  final totalLength = contentLength ?? expectedLength;
+
+  Object? failure;
+  StackTrace? failureStackTrace;
 
   try {
     await response.stream
@@ -241,17 +269,41 @@ Future<bool> downloadFile(
         })
         .pipe(sink);
   } catch (e, st) {
-    _logger.warning('Failed to download file:', e, st);
+    failure = e;
+    failureStackTrace = st;
   } finally {
+    // Closing the sink is what actually flushes the bytes to disk, so its failure is a download
+    // failure, not a detail to log and forget.
     try {
       await sink.flush();
       await sink.close();
-    } on FileSystemException catch (e, st) {
-      _logger.warning('Failed to save file:', e, st);
+    } catch (e, st) {
+      failure ??= e;
+      failureStackTrace ??= st;
     }
   }
 
-  final length = await file.length();
+  if (failure != null) {
+    return discard('the file could not be written', failure, failureStackTrace);
+  }
+
+  // Fewer bytes than announced means the body was cut short. More is not an error: a client that
+  // transparently decompresses the body reports the compressed length here.
+  if (contentLength != null && received < contentLength) {
+    return discard('got $received bytes out of $contentLength');
+  }
+
+  final int length;
+  try {
+    length = await file.length();
+  } catch (e, st) {
+    return discard('the file could not be read back', e, st);
+  }
+
+  if (length != received) {
+    return discard('only $length bytes of $received made it to disk');
+  }
+
   return length > 0;
 }
 

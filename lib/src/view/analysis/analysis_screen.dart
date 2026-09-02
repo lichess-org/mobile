@@ -284,7 +284,10 @@ class _Body extends ConsumerWidget {
             : null,
         engineLines: isEngineAvailable && numEvalLines > 0 && analysisPrefs.showEngineLines
             ? EngineLines(
-                filters: (id: analysisState.evaluationContext.id, path: analysisState.currentPath),
+                filters: (
+                  context: analysisState.evaluationContext,
+                  path: analysisState.currentPath,
+                ),
                 onTapMove: ref.read(ctrlProvider.notifier).onUserMove,
                 analysisState: analysisState,
               )
@@ -466,7 +469,7 @@ class _BottomBar extends ConsumerWidget {
                 builder: (context, snapshot) {
                   return EngineButton(
                     filters: (
-                      id: analysisState.evaluationContext.id,
+                      context: analysisState.evaluationContext,
                       path: analysisState.currentPath,
                     ),
                     savedEval: analysisState.currentNode.eval,
