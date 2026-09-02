@@ -11,16 +11,25 @@ import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:material_ui/material_ui.dart';
 
 class PuzzleFeedbackWidget extends ConsumerWidget {
-  const PuzzleFeedbackWidget({required this.puzzle, required this.state, required this.onStreak});
+  const PuzzleFeedbackWidget({
+    required this.puzzle,
+    required this.state,
+    required this.onStreak,
+    this.streakAdvanceNotice,
+  });
 
   final Puzzle puzzle;
   final PuzzleState state;
   final bool onStreak;
 
+  /// Shown in place of the puzzle stats while a solved streak puzzle cannot advance, e.g. offline.
+  final String? streakAdvanceNotice;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     switch (state.mode) {
       case PuzzleMode.view:
+        final notice = streakAdvanceNotice;
         final puzzleRating = context.l10n.puzzleRatingX(puzzle.puzzle.rating.toString());
         final playedXTimes = context.l10n.puzzlePlayedXTimes(puzzle.puzzle.plays).localizeNumbers();
         return FeedbackTile(
@@ -42,6 +51,8 @@ class PuzzleFeedbackWidget extends ConsumerWidget {
                 ),
           subtitle: onStreak && state.result == PuzzleResult.lose
               ? null
+              : notice != null
+              ? Text(notice, overflow: TextOverflow.ellipsis, maxLines: 2)
               : RatingPrefAware(
                   orElse: Text('$playedXTimes.', overflow: TextOverflow.ellipsis, maxLines: 2),
                   child: Text(

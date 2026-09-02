@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_streak.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_streak_controller.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -28,6 +29,7 @@ import 'package:lichess_mobile/src/view/puzzle/puzzle_feedback_widget.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/board.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
@@ -63,7 +65,11 @@ class _Load extends ConsumerWidget {
     switch (streak) {
       case AsyncValue(:final error?, :final stackTrace):
         debugPrint('SEVERE: [StreakScreen] could not load streak; $error\n$stackTrace');
-        return PuzzleErrorBoardWidget(errorMessage: error.toString());
+        return PuzzleErrorBoardWidget(
+          errorMessage: ref.watch(isDeviceOnlineProvider)
+              ? error.toString()
+              : 'Go online to start or continue your streak.',
+        );
       case AsyncValue(:final value?):
         return _Body(
           initialPuzzleContext: PuzzleContext(
@@ -93,6 +99,9 @@ class _Body extends ConsumerStatefulWidget {
 class _BodyState extends ConsumerState<_Body> {
   final _boardKey = GlobalKey(debugLabel: 'boardOnPuzzleStreakScreen');
   late final ChessboardController _controller;
+
+  /// Set once the solved live puzzle could not advance, until the next attempt.
+  bool _advanceFailed = false;
 
   @override
   void initState() {
@@ -140,6 +149,37 @@ class _BodyState extends ConsumerState<_Body> {
     );
   }
 
+  /// Moves the streak on to the next puzzle, and tells the user when it cannot.
+  Future<void> _advance() async {
+    if (_advanceFailed) {
+      setState(() {
+        _advanceFailed = false;
+      });
+    }
+    final result = await ref.read(puzzleStreakControllerProvider.notifier).next();
+    if (!mounted) return;
+    switch (result) {
+      case .advanced || .aborted:
+        return;
+      case .ended:
+        showSnackBar(context, 'The next puzzle is no longer available, so your streak ends here.');
+      case .unavailable:
+        // The feedback tile says what is wrong, and the bottom bar offers a retry while online.
+        setState(() {
+          _advanceFailed = true;
+        });
+        if (!ref.read(isDeviceOnlineProvider)) {
+          showSnackBar(context, "You're offline. Your streak will continue when you reconnect.");
+        }
+    }
+  }
+
+  /// What the feedback tile says while the solved live puzzle waits for the next one.
+  String? _advanceNotice({required bool isOnline}) {
+    if (!isOnline) return 'Waiting for connection to load the next puzzle.';
+    return _advanceFailed ? 'Could not load the next puzzle.' : null;
+  }
+
   /// Pushes the latest puzzle position to the board controller without rebuilding it.
   void _applyBoardUpdate() {
     _controller.updatePosition(_buildGameData());
@@ -150,6 +190,25 @@ class _BodyState extends ConsumerState<_Body> {
     final boardPreferences = ref.watch(boardPreferencesProvider);
     final ctrlProvider = puzzleControllerProvider(widget.initialPuzzleContext);
     final puzzleState = ref.watch(ctrlProvider);
+
+    // Set while the live puzzle is solved and its successor not there yet. Connectivity is only
+    // watched then, so that it does not rebuild the screen during play.
+    final pendingAdvance = widget.streak.advancePending;
+    final isOnline = !pendingAdvance || ref.watch(isDeviceOnlineProvider);
+
+    // Shared by the portrait and landscape layouts.
+    final feedback = PuzzleFeedbackWidget(
+      puzzle: puzzleState.puzzle,
+      state: puzzleState,
+      onStreak: true,
+      streakAdvanceNotice: pendingAdvance ? _advanceNotice(isOnline: isOnline) : null,
+    );
+    final bottomBar = _BottomBar(
+      initialPuzzleContext: widget.initialPuzzleContext,
+      streak: widget.streak,
+      // Offline, the streak controller retries by itself on reconnect.
+      onRetryAdvance: pendingAdvance && _advanceFailed && isOnline ? _advance : null,
+    );
 
     // fix for #1951 : when failing the first puzzle, need to do
     // an explicit check when restarting, or else the puzzle will be in a bugged state
@@ -176,7 +235,7 @@ class _BodyState extends ConsumerState<_Body> {
       if (previous?.result != PuzzleResult.lose && next.result == PuzzleResult.lose) {
         ref.read(puzzleStreakControllerProvider.notifier).gameOver();
       } else if (previous?.result != PuzzleResult.win && next.result == PuzzleResult.win) {
-        ref.read(puzzleStreakControllerProvider.notifier).next();
+        _advance();
       }
     });
 
@@ -193,7 +252,7 @@ class _BodyState extends ConsumerState<_Body> {
     );
 
     final content = PopScope(
-      canPop: widget.streak.index == 0 || widget.streak.finished,
+      canPop: widget.streak.score == 0 || widget.streak.finished,
       onPopInvokedWithResult: (bool didPop, _) async {
         if (didPop) {
           return;
@@ -272,13 +331,7 @@ class _BodyState extends ConsumerState<_Body> {
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                                         children: [
-                                          Expanded(
-                                            child: PuzzleFeedbackWidget(
-                                              puzzle: puzzleState.puzzle,
-                                              state: puzzleState,
-                                              onStreak: true,
-                                            ),
-                                          ),
+                                          Expanded(child: feedback),
                                           Text(
                                             context.l10n.puzzleRatingX(
                                               puzzleState.puzzle.puzzle.rating.toString(),
@@ -307,7 +360,7 @@ class _BodyState extends ConsumerState<_Body> {
                                                 ),
                                                 const SizedBox(width: 8.0),
                                                 Text(
-                                                  widget.streak.index.toString(),
+                                                  widget.streak.score.toString(),
                                                   style: TextStyle(
                                                     fontSize: 90.0,
                                                     fontWeight: FontWeight.bold,
@@ -342,10 +395,7 @@ class _BodyState extends ConsumerState<_Body> {
                                         ),
                                       ),
                                     ),
-                                    _BottomBar(
-                                      initialPuzzleContext: widget.initialPuzzleContext,
-                                      streak: widget.streak,
-                                    ),
+                                    bottomBar,
                                   ],
                                 ),
                               ),
@@ -370,11 +420,7 @@ class _BodyState extends ConsumerState<_Body> {
                                 child: Center(
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                                    child: PuzzleFeedbackWidget(
-                                      puzzle: puzzleState.puzzle,
-                                      state: puzzleState,
-                                      onStreak: true,
-                                    ),
+                                    child: feedback,
                                   ),
                                 ),
                               ),
@@ -422,7 +468,7 @@ class _BodyState extends ConsumerState<_Body> {
                                               ),
                                               const SizedBox(width: 8.0),
                                               Text(
-                                                widget.streak.index.toString(),
+                                                widget.streak.score.toString(),
                                                 style: TextStyle(
                                                   fontSize: 30.0,
                                                   fontWeight: FontWeight.bold,
@@ -443,10 +489,7 @@ class _BodyState extends ConsumerState<_Body> {
                                 ),
                               ),
                             ),
-                            _BottomBar(
-                              initialPuzzleContext: widget.initialPuzzleContext,
-                              streak: widget.streak,
-                            ),
+                            bottomBar,
                           ],
                         );
                       }
@@ -472,10 +515,17 @@ class _BodyState extends ConsumerState<_Body> {
 }
 
 class _BottomBar extends ConsumerWidget {
-  const _BottomBar({required this.initialPuzzleContext, required this.streak});
+  const _BottomBar({
+    required this.initialPuzzleContext,
+    required this.streak,
+    required this.onRetryAdvance,
+  });
 
   final PuzzleContext initialPuzzleContext;
   final PuzzleStreak streak;
+
+  /// Set while the solved live puzzle could not advance: tries again to load the next puzzle.
+  final VoidCallback? onRetryAdvance;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -491,18 +541,29 @@ class _BottomBar extends ConsumerWidget {
             showLabel: true,
             onTap: () => _streakInfoDialogBuilder(context),
           ),
+        // A solved puzzle cannot be skipped, so a retry takes the button's place when needed.
         if (!streak.finished)
-          BottomBarButton(
-            icon: Icons.skip_next,
-            label: context.l10n.skipThisMove,
-            showLabel: true,
-            onTap: streak.hasSkipped || puzzleState.mode == PuzzleMode.view
-                ? null
-                : () {
-                    ref.read(ctrlProvider.notifier).skipMove();
-                    ref.read(puzzleStreakControllerProvider.notifier).skipMove();
-                  },
-          ),
+          if (onRetryAdvance case final retry?)
+            BottomBarButton(
+              key: const ValueKey('retry-advance'),
+              icon: Icons.refresh,
+              label: context.l10n.retry,
+              showLabel: true,
+              onTap: retry,
+            )
+          else
+            BottomBarButton(
+              key: const ValueKey('skip'),
+              icon: Icons.skip_next,
+              label: context.l10n.skipThisMove,
+              showLabel: true,
+              onTap: streak.hasSkipped || puzzleState.mode == PuzzleMode.view
+                  ? null
+                  : () {
+                      ref.read(ctrlProvider.notifier).skipMove();
+                      ref.read(puzzleStreakControllerProvider.notifier).skipMove();
+                    },
+            ),
         if (streak.finished)
           BottomBarButton(
             onTap: () {
@@ -551,9 +612,17 @@ class _BottomBar extends ConsumerWidget {
           ),
         if (streak.finished)
           BottomBarButton(
-            onTap: ref.read(puzzleStreakControllerProvider).isLoading == false
-                ? () => ref.invalidate(puzzleStreakControllerProvider)
-                : null,
+            key: const ValueKey('new-streak'),
+            // Stays tappable offline, so that it can say why a new streak needs the network.
+            onTap: ref.watch(puzzleStreakControllerProvider.select((s) => s.isLoading))
+                ? null
+                : () {
+                    if (!ref.read(isDeviceOnlineProvider)) {
+                      showSnackBar(context, "You're offline. Go online to start a new streak.");
+                      return;
+                    }
+                    ref.invalidate(puzzleStreakControllerProvider);
+                  },
             highlighted: true,
             label: context.l10n.puzzleNewStreak,
             icon: Icons.refresh,

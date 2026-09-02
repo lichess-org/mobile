@@ -22,6 +22,7 @@ import 'package:lichess_mobile/src/model/correspondence/correspondence_service.d
 import 'package:lichess_mobile/src/model/log/app_log_service.dart';
 import 'package:lichess_mobile/src/model/message/message_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
+import 'package:lichess_mobile/src/model/puzzle/streak_score_sync.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/model/study/study_preferences.dart';
@@ -182,6 +183,11 @@ class _AppState extends ConsumerState<Application> {
     ref.listenManual(connectivityChangesProvider, (prev, current) async {
       final prevWasOffline = prev?.value?.isOnline == false;
       final currentIsOnline = current.value?.isOnline == true;
+
+      // Post a streak score queued while offline, on reconnect or on the first online check.
+      if (currentIsOnline && (prevWasOffline || !_firstTimeOnlineCheck)) {
+        ref.read(streakScoreSyncProvider).flushCurrentUser().ignore();
+      }
 
       // Play registered moves whenever the app comes back online.
       if (prevWasOffline && currentIsOnline) {

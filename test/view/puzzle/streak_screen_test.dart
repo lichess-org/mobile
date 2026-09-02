@@ -1,6 +1,8 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
+import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/puzzle/streak_screen.dart';
@@ -216,8 +218,129 @@ void main() {
       //now, the text should say 'Your turn'.
       expect(find.text('Your turn'), findsOneWidget);
     });
+
+    testWidgets('a new streak cannot start offline, and the button says so', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const StreakScreen(),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+          isDeviceOnlineProvider: isDeviceOnlineProvider.overrideWithValue(false),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      // lose the run on the first move
+      await playMove(tester, 'f6', 'f7', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      expect(find.text('GAME OVER'), findsOneWidget);
+
+      final newStreakButton = find.byKey(const ValueKey('new-streak'));
+      expect(tester.widget<BottomBarButton>(newStreakButton).onTap, isNotNull);
+      await tester.tap(newStreakButton);
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+
+      // the game over board stays, with an explanation
+      expect(find.text("You're offline. Go online to start a new streak."), findsOneWidget);
+      expect(find.text('GAME OVER'), findsOneWidget);
+    });
+
+    testWidgets('a solve stranded offline says it is waiting for a connection', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const StreakScreen(),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(streakOnlyClient, ref),
+          ),
+          isDeviceOnlineProvider: isDeviceOnlineProvider.overrideWithValue(false),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      // solve the first puzzle: the next one is neither cached nor reachable
+      await playMove(tester, 'e5', 'e1', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      await playMove(tester, 'f6', 'f4', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      await playMove(tester, 'f4', 'f2', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+
+      // the solve counts, and the screen says what it is waiting for
+      expect(find.textContaining(RegExp('1\$')), findsOneWidget);
+      expect(find.text('Success!'), findsOneWidget);
+      expect(find.text('Waiting for connection to load the next puzzle.'), findsOneWidget);
+      expect(
+        find.text("You're offline. Your streak will continue when you reconnect."),
+        findsOneWidget,
+      );
+      // the reconnect is retried by the controller, so there is nothing to tap
+      expect(find.byKey(const ValueKey('retry-advance')), findsNothing);
+    });
+
+    testWidgets('a solve that cannot advance online offers a retry', (tester) async {
+      // the next puzzle fails to load once, when the advance fetches it
+      var failuresLeft = 1;
+      final flakyClient = MockClient((request) async {
+        if (request.url.path == '/api/puzzle/4CZxz' && failuresLeft > 0) {
+          failuresLeft--;
+          return http.Response('', 500);
+        }
+        return http.Response.fromStream(
+          await client.send(http.Request(request.method, request.url)),
+        );
+      });
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const StreakScreen(),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(flakyClient, ref),
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      final retryFinder = find.byKey(const ValueKey('retry-advance'));
+      expect(retryFinder, findsNothing);
+
+      await playMove(tester, 'e5', 'e1', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      await playMove(tester, 'f6', 'f4', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      await playMove(tester, 'f4', 'f2', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+
+      // the solve counts, the screen says what went wrong and the skip button became a retry
+      expect(find.textContaining(RegExp('1\$')), findsOneWidget);
+      expect(find.text('Could not load the next puzzle.'), findsOneWidget);
+      expect(find.byKey(const ValueKey('skip')), findsNothing);
+      expect(retryFinder, findsOneWidget);
+
+      await tester.tap(retryFinder);
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      // on the second puzzle (rating 1058), with the bar back to normal
+      expect(find.textContaining('1058'), findsOneWidget);
+      expect(find.text('Could not load the next puzzle.'), findsNothing);
+      expect(retryFinder, findsNothing);
+      expect(find.byKey(const ValueKey('skip')), findsOneWidget);
+    });
   });
 }
+
+/// Serves the streak, then goes offline: nothing is cached ahead of the first puzzle.
+final streakOnlyClient = MockClient((request) async {
+  if (request.url.path == '/api/streak') {
+    return http.Response.fromStream(await client.send(http.Request(request.method, request.url)));
+  }
+  throw http.ClientException('offline');
+});
 
 final client = MockClient((request) {
   if (request.url.path == '/api/streak') {
