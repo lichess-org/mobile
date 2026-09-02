@@ -118,3 +118,13 @@ class _LichessMessageState extends State<LichessMessage> {
     );
   }
 }
+
+/// An icon that represents opening a button or a link in a external application.
+class OpenInNewIcon extends StatelessWidget {
+  const OpenInNewIcon();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Icon(Icons.open_in_new, size: 18);
+  }
+}
