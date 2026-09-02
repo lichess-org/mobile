@@ -54,24 +54,23 @@ dependencies:
   intl: ^0.20.3
   json_annotation: ^4.12.0
   l10n_esperanto: ^3.0.0
-  # Local checkout too: the branch that gave lc0 private I/O and a handle API is not merged yet.
-  # See engine_refactor.md §13. Restore a git ref before merging.
+  # Git ref: the branch that gave lc0 private I/O and a handle API is not merged nor published
+  # yet. See engine_refactor.md §13.
   lc0:
-    path: ../dart-lc0
+    git:
+      url: https://github.com/lichess-org/dart-lc0.git
+      ref: 06bf3b8b6e7436c4dbfa753ceeeda3e411254c31
   logging: ^1.3.0
   material_color_utilities: ^0.13.0
   material_symbols_icons: ^4.2960.0
   material_ui: ^1.0.1
   meta: ^1.19.0
-  # multistockfish: ^0.5.0
-  # Local checkout while the engine refactor lands; restore the git ref before merging.
+  # Git ref while the engine refactor lands; restore a pub.dev version before merging.
   multistockfish:
-    path: ../dart-multistockfish/pkgs/multistockfish
-  # multistockfish:
-  #   git:
-  #     url: https://github.com/lichess-org/dart-multistockfish.git
-  #     ref: 2458f34b58d220ab74dd4c14db03ebe356e01b54
-  #     path: pkgs/multistockfish
+    git:
+      url: https://github.com/lichess-org/dart-multistockfish.git
+      ref: 50b1c4f6c53ad76429bfdfb118f9ebc8c8d2848a
+      path: pkgs/multistockfish
   package_info_plus: ^10.2.1
   path: ^1.9.1
   path_provider: ^2.1.6
@@ -104,20 +103,30 @@ dev_dependencies:
   stream_channel: ^2.1.4
   wakelock_plus_platform_interface: ^1.6.0
 
-# Local checkout of the engine plugin while the engine refactor lands: the branch pins native
-# package versions that are not published yet. Remove this whole block, and restore the git ref
-# under `multistockfish` above, before merging.
+# The engine plugin branch pins native package versions that are not published yet. Remove this
+# whole block, and restore a pub.dev version under `multistockfish` above, once they are.
 dependency_overrides:
-  # Local checkout of dartchess for the Zobrist hashing the opening book keys on (0.14.0,
-  # unreleased). Remove once dartchess 0.14.0 is on pub.dev and the constraint above is bumped.
+  # dartchess is pinned to the Zobrist hashing the opening book keys on (0.14.0, unreleased).
+  # Remove once dartchess 0.14.0 is on pub.dev and the constraint above is bumped.
   dartchess:
-    path: ../dartchess
+    git:
+      url: https://github.com/lichess-org/dartchess.git
+      ref: ed64d8a58ea16e3597f71a037ff0f50733b8604d
   multistockfish_chess:
-    path: ../dart-multistockfish/pkgs/multistockfish_chess
+    git:
+      url: https://github.com/lichess-org/dart-multistockfish.git
+      ref: 50b1c4f6c53ad76429bfdfb118f9ebc8c8d2848a
+      path: pkgs/multistockfish_chess
   multistockfish_sf16:
-    path: ../dart-multistockfish/pkgs/multistockfish_sf16
+    git:
+      url: https://github.com/lichess-org/dart-multistockfish.git
+      ref: 50b1c4f6c53ad76429bfdfb118f9ebc8c8d2848a
+      path: pkgs/multistockfish_sf16
   multistockfish_variant:
-    path: ../dart-multistockfish/pkgs/multistockfish_variant
+    git:
+      url: https://github.com/lichess-org/dart-multistockfish.git
+      ref: 50b1c4f6c53ad76429bfdfb118f9ebc8c8d2848a
+      path: pkgs/multistockfish_variant
 
 flutter:
   # The following line ensures that the Material Icons font is
