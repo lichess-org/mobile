@@ -379,11 +379,6 @@ class MaiaOpponent extends EngineOpponentBase<MaiaOpponentSpec> {
     }
   }
 
-  /// The opening the network would otherwise have to invent.
-  ///
-  /// Maia's policy is sharper than the human distribution, so left to itself it opens the same way
-  /// nearly every game. Skipped outside standard chess and from a custom start, which no book
-  /// covers.
   @override
   Future<UCIMove?> bookMove({
     required Position initialPosition,
@@ -393,24 +388,29 @@ class MaiaOpponent extends EngineOpponentBase<MaiaOpponentSpec> {
     if (variant != Variant.standard) return null;
     if (initialPosition != Chess.initial) return null;
 
-    final position = _replay(initialPosition, moves);
-    if (position == null) return null;
+    try {
+      final position = _replay(initialPosition, moves);
+      if (position == null) return null;
 
-    // The explorer knows this network's own rating band, where the bundled book merges three of
-    // them; it answers empty whenever it cannot be reached, which is when the bundled one is read.
-    final online = await onlineBook.movesFor(position, rating);
-    final source = online.isNotEmpty ? 'online' : 'bundled';
-    final candidates = online.isNotEmpty
-        ? online
-        : await books
-              .bookFor(rating)
-              .then((book) => book?.movesFor(position) ?? const <BookMove>[]);
+      // The explorer knows this network's own rating band, where the bundled book merges three of
+      // them; it answers empty whenever it cannot be reached, which is when the bundled one is read.
+      final online = await onlineBook.movesFor(position, rating);
+      final source = online.isNotEmpty ? 'online' : 'bundled';
+      final candidates = online.isNotEmpty
+          ? online
+          : await books
+                .bookFor(rating)
+                .then((book) => book?.movesFor(position) ?? const <BookMove>[]);
 
-    final move = chooseWeighted(candidates, random);
-    if (move != null) {
-      _logger.info('Playing $move from the $source opening book');
+      final move = chooseWeighted(candidates, random);
+      if (move != null) {
+        _logger.info('Playing $move from the $source opening book');
+      }
+      return move;
+    } catch (e, st) {
+      _logger.warning('Could not read the opening book', e, st);
+      return null;
     }
-    return move;
   }
 
   @override
