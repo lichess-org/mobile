@@ -86,14 +86,10 @@ class PuzzleController extends Notifier<PuzzleState> {
     // update puzzles that are remaining in replay
     _replayRemaining = context.replayRemaining;
 
-    // play first move after 1 second
-    _firstMoveTimer = Timer(const Duration(seconds: 1), () {
-      _setPath(state.initialPath, firstMove: true);
-    });
-
     final initialPath = UciPath.fromId(_gameTree.children.first.id);
+    final initialNode = _gameTree.branchAt(initialPath);
 
-    return PuzzleState(
+    final loaded = PuzzleState(
       puzzle: context.puzzle,
       glicko: context.glicko,
       mode: PuzzleMode.load,
@@ -102,18 +98,41 @@ class PuzzleController extends Notifier<PuzzleState> {
       initialPath: initialPath,
       currentPath: UciPath.empty,
       node: _gameTree.view,
-      pov: _gameTree.nodeAt(initialPath).position.ply.isEven ? Side.white : Side.black,
+      pov: initialNode.position.ply.isEven ? Side.white : Side.black,
       hintShown: false,
       resultSent: false,
       isChangingDifficulty: false,
       shouldBlinkNextArrow: false,
     );
+
+    if (context.isReview) {
+      // Already solved and reported: opens on the solution, with no first move to play.
+      _mergeSolution(initialPath, context.puzzle.puzzle.solution);
+      return loaded.copyWith(
+        mode: PuzzleMode.replay,
+        root: _gameTree.view,
+        currentPath: initialPath,
+        node: initialNode.view,
+        lastMove: initialNode.sanMove.move,
+        result: PuzzleResult.win,
+        resultSent: true,
+      );
+    }
+
+    // play first move after 1 second
+    _firstMoveTimer = Timer(const Duration(seconds: 1), () {
+      _setPath(state.initialPath, firstMove: true);
+    });
+    return loaded;
   }
 
   Future<void> onUserMove(Move move) async {
-    _addMove(move);
+    // A replay may walk into a move already in the tree, e.g. the one that lost the streak.
+    final isNewMove = _addMove(move);
 
-    if (state.mode == PuzzleMode.play) {
+    // Read once: a wrong move switches a streak puzzle to replay below.
+    final replaying = state.mode == PuzzleMode.replay;
+    if (state.mode == PuzzleMode.play || replaying) {
       state = state.copyWith(hintSquare: null);
       final nodeList = _gameTree.branchesOn(state.currentPath).toList();
       final movesToTest = nodeList.sublist(state.initialPath.size).map((e) => e.sanMove);
@@ -132,6 +151,7 @@ class PuzzleController extends Notifier<PuzzleState> {
         else if (nextUci != null) {
           final correctPath = state.currentPath;
           await Future<void>.delayed(const Duration(milliseconds: 500));
+          if (!ref.mounted) return;
           final (nextPath, _) = _gameTree.addMoveAt(correctPath, Move.parse(nextUci)!);
           if (nextPath != null) {
             _setPath(nextPath, isNavigating: true);
@@ -143,11 +163,17 @@ class PuzzleController extends Notifier<PuzzleState> {
         }
       } else {
         state = state.copyWith(feedback: PuzzleFeedback.bad);
-        _onFailOrWin(PuzzleResult.lose);
-        if (initialContext.isPuzzleStreak != true) {
+        if (replaying) {
+          ref.read(soundServiceProvider).play(Sound.error);
+        } else {
+          _onFailOrWin(PuzzleResult.lose);
+        }
+        // A wrong move that ends a live streak stays on the board; any other is taken back.
+        if (initialContext.isPuzzleStreak != true || replaying) {
           final wrongPath = state.currentPath;
           await Future<void>.delayed(const Duration(milliseconds: 500));
-          _gameTree.deleteAt(wrongPath);
+          if (!ref.mounted) return;
+          if (isNewMove) _gameTree.deleteAt(wrongPath);
           _setPath(wrongPath.penultimate);
         }
       }
@@ -167,7 +193,7 @@ class PuzzleController extends Notifier<PuzzleState> {
   void viewSolution() {
     if (state.mode == PuzzleMode.view) return;
 
-    _mergeSolution();
+    _mergeSolution(state.initialPath, state.puzzle.puzzle.solution);
 
     state = state.copyWith(root: _gameTree.view, node: _gameTree.branchAt(state.currentPath).view);
 
@@ -261,9 +287,13 @@ class PuzzleController extends Notifier<PuzzleState> {
   }
 
   Future<void> _completePuzzle() async {
-    state = state.copyWith(mode: PuzzleMode.view);
+    state = state.copyWith(mode: _doneMode);
     await _onFailOrWin(state.result ?? PuzzleResult.win);
   }
+
+  /// Once over, a streak puzzle stays playable against its solution; the others open up.
+  PuzzleMode get _doneMode =>
+      initialContext.isPuzzleStreak == true ? PuzzleMode.replay : PuzzleMode.view;
 
   Future<void> _onFailOrWin(PuzzleResult result) async {
     if (state.resultSent) return;
@@ -277,12 +307,15 @@ class PuzzleController extends Notifier<PuzzleState> {
       if (result == PuzzleResult.lose) {
         soundService.play(Sound.error);
         await Future<void>.delayed(const Duration(milliseconds: 500));
+        if (!ref.mounted) return;
         _setPath(state.currentPath.penultimate);
-        _mergeSolution();
+        _mergeSolution(state.initialPath, state.puzzle.puzzle.solution);
         state = state.copyWith(
-          mode: PuzzleMode.view,
+          mode: PuzzleMode.replay,
           root: _gameTree.view,
           node: _gameTree.branchAt(state.currentPath).view,
+          // The losing move was taken back; feedback now tracks the replay.
+          feedback: null,
         );
       }
     } else {
@@ -407,8 +440,10 @@ class PuzzleController extends Notifier<PuzzleState> {
     return pgn;
   }
 
-  void _addMove(Move move) {
-    final (newPath, _) = _gameTree.addMoveAt(
+  /// Plays [move] from the current position, and returns whether it added a node to the tree
+  /// (false when the move was already there).
+  bool _addMove(Move move) {
+    final (newPath, isNewNode) = _gameTree.addMoveAt(
       state.currentPath,
       move,
       prepend: state.mode == PuzzleMode.play,
@@ -416,28 +451,41 @@ class PuzzleController extends Notifier<PuzzleState> {
     if (newPath != null) {
       _setPath(newPath);
     }
+    return isNewNode;
   }
 
-  void _mergeSolution() {
-    final initialNode = _gameTree.nodeAt(state.initialPath);
-    final (_, newNodes) = state.puzzle.puzzle.solution.foldIndexed(
-      (initialNode.position, IList<Branch>(const [])),
-      (index, previous, uci) {
-        final moveObj = Move.parse(uci)!;
-        final (pos, nodes) = previous;
-        final normalizedMove = _gameTree.normalizeMove(pos, moveObj);
-        final (newPos, newSan) = pos.makeSan(normalizedMove);
-        return (
-          newPos,
-          nodes.add(Branch(position: newPos, sanMove: SanMove(newSan, normalizedMove))),
-        );
-      },
-    );
-    _gameTree.addNodesAt(state.initialPath, newNodes, prepend: true);
+  /// Adds [solution] to the game tree at [initialPath], ahead of any move already played there.
+  void _mergeSolution(UciPath initialPath, IList<String> solution) {
+    final initialNode = _gameTree.nodeAt(initialPath);
+    final (_, newNodes) = solution.foldIndexed((initialNode.position, IList<Branch>(const [])), (
+      index,
+      previous,
+      uci,
+    ) {
+      final moveObj = Move.parse(uci)!;
+      final (pos, nodes) = previous;
+      final normalizedMove = _gameTree.normalizeMove(pos, moveObj);
+      final (newPos, newSan) = pos.makeSan(normalizedMove);
+      return (
+        newPos,
+        nodes.add(Branch(position: newPos, sanMove: SanMove(newSan, normalizedMove))),
+      );
+    });
+    _gameTree.addNodesAt(initialPath, newNodes, prepend: true);
   }
 }
 
-enum PuzzleMode { load, play, view }
+enum PuzzleMode {
+  load,
+  play,
+
+  /// The puzzle is over and the board is free for analysis.
+  view,
+
+  /// The puzzle is over and reported, but moves are still checked against the solution: a wrong
+  /// one is taken back, a right one answered. Streak puzzles end up here.
+  replay,
+}
 
 enum PuzzleResult { win, lose }
 

@@ -66,6 +66,9 @@ sealed class PuzzleContext with _$PuzzleContext {
 
     /// Remaining puzzle IDs to replay after the current one.
     IList<PuzzleId>? replayRemaining,
+
+    /// If true, the puzzle was already solved and opens on its solution, to be replayed.
+    @Default(false) bool isReview,
   }) = _PuzzleContext;
 }
 

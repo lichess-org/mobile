@@ -19,11 +19,15 @@ import 'package:lichess_mobile/src/network/http.dart';
 
 import '../../test_container.dart';
 import '../../test_helpers.dart';
+import '../../view/puzzle/example_data.dart';
 import '../auth/fake_auth_storage.dart';
 
 final _userId = fakeAuthUser.user.id;
 
 void main() {
+  // review moves reach the haptics platform channel
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   group('PuzzleController.changeDifficulty', () {
     test('does not start the offline queue fill while resetBatch is in flight', () async {
       // Regression test: `resetBatch` saves a batch built from a snapshot taken
@@ -111,7 +115,70 @@ void main() {
       expect(container.read(puzzleQueueFillerProvider), isFalse);
     });
   });
+
+  group('PuzzleController in review', () {
+    test('opens the puzzle in replay mode and keeps it there past the first-move delay', () async {
+      final container = await makeContainer();
+      final provider = puzzleControllerProvider(_streakContext.copyWith(isReview: true));
+      final subscription = container.listen(provider, (_, _) {});
+      addTearDown(subscription.close);
+
+      expect(container.read(provider).mode, PuzzleMode.replay);
+      expect(container.read(provider).lastMove, isNotNull, reason: 'the setup move is highlighted');
+
+      // the first move timer must not flip the puzzle back into play mode
+      await Future<void>.delayed(const Duration(milliseconds: 1200));
+      expect(container.read(provider).mode, PuzzleMode.replay);
+    });
+
+    test('plays the opponent reply without waiting for the next-move button', () async {
+      final container = await makeContainer();
+      final provider = puzzleControllerProvider(_streakContext.copyWith(isReview: true));
+      final subscription = container.listen(provider, (_, _) {});
+      addTearDown(subscription.close);
+
+      final initialPath = container.read(provider).initialPath;
+
+      await container.read(provider.notifier).onUserMove(Move.parse('h4h2')!);
+
+      final state = container.read(provider);
+      expect(
+        state.currentPath.size - initialPath.size,
+        2,
+        reason: 'the solved move and the reply to it',
+      );
+      expect(state.node.sanMove.move.uci, 'h1h2', reason: 'the reply is the solution move');
+      expect(state.feedback, PuzzleFeedback.good);
+    });
+
+    test('takes back a wrong move', () async {
+      final container = await makeContainer();
+      final provider = puzzleControllerProvider(_streakContext.copyWith(isReview: true));
+      final subscription = container.listen(provider, (_, _) {});
+      addTearDown(subscription.close);
+
+      final initialPath = container.read(provider).initialPath;
+
+      await container.read(provider.notifier).onUserMove(Move.parse('b4b2')!);
+
+      final state = container.read(provider);
+      expect(state.currentPath, initialPath, reason: 'back to where the move was played from');
+      expect(state.feedback, PuzzleFeedback.bad);
+      expect(
+        state.node.children.map((c) => c.sanMove.move.uci),
+        isNot(contains('b4b2')),
+        reason: 'the variation is deleted, not merely stepped out of',
+      );
+    });
+  });
 }
+
+final _streakContext = PuzzleContext(
+  puzzle: puzzle,
+  angle: const PuzzleTheme(PuzzleThemeKey.mix),
+  userId: null,
+  isPuzzleStreak: true,
+);
 
 /// Waits for the fire-and-forget queue fill kicked off by the controller.
 Future<void> _waitForFill(ProviderContainer container) async {
