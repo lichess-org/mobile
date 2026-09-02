@@ -81,7 +81,7 @@ class SearchRequest {
     this.threads = 1,
     this.multiPv = 1,
     this.options = const IMapConst({}),
-    this.newGame = false,
+    required this.game,
   });
 
   /// The position the [moves] are played from.
@@ -105,8 +105,14 @@ class SearchRequest {
   /// The complete option set for this search, beyond the ones named above.
   final IMap<String, String> options;
 
-  /// Whether the engine should be told this is a new game before the search.
-  final bool newGame;
+  /// What game this search belongs to.
+  ///
+  /// An engine is shared and outlives whoever used it: two analysis screens, or an offline game's
+  /// opponent and the hints computed beside it, search on the same one, and nothing in a `position`
+  /// command tells it that the game moved on. This does — the engine is told `ucinewgame`, and so
+  /// clears the table it filled for the previous game, whenever this differs from the last
+  /// search's. Anything with value equality does: a game id, an analysis context.
+  final Object game;
 }
 
 /// One `info` line, in the engine's point of view.
@@ -188,9 +194,9 @@ class Engine {
   _RunningSearch? _next;
   bool _stopRequested = false;
 
-  /// Whether `ucinewgame` is owed to the engine before the next search. True to begin with: a
-  /// fresh engine has never been told what it is playing.
-  bool _newGamePending = true;
+  /// The game the last search the engine was actually sent belonged to, or null while it has been
+  /// sent none. What makes the table the engine builds up this game's rather than the last one's.
+  Object? _lastGame;
   bool _disposed = false;
 
   /// The variant of the last search started, so that a failure can name what the engine was doing.
@@ -246,14 +252,15 @@ class Engine {
 
     _next?._finish(null);
     _next = search;
-    if (request.newGame) _newGamePending = true;
     _stopRunning();
 
     // Before the handshake, not after it: clearing the hash takes the engine a moment, and
     // `readyok` is how it says it is done. This is the order the protocol asks for, and the one
     // the app has always used.
-    if (_newGamePending) {
-      _newGamePending = false;
+    //
+    // A fresh engine has searched nothing, so its first search is always a new game.
+    if (_lastGame != request.game) {
+      _lastGame = request.game;
       search._newGameSent = true;
       _transport.send('ucinewgame');
     }
@@ -267,14 +274,6 @@ class Engine {
     _next?._finish(null);
     _next = null;
     _stopRunning();
-  }
-
-  /// Tells the engine the next search belongs to a different game.
-  ///
-  /// The `ucinewgame` command itself is deferred to the moment the next search starts, because the
-  /// engine must not be searching when it arrives.
-  void newGame() {
-    _newGamePending = true;
   }
 
   Future<void> dispose() async {
@@ -475,7 +474,7 @@ class Engine {
 
     // Fairy-Stockfish rebuilds its rules when the variant changes, and it must not still be
     // holding a position set up under the old ones. This one cannot go in front of the handshake
-    // like the [newGame] above, because the option it answers is only sent here.
+    // like the [SearchRequest.game] one above, because the option it answers is only sent here.
     final variantChanged = _applyOptions(next.request);
     if (variantChanged && !next._newGameSent) _transport.send('ucinewgame');
 

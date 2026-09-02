@@ -18,6 +18,9 @@ import 'fake_maia_online_book.dart';
 import 'fake_weights_service.dart';
 import 'polyglot_fixture.dart';
 
+/// The game every test that is not about game identity plays.
+const kTestGame = 'test-game';
+
 /// A [ThinkingTime] that always asks for the same wait, so a test can time the wiring rather than
 /// the distribution — which `thinking_time_test.dart` covers on its own.
 class FixedThinkingTime extends ThinkingTime {
@@ -51,6 +54,7 @@ void main() {
         initialPosition: Chess.initial,
         moves: const IListConst([]),
         variant: Variant.standard,
+        game: kTestGame,
       );
 
       expect(move, isNotEmpty);
@@ -66,6 +70,7 @@ void main() {
         initialPosition: Chess.initial,
         moves: const IListConst([]),
         variant: Variant.standard,
+        game: kTestGame,
       );
 
       // Only Fairy-Stockfish has the negative skill levels the weakest opponents need, and it is
@@ -82,6 +87,7 @@ void main() {
         initialPosition: Chess.initial,
         moves: const IListConst([]),
         variant: Variant.standard,
+        game: kTestGame,
       );
 
       expect(engine.options['Skill Level'], '9');
@@ -103,6 +109,7 @@ void main() {
         moves: const IListConst([]),
         variant: Variant.crazyhouse,
         sharesEngineWithEvaluator: true,
+        game: kTestGame,
       );
 
       // On a variant the opponent and the hints are the same Fairy-Stockfish, and a `Threads` the
@@ -123,6 +130,7 @@ void main() {
         initialPosition: Chess.initial,
         moves: const IListConst([]),
         variant: Variant.standard,
+        game: kTestGame,
       );
 
       expect(engine.options['Threads'], '2');
@@ -139,19 +147,101 @@ void main() {
         initialPosition: Chess.initial,
         moves: const IListConst([]),
         variant: Variant.standard,
+        game: kTestGame,
       );
       expect(engine.commands, contains('ucinewgame'));
 
       engine.commands.clear();
       await opponent.findMove(
         initialPosition: Chess.initial,
-        moves: const IListConst(['e2e4']),
+        moves: const IListConst(['e2e4', 'e7e5']),
         variant: Variant.standard,
+        game: kTestGame,
       );
       expect(
         engine.commands,
         isNot(contains('ucinewgame')),
         reason: 'a move that is not the first belongs to the game already in progress',
+      );
+    });
+
+    test('a game the engine has not searched is announced, whatever it is doing', () async {
+      final engine = FakeEngine();
+      fakeEngine = engine;
+      final container = await makeContainer();
+      final opponent = readOpponent(container);
+
+      // The player moved first, so the opponent's first move of the game is not the game's first.
+      // The engine it plays on is shared, and may have been searching something else a moment ago.
+      await opponent.findMove(
+        initialPosition: Chess.initial,
+        moves: const IListConst(['e2e4']),
+        variant: Variant.standard,
+        game: kTestGame,
+      );
+
+      expect(engine.commands, contains('ucinewgame'));
+    });
+
+    test('another game at the same level tells the engine, mid-game or not', () async {
+      final engine = FakeEngine();
+      fakeEngine = engine;
+      final container = await makeContainer();
+      final opponent = readOpponent(container);
+
+      await opponent.findMove(
+        initialPosition: Chess.initial,
+        moves: const IListConst([]),
+        variant: Variant.standard,
+        game: kTestGame,
+      );
+
+      engine.commands.clear();
+      // Another game at the same level is the same opponent on the same engine, and the player
+      // has the first move of it — so nothing but its identity says it is not the game before.
+      await opponent.findMove(
+        initialPosition: Chess.initial,
+        moves: const IListConst(['d2d4']),
+        variant: Variant.standard,
+        game: 'another-game',
+      );
+
+      expect(engine.commands, contains('ucinewgame'));
+    });
+
+    test('a takeback to the starting position is not a new game', () async {
+      final engine = FakeEngine();
+      fakeEngine = engine;
+      final container = await makeContainer();
+      final opponent = readOpponent(container);
+
+      // The opponent has the white pieces: it moves at the starting position, and a takeback puts
+      // it right back there.
+      await opponent.findMove(
+        initialPosition: Chess.initial,
+        moves: const IListConst([]),
+        variant: Variant.standard,
+        game: kTestGame,
+      );
+      await opponent.findMove(
+        initialPosition: Chess.initial,
+        moves: const IListConst(['e2e4', 'e7e5']),
+        variant: Variant.standard,
+        game: kTestGame,
+      );
+
+      engine.commands.clear();
+      await opponent.findMove(
+        initialPosition: Chess.initial,
+        moves: const IListConst([]),
+        variant: Variant.standard,
+        game: kTestGame,
+      );
+
+      expect(
+        engine.commands,
+        isNot(contains('ucinewgame')),
+        reason: 'the table the game has built up is worth keeping',
       );
     });
 
@@ -164,6 +254,7 @@ void main() {
         initialPosition: Chess.initial,
         moves: const IListConst([]),
         variant: Variant.standard,
+        game: kTestGame,
       );
 
       // Let the first search reach the engine before replacing it.
@@ -173,6 +264,7 @@ void main() {
         initialPosition: Chess.initial,
         moves: const IListConst(['e2e4']),
         variant: Variant.standard,
+        game: kTestGame,
       );
 
       await expectLater(first, throwsA(isA<MoveSearchCancelled>()));
@@ -195,6 +287,7 @@ void main() {
           initialPosition: Chess.initial,
           moves: const IListConst([]),
           variant: Variant.standard,
+          game: kTestGame,
         ),
         throwsA(anything),
       );
@@ -212,6 +305,7 @@ void main() {
           initialPosition: Chess.initial,
           moves: const IListConst([]),
           variant: Variant.standard,
+          game: kTestGame,
         ),
         throwsA(isA<MoveSearchCancelled>()),
       );
@@ -242,6 +336,7 @@ void main() {
             initialPosition: Chess.initial,
             moves: const IListConst([]),
             variant: Variant.standard,
+            game: kTestGame,
           );
 
       expect(move, isNotEmpty);
@@ -261,6 +356,7 @@ void main() {
         initialPosition: Chess.initial,
         moves: const IListConst([]),
         variant: Variant.standard,
+        game: kTestGame,
       );
 
       // The two temperatures compose: the priors are softmaxed at `PolicyTemperature`, then each
@@ -284,6 +380,7 @@ void main() {
         initialPosition: Chess.initial,
         moves: const IListConst([]),
         variant: Variant.standard,
+        game: kTestGame,
       );
 
       expect(weights.downloads, [MaiaRating.maia1900]);
@@ -301,6 +398,7 @@ void main() {
             initialPosition: Chess.initial,
             moves: const IListConst([]),
             variant: Variant.standard,
+            game: kTestGame,
           );
 
       // A game against a Maia of the wrong strength beats no game at all.
@@ -319,6 +417,7 @@ void main() {
           initialPosition: Chess.initial,
           moves: const IListConst([]),
           variant: Variant.standard,
+          game: kTestGame,
         );
       }
 
@@ -357,6 +456,7 @@ void main() {
             initialPosition: Chess.initial,
             moves: const IListConst([]),
             variant: Variant.standard,
+            game: kTestGame,
           );
 
       expect(move, 'e2e4');
@@ -382,6 +482,7 @@ void main() {
             initialPosition: Chess.initial,
             moves: const IListConst([]),
             variant: Variant.standard,
+            game: kTestGame,
           );
 
       // The bundled book only ever plays e2e4 here.
@@ -400,6 +501,7 @@ void main() {
             initialPosition: Chess.initial,
             moves: const IListConst([]),
             variant: Variant.standard,
+            game: kTestGame,
           );
 
       expect(online.requests, [Chess.initial.fen]);
@@ -417,6 +519,7 @@ void main() {
             initialPosition: Chess.initial,
             moves: const IListConst(['e2e4', 'e7e5']),
             variant: Variant.standard,
+            game: kTestGame,
           );
 
       expect(move, isNotEmpty);
@@ -432,6 +535,7 @@ void main() {
         initialPosition: Chess.initial,
         moves: const IListConst([]),
         variant: Variant.standard,
+        game: kTestGame,
       );
 
       expect(engine.commands.where((command) => command.startsWith('go')), hasLength(1));
@@ -449,6 +553,7 @@ void main() {
         ),
         moves: const IListConst([]),
         variant: Variant.standard,
+        game: kTestGame,
       );
 
       expect(books.requests, isEmpty);
@@ -465,6 +570,7 @@ void main() {
         initialPosition: Chess.initial,
         moves: const IListConst([]),
         variant: Variant.chess960,
+        game: kTestGame,
       );
 
       expect(books.requests, isEmpty);
@@ -480,6 +586,7 @@ void main() {
         initialPosition: Chess.initial,
         moves: const IListConst([]),
         variant: Variant.standard,
+        game: kTestGame,
       );
 
       expect(books.requests, [MaiaRating.maia1900]);
@@ -511,6 +618,7 @@ void main() {
         initialPosition: Chess.initial,
         moves: const IListConst([]),
         variant: Variant.standard,
+        game: kTestGame,
       );
 
       // The fake engine answers immediately; without the wait this would be a couple of
@@ -529,6 +637,7 @@ void main() {
         initialPosition: Chess.initial,
         moves: const IListConst([]),
         variant: Variant.standard,
+        game: kTestGame,
       );
 
       expect(elapsed.elapsed, greaterThanOrEqualTo(const Duration(milliseconds: 180)));
@@ -548,6 +657,7 @@ void main() {
         initialPosition: Chess.initial,
         moves: const IListConst([]),
         variant: Variant.standard,
+        game: kTestGame,
       );
 
       // A book lookup is instant, which would make the opening the most obviously inhuman part of
@@ -565,6 +675,7 @@ void main() {
         initialPosition: Chess.initial,
         moves: const IListConst([]),
         variant: Variant.standard,
+        game: kTestGame,
       );
 
       // Long enough for the engine to have answered and the wait to be all that is left. A

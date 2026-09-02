@@ -651,6 +651,10 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
         moves: state.game.steps.skip(1).map((s) => s.sanMove!.normalizeUci(variant)).toIList(),
         variant: variant,
         sharesEngineWithEvaluator: _sharesOneEngine,
+        // The same game the hints beside it are computed for, so the two roles share the table
+        // they build up rather than clearing it from each other; a new game is a new id, and the
+        // engine both of them run on hears about it on the first move either one asks for.
+        game: _evaluationContext,
       );
       final move = Move.parse(uciMove);
 

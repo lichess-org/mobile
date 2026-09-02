@@ -279,10 +279,6 @@ class PositionEvaluator extends Notifier<EngineEvaluationState> {
       return;
     }
 
-    final previousWork = state.currentWork;
-    final needsNewGame =
-        previousWork != null && previousWork.initialPosition != work.initialPosition;
-
     _setEvalWork(work);
 
     final flavor = _flavorFor(work.variant);
@@ -294,7 +290,7 @@ class PositionEvaluator extends Notifier<EngineEvaluationState> {
         // A pause hid the engine rather than letting go of it, so coming back is a matter of
         // saying which one it is again and searching on it.
         _setEngine(AsyncData(engine.name.value));
-        _compute(work, newGame: needsNewGame);
+        _compute(work);
       }
       return;
     }
@@ -457,18 +453,18 @@ class PositionEvaluator extends Notifier<EngineEvaluationState> {
   // Searching
   // ---------------------------------------------------------------------------
 
-  void _compute(EvalWork work, {bool newGame = false}) {
+  void _compute(EvalWork work) {
     final engine = _engine;
     if (engine == null) return;
 
-    final search = engine.search(_searchRequestFor(work, newGame: newGame));
+    final search = engine.search(_searchRequestFor(work));
     _currentSearch = search;
 
     search.infos.listen((info) => _onSearchInfo(work, search, info));
     unawaited(search.bestMove.then((_) => _onEvalSearchDone(work, search)));
   }
 
-  SearchRequest _searchRequestFor(EvalWork work, {required bool newGame}) {
+  SearchRequest _searchRequestFor(EvalWork work) {
     final threatMode = work.threatMode;
     return SearchRequest(
       initialPosition: work.initialPosition,
@@ -480,7 +476,10 @@ class PositionEvaluator extends Notifier<EngineEvaluationState> {
       multiPv: work.multiPv,
       // Nothing beyond the defaults: an evaluation names no options of its own, so the engine puts
       // back whatever the opponent set — its `Skill Level`, most of all — before this search runs.
-      newGame: newGame,
+      //
+      // The context is the game: one evaluator evaluates one game, study chapter or puzzle, and it
+      // is the engine underneath that is shared with the screen the user was on a moment ago.
+      game: context,
     );
   }
 

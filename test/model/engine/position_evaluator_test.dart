@@ -645,25 +645,23 @@ void main() {
       expect(resultWork, work);
     });
 
-    test('ucinewgame is sent when initialPosition changes', () async {
+    test('ucinewgame is sent when two screens take turns on one engine', () async {
       final delayedStockfish = FakeEngine();
       fakeEngine = delayedStockfish;
 
       final container = await makeContainer();
-      final service = readEvaluator(container);
 
-      final work1 = makeWork(id: const StringId('game1'));
-      final stream1 = service.evaluate(work1);
-      await stream1!.first;
+      final gameA = makeContext(id: const StringId('gameA'));
+      final gameB = makeContext(id: const StringId('gameB'));
+      await readEvaluator(container, gameA).evaluate(makeWork(id: const StringId('a')))!.first;
 
       delayedStockfish.commands.clear();
+      await readEvaluator(container, gameB).evaluate(makeWork(id: const StringId('b')))!.first;
+      expect(delayedStockfish.commands, contains('ucinewgame'));
 
-      // Different initialPosition (after e4)
-      final positionAfterE4 = Chess.initial.play(Move.parse('e2e4')!);
-      final work2 = makeWork(id: const StringId('game1'), initialPosition: positionAfterE4);
-      final stream2 = service.evaluate(work2);
-      await stream2!.first;
-
+      // Back to the first game, whose table the second one has just been given.
+      delayedStockfish.commands.clear();
+      await readEvaluator(container, gameA).evaluate(makeWork(id: const StringId('a')))!.first;
       expect(delayedStockfish.commands, contains('ucinewgame'));
     });
 
@@ -705,6 +703,29 @@ void main() {
       final stream2 = service.evaluate(work2);
       await stream2!.first;
 
+      expect(delayedStockfish.commands, contains('ucinewgame'));
+    });
+
+    test('ucinewgame is sent when another screen hands its engine over', () async {
+      final delayedStockfish = FakeEngine();
+      fakeEngine = delayedStockfish;
+
+      final container = await makeContainer();
+
+      final gameA = makeContext(id: const StringId('gameA'));
+      final streamA = readEvaluator(container, gameA).evaluate(makeWork(id: const StringId('a')));
+      await streamA!.first;
+
+      // Leaving one analysis screen for another keeps the engine alive for [kEngineDisposeDelay],
+      // so the next game is searched on an engine still carrying this one's table.
+      leaveEvaluatorScreen(container, gameA);
+      delayedStockfish.commands.clear();
+
+      final gameB = makeContext(id: const StringId('gameB'));
+      final streamB = readEvaluator(container, gameB).evaluate(makeWork(id: const StringId('b')));
+      await streamB!.first;
+
+      expect(delayedStockfish.quitCount, 0, reason: 'the engine was handed over, not restarted');
       expect(delayedStockfish.commands, contains('ucinewgame'));
     });
 

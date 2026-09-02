@@ -16,7 +16,7 @@ SearchRequest makeRequest({
   String? fenOverride,
   int multiPv = 1,
   int threads = 1,
-  bool newGame = false,
+  Object game = 'test-game',
 }) => SearchRequest(
   initialPosition: Chess.initial,
   moves: moves,
@@ -26,7 +26,7 @@ SearchRequest makeRequest({
   multiPv: multiPv,
   threads: threads,
   options: options,
-  newGame: newGame,
+  game: game,
 );
 
 /// Runs [engine] up to the point where it has issued the commands for [request].
@@ -95,6 +95,30 @@ void main() {
         'position fen ${Chess.initial.fen}',
         'go movetime 1000',
       ]);
+    });
+
+    test('a search for another game is announced as one, and only its first is', () async {
+      final transport = FakeTransport();
+      final engine = Engine(transport);
+      addTearDown(engine.dispose);
+      await pumpEventQueue();
+
+      await startSearch(engine, transport, makeRequest());
+      transport.emit('bestmove e2e4');
+      await pumpEventQueue();
+      transport.takeCommands();
+
+      // The engine is not fresh any more: what says that the table it has built up is for another
+      // game is that this search names a different one.
+      await startSearch(engine, transport, makeRequest(game: 'another-game'));
+      expect(transport.takeCommands(), containsAllInOrder(<String>['ucinewgame', 'isready']));
+
+      transport.emit('bestmove e2e4');
+      await pumpEventQueue();
+
+      // Still that game: the table it is filling is the one this search wants.
+      await startSearch(engine, transport, makeRequest(game: 'another-game'));
+      expect(transport.takeCommands(), isNot(contains('ucinewgame')));
     });
 
     test('an option a search does not name is put back to its declared default', () async {

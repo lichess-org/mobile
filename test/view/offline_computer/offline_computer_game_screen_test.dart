@@ -447,6 +447,43 @@ void main() {
       expect(button.onTap, isNull);
     });
 
+    testWidgets('A new game at the same level tells the engine it is a new game', (tester) async {
+      // Two games at the same level are the same opponent on the same engine, and the player has
+      // the first move of this one — so nothing about the opponent's first search of it says that
+      // the game it belongs to is not the one the engine has just been playing.
+      final engine = LegalMoveEngine();
+      fakeEngine = engine;
+
+      await initOfflineComputerGame(tester);
+      await playMove(tester, 'e2', 'e4');
+      await tester.pump(const Duration(milliseconds: 200));
+      await tester.pumpAndSettle();
+
+      final opponentEngine = engine.sessions.firstWhere(
+        (session) => session.spec.label == 'variant',
+      );
+      opponentEngine.commands.clear();
+
+      await tester.tap(find.byIcon(Icons.menu));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('New game'));
+      await tester.pumpAndSettle();
+      // The side picker already holds the side of the game just played.
+      await tester.tap(find.text('Play'));
+      await tester.pumpAndSettle();
+
+      await playMove(tester, 'd2', 'd4');
+      await tester.pump(const Duration(milliseconds: 200));
+      await tester.pumpAndSettle();
+
+      expect(
+        engine.sessions,
+        contains(opponentEngine),
+        reason: 'the opponent plays both games on the one engine',
+      );
+      expect(opponentEngine.commands, contains('ucinewgame'));
+    });
+
     testWidgets('Can dismiss new game bottom sheet', (tester) async {
       await initOfflineComputerGame(tester);
 

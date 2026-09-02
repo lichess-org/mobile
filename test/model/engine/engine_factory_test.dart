@@ -18,6 +18,7 @@ SearchRequest makeRequest() => const SearchRequest(
   moves: IListConst([]),
   variant: Variant.standard,
   limit: SearchLimit.movetime(Duration(seconds: 1)),
+  game: 'test',
 );
 
 /// A factory that starts [engine] instead of a real one.

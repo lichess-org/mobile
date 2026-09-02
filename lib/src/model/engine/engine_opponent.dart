@@ -67,11 +67,17 @@ abstract class EngineOpponent {
   /// thread pool down and rebuilds it — clearing the transposition table with it — on every
   /// hand-off between them, several times a move. See [EngineBudget].
   ///
+  /// [game] identifies the game this move is played in — the opponent outlives the games it
+  /// plays, two games at the same level being the same opponent on the same engine, and nothing
+  /// about a position says which of them it belongs to. It reaches the engine as
+  /// [SearchRequest.game].
+  ///
   /// Throws [MoveSearchCancelled] if the search is superseded or stopped.
   Future<UCIMove> findMove({
     required Position initialPosition,
     required IList<UCIMove> moves,
     required Variant variant,
+    required Object game,
     bool sharesEngineWithEvaluator = false,
   });
 
@@ -108,6 +114,7 @@ abstract class EngineOpponentBase<S extends OpponentSpec> implements EngineOppon
     required IList<UCIMove> moves,
     required Variant variant,
     required bool sharesEngineWithEvaluator,
+    required Object game,
   });
 
   /// A move played out of an opening book rather than searched for, if this opponent has one.
@@ -139,13 +146,16 @@ abstract class EngineOpponentBase<S extends OpponentSpec> implements EngineOppon
     required Position initialPosition,
     required IList<UCIMove> moves,
     required Variant variant,
+    required Object game,
     bool sharesEngineWithEvaluator = false,
   }) {
     stop();
 
     final completer = Completer<UCIMove>();
     _pending = completer;
-    unawaited(_runSearch(completer, initialPosition, moves, variant, sharesEngineWithEvaluator));
+    unawaited(
+      _runSearch(completer, initialPosition, moves, variant, sharesEngineWithEvaluator, game),
+    );
     return completer.future;
   }
 
@@ -155,6 +165,7 @@ abstract class EngineOpponentBase<S extends OpponentSpec> implements EngineOppon
     IList<UCIMove> moves,
     Variant variant,
     bool sharesEngineWithEvaluator,
+    Object game,
   ) async {
     // Started before anything else, so that the wait below covers the search rather than being
     // added to it: an opponent that takes two seconds takes two seconds whether its engine
@@ -186,6 +197,7 @@ abstract class EngineOpponentBase<S extends OpponentSpec> implements EngineOppon
         moves: moves,
         variant: variant,
         sharesEngineWithEvaluator: sharesEngineWithEvaluator,
+        game: game,
       );
       if (!identical(_pending, completer)) return;
 
@@ -273,6 +285,7 @@ class StockfishOpponent extends EngineOpponentBase<StockfishOpponentSpec> {
     required IList<UCIMove> moves,
     required Variant variant,
     required bool sharesEngineWithEvaluator,
+    required Object game,
   }) async {
     final threads = budget.offlineOpponentThreads(
       sharesEngineWithEvaluator: sharesEngineWithEvaluator,
@@ -297,8 +310,7 @@ class StockfishOpponent extends EngineOpponentBase<StockfishOpponentSpec> {
       // biasing the scores of slightly worse moves among the candidates, so the MultiPV above
       // is part of how weak the opponent is, not a display setting.
       options: IMap({'Skill Level': level.skill.toString()}),
-      // A search from the starting position is the first move of a game.
-      newGame: moves.isEmpty,
+      game: game,
     );
   }
 }
@@ -418,6 +430,7 @@ class MaiaOpponent extends EngineOpponentBase<MaiaOpponentSpec> {
     required Variant variant,
     // Maia is LC0 and the evaluator is always a Stockfish, so they never share an engine.
     required bool sharesEngineWithEvaluator,
+    required Object game,
   }) async {
     final (rating: playing, :path) = await weights.ensureWeights(rating);
 
@@ -444,7 +457,7 @@ class MaiaOpponent extends EngineOpponentBase<MaiaOpponentSpec> {
         'TempDecayMoves': '$_kMaiaTempDecayMoves',
         'TempEndgame': '$_kMaiaTempEndgame',
       }),
-      newGame: moves.isEmpty,
+      game: game,
     );
   }
 }

@@ -206,6 +206,7 @@ class FakeEngine {
   void _receive(FakeEngineSession session, String command) {
     if (!_sessions.contains(session)) return;
     commands.add(command);
+    session.commands.add(command);
 
     if (failWrite?.call(command) ?? false) {
       // Logged natively and dropped: the engine is told nothing, and neither is the caller. Only
@@ -297,6 +298,12 @@ class FakeEngineSession implements EngineTransport {
   final _death = Completer<EngineFailure?>();
   final _pending = <String>[];
   bool _replayed = false;
+
+  /// Every command this session was sent, in order.
+  ///
+  /// [FakeEngine.commands] is every session's, which is what a test wanting "the engine was
+  /// started twice" reads; this is what a test asking what one of two live engines was told reads.
+  final List<String> commands = [];
 
   /// The position this session's last `position` command set up.
   Position? position;
