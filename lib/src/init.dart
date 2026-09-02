@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/services.dart';
@@ -128,6 +129,10 @@ Future<void> androidDisplayInitialization(WidgetsBinding widgetsBinding) async {
   );
 
   /// Enables high refresh rate for devices where it was previously disabled
+  unawaited(_setHighRefreshRate());
+}
+
+Future<void> _setHighRefreshRate() async {
   final List<DisplayMode> supported = await FlutterDisplayMode.supported;
   final DisplayMode active = await FlutterDisplayMode.active;
 
