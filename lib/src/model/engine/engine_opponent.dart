@@ -276,7 +276,7 @@ class StockfishOpponent extends EngineOpponentBase<StockfishOpponentSpec> {
     required Variant variant,
     required bool sharesEngineWithEvaluator,
   }) async {
-    final threads = budget.opponentThreads(
+    final threads = budget.offlineOpponentThreads(
       sharesEngineWithEvaluator: sharesEngineWithEvaluator,
       threads: level.threads,
     );

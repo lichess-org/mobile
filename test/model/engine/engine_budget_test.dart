@@ -37,12 +37,12 @@ void main() {
       // up as dropped frames in the move animation.
       for (final cores in [1, 2, 3, 4, 7, 8]) {
         final budget = EngineBudget(maxMemoryInMb: 300, maxCores: cores);
-        expect(budget.evaluatorThreads, greaterThanOrEqualTo(1));
-        expect(budget.evaluatorThreads, lessThanOrEqualTo(cores - budget.evaluatorThreads + 1));
+        expect(budget.offlineEvalThreads, greaterThanOrEqualTo(1));
+        expect(budget.offlineEvalThreads, lessThanOrEqualTo(cores - budget.offlineEvalThreads + 1));
       }
 
-      expect(const EngineBudget(maxMemoryInMb: 300, maxCores: 7).evaluatorThreads, 3);
-      expect(const EngineBudget(maxMemoryInMb: 300, maxCores: 1).evaluatorThreads, 1);
+      expect(const EngineBudget(maxMemoryInMb: 300, maxCores: 7).offlineEvalThreads, 3);
+      expect(const EngineBudget(maxMemoryInMb: 300, maxCores: 1).offlineEvalThreads, 1);
     });
 
     test('a shared engine searches on the threads the evaluator asks for', () {
@@ -51,23 +51,23 @@ void main() {
       // Anything else tears the thread pool down and rebuilds it on every hand-off, clearing the
       // table with it.
       expect(
-        budget.opponentThreads(sharesEngineWithEvaluator: true, threads: 1),
-        budget.evaluatorThreads,
+        budget.offlineOpponentThreads(sharesEngineWithEvaluator: true, threads: 1),
+        budget.offlineEvalThreads,
       );
-      expect(budget.evaluatorThreads, greaterThanOrEqualTo(1));
+      expect(budget.offlineEvalThreads, greaterThanOrEqualTo(1));
     });
 
     test('an opponent on its own engine gets the threads its level asks for', () {
       const budget = EngineBudget(maxMemoryInMb: 300, maxCores: 3);
-      expect(budget.opponentThreads(sharesEngineWithEvaluator: false, threads: 2), 2);
+      expect(budget.offlineOpponentThreads(sharesEngineWithEvaluator: false, threads: 2), 2);
     });
 
     test('cores are clamped but never split: one engine searches at a time', () {
       const budget = EngineBudget(maxMemoryInMb: 300, maxCores: 3);
-      expect(budget.threadsFor(1), 1);
-      expect(budget.threadsFor(3), 3);
-      expect(budget.threadsFor(8), 3);
-      expect(budget.threadsFor(0), 1);
+      expect(budget.analysisThreads(1), 1);
+      expect(budget.analysisThreads(3), 3);
+      expect(budget.analysisThreads(8), 3);
+      expect(budget.analysisThreads(0), 1);
     });
   });
 

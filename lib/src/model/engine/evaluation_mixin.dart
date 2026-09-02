@@ -333,7 +333,7 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState<T>> on AnyNotifier<As
     final work = EvalWork(
       id: curState.evaluationContext.id,
       variant: curState.evaluationContext.variant,
-      threads: budget.threadsFor(evaluationPrefs.numEngineCores),
+      threads: budget.analysisThreads(evaluationPrefs.numEngineCores),
       path: curState.currentPath,
       searchTime: searchTime,
       multiPv: evaluationPrefs.numEvalLines,

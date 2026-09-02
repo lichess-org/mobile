@@ -109,7 +109,7 @@ void main() {
       // On a variant the opponent and the hints are the same Fairy-Stockfish, and a `Threads` the
       // two roles disagree about tears the thread pool down and rebuilds it — clearing the
       // transposition table with it — on every hand-off.
-      expect(engine.options['Threads'], budget.evaluatorThreads.toString());
+      expect(engine.options['Threads'], budget.offlineEvalThreads.toString());
       // The table is the engine's own, settled when it was created.
       expect(engine.options['Hash'], budget.engineHash.toString());
     });

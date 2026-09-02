@@ -126,7 +126,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
 
   /// The cores the evaluator asks for. The table it gets is the engine's own, settled when the
   /// engine was created.
-  int get _evaluatorThreads => _budget.evaluatorThreads;
+  int get _evaluatorThreads => _budget.offlineEvalThreads;
 
   /// The analysis that runs on the position the game is at, for hints and move feedback.
   late final PracticeAnalyser _analyser = PracticeAnalyser(
@@ -806,7 +806,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       variant: state.game.meta.variant,
       threads: _evaluatorThreads,
       searchTime: kPracticeMaxSearchTime,
-      multiPv: _budget.evaluatorMultiPv, // extra lines, for the alternatives a hint offers
+      multiPv: _budget.offlineEvalMultiPv, // extra lines, for the alternatives a hint offers
       threatMode: false,
       initialPosition: state.game.initialPosition,
       steps: steps,

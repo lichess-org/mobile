@@ -7,10 +7,7 @@ import 'package:lichess_mobile/src/model/engine/engine_utils.dart';
 /// The smallest table worth giving an engine at all.
 const _kMinHashInMb = 16;
 
-/// The most any one engine may hold, whatever the device has.
-///
-/// A mobile analysis runs a few seconds to half a minute on one or two threads and cannot fill a
-/// table this size, so the unlimited search time is the only setting this constrains at all.
+/// The biggest table size a single engine can ask for.
 const kMaxHashPerEngineInMb = 256;
 
 /// The most engines that can hold a transposition table at the same time.
@@ -37,7 +34,7 @@ const kMaxResidentEngines = 2;
 /// case where two roles share an engine has to make them agree: on a variant offline game the
 /// evaluator and the opponent are literally the same Fairy-Stockfish, and a `Threads` they
 /// disagreed about would tear the pool down several times a move. Hence the
-/// [opponentThreads] `sharesEngineWithEvaluator` argument below.
+/// [offlineOpponentThreads] `sharesEngineWithEvaluator` argument below.
 class EngineBudget {
   const EngineBudget({required this.maxMemoryInMb, required this.maxCores});
 
@@ -50,17 +47,13 @@ class EngineBudget {
   /// The most cores an engine may search on.
   final int maxCores;
 
-  /// The threads to ask for, given what the caller would like.
-  int threadsFor(int requested) => math.min(math.max(1, requested), maxCores);
+  /// The threads the engine of an analysis screen asks for, given the core count the user chose.
+  ///
+  /// Nothing but a clamp: on these screens the whole device is the analysis, and the user is the
+  /// one deciding how much of it to spend.
+  int analysisThreads(int requested) => _clamp(requested);
 
   /// The transposition table every engine is created with.
-  ///
-  /// One number for every engine, whatever it is going to be used for, because the table is not a
-  /// role's: it is allocated when the engine starts and freed when it exits, and one engine serves
-  /// whichever roles happen to want it — the evaluator, the opponent, or both at once on a
-  /// variant. Sizing it per role would mean either resizing on every hand-off, which clears the
-  /// table and blocks the UCI loop while it does, or a number that silently depends on which role
-  /// happened to create the engine.
   ///
   /// A share *and* a cap, because the two protect against different things: the share keeps two
   /// resident engines from asking a small device for more than it has, the cap keeps a large one
@@ -70,25 +63,29 @@ class EngineBudget {
     math.max(_kMinHashInMb, maxMemoryInMb ~/ kMaxResidentEngines),
   );
 
-  /// The threads the evaluator of an offline game asks for.
+  /// The threads the evaluator of an offline computer game asks for — the engine behind hints and
+  /// move feedback, not the one playing the moves.
   ///
   /// Half the budget, floored at 1. It searches during the player's turn, while the board is being
   /// touched and animated, so an engine that saturates the device shows up as dropped frames.
-  int get evaluatorThreads => math.max(1, maxCores ~/ 2);
+  int get offlineEvalThreads => math.max(1, maxCores ~/ 2);
 
-  /// The lines the evaluator of an offline game asks for.
+  /// The lines the evaluator of an offline computer game asks for.
   ///
   /// A third line is another whole search tree, so it is only worth asking for on a device with
   /// cores to spare — where it buys a hint a third good move to choose between, instead of a
   /// slower one with two.
-  int get evaluatorMultiPv => maxCores >= 6 ? 3 : 2;
+  int get offlineEvalMultiPv => maxCores >= 6 ? 3 : 2;
 
-  /// The threads the opponent of an offline game asks for, given what its level wants.
+  /// The threads the opponent of an offline computer game asks for, given what its level wants.
   ///
   /// The evaluator's figure when they are the same engine, because the alternative is tearing the
   /// thread pool down and back up on every hand-off between them.
-  int opponentThreads({required bool sharesEngineWithEvaluator, required int threads}) =>
-      sharesEngineWithEvaluator ? evaluatorThreads : threadsFor(threads);
+  int offlineOpponentThreads({required bool sharesEngineWithEvaluator, required int threads}) =>
+      sharesEngineWithEvaluator ? offlineEvalThreads : _clamp(threads);
+
+  /// A thread count a caller asked for, brought inside the budget.
+  int _clamp(int requested) => math.min(math.max(1, requested), maxCores);
 
   @override
   String toString() =>
