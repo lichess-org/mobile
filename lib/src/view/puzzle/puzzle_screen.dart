@@ -232,10 +232,10 @@ class _LoadReplayPuzzle extends ConsumerWidget {
     switch (replayPuzzle) {
       case AsyncData(:final value):
         if (value == null) {
-          return _PuzzleScaffold(
+          return const _PuzzleScaffold(
             angle: _angle,
             initialPuzzleContext: null,
-            body: PuzzleErrorBoardWidget(errorMessage: context.l10n.mobileNoPuzzlesToReplay),
+            body: PuzzleErrorBoardWidget(errorMessage: 'No more puzzles to replay.'),
           );
         } else {
           return _PuzzleScaffold(
@@ -247,7 +247,7 @@ class _LoadReplayPuzzle extends ConsumerWidget {
       case AsyncError(:final error, :final stackTrace):
         debugPrint('SEVERE: [PuzzleScreen] could not load replay puzzles; $error\n$stackTrace');
         final errorMsg = error.toString().contains('404')
-            ? context.l10n.mobileNoPuzzlesToReplay
+            ? 'No puzzles to replay.'
             : error.toString();
         return _PuzzleScaffold(
           angle: _angle,
