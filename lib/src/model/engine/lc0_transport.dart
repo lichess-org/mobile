@@ -10,10 +10,6 @@ import 'package:logging/logging.dart';
 final _logger = Logger('Lc0Transport');
 
 /// An [EngineTransport] over a `lc0` engine handle.
-///
-/// The same shape as [StockfishTransport], because the two plugins now present the same handle
-/// API: create, dispose, a state to watch, diagnostics to report, and lines in and out of a pipe
-/// the engine owns rather than the process's.
 class Lc0Transport implements EngineTransport {
   Lc0Transport._(this.spec, this._lc0) {
     _controller.onListen = _replayStartupLines;
