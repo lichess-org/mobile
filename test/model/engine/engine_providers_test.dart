@@ -36,7 +36,7 @@ void main() {
       expect(fakeEngine.isRunning, isFalse);
     });
 
-    test('keeps the engine alive for the grace window, then disposes it', () async {
+    test('keeps the engine alive for the dispose window, then disposes it', () async {
       fakeEngine = FakeEngine();
       final container = await makeContainer();
       addTearDown(container.dispose);
@@ -49,7 +49,7 @@ void main() {
       subscription.close();
 
       await pumpEventQueue();
-      expect(fakeEngine.isRunning, isTrue, reason: 'the grace window has not passed yet');
+      expect(fakeEngine.isRunning, isTrue, reason: 'the dispose window has not passed yet');
 
       await Future<void>.delayed(kEngineDisposeDelay + const Duration(milliseconds: 50));
       await pumpEventQueue();
@@ -57,7 +57,7 @@ void main() {
       expect(fakeEngine.isRunning, isFalse);
     });
 
-    test('the grace window is idle time, not a lifetime', () async {
+    test('the dispose window is idle time, not a lifetime', () async {
       fakeEngine = FakeEngine();
       final container = await makeContainer();
       addTearDown(container.dispose);
@@ -85,7 +85,7 @@ void main() {
       expect(fakeEngine.isRunning, isFalse);
     });
 
-    test('quits an engine waiting out its window before starting one on another slot', () async {
+    test('an engine on another slot starts without waiting for an unwatched one to exit', () async {
       fakeEngine = FakeEngine();
       final container = await makeContainer();
       addTearDown(container.dispose);
@@ -97,7 +97,7 @@ void main() {
       await container.read(engineProvider(const StockfishSpec.sf16()).future);
       subscription.close();
       await pumpEventQueue();
-      expect(fakeEngine.isRunning, isTrue, reason: 'still inside the grace window');
+      expect(fakeEngine.isRunning, isTrue, reason: 'still inside its dispose window');
 
       final other = container.listen<AsyncValue<Engine>>(
         engineProvider(const StockfishSpec.fairy()),
@@ -106,11 +106,17 @@ void main() {
       addTearDown(other.close);
       await container.read(engineProvider(const StockfishSpec.fairy()).future);
 
-      // Two engines resident at once each hold the transposition table they were given, and the
-      // memory budget is the device's: the one nobody is watching goes first.
+      // The budget sizes a table for each of `kMaxResidentEngines`, so an engine waiting out its
+      // window is left to it: it is one table more than that for as long as the window lasts, and
+      // nothing about the new engine waits on it.
+      expect(fakeEngine.quitCount, 0);
+      expect(fakeEngine.sessions.length, 2);
+
+      // It still goes when its own window ends.
+      await Future<void>.delayed(kEngineDisposeDelay + const Duration(milliseconds: 50));
+      await pumpEventQueue();
       expect(fakeEngine.quitCount, 1);
-      expect(fakeEngine.sessions.length, 1);
-      expect(fakeEngine.spec, const StockfishSpec.fairy());
+      expect(fakeEngine.sessions.single.spec, const StockfishSpec.fairy());
     });
   });
 }
