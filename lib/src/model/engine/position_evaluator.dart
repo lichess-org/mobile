@@ -716,39 +716,3 @@ final engineEvaluationProvider = Provider.autoDispose
 
 /// A type for filtering engine evaluation notifications.
 typedef EngineEvaluationFilters = ({EvaluationContext context, UciPath? path});
-
-/// A function to choose the eval that should be displayed.
-Eval? pickBestEval({
-  /// The eval from the local engine
-  required LocalEval? localEval,
-
-  /// The cached eval which is either a saved eval from the local evaluation or a cloud eval
-  required ClientEval? savedEval,
-
-  /// The eval from the server analysis
-  required ExternalEval? serverEval,
-}) {
-  if (localEval?.threatMode == true) {
-    return localEval;
-  }
-
-  return switch (savedEval) {
-    CloudEval() => savedEval,
-    final LocalEval eval => localEval != null && localEval.isBetter(eval) ? localEval : eval,
-    null => localEval ?? serverEval,
-  };
-}
-
-/// A function to choose the client eval that should be displayed.
-ClientEval? pickBestClientEval({
-  /// The eval from the local engine
-  required LocalEval? localEval,
-
-  /// The cached eval which is either a saved eval from the local evaluation or a cloud eval
-  required ClientEval? savedEval,
-}) {
-  final eval =
-      pickBestEval(localEval: localEval, savedEval: savedEval, serverEval: null) as ClientEval?;
-
-  return eval;
-}

@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:dartchess/dartchess.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:multistockfish/multistockfish.dart';
 
 /// Maximum number of CPU cores available for engine use.
@@ -56,6 +57,42 @@ String bundledMaiaAsset(String fileName) => '$kBundledMaiaAssetDir/$fileName';
 Uri maiaWeightsUrl(String fileName) => Uri.parse('$_maiaDownloadUrl$fileName');
 
 final _sfVersionPattern = RegExp(r'Stockfish\s+(\d+)');
+
+/// A function to choose the eval that should be displayed.
+Eval? pickBestEval({
+  /// The eval from the local engine
+  required LocalEval? localEval,
+
+  /// The cached eval which is either a saved eval from the local evaluation or a cloud eval
+  required ClientEval? savedEval,
+
+  /// The eval from the server analysis
+  required ExternalEval? serverEval,
+}) {
+  if (localEval?.threatMode == true) {
+    return localEval;
+  }
+
+  return switch (savedEval) {
+    CloudEval() => savedEval,
+    final LocalEval eval => localEval != null && localEval.isBetter(eval) ? localEval : eval,
+    null => localEval ?? serverEval,
+  };
+}
+
+/// A function to choose the client eval that should be displayed.
+ClientEval? pickBestClientEval({
+  /// The eval from the local engine
+  required LocalEval? localEval,
+
+  /// The cached eval which is either a saved eval from the local evaluation or a cloud eval
+  required ClientEval? savedEval,
+}) {
+  final eval =
+      pickBestEval(localEval: localEval, savedEval: savedEval, serverEval: null) as ClientEval?;
+
+  return eval;
+}
 
 /// Extracts a short label like "SF 16" from a UCI engine name like "Stockfish 16.1".
 ///
