@@ -83,6 +83,31 @@ class PuzzleService {
   final PuzzleStorage puzzleStorage;
   final Logger _log = Logger('PuzzleService');
 
+  /// Loads a puzzle from the local storage, or from the server on a miss, saving it locally.
+  ///
+  /// An unreadable local copy is ignored and fetched again.
+  Future<Puzzle> loadPuzzle(PuzzleId id) async {
+    try {
+      final cached = await puzzleStorage.fetch(puzzleId: id);
+      if (cached != null) return cached;
+    } catch (e) {
+      _log.info('Ignoring an unreadable cached puzzle $id', e);
+    }
+    final puzzle = await _ref.read(puzzleRepositoryProvider).fetch(id);
+    await cachePuzzle(puzzle);
+    return puzzle;
+  }
+
+  /// Saves [puzzle] to the local storage, so that [loadPuzzle] serves it offline. Best-effort: a
+  /// failed write is logged, not thrown.
+  Future<void> cachePuzzle(Puzzle puzzle) async {
+    try {
+      await puzzleStorage.save(puzzle: puzzle);
+    } catch (e) {
+      _log.warning('Could not cache puzzle ${puzzle.puzzle.id}', e);
+    }
+  }
+
   /// Loads the next puzzle from database and the glicko rating if available.
   ///
   /// Will sync with server if necessary.
@@ -116,7 +141,7 @@ class PuzzleService {
     required Puzzle puzzle,
     PuzzleAngle angle = const PuzzleTheme(PuzzleThemeKey.mix),
   }) async {
-    puzzleStorage.save(puzzle: puzzle);
+    cachePuzzle(puzzle);
     const emptyBatch = PuzzleBatch(solved: IListConst([]), unsolved: IListConst([]));
     final data = await batchStorage.fetch(userId: userId, angle: angle) ?? emptyBatch;
     await batchStorage.save(

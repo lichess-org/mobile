@@ -9,7 +9,6 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_opening.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/storm.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -103,10 +102,10 @@ final puzzleProvider = FutureProvider.autoDispose.family<Puzzle, PuzzleId>((
   Ref ref,
   PuzzleId id,
 ) async {
-  final puzzleStorage = await ref.watch(puzzleStorageProvider.future);
-  final puzzle = await puzzleStorage.fetch(puzzleId: id);
-  if (puzzle != null) return puzzle;
-  return ref.read(puzzleRepositoryProvider).fetch(id);
+  // Read, not watch: the service rebuilds on a preference change, which must not restart a
+  // puzzle in play.
+  final service = await ref.read(puzzleServiceProvider.future);
+  return service.loadPuzzle(id);
 }, name: 'PuzzleProvider');
 
 /// Fetches the daily puzzle.
