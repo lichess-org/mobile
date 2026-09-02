@@ -6,8 +6,6 @@ import 'package:lichess_mobile/src/model/engine/engine_failure.dart';
 import 'package:lichess_mobile/src/model/engine/engine_slot.dart';
 import 'package:lichess_mobile/src/model/engine/engine_spec.dart';
 import 'package:lichess_mobile/src/model/engine/engine_transport.dart';
-import 'package:lichess_mobile/src/model/engine/lc0_transport.dart';
-import 'package:lichess_mobile/src/model/engine/stockfish_transport.dart';
 import 'package:logging/logging.dart';
 
 final _logger = Logger('EngineFactory');
