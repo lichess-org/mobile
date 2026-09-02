@@ -410,6 +410,10 @@ class Engine {
       name.add(parts[i++]);
     }
     if (name.isEmpty) return;
+    // A `button` has no value to hold. Recording one would put it in [_options], where option
+    // hygiene could later "reset" it — and setting a button is what presses it, so resetting
+    // `Clear Hash` would wipe the transposition table.
+    if (i + 1 < parts.length && parts[i + 1] == 'button') return;
 
     String? value;
     while (i < parts.length) {

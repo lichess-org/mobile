@@ -427,4 +427,241 @@ void main() {
       expect(await search.bestMove, isNull);
     });
   });
+
+  // The `option` declarations of the `uci` handshake are what option hygiene puts an option back
+  // to, so the parser has to read what real engines actually print. The lines below are copied
+  // from Stockfish 17, Fairy-Stockfish and LC0 v0.32.1 handshakes.
+  //
+  // The grammar is:
+  //   option name <name…> type <type> [default <value…>] [min <x>] [max <x>] [var <x>]…
+  // A value can hold spaces, so it runs to the next `min`, `max` or `var` keyword, or to the end
+  // of the line.
+  group('Engine option declarations', () {
+    test('a spin default stops before min and max', () async {
+      expect(
+        await declaredDefaultOf('Skill Level', const [
+          'option name Skill Level type spin default 20 min 0 max 20',
+        ]),
+        '20',
+      );
+    });
+
+    test('a negative spin default is read whole', () async {
+      // LC0's `TaskWorkers`, and Fairy's `Skill Level`, both go below zero.
+      expect(
+        await declaredDefaultOf('TaskWorkers', const [
+          'option name TaskWorkers type spin default -1 min -1 max 128',
+        ]),
+        '-1',
+      );
+    });
+
+    test('a combo default stops before the var list', () async {
+      expect(
+        await declaredDefaultOf('ScoreType', const [
+          'option name ScoreType type combo default WDL_mu var centipawn var Q var W-L var WDL_mu',
+        ]),
+        'WDL_mu',
+      );
+    });
+
+    test('a check default is read as its literal', () async {
+      expect(
+        await declaredDefaultOf('Syzygy50MoveRule', const [
+          'option name Syzygy50MoveRule type check default true',
+        ]),
+        'true',
+      );
+    });
+
+    test('a string default is read whole, spaces and all', () async {
+      // A file name may hold spaces; Stockfish reads a `setoption` value the same way, joining
+      // its tokens with single spaces, so this round-trips.
+      expect(
+        await declaredDefaultOf('EvalFile', const [
+          'option name EvalFile type string default nn-1c0000000000.nnue',
+        ]),
+        'nn-1c0000000000.nnue',
+      );
+      expect(
+        await declaredDefaultOf('Debug Log File', const [
+          'option name Debug Log File type string default my engine log.txt',
+        ]),
+        'my engine log.txt',
+      );
+    });
+
+    test("Stockfish's <empty> and LC0's blank string default both mean the empty value", () async {
+      // Stockfish prints `<empty>` for an empty string option, LC0 prints nothing at all after
+      // `default`. Fairy-Stockfish goes the other way and takes `<empty>` as a value meaning
+      // none, so the empty string we send back is the same thing to it.
+      expect(
+        await declaredDefaultOf('SyzygyPath', const [
+          'option name SyzygyPath type string default <empty>',
+        ]),
+        '',
+      );
+      expect(
+        await declaredDefaultOf('LogFile', const ['option name LogFile type string default ']),
+        '',
+      );
+      expect(
+        await declaredDefaultOf('BackendOptions', const [
+          'option name BackendOptions type string default',
+        ]),
+        '',
+      );
+    });
+
+    test('a default declared after min and max is still found', () async {
+      // The spec fixes no order for the keywords after `type`, only that each value runs to the
+      // next one.
+      expect(
+        await declaredDefaultOf('Weird', const [
+          'option name Weird type spin min 1 max 10 default 5',
+        ]),
+        '5',
+      );
+    });
+
+    test('a name is taken up to the type keyword, however many words it holds', () async {
+      expect(
+        await declaredDefaultOf('Use NNUE', const ['option name Use NNUE type check default true']),
+        'true',
+      );
+    });
+
+    test('padding between the tokens is not part of the name or the value', () async {
+      expect(
+        await declaredDefaultOf('Skill Level', const [
+          '  option   name  Skill   Level  type spin  default  20  min 0 max 20',
+        ]),
+        '20',
+      );
+    });
+
+    test('the last declaration of an option wins', () async {
+      expect(
+        await declaredDefaultOf('Skill Level', const [
+          'option name Skill Level type spin default 20 min 0 max 20',
+          'option name Skill Level type spin default 12 min 0 max 20',
+        ]),
+        '12',
+      );
+    });
+
+    test('a button is not an option to be put back', () async {
+      // `Clear Hash` is a button: setting it is what presses it, and pressing it wipes the
+      // transposition table. It has no default, and must never be reset like a value option.
+      final transport = FakeTransport(
+        startupLines: const [
+          'id name Stockfish 17',
+          'option name Clear Hash type button',
+          'option name Skill Level type spin default 20 min 0 max 20',
+          'uciok',
+        ],
+      );
+      final engine = Engine(transport);
+      addTearDown(engine.dispose);
+      await pumpEventQueue();
+
+      await startSearch(
+        engine,
+        transport,
+        makeRequest(options: const IMapConst({'Clear Hash': 'now', 'Skill Level': '3'})),
+      );
+      transport.emit('bestmove e2e4');
+      await pumpEventQueue();
+      transport.takeCommands();
+
+      // The search that follows names neither, but only the value option is put back.
+      await startSearch(engine, transport, makeRequest());
+      final commands = transport.takeCommands();
+      expect(commands, contains('setoption name Skill Level value 20'));
+      expect(commands.join(' '), isNot(contains('Clear Hash')));
+    });
+
+    test('a declaration that is not one is ignored, and does not stop the others', () async {
+      final transport = FakeTransport(
+        startupLines: const [
+          'id name Stockfish 17',
+          'option',
+          'option name',
+          'option name type spin default 1',
+          'option Skill Level type spin default 20',
+          'option name Skill Level type spin default 20 min 0 max 20',
+          'uciok',
+        ],
+      );
+      final engine = Engine(transport);
+      addTearDown(engine.dispose);
+      await pumpEventQueue();
+
+      await startSearch(
+        engine,
+        transport,
+        makeRequest(options: const IMapConst({'Skill Level': '3'})),
+      );
+      transport.emit('bestmove e2e4');
+      await pumpEventQueue();
+      transport.takeCommands();
+
+      await startSearch(engine, transport, makeRequest());
+      expect(transport.takeCommands(), contains('setoption name Skill Level value 20'));
+    });
+
+    test('a real LC0 handshake is read the way LC0 means it', () async {
+      // Verbatim from `lc0 v0.32.1`, which is the shape the app runs.
+      const contemptMode =
+          'option name ContemptMode type combo default play var play var white_side_analysis '
+          'var black_side_analysis var disable';
+      const lc0 = [
+        'option name LogFile type string default ',
+        'option name ConfigFile type string default lc0.config',
+        'option name Threads type spin default 0 min 0 max 128',
+        'option name CPuct type string default 1.745000',
+        'option name FpuStrategy type combo default reduction var reduction var absolute',
+        contemptMode,
+        'option name HistoryFill type combo default fen_only var no var fen_only var always',
+        'option name WeightsFile type string default <autodiscover>',
+        'option name Backend type combo default metal var metal var blas var eigen var random',
+        'option name UCI_Chess960 type check default false',
+      ];
+
+      expect(await declaredDefaultOf('CPuct', lc0), '1.745000');
+      expect(await declaredDefaultOf('FpuStrategy', lc0), 'reduction');
+      expect(await declaredDefaultOf('ContemptMode', lc0), 'play');
+      expect(await declaredDefaultOf('HistoryFill', lc0), 'fen_only');
+      expect(await declaredDefaultOf('WeightsFile', lc0), '<autodiscover>');
+      expect(await declaredDefaultOf('Backend', lc0), 'metal');
+      expect(await declaredDefaultOf('ConfigFile', lc0), 'lc0.config');
+      expect(await declaredDefaultOf('LogFile', lc0), '');
+    });
+  });
+}
+
+/// The value an engine that declared [declarations] puts [name] back to, once a search has moved
+/// it off its default.
+///
+/// This is the only way the parsed declarations are observable from outside: option hygiene sends
+/// an option the current search does not name back to the default the engine declared for it.
+Future<String?> declaredDefaultOf(
+  String name,
+  List<String> declarations, {
+  String set = 'something else',
+}) async {
+  final transport = FakeTransport(startupLines: ['id name Fake Engine', ...declarations, 'uciok']);
+  final engine = Engine(transport);
+  await pumpEventQueue();
+
+  await startSearch(engine, transport, makeRequest(options: IMap({name: set})));
+  transport.emit('bestmove e2e4');
+  await pumpEventQueue();
+  transport.takeCommands();
+
+  await startSearch(engine, transport, makeRequest());
+  final prefix = 'setoption name $name value ';
+  final reset = transport.takeCommands().where((command) => command.startsWith(prefix)).lastOrNull;
+  await engine.dispose();
+  return reset?.substring(prefix.length);
 }
