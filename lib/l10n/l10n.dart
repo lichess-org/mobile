@@ -844,6 +844,12 @@ abstract class AppLocalizations {
   /// **'Puzzle'**
   String get mobilePerfShortPuzzle;
 
+  /// No description provided for @mobileRenameChapter.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename chapter'**
+  String get mobileRenameChapter;
+
   /// No description provided for @variantStandard.
   ///
   /// In en, this message translates to:

@@ -341,6 +341,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobilePerfShortPuzzle => 'Задачі';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get variantStandard => 'Стандартні шахи';
 
   @override

@@ -341,6 +341,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobilePerfShortPuzzle => 'Bulmaca';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get variantStandard => 'Standart';
 
   @override

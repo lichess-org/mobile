@@ -1,10 +1,12 @@
 import 'package:cupertino_ui/cupertino_ui.dart';
+import 'package:dartchess/dartchess.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/chat/chat.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
+import 'package:lichess_mobile/src/model/study/study.dart';
 import 'package:lichess_mobile/src/model/study/study_controller.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_actions.dart';
@@ -16,8 +18,11 @@ import 'package:lichess_mobile/src/view/study/study_settings.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -440,6 +445,8 @@ class _StudyChaptersMenuState extends ConsumerState<_StudyChaptersMenu> {
       }
     });
 
+    final canEdit = state.canIContribute;
+
     return BottomSheetScrollableContainer(
       scrollController: widget.scrollController,
       children: [
@@ -466,6 +473,13 @@ class _StudyChaptersMenuState extends ConsumerState<_StudyChaptersMenu> {
               ),
               maxLines: 2,
             ),
+            trailing: canEdit
+                ? IconButton(
+                    icon: const Icon(Icons.settings),
+                    onPressed: () =>
+                        _showChapterSettings(context, ref, state: state, chapter: chapter),
+                  )
+                : null,
             onTap: () {
               ref.read(studyControllerProvider(widget.options).notifier).goToChapter(chapter.id);
               Navigator.of(context).pop();
@@ -505,6 +519,119 @@ class _StudyChaptersMenuState extends ConsumerState<_StudyChaptersMenu> {
             ),
           ),
       ],
+    );
+  }
+
+  void _showChapterSettings(
+    BuildContext context,
+    WidgetRef ref, {
+    required StudyState state,
+    required StudyChapterMeta chapter,
+  }) {
+    showAdaptiveActionSheet<void>(
+      context: context,
+      actions: [
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.mobileRenameChapter),
+          onPressed: () => _showRenameDialog(context, ref, chapter: chapter),
+        ),
+        BottomSheetAction(
+          makeLabel: (_) => Text(context.l10n.studyOrientation),
+          onPressed: () => _showOrientationPicker(context, ref, state: state, chapter: chapter),
+        ),
+        BottomSheetAction(
+          makeLabel: (_) => Text(context.l10n.studyDeleteChapter),
+          isDestructiveAction: true,
+          onPressed: () {
+            // Confirming pops the chapters sheet, which unmounts [context], so hold on to a
+            // context that outlives it to be able to report a failure.
+            final rootContext = Navigator.of(context, rootNavigator: true).context;
+            showConfirmDialog<void>(
+              context,
+              title: Text(context.l10n.studyDeleteThisChapter),
+              isDestructiveAction: true,
+              onConfirm: () {
+                Navigator.of(context).pop();
+                ref
+                    .read(studyControllerProvider(widget.options).notifier)
+                    .deleteChapter(chapter.id)
+                    .catchError((Object e) {
+                      if (rootContext.mounted) {
+                        showSnackBar(rootContext, e.toString(), type: SnackBarType.error);
+                      }
+                    });
+              },
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  void _showRenameDialog(BuildContext context, WidgetRef ref, {required StudyChapterMeta chapter}) {
+    final textController = TextEditingController(text: chapter.name);
+    showAdaptiveDialog<void>(
+      context: context,
+      builder: (context) {
+        return AlertDialog.adaptive(
+          title: Text(context.l10n.mobileRenameChapter),
+          content: TextField(
+            controller: textController,
+            autofocus: true,
+            textInputAction: TextInputAction.done,
+            onSubmitted: (value) {
+              if (value.trim().isNotEmpty) {
+                ref
+                    .read(studyControllerProvider(widget.options).notifier)
+                    .editChapter(chapter.id, name: value.trim());
+              }
+              Navigator.of(context).pop();
+            },
+          ),
+          actions: [
+            PlatformDialogAction(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(context.l10n.cancel),
+            ),
+            PlatformDialogAction(
+              onPressed: () {
+                final value = textController.text;
+                if (value.trim().isNotEmpty) {
+                  ref
+                      .read(studyControllerProvider(widget.options).notifier)
+                      .editChapter(chapter.id, name: value.trim());
+                }
+                Navigator.of(context).pop();
+              },
+              child: Text(context.l10n.mobileOkButton),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showOrientationPicker(
+    BuildContext context,
+    WidgetRef ref, {
+    required StudyState state,
+    required StudyChapterMeta chapter,
+  }) {
+    final currentOrientation = chapter.id == state.currentChapter.id
+        ? state.study.chapter.setup.orientation
+        : Side.white;
+
+    showChoicePicker<Side>(
+      context,
+      title: Text(context.l10n.studyOrientation),
+      choices: Side.values,
+      selectedItem: currentOrientation,
+      labelBuilder: (side) => Text(side == Side.white ? context.l10n.white : context.l10n.black),
+      onSelectedItemChanged: (side) {
+        ref
+            .read(studyControllerProvider(widget.options).notifier)
+            .editChapter(chapter.id, orientation: side);
+      },
     );
   }
 }
