@@ -23,6 +23,17 @@ final _logger = Logger('EngineProvider');
 /// reason.
 const kEngineDisposeDelay = Duration(seconds: 2);
 
+/// Thrown by [EngineHolder.build] when the last watcher leaves while the engine is starting.
+class EngineNoLongerWatched implements Exception {
+  const EngineNoLongerWatched(this.spec);
+
+  final EngineSpec spec;
+
+  @override
+  String toString() =>
+      'EngineNoLongerWatched: the last watcher of $spec left while the engine was starting';
+}
+
 /// A live engine for [EngineSpec], shared by every watcher.
 ///
 /// The engine is started when the first watcher appears and disposed a short while after the last
@@ -61,7 +72,7 @@ class EngineHolder extends AsyncNotifier<Engine> {
     if (!ref.mounted) {
       _logger.info('Nobody is waiting for $spec any more; disposing the engine that just started');
       unawaited(engine.dispose());
-      throw StateError('The engine provider was disposed while $spec was starting');
+      throw EngineNoLongerWatched(spec);
     }
 
     // Registered before anything else can throw, so that from here on the engine has an owner
