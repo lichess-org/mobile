@@ -55,6 +55,17 @@ class EngineCreationException implements Exception {
   String toString() => 'EngineCreationException: $failure';
 }
 
+/// Thrown by a create whose caller has already given up, on the create's own future.
+class EngineCreationAbandoned implements Exception {
+  const EngineCreationAbandoned(this.spec);
+
+  final EngineSpec spec;
+
+  @override
+  String toString() =>
+      'EngineCreationAbandoned: the $spec that arrived after its create had given up was disposed';
+}
+
 /// Creates engines, one per [EngineSlot].
 ///
 /// This is the only place that knows a native engine takes a moment to let go of its slot: a
@@ -102,8 +113,9 @@ class EngineFactory {
           kind: EngineFailureKind.stuck,
           message:
               'The engine neither started nor failed within ${kEngineCreateTimeout.inSeconds}s. '
-              'The operation it is blocked on will never complete, so no further engine work is '
-              'possible until the app is restarted',
+              'The create cannot be cancelled, so the native slot stays busy: if it ever finishes, '
+              'the engine it produces is disposed rather than handed over, and until then nothing '
+              'can be started on this slot',
           engine: spec.label,
           error: e,
           stackTrace: st,
@@ -166,9 +178,14 @@ class EngineFactory {
       // Nobody is waiting for this engine any more, and an engine nobody owns is never disposed:
       // it keeps its native slot until the process restarts, and every later engine of this kind
       // is refused.
+      //
+      // The exit is awaited before this create fails, because failing is what releases the claim
+      // in [_starting] that the next create on this slot is queued behind. This engine never
+      // reached [_live], so that claim is the only thing standing between a dying engine and the
+      // next [_connect] into a native library that hosts one engine per slot.
       _logger.warning('Disposing the $spec that arrived after its create had given up');
       await engine.dispose();
-      throw StateError('The create for $spec gave up before the engine had started');
+      throw EngineCreationAbandoned(spec);
     }
 
     _live[spec.slot] = engine;
