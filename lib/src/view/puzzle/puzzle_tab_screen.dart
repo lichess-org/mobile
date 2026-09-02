@@ -327,7 +327,7 @@ class _PuzzleMenu extends ConsumerWidget {
           _PuzzleMenuListTile(
             icon: Icons.history_outlined,
             title: context.l10n.puzzleHistory,
-            subtitle: 'Review your past puzzle attempts.',
+            subtitle: context.l10n.mobileReviewYourPuzzleHistory,
             enabled: isOnline,
             onTap: isOnline
                 ? () => Navigator.of(
@@ -626,8 +626,8 @@ class PuzzleAnglePreview extends ConsumerWidget {
                               isOnline
                                   // The queue is only refilled when a puzzle is opened, so an empty
                                   // one online is not a dead end.
-                                  ? 'Tap to fetch new puzzles.'
-                                  : 'No puzzles available, please go online to fetch them.',
+                                  ? context.l10n.mobileTapToFetchNewPuzzles
+                                  : context.l10n.mobileNoPuzzlesAvailable,
                             ),
                           ),
                       ],

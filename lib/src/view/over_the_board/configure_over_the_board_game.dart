@@ -285,13 +285,13 @@ class OverTheBoardDisplaySettings extends ConsumerWidget {
     return BottomSheetScrollableContainer(
       children: [
         SwitchSettingTile(
-          title: const Text('Use symmetric pieces'),
+          title: Text(context.l10n.mobileUseSymmetricPieces),
           value: prefs.symmetricPieces,
           onChanged: (_) =>
               ref.read(overTheBoardPreferencesProvider.notifier).toggleSymmetricPieces(),
         ),
         SwitchSettingTile(
-          title: const Text('Flip pieces and opponent info after move'),
+          title: Text(context.l10n.mobileFlipPiecesAndOpponentInfo),
           value: prefs.flipPiecesAfterMove,
           onChanged: (_) =>
               ref.read(overTheBoardPreferencesProvider.notifier).toggleFlipPiecesAfterMove(),

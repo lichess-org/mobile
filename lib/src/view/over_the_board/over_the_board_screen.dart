@@ -175,7 +175,7 @@ class _BodyState extends ConsumerState<_Body> {
               context: context,
               builder: (context) => YesNoDialog(
                 title: Text(context.l10n.threefoldRepetition),
-                content: const Text('Accept draw?'),
+                content: Text(context.l10n.mobileAcceptDraw),
                 onYes: () {
                   Navigator.pop(context);
                   ref.read(overTheBoardGameControllerProvider.notifier).draw();
@@ -214,7 +214,7 @@ class _BodyState extends ConsumerState<_Body> {
             builder: (context) {
               return YesNoDialog(
                 title: Text(context.l10n.mobileAreYouSure),
-                content: const Text('No worries, your game will be saved.'),
+                content: Text(context.l10n.mobileGameWillBeSaved),
                 onNo: () => Navigator.of(context).pop(false),
                 onYes: () {
                   _saveGameState();
@@ -326,7 +326,7 @@ class _BottomBar extends ConsumerWidget {
         ),
         if (!clock.timeIncrement.isInfinite)
           BottomBarButton(
-            label: clock.active ? 'Pause' : 'Resume',
+            label: clock.active ? context.l10n.pause : context.l10n.resume,
             onTap: gameState.finished
                 ? null
                 : () {
@@ -339,7 +339,7 @@ class _BottomBar extends ConsumerWidget {
             icon: clock.active ? CupertinoIcons.pause : CupertinoIcons.play,
           ),
         BottomBarButton(
-          label: 'Previous',
+          label: context.l10n.mobilePreviousPage,
           onTap: gameState.canGoBack
               ? () {
                   ref.read(overTheBoardGameControllerProvider.notifier).goBack();
@@ -353,7 +353,7 @@ class _BottomBar extends ConsumerWidget {
           icon: CupertinoIcons.chevron_back,
         ),
         BottomBarButton(
-          label: 'Next',
+          label: context.l10n.next,
           onTap: gameState.canGoForward
               ? () {
                   ref.read(overTheBoardGameControllerProvider.notifier).goForward();
@@ -367,7 +367,7 @@ class _BottomBar extends ConsumerWidget {
           icon: CupertinoIcons.chevron_forward,
         ),
         BottomBarButton(
-          label: 'Takeback',
+          label: context.l10n.takeback,
           onTap: gameState.canGoBack
               ? () {
                   ref.read(overTheBoardGameControllerProvider.notifier).goBack();
@@ -425,7 +425,7 @@ class _BottomBar extends ConsumerWidget {
                 context: context,
                 builder: (context) => YesNoDialog(
                   title: Text('${context.l10n.draw}?'),
-                  content: Text('$offerer offers draw. Does opponent accept?'),
+                  content: Text(context.l10n.mobileOffersDraw(offerer)),
                   onYes: () {
                     Navigator.pop(context);
                     ref.read(overTheBoardGameControllerProvider.notifier).draw();
@@ -444,7 +444,7 @@ class _BottomBar extends ConsumerWidget {
                 context: context,
                 builder: (context) => YesNoDialog(
                   title: Text('${context.l10n.resign}?'),
-                  content: Text('Are you sure you want to resign as $offerer?'),
+                  content: Text(context.l10n.mobileResignAs(offerer)),
                   onYes: () {
                     Navigator.pop(context);
                     ref.read(overTheBoardGameControllerProvider.notifier).resign();

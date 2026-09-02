@@ -203,7 +203,7 @@ class _BodyState extends ConsumerState<_Body> {
           context: context,
           builder: (context) => YesNoDialog(
             title: Text(context.l10n.mobileAreYouSure),
-            content: const Text('No worries, your score will be saved locally.'),
+            content: Text(context.l10n.mobileScoreSavedLocally),
             onYes: () => Navigator.of(context).pop(true),
             onNo: () => Navigator.of(context).pop(false),
           ),
@@ -513,7 +513,7 @@ class _BottomBar extends ConsumerWidget {
                 ),
               );
             },
-            label: 'Share this puzzle',
+            label: context.l10n.mobileSharePuzzle,
             icon: Theme.of(context).platform == TargetPlatform.iOS ? Icons.ios_share : Icons.share,
           ),
         if (streak.finished)
@@ -540,7 +540,7 @@ class _BottomBar extends ConsumerWidget {
             onTap: puzzleState.canGoBack
                 ? () => ref.read(ctrlProvider.notifier).userPrevious()
                 : null,
-            label: 'Previous',
+            label: context.l10n.mobilePreviousPage,
             icon: CupertinoIcons.chevron_back,
           ),
         if (streak.finished)

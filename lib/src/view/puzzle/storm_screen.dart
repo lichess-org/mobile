@@ -399,42 +399,27 @@ Future<void> _stormInfoDialogBuilder(BuildContext context) {
     builder: (context) {
       return AlertDialog.adaptive(
         title: Text(context.l10n.aboutX('Puzzle Storm')),
-        content: const SingleChildScrollView(
+        content: SingleChildScrollView(
           child: Text.rich(
             TextSpan(
               children: [
-                TextSpan(text: '\n'),
+                const TextSpan(text: '\n'),
+                TextSpan(text: context.l10n.mobilePuzzleStormHelpIntro),
+                const TextSpan(text: '\n\n'),
                 TextSpan(
-                  text:
-                      'Each puzzle grants one point. The goal is to get as many points as you can before the time runs out.',
+                  text: '${context.l10n.mobileComboBar}\n',
+                  style: const TextStyle(fontSize: 18),
                 ),
-                TextSpan(text: '\n\n'),
-                TextSpan(text: 'Combo bar\n', style: TextStyle(fontSize: 18)),
-                TextSpan(
-                  text: 'Each correct ',
-                  children: [
-                    TextSpan(
-                      text: 'move',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    TextSpan(
-                      text:
-                          ' fills the combo bar. When the bar is full, you get a time bonus, and you increase the value of the next bonus.',
-                    ),
-                  ],
-                ),
-                TextSpan(text: '\n\n'),
-                TextSpan(text: 'Bonus values:\n'),
-                TextSpan(text: '• 5 moves: +3s\n'),
-                TextSpan(text: '• 12 moves: +5s\n'),
-                TextSpan(text: '• 20 moves: +7s\n'),
-                TextSpan(text: '• 30 moves: +10s\n'),
-                TextSpan(text: '• Then +10s every 10 other moves.\n'),
-                TextSpan(text: '\n'),
-                TextSpan(
-                  text:
-                      'When you play a wrong move, the combo bar is depleted, and you lose 10 seconds.',
-                ),
+                TextSpan(text: context.l10n.mobileEachCorrectMoveFillsComboBar),
+                const TextSpan(text: '\n\n'),
+                TextSpan(text: '${context.l10n.mobileBonusValues}\n'),
+                const TextSpan(text: '• 5 moves: +3s\n'),
+                const TextSpan(text: '• 12 moves: +5s\n'),
+                const TextSpan(text: '• 20 moves: +7s\n'),
+                const TextSpan(text: '• 30 moves: +10s\n'),
+                const TextSpan(text: '• Then +10s every 10 other moves.\n'),
+                const TextSpan(text: '\n'),
+                TextSpan(text: context.l10n.mobileWrongMoveDepletesComboBar),
               ],
             ),
           ),
@@ -730,7 +715,7 @@ class _BottomBar extends ConsumerWidget {
         if (stormState.mode == StormMode.ended && stormState.stats != null)
           BottomBarButton(
             icon: Icons.open_in_new,
-            label: 'Result',
+            label: context.l10n.mobileResult,
             showLabel: true,
             onTap: () => _showStats(context, stormState.stats!),
           ),

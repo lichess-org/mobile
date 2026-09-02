@@ -89,7 +89,7 @@ class _TvScreenState extends ConsumerState<TvScreen> {
         child: Scaffold(
           appBar: AppBar(
             title: widget.channel != null
-                ? Text('${widget.channel!.label(context.l10n)} TV')
+                ? Text(context.l10n.mobileTvChannel(widget.channel!.label(context.l10n)))
                 : Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -272,7 +272,7 @@ class _TvGameBody extends ConsumerWidget {
                   onTap: ref.read(gameCtrl.notifier).canGoBack()
                       ? () => ref.read(gameCtrl.notifier).cursorBackward()
                       : null,
-                  label: 'Previous',
+                  label: context.l10n.mobilePreviousPage,
                   icon: CupertinoIcons.chevron_back,
                   showTooltip: false,
                 ),

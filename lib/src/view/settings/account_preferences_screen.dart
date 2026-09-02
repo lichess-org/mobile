@@ -220,13 +220,13 @@ class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScr
               ],
             ),
             ListSection(
-              header: const SettingsSectionTitle('Danger zone'),
+              header: SettingsSectionTitle(context.l10n.mobileDangerZone),
               hasLeading: true,
               children: [
                 if (Theme.of(context).platform == TargetPlatform.iOS)
                   ListTile(
                     leading: const Icon(Symbols.dangerous),
-                    title: const Text('Delete your account'),
+                    title: Text(context.l10n.mobileDeleteYourAccount),
                     trailing: const _OpenInNewIcon(),
                     onTap: () {
                       launchUrl(lichessUri('/account/delete'));

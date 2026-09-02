@@ -776,7 +776,7 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
           child: BottomBarButton(
             key: const ValueKey('goto-previous'),
             onTap: broadcastAnalysisState.canGoBack ? () => _moveBackward(ref) : null,
-            label: 'Previous',
+            label: context.l10n.mobilePreviousPage,
             icon: CupertinoIcons.chevron_back,
             showTooltip: false,
           ),

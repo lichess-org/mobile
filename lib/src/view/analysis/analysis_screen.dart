@@ -493,7 +493,7 @@ class _BottomBar extends ConsumerWidget {
           child: BottomBarButton(
             key: const ValueKey('goto-previous'),
             onTap: analysisState.canGoBack ? () => _moveBackward(ref) : null,
-            label: 'Previous',
+            label: context.l10n.mobilePreviousPage,
             icon: CupertinoIcons.chevron_back,
             showTooltip: false,
           ),
@@ -726,8 +726,7 @@ class _AnalysisMenu extends ConsumerWidget {
         // used to quickly analyze a position, so the engine must be allowed to access.
         if (analysisState.isComputerAnalysisAllowed)
           BottomSheetAction(
-            // TODO: l10n
-            makeLabel: (context) => const Text('Share local analysis PGN'),
+            makeLabel: (context) => Text(context.l10n.mobileShareLocalAnalysisPgn),
             onPressed: () {
               Navigator.of(context).push(AnalysisShareScreen.buildRoute(options: options));
             },

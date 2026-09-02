@@ -57,7 +57,7 @@ class BoardEditorScreen extends ConsumerWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.edit),
-            tooltip: 'FEN',
+            tooltip: context.l10n.mobileFen,
             onPressed: () => showDialog<void>(
               context: context,
               builder: (_) => _FenDialog(
@@ -308,7 +308,7 @@ class _BottomBar extends ConsumerWidget {
                 ),
               if (editorState.variant == .chess960)
                 BottomSheetAction(
-                  makeLabel: (context) => const Text('Chess960 Position'),
+                  makeLabel: (context) => Text(context.l10n.mobileChess960Position),
                   onPressed: () {
                     showDialog<void>(
                       context: context,
@@ -337,8 +337,7 @@ class _BottomBar extends ConsumerWidget {
                 ),
               if (editorState.variant == Variant.standard)
                 BottomSheetAction(
-                  // TODO: l10n
-                  makeLabel: (context) => const Text('Challenge from position'),
+                  makeLabel: (context) => Text(context.l10n.mobileChallengeFromPosition),
                   onPressed: () {
                     final authUser = ref.read(authControllerProvider);
                     if (authUser == null) {
@@ -355,7 +354,7 @@ class _BottomBar extends ConsumerWidget {
                           if (user.id == authUser.user.id) {
                             showSnackBar(
                               context,
-                              'You cannot challenge yourself',
+                              context.l10n.mobileCannotChallengeYourself,
                               type: SnackBarType.error,
                             );
                           }
@@ -371,8 +370,7 @@ class _BottomBar extends ConsumerWidget {
                             },
                           );
                         },
-                        // TODO: l10n
-                        title: const Text('Challenge from position'),
+                        title: Text(context.l10n.mobileChallengeFromPosition),
                       ),
                     );
                   },
@@ -438,7 +436,7 @@ class _BottomBar extends ConsumerWidget {
           icon: Icons.biotech,
         ),
         BottomBarButton(
-          label: 'Filters',
+          label: context.l10n.mobileFilters,
           onTap: () => showModalBottomSheet<void>(
             context: context,
             builder: (BuildContext context) => BoardEditorFilters(params: params),
@@ -520,7 +518,7 @@ class _FenDialogState extends State<_FenDialog> {
           suffixIcon: IconButton(
             icon: const Icon(Icons.paste),
             onPressed: _pasteFromClipboard,
-            tooltip: 'Paste from clipboard',
+            tooltip: context.l10n.mobilePasteFromClipboard,
           ),
         ),
       ),
@@ -555,11 +553,11 @@ class _Chess960PositionDialogState extends State<_Chess960PositionDialog> {
     });
   }
 
-  void _validateInput(String value) {
+  void _validateInput(BuildContext context, String value) {
     final id = int.tryParse(value);
     setState(() {
       if (id != null && id > 959) {
-        _errorText = 'Max ID is 959';
+        _errorText = context.l10n.mobileMaxIdIs959;
       } else {
         _errorText = null;
       }
@@ -578,16 +576,16 @@ class _Chess960PositionDialogState extends State<_Chess960PositionDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Chess960 Position'),
+      title: Text(context.l10n.mobileChess960Position),
       content: Column(
         mainAxisSize: .min,
         children: [
           TextField(
             controller: _controller,
             keyboardType: .number,
-            onChanged: _validateInput,
+            onChanged: (value) => _validateInput(context, value),
             decoration: InputDecoration(
-              hintText: 'Position ID (0-959)',
+              hintText: context.l10n.mobilePositionId,
               errorText: _errorText,
               suffixIcon: IconButton(
                 icon: const Icon(LichessIcons.die_six),

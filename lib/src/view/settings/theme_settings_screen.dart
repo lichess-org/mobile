@@ -35,11 +35,11 @@ class ThemeSettingsScreen extends ConsumerWidget {
   }
 }
 
-String shapeColorL10n(ShapeColor shapeColor) => switch (shapeColor) {
-  ShapeColor.green => 'Green',
-  ShapeColor.red => 'Red',
-  ShapeColor.blue => 'Blue',
-  ShapeColor.yellow => 'Yellow',
+String shapeColorL10n(BuildContext context, ShapeColor shapeColor) => switch (shapeColor) {
+  ShapeColor.green => context.l10n.mobileColorGreen,
+  ShapeColor.red => context.l10n.mobileColorRed,
+  ShapeColor.blue => context.l10n.mobileColorBlue,
+  ShapeColor.yellow => context.l10n.mobileColorYellow,
 };
 
 class _Body extends ConsumerStatefulWidget {
@@ -106,7 +106,9 @@ class _BodyState extends ConsumerState<_Body> {
                       settingsLabel: Text(context.l10n.background),
                       settingsValue: generalPrefs.backgroundColor != null
                           ? generalPrefs.backgroundColor!.$1.label
-                          : (generalPrefs.backgroundImage != null ? 'Image' : 'Default'),
+                          : (generalPrefs.backgroundImage != null
+                                ? context.l10n.mobileImage
+                                : context.l10n.mobileDefaultBackground),
                       onTap: () {
                         Navigator.of(context).push(BackgroundChoiceScreen.buildRoute());
                       },
@@ -115,7 +117,7 @@ class _BodyState extends ConsumerState<_Body> {
                         generalPrefs.backgroundImage != null)
                       ListTile(
                         leading: const Icon(Icons.cancel),
-                        title: const Text('Reset background'),
+                        title: Text(context.l10n.mobileResetBackground),
                         onTap: () {
                           ref
                               .read(generalPreferencesProvider.notifier)
@@ -140,10 +142,9 @@ class _BodyState extends ConsumerState<_Body> {
                     ),
                     SettingsListTile(
                       icon: const Icon(LichessIcons.arrow_full_upperright),
-                      settingsLabel: const Text('Drawn shape color'),
-                      explanation:
-                          'This color is only used for shapes drawn by hand using two fingers.',
-                      settingsValue: shapeColorL10n(boardPrefs.shapeColor),
+                      settingsLabel: Text(context.l10n.mobileDrawnShapeColor),
+                      explanation: context.l10n.mobileDrawnShapeColorExplanation,
+                      settingsValue: shapeColorL10n(context, boardPrefs.shapeColor),
                       onTap: () {
                         showChoicePicker(
                           context,
@@ -152,7 +153,7 @@ class _BodyState extends ConsumerState<_Body> {
                           labelBuilder: (t) => Text.rich(
                             TextSpan(
                               children: [
-                                TextSpan(text: shapeColorL10n(t)),
+                                TextSpan(text: shapeColorL10n(context, t)),
                                 const TextSpan(text: '   '),
                                 WidgetSpan(child: Container(width: 15, height: 15, color: t.color)),
                               ],
@@ -177,7 +178,7 @@ class _BodyState extends ConsumerState<_Body> {
                     SwitchSettingTile(
                       // TODO translate
                       leading: const Icon(Icons.border_outer),
-                      title: const Text('Show border'),
+                      title: Text(context.l10n.mobileShowBorder),
                       value: boardPrefs.showBorder,
                       onChanged: (value) {
                         ref.read(boardPreferencesProvider.notifier).toggleBorder();

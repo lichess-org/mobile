@@ -43,12 +43,7 @@ class _BoardSettingsScreenState extends ConsumerState<BoardSettingsScreen> {
       final authUser = ref.read(authControllerProvider);
       await save(ref.read(accountPreferencesProvider.notifier));
       if (authUser != null && mounted) {
-        showSnackBar(
-          context,
-          // TODO l10n
-          'Your preference have been saved in your Lichess account. It will be synchronized across all your devices.',
-          type: SnackBarType.success,
-        );
+        showSnackBar(context, context.l10n.mobilePreferencesSaved, type: SnackBarType.success);
       }
     } finally {
       if (mounted) {
@@ -263,7 +258,7 @@ class _BoardSettingsScreenState extends ConsumerState<BoardSettingsScreen> {
               ),
               if (isTabletOrLarger(context))
                 SettingsListTile(
-                  settingsLabel: const Text('Board position in landscape mode'), // TODO l10n
+                  settingsLabel: Text(context.l10n.mobileBoardPositionInLandscape),
                   settingsValue: boardPrefs.landscapeBoardPosition.label(context.l10n),
                   onTap: () {
                     showChoicePicker(
@@ -410,13 +405,8 @@ class _BoardSettingsScreenState extends ConsumerState<BoardSettingsScreen> {
                 },
               ),
               SwitchSettingTile(
-                // TODO l10n
-                title: const Text('Move on release'),
-                subtitle: const Text(
-                  'When moving a piece by tapping, the move is made when you lift '
-                  'your finger, letting you slide to change the destination square.',
-                  maxLines: 5,
-                ),
+                title: Text(context.l10n.mobileMoveOnRelease),
+                subtitle: Text(context.l10n.mobileMoveOnReleaseExplanation, maxLines: 5),
                 value: boardPrefs.moveOnRelease,
                 onChanged: (value) {
                   ref.read(boardPreferencesProvider.notifier).toggleMoveOnRelease();

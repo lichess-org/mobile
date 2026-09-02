@@ -351,7 +351,10 @@ class BroadcastPlayerRow extends StatelessWidget {
             const SizedBox(height: 16),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Text('Tie-breaking', style: Theme.of(context).textTheme.titleSmall),
+              child: Text(
+                context.l10n.mobileTieBreaking,
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
             ),
             ...tieBreaks.map(
               (tieBreak) => ListTile(

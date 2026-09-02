@@ -191,9 +191,7 @@ class _LoadNextPuzzle extends ConsumerWidget {
           return _PuzzleScaffold(
             angle: angle,
             initialPuzzleContext: null,
-            body: const PuzzleErrorBoardWidget(
-              errorMessage: 'No more puzzles. Go online to get more.',
-            ),
+            body: PuzzleErrorBoardWidget(errorMessage: context.l10n.mobileNoMorePuzzles),
           );
         } else {
           return _PuzzleScaffold(
@@ -234,10 +232,10 @@ class _LoadReplayPuzzle extends ConsumerWidget {
     switch (replayPuzzle) {
       case AsyncData(:final value):
         if (value == null) {
-          return const _PuzzleScaffold(
+          return _PuzzleScaffold(
             angle: _angle,
             initialPuzzleContext: null,
-            body: PuzzleErrorBoardWidget(errorMessage: 'No more puzzles to replay.'),
+            body: PuzzleErrorBoardWidget(errorMessage: context.l10n.mobileNoPuzzlesToReplay),
           );
         } else {
           return _PuzzleScaffold(
@@ -249,7 +247,7 @@ class _LoadReplayPuzzle extends ConsumerWidget {
       case AsyncError(:final error, :final stackTrace):
         debugPrint('SEVERE: [PuzzleScreen] could not load replay puzzles; $error\n$stackTrace');
         final errorMsg = error.toString().contains('404')
-            ? 'No puzzles to replay.'
+            ? context.l10n.mobileNoPuzzlesToReplay
             : error.toString();
         return _PuzzleScaffold(
           angle: _angle,
@@ -444,8 +442,7 @@ class _BodyState extends ConsumerState<_Body> {
       if (next != null && next != previous) {
         showSnackBar(
           context,
-          'You solved ${next.solvedCount} puzzles very quickly. Please wait a while before '
-          'solving more so your results can be saved.',
+          context.l10n.mobileSolvedTooFast(next.solvedCount),
           type: SnackBarType.error,
         );
       }
@@ -820,7 +817,7 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
           onLongPress: puzzleState.canGoBack ? () => _moveBackward(ref) : null,
           child: BottomBarButton(
             onTap: puzzleState.canGoBack ? () => _moveBackward(ref) : null,
-            label: 'Previous',
+            label: context.l10n.mobilePreviousPage,
             icon: CupertinoIcons.chevron_back,
             showTooltip: false,
           ),

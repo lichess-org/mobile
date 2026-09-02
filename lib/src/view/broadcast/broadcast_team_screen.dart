@@ -436,9 +436,9 @@ class _MatchHistoryTable extends StatelessWidget {
       children: [
         TableRow(
           children: [
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-              child: Text('Round', style: TextStyle(fontWeight: .bold)),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+              child: Text(context.l10n.mobileRound, style: const TextStyle(fontWeight: .bold)),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 12.0),

@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/log/app_log_service.dart';
 import 'package:lichess_mobile/src/model/log/app_log_storage.dart';
 import 'package:lichess_mobile/src/model/settings/log_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
@@ -72,11 +73,11 @@ class _AppLogSettingsScreenState extends ConsumerState<AppLogSettingsScreen> {
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
-        title: const Text('App Logs'),
+        title: Text(context.l10n.mobileAppLogs),
         actions: [
           if (logs.isNotEmpty)
             IconButton(
-              tooltip: 'Export',
+              tooltip: context.l10n.mobileExport,
               icon: const Icon(Icons.share),
               onPressed: () => launchShareDialog(
                 context,
@@ -92,12 +93,12 @@ class _AppLogSettingsScreenState extends ConsumerState<AppLogSettingsScreen> {
             ),
           if (asyncState.value?.isDeleteButtonVisible == true)
             IconButton(
-              tooltip: 'Delete all logs',
+              tooltip: context.l10n.mobileDeleteAllLogs,
               icon: const Icon(Icons.delete_sweep),
               onPressed: () {
                 showConfirmDialog<dynamic>(
                   context,
-                  title: const Text('Delete all logs'),
+                  title: Text(context.l10n.mobileDeleteAllLogs),
                   onConfirm: () {
                     ref.read(appLogServiceProvider).clear();
                     ref.read(appLogPaginatorProvider(_searchQuery).notifier).deleteAll();
@@ -115,7 +116,7 @@ class _AppLogSettingsScreenState extends ConsumerState<AppLogSettingsScreen> {
                 Expanded(
                   child: PlatformSearchBar(
                     controller: _searchController,
-                    hintText: 'Search logs...',
+                    hintText: context.l10n.mobileSearchLogs,
                     onChanged: (value) => setState(() {
                       _searchQuery = value.isEmpty ? null : value;
                     }),
@@ -150,8 +151,8 @@ class _AppLogSettingsScreenState extends ConsumerState<AppLogSettingsScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text('No logs to show'),
-              TextButton(onPressed: _onRefresh, child: const Text('Tap to refresh')),
+              Text(context.l10n.mobileNoLogsToShow),
+              TextButton(onPressed: _onRefresh, child: Text(context.l10n.mobileTapToRefresh)),
             ],
           ),
         ),

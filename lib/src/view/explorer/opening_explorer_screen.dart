@@ -259,7 +259,7 @@ class _BottomBar extends ConsumerWidget {
     final canGoNext = ref.watch(ctrlProvider.select((value) => value.requireValue.canGoNext));
 
     final dbLabel = switch (db) {
-      OpeningDatabase.master => 'Masters',
+      OpeningDatabase.master => context.l10n.mobileMasters,
       OpeningDatabase.lichess => 'Lichess',
       OpeningDatabase.player => context.l10n.player,
     };
@@ -279,7 +279,7 @@ class _BottomBar extends ConsumerWidget {
           icon: Icons.tune,
         ),
         BottomBarButton(
-          label: 'Flip',
+          label: context.l10n.mobileFlip,
           tooltip: context.l10n.flipBoard,
           showLabel: true,
           onTap: () => ref.read(ctrlProvider.notifier).toggleBoard(),
@@ -289,7 +289,7 @@ class _BottomBar extends ConsumerWidget {
           onLongPress: canGoBack ? () => _moveBackward(ref) : null,
           child: BottomBarButton(
             onTap: canGoBack ? () => _moveBackward(ref) : null,
-            label: 'Previous',
+            label: context.l10n.mobilePreviousPage,
             showLabel: true,
             icon: CupertinoIcons.chevron_back,
             showTooltip: false,
@@ -299,7 +299,7 @@ class _BottomBar extends ConsumerWidget {
           onLongPress: canGoNext ? () => _moveForward(ref) : null,
           child: BottomBarButton(
             icon: CupertinoIcons.chevron_forward,
-            label: 'Next',
+            label: context.l10n.next,
             showLabel: true,
             onTap: canGoNext ? () => _moveForward(ref) : null,
             showTooltip: false,

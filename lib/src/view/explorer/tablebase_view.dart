@@ -27,8 +27,8 @@ class TablebaseView extends ConsumerWidget {
         if (value == null) {
           final connectivity = ref.watch(connectivityChangesProvider);
           final message = connectivity.whenIs(
-            online: () => 'Position not in tablebase.',
-            offline: () => 'Tablebase is not available offline.',
+            online: () => context.l10n.mobilePositionNotInTablebase,
+            offline: () => context.l10n.mobileTablebaseNotAvailableOffline,
           );
           return Center(
             child: Padding(padding: const EdgeInsets.all(16.0), child: Text(message)),
@@ -87,7 +87,7 @@ class TablebaseView extends ConsumerWidget {
         addMoveSection(
           category: TablebaseCategory.maybeWin,
           headerKey: 'maybeWinMovesHeader',
-          headerChild: const Text('Win or 50 move draw'),
+          headerChild: Text(context.l10n.mobileWinOr50MoveDraw),
           isWinningForWhite: position.turn == Side.white,
           moveKeyPrefix: 'maybe-win-move',
         );
@@ -115,7 +115,7 @@ class TablebaseView extends ConsumerWidget {
         addMoveSection(
           category: TablebaseCategory.maybeLoss,
           headerKey: 'maybeLossMovesHeader',
-          headerChild: const Text('Loss or 50 move draw'),
+          headerChild: Text(context.l10n.mobileLossOr50MoveDraw),
           isWinningForWhite: position.turn != Side.white,
           moveKeyPrefix: 'maybe-loss-move',
         );

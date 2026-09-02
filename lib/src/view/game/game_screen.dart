@@ -412,7 +412,7 @@ class _GameMenu extends ConsumerWidget {
         if (gameState.nbWatchers > 0)
           ContextMenuAction(
             icon: Icons.person_outline,
-            label: 'Spectators (${gameState.nbWatchers})',
+            label: context.l10n.mobileSpectators(gameState.nbWatchers),
             onPressed: () {
               final s = ref.read(gameControllerProvider(gameId)).value;
               if (s == null) return;

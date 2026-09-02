@@ -16,8 +16,7 @@ class ToggleSoundButton extends ConsumerWidget {
     );
 
     return SemanticIconButton(
-      // TODO: i18n
-      semanticsLabel: 'Toggle sound',
+      semanticsLabel: context.l10n.mobileToggleSound,
       onPressed: () => ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled(),
       icon: Icon(isSoundEnabled ? Icons.volume_up : Icons.volume_off),
     );

@@ -68,7 +68,7 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
     final prefs = ref.watch(engineEvaluationPreferencesProvider);
 
     return PlatformScaffold(
-      appBar: PlatformAppBar(title: const Text('Chess engine')),
+      appBar: PlatformAppBar(title: Text(context.l10n.mobileChessEngine)),
       body: ListView(
         children: [
           if (_hasVerifiedNNUEFiles == null)
@@ -79,7 +79,7 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
             ListSection(
               children: [
                 SettingsListTile(
-                  settingsLabel: const Text('Engine'),
+                  settingsLabel: Text(context.l10n.mobileEngine),
                   settingsValue: prefs.enginePref.label,
                   onTap: () {
                     showChoicePicker(
@@ -116,7 +116,11 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
                                 },
                               )
                             : const Icon(Icons.download),
-                        title: Text(isLoading ? 'Downloading NNUE files' : 'Download NNUE files'),
+                        title: Text(
+                          isLoading
+                              ? context.l10n.mobileNnueFilesDownloading
+                              : context.l10n.mobileDownloadNnueFiles,
+                        ),
                         subtitle: const Text(nnueTotalSizeMB),
                         enabled: !isLoading,
                         onTap: () async {
@@ -134,18 +138,18 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
                     _hasVerifiedNNUEFiles == true)
                   ListTile(
                     trailing: const Icon(Icons.check),
-                    title: const Text('NNUE files downloaded'),
-                    subtitle: const Text('$nnueTotalSizeMB (tap to delete)'),
+                    title: Text(context.l10n.mobileNnueFilesDownloaded),
+                    subtitle: Text(context.l10n.mobileTapToDelete(nnueTotalSizeMB)),
                     onTap: () async {
                       final isOk = await showAdaptiveDialog<bool>(
                         context: context,
                         barrierDismissible: true,
                         builder: (context) {
                           return AlertDialog.adaptive(
-                            content: const Text('Do you want to delete the NNUE files?'),
+                            content: Text(context.l10n.mobileDeleteNnueFiles),
                             actions: [
                               PlatformDialogAction(
-                                child: const Text('OK'),
+                                child: Text(context.l10n.mobileOkButton),
                                 onPressed: () {
                                   Navigator.of(context).pop(true);
                                 },

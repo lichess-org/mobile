@@ -19,7 +19,7 @@ class OpeningExplorerSettings extends ConsumerWidget {
 
     final List<Widget> masterDbSettings = [
       ListTile(
-        title: const Text('Timespan'),
+        title: Text(context.l10n.mobileTimespan),
         subtitle: Wrap(
           spacing: 5,
           children: MasterDb.datesMap.keys
@@ -82,7 +82,7 @@ class OpeningExplorerSettings extends ConsumerWidget {
         ),
       ),
       ListTile(
-        title: const Text('Timespan'),
+        title: Text(context.l10n.mobileTimespan),
         subtitle: Wrap(
           spacing: 5,
           children: LichessDb.datesMap.keys
@@ -123,7 +123,7 @@ class OpeningExplorerSettings extends ConsumerWidget {
                   fontSize: 18,
                   decoration: TextDecoration.underline,
                 ),
-                text: prefs.playerDb.username ?? 'Select a Lichess player',
+                text: prefs.playerDb.username ?? context.l10n.mobileSelectAPlayer,
               ),
             ],
           ),
@@ -137,8 +137,8 @@ class OpeningExplorerSettings extends ConsumerWidget {
               .map(
                 (side) => ChoiceChip(
                   label: switch (side) {
-                    Side.white => const Text('White'),
-                    Side.black => const Text('Black'),
+                    Side.white => Text(context.l10n.white),
+                    Side.black => Text(context.l10n.black),
                   },
                   selected: prefs.playerDb.side == side,
                   onSelected: (_) =>
@@ -177,8 +177,8 @@ class OpeningExplorerSettings extends ConsumerWidget {
               .map(
                 (gameMode) => FilterChip(
                   label: Text(switch (gameMode) {
-                    GameMode.casual => 'Casual',
-                    GameMode.rated => 'Rated',
+                    GameMode.casual => context.l10n.casual,
+                    GameMode.rated => context.l10n.rated,
                   }),
                   selected: prefs.playerDb.gameModes.contains(gameMode),
                   onSelected: (_) => ref
@@ -190,7 +190,7 @@ class OpeningExplorerSettings extends ConsumerWidget {
         ),
       ),
       ListTile(
-        title: const Text('Timespan'),
+        title: Text(context.l10n.mobileTimespan),
         subtitle: Wrap(
           spacing: 5,
           children: PlayerDb.datesMap.keys
@@ -216,7 +216,7 @@ class OpeningExplorerSettings extends ConsumerWidget {
             spacing: 5,
             children: [
               ChoiceChip(
-                label: const Text('Masters'),
+                label: Text(context.l10n.mobileMasters),
                 selected: prefs.db == OpeningDatabase.master,
                 onSelected: (_) => ref
                     .read(openingExplorerPreferencesProvider.notifier)

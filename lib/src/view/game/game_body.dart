@@ -812,7 +812,7 @@ class _GameBottomBar extends ConsumerWidget {
           )
         else if (data.playable && data.isCorrespondence) ...[
           BottomBarButton(
-            label: 'Go to the next game',
+            label: context.l10n.mobileGoToTheNextGame,
             icon: Icons.skip_next,
             onTap: ongoingGames.maybeWhen(
               data: (games) {
@@ -1108,7 +1108,7 @@ class _MoveNavButton extends ConsumerWidget {
         onLongPress: canGoBackward ? () => _move(ref) : null,
         child: BottomBarButton(
           onTap: canGoBackward ? () => _move(ref) : null,
-          label: 'Previous',
+          label: context.l10n.mobilePreviousPage,
           icon: CupertinoIcons.chevron_back,
           showTooltip: false,
         ),

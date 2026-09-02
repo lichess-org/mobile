@@ -130,7 +130,7 @@ class SettingsScreen extends ConsumerWidget {
               ),
               ListTile(
                 leading: const Icon(Icons.memory_outlined),
-                title: const Text('Chess engine'),
+                title: Text(context.l10n.mobileChessEngine),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
                     ? const CupertinoListTileChevron()
                     : null,
@@ -166,17 +166,17 @@ class SettingsScreen extends ConsumerWidget {
             children: [
               ListTile(
                 leading: const Icon(Icons.storage_outlined),
-                title: const Text('Local database size'),
+                title: Text(context.l10n.mobileLocalDatabaseSize),
                 trailing: dbSize.hasValue ? Text(_getSizeString(dbSize.value)) : null,
               ),
               ListTile(
                 leading: const Icon(Icons.http),
-                title: const Text('HTTP logs'),
+                title: Text(context.l10n.mobileHttpLogs),
                 onTap: () => Navigator.push(context, HttpLogScreen.buildRoute()),
               ),
               ListTile(
                 leading: const Icon(Icons.bug_report),
-                title: const Text('App Logs'),
+                title: Text(context.l10n.mobileAppLogs),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
                     ? const CupertinoListTileChevron()
                     : null,
@@ -186,7 +186,7 @@ class SettingsScreen extends ConsumerWidget {
               ),
               ListTile(
                 leading: const Icon(Icons.star_outline),
-                title: const Text('Rate this app'),
+                title: Text(context.l10n.mobileRateThisApp),
                 onTap: () async {
                   final isAndroid = Theme.of(context).platform == TargetPlatform.android;
                   final launched = await launchUrl(

@@ -43,7 +43,7 @@ class EngineSettingsWidget extends ConsumerWidget {
           header: const SettingsSectionTitle('Stockfish'),
           children: [
             SliderSettingsTile(
-              title: const Text('Search time'),
+              title: Text(context.l10n.searchTime),
               value: prefs.engineSearchTime.inSeconds.toDouble(),
               values: kAvailableEngineSearchTimes.map((e) => e.inSeconds.toDouble()).toList(),
               labelBuilder: (value) =>

@@ -82,6 +82,8 @@
   <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">Tip: You can add more widgets to the Home Screen or remove those you don't need!</string>
   <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">Dismiss</string>
   <string name="customizeButton" comment="Text of a button, so translation should be short.">Customize</string>
+  <string name="dangerZone" comment="Section title shown in account settings for destructive actions.">Danger zone</string>
+  <string name="deleteYourAccount" comment="Action that deletes the user's account. Only shown on iOS.">Delete your account</string>
   <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">Stop showing threat</string>
   <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word">Completed</string>
   <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">Jump to my page</string>
@@ -108,4 +110,93 @@
   <string name="perfShortRacingKings" comment="Short label for the Racing Kings performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Racing</string>
   <string name="perfShortCrazyhouse" comment="Short label for the Crazyhouse performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Crazy</string>
   <string name="perfShortPuzzle" comment="Short label for puzzle performance. Used in compact UI such as perf cards, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Puzzle</string>
+  <string name="acceptDraw" comment="Prompt shown in an over-the-board game when a threefold repetition makes it possible to accept a draw.">Accept draw?</string>
+  <string name="bonusValues" comment="Header for the list of time bonus values in the Puzzle Storm help dialog.">Bonus values:</string>
+  <string name="comboBar" comment="Heading for the combo bar explanation in the Puzzle Storm help dialog.">Combo bar</string>
+  <string name="allBroadcasts" comment="Broadcast list filter that shows all broadcasts, both live and finished.">All broadcasts</string>
+  <string name="appLogs" comment="Title of the screen that shows the app's debug log entries.">App Logs</string>
+  <string name="boardPositionInLandscape" comment="Board settings option to choose the board position when the device is held in landscape mode.">Board position in landscape mode</string>
+  <string name="cannotChallengeYourself" comment="Message shown when trying to challenge yourself to a game from a position.">You cannot challenge yourself</string>
+  <string name="challengeFromPosition" comment="Button or menu label to start a game from a board position.">Challenge from position</string>
+  <string name="chessClock" comment="Option in the GIF export dialog to include the chess clock in the export.">Chess clock</string>
+  <string name="chess960Position" comment="Label for the chess960 starting position section in the board editor.">Chess960 Position</string>
+  <string name="chessEngine" comment="Settings section title for the chess engine.">Chess engine</string>
+  <string name="clearAllLogs" comment="Tooltip or action to clear all HTTP logs.">Clear all logs</string>
+  <string name="colorBlue" comment="Color option for shapes drawn on the board.">Blue</string>
+  <string name="colorGreen" comment="Color option for shapes drawn on the board.">Green</string>
+  <string name="colorRed" comment="Color option for shapes drawn on the board.">Red</string>
+  <string name="colorYellow" comment="Color option for shapes drawn on the board.">Yellow</string>
+  <string name="copied" comment="Snackbar confirmation that something was copied to the clipboard.">Copied.</string>
+  <string name="defaultBackground" comment="Board background theme option meaning the default background.">Default</string>
+  <string name="deleteAllLogs" comment="Action to delete all log entries.">Delete all logs</string>
+  <string name="deleteNnueFiles" comment="Confirmation dialog asking whether to delete the downloaded NNUE engine files.">Do you want to delete the NNUE files?</string>
+  <string name="downloadNnueFiles" comment="Action to download the NNUE engine files.">Download NNUE files</string>
+  <string name="drawnShapeColor" comment="Setting label for the color used when drawing shapes on the board.">Drawn shape color</string>
+  <string name="drawnShapeColorExplanation" comment="Explanation for the drawn shape color setting.">This color is only used for shapes drawn by hand using two fingers.</string>
+  <string name="eachCorrectMoveFillsComboBar" comment="Explanation of how correct moves fill the combo bar in the Puzzle Storm help dialog.">Each correct move fills the combo bar. When the bar is full, you get a time bonus, and you increase the value of the next bonus.</string>
+  <string name="engine" comment="Single-word section header for the engine preferences.">Engine</string>
+  <string name="export" comment="Tooltip for the button that exports app logs.">Export</string>
+  <string name="fen" comment="Label for the FEN notation input in the board editor.">FEN</string>
+  <string name="filterBroadcasts" comment="Accessibility label for the broadcast filter button.">Filter broadcasts</string>
+  <string name="filters" comment="Button that opens filter options in the board editor.">Filters</string>
+  <string name="flip" comment="Button that flips the board orientation.">Flip</string>
+  <string name="flipPiecesAndOpponentInfo" comment="Over-the-board setting to flip the pieces and opponent information after each move.">Flip pieces and opponent info after move</string>
+  <string name="gameWillBeSaved" comment="Confirmation shown when leaving an over-the-board game before it is finished.">No worries, your game will be saved.</string>
+  <string name="gifExportOptions" comment="Header of the dialog that lets the user configure GIF export options.">GIF Export Options</string>
+  <string name="goToTheNextGame" comment="Button that jumps to the next ongoing correspondence game.">Go to the next game</string>
+  <string name="httpLogs" comment="Title of the screen that shows the HTTP request logs.">HTTP logs</string>
+  <string name="image" comment="Board background theme option meaning a custom image.">Image</string>
+  <string name="indexing" comment="Accessibility label shown while the opening explorer is indexing its database.">Indexing</string>
+  <string name="liveBroadcasts" comment="Broadcast list filter that shows only live broadcasts.">Live broadcasts</string>
+  <string name="localDatabaseSize" comment="Setting that shows the size of the local offline database.">Local database size</string>
+  <string name="lossOr50MoveDraw" comment="Tablebase category shown when the position is a loss or a 50-move draw.">Loss or 50 move draw</string>
+  <string name="masters" comment="Opening explorer database option that uses games played by masters.">Masters</string>
+  <string name="maxIdIs959" comment="Validation message for the maximum chess960 starting position ID.">Max ID is 959</string>
+  <string name="moveOnRelease" comment="Board setting to make a move when the finger is lifted after tapping a piece.">Move on release</string>
+  <string name="moveOnReleaseExplanation" comment="Explanation for the move on release board setting.">When moving a piece by tapping, the move is made when you lift your finger, letting you slide to change the destination square.</string>
+  <string name="nextMistake" comment="Analysis button that jumps to the next mistake in the game.">Next mistake</string>
+  <string name="nnueFilesDownloaded" comment="Status shown when the NNUE engine files are already downloaded.">NNUE files downloaded</string>
+  <string name="nnueFilesDownloading" comment="Status shown while the NNUE engine files are being downloaded.">Downloading NNUE files</string>
+  <string name="noGamesMatchingFilter" comment="Empty state shown when the broadcast board filters match no games.">No games matching filter criteria.</string>
+  <string name="noLogsToShow" comment="Empty state shown on the log screens when there are no logs.">No logs to show</string>
+  <string name="noMorePuzzles" comment="Empty state shown when there are no more puzzles available and the user needs to go online.">No more puzzles. Go online to get more.</string>
+  <string name="noPuzzlesAvailable" comment="Message shown on the puzzle tab when no puzzles are available and the user needs to go online.">No puzzles available, please go online to fetch them.</string>
+  <string name="noPuzzlesToReplay" comment="Empty state shown when there are no puzzles to replay.">No puzzles to replay.</string>
+  <string name="offersDraw" comment="Dialog asking whether to accept a draw offer in an over-the-board game. The variable is the name of the player offering the draw.">{offerer} offers draw. Does opponent accept?</string>
+  <string name="pasteFromClipboard" comment="Action in the board editor to paste a FEN position from the clipboard.">Paste from clipboard</string>
+  <string name="positionId" comment="Label for the chess960 starting position ID input in the board editor.">Position ID (0-959)</string>
+  <string name="positionNotInTablebase" comment="Message shown when the current position is not present in the tablebase.">Position not in tablebase.</string>
+  <string name="preferencesSaved" comment="Confirmation shown after account preferences are saved to the user's Lichess account.">Your preference have been saved in your Lichess account. It will be synchronized across all your devices.</string>
+  <string name="puzzleStormHelpIntro" comment="Introduction explaining the goal of Puzzle Storm in the help dialog.">Each puzzle grants one point. The goal is to get as many points as you can before the time runs out.</string>
+  <string name="rateThisApp" comment="Setting that opens the app store to rate the app.">Rate this app</string>
+  <string name="resetBackground" comment="Action that resets the board background to the default.">Reset background</string>
+  <string name="resignAs" comment="Confirmation dialog for resigning an over-the-board game. The variable is the name of the player resigning.">Are you sure you want to resign as {offerer}?</string>
+  <string name="result" comment="Button that shows the results in Puzzle Storm.">Result</string>
+  <string name="round" comment="Column header for the round number in a broadcast.">Round</string>
+  <string name="reviewYourPuzzleHistory" comment="Subtitle for the entry that opens the user's puzzle history.">Review your past puzzle attempts.</string>
+  <string name="scoreSavedLocally" comment="Confirmation shown when leaving a puzzle streak before it is finished.">No worries, your score will be saved locally.</string>
+  <string name="searchIsEmpty" comment="Message shown on the broadcast search screen when the search term is empty.">Search is empty</string>
+  <string name="searchLogs" comment="Hint text for the log search bar.">Search logs...</string>
+  <string name="selectAPlayer" comment="Placeholder telling the user to select a player for the opening explorer.">Select a Lichess player</string>
+  <string name="selectAPlayerInSettings" comment="Hint shown when no player is selected for the opening explorer.">Select a Lichess player in the settings.</string>
+  <string name="shareChallengeUrl" comment="Menu action to share a challenge URL.">Share challenge URL</string>
+  <string name="shareLocalAnalysisPgn" comment="Menu action to share the local analysis PGN.">Share local analysis PGN</string>
+  <string name="showBorder" comment="Board setting to show a border around the board.">Show border</string>
+  <string name="showEngineLines" comment="Analysis setting to show the engine's suggested lines.">Show engine lines</string>
+  <string name="showEvaluationGauge" comment="Analysis setting to show the evaluation gauge.">Show evaluation gauge</string>
+  <string name="smallBoard" comment="Analysis setting to use a smaller board.">Small board</string>
+  <string name="solvedTooFast" comment="Warning shown when the server starts rate-limiting puzzle solve submissions. The variable is the number of puzzles solved.">You solved {count} puzzles very quickly. Please wait a while before solving more so your results can be saved.</string>
+  <string name="sortOpenings" comment="Accessibility label for the control that sorts puzzle openings.">Sort openings</string>
+  <string name="spectators" comment="Label showing the number of spectators watching a game. The variable is the number of spectators.">Spectators ({count})</string>
+  <string name="tapToDelete" comment="Subtitle indicating the NNUE files can be deleted. The variable is the total download size.">{size} (tap to delete)</string>
+  <string name="tablebaseNotAvailableOffline" comment="Message shown when the tablebase is not available while offline.">Tablebase is not available offline.</string>
+  <string name="tapToFetchNewPuzzles" comment="Prompt on the puzzle tab telling the user to tap to fetch new puzzles.">Tap to fetch new puzzles.</string>
+  <string name="tapToRefresh" comment="Prompt to refresh an empty log list.">Tap to refresh</string>
+  <string name="tieBreaking" comment="Header for the tie-breaking points in a broadcast.">Tie-breaking</string>
+  <string name="timespan" comment="Opening explorer setting for the timespan of games used.">Timespan</string>
+  <string name="toggleSound" comment="Accessibility label for the sound toggle button.">Toggle sound</string>
+  <string name="tvChannel" comment="Title combining a TV channel name with 'TV'. The variable is the channel name.">{channel} TV</string>
+  <string name="useSymmetricPieces" comment="Over-the-board setting to use symmetric pieces.">Use symmetric pieces</string>
+  <string name="winOr50MoveDraw" comment="Tablebase category shown when the position is a win or a 50-move draw.">Win or 50 move draw</string>
+  <string name="wrongMoveDepletesComboBar" comment="Explanation of what happens on a wrong move in the Puzzle Storm help dialog.">When you play a wrong move, the combo bar is depleted, and you lose 10 seconds.</string>
 </resources>

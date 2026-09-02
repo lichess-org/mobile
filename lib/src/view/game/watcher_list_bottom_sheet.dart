@@ -1,6 +1,7 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -40,7 +41,10 @@ class WatcherListBottomSheet extends StatelessWidget {
             // Title
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Text('Spectators ($nbWatchers)', style: theme.textTheme.titleMedium),
+              child: Text(
+                context.l10n.mobileSpectators(nbWatchers),
+                style: theme.textTheme.titleMedium,
+              ),
             ),
             const SizedBox(height: 8),
             const Divider(height: 1),
