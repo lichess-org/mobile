@@ -536,7 +536,7 @@ class Root extends Node {
         final childFrom = frame.from.children[childIdx];
         final move = frame.to.position.parseSan(childFrom.data.san);
         if (move != null) {
-          final newPos = frame.to.position.play(move);
+          final newPos = frame.to.position.playUnchecked(move);
           final isMainline = stack.isEmpty;
           final comments = childFrom.data.comments?.map(PgnComment.fromPgn).map((c) {
             if (c.eval == null && isLichessAnalysis && isMainline && newPos.isCheckmate) {
