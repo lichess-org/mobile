@@ -5,8 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/engine/engine_budget.dart';
 import 'package:lichess_mobile/src/model/engine/engine_opponent.dart';
-import 'package:lichess_mobile/src/model/engine/maia_book.dart';
-import 'package:lichess_mobile/src/model/engine/maia_online_book.dart';
+import 'package:lichess_mobile/src/model/engine/opening_book.dart';
 import 'package:lichess_mobile/src/model/engine/opponent_level.dart';
 
 import 'package:lichess_mobile/src/model/engine/thinking_time.dart';
@@ -220,15 +219,17 @@ void main() {
   });
 
   group('MaiaOpponent', () {
-    Future<ProviderContainer> makeMaiaContainer(FakeMaiaWeightsService weights, {MaiaBook? book}) =>
-        makeContainer(
-          overrides: {
-            maiaWeightsServiceProvider: maiaWeightsServiceProvider.overrideWithValue(weights),
-            maiaBookServiceProvider: maiaBookServiceProvider.overrideWithValue(
-              FakeMaiaBookService(book: book),
-            ),
-          },
-        );
+    Future<ProviderContainer> makeMaiaContainer(
+      FakeMaiaWeightsService weights, {
+      MaiaOfflineBook? book,
+    }) => makeContainer(
+      overrides: {
+        maiaWeightsServiceProvider: maiaWeightsServiceProvider.overrideWithValue(weights),
+        maiaBookServiceProvider: maiaBookServiceProvider.overrideWithValue(
+          FakeMaiaOfflineBookService(book: book),
+        ),
+      },
+    );
 
     test("plays the network's own move on LC0, with no search on top of it", () async {
       final engine = FakeEngine();
@@ -330,16 +331,16 @@ void main() {
 
   group('MaiaOpponent opening book', () {
     /// A book that answers the initial position and nothing else.
-    MaiaBook firstMoveBook() => MaiaBook(bookFor(Chess.initial, {'e2e4': 1000}));
+    MaiaOfflineBook firstMoveBook() => MaiaOfflineBook(bookFor(Chess.initial, {'e2e4': 1000}));
 
-    Future<ProviderContainer> makeBookContainer(MaiaBook? book, {MaiaOnlineBook? online}) =>
+    Future<ProviderContainer> makeBookContainer(MaiaOfflineBook? book, {MaiaOnlineBook? online}) =>
         makeContainer(
           overrides: {
             maiaWeightsServiceProvider: maiaWeightsServiceProvider.overrideWithValue(
               FakeMaiaWeightsService(),
             ),
             maiaBookServiceProvider: maiaBookServiceProvider.overrideWithValue(
-              FakeMaiaBookService(book: book),
+              FakeMaiaOfflineBookService(book: book),
             ),
             if (online != null)
               maiaOnlineBookProvider: maiaOnlineBookProvider.overrideWithValue(online),
@@ -440,7 +441,7 @@ void main() {
       final engine = FakeEngine();
       fakeEngine = engine;
       final container = await makeBookContainer(firstMoveBook());
-      final books = container.read(maiaBookServiceProvider) as FakeMaiaBookService;
+      final books = container.read(maiaBookServiceProvider) as FakeMaiaOfflineBookService;
 
       await readOpponentFor(container, const MaiaOpponentSpec(MaiaRating.maia1500)).findMove(
         initialPosition: Chess.fromSetup(
@@ -458,7 +459,7 @@ void main() {
       final engine = FakeEngine();
       fakeEngine = engine;
       final container = await makeBookContainer(firstMoveBook());
-      final books = container.read(maiaBookServiceProvider) as FakeMaiaBookService;
+      final books = container.read(maiaBookServiceProvider) as FakeMaiaOfflineBookService;
 
       await readOpponentFor(container, const MaiaOpponentSpec(MaiaRating.maia1500)).findMove(
         initialPosition: Chess.initial,
@@ -473,7 +474,7 @@ void main() {
     test('reads the book of the rating it is playing at', () async {
       fakeEngine = FakeEngine();
       final container = await makeBookContainer(firstMoveBook());
-      final books = container.read(maiaBookServiceProvider) as FakeMaiaBookService;
+      final books = container.read(maiaBookServiceProvider) as FakeMaiaOfflineBookService;
 
       await readOpponentFor(container, const MaiaOpponentSpec(MaiaRating.maia1900)).findMove(
         initialPosition: Chess.initial,
@@ -487,17 +488,18 @@ void main() {
 
   group('MaiaOpponent thinking time', () {
     /// A container whose Maia opponent waits [think] before answering, however fast the engine is.
-    Future<ProviderContainer> makeSlowContainer(Duration think, {MaiaBook? book}) => makeContainer(
-      overrides: {
-        maiaWeightsServiceProvider: maiaWeightsServiceProvider.overrideWithValue(
-          FakeMaiaWeightsService(),
-        ),
-        thinkingTimeProvider: thinkingTimeProvider.overrideWithValue(FixedThinkingTime(think)),
-        maiaBookServiceProvider: maiaBookServiceProvider.overrideWithValue(
-          FakeMaiaBookService(book: book),
-        ),
-      },
-    );
+    Future<ProviderContainer> makeSlowContainer(Duration think, {MaiaOfflineBook? book}) =>
+        makeContainer(
+          overrides: {
+            maiaWeightsServiceProvider: maiaWeightsServiceProvider.overrideWithValue(
+              FakeMaiaWeightsService(),
+            ),
+            thinkingTimeProvider: thinkingTimeProvider.overrideWithValue(FixedThinkingTime(think)),
+            maiaBookServiceProvider: maiaBookServiceProvider.overrideWithValue(
+              FakeMaiaOfflineBookService(book: book),
+            ),
+          },
+        );
 
     test('sits on the move instead of answering the instant the engine does', () async {
       fakeEngine = FakeEngine();
@@ -537,7 +539,7 @@ void main() {
       fakeEngine = FakeEngine();
       final container = await makeSlowContainer(
         const Duration(milliseconds: 200),
-        book: MaiaBook(bookFor(Chess.initial, {'e2e4': 1000})),
+        book: MaiaOfflineBook(bookFor(Chess.initial, {'e2e4': 1000})),
       );
       final opponent = readOpponentFor(container, const MaiaOpponentSpec(MaiaRating.maia1500));
 

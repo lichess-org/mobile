@@ -8,8 +8,6 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/engine_budget.dart';
 import 'package:lichess_mobile/src/model/engine/engine_providers.dart';
-import 'package:lichess_mobile/src/model/engine/maia_book.dart';
-import 'package:lichess_mobile/src/model/engine/maia_online_book.dart';
 import 'package:lichess_mobile/src/model/engine/opening_book.dart';
 import 'package:lichess_mobile/src/model/engine/opponent_level.dart';
 import 'package:lichess_mobile/src/model/engine/thinking_time.dart';
@@ -326,7 +324,7 @@ class MaiaOpponent extends EngineOpponentBase<MaiaOpponentSpec> {
   final MaiaWeightsService weights;
 
   @protected
-  final MaiaBookService books;
+  final MaiaOfflineBookService books;
 
   @protected
   final MaiaOnlineBook onlineBook;

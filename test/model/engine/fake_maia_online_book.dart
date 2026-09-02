@@ -1,5 +1,4 @@
 import 'package:dartchess/dartchess.dart';
-import 'package:lichess_mobile/src/model/engine/maia_online_book.dart';
 import 'package:lichess_mobile/src/model/engine/opening_book.dart';
 import 'package:lichess_mobile/src/model/engine/opponent_level.dart';
 

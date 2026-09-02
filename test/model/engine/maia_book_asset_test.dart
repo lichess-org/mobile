@@ -1,7 +1,6 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lichess_mobile/src/model/engine/maia_book.dart';
 import 'package:lichess_mobile/src/model/engine/opening_book.dart';
 
 /// The books that ship with the app, as `scripts/gen_maia_book.dart` crawled them.
@@ -12,11 +11,11 @@ import 'package:lichess_mobile/src/model/engine/opening_book.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  Future<PolyglotBook> load(MaiaBookTier tier) async =>
+  Future<PolyglotBook> load(MaiaOfflineBookTier tier) async =>
       PolyglotBook(await rootBundle.load(tier.asset));
 
   group('the bundled Maia books', () {
-    for (final tier in MaiaBookTier.values) {
+    for (final tier in MaiaOfflineBookTier.values) {
       test('$tier opens the game with several moves to choose from', () async {
         final book = await load(tier);
 
@@ -66,8 +65,8 @@ void main() {
     }
 
     test('the two tiers disagree, which is why there are two of them', () async {
-      final low = await load(MaiaBookTier.low);
-      final high = await load(MaiaBookTier.high);
+      final low = await load(MaiaOfflineBookTier.low);
+      final high = await load(MaiaOfflineBookTier.high);
 
       final afterE4 = Chess.initial.play(NormalMove.fromUci('e2e4'));
       int weightOf(PolyglotBook book, String uci) =>
