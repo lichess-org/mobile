@@ -15,8 +15,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileAccountPreferences => 'Konto Ischtellige';
 
   @override
-  String get mobileAccountPreferencesHelp =>
-      'Die Ischtellige gälted uf dim Lichess-Account und uf allne Grät.';
+  String get mobileAccountPreferencesHelp => 'Die Ischtellige gälted uf dim Lichess-Account und uf allne Grät.';
 
   @override
   String get mobileAllGames => 'All Schpiel';
@@ -80,8 +79,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileNoSearchResults => 'Nüt g\'funde';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable =>
-      'Momentan sind no nöd alli Funktione vu de alte App oder vu de Website verfüegbar, aber es chunnt laufend wieder Nois dezue.';
+  String get mobileNotAllFeaturesAreAvailable => 'Momentan sind no nöd alli Funktione vu de alte App oder vu de Website verfüegbar, aber es chunnt laufend wieder Nois dezue.';
 
   @override
   String get mobileNotFollowingAnyUser => 'Du folgsch keim Schpiller.';
@@ -119,12 +117,10 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobilePuzzleStormSubtitle => 'Lös i 3 Minute so vill Ufgabe wie möglich.';
 
   @override
-  String get mobilePuzzleStreakAbortWarning =>
-      'Du verlürsch din aktuelle Lauf und din Rekord wird g\'schpeicheret.';
+  String get mobilePuzzleStreakAbortWarning => 'Du verlürsch din aktuelle Lauf und din Rekord wird g\'schpeicheret.';
 
   @override
-  String get mobilePuzzleThemesSubtitle =>
-      'Schpill Ufgabe mit dine Lieblings-Eröffnige oder wähl es Thema.';
+  String get mobilePuzzleThemesSubtitle => 'Schpill Ufgabe mit dine Lieblings-Eröffnige oder wähl es Thema.';
 
   @override
   String get mobilePuzzlesTab => 'Ufgabe';
@@ -160,8 +156,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileSettingsImmersiveMode => 'Ibettete Modus';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle =>
-      'UI-System während em Schpille usblände. Benutz die Option, wänn dich d\'Navigationsgeschte am Bildschirmrand störed. Das gilt für de Schpiel- und au für de Puzzle-Storm-Bildschirm.';
+  String get mobileSettingsImmersiveModeSubtitle => 'UI-System während em Schpille usblände. Benutz die Option, wänn dich d\'Navigationsgeschte am Bildschirmrand störed. Das gilt für de Schpiel- und au für de Puzzle-Storm-Bildschirm.';
 
   @override
   String get mobileSettingsMaterialDifferenceCapturedPieces => 'g\'schlageni Figure';
@@ -170,8 +165,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileSettingsPickAnImage => 'wähl es Bild';
 
   @override
-  String get mobileSettingsPickAnImageHelp =>
-      'Eigeni Hindergründ funktioniered nur im \"Darkmode\". Es wird es dunkels Bild empfohle.';
+  String get mobileSettingsPickAnImageHelp => 'Eigeni Hindergründ funktioniered nur im \"Darkmode\". Es wird es dunkels Bild empfohle.';
 
   @override
   String get mobileSettingsPickAnImageBlur => 'Bild undütlich mache';
@@ -195,8 +189,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileSettingsShapeDrawing => 'Form Zeichnig';
 
   @override
-  String get mobileSettingsShapeDrawingSubtitle =>
-      'Mach Forme, mit zwei Finger: Heb ein Finger uf es leers Fäld und zieh mit em Andere, zum e Form zeichne.';
+  String get mobileSettingsShapeDrawingSubtitle => 'Mach Forme, mit zwei Finger: Heb ein Finger uf es leers Fäld und zieh mit em Andere, zum e Form zeichne.';
 
   @override
   String get mobileSettingsShowBorder => 'Zeig de Rand';
@@ -205,8 +198,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileSettingsTouchFeedback => 'Haptischi Rückmäldig';
 
   @override
-  String get mobileSettingsTouchFeedbackSubtitle =>
-      'Wänns aktiviert isch, vibriert s\'Grät churz, wänn du e Figur bewegsch oder schlasch.';
+  String get mobileSettingsTouchFeedbackSubtitle => 'Wänns aktiviert isch, vibriert s\'Grät churz, wänn du e Figur bewegsch oder schlasch.';
 
   @override
   String get mobileSettingsTab => 'Ischtelle';
@@ -262,8 +254,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileViewGame => 'Schpiel verfolge';
 
   @override
-  String get mobileCustomizeHomeTip =>
-      'Tipp: Du chasch witeri Widget uf de Schtartbildschirm tue oder Unnötigi entferne!';
+  String get mobileCustomizeHomeTip => 'Tipp: Du chasch witeri Widget uf de Schtartbildschirm tue oder Unnötigi entferne!';
 
   @override
   String get mobileCustomizeHomeTipDismiss => 'Ablehne';
@@ -296,8 +287,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileOpeningExplorerNotAvailableOffline => 'De Explorer chasch offline nöd öffne.';
 
   @override
-  String get mobileChallengeCreated =>
-      'Useforderig isch gmacht: Du wirsch avisiert, wänn\'s Schpiel afangt. Du chasch\'s au uf de \"Home-Site\" ufrüefe.';
+  String get mobileChallengeCreated => 'Useforderig isch gmacht: Du wirsch avisiert, wänn\'s Schpiel afangt. Du chasch\'s au uf de \"Home-Site\" ufrüefe.';
 
   @override
   String get mobilePreviousPage => 'Vorher';
@@ -423,12 +413,10 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileDrawnShapeColor => 'Drawn shape color';
 
   @override
-  String get mobileDrawnShapeColorExplanation =>
-      'This color is only used for shapes drawn by hand using two fingers.';
+  String get mobileDrawnShapeColorExplanation => 'This color is only used for shapes drawn by hand using two fingers.';
 
   @override
-  String get mobileEachCorrectMoveFillsComboBar =>
-      'Each correct move fills the combo bar. When the bar is full, you get a time bonus, and you increase the value of the next bonus.';
+  String get mobileEachCorrectMoveFillsComboBar => 'Each correct move fills the combo bar. When the bar is full, you get a time bonus, and you increase the value of the next bonus.';
 
   @override
   String get mobileEngine => 'Engine';
@@ -488,8 +476,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileMoveOnRelease => 'Move on release';
 
   @override
-  String get mobileMoveOnReleaseExplanation =>
-      'When moving a piece by tapping, the move is made when you lift your finger, letting you slide to change the destination square.';
+  String get mobileMoveOnReleaseExplanation => 'When moving a piece by tapping, the move is made when you lift your finger, letting you slide to change the destination square.';
 
   @override
   String get mobileNextMistake => 'Next mistake';
@@ -530,12 +517,10 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobilePositionNotInTablebase => 'Position not in tablebase.';
 
   @override
-  String get mobilePreferencesSaved =>
-      'Your preference have been saved in your Lichess account. It will be synchronized across all your devices.';
+  String get mobilePreferencesSaved => 'Your preference have been saved in your Lichess account. It will be synchronized across all your devices.';
 
   @override
-  String get mobilePuzzleStormHelpIntro =>
-      'Each puzzle grants one point. The goal is to get as many points as you can before the time runs out.';
+  String get mobilePuzzleStormHelpIntro => 'Each puzzle grants one point. The goal is to get as many points as you can before the time runs out.';
 
   @override
   String get mobileRateThisApp => 'Rate this app';
@@ -638,8 +623,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileWinOr50MoveDraw => 'Win or 50 move draw';
 
   @override
-  String get mobileWrongMoveDepletesComboBar =>
-      'When you play a wrong move, the combo bar is depleted, and you lose 10 seconds.';
+  String get mobileWrongMoveDepletesComboBar => 'When you play a wrong move, the combo bar is depleted, and you lose 10 seconds.';
 
   @override
   String get variantStandard => 'Schtandard';
@@ -693,8 +677,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get variantCrazyhouse => 'Isetz-Schach';
 
   @override
-  String get variantCrazyhouseTitle =>
-      'Anstatt en Zug z\'mache, gschlageni Figure zrugg ufs Brätt schtelle.';
+  String get variantCrazyhouseTitle => 'Anstatt en Zug z\'mache, gschlageni Figure zrugg ufs Brätt schtelle.';
 
   @override
   String get variantFromPosition => 'Vu Position';
@@ -924,15 +907,13 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get arenaIsItRated => 'Isch es g\'wertet?';
 
   @override
-  String get arenaWillBeNotified =>
-      'Du wirsch benachrichtiget, wänn\'s Turnier afangt. Es isch also möglich, während de Wartezit ime andere Tab z\'schpille.';
+  String get arenaWillBeNotified => 'Du wirsch benachrichtiget, wänn\'s Turnier afangt. Es isch also möglich, während de Wartezit ime andere Tab z\'schpille.';
 
   @override
   String get arenaIsRated => 'Das Turnier isch g\'wertet, es wird dini Wertig beiflusse.';
 
   @override
-  String get arenaIsNotRated =>
-      'Das Turnier isch *nöd* g\'wertet und wird dini Wertig *nöd* beiflusse.';
+  String get arenaIsNotRated => 'Das Turnier isch *nöd* g\'wertet und wird dini Wertig *nöd* beiflusse.';
 
   @override
   String get arenaSomeRated => 'Einigi Turnier sind g\'wertet und werded dini Wertig beiflusse.';
@@ -941,43 +922,37 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get arenaHowAreScoresCalculated => 'Wie werded d\'Pünkt berächnet?';
 
   @override
-  String get arenaHowAreScoresCalculatedAnswer =>
-      'En Sieg git 2 Pünkt, es Remis 1 Punkt, e Niderlag 0. Nach 2 Sieg in Serie, gits für jede witeri Sieg doppleti Pünkt. \nDas wird dur e Flamme, bi de Punktzahl, azeigt. Doppleti Pünkt gits so lang, bis es Schpiel verlore gaht oder Remis ändet. \nBischpil: 4 Sieg und dänn es Remis ergit 14 Pünkt ( 2 + 2 + 2x2 + 2x2 + 2x1 = 14 ) und ab dänn, wider normal.';
+  String get arenaHowAreScoresCalculatedAnswer => 'En Sieg git 2 Pünkt, es Remis 1 Punkt, e Niderlag 0. Nach 2 Sieg in Serie, gits für jede witeri Sieg doppleti Pünkt. \nDas wird dur e Flamme, bi de Punktzahl, azeigt. Doppleti Pünkt gits so lang, bis es Schpiel verlore gaht oder Remis ändet. \nBischpil: 4 Sieg und dänn es Remis ergit 14 Pünkt ( 2 + 2 + 2x2 + 2x2 + 2x1 = 14 ) und ab dänn, wider normal.';
 
   @override
   String get arenaBerserk => 'Arena Berserk';
 
   @override
-  String get arenaBerserkAnswer =>
-      'Klickt en Schpiller vor Schpielbeginn uf \"Berserk\", dänn halbiert er sini Bedänkzit. \nWänn er das Schpiel trotzdem günnt, gits 1 zuesätzliche Turnier Punkt.\n\nIm Zitmodus mit Inkrement entfernt \"Berserk\" das Inkrement. \n(1+2 isch e Usnahm, es wird zu 1+0.)\n\nBi Schpiel ohni Grundbedänkziit (0+1, 0+2) isch \"Berserk\" nöd möglich.\n\nDe zuesätzlich \"Berserk Punkt\" gits nur, wänn im Schpiel \nmeh als 6 Züg gschpillt worde sind.';
+  String get arenaBerserkAnswer => 'Klickt en Schpiller vor Schpielbeginn uf \"Berserk\", dänn halbiert er sini Bedänkzit. \nWänn er das Schpiel trotzdem günnt, gits 1 zuesätzliche Turnier Punkt.\n\nIm Zitmodus mit Inkrement entfernt \"Berserk\" das Inkrement. \n(1+2 isch e Usnahm, es wird zu 1+0.)\n\nBi Schpiel ohni Grundbedänkziit (0+1, 0+2) isch \"Berserk\" nöd möglich.\n\nDe zuesätzlich \"Berserk Punkt\" gits nur, wänn im Schpiel \nmeh als 6 Züg gschpillt worde sind.';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'Wie wird de Sieger ermittlet?';
 
   @override
-  String get arenaHowIsTheWinnerDecidedAnswer =>
-      'De/die Schpiller wo bi Turnierändi die meischte Pünkt händ werded als Sieger bekanntgeh. \nWänn 2 oder meh Schpiller glich vill Pünkt händ, entscheidet d\'Turnierleischtig d\'Reihefolg.';
+  String get arenaHowIsTheWinnerDecidedAnswer => 'De/die Schpiller wo bi Turnierändi die meischte Pünkt händ werded als Sieger bekanntgeh. \nWänn 2 oder meh Schpiller glich vill Pünkt händ, entscheidet d\'Turnierleischtig d\'Reihefolg.';
 
   @override
   String get arenaHowDoesPairingWork => 'Wie werded d\'Paarige gmacht?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer =>
-      'Am Afang werded d\'Paarige gemäss de Wertigszahl g\'macht. \nSobald es Schpiel fertig isch, gahts zrugg id Turnierübersicht und es werded Schpiller \nmit ähnlichem Rang paaret. Mer schpillt, im Turnier, nie gäge all Schpiller. \nWänn me sofort z\'rugg id Übersicht gaht, chann me meh schpille und so meh Pünkt mache!';
+  String get arenaHowDoesPairingWorkAnswer => 'Am Afang werded d\'Paarige gemäss de Wertigszahl g\'macht. \nSobald es Schpiel fertig isch, gahts zrugg id Turnierübersicht und es werded Schpiller \nmit ähnlichem Rang paaret. Mer schpillt, im Turnier, nie gäge all Schpiller. \nWänn me sofort z\'rugg id Übersicht gaht, chann me meh schpille und so meh Pünkt mache!';
 
   @override
   String get arenaHowDoesItEnd => 'Wie ändet es Turnier?';
 
   @override
-  String get arenaHowDoesItEndAnswer =>
-      'Es Turnier hät e \"Countdown Uhr\" - isch d\'Turnierzit abgloffe, werded alli Räng fix und de Sieger wird bekannt geh. Schpiel wo no am laufe sind, müend fertig gschpillt werde, sie zelled aber nümme fürs Turnier.';
+  String get arenaHowDoesItEndAnswer => 'Es Turnier hät e \"Countdown Uhr\" - isch d\'Turnierzit abgloffe, werded alli Räng fix und de Sieger wird bekannt geh. Schpiel wo no am laufe sind, müend fertig gschpillt werde, sie zelled aber nümme fürs Turnier.';
 
   @override
   String get arenaOtherRules => 'Anderi wichtigi Regle';
 
   @override
-  String get arenaThereIsACountdown =>
-      'Es lauft en \"Countdown\" für de 1. Zug... Isch nach 12 Sekunde nöd zoge worde, gits es Forfait für de Gägner.';
+  String get arenaThereIsACountdown => 'Es lauft en \"Countdown\" für de 1. Zug... Isch nach 12 Sekunde nöd zoge worde, gits es Forfait für de Gägner.';
 
   @override
   String get arenaThisIsPrivate => 'Das isch es privats Turnier';
@@ -993,8 +968,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   }
 
   @override
-  String get arenaDrawStreakVariants =>
-      'Die chürzischti Schpieldur, für Remise wos Pünkt git, isch je nach Variante underschiedlich. Die folgendi Tabälle zeigt de Schwellewert für jedi Variante.';
+  String get arenaDrawStreakVariants => 'Die chürzischti Schpieldur, für Remise wos Pünkt git, isch je nach Variante underschiedlich. Die folgendi Tabälle zeigt de Schwellewert für jedi Variante.';
 
   @override
   String get arenaVariant => 'Variante';
@@ -1012,15 +986,13 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get arenaCustomStartDate => 'Benutzerdefinierts Schtartdatum';
 
   @override
-  String get arenaCustomStartDateHelp =>
-      'I dinere eigene, lokale Zitzone. Das überschribt d\'Ischtellig \"Zit bis s Turnierbeginn\"';
+  String get arenaCustomStartDateHelp => 'I dinere eigene, lokale Zitzone. Das überschribt d\'Ischtellig \"Zit bis s Turnierbeginn\"';
 
   @override
   String get arenaAllowBerserk => 'Berserk erlaube';
 
   @override
-  String get arenaAllowBerserkHelp =>
-      'Erlaubt em Schpiller sini Bedänkziit z\'halbiere, um so en Zuesatzpunkt z\'günne';
+  String get arenaAllowBerserkHelp => 'Erlaubt em Schpiller sini Bedänkziit z\'halbiere, um so en Zuesatzpunkt z\'günne';
 
   @override
   String get arenaAllowChatHelp => 'Lass d\'Schpiller ime Chatruum diskutiere';
@@ -1059,12 +1031,10 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get arenaPickYourTeam => 'Wähl dis Team';
 
   @override
-  String get arenaWhichTeamWillYouRepresentInThisBattle =>
-      'Welles Team vertrittsch du, i dere Schlacht?';
+  String get arenaWhichTeamWillYouRepresentInThisBattle => 'Welles Team vertrittsch du, i dere Schlacht?';
 
   @override
-  String get arenaYouMustJoinOneOfTheseTeamsToParticipate =>
-      'Zum Mitschpille, muesch du dich eim vu dene Teams aschlüsse!';
+  String get arenaYouMustJoinOneOfTheseTeamsToParticipate => 'Zum Mitschpille, muesch du dich eim vu dene Teams aschlüsse!';
 
   @override
   String get arenaCreated => 'Erschtellt';
@@ -1079,12 +1049,10 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get arenaTournamentStats => 'Turnier - Schtatistike';
 
   @override
-  String get arenaRankAvgHelp =>
-      'De Rangdurchschnitt isch en Prozäntsatz vu dim Rang. Niedriger isch besser.\n\nBischpil: Rang 3 ime Turnier mit 100 Schpiler = 3% oder Rang 10 bi 1000 Schpiler = 1 %.';
+  String get arenaRankAvgHelp => 'De Rangdurchschnitt isch en Prozäntsatz vu dim Rang. Niedriger isch besser.\n\nBischpil: Rang 3 ime Turnier mit 100 Schpiler = 3% oder Rang 10 bi 1000 Schpiler = 1 %.';
 
   @override
-  String get arenaRankAverageHelp =>
-      'Your rank average represents your typical finishing position, relative to the total number of players in each tournament.\nThis is a measure of your tournament placement, not your general rating.\n\nFor example, a rank average of 3% means you typically finish in the top 3% (such as 30th place out of 1,000 players).';
+  String get arenaRankAverageHelp => 'Your rank average represents your typical finishing position, relative to the total number of players in each tournament.\nThis is a measure of your tournament placement, not your general rating.\n\nFor example, a rank average of 3% means you typically finish in the top 3% (such as 30th place out of 1,000 players).';
 
   @override
   String get arenaMedians => 'mittleri Wert';
@@ -1116,8 +1084,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get arenaOnlyTitled => 'Nur Schpiler mit Titel';
 
   @override
-  String get arenaOnlyTitledHelp =>
-      'Für e Teilnahm a dem Turnier, isch en offizielle Titel erforderlich';
+  String get arenaOnlyTitledHelp => 'Für e Teilnahm a dem Turnier, isch en offizielle Titel erforderlich';
 
   @override
   String get arenaTournamentPairingsAreNowClosed => 'Es werded kei Turnierschpiel meh gschpillt.';
@@ -1172,8 +1139,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get broadcastHowToUseLichessBroadcasts => 'Wie mer Lichess-Überträgige benutzt.';
 
   @override
-  String get broadcastTheNewRoundHelp =>
-      'Die neu Runde wird us de gliche Mitglieder und Mitwürkende beschtah, wie die Vorherig.';
+  String get broadcastTheNewRoundHelp => 'Die neu Runde wird us de gliche Mitglieder und Mitwürkende beschtah, wie die Vorherig.';
 
   @override
   String get broadcastAddRound => 'E Rundi zuefüege';
@@ -1205,8 +1171,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get broadcastSourceSingleUrl => 'PGN Quälle URL';
 
   @override
-  String get broadcastSourceUrlHelp =>
-      'URL wo Lichess abfrögt, für PGN Aktualisierige z\'erhalte. Sie muess öffentlich im Internet zuegänglich si.';
+  String get broadcastSourceUrlHelp => 'URL wo Lichess abfrögt, für PGN Aktualisierige z\'erhalte. Sie muess öffentlich im Internet zuegänglich si.';
 
   @override
   String get broadcastSourceGameIds => 'Bis zu 64 Lichess Schpiel-IDs, trännt dur en Leerschlag.';
@@ -1235,8 +1200,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get broadcastDefinitivelyDeleteRound => 'Die Rundi, mit allne Schpiel, definitiv lösche.';
 
   @override
-  String get broadcastDeleteAllGamesOfThisRound =>
-      'Lösch alli Schpiel vu dere Rundi. D\'Quälle muess aktiv si, dass sie neu erschtellt werde chönd.';
+  String get broadcastDeleteAllGamesOfThisRound => 'Lösch alli Schpiel vu dere Rundi. D\'Quälle muess aktiv si, dass sie neu erschtellt werde chönd.';
 
   @override
   String get broadcastEditRoundStudy => 'Runde-Schtudie bearbeite';
@@ -1245,12 +1209,10 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get broadcastDeleteTournament => 'Lösch das Turnier';
 
   @override
-  String get broadcastDefinitivelyDeleteTournament =>
-      'Das ganze Turnier, alli Runde und alli Schpiel definitiv lösche.';
+  String get broadcastDefinitivelyDeleteTournament => 'Das ganze Turnier, alli Runde und alli Schpiel definitiv lösche.';
 
   @override
-  String get broadcastPermanentlyDeleteTournament =>
-      'Permanently delete this tournament, including all rounds and games?';
+  String get broadcastPermanentlyDeleteTournament => 'Permanently delete this tournament, including all rounds and games?';
 
   @override
   String get broadcastShowScores => 'Zeigt d\'Erfolg vu de Schpiller, anhand vu Schpiel-Ergäbnis';
@@ -1298,8 +1260,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get broadcastOverview => 'Überblick';
 
   @override
-  String get broadcastSubscribeTitle =>
-      'Mäld dich a, zum über jede Rundeschtart informiert z\'werde. Du chasch de Alarm- oder d\'Push-Benachrichtigung, für Überträgige, i dine Kontoischtellige umschalte.';
+  String get broadcastSubscribeTitle => 'Mäld dich a, zum über jede Rundeschtart informiert z\'werde. Du chasch de Alarm- oder d\'Push-Benachrichtigung, für Überträgige, i dine Kontoischtellige umschalte.';
 
   @override
   String get broadcastUploadImage => 'Turnier-Bild ufelade';
@@ -1353,8 +1314,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get broadcastScore => 'Resultat';
 
   @override
-  String get broadcastStandingsDisclaimer =>
-      'D\'Ranglischte wird dur die übertreite Schpiel berächnet und chann vu de offizielle Resultate abwiche.';
+  String get broadcastStandingsDisclaimer => 'D\'Ranglischte wird dur die übertreite Schpiel berächnet und chann vu de offizielle Resultate abwiche.';
 
   @override
   String get broadcastAllTeams => 'Alli Teams';
@@ -1387,8 +1347,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get broadcastBackToLiveMove => 'Zrugg zum \"Live-Zug\"';
 
   @override
-  String get broadcastSinceHideResults =>
-      'Will du entschide häsch, dini Ergäbnis z\'verberge, sind - zum Spoiler verhindere - all Vorschau-Brätter leer.';
+  String get broadcastSinceHideResults => 'Will du entschide häsch, dini Ergäbnis z\'verberge, sind - zum Spoiler verhindere - all Vorschau-Brätter leer.';
 
   @override
   String get broadcastLiveboard => 'Live-Brätt';
@@ -1427,8 +1386,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   }
 
   @override
-  String get broadcastDefaultRoundNameHelp =>
-      'Wänn du de Standardname b\'haltsch, wird er automatisch i alli andere Schprache übersetzt.';
+  String get broadcastDefaultRoundNameHelp => 'Wänn du de Standardname b\'haltsch, wird er automatisch i alli andere Schprache übersetzt.';
 
   @override
   String get broadcastOpenTournament => 'Open';
@@ -1530,8 +1488,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get challengeChallengeCanceled => 'Useforderig zrugg\'zoge.';
 
   @override
-  String get challengeRegisterToSendChallenges =>
-      'Bitte regischtier dich, zum Useforderige schicke.';
+  String get challengeRegisterToSendChallenges => 'Bitte regischtier dich, zum Useforderige schicke.';
 
   @override
   String challengeYouCannotChallengeX(String param) {
@@ -1565,27 +1522,22 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get challengeDeclineLater => 'Ich han grad kei Zit, bitte frög spöter nomal.';
 
   @override
-  String get challengeDeclineTooFast =>
-      'Die Bedänkzit isch mir z\'churz, bitte forder mich für es langsamers Schpiel.';
+  String get challengeDeclineTooFast => 'Die Bedänkzit isch mir z\'churz, bitte forder mich für es langsamers Schpiel.';
 
   @override
-  String get challengeDeclineTooSlow =>
-      'Die Bedänkzit isch mir z\'lang, bitte forder mich für es schnällers Schpiel.';
+  String get challengeDeclineTooSlow => 'Die Bedänkzit isch mir z\'lang, bitte forder mich für es schnällers Schpiel.';
 
   @override
   String get challengeDeclineTimeControl => 'Ich akzeptiere kei Schpiel, mit dere Bedänkzit.';
 
   @override
-  String get challengeDeclineRated =>
-      'Bitte schick mir, anstell vu dem, e Forderig für es g\'wertets Spiel.';
+  String get challengeDeclineRated => 'Bitte schick mir, anstell vu dem, e Forderig für es g\'wertets Spiel.';
 
   @override
-  String get challengeDeclineCasual =>
-      'Bitte schick mir, anstell vu dem, e Forderig für es ung\'wertets Spiel.';
+  String get challengeDeclineCasual => 'Bitte schick mir, anstell vu dem, e Forderig für es ung\'wertets Spiel.';
 
   @override
-  String get challengeDeclineStandard =>
-      'Ich nimme momentan kei Useforderige für anderi Schpielvariante a.';
+  String get challengeDeclineStandard => 'Ich nimme momentan kei Useforderige für anderi Schpielvariante a.';
 
   @override
   String get challengeDeclineVariant => 'Ich wott momentan die Variante nöd schpille.';
@@ -1622,32 +1574,25 @@ class AppLocalizationsGsw extends AppLocalizations {
   }
 
   @override
-  String get coordinatesKnowingTheChessBoard =>
-      'D\'Koordinate vom Schachbrätt z\'känne, \nisch e wichtigi Fähigkeit:';
+  String get coordinatesKnowingTheChessBoard => 'D\'Koordinate vom Schachbrätt z\'känne, \nisch e wichtigi Fähigkeit:';
 
   @override
-  String get coordinatesMostChessCourses =>
-      'Die meischte Schach Kürs und Üebige \nverwänded die algebraischi Notazion.';
+  String get coordinatesMostChessCourses => 'Die meischte Schach Kürs und Üebige \nverwänded die algebraischi Notazion.';
 
   @override
-  String get coordinatesTalkToYourChessFriends =>
-      'Es machts eifacher mit Schachfründe z\'rede, \nwänn alli die \"Schach-Schprach\" verschtöhnd.';
+  String get coordinatesTalkToYourChessFriends => 'Es machts eifacher mit Schachfründe z\'rede, \nwänn alli die \"Schach-Schprach\" verschtöhnd.';
 
   @override
-  String get coordinatesYouCanAnalyseAGameMoreEffectively =>
-      'Me chann es Schpiel effektiver analysiere, \nwänn me d\'Koordinate schnäll gseht.';
+  String get coordinatesYouCanAnalyseAGameMoreEffectively => 'Me chann es Schpiel effektiver analysiere, \nwänn me d\'Koordinate schnäll gseht.';
 
   @override
-  String get coordinatesACoordinateAppears =>
-      'Uf em Brätt erschint e Koordinate (z.B. \"c3\") und du muesch ufs entschprächendi Fäld klicke.';
+  String get coordinatesACoordinateAppears => 'Uf em Brätt erschint e Koordinate (z.B. \"c3\") und du muesch ufs entschprächendi Fäld klicke.';
 
   @override
-  String get coordinatesASquareIsHighlightedExplanation =>
-      'Uf em Brätt wird es Fäld erlüchtet und du muesch sini Koordinate (z.B. \"e4\") ageh.';
+  String get coordinatesASquareIsHighlightedExplanation => 'Uf em Brätt wird es Fäld erlüchtet und du muesch sini Koordinate (z.B. \"e4\") ageh.';
 
   @override
-  String get coordinatesYouHaveThirtySeconds =>
-      'Du häsch 30 Sekunde, zum soviel Fälder wie möglich, korrekt z\'bezeichne!';
+  String get coordinatesYouHaveThirtySeconds => 'Du häsch 30 Sekunde, zum soviel Fälder wie möglich, korrekt z\'bezeichne!';
 
   @override
   String get coordinatesGoAsLongAsYouWant => 'Mach so lang wie du wottsch, es git keis Zitlimitt!';
@@ -1694,8 +1639,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get perfStatProvisional => 'provisorisch';
 
   @override
-  String get perfStatNotEnoughRatedGames =>
-      'Nöd gnueg g\'werteti Schpil, zum e verlässlichi Wertig z\'errächne.';
+  String get perfStatNotEnoughRatedGames => 'Nöd gnueg g\'werteti Schpil, zum e verlässlichi Wertig z\'errächne.';
 
   @override
   String perfStatProgressOverLastXGames(String param) {
@@ -1837,8 +1781,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get preferencesShowFlairs => 'Benutzer-Emojis azeige';
 
   @override
-  String get preferencesExplainShowPlayerRatings =>
-      'Das erlaubt s\'Usblände vu allne Wertige uf de Site und hilft, sich ufs Schach z\'konzentriere. s\'Schpiel wird immer no bewertet werde, es gaht nur drum, was mer gseht.';
+  String get preferencesExplainShowPlayerRatings => 'Das erlaubt s\'Usblände vu allne Wertige uf de Site und hilft, sich ufs Schach z\'konzentriere. s\'Schpiel wird immer no bewertet werde, es gaht nur drum, was mer gseht.';
 
   @override
   String get preferencesDisplayBoardResizeHandle => 'Zeig de Brättgrössi Regler';
@@ -1886,8 +1829,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get preferencesBothClicksAndDrag => 'Beides';
 
   @override
-  String get preferencesPremovesPlayingDuringOpponentTurn =>
-      'Voruszüg (Premoves), während de Gägner am Zug isch';
+  String get preferencesPremovesPlayingDuringOpponentTurn => 'Voruszüg (Premoves), während de Gägner am Zug isch';
 
   @override
   String get preferencesTakebacksWithOpponentApproval => 'Zugsrücknahm (mit Erlaubnis vom Gägner)';
@@ -1899,15 +1841,13 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get preferencesPromoteToQueenAutomatically => 'Automatischi Umwandlig zur Dame';
 
   @override
-  String get preferencesExplainPromoteToQueenAutomatically =>
-      'Druck <ctrl> bi de Umwandlig, so wird sie vorübergehend abgschtellt';
+  String get preferencesExplainPromoteToQueenAutomatically => 'Druck <ctrl> bi de Umwandlig, so wird sie vorübergehend abgschtellt';
 
   @override
   String get preferencesWhenPremoving => 'Bim Voruszug';
 
   @override
-  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically =>
-      'Automatischs Remis bi 3 Mal glicher Stellig';
+  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Automatischs Remis bi 3 Mal glicher Stellig';
 
   @override
   String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Bi Reschtzit < 30 Sekunde';
@@ -1916,8 +1856,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get preferencesMoveConfirmation => 'Zugsbeschtätigung';
 
   @override
-  String get preferencesExplainCanThenBeTemporarilyDisabled =>
-      'Chann während eme Schpil im Brättmenü deaktiviert werde';
+  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Chann während eme Schpil im Brättmenü deaktiviert werde';
 
   @override
   String get preferencesInCorrespondenceGames => 'Bi Fernschach';
@@ -1947,19 +1886,16 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get preferencesSnapArrowsToValidMoves => 'Möglichi Züg werded mit Pfil azeigt';
 
   @override
-  String get preferencesSayGgWpAfterLosingOrDrawing =>
-      'Säg \"guet gschpillt\" nach ere Niderlag oder bi me Remis';
+  String get preferencesSayGgWpAfterLosingOrDrawing => 'Säg \"guet gschpillt\" nach ere Niderlag oder bi me Remis';
 
   @override
   String get preferencesYourPreferencesHaveBeenSaved => 'Dini Ischtellige sind gschpeicheret.';
 
   @override
-  String get preferencesScrollOnTheBoardToReplayMoves =>
-      'Mit em Muszeiger uf em Brätt, chasch mit em Musrad all Züg vor- und zrugg scrolle';
+  String get preferencesScrollOnTheBoardToReplayMoves => 'Mit em Muszeiger uf em Brätt, chasch mit em Musrad all Züg vor- und zrugg scrolle';
 
   @override
-  String get preferencesCorrespondenceEmailNotification =>
-      'Täglichi E-Mail-Benachrichtigung, wo dini Korrespondänz-Schpiel uflischtet';
+  String get preferencesCorrespondenceEmailNotification => 'Täglichi E-Mail-Benachrichtigung, wo dini Korrespondänz-Schpiel uflischtet';
 
   @override
   String get preferencesNotifyStreamStart => 'De Streamer gaht live';
@@ -2121,8 +2057,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzleDownVote => 'Die Ufgab negativ bewerte';
 
   @override
-  String get puzzleYourPuzzleRatingWillNotChange =>
-      'Dini Ufgabe-Wertig veränderet sich nöd. Eusi Ufgabe sind kein Wettbewerb. Dini Wertig hilft nur Ufgabe z\'wähle, wo zu dinere aktuelle Schpielstärchi passed.';
+  String get puzzleYourPuzzleRatingWillNotChange => 'Dini Ufgabe-Wertig veränderet sich nöd. Eusi Ufgabe sind kein Wettbewerb. Dini Wertig hilft nur Ufgabe z\'wähle, wo zu dinere aktuelle Schpielstärchi passed.';
 
   @override
   String get puzzleFindTheBestMoveForWhite => 'Find de bescht Zug für Wiss.';
@@ -2169,12 +2104,10 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzlePuzzlesByOpenings => 'Ufgabe nach Eröffnige';
 
   @override
-  String get puzzleOpeningsYouPlayedTheMost =>
-      'Dini meischt-gschpillte Eröffnige, i g\'wertete Schpiel';
+  String get puzzleOpeningsYouPlayedTheMost => 'Dini meischt-gschpillte Eröffnige, i g\'wertete Schpiel';
 
   @override
-  String get puzzleUseFindInPage =>
-      'Benutz im Browser \"Suchen...\", um dini bevorzugti Eröffnig z\'finde!';
+  String get puzzleUseFindInPage => 'Benutz im Browser \"Suchen...\", um dini bevorzugti Eröffnig z\'finde!';
 
   @override
   String get puzzleUseCtrlF => 'Find dini bevorzugti Eröffnig mit Ctrl+F !';
@@ -2250,8 +2183,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzleFailed => 'unglöst';
 
   @override
-  String get puzzleStreakDescription =>
-      'Lös immer schwierigeri Ufgabe und versuech e langi Erfolgserie z\'erreiche. Nimm dir Zit, es lauft kei Uhr. Doch nur 1 falsche Zug und es isch verbi! Aber du chasch 1 Zug pro Serie überschpringe.';
+  String get puzzleStreakDescription => 'Lös immer schwierigeri Ufgabe und versuech e langi Erfolgserie z\'erreiche. Nimm dir Zit, es lauft kei Uhr. Doch nur 1 falsche Zug und es isch verbi! Aber du chasch 1 Zug pro Serie überschpringe.';
 
   @override
   String puzzleYourStreakX(String param) {
@@ -2259,8 +2191,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   }
 
   @override
-  String get puzzleStreakSkipExplanation =>
-      'Überschpring de Zug, um dini Erfolgsserie z\'hebe! Aber du chasch das nur 1x pro Serie mache.';
+  String get puzzleStreakSkipExplanation => 'Überschpring de Zug, um dini Erfolgsserie z\'hebe! Aber du chasch das nur 1x pro Serie mache.';
 
   @override
   String get puzzleContinueTheStreak => 'Erfolgsserie witerfüehre';
@@ -2278,8 +2209,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzleSearchPuzzles => 'Suech Ufgabe';
 
   @override
-  String get puzzleFromMyGamesNone =>
-      'Du häsch kei Ufgabe i de Datäbank, aber Lichess schätzt dich immerno sehr.\n\nSchpill schnälli und au klassischi Schpiel, will so erhöht sich d\'Chance, dass Ufgabe vu dine eigene Schpiel zuegfüegt werded!';
+  String get puzzleFromMyGamesNone => 'Du häsch kei Ufgabe i de Datäbank, aber Lichess schätzt dich immerno sehr.\n\nSchpill schnälli und au klassischi Schpiel, will so erhöht sich d\'Chance, dass Ufgabe vu dine eigene Schpiel zuegfüegt werded!';
 
   @override
   String get puzzlePuzzleDashboardDescription => 'Trainiere analysiere und besser werde';
@@ -2293,8 +2223,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzleNoPuzzlesToShow => 'Es git no nüt zum Zeige, lös zerscht es paar Ufgabe!';
 
   @override
-  String get puzzleImprovementAreasDescription =>
-      'Trainier mit dene Ufgabe und optimier din Fortschritt!';
+  String get puzzleImprovementAreasDescription => 'Trainier mit dene Ufgabe und optimier din Fortschritt!';
 
   @override
   String get puzzleStrengthDescription => 'Dini Leischtig isch am beschte i dene Theme';
@@ -2369,64 +2298,55 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzleThemeAdvancedPawn => 'Vorgruckte Pur';
 
   @override
-  String get puzzleThemeAdvancedPawnDescription =>
-      'Eine vu dine Pure isch tüf i di gägnerisch Schtellig vorgruckt und droht sich umzuwandle.';
+  String get puzzleThemeAdvancedPawnDescription => 'Eine vu dine Pure isch tüf i di gägnerisch Schtellig vorgruckt und droht sich umzuwandle.';
 
   @override
   String get puzzleThemeAdvantage => 'Vorteil';
 
   @override
-  String get puzzleThemeAdvantageDescription =>
-      'Nutz dini Chance, en entscheidende Vorteil z\'erlange. (200 Hundertstelpure ≤ Bewertung ≤ 600 Hundertstelpure)';
+  String get puzzleThemeAdvantageDescription => 'Nutz dini Chance, en entscheidende Vorteil z\'erlange. (200 Hundertstelpure ≤ Bewertung ≤ 600 Hundertstelpure)';
 
   @override
   String get puzzleThemeAnastasiaMate => 'Anastasia\'s Matt';
 
   @override
-  String get puzzleThemeAnastasiaMateDescription =>
-      'En Schpringer und en Turm oder e Dame schaffed zäme, um de König, zwüschet em Brättrand und sine eigene Figure, z\'verwütsche.';
+  String get puzzleThemeAnastasiaMateDescription => 'En Schpringer und en Turm oder e Dame schaffed zäme, um de König, zwüschet em Brättrand und sine eigene Figure, z\'verwütsche.';
 
   @override
   String get puzzleThemeArabianMate => 'Arabischs Matt';
 
   @override
-  String get puzzleThemeArabianMateDescription =>
-      'En Schpringer und en Turm schaffed zäme, um de König im Egge z\'fange.';
+  String get puzzleThemeArabianMateDescription => 'En Schpringer und en Turm schaffed zäme, um de König im Egge z\'fange.';
 
   @override
   String get puzzleThemeAttackingF2F7 => 'Agriff uf f2 oder f7';
 
   @override
-  String get puzzleThemeAttackingF2F7Description =>
-      'En Agriff, wo sich uf d\'Pure uf f2 oder f7 konzentriert.';
+  String get puzzleThemeAttackingF2F7Description => 'En Agriff, wo sich uf d\'Pure uf f2 oder f7 konzentriert.';
 
   @override
   String get puzzleThemeAttraction => 'Aziehigschraft';
 
   @override
-  String get puzzleThemeAttractionDescription =>
-      'En Tusch oder es Opfer, wo e gägnerischi Figur uf es Fäld länkt oder zwingt, was dänn e Folgetaktik ermöglicht.';
+  String get puzzleThemeAttractionDescription => 'En Tusch oder es Opfer, wo e gägnerischi Figur uf es Fäld länkt oder zwingt, was dänn e Folgetaktik ermöglicht.';
 
   @override
   String get puzzleThemeBackRankMate => 'Grundreihe Matt';
 
   @override
-  String get puzzleThemeBackRankMateDescription =>
-      'De König uf de Grundreihe matt setze, wänn er dur sini eigene Figure blockiert isch.';
+  String get puzzleThemeBackRankMateDescription => 'De König uf de Grundreihe matt setze, wänn er dur sini eigene Figure blockiert isch.';
 
   @override
   String get puzzleThemeBalestraMate => 'Balestra Matt';
 
   @override
-  String get puzzleThemeBalestraMateDescription =>
-      'En Läufer setzt Matt, wobi d\'Königin die mögliche Fluchtfälder blockiert';
+  String get puzzleThemeBalestraMateDescription => 'En Läufer setzt Matt, wobi d\'Königin die mögliche Fluchtfälder blockiert';
 
   @override
   String get puzzleThemeBlindSwineMate => 'Blinde-Schweine-Matt';
 
   @override
-  String get puzzleThemeBlindSwineMateDescription =>
-      'Zwei Türm, uf de sibete - oder zweite - Reihe, setzed de König matt.';
+  String get puzzleThemeBlindSwineMateDescription => 'Zwei Türm, uf de sibete - oder zweite - Reihe, setzed de König matt.';
 
   @override
   String get puzzleThemeBishopEndgame => 'Läufer Ändschpil';
@@ -2438,113 +2358,97 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzleThemeBodenMate => 'Boden Matt';
 
   @override
-  String get puzzleThemeBodenMateDescription =>
-      'Zwei Läufer, uf sich chrüzende Diagonale, setzed en König matt, wo dur eigeni Figure behinderet wird.';
+  String get puzzleThemeBodenMateDescription => 'Zwei Läufer, uf sich chrüzende Diagonale, setzed en König matt, wo dur eigeni Figure behinderet wird.';
 
   @override
   String get puzzleThemeCastling => 'Rochade';
 
   @override
-  String get puzzleThemeCastlingDescription =>
-      'Bring de König in Sicherheit und schick de Turm in Agriff.';
+  String get puzzleThemeCastlingDescription => 'Bring de König in Sicherheit und schick de Turm in Agriff.';
 
   @override
   String get puzzleThemeCapturingDefender => 'Schlag de Verteidiger';
 
   @override
-  String get puzzleThemeCapturingDefenderDescription =>
-      'Schlag e Figur, wo e Anderi entscheidend deckt, dass die Ungschützti im nächschte Zug gschlage werde chann.';
+  String get puzzleThemeCapturingDefenderDescription => 'Schlag e Figur, wo e Anderi entscheidend deckt, dass die Ungschützti im nächschte Zug gschlage werde chann.';
 
   @override
   String get puzzleThemeCollinearMove => 'Kollineare Zug';
 
   @override
-  String get puzzleThemeCollinearMoveDescription =>
-      'Zwei gägnerischi Figure stöhnd sich gägenüber, und eini gaht entlang vu de Agriffslinie, ohni die Ander z\'schlah.';
+  String get puzzleThemeCollinearMoveDescription => 'Zwei gägnerischi Figure stöhnd sich gägenüber, und eini gaht entlang vu de Agriffslinie, ohni die Ander z\'schlah.';
 
   @override
   String get puzzleThemeCornerMate => 'Arabischs Matt (Eck-Matt)';
 
   @override
-  String get puzzleThemeCornerMateDescription =>
-      'De König wird mit Turm - oder Dame - und Springer, imeme Egge, Matt gsetzt.';
+  String get puzzleThemeCornerMateDescription => 'De König wird mit Turm - oder Dame - und Springer, imeme Egge, Matt gsetzt.';
 
   @override
   String get puzzleThemeCrushing => 'Vernichtend';
 
   @override
-  String get puzzleThemeCrushingDescription =>
-      'Find de gägnerisch Patzer und chumm zume vernichtende Vorteil. (Bewertig ≥ 600 Hundertschtel-Pure)';
+  String get puzzleThemeCrushingDescription => 'Find de gägnerisch Patzer und chumm zume vernichtende Vorteil. (Bewertig ≥ 600 Hundertschtel-Pure)';
 
   @override
   String get puzzleThemeDiscoveredCheck => 'Abzugs-Schach';
 
   @override
-  String get puzzleThemeDiscoveredCheckDescription =>
-      'Beweg e Figur und deck so es verdeckts Schach uf, was oft zume entscheidende Vorteil füert.';
+  String get puzzleThemeDiscoveredCheckDescription => 'Beweg e Figur und deck so es verdeckts Schach uf, was oft zume entscheidende Vorteil füert.';
 
   @override
   String get puzzleThemeDoubleBishopMate => 'Läuferpaar Matt';
 
   @override
-  String get puzzleThemeDoubleBishopMateDescription =>
-      'Zwei Läufer, uf näbenand ligende Diagonale, setzed en König matt, wo dur eigeni Figure behinderet wird.';
+  String get puzzleThemeDoubleBishopMateDescription => 'Zwei Läufer, uf näbenand ligende Diagonale, setzed en König matt, wo dur eigeni Figure behinderet wird.';
 
   @override
   String get puzzleThemeDovetailMate => 'Schwalbeschwanz Matt';
 
   @override
-  String get puzzleThemeDovetailMateDescription =>
-      'Mit de Dame - diräkt bim König - matt setze, wobi sini Fluchtfälder dur eigeni Figure verschtellt sind.';
+  String get puzzleThemeDovetailMateDescription => 'Mit de Dame - diräkt bim König - matt setze, wobi sini Fluchtfälder dur eigeni Figure verschtellt sind.';
 
   @override
   String get puzzleThemeEquality => 'Usglich';
 
   @override
-  String get puzzleThemeEqualityDescription =>
-      'Befrei dich us verlorener Schtellig und sicher dir es Remis oder en usglicheni Schtellig. (Bewertig ≤ 200 Hundertstelpure)';
+  String get puzzleThemeEqualityDescription => 'Befrei dich us verlorener Schtellig und sicher dir es Remis oder en usglicheni Schtellig. (Bewertig ≤ 200 Hundertstelpure)';
 
   @override
   String get puzzleThemeKingsideAttack => 'Agriff am Königsflügel';
 
   @override
-  String get puzzleThemeKingsideAttackDescription =>
-      'En Agriff uf de gägnerisch König, nachdem er am Königsflügel d\'Rochade gmacht hät.';
+  String get puzzleThemeKingsideAttackDescription => 'En Agriff uf de gägnerisch König, nachdem er am Königsflügel d\'Rochade gmacht hät.';
 
   @override
   String get puzzleThemeClearance => 'Öffnig';
 
   @override
-  String get puzzleThemeClearanceDescription =>
-      'En Zug - oft mit Tämpo - wo es Fäld, e Linie oder e Diagonale für e folgendi, taktischi Idee frei macht.';
+  String get puzzleThemeClearanceDescription => 'En Zug - oft mit Tämpo - wo es Fäld, e Linie oder e Diagonale für e folgendi, taktischi Idee frei macht.';
 
   @override
   String get puzzleThemeDefensiveMove => 'Verteidigungszug';
 
   @override
-  String get puzzleThemeDefensiveMoveDescription =>
-      'En gnaue Zug oder e Zugfolg, wo nötig isch, um kei Material oder Vorteil z\'verlüre.';
+  String get puzzleThemeDefensiveMoveDescription => 'En gnaue Zug oder e Zugfolg, wo nötig isch, um kei Material oder Vorteil z\'verlüre.';
 
   @override
   String get puzzleThemeDeflection => 'Ablänkig';
 
   @override
-  String get puzzleThemeDeflectionDescription =>
-      'En Zug, wo e gägnerischi Figur devo ablänkt e Figur oder es wichtigs Fäld z\'schütze. Wird au als \"Überlaschtig\" bezeichnet.';
+  String get puzzleThemeDeflectionDescription => 'En Zug, wo e gägnerischi Figur devo ablänkt e Figur oder es wichtigs Fäld z\'schütze. Wird au als \"Überlaschtig\" bezeichnet.';
 
   @override
   String get puzzleThemeDiscoveredAttack => 'Abzugsagriff';
 
   @override
-  String get puzzleThemeDiscoveredAttackDescription =>
-      'Me nimmt (z. B. en Schpringer) wo vorher en Agriff dur e anderi, wit weg stehendi, Figur (z. B. en Turm) blockiert hät, us em Wäg.';
+  String get puzzleThemeDiscoveredAttackDescription => 'Me nimmt (z. B. en Schpringer) wo vorher en Agriff dur e anderi, wit weg stehendi, Figur (z. B. en Turm) blockiert hät, us em Wäg.';
 
   @override
   String get puzzleThemeDoubleCheck => 'Doppelschach';
 
   @override
-  String get puzzleThemeDoubleCheckDescription =>
-      'Abzug mit doppletem Schachgebot, wobi die vorher verdeckti Figur- und die Abzogeni, de König glichzitig agrifed.';
+  String get puzzleThemeDoubleCheckDescription => 'Abzug mit doppletem Schachgebot, wobi die vorher verdeckti Figur- und die Abzogeni, de König glichzitig agrifed.';
 
   @override
   String get puzzleThemeEndgame => 'Ändschpil';
@@ -2553,111 +2457,94 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzleThemeEndgameDescription => 'E Taktik für die letscht Fase vum Schpiel.';
 
   @override
-  String get puzzleThemeEnPassantDescription =>
-      'E Taktik wo \"En-Passant\" beinhaltet - e Regle wo en Pur cha en gägnerische Pur schlaa, wänn de ihn mit em \"Zwei-Fälder-Zug\" übergange hät.';
+  String get puzzleThemeEnPassantDescription => 'E Taktik wo \"En-Passant\" beinhaltet - e Regle wo en Pur cha en gägnerische Pur schlaa, wänn de ihn mit em \"Zwei-Fälder-Zug\" übergange hät.';
 
   @override
-  String get puzzleThemeEnPassantAdjacentCaptureDescription =>
-      'A tactic involving the en passant rule, where a pawn can capture an opposing pawn that has just moved next to it with its initial two-square move.';
+  String get puzzleThemeEnPassantAdjacentCaptureDescription => 'A tactic involving the en passant rule, where a pawn can capture an opposing pawn that has just moved next to it with its initial two-square move.';
 
   @override
   String get puzzleThemeEpauletteMate => 'Epaulette Matt';
 
   @override
-  String get puzzleThemeEpauletteMateDescription =>
-      'Zwei benachbarti Fluchtfälder, für en schach-g\'schtellte König, sind vu andere Figure b\'setzt.';
+  String get puzzleThemeEpauletteMateDescription => 'Zwei benachbarti Fluchtfälder, für en schach-g\'schtellte König, sind vu andere Figure b\'setzt.';
 
   @override
   String get puzzleThemeExposedKing => 'Exponierte König';
 
   @override
-  String get puzzleThemeExposedKingDescription =>
-      'E Taktik wo de König nu vu wenige Figure verteidigt wird und oft zu Schachmatt fühert.';
+  String get puzzleThemeExposedKingDescription => 'E Taktik wo de König nu vu wenige Figure verteidigt wird und oft zu Schachmatt fühert.';
 
   @override
   String get puzzleThemeFork => 'Gable';
 
   @override
-  String get puzzleThemeForkDescription =>
-      'En Zug wobi die zogeni Figur glichzitig 2 gägnerischi Figure agrift.';
+  String get puzzleThemeForkDescription => 'En Zug wobi die zogeni Figur glichzitig 2 gägnerischi Figure agrift.';
 
   @override
-  String get puzzleThemeForkOpposingPiecesDescription =>
-      'A move where a piece attacks two or more opposing pieces simultaneously.';
+  String get puzzleThemeForkOpposingPiecesDescription => 'A move where a piece attacks two or more opposing pieces simultaneously.';
 
   @override
   String get puzzleThemeHangingPiece => 'Hängendi Figur';
 
   @override
-  String get puzzleThemeHangingPieceDescription =>
-      'E Taktik wo e gägnerischi Figur zwenig oder gar nöd deckt isch und drum, mit Vorteil, gschlage werde cha.';
+  String get puzzleThemeHangingPieceDescription => 'E Taktik wo e gägnerischi Figur zwenig oder gar nöd deckt isch und drum, mit Vorteil, gschlage werde cha.';
 
   @override
   String get puzzleThemeHookMate => 'Hake Matt';
 
   @override
-  String get puzzleThemeHookMateDescription =>
-      'Schachmatt mit Turm, Schpringer und Pur und eim gägnerische Pur, wo em König d\'Flucht verschperrt.';
+  String get puzzleThemeHookMateDescription => 'Schachmatt mit Turm, Schpringer und Pur und eim gägnerische Pur, wo em König d\'Flucht verschperrt.';
 
   @override
-  String get puzzleThemeHookMateOpposingPawnDescription =>
-      'Checkmate using a rook, knight, and pawn, where an opposing pawn blocks the king\'s escape.';
+  String get puzzleThemeHookMateOpposingPawnDescription => 'Checkmate using a rook, knight, and pawn, where an opposing pawn blocks the king\'s escape.';
 
   @override
   String get puzzleThemeInterference => 'Störig';
 
   @override
-  String get puzzleThemeInterferenceDescription =>
-      'E Figur zwüsche 2 gägnerischi Figure stelle, um einere oder beide de Schutz znäh - z. B. en Schpringer uf es verteidigts Fäld, zwüsche 2 Türm, stelle.';
+  String get puzzleThemeInterferenceDescription => 'E Figur zwüsche 2 gägnerischi Figure stelle, um einere oder beide de Schutz znäh - z. B. en Schpringer uf es verteidigts Fäld, zwüsche 2 Türm, stelle.';
 
   @override
   String get puzzleThemeIntermezzo => 'Zwüschezug';
 
   @override
-  String get puzzleThemeIntermezzoDescription =>
-      'Anstatt de erwarteti Zug, zerscht en Andere mache, wo diräkt droht, so dass de Gägner muess reagiere. Isch au bekannt als \"Zwüschezug\".';
+  String get puzzleThemeIntermezzoDescription => 'Anstatt de erwarteti Zug, zerscht en Andere mache, wo diräkt droht, so dass de Gägner muess reagiere. Isch au bekannt als \"Zwüschezug\".';
 
   @override
   String get puzzleThemeKillBoxMate => 'Kill Box Matt';
 
   @override
-  String get puzzleThemeKillBoxMateDescription =>
-      'En Turm staht näbem gegnerische König und wird vu de Dame unterschtützt, wo au d\'Fluchtfälder vum König blockiert. De Turm und d\'Dame fanged so de König inere 3x3 Fälder grosse, sogenannte „Killbox“.';
+  String get puzzleThemeKillBoxMateDescription => 'En Turm staht näbem gegnerische König und wird vu de Dame unterschtützt, wo au d\'Fluchtfälder vum König blockiert. De Turm und d\'Dame fanged so de König inere 3x3 Fälder grosse, sogenannte „Killbox“.';
 
   @override
   String get puzzleThemePillsburysMate => 'Pillsbury Matt';
 
   @override
-  String get puzzleThemePillsburysMateDescription =>
-      'Schachmatt mit em Turm, wobi de Läufer hilft, de König z\'fange.';
+  String get puzzleThemePillsburysMateDescription => 'Schachmatt mit em Turm, wobi de Läufer hilft, de König z\'fange.';
 
   @override
   String get puzzleThemeMorphysMate => 'Morphy Matt';
 
   @override
-  String get puzzleThemeMorphysMateDescription =>
-      'Schachmatt mit em Läufer, wobi de Turm hilft, de König z\'fange.';
+  String get puzzleThemeMorphysMateDescription => 'Schachmatt mit em Läufer, wobi de Turm hilft, de König z\'fange.';
 
   @override
   String get puzzleThemeSwallowstailMate => 'Schwalbeschwanz Matt';
 
   @override
-  String get puzzleThemeSwallowstailMateDescription =>
-      'Es Schachmattmuschter - optisch inere V-Form, ähnlich wie en Schwalbeschwanz.';
+  String get puzzleThemeSwallowstailMateDescription => 'Es Schachmattmuschter - optisch inere V-Form, ähnlich wie en Schwalbeschwanz.';
 
   @override
   String get puzzleThemeTriangleMate => 'Drüeck-Matt';
 
   @override
-  String get puzzleThemeTriangleMateDescription =>
-      'Es Matt vu Turm und Dame, wo zämme mit em gägnerische König es Drüegg bilded.';
+  String get puzzleThemeTriangleMateDescription => 'Es Matt vu Turm und Dame, wo zämme mit em gägnerische König es Drüegg bilded.';
 
   @override
   String get puzzleThemeVukovicMate => 'Vuković-Matt';
 
   @override
-  String get puzzleThemeVukovicMateDescription =>
-      'En Turm und es Rössli schpanned zämme, zum de König matt setze: De Turm setzt de König mit Hilf vunere dritte Figur matt und s\'Rössli blockiert em König d\'Fluchtfälder.';
+  String get puzzleThemeVukovicMateDescription => 'En Turm und es Rössli schpanned zämme, zum de König matt setze: De Turm setzt de König mit Hilf vunere dritte Figur matt und s\'Rössli blockiert em König d\'Fluchtfälder.';
 
   @override
   String get puzzleThemeKnightEndgame => 'Schpringer Ändschpil';
@@ -2741,8 +2628,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzleThemeOperaMate => 'Opern Matt';
 
   @override
-  String get puzzleThemeOperaMateDescription =>
-      'Schachmatt mit em Turm, wo vum Läufer gschützt wird.';
+  String get puzzleThemeOperaMateDescription => 'Schachmatt mit em Turm, wo vum Läufer gschützt wird.';
 
   @override
   String get puzzleThemePawnEndgame => 'Pure Ändschpiel';
@@ -2754,8 +2640,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzleThemePin => 'Fesslig';
 
   @override
-  String get puzzleThemePinDescription =>
-      'E Taktik mit Fesslig, wo sich e Figur nöd bewege cha, ohni de Angriff uf e stärcheri Figur z\'verrate.';
+  String get puzzleThemePinDescription => 'E Taktik mit Fesslig, wo sich e Figur nöd bewege cha, ohni de Angriff uf e stärcheri Figur z\'verrate.';
 
   @override
   String get puzzleThemePromotion => 'Umwandlig';
@@ -2779,15 +2664,13 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzleThemeQueensideAttack => 'Agriff am Dameflügel';
 
   @override
-  String get puzzleThemeQueensideAttackDescription =>
-      'En Agriff uf de gägnerisch König, nachdem er am Dameflügel d\'Rochade gmacht hät.';
+  String get puzzleThemeQueensideAttackDescription => 'En Agriff uf de gägnerisch König, nachdem er am Dameflügel d\'Rochade gmacht hät.';
 
   @override
   String get puzzleThemeQuietMove => 'Schtille Zug';
 
   @override
-  String get puzzleThemeQuietMoveDescription =>
-      'En Zug wo kei \"Schach\" bütet, wo nüt schlaht und au nöd droht öppis z\'schlah, wo aber - verschteckt - e unvermeidlichi Drohig dur en schpöter folgende Zug vorbereitet.';
+  String get puzzleThemeQuietMoveDescription => 'En Zug wo kei \"Schach\" bütet, wo nüt schlaht und au nöd droht öppis z\'schlah, wo aber - verschteckt - e unvermeidlichi Drohig dur en schpöter folgende Zug vorbereitet.';
 
   @override
   String get puzzleThemeRookEndgame => 'Turm Ändschpiel';
@@ -2799,8 +2682,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzleThemeSacrifice => 'Opfer';
 
   @override
-  String get puzzleThemeSacrificeDescription =>
-      'E Taktik, wo churzfrischtig Material gopferet wird, um dänn mit erzwungener Zugfolg wieder en Vorteil z\'günne.';
+  String get puzzleThemeSacrificeDescription => 'E Taktik, wo churzfrischtig Material gopferet wird, um dänn mit erzwungener Zugfolg wieder en Vorteil z\'günne.';
 
   @override
   String get puzzleThemeShort => 'Churzi Ufgab';
@@ -2812,36 +2694,31 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzleThemeSkewer => 'Schpiess (Hinderschtellig)';
 
   @override
-  String get puzzleThemeSkewerDescription =>
-      'Bim \"Schpiess\" wird e Figur, wo vor ere Andere staht - oft wird sie au dezue zwunge, sich vor die Ander z\'schtelle - agriffe, so dass sie us em Wäg muess und ermöglicht, die Hinder z\'schlah. Quasi umgekehrti Fesslig.';
+  String get puzzleThemeSkewerDescription => 'Bim \"Schpiess\" wird e Figur, wo vor ere Andere staht - oft wird sie au dezue zwunge, sich vor die Ander z\'schtelle - agriffe, so dass sie us em Wäg muess und ermöglicht, die Hinder z\'schlah. Quasi umgekehrti Fesslig.';
 
   @override
   String get puzzleThemeSmotheredMate => 'Erschtickigs Matt';
 
   @override
-  String get puzzleThemeSmotheredMateDescription =>
-      'Es Schachmatt mit em Springer, wo sich de König nöd bewege cha, will er vu sine eigene Figuren umstellt-, also vollkomme igschlosse, wird.';
+  String get puzzleThemeSmotheredMateDescription => 'Es Schachmatt mit em Springer, wo sich de König nöd bewege cha, will er vu sine eigene Figuren umstellt-, also vollkomme igschlosse, wird.';
 
   @override
   String get puzzleThemeSuperGM => 'Super-Grossmeischter-Schpiel';
 
   @override
-  String get puzzleThemeSuperGMDescription =>
-      'Ufgabe us Schpiel, vu de beschte Schpiller uf de Wält.';
+  String get puzzleThemeSuperGMDescription => 'Ufgabe us Schpiel, vu de beschte Schpiller uf de Wält.';
 
   @override
   String get puzzleThemeTrappedPiece => 'G\'fangeni Figur';
 
   @override
-  String get puzzleThemeTrappedPieceDescription =>
-      'E Figur cha em Schlah nöd entgah, will sie nur begränzt Züg mache cha.';
+  String get puzzleThemeTrappedPieceDescription => 'E Figur cha em Schlah nöd entgah, will sie nur begränzt Züg mache cha.';
 
   @override
   String get puzzleThemeUnderPromotion => 'Underverwandlig';
 
   @override
-  String get puzzleThemeUnderPromotionDescription =>
-      'Umwandlig in \"nur\" en Schpringer, Läufer oder Turm.';
+  String get puzzleThemeUnderPromotionDescription => 'Umwandlig in \"nur\" en Schpringer, Läufer oder Turm.';
 
   @override
   String get puzzleThemeVeryLong => 'Sehr langi Ufgab';
@@ -2853,29 +2730,25 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzleThemeXRayAttack => 'Röntge Agriff';
 
   @override
-  String get puzzleThemeXRayAttackDescription =>
-      'E Figur attackiert oder verteidigt es Fäld dur e gägnerischi Figur.';
+  String get puzzleThemeXRayAttackDescription => 'E Figur attackiert oder verteidigt es Fäld dur e gägnerischi Figur.';
 
   @override
   String get puzzleThemeZugzwang => 'Zugszwang';
 
   @override
-  String get puzzleThemeZugzwangDescription =>
-      'De Gägner hät nur e limitierti Azahl Züg und Jede verschlächteret sini Schtellig.';
+  String get puzzleThemeZugzwangDescription => 'De Gägner hät nur e limitierti Azahl Züg und Jede verschlächteret sini Schtellig.';
 
   @override
   String get puzzleThemeMix => 'En gsunde Mix';
 
   @override
-  String get puzzleThemeMixDescription =>
-      'Es bitzli vu Allem, me weiss nöd was eim erwartet, drum isch mer uf alles g\'fasst - genau wie bi richtige Schachschpiel.';
+  String get puzzleThemeMixDescription => 'Es bitzli vu Allem, me weiss nöd was eim erwartet, drum isch mer uf alles g\'fasst - genau wie bi richtige Schachschpiel.';
 
   @override
   String get puzzleThemePlayerGames => 'Schpiller-Schpiel';
 
   @override
-  String get puzzleThemePlayerGamesDescription =>
-      'Suech nach Ufgabe us dine Schpiel oder Ufgabe us Schpiel vu Andere.';
+  String get puzzleThemePlayerGamesDescription => 'Suech nach Ufgabe us dine Schpiel oder Ufgabe us Schpiel vu Andere.';
 
   @override
   String puzzleThemePuzzleDownloadInformation(String param) {
@@ -2892,12 +2765,10 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get settingsCloseAccount => 'Benutzerkonto schlüsse';
 
   @override
-  String get settingsManagedAccountCannotBeClosed =>
-      'Dis Konto wird verwaltet, es chann nöd geschlosse werde.';
+  String get settingsManagedAccountCannotBeClosed => 'Dis Konto wird verwaltet, es chann nöd geschlosse werde.';
 
   @override
-  String get settingsCantOpenSimilarAccount =>
-      'Es isch nöd erlaubt es neus Konto mit em gliche Name z\'eröffne, au wänn d\'Gross- und d\'Chlischribig andersch isch.';
+  String get settingsCantOpenSimilarAccount => 'Es isch nöd erlaubt es neus Konto mit em gliche Name z\'eröffne, au wänn d\'Gross- und d\'Chlischribig andersch isch.';
 
   @override
   String get settingsCancelKeepAccount => 'Löschig abbräche und mis Konto b\'halte';
@@ -2924,8 +2795,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get createLobbyGame => 'Es Schpiel erschtelle';
 
   @override
-  String get toInviteSomeoneToPlayGiveThisUrl =>
-      'Wottsch öpper zum Schpille ilade - schick die URL';
+  String get toInviteSomeoneToPlayGiveThisUrl => 'Wottsch öpper zum Schpille ilade - schick die URL';
 
   @override
   String get gameOver => 'Schpiel verbi';
@@ -2940,8 +2810,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get reusableChallengeUrl => 'Wieder verwändbari Forderigs-URL';
 
   @override
-  String get permanentLinkForAnyoneToChallengeYou =>
-      'En permanänte Link, für jedermann - um mit genau dene Istellige z\'fordere.';
+  String get permanentLinkForAnyoneToChallengeYou => 'En permanänte Link, für jedermann - um mit genau dene Istellige z\'fordere.';
 
   @override
   String get waiting => 'Am Warte';
@@ -3030,8 +2899,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get newOpponent => 'En neue Gägner';
 
   @override
-  String get yourOpponentWantsToPlayANewGameWithYou =>
-      'Din Gägner wett es neus Schpiel mit dir schpille';
+  String get yourOpponentWantsToPlayANewGameWithYou => 'Din Gägner wett es neus Schpiel mit dir schpille';
 
   @override
   String get joinTheGame => 'Gang is Schpiel';
@@ -3043,8 +2911,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get blackPlays => 'Schwarz am Zug';
 
   @override
-  String get opponentLeftChoices =>
-      'Din Gägner hät s\'Schpiel verlah. Du chasch de Sieg beaschpruche, es Remis mache oder warte.';
+  String get opponentLeftChoices => 'Din Gägner hät s\'Schpiel verlah. Du chasch de Sieg beaschpruche, es Remis mache oder warte.';
 
   @override
   String get forceResignation => 'Sieg beaschpruche';
@@ -3056,8 +2923,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get talkInChat => 'Bitte blib nett im Chat!';
 
   @override
-  String get theFirstPersonToComeOnThisUrlWillPlayWithYou =>
-      'Die erscht Person, wo die URL klickt, schpillt mit dir.';
+  String get theFirstPersonToComeOnThisUrlWillPlayWithYou => 'Die erscht Person, wo die URL klickt, schpillt mit dir.';
 
   @override
   String get whiteResigned => 'Wiss hät ufgeh';
@@ -3220,8 +3086,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   }
 
   @override
-  String get dtzWithRounding =>
-      'DTZ50\'\' mit Rundig, basierend uf de Azahl Halbzüg bis zum nächschte Schlag- oder Pure-Zug';
+  String get dtzWithRounding => 'DTZ50\'\' mit Rundig, basierend uf de Azahl Halbzüg bis zum nächschte Schlag- oder Pure-Zug';
 
   @override
   String get noGameFound => 'Keis Schpiel gfunde';
@@ -3230,8 +3095,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get maxDepthReached => 'Die maximali Tüfi isch erreicht!';
 
   @override
-  String get maybeIncludeMoreGamesFromThePreferencesMenu =>
-      'Villicht sötted meh Schpiel vom Iischteligs Menü ibezoge werde?';
+  String get maybeIncludeMoreGamesFromThePreferencesMenu => 'Villicht sötted meh Schpiel vom Iischteligs Menü ibezoge werde?';
 
   @override
   String get openings => 'Eröffnige';
@@ -3248,8 +3112,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   }
 
   @override
-  String get playFirstOpeningEndgameExplorerMove =>
-      'Erschte Eröffnigs-/Endschpil-Erkundigszug schpille';
+  String get playFirstOpeningEndgameExplorerMove => 'Erschte Eröffnigs-/Endschpil-Erkundigszug schpille';
 
   @override
   String get winPreventedBy50MoveRule => 'Sieg mit de 50-Züg-Regle verhinderet';
@@ -3264,8 +3127,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get lossOr50MovesByPriorMistake => 'Niderlag oder 50 Züg dur en vorherige Fähler';
 
   @override
-  String get unknownDueToRounding =>
-      'Sieg/Niderlag nur garantiert, wänn die empfohle Datäbank-Zugfolg sit em letschte Schlag- oder Pure-Zug befolgt worde isch, da möglicherwis DTZ-Wert i de Syzygy-Datäbank grundet sind.';
+  String get unknownDueToRounding => 'Sieg/Niderlag nur garantiert, wänn die empfohle Datäbank-Zugfolg sit em letschte Schlag- oder Pure-Zug befolgt worde isch, da möglicherwis DTZ-Wert i de Syzygy-Datäbank grundet sind.';
 
   @override
   String get allSet => 'Fertig!';
@@ -3313,8 +3175,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get multipleLines => 'Mehreri Variantä';
 
   @override
-  String get multipleLinesDescription =>
-      'Beschtimm d\'Anzahl Bewertigslinie und verschieb d\'Pfil uf em Brätt';
+  String get multipleLinesDescription => 'Beschtimm d\'Anzahl Bewertigslinie und verschieb d\'Pfil uf em Brätt';
 
   @override
   String get searchTime => 'Suech Zit';
@@ -3326,8 +3187,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get threads => 'Threads';
 
   @override
-  String get threadsDescription =>
-      'De Wert underhalb vu de Thread-Azahl i de CPU ischtelle; die Fette sind e gueti und sicheri Wahl';
+  String get threadsDescription => 'De Wert underhalb vu de Thread-Azahl i de CPU ischtelle; die Fette sind e gueti und sicheri Wahl';
 
   @override
   String get threadsDescriptionMobile => 'Meh Threads verbruched meh Akku für e besseri Analyse';
@@ -3410,8 +3270,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get signUp => 'Regischtriere';
 
   @override
-  String get computersAreNotAllowedToPlay =>
-      'Computer und Computer-Understützig isch nöd erlaubt. Bitte lass dir bim Schpille nöd vu Schachengines, Datäbanke oder andere Schpiller hälfe. \nAu vum Erschtelle vu mehrere Konte wird dringend abgrate - übermässigs Multikonteverhalte chann zume Usschluss fühere.';
+  String get computersAreNotAllowedToPlay => 'Computer und Computer-Understützig isch nöd erlaubt. Bitte lass dir bim Schpille nöd vu Schachengines, Datäbanke oder andere Schpiller hälfe. \nAu vum Erschtelle vu mehrere Konte wird dringend abgrate - übermässigs Multikonteverhalte chann zume Usschluss fühere.';
 
   @override
   String get games => 'Schpiel';
@@ -3491,20 +3350,16 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get changeUsername => 'Benutzername ändere';
 
   @override
-  String get changeUsernameNotSame =>
-      'Me chann nur d\'Gross-/Chlischriibig verändere, z. B. \"grosspatzer\" in \"GrossPatzer\".';
+  String get changeUsernameNotSame => 'Me chann nur d\'Gross-/Chlischriibig verändere, z. B. \"grosspatzer\" in \"GrossPatzer\".';
 
   @override
-  String get changeUsernameDescription =>
-      'Korrigier din Benutzername: Das gaht aber nur eimal und mer chann nur d\'Gros- und d\'Chlischribig verändere.';
+  String get changeUsernameDescription => 'Korrigier din Benutzername: Das gaht aber nur eimal und mer chann nur d\'Gros- und d\'Chlischribig verändere.';
 
   @override
-  String get signupUsernameHint =>
-      'Wähl bitte en aschtändige Benutzername. Du chasch en nachträglich nöd ändere und jedes Konto mit untolerierbarem Name wird gschlosse!';
+  String get signupUsernameHint => 'Wähl bitte en aschtändige Benutzername. Du chasch en nachträglich nöd ändere und jedes Konto mit untolerierbarem Name wird gschlosse!';
 
   @override
-  String get signupEmailPromise =>
-      'Mir schicked dir nur E-Mail, wo dis Konto beträffed und gänd dini E-Mail-Adrässe niemals und niemerem witer.';
+  String get signupEmailPromise => 'Mir schicked dir nur E-Mail, wo dis Konto beträffed und gänd dini E-Mail-Adrässe niemals und niemerem witer.';
 
   @override
   String get password => 'Passwort';
@@ -3531,8 +3386,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get error_namePassword => 'Nimm bitte nöd din Benutzername als Passwort!';
 
   @override
-  String get blankedPassword =>
-      'Du häsch das Passwort scho noime anderscht benutzt und ebe det isch\'s missbrucht worde. Zum d\'Sicherheit vu dim Lichess-Konto z\'gwähre, muesch es nois Passwort kreiere. Mir danked dir für dis Verschtändnis.';
+  String get blankedPassword => 'Du häsch das Passwort scho noime anderscht benutzt und ebe det isch\'s missbrucht worde. Zum d\'Sicherheit vu dim Lichess-Konto z\'gwähre, muesch es nois Passwort kreiere. Mir danked dir für dis Verschtändnis.';
 
   @override
   String get youAreLeavingLichess => 'Du verlahsch jetzt Lichess';
@@ -3546,12 +3400,10 @@ class AppLocalizationsGsw extends AppLocalizations {
   }
 
   @override
-  String get passwordSuggestion =>
-      'Setz keis Passwort, wo dir e anderi Person vorgschlage hät. Suscht chan dis Konto gschtohle werde.';
+  String get passwordSuggestion => 'Setz keis Passwort, wo dir e anderi Person vorgschlage hät. Suscht chan dis Konto gschtohle werde.';
 
   @override
-  String get emailSuggestion =>
-      'Setz kei E-Mail-Adrässe, wo dir e anderi Person vorgschlage hät. Suscht chan dis Konto gschtohle werde.';
+  String get emailSuggestion => 'Setz kei E-Mail-Adrässe, wo dir e anderi Person vorgschlage hät. Suscht chan dis Konto gschtohle werde.';
 
   @override
   String get emailConfirmHelp => 'Hilf bi de E-Mail Beschtätigung';
@@ -3568,8 +3420,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   }
 
   @override
-  String get usernameCanBeUsedForNewAccount =>
-      'Du chasch de Name verwände, zum es neus Konto erschtelle';
+  String get usernameCanBeUsedForNewAccount => 'Du chasch de Name verwände, zum es neus Konto erschtelle';
 
   @override
   String emailSent(String param) {
@@ -3583,12 +3434,10 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get refreshInboxAfterFiveMinutes => 'Wart 5 Minute und check dini E-Mail-Inbox.';
 
   @override
-  String get checkSpamFolder =>
-      'Lueg au im Spam-Ordner, es chönnt det glandet si. Wänn ja, lösch d\'Spam-Markierig.';
+  String get checkSpamFolder => 'Lueg au im Spam-Ordner, es chönnt det glandet si. Wänn ja, lösch d\'Spam-Markierig.';
 
   @override
-  String get checkSpamOrJunkFolder =>
-      'If you do not receive a confirmation email, check your Spam or Junk folder. Be sure to indicate messages from lichess.org as safe and \"not spam\", so you can stay informed of important communications.';
+  String get checkSpamOrJunkFolder => 'If you do not receive a confirmation email, check your Spam or Junk folder. Be sure to indicate messages from lichess.org as safe and \"not spam\", so you can stay informed of important communications.';
 
   @override
   String sendEmailForAccountVerification(String param) {
@@ -3837,8 +3686,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get backToTournament => 'Zrugg zum Turnier';
 
   @override
-  String get noDrawBeforeSwissLimit =>
-      'Ime Turnier, nach \"Schweizer System\", chann me erscht nach 30 Züg Remis mache.';
+  String get noDrawBeforeSwissLimit => 'Ime Turnier, nach \"Schweizer System\", chann me erscht nach 30 Züg Remis mache.';
 
   @override
   String get thematic => 'Thematisch';
@@ -3849,8 +3697,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   }
 
   @override
-  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional =>
-      'D\'Bewertigsfilter sind geschperrt, will dini Wertig nöd schtabil isch. Durs Schpiele vu bewertete Schpiel wird die Schtabilität erhöht.';
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'D\'Bewertigsfilter sind geschperrt, will dini Wertig nöd schtabil isch. Durs Schpiele vu bewertete Schpiel wird die Schtabilität erhöht.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3891,8 +3738,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get backToGame => 'Zrugg zum Schpiel';
 
   @override
-  String get siteDescription =>
-      'Gratis Online Schach Server: Schpill Schach uf ere suubere Benutzeroberflächi! Kei Regrischtrierig, kei Werbig, kei Plugins. Schpill Schach gäge Computer, mit Fründe oder gäge zuefällig gwählti Gägner.';
+  String get siteDescription => 'Gratis Online Schach Server: Schpill Schach uf ere suubere Benutzeroberflächi! Kei Regrischtrierig, kei Werbig, kei Plugins. Schpill Schach gäge Computer, mit Fründe oder gäge zuefällig gwählti Gägner.';
 
   @override
   String xJoinedTeamY(String param1, String param2) {
@@ -3964,19 +3810,16 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get importGame => 'Schpiel importiere';
 
   @override
-  String get importGameExplanation =>
-      'Füeg e Schpiel-PGN i, für Zuegriff uf Schpielwiderholig, Computeranalyse, Chat und e teilbari URL.';
+  String get importGameExplanation => 'Füeg e Schpiel-PGN i, für Zuegriff uf Schpielwiderholig, Computeranalyse, Chat und e teilbari URL.';
 
   @override
-  String get importGameDataPrivacyWarning =>
-      'De PGN isch öffentlich zuegänglich. Zum es Schpiel privat importiere, nimmsch e Schtudie.';
+  String get importGameDataPrivacyWarning => 'De PGN isch öffentlich zuegänglich. Zum es Schpiel privat importiere, nimmsch e Schtudie.';
 
   @override
   String get thisIsAChessCaptcha => 'Das isch es Schach Captcha.';
 
   @override
-  String get clickOnTheBoardToMakeYourMove =>
-      'Klick ufs Brätt und mach en Zug, \nzum bewise dass du en Mänsch bisch.';
+  String get clickOnTheBoardToMakeYourMove => 'Klick ufs Brätt und mach en Zug, \nzum bewise dass du en Mänsch bisch.';
 
   @override
   String get captcha_fail => 'Bitte lös die Schach Ufgab.';
@@ -4086,16 +3929,13 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get safeTournamentName => 'Wähl en möglichscht sichere Name fürs Turnier.';
 
   @override
-  String get inappropriateNameWarning =>
-      'Alles - au liecht Unagmässes - cha zur Schlüssig vu dim Konto fühere.';
+  String get inappropriateNameWarning => 'Alles - au liecht Unagmässes - cha zur Schlüssig vu dim Konto fühere.';
 
   @override
-  String get emptyTournamentName =>
-      'Frei la zum s\'Turnier nach eme namhafte Schachschpiller z\'benänne.';
+  String get emptyTournamentName => 'Frei la zum s\'Turnier nach eme namhafte Schachschpiller z\'benänne.';
 
   @override
-  String get makePrivateTournament =>
-      'Mach das Turnier privat und beschränk de Zuegang mit Passwort';
+  String get makePrivateTournament => 'Mach das Turnier privat und beschränk de Zuegang mit Passwort';
 
   @override
   String get join => 'Mitmache';
@@ -4243,8 +4083,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get inlineNotation => 'Inline-Notation';
 
   @override
-  String get makeAStudy =>
-      'Zum Variante sicher ufzbewahre und zum Witergeh, söttsch e Schtudie erschtelle.';
+  String get makeAStudy => 'Zum Variante sicher ufzbewahre und zum Witergeh, söttsch e Schtudie erschtelle.';
 
   @override
   String get clearSavedMoves => 'Gschpeichereti Züg lösche';
@@ -4259,15 +4098,13 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get activePlayers => 'Aktivi Schpiller';
 
   @override
-  String get bewareTheGameIsRatedButHasNoClock =>
-      'Achtung, das Schpiel isch g\'wertet, aber ohni Zitlimit!';
+  String get bewareTheGameIsRatedButHasNoClock => 'Achtung, das Schpiel isch g\'wertet, aber ohni Zitlimit!';
 
   @override
   String get success => 'Korräkt';
 
   @override
-  String get automaticallyProceedToNextGameAfterMoving =>
-      'Nach em Zug automatisch zum nächschte Schpiel';
+  String get automaticallyProceedToNextGameAfterMoving => 'Nach em Zug automatisch zum nächschte Schpiel';
 
   @override
   String get autoSwitch => 'Automatische Wächsel';
@@ -4288,8 +4125,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get descPrivate => 'Privati Beschribig';
 
   @override
-  String get descPrivateHelp =>
-      'Tegscht wo nur Team-Mitglider gsehnd. Wänn usgfüllt, ersetzt er für sie de Öffentlichi.';
+  String get descPrivateHelp => 'Tegscht wo nur Team-Mitglider gsehnd. Wänn usgfüllt, ersetzt er für sie de Öffentlichi.';
 
   @override
   String get no => 'Nei';
@@ -4367,24 +4203,19 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get other => 'Suschtigs';
 
   @override
-  String get reportCheatBoostHelp =>
-      'Füeg de Link dem/dene Schpiel bi und erchlär, wie sich de Benutzer falsch benah hät. Säg nöd nur \"de bschisst\", schrib eus wie du da druf chunnsch. (änglisch gschribeni Mäldige, werded schnäller behandlet).';
+  String get reportCheatBoostHelp => 'Füeg de Link dem/dene Schpiel bi und erchlär, wie sich de Benutzer falsch benah hät. Säg nöd nur \"de bschisst\", schrib eus wie du da druf chunnsch. (änglisch gschribeni Mäldige, werded schnäller behandlet).';
 
   @override
-  String get reportUsernameHelp =>
-      'Erchlär, was am Benutzername nöd in Ornig isch: Säg nöd eifach \"er isch beleidigend/unagmässe\", sondern schrib eus, wie du zu dere Folgerig cho bisch. B\'sunders wänn die Beleidigung verschleieret-, nöd uf Änglisch- oder in Dialäkt isch oder wänn sie en historische oder kulturelle Bezug hät.';
+  String get reportUsernameHelp => 'Erchlär, was am Benutzername nöd in Ornig isch: Säg nöd eifach \"er isch beleidigend/unagmässe\", sondern schrib eus, wie du zu dere Folgerig cho bisch. B\'sunders wänn die Beleidigung verschleieret-, nöd uf Änglisch- oder in Dialäkt isch oder wänn sie en historische oder kulturelle Bezug hät.';
 
   @override
-  String get reportProcessedFasterInEnglish =>
-      'Änglisch g\'schribeni Mäldige werded schnäller behandlet.';
+  String get reportProcessedFasterInEnglish => 'Änglisch g\'schribeni Mäldige werded schnäller behandlet.';
 
   @override
-  String get processReportFasterInEnglish =>
-      'We can process your report faster if you write in English.';
+  String get processReportFasterInEnglish => 'We can process your report faster if you write in English.';
 
   @override
-  String get error_provideOneCheatedGameLink =>
-      'Bitte gib mindeschtens 1 Link zume Schpiel a, wo bschisse worde isch.';
+  String get error_provideOneCheatedGameLink => 'Bitte gib mindeschtens 1 Link zume Schpiel a, wo bschisse worde isch.';
 
   @override
   String by(String param) {
@@ -4469,8 +4300,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get letOtherPlayersChallengeYou => 'Lass anderi Schpiller dich fordere';
 
   @override
-  String get letOtherPlayersInviteYouToStudy =>
-      'Andere Schpiller erlaube, dich zu ere Schtudie izlade';
+  String get letOtherPlayersInviteYouToStudy => 'Andere Schpiller erlaube, dich zu ere Schtudie izlade';
 
   @override
   String get sound => 'Ton';
@@ -4538,12 +4368,10 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get starting => 'Schtartet:';
 
   @override
-  String get allInformationIsPublicAndOptional =>
-      'Alli Informatione sind öffentlich und freiwillig.';
+  String get allInformationIsPublicAndOptional => 'Alli Informatione sind öffentlich und freiwillig.';
 
   @override
-  String get biographyDescription =>
-      'Verzell öppis über dich: dini Inträsse, was du gern häsch bim Schach, dini liebschte Eröffnige oder Schpiller wo du guet findsch, etc...';
+  String get biographyDescription => 'Verzell öppis über dich: dini Inträsse, was du gern häsch bim Schach, dini liebschte Eröffnige oder Schpiller wo du guet findsch, etc...';
 
   @override
   String get listBlockedPlayers => 'Lischte vu de Schpiller, wo du blockiert häsch';
@@ -4591,8 +4419,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get error_email => 'Die E-Mail-Adrässe isch ungültig';
 
   @override
-  String get error_email_acceptable =>
-      'Die E-Mail-Adrässe wird nöd akzeptiert. Bitte überprüef sie und probiers nomal.';
+  String get error_email_acceptable => 'Die E-Mail-Adrässe wird nöd akzeptiert. Bitte überprüef sie und probiers nomal.';
 
   @override
   String get error_email_unique => 'Die E-Mail-Adrässe isch ungültig oder bereits vorhande';
@@ -4723,8 +4550,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get hostANewSimul => 'Mach dir es Simultanschach';
 
   @override
-  String get signUpToHostOrJoinASimul =>
-      'Mäld dich - als Gaschtgeber oder Teilnehmer - bime Simultanschach a';
+  String get signUpToHostOrJoinASimul => 'Mäld dich - als Gaschtgeber oder Teilnehmer - bime Simultanschach a';
 
   @override
   String get noSimulFound => 'Simultanschach nöd gfunde';
@@ -4736,39 +4562,31 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get returnToSimulHomepage => 'Zrugg zur Simultanschach Startsite';
 
   @override
-  String get aboutSimul =>
-      'Bim Simultanschach schpillt 1 Simultanschpiller \nglichzitig gäge beliebig vill Simultangägner.';
+  String get aboutSimul => 'Bim Simultanschach schpillt 1 Simultanschpiller \nglichzitig gäge beliebig vill Simultangägner.';
 
   @override
-  String get aboutSimulImage =>
-      'Hät de Bobby Fischer, bi 50 Gägner, 47 Sieg \nund 2 Remis gschafft - nu 1 Schpiel hät er verlore.';
+  String get aboutSimulImage => 'Hät de Bobby Fischer, bi 50 Gägner, 47 Sieg \nund 2 Remis gschafft - nu 1 Schpiel hät er verlore.';
 
   @override
-  String get aboutSimulRealLife =>
-      'Bim Simultanschach schpillt 1 Simultanschpiller \nglichzitig gäge beliebig vill Simultangägner, \nso lang, bis alli Schpiel fertig gschpillt sind.';
+  String get aboutSimulRealLife => 'Bim Simultanschach schpillt 1 Simultanschpiller \nglichzitig gäge beliebig vill Simultangägner, \nso lang, bis alli Schpiel fertig gschpillt sind.';
 
   @override
-  String get aboutSimulRules =>
-      'Wie bi reale Simultanschach Veraschtaltige, gaht \nde Simultanschpiller vu eim Simultangägner zum \nNächschte und macht bi jedem Brätt 1 Zug.';
+  String get aboutSimulRules => 'Wie bi reale Simultanschach Veraschtaltige, gaht \nde Simultanschpiller vu eim Simultangägner zum \nNächschte und macht bi jedem Brätt 1 Zug.';
 
   @override
-  String get aboutSimulSettings =>
-      'Zugsrücknahme, zuesätzlichi Zit oder Revanche \ngits nöd und es isch nie g\'wertet.';
+  String get aboutSimulSettings => 'Zugsrücknahme, zuesätzlichi Zit oder Revanche \ngits nöd und es isch nie g\'wertet.';
 
   @override
   String get create => 'Erschtelle';
 
   @override
-  String get whenCreateSimul =>
-      'Wänn du dir es Simultanschach machsch, chasch du glichzitig gäge mehreri Gägner schpille.';
+  String get whenCreateSimul => 'Wänn du dir es Simultanschach machsch, chasch du glichzitig gäge mehreri Gägner schpille.';
 
   @override
-  String get creatingASimul =>
-      'Creating a simul lets you play against multiple opponents at the same time.';
+  String get creatingASimul => 'Creating a simul lets you play against multiple opponents at the same time.';
 
   @override
-  String get simulVariantsHint =>
-      'Wänn du mehreri Variante wählsch, chann jede Simultangägner ussueche, was er schpille will.';
+  String get simulVariantsHint => 'Wänn du mehreri Variante wählsch, chann jede Simultangägner ussueche, was er schpille will.';
 
   @override
   String get simulClockHint => 'Fischer Uhr: Je meh Gägner, umso meh Zit bruchsch wahrschinlich.';
@@ -4780,8 +4598,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get simulHostExtraTime => 'Extrazit Simultanschpiller';
 
   @override
-  String get simulAddExtraTimePerPlayer =>
-      'Gib für jede Schpiller, wo am Simultan teilnimmt, bi dinere Uhr Zit dezue';
+  String get simulAddExtraTimePerPlayer => 'Gib für jede Schpiller, wo am Simultan teilnimmt, bi dinere Uhr Zit dezue';
 
   @override
   String get simulHostExtraTimePerPlayer => 'Für jede Schpiller zuesätzlichi Zit addiere';
@@ -4832,8 +4649,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get cyclePreviousOrNextVariation => 'Zyklus vorherigi/nächschti Variante';
 
   @override
-  String get toggleGlyphAnnotations =>
-      'Glyph-Amerkige ischalte und usschalte (...was immer das glyph isch?!)';
+  String get toggleGlyphAnnotations => 'Glyph-Amerkige ischalte und usschalte (...was immer das glyph isch?!)';
 
   @override
   String get togglePositionAnnotations => 'Positionsamerkige umschalte';
@@ -4854,8 +4670,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get tournamentHomeTitle => 'Schachturnier mit verschiedene Zitkontrolle und Variante';
 
   @override
-  String get tournamentHomeDescription =>
-      'Schpill rasanti Turnier! Mach bi plante Turnier mit oder erschtell es Eiges. Bullet, Blitz, Klassisch, Schach960, König uf em Hügel, Drüfach-Schach und witeri Variante sind vorhande - für ändlose Schach-Spass.';
+  String get tournamentHomeDescription => 'Schpill rasanti Turnier! Mach bi plante Turnier mit oder erschtell es Eiges. Bullet, Blitz, Klassisch, Schach960, König uf em Hügel, Drüfach-Schach und witeri Variante sind vorhande - für ändlose Schach-Spass.';
 
   @override
   String get tournamentNotFound => 'Turnier nöd gfunde';
@@ -4864,8 +4679,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get tournamentDoesNotExist => 'Das Turnier exischtiert nöd.';
 
   @override
-  String get tournamentMayHaveBeenCanceled =>
-      'Es Turnier wird abgseit, wänn alli Schpiller vor em Start weg sind.';
+  String get tournamentMayHaveBeenCanceled => 'Es Turnier wird abgseit, wänn alli Schpiller vor em Start weg sind.';
 
   @override
   String get returnToTournamentsHomepage => 'Zrugg zur Turnier-Homepage';
@@ -4913,12 +4727,10 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get checkYourEmail => 'Check dini E-Mail';
 
   @override
-  String get weHaveSentYouAnEmailClickTheLink =>
-      'Mir händ dir es Mail gschickt: Klick de Link i de Nachricht, um dis Konto z\'aktiviere.';
+  String get weHaveSentYouAnEmailClickTheLink => 'Mir händ dir es Mail gschickt: Klick de Link i de Nachricht, um dis Konto z\'aktiviere.';
 
   @override
-  String get ifYouDoNotSeeTheEmailCheckOtherPlaces =>
-      'Wänn du die E-Mail nöd findsch, dursuech witeri Ordner: z. B. de Spamordner oder au de Papierchorb.';
+  String get ifYouDoNotSeeTheEmailCheckOtherPlaces => 'Wänn du die E-Mail nöd findsch, dursuech witeri Ordner: z. B. de Spamordner oder au de Papierchorb.';
 
   @override
   String get ifYouDoNotGetTheEmail => 'Wänn die E-Mail nöd innerhalb 5 Minute chunnt:';
@@ -4947,12 +4759,10 @@ class AppLocalizationsGsw extends AppLocalizations {
   }
 
   @override
-  String get networkLagBetweenYouAndLichess =>
-      'Netzwerk-Verzögerig, zwüschet dir und Lichess (lag)';
+  String get networkLagBetweenYouAndLichess => 'Netzwerk-Verzögerig, zwüschet dir und Lichess (lag)';
 
   @override
-  String get timeToProcessAMoveOnLichessServer =>
-      'Zit zum en Zug uf em Lichess-Server z\'verarbeite';
+  String get timeToProcessAMoveOnLichessServer => 'Zit zum en Zug uf em Lichess-Server z\'verarbeite';
 
   @override
   String get downloadAnnotated => 'Download mit Kommentär';
@@ -4970,20 +4780,16 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get crosstable => 'Matchverlauf';
 
   @override
-  String get youCanAlsoScrollOverTheBoardToMoveInTheGame =>
-      'Übers Brätt scrolle laht s\'Schpil vor- oder rückwärts laufe.';
+  String get youCanAlsoScrollOverTheBoardToMoveInTheGame => 'Übers Brätt scrolle laht s\'Schpil vor- oder rückwärts laufe.';
 
   @override
-  String get scrollOverComputerVariationsToPreviewThem =>
-      'Über e Computer-Variante scrolle, zeigt e Vorschau.';
+  String get scrollOverComputerVariationsToPreviewThem => 'Über e Computer-Variante scrolle, zeigt e Vorschau.';
 
   @override
-  String get analysisShapesHowTo =>
-      'Mit Shift + Musklick - rächts oder links - chasch grüeni oder roti Chreis und Pfil ufs Brätt zeichne.';
+  String get analysisShapesHowTo => 'Mit Shift + Musklick - rächts oder links - chasch grüeni oder roti Chreis und Pfil ufs Brätt zeichne.';
 
   @override
-  String get primaryColorArrowsHowTo =>
-      'Ctrl oder shift = rot; command, alt, oder meta = blau; je eini devo = gähl.';
+  String get primaryColorArrowsHowTo => 'Ctrl oder shift = rot; command, alt, oder meta = blau; je eini devo = gähl.';
 
   @override
   String get letOtherPlayersMessageYou => 'Erlaub andere Schpiller dir Nachrichte z\'schicke';
@@ -5010,8 +4816,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get kidModeIsEnabled => 'De Chindermodus isch aktiviert.';
 
   @override
-  String get kidModeExplanation =>
-      'Sicherheitsiischtellig: Im Chinder-Modus isch die ganzi Kommunikation deaktiviert. Aktivier de Modus und schütz dini Chind vor andere Internetbenutzer.';
+  String get kidModeExplanation => 'Sicherheitsiischtellig: Im Chinder-Modus isch die ganzi Kommunikation deaktiviert. Aktivier de Modus und schütz dini Chind vor andere Internetbenutzer.';
 
   @override
   String inKidModeTheLichessLogoGetsIconX(String param) {
@@ -5019,8 +4824,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   }
 
   @override
-  String get askYourChessTeacherAboutLiftingKidMode =>
-      'Dis Konto wird verwaltet, frög din Schachlehrer für d\'Ufhebig vum Chindermodus.';
+  String get askYourChessTeacherAboutLiftingKidMode => 'Dis Konto wird verwaltet, frög din Schachlehrer für d\'Ufhebig vum Chindermodus.';
 
   @override
   String get enableKidMode => 'Chinder-Modus aktiviere';
@@ -5151,12 +4955,10 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get usernamePrefixInvalid => 'De Benutzername muess mit eme Buechschtabe afange.';
 
   @override
-  String get usernameSuffixInvalid =>
-      'De Benutzername muess mit eme Buechschtabe oder ere Zahl ände.';
+  String get usernameSuffixInvalid => 'De Benutzername muess mit eme Buechschtabe oder ere Zahl ände.';
 
   @override
-  String get usernameCharsInvalid =>
-      'De Benutzername dörf nu Buechschtabe, Zahle, Understrich und Bindestrich ha. Nach enand folgendi Understrich oder Bindestrich sind nöd erlaubt.';
+  String get usernameCharsInvalid => 'De Benutzername dörf nu Buechschtabe, Zahle, Understrich und Bindestrich ha. Nach enand folgendi Understrich oder Bindestrich sind nöd erlaubt.';
 
   @override
   String get usernameUnacceptable => 'De Benutzername wird nöd akzeptiert.';
@@ -5324,8 +5126,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get addCurrentVariation => 'Aktuelli Variante zuefüege';
 
   @override
-  String get playVariationToCreateConditionalPremoves =>
-      'Schpill e Variante, um bedingti Voruszüg z\'kreiere';
+  String get playVariationToCreateConditionalPremoves => 'Schpill e Variante, um bedingti Voruszüg z\'kreiere';
 
   @override
   String get noConditionalPremoves => 'Kei bedingti Voruszüg';
@@ -5359,8 +5160,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get pleasantChessExperience => 'Mir wänd allne e möglichscht gueti Schach-Erfahrig büte.';
 
   @override
-  String get goodPractice =>
-      'Zum dem Zwäck müend mir sicher si, dass sich all Schpiller korräkt verhalted.';
+  String get goodPractice => 'Zum dem Zwäck müend mir sicher si, dass sich all Schpiller korräkt verhalted.';
 
   @override
   String get potentialProblem => 'Wänn es möglichs Problem entdeckt wird, zeiged mir die Mäldig.';
@@ -5378,8 +5178,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get resignLostGames => 'Gib es verlores Schpiel uf (lass nöd eifach d\'Uhr ablaufe).';
 
   @override
-  String get temporaryInconvenience =>
-      'Mir entschuldiged eus für die vorübergehende Unannehmlichkeite,';
+  String get temporaryInconvenience => 'Mir entschuldiged eus für die vorübergehende Unannehmlichkeite,';
 
   @override
   String get wishYouGreatGames => 'und wünsched dir tolli Schpiel uf lichess.org.';
@@ -5394,12 +5193,10 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get currentMatchScore => 'Aktuelle Schpielschtand';
 
   @override
-  String get agreementAssistance =>
-      'Ich schtimme zue, dass ich zum Schpille, kei Hilfe nutze - wie z. B. Schach-Computer, Büecher, Datäbanke oder Drittpersone.';
+  String get agreementAssistance => 'Ich schtimme zue, dass ich zum Schpille, kei Hilfe nutze - wie z. B. Schach-Computer, Büecher, Datäbanke oder Drittpersone.';
 
   @override
-  String get agreementNice =>
-      'Ich schtimme zue, dass ich mit andere Schpiller immer reschpäktvoll umgang.';
+  String get agreementNice => 'Ich schtimme zue, dass ich mit andere Schpiller immer reschpäktvoll umgang.';
 
   @override
   String agreementMultipleAccounts(String param) {
@@ -5500,8 +5297,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   }
 
   @override
-  String get youCannotPostYetPlaySomeGames =>
-      'Du chasch no nüt im Forum schribe: Schpill vorher es paar Schpiel!';
+  String get youCannotPostYetPlaySomeGames => 'Du chasch no nüt im Forum schribe: Schpill vorher es paar Schpiel!';
 
   @override
   String get subscribe => 'Abonniere';
@@ -5551,8 +5347,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   }
 
   @override
-  String get lostAgainstTOSViolator =>
-      'Du häsch Wertigspünkt verlore, gäge öpper, wo d\'Lichess-Regle verletzt hät';
+  String get lostAgainstTOSViolator => 'Du häsch Wertigspünkt verlore, gäge öpper, wo d\'Lichess-Regle verletzt hät';
 
   @override
   String refundXpointsTimeControlY(String param1, String param2) {
@@ -5581,8 +5376,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get tournDescription => 'Turnier Beschribig';
 
   @override
-  String get tournDescriptionHelp =>
-      'Wottsch de Teilnehmer öppis Speziells mitteile? Probier dich churz z\'fasse. Url mit Name sind möglich: [name](https://url)';
+  String get tournDescriptionHelp => 'Wottsch de Teilnehmer öppis Speziells mitteile? Probier dich churz z\'fasse. Url mit Name sind möglich: [name](https://url)';
 
   @override
   String get ratedFormHelp => 'Alli Schpiel sind g\'wertet\nund beiflussed dini Wertig';
@@ -5691,8 +5485,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get reopenYourAccount => 'Konto wider eröffne';
 
   @override
-  String get reopenYourAccountDescription =>
-      'Häsch dis Konto gschlosse und bereusch es, dänn chasch es jetzt wider aktiviere.';
+  String get reopenYourAccountDescription => 'Häsch dis Konto gschlosse und bereusch es, dänn chasch es jetzt wider aktiviere.';
 
   @override
   String get emailAssociatedToaccount => 'Mit dim Konto verbundeni E-Mail-Adrässe';
@@ -5733,8 +5526,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get switchSides => 'Farb wächsle';
 
   @override
-  String get closingAccountWithdrawAppeal =>
-      'Wänn du dis Konto schlüssisch, ziehsch du au din Ischpruch zrugg';
+  String get closingAccountWithdrawAppeal => 'Wänn du dis Konto schlüssisch, ziehsch du au din Ischpruch zrugg';
 
   @override
   String get ourEventTips => 'Eusi Tipps, fürs Organisiere vu Events';
@@ -5746,8 +5538,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get showMeEverything => 'Zeig mer alles';
 
   @override
-  String get lichessPatronInfo =>
-      'Lichess isch e Wohltätigkeitsorganisation und e völlig choschtelosi/freii Open-Source-Software.\nAlli Betriebs-Choschte, d\'Entwicklig und d\'Inhält werded usschliesslich dur Benutzerschpände finanziert.';
+  String get lichessPatronInfo => 'Lichess isch e Wohltätigkeitsorganisation und e völlig choschtelosi/freii Open-Source-Software.\nAlli Betriebs-Choschte, d\'Entwicklig und d\'Inhält werded usschliesslich dur Benutzerschpände finanziert.';
 
   @override
   String get nothingToSeeHere => 'Da gits im monumäntan nüt z\'gseh.';
@@ -6418,8 +6209,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get stormSkipHelp => 'Chasch 1 Zug pro Ränne überschpringe:';
 
   @override
-  String get stormSkipExplanation =>
-      'Überschpring de Zug, um dini combo b\'halte! Das chasch nur 1x pro Ränne.';
+  String get stormSkipExplanation => 'Überschpring de Zug, um dini combo b\'halte! Das chasch nur 1x pro Ränne.';
 
   @override
   String get stormFailedPuzzles => 'Falsch glösti Ufgabe';
@@ -6536,8 +6326,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get studyInviteToTheStudy => 'Lad zu de Schtudie i';
 
   @override
-  String get studyPleaseOnlyInvitePeopleYouKnow =>
-      'Bitte lad nur Lüt i, wo du kännsch und wo wänd aktiv a dere Schtudie teilneh.';
+  String get studyPleaseOnlyInvitePeopleYouKnow => 'Bitte lad nur Lüt i, wo du kännsch und wo wänd aktiv a dere Schtudie teilneh.';
 
   @override
   String get studySearchByUsername => 'Suech noch Benutzername';
@@ -6582,20 +6371,16 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get studyTheChapterIsTooShortToBeAnalysed => 'Das Kapitel isch z\'churz zum analysiere.';
 
   @override
-  String get studyOnlyContributorsCanRequestAnalysis =>
-      'Nur wer a dere Schtudie mit macht, chann e Coputeranalyse afordere.';
+  String get studyOnlyContributorsCanRequestAnalysis => 'Nur wer a dere Schtudie mit macht, chann e Coputeranalyse afordere.';
 
   @override
-  String get studyGetAFullComputerAnalysis =>
-      'Erhalt e vollschtändigi, serversitigi Computeranalyse vu de Hauptvariante.';
+  String get studyGetAFullComputerAnalysis => 'Erhalt e vollschtändigi, serversitigi Computeranalyse vu de Hauptvariante.';
 
   @override
-  String get studyMakeSureTheChapterIsComplete =>
-      'Schtell sicher, dass das Kapitel vollschtändig isch. Die Analyse chann nur eimal agforderet werde.';
+  String get studyMakeSureTheChapterIsComplete => 'Schtell sicher, dass das Kapitel vollschtändig isch. Die Analyse chann nur eimal agforderet werde.';
 
   @override
-  String get studyAllSyncMembersRemainOnTheSamePosition =>
-      'Alli synchronisierte Mitglider gsehnd die glich Schtellig';
+  String get studyAllSyncMembersRemainOnTheSamePosition => 'Alli synchronisierte Mitglider gsehnd die glich Schtellig';
 
   @override
   String get studyShareChanges => 'Teil Änderige mit de Zueschauer und speicher sie uf em Server';
@@ -6640,8 +6425,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get studyCurrentChapterUrl => 'URL aktuells Kapitel';
 
   @override
-  String get studyYouCanPasteThisInTheForumToEmbed =>
-      'Du chasch das, zum ibinde, im Forum oder i dim Lichess Blog ifüege';
+  String get studyYouCanPasteThisInTheForumToEmbed => 'Du chasch das, zum ibinde, im Forum oder i dim Lichess Blog ifüege';
 
   @override
   String get studyStartAtInitialPosition => 'Fang ab de Grundschtellig a';
@@ -6707,8 +6491,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get studyDeleteThisChapter => 'Kapitel lösche? Das chann nöd rückgängig gmacht werde!';
 
   @override
-  String get studyClearAllCommentsInThisChapter =>
-      'Alli Kommentär, Symbol und Zeichnigsforme i dem Kapitel lösche?';
+  String get studyClearAllCommentsInThisChapter => 'Alli Kommentär, Symbol und Zeichnigsforme i dem Kapitel lösche?';
 
   @override
   String get studyRightUnderTheBoard => 'Diräkt underhalb vom Brätt';
@@ -6818,8 +6601,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get studyClearChat => 'Tschätt löschä';
 
   @override
-  String get studyDeleteTheStudyChatHistory =>
-      'Chatverlauf vu de Schtudie lösche? Das chann nüme rückgängig gmacht werde!';
+  String get studyDeleteTheStudyChatHistory => 'Chatverlauf vu de Schtudie lösche? Das chann nüme rückgängig gmacht werde!';
 
   @override
   String get studyDeleteStudy => 'Schtudie lösche';
@@ -6949,15 +6731,13 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get studyWelcomeToLichessStudyTitle => 'Willkomme bi de Lichess-Schtudie!';
 
   @override
-  String get studyWelcomeToLichessStudyText =>
-      'Das isch es gmeinsams Analysebrätt.<br><br>Benutz es zum Partie analysiere und zum kommentiere,<br>zum Schtellige mit Fründe z\'diskutiere,<br>und natürli für Schachunterricht!<br><br>Es isch es schtarchs Werchzüg, lass der ochli Zit, zum luege, wie\'s funktioniert.';
+  String get studyWelcomeToLichessStudyText => 'Das isch es gmeinsams Analysebrätt.<br><br>Benutz es zum Partie analysiere und zum kommentiere,<br>zum Schtellige mit Fründe z\'diskutiere,<br>und natürli für Schachunterricht!<br><br>Es isch es schtarchs Werchzüg, lass der ochli Zit, zum luege, wie\'s funktioniert.';
 
   @override
   String get studySharedAndSaveTitle => 'Teilt und g\'schpeicheret';
 
   @override
-  String get studySharedAndSavedText =>
-      'Anderi Mitglieder chönd dini Züg live gseh!<br>Und alles isch gschpeicheret, für immer.';
+  String get studySharedAndSavedText => 'Anderi Mitglieder chönd dini Züg live gseh!<br>Und alles isch gschpeicheret, für immer.';
 
   @override
   String get studyStudyMembersTitle => 'Schtudie-Mitglieder';
@@ -6976,8 +6756,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get studyStudyChaptersTitle => 'Schtudie-Kapitel';
 
   @override
-  String get studyStudyChaptersText =>
-      'E Schtudie chann verschiedeni Kapitel ha.<br>Jedes Kapitel hät e beschtimmti Usganslag und en eigene Zugsbaum.';
+  String get studyStudyChaptersText => 'E Schtudie chann verschiedeni Kapitel ha.<br>Jedes Kapitel hät e beschtimmti Usganslag und en eigene Zugsbaum.';
 
   @override
   String get studyCommentPositionTitle => 'Kommentar zunere Schtellig';
@@ -6991,68 +6770,58 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get studyAnnotatePositionTitle => 'E Schtellig vermerke';
 
   @override
-  String get studyAnnotatePositionText =>
-      'Klick ufs !? Schaltfäld, or mach en Rächtsklick uf d\'Zugslischte uf de rächte Site<br>Bemerkigs-Symbol sind frei geh und gsicheret.';
+  String get studyAnnotatePositionText => 'Klick ufs !? Schaltfäld, or mach en Rächtsklick uf d\'Zugslischte uf de rächte Site<br>Bemerkigs-Symbol sind frei geh und gsicheret.';
 
   @override
   String get studyConclusionTitle => 'Merci für dini Ziit';
 
   @override
-  String get studyConclusionText =>
-      'Du findsch dini <a href=\'/study/mine/hot\'>vorherige Schtudie</a> vu dinere Profil-Site.<br>Da isch au en <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>Blog-Post über Schtudie</a>.<br>Poweruser chönd \"?\" trucke, um d\'Taschtaturchürzel z\'gseh.<br>Viel Schpass!';
+  String get studyConclusionText => 'Du findsch dini <a href=\'/study/mine/hot\'>vorherige Schtudie</a> vu dinere Profil-Site.<br>Da isch au en <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>Blog-Post über Schtudie</a>.<br>Poweruser chönd \"?\" trucke, um d\'Taschtaturchürzel z\'gseh.<br>Viel Schpass!';
 
   @override
   String get studyCreateChapterTitle => 'Es Schtudie-Kapitel kreiere';
 
   @override
-  String get studyCreateChapterText =>
-      'E Schtudie chann mehreri Kapitel ha.<br>Jedes Kapitel hät en klare Zugsbaum,<br>und chann uf verschideni Arte kreiert werde.';
+  String get studyCreateChapterText => 'E Schtudie chann mehreri Kapitel ha.<br>Jedes Kapitel hät en klare Zugsbaum,<br>und chann uf verschideni Arte kreiert werde.';
 
   @override
   String get studyFromInitialPositionTitle => 'Ab de Usgangsschtellig';
 
   @override
-  String get studyFromInitialPositionText =>
-      'Nur es Brätt in Afangsschtellig.<br>G\'eignet zum Eröffnige erkunde.';
+  String get studyFromInitialPositionText => 'Nur es Brätt in Afangsschtellig.<br>G\'eignet zum Eröffnige erkunde.';
 
   @override
   String get studyCustomPositionTitle => 'Benutzerdefinierti Schtellig';
 
   @override
-  String get studyCustomPositionText =>
-      'Mach dir sälber e Schtellig.<br>G\'eignet zum Ändschpiel erkunde.';
+  String get studyCustomPositionText => 'Mach dir sälber e Schtellig.<br>G\'eignet zum Ändschpiel erkunde.';
 
   @override
   String get studyLoadExistingLichessGameTitle => 'Lad e exischtierendi Lichess-Partie';
 
   @override
-  String get studyLoadExistingLichessGameText =>
-      'Füeg e Lichess-Partie-URL i<br>(wie z.B. lichess.org/7fHIU0XI)<br>zum d\'Züg is Kapitel lade.';
+  String get studyLoadExistingLichessGameText => 'Füeg e Lichess-Partie-URL i<br>(wie z.B. lichess.org/7fHIU0XI)<br>zum d\'Züg is Kapitel lade.';
 
   @override
   String get studyFromFenStringTitle => 'Vunere FEN-Partie';
 
   @override
-  String get studyFromFenStringText =>
-      'Füeg e Schtellig im FEN-Format i<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>um s\'Kapitel ab ere Schtellig z\'schtarte.';
+  String get studyFromFenStringText => 'Füeg e Schtellig im FEN-Format i<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>um s\'Kapitel ab ere Schtellig z\'schtarte.';
 
   @override
   String get studyFromPgnGameTitle => 'Vunere PGN-Partie';
 
   @override
-  String get studyFromPgnGameText =>
-      'Füeg e Partie im PGN-Format i.<br>zum Züg, Kommentär und Variante is Kapitel lade.';
+  String get studyFromPgnGameText => 'Füeg e Partie im PGN-Format i.<br>zum Züg, Kommentär und Variante is Kapitel lade.';
 
   @override
   String get studyVariantsAreSupportedTitle => 'Vu Schtudie underschtützti Variante';
 
   @override
-  String get studyVariantsAreSupportedText =>
-      'Ja, du chasch crazyhouse Schtudie mache<br>und alli andere LichessVariante!';
+  String get studyVariantsAreSupportedText => 'Ja, du chasch crazyhouse Schtudie mache<br>und alli andere LichessVariante!';
 
   @override
-  String get studyChapterConclusionText =>
-      'Kapitel sind für immer g\'sicheret.<br>Freu dich am Organisiere vu dine Schach-Inhält!';
+  String get studyChapterConclusionText => 'Kapitel sind für immer g\'sicheret.<br>Freu dich am Organisiere vu dine Schach-Inhält!';
 
   @override
   String get studyDoubleDefeat => 'Beidi besiegt';
