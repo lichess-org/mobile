@@ -294,7 +294,6 @@ class FakeEngineSession implements EngineTransport {
   final EngineSpec spec;
 
   final _controller = StreamController<String>.broadcast();
-  final _status = ValueNotifier(EngineStatus.ready);
   final _death = Completer<EngineFailure?>();
   final _pending = <String>[];
   bool _replayed = false;
@@ -312,10 +311,10 @@ class FakeEngineSession implements EngineTransport {
   Stream<String> get lines => _controller.stream;
 
   @override
-  ValueListenable<EngineStatus> get status => _status;
+  Future<EngineFailure?> get death => _death.future;
 
   @override
-  Future<EngineFailure?> get death => _death.future;
+  bool get isDead => _death.isCompleted;
 
   @override
   EngineDiagnostics? get diagnostics => diagnosticsOverride;
@@ -330,7 +329,7 @@ class FakeEngineSession implements EngineTransport {
 
   @override
   void send(String command) {
-    if (_status.value == EngineStatus.dead) return;
+    if (isDead) return;
     _engine._receive(this, command);
   }
 
@@ -348,7 +347,6 @@ class FakeEngineSession implements EngineTransport {
 
   void _die(EngineFailure? failure) {
     if (_death.isCompleted) return;
-    _status.value = EngineStatus.dead;
     _death.complete(failure);
     if (!_controller.isClosed) _controller.close();
   }

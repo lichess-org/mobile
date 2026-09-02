@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:lichess_mobile/src/model/engine/engine_diagnostics.dart';
 import 'package:lichess_mobile/src/model/engine/engine_failure.dart';
 import 'package:lichess_mobile/src/model/engine/engine_spec.dart';
@@ -56,7 +55,6 @@ class StockfishTransport implements EngineTransport {
   final Stockfish _stockfish;
 
   final _controller = StreamController<String>.broadcast();
-  final _status = ValueNotifier(EngineStatus.ready);
   final _death = Completer<EngineFailure?>();
 
   /// The lines the engine wrote before anyone could listen, replayed to the first listener.
@@ -73,18 +71,18 @@ class StockfishTransport implements EngineTransport {
   Stream<String> get lines => _controller.stream;
 
   @override
-  ValueListenable<EngineStatus> get status => _status;
+  Future<EngineFailure?> get death => _death.future;
 
   @override
-  Future<EngineFailure?> get death => _death.future;
+  bool get isDead => _death.isCompleted;
 
   @override
   EngineDiagnostics? get diagnostics => EngineDiagnostics.stockfish(_stockfish.diagnostics);
 
   @override
   void send(String command) {
-    if (_status.value == EngineStatus.dead) {
-      _logger.fine('Dropping "$command": the engine is gone.');
+    if (_disposing || isDead) {
+      _logger.fine('Dropping "$command": the engine is gone or on its way out.');
       return;
     }
     try {
@@ -113,14 +111,13 @@ class StockfishTransport implements EngineTransport {
   Future<void> dispose() {
     if (_disposal case final disposal?) return disposal;
     _disposing = true;
-    _status.value = EngineStatus.dead;
     return _disposal = _stockfish
         .dispose()
         .catchError((Object e, StackTrace st) {
           _logger.warning('The engine could not be disposed cleanly', e, st);
         })
         .whenComplete(() {
-          if (!_death.isCompleted) _death.complete(null);
+          _die(null);
           _stockfish.state.removeListener(_onStockfishStateChange);
           if (!_controller.isClosed) _controller.close();
         });
@@ -176,7 +173,6 @@ class StockfishTransport implements EngineTransport {
   /// Ends the session: nothing more is sent, nothing more is delivered, and [death] is answered.
   void _die(EngineFailure? failure) {
     if (_death.isCompleted) return;
-    _status.value = EngineStatus.dead;
     _death.complete(failure);
     if (!_controller.isClosed) _controller.close();
   }

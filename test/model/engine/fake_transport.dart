@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:lichess_mobile/src/model/engine/engine_diagnostics.dart';
 import 'package:lichess_mobile/src/model/engine/engine_failure.dart';
 import 'package:lichess_mobile/src/model/engine/engine_spec.dart';
@@ -63,7 +62,6 @@ class FakeTransport implements EngineTransport {
   final List<String> commands = [];
 
   final _controller = StreamController<String>.broadcast();
-  final _status = ValueNotifier(EngineStatus.ready);
   final _death = Completer<EngineFailure?>();
   final _pending = <String>[];
   bool _replayed = false;
@@ -83,7 +81,6 @@ class FakeTransport implements EngineTransport {
   /// Kills the engine, with [failure] if it died badly.
   void die([EngineFailure? failure]) {
     if (_death.isCompleted) return;
-    _status.value = EngineStatus.dead;
     _death.complete(failure);
     if (!_controller.isClosed) _controller.close();
   }
@@ -92,10 +89,10 @@ class FakeTransport implements EngineTransport {
   Stream<String> get lines => _controller.stream;
 
   @override
-  ValueListenable<EngineStatus> get status => _status;
+  Future<EngineFailure?> get death => _death.future;
 
   @override
-  Future<EngineFailure?> get death => _death.future;
+  bool get isDead => _death.isCompleted;
 
   @override
   EngineDiagnostics? get diagnostics => const EngineDiagnostics(
@@ -107,7 +104,7 @@ class FakeTransport implements EngineTransport {
 
   @override
   void send(String command) {
-    if (_status.value == EngineStatus.dead) return;
+    if (isDead) return;
     commands.add(command);
   }
 

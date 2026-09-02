@@ -33,8 +33,7 @@ const _fallbackOptionDefaults = {
   'UCI_Chess960': 'false',
   'UCI_Variant': 'chess',
   'UCI_LimitStrength': 'false',
-  // LC0's sampling options. It accepts them by name but declares them "pro only", so they never
-  // appear in its handshake and there would otherwise be no value to put them back to.
+  // LC0's sampling options.
   'Temperature': '0',
   'TempDecayMoves': '0',
   'TempDecayDelayMoves': '0',
@@ -184,7 +183,6 @@ class Engine {
 
   final _name = ValueNotifier<String?>(null);
   final _isSearching = ValueNotifier(false);
-  final _death = Completer<EngineFailure?>();
 
   _RunningSearch? _running;
   _RunningSearch? _next;
@@ -206,10 +204,6 @@ class Engine {
   /// different size, would rebuild its table on every hand-off and be unable to read a command,
   /// `quit` included, while it did. That is not a hypothetical: on a variant offline game the
   /// opponent and the evaluator are literally the same engine.
-  ///
-  /// Nobody has a reason to want a different value either, since the table is sized by what the
-  /// device can spare rather than by what any one search intends to do with it. See
-  /// `EngineBudget.engineHash`.
   final int hashSizeInMb;
 
   EngineSpec get spec => _transport.spec;
@@ -224,10 +218,16 @@ class Engine {
   /// Whether a search is running.
   ValueListenable<bool> get isSearching => _isSearching;
 
-  ValueListenable<EngineStatus> get status => _transport.status;
-
   /// Completes when the engine is gone, with the failure if it died badly.
-  Future<EngineFailure?> get death => _death.future;
+  ///
+  /// The transport's own death, with what only this layer knows — the variant that was being
+  /// searched, and the size of the table the engine was carrying — added to the failure.
+  late final Future<EngineFailure?> death = _transport.death.then(
+    (failure) => failure?.withContext(variant: _lastVariant, hashSizeInMb: hashSizeInMb),
+  );
+
+  /// Whether the engine is gone, which is [death] asked synchronously.
+  bool get isDead => _transport.isDead;
 
   EngineDiagnostics? get diagnostics => _transport.diagnostics;
 
@@ -238,7 +238,7 @@ class Engine {
   Search search(SearchRequest request) {
     final search = _RunningSearch(request).._engine = this;
 
-    if (_disposed || _transport.status.value == EngineStatus.dead) {
+    if (_disposed || _transport.isDead) {
       _logger.warning('Refusing a search: the engine is gone.');
       search._finish(null);
       return search;
@@ -289,7 +289,6 @@ class Engine {
     // create, most of all. [_onLine] ignores whatever arrives in the meantime.
     unawaited(_linesSubscription.cancel());
     await _transport.dispose();
-    if (!_death.isCompleted) _death.complete(null);
     _name.dispose();
     _isSearching.dispose();
   }
@@ -346,9 +345,6 @@ class Engine {
     _running?._finish(null);
     _running = null;
     _isSearching.value = false;
-    if (!_death.isCompleted) {
-      _death.complete(failure?.withContext(variant: _lastVariant, hashSizeInMb: hashSizeInMb));
-    }
   }
 
   UciInfo? _parseInfo(List<String> parts) {

@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:lc0/lc0.dart';
 import 'package:lichess_mobile/src/model/engine/engine_diagnostics.dart';
 import 'package:lichess_mobile/src/model/engine/engine_failure.dart';
@@ -57,7 +56,6 @@ class Lc0Transport implements EngineTransport {
   final Lc0 _lc0;
 
   final _controller = StreamController<String>.broadcast();
-  final _status = ValueNotifier(EngineStatus.ready);
   final _death = Completer<EngineFailure?>();
 
   /// The lines the engine wrote before anyone could listen, replayed to the first listener.
@@ -74,18 +72,18 @@ class Lc0Transport implements EngineTransport {
   Stream<String> get lines => _controller.stream;
 
   @override
-  ValueListenable<EngineStatus> get status => _status;
+  Future<EngineFailure?> get death => _death.future;
 
   @override
-  Future<EngineFailure?> get death => _death.future;
+  bool get isDead => _death.isCompleted;
 
   @override
   EngineDiagnostics? get diagnostics => EngineDiagnostics.lc0(_lc0.diagnostics);
 
   @override
   void send(String command) {
-    if (_status.value == EngineStatus.dead) {
-      _logger.fine('Dropping "$command": the engine is gone.');
+    if (_disposing || isDead) {
+      _logger.fine('Dropping "$command": the engine is gone or on its way out.');
       return;
     }
     try {
@@ -114,14 +112,13 @@ class Lc0Transport implements EngineTransport {
   Future<void> dispose() {
     if (_disposal case final disposal?) return disposal;
     _disposing = true;
-    _status.value = EngineStatus.dead;
     return _disposal = _lc0
         .dispose()
         .catchError((Object e, StackTrace st) {
           _logger.warning('The engine could not be disposed cleanly', e, st);
         })
         .whenComplete(() {
-          if (!_death.isCompleted) _death.complete(null);
+          _die(null);
           _lc0.state.removeListener(_onLc0StateChange);
           if (!_controller.isClosed) _controller.close();
         });
@@ -177,7 +174,6 @@ class Lc0Transport implements EngineTransport {
   /// Ends the session: nothing more is sent, nothing more is delivered, and [death] is answered.
   void _die(EngineFailure? failure) {
     if (_death.isCompleted) return;
-    _status.value = EngineStatus.dead;
     _death.complete(failure);
     if (!_controller.isClosed) _controller.close();
   }
