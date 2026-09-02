@@ -3,14 +3,11 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
-import 'package:lichess_mobile/src/model/analysis/analysis_player.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -18,6 +15,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_actions.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_player_widget.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_settings_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_share_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/conditional_premoves.dart';
@@ -45,16 +43,6 @@ import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 import 'package:logging/logging.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:share_plus/share_plus.dart';
-
-extension _AnalysisGameResultColor on AnalysisGameResult {
-  Color? colorFor(Side side, BuildContext context) => switch (this) {
-    AnalysisGameResult.whiteWins =>
-      side == Side.white ? context.lichessColors.good : context.lichessColors.error,
-    AnalysisGameResult.blackWins =>
-      side == Side.white ? context.lichessColors.error : context.lichessColors.good,
-    _ => null,
-  };
-}
 
 final _logger = Logger('AnalysisScreen');
 
@@ -219,46 +207,31 @@ class _Body extends ConsumerWidget {
       final result = resultString != null
           ? AnalysisGameResult.resultFromPgnResult(resultString)
           : null;
-      boardFooter = _PlayerWidget(
-        player: footerPlayer,
+      boardFooter = AnalysisPlayerWidget(
+        playerNameWidget: _PlayerName(player: footerPlayer),
         clock: footerClock,
         isSideToMove: analysisState.currentPosition.turn == pov,
-        result: result?.resultToString(pov),
-        resultColor: result?.colorFor(pov, context),
+        result: result,
+        side: pov,
       );
-      boardHeader = _PlayerWidget(
-        player: headerPlayer,
+      boardHeader = AnalysisPlayerWidget(
+        playerNameWidget: _PlayerName(player: headerPlayer),
         clock: headerClock,
         isSideToMove: analysisState.currentPosition.turn == pov.opposite,
-        result: result?.resultToString(pov.opposite),
-        resultColor: result?.colorFor(pov.opposite, context),
+        result: result,
+        side: pov.opposite,
       );
     } else if (options case Pgn()) {
-      // PGN analysis - try to get player info from PGN headers
-      final footerPlayer = analysisState.playerFromPgnHeaders(pov);
-      final headerPlayer = analysisState.playerFromPgnHeaders(pov.opposite);
+      final playerWidgets = playerWidgetsFromPgnHeaders(
+        pgnHeaders: analysisState.pgnHeaders,
+        sideToMove: analysisState.currentPosition.turn,
+        whiteClock: null,
+        blackClock: null,
+      );
 
-      if (footerPlayer != null || headerPlayer != null) {
-        final resultString = analysisState.pgnHeaders.get('Result');
-        final result = resultString != null
-            ? AnalysisGameResult.resultFromPgnResult(resultString)
-            : null;
-
-        boardFooter = footerPlayer != null
-            ? _AnalysisPlayerWidget(
-                player: footerPlayer,
-                result: result?.resultToString(pov),
-                resultColor: result?.colorFor(pov, context),
-              )
-            : null;
-        boardHeader = headerPlayer != null
-            ? _AnalysisPlayerWidget(
-                player: headerPlayer,
-                result: result?.resultToString(pov.opposite),
-                resultColor: result?.colorFor(pov.opposite, context),
-              )
-            : null;
-      }
+      (boardFooter, boardHeader) = pov == Side.white
+          ? (playerWidgets.white, playerWidgets.black)
+          : (playerWidgets.black, playerWidgets.white);
     }
 
     return FocusDetector(
@@ -357,81 +330,25 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class _PlayerWidget extends StatelessWidget {
-  const _PlayerWidget({
-    required this.player,
-    required this.clock,
-    required this.isSideToMove,
-    this.result,
-    this.resultColor,
-  });
+class _PlayerName extends StatelessWidget {
+  const _PlayerName({required this.player});
 
   final Player player;
-  final Duration? clock;
-  final String? result;
-  final Color? resultColor;
-  final bool isSideToMove;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: kAnalysisBoardHeaderOrFooterHeight,
-      padding: const EdgeInsets.only(left: 8.0),
-      child: Row(
-        children: [
-          if (result != null) ...[
-            Text(
-              result!,
-              style: TextStyle(fontWeight: FontWeight.bold, color: resultColor),
-            ),
-            const SizedBox(width: 16.0),
-          ],
-          if (player.user != null)
-            Expanded(
-              child: UserFullNameWidget.player(
-                user: player.user,
-                name: player.name,
-                rating: player.rating,
-                ratingDiff: player.ratingDiff,
-                provisional: player.provisional,
-                aiLevel: player.aiLevel,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-                onTap: () =>
-                    Navigator.of(context).push(UserOrProfileScreen.buildRoute(player.user!)),
-              ),
-            )
-          else
-            Expanded(child: Text(player.fullName(context.l10n))),
-          if (clock != null) _Clock(timeLeft: clock!, isSideToMove: isSideToMove),
-        ],
-      ),
-    );
-  }
-}
-
-class _Clock extends StatelessWidget {
-  const _Clock({required this.timeLeft, required this.isSideToMove});
-
-  final Duration timeLeft;
-  final bool isSideToMove;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = ColorScheme.of(context);
-    return Container(
-      height: kAnalysisBoardHeaderOrFooterHeight,
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      color: isSideToMove ? colorScheme.secondaryContainer : null,
-      child: Center(
-        child: Text(
-          timeLeft.toHoursMinutesSeconds(showTenths: timeLeft < const Duration(minutes: 1)),
-          style: TextStyle(
-            color: isSideToMove ? colorScheme.onSecondaryContainer : null,
-            fontFeatures: const [FontFeature.tabularFigures()],
-          ),
-        ),
-      ),
-    );
+    return player.user != null
+        ? UserFullNameWidget.player(
+            user: player.user,
+            name: player.name,
+            rating: player.rating,
+            ratingDiff: player.ratingDiff,
+            provisional: player.provisional,
+            aiLevel: player.aiLevel,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+            onTap: () => Navigator.of(context).push(UserOrProfileScreen.buildRoute(player.user!)),
+          )
+        : Text(player.fullName(context.l10n));
   }
 }
 
@@ -736,61 +653,6 @@ class _AnalysisMenu extends ConsumerWidget {
             },
           ),
       ],
-    );
-  }
-}
-
-/// Player widget for PGN imports, displaying analysis player info
-class _AnalysisPlayerWidget extends StatelessWidget {
-  const _AnalysisPlayerWidget({required this.player, this.result, this.resultColor});
-
-  final AnalysisPlayer player;
-  final String? result;
-  final Color? resultColor;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: kAnalysisBoardHeaderOrFooterHeight,
-      padding: const EdgeInsets.only(left: 8.0),
-      child: Row(
-        children: [
-          if (result != null) ...[
-            Text(
-              result!,
-              style: TextStyle(fontWeight: .bold, color: resultColor),
-            ),
-            const SizedBox(width: 16.0),
-          ],
-          if (player.title != null) ...[
-            Text(
-              player.title!,
-              style: TextStyle(
-                color: (player.title == 'BOT')
-                    ? context.lichessColors.fancy
-                    : context.lichessColors.brag,
-                fontWeight: .bold,
-              ),
-            ),
-            const SizedBox(width: 5),
-          ],
-          Flexible(
-            child: Text(
-              player.name,
-              style: const TextStyle(fontWeight: .bold),
-              overflow: .ellipsis,
-            ),
-          ),
-          if (player.rating != null) ...[
-            const SizedBox(width: 5),
-            Text(
-              player.rating.toString(),
-              overflow: .ellipsis,
-              style: TextStyle(fontWeight: FontWeight.w400, color: textShade(context, 0.8)),
-            ),
-          ],
-        ],
-      ),
     );
   }
 }
