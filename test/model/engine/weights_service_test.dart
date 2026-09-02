@@ -183,6 +183,66 @@ void main() {
       expect((await service.ensureWeights(MaiaRating.defaultRating)).path, path);
     });
 
+    test('a network on disk that fails its checksum is deleted', () async {
+      final dir = await makeTempDir();
+      final container = makeWeightsContainer(appSupportDirectory: dir);
+      final service = container.read(maiaWeightsServiceProvider);
+
+      final file = File('${dir.path}/maia/maia-1700.pb.gz');
+      await file.parent.create(recursive: true);
+      await file.writeAsString('not a network');
+
+      expect(await service.isAvailable(MaiaRating.maia1700), isFalse);
+      expect(await file.exists(), isFalse);
+    });
+
+    test('a corrupted bundled network is replaced by the one in the asset bundle', () async {
+      final dir = await makeTempDir();
+      final container = makeWeightsContainer(appSupportDirectory: dir);
+      final service = container.read(maiaWeightsServiceProvider);
+
+      final file = File('${dir.path}/maia/${MaiaRating.defaultRating.fileName}');
+      await file.parent.create(recursive: true);
+      await file.writeAsString('not a network');
+
+      final (:rating, :path) = await service.ensureWeights(MaiaRating.defaultRating);
+
+      expect(rating, MaiaRating.defaultRating);
+      expect(path, file.path);
+      expect(await file.length(), MaiaRating.defaultRating.expectedSize);
+    });
+
+    test('a download that fails leaves nothing behind', () async {
+      final dir = await makeTempDir();
+      final container = makeWeightsContainer(
+        appSupportDirectory: dir,
+        mockClient: MockClient((_) async => http.Response('nope', 404)),
+      );
+      final service = container.read(maiaWeightsServiceProvider);
+
+      expect(await service.download(MaiaRating.maia1700), isNull);
+      expect(await File('${dir.path}/maia/maia-1700.pb.gz').exists(), isFalse);
+    });
+
+    test('networks no rating claims can be reported and deleted on their own', () async {
+      final dir = await makeTempDir();
+      final container = makeWeightsContainer(appSupportDirectory: dir);
+      final service = container.read(maiaWeightsServiceProvider);
+
+      // The bundled network, written out, is claimed and must survive.
+      final (:path, rating: _) = await service.ensureWeights(MaiaRating.defaultRating);
+      final stray = File('${dir.path}/maia/maia-4200.pb.gz');
+      await stray.writeAsString('a network from another era');
+
+      expect(await service.unusableWeights(), (count: 1, bytes: await stray.length()));
+
+      await service.deleteUnusableWeights();
+
+      expect(await stray.exists(), isFalse);
+      expect(await File(path).exists(), isTrue);
+      expect(await service.unusableWeights(), (count: 0, bytes: 0));
+    });
+
     test('reports rather than throws when there is nowhere to put a network', () async {
       final container = makeWeightsContainer(appSupportDirectory: null);
       final service = container.read(maiaWeightsServiceProvider);

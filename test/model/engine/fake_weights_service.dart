@@ -60,4 +60,10 @@ class FakeMaiaWeightsService implements MaiaWeightsService {
       ..clear()
       ..add(MaiaRating.defaultRating);
   }
+
+  @override
+  Future<({int count, int bytes})> unusableWeights() async => (count: 0, bytes: 0);
+
+  @override
+  Future<void> deleteUnusableWeights() async {}
 }

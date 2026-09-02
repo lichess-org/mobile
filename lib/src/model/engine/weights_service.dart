@@ -351,20 +351,76 @@ class MaiaWeightsService {
   /// Deletes every downloaded network. The bundled one is written out again on demand.
   Future<void> deleteWeights() async {
     _verified.clear();
+    await _deleteFiles(await _filesOnDisk());
+  }
+
+  /// The network files on disk that nothing can use, and the space they take.
+  ///
+  /// A rating's own file is deleted the moment it fails its checksum, so what shows up here is a
+  /// file left behind by an older version of the app: no rating claims that name any more, and
+  /// nothing will ever check it or clean it up.
+  Future<({int count, int bytes})> unusableWeights() async {
+    final files = await _unusableFiles();
+    var bytes = 0;
+    for (final file in files) {
+      try {
+        bytes += await file.length();
+      } catch (e, st) {
+        _logger.warning('Could not size ${file.path}:', e, st);
+      }
+    }
+    return (count: files.length, bytes: bytes);
+  }
+
+  /// Deletes the files [unusableWeights] reports, leaving the usable networks alone.
+  Future<void> deleteUnusableWeights() async {
+    await _deleteFiles(await _unusableFiles());
+  }
+
+  /// Every network file in the weights directory.
+  Future<List<File>> _filesOnDisk() async {
     final File anyFile;
     try {
       anyFile = weightsFile(MaiaRating.defaultRating);
     } catch (e, st) {
-      _logger.warning('Cannot delete the Maia networks:', e, st);
-      return;
+      _logger.warning('Cannot list the Maia networks:', e, st);
+      return const [];
     }
 
     final directory = anyFile.parent;
-    if (!await directory.exists()) return;
-    await for (final entity in directory.list(followLinks: false)) {
-      if (entity is File && entity.path.endsWith('.pb.gz')) {
-        _logger.info('Deleting ${entity.path}');
-        await entity.delete();
+    try {
+      if (!await directory.exists()) return const [];
+      return await directory
+          .list(followLinks: false)
+          .where((entity) => entity is File && entity.path.endsWith('.pb.gz'))
+          .cast<File>()
+          .toList();
+    } catch (e, st) {
+      _logger.warning('Error listing the Maia networks:', e, st);
+      return const [];
+    }
+  }
+
+  Future<List<File>> _unusableFiles() async {
+    final claimed = <String>{};
+    for (final rating in MaiaRating.values) {
+      // A bundled rating always claims its file, whether or not it has been written out yet.
+      if (rating.isBundled || await isAvailable(rating)) claimed.add(weightsFile(rating).path);
+    }
+
+    // Listed after the checks above, which delete the corrupted files they find: what is left is
+    // only what nothing claims.
+    final files = await _filesOnDisk();
+    return files.where((file) => !claimed.contains(file.path)).toList();
+  }
+
+  Future<void> _deleteFiles(Iterable<File> files) async {
+    for (final file in files) {
+      _logger.info('Deleting ${file.path}');
+      try {
+        await file.delete();
+      } catch (e, st) {
+        _logger.warning('Could not delete ${file.path}:', e, st);
       }
     }
   }
@@ -400,15 +456,19 @@ class MaiaWeightsService {
           _downloadProgress.value = length > 0 ? received / length : 0.0;
         },
       );
-      if (!ok) return null;
+      if (!ok) {
+        await _deleteFiles([file]);
+        return null;
+      }
     } catch (e, st) {
       _logger.warning('Failed to download ${rating.fileName}:', e, st);
+      await _deleteFiles([file]);
       return null;
     }
 
+    // A file that fails here is deleted by the check itself.
     if (!await _checkFile(rating)) {
-      _logger.warning('${rating.fileName} did not survive the download; deleting it.');
-      await file.delete().catchError((Object _) => file);
+      _logger.warning('${rating.fileName} did not survive the download.');
       return null;
     }
     return file.path;
@@ -431,6 +491,9 @@ class MaiaWeightsService {
   }
 
   /// Whether the file for [rating] is on disk and its checksum matches.
+  ///
+  /// A file that fails the checksum is deleted: LC0 cannot read it, it takes up space, and leaving
+  /// it there would make the next download look like it has nothing to do.
   Future<bool> _checkFile(MaiaRating rating) async {
     if (_verified.contains(rating)) return true;
     try {
@@ -442,7 +505,8 @@ class MaiaWeightsService {
       if (matches) {
         _verified.add(rating);
       } else {
-        _logger.warning('${rating.fileName} is corrupted.');
+        _logger.warning('${rating.fileName} is corrupted, deleting it.');
+        await _deleteFiles([file]);
       }
       return matches;
     } catch (e, st) {

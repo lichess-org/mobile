@@ -235,24 +235,33 @@ class _MaiaNetworksSection extends ConsumerStatefulWidget {
 class _MaiaNetworksSectionState extends ConsumerState<_MaiaNetworksSection> {
   Set<MaiaRating>? _downloaded;
 
+  /// The networks on disk that no rating can use, left behind by an older version of the app.
+  ({int count, int bytes}) _unusable = (count: 0, bytes: 0);
+
   @override
   void initState() {
     super.initState();
     _refresh();
   }
 
-  void _refresh() {
-    ref.read(maiaWeightsServiceProvider).availableRatings().then((available) {
-      if (mounted) {
-        setState(() => _downloaded = available.where((r) => !r.isBundled).toSet());
-      }
+  Future<void> _refresh() async {
+    final service = ref.read(maiaWeightsServiceProvider);
+    // Deletes the corrupted files it finds, so what [unusableWeights] reports afterwards is only
+    // what nothing claims any more.
+    final available = await service.availableRatings();
+    final unusable = await service.unusableWeights();
+    if (!mounted) return;
+    setState(() {
+      _downloaded = available.where((r) => !r.isBundled).toSet();
+      _unusable = unusable;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final downloaded = _downloaded;
-    if (downloaded == null || downloaded.isEmpty) return const SizedBox.shrink();
+    if (downloaded == null) return const SizedBox.shrink();
+    if (downloaded.isEmpty && _unusable.count == 0) return const SizedBox.shrink();
 
     final totalBytes = downloaded.fold(0, (sum, rating) => sum + rating.expectedSize);
     final ratings = (downloaded.toList()..sort((a, b) => a.rating - b.rating))
@@ -262,35 +271,49 @@ class _MaiaNetworksSectionState extends ConsumerState<_MaiaNetworksSection> {
     return ListSection(
       header: const Text('Maia networks'),
       children: [
-        ListTile(
-          trailing: const Icon(Icons.delete_outline),
-          title: Text(ratings),
-          subtitle: Text('${(totalBytes / (1024 * 1024)).toStringAsFixed(1)} MB (tap to delete)'),
-          onTap: () async {
-            final isOk = await showAdaptiveDialog<bool>(
-              context: context,
-              barrierDismissible: true,
-              builder: (context) {
-                return AlertDialog.adaptive(
-                  content: const Text('Do you want to delete the downloaded Maia networks?'),
-                  actions: [
-                    PlatformDialogAction(
-                      child: const Text('OK'),
-                      onPressed: () => Navigator.of(context).pop(true),
-                    ),
-                    PlatformDialogAction(
-                      child: Text(context.l10n.cancel),
-                      onPressed: () => Navigator.of(context).pop(false),
-                    ),
-                  ],
-                );
-              },
-            );
-            if (isOk != true) return;
-            await ref.read(maiaWeightsServiceProvider).deleteWeights();
-            if (mounted) _refresh();
-          },
-        ),
+        if (downloaded.isNotEmpty)
+          ListTile(
+            trailing: const Icon(Icons.delete_outline),
+            title: Text(ratings),
+            subtitle: Text('${(totalBytes / (1024 * 1024)).toStringAsFixed(1)} MB (tap to delete)'),
+            onTap: () async {
+              final isOk = await showAdaptiveDialog<bool>(
+                context: context,
+                barrierDismissible: true,
+                builder: (context) {
+                  return AlertDialog.adaptive(
+                    content: const Text('Do you want to delete the downloaded Maia networks?'),
+                    actions: [
+                      PlatformDialogAction(
+                        child: const Text('OK'),
+                        onPressed: () => Navigator.of(context).pop(true),
+                      ),
+                      PlatformDialogAction(
+                        child: Text(context.l10n.cancel),
+                        onPressed: () => Navigator.of(context).pop(false),
+                      ),
+                    ],
+                  );
+                },
+              );
+              if (isOk != true) return;
+              await ref.read(maiaWeightsServiceProvider).deleteWeights();
+              if (mounted) await _refresh();
+            },
+          ),
+        if (_unusable.count > 0)
+          ListTile(
+            trailing: const Icon(Icons.delete),
+            title: const Text('Delete unusable Maia networks'),
+            subtitle: Text(
+              '${(_unusable.bytes / (1024 * 1024)).toStringAsFixed(1)} MB of networks this version '
+              'of the app cannot use (tap to delete)',
+            ),
+            onTap: () async {
+              await ref.read(maiaWeightsServiceProvider).deleteUnusableWeights();
+              if (mounted) await _refresh();
+            },
+          ),
       ],
     );
   }
