@@ -70,7 +70,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Devi aver effettuato l\'accesso per visualizzare questa pagina.';
 
   @override
-  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+  String get mobileNbOfflinePuzzles => 'Puzzle offline';
 
   @override
   String get mobileNewGame => 'Nuova partita';
@@ -302,22 +302,22 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobilePerfShortBlitz => 'Blitz';
 
   @override
-  String get mobilePerfShortRapid => 'Rapid';
+  String get mobilePerfShortRapid => 'Rapido';
 
   @override
-  String get mobilePerfShortClassical => 'Classical';
+  String get mobilePerfShortClassical => 'Classico';
 
   @override
   String get mobilePerfShortCorrespondence => 'Corresp.';
 
   @override
-  String get mobilePerfShortFromPosition => 'From Pos.';
+  String get mobilePerfShortFromPosition => 'Da Pos.';
 
   @override
   String get mobilePerfShortChess960 => '960';
 
   @override
-  String get mobilePerfShortAntichess => 'Antichess';
+  String get mobilePerfShortAntichess => 'Antica';
 
   @override
   String get mobilePerfShortKingOfTheHill => 'KotH';
@@ -326,16 +326,16 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobilePerfShortThreeCheck => '3check';
 
   @override
-  String get mobilePerfShortAtomic => 'Atomic';
+  String get mobilePerfShortAtomic => 'Atomico';
 
   @override
-  String get mobilePerfShortHorde => 'Horde';
+  String get mobilePerfShortHorde => 'Orda';
 
   @override
-  String get mobilePerfShortRacingKings => 'Racing';
+  String get mobilePerfShortRacingKings => 'Corse';
 
   @override
-  String get mobilePerfShortCrazyhouse => 'Crazy';
+  String get mobilePerfShortCrazyhouse => 'Pazzo';
 
   @override
   String get mobilePerfShortPuzzle => 'Puzzle';

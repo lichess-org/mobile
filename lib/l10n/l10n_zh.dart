@@ -162,13 +162,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileSettingsMaterialDifferenceCapturedPieces => '被吃的棋子';
 
   @override
-  String get mobileSettingsPickAnImage => '选择图片';
+  String get mobileSettingsPickAnImage => '选择图像';
 
   @override
-  String get mobileSettingsPickAnImageHelp => '自定义背景仅在深色模式下生效。建议使用深色图片。';
+  String get mobileSettingsPickAnImageHelp => '自定义背景仅在深色模式下生效，建议使用深色图像。';
 
   @override
-  String get mobileSettingsPickAnImageBlur => '模糊图片';
+  String get mobileSettingsPickAnImageBlur => '模糊图像';
 
   @override
   String get mobileSettingsPickAnImageHideBoard => '隐藏棋盘';
