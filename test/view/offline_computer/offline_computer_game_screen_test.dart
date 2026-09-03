@@ -207,12 +207,18 @@ void main() {
       await tester.pump(kEngineEvalEmissionThrottleDelay * 2);
       expect(engine.stopCount, 0);
 
+      // The full sequence: [AppLifecycleListener] asserts on a transition the platform cannot
+      // make, and the socket pool now installs one.
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
       tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
       await tester.pump();
 
       expect(engine.stopCount, 1, reason: 'the analysis is given up when the screen goes away');
 
       engine.resetTracking();
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
       tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
       await tester.pump();
 
@@ -812,7 +818,7 @@ void main() {
       expect(getBoardLastMove(tester), Move.parse('e7e5'));
     });
 
-    testWidgets('Game is saved when exiting with confirmation', (tester) async {
+    testWidgets('Game is saved when exiting', (tester) async {
       final gameStorage = MockOfflineComputerGameStorage();
 
       when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
@@ -857,19 +863,12 @@ void main() {
       await tester.pump(const Duration(milliseconds: 300));
       await tester.pumpAndSettle();
 
-      // Try to go back - should show confirmation dialog
+      // Leaving an unfinished game asks nothing: it is saved on the way out, so it can be
+      // resumed or analysed later.
       await tester.pageBack();
       await tester.pumpAndSettle();
 
-      // Confirmation dialog should be shown
-      expect(find.text('Are you sure?'), findsOneWidget);
-      expect(find.text('No worries, your game will be saved.'), findsOneWidget);
-
-      // Confirm exit
-      await tester.tap(find.text('Yes'));
-      await tester.pumpAndSettle();
-
-      // Verify save was called
+      expect(find.byType(OfflineComputerGameScreen), findsNothing);
       verify(() => gameStorage.save(any())).called(1);
     });
   });
