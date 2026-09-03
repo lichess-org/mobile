@@ -5,6 +5,7 @@ import 'package:collection/collection.dart';
 import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
@@ -686,6 +687,57 @@ void main() {
           expect(e4NodeBeforeTap, isNot(e4NodeAfterTap));
         },
       );
+    });
+
+    group('Copy line PGN', () {
+      /// Records every text the app writes to the clipboard.
+      List<String> captureClipboard() {
+        final copied = <String>[];
+        final messenger = TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
+        messenger.setMockMethodCallHandler(SystemChannels.platform, (methodCall) async {
+          if (methodCall.method == 'Clipboard.setData') {
+            final arguments = methodCall.arguments as Map<Object?, Object?>;
+            copied.add(arguments['text']! as String);
+          }
+          return null;
+        });
+        addTearDown(() => messenger.setMockMethodCallHandler(SystemChannels.platform, null));
+        return copied;
+      }
+
+      const pgn = '1. e4 e5 (1... c5 2. Nf3 (2. c3)) 2. Nf3 Nc6 (2... d6) 3. Bb5';
+
+      testWidgets('copies the main line without the sidelines branching off it', (tester) async {
+        final copied = captureClipboard();
+        await buildTree(tester, pgn, PgnTreeDisplayMode.inlineNotation);
+
+        await tester.longPress(find.text('e5'));
+        await tester.pumpAndSettle();
+
+        expect(find.text('Copy variation PGN'), findsNothing);
+        await tester.tap(find.text('Copy main line PGN'));
+        await tester.pumpAndSettle();
+
+        expect(copied, ['1. e4 e5 2. Nf3 Nc6 3. Bb5']);
+        expect(
+          find.descendant(of: find.byType(SnackBar), matching: find.text('PGN copied.')),
+          findsOneWidget,
+        );
+      });
+
+      testWidgets('copies a variation with the sidelines after the pressed move', (tester) async {
+        final copied = captureClipboard();
+        await buildTree(tester, pgn, PgnTreeDisplayMode.inlineNotation);
+
+        await tester.longPress(find.text('1… c5'));
+        await tester.pumpAndSettle();
+
+        expect(find.text('Copy main line PGN'), findsNothing);
+        await tester.tap(find.text('Copy variation PGN'));
+        await tester.pumpAndSettle();
+
+        expect(copied, ['1. e4 c5 2. Nf3 ( 2. c3 )']);
+      });
     });
 
     group('PgnTreeDisplayMode.twoColumn', () {

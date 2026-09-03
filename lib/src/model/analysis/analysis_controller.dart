@@ -550,6 +550,13 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
     _setPath(path.penultimate, shouldRecomputeRootView: true);
   }
 
+  @override
+  String makeLinePgn(UciPath path, {required bool includeVariations}) => _root.makeLinePgn(
+    path,
+    variant: state.requireValue.variant,
+    includeVariations: includeVariations,
+  );
+
   void addCurrentPathAsPremove() {
     state = AsyncData(
       state.requireValue.copyWith(
