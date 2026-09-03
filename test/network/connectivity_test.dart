@@ -1,14 +1,17 @@
 import 'dart:io';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/server_status.dart';
+import 'package:lichess_mobile/src/network/socket.dart';
 
 import '../test_container.dart';
 import '../utils/fake_connectivity.dart';
 import 'fake_http_client_factory.dart';
+import 'fake_websocket_channel.dart';
 import 'server_down_client.dart';
 
 /// A client that fails every request, as it would without any connectivity.
@@ -39,6 +42,62 @@ void main() {
 
       expect(container.read(isDeviceOnlineProvider), isFalse);
     });
+
+    test('a socket that connects clears an offline status', () async {
+      final container = await makeContainer(
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+            (ref) => FakeHttpClientFactory(() => _deviceOfflineClient),
+          ),
+        },
+      );
+
+      await container.read(connectivityChangesProvider.future);
+      expect(container.read(isDeviceOnlineProvider), isFalse);
+
+      // Nothing can reach the network in this container except the socket, whose connection is
+      // proof enough on its own: the status must not wait for the next check to be corrected.
+      final client = container.read(socketPoolProvider).currentClient;
+      client.connect();
+      await client.firstConnection;
+      await Future<void>.delayed(kFakeWebSocketConnectionLag * 4);
+      await pumpEventQueue();
+
+      expect(container.read(isDeviceOnlineProvider), isTrue);
+
+      client.close();
+    });
+
+    test(
+      'a connected socket does not keep the device online once a check says otherwise',
+      () async {
+        final container = await makeContainer(
+          overrides: {
+            httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+              (ref) => FakeHttpClientFactory(() => _deviceOfflineClient),
+            ),
+          },
+        );
+        await container.read(connectivityChangesProvider.future);
+
+        final client = container.read(socketPoolProvider).currentClient;
+        client.connect();
+        await client.firstConnection;
+        await Future<void>.delayed(kFakeWebSocketConnectionLag * 4);
+        await pumpEventQueue();
+        expect(container.read(isDeviceOnlineProvider), isTrue);
+
+        // The network goes away. The socket only notices once a ping goes unanswered, tens of
+        // seconds later, so its stale state must not outweigh the check.
+        FakeConnectivity.controller.add([ConnectivityResult.none]);
+        await pumpEventQueue();
+
+        expect(client.isConnected, isTrue, reason: 'the socket has not noticed yet');
+        expect(container.read(isDeviceOnlineProvider), isFalse);
+
+        client.close();
+      },
+    );
 
     test('assumes online while the check is still running', () async {
       final container = await makeContainer(

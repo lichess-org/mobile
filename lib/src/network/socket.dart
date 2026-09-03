@@ -26,6 +26,13 @@ const _kDefaultConnectTimeout = Duration(seconds: 10);
 const _kPingDelay = Duration(milliseconds: 2500);
 const _kPingMaxLag = Duration(seconds: 9);
 const _kAutoReconnectDelay = Duration(milliseconds: 3500);
+
+/// The ceiling of the exponential backoff between failed connection attempts.
+const _kMaxAutoReconnectDelay = Duration(seconds: 60);
+
+/// How long the socket keeps retrying at full speed before the backoff sets in.
+const _kReconnectGracePeriod = Duration(seconds: 30);
+
 const _kResendAckDelay = Duration(milliseconds: 1500);
 const _kVersionGapRetryDelay = Duration(milliseconds: 200);
 const _kIdleTimeout = Duration(seconds: 2);
@@ -94,11 +101,16 @@ class SocketClient {
     this.pingDelay = _kPingDelay,
     this.pingMaxLag = _kPingMaxLag,
     this.autoReconnectDelay = _kAutoReconnectDelay,
+    this.reconnectGracePeriod = _kReconnectGracePeriod,
     this.resendAckDelay = _kResendAckDelay,
   }) : assert(route.path.isNotEmpty, 'Route path must not be empty'),
        assert(pingDelay > Duration.zero, 'Ping delay must be greater than 0'),
        assert(pingMaxLag > Duration.zero, 'Ping max lag must be greater than 0'),
        assert(autoReconnectDelay > Duration.zero, 'Auto reconnect delay must be greater than 0'),
+       assert(
+         reconnectGracePeriod > Duration.zero,
+         'Reconnect grace period must be greater than 0',
+       ),
        assert(resendAckDelay > Duration.zero, 'Resend ack delay must be greater than 0');
 
   final WebSocketChannelFactory channelFactory;
@@ -126,6 +138,10 @@ class SocketClient {
 
   /// The delay before reconnecting after a connection failure.
   final Duration autoReconnectDelay;
+
+  /// How long connection failures keep being retried at [autoReconnectDelay], before the delay
+  /// starts doubling.
+  final Duration reconnectGracePeriod;
 
   /// The delay before resending an ack.
   final Duration resendAckDelay;
@@ -175,6 +191,9 @@ class SocketClient {
   /// The current number of successful connections.
   int nbConnectionSuccess = 0;
 
+  /// When the current run of failed connection attempts started, null while the socket is healthy.
+  DateTime? _failingSince;
+
   /// The current ack id. Incremented for each ack.
   int _ackId = 1;
 
@@ -223,6 +242,7 @@ class SocketClient {
     }
 
     _disconnect();
+
     final epoch = _connectionEpoch;
     _pongCount = 0;
     _reconnectTimer?.cancel();
@@ -279,6 +299,7 @@ class SocketClient {
       _logger.fine('WebSocket connection to $route established.');
 
       nbConnectionSuccess++;
+      _failingSince = null;
 
       if (nbConnectionSuccess == 1) {
         _firstConnection.complete();
@@ -312,16 +333,25 @@ class SocketClient {
       }
 
       _resendAcks();
-    } catch (e, st) {
+    } catch (e) {
       // Don't revive a client that was closed or reconnected while the failed attempt was in
       // flight, otherwise it would keep reconnecting in the background forever.
       if (isDisposed || epoch != _connectionEpoch) {
         _logger.fine('Stale WebSocket connection to $route failed:', e);
         return;
       }
-      _logger.severe('WebSocket connection failed:', e, st);
       _averageLag.value = Duration.zero;
-      _scheduleReconnect(autoReconnectDelay);
+      _failingSince ??= clock_package.clock.now();
+
+      // A failed attempt says nothing on its own: it is what a device with no network looks like,
+      // and that is not an error the logs should shout about. The backoff is what keeps a socket
+      // that cannot connect from retrying in a tight loop.
+      final delay = _reconnectDelay;
+      _logger.fine(
+        'WebSocket connection to $route failed (for ${_failingFor.inSeconds}s now), retrying in '
+        '${delay.inMilliseconds}ms: $e',
+      );
+      _scheduleReconnect(delay);
     }
   }
 
@@ -388,6 +418,7 @@ class SocketClient {
   Future<void> close() {
     nbConnectionAttempts = 0;
     nbConnectionSuccess = 0;
+    _failingSince = null;
     _firstConnection = Completer<void>();
     return _disconnect();
   }
@@ -513,6 +544,27 @@ class SocketClient {
     _averageLag.value += (currentLag - _averageLag.value) * mix;
   }
 
+  /// How long this run of failures has been going on.
+  Duration get _failingFor {
+    final since = _failingSince;
+    return since == null ? Duration.zero : clock_package.clock.now().difference(since);
+  }
+
+  /// How long to wait before the next attempt.
+  ///
+  /// Stays at [autoReconnectDelay] for the first [reconnectGracePeriod], so that a transient
+  /// failure is retried at full speed, then doubles for every further grace period spent failing,
+  /// up to [_kMaxAutoReconnectDelay]. A device left with no network thus settles into a slow poll
+  /// instead of a tight loop, without ever making a blip cost more than a few seconds.
+  Duration get _reconnectDelay {
+    final failingFor = _failingFor;
+    if (failingFor <= reconnectGracePeriod) return autoReconnectDelay;
+
+    final doublings = failingFor.inMicroseconds ~/ reconnectGracePeriod.inMicroseconds;
+    final delay = autoReconnectDelay * (1 << math.min(doublings, 8));
+    return delay < _kMaxAutoReconnectDelay ? delay : _kMaxAutoReconnectDelay;
+  }
+
   void _scheduleReconnect(Duration delay) {
     _reconnectTimer?.cancel();
     _reconnectTimer = Timer(delay, () {
@@ -584,7 +636,6 @@ class SocketPool {
         _averageLag.value = client.averageLag.value;
       }
     });
-
     _pool[_currentRoute] = client;
   }
 
@@ -594,6 +645,8 @@ class SocketPool {
   final Duration idleTimeout;
 
   final _averageLag = ValueNotifier(Duration.zero);
+
+  Timer? _closeInBackgroundTimer;
 
   /// The average lag computed from ping/pong protocol of the current active route.
   ///
@@ -614,6 +667,28 @@ class SocketPool {
   /// The socket clients pool.
   final Map<Uri, SocketClient> _pool = {};
   final Map<Uri, Timer?> _disposeTimers = {};
+
+  /// Call when the app goes to the background.
+  ///
+  /// The socket is kept for a while, as the user may well come right back, then closed to spare
+  /// the battery.
+  void onAppHidden() {
+    _closeInBackgroundTimer?.cancel();
+    _closeInBackgroundTimer = Timer(_kDisconnectOnBackgroundTimeout, () {
+      _logger.info(
+        'App is in background for ${_kDisconnectOnBackgroundTimeout.inMinutes}m, closing socket.',
+      );
+      currentClient.close();
+    });
+  }
+
+  /// Call when the app comes back to the foreground.
+  void onAppShown() {
+    _closeInBackgroundTimer?.cancel();
+    if (!currentClient.isActive) {
+      currentClient.connect();
+    }
+  }
 
   /// Opens a socket connection to the given [route].
   ///
@@ -696,6 +771,7 @@ class SocketPool {
     }
     _isDisposed = true;
     _averageLag.dispose();
+    _closeInBackgroundTimer?.cancel();
     _disposeTimers.forEach((_, t) => t?.cancel());
     _pool.forEach((_, c) => c.dispose());
   }
@@ -704,7 +780,6 @@ class SocketPool {
 /// The global socket pool provider.
 final socketPoolProvider = Provider<SocketPool>((Ref ref) {
   final pool = SocketPool(ref);
-  Timer? closeInBackgroundTimer;
 
   pool.currentClient.connect();
 
@@ -713,29 +788,18 @@ final socketPoolProvider = Provider<SocketPool>((Ref ref) {
     pool.currentClient.connect();
   });
 
+  // Observing the app lifecycle here rather than in [SocketPool], because an
+  // [AppLifecycleListener] needs a [WidgetsBinding], which the pool must not require of the tests
+  // that build one.
   final appLifecycleListener = AppLifecycleListener(
-    onHide: () {
-      closeInBackgroundTimer?.cancel();
-      closeInBackgroundTimer = Timer(_kDisconnectOnBackgroundTimeout, () {
-        _logger.info(
-          'App is in background for ${_kDisconnectOnBackgroundTimeout.inMinutes}m, closing socket.',
-        );
-        pool.currentClient.close();
-      });
-    },
-    onShow: () {
-      closeInBackgroundTimer?.cancel();
-      if (!pool.currentClient.isActive) {
-        pool.currentClient.connect();
-      }
-    },
+    onHide: pool.onAppHidden,
+    onShow: pool.onAppShown,
   );
 
   ref.onDispose(() {
     subscription.cancel();
-    pool.dispose();
-    closeInBackgroundTimer?.cancel();
     appLifecycleListener.dispose();
+    pool.dispose();
   });
 
   return pool;

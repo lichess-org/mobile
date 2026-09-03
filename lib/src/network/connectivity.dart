@@ -7,6 +7,7 @@ import 'package:http/http.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/server_status.dart';
+import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:logging/logging.dart';
 
@@ -27,15 +28,18 @@ final connectivityPluginProvider = Provider<Connectivity>((Ref _) => Connectivit
 /// directly in the rare places that must not be optimistic, and [lichessConnectionStatusProvider]
 /// where a lichess outage has to be shown.
 final isDeviceOnlineProvider = Provider.autoDispose<bool>((ref) {
-  return switch (ref.watch(connectivityChangesProvider)) {
-    // A check that failed does mean we could not reach anything.
-    AsyncValue(hasError: true) => false,
-    // The last known answer, whether it comes from a settled check or from a re-run that has not
-    // completed yet.
-    AsyncValue(:final value?) => value.isOnline,
-    _ => true,
-  };
+  return ref.watch(connectivityChangesProvider.select(_isDeviceOnlineIn));
 }, name: 'IsDeviceOnlineProvider');
+
+/// [isDeviceOnlineProvider]'s view of a connectivity status.
+bool _isDeviceOnlineIn(AsyncValue<ConnectivityStatus> status) => switch (status) {
+  // A check that failed does mean we could not reach anything.
+  AsyncValue(hasError: true) => false,
+  // The last known answer, whether it comes from a settled check or from a re-run that has not
+  // completed yet.
+  AsyncValue(:final value?) => value.isOnline,
+  _ => true,
+};
 
 /// Represents the connection state of the app with respect to the lichess server.
 enum LichessConnectionStatus {
@@ -112,6 +116,28 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
       _connectivityChangesThrottler(() => _onConnectivityChange(result));
     });
 
+    // A socket answering the ping/pong protocol is proof that the device can reach the network, so
+    // it clears an offline status right away rather than leaving it up until the next check.
+    //
+    // Only that edge counts. A socket that is *not* connected proves nothing — it is also what
+    // returning from the background and switching routes look like — and it notices a dead link
+    // long after the check does, since that takes a ping going unanswered. The check therefore
+    // stays the authority on going offline.
+    final pool = ref.read(socketPoolProvider);
+    void onSocketChange() {
+      if (pool.averageLag.value == Duration.zero) return;
+      // Deferred: the pool updates this from inside [SocketPool.open], which controllers call
+      // while building, and Riverpod forbids a provider modifying another during a build.
+      scheduleMicrotask(() {
+        if (!ref.mounted || state.value?.isOnline != false) return;
+        _logger.info('Socket connected, the device is online.');
+        state = AsyncValue.data((isOnline: true, appState: state.requireValue.appState));
+      });
+    }
+
+    pool.averageLag.addListener(onSocketChange);
+    ref.onDispose(() => pool.averageLag.removeListener(onSocketChange));
+
     final AppLifecycleState? appState = WidgetsBinding.instance.lifecycleState;
 
     _appLifecycleListener = AppLifecycleListener(onStateChange: _onAppLifecycleChange);
@@ -171,7 +197,9 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
 
 typedef ConnectivityStatus = ({bool isOnline, AppLifecycleState? appState});
 
-final _internetCheckUris = [
+/// The URIs [isOnline] probes.
+@visibleForTesting
+final internetCheckUris = [
   Uri.parse('https://www.gstatic.com/generate_204'),
   Uri.parse('$kLichessCDNHost/assets/logo/lichess-favicon-32.png'),
 ];
@@ -191,8 +219,8 @@ final _internetCheckUris = [
 Future<bool> isOnline(Client client, {Duration timeout = const Duration(seconds: 5)}) {
   final completer = Completer<bool>();
   try {
-    int remaining = _internetCheckUris.length;
-    final futures = _internetCheckUris.map(
+    int remaining = internetCheckUris.length;
+    final futures = internetCheckUris.map(
       (uri) => client
           .head(uri, headers: const {kQuietRequestHeader: '1'})
           .timeout(timeout)
@@ -214,61 +242,4 @@ Future<bool> isOnline(Client client, {Duration timeout = const Duration(seconds:
     completer.complete(false);
   }
   return completer.future;
-}
-
-extension AsyncValueConnectivity on AsyncValue<ConnectivityStatus> {
-  /// Switches between device's connectivity status.
-  ///
-  /// Using this method assumes the the device is offline when the status is
-  /// not yet available (i.e. [AsyncValue.isLoading].
-  /// If you want to handle the loading state separately, use
-  /// [whenIsLoading] instead.
-  ///
-  /// This method is similar to [AsyncValueX.maybeWhen], but it takes two
-  /// functions, one for when the device is online and another for when it is
-  /// offline.
-  ///
-  /// Example:
-  /// ```dart
-  /// final status = ref.watch(connectivityChangesProvider);
-  /// final result = status.whenIs(
-  ///   online: () => 'Online',
-  ///   offline: () => 'Offline',
-  /// );
-  /// ```
-  R whenIs<R>({required R Function() online, required R Function() offline}) {
-    return maybeWhen(
-      skipLoadingOnReload: true,
-      data: (status) => status.isOnline ? online() : offline(),
-      orElse: offline,
-    );
-  }
-
-  /// Switches between device's connectivity status, but handling the loading state.
-  ///
-  /// This method is similar to [AsyncValueX.when], but it takes three
-  /// functions, one for when the device is online, another for when it is
-  /// offline, and the last for when the status is still loading.
-  ///
-  /// Example:
-  /// ```dart
-  /// final status = ref.watch(connectivityChangesProvider);
-  /// final result = status.whenIsLoading(
-  ///   online: () => 'Online',
-  ///   offline: () => 'Offline',
-  ///   loading: () => 'Loading',
-  /// );
-  /// ```
-  R whenIsLoading<R>({
-    required R Function() online,
-    required R Function() offline,
-    required R Function() loading,
-  }) {
-    return when(
-      skipLoadingOnReload: true,
-      data: (status) => status.isOnline ? online() : offline(),
-      loading: loading,
-      error: (error, stack) => offline(),
-    );
-  }
 }

@@ -797,10 +797,16 @@ void main() {
 
       expectSameLine(tester, ['1. e4', 'e5', '2. d4', 'exd4']);
 
+      // The full sequence: the app installs [AppLifecycleListener]s, which assert on a transition
+      // the platform cannot make.
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
       tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
 
       liveGamePgn = 'e4 e5 Nf3 Nc6';
 
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
       tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
 
       // Wait for API call to refresh game and tree to be updated

@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../binding.dart';
+import '../test_container.dart';
 import 'fake_websocket_channel.dart';
 
 final defaultSocketUri = Uri(path: kDefaultSocketRoute);
@@ -43,6 +44,7 @@ SocketClient makeTestSocketClient({
     pingDelay: const Duration(milliseconds: 50),
     pingMaxLag: const Duration(milliseconds: 200),
     autoReconnectDelay: const Duration(milliseconds: 100),
+    reconnectGracePeriod: const Duration(seconds: 1),
     resendAckDelay: const Duration(milliseconds: 100),
   );
 
@@ -50,6 +52,7 @@ SocketClient makeTestSocketClient({
 }
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   TestLichessBinding.ensureInitialized();
 
   group('SocketClient', () {
@@ -158,6 +161,74 @@ void main() {
       expect(channels[1]!.closeCode, isNotNull);
       expect(socketClient.isConnected, false);
       expect(socketClient.nbConnectionSuccess, 0);
+    });
+
+    test('retries at full speed during the grace period, then backs off', () {
+      final attempts = <Duration>[];
+
+      fakeAsync((async) {
+        final start = async.elapsed;
+        final socketClient = makeTestSocketClient(
+          fakeChannelFactory: FakeWebSocketChannelFactory((_) {
+            attempts.add(async.elapsed - start);
+            throw const SocketException('Network is unreachable');
+          }),
+        );
+        socketClient.connect();
+
+        // The grace period is 1s in tests, the reconnect delay 100ms.
+        async.elapse(const Duration(seconds: 5));
+
+        final gaps = [for (var i = 1; i < attempts.length; i++) attempts[i] - attempts[i - 1]];
+
+        expect(
+          gaps.take(11),
+          everyElement(const Duration(milliseconds: 100)),
+          reason: 'a blip must not be made to wait',
+        );
+        expect(gaps[11], const Duration(milliseconds: 200), reason: 'then the delay doubles');
+        expect(gaps.last, greaterThan(const Duration(milliseconds: 200)));
+
+        socketClient.close();
+        async.flushTimers();
+      });
+    });
+
+    test('a successful connection resets the backoff', () {
+      fakeAsync((async) {
+        final attempts = <Duration>[];
+        final start = async.elapsed;
+        var failing = true;
+        final socketClient = makeTestSocketClient(
+          fakeChannelFactory: FakeWebSocketChannelFactory((route) {
+            attempts.add(async.elapsed - start);
+            if (failing) throw const SocketException('Network is unreachable');
+            return FakeWebSocketChannel(route);
+          }),
+        );
+        socketClient.connect();
+
+        // Fail well past the grace period, so the delay has grown.
+        async.elapse(const Duration(seconds: 5));
+        final grownGap = attempts.last - attempts[attempts.length - 2];
+        expect(grownGap, greaterThan(const Duration(milliseconds: 100)));
+
+        // The network comes back, then drops again: the next retry is at full speed, since this is
+        // a new failure and not the continuation of the old one.
+        failing = false;
+        async.elapse(const Duration(seconds: 5));
+        expect(socketClient.nbConnectionSuccess, greaterThan(0));
+
+        failing = true;
+        attempts.clear();
+        socketClient.connect();
+        async.elapse(const Duration(milliseconds: 250));
+
+        expect(attempts[1] - attempts[0], const Duration(milliseconds: 100));
+
+        socketClient.close();
+        async.flushTimers();
+      });
     });
 
     test('reconnects automatically if pong is not received', () async {
@@ -581,6 +652,39 @@ void main() {
       expect(onEventGapFailureCalled, 1);
 
       socketClient.close();
+    });
+  });
+
+  group('SocketPool', () {
+    test('closes the socket once the app has been in the background for a while', () async {
+      final container = await makeContainer();
+      final pool = container.read(socketPoolProvider);
+
+      // The pool made by the test container does not connect on its own.
+      pool.currentClient.connect();
+      await pool.currentClient.firstConnection;
+      expect(pool.currentClient.isActive, isTrue);
+
+      fakeAsync((async) {
+        pool.onAppHidden();
+
+        async.elapse(const Duration(seconds: 59));
+        expect(
+          pool.currentClient.isActive,
+          isTrue,
+          reason: 'the socket is kept for a while, as the user may well come right back',
+        );
+
+        async.elapse(const Duration(seconds: 2));
+        expect(pool.currentClient.isActive, isFalse);
+
+        // Coming back to the app brings it up again.
+        pool.onAppShown();
+        expect(pool.currentClient.isActive, isTrue);
+
+        pool.currentClient.close();
+        async.flushTimers();
+      });
     });
   });
 }

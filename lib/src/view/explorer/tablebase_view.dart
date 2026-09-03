@@ -25,11 +25,9 @@ class TablebaseView extends ConsumerWidget {
     switch (tablebaseAsync) {
       case AsyncData(:final value):
         if (value == null) {
-          final connectivity = ref.watch(connectivityChangesProvider);
-          final message = connectivity.whenIs(
-            online: () => 'Position not in tablebase.',
-            offline: () => 'Tablebase is not available offline.',
-          );
+          final message = ref.watch(isDeviceOnlineProvider)
+              ? 'Position not in tablebase.'
+              : 'Tablebase is not available offline.';
           return Center(
             child: Padding(padding: const EdgeInsets.all(16.0), child: Text(message)),
           );
@@ -138,11 +136,9 @@ class TablebaseView extends ConsumerWidget {
 
       case AsyncError(:final error):
         debugPrint('SEVERE: [TablebaseView] could not load tablebase data; $error');
-        final connectivity = ref.watch(connectivityChangesProvider);
-        final message = connectivity.whenIs(
-          online: () => 'Could not load tablebase data.',
-          offline: () => 'Tablebase is not available offline.',
-        );
+        final message = ref.watch(isDeviceOnlineProvider)
+            ? 'Could not load tablebase data.'
+            : 'Tablebase is not available offline.';
         return Center(
           child: Padding(padding: const EdgeInsets.all(16.0), child: Text(message)),
         );
