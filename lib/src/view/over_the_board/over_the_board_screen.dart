@@ -45,22 +45,18 @@ overTheBoardLayout({
   required BoardArrangement boardArrangement,
   required Side turn,
   required Side orientation,
-}) {
-
-  return (
-    orientation: boardArrangement == .sideBySideRotateBoard ? turn : orientation,
-    topTableUpsideDown:
-        boardArrangement == .faceToFaceOpponentUpsideDown ||
-        (boardArrangement == .faceToFaceFlipToCurrentPlayer && turn != orientation),
-    bottomTableUpsideDown:
-        boardArrangement == .faceToFaceFlipToCurrentPlayer && turn != orientation,
-    pieceOrientationBehavior: switch (boardArrangement) {
-      .faceToFaceFlipToCurrentPlayer => .sideToPlay,
-      .faceToFaceOpponentUpsideDown => .opponentUpsideDown,
-      .sideBySideWhiteStaysDown || .sideBySideRotateBoard => .facingUser,
-    },
-  );
-}
+}) => (
+  orientation: boardArrangement == .sideBySideRotateBoard ? turn : orientation,
+  topTableUpsideDown:
+      boardArrangement == .faceToFaceOpponentUpsideDown ||
+      (boardArrangement == .faceToFaceFlipToCurrentPlayer && turn != orientation),
+  bottomTableUpsideDown: boardArrangement == .faceToFaceFlipToCurrentPlayer && turn != orientation,
+  pieceOrientationBehavior: switch (boardArrangement) {
+    .faceToFaceFlipToCurrentPlayer => .sideToPlay,
+    .faceToFaceOpponentUpsideDown => .opponentUpsideDown,
+    .sideBySideWhiteStaysDown || .sideBySideRotateBoard => .facingUser,
+  },
+);
 
 class OverTheBoardScreen extends StatelessWidget {
   const OverTheBoardScreen({this.initialFen, this.initialVariant, super.key});
