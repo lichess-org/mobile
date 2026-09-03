@@ -1,6 +1,8 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
+import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/puzzle/streak_screen.dart';
@@ -216,8 +218,355 @@ void main() {
       //now, the text should say 'Your turn'.
       expect(find.text('Your turn'), findsOneWidget);
     });
+
+    testWidgets('reviewing the failed puzzle replays it', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const StreakScreen(),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      // solution is e5e1 g1h2 f6f4 g2g3 f4f2: play the first move, then lose the run on f6f7
+      await playMove(tester, 'e5', 'e1', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      await playMove(tester, 'f6', 'f7', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      expect(find.text('GAME OVER'), findsOneWidget);
+
+      // in review, the same wrong move is taken back
+      await playMove(tester, 'f6', 'f7', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(milliseconds: 600));
+      expect(find.text('Try something else.'), findsOneWidget);
+
+      // and the opponent answers the right move without the next-move button
+      await playMove(tester, 'f6', 'f4', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(milliseconds: 600));
+      expect(find.text('Best move!'), findsOneWidget);
+    });
+
+    testWidgets('can review a previous puzzle and return to the live one', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const StreakScreen(),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      final previousPuzzleFinder = find.byKey(const ValueKey('previous-puzzle'));
+      final nextPuzzleFinder = find.byKey(const ValueKey('next-puzzle'));
+      final skipFinder = find.byWidgetPredicate(
+        (widget) => widget is BottomBarButton && widget.label == 'Skip this move',
+      );
+      final menuFinder = find.byWidgetPredicate(
+        (widget) => widget is BottomBarButton && widget.label == 'Menu',
+      );
+
+      // first puzzle: [Menu] [Previous] [Skip], with previous greyed out
+      expect(tester.widget<BottomBarButton>(previousPuzzleFinder).enabled, isFalse);
+      expect(menuFinder, findsOneWidget);
+
+      // live menu: Share + About only
+      await tester.tap(menuFinder);
+      await tester.pumpAndSettle();
+      expect(find.text('Share this puzzle'), findsOneWidget);
+      expect(find.text('About Streak'), findsOneWidget);
+      expect(find.text('Analysis board'), findsNothing);
+      expect(find.text('Previous puzzle'), findsNothing);
+      expect(find.text('Back to current puzzle'), findsNothing);
+      await tester.tapAt(const Offset(20, 20));
+      await tester.pumpAndSettle();
+
+      // solve the first puzzle to advance to the second
+      await playMove(tester, 'e5', 'e1', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      await playMove(tester, 'f6', 'f4', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      await playMove(tester, 'f4', 'f2', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+
+      // second puzzle: [Menu] [Previous] [Skip], with previous now live
+      expect(find.textContaining(RegExp('1\$')), findsOneWidget);
+      expect(menuFinder, findsOneWidget);
+      expect(tester.widget<BottomBarButton>(previousPuzzleFinder).onTap, isNotNull);
+      expect(skipFinder, findsOneWidget);
+
+      // the board shows the live (second) puzzle, rating 1058
+      expect(find.textContaining('1058'), findsOneWidget);
+      expect(find.textContaining('1012'), findsNothing);
+
+      // review the first (solved) puzzle
+      await tester.tap(previousPuzzleFinder);
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+
+      // review: [Menu] [Analysis] [Previous] [Next], previous disabled on the first puzzle
+      expect(menuFinder, findsOneWidget);
+      expect(find.byKey(const ValueKey('analysis')), findsOneWidget);
+      expect(tester.widget<BottomBarButton>(previousPuzzleFinder).onTap, isNull);
+      expect(nextPuzzleFinder, findsOneWidget);
+      expect(skipFinder, findsNothing);
+      expect(find.byKey(const ValueKey('next-move')), findsNothing);
+
+      // the board shows the reviewed (first) puzzle, rating 1012
+      expect(find.textContaining('1012'), findsWidgets);
+      expect(find.textContaining('1058'), findsNothing);
+
+      // in review, not reloaded into play
+      expect(find.text('Solved puzzle 1 of 1'), findsOneWidget);
+      expect(find.text('Success!'), findsNothing);
+      expect(find.textContaining('Your turn'), findsNothing);
+
+      // review menu: Share + Back to current + About
+      await tester.tap(menuFinder);
+      await tester.pumpAndSettle();
+      expect(find.text('Analysis board'), findsNothing);
+      expect(find.text('Share this puzzle'), findsOneWidget);
+      expect(find.text('Back to current puzzle'), findsOneWidget);
+      expect(find.text('About Streak'), findsOneWidget);
+
+      await tester.tapAt(const Offset(20, 20));
+      await tester.pumpAndSettle();
+
+      // the back gesture leaves the review, not the streak
+      await tester.state<NavigatorState>(find.byType(Navigator).first).maybePop();
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+      expect(find.text('No worries, your score will be saved locally.'), findsNothing);
+      expect(nextPuzzleFinder, findsNothing);
+      expect(skipFinder, findsOneWidget);
+      expect(find.textContaining('1058'), findsOneWidget);
+
+      // review again, and return to the live puzzle through the bottom bar this time
+      await tester.tap(previousPuzzleFinder);
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+      expect(find.text('Solved puzzle 1 of 1'), findsOneWidget);
+      await tester.tap(nextPuzzleFinder);
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      expect(nextPuzzleFinder, findsNothing);
+      expect(skipFinder, findsOneWidget);
+
+      // back on the live puzzle (rating 1058), still mid-play
+      expect(find.textContaining('1058'), findsOneWidget);
+      expect(find.textContaining('1012'), findsNothing);
+      expect(find.text('Solved puzzle 1 of 1'), findsNothing);
+    });
+
+    testWidgets('a solved puzzle is still reachable once the run is over', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const StreakScreen(),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      // solve the first puzzle
+      await playMove(tester, 'e5', 'e1', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      await playMove(tester, 'f6', 'f4', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      await playMove(tester, 'f4', 'f2', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+
+      // fail the second one (the solution is Qc8)
+      await playMove(tester, 'e6', 'f7', orientation: Side.white);
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+      expect(find.text('GAME OVER'), findsOneWidget);
+
+      // once the run is over: [Menu] [Analysis] [Previous] [Next] [New streak]. The arrows walk
+      // the run, and next is spent because the failed puzzle is the last one.
+      expect(find.byKey(const ValueKey('analysis')), findsOneWidget);
+      expect(find.byKey(const ValueKey('previous-move')), findsNothing);
+      expect(find.byKey(const ValueKey('next-move')), findsNothing);
+      expect(findByTooltip('New streak'), findsOneWidget);
+      expect(
+        tester.widget<BottomBarButton>(find.byKey(const ValueKey('next-puzzle'))).enabled,
+        isFalse,
+      );
+
+      await tester.tap(find.byKey(const ValueKey('previous-puzzle')));
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+
+      // reviewing the solved first puzzle (1012), not the failed one (1058)
+      expect(find.textContaining('1012'), findsWidgets);
+      expect(find.textContaining('1058'), findsNothing);
+      expect(find.text('Solved puzzle 1 of 1'), findsOneWidget);
+      expect(find.text('GAME OVER'), findsNothing);
+    });
+
+    testWidgets('a new streak cannot start offline, and the button says so', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const StreakScreen(),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+          isDeviceOnlineProvider: isDeviceOnlineProvider.overrideWithValue(false),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      // lose the run on the first move
+      await playMove(tester, 'f6', 'f7', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      expect(find.text('GAME OVER'), findsOneWidget);
+
+      final newStreakButton = find.byKey(const ValueKey('new-streak'));
+      expect(tester.widget<BottomBarButton>(newStreakButton).onTap, isNotNull);
+      await tester.tap(newStreakButton);
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+
+      // the game over board stays, with an explanation
+      expect(find.text("You're offline. Go online to start a new streak."), findsOneWidget);
+      expect(find.text('GAME OVER'), findsOneWidget);
+    });
+
+    testWidgets('a solve stranded offline says it is waiting for a connection', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const StreakScreen(),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(streakOnlyClient, ref),
+          ),
+          isDeviceOnlineProvider: isDeviceOnlineProvider.overrideWithValue(false),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      // solve the first puzzle: the next one is neither cached nor reachable
+      await playMove(tester, 'e5', 'e1', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      await playMove(tester, 'f6', 'f4', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      await playMove(tester, 'f4', 'f2', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+
+      // the solve counts, and the screen says what it is waiting for
+      expect(find.textContaining(RegExp('1\$')), findsOneWidget);
+      expect(find.text('Success!'), findsOneWidget);
+      expect(find.text('Waiting for connection to load the next puzzle.'), findsOneWidget);
+      expect(
+        find.text("You're offline. Your streak will continue when you reconnect."),
+        findsOneWidget,
+      );
+      // the reconnect is retried by the controller, so there is nothing to tap
+      expect(find.byKey(const ValueKey('retry-advance')), findsNothing);
+    });
+
+    testWidgets('a solve that cannot advance online offers a retry', (tester) async {
+      // the next puzzle fails to load once, when the advance fetches it
+      var failuresLeft = 1;
+      final flakyClient = MockClient((request) async {
+        if (request.url.path == '/api/puzzle/4CZxz' && failuresLeft > 0) {
+          failuresLeft--;
+          return http.Response('', 500);
+        }
+        return http.Response.fromStream(
+          await client.send(http.Request(request.method, request.url)),
+        );
+      });
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const StreakScreen(),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(flakyClient, ref),
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      final retryFinder = find.byKey(const ValueKey('retry-advance'));
+      expect(retryFinder, findsNothing);
+
+      await playMove(tester, 'e5', 'e1', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      await playMove(tester, 'f6', 'f4', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      await playMove(tester, 'f4', 'f2', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+
+      // the solve counts, the screen says what went wrong and the skip button became a retry
+      expect(find.textContaining(RegExp('1\$')), findsOneWidget);
+      expect(find.text('Could not load the next puzzle.'), findsOneWidget);
+      expect(find.byKey(const ValueKey('skip')), findsNothing);
+      expect(retryFinder, findsOneWidget);
+
+      await tester.tap(retryFinder);
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      // on the second puzzle (rating 1058), with the bar back to normal
+      expect(find.textContaining('1058'), findsOneWidget);
+      expect(find.text('Could not load the next puzzle.'), findsNothing);
+      expect(retryFinder, findsNothing);
+      expect(find.byKey(const ValueKey('skip')), findsOneWidget);
+    });
+
+    testWidgets('a new streak started from a review shows its live puzzle', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const StreakScreen(),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      // solve the first puzzle, fail the second, review the first
+      await playMove(tester, 'e5', 'e1', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      await playMove(tester, 'f6', 'f4', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      await playMove(tester, 'f4', 'f2', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+      await playMove(tester, 'e6', 'f7', orientation: Side.white);
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+      await tester.tap(find.byKey(const ValueKey('previous-puzzle')));
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+      expect(find.text('Solved puzzle 1 of 1'), findsOneWidget);
+
+      await tester.tap(find.byKey(const ValueKey('new-streak')));
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      // the review is over: the new run's first puzzle is on the board, in play
+      expect(find.text('Solved puzzle 1 of 1'), findsNothing);
+      expect(find.byKey(const ValueKey('next-puzzle')), findsNothing);
+      expect(find.byKey(const ValueKey('skip')), findsOneWidget);
+      expect(find.text('Your turn'), findsOneWidget);
+      expect(find.textContaining(RegExp('0\$')), findsOneWidget);
+    });
   });
 }
+
+/// Serves the streak, then goes offline: nothing is cached ahead of the first puzzle.
+final streakOnlyClient = MockClient((request) async {
+  if (request.url.path == '/api/streak') {
+    return http.Response.fromStream(await client.send(http.Request(request.method, request.url)));
+  }
+  throw http.ClientException('offline');
+});
 
 final client = MockClient((request) {
   if (request.url.path == '/api/streak') {

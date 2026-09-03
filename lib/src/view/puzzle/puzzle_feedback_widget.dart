@@ -11,18 +11,54 @@ import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:material_ui/material_ui.dart';
 
 class PuzzleFeedbackWidget extends ConsumerWidget {
-  const PuzzleFeedbackWidget({required this.puzzle, required this.state, required this.onStreak});
+  const PuzzleFeedbackWidget({
+    required this.puzzle,
+    required this.state,
+    required this.onStreak,
+    this.streakReview,
+    this.streakAdvanceNotice,
+  });
 
   final Puzzle puzzle;
   final PuzzleState state;
   final bool onStreak;
 
+  /// Shown in place of the puzzle stats while a solved streak puzzle cannot advance, e.g. offline.
+  final String? streakAdvanceNotice;
+
+  /// Set while a solved streak puzzle is reviewed: its index in the run and the solved count.
+  final ({int index, int total})? streakReview;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final replayFeedback = switch (state.feedback) {
+      PuzzleFeedback.good => Text(context.l10n.puzzleBestMove, overflow: TextOverflow.ellipsis),
+      PuzzleFeedback.bad => Text(
+        context.l10n.puzzleTrySomethingElse,
+        overflow: TextOverflow.ellipsis,
+      ),
+      null => null,
+    };
+
+    final review = streakReview;
+    if (review != null) {
+      return FeedbackTile(
+        leading: switch (state.feedback) {
+          PuzzleFeedback.good => Icon(Icons.check, size: 36, color: context.lichessColors.good),
+          PuzzleFeedback.bad => Icon(Icons.close, size: 36, color: context.lichessColors.error),
+          null => SideToPlayPiece(side: state.pov),
+        },
+        title: Text(
+          'Solved puzzle ${review.index + 1} of ${review.total}',
+          overflow: TextOverflow.ellipsis,
+        ),
+        subtitle: replayFeedback ?? _PuzzleStats(puzzle: puzzle),
+      );
+    }
+
     switch (state.mode) {
-      case PuzzleMode.view:
-        final puzzleRating = context.l10n.puzzleRatingX(puzzle.puzzle.rating.toString());
-        final playedXTimes = context.l10n.puzzlePlayedXTimes(puzzle.puzzle.plays).localizeNumbers();
+      case PuzzleMode.view || PuzzleMode.replay:
+        final notice = streakAdvanceNotice;
         return FeedbackTile(
           leading: state.result == PuzzleResult.win
               ? Icon(Icons.check, size: 36, color: context.lichessColors.good)
@@ -41,15 +77,10 @@ class PuzzleFeedbackWidget extends ConsumerWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
           subtitle: onStreak && state.result == PuzzleResult.lose
-              ? null
-              : RatingPrefAware(
-                  orElse: Text('$playedXTimes.', overflow: TextOverflow.ellipsis, maxLines: 2),
-                  child: Text(
-                    '$puzzleRating. $playedXTimes.',
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
-                  ),
-                ),
+              ? replayFeedback
+              : notice != null
+              ? Text(notice, overflow: TextOverflow.ellipsis, maxLines: 2)
+              : _PuzzleStats(puzzle: puzzle),
         );
       case PuzzleMode.load:
       case PuzzleMode.play:
@@ -83,6 +114,22 @@ class PuzzleFeedbackWidget extends ConsumerWidget {
           );
         }
     }
+  }
+}
+
+class _PuzzleStats extends StatelessWidget {
+  const _PuzzleStats({required this.puzzle});
+
+  final Puzzle puzzle;
+
+  @override
+  Widget build(BuildContext context) {
+    final rating = context.l10n.puzzleRatingX(puzzle.puzzle.rating.toString());
+    final playedXTimes = context.l10n.puzzlePlayedXTimes(puzzle.puzzle.plays).localizeNumbers();
+    return RatingPrefAware(
+      orElse: Text('$playedXTimes.', overflow: TextOverflow.ellipsis, maxLines: 2),
+      child: Text('$rating. $playedXTimes.', overflow: TextOverflow.ellipsis, maxLines: 2),
+    );
   }
 }
 

@@ -20,6 +20,26 @@ void main() {
     FakeClient.reset();
   });
 
+  group('isPermanentFailure', () {
+    ServerException serverException(int status) =>
+        ServerException(status, 'error', Uri.parse('https://lichess.org/api/test'), null);
+
+    test('a 4xx is final', () {
+      expect(isPermanentFailure(serverException(400)), isTrue);
+      expect(isPermanentFailure(serverException(404)), isTrue);
+    });
+
+    test('a 401, a 429 and a 5xx may pass later', () {
+      expect(isPermanentFailure(serverException(401)), isFalse);
+      expect(isPermanentFailure(serverException(429)), isFalse);
+      expect(isPermanentFailure(serverException(503)), isFalse);
+    });
+
+    test('a network error may pass later', () {
+      expect(isPermanentFailure(http.ClientException('offline')), isFalse);
+    });
+  });
+
   group('shouldRetryOn429', () {
     http.Response response(int status, {String method = 'GET', String path = '/api/test'}) {
       return http.Response(
@@ -58,6 +78,15 @@ void main() {
         shouldRetryOn429(response(429, method: 'GET', path: '/api/puzzle/batch/advancedPawn')),
         isFalse,
       );
+    });
+
+    test('does not retry a streak look-ahead refill (GET /api/puzzle/many)', () {
+      expect(shouldRetryOn429(response(429, path: '/api/puzzle/many')), isFalse);
+    });
+
+    test('retries other puzzle endpoints', () {
+      expect(shouldRetryOn429(response(429, path: '/api/puzzle/abcde')), isTrue);
+      expect(shouldRetryOn429(response(429, path: '/api/puzzle/manyfold')), isTrue);
     });
   });
 
