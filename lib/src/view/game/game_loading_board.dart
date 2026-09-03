@@ -620,7 +620,10 @@ class ChallengeDeclinedBoard extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             const Text(' — '),
-                            UserFullNameWidget(user: challenge.destUser?.user),
+                            Flexible(
+                              fit: FlexFit.loose,
+                              child: UserFullNameWidget(user: challenge.destUser?.user),
+                            ),
                             if (challenge.destUser?.lagRating != null) ...[
                               const SizedBox(width: 6.0),
                               LagIndicator(lagRating: challenge.destUser!.lagRating!, size: 13.0),

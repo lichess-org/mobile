@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set up JDK 17
-        uses: actions/setup-java@v5.7.0
+        uses: actions/setup-java@v6.0.0
         with:
           java-version: 17
           distribution: temurin
@@ -45,7 +45,7 @@ jobs:
       - name: Setup Fastlane
         uses: ruby/setup-ruby@v1.321.0
         with:
-          ruby-version: "3.2"
+          ruby-version: "3.4"
           bundler-cache: true
           working-directory: android
 

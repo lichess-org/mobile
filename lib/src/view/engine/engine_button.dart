@@ -2,9 +2,9 @@ import 'dart:math' as math;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
-import 'package:lichess_mobile/src/model/engine/engine.dart';
+import 'package:lichess_mobile/src/model/engine/engine_utils.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
+import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/popover.dart';
@@ -33,15 +33,15 @@ class _EngineButtonState extends ConsumerState<EngineButton> {
   @override
   Widget build(BuildContext context) {
     final prefs = ref.watch(engineEvaluationPreferencesProvider);
-    final (engineName: engineName, eval: localEval, state: engineState, currentWork: work) = ref
-        .watch(engineEvaluationProvider(widget.filters));
+    final (engine: engine, eval: localEval, isComputing: isComputing, currentWork: _) = ref.watch(
+      engineEvaluationProvider(widget.filters),
+    );
     final eval = pickBestClientEval(localEval: localEval, savedEval: widget.savedEval);
 
     final newChipColor = prefs.isEnabled
-        ? switch (engineState) {
-            EngineState.computing => ColorScheme.of(context).primary,
-            _ => ColorScheme.of(context).primary.withValues(alpha: 0.65),
-          }
+        ? isComputing
+              ? ColorScheme.of(context).primary
+              : ColorScheme.of(context).primary.withValues(alpha: 0.65)
         : IconTheme.of(context).color ?? TextTheme.of(context).bodyMedium!.color!;
 
     fromChipColor = toChipColor ?? newChipColor;
@@ -112,17 +112,18 @@ class _EngineButtonState extends ConsumerState<EngineButton> {
                       child: prefs.isEnabled
                           ? eval is CloudEval
                                 ? Text('${math.min(99, eval.depth)}', style: iconTextStyle)
-                                : switch (engineState) {
-                                    EngineState.computing || EngineState.idle =>
+                                : switch (engine) {
+                                    // No engine has been asked for yet.
+                                    null => Text('-', style: iconTextStyle),
+                                    AsyncError() => Text('!', style: iconTextStyle),
+                                    AsyncValue(isLoading: true) => loadingIndicator,
+                                    _ =>
                                       eval?.depth != null
                                           ? Text(
                                               '${math.min(99, eval!.depth)}',
                                               style: iconTextStyle,
                                             )
                                           : loadingIndicator,
-                                    EngineState.loading => loadingIndicator,
-                                    EngineState.initial => Text('-', style: iconTextStyle),
-                                    EngineState.error => Text('!', style: iconTextStyle),
                                   }
                           : const SizedBox.shrink(),
                     ),
@@ -135,7 +136,7 @@ class _EngineButtonState extends ConsumerState<EngineButton> {
         Positioned(
           bottom: -6,
           child: Text(
-            engineShortLabel(engineName) ?? prefs.enginePref.shortLabel,
+            engineShortLabel(engine?.value) ?? prefs.enginePref.shortLabel,
             style: TextStyle(
               fontSize: 10,
               fontWeight: FontWeight.w700,
@@ -281,18 +282,12 @@ class _EnginePopup extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final evalState = ref.watch(engineEvaluationProvider(filters));
-    final (state: engineState, currentWork: work, engineName: engineName, eval: evalStateEval) =
-        evalState;
+    final (engine: engine, currentWork: work, eval: evalStateEval, isComputing: isComputing) = ref
+        .watch(engineEvaluationProvider(filters));
     final bool canGoDeeper =
-        goDeeper != null &&
-        engineState != EngineState.computing &&
-        (work == null || work.isDeeper != true);
+        goDeeper != null && !isComputing && (work == null || work.isDeeper != true);
 
-    final currentEval = switch (engineState) {
-      EngineState.computing || EngineState.idle => evalStateEval,
-      _ => null,
-    };
+    final currentEval = engine?.hasValue == true ? evalStateEval : null;
 
     if (currentEval is CloudEval) {
       return ListTile(
@@ -309,9 +304,10 @@ class _EnginePopup extends ConsumerWidget {
       );
     }
 
-    final knps = engineState == EngineState.computing ? ', ${evalStateEval?.knps.round()}kn/s' : '';
+    final knps = isComputing ? ', ${evalStateEval?.knps.round()}kn/s' : '';
 
     // remove Fairy-Stockfish version from engine name
+    final engineName = engine?.value;
     final fixedEngineName = engineName != null && engineName.startsWith('Fairy-Stockfish')
         ? 'Fairy-Stockfish'
         : engineName ?? 'Stockfish';

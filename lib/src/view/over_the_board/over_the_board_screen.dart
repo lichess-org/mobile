@@ -46,10 +46,9 @@ overTheBoardLayout({
   required Side turn,
   required Side orientation,
 }) {
-  final boardOrientation = boardArrangement == .sideBySideRotateBoard ? turn : orientation;
 
   return (
-    orientation: boardOrientation,
+    orientation: boardArrangement == .sideBySideRotateBoard ? turn : orientation,
     topTableUpsideDown:
         boardArrangement == .faceToFaceOpponentUpsideDown ||
         (boardArrangement == .faceToFaceFlipToCurrentPlayer && turn != orientation),
@@ -221,6 +220,8 @@ class _BodyState extends ConsumerState<_Body> {
       }
     });
 
+    final blindfoldMode = overTheBoardPrefs.blindfoldMode;
+
     final layout = overTheBoardLayout(
       boardArrangement: overTheBoardPrefs.boardArrangement,
       turn: gameState.turn,
@@ -315,6 +316,7 @@ class _BodyState extends ConsumerState<_Body> {
                       drawShape: const DrawShapeOptions(enable: false),
                       pieceOrientationBehavior: layout.pieceOrientationBehavior,
                       enablePremoves: false,
+                      blindfoldMode: blindfoldMode,
                     ),
                     userActionsBar: _BottomBar(
                       onFlipBoard: () {

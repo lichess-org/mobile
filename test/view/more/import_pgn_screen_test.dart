@@ -37,6 +37,9 @@ final class _FakePlatformFile extends PlatformFile {
 
   @override
   Stream<Uint8List> readAsByteStream() => Stream.value(fileBytes);
+
+  @override
+  int? lengthSync() => fileBytes.length;
 }
 
 Future<Widget> _makeApp(WidgetTester tester, {PlatformFile? pickResult}) =>

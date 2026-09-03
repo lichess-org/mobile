@@ -58,4 +58,27 @@ platform :ios do
       skip_waiting_for_build_processing: true
     )
   end
+
+  desc "Build an unsigned .ipa for manual testing on BrowserStack"
+  lane :test_build do
+    root = File.expand_path("../..", __dir__)
+    out = "#{root}/build/ios/browserstack"
+
+    sh "cd #{root} && flutter build ios --release --no-codesign --dart-define=LICHESS_HOST=lichess.org --dart-define=LICHESS_WS_HOST=socket.lichess.org --dart-define=LICHESS_WS_SECRET=#{ENV['WS_SECRET']}"
+
+    # An .ipa is a zip with the .app under Payload/ and nothing else required, so it is built by
+    # hand here: xcodebuild's exportArchive is the step that insists on a profile, and it is the
+    # step being skipped.
+    sh <<~SHELL
+      set -e
+      rm -rf "#{out}"
+      mkdir -p "#{out}/Payload"
+      cp -R "#{root}/build/ios/iphoneos/Runner.app" "#{out}/Payload/"
+      cd "#{out}"
+      zip -qry lichess-test.ipa Payload
+      rm -rf Payload
+    SHELL
+
+    UI.success("Unsigned .ipa ready at #{out}/lichess-test.ipa")
+  end
 end

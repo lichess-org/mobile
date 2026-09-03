@@ -333,20 +333,30 @@ class OverTheBoardDisplaySettings extends ConsumerWidget {
   const OverTheBoardDisplaySettings();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) => BottomSheetScrollableContainer(
-    children: [
-      _buildConfigSection(
-        'Players face to face',
-        trailingIconElements: _buildFaceToFaceIcon(textShade(context, 0.5)),
-        choices: [.faceToFaceOpponentUpsideDown, .faceToFaceFlipToCurrentPlayer],
-        ref: ref,
-      ),
-      _buildConfigSection(
-        'Players side by side',
-        trailingIconElements: _buildSideBySideIcon(textShade(context, 0.5)),
-        choices: [.sideBySideWhiteStaysDown, .sideBySideRotateBoard],
-        ref: ref,
-      ),
-    ],
-  );
+  Widget build(BuildContext context, WidgetRef ref) {
+    final prefs = ref.watch(overTheBoardPreferencesProvider);
+
+    return BottomSheetScrollableContainer(
+      children: [
+        _buildConfigSection(
+          'Players face to face',
+          trailingIconElements: _buildFaceToFaceIcon(textShade(context, 0.5)),
+          choices: [.faceToFaceOpponentUpsideDown, .faceToFaceFlipToCurrentPlayer],
+          ref: ref,
+        ),
+        _buildConfigSection(
+          'Players side by side',
+          trailingIconElements: _buildSideBySideIcon(textShade(context, 0.5)),
+          choices: [.sideBySideWhiteStaysDown, .sideBySideRotateBoard],
+          ref: ref,
+        ),
+        SwitchSettingTile(
+          title: Text(context.l10n.preferencesBlindfold),
+          value: prefs.blindfoldMode,
+          onChanged: (_) =>
+              ref.read(overTheBoardPreferencesProvider.notifier).toggleBlindfoldMode(),
+        ),
+      ],
+    );
+  }
 }

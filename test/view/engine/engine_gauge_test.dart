@@ -1,7 +1,9 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_context.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -15,7 +17,14 @@ void main() {
       position: Chess.initial.makeSanUnchecked(Move.parse('e2e4')!).$1,
       savedEval: null,
       serverEval: const ExternalEval(cp: 0, mate: null),
-      filters: (id: const StringId('test'), path: null),
+      filters: (
+        context: const EvaluationContext(
+          id: StringId('test'),
+          variant: Variant.standard,
+          initialPosition: Chess.initial,
+        ),
+        path: null,
+      ),
     );
 
     final widget = await makeTestProviderScopeApp(
@@ -41,7 +50,14 @@ void main() {
       position: Chess.initial.makeSanUnchecked(Move.parse('e2e4')!).$1,
       savedEval: null,
       serverEval: const ExternalEval(cp: 2, mate: null),
-      filters: (id: const StringId('test'), path: null),
+      filters: (
+        context: const EvaluationContext(
+          id: StringId('test'),
+          variant: Variant.standard,
+          initialPosition: Chess.initial,
+        ),
+        path: null,
+      ),
     );
 
     final widget = await makeTestProviderScopeApp(
@@ -66,7 +82,14 @@ void main() {
       position: drawPosition,
       savedEval: null,
       serverEval: null,
-      filters: (id: const StringId('test'), path: null),
+      filters: (
+        context: const EvaluationContext(
+          id: StringId('test'),
+          variant: Variant.standard,
+          initialPosition: Chess.initial,
+        ),
+        path: null,
+      ),
     );
 
     final widget = await makeTestProviderScopeApp(

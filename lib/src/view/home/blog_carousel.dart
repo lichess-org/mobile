@@ -300,12 +300,15 @@ class _BlogCardContent extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.baseline,
                 textBaseline: TextBaseline.alphabetic,
                 children: [
-                  UserFullNameWidget(
-                    user: post.author,
-                    showPatron: false,
-                    showFlair: false,
-                    style: TextStyle(color: subTitleColor, letterSpacing: -0.2),
+                  Expanded(
+                    child: UserFullNameWidget(
+                      user: post.author,
+                      showPatron: false,
+                      showFlair: false,
+                      style: TextStyle(color: subTitleColor, letterSpacing: -0.2),
+                    ),
                   ),
+                  const SizedBox(width: 4.0),
                   Text(
                     _dateFormat.format(post.createdAt),
                     style: TextStyle(color: subTitleColor, letterSpacing: -0.2, fontSize: 12.0),

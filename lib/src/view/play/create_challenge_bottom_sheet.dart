@@ -376,7 +376,10 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
                                               const Text(' — '),
-                                              UserFullNameWidget(user: widget.user),
+                                              Flexible(
+                                                fit: FlexFit.loose,
+                                                child: UserFullNameWidget(user: widget.user),
+                                              ),
                                             ],
                                           ),
                                         ),

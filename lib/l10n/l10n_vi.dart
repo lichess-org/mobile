@@ -266,7 +266,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileStopShowingThreat => 'Dừng hiện mối nguy';
 
   @override
-  String get mobileTournamentCompleted => 'Hoàn thành';
+  String get mobileTournamentCompleted => 'Đã hoàn thành';
 
   @override
   String get mobileTournamentJumpToMyPage => 'Đến trang chứa tôi';
