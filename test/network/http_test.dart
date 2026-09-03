@@ -426,6 +426,25 @@ void main() {
     });
   });
 
+  group('kQuietRequestHeader', () {
+    test('is stripped before the request is sent', () async {
+      final container = await makeContainer(
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => FakeClient());
+          }),
+        },
+      );
+      final client = container.read(defaultClientProvider);
+      await client.head(
+        Uri.https('www.gstatic.com', '/generate_204'),
+        headers: const {kQuietRequestHeader: '1'},
+      );
+      final requests = FakeClient.verifyRequests();
+      expect(requests.first.headers.containsKey(kQuietRequestHeader), isFalse);
+    });
+  });
+
   group('downloadFile', () {
     Future<File> targetFile() async {
       final tempDir = await Directory.systemTemp.createTemp('download_test_');

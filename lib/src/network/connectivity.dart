@@ -177,12 +177,19 @@ final _internetCheckUris = [
 ];
 
 /// Checks if the device is online by making a HEAD request to a list of URIs.
+///
+/// The requests are marked with [kQuietRequestHeader]: they are expected to fail whenever the
+/// device is offline, which is exactly when this check matters, so their failures are not worth a
+/// warning in the logs.
 Future<bool> isOnline(Client client, {Duration timeout = const Duration(seconds: 10)}) {
   final completer = Completer<bool>();
   try {
     int remaining = _internetCheckUris.length;
     final futures = _internetCheckUris.map(
-      (uri) => client.head(uri).timeout(timeout).then((response) => true, onError: (_) => false),
+      (uri) => client
+          .head(uri, headers: const {kQuietRequestHeader: '1'})
+          .timeout(timeout)
+          .then((response) => true, onError: (_) => false),
     );
     for (final future in futures) {
       future.then((value) {
