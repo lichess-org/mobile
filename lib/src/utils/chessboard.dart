@@ -13,10 +13,15 @@ Set<Square>? atomicExplosionSquares(Position positionBefore, Move? move) {
   return squareSet.isEmpty ? null : squareSet.squares.toSet();
 }
 
+PieceSet? _lastCachedPieceSet;
+
 /// Preload piece images from the specified [PieceSet] into Chessground's image cache.
 ///
-/// This method clears the cache before loading the images.
+/// This method clears the cache before loading the images. Subsequent calls
+/// with the same [pieceSet] are skipped to avoid flash and redundant work.
 Future<void> precachePieceImages(PieceSet pieceSet) async {
+  if (_lastCachedPieceSet == pieceSet) return;
+
   try {
     final devicePixelRatio =
         WidgetsBinding.instance.platformDispatcher.implicitView?.devicePixelRatio ?? 1.0;
@@ -27,6 +32,7 @@ Future<void> precachePieceImages(PieceSet pieceSet) async {
       for (final asset in pieceSet.assets.values)
         ChessgroundImages.instance.load(asset, devicePixelRatio: devicePixelRatio),
     ]);
+    _lastCachedPieceSet = pieceSet;
   } catch (e) {
     debugPrint('Failed to preload piece images: $e');
   }
