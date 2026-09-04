@@ -437,14 +437,10 @@ class _BodyState extends ConsumerState<_Body> {
   Widget build(BuildContext context) {
     final boardPreferences = ref.watch(boardPreferencesProvider);
     final ctrlProvider = puzzleControllerProvider(widget.initialPuzzleContext);
-    final puzzleState = ref.watch(ctrlProvider);
-    // Slice 1: isolate hint shapes and view-mode from whole-state watch.
+    // Slice 1+2+3: parent watches only slices; FeedbackWidget isolated below.
     final hintSquare = ref.watch(ctrlProvider.select((s) => s.hintSquare));
     final mode = ref.watch(ctrlProvider.select((s) => s.mode));
-    // Slice 2: narrow remaining hot fields. Parent still watches whole for
-    // FeedbackWidget; board/tree/bottom bar will use these selects.
     final pov = ref.watch(ctrlProvider.select((s) => s.pov));
-    final puzzle = ref.watch(ctrlProvider.select((s) => s.puzzle));
     final root = ref.watch(ctrlProvider.select((s) => s.root));
     final currentPath = ref.watch(ctrlProvider.select((s) => s.currentPath));
     final puzzleId = ref.watch(ctrlProvider.select((s) => s.puzzle.puzzle.id));
@@ -544,10 +540,16 @@ class _BodyState extends ConsumerState<_Body> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Center(
-                            child: PuzzleFeedbackWidget(
-                              puzzle: puzzle,
-                              state: puzzleState,
-                              onStreak: false,
+                            child: Consumer(
+                              builder: (context, ref, _) {
+                                final puzzle = ref.watch(ctrlProvider.select((s) => s.puzzle));
+                                final state = ref.watch(ctrlProvider);
+                                return PuzzleFeedbackWidget(
+                                  puzzle: puzzle,
+                                  state: state,
+                                  onStreak: false,
+                                );
+                              },
                             ),
                           ),
                           _PuzzleStatus(initialPuzzleContext: widget.initialPuzzleContext),
@@ -607,10 +609,16 @@ class _BodyState extends ConsumerState<_Body> {
                         horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
                       ),
                       child: Center(
-                        child: PuzzleFeedbackWidget(
-                          puzzle: puzzle,
-                          state: puzzleState,
-                          onStreak: false,
+                        child: Consumer(
+                          builder: (context, ref, _) {
+                            final puzzle = ref.watch(ctrlProvider.select((s) => s.puzzle));
+                            final state = ref.watch(ctrlProvider);
+                            return PuzzleFeedbackWidget(
+                              puzzle: puzzle,
+                              state: state,
+                              onStreak: false,
+                            );
+                          },
                         ),
                       ),
                     ),
