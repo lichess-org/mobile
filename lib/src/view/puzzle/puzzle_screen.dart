@@ -437,7 +437,6 @@ class _BodyState extends ConsumerState<_Body> {
   Widget build(BuildContext context) {
     final boardPreferences = ref.watch(boardPreferencesProvider);
     final ctrlProvider = puzzleControllerProvider(widget.initialPuzzleContext);
-    // Slice 1+2+3: parent watches only slices; FeedbackWidget isolated below.
     final hintSquare = ref.watch(ctrlProvider.select((s) => s.hintSquare));
     final mode = ref.watch(ctrlProvider.select((s) => s.mode));
     final pov = ref.watch(ctrlProvider.select((s) => s.pov));
