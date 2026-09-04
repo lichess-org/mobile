@@ -68,6 +68,10 @@ class MockSoundService extends Mock implements SoundService {}
 
 class MockCreateGameService extends Mock implements CreateGameService {}
 
+const _iPhone16ZoomedSurface = Size(320.0, 693.0);
+const _iPhone16ZoomedDevicePixelRatio = 3.0;
+const _iPhone16ZoomedPhysicalViewPadding = EdgeInsets.only(top: 141.0, bottom: 102.0);
+
 void main() {
   const testGameFullId = GameFullId('qVChCOTcHSeW');
   final testGameSocketUri = GameController.socketUri(testGameFullId);
@@ -100,6 +104,25 @@ void main() {
   });
 
   group('Loading', () {
+    testWidgets('compact portrait board fills width with game controls visible', (tester) async {
+      await createTestGame(
+        tester,
+        surfaceSize: _iPhone16ZoomedSurface,
+        devicePixelRatio: _iPhone16ZoomedDevicePixelRatio,
+        physicalViewPadding: _iPhone16ZoomedPhysicalViewPadding,
+        failOnOverflow: true,
+      );
+
+      final boardRect = tester.getRect(find.byType(Chessboard));
+      expect(boardRect.left, 0.0);
+      expect(boardRect.right, _iPhone16ZoomedSurface.width);
+      expect(boardRect.size, const Size.square(320.0));
+      expect(find.text('Peter'), findsOneWidget);
+      expect(find.text('Steven'), findsOneWidget);
+      expect(find.byType(Clock), findsNWidgets(2));
+      expect(find.byType(BottomBar), findsOneWidget);
+    });
+
     testWidgets('a game directly with initialGameId', (WidgetTester tester) async {
       final app = await makeTestProviderScopeApp(
         tester,
@@ -2849,11 +2872,16 @@ Future<void> createTestGame(
   Map<ProviderOrFamily, Override>? overrides,
   TournamentMeta? tournament,
   ServerGamePrefs? serverPrefs,
+  Size surfaceSize = kTestSurfaceSize,
+  double? devicePixelRatio,
+  EdgeInsets? physicalViewPadding,
+  bool failOnOverflow = false,
 
   /// An optional listenable fake web socket channel factory to use in place of the default one if
   /// we need to listen to the sent messages.
   ListenableFakeWebSocketChannelFactory? socketFactory,
 }) async {
+  final flutterTestOnError = FlutterError.onError!;
   const gameFullId = GameFullId('qVChCOTcHSeW');
   final app = await makeTestProviderScopeApp(
     tester,
@@ -2870,7 +2898,16 @@ Future<void> createTestGame(
         }),
       ...?overrides,
     },
+    surfaceSize: surfaceSize,
+    devicePixelRatio: devicePixelRatio,
+    physicalViewPadding: physicalViewPadding,
   );
+
+  if (failOnOverflow) {
+    FlutterError.onError = flutterTestOnError;
+    addTearDown(() => FlutterError.onError = flutterTestOnError);
+  }
+
   await tester.pumpWidget(app);
   await tester.pump(const Duration(milliseconds: 10));
 

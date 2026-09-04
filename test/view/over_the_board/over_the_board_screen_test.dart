@@ -19,6 +19,7 @@ import 'package:lichess_mobile/src/model/over_the_board/over_the_board_game_cont
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_game_storage.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/over_the_board/over_the_board_screen.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
@@ -33,6 +34,10 @@ const _customFen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2
 // White pawn on a5, black pawn on a7. White to move plays a6, blocking black's pawn.
 // Black has no legal moves = stalemate = black wins in antichess.
 const _antichessStalemateFen = '8/p7/8/P7/8/8/8/8 w - - 0 1';
+
+const _iPhone16ZoomedSurface = Size(320.0, 693.0);
+const _iPhone16ZoomedDevicePixelRatio = 3.0;
+const _iPhone16ZoomedPhysicalViewPadding = EdgeInsets.only(top: 141.0, bottom: 102.0);
 
 class MockOverTheBoardGameStorage extends Mock implements OverTheBoardGameStorage {}
 
@@ -55,6 +60,25 @@ void main() {
   registerFallbackValue(const TimeIncrement(0, 0));
 
   group('Playing over the board (offline)', () {
+    testWidgets('compact portrait board fills width with clocks and actions visible', (
+      tester,
+    ) async {
+      final boardRect = await initOverTheBoardGame(
+        tester,
+        const TimeIncrement(60, 5),
+        surfaceSize: _iPhone16ZoomedSurface,
+        devicePixelRatio: _iPhone16ZoomedDevicePixelRatio,
+        physicalViewPadding: _iPhone16ZoomedPhysicalViewPadding,
+        failOnOverflow: true,
+      );
+
+      expect(boardRect.left, 0.0);
+      expect(boardRect.right, _iPhone16ZoomedSurface.width);
+      expect(boardRect.size, const Size.square(320.0));
+      expect(find.byType(Clock), findsNWidgets(2));
+      expect(find.byType(BottomBar), findsOneWidget);
+    });
+
     testWidgets('Checkmate and Rematch', (tester) async {
       await initOverTheBoardGame(tester, const TimeIncrement(60, 5));
 
@@ -773,7 +797,15 @@ void main() {
   });
 }
 
-Future<Rect> initOverTheBoardGame(WidgetTester tester, TimeIncrement timeIncrement) async {
+Future<Rect> initOverTheBoardGame(
+  WidgetTester tester,
+  TimeIncrement timeIncrement, {
+  Size surfaceSize = kTestSurfaceSize,
+  double? devicePixelRatio,
+  EdgeInsets? physicalViewPadding,
+  bool failOnOverflow = false,
+}) async {
+  final flutterTestOnError = FlutterError.onError!;
   final gameStorage = MockOverTheBoardGameStorage();
 
   when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
@@ -794,7 +826,16 @@ Future<Rect> initOverTheBoardGame(WidgetTester tester, TimeIncrement timeIncreme
         (_) => gameStorage,
       ),
     },
+    surfaceSize: surfaceSize,
+    devicePixelRatio: devicePixelRatio,
+    physicalViewPadding: physicalViewPadding,
   );
+
+  if (failOnOverflow) {
+    FlutterError.onError = flutterTestOnError;
+    addTearDown(() => FlutterError.onError = flutterTestOnError);
+  }
+
   await tester.pumpWidget(app);
 
   // Wait for bottom sheet to show up

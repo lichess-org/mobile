@@ -18,6 +18,10 @@ import '../../network/fake_websocket_channel.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 
+const _iPhone16ZoomedSurface = Size(320.0, 693.0);
+const _iPhone16ZoomedDevicePixelRatio = 3.0;
+const _iPhone16ZoomedPhysicalViewPadding = EdgeInsets.only(top: 141.0, bottom: 102.0);
+
 void main() {
   const gameId = GameId('qVChCOTc');
   // The TV controller opens this socket route for the initial game.
@@ -50,6 +54,32 @@ void main() {
   }
 
   group('TvScreen (readonly GameLayout board)', () {
+    testWidgets('board fills the safe area width on a zoomed iPhone display', (tester) async {
+      final flutterTestOnError = FlutterError.onError!;
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const TvScreen(channel: TvChannel.best, initialGame: (gameId, Side.white)),
+        surfaceSize: _iPhone16ZoomedSurface,
+        devicePixelRatio: _iPhone16ZoomedDevicePixelRatio,
+        physicalViewPadding: _iPhone16ZoomedPhysicalViewPadding,
+      );
+
+      // This test specifically guards against the compact layout overflowing
+      // after restoring the board to full width.
+      FlutterError.onError = flutterTestOnError;
+      addTearDown(() => FlutterError.onError = flutterTestOnError);
+
+      await tester.pumpWidget(app);
+      await loadGame(tester);
+
+      final boardRect = tester.getRect(find.byType(Chessboard));
+      expect(boardRect.left, 0.0);
+      expect(boardRect.right, _iPhone16ZoomedSurface.width);
+      expect(boardRect.width, _iPhone16ZoomedSurface.width);
+      expect(boardRect.height, _iPhone16ZoomedSurface.width);
+    });
+
     testWidgets('loads the game and displays a non-interactive board', (tester) async {
       final app = await makeTestProviderScopeApp(
         tester,
