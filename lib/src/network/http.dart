@@ -197,13 +197,13 @@ Duration _defaultDelay(int retryCount) =>
     const Duration(milliseconds: 900) * math.pow(1.5, retryCount);
 
 final userAgentProvider = Provider<String>((Ref ref) {
-  final authUser = ref.watch(authControllerProvider);
+  final user = ref.watch(authControllerProvider.select((value) => value?.user));
 
   return makeUserAgent(
     ref.read(preloadedDataProvider).requireValue.packageInfo,
     ref.read(preloadedDataProvider).requireValue.deviceInfo,
     ref.read(preloadedDataProvider).requireValue.sri,
-    authUser?.user,
+    user,
   );
 });
 
@@ -413,12 +413,27 @@ class _RegisterCallbackClient extends BaseClient {
 /// * When a response has the 401 status, checks if the authUser token is still valid,
 /// and deletes the authUser if it's not.
 class LichessClient implements Client {
-  LichessClient(this._inner, this._ref);
+  LichessClient(this._inner, this._ref)
+    : _cachedVersion = _ref.read(preloadedDataProvider).requireValue.packageInfo.version,
+      _cachedSri = _ref.read(preloadedDataProvider).requireValue.sri,
+      _cachedOsPart = _osPartFor(_ref.read(preloadedDataProvider).requireValue.deviceInfo);
 
   static const defaultRequestTimeout = Duration(seconds: 15);
 
   final Ref _ref;
   final Client _inner;
+  final String _cachedVersion;
+  final String _cachedSri;
+  final String _cachedOsPart;
+
+  static String _osPartFor(BaseDeviceInfo deviceInfo) {
+    if (deviceInfo is AndroidDeviceInfo) {
+      return ' os:Android/${deviceInfo.version.release} dev:${deviceInfo.model}';
+    } else if (deviceInfo is IosDeviceInfo) {
+      return ' os:iOS/${deviceInfo.systemVersion} dev:${deviceInfo.model}';
+    }
+    return '';
+  }
 
   @override
   Future<StreamedResponse> send(BaseRequest request) async {
@@ -428,12 +443,9 @@ class LichessClient implements Client {
       final bearer = signBearerToken(authUser.token);
       request.headers['Authorization'] = 'Bearer $bearer';
     }
-    request.headers['User-Agent'] = makeUserAgent(
-      _ref.read(preloadedDataProvider).requireValue.packageInfo,
-      _ref.read(preloadedDataProvider).requireValue.deviceInfo,
-      _ref.read(preloadedDataProvider).requireValue.sri,
-      authUser?.user,
-    );
+    final userId = authUser?.user.id;
+    request.headers['User-Agent'] =
+        'Lichess Mobile/$_cachedVersion as:${userId ?? 'anon'} sri:$_cachedSri$_cachedOsPart';
 
     final quiet = request.headers.remove(kQuietRequestHeader) != null;
 
