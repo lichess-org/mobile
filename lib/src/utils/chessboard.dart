@@ -21,7 +21,6 @@ PieceSet? _lastCachedPieceSet;
 /// with the same [pieceSet] are skipped to avoid flash and redundant work.
 Future<void> precachePieceImages(PieceSet pieceSet) async {
   if (_lastCachedPieceSet == pieceSet) return;
-  _lastCachedPieceSet = pieceSet;
 
   try {
     final devicePixelRatio =
@@ -33,6 +32,7 @@ Future<void> precachePieceImages(PieceSet pieceSet) async {
       for (final asset in pieceSet.assets.values)
         ChessgroundImages.instance.load(asset, devicePixelRatio: devicePixelRatio),
     ]);
+    _lastCachedPieceSet = pieceSet;
   } catch (e) {
     debugPrint('Failed to preload piece images: $e');
   }
