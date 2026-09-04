@@ -23,12 +23,11 @@ class GameStorage {
   final Database _db;
 
   Future<int> count({UserId? userId}) async {
-    final list = await _db.query(
-      kGameStorageTable,
-      where: 'userId = ?',
-      whereArgs: [userId ?? kStorageAnonId],
+    final result = await _db.rawQuery(
+      'SELECT COUNT(*) as cnt FROM $kGameStorageTable WHERE userId = ?',
+      [userId ?? kStorageAnonId],
     );
-    return list.length;
+    return Sqflite.firstIntValue(result) ?? 0;
   }
 
   Future<IList<StoredGame>> page({
