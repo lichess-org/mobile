@@ -34,6 +34,10 @@ class LogPreferencesNotifier extends Notifier<LogPrefs> with PreferencesStorage<
 
 const _kDefaultLevel = Level.WARNING;
 
+const kLogPreferencesAvailableLevels = kDebugMode
+    ? Level.LEVELS
+    : [Level.INFO, Level.WARNING, Level.SEVERE];
+
 @Freezed(fromJson: true, toJson: true)
 sealed class LogPrefs with _$LogPrefs implements Serializable {
   const LogPrefs._();
@@ -54,7 +58,7 @@ class LevelConverter implements JsonConverter<Level, String> {
   Level fromJson(String json) {
     try {
       final value = int.parse(json);
-      return Level.LEVELS.firstWhere((level) => level.value == value);
+      return kLogPreferencesAvailableLevels.firstWhere((level) => level.value == value);
     } catch (e) {
       return _kDefaultLevel;
     }

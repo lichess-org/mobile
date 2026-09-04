@@ -70,7 +70,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Морате се пријавити да бисте видели ову страницу.';
 
   @override
-  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+  String get mobileNbOfflinePuzzles => 'Проблеми ван мреже';
 
   @override
   String get mobileNewGame => 'Нова партија';

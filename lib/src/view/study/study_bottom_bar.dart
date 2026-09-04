@@ -67,7 +67,7 @@ class _AnalysisBottomBar extends ConsumerWidget {
                 future: toggleFuture,
                 builder: (context, snapshot) {
                   return EngineButton(
-                    filters: (id: state.evaluationContext.id, path: state.currentPath),
+                    filters: (context: state.evaluationContext, path: state.currentPath),
                     savedEval: state.currentNode.eval,
                     onTap: snapshot.connectionState != ConnectionState.waiting
                         ? () async {

@@ -796,6 +796,52 @@ void main() {
     ]);
   });
 
+  testWidgets('Displays PGN player names and clocks', (WidgetTester tester) async {
+    final mockRepository = MockStudyRepository();
+    when(() => mockRepository.getStudy(id: testId)).thenAnswer(
+      (_) async => (
+        makeStudy(
+          chapter: makeChapter(
+            id: const StudyChapterId('1'),
+            orientation: Side.white,
+            gamebook: false,
+          ),
+        ),
+        null,
+        '''
+[White "Magnus"]
+[Black "Hikaru"]
+[Result "1-0"]
+
+1. e4 { [%clk 0:10:00] } e5 { [%clk 0:10:00] } 2. Nf3 { [%clk 0:09:50] } 1-0
+''',
+      ),
+    );
+
+    final app = await makeTestProviderScopeApp(
+      tester,
+      home: const StudyScreen(options: (id: testId, initialChapter: null)),
+      overrides: {
+        studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
+      },
+    );
+    await tester.pumpWidget(app);
+    // Wait for study to load
+    await tester.pumpAndSettle();
+
+    await playMove(tester, 'e2', 'e4');
+    await playMove(tester, 'e7', 'e5');
+    await playMove(tester, 'g1', 'f3');
+
+    final whiteFooter = find.byKey(const ValueKey(Side.white));
+    expect(find.descendant(of: whiteFooter, matching: find.text('Magnus')), findsOneWidget);
+    expect(find.descendant(of: whiteFooter, matching: find.text('09:50')), findsOneWidget);
+
+    final blackHeader = find.byKey(const ValueKey(Side.black));
+    expect(find.descendant(of: blackHeader, matching: find.text('Hikaru')), findsOneWidget);
+    expect(find.descendant(of: blackHeader, matching: find.text('10:00')), findsOneWidget);
+  });
+
   testWidgets('Displays correct annotation for castling on correct square', (
     WidgetTester tester,
   ) async {

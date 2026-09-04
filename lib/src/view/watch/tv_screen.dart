@@ -93,7 +93,7 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                 : Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      UserFullNameWidget(user: widget.user),
+                      Expanded(child: UserFullNameWidget(user: widget.user)),
                       const SizedBox(width: 4.0),
                       const Icon(Icons.live_tv),
                     ],

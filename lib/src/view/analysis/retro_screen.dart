@@ -11,7 +11,7 @@ import 'package:lichess_mobile/src/model/analysis/retro_controller.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
+import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -71,7 +71,7 @@ class RetroScreen extends ConsumerWidget {
             actions: [
               if (value.isEngineAvailable(enginePrefs) == true)
                 EngineButton(
-                  filters: (id: value.evaluationContext.id, path: value.currentPath),
+                  filters: (context: value.evaluationContext, path: value.currentPath),
                   savedEval: value.currentNode.eval,
                   goDeeper: () => ref
                       .read(retroControllerProvider(options).notifier)
@@ -198,7 +198,7 @@ class _RetroAnalysisBoardState
 
   @override
   EngineEvaluationFilters get engineEvaluationFilters =>
-      (id: analysisState.evaluationContext.id, path: analysisState.currentPath);
+      (context: analysisState.evaluationContext, path: analysisState.currentPath);
 
   @override
   String computeFen(RetroState state) => state.currentPosition.board.fen;

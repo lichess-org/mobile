@@ -100,9 +100,22 @@ class _CustomClockSettingsState extends State<CustomClockSettings> {
         ),
         Padding(
           padding: Styles.horizontalBodyPadding,
-          child: FilledButton(
-            onPressed: () => _submit(context),
-            child: Text(context.l10n.mobileOkButton, style: Styles.bold),
+          child: Row(
+            children: [
+              Expanded(
+                child: FilledButton(
+                  onPressed: () => _submit(context),
+                  child: Text(context.l10n.mobileOkButton, style: Styles.bold),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: FilledButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text(context.l10n.cancel, style: Styles.bold),
+                ),
+              ),
+            ],
           ),
         ),
       ],

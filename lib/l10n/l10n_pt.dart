@@ -70,7 +70,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Tens de iniciar sessão para visualizar esta página.';
 
   @override
-  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+  String get mobileNbOfflinePuzzles => 'Problemas offline';
 
   @override
   String get mobileNewGame => 'Novo jogo';
@@ -248,7 +248,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileWatchTab => 'Assistir';
 
   @override
-  String get mobileWelcomeToLichessApp => 'Bem-vindo(a) à aplicação do Lichess!';
+  String get mobileWelcomeToLichessApp => 'Bem-vindo à aplicação do Lichess!';
 
   @override
   String get mobileViewGame => 'Ver Jogo';
@@ -305,46 +305,46 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobilePerfShortBullet => 'Bullet';
 
   @override
-  String get mobilePerfShortBlitz => 'Blitz';
+  String get mobilePerfShortBlitz => 'Rápidas';
 
   @override
-  String get mobilePerfShortRapid => 'Rapid';
+  String get mobilePerfShortRapid => 'Semi-rápid';
 
   @override
-  String get mobilePerfShortClassical => 'Classical';
+  String get mobilePerfShortClassical => 'Lentas';
 
   @override
   String get mobilePerfShortCorrespondence => 'Corresp.';
 
   @override
-  String get mobilePerfShortFromPosition => 'From Pos.';
+  String get mobilePerfShortFromPosition => 'Da Pos.';
 
   @override
   String get mobilePerfShortChess960 => '960';
 
   @override
-  String get mobilePerfShortAntichess => 'Antichess';
+  String get mobilePerfShortAntichess => 'Antixadrez';
 
   @override
   String get mobilePerfShortKingOfTheHill => 'KotH';
 
   @override
-  String get mobilePerfShortThreeCheck => '3check';
+  String get mobilePerfShortThreeCheck => '3 Xeques';
 
   @override
-  String get mobilePerfShortAtomic => 'Atomic';
+  String get mobilePerfShortAtomic => 'Atómico';
 
   @override
-  String get mobilePerfShortHorde => 'Horde';
+  String get mobilePerfShortHorde => 'Horda';
 
   @override
-  String get mobilePerfShortRacingKings => 'Racing';
+  String get mobilePerfShortRacingKings => 'Corrida';
 
   @override
-  String get mobilePerfShortCrazyhouse => 'Crazy';
+  String get mobilePerfShortCrazyhouse => 'Troca-Peça';
 
   @override
-  String get mobilePerfShortPuzzle => 'Puzzle';
+  String get mobilePerfShortPuzzle => 'Problema';
 
   @override
   String get mobileAcceptDraw => 'Accept draw?';
@@ -7150,7 +7150,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get mobileHomeTab => 'Início';
 
   @override
-  String get mobileLiveStreamers => 'Streamers do Lichess';
+  String get mobileLiveStreamers => 'Streamer do Lichess';
 
   @override
   String get mobileMustBeLoggedIn => 'Você precisa estar logado para ver essa pagina.';
@@ -7376,7 +7376,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get mobileOrImportPgnFile => 'Ou importe um arquivo PGN';
 
   @override
-  String get mobileGoodMoveButThereIsBetter => 'Bom lance, mas existe um ainda melhor';
+  String get mobileGoodMoveButThereIsBetter => 'Bom lance, mas existe um melhor';
 
   @override
   String get mobilePerfShortUltraBullet => 'Ultra';
@@ -7412,7 +7412,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get mobilePerfShortThreeCheck => '3 xeques';
 
   @override
-  String get mobilePerfShortAtomic => 'Atómico';
+  String get mobilePerfShortAtomic => 'Atômico';
 
   @override
   String get mobilePerfShortHorde => 'Horda';

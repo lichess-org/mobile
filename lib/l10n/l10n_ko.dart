@@ -302,7 +302,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobilePerfShortUltraBullet => '울트라';
 
   @override
-  String get mobilePerfShortBullet => '불렛';
+  String get mobilePerfShortBullet => '불릿';
 
   @override
   String get mobilePerfShortBlitz => '블리츠';

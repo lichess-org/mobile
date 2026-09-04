@@ -15,7 +15,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get mobileAccountPreferences => 'Kontoinställningar';
 
   @override
-  String get mobileAccountPreferencesHelp => 'These preferences are applied to your Lichess account and will be used across all devices.';
+  String get mobileAccountPreferencesHelp => 'De här preferenserna tillämpas på ditt Lichess-konto och kommer användas på alla enheter.';
 
   @override
   String get mobileAllGames => 'Alla spel';
@@ -47,7 +47,7 @@ class AppLocalizationsSv extends AppLocalizations {
   }
 
   @override
-  String get mobileGoodEveningWithoutName => 'Good evening';
+  String get mobileGoodEveningWithoutName => 'Godkväll';
 
   @override
   String mobileGoodDay(String param) {
@@ -70,7 +70,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Du måste vara inloggad för att se denna sida.';
 
   @override
-  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+  String get mobileNbOfflinePuzzles => 'Offline pussel';
 
   @override
   String get mobileNewGame => 'Nytt parti';
@@ -132,13 +132,13 @@ class AppLocalizationsSv extends AppLocalizations {
   String get mobileRemoveBookmark => 'Ta bort bokmärke';
 
   @override
-  String get mobileServerAnalysis => 'Server analysis';
+  String get mobileServerAnalysis => 'Serveranalys';
 
   @override
   String get mobileSettingsClockPosition => 'Klockans position';
 
   @override
-  String get mobileSettingsCustomBackgroundPresets => 'Presets';
+  String get mobileSettingsCustomBackgroundPresets => 'Förval';
 
   @override
   String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
@@ -281,7 +281,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get mobileDisplayModeCompact => 'Compact';
 
   @override
-  String get mobileDisplayModeDetailed => 'Detailed';
+  String get mobileDisplayModeDetailed => 'Detaljerad';
 
   @override
   String get mobileOpeningExplorerNotAvailableOffline => 'Opening Explorer is not available offline.';
@@ -305,7 +305,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get mobilePerfShortBullet => 'Bullet';
 
   @override
-  String get mobilePerfShortBlitz => 'Blitz';
+  String get mobilePerfShortBlitz => 'Blixt';
 
   @override
   String get mobilePerfShortRapid => 'Rapid';

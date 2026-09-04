@@ -9,7 +9,7 @@ import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
+import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -312,7 +312,7 @@ class _Body extends ConsumerWidget {
             engineLines:
                 isLocalEvaluationEnabled && broadcastPrefs.showEngineLines && numEvalLines > 0
                 ? EngineLines(
-                    filters: (id: state.evaluationContext.id, path: state.currentPath),
+                    filters: (context: state.evaluationContext, path: state.currentPath),
                     analysisState: state,
                     onTapMove: ref
                         .read(
@@ -570,7 +570,7 @@ class _BroadcastAnalysisBoardState
 
   @override
   EngineEvaluationFilters get engineEvaluationFilters =>
-      (id: analysisState.evaluationContext.id, path: analysisState.currentPath);
+      (context: analysisState.evaluationContext, path: analysisState.currentPath);
 
   @override
   String computeFen(BroadcastAnalysisState state) => state.currentPosition.fen;
@@ -751,7 +751,7 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
               builder: (context, snapshot) {
                 return EngineButton(
                   filters: (
-                    id: broadcastAnalysisState.evaluationContext.id,
+                    context: broadcastAnalysisState.evaluationContext,
                     path: broadcastAnalysisState.currentPath,
                   ),
                   savedEval: broadcastAnalysisState.currentNode.eval,

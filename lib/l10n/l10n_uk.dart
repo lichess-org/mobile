@@ -70,7 +70,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Ви повинні ввійти, аби переглянути цю сторінку.';
 
   @override
-  String get mobileNbOfflinePuzzles => 'Задачі без мережі';
+  String get mobileNbOfflinePuzzles => 'Офлайн задачі';
 
   @override
   String get mobileNewGame => 'Нова гра';
@@ -180,7 +180,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileSettingsPickAnImageSwipeToDisplay => 'Проведіть для показу інших фонів';
 
   @override
-  String get mobileSettingsPieceShiftMethodEither => 'Натисніть, або перенесіть';
+  String get mobileSettingsPieceShiftMethodEither => 'Натисніть або перенесіть';
 
   @override
   String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Натиснути на два поля';

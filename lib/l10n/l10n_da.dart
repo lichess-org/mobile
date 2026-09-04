@@ -344,7 +344,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobilePerfShortCrazyhouse => 'Crazy';
 
   @override
-  String get mobilePerfShortPuzzle => 'Puzzle';
+  String get mobilePerfShortPuzzle => 'Opgave';
 
   @override
   String get mobileAcceptDraw => 'Accept draw?';

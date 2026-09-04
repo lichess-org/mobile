@@ -8,7 +8,7 @@ import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
+import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/study/study_controller.dart';
@@ -20,6 +20,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_player_widget.dart';
 import 'package:lichess_mobile/src/view/analysis/server_analysis.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
@@ -407,6 +408,17 @@ class _Body extends ConsumerWidget {
         ? StudyGamebook(options)
         : StudyTreeView(options, showTopDivider: tabs.length == 1);
 
+    final playerWidgets = playerWidgetsFromPgnHeaders(
+      pgnHeaders: studyState.pgnHeaders,
+      sideToMove: studyState.currentPosition?.turn ?? Side.white,
+      whiteClock: studyState.currentPosition?.turn == Side.white
+          ? studyState.clocks?.parentClock
+          : studyState.clocks?.clock,
+      blackClock: studyState.currentPosition?.turn == Side.black
+          ? studyState.clocks?.parentClock
+          : studyState.clocks?.clock,
+    );
+
     return AnalysisLayout(
       tabController: tabController,
       pov: pov,
@@ -414,6 +426,8 @@ class _Body extends ConsumerWidget {
       boardBuilder: (context, boardSize, borderRadius) =>
           StudyAnalysisBoard(options: options, boardSize: boardSize, boardRadius: borderRadius),
       smallBoard: studyPrefs.smallBoard,
+      boardHeader: pov == Side.white ? playerWidgets.black : playerWidgets.white,
+      boardFooter: pov == Side.white ? playerWidgets.white : playerWidgets.black,
       engineGaugeBuilder:
           isComputerAnalysisAllowed && showEvaluationGauge && engineGaugeParams != null
           ? (context) {
@@ -426,7 +440,7 @@ class _Body extends ConsumerWidget {
               isLocalEvaluationEnabled &&
               numEvalLines > 0
           ? EngineLines(
-              filters: (id: studyState.evaluationContext.id, path: studyState.currentPath),
+              filters: (context: studyState.evaluationContext, path: studyState.currentPath),
               analysisState: studyState,
               onTapMove: ref.read(studyControllerProvider(options).notifier).onUserMove,
             )
@@ -551,7 +565,7 @@ class _StudyAnalysisBoardState
 
   @override
   EngineEvaluationFilters get engineEvaluationFilters =>
-      (id: analysisState.evaluationContext.id, path: analysisState.currentPath);
+      (context: analysisState.evaluationContext, path: analysisState.currentPath);
 
   @override
   String computeFen(StudyState state) =>

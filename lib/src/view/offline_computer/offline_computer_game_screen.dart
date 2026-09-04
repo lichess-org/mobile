@@ -25,6 +25,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/status_l10n.dart';
+import 'package:lichess_mobile/src/view/offline_computer/opponent_picker.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
@@ -34,7 +35,6 @@ import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/material_diff.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
-import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
@@ -92,17 +92,16 @@ class OfflineComputerGameScreen extends ConsumerWidget {
       appBar: AppBar(
         title: AppBarTitleText(title),
         actions: [
-          if (practiceMode)
-            IconButton(
-              icon: const Icon(Icons.settings),
-              tooltip: 'Practice settings',
-              onPressed: () {
-                showModalBottomSheet<void>(
-                  context: context,
-                  builder: (_) => const _PracticeSettingsSheet(),
-                );
-              },
-            ),
+          IconButton(
+            icon: const Icon(Icons.settings),
+            tooltip: context.l10n.settingsSettings,
+            onPressed: () {
+              showModalBottomSheet<void>(
+                context: context,
+                builder: (_) => const _OfflineComputerGameSettingsSheet(),
+              );
+            },
+          ),
         ],
       ),
       body: _Body(initialVariant: initialVariant, initialFen: initialFen),
@@ -200,44 +199,25 @@ class _BodyState extends ConsumerState<_Body> {
       }
     });
 
+    final controller = ref.read(offlineComputerGameControllerProvider.notifier);
     final isBoardFlipped = ref.watch(_isBoardFlippedProvider);
     final orientation = gameState.game.playerSide;
     final isPlayerTurn = gameState.turn == orientation && !gameState.isEngineThinking;
 
+    final blindfoldMode = ref.watch(
+      offlineComputerGamePreferencesProvider.select((p) => p.blindfoldMode),
+    );
+
     return WakelockWidget(
       child: PopScope(
-        canPop: false,
-        onPopInvokedWithResult: (didPop, _) async {
-          if (didPop) return;
-
-          final navigator = Navigator.of(context);
-          final game = gameState.game;
-          if (game.abortable) {
-            return navigator.pop();
-          }
-
-          if (game.playable) {
-            final shouldPop = await showAdaptiveDialog<bool>(
-              context: context,
-              builder: (context) => YesNoDialog(
-                title: Text(context.l10n.mobileAreYouSure),
-                content: const Text('No worries, your game will be saved.'),
-                onNo: () => Navigator.of(context).pop(false),
-                onYes: () => Navigator.of(context).pop(true),
-              ),
-            );
-            if (shouldPop == true) {
-              await _saveGameState();
-              navigator.pop();
-            }
-          } else {
-            // Save state even if the game is finished, we might want to analyse it later
-            await _saveGameState();
-            navigator.pop();
-          }
+        onPopInvokedWithResult: (_, _) async {
+          // Save state even if the game is finished, we might want to analyse it later
+          await _saveGameState();
         },
         child: FocusDetector(
           onForegroundLost: _saveGameState,
+          onFocusLost: controller.suspendAnalysis,
+          onFocusRegained: controller.resumeAnalysis,
           child: Column(
             children: [
               Expanded(
@@ -260,7 +240,10 @@ class _BodyState extends ConsumerState<_Body> {
                           )
                         : null,
                     shapes: _buildBoardShapes(gameState, boardColorScheme),
-                    boardSettingsOverrides: const BoardSettingsOverrides(enablePremoves: false),
+                    boardSettingsOverrides: BoardSettingsOverrides(
+                      enablePremoves: false,
+                      blindfoldMode: blindfoldMode,
+                    ),
                     boardParams: GameBoardParams.interactive(
                       variant: gameState.game.meta.variant,
                       position: gameState.currentPosition,
@@ -462,17 +445,17 @@ class _Player extends ConsumerWidget {
     final gameState = ref.watch(offlineComputerGameControllerProvider);
     final boardPreferences = ref.watch(boardPreferencesProvider);
     final game = gameState.game;
-    final isStockfish = side != game.playerSide;
+    final isEngine = side != game.playerSide;
     final materialDiff = boardPreferences.materialDifferenceFormat.visible
         ? gameState.currentMaterialDiff(side)
         : null;
 
     final isShortScreen = isShortVerticalScreen(context);
 
-    if (isStockfish) {
+    if (isEngine) {
       return Row(
         children: [
-          Image.asset('assets/images/stockfish/icon.webp', width: 44, height: 44),
+          OpponentIcon(game.opponentSpec),
           const SizedBox(width: 8),
           Expanded(
             child: Column(
@@ -482,10 +465,7 @@ class _Player extends ConsumerWidget {
                 Row(
                   children: [
                     Text(
-                      context.l10n.aiNameLevelAiLevel(
-                        'Stockfish',
-                        game.stockfishLevel.level.toString(),
-                      ),
+                      game.opponentSpec.displayName,
                       style: const TextStyle(fontWeight: FontWeight.w600),
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -720,7 +700,7 @@ class _NewGameSheet extends ConsumerStatefulWidget {
 }
 
 class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
-  late StockfishLevel _selectedLevel;
+  late OpponentSpec _selectedOpponent;
   late SideChoice _selectedSideChoice;
   late Variant _selectedVariant;
   late bool _casual;
@@ -740,12 +720,16 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
   void initState() {
     super.initState();
     final prefs = ref.read(offlineComputerGamePreferencesProvider);
-    _selectedLevel = prefs.stockfishLevel;
     _selectedSideChoice = widget.initialFen != null ? SideChoice.nextToPlay : prefs.sideChoice;
     final preferredVariant = widget.initialVariant ?? prefs.variant;
     _selectedVariant = widget.initialFen == null && preferredVariant == Variant.fromPosition
         ? Variant.standard
         : preferredVariant;
+    // The variant is not always the one the preferred opponent was chosen for: a game started from
+    // a variant screen brings its own.
+    _selectedOpponent = prefs.opponentSpec.supportsVariant(_selectedVariant)
+        ? prefs.opponentSpec
+        : OpponentSpec.defaultSpec;
     _casual = prefs.casual;
     _practiceMode = prefs.practiceMode;
     _fenController.addListener(() {
@@ -802,35 +786,11 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
         ListSection(
           materialFilledCard: true,
           children: [
-            ListTile(
-              title: Text.rich(
-                TextSpan(
-                  text: '${context.l10n.level}: ',
-                  children: [
-                    TextSpan(
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                      text: '${_selectedLevel.level}',
-                    ),
-                  ],
-                ),
-              ),
-              subtitle: NonLinearSlider(
-                value: _selectedLevel.level,
-                values: StockfishLevel.values.map((l) => l.level).toList(),
-                onChange: (value) {
-                  setState(() {
-                    _selectedLevel = StockfishLevel.values[value.toInt() - 1];
-                  });
-                },
-                onChangeEnd: (value) {
-                  setState(() {
-                    _selectedLevel = StockfishLevel.values[value.toInt() - 1];
-                  });
-                  ref
-                      .read(offlineComputerGamePreferencesProvider.notifier)
-                      .setStockfishLevel(_selectedLevel);
-                },
-              ),
+            SettingsListTile(
+              icon: OpponentIcon(_selectedOpponent, size: 32),
+              settingsLabel: Text(context.l10n.opponent),
+              settingsValue: _selectedOpponent.displayName,
+              onTap: _pickOpponent,
             ),
             SettingsListTile(
               settingsLabel: Text(context.l10n.variant),
@@ -846,6 +806,12 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
                       _selectedVariant = variant;
                       if (variant == Variant.crazyhouse) {
                         _practiceMode = false;
+                      }
+                      // Maia only knows standard chess, so picking a variant it cannot play hands
+                      // the game back to Stockfish rather than leaving an opponent that would
+                      // have to refuse to move.
+                      if (!_selectedOpponent.supportsVariant(variant)) {
+                        _selectedOpponent = OpponentSpec.defaultSpec;
                       }
                     });
                     ref.read(offlineComputerGamePreferencesProvider.notifier).setVariant(variant);
@@ -933,7 +899,7 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
                     ref
                         .read(offlineComputerGameControllerProvider.notifier)
                         .startNewGame(
-                          stockfishLevel: _selectedLevel,
+                          opponentSpec: _selectedOpponent,
                           playerSide: side,
                           casual: _practiceMode || _casual,
                           practiceMode: _practiceMode,
@@ -950,37 +916,65 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
     );
   }
 
+  Future<void> _pickOpponent() async {
+    final opponent = await showOpponentPicker(
+      context,
+      selected: _selectedOpponent,
+      variant: _selectedVariant,
+    );
+    if (opponent == null || !mounted) return;
+    setState(() => _selectedOpponent = opponent);
+    await ref.read(offlineComputerGamePreferencesProvider.notifier).setOpponent(opponent);
+  }
+
   bool get _isPlayEnabled =>
       _selectedVariant != Variant.fromPosition ||
       widget.initialFen != null ||
       (_fromPositionFen != null && _fromPositionFen!.isNotEmpty);
 }
 
-class _PracticeSettingsSheet extends ConsumerWidget {
-  const _PracticeSettingsSheet();
+class _OfflineComputerGameSettingsSheet extends ConsumerWidget {
+  const _OfflineComputerGameSettingsSheet();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final prefs = ref.watch(offlineComputerGamePreferencesProvider);
+    final practiceMode = ref.watch(
+      offlineComputerGameControllerProvider.select((s) => s.game.practiceMode),
+    );
 
     return BottomSheetScrollableContainer(
       children: [
+        if (practiceMode)
+          ListSection(
+            header: const Text('Practice settings'),
+            materialFilledCard: true,
+            children: [
+              SwitchSettingTile(
+                title: Text(context.l10n.hideBestMove),
+                value: prefs.hideBestMove,
+                onChanged: (_) {
+                  ref.read(offlineComputerGamePreferencesProvider.notifier).toggleHideBestMove();
+                },
+              ),
+              SwitchSettingTile(
+                title: const Text('Hide evaluation'),
+                value: prefs.hideEvaluation,
+                onChanged: (_) {
+                  ref.read(offlineComputerGamePreferencesProvider.notifier).toggleHideEvaluation();
+                },
+              ),
+            ],
+          ),
         ListSection(
-          header: const Text('Practice settings'),
+          header: Text(context.l10n.settingsSettings),
           materialFilledCard: true,
           children: [
             SwitchSettingTile(
-              title: Text(context.l10n.hideBestMove),
-              value: prefs.hideBestMove,
+              title: Text(context.l10n.preferencesBlindfold),
+              value: prefs.blindfoldMode,
               onChanged: (_) {
-                ref.read(offlineComputerGamePreferencesProvider.notifier).toggleHideBestMove();
-              },
-            ),
-            SwitchSettingTile(
-              title: const Text('Hide evaluation'),
-              value: prefs.hideEvaluation,
-              onChanged: (_) {
-                ref.read(offlineComputerGamePreferencesProvider.notifier).toggleHideEvaluation();
+                ref.read(offlineComputerGamePreferencesProvider.notifier).toggleBlindfoldMode();
               },
             ),
           ],

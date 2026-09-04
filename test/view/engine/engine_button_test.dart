@@ -2,11 +2,12 @@ import 'package:chessground/chessground.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
+import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/view/engine/engine_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:material_ui/material_ui.dart';
 
+import '../../model/engine/fake_engine.dart';
 import 'test_engine_app.dart';
 
 void main() {
@@ -33,6 +34,23 @@ void main() {
     // wait for engine
     await tester.pump(kRequestEvalDebounceDelay + kEngineEvalEmissionThrottleDelay);
     expect(find.widgetWithText(EngineButton, '16'), findsOne);
+  });
+
+  testWidgets('No engine is started when the user has turned the engine off', (tester) async {
+    final stockfish = FakeEngine();
+    await makeEngineTestApp(
+      tester,
+      isEngineEnabled: false,
+      isCloudEvalEnabled: false,
+      gameId: const GameId('xze7RH66'),
+      stockfish: stockfish,
+    );
+    await tester.pump(const Duration(milliseconds: 50));
+    await tester.pump(kRequestEvalDebounceDelay + kEngineEvalEmissionThrottleDelay);
+
+    // Opening a screen with the engine off asks for no evaluation, so no engine is ever created:
+    // an engine nobody is going to use must not be started, on this screen or the next.
+    expect(stockfish.startCount, 0);
   });
 
   testWidgets('Long pressing the engine button opens the engine popup', (tester) async {

@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
+import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/offline_computer_game.dart';
@@ -17,6 +18,7 @@ import 'package:lichess_mobile/src/model/offline_computer/computer_analysis.dart
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_controller.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_preferences.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_storage.dart';
+import 'package:lichess_mobile/src/model/offline_computer/practice_analyser.dart';
 import 'package:lichess_mobile/src/model/offline_computer/practice_comment.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -29,7 +31,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../binding.dart';
-import '../../model/engine/fake_stockfish.dart';
+import '../../model/engine/fake_engine.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 
@@ -52,9 +54,9 @@ void main() {
       initialFen: null,
       status: GameStatus.started,
       playerSide: Side.white,
-      stockfishLevel: StockfishLevel.level1,
+      opponentSpec: const StockfishOpponentSpec(StockfishLevel.level1),
       humanPlayer: const Player(onGame: true),
-      enginePlayer: stockfishPlayer(),
+      enginePlayer: enginePlayerFor(const StockfishOpponentSpec(StockfishLevel.level1)),
     );
     registerFallbackValue(game);
     registerFallbackValue(SavedOfflineComputerGame(game: game));
@@ -62,8 +64,8 @@ void main() {
 
   group('Offline computer game', () {
     setUp(() {
-      // Use LegalMoveFakeStockfish which returns valid moves for each position
-      testBinding.stockfish = LegalMoveFakeStockfish();
+      // Use LegalMoveEngine which returns valid moves for each position
+      fakeEngine = LegalMoveEngine();
     });
 
     testWidgets('New game dialog is shown on startup with all options', (tester) async {
@@ -84,9 +86,10 @@ void main() {
 
       // Verify new game bottom sheet is displayed
 
-      // Verify level slider is shown
-      expect(find.textContaining('Level'), findsOneWidget);
-      expect(find.byType(Slider), findsOneWidget);
+      // Verify the opponent tile is shown, with the default opponent on it
+      expect(find.text('Opponent'), findsOneWidget);
+      // Once on the tile, once on the engine player behind the sheet.
+      expect(find.text('Stockfish level 4'), findsNWidgets(2));
 
       // Verify side selection (label is "Side" with value showing default "Random side")
       expect(find.text('Side'), findsOneWidget);
@@ -133,6 +136,125 @@ void main() {
 
       // Engine should have responded - at least 2 moves now
       expect(find.byType(InlineMoveItem), findsAtLeast(2));
+    });
+
+    testWidgets('Hints run on the analysis engine, beside the resident opponent', (tester) async {
+      // The payoff of two resident engines. The opponent needs Fairy-Stockfish for its negative
+      // skill levels, but the hints no longer have to be computed by it: they go to the engine the
+      // user chose for analysis, and neither engine is quit to make room for the other.
+      final engine = MultiPvEngine();
+      fakeEngine = engine;
+
+      await initOfflineComputerGame(tester);
+
+      await playMove(tester, 'e2', 'e4');
+      await tester.pump(const Duration(milliseconds: 200));
+      await tester.pumpAndSettle();
+
+      // The opponent has answered, and the hints for the player's turn have been computed.
+      await tester.pump(const Duration(seconds: 1));
+      await tester.pumpAndSettle();
+
+      expect(engine.sessions.map((session) => session.spec.label).toSet(), {
+        'variant',
+        'sf16',
+      }, reason: 'the opponent plays on Fairy while the hints are computed on Stockfish 16');
+      expect(
+        engine.quitCount,
+        0,
+        reason: 'neither engine is quit between the opponent move and the hints',
+      );
+    });
+
+    testWidgets('The analysis keeps running after the hints unlock', (tester) async {
+      // The point of the continuous analysis: a usable eval unlocks the hints promptly, and the
+      // search then runs on to the target depth while the player thinks, instead of the engine
+      // sitting idle exactly when the device is free.
+      final engine = AnalysisTestEngine();
+      fakeEngine = engine;
+
+      await initOfflineComputerGame(tester, variant: Variant.crazyhouse);
+
+      engine.emitDepthRange(toDepth: kPracticeUsableDepth);
+      await tester.pump(kEngineEvalEmissionThrottleDelay * 2);
+
+      final hintButton = find.ancestor(
+        of: find.byIcon(CupertinoIcons.lightbulb),
+        matching: find.byType(BottomBarButton),
+      );
+      expect(
+        tester.widget<BottomBarButton>(hintButton).onTap,
+        isNotNull,
+        reason: 'the hints unlock at the usable depth',
+      );
+      expect(engine.stopCount, 0, reason: 'and the search is still running');
+
+      engine.emitDepthRange(toDepth: kPracticeTargetDepth);
+      await tester.pump(kEngineEvalEmissionThrottleDelay * 2);
+
+      expect(engine.stopCount, 1, reason: 'the target depth is where the engine is let go idle');
+    });
+
+    testWidgets('The analysis does not survive the app going to the background', (tester) async {
+      // A search that runs for as long as the player thinks must not go on running with the app
+      // out of sight — which is a problem the old one-burst-per-move model never had.
+      final engine = AnalysisTestEngine();
+      fakeEngine = engine;
+
+      await initOfflineComputerGame(tester, variant: Variant.crazyhouse);
+
+      engine.emitDepthRange(toDepth: kPracticeUsableDepth - 2);
+      await tester.pump(kEngineEvalEmissionThrottleDelay * 2);
+      expect(engine.stopCount, 0);
+
+      // The full sequence: [AppLifecycleListener] asserts on a transition the platform cannot
+      // make, and the socket pool now installs one.
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
+      await tester.pump();
+
+      expect(engine.stopCount, 1, reason: 'the analysis is given up when the screen goes away');
+
+      engine.resetTracking();
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+      await tester.pump();
+
+      expect(
+        engine.requestedPositions,
+        hasLength(1),
+        reason: 'and the position the game is at is analysed again when it comes back',
+      );
+    });
+
+    testWidgets('A variant game sizes its one engine once, and keeps it', (tester) async {
+      // On a variant the opponent and the hints are the same Fairy-Stockfish, so they have to ask
+      // it for the same options: `setoption name Hash` reallocates and clears the transposition
+      // table, and two roles disagreeing about it would throw the search away several times a move.
+      final engine = MultiPvEngine();
+      fakeEngine = engine;
+
+      await initOfflineComputerGame(tester, variant: Variant.crazyhouse);
+
+      await playMove(tester, 'e2', 'e4');
+      await tester.pump(const Duration(milliseconds: 200));
+      await tester.pumpAndSettle();
+
+      // The opponent has answered, and the hints for the player's turn have been computed.
+      await tester.pump(const Duration(seconds: 1));
+      await tester.pumpAndSettle();
+
+      expect(engine.sessions.map((session) => session.spec.label).toSet(), {'variant'});
+      expect(
+        engine.commands.where((command) => command.startsWith('setoption name Hash')),
+        hasLength(1),
+      );
+      expect(
+        engine.commands.where((command) => command.startsWith('setoption name Threads')),
+        hasLength(1),
+      );
     });
 
     testWidgets('Can play drop moves in crazyhouse', (tester) async {
@@ -259,7 +381,7 @@ void main() {
       // Verify new game bottom sheet is shown with all options
       await tester.ensureVisible(find.text('Side'));
       expect(find.text('Side'), findsOneWidget);
-      expect(find.byType(Slider), findsOneWidget);
+      expect(find.text('Opponent'), findsOneWidget);
     });
 
     testWidgets('Menu button opens action sheet', (tester) async {
@@ -272,6 +394,44 @@ void main() {
       // Verify action sheet with options
       expect(find.text('New game'), findsWidgets);
     });
+
+    testWidgets(
+      'Settings icon in app bar is visible and opens unified settings sheet in standard mode',
+      (tester) async {
+        await initOfflineComputerGame(tester);
+
+        // Verify settings icon is present in app bar
+        final settingsIcon = find.byIcon(Icons.settings);
+        expect(settingsIcon, findsOneWidget);
+
+        await tester.tap(settingsIcon);
+        await tester.pumpAndSettle();
+
+        // In standard mode, only general settings (blindfold mode) are shown
+        expect(find.text('Blindfold'), findsOneWidget);
+        expect(find.text('Practice settings'), findsNothing);
+        expect(find.text('Hide best move'), findsNothing);
+      },
+    );
+
+    testWidgets(
+      'Settings icon opens unified settings sheet with practice settings in practice mode',
+      (tester) async {
+        await initPracticeModeGame(tester);
+        await tester.pumpAndSettle();
+
+        // Verify settings icon is visible
+        final settingsIcon = find.byIcon(Icons.settings);
+        expect(settingsIcon, findsOneWidget);
+
+        await tester.tap(settingsIcon);
+        await tester.pumpAndSettle();
+
+        // In practice mode, practice settings appear before general settings (blindfold mode)
+        expect(find.text('Practice settings'), findsOneWidget);
+        expect(find.text('Blindfold'), findsOneWidget);
+      },
+    );
 
     testWidgets('Playing as black shows board from black perspective', (tester) async {
       await initOfflineComputerGame(tester, side: Side.black);
@@ -331,6 +491,43 @@ void main() {
       expect(button.onTap, isNull);
     });
 
+    testWidgets('A new game at the same level tells the engine it is a new game', (tester) async {
+      // Two games at the same level are the same opponent on the same engine, and the player has
+      // the first move of this one — so nothing about the opponent's first search of it says that
+      // the game it belongs to is not the one the engine has just been playing.
+      final engine = LegalMoveEngine();
+      fakeEngine = engine;
+
+      await initOfflineComputerGame(tester);
+      await playMove(tester, 'e2', 'e4');
+      await tester.pump(const Duration(milliseconds: 200));
+      await tester.pumpAndSettle();
+
+      final opponentEngine = engine.sessions.firstWhere(
+        (session) => session.spec.label == 'variant',
+      );
+      opponentEngine.commands.clear();
+
+      await tester.tap(find.byIcon(Icons.menu));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('New game'));
+      await tester.pumpAndSettle();
+      // The side picker already holds the side of the game just played.
+      await tester.tap(find.text('Play'));
+      await tester.pumpAndSettle();
+
+      await playMove(tester, 'd2', 'd4');
+      await tester.pump(const Duration(milliseconds: 200));
+      await tester.pumpAndSettle();
+
+      expect(
+        engine.sessions,
+        contains(opponentEngine),
+        reason: 'the opponent plays both games on the one engine',
+      );
+      expect(opponentEngine.commands, contains('ucinewgame'));
+    });
+
     testWidgets('Can dismiss new game bottom sheet', (tester) async {
       await initOfflineComputerGame(tester);
 
@@ -340,20 +537,20 @@ void main() {
       await tester.tap(find.text('New game'));
       await tester.pumpAndSettle();
 
-      // Verify bottom sheet is shown (has Play button and Level slider)
+      // Verify bottom sheet is shown (has Play button and the opponent tile)
       expect(find.text('Play'), findsOneWidget);
-      expect(find.byType(Slider), findsOneWidget);
+      expect(find.text('Opponent'), findsOneWidget);
 
       // Dismiss the bottom sheet by tapping the barrier (scrim)
       await tester.tapAt(Offset.zero);
       await tester.pumpAndSettle();
 
       // Bottom sheet should be closed, game should still be visible
-      expect(find.byType(Slider), findsNothing);
+      expect(find.text('Opponent'), findsNothing);
       expect(find.byType(Chessboard), findsOneWidget);
     });
 
-    testWidgets('Can start game with different level', (tester) async {
+    testWidgets('Can start game with a different Stockfish level', (tester) async {
       final gameStorage = MockOfflineComputerGameStorage();
       when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
 
@@ -369,13 +566,22 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pumpAndSettle();
 
-      // Find and drag the level slider
+      // The level lives in the opponent picker now
+      await tester.tap(find.text('Opponent'));
+      await tester.pumpAndSettle();
+
       final slider = find.byType(Slider);
       expect(slider, findsOneWidget);
 
       // Drag slider to change level (drag to the right for higher level)
       await tester.drag(slider, const Offset(100, 0));
       await tester.pumpAndSettle();
+
+      await tester.tap(find.text('OK'));
+      await tester.pumpAndSettle();
+
+      // Only the engine player behind the sheet still says level 4; the tile has moved on.
+      expect(find.text('Stockfish level 4'), findsOneWidget);
 
       // Select white and start game
       await selectSide(tester, Side.white);
@@ -498,9 +704,9 @@ void main() {
             initialFen: kInitialFEN,
             status: GameStatus.started,
             playerSide: Side.white,
-            stockfishLevel: StockfishLevel.level1,
+            opponentSpec: const StockfishOpponentSpec(StockfishLevel.level1),
             humanPlayer: const Player(onGame: true),
-            enginePlayer: stockfishPlayer(),
+            enginePlayer: enginePlayerFor(const StockfishOpponentSpec(StockfishLevel.level1)),
           ),
         ),
       );
@@ -588,9 +794,9 @@ void main() {
             initialFen: kInitialFEN,
             status: GameStatus.started,
             playerSide: Side.white,
-            stockfishLevel: StockfishLevel.level1,
+            opponentSpec: const StockfishOpponentSpec(StockfishLevel.level1),
             humanPlayer: const Player(onGame: true),
-            enginePlayer: stockfishPlayer(),
+            enginePlayer: enginePlayerFor(const StockfishOpponentSpec(StockfishLevel.level1)),
           ),
         ),
       );
@@ -612,7 +818,7 @@ void main() {
       expect(getBoardLastMove(tester), Move.parse('e7e5'));
     });
 
-    testWidgets('Game is saved when exiting with confirmation', (tester) async {
+    testWidgets('Game is saved when exiting', (tester) async {
       final gameStorage = MockOfflineComputerGameStorage();
 
       when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
@@ -657,27 +863,20 @@ void main() {
       await tester.pump(const Duration(milliseconds: 300));
       await tester.pumpAndSettle();
 
-      // Try to go back - should show confirmation dialog
+      // Leaving an unfinished game asks nothing: it is saved on the way out, so it can be
+      // resumed or analysed later.
       await tester.pageBack();
       await tester.pumpAndSettle();
 
-      // Confirmation dialog should be shown
-      expect(find.text('Are you sure?'), findsOneWidget);
-      expect(find.text('No worries, your game will be saved.'), findsOneWidget);
-
-      // Confirm exit
-      await tester.tap(find.text('Yes'));
-      await tester.pumpAndSettle();
-
-      // Verify save was called
+      expect(find.byType(OfflineComputerGameScreen), findsNothing);
       verify(() => gameStorage.save(any())).called(1);
     });
   });
 
   group('Hint feature', () {
     setUp(() {
-      // Use MultiPvFakeStockfish which returns multiPv evaluation data
-      testBinding.stockfish = MultiPvFakeStockfish();
+      // Use MultiPvEngine which returns multiPv evaluation data
+      fakeEngine = MultiPvEngine();
     });
 
     testWidgets('Hint button shows lightbulb icon', (tester) async {
@@ -784,7 +983,7 @@ void main() {
 
         // Hint square should now be set
         final updatedState = ref.read(offlineComputerGameControllerProvider);
-        expect(updatedState.hintIndex, equals(0));
+        expect(updatedState.hintMove, equals(gameState.hintMoves!.first));
         expect(updatedState.hintSquare, isNotNull);
       }
     });
@@ -828,7 +1027,7 @@ void main() {
         await tester.pump();
 
         final firstHintState = ref.read(offlineComputerGameControllerProvider);
-        expect(firstHintState.hintIndex, equals(0));
+        expect(firstHintState.hintMove, equals(gameState.hintMoves![0]));
         final firstHintSquare = firstHintState.hintSquare;
 
         // Press hint button second time
@@ -836,12 +1035,73 @@ void main() {
         await tester.pump();
 
         final secondHintState = ref.read(offlineComputerGameControllerProvider);
-        expect(secondHintState.hintIndex, equals(1));
+        expect(secondHintState.hintMove, equals(gameState.hintMoves![1]));
         final secondHintSquare = secondHintState.hintSquare;
 
         // Hint square should be different (different origin)
         expect(secondHintSquare, isNot(equals(firstHintSquare)));
       }
+    });
+
+    testWidgets('A deeper eval that drops a hint leaves the shown hint where it is', (
+      tester,
+    ) async {
+      // The analysis keeps running while a hint is on screen, and every evaluation re-sorts and
+      // re-filters the hint moves. What is shown is the move the player cycled to, so it neither
+      // jumps to another square under them nor — as an index into the list would — points past the
+      // end of a list the new eval has shortened.
+      final engine = NarrowingHintEngine();
+      fakeEngine = engine;
+
+      final gameStorage = MockOfflineComputerGameStorage();
+      when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
+      when(() => gameStorage.save(any())).thenAnswer((_) async {});
+
+      late WidgetRef ref;
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: Consumer(
+          builder: (context, r, _) {
+            ref = r;
+            return const OfflineComputerGameScreen();
+          },
+        ),
+        overrides: {
+          offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      await selectSide(tester, Side.white);
+      await tester.tap(find.text('Play'));
+      await tester.pumpAndSettle();
+
+      final gameState = ref.read(offlineComputerGameControllerProvider);
+      expect(gameState.hintMoves, hasLength(2));
+
+      // Cycle to the second hint.
+      await tester.tap(find.byIcon(CupertinoIcons.lightbulb));
+      await tester.pump();
+      await tester.tap(find.byIcon(CupertinoIcons.lightbulb));
+      await tester.pump();
+
+      final shownState = ref.read(offlineComputerGameControllerProvider);
+      expect(shownState.hintMove, equals(gameState.hintMoves![1]));
+      final shownSquare = shownState.hintSquare;
+      expect(shownSquare, isNotNull);
+
+      // A deeper eval leaves the second line far enough behind that it is no longer a hint.
+      engine.emitNarrowedDepth();
+      await tester.pump();
+
+      expect(tester.takeException(), isNull);
+      final narrowedState = ref.read(offlineComputerGameControllerProvider);
+      expect(narrowedState.hintMoves, hasLength(1));
+      expect(narrowedState.hintMove, equals(shownState.hintMove));
+      expect(narrowedState.hintSquare, equals(shownSquare));
     });
 
     testWidgets('Hints are cleared when a move is made', (tester) async {
@@ -891,7 +1151,7 @@ void main() {
 
         // Hints should be cleared
         final afterMoveState = ref.read(offlineComputerGameControllerProvider);
-        expect(afterMoveState.hintIndex, isNull);
+        expect(afterMoveState.hintMove, isNull);
       }
     });
 
@@ -952,12 +1212,13 @@ void main() {
     });
 
     testWidgets('Hint button is disabled when not player turn', (tester) async {
-      // Use LegalMoveFakeStockfish for this test as we need engine to play
-      testBinding.stockfish = LegalMoveFakeStockfish();
+      // An opponent that takes its time, so that it is still thinking when the button is checked.
+      // The analysis of the player's own position now unlocks the hints as soon as the search is
+      // deep enough, which with an engine that answers instantly is immediately.
+      fakeEngine = SlowEngine(const Duration(seconds: 2));
       await initOfflineComputerGame(tester, side: Side.black);
 
       // When playing as black, it's white's turn initially (engine's turn)
-      // Wait briefly for engine to start thinking
       await tester.pump(const Duration(milliseconds: 100));
 
       // Find the hint button
@@ -970,14 +1231,17 @@ void main() {
       final button = tester.widget<BottomBarButton>(hintButton);
       expect(button.onTap, isNull);
 
-      // Wait for engine move
+      // Let the opponent answer and the analysis of the player's turn give up, so that nothing is
+      // left running behind the test.
+      await tester.pump(const Duration(seconds: 3));
+      await tester.pump(kPracticeMaxSearchTime + const Duration(seconds: 2));
       await tester.pumpAndSettle();
     });
   });
 
   group('Custom starting position', () {
     setUp(() {
-      testBinding.stockfish = LegalMoveFakeStockfish();
+      fakeEngine = LegalMoveEngine();
     });
 
     testWidgets('New game dialog shows mini board when initialFen is provided', (tester) async {
@@ -1366,7 +1630,7 @@ void main() {
 
   group('Practice comment card', () {
     setUp(() {
-      testBinding.stockfish = LegalMoveFakeStockfish();
+      fakeEngine = LegalMoveEngine();
     });
 
     Future<void> pumpWithComment(WidgetTester tester, PracticeComment comment) async {
@@ -1640,7 +1904,7 @@ void main() {
     });
 
     testWidgets('title is shown when practice mode is enabled', (tester) async {
-      testBinding.stockfish = PracticeModeStockfish();
+      fakeEngine = PracticeModeEngine();
       await initPracticeModeGame(tester);
 
       // Verify the title shows "Practice with computer"
@@ -1648,7 +1912,7 @@ void main() {
     });
 
     testWidgets('game is started with practiceMode flag set', (tester) async {
-      testBinding.stockfish = PracticeModeStockfish();
+      fakeEngine = PracticeModeEngine();
 
       late WidgetRef ref;
       final gameStorage = MockOfflineComputerGameStorage();
@@ -1690,90 +1954,64 @@ void main() {
       final gameState = ref.read(offlineComputerGameControllerProvider);
       expect(gameState.game.practiceMode, isTrue);
     });
+    testWidgets('a move outside the analysed lines is judged on its own analysis', (tester) async {
+      // The slow path. The analysis running while the player thinks holds two lines, and e4 is not
+      // one of the two the fake engine offers — so the position the move led to has no eval yet and
+      // has to be analysed on its own before there is anything to judge the move by.
+      fakeEngine = PracticeModeEngine(initialEvalCp: 50, evalShiftCp: -60);
 
-    // testWidgets('Practice mode shows verdict after playing a move', (tester) async {
-    //   // Use a fake stockfish that returns an inaccuracy (-60cp shift)
-    //   testBinding.stockfish = PracticeModeStockfish(initialEvalCp: 50, evalShiftCp: -60);
+      late WidgetRef ref;
+      final gameStorage = MockOfflineComputerGameStorage();
+      when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
+      when(() => gameStorage.save(any())).thenAnswer((_) async {});
 
-    //   late WidgetRef ref;
-    //   final gameStorage = MockOfflineComputerGameStorage();
-    //   when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: Consumer(
+          builder: (context, r, _) {
+            ref = r;
+            return const OfflineComputerGameScreen();
+          },
+        ),
+        overrides: {
+          offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
 
-    //   final app = await makeTestProviderScopeApp(
-    //     tester,
-    //     home: Consumer(
-    //       builder: (context, r, _) {
-    //         ref = r;
-    //         return const OfflineComputerGameScreen();
-    //       },
-    //     ),
-    //     overrides: {
-    //       offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
-    //         (_) => gameStorage,
-    //       ),
-    //     },
-    //   );
-    //   await tester.pumpWidget(app);
-    //   await tester.pump(const Duration(milliseconds: 50));
+      final practiceSwitch = find.descendant(
+        of: find.ancestor(of: find.text('Practice mode'), matching: find.byType(SwitchSettingTile)),
+        matching: find.byType(Switch),
+      );
+      await tester.tap(practiceSwitch);
+      await tester.pump();
 
-    //   // Enable practice mode
-    //   final practiceSwitch = find.descendant(
-    //     of: find.ancestor(of: find.text('Practice mode'), matching: find.byType(SwitchListTile)),
-    //     matching: find.byType(Switch),
-    //   );
-    //   await tester.tap(practiceSwitch);
-    //   await tester.pump();
+      await selectSide(tester, Side.white);
+      await tester.tap(find.text('Play'));
+      await tester.pumpAndSettle();
 
-    //   // Start game as white
-    //   await selectSide(tester, Side.white);
-    //   await tester.tap(find.text('Play'));
-    //   await tester.pump();
-    //   await tester.pump(const Duration(milliseconds: 100));
+      await playMove(tester, 'e2', 'e4');
+      await tester.pump(const Duration(seconds: 1));
+      await tester.pumpAndSettle();
 
-    //   // Verify the game started
-    //   expect(find.text('Practice with computer'), findsOneWidget);
-    //   expect(find.byType(Chessboard), findsOneWidget);
+      final state = ref.read(offlineComputerGameControllerProvider);
+      expect(state.isEvaluatingMove, isFalse, reason: 'the verdict is in, one way or another');
 
-    //   // Check initial state
-    //   var state = ref.read(offlineComputerGameControllerProvider);
-    //   expect(state.game.practiceMode, isTrue);
+      final comment = state.game.steps
+          .map((step) => step.computerAnalysis?.practiceComment)
+          .nonNulls
+          .singleOrNull;
+      expect(comment, isNotNull, reason: 'the move was judged');
 
-    //   // Play a move (e2-e4)
-    //   await playMove(tester, 'e2', 'e4');
-    //   await tester.pump(const Duration(seconds: 3));
-
-    //   // After playing a move in practice mode, either:
-    //   // 1. Still evaluating (shows spinner), OR
-    //   // 2. Evaluation completed (shows verdict icon)
-    //   state = ref.read(offlineComputerGameControllerProvider);
-
-    //   // Print debug info
-    //   debugPrint('isEvaluatingMove: ${state.isEvaluatingMove}');
-    //   debugPrint('practiceComment: ${state.practiceComment}');
-    //   debugPrint('cachedWinningChances: ${state.cachedWinningChances}');
-
-    //   // The evaluation might complete instantly with fake stockfish
-    //   // Check that either evaluating state or verdict is shown
-    //   // Note: The localized text is "Evaluating your move ..." with spaces and ellipsis
-    //   final evaluatingText = find.textContaining('Evaluating your move');
-    //   final helpIcon = find.byIcon(Icons.help);
-    //   final errorIcon = find.byIcon(Icons.error);
-    //   final checkIcon = find.byIcon(Icons.check_circle);
-    //   final cancelIcon = find.byIcon(Icons.cancel);
-
-    //   final isEvaluating = evaluatingText.evaluate().isNotEmpty;
-    //   final hasVerdictIcon =
-    //       helpIcon.evaluate().isNotEmpty ||
-    //       errorIcon.evaluate().isNotEmpty ||
-    //       checkIcon.evaluate().isNotEmpty ||
-    //       cancelIcon.evaluate().isNotEmpty;
-
-    //   expect(
-    //     isEvaluating || hasVerdictIcon,
-    //     isTrue,
-    //     reason: 'Should show either evaluating state or verdict icon',
-    //   );
-    // });
+      // The engine only drops its eval by [evalShiftCp] on a search *after* the move, so a verdict
+      // that sees the drop is proof the position the move led to was analysed on its own rather
+      // than read off the lines the pre-move analysis already held.
+      expect(comment!.verdict, isNot(MoveVerdict.goodMove));
+    });
   });
 }
 
@@ -1864,9 +2102,9 @@ OfflineComputerGameState _stateWithPracticeComment(PracticeComment comment) {
     initialFen: kInitialFEN,
     status: GameStatus.started,
     playerSide: Side.black,
-    stockfishLevel: StockfishLevel.level1,
+    opponentSpec: const StockfishOpponentSpec(StockfishLevel.level1),
     humanPlayer: const Player(onGame: true),
-    enginePlayer: stockfishPlayer(),
+    enginePlayer: enginePlayerFor(const StockfishOpponentSpec(StockfishLevel.level1)),
     practiceMode: true,
     casual: true,
   );
@@ -1898,9 +2136,9 @@ OfflineComputerGameState _stateGameFinished() {
     status: GameStatus.mate,
     winner: Side.white,
     playerSide: Side.black,
-    stockfishLevel: StockfishLevel.level1,
+    opponentSpec: const StockfishOpponentSpec(StockfishLevel.level1),
     humanPlayer: const Player(onGame: true),
-    enginePlayer: stockfishPlayer(),
+    enginePlayer: enginePlayerFor(const StockfishOpponentSpec(StockfishLevel.level1)),
     practiceMode: true,
     casual: true,
   );
@@ -1925,9 +2163,9 @@ OfflineComputerGameState _statePlayerTurn({ComputerAnalysis? analysis}) {
     initialFen: kInitialFEN,
     status: GameStatus.started,
     playerSide: Side.white,
-    stockfishLevel: StockfishLevel.level1,
+    opponentSpec: const StockfishOpponentSpec(StockfishLevel.level1),
     humanPlayer: const Player(onGame: true),
-    enginePlayer: stockfishPlayer(),
+    enginePlayer: enginePlayerFor(const StockfishOpponentSpec(StockfishLevel.level1)),
     practiceMode: true,
     casual: true,
   );
@@ -1965,9 +2203,9 @@ OfflineComputerGameState _stateEvaluatingMove() {
     initialFen: kInitialFEN,
     status: GameStatus.started,
     playerSide: Side.black,
-    stockfishLevel: StockfishLevel.level1,
+    opponentSpec: const StockfishOpponentSpec(StockfishLevel.level1),
     humanPlayer: const Player(onGame: true),
-    enginePlayer: stockfishPlayer(),
+    enginePlayer: enginePlayerFor(const StockfishOpponentSpec(StockfishLevel.level1)),
     practiceMode: true,
     casual: true,
   );
@@ -2038,6 +2276,8 @@ Future<Rect> initOfflineComputerGame(
 }) async {
   final gameStorage = MockOfflineComputerGameStorage();
   when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
+  // Sending the app to the background saves the game as well as stopping the analysis.
+  when(() => gameStorage.save(any())).thenAnswer((_) async {});
 
   final app = await makeTestProviderScopeApp(
     tester,

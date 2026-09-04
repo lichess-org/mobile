@@ -744,6 +744,32 @@ void main() {
       expect(boardHasPiece(tester, Square.e4, Piece.whitePawn), isTrue);
       expect(boardHasPiece(tester, Square.e5, Piece.blackPawn), isTrue);
     });
+
+    testWidgets('Blindfold option is shown in display settings sheet', (tester) async {
+      final gameStorage = MockOverTheBoardGameStorage();
+      when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const OverTheBoardScreen(),
+        overrides: {
+          overTheBoardGameStorageProvider: overTheBoardGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Play'));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byIcon(Icons.settings));
+      await tester.pumpAndSettle();
+
+      // Verify Blindfold setting tile is present in display settings bottom sheet
+      expect(find.text('Blindfold'), findsOneWidget);
+    });
   });
 }
 

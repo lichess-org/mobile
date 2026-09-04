@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io' show Directory;
 
 import 'package:device_info_plus/device_info_plus.dart';
@@ -7,6 +8,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/db/secure_storage.dart';
 import 'package:lichess_mobile/src/model/auth/auth_storage.dart';
 import 'package:lichess_mobile/src/model/auth/auth_user.dart';
+import 'package:lichess_mobile/src/model/engine/engine_utils.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/utils/system.dart';
@@ -28,29 +30,25 @@ typedef PreloadedData = ({
 final preloadedDataProvider = FutureProvider<PreloadedData>((Ref ref) async {
   final authStorage = ref.read(authStorageProvider);
 
-  final pInfo = await PackageInfo.fromPlatform();
-  final deviceInfo = await DeviceInfoPlugin().deviceInfo;
+  final (
+    pInfo,
+    deviceInfo,
+    sri,
+    authUser,
+    physicalMemory,
+    appDocumentsDirectory,
+    appSupportDirectory,
+  ) = await (
+    PackageInfo.fromPlatform(),
+    DeviceInfoPlugin().deviceInfo,
+    _readOrCreateSri(),
+    authStorage.read(),
+    System.instance.getTotalRam(),
+    _getDirectoryOrNull(getApplicationDocumentsDirectory),
+    _getDirectoryOrNull(getApplicationSupportDirectory),
+  ).wait;
 
-  // Generate a socket random identifier and store it for the app lifetime
-  String? storedSri;
-  try {
-    storedSri = await SecureStorage.instance.read(key: kSRIStorageKey);
-    if (storedSri == null) {
-      final sri = genRandomString(12);
-      await SecureStorage.instance.write(key: kSRIStorageKey, value: sri);
-      storedSri = sri;
-    }
-  } on PlatformException catch (_) {
-    // Clear all secure storage if an error occurs because it probably means the key has
-    // been lost
-    await SecureStorage.instance.deleteAll();
-  }
-
-  final sri = storedSri ?? genRandomString(12);
-
-  AuthUser? authUser = await authStorage.read();
   final token = authUser?.token;
-
   if (token != null) {
     final userAgent = makeUserAgent(pInfo, deviceInfo, sri, null);
     final client = DefaultClient(ref.read(httpClientFactoryProvider)(), userAgent: userAgent);
@@ -61,7 +59,6 @@ final preloadedDataProvider = FutureProvider<PreloadedData>((Ref ref) async {
           final isValid = data[token] != null;
           if (!isValid) {
             authStorage.delete();
-            authUser = null;
           }
         })
         .catchError((_) {
@@ -72,26 +69,40 @@ final preloadedDataProvider = FutureProvider<PreloadedData>((Ref ref) async {
         });
   }
 
-  final physicalMemory = await System.instance.getTotalRam() ?? 256.0;
-  final engineMaxMemory = (physicalMemory / 10).ceil();
-
-  Directory? appDocumentsDirectory;
-  try {
-    appDocumentsDirectory = await getApplicationDocumentsDirectory();
-  } catch (_) {}
-
-  Directory? appSupportDirectory;
-  try {
-    appSupportDirectory = await getApplicationSupportDirectory();
-  } catch (_) {}
-
   return (
     packageInfo: pInfo,
     deviceInfo: deviceInfo,
     authUser: authUser,
     sri: sri,
-    engineMaxMemoryInMb: engineMaxMemory,
+    engineMaxMemoryInMb: engineMaxMemoryFor(physicalMemory ?? 256),
     appDocumentsDirectory: appDocumentsDirectory,
     appSupportDirectory: appSupportDirectory,
   );
 }, name: 'PreloadedDataProvider');
+
+/// Reads the stored socket random identifier, generating and persisting a
+/// new one if none exists yet or if secure storage turns out to be
+/// unreadable.
+Future<String> _readOrCreateSri() async {
+  try {
+    final storedSri = await SecureStorage.instance.read(key: kSRIStorageKey);
+    if (storedSri != null) return storedSri;
+    final newSri = genRandomString(12);
+    await SecureStorage.instance.write(key: kSRIStorageKey, value: newSri);
+    return newSri;
+  } on PlatformException catch (_) {
+    // Clear all secure storage if an error occurs because it probably means
+    // the key has been lost.
+    await SecureStorage.instance.deleteAll();
+    return genRandomString(12);
+  }
+}
+
+/// Runs [getDirectory], returning `null` instead of throwing if it fails.
+Future<Directory?> _getDirectoryOrNull(Future<Directory> Function() getDirectory) async {
+  try {
+    return await getDirectory();
+  } catch (_) {
+    return null;
+  }
+}

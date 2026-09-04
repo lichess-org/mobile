@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -422,6 +423,95 @@ void main() {
 
         expect(container.read(authControllerProvider), equals(authUser));
       });
+    });
+  });
+
+  group('kQuietRequestHeader', () {
+    test('is stripped before the request is sent', () async {
+      final container = await makeContainer(
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => FakeClient());
+          }),
+        },
+      );
+      final client = container.read(defaultClientProvider);
+      await client.head(
+        Uri.https('www.gstatic.com', '/generate_204'),
+        headers: const {kQuietRequestHeader: '1'},
+      );
+      final requests = FakeClient.verifyRequests();
+      expect(requests.first.headers.containsKey(kQuietRequestHeader), isFalse);
+    });
+  });
+
+  group('downloadFile', () {
+    Future<File> targetFile() async {
+      final tempDir = await Directory.systemTemp.createTemp('download_test_');
+      addTearDown(() => tempDir.delete(recursive: true));
+      return File('${tempDir.path}/file.bin');
+    }
+
+    test('saves the file when the whole body arrives', () async {
+      final file = await targetFile();
+      final client = MockClient((request) async => http.Response('hello', 200));
+
+      final result = await downloadFile(client, Uri.parse('https://example.org/file'), file);
+
+      expect(result, isTrue);
+      expect(await file.readAsString(), 'hello');
+    });
+
+    test('deletes the partial file when the body is truncated', () async {
+      final file = await targetFile();
+      final client = MockClient.streaming((request, bodyStream) async {
+        return http.StreamedResponse(
+          Stream<List<int>>.fromIterable([utf8.encode('hel')]),
+          200,
+          contentLength: 5,
+        );
+      });
+
+      final result = await downloadFile(client, Uri.parse('https://example.org/file'), file);
+
+      expect(result, isFalse);
+      expect(await file.exists(), isFalse);
+    });
+
+    test('deletes the partial file when the stream fails', () async {
+      final file = await targetFile();
+      final client = MockClient.streaming((request, bodyStream) async {
+        final controller = StreamController<List<int>>();
+        controller.add(utf8.encode('hel'));
+        controller.addError(const SocketException('connection reset'));
+        unawaited(controller.close());
+        return http.StreamedResponse(controller.stream, 200);
+      });
+
+      final result = await downloadFile(client, Uri.parse('https://example.org/file'), file);
+
+      expect(result, isFalse);
+      expect(await file.exists(), isFalse);
+    });
+
+    test('writes nothing when the server answers with an error', () async {
+      final file = await targetFile();
+      final client = MockClient((request) async => http.Response('nope', 404));
+
+      final result = await downloadFile(client, Uri.parse('https://example.org/file'), file);
+
+      expect(result, isFalse);
+      expect(await file.exists(), isFalse);
+    });
+
+    test('returns false when the request throws', () async {
+      final file = await targetFile();
+      final client = MockClient((request) async => throw const SocketException('no route'));
+
+      final result = await downloadFile(client, Uri.parse('https://example.org/file'), file);
+
+      expect(result, isFalse);
+      expect(await file.exists(), isFalse);
     });
   });
 }

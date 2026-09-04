@@ -24,6 +24,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
@@ -173,6 +174,9 @@ class SettingsScreen extends ConsumerWidget {
                 leading: const Icon(Icons.http),
                 title: Text(context.l10n.mobileHttpLogs),
                 onTap: () => Navigator.push(context, HttpLogScreen.buildRoute()),
+                trailing: Theme.of(context).platform == TargetPlatform.iOS
+                    ? const CupertinoListTileChevron()
+                    : null,
               ),
               ListTile(
                 leading: const Icon(Icons.bug_report),
@@ -204,6 +208,7 @@ class SettingsScreen extends ConsumerWidget {
                     );
                   }
                 },
+                trailing: const OpenInNewIcon(),
               ),
             ],
           ),

@@ -43,3 +43,6 @@ doc/api/
 
 # VS Code
 .vscode/
+
+# Cache directory created by scripts
+.cache/

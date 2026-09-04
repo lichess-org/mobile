@@ -70,7 +70,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Du muesch igloggt si, um die Site z\'gseh.';
 
   @override
-  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+  String get mobileNbOfflinePuzzles => 'Offline Ufgabe';
 
   @override
   String get mobileNewGame => 'Neus Schpiel';
@@ -296,7 +296,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Oder lad e PGN-Datei ufe';
 
   @override
-  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+  String get mobileGoodMoveButThereIsBetter => 'Gueter Zueg, abr es git en bessere';
 
   @override
   String get mobilePerfShortUltraBullet => 'Ultra';
@@ -311,19 +311,19 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobilePerfShortRapid => 'Rapid';
 
   @override
-  String get mobilePerfShortClassical => 'Classical';
+  String get mobilePerfShortClassical => 'Klassisch';
 
   @override
-  String get mobilePerfShortCorrespondence => 'Corresp.';
+  String get mobilePerfShortCorrespondence => 'Färnsch.';
 
   @override
-  String get mobilePerfShortFromPosition => 'From Pos.';
+  String get mobilePerfShortFromPosition => 'Vo Stel.';
 
   @override
   String get mobilePerfShortChess960 => '960';
 
   @override
-  String get mobilePerfShortAntichess => 'Antichess';
+  String get mobilePerfShortAntichess => 'Fresschach';
 
   @override
   String get mobilePerfShortKingOfTheHill => 'KotH';
@@ -344,7 +344,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobilePerfShortCrazyhouse => 'Crazy';
 
   @override
-  String get mobilePerfShortPuzzle => 'Puzzle';
+  String get mobilePerfShortPuzzle => 'Ufgabe';
 
   @override
   String get mobileAcceptDraw => 'Accept draw?';

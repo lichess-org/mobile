@@ -10,15 +10,16 @@ import 'package:lichess_mobile/src/model/settings/log_preferences.dart';
 import 'package:lichess_mobile/src/utils/lru_list.dart';
 import 'package:logging/logging.dart';
 
-const _loggersToShowInTerminal = {'HttpClient', 'Socket', 'EvaluationService', 'Stockfish'};
+const _loggersToShowInTerminal = {'HttpClient', 'Socket', 'PositionEvaluator', 'Stockfish', 'Lc0'};
 
 /// Loggers whose severe records are worth a non-fatal Crashlytics report on their own.
 ///
-/// The engine plugin logs the native diagnostics it can see — the lifecycle phase a start stalled
-/// in, the reason a write to the engine failed — and none of that reaches the app any other way.
-/// [EvaluationService] is deliberately absent: it reports its own failures through
-/// `reportEngineFailure`, with the flavor, variant and diagnostics attached as custom keys.
-const _loggersReportedToCrashlytics = {'Stockfish'};
+/// These are the engine plugins: they log the native diagnostics they can see — the lifecycle
+/// phase a start stalled in, the reason a write to the engine failed — and none of that reaches
+/// the app any other way. The app's own engine layer is deliberately absent: it reports its
+/// failures through `reportEngineFailure`, with the backend, variant and diagnostics attached as
+/// custom keys.
+const _loggersReportedToCrashlytics = {'Stockfish', 'Lc0'};
 
 /// Provides an instance of [AppLogService] using Riverpod.
 final appLogServiceProvider = Provider<AppLogService>(
@@ -106,12 +107,15 @@ final class ProviderLogger extends ProviderObserver {
 
   @override
   void didAddProvider(ProviderObserverContext context, Object? value) {
-    _logger.fine('${context.provider.name ?? context.provider.runtimeType} initialized', value);
+    _logger.finer('${context.provider.name ?? context.provider.runtimeType} initialized', value);
   }
 
+  /// Riverpod calls this whenever a provider's `onDispose` listeners run, which a rebuild does as
+  /// much as a disposal: `_performRebuild` and `invalidateSelf` both go through `runOnDispose`, so
+  /// a provider that merely recomputed logs this twice without going anywhere.
   @override
   void didDisposeProvider(ProviderObserverContext context) {
-    _logger.fine('${context.provider.name ?? context.provider.runtimeType} disposed');
+    _logger.finer('${context.provider.name ?? context.provider.runtimeType} disposed or rebuilt');
   }
 
   @override

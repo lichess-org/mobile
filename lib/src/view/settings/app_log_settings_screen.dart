@@ -81,14 +81,7 @@ class _AppLogSettingsScreenState extends ConsumerState<AppLogSettingsScreen> {
               icon: const Icon(Icons.share),
               onPressed: () => launchShareDialog(
                 context,
-                ShareParams(
-                  text: logs
-                      .map(
-                        (entry) =>
-                            '[${_logDateFormatter.format(entry.logTime)}] [${entry.loggerName}] [${entry.levelName}] ${entry.message}',
-                      )
-                      .join('\n'),
-                ),
+                ShareParams(text: logs.map(_formatLogEntry).join('\n')),
               ),
             ),
           if (asyncState.value?.isDeleteButtonVisible == true)
@@ -130,7 +123,7 @@ class _AppLogSettingsScreenState extends ConsumerState<AppLogSettingsScreen> {
                   onPressed: () {
                     showChoicePicker<Level>(
                       context,
-                      choices: Level.LEVELS,
+                      choices: kLogPreferencesAvailableLevels,
                       selectedItem: currentLevel,
                       labelBuilder: (Level l) => Text(l.name),
                       onSelectedItemChanged: (Level value) {
@@ -177,6 +170,21 @@ class _AppLogSettingsScreenState extends ConsumerState<AppLogSettingsScreen> {
   }
 }
 
+String _formatLogEntry(AppLogEntry entry) {
+  final buffer = StringBuffer(
+    '[${_logDateFormatter.format(entry.logTime)}] [${entry.loggerName}] [${entry.levelName}] ${entry.message}',
+  );
+  final error = entry.error;
+  final stackTrace = entry.stackTrace;
+  if (error != null) {
+    buffer.write('\n$error');
+  }
+  if (stackTrace != null) {
+    buffer.write('\n$stackTrace');
+  }
+  return buffer.toString();
+}
+
 class _LogTile extends StatelessWidget {
   const _LogTile({required this.entry});
 
@@ -187,10 +195,12 @@ class _LogTile extends StatelessWidget {
     const titleStyle = TextStyle(fontSize: 14, letterSpacing: -0.15);
     final subtitleStyle = TextStyle(color: textShade(context, 0.7), fontSize: 12);
 
-    final leading = SizedBox(
-      width: 30,
-      child: Text(entry.levelName, style: const TextStyle(fontSize: 12)),
-    );
+    final (levelIcon, levelColor) = entry.levelValue >= Level.SEVERE.value
+        ? (Icons.error_outline, Colors.red)
+        : entry.levelValue >= Level.WARNING.value
+        ? (Icons.warning_amber_outlined, Colors.orange)
+        : (Icons.info_outline, textShade(context, 0.7));
+    final leading = Icon(levelIcon, size: 20, color: levelColor, semanticLabel: entry.levelName);
     final title = Text('[${entry.loggerName}] ${entry.message}', style: titleStyle);
     final subtitle = Text(_logDateFormatter.format(entry.logTime), style: subtitleStyle);
 
