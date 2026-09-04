@@ -438,6 +438,9 @@ class _BodyState extends ConsumerState<_Body> {
     final boardPreferences = ref.watch(boardPreferencesProvider);
     final ctrlProvider = puzzleControllerProvider(widget.initialPuzzleContext);
     final puzzleState = ref.watch(ctrlProvider);
+    // Slice 1: isolate hint shapes and view-mode from whole-state watch.
+    final hintSquare = ref.watch(ctrlProvider.select((s) => s.hintSquare));
+    final mode = ref.watch(ctrlProvider.select((s) => s.mode));
 
     // Warn the user when the server starts rate-limiting solve submissions.
     ref.listen(puzzleSolveLimiterProvider, (previous, next) {
@@ -475,13 +478,12 @@ class _BodyState extends ConsumerState<_Body> {
       }
     });
 
-    final shapes = puzzleState.hintSquare != null
-        ? <Shape>{Circle(color: ShapeColor.green.color, orig: puzzleState.hintSquare!)}
+    final shapes = hintSquare != null
+        ? <Shape>{Circle(color: ShapeColor.green.color, orig: hintSquare)}
         : const <Shape>{};
 
     final content = PopScope(
-      canPop:
-          Theme.of(context).platform != TargetPlatform.iOS || puzzleState.mode == PuzzleMode.view,
+      canPop: Theme.of(context).platform != TargetPlatform.iOS || mode == PuzzleMode.view,
       child: SafeArea(
         // view padding can change on Android when immersive mode is enabled, so to prevent any
         // board vertical shift, we set `maintainBottomViewPadding` to true.
