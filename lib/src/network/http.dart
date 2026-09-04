@@ -414,28 +414,17 @@ class _RegisterCallbackClient extends BaseClient {
 /// and deletes the authUser if it's not.
 class LichessClient implements Client {
   LichessClient(this._inner, this._ref)
-    : _cachedVersion = _ref.read(preloadedDataProvider).requireValue.packageInfo.version,
-      _cachedSri = _ref.read(preloadedDataProvider).requireValue.sri,
-      _cachedOsPart = _osPartFor(
-        _ref.read(preloadedDataProvider).requireValue.deviceInfo,
-      );
+    : _cachedPackageInfo = _ref.read(preloadedDataProvider).requireValue.packageInfo,
+      _cachedDeviceInfo = _ref.read(preloadedDataProvider).requireValue.deviceInfo,
+      _cachedSri = _ref.read(preloadedDataProvider).requireValue.sri;
 
   static const defaultRequestTimeout = Duration(seconds: 15);
 
   final Ref _ref;
   final Client _inner;
-  final String _cachedVersion;
+  final PackageInfo _cachedPackageInfo;
+  final BaseDeviceInfo _cachedDeviceInfo;
   final String _cachedSri;
-  final String _cachedOsPart;
-
-  static String _osPartFor(BaseDeviceInfo deviceInfo) {
-    if (deviceInfo is AndroidDeviceInfo) {
-      return ' os:Android/${deviceInfo.version.release} dev:${deviceInfo.model}';
-    } else if (deviceInfo is IosDeviceInfo) {
-      return ' os:iOS/${deviceInfo.systemVersion} dev:${deviceInfo.model}';
-    }
-    return '';
-  }
 
   @override
   Future<StreamedResponse> send(BaseRequest request) async {
@@ -445,9 +434,12 @@ class LichessClient implements Client {
       final bearer = signBearerToken(authUser.token);
       request.headers['Authorization'] = 'Bearer $bearer';
     }
-    final userId = authUser?.user.id;
-    request.headers['User-Agent'] =
-        'Lichess Mobile/$_cachedVersion as:${userId ?? 'anon'} sri:$_cachedSri$_cachedOsPart';
+    request.headers['User-Agent'] = makeUserAgent(
+      _cachedPackageInfo,
+      _cachedDeviceInfo,
+      _cachedSri,
+      authUser?.user,
+    );
 
     final quiet = request.headers.remove(kQuietRequestHeader) != null;
 
