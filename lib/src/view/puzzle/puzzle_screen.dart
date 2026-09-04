@@ -441,6 +441,13 @@ class _BodyState extends ConsumerState<_Body> {
     // Slice 1: isolate hint shapes and view-mode from whole-state watch.
     final hintSquare = ref.watch(ctrlProvider.select((s) => s.hintSquare));
     final mode = ref.watch(ctrlProvider.select((s) => s.mode));
+    // Slice 2: narrow remaining hot fields. Parent still watches whole for
+    // FeedbackWidget; board/tree/bottom bar will use these selects.
+    final pov = ref.watch(ctrlProvider.select((s) => s.pov));
+    final puzzle = ref.watch(ctrlProvider.select((s) => s.puzzle));
+    final root = ref.watch(ctrlProvider.select((s) => s.root));
+    final currentPath = ref.watch(ctrlProvider.select((s) => s.currentPath));
+    final puzzleId = ref.watch(ctrlProvider.select((s) => s.puzzle.puzzle.id));
 
     // Warn the user when the server starts rate-limiting solve submissions.
     ref.listen(puzzleSolveLimiterProvider, (previous, next) {
@@ -526,7 +533,7 @@ class _BodyState extends ConsumerState<_Body> {
                       onMove: (move, {viaDragAndDrop}) {
                         ref.read(ctrlProvider.notifier).onUserMove(move);
                       },
-                      orientation: _isBoardTurned ? puzzleState.pov.opposite : puzzleState.pov,
+                      orientation: _isBoardTurned ? pov.opposite : pov,
                       shapes: shapes,
                       settings: defaultSettings,
                     ),
@@ -538,7 +545,7 @@ class _BodyState extends ConsumerState<_Body> {
                         children: [
                           Center(
                             child: PuzzleFeedbackWidget(
-                              puzzle: puzzleState.puzzle,
+                              puzzle: puzzle,
                               state: puzzleState,
                               onStreak: false,
                             ),
@@ -555,8 +562,8 @@ class _BodyState extends ConsumerState<_Body> {
                                   child: Column(
                                     children: [
                                       DebouncedPgnTreeView(
-                                        root: puzzleState.root,
-                                        currentPath: puzzleState.currentPath,
+                                        root: root,
+                                        currentPath: currentPath,
                                         pgnRootComments: null,
                                         shouldShowComputerAnalysis: false,
                                         shouldShowComments: false,
@@ -574,7 +581,7 @@ class _BodyState extends ConsumerState<_Body> {
                             padding: const EdgeInsets.only(bottom: 16.0),
                             child: _BottomBar(
                               initialPuzzleContext: widget.initialPuzzleContext,
-                              puzzleId: puzzleState.puzzle.puzzle.id,
+                              puzzleId: puzzleId,
                               onFlipBoard: () => setState(() => _isBoardTurned = !_isBoardTurned),
                             ),
                           ),
@@ -601,7 +608,7 @@ class _BodyState extends ConsumerState<_Body> {
                       ),
                       child: Center(
                         child: PuzzleFeedbackWidget(
-                          puzzle: puzzleState.puzzle,
+                          puzzle: puzzle,
                           state: puzzleState,
                           onStreak: false,
                         ),
@@ -619,7 +626,7 @@ class _BodyState extends ConsumerState<_Body> {
                       onMove: (move, {viaDragAndDrop}) {
                         ref.read(ctrlProvider.notifier).onUserMove(move);
                       },
-                      orientation: _isBoardTurned ? puzzleState.pov.opposite : puzzleState.pov,
+                      orientation: _isBoardTurned ? pov.opposite : pov,
                       shapes: shapes,
                       settings: defaultSettings,
                     ),
@@ -634,7 +641,7 @@ class _BodyState extends ConsumerState<_Body> {
                   ),
                   _BottomBar(
                     initialPuzzleContext: widget.initialPuzzleContext,
-                    puzzleId: puzzleState.puzzle.puzzle.id,
+                    puzzleId: puzzleId,
                     onFlipBoard: () => setState(() => _isBoardTurned = !_isBoardTurned),
                   ),
                 ],
@@ -648,7 +655,7 @@ class _BodyState extends ConsumerState<_Body> {
     return Theme.of(context).platform == TargetPlatform.android
         ? AndroidGesturesExclusionWidget(
             boardKey: widget.boardKey,
-            shouldExcludeGesturesOnFocusGained: puzzleState.mode != PuzzleMode.view,
+            shouldExcludeGesturesOnFocusGained: mode != PuzzleMode.view,
             shouldSetImmersiveMode: boardPreferences.immersiveModeWhilePlaying ?? false,
             child: content,
           )
