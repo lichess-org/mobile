@@ -219,7 +219,7 @@ Future<bool> isOnline(Client client, {Duration timeout = const Duration(seconds:
 extension AsyncValueConnectivity on AsyncValue<ConnectivityStatus> {
   /// Switches between device's connectivity status.
   ///
-  /// Using this method assumes the the device is offline when the status is
+  /// Using this method assumes the device is offline when the status is
   /// not yet available (i.e. [AsyncValue.isLoading].
   /// If you want to handle the loading state separately, use
   /// [whenIsLoading] instead.
