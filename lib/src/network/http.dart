@@ -416,9 +416,7 @@ class LichessClient implements Client {
   LichessClient(this._inner, this._ref)
     : _cachedVersion = _ref.read(preloadedDataProvider).requireValue.packageInfo.version,
       _cachedSri = _ref.read(preloadedDataProvider).requireValue.sri,
-      _cachedOsPart = _osPartFor(
-        _ref.read(preloadedDataProvider).requireValue.deviceInfo,
-      );
+      _cachedOsPart = _osPartFor(_ref.read(preloadedDataProvider).requireValue.deviceInfo);
 
   static const defaultRequestTimeout = Duration(seconds: 15);
 
