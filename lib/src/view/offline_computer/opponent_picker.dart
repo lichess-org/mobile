@@ -23,8 +23,7 @@ enum OpponentEngine {
     name: 'Maia',
     iconAsset: 'assets/images/maia/icon.webp',
     description:
-        'Maia is a human-like neural network chess engine. This version was trained by learning '
-        'from over 10 million Lichess games between 1500s. Maia Chess is an ongoing research '
+        'Maia is a human-like neural network chess engine. Maia Chess is an ongoing research '
         'project aiming to make a more human-friendly, useful, and fun chess AI. For more '
         'information go to maiachess.com.',
   );

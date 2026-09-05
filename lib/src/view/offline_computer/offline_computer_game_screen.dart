@@ -210,42 +210,12 @@ class _BodyState extends ConsumerState<_Body> {
 
     return WakelockWidget(
       child: PopScope(
-        canPop: false,
-        onPopInvokedWithResult: (didPop, _) async {
-          if (didPop) return;
-
-          final navigator = Navigator.of(context);
-          final game = gameState.game;
-          if (game.abortable) {
-            return navigator.pop();
-          }
-
-          if (game.playable) {
-            final shouldPop = await showAdaptiveDialog<bool>(
-              context: context,
-              builder: (context) => YesNoDialog(
-                title: Text(context.l10n.mobileAreYouSure),
-                content: const Text('No worries, your game will be saved.'),
-                onNo: () => Navigator.of(context).pop(false),
-                onYes: () => Navigator.of(context).pop(true),
-              ),
-            );
-            if (shouldPop == true) {
-              await _saveGameState();
-              navigator.pop();
-            }
-          } else {
-            // Save state even if the game is finished, we might want to analyse it later
-            await _saveGameState();
-            navigator.pop();
-          }
+        onPopInvokedWithResult: (_, _) async {
+          // Save state even if the game is finished, we might want to analyse it later
+          await _saveGameState();
         },
         child: FocusDetector(
           onForegroundLost: _saveGameState,
-          // The practice analysis searches for as long as the player thinks, so it must not
-          // outlive the screen being looked at. The controller is held rather than read inside the
-          // callbacks: losing focus is also what leaving the screen looks like, and `ref` is not
-          // safe to use from a widget that is on its way out.
           onFocusLost: controller.suspendAnalysis,
           onFocusRegained: controller.resumeAnalysis,
           child: Column(

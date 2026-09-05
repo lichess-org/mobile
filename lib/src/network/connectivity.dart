@@ -177,12 +177,26 @@ final _internetCheckUris = [
 ];
 
 /// Checks if the device is online by making a HEAD request to a list of URIs.
-Future<bool> isOnline(Client client, {Duration timeout = const Duration(seconds: 10)}) {
+///
+/// The requests are marked with [kQuietRequestHeader]: they are expected to fail whenever the
+/// device is offline, which is exactly when this check matters, so their failures are not worth a
+/// warning in the logs.
+///
+/// The [timeout] is the window in which the device gets to prove it is online: the URIs are hit in
+/// parallel and the first answer wins, so a timeout is only ever reached when every one of them
+/// hangs — an interface that is up but leads nowhere. A device with no interface at all fails
+/// immediately, so the timeout is never reached.
+/// Five seconds is generous for a HEAD request to a CDN: Android's own captive portal detection
+/// decides on its parallel probes after three (`PROBE_TIMEOUT_MS` in `NetworkMonitor`).
+Future<bool> isOnline(Client client, {Duration timeout = const Duration(seconds: 5)}) {
   final completer = Completer<bool>();
   try {
     int remaining = _internetCheckUris.length;
     final futures = _internetCheckUris.map(
-      (uri) => client.head(uri).timeout(timeout).then((response) => true, onError: (_) => false),
+      (uri) => client
+          .head(uri, headers: const {kQuietRequestHeader: '1'})
+          .timeout(timeout)
+          .then((response) => true, onError: (_) => false),
     );
     for (final future in futures) {
       future.then((value) {
