@@ -87,6 +87,7 @@ String makeTournamentJson({
   required int nbPlayers,
   String? verdictsJson,
   TournamentMe? me,
+  bool isStarted = true,
   bool isPrivate = false,
   String featuredGameJson = '',
 }) {
@@ -113,8 +114,8 @@ String makeTournamentJson({
   "nbPlayers": $nbPlayers,
   ${meToJson(me)}
   "duels": [ ],
-  "secondsToFinish": 2744,
-  "isStarted": true,
+  "${isStarted ? 'secondsToFinish' : 'secondsToStart'}": 2744,
+  "isStarted": $isStarted,
   $featuredGameJson
   "standing": {
     "page": 1,
@@ -546,6 +547,50 @@ void main() {
       await tester.pump();
       expect(find.text('11-12 / 12'), findsOneWidget);
     });
+
+    for (final isStarted in [false, true]) {
+      testWidgets('${isStarted ? 'Shows' : 'Hides'} pairing status for a joined '
+          '${isStarted ? 'started' : 'scheduled'} tournament', (WidgetTester tester) async {
+        final mockClient = MockClient((request) {
+          if (request.url.path == '/api/tournament/82QbxlJb') {
+            return mockResponse(
+              makeTournamentJson(
+                standings: makeTestPlayers(10),
+                nbPlayers: 11,
+                me: (gameId: null, pauseDelay: null, rank: 11, withdraw: null),
+                isStarted: isStarted,
+              ),
+              200,
+            );
+          }
+          return mockResponse('', 404);
+        });
+
+        const name = 'tom-anders';
+        final authUser = AuthUser(
+          user: LightUser(id: UserId.fromUserName(name), name: name),
+          token: 'test-token',
+        );
+
+        final app = await makeTestProviderScopeApp(
+          tester,
+          home: const TournamentScreen(id: TournamentId('82QbxlJb')),
+          authUser: authUser,
+          overrides: {
+            lichessClientProvider: lichessClientProvider.overrideWith((ref) {
+              return LichessClient(mockClient, ref);
+            }),
+          },
+        );
+        await tester.pumpWidget(app);
+        await tester.pump();
+
+        expect(
+          find.text('Stand by $name, pairing players, get ready!'),
+          isStarted ? findsOneWidget : findsNothing,
+        );
+      });
+    }
 
     testWidgets('Cannot join tournament if not logged in', (WidgetTester tester) async {
       final mockClient = MockClient((request) {

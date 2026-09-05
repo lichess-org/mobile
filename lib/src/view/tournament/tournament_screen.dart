@@ -160,6 +160,11 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final authUser = ref.watch(authControllerProvider);
     final timeLeft = state.tournament.timeToStart ?? state.tournament.timeToFinish;
+    final showPairingStatus =
+        authUser != null &&
+        state.joined &&
+        state.tournament.isStarted == true &&
+        state.tournament.isFinished != true;
 
     final standingWidgets = [
       if (state.tournament.teamStanding != null) ...[
@@ -178,7 +183,7 @@ class _Body extends ConsumerWidget {
         _FeaturedGame(state.tournament.featuredGame!),
     ];
 
-    final bottomSheetSpacer = (authUser != null && state.joined)
+    final bottomSheetSpacer = showPairingStatus
         ? const SizedBox(height: 35)
         : const SizedBox.shrink();
 
@@ -272,7 +277,7 @@ class _Body extends ConsumerWidget {
             );
           },
         ),
-        bottomSheet: authUser != null && state.joined && state.tournament.isFinished != true
+        bottomSheet: showPairingStatus
             ? Material(
                 child: Container(
                   height: 35,
