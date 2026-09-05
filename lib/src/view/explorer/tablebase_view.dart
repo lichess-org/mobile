@@ -1,5 +1,6 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart' show Variant;
 import 'package:lichess_mobile/src/model/explorer/tablebase.dart';
 import 'package:lichess_mobile/src/model/explorer/tablebase_repository.dart';
@@ -35,6 +36,12 @@ class TablebaseView extends ConsumerWidget {
           );
         }
 
+        final pieceNotation = ref
+            .watch(pieceNotationProvider)
+            .maybeWhen(
+              data: (value) => value,
+              orElse: () => defaultAccountPreferences.pieceNotation,
+            );
         final children = <Widget>[];
 
         void addMoveSection({
@@ -57,6 +64,7 @@ class TablebaseView extends ConsumerWidget {
                   color: index.isEven ? context.lichessTheme.rowEven : context.lichessTheme.rowOdd,
                   onMoveSelected: onMoveSelected,
                   isWinningForWhite: isWinningForWhite,
+                  pieceNotation: pieceNotation,
                 );
               }, growable: false),
             );
@@ -217,6 +225,7 @@ class _TablebaseMoveRow extends StatelessWidget {
     required this.move,
     required this.color,
     required this.isWinningForWhite,
+    required this.pieceNotation,
     this.onMoveSelected,
     super.key,
   });
@@ -224,6 +233,7 @@ class _TablebaseMoveRow extends StatelessWidget {
   final TablebaseMove move;
   final Color color;
   final bool? isWinningForWhite;
+  final PieceNotation pieceNotation;
   final void Function(Move)? onMoveSelected;
 
   @override
@@ -301,7 +311,13 @@ class _TablebaseMoveRow extends StatelessWidget {
         child: Row(
           children: [
             Expanded(
-              child: Text(move.san, style: const TextStyle(fontWeight: FontWeight.w500)),
+              child: Text(
+                move.san,
+                style: TextStyle(
+                  fontFamily: pieceNotation == PieceNotation.symbol ? 'ChessFont' : null,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
             ),
             metricsWidget,
           ],
