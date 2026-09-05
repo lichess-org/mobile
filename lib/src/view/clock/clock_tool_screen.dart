@@ -198,8 +198,8 @@ class _ClockTileState extends ConsumerState<ClockTile> with SingleTickerProvider
       child: RotatedBox(
         quarterTurns: clockOrientation.isPortrait
             ? (playerType == ClockSide.top
-                  ? clockOrientation.oppositeQuarterTurns
-                  : clockOrientation.quarterTurns)
+                ? clockOrientation.oppositeQuarterTurns
+                : clockOrientation.quarterTurns)
             : clockOrientation.quarterTurns,
         child: AnimatedBuilder(
           animation: _blinkController,
@@ -256,85 +256,79 @@ class _ClockTileState extends ConsumerState<ClockTile> with SingleTickerProvider
                   ),
                 ),
                 Positioned(
-                  top: 24,
-                  right: 24,
+                  top: 20,
+                  right: 20,
                   child: IgnorePointer(
-                    child: Text(
-                      '${context.l10n.stormMoves}: ${clockState.getMovesCount(playerType)}',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: !clockState.paused && clockState.isPlayersTurn(playerType)
-                            ? clockStyle.activeTextColor
-                            : clockStyle.textColor,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withValues(alpha: 0.2),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        '${context.l10n.stormMoves}: ${clockState.getMovesCount(playerType)}',
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                          color: !clockState.paused && clockState.isPlayersTurn(playerType)
+                              ? clockStyle.activeTextColor
+                              : clockStyle.textColor,
+                        ),
                       ),
                     ),
                   ),
                 ),
                 if (widget.orientation == Orientation.portrait && clockOrientation.isPortrait)
                   Positioned(
-                    top: 24,
-                    left: 24,
+                    bottom: MediaQuery.paddingOf(context).bottom + 48.0,
                     child: IgnorePointer(
-                      child: RotatedBox(
-                        quarterTurns: 2,
-                        child: _ClockDisplay(
-                          clockState: clockState,
-                          playerType: playerType,
-                          clockStyle: clockStyle,
+                      ignoring: clockState.started && !clockState.paused,
+                      child: AnimatedOpacity(
+                        opacity: (clockState.started && !clockState.paused) ? 0 : 1.0,
+                        duration: const Duration(milliseconds: 300),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SemanticIconButton(
+                              semanticsLabel: context.l10n.settingsSettings,
+                              iconSize: 32,
+                              icon: const Icon(Icons.tune),
+                              color: clockStyle.textColor,
+                              onPressed: (clockState.started && !clockState.paused)
+                                  ? null
+                                  : () => showModalBottomSheet<void>(
+                                      context: context,
+                                      builder: (BuildContext context) => CustomClockSettings(
+                                        clockType: clockState.options.type,
+                                        clock: playerType == ClockSide.top
+                                            ? TimeIncrement.fromDurations(
+                                                clockState.options.topTime,
+                                                clockState.options.topIncrement,
+                                              )
+                                            : TimeIncrement.fromDurations(
+                                                clockState.options.bottomTime,
+                                                clockState.options.bottomIncrement,
+                                              ),
+                                        onTimeSelected: (TimeIncrement clock) {
+                                          ref
+                                              .read(clockToolControllerProvider.notifier)
+                                              .updateOptionsCustom(clock, playerType);
+                                        },
+                                      ),
+                                    ),
+                            ),
+                            if (clockState.options.hasIncrement(playerType)) ...[
+                              const SizedBox(width: 8),
+                              Text(
+                                '${clockState.options.type == ClockTimeControlType.increment ? '+' : 'd'}${clockState.options.getIncrement(playerType)}',
+                                style: TextStyle(fontSize: 28, color: clockStyle.textColor),
+                              ),
+                            ],
+                          ],
                         ),
                       ),
                     ),
                   ),
-                Positioned(
-                  bottom: MediaQuery.paddingOf(context).bottom + 48.0,
-                  child: IgnorePointer(
-                    ignoring: clockState.started && !clockState.paused,
-                    child: AnimatedOpacity(
-                      opacity: (clockState.started && !clockState.paused) ? 0 : 1.0,
-                      duration: const Duration(milliseconds: 300),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          SemanticIconButton(
-                            semanticsLabel: context.l10n.settingsSettings,
-                            iconSize: 32,
-                            icon: const Icon(Icons.tune),
-                            color: clockStyle.textColor,
-                            onPressed: (clockState.started && !clockState.paused)
-                                ? null
-                                : () => showModalBottomSheet<void>(
-                                    context: context,
-                                    builder: (BuildContext context) => CustomClockSettings(
-                                      clockType: clockState.options.type,
-                                      clock: playerType == ClockSide.top
-                                          ? TimeIncrement.fromDurations(
-                                              clockState.options.topTime,
-                                              clockState.options.topIncrement,
-                                            )
-                                          : TimeIncrement.fromDurations(
-                                              clockState.options.bottomTime,
-                                              clockState.options.bottomIncrement,
-                                            ),
-                                      onTimeSelected: (TimeIncrement clock) {
-                                        ref
-                                            .read(clockToolControllerProvider.notifier)
-                                            .updateOptionsCustom(clock, playerType);
-                                      },
-                                    ),
-                                  ),
-                          ),
-                          if (clockState.options.hasIncrement(playerType)) ...[
-                            const SizedBox(width: 8),
-                            Text(
-                              '${clockState.options.type == ClockTimeControlType.increment ? '+' : 'd'}${clockState.options.getIncrement(playerType)}',
-                              style: TextStyle(fontSize: 28, color: clockStyle.textColor),
-                            ),
-                          ],
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
               ],
             );
           },
