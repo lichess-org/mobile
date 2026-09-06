@@ -198,8 +198,8 @@ class _ClockTileState extends ConsumerState<ClockTile> with SingleTickerProvider
       child: RotatedBox(
         quarterTurns: clockOrientation.isPortrait
             ? (playerType == ClockSide.top
-                ? clockOrientation.oppositeQuarterTurns
-                : clockOrientation.quarterTurns)
+                  ? clockOrientation.oppositeQuarterTurns
+                  : clockOrientation.quarterTurns)
             : clockOrientation.quarterTurns,
         child: AnimatedBuilder(
           animation: _blinkController,
