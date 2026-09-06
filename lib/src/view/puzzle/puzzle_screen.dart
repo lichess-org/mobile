@@ -1068,13 +1068,12 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
               SettingsListTile(
                 // Hardcoded English first; translate once stable.
                 settingsLabel: const Text('Offline vault'),
-                settingsValue: Text(
-                  switch (vaultPrefs.mode) {
-                    OfflineVaultMode.count => '${vaultPrefs.countTarget}',
-                    OfflineVaultMode.mb => '${vaultPrefs.mbTarget} MB (~${vaultPrefs.targetCount})',
-                    OfflineVaultMode.all => 'All',
-                  },
-                ),
+                settingsValue: switch (vaultPrefs.mode) {
+                  OfflineVaultMode.count => '${vaultPrefs.countTarget}',
+                  OfflineVaultMode.mb =>
+                    '${vaultPrefs.mbTarget} MB (~${vaultPrefs.targetCount})',
+                  OfflineVaultMode.all => 'All',
+                },
                 onTap: () {
                   OfflineVaultMode selMode = vaultPrefs.mode;
                   showChoicePicker(
