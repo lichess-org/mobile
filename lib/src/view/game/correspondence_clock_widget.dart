@@ -1,12 +1,12 @@
 import 'dart:async';
 
 import 'package:clock/clock.dart';
-import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
+import 'package:material_ui/material_ui.dart';
 
 class CorrespondenceClock extends StatefulWidget {
   /// The duration left on the clock.
@@ -120,10 +120,8 @@ class _CorrespondenceClockState extends State<CorrespondenceClock> {
           padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5.0),
           child: MediaQuery.withClampedTextScaling(
             maxScaleFactor: kMaxClockTextScaleFactor,
-            child: RichText(
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              text: TextSpan(
+            child: Text.rich(
+              TextSpan(
                 text: '$daysStr$hoursStr',
                 style: TextStyle(
                   color: widget.active ? clockStyle.activeTextColor : clockStyle.textColor,
@@ -147,6 +145,8 @@ class _CorrespondenceClockState extends State<CorrespondenceClock> {
                   ],
                 ],
               ),
+              textAlign: TextAlign.center,
+              maxLines: 2,
             ),
           ),
         ),

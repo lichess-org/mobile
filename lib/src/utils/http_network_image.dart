@@ -58,7 +58,7 @@ class HttpNetworkImage extends ImageProvider<HttpNetworkImage> {
         throw NetworkImageLoadException(statusCode: response.statusCode, uri: resolved);
       }
 
-      return decode(await ui.ImmutableBuffer.fromUint8List(response.bodyBytes));
+      return await decode(await ui.ImmutableBuffer.fromUint8List(response.bodyBytes));
     } catch (e) {
       // Depending on where the exception was thrown, the image cache may not
       // have had a chance to track the key in the cache at all.

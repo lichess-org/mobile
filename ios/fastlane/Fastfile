@@ -18,7 +18,11 @@ default_platform(:ios)
 platform :ios do
   desc "Push a new beta build to TestFlight"
   lane :beta do
-    # sh "flutter build ios --release --no-codesign --obfuscate --split-debug-info=./split-debug-info --dart-define=LICHESS_HOST=https://lichess.org --dart-define=LICHESS_WS_HOST=wss://socket.lichess.org --dart-define=LICHESS_WS_SECRET=#{ENV['WS_SECRET']}"
+    # Required: this regenerates Generated.xcconfig with the prod dart-defines, and bumps the
+    # minimum iOS version of the generated SwiftPM manifest (FlutterGeneratedPluginSwiftPackage)
+    # to the Runner target's deployment target. `flutter pub get` resets that manifest back to
+    # Flutter's default (iOS 13.0), which makes the archive fail on the Firebase plugins.
+    sh "cd .. && flutter build ios --release --no-codesign --obfuscate --split-debug-info=./split-debug-info --dart-define=LICHESS_HOST=lichess.org --dart-define=LICHESS_WS_HOST=socket.lichess.org --dart-define=LICHESS_WS_SECRET=#{ENV['WS_SECRET']}"
     if is_ci
       create_keychain(
         name: ENV['MATCH_KEYCHAIN_NAME'],
@@ -53,5 +57,28 @@ platform :ios do
       api_key: ENV['APP_STORE_KEY_JSON'],
       skip_waiting_for_build_processing: true
     )
+  end
+
+  desc "Build an unsigned .ipa for manual testing on BrowserStack"
+  lane :test_build do
+    root = File.expand_path("../..", __dir__)
+    out = "#{root}/build/ios/browserstack"
+
+    sh "cd #{root} && flutter build ios --release --no-codesign --dart-define=LICHESS_HOST=lichess.org --dart-define=LICHESS_WS_HOST=socket.lichess.org --dart-define=LICHESS_WS_SECRET=#{ENV['WS_SECRET']}"
+
+    # An .ipa is a zip with the .app under Payload/ and nothing else required, so it is built by
+    # hand here: xcodebuild's exportArchive is the step that insists on a profile, and it is the
+    # step being skipped.
+    sh <<~SHELL
+      set -e
+      rm -rf "#{out}"
+      mkdir -p "#{out}/Payload"
+      cp -R "#{root}/build/ios/iphoneos/Runner.app" "#{out}/Payload/"
+      cd "#{out}"
+      zip -qry lichess-test.ipa Payload
+      rm -rf Payload
+    SHELL
+
+    UI.success("Unsigned .ipa ready at #{out}/lichess-test.ipa")
   end
 end

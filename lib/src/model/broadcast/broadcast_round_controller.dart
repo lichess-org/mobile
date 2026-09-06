@@ -88,6 +88,7 @@ class BroadcastRoundController extends AsyncNotifier<BroadcastRoundState> {
       games: round.games,
       observedGames: ISet(),
       isTeamTournament: round.tournament.teamTable == true,
+      isSubscribed: round.isSubscribed,
     );
   }
 
@@ -105,6 +106,7 @@ class BroadcastRoundController extends AsyncNotifier<BroadcastRoundState> {
           games: round.games,
           observedGames: state.requireValue.observedGames.where(round.games.containsKey).toISet(),
           isTeamTournament: isTeamTournament,
+          isSubscribed: round.isSubscribed,
         ),
       );
       _sendEvalMultiGet();
@@ -262,6 +264,25 @@ class BroadcastRoundController extends AsyncNotifier<BroadcastRoundState> {
     state = AsyncData(state.requireValue.copyWith(observedGames: ISet()));
   }
 
+  /// Subscribes to, or unsubscribes from, the tournament this round belongs to.
+  ///
+  /// The state is updated right away and reverted if the request fails.
+  Future<void> setSubscribed(BroadcastTournamentId tournamentId, bool subscribed) async {
+    if (!state.hasValue) return;
+
+    final previous = state.requireValue.isSubscribed;
+    state = AsyncData(state.requireValue.copyWith(isSubscribed: subscribed));
+
+    try {
+      await ref.read(broadcastRepositoryProvider).setSubscribed(tournamentId, subscribed);
+    } catch (e) {
+      if (state.hasValue) {
+        state = AsyncData(state.requireValue.copyWith(isSubscribed: previous));
+      }
+      rethrow;
+    }
+  }
+
   void addObservedGame(BroadcastGameId gameId) {
     if (state.value?.games.containsKey(gameId) != true) return;
 
@@ -309,5 +330,8 @@ sealed class BroadcastRoundState with _$BroadcastRoundState {
 
     /// Whether the tournament is a team event
     required bool isTeamTournament,
+
+    /// Whether the user is subscribed to the tournament this round belongs to.
+    required bool? isSubscribed,
   }) = _BroadcastRoundState;
 }

@@ -15,7 +15,42 @@ import 'package:lichess_mobile/src/model/puzzle/storm.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/riverpod.dart';
 
-/// Fetches the next puzzle for the given [PuzzleAngle].
+/// Reads the next unsolved puzzle of [angle] from the local queue, without ever syncing with the
+/// server.
+///
+/// This is what the puzzle tab previews use: merely listing angles must not download anything, or
+/// opening the tab fires one batch request per saved angle at once. Refilling the queue is
+/// [nextPuzzleProvider]'s job, and only happens when the user actually opens a puzzle.
+///
+/// The one exception is the mix angle: it is the tab's main entry, and the only preview shown
+/// before anything has ever been downloaded, so an empty queue there falls back to
+/// [nextPuzzleProvider].
+final nextPuzzlePreviewProvider = FutureProvider.autoDispose.family<Puzzle?, PuzzleAngle>((
+  Ref ref,
+  PuzzleAngle angle,
+) async {
+  final authUser = ref.watch(authControllerProvider);
+  // Watched, so that saving a batch (which invalidates the storage provider) refreshes the preview:
+  // the puzzle just solved must not stay on display.
+  final storage = await ref.watch(puzzleBatchStorageProvider.future);
+  // useful for the preview puzzle list in the puzzle tab (providers in a list can be invalidated
+  // multiple times when the user scrolls the list)
+  ref.cacheFor(const Duration(minutes: 1));
+
+  final batch = await storage.fetch(userId: authUser?.user.id, angle: angle);
+  final next = batch?.unsolved.firstOrNull;
+  if (next != null) return next;
+
+  return isConfigurableOfflineQueueAngle(angle)
+      ? (await ref.watch(nextPuzzleProvider(angle).future))?.puzzle
+      : null;
+}, name: 'NextPuzzlePreviewProvider');
+
+/// Fetches the next puzzle for the given [PuzzleAngle], syncing the offline queue with the server
+/// if it is short.
+///
+/// Because reading it downloads puzzles, it belongs to the screens that play them. Use
+/// [nextPuzzlePreviewProvider] to only display a puzzle.
 final nextPuzzleProvider = FutureProvider.autoDispose.family<PuzzleContext?, PuzzleAngle>((
   Ref ref,
   PuzzleAngle angle,

@@ -10,8 +10,9 @@ import 'package:lichess_mobile/src/model/analysis/common_analysis_prefs.dart';
 import 'package:lichess_mobile/src/model/analysis/common_analysis_state.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
+import 'package:lichess_mobile/src/model/engine/engine_utils.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
+import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/view/analysis/game_analysis_board.dart';
@@ -137,22 +138,29 @@ abstract class AnalysisBoardState<
   void _onAnalysisStateChanged(AnalysisState? prev, AnalysisState? next) {
     if (!mounted || next == null) return;
     final boardPrefs = ref.read(boardPreferencesProvider);
+    final gameData = _buildGameData(next, boardPrefs);
     final controller = _controller;
+    if (gameData == null) {
+      if (controller != null) {
+        controller.dispose();
+        setState(() => _controller = null);
+      }
+      return;
+    }
     if (controller == null) {
       final ctrl = _createController(next, boardPrefs);
       if (ctrl != null) setState(() => _controller = ctrl);
       return;
     }
     final newFen = computeFen(next);
-    final gameData = _buildGameData(next, boardPrefs);
     final prevFen = prev != null ? computeFen(prev) : null;
     if (prevFen != newFen) {
-      if (gameData != null) controller.updatePosition(gameData, resetPremove: true);
+      controller.updatePosition(gameData, resetPremove: true);
       final explosionSquares = next.explosionSquares;
       if (explosionSquares != null) {
         controller.triggerExplosion(explosionSquares.toSet());
       }
-    } else if (gameData != null) {
+    } else {
       controller.updatePosition(gameData);
     }
   }

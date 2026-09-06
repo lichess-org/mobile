@@ -2,10 +2,9 @@ import 'dart:convert';
 
 import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
@@ -14,7 +13,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
+import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
@@ -29,10 +28,9 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/pockets.dart';
 import 'package:lichess_mobile/src/widgets/variations_bar.dart';
-import 'package:multistockfish/multistockfish.dart';
+import 'package:material_ui/material_ui.dart';
 
-import '../../binding.dart';
-import '../../model/engine/fake_stockfish.dart';
+import '../../model/engine/fake_engine.dart';
 import '../../network/fake_websocket_channel.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
@@ -881,14 +879,14 @@ void main() {
       });
 
       testWidgets('different positions show different evals in move tree', (tester) async {
-        final stockfish = AnalysisTestStockfish();
+        final stockfish = AnalysisTestEngine();
         await makeEngineTestApp(tester, isCloudEvalEnabled: false, stockfish: stockfish);
 
         await playMove(tester, 'e2', 'e4');
         await tester.pump(kRequestEvalDebounceDelay);
 
         // check engine is started
-        expect(stockfish.state.value, StockfishState.ready);
+        expect(stockfish.isRunning, isTrue);
 
         stockfish.emitNextDepth();
         await tester.pump(kEngineEvalEmissionThrottleDelay);
@@ -921,7 +919,7 @@ void main() {
 
     group('Engine analysis on move navigation', () {
       testWidgets('evaluation is debounced when jumping quickly between moves', (tester) async {
-        final stockfish = AnalysisTestStockfish();
+        final stockfish = AnalysisTestEngine();
         await makeEngineTestApp(tester, isCloudEvalEnabled: false, stockfish: stockfish);
 
         // Make several moves
@@ -1014,10 +1012,9 @@ void main() {
       });
 
       testWidgets('can be tapped to play a drop move in crazyhouse', (tester) async {
-        final binding = TestLichessBinding.ensureInitialized();
-        final stockfish = FakeCrazyhouseDropMoveStockfish();
-        binding.stockfish = stockfish;
-        addTearDown(() => binding.stockfish = FakeStockfish());
+        final stockfish = CrazyhouseDropMoveEngine();
+        fakeEngine = stockfish;
+        addTearDown(() => fakeEngine = FakeEngine());
 
         final app = await makeTestProviderScopeApp(
           tester,
@@ -1498,8 +1495,8 @@ void main() {
     await dragFromTo(tester, 'd7', 'd5');
 
     //Open analysis from editor
-    expect(find.byTooltip('Analysis board'), findsOneWidget);
-    await tester.tap(find.byTooltip('Analysis board'));
+    expect(findByTooltip('Analysis board'), findsOneWidget);
+    await tester.tap(findByTooltip('Analysis board'));
     await tester.pumpAndSettle();
 
     // Verify board state is correct and previous analysis was overwritten

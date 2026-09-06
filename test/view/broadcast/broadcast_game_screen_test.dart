@@ -3,20 +3,20 @@ import 'dart:convert';
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
+import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_button.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/widgets/variations_bar.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../model/broadcast/example_data.dart';
 import '../../network/fake_websocket_channel.dart';
@@ -97,6 +97,57 @@ void main() {
       expect(find.text('Dastan, Muhammed Batuhan'), findsOne);
       expect(find.text('Gokerkan, Cem Kaan'), findsOne);
     });
+
+    testWidgets('board is oriented as white by default', variant: kPlatformVariant, (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const BroadcastGameScreen(
+          tournamentId: _tournamentId,
+          roundId: _roundId,
+          gameId: _gameId,
+        ),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      // Load the broadcast analysis controller
+      await tester.pump();
+
+      expect(tester.widget<Chessboard>(find.byType(Chessboard)).orientation, Side.white);
+    });
+
+    testWidgets(
+      'initialPov orients the board once the controller is loaded',
+      variant: kPlatformVariant,
+      (tester) async {
+        final app = await makeTestProviderScopeApp(
+          tester,
+          home: const BroadcastGameScreen(
+            tournamentId: _tournamentId,
+            roundId: _roundId,
+            gameId: _gameId,
+            initialPov: Side.black,
+          ),
+          overrides: {
+            lichessClientProvider: lichessClientProvider.overrideWith(
+              (ref) => LichessClient(client, ref),
+            ),
+          },
+        );
+
+        await tester.pumpWidget(app);
+        // Load the broadcast analysis controller
+        await tester.pump();
+        // Apply the initial point of view, which is deferred to a microtask
+        await tester.pump();
+
+        expect(tester.widget<Chessboard>(find.byType(Chessboard)).orientation, Side.black);
+      },
+    );
 
     // TODO investigate this failing test
 

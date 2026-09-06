@@ -53,6 +53,10 @@ class OverTheBoardPreferencesNotifier extends Notifier<OverTheBoardPrefs>
   Future<void> setTimeIncrement(TimeIncrement timeIncrement) {
     return save(state.copyWith(timeIncrement: timeIncrement));
   }
+
+  Future<void> toggleBlindfoldMode() {
+    return save(state.copyWith(blindfoldMode: !state.blindfoldMode));
+  }
 }
 
 enum TimeControlType {
@@ -80,6 +84,7 @@ sealed class OverTheBoardPrefs with _$OverTheBoardPrefs implements Serializable 
     required bool symmetricPieces,
     @Default(TimeControlType.clock) TimeControlType timeControlType,
     @Default(OverTheBoardPrefs._defaultTimeIncrement) TimeIncrement timeIncrement,
+    @Default(false) bool blindfoldMode,
   }) = _OverTheBoardPrefs;
 
   static const defaults = OverTheBoardPrefs(
@@ -87,6 +92,7 @@ sealed class OverTheBoardPrefs with _$OverTheBoardPrefs implements Serializable 
     symmetricPieces: false,
     timeControlType: TimeControlType.clock,
     timeIncrement: _defaultTimeIncrement,
+    blindfoldMode: false,
   );
 
   factory OverTheBoardPrefs.fromJson(Map<String, dynamic> json) {

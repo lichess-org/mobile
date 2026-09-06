@@ -12,8 +12,12 @@ part 'analysis_player.freezed.dart';
 sealed class AnalysisPlayer with _$AnalysisPlayer {
   const AnalysisPlayer._();
 
-  const factory AnalysisPlayer({required String name, String? title, int? rating}) =
-      _AnalysisPlayer;
+  const factory AnalysisPlayer({
+    required String name,
+    required Side side,
+    String? title,
+    int? rating,
+  }) = _AnalysisPlayer;
 
   /// Creates an AnalysisPlayer from PGN headers for the given side.
   ///
@@ -30,6 +34,6 @@ sealed class AnalysisPlayer with _$AnalysisPlayer {
     final eloStr = pgnHeaders.get(eloKey);
     final rating = eloStr != null ? int.tryParse(eloStr) : null;
 
-    return AnalysisPlayer(name: name, title: title, rating: rating);
+    return AnalysisPlayer(name: name, side: side, title: title, rating: rating);
   }
 }

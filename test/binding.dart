@@ -4,10 +4,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/binding.dart';
-import 'package:multistockfish/multistockfish.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'model/engine/fake_stockfish.dart';
 
 /// The binding instance used in tests.
 TestLichessBinding get testBinding => TestLichessBinding.instance;
@@ -89,19 +86,20 @@ class TestLichessBinding extends LichessBinding {
   ///
   /// Should be called using [addTearDown] in tests.
   void reset() {
+    _firebaseCrashlytics = null;
     _firebaseMessaging = null;
     _sharedPreferences = null;
     numAppStarts = 1;
   }
 
-  FirebaseCrashlytics? _firebaseCrashlytics;
+  FakeFirebaseCrashlytics? _firebaseCrashlytics;
   FakeFirebaseMessaging? _firebaseMessaging;
 
   @override
   Future<void> initializeFirebase() async {}
 
   @override
-  FirebaseCrashlytics get firebaseCrashlytics {
+  FakeFirebaseCrashlytics get firebaseCrashlytics {
     return _firebaseCrashlytics ??= FakeFirebaseCrashlytics();
   }
 
@@ -121,15 +119,6 @@ class TestLichessBinding extends LichessBinding {
   @override
   Stream<RemoteMessage> get firebaseMessagingOnMessageOpenedApp =>
       firebaseMessaging.onMessageOpenedApp.stream;
-
-  Stockfish _stockfish = FakeStockfish();
-
-  @override
-  Stockfish get stockfish => _stockfish;
-
-  set stockfish(Stockfish instance) {
-    _stockfish = instance;
-  }
 }
 
 class FakeSharedPreferences implements SharedPreferencesWithCache {
@@ -231,6 +220,13 @@ typedef FirebaseMessagingRequestPermissionCall = ({
 });
 
 class FakeFirebaseCrashlytics extends Fake implements FirebaseCrashlytics {
+  /// Errors passed to [recordError], oldest first.
+  final List<({Object? exception, StackTrace? stack, Object? reason, bool fatal})> recordedErrors =
+      [];
+
+  /// The keys set with [setCustomKey]; last write wins, as in Crashlytics itself.
+  final Map<String, Object> customKeys = {};
+
   @override
   Future<void> recordError(
     dynamic exception,
@@ -239,15 +235,27 @@ class FakeFirebaseCrashlytics extends Fake implements FirebaseCrashlytics {
     Iterable<Object> information = const [],
     bool? printDetails,
     bool fatal = false,
-  }) async {}
+  }) async {
+    recordedErrors.add((exception: exception, stack: stack, reason: reason, fatal: fatal));
+  }
 
   @override
-  Future<void> setCustomKey(String key, Object value) async {}
+  Future<void> setCustomKey(String key, Object value) async {
+    customKeys[key] = value;
+  }
 }
 
 class FakeFirebaseMessaging extends Fake implements FirebaseMessaging {
   /// Whether [requestPermission] will grant permission.
   bool _willGrantPermission = true;
+
+  /// Whether [setAutoInitEnabled] was last called with `true`.
+  bool autoInitEnabled = false;
+
+  @override
+  Future<void> setAutoInitEnabled(bool enabled) async {
+    autoInitEnabled = enabled;
+  }
 
   /// Set whether [requestPermission] will grant permission.
   // ignore: avoid_setters_without_getters

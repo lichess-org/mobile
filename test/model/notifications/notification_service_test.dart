@@ -44,6 +44,16 @@ void main() {
   });
 
   group('Start service:', () {
+    test('enables firebase messaging auto-init', () async {
+      final container = await makeContainer();
+
+      expect(testBinding.firebaseMessaging.autoInitEnabled, isFalse);
+
+      await container.read(notificationServiceProvider).start();
+
+      expect(testBinding.firebaseMessaging.autoInitEnabled, isTrue);
+    });
+
     test('request permissions', () async {
       final container = await makeContainer();
 

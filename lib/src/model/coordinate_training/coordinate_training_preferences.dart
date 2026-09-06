@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/common/game.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
+import 'package:material_ui/material_ui.dart';
 
 part 'coordinate_training_preferences.freezed.dart';
 part 'coordinate_training_preferences.g.dart';

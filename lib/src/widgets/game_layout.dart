@@ -2,7 +2,6 @@ import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -13,6 +12,7 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/widgets/board.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
 import 'package:lichess_mobile/src/widgets/pockets.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// In crazyhouse, when displaying pockets above/below the board, add this much additional side padding to make the board smaller and avoid overflows.
 const _kAdditionalBoardSidePaddingForPockets = 70.0;
@@ -496,6 +496,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
           );
         } else {
           final defaultBoardSize = constraints.biggest.shortestSide;
+          final maxHeight = constraints.maxHeight;
 
           final isShortScreen = isShortVerticalScreen(context);
 
@@ -506,6 +507,12 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
           double effectiveBoardSize =
               (isTablet ? defaultBoardSize - kTabletBoardTableSidePadding * 2 : defaultBoardSize) -
               pocketsPadding;
+
+          //Reserve vertical space for the top and bottom tables and the user actions bar if present.
+          final maxAllowedBoardSize = maxHeight - 180.0;
+          if (effectiveBoardSize > maxAllowedBoardSize) {
+            effectiveBoardSize = maxAllowedBoardSize;
+          }
 
           if (isShortScreen) {
             effectiveBoardSize -= 16;

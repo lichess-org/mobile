@@ -1,17 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="account" comment="The account screen title.">ಖಾತೆ</string>
+  <string name="accountPreferences" comment="Displayed on settings screen. This is for preferences synced with website on the server.">ಖಾತೆ ಆದ್ಯತೆಗಳು</string>
+  <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">ಈ ಆದ್ಯತೆಗಳನ್ನು ನಿಮ್ಮ ಲೈಚೆಸ್ ಖಾತೆಗೆ ಅನ್ವಯಿಸಲಾಗುತ್ತದೆ ಮತ್ತು ಎಲ್ಲಾ ಸಾಧನಗಳಲ್ಲಿ ಬಳಸಲಾಗುತ್ತದೆ.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">ಎಲ್ಲಾ ಆಟಗಳು</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">ಖಂಡಿತಾ ನಾ?</string>
+  <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">ಬೋರ್ಡ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳು</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">ಪುನಃ ಆಡಲು ಕಳುಹಿಸಿದ ಆಹ್ವಾನವನ್ನು ಅಳಿಸು</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">ಅಳಿಸಿ</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">ಉಳಿಸಿದ ನಡೆಯನ್ನು ತೆಗೆದು ಹಾಕಿ</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">ಆಟವನ್ನು ಸೇರಿ</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">ಫೀಡ್ ಬ್ಯಾಕ್</string>
+  <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">ಶುಭ ಸಂಜೆ, %s</string>
+  <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">ಶುಭ ಸಂಜೆ</string>
+  <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">ಶುಭ ದಿನ, %s</string>
+  <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">ಶುಭ ದಿನ</string>
   <string name="hideVariation" comment="Shown in the analysis screen.">ಈ ಪ್ರಕಾರವನ್ನು ಅಡಗಿಸಿ</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">ಮನೆ</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">ನೇರಪ್ರಸಾರಕರು</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">ಈ ಪುಟ ಪ್ರವೇಶಿಸಲು ನೀವು ಲಾಗ್ ಇನ್ ಆಗಿರಬೇಕು.</string>
+  <string name="nbOfflinePuzzles" comment="Label for the puzzle setting that controls how many puzzles are downloaded and kept available for offline play.">ಆಫ್‌ಲೈನ್ ಒಗಟುಗಳು</string>
+  <string name="newGame" comment="New game button in OTB and play against offline computer features">ಹೊಸ ಆಟ</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">ಯಾವುದೇ ಫಲಿತಾಂಶಗಳಿಲ್ಲ</string>
+  <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">ಹಳೆಯ ಅಪ್ಲಿಕೇಶನ್ ಅಥವಾ ವೆಬ್‌ಸೈಟ್‌ನಿಂದ ಎಲ್ಲಾ ವೈಶಿಷ್ಟ್ಯಗಳು ಪ್ರಸ್ತುತ ಲಭ್ಯವಿಲ್ಲ ಎಂಬುದನ್ನು ದಯವಿಟ್ಟು ಗಮನಿಸಿ, ಆದರೆ ನಾವು ಎಲ್ಲಾ ಸಮಯದಲ್ಲೂ ವೈಶಿಷ್ಟ್ಯಗಳನ್ನು ಸೇರಿಸುತ್ತಿದ್ದೇವೆ.</string>
+  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">ನೀವು ಯಾವುದೇ ಬಳಕೆದಾರರನ್ನು ಅನುಸರಿಸುತ್ತಿಲ್ಲ.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">ಸರಿ</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">ಚೆಸ್ ಮಣೆಯಲ್ಲಿ ಆಡಿ</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">\"%s\" ನ್ನು ಹೊಂದಿರುವ ಆಟಗಾರರು</string>
@@ -19,11 +31,81 @@
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">ಬಲಬದಿ</string>
   <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">ಡ್ರ್ಯಾಗ್ ಮಾಡಿದ ಭಾಗವನ್ನು ಹಿಗ್ಗಿಸಿ</string>
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">ಈ ಓಟವನ್ನು ನಿಲ್ಲಿಸಬೇಕೇ?</string>
+  <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">ತೋರಿಸಲು ಏನೂ ಇಲ್ಲ, ದಯವಿಟ್ಟು ಫಿಲ್ಟರ್‌ಗಳನ್ನು ಬದಲಾಯಿಸಿ</string>
+  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">ತೋರಿಸಲು ಏನೂ ಇಲ್ಲ. ಪಜಲ್ ಸ್ಟಾರ್ಮ್ ನ ಕೆಲವು ರನ್ ಗಳನ್ನು ಆಡಿ.</string>
+  <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">3 ನಿಮಿಷಗಳಲ್ಲಿ ಸಾಧ್ಯವಾದಷ್ಟು ಒಗಟುಗಳನ್ನು ಬಿಡಿಸಿ.</string>
+  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">ನಿಮ್ಮ ಪ್ರಸ್ತುತ ಸ್ಟ್ರೀಕ್ ಅನ್ನು ನೀವು ಕಳೆದುಕೊಳ್ಳುತ್ತೀರಿ ಮತ್ತು ನಿಮ್ಮ ಸ್ಕೋರ್ ಉಳಿಸಲ್ಪಡುತ್ತದೆ.</string>
+  <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">ನಿಮ್ಮ ನೆಚ್ಚಿನ ತೆರೆಯುವಿಕೆಗಳಿಂದ ಒಗಟುಗಳನ್ನು ಪ್ಲೇ ಮಾಡಿ, ಅಥವಾ ಥೀಮ್ ಆಯ್ಕೆಮಾಡಿ.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">ಒಗಟುಗಳು</string>
+  <string name="recentSearches" comment="Title of the recent searches section in the search screen.">ಇತ್ತೀಚಿನ ಹುಡುಕಾಟಗಳು</string>
+  <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">ಬುಕ್‌ಮಾರ್ಕ್ ತೆಗೆದುಹಾಕಿ</string>
+  <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.">ಸರ್ವರ್ ವಿಶ್ಲೇಷಣೆ</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">ಗಡಿಯಾರದ ಸ್ಥಾನ</string>
+  <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">ಪೂರ್ವನಿಗದಿಗಳು</string>
+  <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">ಎಳೆದಾಡುವ ಚದುರಂಗದ ತುಂಡು ಗುರಿ</string>
+  <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">ವೃತ್ತ</string>
+  <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">ಚೌಕ</string>
+  <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">ಹೋಮ್ ವಿಜೆಟ್‌ಗಳು</string>
+  <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">ಇಮ್ಮರ್ಸಿವ್ ಮೋಡ್</string>
+  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">ಆಟವಾಡುವಾಗ ಸಿಸ್ಟಂ UI ಅನ್ನು ಮರೆಮಾಡಿ. ಪರದೆಯ ಅಂಚುಗಳಲ್ಲಿ ಸಿಸ್ಟಂನ ನ್ಯಾವಿಗೇಷನ್ ಸನ್ನೆಗಳಿಂದ ನಿಮಗೆ ತೊಂದರೆಯಾದರೆ ಇದನ್ನು ಬಳಸಿ. ಆಟ ಮತ್ತು ಪಜಲ್ ಪರದೆಗಳಿಗೆ ಅನ್ವಯಿಸುತ್ತದೆ.</string>
+  <string name="settingsMaterialDifferenceCapturedPieces" comment="A value of the material difference settings choice (to show all captured pieces instead of material difference).">ಸೆರೆಹಿಡಿಯಲಾದ ತುಣುಕುಗಳು</string>
+  <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick and image from the image library as app custom background.">ಚಿತ್ರವನ್ನು ಆರಿಸಿ</string>
+  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">ಕಸ್ಟಮ್ ಹಿನ್ನೆಲೆ ಡಾರ್ಕ್ ಮೋಡ್‌ನಲ್ಲಿ ಮಾತ್ರ ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತದೆ. ಡಾರ್ಕ್ ಚಿತ್ರವನ್ನು ಶಿಫಾರಸು ಮಾಡಲಾಗಿದೆ.</string>
+  <string name="settingsPickAnImageBlur" comment="Displayed in theme background choice screen, to blur the chosen image.">ಚಿತ್ರವನ್ನು ಮಸುಕುಗೊಳಿಸಿ</string>
+  <string name="settingsPickAnImageHideBoard" comment="Displayed in theme background choice screen, to hide the board when viewing chosen image.">ಬೋರ್ಡ್ ಮರೆಮಾಡಿ</string>
+  <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">ಬೋರ್ಡ್ ತೋರಿಸಿ</string>
+  <string name="settingsPickAnImageSwipeToDisplay" comment="Displayed in theme background choice screen, when viewing colors presets to display other colors backgrounds.">ಇತರ ಹಿನ್ನೆಲೆಗಳನ್ನು ಪ್ರದರ್ಶಿಸಲು ಸ್ವೈಪ್ ಮಾಡಿ</string>
+  <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">ಟ್ಯಾಪ್ ಮಾಡಿ ಅಥವಾ ಎಳೆಯಿರಿ</string>
+  <string name="settingsPieceShiftMethodTapTwoSquares" comment="A value of piece shift method settings entry.">ಎರಡು ಚೌಕಗಳನ್ನು ಟ್ಯಾಪ್ ಮಾಡಿ</string>
+  <string name="settingsShapeDrawing" comment="Entry in the settings.">ಆಕಾರವನ್ನು ಚಿತ್ರಿಸುವುದು</string>
+  <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.">ಎರಡು ಬೆರಳುಗಳನ್ನು ಬಳಸಿ ಆಕಾರಗಳನ್ನು ಬರೆಯಿರಿ: ಒಂದು ಬೆರಳನ್ನು ಖಾಲಿ ಚೌಕದ ಮೇಲೆ ಇರಿಸಿ ಮತ್ತು ಆಕಾರವನ್ನು ಸೆಳೆಯಲು ಇನ್ನೊಂದು ಬೆರಳನ್ನು ಎಳೆಯಿರಿ.</string>
+  <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">ಗಡಿಯನ್ನು ತೋರಿಸಿ</string>
+  <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">ಸ್ಪರ್ಶ ಪ್ರತಿಕ್ರಿಯೆ</string>
+  <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">ಸಕ್ರಿಯಗೊಳಿಸಿದಾಗ, ನೀವು ಒಂದು ತುಣುಕನ್ನು ಸರಿಸಿದಾಗ ಅಥವಾ ಸೆರೆಹಿಡಿಯುವಾಗ ಸಾಧನವು ಸ್ವಲ್ಪ ಸಮಯದ ನಂತರ ಕಂಪಿಸುತ್ತದೆ.</string>
+  <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">ಸೆಟ್ಟಿಂಗ್‌</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PGN ಫೈಲ್ ಹಂಚಿ</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">ಆಟದ URL ಹಂಚಿ</string>
+  <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">FEN ಆಗಿ ಸ್ಥಾನವನ್ನು ಹಂಚಿಕೊಳ್ಳಿ</string>
+  <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">ಈ ಒಗಟು ಹಂಚಿಕೊಳ್ಳಿ</string>
+  <string name="showComments" comment="Shown in the analysis screen.">ಕಾಮೆಂಟ್‌ಗಳನ್ನು ತೋರಿಸಿ</string>
+  <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">ಫಲಿತಾಂಶವನ್ನು ತೋರಿಸಿ</string>
+  <string name="showVariations" comment="Shown in the analysis screen.">ವ್ಯತ್ಯಾಸಗಳನ್ನು ತೋರಿಸಿ</string>
+  <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">ಏನೋ ತಪ್ಪಾಗಿದೆ.</string>
+  <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">ವ್ಯವಸ್ಥೆಯ ಬಣ್ಣಗಳು</string>
+  <string name="theme" comment="Graphic theme section in the global app settings.">ಥೀಮ್</string>
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">ಸಲಕರಣೆಗಳು</string>
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">ಈ ಆವೃತ್ತಿಯಲ್ಲಿ ಆಟದ ಪ್ರಕಾರ %s ದಲ್ಲಿ ಆಡಲು ಸಧ್ಯಕ್ಕೆ ಸಾಧ್ಯವಿಲ್ಲ.</string>
+  <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">ಎದುರಾಳಿ ಸೇರಲು ಕಾಯುತ್ತಿದ್ದೇನೆ...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">ವೀಕ್ಷಿಸಿ</string>
+  <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">ಲೀಚೆಸ್ ಅಪ್ಲಿಕೇಶನ್‌ಗೆ ಸುಸ್ವಾಗತ!</string>
+  <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">ಆಟವನ್ನು ವೀಕ್ಷಿಸಿ</string>
+  <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">ಸಲಹೆ: ನೀವು ಮುಖಪುಟ ಪರದೆಗೆ ಹೆಚ್ಚಿನ ವಿಜೆಟ್‌ಗಳನ್ನು ಸೇರಿಸಬಹುದು ಅಥವಾ ನಿಮಗೆ ಅಗತ್ಯವಿಲ್ಲದವುಗಳನ್ನು ತೆಗೆದುಹಾಕಬಹುದು!</string>
+  <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">ವಜಾಗೊಳಿಸಿ</string>
+  <string name="customizeButton" comment="Text of a button, so translation should be short.">ಕಸ್ಟಮೈಸ್ ಮಾಡಿ</string>
+  <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">ಬೆದರಿಕೆ ತೋರಿಸುವುದನ್ನು ನಿಲ್ಲಿಸಿ</string>
+  <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word">ಪೂರ್ಣಗೊಂಡಿದೆ</string>
+  <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">ನನ್ನ ಪುಟಕ್ಕೆ ಹೋಗಿ</string>
+  <string name="displayModeCompact" comment="">ಸಾಂದ್ರೀಕೃತ</string>
+  <string name="displayModeDetailed" comment="">ವಿವರವಾದ</string>
+  <string name="openingExplorerNotAvailableOffline" comment="">ಎಕ್ಸ್‌ಪ್ಲೋರರ್ ತೆರೆಯುವುದು ಆಫ್‌ಲೈನ್‌ನಲ್ಲಿ ಲಭ್ಯವಿಲ್ಲ.</string>
+  <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">ಸವಾಲು ರಚಿಸಲಾಗಿದೆ: ಆಟ ಪ್ರಾರಂಭವಾದಾಗ ನಿಮಗೆ ಸೂಚಿಸಲಾಗುತ್ತದೆ. \n ನೀವು ಅದನ್ನು ಹೋಮ್ ಟ್ಯಾಬ್‌ನಿಂದ ಪ್ರವೇಶಿಸಬಹುದು.</string>
+  <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">ಹಿಂದಿನದು</string>
+  <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">ಅಥವಾ PGN ಫೈಲ್ ಅನ್ನು ಆಮದು ಮಾಡಿ</string>
+  <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">ಒಳ್ಳೆಯ ನಡೆ, ಆದರೆ ಇನ್ನೊಂದು ಉತ್ತಮ ನಡೆ ಇದೆ</string>
+  <string name="perfShortUltraBullet" comment="Short label for the UltraBullet chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">ಅತಿ</string>
+  <string name="perfShortBullet" comment="Short label for the Bullet chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">ಬುಲೆಟ್</string>
+  <string name="perfShortBlitz" comment="Short label for the Blitz chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">ಬ್ಲಿಟ್ಜ್</string>
+  <string name="perfShortRapid" comment="Short label for the Rapid chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">ರಾಪಿಡ್</string>
+  <string name="perfShortClassical" comment="Short label for the Classical chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">ಕ್ಲಾಸಿಕಲ್</string>
+  <string name="perfShortCorrespondence" comment="Short label for the Correspondence chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">ಕರೆಸ್ಪ್.</string>
+  <string name="perfShortFromPosition" comment="Short label for the From Position chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">ಪೋಜ್. ಇಂದ.</string>
+  <string name="perfShortChess960" comment="Short label for the Chess960 performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">೯೬೦ 960</string>
+  <string name="perfShortAntichess" comment="Short label for the Antichess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">ಆಂಟಿಚೆಸ್</string>
+  <string name="perfShortKingOfTheHill" comment="Short label for the King of the Hill performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">ಕಿಯೋಥಿಹಿ</string>
+  <string name="perfShortThreeCheck" comment="Short label for the Three-check performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">3ಚೆಕ್</string>
+  <string name="perfShortAtomic" comment="Short label for the Atomic performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">ಅಟಾಮಿಕ್</string>
+  <string name="perfShortHorde" comment="Short label for the Horde performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">ಹೋರ್ಡೆ</string>
+  <string name="perfShortRacingKings" comment="Short label for the Racing Kings performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">ರೇಸಿಂಗ್</string>
+  <string name="perfShortCrazyhouse" comment="Short label for the Crazyhouse performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">ಕ್ರೇಜಿ</string>
+  <string name="perfShortPuzzle" comment="Short label for puzzle performance. Used in compact UI such as perf cards, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">ಒಗಟು</string>
 </resources>

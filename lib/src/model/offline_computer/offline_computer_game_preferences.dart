@@ -32,8 +32,8 @@ class OfflineComputerGamePreferences extends Notifier<OfflineComputerGamePrefs>
     return fetch();
   }
 
-  Future<void> setStockfishLevel(StockfishLevel level) {
-    return save(state.copyWith(stockfishLevel: level));
+  Future<void> setOpponent(OpponentSpec opponent) {
+    return save(state.copyWith(opponentSpec: opponent));
   }
 
   Future<void> setSideChoice(SideChoice sideChoice) {
@@ -58,6 +58,10 @@ class OfflineComputerGamePreferences extends Notifier<OfflineComputerGamePrefs>
 
   Future<void> toggleHideEvaluation() {
     return save(state.copyWith(hideEvaluation: !state.hideEvaluation));
+  }
+
+  Future<void> toggleBlindfoldMode() {
+    return save(state.copyWith(blindfoldMode: !state.blindfoldMode));
   }
 }
 
@@ -91,23 +95,25 @@ sealed class OfflineComputerGamePrefs with _$OfflineComputerGamePrefs implements
   const OfflineComputerGamePrefs._();
 
   const factory OfflineComputerGamePrefs({
-    required StockfishLevel stockfishLevel,
+    @JsonKey(readValue: readOpponent) required OpponentSpec opponentSpec,
     required SideChoice sideChoice,
     @Default(Variant.standard) Variant variant,
     @Default(true) bool casual,
     @Default(false) bool practiceMode,
     @Default(false) bool hideBestMove,
     @Default(false) bool hideEvaluation,
+    @Default(false) bool blindfoldMode,
   }) = _OfflineComputerGamePrefs;
 
   static const defaults = OfflineComputerGamePrefs(
-    stockfishLevel: StockfishLevel.defaultLevel,
+    opponentSpec: StockfishOpponentSpec(StockfishLevel.defaultLevel),
     sideChoice: SideChoice.random,
     variant: Variant.standard,
     casual: true,
     practiceMode: false,
     hideBestMove: false,
     hideEvaluation: false,
+    blindfoldMode: false,
   );
 
   factory OfflineComputerGamePrefs.fromJson(Map<String, dynamic> json) {

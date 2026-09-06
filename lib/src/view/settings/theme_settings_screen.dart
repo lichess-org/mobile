@@ -1,6 +1,5 @@
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -18,6 +17,7 @@ import 'package:lichess_mobile/src/view/settings/piece_set_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
+import 'package:material_ui/material_ui.dart';
 
 class ThemeSettingsScreen extends ConsumerWidget {
   const ThemeSettingsScreen({super.key});
@@ -92,7 +92,7 @@ class _BodyState extends ConsumerState<_Body> {
                 ListSection(
                   hasLeading: true,
                   children: [
-                    if (getCorePalette() != null)
+                    if (getSystemCorePalettes() != null)
                       SwitchSettingTile(
                         leading: const Icon(Icons.colorize_outlined),
                         title: Text(context.l10n.mobileSystemColors),

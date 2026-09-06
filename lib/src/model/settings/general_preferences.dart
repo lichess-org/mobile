@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
@@ -8,6 +7,7 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart'
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
+import 'package:material_ui/material_ui.dart';
 
 part 'general_preferences.freezed.dart';
 part 'general_preferences.g.dart';
@@ -141,7 +141,10 @@ enum BackgroundThemeMode {
   light,
 
   /// Always use the dark mode (if available) regardless of system preference.
-  dark;
+  dark,
+
+  /// Pure black for amoled screens.
+  amoled;
 
   String title(AppLocalizations l10n) {
     switch (this) {
@@ -151,6 +154,8 @@ enum BackgroundThemeMode {
         return l10n.dark;
       case BackgroundThemeMode.light:
         return l10n.light;
+      case BackgroundThemeMode.amoled:
+        return 'Amoled black';
     }
   }
 }

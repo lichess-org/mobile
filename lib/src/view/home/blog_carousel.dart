@@ -4,7 +4,6 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -17,6 +16,7 @@ import 'package:lichess_mobile/src/utils/http_network_image.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const kDefaultBlogImage = AssetImage('assets/images/broadcast_image.webp');
@@ -300,12 +300,15 @@ class _BlogCardContent extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.baseline,
                 textBaseline: TextBaseline.alphabetic,
                 children: [
-                  UserFullNameWidget(
-                    user: post.author,
-                    showPatron: false,
-                    showFlair: false,
-                    style: TextStyle(color: subTitleColor, letterSpacing: -0.2),
+                  Expanded(
+                    child: UserFullNameWidget(
+                      user: post.author,
+                      showPatron: false,
+                      showFlair: false,
+                      style: TextStyle(color: subTitleColor, letterSpacing: -0.2),
+                    ),
                   ),
+                  const SizedBox(width: 4.0),
                   Text(
                     _dateFormat.format(post.createdAt),
                     style: TextStyle(color: subTitleColor, letterSpacing: -0.2, fontSize: 12.0),

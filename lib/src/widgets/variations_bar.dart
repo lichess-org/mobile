@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// A bar showing the variations branching out of the current position, if there is more than one variation.
 ///

@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:dartchess/dartchess.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
@@ -8,6 +9,8 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_players_tab.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
+import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
@@ -192,6 +195,114 @@ void main() {
       // Clear the field -> results restored
       await tester.pump();
       expect(find.byType(BoardThumbnail), findsAtLeastNWidgets(6));
+    });
+
+    testWidgets('Test boards tab when filtering by team', variant: kPlatformVariant, (
+      tester,
+    ) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: BroadcastRoundScreen(
+          broadcast: _liveTeamBroadcast,
+          initialTab: BroadcastRoundTab.boards,
+        ),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(_teamFilteringTestBroadcastClient, ref),
+          ),
+        },
+      );
+
+      await tester.pumpWidget(app);
+
+      // Load the tournament
+      await tester.pump();
+
+      // Load the round
+      await tester.pump();
+
+      expect(find.byType(BoardThumbnail), findsNWidgets(2));
+
+      await tester.tap(find.byType(ContextMenuIconButton));
+      await tester.pump();
+
+      final filterGames = find.byWidgetPredicate(
+        (widget) => widget is ContextMenuAction && widget.label == 'Filter games',
+      );
+      await tester.tap(filterGames);
+      await tester.pumpAndSettle();
+      final teamChip = find.descendant(of: find.byType(FilterChip), matching: find.text('Team'));
+
+      expect(teamChip, findsOneWidget);
+
+      // Try to scroll the bottom sheet content to make the team chip visible
+      // Find the scrollable within the bottom sheet
+      await tester.scrollUntilVisible(teamChip, 100, scrollable: find.byType(Scrollable).first);
+
+      await tester.tap(teamChip);
+
+      await tester.pumpAndSettle();
+
+      expect(find.text('All teams'), findsOneWidget);
+      expect(
+        find.descendant(
+          of: find.byKey(const ValueKey('team-picker')),
+          matching: find.byType(ListTile),
+        ),
+        findsNWidgets(5),
+      ); // Back + "All teams" + 3 teams
+
+      await tester.tap(find.text('Team C'));
+
+      await tester.pump();
+
+      expect(find.text('Team: Team C'), findsOneWidget);
+
+      // Close the settings bottom sheet by tapping outside it
+      await tester.tapAt(const Offset(195, 100));
+
+      await tester.pump();
+
+      // Filtered to one game
+      final filteredGame = find.byType(BoardThumbnail);
+
+      expect(filteredGame, findsOneWidget);
+      expect(tester.widget<BoardThumbnail>(find.byType(BoardThumbnail)).orientation, Side.black);
+
+      // Clear the filter by opening settings again
+      await tester.pump();
+      await tester.tap(find.byType(ContextMenuIconButton));
+      await tester.pump();
+      await tester.tap(filterGames);
+      await tester.pumpAndSettle();
+
+      // Tap the team filter chip
+      final teamFilterChip = find.descendant(
+        of: find.byType(FilterChip),
+        matching: find.byWidgetPredicate((widget) {
+          if (widget is Text) {
+            final text = widget.data;
+            return text != null && (text.startsWith('Team'));
+          }
+          return false;
+        }),
+      );
+      await tester.tap(teamFilterChip);
+
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('All teams'));
+
+      await tester.pumpAndSettle();
+
+      expect(find.text('Team'), findsOneWidget);
+
+      // Close the settings bottom sheet by tapping outside it
+      await tester.tapAt(const Offset(195, 100));
+
+      await tester.pump();
+
+      // Filter cleared -> all results restored
+      expect(find.byType(BoardThumbnail), findsNWidgets(2));
     });
   });
 
@@ -538,7 +649,154 @@ void main() {
       expect(find.text('Team A'), findsOneWidget);
     });
   });
+
+  group('Subscribe button', () {
+    Future<void> pumpRoundScreen(
+      WidgetTester tester, {
+      required bool? isSubscribed,
+      List<http.Request>? recordedRequests,
+    }) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: BroadcastRoundScreen(broadcast: _finishedBroadcast),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(
+              _subscribableBroadcastClient(isSubscribed, recordedRequests: recordedRequests),
+              ref,
+            ),
+          ),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      // Load the tournament
+      await tester.pump();
+      // Load the round
+      await tester.pump();
+    }
+
+    testWidgets('is not shown when logged out', variant: kPlatformVariant, (tester) async {
+      // lila omits 'isSubscribed' when the user is not logged in.
+      await pumpRoundScreen(tester, isSubscribed: null);
+
+      expect(find.byIcon(Icons.notifications), findsNothing);
+      expect(find.byIcon(Icons.notifications_none), findsNothing);
+    });
+
+    testWidgets('is filled when already subscribed', variant: kPlatformVariant, (tester) async {
+      await pumpRoundScreen(tester, isSubscribed: true);
+
+      expect(find.byIcon(Icons.notifications), findsOneWidget);
+    });
+
+    testWidgets('subscribes to the tournament when tapped', variant: kPlatformVariant, (
+      tester,
+    ) async {
+      final requests = <http.Request>[];
+      await pumpRoundScreen(tester, isSubscribed: false, recordedRequests: requests);
+
+      expect(find.byIcon(Icons.notifications_none), findsOneWidget);
+
+      await tester.tap(find.byIcon(Icons.notifications_none));
+      await tester.pump();
+
+      expect(find.byIcon(Icons.notifications), findsOneWidget);
+
+      final request = requests.firstWhere((r) => r.url.path == '/broadcast/AQ28hmmO/subscribe');
+      expect(request.method, 'POST');
+      expect(request.url.queryParameters['set'], 'true');
+    });
+
+    testWidgets('unsubscribes when tapped while subscribed', variant: kPlatformVariant, (
+      tester,
+    ) async {
+      final requests = <http.Request>[];
+      await pumpRoundScreen(tester, isSubscribed: true, recordedRequests: requests);
+
+      await tester.tap(find.byIcon(Icons.notifications));
+      await tester.pump();
+
+      expect(find.byIcon(Icons.notifications_none), findsOneWidget);
+
+      final request = requests.firstWhere((r) => r.url.path == '/broadcast/AQ28hmmO/subscribe');
+      expect(request.url.queryParameters['set'], 'false');
+    });
+
+    testWidgets('reverts the icon when the request fails', variant: kPlatformVariant, (
+      tester,
+    ) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: BroadcastRoundScreen(broadcast: _finishedBroadcast),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(
+              _subscribableBroadcastClient(
+                false,
+                subscribeStatusCode: 500,
+                subscribeDelay: const Duration(seconds: 1),
+              ),
+              ref,
+            ),
+          ),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pump();
+      await tester.pump();
+
+      await tester.tap(find.byIcon(Icons.notifications_none));
+      await tester.pump();
+
+      // Toggled right away, while the request is still in flight...
+      expect(find.byIcon(Icons.notifications), findsOneWidget);
+
+      await tester.pump(const Duration(seconds: 1));
+      await tester.pump();
+
+      // ...then reverted once the request failed.
+      expect(find.byIcon(Icons.notifications_none), findsOneWidget);
+    });
+  });
 }
+
+/// Returns [_finishedRoundResponse] with lila's `isSubscribed` flag, which is only sent to logged
+/// in users.
+String _finishedRoundResponseWith(bool? isSubscribed) => isSubscribed == null
+    ? _finishedRoundResponse
+    : _finishedRoundResponse.replaceFirst('{', '{\n  "isSubscribed": $isSubscribed,');
+
+MockClient _subscribableBroadcastClient(
+  bool? isSubscribed, {
+  List<http.Request>? recordedRequests,
+  int subscribeStatusCode = 200,
+  Duration subscribeDelay = Duration.zero,
+}) => MockClient((request) async {
+  recordedRequests?.add(request);
+  if (request.url.path == '/broadcast/AQ28hmmO/subscribe') {
+    if (subscribeDelay > Duration.zero) {
+      await Future<void>.delayed(subscribeDelay);
+    }
+    return mockResponse('{"ok":true}', subscribeStatusCode);
+  }
+  if (request.url.path == '/api/broadcast/AQ28hmmO') {
+    return mockResponse(
+      _finishedTournamentResponse,
+      200,
+      headers: {'content-type': 'application/json; charset=utf-8'},
+    );
+  }
+  if (request.url.path == '/api/broadcast/-/-/S5VCwuVn') {
+    return mockResponse(
+      _finishedRoundResponseWith(isSubscribed),
+      200,
+      headers: {'content-type': 'application/json; charset=utf-8'},
+    );
+  }
+  return mockResponse('', 404);
+});
 
 final _finishedBroadcastClient = MockClient((request) {
   if (request.url.path == '/api/broadcast/AQ28hmmO') {
@@ -2135,6 +2393,84 @@ const _livePlayersWithoutScoresResponse = '''
 ]
 ''';
 
+/// Simplified round response for team filtering test: 6 games with 2 teams
+const _teamFilteringTestRoundResponse = '''
+{
+  "round": {
+    "id": "00000000",
+    "name": "Test round",
+    "slug": "test-round",
+    "ongoing": true
+  },
+  "tour": {
+    "id": "AAAAAAAA",
+    "name": "Test tournament",
+    "slug": "test-tournament",
+    "dates": [1735671720000],
+    "image": ""
+  },
+  "study": {
+    "writeable": false
+  },
+  "games": [
+    {
+      "id": "11111111",
+      "name": "Player1 - Player2",
+      "fen": "8/8/8/8/8/8/8/8",
+      "players": [
+        {
+          "name": "Player1",
+          "title": "GM",
+          "rating": 2600,
+          "fideId": 1,
+          "fed": "USA",
+          "clock": 2000,
+          "team": "Team A"
+        },
+        {
+          "name": "Player2",
+          "title": "GM",
+          "rating": 2600,
+          "fideId": 2,
+          "fed": "USA",
+          "clock": 2000,
+          "team": "Team B"
+        }
+      ],
+      "lastMove": "e2e4",
+      "status": "*"
+    },
+    {
+      "id": "22222222",
+      "name": "Player3 - Player4",
+      "fen": "8/8/8/8/8/8/8/8",
+      "players": [
+        {
+          "name": "Player3",
+          "title": "GM",
+          "rating": 2600,
+          "fideId": 3,
+          "fed": "USA",
+          "clock": 2000,
+          "team": "Team B"
+        },
+        {
+          "name": "Player4",
+          "title": "GM",
+          "rating": 2600,
+          "fideId": 4,
+          "fed": "USA",
+          "clock": 2000,
+          "team": "Team C"
+        }
+      ],
+      "lastMove": "e2e4",
+      "status": "*"
+    }
+  ]
+}
+''';
+
 final _liveTeamBroadcastClient = MockClient((request) {
   if (request.url.path == '/api/broadcast/AAAAAAAA') {
     return mockResponse(
@@ -2146,6 +2482,46 @@ final _liveTeamBroadcastClient = MockClient((request) {
   if (request.url.path == '/api/broadcast/-/-/00000000') {
     return mockResponse(
       _liveRoundResponse,
+      200,
+      headers: {'content-type': 'application/json; charset=utf-8'},
+    );
+  }
+  if (request.url.path == '/broadcast/AAAAAAAA/players') {
+    return mockResponse(
+      _livePlayersResponse,
+      200,
+      headers: {'content-type': 'application/json; charset=utf-8'},
+    );
+  }
+  if (request.url.path == '/broadcast/00000000/teams') {
+    return mockResponse(
+      _teamMatchesResponse,
+      200,
+      headers: {'content-type': 'application/json; charset=utf-8'},
+    );
+  }
+  if (request.url.path == '/broadcast/AAAAAAAA/teams/standings') {
+    return mockResponse(
+      _teamStandingsResponse,
+      200,
+      headers: {'content-type': 'application/json; charset=utf-8'},
+    );
+  }
+  return mockResponse('', 404);
+});
+
+/// Simplified mock client for team filtering test with just 6 games and 3 teams
+final _teamFilteringTestBroadcastClient = MockClient((request) {
+  if (request.url.path == '/api/broadcast/AAAAAAAA') {
+    return mockResponse(
+      _liveTeamTournamentResponse,
+      200,
+      headers: {'content-type': 'application/json; charset=utf-8'},
+    );
+  }
+  if (request.url.path == '/api/broadcast/-/-/00000000') {
+    return mockResponse(
+      _teamFilteringTestRoundResponse,
       200,
       headers: {'content-type': 'application/json; charset=utf-8'},
     );

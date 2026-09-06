@@ -1,7 +1,7 @@
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/coordinate_training/coordinate_training_controller.dart';
+import 'package:material_ui/material_ui.dart';
 
 const Offset _kNextCoordFractionalTranslation = Offset(0.8, 0.3);
 const double _kNextCoordScale = 0.4;

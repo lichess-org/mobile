@@ -23,10 +23,10 @@ Future<void> precachePieceImages(PieceSet pieceSet) async {
 
     ChessgroundImages.instance.clear();
 
-    for (final asset in pieceSet.assets.values) {
-      await ChessgroundImages.instance.load(asset, devicePixelRatio: devicePixelRatio);
-      debugPrint('Preloaded piece image: ${asset.assetName}');
-    }
+    await Future.wait([
+      for (final asset in pieceSet.assets.values)
+        ChessgroundImages.instance.load(asset, devicePixelRatio: devicePixelRatio),
+    ]);
   } catch (e) {
     debugPrint('Failed to preload piece images: $e');
   }

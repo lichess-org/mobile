@@ -1,6 +1,5 @@
 import 'package:app_settings/app_settings.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:flutter_riverpod/experimental/mutation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
@@ -25,9 +24,11 @@ import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsScreen extends ConsumerWidget {
@@ -173,6 +174,9 @@ class SettingsScreen extends ConsumerWidget {
                 leading: const Icon(Icons.http),
                 title: const Text('HTTP logs'),
                 onTap: () => Navigator.push(context, HttpLogScreen.buildRoute()),
+                trailing: Theme.of(context).platform == TargetPlatform.iOS
+                    ? const CupertinoListTileChevron()
+                    : null,
               ),
               ListTile(
                 leading: const Icon(Icons.bug_report),
@@ -204,6 +208,7 @@ class SettingsScreen extends ConsumerWidget {
                     );
                   }
                 },
+                trailing: const OpenInNewIcon(),
               ),
             ],
           ),

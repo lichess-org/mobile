@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/app_links_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
@@ -15,8 +13,10 @@ import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/rich_link_text.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
+import 'package:material_ui/material_ui.dart';
 
 class ChatBottomBarButton extends ConsumerWidget {
   const ChatBottomBarButton({required this.options, this.showLabel = false, super.key});
@@ -235,7 +235,7 @@ class _MessageBubble extends ConsumerWidget {
                     onTap: () =>
                         Navigator.of(context).push(UserOrProfileScreen.buildRoute(message.user!)),
                   ),
-                Linkify(
+                RichLinkText(
                   onOpen: (link) async =>
                       await ref.read(appLinksServiceProvider).onLinkifyOpen(context, link),
                   linkifiers: AppLinksService.kLichessLinkifiers,

@@ -39,6 +39,14 @@ Deploy an closed test version to Google Play
 
 Upload a production version to Google Play
 
+### android test_build
+
+```sh
+[bundle exec] fastlane android test_build
+```
+
+Build a release .aab for manual testing on BrowserStack
+
 ----
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.

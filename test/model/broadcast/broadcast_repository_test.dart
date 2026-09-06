@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
@@ -56,6 +57,74 @@ void main() {
 
       expect(response, isA<BroadcastRoundResponse>());
       expect(response.games.length, 5);
+      // The fixture is a logged out response, which carries no 'isSubscribed' field.
+      expect(response.isSubscribed, isNull);
+    });
+
+    test('setSubscribed', () async {
+      final requests = <http.Request>[];
+      final mockClient = MockClient((request) {
+        requests.add(request);
+        return mockResponse('{"ok":true}', 200);
+      });
+
+      final container = await lichessClientContainer(mockClient);
+      final repo = container.read(broadcastRepositoryProvider);
+
+      await repo.setSubscribed(const BroadcastTournamentId('YtMYEYu9'), true);
+      await repo.setSubscribed(const BroadcastTournamentId('YtMYEYu9'), false);
+
+      expect(requests.map((r) => r.method), ['POST', 'POST']);
+      expect(requests.map((r) => r.url.path), [
+        '/broadcast/YtMYEYu9/subscribe',
+        '/broadcast/YtMYEYu9/subscribe',
+      ]);
+      expect(requests.map((r) => r.url.queryParameters['set']), ['true', 'false']);
+    });
+
+    test('setFollowingPlayer', () async {
+      final requests = <http.Request>[];
+      final mockClient = MockClient((request) {
+        requests.add(request);
+        return mockResponse('{"ok":true}', 200);
+      });
+
+      final container = await lichessClientContainer(mockClient);
+      final repo = container.read(broadcastRepositoryProvider);
+
+      await repo.setFollowingPlayer(const FideId(1503014), true);
+      await repo.setFollowingPlayer(const FideId(1503014), false);
+
+      expect(requests.map((r) => r.method), ['POST', 'POST']);
+      expect(requests.map((r) => r.url.path), ['/fide/1503014/follow', '/fide/1503014/follow']);
+      expect(requests.map((r) => r.url.queryParameters['follow']), ['true', 'false']);
+    });
+
+    test('getPlayerResults reads the follow flag from the fide object', () async {
+      const tournamentId = 'YtMYEYu9';
+      const playerId = '1503014';
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/broadcast/$tournamentId/players/$playerId') {
+          return mockResponse(
+            '{"name":"Carlsen, Magnus","played":0,"fideId":1503014, '
+            '"fide":{"year":1990,"follow":true},"games":[]}',
+            200,
+            headers: {'content-type': 'application/json; charset=utf-8'},
+          );
+        }
+        return mockResponse('', 404);
+      });
+
+      final container = await lichessClientContainer(mockClient);
+      final repo = container.read(broadcastRepositoryProvider);
+
+      final response = await repo.getPlayerResults(
+        const BroadcastTournamentId(tournamentId),
+        playerId,
+      );
+
+      expect(response.isFollowing, isTrue);
+      expect(response.playerWithOverallResult.player.fideId, const FideId(1503014));
     });
   });
 }

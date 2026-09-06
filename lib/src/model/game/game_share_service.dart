@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart' show Response;
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
@@ -58,9 +57,9 @@ class GameShareService {
             '$kLichessCDNHost/export/fen.gif?fen=${Uri.encodeComponent(fen)}&color=${orientation.name}${lastMove != null ? '&lastMove=${lastMove.uci}' : ''}&theme=${boardTheme.gifApiName}&piece=${pieceTheme.name}',
           ),
         )
-        .timeout(const Duration(seconds: 1));
+        .timeout(const Duration(seconds: 5));
     if (resp.statusCode != 200) {
-      throw Exception('Failed to get GIF');
+      throw Exception('Failed to get GIF: status ${resp.statusCode}');
     }
     return XFile.fromData(resp.bodyBytes, mimeType: 'image/gif');
   }
@@ -79,22 +78,22 @@ class GameShareService {
         ? BoardTheme.brown
         : boardPreferences.boardTheme;
     final pieceTheme = boardPreferences.pieceSet;
-    final resp = await Future.wait([
-      _ref
-          .read(defaultClientProvider)
-          .get(
-            Uri.parse(
-              '$kLichessCDNHost/game/export/gif/${orientation.name}/$id.gif?theme=${boardTheme.gifApiName}&piece=${pieceTheme.name}&players=$playerNames&ratings=$showPlayerRatings&glyphs=$moveAnnotations&clocks=$chessClock',
-            ),
-          ),
-      _ref.read(gameRepositoryProvider).getGame(id),
-    ]).timeout(const Duration(seconds: 1));
 
-    final gifResp = resp[0] as Response;
-    final game = resp[1] as ExportedGame;
+    // Fetch metadata first
+    final game = await _ref.read(gameRepositoryProvider).getGame(id);
+
+    // Fetch the actual GIF animation (heavy synchronous task)
+    final gifResp = await _ref
+        .read(defaultClientProvider)
+        .get(
+          Uri.parse(
+            '$kLichessCDNHost/game/export/gif/${orientation.name}/$id.gif?theme=${boardTheme.gifApiName}&piece=${pieceTheme.name}&players=$playerNames&ratings=$showPlayerRatings&glyphs=$moveAnnotations&clocks=$chessClock',
+          ),
+        )
+        .timeout(const Duration(minutes: 2));
 
     if (gifResp.statusCode != 200) {
-      throw Exception('Failed to get GIF');
+      throw Exception('Failed to get GIF: status ${gifResp.statusCode}');
     }
     return (XFile.fromData(gifResp.bodyBytes, mimeType: 'image/gif'), game);
   }
@@ -115,9 +114,9 @@ class GameShareService {
             'piece': pieceTheme.name,
           }),
         )
-        .timeout(const Duration(seconds: 1));
+        .timeout(const Duration(seconds: 5));
     if (resp.statusCode != 200) {
-      throw Exception('Failed to get GIF');
+      throw Exception('Failed to get GIF: status ${resp.statusCode}');
     }
     return XFile.fromData(resp.bodyBytes, mimeType: 'image/gif');
   }

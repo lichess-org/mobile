@@ -542,7 +542,7 @@ sealed class RetroState
     position: currentPosition,
     savedEval: currentNode.eval,
     serverEval: currentNode.serverEval,
-    filters: (id: evaluationContext.id, path: currentPath),
+    filters: (context: evaluationContext, path: currentPath),
   );
 
   bool get canGoNext => !isSolving && currentNode.hasChild;

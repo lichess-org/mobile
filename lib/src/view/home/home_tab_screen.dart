@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/experimental/mutation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/binding.dart';
@@ -19,7 +18,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
 import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
+import 'package:lichess_mobile/src/model/engine/weights_service.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/message/message_repository.dart';
 import 'package:lichess_mobile/src/model/relation/following_user.dart';
@@ -39,6 +38,7 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/account/account_menu.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/auth/sign_in_error.dart';
+import 'package:lichess_mobile/src/view/auth/sign_in_options.dart';
 import 'package:lichess_mobile/src/view/correspondence/offline_correspondence_game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
@@ -63,6 +63,7 @@ import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/server_outage_display.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// Number of cold app starts before hiding the home customization tip.
@@ -182,6 +183,17 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                 ? ref.watch(followingCarouselProvider)
                 : const AsyncValue.data(IListConst<FollowingUser>([]));
 
+            // Widgets whose content can be empty should not show a checkbox in
+            // edit mode when there is nothing to display next to it.
+            final hasFeaturedTournaments = featuredTournaments.maybeWhen(
+              data: (tournaments) => tournaments.any((t) => t.isSupportedInApp),
+              orElse: () => true,
+            );
+            final hasFollowing = followingAsync.maybeWhen(
+              data: (following) => following.isNotEmpty,
+              orElse: () => true,
+            );
+
             final isKidMode = ref.watch(kidModeProvider).value ?? false;
 
             // Show the welcome screen if not logged in and there are no recent games and no stored games
@@ -263,7 +275,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                     ),
                   _EditableWidget(
                     widget: HomeEditableWidget.featuredTournaments,
-                    shouldShow: hasServerContent,
+                    shouldShow: hasServerContent && hasFeaturedTournaments,
                     child: FeaturedTournamentsWidget(featured: featuredTournaments),
                   ),
                   if (_worker != null && !isKidMode)
@@ -294,7 +306,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                   ),
                 _EditableWidget(
                   widget: HomeEditableWidget.friends,
-                  shouldShow: authUser != null && hasServerContent,
+                  shouldShow: authUser != null && hasServerContent && hasFollowing,
                   child: FollowingCarousel(followingAsync),
                 ),
                 Row(
@@ -368,7 +380,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                 ),
                 _EditableWidget(
                   widget: HomeEditableWidget.friends,
-                  shouldShow: authUser != null && hasServerContent,
+                  shouldShow: authUser != null && hasServerContent && hasFollowing,
                   child: FollowingCarousel(followingAsync),
                 ),
                 _EditableWidget(
@@ -388,7 +400,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                 ),
                 _EditableWidget(
                   widget: HomeEditableWidget.featuredTournaments,
-                  shouldShow: hasServerContent,
+                  shouldShow: hasServerContent && hasFeaturedTournaments,
                   child: FeaturedTournamentsWidget(featured: featuredTournaments),
                 ),
                 if (_worker != null && !isKidMode)
@@ -560,13 +572,7 @@ class _SignInWidget extends ConsumerWidget {
     return FilledButton(
       onPressed: switch (signInState) {
         MutationPending() => null,
-        _ => () {
-          // The error is surfaced via the [ref.listen] above; ignore the
-          // rethrown future so it does not become an unhandled exception.
-          signInMutation.run(ref, (tsx) async {
-            await tsx.get(authControllerProvider.notifier).signIn();
-          }).ignore();
-        },
+        _ => () => showSignInOptions(context, ref),
       },
       child: Text(context.l10n.signIn),
     );
@@ -1075,7 +1081,7 @@ class _NNUEFilesOutdatedTipState extends ConsumerState<_NNUEFilesOutdatedTip> {
   @override
   void initState() {
     super.initState();
-    _checkNNUEFilesFuture = ref.read(nnueServiceProvider).hasOutdatedNNUEFiles();
+    _checkNNUEFilesFuture = ref.read(stockfishNnueServiceProvider).hasOutdatedNNUEFiles();
   }
 
   @override
@@ -1085,7 +1091,7 @@ class _NNUEFilesOutdatedTipState extends ConsumerState<_NNUEFilesOutdatedTip> {
       return const SizedBox.shrink();
     }
 
-    final nnueService = ref.watch(nnueServiceProvider);
+    final nnueService = ref.watch(stockfishNnueServiceProvider);
     if (nnueService.isDownloadingNNUEFiles) {
       return const SizedBox.shrink();
     }

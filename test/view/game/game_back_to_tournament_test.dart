@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -8,6 +7,7 @@ import 'package:lichess_mobile/src/view/game/game_body.dart' show kGameEndDialog
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../network/fake_websocket_channel.dart';
 import '../../test_helpers.dart';

@@ -1,6 +1,5 @@
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
@@ -30,6 +29,7 @@ import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
+import 'package:material_ui/material_ui.dart';
 
 class TvScreen extends ConsumerStatefulWidget {
   const TvScreen({this.channel, this.initialGame, this.user, super.key})
@@ -93,7 +93,7 @@ class _TvScreenState extends ConsumerState<TvScreen> {
                 : Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      UserFullNameWidget(user: widget.user),
+                      Expanded(child: UserFullNameWidget(user: widget.user)),
                       const SizedBox(width: 4.0),
                       const Icon(Icons.live_tv),
                     ],

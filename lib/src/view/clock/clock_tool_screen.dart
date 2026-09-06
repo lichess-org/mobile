@@ -1,5 +1,4 @@
-import 'package:flutter/cupertino.dart' show CupertinoIcons;
-import 'package:flutter/material.dart';
+import 'package:cupertino_ui/cupertino_ui.dart' show CupertinoIcons;
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/clock/clock_tool_controller.dart';
@@ -13,6 +12,7 @@ import 'package:lichess_mobile/src/view/clock/clock_settings.dart';
 import 'package:lichess_mobile/src/view/clock/custom_clock_settings.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
+import 'package:material_ui/material_ui.dart';
 
 class ClockToolScreen extends StatelessWidget {
   const ClockToolScreen({super.key});
@@ -288,9 +288,9 @@ class _ClockTileState extends ConsumerState<ClockTile> with SingleTickerProvider
                 Positioned(
                   bottom: MediaQuery.paddingOf(context).bottom + 48.0,
                   child: IgnorePointer(
-                    ignoring: clockState.started,
+                    ignoring: clockState.started && !clockState.paused,
                     child: AnimatedOpacity(
-                      opacity: clockState.started ? 0 : 1.0,
+                      opacity: (clockState.started && !clockState.paused) ? 0 : 1.0,
                       duration: const Duration(milliseconds: 300),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -300,7 +300,7 @@ class _ClockTileState extends ConsumerState<ClockTile> with SingleTickerProvider
                             iconSize: 32,
                             icon: const Icon(Icons.tune),
                             color: clockStyle.textColor,
-                            onPressed: clockState.started
+                            onPressed: (clockState.started && !clockState.paused)
                                 ? null
                                 : () => showModalBottomSheet<void>(
                                     context: context,

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart' show Side;
 import 'package:deep_pick/deep_pick.dart';
@@ -145,6 +147,19 @@ class UserRepository {
       ),
       mapper: _autocompleteFromJson,
     );
+  }
+
+  /// Whether [username] is an existing lichess account.
+  Future<bool> usernameExists(String username) async {
+    final term = username.toLowerCase();
+    // TODO use a dedicated endpoint if/when it becomes available.
+    final body = await client.read(
+      Uri(path: '/api/player/autocomplete', queryParameters: {'term': term}),
+    );
+    final names = jsonDecode(body) as List<dynamic>;
+
+    // Completions are prefix matches, so the name is only known if one comes back verbatim.
+    return names.any((name) => name is String && name == term);
   }
 
   Future<IList<UserRatingHistoryPerf>> getRatingHistory(UserId id) {

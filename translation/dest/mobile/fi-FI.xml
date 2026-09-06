@@ -19,6 +19,7 @@
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Etusivu</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Live-striimaajat</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Sinun täytyy olla kirjautuneena nähdäksesi tämän sivun.</string>
+  <string name="nbOfflinePuzzles" comment="Label for the puzzle setting that controls how many puzzles are downloaded and kept available for offline play.">Offline-tehtävät</string>
   <string name="newGame" comment="New game button in OTB and play against offline computer features">Uusi peli</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Ei hakutuloksia</string>
   <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Ota huomioon, että kaikkia vanhan sovelluksemme tai nettisivumme toimintoja ei tällä hetkellä ole vielä käytettävissä, mutta lisäämme toimintoja koko ajan.</string>

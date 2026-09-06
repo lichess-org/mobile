@@ -205,7 +205,7 @@ class UserGameHistoryNotifier extends AsyncNotifier<UserGameHistoryState> {
           hasMore: value.length == _nbPerPage,
         ),
       );
-    } catch (error, _) {
+    } catch (error) {
       state = AsyncData(currentVal.copyWith(isLoading: false, hasError: true));
     }
   }

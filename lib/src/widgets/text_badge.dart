@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
+import 'package:material_ui/material_ui.dart';
 
 // A simple badge widget to display text in a pill-shaped container.
 class TextBadge extends StatelessWidget {

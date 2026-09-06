@@ -1,9 +1,9 @@
 import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
+import 'package:material_ui/material_ui.dart';
 
 const _scrollAnimationDuration = Duration(milliseconds: 200);
 const _moveListOpacity = 0.8;

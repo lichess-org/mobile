@@ -1,26 +1,28 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/app.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
+import 'package:lichess_mobile/src/model/engine/weights_service.dart';
 import 'package:lichess_mobile/src/model/game/game_storage.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
+import 'package:lichess_mobile/src/view/auth/email_login_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/view/home/games_carousel.dart';
 import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
 import 'package:lichess_mobile/src/view/play/quick_game_matrix.dart';
+import 'package:lichess_mobile/src/view/tournament/tournament_list_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/server_outage_display.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../binding.dart';
 import '../../example_data.dart';
@@ -28,7 +30,7 @@ import '../../mock_server_responses.dart';
 import '../../model/auth/auth_repository_test.dart';
 import '../../model/auth/fake_auth_storage.dart';
 import '../../model/challenge/challenge_repository_test.dart';
-import '../../model/engine/fake_nnue_service.dart';
+import '../../model/engine/fake_stockfish_nnue_service.dart';
 import '../../network/fake_http_client_factory.dart';
 import '../../network/server_down_client.dart';
 import '../../test_helpers.dart';
@@ -238,6 +240,73 @@ void main() {
       expect(find.text('1 game in play'), findsOneWidget);
       expect(find.byType(OngoingGameCarouselItem), findsOneWidget);
     });
+
+    group('home widgets edit mode', () {
+      testWidgets('featured tournaments checkbox is hidden when there are none to show', (
+        tester,
+      ) async {
+        final mockClient = MockClient((request) {
+          if (request.url.path == '/tournament/featured') {
+            return mockResponse('{"featured":[]}', 200);
+          }
+          return mockResponse('', 200);
+        });
+        final app = await makeTestProviderScope(
+          tester,
+          child: const Application(),
+          defaultPreferences: {kWelcomeMessageShownKey: true},
+          overrides: {
+            httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+              (ref) => FakeHttpClientFactory(() => mockClient),
+            ),
+          },
+        );
+        await tester.pumpWidget(app);
+
+        // wait for connectivity
+        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text('Customize'));
+        await tester.pumpAndSettle(); // wait for settings screen to open
+
+        expect(find.widgetWithText(PlatformAppBar, 'Home widgets'), findsOneWidget);
+        expect(find.byType(FeaturedTournamentsWidget), findsNothing);
+      });
+
+      testWidgets('featured tournaments checkbox is shown when there are some to show', (
+        tester,
+      ) async {
+        final mockClient = MockClient((request) {
+          if (request.url.path == '/tournament/featured') {
+            return mockResponse(mockFeaturedTournamentsResponse, 200);
+          }
+          return mockResponse('', 200);
+        });
+        final app = await makeTestProviderScope(
+          tester,
+          child: const Application(),
+          defaultPreferences: {kWelcomeMessageShownKey: true},
+          overrides: {
+            httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+              (ref) => FakeHttpClientFactory(() => mockClient),
+            ),
+          },
+        );
+        await tester.pumpWidget(app);
+
+        // wait for connectivity
+        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text('Customize'));
+        await tester.pumpAndSettle(); // wait for settings screen to open
+
+        expect(find.widgetWithText(PlatformAppBar, 'Home widgets'), findsOneWidget);
+        expect(find.byType(FeaturedTournamentsWidget), findsOneWidget);
+        expect(find.text('Open tournaments'), findsOneWidget);
+      });
+    });
   });
 
   group('Home offline', () {
@@ -441,8 +510,8 @@ void main() {
         final app = await makeTestProviderScope(
           tester,
           overrides: {
-            nnueServiceProvider: nnueServiceProvider.overrideWithValue(
-              FakeNnueServiceUnavailable(),
+            stockfishNnueServiceProvider: stockfishNnueServiceProvider.overrideWithValue(
+              FakeStockfishNnueServiceUnavailable(),
             ),
           },
           authUser: fakeAuthUser,
@@ -468,7 +537,9 @@ void main() {
         final app = await makeTestProviderScope(
           tester,
           overrides: {
-            nnueServiceProvider: nnueServiceProvider.overrideWithValue(FakeNnueService()),
+            stockfishNnueServiceProvider: stockfishNnueServiceProvider.overrideWithValue(
+              FakeStockfishNnueService(),
+            ),
           },
           authUser: fakeAuthUser,
           defaultPreferences: {
@@ -493,8 +564,8 @@ void main() {
         final app = await makeTestProviderScope(
           tester,
           overrides: {
-            nnueServiceProvider: nnueServiceProvider.overrideWithValue(
-              FakeNnueServiceUnavailable(),
+            stockfishNnueServiceProvider: stockfishNnueServiceProvider.overrideWithValue(
+              FakeStockfishNnueServiceUnavailable(),
             ),
           },
           authUser: fakeAuthUser,
@@ -613,6 +684,21 @@ void main() {
     });
   });
 
+  group('Sign in options', () {
+    testWidgets('opens the email login screen', (tester) async {
+      final app = await makeTestProviderScope(tester, child: const Application());
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Sign in'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Sign in with an email'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(EmailLoginScreen), findsOneWidget);
+    });
+  });
+
   group('Sign in error handling', () {
     testWidgets('shows an error snackbar when sign-in fails', (tester) async {
       final app = await makeTestProviderScope(
@@ -630,6 +716,8 @@ void main() {
       expect(find.text('Sign in'), findsOneWidget);
 
       await tester.tap(find.text('Sign in'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Sign in with the browser'));
       await tester.pumpAndSettle();
 
       expect(find.text('Something went wrong.'), findsOneWidget);
@@ -651,6 +739,8 @@ void main() {
       expect(find.text('Sign in'), findsOneWidget);
 
       await tester.tap(find.text('Sign in'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Sign in with the browser'));
       await tester.pumpAndSettle();
 
       expect(find.text('Something went wrong.'), findsNothing);

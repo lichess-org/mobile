@@ -14,7 +14,7 @@ Locale getSystemLocale(WidgetsBinding widgetsBinding) {
 }
 
 /// Setup [Intl.defaultLocale] and timeago locale and messages.
-Future<Locale> setupIntl(WidgetsBinding widgetsBinding) async {
+Locale setupIntl(WidgetsBinding widgetsBinding) {
   final systemLocale = getSystemLocale(widgetsBinding);
 
   // Get locale from shared preferences, if any

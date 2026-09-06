@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:popover/popover.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
+import 'package:lichess_mobile/src/widgets/popover.dart';
+import 'package:material_ui/material_ui.dart';
 
 const Color _kBorderColor = CupertinoDynamicColor.withBrightness(
   color: Color(0xFFA9A9AF),

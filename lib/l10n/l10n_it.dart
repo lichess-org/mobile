@@ -70,7 +70,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Devi aver effettuato l\'accesso per visualizzare questa pagina.';
 
   @override
-  String get mobileNbOfflinePuzzles => 'Problemi di scacchi offline';
+  String get mobileNbOfflinePuzzles => 'Puzzle offline';
 
   @override
   String get mobileNewGame => 'Nuova partita';
@@ -302,22 +302,22 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobilePerfShortBlitz => 'Blitz';
 
   @override
-  String get mobilePerfShortRapid => 'Rapid';
+  String get mobilePerfShortRapid => 'Rapido';
 
   @override
-  String get mobilePerfShortClassical => 'Classical';
+  String get mobilePerfShortClassical => 'Classico';
 
   @override
   String get mobilePerfShortCorrespondence => 'Corresp.';
 
   @override
-  String get mobilePerfShortFromPosition => 'From Pos.';
+  String get mobilePerfShortFromPosition => 'Da Pos.';
 
   @override
   String get mobilePerfShortChess960 => '960';
 
   @override
-  String get mobilePerfShortAntichess => 'Antichess';
+  String get mobilePerfShortAntichess => 'Antica';
 
   @override
   String get mobilePerfShortKingOfTheHill => 'KotH';
@@ -326,16 +326,16 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobilePerfShortThreeCheck => '3check';
 
   @override
-  String get mobilePerfShortAtomic => 'Atomic';
+  String get mobilePerfShortAtomic => 'Atomico';
 
   @override
-  String get mobilePerfShortHorde => 'Horde';
+  String get mobilePerfShortHorde => 'Orda';
 
   @override
-  String get mobilePerfShortRacingKings => 'Racing';
+  String get mobilePerfShortRacingKings => 'Corse';
 
   @override
-  String get mobilePerfShortCrazyhouse => 'Crazy';
+  String get mobilePerfShortCrazyhouse => 'Pazzo';
 
   @override
   String get mobilePerfShortPuzzle => 'Puzzle';
@@ -767,6 +767,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get arenaRankAvgHelp => 'La media del piazzamento è la percentuale del tuo piazzamento. Più è basso, più è meglio.\n\nPer esempio, essere classificato in 3ª posizione in un torneo di 100 giocatori = 3%. Essere classificato in 10ª posizione in un torneo di 1000 = 1%.';
 
   @override
+  String get arenaRankAverageHelp => 'Your rank average represents your typical finishing position, relative to the total number of players in each tournament.\nThis is a measure of your tournament placement, not your general rating.\n\nFor example, a rank average of 3% means you typically finish in the top 3% (such as 30th place out of 1,000 players).';
+
+  @override
   String get arenaMedians => 'mediane';
 
   @override
@@ -922,6 +925,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get broadcastDefinitivelyDeleteTournament => 'Elimina definitivamente l\'intero torneo, tutti i turni e tutte le partite.';
+
+  @override
+  String get broadcastPermanentlyDeleteTournament => 'Permanently delete this tournament, including all rounds and games?';
 
   @override
   String get broadcastShowScores => 'Mostra i punteggi dei giocatori in base ai risultati del gioco';
@@ -1613,10 +1619,19 @@ class AppLocalizationsIt extends AppLocalizations {
   String get preferencesNotifyInboxMsg => 'Nuovo messaggio';
 
   @override
+  String get preferencesNotifyDirectMessage => 'New direct message';
+
+  @override
   String get preferencesNotifyForumMention => 'Un commento nel forum ti ha menzionato';
 
   @override
+  String get preferencesNotifyForumMentions => 'Forum mentions';
+
+  @override
   String get preferencesNotifyInvitedStudy => 'Invito ad uno Studio';
+
+  @override
+  String get preferencesNotifyStudyInvites => 'Study invites';
 
   @override
   String get preferencesNotifyGameEvent => 'Aggiornamenti in una partita per corrispondenza';
@@ -1628,7 +1643,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get preferencesNotifyTournamentSoon => 'Il torneo sta per iniziare';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
+  String get preferencesNotifyTournamentStartReminders => 'Tournaments start reminders';
+
+  @override
+  String get preferencesNotifyBroadcasts => 'Broadcasts';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Il tempo sta per scadere in una partita per corrispondenza';
@@ -2157,6 +2175,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get puzzleThemeEnPassantDescription => 'Una tattica che coinvolge la regola dell\'en passant, in cui un pedone può catturare un pedone avversario che l\'ha superato usando la propria mossa iniziale di due caselle.';
 
   @override
+  String get puzzleThemeEnPassantAdjacentCaptureDescription => 'A tactic involving the en passant rule, where a pawn can capture an opposing pawn that has just moved next to it with its initial two-square move.';
+
+  @override
   String get puzzleThemeEpauletteMate => 'Matto di controspallina';
 
   @override
@@ -2175,6 +2196,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get puzzleThemeForkDescription => 'Una mossa in cui un pezzo attacca due pezzi avversari contemporaneamente.';
 
   @override
+  String get puzzleThemeForkOpposingPiecesDescription => 'A move where a piece attacks two or more opposing pieces simultaneously.';
+
+  @override
   String get puzzleThemeHangingPiece => 'Pezzo in presa';
 
   @override
@@ -2185,6 +2209,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get puzzleThemeHookMateDescription => 'Matto con torre, cavallo e pedone, con un pedone avversario che ostruisce il suo re.';
+
+  @override
+  String get puzzleThemeHookMateOpposingPawnDescription => 'Checkmate using a rook, knight, and pawn, where an opposing pawn blocks the king\'s escape.';
 
   @override
   String get puzzleThemeInterference => 'Interposizione';
@@ -3133,6 +3160,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get checkSpamFolder => 'Controlla anche la tua cartella di spam, potrebbe essere finita lì. Se sì, contrassegnala come non spam.';
 
   @override
+  String get checkSpamOrJunkFolder => 'If you do not receive a confirmation email, check your Spam or Junk folder. Be sure to indicate messages from lichess.org as safe and \"not spam\", so you can stay informed of important communications.';
+
+  @override
   String sendEmailForAccountVerification(String param) {
     return 'Se non trovi la tua email di conferma, invia un\'email a $param e confermeremo il tuo account per te.';
   }
@@ -3860,6 +3890,15 @@ class AppLocalizationsIt extends AppLocalizations {
   String get reply => 'Rispondi';
 
   @override
+  String get reopen => 'Reopen';
+
+  @override
+  String get quote => 'Quote';
+
+  @override
+  String get postEdited => 'edited';
+
+  @override
   String get message => 'Messaggio';
 
   @override
@@ -3894,6 +3933,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get reportProcessedFasterInEnglish => 'La tua segnalazione sarà processata più velocemente se scritta in Inglese.';
+
+  @override
+  String get processReportFasterInEnglish => 'We can process your report faster if you write in English.';
 
   @override
   String get error_provideOneCheatedGameLink => 'Si prega di fornire almeno un collegamento link di una partita in cui il giocatore ha imbrogliato.';
@@ -4264,6 +4306,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get whenCreateSimul => 'Quando crei una simultanea, giochi contro diversi avversari contemporaneamente.';
 
   @override
+  String get creatingASimul => 'Creating a simul lets you play against multiple opponents at the same time.';
+
+  @override
   String get simulVariantsHint => 'Se selezioni più varianti, ogni giocatore può scegliere quale giocare.';
 
   @override
@@ -4576,6 +4621,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get background => 'Sfondo';
 
   @override
+  String get theme => 'Theme';
+
+  @override
   String get light => 'Chiaro';
 
   @override
@@ -4585,7 +4633,13 @@ class AppLocalizationsIt extends AppLocalizations {
   String get transparent => 'Trasparente';
 
   @override
+  String get picture => 'Picture';
+
+  @override
   String get deviceTheme => 'Tema del dispositivo';
+
+  @override
+  String get roundness => 'Roundness';
 
   @override
   String get backgroundImageUrl => 'URL dell\'immagine di sfondo:';
@@ -5003,9 +5057,6 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
-  String get someoneYouReportedWasBanned => 'Qualcuno che hai segnalato è stato bannato';
-
-  @override
   String get congratsYouWon => 'Complimenti, hai vinto!';
 
   @override
@@ -5104,6 +5155,11 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
+  String youCanFormatTextUsing(String param) {
+    return 'You can format text using $param.';
+  }
+
+  @override
   String get embedsAvailable => 'Incolla l\'URL di un gioco o l\'URL di un capitolo di studio per incorporarlo.';
 
   @override
@@ -5123,6 +5179,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get navigateMoveTree => 'Sfoglia l\'albero delle mosse';
+
+  @override
+  String get moveListNavigation => 'Move list navigation';
 
   @override
   String get mouseTricks => 'Trucchi del mouse';
@@ -5175,7 +5234,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get resignTheGame => 'Rinuncia alla partita';
 
   @override
-  String get youCantStartNewGame => 'You can\'t start a new game until this one is finished.';
+  String get youCantStartNewGame => 'You can\'t start a new game while it\'s your turn.';
 
   @override
   String get since => 'Da';
@@ -6539,6 +6598,9 @@ class AppLocalizationsIt extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get teamTeam => 'Squadra';
 
   @override
   String get teamIncorrectEntryCode => 'Codice di accesso errato.';

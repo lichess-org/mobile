@@ -1,5 +1,4 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
@@ -15,6 +14,7 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
+import 'package:material_ui/material_ui.dart';
 
 class BroadcastTeamScreen extends ConsumerWidget {
   const BroadcastTeamScreen({super.key, required this.tournamentId, required this.teamName});
@@ -434,17 +434,17 @@ class _MatchHistoryTable extends StatelessWidget {
       },
       defaultVerticalAlignment: .middle,
       children: [
-        const TableRow(
+        TableRow(
           children: [
-            Padding(
+            const Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
               child: Text('Round', style: TextStyle(fontWeight: .bold)),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 12.0),
-              child: Text('Team', style: TextStyle(fontWeight: .bold)),
+              padding: const EdgeInsets.symmetric(vertical: 12.0),
+              child: Text(context.l10n.teamTeam, style: const TextStyle(fontWeight: .bold)),
             ),
-            Padding(
+            const Padding(
               padding: EdgeInsets.symmetric(vertical: 12.0),
               child: Text(
                 'MP',
@@ -452,7 +452,7 @@ class _MatchHistoryTable extends StatelessWidget {
                 style: TextStyle(fontWeight: .bold),
               ),
             ),
-            Padding(
+            const Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
               child: Text(
                 'GP',
@@ -479,6 +479,7 @@ class _MatchHistoryTable extends StatelessWidget {
             ),
             children: [
               _TableTapCell(
+                teamName: team.name,
                 match: match,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
@@ -505,6 +506,7 @@ class _MatchHistoryTable extends StatelessWidget {
                 ),
               ),
               _TableTapCell(
+                teamName: team.name,
                 match: match,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: _kMatchHistoryRowVerticalPadding),
@@ -518,6 +520,7 @@ class _MatchHistoryTable extends StatelessWidget {
                 ),
               ),
               _TableTapCell(
+                teamName: team.name,
                 match: match,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
@@ -538,8 +541,9 @@ class _MatchHistoryTable extends StatelessWidget {
 }
 
 class _TableTapCell extends StatelessWidget {
-  const _TableTapCell({required this.match, required this.child});
+  const _TableTapCell({required this.teamName, required this.match, required this.child});
 
+  final String teamName;
   final BroadcastTeamStandingMatch match;
   final Widget child;
 
@@ -547,9 +551,13 @@ class _TableTapCell extends StatelessWidget {
   Widget build(BuildContext context) {
     return TableRowInkWell(
       onTap: () {
-        Navigator.of(
-          context,
-        ).push(BroadcastRoundScreenLoading.buildRoute(match.roundId, initialTab: .teams));
+        Navigator.of(context).push(
+          BroadcastRoundScreenLoading.buildRoute(
+            match.roundId,
+            initialTab: .boards,
+            teamFilter: teamName,
+          ),
+        );
       },
       child: child,
     );

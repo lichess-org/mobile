@@ -1,13 +1,14 @@
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/board_editor/board_editor_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/chess960.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../test_provider_scope.dart';
 
@@ -184,7 +185,13 @@ void main() {
       container
           .read(controllerProvider.notifier)
           .loadFen('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/4RK1R');
-
+      // in standard chess with the King on f1, white cannot castle
+      expect(
+        container.read(controllerProvider).fen,
+        'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/4RK1R w kq - 0 1',
+      );
+      container.read(controllerProvider.notifier).setVariant(.chess960);
+      // in chess960, the King on f1 can castle
       expect(
         container.read(controllerProvider).fen,
         'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/4RK1R w KQkq - 0 1',
@@ -206,6 +213,59 @@ void main() {
         container.read(controllerProvider).fen,
         'rnbqkbnr/pppppppp/8/8/8/5K2/PPPPPPPP/4R2R w kq - 0 1',
       );
+    });
+
+    testWidgets('Standard castling is strictly revoked if king or rook leaves starting square', (
+      tester,
+    ) async {
+      final app = await makeTestProviderScopeApp(tester, home: const BoardEditorScreen());
+      await tester.pumpWidget(app);
+
+      final container = ProviderScope.containerOf(tester.element(find.byType(ChessboardEditor)));
+      final controllerProvider = boardEditorControllerProvider(null);
+
+      // In editor mode, dragging a piece just moves it without changing the turn
+      await dragFromTo(tester, 'e1', 'd1');
+
+      // White king moved, so White's castling rights should be removed from the FEN
+      expect(
+        container.read(controllerProvider).fen,
+        'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBK1BNR w kq - 0 1',
+      );
+
+      // Move it back to e1
+      await dragFromTo(tester, 'd1', 'e1');
+
+      // Since the castling right is still enabled in the underlying state,
+      // putting the king back restores the FEN output.
+      expect(
+        container.read(controllerProvider).fen,
+        'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNB1KBNR w KQkq - 0 1',
+      );
+    });
+
+    testWidgets('isCastlingPossible accurately reflects board validity for the UI', (tester) async {
+      final app = await makeTestProviderScopeApp(tester, home: const BoardEditorScreen());
+      await tester.pumpWidget(app);
+
+      final container = ProviderScope.containerOf(tester.element(find.byType(ChessboardEditor)));
+      final controllerProvider = boardEditorControllerProvider(null);
+
+      // Start with standard position
+      var state = container.read(controllerProvider);
+      expect(state.isCastlingPossible(.white, .king), isTrue);
+
+      // Remove the white h1 rook
+      await tester.tap(find.byKey(const Key('delete-button-white')));
+      await tester.pump();
+      await tapSquare(tester, 'h1');
+
+      state = container.read(controllerProvider);
+
+      // Kingside castling should now report as physically impossible for the UI chips
+      expect(state.isCastlingPossible(.white, .king), isFalse);
+      // Queenside should remain possible
+      expect(state.isCastlingPossible(.white, .queen), isTrue);
     });
 
     testWidgets('Possible en passant squares are calculated correctly', (tester) async {
@@ -538,6 +598,74 @@ void main() {
       // Variant we set previously should be preselected
       expect(find.textContaining('Atomic'), findsOneWidget);
     });
+  });
+  testWidgets('Chess960 position dialog loads valid ID', (tester) async {
+    // Boot up the editor directly in Chess960 mode
+    final app = await makeTestProviderScopeApp(
+      tester,
+      home: const BoardEditorScreen(
+        params: (initialVariant: Variant.chess960, initialFen: null, initialOrientation: null),
+      ),
+    );
+    await tester.pumpWidget(app);
+
+    // Open the bottom sheet menu
+    await tester.tap(find.bySemanticsLabel('Menu'));
+    await tester.pump();
+
+    // Tap the action to open the dialog
+    await tester.tap(find.text('Chess960 Position'));
+    await tester.pump();
+
+    expect(find.byType(AlertDialog), findsOneWidget);
+
+    // Enter a valid FRC ID
+    await tester.enterText(find.byType(TextField), '0');
+    await tester.pump();
+
+    // load position
+    await tester.tap(find.text('Load position'));
+    await tester.pump();
+
+    // Verify the dialog closes successfully
+    expect(find.byType(AlertDialog), findsNothing);
+
+    // Verify the board state has updated to match the FEN for ID 0
+    final container = ProviderScope.containerOf(tester.element(find.byType(ChessboardEditor)));
+    final controllerProvider = boardEditorControllerProvider((
+      initialVariant: Variant.chess960,
+      initialFen: null,
+      initialOrientation: null,
+    ));
+
+    expect(container.read(controllerProvider).fen, chess960Position(0).fen);
+  });
+
+  testWidgets('Chess960 position dialog rejects invalid ID', (tester) async {
+    final app = await makeTestProviderScopeApp(
+      tester,
+      home: const BoardEditorScreen(
+        params: (initialVariant: Variant.chess960, initialFen: null, initialOrientation: null),
+      ),
+    );
+    await tester.pumpWidget(app);
+
+    await tester.tap(find.bySemanticsLabel('Menu'));
+    await tester.pump();
+
+    await tester.tap(find.text('Chess960 Position'));
+    await tester.pump();
+
+    // Enter an out-of-bounds ID
+    await tester.enterText(find.byType(TextField), '999');
+    await tester.pump();
+
+    // Verify the 'Load position' button is actually disabled
+    final loadButton = tester.widget<TextButton>(find.widgetWithText(TextButton, 'Load position'));
+    expect(loadButton.onPressed, isNull);
+
+    // The dialog should remain open because validation failed
+    expect(find.byType(AlertDialog), findsOneWidget);
   });
 }
 

@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lichess_mobile/src/model/board_editor/position.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:material_ui/material_ui.dart';
 
 class BoardEditorPositionsScreen extends StatelessWidget {
   const BoardEditorPositionsScreen({required this.onPositionSelected, super.key});

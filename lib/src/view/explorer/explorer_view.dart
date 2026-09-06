@@ -1,5 +1,4 @@
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
@@ -8,6 +7,7 @@ import 'package:lichess_mobile/src/model/explorer/tablebase.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/explorer/opening_explorer_view.dart';
 import 'package:lichess_mobile/src/view/explorer/tablebase_view.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Unified explorer view that shows either opening explorer or tablebase
 /// based on the position state (opening vs endgame)

@@ -15,11 +15,10 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
-import 'package:multistockfish/multistockfish.dart';
 
 import '../../binding.dart';
 import '../../model/broadcast/example_data.dart';
-import '../../model/engine/fake_stockfish.dart';
+import '../../model/engine/fake_engine.dart';
 import '../../network/fake_websocket_channel.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
@@ -40,19 +39,18 @@ Future<void> makeEngineTestApp(
   bool showBestMoveArrow = true,
   Duration connectionLag = kFakeWebSocketConnectionLag,
 
-  /// Custom Stockfish instance for tests requiring controllable eval emission.
-  /// Note: If provided, it will be reset to a default FakeStockfish after the test.
-  Stockfish? stockfish,
+  /// Custom engine for tests that need to control when evals are emitted.
+  /// Note: If provided, it will be reset to a default [FakeEngine] after the test.
+  FakeEngine? stockfish,
 }) async {
   // Ensure the binding is initialized before accessing it
-  final binding = TestLichessBinding.ensureInitialized();
+  TestLichessBinding.ensureInitialized();
 
-  // Set custom stockfish if provided
   if (stockfish != null) {
-    binding.stockfish = stockfish;
+    fakeEngine = stockfish;
     // Reset to default after test to not affect other tests
     addTearDown(() {
-      binding.stockfish = FakeStockfish();
+      fakeEngine = FakeEngine();
     });
   }
 
