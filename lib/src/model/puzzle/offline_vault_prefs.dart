@@ -24,6 +24,7 @@ class OfflineVaultPrefs implements Serializable {
   /// Calibrated after first fill; start guess only.
   static const int kBytesPerPuzzleGuess = 500;
 
+  // ignore: avoid_unused_constructor_parameters
   factory OfflineVaultPrefs.defaults({LightUser? user}) =>
       const OfflineVaultPrefs(mode: OfflineVaultMode.count, mbTarget: 0, countTarget: 100);
 

@@ -58,7 +58,7 @@ class OfflineVaultStorage {
     required UserId? userId,
     String angle = 'mix',
     int limit = 50,
-  }) async {
+  }) {
     return _db.query(
       'offline_puzzles',
       columns: ['puzzleId', 'win', 'rated'],
@@ -120,7 +120,8 @@ class OfflineVaultStorage {
     final over = kept - keep;
     if (over > 0) {
       await _db.rawDelete(
-        '''DELETE FROM offline_puzzles WHERE rowid IN (
+        '''
+DELETE FROM offline_puzzles WHERE rowid IN (
           SELECT rowid FROM offline_puzzles
           WHERE userId = ? AND angle = ? AND done = 0
           ORDER BY lastModified ASC LIMIT ?)''',
