@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:fake_async/fake_async.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -147,6 +148,77 @@ void main() {
         client.close();
       },
     );
+
+    test('a socket that cannot connect makes the check run again', () async {
+      // The network dies without the connectivity plugin ever saying so — a captive portal, or an
+      // interface that is up but leads nowhere.
+      var offline = false;
+      final container = await makeContainer(
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+            (ref) => FakeHttpClientFactory(
+              () => MockClient((request) async {
+                if (offline) throw const SocketException('No internet');
+                return http.Response('', 200);
+              }),
+            ),
+          ),
+          webSocketChannelFactoryProvider: webSocketChannelFactoryProvider.overrideWithValue(
+            FakeWebSocketChannelFactory((_) => throw const SocketException('No internet')),
+          ),
+        },
+      );
+
+      await container.read(connectivityChangesProvider.future);
+      expect(container.read(isDeviceOnlineProvider), isTrue);
+
+      offline = true;
+      container.read(socketPoolProvider).currentClient.connect();
+      await pumpEventQueue();
+
+      expect(container.read(isDeviceOnlineProvider), isFalse);
+    });
+
+    test('a failing socket alone does not take the device offline', () async {
+      // Only lichess is unreachable here: the device itself is online, and the app must go on
+      // saying so, however long the socket goes on failing.
+      var checks = 0;
+      final container = await makeContainer(
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+            (ref) => FakeHttpClientFactory(
+              () => MockClient((request) async {
+                if (request.url == internetCheckUris.first) checks++;
+                return http.Response('', 200);
+              }),
+            ),
+          ),
+          webSocketChannelFactoryProvider: webSocketChannelFactoryProvider.overrideWithValue(
+            FakeWebSocketChannelFactory((_) => throw const SocketException('No internet')),
+          ),
+        },
+      );
+
+      await container.read(connectivityChangesProvider.future);
+      checks = 0;
+
+      fakeAsync((async) {
+        container.read(socketPoolProvider).currentClient.connect();
+
+        // Minutes of failed attempts, each one backing off a little further.
+        async.elapse(const Duration(minutes: 5));
+
+        expect(container.read(isDeviceOnlineProvider), isTrue);
+        expect(
+          checks,
+          1,
+          reason: 'a run of failures is worth one check, however many attempts it is made of',
+        );
+
+        container.read(socketPoolProvider).currentClient.close();
+        async.flushTimers();
+      });
+    });
 
     test('assumes online while the check is still running', () async {
       final container = await makeContainer(

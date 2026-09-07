@@ -88,7 +88,8 @@ final lichessConnectionStatusProvider = Provider.autoDispose<LichessConnectionSt
 ///
 /// - Uses the [Connectivity] plugin to listen to connectivity changes
 /// - Uses [AppLifecycleListener] to check connectivity on app resume
-/// - Uses [SocketPool] to check if the device is online when the current status is offline and a socket connects
+/// - Uses [SocketPool] to check if the device is online when the current status is offline and a
+/// socket connects or fails to connect.
 final connectivityChangesProvider =
     AsyncNotifierProvider<ConnectivityChangesNotifier, ConnectivityStatus>(
       ConnectivityChangesNotifier.new,
@@ -117,10 +118,11 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
       _connectivityChangesThrottler(() => _onConnectivityChange(result));
     });
 
+    final pool = ref.read(socketPoolProvider);
+
     // A socket answering the ping/pong protocol is proof that the device can reach the network, so
     // it clears an offline status right away rather than leaving it up until the next check.
-    final pool = ref.read(socketPoolProvider);
-    void onSocketChange() {
+    void onSocketConnected() {
       if (pool.averageLag.value == Duration.zero) return;
       // Deferred: the pool updates this from inside [SocketPool.open], which controllers call
       // while building, and Riverpod forbids a provider modifying another during a build.
@@ -131,8 +133,27 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
       });
     }
 
-    pool.averageLag.addListener(onSocketChange);
-    ref.onDispose(() => pool.averageLag.removeListener(onSocketChange));
+    // The other way around, a socket that cannot connect is only a suspicion: it may be lichess
+    // that is down, and the socket goes on failing long after the network is back. So it does not
+    // set the status offline, it merely asks the check to run — the check remains the authority.
+    //
+    // This is also what keeps the two providers from egging each other on: [SocketPool] reconnects
+    // on the offline -> online edge only, and a socket only reports a *run* of failures once, so
+    // each failing run costs at most one check.
+    void onSocketFailing() {
+      if (!pool.isFailing.value) return;
+      scheduleMicrotask(() {
+        if (!ref.mounted || state.value?.isOnline != true) return;
+        _connectivityChangesThrottler(() => _refreshOnlineStatus('socket cannot connect'));
+      });
+    }
+
+    pool.averageLag.addListener(onSocketConnected);
+    pool.isFailing.addListener(onSocketFailing);
+    ref.onDispose(() {
+      pool.averageLag.removeListener(onSocketConnected);
+      pool.isFailing.removeListener(onSocketFailing);
+    });
 
     final AppLifecycleState? appState = WidgetsBinding.instance.lifecycleState;
 
@@ -164,19 +185,27 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
     }
   }
 
-  Future<void> _onConnectivityChange(List<ConnectivityResult> result) async {
+  Future<void> _onConnectivityChange(List<ConnectivityResult> result) {
+    _logger.fine('Connectivity changed: $result');
+    return _refreshOnlineStatus('connectivity changed: $result');
+  }
+
+  /// Runs the online check and updates the status if it disagrees with it.
+  ///
+  /// [reason] is what prompted the check, for the logs.
+  Future<void> _refreshOnlineStatus(String reason) async {
     if (!state.hasValue) {
       return;
     }
 
     final wasOnline = state.requireValue.isOnline;
-
-    _logger.fine('Connectivity changed: $result');
     final newIsOnline = await isOnline(_defaultClient);
     _logger.fine('Online check result: $newIsOnline');
 
+    if (!ref.mounted) return;
+
     if (newIsOnline != wasOnline) {
-      _logger.info('Connectivity status: $result, isOnline: $newIsOnline');
+      _logger.info('Connectivity status: $reason, isOnline: $newIsOnline');
       state = AsyncValue.data((isOnline: newIsOnline, appState: state.value?.appState));
     }
   }

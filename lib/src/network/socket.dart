@@ -171,6 +171,7 @@ class SocketClient {
   DateTime _lastPing = clock_package.clock.now();
 
   final _averageLag = ValueNotifier(Duration.zero);
+  final _isFailing = ValueNotifier(false);
 
   StreamSubscription<SocketEvent>? _socketStreamSubscription;
 
@@ -230,7 +231,10 @@ class SocketClient {
   bool get isConnected => averageLag.value != Duration.zero;
 
   /// Whether the socket is failing to connect, and waiting out its backoff before trying again.
-  bool get isFailing => _failingSince != null;
+  ///
+  /// Set once when a run of failures starts, and cleared when the socket connects or is closed, so
+  /// that a listener hears about a socket that cannot connect, not about each of its attempts.
+  ValueListenable<bool> get isFailing => _isFailing;
 
   /// Whether the client is disposed. If true the client cannot be reconnected, or
   /// be listened to.
@@ -304,6 +308,7 @@ class SocketClient {
 
       nbConnectionSuccess++;
       _failingSince = null;
+      _isFailing.value = false;
 
       if (nbConnectionSuccess == 1) {
         _firstConnection.complete();
@@ -346,6 +351,7 @@ class SocketClient {
       }
       _averageLag.value = Duration.zero;
       _failingSince ??= clock_package.clock.now();
+      _isFailing.value = true;
 
       // A failed attempt says nothing on its own: it is what a device with no network looks like,
       // and that is not an error the logs should shout about. The backoff is what keeps a socket
@@ -410,6 +416,7 @@ class SocketClient {
     _versionGapRetryTimer?.cancel();
     _streamController.close();
     _averageLag.dispose();
+    _isFailing.dispose();
     isDisposed = true;
     _disconnect();
   }
@@ -423,6 +430,7 @@ class SocketClient {
     nbConnectionAttempts = 0;
     nbConnectionSuccess = 0;
     _failingSince = null;
+    _isFailing.value = false;
     _firstConnection = Completer<void>();
     return _disconnect();
   }
@@ -635,11 +643,7 @@ class SocketPool {
       pingDelay: const Duration(seconds: 25),
     );
 
-    client.averageLag.addListener(() {
-      if (_currentRoute == client.route) {
-        _averageLag.value = client.averageLag.value;
-      }
-    });
+    _mirrorCurrentClientState(client);
     _pool[_currentRoute] = client;
 
     // Deferred: [ConnectivityChangesNotifier] reads this pool while building, so listening to it
@@ -660,6 +664,7 @@ class SocketPool {
   final Duration idleTimeout;
 
   final _averageLag = ValueNotifier(Duration.zero);
+  final _isFailing = ValueNotifier(false);
 
   Timer? _closeInBackgroundTimer;
 
@@ -669,6 +674,9 @@ class SocketPool {
   ///
   /// A duration of zero means the socket is not connected.
   ValueListenable<Duration> get averageLag => _averageLag;
+
+  /// Whether the current socket is failing to connect, and waiting out its backoff.
+  ValueListenable<bool> get isFailing => _isFailing;
 
   /// Whether the pool is disposed.
   ///
@@ -728,13 +736,27 @@ class SocketPool {
     }
   }
 
+  /// Reflects [client]'s connection state in the pool's own, for as long as it is the current one.
+  void _mirrorCurrentClientState(SocketClient client) {
+    client.averageLag.addListener(() {
+      if (_currentRoute == client.route) {
+        _averageLag.value = client.averageLag.value;
+      }
+    });
+    client.isFailing.addListener(() {
+      if (_currentRoute == client.route) {
+        _isFailing.value = client.isFailing.value;
+      }
+    });
+  }
+
   /// Connects the current client, unless it is already connected or on its way to being.
   ///
   /// A client waiting out its reconnect backoff does need connecting: the wait is there to spare a
   /// device that cannot connect at all, and is only ever cut short by something — the app coming
   /// back to the foreground, the network coming back — saying that this time it might work.
   void _connectIfNeeded() {
-    if (!currentClient.isActive || currentClient.isFailing) {
+    if (!currentClient.isActive || currentClient.isFailing.value) {
       currentClient.connect();
     }
   }
@@ -796,11 +818,7 @@ class SocketPool {
         },
         onEventGapFailure: onEventGapFailure,
       );
-      newClient.averageLag.addListener(() {
-        if (_currentRoute == newClient.route) {
-          _averageLag.value = newClient.averageLag.value;
-        }
-      });
+      _mirrorCurrentClientState(newClient);
       _pool[route] = newClient;
     }
 
@@ -826,6 +844,7 @@ class SocketPool {
     }
     _isDisposed = true;
     _averageLag.dispose();
+    _isFailing.dispose();
     _closeInBackgroundTimer?.cancel();
     _disposeTimers.forEach((_, t) => t?.cancel());
     _pool.forEach((_, c) => c.dispose());
