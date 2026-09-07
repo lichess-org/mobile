@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:fake_async/fake_async.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
@@ -66,6 +67,54 @@ void main() {
       expect(container.read(isDeviceOnlineProvider), isTrue);
 
       client.close();
+    });
+
+    test('the socket clears an offline status once, not on every lag change', () async {
+      // A server whose answers get slower and slower, so that every pong moves the average lag.
+      FakeWebSocketChannel? channel;
+      final container = await makeContainer(
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+            (ref) => FakeHttpClientFactory(() => _deviceOfflineClient),
+          ),
+          webSocketChannelFactoryProvider: webSocketChannelFactoryProvider.overrideWithValue(
+            FakeWebSocketChannelFactory((route) => channel = FakeWebSocketChannel(route)),
+          ),
+        },
+      );
+
+      await container.read(connectivityChangesProvider.future);
+      expect(container.read(isDeviceOnlineProvider), isFalse);
+
+      var statusChanges = 0;
+      container.listen(connectivityChangesProvider, (_, _) => statusChanges++);
+
+      final pool = container.read(socketPoolProvider);
+      var lagChanges = 0;
+      void countLagChange() => lagChanges++;
+      pool.averageLag.addListener(countLagChange);
+
+      fakeAsync((async) {
+        pool.currentClient.connect();
+        async.elapse(const Duration(seconds: 1));
+
+        expect(container.read(isDeviceOnlineProvider), isTrue);
+        expect(statusChanges, 1);
+
+        // The ping/pong protocol keeps moving the average lag for as long as the socket is up: an
+        // online status that is already settled must not be rewritten on every pong.
+        for (var i = 1; i <= 10; i++) {
+          channel!.connectionLag = Duration(milliseconds: 10 * i);
+          async.elapse(const Duration(seconds: 30));
+        }
+
+        expect(lagChanges, greaterThan(5), reason: 'the lag did keep changing');
+        expect(statusChanges, 1, reason: 'but the status was only ever settled once');
+
+        pool.averageLag.removeListener(countLagChange);
+        pool.currentClient.close();
+        async.flushTimers();
+      });
     });
 
     test(
