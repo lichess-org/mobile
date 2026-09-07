@@ -100,7 +100,10 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
   StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
   AppLifecycleListener? _appLifecycleListener;
 
-  final _connectivityChangesThrottler = Throttler(kConnectivityThrottleDelay);
+  // Trailing: [onSocketFailing] reports a run of failures once, so a call dropped here is a signal
+  // lost for good — no later notification would ask for the check again, and the status would stay
+  // online while the socket keeps failing.
+  final _connectivityChangesThrottler = Throttler(kConnectivityThrottleDelay, trailing: true);
 
   Client get _defaultClient => ref.read(defaultClientProvider);
   Connectivity get _connectivity => ref.read(connectivityPluginProvider);
@@ -143,8 +146,16 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
     void onSocketFailing() {
       if (!pool.isFailing.value) return;
       scheduleMicrotask(() {
+        // A device already known to be offline has nothing to learn from a socket that fails, and
+        // must not take up the throttler's window: the connectivity event that brings the network
+        // back is what has to run next, without waiting out a delay.
         if (!ref.mounted || state.value?.isOnline != true) return;
-        _connectivityChangesThrottler(() => _refreshOnlineStatus('socket cannot connect'));
+        _connectivityChangesThrottler(() {
+          // Checked again: the throttler may run this a delay later, by which time the status may
+          // have settled offline on its own.
+          if (!ref.mounted || state.value?.isOnline != true) return;
+          _refreshOnlineStatus('socket cannot connect');
+        });
       });
     }
 
@@ -159,7 +170,23 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
 
     _appLifecycleListener = AppLifecycleListener(onStateChange: _onAppLifecycleChange);
 
-    return _connectivity.checkConnectivity().then((r) => _getConnectivityStatus(r, appState));
+    return _initialStatus(appState, pool);
+  }
+
+  /// Runs the first check, and reconciles its result with the socket pool.
+  ///
+  /// [onSocketConnected] has no status to correct while this check is still running, so a pong
+  /// that lands in that window would otherwise be dropped, leaving the device reported offline
+  /// until the next lag change. A socket that is connected by the time the check answers is proof
+  /// of a working network, and outranks a check that came back offline.
+  Future<ConnectivityStatus> _initialStatus(AppLifecycleState? appState, SocketPool pool) async {
+    final result = await _connectivity.checkConnectivity();
+    final status = await _getConnectivityStatus(result, appState);
+    if (!status.isOnline && pool.averageLag.value != Duration.zero) {
+      _logger.info('Initial check says offline but a socket is connected: the device is online.');
+      return (isOnline: true, appState: status.appState);
+    }
+    return status;
   }
 
   Future<void> _onAppLifecycleChange(AppLifecycleState appState) async {

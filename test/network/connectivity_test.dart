@@ -70,6 +70,39 @@ void main() {
       client.close();
     });
 
+    test(
+      'a socket that connects while the first check is running keeps the device online',
+      () async {
+        // The check takes long enough for the socket to answer a pong before it comes back offline.
+        final container = await makeContainer(
+          overrides: {
+            httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+              (ref) => FakeHttpClientFactory(
+                () => MockClient((request) async {
+                  await Future<void>.delayed(const Duration(milliseconds: 200));
+                  throw const SocketException('No internet');
+                }),
+              ),
+            ),
+          },
+        );
+
+        final pendingCheck = container.read(connectivityChangesProvider.future);
+
+        final client = container.read(socketPoolProvider).currentClient;
+        client.connect();
+        await client.firstConnection;
+        await Future<void>.delayed(kFakeWebSocketConnectionLag * 4);
+        await pumpEventQueue();
+
+        await pendingCheck;
+
+        expect(container.read(isDeviceOnlineProvider), isTrue);
+
+        client.close();
+      },
+    );
+
     test('the socket clears an offline status once, not on every lag change', () async {
       // A server whose answers get slower and slower, so that every pong moves the average lag.
       FakeWebSocketChannel? channel;
@@ -177,6 +210,52 @@ void main() {
       await pumpEventQueue();
 
       expect(container.read(isDeviceOnlineProvider), isFalse);
+    });
+
+    test('a socket that starts failing during the throttle delay still gets a check', () async {
+      var offline = false;
+      final container = await makeContainer(
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+            (ref) => FakeHttpClientFactory(
+              () => MockClient((request) async {
+                if (offline) throw const SocketException('No internet');
+                return http.Response('', 200);
+              }),
+            ),
+          ),
+          webSocketChannelFactoryProvider: webSocketChannelFactoryProvider.overrideWithValue(
+            FakeWebSocketChannelFactory((_) => throw const SocketException('No internet')),
+          ),
+        },
+      );
+
+      // The notifier is built inside [fakeAsync] so that the timers it starts from the connectivity
+      // subscription — the throttler's among them — belong to this zone and answer to [elapse].
+      fakeAsync((async) {
+        container.read(connectivityChangesProvider);
+        async.elapse(const Duration(seconds: 1));
+        expect(container.read(isDeviceOnlineProvider), isTrue);
+
+        // A connectivity event opens the throttle window while the network is still fine.
+        FakeConnectivity.controller.add([ConnectivityResult.wifi]);
+        async.elapse(const Duration(milliseconds: 100));
+        expect(container.read(isDeviceOnlineProvider), isTrue);
+
+        // The network dies without the plugin ever saying so, and the socket is the only witness.
+        // It reports a run of failures once, and that report lands inside the window opened above:
+        // dropped, it would leave the device reported online with nothing left to correct it.
+        offline = true;
+        container.read(socketPoolProvider).currentClient.connect();
+        async.elapse(const Duration(milliseconds: 100));
+        expect(container.read(isDeviceOnlineProvider), isTrue, reason: 'still throttled');
+
+        async.elapse(kConnectivityThrottleDelay);
+        expect(container.read(isDeviceOnlineProvider), isFalse);
+
+        container.read(socketPoolProvider).currentClient.close();
+        async.flushTimers();
+      });
     });
 
     test('a failing socket alone does not take the device offline', () async {
