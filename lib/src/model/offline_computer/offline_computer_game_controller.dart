@@ -14,10 +14,12 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/chess960.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/local_game_clock.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
+import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/engine_budget.dart';
 import 'package:lichess_mobile/src/model/engine/engine_opponent.dart';
@@ -35,6 +37,7 @@ import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/game/offline_computer_game.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/offline_computer/computer_analysis.dart';
+import 'package:lichess_mobile/src/model/offline_computer/offline_computer_clock.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_storage.dart';
 import 'package:lichess_mobile/src/model/offline_computer/practice_analyser.dart';
 import 'package:lichess_mobile/src/model/offline_computer/practice_comment.dart';
@@ -111,6 +114,9 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   /// How this device's engines share it.
   EngineBudget get _budget => ref.read(engineBudgetProvider);
 
+  /// The clock of the game, which only runs when the game is played with a time control.
+  LocalGameClock get _clock => ref.read(offlineComputerClockProvider.notifier);
+
   /// Whether the evaluator and the opponent are the same engine, and so must be asked for the
   /// same options.
   ///
@@ -156,6 +162,25 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     _analyseCurrentPosition();
   }
 
+  /// Stops the clock while the game is out of sight, so that no time is lost to another screen or
+  /// to the app being in the background.
+  void suspendClock() {
+    // Called from a widget that may be on its way out, and whose provider may already be gone.
+    if (!ref.mounted) return;
+    _clock.pause();
+  }
+
+  /// Starts the clock again when the game comes back into view.
+  void resumeClock() {
+    if (!ref.mounted) return;
+    final clock = ref.read(offlineComputerClockProvider);
+    // Nothing to resume: an untimed game, one that is over, or one whose first move — and with it
+    // the clock — has yet to be played.
+    if (clock.timeIncrement.isInfinite || clock.flagSide != null) return;
+    if (!state.game.playable || state.game.steps.length <= 1) return;
+    _clock.resume(state.turn);
+  }
+
   /// Stores an evaluation the analysis has just improved on the step it belongs to.
   void _onAnalysisEval(Position position, ClientEval eval) {
     if (!ref.mounted) return;
@@ -196,6 +221,14 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     socketClient = ref.watch(socketPoolProvider).open(AnalysisController.socketUri);
     _socketSubscription?.cancel();
     _socketSubscription = socketClient.stream.listen(_handleSocketEvent);
+    // Listened to rather than watched: this both keeps the clock alive for as long as the game is,
+    // and is how a game ends on time — the clock is the only thing that knows.
+    ref.listen<Side?>(offlineComputerClockProvider.select((clock) => clock.flagSide), (
+      previous,
+      flagSide,
+    ) {
+      if (previous == null && flagSide != null) _onFlag(flagSide);
+    });
     ref.onDispose(() {
       _socketSubscription?.cancel();
       _analyser.dispose();
@@ -215,8 +248,12 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     required bool practiceMode,
     Variant variant = Variant.standard,
     String? initialFen,
+    TimeIncrement timeIncrement = const TimeIncrement.infinite(),
   }) {
     _analyser.clear();
+    // Practice mode has no clock: thinking about the feedback it gives is the point of it, and a
+    // move there waits on an evaluation the player did not ask for.
+    final effectiveTimeIncrement = practiceMode ? const TimeIncrement.infinite() : timeIncrement;
     state = OfflineComputerGameState.initial(
       opponentSpec: opponentSpec,
       playerSide: playerSide,
@@ -224,7 +261,9 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       practiceMode: practiceMode,
       variant: variant,
       initialFen: initialFen,
+      timeIncrement: effectiveTimeIncrement,
     );
+    _clock.setupClock(effectiveTimeIncrement);
 
     if (state.turn != playerSide) {
       _playEngineMove();
@@ -238,6 +277,11 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     _analyser.clear();
     final game = savedGame.game;
     state = OfflineComputerGameState(game: game, stepCursor: game.steps.length - 1);
+    _clock.setupClock(
+      savedGame.timeIncrement,
+      whiteTimeLeft: savedGame.whiteTimeLeft,
+      blackTimeLeft: savedGame.blackTimeLeft,
+    );
 
     if (game.playable && state.turn == game.playerSide && (game.casual || game.practiceMode)) {
       _analyseCurrentPosition();
@@ -298,6 +342,12 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       state = state.copyWith(game: state.game.copyWith(status: GameStatus.stalemate));
     } else if (state.currentPosition.isInsufficientMaterial) {
       state = state.copyWith(game: state.game.copyWith(status: GameStatus.draw));
+    }
+
+    if (state.game.playable) {
+      _clock.onMove(newSideToMove: state.turn);
+    } else {
+      _clock.pause();
     }
 
     _moveFeedback(sanMove);
@@ -697,8 +747,20 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
 
   void resign() {
     if (!state.game.resignable) return;
+    _clock.pause();
     state = state.copyWith(
       game: state.game.copyWith(status: GameStatus.resign, winner: state.game.playerSide.opposite),
+      isEngineThinking: false,
+    );
+  }
+
+  /// Ends the game on time, [side] having run out of it.
+  void _onFlag(Side side) {
+    if (!state.game.playable) return;
+    _stopThinking();
+    _clock.pause();
+    state = state.copyWith(
+      game: state.game.copyWith(status: GameStatus.outoftime, winner: side.opposite),
       isEngineThinking: false,
     );
   }
@@ -707,6 +769,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   void claimThreefoldDraw() {
     if (!state.game.playable || state.game.isThreefoldRepetition != true) return;
     _stopThinking();
+    _clock.pause();
     state = state.copyWith(
       game: state.game.copyWith(status: GameStatus.draw, isThreefoldRepetition: false),
       isEngineThinking: false,
@@ -736,6 +799,10 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       hintMove: null,
       showingSuggestedMove: null,
     );
+
+    if (ref.read(offlineComputerClockProvider).active) {
+      _clock.switchSide(newSideToMove: state.turn, addIncrement: false);
+    }
 
     if (state.turn != state.game.playerSide && state.game.playable) {
       _playEngineMove();
@@ -911,6 +978,7 @@ sealed class OfflineComputerGameState with _$OfflineComputerGameState {
     bool casual = true,
     bool practiceMode = false,
     String? initialFen,
+    TimeIncrement timeIncrement = const TimeIncrement.infinite(),
   }) {
     final Position position;
     final Variant effectiveVariant;
@@ -931,6 +999,9 @@ sealed class OfflineComputerGameState with _$OfflineComputerGameState {
     }
 
     final sessionId = StringId('ocg_${_random.nextInt(1 << 32).toRadixString(16).padLeft(8, '0')}');
+    final speed = timeIncrement.isInfinite
+        ? Speed.classical
+        : Speed.fromTimeIncrement(timeIncrement);
     return OfflineComputerGameState(
       game: OfflineComputerGame(
         id: sessionId,
@@ -941,8 +1012,16 @@ sealed class OfflineComputerGameState with _$OfflineComputerGameState {
           createdAt: DateTime.now(),
           rated: false,
           variant: effectiveVariant,
-          speed: Speed.classical,
-          perf: Perf.fromVariantAndSpeed(effectiveVariant, Speed.classical),
+          speed: speed,
+          perf: Perf.fromVariantAndSpeed(effectiveVariant, speed),
+          clock: timeIncrement.isInfinite
+              ? null
+              : (
+                  initial: Duration(seconds: timeIncrement.time),
+                  increment: Duration(seconds: timeIncrement.increment),
+                  emergency: null,
+                  moreTime: null,
+                ),
         ),
         playerSide: playerSide,
         opponentSpec: opponentSpec,
