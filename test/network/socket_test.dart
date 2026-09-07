@@ -194,7 +194,7 @@ void main() {
       // we expect another connection because it reconnects if not receiving pong
       await expectLater(socketClient.connectedStream, emits(null));
 
-      // check the the first connection was closed
+      // check the first connection was closed
       // no need to check the close code since it will alway be 1000 in our fake channel
       expect(channels[1]!.closeCode, isNotNull);
       expect(channels[2]!.closeCode, isNull);
