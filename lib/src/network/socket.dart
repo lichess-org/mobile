@@ -718,6 +718,16 @@ class SocketPool {
     _connectIfNeeded();
   }
 
+  /// Call when the session changes: the socket carries the token, so it has to be reopened.
+  ///
+  /// A socket closed in the background stays closed; it will carry the new session whenever it is
+  /// opened again.
+  void onAuthChanged() {
+    if (currentClient.isActive) {
+      currentClient.connect();
+    }
+  }
+
   /// Connects the current client, unless it is already connected or on its way to being.
   ///
   /// A client waiting out its reconnect backoff does need connecting: the wait is there to spare a
@@ -734,6 +744,10 @@ class SocketPool {
   /// It will use an existing connection if it is already active, unless [forceReconnect] is set to
   /// true.
   /// Any other active connection will be closed.
+  ///
+  /// This is the one way to a connection that the app being in the background does not stop:
+  /// a caller asking for a socket by route is asking for it now, and every one of them is a screen
+  /// or a controller the user is looking at.
   SocketClient open(
     Uri route, {
     int? version,
@@ -770,9 +784,11 @@ class SocketPool {
             _pool.remove(route);
             // if during the idle time no new socket is requested, we reconnect
             // the default socket
+            // Not while the app is in the background: the socket is closed there to spare the
+            // battery, and nothing is watching what the default one would bring in anyway.
             if (route == _currentRoute) {
               _currentRoute = Uri(path: kDefaultSocketRoute);
-              if (!currentClient.isActive) {
+              if (!_isAppInBackground && !currentClient.isActive) {
                 currentClient.connect();
               }
             }
@@ -823,9 +839,7 @@ final socketPoolProvider = Provider<SocketPool>((Ref ref) {
   pool.currentClient.connect();
 
   // force reconnect to the current socket with the new token
-  final subscription = authEventsStream.listen((_) {
-    pool.currentClient.connect();
-  });
+  final subscription = authEventsStream.listen((_) => pool.onAuthChanged());
 
   // Observing the app lifecycle here rather than in [SocketPool], because an
   // [AppLifecycleListener] needs a [WidgetsBinding], which the pool must not require of the tests

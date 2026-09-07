@@ -726,7 +726,7 @@ void main() {
       var offline = true;
       var socketAttempts = 0;
       final container = await makeContainer(
-        overrides: offlineNetworkOverrides(() => offline, onSocketAttempt: () => socketAttempts++),
+        overrides: offlineNetworkOverrides(() => offline, onSocketAttempt: (_) => socketAttempts++),
       );
 
       await container.read(connectivityChangesProvider.future);
@@ -760,6 +760,72 @@ void main() {
 
       pool.currentClient.close();
     });
+
+    test('nothing reopens the socket once it has been closed in the background', () async {
+      final attempts = <Uri>[];
+      final container = await makeContainer(
+        overrides: offlineNetworkOverrides(() => false, onSocketAttempt: attempts.add),
+      );
+      final pool = container.read(socketPoolProvider);
+
+      fakeAsync((async) {
+        pool.currentClient.connect();
+        async.elapse(const Duration(seconds: 1));
+        expect(pool.currentClient.isConnected, isTrue);
+        expect(attempts.length, 1);
+
+        pool.onAppHidden();
+        async.elapse(const Duration(minutes: 2));
+        expect(pool.currentClient.isActive, isFalse, reason: 'the socket is closed in background');
+
+        // Everything that would bring the socket back in the foreground must leave it closed
+        // here, and no timer left over from the connected socket may bring it back either.
+        pool.onDeviceOnline();
+        pool.onAuthChanged();
+        async.elapse(const Duration(minutes: 10));
+
+        expect(attempts.length, 1, reason: 'the socket must stay closed while in the background');
+        expect(pool.currentClient.isActive, isFalse);
+
+        // The user coming back is the one thing that reopens it.
+        pool.onAppShown();
+        async.elapse(const Duration(seconds: 1));
+        expect(attempts.length, 2);
+        expect(pool.currentClient.isConnected, isTrue);
+
+        pool.currentClient.close();
+        async.flushTimers();
+      });
+    });
+
+    test('does not reopen the default socket in the background when a route goes idle', () async {
+      const route = '/lobby/socket/v5';
+      final attempts = <Uri>[];
+      final container = await makeContainer(
+        overrides: offlineNetworkOverrides(() => false, onSocketAttempt: attempts.add),
+      );
+      final pool = container.read(socketPoolProvider);
+
+      fakeAsync((async) {
+        final client = pool.open(Uri(path: route));
+        final subscription = client.stream.listen((_) {});
+        async.elapse(const Duration(seconds: 1));
+        expect(attempts.map((uri) => uri.path), [route]);
+
+        pool.onAppHidden();
+        async.elapse(const Duration(minutes: 2));
+
+        // The screen that was using this route is gone: the pool disposes its idle client, which
+        // in the foreground would have it fall back to the default socket.
+        subscription.cancel();
+        async.elapse(const Duration(minutes: 1));
+
+        expect(attempts.map((uri) => uri.path), [route]);
+        expect(pool.currentClient.isActive, isFalse);
+
+        async.flushTimers();
+      });
+    });
   });
 }
 
@@ -767,7 +833,7 @@ void main() {
 /// socket alike — for as long as [isOffline] returns true.
 Map<ProviderOrFamily, Override> offlineNetworkOverrides(
   bool Function() isOffline, {
-  VoidCallback? onSocketAttempt,
+  void Function(Uri route)? onSocketAttempt,
 }) => {
   httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
     (ref) => FakeHttpClientFactory(
@@ -779,7 +845,7 @@ Map<ProviderOrFamily, Override> offlineNetworkOverrides(
   ),
   webSocketChannelFactoryProvider: webSocketChannelFactoryProvider.overrideWithValue(
     FakeWebSocketChannelFactory((route) {
-      onSocketAttempt?.call();
+      onSocketAttempt?.call(route);
       if (isOffline()) throw const SocketException('No internet');
       return createDefaultFakeWebSocketChannel(route);
     }),
