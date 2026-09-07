@@ -44,9 +44,9 @@ class CorrespondenceService {
 
   void start() {
     _fcmSubscription = NotificationService.fcmMessageStream.listen((data) {
-      final (message: fcmMessage, fromBackground: fromBackground) = data;
+      final (message: fcmMessage, :fromBackground) = data;
       switch (fcmMessage) {
-        case CorresGameUpdateFcmMessage(fullId: final fullId, game: final game):
+        case CorresGameUpdateFcmMessage(:final fullId, :final game):
           if (game != null) {
             _onServerUpdateEvent(fullId, game, fromBackground: fromBackground);
           }
@@ -226,7 +226,7 @@ class CorrespondenceService {
 
   /// Updates a stored correspondence game.
   Future<void> updateStoredGame(GameFullId fullId, PlayableGame game) async {
-    return (await ref.read(correspondenceGameStorageProvider.future)).save(
+    return await (await ref.read(correspondenceGameStorageProvider.future)).save(
       OfflineCorrespondenceGame(
         id: game.id,
         fullId: fullId,

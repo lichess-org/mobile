@@ -397,6 +397,6 @@ class SlowFakeSharedPreferences extends FakeSharedPreferences {
   @override
   Future<bool> setString(String key, String value) async {
     await Future<void>.delayed(writeDelay);
-    return super.setString(key, value);
+    return await super.setString(key, value);
   }
 }

@@ -235,7 +235,7 @@ class _LoadingButtonBuilderState<T> extends State<LoadingButtonBuilder<T>> {
             } finally {
               _future = null;
             }
-            return future;
+            return await future;
           },
         );
       },

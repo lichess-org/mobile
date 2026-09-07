@@ -1379,7 +1379,7 @@ void _showPlayerDetails(BuildContext context, TournamentId tournamentId, UserId 
                   tournamentId: tournamentId,
                   scrollController: scrollController,
                 ),
-                AsyncError(error: final error) => Center(
+                AsyncError(:final error) => Center(
                   child: Text('Error loading player data: $error'),
                 ),
                 _ => const Center(child: CircularProgressIndicator.adaptive()),
@@ -1550,7 +1550,7 @@ class _StatRow extends StatelessWidget {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (prefix != null) prefix!,
+              ?prefix,
               Text(value, style: const TextStyle(fontWeight: FontWeight.bold)),
             ],
           ),
@@ -1675,9 +1675,7 @@ void _showTeamDetails(BuildContext context, TournamentId tournamentId, TeamId te
                   tournamentId: tournamentId,
                   scrollController: scrollController,
                 ),
-                AsyncError(error: final error) => Center(
-                  child: Text('Error loading team data: $error'),
-                ),
+                AsyncError(:final error) => Center(child: Text('Error loading team data: $error')),
                 _ => const Center(child: CircularProgressIndicator.adaptive()),
               };
             },
