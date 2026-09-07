@@ -332,7 +332,7 @@ Future<bool> downloadFiles(
     throw ArgumentError('expectedLengths must have the same length as urls.');
   }
 
-  // aggregrate progress of all files
+  // aggregate progress of all files
   final Map<Uri, int> fileLengths = {};
   final Map<Uri, int> fileReceived = {};
   final results = await Future.wait(
