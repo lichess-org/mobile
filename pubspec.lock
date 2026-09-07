@@ -1010,11 +1010,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: b75077349a1d16c1999daa063ffb144060916f20
-      resolved-ref: b75077349a1d16c1999daa063ffb144060916f20
+      ref: "04284fa88176930a0e2ffd475979fa289710169e"
+      resolved-ref: "04284fa88176930a0e2ffd475979fa289710169e"
       url: "https://github.com/lichess-org/dart-lc0.git"
     source: git
-    version: "1.0.0"
+    version: "0.1.0"
   leak_tracker:
     dependency: transitive
     description:
