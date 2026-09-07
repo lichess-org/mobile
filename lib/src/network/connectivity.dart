@@ -118,11 +118,6 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
 
     // A socket answering the ping/pong protocol is proof that the device can reach the network, so
     // it clears an offline status right away rather than leaving it up until the next check.
-    //
-    // Only that edge counts. A socket that is *not* connected proves nothing — it is also what
-    // returning from the background and switching routes look like — and it notices a dead link
-    // long after the check does, since that takes a ping going unanswered. The check therefore
-    // stays the authority on going offline.
     final pool = ref.read(socketPoolProvider);
     void onSocketChange() {
       if (pool.averageLag.value == Duration.zero) return;
