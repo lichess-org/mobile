@@ -10,7 +10,6 @@ import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
-import 'package:lichess_mobile/src/model/puzzle/offline_vault_prefs.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_controller.dart';
@@ -940,7 +939,6 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
     final nbOfflinePuzzles = ref.watch(
       puzzlePreferencesProvider.select((value) => value.nbOfflinePuzzles),
     );
-    final vaultPrefs = ref.watch(offlineVaultPrefsProvider);
     final rated = ref.watch(puzzlePreferencesProvider.select((value) => value.rated));
     final ctrlProvider = puzzleControllerProvider(initialPuzzleContext);
     final puzzleState = ref.watch(ctrlProvider);
@@ -1062,64 +1060,6 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
                           );
                         });
                       },
-              ),
-            if (initialPuzzleContext.userId != null &&
-                isConfigurableOfflineQueueAngle(initialPuzzleContext.angle))
-              SettingsListTile(
-                // Hardcoded English first; translate once stable.
-                settingsLabel: const Text('Offline vault'),
-                settingsValue: switch (vaultPrefs.mode) {
-                  OfflineVaultMode.count => '${vaultPrefs.countTarget}',
-                  OfflineVaultMode.mb =>
-                    '${vaultPrefs.mbTarget} MB (~${vaultPrefs.targetCount})',
-                  OfflineVaultMode.all => 'All',
-                },
-                onTap: () {
-                  OfflineVaultMode selMode = vaultPrefs.mode;
-                  showChoicePicker(
-                    context,
-                    choices: OfflineVaultMode.values,
-                    selectedItem: vaultPrefs.mode,
-                    labelBuilder: (t) => Text(t.name),
-                    onSelectedItemChanged: (OfflineVaultMode? m) {
-                      if (m != null) selMode = m;
-                    },
-                  ).then((_) async {
-                    final notifier = ref.read(offlineVaultPrefsProvider.notifier);
-                    switch (selMode) {
-                      case OfflineVaultMode.count:
-                        const choices = [100, 500, 1000, 5000, 20000, 100000];
-                        int sel = vaultPrefs.countTarget;
-                        if (!context.mounted) return;
-                        await showChoicePicker(
-                          context,
-                          choices: choices,
-                          selectedItem: choices.contains(sel) ? sel : 1000,
-                          labelBuilder: (t) => Text(t.toString()),
-                          onSelectedItemChanged: (int? n) {
-                            if (n != null) sel = n;
-                          },
-                        );
-                        await notifier.setCount(sel);
-                      case OfflineVaultMode.mb:
-                        const choices = [10, 50, 100, 250, 500, 1000];
-                        int sel = vaultPrefs.mbTarget == 0 ? 50 : vaultPrefs.mbTarget;
-                        if (!context.mounted) return;
-                        await showChoicePicker(
-                          context,
-                          choices: choices,
-                          selectedItem: choices.contains(sel) ? sel : 50,
-                          labelBuilder: (t) => Text('$t MB'),
-                          onSelectedItemChanged: (int? n) {
-                            if (n != null) sel = n;
-                          },
-                        );
-                        await notifier.setMb(sel);
-                      case OfflineVaultMode.all:
-                        await notifier.setAll();
-                    }
-                  });
-                },
               ),
             if (authUser != null && initialPuzzleContext.replayRemaining == null)
               SwitchSettingTile(
