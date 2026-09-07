@@ -16,6 +16,7 @@
   <string name="showCoordsOnAllSquares">Координаты на каждом поле</string>
   <string name="showPieces">Показывать фигуры</string>
   <string name="startTraining">Начать тренировку</string>
+  <string name="abortTraining">Прервать тренировку</string>
   <string name="findSquare">Найти поле</string>
   <string name="nameSquare">Обозначить поле</string>
   <string name="practiceOnlySomeFilesAndRanks" comment="Label for a checkbox, keep it very short">Потренироваться только с некоторыми вертикалями и горизонталями</string>

@@ -153,7 +153,7 @@ class _BodyState extends ConsumerState<_Body> {
                         onPressed: ref
                             .read(coordinateTrainingControllerProvider.notifier)
                             .abortTraining,
-                        label: 'Abort Training',
+                        label: context.l10n.coordinatesAbortTraining,
                       )
                     else if (trainingState.lastScore != null)
                       _ScoreAndTrainingButton(
