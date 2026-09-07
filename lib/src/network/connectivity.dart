@@ -131,7 +131,7 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
       // while building, and Riverpod forbids a provider modifying another during a build.
       scheduleMicrotask(() {
         if (!ref.mounted || state.value?.isOnline != false) return;
-        _logger.info('Socket connected, the device is online.');
+        _logger.fine('Socket connected, the device is online.');
         state = AsyncValue.data((isOnline: true, appState: state.requireValue.appState));
       });
     }
@@ -183,7 +183,7 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
     final result = await _connectivity.checkConnectivity();
     final status = await _getConnectivityStatus(result, appState);
     if (!status.isOnline && pool.averageLag.value != Duration.zero) {
-      _logger.info('Initial check says offline but a socket is connected: the device is online.');
+      _logger.fine('Initial check says offline but a socket is connected: the device is online.');
       return (isOnline: true, appState: status.appState);
     }
     return status;
@@ -213,7 +213,6 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
   }
 
   Future<void> _onConnectivityChange(List<ConnectivityResult> result) {
-    _logger.fine('Connectivity changed: $result');
     return _refreshOnlineStatus('connectivity changed: $result');
   }
 
@@ -227,7 +226,6 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
 
     final wasOnline = state.requireValue.isOnline;
     final newIsOnline = await isOnline(_defaultClient);
-    _logger.fine('Online check result: $newIsOnline');
 
     if (!ref.mounted) return;
 
