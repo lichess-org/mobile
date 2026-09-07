@@ -736,6 +736,22 @@ class SocketPool {
     }
   }
 
+  /// Takes [client]'s failing state as the pool's own, when it becomes the current one.
+  ///
+  /// The mirror below only forwards what a client emits from now on, so the pool has to read the
+  /// state of the client it switches to: the one it switches away from clears its failing state as
+  /// it is closed, but by then it is no longer the current route and that update is dropped — the
+  /// pool would stay failing, and swallow the next real failure as a value it already holds.
+  ///
+  /// The average lag is deliberately left as it is: a client that has yet to answer its first ping
+  /// has no lag to speak of, and blanking the pool's on every route change would have every screen
+  /// switch flash as a disconnection. Consumers that care about a single route already compare it
+  /// to [currentClient]'s.
+  void _syncCurrentClientFailingState(SocketClient client) {
+    if (client.isDisposed) return;
+    _isFailing.value = client.isFailing.value;
+  }
+
   /// Reflects [client]'s connection state in the pool's own, for as long as it is the current one.
   void _mirrorCurrentClientState(SocketClient client) {
     client.averageLag.addListener(() {
@@ -810,6 +826,7 @@ class SocketPool {
             // battery, and nothing is watching what the default one would bring in anyway.
             if (route == _currentRoute) {
               _currentRoute = Uri(path: kDefaultSocketRoute);
+              _syncCurrentClientFailingState(currentClient);
               if (!_isAppInBackground && !currentClient.isActive) {
                 currentClient.connect();
               }
@@ -830,6 +847,8 @@ class SocketPool {
     });
 
     final client = _pool[route]!;
+    _syncCurrentClientFailingState(client);
+
     if (forceReconnect == true || !client.isActive) {
       client.connect();
     }

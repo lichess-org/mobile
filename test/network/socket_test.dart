@@ -798,6 +798,52 @@ void main() {
       });
     });
 
+    test('takes on the connection state of the client it switches to', () async {
+      const flakyRoute = '/flaky/socket/v5';
+      var defaultRouteFails = false;
+      final container = await makeContainer(
+        overrides: {
+          webSocketChannelFactoryProvider: webSocketChannelFactoryProvider.overrideWithValue(
+            FakeWebSocketChannelFactory((route) {
+              if (route.path == flakyRoute || defaultRouteFails) {
+                throw const SocketException('No internet');
+              }
+              return createDefaultFakeWebSocketChannel(route);
+            }),
+          ),
+        },
+      );
+      final pool = container.read(socketPoolProvider);
+
+      var failingEdges = 0;
+      pool.isFailing.addListener(() {
+        if (pool.isFailing.value) failingEdges++;
+      });
+
+      fakeAsync((async) {
+        pool.open(Uri(path: flakyRoute));
+        async.elapse(const Duration(seconds: 1));
+        expect(pool.isFailing.value, isTrue);
+        expect(failingEdges, 1);
+
+        // Back to the default socket, which connects: the pool must not be left holding the
+        // failing state of the client it just closed.
+        pool.open(Uri(path: kDefaultSocketRoute));
+        async.elapse(const Duration(seconds: 1));
+        expect(pool.isFailing.value, isFalse);
+
+        // A failure on the new current client is then heard as the change it is.
+        defaultRouteFails = true;
+        pool.currentClient.connect();
+        async.elapse(const Duration(seconds: 1));
+        expect(pool.isFailing.value, isTrue);
+        expect(failingEdges, 2, reason: 'this failure must reach the listeners too');
+
+        pool.currentClient.close();
+        async.flushTimers();
+      });
+    });
+
     test('does not reopen the default socket in the background when a route goes idle', () async {
       const route = '/lobby/socket/v5';
       final attempts = <Uri>[];
