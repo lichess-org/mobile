@@ -51,7 +51,7 @@ mixin ServerAnalysisMixin<T extends ServerAnalysisMixinState> on AnyNotifier<Asy
     if (serverAnalysisSource != null) {
       await ref.read(serverAnalysisServiceProvider).requestAnalysis(serverAnalysisSource, side);
     } else {
-      return Future.error('Cannot request server analysis');
+      return await Future.error('Cannot request server analysis');
     }
   }
 

@@ -35,9 +35,9 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
-import './model/common/service/fake_sound_service.dart';
 import 'binding.dart';
 import 'model/analysis/fake_opening_service.dart';
+import 'model/common/service/fake_sound_service.dart';
 import 'model/engine/fake_engine.dart';
 import 'model/engine/fake_weights_service.dart';
 import 'model/notifications/fake_notification_display.dart';

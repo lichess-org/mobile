@@ -70,7 +70,7 @@ final nextPuzzleProvider = FutureProvider.autoDispose.family<PuzzleContext?, Puz
   // be invalidated multiple times when the user scrolls the list)
   ref.cacheFor(const Duration(minutes: 1));
 
-  return puzzleService.nextPuzzle(userId: authUser?.user.id, angle: angle);
+  return await puzzleService.nextPuzzle(userId: authUser?.user.id, angle: angle);
 }, name: 'NextPuzzleProvider');
 
 /// Fetches the list of puzzles to replay for the given number of [days] and [theme].
@@ -106,7 +106,7 @@ final puzzleProvider = FutureProvider.autoDispose.family<Puzzle, PuzzleId>((
   final puzzleStorage = await ref.watch(puzzleStorageProvider.future);
   final puzzle = await puzzleStorage.fetch(puzzleId: id);
   if (puzzle != null) return puzzle;
-  return ref.read(puzzleRepositoryProvider).fetch(id);
+  return await ref.read(puzzleRepositoryProvider).fetch(id);
 }, name: 'PuzzleProvider');
 
 /// Fetches the daily puzzle.
@@ -121,7 +121,7 @@ final dailyPuzzleProvider = FutureProvider.autoDispose<Puzzle>((Ref ref) {
 final savedBatchesProvider = FutureProvider.autoDispose<IList<PuzzleAngle>>((Ref ref) async {
   final authUser = ref.watch(authControllerProvider);
   final storage = await ref.watch(puzzleBatchStorageProvider.future);
-  return storage.fetchAllAngles(userId: authUser?.user.id);
+  return await storage.fetchAllAngles(userId: authUser?.user.id);
 }, name: 'SavedBatchesProvider');
 
 /// Fetches saved puzzle theme batches for the current user.
@@ -130,14 +130,14 @@ final savedThemeBatchesProvider = FutureProvider.autoDispose<IMap<PuzzleThemeKey
 ) async {
   final authUser = ref.watch(authControllerProvider);
   final storage = await ref.watch(puzzleBatchStorageProvider.future);
-  return storage.fetchSavedThemes(userId: authUser?.user.id);
+  return await storage.fetchSavedThemes(userId: authUser?.user.id);
 }, name: 'SavedThemeBatchesProvider');
 
 /// Fetches the keys of the saved puzzle opening batches for the current user.
 final savedOpeningBatchesProvider = FutureProvider.autoDispose<ISet<String>>((Ref ref) async {
   final authUser = ref.watch(authControllerProvider);
   final storage = await ref.watch(puzzleBatchStorageProvider.future);
-  return storage.fetchSavedOpenings(userId: authUser?.user.id);
+  return await storage.fetchSavedOpenings(userId: authUser?.user.id);
 }, name: 'SavedOpeningBatchesProvider');
 
 /// Fetches the number of unsolved puzzles saved for the given [PuzzleAngle].
@@ -151,7 +151,7 @@ final savedBatchNbUnsolvedProvider = FutureProvider.autoDispose.family<int, Puzz
   // many times as the user scrolls
   ref.cacheFor(const Duration(minutes: 1));
 
-  return storage.fetchNbUnsolved(userId: authUser?.user.id, angle: angle);
+  return await storage.fetchNbUnsolved(userId: authUser?.user.id, angle: angle);
 }, name: 'SavedBatchNbUnsolvedProvider');
 
 /// Fetches the puzzle dashboard for the current user for the given number of [days].

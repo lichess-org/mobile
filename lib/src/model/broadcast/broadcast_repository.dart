@@ -382,9 +382,9 @@ StatByFideTC pickStats(RequiredPick pick) {
   final rapid = pick('rapid').asIntOrNull();
   final blitz = pick('blitz').asIntOrNull();
   return {
-    if (standard != null) BroadcastFideTC.standard: standard,
-    if (rapid != null) BroadcastFideTC.rapid: rapid,
-    if (blitz != null) BroadcastFideTC.blitz: blitz,
+    BroadcastFideTC.standard: ?standard,
+    BroadcastFideTC.rapid: ?rapid,
+    BroadcastFideTC.blitz: ?blitz,
   }.lock;
 }
 

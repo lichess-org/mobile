@@ -248,13 +248,13 @@ Future<bool> downloadFile(
   try {
     response = await client.send(Request('GET', url));
   } catch (e, st) {
-    return discard('the request failed', e, st);
+    return await discard('the request failed', e, st);
   }
 
   if (response.statusCode != 200) {
     // The body is an error page, not the file we asked for.
     await response.stream.drain<void>().catchError((Object _) {});
-    return discard('unexpected status ${response.statusCode}');
+    return await discard('unexpected status ${response.statusCode}');
   }
 
   final sink = file.openWrite();
@@ -292,24 +292,24 @@ Future<bool> downloadFile(
   }
 
   if (failure != null) {
-    return discard('the file could not be written', failure, failureStackTrace);
+    return await discard('the file could not be written', failure, failureStackTrace);
   }
 
   // Fewer bytes than announced means the body was cut short. More is not an error: a client that
   // transparently decompresses the body reports the compressed length here.
   if (contentLength != null && received < contentLength) {
-    return discard('got $received bytes out of $contentLength');
+    return await discard('got $received bytes out of $contentLength');
   }
 
   final int length;
   try {
     length = await file.length();
   } catch (e, st) {
-    return discard('the file could not be read back', e, st);
+    return await discard('the file could not be read back', e, st);
   }
 
   if (length != received) {
-    return discard('only $length bytes of $received made it to disk');
+    return await discard('only $length bytes of $received made it to disk');
   }
 
   return length > 0;
@@ -559,7 +559,7 @@ class LichessClient implements Client {
       }
     }
 
-    return Response.fromStream(await send(request));
+    return await Response.fromStream(await send(request));
   }
 }
 
@@ -687,7 +687,7 @@ class DefaultClient implements Client {
       }
     }
 
-    return Response.fromStream(await send(request));
+    return await Response.fromStream(await send(request));
   }
 }
 

@@ -26,7 +26,7 @@ final databaseProvider = FutureProvider<Database>((Ref ref) async {
     databaseFactory = databaseFactoryFfi;
   }
   final dbPath = await _databasePath;
-  return openAppDatabase(databaseFactory, dbPath);
+  return await openAppDatabase(databaseFactory, dbPath);
 }, name: 'DatabaseProvider');
 
 /// Returns the database path including filename.
@@ -55,7 +55,7 @@ final getDbSizeInBytesProvider = FutureProvider<int>((Ref ref) async {
   final dbPath = join(await getDatabasesPath(), kLichessDatabaseName);
   final dbFile = File(dbPath);
 
-  return dbFile.length();
+  return await dbFile.length();
 }, name: 'GetDbSizeInBytesProvider');
 
 /// Opens the app database.

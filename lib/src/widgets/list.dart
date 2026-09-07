@@ -146,7 +146,7 @@ class ListSection extends StatelessWidget {
                       ],
                     ),
                   ),
-                  if (footer != null) footer!,
+                  ?footer,
                 ],
               ),
             ),
@@ -213,8 +213,8 @@ class ListSectionHeader extends StatelessWidget {
                   Icon(Icons.chevron_right, size: 16, color: ColorScheme.of(context).primary),
                 ],
               )
-            else if (trailing != null)
-              trailing!,
+            else
+              ?trailing,
           ],
         ),
       ),

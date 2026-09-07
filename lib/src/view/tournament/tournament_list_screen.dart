@@ -228,7 +228,7 @@ class _TournamentListBodyState extends ConsumerState<_TournamentListBody> {
           ? MediaQuery.paddingOf(context).top + kToolbarHeight
           : 0.0,
       key: _refreshIndicatorKey,
-      onRefresh: () async => ref.refresh(tournamentsProvider),
+      onRefresh: () async => await ref.refresh(tournamentsProvider),
       child: ListView.separated(
         shrinkWrap: true,
         itemCount: tournamentListItems.length,

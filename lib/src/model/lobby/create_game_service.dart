@@ -108,7 +108,7 @@ class CreateGameService {
       }
     }
 
-    return completer.future;
+    return await completer.future;
   }
 
   /// Create a new correspondence game.
@@ -271,7 +271,7 @@ class CreateGameService {
       }
     }
 
-    return completer.future;
+    return await completer.future;
   }
 
   /// Cancel the current game creation. No-op if no active lobby seek.

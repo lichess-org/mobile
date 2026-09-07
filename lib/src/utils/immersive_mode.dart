@@ -94,6 +94,6 @@ class ImmersiveMode {
             overlays: SystemUiOverlay.values,
           );
 
-    return Future.wait([wakeFuture, setUiModeFuture]).then((_) {});
+    return await Future.wait([wakeFuture, setUiModeFuture]).then((_) {});
   }
 }

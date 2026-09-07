@@ -14,7 +14,7 @@ const _kDatabaseName = 'chess_openings$_kDatabaseVersion.db';
 /// A provider for the openings database.
 final openingsDatabaseProvider = FutureProvider<Database>((Ref ref) async {
   final dbPath = p.join(await getDatabasesPath(), _kDatabaseName);
-  return _openDb(dbPath);
+  return await _openDb(dbPath);
 }, name: 'OpeningsDatabaseProvider');
 
 Future<Database> _openDb(String path) async {
@@ -43,5 +43,5 @@ Future<Database> _openDb(String path) async {
     await File(path).writeAsBytes(bytes, flush: true);
   }
 
-  return databaseFactory.openDatabase(path, options: OpenDatabaseOptions(readOnly: true));
+  return await databaseFactory.openDatabase(path, options: OpenDatabaseOptions(readOnly: true));
 }

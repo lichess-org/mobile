@@ -386,8 +386,8 @@ class SocketClient {
         't': topic,
         if (data != null && data is Map<String, Object>)
           'd': {...data, if (withLag == true) 'l': _averageLag.value.inMilliseconds}
-        else if (data != null)
-          'd': data,
+        else
+          'd': ?data,
       };
     }
 
