@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
+import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -227,6 +228,9 @@ class SocketClient {
 
   /// Whether the socket is connected.
   bool get isConnected => averageLag.value != Duration.zero;
+
+  /// Whether the socket is failing to connect, and waiting out its backoff before trying again.
+  bool get isFailing => _failingSince != null;
 
   /// Whether the client is disposed. If true the client cannot be reconnected, or
   /// be listened to.
@@ -637,6 +641,17 @@ class SocketPool {
       }
     });
     _pool[_currentRoute] = client;
+
+    // Deferred: [ConnectivityChangesNotifier] reads this pool while building, so listening to it
+    // right here would have the two providers build each other, which Riverpod forbids.
+    scheduleMicrotask(() {
+      if (_isDisposed) return;
+      _ref.listen(connectivityChangesProvider, (prev, next) {
+        if (prev?.value?.isOnline == false && next.value?.isOnline == true) {
+          onDeviceOnline();
+        }
+      });
+    });
   }
 
   final Ref _ref;
@@ -647,6 +662,8 @@ class SocketPool {
   final _averageLag = ValueNotifier(Duration.zero);
 
   Timer? _closeInBackgroundTimer;
+
+  bool _isAppInBackground = false;
 
   /// The average lag computed from ping/pong protocol of the current active route.
   ///
@@ -673,6 +690,7 @@ class SocketPool {
   /// The socket is kept for a while, as the user may well come right back, then closed to spare
   /// the battery.
   void onAppHidden() {
+    _isAppInBackground = true;
     _closeInBackgroundTimer?.cancel();
     _closeInBackgroundTimer = Timer(_kDisconnectOnBackgroundTimeout, () {
       _logger.info(
@@ -684,8 +702,29 @@ class SocketPool {
 
   /// Call when the app comes back to the foreground.
   void onAppShown() {
+    _isAppInBackground = false;
     _closeInBackgroundTimer?.cancel();
-    if (!currentClient.isActive) {
+    _connectIfNeeded();
+  }
+
+  /// Call when the device comes back online, after having been offline.
+  ///
+  /// A socket that went down with the network keeps retrying on an exponential backoff, so it may
+  /// be up to a minute before it notices on its own that the network is back. Connectivity knows
+  /// first, so it is worth an attempt right away.
+  void onDeviceOnline() {
+    if (_isAppInBackground) return;
+    _logger.info('Device is back online, reconnecting the socket.');
+    _connectIfNeeded();
+  }
+
+  /// Connects the current client, unless it is already connected or on its way to being.
+  ///
+  /// A client waiting out its reconnect backoff does need connecting: the wait is there to spare a
+  /// device that cannot connect at all, and is only ever cut short by something — the app coming
+  /// back to the foreground, the network coming back — saying that this time it might work.
+  void _connectIfNeeded() {
+    if (!currentClient.isActive || currentClient.isFailing) {
       currentClient.connect();
     }
   }

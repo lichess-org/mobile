@@ -1,15 +1,23 @@
 import 'dart:io';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:fake_async/fake_async.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/misc.dart' show Override, ProviderOrFamily;
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
+import 'package:lichess_mobile/src/network/connectivity.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../binding.dart';
 import '../test_container.dart';
+import '../utils/fake_connectivity.dart';
+import 'fake_http_client_factory.dart';
 import 'fake_websocket_channel.dart';
 
 final defaultSocketUri = Uri(path: kDefaultSocketRoute);
@@ -686,8 +694,97 @@ void main() {
         async.flushTimers();
       });
     });
+
+    test('reconnects the socket as soon as the device is back online', () async {
+      var offline = true;
+      final container = await makeContainer(overrides: offlineNetworkOverrides(() => offline));
+
+      await container.read(connectivityChangesProvider.future);
+      expect(container.read(isDeviceOnlineProvider), isFalse);
+
+      final pool = container.read(socketPoolProvider);
+      pool.currentClient.connect();
+      await pumpEventQueue();
+      expect(pool.currentClient.isConnected, isFalse);
+
+      offline = false;
+      FakeConnectivity.controller.add([ConnectivityResult.wifi]);
+
+      // The socket, left to its own backoff, would not try again for seconds: connectivity knows
+      // the network is back first and brings it up at once.
+      await pool.currentClient.firstConnection.timeout(
+        const Duration(seconds: 1),
+        onTimeout: () => fail('the socket did not reconnect when the device came back online'),
+      );
+      await Future<void>.delayed(kFakeWebSocketConnectionLag * 4);
+      expect(pool.currentClient.isConnected, isTrue);
+
+      pool.currentClient.close();
+    });
+
+    test('does not reconnect the socket while the app is in the background', () async {
+      var offline = true;
+      var socketAttempts = 0;
+      final container = await makeContainer(
+        overrides: offlineNetworkOverrides(() => offline, onSocketAttempt: () => socketAttempts++),
+      );
+
+      await container.read(connectivityChangesProvider.future);
+
+      final pool = container.read(socketPoolProvider);
+      pool.currentClient.connect();
+      await pumpEventQueue();
+      expect(socketAttempts, 1);
+
+      pool.onAppHidden();
+
+      offline = false;
+      FakeConnectivity.controller.add([ConnectivityResult.wifi]);
+      await pumpEventQueue();
+      await Future<void>.delayed(kFakeWebSocketConnectionLag * 4);
+
+      expect(container.read(isDeviceOnlineProvider), isTrue);
+      expect(
+        socketAttempts,
+        1,
+        reason: 'nothing needs the socket while the app is in the background',
+      );
+      expect(pool.currentClient.isConnected, isFalse);
+
+      // Coming back to the app is what brings it up.
+      pool.onAppShown();
+      await pool.currentClient.firstConnection.timeout(
+        const Duration(seconds: 1),
+        onTimeout: () => fail('the socket did not reconnect when the app came back'),
+      );
+
+      pool.currentClient.close();
+    });
   });
 }
+
+/// Overrides for a container whose network is entirely down — the connectivity check and the
+/// socket alike — for as long as [isOffline] returns true.
+Map<ProviderOrFamily, Override> offlineNetworkOverrides(
+  bool Function() isOffline, {
+  VoidCallback? onSocketAttempt,
+}) => {
+  httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+    (ref) => FakeHttpClientFactory(
+      () => MockClient((request) async {
+        if (isOffline()) throw const SocketException('No internet');
+        return http.Response('', 200);
+      }),
+    ),
+  ),
+  webSocketChannelFactoryProvider: webSocketChannelFactoryProvider.overrideWithValue(
+    FakeWebSocketChannelFactory((route) {
+      onSocketAttempt?.call();
+      if (isOffline()) throw const SocketException('No internet');
+      return createDefaultFakeWebSocketChannel(route);
+    }),
+  ),
+};
 
 Future<void> testEventEmitted(
   SocketClient socketClient,

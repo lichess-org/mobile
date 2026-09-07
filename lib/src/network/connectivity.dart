@@ -88,6 +88,7 @@ final lichessConnectionStatusProvider = Provider.autoDispose<LichessConnectionSt
 ///
 /// - Uses the [Connectivity] plugin to listen to connectivity changes
 /// - Uses [AppLifecycleListener] to check connectivity on app resume
+/// - Uses [SocketPool] to check if the device is online when the current status is offline and a socket connects
 final connectivityChangesProvider =
     AsyncNotifierProvider<ConnectivityChangesNotifier, ConnectivityStatus>(
       ConnectivityChangesNotifier.new,
