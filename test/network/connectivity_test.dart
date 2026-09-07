@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:fake_async/fake_async.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
@@ -297,6 +298,57 @@ void main() {
         container.read(socketPoolProvider).currentClient.close();
         async.flushTimers();
       });
+    });
+
+    test('a slow check does not overwrite what happened while it ran', () async {
+      // A network that comes and goes, and a check that takes as long as it is told to.
+      var offline = false;
+      var checkDelay = Duration.zero;
+      final container = await makeContainer(
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+            (ref) => FakeHttpClientFactory(
+              () => MockClient((request) async {
+                final (wasOffline, delay) = (offline, checkDelay);
+                await Future<void>.delayed(delay);
+                if (wasOffline) throw const SocketException('No internet');
+                return http.Response('', 200);
+              }),
+            ),
+          ),
+        },
+      );
+
+      final binding = TestWidgetsFlutterBinding.instance;
+
+      fakeAsync((async) {
+        container.read(connectivityChangesProvider);
+        async.elapse(const Duration(seconds: 1));
+        expect(container.read(isDeviceOnlineProvider), isTrue);
+
+        // A check starts while the network is down, and takes seconds to say so.
+        offline = true;
+        checkDelay = const Duration(seconds: 3);
+        FakeConnectivity.controller.add([ConnectivityResult.none]);
+        async.elapse(const Duration(milliseconds: 100));
+
+        // The network is back before that check answers, and the user coming back to the app
+        // settles the question with a probe of its own.
+        offline = false;
+        checkDelay = Duration.zero;
+        binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+        async.elapse(const Duration(milliseconds: 100));
+        expect(container.read(isDeviceOnlineProvider), isTrue);
+
+        // The slow check now answers with what the network looked like seconds ago: it must not
+        // overwrite the fresher answer.
+        async.elapse(const Duration(seconds: 5));
+        expect(container.read(isDeviceOnlineProvider), isTrue);
+
+        async.flushTimers();
+      });
+
+      binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
     });
 
     test('assumes online while the check is still running', () async {

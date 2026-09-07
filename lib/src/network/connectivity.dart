@@ -105,8 +105,31 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
   // online while the socket keeps failing.
   final _connectivityChangesThrottler = Throttler(kConnectivityThrottleDelay, trailing: true);
 
+  /// Bumped by every write that decides whether the device is online.
+  ///
+  /// A check reads the network over hundreds of milliseconds, and a resume, a socket pong or
+  /// another check can settle the question with fresher evidence while it runs. Each check
+  /// captures this revision before it starts and drops its result if it has moved since, so that a
+  /// slow answer never overwrites what happened while it was on its way.
+  int _onlineStatusRevision = 0;
+
   Client get _defaultClient => ref.read(defaultClientProvider);
   Connectivity get _connectivity => ref.read(connectivityPluginProvider);
+
+  /// Writes a status, and marks every check that is already running as outdated.
+  void _setStatus(ConnectivityStatus status) {
+    _onlineStatusRevision++;
+    state = AsyncValue.data(status);
+  }
+
+  /// Whether a check that started at [revision] may still commit its result.
+  bool _isCurrent(int revision, String reason) {
+    if (!ref.mounted) return false;
+    if (revision != _onlineStatusRevision) {
+      return false;
+    }
+    return true;
+  }
 
   @override
   Future<ConnectivityStatus> build() {
@@ -131,8 +154,7 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
       // while building, and Riverpod forbids a provider modifying another during a build.
       scheduleMicrotask(() {
         if (!ref.mounted || state.value?.isOnline != false) return;
-        _logger.fine('Socket connected, the device is online.');
-        state = AsyncValue.data((isOnline: true, appState: state.requireValue.appState));
+        _setStatus((isOnline: true, appState: state.requireValue.appState));
       });
     }
 
@@ -183,7 +205,6 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
     final result = await _connectivity.checkConnectivity();
     final status = await _getConnectivityStatus(result, appState);
     if (!status.isOnline && pool.averageLag.value != Duration.zero) {
-      _logger.fine('Initial check says offline but a socket is connected: the device is online.');
       return (isOnline: true, appState: status.appState);
     }
     return status;
@@ -200,16 +221,23 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
       return;
     }
 
-    if (appState == AppLifecycleState.resumed) {
-      final newConn = await _connectivity.checkConnectivity().then(
-        (r) => _getConnectivityStatus(r, appState),
-      );
+    // The lifecycle state is known right away, whatever the check that follows finds. It says
+    // nothing about connectivity, so it does not outdate a check that is already running.
+    state = AsyncValue.data((isOnline: state.requireValue.isOnline, appState: appState));
 
-      state = AsyncValue.data(newConn);
-    } else {
-      final (:isOnline, appState: _) = state.requireValue;
-      state = AsyncValue.data((isOnline: isOnline, appState: appState));
+    if (appState != AppLifecycleState.resumed) {
+      return;
     }
+
+    final revision = _onlineStatusRevision;
+    final result = await _connectivity.checkConnectivity();
+    final newConn = await _getConnectivityStatus(result, appState);
+
+    if (!_isCurrent(revision, 'app resumed')) return;
+
+    // The app may have been backgrounded again while the check ran, so the lifecycle state is read
+    // again rather than taken from the check.
+    _setStatus((isOnline: newConn.isOnline, appState: state.requireValue.appState));
   }
 
   Future<void> _onConnectivityChange(List<ConnectivityResult> result) {
@@ -224,14 +252,15 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
       return;
     }
 
+    final revision = _onlineStatusRevision;
     final wasOnline = state.requireValue.isOnline;
     final newIsOnline = await isOnline(_defaultClient);
 
-    if (!ref.mounted) return;
+    if (!_isCurrent(revision, reason)) return;
 
     if (newIsOnline != wasOnline) {
       _logger.info('Connectivity status: $reason, isOnline: $newIsOnline');
-      state = AsyncValue.data((isOnline: newIsOnline, appState: state.value?.appState));
+      _setStatus((isOnline: newIsOnline, appState: state.requireValue.appState));
     }
   }
 
