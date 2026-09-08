@@ -143,7 +143,7 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
   }
 
   @override
-  Future<ConnectivityStatus> build() {
+  Future<ConnectivityStatus> build() async {
     ref.onDispose(() {
       _connectivitySubscription?.cancel();
       _appLifecycleListener?.dispose();
@@ -160,7 +160,9 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
     // A socket answering the ping/pong protocol is proof that the device can reach the network, so
     // it clears an offline status right away rather than leaving it up until the next check.
     void onSocketConnected() {
-      if (pool.averageLag.value == Duration.zero) return;
+      // The pool's own lag is the last one any route reported, and it deliberately outlives the
+      // client that measured it: only the current client says whether a socket is up right now.
+      if (!pool.currentClient.isConnected) return;
       // Deferred: the pool updates this from inside [SocketPool.open], which controllers call
       // while building, and Riverpod forbids a provider modifying another during a build.
       scheduleMicrotask(() {
@@ -203,19 +205,10 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
 
     _appLifecycleListener = AppLifecycleListener(onStateChange: _onAppLifecycleChange);
 
-    return _initialStatus(appState, pool);
-  }
-
-  /// Runs the first check, and reconciles its result with the socket pool.
-  ///
-  /// [onSocketConnected] has no status to correct while this check is still running, so a pong
-  /// that lands in that window would otherwise be dropped, leaving the device reported offline
-  /// until the next lag change. A socket that is connected by the time the check answers is proof
-  /// of a working network, and outranks a check that came back offline.
-  Future<ConnectivityStatus> _initialStatus(AppLifecycleState? appState, SocketPool pool) async {
-    final result = await _connectivity.checkConnectivity();
-    final status = await _getConnectivityStatus(result, appState);
-    if (!status.isOnline && pool.averageLag.value != Duration.zero) {
+    final status = await _getConnectivityStatus(await _connectivity.checkConnectivity(), appState);
+    // A socket that is connected by the time the check answers is proof of a working network, and
+    // outranks a check that came back offline.
+    if (!status.isOnline && pool.currentClient.isConnected) {
       return (isOnline: true, appState: status.appState);
     }
     return status;

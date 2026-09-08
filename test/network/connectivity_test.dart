@@ -133,6 +133,48 @@ void main() {
       client.close();
     });
 
+    test('the lag left by a socket that has been closed is not proof of a connection', () async {
+      // Only the second route fails to connect, so that the pool keeps the lag measured on the
+      // first one — which it deliberately does not blank on a route change.
+      const failingRoute = '/failing/socket';
+      final container = await makeContainer(
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+            (ref) => FakeHttpClientFactory(
+              () => MockClient((request) async {
+                // Slow enough for the sockets below to come and go while the check runs.
+                await Future<void>.delayed(const Duration(milliseconds: 300));
+                throw const SocketException('No internet');
+              }),
+            ),
+          ),
+          webSocketChannelFactoryProvider: webSocketChannelFactoryProvider.overrideWithValue(
+            FakeWebSocketChannelFactory((route) {
+              if (route.path == failingRoute) throw const SocketException('No internet');
+              return FakeWebSocketChannel(route);
+            }),
+          ),
+        },
+      );
+
+      final pool = container.read(socketPoolProvider);
+      final connected = pool.open(Uri(path: kDefaultSocketRoute));
+      await connected.firstConnection;
+      await Future<void>.delayed(kFakeWebSocketConnectionLag * 4);
+      expect(pool.averageLag.value, isNot(Duration.zero));
+
+      pool.open(Uri(path: failingRoute));
+      await pumpEventQueue();
+      expect(pool.averageLag.value, isNot(Duration.zero), reason: 'the lag outlives its socket');
+      expect(pool.currentClient.isConnected, isFalse);
+
+      await container.read(connectivityChangesProvider.future);
+
+      expect(container.read(isDeviceOnlineProvider), isFalse);
+
+      pool.currentClient.close();
+    });
+
     test('the socket clears an offline status once, not on every lag change', () async {
       // A server whose answers get slower and slower, so that every pong moves the average lag.
       FakeWebSocketChannel? channel;
