@@ -182,7 +182,7 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
     // on the offline -> online edge only, and a socket only reports a *run* of failures once, so
     // each failing run costs at most one check.
     void onSocketFailing() {
-      if (!pool.isFailing.value) return;
+      if (!pool.isFailing) return;
       scheduleMicrotask(() {
         // A device already known to be offline has nothing to learn from a socket that fails, and
         // must not take up the throttler's window: the connectivity event that brings the network
@@ -198,10 +198,10 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
     }
 
     pool.averageLag.addListener(onSocketConnected);
-    pool.isFailing.addListener(onSocketFailing);
+    pool.failingSince.addListener(onSocketFailing);
     ref.onDispose(() {
       pool.averageLag.removeListener(onSocketConnected);
-      pool.isFailing.removeListener(onSocketFailing);
+      pool.failingSince.removeListener(onSocketFailing);
     });
 
     final AppLifecycleState? appState = WidgetsBinding.instance.lifecycleState;

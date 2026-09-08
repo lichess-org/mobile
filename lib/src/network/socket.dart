@@ -171,7 +171,14 @@ class SocketClient {
   DateTime _lastPing = clock_package.clock.now();
 
   final _averageLag = ValueNotifier(Duration.zero);
-  final _isFailing = ValueNotifier(false);
+
+  /// When the current run of failures started, null while the socket is healthy.
+  ///
+  /// A run starts at the first attempt that goes wrong — a connection that could not be made, or a
+  /// ping that went unanswered — and ends only once a pong proves the socket usable again. The
+  /// handshake alone does not end it: a channel that opens and then answers nothing would reset
+  /// the backoff on every attempt, and never look failing to anyone watching.
+  final _failingSince = ValueNotifier<DateTime?>(null);
 
   StreamSubscription<SocketEvent>? _socketStreamSubscription;
 
@@ -192,9 +199,6 @@ class SocketClient {
 
   /// The current number of successful connections.
   int nbConnectionSuccess = 0;
-
-  /// When the current run of failed connection attempts started, null while the socket is healthy.
-  DateTime? _failingSince;
 
   /// The current ack id. Incremented for each ack.
   int _ackId = 1;
@@ -230,11 +234,14 @@ class SocketClient {
   /// Whether the socket is connected.
   bool get isConnected => averageLag.value != Duration.zero;
 
-  /// Whether the socket is failing to connect, and waiting out its backoff before trying again.
+  /// When the current run of failures started, null while the socket is healthy.
   ///
-  /// Set once when a run of failures starts, and cleared when the socket connects or is closed, so
+  /// Set once when a run starts, and cleared when the socket answers a ping again or is closed, so
   /// that a listener hears about a socket that cannot connect, not about each of its attempts.
-  ValueListenable<bool> get isFailing => _isFailing;
+  ValueListenable<DateTime?> get failingSince => _failingSince;
+
+  /// Whether the socket is failing, and waiting out its backoff before trying again.
+  bool get isFailing => _failingSince.value != null;
 
   /// Whether the client is disposed. If true the client cannot be reconnected, or
   /// be listened to.
@@ -307,8 +314,6 @@ class SocketClient {
       _logger.fine('WebSocket connection to $route established.');
 
       nbConnectionSuccess++;
-      _failingSince = null;
-      _isFailing.value = false;
 
       if (nbConnectionSuccess == 1) {
         _firstConnection.complete();
@@ -350,8 +355,7 @@ class SocketClient {
         return;
       }
       _averageLag.value = Duration.zero;
-      _failingSince ??= clock_package.clock.now();
-      _isFailing.value = true;
+      _failingSince.value ??= clock_package.clock.now();
 
       final delay = _reconnectDelay;
       final message =
@@ -428,7 +432,7 @@ class SocketClient {
     _versionGapRetryTimer?.cancel();
     _streamController.close();
     _averageLag.dispose();
-    _isFailing.dispose();
+    _failingSince.dispose();
     isDisposed = true;
     _disconnect();
   }
@@ -441,8 +445,7 @@ class SocketClient {
   Future<void> close() {
     nbConnectionAttempts = 0;
     nbConnectionSuccess = 0;
-    _failingSince = null;
-    _isFailing.value = false;
+    _failingSince.value = null;
     _firstConnection = Completer<void>();
     return _disconnect();
   }
@@ -556,6 +559,8 @@ class SocketClient {
     _reconnectTimer?.cancel();
     if (_pongCount == 0) {
       _logger.fine('Ping/pong protocol for $route established.');
+      // The socket is not merely open, it answers: this is what ends a run of failures.
+      _failingSince.value = null;
     }
     _schedulePing(pingDelay);
     _pongCount++;
@@ -570,7 +575,7 @@ class SocketClient {
 
   /// How long this run of failures has been going on.
   Duration get _failingFor {
-    final since = _failingSince;
+    final since = _failingSince.value;
     return since == null ? Duration.zero : clock_package.clock.now().difference(since);
   }
 
@@ -593,6 +598,10 @@ class SocketClient {
     _reconnectTimer?.cancel();
     _reconnectTimer = Timer(delay, () {
       if (!isDisposed) {
+        // Whatever scheduled it, a reconnect only ever follows a failure: an attempt that could
+        // not connect, or a ping left unanswered for [pingMaxLag]. Both start a run, so that the
+        // backoff grows and the connectivity check is asked for.
+        _failingSince.value ??= clock_package.clock.now();
         _logger.fine('Reconnecting WebSocket.');
         _averageLag.value = Duration.zero;
         connect();
@@ -678,7 +687,7 @@ class SocketPool {
   final Duration idleTimeout;
 
   final _averageLag = ValueNotifier(Duration.zero);
-  final _isFailing = ValueNotifier(false);
+  final _failingSince = ValueNotifier<DateTime?>(null);
 
   Timer? _closeInBackgroundTimer;
 
@@ -689,8 +698,11 @@ class SocketPool {
   /// A duration of zero means the socket is not connected.
   ValueListenable<Duration> get averageLag => _averageLag;
 
-  /// Whether the current socket is failing to connect, and waiting out its backoff.
-  ValueListenable<bool> get isFailing => _isFailing;
+  /// When the current socket's run of failures started, null while it is healthy.
+  ValueListenable<DateTime?> get failingSince => _failingSince;
+
+  /// Whether the current socket is failing, and waiting out its backoff.
+  bool get isFailing => _failingSince.value != null;
 
   /// Whether the pool is disposed.
   ///
@@ -763,7 +775,7 @@ class SocketPool {
   /// to [currentClient]'s.
   void _syncCurrentClientFailingState(SocketClient client) {
     if (client.isDisposed) return;
-    _isFailing.value = client.isFailing.value;
+    _failingSince.value = client.failingSince.value;
   }
 
   /// Reflects [client]'s connection state in the pool's own, for as long as it is the current one.
@@ -773,9 +785,9 @@ class SocketPool {
         _averageLag.value = client.averageLag.value;
       }
     });
-    client.isFailing.addListener(() {
+    client.failingSince.addListener(() {
       if (_currentRoute == client.route) {
-        _isFailing.value = client.isFailing.value;
+        _failingSince.value = client.failingSince.value;
       }
     });
   }
@@ -786,7 +798,7 @@ class SocketPool {
   /// device that cannot connect at all, and is only ever cut short by something — the app coming
   /// back to the foreground, the network coming back — saying that this time it might work.
   void _connectIfNeeded() {
-    if (!currentClient.isActive || currentClient.isFailing.value) {
+    if (!currentClient.isActive || currentClient.isFailing) {
       currentClient.connect();
     }
   }
@@ -877,7 +889,7 @@ class SocketPool {
     }
     _isDisposed = true;
     _averageLag.dispose();
-    _isFailing.dispose();
+    _failingSince.dispose();
     _closeInBackgroundTimer?.cancel();
     _disposeTimers.forEach((_, t) => t?.cancel());
     _pool.forEach((_, c) => c.dispose());
