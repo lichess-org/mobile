@@ -1153,6 +1153,41 @@ void main() {
       });
     });
 
+    test(
+      'a socket that comes up with the lag the pool already holds still reports connected',
+      () async {
+        final container = await makeContainer();
+
+        fakeAsync((async) {
+          final pool = container.read(socketPoolProvider);
+          pool.open(defaultSocketUri);
+          async.elapse(const Duration(seconds: 1));
+          expect(pool.isConnected.value, isTrue);
+          final lag = pool.averageLag.value;
+
+          var lagChanges = 0;
+          pool.averageLag.addListener(() => lagChanges++);
+          var connectedEdges = 0;
+          pool.isConnected.addListener(() {
+            if (pool.isConnected.value) connectedEdges++;
+          });
+
+          // Another route, whose socket answers in exactly the time the first one took, so the lag
+          // the pool holds is never written to a different value.
+          pool.open(Uri(path: '/other/socket/v5'));
+          async.elapse(const Duration(seconds: 1));
+
+          expect(pool.averageLag.value, lag);
+          expect(lagChanges, 0, reason: 'nothing about the lag has changed');
+          expect(pool.isConnected.value, isTrue);
+          expect(connectedEdges, 1, reason: 'a socket coming up is heard even so');
+
+          pool.currentClient.close();
+          async.flushTimers();
+        });
+      },
+    );
+
     test('takes on the connection state of the client it switches to', () async {
       const flakyRoute = '/flaky/socket/v5';
       var defaultRouteFails = false;

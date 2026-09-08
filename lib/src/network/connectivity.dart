@@ -161,9 +161,7 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
     // A socket answering the ping/pong protocol is proof that the device can reach the network, so
     // it clears an offline status right away rather than leaving it up until the next check.
     void onSocketConnected() {
-      // The pool's own lag is the last one any route reported, and it deliberately outlives the
-      // client that measured it: only the current client says whether a socket is up right now.
-      if (!pool.currentClient.isConnected) return;
+      if (!pool.isConnected.value) return;
       // Deferred: the pool updates this from inside [SocketPool.open], which controllers call
       // while building, and Riverpod forbids a provider modifying another during a build.
       scheduleMicrotask(() {
@@ -193,10 +191,10 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
       });
     }
 
-    pool.averageLag.addListener(onSocketConnected);
+    pool.isConnected.addListener(onSocketConnected);
     pool.isFailing.addListener(onSocketFailing);
     ref.onDispose(() {
-      pool.averageLag.removeListener(onSocketConnected);
+      pool.isConnected.removeListener(onSocketConnected);
       pool.isFailing.removeListener(onSocketFailing);
     });
 
@@ -211,7 +209,7 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
       // A check that could not even run is read as offline, and the socket has no way back in: the
       // report it made while this one was running found nothing settled to correct, and was
       // dropped. So the socket has the same say here as it does below.
-      if (pool.currentClient.isConnected) {
+      if (pool.isConnected.value) {
         return (isOnline: true, appState: appState);
       }
       rethrow;
@@ -219,7 +217,7 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
 
     // A socket that is connected by the time the check answers is proof of a working network, and
     // outranks a check that came back offline.
-    if (!status.isOnline && pool.currentClient.isConnected) {
+    if (!status.isOnline && pool.isConnected.value) {
       return (isOnline: true, appState: status.appState);
     }
     return status;

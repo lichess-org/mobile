@@ -774,6 +774,7 @@ class SocketPool {
 
   final _averageLag = ValueNotifier(Duration.zero);
   final _isFailing = ValueNotifier(false);
+  final _isConnected = ValueNotifier(false);
 
   Timer? _closeInBackgroundTimer;
 
@@ -786,6 +787,13 @@ class SocketPool {
 
   /// Whether the current socket is failing, and waiting out its backoff.
   ValueListenable<bool> get isFailing => _isFailing;
+
+  /// Whether the current socket is connected, ie. it has answered a ping.
+  ///
+  /// This, and not [averageLag], is the signal that a socket is up: the lag deliberately outlives
+  /// the client that measured it, and two clients can well measure the same one — a value that
+  /// does not change notifies nobody.
+  ValueListenable<bool> get isConnected => _isConnected;
 
   /// Whether the pool is disposed.
   ///
@@ -850,7 +858,7 @@ class SocketPool {
     }
   }
 
-  /// Takes [client]'s failing state as the pool's own, when it becomes the current one.
+  /// Takes [client]'s connection state as the pool's own, when it becomes the current one.
   ///
   /// The mirror below only forwards what a client emits from now on, so the pool has to read the
   /// state of the client it switches to: the one it switches away from clears its failing state as
@@ -861,9 +869,10 @@ class SocketPool {
   /// has no lag to speak of, and blanking the pool's on every route change would have every screen
   /// switch flash as a disconnection. Consumers that care about a single route already compare it
   /// to [currentClient]'s.
-  void _syncCurrentClientFailingState(SocketClient client) {
+  void _syncCurrentClientState(SocketClient client) {
     if (client.isDisposed) return;
     _isFailing.value = client.isFailing.value;
+    _isConnected.value = client.isConnected;
   }
 
   /// Reflects [client]'s connection state in the pool's own, for as long as it is the current one.
@@ -871,6 +880,9 @@ class SocketPool {
     client.averageLag.addListener(() {
       if (_currentRoute == client.route) {
         _averageLag.value = client.averageLag.value;
+        // Set from the client's own change, not from the pool's lag: the assignment above can be a
+        // no-op — the same lag as the client before it — and still be a socket coming up.
+        _isConnected.value = client.isConnected;
       }
     });
     client.isFailing.addListener(() {
@@ -940,7 +952,7 @@ class SocketPool {
             // battery, and nothing is watching what the default one would bring in anyway.
             if (route == _currentRoute) {
               _currentRoute = Uri(path: kDefaultSocketRoute);
-              _syncCurrentClientFailingState(currentClient);
+              _syncCurrentClientState(currentClient);
               if (!_isAppInBackground && !currentClient.isActive) {
                 currentClient.connect();
               }
@@ -961,7 +973,7 @@ class SocketPool {
     });
 
     final client = _pool[route]!;
-    _syncCurrentClientFailingState(client);
+    _syncCurrentClientState(client);
 
     if (forceReconnect == true || !client.isActive) {
       client.connect();
@@ -978,6 +990,7 @@ class SocketPool {
     _isDisposed = true;
     _averageLag.dispose();
     _isFailing.dispose();
+    _isConnected.dispose();
     _closeInBackgroundTimer?.cancel();
     _disposeTimers.forEach((_, t) => t?.cancel());
     _pool.forEach((_, c) => c.dispose());
