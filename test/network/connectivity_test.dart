@@ -284,7 +284,7 @@ void main() {
       expect(container.read(isDeviceOnlineProvider), isFalse);
     });
 
-    test('a socket that starts failing during the throttle delay still gets a check', () async {
+    test('a socket that starts failing during the throttle delay is checked right away', () async {
       var offline = false;
       final container = await makeContainer(
         overrides: {
@@ -315,14 +315,12 @@ void main() {
         expect(container.read(isDeviceOnlineProvider), isTrue);
 
         // The network dies without the plugin ever saying so, and the socket is the only witness.
-        // It reports a run of failures once, and that report lands inside the window opened above:
-        // dropped, it would leave the device reported online with nothing left to correct it.
+        // It reports a run of failures once, so the check it asks for must not be held back by a
+        // window the connectivity plugin happens to have opened: the report would be lost, and
+        // nothing left to correct the device being reported online.
         offline = true;
         container.read(socketPoolProvider).currentClient.connect();
         async.elapse(const Duration(milliseconds: 100));
-        expect(container.read(isDeviceOnlineProvider), isTrue, reason: 'still throttled');
-
-        async.elapse(kConnectivityThrottleDelay);
         expect(container.read(isDeviceOnlineProvider), isFalse);
 
         container.read(socketPoolProvider).currentClient.close();

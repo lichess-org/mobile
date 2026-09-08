@@ -103,18 +103,12 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
   StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
   AppLifecycleListener? _appLifecycleListener;
 
-  // Trailing: [onSocketFailing] reports a run of failures once, so a call dropped here is a signal
-  // lost for good — no later notification would ask for the check again, and the status would stay
-  // online while the socket keeps failing.
+  // Trailing: the plugin reports each change once, so a call dropped here is a signal lost for
+  // good — nothing would ask for the check again, and the status would stay as it was until the
+  // next change.
   final _connectivityChangesThrottler = Throttler(kConnectivityThrottleDelay, trailing: true);
 
   /// Claimed by every check that starts and every write that decides whether the device is online.
-  ///
-  /// A check reads the network over hundreds of milliseconds, and a resume, a socket pong or
-  /// another check can settle the question with fresher evidence while it runs. Claiming the
-  /// revision on the way in makes the last thing to start the one that gets to speak: a check
-  /// commits only if nothing has claimed it since, so neither a slow answer nor an older one that
-  /// happens to arrive first can overwrite what came after it.
   int _onlineStatusRevision = 0;
 
   Client get _defaultClient => ref.read(defaultClientProvider);
@@ -189,24 +183,21 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
     // set the status offline, it merely asks the check to run — the check remains the authority.
     //
     // This is also what keeps the two providers from egging each other on: [SocketPool] reconnects
-    // on the offline -> online edge only, and a socket only reports a *run* of failures once, so
-    // each failing run costs at most one check.
+    // on the offline -> online edge only, and [SocketPool.isFailing] only turns true once per run
+    // of failures, so each failing run costs at most one check.
     void onSocketFailing() {
-      if (!pool.isFailing) return;
+      if (!pool.isFailing.value) return;
       scheduleMicrotask(() {
         if (!ref.mounted || _settledStatus?.isOnline != true) return;
-        _connectivityChangesThrottler(() {
-          if (!ref.mounted || _settledStatus?.isOnline != true) return;
-          _refreshOnlineStatus('socket cannot connect');
-        });
+        _refreshOnlineStatus('socket cannot connect');
       });
     }
 
     pool.averageLag.addListener(onSocketConnected);
-    pool.failingSince.addListener(onSocketFailing);
+    pool.isFailing.addListener(onSocketFailing);
     ref.onDispose(() {
       pool.averageLag.removeListener(onSocketConnected);
-      pool.failingSince.removeListener(onSocketFailing);
+      pool.isFailing.removeListener(onSocketFailing);
     });
 
     final AppLifecycleState? appState = WidgetsBinding.instance.lifecycleState;

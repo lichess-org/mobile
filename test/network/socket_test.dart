@@ -168,29 +168,32 @@ void main() {
 
       fakeAsync((async) {
         final socketClient = makeTestSocketClient(fakeChannelFactory: fakeChannelFactory);
+        var failingChanges = 0;
+        socketClient.isFailing.addListener(() => failingChanges++);
         socketClient.connect();
 
         async.elapse(const Duration(milliseconds: 10));
-        expect(socketClient.isFailing, isFalse, reason: 'the first ping has yet to time out');
+        expect(socketClient.isFailing.value, isFalse, reason: 'the first ping has yet to time out');
 
         // The handshake keeps succeeding, so nothing here fails to connect: it is the ping going
         // unanswered that says this socket is no use.
         async.elapse(const Duration(seconds: 1));
-        expect(socketClient.isFailing, isTrue);
+        expect(socketClient.isFailing.value, isTrue);
+        expect(failingChanges, 1);
 
-        final failingSince = socketClient.failingSince.value;
         final attemptsSoFar = channelsCreated;
 
         // Every one of those handshakes used to end the run, which kept the backoff at its
         // shortest and told nobody the socket was failing.
         async.elapse(const Duration(seconds: 5));
         expect(channelsCreated, greaterThan(attemptsSoFar), reason: 'it does keep reconnecting');
-        expect(socketClient.failingSince.value, failingSince, reason: 'one run, not one per try');
+        expect(socketClient.isFailing.value, isTrue);
+        expect(failingChanges, 1, reason: 'one run, not one per try');
 
         // The server answers again: a pong, not a handshake, is what ends the run.
         serverAnswers = true;
         async.elapse(const Duration(seconds: 30));
-        expect(socketClient.isFailing, isFalse);
+        expect(socketClient.isFailing.value, isFalse);
         expect(socketClient.isConnected, isTrue);
 
         socketClient.close();
@@ -973,27 +976,27 @@ void main() {
       final pool = container.read(socketPoolProvider);
 
       var failingEdges = 0;
-      pool.failingSince.addListener(() {
-        if (pool.isFailing) failingEdges++;
+      pool.isFailing.addListener(() {
+        if (pool.isFailing.value) failingEdges++;
       });
 
       fakeAsync((async) {
         pool.open(Uri(path: flakyRoute));
         async.elapse(const Duration(seconds: 1));
-        expect(pool.isFailing, isTrue);
+        expect(pool.isFailing.value, isTrue);
         expect(failingEdges, 1);
 
         // Back to the default socket, which connects: the pool must not be left holding the
         // failing state of the client it just closed.
         pool.open(Uri(path: kDefaultSocketRoute));
         async.elapse(const Duration(seconds: 1));
-        expect(pool.isFailing, isFalse);
+        expect(pool.isFailing.value, isFalse);
 
         // A failure on the new current client is then heard as the change it is.
         defaultRouteFails = true;
         pool.currentClient.connect();
         async.elapse(const Duration(seconds: 1));
-        expect(pool.isFailing, isTrue);
+        expect(pool.isFailing.value, isTrue);
         expect(failingEdges, 2, reason: 'this failure must reach the listeners too');
 
         pool.currentClient.close();
