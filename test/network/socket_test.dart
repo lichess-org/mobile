@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
+import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../binding.dart';
@@ -110,6 +111,41 @@ void main() {
       expect(numConnectionAttempts, 2);
       expect(socketClient.nbConnectionAttempts, 2);
       expect(socketClient.nbConnectionSuccess, 1);
+
+      socketClient.close();
+    });
+
+    test('an unexpected connection failure is logged in full, a network one is not', () async {
+      var attempts = 0;
+      final fakeChannelFactory = FakeWebSocketChannelFactory((_) {
+        attempts++;
+        return switch (attempts) {
+          // What a device with no network looks like: routine, and not worth a log the user's
+          // crash reports would have to carry.
+          1 => throw const SocketException('Connection failed'),
+          // A bug in the connection setup, which no amount of retrying will fix: the logs are the
+          // only place it can be seen from production.
+          2 => throw StateError('boom'),
+          _ => FakeWebSocketChannel(defaultSocketUri),
+        };
+      });
+
+      final records = <LogRecord>[];
+      final subscription = Logger.root.onRecord
+          .where((record) => record.level >= Level.WARNING)
+          .listen(records.add);
+      addTearDown(subscription.cancel);
+
+      final socketClient = makeTestSocketClient(fakeChannelFactory: fakeChannelFactory);
+      socketClient.connect();
+
+      await socketClient.firstConnection;
+      expect(attempts, 3);
+
+      expect(records, hasLength(1), reason: 'only the unexpected failure is reported');
+      expect(records.single.level, Level.SEVERE);
+      expect(records.single.error, isStateError);
+      expect(records.single.stackTrace, isNotNull, reason: 'the stack trace is what points at it');
 
       socketClient.close();
     });

@@ -342,25 +342,30 @@ class SocketClient {
       }
 
       _resendAcks();
-    } catch (e) {
+    } catch (e, s) {
       // Don't revive a client that was closed or reconnected while the failed attempt was in
       // flight, otherwise it would keep reconnecting in the background forever.
       if (isDisposed || epoch != _connectionEpoch) {
-        _logger.fine('Stale WebSocket connection to $route failed:', e);
+        _logger.fine('Stale WebSocket connection to $route failed:', e, s);
         return;
       }
       _averageLag.value = Duration.zero;
       _failingSince ??= clock_package.clock.now();
       _isFailing.value = true;
 
-      // A failed attempt says nothing on its own: it is what a device with no network looks like,
-      // and that is not an error the logs should shout about. The backoff is what keeps a socket
-      // that cannot connect from retrying in a tight loop.
       final delay = _reconnectDelay;
-      _logger.fine(
-        'WebSocket connection to $route failed (for ${_failingFor.inSeconds}s now), retrying in '
-        '${delay.inMilliseconds}ms: $e',
-      );
+      final message =
+          'WebSocket connection to $route failed (for ${_failingFor.inSeconds}s now), retrying in '
+          '${delay.inMilliseconds}ms: $e';
+
+      // A connection that could not be made says nothing on its own: it is what a device with no
+      // network looks like, and that is not an error the logs should shout about.
+      if (_isConnectivityFailure(e)) {
+        _logger.fine(message);
+      } else {
+        _logger.severe(message, e, s);
+      }
+
       _scheduleReconnect(delay);
     }
   }
@@ -970,6 +975,13 @@ class SocketPingNotifier extends Notifier<SocketPingState> {
 final webSocketChannelFactoryProvider = Provider<WebSocketChannelFactory>((Ref ref) {
   return const WebSocketChannelFactory();
 });
+
+/// Whether [error] is one of the failures a socket runs into when the network is not there.
+bool _isConnectivityFailure(Object error) =>
+    error is SocketException ||
+    error is TimeoutException ||
+    error is WebSocketException ||
+    error is HandshakeException;
 
 /// A factory to create a [WebSocketChannel].
 ///
