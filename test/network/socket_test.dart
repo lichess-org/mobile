@@ -977,6 +977,68 @@ void main() {
     });
 
     test(
+      'reconnects a socket that has yet to notice the network went away and came back',
+      () async {
+        var offline = false;
+        var channelsCreated = 0;
+        final container = await makeContainer(
+          overrides: {
+            httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+              (ref) => FakeHttpClientFactory(
+                () => MockClient((request) async {
+                  if (offline) throw const SocketException('No internet');
+                  return http.Response('', 200);
+                }),
+              ),
+            ),
+            // The fake network has no idea it is gone: the channel stays open and goes on
+            // answering, which is just what a socket bound to a lost network looks like until its
+            // next ping — up to 25s away on the default route.
+            webSocketChannelFactoryProvider: webSocketChannelFactoryProvider.overrideWithValue(
+              FakeWebSocketChannelFactory((route) {
+                channelsCreated++;
+                return createDefaultFakeWebSocketChannel(route);
+              }),
+            ),
+          },
+        );
+
+        fakeAsync((async) {
+          // The notifier is built inside [fakeAsync] so that the timers it starts — the throttler's
+          // among them — belong to this zone and answer to [elapse].
+          container.read(connectivityChangesProvider);
+          final pool = container.read(socketPoolProvider);
+          pool.currentClient.connect();
+          async.elapse(const Duration(seconds: 1));
+
+          expect(channelsCreated, 1);
+          expect(pool.currentClient.isConnected, isTrue);
+          expect(container.read(isDeviceOnlineProvider), isTrue);
+
+          offline = true;
+          FakeConnectivity.controller.add([ConnectivityResult.none]);
+          async.elapse(const Duration(milliseconds: 100));
+          expect(container.read(isDeviceOnlineProvider), isFalse);
+          expect(pool.currentClient.isConnected, isTrue, reason: 'the socket has yet to find out');
+          expect(pool.currentClient.isFailing.value, isFalse);
+
+          // The network comes back before the socket has noticed anything at all. Its connection
+          // belongs to the network that went away, so it must be made again whatever it looks like.
+          offline = false;
+          async.elapse(kConnectivityThrottleDelay);
+          FakeConnectivity.controller.add([ConnectivityResult.wifi]);
+          async.elapse(const Duration(milliseconds: 100));
+
+          expect(container.read(isDeviceOnlineProvider), isTrue);
+          expect(channelsCreated, 2);
+
+          pool.currentClient.close();
+          async.flushTimers();
+        });
+      },
+    );
+
+    test(
       'reconnects the socket when a failed connectivity check is followed by an online one',
       () async {
         var offline = true;

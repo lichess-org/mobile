@@ -832,7 +832,12 @@ class SocketPool {
   void onDeviceOnline() {
     if (_isAppInBackground) return;
     _logger.info('Device is back online, reconnecting the socket.');
-    _connectIfNeeded();
+    // Unconditionally, unlike [_connectIfNeeded]: a socket that lost its network without noticing
+    // yet — no ping due, nothing that tore the channel down — still looks perfectly healthy, and
+    // the connection it holds belongs to a network that is gone. Waiting for it to find out on its
+    // own costs up to [SocketClient.pingMaxLag], and the handshake it costs to be sure is cheap
+    // next to a socket that is up but deaf.
+    currentClient.connect();
   }
 
   /// Call when the session changes: the socket carries the token, so it has to be reopened.
