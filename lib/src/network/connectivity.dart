@@ -244,8 +244,16 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
     }
 
     final revision = _claimRevision();
-    final result = await _connectivity.checkConnectivity();
-    final newConn = await _getConnectivityStatus(result, appState);
+    final ConnectivityStatus newConn;
+    try {
+      newConn = await _getConnectivityStatus(await _connectivity.checkConnectivity(), appState);
+    } catch (e, s) {
+      // A check that could not run says nothing about the network, and here — unlike in [build] —
+      // there is already a settled status to fall back on: it is left as it is, rather than turned
+      // into an error something else would have to undo.
+      _logger.warning('Connectivity check on app resume failed', e, s);
+      return;
+    }
 
     if (!_isCurrent(revision)) return;
 

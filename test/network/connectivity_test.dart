@@ -400,6 +400,35 @@ void main() {
       });
     });
 
+    test('a check that goes wrong on resume leaves the status as it is', () async {
+      final connectivity = SwitchableConnectivity();
+      final container = await makeContainer(
+        overrides: {
+          connectivityPluginProvider: connectivityPluginProvider.overrideWith((_) => connectivity),
+        },
+      );
+      final binding = TestWidgetsFlutterBinding.instance;
+
+      fakeAsync((async) {
+        container.read(connectivityChangesProvider);
+        async.elapse(const Duration(seconds: 1));
+        expect(container.read(isDeviceOnlineProvider), isTrue);
+
+        // The plugin goes wrong on the check the user coming back to the app asks for. That says
+        // nothing about the network, and there is a settled status here to leave alone — turning
+        // it into an error would take the app offline for no reason at all.
+        connectivity.shouldFail = true;
+        // The binding may still be resumed from an earlier test, and only a change is notified.
+        binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+        binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+        async.elapse(const Duration(milliseconds: 100));
+
+        expect(container.read(isDeviceOnlineProvider), isTrue);
+
+        async.flushTimers();
+      });
+    });
+
     test('a slow check does not overwrite what happened while it ran', () async {
       // A network that comes and goes, and a check that takes as long as it is told to.
       var offline = false;

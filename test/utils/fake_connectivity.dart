@@ -63,3 +63,18 @@ class PendingThenFailingConnectivity implements Connectivity {
   @override
   Stream<List<ConnectivityResult>> get onConnectivityChanged => FakeConnectivity.controller.stream;
 }
+
+/// A fake [Connectivity] whose check works until [shouldFail] is set, and fails from then on.
+///
+/// Lets a test have the plugin go wrong on a check that is not the first one.
+class SwitchableConnectivity implements Connectivity {
+  bool shouldFail = false;
+
+  @override
+  Future<List<ConnectivityResult>> checkConnectivity() => shouldFail
+      ? Future.error(StateError('the connectivity plugin failed'))
+      : Future.value([ConnectivityResult.wifi]);
+
+  @override
+  Stream<List<ConnectivityResult>> get onConnectivityChanged => FakeConnectivity.controller.stream;
+}
