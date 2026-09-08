@@ -328,8 +328,10 @@ class SocketClient {
       }
 
       _averageLag.value = Duration.zero;
+      // The next ping is scheduled by the pong that answers this one: a second ping sent before
+      // then would push the pong timeout further out, and let a socket that answers nothing live
+      // [pingDelay] longer than it should.
       _sendPing();
-      _schedulePing(pingDelay);
 
       if (_socketOpenController.hasListener) {
         _socketOpenController.add(null);
@@ -604,11 +606,6 @@ class SocketClient {
   }
 
   /// Called when a ping has gone unanswered for [pingMaxLag]: the socket is of no use any more.
-  ///
-  /// This is a run of failures starting, exactly like a connection that could not be made, and the
-  /// reconnect that follows waits out the same backoff. A peer that accepts every handshake and
-  /// then answers nothing is thus retried more and more slowly, instead of every [pingMaxLag]
-  /// forever.
   void _onPongTimeout() {
     if (isDisposed) return;
 
@@ -619,9 +616,8 @@ class SocketClient {
 
     // The socket is not answering: it is no longer proof of anything to whoever watches the lag.
     _averageLag.value = Duration.zero;
-    _startFailing();
 
-    final delay = _reconnectDelay;
+    final delay = _startFailing() ? Duration.zero : _reconnectDelay;
     _logger.fine(
       'No pong from $route in ${pingMaxLag.inMilliseconds}ms (failing for '
       '${_failingFor.inSeconds}s now), reconnecting in ${delay.inMilliseconds}ms.',
@@ -652,9 +648,13 @@ class SocketClient {
   }
 
   /// Starts a run of failures, if one is not already going on.
-  void _startFailing() {
+  ///
+  /// Returns whether this is the failure that started it.
+  bool _startFailing() {
+    final startsRun = _failingSince == null;
     _failingSince ??= clock_package.clock.now();
     _isFailing.value = true;
+    return startsRun;
   }
 
   /// Ends the current run of failures.

@@ -159,14 +159,48 @@ void main() {
       socketClient.close();
     });
 
+    test('the first pong timeout reconnects at once, the ones after it wait', () {
+      var channelsCreated = 0;
+      final fakeChannelFactory = FakeWebSocketChannelFactory((route) {
+        channelsCreated++;
+        return FakeWebSocketChannel(route)..shouldSendPong = false;
+      });
+
+      fakeAsync((async) {
+        // The ping goes out as the socket opens, so the first pong times out at [pingMaxLag].
+        final socketClient = makeTestSocketClient(fakeChannelFactory: fakeChannelFactory);
+        socketClient.connect();
+
+        async.elapse(const Duration(milliseconds: 199));
+        expect(channelsCreated, 1);
+
+        // 1ms past the timeout, and well short of the 100ms [autoReconnectDelay] this client is
+        // built with: the socket has already spent [pingMaxLag] waiting, so it retries at once.
+        async.elapse(const Duration(milliseconds: 2));
+        expect(channelsCreated, 2);
+
+        // That attempt goes the same way, and this one does wait: a peer that keeps accepting
+        // handshakes and answering nothing must not be retried every [pingMaxLag] forever.
+        async.elapse(const Duration(milliseconds: 249));
+        expect(channelsCreated, 2, reason: 'the second timeout waits out the backoff');
+
+        async.elapse(const Duration(milliseconds: 100));
+        expect(channelsCreated, 3);
+
+        socketClient.close();
+        async.flushTimers();
+      });
+    });
+
     test('a message sent while the socket waits out its backoff is queued, not lost', () {
-      var serverAnswers = true;
+      var offline = false;
       // Every message this client sends, ping excepted, whichever channel it goes out on: one
       // written to a channel that is already gone would show up here just the same.
       final sent = <dynamic>[];
       FakeWebSocketChannel? currentChannel;
       final fakeChannelFactory = FakeWebSocketChannelFactory((route) {
-        final channel = FakeWebSocketChannel(route)..shouldSendPong = serverAnswers;
+        if (offline) throw const SocketException('No internet');
+        final channel = FakeWebSocketChannel(route);
         channel.sentMessagesExceptPing.listen(sent.add);
         return currentChannel = channel;
       });
@@ -178,21 +212,21 @@ void main() {
         async.elapse(const Duration(milliseconds: 20));
         expect(socketClient.isConnected, isTrue);
 
-        // The peer stops answering: the ping goes unanswered and the client falls back to its
-        // reconnect backoff, which is no place to be writing messages.
-        serverAnswers = false;
+        // The network goes away under the socket: the ping goes unanswered, and the attempts that
+        // follow cannot get a channel either, so the client is left waiting out its backoff.
+        offline = true;
         currentChannel!.shouldSendPong = false;
-        async.elapse(const Duration(milliseconds: 300));
+        async.elapse(const Duration(seconds: 1));
         expect(socketClient.isFailing.value, isTrue);
         expect(socketClient.isConnected, isFalse);
 
         socketClient.send('test', {'foo': 'bar'});
-        async.elapse(const Duration(milliseconds: 10));
-        expect(sent, isEmpty, reason: 'the channel it would have gone out on is closed');
+        async.elapse(const Duration(milliseconds: 500));
+        expect(sent, isEmpty, reason: 'there is no channel to write it to');
 
-        // It goes out on the connection that replaces it instead.
-        serverAnswers = true;
-        async.elapse(const Duration(seconds: 1));
+        // It goes out on the connection that the network coming back makes possible.
+        offline = false;
+        async.elapse(const Duration(seconds: 2));
 
         expect(socketClient.isConnected, isTrue);
         expect(sent, [
