@@ -173,8 +173,14 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
       // Deferred: the pool updates this from inside [SocketPool.open], which controllers call
       // while building, and Riverpod forbids a provider modifying another during a build.
       scheduleMicrotask(() {
-        if (!ref.mounted || _settledStatus?.isOnline != false) return;
-        _setOnlineStatus(true);
+        if (!ref.mounted) return;
+        final settled = _settledStatus;
+        if (settled == null) return;
+        if (settled.isOnline) {
+          _claimRevision();
+        } else {
+          _setOnlineStatus(true);
+        }
       });
     }
 
@@ -188,13 +194,8 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
     void onSocketFailing() {
       if (!pool.isFailing) return;
       scheduleMicrotask(() {
-        // A device already known to be offline has nothing to learn from a socket that fails, and
-        // must not take up the throttler's window: the connectivity event that brings the network
-        // back is what has to run next, without waiting out a delay.
         if (!ref.mounted || _settledStatus?.isOnline != true) return;
         _connectivityChangesThrottler(() {
-          // Checked again: the throttler may run this a delay later, by which time the status may
-          // have settled offline on its own.
           if (!ref.mounted || _settledStatus?.isOnline != true) return;
           _refreshOnlineStatus('socket cannot connect');
         });

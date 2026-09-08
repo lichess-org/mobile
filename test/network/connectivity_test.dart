@@ -514,6 +514,51 @@ void main() {
       });
     });
 
+    test('a pong keeps a check that started before it from taking the device offline', () async {
+      var offline = false;
+      var checkDelay = Duration.zero;
+      final container = await makeContainer(
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+            (ref) => FakeHttpClientFactory(
+              () => MockClient((request) async {
+                final (wasOffline, delay) = (offline, checkDelay);
+                await Future<void>.delayed(delay);
+                if (wasOffline) throw const SocketException('No internet');
+                return http.Response('', 200);
+              }),
+            ),
+          ),
+        },
+      );
+
+      fakeAsync((async) {
+        container.read(connectivityChangesProvider);
+        async.elapse(const Duration(seconds: 1));
+        expect(container.read(isDeviceOnlineProvider), isTrue);
+
+        // A check starts on a network that is momentarily down, and takes seconds to say so.
+        offline = true;
+        checkDelay = const Duration(seconds: 2);
+        FakeConnectivity.controller.add([ConnectivityResult.none]);
+        async.elapse(const Duration(milliseconds: 100));
+
+        // The socket then answers a ping, which is proof of a working network. It changes nothing
+        // to a status that already reads online, but it is newer than the check in flight.
+        final pool = container.read(socketPoolProvider);
+        pool.currentClient.connect();
+        async.elapse(const Duration(seconds: 1));
+        expect(pool.currentClient.isConnected, isTrue);
+
+        // The check now answers with a network that is seconds out of date.
+        async.elapse(const Duration(seconds: 5));
+        expect(container.read(isDeviceOnlineProvider), isTrue);
+
+        pool.currentClient.close();
+        async.flushTimers();
+      });
+    });
+
     test('assumes online while the check is still running', () async {
       final container = await makeContainer(
         overrides: {
