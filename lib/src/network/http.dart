@@ -197,13 +197,13 @@ Duration _defaultDelay(int retryCount) =>
     const Duration(milliseconds: 900) * math.pow(1.5, retryCount);
 
 final userAgentProvider = Provider<String>((Ref ref) {
-  final authUser = ref.watch(authControllerProvider);
+  final user = ref.watch(authControllerProvider.select((value) => value?.user));
 
   return makeUserAgent(
     ref.read(preloadedDataProvider).requireValue.packageInfo,
     ref.read(preloadedDataProvider).requireValue.deviceInfo,
     ref.read(preloadedDataProvider).requireValue.sri,
-    authUser?.user,
+    user,
   );
 });
 
@@ -413,12 +413,18 @@ class _RegisterCallbackClient extends BaseClient {
 /// * When a response has the 401 status, checks if the authUser token is still valid,
 /// and deletes the authUser if it's not.
 class LichessClient implements Client {
-  LichessClient(this._inner, this._ref);
+  LichessClient(this._inner, this._ref)
+    : _cachedPackageInfo = _ref.read(preloadedDataProvider).requireValue.packageInfo,
+      _cachedDeviceInfo = _ref.read(preloadedDataProvider).requireValue.deviceInfo,
+      _cachedSri = _ref.read(preloadedDataProvider).requireValue.sri;
 
   static const defaultRequestTimeout = Duration(seconds: 15);
 
   final Ref _ref;
   final Client _inner;
+  final PackageInfo _cachedPackageInfo;
+  final BaseDeviceInfo _cachedDeviceInfo;
+  final String _cachedSri;
 
   @override
   Future<StreamedResponse> send(BaseRequest request) async {
@@ -429,9 +435,9 @@ class LichessClient implements Client {
       request.headers['Authorization'] = 'Bearer $bearer';
     }
     request.headers['User-Agent'] = makeUserAgent(
-      _ref.read(preloadedDataProvider).requireValue.packageInfo,
-      _ref.read(preloadedDataProvider).requireValue.deviceInfo,
-      _ref.read(preloadedDataProvider).requireValue.sri,
+      _cachedPackageInfo,
+      _cachedDeviceInfo,
+      _cachedSri,
       authUser?.user,
     );
 
