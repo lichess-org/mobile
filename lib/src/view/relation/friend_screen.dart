@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/user/search_screen.dart';
 import 'package:lichess_mobile/src/view/user/user_context_menu.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
@@ -79,6 +80,20 @@ class _FriendScreenState extends ConsumerState<FriendScreen> with TickerProvider
     final onlineFriendsCount = ref.watch(onlineFriendsProvider.select((v) => v.value?.length ?? 0));
     final followingCount = ref.watch(followingProvider.select((v) => v.value?.length ?? 0));
 
+    final searchButton = SemanticIconButton(
+      icon: const Icon(Icons.search),
+      onPressed: () {
+        Navigator.of(context).push(
+          SearchScreen.buildRoute(
+            onUserTap: (user) {
+              Navigator.of(context).push(UserOrProfileScreen.buildRoute(user));
+            },
+          ),
+        );
+      },
+      semanticsLabel: context.l10n.searchSearch,
+    );
+
     final sortButton = SemanticIconButton(
       icon: const Icon(Icons.sort),
       // TODO: translate
@@ -119,7 +134,7 @@ class _FriendScreenState extends ConsumerState<FriendScreen> with TickerProvider
     return PlatformScaffold(
       appBar: PlatformAppBar(
         title: Text(context.l10n.friends),
-        actions: [sortButton],
+        actions: [searchButton, sortButton],
         bottom: TabBar(
           controller: _tabController,
           tabs: <Widget>[
