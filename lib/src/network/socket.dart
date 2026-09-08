@@ -259,7 +259,7 @@ class SocketClient {
       throw StateError('SocketClient is disposed, cannot connect.');
     }
 
-    _disconnect();
+    unawaited(_disconnect());
 
     final epoch = _connectionEpoch;
     _pongCount = 0;
@@ -558,8 +558,10 @@ class SocketClient {
   void _onChannelGone(int epoch, [Object? error, StackTrace? stackTrace]) {
     if (isDisposed || epoch != _connectionEpoch) return;
 
-    _pingTimer?.cancel();
-    _pongTimeoutTimer?.cancel();
+    // The peer is gone, but the channel is still there to be closed, and its timers to be
+    // cancelled — as for a pong timeout, [send] must queue rather than write to a dead sink.
+    unawaited(_disconnect());
+
     _averageLag.value = Duration.zero;
     _startFailing();
 
@@ -609,6 +611,11 @@ class SocketClient {
   /// forever.
   void _onPongTimeout() {
     if (isDisposed) return;
+
+    // Drop the channel now rather than at the end of the backoff, which can be a minute long: a
+    // sink nothing answers on is not somewhere to write, and [send] queues for the next connection
+    // as soon as there is none. This cancels the ping and ack timers along with it.
+    unawaited(_disconnect());
 
     // The socket is not answering: it is no longer proof of anything to whoever watches the lag.
     _averageLag.value = Duration.zero;

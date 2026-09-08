@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -156,6 +157,54 @@ void main() {
       );
 
       socketClient.close();
+    });
+
+    test('a message sent while the socket waits out its backoff is queued, not lost', () {
+      var serverAnswers = true;
+      // Every message this client sends, ping excepted, whichever channel it goes out on: one
+      // written to a channel that is already gone would show up here just the same.
+      final sent = <dynamic>[];
+      FakeWebSocketChannel? currentChannel;
+      final fakeChannelFactory = FakeWebSocketChannelFactory((route) {
+        final channel = FakeWebSocketChannel(route)..shouldSendPong = serverAnswers;
+        channel.sentMessagesExceptPing.listen(sent.add);
+        return currentChannel = channel;
+      });
+
+      fakeAsync((async) {
+        final socketClient = makeTestSocketClient(fakeChannelFactory: fakeChannelFactory);
+        socketClient.connect();
+
+        async.elapse(const Duration(milliseconds: 20));
+        expect(socketClient.isConnected, isTrue);
+
+        // The peer stops answering: the ping goes unanswered and the client falls back to its
+        // reconnect backoff, which is no place to be writing messages.
+        serverAnswers = false;
+        currentChannel!.shouldSendPong = false;
+        async.elapse(const Duration(milliseconds: 300));
+        expect(socketClient.isFailing.value, isTrue);
+        expect(socketClient.isConnected, isFalse);
+
+        socketClient.send('test', {'foo': 'bar'});
+        async.elapse(const Duration(milliseconds: 10));
+        expect(sent, isEmpty, reason: 'the channel it would have gone out on is closed');
+
+        // It goes out on the connection that replaces it instead.
+        serverAnswers = true;
+        async.elapse(const Duration(seconds: 1));
+
+        expect(socketClient.isConnected, isTrue);
+        expect(sent, [
+          jsonEncode({
+            't': 'test',
+            'd': {'foo': 'bar'},
+          }),
+        ]);
+
+        socketClient.close();
+        async.flushTimers();
+      });
     });
 
     test('a connection the peer drops is failing at once', () {
