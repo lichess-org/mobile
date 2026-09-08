@@ -115,7 +115,7 @@ void main() {
       socketClient.close();
     });
 
-    test('an unexpected connection failure is logged in full, a network one is not', () async {
+    test('logs a connection failure at the level its cause deserves', () async {
       var attempts = 0;
       final fakeChannelFactory = FakeWebSocketChannelFactory((_) {
         attempts++;
@@ -123,9 +123,11 @@ void main() {
           // What a device with no network looks like: routine, and not worth a log the user's
           // crash reports would have to carry.
           1 => throw const SocketException('Connection failed'),
-          // A bug in the connection setup, which no amount of retrying will fix: the logs are the
-          // only place it can be seen from production.
-          2 => throw StateError('boom'),
+          // The server answered, but not with a websocket: a regression on its side, or a TLS
+          // chain the device will not trust.
+          2 => throw const WebSocketException('Connection was not upgraded to websocket'),
+          // A bug in the connection setup, which no amount of retrying will fix.
+          3 => throw StateError('boom'),
           _ => FakeWebSocketChannel(defaultSocketUri),
         };
       });
@@ -140,12 +142,18 @@ void main() {
       socketClient.connect();
 
       await socketClient.firstConnection;
-      expect(attempts, 3);
+      expect(attempts, 4);
 
-      expect(records, hasLength(1), reason: 'only the unexpected failure is reported');
-      expect(records.single.level, Level.SEVERE);
-      expect(records.single.error, isStateError);
-      expect(records.single.stackTrace, isNotNull, reason: 'the stack trace is what points at it');
+      expect(records, hasLength(2), reason: 'the missing network alone is not reported');
+      expect(records.first.level, Level.WARNING);
+      expect(records.first.error, isA<WebSocketException>());
+      expect(records.last.level, Level.SEVERE);
+      expect(records.last.error, isStateError);
+      expect(
+        records.every((record) => record.stackTrace != null),
+        isTrue,
+        reason: 'the stack trace is what points at the line that threw',
+      );
 
       socketClient.close();
     });

@@ -358,11 +358,18 @@ class SocketClient {
           'WebSocket connection to $route failed (for ${_failingFor.inSeconds}s now), retrying in '
           '${delay.inMilliseconds}ms: $e';
 
-      // A connection that could not be made says nothing on its own: it is what a device with no
-      // network looks like, and that is not an error the logs should shout about.
-      if (_isConnectivityFailure(e)) {
+      if (_isTransportUnavailable(e)) {
+        // A connection that could not even be attempted says nothing on its own: it is what a
+        // device with no network looks like, and that is not worth a line in the logs.
         _logger.fine(message);
+      } else if (e is Exception) {
+        // The server answered, but not with a websocket it accepted: a refused or malformed
+        // upgrade, a certificate that cannot be trusted. Retrying may well get past it, but this
+        // is the only sign a regression on the server or in the TLS chain gives from production.
+        _logger.warning(message, e, s);
       } else {
+        // An [Error] comes from the setup above rather than from the network, and retrying will
+        // not fix it.
         _logger.severe(message, e, s);
       }
 
@@ -978,12 +985,11 @@ final webSocketChannelFactoryProvider = Provider<WebSocketChannelFactory>((Ref r
   return const WebSocketChannelFactory();
 });
 
-/// Whether [error] is one of the failures a socket runs into when the network is not there.
-bool _isConnectivityFailure(Object error) =>
-    error is SocketException ||
-    error is TimeoutException ||
-    error is WebSocketException ||
-    error is HandshakeException;
+/// Whether [error] is the network simply not being there.
+///
+/// These are the two [WebSocketChannelFactory.create] documents, and the only two that say nothing
+/// beyond that. Anything else means the server answered.
+bool _isTransportUnavailable(Object error) => error is SocketException || error is TimeoutException;
 
 /// A factory to create a [WebSocketChannel].
 ///
