@@ -104,6 +104,35 @@ void main() {
       },
     );
 
+    test('a socket that connects clears an offline status left by a failed check', () async {
+      final container = await makeContainer(
+        overrides: {
+          connectivityPluginProvider: connectivityPluginProvider.overrideWith(
+            (_) => FailingConnectivity(),
+          ),
+        },
+      );
+
+      await expectLater(container.read(connectivityChangesProvider.future), throwsStateError);
+      expect(
+        container.read(isDeviceOnlineProvider),
+        isFalse,
+        reason: 'a check that could not run reached nothing',
+      );
+
+      // The socket is proof of a working network whatever the failed check left behind, so the
+      // status must not stay offline until something else happens to probe it.
+      final client = container.read(socketPoolProvider).currentClient;
+      client.connect();
+      await client.firstConnection;
+      await Future<void>.delayed(kFakeWebSocketConnectionLag * 4);
+      await pumpEventQueue();
+
+      expect(container.read(isDeviceOnlineProvider), isTrue);
+
+      client.close();
+    });
+
     test('the socket clears an offline status once, not on every lag change', () async {
       // A server whose answers get slower and slower, so that every pong moves the average lag.
       FakeWebSocketChannel? channel;

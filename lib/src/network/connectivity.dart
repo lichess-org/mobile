@@ -116,10 +116,21 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
   Client get _defaultClient => ref.read(defaultClientProvider);
   Connectivity get _connectivity => ref.read(connectivityPluginProvider);
 
+  /// The status the app is showing, or null while the first check has yet to settle anything.
+  ///
+  /// A check that failed settles the question too: [isDeviceOnlineProvider] reads an error as
+  /// offline — nothing could be reached — so it must be recoverable like any other offline status,
+  /// by a socket that connects or by a later check.
+  ConnectivityStatus? get _settledStatus => switch (state) {
+    AsyncValue(hasError: true) => (isOnline: false, appState: state.value?.appState),
+    AsyncValue(:final value?) => value,
+    _ => null,
+  };
+
   /// Writes a status, and marks every check that is already running as outdated.
   void _setOnlineStatus(bool isOnline) {
     _onlineStatusRevision++;
-    state = AsyncValue.data((isOnline: isOnline, appState: state.requireValue.appState));
+    state = AsyncValue.data((isOnline: isOnline, appState: state.value?.appState));
   }
 
   /// Whether a check that started at [revision] may still commit its result.
@@ -153,7 +164,7 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
       // Deferred: the pool updates this from inside [SocketPool.open], which controllers call
       // while building, and Riverpod forbids a provider modifying another during a build.
       scheduleMicrotask(() {
-        if (!ref.mounted || state.value?.isOnline != false) return;
+        if (!ref.mounted || _settledStatus?.isOnline != false) return;
         _setOnlineStatus(true);
       });
     }
@@ -171,11 +182,11 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
         // A device already known to be offline has nothing to learn from a socket that fails, and
         // must not take up the throttler's window: the connectivity event that brings the network
         // back is what has to run next, without waiting out a delay.
-        if (!ref.mounted || state.value?.isOnline != true) return;
+        if (!ref.mounted || _settledStatus?.isOnline != true) return;
         _connectivityChangesThrottler(() {
           // Checked again: the throttler may run this a delay later, by which time the status may
           // have settled offline on its own.
-          if (!ref.mounted || state.value?.isOnline != true) return;
+          if (!ref.mounted || _settledStatus?.isOnline != true) return;
           _refreshOnlineStatus('socket cannot connect');
         });
       });
@@ -217,13 +228,14 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
       ref.read(serverStatusProvider.notifier).onAppResumed();
     }
 
-    if (!state.hasValue) {
+    final settled = _settledStatus;
+    if (settled == null) {
       return;
     }
 
     // The lifecycle state is known right away, whatever the check that follows finds. It says
     // nothing about connectivity, so it does not outdate a check that is already running.
-    state = AsyncValue.data((isOnline: state.requireValue.isOnline, appState: appState));
+    state = AsyncValue.data((isOnline: settled.isOnline, appState: appState));
 
     if (appState != AppLifecycleState.resumed) {
       return;
@@ -248,12 +260,13 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
   ///
   /// [reason] is what prompted the check, for the logs.
   Future<void> _refreshOnlineStatus(String reason) async {
-    if (!state.hasValue) {
+    final settled = _settledStatus;
+    if (settled == null) {
       return;
     }
 
     final revision = _onlineStatusRevision;
-    final wasOnline = state.requireValue.isOnline;
+    final wasOnline = settled.isOnline;
     final newIsOnline = await isOnline(_defaultClient);
 
     if (!_isCurrent(revision)) return;

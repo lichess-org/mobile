@@ -29,3 +29,17 @@ class PendingConnectivity implements Connectivity {
   Stream<List<ConnectivityResult>> get onConnectivityChanged =>
       const Stream<List<ConnectivityResult>>.empty();
 }
+
+/// A fake implementation of [Connectivity] whose check always fails, to simulate the plugin
+/// itself going wrong.
+///
+/// It throws an [Error] rather than an [Exception] so that riverpod does not retry the build it
+/// makes fail: what is under test is the state that failure leaves behind.
+class FailingConnectivity implements Connectivity {
+  @override
+  Future<List<ConnectivityResult>> checkConnectivity() =>
+      Future.error(StateError('the connectivity plugin failed'));
+
+  @override
+  Stream<List<ConnectivityResult>> get onConnectivityChanged => FakeConnectivity.controller.stream;
+}
