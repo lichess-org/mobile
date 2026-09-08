@@ -181,7 +181,9 @@ class _AppState extends ConsumerState<Application> {
     // network calls, which must not be made on the optimistic assumption that a device whose
     // status is not known yet is online.
     ref.listenManual(connectivityChangesProvider, (prev, current) async {
-      final prevWasOffline = prev?.value?.isOnline == false;
+      // The previous state is read with [isDeviceOnlineIn], so that coming back from a check that
+      // failed — offline as far as the app is concerned — is an edge like any other.
+      final prevWasOffline = prev != null && !isDeviceOnlineIn(prev);
       final currentIsOnline = current.value?.isOnline == true;
 
       // Play registered moves whenever the app comes back online.
