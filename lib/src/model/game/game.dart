@@ -224,7 +224,7 @@ abstract mixin class BaseGame {
         'Variant': meta.variant.pgnName,
         if (meta.clock != null)
           'TimeControl': '${meta.clock!.initial.inSeconds}+${meta.clock!.increment.inSeconds}',
-        if (initialFen != null) 'FEN': initialFen!,
+        'FEN': ?initialFen,
         if (meta.opening != null) 'ECO': meta.opening!.eco,
         if (meta.opening != null) 'Opening': meta.opening!.name,
       }),

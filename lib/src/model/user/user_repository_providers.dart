@@ -62,7 +62,7 @@ final autoCompleteUserProvider = FutureProvider.autoDispose.family<IList<LightUs
     throw Exception('Cancelled');
   }
 
-  return ref.read(userRepositoryProvider).autocompleteUser(term);
+  return await ref.read(userRepositoryProvider).autocompleteUser(term);
 }, name: 'AutoCompleteUserProvider');
 
 final userRatingHistoryProvider = FutureProvider.autoDispose

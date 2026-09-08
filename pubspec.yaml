@@ -59,7 +59,7 @@ dependencies:
   lc0:
     git:
       url: https://github.com/lichess-org/dart-lc0.git
-      ref: b75077349a1d16c1999daa063ffb144060916f20
+      ref: 04284fa88176930a0e2ffd475979fa289710169e
   logging: ^1.3.0
   material_color_utilities: ^0.13.0
   material_symbols_icons: ^4.2960.0

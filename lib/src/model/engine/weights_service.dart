@@ -184,7 +184,7 @@ class StockfishNnueService {
           return false;
         }
         // Deletes the files itself if they do not check out.
-        return checkNNUEFiles();
+        return await checkNNUEFiles();
       }
 
       final connectivityResult = await _ref.read(connectivityPluginProvider).checkConnectivity();
@@ -305,7 +305,7 @@ class MaiaWeightsService {
   /// always produce it, without a network connection.
   Future<bool> isAvailable(MaiaRating rating) async {
     if (rating.isBundled) return true;
-    return _checkFile(rating);
+    return await _checkFile(rating);
   }
 
   /// The ratings that can be played right now.
@@ -428,7 +428,7 @@ class MaiaWeightsService {
   /// The path of [rating]'s network if it can be produced without the network, null otherwise.
   Future<String?> _pathIfReady(MaiaRating rating) async {
     if (await _checkFile(rating)) return weightsFile(rating).path;
-    if (rating.isBundled) return _writeBundledWeights(rating);
+    if (rating.isBundled) return await _writeBundledWeights(rating);
     return null;
   }
 

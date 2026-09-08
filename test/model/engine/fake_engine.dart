@@ -129,7 +129,7 @@ class FakeEngine {
     if (hangsFromStart != null && startCount >= hangsFromStart!) {
       // Deliberately never completes, and never leaves the in-flight count either: this engine is
       // wedged somewhere no timeout of the plugin's covers.
-      return Completer<EngineTransport>().future;
+      return await Completer<EngineTransport>().future;
     }
 
     if (startDelay > Duration.zero) {

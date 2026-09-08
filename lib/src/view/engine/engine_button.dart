@@ -33,7 +33,7 @@ class _EngineButtonState extends ConsumerState<EngineButton> {
   @override
   Widget build(BuildContext context) {
     final prefs = ref.watch(engineEvaluationPreferencesProvider);
-    final (engine: engine, eval: localEval, isComputing: isComputing, currentWork: _) = ref.watch(
+    final (:engine, eval: localEval, :isComputing, currentWork: _) = ref.watch(
       engineEvaluationProvider(widget.filters),
     );
     final eval = pickBestClientEval(localEval: localEval, savedEval: widget.savedEval);
@@ -282,8 +282,9 @@ class _EnginePopup extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final (engine: engine, currentWork: work, eval: evalStateEval, isComputing: isComputing) = ref
-        .watch(engineEvaluationProvider(filters));
+    final (:engine, currentWork: work, eval: evalStateEval, :isComputing) = ref.watch(
+      engineEvaluationProvider(filters),
+    );
     final bool canGoDeeper =
         goDeeper != null && !isComputing && (work == null || work.isDeeper != true);
 

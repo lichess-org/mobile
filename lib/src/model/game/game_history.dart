@@ -40,12 +40,12 @@ final myRecentGamesProvider = FutureProvider.autoDispose<IList<LightExportedGame
   final isServerUp = ref.watch(serverStatusProvider) == ServerStatus.up;
   final authUser = ref.watch(authControllerProvider);
   if (authUser != null && online && isServerUp) {
-    return ref
+    return await ref
         .read(gameRepositoryProvider)
         .getUserGames(authUser.user.id, max: kNumberOfRecentGames);
   } else {
     final storage = await ref.watch(gameStorageProvider.future);
-    return storage
+    return await storage
         .page(userId: authUser?.user.id, max: kNumberOfRecentGames)
         .then(
           (value) => value
@@ -75,7 +75,7 @@ final userNumberOfGamesProvider = FutureProvider.autoDispose.family<int, LightUs
       ? (await ref.watch(userProvider(user.id).future)).count?.all ?? 0
       : authUser != null && online && isServerUp
       ? (await ref.watch(accountProvider.future))?.count?.all ?? 0
-      : (await ref.watch(gameStorageProvider.future)).count(userId: user?.id);
+      : await (await ref.watch(gameStorageProvider.future)).count(userId: user?.id);
 }, name: 'UserNumberOfGamesProvider');
 
 typedef UserGameHistoryNotifierParams = ({UserId? userId, GameFilterState filter});
@@ -217,7 +217,7 @@ class UserGameHistoryNotifier extends AsyncNotifier<UserGameHistoryState> {
     final entry = gameList.firstWhereOrNull((e) => e.game.id == id);
     if (entry == null) return;
 
-    final (game: game, pov: pov) = entry;
+    final (:game, :pov) = entry;
     final index = gameList.indexOf(entry);
 
     state = AsyncData(

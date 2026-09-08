@@ -18,7 +18,7 @@ class MockAppLocalizations extends Mock implements AppLocalizations {}
 /// `/broadcast/<tourSlug>/<roundSlug>/<roundId>`, with the chapter id appended and a `pov` query
 /// parameter added when a followed player starts a game.
 RemoteMessage broadcastMessage(String? url) => RemoteMessage(
-  data: {'lichess.type': 'broadcast', if (url != null) 'lichess.url': url},
+  data: {'lichess.type': 'broadcast', 'lichess.url': ?url},
   notification: const RemoteNotification(title: 'Tata Steel Masters', body: 'Round 3 has begun'),
 );
 

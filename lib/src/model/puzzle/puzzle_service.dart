@@ -127,7 +127,7 @@ class PuzzleService {
         unsolved: data.unsolved.removeWhere((e) => e.puzzle.id == solution.id),
       ),
     );
-    return nextPuzzle(userId: userId, angle: angle);
+    return await nextPuzzle(userId: userId, angle: angle);
   }
 
   /// Clears the current puzzle batch, fetches a new one and returns the next puzzle.
@@ -136,7 +136,7 @@ class PuzzleService {
     PuzzleAngle angle = const PuzzleTheme(PuzzleThemeKey.mix),
   }) async {
     await batchStorage.delete(userId: userId, angle: angle);
-    return nextPuzzle(userId: userId, angle: angle);
+    return await nextPuzzle(userId: userId, angle: angle);
   }
 
   /// Deletes the puzzle batch of [angle] from the local storage.
@@ -192,7 +192,7 @@ class PuzzleService {
         ),
       );
 
-      return batchResponse
+      return await batchResponse
           .fold(
             (value) => Result.value((
               PuzzleBatch(
