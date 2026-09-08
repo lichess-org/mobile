@@ -133,6 +133,37 @@ void main() {
       client.close();
     });
 
+    test('a socket that connected while the check went wrong keeps the device online', () async {
+      final connectivity = PendingThenFailingConnectivity();
+      final container = await makeContainer(
+        overrides: {
+          connectivityPluginProvider: connectivityPluginProvider.overrideWith((_) => connectivity),
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+            (ref) => FakeHttpClientFactory(() => _deviceOfflineClient),
+          ),
+        },
+      );
+
+      final pendingCheck = container.read(connectivityChangesProvider.future);
+
+      // The socket answers its first ping while the check is still running, so its report finds
+      // nothing settled yet to correct and is dropped.
+      final client = container.read(socketPoolProvider).currentClient;
+      client.connect();
+      await client.firstConnection;
+      await Future<void>.delayed(kFakeWebSocketConnectionLag * 4);
+      await pumpEventQueue();
+
+      // Only then does the plugin go wrong. A failed check reads as offline, which the socket has
+      // already disproved — and nothing would come along to correct it.
+      connectivity.failNow();
+      await pendingCheck;
+
+      expect(container.read(isDeviceOnlineProvider), isTrue);
+
+      client.close();
+    });
+
     test('the lag left by a socket that has been closed is not proof of a connection', () async {
       // Only the second route fails to connect, so that the pool keeps the lag measured on the
       // first one — which it deliberately does not blank on a route change.

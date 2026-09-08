@@ -204,7 +204,19 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
 
     _appLifecycleListener = AppLifecycleListener(onStateChange: _onAppLifecycleChange);
 
-    final status = await _getConnectivityStatus(await _connectivity.checkConnectivity(), appState);
+    final ConnectivityStatus status;
+    try {
+      status = await _getConnectivityStatus(await _connectivity.checkConnectivity(), appState);
+    } catch (_) {
+      // A check that could not even run is read as offline, and the socket has no way back in: the
+      // report it made while this one was running found nothing settled to correct, and was
+      // dropped. So the socket has the same say here as it does below.
+      if (pool.currentClient.isConnected) {
+        return (isOnline: true, appState: appState);
+      }
+      rethrow;
+    }
+
     // A socket that is connected by the time the check answers is proof of a working network, and
     // outranks a check that came back offline.
     if (!status.isOnline && pool.currentClient.isConnected) {

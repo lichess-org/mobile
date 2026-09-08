@@ -43,3 +43,23 @@ class FailingConnectivity implements Connectivity {
   @override
   Stream<List<ConnectivityResult>> get onConnectivityChanged => FakeConnectivity.controller.stream;
 }
+
+/// A fake [Connectivity] whose check fails, but only once [failNow] is called.
+///
+/// Lets a test have a socket connect while the very first check is still running, and only then
+/// have the plugin go wrong.
+class PendingThenFailingConnectivity implements Connectivity {
+  final _failure = Completer<void>();
+
+  /// Makes the pending check fail.
+  void failNow() => _failure.complete();
+
+  @override
+  Future<List<ConnectivityResult>> checkConnectivity() async {
+    await _failure.future;
+    throw StateError('the connectivity plugin failed');
+  }
+
+  @override
+  Stream<List<ConnectivityResult>> get onConnectivityChanged => FakeConnectivity.controller.stream;
+}
