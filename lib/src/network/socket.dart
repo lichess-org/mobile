@@ -164,6 +164,7 @@ class SocketClient {
   Completer<void> _firstConnection = Completer<void>();
 
   Timer? _pingTimer;
+  Timer? _pongTimeoutTimer;
   Timer? _reconnectTimer;
   Timer? _ackResendTimer;
   Timer? _versionGapRetryTimer;
@@ -427,6 +428,7 @@ class SocketClient {
   void dispose() {
     _socketStreamSubscription?.cancel();
     _pingTimer?.cancel();
+    _pongTimeoutTimer?.cancel();
     _reconnectTimer?.cancel();
     _ackResendTimer?.cancel();
     _versionGapRetryTimer?.cancel();
@@ -457,6 +459,7 @@ class SocketClient {
     _connectionEpoch++;
     _socketStreamSubscription?.cancel();
     _pingTimer?.cancel();
+    _pongTimeoutTimer?.cancel();
     _reconnectTimer?.cancel();
     _ackResendTimer?.cancel();
 
@@ -550,17 +553,46 @@ class SocketClient {
           : 'p',
     );
     _lastPing = clock_package.clock.now();
-    _scheduleReconnect(pingMaxLag);
+    _schedulePongTimeout();
+  }
+
+  /// Gives the server [pingMaxLag] to answer the ping that was just sent.
+  void _schedulePongTimeout() {
+    _pongTimeoutTimer?.cancel();
+    _pongTimeoutTimer = Timer(pingMaxLag, _onPongTimeout);
+  }
+
+  /// Called when a ping has gone unanswered for [pingMaxLag]: the socket is of no use any more.
+  ///
+  /// This is a run of failures starting, exactly like a connection that could not be made, and the
+  /// reconnect that follows waits out the same backoff. A peer that accepts every handshake and
+  /// then answers nothing is thus retried more and more slowly, instead of every [pingMaxLag]
+  /// forever.
+  void _onPongTimeout() {
+    if (isDisposed) return;
+
+    // The socket is not answering: it is no longer proof of anything to whoever watches the lag.
+    _averageLag.value = Duration.zero;
+    _failingSince.value ??= clock_package.clock.now();
+
+    final delay = _reconnectDelay;
+    _logger.fine(
+      'No pong from $route in ${pingMaxLag.inMilliseconds}ms (failing for '
+      '${_failingFor.inSeconds}s now), reconnecting in ${delay.inMilliseconds}ms.',
+    );
+    _scheduleReconnect(delay);
   }
 
   void _handlePong(Duration pingDelay) {
     if (isDisposed) return;
 
+    _pongTimeoutTimer?.cancel();
+    // The socket is not merely open, it answers: this, and not the handshake before it, is what
+    // ends a run of failures — and it makes any reconnect waiting out the backoff moot.
     _reconnectTimer?.cancel();
+    _failingSince.value = null;
     if (_pongCount == 0) {
       _logger.fine('Ping/pong protocol for $route established.');
-      // The socket is not merely open, it answers: this is what ends a run of failures.
-      _failingSince.value = null;
     }
     _schedulePing(pingDelay);
     _pongCount++;
@@ -598,10 +630,6 @@ class SocketClient {
     _reconnectTimer?.cancel();
     _reconnectTimer = Timer(delay, () {
       if (!isDisposed) {
-        // Whatever scheduled it, a reconnect only ever follows a failure: an attempt that could
-        // not connect, or a ping left unanswered for [pingMaxLag]. Both start a run, so that the
-        // backoff grows and the connectivity check is asked for.
-        _failingSince.value ??= clock_package.clock.now();
         _logger.fine('Reconnecting WebSocket.');
         _averageLag.value = Duration.zero;
         connect();

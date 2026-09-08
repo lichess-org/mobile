@@ -198,6 +198,40 @@ void main() {
       });
     });
 
+    test('a socket that never answers a ping is retried on the backoff, not on every timeout', () {
+      var channelsCreated = 0;
+      final fakeChannelFactory = FakeWebSocketChannelFactory((route) {
+        channelsCreated++;
+        return FakeWebSocketChannel(route)..shouldSendPong = false;
+      });
+
+      fakeAsync((async) {
+        final socketClient = makeTestSocketClient(fakeChannelFactory: fakeChannelFactory);
+        socketClient.connect();
+
+        // Within the grace period the socket retries at full speed: a peer that has just stopped
+        // answering is worth a few quick attempts.
+        async.elapse(const Duration(seconds: 1));
+        final earlyAttempts = channelsCreated;
+        expect(earlyAttempts, greaterThan(2));
+
+        // Minutes of a peer that accepts every handshake and answers nothing: the delay between
+        // attempts has grown to its ceiling instead of staying at the pong timeout.
+        async.elapse(const Duration(minutes: 5));
+        final attemptsSoFar = channelsCreated;
+        async.elapse(const Duration(minutes: 1));
+
+        expect(
+          channelsCreated - attemptsSoFar,
+          lessThanOrEqualTo(2),
+          reason: 'a minute of a socket that never answers is worth about one attempt',
+        );
+
+        socketClient.close();
+        async.flushTimers();
+      });
+    });
+
     test('does not reconnect when closed while a connection attempt is in flight', () async {
       int numConnectionAttempts = 0;
 
