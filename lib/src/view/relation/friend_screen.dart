@@ -2,6 +2,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/relation/online_friends.dart';
 import 'package:lichess_mobile/src/model/relation/relation_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
@@ -11,13 +12,36 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/user/user_context_menu.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
 import 'package:material_ui/material_ui.dart';
+
+enum _FriendSortType {
+  alphabetical,
+  ratingDesc,
+  ratingAsc,
+  lastOnline;
+
+  String l10n(AppLocalizations l10n) {
+    switch (this) {
+      case _FriendSortType.alphabetical:
+        return l10n.studyAlphabetical;
+      case ratingDesc:
+        return 'Rating Descending';
+      case _FriendSortType.ratingAsc:
+        return 'Rating Ascending';
+      case _FriendSortType.lastOnline:
+        return 'Last Seen';
+    }
+  }
+}
 
 final followingProvider = FutureProvider.autoDispose<IList<User>>((ref) {
   return ref.read(relationRepositoryProvider).getAllFollowing();
@@ -36,6 +60,7 @@ class FriendScreen extends ConsumerStatefulWidget {
 
 class _FriendScreenState extends ConsumerState<FriendScreen> with TickerProviderStateMixin {
   late final TabController _tabController;
+  _FriendSortType sortType = _FriendSortType.ratingDesc;
 
   @override
   void initState() {
@@ -54,9 +79,47 @@ class _FriendScreenState extends ConsumerState<FriendScreen> with TickerProvider
     final onlineFriendsCount = ref.watch(onlineFriendsProvider.select((v) => v.value?.length ?? 0));
     final followingCount = ref.watch(followingProvider.select((v) => v.value?.length ?? 0));
 
+    final sortButton = SemanticIconButton(
+      icon: const Icon(Icons.sort),
+      // TODO: translate
+      semanticsLabel: 'Sort friends',
+      onPressed: () => showModalBottomSheet<void>(
+        context: context,
+        isScrollControlled: true,
+        constraints: BoxConstraints(minHeight: MediaQuery.heightOf(context) * 0.4),
+        builder: (_) => StatefulBuilder(
+          builder: (context, setLocalState) {
+            return BottomSheetScrollableContainer(
+              padding: const EdgeInsets.all(16.0),
+              children: [
+                const SizedBox(height: 16.0),
+                Text('Sort by', style: Theme.of(context).textTheme.bodyLarge),
+                const SizedBox(height: 16.0),
+                Filter<_FriendSortType>(
+                  filterType: FilterType.singleChoice,
+                  choices: _FriendSortType.values,
+                  choiceSelected: (choice) => sortType == choice,
+                  choiceLabel: (category) => Text(category.l10n(context.l10n)),
+                  onSelected: (value, selected) {
+                    if (_tabController.index == 0) {
+                      _tabController.animateTo(1, duration: kTabScrollDuration);
+                    }
+                    setLocalState(() => sortType = value);
+                    setState(() => sortType = value);
+                  },
+                ),
+                const SizedBox(height: 16.0),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+
     return PlatformScaffold(
       appBar: PlatformAppBar(
         title: Text(context.l10n.friends),
+        actions: [sortButton],
         bottom: TabBar(
           controller: _tabController,
           tabs: <Widget>[
@@ -65,7 +128,10 @@ class _FriendScreenState extends ConsumerState<FriendScreen> with TickerProvider
           ],
         ),
       ),
-      body: TabBarView(controller: _tabController, children: const [_Online(), _Following()]),
+      body: TabBarView(
+        controller: _tabController,
+        children: [const _Online(), _Following(sortType)],
+      ),
     );
   }
 }
@@ -169,7 +235,8 @@ class _Online extends ConsumerWidget {
 }
 
 class _Following extends ConsumerWidget {
-  const _Following();
+  const _Following(this.sortType);
+  final _FriendSortType sortType;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -177,7 +244,28 @@ class _Following extends ConsumerWidget {
 
     switch (following) {
       case AsyncData(:final value):
-        IList<User> following = value;
+        IList<User> following = switch (sortType) {
+          _FriendSortType.alphabetical => value.sort(
+            (a, b) => a.username.toLowerCase().compareTo(b.username.toLowerCase()),
+          ),
+          _FriendSortType.ratingDesc =>
+            value
+                .sort(
+                  (a, b) => (int.tryParse(a.perfs.displayRating ?? '0') ?? 0).compareTo(
+                    int.tryParse(b.perfs.displayRating ?? '0') ?? 0,
+                  ),
+                )
+                .reversed,
+          _FriendSortType.ratingAsc => value.sort(
+            (a, b) => (int.tryParse(a.perfs.displayRating ?? '0') ?? 0).compareTo(
+              int.tryParse(b.perfs.displayRating ?? '0') ?? 0,
+            ),
+          ),
+          _FriendSortType.lastOnline =>
+            value
+                .sort((a, b) => (a.seenAt ?? DateTime(1970)).compareTo(b.seenAt ?? DateTime(1970)))
+                .reversed,
+        };
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
             if (following.isEmpty) {
