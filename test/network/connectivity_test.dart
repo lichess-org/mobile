@@ -407,6 +407,8 @@ void main() {
         // settles the question with a probe of its own.
         offline = false;
         checkDelay = Duration.zero;
+        // The binding may still be resumed from an earlier test, and only a change is notified.
+        binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
         binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
         async.elapse(const Duration(milliseconds: 100));
         expect(container.read(isDeviceOnlineProvider), isTrue);
@@ -418,8 +420,6 @@ void main() {
 
         async.flushTimers();
       });
-
-      binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
     });
 
     test('a check that confirms the status still outdates the slower ones', () async {
@@ -450,6 +450,8 @@ void main() {
         // Coming back to the app starts a check while the network is down, and it takes its time.
         offline = true;
         checkDelay = const Duration(seconds: 4);
+        // The binding may still be resumed from an earlier test, and only a change is notified.
+        binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
         binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
         async.elapse(const Duration(milliseconds: 100));
 
@@ -465,8 +467,51 @@ void main() {
         async.elapse(const Duration(seconds: 5));
         expect(container.read(isDeviceOnlineProvider), isTrue);
       });
+    });
 
-      binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+    test('an older check finishing first does not outdate a newer one', () async {
+      var offline = false;
+      var checkDelay = Duration.zero;
+      final container = await makeContainer(
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+            (ref) => FakeHttpClientFactory(
+              () => MockClient((request) async {
+                final (wasOffline, delay) = (offline, checkDelay);
+                await Future<void>.delayed(delay);
+                if (wasOffline) throw const SocketException('No internet');
+                return http.Response('', 200);
+              }),
+            ),
+          ),
+        },
+      );
+
+      final binding = TestWidgetsFlutterBinding.instance;
+
+      fakeAsync((async) {
+        container.read(connectivityChangesProvider);
+        async.elapse(const Duration(seconds: 1));
+        expect(container.read(isDeviceOnlineProvider), isTrue);
+
+        // A check starts while the network is up, and will take a moment to confirm as much.
+        offline = false;
+        checkDelay = const Duration(milliseconds: 200);
+        FakeConnectivity.controller.add([ConnectivityResult.wifi]);
+        async.elapse(const Duration(milliseconds: 50));
+
+        // The network then dies, and the user coming back to the app starts a second check. It is
+        // the newer of the two, and its answer must win however long it takes to arrive — the
+        // older one finishing first must not disqualify it.
+        offline = true;
+        checkDelay = const Duration(seconds: 2);
+        // The binding may still be resumed from an earlier test, and only a change is notified.
+        binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+        binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+
+        async.elapse(const Duration(seconds: 5));
+        expect(container.read(isDeviceOnlineProvider), isFalse);
+      });
     });
 
     test('assumes online while the check is still running', () async {

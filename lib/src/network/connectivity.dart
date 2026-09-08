@@ -108,12 +108,13 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
   // online while the socket keeps failing.
   final _connectivityChangesThrottler = Throttler(kConnectivityThrottleDelay, trailing: true);
 
-  /// Bumped by every write that decides whether the device is online.
+  /// Claimed by every check that starts and every write that decides whether the device is online.
   ///
   /// A check reads the network over hundreds of milliseconds, and a resume, a socket pong or
-  /// another check can settle the question with fresher evidence while it runs. Each check
-  /// captures this revision before it starts and drops its result if it has moved since, so that a
-  /// slow answer never overwrites what happened while it was on its way.
+  /// another check can settle the question with fresher evidence while it runs. Claiming the
+  /// revision on the way in makes the last thing to start the one that gets to speak: a check
+  /// commits only if nothing has claimed it since, so neither a slow answer nor an older one that
+  /// happens to arrive first can overwrite what came after it.
   int _onlineStatusRevision = 0;
 
   Client get _defaultClient => ref.read(defaultClientProvider);
@@ -130,9 +131,12 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
     _ => null,
   };
 
+  /// Claims the newest revision, outdating everything that is already running.
+  int _claimRevision() => ++_onlineStatusRevision;
+
   /// Writes a status, and marks every check that is already running as outdated.
   void _setOnlineStatus(bool isOnline) {
-    _onlineStatusRevision++;
+    _claimRevision();
     state = AsyncValue.data((isOnline: isOnline, appState: state.value?.appState));
   }
 
@@ -237,7 +241,7 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
       return;
     }
 
-    final revision = _onlineStatusRevision;
+    final revision = _claimRevision();
     final result = await _connectivity.checkConnectivity();
     final newConn = await _getConnectivityStatus(result, appState);
 
@@ -261,19 +265,17 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
       return;
     }
 
-    final revision = _onlineStatusRevision;
+    final revision = _claimRevision();
     final wasOnline = settled.isOnline;
     final newIsOnline = await isOnline(_defaultClient);
 
     if (!_isCurrent(revision)) return;
 
+    // A check that confirms the status has nothing to write: the checks it overtook were already
+    // outdated by the revision it claimed on its way in.
     if (newIsOnline != wasOnline) {
       _logger.info('Connectivity status: $reason, isOnline: $newIsOnline');
       _setOnlineStatus(newIsOnline);
-    } else {
-      // A check that confirms the status is evidence just as fresh as one that changes it: it has
-      // nothing to notify about, but it still outdates the slower checks it has overtaken.
-      _onlineStatusRevision++;
     }
   }
 
