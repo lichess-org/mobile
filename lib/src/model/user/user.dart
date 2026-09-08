@@ -1,10 +1,12 @@
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/profile.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
+import 'package:material_ui/material_ui.dart';
 
 part 'user.freezed.dart';
 part 'user.g.dart';
@@ -482,4 +484,31 @@ sealed class Crosstable with _$Crosstable {
       return CrosstableMatchup.fromPick(matchupPick.required());
     }),
   );
+}
+
+extension DisplayRating on IMap<Perf, UserPerf> {
+  Perf? get _displayPerfs {
+    List<Perf> userPerfs = Perf.values
+        .where((element) {
+          final p = this[element];
+          return p != null && p.numberOfGamesOrRuns > 0 && p.ratingDeviation < kClueLessDeviation;
+        })
+        .toList(growable: false);
+
+    if (userPerfs.isEmpty) return null;
+
+    userPerfs.sort(
+      (p1, p2) => this[p1]!.numberOfGamesOrRuns.compareTo(this[p2]!.numberOfGamesOrRuns),
+    );
+    userPerfs = userPerfs.reversed.toList();
+    return userPerfs.first;
+  }
+
+  String? get displayRating {
+    final perf = _displayPerfs;
+    if (perf == null) return null;
+    return this[perf]?.rating.toString() ?? '?';
+  }
+
+  IconData? get displayRatingIcon => _displayPerfs?.icon;
 }

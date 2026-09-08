@@ -1,5 +1,4 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
@@ -64,22 +63,9 @@ class _UserRating extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Perf> userPerfs = Perf.values
-        .where((element) {
-          final p = perfs[element];
-          return p != null && p.numberOfGamesOrRuns > 0 && p.ratingDeviation < kClueLessDeviation;
-        })
-        .toList(growable: false);
-
-    if (userPerfs.isEmpty) return const SizedBox.shrink();
-
-    userPerfs.sort(
-      (p1, p2) => perfs[p1]!.numberOfGamesOrRuns.compareTo(perfs[p2]!.numberOfGamesOrRuns),
-    );
-    userPerfs = userPerfs.reversed.toList();
-
-    final rating = perfs[userPerfs.first]?.rating.toString() ?? '?';
-    final icon = userPerfs.first.icon;
+    final rating = perfs.displayRating;
+    if (rating == null) return const SizedBox.shrink();
+    final icon = perfs.displayRatingIcon;
 
     return Row(
       mainAxisSize: MainAxisSize.min,
