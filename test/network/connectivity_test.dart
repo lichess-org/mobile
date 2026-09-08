@@ -351,6 +351,53 @@ void main() {
       binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
     });
 
+    test('a check that confirms the status still outdates the slower ones', () async {
+      var offline = false;
+      var checkDelay = Duration.zero;
+      final container = await makeContainer(
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+            (ref) => FakeHttpClientFactory(
+              () => MockClient((request) async {
+                final (wasOffline, delay) = (offline, checkDelay);
+                await Future<void>.delayed(delay);
+                if (wasOffline) throw const SocketException('No internet');
+                return http.Response('', 200);
+              }),
+            ),
+          ),
+        },
+      );
+
+      final binding = TestWidgetsFlutterBinding.instance;
+
+      fakeAsync((async) {
+        container.read(connectivityChangesProvider);
+        async.elapse(const Duration(seconds: 1));
+        expect(container.read(isDeviceOnlineProvider), isTrue);
+
+        // Coming back to the app starts a check while the network is down, and it takes its time.
+        offline = true;
+        checkDelay = const Duration(seconds: 4);
+        binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+        async.elapse(const Duration(milliseconds: 100));
+
+        // The network is back, and a second check overtakes the first to say so. It confirms the
+        // status rather than changing it, so it writes nothing — but it is the fresher answer.
+        offline = false;
+        checkDelay = Duration.zero;
+        FakeConnectivity.controller.add([ConnectivityResult.wifi]);
+        async.elapse(const Duration(milliseconds: 100));
+        expect(container.read(isDeviceOnlineProvider), isTrue);
+
+        // The first check finally answers, with a network that is seconds out of date.
+        async.elapse(const Duration(seconds: 5));
+        expect(container.read(isDeviceOnlineProvider), isTrue);
+      });
+
+      binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+    });
+
     test('assumes online while the check is still running', () async {
       final container = await makeContainer(
         overrides: {

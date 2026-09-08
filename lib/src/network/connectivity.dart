@@ -117,13 +117,13 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
   Connectivity get _connectivity => ref.read(connectivityPluginProvider);
 
   /// Writes a status, and marks every check that is already running as outdated.
-  void _setStatus(ConnectivityStatus status) {
+  void _setOnlineStatus(bool isOnline) {
     _onlineStatusRevision++;
-    state = AsyncValue.data(status);
+    state = AsyncValue.data((isOnline: isOnline, appState: state.requireValue.appState));
   }
 
   /// Whether a check that started at [revision] may still commit its result.
-  bool _isCurrent(int revision, String reason) {
+  bool _isCurrent(int revision) {
     if (!ref.mounted) return false;
     if (revision != _onlineStatusRevision) {
       return false;
@@ -154,7 +154,7 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
       // while building, and Riverpod forbids a provider modifying another during a build.
       scheduleMicrotask(() {
         if (!ref.mounted || state.value?.isOnline != false) return;
-        _setStatus((isOnline: true, appState: state.requireValue.appState));
+        _setOnlineStatus(true);
       });
     }
 
@@ -233,11 +233,11 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
     final result = await _connectivity.checkConnectivity();
     final newConn = await _getConnectivityStatus(result, appState);
 
-    if (!_isCurrent(revision, 'app resumed')) return;
+    if (!_isCurrent(revision)) return;
 
     // The app may have been backgrounded again while the check ran, so the lifecycle state is read
     // again rather than taken from the check.
-    _setStatus((isOnline: newConn.isOnline, appState: state.requireValue.appState));
+    _setOnlineStatus(newConn.isOnline);
   }
 
   Future<void> _onConnectivityChange(List<ConnectivityResult> result) {
@@ -256,11 +256,15 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
     final wasOnline = state.requireValue.isOnline;
     final newIsOnline = await isOnline(_defaultClient);
 
-    if (!_isCurrent(revision, reason)) return;
+    if (!_isCurrent(revision)) return;
 
     if (newIsOnline != wasOnline) {
       _logger.info('Connectivity status: $reason, isOnline: $newIsOnline');
-      _setStatus((isOnline: newIsOnline, appState: state.requireValue.appState));
+      _setOnlineStatus(newIsOnline);
+    } else {
+      // A check that confirms the status is evidence just as fresh as one that changes it: it has
+      // nothing to notify about, but it still outdates the slower checks it has overtaken.
+      _onlineStatusRevision++;
     }
   }
 
