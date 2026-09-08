@@ -655,8 +655,10 @@ class SocketPool {
     // right here would have the two providers build each other, which Riverpod forbids.
     scheduleMicrotask(() {
       if (_isDisposed) return;
+      // [isDeviceOnlineIn] rather than the raw value: a check that failed reads as offline there,
+      // and coming back from one is an edge the socket has to hear about like any other.
       _ref.listen(connectivityChangesProvider, (prev, next) {
-        if (prev?.value?.isOnline == false && next.value?.isOnline == true) {
+        if (prev != null && !isDeviceOnlineIn(prev) && isDeviceOnlineIn(next)) {
           onDeviceOnline();
         }
       });

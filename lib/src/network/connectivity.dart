@@ -28,11 +28,14 @@ final connectivityPluginProvider = Provider<Connectivity>((Ref _) => Connectivit
 /// directly in the rare places that must not be optimistic, and [lichessConnectionStatusProvider]
 /// where a lichess outage has to be shown.
 final isDeviceOnlineProvider = Provider.autoDispose<bool>((ref) {
-  return ref.watch(connectivityChangesProvider.select(_isDeviceOnlineIn));
+  return ref.watch(connectivityChangesProvider.select(isDeviceOnlineIn));
 }, name: 'IsDeviceOnlineProvider');
 
 /// [isDeviceOnlineProvider]'s view of a connectivity status.
-bool _isDeviceOnlineIn(AsyncValue<ConnectivityStatus> status) => switch (status) {
+///
+/// Exposed so that the few places reading [connectivityChangesProvider] directly can tell online
+/// from offline the same way, error states included.
+bool isDeviceOnlineIn(AsyncValue<ConnectivityStatus> status) => switch (status) {
   // A check that failed does mean we could not reach anything.
   AsyncValue(hasError: true) => false,
   // The last known answer, whether it comes from a settled check or from a re-run that has not

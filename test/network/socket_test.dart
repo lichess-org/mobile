@@ -758,6 +758,45 @@ void main() {
       pool.currentClient.close();
     });
 
+    test(
+      'reconnects the socket when a failed connectivity check is followed by an online one',
+      () async {
+        var offline = true;
+        final container = await makeContainer(
+          overrides: {
+            ...offlineNetworkOverrides(() => offline),
+            // The check itself cannot even run: what it leaves behind is an error, which the app
+            // reads as offline like any other check that reached nothing.
+            connectivityPluginProvider: connectivityPluginProvider.overrideWith(
+              (_) => FailingConnectivity(),
+            ),
+          },
+        );
+
+        await expectLater(container.read(connectivityChangesProvider.future), throwsStateError);
+        expect(container.read(isDeviceOnlineProvider), isFalse);
+
+        final pool = container.read(socketPoolProvider);
+        pool.currentClient.connect();
+        await pumpEventQueue();
+        expect(pool.currentClient.isConnected, isFalse);
+
+        // The socket is waiting out its backoff, and the only thing that can cut it short is the
+        // device coming back online — from an error just as much as from a settled offline status.
+        offline = false;
+        FakeConnectivity.controller.add([ConnectivityResult.wifi]);
+
+        await pool.currentClient.firstConnection.timeout(
+          const Duration(seconds: 1),
+          onTimeout: () => fail('the socket did not reconnect when the device came back online'),
+        );
+        await Future<void>.delayed(kFakeWebSocketConnectionLag * 4);
+        expect(pool.currentClient.isConnected, isTrue);
+
+        pool.currentClient.close();
+      },
+    );
+
     test('does not reconnect the socket while the app is in the background', () async {
       var offline = true;
       var socketAttempts = 0;
