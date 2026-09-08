@@ -144,7 +144,40 @@ class FakeWebSocketChannel implements WebSocketChannel {
   late final _FakeWebSocketSink _sink;
 
   Future<void> _close() {
+    if (!_streamController.isClosed) {
+      _streamController.close();
+    }
     return _outcomingController.close();
+  }
+
+  /// The stream the client listens to, fed by the global incoming controller.
+  ///
+  /// It is per channel so that a single connection can be dropped, as [closeFromServer] does.
+  late final StreamController<dynamic> _streamController = StreamController<dynamic>.broadcast(
+    onListen: () {
+      _incomingSubscription = _incomingController.stream
+          .where((event) => event.$1 == route)
+          .map((event) => event.$2)
+          .listen(_streamController.add);
+    },
+    onCancel: () {
+      _incomingSubscription?.cancel();
+      _incomingSubscription = null;
+    },
+  );
+
+  StreamSubscription<dynamic>? _incomingSubscription;
+
+  /// Drops the connection the way a network going away under an open socket does.
+  ///
+  /// With [error], the stream errors out before it closes; without, it merely closes, as a peer
+  /// hanging up would.
+  void closeFromServer([Object? error]) {
+    if (_streamController.isClosed) return;
+    if (error != null) {
+      _streamController.addError(error);
+    }
+    _streamController.close();
   }
 
   int _pongCount = 0;
@@ -200,8 +233,7 @@ class FakeWebSocketChannel implements WebSocketChannel {
   WebSocketSink get sink => _sink;
 
   @override
-  Stream<dynamic> get stream =>
-      _incomingController.stream.where((event) => event.$1 == route).map((event) => event.$2);
+  Stream<dynamic> get stream => _streamController.stream;
 
   @override
   void pipe(StreamChannel<dynamic> other) {}

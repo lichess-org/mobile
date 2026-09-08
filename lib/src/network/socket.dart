@@ -312,7 +312,12 @@ class SocketClient {
             final event = SocketEvent.fromJson(jsonDecode(raw as String) as Map<String, dynamic>);
             return event;
           })
-          .listen(_handleEvent);
+          .listen(
+            _handleEvent,
+            onError: (Object error, StackTrace stackTrace) =>
+                _onChannelGone(epoch, error, stackTrace),
+            onDone: () => _onChannelGone(epoch),
+          );
 
       _logger.fine('WebSocket connection to $route established.');
 
@@ -540,6 +545,38 @@ class SocketClient {
           _globalStreamController.add(event);
         }
     }
+  }
+
+  /// Called when the channel is gone: the peer closed it, or the stream errored out.
+  ///
+  /// A device losing its network under an open socket ends here rather than at a ping going
+  /// unanswered, and that is worth acting on right away: waiting out [pingMaxLag] for a socket
+  /// already known to be dead only delays the reconnect, and everything watching the lag.
+  ///
+  /// [epoch] is the connection this subscription belonged to, so that a channel closing after the
+  /// client has moved on to another one is ignored.
+  void _onChannelGone(int epoch, [Object? error, StackTrace? stackTrace]) {
+    if (isDisposed || epoch != _connectionEpoch) return;
+
+    _pingTimer?.cancel();
+    _pongTimeoutTimer?.cancel();
+    _averageLag.value = Duration.zero;
+    _startFailing();
+
+    final delay = _reconnectDelay;
+    final message =
+        'WebSocket connection to $route was closed (failing for ${_failingFor.inSeconds}s now), '
+        'reconnecting in ${delay.inMilliseconds}ms.';
+
+    if (error == null || _isTransportUnavailable(error)) {
+      // A peer that hangs up, or a network that goes away under the socket: both are ordinary, and
+      // the reconnect below is the whole answer to them.
+      _logger.fine(message, error, stackTrace);
+    } else {
+      _logger.warning(message, error, stackTrace);
+    }
+
+    _scheduleReconnect(delay);
   }
 
   void _schedulePing(Duration delay) {
@@ -983,6 +1020,11 @@ class SocketPingNotifier extends Notifier<SocketPingState> {
   SocketPingState build({Uri? route}) {
     final pool = ref.watch(socketPoolProvider);
 
+    // A socket only notices a network that went away when a ping goes unanswered, up to
+    // [SocketClient.pingMaxLag] later. Connectivity knows first, so the indicator does not have to
+    // go on showing a lag measured over a network that is no longer there.
+    ref.watch(isDeviceOnlineProvider);
+
     pool.averageLag.addListener(_listener);
 
     ref.onDispose(() {
@@ -993,6 +1035,7 @@ class SocketPingNotifier extends Notifier<SocketPingState> {
   }
 
   Duration get _currentRouteLag {
+    if (!ref.read(isDeviceOnlineProvider)) return Duration.zero;
     final pool = ref.read(socketPoolProvider);
     return route != null
         ? route == pool.currentClient.route

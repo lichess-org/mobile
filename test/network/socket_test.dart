@@ -158,6 +158,56 @@ void main() {
       socketClient.close();
     });
 
+    test('a connection the peer drops is failing at once', () {
+      FakeWebSocketChannel? channel;
+      final fakeChannelFactory = FakeWebSocketChannelFactory(
+        (route) => channel = FakeWebSocketChannel(route),
+      );
+
+      fakeAsync((async) {
+        final socketClient = makeTestSocketClient(fakeChannelFactory: fakeChannelFactory);
+        socketClient.connect();
+
+        async.elapse(const Duration(milliseconds: 20));
+        expect(socketClient.isConnected, isTrue);
+
+        // What a device losing its network under an open socket looks like: the channel is torn
+        // down, and there is nothing to wait for — least of all the pong timeout.
+        channel!.closeFromServer(const SocketException('Network is unreachable'));
+        async.elapse(const Duration(milliseconds: 1));
+
+        expect(socketClient.isFailing.value, isTrue);
+        expect(socketClient.isConnected, isFalse);
+
+        socketClient.close();
+        async.flushTimers();
+      });
+    });
+
+    test('a connection the peer closes cleanly is failing at once', () {
+      FakeWebSocketChannel? channel;
+      final fakeChannelFactory = FakeWebSocketChannelFactory(
+        (route) => channel = FakeWebSocketChannel(route),
+      );
+
+      fakeAsync((async) {
+        final socketClient = makeTestSocketClient(fakeChannelFactory: fakeChannelFactory);
+        socketClient.connect();
+
+        async.elapse(const Duration(milliseconds: 20));
+        expect(socketClient.isConnected, isTrue);
+
+        channel!.closeFromServer();
+        async.elapse(const Duration(milliseconds: 1));
+
+        expect(socketClient.isFailing.value, isTrue);
+        expect(socketClient.isConnected, isFalse);
+
+        socketClient.close();
+        async.flushTimers();
+      });
+    });
+
     test('a socket that opens but never answers a ping is failing', () {
       var serverAnswers = false;
       var channelsCreated = 0;
@@ -638,7 +688,7 @@ void main() {
     await testEventEmitted(socketClient, fakeChannel, pongMessage, [pongEvent]);
 
     // should not emit if ack
-    const ackMessage = '{"t":"n","d":10,"r":3}';
+    const ackMessage = '{"t":"ack","d":1}';
     await testEventEmitted(socketClient, fakeChannel, ackMessage, []);
 
     // should not emit if batch
@@ -1031,6 +1081,35 @@ void main() {
 
         async.flushTimers();
       });
+    });
+  });
+
+  group('socketPingProvider', () {
+    test('reports no lag as soon as the device is known to be offline', () async {
+      var offline = false;
+      final container = await makeContainer(overrides: offlineNetworkOverrides(() => offline));
+
+      await container.read(connectivityChangesProvider.future);
+
+      final client = container.read(socketPoolProvider).currentClient;
+      client.connect();
+      await client.firstConnection;
+      await Future<void>.delayed(kFakeWebSocketConnectionLag * 4);
+      await pumpEventQueue();
+
+      expect(container.read(socketPingProvider(null)).averageLag, isNot(Duration.zero));
+
+      // The network goes away. The socket has yet to notice — its next ping has not even been
+      // sent — but the check does, and the indicator must not go on showing a lag measured over a
+      // network that is no longer there.
+      offline = true;
+      FakeConnectivity.controller.add([ConnectivityResult.none]);
+      await pumpEventQueue();
+
+      expect(container.read(isDeviceOnlineProvider), isFalse);
+      expect(container.read(socketPingProvider(null)).averageLag, Duration.zero);
+
+      client.close();
     });
   });
 }
