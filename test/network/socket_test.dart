@@ -1012,6 +1012,75 @@ void main() {
       pool.currentClient.close();
     });
 
+    test(
+      'reconnects a failing socket even if the route before it answered while offline',
+      () async {
+        const otherRoute = '/other/socket/v5';
+        var networkDown = false;
+        final attempts = <Uri>[];
+        FakeWebSocketChannel? defaultChannel;
+        final container = await makeContainer(
+          overrides: {
+            httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+              (ref) => FakeHttpClientFactory(
+                () => MockClient((request) async {
+                  if (networkDown) throw const SocketException('No internet');
+                  return http.Response('', 200);
+                }),
+              ),
+            ),
+            webSocketChannelFactoryProvider: webSocketChannelFactoryProvider.overrideWithValue(
+              FakeWebSocketChannelFactory((route) {
+                attempts.add(route);
+                if (networkDown) throw const SocketException('No internet');
+                final channel = createDefaultFakeWebSocketChannel(route);
+                if (route.path == kDefaultSocketRoute) defaultChannel = channel;
+                return channel;
+              }),
+            ),
+          },
+        );
+
+        fakeAsync((async) {
+          container.read(connectivityChangesProvider);
+          final pool = container.read(socketPoolProvider);
+          pool.open(defaultSocketUri);
+          async.elapse(const Duration(seconds: 1));
+          expect(pool.currentClient.isConnected, isTrue);
+
+          // The device is found offline, and the socket on the default route answers a ping all the
+          // same — the channel it holds is fine, whatever the probed hosts say.
+          networkDown = true;
+          FakeConnectivity.controller.add([ConnectivityResult.none]);
+          // A lag of its own, so that the pong to come is a change the pool hears about.
+          defaultChannel!.connectionLag = const Duration(milliseconds: 40);
+          async.elapse(const Duration(seconds: 30));
+          expect(container.read(isDeviceOnlineProvider), isFalse);
+          expect(pool.currentClient.isConnected, isTrue);
+
+          // A screen then opens another route, whose socket cannot connect and settles into its
+          // backoff. What the route before it answered says nothing about this one.
+          pool.open(Uri(path: otherRoute));
+          async.elapse(const Duration(milliseconds: 500));
+          expect(pool.currentClient.isConnected, isFalse);
+          final attemptsSoFar = attempts.length;
+
+          // The network comes back. This socket has everything to gain from an attempt now, rather
+          // than at the end of a backoff seconds away.
+          networkDown = false;
+          FakeConnectivity.controller.add([ConnectivityResult.wifi]);
+          async.elapse(const Duration(milliseconds: 200));
+
+          expect(container.read(isDeviceOnlineProvider), isTrue);
+          expect(attempts.length, attemptsSoFar + 1);
+          expect(pool.currentClient.isConnected, isTrue);
+
+          pool.currentClient.close();
+          async.flushTimers();
+        });
+      },
+    );
+
     test('does not reconnect a socket that came back up before the check noticed', () async {
       var offline = false;
       var channelsCreated = 0;

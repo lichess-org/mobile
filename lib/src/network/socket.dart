@@ -772,11 +772,14 @@ class SocketPool {
 
   final _averageLag = ValueNotifier(Duration.zero);
 
-  /// Whether the current socket has answered a ping since the device was last found offline.
+  /// Whether a socket has answered a ping since the device was last found offline.
   ///
-  /// A socket that did has already made the connection the online edge would ask for: its own
-  /// retry got to the network before the check noticed it was back. One that did not says nothing:
-  /// it may well be holding a connection to a network that is gone.
+  /// One that did has already made the connection the online edge would ask for: its own retry got
+  /// to the network before the check noticed it was back. One that did not says nothing: it may
+  /// well be holding a connection to a network that is gone.
+  ///
+  /// It says nothing about *which* socket answered, so it is only ever read together with the
+  /// current client's own state — the pool may have switched route since.
   bool _socketAnsweredSinceOffline = false;
 
   Timer? _closeInBackgroundTimer;
@@ -836,10 +839,14 @@ class SocketPool {
   void onDeviceBackOnline() {
     if (_isAppInBackground) return;
 
-    // The socket answered a ping while the device was held offline, so it is already on the
-    // network this edge is announcing: reconnecting it here would cost an event gap and a
+    // The current socket answered a ping while the device was held offline, so it is already on
+    // the network this edge is announcing: reconnecting it here would cost an event gap and a
     // handshake to end up exactly where it is.
-    if (_socketAnsweredSinceOffline) {
+    //
+    // The flag alone would not do: it is not reset when the pool switches route, so it may well be
+    // the socket of the route before this one that answered, while the current one is failing and
+    // has everything to gain from an attempt now.
+    if (_socketAnsweredSinceOffline && currentClient.isConnected) {
       return;
     }
 
