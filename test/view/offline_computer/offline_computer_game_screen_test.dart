@@ -207,8 +207,8 @@ void main() {
       await tester.pump(kEngineEvalEmissionThrottleDelay * 2);
       expect(engine.stopCount, 0);
 
-      // The full sequence: [AppLifecycleListener] asserts on a transition the platform cannot
-      // make, and the socket pool now installs one.
+      // The full sequence: the app installs [AppLifecycleListener]s, which assert on a transition
+      // the platform cannot make.
       tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
       tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
       tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);

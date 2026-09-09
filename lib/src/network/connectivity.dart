@@ -27,15 +27,21 @@ final connectivityPluginProvider = Provider<Connectivity>((Ref _) => Connectivit
 /// directly in the rare places that must not be optimistic, and [lichessConnectionStatusProvider]
 /// where a lichess outage has to be shown.
 final isDeviceOnlineProvider = Provider.autoDispose<bool>((ref) {
-  return switch (ref.watch(connectivityChangesProvider)) {
-    // A check that failed does mean we could not reach anything.
-    AsyncValue(hasError: true) => false,
-    // The last known answer, whether it comes from a settled check or from a re-run that has not
-    // completed yet.
-    AsyncValue(:final value?) => value.isOnline,
-    _ => true,
-  };
+  return ref.watch(connectivityChangesProvider.select(isDeviceOnlineIn));
 }, name: 'IsDeviceOnlineProvider');
+
+/// [isDeviceOnlineProvider]'s view of a connectivity status.
+///
+/// Exposed so that the few places reading [connectivityChangesProvider] directly can tell online
+/// from offline the same way, error states included.
+bool isDeviceOnlineIn(AsyncValue<ConnectivityStatus> status) => switch (status) {
+  // A check that failed does mean we could not reach anything.
+  AsyncValue(hasError: true) => false,
+  // The last known answer, whether it comes from a settled check or from a re-run that has not
+  // completed yet.
+  AsyncValue(:final value?) => value.isOnline,
+  _ => true,
+};
 
 /// Represents the connection state of the app with respect to the lichess server.
 enum LichessConnectionStatus {
@@ -94,13 +100,48 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
   StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
   AppLifecycleListener? _appLifecycleListener;
 
-  final _connectivityChangesThrottler = Throttler(kConnectivityThrottleDelay);
+  // Trailing: the plugin reports each change once, so a call dropped here is a signal lost for
+  // good — nothing would ask for the check again, and the status would stay as it was until the
+  // next change.
+  final _connectivityChangesThrottler = Throttler(kConnectivityThrottleDelay, trailing: true);
+
+  /// Claimed by every check that starts and every write that decides whether the device is online.
+  int _onlineStatusRevision = 0;
 
   Client get _defaultClient => ref.read(defaultClientProvider);
   Connectivity get _connectivity => ref.read(connectivityPluginProvider);
 
+  /// The status the app is showing, or null while the first check has yet to settle anything.
+  ///
+  /// A check that failed settles the question too: [isDeviceOnlineProvider] reads an error as
+  /// offline — nothing could be reached — so a later check has an offline status to compare with,
+  /// like any other.
+  ConnectivityStatus? get _settledStatus => switch (state) {
+    AsyncValue(hasError: true) => (isOnline: false, appState: state.value?.appState),
+    AsyncValue(:final value?) => value,
+    _ => null,
+  };
+
+  /// Claims the newest revision, outdating everything that is already running.
+  int _claimRevision() => ++_onlineStatusRevision;
+
+  /// Writes a status, and marks every check that is already running as outdated.
+  void _setOnlineStatus(bool isOnline) {
+    _claimRevision();
+    state = AsyncValue.data((isOnline: isOnline, appState: state.value?.appState));
+  }
+
+  /// Whether a check that started at [revision] may still commit its result.
+  bool _isCurrent(int revision) {
+    if (!ref.mounted) return false;
+    if (revision != _onlineStatusRevision) {
+      return false;
+    }
+    return true;
+  }
+
   @override
-  Future<ConnectivityStatus> build() {
+  Future<ConnectivityStatus> build() async {
     ref.onDispose(() {
       _connectivitySubscription?.cancel();
       _appLifecycleListener?.dispose();
@@ -116,7 +157,7 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
 
     _appLifecycleListener = AppLifecycleListener(onStateChange: _onAppLifecycleChange);
 
-    return _connectivity.checkConnectivity().then((r) => _getConnectivityStatus(r, appState));
+    return await _getConnectivityStatus(await _connectivity.checkConnectivity(), appState);
   }
 
   Future<void> _onAppLifecycleChange(AppLifecycleState appState) async {
@@ -126,36 +167,61 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
       ref.read(serverStatusProvider.notifier).onAppResumed();
     }
 
-    if (!state.hasValue) {
+    final settled = _settledStatus;
+    if (settled == null) {
       return;
     }
 
-    if (appState == AppLifecycleState.resumed) {
-      final newConn = await _connectivity.checkConnectivity().then(
-        (r) => _getConnectivityStatus(r, appState),
-      );
+    // The lifecycle state is known right away, whatever the check that follows finds. It says
+    // nothing about connectivity, so it does not outdate a check that is already running.
+    state = AsyncValue.data((isOnline: settled.isOnline, appState: appState));
 
-      state = AsyncValue.data(newConn);
-    } else {
-      final (:isOnline, appState: _) = state.requireValue;
-      state = AsyncValue.data((isOnline: isOnline, appState: appState));
+    if (appState != AppLifecycleState.resumed) {
+      return;
     }
+
+    final List<ConnectivityResult> result;
+    try {
+      result = await _connectivity.checkConnectivity();
+    } catch (e, s) {
+      // A check that could not run says nothing about the network, and here — unlike in [build] —
+      // there is already a settled status to fall back on: it is left as it is, rather than turned
+      // into an error something else would have to undo.
+      _logger.warning('Connectivity check on app resume failed', e, s);
+      return;
+    }
+
+    // Claimed only now that there is a check to run: one that never got off the ground would
+    // otherwise outdate a probe already in flight, whose answer would then be dropped with nothing
+    // written in its place.
+    final revision = _claimRevision();
+    final newConn = await _getConnectivityStatus(result, appState);
+
+    if (!_isCurrent(revision)) return;
+
+    // The app may have been backgrounded again while the check ran, so the lifecycle state is read
+    // again rather than taken from the check.
+    _setOnlineStatus(newConn.isOnline);
   }
 
+  /// Runs the online check on a connectivity change, and updates the status if it disagrees.
   Future<void> _onConnectivityChange(List<ConnectivityResult> result) async {
-    if (!state.hasValue) {
+    final settled = _settledStatus;
+    if (settled == null) {
       return;
     }
 
-    final wasOnline = state.requireValue.isOnline;
-
-    _logger.fine('Connectivity changed: $result');
+    final revision = _claimRevision();
+    final wasOnline = settled.isOnline;
     final newIsOnline = await isOnline(_defaultClient);
-    _logger.fine('Online check result: $newIsOnline');
 
+    if (!_isCurrent(revision)) return;
+
+    // A check that confirms the status has nothing to write: the checks it overtook were already
+    // outdated by the revision it claimed on its way in.
     if (newIsOnline != wasOnline) {
-      _logger.info('Connectivity status: $result, isOnline: $newIsOnline');
-      state = AsyncValue.data((isOnline: newIsOnline, appState: state.value?.appState));
+      _logger.info('Connectivity status: connectivity changed: $result, isOnline: $newIsOnline');
+      _setOnlineStatus(newIsOnline);
     }
   }
 
@@ -171,10 +237,12 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
 
 typedef ConnectivityStatus = ({bool isOnline, AppLifecycleState? appState});
 
-final _internetCheckUris = [
+/// The URIs [isOnline] probes.
+@visibleForTesting
+final internetCheckUris = List<Uri>.unmodifiable([
   Uri.parse('https://www.gstatic.com/generate_204'),
   Uri.parse('$kLichessCDNHost/assets/logo/lichess-favicon-32.png'),
-];
+]);
 
 /// Checks if the device is online by making a HEAD request to a list of URIs.
 ///
@@ -191,8 +259,8 @@ final _internetCheckUris = [
 Future<bool> isOnline(Client client, {Duration timeout = const Duration(seconds: 5)}) {
   final completer = Completer<bool>();
   try {
-    int remaining = _internetCheckUris.length;
-    final futures = _internetCheckUris.map(
+    int remaining = internetCheckUris.length;
+    final futures = internetCheckUris.map(
       (uri) => client
           .head(uri, headers: const {kQuietRequestHeader: '1'})
           .timeout(timeout)
@@ -214,61 +282,4 @@ Future<bool> isOnline(Client client, {Duration timeout = const Duration(seconds:
     completer.complete(false);
   }
   return completer.future;
-}
-
-extension AsyncValueConnectivity on AsyncValue<ConnectivityStatus> {
-  /// Switches between device's connectivity status.
-  ///
-  /// Using this method assumes the device is offline when the status is
-  /// not yet available (i.e. [AsyncValue.isLoading].
-  /// If you want to handle the loading state separately, use
-  /// [whenIsLoading] instead.
-  ///
-  /// This method is similar to [AsyncValueX.maybeWhen], but it takes two
-  /// functions, one for when the device is online and another for when it is
-  /// offline.
-  ///
-  /// Example:
-  /// ```dart
-  /// final status = ref.watch(connectivityChangesProvider);
-  /// final result = status.whenIs(
-  ///   online: () => 'Online',
-  ///   offline: () => 'Offline',
-  /// );
-  /// ```
-  R whenIs<R>({required R Function() online, required R Function() offline}) {
-    return maybeWhen(
-      skipLoadingOnReload: true,
-      data: (status) => status.isOnline ? online() : offline(),
-      orElse: offline,
-    );
-  }
-
-  /// Switches between device's connectivity status, but handling the loading state.
-  ///
-  /// This method is similar to [AsyncValueX.when], but it takes three
-  /// functions, one for when the device is online, another for when it is
-  /// offline, and the last for when the status is still loading.
-  ///
-  /// Example:
-  /// ```dart
-  /// final status = ref.watch(connectivityChangesProvider);
-  /// final result = status.whenIsLoading(
-  ///   online: () => 'Online',
-  ///   offline: () => 'Offline',
-  ///   loading: () => 'Loading',
-  /// );
-  /// ```
-  R whenIsLoading<R>({
-    required R Function() online,
-    required R Function() offline,
-    required R Function() loading,
-  }) {
-    return when(
-      skipLoadingOnReload: true,
-      data: (status) => status.isOnline ? online() : offline(),
-      loading: loading,
-      error: (error, stack) => offline(),
-    );
-  }
 }

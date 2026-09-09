@@ -163,7 +163,9 @@ class CreateGameService {
           _challengePingTimer?.cancel();
           _challengePingTimer = Timer.periodic(
             const Duration(seconds: 9),
-            (_) => socketClient.send('ping', null),
+            // Not queued while the socket is down: these say the user is still waiting *now*, and
+            // the listener above sends a fresh one as soon as it is back up.
+            (_) => socketClient.send('ping', null, noRetry: true),
           );
         }),
         socketClient.stream.listen((event) async {
@@ -238,7 +240,9 @@ class CreateGameService {
           _challengePingTimer?.cancel();
           _challengePingTimer = Timer.periodic(
             const Duration(seconds: 9),
-            (_) => socketClient.send('ping', null),
+            // Not queued while the socket is down: these say the user is still waiting *now*, and
+            // the listener above sends a fresh one as soon as it is back up.
+            (_) => socketClient.send('ping', null, noRetry: true),
           );
         }),
         socketClient.stream.listen((event) async {
