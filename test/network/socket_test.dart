@@ -1175,7 +1175,7 @@ void main() {
 
         // Everything that would bring the socket back in the foreground must leave it closed
         // here, and no timer left over from the connected socket may bring it back either.
-        pool.onDeviceOnline();
+        pool.onDeviceBackOnline();
         pool.onAuthChanged();
         async.elapse(const Duration(minutes: 10));
 

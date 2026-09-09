@@ -766,7 +766,7 @@ class SocketPool {
         if (wasOnline && !isOnline) {
           _socketAnsweredSinceOffline = false;
         } else if (!wasOnline && isOnline) {
-          onDeviceOnline();
+          onDeviceBackOnline();
         }
       });
     });
@@ -827,6 +827,7 @@ class SocketPool {
   ///
   /// The socket is kept for a while, as the user may well come right back, then closed to spare
   /// the battery.
+  @visibleForTesting
   void onAppHidden() {
     _isAppInBackground = true;
     _closeInBackgroundTimer?.cancel();
@@ -839,6 +840,7 @@ class SocketPool {
   }
 
   /// Call when the app comes back to the foreground.
+  @visibleForTesting
   void onAppShown() {
     _isAppInBackground = false;
     _closeInBackgroundTimer?.cancel();
@@ -850,7 +852,8 @@ class SocketPool {
   /// A socket that went down with the network keeps retrying on an exponential backoff, so it may
   /// be up to a minute before it notices on its own that the network is back. Connectivity knows
   /// first, so it is worth an attempt right away.
-  void onDeviceOnline() {
+  @visibleForTesting
+  void onDeviceBackOnline() {
     if (_isAppInBackground) return;
 
     // The socket answered a ping while the device was held offline: it is what proved the network
@@ -872,6 +875,7 @@ class SocketPool {
   ///
   /// A socket closed in the background stays closed; it will carry the new session whenever it is
   /// opened again.
+  @visibleForTesting
   void onAuthChanged() {
     if (currentClient.isActive) {
       currentClient.connect();
