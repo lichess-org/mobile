@@ -61,6 +61,7 @@ class BoardEditorScreen extends ConsumerWidget {
             onPressed: () => showDialog<void>(
               context: context,
               builder: (_) => _FenDialog(
+                initialFen: boardEditorState.fen,
                 onFenLoaded: (fen) =>
                     ref.read(boardEditorControllerProvider(params).notifier).loadFen(fen),
               ),
@@ -473,8 +474,9 @@ class _BottomBar extends ConsumerWidget {
 }
 
 class _FenDialog extends StatefulWidget {
-  const _FenDialog({required this.onFenLoaded});
+  const _FenDialog({required this.initialFen, required this.onFenLoaded});
 
+  final String initialFen;
   final void Function(String fen) onFenLoaded;
 
   @override
@@ -482,7 +484,20 @@ class _FenDialog extends StatefulWidget {
 }
 
 class _FenDialogState extends State<_FenDialog> {
-  final _controller = TextEditingController();
+  late final TextEditingController _controller;
+  bool _hasError = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(text: widget.initialFen);
+    // Auto-check the clipboard on open for 1-touch convenience: if the clipboard
+    // contains a valid FEN, _submit() will load it and close the dialog immediately.
+    // If invalid, the dialog remains open so the user can edit the text.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _pasteFromClipboard();
+    });
+  }
 
   @override
   void dispose() {
@@ -491,39 +506,69 @@ class _FenDialogState extends State<_FenDialog> {
   }
 
   Future<void> _pasteFromClipboard() async {
-    final ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain);
-    if (data?.text == null || !mounted) return;
+    final data = await Clipboard.getData(Clipboard.kTextPlain);
+    final text = data?.text?.trim();
+    if (text == null || text.isEmpty || !mounted) return;
 
-    final text = data!.text!.trim();
-    if (text.isEmpty) return;
+    _controller.value = TextEditingValue(
+      text: text,
+      selection: TextSelection.collapsed(offset: text.length),
+    );
+    _submit();
+  }
 
-    _controller.text = text;
+  void _submit() {
+    final text = _controller.text.trim();
     try {
       final pos = Chess.fromSetup(Setup.parseFen(text));
       widget.onFenLoaded(pos.fen);
+      if (mounted) {
+        Navigator.of(context, rootNavigator: true).pop();
+      }
     } catch (_) {
-      showSnackBar(context, context.l10n.invalidFen, type: SnackBarType.error);
-    } finally {
-      Navigator.of(context, rootNavigator: true).pop();
+      // Keep the dialog open on invalid FEN so the user can edit and correct
+      // the input field rather than discarding their edits.
+      if (mounted) {
+        setState(() {
+          _hasError = true;
+        });
+        showSnackBar(context, context.l10n.invalidFen, type: SnackBarType.error);
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      title: const Text('FEN'),
       content: TextField(
         controller: _controller,
-        readOnly: true,
-        onTap: _pasteFromClipboard,
+        autofocus: true,
+        onChanged: (_) {
+          if (_hasError) {
+            setState(() {
+              _hasError = false;
+            });
+          }
+        },
         decoration: InputDecoration(
           hintText: context.l10n.pasteTheFenStringHere,
+          errorText: _hasError ? context.l10n.invalidFen : null,
           suffixIcon: IconButton(
             icon: const Icon(Icons.paste),
             onPressed: _pasteFromClipboard,
             tooltip: 'Paste from clipboard',
           ),
         ),
+        onSubmitted: (_) => _submit(),
       ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
+          child: Text(context.l10n.cancel),
+        ),
+        TextButton(onPressed: _submit, child: Text(context.l10n.ok)),
+      ],
     );
   }
 }
