@@ -10,6 +10,20 @@ void main() {
       expect(hasNonStandardMaterial(Chess.initial), isFalse);
     });
 
+    test('more than 32 pieces is not standard material', () {
+      expect(
+        hasNonStandardMaterial(
+          position('rnbqkbnr/pppppppp/8/8/8/4N3/PPPPPPPP/RNBQKBNR w KQkq - 0 1'),
+        ),
+        isTrue,
+      );
+    });
+
+    test('more than eight pawns on either side is not standard material', () {
+      expect(hasNonStandardMaterial(position('4k3/8/8/8/8/P7/PPPPPPPP/4K3 w - - 0 1')), isTrue);
+      expect(hasNonStandardMaterial(position('4k3/pppppppp/p7/8/8/8/8/4K3 w - - 0 1')), isTrue);
+    });
+
     test('a promoted piece paid for with a pawn is standard material', () {
       // Eight white pieces beyond the king, one of them a second queen that came from a promotion.
       expect(hasNonStandardMaterial(position('4k3/8/8/8/8/8/PPPPPPP1/QQ2K3 w - - 0 1')), isFalse);
