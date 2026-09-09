@@ -32,7 +32,7 @@ const _kAutoReconnectDelay = Duration(milliseconds: 3500);
 const _kMaxAutoReconnectDelay = Duration(seconds: 60);
 
 /// How long the socket keeps retrying at full speed before the backoff sets in.
-const _kReconnectGracePeriod = Duration(seconds: 30);
+const _kReconnectGracePeriod = Duration(seconds: 60);
 
 const _kResendAckDelay = Duration(milliseconds: 1500);
 const _kVersionGapRetryDelay = Duration(milliseconds: 200);
