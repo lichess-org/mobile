@@ -31,15 +31,15 @@
             android:textStyle="bold"
             android:textColor="@color/widget_text_primary"
             android:textSize="14sp" />
-    </LinearLayout>
 
-    <LinearLayout
+      <LinearLayout
         android:id="@+id/broadcast_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" />
+    </LinearLayout>
 
-    <TextView
+  <TextView
         android:id="@+id/empty_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
