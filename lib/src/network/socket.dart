@@ -398,7 +398,11 @@ class SocketClient {
   }
 
   /// Sends a message to the websocket.
-  void send(String topic, Object? data, {bool? ackable, bool? withLag}) {
+  ///
+  /// [noRetry] drops the message when there is no connection to write it to, instead of queueing
+  /// it for the next one. It says nothing about [ackable] messages, which are retried until acked
+  /// whatever happens.
+  void send(String topic, Object? data, {bool? ackable, bool? withLag, bool noRetry = false}) {
     Map<String, Object> message;
     int? ackId;
 
@@ -427,7 +431,7 @@ class SocketClient {
     final sink = _sink;
     if (sink != null) {
       sink.add(encoded);
-    } else {
+    } else if (!noRetry) {
       // Not connected: queue the message so it is sent once the connection
       // (re)opens, instead of being silently dropped.
       _resendWhenOpen.add((ackId, encoded));

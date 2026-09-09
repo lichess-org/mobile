@@ -235,6 +235,39 @@ void main() {
       });
     });
 
+    test('a message sent with noRetry is dropped rather than queued', () {
+      var canConnect = false;
+      final sent = <dynamic>[];
+      final fakeChannelFactory = FakeWebSocketChannelFactory((route) {
+        if (!canConnect) throw const SocketException('No internet');
+        final channel = FakeWebSocketChannel(route);
+        channel.sentMessagesExceptPing.listen(sent.add);
+        return channel;
+      });
+
+      fakeAsync((async) {
+        final socketClient = makeTestSocketClient(fakeChannelFactory: fakeChannelFactory);
+        socketClient.connect();
+        async.elapse(const Duration(milliseconds: 20));
+        expect(socketClient.isConnected, isFalse);
+
+        // The keep-alive is only true of the moment it is sent; the other message is not.
+        socketClient.send('keepAlive', null, noRetry: true);
+        socketClient.send('talk', null);
+
+        canConnect = true;
+        async.elapse(const Duration(seconds: 1));
+
+        expect(socketClient.isConnected, isTrue);
+        expect(sent, [
+          jsonEncode({'t': 'talk'}),
+        ]);
+
+        socketClient.close();
+        async.flushTimers();
+      });
+    });
+
     test('a flush that breaks partway keeps the messages it did not send', () {
       var canConnect = false;
       var nextChannelBreaks = true;
