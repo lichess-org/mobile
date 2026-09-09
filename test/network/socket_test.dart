@@ -192,6 +192,46 @@ void main() {
       });
     });
 
+    test('a message sent after a connection that broke while opening is queued, not lost', () {
+      // Every message this client sends, ping excepted, whichever channel it goes out on: one
+      // written to the channel of the attempt that failed would show up here just the same.
+      final sent = <dynamic>[];
+      var nextChannelFailsItsPing = true;
+      final fakeChannelFactory = FakeWebSocketChannelFactory((route) {
+        final channel = FakeWebSocketChannel(route)..failNextWrite = nextChannelFailsItsPing;
+        nextChannelFailsItsPing = false;
+        channel.sentMessagesExceptPing.listen(sent.add);
+        return channel;
+      });
+
+      fakeAsync((async) {
+        // The handshake succeeds and the peer is gone by the first ping: the attempt fails with a
+        // channel of its own already in hand.
+        final socketClient = makeTestSocketClient(fakeChannelFactory: fakeChannelFactory);
+        socketClient.connect();
+        async.elapse(const Duration(milliseconds: 20));
+        expect(socketClient.isFailing.value, isTrue);
+        expect(socketClient.isConnected, isFalse);
+
+        socketClient.send('test', {'foo': 'bar'});
+        async.elapse(const Duration(milliseconds: 10));
+        expect(sent, isEmpty, reason: 'the channel of the failed attempt is gone');
+
+        // It goes out on the connection that the retry makes instead.
+        async.elapse(const Duration(seconds: 1));
+        expect(socketClient.isConnected, isTrue);
+        expect(sent, [
+          jsonEncode({
+            't': 'test',
+            'd': {'foo': 'bar'},
+          }),
+        ]);
+
+        socketClient.close();
+        async.flushTimers();
+      });
+    });
+
     test('a message sent while the socket waits out its backoff is queued, not lost', () {
       var offline = false;
       // Every message this client sends, ping excepted, whichever channel it goes out on: one

@@ -364,7 +364,11 @@ class SocketClient {
         _logger.fine('Stale WebSocket connection to $route failed:', e, s);
         return;
       }
-      _averageLag.value = Duration.zero;
+      // The attempt may have got as far as a channel before it went wrong — a peer that hangs up
+      // between the handshake and the first ping, say. Drop it here as the pong timeout and the
+      // stream error do, so that [send] queues for the next connection rather than writing to a
+      // sink that is already gone. This cancels the timers of the failed attempt along with it.
+      unawaited(_disconnect());
       _startFailing();
 
       final delay = _reconnectDelay;
