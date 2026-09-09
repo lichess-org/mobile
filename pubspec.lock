@@ -1107,8 +1107,8 @@ packages:
     dependency: "direct main"
     description:
       path: "pkgs/multistockfish"
-      ref: "50b1c4f6c53ad76429bfdfb118f9ebc8c8d2848a"
-      resolved-ref: "50b1c4f6c53ad76429bfdfb118f9ebc8c8d2848a"
+      ref: "896c3884921ae1d775fcd3088ddcd1559fb87308"
+      resolved-ref: "896c3884921ae1d775fcd3088ddcd1559fb87308"
       url: "https://github.com/lichess-org/dart-multistockfish.git"
     source: git
     version: "0.6.0"
@@ -1116,26 +1116,26 @@ packages:
     dependency: "direct overridden"
     description:
       path: "pkgs/multistockfish_chess"
-      ref: "50b1c4f6c53ad76429bfdfb118f9ebc8c8d2848a"
-      resolved-ref: "50b1c4f6c53ad76429bfdfb118f9ebc8c8d2848a"
+      ref: "896c3884921ae1d775fcd3088ddcd1559fb87308"
+      resolved-ref: "896c3884921ae1d775fcd3088ddcd1559fb87308"
       url: "https://github.com/lichess-org/dart-multistockfish.git"
     source: git
     version: "0.6.0"
-  multistockfish_sf16:
+  multistockfish_light:
     dependency: "direct overridden"
     description:
-      path: "pkgs/multistockfish_sf16"
-      ref: "50b1c4f6c53ad76429bfdfb118f9ebc8c8d2848a"
-      resolved-ref: "50b1c4f6c53ad76429bfdfb118f9ebc8c8d2848a"
+      path: "pkgs/multistockfish_light"
+      ref: "896c3884921ae1d775fcd3088ddcd1559fb87308"
+      resolved-ref: "896c3884921ae1d775fcd3088ddcd1559fb87308"
       url: "https://github.com/lichess-org/dart-multistockfish.git"
     source: git
-    version: "0.4.0"
+    version: "0.1.0"
   multistockfish_variant:
     dependency: "direct overridden"
     description:
       path: "pkgs/multistockfish_variant"
-      ref: "50b1c4f6c53ad76429bfdfb118f9ebc8c8d2848a"
-      resolved-ref: "50b1c4f6c53ad76429bfdfb118f9ebc8c8d2848a"
+      ref: "896c3884921ae1d775fcd3088ddcd1559fb87308"
+      resolved-ref: "896c3884921ae1d775fcd3088ddcd1559fb87308"
       url: "https://github.com/lichess-org/dart-multistockfish.git"
     source: git
     version: "0.4.0"

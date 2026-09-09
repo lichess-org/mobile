@@ -157,8 +157,8 @@ void main() {
 
       expect(engine.sessions.map((session) => session.spec.label).toSet(), {
         'variant',
-        'sf16',
-      }, reason: 'the opponent plays on Fairy while the hints are computed on Stockfish 16');
+        'light',
+      }, reason: 'the opponent plays on Fairy while the hints are computed on the light Stockfish');
       expect(
         engine.quitCount,
         0,

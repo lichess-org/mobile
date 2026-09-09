@@ -33,7 +33,7 @@ class _EngineButtonState extends ConsumerState<EngineButton> {
   @override
   Widget build(BuildContext context) {
     final prefs = ref.watch(engineEvaluationPreferencesProvider);
-    final (:engine, eval: localEval, :isComputing, currentWork: _) = ref.watch(
+    final (:engine, :engineSpec, eval: localEval, :isComputing, currentWork: _) = ref.watch(
       engineEvaluationProvider(widget.filters),
     );
     final eval = pickBestClientEval(localEval: localEval, savedEval: widget.savedEval);
@@ -136,7 +136,7 @@ class _EngineButtonState extends ConsumerState<EngineButton> {
         Positioned(
           bottom: -6,
           child: Text(
-            engineShortLabel(engine?.value) ?? prefs.enginePref.shortLabel,
+            engineShortLabel(engine?.value, spec: engineSpec) ?? prefs.enginePref.shortLabel,
             style: TextStyle(
               fontSize: 10,
               fontWeight: FontWeight.w700,
@@ -282,7 +282,7 @@ class _EnginePopup extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final (:engine, currentWork: work, eval: evalStateEval, :isComputing) = ref.watch(
+    final (:engine, :engineSpec, currentWork: work, eval: evalStateEval, :isComputing) = ref.watch(
       engineEvaluationProvider(filters),
     );
     final bool canGoDeeper =
@@ -307,16 +307,12 @@ class _EnginePopup extends ConsumerWidget {
 
     final knps = isComputing ? ', ${evalStateEval?.knps.round()}kn/s' : '';
 
-    // remove Fairy-Stockfish version from engine name
-    final engineName = engine?.value;
-    final fixedEngineName = engineName != null && engineName.startsWith('Fairy-Stockfish')
-        ? 'Fairy-Stockfish'
-        : engineName ?? 'Stockfish';
+    final displayName = engineDisplayName(engine?.value, spec: engineSpec);
 
     return ListTile(
       contentPadding: const EdgeInsets.only(left: 16.0),
       leading: Image.asset('assets/images/stockfish/icon.webp', width: 44, height: 44),
-      title: Text(fixedEngineName),
+      title: Text(displayName),
       subtitle: currentEval != null ? Text(context.l10n.depthX('${currentEval.depth}$knps')) : null,
       trailing: canGoDeeper
           ? IconButton(
