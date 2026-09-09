@@ -976,21 +976,25 @@ void main() {
       pool.currentClient.close();
     });
 
-    test('does not reconnect the socket whose own pong brought the device back online', () async {
+    test('does not reconnect a socket that came back up before the check noticed', () async {
+      var offline = false;
       var channelsCreated = 0;
+      FakeWebSocketChannel? currentChannel;
       final container = await makeContainer(
         overrides: {
-          // Nothing the check probes can be reached, so the device is held offline; the socket is
-          // the only thing that works, as it is on a network that blocks the probe hosts.
           httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
             (ref) => FakeHttpClientFactory(
-              () => MockClient((request) => throw const SocketException('No internet')),
+              () => MockClient((request) async {
+                if (offline) throw const SocketException('No internet');
+                return http.Response('', 200);
+              }),
             ),
           ),
           webSocketChannelFactoryProvider: webSocketChannelFactoryProvider.overrideWithValue(
             FakeWebSocketChannelFactory((route) {
+              if (offline) throw const SocketException('No internet');
               channelsCreated++;
-              return createDefaultFakeWebSocketChannel(route);
+              return currentChannel = createDefaultFakeWebSocketChannel(route);
             }),
           ),
         },
@@ -998,18 +1002,32 @@ void main() {
 
       fakeAsync((async) {
         container.read(connectivityChangesProvider);
-        async.elapse(const Duration(seconds: 1));
-        expect(container.read(isDeviceOnlineProvider), isFalse);
-
         final pool = container.read(socketPoolProvider);
         pool.currentClient.connect();
         async.elapse(const Duration(seconds: 1));
-
-        // The pong cleared the offline status, and that transition reaches the pool like any
-        // other. Reconnecting here would tear down the connection that proved the network.
-        expect(container.read(isDeviceOnlineProvider), isTrue);
         expect(channelsCreated, 1);
+        expect(container.read(isDeviceOnlineProvider), isTrue);
+
+        // The network goes away, the plugin says so, and the socket loses its channel with it.
+        offline = true;
+        FakeConnectivity.controller.add([ConnectivityResult.none]);
+        currentChannel!.closeFromServer(const SocketException('No internet'));
+        async.elapse(const Duration(seconds: 5));
+        expect(container.read(isDeviceOnlineProvider), isFalse);
+        expect(pool.currentClient.isConnected, isFalse);
+
+        // The network comes back, and the socket's own retry gets there first.
+        offline = false;
+        async.elapse(const Duration(seconds: 10));
         expect(pool.currentClient.isConnected, isTrue);
+        final channelsWhenBack = channelsCreated;
+
+        // Only then does the check catch up. The socket it would reconnect has been up and
+        // answering since before this edge, so tearing it down would cost an event gap for nothing.
+        FakeConnectivity.controller.add([ConnectivityResult.wifi]);
+        async.elapse(const Duration(seconds: 1));
+        expect(container.read(isDeviceOnlineProvider), isTrue);
+        expect(channelsCreated, channelsWhenBack);
 
         pool.currentClient.close();
         async.flushTimers();
@@ -1187,87 +1205,6 @@ void main() {
         async.elapse(const Duration(seconds: 1));
         expect(attempts.length, 2);
         expect(pool.currentClient.isConnected, isTrue);
-
-        pool.currentClient.close();
-        async.flushTimers();
-      });
-    });
-
-    test(
-      'a socket that comes up with the lag the pool already holds still reports connected',
-      () async {
-        final container = await makeContainer();
-
-        fakeAsync((async) {
-          final pool = container.read(socketPoolProvider);
-          pool.open(defaultSocketUri);
-          async.elapse(const Duration(seconds: 1));
-          expect(pool.isConnected.value, isTrue);
-          final lag = pool.averageLag.value;
-
-          var lagChanges = 0;
-          pool.averageLag.addListener(() => lagChanges++);
-          var connectedEdges = 0;
-          pool.isConnected.addListener(() {
-            if (pool.isConnected.value) connectedEdges++;
-          });
-
-          // Another route, whose socket answers in exactly the time the first one took, so the lag
-          // the pool holds is never written to a different value.
-          pool.open(Uri(path: '/other/socket/v5'));
-          async.elapse(const Duration(seconds: 1));
-
-          expect(pool.averageLag.value, lag);
-          expect(lagChanges, 0, reason: 'nothing about the lag has changed');
-          expect(pool.isConnected.value, isTrue);
-          expect(connectedEdges, 1, reason: 'a socket coming up is heard even so');
-
-          pool.currentClient.close();
-          async.flushTimers();
-        });
-      },
-    );
-
-    test('takes on the connection state of the client it switches to', () async {
-      const flakyRoute = '/flaky/socket/v5';
-      var defaultRouteFails = false;
-      final container = await makeContainer(
-        overrides: {
-          webSocketChannelFactoryProvider: webSocketChannelFactoryProvider.overrideWithValue(
-            FakeWebSocketChannelFactory((route) {
-              if (route.path == flakyRoute || defaultRouteFails) {
-                throw const SocketException('No internet');
-              }
-              return createDefaultFakeWebSocketChannel(route);
-            }),
-          ),
-        },
-      );
-      final pool = container.read(socketPoolProvider);
-
-      var failingEdges = 0;
-      pool.isFailing.addListener(() {
-        if (pool.isFailing.value) failingEdges++;
-      });
-
-      fakeAsync((async) {
-        pool.open(Uri(path: flakyRoute));
-        async.elapse(const Duration(seconds: 1));
-        expect(pool.isFailing.value, isTrue);
-        expect(failingEdges, 1);
-
-        // Back to the default socket, which connects: the pool must not be left holding the
-        // failing state of the client it just closed.
-        pool.open(Uri(path: kDefaultSocketRoute));
-        async.elapse(const Duration(seconds: 1));
-        expect(pool.isFailing.value, isFalse);
-
-        // A failure on the new current client is then heard as the change it is.
-        defaultRouteFails = true;
-        pool.currentClient.connect();
-        async.elapse(const Duration(seconds: 1));
-        expect(pool.isFailing.value, isTrue);
-        expect(failingEdges, 2, reason: 'this failure must reach the listeners too');
 
         pool.currentClient.close();
         async.flushTimers();

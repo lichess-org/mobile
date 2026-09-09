@@ -7,7 +7,6 @@ import 'package:http/http.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/server_status.dart';
-import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:logging/logging.dart';
 
@@ -91,8 +90,6 @@ final lichessConnectionStatusProvider = Provider.autoDispose<LichessConnectionSt
 ///
 /// - Uses the [Connectivity] plugin to listen to connectivity changes
 /// - Uses [AppLifecycleListener] to check connectivity on app resume
-/// - Uses [SocketPool] to check if the device is online when the current status is offline and a
-/// socket connects or fails to connect.
 final connectivityChangesProvider =
     AsyncNotifierProvider<ConnectivityChangesNotifier, ConnectivityStatus>(
       ConnectivityChangesNotifier.new,
@@ -117,8 +114,8 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
   /// The status the app is showing, or null while the first check has yet to settle anything.
   ///
   /// A check that failed settles the question too: [isDeviceOnlineProvider] reads an error as
-  /// offline — nothing could be reached — so it must be recoverable like any other offline status,
-  /// by a socket that connects or by a later check.
+  /// offline — nothing could be reached — so a later check has an offline status to compare with,
+  /// like any other.
   ConnectivityStatus? get _settledStatus => switch (state) {
     AsyncValue(hasError: true) => (isOnline: false, appState: state.value?.appState),
     AsyncValue(:final value?) => value,
@@ -156,71 +153,11 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
       _connectivityChangesThrottler(() => _onConnectivityChange(result));
     });
 
-    final pool = ref.read(socketPoolProvider);
-
-    // A socket answering the ping/pong protocol is proof that the device can reach the network, so
-    // it clears an offline status right away rather than leaving it up until the next check.
-    void onSocketConnected() {
-      if (!pool.isConnected.value) return;
-      // Deferred: the pool updates this from inside [SocketPool.open], which controllers call
-      // while building, and Riverpod forbids a provider modifying another during a build.
-      scheduleMicrotask(() {
-        if (!ref.mounted) return;
-        final settled = _settledStatus;
-        if (settled == null) return;
-        if (settled.isOnline) {
-          _claimRevision();
-        } else {
-          _setOnlineStatus(true);
-        }
-      });
-    }
-
-    // The other way around, a socket that cannot connect is only a suspicion: it may be lichess
-    // that is down, and the socket goes on failing long after the network is back. So it does not
-    // set the status offline, it merely asks the check to run — the check remains the authority.
-    //
-    // This is also what keeps the two providers from egging each other on: [SocketPool] reconnects
-    // on the offline -> online edge only, and [SocketPool.isFailing] only turns true once per run
-    // of failures, so each failing run costs at most one check.
-    void onSocketFailing() {
-      if (!pool.isFailing.value) return;
-      scheduleMicrotask(() {
-        if (!ref.mounted || _settledStatus?.isOnline != true) return;
-        _refreshOnlineStatus('socket cannot connect');
-      });
-    }
-
-    pool.isConnected.addListener(onSocketConnected);
-    pool.isFailing.addListener(onSocketFailing);
-    ref.onDispose(() {
-      pool.isConnected.removeListener(onSocketConnected);
-      pool.isFailing.removeListener(onSocketFailing);
-    });
-
     final AppLifecycleState? appState = WidgetsBinding.instance.lifecycleState;
 
     _appLifecycleListener = AppLifecycleListener(onStateChange: _onAppLifecycleChange);
 
-    final ConnectivityStatus status;
-    try {
-      status = await _getConnectivityStatus(await _connectivity.checkConnectivity(), appState);
-    } catch (_) {
-      // A check that could not even run is read as offline, and the socket has no way back in: the
-      // report it made while this one was running found nothing settled to correct, and was
-      // dropped. So the socket has the same say here as it does below.
-      if (pool.isConnected.value) {
-        return (isOnline: true, appState: appState);
-      }
-      rethrow;
-    }
-
-    // A socket that is connected by the time the check answers is proof of a working network, and
-    // outranks a check that came back offline.
-    if (!status.isOnline && pool.isConnected.value) {
-      return (isOnline: true, appState: status.appState);
-    }
-    return status;
+    return await _getConnectivityStatus(await _connectivity.checkConnectivity(), appState);
   }
 
   Future<void> _onAppLifecycleChange(AppLifecycleState appState) async {
@@ -262,14 +199,8 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
     _setOnlineStatus(newConn.isOnline);
   }
 
-  Future<void> _onConnectivityChange(List<ConnectivityResult> result) {
-    return _refreshOnlineStatus('connectivity changed: $result');
-  }
-
-  /// Runs the online check and updates the status if it disagrees with it.
-  ///
-  /// [reason] is what prompted the check, for the logs.
-  Future<void> _refreshOnlineStatus(String reason) async {
+  /// Runs the online check on a connectivity change, and updates the status if it disagrees.
+  Future<void> _onConnectivityChange(List<ConnectivityResult> result) async {
     final settled = _settledStatus;
     if (settled == null) {
       return;
@@ -284,7 +215,7 @@ class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
     // A check that confirms the status has nothing to write: the checks it overtook were already
     // outdated by the revision it claimed on its way in.
     if (newIsOnline != wasOnline) {
-      _logger.info('Connectivity status: $reason, isOnline: $newIsOnline');
+      _logger.info('Connectivity status: connectivity changed: $result, isOnline: $newIsOnline');
       _setOnlineStatus(newIsOnline);
     }
   }

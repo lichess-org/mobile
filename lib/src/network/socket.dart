@@ -753,22 +753,17 @@ class SocketPool {
     _mirrorCurrentClientState(client);
     _pool[_currentRoute] = client;
 
-    // Deferred: [ConnectivityChangesNotifier] reads this pool while building, so listening to it
-    // right here would have the two providers build each other, which Riverpod forbids.
-    scheduleMicrotask(() {
-      if (_isDisposed) return;
-      // [isDeviceOnlineIn] rather than the raw value: a check that failed reads as offline there,
-      // and coming back from one is an edge the socket has to hear about like any other.
-      _ref.listen(connectivityChangesProvider, (prev, next) {
-        if (prev == null) return;
-        final wasOnline = isDeviceOnlineIn(prev);
-        final isOnline = isDeviceOnlineIn(next);
-        if (wasOnline && !isOnline) {
-          _socketAnsweredSinceOffline = false;
-        } else if (!wasOnline && isOnline) {
-          onDeviceBackOnline();
-        }
-      });
+    // [isDeviceOnlineIn] rather than the raw value: a check that failed reads as offline there,
+    // and coming back from one is an edge the socket has to hear about like any other.
+    _ref.listen(connectivityChangesProvider, (prev, next) {
+      if (prev == null) return;
+      final wasOnline = isDeviceOnlineIn(prev);
+      final isOnline = isDeviceOnlineIn(next);
+      if (wasOnline && !isOnline) {
+        _socketAnsweredSinceOffline = false;
+      } else if (!wasOnline && isOnline) {
+        onDeviceBackOnline();
+      }
     });
   }
 
@@ -778,15 +773,12 @@ class SocketPool {
   final Duration idleTimeout;
 
   final _averageLag = ValueNotifier(Duration.zero);
-  final _isFailing = ValueNotifier(false);
-  final _isConnected = ValueNotifier(false);
 
   /// Whether the current socket has answered a ping since the device was last found offline.
   ///
-  /// A socket that did is the very thing that proves the network is back — connectivity clears an
-  /// offline status on its pong — and reconnecting it on the online edge that follows would tear
-  /// down the connection that produced it. One that did not says nothing: it may well be holding a
-  /// connection to a network that is gone.
+  /// A socket that did has already made the connection the online edge would ask for: its own
+  /// retry got to the network before the check noticed it was back. One that did not says nothing:
+  /// it may well be holding a connection to a network that is gone.
   bool _socketAnsweredSinceOffline = false;
 
   Timer? _closeInBackgroundTimer;
@@ -797,16 +789,6 @@ class SocketPool {
   ///
   /// A duration of zero means the socket is not connected.
   ValueListenable<Duration> get averageLag => _averageLag;
-
-  /// Whether the current socket is failing, and waiting out its backoff.
-  ValueListenable<bool> get isFailing => _isFailing;
-
-  /// Whether the current socket is connected, ie. it has answered a ping.
-  ///
-  /// This, and not [averageLag], is the signal that a socket is up: the lag deliberately outlives
-  /// the client that measured it, and two clients can well measure the same one — a value that
-  /// does not change notifies nobody.
-  ValueListenable<bool> get isConnected => _isConnected;
 
   /// Whether the pool is disposed.
   ///
@@ -856,9 +838,9 @@ class SocketPool {
   void onDeviceBackOnline() {
     if (_isAppInBackground) return;
 
-    // The socket answered a ping while the device was held offline: it is what proved the network
-    // is back, and reconnecting it here would tear down the very connection that did so — an event
-    // gap and a handshake on every socket-driven recovery.
+    // The socket answered a ping while the device was held offline, so it is already on the
+    // network this edge is announcing: reconnecting it here would cost an event gap and a
+    // handshake to end up exactly where it is.
     if (_socketAnsweredSinceOffline) {
       return;
     }
@@ -882,37 +864,16 @@ class SocketPool {
     }
   }
 
-  /// Takes [client]'s connection state as the pool's own, when it becomes the current one.
-  ///
-  /// The mirror below only forwards what a client emits from now on, so the pool has to read the
-  /// state of the client it switches to: the one it switches away from clears its failing state as
-  /// it is closed, but by then it is no longer the current route and that update is dropped — the
-  /// pool would stay failing, and swallow the next real failure as a value it already holds.
-  ///
-  /// The average lag is deliberately left as it is: a client that has yet to answer its first ping
-  /// has no lag to speak of, and blanking the pool's on every route change would have every screen
-  /// switch flash as a disconnection. Consumers that care about a single route already compare it
-  /// to [currentClient]'s.
-  void _syncCurrentClientState(SocketClient client) {
-    if (client.isDisposed) return;
-    _isFailing.value = client.isFailing.value;
-    _isConnected.value = client.isConnected;
-  }
-
   /// Reflects [client]'s connection state in the pool's own, for as long as it is the current one.
   void _mirrorCurrentClientState(SocketClient client) {
     client.averageLag.addListener(() {
       if (_currentRoute == client.route) {
         _averageLag.value = client.averageLag.value;
-        _isConnected.value = client.isConnected;
+        // Read from the client, not from the pool's lag: the assignment above can be a no-op — the
+        // same lag as the client before it — and still be a socket answering.
         if (client.isConnected) {
           _socketAnsweredSinceOffline = true;
         }
-      }
-    });
-    client.isFailing.addListener(() {
-      if (_currentRoute == client.route) {
-        _isFailing.value = client.isFailing.value;
       }
     });
   }
@@ -977,7 +938,6 @@ class SocketPool {
             // battery, and nothing is watching what the default one would bring in anyway.
             if (route == _currentRoute) {
               _currentRoute = Uri(path: kDefaultSocketRoute);
-              _syncCurrentClientState(currentClient);
               if (!_isAppInBackground && !currentClient.isActive) {
                 currentClient.connect();
               }
@@ -998,7 +958,6 @@ class SocketPool {
     });
 
     final client = _pool[route]!;
-    _syncCurrentClientState(client);
 
     if (forceReconnect == true || !client.isActive) {
       client.connect();
@@ -1014,8 +973,6 @@ class SocketPool {
     }
     _isDisposed = true;
     _averageLag.dispose();
-    _isFailing.dispose();
-    _isConnected.dispose();
     _closeInBackgroundTimer?.cancel();
     _disposeTimers.forEach((_, t) => t?.cancel());
     _pool.forEach((_, c) => c.dispose());

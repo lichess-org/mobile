@@ -46,7 +46,10 @@ void main() {
       expect(container.read(isDeviceOnlineProvider), isFalse);
     });
 
-    test('a socket that connects clears an offline status', () async {
+    test('a connected socket has no say in the status', () async {
+      // The socket is up and answering, and the check can reach nothing. That the socket works is
+      // only ever a suspicion — it may be holding a connection to a network that is already gone,
+      // which it would not notice for tens of seconds — so the check has the last word.
       final container = await makeContainer(
         overrides: {
           httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
@@ -55,313 +58,28 @@ void main() {
         },
       );
 
-      await container.read(connectivityChangesProvider.future);
-      expect(container.read(isDeviceOnlineProvider), isFalse);
-
-      // Nothing can reach the network in this container except the socket, whose connection is
-      // proof enough on its own: the status must not wait for the next check to be corrected.
       final client = container.read(socketPoolProvider).currentClient;
       client.connect();
       await client.firstConnection;
       await Future<void>.delayed(kFakeWebSocketConnectionLag * 4);
       await pumpEventQueue();
-
-      expect(container.read(isDeviceOnlineProvider), isTrue);
-
-      client.close();
-    });
-
-    test(
-      'a socket that connects while the first check is running keeps the device online',
-      () async {
-        // The check takes long enough for the socket to answer a pong before it comes back offline.
-        final container = await makeContainer(
-          overrides: {
-            httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
-              (ref) => FakeHttpClientFactory(
-                () => MockClient((request) async {
-                  await Future<void>.delayed(const Duration(milliseconds: 200));
-                  throw const SocketException('No internet');
-                }),
-              ),
-            ),
-          },
-        );
-
-        final pendingCheck = container.read(connectivityChangesProvider.future);
-
-        final client = container.read(socketPoolProvider).currentClient;
-        client.connect();
-        await client.firstConnection;
-        await Future<void>.delayed(kFakeWebSocketConnectionLag * 4);
-        await pumpEventQueue();
-
-        await pendingCheck;
-
-        expect(container.read(isDeviceOnlineProvider), isTrue);
-
-        client.close();
-      },
-    );
-
-    test('a socket that connects clears an offline status left by a failed check', () async {
-      final container = await makeContainer(
-        overrides: {
-          connectivityPluginProvider: connectivityPluginProvider.overrideWith(
-            (_) => FailingConnectivity(),
-          ),
-        },
-      );
-
-      await expectLater(container.read(connectivityChangesProvider.future), throwsStateError);
-      expect(
-        container.read(isDeviceOnlineProvider),
-        isFalse,
-        reason: 'a check that could not run reached nothing',
-      );
-
-      // The socket is proof of a working network whatever the failed check left behind, so the
-      // status must not stay offline until something else happens to probe it.
-      final client = container.read(socketPoolProvider).currentClient;
-      client.connect();
-      await client.firstConnection;
-      await Future<void>.delayed(kFakeWebSocketConnectionLag * 4);
-      await pumpEventQueue();
-
-      expect(container.read(isDeviceOnlineProvider), isTrue);
-
-      client.close();
-    });
-
-    test('a socket that connected while the check went wrong keeps the device online', () async {
-      final connectivity = PendingThenFailingConnectivity();
-      final container = await makeContainer(
-        overrides: {
-          connectivityPluginProvider: connectivityPluginProvider.overrideWith((_) => connectivity),
-          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
-            (ref) => FakeHttpClientFactory(() => _deviceOfflineClient),
-          ),
-        },
-      );
-
-      final pendingCheck = container.read(connectivityChangesProvider.future);
-
-      // The socket answers its first ping while the check is still running, so its report finds
-      // nothing settled yet to correct and is dropped.
-      final client = container.read(socketPoolProvider).currentClient;
-      client.connect();
-      await client.firstConnection;
-      await Future<void>.delayed(kFakeWebSocketConnectionLag * 4);
-      await pumpEventQueue();
-
-      // Only then does the plugin go wrong. A failed check reads as offline, which the socket has
-      // already disproved — and nothing would come along to correct it.
-      connectivity.failNow();
-      await pendingCheck;
-
-      expect(container.read(isDeviceOnlineProvider), isTrue);
-
-      client.close();
-    });
-
-    test('the lag left by a socket that has been closed is not proof of a connection', () async {
-      // Only the second route fails to connect, so that the pool keeps the lag measured on the
-      // first one — which it deliberately does not blank on a route change.
-      const failingRoute = '/failing/socket';
-      final container = await makeContainer(
-        overrides: {
-          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
-            (ref) => FakeHttpClientFactory(
-              () => MockClient((request) async {
-                // Slow enough for the sockets below to come and go while the check runs.
-                await Future<void>.delayed(const Duration(milliseconds: 300));
-                throw const SocketException('No internet');
-              }),
-            ),
-          ),
-          webSocketChannelFactoryProvider: webSocketChannelFactoryProvider.overrideWithValue(
-            FakeWebSocketChannelFactory((route) {
-              if (route.path == failingRoute) throw const SocketException('No internet');
-              return FakeWebSocketChannel(route);
-            }),
-          ),
-        },
-      );
-
-      final pool = container.read(socketPoolProvider);
-      final connected = pool.open(Uri(path: kDefaultSocketRoute));
-      await connected.firstConnection;
-      await Future<void>.delayed(kFakeWebSocketConnectionLag * 4);
-      expect(pool.averageLag.value, isNot(Duration.zero));
-
-      pool.open(Uri(path: failingRoute));
-      await pumpEventQueue();
-      expect(pool.averageLag.value, isNot(Duration.zero), reason: 'the lag outlives its socket');
-      expect(pool.currentClient.isConnected, isFalse);
-
-      await container.read(connectivityChangesProvider.future);
-
-      expect(container.read(isDeviceOnlineProvider), isFalse);
-
-      pool.currentClient.close();
-    });
-
-    test('the socket clears an offline status once, not on every lag change', () async {
-      // A server whose answers get slower and slower, so that every pong moves the average lag.
-      FakeWebSocketChannel? channel;
-      final container = await makeContainer(
-        overrides: {
-          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
-            (ref) => FakeHttpClientFactory(() => _deviceOfflineClient),
-          ),
-          webSocketChannelFactoryProvider: webSocketChannelFactoryProvider.overrideWithValue(
-            FakeWebSocketChannelFactory((route) => channel = FakeWebSocketChannel(route)),
-          ),
-        },
-      );
+      expect(client.isConnected, isTrue);
 
       await container.read(connectivityChangesProvider.future);
       expect(container.read(isDeviceOnlineProvider), isFalse);
 
-      var statusChanges = 0;
-      container.listen(connectivityChangesProvider, (_, _) => statusChanges++);
-
-      final pool = container.read(socketPoolProvider);
-      var lagChanges = 0;
-      void countLagChange() => lagChanges++;
-      pool.averageLag.addListener(countLagChange);
-
-      fakeAsync((async) {
-        pool.currentClient.connect();
-        async.elapse(const Duration(seconds: 1));
-
-        expect(container.read(isDeviceOnlineProvider), isTrue);
-        expect(statusChanges, 1);
-
-        // The ping/pong protocol keeps moving the average lag for as long as the socket is up: an
-        // online status that is already settled must not be rewritten on every pong.
-        for (var i = 1; i <= 10; i++) {
-          channel!.connectionLag = Duration(milliseconds: 10 * i);
-          async.elapse(const Duration(seconds: 30));
-        }
-
-        expect(lagChanges, greaterThan(5), reason: 'the lag did keep changing');
-        expect(statusChanges, 1, reason: 'but the status was only ever settled once');
-
-        pool.averageLag.removeListener(countLagChange);
-        pool.currentClient.close();
-        async.flushTimers();
-      });
-    });
-
-    test(
-      'a connected socket does not keep the device online once a check says otherwise',
-      () async {
-        final container = await makeContainer(
-          overrides: {
-            httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
-              (ref) => FakeHttpClientFactory(() => _deviceOfflineClient),
-            ),
-          },
-        );
-        await container.read(connectivityChangesProvider.future);
-
-        final client = container.read(socketPoolProvider).currentClient;
-        client.connect();
-        await client.firstConnection;
-        await Future<void>.delayed(kFakeWebSocketConnectionLag * 4);
-        await pumpEventQueue();
-        expect(container.read(isDeviceOnlineProvider), isTrue);
-
-        // The network goes away. The socket only notices once a ping goes unanswered, tens of
-        // seconds later, so its stale state must not outweigh the check.
-        FakeConnectivity.controller.add([ConnectivityResult.none]);
-        await pumpEventQueue();
-
-        expect(client.isConnected, isTrue, reason: 'the socket has not noticed yet');
-        expect(container.read(isDeviceOnlineProvider), isFalse);
-
-        client.close();
-      },
-    );
-
-    test('a socket that cannot connect makes the check run again', () async {
-      // The network dies without the connectivity plugin ever saying so — a captive portal, or an
-      // interface that is up but leads nowhere.
-      var offline = false;
-      final container = await makeContainer(
-        overrides: {
-          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
-            (ref) => FakeHttpClientFactory(
-              () => MockClient((request) async {
-                if (offline) throw const SocketException('No internet');
-                return http.Response('', 200);
-              }),
-            ),
-          ),
-          webSocketChannelFactoryProvider: webSocketChannelFactoryProvider.overrideWithValue(
-            FakeWebSocketChannelFactory((_) => throw const SocketException('No internet')),
-          ),
-        },
-      );
-
-      await container.read(connectivityChangesProvider.future);
-      expect(container.read(isDeviceOnlineProvider), isTrue);
-
-      offline = true;
-      container.read(socketPoolProvider).currentClient.connect();
+      // And it stays that way, however many pings the socket goes on answering.
+      await Future<void>.delayed(kFakeWebSocketConnectionLag * 10);
       await pumpEventQueue();
-
       expect(container.read(isDeviceOnlineProvider), isFalse);
+
+      client.close();
     });
 
-    test('a socket that starts failing during the throttle delay is checked right away', () async {
-      var offline = false;
-      final container = await makeContainer(
-        overrides: {
-          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
-            (ref) => FakeHttpClientFactory(
-              () => MockClient((request) async {
-                if (offline) throw const SocketException('No internet');
-                return http.Response('', 200);
-              }),
-            ),
-          ),
-          webSocketChannelFactoryProvider: webSocketChannelFactoryProvider.overrideWithValue(
-            FakeWebSocketChannelFactory((_) => throw const SocketException('No internet')),
-          ),
-        },
-      );
-
-      // The notifier is built inside [fakeAsync] so that the timers it starts from the connectivity
-      // subscription — the throttler's among them — belong to this zone and answer to [elapse].
-      fakeAsync((async) {
-        container.read(connectivityChangesProvider);
-        async.elapse(const Duration(seconds: 1));
-        expect(container.read(isDeviceOnlineProvider), isTrue);
-
-        // A connectivity event opens the throttle window while the network is still fine.
-        FakeConnectivity.controller.add([ConnectivityResult.wifi]);
-        async.elapse(const Duration(milliseconds: 100));
-        expect(container.read(isDeviceOnlineProvider), isTrue);
-
-        // The network dies without the plugin ever saying so, and the socket is the only witness.
-        // It reports a run of failures once, so the check it asks for must not be held back by a
-        // window the connectivity plugin happens to have opened: the report would be lost, and
-        // nothing left to correct the device being reported online.
-        offline = true;
-        container.read(socketPoolProvider).currentClient.connect();
-        async.elapse(const Duration(milliseconds: 100));
-        expect(container.read(isDeviceOnlineProvider), isFalse);
-
-        container.read(socketPoolProvider).currentClient.close();
-        async.flushTimers();
-      });
-    });
-
-    test('a failing socket alone does not take the device offline', () async {
-      // Only lichess is unreachable here: the device itself is online, and the app must go on
-      // saying so, however long the socket goes on failing.
+    test('a failing socket has no say in the status', () async {
+      // A socket that cannot connect is only ever a suspicion: it may be lichess that is down, and
+      // a check asked for on its word would report offline wherever the probed hosts are blocked
+      // but the network is fine. So it neither takes the device offline nor asks anything.
       var checks = 0;
       final container = await makeContainer(
         overrides: {
@@ -391,8 +109,8 @@ void main() {
         expect(container.read(isDeviceOnlineProvider), isTrue);
         expect(
           checks,
-          1,
-          reason: 'a run of failures is worth one check, however many attempts it is made of',
+          0,
+          reason: 'the check runs on connectivity events and app resume, not on it',
         );
 
         container.read(socketPoolProvider).currentClient.close();
@@ -569,51 +287,6 @@ void main() {
 
         async.elapse(const Duration(seconds: 5));
         expect(container.read(isDeviceOnlineProvider), isFalse);
-      });
-    });
-
-    test('a pong keeps a check that started before it from taking the device offline', () async {
-      var offline = false;
-      var checkDelay = Duration.zero;
-      final container = await makeContainer(
-        overrides: {
-          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
-            (ref) => FakeHttpClientFactory(
-              () => MockClient((request) async {
-                final (wasOffline, delay) = (offline, checkDelay);
-                await Future<void>.delayed(delay);
-                if (wasOffline) throw const SocketException('No internet');
-                return http.Response('', 200);
-              }),
-            ),
-          ),
-        },
-      );
-
-      fakeAsync((async) {
-        container.read(connectivityChangesProvider);
-        async.elapse(const Duration(seconds: 1));
-        expect(container.read(isDeviceOnlineProvider), isTrue);
-
-        // A check starts on a network that is momentarily down, and takes seconds to say so.
-        offline = true;
-        checkDelay = const Duration(seconds: 2);
-        FakeConnectivity.controller.add([ConnectivityResult.none]);
-        async.elapse(const Duration(milliseconds: 100));
-
-        // The socket then answers a ping, which is proof of a working network. It changes nothing
-        // to a status that already reads online, but it is newer than the check in flight.
-        final pool = container.read(socketPoolProvider);
-        pool.currentClient.connect();
-        async.elapse(const Duration(seconds: 1));
-        expect(pool.currentClient.isConnected, isTrue);
-
-        // The check now answers with a network that is seconds out of date.
-        async.elapse(const Duration(seconds: 5));
-        expect(container.read(isDeviceOnlineProvider), isTrue);
-
-        pool.currentClient.close();
-        async.flushTimers();
       });
     });
 
