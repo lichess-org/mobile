@@ -207,6 +207,12 @@ class FakeWebSocketChannel implements WebSocketChannel {
   /// Can be used to simulate a faulty connection.
   bool shouldSendPong = true;
 
+  /// How long the channel takes to finish closing.
+  ///
+  /// A real one is not closed the moment it is asked to be: the client can well be connected again
+  /// by the time the old sink is done.
+  Duration closeDelay = Duration.zero;
+
   /// Number of pong response received
   int get pongCount => _pongCount;
 
@@ -338,7 +344,8 @@ class _FakeWebSocketSink implements WebSocketSink {
     _serverHandlersTimers.forEach((_, timer) {
       timer?.cancel();
     });
-    return _channel._close();
+    final delay = _channel.closeDelay;
+    return delay > Duration.zero ? Future<void>.delayed(delay, _channel._close) : _channel._close();
   }
 
   @override

@@ -241,6 +241,42 @@ void main() {
       });
     });
 
+    test('a channel that takes its time closing does not disconnect the one after it', () {
+      final channels = <FakeWebSocketChannel>[];
+      final fakeChannelFactory = FakeWebSocketChannelFactory((route) {
+        final channel = FakeWebSocketChannel(route)..closeDelay = const Duration(seconds: 5);
+        channels.add(channel);
+        return channel;
+      });
+
+      fakeAsync((async) {
+        final socketClient = makeTestSocketClient(fakeChannelFactory: fakeChannelFactory);
+        socketClient.connect();
+        async.elapse(const Duration(milliseconds: 20));
+        expect(socketClient.isConnected, isTrue);
+
+        // Reconnecting closes the first channel, which takes seconds to finish doing so — long
+        // after the socket that replaced it has answered a ping of its own.
+        socketClient.connect();
+        async.elapse(const Duration(milliseconds: 20));
+        expect(channels.length, 2);
+        expect(socketClient.isConnected, isTrue);
+
+        var disconnections = 0;
+        socketClient.averageLag.addListener(() {
+          if (socketClient.averageLag.value == Duration.zero) disconnections++;
+        });
+
+        async.elapse(const Duration(seconds: 6));
+
+        expect(socketClient.isConnected, isTrue);
+        expect(disconnections, 0, reason: 'the old channel closing says nothing about this one');
+
+        socketClient.close();
+        async.flushTimers();
+      });
+    });
+
     test('a connection the peer drops is failing at once', () {
       FakeWebSocketChannel? channel;
       final fakeChannelFactory = FakeWebSocketChannelFactory(

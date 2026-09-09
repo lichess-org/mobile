@@ -472,27 +472,25 @@ class SocketClient {
     _reconnectTimer?.cancel();
     _ackResendTimer?.cancel();
 
-    final future =
-        _sink
-            ?.close()
-            .then((_) {
-              _logger.fine('WebSocket connection to $route was properly closed.');
-              if (isDisposed) {
-                return;
-              }
-              _averageLag.value = Duration.zero;
-            })
-            .catchError((Object? error) {
-              _logger.warning('WebSocket connection to $route could not be closed:', error);
-              if (isDisposed) {
-                return;
-              }
-              _averageLag.value = Duration.zero;
-            }) ??
-        Future.value();
-    _channel = null;
+    // Now, rather than when the close completes: closing a sink can take as long as it likes, and
+    // by the time it does the client may well be connected again — a lag blanked then would be the
+    // old channel marking the new connection as down, until the next pong put it right.
+    if (!isDisposed) {
+      _averageLag.value = Duration.zero;
+    }
 
-    return future;
+    final sink = _sink;
+    _channel = null;
+    if (sink == null) return Future.value();
+
+    return sink
+        .close()
+        .then((_) {
+          _logger.fine('WebSocket connection to $route was properly closed.');
+        })
+        .catchError((Object? error) {
+          _logger.warning('WebSocket connection to $route could not be closed:', error);
+        });
   }
 
   void _handleEvent(SocketEvent event, [int retries = 10]) {
