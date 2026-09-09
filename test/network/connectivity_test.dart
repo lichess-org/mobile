@@ -118,6 +118,62 @@ void main() {
       });
     });
 
+    test('a plugin failure is retried, and the status recovers on a later attempt', () async {
+      // The real plugin fails with a [PlatformException], which riverpod retries — unlike the
+      // [Error] the other fakes throw, which it deliberately does not. So the provider goes
+      // through several builds here, and what the last one leaves behind is what the app uses.
+      final connectivity = PluginFailingConnectivity();
+      var probes = 0;
+      final container = await makeContainer(
+        overrides: {
+          connectivityPluginProvider: connectivityPluginProvider.overrideWith((_) => connectivity),
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+            (ref) => FakeHttpClientFactory(
+              () => MockClient((request) async {
+                if (request.url == internetCheckUris.first) probes++;
+                return http.Response('', 200);
+              }),
+            ),
+          ),
+        },
+      );
+
+      fakeAsync((async) {
+        // Listened to, not merely read: a provider nobody listens to is not retried.
+        container.listen(connectivityChangesProvider, (_, _) {});
+        async.elapse(const Duration(milliseconds: 100));
+        expect(connectivity.checks, 1);
+        expect(
+          container.read(isDeviceOnlineProvider),
+          isFalse,
+          reason: 'a check that could not run reached nothing',
+        );
+
+        // The first retry, half a second later.
+        async.elapse(const Duration(milliseconds: 500));
+        expect(connectivity.checks, 2);
+
+        // The plugin comes back before the six attempts are spent.
+        connectivity.shouldFail = false;
+        async.elapse(const Duration(seconds: 2));
+        expect(connectivity.checks, 3);
+        expect(container.read(isDeviceOnlineProvider), isTrue);
+
+        // The builds that failed left nothing behind: their subscriptions are gone, so a
+        // connectivity event runs one check, not one per attempt.
+        probes = 0;
+        FakeConnectivity.controller.add([ConnectivityResult.wifi]);
+        async.elapse(const Duration(milliseconds: 100));
+        expect(probes, 1);
+
+        // Not even once the throttle window a duplicate would have been coalesced into expires.
+        async.elapse(kConnectivityThrottleDelay * 2);
+        expect(probes, 1);
+
+        async.flushTimers();
+      });
+    });
+
     test('a check that goes wrong on resume leaves the status as it is', () async {
       final connectivity = SwitchableConnectivity();
       final container = await makeContainer(

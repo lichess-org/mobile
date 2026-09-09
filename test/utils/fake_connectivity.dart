@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/services.dart';
 
 /// A fake implementation of [Connectivity] that always returns [ConnectivityResult.wifi].
 class FakeConnectivity implements Connectivity {
@@ -74,6 +75,30 @@ class SwitchableConnectivity implements Connectivity {
   Future<List<ConnectivityResult>> checkConnectivity() => shouldFail
       ? Future.error(StateError('the connectivity plugin failed'))
       : Future.value([ConnectivityResult.wifi]);
+
+  @override
+  Stream<List<ConnectivityResult>> get onConnectivityChanged => FakeConnectivity.controller.stream;
+}
+
+/// A fake [Connectivity] that fails the way the plugin really does, with a [PlatformException].
+///
+/// Riverpod retries a build that failed with an [Exception] — six times, per `lichessProviderRetry`
+/// — where it never retries an [Error]. Use this one, rather than [FailingConnectivity], for
+/// anything that has to go through that schedule.
+class PluginFailingConnectivity implements Connectivity {
+  /// Whether the next check fails. Set it to false to have the plugin recover.
+  bool shouldFail = true;
+
+  /// How many checks have been asked for, retries included.
+  int checks = 0;
+
+  @override
+  Future<List<ConnectivityResult>> checkConnectivity() {
+    checks++;
+    return shouldFail
+        ? Future.error(PlatformException(code: 'channel-error', message: 'Unable to establish'))
+        : Future.value([ConnectivityResult.wifi]);
+  }
 
   @override
   Stream<List<ConnectivityResult>> get onConnectivityChanged => FakeConnectivity.controller.stream;

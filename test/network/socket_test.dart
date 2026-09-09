@@ -1132,6 +1132,48 @@ void main() {
       },
     );
 
+    test('reconnects the socket when the plugin recovers on a retried build', () async {
+      // The real plugin fails with a [PlatformException], which riverpod retries: the status the
+      // socket listens to is settled by a later build than the one that first failed, and the edge
+      // it produces has to reach the pool like any other.
+      var socketDown = true;
+      final connectivity = PluginFailingConnectivity();
+      final container = await makeContainer(
+        overrides: {
+          connectivityPluginProvider: connectivityPluginProvider.overrideWith((_) => connectivity),
+          webSocketChannelFactoryProvider: webSocketChannelFactoryProvider.overrideWithValue(
+            FakeWebSocketChannelFactory((route) {
+              if (socketDown) throw const SocketException('No internet');
+              return createDefaultFakeWebSocketChannel(route);
+            }),
+          ),
+        },
+      );
+
+      fakeAsync((async) {
+        // Listened to, not merely read: a provider nobody listens to is not retried.
+        container.listen(connectivityChangesProvider, (_, _) {});
+        final pool = container.read(socketPoolProvider);
+        pool.currentClient.connect();
+        async.elapse(const Duration(milliseconds: 100));
+
+        expect(container.read(isDeviceOnlineProvider), isFalse);
+        expect(pool.currentClient.isFailing.value, isTrue);
+
+        // Everything comes back at once, and the retried build is what says so. The socket's own
+        // next attempt is [_kAutoReconnectDelay] away — seconds later than this.
+        socketDown = false;
+        connectivity.shouldFail = false;
+        async.elapse(const Duration(milliseconds: 600));
+
+        expect(container.read(isDeviceOnlineProvider), isTrue);
+        expect(pool.currentClient.isConnected, isTrue);
+
+        pool.currentClient.close();
+        async.flushTimers();
+      });
+    });
+
     test(
       'reconnects the socket when a failed connectivity check is followed by an online one',
       () async {
