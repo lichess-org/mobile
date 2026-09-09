@@ -509,7 +509,7 @@ void main() {
         expect(state.castlingRights[CastlingRight.blackQueen], isTrue);
       });
 
-      testWidgets('Pasting invalid FEN closes dialog and shows snackbar', (tester) async {
+      testWidgets('Pasting invalid FEN syntax displays specific error message', (tester) async {
         _mockClipboard('not a valid fen');
 
         final app = await makeTestProviderScopeApp(tester, home: const BoardEditorScreen());
@@ -522,7 +522,23 @@ void main() {
         await tester.pumpAndSettle();
 
         expect(find.byType(AlertDialog), findsNothing);
-        expect(find.text('Invalid FEN'), findsOneWidget);
+        expect(find.text('Invalid board setup in FEN'), findsOneWidget);
+      });
+
+      testWidgets('Pasting FEN with missing king displays specific position error', (tester) async {
+        _mockClipboard('8/8/8/8/8/8/8/P7 w - - 0 1');
+
+        final app = await makeTestProviderScopeApp(tester, home: const BoardEditorScreen());
+        await tester.pumpWidget(app);
+
+        await tester.tap(find.byIcon(Icons.edit));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.paste));
+        await tester.pumpAndSettle();
+
+        expect(find.byType(AlertDialog), findsNothing);
+        expect(find.text('White king missing or duplicated'), findsOneWidget);
       });
     });
 

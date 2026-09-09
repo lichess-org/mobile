@@ -232,6 +232,96 @@ abstract class AppLocalizations {
   /// **'Board settings'**
   String get mobileBoardSettings;
 
+  /// No description provided for @mobileBoardEditorErrorWhiteKing.
+  ///
+  /// In en, this message translates to:
+  /// **'White king missing or duplicated'**
+  String get mobileBoardEditorErrorWhiteKing;
+
+  /// No description provided for @mobileBoardEditorErrorBlackKing.
+  ///
+  /// In en, this message translates to:
+  /// **'Black king missing or duplicated'**
+  String get mobileBoardEditorErrorBlackKing;
+
+  /// No description provided for @mobileBoardEditorErrorOppositeCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'Side not to move is in check'**
+  String get mobileBoardEditorErrorOppositeCheck;
+
+  /// No description provided for @mobileBoardEditorErrorPawnsOnBackrank.
+  ///
+  /// In en, this message translates to:
+  /// **'Pawns cannot be on the 1st or 8th rank'**
+  String get mobileBoardEditorErrorPawnsOnBackrank;
+
+  /// No description provided for @mobileBoardEditorErrorInvalidEpSquare.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid en passant square for position'**
+  String get mobileBoardEditorErrorInvalidEpSquare;
+
+  /// No description provided for @mobileBoardEditorErrorBadCastlingRights.
+  ///
+  /// In en, this message translates to:
+  /// **'Castling rights invalid for current piece positions'**
+  String get mobileBoardEditorErrorBadCastlingRights;
+
+  /// No description provided for @mobileBoardEditorErrorFenFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid FEN format'**
+  String get mobileBoardEditorErrorFenFormat;
+
+  /// No description provided for @mobileBoardEditorErrorFenBoard.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid board setup in FEN'**
+  String get mobileBoardEditorErrorFenBoard;
+
+  /// No description provided for @mobileBoardEditorErrorFenTurn.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid side to move in FEN'**
+  String get mobileBoardEditorErrorFenTurn;
+
+  /// No description provided for @mobileBoardEditorErrorFenCastling.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid castling rights in FEN'**
+  String get mobileBoardEditorErrorFenCastling;
+
+  /// No description provided for @mobileBoardEditorErrorFenEnPassant.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid en passant square in FEN'**
+  String get mobileBoardEditorErrorFenEnPassant;
+
+  /// No description provided for @mobileBoardEditorErrorFenHalfmove.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid halfmove clock in FEN'**
+  String get mobileBoardEditorErrorFenHalfmove;
+
+  /// No description provided for @mobileBoardEditorErrorFenFullmove.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid fullmove number in FEN'**
+  String get mobileBoardEditorErrorFenFullmove;
+
+  /// No description provided for @mobileBoardEditorErrorFenRemainingChecks.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid remaining checks in FEN'**
+  String get mobileBoardEditorErrorFenRemainingChecks;
+
+  /// No description provided for @mobileBoardEditorErrorFenPockets.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid pockets in FEN'**
+  String get mobileBoardEditorErrorFenPockets;
+
   /// No description provided for @mobileCancelTakebackOffer.
   ///
   /// In en, this message translates to:
