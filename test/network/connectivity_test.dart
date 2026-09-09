@@ -203,6 +203,54 @@ void main() {
       });
     });
 
+    test('a resume whose plugin call fails does not swallow a check already running', () async {
+      final connectivity = PluginFailingConnectivity()..shouldFail = false;
+      var offline = false;
+      var checkDelay = Duration.zero;
+      final container = await makeContainer(
+        overrides: {
+          connectivityPluginProvider: connectivityPluginProvider.overrideWith((_) => connectivity),
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+            (ref) => FakeHttpClientFactory(
+              () => MockClient((request) async {
+                final (wasOffline, delay) = (offline, checkDelay);
+                await Future<void>.delayed(delay);
+                if (wasOffline) throw const SocketException('No internet');
+                return http.Response('', 200);
+              }),
+            ),
+          ),
+        },
+      );
+      final binding = TestWidgetsFlutterBinding.instance;
+
+      fakeAsync((async) {
+        container.read(connectivityChangesProvider);
+        async.elapse(const Duration(seconds: 1));
+        expect(container.read(isDeviceOnlineProvider), isTrue);
+
+        // A connectivity event starts a check that takes seconds to report the network is gone.
+        offline = true;
+        checkDelay = const Duration(seconds: 3);
+        FakeConnectivity.controller.add([ConnectivityResult.none]);
+        async.elapse(const Duration(milliseconds: 100));
+
+        // The user comes back to the app meanwhile, and the plugin call that makes goes wrong. It
+        // has nothing to write, so it must not outdate the check that is still running either —
+        // that answer is all the app is going to get.
+        connectivity.shouldFail = true;
+        // The binding may still be resumed from an earlier test, and only a change is notified.
+        binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+        binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+        async.elapse(const Duration(milliseconds: 100));
+
+        async.elapse(const Duration(seconds: 5));
+        expect(container.read(isDeviceOnlineProvider), isFalse);
+
+        async.flushTimers();
+      });
+    });
+
     test('a slow check does not overwrite what happened while it ran', () async {
       // A network that comes and goes, and a check that takes as long as it is told to.
       var offline = false;
