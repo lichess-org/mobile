@@ -198,8 +198,11 @@ void main() {
       final sent = <dynamic>[];
       var nextChannelFailsItsPing = true;
       final fakeChannelFactory = FakeWebSocketChannelFactory((route) {
-        final channel = FakeWebSocketChannel(route)..failNextWrite = nextChannelFailsItsPing;
-        nextChannelFailsItsPing = false;
+        final channel = FakeWebSocketChannel(route);
+        if (nextChannelFailsItsPing) {
+          nextChannelFailsItsPing = false;
+          channel.failWriteWhen = FakeWebSocketChannel.isPing;
+        }
         channel.sentMessagesExceptPing.listen(sent.add);
         return channel;
       });
@@ -225,6 +228,52 @@ void main() {
             't': 'test',
             'd': {'foo': 'bar'},
           }),
+        ]);
+
+        socketClient.close();
+        async.flushTimers();
+      });
+    });
+
+    test('a flush that breaks partway keeps the messages it did not send', () {
+      var canConnect = false;
+      var nextChannelBreaks = true;
+      final sent = <dynamic>[];
+      final fakeChannelFactory = FakeWebSocketChannelFactory((route) {
+        if (!canConnect) throw const SocketException('No internet');
+        final channel = FakeWebSocketChannel(route);
+        if (nextChannelBreaks) {
+          nextChannelBreaks = false;
+          // This peer takes the first message and hangs up on the second.
+          channel.failWriteWhen = (data) => data is String && data.contains('"t":"second"');
+        }
+        channel.sentMessagesExceptPing.listen(sent.add);
+        return channel;
+      });
+
+      fakeAsync((async) {
+        final socketClient = makeTestSocketClient(fakeChannelFactory: fakeChannelFactory);
+        socketClient.connect();
+        async.elapse(const Duration(milliseconds: 20));
+        expect(socketClient.isFailing.value, isTrue);
+
+        socketClient.send('first', null);
+        socketClient.send('second', null);
+
+        // The socket gets a channel again, and the flush breaks halfway through it.
+        canConnect = true;
+        async.elapse(const Duration(milliseconds: 150));
+        expect(sent, [
+          jsonEncode({'t': 'first'}),
+        ]);
+        expect(socketClient.isFailing.value, isTrue);
+
+        // The message that sink never took is still queued, and goes out on the next connection.
+        async.elapse(const Duration(seconds: 1));
+        expect(socketClient.isConnected, isTrue);
+        expect(sent, [
+          jsonEncode({'t': 'first'}),
+          jsonEncode({'t': 'second'}),
         ]);
 
         socketClient.close();

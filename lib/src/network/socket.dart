@@ -341,17 +341,19 @@ class SocketClient {
       // This runs *before* [_resendAcks] and bumps each flushed ackable
       // message's timestamp so that [_resendAcks] does not immediately send it a
       // second time (the periodic resend-until-acked behavior is preserved).
-      if (_resendWhenOpen.isNotEmpty) {
-        final pending = List<(int?, String)>.of(_resendWhenOpen);
-        _resendWhenOpen.clear();
-        final now = clock_package.clock.now();
-        for (final (ackId, message) in pending) {
-          _sink?.add(message);
-          if (ackId != null) {
-            final index = _acks.indexWhere((rec) => rec.$2 == ackId);
-            if (index != -1) {
-              _acks[index] = (now, _acks[index].$2, _acks[index].$3);
-            }
+      //
+      // Each message leaves the queue only once the sink has taken it, so that a write throwing
+      // partway through — a peer that hangs up mid-flush — leaves the rest of them queued for the
+      // connection that replaces this one, instead of dropping the lot.
+      final now = clock_package.clock.now();
+      while (_resendWhenOpen.isNotEmpty) {
+        final (ackId, message) = _resendWhenOpen.first;
+        channel.sink.add(message);
+        _resendWhenOpen.removeAt(0);
+        if (ackId != null) {
+          final index = _acks.indexWhere((rec) => rec.$2 == ackId);
+          if (index != -1) {
+            _acks[index] = (now, _acks[index].$2, _acks[index].$3);
           }
         }
       }

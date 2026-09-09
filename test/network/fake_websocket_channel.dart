@@ -207,11 +207,12 @@ class FakeWebSocketChannel implements WebSocketChannel {
   /// Can be used to simulate a faulty connection.
   bool shouldSendPong = true;
 
-  /// Makes the next write to the sink throw, as one whose peer is already gone does.
+  /// Makes a write to the sink throw whenever this returns true, as one whose peer is already
+  /// gone does.
   ///
-  /// It is cleared by the write it fails, so that whatever the client does next is recorded as
-  /// usual — including a write it should not have made.
-  bool failNextWrite = false;
+  /// The data written is passed in, so that a test can break on one particular message and let
+  /// everything else through — including a write the client should not have made.
+  bool Function(dynamic data)? failWriteWhen;
 
   /// How long the channel takes to finish closing.
   ///
@@ -298,8 +299,7 @@ class _FakeWebSocketSink implements WebSocketSink {
 
   @override
   void add(dynamic data) {
-    if (_channel.failNextWrite) {
-      _channel.failNextWrite = false;
+    if (_channel.failWriteWhen?.call(data) == true) {
       throw StateError('Cannot add to a closed sink');
     }
     _channel._outcomingController.add(data);
