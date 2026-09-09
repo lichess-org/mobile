@@ -6,9 +6,9 @@ import 'package:lichess_mobile/src/model/engine/weights_service.dart';
 /// A fake implementation of [StockfishNnueService] for testing.
 ///
 /// This implementation:
-/// - Always returns true for [checkNNUEFiles] (NNUE files are available)
-/// - Returns dummy file paths for [nnueFiles] (not used by FakeStockfish)
-/// - Returns false for [downloadNNUEFiles]
+/// - Always returns true for [checkNNUEFile] (the NNUE file is available)
+/// - Returns a dummy file path for [nnueFile] (not used by FakeStockfish)
+/// - Returns false for [downloadNNUEFile]
 /// - Does nothing for [deleteNNUEFiles]
 class FakeStockfishNnueService implements StockfishNnueService {
   FakeStockfishNnueService();
@@ -19,16 +19,16 @@ class FakeStockfishNnueService implements StockfishNnueService {
   ValueListenable<double> get nnueDownloadProgress => _nnueDownloadProgress;
 
   @override
-  bool get isDownloadingNNUEFiles => false;
+  bool get isDownloadingNNUEFile => false;
 
   @override
-  NNUEFiles get nnueFiles {
-    // Return dummy file paths - these won't be accessed by FakeStockfish
-    return (bigNet: File('/tmp/fake_big.nnue'), smallNet: File('/tmp/fake_small.nnue'));
+  File get nnueFile {
+    // Return a dummy file path - it won't be accessed by FakeStockfish
+    return File('/tmp/fake_net.nnue');
   }
 
   @override
-  Future<bool> checkNNUEFiles() async {
+  Future<bool> checkNNUEFile() async {
     return true;
   }
 
@@ -43,7 +43,7 @@ class FakeStockfishNnueService implements StockfishNnueService {
   }
 
   @override
-  Future<bool> downloadNNUEFiles({bool inBackground = true}) async {
+  Future<bool> downloadNNUEFile({bool inBackground = true}) async {
     return false;
   }
 
@@ -53,9 +53,9 @@ class FakeStockfishNnueService implements StockfishNnueService {
   }
 }
 
-/// A fake [StockfishNnueService] that simulates missing/unavailable NNUE files.
+/// A fake [StockfishNnueService] that simulates a missing/unavailable NNUE file.
 ///
-/// - Always returns false for [checkNNUEFiles]
+/// - Always returns false for [checkNNUEFile]
 /// - Always returns true for [hasOutdatedNNUEFiles]
 /// - All other behaviour is identical to [FakeStockfishNnueService]
 class FakeStockfishNnueServiceUnavailable implements StockfishNnueService {
@@ -67,15 +67,15 @@ class FakeStockfishNnueServiceUnavailable implements StockfishNnueService {
   ValueListenable<double> get nnueDownloadProgress => _nnueDownloadProgress;
 
   @override
-  bool get isDownloadingNNUEFiles => false;
+  bool get isDownloadingNNUEFile => false;
 
   @override
-  NNUEFiles get nnueFiles {
-    return (bigNet: File('/tmp/fake_big.nnue'), smallNet: File('/tmp/fake_small.nnue'));
+  File get nnueFile {
+    return File('/tmp/fake_net.nnue');
   }
 
   @override
-  Future<bool> checkNNUEFiles() async {
+  Future<bool> checkNNUEFile() async {
     return false;
   }
 
@@ -90,7 +90,7 @@ class FakeStockfishNnueServiceUnavailable implements StockfishNnueService {
   }
 
   @override
-  Future<bool> downloadNNUEFiles({bool inBackground = true}) async {
+  Future<bool> downloadNNUEFile({bool inBackground = true}) async {
     return false;
   }
 

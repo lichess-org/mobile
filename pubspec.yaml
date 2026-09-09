@@ -69,7 +69,7 @@ dependencies:
   multistockfish:
     git:
       url: https://github.com/lichess-org/dart-multistockfish.git
-      ref: 50b1c4f6c53ad76429bfdfb118f9ebc8c8d2848a
+      ref: 896c3884921ae1d775fcd3088ddcd1559fb87308
       path: pkgs/multistockfish
   package_info_plus: ^10.2.1
   path: ^1.9.1
@@ -115,17 +115,17 @@ dependency_overrides:
   multistockfish_chess:
     git:
       url: https://github.com/lichess-org/dart-multistockfish.git
-      ref: 50b1c4f6c53ad76429bfdfb118f9ebc8c8d2848a
+      ref: 896c3884921ae1d775fcd3088ddcd1559fb87308
       path: pkgs/multistockfish_chess
-  multistockfish_sf16:
+  multistockfish_light:
     git:
       url: https://github.com/lichess-org/dart-multistockfish.git
-      ref: 50b1c4f6c53ad76429bfdfb118f9ebc8c8d2848a
-      path: pkgs/multistockfish_sf16
+      ref: 896c3884921ae1d775fcd3088ddcd1559fb87308
+      path: pkgs/multistockfish_light
   multistockfish_variant:
     git:
       url: https://github.com/lichess-org/dart-multistockfish.git
-      ref: 50b1c4f6c53ad76429bfdfb118f9ebc8c8d2848a
+      ref: 896c3884921ae1d775fcd3088ddcd1559fb87308
       path: pkgs/multistockfish_variant
 
 flutter:
