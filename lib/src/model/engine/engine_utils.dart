@@ -134,6 +134,25 @@ Position threatModePosition(Position position) => position.copyWith(
 /// Variants supported by the official Stockfish engine. Every other variant needs Fairy-Stockfish.
 const officialStockfishVariants = {Variant.standard, Variant.chess960, Variant.fromPosition};
 
+/// Whether [position] holds material the official Stockfish will not accept.
+bool hasNonStandardMaterial(Position position) =>
+    !_isStandardMaterialSide(position.board, Side.white) ||
+    !_isStandardMaterialSide(position.board, Side.black);
+
+bool _isStandardMaterialSide(Board board, Side side) {
+  int count(Role role) => board.piecesOf(side, role).size;
+  final bishops = board.piecesOf(side, Role.bishop);
+  // Every piece beyond the ones a side starts with had to be promoted, and every promotion costs a
+  // pawn — so pawns and promotions together cannot exceed the eight pawns a side starts with.
+  final promoted =
+      max(count(Role.queen) - 1, 0) +
+      max(count(Role.rook) - 2, 0) +
+      max(count(Role.knight) - 2, 0) +
+      max(bishops.intersect(SquareSet.lightSquares).size - 1, 0) +
+      max(bishops.intersect(SquareSet.darkSquares).size - 1, 0);
+  return count(Role.pawn) + promoted <= 8;
+}
+
 extension FairyVariantExtension on Variant {
   /// The Fairy-Stockfish variant name, for the `UCI_Variant` option.
   String get fairy => switch (this) {

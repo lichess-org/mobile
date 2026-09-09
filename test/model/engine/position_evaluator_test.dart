@@ -806,6 +806,22 @@ void main() {
       expect(service.state.spec, const StockfishSpec.light());
     });
 
+    test('Falls back to Fairy-Stockfish on material Stockfish will not accept', () async {
+      final container = await makeContainer();
+      final service = readEvaluator(container);
+
+      // Three knights a side beside a full set of pawns: legal to set up, but not material a
+      // standard game could produce, and Stockfish 19 exits rather than evaluate it.
+      final position = Chess.fromSetup(
+        Setup.parseFen('nnnk4/pppppppp/8/8/8/8/PPPPPPPP/4KNNN w - - 0 1'),
+      );
+
+      final stream = service.evaluate(makeWork(initialPosition: position));
+      expect(stream, isNotNull);
+      await stream!.first;
+      expect(service.state.spec, const StockfishSpec.fairy());
+    });
+
     test('Falls back to Fairy-Stockfish for the variants Stockfish cannot play', () async {
       final container = await makeContainer();
       // Even asked for the latest Stockfish, an atomic game can only be evaluated by Fairy.

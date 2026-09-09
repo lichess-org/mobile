@@ -52,25 +52,26 @@ final positionEvaluatorProvider = NotifierProvider.autoDispose
       name: 'PositionEvaluatorProvider',
     );
 
-/// The flavor the evaluator will use for [variant].
+/// The flavor the evaluator will use for [variant], played from [position].
 ///
-/// The user's preference, except for the variants Stockfish does not know how to play, which only
-/// Fairy-Stockfish can evaluate. Read when the work starts rather than carried on it, so that
+/// The user's preference, except where only Fairy-Stockfish will do: the variants Stockfish does
+/// not know how to play, and the positions it refuses to accept the material of (see
+/// [hasNonStandardMaterial]). Read when the work starts rather than carried on it, so that
 /// changing the preference is picked up by the next evaluation wherever it comes from.
-StockfishFlavor evaluatorFlavorFor(Ref ref, Variant variant) =>
-    officialStockfishVariants.contains(variant)
+StockfishFlavor evaluatorFlavorFor(Ref ref, Variant variant, Position position) =>
+    officialStockfishVariants.contains(variant) && !hasNonStandardMaterial(position)
     ? ref.read(engineEvaluationPreferencesProvider).enginePref.flavor
     : StockfishFlavor.variant;
 
-/// The engine the evaluator will run [variant] on.
+/// The engine the evaluator will run [variant] on, played from [position].
 ///
 /// The slot rather than the [EngineSpec] because resolving a spec is asynchronous — it depends on
 /// whether the NNUE file is on disk — while the caller needs the answer now, in order to build a
 /// search request. What it is asked is whether some other role shares the evaluator's engine, and
 /// the slot settles that: the `latestNoNNUE` → `light` fallback can make this name the wrong
-/// Stockfish, but only a variant ever resolves to Fairy.
-EngineSlot evaluatorEngineSlotFor(Ref ref, Variant variant) =>
-    switch (evaluatorFlavorFor(ref, variant)) {
+/// Stockfish, but only a variant or an unplayable material ever resolves to Fairy.
+EngineSlot evaluatorEngineSlotFor(Ref ref, Variant variant, Position position) =>
+    switch (evaluatorFlavorFor(ref, variant, position)) {
       StockfishFlavor.variant => EngineSlot.fairy,
       StockfishFlavor.light => EngineSlot.sfLight,
       StockfishFlavor.latestNoNNUE => EngineSlot.sfLatest,
@@ -287,7 +288,7 @@ class PositionEvaluator extends Notifier<EngineEvaluationState> {
 
     _setEvalWork(work);
 
-    final flavor = _flavorFor(work.variant);
+    final flavor = _flavorFor(work);
 
     if (_engineFlavor == flavor) {
       // Already asking for the right engine. It may not be ready yet, in which case the work runs
@@ -433,8 +434,12 @@ class PositionEvaluator extends Notifier<EngineEvaluationState> {
     }
   }
 
-  /// The flavor to evaluate [variant] with.
-  StockfishFlavor _flavorFor(Variant variant) => evaluatorFlavorFor(ref, variant);
+  /// The flavor to evaluate [work] with.
+  ///
+  /// The material is read from the root of the tree rather than from the position being evaluated,
+  /// so that the engine cannot change under the user as pieces come off the board.
+  StockfishFlavor _flavorFor(EvalWork work) =>
+      evaluatorFlavorFor(ref, work.variant, work.initialPosition);
 
   /// Runs whatever work is current on the engine that has just become available.
   void _computeCurrentWork() {

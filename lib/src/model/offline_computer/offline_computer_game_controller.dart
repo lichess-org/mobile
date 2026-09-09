@@ -121,7 +121,8 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   bool get _sharesOneEngine {
     if (!state.game.casual && !state.game.practiceMode) return false;
     final variant = state.game.meta.variant;
-    return state.game.opponentSpec.engineSpec.slot == evaluatorEngineSlotFor(ref, variant);
+    return state.game.opponentSpec.engineSpec.slot ==
+        evaluatorEngineSlotFor(ref, variant, state.game.initialPosition);
   }
 
   /// The cores the evaluator asks for. The table it gets is the engine's own, settled when the
