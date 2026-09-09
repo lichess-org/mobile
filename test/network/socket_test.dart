@@ -976,6 +976,46 @@ void main() {
       pool.currentClient.close();
     });
 
+    test('does not reconnect the socket whose own pong brought the device back online', () async {
+      var channelsCreated = 0;
+      final container = await makeContainer(
+        overrides: {
+          // Nothing the check probes can be reached, so the device is held offline; the socket is
+          // the only thing that works, as it is on a network that blocks the probe hosts.
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+            (ref) => FakeHttpClientFactory(
+              () => MockClient((request) => throw const SocketException('No internet')),
+            ),
+          ),
+          webSocketChannelFactoryProvider: webSocketChannelFactoryProvider.overrideWithValue(
+            FakeWebSocketChannelFactory((route) {
+              channelsCreated++;
+              return createDefaultFakeWebSocketChannel(route);
+            }),
+          ),
+        },
+      );
+
+      fakeAsync((async) {
+        container.read(connectivityChangesProvider);
+        async.elapse(const Duration(seconds: 1));
+        expect(container.read(isDeviceOnlineProvider), isFalse);
+
+        final pool = container.read(socketPoolProvider);
+        pool.currentClient.connect();
+        async.elapse(const Duration(seconds: 1));
+
+        // The pong cleared the offline status, and that transition reaches the pool like any
+        // other. Reconnecting here would tear down the connection that proved the network.
+        expect(container.read(isDeviceOnlineProvider), isTrue);
+        expect(channelsCreated, 1);
+        expect(pool.currentClient.isConnected, isTrue);
+
+        pool.currentClient.close();
+        async.flushTimers();
+      });
+    });
+
     test(
       'reconnects a socket that has yet to notice the network went away and came back',
       () async {

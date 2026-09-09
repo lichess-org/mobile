@@ -760,7 +760,12 @@ class SocketPool {
       // [isDeviceOnlineIn] rather than the raw value: a check that failed reads as offline there,
       // and coming back from one is an edge the socket has to hear about like any other.
       _ref.listen(connectivityChangesProvider, (prev, next) {
-        if (prev != null && !isDeviceOnlineIn(prev) && isDeviceOnlineIn(next)) {
+        if (prev == null) return;
+        final wasOnline = isDeviceOnlineIn(prev);
+        final isOnline = isDeviceOnlineIn(next);
+        if (wasOnline && !isOnline) {
+          _socketAnsweredSinceOffline = false;
+        } else if (!wasOnline && isOnline) {
           onDeviceOnline();
         }
       });
@@ -775,6 +780,14 @@ class SocketPool {
   final _averageLag = ValueNotifier(Duration.zero);
   final _isFailing = ValueNotifier(false);
   final _isConnected = ValueNotifier(false);
+
+  /// Whether the current socket has answered a ping since the device was last found offline.
+  ///
+  /// A socket that did is the very thing that proves the network is back — connectivity clears an
+  /// offline status on its pong — and reconnecting it on the online edge that follows would tear
+  /// down the connection that produced it. One that did not says nothing: it may well be holding a
+  /// connection to a network that is gone.
+  bool _socketAnsweredSinceOffline = false;
 
   Timer? _closeInBackgroundTimer;
 
@@ -839,7 +852,14 @@ class SocketPool {
   /// first, so it is worth an attempt right away.
   void onDeviceOnline() {
     if (_isAppInBackground) return;
-    _logger.info('Device is back online, reconnecting the socket.');
+
+    // The socket answered a ping while the device was held offline: it is what proved the network
+    // is back, and reconnecting it here would tear down the very connection that did so — an event
+    // gap and a handshake on every socket-driven recovery.
+    if (_socketAnsweredSinceOffline) {
+      return;
+    }
+
     // Unconditionally, unlike [_connectIfNeeded]: a socket that lost its network without noticing
     // yet — no ping due, nothing that tore the channel down — still looks perfectly healthy, and
     // the connection it holds belongs to a network that is gone. Waiting for it to find out on its
@@ -880,9 +900,10 @@ class SocketPool {
     client.averageLag.addListener(() {
       if (_currentRoute == client.route) {
         _averageLag.value = client.averageLag.value;
-        // Set from the client's own change, not from the pool's lag: the assignment above can be a
-        // no-op — the same lag as the client before it — and still be a socket coming up.
         _isConnected.value = client.isConnected;
+        if (client.isConnected) {
+          _socketAnsweredSinceOffline = true;
+        }
       }
     });
     client.isFailing.addListener(() {
