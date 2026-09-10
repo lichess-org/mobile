@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/model/game/over_the_board_game.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_clock.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_game_controller.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_game_storage.dart';
+import 'package:lichess_mobile/src/model/over_the_board/over_the_board_preferences.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/over_the_board/over_the_board_screen.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
@@ -53,6 +54,112 @@ void main() {
     ),
   );
   registerFallbackValue(const TimeIncrement(0, 0));
+
+  group('Over the board: board arrangement', () {
+    test('Face to face: upside down, white move', () {
+      final result = overTheBoardLayout(
+        boardArrangement: BoardArrangement.faceToFaceOpponentUpsideDown,
+        turn: Side.white,
+        orientation: Side.white,
+      );
+
+      expect(result.orientation, Side.white);
+      expect(result.topTableUpsideDown, isTrue);
+      expect(result.bottomTableUpsideDown, isFalse);
+      expect(result.pieceOrientationBehavior, PieceOrientationBehavior.opponentUpsideDown);
+    });
+
+    test('Face to face: upside down, black move', () {
+      final result = overTheBoardLayout(
+        boardArrangement: BoardArrangement.faceToFaceOpponentUpsideDown,
+        turn: Side.black,
+        orientation: Side.white,
+      );
+
+      expect(result.orientation, Side.white);
+      expect(result.topTableUpsideDown, isTrue);
+      expect(result.bottomTableUpsideDown, isFalse);
+      expect(result.pieceOrientationBehavior, PieceOrientationBehavior.opponentUpsideDown);
+    });
+
+    test('Face to face: flip pieces, white move', () {
+      final result = overTheBoardLayout(
+        boardArrangement: BoardArrangement.faceToFaceFlipToCurrentPlayer,
+        turn: Side.white,
+        orientation: Side.white,
+      );
+
+      expect(result.orientation, Side.white);
+      expect(result.topTableUpsideDown, isFalse);
+      expect(result.bottomTableUpsideDown, isFalse);
+      expect(result.pieceOrientationBehavior, PieceOrientationBehavior.sideToPlay);
+    });
+
+    test('Face to face: flip pieces, black move', () {
+      final result = overTheBoardLayout(
+        boardArrangement: BoardArrangement.faceToFaceFlipToCurrentPlayer,
+        turn: Side.black,
+        orientation: Side.white,
+      );
+
+      expect(result.orientation, Side.white);
+      expect(result.topTableUpsideDown, isTrue);
+      expect(result.bottomTableUpsideDown, isTrue);
+      expect(result.pieceOrientationBehavior, PieceOrientationBehavior.sideToPlay);
+    });
+
+    test('Side by side: white at bottom, white move', () {
+      final result = overTheBoardLayout(
+        boardArrangement: BoardArrangement.sideBySideWhiteStaysDown,
+        turn: Side.white,
+        orientation: Side.white,
+      );
+
+      expect(result.orientation, Side.white);
+      expect(result.topTableUpsideDown, isFalse);
+      expect(result.bottomTableUpsideDown, isFalse);
+      expect(result.pieceOrientationBehavior, PieceOrientationBehavior.facingUser);
+    });
+
+    test('Side by side: white at bottom, black move', () {
+      final result = overTheBoardLayout(
+        boardArrangement: BoardArrangement.sideBySideWhiteStaysDown,
+        turn: Side.black,
+        orientation: Side.white,
+      );
+
+      expect(result.orientation, Side.white);
+      expect(result.topTableUpsideDown, isFalse);
+      expect(result.bottomTableUpsideDown, isFalse);
+      expect(result.pieceOrientationBehavior, PieceOrientationBehavior.facingUser);
+    });
+
+    test('Side by side: rotate board, white move', () {
+      final result = overTheBoardLayout(
+        boardArrangement: BoardArrangement.sideBySideRotateBoard,
+        turn: Side.white,
+        orientation: Side.white,
+      );
+
+      expect(result.orientation, Side.white);
+      expect(result.topTableUpsideDown, isFalse);
+      expect(result.bottomTableUpsideDown, isFalse);
+      expect(result.pieceOrientationBehavior, PieceOrientationBehavior.facingUser);
+    });
+
+    test('Side by side: rotate board, black move', () {
+      final result = overTheBoardLayout(
+        boardArrangement: BoardArrangement.sideBySideRotateBoard,
+        turn: Side.black,
+        orientation: Side.white,
+      );
+
+      expect(result.orientation, Side.black);
+      expect(result.topTableUpsideDown, isFalse);
+      expect(result.bottomTableUpsideDown, isFalse);
+      expect(result.pieceOrientationBehavior, PieceOrientationBehavior.facingUser);
+    });
+  });
 
   group('Playing over the board (offline)', () {
     testWidgets('Checkmate and Rematch', (tester) async {
@@ -307,7 +414,6 @@ void main() {
 
       // Expect increment to be added
       expect(findBlackClock(tester).timeLeft, greaterThan(time));
-
       expect(findWhiteClock(tester).timeLeft, lessThan(time));
     });
 
@@ -818,7 +924,6 @@ Future<Rect> initOverTheBoardGame(WidgetTester tester, TimeIncrement timeIncreme
 Side? activeClock(WidgetTester tester, {Side orientation = Side.white}) {
   final whiteClock = findWhiteClock(tester, orientation: orientation);
   final blackClock = findBlackClock(tester, orientation: orientation);
-
   if (whiteClock.active) {
     expect(blackClock.active, false);
     return Side.white;
