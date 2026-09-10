@@ -353,6 +353,54 @@ abstract class Node {
 
     return pgnGame.makePgn();
   }
+
+  /// Exports the line going through [path] as a PGN string.
+  ///
+  /// Mirrors the website's "Copy main line PGN" and "Copy variation PGN": the moves up to [path]
+  /// are exported as a single line, dropping the sidelines branching off them, then the line
+  /// follows the first child of each node to the end. Sidelines after [path] are kept only when
+  /// [includeVariations] is true.
+  ///
+  /// Comments and annotations are dropped. A `Variant` or `FEN` tag is added when the line does not
+  /// start from the standard initial position. Returns an empty string when the line has no move.
+  String makeLinePgn(UciPath path, {required Variant variant, required bool includeVariations}) {
+    final pgnRoot = PgnNode<PgnNodeData>();
+
+    PgnNode<PgnNodeData> pgnNode = pgnRoot;
+    Node node = this;
+    for (final branch in branchesOn(path)) {
+      final pgnChild = PgnChildNode(PgnNodeData(san: branch.sanMove.san));
+      pgnNode.children.add(pgnChild);
+      pgnNode = pgnChild;
+      node = branch;
+    }
+
+    final List<({Node from, PgnNode<PgnNodeData> to})> stack = [(from: node, to: pgnNode)];
+    while (stack.isNotEmpty) {
+      final frame = stack.removeLast();
+      final children = includeVariations ? frame.from.children : frame.from.children.take(1);
+      for (final childFrom in children) {
+        final childTo = PgnChildNode(PgnNodeData(san: childFrom.sanMove.san));
+        frame.to.children.add(childTo);
+        stack.add((from: childFrom, to: childTo));
+      }
+    }
+
+    // A line without any move has nothing to export: don't return bare headers.
+    if (pgnRoot.children.isEmpty) return '';
+
+    // Compare against the variant's own initial position: the initial FEN of crazyhouse and
+    // three-check carries extra fields and never equals the standard one.
+    final fen = position.fen;
+    return PgnGame(
+      headers: {
+        if (variant != Variant.standard) 'Variant': variant.pgnName,
+        if (fen != Position.initialPosition(variant.rule).fen) 'FEN': fen,
+      },
+      moves: pgnRoot,
+      comments: [],
+    ).makePgn();
+  }
 }
 
 /// A branch node of a game tree
