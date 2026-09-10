@@ -24,6 +24,12 @@ class CreateChapterOfExistingStudy extends CreateStudyChapterParams {
   final StudyId studyId;
 }
 
+class CreateFirstChapterOfNewStudy extends CreateStudyChapterParams {
+  CreateFirstChapterOfNewStudy(this.studyPayload);
+
+  final CreateStudyPayload studyPayload;
+}
+
 enum _ChapterSource { empty, fen, pgn }
 
 class CreateStudyChapterBottomSheet extends ConsumerStatefulWidget {
@@ -313,6 +319,8 @@ class _CreateStudyChapterBottomSheetState extends ConsumerState<CreateStudyChapt
           studyId,
           await ref.read(studyRepositoryProvider).createChapter(studyId, chapterPayload),
         ),
+        CreateFirstChapterOfNewStudy(:final studyPayload) =>
+          await ref.read(studyRepositoryProvider).createStudy(studyPayload, chapterPayload),
       };
 
       if (!mounted) return;
@@ -359,9 +367,9 @@ class _CreateStudyChapterBottomSheetState extends ConsumerState<CreateStudyChapt
       final file = await ref.read(pickPgnFileProvider)();
 
       if (file != null) {
-        final content = await const Utf8Decoder(
-          allowMalformed: true,
-        ).bind(file.readAsByteStream()).join();
+        final content = await const Utf8Decoder(allowMalformed: true)
+            .bind(file.readAsByteStream())
+            .join();
         if (mounted) {
           _onTextChanged(content);
         }

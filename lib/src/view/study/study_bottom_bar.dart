@@ -445,9 +445,14 @@ class _StudyChaptersMenuState extends ConsumerState<_StudyChaptersMenu> {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Text(
-            context.l10n.studyNbChapters(state.study.chapters.length),
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                context.l10n.studyNbChapters(state.study.chapters.length),
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ],
           ),
         ),
         const SizedBox(height: 16),
