@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/local_game_clock.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
+import 'package:lichess_mobile/src/model/engine/weights_service.dart';
 import 'package:lichess_mobile/src/model/game/game_board_params.dart';
 import 'package:lichess_mobile/src/model/game/offline_computer_game.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
@@ -783,6 +784,9 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
     _selectedOpponent = prefs.opponentSpec.supportsVariant(_selectedVariant)
         ? prefs.opponentSpec
         : OpponentSpec.defaultSpec;
+    if (_selectedOpponent case MaiaOpponentSpec(:final rating) when !rating.isBundled) {
+      _checkMaiaWeights(rating);
+    }
     _casual = prefs.casual;
     _practiceMode = prefs.practiceMode;
     // Practice mode is played without a clock, so a game that starts in it starts untimed whatever
@@ -794,6 +798,20 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
     _fenController.addListener(() {
       setState(() => _fromPositionFen = _fenController.text);
     });
+  }
+
+  /// Falls back to the bundled Maia when the network of the preferred [rating] is no longer on the
+  /// device, e.g. after the downloaded files were cleared from the engine settings.
+  ///
+  /// Playing it anyway would either download it in the middle of the game, or, without a
+  /// connection, have the bundled network play under the preferred rating's name.
+  Future<void> _checkMaiaWeights(MaiaRating rating) async {
+    if (await ref.read(maiaWeightsServiceProvider).isAvailable(rating)) return;
+    // The user may have picked another opponent while we were looking.
+    if (!mounted || _selectedOpponent != MaiaOpponentSpec(rating)) return;
+    const fallback = MaiaOpponentSpec(MaiaRating.defaultRating);
+    setState(() => _selectedOpponent = fallback);
+    await ref.read(offlineComputerGamePreferencesProvider.notifier).setOpponent(fallback);
   }
 
   @override
