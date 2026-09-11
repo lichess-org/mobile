@@ -27,9 +27,11 @@ Rule ruleFromUciVariant(String uciVariant) => switch (uciVariant) {
   _ => throw ArgumentError('Unexpected uci variant: $uciVariant'),
 };
 
+/// Both Stockfish flavors report the same name, as the real binaries do: which one is running is
+/// read from the spec, not from the name.
 String _engineNameFor(EngineSpec spec) => switch (spec) {
-  StockfishSpec(flavor: StockfishFlavor.sf16) => 'Stockfish 16',
-  StockfishSpec(flavor: StockfishFlavor.latestNoNNUE) => 'Stockfish 18',
+  StockfishSpec(flavor: StockfishFlavor.light) => 'Stockfish 19',
+  StockfishSpec(flavor: StockfishFlavor.latestNoNNUE) => 'Stockfish 19',
   StockfishSpec(flavor: StockfishFlavor.variant) => 'Fairy-Stockfish',
   Lc0Spec() => 'Lc0 v0.32.1',
 };
@@ -129,7 +131,7 @@ class FakeEngine {
     if (hangsFromStart != null && startCount >= hangsFromStart!) {
       // Deliberately never completes, and never leaves the in-flight count either: this engine is
       // wedged somewhere no timeout of the plugin's covers.
-      return Completer<EngineTransport>().future;
+      return await Completer<EngineTransport>().future;
     }
 
     if (startDelay > Duration.zero) {

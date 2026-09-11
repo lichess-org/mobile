@@ -24,7 +24,6 @@ bool isShortVerticalScreen(BuildContext context) {
   return estimateHeightMinusBoardFromContext(context) < kSmallHeightMinusBoard;
 }
 
-// ignore: avoid_classes_with_only_static_members
 abstract class FormFactor {
   static const double desktop = 900;
   static const double tablet = 600;

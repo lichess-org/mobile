@@ -25,7 +25,12 @@ class TestLichessBinding extends LichessBinding {
   ///
   /// If there is an existing binding but it is not a [TestLichessBinding],
   /// this method throws an error.
+  ///
+  /// Also initializes the Flutter binding, which the app widely assumes to exist: an
+  /// [AppLifecycleListener] alone — the connectivity notifier and the socket pool both build one —
+  /// throws without it.
   factory TestLichessBinding.ensureInitialized() {
+    TestWidgetsFlutterBinding.ensureInitialized();
     if (_instance == null) {
       TestLichessBinding();
     }
@@ -397,6 +402,6 @@ class SlowFakeSharedPreferences extends FakeSharedPreferences {
   @override
   Future<bool> setString(String key, String value) async {
     await Future<void>.delayed(writeDelay);
-    return super.setString(key, value);
+    return await super.setString(key, value);
   }
 }

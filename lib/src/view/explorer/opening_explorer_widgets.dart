@@ -2,6 +2,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer.dart';
@@ -109,6 +110,9 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
       return loadingTable;
     }
 
+    final pieceNotation = ref
+        .watch(pieceNotationProvider)
+        .maybeWhen(data: (value) => value, orElse: () => defaultAccountPreferences.pieceNotation);
     final games = whiteWins + draws + blackWins;
 
     return Table(
@@ -154,7 +158,15 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
             children: [
               TableRowInkWell(
                 onTap: () => onMoveSelected?.call(Move.parse(move.uci)!),
-                child: Padding(padding: kExplorerTableRowPadding, child: Text(move.san)),
+                child: Padding(
+                  padding: kExplorerTableRowPadding,
+                  child: Text(
+                    move.san,
+                    style: TextStyle(
+                      fontFamily: pieceNotation == PieceNotation.symbol ? 'ChessFont' : null,
+                    ),
+                  ),
+                ),
               ),
               TableRowInkWell(
                 onTap: () => onMoveSelected?.call(Move.parse(move.uci)!),

@@ -22,8 +22,8 @@ import 'package:lichess_mobile/src/utils/riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
-import './model/common/service/fake_sound_service.dart';
 import 'binding.dart';
+import 'model/common/service/fake_sound_service.dart';
 import 'model/engine/fake_engine.dart';
 import 'model/engine/fake_maia_online_book.dart';
 import 'model/engine/fake_stockfish_nnue_service.dart';

@@ -17,7 +17,7 @@ void main() {
       addTearDown(container.dispose);
 
       final subscription = container.listen<AsyncValue<Engine>>(
-        engineProvider(const StockfishSpec.sf16()),
+        engineProvider(const StockfishSpec.light()),
         (_, _) {},
       );
 
@@ -42,10 +42,10 @@ void main() {
       addTearDown(container.dispose);
 
       final subscription = container.listen<AsyncValue<Engine>>(
-        engineProvider(const StockfishSpec.sf16()),
+        engineProvider(const StockfishSpec.light()),
         (_, _) {},
       );
-      await container.read(engineProvider(const StockfishSpec.sf16()).future);
+      await container.read(engineProvider(const StockfishSpec.light()).future);
       subscription.close();
 
       await pumpEventQueue();
@@ -63,10 +63,10 @@ void main() {
       addTearDown(container.dispose);
 
       final subscription = container.listen<AsyncValue<Engine>>(
-        engineProvider(const StockfishSpec.sf16()),
+        engineProvider(const StockfishSpec.light()),
         (_, _) {},
       );
-      await container.read(engineProvider(const StockfishSpec.sf16()).future);
+      await container.read(engineProvider(const StockfishSpec.light()).future);
 
       // Watched for longer than the window: a timer started when the engine was built would have
       // fired by now, and the engine would be quit the moment its last watcher went away.
@@ -91,10 +91,10 @@ void main() {
       addTearDown(container.dispose);
 
       final subscription = container.listen<AsyncValue<Engine>>(
-        engineProvider(const StockfishSpec.sf16()),
+        engineProvider(const StockfishSpec.light()),
         (_, _) {},
       );
-      await container.read(engineProvider(const StockfishSpec.sf16()).future);
+      await container.read(engineProvider(const StockfishSpec.light()).future);
       subscription.close();
       await pumpEventQueue();
       expect(fakeEngine.isRunning, isTrue, reason: 'still inside its dispose window');

@@ -73,8 +73,8 @@ Future<ProviderContainer> makeNnueTestContainer({
 
 void main() {
   group('StockfishNnueService', () {
-    group('nnueFiles', () {
-      test('returns correct file paths when appSupportDirectory is available', () async {
+    group('nnueFile', () {
+      test('returns the correct file path when appSupportDirectory is available', () async {
         final tempDir = await Directory.systemTemp.createTemp('nnue_test_');
         addTearDown(() => tempDir.delete(recursive: true));
 
@@ -82,10 +82,8 @@ void main() {
         addTearDown(container.dispose);
 
         final service = container.read(stockfishNnueServiceProvider);
-        final files = service.nnueFiles;
 
-        expect(files.bigNet.path, '${tempDir.path}/${Stockfish.latestBigNNUE}');
-        expect(files.smallNet.path, '${tempDir.path}/${Stockfish.latestSmallNNUE}');
+        expect(service.nnueFile.path, '${tempDir.path}/${Stockfish.latestNNUE}');
       });
 
       test('throws exception when appSupportDirectory is null', () async {
@@ -94,22 +92,22 @@ void main() {
 
         final service = container.read(stockfishNnueServiceProvider);
 
-        expect(() => service.nnueFiles, throwsException);
+        expect(() => service.nnueFile, throwsException);
       });
     });
 
-    group('checkNNUEFiles', () {
+    group('checkNNUEFile', () {
       test('returns false when appSupportDirectory is null', () async {
         final container = await makeNnueTestContainer(appSupportDirectory: null);
         addTearDown(container.dispose);
 
         final service = container.read(stockfishNnueServiceProvider);
-        final result = await service.checkNNUEFiles();
+        final result = await service.checkNNUEFile();
 
         expect(result, isFalse);
       });
 
-      test('returns false when files do not exist', () async {
+      test('returns false when the file does not exist', () async {
         final tempDir = await Directory.systemTemp.createTemp('nnue_test_');
         addTearDown(() => tempDir.delete(recursive: true));
 
@@ -117,64 +115,42 @@ void main() {
         addTearDown(container.dispose);
 
         final service = container.read(stockfishNnueServiceProvider);
-        final result = await service.checkNNUEFiles();
+        final result = await service.checkNNUEFile();
 
         expect(result, isFalse);
       });
 
-      test('returns false when only one file exists', () async {
+      test('returns false when the file exists but its checksum does not match', () async {
         final tempDir = await Directory.systemTemp.createTemp('nnue_test_');
         addTearDown(() => tempDir.delete(recursive: true));
 
-        // Create only the big net file
-        final bigNetFile = File('${tempDir.path}/${Stockfish.latestBigNNUE}');
-        await bigNetFile.writeAsBytes([1, 2, 3]);
+        // Create a file with invalid content
+        final netFile = File('${tempDir.path}/${Stockfish.latestNNUE}');
+        await netFile.writeAsBytes([1, 2, 3]);
 
         final container = await makeNnueTestContainer(appSupportDirectory: tempDir);
         addTearDown(container.dispose);
 
         final service = container.read(stockfishNnueServiceProvider);
-        final result = await service.checkNNUEFiles();
+        final result = await service.checkNNUEFile();
 
         expect(result, isFalse);
       });
 
-      test('returns false when files exist but checksums do not match', () async {
+      test('deletes the file when its checksum does not match', () async {
         final tempDir = await Directory.systemTemp.createTemp('nnue_test_');
         addTearDown(() => tempDir.delete(recursive: true));
 
-        // Create files with invalid content
-        final bigNetFile = File('${tempDir.path}/${Stockfish.latestBigNNUE}');
-        final smallNetFile = File('${tempDir.path}/${Stockfish.latestSmallNNUE}');
-        await bigNetFile.writeAsBytes([1, 2, 3]);
-        await smallNetFile.writeAsBytes([4, 5, 6]);
+        final netFile = File('${tempDir.path}/${Stockfish.latestNNUE}');
+        await netFile.writeAsBytes([1, 2, 3]);
 
         final container = await makeNnueTestContainer(appSupportDirectory: tempDir);
         addTearDown(container.dispose);
 
         final service = container.read(stockfishNnueServiceProvider);
-        final result = await service.checkNNUEFiles();
+        await service.checkNNUEFile();
 
-        expect(result, isFalse);
-      });
-
-      test('deletes the files when the checksums do not match', () async {
-        final tempDir = await Directory.systemTemp.createTemp('nnue_test_');
-        addTearDown(() => tempDir.delete(recursive: true));
-
-        final bigNetFile = File('${tempDir.path}/${Stockfish.latestBigNNUE}');
-        final smallNetFile = File('${tempDir.path}/${Stockfish.latestSmallNNUE}');
-        await bigNetFile.writeAsBytes([1, 2, 3]);
-        await smallNetFile.writeAsBytes([4, 5, 6]);
-
-        final container = await makeNnueTestContainer(appSupportDirectory: tempDir);
-        addTearDown(container.dispose);
-
-        final service = container.read(stockfishNnueServiceProvider);
-        await service.checkNNUEFiles();
-
-        expect(await bigNetFile.exists(), isFalse);
-        expect(await smallNetFile.exists(), isFalse);
+        expect(await netFile.exists(), isFalse);
       });
     });
 
@@ -239,13 +215,13 @@ void main() {
       });
     });
 
-    group('downloadNNUEFiles', () {
+    group('downloadNNUEFile', () {
       test('returns false when appSupportDirectory is null', () async {
         final container = await makeNnueTestContainer(appSupportDirectory: null);
         addTearDown(container.dispose);
 
         final service = container.read(stockfishNnueServiceProvider);
-        final result = await service.downloadNNUEFiles(inBackground: true);
+        final result = await service.downloadNNUEFile(inBackground: true);
 
         expect(result, isFalse);
       });
@@ -270,10 +246,10 @@ void main() {
         final service = container.read(stockfishNnueServiceProvider);
 
         // Start first download
-        final firstDownload = service.downloadNNUEFiles(inBackground: true);
+        final firstDownload = service.downloadNNUEFile(inBackground: true);
 
         // Immediately start second download while first is in progress
-        final secondDownload = service.downloadNNUEFiles(inBackground: true);
+        final secondDownload = service.downloadNNUEFile(inBackground: true);
 
         final results = await Future.wait([firstDownload, secondDownload]);
 
@@ -293,7 +269,7 @@ void main() {
 
         final service = container.read(stockfishNnueServiceProvider);
 
-        expect(() => service.downloadNNUEFiles(inBackground: true), throwsException);
+        expect(() => service.downloadNNUEFile(inBackground: true), throwsException);
       });
 
       test('allows sequential downloads after previous one completes', () async {
@@ -316,16 +292,16 @@ void main() {
         final service = container.read(stockfishNnueServiceProvider);
 
         // First download
-        await service.downloadNNUEFiles(inBackground: true);
+        await service.downloadNNUEFile(inBackground: true);
 
         // Second download after first completes
-        await service.downloadNNUEFiles(inBackground: true);
+        await service.downloadNNUEFile(inBackground: true);
 
-        // Both downloads should have been allowed (4 requests = 2 files x 2 downloads)
-        expect(downloadCount, 4);
+        // Both downloads should have been allowed
+        expect(downloadCount, 2);
       });
 
-      test('returns false and keeps nothing when the downloaded files are corrupted', () async {
+      test('returns false and keeps nothing when the downloaded file is corrupted', () async {
         final tempDir = await Directory.systemTemp.createTemp('nnue_test_');
         addTearDown(() => tempDir.delete(recursive: true));
 
@@ -339,11 +315,10 @@ void main() {
         addTearDown(container.dispose);
 
         final service = container.read(stockfishNnueServiceProvider);
-        final result = await service.downloadNNUEFiles(inBackground: true);
+        final result = await service.downloadNNUEFile(inBackground: true);
 
         expect(result, isFalse);
-        expect(await service.nnueFiles.bigNet.exists(), isFalse);
-        expect(await service.nnueFiles.smallNet.exists(), isFalse);
+        expect(await service.nnueFile.exists(), isFalse);
       });
 
       test('returns false and keeps nothing when a download fails', () async {
@@ -360,22 +335,21 @@ void main() {
         addTearDown(container.dispose);
 
         final service = container.read(stockfishNnueServiceProvider);
-        final result = await service.downloadNNUEFiles(inBackground: true);
+        final result = await service.downloadNNUEFile(inBackground: true);
 
         expect(result, isFalse);
-        expect(await service.nnueFiles.bigNet.exists(), isFalse);
-        expect(await service.nnueFiles.smallNet.exists(), isFalse);
+        expect(await service.nnueFile.exists(), isFalse);
       });
     });
 
-    group('isDownloadingNNUEFiles', () {
+    group('isDownloadingNNUEFile', () {
       test('returns false when progress is 0', () async {
         final container = await makeNnueTestContainer(appSupportDirectory: null);
         addTearDown(container.dispose);
 
         final service = container.read(stockfishNnueServiceProvider);
 
-        expect(service.isDownloadingNNUEFiles, isFalse);
+        expect(service.isDownloadingNNUEFile, isFalse);
       });
 
       test('returns false when progress is 1', () async {
@@ -384,9 +358,9 @@ void main() {
 
         final service = container.read(stockfishNnueServiceProvider);
         // We can't easily set progress to 1 without downloading, but we can verify the logic
-        // Progress starts at 0, so isDownloadingNNUEFiles should be false
+        // Progress starts at 0, so isDownloadingNNUEFile should be false
         expect(service.nnueDownloadProgress.value, 0.0);
-        expect(service.isDownloadingNNUEFiles, isFalse);
+        expect(service.isDownloadingNNUEFile, isFalse);
       });
     });
   });

@@ -5,10 +5,10 @@
 /// that resolve to the same slot are the same spec, so a slot can never be asked for two engines
 /// through the ordinary engine plumbing.
 enum EngineSlot {
-  /// Stockfish 16, with its NNUE network embedded in the binary.
-  sf16,
+  /// Stockfish with its small NNUE network embedded in the binary.
+  sfLight,
 
-  /// The latest Stockfish, whose networks are loaded from disk.
+  /// The latest Stockfish, whose network is loaded from disk.
   sfLatest,
 
   /// Fairy-Stockfish: chess variants, and negative skill levels.

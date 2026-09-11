@@ -701,7 +701,7 @@ class _PracticeCommentCardState extends ConsumerState<_PracticeCommentCard> {
                   verdictText,
                   style: TextStyle(fontWeight: FontWeight.w600, color: iconColor),
                 ),
-                if (suggestedMoveWidget != null) suggestedMoveWidget,
+                ?suggestedMoveWidget,
               ],
             ),
           ),

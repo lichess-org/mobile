@@ -240,7 +240,7 @@ class AnalysisLayout extends ConsumerWidget {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              if (engineLines != null) engineLines!,
+                              ?engineLines,
                               if (pockets != null)
                                 Align(
                                   alignment: Alignment.center,
@@ -309,7 +309,7 @@ class AnalysisLayout extends ConsumerWidget {
                     mainAxisSize: MainAxisSize.max,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      if (engineLines != null) engineLines!,
+                      ?engineLines,
                       Padding(
                         padding: isTablet
                             ? const EdgeInsets.all(kTabletBoardTableSidePadding)
@@ -411,7 +411,7 @@ class AnalysisLayout extends ConsumerWidget {
             ),
           ),
         ),
-        if (bottomBar != null) bottomBar!,
+        ?bottomBar,
       ],
     );
   }

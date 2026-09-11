@@ -241,7 +241,7 @@ ISet<Shape> moveShapes({
         piece: Piece(color: sideToMove, role: promRole),
       ),
   }.toISet(),
-  DropMove(role: final role, to: _) => {
+  DropMove(:final role, to: _) => {
     Circle(color: color, orig: move.to, scale: scale),
     PieceShape(
       color: color,
