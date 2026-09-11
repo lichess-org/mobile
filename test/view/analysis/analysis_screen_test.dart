@@ -112,6 +112,49 @@ void main() {
         isTrue,
       );
     });
+    testWidgets('displays the clocks of a game played with a time control', (tester) async {
+      const pgn =
+          '[White "white"]\n'
+          '[Black "black"]\n'
+          '[TimeControl "300+3"]\n\n'
+          '1. e4 { [%clk 0:05:01] } e5 { [%clk 0:05:02] } '
+          '2. Nf3 { [%clk 0:04:55] } Nc6 { [%clk 0:04:50] } *';
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const AnalysisScreen(
+          options: AnalysisOptions.pgn(
+            id: StringId('otb_test'),
+            orientation: Side.white,
+            pgn: pgn,
+            isComputerAnalysisAllowed: false,
+            variant: Variant.standard,
+          ),
+        ),
+      );
+
+      await tester.pumpWidget(app);
+
+      // The last move is black's, so black shows the clock of that move and white the one it
+      // still had after its own last move.
+      expect(find.text('04:50'), findsOneWidget);
+      expect(find.text('04:55'), findsOneWidget);
+
+      // Stepping back a move moves both clocks back with it.
+      await tester.tap(find.byKey(const Key('goto-previous')));
+      await tester.pumpAndSettle();
+      expect(find.text('04:55'), findsOneWidget);
+      expect(find.text('05:02'), findsOneWidget);
+
+      // At the root neither side has played, so there is nothing to show.
+      for (var i = 0; i < 3; i++) {
+        await tester.tap(find.byKey(const Key('goto-previous')));
+        await tester.pumpAndSettle();
+      }
+      expect(find.text('05:01'), findsNothing);
+      expect(find.text('05:02'), findsNothing);
+    });
+
     testWidgets('Variations bar displays variations and can be tapped', (tester) async {
       // A PGN where black has two responses to 1. e4 : e5 and c5
       const pgn = '1. e4 e5 (1... c5)';

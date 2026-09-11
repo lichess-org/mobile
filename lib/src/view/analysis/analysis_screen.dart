@@ -225,8 +225,12 @@ class _Body extends ConsumerWidget {
       final playerWidgets = playerWidgetsFromPgnHeaders(
         pgnHeaders: analysisState.pgnHeaders,
         sideToMove: analysisState.currentPosition.turn,
-        whiteClock: null,
-        blackClock: null,
+        whiteClock: analysisState.currentPosition.turn == Side.white
+            ? analysisState.clocks?.parentClock
+            : analysisState.clocks?.clock,
+        blackClock: analysisState.currentPosition.turn == Side.black
+            ? analysisState.clocks?.parentClock
+            : analysisState.clocks?.clock,
       );
 
       (boardFooter, boardHeader) = pov == Side.white

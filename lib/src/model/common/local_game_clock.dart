@@ -38,25 +38,29 @@ abstract class LocalGameClock extends Notifier<LocalGameClockState> {
       _updateTimer?.cancel();
     });
 
-    _updateTimer = Timer.periodic(const Duration(milliseconds: 100), (_) {
-      if (_stopwatch.isRunning) {
-        final newTime = state.timeLeft(state.activeClock!)! - _stopwatch.elapsed;
-
-        if (state.activeClock == Side.white) {
-          state = state.copyWith(whiteTimeLeft: newTime);
-        } else {
-          state = state.copyWith(blackTimeLeft: newTime);
-        }
-
-        if (newTime <= Duration.zero) {
-          state = state.copyWith(flagSide: state.activeClock);
-        }
-
-        _stopwatch.reset();
-      }
-    });
+    _updateTimer = Timer.periodic(const Duration(milliseconds: 100), (_) => _flushElapsed());
 
     return LocalGameClockState.fromTimeIncrement(defaultTimeIncrement);
+  }
+
+  /// Charges the time run since the last reading to the side whose clock is running.
+  ///
+  /// Called on every tick, but also whenever the clock is about to stop or change hands, so that
+  /// the fraction of a tick that has run since the last one is not silently given back.
+  void _flushElapsed() {
+    final activeClock = state.activeClock;
+    if (!_stopwatch.isRunning || activeClock == null) return;
+
+    final newTime = state.timeLeft(activeClock)! - _stopwatch.elapsed;
+    _stopwatch.reset();
+
+    state = activeClock == Side.white
+        ? state.copyWith(whiteTimeLeft: newTime)
+        : state.copyWith(blackTimeLeft: newTime);
+
+    if (newTime <= Duration.zero) {
+      state = state.copyWith(flagSide: activeClock);
+    }
   }
 
   void setupClock(TimeIncrement timeIncrement, {Duration? whiteTimeLeft, Duration? blackTimeLeft}) {
@@ -76,6 +80,10 @@ abstract class LocalGameClock extends Notifier<LocalGameClockState> {
 
   void switchSide({required Side newSideToMove, required bool addIncrement}) {
     if (state.timeIncrement.isInfinite || state.flagSide != null) return;
+
+    _flushElapsed();
+    // Flushing can be what reveals that the side to move has just run out of time.
+    if (state.flagSide != null) return;
 
     final increment = Duration(seconds: addIncrement ? state.timeIncrement.increment : 0);
     if (newSideToMove == Side.black) {
@@ -100,9 +108,9 @@ abstract class LocalGameClock extends Notifier<LocalGameClockState> {
 
   void pause() {
     if (_stopwatch.isRunning) {
-      state = state.copyWith(activeClock: null);
-      _stopwatch.reset();
+      _flushElapsed();
       _stopwatch.stop();
+      state = state.copyWith(activeClock: null);
     }
   }
 

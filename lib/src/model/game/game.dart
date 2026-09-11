@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
+import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
@@ -43,6 +44,14 @@ abstract mixin class BaseGame {
   String? get initialFen;
 
   GameStatus get status;
+
+  /// The time control of the game, [TimeIncrement.infinite] if it is played without a clock.
+  TimeIncrement get timeIncrement {
+    final clock = meta.clock;
+    return clock != null
+        ? TimeIncrement.fromDurations(clock.initial, clock.increment)
+        : const TimeIncrement.infinite();
+  }
 
   /// Whether the game is properly finished (not aborted).
   bool get finished => status.value >= GameStatus.mate.value;
@@ -243,6 +252,19 @@ abstract mixin class ServerGame implements BaseGame {
 abstract mixin class LocalGame implements BaseGame {
   @override
   StringId get id;
+
+  /// Derived from the [GameStep.clock] readings taken as the game was played.
+  ///
+  /// Null unless every move carries one: a game played without a time control has none at all,
+  /// and a game that was saved before its clocks were recorded has only the later ones, which
+  /// would not line up with the moves they are read against.
+  @override
+  IList<Duration>? get clocks {
+    final moveClocks = steps.skip(1).map((step) => step.clock).toIList();
+    return moveClocks.isEmpty || moveClocks.any((clock) => clock == null)
+        ? null
+        : moveClocks.map((clock) => clock!).toIList();
+  }
 }
 
 /// A mixin that provides methods to access game data at a specific step.
@@ -385,6 +407,18 @@ sealed class GameMeta with _$GameMeta {
   factory GameMeta.fromJson(Map<String, dynamic> json) => _$GameMetaFromJson(json);
 }
 
+/// The [GameMeta.clock] of a locally played game, null if it is played without a time control.
+({Duration initial, Duration increment, Duration? emergency, Duration? moreTime})? clockMetaOf(
+  TimeIncrement timeIncrement,
+) => timeIncrement.isInfinite
+    ? null
+    : (
+        initial: Duration(seconds: timeIncrement.time),
+        increment: Duration(seconds: timeIncrement.increment),
+        emergency: null,
+        moreTime: null,
+      );
+
 @Freezed(fromJson: true, toJson: true)
 sealed class CorrespondenceClockData with _$CorrespondenceClockData {
   const CorrespondenceClockData._();
@@ -421,6 +455,13 @@ sealed class GameStep with _$GameStep {
     /// game is finished.
     Duration? archivedBlackClock,
 
+    /// The time left to the side that just played this step's move, increment included.
+    ///
+    /// Only set for locally played games with a time control (over the board, or against the
+    /// engine); server games carry their clocks in [archivedWhiteClock] and [archivedBlackClock]
+    /// instead.
+    Duration? clock,
+
     /// The computer analysis data for this step (only used in offline computer mode).
     ComputerAnalysis? computerAnalysis,
   }) = _GameStep;
@@ -435,6 +476,7 @@ String stepsToJson(IList<GameStep> steps) {
           if (i == 0) 'rule': e.position.rule.name,
           'uci': e.sanMove?.move.uci,
           'san': e.sanMove?.san,
+          if (e.clock != null) 'clk': e.clock!.inMilliseconds,
           ...?e.computerAnalysis?.toStepJson(),
         },
       )
@@ -458,12 +500,14 @@ IList<GameStep> stepsFromJson(String json) {
       break;
     }
     final move = Move.parse(uci)!;
+    final clock = step['clk'] as int?;
     position = position.playUnchecked(move);
     steps.add(
       GameStep(
         position: position,
         sanMove: SanMove(san, move),
         diff: MaterialDiff.fromPosition(position),
+        clock: clock != null ? Duration(milliseconds: clock) : null,
         computerAnalysis: ComputerAnalysis.fromStepJson(step),
       ),
     );

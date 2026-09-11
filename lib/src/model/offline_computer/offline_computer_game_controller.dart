@@ -307,10 +307,17 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   SanMove _applyMove(Move move) {
     final (newPos, newSan) = state.currentPosition.makeSan(Move.parse(move.uci)!);
     final sanMove = SanMove(newSan, move);
+    final movedSide = state.currentPosition.turn;
+
+    // The clock changes hands before the step is built, so that the step records the time the
+    // mover is left with once their increment has been added — the same reading lichess stores.
+    _clock.onMove(newSideToMove: newPos.turn);
+
     final newStep = GameStep(
       position: newPos,
       sanMove: sanMove,
       diff: MaterialDiff.fromPosition(newPos),
+      clock: ref.read(offlineComputerClockProvider).timeLeft(movedSide),
     );
 
     state = state.copyWith(
@@ -345,9 +352,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       state = state.copyWith(game: state.game.copyWith(status: GameStatus.draw));
     }
 
-    if (state.game.playable) {
-      _clock.onMove(newSideToMove: state.turn);
-    } else {
+    if (!state.game.playable) {
       _clock.pause();
     }
 
@@ -1015,14 +1020,7 @@ sealed class OfflineComputerGameState with _$OfflineComputerGameState {
           variant: effectiveVariant,
           speed: speed,
           perf: Perf.fromVariantAndSpeed(effectiveVariant, speed),
-          clock: timeIncrement.isInfinite
-              ? null
-              : (
-                  initial: Duration(seconds: timeIncrement.time),
-                  increment: Duration(seconds: timeIncrement.increment),
-                  emergency: null,
-                  moreTime: null,
-                ),
+          clock: clockMetaOf(timeIncrement),
         ),
         playerSide: playerSide,
         opponentSpec: opponentSpec,

@@ -319,6 +319,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
       gameId: options.gameId,
       archivedGame: archivedGame,
       currentPath: currentPath,
+      clocks: _getClocks(currentPath),
       pathToLiveMove: isGameFinished || options is Standalone || options is Pgn
           ? null
           : currentPath,
@@ -725,6 +726,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
       state = AsyncData(
         curState.copyWith(
           currentPath: path,
+          clocks: _getClocks(path),
           isOnMainline: _root.isOnMainline(path),
           currentNode: AnalysisCurrentNode.fromNode(currentNode),
           currentBranchOpening: opening,
@@ -736,6 +738,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
       state = AsyncData(
         curState.copyWith(
           currentPath: path,
+          clocks: _getClocks(path),
           isOnMainline: _root.isOnMainline(path),
           currentNode: AnalysisCurrentNode.fromNode(currentNode),
           currentBranchOpening: opening,
@@ -749,6 +752,20 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
       state = AsyncData(state.requireValue.copyWith(engineInThreatMode: false));
       requestEval();
     }
+  }
+
+  /// The clocks to show either side of the board at [path].
+  ///
+  /// The node holds the clock of the side that has just moved, so the side to move is shown the
+  /// clock of its parent — the last reading it had.
+  ({Duration? parentClock, Duration? clock}) _getClocks(UciPath path) {
+    final node = _root.nodeAt(path);
+    final parent = _root.parentAt(path);
+
+    return (
+      parentClock: (parent is Branch) ? parent.clock : null,
+      clock: (node is Branch) ? node.clock : null,
+    );
   }
 
   @override
@@ -810,6 +827,9 @@ sealed class AnalysisState
 
     /// The path to the current node in the analysis view.
     required UciPath currentPath,
+
+    /// The clocks at the current node, if the analysed game carries any.
+    required ({Duration? parentClock, Duration? clock})? clocks,
 
     /// If this is a correspondence game, the path to the last move that has been played.
     required UciPath? pathToLiveMove,
