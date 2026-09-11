@@ -75,8 +75,7 @@ class StockfishTransport implements EngineTransport {
 
     final stockfish = await Stockfish.create(
       flavor: spec.flavor,
-      bigNetPath: spec.bigNetPath,
-      smallNetPath: spec.smallNetPath,
+      nnuePath: spec.nnuePath,
       onStdout: (line) => transport == null ? buffered.add(line) : transport._receive(line),
     );
 

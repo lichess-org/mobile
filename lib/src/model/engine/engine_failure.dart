@@ -46,7 +46,7 @@ class EngineFailure {
   /// A human-readable description of what went wrong, without the diagnostics.
   final String message;
 
-  /// A short name for the engine that failed: `sf16`, `variant`, `lc0`.
+  /// A short name for the engine that failed: `light`, `variant`, `lc0`.
   final String engine;
 
   /// The chess variant the engine was searching, when the failure was detected somewhere that

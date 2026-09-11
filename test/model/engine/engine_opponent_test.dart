@@ -363,10 +363,10 @@ void main() {
       // move is weighted `pow(prior, 1 / Temperature)`. Pinning the first to Maia's training value
       // is what makes the second one readable.
       expect(engine.options['PolicyTemperature'], '1.0');
-      expect(engine.options['Temperature'], '0.8');
+      expect(engine.options['Temperature'], '0.6');
       // The full temperature holds until the opening book runs out at move 5, then fades.
       expect(engine.options['TempDecayDelayMoves'], '5');
-      expect(engine.options['TempDecayMoves'], '35');
+      expect(engine.options['TempDecayMoves'], '10');
       // Not a phase of the game: with no `TempCutoffMove` this is the floor the decay stops at.
       expect(engine.options['TempEndgame'], '0.2');
     });

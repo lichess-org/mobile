@@ -20,16 +20,14 @@ import 'package:multistockfish/multistockfish.dart';
 
 final _logger = Logger('EngineWeightsService');
 
-typedef NNUEFiles = ({File bigNet, File smallNet});
-
 /// A provider for [StockfishNnueService].
 final stockfishNnueServiceProvider = Provider<StockfishNnueService>((Ref ref) {
   return StockfishNnueService(ref);
 }, name: 'StockfishNnueServiceProvider');
 
-/// A service to manage NNUE files for the Stockfish engine.
+/// A service to manage the NNUE file for the Stockfish engine.
 ///
-/// This service handles downloading, checking, and deleting NNUE files.
+/// This service handles downloading, checking, and deleting the NNUE file.
 /// It can be overridden in tests to avoid file system access.
 class StockfishNnueService {
   StockfishNnueService(this._ref);
@@ -44,26 +42,23 @@ class StockfishNnueService {
 
   ValueListenable<double> get nnueDownloadProgress => _nnueDownloadProgress;
 
-  bool get isDownloadingNNUEFiles =>
+  bool get isDownloadingNNUEFile =>
       nnueDownloadProgress.value > 0.0 && nnueDownloadProgress.value < 1.0;
 
-  /// Get the NNUE files paths.
+  /// Get the NNUE file path.
   ///
   /// Throws an exception if the app support directory is not available.
-  NNUEFiles get nnueFiles {
+  File get nnueFile {
     final appSupportDirectory = _ref.read(preloadedDataProvider).requireValue.appSupportDirectory;
     if (appSupportDirectory == null) {
       throw Exception('App support directory is null.');
     }
 
-    final bigNetFile = File('${appSupportDirectory.path}/${Stockfish.latestBigNNUE}');
-    final smallNetFile = File('${appSupportDirectory.path}/${Stockfish.latestSmallNNUE}');
-
-    return (bigNet: bigNetFile, smallNet: smallNetFile);
+    return File('${appSupportDirectory.path}/${Stockfish.latestNNUE}');
   }
 
   Future<bool> hasOutdatedNNUEFiles() async {
-    if (await checkNNUEFiles()) {
+    if (await checkNNUEFile()) {
       return false;
     }
 
@@ -72,13 +67,10 @@ class StockfishNnueService {
       return false;
     }
 
-    final NNUEFiles files = nnueFiles;
+    final File file = nnueFile;
 
     await for (final entity in appSupportDirectory.list(followLinks: false)) {
-      if (entity is File &&
-          entity.path.endsWith('.nnue') &&
-          entity.path != files.bigNet.path &&
-          entity.path != files.smallNet.path) {
+      if (entity is File && entity.path.endsWith('.nnue') && entity.path != file.path) {
         return true;
       }
     }
@@ -87,8 +79,8 @@ class StockfishNnueService {
 
   /// Whether there is any NNUE file on disk, current or not, intact or not.
   ///
-  /// Useful to offer to reclaim the space taken by files the engine cannot use: the networks of a
-  /// previous Stockfish version, or a pair that did not survive its download.
+  /// Useful to offer to reclaim the space taken by files the engine cannot use: the network of a
+  /// previous Stockfish version, or one that did not survive its download.
   Future<bool> hasNNUEFilesOnDisk() async {
     final appSupportDirectory = _ref.read(preloadedDataProvider).requireValue.appSupportDirectory;
     if (appSupportDirectory == null) {
@@ -105,45 +97,40 @@ class StockfishNnueService {
     return false;
   }
 
-  /// Check the presence and integrity of the NNUE files.
+  /// Check the presence and integrity of the NNUE file.
   ///
-  /// Files that fail the checksum are deleted: they are useless to the engine, they take up more
-  /// than 100MB, and leaving them on disk makes the next download look like it has nothing to do.
-  Future<bool> checkNNUEFiles() async {
-    final NNUEFiles files;
+  /// A file that fails the checksum is deleted: it is useless to the engine, it takes up more
+  /// than 60MB, and leaving it on disk makes the next download look like it has nothing to do.
+  Future<bool> checkNNUEFile() async {
+    final File file;
     try {
-      files = nnueFiles;
+      file = nnueFile;
     } catch (e, st) {
-      _logger.warning('Error getting NNUE files:', e, st);
+      _logger.warning('Error getting the NNUE file:', e, st);
       return false;
     }
 
-    final (:bigNet, :smallNet) = files;
-
     try {
-      final found = await bigNet.exists() && await smallNet.exists();
-      if (found) {
-        _nnueSumCheckResult ??= await Isolate.run(() {
-          return _checksumMatches(bigNet.path, bigNetHash) &&
-              _checksumMatches(smallNet.path, smallNetHash);
-        });
+      if (await file.exists()) {
+        final path = file.path;
+        _nnueSumCheckResult ??= await Isolate.run(() => _checksumMatches(path, nnueHash));
 
         if (_nnueSumCheckResult == true) {
           return true;
         } else {
-          _logger.warning('NNUE files are corrupted, deleting them.');
+          _logger.warning('The NNUE file is corrupted, deleting it.');
           await deleteNNUEFiles();
         }
       }
 
       return false;
     } catch (e, st) {
-      _logger.warning('Error checking NNUE files:', e, st);
+      _logger.warning('Error checking the NNUE file:', e, st);
       return false;
     }
   }
 
-  Future<bool> downloadNNUEFiles({bool inBackground = true}) async {
+  Future<bool> downloadNNUEFile({bool inBackground = true}) async {
     if (_nnueOperationInProgress) {
       _logger.warning('NNUE download already in progress, ignoring request');
       return false;
@@ -152,29 +139,27 @@ class StockfishNnueService {
     _nnueOperationInProgress = true;
 
     try {
-      final NNUEFiles files;
+      final File file;
       try {
-        files = nnueFiles;
+        file = nnueFile;
       } catch (e, st) {
-        _logger.warning('Error getting NNUE files:', e, st);
+        _logger.warning('Error getting the NNUE file:', e, st);
         return false;
       }
-
-      final (:bigNet, :smallNet) = files;
 
       // delete any existing nnue files before downloading
       await deleteNNUEFiles();
 
       // The download only counts as a success if what landed on disk is what the engine needs:
       // a file that arrives truncated or garbled is deleted rather than kept and reported as
-      // downloaded, which would leave the engine falling back to SF16 with no way out.
+      // downloaded, which would leave the engine falling back to the light one with no way out.
       Future<bool> doDownload() async {
         final client = _ref.read(defaultClientProvider);
-        final downloaded = await downloadFiles(
+        final downloaded = await downloadFile(
           client,
-          [bigNetUrl, smallNetUrl],
-          [bigNet, smallNet],
-          expectedLengths: [bigNetExpectedSize, smallNetExpectedSize],
+          nnueUrl,
+          file,
+          expectedLength: nnueExpectedSize,
           onProgress: (received, length) {
             _nnueDownloadProgress.value = received / length;
           },
@@ -183,8 +168,8 @@ class StockfishNnueService {
           await deleteNNUEFiles();
           return false;
         }
-        // Deletes the files itself if they do not check out.
-        return checkNNUEFiles();
+        // Deletes the file itself if it does not check out.
+        return await checkNNUEFile();
       }
 
       final connectivityResult = await _ref.read(connectivityPluginProvider).checkConnectivity();
@@ -201,7 +186,7 @@ class StockfishNnueService {
             builder: (context) {
               return AlertDialog.adaptive(
                 content: const Text(
-                  'Are you sure you want to download the NNUE files ($nnueTotalSizeMB)?',
+                  'Are you sure you want to download the NNUE file ($nnueDownloadSizeMB)?',
                 ),
                 actions: [
                   PlatformDialogAction(
@@ -305,7 +290,7 @@ class MaiaWeightsService {
   /// always produce it, without a network connection.
   Future<bool> isAvailable(MaiaRating rating) async {
     if (rating.isBundled) return true;
-    return _checkFile(rating);
+    return await _checkFile(rating);
   }
 
   /// The ratings that can be played right now.
@@ -428,7 +413,7 @@ class MaiaWeightsService {
   /// The path of [rating]'s network if it can be produced without the network, null otherwise.
   Future<String?> _pathIfReady(MaiaRating rating) async {
     if (await _checkFile(rating)) return weightsFile(rating).path;
-    if (rating.isBundled) return _writeBundledWeights(rating);
+    if (rating.isBundled) return await _writeBundledWeights(rating);
     return null;
   }
 

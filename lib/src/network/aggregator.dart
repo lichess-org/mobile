@@ -112,7 +112,7 @@ class Aggregator {
     // Aggregation is disabled for widget tests to avoid dealing with timer and extra complexity.
     // The Aggregator is tested on its own.
     if (aggregationInterval == Duration.zero) {
-      return atomicClientCall();
+      return await atomicClientCall();
     }
 
     if (_pending == null) {
@@ -129,7 +129,7 @@ class Aggregator {
       _pending = null;
 
       if (uris.length == 1) {
-        return atomicClientCall();
+        return await atomicClientCall();
       }
 
       for (final group in _targetUris.entries) {
@@ -160,6 +160,6 @@ class Aggregator {
 
     _logger.warning('No aggregation found for URI: $uri');
 
-    return atomicClientCall();
+    return await atomicClientCall();
   }
 }

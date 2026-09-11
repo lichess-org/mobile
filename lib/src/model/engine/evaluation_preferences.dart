@@ -62,26 +62,24 @@ class EngineEvaluationPreferences extends Notifier<EngineEvaluationPrefState>
 }
 
 enum ChessEnginePref {
-  sf16,
+  /// Stockfish 19 with the small net embedded in the app, ready to evaluate right away.
+  sfLight,
+
+  /// Stockfish 19 with the full net, which has to be downloaded first.
   sfLatest;
 
   String get label => switch (this) {
-    ChessEnginePref.sf16 => 'Stockfish 16',
-    ChessEnginePref.sfLatest => 'Stockfish 18 ($nnueTotalSizeMB)',
+    ChessEnginePref.sfLight => 'Stockfish 19 ($lightNetSizeMB)',
+    ChessEnginePref.sfLatest => 'Stockfish 19 ($latestNetSizeMB)',
   };
 
   String get shortLabel => switch (this) {
-    ChessEnginePref.sf16 => 'SF 16',
-    ChessEnginePref.sfLatest => 'SF 18',
-  };
-
-  String get version => switch (this) {
-    ChessEnginePref.sf16 => '16',
-    ChessEnginePref.sfLatest => '18',
+    ChessEnginePref.sfLight => 'SF 19 $lightNetSizeMB',
+    ChessEnginePref.sfLatest => 'SF 19',
   };
 
   StockfishFlavor get flavor => switch (this) {
-    ChessEnginePref.sf16 => StockfishFlavor.sf16,
+    ChessEnginePref.sfLight => StockfishFlavor.light,
     ChessEnginePref.sfLatest => StockfishFlavor.latestNoNNUE,
   };
 }
@@ -101,7 +99,7 @@ sealed class EngineEvaluationPrefState with _$EngineEvaluationPrefState implemen
       toJson: _searchTimeToJson,
     )
     required Duration engineSearchTime,
-    @JsonKey(defaultValue: ChessEnginePref.sf16, unknownEnumValue: ChessEnginePref.sf16)
+    @JsonKey(defaultValue: ChessEnginePref.sfLight, unknownEnumValue: ChessEnginePref.sfLight)
     required ChessEnginePref enginePref,
   }) = _EngineEvaluationPrefState;
 
@@ -110,7 +108,7 @@ sealed class EngineEvaluationPrefState with _$EngineEvaluationPrefState implemen
     numEvalLines: 2,
     numEngineCores: 1,
     engineSearchTime: Duration(seconds: 4),
-    enginePref: ChessEnginePref.sf16,
+    enginePref: ChessEnginePref.sfLight,
   );
 
   factory EngineEvaluationPrefState.fromJson(Map<String, dynamic> json) {

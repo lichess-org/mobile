@@ -525,7 +525,7 @@ class Engine {
       _setOption(name, fallback);
     }
 
-    for (final MapEntry(key: name, value: value) in wanted.entries) {
+    for (final MapEntry(key: name, :value) in wanted.entries) {
       _setOption(name, value);
     }
 

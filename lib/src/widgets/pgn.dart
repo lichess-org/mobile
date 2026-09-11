@@ -1341,7 +1341,7 @@ class InlineMove extends ConsumerWidget {
             Text.rich(
               TextSpan(
                 children: [
-                  if (indexText != null) indexText,
+                  ?indexText,
                   TextSpan(
                     text: moveWithNag,
                     style: moveTextStyle.copyWith(

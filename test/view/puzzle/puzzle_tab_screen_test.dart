@@ -572,12 +572,12 @@ void main() {
 
     final client = MockClient((request) async {
       if (request.url.path == '/api/puzzle/daily') {
-        return mockResponse(mockDailyPuzzleResponse, 200);
+        return await mockResponse(mockDailyPuzzleResponse, 200);
       }
       if (request.url.path == '/api/puzzle/batch/mix') {
         // the rating probe made on puzzle controller build asks for nb=0
         if (request.url.queryParameters['nb'] == '0') {
-          return mockResponse('{"puzzles":[]}', 200);
+          return await mockResponse('{"puzzles":[]}', 200);
         }
         nbBatchReq++;
         inFlight++;
@@ -587,9 +587,9 @@ void main() {
         await Future<void>.delayed(const Duration(milliseconds: 20));
         inFlight--;
         // the server caps each batch at 50 puzzles, whatever `nb` asks for
-        return mockResponse(_batchResponse(50, () => nextPuzzleNumber++), 200);
+        return await mockResponse(_batchResponse(50, () => nextPuzzleNumber++), 200);
       }
-      return mockResponse('', 404);
+      return await mockResponse('', 404);
     });
 
     final testDb = await openAppDatabase(databaseFactoryFfiNoIsolate, inMemoryDatabasePath);

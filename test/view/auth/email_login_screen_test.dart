@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/auth/email_login_screen.dart';
 import 'package:material_ui/material_ui.dart';
@@ -26,6 +27,10 @@ MockClientHandler happyPath({
   int autocompleteStatus = 200,
 }) {
   return (request) {
+    // The connectivity checks run on their own schedule and are not traffic this screen produced.
+    if (internetCheckUris.contains(request.url)) {
+      return mockResponse('', 200);
+    }
     recordUrl?.call(request.url);
     switch (request.url.path) {
       case '/api/player/autocomplete':
@@ -114,7 +119,10 @@ void main() {
       testWidgets(email.isEmpty ? '(empty)' : email, (tester) async {
         var requests = 0;
         final app = await makeApp(tester, (request) {
-          requests++;
+          // The connectivity checks are not traffic this screen produced.
+          if (!internetCheckUris.contains(request.url)) {
+            requests++;
+          }
           return mockResponse('', 204);
         });
         await tester.pumpWidget(app);
@@ -160,7 +168,10 @@ void main() {
   testWidgets('does not send a request without a username', (tester) async {
     var requests = 0;
     final app = await makeApp(tester, (request) {
-      requests++;
+      // The connectivity checks are not traffic this screen produced.
+      if (!internetCheckUris.contains(request.url)) {
+        requests++;
+      }
       return mockResponse('', 204);
     });
     await tester.pumpWidget(app);

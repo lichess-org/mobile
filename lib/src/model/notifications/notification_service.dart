@@ -314,10 +314,10 @@ class NotificationService {
         ));
 
       // TODO: handle other notification types
-      case UnhandledFcmMessage(data: final data):
+      case UnhandledFcmMessage(:final data):
         _logger.warning('Received unhandled FCM notification type: ${data['lichess.type']}');
 
-      case MalformedFcmMessage(data: final data):
+      case MalformedFcmMessage(:final data):
         _logger.severe('Received malformed FCM message: $data');
     }
   }
@@ -350,12 +350,12 @@ class NotificationService {
     _fcmMessageStreamController.add((message: parsedMessage, fromBackground: fromBackground));
 
     switch (parsedMessage) {
-      case CorresGameUpdateFcmMessage(fullId: final fullId, notification: final notification):
+      case CorresGameUpdateFcmMessage(:final fullId, :final notification):
         if (fromBackground == false && notification != null) {
           await show(CorresGameUpdateNotification(fullId, notification.title!, notification.body!));
         }
 
-      case NewMessageFcmMessage(conversationId: final userId, notification: final notification):
+      case NewMessageFcmMessage(conversationId: final userId, :final notification):
         if (fromBackground == false && notification != null) {
           await show(NewMessageNotification(userId, notification.title!, notification.body!));
         }
@@ -364,7 +364,7 @@ class NotificationService {
         // nothing to do here in foreground as it should be handled by the socket
         break;
 
-      case ChallengeAcceptFcmMessage(fullId: final fullId, notification: final notification):
+      case ChallengeAcceptFcmMessage(:final fullId, :final notification):
         if (fromBackground == false && notification != null) {
           await show(
             ChallengeAcceptedNotification(fullId, notification.title!, notification.body!),
@@ -394,15 +394,15 @@ class NotificationService {
           );
         }
 
-      case RecapFcmMessage(:final year, notification: final notification):
+      case RecapFcmMessage(:final year, :final notification):
         if (fromBackground == false && notification != null) {
           await show(RecapNotification(year));
         }
 
-      case UnhandledFcmMessage(data: final data):
+      case UnhandledFcmMessage(:final data):
         _logger.warning('Received unhandled FCM notification type: ${data['lichess.type']}');
 
-      case MalformedFcmMessage(data: final data):
+      case MalformedFcmMessage(:final data):
         _logger.severe('Received malformed FCM message: $data');
     }
 

@@ -157,8 +157,8 @@ void main() {
 
       expect(engine.sessions.map((session) => session.spec.label).toSet(), {
         'variant',
-        'sf16',
-      }, reason: 'the opponent plays on Fairy while the hints are computed on Stockfish 16');
+        'light',
+      }, reason: 'the opponent plays on Fairy while the hints are computed on the light Stockfish');
       expect(
         engine.quitCount,
         0,
@@ -207,8 +207,8 @@ void main() {
       await tester.pump(kEngineEvalEmissionThrottleDelay * 2);
       expect(engine.stopCount, 0);
 
-      // The full sequence: [AppLifecycleListener] asserts on a transition the platform cannot
-      // make, and the socket pool now installs one.
+      // The full sequence: the app installs [AppLifecycleListener]s, which assert on a transition
+      // the platform cannot make.
       tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
       tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
       tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);

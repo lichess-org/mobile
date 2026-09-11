@@ -818,7 +818,7 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
     return SafeArea(
       child: ListView(
         children: [
-          if (highScoreWidgets != null) ...highScoreWidgets,
+          ...?highScoreWidgets,
           ListSection(
             header: Text('${widget.stats.score} ${context.l10n.stormPuzzlesSolved}'),
             children: [
