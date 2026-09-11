@@ -147,13 +147,13 @@ class StockfishNnueService {
         return false;
       }
 
-      // delete any existing nnue files before downloading
-      await deleteNNUEFiles();
-
       // The download only counts as a success if what landed on disk is what the engine needs:
       // a file that arrives truncated or garbled is deleted rather than kept and reported as
       // downloaded, which would leave the engine falling back to the light one with no way out.
       Future<bool> doDownload() async {
+        // delete any existing nnue files before downloading
+        await deleteNNUEFiles();
+
         final client = _ref.read(defaultClientProvider);
         final downloaded = await downloadFile(
           client,
@@ -290,6 +290,7 @@ class MaiaWeightsService {
   /// always produce it, without a network connection.
   Future<bool> isAvailable(MaiaRating rating) async {
     if (rating.isBundled) return true;
+    if (_inFlight.containsKey(rating)) return false;
     return await _checkFile(rating);
   }
 
@@ -390,7 +391,10 @@ class MaiaWeightsService {
     final claimed = <String>{};
     for (final rating in MaiaRating.values) {
       // A bundled rating always claims its file, whether or not it has been written out yet.
-      if (rating.isBundled || await isAvailable(rating)) claimed.add(weightsFile(rating).path);
+      // An in-flight download also claims its file so it is not reported as unusable while downloading.
+      if (rating.isBundled || _inFlight.containsKey(rating) || await isAvailable(rating)) {
+        claimed.add(weightsFile(rating).path);
+      }
     }
 
     // Listed after the checks above, which delete the corrupted files they find: what is left is
