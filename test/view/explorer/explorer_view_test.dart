@@ -2,9 +2,11 @@ import 'dart:convert';
 
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer.dart';
@@ -304,7 +306,68 @@ void main() {
     });
   });
 
+  group('TablebaseView', () {
+    for (final pieceNotation in PieceNotation.values) {
+      testWidgets('uses ${pieceNotation.name} piece notation', (tester) async {
+        final position = Chess.fromSetup(Setup.parseFen('4k3/8/4q3/4PR2/5P2/6NK/8/8 w - - 3 131'));
+
+        final app = await makeTestProviderScopeApp(
+          tester,
+          home: Scaffold(body: TablebaseView(position: position)),
+          authUser: authUser,
+          overrides: {
+            httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+              return FakeHttpClientFactory(() => mockClient);
+            }),
+            pieceNotationProvider: pieceNotationProvider.overrideWithValue(
+              AsyncValue.data(pieceNotation),
+            ),
+          },
+        );
+        await tester.pumpWidget(app);
+        await tester.pump(const Duration(milliseconds: 350));
+
+        final moveText = tester.widget<Text>(find.text('Kh4'));
+        expect(
+          moveText.style?.fontFamily,
+          pieceNotation == PieceNotation.symbol ? 'ChessFont' : isNull,
+        );
+      });
+    }
+  });
+
   group('OpeningExplorerMoveTable', () {
+    for (final pieceNotation in PieceNotation.values) {
+      testWidgets('uses ${pieceNotation.name} piece notation', (tester) async {
+        final app = await makeTestProviderScopeApp(
+          tester,
+          home: Scaffold(
+            body: OpeningExplorerMoveTable(
+              moves: IList(const [
+                OpeningMove(uci: 'g1f3', san: 'Nf3', white: 50, draws: 10, black: 40),
+              ]),
+              whiteWins: 50,
+              draws: 10,
+              blackWins: 40,
+            ),
+          ),
+          overrides: {
+            pieceNotationProvider: pieceNotationProvider.overrideWithValue(
+              AsyncValue.data(pieceNotation),
+            ),
+          },
+        );
+        await tester.pumpWidget(app);
+        await tester.pump();
+
+        final moveText = tester.widget<Text>(find.text('Nf3'));
+        expect(
+          moveText.style?.fontFamily,
+          pieceNotation == PieceNotation.symbol ? 'ChessFont' : isNull,
+        );
+      });
+    }
+
     testWidgets('calls onMoveSelected with a DropMove when tapping a drop move row', (
       tester,
     ) async {
