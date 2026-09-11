@@ -715,6 +715,8 @@
   "puzzleThemePlayerGames": "Partidas de jugadores",
   "puzzleThemePlayerGamesDescription": "Busca ejercicios generados a partir de tus partidas o de las de otros jugadores.",
   "puzzleThemePuzzleDownloadInformation": "Estos ejercicios son de dominio público y pueden descargarse desde {param}.",
+  "recapAwaitQuestion": "¿Qué has estado haciendo este año?",
+  "recapRecapReady": "¡Tu resumen del {param} está listo!",
   "searchSearch": "Búsqueda",
   "settingsSettings": "Preferencias",
   "settingsCloseAccount": "Cerrar cuenta",

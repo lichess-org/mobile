@@ -715,6 +715,8 @@
   "puzzleThemePlayerGames": "Pelaajan peleistä",
   "puzzleThemePlayerGamesDescription": "Tehtäviä sinun tai jonkun toisen yksittäisen pelaajan peleistä.",
   "puzzleThemePuzzleDownloadInformation": "Nämä tehtävät ovat vapaasti käytettävissä ja ladattavissa osoitteesta {param}.",
+  "recapAwaitQuestion": "Mitä olet puuhannut tänä vuonna?",
+  "recapRecapReady": "Yhteenvetosi vuodesta {param} on valmis!",
   "searchSearch": "Etsi",
   "settingsSettings": "Asetukset",
   "settingsCloseAccount": "Sulje tili",

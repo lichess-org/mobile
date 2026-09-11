@@ -715,6 +715,8 @@
   "puzzleThemePlayerGames": "Partidas de xogadores",
   "puzzleThemePlayerGamesDescription": "Exercicios xerados a partir das túas partidas ou dende partidas doutros xogadores.",
   "puzzleThemePuzzleDownloadInformation": "Estes problemas son de dominio público e poden ser descargados en {param}.",
+  "recapAwaitQuestion": "Que fixeches este ano?",
+  "recapRecapReady": "O teu resumo do {param} está listo!",
   "searchSearch": "Buscar",
   "settingsSettings": "Configuración",
   "settingsCloseAccount": "Pechar conta",

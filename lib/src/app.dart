@@ -22,6 +22,7 @@ import 'package:lichess_mobile/src/model/correspondence/correspondence_service.d
 import 'package:lichess_mobile/src/model/log/app_log_service.dart';
 import 'package:lichess_mobile/src/model/message/message_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
+import 'package:lichess_mobile/src/model/recap/recap_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/model/study/study_preferences.dart';
@@ -147,6 +148,7 @@ class _AppState extends ConsumerState<Application> {
     ref.read(appLinksServiceProvider).start();
     ref.read(sharedPgnServiceProvider).start();
     ref.read(broadcastServiceProvider).start();
+    ref.read(recapServiceProvider).start();
 
     if (Platform.isIOS) {
       HomeWidget.setAppGroupId(_kIosAppGroupId);

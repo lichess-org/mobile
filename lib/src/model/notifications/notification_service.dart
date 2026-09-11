@@ -302,6 +302,17 @@ class NotificationService {
           notification,
         ));
 
+      case final RecapFcmMessage recapMessage:
+        final notification = RecapNotification.fromFcmMessage(recapMessage);
+        _responseStreamController.add((
+          NotificationResponse(
+            notificationResponseType: NotificationResponseType.selectedNotification,
+            id: notification.id,
+            payload: jsonEncode(notification.payload),
+          ),
+          notification,
+        ));
+
       // TODO: handle other notification types
       case UnhandledFcmMessage(:final data):
         _logger.warning('Received unhandled FCM notification type: ${data['lichess.type']}');
@@ -381,6 +392,11 @@ class NotificationService {
               notification.body!,
             ),
           );
+        }
+
+      case RecapFcmMessage(:final year, :final notification):
+        if (fromBackground == false && notification != null) {
+          await show(RecapNotification(year));
         }
 
       case UnhandledFcmMessage(:final data):

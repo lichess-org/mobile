@@ -715,6 +715,8 @@
   "puzzleThemePlayerGames": "Parties de joueurs",
   "puzzleThemePlayerGamesDescription": "Problèmes tirés de vos parties ou de celles d'autres joueurs.",
   "puzzleThemePuzzleDownloadInformation": "Ces problèmes sont du domaine public et peuvent être téléchargés sur {param}.",
+  "recapAwaitQuestion": "Qu'avez-vous fait cette année?",
+  "recapRecapReady": "Votre récapitulatif {param} est prêt!",
   "searchSearch": "Recherche",
   "settingsSettings": "Paramètres",
   "settingsCloseAccount": "Fermer votre compte",

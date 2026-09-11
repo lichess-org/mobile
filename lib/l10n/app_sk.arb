@@ -687,6 +687,8 @@
   "puzzleThemePlayerGames": "Vaše partie",
   "puzzleThemePlayerGamesDescription": "Vyhľadajte si úlohy vygenerované z Vašich partií alebo z partií iných hráčov.",
   "puzzleThemePuzzleDownloadInformation": "Tieto úlohy sú voľne dostupné a môžete si ich stiahnuť z {param}.",
+  "recapAwaitQuestion": "Čomu si sa venoval tento rok?",
+  "recapRecapReady": "Vaše zhrnutie {param} je pripravené!",
   "searchSearch": "Hľadať",
   "settingsSettings": "Nastavenia",
   "settingsCloseAccount": "Zrušiť účet",
