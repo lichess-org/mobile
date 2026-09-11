@@ -3,6 +3,7 @@ import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:dynamic_system_colors/dynamic_system_colors.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
@@ -119,6 +120,9 @@ abstract class PgnTreeNotifier {
   void promoteVariation(UciPath path, bool toMainLine);
   void deleteFromHere(UciPath path);
   void userJump(UciPath path);
+
+  /// Exports the line going through [path] as a PGN string, see [Node.makeLinePgn].
+  String makeLinePgn(UciPath path, {required bool includeVariations});
 }
 
 enum PgnTreeDisplayMode {
@@ -1453,6 +1457,28 @@ class _MoveContextMenu extends ConsumerWidget {
             onPressed: () => notifier?.promoteVariation(path, true),
           ),
         ],
+        BottomSheetContextMenuAction(
+          icon: Icons.copy,
+          child: Text(
+            lineInfo.type == _LineType.mainline
+                ? context.l10n.copyMainLinePgn
+                : context.l10n.copyVariationPgn,
+          ),
+          onPressed: () async {
+            final pgn = notifier?.makeLinePgn(
+              path,
+              includeVariations: lineInfo.type != _LineType.mainline,
+            );
+            if (pgn == null) return;
+            // The result token and trailing newline belong in a PGN file, not on the clipboard.
+            final line = pgn.trimRight().replaceFirst(RegExp(r'\s*\*$'), '');
+            // The bottom sheet can be disposed before the clipboard write completes.
+            final messenger = ScaffoldMessenger.of(context);
+            await Clipboard.setData(ClipboardData(text: line));
+            if (!messenger.mounted) return;
+            messenger.showSnackBar(const SnackBar(content: Text('PGN copied.'))); // TODO l10n
+          },
+        ),
         BottomSheetContextMenuAction(
           icon: Icons.delete,
           child: Text(context.l10n.deleteFromHere),
