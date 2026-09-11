@@ -1,6 +1,5 @@
 import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
@@ -97,7 +96,7 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen> {
             body: _TabbedBody(
               options: widget.options,
               // Move times can only be shown for games played with a clock.
-              showMoveTimes: value.archivedGame?.clocks?.isNotEmpty ?? false,
+              showMoveTimes: value.chartClocks.isNotEmpty,
             ),
           ),
         );
@@ -139,11 +138,9 @@ class _TabbedBodyState extends State<_TabbedBody> with SingleTickerProviderState
     tabs = [
       AnalysisTab.explorer,
       AnalysisTab.moves,
-      if (widget.options case ArchivedGame()) ...[
-        AnalysisTab.summary,
-        if (widget.showMoveTimes) AnalysisTab.moveTimes,
-      ] else if (widget.options case ActiveCorrespondenceGame())
-        AnalysisTab.conditionalPremoves,
+      if (widget.options case ArchivedGame()) AnalysisTab.summary,
+      if (widget.showMoveTimes) AnalysisTab.moveTimes,
+      if (widget.options case ActiveCorrespondenceGame()) AnalysisTab.conditionalPremoves,
     ];
 
     _tabController = TabController(
@@ -314,8 +311,8 @@ class _Body extends ConsumerWidget {
               children: [
                 MoveTimesChart(
                   params: (
-                    moveTimes: analysisState.archivedGame!.moveTimes,
-                    clocks: analysisState.archivedGame!.clocks ?? const IListConst<Duration>([]),
+                    moveTimes: analysisState.chartMoveTimes,
+                    clocks: analysisState.chartClocks,
                     division: analysisState.division,
                     rootPly: analysisState.root.position.ply,
                     currentNodePly: analysisState.currentPosition.ply,

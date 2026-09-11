@@ -29,6 +29,25 @@ final _dateFormat = DateFormat('yyyy.MM.dd');
 /// time.
 Duration _atLeastZero(Duration duration) => duration < Duration.zero ? Duration.zero : duration;
 
+/// The time spent on each move, in ply order, given the clock left after each one.
+///
+/// The time spent on a move is the clock the player had left after their previous move, plus the
+/// increment, minus the clock they have left after this one. Each side's first move is reported as
+/// [Duration.zero], since the clock is not running before it. This matches lila's own derivation
+/// in `GameExt.computeMoveTimes`.
+///
+/// Returns an empty list when there are no clocks to derive them from (correspondence, unclocked
+/// games and most PGN imports).
+IList<Duration> moveTimesFromClocks(IList<Duration>? clocks, Duration increment) {
+  if (clocks == null || clocks.isEmpty) {
+    return const IListConst<Duration>([]);
+  }
+  return IList([
+    for (var i = 0; i < clocks.length; i++)
+      if (i < 2) Duration.zero else _atLeastZero(clocks[i - 2] + increment - clocks[i]),
+  ]);
+}
+
 /// Common interface for all games.
 abstract mixin class BaseGame {
   StringId get id;
@@ -109,26 +128,9 @@ abstract mixin class BaseGame {
       ? (white: white.analysis!, black: black.analysis!)
       : null;
 
-  /// The time spent on each move, in ply order.
-  ///
-  /// Derived from [clocks]: the time spent on a move is the clock the player had left after their
-  /// previous move, plus the increment, minus the clock they have left after this one. Each side's
-  /// first move is reported as [Duration.zero], since the clock is not running before it. This
-  /// matches lila's own derivation in `GameExt.computeMoveTimes`.
-  ///
-  /// Returns an empty list for games without clock data (correspondence, unclocked games and most
-  /// PGN imports).
-  IList<Duration> get moveTimes {
-    final gameClocks = clocks;
-    if (gameClocks == null || gameClocks.isEmpty) {
-      return const IListConst<Duration>([]);
-    }
-    final increment = meta.clock?.increment ?? Duration.zero;
-    return IList([
-      for (var i = 0; i < gameClocks.length; i++)
-        if (i < 2) Duration.zero else _atLeastZero(gameClocks[i - 2] + increment - gameClocks[i]),
-    ]);
-  }
+  /// The time spent on each move, in ply order, derived from [clocks].
+  IList<Duration> get moveTimes =>
+      moveTimesFromClocks(clocks, meta.clock?.increment ?? Duration.zero);
 
   /// Converts the game to a tree representation
   Root makeTree() {

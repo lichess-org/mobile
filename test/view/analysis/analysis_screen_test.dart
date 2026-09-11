@@ -21,12 +21,14 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_button.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/more/more_tab_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
+import 'package:lichess_mobile/src/widgets/move_times_chart.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/pockets.dart';
 import 'package:lichess_mobile/src/widgets/variations_bar.dart';
@@ -153,6 +155,68 @@ void main() {
       }
       expect(find.text('05:01'), findsNothing);
       expect(find.text('05:02'), findsNothing);
+    });
+
+    testWidgets('offers a move times chart for a game played with a time control', (tester) async {
+      const pgn =
+          '[White "white"]\n'
+          '[Black "black"]\n'
+          '[TimeControl "300+3"]\n\n'
+          '1. e4 { [%clk 0:05:01] } e5 { [%clk 0:05:02] } '
+          '2. Nf3 { [%clk 0:04:55] } Nc6 { [%clk 0:04:50] } *';
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const AnalysisScreen(
+          options: AnalysisOptions.pgn(
+            id: StringId('otb_test'),
+            orientation: Side.white,
+            pgn: pgn,
+            isComputerAnalysisAllowed: false,
+            variant: Variant.standard,
+          ),
+        ),
+      );
+
+      await tester.pumpWidget(app);
+
+      expect(find.byIcon(AnalysisTab.moveTimes.icon), findsOneWidget);
+      await tester.tap(find.byIcon(AnalysisTab.moveTimes.icon));
+      await tester.pumpAndSettle();
+
+      final chart = tester.widget<MoveTimesChart>(find.byType(MoveTimesChart));
+      expect(chart.params.clocks, const [
+        Duration(minutes: 5, seconds: 1),
+        Duration(minutes: 5, seconds: 2),
+        Duration(minutes: 4, seconds: 55),
+        Duration(minutes: 4, seconds: 50),
+      ]);
+      // Each side's first move is free; after that the increment is part of what was spent.
+      expect(chart.params.moveTimes, const [
+        Duration.zero,
+        Duration.zero,
+        Duration(seconds: 9),
+        Duration(seconds: 15),
+      ]);
+    });
+
+    testWidgets('offers no move times chart for a game played without a clock', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: AnalysisScreen(
+          options: AnalysisOptions.pgn(
+            id: const StringId('standalone'),
+            orientation: Side.white,
+            pgn: sanMoves,
+            isComputerAnalysisAllowed: false,
+            variant: Variant.standard,
+          ),
+        ),
+      );
+
+      await tester.pumpWidget(app);
+
+      expect(find.byIcon(AnalysisTab.moveTimes.icon), findsNothing);
     });
 
     testWidgets('Variations bar displays variations and can be tapped', (tester) async {
