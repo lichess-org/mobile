@@ -42,6 +42,10 @@ import '../../test_provider_scope.dart';
 
 class MockOfflineComputerGameStorage extends Mock implements OfflineComputerGameStorage {}
 
+const _iPhone16ZoomedSurface = Size(320.0, 693.0);
+const _iPhone16ZoomedDevicePixelRatio = 3.0;
+const _iPhone16ZoomedPhysicalViewPadding = EdgeInsets.only(top: 141.0, bottom: 102.0);
+
 void main() {
   TestLichessBinding.ensureInitialized();
 
@@ -120,6 +124,34 @@ void main() {
       expect(find.textContaining('Stockfish'), findsOneWidget);
       expect(find.textContaining('4'), findsWidgets);
     });
+
+    testWidgets('compact portrait board fills width without overflowing practice controls', (
+      tester,
+    ) async {
+      await _pumpWithState(
+        tester,
+        _stateWithPracticeComment(const PracticeComment(verdict: MoveVerdict.blunder)),
+        surfaceSize: _iPhone16ZoomedSurface,
+        devicePixelRatio: _iPhone16ZoomedDevicePixelRatio,
+        physicalViewPadding: _iPhone16ZoomedPhysicalViewPadding,
+        failOnOverflow: true,
+      );
+
+      // Empty storage opens the new-game sheet over the injected practice state.
+      expect(find.text('Play'), findsOneWidget);
+      Navigator.of(tester.element(find.text('Play'))).pop();
+      await tester.pumpAndSettle();
+      expect(find.text('Play'), findsNothing);
+
+      final boardRect = tester.getRect(find.byType(Chessboard));
+      expect(boardRect.left, 0.0);
+      expect(boardRect.right, _iPhone16ZoomedSurface.width);
+      expect(boardRect.size, const Size.square(320.0));
+      expect(find.text('Blunder'), findsOneWidget);
+      expect(find.byType(BottomBar), findsOneWidget);
+      expectGameControlsVisible(tester, find.text('Blunder'));
+      expectGameControlsVisible(tester, find.byType(BottomBarButton));
+    }, variant: kPlatformVariant);
 
     testWidgets('Can play moves and move list updates', (tester) async {
       await initOfflineComputerGame(tester);
@@ -2083,7 +2115,12 @@ Future<void> _pumpWithState(
   WidgetTester tester,
   OfflineComputerGameState state, {
   OfflineComputerGamePrefs? prefs,
+  Size surfaceSize = kTestSurfaceSize,
+  double? devicePixelRatio,
+  EdgeInsets? physicalViewPadding,
+  bool failOnOverflow = false,
 }) async {
+  final flutterTestOnError = FlutterError.onError!;
   final gameStorage = MockOfflineComputerGameStorage();
   when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
 
@@ -2102,7 +2139,16 @@ Future<void> _pumpWithState(
           () => _FakeGamePreferences(prefs),
         ),
     },
+    surfaceSize: surfaceSize,
+    devicePixelRatio: devicePixelRatio,
+    physicalViewPadding: physicalViewPadding,
   );
+
+  if (failOnOverflow) {
+    FlutterError.onError = flutterTestOnError;
+    addTearDown(() => FlutterError.onError = flutterTestOnError);
+  }
+
   await tester.pumpWidget(app);
   await tester.pumpAndSettle();
 }

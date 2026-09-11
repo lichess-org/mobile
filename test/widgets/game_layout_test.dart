@@ -18,7 +18,156 @@ import 'package:material_ui/material_ui.dart';
 import '../test_helpers.dart';
 import '../test_provider_scope.dart';
 
+const _safeAreaContentKey = ValueKey('safe-area-content');
+const _iPhone16Surface = Size(393.0, 852.0);
+const _iPhone16ViewPadding = EdgeInsets.only(top: 59.0, bottom: 34.0);
+const _iPhone16ZoomedSurface = Size(320.0, 693.0);
+const _iPhone16ZoomedViewPadding = EdgeInsets.only(top: 47.0, bottom: 34.0);
+
+Future<void> _pumpGameLayoutWithSafeArea(
+  WidgetTester tester, {
+  required Size surface,
+  required EdgeInsets viewPadding,
+  bool showBorder = false,
+  GameBoardParams? boardParams,
+}) async {
+  final app = await makeTestProviderScope(
+    tester,
+    child: MaterialApp(
+      home: MediaQuery(
+        data: MediaQueryData(size: surface, padding: viewPadding, viewPadding: viewPadding),
+        child: SafeArea(
+          maintainBottomViewPadding: true,
+          child: SizedBox.expand(
+            key: _safeAreaContentKey,
+            child: GameLayout(
+              orientation: Side.white,
+              boardParams:
+                  boardParams ??
+                  const GameBoardParams.readonly(
+                    variant: Variant.standard,
+                    position: Chess.initial,
+                  ),
+            ),
+          ),
+        ),
+      ),
+    ),
+    defaultPreferences: showBorder
+        ? {
+            PrefCategory.board.storageKey: jsonEncode(
+              BoardPrefs.defaults.copyWith(pieceAnimation: false, showBorder: true).toJson(),
+            ),
+          }
+        : null,
+    surfaceSize: surface,
+    devicePixelRatio: 1.0,
+    physicalViewPadding: viewPadding,
+  );
+  await tester.pumpWidget(app);
+}
+
+void _expectHorizontalInset(Rect inner, Rect outer, double inset) {
+  expect(inner.left, moreOrLessEquals(outer.left + inset));
+  expect(inner.right, moreOrLessEquals(outer.right - inset));
+  expect(inner.width, moreOrLessEquals(outer.width - inset * 2));
+}
+
 void main() {
+  testWidgets('portrait iPhone board fills the safe area width when the border is hidden', (
+    WidgetTester tester,
+  ) async {
+    await _pumpGameLayoutWithSafeArea(
+      tester,
+      surface: _iPhone16Surface,
+      viewPadding: _iPhone16ViewPadding,
+    );
+
+    final safeAreaRect = tester.getRect(find.byKey(_safeAreaContentKey));
+    final boardRect = tester.getRect(find.byType(Chessboard));
+    final playableGridRect = tester.getRect(find.byType(SolidColorChessboardBackground));
+
+    _expectHorizontalInset(boardRect, safeAreaRect, 0.0);
+    _expectHorizontalInset(playableGridRect, safeAreaRect, 0.0);
+  }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
+
+  testWidgets('portrait board adds no margin beyond horizontal safe area insets', (
+    WidgetTester tester,
+  ) async {
+    const viewPadding = EdgeInsets.fromLTRB(6.0, 59.0, 10.0, 34.0);
+    await _pumpGameLayoutWithSafeArea(tester, surface: _iPhone16Surface, viewPadding: viewPadding);
+
+    final safeAreaRect = tester.getRect(find.byKey(_safeAreaContentKey));
+    final boardRect = tester.getRect(find.byType(Chessboard));
+    final playableGridRect = tester.getRect(find.byType(SolidColorChessboardBackground));
+
+    expect(safeAreaRect.left, viewPadding.left);
+    expect(safeAreaRect.right, _iPhone16Surface.width - viewPadding.right);
+    _expectHorizontalInset(boardRect, safeAreaRect, 0.0);
+    _expectHorizontalInset(playableGridRect, safeAreaRect, 0.0);
+  }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
+
+  testWidgets('compact portrait boards fill the safe area width', (WidgetTester tester) async {
+    const compactProfiles = [
+      (surface: _iPhone16ZoomedSurface, viewPadding: _iPhone16ZoomedViewPadding),
+      (surface: Size(375.0, 667.0), viewPadding: EdgeInsets.only(top: 20.0)),
+    ];
+
+    for (final profile in compactProfiles) {
+      await _pumpGameLayoutWithSafeArea(
+        tester,
+        surface: profile.surface,
+        viewPadding: profile.viewPadding,
+      );
+
+      final safeAreaRect = tester.getRect(find.byKey(_safeAreaContentKey));
+      final boardRect = tester.getRect(find.byType(Chessboard));
+      final playableGridRect = tester.getRect(find.byType(SolidColorChessboardBackground));
+
+      _expectHorizontalInset(boardRect, safeAreaRect, 0.0);
+      expect(playableGridRect, boardRect);
+    }
+  }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
+
+  testWidgets('board border insets the playable grid without shrinking the outer board', (
+    WidgetTester tester,
+  ) async {
+    await _pumpGameLayoutWithSafeArea(
+      tester,
+      surface: _iPhone16Surface,
+      viewPadding: _iPhone16ViewPadding,
+      showBorder: true,
+    );
+
+    final safeAreaRect = tester.getRect(find.byKey(_safeAreaContentKey));
+    final boardRect = tester.getRect(find.byType(Chessboard));
+    final playableGridRect = tester.getRect(find.byType(SolidColorChessboardBackground));
+
+    _expectHorizontalInset(boardRect, safeAreaRect, 0.0);
+    _expectHorizontalInset(playableGridRect, boardRect, 16.0);
+  }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
+
+  testWidgets('compact crazyhouse board keeps the pocket spacing exception', (
+    WidgetTester tester,
+  ) async {
+    await _pumpGameLayoutWithSafeArea(
+      tester,
+      surface: _iPhone16ZoomedSurface,
+      viewPadding: _iPhone16ZoomedViewPadding,
+      boardParams: const GameBoardParams.readonly(
+        variant: Variant.crazyhouse,
+        position: Crazyhouse.initial,
+      ),
+    );
+
+    final safeAreaRect = tester.getRect(find.byKey(_safeAreaContentKey));
+    final boardRect = tester.getRect(find.byType(Chessboard));
+
+    expect(find.byType(PocketsMenu), findsNWidgets(2));
+    expect(boardRect.width, lessThan(safeAreaRect.width));
+    expect(boardRect.center.dx, moreOrLessEquals(safeAreaRect.center.dx));
+  }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
+
   testWidgets('board background size should match board size on all surfaces', (
     WidgetTester tester,
   ) async {
@@ -151,22 +300,12 @@ void main() {
       final boardSize = tester.getSize(find.byType(Chessboard));
 
       if (isPortrait) {
-        // isShortVerticalScreen uses viewPadding=0 in tests, kToolbarHeight=56, kBottomBarHeight=56
-        final isShortScreen =
-            surface.height - surface.width - kToolbarHeight - kBottomBarHeight <
-            kSmallHeightMinusBoard;
-
         double expectedBoardSize = isTablet ? surface.width - 32.0 : surface.width;
 
         final maxAllowedBoardSize = surface.height - 180.0;
         if (expectedBoardSize > maxAllowedBoardSize) {
           expectedBoardSize = maxAllowedBoardSize;
         }
-
-        if (isShortScreen) {
-          expectedBoardSize -= 16.0;
-        }
-
         expect(
           boardSize,
           Size(expectedBoardSize, expectedBoardSize),

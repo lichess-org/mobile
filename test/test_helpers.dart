@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
+import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:material_ui/material_ui.dart';
 
 const double _kTestScreenWidth = 390.0;
@@ -47,7 +48,7 @@ class TestSurface extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MediaQuery(
-      data: MediaQueryData(size: size),
+      data: MediaQueryData.fromView(View.of(context)).copyWith(size: size),
       child: SizedBox(width: size.width, height: size.height, child: child),
     );
   }
@@ -70,6 +71,36 @@ Future<void> meetsTapTargetGuideline(WidgetTester tester) async {
 
 /// Finds either an interactive [Chessboard] or a [StaticChessboard].
 Finder _anyBoard() => find.byWidgetPredicate((w) => w is Chessboard || w is StaticChessboard);
+
+/// Checks that controls fit in the safe area, avoid the board, and enabled buttons receive taps.
+void expectGameControlsVisible(WidgetTester tester, Finder controls) {
+  final view = tester.view;
+  final ratio = view.devicePixelRatio;
+  final safeArea = Rect.fromLTRB(
+    view.viewPadding.left / ratio,
+    view.viewPadding.top / ratio,
+    (view.physicalSize.width - view.viewPadding.right) / ratio,
+    (view.physicalSize.height - view.viewPadding.bottom) / ratio,
+  );
+  final boardRect = tester.getRect(_anyBoard());
+  expect(controls, findsWidgets);
+  for (var index = 0; index < controls.evaluate().length; index++) {
+    final control = controls.at(index);
+    final rect = tester.getRect(control);
+    final reason = '${control.describeMatch(Plurality.one)}: $rect should fit in $safeArea';
+    expect(rect.width, greaterThan(0), reason: reason);
+    expect(rect.height, greaterThan(0), reason: reason);
+    expect(rect.left, greaterThanOrEqualTo(safeArea.left), reason: reason);
+    expect(rect.top, greaterThanOrEqualTo(safeArea.top), reason: reason);
+    expect(rect.right, lessThanOrEqualTo(safeArea.right), reason: reason);
+    expect(rect.bottom, lessThanOrEqualTo(safeArea.bottom), reason: reason);
+    expect(rect.overlaps(boardRect), isFalse, reason: '$control overlaps the board');
+    final widget = tester.widget(control);
+    if (widget is BottomBarButton && widget.enabled) {
+      expect(control.hitTestable(), findsOneWidget, reason: '$control should receive taps');
+    }
+  }
+}
 
 /// Returns the pieces of the first [Chessboard] or [StaticChessboard] found in the widget tree.
 ///
