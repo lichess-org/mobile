@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:chessground/chessground.dart';
 import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
@@ -10,6 +12,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
+import 'package:lichess_mobile/src/model/engine/weights_service.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/offline_computer_game.dart';
@@ -20,6 +23,7 @@ import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_storage.dart';
 import 'package:lichess_mobile/src/model/offline_computer/practice_analyser.dart';
 import 'package:lichess_mobile/src/model/offline_computer/practice_comment.dart';
+import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/offline_computer/offline_computer_game_screen.dart';
@@ -32,6 +36,7 @@ import 'package:mocktail/mocktail.dart';
 
 import '../../binding.dart';
 import '../../model/engine/fake_engine.dart';
+import '../../model/engine/fake_weights_service.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 
@@ -157,8 +162,8 @@ void main() {
 
       expect(engine.sessions.map((session) => session.spec.label).toSet(), {
         'variant',
-        'sf16',
-      }, reason: 'the opponent plays on Fairy while the hints are computed on Stockfish 16');
+        'light',
+      }, reason: 'the opponent plays on Fairy while the hints are computed on the light Stockfish');
       expect(
         engine.quitCount,
         0,
@@ -207,8 +212,8 @@ void main() {
       await tester.pump(kEngineEvalEmissionThrottleDelay * 2);
       expect(engine.stopCount, 0);
 
-      // The full sequence: [AppLifecycleListener] asserts on a transition the platform cannot
-      // make, and the socket pool now installs one.
+      // The full sequence: the app installs [AppLifecycleListener]s, which assert on a transition
+      // the platform cannot make.
       tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
       tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
       tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
@@ -590,6 +595,46 @@ void main() {
 
       // Verify game started
       expect(find.byType(Chessboard), findsOneWidget);
+    });
+
+    testWidgets('A preferred Maia whose network was deleted falls back to the bundled one', (
+      tester,
+    ) async {
+      final gameStorage = MockOfflineComputerGameStorage();
+      when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
+      final weights = FakeMaiaWeightsService();
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const OfflineComputerGameScreen(),
+        defaultPreferences: {
+          PrefCategory.offlineComputerGame.storageKey: jsonEncode(
+            OfflineComputerGamePrefs.defaults
+                .copyWith(opponentSpec: const MaiaOpponentSpec(MaiaRating.maia2200))
+                .toJson(),
+          ),
+        },
+        overrides: {
+          offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+          maiaWeightsServiceProvider: maiaWeightsServiceProvider.overrideWithValue(weights),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Maia 2200'), findsNothing);
+      expect(find.text('Maia ${MaiaRating.defaultRating.rating}'), findsWidgets);
+
+      final container = ProviderScope.containerOf(
+        tester.element(find.byType(OfflineComputerGameScreen)),
+      );
+      expect(
+        container.read(offlineComputerGamePreferencesProvider).opponentSpec,
+        const MaiaOpponentSpec(MaiaRating.defaultRating),
+      );
+      expect(weights.downloads, isEmpty);
     });
 
     testWidgets('Casual switch is shown in new game dialog', (tester) async {

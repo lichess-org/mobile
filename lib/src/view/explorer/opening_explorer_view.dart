@@ -155,11 +155,9 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
         return _buildListView(children: children);
       case AsyncError(:final error):
         debugPrint('SEVERE: [OpeningExplorerView] could not load opening explorer data; $error');
-        final connectivity = ref.watch(connectivityChangesProvider);
-        final message = connectivity.whenIs(
-          online: () => 'Could not load opening explorer data.',
-          offline: () => context.l10n.mobileOpeningExplorerNotAvailableOffline,
-        );
+        final message = ref.watch(isDeviceOnlineProvider)
+            ? 'Could not load opening explorer data.'
+            : context.l10n.mobileOpeningExplorerNotAvailableOffline;
         return _buildListView(children: [ExplorerMessage(message)]);
       case _:
         return _buildListView(isLoading: true, children: lastExplorerWidgets ?? _loadingChildren);

@@ -2,12 +2,12 @@ name: lichess_mobile
 description: Lichess mobile app V2
 publish_to: "none"
 
-version: 0.28.1+002801 # See README.md for details about versioning
+version: 0.28.2+002802 # See README.md for details about versioning
 
 environment:
   sdk: ^3.12.2
   # this should be updated with every new flutter stable release
-  flutter: 3.47.1
+  flutter: 3.47.3
 
 dependencies:
   app_links: ^7.2.1
@@ -69,7 +69,7 @@ dependencies:
   multistockfish:
     git:
       url: https://github.com/lichess-org/dart-multistockfish.git
-      ref: 50b1c4f6c53ad76429bfdfb118f9ebc8c8d2848a
+      ref: 896c3884921ae1d775fcd3088ddcd1559fb87308
       path: pkgs/multistockfish
   package_info_plus: ^10.2.1
   path: ^1.9.1
@@ -115,17 +115,17 @@ dependency_overrides:
   multistockfish_chess:
     git:
       url: https://github.com/lichess-org/dart-multistockfish.git
-      ref: 50b1c4f6c53ad76429bfdfb118f9ebc8c8d2848a
+      ref: 896c3884921ae1d775fcd3088ddcd1559fb87308
       path: pkgs/multistockfish_chess
-  multistockfish_sf16:
+  multistockfish_light:
     git:
       url: https://github.com/lichess-org/dart-multistockfish.git
-      ref: 50b1c4f6c53ad76429bfdfb118f9ebc8c8d2848a
-      path: pkgs/multistockfish_sf16
+      ref: 896c3884921ae1d775fcd3088ddcd1559fb87308
+      path: pkgs/multistockfish_light
   multistockfish_variant:
     git:
       url: https://github.com/lichess-org/dart-multistockfish.git
-      ref: 50b1c4f6c53ad76429bfdfb118f9ebc8c8d2848a
+      ref: 896c3884921ae1d775fcd3088ddcd1559fb87308
       path: pkgs/multistockfish_variant
 
 flutter:

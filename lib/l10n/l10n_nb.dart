@@ -70,7 +70,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobileMustBeLoggedIn => 'Du må være logget inn for å vise denne siden.';
 
   @override
-  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+  String get mobileNbOfflinePuzzles => 'Nøtter uten nett';
 
   @override
   String get mobileNewGame => 'Nytt parti';
@@ -299,46 +299,46 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobilePerfShortBullet => 'Bullet';
 
   @override
-  String get mobilePerfShortBlitz => 'Blitz';
+  String get mobilePerfShortBlitz => 'Lyn';
 
   @override
-  String get mobilePerfShortRapid => 'Rapid';
+  String get mobilePerfShortRapid => 'Hurtig';
 
   @override
-  String get mobilePerfShortClassical => 'Classical';
+  String get mobilePerfShortClassical => 'Klassisk';
 
   @override
-  String get mobilePerfShortCorrespondence => 'Corresp.';
+  String get mobilePerfShortCorrespondence => 'Fjern';
 
   @override
-  String get mobilePerfShortFromPosition => 'From Pos.';
+  String get mobilePerfShortFromPosition => 'Fra still.';
 
   @override
   String get mobilePerfShortChess960 => '960';
 
   @override
-  String get mobilePerfShortAntichess => 'Antichess';
+  String get mobilePerfShortAntichess => 'Anti';
 
   @override
-  String get mobilePerfShortKingOfTheHill => 'KotH';
+  String get mobilePerfShortKingOfTheHill => 'Kph';
 
   @override
-  String get mobilePerfShortThreeCheck => '3check';
+  String get mobilePerfShortThreeCheck => '3sjakk';
 
   @override
-  String get mobilePerfShortAtomic => 'Atomic';
+  String get mobilePerfShortAtomic => 'Atom';
 
   @override
   String get mobilePerfShortHorde => 'Horde';
 
   @override
-  String get mobilePerfShortRacingKings => 'Racing';
+  String get mobilePerfShortRacingKings => 'Løp';
 
   @override
-  String get mobilePerfShortCrazyhouse => 'Crazy';
+  String get mobilePerfShortCrazyhouse => 'Gali.';
 
   @override
-  String get mobilePerfShortPuzzle => 'Puzzle';
+  String get mobilePerfShortPuzzle => 'Nøtt';
 
   @override
   String get variantStandard => 'Standard';
