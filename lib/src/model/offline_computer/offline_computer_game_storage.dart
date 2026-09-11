@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/game/offline_computer_game.dart';
 import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart';
@@ -17,7 +18,12 @@ final _logger = Logger('OfflineComputerGameStorage');
 sealed class SavedOfflineComputerGame with _$SavedOfflineComputerGame {
   const SavedOfflineComputerGame._();
 
-  factory SavedOfflineComputerGame({required OfflineComputerGame game}) = _SavedOfflineComputerGame;
+  factory SavedOfflineComputerGame({
+    required OfflineComputerGame game,
+    @Default(TimeIncrement.infinite()) TimeIncrement timeIncrement,
+    Duration? whiteTimeLeft,
+    Duration? blackTimeLeft,
+  }) = _SavedOfflineComputerGame;
 
   factory SavedOfflineComputerGame.fromJson(Map<String, dynamic> json) =>
       _$SavedOfflineComputerGameFromJson(json);

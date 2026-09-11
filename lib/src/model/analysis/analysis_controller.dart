@@ -25,6 +25,7 @@ import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
+import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
@@ -319,6 +320,8 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
       gameId: options.gameId,
       archivedGame: archivedGame,
       currentPath: currentPath,
+      clocks: _getClocks(currentPath),
+      mainlineClocks: _getMainlineClocks(),
       pathToLiveMove: isGameFinished || options is Standalone || options is Pgn
           ? null
           : currentPath,
@@ -725,6 +728,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
       state = AsyncData(
         curState.copyWith(
           currentPath: path,
+          clocks: _getClocks(path),
           isOnMainline: _root.isOnMainline(path),
           currentNode: AnalysisCurrentNode.fromNode(currentNode),
           currentBranchOpening: opening,
@@ -736,6 +740,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
       state = AsyncData(
         curState.copyWith(
           currentPath: path,
+          clocks: _getClocks(path),
           isOnMainline: _root.isOnMainline(path),
           currentNode: AnalysisCurrentNode.fromNode(currentNode),
           currentBranchOpening: opening,
@@ -749,6 +754,28 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
       state = AsyncData(state.requireValue.copyWith(engineInThreatMode: false));
       requestEval();
     }
+  }
+
+  /// The clock left after each mainline move, null unless every one of them carries a reading.
+  IList<Duration>? _getMainlineClocks() {
+    final clocks = _root.mainline.map((branch) => branch.clock).toIList();
+    return clocks.isEmpty || clocks.any((clock) => clock == null)
+        ? null
+        : clocks.map((clock) => clock!).toIList();
+  }
+
+  /// The clocks to show either side of the board at [path].
+  ///
+  /// The node holds the clock of the side that has just moved, so the side to move is shown the
+  /// clock of its parent — the last reading it had.
+  ({Duration? parentClock, Duration? clock}) _getClocks(UciPath path) {
+    final node = _root.nodeAt(path);
+    final parent = _root.parentAt(path);
+
+    return (
+      parentClock: (parent is Branch) ? parent.clock : null,
+      clock: (node is Branch) ? node.clock : null,
+    );
   }
 
   @override
@@ -811,6 +838,15 @@ sealed class AnalysisState
     /// The path to the current node in the analysis view.
     required UciPath currentPath,
 
+    /// The clocks at the current node, if the analysed game carries any.
+    required ({Duration? parentClock, Duration? clock})? clocks,
+
+    /// The clock left after each mainline move, if every one of them carries a reading.
+    ///
+    /// Read off the tree once, when the analysis is loaded, so moves added since are not part of
+    /// it — the same way [archivedGame] holds the game as it was played.
+    IList<Duration>? mainlineClocks,
+
     /// If this is a correspondence game, the path to the last move that has been played.
     required UciPath? pathToLiveMove,
 
@@ -865,6 +901,25 @@ sealed class AnalysisState
 
   @override
   bool get alwaysRequestCloudEval => false;
+
+  /// The clock left after each mainline move, empty if the game was played without one.
+  ///
+  /// A lichess game is authoritative about its own clocks; anything else is read off the tree.
+  IList<Duration> get chartClocks =>
+      archivedGame?.clocks ?? mainlineClocks ?? const IListConst<Duration>([]);
+
+  /// The time spent on each mainline move, empty if the game was played without a clock.
+  IList<Duration> get chartMoveTimes =>
+      archivedGame?.moveTimes ?? moveTimesFromClocks(mainlineClocks, _pgnClockIncrement);
+
+  /// The increment of a game analysed from a PGN, read off its `TimeControl` header.
+  Duration get _pgnClockIncrement {
+    final timeControl = pgnHeaders['TimeControl'];
+    final increment = timeControl != null && timeControl.contains('+')
+        ? int.tryParse(timeControl.split('+').last)
+        : null;
+    return Duration(seconds: increment ?? 0);
+  }
 
   /// Whether the analysis is for a lichess game.
   bool get isLichessGameAnalysis => gameId != null;
