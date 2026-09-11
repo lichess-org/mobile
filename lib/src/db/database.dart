@@ -63,7 +63,7 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) {
   return dbFactory.openDatabase(
     path,
     options: OpenDatabaseOptions(
-      version: 5,
+      version: 6,
       onConfigure: (db) async {
         final version = await _getDatabaseVersion(db);
         _logger.info('SQLite version: $version');
@@ -88,6 +88,7 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) {
         final batch = db.batch();
         _createPuzzleBatchTableV3(batch);
         _createPuzzleTableV1(batch);
+        _createOfflineVaultTablesV6(batch);
         _createCorrespondenceGameTableV1(batch);
         _createChatReadMessagesTableV1(batch);
         _createGameTableV2(batch);
@@ -108,6 +109,9 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) {
         }
         if (oldVersion < 5) {
           _createAppLogTableV5(batch);
+        }
+        if (oldVersion < 6) {
+          _createOfflineVaultTablesV6(batch);
         }
         await batch.commit();
       },
@@ -155,6 +159,48 @@ void _createPuzzleTableV1(Batch batch) {
     lastModified TEXT NOT NULL,
     data TEXT NOT NULL,
     PRIMARY KEY (puzzleId)
+  )
+    ''');
+}
+
+/// Offline vault (v6): row-per-puzzle store for large user-chosen goals.
+///
+/// The existing `puzzle_batchs` row holds one JSON blob per user+angle. That
+/// is fine for <=1000 but must load all to read one. The vault stores one row
+/// per puzzle so 100k+ stays fast. `done=1` marks solved; sync pushes done in
+/// 50s then deletes done first.
+void _createOfflineVaultTablesV6(Batch batch) {
+  batch.execute('''
+    CREATE TABLE IF NOT EXISTS offline_puzzles(
+    puzzleId TEXT NOT NULL,
+    userId TEXT NOT NULL,
+    angle TEXT NOT NULL DEFAULT 'mix',
+    rating INTEGER NOT NULL DEFAULT 0,
+    themes TEXT NOT NULL DEFAULT '',
+    fen TEXT NOT NULL DEFAULT '',
+    moves TEXT NOT NULL DEFAULT '',
+    data TEXT NOT NULL DEFAULT '{}',
+    done INTEGER NOT NULL DEFAULT 0,
+    win INTEGER,
+    rated INTEGER NOT NULL DEFAULT 1,
+    lastModified TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (puzzleId, userId)
+  )
+    ''');
+  batch.execute('''
+    CREATE INDEX IF NOT EXISTS idx_offline_puzzles_user_angle_done_rating
+    ON offline_puzzles(userId, angle, done, rating)
+  ''');
+  batch.execute('''
+    CREATE TABLE IF NOT EXISTS offline_dl(
+    userId TEXT NOT NULL PRIMARY KEY,
+    mode TEXT NOT NULL DEFAULT 'count',
+    mbTarget INTEGER NOT NULL DEFAULT 0,
+    countTarget INTEGER NOT NULL DEFAULT 100,
+    kept INTEGER NOT NULL DEFAULT 0,
+    doneCount INTEGER NOT NULL DEFAULT 0,
+    dbDate TEXT,
+    state TEXT NOT NULL DEFAULT 'idle'
   )
     ''');
 }
