@@ -710,6 +710,8 @@
   "puzzleThemePlayerGames": "Partidas de jogadores",
   "puzzleThemePlayerGamesDescription": "Procure problemas gerados a partir de suas partidas ou das partidas de outro jogador.",
   "puzzleThemePuzzleDownloadInformation": "Esses problemas estão em domínio público, e você pode baixá-los em {param}.",
+  "recapAwaitQuestion": "O que você será que você fez nesse ano?",
+  "recapRecapReady": "Sua recapitulação de {param} está pronta!",
   "searchSearch": "Buscar",
   "settingsSettings": "Configurações",
   "settingsCloseAccount": "Encerrar conta",

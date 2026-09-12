@@ -2471,6 +2471,14 @@ class AppLocalizationsDa extends AppLocalizations {
   }
 
   @override
+  String get recapAwaitQuestion => 'Hvordan har dit år været?';
+
+  @override
+  String recapRecapReady(String param) {
+    return 'Dit $param resumé er klar!';
+  }
+
+  @override
   String get searchSearch => 'Søg';
 
   @override

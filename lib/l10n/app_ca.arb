@@ -713,6 +713,8 @@
   "puzzleThemePlayerGames": "Partides de jugadors",
   "puzzleThemePlayerGamesDescription": "Problemes generats a partir de les teves partides o de les partides d'altres jugadors.",
   "puzzleThemePuzzleDownloadInformation": "Aquests problemes són de domini públic i es poden descarregar des de {param}.",
+  "recapAwaitQuestion": "Que has estat fent aquest any?",
+  "recapRecapReady": "El teu resum del {param} esta disponible!",
   "searchSearch": "Cerca",
   "settingsSettings": "Configuració",
   "settingsCloseAccount": "Donar-se de baixa",

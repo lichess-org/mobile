@@ -311,6 +311,46 @@ void main() {
       expect(findWhiteClock(tester).timeLeft, lessThan(time));
     });
 
+    testWidgets('Moves record the clock they were played on', (tester) async {
+      const time = Duration(minutes: 5);
+
+      await initOverTheBoardGame(tester, TimeIncrement(time.inSeconds, 3));
+
+      await playMove(tester, 'e2', 'e4');
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      await playMove(tester, 'e7', 'e5');
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+
+      final container = ProviderScope.containerOf(tester.element(find.byType(Chessboard)));
+      final game = container.read(overTheBoardGameControllerProvider).game;
+
+      final clocks = game.clocks;
+      expect(clocks, isNotNull);
+      expect(clocks!.length, 2);
+      // White's move is what starts the clock, so it costs white nothing — and, since the clock
+      // was not running, earns no increment either.
+      expect(clocks[0], time);
+      // Black thought for less than the increment it is given back.
+      expect(clocks[1], greaterThan(time));
+
+      // And they come out the other end as PGN clock comments.
+      expect(game.makePgn(), contains('[%clk '));
+      expect(game.makePgn(), contains('[TimeControl "300+3"]'));
+    });
+
+    testWidgets('Moves of an untimed game record no clock', (tester) async {
+      await initOverTheBoardGame(tester, const TimeIncrement.infinite());
+
+      await playMove(tester, 'e2', 'e4');
+      await tester.pumpAndSettle();
+
+      final container = ProviderScope.containerOf(tester.element(find.byType(Chessboard)));
+      final game = container.read(overTheBoardGameControllerProvider).game;
+
+      expect(game.clocks, isNull);
+      expect(game.makePgn(), isNot(contains('[%clk ')));
+    });
+
     testWidgets('Loading saved game', (tester) async {
       final gameStorage = MockOverTheBoardGameStorage();
 
@@ -415,7 +455,15 @@ void main() {
         () => gameStorage.save(
           any(),
           timeIncrement: const TimeIncrement(5, 3),
-          whiteTimeLeft: const Duration(minutes: 2),
+          // White's clock was left running, so pausing it on the way out charges white the time
+          // that had run since the last reading.
+          whiteTimeLeft: any(
+            named: 'whiteTimeLeft',
+            that: allOf(
+              lessThan(const Duration(minutes: 2)),
+              greaterThan(const Duration(minutes: 1, seconds: 59)),
+            ),
+          ),
           blackTimeLeft: const Duration(minutes: 1),
         ),
       ).called(1);

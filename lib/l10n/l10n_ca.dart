@@ -2471,6 +2471,14 @@ class AppLocalizationsCa extends AppLocalizations {
   }
 
   @override
+  String get recapAwaitQuestion => 'Que has estat fent aquest any?';
+
+  @override
+  String recapRecapReady(String param) {
+    return 'El teu resum del $param esta disponible!';
+  }
+
+  @override
   String get searchSearch => 'Cerca';
 
   @override
