@@ -122,9 +122,8 @@ class _TournamentScreenState extends ConsumerState<TournamentScreen> with RouteA
       tournamentControllerProvider(widget.id).select((value) => value.value?.currentGame),
       (prevGameId, currentGameId) {
         if (prevGameId != currentGameId && currentGameId != null) {
-          Navigator.of(
-            context,
-          ).popUntil((route) => route.settings.name == TournamentScreen.routeName);
+          Navigator.of(context)
+              .popUntil((route) => route.settings.name == TournamentScreen.routeName);
           Navigator.of(
             context,
             rootNavigator: true,
@@ -1432,9 +1431,9 @@ class _TournamentPlayerDetails extends ConsumerWidget {
                         rating: player.rating,
                         style: Styles.title,
                         onTap: tournamentState.value?.isSpectator == true
-                            ? () => Navigator.of(
-                                context,
-                              ).push(UserOrProfileScreen.buildRoute(player.user))
+                            ? () =>
+                                  Navigator.of(context)
+                                      .push(UserOrProfileScreen.buildRoute(player.user))
                             : null,
                       ),
                     ),

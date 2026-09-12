@@ -360,9 +360,8 @@ class _OverallStatPlayer extends StatelessWidget {
                                 Flexible(
                                   child: Text(
                                     federationIdToName[federation]!,
-                                    style: Theme.of(
-                                      context,
-                                    ).textTheme.bodyLarge?.copyWith(height: 1.2),
+                                    style: Theme.of(context).textTheme.bodyLarge
+                                        ?.copyWith(height: 1.2),
                                     maxLines: 3,
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -377,9 +376,8 @@ class _OverallStatPlayer extends StatelessWidget {
                       GestureDetector(
                         onTap: () {
                           if (tournament.data.showTeamScores == true) {
-                            Navigator.of(
-                              context,
-                            ).push(BroadcastTeamScreen.buildRoute(tournament.data.id, team));
+                            Navigator.of(context)
+                                .push(BroadcastTeamScreen.buildRoute(tournament.data.id, team));
                           }
                         },
                         child: Row(

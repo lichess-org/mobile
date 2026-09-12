@@ -231,9 +231,8 @@ class _AppState extends ConsumerState<Application> {
       theme: theme.copyWith(
         navigationBarTheme: isIOS
             ? null
-            : NavigationBarTheme.of(
-                context,
-              ).copyWith(height: isShortVerticalScreen(context) ? 60 : null),
+            : NavigationBarTheme.of(context)
+                  .copyWith(height: isShortVerticalScreen(context) ? 60 : null),
       ),
       home: const MainTabScaffold(),
       navigatorObservers: [rootNavPageRouteObserver, rootNavRouteStackObserver],

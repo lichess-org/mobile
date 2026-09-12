@@ -134,15 +134,12 @@ void main() {
         ),
       );
 
-      when(
-        () => mockRepository.getStudy(id: testId),
-      ).thenAnswer((_) async => (studyChapter1, null, '{pgn 1} 1. e4 {wow} e5 {such chess}'));
-      when(
-        () => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('1')),
-      ).thenAnswer((_) async => (studyChapter1, null, '{pgn 1} 1. e4 {wow} e5 {such chess}'));
-      when(
-        () => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('2')),
-      ).thenAnswer((_) async => (studyChapter2, null, '{pgn 2} 1. e4 {wow} e5 {such chess}'));
+      when(() => mockRepository.getStudy(id: testId))
+          .thenAnswer((_) async => (studyChapter1, null, '{pgn 1} 1. e4 {wow} e5 {such chess}'));
+      when(() => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('1')))
+          .thenAnswer((_) async => (studyChapter1, null, '{pgn 1} 1. e4 {wow} e5 {such chess}'));
+      when(() => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('2')))
+          .thenAnswer((_) async => (studyChapter2, null, '{pgn 2} 1. e4 {wow} e5 {such chess}'));
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -213,9 +210,8 @@ void main() {
         chapter: makeChapter(id: const StudyChapterId('2')),
       );
 
-      when(
-        () => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('2')),
-      ).thenAnswer((_) async => (studyChapter2, null, '{pgn 2}'));
+      when(() => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('2')))
+          .thenAnswer((_) async => (studyChapter2, null, '{pgn 2}'));
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -285,9 +281,8 @@ void main() {
       final mockRepository = MockStudyRepository();
 
       // Return a study that branches: 1. e4 : e5 and c5
-      when(
-        () => mockRepository.getStudy(id: testId),
-      ).thenAnswer((_) async => (makeStudy(), null, '1. e4 e5 (1... c5)'));
+      when(() => mockRepository.getStudy(id: testId))
+          .thenAnswer((_) async => (makeStudy(), null, '1. e4 e5 (1... c5)'));
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -523,22 +518,21 @@ void main() {
           '1. e4 (1. d4 {Shown if d4 is played}) e5 2. Nf3 Nc6 3. d4',
         ),
       );
-      when(
-        () => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('2')),
-      ).thenAnswer(
-        (_) async => (
-          makeStudy(
-            chapter: makeChapter(
-              id: const StudyChapterId('2'),
-              orientation: Side.white,
-              gamebook: true,
+      when(() => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('2')))
+          .thenAnswer(
+            (_) async => (
+              makeStudy(
+                chapter: makeChapter(
+                  id: const StudyChapterId('2'),
+                  orientation: Side.white,
+                  gamebook: true,
+                ),
+                hints: ['Hint 1'].lock,
+              ),
+              null,
+              '1. e4 e5',
             ),
-            hints: ['Hint 1'].lock,
-          ),
-          null,
-          '1. e4 e5',
-        ),
-      );
+          );
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -634,27 +628,24 @@ void main() {
       );
 
       // First chapter has a valid position
-      when(
-        () => mockRepository.getStudy(id: testId),
-      ).thenAnswer((_) async => (studyChapter1, null, '1. e4 e5'));
+      when(() => mockRepository.getStudy(id: testId))
+          .thenAnswer((_) async => (studyChapter1, null, '1. e4 e5'));
 
-      when(
-        () => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('1')),
-      ).thenAnswer((_) async => (studyChapter1, null, '1. e4 e5'));
+      when(() => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('1')))
+          .thenAnswer((_) async => (studyChapter1, null, '1. e4 e5'));
 
       // Second chapter has an illegal position (no pieces on Board)
-      when(
-        () => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('2')),
-      ).thenAnswer(
-        (_) async => (
-          studyChapter2,
-          null,
-          '''
+      when(() => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('2')))
+          .thenAnswer(
+            (_) async => (
+              studyChapter2,
+              null,
+              '''
 [FEN "8/8/8/8/8/8/8/8 w - - 0 1"]
 { Random comment } { [%csl Gd5,Ge5,Ge4,Gd4] }
     ''',
-        ),
-      );
+            ),
+          );
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -984,9 +975,8 @@ void main() {
               orientation: Side.white,
               features: (computer: true, explorer: false),
             ),
-            members: IMap<UserId, StudyMember>(
-              const {},
-            ).add(user.user.id, StudyMember(user: user.user, role: '')),
+            members: IMap<UserId, StudyMember>(const {})
+                .add(user.user.id, StudyMember(user: user.user, role: '')),
           ),
           null,
           'e4 e5 Nf3 Nc6',
@@ -1030,9 +1020,8 @@ void main() {
               orientation: Side.white,
               features: (computer: true, explorer: false),
             ),
-            members: IMap<UserId, StudyMember>(
-              const {},
-            ).add(user.user.id, StudyMember(user: user.user, role: 'w')),
+            members: IMap<UserId, StudyMember>(const {})
+                .add(user.user.id, StudyMember(user: user.user, role: 'w')),
           ),
           null,
           'e4 e5 Nf3 Nc6',

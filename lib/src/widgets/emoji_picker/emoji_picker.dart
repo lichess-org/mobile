@@ -6,22 +6,20 @@ import 'package:lichess_mobile/src/widgets/emoji_picker/emoji_picker_models.dart
 import 'package:material_ui/material_ui.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
-typedef EmojiSearchBarBuilder =
-    Widget Function(
-      BuildContext context,
-      ValueNotifier<String> keyword,
-      ValueNotifier<EmojiSkinTone> skinTone,
-    );
+typedef EmojiSearchBarBuilder = Widget Function(
+  BuildContext context,
+  ValueNotifier<String> keyword,
+  ValueNotifier<EmojiSkinTone> skinTone,
+);
 
 typedef EmojiSectionHeaderBuilder = Widget Function(BuildContext context, Category category);
 
-typedef EmojiItemBuilder =
-    Widget Function(
-      BuildContext context,
-      String emojiId,
-      String emoji,
-      EmojiSelectedCallback callback,
-    );
+typedef EmojiItemBuilder = Widget Function(
+  BuildContext context,
+  String emojiId,
+  String emoji,
+  EmojiSelectedCallback callback,
+);
 
 class EmojiPicker extends StatefulWidget {
   const EmojiPicker({

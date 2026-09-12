@@ -333,9 +333,8 @@ void main() {
         tester,
         home: Builder(
           builder: (context) => MediaQuery(
-            data: MediaQuery.of(
-              context,
-            ).copyWith(viewInsets: const EdgeInsets.only(bottom: keyboardHeight)),
+            data: MediaQuery.of(context)
+                .copyWith(viewInsets: const EdgeInsets.only(bottom: keyboardHeight)),
             child: CreateStudyChapterBottomSheet(
               params: CreateChapterOfExistingStudy(const StudyId('test-id')),
               chapterNumber: 1,

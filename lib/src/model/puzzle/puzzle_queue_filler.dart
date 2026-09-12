@@ -97,9 +97,9 @@ class PuzzleQueueFiller extends Notifier<bool> {
         final PuzzleBatchResponse response;
         try {
           response = await ref.withClient(
-            (client) => PuzzleRepository(
-              client,
-            ).selectBatch(nb: deficit, angle: angle, difficulty: difficulty),
+            (client) =>
+                PuzzleRepository(client)
+                    .selectBatch(nb: deficit, angle: angle, difficulty: difficulty),
           );
         } catch (e, st) {
           // Offline or server error: stop the fill, keep what we have.

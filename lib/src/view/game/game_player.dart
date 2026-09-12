@@ -264,9 +264,8 @@ class GamePlayer extends StatelessWidget {
                                   if (mePlaying) {
                                     ref.invalidate(accountProvider);
                                   }
-                                  Navigator.of(
-                                    context,
-                                  ).push(UserOrProfileScreen.buildRoute(player.user!));
+                                  Navigator.of(context)
+                                      .push(UserOrProfileScreen.buildRoute(player.user!));
                                 }
                               : null,
                           child: playerWidget,

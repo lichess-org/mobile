@@ -768,9 +768,9 @@ void main() {
             appBar: AppBar(title: const Text('Test Screen')),
             body: FilledButton(
               child: const Text('Go to game'),
-              onPressed: () => Navigator.of(
-                context,
-              ).push(buildScreenRoute<void>(screen: const OfflineComputerGameScreen())),
+              onPressed: () =>
+                  Navigator.of(context)
+                      .push(buildScreenRoute<void>(screen: const OfflineComputerGameScreen())),
             ),
           ),
         ),
@@ -880,9 +880,9 @@ void main() {
             appBar: AppBar(title: const Text('Test Screen')),
             body: FilledButton(
               child: const Text('Go to game'),
-              onPressed: () => Navigator.of(
-                context,
-              ).push(buildScreenRoute<void>(screen: const OfflineComputerGameScreen())),
+              onPressed: () =>
+                  Navigator.of(context)
+                      .push(buildScreenRoute<void>(screen: const OfflineComputerGameScreen())),
             ),
           ),
         ),

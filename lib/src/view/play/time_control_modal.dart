@@ -45,21 +45,18 @@ class TimeControlModal extends StatelessWidget {
               Text.rich(
                 TextSpan(
                   text: context.l10n.minutesPerSide,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.labelSmall?.copyWith(color: textShade(context, 0.7)),
+                  style: Theme.of(context).textTheme.labelSmall
+                      ?.copyWith(color: textShade(context, 0.7)),
                   children: [
                     TextSpan(
                       text: ' + ',
-                      style: Theme.of(
-                        context,
-                      ).textTheme.labelLarge?.copyWith(color: textShade(context, 0.7)),
+                      style: Theme.of(context).textTheme.labelLarge
+                          ?.copyWith(color: textShade(context, 0.7)),
                     ),
                     TextSpan(
                       text: context.l10n.incrementInSeconds,
-                      style: Theme.of(
-                        context,
-                      ).textTheme.labelSmall?.copyWith(color: textShade(context, 0.7)),
+                      style: Theme.of(context).textTheme.labelSmall
+                          ?.copyWith(color: textShade(context, 0.7)),
                     ),
                   ],
                 ),

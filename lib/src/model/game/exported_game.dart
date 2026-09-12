@@ -176,9 +176,8 @@ IList<ExternalEval>? gameEvalsFromPick(RequiredPick pick) {
 
 ExportedGame _archivedGameFromPick(RequiredPick pick, {bool withBookmarked = false}) {
   final data = _lightExportedGameFromPick(pick, withBookmarked: withBookmarked);
-  final clocks = pick(
-    'clocks',
-  ).asListOrNull<Duration>((p0) => Duration(milliseconds: p0.asIntOrThrow() * 10));
+  final clocks = pick('clocks')
+      .asListOrNull<Duration>((p0) => Duration(milliseconds: p0.asIntOrThrow() * 10));
   final division = pick('division').letOrNull(_divisionFromPick);
 
   final initialFen = pick('initialFen').asStringOrNull();
@@ -202,9 +201,8 @@ ExportedGame _archivedGameFromPick(RequiredPick pick, {bool withBookmarked = fal
       opening: data.opening,
       division: division,
     ),
-    source: pick(
-      'source',
-    ).letOrThrow((pick) => GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown),
+    source: pick('source')
+        .letOrThrow((pick) => GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown),
     data: data,
     status: data.status,
     winner: data.winner,
@@ -255,9 +253,8 @@ LightExportedGame _lightExportedGameFromPick(
   return LightExportedGame(
     id: pick('id').asGameIdOrThrow(),
     fullId: pick('fullId').asGameFullIdOrNull(),
-    source: pick(
-      'source',
-    ).letOrNull((pick) => GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown),
+    source: pick('source')
+        .letOrNull((pick) => GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown),
     importDate: pick('import', 'date').asStringOrNull(),
     rated: pick('rated').asBoolOrThrow(),
     speed: pick('speed').asSpeedOrThrow(),

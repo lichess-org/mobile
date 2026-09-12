@@ -543,15 +543,13 @@ class _BottomBar extends ConsumerWidget {
             else ...[
               BottomSheetAction(
                 makeLabel: (context) => Text(context.l10n.reviewWhiteMistakes),
-                onPressed: () => Navigator.of(
-                  context,
-                ).push(RetroScreen.buildRoute((id: options.gameId!, initialSide: Side.white))),
+                onPressed: () => Navigator.of(context)
+                    .push(RetroScreen.buildRoute((id: options.gameId!, initialSide: Side.white))),
               ),
               BottomSheetAction(
                 makeLabel: (context) => Text(context.l10n.reviewBlackMistakes),
-                onPressed: () => Navigator.of(
-                  context,
-                ).push(RetroScreen.buildRoute((id: options.gameId!, initialSide: Side.black))),
+                onPressed: () => Navigator.of(context)
+                    .push(RetroScreen.buildRoute((id: options.gameId!, initialSide: Side.black))),
               ),
             ],
         // board editor can be used to quickly analyze a position, so engine must be allowed to access

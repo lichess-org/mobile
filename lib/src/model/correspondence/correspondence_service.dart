@@ -197,9 +197,8 @@ class CorrespondenceService {
 
           await movePlayedCompleter.future.timeout(const Duration(seconds: 3));
 
-          (await ref.read(
-            correspondenceGameStorageProvider.future,
-          )).save(gameToSync.copyWith(registeredMoveAtPgn: null));
+          (await ref.read(correspondenceGameStorageProvider.future))
+              .save(gameToSync.copyWith(registeredMoveAtPgn: null));
         } else {
           _log.info('Cannot play game ${gameToSync.id} move because its state has changed');
           updateStoredGame(gameToSync.fullId, playableGame);

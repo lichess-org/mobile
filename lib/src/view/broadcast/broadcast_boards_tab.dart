@@ -439,10 +439,8 @@ class _PlayerWidget extends StatelessWidget {
               if (game.isOver)
                 Text(
                   resultString(customScoring, side, game.status),
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    fontWeight: .bold,
-                    color: game.status.colorFor(side, context),
-                  ),
+                  style: Theme.of(context).textTheme.bodySmall
+                      ?.copyWith(fontWeight: .bold, color: game.status.colorFor(side, context)),
                 )
               else if (clock != null)
                 CountdownClockBuilder(

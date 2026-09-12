@@ -28,9 +28,8 @@ class CreateGameWidget extends ConsumerWidget {
     final userPerf = account?.perfs[playPrefs.realTimePerf];
     final canUseRatingRange = userPerf != null && userPerf.provisional != true;
 
-    final labelStyle = Theme.of(
-      context,
-    ).textTheme.labelMedium?.copyWith(color: textShade(context, 0.5), height: 1.0);
+    final labelStyle = Theme.of(context).textTheme.labelMedium
+        ?.copyWith(color: textShade(context, 0.5), height: 1.0);
 
     return Column(
       mainAxisSize: MainAxisSize.min,

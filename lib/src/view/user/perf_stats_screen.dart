@@ -115,9 +115,8 @@ class _Title extends StatelessWidget {
                     ],
                   ),
                   onPressed: () {
-                    Navigator.of(
-                      context,
-                    ).pushReplacement(PerfStatsScreen.buildRoute(user: user, perf: p));
+                    Navigator.of(context)
+                        .pushReplacement(PerfStatsScreen.buildRoute(user: user, perf: p));
                   },
                 );
               })
@@ -259,9 +258,8 @@ class _Body extends ConsumerWidget {
                             context.l10n.rank,
                             value: data.rank == null
                                 ? '?'
-                                : NumberFormat.decimalPattern(
-                                    Intl.getCurrentLocale(),
-                                  ).format(data.rank),
+                                : NumberFormat.decimalPattern(Intl.getCurrentLocale())
+                                      .format(data.rank),
                           ),
                         StatCard(
                           context.l10n.perfStatRatingDeviation('').replaceAll(': .', ''),

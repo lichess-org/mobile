@@ -289,9 +289,8 @@ class _ContextMenu extends ConsumerWidget {
       children: [
         Text(
           study.name,
-          style: Theme.of(
-            context,
-          ).textTheme.titleMedium?.copyWith(height: 1.1, fontWeight: FontWeight.bold),
+          style: Theme.of(context).textTheme.titleMedium
+              ?.copyWith(height: 1.1, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 16.0),
         _StudyChapters(study: study),

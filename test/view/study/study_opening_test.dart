@@ -89,9 +89,8 @@ void main() {
   group('Study opening detection', () {
     testWidgets('opening is set when navigating to a mainline position', (tester) async {
       final mockRepository = MockStudyRepository();
-      when(
-        () => mockRepository.getStudy(id: _testId),
-      ).thenAnswer((_) async => (_makeStudy(), null, '1. e4 e5 2. Nf3'));
+      when(() => mockRepository.getStudy(id: _testId))
+          .thenAnswer((_) async => (_makeStudy(), null, '1. e4 e5 2. Nf3'));
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -119,9 +118,8 @@ void main() {
 
     testWidgets('ancestor opening is used when current node has no direct opening', (tester) async {
       final mockRepository = MockStudyRepository();
-      when(
-        () => mockRepository.getStudy(id: _testId),
-      ).thenAnswer((_) async => (_makeStudy(), null, '1. e4 e5 2. Nf3'));
+      when(() => mockRepository.getStudy(id: _testId))
+          .thenAnswer((_) async => (_makeStudy(), null, '1. e4 e5 2. Nf3'));
 
       final app = await makeTestProviderScopeApp(
         tester,

@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';

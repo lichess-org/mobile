@@ -779,9 +779,8 @@ void main() {
         // Wait for tournament data to load and the socket to open.
         await tester.pump();
 
-        final socketPool = ProviderScope.containerOf(
-          tester.element(find.byType(TournamentScreen)),
-        ).read(socketPoolProvider);
+        final socketPool = ProviderScope.containerOf(tester.element(find.byType(TournamentScreen)))
+            .read(socketPoolProvider);
 
         // The tournament socket is the active one.
         expect(socketPool.currentClient.route, TournamentController.socketUri(tournamentId));

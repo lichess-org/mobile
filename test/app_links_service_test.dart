@@ -778,9 +778,8 @@ void main() {
         (_) async => const User(id: UserId('thibault'), username: 'Thibault', perfs: IMap.empty()),
       );
       final testGame = generateExportedGames(count: 1).first;
-      when(
-        () => mockUserRepository.getCurrentGame(const UserId('thibault')),
-      ).thenAnswer((_) async => testGame);
+      when(() => mockUserRepository.getCurrentGame(const UserId('thibault')))
+          .thenAnswer((_) async => testGame);
 
       await triggerAppLink(
         tester,
@@ -816,9 +815,8 @@ void main() {
     testWidgets('Shows error snackbar for invalid user', (WidgetTester tester) async {
       final uri = Uri.parse('https://lichess.org/@/hikaru');
       final mockUserRepository = MockUserRepository();
-      when(
-        () => mockUserRepository.getUser(const UserId('hikaru')),
-      ).thenThrow(Exception('User not found'));
+      when(() => mockUserRepository.getUser(const UserId('hikaru')))
+          .thenThrow(Exception('User not found'));
 
       await triggerAppLink(
         tester,

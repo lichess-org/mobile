@@ -406,9 +406,9 @@ void main() {
             appBar: AppBar(title: const Text('Test OTB Screen')),
             body: FilledButton(
               child: const Text('OTB'),
-              onPressed: () => Navigator.of(
-                context,
-              ).push(buildScreenRoute<void>(screen: const OverTheBoardScreen())),
+              onPressed: () =>
+                  Navigator.of(context)
+                      .push(buildScreenRoute<void>(screen: const OverTheBoardScreen())),
             ),
           ),
         ),

@@ -316,10 +316,8 @@ class _Body extends ConsumerWidget {
                     analysisState: state,
                     onTapMove: ref
                         .read(
-                          broadcastAnalysisControllerProvider((
-                            roundId: roundId,
-                            gameId: gameId,
-                          )).notifier,
+                          broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId))
+                              .notifier,
                         )
                         .onUserMove,
                   )
@@ -539,10 +537,8 @@ class _BroadcastAnalysisBoardState
   void listenToStateChanges(
     void Function(BroadcastAnalysisState? prev, BroadcastAnalysisState? next) listener,
   ) => ref.listenManual<BroadcastAnalysisState?>(
-    broadcastAnalysisControllerProvider((
-      roundId: widget.roundId,
-      gameId: widget.gameId,
-    )).select((v) => v.value),
+    broadcastAnalysisControllerProvider((roundId: widget.roundId, gameId: widget.gameId))
+        .select((v) => v.value),
     listener,
   );
 
@@ -561,10 +557,8 @@ class _BroadcastAnalysisBoardState
   @override
   void onUserMove(Move move) => ref
       .read(
-        broadcastAnalysisControllerProvider((
-          roundId: widget.roundId,
-          gameId: widget.gameId,
-        )).notifier,
+        broadcastAnalysisControllerProvider((roundId: widget.roundId, gameId: widget.gameId))
+            .notifier,
       )
       .onUserMove(move);
 
@@ -639,10 +633,8 @@ class _PlayerWidget extends ConsumerWidget {
                 if (game.isOver) ...[
                   Text(
                     resultString(customScoring, side, game.status),
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontWeight: .bold,
-                      color: game.status.colorFor(side, context),
-                    ),
+                    style: Theme.of(context).textTheme.bodyMedium
+                        ?.copyWith(fontWeight: .bold, color: game.status.colorFor(side, context)),
                   ),
                   const SizedBox(width: 16.0),
                 ],
@@ -805,9 +797,9 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
       actions: [
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.settingsSettings),
-          onPressed: () => Navigator.of(
-            context,
-          ).push(BroadcastGameSettingsScreen.buildRoute(roundId: roundId, gameId: gameId)),
+          onPressed: () =>
+              Navigator.of(context)
+                  .push(BroadcastGameSettingsScreen.buildRoute(roundId: roundId, gameId: gameId)),
         ),
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.flipBoard),

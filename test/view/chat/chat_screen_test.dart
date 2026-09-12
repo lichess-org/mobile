@@ -102,9 +102,8 @@ void main() {
             unreadMessages: 0,
           );
         }),
-        chatNotifierProvider(options): chatNotifierProvider(
-          options,
-        ).overrideWith((ref) => chatNotifier),
+        chatNotifierProvider(options): chatNotifierProvider(options)
+            .overrideWith((ref) => chatNotifier),
       },
     );
   }

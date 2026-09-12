@@ -141,9 +141,10 @@ class _BroadcastPlayersListState extends ConsumerState<BroadcastPlayersList> {
 
   void sort() {
     final compare = switch (currentSort) {
-      _SortingTypes.elo =>
-        (BroadcastPlayerWithOverallResult p1, BroadcastPlayerWithOverallResult p2) =>
-            bothCompare((p) => p.player.rating, (p) => p.score)(p2, p1),
+      _SortingTypes.elo => (
+        BroadcastPlayerWithOverallResult p1,
+        BroadcastPlayerWithOverallResult p2,
+      ) => bothCompare((p) => p.player.rating, (p) => p.score)(p2, p1),
       _SortingTypes.score =>
         (BroadcastPlayerWithOverallResult p1, BroadcastPlayerWithOverallResult p2) =>
             p1.rank != null && p2.rank != null

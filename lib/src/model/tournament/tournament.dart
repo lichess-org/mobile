@@ -177,12 +177,10 @@ Tournament _tournamentFromPick(RequiredPick pick) {
     isFinished: pick('isFinished').asBoolOrNull(),
     isStarted: pick('isStarted').asBoolOrNull(),
     private: pick('private').asBoolOrFalse(),
-    timeToStart: pick(
-      'secondsToStart',
-    ).letOrNull((p) => (p.asDurationFromSecondsOrThrow(), DateTime.now())),
-    timeToFinish: pick(
-      'secondsToFinish',
-    ).letOrNull((p) => (p.asDurationFromSecondsOrThrow(), DateTime.now())),
+    timeToStart: pick('secondsToStart')
+        .letOrNull((p) => (p.asDurationFromSecondsOrThrow(), DateTime.now())),
+    timeToFinish: pick('secondsToFinish')
+        .letOrNull((p) => (p.asDurationFromSecondsOrThrow(), DateTime.now())),
     pairingsClosed: pick('pairingsClosed').asBoolOrFalse(),
     me: pick('me').asTournamentMeOrNull(),
     nbPlayers: pick('nbPlayers').asIntOrThrow(),
@@ -211,12 +209,10 @@ Tournament _updateTournamentFromPartialPick(Tournament tournament, RequiredPick 
     isFinished: pick('isFinished').asBoolOrNull(),
     isStarted: pick('isStarted').asBoolOrNull(),
     pairingsClosed: pick('pairingsClosed').asBoolOrFalse(),
-    timeToStart: pick(
-      'secondsToStart',
-    ).letOrNull((p) => (p.asDurationFromSecondsOrThrow(), DateTime.now())),
-    timeToFinish: pick(
-      'secondsToFinish',
-    ).letOrNull((p) => (p.asDurationFromSecondsOrThrow(), DateTime.now())),
+    timeToStart: pick('secondsToStart')
+        .letOrNull((p) => (p.asDurationFromSecondsOrThrow(), DateTime.now())),
+    timeToFinish: pick('secondsToFinish')
+        .letOrNull((p) => (p.asDurationFromSecondsOrThrow(), DateTime.now())),
     me: pick('me').asTournamentMeOrNull(),
     nbPlayers: pick('nbPlayers').asIntOrThrow(),
     standing: pick('standing').asStandingPageOrNull(),
@@ -455,9 +451,9 @@ extension TournamentExtension on Pick {
     final requiredPick = this.required();
     return (
       page: requiredPick('page').asIntOrThrow(),
-      players: requiredPick(
-        'players',
-      ).asListOrThrow((pick) => _standingPlayerFromPick(pick.required())).toIList(),
+      players: requiredPick('players')
+          .asListOrThrow((pick) => _standingPlayerFromPick(pick.required()))
+          .toIList(),
     );
   }
 
@@ -615,9 +611,9 @@ TournamentTeam _tournamentTeamFromPick(RequiredPick pick) {
     rating: pick('rating').asIntOrThrow(),
     performance: pick('perf').asIntOrNull(),
     score: pick('score').asIntOrThrow(),
-    topPlayers: pick(
-      'topPlayers',
-    ).asListOrThrow((p) => _teamPlayerDetailedFromPick(p.required())).toIList(),
+    topPlayers: pick('topPlayers')
+        .asListOrThrow((p) => _teamPlayerDetailedFromPick(p.required()))
+        .toIList(),
   );
 }
 

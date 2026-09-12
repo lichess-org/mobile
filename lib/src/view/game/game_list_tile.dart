@@ -135,9 +135,8 @@ class GameContextMenu extends ConsumerWidget {
     return BottomSheetScrollableContainer(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16.0,
-          ).add(const EdgeInsets.only(bottom: 4.0)),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0)
+              .add(const EdgeInsets.only(bottom: 4.0)),
           child: Text(
             context.l10n.resVsX(
               game.white.fullName(context.l10n),

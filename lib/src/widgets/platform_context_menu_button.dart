@@ -64,9 +64,8 @@ class ContextMenuIconButton extends StatelessWidget {
                       borderRadius: const BorderRadius.all(Radius.circular(13.0)),
                       child: ColoredBox(
                         color:
-                            MenuTheme.of(
-                              context,
-                            ).style?.backgroundColor?.resolve({WidgetState.focused}) ??
+                            MenuTheme.of(context).style?.backgroundColor
+                                ?.resolve({WidgetState.focused}) ??
                             ColorScheme.of(context).surfaceContainer,
                         child: ScrollConfiguration(
                           behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),

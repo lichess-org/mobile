@@ -405,8 +405,7 @@ Future<void> _stormInfoDialogBuilder(BuildContext context) {
               children: [
                 TextSpan(text: '\n'),
                 TextSpan(
-                  text:
-                      'Each puzzle grants one point. The goal is to get as many points as you can before the time runs out.',
+                  text: 'Each puzzle grants one point. The goal is to get as many points as you can before the time runs out.',
                 ),
                 TextSpan(text: '\n\n'),
                 TextSpan(text: 'Combo bar\n', style: TextStyle(fontSize: 18)),
@@ -418,8 +417,7 @@ Future<void> _stormInfoDialogBuilder(BuildContext context) {
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     TextSpan(
-                      text:
-                          ' fills the combo bar. When the bar is full, you get a time bonus, and you increase the value of the next bonus.',
+                      text: ' fills the combo bar. When the bar is full, you get a time bonus, and you increase the value of the next bonus.',
                     ),
                   ],
                 ),
@@ -432,8 +430,7 @@ Future<void> _stormInfoDialogBuilder(BuildContext context) {
                 TextSpan(text: '• Then +10s every 10 other moves.\n'),
                 TextSpan(text: '\n'),
                 TextSpan(
-                  text:
-                      'When you play a wrong move, the combo bar is depleted, and you lose 10 seconds.',
+                  text: 'When you play a wrong move, the combo bar is depleted, and you lose 10 seconds.',
                 ),
               ],
             ),

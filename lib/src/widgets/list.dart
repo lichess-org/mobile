@@ -274,8 +274,11 @@ class PlatformDivider extends StatelessWidget {
   }
 }
 
-typedef RemovedItemBuilder<T> =
-    Widget Function(T item, BuildContext context, Animation<double> animation);
+typedef RemovedItemBuilder<T> = Widget Function(
+  T item,
+  BuildContext context,
+  Animation<double> animation,
+);
 
 /// Keeps a Dart [List] in sync with an [AnimatedList].
 ///

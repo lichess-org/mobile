@@ -218,9 +218,8 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
   return PlayableGame(
     id: requiredGamePick('id').asGameIdOrThrow(),
     meta: meta,
-    source: requiredGamePick(
-      'source',
-    ).letOrThrow((pick) => GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown),
+    source: requiredGamePick('source')
+        .letOrThrow((pick) => GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown),
     initialFen: initialFen,
     steps: steps.toIList(),
     white: pick('white').letOrThrow(_playerFromUserGamePick),
@@ -281,9 +280,8 @@ TournamentMeta? _playableGameTournamentDataFromPick(RequiredPick pick) => Tourna
   name: pick('name').asStringOrThrow(),
   clock: (timeLeft: Duration(seconds: pick('secondsLeft').asIntOrThrow()), at: DateTime.now()),
   berserkable: pick('berserkable').asBoolOrFalse(),
-  ranks: pick(
-    'ranks',
-  ).letOrNull((p) => (white: p('white').asIntOrThrow(), black: p('black').asIntOrThrow())),
+  ranks: pick('ranks')
+      .letOrNull((p) => (white: p('white').asIntOrThrow(), black: p('black').asIntOrThrow())),
 );
 
 ServerGamePrefs _gamePrefsFromPick(RequiredPick pick) {

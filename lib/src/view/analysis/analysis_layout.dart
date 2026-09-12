@@ -18,8 +18,11 @@ const kAnalysisBoardHeaderOrFooterHeight = 26.0;
 /// Scale factor for the small board in portrait orientation.
 const kSmallBoardScale = 0.8;
 
-typedef BoardBuilder =
-    Widget Function(BuildContext context, double boardSize, BorderRadius? boardRadius);
+typedef BoardBuilder = Widget Function(
+  BuildContext context,
+  double boardSize,
+  BorderRadius? boardRadius,
+);
 
 typedef EngineGaugeBuilder = Widget Function(BuildContext context);
 

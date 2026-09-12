@@ -558,9 +558,8 @@ class PuzzleAnglePreview extends ConsumerWidget {
                             style: TextStyle(
                               height: 1.2,
                               fontSize: 12.0,
-                              color: DefaultTextStyle.of(
-                                context,
-                              ).style.color?.withValues(alpha: 0.6),
+                              color: DefaultTextStyle.of(context).style.color
+                                  ?.withValues(alpha: 0.6),
                             ),
                           ),
                         ],

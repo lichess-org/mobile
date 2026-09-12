@@ -31,9 +31,8 @@ void main() {
       ),
     ).thenAnswer((_) => Future.value());
 
-    when(
-      () => notificationDisplayMock.cancel(id: any(named: 'id')),
-    ).thenAnswer((_) => Future.value());
+    when(() => notificationDisplayMock.cancel(id: any(named: 'id')))
+        .thenAnswer((_) => Future.value());
   });
 
   tearDown(() {
@@ -117,9 +116,8 @@ void main() {
 
       async.flushMicrotasks();
 
-      verify(
-        () => notificationDisplayMock.cancel(id: AnnounceNotification.notificationId),
-      ).called(1);
+      verify(() => notificationDisplayMock.cancel(id: AnnounceNotification.notificationId))
+          .called(1);
 
       socketClient.close();
       async.flushTimers();
@@ -166,9 +164,8 @@ void main() {
       async.elapse(const Duration(minutes: 5, seconds: 1));
       async.flushMicrotasks();
 
-      verify(
-        () => notificationDisplayMock.cancel(id: AnnounceNotification.notificationId),
-      ).called(1);
+      verify(() => notificationDisplayMock.cancel(id: AnnounceNotification.notificationId))
+          .called(1);
 
       socketClient.close();
       async.flushTimers();
@@ -362,9 +359,8 @@ void main() {
 
       async.flushMicrotasks();
 
-      verify(
-        () => notificationDisplayMock.cancel(id: AnnounceNotification.notificationId),
-      ).called(1);
+      verify(() => notificationDisplayMock.cancel(id: AnnounceNotification.notificationId))
+          .called(1);
 
       socketClient.close();
       async.flushTimers();

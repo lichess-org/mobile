@@ -376,12 +376,12 @@ LeaderboardUser _leaderboardUserFromPick(RequiredPick pick) {
     flair: pick('flair').asStringOrNull(),
     patronColor: pick('patronColor').asIntOrNull(),
     online: pick('online').asBoolOrNull(),
-    rating: pick(
-      'perfs',
-    ).letOrThrow((perfsPick) => perfsPick(prefMap.keys.first, 'rating')).asIntOrThrow(),
-    progress: pick(
-      'perfs',
-    ).letOrThrow((prefsPick) => prefsPick(prefMap.keys.first, 'progress')).asIntOrThrow(),
+    rating: pick('perfs')
+        .letOrThrow((perfsPick) => perfsPick(prefMap.keys.first, 'rating'))
+        .asIntOrThrow(),
+    progress: pick('perfs')
+        .letOrThrow((prefsPick) => prefsPick(prefMap.keys.first, 'progress'))
+        .asIntOrThrow(),
   );
 }
 

@@ -283,9 +283,8 @@ void main() {
       ),
     ).thenAnswer((_) => Future.value());
 
-    when(
-      () => notificationDisplayMock.cancel(id: any(named: 'id')),
-    ).thenAnswer((_) => Future.value());
+    when(() => notificationDisplayMock.cancel(id: any(named: 'id')))
+        .thenAnswer((_) => Future.value());
 
     final container = await makeContainer(
       authUser: fakeAuthUser,
@@ -335,9 +334,8 @@ void main() {
 
       async.flushMicrotasks();
 
-      verify(
-        () => notificationDisplayMock.cancel(id: const ChallengeId('H9fIRZUk').hashCode),
-      ).called(1);
+      verify(() => notificationDisplayMock.cancel(id: const ChallengeId('H9fIRZUk').hashCode))
+          .called(1);
 
       // closing the socket client to be able to flush the timers
       socketClient.close();
@@ -522,9 +520,8 @@ void main() {
 
     testWidgets('calls decline on repository with selected reason', (tester) async {
       final mockChallengeRepo = MockChallengeRepository();
-      when(
-        () => mockChallengeRepo.decline(any(), reason: any(named: 'reason')),
-      ).thenAnswer((_) async {});
+      when(() => mockChallengeRepo.decline(any(), reason: any(named: 'reason')))
+          .thenAnswer((_) async {});
 
       final app = await makeTestProviderScopeApp(
         tester,

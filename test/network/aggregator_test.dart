@@ -82,34 +82,31 @@ void main() {
       },
     );
 
-    test(
-      'supported uris will still aggregate if the group is not complete but has more than half of the target group',
-      () async {
-        int requestsCount = 0;
+    test('supported uris will still aggregate if the group is not complete but has more than half of the target group', () async {
+      int requestsCount = 0;
 
-        final mockClient = MockClient((request) {
-          requestsCount++;
-          if (request.url.path == '/api/mobile/watch') {
-            return mockResponse(watchEndpointResponse, 200);
-          }
-          return mockResponse('', 404);
-        });
+      final mockClient = MockClient((request) {
+        requestsCount++;
+        if (request.url.path == '/api/mobile/watch') {
+          return mockResponse(watchEndpointResponse, 200);
+        }
+        return mockResponse('', 404);
+      });
 
-        final aggregator = await mockClientAggregator(mockClient);
+      final aggregator = await mockClientAggregator(mockClient);
 
-        final broadcastUri = Uri(path: '/api/broadcast/top', queryParameters: {'page': '1'});
-        final tvUri = Uri(path: '/api/tv/channels');
+      final broadcastUri = Uri(path: '/api/broadcast/top', queryParameters: {'page': '1'});
+      final tvUri = Uri(path: '/api/tv/channels');
 
-        final [broadcasts, channels] = await Future.wait([
-          aggregator.readJson(broadcastUri, atomicMapper: broadcastListFromServerJson),
-          aggregator.readJson(tvUri, atomicMapper: tvChannelsFromServerJson),
-        ]);
+      final [broadcasts, channels] = await Future.wait([
+        aggregator.readJson(broadcastUri, atomicMapper: broadcastListFromServerJson),
+        aggregator.readJson(tvUri, atomicMapper: tvChannelsFromServerJson),
+      ]);
 
-        expect(requestsCount, 1);
-        expect(broadcasts, isA<BroadcastList>());
-        expect(channels, isA<TvChannels>());
-      },
-    );
+      expect(requestsCount, 1);
+      expect(broadcasts, isA<BroadcastList>());
+      expect(channels, isA<TvChannels>());
+    });
 
     test('supported uris will not aggregate if group has less than half of target group', () async {
       int requestsCount = 0;

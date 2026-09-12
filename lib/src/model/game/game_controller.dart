@@ -919,9 +919,8 @@ class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> 
       case 'clockInc':
         final data = event.data as Map<String, dynamic>;
         final side = pick(data['color']).asSideOrNull();
-        final newClock = pick(
-          data['total'],
-        ).letOrNull((it) => Duration(milliseconds: it.asIntOrThrow() * 10));
+        final newClock = pick(data['total'])
+            .letOrNull((it) => Duration(milliseconds: it.asIntOrThrow() * 10));
         final curState = state.requireValue;
 
         if (side != null && newClock != null) {

@@ -183,12 +183,10 @@ class PuzzleService {
       final batchResponse = _ref.withClient(
         (client) => Result.capture(
           isSolving
-              ? PuzzleRepository(
-                  client,
-                ).solveBatch(nb: deficit, solved: solved, angle: angle, difficulty: difficulty)
-              : PuzzleRepository(
-                  client,
-                ).selectBatch(nb: deficit, angle: angle, difficulty: difficulty),
+              ? PuzzleRepository(client)
+                    .solveBatch(nb: deficit, solved: solved, angle: angle, difficulty: difficulty)
+              : PuzzleRepository(client)
+                    .selectBatch(nb: deficit, angle: angle, difficulty: difficulty),
         ),
       );
 

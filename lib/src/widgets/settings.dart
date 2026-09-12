@@ -50,9 +50,8 @@ class SettingsListTile extends StatelessWidget {
             ? Text(
                 explanation!,
                 maxLines: 5,
-                style: ListTileTheme.of(
-                  context,
-                ).subtitleTextStyle?.copyWith(fontSize: TextTheme.of(context).bodySmall?.fontSize),
+                style: ListTileTheme.of(context).subtitleTextStyle
+                    ?.copyWith(fontSize: TextTheme.of(context).bodySmall?.fontSize),
               )
             : null,
         enabled: enabled,
@@ -97,9 +96,8 @@ class SwitchSettingTile extends StatelessWidget {
       title: _SettingsTitle(title: title),
       subtitle: subtitle != null
           ? DefaultTextStyle.merge(
-              style: ListTileTheme.of(
-                context,
-              ).subtitleTextStyle?.copyWith(fontSize: TextTheme.of(context).bodySmall?.fontSize),
+              style: ListTileTheme.of(context).subtitleTextStyle
+                  ?.copyWith(fontSize: TextTheme.of(context).bodySmall?.fontSize),
               child: subtitle!,
             )
           : null,

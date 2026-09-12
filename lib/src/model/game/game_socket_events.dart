@@ -106,9 +106,8 @@ GameEndEvent _gameEndEventFromPick(RequiredPick pick) {
   return GameEndEvent(
     status: pick('status').asGameStatusOrThrow(),
     winner: pick('winner').asSideOrNull(),
-    ratingDiff: pick(
-      'ratingDiff',
-    ).letOrNull((it) => (white: it('white').asIntOrThrow(), black: it('black').asIntOrThrow())),
+    ratingDiff: pick('ratingDiff')
+        .letOrNull((it) => (white: it('white').asIntOrThrow(), black: it('black').asIntOrThrow())),
     boosted: pick('boosted').asBoolOrNull(),
     clock: pick('clock').letOrNull(
       (it) => (
@@ -243,9 +242,8 @@ ServerEvalEvent _serverEvalEventFromPick(RequiredPick pick) {
       ),
     ),
     isAnalysisComplete: !isAnalysisIncomplete,
-    division: pick(
-      'division',
-    ).letOrNull((it) => (middle: it('middle').asIntOrNull(), end: it('end').asIntOrNull())),
+    division: pick('division')
+        .letOrNull((it) => (middle: it('middle').asIntOrNull(), end: it('end').asIntOrNull())),
   );
 }
 

@@ -288,10 +288,8 @@ class PuzzleController extends Notifier<PuzzleState> {
     } else {
       ref
           .read(
-            puzzleSessionProvider((
-              userId: initialContext.userId,
-              angle: initialContext.angle,
-            )).notifier,
+            puzzleSessionProvider((userId: initialContext.userId, angle: initialContext.angle))
+                .notifier,
           )
           .addAttempt(state.puzzle.puzzle.id, win: result == PuzzleResult.win);
 
@@ -342,10 +340,8 @@ class PuzzleController extends Notifier<PuzzleState> {
       if (rounds != null) {
         ref
             .read(
-              puzzleSessionProvider((
-                userId: initialContext.userId,
-                angle: initialContext.angle,
-              )).notifier,
+              puzzleSessionProvider((userId: initialContext.userId, angle: initialContext.angle))
+                  .notifier,
             )
             .setRatingDiffs(rounds);
       }

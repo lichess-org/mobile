@@ -137,9 +137,8 @@ class _Body extends ConsumerWidget {
                       if (section.$3.isNotEmpty)
                         SliverAppBar(
                           centerTitle: false,
-                          backgroundColor: ColorScheme.of(
-                            context,
-                          ).surfaceContainerHigh.withValues(alpha: 1),
+                          backgroundColor: ColorScheme.of(context).surfaceContainerHigh
+                              .withValues(alpha: 1),
                           scrolledUnderElevation: 0,
                           automaticallyImplyLeading: false,
                           primary: false,

@@ -262,9 +262,8 @@ class _OpenChallengeLoadingContentState extends ConsumerState<OpenChallengeLoadi
                               TextSpan(text: ' $challengeLink'),
                             ],
                           ),
-                          style: TextTheme.of(context).bodyMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
+                          style: TextTheme.of(context).bodyMedium
+                              ?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
                         ),
                       ),
                     ),

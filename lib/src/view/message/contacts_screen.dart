@@ -186,9 +186,8 @@ class ContactTile extends StatelessWidget {
     final isRead = contact.lastMessage.read || contact.lastMessage.userId == me.id;
 
     return ListTile(
-      contentPadding: Theme.of(
-        context,
-      ).listTileTheme.contentPadding?.add(const EdgeInsets.symmetric(vertical: 4.0)),
+      contentPadding: Theme.of(context).listTileTheme.contentPadding
+          ?.add(const EdgeInsets.symmetric(vertical: 4.0)),
       leading: UserAvatar(contact.user),
       title: UserFullNameWidget(user: contact.user, showFlair: false, showPatron: true),
       subtitle: Text(contact.lastMessage.text),

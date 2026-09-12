@@ -89,9 +89,10 @@ sealed class Forecast with _$Forecast {
   @useResult
   Forecast playMove(Move move) {
     return copyWith(
-      lines: linesStartingWith(
-        move,
-      ).map((line) => line.tail).whereNot((line) => line.isEmpty).toIList(),
+      lines: linesStartingWith(move)
+          .map((line) => line.tail)
+          .whereNot((line) => line.isEmpty)
+          .toIList(),
       onMyTurn: !onMyTurn,
     );
   }

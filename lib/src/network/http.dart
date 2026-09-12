@@ -935,12 +935,12 @@ extension ClientExtension on Client {
   IList<T> _readNdJsonList<T>(Response response, T Function(Map<String, dynamic>) mapper) {
     try {
       return IList(
-        LineSplitter.split(
-          utf8.decode(response.bodyBytes),
-        ).where((e) => e.isNotEmpty && e != '\n').map((e) {
-          final json = jsonDecode(e) as Map<String, dynamic>;
-          return mapper(json);
-        }),
+        LineSplitter.split(utf8.decode(response.bodyBytes))
+            .where((e) => e.isNotEmpty && e != '\n')
+            .map((e) {
+              final json = jsonDecode(e) as Map<String, dynamic>;
+              return mapper(json);
+            }),
       );
     } catch (e, st) {
       _logger.severe('Could not read nd-json objects as List<$T>.', e, st);

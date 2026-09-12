@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -199,9 +200,8 @@ void main() {
       return mockResponse('', 404);
     });
 
-    when(
-      () => mockHistoryStorage.fetch(puzzleId: puzzle2.puzzle.id),
-    ).thenAnswer((_) async => puzzle2);
+    when(() => mockHistoryStorage.fetch(puzzleId: puzzle2.puzzle.id))
+        .thenAnswer((_) async => puzzle2);
     when(() => mockHistoryStorage.save(puzzle: any(named: 'puzzle'))).thenAnswer((_) async {});
     when(
       () => mockBatchStorage.fetch(
