@@ -64,19 +64,9 @@ class _UserRating extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Perf> userPerfs = Perf.values
-        .where((element) {
-          final p = perfs[element];
-          return p != null && p.numberOfGamesOrRuns > 0 && p.ratingDeviation < kClueLessDeviation;
-        })
-        .toList(growable: false);
+    final userPerfs = _sortedUserPerfs(perfs);
 
     if (userPerfs.isEmpty) return const SizedBox.shrink();
-
-    userPerfs.sort(
-      (p1, p2) => perfs[p1]!.numberOfGamesOrRuns.compareTo(perfs[p2]!.numberOfGamesOrRuns),
-    );
-    userPerfs = userPerfs.reversed.toList();
 
     final rating = perfs[userPerfs.first]?.rating.toString() ?? '?';
     final icon = userPerfs.first.icon;
@@ -86,4 +76,25 @@ class _UserRating extends StatelessWidget {
       children: [Icon(icon, size: 16), const SizedBox(width: 5), Text(rating)],
     );
   }
+}
+
+/// Perfs with enough rated games, sorted by game count descending.
+///
+/// This runs in every row of every scrolling user list (leaderboards, search,
+/// teams), so the filter + sort is memoized per map instance. [IMap] is
+/// immutable, so instance identity implies value identity and the cached list
+/// stays valid as long as the map is alive.
+final _sortedPerfsCache = Expando<List<Perf>>('sortedUserPerfs');
+
+List<Perf> _sortedUserPerfs(IMap<Perf, UserPerf> perfs) {
+  return _sortedPerfsCache[perfs] ??=
+      Perf.values
+          .where((element) {
+            final p = perfs[element];
+            return p != null && p.numberOfGamesOrRuns > 0 && p.ratingDeviation < kClueLessDeviation;
+          })
+          .toList(growable: false)
+        ..sort(
+          (p1, p2) => perfs[p2]!.numberOfGamesOrRuns.compareTo(perfs[p1]!.numberOfGamesOrRuns),
+        );
 }
