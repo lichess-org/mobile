@@ -178,23 +178,25 @@ class _BodyState extends ConsumerState<_Body> {
         : ref.watch(liveStreamersProvider);
     final isTablet = isTabletOrLarger(context);
 
-    final content = [
-      if (_worker != null) _BroadcastWidget(broadcastList, _worker!),
+    final slivers = [
+      if (_worker != null) SliverToBoxAdapter(child: _BroadcastWidget(broadcastList, _worker!)),
       if (isTablet)
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(child: _WatchTvWidget(featuredChannels)),
-            if (!isKidMode) Expanded(child: _StreamerWidget(streamers)),
-          ],
+        SliverToBoxAdapter(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(child: _WatchTvWidget(featuredChannels)),
+              if (!isKidMode) Expanded(child: _StreamerWidget(streamers)),
+            ],
+          ),
         )
       else ...[
-        _WatchTvWidget(featuredChannels),
-        if (!isKidMode) _StreamerWidget(streamers),
+        SliverToBoxAdapter(child: _WatchTvWidget(featuredChannels)),
+        if (!isKidMode) SliverToBoxAdapter(child: _StreamerWidget(streamers)),
       ],
     ];
 
-    return ListView(controller: watchScrollController, children: content);
+    return CustomScrollView(controller: watchScrollController, slivers: slivers);
   }
 }
 
