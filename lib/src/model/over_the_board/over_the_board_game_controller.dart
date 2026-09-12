@@ -7,6 +7,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/chess960.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/local_game_clock.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
@@ -15,6 +16,7 @@ import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/game/over_the_board_game.dart';
+import 'package:lichess_mobile/src/model/over_the_board/over_the_board_clock.dart';
 
 part 'over_the_board_game_controller.freezed.dart';
 
@@ -27,28 +29,33 @@ final overTheBoardGameControllerProvider =
     );
 
 class OverTheBoardGameController extends Notifier<OverTheBoardGameState> {
+  /// The clock of the game, which only runs when the game is played with a time control.
+  LocalGameClock get _clock => ref.read(overTheBoardClockProvider.notifier);
+
   @override
-  OverTheBoardGameState build() => OverTheBoardGameState.fromVariant(
-    Variant.standard,
-    Speed.fromTimeIncrement(const TimeIncrement(0, 0)),
-  );
+  OverTheBoardGameState build() =>
+      OverTheBoardGameState.fromVariant(Variant.standard, const TimeIncrement.infinite());
 
   void startNewGame(Variant variant, TimeIncrement timeIncrement, {String? initialFen}) {
-    state = OverTheBoardGameState.fromVariant(
-      variant,
-      Speed.fromTimeIncrement(timeIncrement),
-      initialFen: initialFen,
-    );
+    state = OverTheBoardGameState.fromVariant(variant, timeIncrement, initialFen: initialFen);
   }
 
-  void loadOngoingGame(OverTheBoardGame game) {
-    state = OverTheBoardGameState(game: game, stepCursor: game.steps.length - 1);
+  void loadOngoingGame(OverTheBoardGame game, TimeIncrement timeIncrement) {
+    // A game saved before the time control was part of its metadata carries it alongside instead,
+    // so the saved value is what fills the gap — a rematch reads the time control off the game.
+    final meta = game.meta.clock == null && !timeIncrement.isInfinite
+        ? game.meta.copyWith(clock: clockMetaOf(timeIncrement))
+        : game.meta;
+    state = OverTheBoardGameState(
+      game: game.copyWith(meta: meta),
+      stepCursor: game.steps.length - 1,
+    );
   }
 
   void rematch() {
     state = OverTheBoardGameState.fromVariant(
       state.game.meta.variant,
-      state.game.meta.speed,
+      state.game.timeIncrement,
       initialFen: state.game.initialFen,
     );
   }
@@ -66,10 +73,17 @@ class OverTheBoardGameController extends Notifier<OverTheBoardGameState> {
   void makeMove(Move move) {
     final (newPos, newSan) = state.currentPosition.makeSan(Move.parse(move.uci)!);
     final sanMove = SanMove(newSan, move);
+    final movedSide = state.currentPosition.turn;
+
+    // The clock changes hands before the step is built, so that the step records the time the
+    // mover is left with once their increment has been added — the same reading lichess stores.
+    _clock.onMove(newSideToMove: newPos.turn);
+
     final newStep = GameStep(
       position: newPos,
       sanMove: sanMove,
       diff: MaterialDiff.fromPosition(newPos),
+      clock: ref.read(overTheBoardClockProvider).timeLeft(movedSide),
     );
 
     // In an over-the-board game, we support "implicit takebacks":
@@ -114,6 +128,11 @@ class OverTheBoardGameController extends Notifier<OverTheBoardGameState> {
       state = state.copyWith(game: state.game.copyWith(status: GameStatus.draw));
     }
 
+    // Don't let the clock keep running on a game-ending move.
+    if (!state.game.playable) {
+      _clock.pause();
+    }
+
     _moveFeedback(sanMove);
   }
 
@@ -156,7 +175,11 @@ sealed class OverTheBoardGameState with _$OverTheBoardGameState {
     @Default(0) int stepCursor,
   }) = _OverTheBoardGameState;
 
-  factory OverTheBoardGameState.fromVariant(Variant variant, Speed speed, {String? initialFen}) {
+  factory OverTheBoardGameState.fromVariant(
+    Variant variant,
+    TimeIncrement timeIncrement, {
+    String? initialFen,
+  }) {
     final Position position;
     final Variant effectiveVariant;
     if (initialFen != null) {
@@ -170,6 +193,7 @@ sealed class OverTheBoardGameState with _$OverTheBoardGameState {
       effectiveVariant = variant;
     }
     final sessionId = StringId('otb_${_random.nextInt(1 << 32).toRadixString(16).padLeft(8, '0')}');
+    final speed = Speed.fromTimeIncrement(timeIncrement);
     return OverTheBoardGameState(
       game: OverTheBoardGame(
         id: sessionId,
@@ -182,6 +206,7 @@ sealed class OverTheBoardGameState with _$OverTheBoardGameState {
           variant: effectiveVariant,
           speed: speed,
           perf: Perf.fromVariantAndSpeed(effectiveVariant, speed),
+          clock: clockMetaOf(timeIncrement),
         ),
       ),
     );

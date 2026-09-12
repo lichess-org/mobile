@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/l10n/l10n.dart';
+import 'package:lichess_mobile/src/model/common/local_game_clock.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 
@@ -59,20 +59,6 @@ class OverTheBoardPreferencesNotifier extends Notifier<OverTheBoardPrefs>
   }
 }
 
-enum TimeControlType {
-  clock,
-  unlimited;
-
-  String label(AppLocalizations l10n) {
-    switch (this) {
-      case TimeControlType.clock:
-        return l10n.clock;
-      case TimeControlType.unlimited:
-        return l10n.unlimited;
-    }
-  }
-}
-
 @Freezed(fromJson: true, toJson: true)
 sealed class OverTheBoardPrefs with _$OverTheBoardPrefs implements Serializable {
   const OverTheBoardPrefs._();
@@ -82,7 +68,7 @@ sealed class OverTheBoardPrefs with _$OverTheBoardPrefs implements Serializable 
   const factory OverTheBoardPrefs({
     required bool flipPiecesAfterMove,
     required bool symmetricPieces,
-    @Default(TimeControlType.clock) TimeControlType timeControlType,
+    @Default(TimeControlType.unlimited) TimeControlType timeControlType,
     @Default(OverTheBoardPrefs._defaultTimeIncrement) TimeIncrement timeIncrement,
     @Default(false) bool blindfoldMode,
   }) = _OverTheBoardPrefs;
@@ -90,7 +76,7 @@ sealed class OverTheBoardPrefs with _$OverTheBoardPrefs implements Serializable 
   static const defaults = OverTheBoardPrefs(
     flipPiecesAfterMove: false,
     symmetricPieces: false,
-    timeControlType: TimeControlType.clock,
+    timeControlType: TimeControlType.unlimited,
     timeIncrement: _defaultTimeIncrement,
     blindfoldMode: false,
   );

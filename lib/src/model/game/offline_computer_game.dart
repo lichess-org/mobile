@@ -68,8 +68,6 @@ abstract class OfflineComputerGame with BaseGame, _$OfflineComputerGame, LocalGa
 
   @override
   IList<ExternalEval>? get evals => null;
-  @override
-  IList<Duration>? get clocks => null;
 
   bool get abortable => playable && lastPosition.fullmoves <= 1;
 

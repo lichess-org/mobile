@@ -6,11 +6,16 @@ import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/local_game_clock.dart';
+import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/engine/weights_service.dart';
 import 'package:lichess_mobile/src/model/game/game_board_params.dart';
 import 'package:lichess_mobile/src/model/game/offline_computer_game.dart';
+import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
+import 'package:lichess_mobile/src/model/offline_computer/offline_computer_clock.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_controller.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_preferences.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_storage.dart';
@@ -32,10 +37,12 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
+import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/material_diff.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
+import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
@@ -149,9 +156,17 @@ class _BodyState extends ConsumerState<_Body> {
   Future<void> _saveGameState() async {
     if (!mounted) return;
     final state = ref.read(offlineComputerGameControllerProvider);
+    final clock = ref.read(offlineComputerClockProvider);
     await ref
         .read(offlineComputerGameStorageProvider)
-        .save(SavedOfflineComputerGame(game: state.game));
+        .save(
+          SavedOfflineComputerGame(
+            game: state.game,
+            timeIncrement: clock.timeIncrement,
+            whiteTimeLeft: clock.whiteTimeLeft,
+            blackTimeLeft: clock.blackTimeLeft,
+          ),
+        );
   }
 
   @override
@@ -217,8 +232,14 @@ class _BodyState extends ConsumerState<_Body> {
         },
         child: FocusDetector(
           onForegroundLost: _saveGameState,
-          onFocusLost: controller.suspendAnalysis,
-          onFocusRegained: controller.resumeAnalysis,
+          onFocusLost: () {
+            controller.suspendAnalysis();
+            controller.suspendClock();
+          },
+          onFocusRegained: () {
+            controller.resumeAnalysis();
+            controller.resumeClock();
+          },
           child: Column(
             children: [
               Expanded(
@@ -483,6 +504,7 @@ class _Player extends ConsumerWidget {
               ],
             ),
           ),
+          _PlayerClock(side: side, clockKey: const ValueKey('engineClock')),
         ],
       );
     }
@@ -528,9 +550,38 @@ class _Player extends ConsumerWidget {
               materialDiff: materialDiff,
               materialDifferenceFormat: boardPreferences.materialDifferenceFormat,
             ),
+            const Spacer(),
+            _PlayerClock(side: side, clockKey: const ValueKey('playerClock')),
           ],
         ),
       ],
+    );
+  }
+}
+
+/// The clock of [side], or nothing at all when the game is played without a time control.
+class _PlayerClock extends ConsumerWidget {
+  const _PlayerClock({required this.side, required this.clockKey});
+
+  final Side side;
+  final Key clockKey;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final clock = ref.watch(offlineComputerClockProvider);
+    if (clock.timeIncrement.isInfinite) return const SizedBox.shrink();
+
+    final clockTenths =
+        ref.watch(clockTenthsProvider).value ?? defaultAccountPreferences.clockTenths;
+
+    return Clock(
+      key: clockKey,
+      timeLeft: Duration(milliseconds: max(0, clock.timeLeft(side)!.inMilliseconds)),
+      active: clock.activeClock == side,
+      emergencyThreshold: Duration(
+        seconds: (clock.timeIncrement.time * 0.125).clamp(10, 60).toInt(),
+      ),
+      clockTenths: clockTenths,
     );
   }
 }
@@ -706,6 +757,8 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
   late Variant _selectedVariant;
   late bool _casual;
   late bool _practiceMode;
+  late TimeControlType _timeControlType;
+  late TimeIncrement _timeIncrement;
   String? _fromPositionFen;
   final _fenController = TextEditingController();
 
@@ -736,6 +789,12 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
     }
     _casual = prefs.casual;
     _practiceMode = prefs.practiceMode;
+    // Practice mode is played without a clock, so a game that starts in it starts untimed whatever
+    // the last one was played with.
+    _timeIncrement = _practiceMode ? const TimeIncrement.infinite() : prefs.timeIncrement;
+    _timeControlType = _timeIncrement.isInfinite
+        ? TimeControlType.unlimited
+        : TimeControlType.clock;
     _fenController.addListener(() {
       setState(() => _fromPositionFen = _fenController.text);
     });
@@ -761,9 +820,55 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
     super.dispose();
   }
 
+  void _setTimeControlType(TimeControlType type) {
+    ref.read(offlineComputerGamePreferencesProvider.notifier).setTimeControlType(type);
+    setState(() {
+      _timeControlType = type;
+      if (type == TimeControlType.unlimited) {
+        _timeIncrement = const TimeIncrement.infinite();
+      } else if (_timeIncrement.isInfinite) {
+        _timeIncrement = OfflineComputerGamePrefs.defaultClockTimeIncrement;
+      }
+    });
+    ref.read(offlineComputerGamePreferencesProvider.notifier).setTimeIncrement(_timeIncrement);
+  }
+
+  void _setTotalTime(num seconds) {
+    _updateTimeIncrement(TimeIncrement(seconds.toInt(), _timeIncrement.increment));
+  }
+
+  void _setIncrement(num seconds) {
+    _updateTimeIncrement(TimeIncrement(_timeIncrement.time, seconds.toInt()));
+  }
+
+  void _updateTimeIncrement(TimeIncrement newIncrement) {
+    setState(() {
+      _timeIncrement = newIncrement;
+      _timeControlType = newIncrement.isInfinite
+          ? TimeControlType.unlimited
+          : TimeControlType.clock;
+    });
+    ref.read(offlineComputerGamePreferencesProvider.notifier).setTimeIncrement(newIncrement);
+    ref.read(offlineComputerGamePreferencesProvider.notifier).setTimeControlType(_timeControlType);
+  }
+
+  /// Turning practice mode on takes the clock away: the feedback it gives is meant to be thought
+  /// about, which is not something to do against a running clock.
+  void _setPracticeMode(bool value) {
+    setState(() {
+      _practiceMode = value;
+      if (value) {
+        _timeControlType = TimeControlType.unlimited;
+        _timeIncrement = const TimeIncrement.infinite();
+      }
+    });
+    ref.read(offlineComputerGamePreferencesProvider.notifier).setPracticeMode(value);
+  }
+
   @override
   Widget build(BuildContext context) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
+    final hasClock = !_practiceMode && _timeControlType == TimeControlType.clock;
 
     return BottomSheetScrollableContainer(
       children: [
@@ -809,6 +914,75 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
               settingsLabel: Text(context.l10n.opponent),
               settingsValue: _selectedOpponent.displayName,
               onTap: _pickOpponent,
+            ),
+            SettingsListTile(
+              settingsLabel: Text(context.l10n.timeControl),
+              settingsValue: _timeControlType.label(context.l10n),
+              enabled: !_practiceMode,
+              explanation: _practiceMode ? 'Practice mode is played without a clock.' : null,
+              onTap: _practiceMode
+                  ? null
+                  : () {
+                      showChoicePicker<TimeControlType>(
+                        context,
+                        title: Text(context.l10n.timeControl),
+                        choices: TimeControlType.values,
+                        selectedItem: _timeControlType,
+                        labelBuilder: (TimeControlType control) =>
+                            Text(control.label(context.l10n)),
+                        onSelectedItemChanged: _setTimeControlType,
+                      );
+                    },
+            ),
+            AnimatedSize(
+              duration: const Duration(milliseconds: 150),
+              curve: Curves.easeOut,
+              alignment: Alignment.topCenter,
+              child: hasClock
+                  ? Column(
+                      children: [
+                        ListTile(
+                          title: Text.rich(
+                            TextSpan(
+                              text: '${context.l10n.minutesPerSide}: ',
+                              children: [
+                                TextSpan(
+                                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                                  text: clockLabelInMinutes(_timeIncrement.time),
+                                ),
+                              ],
+                            ),
+                          ),
+                          subtitle: NonLinearSlider(
+                            value: _timeIncrement.time,
+                            values: kAvailableTimesInSeconds,
+                            labelBuilder: clockLabelInMinutes,
+                            onChange: _setTotalTime,
+                            onChangeEnd: _setTotalTime,
+                          ),
+                        ),
+                        ListTile(
+                          title: Text.rich(
+                            TextSpan(
+                              text: '${context.l10n.incrementInSeconds}: ',
+                              children: [
+                                TextSpan(
+                                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                                  text: _timeIncrement.increment.toString(),
+                                ),
+                              ],
+                            ),
+                          ),
+                          subtitle: NonLinearSlider(
+                            value: _timeIncrement.increment,
+                            values: kAvailableIncrementsInSeconds,
+                            onChange: _setIncrement,
+                            onChangeEnd: _setIncrement,
+                          ),
+                        ),
+                      ],
+                    )
+                  : const SizedBox.shrink(),
             ),
             SettingsListTile(
               settingsLabel: Text(context.l10n.variant),
@@ -881,14 +1055,7 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
               title: const Text('Practice mode'),
               subtitle: const Text('Get feedback on your moves'),
               value: _practiceMode,
-              onChanged: _selectedVariant == Variant.crazyhouse
-                  ? null
-                  : (value) {
-                      setState(() => _practiceMode = value);
-                      ref
-                          .read(offlineComputerGamePreferencesProvider.notifier)
-                          .setPracticeMode(value);
-                    },
+              onChanged: _selectedVariant == Variant.crazyhouse ? null : _setPracticeMode,
             ),
             SwitchSettingTile(
               title: Text(context.l10n.casual),
@@ -923,6 +1090,7 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
                           practiceMode: _practiceMode,
                           variant: _selectedVariant,
                           initialFen: effectiveFen,
+                          timeIncrement: _timeIncrement,
                         );
                     Navigator.pop(context);
                   }

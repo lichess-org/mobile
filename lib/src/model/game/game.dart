@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
+import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
@@ -27,6 +28,25 @@ final _dateFormat = DateFormat('yyyy.MM.dd');
 /// Clamps negative durations to zero, so that lag compensation cannot produce a negative move
 /// time.
 Duration _atLeastZero(Duration duration) => duration < Duration.zero ? Duration.zero : duration;
+
+/// The time spent on each move, in ply order, given the clock left after each one.
+///
+/// The time spent on a move is the clock the player had left after their previous move, plus the
+/// increment, minus the clock they have left after this one. Each side's first move is reported as
+/// [Duration.zero], since the clock is not running before it. This matches lila's own derivation
+/// in `GameExt.computeMoveTimes`.
+///
+/// Returns an empty list when there are no clocks to derive them from (correspondence, unclocked
+/// games and most PGN imports).
+IList<Duration> moveTimesFromClocks(IList<Duration>? clocks, Duration increment) {
+  if (clocks == null || clocks.isEmpty) {
+    return const IListConst<Duration>([]);
+  }
+  return IList([
+    for (var i = 0; i < clocks.length; i++)
+      if (i < 2) Duration.zero else _atLeastZero(clocks[i - 2] + increment - clocks[i]),
+  ]);
+}
 
 /// Common interface for all games.
 abstract mixin class BaseGame {
@@ -43,6 +63,14 @@ abstract mixin class BaseGame {
   String? get initialFen;
 
   GameStatus get status;
+
+  /// The time control of the game, [TimeIncrement.infinite] if it is played without a clock.
+  TimeIncrement get timeIncrement {
+    final clock = meta.clock;
+    return clock != null
+        ? TimeIncrement.fromDurations(clock.initial, clock.increment)
+        : const TimeIncrement.infinite();
+  }
 
   /// Whether the game is properly finished (not aborted).
   bool get finished => status.value >= GameStatus.mate.value;
@@ -100,26 +128,9 @@ abstract mixin class BaseGame {
       ? (white: white.analysis!, black: black.analysis!)
       : null;
 
-  /// The time spent on each move, in ply order.
-  ///
-  /// Derived from [clocks]: the time spent on a move is the clock the player had left after their
-  /// previous move, plus the increment, minus the clock they have left after this one. Each side's
-  /// first move is reported as [Duration.zero], since the clock is not running before it. This
-  /// matches lila's own derivation in `GameExt.computeMoveTimes`.
-  ///
-  /// Returns an empty list for games without clock data (correspondence, unclocked games and most
-  /// PGN imports).
-  IList<Duration> get moveTimes {
-    final gameClocks = clocks;
-    if (gameClocks == null || gameClocks.isEmpty) {
-      return const IListConst<Duration>([]);
-    }
-    final increment = meta.clock?.increment ?? Duration.zero;
-    return IList([
-      for (var i = 0; i < gameClocks.length; i++)
-        if (i < 2) Duration.zero else _atLeastZero(gameClocks[i - 2] + increment - gameClocks[i]),
-    ]);
-  }
+  /// The time spent on each move, in ply order, derived from [clocks].
+  IList<Duration> get moveTimes =>
+      moveTimesFromClocks(clocks, meta.clock?.increment ?? Duration.zero);
 
   /// Converts the game to a tree representation
   Root makeTree() {
@@ -243,6 +254,19 @@ abstract mixin class ServerGame implements BaseGame {
 abstract mixin class LocalGame implements BaseGame {
   @override
   StringId get id;
+
+  /// Derived from the [GameStep.clock] readings taken as the game was played.
+  ///
+  /// Null unless every move carries one: a game played without a time control has none at all,
+  /// and a game that was saved before its clocks were recorded has only the later ones, which
+  /// would not line up with the moves they are read against.
+  @override
+  IList<Duration>? get clocks {
+    final moveClocks = steps.skip(1).map((step) => step.clock).toIList();
+    return moveClocks.isEmpty || moveClocks.any((clock) => clock == null)
+        ? null
+        : moveClocks.map((clock) => clock!).toIList();
+  }
 }
 
 /// A mixin that provides methods to access game data at a specific step.
@@ -385,6 +409,18 @@ sealed class GameMeta with _$GameMeta {
   factory GameMeta.fromJson(Map<String, dynamic> json) => _$GameMetaFromJson(json);
 }
 
+/// The [GameMeta.clock] of a locally played game, null if it is played without a time control.
+({Duration initial, Duration increment, Duration? emergency, Duration? moreTime})? clockMetaOf(
+  TimeIncrement timeIncrement,
+) => timeIncrement.isInfinite
+    ? null
+    : (
+        initial: Duration(seconds: timeIncrement.time),
+        increment: Duration(seconds: timeIncrement.increment),
+        emergency: null,
+        moreTime: null,
+      );
+
 @Freezed(fromJson: true, toJson: true)
 sealed class CorrespondenceClockData with _$CorrespondenceClockData {
   const CorrespondenceClockData._();
@@ -421,6 +457,13 @@ sealed class GameStep with _$GameStep {
     /// game is finished.
     Duration? archivedBlackClock,
 
+    /// The time left to the side that just played this step's move, increment included.
+    ///
+    /// Only set for locally played games with a time control (over the board, or against the
+    /// engine); server games carry their clocks in [archivedWhiteClock] and [archivedBlackClock]
+    /// instead.
+    Duration? clock,
+
     /// The computer analysis data for this step (only used in offline computer mode).
     ComputerAnalysis? computerAnalysis,
   }) = _GameStep;
@@ -435,6 +478,7 @@ String stepsToJson(IList<GameStep> steps) {
           if (i == 0) 'rule': e.position.rule.name,
           'uci': e.sanMove?.move.uci,
           'san': e.sanMove?.san,
+          if (e.clock != null) 'clk': e.clock!.inMilliseconds,
           ...?e.computerAnalysis?.toStepJson(),
         },
       )
@@ -458,12 +502,14 @@ IList<GameStep> stepsFromJson(String json) {
       break;
     }
     final move = Move.parse(uci)!;
+    final clock = step['clk'] as int?;
     position = position.playUnchecked(move);
     steps.add(
       GameStep(
         position: position,
         sanMove: SanMove(san, move),
         diff: MaterialDiff.fromPosition(position),
+        clock: clock != null ? Duration(milliseconds: clock) : null,
         computerAnalysis: ComputerAnalysis.fromStepJson(step),
       ),
     );
