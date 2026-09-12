@@ -21,53 +21,44 @@ typedef EmojiItemBuilder = Widget Function(
   EmojiSelectedCallback callback,
 );
 
-class EmojiPicker extends StatefulWidget {
-  const EmojiPicker({
-    super.key,
-    required this.emojiData,
-    required this.onEmojiSelected,
-    this.searchBarBuilder,
-    this.headerBuilder,
-    this.itemBuilder,
-    this.configuration = const EmojiPickerConfiguration(),
-    this.padding = EdgeInsets.zero,
-  });
+class const EmojiPicker({
+  super.key,
 
   /// Data to use for the picker
   ///
   /// You can use the [EmojiData] class to load the data from a JSON file or from
   ///   a custom source
-  final EmojiData emojiData;
+  required final EmojiData emojiData,
 
   /// Callback when an emoji is selected
-  final EmojiSelectedCallback onEmojiSelected;
-
-  /// Custom the emoji picker configuration
-  final EmojiPickerConfiguration configuration;
+  required final EmojiSelectedCallback onEmojiSelected,
 
   /// Builder for the emoji search bar
   ///
   /// If this is null, the default search bar will be used
-  final EmojiSearchBarBuilder? searchBarBuilder;
+  final EmojiSearchBarBuilder? searchBarBuilder,
 
   /// Builder for the emoji section header
   ///
   /// If this is null, the default section header will be used
-  final EmojiSectionHeaderBuilder? headerBuilder;
+  final EmojiSectionHeaderBuilder? headerBuilder,
 
   /// Builder for the emoji item
   ///
   ///
-  final EmojiItemBuilder? itemBuilder;
+  final EmojiItemBuilder? itemBuilder,
+
+  /// Custom the emoji picker configuration
+  final EmojiPickerConfiguration configuration = const EmojiPickerConfiguration(),
 
   /// Padding for the emoji picker
-  final EdgeInsets padding;
-
+  final EdgeInsets padding = EdgeInsets.zero,
+}) extends StatefulWidget {
   @override
   State<EmojiPicker> createState() => _EmojiPickerState();
 }
 
-class _EmojiPickerState extends State<EmojiPicker> with SingleTickerProviderStateMixin {
+class _EmojiPickerState() extends State<EmojiPicker> with SingleTickerProviderStateMixin {
   final _debouncer = Debouncer(const Duration(milliseconds: 250));
 
   // global keys for each section
@@ -274,28 +265,17 @@ class _EmojiPickerState extends State<EmojiPicker> with SingleTickerProviderStat
   }
 }
 
-class EmojiSection extends StatelessWidget {
-  const EmojiSection({
-    super.key,
-    required this.configuration,
-    required this.emojiData,
-    required this.category,
-    required this.onEmojiSelected,
-    required this.sectionKey,
-    this.headerBuilder,
-    this.itemBuilder,
-    this.skinTone = EmojiSkinTone.none,
-  });
-
-  final Key sectionKey;
-  final EmojiPickerConfiguration configuration;
-  final EmojiData emojiData;
-  final Category category;
-  final EmojiSkinTone skinTone;
-  final EmojiSelectedCallback onEmojiSelected;
-  final EmojiSectionHeaderBuilder? headerBuilder;
-  final EmojiItemBuilder? itemBuilder;
-
+class const EmojiSection({
+  super.key,
+  required final EmojiPickerConfiguration configuration,
+  required final EmojiData emojiData,
+  required final Category category,
+  required final EmojiSelectedCallback onEmojiSelected,
+  required final Key sectionKey,
+  final EmojiSectionHeaderBuilder? headerBuilder,
+  final EmojiItemBuilder? itemBuilder,
+  final EmojiSkinTone skinTone = EmojiSkinTone.none,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverMainAxisGroup(
@@ -328,12 +308,11 @@ class EmojiSection extends StatelessWidget {
   }
 }
 
-class EmojiSectionHeader extends StatelessWidget {
-  const EmojiSectionHeader({super.key, required this.category, required this.configuration});
-
-  final Category category;
-  final EmojiPickerConfiguration configuration;
-
+class const EmojiSectionHeader({
+  super.key,
+  required final Category category,
+  required final EmojiPickerConfiguration configuration,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -346,17 +325,16 @@ class EmojiSectionHeader extends StatelessWidget {
   }
 }
 
-class EmojiSearchBar extends StatefulWidget {
-  const EmojiSearchBar({super.key, required this.configuration, required this.onKeywordChanged});
-
-  final EmojiPickerConfiguration configuration;
-  final void Function(String keyword) onKeywordChanged;
-
+class const EmojiSearchBar({
+  super.key,
+  required final EmojiPickerConfiguration configuration,
+  required final void Function(String keyword) onKeywordChanged,
+}) extends StatefulWidget {
   @override
   State<EmojiSearchBar> createState() => _EmojiSearchBarState();
 }
 
-class _EmojiSearchBarState extends State<EmojiSearchBar> {
+class _EmojiSearchBarState() extends State<EmojiSearchBar> {
   final controller = TextEditingController();
 
   @override

@@ -1,16 +1,12 @@
 import 'package:flutter/widgets.dart';
 
-class ExpandedSection extends StatefulWidget {
-  final Widget child;
-  final bool expand;
-
-  const ExpandedSection({this.expand = false, required this.child});
-
+class const ExpandedSection({final bool expand = false, required final Widget child})
+    extends StatefulWidget {
   @override
   _ExpandedSectionState createState() => _ExpandedSectionState();
 }
 
-class _ExpandedSectionState extends State<ExpandedSection> with SingleTickerProviderStateMixin {
+class _ExpandedSectionState() extends State<ExpandedSection> with SingleTickerProviderStateMixin {
   late AnimationController expandController;
   late Animation<double> animation;
 

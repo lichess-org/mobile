@@ -14,7 +14,7 @@ import 'package:material_ui/material_ui.dart';
 
 part 'tournament.freezed.dart';
 
-enum TournamentFreq implements Comparable<TournamentFreq> {
+enum TournamentFreq() implements Comparable<TournamentFreq> {
   hourly,
   daily,
   eastern,
@@ -50,10 +50,8 @@ const int kStandingsPageSize = 10;
 typedef StandingPage = ({int page, IList<StandingPlayer> players});
 
 @freezed
-sealed class TournamentMeta with _$TournamentMeta {
-  const TournamentMeta._();
-
-  const factory TournamentMeta({
+sealed class const TournamentMeta._() with _$TournamentMeta {
+  const factory({
     required String createdBy,
     required String fullName,
     required TimeIncrement timeIncrement,
@@ -66,7 +64,7 @@ sealed class TournamentMeta with _$TournamentMeta {
     TeamBattleData? teamBattle,
   }) = _TournamentMeta;
 
-  factory TournamentMeta.fromServerJson(Map<String, Object?> json) =>
+  factory fromServerJson(Map<String, Object?> json) =>
       _tournamentMetaFromPick(pick(json).required());
 }
 
@@ -86,10 +84,8 @@ TournamentMeta _tournamentMetaFromPick(RequiredPick pick) {
 }
 
 @freezed
-sealed class LightTournament with _$LightTournament {
-  const LightTournament._();
-
-  const factory LightTournament({
+sealed class const LightTournament._() with _$LightTournament {
+  const factory({
     required TournamentId id,
     required TournamentMeta meta,
     required int position,
@@ -99,10 +95,10 @@ sealed class LightTournament with _$LightTournament {
     required LightUser? winner,
   }) = _LightTournament;
 
-  factory LightTournament.fromServerJson(Map<String, Object?> json) =>
+  factory fromServerJson(Map<String, Object?> json) =>
       _lightTournamentFromPick(pick(json).required());
 
-  factory LightTournament.fromPick(RequiredPick pick) => _lightTournamentFromPick(pick);
+  factory fromPick(RequiredPick pick) => _lightTournamentFromPick(pick);
 
   bool get isSystemTournament => meta.freq != null;
 
@@ -126,10 +122,8 @@ typedef Verdicts = ({IList<Verdict> list, bool accepted});
 typedef Verdict = ({String condition, bool ok});
 
 @freezed
-sealed class Tournament with _$Tournament {
-  const Tournament._();
-
-  const factory Tournament({
+sealed class const Tournament._() with _$Tournament {
+  const factory({
     required TournamentId id,
     required TournamentMeta meta,
     required bool berserkable,
@@ -154,7 +148,7 @@ sealed class Tournament with _$Tournament {
     IList<TeamStanding>? teamStanding,
   }) = _Tournament;
 
-  factory Tournament.fromServerJson(Map<String, Object?> json) {
+  factory fromServerJson(Map<String, Object?> json) {
     return _tournamentFromPick(pick(json).required());
   }
 
@@ -223,10 +217,8 @@ Tournament _updateTournamentFromPartialPick(Tournament tournament, RequiredPick 
 typedef StandingSheet = ({bool fire, IList<int> scores});
 
 @freezed
-sealed class StandingPlayer with _$StandingPlayer {
-  const StandingPlayer._();
-
-  const factory StandingPlayer({
+sealed class const StandingPlayer._() with _$StandingPlayer {
+  const factory({
     required LightUser user,
     required int rating,
     required bool provisional,
@@ -264,10 +256,8 @@ StandingPlayer _standingPlayerFromPick(RequiredPick pick) {
 }
 
 @freezed
-sealed class TeamStanding with _$TeamStanding {
-  const TeamStanding._();
-
-  const factory TeamStanding({
+sealed class const TeamStanding._() with _$TeamStanding {
+  const factory({
     required int rank,
     required TeamId id,
     required int score,
@@ -276,17 +266,13 @@ sealed class TeamStanding with _$TeamStanding {
 }
 
 @freezed
-sealed class TeamPlayer with _$TeamPlayer {
-  const TeamPlayer._();
-
-  const factory TeamPlayer({required LightUser user, required int score}) = _TeamPlayer;
+sealed class const TeamPlayer._() with _$TeamPlayer {
+  const factory({required LightUser user, required int score}) = _TeamPlayer;
 }
 
 @freezed
-sealed class FeaturedPlayer with _$FeaturedPlayer {
-  const FeaturedPlayer._();
-
-  const factory FeaturedPlayer({
+sealed class const FeaturedPlayer._() with _$FeaturedPlayer {
+  const factory({
     required LightUser user,
     required int? rank,
     required bool? berserk,
@@ -294,7 +280,7 @@ sealed class FeaturedPlayer with _$FeaturedPlayer {
     required bool provisional,
   }) = _FeaturedPlayer;
 
-  factory FeaturedPlayer.fromServerJson(Map<String, Object?> json) =>
+  factory fromServerJson(Map<String, Object?> json) =>
       _featuredPlayerFromPick(pick(json).required());
 }
 
@@ -311,10 +297,8 @@ FeaturedPlayer _featuredPlayerFromPick(RequiredPick pick) {
 typedef FeaturedGameClocks = ({Duration white, Duration black});
 
 @freezed
-sealed class FeaturedGame with _$FeaturedGame {
-  const FeaturedGame._();
-
-  const factory FeaturedGame({
+sealed class const FeaturedGame._() with _$FeaturedGame {
+  const factory({
     required GameId id,
     required FeaturedPlayer white,
     required FeaturedPlayer black,
@@ -351,10 +335,8 @@ FeaturedGame _featuredGameFromPick(RequiredPick pick) {
 }
 
 @freezed
-sealed class TournamentStats with _$TournamentStats {
-  const TournamentStats._();
-
-  const factory TournamentStats({
+sealed class const TournamentStats._() with _$TournamentStats {
+  const factory({
     required int nbMoves,
     required int nbGames,
     required int nbDraws,
@@ -364,10 +346,10 @@ sealed class TournamentStats with _$TournamentStats {
     required int averageRating,
   }) = _TournamentStats;
 
-  factory TournamentStats.fromServerJson(Map<String, Object?> json) =>
+  factory fromServerJson(Map<String, Object?> json) =>
       TournamentStats._fromPick(pick(json).required());
 
-  factory TournamentStats._fromPick(RequiredPick pick) {
+  factory _fromPick(RequiredPick pick) {
     return TournamentStats(
       nbMoves: pick('moves').asIntOrThrow(),
       nbGames: pick('games').asIntOrThrow(),
@@ -516,10 +498,8 @@ extension TournamentExtension on Pick {
 typedef PlayerStats = ({int game, int berserk, int win});
 
 @freezed
-sealed class TournamentPlayer with _$TournamentPlayer {
-  const TournamentPlayer._();
-
-  factory TournamentPlayer({
+sealed class const TournamentPlayer._() with _$TournamentPlayer {
+  factory({
     required LightUser user,
     required int rating,
     required int score,
@@ -530,15 +510,13 @@ sealed class TournamentPlayer with _$TournamentPlayer {
     required IList<TournamentPairing> pairings,
     TeamId? teamId,
   }) = _TournamentPlayer;
-  factory TournamentPlayer.fromServerJson(Map<String, Object?> json) =>
+  factory fromServerJson(Map<String, Object?> json) =>
       _tournamentPlayerFromPick(pick(json).required());
 }
 
 @freezed
-sealed class TournamentTeam with _$TournamentTeam {
-  const TournamentTeam._();
-
-  factory TournamentTeam({
+sealed class const TournamentTeam._() with _$TournamentTeam {
+  factory({
     required TeamId id,
     required int nbPlayers,
     required int rating,
@@ -547,15 +525,13 @@ sealed class TournamentTeam with _$TournamentTeam {
     required IList<TeamPlayerDetailed> topPlayers,
   }) = _TournamentTeam;
 
-  factory TournamentTeam.fromServerJson(Map<String, Object?> json) =>
+  factory fromServerJson(Map<String, Object?> json) =>
       _tournamentTeamFromPick(pick(json).required());
 }
 
 @freezed
-sealed class TeamPlayerDetailed with _$TeamPlayerDetailed {
-  const TeamPlayerDetailed._();
-
-  const factory TeamPlayerDetailed({
+sealed class const TeamPlayerDetailed._() with _$TeamPlayerDetailed {
+  const factory({
     required LightUser user,
     required int rating,
     required int score,
@@ -564,10 +540,8 @@ sealed class TeamPlayerDetailed with _$TeamPlayerDetailed {
 }
 
 @freezed
-sealed class TournamentPairing with _$TournamentPairing {
-  const TournamentPairing._();
-
-  const factory TournamentPairing({
+sealed class const TournamentPairing._() with _$TournamentPairing {
+  const factory({
     required GameId gameId,
     required Side color,
     required LightUser opponent,

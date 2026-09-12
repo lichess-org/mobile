@@ -15,9 +15,7 @@ import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Create a Screen with Top 10 players for each Lichess Variant
-class LeaderboardScreen extends StatelessWidget {
-  const LeaderboardScreen({super.key});
-
+class const LeaderboardScreen({super.key}) extends StatelessWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const LeaderboardScreen());
   }
@@ -31,9 +29,7 @@ class LeaderboardScreen extends StatelessWidget {
   }
 }
 
-class _Body extends ConsumerWidget {
-  const _Body();
-
+class const _Body() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final leaderboard = ref.watch(leaderboardProvider);
@@ -80,11 +76,8 @@ class _Body extends ConsumerWidget {
 /// A List Tile for the Leaderboard
 ///
 /// Optionaly Provide the [perfIcon] for the Variant of the List
-class LeaderboardListTile extends StatelessWidget {
-  const LeaderboardListTile({required this.user, this.perfIcon});
-  final LeaderboardUser user;
-  final IconData? perfIcon;
-
+class const LeaderboardListTile({required final LeaderboardUser user, final IconData? perfIcon})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -105,11 +98,7 @@ class LeaderboardListTile extends StatelessWidget {
   }
 }
 
-class _Progress extends StatelessWidget {
-  const _Progress(this.rating, this.progress);
-  final int progress;
-  final int rating;
-
+class const _Progress(final int rating, final int progress) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (progress == 0) return const SizedBox.shrink();
@@ -138,11 +127,8 @@ class _Progress extends StatelessWidget {
   }
 }
 
-class _Leaderboard extends StatelessWidget {
-  const _Leaderboard(this.userList, this.perf);
-  final List<LeaderboardUser> userList;
-  final Perf perf;
-
+class const _Leaderboard(final List<LeaderboardUser> userList, final Perf perf)
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(

@@ -31,9 +31,7 @@ import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class MoreTabScreen extends ConsumerWidget {
-  const MoreTabScreen({super.key});
-
+class const MoreTabScreen({super.key}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return PopScope(
@@ -62,9 +60,7 @@ class MoreTabScreen extends ConsumerWidget {
   }
 }
 
-class _Body extends ConsumerWidget {
-  const _Body();
-
+class const _Body() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isOnline = ref.watch(isDeviceOnlineProvider);
@@ -213,9 +209,7 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class _AccountSection extends ConsumerWidget {
-  const _AccountSection();
-
+class const _AccountSection() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isOnline = ref.watch(isDeviceOnlineProvider);

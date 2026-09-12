@@ -38,12 +38,8 @@ const kTestSurfaceSize = Size(_kTestScreenWidth, _kTestScreenHeight);
 const kPlatformVariant = TargetPlatformVariant({TargetPlatform.android, TargetPlatform.iOS});
 
 /// Mocks a surface with a given size.
-class TestSurface extends StatelessWidget {
-  const TestSurface({required this.child, required this.size, super.key});
-
-  final Size size;
-  final Widget child;
-
+class const TestSurface({required final Widget child, required final Size size, super.key})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MediaQuery(

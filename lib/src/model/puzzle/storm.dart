@@ -8,18 +8,13 @@ part 'storm.freezed.dart';
 
 @freezed
 sealed class PuzzleStormHighScore with _$PuzzleStormHighScore {
-  const factory PuzzleStormHighScore({
-    required int allTime,
-    required int day,
-    required int month,
-    required int week,
-  }) = _PuzzleStormHighScore;
+  const factory({required int allTime, required int day, required int month, required int week}) =
+      _PuzzleStormHighScore;
 }
 
 @freezed
-sealed class StormRunStats with _$StormRunStats {
-  const StormRunStats._();
-  const factory StormRunStats({
+sealed class const StormRunStats._() with _$StormRunStats {
+  const factory({
     required int moves,
     required int errors,
     required int score,
@@ -44,20 +39,21 @@ sealed class StormRunStats with _$StormRunStats {
 }
 
 @immutable
-class StormFilter {
-  const StormFilter({required this.slow, required this.failed});
-  final bool slow;
-  final bool failed;
-
+class const StormFilter({required final bool slow, required final bool failed}) {
   StormFilter copyWith({bool? slow, bool? failed}) =>
       StormFilter(slow: slow ?? this.slow, failed: failed ?? this.failed);
 }
 
-enum StormNewHighType { day, week, month, allTime }
+enum StormNewHighType() {
+  day,
+  week,
+  month,
+  allTime,
+}
 
 @freezed
 sealed class StormDashboard with _$StormDashboard {
-  const factory StormDashboard({
+  const factory({
     required PuzzleStormHighScore highScore,
     required IList<StormDayScore> dayHighscores,
   }) = _StormDashboard;
@@ -65,7 +61,7 @@ sealed class StormDashboard with _$StormDashboard {
 
 @freezed
 sealed class StormDayScore with _$StormDayScore {
-  const factory StormDayScore({
+  const factory({
     required DateTime day,
     required int runs,
     required int score,
@@ -76,7 +72,7 @@ sealed class StormDayScore with _$StormDayScore {
 
 @freezed
 sealed class StormNewHigh with _$StormNewHigh {
-  const factory StormNewHigh({required StormNewHighType key, required int prev}) = _StormNewHigh;
+  const factory({required StormNewHighType key, required int prev}) = _StormNewHigh;
 }
 
 final IMap<String, StormNewHighType> stormNewHighTypeMap = IMap(

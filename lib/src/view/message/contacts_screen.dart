@@ -33,9 +33,7 @@ const _emptySearchResult = SearchResult(
   users: IListConst([]),
 );
 
-class ContactsScreen extends ConsumerStatefulWidget {
-  const ContactsScreen({super.key});
-
+class const ContactsScreen({super.key}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<ContactsScreen> createState() => _ContactsScreenState();
 
@@ -44,7 +42,7 @@ class ContactsScreen extends ConsumerStatefulWidget {
   }
 }
 
-class _ContactsScreenState extends ConsumerState<ContactsScreen> {
+class _ContactsScreenState() extends ConsumerState<ContactsScreen> {
   final onChangedDebouncer = Debouncer(const Duration(milliseconds: 300));
   final controller = TextEditingController();
   final focusNode = FocusNode();
@@ -121,11 +119,7 @@ class _ContactsScreenState extends ConsumerState<ContactsScreen> {
   }
 }
 
-class _SearchCategoryTitle extends StatelessWidget {
-  const _SearchCategoryTitle(this.title);
-
-  final String title;
-
+class const _SearchCategoryTitle(final String title) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -135,11 +129,8 @@ class _SearchCategoryTitle extends StatelessWidget {
   }
 }
 
-class ContactsListView extends ConsumerWidget {
-  const ContactsListView({required this.openConvo, super.key});
-
-  final void Function(LightUser user) openConvo;
-
+class const ContactsListView({required final void Function(LightUser user) openConvo, super.key})
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final contactsAsync = ref.watch(contactsProvider);
@@ -170,13 +161,12 @@ class ContactsListView extends ConsumerWidget {
   }
 }
 
-class ContactTile extends StatelessWidget {
-  const ContactTile(this.contact, this.me, {required this.openConvo, super.key});
-
-  final Contact contact;
-  final LightUser me;
-  final void Function(LightUser user) openConvo;
-
+class const ContactTile(
+  final Contact contact,
+  final LightUser me, {
+  required final void Function(LightUser user) openConvo,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final unreadStyle = TextStyle(
@@ -217,12 +207,11 @@ class ContactTile extends StatelessWidget {
   }
 }
 
-class UserTile extends ConsumerWidget {
-  const UserTile(this.user, {required this.openConvo, super.key});
-
-  final LightUser user;
-  final void Function(LightUser user) openConvo;
-
+class const UserTile(
+  final LightUser user, {
+  required final void Function(LightUser user) openConvo,
+  super.key,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListTile(

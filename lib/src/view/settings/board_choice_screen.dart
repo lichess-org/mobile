@@ -7,9 +7,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_ui/material_ui.dart';
 
-class BoardChoiceScreen extends StatelessWidget {
-  const BoardChoiceScreen({super.key});
-
+class const BoardChoiceScreen({super.key}) extends StatelessWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const BoardChoiceScreen());
   }
@@ -23,9 +21,7 @@ class BoardChoiceScreen extends StatelessWidget {
   }
 }
 
-class _Body extends ConsumerWidget {
-  const _Body();
-
+class const _Body() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final boardTheme = ref.watch(boardPreferencesProvider.select((p) => p.boardTheme));

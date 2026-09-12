@@ -64,9 +64,9 @@ final client = MockClient((request) {
   return mockResponse('', 404);
 });
 
-class MockSoundService extends Mock implements SoundService {}
+class MockSoundService() extends Mock implements SoundService;
 
-class MockCreateGameService extends Mock implements CreateGameService {}
+class MockCreateGameService() extends Mock implements CreateGameService;
 
 void main() {
   const testGameFullId = GameFullId('qVChCOTcHSeW');
@@ -2914,8 +2914,7 @@ const _finishedGameFullEvent = '''
 
 /// Necessary to mock wakelock_plus method calls
 /// See: https://github.com/fluttercommunity/wakelock_plus/blob/0c74e5bbc6aefac57b6c96bb7ef987705ed559ec/wakelock_plus_platform_interface/lib/messages.g.dart#L127-L156
-class _PigeonCodec extends StandardMessageCodec {
-  const _PigeonCodec();
+class const _PigeonCodec() extends StandardMessageCodec {
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
     if (value is int) {

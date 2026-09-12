@@ -27,11 +27,7 @@ final puzzleRepositoryProvider = Provider<PuzzleRepository>((ref) {
   return PuzzleRepository(client);
 }, name: 'PuzzleRepositoryProvider');
 
-class PuzzleRepository {
-  PuzzleRepository(this.client);
-
-  final LichessClient client;
-
+class PuzzleRepository(final LichessClient client) {
   Future<PuzzleBatchResponse> selectBatch({
     required int nb,
     PuzzleAngle angle = const PuzzleTheme(PuzzleThemeKey.mix),
@@ -208,7 +204,7 @@ class PuzzleRepository {
 
 @freezed
 sealed class PuzzleBatchResponse with _$PuzzleBatchResponse {
-  const factory PuzzleBatchResponse({
+  const factory({
     required IList<Puzzle> puzzles,
     PuzzleGlicko? glicko,
     IList<PuzzleRound>? rounds,
@@ -217,7 +213,7 @@ sealed class PuzzleBatchResponse with _$PuzzleBatchResponse {
 
 @freezed
 sealed class PuzzleStreakResponse with _$PuzzleStreakResponse {
-  const factory PuzzleStreakResponse({
+  const factory({
     required Puzzle puzzle,
     required IList<PuzzleId> streak,
 
@@ -232,7 +228,7 @@ sealed class PuzzleStreakResponse with _$PuzzleStreakResponse {
 
 @freezed
 sealed class PuzzleStormResponse with _$PuzzleStormResponse {
-  const factory PuzzleStormResponse({
+  const factory({
     required IList<LitePuzzle> puzzles,
     required String? key,
     required PuzzleStormHighScore? highscore,

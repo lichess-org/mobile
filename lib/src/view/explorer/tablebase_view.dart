@@ -11,12 +11,11 @@ import 'package:lichess_mobile/src/view/explorer/explorer_view.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:material_ui/material_ui.dart';
 
-class TablebaseView extends ConsumerWidget {
-  const TablebaseView({required this.position, this.onMoveSelected, super.key});
-
-  final Position position;
-  final void Function(Move)? onMoveSelected;
-
+class const TablebaseView({
+  required final Position position,
+  final void Function(Move)? onMoveSelected,
+  super.key,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tablebaseAsync = ref.watch(
@@ -167,12 +166,10 @@ class TablebaseView extends ConsumerWidget {
   }
 }
 
-class _TablebaseListView extends StatelessWidget {
-  const _TablebaseListView({required this.children, required this.isLoading});
-
-  final List<Widget> children;
-  final bool isLoading;
-
+class const _TablebaseListView({
+  required final List<Widget> children,
+  required final bool isLoading,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final brightness = Theme.of(context).brightness;
@@ -197,11 +194,7 @@ class _TablebaseListView extends StatelessWidget {
   }
 }
 
-class _TablebaseHeaderTile extends StatelessWidget {
-  const _TablebaseHeaderTile({required this.child, super.key});
-
-  final Widget child;
-
+class const _TablebaseHeaderTile({required final Widget child, super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -216,22 +209,14 @@ class _TablebaseHeaderTile extends StatelessWidget {
   }
 }
 
-class _TablebaseMoveRow extends StatelessWidget {
-  const _TablebaseMoveRow({
-    required this.move,
-    required this.color,
-    required this.isWinningForWhite,
-    required this.pieceNotation,
-    this.onMoveSelected,
-    super.key,
-  });
-
-  final TablebaseMove move;
-  final Color color;
-  final bool? isWinningForWhite;
-  final PieceNotation pieceNotation;
-  final void Function(Move)? onMoveSelected;
-
+class const _TablebaseMoveRow({
+  required final TablebaseMove move,
+  required final Color color,
+  required final bool? isWinningForWhite,
+  required final PieceNotation pieceNotation,
+  final void Function(Move)? onMoveSelected,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final metrics = <String>[];
@@ -323,11 +308,8 @@ class _TablebaseMoveRow extends StatelessWidget {
   }
 }
 
-class _TablebaseLoadingPlaceholder extends StatelessWidget {
-  const _TablebaseLoadingPlaceholder({required this.position});
-
-  final Position position;
-
+class const _TablebaseLoadingPlaceholder({required final Position position})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(

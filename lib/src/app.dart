@@ -43,9 +43,7 @@ const List<String> _kIosBlogWidgetKinds = [
 ];
 
 /// Application initialization and main entry point.
-class AppInitializationScreen extends ConsumerWidget {
-  const AppInitializationScreen({super.key});
-
+class const AppInitializationScreen({super.key}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.listen<AsyncValue<PreloadedData>>(preloadedDataProvider, (_, state) {
@@ -71,14 +69,12 @@ class AppInitializationScreen extends ConsumerWidget {
 ///
 /// This widget is the root of the application and is responsible for setting up
 /// the theme, locale, and other global settings.
-class Application extends ConsumerStatefulWidget {
-  const Application({super.key});
-
+class const Application({super.key}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<Application> createState() => _AppState();
 }
 
-class _AppState extends ConsumerState<Application> {
+class _AppState() extends ConsumerState<Application> {
   /// Whether the app has checked for online status for the first time.
   bool _firstTimeOnlineCheck = false;
   final _navigatorKey = GlobalKey<NavigatorState>();

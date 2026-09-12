@@ -34,7 +34,7 @@ const _customFen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2
 // Black has no legal moves = stalemate = black wins in antichess.
 const _antichessStalemateFen = '8/p7/8/P7/8/8/8/8 w - - 0 1';
 
-class MockOverTheBoardGameStorage extends Mock implements OverTheBoardGameStorage {}
+class MockOverTheBoardGameStorage() extends Mock implements OverTheBoardGameStorage;
 
 void main() {
   registerFallbackValue(

@@ -10,7 +10,7 @@ import 'package:lichess_mobile/src/model/common/time_increment.dart';
 part 'local_game_clock.freezed.dart';
 
 /// Whether a locally played game is timed or has no time limit at all.
-enum TimeControlType {
+enum TimeControlType() {
   clock,
   unlimited;
 
@@ -24,7 +24,7 @@ enum TimeControlType {
 ///
 /// Only one side's time runs at a time, and only once [switchSide] has been called for the first
 /// time — so the clock starts on the first move, not when the game is set up.
-abstract class LocalGameClock extends Notifier<LocalGameClockState> {
+abstract class LocalGameClock() extends Notifier<LocalGameClockState> {
   final Stopwatch _stopwatch = Stopwatch();
 
   Timer? _updateTimer;
@@ -123,10 +123,8 @@ abstract class LocalGameClock extends Notifier<LocalGameClockState> {
 }
 
 @freezed
-sealed class LocalGameClockState with _$LocalGameClockState {
-  const LocalGameClockState._();
-
-  const factory LocalGameClockState({
+sealed class const LocalGameClockState._() with _$LocalGameClockState {
+  const factory({
     required TimeIncrement timeIncrement,
     required Duration? whiteTimeLeft,
     required Duration? blackTimeLeft,
@@ -134,7 +132,7 @@ sealed class LocalGameClockState with _$LocalGameClockState {
     required Side? flagSide,
   }) = _LocalGameClockState;
 
-  factory LocalGameClockState.fromTimeIncrement(
+  factory fromTimeIncrement(
     TimeIncrement timeIncrement, {
     Duration? whiteTimeLeft,
     Duration? blackTimeLeft,

@@ -6,7 +6,7 @@ import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 
 /// Represents a lichess rating Speed item
-enum Speed {
+enum Speed(final IconData icon) {
   ultraBullet(LichessIcons.ultrabullet),
   bullet(LichessIcons.bullet),
   blitz(LichessIcons.blitz),
@@ -14,11 +14,7 @@ enum Speed {
   classical(LichessIcons.classical),
   correspondence(LichessIcons.correspondence);
 
-  const Speed(this.icon);
-
-  final IconData icon;
-
-  factory Speed.fromTimeIncrement(TimeIncrement t) {
+  factory fromTimeIncrement(TimeIncrement t) {
     switch (t.estimatedDuration.inSeconds) {
       case >= 1 && <= 29:
         return Speed.ultraBullet;

@@ -31,10 +31,7 @@ final appLogServiceProvider = Provider<AppLogService>(
 ///
 /// Log entries are stored in memory for the current session and persisted to the
 /// SQLite database so they survive app restarts.
-class AppLogService {
-  AppLogService(this.ref);
-
-  final Ref ref;
+class AppLogService(final Ref ref) {
   final _logs = LRUList<LogRecord>(capacity: 1024);
 
   /// Currently stored log entries, ordered from oldest to newest.
@@ -102,7 +99,7 @@ class AppLogService {
   }
 }
 
-final class ProviderLogger extends ProviderObserver {
+final class ProviderLogger() extends ProviderObserver {
   final _logger = Logger('Provider');
 
   @override

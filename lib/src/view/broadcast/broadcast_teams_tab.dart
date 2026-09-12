@@ -31,19 +31,12 @@ const _kEvalBarWidth = 32.0;
 const _kEvalBarHeight = 14.0;
 const _kEvalBarDividerWidth = _kEvalBarWidth / 50;
 
-class BroadcastTeamsTab extends ConsumerWidget {
-  const BroadcastTeamsTab({
-    required this.roundId,
-    required this.tournamentId,
-    required this.tournamentSlug,
-    this.showTeamScores = false,
-  });
-
-  final BroadcastRoundId roundId;
-  final BroadcastTournamentId tournamentId;
-  final String tournamentSlug;
-  final bool showTeamScores;
-
+class const BroadcastTeamsTab({
+  required final BroadcastRoundId roundId,
+  required final BroadcastTournamentId tournamentId,
+  required final String tournamentSlug,
+  final bool showTeamScores = false,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final teams = ref.watch(broadcastTeamMatchesProvider(roundId));
@@ -62,21 +55,13 @@ class BroadcastTeamsTab extends ConsumerWidget {
   }
 }
 
-class BroadcastTeamsList extends ConsumerWidget {
-  const BroadcastTeamsList(
-    this.teamMatches,
-    this.roundId,
-    this.tournamentId,
-    this.tournamentSlug,
-    this.showTeamScores,
-  );
-
-  final IList<BroadcastTeamMatch> teamMatches;
-  final BroadcastRoundId roundId;
-  final BroadcastTournamentId tournamentId;
-  final String tournamentSlug;
-  final bool showTeamScores;
-
+class const BroadcastTeamsList(
+  final IList<BroadcastTeamMatch> teamMatches,
+  final BroadcastRoundId roundId,
+  final BroadcastTournamentId tournamentId,
+  final String tournamentSlug,
+  final bool showTeamScores,
+) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final round = ref.watch(broadcastRoundControllerProvider(roundId));
@@ -120,11 +105,8 @@ class BroadcastTeamsList extends ConsumerWidget {
   }
 }
 
-class _TeamStandingsButton extends StatelessWidget {
-  const _TeamStandingsButton({required this.tournamentId});
-
-  final BroadcastTournamentId tournamentId;
-
+class const _TeamStandingsButton({required final BroadcastTournamentId tournamentId})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -161,31 +143,18 @@ class _TeamStandingsButton extends StatelessWidget {
   }
 }
 
-class _TeamMatchCard extends StatelessWidget {
-  const _TeamMatchCard({
-    required this.match,
-    required this.games,
-    required this.tournamentId,
-    required this.roundId,
-    required this.tournamentSlug,
-    required this.roundSlug,
-    required this.title,
-    required this.showEvaluationGauge,
-    required this.customScoring,
-    required this.showTeamScores,
-  });
-
-  final BroadcastTeamMatch match;
-  final BroadcastRoundGames games;
-  final BroadcastTournamentId tournamentId;
-  final BroadcastRoundId roundId;
-  final String tournamentSlug;
-  final String roundSlug;
-  final String title;
-  final bool showEvaluationGauge;
-  final BroadcastCustomScoring? customScoring;
-  final bool showTeamScores;
-
+class const _TeamMatchCard({
+  required final BroadcastTeamMatch match,
+  required final BroadcastRoundGames games,
+  required final BroadcastTournamentId tournamentId,
+  required final BroadcastRoundId roundId,
+  required final String tournamentSlug,
+  required final String roundSlug,
+  required final String title,
+  required final bool showEvaluationGauge,
+  required final BroadcastCustomScoring? customScoring,
+  required final bool showTeamScores,
+}) extends StatelessWidget {
   bool get matchFinished => games.everyEntry((e) => e.value.isOver);
   BroadcastResult? get matchStatus => matchFinished
       ? match.team1.points > match.team2.points
@@ -296,35 +265,23 @@ class _TeamMatchCard extends StatelessWidget {
   }
 }
 
-class _GameRow extends ConsumerStatefulWidget {
-  const _GameRow({
-    required this.game,
-    required this.teamGame,
-    required this.index,
-    required this.tournamentId,
-    required this.roundId,
-    required this.tournamentSlug,
-    required this.roundSlug,
-    required this.title,
-    required this.showEvaluationGauge,
-    required this.customScoring,
-  });
-
-  final BroadcastGame game;
-  final BroadcastTeamGame teamGame;
-  final int index;
-  final BroadcastTournamentId tournamentId;
-  final BroadcastRoundId roundId;
-  final String tournamentSlug;
-  final String roundSlug;
-  final String title;
-  final bool showEvaluationGauge;
-  final BroadcastCustomScoring? customScoring;
+class const _GameRow({
+  required final BroadcastGame game,
+  required final BroadcastTeamGame teamGame,
+  required final int index,
+  required final BroadcastTournamentId tournamentId,
+  required final BroadcastRoundId roundId,
+  required final String tournamentSlug,
+  required final String roundSlug,
+  required final String title,
+  required final bool showEvaluationGauge,
+  required final BroadcastCustomScoring? customScoring,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_GameRow> createState() => _GameRowState();
 }
 
-class _GameRowState extends ConsumerState<_GameRow> {
+class _GameRowState() extends ConsumerState<_GameRow> {
   bool isGameVisible = false;
 
   @override
@@ -447,12 +404,8 @@ class _GameRowState extends ConsumerState<_GameRow> {
   }
 }
 
-class _MiniEvalBar extends StatelessWidget {
-  const _MiniEvalBar({required this.whiteWinningChances, required this.pov});
-
-  final double whiteWinningChances;
-  final Side pov;
-
+class const _MiniEvalBar({required final double whiteWinningChances, required final Side pov})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final whiteBarWidth = _kEvalBarWidth * (whiteWinningChances + 1) / 2;

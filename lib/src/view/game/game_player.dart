@@ -26,37 +26,17 @@ import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// A widget to display player information above/below the chess board.
-class GamePlayer extends StatelessWidget {
-  const GamePlayer({
-    required this.game,
-    required this.side,
-    this.socketUri,
-    this.matchupScore,
-    this.clock,
-    this.materialDiff,
-    this.materialDifferenceFormat,
-    this.confirmMoveCallbacks,
-    this.opponentLeftCallbacks,
-    this.timeToMove,
-    this.shouldLinkToUserProfile = true,
-    this.mePlaying = false,
-    this.canGoForward = false,
-    this.zenMode = false,
-    this.clockPosition = ClockPosition.right,
-    super.key,
-  });
-
-  final BaseGame game;
-  final Side side;
-
-  final Uri? socketUri;
-
-  final Widget? clock;
-  final MaterialDiffSide? materialDiff;
-  final MaterialDifferenceFormat? materialDifferenceFormat;
+class const GamePlayer({
+  required final BaseGame game,
+  required final Side side,
+  final Uri? socketUri,
+  final double? matchupScore,
+  final Widget? clock,
+  final MaterialDiffSide? materialDiff,
+  final MaterialDifferenceFormat? materialDifferenceFormat,
 
   /// if confirm move preference is enabled, used to display confirmation buttons
-  final ({VoidCallback confirm, VoidCallback cancel})? confirmMoveCallbacks;
+  final ({VoidCallback confirm, VoidCallback cancel})? confirmMoveCallbacks,
 
   /// When the opponent has left the game, used to display the claim-win countdown
   /// and, once the opponent has been gone long enough, the claim choices.
@@ -66,18 +46,17 @@ class GamePlayer extends StatelessWidget {
     VoidCallback onClaimWin,
     VoidCallback onClaimDraw,
   })?
-  opponentLeftCallbacks;
-
-  final double? matchupScore;
-  final bool shouldLinkToUserProfile;
-  final bool mePlaying;
-  final bool canGoForward;
-  final bool zenMode;
-  final ClockPosition clockPosition;
+  opponentLeftCallbacks,
 
   /// Time left for the player to move at the start of the game.
-  final Duration? timeToMove;
-
+  final Duration? timeToMove,
+  final bool shouldLinkToUserProfile = true,
+  final bool mePlaying = false,
+  final bool canGoForward = false,
+  final bool zenMode = false,
+  final ClockPosition clockPosition = ClockPosition.right,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final playerFontSize = isShortVerticalScreen(context) ? 15.0 : 16.0;
@@ -281,12 +260,11 @@ class GamePlayer extends StatelessWidget {
   }
 }
 
-class ConfirmMove extends StatelessWidget {
-  const ConfirmMove({required this.onConfirm, required this.onCancel, super.key});
-
-  final VoidCallback onConfirm;
-  final VoidCallback onCancel;
-
+class const ConfirmMove({
+  required final VoidCallback onConfirm,
+  required final VoidCallback onCancel,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -326,20 +304,13 @@ class ConfirmMove extends StatelessWidget {
 /// While the claim threshold has not been reached, displays a live countdown.
 /// Once [canClaim] is true, displays the two claim choices inline (so there is
 /// no dialog to dismiss). The player clock is hidden to leave enough room.
-class OpponentLeftCountdown extends StatelessWidget {
-  const OpponentLeftCountdown({
-    required this.countdown,
-    required this.canClaim,
-    required this.onClaimWin,
-    required this.onClaimDraw,
-    super.key,
-  });
-
-  final (Duration, DateTime) countdown;
-  final bool canClaim;
-  final VoidCallback onClaimWin;
-  final VoidCallback onClaimDraw;
-
+class const OpponentLeftCountdown({
+  required final (Duration, DateTime) countdown,
+  required final bool canClaim,
+  required final VoidCallback onClaimWin,
+  required final VoidCallback onClaimDraw,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (!canClaim) {
@@ -423,17 +394,16 @@ String _scoreDisplay(double score) {
       : '$integerPart${decimalPart == 0.5 ? '½' : ''}';
 }
 
-class MoveExpiration extends ConsumerStatefulWidget {
-  const MoveExpiration({required this.timeToMove, required this.mePlaying, super.key});
-
-  final Duration timeToMove;
-  final bool mePlaying;
-
+class const MoveExpiration({
+  required final Duration timeToMove,
+  required final bool mePlaying,
+  super.key,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<MoveExpiration> createState() => _MoveExpirationState();
 }
 
-class _MoveExpirationState extends ConsumerState<MoveExpiration> {
+class _MoveExpirationState() extends ConsumerState<MoveExpiration> {
   static const _period = Duration(milliseconds: 1000);
   Timer? _timer;
   Duration timeLeft = Duration.zero;

@@ -26,11 +26,10 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:material_ui/material_ui.dart';
 
-class OfflineCorrespondenceGameScreen extends StatefulWidget {
-  const OfflineCorrespondenceGameScreen({required this.initialGame, super.key});
-
-  final (DateTime, OfflineCorrespondenceGame) initialGame;
-
+class const OfflineCorrespondenceGameScreen({
+  required final (DateTime, OfflineCorrespondenceGame) initialGame,
+  super.key,
+}) extends StatefulWidget {
   static Route<dynamic> buildRoute({required (DateTime, OfflineCorrespondenceGame) initialGame}) {
     return buildScreenRoute(screen: OfflineCorrespondenceGameScreen(initialGame: initialGame));
   }
@@ -39,7 +38,7 @@ class OfflineCorrespondenceGameScreen extends StatefulWidget {
   State<OfflineCorrespondenceGameScreen> createState() => _OfflineCorrespondenceGameScreenState();
 }
 
-class _OfflineCorrespondenceGameScreenState extends State<OfflineCorrespondenceGameScreen> {
+class _OfflineCorrespondenceGameScreenState() extends State<OfflineCorrespondenceGameScreen> {
   late (DateTime, OfflineCorrespondenceGame) currentGame;
 
   @override
@@ -64,10 +63,7 @@ class _OfflineCorrespondenceGameScreenState extends State<OfflineCorrespondenceG
   }
 }
 
-class _Title extends StatelessWidget {
-  const _Title(this.game);
-  final OfflineCorrespondenceGame game;
-
+class const _Title(final OfflineCorrespondenceGame game) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mode = game.rated ? ' • ${context.l10n.rated}' : ' • ${context.l10n.casual}';
@@ -85,18 +81,16 @@ class _Title extends StatelessWidget {
   }
 }
 
-class _Body extends ConsumerStatefulWidget {
-  const _Body({required this.game, required this.lastModified, required this.onGameChanged});
-
-  final OfflineCorrespondenceGame game;
-  final DateTime lastModified;
-  final void Function((DateTime, OfflineCorrespondenceGame)) onGameChanged;
-
+class const _Body({
+  required final OfflineCorrespondenceGame game,
+  required final DateTime lastModified,
+  required final void Function((DateTime, OfflineCorrespondenceGame)) onGameChanged,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_Body> createState() => _BodyState();
 }
 
-class _BodyState extends ConsumerState<_Body> {
+class _BodyState() extends ConsumerState<_Body> {
   late OfflineCorrespondenceGame game;
   int stepCursor = 0;
   (String, Move)? moveToConfirm;

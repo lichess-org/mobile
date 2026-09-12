@@ -22,7 +22,7 @@ const kWinningThreshold = 0.5;
 ///
 /// Based on the winning chances difference between the position before and after the move.
 /// Thresholds loosely adapted from lila practice mode.
-enum MoveVerdict {
+enum MoveVerdict() {
   /// The move is good (shift < [kGoodMoveThreshold] or no better move exists).
   goodMove,
 
@@ -74,12 +74,10 @@ enum MoveVerdict {
 
 /// A comment about a player's move in practice mode.
 @Freezed(fromJson: true, toJson: true)
-sealed class PracticeComment with _$PracticeComment {
-  const PracticeComment._();
+sealed class const PracticeComment._() with _$PracticeComment {
+  factory fromJson(Map<String, dynamic> json) => _$PracticeCommentFromJson(json);
 
-  factory PracticeComment.fromJson(Map<String, dynamic> json) => _$PracticeCommentFromJson(json);
-
-  const factory PracticeComment({
+  const factory({
     /// The verdict for the move.
     required MoveVerdict verdict,
 

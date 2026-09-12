@@ -55,12 +55,8 @@ import 'package:path_provider/path_provider.dart' show getTemporaryDirectory;
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class TournamentScreen extends ConsumerStatefulWidget {
-  const TournamentScreen({required this.id, this.initialPlayerId});
-
-  final TournamentId id;
-  final UserId? initialPlayerId;
-
+class const TournamentScreen({required final TournamentId id, final UserId? initialPlayerId})
+    extends ConsumerStatefulWidget {
   static const String routeName = '/tournament';
 
   static Route<void> buildRoute(TournamentId id, {UserId? initialPlayerId}) {
@@ -76,7 +72,7 @@ class TournamentScreen extends ConsumerStatefulWidget {
   ConsumerState<TournamentScreen> createState() => _TournamentScreenState();
 }
 
-class _TournamentScreenState extends ConsumerState<TournamentScreen> with RouteAware {
+class _TournamentScreenState() extends ConsumerState<TournamentScreen> with RouteAware {
   @override
   void initState() {
     super.initState();
@@ -134,27 +130,23 @@ class _TournamentScreenState extends ConsumerState<TournamentScreen> with RouteA
 
     return switch (ref.watch(tournamentControllerProvider(widget.id))) {
       AsyncError(:final error) => PlatformScaffold(
-        appBar: PlatformAppBar(title: const SizedBox.shrink()),
+        appBar: const PlatformAppBar(title: SizedBox.shrink()),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Center(child: Text('Could not load tournament: $error')),
         ),
       ),
       AsyncValue(:final value?) => _Body(id: widget.id, state: value),
-      _ => PlatformScaffold(
-        appBar: PlatformAppBar(title: const SizedBox.shrink()),
-        body: const Center(child: CircularProgressIndicator.adaptive()),
+      _ => const PlatformScaffold(
+        appBar: PlatformAppBar(title: SizedBox.shrink()),
+        body: Center(child: CircularProgressIndicator.adaptive()),
       ),
     };
   }
 }
 
-class _Body extends ConsumerWidget {
-  const _Body({required this.id, required this.state});
-
-  final TournamentId id;
-  final TournamentState state;
-
+class const _Body({required final TournamentId id, required final TournamentState state})
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authUser = ref.watch(authControllerProvider);
@@ -305,11 +297,7 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class _TournamentInfoCard extends StatelessWidget {
-  const _TournamentInfoCard({required this.tournament});
-
-  final Tournament tournament;
-
+class const _TournamentInfoCard({required final Tournament tournament}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -349,22 +337,14 @@ class _TournamentInfoCard extends StatelessWidget {
   }
 }
 
-class _Title extends StatelessWidget {
-  const _Title({required this.state});
-
-  final TournamentState state;
-
+class const _Title({required final TournamentState state}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppBarTitleText(state.tournament.meta.fullName, maxLines: 2);
   }
 }
 
-class _TournamentHelp extends StatelessWidget {
-  const _TournamentHelp({required this.state});
-
-  final TournamentState state;
-
+class const _TournamentHelp({required final TournamentState state}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -559,11 +539,7 @@ class _TournamentHelp extends StatelessWidget {
 String _variantLabels(BuildContext context, Iterable<Variant> variants) =>
     variants.map((variant) => variant.label(context.l10n)).join(', ');
 
-class _ExpandableDescription extends ConsumerWidget {
-  const _ExpandableDescription({required this.description});
-
-  final String description;
-
+class const _ExpandableDescription({required final String description}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ExpansionTile(
@@ -590,11 +566,7 @@ class _ExpandableDescription extends ConsumerWidget {
   }
 }
 
-class _TeamStanding extends ConsumerWidget {
-  const _TeamStanding(this.state);
-
-  final TournamentState state;
-
+class const _TeamStanding(final TournamentState state) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final teamStanding = state.tournament.teamStanding;
@@ -642,19 +614,12 @@ class _TeamStanding extends ConsumerWidget {
   }
 }
 
-class _TeamStandingTile extends ConsumerWidget {
-  const _TeamStandingTile({
-    required this.team,
-    required this.teamInfo,
-    required this.nbLeaders,
-    required this.tournamentId,
-  });
-
-  final TeamStanding team;
-  final TeamInfo? teamInfo;
-  final int nbLeaders;
-  final TournamentId tournamentId;
-
+class const _TeamStandingTile({
+  required final TeamStanding team,
+  required final TeamInfo? teamInfo,
+  required final int nbLeaders,
+  required final TournamentId tournamentId,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListTile(
@@ -716,11 +681,7 @@ class _TeamStandingTile extends ConsumerWidget {
   }
 }
 
-class _Standing extends ConsumerWidget {
-  const _Standing(this.state);
-
-  final TournamentState state;
-
+class const _Standing(final TournamentState state) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final standing = state.tournament.standing;
@@ -742,12 +703,10 @@ class _Standing extends ConsumerWidget {
   }
 }
 
-class _StandingPlayer extends ConsumerWidget {
-  const _StandingPlayer({required this.player, required this.state});
-
-  final StandingPlayer player;
-  final TournamentState state;
-
+class const _StandingPlayer({
+  required final StandingPlayer player,
+  required final TournamentState state,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tournamentId = state.id;
@@ -787,11 +746,7 @@ class _StandingPlayer extends ConsumerWidget {
   }
 }
 
-class _Scores extends StatelessWidget {
-  const _Scores(this.scores);
-
-  final IList<int> scores;
-
+class const _Scores(final IList<int> scores) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Wrap(
@@ -816,11 +771,7 @@ class _Scores extends StatelessWidget {
   }
 }
 
-class _StandingControls extends ConsumerWidget {
-  const _StandingControls({required this.state});
-
-  final TournamentState state;
-
+class const _StandingControls({required final TournamentState state}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Row(
@@ -863,11 +814,7 @@ class _StandingControls extends ConsumerWidget {
   }
 }
 
-class _TournamentInfo extends StatelessWidget {
-  const _TournamentInfo(this.tournament);
-
-  final Tournament tournament;
-
+class const _TournamentInfo(final Tournament tournament) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -893,11 +840,7 @@ class _TournamentInfo extends StatelessWidget {
   }
 }
 
-class _TeamInfo extends StatelessWidget {
-  const _TeamInfo(this.teamBattle);
-
-  final TeamBattleData teamBattle;
-
+class const _TeamInfo(final TeamBattleData teamBattle) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -918,11 +861,7 @@ class _TeamInfo extends StatelessWidget {
   }
 }
 
-class _Verdicts extends ConsumerWidget {
-  const _Verdicts(this.verdicts);
-
-  final Verdicts verdicts;
-
+class const _Verdicts(final Verdicts verdicts) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isLoggedIn = ref.watch(authControllerProvider)?.user.id != null;
@@ -966,11 +905,7 @@ class _Verdicts extends ConsumerWidget {
   }
 }
 
-class _FeaturedGame extends ConsumerWidget {
-  const _FeaturedGame(this.featuredGame);
-
-  final FeaturedGame featuredGame;
-
+class const _FeaturedGame(final FeaturedGame featuredGame) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return LayoutBuilder(
@@ -990,12 +925,8 @@ class _FeaturedGame extends ConsumerWidget {
   }
 }
 
-class _FeaturedGamePlayer extends StatelessWidget {
-  const _FeaturedGamePlayer({required this.game, required this.side});
-
-  final FeaturedGame game;
-  final Side side;
-
+class const _FeaturedGamePlayer({required final FeaturedGame game, required final Side side})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final player = game.playerOf(side);
@@ -1060,11 +991,8 @@ class _FeaturedGamePlayer extends StatelessWidget {
   }
 }
 
-class _TournamentCompleteWidget extends ConsumerWidget {
-  const _TournamentCompleteWidget({required this.state});
-
-  final TournamentState state;
-
+class const _TournamentCompleteWidget({required final TournamentState state})
+    extends ConsumerWidget {
   static const _headerStyle = TextStyle();
   static const _valueStyle = TextStyle(fontWeight: FontWeight.bold);
 
@@ -1212,16 +1140,12 @@ class _TournamentCompleteWidget extends ConsumerWidget {
   }
 }
 
-class _BottomBar extends ConsumerStatefulWidget {
-  const _BottomBar(this.state);
-
-  final TournamentState state;
-
+class const _BottomBar(final TournamentState state) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_BottomBar> createState() => _BottomBarState();
 }
 
-class _BottomBarState extends ConsumerState<_BottomBar> {
+class _BottomBarState() extends ConsumerState<_BottomBar> {
   bool joinOrLeaveInProgress = false;
 
   @override
@@ -1396,17 +1320,11 @@ void _showPlayerDetails(BuildContext context, TournamentId tournamentId, UserId 
   );
 }
 
-class _TournamentPlayerDetails extends ConsumerWidget {
-  final TournamentPlayer player;
-  final TournamentId tournamentId;
-  final ScrollController scrollController;
-
-  const _TournamentPlayerDetails({
-    required this.player,
-    required this.tournamentId,
-    required this.scrollController,
-  });
-
+class const _TournamentPlayerDetails({
+  required final TournamentPlayer player,
+  required final TournamentId tournamentId,
+  required final ScrollController scrollController,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tournamentState = ref.watch(tournamentControllerProvider(tournamentId));
@@ -1536,13 +1454,11 @@ class _TournamentPlayerDetails extends ConsumerWidget {
   }
 }
 
-class _StatRow extends StatelessWidget {
-  final String label;
-  final String value;
-  final Widget? prefix;
-
-  const _StatRow({required this.label, required this.value, this.prefix});
-
+class const _StatRow({
+  required final String label,
+  required final String value,
+  final Widget? prefix,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -1564,21 +1480,13 @@ class _StatRow extends StatelessWidget {
   }
 }
 
-class _PairingTile extends ConsumerWidget {
-  final TournamentPairing pairing;
-  final LightUser player;
-  final int index;
-  final int nbGames;
-  final TournamentId tournamentId;
-
-  const _PairingTile({
-    required this.pairing,
-    required this.player,
-    required this.index,
-    required this.nbGames,
-    required this.tournamentId,
-  });
-
+class const _PairingTile({
+  required final TournamentPairing pairing,
+  required final LightUser player,
+  required final int index,
+  required final int nbGames,
+  required final TournamentId tournamentId,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tournamentState = ref.watch(tournamentControllerProvider(tournamentId));
@@ -1690,17 +1598,11 @@ void _showTeamDetails(BuildContext context, TournamentId tournamentId, TeamId te
   );
 }
 
-class _TournamentTeamDetails extends ConsumerWidget {
-  final TournamentTeam team;
-  final TournamentId tournamentId;
-  final ScrollController scrollController;
-
-  const _TournamentTeamDetails({
-    required this.team,
-    required this.tournamentId,
-    required this.scrollController,
-  });
-
+class const _TournamentTeamDetails({
+  required final TournamentTeam team,
+  required final TournamentId tournamentId,
+  required final ScrollController scrollController,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tournamentState = ref.watch(tournamentControllerProvider(tournamentId));
@@ -1793,19 +1695,12 @@ class _TournamentTeamDetails extends ConsumerWidget {
   }
 }
 
-class _TeamPlayerTile extends ConsumerWidget {
-  final TeamPlayerDetailed player;
-  final int index;
-  final TournamentId tournamentId;
-  final int? nbLeaders;
-
-  const _TeamPlayerTile({
-    required this.player,
-    required this.index,
-    required this.tournamentId,
-    required this.nbLeaders,
-  });
-
+class const _TeamPlayerTile({
+  required final TeamPlayerDetailed player,
+  required final int index,
+  required final TournamentId tournamentId,
+  required final int? nbLeaders,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListTile(
@@ -1912,12 +1807,10 @@ Future<String?> _showEntryCodeDialog(BuildContext context) {
   );
 }
 
-class _AllTeamsScreen extends ConsumerWidget {
-  const _AllTeamsScreen({required this.tournamentId, required this.teamBattle});
-
-  final TournamentId tournamentId;
-  final TeamBattleData teamBattle;
-
+class const _AllTeamsScreen({
+  required final TournamentId tournamentId,
+  required final TeamBattleData teamBattle,
+}) extends ConsumerWidget {
   static Route<void> buildRoute(TournamentId tournamentId, TeamBattleData teamBattle) {
     return buildScreenRoute(
       screen: _AllTeamsScreen(tournamentId: tournamentId, teamBattle: teamBattle),

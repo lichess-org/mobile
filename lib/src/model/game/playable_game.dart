@@ -30,13 +30,11 @@ part 'playable_game.freezed.dart';
 /// See also:
 /// - [ExportedGame] for a game that is finished and not owned by the current user.
 @freezed
-sealed class PlayableGame
+sealed class const PlayableGame._()
     with BaseGame, _$PlayableGame, ServerGame, IndexableSteps
     implements ServerGame {
-  const PlayableGame._();
-
   @Assert('steps.isNotEmpty')
-  factory PlayableGame({
+  factory({
     required GameId id,
     required GameMeta meta,
     required GameSource source,
@@ -74,7 +72,7 @@ sealed class PlayableGame
   /// - GET /api/mobile/my-games
   /// - player game socket (/play/:gameFullId/v6) 'full' event
   /// - watcher game socket (/watch/:gameId/:side/v6) 'full' event
-  factory PlayableGame.fromServerJson(Map<String, dynamic> json) {
+  factory fromServerJson(Map<String, dynamic> json) {
     return _playableGameFromPick(pick(json).required());
   }
 
@@ -167,10 +165,8 @@ sealed class PlayableGame
 }
 
 @freezed
-sealed class PlayableClockData with _$PlayableClockData {
-  const PlayableClockData._();
-
-  const factory PlayableClockData({
+sealed class const PlayableClockData._() with _$PlayableClockData {
+  const factory({
     required bool running,
     required Duration white,
     required Duration black,

@@ -15,11 +15,9 @@ const _accountResponse =
 
 /// Fake [FlutterAppAuth] that returns a canned token response (or throws) instead of opening a real
 /// browser session and performing the OAuth code exchange.
-class FakeFlutterAppAuth implements FlutterAppAuth {
-  FakeFlutterAppAuth(this.onAuthorize);
-
-  final Future<AuthorizationTokenResponse> Function(AuthorizationTokenRequest request) onAuthorize;
-
+class FakeFlutterAppAuth(
+  final Future<AuthorizationTokenResponse> Function(AuthorizationTokenRequest request) onAuthorize,
+) implements FlutterAppAuth {
   @override
   Future<AuthorizationTokenResponse> authorizeAndExchangeCode(AuthorizationTokenRequest request) =>
       onAuthorize(request);

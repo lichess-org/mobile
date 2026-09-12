@@ -3,19 +3,12 @@ import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:material_ui/material_ui.dart';
 
-class BroadcastPlayerWidget extends ConsumerWidget {
-  const BroadcastPlayerWidget({
-    required this.player,
-    this.showFederation = true,
-    this.showRating = true,
-    this.textStyle,
-  });
-
-  final BroadcastPlayer player;
-  final bool showFederation;
-  final bool showRating;
-  final TextStyle? textStyle;
-
+class const BroadcastPlayerWidget({
+  required final BroadcastPlayer player,
+  final bool showFederation = true,
+  final bool showRating = true,
+  final TextStyle? textStyle,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final BroadcastPlayer(:federation, :title, :name, :rating) = player;

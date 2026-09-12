@@ -33,12 +33,7 @@ final correspondenceServiceProvider = Provider<CorrespondenceService>((Ref ref) 
 }, name: 'CorrespondenceServiceProvider');
 
 /// Service that manages correspondence games.
-class CorrespondenceService {
-  CorrespondenceService(this._log, {required this.ref});
-
-  final Ref ref;
-  final Logger _log;
-
+class CorrespondenceService(final Logger _log, {required final Ref ref}) {
   StreamSubscription<ParsedLocalNotification>? _notificationResponseSubscription;
   StreamSubscription<ReceivedFcmMessage>? _fcmSubscription;
 

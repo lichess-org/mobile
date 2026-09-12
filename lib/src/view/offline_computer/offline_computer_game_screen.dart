@@ -70,17 +70,16 @@ extension _PracticeCommentDisplay on PracticeComment {
   Color get color => verdict.color;
 }
 
-class OfflineComputerGameScreen extends ConsumerWidget {
-  const OfflineComputerGameScreen({this.initialVariant, this.initialFen, super.key});
-
+class const OfflineComputerGameScreen({
   /// Optional initial variant to be preselected in the "New Game" dialog.
   ///
   /// If null, the variant from the last game against the computer will be used.
-  final Variant? initialVariant;
+  final Variant? initialVariant,
 
   /// Optional initial FEN to start the game from a custom position.
-  final String? initialFen;
-
+  final String? initialFen,
+  super.key,
+}) extends ConsumerWidget {
   static Route<void> buildRoute({Variant? initialVariant, String? initialFen}) {
     return buildScreenRoute(
       screen: OfflineComputerGameScreen(initialVariant: initialVariant, initialFen: initialFen),
@@ -117,18 +116,13 @@ class OfflineComputerGameScreen extends ConsumerWidget {
   }
 }
 
-class _Body extends ConsumerStatefulWidget {
-  const _Body({required this.initialVariant, this.initialFen});
-
-  final Variant? initialVariant;
-
-  final String? initialFen;
-
+class const _Body({required final Variant? initialVariant, final String? initialFen})
+    extends ConsumerStatefulWidget {
   @override
   ConsumerState<_Body> createState() => _BodyState();
 }
 
-class _BodyState extends ConsumerState<_Body> {
+class _BodyState() extends ConsumerState<_Body> {
   final _boardKey = GlobalKey(debugLabel: 'boardOnOfflineComputerScreen');
 
   @override
@@ -337,11 +331,7 @@ class _BodyState extends ConsumerState<_Body> {
   }
 }
 
-class _BottomBar extends ConsumerWidget {
-  const _BottomBar({required this.onNewGame});
-
-  final VoidCallback onNewGame;
-
+class const _BottomBar({required final VoidCallback onNewGame}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final gameState = ref.watch(offlineComputerGameControllerProvider);
@@ -446,7 +436,7 @@ final _isBoardFlippedProvider = NotifierProvider.autoDispose<IsBoardFlippedNotif
   name: 'IsBoardFlippedProvider',
 );
 
-class IsBoardFlippedNotifier extends Notifier<bool> {
+class IsBoardFlippedNotifier() extends Notifier<bool> {
   @override
   bool build() {
     return false;
@@ -457,11 +447,7 @@ class IsBoardFlippedNotifier extends Notifier<bool> {
   }
 }
 
-class _Player extends ConsumerWidget {
-  const _Player({required this.side});
-
-  final Side side;
-
+class const _Player({required final Side side}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final gameState = ref.watch(offlineComputerGameControllerProvider);
@@ -560,12 +546,8 @@ class _Player extends ConsumerWidget {
 }
 
 /// The clock of [side], or nothing at all when the game is played without a time control.
-class _PlayerClock extends ConsumerWidget {
-  const _PlayerClock({required this.side, required this.clockKey});
-
-  final Side side;
-  final Key clockKey;
-
+class const _PlayerClock({required final Side side, required final Key clockKey})
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final clock = ref.watch(offlineComputerClockProvider);
@@ -586,16 +568,13 @@ class _PlayerClock extends ConsumerWidget {
   }
 }
 
-class _PracticeCommentCard extends ConsumerStatefulWidget {
-  const _PracticeCommentCard({required this.gameState});
-
-  final OfflineComputerGameState gameState;
-
+class const _PracticeCommentCard({required final OfflineComputerGameState gameState})
+    extends ConsumerStatefulWidget {
   @override
   ConsumerState<_PracticeCommentCard> createState() => _PracticeCommentCardState();
 }
 
-class _PracticeCommentCardState extends ConsumerState<_PracticeCommentCard> {
+class _PracticeCommentCardState() extends ConsumerState<_PracticeCommentCard> {
   // Last non-null comment, kept so we can show it with opacity while a new evaluation is in
   // progress and no new comment has arrived yet.
   PracticeComment? _previousComment;
@@ -740,18 +719,13 @@ class _PracticeCommentCardState extends ConsumerState<_PracticeCommentCard> {
   }
 }
 
-class _NewGameSheet extends ConsumerStatefulWidget {
-  const _NewGameSheet({required this.initialVariant, this.initialFen});
-
-  final Variant? initialVariant;
-
-  final String? initialFen;
-
+class const _NewGameSheet({required final Variant? initialVariant, final String? initialFen})
+    extends ConsumerStatefulWidget {
   @override
   ConsumerState<_NewGameSheet> createState() => _NewGameSheetState();
 }
 
-class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
+class _NewGameSheetState() extends ConsumerState<_NewGameSheet> {
   late OpponentSpec _selectedOpponent;
   late SideChoice _selectedSideChoice;
   late Variant _selectedVariant;
@@ -1119,9 +1093,7 @@ class _NewGameSheetState extends ConsumerState<_NewGameSheet> {
       (_fromPositionFen != null && _fromPositionFen!.isNotEmpty);
 }
 
-class _OfflineComputerGameSettingsSheet extends ConsumerWidget {
-  const _OfflineComputerGameSettingsSheet();
-
+class const _OfflineComputerGameSettingsSheet() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final prefs = ref.watch(offlineComputerGamePreferencesProvider);
@@ -1170,12 +1142,11 @@ class _OfflineComputerGameSettingsSheet extends ConsumerWidget {
   }
 }
 
-class OfflineComputerGameResultDialog extends StatelessWidget {
-  const OfflineComputerGameResultDialog({required this.game, required this.onNewGame, super.key});
-
-  final OfflineComputerGame game;
-  final VoidCallback onNewGame;
-
+class const OfflineComputerGameResultDialog({
+  required final OfflineComputerGame game,
+  required final VoidCallback onNewGame,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final winner = game.winner;

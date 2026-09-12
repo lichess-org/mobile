@@ -9,13 +9,13 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 ///
 /// Immersive mode will hide the system UI (status bar and navigation bar) and
 /// force the device to stay awake.
-class ImmersiveModeWidget extends StatelessWidget {
+class const ImmersiveModeWidget({
+  required final Widget child,
+  final bool Function()? shouldEnableOnFocusGained,
+  super.key,
+}) extends StatelessWidget {
   /// Create a new immersive mode widget, that enables immersive mode when focused.
-  const ImmersiveModeWidget({required this.child, this.shouldEnableOnFocusGained, super.key});
-
-  final Widget child;
-
-  final bool Function()? shouldEnableOnFocusGained;
+  this;
 
   @override
   Widget build(BuildContext context) {
@@ -34,13 +34,13 @@ class ImmersiveModeWidget extends StatelessWidget {
 }
 
 /// A widget that enables wakelock when focused.
-class WakelockWidget extends StatelessWidget {
+class const WakelockWidget({
+  required final Widget child,
+  final bool Function()? shouldEnableOnFocusGained,
+  super.key,
+}) extends StatelessWidget {
   /// Create a new wakelock widget, that enables wakelock when focused.
-  const WakelockWidget({required this.child, this.shouldEnableOnFocusGained, super.key});
-
-  final Widget child;
-
-  final bool Function()? shouldEnableOnFocusGained;
+  this;
 
   @override
   Widget build(BuildContext context) {
@@ -60,9 +60,7 @@ class WakelockWidget extends StatelessWidget {
 
 /// Immersive mode is a way to hide the system UI (status bar and navigation bar)
 /// and to force the device to stay awake.
-class ImmersiveMode {
-  const ImmersiveMode._();
-
+class const ImmersiveMode._() {
   static const instance = ImmersiveMode._();
 
   /// Enable immersive mode.

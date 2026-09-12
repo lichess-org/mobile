@@ -18,35 +18,28 @@ final _deviceInfoPlugin = DeviceInfoPlugin();
 /// This widget will keep the initial [MediaQueryData.viewPadding] whether immersive mode is set or
 /// not. This works in conjunction with the [SafeArea.maintainBottomViewPadding] property. This is
 /// the responsibility of the parent widget to set the [SafeArea] with the correct value.
-class AndroidGesturesExclusionWidget extends StatefulWidget {
-  const AndroidGesturesExclusionWidget({
-    required this.child,
-    required this.boardKey,
-    this.shouldExcludeGesturesOnFocusGained,
-    this.shouldSetImmersiveMode = false,
-    super.key,
-  });
-
-  final Widget child;
+class const AndroidGesturesExclusionWidget({
+  required final Widget child,
 
   /// Global key of the board widget.
-  final GlobalKey boardKey;
+  required final GlobalKey boardKey,
 
   /// Whether to exclude gestures when focus is gained.
   ///
   /// If null, gestures exclusion will be enabled by default.
-  final bool? shouldExcludeGesturesOnFocusGained;
+  final bool? shouldExcludeGesturesOnFocusGained,
 
   /// Whether to set immersive mode with the gestures exclusion.
   ///
   /// False by default.
-  final bool shouldSetImmersiveMode;
-
+  final bool shouldSetImmersiveMode = false,
+  super.key,
+}) extends StatefulWidget {
   @override
   State<AndroidGesturesExclusionWidget> createState() => _AndroidGesturesExclusionWidgetState();
 }
 
-class _AndroidGesturesExclusionWidgetState extends State<AndroidGesturesExclusionWidget> {
+class _AndroidGesturesExclusionWidgetState() extends State<AndroidGesturesExclusionWidget> {
   EdgeInsets? initialViewPadding;
 
   @override
@@ -139,10 +132,8 @@ Future<void> clearAndroidBoardGesturesExclusion() async {
   }
 }
 
-class GesturesExclusion {
+class const GesturesExclusion._() {
   static const _channel = MethodChannel('mobile.lichess.org/gestures_exclusion');
-
-  const GesturesExclusion._();
 
   static const instance = GesturesExclusion._();
 

@@ -17,10 +17,8 @@ const kMaxForecastPlies = 30;
 ///
 /// Most logic is based on ForecastCtrl from lichobile
 @Freezed(fromJson: true, toJson: true)
-sealed class Forecast with _$Forecast {
-  const Forecast._();
-
-  const factory Forecast({required bool onMyTurn, required IList<UciPath> lines}) = _Forecast;
+sealed class const Forecast._() with _$Forecast {
+  const factory({required bool onMyTurn, required IList<UciPath> lines}) = _Forecast;
 
   /// Two forecasts are considered to collide if the current player cannot theoretically play both of them.
   /// For example, for black, 1. e4 e5 and 1. e4 c5 are colliding forecasts, as black cannot play both e5 and c5

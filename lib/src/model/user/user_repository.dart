@@ -31,12 +31,7 @@ typedef UserScreenData = ({
   Crosstable? crosstable,
 });
 
-class UserRepository {
-  UserRepository(this.client, this.aggregator);
-
-  final LichessClient client;
-  final Aggregator aggregator;
-
+class UserRepository(final LichessClient client, final Aggregator aggregator) {
   Future<UserScreenData> getUserScreenData(UserId id) {
     return client.readJson(
       Uri(path: '/api/mobile/profile/$id'),

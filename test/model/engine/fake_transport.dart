@@ -34,16 +34,16 @@ const kFakeLc0OptionDeclarations = [
 ///
 /// This is the seam for testing the UCI protocol itself: no plugin, no isolates, no engine — just
 /// the lines in and the lines out.
-class FakeTransport implements EngineTransport {
-  FakeTransport({
-    this.spec = const StockfishSpec.light(),
-    List<String> startupLines = const [
-      'Stockfish 19 by the Stockfish developers',
-      'id name Stockfish 19',
-      ...kFakeOptionDeclarations,
-      'uciok',
-    ],
-  }) {
+class FakeTransport({
+  @override final EngineSpec spec = const StockfishSpec.light(),
+  List<String> startupLines = const [
+    'Stockfish 19 by the Stockfish developers',
+    'id name Stockfish 19',
+    ...kFakeOptionDeclarations,
+    'uciok',
+  ],
+}) implements EngineTransport {
+  this {
     _pending.addAll(startupLines);
     _controller.onListen = () {
       if (_replayed) return;
@@ -54,9 +54,6 @@ class FakeTransport implements EngineTransport {
       _pending.clear();
     };
   }
-
-  @override
-  final EngineSpec spec;
 
   /// Every command the engine was sent, in order.
   final List<String> commands = [];

@@ -36,9 +36,7 @@ import 'package:material_ui/material_ui.dart';
 const _kNumberOfHistoryItemsOnHandset = 8;
 const _kNumberOfHistoryItemsOnTablet = 16;
 
-class PuzzleTabScreen extends ConsumerWidget {
-  const PuzzleTabScreen({super.key});
-
+class const PuzzleTabScreen({super.key}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // The saved batches are only used to show the extra angle previews at the bottom of the list,
@@ -63,11 +61,7 @@ class PuzzleTabScreen extends ConsumerWidget {
 }
 
 /// Scaffold of the puzzle tab, shared by all states of the [savedBatchesProvider].
-class _PuzzleTabScaffold extends ConsumerWidget {
-  const _PuzzleTabScaffold({required this.body});
-
-  final Widget body;
-
+class const _PuzzleTabScaffold({required final Widget body}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return PopScope(
@@ -92,16 +86,12 @@ class _PuzzleTabScaffold extends ConsumerWidget {
   }
 }
 
-class _MaterialTabBody extends ConsumerStatefulWidget {
-  const _MaterialTabBody(this.savedAngles);
-
-  final IList<PuzzleAngle> savedAngles;
-
+class const _MaterialTabBody(final IList<PuzzleAngle> savedAngles) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_MaterialTabBody> createState() => _MaterialTabBodyState();
 }
 
-class _MaterialTabBodyState extends ConsumerState<_MaterialTabBody> {
+class _MaterialTabBodyState() extends ConsumerState<_MaterialTabBody> {
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
   late AnimatedListModel<PuzzleAngle> _angles;
 
@@ -223,23 +213,14 @@ Widget _buildMainListRemovedItem(
   );
 }
 
-class _PuzzleMenuListTile extends StatelessWidget {
-  const _PuzzleMenuListTile({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    this.badgeLabel,
-    this.onTap,
-    this.enabled = true,
-  });
-
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final String? badgeLabel;
-  final VoidCallback? onTap;
-  final bool enabled;
-
+class const _PuzzleMenuListTile({
+  required final IconData icon,
+  required final String title,
+  required final String subtitle,
+  final String? badgeLabel,
+  final VoidCallback? onTap,
+  final bool enabled = true,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -265,9 +246,7 @@ class _PuzzleMenuListTile extends StatelessWidget {
   }
 }
 
-class _PuzzleMenu extends ConsumerWidget {
-  const _PuzzleMenu();
-
+class const _PuzzleMenu() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isOnline = ref.watch(isDeviceOnlineProvider);
@@ -342,11 +321,7 @@ class _PuzzleMenu extends ConsumerWidget {
   }
 }
 
-class PuzzleHistoryWidget extends ConsumerWidget {
-  const PuzzleHistoryWidget({this.showHeader = true});
-
-  final bool showHeader;
-
+class const PuzzleHistoryWidget({final bool showHeader = true}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncData = ref.watch(puzzleRecentActivityProvider);
@@ -409,9 +384,7 @@ TextStyle _puzzlePreviewSubtitleStyle(BuildContext context) {
 }
 
 /// A widget that displays the daily puzzle.
-class DailyPuzzle extends ConsumerWidget {
-  const DailyPuzzle({super.key});
-
+class const DailyPuzzle({super.key}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isOnline = ref.watch(isDeviceOnlineProvider);
@@ -485,12 +458,11 @@ class DailyPuzzle extends ConsumerWidget {
 }
 
 /// A widget that displays a preview of a puzzle angle batch.
-class PuzzleAnglePreview extends ConsumerWidget {
-  const PuzzleAnglePreview({required this.angle, this.onTap, super.key});
-
-  final PuzzleAngle angle;
-  final VoidCallback? onTap;
-
+class const PuzzleAnglePreview({
+  required final PuzzleAngle angle,
+  final VoidCallback? onTap,
+  super.key,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final puzzle = ref.watch(nextPuzzlePreviewProvider(angle));

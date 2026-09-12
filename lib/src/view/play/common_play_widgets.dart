@@ -5,23 +5,17 @@ import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:material_ui/material_ui.dart';
 
-class PlayRatingRange extends StatefulWidget {
-  const PlayRatingRange({
-    required this.perf,
-    required this.ratingDelta,
-    required this.onRatingDeltaChange,
-    super.key,
-  });
-
-  final UserPerf perf;
-  final (int, int) ratingDelta;
-  final void Function(int, int) onRatingDeltaChange;
-
+class const PlayRatingRange({
+  required final UserPerf perf,
+  required final (int, int) ratingDelta,
+  required final void Function(int, int) onRatingDeltaChange,
+  super.key,
+}) extends StatefulWidget {
   @override
   State<PlayRatingRange> createState() => _PlayRatingRangeState();
 }
 
-class _PlayRatingRangeState extends State<PlayRatingRange> {
+class _PlayRatingRangeState() extends State<PlayRatingRange> {
   late int _subtract;
   late int _add;
 

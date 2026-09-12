@@ -24,7 +24,7 @@ bool isShortVerticalScreen(BuildContext context) {
   return estimateHeightMinusBoardFromContext(context) < kSmallHeightMinusBoard;
 }
 
-abstract class FormFactor {
+abstract class FormFactor() {
   static const double desktop = 900;
   static const double tablet = 600;
   static const double handset = 300;
@@ -52,7 +52,12 @@ double pocketSquareSize({required double boardSize, required bool isTablet}) {
   return isTablet ? 0.7 * squareSize : squareSize;
 }
 
-enum ScreenType { watch, handset, tablet, desktop }
+enum ScreenType() {
+  watch,
+  handset,
+  tablet,
+  desktop,
+}
 
 extension ScreenTypeComparisonOperators on ScreenType {
   bool operator <(ScreenType other) {

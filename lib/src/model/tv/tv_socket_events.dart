@@ -10,7 +10,7 @@ part 'tv_socket_events.freezed.dart';
 
 @freezed
 sealed class FenSocketEvent with _$FenSocketEvent {
-  const factory FenSocketEvent({
+  const factory({
     required GameId id,
     required String fen,
     required Move lastMove,
@@ -18,7 +18,7 @@ sealed class FenSocketEvent with _$FenSocketEvent {
     required Duration blackClock,
   }) = _FenSocketEvent;
 
-  factory FenSocketEvent.fromJson(Map<String, dynamic> json) {
+  factory fromJson(Map<String, dynamic> json) {
     return _tvFenEventFromPick(pick(json).required());
   }
 }
@@ -35,9 +35,9 @@ FenSocketEvent _tvFenEventFromPick(RequiredPick pick) {
 
 @freezed
 sealed class FinishSocketEvent with _$FinishSocketEvent {
-  const factory FinishSocketEvent({required GameId id, required Side? winner}) = _FinishSocketEvent;
+  const factory({required GameId id, required Side? winner}) = _FinishSocketEvent;
 
-  factory FinishSocketEvent.fromJson(Map<String, dynamic> json) {
+  factory fromJson(Map<String, dynamic> json) {
     return _finishEventFromPick(pick(json).required());
   }
 }
@@ -56,14 +56,14 @@ FinishSocketEvent _finishEventFromPick(RequiredPick pick) {
 
 @freezed
 sealed class TvSelectEvent with _$TvSelectEvent {
-  const factory TvSelectEvent({
+  const factory({
     required TvChannel channel,
     required GameId id,
     required Side orientation,
     required ({String name, String? title, int? rating}) player,
   }) = _TvSelectEvent;
 
-  factory TvSelectEvent.fromJson(Map<String, dynamic> json) {
+  factory fromJson(Map<String, dynamic> json) {
     return _tvSelectEventFromPick(pick(json).required());
   }
 }

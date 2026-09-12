@@ -51,12 +51,10 @@ final aggregatorProvider = Provider<Aggregator>((ref) {
 /// if all uris grouped client side match the target server endpoint configuration.
 ///
 /// If there is no match, it will make atomic requests for each uri after the [aggregationInterval] delay.
-class Aggregator {
-  Aggregator(this.client, {this.aggregationInterval = kAggregationInterval});
-
-  final LichessClient client;
-  final Duration aggregationInterval;
-
+class Aggregator(
+  final LichessClient client, {
+  final Duration aggregationInterval = kAggregationInterval,
+}) {
   (Future<void>, ISet<Uri>)? _pending;
 
   final MemoryCache<ISet<Uri>, CachedAggregatorRequest> _groupRequests = MemoryCache(

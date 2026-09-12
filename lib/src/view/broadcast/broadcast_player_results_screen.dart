@@ -44,17 +44,11 @@ int tournamentReferenceYear(BroadcastTournament tournament) {
   return (dates.endsAt ?? dates.startsAt).year;
 }
 
-class BroadcastPlayerResultsScreenLoading extends ConsumerWidget {
-  final BroadcastRoundId roundId;
-  final BroadcastPlayer? player;
-  final String playerId;
-
-  const BroadcastPlayerResultsScreenLoading({
-    required this.roundId,
-    this.player,
-    required this.playerId,
-  });
-
+class const BroadcastPlayerResultsScreenLoading({
+  required final BroadcastRoundId roundId,
+  final BroadcastPlayer? player,
+  required final String playerId,
+}) extends ConsumerWidget {
   static Route<dynamic> buildRoute(
     BroadcastRoundId roundId,
     String playerId, {
@@ -91,17 +85,11 @@ class BroadcastPlayerResultsScreenLoading extends ConsumerWidget {
   }
 }
 
-class BroadcastPlayerResultsScreen extends ConsumerWidget {
-  final BroadcastTournamentId tournamentId;
-  final BroadcastPlayer? player;
-  final String playerId;
-
-  const BroadcastPlayerResultsScreen({
-    required this.tournamentId,
-    this.player,
-    required this.playerId,
-  });
-
+class const BroadcastPlayerResultsScreen({
+  required final BroadcastTournamentId tournamentId,
+  final BroadcastPlayer? player,
+  required final String playerId,
+}) extends ConsumerWidget {
   static Route<dynamic> buildRoute(
     BroadcastTournamentId tournamentId,
     BroadcastPlayer player,
@@ -169,17 +157,13 @@ class BroadcastPlayerResultsScreen extends ConsumerWidget {
 ///
 /// The toggled value is kept locally so the button reacts immediately, without refetching the
 /// player. It is reverted if the request fails.
-class _FollowPlayerButton extends ConsumerStatefulWidget {
-  const _FollowPlayerButton({required this.fideId, required this.isFollowing});
-
-  final FideId fideId;
-  final bool isFollowing;
-
+class const _FollowPlayerButton({required final FideId fideId, required final bool isFollowing})
+    extends ConsumerStatefulWidget {
   @override
   ConsumerState<_FollowPlayerButton> createState() => _FollowPlayerButtonState();
 }
 
-class _FollowPlayerButtonState extends ConsumerState<_FollowPlayerButton> {
+class _FollowPlayerButtonState() extends ConsumerState<_FollowPlayerButton> {
   bool? _isFollowing;
 
   bool get _value => _isFollowing ?? widget.isFollowing;
@@ -223,12 +207,8 @@ final _playerAndTournamentProvider = FutureProvider.autoDispose
       return (player, tournament);
     });
 
-class _Body extends ConsumerWidget {
-  final BroadcastTournamentId tournamentId;
-  final String playerId;
-
-  const _Body(this.tournamentId, this.playerId);
-
+class const _Body(final BroadcastTournamentId tournamentId, final String playerId)
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     switch (ref.watch(_playerAndTournamentProvider((tournamentId, playerId)))) {
@@ -301,12 +281,10 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class _OverallStatPlayer extends StatelessWidget {
-  const _OverallStatPlayer({required this.playerWithGameResults, required this.tournament});
-
-  final BroadcastPlayerWithGameResults playerWithGameResults;
-  final BroadcastTournament tournament;
-
+class const _OverallStatPlayer({
+  required final BroadcastPlayerWithGameResults playerWithGameResults,
+  required final BroadcastTournament tournament,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final BroadcastPlayerWithGameResults(:playerWithOverallResult, :fideData, :games) =
@@ -497,12 +475,10 @@ class _OverallStatPlayer extends StatelessWidget {
   }
 }
 
-class _TieBreaksSection extends StatelessWidget {
-  const _TieBreaksSection(this.tieBreaks, this.player);
-
-  final BroadcastPlayerWithOverallResult player;
-  final IList<BroadcastTieBreakDetail> tieBreaks;
-
+class const _TieBreaksSection(
+  final IList<BroadcastTieBreakDetail> tieBreaks,
+  final BroadcastPlayerWithOverallResult player,
+) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -537,23 +513,14 @@ class _TieBreaksSection extends StatelessWidget {
   }
 }
 
-class _GameResultListTile extends StatelessWidget {
-  const _GameResultListTile({
-    required this.playerGameResult,
-    required this.tournament,
-    required this.index,
-    required this.indexWidth,
-    required this.showRatingDiff,
-    required this.showTCIcon,
-  });
-
-  final BroadcastPlayerGameResult playerGameResult;
-  final BroadcastTournament tournament;
-  final int index;
-  final double indexWidth;
-  final bool showRatingDiff;
-  final bool showTCIcon;
-
+class const _GameResultListTile({
+  required final BroadcastPlayerGameResult playerGameResult,
+  required final BroadcastTournament tournament,
+  required final int index,
+  required final double indexWidth,
+  required final bool showRatingDiff,
+  required final bool showTCIcon,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final BroadcastPlayerGameResult(
@@ -646,13 +613,8 @@ class _GameResultListTile extends StatelessWidget {
   }
 }
 
-class _StatCard extends StatelessWidget {
-  const _StatCard(this.stat, {this.value, this.child});
-
-  final String stat;
-  final String? value;
-  final Widget? child;
-
+class const _StatCard(final String stat, {final String? value, final Widget? child})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StatCard(

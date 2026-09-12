@@ -17,11 +17,7 @@ final broadcastServiceProvider = Provider<BroadcastService>((Ref ref) {
   return service;
 }, name: 'BroadcastServiceProvider');
 
-class BroadcastService {
-  BroadcastService(this.ref);
-
-  final Ref ref;
-
+class BroadcastService(final Ref ref) {
   StreamSubscription<ParsedLocalNotification>? _notificationResponseSubscription;
 
   void start() {

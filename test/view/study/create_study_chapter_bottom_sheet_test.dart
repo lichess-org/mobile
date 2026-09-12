@@ -17,7 +17,7 @@ import '../../test_bottom_sheet_opener.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 
-class OnChaptersCreatedCallback extends Mock {
+class OnChaptersCreatedCallback() extends Mock {
   void call(StudyId studyId, IList<StudyChapterId> chapterIds);
 }
 

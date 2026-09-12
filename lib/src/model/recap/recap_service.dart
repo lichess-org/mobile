@@ -13,11 +13,7 @@ final recapServiceProvider = Provider<RecapService>((Ref ref) {
   return service;
 }, name: 'recapServiceProvider');
 
-class RecapService {
-  RecapService(this.ref);
-
-  final Ref ref;
-
+class RecapService(final Ref ref) {
   StreamSubscription<ParsedLocalNotification>? _notificationResponseSubscription;
 
   void start() {

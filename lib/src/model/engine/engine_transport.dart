@@ -12,7 +12,7 @@ import 'package:multistockfish/multistockfish.dart';
 /// Backends are responsible for their own start-up handshake, so everything that can fail before
 /// the engine answers fails the future that produces the transport, and there is no "loading"
 /// state to model up here.
-abstract class EngineTransport {
+abstract class EngineTransport() {
   /// What this transport was created for.
   EngineSpec get spec;
 
@@ -53,8 +53,9 @@ abstract class EngineTransport {
 }
 
 /// An [EngineTransport] over a `multistockfish` engine handle.
-class StockfishTransport implements EngineTransport {
-  StockfishTransport._(this.spec, this._stockfish) {
+class StockfishTransport._(@override final StockfishSpec spec, final Stockfish _stockfish)
+    implements EngineTransport {
+  this {
     _controller.onListen = _replayStartupLines;
     _stockfish.state.addListener(_onStockfishStateChange);
   }
@@ -92,11 +93,6 @@ class StockfishTransport implements EngineTransport {
     buffered.clear();
     return transport;
   }
-
-  @override
-  final StockfishSpec spec;
-
-  final Stockfish _stockfish;
 
   final _controller = StreamController<String>.broadcast();
   final _death = Completer<EngineFailure?>();
@@ -238,8 +234,8 @@ class StockfishTransport implements EngineTransport {
 }
 
 /// An [EngineTransport] over a `lc0` engine handle.
-class Lc0Transport implements EngineTransport {
-  Lc0Transport._(this.spec, this._lc0) {
+class Lc0Transport._(@override final Lc0Spec spec, final Lc0 _lc0) implements EngineTransport {
+  this {
     _controller.onListen = _replayStartupLines;
     _lc0.state.addListener(_onLc0StateChange);
   }
@@ -275,11 +271,6 @@ class Lc0Transport implements EngineTransport {
     buffered.clear();
     return transport;
   }
-
-  @override
-  final Lc0Spec spec;
-
-  final Lc0 _lc0;
 
   final _controller = StreamController<String>.broadcast();
   final _death = Completer<EngineFailure?>();

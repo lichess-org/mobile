@@ -36,11 +36,8 @@ import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:share_plus/share_plus.dart';
 
-class BoardEditorScreen extends ConsumerWidget {
-  const BoardEditorScreen({super.key, this.params});
-
-  final BoardEditorControllerParams? params;
-
+class const BoardEditorScreen({super.key, final BoardEditorControllerParams? params})
+    extends ConsumerWidget {
   static Route<dynamic> buildRoute(BoardEditorControllerParams? params) {
     return buildScreenRoute(screen: BoardEditorScreen(params: params));
   }
@@ -123,21 +120,13 @@ class BoardEditorScreen extends ConsumerWidget {
   }
 }
 
-class _BoardEditor extends ConsumerWidget {
-  const _BoardEditor(
-    this.boardSize, {
-    required this.params,
-    required this.isTablet,
-    required this.orientation,
-    required this.pieces,
-  });
-
-  final BoardEditorControllerParams? params;
-  final double boardSize;
-  final bool isTablet;
-  final Side orientation;
-  final Pieces pieces;
-
+class const _BoardEditor(
+  final double boardSize, {
+  required final BoardEditorControllerParams? params,
+  required final bool isTablet,
+  required final Side orientation,
+  required final Pieces pieces,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final editorState = ref.watch(boardEditorControllerProvider(params));
@@ -164,30 +153,18 @@ class _BoardEditor extends ConsumerWidget {
   }
 }
 
-class _PieceMenu extends ConsumerStatefulWidget {
-  const _PieceMenu(
-    this.boardSize, {
-    required this.params,
-    required this.direction,
-    required this.side,
-    required this.isTablet,
-  });
-
-  final BoardEditorControllerParams? params;
-
-  final double boardSize;
-
-  final Axis direction;
-
-  final Side side;
-
-  final bool isTablet;
-
+class const _PieceMenu(
+  final double boardSize, {
+  required final BoardEditorControllerParams? params,
+  required final Axis direction,
+  required final Side side,
+  required final bool isTablet,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_PieceMenu> createState() => _PieceMenuState();
 }
 
-class _PieceMenuState extends ConsumerState<_PieceMenu> {
+class _PieceMenuState() extends ConsumerState<_PieceMenu> {
   @override
   Widget build(BuildContext context) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
@@ -278,11 +255,7 @@ class _PieceMenuState extends ConsumerState<_PieceMenu> {
   }
 }
 
-class _BottomBar extends ConsumerWidget {
-  const _BottomBar(this.params);
-
-  final BoardEditorControllerParams? params;
-
+class const _BottomBar(final BoardEditorControllerParams? params) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final editorController = boardEditorControllerProvider(params);
@@ -470,16 +443,13 @@ class _BottomBar extends ConsumerWidget {
   }
 }
 
-class _FenDialog extends StatefulWidget {
-  const _FenDialog({required this.onFenLoaded});
-
-  final void Function(String fen) onFenLoaded;
-
+class const _FenDialog({required final void Function(String fen) onFenLoaded})
+    extends StatefulWidget {
   @override
   State<_FenDialog> createState() => _FenDialogState();
 }
 
-class _FenDialogState extends State<_FenDialog> {
+class _FenDialogState() extends State<_FenDialog> {
   final _controller = TextEditingController();
 
   @override
@@ -526,16 +496,13 @@ class _FenDialogState extends State<_FenDialog> {
   }
 }
 
-class _Chess960PositionDialog extends StatefulWidget {
-  const _Chess960PositionDialog({required this.onFenLoaded});
-
-  final void Function(String fen) onFenLoaded;
-
+class const _Chess960PositionDialog({required final void Function(String fen) onFenLoaded})
+    extends StatefulWidget {
   @override
   State<_Chess960PositionDialog> createState() => _Chess960PositionDialogState();
 }
 
-class _Chess960PositionDialogState extends State<_Chess960PositionDialog> {
+class _Chess960PositionDialogState() extends State<_Chess960PositionDialog> {
   final _controller = TextEditingController();
   String? _errorText;
 

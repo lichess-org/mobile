@@ -16,12 +16,11 @@ import 'package:material_ui/material_ui.dart';
 
 final _dateFormatter = DateFormat.yMMMd();
 
-class UserActivityWidget extends ConsumerWidget {
-  const UserActivityWidget({required this.activity, required this.user, super.key});
-
-  final AsyncValue<IList<UserActivity>> activity;
-  final LightUser user;
-
+class const UserActivityWidget({
+  required final AsyncValue<IList<UserActivity>> activity,
+  required final LightUser user,
+  super.key,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return activity.when(
@@ -53,12 +52,11 @@ class UserActivityWidget extends ConsumerWidget {
   }
 }
 
-class UserActivityEntry extends ConsumerWidget {
-  const UserActivityEntry({required this.entry, required this.user, super.key});
-
-  final UserActivity entry;
-  final LightUser user;
-
+class const UserActivityEntry({
+  required final UserActivity entry,
+  required final LightUser user,
+  super.key,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
@@ -235,21 +233,13 @@ class UserActivityEntry extends ConsumerWidget {
   }
 }
 
-class _UserActivityListTile extends StatelessWidget {
-  const _UserActivityListTile({
-    required this.title,
-    this.subtitle,
-    this.trailing,
-    this.leading,
-    this.onTap,
-  });
-
-  final String title;
-  final Widget? subtitle;
-  final Widget? trailing;
-  final Widget? leading;
-  final VoidCallback? onTap;
-
+class const _UserActivityListTile({
+  required final String title,
+  final Widget? subtitle,
+  final Widget? trailing,
+  final Widget? leading,
+  final VoidCallback? onTap,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -271,12 +261,8 @@ const _gameStatsFontStyle = TextStyle(
   fontWeight: FontWeight.bold,
 );
 
-class _ResultBox extends StatelessWidget {
-  const _ResultBox({required this.number, required this.color});
-
-  final int number;
-  final Color color;
-
+class const _ResultBox({required final int number, required final Color color})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -297,13 +283,11 @@ class _ResultBox extends StatelessWidget {
   }
 }
 
-class BriefGameResultBox extends StatelessWidget {
-  const BriefGameResultBox({required this.win, required this.draw, required this.loss});
-
-  final int win;
-  final int draw;
-  final int loss;
-
+class const BriefGameResultBox({
+  required final int win,
+  required final int draw,
+  required final int loss,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(

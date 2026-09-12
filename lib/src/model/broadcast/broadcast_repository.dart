@@ -18,12 +18,7 @@ final broadcastRepositoryProvider = Provider<BroadcastRepository>((ref) {
   return BroadcastRepository(client, aggregator);
 }, name: 'BroadcastRepositoryProvider');
 
-class BroadcastRepository {
-  BroadcastRepository(this.client, this.aggregator);
-
-  final LichessClient client;
-  final Aggregator aggregator;
-
+class BroadcastRepository(final LichessClient client, final Aggregator aggregator) {
   Future<BroadcastList> getBroadcasts({int page = 1}) {
     return aggregator.readJson(
       Uri(path: '/api/broadcast/top', queryParameters: {'page': page.toString()}),

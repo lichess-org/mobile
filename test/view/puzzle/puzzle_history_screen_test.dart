@@ -21,9 +21,9 @@ import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 import 'example_data.dart';
 
-class MockPuzzleBatchStorage extends Mock implements PuzzleBatchStorage {}
+class MockPuzzleBatchStorage() extends Mock implements PuzzleBatchStorage;
 
-class MockPuzzleStorage extends Mock implements PuzzleStorage {}
+class MockPuzzleStorage() extends Mock implements PuzzleStorage;
 
 void main() {
   setUpAll(() {

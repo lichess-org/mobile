@@ -10,9 +10,7 @@ import 'package:material_ui/material_ui.dart';
 
 const kMasterVolumeValues = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0];
 
-class SoundSettingsScreen extends StatelessWidget {
-  const SoundSettingsScreen({super.key});
-
+class const SoundSettingsScreen({super.key}) extends StatelessWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const SoundSettingsScreen());
   }
@@ -21,7 +19,7 @@ class SoundSettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return PlatformScaffold(
       appBar: PlatformAppBar(title: Text(context.l10n.sound)),
-      body: _Body(),
+      body: const _Body(),
     );
   }
 }
@@ -33,7 +31,7 @@ String soundThemeL10n(BuildContext context, SoundTheme theme) =>
 /// Returns a volume label in percentage.
 String volumeLabel(double value) => '${(value * 100).round()}%';
 
-class _Body extends ConsumerWidget {
+class const _Body() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final generalPrefs = ref.watch(generalPreferencesProvider);

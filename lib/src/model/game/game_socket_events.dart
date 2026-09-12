@@ -15,10 +15,9 @@ part 'game_socket_events.freezed.dart';
 
 @freezed
 sealed class GameFullEvent with _$GameFullEvent {
-  const factory GameFullEvent({required PlayableGame game, required int socketEventVersion}) =
-      _GameFullEvent;
+  const factory({required PlayableGame game, required int socketEventVersion}) = _GameFullEvent;
 
-  factory GameFullEvent.fromJson(Map<String, dynamic> json) {
+  factory fromJson(Map<String, dynamic> json) {
     return GameFullEvent(
       game: PlayableGame.fromServerJson(json),
       socketEventVersion: json['socket'] as int,
@@ -27,10 +26,8 @@ sealed class GameFullEvent with _$GameFullEvent {
 }
 
 @freezed
-sealed class MoveEvent with _$MoveEvent {
-  const MoveEvent._();
-
-  const factory MoveEvent({
+sealed class const MoveEvent._() with _$MoveEvent {
+  const factory({
     required int ply,
     required String uci,
     required String san,
@@ -42,8 +39,7 @@ sealed class MoveEvent with _$MoveEvent {
     ({Duration white, Duration black, Duration? lag, DateTime at})? clock,
   }) = _MoveEvent;
 
-  factory MoveEvent.fromJson(Map<String, dynamic> json) =>
-      _socketMoveEventFromPick(pick(json).required());
+  factory fromJson(Map<String, dynamic> json) => _socketMoveEventFromPick(pick(json).required());
 }
 
 MoveEvent _socketMoveEventFromPick(RequiredPick pick) {
@@ -87,10 +83,8 @@ MoveEvent _socketMoveEventFromPick(RequiredPick pick) {
 }
 
 @freezed
-sealed class GameEndEvent with _$GameEndEvent {
-  const GameEndEvent._();
-
-  const factory GameEndEvent({
+sealed class const GameEndEvent._() with _$GameEndEvent {
+  const factory({
     required GameStatus status,
     Side? winner,
     ({int white, int black})? ratingDiff,
@@ -98,8 +92,7 @@ sealed class GameEndEvent with _$GameEndEvent {
     ({Duration white, Duration black})? clock,
   }) = _GameEndEvent;
 
-  factory GameEndEvent.fromJson(Map<String, dynamic> json) =>
-      _gameEndEventFromPick(pick(json).required());
+  factory fromJson(Map<String, dynamic> json) => _gameEndEventFromPick(pick(json).required());
 }
 
 GameEndEvent _gameEndEventFromPick(RequiredPick pick) {
@@ -119,10 +112,8 @@ GameEndEvent _gameEndEventFromPick(RequiredPick pick) {
 }
 
 @freezed
-sealed class ServerEvalEvent with _$ServerEvalEvent {
-  const ServerEvalEvent._();
-
-  const factory ServerEvalEvent({
+sealed class const ServerEvalEvent._() with _$ServerEvalEvent {
+  const factory({
     required IList<ExternalEval> evals,
     required Map<String, dynamic> tree,
     ServerAnalysis? analysis,
@@ -130,8 +121,7 @@ sealed class ServerEvalEvent with _$ServerEvalEvent {
     required bool isAnalysisComplete,
   }) = _ServerEvalEvent;
 
-  factory ServerEvalEvent.fromJson(Map<String, dynamic> json) =>
-      _serverEvalEventFromPick(pick(json).required());
+  factory fromJson(Map<String, dynamic> json) => _serverEvalEventFromPick(pick(json).required());
 }
 
 ServerEvalEvent _serverEvalEventFromPick(RequiredPick pick) {

@@ -9,19 +9,12 @@ import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_ui/material_ui.dart';
 
-class TimeControlModal extends StatelessWidget {
-  const TimeControlModal({
-    required this.timeIncrement,
-    required this.onSelected,
-    this.excludeUltraBullet = false,
-    super.key,
-  });
-
-  final TimeIncrement timeIncrement;
-  final ValueSetter<TimeIncrement> onSelected;
-
-  final bool excludeUltraBullet;
-
+class const TimeControlModal({
+  required final TimeIncrement timeIncrement,
+  required final ValueSetter<TimeIncrement> onSelected,
+  final bool excludeUltraBullet = false,
+  super.key,
+}) extends StatelessWidget {
   static const _horizontalPadding = EdgeInsets.symmetric(horizontal: 16.0);
   static const _sectionSpacing = SizedBox(height: 16.0);
 
@@ -225,19 +218,12 @@ class TimeControlModal extends StatelessWidget {
   }
 }
 
-class _SectionChoices extends StatelessWidget {
-  const _SectionChoices(
-    this.selected, {
-    required this.title,
-    required this.choices,
-    required this.onSelected,
-  });
-
-  final TimeIncrement selected;
-  final List<TimeIncrement> choices;
-  final _SectionTitle title;
-  final void Function(TimeIncrement choice) onSelected;
-
+class const _SectionChoices(
+  final TimeIncrement selected, {
+  required final _SectionTitle title,
+  required final List<TimeIncrement> choices,
+  required final void Function(TimeIncrement choice) onSelected,
+}) extends StatelessWidget {
   static const spacing = SizedBox(width: 8.0);
 
   @override
@@ -281,18 +267,12 @@ class _SectionChoices extends StatelessWidget {
   }
 }
 
-class _ChoiceChip extends StatelessWidget {
-  const _ChoiceChip({
-    required this.label,
-    required this.selected,
-    required this.onSelected,
-    super.key,
-  });
-
-  final Widget label;
-  final bool selected;
-  final void Function(bool selected) onSelected;
-
+class const _ChoiceChip({
+  required final Widget label,
+  required final bool selected,
+  required final void Function(bool selected) onSelected,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -331,12 +311,8 @@ class _ChoiceChip extends StatelessWidget {
   }
 }
 
-class _SectionTitle extends StatelessWidget {
-  const _SectionTitle({required this.title, required this.icon});
-
-  final String title;
-  final IconData icon;
-
+class const _SectionTitle({required final String title, required final IconData icon})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(

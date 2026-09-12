@@ -55,18 +55,16 @@ const kPracticeMaxSearchTime = Duration(seconds: 5);
 /// supersedes this one silently: the stream simply stops and nothing restarts it. So the analysis
 /// is handed over explicitly rather than left to be discovered — and taken back the same way, by
 /// analysing the position the game is at now, which is not always the one that was given up.
-class PracticeAnalyser {
-  PracticeAnalyser({required this.evaluator, required this.onEval});
-
+class PracticeAnalyser({
   /// The evaluator to run on.
   ///
   /// A function rather than the evaluator itself, because it is keyed by the game being played and
   /// is resolved lazily by the controller that owns both.
-  final PositionEvaluator Function() evaluator;
+  required final PositionEvaluator Function() evaluator,
 
   /// Called whenever a position's evaluation improves, so the game can store it.
-  final void Function(Position position, ClientEval eval) onEval;
-
+  required final void Function(Position position, ClientEval eval) onEval,
+}) {
   /// The work being analysed, or null when nothing is.
   EvalWork? _analysing;
 
@@ -244,12 +242,10 @@ class PracticeAnalyser {
 }
 
 /// Somebody waiting on a position reaching a depth, and the deadline they gave it.
-class _Waiter {
-  _Waiter(this.minDepth);
-
+class _Waiter(
   /// The depth this waiter is waiting for.
-  final int minDepth;
-
+  final int minDepth,
+) {
   final _completer = Completer<ClientEval?>();
 
   /// Cancelled when the wait ends another way, so that nothing is left ticking behind it.

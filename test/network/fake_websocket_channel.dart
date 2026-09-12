@@ -21,11 +21,9 @@ FakeWebSocketChannel createDefaultFakeWebSocketChannel(Uri socketRoute) {
 }
 
 /// A [WebSocketChannelFactory] that creates fake WebSocket channels and exposes a stream of outgoing messages (except ping).
-class ListenableFakeWebSocketChannelFactory implements WebSocketChannelFactory {
-  ListenableFakeWebSocketChannelFactory(this.createFunction);
-
-  final FakeWebSocketChannel Function(Uri socketRoute) createFunction;
-
+class ListenableFakeWebSocketChannelFactory(
+  final FakeWebSocketChannel Function(Uri socketRoute) createFunction,
+) implements WebSocketChannelFactory {
   Stream<dynamic> outgoingMessages(Uri socketRoute) {
     return _outcomingController.stream
         .where((message) => message.$1 == socketRoute)
@@ -62,11 +60,9 @@ class ListenableFakeWebSocketChannelFactory implements WebSocketChannelFactory {
 }
 
 /// A [WebSocketChannelFactory] that creates fake WebSocket channels.
-class FakeWebSocketChannelFactory implements WebSocketChannelFactory {
-  const FakeWebSocketChannelFactory(this.createFunction);
-
-  final FakeWebSocketChannel Function(Uri socketRoute) createFunction;
-
+class const FakeWebSocketChannelFactory(
+  final FakeWebSocketChannel Function(Uri socketRoute) createFunction,
+) implements WebSocketChannelFactory {
   @override
   Future<WebSocketChannel> create(
     String url, {
@@ -80,12 +76,10 @@ class FakeWebSocketChannelFactory implements WebSocketChannelFactory {
 /// A [WebSocketChannelFactory] that resolves the channel creation after a delay.
 ///
 /// Useful to simulate a connection attempt that is still in flight while the client state changes.
-class DelayedFakeWebSocketChannelFactory implements WebSocketChannelFactory {
-  const DelayedFakeWebSocketChannelFactory(this.delay, this.createFunction);
-
-  final Duration delay;
-  final FakeWebSocketChannel Function(Uri socketRoute) createFunction;
-
+class const DelayedFakeWebSocketChannelFactory(
+  final Duration delay,
+  final FakeWebSocketChannel Function(Uri socketRoute) createFunction,
+) implements WebSocketChannelFactory {
   @override
   Future<WebSocketChannel> create(
     String url, {
@@ -126,20 +120,20 @@ typedef FakeSocketServerHandlers =
 ///
 /// The [sentMessages] and [sentMessagesExceptPing] streams can be used to
 /// verify that the client sends the expected messages.
-class FakeWebSocketChannel implements WebSocketChannel {
-  FakeWebSocketChannel(
-    Uri socketRoute, {
-    this.connectionLag = kFakeWebSocketConnectionLag,
-    this.serverHandlers = const {},
-  }) : route = Uri(path: socketRoute.path),
-       assert(socketRoute.path.isNotEmpty, 'Route path must not be empty'),
-       assert(connectionLag > Duration.zero, 'Connection lag must be greater than 0') {
+class FakeWebSocketChannel(
+  Uri socketRoute, {
+
+  /// The lag of the connection (duration before pong response) in milliseconds.
+  var Duration connectionLag = kFakeWebSocketConnectionLag,
+  final FakeSocketServerHandlers serverHandlers = const {},
+}) implements WebSocketChannel {
+  this
+    : assert(socketRoute.path.isNotEmpty, 'Route path must not be empty'),
+      assert(connectionLag > Duration.zero, 'Connection lag must be greater than 0') {
     _sink = _FakeWebSocketSink(this, serverHandlers);
   }
 
-  final Uri route;
-
-  final FakeSocketServerHandlers serverHandlers;
+  final Uri route = Uri(path: socketRoute.path);
 
   late final _FakeWebSocketSink _sink;
 
@@ -198,9 +192,6 @@ class FakeWebSocketChannel implements WebSocketChannel {
 
   /// The controller for outgoing (to server) messages.
   final _outcomingController = StreamController<dynamic>.broadcast();
-
-  /// The lag of the connection (duration before pong response) in milliseconds.
-  Duration connectionLag;
 
   /// Whether the server should send a pong response to a ping request.
   ///
@@ -288,12 +279,10 @@ class FakeWebSocketChannel implements WebSocketChannel {
   }
 }
 
-class _FakeWebSocketSink implements WebSocketSink {
-  _FakeWebSocketSink(this._channel, this._serverHandlers);
-
-  final FakeWebSocketChannel _channel;
-  final FakeSocketServerHandlers _serverHandlers;
-
+class _FakeWebSocketSink(
+  final FakeWebSocketChannel _channel,
+  final FakeSocketServerHandlers _serverHandlers,
+) implements WebSocketSink {
   Timer? _pingTimer;
   final Map<String, Timer?> _serverHandlersTimers = {};
 

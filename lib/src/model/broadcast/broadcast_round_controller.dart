@@ -26,11 +26,8 @@ final broadcastRoundControllerProvider = AsyncNotifierProvider.autoDispose
       name: 'BroadcastRoundControllerProvider',
     );
 
-class BroadcastRoundController extends AsyncNotifier<BroadcastRoundState> {
-  BroadcastRoundController(this.broadcastRoundId);
-
-  final BroadcastRoundId broadcastRoundId;
-
+class BroadcastRoundController(final BroadcastRoundId broadcastRoundId)
+    extends AsyncNotifier<BroadcastRoundState> {
   static Uri broadcastSocketUri(BroadcastRoundId broadcastRoundId) =>
       Uri(path: 'study/$broadcastRoundId/socket/v6');
 
@@ -316,7 +313,7 @@ class BroadcastRoundController extends AsyncNotifier<BroadcastRoundState> {
 
 @freezed
 sealed class BroadcastRoundState with _$BroadcastRoundState {
-  const factory BroadcastRoundState({
+  const factory({
     /// The broadcast round
     required BroadcastRound round,
 

@@ -41,69 +41,42 @@ const _fallbackOptionDefaults = {
 };
 
 /// How long a search may run.
-sealed class SearchLimit {
-  const SearchLimit();
-
-  const factory SearchLimit.movetime(Duration duration) = MoveTimeLimit;
-  const factory SearchLimit.nodes(int nodes) = NodesLimit;
-  const factory SearchLimit.depth(int depth) = DepthLimit;
-  const factory SearchLimit.infinite() = InfiniteLimit;
+sealed class const SearchLimit() {
+  const factory movetime(Duration duration) = MoveTimeLimit;
+  const factory nodes(int nodes) = NodesLimit;
+  const factory depth(int depth) = DepthLimit;
+  const factory infinite() = InfiniteLimit;
 }
 
-final class MoveTimeLimit extends SearchLimit {
-  const MoveTimeLimit(this.duration);
-  final Duration duration;
-}
+final class const MoveTimeLimit(final Duration duration) extends SearchLimit;
 
-final class NodesLimit extends SearchLimit {
-  const NodesLimit(this.nodes);
-  final int nodes;
-}
+final class const NodesLimit(final int nodes) extends SearchLimit;
 
-final class DepthLimit extends SearchLimit {
-  const DepthLimit(this.depth);
-  final int depth;
-}
+final class const DepthLimit(final int depth) extends SearchLimit;
 
-final class InfiniteLimit extends SearchLimit {
-  const InfiniteLimit();
-}
+final class const InfiniteLimit() extends SearchLimit;
 
 /// Everything a search needs, and nothing about why it was asked for.
 @immutable
-class SearchRequest {
-  const SearchRequest({
-    required this.initialPosition,
-    required this.moves,
-    required this.variant,
-    required this.limit,
-    this.fenOverride,
-    this.threads = 1,
-    this.multiPv = 1,
-    this.options = const IMapConst({}),
-    required this.game,
-  });
-
+class const SearchRequest({
   /// The position the [moves] are played from.
-  final Position initialPosition;
+  required final Position initialPosition,
 
   /// The moves leading to the position to search, already normalised for [variant].
-  final IList<UCIMove> moves;
+  required final IList<UCIMove> moves,
 
   /// The variant being played. Sent as `UCI_Variant` to an engine that has the option.
-  final Variant variant;
-
-  final SearchLimit limit;
+  required final Variant variant,
+  required final SearchLimit limit,
 
   /// A position to search instead of the one [moves] leads to — threat mode searches a doctored
   /// FEN that no sequence of moves can reach.
-  final String? fenOverride;
-
-  final int threads;
-  final int multiPv;
+  final String? fenOverride,
+  final int threads = 1,
+  final int multiPv = 1,
 
   /// The complete option set for this search, beyond the ones named above.
-  final IMap<String, String> options;
+  final IMap<String, String> options = const IMapConst({}),
 
   /// What game this search belongs to.
   ///
@@ -112,42 +85,29 @@ class SearchRequest {
   /// command tells it that the game moved on. This does — the engine is told `ucinewgame`, and so
   /// clears the table it filled for the previous game, whenever this differs from the last
   /// search's. Anything with value equality does: a game id, an analysis context.
-  final Object game;
-}
+  required final Object game,
+});
 
 /// One `info` line, in the engine's point of view.
 @immutable
-class UciInfo {
-  const UciInfo({
-    required this.depth,
-    required this.nodes,
-    required this.multiPv,
-    required this.elapsed,
-    required this.pv,
-    this.cp,
-    this.mate,
-    this.isLowerBound = false,
-    this.isUpperBound = false,
-  });
-
-  final int depth;
-  final int nodes;
-  final int multiPv;
-  final Duration elapsed;
-  final IList<UCIMove> pv;
+class const UciInfo({
+  required final int depth,
+  required final int nodes,
+  required final int multiPv,
+  required final Duration elapsed,
+  required final IList<UCIMove> pv,
 
   /// Centipawns, from the point of view of the side to move. Null for a mate score.
-  final int? cp;
+  final int? cp,
 
   /// Moves to mate, from the point of view of the side to move. Null for a centipawn score.
-  final int? mate;
-
-  final bool isLowerBound;
-  final bool isUpperBound;
-}
+  final int? mate,
+  final bool isLowerBound = false,
+  final bool isUpperBound = false,
+});
 
 /// A search in progress.
-abstract class Search {
+abstract class Search() {
   /// The request this search was started for.
   SearchRequest get request;
 
@@ -171,13 +131,23 @@ abstract class Search {
 ///
 /// It has no idea whether it is being used to analyse or to play. Skill levels, evaluation
 /// perspective and search-time policy all live above it.
-class Engine {
-  Engine(this._transport, {this.hashSizeInMb = 16}) {
+class Engine(
+  final EngineTransport _transport, {
+
+  /// The transposition table this engine was created with, in MB.
+  ///
+  /// A creation parameter and not a search one, because **the table belongs to the engine**:
+  /// `setoption name Hash` frees the old table and allocates and zeroes a new one, synchronously,
+  /// on the thread running the UCI loop — so an engine two callers shared, each asking for a
+  /// different size, would rebuild its table on every hand-off and be unable to read a command,
+  /// `quit` included, while it did. That is not a hypothetical: on a variant offline game the
+  /// opponent and the evaluator are literally the same engine.
+  final int hashSizeInMb = 16,
+}) {
+  this {
     _linesSubscription = _transport.lines.listen(_onLine);
     unawaited(_transport.death.then(_onDeath));
   }
-
-  final EngineTransport _transport;
 
   late final StreamSubscription<String> _linesSubscription;
 
@@ -201,16 +171,6 @@ class Engine {
 
   /// The variant of the last search started, so that a failure can name what the engine was doing.
   Variant? _lastVariant;
-
-  /// The transposition table this engine was created with, in MB.
-  ///
-  /// A creation parameter and not a search one, because **the table belongs to the engine**:
-  /// `setoption name Hash` frees the old table and allocates and zeroes a new one, synchronously,
-  /// on the thread running the UCI loop — so an engine two callers shared, each asking for a
-  /// different size, would rebuild its table on every hand-off and be unable to read a command,
-  /// `quit` included, while it did. That is not a hypothetical: on a variant offline game the
-  /// opponent and the evaluator are literally the same engine.
-  final int hashSizeInMb;
 
   EngineSpec get spec => _transport.spec;
 
@@ -563,12 +523,7 @@ class Engine {
   };
 }
 
-class _RunningSearch implements Search {
-  _RunningSearch(this.request);
-
-  @override
-  final SearchRequest request;
-
+class _RunningSearch(@override final SearchRequest request) implements Search {
   /// Whether `ucinewgame` was already sent on this search's behalf, so that a variant change does
   /// not send a second one.
   bool _newGameSent = false;

@@ -26,17 +26,13 @@ import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 import 'package:material_ui/material_ui.dart';
 
-class CreateChallengeBottomSheet extends ConsumerStatefulWidget {
-  const CreateChallengeBottomSheet({this.user, this.positionFen});
-
-  final LightUser? user;
-  final String? positionFen;
-
+class const CreateChallengeBottomSheet({final LightUser? user, final String? positionFen})
+    extends ConsumerStatefulWidget {
   @override
   ConsumerState<CreateChallengeBottomSheet> createState() => _CreateChallengeBottomSheetState();
 }
 
-class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBottomSheet> {
+class _CreateChallengeBottomSheetState() extends ConsumerState<CreateChallengeBottomSheet> {
   Future<ChallengeDeclineReason?>? _pendingCorrespondenceChallenge;
   final _controller = TextEditingController();
 

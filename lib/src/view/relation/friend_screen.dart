@@ -23,9 +23,7 @@ final followingProvider = FutureProvider.autoDispose<IList<User>>((ref) {
   return ref.read(relationRepositoryProvider).getAllFollowing();
 });
 
-class FriendScreen extends ConsumerStatefulWidget {
-  const FriendScreen({super.key});
-
+class const FriendScreen({super.key}) extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const FriendScreen());
   }
@@ -34,7 +32,7 @@ class FriendScreen extends ConsumerStatefulWidget {
   ConsumerState<FriendScreen> createState() => _FriendScreenState();
 }
 
-class _FriendScreenState extends ConsumerState<FriendScreen> with TickerProviderStateMixin {
+class _FriendScreenState() extends ConsumerState<FriendScreen> with TickerProviderStateMixin {
   late final TabController _tabController;
 
   @override
@@ -70,11 +68,8 @@ class _FriendScreenState extends ConsumerState<FriendScreen> with TickerProvider
   }
 }
 
-class OnlineFriendsWidget extends ConsumerWidget {
-  const OnlineFriendsWidget({required this.onlineFriends});
-
-  final AsyncValue<IList<OnlineFriend>> onlineFriends;
-
+class const OnlineFriendsWidget({required final AsyncValue<IList<OnlineFriend>> onlineFriends})
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Shimmer(
@@ -107,11 +102,8 @@ class OnlineFriendsWidget extends ConsumerWidget {
   }
 }
 
-class _OnlineFriendListTile extends ConsumerWidget {
-  const _OnlineFriendListTile({required this.onlineFriend});
-
-  final OnlineFriend onlineFriend;
-
+class const _OnlineFriendListTile({required final OnlineFriend onlineFriend})
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final (:user, :playing) = onlineFriend;
@@ -141,9 +133,7 @@ class _OnlineFriendListTile extends ConsumerWidget {
   }
 }
 
-class _Online extends ConsumerWidget {
-  const _Online();
-
+class const _Online() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final onlineFriends = ref.watch(onlineFriendsProvider);
@@ -168,9 +158,7 @@ class _Online extends ConsumerWidget {
   }
 }
 
-class _Following extends ConsumerWidget {
-  const _Following();
-
+class const _Following() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final following = ref.watch(followingProvider);

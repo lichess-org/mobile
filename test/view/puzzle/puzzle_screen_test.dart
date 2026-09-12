@@ -31,15 +31,11 @@ import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 import 'example_data.dart';
 
-class MockPuzzleBatchStorage extends Mock implements PuzzleBatchStorage {}
+class MockPuzzleBatchStorage() extends Mock implements PuzzleBatchStorage;
 
-class MockPuzzleStorage extends Mock implements PuzzleStorage {}
+class MockPuzzleStorage() extends Mock implements PuzzleStorage;
 
-class MockPuzzlePreferences extends PuzzlePreferences with Mock {
-  MockPuzzlePreferences(this._rated);
-
-  final bool _rated;
-
+class MockPuzzlePreferences(final bool _rated) extends PuzzlePreferences with Mock {
   @override
   PuzzlePrefs build() {
     return PuzzlePrefs(

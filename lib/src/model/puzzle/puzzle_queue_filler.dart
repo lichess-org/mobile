@@ -26,7 +26,7 @@ final puzzleQueueFillerProvider = NotifierProvider<PuzzleQueueFiller, bool>(
   name: 'PuzzleQueueFillerProvider',
 );
 
-class PuzzleQueueFiller extends Notifier<bool> {
+class PuzzleQueueFiller() extends Notifier<bool> {
   final Logger _log = Logger('PuzzleQueueFiller');
 
   @override

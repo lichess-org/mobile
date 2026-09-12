@@ -4,12 +4,8 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 
 const _customOpacity = 0.6;
 
-class ProgressionWidget extends StatelessWidget {
-  final int progress;
-  final double fontSize;
-
-  const ProgressionWidget(this.progress, {this.fontSize = 20});
-
+class const ProgressionWidget(final int progress, {final double fontSize = 20})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(

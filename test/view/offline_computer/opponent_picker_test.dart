@@ -10,17 +10,13 @@ import '../../model/engine/fake_weights_service.dart';
 import '../../test_provider_scope.dart';
 
 /// A screen whose only job is to open the picker and remember what it returned.
-class _PickerHost extends StatefulWidget {
-  const _PickerHost({required this.selected, required this.variant});
-
-  final OpponentSpec selected;
-  final Variant variant;
-
+class const _PickerHost({required final OpponentSpec selected, required final Variant variant})
+    extends StatefulWidget {
   @override
   State<_PickerHost> createState() => _PickerHostState();
 }
 
-class _PickerHostState extends State<_PickerHost> {
+class _PickerHostState() extends State<_PickerHost> {
   OpponentSpec? picked;
 
   @override

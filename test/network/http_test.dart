@@ -516,7 +516,7 @@ void main() {
   });
 }
 
-class FakeClient extends http.BaseClient {
+class FakeClient() extends http.BaseClient {
   static List<http.BaseRequest> _requests = [];
 
   static List<http.BaseRequest> verifyRequests() {

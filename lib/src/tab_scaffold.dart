@@ -15,9 +15,7 @@ import 'package:lichess_mobile/src/widgets/background.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Main scaffold that provides the bottom navigation bar and tab switching view.
-class MainTabScaffold extends ConsumerWidget {
-  const MainTabScaffold({super.key});
-
+class const MainTabScaffold({super.key}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentTab = ref.watch(currentBottomTabProvider);
@@ -146,17 +144,15 @@ class MainTabScaffold extends ConsumerWidget {
 
 /// A widget laying out multiple tabs with only one active tab being built
 /// at a time and on stage. Off stage tabs' animations are stopped.
-class _TabSwitchingView extends StatefulWidget {
-  const _TabSwitchingView({required this.currentTab, required this.tabBuilder});
-
-  final BottomTab currentTab;
-  final IndexedWidgetBuilder tabBuilder;
-
+class const _TabSwitchingView({
+  required final BottomTab currentTab,
+  required final IndexedWidgetBuilder tabBuilder,
+}) extends StatefulWidget {
   @override
   _TabSwitchingViewState createState() => _TabSwitchingViewState();
 }
 
-class _TabSwitchingViewState extends State<_TabSwitchingView> {
+class _TabSwitchingViewState() extends State<_TabSwitchingView> {
   final List<bool> shouldBuildTab = <bool>[];
   final List<FocusScopeNode> tabFocusNodes = <FocusScopeNode>[];
 
@@ -248,46 +244,28 @@ class _TabSwitchingViewState extends State<_TabSwitchingView> {
 // Following code copied and adapted from
 // https://github.com/flutter/flutter/blob/2ad6cd72c040113b47ee9055e722606a490ef0da/packages/flutter/lib/src/cupertino/tab_view.dart#L41
 
-class _MaterialTabView extends ConsumerStatefulWidget {
-  const _MaterialTabView({
-    // ignore: unused_element_parameter
-    super.key,
-    required this.tab,
-    this.builder,
-    this.navigatorKey,
-    // ignore: unused_element_parameter
-    this.routes,
-    // ignore: unused_element_parameter
-    this.onGenerateRoute,
-    // ignore: unused_element_parameter
-    this.onUnknownRoute,
-    // ignore: unused_element_parameter
-    this.navigatorObservers = const <NavigatorObserver>[],
-    // ignore: unused_element_parameter
-    this.restorationScopeId,
-  });
-
-  final BottomTab tab;
-
-  final WidgetBuilder? builder;
-
-  final GlobalKey<NavigatorState>? navigatorKey;
-
-  final Map<String, WidgetBuilder>? routes;
-
-  final RouteFactory? onGenerateRoute;
-
-  final RouteFactory? onUnknownRoute;
-
-  final List<NavigatorObserver> navigatorObservers;
-
-  final String? restorationScopeId;
-
+class const _MaterialTabView({
+  // ignore: unused_element_parameter
+  super.key,
+  required final BottomTab tab,
+  final WidgetBuilder? builder,
+  final GlobalKey<NavigatorState>? navigatorKey,
+  // ignore: unused_element_parameter
+  final Map<String, WidgetBuilder>? routes,
+  // ignore: unused_element_parameter
+  final RouteFactory? onGenerateRoute,
+  // ignore: unused_element_parameter
+  final RouteFactory? onUnknownRoute,
+  // ignore: unused_element_parameter
+  final List<NavigatorObserver> navigatorObservers = const <NavigatorObserver>[],
+  // ignore: unused_element_parameter
+  final String? restorationScopeId,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_MaterialTabView> createState() => _MaterialTabViewState();
 }
 
-class _MaterialTabViewState extends ConsumerState<_MaterialTabView> {
+class _MaterialTabViewState() extends ConsumerState<_MaterialTabView> {
   // ignore: avoid-late-keyword
   late HeroController _heroController;
 
@@ -431,82 +409,74 @@ const Color _kDefaultTabBarInactiveColor = CupertinoColors.inactiveGray;
 ///  * [CupertinoTabScaffold], which hosts the [CupertinoTabBar] at the bottom.
 ///  * [BottomNavigationBarItem], an item in a [CupertinoTabBar].
 ///  * <https://developer.apple.com/design/human-interface-guidelines/ios/bars/tab-bars/>
-class _CupertinoTabBar extends StatelessWidget implements PreferredSizeWidget {
-  /// Creates a tab bar in the iOS style.
-  const _CupertinoTabBar({
-    // ignore: unused_element_parameter
-    super.key,
-    required this.items,
-    this.onTap,
-    this.currentIndex = 0,
-    this.backgroundColor,
-    this.activeColor,
-    // ignore: unused_element_parameter
-    this.inactiveColor = _kDefaultTabBarInactiveColor,
-    // ignore: unused_element_parameter
-    this.iconSize = 30.0,
-    this.height = _kTabBarHeight,
-    this.border = const Border(
-      top: BorderSide(
-        color: _kDefaultTabBarBorderColor,
-        width: 0.0, // 0.0 means one physical pixel
-      ),
-    ),
-  }) : assert(items.length >= 2, "Tabs need at least 2 items to conform to Apple's HIG"),
-       assert(0 <= currentIndex && currentIndex < items.length),
-       assert(height >= 0.0);
+class const _CupertinoTabBar({
+  // ignore: unused_element_parameter
+  super.key,
 
   /// The interactive items laid out within the bottom navigation bar.
-  final List<BottomNavigationBarItem> items;
+  required final List<BottomNavigationBarItem> items,
 
   /// The callback that is called when a item is tapped.
   ///
   /// The widget creating the bottom navigation bar needs to keep track of the
   /// current index and call `setState` to rebuild it with the newly provided
   /// index.
-  final ValueChanged<int>? onTap;
+  final ValueChanged<int>? onTap,
 
   /// The index into [items] of the current active item.
   ///
   /// Must be between 0 and the number of tabs minus 1, inclusive.
-  final int currentIndex;
+  final int currentIndex = 0,
 
   /// The background color of the tab bar. If it contains transparency, the
   /// tab bar will automatically produce a blurring effect to the content
   /// behind it.
   ///
   /// Defaults to [CupertinoTheme]'s `barBackgroundColor` when null.
-  final Color? backgroundColor;
+  final Color? backgroundColor,
 
   /// The foreground color of the icon and title for the [BottomNavigationBarItem]
   /// of the selected tab.
   ///
   /// Defaults to [CupertinoTheme]'s `primaryColor` if null.
-  final Color? activeColor;
+  final Color? activeColor,
 
   /// The foreground color of the icon and title for the [BottomNavigationBarItem]s
   /// in the unselected state.
   ///
   /// Defaults to a [CupertinoDynamicColor] that matches the disabled foreground
   /// color of the native `UITabBar` component.
-  final Color inactiveColor;
+  // ignore: unused_element_parameter
+  final Color inactiveColor = _kDefaultTabBarInactiveColor,
 
   /// The size of all of the [BottomNavigationBarItem] icons.
   ///
   /// This value is used to configure the [IconTheme] for the navigation bar.
   /// When a [BottomNavigationBarItem.icon] widget is not an [Icon] the widget
   /// should configure itself to match the icon theme's size and color.
-  final double iconSize;
+  // ignore: unused_element_parameter
+  final double iconSize = 30.0,
 
   /// The height of the [CupertinoTabBar].
   ///
   /// Defaults to 50.
-  final double height;
+  final double height = _kTabBarHeight,
 
   /// The border of the [CupertinoTabBar].
   ///
   /// The default value is a one physical pixel top border with grey color.
-  final Border? border;
+  final Border? border = const Border(
+    top: BorderSide(
+      color: _kDefaultTabBarBorderColor,
+      width: 0.0, // 0.0 means one physical pixel
+    ),
+  ),
+}) extends StatelessWidget implements PreferredSizeWidget {
+  /// Creates a tab bar in the iOS style.
+  this
+    : assert(items.length >= 2, "Tabs need at least 2 items to conform to Apple's HIG"),
+      assert(0 <= currentIndex && currentIndex < items.length),
+      assert(height >= 0.0);
 
   @override
   Size get preferredSize => Size.fromHeight(height);

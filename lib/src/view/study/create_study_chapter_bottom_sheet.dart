@@ -17,32 +17,27 @@ import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:material_ui/material_ui.dart';
 
-sealed class CreateStudyChapterParams {}
+sealed class CreateStudyChapterParams();
 
-class CreateChapterOfExistingStudy extends CreateStudyChapterParams {
-  CreateChapterOfExistingStudy(this.studyId);
-  final StudyId studyId;
+class CreateChapterOfExistingStudy(final StudyId studyId) extends CreateStudyChapterParams;
+
+enum _ChapterSource() {
+  empty,
+  fen,
+  pgn,
 }
 
-enum _ChapterSource { empty, fen, pgn }
-
-class CreateStudyChapterBottomSheet extends ConsumerStatefulWidget {
-  const CreateStudyChapterBottomSheet({
-    required this.params,
-    required this.chapterNumber,
-    this.onChaptersCreated,
-  });
-
-  final CreateStudyChapterParams params;
-  final int chapterNumber;
-  final void Function(StudyId, IList<StudyChapterId>)? onChaptersCreated;
-
+class const CreateStudyChapterBottomSheet({
+  required final CreateStudyChapterParams params,
+  required final int chapterNumber,
+  final void Function(StudyId, IList<StudyChapterId>)? onChaptersCreated,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<CreateStudyChapterBottomSheet> createState() =>
       _CreateStudyChapterBottomSheetState();
 }
 
-class _CreateStudyChapterBottomSheetState extends ConsumerState<CreateStudyChapterBottomSheet> {
+class _CreateStudyChapterBottomSheetState() extends ConsumerState<CreateStudyChapterBottomSheet> {
   String chapterName = '';
 
   final _nameController = TextEditingController();

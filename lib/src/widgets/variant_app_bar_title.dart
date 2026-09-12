@@ -9,11 +9,7 @@ import 'package:lichess_mobile/src/widgets/misc.dart';
 /// A widget that displays a variant [Icon] followed by its translated label, sized and colored to
 /// match the surrounding text style, with a description below. Intended for use as a [labelBuilder]
 /// in [showChoicePicker].
-class VariantLabel extends StatelessWidget {
-  const VariantLabel(this.variant, {super.key});
-
-  final Variant variant;
-
+class const VariantLabel(final Variant variant, {super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final style = DefaultTextStyle.of(context).style;
@@ -48,12 +44,11 @@ class VariantLabel extends StatelessWidget {
 }
 
 /// A widget that displays a [AppBarTitleText] preceded by an icon based on the variant type.
-class VariantAppBarTitle extends StatelessWidget {
-  const VariantAppBarTitle({super.key, required this.variant, required this.title});
-
-  final Variant variant;
-  final String title;
-
+class const VariantAppBarTitle({
+  super.key,
+  required final Variant variant,
+  required final String title,
+}) extends StatelessWidget {
   static const excludedIcons = [Variant.standard, Variant.fromPosition];
 
   @override

@@ -18,7 +18,7 @@ final _soundEffectPlugin = SoundEffect();
 final _logger = Logger('SoundService');
 
 // Must match name of files in assets/sounds/standard
-enum Sound {
+enum Sound() {
   move,
   capture,
   explosion,
@@ -66,11 +66,7 @@ Future<void> _loadSound(SoundTheme theme, Sound sound) async {
 }
 
 /// Service to play game sounds.
-class SoundService {
-  SoundService(this._ref);
-
-  final Ref _ref;
-
+class SoundService(final Ref _ref) {
   /// Initialize the sound service.
   ///
   /// This will load the sounds from assets and make them ready to be played.

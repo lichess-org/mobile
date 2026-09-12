@@ -6,9 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Various system utilities.
-class System {
-  const System._();
-
+class const System._() {
   static const _channel = MethodChannel('mobile.lichess.org/system');
 
   static const instance = System._();

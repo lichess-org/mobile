@@ -18,14 +18,12 @@ import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 import 'package:material_ui/material_ui.dart';
 
-class CreateCorrespondenceGameBottomSheet extends ConsumerStatefulWidget {
-  const CreateCorrespondenceGameBottomSheet({super.key});
-
+class const CreateCorrespondenceGameBottomSheet({super.key}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<CreateCorrespondenceGameBottomSheet> createState() => _CreateGameBodyState();
 }
 
-class _CreateGameBodyState extends ConsumerState<CreateCorrespondenceGameBottomSheet> {
+class _CreateGameBodyState() extends ConsumerState<CreateCorrespondenceGameBottomSheet> {
   Future<void>? _pendingCreateGame;
 
   @override

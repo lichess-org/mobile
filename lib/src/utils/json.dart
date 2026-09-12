@@ -34,9 +34,7 @@ IList<T> decodeObjectList<T>(Object? json, {required T? Function(Map<String, dyn
   return IList(list);
 }
 
-class LocaleConverter implements JsonConverter<Locale?, Map<String, dynamic>?> {
-  const LocaleConverter();
-
+class const LocaleConverter() implements JsonConverter<Locale?, Map<String, dynamic>?> {
   @override
   Locale? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

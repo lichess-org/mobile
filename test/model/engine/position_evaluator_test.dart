@@ -29,7 +29,13 @@ import 'fake_stockfish_nnue_service.dart';
 /// Deliberately not called `EngineState`: that name belongs to the plugin's own reading of a
 /// native engine (`EngineFailure.engineState`), which is a different thing entirely. This is a
 /// test's way of reading two fields as one word, and exists nowhere in the app.
-enum EngineLifecycle { initial, loading, idle, computing, error }
+enum EngineLifecycle() {
+  initial,
+  loading,
+  idle,
+  computing,
+  error,
+}
 
 extension EngineEvaluationStateTest on EngineEvaluationState {
   /// The engine's `id name`, once it has one.

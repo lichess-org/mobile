@@ -18,27 +18,20 @@ import 'package:url_launcher/url_launcher.dart';
 ///
 /// Shows player names, game result, accuracy, inaccuracies, mistakes, blunders, and ACPL
 /// in a formatted table layout.
-class GameSummaryTable extends ConsumerWidget {
-  const GameSummaryTable({
-    required this.pgnHeaders,
-    required this.playersAnalysis,
-    this.whiteUser,
-    this.blackUser,
-    super.key,
-  });
-
+class const GameSummaryTable({
   /// PGN headers containing player names, titles, and result
-  final IMap<String, String> pgnHeaders;
+  required final IMap<String, String> pgnHeaders,
 
   /// White and Black player's analysis summary
-  final PlayersAnalysis playersAnalysis;
+  required final PlayersAnalysis playersAnalysis,
 
   /// White player's lichess user, when known
-  final LightUser? whiteUser;
+  final LightUser? whiteUser,
 
   /// Black player's lichess user, when known
-  final LightUser? blackUser;
-
+  final LightUser? blackUser,
+  super.key,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final result = pgnHeaders.get('Result') ?? '';
@@ -196,11 +189,7 @@ class GameSummaryTable extends ConsumerWidget {
   }
 }
 
-class _SummaryNumber extends StatelessWidget {
-  const _SummaryNumber(this.data, {this.color});
-  final String data;
-  final Color? color;
-
+class const _SummaryNumber(final String data, {final Color? color}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -209,12 +198,11 @@ class _SummaryNumber extends StatelessWidget {
   }
 }
 
-class _SummaryPlayerName extends StatelessWidget {
-  const _SummaryPlayerName(this.side, this.pgnHeaders, this.user);
-  final Side side;
-  final IMap<String, String> pgnHeaders;
-  final LightUser? user;
-
+class const _SummaryPlayerName(
+  final Side side,
+  final IMap<String, String> pgnHeaders,
+  final LightUser? user,
+) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final playerTitle = side == .white

@@ -5,37 +5,24 @@ import 'package:material_ui/material_ui.dart';
 const kSettingsTileTitleMaxLines = 3;
 
 /// A platform agnostic tappable list tile that represents a settings value.
-class SettingsListTile extends StatelessWidget {
-  const SettingsListTile({
-    this.icon,
-    required this.settingsLabel,
-    required this.settingsValue,
-    required this.onTap,
-    this.explanation,
-    this.trailing,
-    this.enabled = true,
-    super.key,
-  });
-
+class const SettingsListTile({
   /// The icon of the settings value.
-  final Widget? icon;
+  final Widget? icon,
 
   /// The label of the settings value.
-  final Text settingsLabel;
-
-  final String settingsValue;
-
-  final bool enabled;
-
-  final void Function()? onTap;
+  required final Text settingsLabel,
+  required final String settingsValue,
+  required final void Function()? onTap,
 
   /// The optional explanation of the settings.
-  final String? explanation;
+  final String? explanation,
 
   /// Optional widget shown in the trailing slot instead of [settingsValue],
   /// e.g. a progress indicator while the value is being applied.
-  final Widget? trailing;
-
+  final Widget? trailing,
+  final bool enabled = true,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Semantics(
@@ -73,22 +60,14 @@ class SettingsListTile extends StatelessWidget {
   }
 }
 
-class SwitchSettingTile extends StatelessWidget {
-  const SwitchSettingTile({
-    required this.title,
-    this.subtitle,
-    required this.value,
-    this.onChanged,
-    this.leading,
-    super.key,
-  });
-
-  final Text title;
-  final Widget? subtitle;
-  final bool value;
-  final void Function(bool value)? onChanged;
-  final Widget? leading;
-
+class const SwitchSettingTile({
+  required final Text title,
+  final Widget? subtitle,
+  required final bool value,
+  final void Function(bool value)? onChanged,
+  final Widget? leading,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -110,28 +89,19 @@ class SwitchSettingTile extends StatelessWidget {
   }
 }
 
-class SliderSettingsTile extends StatefulWidget {
-  const SliderSettingsTile({
-    this.icon,
-    this.title,
-    required this.value,
-    required this.values,
-    required this.onChangeEnd,
-    this.labelBuilder,
-  });
-
-  final Widget? icon;
-  final Widget? title;
-  final double value;
-  final List<double> values;
-  final void Function(double value) onChangeEnd;
-  final String Function(double)? labelBuilder;
-
+class const SliderSettingsTile({
+  final Widget? icon,
+  final Widget? title,
+  required final double value,
+  required final List<double> values,
+  required final void Function(double value) onChangeEnd,
+  final String Function(double)? labelBuilder,
+}) extends StatefulWidget {
   @override
   State<SliderSettingsTile> createState() => _SliderSettingsTileState();
 }
 
-class _SliderSettingsTileState extends State<SliderSettingsTile> {
+class _SliderSettingsTileState() extends State<SliderSettingsTile> {
   late int _index = widget.values.indexOf(widget.value);
 
   @override
@@ -164,11 +134,7 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
   }
 }
 
-class SettingsSectionTitle extends StatelessWidget {
-  const SettingsSectionTitle(this.title, {super.key});
-
-  final String title;
-
+class const SettingsSectionTitle(final String title, {super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
@@ -178,11 +144,7 @@ class SettingsSectionTitle extends StatelessWidget {
   }
 }
 
-class _SettingsTitle extends StatelessWidget {
-  const _SettingsTitle({required this.title});
-
-  final Text title;
-
+class const _SettingsTitle({required final Text title}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTextStyle.merge(
@@ -197,36 +159,24 @@ class _SettingsTitle extends StatelessWidget {
 ///
 /// It is best used for settings where the user can choose between a relatively
 /// small number of options.
-class ChoicePicker<T> extends StatelessWidget {
-  const ChoicePicker({
-    super.key,
-    required this.choices,
-    required this.selectedItem,
-    required this.titleBuilder,
-    this.subtitleBuilder,
-    this.leadingBuilder,
-    required this.onSelectedItemChanged,
-    this.tileContentPadding,
-    this.margin,
-    this.notchedTile = true,
-  });
-
-  final List<T> choices;
-  final T selectedItem;
-  final Widget Function(T choice) titleBuilder;
-  final Widget Function(T choice)? subtitleBuilder;
-  final Widget Function(T choice)? leadingBuilder;
-  final void Function(T choice)? onSelectedItemChanged;
+class const ChoicePicker<T>({
+  super.key,
+  required final List<T> choices,
+  required final T selectedItem,
+  required final Widget Function(T choice) titleBuilder,
+  final Widget Function(T choice)? subtitleBuilder,
+  final Widget Function(T choice)? leadingBuilder,
+  required final void Function(T choice)? onSelectedItemChanged,
 
   /// Android tiles content padding.
-  final EdgeInsetsGeometry? tileContentPadding;
+  final EdgeInsetsGeometry? tileContentPadding,
 
   /// iOS margin.
-  final EdgeInsetsGeometry? margin;
+  final EdgeInsetsGeometry? margin,
 
   /// iOS only, for choosing the style of the tile.
-  final bool notchedTile;
-
+  final bool notchedTile = true,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListSection(

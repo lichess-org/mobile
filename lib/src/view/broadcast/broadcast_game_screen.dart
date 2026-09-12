@@ -44,27 +44,17 @@ import 'package:material_ui/material_ui.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-class BroadcastGameScreen extends ConsumerStatefulWidget {
-  final BroadcastTournamentId? tournamentId;
-  final BroadcastRoundId roundId;
-  final BroadcastGameId gameId;
-  final String? tournamentSlug;
-  final String? roundSlug;
-  final String? title;
+class const BroadcastGameScreen({
+  final BroadcastTournamentId? tournamentId,
+  required final BroadcastRoundId roundId,
+  required final BroadcastGameId gameId,
+  final String? tournamentSlug,
+  final String? roundSlug,
+  final String? title,
 
   /// The side to view the board from, if it should differ from the default (white).
-  final Side? initialPov;
-
-  const BroadcastGameScreen({
-    this.tournamentId,
-    required this.roundId,
-    required this.gameId,
-    this.tournamentSlug,
-    this.roundSlug,
-    this.title,
-    this.initialPov,
-  });
-
+  final Side? initialPov,
+}) extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute({
     BroadcastTournamentId? tournamentId,
     required BroadcastRoundId roundId,
@@ -91,7 +81,8 @@ class BroadcastGameScreen extends ConsumerStatefulWidget {
   ConsumerState<BroadcastGameScreen> createState() => _BroadcastGameScreenState();
 }
 
-class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
+class _BroadcastGameScreenState()
+    extends ConsumerState<BroadcastGameScreen>
     with SingleTickerProviderStateMixin {
   late final List<AnalysisTab> tabs;
   late final TabController _tabController;
@@ -169,19 +160,12 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
   }
 }
 
-class _BroadcastGameMenu extends ConsumerWidget {
-  const _BroadcastGameMenu({
-    required this.roundId,
-    required this.gameId,
-    this.tournamentSlug,
-    this.roundSlug,
-  });
-
-  final BroadcastRoundId roundId;
-  final BroadcastGameId gameId;
-  final String? tournamentSlug;
-  final String? roundSlug;
-
+class const _BroadcastGameMenu({
+  required final BroadcastRoundId roundId,
+  required final BroadcastGameId gameId,
+  final String? tournamentSlug,
+  final String? roundSlug,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ContextMenuIconButton(
@@ -247,25 +231,15 @@ class _BroadcastGameMenu extends ConsumerWidget {
   }
 }
 
-class _Body extends ConsumerWidget {
-  const _Body(
-    this.tournamentId,
-    this.roundId,
-    this.gameId,
-    this.tournamentSlug,
-    this.roundSlug, {
-    required this.tabController,
-    required this.tabs,
-  });
-
-  final BroadcastTournamentId? tournamentId;
-  final BroadcastRoundId roundId;
-  final BroadcastGameId gameId;
-  final String? tournamentSlug;
-  final String? roundSlug;
-  final TabController tabController;
-  final List<AnalysisTab> tabs;
-
+class const _Body(
+  final BroadcastTournamentId? tournamentId,
+  final BroadcastRoundId roundId,
+  final BroadcastGameId gameId,
+  final String? tournamentSlug,
+  final String? roundSlug, {
+  required final TabController tabController,
+  required final List<AnalysisTab> tabs,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     switch (ref.watch(broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId)))) {
@@ -344,12 +318,8 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class _BroadcastGameTreeView extends ConsumerWidget {
-  const _BroadcastGameTreeView(this.roundId, this.gameId);
-
-  final BroadcastRoundId roundId;
-  final BroadcastGameId gameId;
-
+class const _BroadcastGameTreeView(final BroadcastRoundId roundId, final BroadcastGameId gameId)
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId));
@@ -392,7 +362,7 @@ class _BroadcastGameTreeView extends ConsumerWidget {
   }
 }
 
-enum PgnTags {
+enum PgnTags(final String tagName, {required final bool isLink}) {
   white('White', isLink: false),
   whiteElo('WhiteElo', isLink: false),
   whiteTitle('WhiteTitle', isLink: false),
@@ -407,11 +377,6 @@ enum PgnTags {
   event('Event', isLink: false),
   round('Round', isLink: false);
 
-  const PgnTags(this.tagName, {required this.isLink});
-
-  final String tagName;
-  final bool isLink;
-
   String? buildUrl(String value) {
     if (value.isEmpty) return null;
     switch (this) {
@@ -424,12 +389,8 @@ enum PgnTags {
   }
 }
 
-class _PgnTagsView extends ConsumerWidget {
-  const _PgnTagsView(this.roundId, this.gameId);
-
-  final BroadcastRoundId roundId;
-  final BroadcastGameId gameId;
-
+class const _PgnTagsView(final BroadcastRoundId roundId, final BroadcastGameId gameId)
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId));
@@ -484,12 +445,8 @@ class _PgnTagsView extends ConsumerWidget {
   }
 }
 
-class _OpeningExplorerTab extends ConsumerWidget {
-  const _OpeningExplorerTab(this.roundId, this.gameId);
-
-  final BroadcastRoundId roundId;
-  final BroadcastGameId gameId;
-
+class const _OpeningExplorerTab(final BroadcastRoundId roundId, final BroadcastGameId gameId)
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId));
@@ -511,22 +468,17 @@ class _OpeningExplorerTab extends ConsumerWidget {
   }
 }
 
-class BroadcastAnalysisBoard extends AnalysisBoard {
-  const BroadcastAnalysisBoard({
-    required this.roundId,
-    required this.gameId,
-    required super.boardSize,
-    super.boardRadius,
-  });
-
-  final BroadcastRoundId roundId;
-  final BroadcastGameId gameId;
-
+class const BroadcastAnalysisBoard({
+  required final BroadcastRoundId roundId,
+  required final BroadcastGameId gameId,
+  required super.boardSize,
+  super.boardRadius,
+}) extends AnalysisBoard {
   @override
   ConsumerState<BroadcastAnalysisBoard> createState() => _BroadcastAnalysisBoardState();
 }
 
-class _BroadcastAnalysisBoardState
+class _BroadcastAnalysisBoardState()
     extends AnalysisBoardState<BroadcastAnalysisBoard, BroadcastAnalysisState, BroadcastPrefs> {
   @override
   BroadcastAnalysisState? readCurrentState() => ref
@@ -570,21 +522,17 @@ class _BroadcastAnalysisBoardState
   String computeFen(BroadcastAnalysisState state) => state.currentPosition.fen;
 }
 
-enum _PlayerWidgetPosition { bottom, top }
+enum _PlayerWidgetPosition() {
+  bottom,
+  top,
+}
 
-class _PlayerWidget extends ConsumerWidget {
-  const _PlayerWidget({
-    this.tournamentId,
-    required this.roundId,
-    required this.gameId,
-    required this.widgetPosition,
-  });
-
-  final BroadcastTournamentId? tournamentId;
-  final BroadcastRoundId roundId;
-  final BroadcastGameId gameId;
-  final _PlayerWidgetPosition widgetPosition;
-
+class const _PlayerWidget({
+  final BroadcastTournamentId? tournamentId,
+  required final BroadcastRoundId roundId,
+  required final BroadcastGameId gameId,
+  required final _PlayerWidgetPosition widgetPosition,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     switch (ref.watch(broadcastRoundGameProvider((roundId: roundId, gameId: gameId)))) {
@@ -687,13 +635,11 @@ class _PlayerWidget extends ConsumerWidget {
   }
 }
 
-class _Clock extends StatelessWidget {
-  const _Clock({required this.timeLeft, required this.isSideToMove, required this.isClockActive});
-
-  final Duration timeLeft;
-  final bool isSideToMove;
-  final bool isClockActive;
-
+class const _Clock({
+  required final Duration timeLeft,
+  required final bool isSideToMove,
+  required final bool isClockActive,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
@@ -710,19 +656,12 @@ class _Clock extends StatelessWidget {
   }
 }
 
-class _BroadcastGameBottomBar extends ConsumerWidget {
-  const _BroadcastGameBottomBar({
-    required this.roundId,
-    required this.gameId,
-    this.tournamentSlug,
-    this.roundSlug,
-  });
-
-  final BroadcastRoundId roundId;
-  final BroadcastGameId gameId;
-  final String? tournamentSlug;
-  final String? roundSlug;
-
+class const _BroadcastGameBottomBar({
+  required final BroadcastRoundId roundId,
+  required final BroadcastGameId gameId,
+  final String? tournamentSlug,
+  final String? roundSlug,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId));

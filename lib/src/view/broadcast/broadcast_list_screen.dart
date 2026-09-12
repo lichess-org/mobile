@@ -13,7 +13,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:material_ui/material_ui.dart';
 
-enum _BroadcastFilter {
+enum _BroadcastFilter() {
   all,
   live;
 
@@ -28,9 +28,7 @@ enum _BroadcastFilter {
 }
 
 /// A screen that displays a paginated list of broadcasts.
-class BroadcastListScreen extends StatefulWidget {
-  const BroadcastListScreen({super.key});
-
+class const BroadcastListScreen({super.key}) extends StatefulWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const BroadcastListScreen());
   }
@@ -39,7 +37,7 @@ class BroadcastListScreen extends StatefulWidget {
   State<BroadcastListScreen> createState() => _BroadcastListScreenState();
 }
 
-class _BroadcastListScreenState extends State<BroadcastListScreen> {
+class _BroadcastListScreenState() extends State<BroadcastListScreen> {
   _BroadcastFilter filter = _BroadcastFilter.all;
 
   @override
@@ -99,11 +97,7 @@ class _BroadcastListScreenState extends State<BroadcastListScreen> {
   }
 }
 
-class _Body extends ConsumerWidget {
-  const _Body(this.filter);
-
-  final _BroadcastFilter filter;
-
+class const _Body(final _BroadcastFilter filter) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final broadcastList = ref.watch(broadcastsPaginatorProvider);

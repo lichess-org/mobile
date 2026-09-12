@@ -11,12 +11,8 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_ui/material_ui.dart';
 
-class GifExport extends ConsumerStatefulWidget {
-  const GifExport({super.key, required this.gameId, required this.orientation});
-
-  final GameId gameId;
-  final Side orientation;
-
+class const GifExport({super.key, required final GameId gameId, required final Side orientation})
+    extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute({required GameId gameId, required Side orientation}) {
     return buildScreenRoute(
       screen: GifExport(gameId: gameId, orientation: orientation),
@@ -27,7 +23,7 @@ class GifExport extends ConsumerStatefulWidget {
   ConsumerState<GifExport> createState() => _GifExportState();
 }
 
-class _GifExportState extends ConsumerState<GifExport> {
+class _GifExportState() extends ConsumerState<GifExport> {
   bool playerNames = true;
   bool showPlayerRatings = true;
   bool moveAnnotations = false;

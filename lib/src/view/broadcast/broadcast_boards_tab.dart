@@ -27,21 +27,13 @@ const _kPlayerWidgetTextStyle = TextStyle(fontSize: 13, height: 1.0);
 const _kPlayerWidgetPadding = EdgeInsets.symmetric(vertical: 5.0);
 
 /// A tab that displays the live games of a broadcast round.
-class BroadcastBoardsTab extends ConsumerWidget {
-  const BroadcastBoardsTab({
-    required this.tournamentId,
-    required this.roundId,
-    required this.tournamentSlug,
-    required this.showOnlyOngoingGames,
-    required this.teamFilter,
-  });
-
-  final BroadcastTournamentId tournamentId;
-  final BroadcastRoundId roundId;
-  final String tournamentSlug;
-  final bool showOnlyOngoingGames;
-  final String? teamFilter;
-
+class const BroadcastBoardsTab({
+  required final BroadcastTournamentId tournamentId,
+  required final BroadcastRoundId roundId,
+  required final String tournamentSlug,
+  required final bool showOnlyOngoingGames,
+  required final String? teamFilter,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final round = ref.watch(broadcastRoundControllerProvider(roundId));
@@ -101,7 +93,7 @@ class BroadcastBoardsTab extends ConsumerWidget {
 }
 
 class BroadcastPreview extends ConsumerStatefulWidget {
-  const BroadcastPreview({
+  const new({
     required this.tournamentId,
     required this.roundId,
     required this.games,
@@ -114,7 +106,7 @@ class BroadcastPreview extends ConsumerStatefulWidget {
   });
 
   // A circular progress indicator is used instead of shimmers currently
-  const BroadcastPreview.loading()
+  const new loading()
     : tournamentId = const BroadcastTournamentId(''),
       roundId = const BroadcastRoundId(''),
       games = null,
@@ -138,7 +130,7 @@ class BroadcastPreview extends ConsumerStatefulWidget {
   ConsumerState<BroadcastPreview> createState() => _BroadcastPreviewState();
 }
 
-class _BroadcastPreviewState extends ConsumerState<BroadcastPreview> {
+class _BroadcastPreviewState() extends ConsumerState<BroadcastPreview> {
   String _searchQuery = '';
   late final TextEditingController _searchController;
 
@@ -273,40 +265,25 @@ class _BroadcastPreviewState extends ConsumerState<BroadcastPreview> {
   }
 }
 
-class ObservedBoardThumbnail extends ConsumerStatefulWidget {
-  const ObservedBoardThumbnail({
-    required this.roundId,
-    required this.game,
-    required this.title,
-    required this.tournamentId,
-    required this.tournamentSlug,
-    required this.roundSlug,
-    required this.showEvaluationGauge,
-    required this.boardSize,
-    required this.boardWithMaybeEvalBarWidth,
-    required this.playingSide,
-    required this.customScoring,
-    required this.teamFilter,
-  });
-
-  final BroadcastRoundId roundId;
-  final BroadcastGame game;
-  final String title;
-  final BroadcastTournamentId tournamentId;
-  final String tournamentSlug;
-  final String roundSlug;
-  final bool showEvaluationGauge;
-  final double boardSize;
-  final double boardWithMaybeEvalBarWidth;
-  final Side playingSide;
-  final BroadcastCustomScoring? customScoring;
-  final String? teamFilter;
-
+class const ObservedBoardThumbnail({
+  required final BroadcastRoundId roundId,
+  required final BroadcastGame game,
+  required final String title,
+  required final BroadcastTournamentId tournamentId,
+  required final String tournamentSlug,
+  required final String roundSlug,
+  required final bool showEvaluationGauge,
+  required final double boardSize,
+  required final double boardWithMaybeEvalBarWidth,
+  required final Side playingSide,
+  required final BroadcastCustomScoring? customScoring,
+  required final String? teamFilter,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<ObservedBoardThumbnail> createState() => _ObservedBoardThumbnailState();
 }
 
-class _ObservedBoardThumbnailState extends ConsumerState<ObservedBoardThumbnail> {
+class _ObservedBoardThumbnailState() extends ConsumerState<ObservedBoardThumbnail> {
   bool isBoardVisible = false;
 
   @override
@@ -382,11 +359,7 @@ class _ObservedBoardThumbnailState extends ConsumerState<ObservedBoardThumbnail>
   }
 }
 
-class _PlayerWidgetLoading extends StatelessWidget {
-  const _PlayerWidgetLoading({required this.width});
-
-  final double width;
-
+class const _PlayerWidgetLoading({required final double width}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -402,21 +375,13 @@ class _PlayerWidgetLoading extends StatelessWidget {
   }
 }
 
-class _PlayerWidget extends StatelessWidget {
-  const _PlayerWidget({
-    required this.width,
-    required this.game,
-    required this.side,
-    required this.playingSide,
-    required this.customScoring,
-  });
-
-  final BroadcastGame game;
-  final Side side;
-  final Side playingSide;
-  final double width;
-  final BroadcastCustomScoring? customScoring;
-
+class const _PlayerWidget({
+  required final double width,
+  required final BroadcastGame game,
+  required final Side side,
+  required final Side playingSide,
+  required final BroadcastCustomScoring? customScoring,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final playerWithClock = game.players[side]!;
@@ -469,11 +434,7 @@ bool _containsPlayer(BroadcastGame game, String query) {
   return game.players.values.any((pwc) => pwc.player.name?.toLowerCase().contains(q) ?? false);
 }
 
-class _PinnedCommentCard extends StatelessWidget {
-  const _PinnedCommentCard({required this.text});
-
-  final String text;
-
+class const _PinnedCommentCard({required final String text}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(

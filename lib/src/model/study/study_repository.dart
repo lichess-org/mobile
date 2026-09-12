@@ -16,12 +16,7 @@ final studyRepositoryProvider = Provider<StudyRepository>((Ref ref) {
   return StudyRepository(ref, ref.watch(lichessClientProvider));
 }, name: 'StudyRepositoryProvider');
 
-class StudyRepository {
-  StudyRepository(this.ref, this.client);
-
-  final Client client;
-  final Ref ref;
-
+class StudyRepository(final Ref ref, final Client client) {
   Future<StudyList> getStudies({
     required StudyCategory category,
     required StudyListOrder order,

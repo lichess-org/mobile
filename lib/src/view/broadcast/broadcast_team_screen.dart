@@ -16,12 +16,11 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
 import 'package:material_ui/material_ui.dart';
 
-class BroadcastTeamScreen extends ConsumerWidget {
-  const BroadcastTeamScreen({super.key, required this.tournamentId, required this.teamName});
-
-  final BroadcastTournamentId tournamentId;
-  final String teamName;
-
+class const BroadcastTeamScreen({
+  super.key,
+  required final BroadcastTournamentId tournamentId,
+  required final String teamName,
+}) extends ConsumerWidget {
   static Route<dynamic> buildRoute(BroadcastTournamentId tournamentId, String teamName) {
     return buildScreenRoute(
       screen: BroadcastTeamScreen(tournamentId: tournamentId, teamName: teamName),
@@ -59,12 +58,10 @@ class BroadcastTeamScreen extends ConsumerWidget {
   }
 }
 
-class _Body extends StatelessWidget {
-  const _Body({required this.tournament, required this.team});
-
-  final BroadcastTournament tournament;
-  final BroadcastTeamStanding team;
-
+class const _Body({
+  required final BroadcastTournament tournament,
+  required final BroadcastTeamStanding team,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -84,11 +81,7 @@ class _Body extends StatelessWidget {
   }
 }
 
-class _OverallTeamStat extends StatelessWidget {
-  const _OverallTeamStat({required this.team});
-
-  final BroadcastTeamStanding team;
-
+class const _OverallTeamStat({required final BroadcastTeamStanding team}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final statWidth = (MediaQuery.widthOf(context) - Styles.bodyPadding.horizontal - 10 * 2) / 3;
@@ -143,11 +136,7 @@ class _OverallTeamStat extends StatelessWidget {
   }
 }
 
-class _SectionHeader extends StatelessWidget {
-  const _SectionHeader({required this.title});
-
-  final String title;
-
+class const _SectionHeader({required final String title}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ColoredBox(
@@ -160,7 +149,10 @@ class _SectionHeader extends StatelessWidget {
   }
 }
 
-enum _SortingTypes { elo, score }
+enum _SortingTypes() {
+  elo,
+  score,
+}
 
 typedef _BroadcastPlayerPicker<T> = T? Function(BroadcastPlayerWithOverallResult player);
 
@@ -172,17 +164,15 @@ const _kTableRowPadding = EdgeInsets.symmetric(
 );
 const _kHeaderTextStyle = TextStyle(fontWeight: .bold, overflow: .ellipsis);
 
-class _TeamPlayersList extends StatefulWidget {
-  const _TeamPlayersList({required this.tournament, required this.players});
-
-  final BroadcastTournament tournament;
-  final IList<BroadcastPlayerWithOverallResult> players;
-
+class const _TeamPlayersList({
+  required final BroadcastTournament tournament,
+  required final IList<BroadcastPlayerWithOverallResult> players,
+}) extends StatefulWidget {
   @override
   State<_TeamPlayersList> createState() => _TeamPlayersListState();
 }
 
-class _TeamPlayersListState extends State<_TeamPlayersList> {
+class _TeamPlayersListState() extends State<_TeamPlayersList> {
   late IList<BroadcastPlayerWithOverallResult> players;
   late _SortingTypes currentSort;
   bool reverse = false;
@@ -302,13 +292,11 @@ class _TeamPlayersListState extends State<_TeamPlayersList> {
   }
 }
 
-class _TableTitleCell extends StatelessWidget {
-  const _TableTitleCell({required this.title, required this.onTap, this.sortIcon});
-
-  final Widget title;
-  final void Function() onTap;
-  final IconData? sortIcon;
-
+class const _TableTitleCell({
+  required final Widget title,
+  required final void Function() onTap,
+  final IconData? sortIcon,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -346,17 +334,11 @@ class _TableTitleCell extends StatelessWidget {
   }
 }
 
-class _PlayerListTile extends StatelessWidget {
-  const _PlayerListTile({
-    required this.tournament,
-    required this.playerResult,
-    required this.index,
-  });
-
-  final BroadcastTournament tournament;
-  final BroadcastPlayerWithOverallResult playerResult;
-  final int index;
-
+class const _PlayerListTile({
+  required final BroadcastTournament tournament,
+  required final BroadcastPlayerWithOverallResult playerResult,
+  required final int index,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scoreStr = playerResult.score != null
@@ -400,12 +382,7 @@ class _PlayerListTile extends StatelessWidget {
   }
 }
 
-class _StatCard extends StatelessWidget {
-  const _StatCard(this.stat, {this.value});
-
-  final String stat;
-  final String? value;
-
+class const _StatCard(final String stat, {final String? value}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StatCard(
@@ -418,12 +395,10 @@ class _StatCard extends StatelessWidget {
 
 const _kMatchHistoryRowVerticalPadding = 16.0;
 
-class _MatchHistoryTable extends StatelessWidget {
-  const _MatchHistoryTable({required this.team, required this.tournament});
-
-  final BroadcastTeamStanding team;
-  final BroadcastTournament tournament;
-
+class const _MatchHistoryTable({
+  required final BroadcastTeamStanding team,
+  required final BroadcastTournament tournament,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Table(
@@ -540,13 +515,11 @@ class _MatchHistoryTable extends StatelessWidget {
   }
 }
 
-class _TableTapCell extends StatelessWidget {
-  const _TableTapCell({required this.teamName, required this.match, required this.child});
-
-  final String teamName;
-  final BroadcastTeamStandingMatch match;
-  final Widget child;
-
+class const _TableTapCell({
+  required final String teamName,
+  required final BroadcastTeamStandingMatch match,
+  required final Widget child,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TableRowInkWell(

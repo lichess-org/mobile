@@ -7,7 +7,7 @@ import 'package:material_ui/material_ui.dart';
 ///
 /// Use to show a limited number of items.
 class ListSection extends StatelessWidget {
-  const ListSection({
+  const new({
     super.key,
     required this.children,
     this.header,
@@ -23,22 +23,18 @@ class ListSection extends StatelessWidget {
     this.backgroundColor,
   }) : _isLoading = false;
 
-  ListSection.loading({
-    required int itemsNumber,
-    bool header = false,
-    this.margin,
-    this.hasLeading = false,
-  }) : children = [for (int i = 0; i < itemsNumber; i++) const SizedBox.shrink()],
-       onHeaderTap = null,
-       headerTrailing = null,
-       header = header ? const SizedBox.shrink() : null,
-       footer = null,
-       dense = false,
-       leadingIndent = null,
-       materialFilledCard = false,
-       clipBehavior = Clip.hardEdge,
-       backgroundColor = null,
-       _isLoading = true;
+  new loading({required int itemsNumber, bool header = false, this.margin, this.hasLeading = false})
+    : children = [for (int i = 0; i < itemsNumber; i++) const SizedBox.shrink()],
+      onHeaderTap = null,
+      headerTrailing = null,
+      header = header ? const SizedBox.shrink() : null,
+      footer = null,
+      dense = false,
+      leadingIndent = null,
+      materialFilledCard = false,
+      clipBehavior = Clip.hardEdge,
+      backgroundColor = null,
+      _isLoading = true;
 
   /// Usually a list of [ListTile] widgets
   final List<Widget> children;
@@ -182,17 +178,16 @@ class ListSection extends StatelessWidget {
 }
 
 /// A header for a [ListSection].
-class ListSectionHeader extends StatelessWidget {
-  const ListSectionHeader({super.key, required this.title, this.onTap, this.trailing});
-
-  final Widget title;
+class const ListSectionHeader({
+  super.key,
+  required final Widget title,
 
   /// A callback to be called when the header is tapped.
-  final VoidCallback? onTap;
+  final VoidCallback? onTap,
 
   /// A widget to show at the end of the header (only if [onTap] is null).
-  final Widget? trailing;
-
+  final Widget? trailing,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OpacityButton(
@@ -226,28 +221,18 @@ class ListSectionHeader extends StatelessWidget {
 ///
 /// Useful to show a divider between [ListTile] widgets when using the
 /// [ListView.separated] constructor.
-class PlatformDivider extends StatelessWidget {
-  const PlatformDivider({
-    this.height,
-    this.thickness,
-    this.indent,
-    this.endIndent,
-    this.color,
-    this.cupertinoHasLeading = false,
-    this.cupertinoLeadingIndent,
-  });
-
-  final double? height;
-  final double? thickness;
-  final double? indent;
-  final double? endIndent;
-  final Color? color;
+class const PlatformDivider({
+  final double? height,
+  final double? thickness,
+  final double? indent,
+  final double? endIndent,
+  final Color? color,
 
   /// Set to true if the cupertino tiles have a leading widget, to adapt the
   /// divider margin.
-  final bool cupertinoHasLeading;
-  final double? cupertinoLeadingIndent;
-
+  final bool cupertinoHasLeading = false,
+  final double? cupertinoLeadingIndent,
+}) extends StatelessWidget {
   static const _defaultListTileLeadingWidth = 40.0;
 
   @override
@@ -284,19 +269,14 @@ typedef RemovedItemBuilder<T> = Widget Function(
 ///
 /// The [insert] and [removeAt] methods apply to both the internal list and
 /// the animated list that belongs to [listKey].
-class AnimatedListModel<E> {
-  AnimatedListModel({
-    required this.listKey,
-    required this.removedItemBuilder,
-    Iterable<E>? initialItems,
-    int? itemsOffset,
-  }) : _items = List<E>.from(initialItems ?? <E>[]),
-       itemsOffset = itemsOffset ?? 0;
-
-  final GlobalKey<AnimatedListState> listKey;
-  final RemovedItemBuilder<E> removedItemBuilder;
-  final List<E> _items;
-  final int itemsOffset;
+class AnimatedListModel<E>({
+  required final GlobalKey<AnimatedListState> listKey,
+  required final RemovedItemBuilder<E> removedItemBuilder,
+  Iterable<E>? initialItems,
+  int? itemsOffset,
+}) {
+  final List<E> _items = List<E>.from(initialItems ?? <E>[]);
+  final int itemsOffset = itemsOffset ?? 0;
 
   AnimatedListState? get _animatedList => listKey.currentState;
 
@@ -331,19 +311,14 @@ class AnimatedListModel<E> {
 ///
 /// The [insert] and [removeAt] methods apply to both the internal list and
 /// the animated list that belongs to [listKey].
-class SliverAnimatedListModel<E> {
-  SliverAnimatedListModel({
-    required this.listKey,
-    required this.removedItemBuilder,
-    Iterable<E>? initialItems,
-    int? itemsOffset,
-  }) : _items = List<E>.from(initialItems ?? <E>[]),
-       itemsOffset = itemsOffset ?? 0;
-
-  final GlobalKey<SliverAnimatedListState> listKey;
-  final RemovedItemBuilder<E> removedItemBuilder;
-  final List<E> _items;
-  final int itemsOffset;
+class SliverAnimatedListModel<E>({
+  required final GlobalKey<SliverAnimatedListState> listKey,
+  required final RemovedItemBuilder<E> removedItemBuilder,
+  Iterable<E>? initialItems,
+  int? itemsOffset,
+}) {
+  final List<E> _items = List<E>.from(initialItems ?? <E>[]);
+  final int itemsOffset = itemsOffset ?? 0;
 
   SliverAnimatedListState? get _animatedList => listKey.currentState;
 

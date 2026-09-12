@@ -15,9 +15,7 @@ import 'package:material_ui/material_ui.dart';
 import '../../test_provider_scope.dart';
 
 // A minimal [ChatMixinState] for the fake notifier below.
-class _FakeChatState with ChatMixinState {
-  const _FakeChatState();
-
+class const _FakeChatState() with ChatMixinState {
   @override
   ChatState? get chatState => const ChatState(messages: IList.empty(), unreadMessages: 0);
 
@@ -34,7 +32,7 @@ class _FakeChatState with ChatMixinState {
 /// `ref`/`state`. The [chatInputDraft] field is a plain field and is safe to use on
 /// an unmounted instance, so it is deliberately *not* overridden — this is what
 /// backs the draft-persistence tests below.
-class _FakeChatNotifier extends AsyncNotifier<_FakeChatState> with ChatMixin<_FakeChatState> {
+class _FakeChatNotifier() extends AsyncNotifier<_FakeChatState> with ChatMixin<_FakeChatState> {
   @override
   StringId get chatId => const StringId('test-chat');
 
@@ -57,7 +55,7 @@ class _FakeChatNotifier extends AsyncNotifier<_FakeChatState> with ChatMixin<_Fa
   void onForegroundLost() {}
 }
 
-class HangNotifier extends Notifier<bool> {
+class HangNotifier() extends Notifier<bool> {
   @override
   bool build() => false;
 

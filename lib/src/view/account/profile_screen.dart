@@ -27,9 +27,7 @@ import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:share_plus/share_plus.dart';
 
-class ProfileScreen extends ConsumerStatefulWidget {
-  const ProfileScreen({super.key});
-
+class const ProfileScreen({super.key}) extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const ProfileScreen());
   }
@@ -44,7 +42,7 @@ final _accountActivityProvider = FutureProvider.autoDispose<IList<UserActivity>>
   return ref.read(userRepositoryProvider).getActivity(authUser.user.id);
 }, name: 'userActivityProvider');
 
-class _ProfileScreenState extends ConsumerState<ProfileScreen> {
+class _ProfileScreenState() extends ConsumerState<ProfileScreen> {
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   @override
@@ -135,11 +133,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   }
 }
 
-class AccountPerfCards extends ConsumerWidget {
-  const AccountPerfCards({this.padding});
-
-  final EdgeInsetsGeometry? padding;
-
+class const AccountPerfCards({final EdgeInsetsGeometry? padding}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final account = ref.watch(accountProvider);

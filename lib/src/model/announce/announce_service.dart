@@ -12,11 +12,7 @@ final announceServiceProvider = Provider<AnnounceService>((ref) {
   return service;
 });
 
-class AnnounceService {
-  AnnounceService(this._ref);
-
-  final Ref _ref;
-
+class AnnounceService(final Ref _ref) {
   StreamSubscription<SocketEvent>? _socketSubscription;
   StreamSubscription<ParsedLocalNotification>? _responseSubscription;
   Timer? _dismissTimer;

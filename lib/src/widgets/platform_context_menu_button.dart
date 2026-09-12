@@ -10,27 +10,17 @@ const Color _kBorderColor = CupertinoDynamicColor.withBrightness(
 /// A platform agnostic context menu icon button.
 ///
 /// Typically used in the [AppBar] to show a context menu.
-class ContextMenuIconButton extends StatelessWidget {
-  const ContextMenuIconButton({
-    required this.icon,
-    this.color,
-    required this.semanticsLabel,
-    required this.actions,
-    this.consumeOutsideTap = false,
-    this.isCompact = false,
-    super.key,
-  });
-
-  final Widget icon;
-  final Color? color;
-  final String semanticsLabel;
-  final List<Widget> actions;
-
-  final bool isCompact;
+class const ContextMenuIconButton({
+  required final Widget icon,
+  final Color? color,
+  required final String semanticsLabel,
+  required final List<Widget> actions,
 
   /// Whether to consume taps outside the menu to close it (only on Android).
-  final bool consumeOutsideTap;
-
+  final bool consumeOutsideTap = false,
+  final bool isCompact = false,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (Theme.of(context).platform == TargetPlatform.iOS) {
@@ -145,23 +135,16 @@ class ContextMenuIconButton extends StatelessWidget {
   }
 }
 
-class ContextMenuAction extends StatelessWidget {
-  const ContextMenuAction({
-    this.icon,
-    required this.label,
-    required this.onPressed,
-    this.dismissOnPress = true,
-  });
-
-  final IconData? icon;
-  final String label;
-  final VoidCallback? onPressed;
+class const ContextMenuAction({
+  final IconData? icon,
+  required final String label,
+  required final VoidCallback? onPressed,
 
   /// Whether the modal should be dismissed when an action is pressed.
   ///
   /// Default to true.
-  final bool dismissOnPress;
-
+  final bool dismissOnPress = true,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Theme.of(context).platform == TargetPlatform.iOS
@@ -195,45 +178,40 @@ class ContextMenuAction extends StatelessWidget {
 /// A typical use case is to pass a [Text] as the [child] here, but be sure to
 /// use [TextOverflow.ellipsis] for the [Text.overflow] field if the text may be
 /// long, as without it the text will wrap to the next line.
-class _CupertinoContextMenuAction extends StatefulWidget {
-  /// Construct a _CupertinoContextMenuAction.
-  const _CupertinoContextMenuAction({
-    // ignore: unused_element_parameter
-    super.key,
-    required this.child,
-    // ignore: unused_element_parameter
-    this.isDefaultAction = false,
-    // ignore: unused_element_parameter
-    this.isDestructiveAction = false,
-    this.onPressed,
-    this.trailingIcon,
-  });
+class const _CupertinoContextMenuAction({
+  // ignore: unused_element_parameter
+  super.key,
 
   /// The widget that will be placed inside the action.
-  final Widget child;
+  required final Widget child,
 
   /// Indicates whether this action should receive the style of an emphasized,
   /// default action.
-  final bool isDefaultAction;
+  // ignore: unused_element_parameter
+  final bool isDefaultAction = false,
 
   /// Indicates whether this action should receive the style of a destructive
   /// action.
-  final bool isDestructiveAction;
+  // ignore: unused_element_parameter
+  final bool isDestructiveAction = false,
 
   /// Called when the action is pressed.
-  final VoidCallback? onPressed;
+  final VoidCallback? onPressed,
 
   /// An optional icon to display to the right of the child.
   ///
   /// Will be colored in the same way as the [TextStyle] used for [child] (for
   /// example, if using [isDestructiveAction]).
-  final IconData? trailingIcon;
+  final IconData? trailingIcon,
+}) extends StatefulWidget {
+  /// Construct a _CupertinoContextMenuAction.
+  this;
 
   @override
   State<_CupertinoContextMenuAction> createState() => _CupertinoContextMenuActionState();
 }
 
-class _CupertinoContextMenuActionState extends State<_CupertinoContextMenuAction> {
+class _CupertinoContextMenuActionState() extends State<_CupertinoContextMenuAction> {
   static const double _kButtonHeight = 43;
   static const TextStyle _kActionSheetActionStyle = TextStyle(
     fontFamily: 'CupertinoSystemText',

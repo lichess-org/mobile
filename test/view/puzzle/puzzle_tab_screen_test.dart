@@ -39,7 +39,7 @@ final mockClient = MockClient((request) {
   return mockResponse('', 404);
 });
 
-class MockPuzzleBatchStorage extends Mock implements PuzzleBatchStorage {}
+class MockPuzzleBatchStorage() extends Mock implements PuzzleBatchStorage;
 
 void main() {
   setUpAll(() {

@@ -63,11 +63,7 @@ final _lichessMainHost = lichessUri('/').host;
 /// Creates the appropriate http client for the platform.
 ///
 /// Do not use directly, use [defaultClientProvider] or [lichessClientProvider] instead.
-class HttpClientFactory {
-  const HttpClientFactory({this.wrapper});
-
-  final Client Function(Client client)? wrapper;
-
+class const HttpClientFactory({final Client Function(Client client)? wrapper}) {
   Client _createClient() {
     const userAgent = 'Lichess Mobile';
     try {
@@ -380,15 +376,12 @@ Future<bool> downloadFiles(
 /// See also:
 /// - [BaseClient] for the base class.
 /// - [Client] for the interface that this class implements.
-class _RegisterCallbackClient extends BaseClient {
-  _RegisterCallbackClient(this._inner, {this.onRequest, this.onResponse, this.onError});
-
-  final Client _inner;
-
-  final void Function(BaseRequest request)? onRequest;
-  final void Function(BaseResponse response)? onResponse;
-  final void Function(BaseRequest request, Object error, [StackTrace? stackTrace])? onError;
-
+class _RegisterCallbackClient(
+  final Client _inner, {
+  final void Function(BaseRequest request)? onRequest,
+  final void Function(BaseResponse response)? onResponse,
+  final void Function(BaseRequest request, Object error, [StackTrace? stackTrace])? onError,
+}) extends BaseClient {
   @override
   Future<StreamedResponse> send(BaseRequest request) async {
     try {
@@ -414,19 +407,12 @@ class _RegisterCallbackClient extends BaseClient {
 /// * Logs all requests and responses with status code >= 400.
 /// * When a response has the 401 status, checks if the authUser token is still valid,
 /// and deletes the authUser if it's not.
-class LichessClient implements Client {
-  LichessClient(this._inner, this._ref)
-    : _cachedPackageInfo = _ref.read(preloadedDataProvider).requireValue.packageInfo,
-      _cachedDeviceInfo = _ref.read(preloadedDataProvider).requireValue.deviceInfo,
-      _cachedSri = _ref.read(preloadedDataProvider).requireValue.sri;
-
+class LichessClient(final Client _inner, final Ref _ref) implements Client {
   static const defaultRequestTimeout = Duration(seconds: 15);
 
-  final Ref _ref;
-  final Client _inner;
-  final PackageInfo _cachedPackageInfo;
-  final BaseDeviceInfo _cachedDeviceInfo;
-  final String _cachedSri;
+  final PackageInfo _cachedPackageInfo = _ref.read(preloadedDataProvider).requireValue.packageInfo;
+  final BaseDeviceInfo _cachedDeviceInfo = _ref.read(preloadedDataProvider).requireValue.deviceInfo;
+  final String _cachedSri = _ref.read(preloadedDataProvider).requireValue.sri;
 
   @override
   Future<StreamedResponse> send(BaseRequest request) async {
@@ -575,12 +561,7 @@ class LichessClient implements Client {
 ///
 /// * Sets the user-agent header with the app version, build number, and device info.
 /// * Logs all requests and responses with status code >= 400.
-class DefaultClient implements Client {
-  DefaultClient(this._inner, {required this._userAgent});
-
-  final Client _inner;
-  final String _userAgent;
-
+class DefaultClient(final Client _inner, {required final String _userAgent}) implements Client {
   @override
   Future<StreamedResponse> send(BaseRequest request) async {
     request.headers['User-Agent'] = _userAgent;
@@ -700,12 +681,12 @@ class DefaultClient implements Client {
 }
 
 /// An exception thrown when the server responds with a status code >= 400.
-class ServerException extends ClientException {
-  final int statusCode;
-  final Map<String, dynamic>? jsonError;
-
-  ServerException(this.statusCode, super.message, Uri super.url, this.jsonError);
-}
+class ServerException(
+  final int statusCode,
+  super.message,
+  Uri super.url,
+  final Map<String, dynamic>? jsonError,
+) extends ClientException;
 
 /// Throws an error if [response] is not successful.
 void _checkResponseSuccess(Uri url, Response response) {

@@ -13,7 +13,7 @@ import '../../network/fake_websocket_channel.dart';
 import '../../network/socket_test.dart';
 import '../../test_container.dart';
 
-class _NotificationDisplayMock extends Mock implements FlutterLocalNotificationsPlugin {}
+class _NotificationDisplayMock() extends Mock implements FlutterLocalNotificationsPlugin;
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

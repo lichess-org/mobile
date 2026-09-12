@@ -16,7 +16,8 @@ final challengePreferencesProvider = NotifierProvider<ChallengePreferences, Chal
   name: 'ChallengePreferencesProvider',
 );
 
-class ChallengePreferences extends Notifier<ChallengePrefs>
+class ChallengePreferences()
+    extends Notifier<ChallengePrefs>
     with SessionPreferencesStorage<ChallengePrefs> {
   @override
   @protected
@@ -59,10 +60,8 @@ class ChallengePreferences extends Notifier<ChallengePrefs>
 }
 
 @Freezed(fromJson: true, toJson: true)
-sealed class ChallengePrefs with _$ChallengePrefs implements Serializable {
-  const ChallengePrefs._();
-
-  const factory ChallengePrefs({
+sealed class const ChallengePrefs._() with _$ChallengePrefs implements Serializable {
+  const factory({
     required Variant variant,
     required ChallengeTimeControlType timeControl,
     required ({Duration time, Duration increment}) clock,
@@ -104,7 +103,7 @@ sealed class ChallengePrefs with _$ChallengePrefs implements Serializable {
     );
   }
 
-  factory ChallengePrefs.fromJson(Map<String, dynamic> json) {
+  factory fromJson(Map<String, dynamic> json) {
     try {
       return _$ChallengePrefsFromJson(json);
     } catch (_) {

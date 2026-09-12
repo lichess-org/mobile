@@ -9,9 +9,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:material_ui/material_ui.dart';
 
-class BroadcastSearchScreen extends StatefulWidget {
-  const BroadcastSearchScreen();
-
+class const BroadcastSearchScreen() extends StatefulWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const BroadcastSearchScreen(), fullscreenDialog: true);
   }
@@ -20,7 +18,7 @@ class BroadcastSearchScreen extends StatefulWidget {
   State<BroadcastSearchScreen> createState() => _BroadcastSearchScreenState();
 }
 
-class _BroadcastSearchScreenState extends State<BroadcastSearchScreen> {
+class _BroadcastSearchScreenState() extends State<BroadcastSearchScreen> {
   late final TextEditingController _searchController;
   String? searchTerm;
 
@@ -70,11 +68,7 @@ class _BroadcastSearchScreenState extends State<BroadcastSearchScreen> {
   }
 }
 
-class _Body extends ConsumerWidget {
-  const _Body(this.searchTerm);
-
-  final String searchTerm;
-
+class const _Body(final String searchTerm) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final broadcastList = ref.watch(broadcastsSearchPaginatorProvider(searchTerm));

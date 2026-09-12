@@ -23,15 +23,11 @@ part 'server_analysis_service.freezed.dart';
 final _logger = Logger('ServerAnalysisService');
 
 @freezed
-sealed class ServerAnalysisSource with _$ServerAnalysisSource {
-  const ServerAnalysisSource._();
+sealed class const ServerAnalysisSource._() with _$ServerAnalysisSource {
+  const factory game({required GameId gameId}) = _GameServerAnalysisSource;
 
-  const factory ServerAnalysisSource.game({required GameId gameId}) = _GameServerAnalysisSource;
-
-  const factory ServerAnalysisSource.studyChapter({
-    required StudyId studyId,
-    required StudyChapterId chapterId,
-  }) = _StudyChapterServerAnalysisSource;
+  const factory studyChapter({required StudyId studyId, required StudyChapterId chapterId}) =
+      _StudyChapterServerAnalysisSource;
 }
 
 const Duration kMaxWaitForServerAnalysis = Duration(minutes: 1);
@@ -41,12 +37,8 @@ final serverAnalysisServiceProvider = Provider<ServerAnalysisService>((Ref ref) 
   return ServerAnalysisService(ref);
 }, name: 'ServerAnalysisServiceProvider');
 
-class ServerAnalysisService {
-  ServerAnalysisService(this.ref);
-
+class ServerAnalysisService(final Ref ref) {
   StreamSubscription<SocketEvent>? _socketSubscription;
-
-  final Ref ref;
 
   final _currentAnalysis = ValueNotifier<ServerAnalysisSource?>(null);
 
@@ -226,7 +218,7 @@ final currentAnalysisProvider =
       name: 'CurrentAnalysisProvider',
     );
 
-class CurrentAnalysis extends Notifier<ServerAnalysisSource?> {
+class CurrentAnalysis() extends Notifier<ServerAnalysisSource?> {
   @override
   ServerAnalysisSource? build() {
     final listenable = ref.watch(serverAnalysisServiceProvider).currentAnalysis;

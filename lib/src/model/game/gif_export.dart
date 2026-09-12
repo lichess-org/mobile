@@ -13,7 +13,7 @@ part 'gif_export.freezed.dart';
 
 @freezed
 sealed class GifExportOptions with _$GifExportOptions {
-  const factory GifExportOptions({
+  const factory({
     required bool playerNames,
     required bool showPlayerRatings,
     required bool moveAnnotations,

@@ -17,9 +17,7 @@ import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 import 'package:material_ui/material_ui.dart';
 
-class CreateGameWidget extends ConsumerWidget {
-  const CreateGameWidget();
-
+class const CreateGameWidget() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final playPrefs = ref.watch(gameSetupPreferencesProvider);

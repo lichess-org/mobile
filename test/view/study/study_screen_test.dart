@@ -21,7 +21,7 @@ import 'package:mocktail/mocktail.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 
-class MockStudyRepository extends Mock implements StudyRepository {}
+class MockStudyRepository() extends Mock implements StudyRepository;
 
 const testId = StudyId('test-id');
 

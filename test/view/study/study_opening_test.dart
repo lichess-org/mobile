@@ -16,7 +16,7 @@ import 'package:mocktail/mocktail.dart';
 import '../../model/analysis/fake_opening_service.dart';
 import '../../test_provider_scope.dart';
 
-class MockStudyRepository extends Mock implements StudyRepository {}
+class MockStudyRepository() extends Mock implements StudyRepository;
 
 const _testId = StudyId('test-id');
 

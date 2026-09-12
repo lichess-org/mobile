@@ -12,7 +12,7 @@ final logPreferencesProvider = NotifierProvider<LogPreferencesNotifier, LogPrefs
   name: 'LogPreferencesProvider',
 );
 
-class LogPreferencesNotifier extends Notifier<LogPrefs> with PreferencesStorage<LogPrefs> {
+class LogPreferencesNotifier() extends Notifier<LogPrefs> with PreferencesStorage<LogPrefs> {
   @override
   @protected
   PrefCategory get prefCategory => PrefCategory.log;
@@ -39,21 +39,17 @@ const kLogPreferencesAvailableLevels = kDebugMode
     : [Level.INFO, Level.WARNING, Level.SEVERE];
 
 @Freezed(fromJson: true, toJson: true)
-sealed class LogPrefs with _$LogPrefs implements Serializable {
-  const LogPrefs._();
-
-  const factory LogPrefs({@LevelConverter() required Level level}) = _LogPrefs;
+sealed class const LogPrefs._() with _$LogPrefs implements Serializable {
+  const factory({@LevelConverter() required Level level}) = _LogPrefs;
 
   static const defaults = LogPrefs(level: _kDefaultLevel);
 
-  factory LogPrefs.fromJson(Map<String, dynamic> json) {
+  factory fromJson(Map<String, dynamic> json) {
     return _$LogPrefsFromJson(json);
   }
 }
 
-class LevelConverter implements JsonConverter<Level, String> {
-  const LevelConverter();
-
+class const LevelConverter() implements JsonConverter<Level, String> {
   @override
   Level fromJson(String json) {
     try {

@@ -6,10 +6,8 @@ import 'package:lichess_mobile/src/model/engine/opponent_level.dart';
 ///
 /// With nothing configured it stands for the offline case: every lookup misses, so the bundled
 /// book answers instead.
-class FakeMaiaOnlineBook implements MaiaOnlineBook {
-  FakeMaiaOnlineBook({Map<String, List<BookMove>>? moves}) : _moves = moves ?? const {};
-
-  final Map<String, List<BookMove>> _moves;
+class FakeMaiaOnlineBook({Map<String, List<BookMove>>? moves}) implements MaiaOnlineBook {
+  final Map<String, List<BookMove>> _moves = moves ?? const {};
 
   /// The positions [movesFor] was asked for, in order.
   final List<String> requests = [];

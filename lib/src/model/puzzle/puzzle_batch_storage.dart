@@ -36,12 +36,7 @@ int _nbUnsolved(String raw) {
 }
 
 /// Local storage for puzzles.
-class PuzzleBatchStorage {
-  const PuzzleBatchStorage(this._db, this._ref);
-
-  final Database _db;
-  final Ref _ref;
-
+class const PuzzleBatchStorage(final Database _db, final Ref _ref) {
   Future<PuzzleBatch?> fetch({
     required UserId? userId,
     PuzzleAngle angle = const PuzzleTheme(PuzzleThemeKey.mix),
@@ -173,10 +168,8 @@ class PuzzleBatchStorage {
 
 @Freezed(fromJson: true, toJson: true)
 sealed class PuzzleBatch with _$PuzzleBatch {
-  const factory PuzzleBatch({
-    required IList<PuzzleSolution> solved,
-    required IList<Puzzle> unsolved,
-  }) = _PuzzleBatch;
+  const factory({required IList<PuzzleSolution> solved, required IList<Puzzle> unsolved}) =
+      _PuzzleBatch;
 
-  factory PuzzleBatch.fromJson(Map<String, dynamic> json) => _$PuzzleBatchFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$PuzzleBatchFromJson(json);
 }

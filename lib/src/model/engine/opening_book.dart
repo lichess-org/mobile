@@ -59,14 +59,12 @@ UCIMove? chooseWeighted(List<BookMove> moves, Random random) {
 /// to land first. Entries for one position are contiguous, so a lookup is a binary search followed
 /// by a walk in both directions.
 @immutable
-class PolyglotBook {
+class const PolyglotBook(final ByteData _bytes) {
   /// Wraps the bytes of a `.bin` file.
   ///
   /// Trailing bytes that do not make up a whole entry are ignored, which is what every other
   /// Polyglot reader does with a truncated book.
-  const PolyglotBook(this._bytes);
-
-  final ByteData _bytes;
+  this;
 
   static const _entrySize = 16;
 
@@ -168,7 +166,7 @@ enum MaiaOfflineBookTier {
   high;
 
   /// The tier a Maia network plays from. The split follows the explorer's own rating buckets.
-  factory MaiaOfflineBookTier.forRating(MaiaRating rating) =>
+  factory forRating(MaiaRating rating) =>
       rating.rating < 1600 ? MaiaOfflineBookTier.low : MaiaOfflineBookTier.high;
 
   /// Where the book ships in the asset bundle.
@@ -177,11 +175,7 @@ enum MaiaOfflineBookTier {
 
 /// The Maia opponent opening book of one rating tier, and the weighted choice made from it.
 @immutable
-class MaiaOfflineBook {
-  const MaiaOfflineBook(this.book);
-
-  final PolyglotBook book;
-
+class const MaiaOfflineBook(final PolyglotBook book) {
   /// The moves the book offers in [position], most played first.
   List<BookMove> movesFor(Position position) => book.movesFor(position);
 
@@ -197,9 +191,7 @@ class MaiaOfflineBook {
 ///
 /// The books are a few tens of kilobytes, so they are kept for the life of the app rather than
 /// released with the game that asked for them.
-class MaiaOfflineBookService {
-  MaiaOfflineBookService();
-
+class MaiaOfflineBookService() {
   final _logger = Logger('MaiaOfflineBook');
 
   final Map<MaiaOfflineBookTier, Future<MaiaOfflineBook?>> _books = {};
@@ -232,11 +224,7 @@ final maiaOnlineBookProvider = Provider<MaiaOnlineBook>((Ref ref) {
 }, name: 'MaiaOnlineBookProvider');
 
 /// The online opening book Maia opponents play from, which reads the Lichess opening explorer.
-class MaiaOnlineBook {
-  MaiaOnlineBook(this._ref);
-
-  final Ref _ref;
-
+class MaiaOnlineBook(final Ref _ref) {
   final _logger = Logger('MaiaOnlineBook');
 
   /// Positions already looked up this session, so a rematch does not ask twice.
