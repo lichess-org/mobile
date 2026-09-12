@@ -23,7 +23,10 @@ class PieceSetScreen extends ConsumerStatefulWidget {
 class _PieceSetScreenState extends ConsumerState<PieceSetScreen> {
   bool isLoading = false;
 
-  Future<void> onChanged(PieceSet? value) async {
+  Future<void> onChanged(PieceSet? value, bool toggle3d) async {
+    if(toggle3d != null ){
+      ref.read(boardPreferencesProvider.notifier).toggleEnable3dAssets(toggle3d);
+    }
     if (value != null) {
       ref.read(boardPreferencesProvider.notifier).setPieceSet(value);
       setState(() {
@@ -41,7 +44,19 @@ class _PieceSetScreenState extends ConsumerState<PieceSetScreen> {
     }
   }
 
+
   List<AssetImage> getPieceImages(PieceSet set) {
+    return [
+      set.assets[PieceKind.whiteKing]!,
+      set.assets[PieceKind.blackQueen]!,
+      set.assets[PieceKind.whiteRook]!,
+      set.assets[PieceKind.blackBishop]!,
+      set.assets[PieceKind.whiteKnight]!,
+      set.assets[PieceKind.blackPawn]!,
+    ];
+  }
+
+  List<AssetImage> get3DPieceImages(PieceSet set) {
     return [
       set.assets[PieceKind.whiteKing]!,
       set.assets[PieceKind.blackQueen]!,
@@ -56,19 +71,30 @@ class _PieceSetScreenState extends ConsumerState<PieceSetScreen> {
   Widget build(BuildContext context) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
 
-    return PlatformScaffold(
-      appBar: PlatformAppBar(
-        title: Text(context.l10n.pieceSet),
-        actions: [if (isLoading) const PlatformAppBarLoadingIndicator()],
-      ),
-      body: SafeArea(
+    return DefaultTabController(
+      length: 2,
+      child: PlatformScaffold(
+        appBar: PlatformAppBar(
+          title: Text(context.l10n.pieceSet),
+          actions: [if (isLoading) const PlatformAppBarLoadingIndicator()],
+          bottom: const TabBar(
+            tabs: [
+              Tab(text: '2D'), // TODO: Create i18n translations for these tabs
+              Tab(text: '3D'),
+            ],
+          ),
+        ),
+        body: TabBarView(
+          children: [
+        Center(
+              child: SafeArea(
         child: ListView.separated(
-          itemCount: PieceSet.values.length,
+          itemCount: PieceSet.pieceSets2d.length,
           separatorBuilder: (_, _) => Theme.of(context).platform == TargetPlatform.iOS
               ? const PlatformDivider()
               : const SizedBox.shrink(),
           itemBuilder: (context, index) {
-            final pieceSet = PieceSet.values[index];
+            final pieceSet = PieceSet.pieceSets2d[index];
             return ListTile(
               trailing: boardPrefs.pieceSet == pieceSet ? const Icon(Icons.check) : null,
               title: Text(pieceSet.label),
@@ -87,14 +113,63 @@ class _PieceSetScreenState extends ConsumerState<PieceSetScreen> {
                       ],
                     ),
                   ],
+
+                        ),
+                      ),
+                      onTap: isLoading ? null : () => onChanged(pieceSet, false),
+                      selected: boardPrefs.pieceSet == pieceSet,
+                    );
+                  },
+		),
+              ),
+            ),
+
+	Center(
+              child: SafeArea(
+                child: ListView.separated(
+                  itemCount: PieceSet.pieceSets3d.length,
+                  separatorBuilder: (_, _) => Theme.of(context).platform == TargetPlatform.iOS
+                      ? const PlatformDivider()
+                      : const SizedBox.shrink(),
+                  itemBuilder: (context, index) {
+                    final pieceSet = PieceSet.pieceSets3d[index];
+                    return ListTile(
+                      trailing: boardPrefs.pieceSet == pieceSet ? const Icon(Icons.check) : null,
+                      title: Text(pieceSet.label),
+                      subtitle: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 264),
+                        child: Stack(
+                          children: [
+                            BrightnessHueFilter(
+                              brightness: boardPrefs.brightness,
+                              hue: boardPrefs.hue,
+                              child: boardPrefs.boardTheme.thumbnail,
+                            ),
+                            Wrap(
+                              spacing: -3,
+                              children: [
+                                for (final img in get3DPieceImages(pieceSet))
+                                  Transform.translate(
+                                    offset: const Offset(0, -9),
+                                    child: Image(image: img, height: 60),
+                                  ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      onTap: isLoading ? null : () => onChanged(pieceSet, true),
+                      selected: boardPrefs.pieceSet == pieceSet,
+		      
+                    );
+                  },
                 ),
               ),
-              onTap: isLoading ? null : () => onChanged(pieceSet),
-              selected: boardPrefs.pieceSet == pieceSet,
-            );
-          },
+            )
+          ],
         ),
       ),
     );
   }
 }
+
