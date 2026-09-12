@@ -508,16 +508,11 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
               (isTablet ? defaultBoardSize - kTabletBoardTableSidePadding * 2 : defaultBoardSize) -
               pocketsPadding;
 
-          //Reserve vertical space for the top and bottom tables and the user actions bar if present.
+          // Reserve vertical space for the top and bottom tables and the user actions bar if present.
           final maxAllowedBoardSize = maxHeight - 180.0;
           if (effectiveBoardSize > maxAllowedBoardSize) {
             effectiveBoardSize = maxAllowedBoardSize;
           }
-
-          if (isShortScreen) {
-            effectiveBoardSize -= 16;
-          }
-
           return Column(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
