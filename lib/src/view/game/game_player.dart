@@ -461,9 +461,11 @@ class _MoveExpirationState extends ConsumerState<MoveExpiration> {
   @override
   void didUpdateWidget(covariant MoveExpiration oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _timer?.cancel();
-    timeLeft = widget.timeToMove;
-    _timer = startTimer();
+    if (oldWidget.timeToMove != widget.timeToMove) {
+      _timer?.cancel();
+      timeLeft = widget.timeToMove;
+      _timer = startTimer();
+    }
   }
 
   @override
