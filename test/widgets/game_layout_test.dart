@@ -31,6 +31,7 @@ Future<void> _pumpGameLayoutWithSafeArea(
   bool showBorder = false,
   GameBoardParams? boardParams,
 }) async {
+  final flutterTestOnError = FlutterError.onError!;
   final app = await makeTestProviderScope(
     tester,
     child: MaterialApp(
@@ -64,6 +65,8 @@ Future<void> _pumpGameLayoutWithSafeArea(
     devicePixelRatio: 1.0,
     physicalViewPadding: viewPadding,
   );
+  FlutterError.onError = flutterTestOnError;
+  addTearDown(() => FlutterError.onError = flutterTestOnError);
   await tester.pumpWidget(app);
 }
 
@@ -90,6 +93,31 @@ void main() {
     _expectHorizontalInset(boardRect, safeAreaRect, 0.0);
     _expectHorizontalInset(playableGridRect, safeAreaRect, 0.0);
   }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
+
+  for (final scenario in [
+    (name: 'below', height: 587.0, boardSize: 359.0),
+    (name: 'at', height: 588.0, boardSize: 360.0),
+    (name: 'above', height: 589.0, boardSize: 360.0),
+    (name: 'well below', height: 548.0, boardSize: 320.0),
+  ]) {
+    testWidgets('compact board ${scenario.name} the height-cap boundary', (tester) async {
+      // 360 board + 180 reserved + 24 top and 24 bottom safe-area insets.
+      await _pumpGameLayoutWithSafeArea(
+        tester,
+        surface: Size(360.0, scenario.height),
+        viewPadding: const EdgeInsets.symmetric(vertical: 24.0),
+      );
+
+      final safeAreaRect = tester.getRect(find.byKey(_safeAreaContentKey));
+      final boardRect = tester.getRect(find.byType(Chessboard));
+      expect(boardRect.size, Size.square(scenario.boardSize));
+      expect(boardRect.center.dx, moreOrLessEquals(safeAreaRect.center.dx));
+      expect(boardRect.top, greaterThanOrEqualTo(safeAreaRect.top));
+      expect(boardRect.bottom, lessThanOrEqualTo(safeAreaRect.bottom));
+      expect(tester.getRect(find.byType(SolidColorChessboardBackground)), boardRect);
+      expect(tester.takeException(), isNull);
+    }, variant: kPlatformVariant);
+  }
 
   testWidgets('portrait board adds no margin beyond horizontal safe area insets', (
     WidgetTester tester,

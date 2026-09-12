@@ -1,9 +1,12 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:chessground/chessground.dart';
 import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -21,6 +24,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/over_the_board/over_the_board_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
+import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -60,26 +64,84 @@ void main() {
   registerFallbackValue(const TimeIncrement(0, 0));
 
   group('Playing over the board (offline)', () {
-    testWidgets('compact portrait board fills width with clocks and actions visible', (
-      tester,
-    ) async {
-      final boardRect = await initOverTheBoardGame(
+    for (final profile in [
+      (
+        name: 'zoomed-iphone',
+        surface: _iPhone16ZoomedSurface,
+        ratio: _iPhone16ZoomedDevicePixelRatio,
+        padding: _iPhone16ZoomedPhysicalViewPadding,
+        capped: false,
+      ),
+      (
+        name: 'compact-360x640',
+        surface: const Size(360.0, 640.0),
+        ratio: 3.0,
+        padding: const EdgeInsets.only(top: 72.0, bottom: 72.0),
+        capped: true,
+      ),
+      (
+        name: 'height-capped-360x560',
+        surface: const Size(360.0, 560.0),
+        ratio: 3.0,
+        padding: const EdgeInsets.only(top: 72.0, bottom: 72.0),
+        capped: true,
+      ),
+    ]) {
+      testWidgets('compact portrait ${profile.name} keeps clocks and actions usable', (
         tester,
-        const TimeIncrement(60, 5),
-        surfaceSize: _iPhone16ZoomedSurface,
-        devicePixelRatio: _iPhone16ZoomedDevicePixelRatio,
-        physicalViewPadding: _iPhone16ZoomedPhysicalViewPadding,
-        failOnOverflow: true,
-      );
+      ) async {
+        const wakelockChannel =
+            'dev.flutter.pigeon.wakelock_plus_platform_interface.WakelockPlusApi.toggle';
+        final messenger = TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
+        messenger.setMockMessageHandler(
+          wakelockChannel,
+          (_) async => const StandardMessageCodec().encodeMessage([null]),
+        );
+        addTearDown(() => messenger.setMockMessageHandler(wakelockChannel, null));
+        final boardRect = await initOverTheBoardGame(
+          tester,
+          const TimeIncrement(60, 5),
+          surfaceSize: profile.surface,
+          devicePixelRatio: profile.ratio,
+          physicalViewPadding: profile.padding,
+          failOnOverflow: true,
+        );
 
-      expect(boardRect.left, 0.0);
-      expect(boardRect.right, _iPhone16ZoomedSurface.width);
-      expect(boardRect.size, const Size.square(320.0));
-      expect(find.byType(Clock), findsNWidgets(2));
-      expect(find.byType(BottomBar), findsOneWidget);
-      expectGameControlsVisible(tester, find.byType(Clock));
-      expectGameControlsVisible(tester, find.byType(BottomBarButton));
-    }, variant: kPlatformVariant);
+        final layoutRect = tester.getRect(find.byType(GameLayout));
+        final heightCap = layoutRect.height - 180.0;
+        expect(heightCap < layoutRect.width, profile.capped);
+        expect(boardRect.size, Size.square(min(layoutRect.width, heightCap)));
+        expect(boardRect.center.dx, moreOrLessEquals(layoutRect.center.dx));
+        expect(boardRect.top, greaterThanOrEqualTo(layoutRect.top));
+        expect(boardRect.bottom, lessThanOrEqualTo(layoutRect.bottom));
+        expect(find.byType(Clock), findsNWidgets(2));
+        expect(find.byType(BottomBar), findsOneWidget);
+        expectGameControlsVisible(tester, find.byType(Clock));
+        expectGameControlsVisible(tester, find.byType(BottomBarButton));
+        expect(tester.takeException(), isNull);
+
+        // Opt-in rendered evidence: --dart-define=LAYOUT_GOLDENS=true --update-goldens.
+        // Generated images stay in ignored build/; ordinary CI only runs assertions.
+        if (const bool.fromEnvironment('LAYOUT_GOLDENS')) {
+          await expectLater(
+            find.byType(OverTheBoardScreen),
+            matchesGoldenFile(
+              '../../../build/compact-layout/${profile.name}-${debugDefaultTargetPlatformOverride!.name}.png',
+            ),
+          );
+        }
+
+        await playMove(tester, 'e2', 'e4');
+        expect(boardHasPiece(tester, Square.e4, Piece.whitePawn), isTrue);
+        await tester.tap(findByTooltip('Pause'));
+        await tester.pump();
+        expect(activeClock(tester), isNull);
+        expect(findByTooltip('Resume'), findsOneWidget);
+        expectGameControlsVisible(tester, find.byType(Clock));
+        expectGameControlsVisible(tester, find.byType(BottomBarButton));
+        expect(tester.takeException(), isNull);
+      }, variant: kPlatformVariant);
+    }
 
     testWidgets('Checkmate and Rematch', (tester) async {
       await initOverTheBoardGame(tester, const TimeIncrement(60, 5));
