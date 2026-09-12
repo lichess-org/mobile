@@ -91,6 +91,7 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) {
         _createCorrespondenceGameTableV1(batch);
         _createChatReadMessagesTableV1(batch);
         _createGameTableV2(batch);
+        _createGameTableIndexesV6(batch);
         _createHttpLogTableV4(batch);
         _createAppLogTableV5(batch);
         await batch.commit();
@@ -99,7 +100,6 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) {
         final batch = db.batch();
         if (oldVersion == 1) {
           _createGameTableV2(batch);
-          _createGameTableIndexesV6(batch);
         }
         if (oldVersion < 3) {
           _updatePuzzleBatchTableToV3(batch);
