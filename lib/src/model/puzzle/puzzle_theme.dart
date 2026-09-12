@@ -204,7 +204,7 @@ enum PuzzleThemeKey {
         );
       case PuzzleThemeKey.enPassant:
         return PuzzleThemeL10n(
-          name: 'En passant',
+          name: l10n.enPassant,
           description: l10n.puzzleThemeEnPassantDescription,
         );
       case PuzzleThemeKey.exposedKing:

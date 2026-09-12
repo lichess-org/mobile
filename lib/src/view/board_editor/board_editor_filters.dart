@@ -82,7 +82,7 @@ class BoardEditorFilters extends ConsumerWidget {
         if (editorState.variant.hasEnPassant && editorState.enPassantOptions.isNotEmpty) ...[
           const Padding(
             padding: Styles.bodySectionPadding,
-            child: Text('En passant', style: Styles.subtitle),
+            child: Text(context.l10n.enPassant, style: Styles.subtitle),
           ),
           Padding(
             padding: Styles.horizontalBodyPadding,
