@@ -7,10 +7,8 @@ part 'player.freezed.dart';
 part 'player.g.dart';
 
 @Freezed(fromJson: true, toJson: true)
-sealed class Player with _$Player {
-  const Player._();
-
-  const factory Player({
+sealed class const Player._() with _$Player {
+  const factory({
     LightUser? user,
     String? name,
     int? aiLevel,
@@ -37,7 +35,7 @@ sealed class Player with _$Player {
     bool? berserk,
   }) = _Player;
 
-  factory Player.fromJson(Map<String, dynamic> json) => _$PlayerFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$PlayerFromJson(json);
 
   bool get isAI => aiLevel != null;
 
@@ -68,7 +66,7 @@ typedef PhaseAccuracies = ({int? opening, int? middlegame, int? endgame});
 
 @Freezed(fromJson: true, toJson: true)
 sealed class PlayerAnalysis with _$PlayerAnalysis {
-  const factory PlayerAnalysis({
+  const factory({
     required int inaccuracies,
     required int mistakes,
     required int blunders,
@@ -77,7 +75,7 @@ sealed class PlayerAnalysis with _$PlayerAnalysis {
     PhaseAccuracies? phases,
   }) = _PlayerAnalysis;
 
-  factory PlayerAnalysis.fromJson(Map<String, dynamic> json) => _$PlayerAnalysisFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$PlayerAnalysisFromJson(json);
 }
 
 typedef PlayersAnalysis = ({PlayerAnalysis white, PlayerAnalysis black});

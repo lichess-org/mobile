@@ -32,17 +32,15 @@ import 'package:material_ui/material_ui.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 
-class LobbyScreenLoadingContent extends StatefulWidget {
-  const LobbyScreenLoadingContent(this.seek, this.cancelGameCreation);
-
-  final GameSeek seek;
-  final Future<void> Function() cancelGameCreation;
-
+class const LobbyScreenLoadingContent(
+  final GameSeek seek,
+  final Future<void> Function() cancelGameCreation,
+) extends StatefulWidget {
   @override
   State<LobbyScreenLoadingContent> createState() => _LobbyScreenLoadingContentState();
 }
 
-class _LobbyScreenLoadingContentState extends State<LobbyScreenLoadingContent> {
+class _LobbyScreenLoadingContentState() extends State<LobbyScreenLoadingContent> {
   Future<void>? _cancelGameCreationFuture;
 
   @override
@@ -73,7 +71,7 @@ class _LobbyScreenLoadingContentState extends State<LobbyScreenLoadingContent> {
                 ),
               ],
               const SizedBox(height: 16.0),
-              _LobbyNumbers(),
+              const _LobbyNumbers(),
             ],
           ),
         ),
@@ -117,17 +115,15 @@ class _LobbyScreenLoadingContentState extends State<LobbyScreenLoadingContent> {
   }
 }
 
-class UserChallengeLoadingContent extends StatefulWidget {
-  const UserChallengeLoadingContent(this.challenge, this.cancelChallenge);
-
-  final ChallengeRequest challenge;
-  final Future<void> Function() cancelChallenge;
-
+class const UserChallengeLoadingContent(
+  final ChallengeRequest challenge,
+  final Future<void> Function() cancelChallenge,
+) extends StatefulWidget {
   @override
   State<UserChallengeLoadingContent> createState() => _UserChallengeLoadingContentState();
 }
 
-class _UserChallengeLoadingContentState extends State<UserChallengeLoadingContent> {
+class _UserChallengeLoadingContentState() extends State<UserChallengeLoadingContent> {
   Future<void>? _cancelChallengeFuture;
 
   @override
@@ -195,22 +191,16 @@ class _UserChallengeLoadingContentState extends State<UserChallengeLoadingConten
   }
 }
 
-class OpenChallengeLoadingContent extends ConsumerStatefulWidget {
-  const OpenChallengeLoadingContent({
-    required this.id,
-    required this.challengeRequest,
-    required this.cancelChallenge,
-  });
-
-  final ChallengeId id;
-  final ChallengeRequest challengeRequest;
-  final Future<void> Function() cancelChallenge;
-
+class const OpenChallengeLoadingContent({
+  required final ChallengeId id,
+  required final ChallengeRequest challengeRequest,
+  required final Future<void> Function() cancelChallenge,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<OpenChallengeLoadingContent> createState() => _OpenChallengeLoadingContentState();
 }
 
-class _OpenChallengeLoadingContentState extends ConsumerState<OpenChallengeLoadingContent> {
+class _OpenChallengeLoadingContentState() extends ConsumerState<OpenChallengeLoadingContent> {
   Future<void>? _cancelChallengeFuture;
 
   @override
@@ -262,9 +252,8 @@ class _OpenChallengeLoadingContentState extends ConsumerState<OpenChallengeLoadi
                               TextSpan(text: ' $challengeLink'),
                             ],
                           ),
-                          style: TextTheme.of(context).bodyMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
+                          style: TextTheme.of(context).bodyMedium
+                              ?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
                         ),
                       ),
                     ),
@@ -408,14 +397,11 @@ class _OpenChallengeLoadingContentState extends ConsumerState<OpenChallengeLoadi
 }
 
 class _GameParamsDisplay extends StatelessWidget {
-  const _GameParamsDisplay({required this.perf, required this.timeIncrement, required this.days});
+  const new({required this.perf, required this.timeIncrement, required this.days});
 
-  _GameParamsDisplay.seek(GameSeek seek)
-    : perf = seek.perf,
-      timeIncrement = seek.timeIncrement,
-      days = seek.days;
+  new seek(GameSeek seek) : perf = seek.perf, timeIncrement = seek.timeIncrement, days = seek.days;
 
-  _GameParamsDisplay.challengeRequest(ChallengeRequest challenge)
+  new challengeRequest(ChallengeRequest challenge)
     : perf = challenge.perf,
       timeIncrement = challenge.timeIncrement,
       days = challenge.days;
@@ -442,12 +428,11 @@ class _GameParamsDisplay extends StatelessWidget {
   }
 }
 
-class StandaloneGameLoadingContent extends StatelessWidget {
-  const StandaloneGameLoadingContent({this.loadingParam, this.userActionsBar, super.key});
-
-  final LoadingParam? loadingParam;
-  final Widget? userActionsBar;
-
+class const StandaloneGameLoadingContent({
+  final LoadingParam? loadingParam,
+  final Widget? userActionsBar,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final loadingFen = loadingParam?.fen;
@@ -499,9 +484,7 @@ class StandaloneGameLoadingContent extends StatelessWidget {
 /// A widget that shows a loading indicator for a player.
 ///
 /// Must be wrapped in a [Shimmer] widget.
-class LoadingPlayerWidget extends StatelessWidget {
-  const LoadingPlayerWidget({super.key});
-
+class const LoadingPlayerWidget({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ShimmerLoading(
@@ -544,12 +527,8 @@ class LoadingPlayerWidget extends StatelessWidget {
   }
 }
 
-class LoadGameError extends StatelessWidget {
-  const LoadGameError(this.errorMessage, {this.showBottomBar = true});
-
-  final String errorMessage;
-  final bool showBottomBar;
-
+class const LoadGameError(final String errorMessage, {final bool showBottomBar = true})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -581,12 +560,10 @@ class LoadGameError extends StatelessWidget {
 }
 
 /// A board that shows a message that a challenge has been declined.
-class ChallengeDeclinedBoard extends StatelessWidget {
-  const ChallengeDeclinedBoard({required this.declineReason, required this.challenge});
-
-  final String declineReason;
-  final Challenge challenge;
-
+class const ChallengeDeclinedBoard({
+  required final String declineReason,
+  required final Challenge challenge,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textColor = DefaultTextStyle.of(context).style.color;
@@ -652,7 +629,7 @@ class ChallengeDeclinedBoard extends StatelessWidget {
   }
 }
 
-class _LobbyNumbers extends ConsumerWidget {
+class const _LobbyNumbers() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final lobbyNumbers = ref.watch(lobbyNumbersProvider);
@@ -679,13 +656,8 @@ class _LobbyNumbers extends ConsumerWidget {
   }
 }
 
-class _BoardOverlayCard extends StatelessWidget {
-  const _BoardOverlayCard({this.padding, required this.child});
-
-  final EdgeInsetsGeometry? padding;
-
-  final Widget child;
-
+class const _BoardOverlayCard({final EdgeInsetsGeometry? padding, required final Widget child})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(

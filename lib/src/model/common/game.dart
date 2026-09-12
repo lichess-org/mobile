@@ -1,7 +1,7 @@
 import 'package:lichess_mobile/l10n/l10n.dart';
 
 /// Represents the choice of a side as a player: white, black or random.
-enum SideChoice {
+enum SideChoice() {
   white,
   random,
   black;

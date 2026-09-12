@@ -16,7 +16,8 @@ final openingExplorerPreferencesProvider =
       name: 'OpeningExplorerPreferencesProvider',
     );
 
-class OpeningExplorerPreferences extends Notifier<OpeningExplorerPrefs>
+class OpeningExplorerPreferences()
+    extends Notifier<OpeningExplorerPrefs>
     with SessionPreferencesStorage<OpeningExplorerPrefs> {
   @override
   @protected
@@ -92,33 +93,29 @@ class OpeningExplorerPreferences extends Notifier<OpeningExplorerPrefs>
 }
 
 @Freezed(fromJson: true, toJson: true)
-sealed class OpeningExplorerPrefs with _$OpeningExplorerPrefs implements Serializable {
-  const OpeningExplorerPrefs._();
-
-  const factory OpeningExplorerPrefs({
+sealed class const OpeningExplorerPrefs._() with _$OpeningExplorerPrefs implements Serializable {
+  const factory({
     required OpeningDatabase db,
     required MasterDb masterDb,
     required LichessDb lichessDb,
     required PlayerDb playerDb,
   }) = _OpeningExplorerPrefs;
 
-  factory OpeningExplorerPrefs.defaults({LightUser? user}) => OpeningExplorerPrefs(
+  factory defaults({LightUser? user}) => OpeningExplorerPrefs(
     db: OpeningDatabase.master,
     masterDb: MasterDb.defaults,
     lichessDb: LichessDb.defaults,
     playerDb: PlayerDb.defaults(user: user),
   );
 
-  factory OpeningExplorerPrefs.fromJson(Map<String, dynamic> json) {
+  factory fromJson(Map<String, dynamic> json) {
     return _$OpeningExplorerPrefsFromJson(json);
   }
 }
 
 @Freezed(fromJson: true, toJson: true)
-sealed class MasterDb with _$MasterDb {
-  const MasterDb._();
-
-  const factory MasterDb({required int sinceYear}) = _MasterDb;
+sealed class const MasterDb._() with _$MasterDb {
+  const factory({required int sinceYear}) = _MasterDb;
 
   static const kEarliestYear = 1952;
   static final now = DateTime.now();
@@ -130,16 +127,14 @@ sealed class MasterDb with _$MasterDb {
   };
   static const defaults = MasterDb(sinceYear: kEarliestYear);
 
-  factory MasterDb.fromJson(Map<String, dynamic> json) {
+  factory fromJson(Map<String, dynamic> json) {
     return _$MasterDbFromJson(json);
   }
 }
 
 @Freezed(fromJson: true, toJson: true)
-sealed class LichessDb with _$LichessDb {
-  const LichessDb._();
-
-  const factory LichessDb({
+sealed class const LichessDb._() with _$LichessDb {
+  const factory({
     required ISet<Speed> speeds,
     required ISet<int> ratings,
     required DateTime since,
@@ -168,16 +163,14 @@ sealed class LichessDb with _$LichessDb {
     since: earliestDate,
   );
 
-  factory LichessDb.fromJson(Map<String, dynamic> json) {
+  factory fromJson(Map<String, dynamic> json) {
     return _$LichessDbFromJson(json);
   }
 }
 
 @Freezed(fromJson: true, toJson: true)
-sealed class PlayerDb with _$PlayerDb {
-  const PlayerDb._();
-
-  const factory PlayerDb({
+sealed class const PlayerDb._() with _$PlayerDb {
+  const factory({
     String? username,
     required Side side,
     required ISet<Speed> speeds,
@@ -202,7 +195,7 @@ sealed class PlayerDb with _$PlayerDb {
     'Last year': now.subtract(const Duration(days: 365)),
     'All time': earliestDate,
   };
-  factory PlayerDb.defaults({LightUser? user}) => PlayerDb(
+  factory defaults({LightUser? user}) => PlayerDb(
     username: user?.name,
     side: Side.white,
     speeds: kAvailableSpeeds,
@@ -210,7 +203,7 @@ sealed class PlayerDb with _$PlayerDb {
     since: earliestDate,
   );
 
-  factory PlayerDb.fromJson(Map<String, dynamic> json) {
+  factory fromJson(Map<String, dynamic> json) {
     return _$PlayerDbFromJson(json);
   }
 }

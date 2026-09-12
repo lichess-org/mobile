@@ -17,9 +17,9 @@ import '../../test_container.dart';
 import '../../test_helpers.dart';
 import '../auth/fake_auth_storage.dart';
 
-class NotificationDisplayMock extends Mock implements FlutterLocalNotificationsPlugin {}
+class NotificationDisplayMock() extends Mock implements FlutterLocalNotificationsPlugin;
 
-class CorrespondenceServiceMock extends Mock implements CorrespondenceService {}
+class CorrespondenceServiceMock() extends Mock implements CorrespondenceService;
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

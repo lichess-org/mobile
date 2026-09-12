@@ -7,11 +7,8 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:material_ui/material_ui.dart';
 
-class BoardEditorFilters extends ConsumerWidget {
-  const BoardEditorFilters({required this.params, super.key});
-
-  final BoardEditorControllerParams? params;
-
+class const BoardEditorFilters({required final BoardEditorControllerParams? params, super.key})
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final editorController = boardEditorControllerProvider(params);

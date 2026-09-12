@@ -11,9 +11,7 @@ import 'package:multistockfish/multistockfish.dart';
 /// Note what a spec does *not* carry: the chess variant. `UCI_Variant` is a per-search option
 /// rather than a start-up parameter, so an atomic analysis and an atomic opponent — or two screens
 /// on two different variants — share one Fairy-Stockfish engine instead of colliding over it.
-sealed class EngineSpec {
-  const EngineSpec();
-
+sealed class const EngineSpec() {
   /// The native library this engine runs in.
   EngineSlot get slot;
 
@@ -25,21 +23,15 @@ sealed class EngineSpec {
 @immutable
 final class StockfishSpec extends EngineSpec {
   /// Stockfish with a small NNUE network embedded in the binary.
-  const StockfishSpec.light()
-    : slot = EngineSlot.sfLight,
-      flavor = StockfishFlavor.light,
-      nnuePath = null;
+  const new light() : slot = EngineSlot.sfLight, flavor = StockfishFlavor.light, nnuePath = null;
 
   /// The latest Stockfish, with its net loaded from disk (see `StockfishNnueService`).
-  const StockfishSpec.latest({required String this.nnuePath})
+  const new latest({required String this.nnuePath})
     : slot = EngineSlot.sfLatest,
       flavor = StockfishFlavor.latestNoNNUE;
 
   /// Fairy-Stockfish: chess variants, and the negative skill levels the weakest opponents need.
-  const StockfishSpec.fairy()
-    : slot = EngineSlot.fairy,
-      flavor = StockfishFlavor.variant,
-      nnuePath = null;
+  const new fairy() : slot = EngineSlot.fairy, flavor = StockfishFlavor.variant, nnuePath = null;
 
   @override
   final EngineSlot slot;
@@ -72,9 +64,7 @@ final class StockfishSpec extends EngineSpec {
 /// options it was built from have changed — so the network is a per-search
 /// option like any other. Two Maia ratings are therefore the same spec, and
 /// share one engine, rather than being two engines fighting over one slot.
-final class Lc0Spec extends EngineSpec {
-  const Lc0Spec();
-
+final class const Lc0Spec() extends EngineSpec {
   @override
   EngineSlot get slot => EngineSlot.lc0;
 

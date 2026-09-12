@@ -46,19 +46,12 @@ import 'package:material_ui/material_ui.dart';
 }
 
 /// Player widget for PGN imports, displaying analysis player info
-class PgnPlayerWidget extends StatelessWidget {
-  const PgnPlayerWidget({
-    required this.player,
-    required this.isSideToMove,
-    required this.result,
-    this.clock,
-  });
-
-  final AnalysisPlayer player;
-  final Duration? clock;
-  final bool isSideToMove;
-  final AnalysisGameResult? result;
-
+class const PgnPlayerWidget({
+  required final AnalysisPlayer player,
+  required final bool isSideToMove,
+  required final AnalysisGameResult? result,
+  final Duration? clock,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnalysisPlayerWidget(
@@ -104,21 +97,13 @@ class PgnPlayerWidget extends StatelessWidget {
   }
 }
 
-class AnalysisPlayerWidget extends StatelessWidget {
-  const AnalysisPlayerWidget({
-    required this.playerNameWidget,
-    required this.result,
-    required this.side,
-    required this.isSideToMove,
-    required this.clock,
-  });
-
-  final Widget playerNameWidget;
-  final AnalysisGameResult? result;
-  final Side side;
-  final Duration? clock;
-  final bool isSideToMove;
-
+class const AnalysisPlayerWidget({
+  required final Widget playerNameWidget,
+  required final AnalysisGameResult? result,
+  required final Side side,
+  required final bool isSideToMove,
+  required final Duration? clock,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final resultString = result?.resultToString(side);

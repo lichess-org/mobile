@@ -1,7 +1,7 @@
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
-enum GameStatus {
+enum GameStatus(final int value) {
   /// Unknown game status (not handled by the app).
   unknown(-1),
 
@@ -36,9 +36,6 @@ enum GameStatus {
   variantEnd(60);
 
   static final nameMap = IMap(GameStatus.values.asNameMap());
-
-  const GameStatus(this.value);
-  final int value;
 }
 
 extension GameExtension on Pick {

@@ -34,9 +34,7 @@ final _themesProvider =
       return (isOnline, savedThemes, onlineThemes, savedOpenings.isNotEmpty);
     });
 
-class PuzzleThemesScreen extends StatelessWidget {
-  const PuzzleThemesScreen({super.key});
-
+class const PuzzleThemesScreen({super.key}) extends StatelessWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const PuzzleThemesScreen());
   }
@@ -50,14 +48,12 @@ class PuzzleThemesScreen extends StatelessWidget {
   }
 }
 
-class _Body extends ConsumerStatefulWidget {
-  const _Body();
-
+class const _Body() extends ConsumerStatefulWidget {
   @override
   ConsumerState<_Body> createState() => _BodyState();
 }
 
-class _BodyState extends ConsumerState<_Body> {
+class _BodyState() extends ConsumerState<_Body> {
   final _searchController = TextEditingController();
   String _searchQuery = '';
 
@@ -150,21 +146,13 @@ class _BodyState extends ConsumerState<_Body> {
   }
 }
 
-class _ThemeTile extends StatelessWidget {
-  const _ThemeTile({
-    required this.theme,
-    required this.isThemeAvailable,
-    required this.hasConnectivity,
-    required this.onlineThemes,
-    required this.savedThemes,
-  });
-
-  final PuzzleThemeKey theme;
-  final bool isThemeAvailable;
-  final bool hasConnectivity;
-  final IMap<PuzzleThemeKey, PuzzleThemeData>? onlineThemes;
-  final IMap<PuzzleThemeKey, int> savedThemes;
-
+class const _ThemeTile({
+  required final PuzzleThemeKey theme,
+  required final bool isThemeAvailable,
+  required final bool hasConnectivity,
+  required final IMap<PuzzleThemeKey, PuzzleThemeData>? onlineThemes,
+  required final IMap<PuzzleThemeKey, int> savedThemes,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeCountStyle = TextStyle(
@@ -205,19 +193,12 @@ class _ThemeTile extends StatelessWidget {
   }
 }
 
-class _Category extends StatelessWidget {
-  const _Category({
-    required this.hasConnectivity,
-    required this.category,
-    required this.onlineThemes,
-    required this.savedThemes,
-  });
-
-  final bool hasConnectivity;
-  final PuzzleThemeCategory category;
-  final IMap<PuzzleThemeKey, PuzzleThemeData>? onlineThemes;
-  final IMap<PuzzleThemeKey, int> savedThemes;
-
+class const _Category({
+  required final bool hasConnectivity,
+  required final PuzzleThemeCategory category,
+  required final IMap<PuzzleThemeKey, PuzzleThemeData>? onlineThemes,
+  required final IMap<PuzzleThemeKey, int> savedThemes,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final (categoryName, themes) = category;

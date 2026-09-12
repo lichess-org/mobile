@@ -14,11 +14,7 @@ import 'package:lichess_mobile/src/view/explorer/explorer_view.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class OpeningNameHeader extends StatelessWidget {
-  const OpeningNameHeader({required this.opening, super.key});
-
-  final Opening opening;
-
+class const OpeningNameHeader({required final Opening opening, super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -53,11 +49,7 @@ class OpeningNameHeader extends StatelessWidget {
 
 /// A centered, padded informational message shown in place of explorer or tablebase results
 /// (e.g. max depth reached, offline, no data).
-class ExplorerMessage extends StatelessWidget {
-  const ExplorerMessage(this.message, {super.key});
-
-  final String message;
-
+class const ExplorerMessage(final String message, {super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -69,7 +61,7 @@ class ExplorerMessage extends StatelessWidget {
 
 /// Table of moves for the opening explorer.
 class OpeningExplorerMoveTable extends ConsumerWidget {
-  const OpeningExplorerMoveTable({
+  const new({
     required this.moves,
     required this.whiteWins,
     required this.draws,
@@ -78,7 +70,7 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
     this.isIndexing = false,
   }) : _isLoading = false;
 
-  const OpeningExplorerMoveTable.loading()
+  const new loading()
     : _isLoading = true,
       moves = const IListConst([]),
       whiteWins = 0,
@@ -277,14 +269,12 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
   );
 }
 
-class IndexingIndicator extends StatefulWidget {
-  const IndexingIndicator();
-
+class const IndexingIndicator() extends StatefulWidget {
   @override
   State<IndexingIndicator> createState() => _IndexingIndicatorState();
 }
 
-class _IndexingIndicatorState extends State<IndexingIndicator> with TickerProviderStateMixin {
+class _IndexingIndicatorState() extends State<IndexingIndicator> with TickerProviderStateMixin {
   late AnimationController controller;
 
   @override
@@ -318,11 +308,8 @@ class _IndexingIndicatorState extends State<IndexingIndicator> with TickerProvid
   }
 }
 
-class OpeningExplorerHeaderTile extends StatelessWidget {
-  const OpeningExplorerHeaderTile({required this.child, super.key});
-
-  final Widget child;
-
+class const OpeningExplorerHeaderTile({required final Widget child, super.key})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -335,25 +322,18 @@ class OpeningExplorerHeaderTile extends StatelessWidget {
 }
 
 /// A game tile for the opening explorer.
-class OpeningExplorerGameTile extends ConsumerStatefulWidget {
-  const OpeningExplorerGameTile({
-    required this.pov,
-    required this.game,
-    required this.color,
-    required this.ply,
-    super.key,
-  });
-
-  final Side pov;
-  final OpeningExplorerGame game;
-  final Color color;
-  final int ply;
-
+class const OpeningExplorerGameTile({
+  required final Side pov,
+  required final OpeningExplorerGame game,
+  required final Color color,
+  required final int ply,
+  super.key,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<OpeningExplorerGameTile> createState() => _OpeningExplorerGameTileState();
 }
 
-class _OpeningExplorerGameTileState extends ConsumerState<OpeningExplorerGameTile> {
+class _OpeningExplorerGameTileState() extends ConsumerState<OpeningExplorerGameTile> {
   @override
   Widget build(BuildContext context) {
     const widthResultBox = 50.0;
@@ -461,17 +441,11 @@ class _OpeningExplorerGameTileState extends ConsumerState<OpeningExplorerGameTil
   }
 }
 
-class _WinPercentageChart extends StatelessWidget {
-  const _WinPercentageChart({
-    required this.whiteWins,
-    required this.draws,
-    required this.blackWins,
-  });
-
-  final int whiteWins;
-  final int draws;
-  final int blackWins;
-
+class const _WinPercentageChart({
+  required final int whiteWins,
+  required final int draws,
+  required final int blackWins,
+}) extends StatelessWidget {
   int percentGames(int games) => ((games / (whiteWins + draws + blackWins)) * 100).round();
   String label(int percent) => percent < 20 ? '' : '$percent%';
 

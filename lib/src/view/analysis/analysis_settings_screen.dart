@@ -11,11 +11,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_ui/material_ui.dart';
 
-class AnalysisSettingsScreen extends ConsumerWidget {
-  const AnalysisSettingsScreen(this.options);
-
-  final AnalysisOptions options;
-
+class const AnalysisSettingsScreen(final AnalysisOptions options) extends ConsumerWidget {
   static Route<dynamic> buildRoute({required AnalysisOptions options}) {
     return buildScreenRoute(screen: AnalysisSettingsScreen(options));
   }

@@ -9,11 +9,8 @@ import 'package:material_ui/material_ui.dart';
 const _iconSize = 38.0;
 const _kIconPadding = EdgeInsets.all(10.0);
 
-class ClockSettings extends ConsumerWidget {
-  const ClockSettings({required this.orientation, super.key});
-
-  final Orientation orientation;
-
+class const ClockSettings({required final Orientation orientation, super.key})
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(clockToolControllerProvider);
@@ -139,11 +136,7 @@ class ClockSettings extends ConsumerWidget {
   }
 }
 
-class _PlayResumeButton extends ConsumerWidget {
-  const _PlayResumeButton(this.iconSize);
-
-  final double iconSize;
-
+class const _PlayResumeButton(final double iconSize) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = ref.read(clockToolControllerProvider.notifier);

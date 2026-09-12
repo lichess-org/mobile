@@ -15,10 +15,7 @@ final puzzleStorageProvider = FutureProvider<PuzzleStorage>((Ref ref) async {
 const _tableName = 'puzzle';
 
 /// Local storage for puzzles.
-class PuzzleStorage {
-  const PuzzleStorage(this._db);
-  final Database _db;
-
+class const PuzzleStorage(final Database _db) {
   Future<Puzzle?> fetch({required PuzzleId puzzleId}) async {
     final list = await _db.query(
       _tableName,

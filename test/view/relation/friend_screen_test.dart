@@ -179,11 +179,7 @@ void main() {
   });
 }
 
-class _MockOnlineFriends extends OnlineFriends {
-  _MockOnlineFriends(this._friends);
-
-  final IList<OnlineFriend> _friends;
-
+class _MockOnlineFriends(final IList<OnlineFriend> _friends) extends OnlineFriends {
   @override
   Future<IList<OnlineFriend>> build() async {
     return _friends;

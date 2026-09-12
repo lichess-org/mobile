@@ -8,35 +8,28 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:material_ui/material_ui.dart';
 
-class CorrespondenceClock extends StatefulWidget {
+class const CorrespondenceClock({
   /// The duration left on the clock.
-  final Duration duration;
+  required final Duration duration,
 
   /// If [active] is `true`, the clock starts counting down.
-  final bool active;
+  required final bool active,
 
   /// Opaque token that identifies the server-authoritative clock reading.
   /// [timeLeft] is reset to [duration] whenever this value changes.
-  final int resetId;
+  required final int resetId,
 
   /// Callback when the clock reaches zero.
-  final VoidCallback? onFlag;
-
-  const CorrespondenceClock({
-    required this.duration,
-    required this.active,
-    required this.resetId,
-    this.onFlag,
-    super.key,
-  });
-
+  final VoidCallback? onFlag,
+  super.key,
+}) extends StatefulWidget {
   @override
   State<CorrespondenceClock> createState() => _CorrespondenceClockState();
 }
 
 const _period = Duration(seconds: 1);
 
-class _CorrespondenceClockState extends State<CorrespondenceClock> {
+class _CorrespondenceClockState() extends State<CorrespondenceClock> {
   Timer? _timer;
   Duration timeLeft = Duration.zero;
 

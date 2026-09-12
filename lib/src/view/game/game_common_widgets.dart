@@ -56,23 +56,17 @@ void openGameScreen(
   }
 }
 
-class GameBookmarkContextMenuAction extends StatefulWidget {
-  const GameBookmarkContextMenuAction({
-    required this.id,
-    required this.bookmarked,
-    required this.onToggleBookmark,
-    super.key,
-  });
-
-  final GameId id;
-  final bool bookmarked;
-  final Future<void> Function() onToggleBookmark;
-
+class const GameBookmarkContextMenuAction({
+  required final GameId id,
+  required final bool bookmarked,
+  required final Future<void> Function() onToggleBookmark,
+  super.key,
+}) extends StatefulWidget {
   @override
   State<GameBookmarkContextMenuAction> createState() => _GameBookmarkContextMenuActionState();
 }
 
-class _GameBookmarkContextMenuActionState extends State<GameBookmarkContextMenuAction> {
+class _GameBookmarkContextMenuActionState() extends State<GameBookmarkContextMenuAction> {
   Future<void>? _pendingBookmarkAction;
   late bool _bookmarked;
 

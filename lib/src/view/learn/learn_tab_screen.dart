@@ -53,9 +53,7 @@ final _myFavoriteStudiesLengthProvider = FutureProvider.autoDispose<int>((Ref re
   );
 });
 
-class LearnTabScreen extends ConsumerWidget {
-  const LearnTabScreen({super.key});
-
+class const LearnTabScreen({super.key}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return PopScope(
@@ -80,9 +78,7 @@ class LearnTabScreen extends ConsumerWidget {
   }
 }
 
-class _Body extends ConsumerWidget {
-  const _Body();
-
+class const _Body() extends ConsumerWidget {
   Future<void> _refreshData(WidgetRef ref) async {
     try {
       await Future.wait([

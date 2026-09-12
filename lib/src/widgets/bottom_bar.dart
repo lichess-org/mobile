@@ -8,14 +8,14 @@ import 'package:material_ui/material_ui.dart';
 /// The height of the bar is always [kBottomBarHeight] and the font size scale factor is
 /// clamped to 1.4.
 class BottomBar extends StatelessWidget {
-  const BottomBar({
+  const new({
     required this.children,
     this.mainAxisAlignment = MainAxisAlignment.spaceAround,
     this.expandChildren = true,
     this.cupertinoTransparent = false,
   });
 
-  const BottomBar.empty({this.cupertinoTransparent = false})
+  const new empty({this.cupertinoTransparent = false})
     : children = const [],
       expandChildren = true,
       mainAxisAlignment = MainAxisAlignment.spaceAround;
@@ -66,34 +66,21 @@ class BottomBar extends StatelessWidget {
 /// A bottom bar button.
 ///
 /// Typically used in a [BottomBar].
-class BottomBarButton extends StatelessWidget {
-  const BottomBarButton({
-    required this.icon,
-    required this.label,
-    required this.onTap,
-    this.badgeLabel,
-    this.highlighted = false,
-    this.showLabel = false,
-    this.showTooltip = true,
-    this.blink = false,
-    this.tooltip,
-    super.key,
-  });
-
-  final IconData icon;
-  final String label;
-  final String? badgeLabel;
-  final VoidCallback? onTap;
-
-  final bool highlighted;
-  final bool showLabel;
-  final bool showTooltip;
-  final bool blink;
+class const BottomBarButton({
+  required final IconData icon,
+  required final String label,
+  required final VoidCallback? onTap,
+  final String? badgeLabel,
+  final bool highlighted = false,
+  final bool showLabel = false,
+  final bool showTooltip = true,
+  final bool blink = false,
 
   /// In case we want to override the tooltip message. If null, the [label] will
   /// be used.
-  final String? tooltip;
-
+  final String? tooltip,
+  super.key,
+}) extends StatelessWidget {
   bool get enabled => onTap != null;
 
   @override
@@ -154,17 +141,14 @@ class BottomBarButton extends StatelessWidget {
   }
 }
 
-class _AnimatedInvertBackground extends StatefulWidget {
-  const _AnimatedInvertBackground({required this.child, required this.color});
-
-  final Widget child;
-  final Color color;
-
+class const _AnimatedInvertBackground({required final Widget child, required final Color color})
+    extends StatefulWidget {
   @override
   _InvertBackgroundState createState() => _InvertBackgroundState();
 }
 
-class _InvertBackgroundState extends State<_AnimatedInvertBackground>
+class _InvertBackgroundState()
+    extends State<_AnimatedInvertBackground>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<Color?> _colorAnimation;

@@ -3,14 +3,14 @@ import 'package:clock/clock.dart';
 // Code adapted from: https://github.com/gokberkbar/memory_cache/blob/main/lib/src/cache.dart
 
 /// A simple and fast in-memory cache with expiration support.
-class MemoryCache<K, V> {
+class MemoryCache<K, V>({
+  /// The default expiry duration for cache items.
+  required final Duration defaultExpiry,
+}) {
   /// Creates a new instance of [MemoryCache].
   ///
   /// [defaultExpiry] is the default expiry duration for cache items.
-  MemoryCache({required this.defaultExpiry});
-
-  /// The default expiry duration for cache items.
-  final Duration defaultExpiry;
+  this;
 
   final Map<K, CacheItem<V>> _cache = {};
 
@@ -103,14 +103,12 @@ class MemoryCache<K, V> {
   }
 }
 
-class CacheItem<T> {
-  final DateTime createdAt;
-  final DateTime? expiry;
-  final T value;
-
-  const CacheItem({required this.createdAt, this.expiry, required this.value});
-
-  factory CacheItem.create(T value, {DateTime? expiry}) =>
+class const CacheItem<T>({
+  required final DateTime createdAt,
+  final DateTime? expiry,
+  required final T value,
+}) {
+  factory create(T value, {DateTime? expiry}) =>
       CacheItem(createdAt: clock.now(), expiry: expiry, value: value);
 
   CacheItem<T> copyWith({DateTime? createdAt, DateTime? expiry, T? value}) {

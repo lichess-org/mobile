@@ -19,9 +19,7 @@ import 'package:material_ui/material_ui.dart';
 
 const _kMatrixSpacing = 8.0;
 
-class QuickGameMatrix extends ConsumerWidget {
-  const QuickGameMatrix({super.key});
-
+class const QuickGameMatrix({super.key}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final playban = ref.watch(accountProvider).value?.playban;
@@ -85,12 +83,10 @@ class QuickGameMatrix extends ConsumerWidget {
   }
 }
 
-class _SectionChoices extends ConsumerWidget {
-  const _SectionChoices({required this.choices, this.showCustom = false});
-
-  final List<TimeIncrement> choices;
-  final bool showCustom;
-
+class const _SectionChoices({
+  required final List<TimeIncrement> choices,
+  final bool showCustom = false,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authUser = ref.watch(authControllerProvider);
@@ -158,20 +154,13 @@ class _SectionChoices extends ConsumerWidget {
   }
 }
 
-class _ChoiceChip extends StatelessWidget {
-  const _ChoiceChip({
-    required this.title,
-    this.subtitle,
-    this.speed,
-    required this.onTap,
-    super.key,
-  });
-
-  final Widget title;
-  final Widget? subtitle;
-  final Speed? speed;
-  final void Function()? onTap;
-
+class const _ChoiceChip({
+  required final Widget title,
+  final Widget? subtitle,
+  final Speed? speed,
+  required final void Function()? onTap,
+  super.key,
+}) extends StatelessWidget {
   static const BorderRadius _kBorderRadius = BorderRadius.all(Radius.circular(6.0));
 
   @override

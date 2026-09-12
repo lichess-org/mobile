@@ -1,10 +1,7 @@
 import 'dart:async';
 
-class Debouncer {
-  final Duration delay;
+class Debouncer(final Duration delay) {
   Timer? _timer;
-
-  Debouncer(this.delay);
 
   void call(void Function() action) {
     _timer?.cancel();
@@ -16,20 +13,18 @@ class Debouncer {
   }
 }
 
-class Throttler {
-  final Duration delay;
+class Throttler(
+  final Duration delay, {
 
   /// Whether a call made during the delay runs when it expires, instead of being dropped.
   ///
   /// Calls made in the same window are coalesced into a single trailing run, which uses the last
   /// action given. Use this when dropping a call for good would lose a signal — a state change
   /// that nothing will notify about again — rather than merely skip one of a repeating series.
-  final bool trailing;
-
+  final bool trailing = false,
+}) {
   Timer? _timer;
   void Function()? _trailingAction;
-
-  Throttler(this.delay, {this.trailing = false});
 
   void call(void Function() action) {
     if (_timer?.isActive ?? false) {

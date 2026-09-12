@@ -43,9 +43,7 @@ const _kMaiaTempEndgame = 0.2;
 /// Thrown when a [EngineOpponent.findMove] request does not produce a move.
 ///
 /// Either it was superseded by another one, or the engine was stopped or died before answering.
-class MoveSearchCancelled implements Exception {
-  const MoveSearchCancelled();
-
+class const MoveSearchCancelled() implements Exception {
   @override
   String toString() => 'MoveSearchCancelled: the move search was cancelled';
 }
@@ -55,7 +53,7 @@ class MoveSearchCancelled implements Exception {
 /// It knows how to turn "level 4" or "Maia 1500" into UCI options and a search limit, and knows
 /// nothing about evaluation, hints or practice comments — those belong to the evaluator, even when
 /// both happen to be running on the same engine.
-abstract class EngineOpponent {
+abstract class EngineOpponent() {
   /// A short label for the UI: "Stockfish level 4", "Maia 1500".
   String get displayName;
 
@@ -90,14 +88,10 @@ abstract class EngineOpponent {
 /// Last caller wins: the search it replaces is failed rather than left waiting, because a search
 /// the engine has already begun still answers, but that answer is for a position the game has
 /// moved on from.
-abstract class EngineOpponentBase<S extends OpponentSpec> implements EngineOpponent {
-  EngineOpponentBase({required this.ref, required this.spec});
-
-  @protected
-  final Ref ref;
-
-  final S spec;
-
+abstract class EngineOpponentBase<S extends OpponentSpec>({
+  @protected required final Ref ref,
+  required final S spec,
+}) implements EngineOpponent {
   @override
   String get displayName => spec.displayName;
 
@@ -271,12 +265,13 @@ abstract class EngineOpponentBase<S extends OpponentSpec> implements EngineOppon
 ///
 /// The whole of "how strong is the computer" lives here: the skill level, the number of candidate
 /// moves it picks from, how long it thinks and how many cores it gets.
-class StockfishOpponent extends EngineOpponentBase<StockfishOpponentSpec> {
-  StockfishOpponent({required super.ref, required super.spec, required this.budget});
+class StockfishOpponent({
+  required super.ref,
+  required super.spec,
 
   /// How this device's engines share it.
-  final EngineBudget budget;
-
+  required final EngineBudget budget,
+}) extends EngineOpponentBase<StockfishOpponentSpec> {
   StockfishLevel get level => spec.level;
 
   @override
@@ -321,34 +316,21 @@ class StockfishOpponent extends EngineOpponentBase<StockfishOpponentSpec> {
 /// its rating is which moves that network expects such a human to choose, not the move a tree
 /// search rescues — so it runs at one node, samples the policy rather than taking its top move (see
 /// [_kMaiaTemperature]), and none of the strength dials [StockfishOpponent] turns apply.
-class MaiaOpponent extends EngineOpponentBase<MaiaOpponentSpec> {
-  MaiaOpponent({
-    required super.ref,
-    required super.spec,
-    required this.weights,
-    required this.books,
-    required this.onlineBook,
-    required this.thinkingTime,
-    Random? random,
-  }) : random = random ?? Random();
-
-  @protected
-  final MaiaWeightsService weights;
-
-  @protected
-  final MaiaOfflineBookService books;
-
-  @protected
-  final MaiaOnlineBook onlineBook;
-
-  /// Injected so that a game can be replayed move for move in tests.
-  @protected
-  final Random random;
+class MaiaOpponent({
+  required super.ref,
+  required super.spec,
+  @protected required final MaiaWeightsService weights,
+  @protected required final MaiaOfflineBookService books,
+  @protected required final MaiaOnlineBook onlineBook,
 
   /// How long it sits on a move before playing it. Maia answers in a few tens of milliseconds, and
   /// a move that lands the instant you finish yours is the most obviously inhuman thing about it.
+  @protected required final ThinkingTime thinkingTime,
+  Random? random,
+}) extends EngineOpponentBase<MaiaOpponentSpec> {
+  /// Injected so that a game can be replayed move for move in tests.
   @protected
-  final ThinkingTime thinkingTime;
+  final Random random = random ?? Random();
 
   MaiaRating get rating => spec.rating;
 

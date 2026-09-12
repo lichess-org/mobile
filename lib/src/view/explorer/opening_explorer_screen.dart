@@ -25,11 +25,7 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:share_plus/share_plus.dart';
 
-class OpeningExplorerScreen extends ConsumerWidget {
-  const OpeningExplorerScreen({required this.options});
-
-  final AnalysisOptions options;
-
+class const OpeningExplorerScreen({required final AnalysisOptions options}) extends ConsumerWidget {
   static Route<dynamic> buildRoute(AnalysisOptions options) {
     return buildScreenRoute(screen: OpeningExplorerScreen(options: options));
   }
@@ -85,12 +81,8 @@ class OpeningExplorerScreen extends ConsumerWidget {
   }
 }
 
-class _Body extends ConsumerWidget {
-  const _Body({required this.options, required this.state});
-
-  final AnalysisOptions options;
-  final AnalysisState state;
-
+class const _Body({required final AnalysisOptions options, required final AnalysisState state})
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isTablet = isTabletOrLarger(context);
@@ -210,11 +202,9 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class _MoveList extends ConsumerWidget implements PreferredSizeWidget {
-  const _MoveList({required this.options});
-
-  final AnalysisOptions options;
-
+class const _MoveList({required final AnalysisOptions options})
+    extends ConsumerWidget
+    implements PreferredSizeWidget {
   @override
   Size get preferredSize => const Size.fromHeight(40.0);
 
@@ -246,11 +236,7 @@ class _MoveList extends ConsumerWidget implements PreferredSizeWidget {
   }
 }
 
-class _BottomBar extends ConsumerWidget {
-  const _BottomBar({required this.options});
-
-  final AnalysisOptions options;
-
+class const _BottomBar({required final AnalysisOptions options}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final db = ref.watch(openingExplorerPreferencesProvider.select((value) => value.db));

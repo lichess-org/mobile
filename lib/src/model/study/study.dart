@@ -12,10 +12,8 @@ part 'study.freezed.dart';
 part 'study.g.dart';
 
 @freezed
-sealed class Study with _$Study {
-  const Study._();
-
-  const factory Study({
+sealed class const Study._() with _$Study {
+  const factory({
     required StudyId id,
     required String name,
     required bool liked,
@@ -57,7 +55,7 @@ sealed class Study with _$Study {
 
   StudyChapterMeta get currentChapterMeta => chapters.firstWhere((c) => c.id == chapter.id);
 
-  factory Study.fromServerJson(Map<String, Object?> json) {
+  factory fromServerJson(Map<String, Object?> json) {
     return _studyFromPick(pick(json).required());
   }
 }
@@ -88,9 +86,9 @@ Study _studyFromPick(RequiredPick pick) {
       sticky: study('features', 'sticky').asBoolOrFalse(),
     ),
     topics: study('topics').asListOrThrow((pick) => pick.asStringOrThrow()).lock,
-    chapters: study(
-      'chapters',
-    ).asListOrThrow((pick) => StudyChapterMeta.fromJson(pick.asMapOrThrow())).lock,
+    chapters: study('chapters')
+        .asListOrThrow((pick) => StudyChapterMeta.fromJson(pick.asMapOrThrow()))
+        .lock,
     chapter: StudyChapter.fromJson(study('chapter').asMapOrThrow()),
     members: study('members')
         .asMapOrThrow<String, Map<String, Object?>>()
@@ -104,10 +102,8 @@ Study _studyFromPick(RequiredPick pick) {
 typedef StudyFeatures = ({bool cloneable, bool chat, bool sticky});
 
 @Freezed(fromJson: true)
-sealed class StudyChapter with _$StudyChapter {
-  const StudyChapter._();
-
-  const factory StudyChapter({
+sealed class const StudyChapter._() with _$StudyChapter {
+  const factory({
     required StudyChapterId id,
     required StudyChapterSetup setup,
     @JsonKey(defaultValue: false) required bool practise,
@@ -116,7 +112,7 @@ sealed class StudyChapter with _$StudyChapter {
     @JsonKey(fromJson: studyChapterFeaturesFromJson) required StudyChapterFeatures features,
   }) = _StudyChapter;
 
-  factory StudyChapter.fromJson(Map<String, Object?> json) => _$StudyChapterFromJson(json);
+  factory fromJson(Map<String, Object?> json) => _$StudyChapterFromJson(json);
 }
 
 typedef StudyChapterFeatures = ({bool computer, bool explorer});
@@ -129,18 +125,15 @@ StudyChapterFeatures studyChapterFeaturesFromJson(Map<String, Object?> json) {
 }
 
 @Freezed(fromJson: true)
-sealed class StudyChapterSetup with _$StudyChapterSetup {
-  const StudyChapterSetup._();
-
-  const factory StudyChapterSetup({
+sealed class const StudyChapterSetup._() with _$StudyChapterSetup {
+  const factory({
     required GameId? id,
     required Side orientation,
     @JsonKey(fromJson: _variantFromJson) required Variant variant,
     required bool? fromFen,
   }) = _StudyChapterSetup;
 
-  factory StudyChapterSetup.fromJson(Map<String, Object?> json) =>
-      _$StudyChapterSetupFromJson(json);
+  factory fromJson(Map<String, Object?> json) => _$StudyChapterSetupFromJson(json);
 }
 
 Variant _variantFromJson(Map<String, Object?> json) {
@@ -148,23 +141,16 @@ Variant _variantFromJson(Map<String, Object?> json) {
 }
 
 @Freezed(fromJson: true)
-sealed class StudyChapterMeta with _$StudyChapterMeta {
-  const StudyChapterMeta._();
+sealed class const StudyChapterMeta._() with _$StudyChapterMeta {
+  const factory({required StudyChapterId id, required String name, required String? fen}) =
+      _StudyChapterMeta;
 
-  const factory StudyChapterMeta({
-    required StudyChapterId id,
-    required String name,
-    required String? fen,
-  }) = _StudyChapterMeta;
-
-  factory StudyChapterMeta.fromJson(Map<String, Object?> json) => _$StudyChapterMetaFromJson(json);
+  factory fromJson(Map<String, Object?> json) => _$StudyChapterMetaFromJson(json);
 }
 
 @Freezed(fromJson: true)
-sealed class StudyPageItem with _$StudyPageItem {
-  const StudyPageItem._();
-
-  const factory StudyPageItem({
+sealed class const StudyPageItem._() with _$StudyPageItem {
+  const factory({
     required StudyId id,
     required String name,
     required bool liked,
@@ -178,21 +164,19 @@ sealed class StudyPageItem with _$StudyPageItem {
     required StudyVisibility visibility,
   }) = _StudyPageItem;
 
-  factory StudyPageItem.fromJson(Map<String, Object?> json) => _$StudyPageItemFromJson(json);
+  factory fromJson(Map<String, Object?> json) => _$StudyPageItemFromJson(json);
 }
 
 @Freezed(fromJson: true)
-sealed class StudyMember with _$StudyMember {
-  const StudyMember._();
+sealed class const StudyMember._() with _$StudyMember {
+  const factory({required LightUser user, required String role}) = _StudyMember;
 
-  const factory StudyMember({required LightUser user, required String role}) = _StudyMember;
-
-  factory StudyMember.fromJson(Map<String, Object?> json) => _$StudyMemberFromJson(json);
+  factory fromJson(Map<String, Object?> json) => _$StudyMemberFromJson(json);
 }
 
 @freezed
 sealed class CreateStudyChapterPayload with _$CreateStudyChapterPayload {
-  const factory CreateStudyChapterPayload({
+  const factory({
     required String pgn,
     required String name,
     required Side orientation,
@@ -200,4 +184,8 @@ sealed class CreateStudyChapterPayload with _$CreateStudyChapterPayload {
   }) = _CreateStudyChapterPayload;
 }
 
-enum StudyVisibility { public, unlisted, private }
+enum StudyVisibility() {
+  public,
+  unlisted,
+  private,
+}

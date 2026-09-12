@@ -40,12 +40,8 @@ ThemeData makeAppTheme(BuildContext context, GeneralPrefs generalPrefs, BoardPre
 
 /// A custom theme extension that adds lichess custom properties to the theme.
 @immutable
-class CustomTheme extends ThemeExtension<CustomTheme> {
-  const CustomTheme({required this.rowEven, required this.rowOdd});
-
-  final Color rowEven;
-  final Color rowOdd;
-
+class const CustomTheme({required final Color rowEven, required final Color rowOdd})
+    extends ThemeExtension<CustomTheme> {
   @override
   CustomTheme copyWith({Color? rowEven, Color? rowOdd}) {
     return CustomTheme(rowEven: rowEven ?? this.rowEven, rowOdd: rowOdd ?? this.rowOdd);

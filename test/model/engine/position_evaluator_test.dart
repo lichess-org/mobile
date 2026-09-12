@@ -29,7 +29,13 @@ import 'fake_stockfish_nnue_service.dart';
 /// Deliberately not called `EngineState`: that name belongs to the plugin's own reading of a
 /// native engine (`EngineFailure.engineState`), which is a different thing entirely. This is a
 /// test's way of reading two fields as one word, and exists nowhere in the app.
-enum EngineLifecycle { initial, loading, idle, computing, error }
+enum EngineLifecycle() {
+  initial,
+  loading,
+  idle,
+  computing,
+  error,
+}
 
 extension EngineEvaluationStateTest on EngineEvaluationState {
   /// The engine's `id name`, once it has one.
@@ -757,42 +763,39 @@ void main() {
       expect(delayedStockfish.commands, isNot(contains('ucinewgame')));
     });
 
-    test(
-      'latestNoNNUE falling back to light does not cause restart on subsequent latestNoNNUE requests',
-      () async {
-        final delayedStockfish = FakeEngine();
-        fakeEngine = delayedStockfish;
+    test('latestNoNNUE falling back to light does not cause restart on subsequent latestNoNNUE requests', () async {
+      final delayedStockfish = FakeEngine();
+      fakeEngine = delayedStockfish;
 
-        // The NNUE file is unavailable: latestNoNNUE will fall back to the light engine
-        final container = await makeContainer(
-          overrides: {
-            stockfishNnueServiceProvider: stockfishNnueServiceProvider.overrideWithValue(
-              FakeStockfishNnueServiceUnavailable(),
-            ),
-          },
-        );
-        final service = readEvaluator(container);
+      // The NNUE file is unavailable: latestNoNNUE will fall back to the light engine
+      final container = await makeContainer(
+        overrides: {
+          stockfishNnueServiceProvider: stockfishNnueServiceProvider.overrideWithValue(
+            FakeStockfishNnueServiceUnavailable(),
+          ),
+        },
+      );
+      final service = readEvaluator(container);
 
-        final work1 = makeWork();
-        final stream1 = service.evaluate(work1);
-        await stream1!.first;
+      final work1 = makeWork();
+      final stream1 = service.evaluate(work1);
+      await stream1!.first;
 
-        expect(delayedStockfish.startCount, 1);
+      expect(delayedStockfish.startCount, 1);
 
-        // A second request with latestNoNNUE should reuse the running light engine.
-        final work2 = makeWork(path: UciPath.fromId(UciCharPair.fromUci('e2e4')));
-        final stream2 = service.evaluate(work2);
-        await stream2!.first;
+      // A second request with latestNoNNUE should reuse the running light engine.
+      final work2 = makeWork(path: UciPath.fromId(UciCharPair.fromUci('e2e4')));
+      final stream2 = service.evaluate(work2);
+      await stream2!.first;
 
-        expect(
-          delayedStockfish.startCount,
-          1,
-          reason:
-              'Engine must not restart when latestNoNNUE already fell back to the light engine '
-              'and a new latestNoNNUE request arrives',
-        );
-      },
-    );
+      expect(
+        delayedStockfish.startCount,
+        1,
+        reason:
+            'Engine must not restart when latestNoNNUE already fell back to the light engine '
+            'and a new latestNoNNUE request arrives',
+      );
+    });
   });
 
   group('PositionEvaluator', () {

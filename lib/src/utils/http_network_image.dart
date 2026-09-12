@@ -7,18 +7,14 @@ import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 
 /// Like [NetworkImage], but uses the provided [http.Client] to fetch the image.
-class HttpNetworkImage extends ImageProvider<HttpNetworkImage> {
+class const HttpNetworkImage(
+  final String url,
+  final http.Client _client, {
+  final double scale = 1.0,
+  final Map<String, String>? headers,
+}) extends ImageProvider<HttpNetworkImage> {
   /// Creates an object that fetches the image at the given URL.
-  const HttpNetworkImage(this.url, http.Client client, {this.scale = 1.0, this.headers})
-    : _client = client;
-
-  final http.Client _client;
-
-  final String url;
-
-  final double scale;
-
-  final Map<String, String>? headers;
+  this;
 
   @override
   Future<HttpNetworkImage> obtainKey(ImageConfiguration configuration) {

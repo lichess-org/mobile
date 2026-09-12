@@ -27,11 +27,7 @@ final puzzleRepositoryProvider = Provider<PuzzleRepository>((ref) {
   return PuzzleRepository(client);
 }, name: 'PuzzleRepositoryProvider');
 
-class PuzzleRepository {
-  PuzzleRepository(this.client);
-
-  final LichessClient client;
-
+class PuzzleRepository(final LichessClient client) {
   Future<PuzzleBatchResponse> selectBatch({
     required int nb,
     PuzzleAngle angle = const PuzzleTheme(PuzzleThemeKey.mix),
@@ -110,8 +106,7 @@ class PuzzleRepository {
       'combo': stats.comboBest.toString(),
       'time': stats.time.inSeconds.toString(),
       'highest': stats.highest.toString(),
-      'notAnExploit':
-          "Yes, we know that you can send whatever score you like. That's why there's no leaderboards and no competition.",
+      'notAnExploit': "Yes, we know that you can send whatever score you like. That's why there's no leaderboards and no competition.",
     };
 
     return client.postReadJson(
@@ -201,16 +196,15 @@ class PuzzleRepository {
         }),
       ),
       glicko: pick(json['glicko']).letOrNull(_puzzleGlickoFromPick),
-      rounds: pick(
-        json['rounds'],
-      ).letOrNull((p0) => IList(p0.asListOrNull((p1) => _puzzleRoundFromPick(p1)))),
+      rounds: pick(json['rounds'])
+          .letOrNull((p0) => IList(p0.asListOrNull((p1) => _puzzleRoundFromPick(p1)))),
     );
   }
 }
 
 @freezed
 sealed class PuzzleBatchResponse with _$PuzzleBatchResponse {
-  const factory PuzzleBatchResponse({
+  const factory({
     required IList<Puzzle> puzzles,
     PuzzleGlicko? glicko,
     IList<PuzzleRound>? rounds,
@@ -219,7 +213,7 @@ sealed class PuzzleBatchResponse with _$PuzzleBatchResponse {
 
 @freezed
 sealed class PuzzleStreakResponse with _$PuzzleStreakResponse {
-  const factory PuzzleStreakResponse({
+  const factory({
     required Puzzle puzzle,
     required IList<PuzzleId> streak,
 
@@ -234,7 +228,7 @@ sealed class PuzzleStreakResponse with _$PuzzleStreakResponse {
 
 @freezed
 sealed class PuzzleStormResponse with _$PuzzleStormResponse {
-  const factory PuzzleStormResponse({
+  const factory({
     required IList<LitePuzzle> puzzles,
     required String? key,
     required PuzzleStormHighScore? highscore,

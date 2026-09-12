@@ -29,12 +29,7 @@ final accountRepositoryProvider = Provider<AccountRepository>((ref) {
   return AccountRepository(client, aggregator);
 }, name: 'AccountRepositoryProvider');
 
-class AccountRepository {
-  AccountRepository(this.client, this.aggregator);
-
-  final LichessClient client;
-  final Aggregator aggregator;
-
+class AccountRepository(final LichessClient client, final Aggregator aggregator) {
   Future<User> getProfile() {
     return aggregator.readJson(
       Uri(path: '/api/account', queryParameters: {'playban': '1'}),

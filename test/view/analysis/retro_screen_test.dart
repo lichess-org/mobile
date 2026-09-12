@@ -26,7 +26,7 @@ import '../../test_provider_scope.dart';
 
 const testId = GameId('abcdefgh');
 
-class MockServerAnalysisService extends Mock implements ServerAnalysisService {}
+class MockServerAnalysisService() extends Mock implements ServerAnalysisService;
 
 Future<Widget> makeTestApp(
   WidgetTester tester, {

@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
@@ -11,22 +12,17 @@ import 'package:lichess_mobile/src/widgets/popover.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// A button to toggle engine evaluation and show engine depth.
-class EngineButton extends ConsumerStatefulWidget {
-  const EngineButton({required this.filters, this.onTap, this.savedEval, this.goDeeper});
-
-  final EngineEvaluationFilters filters;
-
-  final ClientEval? savedEval;
-
-  final VoidCallback? onTap;
-
-  final VoidCallback? goDeeper;
-
+class const EngineButton({
+  required final EngineEvaluationFilters filters,
+  final VoidCallback? onTap,
+  final ClientEval? savedEval,
+  final VoidCallback? goDeeper,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<EngineButton> createState() => _EngineButtonState();
 }
 
-class _EngineButtonState extends ConsumerState<EngineButton> {
+class _EngineButtonState() extends ConsumerState<EngineButton> {
   late Color fromChipColor;
   Color? toChipColor;
 
@@ -149,11 +145,7 @@ class _EngineButtonState extends ConsumerState<EngineButton> {
   }
 }
 
-class MicroChipPainter extends CustomPainter {
-  const MicroChipPainter(this.color);
-
-  final Color color;
-
+class const MicroChipPainter(final Color color) extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     const pinLength = 3.5;
@@ -274,12 +266,10 @@ class MicroChipPainter extends CustomPainter {
   bool shouldRepaint(covariant MicroChipPainter oldDelegate) => color != oldDelegate.color;
 }
 
-class _EnginePopup extends ConsumerWidget {
-  const _EnginePopup({this.goDeeper, required this.filters});
-
-  final VoidCallback? goDeeper;
-  final EngineEvaluationFilters filters;
-
+class const _EnginePopup({
+  final VoidCallback? goDeeper,
+  required final EngineEvaluationFilters filters,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final (:engine, :engineSpec, currentWork: work, eval: evalStateEval, :isComputing) = ref.watch(

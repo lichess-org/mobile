@@ -10,34 +10,24 @@ const _moveListOpacity = 0.8;
 
 const _kMoveListHeight = 40.0;
 
-enum MoveListType { inline, stacked }
+enum MoveListType() {
+  inline,
+  stacked,
+}
 
-class MoveList extends ConsumerStatefulWidget {
-  const MoveList({
-    required this.type,
-    required this.slicedMoves,
-    required this.currentMoveIndex,
-    this.inlineColor,
-    this.inlineDecoration,
-    this.onSelectMove,
-  });
-
-  final MoveListType type;
-
-  final Color? inlineColor;
-
-  final BoxDecoration? inlineDecoration;
-
-  final Iterable<List<MapEntry<int, String>>> slicedMoves;
-
-  final int currentMoveIndex;
-  final void Function(int moveIndex)? onSelectMove;
-
+class const MoveList({
+  required final MoveListType type,
+  required final Iterable<List<MapEntry<int, String>>> slicedMoves,
+  required final int currentMoveIndex,
+  final Color? inlineColor,
+  final BoxDecoration? inlineDecoration,
+  final void Function(int moveIndex)? onSelectMove,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<MoveList> createState() => _MoveListState();
 }
 
-class _MoveListState extends ConsumerState<MoveList> {
+class _MoveListState() extends ConsumerState<MoveList> {
   final currentMoveKey = GlobalKey();
   final _debounce = Debouncer(const Duration(milliseconds: 100));
 
@@ -152,13 +142,8 @@ class _MoveListState extends ConsumerState<MoveList> {
   }
 }
 
-class InlineMoveCount extends StatelessWidget {
-  const InlineMoveCount({required this.count, this.color});
-
-  final int count;
-
-  final Color? color;
-
+class const InlineMoveCount({required final int count, final Color? color})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -174,23 +159,14 @@ class InlineMoveCount extends StatelessWidget {
   }
 }
 
-class InlineMoveItem extends StatelessWidget {
-  const InlineMoveItem({
-    required this.move,
-    required this.pieceNotation,
-    this.color,
-    this.current,
-    this.onSelectMove,
-    super.key,
-  });
-
-  final Color? color;
-
-  final MapEntry<int, String> move;
-  final PieceNotation pieceNotation;
-  final bool? current;
-  final void Function(int moveIndex)? onSelectMove;
-
+class const InlineMoveItem({
+  required final MapEntry<int, String> move,
+  required final PieceNotation pieceNotation,
+  final Color? color,
+  final bool? current,
+  final void Function(int moveIndex)? onSelectMove,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -214,11 +190,7 @@ class InlineMoveItem extends StatelessWidget {
   }
 }
 
-class StackedMoveCount extends StatelessWidget {
-  const StackedMoveCount({required this.count});
-
-  final int count;
-
+class const StackedMoveCount({required final int count}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -231,20 +203,13 @@ class StackedMoveCount extends StatelessWidget {
   }
 }
 
-class StackedMoveItem extends StatelessWidget {
-  const StackedMoveItem({
-    required this.move,
-    required this.pieceNotation,
-    this.current,
-    this.onSelectMove,
-    super.key,
-  });
-
-  final MapEntry<int, String> move;
-  final PieceNotation pieceNotation;
-  final bool? current;
-  final void Function(int moveIndex)? onSelectMove;
-
+class const StackedMoveItem({
+  required final MapEntry<int, String> move,
+  required final PieceNotation pieceNotation,
+  final bool? current,
+  final void Function(int moveIndex)? onSelectMove,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

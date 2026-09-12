@@ -23,11 +23,8 @@ const _tableName = 'chat_read_messages';
 String _storeKey(StringId id) => 'chat.$id';
 
 @freezed
-sealed class ChatState with _$ChatState {
-  const ChatState._();
-
-  const factory ChatState({required IList<ChatMessage> messages, required int unreadMessages}) =
-      _ChatState;
+sealed class const ChatState._() with _$ChatState {
+  const factory({required IList<ChatMessage> messages, required int unreadMessages}) = _ChatState;
 }
 
 /// Interface for a Notifier's State that uses [ChatMixin].

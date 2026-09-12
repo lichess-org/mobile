@@ -26,16 +26,14 @@ import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 import '../auth/fake_auth_storage.dart';
 
-class NotificationDisplayMock extends Mock implements FlutterLocalNotificationsPlugin {}
+class NotificationDisplayMock() extends Mock implements FlutterLocalNotificationsPlugin;
 
-class MockChallengeRepository extends Mock implements ChallengeRepository {}
+class MockChallengeRepository() extends Mock implements ChallengeRepository;
 
-class _ShowConfirmDialogWidget extends ConsumerWidget {
-  const _ShowConfirmDialogWidget({required this.challenge, this.fromLink = false});
-
-  final Challenge challenge;
-  final bool fromLink;
-
+class const _ShowConfirmDialogWidget({
+  required final Challenge challenge,
+  final bool fromLink = false,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ElevatedButton(
@@ -47,11 +45,8 @@ class _ShowConfirmDialogWidget extends ConsumerWidget {
   }
 }
 
-class _ShowDeclineDialogWidget extends ConsumerWidget {
-  const _ShowDeclineDialogWidget({required this.challengeId});
-
-  final ChallengeId challengeId;
-
+class const _ShowDeclineDialogWidget({required final ChallengeId challengeId})
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ElevatedButton(
@@ -283,9 +278,8 @@ void main() {
       ),
     ).thenAnswer((_) => Future.value());
 
-    when(
-      () => notificationDisplayMock.cancel(id: any(named: 'id')),
-    ).thenAnswer((_) => Future.value());
+    when(() => notificationDisplayMock.cancel(id: any(named: 'id')))
+        .thenAnswer((_) => Future.value());
 
     final container = await makeContainer(
       authUser: fakeAuthUser,
@@ -335,9 +329,8 @@ void main() {
 
       async.flushMicrotasks();
 
-      verify(
-        () => notificationDisplayMock.cancel(id: const ChallengeId('H9fIRZUk').hashCode),
-      ).called(1);
+      verify(() => notificationDisplayMock.cancel(id: const ChallengeId('H9fIRZUk').hashCode))
+          .called(1);
 
       // closing the socket client to be able to flush the timers
       socketClient.close();
@@ -522,9 +515,8 @@ void main() {
 
     testWidgets('calls decline on repository with selected reason', (tester) async {
       final mockChallengeRepo = MockChallengeRepository();
-      when(
-        () => mockChallengeRepo.decline(any(), reason: any(named: 'reason')),
-      ).thenAnswer((_) async {});
+      when(() => mockChallengeRepo.decline(any(), reason: any(named: 'reason')))
+          .thenAnswer((_) async {});
 
       final app = await makeTestProviderScopeApp(
         tester,

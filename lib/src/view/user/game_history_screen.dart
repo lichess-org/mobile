@@ -32,17 +32,12 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:material_ui/material_ui.dart';
 
-class GameHistoryScreen extends ConsumerWidget {
-  const GameHistoryScreen({
-    required this.user,
-    required this.isOnline,
-    this.gameFilter = const GameFilterState(),
-    super.key,
-  });
-  final LightUser? user;
-  final bool isOnline;
-  final GameFilterState gameFilter;
-
+class const GameHistoryScreen({
+  required final LightUser? user,
+  required final bool isOnline,
+  final GameFilterState gameFilter = const GameFilterState(),
+  super.key,
+}) extends ConsumerWidget {
   static Route<dynamic> buildRoute({
     LightUser? user,
     bool isOnline = false,
@@ -125,18 +120,16 @@ class GameHistoryScreen extends ConsumerWidget {
   }
 }
 
-class _Body extends ConsumerStatefulWidget {
-  const _Body({required this.user, required this.isOnline, required this.gameFilter});
-
-  final LightUser? user;
-  final bool isOnline;
-  final GameFilterState gameFilter;
-
+class const _Body({
+  required final LightUser? user,
+  required final bool isOnline,
+  required final GameFilterState gameFilter,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_Body> createState() => _BodyState();
 }
 
-class _BodyState extends ConsumerState<_Body> {
+class _BodyState() extends ConsumerState<_Body> {
   final ScrollController _scrollController = ScrollController();
 
   @override
@@ -361,17 +354,13 @@ class _BodyState extends ConsumerState<_Body> {
   }
 }
 
-class _FilterGames extends ConsumerStatefulWidget {
-  const _FilterGames({required this.filter, required this.user});
-
-  final GameFilterState filter;
-  final LightUser? user;
-
+class const _FilterGames({required final GameFilterState filter, required final LightUser? user})
+    extends ConsumerStatefulWidget {
   @override
   ConsumerState<_FilterGames> createState() => _FilterGamesState();
 }
 
-class _FilterGamesState extends ConsumerState<_FilterGames> {
+class _FilterGamesState() extends ConsumerState<_FilterGames> {
   late GameFilterState filter;
 
   @override

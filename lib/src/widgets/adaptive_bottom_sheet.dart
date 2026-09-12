@@ -6,17 +6,11 @@ import 'package:material_ui/material_ui.dart';
 /// context menu.
 ///
 /// This is meant for content that mostly fits on the screen, not for long lists.
-class BottomSheetScrollableContainer extends StatelessWidget {
-  const BottomSheetScrollableContainer({
-    required this.children,
-    this.padding = const EdgeInsets.symmetric(vertical: 16.0),
-    this.scrollController,
-  });
-
-  final List<Widget> children;
-  final EdgeInsetsGeometry? padding;
-  final ScrollController? scrollController;
-
+class const BottomSheetScrollableContainer({
+  required final List<Widget> children,
+  final EdgeInsetsGeometry? padding = const EdgeInsets.symmetric(vertical: 16.0),
+  final ScrollController? scrollController,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -29,19 +23,12 @@ class BottomSheetScrollableContainer extends StatelessWidget {
   }
 }
 
-class BottomSheetContextMenuAction extends StatelessWidget {
-  const BottomSheetContextMenuAction({
-    required this.child,
-    this.icon,
-    this.onPressed,
-    this.closeOnPressed = true,
-  });
-
-  final IconData? icon;
-  final VoidCallback? onPressed;
-  final Widget child;
-  final bool closeOnPressed;
-
+class const BottomSheetContextMenuAction({
+  required final Widget child,
+  final IconData? icon,
+  final VoidCallback? onPressed,
+  final bool closeOnPressed = true,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(

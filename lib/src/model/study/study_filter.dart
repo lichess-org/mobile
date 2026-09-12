@@ -1,6 +1,6 @@
 import 'package:lichess_mobile/l10n/l10n.dart';
 
-enum StudyCategory {
+enum StudyCategory() {
   all,
   mine,
   member,
@@ -18,7 +18,7 @@ enum StudyCategory {
   };
 }
 
-enum StudyListOrder {
+enum StudyListOrder() {
   hot,
   popular,
   newest,

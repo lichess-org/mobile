@@ -7,7 +7,7 @@ part 'evaluation_context.freezed.dart';
 
 @freezed
 sealed class EvaluationContext with _$EvaluationContext {
-  const factory EvaluationContext({
+  const factory({
     /// Identifier to associate the evaluation with a game, puzzle, study, etc.
     required StringId id,
     required Variant variant,

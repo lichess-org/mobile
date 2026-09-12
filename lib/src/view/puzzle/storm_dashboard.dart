@@ -12,11 +12,8 @@ import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
 import 'package:material_ui/material_ui.dart';
 
-class StormDashboardModal extends StatelessWidget {
-  const StormDashboardModal({super.key, required this.user});
-
-  final LightUser user;
-
+class const StormDashboardModal({super.key, required final LightUser user})
+    extends StatelessWidget {
   static Route<dynamic> buildRoute(LightUser user) {
     return buildScreenRoute(screen: StormDashboardModal(user: user));
   }
@@ -39,11 +36,7 @@ class StormDashboardModal extends StatelessWidget {
   }
 }
 
-class _Body extends ConsumerWidget {
-  const _Body({required this.user});
-
-  final LightUser user;
-
+class const _Body({required final LightUser user}) extends ConsumerWidget {
   static const EdgeInsets _statCardPadding = EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0);
 
   @override
@@ -179,12 +172,12 @@ class _Body extends ConsumerWidget {
         debugPrint('SEVERE: [StormDashboardModel] could not load storm dashboard; $e\n$s');
         return const SafeArea(child: Text('Could not load dashboard'));
       },
-      loading: () => _Loading(),
+      loading: () => const _Loading(),
     );
   }
 }
 
-class _Loading extends StatelessWidget {
+class const _Loading() extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final containerHeight = MediaQuery.widthOf(context) / 2 * 0.8;

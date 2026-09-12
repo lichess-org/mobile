@@ -90,11 +90,8 @@ final userGameHistoryProvider = AsyncNotifierProvider.autoDispose
       name: 'UserGameHistoryProvider',
     );
 
-class UserGameHistoryNotifier extends AsyncNotifier<UserGameHistoryState> {
-  UserGameHistoryNotifier(this.params);
-
-  final UserGameHistoryNotifierParams params;
-
+class UserGameHistoryNotifier(final UserGameHistoryNotifierParams params)
+    extends AsyncNotifier<UserGameHistoryState> {
   final _list = <LightExportedGameWithPov>[];
 
   StreamSubscription<(GameId, bool)>? _bookmarkChangesSubscription;
@@ -230,7 +227,7 @@ class UserGameHistoryNotifier extends AsyncNotifier<UserGameHistoryState> {
 
 @freezed
 sealed class UserGameHistoryState with _$UserGameHistoryState {
-  const factory UserGameHistoryState({
+  const factory({
     required IList<LightExportedGameWithPov> gameList,
     required bool isLoading,
     required GameFilterState filter,

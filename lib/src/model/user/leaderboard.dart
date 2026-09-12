@@ -11,7 +11,7 @@ typedef Top1Leaderboard = IMap<Perf, LeaderboardUser>;
 
 @freezed
 sealed class Leaderboard with _$Leaderboard {
-  const factory Leaderboard({
+  const factory({
     required List<LeaderboardUser> bullet,
     required List<LeaderboardUser> blitz,
     required List<LeaderboardUser> rapid,
@@ -29,10 +29,8 @@ sealed class Leaderboard with _$Leaderboard {
 }
 
 @freezed
-sealed class LeaderboardUser with _$LeaderboardUser {
-  const LeaderboardUser._();
-
-  const factory LeaderboardUser({
+sealed class const LeaderboardUser._() with _$LeaderboardUser {
+  const factory({
     required UserId id,
     required String username,
     int? patronColor,

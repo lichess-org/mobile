@@ -35,18 +35,16 @@ const kMaxResidentEngines = 2;
 /// evaluator and the opponent are literally the same Fairy-Stockfish, and a `Threads` they
 /// disagreed about would tear the pool down several times a move. Hence the
 /// [offlineOpponentThreads] `sharesEngineWithEvaluator` argument below.
-class EngineBudget {
-  const EngineBudget({required this.maxMemoryInMb, required this.maxCores});
-
+class const EngineBudget({
   /// The whole memory budget for engines on this device, in MB.
   ///
   /// A share of the device's RAM — see [engineMaxMemoryFor] — divided between the engines that can
   /// be resident at once rather than handed to any one of them.
-  final int maxMemoryInMb;
+  required final int maxMemoryInMb,
 
   /// The most cores an engine may search on.
-  final int maxCores;
-
+  required final int maxCores,
+}) {
   /// The threads the engine of an analysis screen asks for, given the core count the user chose.
   ///
   /// Nothing but a clamp: on these screens the whole device is the analysis, and the user is the

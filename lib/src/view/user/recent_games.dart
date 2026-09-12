@@ -16,20 +16,13 @@ import 'package:lichess_mobile/src/widgets/shimmer.dart';
 ///
 /// The [user] should be provided only if the games are for a specific user. If the
 /// games are for the current logged in user, the [user] should be null.
-class RecentGamesWidget extends ConsumerWidget {
-  const RecentGamesWidget({
-    required this.recentGames,
-    required this.user,
-    required this.nbOfGames,
-    this.maxGamesToShow = kNumberOfRecentGames,
-    super.key,
-  });
-
-  final LightUser? user;
-  final AsyncValue<IList<LightExportedGameWithPov>> recentGames;
-  final int nbOfGames;
-  final int maxGamesToShow;
-
+class const RecentGamesWidget({
+  required final AsyncValue<IList<LightExportedGameWithPov>> recentGames,
+  required final LightUser? user,
+  required final int nbOfGames,
+  final int maxGamesToShow = kNumberOfRecentGames,
+  super.key,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isOnline = ref.watch(isDeviceOnlineProvider);
@@ -45,9 +38,8 @@ class RecentGamesWidget extends ConsumerWidget {
           hasLeading: true,
           onHeaderTap: nbOfGames > list.length
               ? () {
-                  Navigator.of(
-                    context,
-                  ).push(GameHistoryScreen.buildRoute(user: user, isOnline: isOnline));
+                  Navigator.of(context)
+                      .push(GameHistoryScreen.buildRoute(user: user, isOnline: isOnline));
                 }
               : null,
           children: [for (final item in list) GameListTile(item: item)],

@@ -12,7 +12,7 @@ final lobbyNumbersProvider =
       name: 'LobbyNumbersProvider',
     );
 
-class LobbyNumbers extends Notifier<({int nbPlayers, int nbGames})?> {
+class LobbyNumbers() extends Notifier<({int nbPlayers, int nbGames})?> {
   StreamSubscription<SocketEvent>? _socketSubscription;
 
   @override

@@ -44,7 +44,7 @@ import '../../model/engine/fake_weights_service.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 
-class MockOfflineComputerGameStorage extends Mock implements OfflineComputerGameStorage {}
+class MockOfflineComputerGameStorage() extends Mock implements OfflineComputerGameStorage;
 
 void main() {
   TestLichessBinding.ensureInitialized();
@@ -768,9 +768,9 @@ void main() {
             appBar: AppBar(title: const Text('Test Screen')),
             body: FilledButton(
               child: const Text('Go to game'),
-              onPressed: () => Navigator.of(
-                context,
-              ).push(buildScreenRoute<void>(screen: const OfflineComputerGameScreen())),
+              onPressed: () =>
+                  Navigator.of(context)
+                      .push(buildScreenRoute<void>(screen: const OfflineComputerGameScreen())),
             ),
           ),
         ),
@@ -880,9 +880,9 @@ void main() {
             appBar: AppBar(title: const Text('Test Screen')),
             body: FilledButton(
               child: const Text('Go to game'),
-              onPressed: () => Navigator.of(
-                context,
-              ).push(buildScreenRoute<void>(screen: const OfflineComputerGameScreen())),
+              onPressed: () =>
+                  Navigator.of(context)
+                      .push(buildScreenRoute<void>(screen: const OfflineComputerGameScreen())),
             ),
           ),
         ),
@@ -2155,19 +2155,15 @@ void main() {
 }
 
 /// A fake controller that returns a preset state, used to inject specific practice comments.
-class _FakePracticeController extends OfflineComputerGameController {
-  _FakePracticeController(this._initialState);
-  final OfflineComputerGameState _initialState;
-
+class _FakePracticeController(final OfflineComputerGameState _initialState)
+    extends OfflineComputerGameController {
   @override
   OfflineComputerGameState build() => _initialState;
 }
 
 /// A fake preferences notifier that returns a preset [OfflineComputerGamePrefs].
-class _FakeGamePreferences extends OfflineComputerGamePreferences {
-  _FakeGamePreferences(this._prefs);
-  final OfflineComputerGamePrefs _prefs;
-
+class _FakeGamePreferences(final OfflineComputerGamePrefs _prefs)
+    extends OfflineComputerGamePreferences {
   @override
   OfflineComputerGamePrefs build() => _prefs;
 }

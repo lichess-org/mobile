@@ -16,7 +16,7 @@ import 'package:mocktail/mocktail.dart';
 import '../../model/analysis/fake_opening_service.dart';
 import '../../test_provider_scope.dart';
 
-class MockStudyRepository extends Mock implements StudyRepository {}
+class MockStudyRepository() extends Mock implements StudyRepository;
 
 const _testId = StudyId('test-id');
 
@@ -89,9 +89,8 @@ void main() {
   group('Study opening detection', () {
     testWidgets('opening is set when navigating to a mainline position', (tester) async {
       final mockRepository = MockStudyRepository();
-      when(
-        () => mockRepository.getStudy(id: _testId),
-      ).thenAnswer((_) async => (_makeStudy(), null, '1. e4 e5 2. Nf3'));
+      when(() => mockRepository.getStudy(id: _testId))
+          .thenAnswer((_) async => (_makeStudy(), null, '1. e4 e5 2. Nf3'));
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -119,9 +118,8 @@ void main() {
 
     testWidgets('ancestor opening is used when current node has no direct opening', (tester) async {
       final mockRepository = MockStudyRepository();
-      when(
-        () => mockRepository.getStudy(id: _testId),
-      ).thenAnswer((_) async => (_makeStudy(), null, '1. e4 e5 2. Nf3'));
+      when(() => mockRepository.getStudy(id: _testId))
+          .thenAnswer((_) async => (_makeStudy(), null, '1. e4 e5 2. Nf3'));
 
       final app = await makeTestProviderScopeApp(
         tester,

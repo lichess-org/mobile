@@ -35,10 +35,8 @@ typedef RetroOptions = ({GameId id, Side initialSide});
 final Logger _logger = Logger('RetroController');
 
 @freezed
-sealed class Mistake with _$Mistake {
-  const Mistake._();
-
-  const factory Mistake({
+sealed class const Mistake._() with _$Mistake {
+  const factory({
     required ViewBranch branch,
     @Default(IList<UCIMove>.empty()) IList<UCIMove> openingExplorerSolutions,
   }) = _Mistake;
@@ -81,12 +79,9 @@ final retroControllerProvider = AsyncNotifierProvider.autoDispose
       name: 'RetroControllerProvider',
     );
 
-class RetroController extends AsyncNotifier<RetroState>
+class RetroController(final RetroOptions options)
+    extends AsyncNotifier<RetroState>
     with EngineEvaluationMixin, ServerAnalysisMixin {
-  RetroController(this.options);
-
-  final RetroOptions options;
-
   late Root _root;
 
   late ExportedGame _game;
@@ -468,23 +463,28 @@ class RetroController extends AsyncNotifier<RetroState>
   }
 }
 
-enum RetroFeedback { findMove, evalMove, correct, incorrect, viewingSolution, done }
+enum RetroFeedback() {
+  findMove,
+  evalMove,
+  correct,
+  incorrect,
+  viewingSolution,
+  done,
+}
 
 @freezed
-sealed class RetroState
+sealed class const RetroState._()
     with
         _$RetroState,
         AnalysisExplosionMixin,
         EvaluationMixinState<RetroState>,
         ServerAnalysisMixinState
     implements CommonAnalysisState {
-  const RetroState._();
-
   @override
   RetroState withThreatMode(bool engineInThreatMode) =>
       copyWith(engineInThreatMode: engineInThreatMode);
 
-  const factory RetroState({
+  const factory({
     required GameId gameId,
     required bool serverAnalysisAvailable,
 
@@ -550,10 +550,10 @@ sealed class RetroState
 }
 
 @freezed
-sealed class RetroCurrentNode with _$RetroCurrentNode implements AnalysisCurrentNodeInterface {
-  const RetroCurrentNode._();
-
-  const factory RetroCurrentNode({
+sealed class const RetroCurrentNode._()
+    with _$RetroCurrentNode
+    implements AnalysisCurrentNodeInterface {
+  const factory({
     required Position position,
     required bool isRoot,
     required bool hasChild,
@@ -563,7 +563,7 @@ sealed class RetroCurrentNode with _$RetroCurrentNode implements AnalysisCurrent
     IList<int>? nags,
   }) = _RetroCurrentNode;
 
-  factory RetroCurrentNode.fromNode(Node node) {
+  factory fromNode(Node node) {
     if (node is Branch) {
       return RetroCurrentNode(
         sanMove: node.sanMove,

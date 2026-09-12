@@ -22,12 +22,13 @@ final _emailRegExp = RegExp(
 );
 
 /// The two steps of the email login flow.
-enum _EmailLoginStep { email, code }
+enum _EmailLoginStep() {
+  email,
+  code,
+}
 
 /// Screen that signs the user in with a login code emailed to them.
-class EmailLoginScreen extends StatefulWidget {
-  const EmailLoginScreen({super.key});
-
+class const EmailLoginScreen({super.key}) extends StatefulWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const EmailLoginScreen());
   }
@@ -36,7 +37,7 @@ class EmailLoginScreen extends StatefulWidget {
   State<EmailLoginScreen> createState() => _EmailLoginScreenState();
 }
 
-class _EmailLoginScreenState extends State<EmailLoginScreen> {
+class _EmailLoginScreenState() extends State<EmailLoginScreen> {
   _EmailLoginStep step = _EmailLoginStep.email;
 
   /// The account the code was requested for. Only set once the first step succeeded.
@@ -93,22 +94,16 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
 }
 
 /// First step: asks for the account name and email address, and requests a login code for them.
-class _EmailForm extends ConsumerStatefulWidget {
-  const _EmailForm({
-    required this.initialUsername,
-    required this.initialEmail,
-    required this.onCodeSent,
-  });
-
-  final String? initialUsername;
-  final String? initialEmail;
-  final void Function({required String username, required String email}) onCodeSent;
-
+class const _EmailForm({
+  required final String? initialUsername,
+  required final String? initialEmail,
+  required final void Function({required String username, required String email}) onCodeSent,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_EmailForm> createState() => _EmailFormState();
 }
 
-class _EmailFormState extends ConsumerState<_EmailForm> {
+class _EmailFormState() extends ConsumerState<_EmailForm> {
   final formKey = GlobalKey<FormState>();
   late final usernameController = TextEditingController(text: widget.initialUsername);
   late final emailController = TextEditingController(text: widget.initialEmail);
@@ -234,17 +229,13 @@ class _EmailFormState extends ConsumerState<_EmailForm> {
 }
 
 /// Second step: asks for the code that was emailed, and exchanges it for a session.
-class _CodeForm extends ConsumerStatefulWidget {
-  const _CodeForm({required this.username, required this.email});
-
-  final String username;
-  final String email;
-
+class const _CodeForm({required final String username, required final String email})
+    extends ConsumerStatefulWidget {
   @override
   ConsumerState<_CodeForm> createState() => _CodeFormState();
 }
 
-class _CodeFormState extends ConsumerState<_CodeForm> {
+class _CodeFormState() extends ConsumerState<_CodeForm> {
   final formKey = GlobalKey<FormState>();
   final controller = TextEditingController();
 

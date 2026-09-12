@@ -20,9 +20,7 @@ final Logger _logger = Logger('AppLogSettingsScreen');
 
 final _logDateFormatter = DateFormat.yMd().add_Hms();
 
-class AppLogSettingsScreen extends ConsumerStatefulWidget {
-  const AppLogSettingsScreen({super.key});
-
+class const AppLogSettingsScreen({super.key}) extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const AppLogSettingsScreen());
   }
@@ -31,7 +29,7 @@ class AppLogSettingsScreen extends ConsumerStatefulWidget {
   ConsumerState<AppLogSettingsScreen> createState() => _AppLogSettingsScreenState();
 }
 
-class _AppLogSettingsScreenState extends ConsumerState<AppLogSettingsScreen> {
+class _AppLogSettingsScreenState() extends ConsumerState<AppLogSettingsScreen> {
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _searchController = TextEditingController();
   String? _searchQuery;
@@ -184,11 +182,7 @@ String _formatLogEntry(AppLogEntry entry) {
   return buffer.toString();
 }
 
-class _LogTile extends StatelessWidget {
-  const _LogTile({required this.entry});
-
-  final AppLogEntry entry;
-
+class const _LogTile({required final AppLogEntry entry}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const titleStyle = TextStyle(fontSize: 14, letterSpacing: -0.15);

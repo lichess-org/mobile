@@ -8,12 +8,10 @@ part 'uci.g.dart';
 
 /// UciCharPair from scalachess
 @Freezed(fromJson: true, toJson: true, toStringOverride: false)
-sealed class UciCharPair with _$UciCharPair {
-  const UciCharPair._();
+sealed class const UciCharPair._() with _$UciCharPair {
+  const factory(String a, String b) = _UciCharPair;
 
-  const factory UciCharPair(String a, String b) = _UciCharPair;
-
-  factory UciCharPair.fromStringId(String id) {
+  factory fromStringId(String id) {
     if (id.length != 2) {
       throw ArgumentError('Invalid id $id');
     }
@@ -23,7 +21,7 @@ sealed class UciCharPair with _$UciCharPair {
   /// Creates a UciCharPair from a UCI move.
   ///
   /// Throws an [ArgumentError] if the move is invalid.
-  factory UciCharPair.fromUci(String uci) {
+  factory fromUci(String uci) {
     final move = Move.parse(uci);
     if (move == null) {
       throw ArgumentError('Invalid uci $uci');
@@ -31,7 +29,7 @@ sealed class UciCharPair with _$UciCharPair {
     return UciCharPair.fromMove(move);
   }
 
-  factory UciCharPair.fromMove(Move move) => switch (move) {
+  factory fromMove(Move move) => switch (move) {
     NormalMove(from: final f, to: final t, promotion: final p) => UciCharPair(
       String.fromCharCode(35 + f),
       String.fromCharCode(p != null ? 35 + 64 + 8 * _promotionRoles.indexOf(p) + t.file : 35 + t),
@@ -42,7 +40,7 @@ sealed class UciCharPair with _$UciCharPair {
     ),
   };
 
-  factory UciCharPair.fromJson(Map<String, dynamic> json) => _$UciCharPairFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$UciCharPairFromJson(json);
 
   @override
   String toString() => '$a$b';
@@ -55,16 +53,13 @@ const _dropRoles = [Role.queen, Role.rook, Role.bishop, Role.knight, Role.pawn];
 /// Compact representation of a path to a game node made from concatenated
 /// UciCharPair strings.
 @Freezed(fromJson: true, toJson: true)
-sealed class UciPath with _$UciPath {
-  const UciPath._();
+sealed class const UciPath._() with _$UciPath {
+  const factory(String value) = _UciPath;
 
-  const factory UciPath(String value) = _UciPath;
+  factory fromId(UciCharPair id) => UciPath(id.toString());
+  factory fromIds(Iterable<UciCharPair> ids) => UciPath(ids.map((id) => id.toString()).join(''));
 
-  factory UciPath.fromId(UciCharPair id) => UciPath(id.toString());
-  factory UciPath.fromIds(Iterable<UciCharPair> ids) =>
-      UciPath(ids.map((id) => id.toString()).join(''));
-
-  factory UciPath.fromNodeList(Iterable<Branch> nodeList) {
+  factory fromNodeList(Iterable<Branch> nodeList) {
     final path = StringBuffer();
     for (final node in nodeList) {
       path.write(node.id);
@@ -72,12 +67,12 @@ sealed class UciPath with _$UciPath {
     return UciPath(path.toString());
   }
 
-  factory UciPath.join(UciPath a, UciPath b) => UciPath(a.value + b.value);
+  factory join(UciPath a, UciPath b) => UciPath(a.value + b.value);
 
   /// Creates a UciPath from a list of UCI moves.
   ///
   /// Throws an [ArgumentError] if any of the moves is invalid.
-  factory UciPath.fromUciMoves(Iterable<UCIMove> moves) {
+  factory fromUciMoves(Iterable<UCIMove> moves) {
     final path = StringBuffer();
     for (final move in moves) {
       path.write(UciCharPair.fromUci(move));
@@ -116,5 +111,5 @@ sealed class UciPath with _$UciPath {
 
   bool get isEmpty => value.isEmpty;
 
-  factory UciPath.fromJson(Map<String, dynamic> json) => _$UciPathFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$UciPathFromJson(json);
 }

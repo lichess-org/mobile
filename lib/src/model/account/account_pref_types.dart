@@ -7,10 +7,8 @@ part 'account_pref_types.freezed.dart';
 part 'account_pref_types.g.dart';
 
 @Freezed(fromJson: true, toJson: true)
-sealed class AccountPrefState with _$AccountPrefState implements Serializable {
-  const AccountPrefState._();
-
-  const factory AccountPrefState({
+sealed class const AccountPrefState._() with _$AccountPrefState implements Serializable {
+  const factory({
     // game display
     @JsonKey(unknownEnumValue: Zen.no) required Zen zenMode,
     @JsonKey(unknownEnumValue: PieceNotation.symbol) required PieceNotation pieceNotation,
@@ -32,7 +30,7 @@ sealed class AccountPrefState with _$AccountPrefState implements Serializable {
     @JsonKey(unknownEnumValue: Message.always) required Message message,
   }) = _AccountPrefState;
 
-  factory AccountPrefState.fromJson(Map<String, dynamic> json) {
+  factory fromJson(Map<String, dynamic> json) {
     try {
       return _$AccountPrefStateFromJson(json);
     } catch (_) {
@@ -59,21 +57,16 @@ final defaultAccountPreferences = AccountPrefState(
   message: Message.always,
 );
 
-abstract class AccountPref<T> {
+abstract class AccountPref<T>() {
   T get value;
   String get toFormData;
 }
 
-class BooleanPref implements AccountPref<bool> {
-  const BooleanPref(this.value);
-
-  @override
-  final bool value;
-
+class const BooleanPref(@override final bool value) implements AccountPref<bool> {
   @override
   String get toFormData => value ? '1' : '0';
 
-  factory BooleanPref.fromJson(dynamic json) {
+  factory fromJson(dynamic json) {
     if (json is bool) {
       return BooleanPref(json);
     } else if (json is int) {
@@ -96,18 +89,13 @@ class BooleanPref implements AccountPref<bool> {
   }
 }
 
-enum Zen implements AccountPref<int> {
+enum Zen(@override final int value) implements AccountPref<int> {
   @JsonValue(0)
   no(0),
   @JsonValue(1)
   yes(1),
   @JsonValue(2)
   gameAuto(2);
-
-  const Zen(this.value);
-
-  @override
-  final int value;
 
   @override
   String get toFormData => value.toString();
@@ -137,18 +125,13 @@ enum Zen implements AccountPref<int> {
   }
 }
 
-enum ShowRatings implements AccountPref<int> {
+enum ShowRatings(@override final int value) implements AccountPref<int> {
   @JsonValue(0)
   no(0),
   @JsonValue(1)
   yes(1),
   @JsonValue(2)
   exceptInGame(2);
-
-  const ShowRatings(this.value);
-
-  @override
-  final int value;
 
   @override
   String get toFormData => value.toString();
@@ -178,16 +161,11 @@ enum ShowRatings implements AccountPref<int> {
   }
 }
 
-enum PieceNotation implements AccountPref<int> {
+enum PieceNotation(@override final int value) implements AccountPref<int> {
   @JsonValue(0)
   symbol(0),
   @JsonValue(1)
   letter(1);
-
-  const PieceNotation(this.value);
-
-  @override
-  final int value;
 
   @override
   String get toFormData => value.toString();
@@ -213,18 +191,13 @@ enum PieceNotation implements AccountPref<int> {
   }
 }
 
-enum AutoQueen implements AccountPref<int> {
+enum AutoQueen(@override final int value) implements AccountPref<int> {
   @JsonValue(1)
   never(1),
   @JsonValue(2)
   premove(2),
   @JsonValue(3)
   always(3);
-
-  const AutoQueen(this.value);
-
-  @override
-  final int value;
 
   @override
   String get toFormData => value.toString();
@@ -254,18 +227,13 @@ enum AutoQueen implements AccountPref<int> {
   }
 }
 
-enum AutoThreefold implements AccountPref<int> {
+enum AutoThreefold(@override final int value) implements AccountPref<int> {
   @JsonValue(1)
   never(1),
   @JsonValue(2)
   time(2),
   @JsonValue(3)
   always(3);
-
-  const AutoThreefold(this.value);
-
-  @override
-  final int value;
 
   @override
   String get toFormData => value.toString();
@@ -295,18 +263,13 @@ enum AutoThreefold implements AccountPref<int> {
   }
 }
 
-enum Takeback implements AccountPref<int> {
+enum Takeback(@override final int value) implements AccountPref<int> {
   @JsonValue(1)
   never(1),
   @JsonValue(2)
   casual(2),
   @JsonValue(3)
   always(3);
-
-  const Takeback(this.value);
-
-  @override
-  final int value;
 
   @override
   String get toFormData => value.toString();
@@ -336,18 +299,13 @@ enum Takeback implements AccountPref<int> {
   }
 }
 
-enum Moretime implements AccountPref<int> {
+enum Moretime(@override final int value) implements AccountPref<int> {
   @JsonValue(1)
   never(1),
   @JsonValue(2)
   casual(2),
   @JsonValue(3)
   always(3);
-
-  const Moretime(this.value);
-
-  @override
-  final int value;
 
   @override
   String get toFormData => value.toString();
@@ -377,18 +335,13 @@ enum Moretime implements AccountPref<int> {
   }
 }
 
-enum ClockTenths implements AccountPref<int> {
+enum ClockTenths(@override final int value) implements AccountPref<int> {
   @JsonValue(0)
   never(0),
   @JsonValue(1)
   lessThan10s(1),
   @JsonValue(2)
   always(2);
-
-  const ClockTenths(this.value);
-
-  @override
-  final int value;
 
   @override
   String get toFormData => value.toString();
@@ -418,7 +371,7 @@ enum ClockTenths implements AccountPref<int> {
   }
 }
 
-enum Challenge implements AccountPref<int> {
+enum Challenge(@override final int value) implements AccountPref<int> {
   @JsonValue(1)
   never(1),
   @JsonValue(2)
@@ -429,11 +382,6 @@ enum Challenge implements AccountPref<int> {
   registered(4),
   @JsonValue(5)
   always(5);
-
-  const Challenge(this.value);
-
-  @override
-  final int value;
 
   @override
   String get toFormData => value.toString();
@@ -471,18 +419,13 @@ enum Challenge implements AccountPref<int> {
   }
 }
 
-enum Message implements AccountPref<int> {
+enum Message(@override final int value) implements AccountPref<int> {
   @JsonValue(1)
   never(1),
   @JsonValue(2)
   friends(2),
   @JsonValue(3)
   always(3);
-
-  const Message(this.value);
-
-  @override
-  final int value;
 
   @override
   String get toFormData => value.toString();
@@ -512,10 +455,8 @@ enum Message implements AccountPref<int> {
   }
 }
 
-class SubmitMove implements AccountPref<int> {
-  SubmitMove(Iterable<SubmitMoveChoice> choices) : choices = ISet(choices.toSet());
-
-  final ISet<SubmitMoveChoice> choices;
+class SubmitMove(Iterable<SubmitMoveChoice> choices) implements AccountPref<int> {
+  final ISet<SubmitMoveChoice> choices = ISet(choices.toSet());
 
   @override
   int get value => choices.fold(0, (acc, choice) => acc | choice.value);
@@ -531,10 +472,10 @@ class SubmitMove implements AccountPref<int> {
     return choices.map((choice) => choice.label(l10n)).join(', ');
   }
 
-  factory SubmitMove.fromInt(int value) =>
+  factory fromInt(int value) =>
       SubmitMove(SubmitMoveChoice.values.where((choice) => _bitPresent(value, choice.value)));
 
-  factory SubmitMove.fromJson(dynamic json) {
+  factory fromJson(dynamic json) {
     if (json is int) {
       return SubmitMove.fromInt(json);
     }
@@ -544,7 +485,7 @@ class SubmitMove implements AccountPref<int> {
   int toJson() => value;
 }
 
-enum SubmitMoveChoice {
+enum SubmitMoveChoice(final int value) {
   @JsonValue(1)
   unlimited(1),
   @JsonValue(2)
@@ -555,10 +496,6 @@ enum SubmitMoveChoice {
   rapid(8),
   @JsonValue(16)
   blitz(16);
-
-  const SubmitMoveChoice(this.value);
-
-  final int value;
 
   String label(AppLocalizations l10n) {
     switch (this) {

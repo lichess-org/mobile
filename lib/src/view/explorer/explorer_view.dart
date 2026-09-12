@@ -47,21 +47,13 @@ Opening? explorerOpening(
   return nodeOpening ?? branchOpening;
 }
 
-class ExplorerView extends ConsumerWidget {
-  const ExplorerView({
-    required this.pov,
-    required this.position,
-    required this.onMoveSelected,
-    required this.isComputerAnalysisAllowed,
-    this.opening,
-  });
-
-  final Side pov;
-  final Position position;
-  final bool isComputerAnalysisAllowed;
-  final Opening? opening;
-  final void Function(Move) onMoveSelected;
-
+class const ExplorerView({
+  required final Side pov,
+  required final Position position,
+  required final void Function(Move) onMoveSelected,
+  required final bool isComputerAnalysisAllowed,
+  final Opening? opening,
+}) extends ConsumerWidget {
   bool get tablebaseRelevant => isTablebaseRelevant(position);
 
   @override

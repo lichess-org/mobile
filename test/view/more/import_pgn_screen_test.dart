@@ -13,14 +13,10 @@ import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 
 /// A [PlatformFile] backed by in-memory bytes, avoiding the need for a real file path in tests.
-final class _FakePlatformFile extends PlatformFile {
-  _FakePlatformFile({required this.name, required this.fileBytes});
-
-  final Uint8List fileBytes;
-
-  @override
-  final String name;
-
+final class _FakePlatformFile({
+  @override required final String name,
+  required final Uint8List fileBytes,
+}) extends PlatformFile {
   @override
   Uri get uri => Uri.file(name);
 

@@ -10,9 +10,7 @@ import 'package:lichess_mobile/src/view/user/search_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:material_ui/material_ui.dart';
 
-class OpeningExplorerSettings extends ConsumerWidget {
-  const OpeningExplorerSettings();
-
+class const OpeningExplorerSettings() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final prefs = ref.watch(openingExplorerPreferencesProvider);

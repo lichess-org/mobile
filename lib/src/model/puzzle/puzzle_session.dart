@@ -22,11 +22,7 @@ final puzzleSessionProvider =
 
 typedef PuzzleSessionParams = ({UserId? userId, PuzzleAngle angle});
 
-class PuzzleSession extends Notifier<PuzzleSessionData> {
-  PuzzleSession(this.params);
-
-  final PuzzleSessionParams params;
-
+class PuzzleSession(final PuzzleSessionParams params) extends Notifier<PuzzleSessionData> {
   static const maxAge = Duration(hours: 1);
   static const maxSize = 150;
 
@@ -89,13 +85,13 @@ class PuzzleSession extends Notifier<PuzzleSessionData> {
 
 @Freezed(fromJson: true, toJson: true)
 sealed class PuzzleSessionData with _$PuzzleSessionData {
-  const factory PuzzleSessionData({
+  const factory({
     required PuzzleAngle angle,
     required IList<PuzzleAttempt> attempts,
     required DateTime lastUpdatedAt,
   }) = _PuzzleSession;
 
-  factory PuzzleSessionData.initial({required PuzzleAngle angle}) {
+  factory initial({required PuzzleAngle angle}) {
     return PuzzleSessionData(
       angle: angle,
       attempts: IList(const []),
@@ -103,7 +99,7 @@ sealed class PuzzleSessionData with _$PuzzleSessionData {
     );
   }
 
-  factory PuzzleSessionData.fromJson(Map<String, dynamic> json) {
+  factory fromJson(Map<String, dynamic> json) {
     try {
       return _$PuzzleSessionDataFromJson(json);
     } catch (e) {
@@ -113,13 +109,10 @@ sealed class PuzzleSessionData with _$PuzzleSessionData {
 }
 
 @Freezed(fromJson: true, toJson: true)
-sealed class PuzzleAttempt with _$PuzzleAttempt {
-  const PuzzleAttempt._();
+sealed class const PuzzleAttempt._() with _$PuzzleAttempt {
+  const factory({required PuzzleId id, required bool win, int? ratingDiff}) = _PuzzleAttempt;
 
-  const factory PuzzleAttempt({required PuzzleId id, required bool win, int? ratingDiff}) =
-      _PuzzleAttempt;
-
-  factory PuzzleAttempt.fromJson(Map<String, dynamic> json) => _$PuzzleAttemptFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$PuzzleAttemptFromJson(json);
 
   String? get ratingDiffString {
     if (ratingDiff == null) return null;

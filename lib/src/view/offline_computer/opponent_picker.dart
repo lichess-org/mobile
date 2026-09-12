@@ -11,7 +11,15 @@ import 'package:material_ui/material_ui.dart';
 
 /// The engines a game can be played against, in the order the picker presents them: Stockfish
 /// first, because it is what a new game plays.
-enum OpponentEngine {
+enum OpponentEngine({
+  required final String name,
+
+  /// The engine's logo, shown wherever it is named.
+  required final String iconAsset,
+
+  /// A sentence or two on what this engine is, for someone choosing between them.
+  required final String description,
+}) {
   stockfish(
     name: 'Stockfish',
     iconAsset: 'assets/images/stockfish/icon.webp',
@@ -28,16 +36,6 @@ enum OpponentEngine {
         'information go to maiachess.com.',
   );
 
-  const OpponentEngine({required this.name, required this.iconAsset, required this.description});
-
-  final String name;
-
-  /// The engine's logo, shown wherever it is named.
-  final String iconAsset;
-
-  /// A sentence or two on what this engine is, for someone choosing between them.
-  final String description;
-
   static OpponentEngine of(OpponentSpec spec) => switch (spec) {
     StockfishOpponentSpec() => OpponentEngine.stockfish,
     MaiaOpponentSpec() => OpponentEngine.maia,
@@ -45,12 +43,8 @@ enum OpponentEngine {
 }
 
 /// The logo of the engine [spec] plays on.
-class OpponentIcon extends StatelessWidget {
-  const OpponentIcon(this.spec, {this.size = 44, super.key});
-
-  final OpponentSpec spec;
-  final double size;
-
+class const OpponentIcon(final OpponentSpec spec, {final double size = 44, super.key})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
       Image.asset(OpponentEngine.of(spec).iconAsset, width: size, height: size);
@@ -73,20 +67,18 @@ Future<OpponentSpec?> showOpponentPicker(
   );
 }
 
-class _OpponentPickerSheet extends ConsumerStatefulWidget {
-  const _OpponentPickerSheet({required this.selected, required this.variant});
-
-  final OpponentSpec selected;
+class const _OpponentPickerSheet({
+  required final OpponentSpec selected,
 
   /// The variant the game will be played in. Maia only knows standard chess, so for anything else
   /// there is nothing to choose between.
-  final Variant variant;
-
+  required final Variant variant,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_OpponentPickerSheet> createState() => _OpponentPickerSheetState();
 }
 
-class _OpponentPickerSheetState extends ConsumerState<_OpponentPickerSheet> {
+class _OpponentPickerSheetState() extends ConsumerState<_OpponentPickerSheet> {
   late OpponentEngine _engine;
   late StockfishLevel _level;
   late MaiaRating _rating;
@@ -212,11 +204,7 @@ class _OpponentPickerSheetState extends ConsumerState<_OpponentPickerSheet> {
   }
 }
 
-class _EngineDescription extends StatelessWidget {
-  const _EngineDescription(this.engine);
-
-  final OpponentEngine engine;
-
+class const _EngineDescription(final OpponentEngine engine) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -243,12 +231,10 @@ class _EngineDescription extends StatelessWidget {
   }
 }
 
-class _StockfishLevelTile extends StatelessWidget {
-  const _StockfishLevelTile({required this.level, required this.onChanged});
-
-  final StockfishLevel level;
-  final ValueChanged<StockfishLevel> onChanged;
-
+class const _StockfishLevelTile({
+  required final StockfishLevel level,
+  required final ValueChanged<StockfishLevel> onChanged,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -273,26 +259,18 @@ class _StockfishLevelTile extends StatelessWidget {
   }
 }
 
-class _MaiaRatingTile extends ConsumerStatefulWidget {
-  const _MaiaRatingTile({
-    required this.rating,
-    required this.available,
-    required this.downloading,
-    required this.failed,
-    required this.onChanged,
-  });
-
-  final MaiaRating rating;
-  final Set<MaiaRating>? available;
-  final MaiaRating? downloading;
-  final MaiaRating? failed;
-  final ValueChanged<MaiaRating> onChanged;
-
+class const _MaiaRatingTile({
+  required final MaiaRating rating,
+  required final Set<MaiaRating>? available,
+  required final MaiaRating? downloading,
+  required final MaiaRating? failed,
+  required final ValueChanged<MaiaRating> onChanged,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_MaiaRatingTile> createState() => _MaiaRatingTileState();
 }
 
-class _MaiaRatingTileState extends ConsumerState<_MaiaRatingTile> {
+class _MaiaRatingTileState() extends ConsumerState<_MaiaRatingTile> {
   MaiaRating? _dragged;
 
   @override
@@ -348,17 +326,11 @@ class _MaiaRatingTileState extends ConsumerState<_MaiaRatingTile> {
 }
 
 /// Says whether the selected network is on the device or being fetched.
-class _MaiaWeightsStatus extends ConsumerWidget {
-  const _MaiaWeightsStatus({
-    required this.rating,
-    required this.available,
-    required this.downloading,
-  });
-
-  final MaiaRating rating;
-  final Set<MaiaRating>? available;
-  final MaiaRating? downloading;
-
+class const _MaiaWeightsStatus({
+  required final MaiaRating rating,
+  required final Set<MaiaRating>? available,
+  required final MaiaRating? downloading,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (downloading != null) {

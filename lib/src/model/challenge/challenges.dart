@@ -12,7 +12,7 @@ final challengesProvider = AsyncNotifierProvider.autoDispose<Challenges, Challen
   name: 'ChallengesProvider',
 );
 
-class Challenges extends AsyncNotifier<ChallengesList> {
+class Challenges() extends AsyncNotifier<ChallengesList> {
   StreamSubscription<ChallengesList>? _subscription;
 
   @override

@@ -6,20 +6,13 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_ui/material_ui.dart';
 
-class EngineSettingsWidget extends ConsumerWidget {
-  const EngineSettingsWidget({
-    this.onToggleLocalEvaluation,
-    required this.onSetEngineSearchTime,
-    this.onSetNumEvalLines,
-    required this.onSetEngineCores,
-    super.key,
-  });
-
-  final VoidCallback? onToggleLocalEvaluation;
-  final void Function(Duration) onSetEngineSearchTime;
-  final void Function(int)? onSetNumEvalLines;
-  final void Function(int) onSetEngineCores;
-
+class const EngineSettingsWidget({
+  final VoidCallback? onToggleLocalEvaluation,
+  required final void Function(Duration) onSetEngineSearchTime,
+  final void Function(int)? onSetNumEvalLines,
+  required final void Function(int) onSetEngineCores,
+  super.key,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final prefs = ref.watch(engineEvaluationPreferencesProvider);

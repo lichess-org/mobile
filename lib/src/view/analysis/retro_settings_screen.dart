@@ -5,11 +5,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/engine_settings_widget.dart';
 import 'package:material_ui/material_ui.dart';
 
-class RetroSettingsScreen extends ConsumerWidget {
-  const RetroSettingsScreen(this.options);
-
-  final RetroOptions options;
-
+class const RetroSettingsScreen(final RetroOptions options) extends ConsumerWidget {
   static Route<dynamic> buildRoute({required RetroOptions options}) {
     return buildScreenRoute(screen: RetroSettingsScreen(options));
   }

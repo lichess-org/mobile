@@ -31,13 +31,13 @@ import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
 
-class TvScreen extends ConsumerStatefulWidget {
-  const TvScreen({this.channel, this.initialGame, this.user, super.key})
-    : assert(channel != null || user != null, 'Either channel or user must be provided');
-
-  final TvChannel? channel;
-  final (GameId id, Side orientation)? initialGame;
-  final LightUser? user;
+class const TvScreen({
+  final TvChannel? channel,
+  final (GameId id, Side orientation)? initialGame,
+  final LightUser? user,
+  super.key,
+}) extends ConsumerStatefulWidget {
+  this : assert(channel != null || user != null, 'Either channel or user must be provided');
 
   static Route<dynamic> buildRoute({
     TvChannel? channel,
@@ -58,7 +58,7 @@ class TvScreen extends ConsumerStatefulWidget {
   ConsumerState<TvScreen> createState() => _TvScreenState();
 }
 
-class _TvScreenState extends ConsumerState<TvScreen> {
+class _TvScreenState() extends ConsumerState<TvScreen> {
   TvControllerParams get _tvControllerParams =>
       (channel: widget.channel, initialGame: widget.initialGame, userId: widget.user?.id);
 
@@ -129,19 +129,12 @@ class _TvScreenState extends ConsumerState<TvScreen> {
 
 /// Displays the watched game once [TvController] has resolved which game to
 /// watch.
-class _TvGameBody extends ConsumerWidget {
-  const _TvGameBody({
-    required this.channel,
-    required this.gameParams,
-    required this.whiteClockKey,
-    required this.blackClockKey,
-  });
-
-  final TvChannel? channel;
-  final TvGameControllerParams gameParams;
-  final GlobalKey whiteClockKey;
-  final GlobalKey blackClockKey;
-
+class const _TvGameBody({
+  required final TvChannel? channel,
+  required final TvGameControllerParams gameParams,
+  required final GlobalKey whiteClockKey,
+  required final GlobalKey blackClockKey,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final gameCtrl = tvGameControllerProvider(gameParams);
@@ -304,9 +297,7 @@ class _TvGameBody extends ConsumerWidget {
   }
 }
 
-class _TvLoadingBoard extends StatelessWidget {
-  const _TvLoadingBoard();
-
+class const _TvLoadingBoard() extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Shimmer(
@@ -322,9 +313,7 @@ class _TvLoadingBoard extends StatelessWidget {
   }
 }
 
-class _TvErrorBoard extends StatelessWidget {
-  const _TvErrorBoard();
-
+class const _TvErrorBoard() extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const GameLayout(

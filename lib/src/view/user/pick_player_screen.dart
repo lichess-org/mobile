@@ -13,12 +13,11 @@ import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
 
-class PickPlayerScreen extends ConsumerWidget {
-  const PickPlayerScreen({required this.onUserTap, required this.title, super.key});
-
-  final void Function(LightUser) onUserTap;
-  final Widget title;
-
+class const PickPlayerScreen({
+  required final void Function(LightUser) onUserTap,
+  required final Widget title,
+  super.key,
+}) extends ConsumerWidget {
   static Route<dynamic> buildRoute({
     required void Function(LightUser) onUserTap,
     required Widget title,
@@ -37,11 +36,7 @@ class PickPlayerScreen extends ConsumerWidget {
   }
 }
 
-class _Body extends ConsumerWidget {
-  const _Body({required this.onUserTap});
-
-  final void Function(LightUser) onUserTap;
-
+class const _Body({required final void Function(LightUser) onUserTap}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final online = ref.watch(onlineFriendsProvider);
@@ -81,17 +76,15 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class _PlayersList extends StatefulWidget {
-  const _PlayersList({required this.onUserTap, required this.children});
-
-  final void Function(LightUser) onUserTap;
-  final List<Widget> children;
-
+class const _PlayersList({
+  required final void Function(LightUser) onUserTap,
+  required final List<Widget> children,
+}) extends StatefulWidget {
   @override
   State<_PlayersList> createState() => _PlayersListState();
 }
 
-class _PlayersListState extends State<_PlayersList> {
+class _PlayersListState() extends State<_PlayersList> {
   final _searchFocusNode = _AlwaysDisabledFocusNode();
 
   @override
@@ -125,17 +118,15 @@ class _PlayersListState extends State<_PlayersList> {
   }
 }
 
-class _AlwaysDisabledFocusNode extends FocusNode {
+class _AlwaysDisabledFocusNode() extends FocusNode {
   @override
   bool get hasFocus => false;
 }
 
-class _FriendTile extends StatelessWidget {
-  const _FriendTile({required this.friend, required this.onUserTap});
-
-  final LightUser friend;
-  final void Function(LightUser) onUserTap;
-
+class const _FriendTile({
+  required final LightUser friend,
+  required final void Function(LightUser) onUserTap,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(

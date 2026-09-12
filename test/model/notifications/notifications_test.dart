@@ -10,7 +10,7 @@ import 'package:mocktail/mocktail.dart';
 
 /// Broadcast notifications carry their title and body from the server, so they never read from
 /// [AppLocalizations].
-class MockAppLocalizations extends Mock implements AppLocalizations {}
+class MockAppLocalizations() extends Mock implements AppLocalizations;
 
 /// Builds a broadcast FCM message as lila sends it.
 ///
