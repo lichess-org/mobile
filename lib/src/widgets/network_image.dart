@@ -20,9 +20,10 @@ class const HttpNetworkImageWidget(
       image: ResizeImage.resizeIfNeeded(
         cacheWidth,
         cacheHeight,
-        HttpNetworkImage(url, ref.watch(defaultClientProvider)),
+        HttpNetworkImage(url, ref.read(defaultClientProvider)),
       ),
       width: width,
+      height: height,
       fit: fit,
       errorBuilder: errorBuilder,
     );
