@@ -265,16 +265,10 @@ class _Following extends ConsumerWidget {
           ),
           _FriendSortType.ratingDesc =>
             value
-                .sort(
-                  (a, b) => (int.tryParse(a.perfs.displayRating ?? '0') ?? 0).compareTo(
-                    int.tryParse(b.perfs.displayRating ?? '0') ?? 0,
-                  ),
-                )
+                .sort((a, b) => (a.perfs.displayRating ?? 0).compareTo(b.perfs.displayRating ?? 0))
                 .reversed,
           _FriendSortType.ratingAsc => value.sort(
-            (a, b) => (int.tryParse(a.perfs.displayRating ?? '0') ?? 0).compareTo(
-              int.tryParse(b.perfs.displayRating ?? '0') ?? 0,
-            ),
+            (a, b) => (a.perfs.displayRating ?? 0).compareTo(b.perfs.displayRating ?? 0),
           ),
           _FriendSortType.lastOnline =>
             value

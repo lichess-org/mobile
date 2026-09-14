@@ -56,16 +56,15 @@ class UserListTile extends StatelessWidget {
   }
 }
 
-class _UserRating extends StatelessWidget {
-  const _UserRating({required this.perfs});
-
-  final IMap<Perf, UserPerf> perfs;
-
+class const _UserRating({required final IMap<Perf, UserPerf> perfs}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final rating = perfs.displayRating;
-    if (rating == null) return const SizedBox.shrink();
-    final icon = perfs.displayRatingIcon;
+    final userPerfs = perfs.sortedUserPerfs;
+
+    if (userPerfs.isEmpty) return const SizedBox.shrink();
+
+    final rating = perfs[userPerfs.first]?.rating.toString() ?? '?';
+    final icon = userPerfs.first.icon;
 
     return Row(
       mainAxisSize: MainAxisSize.min,

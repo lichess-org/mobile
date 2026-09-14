@@ -486,29 +486,27 @@ sealed class Crosstable with _$Crosstable {
   );
 }
 
-extension DisplayRating on IMap<Perf, UserPerf> {
-  Perf? get _displayPerfs {
-    List<Perf> userPerfs = Perf.values
-        .where((element) {
-          final p = this[element];
-          return p != null && p.numberOfGamesOrRuns > 0 && p.ratingDeviation < kClueLessDeviation;
-        })
-        .toList(growable: false);
+/// Perfs with enough rated games, sorted by game count descending.
+///
+/// This runs in every row of every scrolling user lists (leaderboards, search,
+/// teams), so the filter + sort is memoized per map instance. [IMap] is
+/// immutable, so instance identity implies value identity and the cached list
+/// stays valid as long as the map is alive.
 
-    if (userPerfs.isEmpty) return null;
+/// Expando uses a weak reference, ensuring that the cache is garbage collected
+/// once the perf map is destroyed
+final _sortedPerfsCache = Expando<List<Perf>>('sortedUserPerfs');
 
-    userPerfs.sort(
-      (p1, p2) => this[p1]!.numberOfGamesOrRuns.compareTo(this[p2]!.numberOfGamesOrRuns),
-    );
-    userPerfs = userPerfs.reversed.toList();
-    return userPerfs.first;
-  }
+extension PerfsHelpers on IMap<Perf, UserPerf> {
+  List<Perf> get sortedUserPerfs => _sortedPerfsCache[this] ??=
+      Perf.values
+          .where((element) {
+            final p = this[element];
+            return p != null && p.numberOfGamesOrRuns > 0 && p.ratingDeviation < kClueLessDeviation;
+          })
+          .toList(growable: false)
+        ..sort((p1, p2) => this[p2]!.numberOfGamesOrRuns.compareTo(this[p1]!.numberOfGamesOrRuns));
 
-  String? get displayRating {
-    final perf = _displayPerfs;
-    if (perf == null) return null;
-    return this[perf]?.rating.toString() ?? '?';
-  }
-
-  IconData? get displayRatingIcon => _displayPerfs?.icon;
+  int? get displayRating => sortedUserPerfs.isEmpty ? null : this[sortedUserPerfs.first]?.rating;
+  IconData? get displayIcon => sortedUserPerfs.isEmpty ? null : sortedUserPerfs.first.icon;
 }
