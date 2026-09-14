@@ -102,7 +102,9 @@ class _BodyState() extends ConsumerState<_Body> {
                       settingsLabel: Text(context.l10n.background),
                       settingsValue: generalPrefs.backgroundColor != null
                           ? generalPrefs.backgroundColor!.$1.label
-                          : (generalPrefs.backgroundImage != null ? 'Image' : 'Default'),
+                          : (generalPrefs.backgroundImage != null
+                                ? context.l10n.backgroundImage
+                                : 'Default'),
                       onTap: () {
                         Navigator.of(context).push(BackgroundChoiceScreen.buildRoute());
                       },
@@ -110,8 +112,12 @@ class _BodyState() extends ConsumerState<_Body> {
                     if (generalPrefs.backgroundColor != null ||
                         generalPrefs.backgroundImage != null)
                       ListTile(
-                        leading: const Icon(Icons.cancel),
-                        title: const Text('Reset background'),
+                        leading: Icon(Icons.clear, color: lichessCustomColors.error),
+                        // TODO: l10n
+                        title: Text(
+                          'Restore default background',
+                          style: TextStyle(color: lichessCustomColors.error),
+                        ),
                         onTap: () {
                           ref
                               .read(generalPreferencesProvider.notifier)
@@ -171,9 +177,8 @@ class _BodyState() extends ConsumerState<_Body> {
                       },
                     ),
                     SwitchSettingTile(
-                      // TODO translate
                       leading: const Icon(Icons.border_outer),
-                      title: const Text('Show border'),
+                      title: Text(context.l10n.mobileSettingsShowBorder),
                       value: boardPrefs.showBorder,
                       onChanged: (value) {
                         ref.read(boardPreferencesProvider.notifier).toggleBorder();

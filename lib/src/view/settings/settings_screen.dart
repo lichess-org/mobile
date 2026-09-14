@@ -129,7 +129,7 @@ class const SettingsScreen({super.key}) extends ConsumerWidget {
               ),
               ListTile(
                 leading: const Icon(Icons.memory_outlined),
-                title: const Text('Chess engine'),
+                title: Text(context.l10n.mobileChessEngine, overflow: TextOverflow.ellipsis),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
                     ? const CupertinoListTileChevron()
                     : null,

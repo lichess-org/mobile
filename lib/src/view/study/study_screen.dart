@@ -273,7 +273,7 @@ class const _StudyMenu({required final StudyOptions options}) extends ConsumerWi
                   ),
                   if (state.currentPosition != null)
                     BottomSheetAction(
-                      makeLabel: (context) => Text(context.l10n.screenshotCurrentPosition),
+                      makeLabel: (context) => Text(context.l10n.positionAsImage),
                       onPressed: () async {
                         try {
                           final image = await ref

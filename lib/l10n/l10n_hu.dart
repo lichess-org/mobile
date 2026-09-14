@@ -30,6 +30,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Visszalépés kérésének visszavonása';
 
   @override
+  String get mobileChessEngine => 'Chess engine';
+
+  @override
   String get mobileClearButton => 'Törlés';
 
   @override
@@ -655,6 +658,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get arenaHowDoesPairingWork => 'Hogyan történik a párosítás?';
 
   @override
+  String get arenaHowArePlayersPaired => 'How are players paired?';
+
+  @override
   String get arenaHowDoesPairingWorkAnswer => 'A verseny kezdetekor a játékosokat a pontszámuk alapján párosítjuk.\nAmint befejeztél egy játszmát, és visszatértél a lobbiba: azt az ellenfelet kapod, aki a legközelebb áll a pontszámodhoz. Így a lehető legkevesebbet kell várakoznod, de előfordulhat, hogy nem fogsz mindenkivel játszani.\nJátssz gyorsan, térj vissza a lobbiba további játszmákért, hogy több pontot nyerhess.';
 
   @override
@@ -743,6 +749,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get arenaDefender => 'Védő';
 
   @override
+  String get arenaDefenderLabel => 'Defender:';
+
+  @override
   String get arenaPickYourTeam => 'Válaszd ki a csapatodat';
 
   @override
@@ -806,6 +815,9 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get arenaBerserkRate => 'Berserk arány';
+
+  @override
+  String get arenaLeaguesAndStreamerBattles => 'Leagues & Streamer Battles';
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -915,6 +927,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get broadcastDefinitivelyDeleteRound => 'A forduló és játszmáinak végleges törlése.';
 
   @override
+  String get broadcastPermanentlyDeleteRound => 'Permanently delete this round and all its games?';
+
+  @override
   String get broadcastDeleteAllGamesOfThisRound => 'Minden játék törlése ebben a fordulóban. A forrásnak aktívnak kell lennie, hogy újra létre lehessen hozni őket.';
 
   @override
@@ -982,6 +997,9 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get broadcastNoBoardsYet => 'Még nincsenek táblák. A játszmák feltöltése után jelennek csak meg.';
+
+  @override
+  String get broadcastNoPlayersYet => 'No players yet. They will appear once games are uploaded.';
 
   @override
   String broadcastBoardsCanBeLoaded(String param) {
@@ -2100,6 +2118,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get puzzleThemeCornerMateDescription => 'Confine the king to the corner using a rook or queen and a knight to engage the checkmate.';
 
   @override
+  String get puzzleThemeCornerMateKnightDeliversDescription => 'Confine the king to the corner using a rook or queen, and use a knight to deliver the checkmate.';
+
+  @override
   String get puzzleThemeCrushing => 'Megsemmisítés';
 
   @override
@@ -2238,10 +2259,16 @@ class AppLocalizationsHu extends AppLocalizations {
   String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
 
   @override
+  String get puzzleThemePillsburyMateRookAndBishopDescription => 'A rook delivers checkmate to the king, while a bishop helps confine it.';
+
+  @override
   String get puzzleThemeMorphysMate => 'Morphy\'s mate';
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphyMateBishopAndRookDescription => 'A bishop delivers checkmate to the king, while a rook helps confine it.';
 
   @override
   String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
@@ -2362,6 +2389,9 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get puzzleThemePromotionDescription => 'Átváltozó vagy átváltozással fenyegető gyalog kulcsfontosságú taktika.';
+
+  @override
+  String get puzzleThemePromotePawnToQueenRookOrMinor => 'Promote one of your pawns to a queen, rook or minor piece.';
 
   @override
   String get puzzleThemeQueenEndgame => 'Vezér végjáték';
@@ -2946,6 +2976,18 @@ class AppLocalizationsHu extends AppLocalizations {
   String get flipBoard => 'Tábla megfordítása';
 
   @override
+  String get toggleLocalEngine => 'Toggle local engine';
+
+  @override
+  String get engineSettings => 'Engine settings';
+
+  @override
+  String get enginesFromStrongestToWeakest => 'Engines from strongest to weakest';
+
+  @override
+  String get illegalPosition => 'Illegal position';
+
+  @override
   String get threefoldRepetition => 'Háromszori állásismétlés';
 
   @override
@@ -3088,6 +3130,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get password => 'Jelszó';
 
   @override
+  String get showPassword => 'Show password';
+
+  @override
   String get changePassword => 'Jelszó megváltoztatása';
 
   @override
@@ -3211,7 +3256,13 @@ class AppLocalizationsHu extends AppLocalizations {
   String get whiteTimeOut => 'Világos ideje lejárt';
 
   @override
+  String get whiteRanOutOfTime => 'White ran out of time';
+
+  @override
   String get blackTimeOut => 'Sötét ideje lejárt';
+
+  @override
+  String get blackRanOutOfTime => 'Black ran out of time';
 
   @override
   String get drawOfferSent => 'Döntetlen felajánlva';
@@ -3423,6 +3474,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Az értékszámszűrők zárolva vannak, mert az értékszámod még nem stabil. Értékszámszerző játszmák játszása növeli a stabilitást.';
 
   @override
+  String get cannotFilterByUnstableRating => 'It is not possible to filter by rating because your rating is not stable.\nPlaying rated games will increase stability.';
+
+  @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
     return 'A $param1 pontszámod ($param2) túl magas';
   }
@@ -3503,7 +3557,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get leaderboard => 'Ranglista';
 
   @override
-  String get screenshotCurrentPosition => 'Képernyőkép készítése a jelenlegi állásról';
+  String get positionAsImage => 'Position as image';
 
   @override
   String get gameAsGIF => 'Játszma GIF-ként';
@@ -3600,6 +3654,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String xStartedFollowingY(String param1, String param2) {
     return '$param1 $param2 követője lett';
   }
+
+  @override
+  String get less => 'Less';
 
   @override
   String get more => 'Több';
@@ -3809,7 +3866,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get makeAStudy => 'A biztonság kedvéért és a későbbi megosztás lehetőségéért fontold meg egy tanulmány létrehozását.';
 
   @override
-  String get clearSavedMoves => 'Lépések törlése';
+  String get clearLocalData => 'Clear local data';
 
   @override
   String get previouslyOnLichessTV => 'A Lichess TV korábbi műsorai';
@@ -4321,6 +4378,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get simulHostExtraTime => 'Időbónusz';
 
   @override
+  String get extraClockTimeForHost => 'Extra clock time for the host:';
+
+  @override
   String get simulAddExtraTimePerPlayer => 'A beállított idő hozzáadása az órádhoz minden szimultánhoz csatlakozó játékos után.';
 
   @override
@@ -4351,10 +4411,16 @@ class AppLocalizationsHu extends AppLocalizations {
   String get keyGoToStartOrEnd => 'menjen az elejére/végére';
 
   @override
+  String get keyGoToPreviousOrNextLine => 'go to previous/next line';
+
+  @override
   String get keyCycleSelectedVariation => 'A választott változatok váltogatása';
 
   @override
   String get keyShowOrHideComments => 'kommentek megjelenítése/elrejtése';
+
+  @override
+  String get keyShowOrHideCurrentVariation => 'show/hide current variation';
 
   @override
   String get keyEnterOrExitVariation => 'ki/belépés változatba';
@@ -4630,9 +4696,6 @@ class AppLocalizationsHu extends AppLocalizations {
   String get dark => 'Sötét';
 
   @override
-  String get transparent => 'Áttetsző';
-
-  @override
   String get picture => 'Picture';
 
   @override
@@ -4642,7 +4705,13 @@ class AppLocalizationsHu extends AppLocalizations {
   String get roundness => 'Roundness';
 
   @override
+  String get backgroundImage => 'Background image';
+
+  @override
   String get backgroundImageUrl => 'Háttérkép URL címe:';
+
+  @override
+  String get imageOpacity => 'Image opacity';
 
   @override
   String get board => 'Sakktábla';
@@ -4715,6 +4784,11 @@ class AppLocalizationsHu extends AppLocalizations {
   @override
   String perfRatingX(String param) {
     return 'Pontszám: $param';
+  }
+
+  @override
+  String perfRatingLabel(String param) {
+    return 'Rating: $param.';
   }
 
   @override
@@ -4869,6 +4943,9 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get clickHereToReadIt => 'Kattints ide az olvasáshoz';
+
+  @override
+  String get readTheMessage => 'Read the message';
 
   @override
   String get sorry => 'Sajnáljuk';
@@ -5306,6 +5383,15 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get settings => 'Settings';
+
+  @override
+  String get verifyingYourDevice => 'Verifying your device...';
+
+  @override
+  String get chessOpenings => 'Chess openings';
+
+  @override
+  String get boards => 'Boards';
 
   @override
   String opponentLeftCounter(int count) {
@@ -6151,6 +6237,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get studyYouCanPasteThisInTheForumToEmbed => 'Ezzel a linkkel beágyazhatod a fejezetet a Lichess blogodban vagy a fórumon';
 
   @override
+  String get studyPasteToEmbedChapterInForumOrBlog => 'You can paste this in the forum or your Lichess blog to embed the chapter.';
+
+  @override
   String get studyStartAtInitialPosition => 'Kezdés a kiinduló állásból';
 
   @override
@@ -6523,7 +6612,13 @@ class AppLocalizationsHu extends AppLocalizations {
   String get studyLoadExistingLichessGameTitle => 'Tölts be egy létező Lichess játszmát';
 
   @override
+  String get studyLoadGameFromTheWebTitle => 'Load a game from the web';
+
+  @override
   String get studyLoadExistingLichessGameText => 'Illessz be egy Lichess parti URL-jét<br>(például lichess.org/7fHIU0XI)<br>A lépések betöltődnek a fejezetbe.';
+
+  @override
+  String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/7fHIU0XI)<br>to load game moves in the chapter.';
 
   @override
   String get studyFromFenStringTitle => 'Egy FEN karakterláncból';

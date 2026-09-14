@@ -30,6 +30,9 @@ class AppLocalizationsAf extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Cancel takeback offer';
 
   @override
+  String get mobileChessEngine => 'Chess engine';
+
+  @override
   String get mobileClearButton => 'Vee uit';
 
   @override
@@ -655,6 +658,9 @@ class AppLocalizationsAf extends AppLocalizations {
   String get arenaHowDoesPairingWork => 'Hoe werk die plasing?';
 
   @override
+  String get arenaHowArePlayersPaired => 'How are players paired?';
+
+  @override
   String get arenaHowDoesPairingWorkAnswer => 'Aan die begin van die toernooi word spelers volgens hulle gradering geplaas.\nSodra jy \'n wedstryd voltooi het, keer jy terug na die toernooi ontvangs: Jy sal dan teen ander spelers geplaas word wat naby aan jou gradering is. Dit verseker \'n minimum wagtydperk, alhoewel jy dalk nie teen almal in die toernooi sal speel nie. \nSpeel vinnig en keer terug na die ontvangs om meer te speel en meer punte te kry.';
 
   @override
@@ -743,6 +749,9 @@ class AppLocalizationsAf extends AppLocalizations {
   String get arenaDefender => 'Defender';
 
   @override
+  String get arenaDefenderLabel => 'Defender:';
+
+  @override
   String get arenaPickYourTeam => 'Kies jou span';
 
   @override
@@ -806,6 +815,9 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get arenaBerserkRate => 'Berserk rate';
+
+  @override
+  String get arenaLeaguesAndStreamerBattles => 'Leagues & Streamer Battles';
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -915,6 +927,9 @@ class AppLocalizationsAf extends AppLocalizations {
   String get broadcastDefinitivelyDeleteRound => 'Skrap die rondte en sy spelle beslis uit.';
 
   @override
+  String get broadcastPermanentlyDeleteRound => 'Permanently delete this round and all its games?';
+
+  @override
   String get broadcastDeleteAllGamesOfThisRound => 'Skrap alle spelle van hierdie rondte. Die bron sal aktief moet wees om hulle te kan herskep.';
 
   @override
@@ -982,6 +997,9 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get broadcastNoBoardsYet => 'No boards yet. These will appear once games are uploaded.';
+
+  @override
+  String get broadcastNoPlayersYet => 'No players yet. They will appear once games are uploaded.';
 
   @override
   String broadcastBoardsCanBeLoaded(String param) {
@@ -2100,6 +2118,9 @@ class AppLocalizationsAf extends AppLocalizations {
   String get puzzleThemeCornerMateDescription => 'Confine the king to the corner using a rook or queen and a knight to engage the checkmate.';
 
   @override
+  String get puzzleThemeCornerMateKnightDeliversDescription => 'Confine the king to the corner using a rook or queen, and use a knight to deliver the checkmate.';
+
+  @override
   String get puzzleThemeCrushing => 'Verpletter';
 
   @override
@@ -2238,10 +2259,16 @@ class AppLocalizationsAf extends AppLocalizations {
   String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
 
   @override
+  String get puzzleThemePillsburyMateRookAndBishopDescription => 'A rook delivers checkmate to the king, while a bishop helps confine it.';
+
+  @override
   String get puzzleThemeMorphysMate => 'Morphy\'s mate';
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphyMateBishopAndRookDescription => 'A bishop delivers checkmate to the king, while a rook helps confine it.';
 
   @override
   String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
@@ -2362,6 +2389,9 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get puzzleThemePromotionDescription => '\'N Pion wat bevorder of dreig om te bevorder, is die sleutel tot die taktiek.';
+
+  @override
+  String get puzzleThemePromotePawnToQueenRookOrMinor => 'Promote one of your pawns to a queen, rook or minor piece.';
 
   @override
   String get puzzleThemeQueenEndgame => 'Koningin eindspel';
@@ -2946,6 +2976,18 @@ class AppLocalizationsAf extends AppLocalizations {
   String get flipBoard => 'Keer bord om';
 
   @override
+  String get toggleLocalEngine => 'Toggle local engine';
+
+  @override
+  String get engineSettings => 'Engine settings';
+
+  @override
+  String get enginesFromStrongestToWeakest => 'Engines from strongest to weakest';
+
+  @override
+  String get illegalPosition => 'Illegal position';
+
+  @override
   String get threefoldRepetition => 'Drie-malige herhaling';
 
   @override
@@ -3088,6 +3130,9 @@ class AppLocalizationsAf extends AppLocalizations {
   String get password => 'Wagwoord';
 
   @override
+  String get showPassword => 'Show password';
+
+  @override
   String get changePassword => 'Verander wagwoord';
 
   @override
@@ -3211,7 +3256,13 @@ class AppLocalizationsAf extends AppLocalizations {
   String get whiteTimeOut => 'Wit tyd verstreke';
 
   @override
+  String get whiteRanOutOfTime => 'White ran out of time';
+
+  @override
   String get blackTimeOut => 'Swart time-out';
+
+  @override
+  String get blackRanOutOfTime => 'Black ran out of time';
 
   @override
   String get drawOfferSent => 'Gelykop aanbod gestuur';
@@ -3423,6 +3474,9 @@ class AppLocalizationsAf extends AppLocalizations {
   String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
 
   @override
+  String get cannotFilterByUnstableRating => 'It is not possible to filter by rating because your rating is not stable.\nPlaying rated games will increase stability.';
+
+  @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
     return 'Jou $param1 gradering ($param2) is te hoog';
   }
@@ -3503,7 +3557,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get leaderboard => 'Leierbord';
 
   @override
-  String get screenshotCurrentPosition => 'Neem \'n skermfoto van die huidige posisie';
+  String get positionAsImage => 'Position as image';
 
   @override
   String get gameAsGIF => 'Spel as \'n GIF';
@@ -3600,6 +3654,9 @@ class AppLocalizationsAf extends AppLocalizations {
   String xStartedFollowingY(String param1, String param2) {
     return '$param1 het begin om $param2 te volg';
   }
+
+  @override
+  String get less => 'Less';
 
   @override
   String get more => 'Meer';
@@ -3809,7 +3866,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get makeAStudy => 'Oorweeg dit om \'n studie te skep om te bewaar en met ander te deel.';
 
   @override
-  String get clearSavedMoves => 'Verwyder skuiwe';
+  String get clearLocalData => 'Clear local data';
 
   @override
   String get previouslyOnLichessTV => 'Voorigekeer op Lichess TV';
@@ -4321,6 +4378,9 @@ class AppLocalizationsAf extends AppLocalizations {
   String get simulHostExtraTime => 'Gasheer ekstra kloktyd';
 
   @override
+  String get extraClockTimeForHost => 'Extra clock time for the host:';
+
+  @override
   String get simulAddExtraTimePerPlayer => 'Voeg begintyd by jou klok vir elke speler wat die simul aansluit.';
 
   @override
@@ -4351,10 +4411,16 @@ class AppLocalizationsAf extends AppLocalizations {
   String get keyGoToStartOrEnd => 'gaan na begin/einde';
 
   @override
+  String get keyGoToPreviousOrNextLine => 'go to previous/next line';
+
+  @override
   String get keyCycleSelectedVariation => 'Wissel geselekteerde variasie';
 
   @override
   String get keyShowOrHideComments => 'vertoon/versteek kommentaar';
+
+  @override
+  String get keyShowOrHideCurrentVariation => 'show/hide current variation';
 
   @override
   String get keyEnterOrExitVariation => 'betree/verlaat variasie';
@@ -4630,9 +4696,6 @@ class AppLocalizationsAf extends AppLocalizations {
   String get dark => 'Donker';
 
   @override
-  String get transparent => 'Deurdigtig';
-
-  @override
   String get picture => 'Picture';
 
   @override
@@ -4642,7 +4705,13 @@ class AppLocalizationsAf extends AppLocalizations {
   String get roundness => 'Roundness';
 
   @override
+  String get backgroundImage => 'Background image';
+
+  @override
   String get backgroundImageUrl => 'Agtergrond prent URL:';
+
+  @override
+  String get imageOpacity => 'Image opacity';
 
   @override
   String get board => 'Bord';
@@ -4715,6 +4784,11 @@ class AppLocalizationsAf extends AppLocalizations {
   @override
   String perfRatingX(String param) {
     return 'Gradering: $param';
+  }
+
+  @override
+  String perfRatingLabel(String param) {
+    return 'Rating: $param.';
   }
 
   @override
@@ -4869,6 +4943,9 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get clickHereToReadIt => 'Klik hier om dit te lees';
+
+  @override
+  String get readTheMessage => 'Read the message';
 
   @override
   String get sorry => 'Skies :(';
@@ -5306,6 +5383,15 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get settings => 'Settings';
+
+  @override
+  String get verifyingYourDevice => 'Verifying your device...';
+
+  @override
+  String get chessOpenings => 'Chess openings';
+
+  @override
+  String get boards => 'Boards';
 
   @override
   String opponentLeftCounter(int count) {
@@ -6151,6 +6237,9 @@ class AppLocalizationsAf extends AppLocalizations {
   String get studyYouCanPasteThisInTheForumToEmbed => 'U kan dit in die forum plak om in te bed';
 
   @override
+  String get studyPasteToEmbedChapterInForumOrBlog => 'You can paste this in the forum or your Lichess blog to embed the chapter.';
+
+  @override
   String get studyStartAtInitialPosition => 'Begin by die oorspronklike posisie';
 
   @override
@@ -6523,7 +6612,13 @@ class AppLocalizationsAf extends AppLocalizations {
   String get studyLoadExistingLichessGameTitle => 'Laai \'n bestaande lichess-spel';
 
   @override
+  String get studyLoadGameFromTheWebTitle => 'Load a game from the web';
+
+  @override
   String get studyLoadExistingLichessGameText => 'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
+
+  @override
+  String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/7fHIU0XI)<br>to load game moves in the chapter.';
 
   @override
   String get studyFromFenStringTitle => 'Vanaf \'n FEN-string';

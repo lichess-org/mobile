@@ -30,6 +30,9 @@ class AppLocalizationsLt extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Cancel takeback offer';
 
   @override
+  String get mobileChessEngine => 'Chess engine';
+
+  @override
   String get mobileClearButton => 'Clear';
 
   @override
@@ -691,6 +694,9 @@ class AppLocalizationsLt extends AppLocalizations {
   String get arenaHowDoesPairingWork => 'Kaip veikia suporavimas?';
 
   @override
+  String get arenaHowArePlayersPaired => 'How are players paired?';
+
+  @override
   String get arenaHowDoesPairingWorkAnswer => 'Turnyro pradžioje žaidėjai suporuojami atsižvelgiant į jų reitingus.\nKai tik baigiate partiją, grįžkite į turnyro laukiamąjį: tuomet būsite suporuoti su žaidėju, artimus jūsų reitingui. Tai užtikrina mažiausią laukimo laiką, visgi jūs galite nesusidurti su visais kitais turnyro žaidėjais.\nŽaisdami greitai ir grįždami į laukiamąjį sužaisite daugiau partijų ir galėsite pelnyti daugiau taškų.';
 
   @override
@@ -779,6 +785,9 @@ class AppLocalizationsLt extends AppLocalizations {
   String get arenaDefender => 'Ginantis titulą';
 
   @override
+  String get arenaDefenderLabel => 'Defender:';
+
+  @override
   String get arenaPickYourTeam => 'Pasirinkti savo komandą';
 
   @override
@@ -842,6 +851,9 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get arenaBerserkRate => 'Įsiūčio dažnis';
+
+  @override
+  String get arenaLeaguesAndStreamerBattles => 'Leagues & Streamer Battles';
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -955,6 +967,9 @@ class AppLocalizationsLt extends AppLocalizations {
   String get broadcastDefinitivelyDeleteRound => 'Užtikrintai ištrinti raundą ir jo partijas.';
 
   @override
+  String get broadcastPermanentlyDeleteRound => 'Permanently delete this round and all its games?';
+
+  @override
   String get broadcastDeleteAllGamesOfThisRound => 'Ištrinti visas partijas šiame raunde. Norint jas perkurti reikės aktyvaus šaltinio.';
 
   @override
@@ -1022,6 +1037,9 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get broadcastNoBoardsYet => 'Dar nėra lentų. Jos bus rodomos, kai bus įkeltos partijos.';
+
+  @override
+  String get broadcastNoPlayersYet => 'No players yet. They will appear once games are uploaded.';
 
   @override
   String broadcastBoardsCanBeLoaded(String param) {
@@ -2154,6 +2172,9 @@ class AppLocalizationsLt extends AppLocalizations {
   String get puzzleThemeCornerMateDescription => 'Confine the king to the corner using a rook or queen and a knight to engage the checkmate.';
 
   @override
+  String get puzzleThemeCornerMateKnightDeliversDescription => 'Confine the king to the corner using a rook or queen, and use a knight to deliver the checkmate.';
+
+  @override
   String get puzzleThemeCrushing => 'Suspaudimas';
 
   @override
@@ -2292,10 +2313,16 @@ class AppLocalizationsLt extends AppLocalizations {
   String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
 
   @override
+  String get puzzleThemePillsburyMateRookAndBishopDescription => 'A rook delivers checkmate to the king, while a bishop helps confine it.';
+
+  @override
   String get puzzleThemeMorphysMate => 'Morphy\'s mate';
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphyMateBishopAndRookDescription => 'A bishop delivers checkmate to the king, while a rook helps confine it.';
 
   @override
   String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
@@ -2416,6 +2443,9 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get puzzleThemePromotionDescription => 'Pėstininkas, kuris pasiaukština ar kėsinasi pasiaukštinti yra raktas šiai taktikai.';
+
+  @override
+  String get puzzleThemePromotePawnToQueenRookOrMinor => 'Promote one of your pawns to a queen, rook or minor piece.';
 
   @override
   String get puzzleThemeQueenEndgame => 'Valdovės endšpilis';
@@ -3000,6 +3030,18 @@ class AppLocalizationsLt extends AppLocalizations {
   String get flipBoard => 'Apsukti lentą';
 
   @override
+  String get toggleLocalEngine => 'Toggle local engine';
+
+  @override
+  String get engineSettings => 'Engine settings';
+
+  @override
+  String get enginesFromStrongestToWeakest => 'Engines from strongest to weakest';
+
+  @override
+  String get illegalPosition => 'Illegal position';
+
+  @override
   String get threefoldRepetition => 'Pozicijos pasikartojimas tris kartus';
 
   @override
@@ -3142,6 +3184,9 @@ class AppLocalizationsLt extends AppLocalizations {
   String get password => 'Slaptažodis';
 
   @override
+  String get showPassword => 'Show password';
+
+  @override
   String get changePassword => 'Keisti slaptažodį';
 
   @override
@@ -3265,7 +3310,13 @@ class AppLocalizationsLt extends AppLocalizations {
   String get whiteTimeOut => 'Baigėsi laikas baltiesiems';
 
   @override
+  String get whiteRanOutOfTime => 'White ran out of time';
+
+  @override
   String get blackTimeOut => 'Baigėsi laikas juodiesiems';
+
+  @override
+  String get blackRanOutOfTime => 'Black ran out of time';
 
   @override
   String get drawOfferSent => 'Lygiųjų pasiūlymas išsiųstas';
@@ -3477,6 +3528,9 @@ class AppLocalizationsLt extends AppLocalizations {
   String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Reitingo filtrai užrakinti, nes jūsų reitingas nestabilus. Žaidžiant įvertintus žaidimus, padidės stabilumas.';
 
   @override
+  String get cannotFilterByUnstableRating => 'It is not possible to filter by rating because your rating is not stable.\nPlaying rated games will increase stability.';
+
+  @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
     return 'Jūsų „$param1“ reitingas ($param2) yra per aukštas';
   }
@@ -3557,7 +3611,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get leaderboard => 'Lyderiai';
 
   @override
-  String get screenshotCurrentPosition => 'Nufotografuoti esamą poziciją';
+  String get positionAsImage => 'Position as image';
 
   @override
   String get gameAsGIF => 'Žaidimas kaip GIF animacija';
@@ -3654,6 +3708,9 @@ class AppLocalizationsLt extends AppLocalizations {
   String xStartedFollowingY(String param1, String param2) {
     return '$param1 pradėjo sekti $param2';
   }
+
+  @override
+  String get less => 'Less';
 
   @override
   String get more => 'Daugiau';
@@ -3863,7 +3920,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get makeAStudy => 'Norėdami pasiekti vėliau ar pasidalinti sukurkite studiją.';
 
   @override
-  String get clearSavedMoves => 'Išvalyti ėjimus';
+  String get clearLocalData => 'Clear local data';
 
   @override
   String get previouslyOnLichessTV => 'Anksčiau per „lichess TV“';
@@ -4375,6 +4432,9 @@ class AppLocalizationsLt extends AppLocalizations {
   String get simulHostExtraTime => 'Papildomas laikas šeimininkui';
 
   @override
+  String get extraClockTimeForHost => 'Extra clock time for the host:';
+
+  @override
   String get simulAddExtraTimePerPlayer => 'Pridėti pradinio laiko prie jūsų laikrodžio už kiekvieną prie simultano prisijungiantį žaidėją.';
 
   @override
@@ -4405,10 +4465,16 @@ class AppLocalizationsLt extends AppLocalizations {
   String get keyGoToStartOrEnd => 'eiti į pradžią/pabaigą';
 
   @override
+  String get keyGoToPreviousOrNextLine => 'go to previous/next line';
+
+  @override
   String get keyCycleSelectedVariation => 'Praeiti pasirinktą variantą';
 
   @override
   String get keyShowOrHideComments => 'rodyti/slėpti komentarus';
+
+  @override
+  String get keyShowOrHideCurrentVariation => 'show/hide current variation';
 
   @override
   String get keyEnterOrExitVariation => 'įeiti/išeiti iš variacijos';
@@ -4684,9 +4750,6 @@ class AppLocalizationsLt extends AppLocalizations {
   String get dark => 'Tamsus';
 
   @override
-  String get transparent => 'Permatomas';
-
-  @override
   String get picture => 'Picture';
 
   @override
@@ -4696,7 +4759,13 @@ class AppLocalizationsLt extends AppLocalizations {
   String get roundness => 'Roundness';
 
   @override
+  String get backgroundImage => 'Background image';
+
+  @override
   String get backgroundImageUrl => 'Fono paveikslo URL:';
+
+  @override
+  String get imageOpacity => 'Image opacity';
 
   @override
   String get board => 'Lenta';
@@ -4769,6 +4838,11 @@ class AppLocalizationsLt extends AppLocalizations {
   @override
   String perfRatingX(String param) {
     return 'Reitingas: $param';
+  }
+
+  @override
+  String perfRatingLabel(String param) {
+    return 'Rating: $param.';
   }
 
   @override
@@ -4923,6 +4997,9 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get clickHereToReadIt => 'Spustelėkite čia, kad peržiūrėtumėte';
+
+  @override
+  String get readTheMessage => 'Read the message';
 
   @override
   String get sorry => 'Atsiprašome :(';
@@ -5360,6 +5437,15 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get settings => 'Settings';
+
+  @override
+  String get verifyingYourDevice => 'Verifying your device...';
+
+  @override
+  String get chessOpenings => 'Chess openings';
+
+  @override
+  String get boards => 'Boards';
 
   @override
   String opponentLeftCounter(int count) {
@@ -6297,6 +6383,9 @@ class AppLocalizationsLt extends AppLocalizations {
   String get studyYouCanPasteThisInTheForumToEmbed => 'Galite įklijuoti šį forume norėdami įterpti';
 
   @override
+  String get studyPasteToEmbedChapterInForumOrBlog => 'You can paste this in the forum or your Lichess blog to embed the chapter.';
+
+  @override
   String get studyStartAtInitialPosition => 'Pradėti pradinėje pozicijoje';
 
   @override
@@ -6669,7 +6758,13 @@ class AppLocalizationsLt extends AppLocalizations {
   String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
 
   @override
+  String get studyLoadGameFromTheWebTitle => 'Load a game from the web';
+
+  @override
   String get studyLoadExistingLichessGameText => 'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
+
+  @override
+  String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/7fHIU0XI)<br>to load game moves in the chapter.';
 
   @override
   String get studyFromFenStringTitle => 'From a FEN string';

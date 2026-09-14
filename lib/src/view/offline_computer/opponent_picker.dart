@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/engine/opponent_level.dart';
@@ -109,12 +111,17 @@ class _OpponentPickerSheetState() extends ConsumerState<_OpponentPickerSheet> {
     };
     final initialRating = _rating;
     _weights.availableRatings().then((available) {
+      // Nothing else ever looks at the networks an older version of the app left behind: no rating
+      // claims them, so no check ever reaches them. Sweeping them here, where the Maia files are
+      // the user's concern anyway, keeps a megabyte of dead weight off the device without making
+      // it anyone's chore.
+      unawaited(_weights.deleteUnusableWeights());
       if (!mounted) return;
       setState(() => _available = available);
       if (available.contains(_rating)) return;
       if (_rating == initialRating) {
-        // The network of the rating the picker opened on is gone, e.g. cleared from the engine
-        // settings: fall back to the bundled one rather than download it unasked.
+        // The network of the rating the picker opened on is gone, e.g. deleted after it failed
+        // its checksum: fall back to the bundled one rather than download it unasked.
         setState(() => _rating = MaiaRating.defaultRating);
       } else {
         // Picked before we knew what was on the device, so nothing fetched it yet.

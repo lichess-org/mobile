@@ -33,10 +33,11 @@ class const EngineSettingsWidget({
             ],
           ),
         ListSection(
-          header: const SettingsSectionTitle('Stockfish'),
+          header: SettingsSectionTitle(context.l10n.engineSettings),
           children: [
             SliderSettingsTile(
-              title: const Text('Search time'),
+              title: Text(context.l10n.searchTime),
+              explanation: context.l10n.searchTimeDescription,
               value: prefs.engineSearchTime.inSeconds.toDouble(),
               values: kAvailableEngineSearchTimes.map((e) => e.inSeconds.toDouble()).toList(),
               labelBuilder: (value) =>
@@ -55,7 +56,8 @@ class const EngineSettingsWidget({
               ),
             if (maxEngineCores > 1)
               SliderSettingsTile(
-                title: Text(context.l10n.cpus),
+                title: Text(context.l10n.threads),
+                explanation: context.l10n.threadsDescriptionMobile,
                 value: prefs.numEngineCores.toDouble(),
                 values: List.generate(
                   maxEngineCores,

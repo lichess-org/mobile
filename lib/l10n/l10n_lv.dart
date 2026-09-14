@@ -30,6 +30,9 @@ class AppLocalizationsLv extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Cancel takeback offer';
 
   @override
+  String get mobileChessEngine => 'Chess engine';
+
+  @override
   String get mobileClearButton => 'Clear';
 
   @override
@@ -672,6 +675,9 @@ class AppLocalizationsLv extends AppLocalizations {
   String get arenaHowDoesPairingWork => 'Kā notiek sapārošana?';
 
   @override
+  String get arenaHowArePlayersPaired => 'How are players paired?';
+
+  @override
   String get arenaHowDoesPairingWorkAnswer => 'Turnīram sākoties, spēlētājus sapāro atbilstoši reitingam.\nTiklīdz spēle beigusies, atgriezies turnīra vestibilā: tad tiksi sapārots ar nākamo spēlētāju vistuvāk tavam reitingam.\nTādā veidā tiek panākts mazāks gaidīšanas laiks, taču var gadīties, ka netiksies ar katru turnīra spēlētāju.\nSpēlē ātri un atgriezies vestibilā lai spēlētu vairāk spēļu un iegūtu vairāk punktu.';
 
   @override
@@ -760,6 +766,9 @@ class AppLocalizationsLv extends AppLocalizations {
   String get arenaDefender => 'Defender';
 
   @override
+  String get arenaDefenderLabel => 'Defender:';
+
+  @override
   String get arenaPickYourTeam => 'Pick your team';
 
   @override
@@ -823,6 +832,9 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get arenaBerserkRate => 'Berserk rate';
+
+  @override
+  String get arenaLeaguesAndStreamerBattles => 'Leagues & Streamer Battles';
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -934,6 +946,9 @@ class AppLocalizationsLv extends AppLocalizations {
   String get broadcastDefinitivelyDeleteRound => 'Neatgriezeniski dzēst raundu un tā spēles.';
 
   @override
+  String get broadcastPermanentlyDeleteRound => 'Permanently delete this round and all its games?';
+
+  @override
   String get broadcastDeleteAllGamesOfThisRound => 'Izdzēst visas šī raunda spēles. To atjaunošanai būs nepieciešams aktīvs avots.';
 
   @override
@@ -1001,6 +1016,9 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get broadcastNoBoardsYet => 'No boards yet. These will appear once games are uploaded.';
+
+  @override
+  String get broadcastNoPlayersYet => 'No players yet. They will appear once games are uploaded.';
 
   @override
   String broadcastBoardsCanBeLoaded(String param) {
@@ -2124,6 +2142,9 @@ class AppLocalizationsLv extends AppLocalizations {
   String get puzzleThemeCornerMateDescription => 'Confine the king to the corner using a rook or queen and a knight to engage the checkmate.';
 
   @override
+  String get puzzleThemeCornerMateKnightDeliversDescription => 'Confine the king to the corner using a rook or queen, and use a knight to deliver the checkmate.';
+
+  @override
   String get puzzleThemeCrushing => 'Graušana';
 
   @override
@@ -2262,10 +2283,16 @@ class AppLocalizationsLv extends AppLocalizations {
   String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
 
   @override
+  String get puzzleThemePillsburyMateRookAndBishopDescription => 'A rook delivers checkmate to the king, while a bishop helps confine it.';
+
+  @override
   String get puzzleThemeMorphysMate => 'Morphy\'s mate';
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphyMateBishopAndRookDescription => 'A bishop delivers checkmate to the king, while a rook helps confine it.';
 
   @override
   String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
@@ -2386,6 +2413,9 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get puzzleThemePromotionDescription => 'Paaugstiniet bandinieku par dāmu vai citu figūru.';
+
+  @override
+  String get puzzleThemePromotePawnToQueenRookOrMinor => 'Promote one of your pawns to a queen, rook or minor piece.';
 
   @override
   String get puzzleThemeQueenEndgame => 'Dāmu beigu spēle';
@@ -2970,6 +3000,18 @@ class AppLocalizationsLv extends AppLocalizations {
   String get flipBoard => 'Apgriezt galdiņu';
 
   @override
+  String get toggleLocalEngine => 'Toggle local engine';
+
+  @override
+  String get engineSettings => 'Engine settings';
+
+  @override
+  String get enginesFromStrongestToWeakest => 'Engines from strongest to weakest';
+
+  @override
+  String get illegalPosition => 'Illegal position';
+
+  @override
   String get threefoldRepetition => 'Trīskārša atkārtošanās';
 
   @override
@@ -3112,6 +3154,9 @@ class AppLocalizationsLv extends AppLocalizations {
   String get password => 'Parole';
 
   @override
+  String get showPassword => 'Show password';
+
+  @override
   String get changePassword => 'Mainīt paroli';
 
   @override
@@ -3235,7 +3280,13 @@ class AppLocalizationsLv extends AppLocalizations {
   String get whiteTimeOut => 'Baltajiem beidzās laiks';
 
   @override
+  String get whiteRanOutOfTime => 'White ran out of time';
+
+  @override
   String get blackTimeOut => 'Melnajiem beidzās laiks';
+
+  @override
+  String get blackRanOutOfTime => 'Black ran out of time';
 
   @override
   String get drawOfferSent => 'Neizšķirta piedāvājums nosūtīts';
@@ -3447,6 +3498,9 @@ class AppLocalizationsLv extends AppLocalizations {
   String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
 
   @override
+  String get cannotFilterByUnstableRating => 'It is not possible to filter by rating because your rating is not stable.\nPlaying rated games will increase stability.';
+
+  @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
     return 'Tavs $param1 reitings ($param2) ir pārāk augsts';
   }
@@ -3527,7 +3581,7 @@ class AppLocalizationsLv extends AppLocalizations {
   String get leaderboard => 'Labāko spēlētāju saraksts';
 
   @override
-  String get screenshotCurrentPosition => 'Uzņemt pašreizējās pozīcijas attēlu';
+  String get positionAsImage => 'Position as image';
 
   @override
   String get gameAsGIF => 'Spēle GIF formātā';
@@ -3624,6 +3678,9 @@ class AppLocalizationsLv extends AppLocalizations {
   String xStartedFollowingY(String param1, String param2) {
     return '$param1 sāka sekot $param2';
   }
+
+  @override
+  String get less => 'Less';
 
   @override
   String get more => 'Vairāk';
@@ -3833,7 +3890,7 @@ class AppLocalizationsLv extends AppLocalizations {
   String get makeAStudy => 'Lai saglabātu un dalītos, varat izveidot izpēti.';
 
   @override
-  String get clearSavedMoves => 'Dzēst gājienus';
+  String get clearLocalData => 'Clear local data';
 
   @override
   String get previouslyOnLichessTV => 'Iepriekš pārraidīts Lichess TV';
@@ -4345,6 +4402,9 @@ class AppLocalizationsLv extends AppLocalizations {
   String get simulHostExtraTime => 'Papildu laiks vadītājam';
 
   @override
+  String get extraClockTimeForHost => 'Extra clock time for the host:';
+
+  @override
   String get simulAddExtraTimePerPlayer => 'Pievienot papildu laiku jūsu pulkstenim par katru spēlētāju, kas pievienojas simultānseansam.';
 
   @override
@@ -4375,10 +4435,16 @@ class AppLocalizationsLv extends AppLocalizations {
   String get keyGoToStartOrEnd => 'iet uz sākumu/beigām';
 
   @override
+  String get keyGoToPreviousOrNextLine => 'go to previous/next line';
+
+  @override
   String get keyCycleSelectedVariation => 'Cycle selected variation';
 
   @override
   String get keyShowOrHideComments => 'slēpt/rādīt komentārus';
+
+  @override
+  String get keyShowOrHideCurrentVariation => 'show/hide current variation';
 
   @override
   String get keyEnterOrExitVariation => 'ieiet/iziet variācijā';
@@ -4654,9 +4720,6 @@ class AppLocalizationsLv extends AppLocalizations {
   String get dark => 'Tumšs';
 
   @override
-  String get transparent => 'Caurspīdīgs';
-
-  @override
   String get picture => 'Picture';
 
   @override
@@ -4666,7 +4729,13 @@ class AppLocalizationsLv extends AppLocalizations {
   String get roundness => 'Roundness';
 
   @override
+  String get backgroundImage => 'Background image';
+
+  @override
   String get backgroundImageUrl => 'Fona attēla URL:';
+
+  @override
+  String get imageOpacity => 'Image opacity';
 
   @override
   String get board => 'Galdiņš';
@@ -4739,6 +4808,11 @@ class AppLocalizationsLv extends AppLocalizations {
   @override
   String perfRatingX(String param) {
     return 'Reitings: $param';
+  }
+
+  @override
+  String perfRatingLabel(String param) {
+    return 'Rating: $param.';
   }
 
   @override
@@ -4893,6 +4967,9 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get clickHereToReadIt => 'Klikšķini te, lai to lasītu';
+
+  @override
+  String get readTheMessage => 'Read the message';
 
   @override
   String get sorry => 'Lūdzu piedodiet :(';
@@ -5330,6 +5407,15 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get settings => 'Settings';
+
+  @override
+  String get verifyingYourDevice => 'Verifying your device...';
+
+  @override
+  String get chessOpenings => 'Chess openings';
+
+  @override
+  String get boards => 'Boards';
 
   @override
   String opponentLeftCounter(int count) {
@@ -6221,6 +6307,9 @@ class AppLocalizationsLv extends AppLocalizations {
   String get studyYouCanPasteThisInTheForumToEmbed => 'Šo varat ielīmēt forumā, lai iegultu';
 
   @override
+  String get studyPasteToEmbedChapterInForumOrBlog => 'You can paste this in the forum or your Lichess blog to embed the chapter.';
+
+  @override
   String get studyStartAtInitialPosition => 'Sākt no sākotnējās pozīcijas';
 
   @override
@@ -6593,7 +6682,13 @@ class AppLocalizationsLv extends AppLocalizations {
   String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
 
   @override
+  String get studyLoadGameFromTheWebTitle => 'Load a game from the web';
+
+  @override
   String get studyLoadExistingLichessGameText => 'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
+
+  @override
+  String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/7fHIU0XI)<br>to load game moves in the chapter.';
 
   @override
   String get studyFromFenStringTitle => 'From a FEN string';

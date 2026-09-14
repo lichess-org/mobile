@@ -30,6 +30,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Жүріс қайтару сұрауын тоқтату';
 
   @override
+  String get mobileChessEngine => 'Chess engine';
+
+  @override
   String get mobileClearButton => 'Өшіру';
 
   @override
@@ -655,6 +658,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get arenaHowDoesPairingWork => 'Жұптастыру әдісі қандай?';
 
   @override
+  String get arenaHowArePlayersPaired => 'How are players paired?';
+
+  @override
   String get arenaHowDoesPairingWorkAnswer => 'Турнирдің басында ойыншылар рейтинг негізінде жұптасады.\nӘр ойыннан кейін жарыстың бас парақшасына оралыңыз: рейтингіңізге жақын ойыншымен жұптасатын боласыз. Бұл шамалы уақытты қажет еткенімен, барлық ойыншылармен белдесуге үлгермеуіңіз мүмкін.\nКөп ойынға қатысып, көп ұпай алу үшін тез ойнап, жарыстың бас парақшасына оралуды ұмытпаңыз.';
 
   @override
@@ -743,6 +749,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get arenaDefender => 'Қорғаушы';
 
   @override
+  String get arenaDefenderLabel => 'Defender:';
+
+  @override
   String get arenaPickYourTeam => 'Тобыңызды таңдаңыз';
 
   @override
@@ -806,6 +815,9 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get arenaBerserkRate => 'Берсерк үлесі';
+
+  @override
+  String get arenaLeaguesAndStreamerBattles => 'Leagues & Streamer Battles';
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -915,6 +927,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get broadcastDefinitivelyDeleteRound => 'Айналым мен оның ойындарын толығымен жою.';
 
   @override
+  String get broadcastPermanentlyDeleteRound => 'Permanently delete this round and all its games?';
+
+  @override
   String get broadcastDeleteAllGamesOfThisRound => 'Айналымның бүкіл ойындарын жою. Оларды қайта құру үшін қайнар көзі белсенді болуы керек.';
 
   @override
@@ -982,6 +997,9 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get broadcastNoBoardsYet => 'No boards yet. These will appear once games are uploaded.';
+
+  @override
+  String get broadcastNoPlayersYet => 'No players yet. They will appear once games are uploaded.';
 
   @override
   String broadcastBoardsCanBeLoaded(String param) {
@@ -2100,6 +2118,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get puzzleThemeCornerMateDescription => 'Confine the king to the corner using a rook or queen and a knight to engage the checkmate.';
 
   @override
+  String get puzzleThemeCornerMateKnightDeliversDescription => 'Confine the king to the corner using a rook or queen, and use a knight to deliver the checkmate.';
+
+  @override
   String get puzzleThemeCrushing => 'Тас-талқан';
 
   @override
@@ -2238,10 +2259,16 @@ class AppLocalizationsKk extends AppLocalizations {
   String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
 
   @override
+  String get puzzleThemePillsburyMateRookAndBishopDescription => 'A rook delivers checkmate to the king, while a bishop helps confine it.';
+
+  @override
   String get puzzleThemeMorphysMate => 'Morphy\'s mate';
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphyMateBishopAndRookDescription => 'A bishop delivers checkmate to the king, while a rook helps confine it.';
 
   @override
   String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
@@ -2362,6 +2389,9 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get puzzleThemePromotionDescription => 'Айналуға ұмтылған не айналу қаупін төндіретін сарбаз – тактиканың өзегі.';
+
+  @override
+  String get puzzleThemePromotePawnToQueenRookOrMinor => 'Promote one of your pawns to a queen, rook or minor piece.';
 
   @override
   String get puzzleThemeQueenEndgame => 'Уәзір ойынсоңы';
@@ -2946,6 +2976,18 @@ class AppLocalizationsKk extends AppLocalizations {
   String get flipBoard => 'Тақтаны аудару';
 
   @override
+  String get toggleLocalEngine => 'Toggle local engine';
+
+  @override
+  String get engineSettings => 'Engine settings';
+
+  @override
+  String get enginesFromStrongestToWeakest => 'Engines from strongest to weakest';
+
+  @override
+  String get illegalPosition => 'Illegal position';
+
+  @override
   String get threefoldRepetition => 'Үш реттік қайталану';
 
   @override
@@ -3088,6 +3130,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get password => 'Құпиясөз';
 
   @override
+  String get showPassword => 'Show password';
+
+  @override
   String get changePassword => 'Құпиясөзді өзгерту';
 
   @override
@@ -3211,7 +3256,13 @@ class AppLocalizationsKk extends AppLocalizations {
   String get whiteTimeOut => 'Ақтың уақыты бітті';
 
   @override
+  String get whiteRanOutOfTime => 'White ran out of time';
+
+  @override
   String get blackTimeOut => 'Қараның уақыты бітті';
+
+  @override
+  String get blackRanOutOfTime => 'Black ran out of time';
 
   @override
   String get drawOfferSent => 'Тепе-теңдік сұрауда';
@@ -3423,6 +3474,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
 
   @override
+  String get cannotFilterByUnstableRating => 'It is not possible to filter by rating because your rating is not stable.\nPlaying rated games will increase stability.';
+
+  @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
     return '$param1 рейтингіңіз ($param2) тым жоғары';
   }
@@ -3503,7 +3557,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get leaderboard => 'Мықтылар қатары';
 
   @override
-  String get screenshotCurrentPosition => 'Осы күйді суретке түсіру';
+  String get positionAsImage => 'Position as image';
 
   @override
   String get gameAsGIF => 'GIF етіп сақтау';
@@ -3600,6 +3654,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String xStartedFollowingY(String param1, String param2) {
     return '$param1 $param2 серігі болды';
   }
+
+  @override
+  String get less => 'Less';
 
   @override
   String get more => 'Жаю';
@@ -3809,7 +3866,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get makeAStudy => 'Ұзаққа сақтау әрі бөлісу үшін зерттеуді жасаған дұрыс.';
 
   @override
-  String get clearSavedMoves => 'Жүрістерді жою';
+  String get clearLocalData => 'Clear local data';
 
   @override
   String get previouslyOnLichessTV => 'Личес ТВ-да көрсетілген';
@@ -4321,6 +4378,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get simulHostExtraTime => 'Бас ойыншының қосымша уақыты';
 
   @override
+  String get extraClockTimeForHost => 'Extra clock time for the host:';
+
+  @override
   String get simulAddExtraTimePerPlayer => 'Жаңа кірген әр ойыншы үшін өзіңіздің бастапқы уақытыңызды көбейту.';
 
   @override
@@ -4351,10 +4411,16 @@ class AppLocalizationsKk extends AppLocalizations {
   String get keyGoToStartOrEnd => 'басына/аяғына жүру';
 
   @override
+  String get keyGoToPreviousOrNextLine => 'go to previous/next line';
+
+  @override
   String get keyCycleSelectedVariation => 'Тандалған тармақтан шықпау';
 
   @override
   String get keyShowOrHideComments => 'пікірлерді көрсету/жасыру';
+
+  @override
+  String get keyShowOrHideCurrentVariation => 'show/hide current variation';
 
   @override
   String get keyEnterOrExitVariation => 'тармаққа кіру/шығу';
@@ -4630,9 +4696,6 @@ class AppLocalizationsKk extends AppLocalizations {
   String get dark => 'Қараңғы';
 
   @override
-  String get transparent => 'Мөлдір';
-
-  @override
   String get picture => 'Picture';
 
   @override
@@ -4642,7 +4705,13 @@ class AppLocalizationsKk extends AppLocalizations {
   String get roundness => 'Roundness';
 
   @override
+  String get backgroundImage => 'Background image';
+
+  @override
   String get backgroundImageUrl => 'Артқы сурет сілтемесі:';
+
+  @override
+  String get imageOpacity => 'Image opacity';
 
   @override
   String get board => 'Тақта';
@@ -4715,6 +4784,11 @@ class AppLocalizationsKk extends AppLocalizations {
   @override
   String perfRatingX(String param) {
     return 'Рейтинг: $param';
+  }
+
+  @override
+  String perfRatingLabel(String param) {
+    return 'Rating: $param.';
   }
 
   @override
@@ -4869,6 +4943,9 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get clickHereToReadIt => 'Осында басып оқыңыз';
+
+  @override
+  String get readTheMessage => 'Read the message';
 
   @override
   String get sorry => 'Өкінішті-ақ :(';
@@ -5306,6 +5383,15 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get settings => 'Settings';
+
+  @override
+  String get verifyingYourDevice => 'Verifying your device...';
+
+  @override
+  String get chessOpenings => 'Chess openings';
+
+  @override
+  String get boards => 'Boards';
 
   @override
   String opponentLeftCounter(int count) {
@@ -6151,6 +6237,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get studyYouCanPasteThisInTheForumToEmbed => 'Сіз бұны форумға не Личес блогыңызға қоя аласыз';
 
   @override
+  String get studyPasteToEmbedChapterInForumOrBlog => 'You can paste this in the forum or your Lichess blog to embed the chapter.';
+
+  @override
   String get studyStartAtInitialPosition => 'Басталуы: бастапқы күйден';
 
   @override
@@ -6523,7 +6612,13 @@ class AppLocalizationsKk extends AppLocalizations {
   String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
 
   @override
+  String get studyLoadGameFromTheWebTitle => 'Load a game from the web';
+
+  @override
   String get studyLoadExistingLichessGameText => 'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
+
+  @override
+  String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/7fHIU0XI)<br>to load game moves in the chapter.';
 
   @override
   String get studyFromFenStringTitle => 'From a FEN string';
