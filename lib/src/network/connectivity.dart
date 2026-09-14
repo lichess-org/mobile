@@ -44,7 +44,7 @@ bool isDeviceOnlineIn(AsyncValue<ConnectivityStatus> status) => switch (status) 
 };
 
 /// Represents the connection state of the app with respect to the lichess server.
-enum LichessConnectionStatus {
+enum LichessConnectionStatus() {
   /// The device is online and the lichess server is reachable.
   online,
 
@@ -96,7 +96,7 @@ final connectivityChangesProvider =
       name: 'ConnectivityChangesProvider',
     );
 
-class ConnectivityChangesNotifier extends AsyncNotifier<ConnectivityStatus> {
+class ConnectivityChangesNotifier() extends AsyncNotifier<ConnectivityStatus> {
   StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
   AppLifecycleListener? _appLifecycleListener;
 

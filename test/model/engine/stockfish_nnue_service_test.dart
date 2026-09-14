@@ -15,11 +15,8 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../network/fake_http_client_factory.dart';
 
-class ConfigurableFakeConnectivity implements Connectivity {
-  ConfigurableFakeConnectivity({this.result = ConnectivityResult.wifi});
-
-  ConnectivityResult result;
-
+class ConfigurableFakeConnectivity({var ConnectivityResult result = ConnectivityResult.wifi})
+    implements Connectivity {
   @override
   Future<List<ConnectivityResult>> checkConnectivity() {
     return Future.value([result]);

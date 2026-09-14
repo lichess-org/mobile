@@ -14,12 +14,7 @@ final blogRepositoryProvider = Provider<BlogRepository>((ref) {
   return BlogRepository(client, aggregator);
 }, name: 'BlogRepositoryProvider');
 
-class BlogRepository {
-  BlogRepository(this.client, this.aggregator);
-
-  final LichessClient client;
-  final Aggregator aggregator;
-
+class BlogRepository(final LichessClient client, final Aggregator aggregator) {
   Future<IList<BlogPost>> getCarousel() {
     return client.readJsonList(Uri(path: '/api/blog/carousel'), mapper: BlogPost.fromServerJson);
   }

@@ -23,11 +23,8 @@ import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// A screen that displays a paginated list of studies
-class StudyListScreen extends ConsumerStatefulWidget {
-  const StudyListScreen({this.initialCategory, super.key});
-
-  final StudyCategory? initialCategory;
-
+class const StudyListScreen({final StudyCategory? initialCategory, super.key})
+    extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute({StudyCategory? initialCategory}) {
     return buildScreenRoute(screen: StudyListScreen(initialCategory: initialCategory));
   }
@@ -36,7 +33,7 @@ class StudyListScreen extends ConsumerStatefulWidget {
   ConsumerState<StudyListScreen> createState() => _StudyListScreenState();
 }
 
-class _StudyListScreenState extends ConsumerState<StudyListScreen> {
+class _StudyListScreenState() extends ConsumerState<StudyListScreen> {
   late StudyCategory category;
   late StudyListOrder order;
 
@@ -246,13 +243,12 @@ class _StudyListScreenState extends ConsumerState<StudyListScreen> {
   }
 }
 
-class StudyListItem extends StatelessWidget {
-  const StudyListItem({required this.study, this.flairSize, this.titleMaxLines, super.key});
-
-  final StudyPageItem study;
-  final double? flairSize;
-  final int? titleMaxLines;
-
+class const StudyListItem({
+  required final StudyPageItem study,
+  final double? flairSize,
+  final int? titleMaxLines,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -277,11 +273,7 @@ class StudyListItem extends StatelessWidget {
   }
 }
 
-class _ContextMenu extends ConsumerWidget {
-  const _ContextMenu({required this.study});
-
-  final StudyPageItem study;
-
+class const _ContextMenu({required final StudyPageItem study}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return BottomSheetScrollableContainer(
@@ -289,9 +281,8 @@ class _ContextMenu extends ConsumerWidget {
       children: [
         Text(
           study.name,
-          style: Theme.of(
-            context,
-          ).textTheme.titleMedium?.copyWith(height: 1.1, fontWeight: FontWeight.bold),
+          style: Theme.of(context).textTheme.titleMedium
+              ?.copyWith(height: 1.1, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 16.0),
         _StudyChapters(study: study),
@@ -302,11 +293,7 @@ class _ContextMenu extends ConsumerWidget {
   }
 }
 
-class _StudyChapters extends StatelessWidget {
-  const _StudyChapters({required this.study});
-
-  final StudyPageItem study;
-
+class const _StudyChapters({required final StudyPageItem study}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListSection(
@@ -324,11 +311,7 @@ class _StudyChapters extends StatelessWidget {
   }
 }
 
-class _StudyMembers extends StatelessWidget {
-  const _StudyMembers({required this.study});
-
-  final StudyPageItem study;
-
+class const _StudyMembers({required final StudyPageItem study}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListSection(
@@ -353,13 +336,8 @@ class _StudyMembers extends StatelessWidget {
   }
 }
 
-class StudyFlair extends StatelessWidget {
-  const StudyFlair({required this.flair, required this.size});
-
-  final String? flair;
-
-  final double size;
-
+class const StudyFlair({required final String? flair, required final double size})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final iconIfNoFlair = Icon(LichessIcons.study, size: size);
@@ -375,11 +353,7 @@ class StudyFlair extends StatelessWidget {
   }
 }
 
-class _StudySubtitle extends StatelessWidget {
-  const _StudySubtitle({required this.study});
-
-  final StudyPageItem study;
-
+class const _StudySubtitle({required final StudyPageItem study}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text.rich(

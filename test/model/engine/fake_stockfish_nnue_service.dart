@@ -10,9 +10,7 @@ import 'package:lichess_mobile/src/model/engine/weights_service.dart';
 /// - Returns a dummy file path for [nnueFile] (not used by FakeStockfish)
 /// - Returns false for [downloadNNUEFile]
 /// - Does nothing for [deleteNNUEFiles]
-class FakeStockfishNnueService implements StockfishNnueService {
-  FakeStockfishNnueService();
-
+class FakeStockfishNnueService() implements StockfishNnueService {
   final ValueNotifier<double> _nnueDownloadProgress = ValueNotifier(0.0);
 
   @override
@@ -58,9 +56,7 @@ class FakeStockfishNnueService implements StockfishNnueService {
 /// - Always returns false for [checkNNUEFile]
 /// - Always returns true for [hasOutdatedNNUEFiles]
 /// - All other behaviour is identical to [FakeStockfishNnueService]
-class FakeStockfishNnueServiceUnavailable implements StockfishNnueService {
-  FakeStockfishNnueServiceUnavailable();
-
+class FakeStockfishNnueServiceUnavailable() implements StockfishNnueService {
   final ValueNotifier<double> _nnueDownloadProgress = ValueNotifier(0.0);
 
   @override

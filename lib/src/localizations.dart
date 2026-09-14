@@ -12,7 +12,7 @@ final localizationsProvider = NotifierProvider<Localizations, ActiveLocalization
   name: 'LocalizationsProvider',
 );
 
-class Localizations extends Notifier<ActiveLocalizations> {
+class Localizations() extends Notifier<ActiveLocalizations> {
   @override
   ActiveLocalizations build() {
     final generalPrefs = ref.watch(generalPreferencesProvider);
@@ -41,9 +41,8 @@ class Localizations extends Notifier<ActiveLocalizations> {
 }
 
 /// observer used to notify the caller when the locale changes
-class _LocaleObserver extends WidgetsBindingObserver {
-  _LocaleObserver(this._didChangeLocales);
-  final void Function(List<Locale>? locales) _didChangeLocales;
+class _LocaleObserver(final void Function(List<Locale>? locales) _didChangeLocales)
+    extends WidgetsBindingObserver {
   @override
   void didChangeLocales(List<Locale>? locales) {
     _didChangeLocales(locales);

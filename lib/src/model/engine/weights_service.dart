@@ -29,11 +29,7 @@ final stockfishNnueServiceProvider = Provider<StockfishNnueService>((Ref ref) {
 ///
 /// This service handles downloading, checking, and deleting the NNUE file.
 /// It can be overridden in tests to avoid file system access.
-class StockfishNnueService {
-  StockfishNnueService(this._ref);
-
-  final Ref _ref;
-
+class StockfishNnueService(final Ref _ref) {
   final ValueNotifier<double> _nnueDownloadProgress = ValueNotifier(0.0);
   bool _nnueOperationInProgress = false;
 
@@ -253,11 +249,7 @@ final maiaWeightsServiceProvider = Provider<MaiaWeightsService>((Ref ref) {
 /// there is always a Maia to play against. LC0 reads its network from a path rather than from
 /// bytes, so even the bundled one is written out to the app support directory the first time it is
 /// asked for.
-class MaiaWeightsService {
-  MaiaWeightsService(this._ref);
-
-  final Ref _ref;
-
+class MaiaWeightsService(final Ref _ref) {
   /// The download in progress, by rating, so that two callers asking at once share one download
   /// rather than writing over each other's file.
   final Map<MaiaRating, Future<String?>> _inFlight = {};

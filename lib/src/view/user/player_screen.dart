@@ -15,9 +15,7 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:material_ui/material_ui.dart';
 
-class PlayerScreen extends ConsumerWidget {
-  const PlayerScreen({super.key});
-
+class const PlayerScreen({super.key}) extends ConsumerWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const PlayerScreen());
   }
@@ -35,18 +33,18 @@ class PlayerScreen extends ConsumerWidget {
       },
       child: PlatformScaffold(
         appBar: PlatformAppBar(title: Text(context.l10n.players)),
-        body: _Body(),
+        body: const _Body(),
       ),
     );
   }
 }
 
-class _Body extends ConsumerStatefulWidget {
+class const _Body() extends ConsumerStatefulWidget {
   @override
   ConsumerState<_Body> createState() => _BodyState();
 }
 
-class _BodyState extends ConsumerState<_Body> {
+class _BodyState() extends ConsumerState<_Body> {
   final _focusNode = _AlwaysDisabledFocusNode();
 
   @override
@@ -86,7 +84,7 @@ class _BodyState extends ConsumerState<_Body> {
   }
 }
 
-class _AlwaysDisabledFocusNode extends FocusNode {
+class _AlwaysDisabledFocusNode() extends FocusNode {
   @override
   bool get hasFocus => false;
 }

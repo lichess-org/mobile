@@ -19,7 +19,7 @@ final puzzleActivityProvider =
       name: 'PuzzleActivityProvider',
     );
 
-class PuzzleActivity extends AsyncNotifier<PuzzleActivityState> {
+class PuzzleActivity() extends AsyncNotifier<PuzzleActivityState> {
   final _list = <PuzzleHistoryEntry>[];
 
   @override
@@ -91,7 +91,7 @@ class PuzzleActivity extends AsyncNotifier<PuzzleActivityState> {
 
 @freezed
 sealed class PuzzleActivityState with _$PuzzleActivityState {
-  const factory PuzzleActivityState({
+  const factory({
     required Map<DateTime, IList<PuzzleHistoryEntry>> historyByDay,
     required bool isLoading,
     required bool hasMore,

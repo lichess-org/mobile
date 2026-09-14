@@ -8,8 +8,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'profile.freezed.dart';
 
 @freezed
-sealed class Profile with _$Profile {
-  const factory Profile({
+sealed class const Profile._() with _$Profile {
+  const factory({
     String? country,
     String? location,
     String? bio,
@@ -23,13 +23,11 @@ sealed class Profile with _$Profile {
     IList<SocialLink>? links,
   }) = _Profile;
 
-  const Profile._();
-
-  factory Profile.fromJson(Map<String, dynamic> json) {
+  factory fromJson(Map<String, dynamic> json) {
     return Profile.fromPick(pick(json).required());
   }
 
-  factory Profile.fromPick(RequiredPick pick) {
+  factory fromPick(RequiredPick pick) {
     const lineSplitter = LineSplitter();
     final rawLinks = pick('links').letOrNull((e) => lineSplitter.convert(e.asStringOrThrow()));
 
@@ -64,10 +62,8 @@ sealed class Profile with _$Profile {
 }
 
 @freezed
-sealed class SocialLink with _$SocialLink {
-  const factory SocialLink({required LinkSite? site, required Uri url}) = _SocialLink;
-
-  const SocialLink._();
+sealed class const SocialLink._() with _$SocialLink {
+  const factory({required LinkSite? site, required Uri url}) = _SocialLink;
 
   static SocialLink? fromUrl(String url) {
     final updatedUrl = url.startsWith('http://') || url.startsWith('https://')
@@ -82,7 +78,7 @@ sealed class SocialLink with _$SocialLink {
   }
 }
 
-enum LinkSite {
+enum LinkSite(final String title, final IList<String> domains) {
   mastodon(
     'Mastodon',
     IListConst([
@@ -115,10 +111,5 @@ enum LinkSite {
   chessCom('Chess.com', IListConst(['chess.com'])),
   chessMonitor('ChessMonitor', IListConst(['chessmonitor.com'])),
   chessTempo('ChessTempo', IListConst(['chesstempo.com'])),
-  telegram('telegram.me', IListConst(['t.me', 'telegram.me']));
-
-  const LinkSite(this.title, this.domains);
-
-  final String title;
-  final IList<String> domains;
+  telegram('telegram.me', IListConst(['t.me', 'telegram.me'])),
 }

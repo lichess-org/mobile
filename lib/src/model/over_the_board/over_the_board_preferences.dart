@@ -13,7 +13,8 @@ final overTheBoardPreferencesProvider =
       name: 'OverTheBoardPreferencesProvider',
     );
 
-class OverTheBoardPreferencesNotifier extends Notifier<OverTheBoardPrefs>
+class OverTheBoardPreferencesNotifier()
+    extends Notifier<OverTheBoardPrefs>
     with PreferencesStorage<OverTheBoardPrefs> {
   @override
   @protected
@@ -60,12 +61,10 @@ class OverTheBoardPreferencesNotifier extends Notifier<OverTheBoardPrefs>
 }
 
 @Freezed(fromJson: true, toJson: true)
-sealed class OverTheBoardPrefs with _$OverTheBoardPrefs implements Serializable {
-  const OverTheBoardPrefs._();
-
+sealed class const OverTheBoardPrefs._() with _$OverTheBoardPrefs implements Serializable {
   static const _defaultTimeIncrement = TimeIncrement(300, 3);
 
-  const factory OverTheBoardPrefs({
+  const factory({
     required bool flipPiecesAfterMove,
     required bool symmetricPieces,
     @Default(TimeControlType.unlimited) TimeControlType timeControlType,
@@ -81,7 +80,7 @@ sealed class OverTheBoardPrefs with _$OverTheBoardPrefs implements Serializable 
     blindfoldMode: false,
   );
 
-  factory OverTheBoardPrefs.fromJson(Map<String, dynamic> json) {
+  factory fromJson(Map<String, dynamic> json) {
     try {
       return _$OverTheBoardPrefsFromJson(json);
     } catch (e) {

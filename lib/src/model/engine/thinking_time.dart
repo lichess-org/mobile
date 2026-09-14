@@ -47,13 +47,13 @@ const _kTypicalLegalMoves = 30;
 /// most obviously inhuman thing about playing it. Note what this is not: it is not a search limit,
 /// and it does not change which move is played. The move is known before this is consulted.
 class ThinkingTime {
-  ThinkingTime({math.Random? random}) : _random = random ?? math.Random();
+  new({math.Random? random}) : _random = random ?? math.Random();
 
   /// Never waits.
   ///
   /// What tests use, so that a suite that plays a few hundred moves does not take a few hundred
   /// seconds.
-  const ThinkingTime.instant() : _random = null;
+  const new instant() : _random = null;
 
   final math.Random? _random;
 

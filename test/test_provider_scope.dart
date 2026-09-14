@@ -79,16 +79,12 @@ Future<Widget> makeTestProviderScopeApp(
   );
 }
 
-class _FakeApp extends ConsumerStatefulWidget {
-  const _FakeApp({required this.home});
-
-  final Widget home;
-
+class const _FakeApp({required final Widget home}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_FakeApp> createState() => _FakeAppState();
 }
 
-class _FakeAppState extends ConsumerState<_FakeApp> {
+class _FakeAppState() extends ConsumerState<_FakeApp> {
   @override
   void initState() {
     final socketClient = ref.read(socketPoolProvider).currentClient;

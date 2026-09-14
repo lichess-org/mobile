@@ -15,18 +15,15 @@ part 'offline_computer_game_storage.g.dart';
 final _logger = Logger('OfflineComputerGameStorage');
 
 @Freezed(fromJson: true, toJson: true)
-sealed class SavedOfflineComputerGame with _$SavedOfflineComputerGame {
-  const SavedOfflineComputerGame._();
-
-  factory SavedOfflineComputerGame({
+sealed class const SavedOfflineComputerGame._() with _$SavedOfflineComputerGame {
+  factory({
     required OfflineComputerGame game,
     @Default(TimeIncrement.infinite()) TimeIncrement timeIncrement,
     Duration? whiteTimeLeft,
     Duration? blackTimeLeft,
   }) = _SavedOfflineComputerGame;
 
-  factory SavedOfflineComputerGame.fromJson(Map<String, dynamic> json) =>
-      _$SavedOfflineComputerGameFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$SavedOfflineComputerGameFromJson(json);
 }
 
 /// A provider for [OfflineComputerGameStorage].
@@ -36,10 +33,7 @@ final offlineComputerGameStorageProvider = Provider<OfflineComputerGameStorage>(
 
 const kOfflineComputerGameFileName = 'offline_computer_game.json';
 
-class OfflineComputerGameStorage {
-  const OfflineComputerGameStorage(this.ref);
-  final Ref ref;
-
+class const OfflineComputerGameStorage(final Ref ref) {
   Future<File> _getFile() async {
     final dir = await getApplicationSupportDirectory();
     return File('${dir.path}/$kOfflineComputerGameFileName');

@@ -18,9 +18,7 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:material_ui/material_ui.dart';
 
-class TournamentListScreen extends ConsumerStatefulWidget {
-  const TournamentListScreen({super.key});
-
+class const TournamentListScreen({super.key}) extends ConsumerStatefulWidget {
   static Route<void> buildRoute() {
     return buildScreenRoute(screen: const TournamentListScreen());
   }
@@ -29,7 +27,7 @@ class TournamentListScreen extends ConsumerStatefulWidget {
   ConsumerState<TournamentListScreen> createState() => _TournamentListScreenState();
 }
 
-enum _ViewMode {
+enum _ViewMode() {
   completed,
   ongoing,
   upcoming;
@@ -46,7 +44,8 @@ enum _ViewMode {
   }
 }
 
-class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
+class _TournamentListScreenState()
+    extends ConsumerState<TournamentListScreen>
     with TickerProviderStateMixin {
   late final TabController _tabController;
 
@@ -114,11 +113,10 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
   }
 }
 
-class FeaturedTournamentsWidget extends ConsumerWidget {
-  const FeaturedTournamentsWidget({required this.featured, super.key});
-
-  final AsyncValue<IList<LightTournament>> featured;
-
+class const FeaturedTournamentsWidget({
+  required final AsyncValue<IList<LightTournament>> featured,
+  super.key,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     switch (featured) {
@@ -155,18 +153,15 @@ class FeaturedTournamentsWidget extends ConsumerWidget {
   }
 }
 
-class _TournamentListBody extends ConsumerStatefulWidget {
-  const _TournamentListBody({required this.tournaments, required this.viewMode});
-
-  final IList<LightTournament> tournaments;
-
-  final _ViewMode viewMode;
-
+class const _TournamentListBody({
+  required final IList<LightTournament> tournaments,
+  required final _ViewMode viewMode,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_TournamentListBody> createState() => _TournamentListBodyState();
 }
 
-class _TournamentListBodyState extends ConsumerState<_TournamentListBody> {
+class _TournamentListBodyState() extends ConsumerState<_TournamentListBody> {
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   @override
@@ -252,11 +247,8 @@ Color? _iconColor(LightTournament tournament) {
         };
 }
 
-class _TournamentListItem extends StatelessWidget {
-  const _TournamentListItem({required this.tournament});
-
-  final LightTournament tournament;
-
+class const _TournamentListItem({required final LightTournament tournament})
+    extends StatelessWidget {
   static final _hourMinuteFormat = DateFormat.Hm();
 
   @override

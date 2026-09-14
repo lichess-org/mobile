@@ -4,26 +4,16 @@ import 'package:flutter/services.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Icon button with mandatory semantics.
-class SemanticIconButton extends StatelessWidget {
-  const SemanticIconButton({
-    required this.icon,
-    required this.onPressed,
-    this.onLongPress,
-    required this.semanticsLabel,
-    this.color,
-    this.iconSize,
-    this.padding,
-    super.key,
-  });
-
-  final Widget icon;
-  final VoidCallback? onPressed;
-  final VoidCallback? onLongPress;
-  final String semanticsLabel;
-  final Color? color;
-  final double? iconSize;
-  final EdgeInsetsGeometry? padding;
-
+class const SemanticIconButton({
+  required final Widget icon,
+  required final VoidCallback? onPressed,
+  final VoidCallback? onLongPress,
+  required final String semanticsLabel,
+  final Color? color,
+  final double? iconSize,
+  final EdgeInsetsGeometry? padding,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
@@ -39,23 +29,17 @@ class SemanticIconButton extends StatelessWidget {
 }
 
 /// Wrapper that changes child's opacity when pressed.
-class OpacityButton extends StatefulWidget {
-  const OpacityButton({
-    required this.child,
-    required this.onPressed,
-    this.semanticsLabel,
-    super.key,
-  });
-
-  final VoidCallback? onPressed;
-  final Widget child;
-  final String? semanticsLabel;
-
+class const OpacityButton({
+  required final Widget child,
+  required final VoidCallback? onPressed,
+  final String? semanticsLabel,
+  super.key,
+}) extends StatefulWidget {
   @override
   State<OpacityButton> createState() => _OpacityButtonState();
 }
 
-class _OpacityButtonState extends State<OpacityButton> {
+class _OpacityButtonState() extends State<OpacityButton> {
   bool _isPressed = false;
 
   @override
@@ -97,35 +81,27 @@ class _OpacityButtonState extends State<OpacityButton> {
 /// Child widgets with a `tooltip` already have an `onLongPress` callback that will
 /// conflict.
 /// `onTap` callback should be handled by the child widget.
-class RepeatButton extends StatefulWidget {
-  const RepeatButton({
-    required this.onLongPress,
-    required this.child,
-    this.triggerDelays = const [
-      Duration(milliseconds: 200),
-      Duration(milliseconds: 180),
-      Duration(milliseconds: 100),
-      Duration(milliseconds: 40),
-    ],
-    this.holdDelay = const Duration(milliseconds: 30),
-  });
-
-  final Widget child;
-
+class const RepeatButton({
   /// function called on long press
-  final VoidCallback? onLongPress;
+  required final VoidCallback? onLongPress,
+  required final Widget child,
 
   /// Delays between callbacks at the beginning. Leave default to get an acceleration effect.
-  final List<Duration> triggerDelays;
+  final List<Duration> triggerDelays = const [
+    Duration(milliseconds: 200),
+    Duration(milliseconds: 180),
+    Duration(milliseconds: 100),
+    Duration(milliseconds: 40),
+  ],
 
   /// Delay between callbacks
-  final Duration holdDelay;
-
+  final Duration holdDelay = const Duration(milliseconds: 30),
+}) extends StatefulWidget {
   @override
   _RepeatButtonState createState() => _RepeatButtonState();
 }
 
-class _RepeatButtonState extends State<RepeatButton> {
+class _RepeatButtonState() extends State<RepeatButton> {
   bool _isPressed = false;
   Timer? _holdTimer;
 
@@ -183,24 +159,22 @@ class _RepeatButtonState extends State<RepeatButton> {
   }
 }
 
-class LoadingButtonBuilder<T> extends StatefulWidget {
-  const LoadingButtonBuilder({
-    required this.builder,
-    required this.fetchData,
-    this.initialFuture,
-    super.key,
-  });
-
-  final Future<T>? initialFuture;
-  final Future<T> Function() fetchData;
-  final Widget Function(BuildContext context, bool isLoading, Future<T> Function() fetchData)
-  builder;
-
+class const LoadingButtonBuilder<T>({
+  required final Widget Function(
+    BuildContext context,
+    bool isLoading,
+    Future<T> Function() fetchData,
+  )
+  builder,
+  required final Future<T> Function() fetchData,
+  final Future<T>? initialFuture,
+  super.key,
+}) extends StatefulWidget {
   @override
   State<LoadingButtonBuilder<T>> createState() => _LoadingButtonBuilderState();
 }
 
-class _LoadingButtonBuilderState<T> extends State<LoadingButtonBuilder<T>> {
+class _LoadingButtonBuilderState<T>() extends State<LoadingButtonBuilder<T>> {
   Future<T>? _future;
 
   @override

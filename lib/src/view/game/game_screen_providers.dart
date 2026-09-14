@@ -18,7 +18,7 @@ part 'game_screen_providers.freezed.dart';
 /// - [ChallengeDeclinedState]: A real time challenge has been declined.
 /// - [SeekCancelledState]: A game seek has been cancelled.
 /// - [ChallengeCancelledState]: A real time challenge has been cancelled.
-sealed class GameScreenState {}
+sealed class GameScreenState();
 
 /// Game screen state when a game has been created or loaded.
 ///
@@ -27,52 +27,47 @@ sealed class GameScreenState {}
 /// - A game has been created from a lobby seek.
 /// - A challenge has been accepted and a game has been created from it.
 @freezed
-sealed class GameCreatedState with _$GameCreatedState implements GameScreenState {
-  const GameCreatedState._();
-
-  const factory GameCreatedState(GameFullId createdGameId) = _GameCreatedState;
+sealed class const GameCreatedState._() with _$GameCreatedState implements GameScreenState {
+  const factory(GameFullId createdGameId) = _GameCreatedState;
 }
 
 /// An open challenge has been created but not yet accepted.
 /// We're waiting for someone to accept it via the challenge link.
 @freezed
-sealed class OpenChallengeCreatedState with _$OpenChallengeCreatedState implements GameScreenState {
-  const OpenChallengeCreatedState._();
-
-  const factory OpenChallengeCreatedState(Challenge challenge) = _OpenChallengeCreatedState;
+sealed class const OpenChallengeCreatedState._()
+    with _$OpenChallengeCreatedState
+    implements GameScreenState {
+  const factory(Challenge challenge) = _OpenChallengeCreatedState;
 }
 
 /// We challenged another user and are currently waiting for them to accept or decline.
 @freezed
-sealed class UserChallengeCreatedState with _$UserChallengeCreatedState implements GameScreenState {
-  const UserChallengeCreatedState._();
-
-  const factory UserChallengeCreatedState(Challenge challenge) = _UserChallengeCreatedState;
+sealed class const UserChallengeCreatedState._()
+    with _$UserChallengeCreatedState
+    implements GameScreenState {
+  const factory(Challenge challenge) = _UserChallengeCreatedState;
 }
 
 /// A real time challenge has been declined.
 @freezed
-sealed class ChallengeDeclinedState with _$ChallengeDeclinedState implements GameScreenState {
-  const ChallengeDeclinedState._();
-
-  const factory ChallengeDeclinedState(ChallengeResponseDeclined response) =
-      _ChallengeDeclinedState;
+sealed class const ChallengeDeclinedState._()
+    with _$ChallengeDeclinedState
+    implements GameScreenState {
+  const factory(ChallengeResponseDeclined response) = _ChallengeDeclinedState;
 }
 
 /// A game seek has been cancelled.
 @freezed
-sealed class SeekCancelledState with _$SeekCancelledState implements GameScreenState {
-  const SeekCancelledState._();
-
-  const factory SeekCancelledState() = _SeekCancelledState;
+sealed class const SeekCancelledState._() with _$SeekCancelledState implements GameScreenState {
+  const factory() = _SeekCancelledState;
 }
 
 /// A real time challenge has been cancelled.
 @freezed
-sealed class ChallengeCancelledState with _$ChallengeCancelledState implements GameScreenState {
-  const ChallengeCancelledState._();
-
-  const factory ChallengeCancelledState() = _ChallengeCancelledState;
+sealed class const ChallengeCancelledState._()
+    with _$ChallengeCancelledState
+    implements GameScreenState {
+  const factory() = _ChallengeCancelledState;
 }
 
 /// The source from which the [GameScreen] was opened.
@@ -84,30 +79,24 @@ sealed class ChallengeCancelledState with _$ChallengeCancelledState implements G
 ///
 /// In case of a lobby seek or a user challenge, a new game will be created and the screen will show
 /// a loading indicator until the game is created.
-sealed class GameScreenSource {}
+sealed class GameScreenSource();
 
 /// An existing game source for [GameScreen], identified by its [GameFullId].
 @freezed
-sealed class ExistingGameSource with _$ExistingGameSource implements GameScreenSource {
-  const ExistingGameSource._();
-
-  const factory ExistingGameSource(GameFullId id) = _ExistingGameSource;
+sealed class const ExistingGameSource._() with _$ExistingGameSource implements GameScreenSource {
+  const factory(GameFullId id) = _ExistingGameSource;
 }
 
 /// A lobby source for [GameScreen], identified by the [GameSeek] from which the game will be created.
 @freezed
-sealed class LobbySource with _$LobbySource implements GameScreenSource {
-  const LobbySource._();
-
-  const factory LobbySource(GameSeek seek) = _LobbySource;
+sealed class const LobbySource._() with _$LobbySource implements GameScreenSource {
+  const factory(GameSeek seek) = _LobbySource;
 }
 
 /// A user challenge source for [GameScreen], identified by the [ChallengeRequest] from which the game will be created.
 @freezed
-sealed class UserChallengeSource with _$UserChallengeSource implements GameScreenSource {
-  const UserChallengeSource._();
-
-  const factory UserChallengeSource(ChallengeRequest challengeRequest) = _UserChallengeSource;
+sealed class const UserChallengeSource._() with _$UserChallengeSource implements GameScreenSource {
+  const factory(ChallengeRequest challengeRequest) = _UserChallengeSource;
 }
 
 /// A provider that loads or creates a game for the [GameScreen].
@@ -117,11 +106,8 @@ final gameScreenLoaderProvider = AsyncNotifierProvider.autoDispose
       name: 'GameScreenLoaderProvider',
     );
 
-class GameScreenLoaderNotifier extends AsyncNotifier<GameScreenState> {
-  GameScreenLoaderNotifier(this.source);
-
-  final GameScreenSource source;
-
+class GameScreenLoaderNotifier(final GameScreenSource source)
+    extends AsyncNotifier<GameScreenState> {
   @override
   Future<GameScreenState> build() async {
     final service = ref.watch(createGameServiceProvider);
@@ -187,7 +173,7 @@ final isBoardTurnedProvider = NotifierProvider.autoDispose<IsBoardTurnedNotifier
   name: 'IsBoardTurnedProvider',
 );
 
-class IsBoardTurnedNotifier extends Notifier<bool> {
+class IsBoardTurnedNotifier() extends Notifier<bool> {
   @override
   bool build() {
     return false;

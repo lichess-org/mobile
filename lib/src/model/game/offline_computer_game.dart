@@ -23,11 +23,10 @@ Object? readOpponent(Map<dynamic, dynamic> json, String key) =>
 
 /// An offline game played against the local engine.
 @Freezed(fromJson: true, toJson: true)
-abstract class OfflineComputerGame with BaseGame, _$OfflineComputerGame, LocalGame, IndexableSteps {
-  const OfflineComputerGame._();
-
+abstract class const OfflineComputerGame._()
+    with BaseGame, _$OfflineComputerGame, LocalGame, IndexableSteps {
   @Assert('steps.isNotEmpty')
-  factory OfflineComputerGame({
+  factory({
     required StringId id,
     required GameMeta meta,
     required String? initialFen,
@@ -60,8 +59,7 @@ abstract class OfflineComputerGame with BaseGame, _$OfflineComputerGame, LocalGa
     bool? isThreefoldRepetition,
   }) = _OfflineComputerGame;
 
-  factory OfflineComputerGame.fromJson(Map<String, dynamic> json) =>
-      _$OfflineComputerGameFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$OfflineComputerGameFromJson(json);
 
   @override
   Side? get youAre => playerSide;

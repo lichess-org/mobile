@@ -5,11 +5,7 @@ import 'package:lichess_mobile/src/model/engine/opponent_level.dart';
 ///
 /// With no book it stands for the case every opponent has to survive: no book asset, or one that
 /// could not be read, so the opponent plays its own opening moves.
-class FakeMaiaOfflineBookService implements MaiaOfflineBookService {
-  FakeMaiaOfflineBookService({this.book});
-
-  final MaiaOfflineBook? book;
-
+class FakeMaiaOfflineBookService({final MaiaOfflineBook? book}) implements MaiaOfflineBookService {
   /// The ratings [bookFor] was asked for, in order.
   final List<MaiaRating> requests = [];
 

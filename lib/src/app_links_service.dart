@@ -50,14 +50,12 @@ final appLinksServiceProvider = Provider<AppLinksService>((ref) {
   return service;
 });
 
-class AppLinksService {
+class AppLinksService(final Ref ref, {AppLinks? appLinks}) {
   /// Creates the service. [appLinks] is injectable so tests can supply a fake
   /// in place of the real (singleton, platform-channel backed) [AppLinks].
-  AppLinksService(this.ref, {AppLinks? appLinks}) : _appLinks = appLinks ?? AppLinks();
+  this;
 
-  final Ref ref;
-
-  final AppLinks _appLinks;
+  final AppLinks _appLinks = appLinks ?? AppLinks();
   StreamSubscription<Uri>? _linkSubscription;
 
   Future<void> start() async {

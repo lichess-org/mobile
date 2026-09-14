@@ -16,10 +16,8 @@ ChatData chatDataFromPick(RequiredPick pick) {
 }
 
 @freezed
-sealed class ChatMessage with _$ChatMessage {
-  const ChatMessage._();
-
-  const factory ChatMessage({
+sealed class const ChatMessage._() with _$ChatMessage {
+  const factory({
     required String message,
     required String? username,
     required bool troll,
@@ -39,10 +37,9 @@ sealed class ChatMessage with _$ChatMessage {
         )
       : null;
 
-  factory ChatMessage.fromJson(Map<String, dynamic> json) =>
-      ChatMessage.fromPick(pick(json).required());
+  factory fromJson(Map<String, dynamic> json) => ChatMessage.fromPick(pick(json).required());
 
-  factory ChatMessage.fromPick(RequiredPick pick) {
+  factory fromPick(RequiredPick pick) {
     return ChatMessage(
       message: pick('t').asStringOrThrow(),
       username: pick('u').asStringOrNull(),

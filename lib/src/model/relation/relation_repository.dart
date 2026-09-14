@@ -11,12 +11,7 @@ final relationRepositoryProvider = Provider<RelationRepository>((ref) {
   return RelationRepository(ref.watch(lichessClientProvider), ref.watch(aggregatorProvider));
 }, name: 'RelationRepositoryProvider');
 
-class RelationRepository {
-  const RelationRepository(this.client, this.aggregator);
-
-  final LichessClient client;
-  final Aggregator aggregator;
-
+class const RelationRepository(final LichessClient client, final Aggregator aggregator) {
   /// Fetches the list of users that the current user is following.
   Future<IList<User>> getAllFollowing() {
     return client.readNdJsonList(

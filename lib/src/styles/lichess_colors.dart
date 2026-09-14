@@ -1,14 +1,8 @@
 import 'package:material_ui/material_ui.dart';
 
-class LichessColors {
+class LichessColors._() {
   // This class is not meant to be instantiated or extended; this constructor
   // prevents instantiation and extension.
-  LichessColors._();
-
-  // material colors palette generated with:
-  // http://mmbitson.com
-
-  // primary: blue
   static const MaterialColor primary = MaterialColor(_primaryPrimaryValue, <int, Color>{
     50: Color(0xFFE4EFF9),
     100: Color(0xFFBBD7F1),

@@ -2,16 +2,13 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:material_ui/material_ui.dart';
 
-class EmojiItem extends StatelessWidget {
-  const EmojiItem({super.key, required this.onTap, required this.emoji, this.size = 24});
-
-  final VoidCallback onTap;
-
-  final String emoji;
-
+class const EmojiItem({
+  super.key,
+  required final VoidCallback onTap,
+  required final String emoji,
+  final double size = 24,
+}) extends StatelessWidget {
   // size of the emoji, font size
-  final double size;
-
   @override
   Widget build(BuildContext context) {
     return IconButton(

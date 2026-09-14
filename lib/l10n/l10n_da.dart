@@ -30,6 +30,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Annuller tilbud om tilbagetagelse';
 
   @override
+  String get mobileChessEngine => 'Chess engine';
+
+  @override
   String get mobileClearButton => 'Ryd';
 
   @override
@@ -148,6 +151,12 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get mobileSettingsDraggedTargetSquare => 'Kvadrat';
+
+  @override
+  String get mobileSettingsDrawnShapeColor => 'Drawn shape color';
+
+  @override
+  String get mobileSettingsDrawnShapeColorHelp => 'This color is used for shapes drawn by hand using two fingers.';
 
   @override
   String get mobileSettingsHomeWidgets => 'Hjem-widget';
@@ -655,6 +664,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get arenaHowDoesPairingWork => 'Hvordan foretages pardannelse?';
 
   @override
+  String get arenaHowArePlayersPaired => 'Hvordan bliver spillerne sat sammen?';
+
+  @override
   String get arenaHowDoesPairingWorkAnswer => 'Ved starten på turneringen parres spillere på baggrund af deres rating. Vend tilbage til turneringslobbyen, når du afslutter et parti: så vil du igen blive parret med en spiller tæt på din ranking. Det sikrer minimal ventetid, men du møder måske ikke alle andre deltagere i turneringen.\nSpil hurtigt og vend tilbage til lobbyen for at spille flere partier og vinde flere point.';
 
   @override
@@ -743,6 +755,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get arenaDefender => 'Forsvarer';
 
   @override
+  String get arenaDefenderLabel => 'Forsvarer:';
+
+  @override
   String get arenaPickYourTeam => 'Vælg dit hold';
 
   @override
@@ -806,6 +821,9 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get arenaBerserkRate => 'Bersærk-rate';
+
+  @override
+  String get arenaLeaguesAndStreamerBattles => 'Leagues & Streamer Battles';
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -915,6 +933,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get broadcastDefinitivelyDeleteRound => 'Slet runden og dens partier endegyldigt.';
 
   @override
+  String get broadcastPermanentlyDeleteRound => 'Slet denne runde og alle dens partier permanent?';
+
+  @override
   String get broadcastDeleteAllGamesOfThisRound => 'Slet alle partier i denne runde. Kilden skal være aktiv for at genskabe dem.';
 
   @override
@@ -982,6 +1003,9 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get broadcastNoBoardsYet => 'Ingen brætter endnu. Disse vises når partier er uploadet.';
+
+  @override
+  String get broadcastNoPlayersYet => 'Der er endnu ingen spillere. De vises, så snart partierne er uploadet.';
 
   @override
   String broadcastBoardsCanBeLoaded(String param) {
@@ -1646,7 +1670,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get preferencesNotifyTournamentStartReminders => 'Påmindelser om turneringsstart';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Broadcasts';
+  String get preferencesNotifyBroadcasts => 'Udsendelser';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Ur i korrespondance er ved at løbe ud';
@@ -2100,6 +2124,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get puzzleThemeCornerMateDescription => 'Træng kongen op i hjørnet ved hjælp af et tårn eller dronning og en springer til at udføre skakmat.';
 
   @override
+  String get puzzleThemeCornerMateKnightDeliversDescription => 'Træng kongen op i hjørnet ved hjælp af et tårn eller dronning og brug en springer til at udføre skakmat.';
+
+  @override
   String get puzzleThemeCrushing => 'Knusende';
 
   @override
@@ -2238,10 +2265,16 @@ class AppLocalizationsDa extends AppLocalizations {
   String get puzzleThemePillsburysMateDescription => 'Tårnet sætter skakmat, mens løberen hjælper med at spærre af.';
 
   @override
+  String get puzzleThemePillsburyMateRookAndBishopDescription => 'Et tårn sætter kongen skakmat, mens en løber er med til at indespærre den.';
+
+  @override
   String get puzzleThemeMorphysMate => 'Morphy\'s mat';
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Brug løberen til at sætte kongen skak, mens tårnet hjælper med at spærre den inde.';
+
+  @override
+  String get puzzleThemeMorphyMateBishopAndRookDescription => 'En løber sætter kongen skakmat, mens et tårn er med til at indespærre den.';
 
   @override
   String get puzzleThemeSwallowstailMate => 'Svalehale-mat';
@@ -2362,6 +2395,9 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get puzzleThemePromotionDescription => 'En bonde, der forvandles eller truer med at forvandle, er nøglen til taktikken.';
+
+  @override
+  String get puzzleThemePromotePawnToQueenRookOrMinor => 'Forfrem en af dine bønder til en dronning, et tårn eller en mindre brik.';
 
   @override
   String get puzzleThemeQueenEndgame => 'Dronningeslutspil';
@@ -2946,6 +2982,18 @@ class AppLocalizationsDa extends AppLocalizations {
   String get flipBoard => 'Vend bræt';
 
   @override
+  String get toggleLocalEngine => 'Toggle local engine';
+
+  @override
+  String get engineSettings => 'Engine settings';
+
+  @override
+  String get enginesFromStrongestToWeakest => 'Engines from strongest to weakest';
+
+  @override
+  String get illegalPosition => 'Ulovlig position';
+
+  @override
   String get threefoldRepetition => 'Trækgentagelse';
 
   @override
@@ -3088,6 +3136,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get password => 'Adgangskode';
 
   @override
+  String get showPassword => 'Vis adgangskode';
+
+  @override
   String get changePassword => 'Skift adgangskode';
 
   @override
@@ -3211,7 +3262,13 @@ class AppLocalizationsDa extends AppLocalizations {
   String get whiteTimeOut => 'Tid udløbet for hvid';
 
   @override
+  String get whiteRanOutOfTime => 'Hvid løb tør for tid';
+
+  @override
   String get blackTimeOut => 'Tid udløbet for sort';
+
+  @override
+  String get blackRanOutOfTime => 'Sort løb tør for tid';
 
   @override
   String get drawOfferSent => 'Remistilbud afsendt';
@@ -3423,6 +3480,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating-filtre er låst, fordi din rating ikke er stabil. Stabiliteten øges ved at spille ratede partier.';
 
   @override
+  String get cannotFilterByUnstableRating => 'Det er ikke muligt at filtrere efter rating, da din rating ikke er stabil.\nAt spille ratede partier vil øge stabiliteten.';
+
+  @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
     return 'Din $param1 rating ($param2) er for høj';
   }
@@ -3503,7 +3563,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get leaderboard => 'Rangliste';
 
   @override
-  String get screenshotCurrentPosition => 'Tag et skræmbillede af den aktuelle stilling';
+  String get positionAsImage => 'Position som billede';
 
   @override
   String get gameAsGIF => 'Parti som GIF';
@@ -3600,6 +3660,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String xStartedFollowingY(String param1, String param2) {
     return '$param1 følger nu $param2';
   }
+
+  @override
+  String get less => 'Færre';
 
   @override
   String get more => 'Mere';
@@ -3809,7 +3872,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get makeAStudy => 'Overvej at lave et studie for sikker opbevaring og deling.';
 
   @override
-  String get clearSavedMoves => 'Ryd træk';
+  String get clearLocalData => 'Ryd lokale data';
 
   @override
   String get previouslyOnLichessTV => 'Tidligere på Lichess TV';
@@ -4321,6 +4384,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get simulHostExtraTime => 'Ekstra tid til værtsuret';
 
   @override
+  String get extraClockTimeForHost => 'Ekstra tid på uret for værten:';
+
+  @override
   String get simulAddExtraTimePerPlayer => 'Læg den indledende tid til dit ur igen for hver spiller, der melder sig til simultanspillet.';
 
   @override
@@ -4351,10 +4417,16 @@ class AppLocalizationsDa extends AppLocalizations {
   String get keyGoToStartOrEnd => 'gå til start/slut';
 
   @override
+  String get keyGoToPreviousOrNextLine => 'go to previous/next line';
+
+  @override
   String get keyCycleSelectedVariation => 'Gennemgå den valgte variant';
 
   @override
   String get keyShowOrHideComments => 'vis/skjul kommentar';
+
+  @override
+  String get keyShowOrHideCurrentVariation => 'show/hide current variation';
 
   @override
   String get keyEnterOrExitVariation => 'Start/slut variant';
@@ -4621,7 +4693,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get background => 'Baggrund';
 
   @override
-  String get theme => 'Theme';
+  String get theme => 'Tema';
 
   @override
   String get light => 'Lys';
@@ -4630,19 +4702,22 @@ class AppLocalizationsDa extends AppLocalizations {
   String get dark => 'Mørk';
 
   @override
-  String get transparent => 'Gennemsigtigt';
-
-  @override
-  String get picture => 'Picture';
+  String get picture => 'Billede';
 
   @override
   String get deviceTheme => 'Enhedstema';
 
   @override
-  String get roundness => 'Roundness';
+  String get roundness => 'Afrunding';
+
+  @override
+  String get backgroundImage => 'Baggrundsbillede';
 
   @override
   String get backgroundImageUrl => 'Baggrundsbillede URL:';
+
+  @override
+  String get imageOpacity => 'Billede gennemsigtighed';
 
   @override
   String get board => 'Bræt';
@@ -4715,6 +4790,11 @@ class AppLocalizationsDa extends AppLocalizations {
   @override
   String perfRatingX(String param) {
     return 'Rating: $param';
+  }
+
+  @override
+  String perfRatingLabel(String param) {
+    return 'Rating: $param.';
   }
 
   @override
@@ -4869,6 +4949,9 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get clickHereToReadIt => 'Klik her for at læse den';
+
+  @override
+  String get readTheMessage => 'Læs beskeden';
 
   @override
   String get sorry => 'Beklager :(';
@@ -5306,6 +5389,15 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get settings => 'Indstillinger';
+
+  @override
+  String get verifyingYourDevice => 'Verifying your device...';
+
+  @override
+  String get chessOpenings => 'Chess openings';
+
+  @override
+  String get boards => 'Boards';
 
   @override
   String opponentLeftCounter(int count) {
@@ -6151,6 +6243,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get studyYouCanPasteThisInTheForumToEmbed => 'Du kan indsætte dette i forummet for at indlejre';
 
   @override
+  String get studyPasteToEmbedChapterInForumOrBlog => 'Du kan indsætte dette i forummet eller på din Lichess-blog for at indlejre kapitlet.';
+
+  @override
   String get studyStartAtInitialPosition => 'Start ved indledende stilling';
 
   @override
@@ -6523,7 +6618,13 @@ class AppLocalizationsDa extends AppLocalizations {
   String get studyLoadExistingLichessGameTitle => 'Indlæs et eksisterende lichess-parti';
 
   @override
+  String get studyLoadGameFromTheWebTitle => 'Indlæs et parti fra nettet';
+
+  @override
   String get studyLoadExistingLichessGameText => 'Indsæt en URL for et lichess-parti<br>(som lichess.org/7fHIU0XI)<br>for at indlæse partiets træk i kapitlet.';
+
+  @override
+  String get studyLoadGameFromTheWebText => 'Indsæt en parti-URL<br>(som lichess.org/7fHIU0XI)<br>for at indlæse partitræk i kapitlet.';
 
   @override
   String get studyFromFenStringTitle => 'Fra en FEN-streng';

@@ -11,16 +11,13 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:material_ui/material_ui.dart';
 
-class PuzzleSessionWidget extends ConsumerStatefulWidget {
-  const PuzzleSessionWidget({required this.initialPuzzleContext});
-
-  final PuzzleContext initialPuzzleContext;
-
+class const PuzzleSessionWidget({required final PuzzleContext initialPuzzleContext})
+    extends ConsumerStatefulWidget {
   @override
   ConsumerState<PuzzleSessionWidget> createState() => PuzzleSessionWidgetState();
 }
 
-class PuzzleSessionWidgetState extends ConsumerState<PuzzleSessionWidget> {
+class PuzzleSessionWidgetState() extends ConsumerState<PuzzleSessionWidget> {
   final lastAttemptKey = GlobalKey();
   PuzzleId? loadingPuzzleId;
 
@@ -131,22 +128,14 @@ class PuzzleSessionWidgetState extends ConsumerState<PuzzleSessionWidget> {
   }
 }
 
-class _SessionItem extends StatelessWidget {
-  const _SessionItem({
-    this.attempt,
-    required this.isCurrent,
-    required this.isLoading,
-    required this.brightness,
-    this.onTap,
-    super.key,
-  });
-
-  final bool isCurrent;
-  final bool isLoading;
-  final PuzzleAttempt? attempt;
-  final Brightness brightness;
-  final void Function(PuzzleId id)? onTap;
-
+class const _SessionItem({
+  final PuzzleAttempt? attempt,
+  required final bool isCurrent,
+  required final bool isLoading,
+  required final Brightness brightness,
+  final void Function(PuzzleId id)? onTap,
+  super.key,
+}) extends StatelessWidget {
   Color get good =>
       brightness == Brightness.light ? LichessColors.good.shade300 : LichessColors.good.shade400;
 

@@ -14,39 +14,28 @@ const _kClockHundredsFontSize = 18.0;
 /// A stateless widget that displays the time left on the clock.
 ///
 /// For a clock widget that automatically counts down, see [CountdownClockBuilder].
-class Clock extends StatelessWidget {
-  const Clock({
-    required this.timeLeft,
-    this.active = false,
-    this.clockStyle,
-    this.emergencyThreshold,
-    this.clockTenths,
-    this.padLeft = false,
-    this.padding = const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5.0),
-    super.key,
-  });
-
+class const Clock({
   /// The time left to be displayed on the clock.
-  final Duration timeLeft;
+  required final Duration timeLeft,
 
   /// If `true`, [ClockStyle.activeBackgroundColor] will be used, otherwise [ClockStyle.backgroundColor].
-  final bool active;
+  final bool active = false,
+
+  /// Clock style to use.
+  final ClockStyle? clockStyle,
 
   /// If [timeLeft] is less than [emergencyThreshold], the clock will set
   /// its background color to [ClockStyle.emergencyBackgroundColor].
-  final Duration? emergencyThreshold;
-
-  /// Clock style to use.
-  final ClockStyle? clockStyle;
-
-  final ClockTenths? clockTenths;
+  final Duration? emergencyThreshold,
+  final ClockTenths? clockTenths,
 
   /// Whether to pad with a leading zero (default is `false`).
-  final bool padLeft;
+  final bool padLeft = false,
 
   /// Padding around the clock.
-  final EdgeInsets padding;
-
+  final EdgeInsets padding = const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5.0),
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final hours = timeLeft.inHours;
@@ -128,24 +117,15 @@ class Clock extends StatelessWidget {
 }
 
 @immutable
-class ClockStyle {
-  const ClockStyle({
-    required this.textColor,
-    required this.activeTextColor,
-    required this.emergencyTextColor,
-    required this.backgroundColor,
-    required this.activeBackgroundColor,
-    required this.emergencyBackgroundColor,
-  });
-
-  final Color textColor;
-  final Color activeTextColor;
-  final Color emergencyTextColor;
-  final Color backgroundColor;
-  final Color activeBackgroundColor;
-  final Color emergencyBackgroundColor;
-
-  factory ClockStyle.defaultStyle(
+class const ClockStyle({
+  required final Color textColor,
+  required final Color activeTextColor,
+  required final Color emergencyTextColor,
+  required final Color backgroundColor,
+  required final Color activeBackgroundColor,
+  required final Color emergencyBackgroundColor,
+}) {
+  factory defaultStyle(
     Brightness brightness,
     ColorScheme colorScheme,
     LichessCustomColors lichessColors,
@@ -182,45 +162,36 @@ typedef ClockWidgetBuilder = Widget Function(BuildContext, Duration);
 /// The clock will stop counting down when [active] is set to `false`.
 ///
 /// The clock will stop counting down when the time left reaches zero.
-class CountdownClockBuilder extends StatefulWidget {
-  const CountdownClockBuilder({
-    required this.timeLeft,
-    required this.active,
-    required this.builder,
-    this.delay,
-    this.tickInterval = const Duration(milliseconds: 100),
-    this.clockUpdatedAt,
-    super.key,
-  });
-
+class const CountdownClockBuilder({
   /// The duration left on the clock.
-  final Duration timeLeft;
+  required final Duration timeLeft,
+
+  /// If `true`, the clock starts counting down.
+  required final bool active,
+
+  /// A [ClockWidgetBuilder] that builds the clock on each tick with the new [timeLeft] value.
+  required final ClockWidgetBuilder builder,
 
   /// The delay before the clock starts counting down.
   ///
   /// This can be used to implement lag compensation.
-  final Duration? delay;
+  final Duration? delay,
 
   /// The interval at which the clock updates the UI.
-  final Duration tickInterval;
+  final Duration tickInterval = const Duration(milliseconds: 100),
 
   /// The time at which the clock was updated.
   ///
   /// Use this parameter to synchronize the clock with the time at which the clock
   /// event was received from the server and to compensate for UI lag.
-  final DateTime? clockUpdatedAt;
-
-  /// If `true`, the clock starts counting down.
-  final bool active;
-
-  /// A [ClockWidgetBuilder] that builds the clock on each tick with the new [timeLeft] value.
-  final ClockWidgetBuilder builder;
-
+  final DateTime? clockUpdatedAt,
+  super.key,
+}) extends StatefulWidget {
   @override
   State<CountdownClockBuilder> createState() => _CountdownClockState();
 }
 
-class _CountdownClockState extends State<CountdownClockBuilder> {
+class _CountdownClockState() extends State<CountdownClockBuilder> {
   Timer? _timer;
   Timer? _delayTimer;
   Duration timeLeft = Duration.zero;

@@ -11,12 +11,10 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_ui/material_ui.dart';
 
-class BroadcastGameSettingsScreen extends ConsumerWidget {
-  const BroadcastGameSettingsScreen(this.roundId, this.gameId);
-
-  final BroadcastRoundId roundId;
-  final BroadcastGameId gameId;
-
+class const BroadcastGameSettingsScreen(
+  final BroadcastRoundId roundId,
+  final BroadcastGameId gameId,
+) extends ConsumerWidget {
   static Route<dynamic> buildRoute({
     required BroadcastRoundId roundId,
     required BroadcastGameId gameId,

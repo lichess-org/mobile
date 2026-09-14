@@ -20,7 +20,7 @@ final liveTvChannelsProvider =
       name: 'LiveTvChannelsProvider',
     );
 
-class LiveTvChannels extends AsyncNotifier<LiveTvChannelsState> {
+class LiveTvChannels() extends AsyncNotifier<LiveTvChannelsState> {
   StreamSubscription<SocketEvent>? _socketSubscription;
   StreamSubscription<void>? _socketReadySubscription;
 

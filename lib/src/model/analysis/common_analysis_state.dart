@@ -8,7 +8,7 @@ import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 
 /// Interface for Analysis's State.
-abstract class CommonAnalysisState {
+abstract class CommonAnalysisState() {
   /// Returns `true` if the engine evaluation is available (for both local and cloud).
   ///
   /// This value may depend on the current state and the user preferences.
@@ -68,7 +68,7 @@ mixin AnalysisExplosionMixin implements CommonAnalysisState {
 }
 
 /// Interface for Analysis's current node.
-abstract class AnalysisCurrentNodeInterface {
+abstract class AnalysisCurrentNodeInterface() {
   SanMove? get sanMove;
   IList<int>? get nags;
   ClientEval? get eval;

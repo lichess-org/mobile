@@ -15,18 +15,20 @@ import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_ui/material_ui.dart';
 
-enum _SortingTypes { elo, score }
+enum _SortingTypes() {
+  elo,
+  score,
+}
 
 typedef _TeamPicker<T> = T? Function(BroadcastTeamStanding team);
 
 const _kTableRowPadding = EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0);
 const _kHeaderTextStyle = TextStyle(fontWeight: .bold, overflow: .ellipsis);
 
-class BroadcastTeamStandingsScreen extends ConsumerWidget {
-  const BroadcastTeamStandingsScreen({super.key, required this.tournamentId});
-
-  final BroadcastTournamentId tournamentId;
-
+class const BroadcastTeamStandingsScreen({
+  super.key,
+  required final BroadcastTournamentId tournamentId,
+}) extends ConsumerWidget {
   static Route<dynamic> buildRoute(BroadcastTournamentId tournamentId) {
     return buildScreenRoute(screen: BroadcastTeamStandingsScreen(tournamentId: tournamentId));
   }
@@ -51,17 +53,15 @@ class BroadcastTeamStandingsScreen extends ConsumerWidget {
   }
 }
 
-class BroadcastTeamStandingsList extends ConsumerStatefulWidget {
-  const BroadcastTeamStandingsList({required this.teams, required this.tournamentId});
-
-  final IList<BroadcastTeamStanding> teams;
-  final BroadcastTournamentId tournamentId;
-
+class const BroadcastTeamStandingsList({
+  required final IList<BroadcastTeamStanding> teams,
+  required final BroadcastTournamentId tournamentId,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<BroadcastTeamStandingsList> createState() => _BroadcastTeamStandingsListState();
 }
 
-class _BroadcastTeamStandingsListState extends ConsumerState<BroadcastTeamStandingsList> {
+class _BroadcastTeamStandingsListState() extends ConsumerState<BroadcastTeamStandingsList> {
   late IList<BroadcastTeamStanding> teams;
   late _SortingTypes currentSort;
   bool reverse = false;
@@ -245,19 +245,12 @@ class _BroadcastTeamStandingsListState extends ConsumerState<BroadcastTeamStandi
   }
 }
 
-class _TableTitleCell extends StatelessWidget {
-  const _TableTitleCell({
-    required this.title,
-    required this.onTap,
-    this.sortIcon,
-    this.mainAxisAlignment = .start,
-  });
-
-  final Widget title;
-  final void Function() onTap;
-  final IconData? sortIcon;
-  final MainAxisAlignment mainAxisAlignment;
-
+class const _TableTitleCell({
+  required final Widget title,
+  required final void Function() onTap,
+  final IconData? sortIcon,
+  final MainAxisAlignment mainAxisAlignment = .start,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -292,21 +285,13 @@ class _TableTitleCell extends StatelessWidget {
   }
 }
 
-class _BroadcastTeamStandingRow extends StatelessWidget {
-  const _BroadcastTeamStandingRow({
-    required this.index,
-    required this.team,
-    required this.tournamentId,
-    required this.scoreWidth,
-    required this.scoreFormat,
-  });
-
-  final int index;
-  final BroadcastTeamStanding team;
-  final BroadcastTournamentId tournamentId;
-  final double scoreWidth;
-  final NumberFormat scoreFormat;
-
+class const _BroadcastTeamStandingRow({
+  required final int index,
+  required final BroadcastTeamStanding team,
+  required final BroadcastTournamentId tournamentId,
+  required final double scoreWidth,
+  required final NumberFormat scoreFormat,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(

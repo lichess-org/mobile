@@ -17,15 +17,14 @@ sealed class PuzzleAngle {
     }
   }
 
-  factory PuzzleAngle.fromJson(dynamic json) {
+  factory fromJson(dynamic json) {
     return fromKey(json as String);
   }
 }
 
 @freezed
-sealed class PuzzleTheme with _$PuzzleTheme implements PuzzleAngle {
-  const PuzzleTheme._();
-  const factory PuzzleTheme(PuzzleThemeKey themeKey) = _PuzzleTheme;
+sealed class const PuzzleTheme._() with _$PuzzleTheme implements PuzzleAngle {
+  const factory(PuzzleThemeKey themeKey) = _PuzzleTheme;
 
   @override
   String get key => themeKey.name;
@@ -35,9 +34,8 @@ sealed class PuzzleTheme with _$PuzzleTheme implements PuzzleAngle {
 }
 
 @freezed
-sealed class PuzzleOpening with _$PuzzleOpening implements PuzzleAngle {
-  const PuzzleOpening._();
-  const factory PuzzleOpening(String key) = _PuzzleOpening;
+sealed class const PuzzleOpening._() with _$PuzzleOpening implements PuzzleAngle {
+  const factory(String key) = _PuzzleOpening;
 
   @override
   String toJson() => key;

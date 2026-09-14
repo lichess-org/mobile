@@ -75,11 +75,9 @@ bool _submitMoveEnabledForSpeed(SubmitMove submitMove, Speed speed) {
   };
 }
 
-class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> {
-  GameController(this.gameFullId);
-
-  final GameFullId gameFullId;
-
+class GameController(final GameFullId gameFullId)
+    extends AsyncNotifier<GameState>
+    with ChatMixin<GameState> {
   final _logger = Logger('GameController');
 
   StreamSubscription<SocketEvent>? _socketSubscription;
@@ -919,9 +917,8 @@ class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> 
       case 'clockInc':
         final data = event.data as Map<String, dynamic>;
         final side = pick(data['color']).asSideOrNull();
-        final newClock = pick(
-          data['total'],
-        ).letOrNull((it) => Duration(milliseconds: it.asIntOrThrow() * 10));
+        final newClock = pick(data['total'])
+            .letOrNull((it) => Duration(milliseconds: it.asIntOrThrow() * 10));
         final curState = state.requireValue;
 
         if (side != null && newClock != null) {
@@ -1152,10 +1149,8 @@ class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> 
 typedef LiveGameClock = ({ValueListenable<Duration> white, ValueListenable<Duration> black});
 
 @freezed
-sealed class GameState with _$GameState, ChatMixinState {
-  const GameState._();
-
-  const factory GameState({
+sealed class const GameState._() with _$GameState, ChatMixinState {
+  const factory({
     @Default(0) int nbWatchers,
     @Default(IList<String>.empty()) IList<String> watcherNames,
     required GameFullId gameFullId,

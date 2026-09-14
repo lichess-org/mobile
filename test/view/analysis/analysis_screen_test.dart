@@ -1623,9 +1623,7 @@ void main() {
     await tester.tap(find.byIcon(Icons.menu));
     await tester.pump();
 
-    //tap Clear moves
-    expect(find.text('Clear moves'), findsOneWidget);
-    await tester.tap(find.text('Clear moves'));
+    await tester.tap(find.text('Clear local data'));
     await tester.pump();
 
     //verify moves are cleared

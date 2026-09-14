@@ -26,11 +26,7 @@ final tvControllerProvider = AsyncNotifierProvider.autoDispose
 /// The actual game (board, moves, chat) is handled by the [TvGameController]
 /// identified by the [TvGameControllerParams] exposed as this controller's
 /// state.
-class TvController extends AsyncNotifier<TvGameControllerParams> {
-  TvController(this.params);
-
-  final TvControllerParams params;
-
+class TvController(final TvControllerParams params) extends AsyncNotifier<TvGameControllerParams> {
   @override
   Future<TvGameControllerParams> build() {
     assert(

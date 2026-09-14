@@ -39,7 +39,7 @@ final mockClient = MockClient((request) {
   return mockResponse('', 404);
 });
 
-class MockPuzzleBatchStorage extends Mock implements PuzzleBatchStorage {}
+class MockPuzzleBatchStorage() extends Mock implements PuzzleBatchStorage;
 
 void main() {
   setUpAll(() {
@@ -51,12 +51,10 @@ void main() {
   testWidgets('meets accessibility guidelines', (WidgetTester tester) async {
     final SemanticsHandle handle = tester.ensureSemantics();
 
-    when(
-      () => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)),
-    ).thenAnswer((_) async => batch);
-    when(
-      () => mockBatchStorage.fetchAllAngles(userId: null),
-    ).thenAnswer((_) async => IList(const []));
+    when(() => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)))
+        .thenAnswer((_) async => batch);
+    when(() => mockBatchStorage.fetchAllAngles(userId: null))
+        .thenAnswer((_) async => IList(const []));
 
     final app = await makeTestProviderScopeApp(
       tester,
@@ -86,12 +84,10 @@ void main() {
   });
 
   testWidgets('shows puzzle menu', (WidgetTester tester) async {
-    when(
-      () => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)),
-    ).thenAnswer((_) async => batch);
-    when(
-      () => mockBatchStorage.fetchAllAngles(userId: null),
-    ).thenAnswer((_) async => IList(const []));
+    when(() => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)))
+        .thenAnswer((_) async => batch);
+    when(() => mockBatchStorage.fetchAllAngles(userId: null))
+        .thenAnswer((_) async => IList(const []));
     final app = await makeTestProviderScopeApp(
       tester,
       home: const PuzzleTabScreen(),
@@ -120,12 +116,10 @@ void main() {
   testWidgets('shows puzzle menu even if saved batches cannot be loaded', (
     WidgetTester tester,
   ) async {
-    when(
-      () => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)),
-    ).thenAnswer((_) async => batch);
-    when(
-      () => mockBatchStorage.fetchAllAngles(userId: null),
-    ).thenThrow(const FormatException('cannot fetch puzzles'));
+    when(() => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)))
+        .thenAnswer((_) async => batch);
+    when(() => mockBatchStorage.fetchAllAngles(userId: null))
+        .thenThrow(const FormatException('cannot fetch puzzles'));
     final app = await makeTestProviderScopeApp(
       tester,
       home: const PuzzleTabScreen(),
@@ -154,12 +148,10 @@ void main() {
   });
 
   testWidgets('shows daily puzzle', (WidgetTester tester) async {
-    when(
-      () => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)),
-    ).thenAnswer((_) async => batch);
-    when(
-      () => mockBatchStorage.fetchAllAngles(userId: null),
-    ).thenAnswer((_) async => IList(const []));
+    when(() => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)))
+        .thenAnswer((_) async => batch);
+    when(() => mockBatchStorage.fetchAllAngles(userId: null))
+        .thenAnswer((_) async => IList(const []));
     final app = await makeTestProviderScopeApp(
       tester,
       home: const PuzzleTabScreen(),
@@ -189,12 +181,10 @@ void main() {
 
   group('tactical training preview', () {
     testWidgets('shows first puzzle from unsolved batch', (WidgetTester tester) async {
-      when(
-        () => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)),
-      ).thenAnswer((_) async => batch);
-      when(
-        () => mockBatchStorage.fetchAllAngles(userId: null),
-      ).thenAnswer((_) async => IList(const []));
+      when(() => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)))
+          .thenAnswer((_) async => batch);
+      when(() => mockBatchStorage.fetchAllAngles(userId: null))
+          .thenAnswer((_) async => IList(const []));
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -234,18 +224,16 @@ void main() {
     });
 
     testWidgets('shows saved puzzle batches', (WidgetTester tester) async {
-      when(
-        () => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)),
-      ).thenAnswer((_) async => batch);
+      when(() => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)))
+          .thenAnswer((_) async => batch);
       when(
         () => mockBatchStorage.fetch(
           userId: null,
           angle: const PuzzleTheme(PuzzleThemeKey.advancedPawn),
         ),
       ).thenAnswer((_) async => batch);
-      when(
-        () => mockBatchStorage.fetch(userId: null, angle: const PuzzleOpening('A00')),
-      ).thenAnswer((_) async => batch);
+      when(() => mockBatchStorage.fetch(userId: null, angle: const PuzzleOpening('A00')))
+          .thenAnswer((_) async => batch);
       when(() => mockBatchStorage.fetchAllAngles(userId: null)).thenAnswer(
         (_) async => IList(const [PuzzleTheme(PuzzleThemeKey.advancedPawn), PuzzleOpening('A00')]),
       );
@@ -279,18 +267,16 @@ void main() {
     });
 
     testWidgets('shows the number of remaining puzzles when offline', (WidgetTester tester) async {
-      when(
-        () => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)),
-      ).thenAnswer((_) async => twoPuzzlesBatch);
+      when(() => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)))
+          .thenAnswer((_) async => twoPuzzlesBatch);
       when(
         () => mockBatchStorage.fetchNbUnsolved(
           userId: null,
           angle: const PuzzleTheme(PuzzleThemeKey.mix),
         ),
       ).thenAnswer((_) async => twoPuzzlesBatch.unsolved.length);
-      when(
-        () => mockBatchStorage.fetchAllAngles(userId: null),
-      ).thenAnswer((_) async => IList(const []));
+      when(() => mockBatchStorage.fetchAllAngles(userId: null))
+          .thenAnswer((_) async => IList(const []));
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -320,18 +306,16 @@ void main() {
     testWidgets('does not show the number of remaining puzzles when online', (
       WidgetTester tester,
     ) async {
-      when(
-        () => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)),
-      ).thenAnswer((_) async => twoPuzzlesBatch);
+      when(() => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)))
+          .thenAnswer((_) async => twoPuzzlesBatch);
       when(
         () => mockBatchStorage.fetchNbUnsolved(
           userId: null,
           angle: const PuzzleTheme(PuzzleThemeKey.mix),
         ),
       ).thenAnswer((_) async => twoPuzzlesBatch.unsolved.length);
-      when(
-        () => mockBatchStorage.fetchAllAngles(userId: null),
-      ).thenAnswer((_) async => IList(const []));
+      when(() => mockBatchStorage.fetchAllAngles(userId: null))
+          .thenAnswer((_) async => IList(const []));
 
       final app = await makeTestProviderScopeApp(
         tester,

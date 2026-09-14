@@ -90,7 +90,7 @@ final offlineComputerGameControllerProvider =
       name: 'OfflineComputerGameControllerProvider',
     );
 
-class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
+class OfflineComputerGameController() extends Notifier<OfflineComputerGameState> {
   late SocketClient socketClient;
   StreamSubscription<SocketEvent>? _socketSubscription;
 
@@ -958,10 +958,8 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
 }
 
 @freezed
-sealed class OfflineComputerGameState with _$OfflineComputerGameState {
-  const OfflineComputerGameState._();
-
-  const factory OfflineComputerGameState({
+sealed class const OfflineComputerGameState._() with _$OfflineComputerGameState {
+  const factory({
     required OfflineComputerGame game,
     @Default(0) int stepCursor,
     @Default(false) bool isEngineThinking,
@@ -977,7 +975,7 @@ sealed class OfflineComputerGameState with _$OfflineComputerGameState {
     @Default(null) NormalMove? showingSuggestedMove,
   }) = _OfflineComputerGameState;
 
-  factory OfflineComputerGameState.initial({
+  factory initial({
     required OpponentSpec opponentSpec,
     required Side playerSide,
     Variant variant = Variant.standard,

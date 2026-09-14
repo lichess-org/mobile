@@ -206,46 +206,36 @@ Future<T?> showMaterialActionSheet<T>({
 }
 
 /// The Actions model that will use on the ActionSheet.
-class BottomSheetAction {
+class BottomSheetAction({
   /// A function that returns the label widget. (required)
   ///
   /// Typically a [Text] widget.
   ///
   /// This should not wrap. To enforce the single line limit, use
   /// [Text.maxLines].
-  final Widget Function(BuildContext context) makeLabel;
+  required final Widget Function(BuildContext context) makeLabel,
 
   /// The callback that is called when the action item is tapped. (required)
-  final VoidCallback onPressed;
+  required final VoidCallback onPressed,
 
   /// Whether the modal should be dismissed when an action is pressed.
   ///
   /// Default to true.
-  final bool dismissOnPress;
+  final bool dismissOnPress = true,
 
   /// A widget to display after the label.
   ///
   /// Typically an [Icon] widget. (Android only).
-  final Widget? trailing;
+  final Widget? trailing,
 
   /// A widget to display before the label.
   ///
   /// Typically an [Icon] or a [CircleAvatar] widget. (Android only).
-  final Widget? leading;
+  final Widget? leading,
 
   /// Whether the action is destructive. (iOS only).
-  final bool isDestructiveAction;
+  final bool isDestructiveAction = false,
 
   /// Whether the action is the default action. (iOS only).
-  final bool isDefaultAction;
-
-  BottomSheetAction({
-    required this.makeLabel,
-    required this.onPressed,
-    this.dismissOnPress = true,
-    this.trailing,
-    this.leading,
-    this.isDestructiveAction = false,
-    this.isDefaultAction = false,
-  });
-}
+  final bool isDefaultAction = false,
+});

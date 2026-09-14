@@ -10,12 +10,7 @@ final moveFeedbackServiceProvider = Provider<MoveFeedbackService>((Ref ref) {
   return MoveFeedbackService(soundService, ref);
 }, name: 'MoveFeedbackServiceProvider');
 
-class MoveFeedbackService {
-  MoveFeedbackService(this._soundService, this._ref);
-
-  final SoundService _soundService;
-  final Ref _ref;
-
+class MoveFeedbackService(final SoundService _soundService, final Ref _ref) {
   void moveFeedback({bool check = false}) {
     _soundService.play(Sound.move);
 

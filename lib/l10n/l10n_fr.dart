@@ -30,6 +30,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Annuler la proposition de reprise du coup';
 
   @override
+  String get mobileChessEngine => 'Chess engine';
+
+  @override
   String get mobileClearButton => 'Effacer';
 
   @override
@@ -148,6 +151,12 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get mobileSettingsDraggedTargetSquare => 'Carré';
+
+  @override
+  String get mobileSettingsDrawnShapeColor => 'Drawn shape color';
+
+  @override
+  String get mobileSettingsDrawnShapeColorHelp => 'This color is used for shapes drawn by hand using two fingers.';
 
   @override
   String get mobileSettingsHomeWidgets => 'Widgets de l\'écran d\'accueil';
@@ -655,6 +664,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get arenaHowDoesPairingWork => 'Comment sont déterminés les appariements ?';
 
   @override
+  String get arenaHowArePlayersPaired => 'Comment les joueurs sont-ils appariés?';
+
+  @override
   String get arenaHowDoesPairingWorkAnswer => 'Au début du tournoi, les joueurs sont appariés en fonction de leur cote.\nDès que vous avez terminé votre partie, retournez à la page d\'accueil du tournoi : vous serez alors apparié avec un joueur qui possède un classement proche du vôtre. Cela garantit un temps d\'attente minimum entre les parties, toutefois il est possible que vous n\'affrontiez pas tous les autres joueurs du tournoi.\nJouez vite et retournez à la page d\'accueil du tournoi pour jouer plus de parties et gagner plus de points.';
 
   @override
@@ -743,6 +755,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get arenaDefender => 'Défenseur';
 
   @override
+  String get arenaDefenderLabel => 'Défenseur :';
+
+  @override
   String get arenaPickYourTeam => 'Choisissez votre équipe';
 
   @override
@@ -806,6 +821,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get arenaBerserkRate => 'Taux de berserk';
+
+  @override
+  String get arenaLeaguesAndStreamerBattles => 'Ligues et batailles de streamer';
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -915,6 +933,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get broadcastDefinitivelyDeleteRound => 'Supprimer définitivement la ronde et ses parties.';
 
   @override
+  String get broadcastPermanentlyDeleteRound => 'Supprimer définitivement cette ronde et ses parties?';
+
+  @override
   String get broadcastDeleteAllGamesOfThisRound => 'Supprimer toutes les parties de la ronde. La source doit être active pour recréer les parties.';
 
   @override
@@ -982,6 +1003,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get broadcastNoBoardsYet => 'Pas d\'échiquiers pour le moment. Ils s\'afficheront lorsque les parties seront téléversées.';
+
+  @override
+  String get broadcastNoPlayersYet => 'Aucun joueur pour le moment. Chaque joueur s\'affichera une fois les parties téléchargées.';
 
   @override
   String broadcastBoardsCanBeLoaded(String param) {
@@ -1571,7 +1595,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get preferencesMoveConfirmation => 'Confirmation de coup';
 
   @override
-  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Peut être désactivé pendant une partie grâce au menu de l\'échiquer';
+  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Peut être désactivé pendant une partie grâce au menu de l\'échiquier';
 
   @override
   String get preferencesInCorrespondenceGames => 'Dans les parties par correspondance';
@@ -2100,6 +2124,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get puzzleThemeCornerMateDescription => 'Le roi adverse est confiné dans un coin de l\'échiquier par une tour ou la dame, puis un cavalier le met mat.';
 
   @override
+  String get puzzleThemeCornerMateKnightDeliversDescription => 'Utilisez la tour et la dame pour confiner le roi dans le coin de l\'échiquier, puis faites mat avec le cavalier.';
+
+  @override
   String get puzzleThemeCrushing => 'Écrasant';
 
   @override
@@ -2238,10 +2265,16 @@ class AppLocalizationsFr extends AppLocalizations {
   String get puzzleThemePillsburysMateDescription => 'La tour met le roi adverse mat avec l\'aide du fou.';
 
   @override
+  String get puzzleThemePillsburyMateRookAndBishopDescription => 'La tour met le roi mat avec l\'aide du fou.';
+
+  @override
   String get puzzleThemeMorphysMate => 'Mat de Morphy';
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Le fou met le roi adverse échec et mat avec l\'aide de la tour.';
+
+  @override
+  String get puzzleThemeMorphyMateBishopAndRookDescription => 'Le fou met le roi mat avec l\'aide de la tour.';
 
   @override
   String get puzzleThemeSwallowstailMate => 'Mat du guéridon';
@@ -2362,6 +2395,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get puzzleThemePromotionDescription => 'Un pion promouvant ou menaçant d\'être promu est essentiel à la tactique.';
+
+  @override
+  String get puzzleThemePromotePawnToQueenRookOrMinor => 'Promouvez l\'un de vos pions en une dame, une tour ou une pièce mineure.';
 
   @override
   String get puzzleThemeQueenEndgame => 'Finale de Dames';
@@ -2913,7 +2949,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get threadsDescription => 'Sélectionnez une valeur en dessous du nombre de cœurs de votre processeur. Les flèches indiquent le choix optimal';
 
   @override
-  String get threadsDescriptionMobile => 'Utiliser plus de coeurs consomme plus d\'énergie, mais permet une meilleure analyse.';
+  String get threadsDescriptionMobile => 'Utiliser plus de cœurs consomme plus d\'énergie, mais permet une meilleure analyse';
 
   @override
   String get cpus => 'Processeurs';
@@ -2944,6 +2980,18 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get flipBoard => 'Tourner l\'échiquier';
+
+  @override
+  String get toggleLocalEngine => 'Activer/désactiver le moteur d\'analyse local';
+
+  @override
+  String get engineSettings => 'Paramètres du moteur d\'analyse';
+
+  @override
+  String get enginesFromStrongestToWeakest => 'Moteurs d\'analyse, du plus fort au plus faible';
+
+  @override
+  String get illegalPosition => 'Position illégale';
 
   @override
   String get threefoldRepetition => 'Triple répétition';
@@ -3088,6 +3136,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get password => 'Mot de passe';
 
   @override
+  String get showPassword => 'Afficher le mot de passe';
+
+  @override
   String get changePassword => 'Changer votre mot de passe';
 
   @override
@@ -3211,7 +3262,13 @@ class AppLocalizationsFr extends AppLocalizations {
   String get whiteTimeOut => 'Temps blanc écoulé';
 
   @override
+  String get whiteRanOutOfTime => 'Les blancs sont tombés au temps';
+
+  @override
   String get blackTimeOut => 'Temps noir écoulé';
+
+  @override
+  String get blackRanOutOfTime => 'Les noirs sont tombés au temps';
 
   @override
   String get drawOfferSent => 'Proposition de nulle envoyée';
@@ -3423,6 +3480,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Les filtres de classement sont verrouillés parce que votre classement (votre cote) n\'est pas stable. Jouer davantage de parties classées contribuera à stabiliser votre classement.';
 
   @override
+  String get cannotFilterByUnstableRating => 'Il n\'est pas possible d\'utiliser les filtres de classement, car votre classement (votre cote) n\'est pas stable. Jouer davantage de parties classées stabilisera votre classement.';
+
+  @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
     return 'Votre cote $param1 ($param2) est trop élevée';
   }
@@ -3503,7 +3563,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get leaderboard => 'Classements';
 
   @override
-  String get screenshotCurrentPosition => 'Capture d\'écran de la position actuelle';
+  String get positionAsImage => 'Image de la position';
 
   @override
   String get gameAsGIF => 'Enregistrer la partie en GIF';
@@ -3600,6 +3660,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String xStartedFollowingY(String param1, String param2) {
     return '$param1 a suivi $param2';
   }
+
+  @override
+  String get less => 'Moins de choix';
 
   @override
   String get more => 'Plus';
@@ -3809,7 +3872,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get makeAStudy => 'Pour conserver et partager vos analyses, créez une étude.';
 
   @override
-  String get clearSavedMoves => 'Supprimer les coups';
+  String get clearLocalData => 'Supprimer les données locales';
 
   @override
   String get previouslyOnLichessTV => 'Précédemment sur Lichess TV';
@@ -4321,6 +4384,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get simulHostExtraTime => 'Temps supplémentaire de l\'hôte';
 
   @override
+  String get extraClockTimeForHost => 'Temps supplémentaire pour l\'hôte :';
+
+  @override
   String get simulAddExtraTimePerPlayer => 'Ajouter le temps initial à votre pendule pour chaque joueur participant à la simultanée';
 
   @override
@@ -4351,10 +4417,16 @@ class AppLocalizationsFr extends AppLocalizations {
   String get keyGoToStartOrEnd => 'aller au début/à la fin';
 
   @override
+  String get keyGoToPreviousOrNextLine => 'aller à la variante précédente/suivante';
+
+  @override
   String get keyCycleSelectedVariation => 'Changer de variante';
 
   @override
   String get keyShowOrHideComments => 'montrer/cacher les annotations';
+
+  @override
+  String get keyShowOrHideCurrentVariation => 'afficher/masquer la variante actuelle';
 
   @override
   String get keyEnterOrExitVariation => 'entrer dans/sortir d\'une variante';
@@ -4630,9 +4702,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get dark => 'Sombre';
 
   @override
-  String get transparent => 'Transparent';
-
-  @override
   String get picture => 'Photo';
 
   @override
@@ -4642,7 +4711,13 @@ class AppLocalizationsFr extends AppLocalizations {
   String get roundness => 'Coins arrondis';
 
   @override
+  String get backgroundImage => 'Image d\'arrière-plan';
+
+  @override
   String get backgroundImageUrl => 'URL de l\'image de fond :';
+
+  @override
+  String get imageOpacity => 'Opacité de l\'image';
 
   @override
   String get board => 'Échiquier';
@@ -4715,6 +4790,11 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String perfRatingX(String param) {
     return 'Classement : $param';
+  }
+
+  @override
+  String perfRatingLabel(String param) {
+    return 'Classement (cote) : $param.';
   }
 
   @override
@@ -4869,6 +4949,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get clickHereToReadIt => 'Cliquez ici pour le lire.';
+
+  @override
+  String get readTheMessage => 'Lire le message';
 
   @override
   String get sorry => 'Désolé :(';
@@ -5306,6 +5389,15 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get settings => 'Paramètres';
+
+  @override
+  String get verifyingYourDevice => 'Vérification de votre appareil...';
+
+  @override
+  String get chessOpenings => 'Ouvertures';
+
+  @override
+  String get boards => 'Échiquiers';
 
   @override
   String opponentLeftCounter(int count) {
@@ -6151,6 +6243,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get studyYouCanPasteThisInTheForumToEmbed => 'Vous pouvez collez ce lien dans le forum afin de l’insérer';
 
   @override
+  String get studyPasteToEmbedChapterInForumOrBlog => 'Vous pouvez coller ce lien dans le forum ou votre blogue pour intégrer le chapitre.';
+
+  @override
   String get studyStartAtInitialPosition => 'Commencer à partir du début';
 
   @override
@@ -6523,7 +6618,13 @@ class AppLocalizationsFr extends AppLocalizations {
   String get studyLoadExistingLichessGameTitle => 'Ouvrir une partie Lichess existante';
 
   @override
+  String get studyLoadGameFromTheWebTitle => 'Charger une partie à partir du Web';
+
+  @override
   String get studyLoadExistingLichessGameText => 'Collez l\'URL d\'une partie Lichess<br>(ex. lichess.org/7fHIU0XI)<br>pour insérer les coups de la partie dans le chapitre.';
+
+  @override
+  String get studyLoadGameFromTheWebText => 'Collez l\'URL d\'une partie<br>(ex. lichess.org/7fHIU0XI)<br>pour insérer les coups dans le chapitre.';
 
   @override
   String get studyFromFenStringTitle => 'À partir d\'une position en format FEN';
