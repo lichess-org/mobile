@@ -21,6 +21,9 @@ sealed class CreateStudyChapterParams();
 
 class CreateChapterOfExistingStudy(final StudyId studyId) extends CreateStudyChapterParams;
 
+class CreateFirstChapterOfNewStudy(final CreateStudyPayload studyPayload)
+    extends CreateStudyChapterParams;
+
 enum _ChapterSource() {
   empty,
   fen,
@@ -308,6 +311,8 @@ class _CreateStudyChapterBottomSheetState() extends ConsumerState<CreateStudyCha
           studyId,
           await ref.read(studyRepositoryProvider).createChapter(studyId, chapterPayload),
         ),
+        CreateFirstChapterOfNewStudy(:final studyPayload) =>
+          await ref.read(studyRepositoryProvider).createStudy(studyPayload, chapterPayload),
       };
 
       if (!mounted) return;

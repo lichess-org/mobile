@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/study/create_study_floating_action_button.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -239,6 +240,7 @@ class _StudyListScreenState() extends ConsumerState<StudyListScreen> {
           ],
         ),
       },
+      floatingActionButton: const CreateStudyFloatingActionButton(),
     );
   }
 }
