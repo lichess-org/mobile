@@ -10,20 +10,15 @@ part 'message.freezed.dart';
 typedef UnreadMessages = ({int unread, bool lichess});
 
 @freezed
-sealed class Contacts with _$Contacts {
-  const Contacts._();
+sealed class const Contacts._() with _$Contacts {
+  const factory({required IList<Contact> contacts, required LightUser me, required bool isBot}) =
+      _Contacts;
 
-  const factory Contacts({
-    required IList<Contact> contacts,
-    required LightUser me,
-    required bool isBot,
-  }) = _Contacts;
-
-  factory Contacts.fromServerJson(Map<String, dynamic> json) {
+  factory fromServerJson(Map<String, dynamic> json) {
     return Contacts.fromPick(pick(json).required());
   }
 
-  factory Contacts.fromPick(RequiredPick pick) {
+  factory fromPick(RequiredPick pick) {
     return Contacts(
       contacts: pick('contacts').asListOrEmpty((it) => Contact.fromPick(it)).toIList(),
       me: pick('me').asLightUserOrThrow(),
@@ -40,17 +35,14 @@ sealed class Contacts with _$Contacts {
 
 @freezed
 sealed class ConversationData with _$ConversationData {
-  const factory ConversationData({
-    required LightUser me,
-    required bool isBot,
-    required Convo convo,
-  }) = _ConversationData;
+  const factory({required LightUser me, required bool isBot, required Convo convo}) =
+      _ConversationData;
 
-  factory ConversationData.fromServerJson(Map<String, dynamic> json) {
+  factory fromServerJson(Map<String, dynamic> json) {
     return ConversationData.fromPick(pick(json).required());
   }
 
-  factory ConversationData.fromPick(RequiredPick pick) {
+  factory fromPick(RequiredPick pick) {
     return ConversationData(
       me: pick('me').asLightUserOrThrow(),
       isBot: pick('bot').asBoolOrFalse(),
@@ -61,14 +53,13 @@ sealed class ConversationData with _$ConversationData {
 
 @freezed
 sealed class Message with _$Message {
-  const factory Message({required UserId userId, required String text, required DateTime date}) =
-      _Message;
+  const factory({required UserId userId, required String text, required DateTime date}) = _Message;
 
-  factory Message.fromServerJson(Map<String, dynamic> json) {
+  factory fromServerJson(Map<String, dynamic> json) {
     return Message.fromPick(pick(json).required());
   }
 
-  factory Message.fromPick(RequiredPick pick) {
+  factory fromPick(RequiredPick pick) {
     return Message(
       userId: pick('user').asUserIdOrThrow(),
       text: pick('text').asStringOrThrow(),
@@ -79,7 +70,7 @@ sealed class Message with _$Message {
 
 @freezed
 sealed class LastMessage with _$LastMessage {
-  const factory LastMessage({
+  const factory({
     required UserId userId,
     required String text,
     required DateTime date,
@@ -89,13 +80,13 @@ sealed class LastMessage with _$LastMessage {
 
 @freezed
 sealed class Contact with _$Contact {
-  const factory Contact({required LightUser user, required LastMessage lastMessage}) = _Contact;
+  const factory({required LightUser user, required LastMessage lastMessage}) = _Contact;
 
-  factory Contact.fromServerJson(Map<String, dynamic> json) {
+  factory fromServerJson(Map<String, dynamic> json) {
     return Contact.fromPick(pick(json).required());
   }
 
-  factory Contact.fromPick(RequiredPick pick) {
+  factory fromPick(RequiredPick pick) {
     return Contact(
       user: pick('user').asLightUserOrThrow(),
       lastMessage: LastMessage(
@@ -112,7 +103,7 @@ typedef Relations = ({bool? inward, bool? outward});
 
 @freezed
 sealed class Convo with _$Convo {
-  const factory Convo({
+  const factory({
     required LightUser user,
     required IList<Message> messages,
     required Relations relations,
@@ -120,11 +111,11 @@ sealed class Convo with _$Convo {
     ModDetails? modDetails,
   }) = _Convo;
 
-  factory Convo.fromServerJson(Map<String, dynamic> json) {
+  factory fromServerJson(Map<String, dynamic> json) {
     return Convo.fromPick(pick(json).required());
   }
 
-  factory Convo.fromPick(RequiredPick pick) {
+  factory fromPick(RequiredPick pick) {
     return Convo(
       user: pick('user').asLightUserOrThrow(),
       messages: pick('msgs').asListOrThrow((it) => Message.fromPick(it)).toIList(),
@@ -141,17 +132,17 @@ typedef ModDetails = ({bool kid, bool openInbox});
 
 @freezed
 sealed class SearchResult with _$SearchResult {
-  const factory SearchResult({
+  const factory({
     required IList<Contact> contacts,
     required IList<LightUser> friends,
     required IList<LightUser> users,
   }) = _SearchResult;
 
-  factory SearchResult.fromJson(Map<String, dynamic> json) {
+  factory fromJson(Map<String, dynamic> json) {
     return SearchResult.fromPick(pick(json).required());
   }
 
-  factory SearchResult.fromPick(RequiredPick pick) {
+  factory fromPick(RequiredPick pick) {
     return SearchResult(
       contacts: pick('contacts').asListOrEmpty((it) => Contact.fromPick(it)).toIList(),
       friends: pick('friends').asListOrEmpty((it) => it.asLightUserOrThrow()).toIList(),

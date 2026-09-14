@@ -12,7 +12,7 @@ final gamePreferencesProvider = NotifierProvider<GamePreferences, GamePrefs>(
 );
 
 /// Local game preferences, defined client-side only.
-class GamePreferences extends Notifier<GamePrefs> with PreferencesStorage<GamePrefs> {
+class GamePreferences() extends Notifier<GamePrefs> with PreferencesStorage<GamePrefs> {
   @override
   @protected
   final prefCategory = PrefCategory.game;
@@ -41,9 +41,9 @@ class GamePreferences extends Notifier<GamePrefs> with PreferencesStorage<GamePr
 
 @Freezed(fromJson: true, toJson: true)
 sealed class GamePrefs with _$GamePrefs implements Serializable {
-  const factory GamePrefs({bool? enableChat, bool? blindfoldMode}) = _GamePrefs;
+  const factory({bool? enableChat, bool? blindfoldMode}) = _GamePrefs;
 
   static const defaults = GamePrefs(enableChat: true);
 
-  factory GamePrefs.fromJson(Map<String, dynamic> json) => _$GamePrefsFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$GamePrefsFromJson(json);
 }

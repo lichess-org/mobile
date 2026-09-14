@@ -16,9 +16,7 @@ import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:material_ui/material_ui.dart';
 
-class EngineSettingsScreen extends ConsumerStatefulWidget {
-  const EngineSettingsScreen({super.key});
-
+class const EngineSettingsScreen({super.key}) extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const EngineSettingsScreen());
   }
@@ -27,7 +25,7 @@ class EngineSettingsScreen extends ConsumerStatefulWidget {
   ConsumerState<EngineSettingsScreen> createState() => _EngineSettingsScreenState();
 }
 
-class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
+class _EngineSettingsScreenState() extends ConsumerState<EngineSettingsScreen> {
   /// null = loading, true = has the file with checked integrity, false = doesn't have it
   bool? _hasVerifiedNNUEFile;
 
@@ -81,7 +79,7 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
     final prefs = ref.watch(engineEvaluationPreferencesProvider);
 
     return PlatformScaffold(
-      appBar: PlatformAppBar(title: const Text('Chess engine')),
+      appBar: const PlatformAppBar(title: Text('Chess engine')),
       body: ListView(
         children: [
           if (_hasVerifiedNNUEFile == null)
@@ -225,14 +223,12 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
 ///
 /// Nothing is shown until there is something to delete: one network ships with the app, and the
 /// rest arrive only if someone chose that rating to play against.
-class _MaiaNetworksSection extends ConsumerStatefulWidget {
-  const _MaiaNetworksSection();
-
+class const _MaiaNetworksSection() extends ConsumerStatefulWidget {
   @override
   ConsumerState<_MaiaNetworksSection> createState() => _MaiaNetworksSectionState();
 }
 
-class _MaiaNetworksSectionState extends ConsumerState<_MaiaNetworksSection> {
+class _MaiaNetworksSectionState() extends ConsumerState<_MaiaNetworksSection> {
   Set<MaiaRating>? _downloaded;
 
   /// The networks on disk that no rating can use, left behind by an older version of the app.

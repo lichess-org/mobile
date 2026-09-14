@@ -4,7 +4,7 @@ import 'package:logging/logging.dart';
 final _logger = Logger('ServerStatus');
 
 /// The availability of the lichess main server.
-enum ServerStatus {
+enum ServerStatus() {
   /// The lichess server is up.
   up,
 
@@ -30,7 +30,7 @@ final serverStatusProvider = NotifierProvider<ServerStatusNotifier, ServerStatus
 /// backend is unreachable, so those two codes are the only reliable indication of an outage.
 /// Responses from the opening explorer, the tablebase or the CDN are never taken into account, as
 /// those run on their own servers.
-class ServerStatusNotifier extends Notifier<ServerStatus> {
+class ServerStatusNotifier() extends Notifier<ServerStatus> {
   /// The server is assumed to be up until a response says otherwise.
   @override
   ServerStatus build() => ServerStatus.up;

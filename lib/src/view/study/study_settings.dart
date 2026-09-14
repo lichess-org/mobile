@@ -9,11 +9,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_ui/material_ui.dart';
 
-class StudySettingsScreen extends ConsumerWidget {
-  const StudySettingsScreen(this.options);
-
-  final StudyOptions options;
-
+class const StudySettingsScreen(final StudyOptions options) extends ConsumerWidget {
   static Route<dynamic> buildRoute(StudyOptions options) {
     return buildScreenRoute(screen: StudySettingsScreen(options));
   }

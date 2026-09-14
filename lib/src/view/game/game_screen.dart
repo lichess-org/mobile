@@ -36,16 +36,14 @@ import 'package:material_ui/material_ui.dart';
 /// - From an existing game: using [ExistingGameSource].
 ///
 /// The screen will show a loading board while the game is being created.
-class GameScreen extends ConsumerStatefulWidget {
-  const GameScreen({required this.source, this.loadingPosition, this.lastMoveAt, super.key});
-
-  final GameScreenSource source;
-
-  final LoadingParam? loadingPosition;
+class const GameScreen({
+  required final GameScreenSource source,
+  final LoadingParam? loadingPosition,
 
   /// The date of the last move played in the game. If null, the game is in progress.
-  final DateTime? lastMoveAt;
-
+  final DateTime? lastMoveAt,
+  super.key,
+}) extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute({
     required GameScreenSource source,
     LoadingParam? loadingPosition,
@@ -68,7 +66,7 @@ final _isRealTimePlayableGameProvider = FutureProvider.autoDispose.family<bool, 
   return state.game.meta.speed != Speed.correspondence && state.game.playable;
 }, name: 'IsRealTimePlayableGameProvider');
 
-class _GameScreenState extends ConsumerState<GameScreen> {
+class _GameScreenState() extends ConsumerState<GameScreen> {
   final _whiteClockKey = GlobalKey(debugLabel: 'whiteClockOnGameScreen');
   final _blackClockKey = GlobalKey(debugLabel: 'blackClockOnGameScreen');
   final _boardKey = GlobalKey(debugLabel: 'boardOnGameScreen');
@@ -292,38 +290,28 @@ class _GameScreenState extends ConsumerState<GameScreen> {
   }
 }
 
-sealed class _GameTitleVariant {
-  const _GameTitleVariant();
-}
+sealed class const _GameTitleVariant();
 
-final class _LobbyTitleVariant extends _GameTitleVariant {
-  const _LobbyTitleVariant(this.seek);
-  final GameSeek seek;
-}
+final class const _LobbyTitleVariant(final GameSeek seek) extends _GameTitleVariant;
 
-final class _ChallengeTitleVariant extends _GameTitleVariant {
-  const _ChallengeTitleVariant(this.challenge);
-  final ChallengeRequest challenge;
-}
+final class const _ChallengeTitleVariant(final ChallengeRequest challenge)
+    extends _GameTitleVariant;
 
-final class _StandaloneTitleVariant extends _GameTitleVariant {
-  const _StandaloneTitleVariant({required this.id, this.lastMoveAt});
-  final GameFullId id;
-  final DateTime? lastMoveAt;
-}
+final class const _StandaloneTitleVariant({
+  required final GameFullId id,
+  final DateTime? lastMoveAt,
+}) extends _GameTitleVariant;
 
 /// Single title widget for all GameScreen AppBar configurations.
 ///
 /// When [monitorSocket] is true, shows "Reconnecting" if the socket is
 /// disconnected (ping rating == 0). [socketUri] scopes the ping check to a
 /// specific socket; null monitors the currently active route.
-class _GameTitle extends ConsumerWidget {
-  const _GameTitle(this.variant, {this.monitorSocket = false, this.socketUri});
-
-  final _GameTitleVariant variant;
-  final bool monitorSocket;
-  final Uri? socketUri;
-
+class const _GameTitle(
+  final _GameTitleVariant variant, {
+  final bool monitorSocket = false,
+  final Uri? socketUri,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (monitorSocket && ref.watch(socketPingProvider(socketUri)).rating == 0) {
@@ -376,13 +364,8 @@ final _gameMetaProvider = FutureProvider.autoDispose.family<GameMeta, GameFullId
   return (await ref.read(gameControllerProvider(gameId).future)).game.meta;
 }, name: 'GameMetaProvider');
 
-class _ExportedGameTitle extends ConsumerWidget {
-  const _ExportedGameTitle({required this.id, this.lastMoveAt});
-
-  final GameFullId id;
-
-  final DateTime? lastMoveAt;
-
+class const _ExportedGameTitle({required final GameFullId id, final DateTime? lastMoveAt})
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final metaAsync = ref.watch(_gameMetaProvider(id));
@@ -395,11 +378,7 @@ class _ExportedGameTitle extends ConsumerWidget {
 }
 
 /// App bar menu holding the game actions: spectators, bookmark, share and export.
-class _GameMenu extends ConsumerWidget {
-  const _GameMenu({required this.gameId});
-
-  final GameFullId gameId;
-
+class const _GameMenu({required final GameFullId gameId}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final gameState = ref.watch(gameControllerProvider(gameId)).value;

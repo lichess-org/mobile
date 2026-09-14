@@ -52,19 +52,15 @@ final _mockStalePuzzleJson = mockDailyPuzzleResponse.trim().replaceFirst(
   '"id":"stale1"',
 );
 
-class MockAppLinks extends Mock implements AppLinks {}
+class MockAppLinks() extends Mock implements AppLinks;
 
-class MockGameRepository extends Mock implements GameRepository {}
+class MockGameRepository() extends Mock implements GameRepository;
 
-class MockChallengeRepository extends Mock implements ChallengeRepository {}
+class MockChallengeRepository() extends Mock implements ChallengeRepository;
 
-class MockUserRepository extends Mock implements UserRepository {}
+class MockUserRepository() extends Mock implements UserRepository;
 
-class _DailyPuzzleLinkTestWidget extends ConsumerWidget {
-  const _DailyPuzzleLinkTestWidget({this.puzzleId});
-
-  final String? puzzleId;
-
+class const _DailyPuzzleLinkTestWidget({final String? puzzleId}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ElevatedButton(
@@ -76,11 +72,7 @@ class _DailyPuzzleLinkTestWidget extends ConsumerWidget {
   }
 }
 
-class _TestWidget extends ConsumerWidget {
-  const _TestWidget({required this.uri});
-
-  final Uri uri;
-
+class const _TestWidget({required final Uri uri}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ElevatedButton(
@@ -94,14 +86,12 @@ class _TestWidget extends ConsumerWidget {
 }
 
 /// Starts the [AppLinksService] when mounted, as the real app does at launch.
-class _ColdStartLauncher extends ConsumerStatefulWidget {
-  const _ColdStartLauncher();
-
+class const _ColdStartLauncher() extends ConsumerStatefulWidget {
   @override
   ConsumerState<_ColdStartLauncher> createState() => _ColdStartLauncherState();
 }
 
-class _ColdStartLauncherState extends ConsumerState<_ColdStartLauncher> {
+class _ColdStartLauncherState() extends ConsumerState<_ColdStartLauncher> {
   @override
   void initState() {
     super.initState();
@@ -778,9 +768,8 @@ void main() {
         (_) async => const User(id: UserId('thibault'), username: 'Thibault', perfs: IMap.empty()),
       );
       final testGame = generateExportedGames(count: 1).first;
-      when(
-        () => mockUserRepository.getCurrentGame(const UserId('thibault')),
-      ).thenAnswer((_) async => testGame);
+      when(() => mockUserRepository.getCurrentGame(const UserId('thibault')))
+          .thenAnswer((_) async => testGame);
 
       await triggerAppLink(
         tester,
@@ -816,9 +805,8 @@ void main() {
     testWidgets('Shows error snackbar for invalid user', (WidgetTester tester) async {
       final uri = Uri.parse('https://lichess.org/@/hikaru');
       final mockUserRepository = MockUserRepository();
-      when(
-        () => mockUserRepository.getUser(const UserId('hikaru')),
-      ).thenThrow(Exception('User not found'));
+      when(() => mockUserRepository.getUser(const UserId('hikaru')))
+          .thenThrow(Exception('User not found'));
 
       await triggerAppLink(
         tester,

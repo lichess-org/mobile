@@ -25,11 +25,7 @@ final sharedPgnServiceProvider = Provider<SharedPgnService>((ref) {
 /// reads the shared file content and delivers it as a plain [String], either as
 /// the initial value the app was cold-started with or through an event stream
 /// while the app is already running.
-class SharedPgnService {
-  SharedPgnService(this.ref);
-
-  final Ref ref;
-
+class SharedPgnService(final Ref ref) {
   StreamSubscription<dynamic>? _subscription;
 
   Future<void> start() async {

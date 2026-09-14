@@ -8,12 +8,12 @@ import 'package:logging/logging.dart';
 
 final _logger = Logger('PreferencesStorage');
 
-abstract class Serializable {
+abstract class Serializable() {
   Map<String, dynamic> toJson();
 }
 
 /// A preference category with its storage key
-enum PrefCategory {
+enum PrefCategory(final String storageKey) {
   general('preferences.general'),
   home('preferences.home'),
   board('preferences.board'),
@@ -33,11 +33,7 @@ enum PrefCategory {
   offlineComputerGame('preferences.offlineComputerGame'),
   account('preferences.account'),
   log('preferences.log'),
-  clockTool('preferences.clockTool');
-
-  const PrefCategory(this.storageKey);
-
-  final String storageKey;
+  clockTool('preferences.clockTool'),
 }
 
 /// A [Notifier] mixin to provide a way to store and retrieve preferences.

@@ -19,9 +19,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_ui/material_ui.dart';
 
-class ThemeSettingsScreen extends ConsumerWidget {
-  const ThemeSettingsScreen({super.key});
-
+class const ThemeSettingsScreen({super.key}) extends ConsumerWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const ThemeSettingsScreen());
   }
@@ -42,14 +40,12 @@ String shapeColorL10n(ShapeColor shapeColor) => switch (shapeColor) {
   ShapeColor.yellow => 'Yellow',
 };
 
-class _Body extends ConsumerStatefulWidget {
-  const _Body();
-
+class const _Body() extends ConsumerStatefulWidget {
   @override
   ConsumerState<_Body> createState() => _BodyState();
 }
 
-class _BodyState extends ConsumerState<_Body> {
+class _BodyState() extends ConsumerState<_Body> {
   late double brightness;
   late double hue;
 
@@ -250,19 +246,12 @@ class _BodyState extends ConsumerState<_Body> {
   }
 }
 
-class _BoardPreview extends StatelessWidget {
-  const _BoardPreview({
-    required this.size,
-    required this.boardPrefs,
-    required this.brightness,
-    required this.hue,
-  });
-
-  final BoardPrefs boardPrefs;
-  final double brightness;
-  final double hue;
-  final double size;
-
+class const _BoardPreview({
+  required final double size,
+  required final BoardPrefs boardPrefs,
+  required final double brightness,
+  required final double hue,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(

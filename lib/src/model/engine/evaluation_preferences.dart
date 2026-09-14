@@ -19,7 +19,8 @@ final engineEvaluationPreferencesProvider =
 /// - Analysis screen
 /// - Study screen
 /// - Broadcast game screen
-class EngineEvaluationPreferences extends Notifier<EngineEvaluationPrefState>
+class EngineEvaluationPreferences()
+    extends Notifier<EngineEvaluationPrefState>
     with PreferencesStorage<EngineEvaluationPrefState> {
   @override
   @protected
@@ -61,7 +62,7 @@ class EngineEvaluationPreferences extends Notifier<EngineEvaluationPrefState>
   }
 }
 
-enum ChessEnginePref {
+enum ChessEnginePref() {
   /// Stockfish 19 with the small net embedded in the app, ready to evaluate right away.
   sfLight,
 
@@ -85,10 +86,10 @@ enum ChessEnginePref {
 }
 
 @Freezed(fromJson: true, toJson: true)
-sealed class EngineEvaluationPrefState with _$EngineEvaluationPrefState implements Serializable {
-  const EngineEvaluationPrefState._();
-
-  const factory EngineEvaluationPrefState({
+sealed class const EngineEvaluationPrefState._()
+    with _$EngineEvaluationPrefState
+    implements Serializable {
+  const factory({
     /// Whether the engine evaluation is enabled (acts both for local and cloud).
     required bool isEnabled,
     @Assert('numEvalLines >= 0 && numEvalLines <= 3') required int numEvalLines,
@@ -111,7 +112,7 @@ sealed class EngineEvaluationPrefState with _$EngineEvaluationPrefState implemen
     enginePref: ChessEnginePref.sfLight,
   );
 
-  factory EngineEvaluationPrefState.fromJson(Map<String, dynamic> json) {
+  factory fromJson(Map<String, dynamic> json) {
     return _$EngineEvaluationPrefStateFromJson(json);
   }
 }

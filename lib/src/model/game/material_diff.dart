@@ -6,7 +6,7 @@ part 'material_diff.freezed.dart';
 
 @freezed
 sealed class MaterialDiffSide with _$MaterialDiffSide {
-  const factory MaterialDiffSide({
+  const factory({
     required IMap<Role, int> pieces,
     required int score,
     required IMap<Role, int> capturedPieces,
@@ -15,7 +15,7 @@ sealed class MaterialDiffSide with _$MaterialDiffSide {
     required int? checksGiven,
   }) = _MaterialDiffSide;
 
-  factory MaterialDiffSide.empty() =>
+  factory empty() =>
       MaterialDiffSide(pieces: IMap(), score: 0, capturedPieces: IMap(), checksGiven: null);
 }
 
@@ -29,13 +29,10 @@ const IMap<Role, int> pieceScores = IMapConst({
 });
 
 @freezed
-sealed class MaterialDiff with _$MaterialDiff {
-  const MaterialDiff._();
+sealed class const MaterialDiff._() with _$MaterialDiff {
+  const factory({required MaterialDiffSide black, required MaterialDiffSide white}) = _MaterialDiff;
 
-  const factory MaterialDiff({required MaterialDiffSide black, required MaterialDiffSide white}) =
-      _MaterialDiff;
-
-  factory MaterialDiff.fromPosition(Position position) {
+  factory fromPosition(Position position) {
     if (position.rule == Rule.crazyhouse || position.rule == Rule.horde) {
       return MaterialDiff(black: MaterialDiffSide.empty(), white: MaterialDiffSide.empty());
     }

@@ -85,74 +85,52 @@ Uri lichessWSUri(String unencodedPath, [Map<String, String>? queryParameters]) =
 ///   - User-Agent header
 ///
 /// Handles low-level ping/pong protocol, message acks, and automatic reconnections, event versioning.
-class SocketClient {
-  SocketClient(
-    this.route, {
-    this.version,
-    required this.channelFactory,
-    required this.getSession,
-    required this.packageInfo,
-    required this.deviceInfo,
-    required this.sri,
-    this.onStreamListen,
-    this.onStreamCancel,
-    this.onEventGapFailure,
-    this.pingDelay = _kPingDelay,
-    this.pingMaxLag = _kPingMaxLag,
-    this.autoReconnectDelay = _kAutoReconnectDelay,
-    this.reconnectGracePeriod = _kReconnectGracePeriod,
-    this.resendAckDelay = _kResendAckDelay,
-  }) : assert(route.path.isNotEmpty, 'Route path must not be empty'),
-       assert(pingDelay > Duration.zero, 'Ping delay must be greater than 0'),
-       assert(pingMaxLag > Duration.zero, 'Ping max lag must be greater than 0'),
-       assert(autoReconnectDelay > Duration.zero, 'Auto reconnect delay must be greater than 0'),
-       assert(
-         reconnectGracePeriod > Duration.zero,
-         'Reconnect grace period must be greater than 0',
-       ),
-       assert(resendAckDelay > Duration.zero, 'Resend ack delay must be greater than 0');
-
-  final WebSocketChannelFactory channelFactory;
-
-  final AuthUser? Function() getSession;
-
-  final PackageInfo packageInfo;
-
-  final BaseDeviceInfo deviceInfo;
-
-  /// The Socket Random Identifier.
-  final String sri;
-
+class SocketClient(
   /// The route to connect to.
-  final Uri route;
+  final Uri route, {
 
   /// The current event version if this socket is versioned.
-  int? version;
+  var int? version,
+  required final WebSocketChannelFactory channelFactory,
+  required final AuthUser? Function() getSession,
+  required final PackageInfo packageInfo,
+  required final BaseDeviceInfo deviceInfo,
+
+  /// The Socket Random Identifier.
+  required final String sri,
+
+  /// Called when the first listener is added to the socket stream.
+  final VoidCallback? onStreamListen,
+
+  /// Called when the last listener is removed from the socket stream.
+  final VoidCallback? onStreamCancel,
+
+  /// Called when a versioned socket event gap failed to resolve after 10 retries.
+  final VoidCallback? onEventGapFailure,
 
   /// The delay between the next ping after receiving a pong.
-  final Duration pingDelay;
+  final Duration pingDelay = _kPingDelay,
 
   /// The maximum lag before considering the connection as lost.
-  final Duration pingMaxLag;
+  final Duration pingMaxLag = _kPingMaxLag,
 
   /// The delay before reconnecting after a connection failure.
-  final Duration autoReconnectDelay;
+  final Duration autoReconnectDelay = _kAutoReconnectDelay,
 
   /// How long connection failures keep being retried at [autoReconnectDelay], before the delay
   /// starts doubling.
-  final Duration reconnectGracePeriod;
+  final Duration reconnectGracePeriod = _kReconnectGracePeriod,
 
   /// The delay before resending an ack.
-  final Duration resendAckDelay;
-
-  /// Called when the first listener is added to the socket stream.
-  final VoidCallback? onStreamListen;
-
-  /// Called when the last listener is removed from the socket stream.
-  final VoidCallback? onStreamCancel;
-
-  /// Called when a versioned socket event gap failed to resolve after 10 retries.
-  final VoidCallback? onEventGapFailure;
+  final Duration resendAckDelay = _kResendAckDelay,
+}) {
+  this
+    : assert(route.path.isNotEmpty, 'Route path must not be empty'),
+      assert(pingDelay > Duration.zero, 'Ping delay must be greater than 0'),
+      assert(pingMaxLag > Duration.zero, 'Ping max lag must be greater than 0'),
+      assert(autoReconnectDelay > Duration.zero, 'Auto reconnect delay must be greater than 0'),
+      assert(reconnectGracePeriod > Duration.zero, 'Reconnect grace period must be greater than 0'),
+      assert(resendAckDelay > Duration.zero, 'Resend ack delay must be greater than 0');
 
   late final StreamController<SocketEvent> _streamController =
       StreamController<SocketEvent>.broadcast(onListen: onStreamListen, onCancel: onStreamCancel);
@@ -743,8 +721,13 @@ class SocketClient {
 /// there is always an active client.
 /// When a requested client is disposed, the pool will automatically reconnect
 /// the default client.
-class SocketPool {
-  SocketPool(this._ref, {this.idleTimeout = _kIdleTimeout}) {
+class SocketPool(
+  final Ref _ref, {
+
+  /// The delay before closing the socket if idle (no subscription).
+  final Duration idleTimeout = _kIdleTimeout,
+}) {
+  this {
     // Create a default socket client. This one is never disposed.
     final client = SocketClient(
       _currentRoute,
@@ -772,11 +755,6 @@ class SocketPool {
       }
     });
   }
-
-  final Ref _ref;
-
-  /// The delay before closing the socket if idle (no subscription).
-  final Duration idleTimeout;
 
   final _averageLag = ValueNotifier(Duration.zero);
 
@@ -1032,10 +1010,7 @@ final socketPingProvider = NotifierProvider.autoDispose
 /// If [route] is provided, it will return the average lag for that route only, and if any other route
 /// is active, it will return [Duration.zero], meaning the socket is not connected.
 /// If no route is provided, it will return the average lag for the current active route.
-class SocketPingNotifier extends Notifier<SocketPingState> {
-  SocketPingNotifier(this.route);
-  final Uri? route;
-
+class SocketPingNotifier(final Uri? route) extends Notifier<SocketPingState> {
   @override
   SocketPingState build({Uri? route}) {
     final pool = ref.watch(socketPoolProvider);
@@ -1108,9 +1083,7 @@ bool _isTransportUnavailable(Object error) => error is SocketException || error 
 /// A factory to create a [WebSocketChannel].
 ///
 /// This is useful to be able to mock the [WebSocketChannel] in tests.
-class WebSocketChannelFactory {
-  const WebSocketChannelFactory();
-
+class const WebSocketChannelFactory() {
   /// Creates a [WebSocketChannel] from the given [url].
   ///
   /// Throws a [TimeoutException] if the connection takes too long.

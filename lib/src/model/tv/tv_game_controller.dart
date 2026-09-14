@@ -40,11 +40,9 @@ final tvGameControllerProvider = AsyncNotifierProvider.autoDispose
 ///
 /// Chat is only enabled when watching a single game or a user's TV, not when
 /// watching a TV channel.
-class TvGameController extends AsyncNotifier<TvGameState> with ChatMixin<TvGameState> {
-  TvGameController(this.params);
-
-  final TvGameControllerParams params;
-
+class TvGameController(final TvGameControllerParams params)
+    extends AsyncNotifier<TvGameState>
+    with ChatMixin<TvGameState> {
   StreamSubscription<SocketEvent>? _socketSubscription;
 
   VoidCallback? _onReload;
@@ -307,10 +305,8 @@ class TvGameController extends AsyncNotifier<TvGameState> with ChatMixin<TvGameS
 }
 
 @freezed
-sealed class TvGameState with _$TvGameState, ChatMixinState {
-  const TvGameState._();
-
-  const factory TvGameState({
+sealed class const TvGameState._() with _$TvGameState, ChatMixinState {
+  const factory({
     required PlayableGame game,
     required int stepCursor,
     required Side orientation,

@@ -23,9 +23,7 @@ import 'package:material_color_utilities/score/score.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:path/path.dart';
 
-class BackgroundChoiceScreen extends StatelessWidget {
-  const BackgroundChoiceScreen({super.key});
-
+class const BackgroundChoiceScreen({super.key}) extends StatelessWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const BackgroundChoiceScreen());
   }
@@ -34,7 +32,7 @@ class BackgroundChoiceScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return PlatformScaffold(
       appBar: PlatformAppBar(title: Text(context.l10n.background)),
-      body: _Body(),
+      body: const _Body(),
     );
   }
 }
@@ -42,7 +40,7 @@ class BackgroundChoiceScreen extends StatelessWidget {
 const colorChoices = BackgroundColor.values;
 const itemsByRow = 3;
 
-class _Body extends ConsumerWidget {
+class const _Body() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final appDocumentsDirectory = ref
@@ -191,21 +189,16 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class ConfirmColorBackgroundScreen extends StatefulWidget {
-  const ConfirmColorBackgroundScreen({
-    required this.initialIndex,
-    required this.boardPrefs,
-    super.key,
-  });
-
-  final int initialIndex;
-  final BoardPrefs boardPrefs;
-
+class const ConfirmColorBackgroundScreen({
+  required final int initialIndex,
+  required final BoardPrefs boardPrefs,
+  super.key,
+}) extends StatefulWidget {
   @override
   State<ConfirmColorBackgroundScreen> createState() => _ConfirmColorBackgroundScreenState();
 }
 
-class _ConfirmColorBackgroundScreenState extends State<ConfirmColorBackgroundScreen> {
+class _ConfirmColorBackgroundScreenState() extends State<ConfirmColorBackgroundScreen> {
   late PageController _controller;
 
   @override
@@ -310,26 +303,16 @@ class _ConfirmColorBackgroundScreenState extends State<ConfirmColorBackgroundScr
   }
 }
 
-class ConfirmImageBackgroundScreen extends StatefulWidget {
-  const ConfirmImageBackgroundScreen({
-    required this.image,
-    required this.boardPrefs,
-    required this.meanLuminance,
-    required this.baseColor,
-    required this.imageSize,
-    required this.viewport,
-    required this.appDocumentsDirectory,
-    super.key,
-  });
-
-  final XFile image;
-  final BoardPrefs boardPrefs;
-  final Color baseColor;
-  final double meanLuminance;
-  final Size imageSize;
-  final Size viewport;
-  final Directory appDocumentsDirectory;
-
+class const ConfirmImageBackgroundScreen({
+  required final XFile image,
+  required final BoardPrefs boardPrefs,
+  required final double meanLuminance,
+  required final Color baseColor,
+  required final Size imageSize,
+  required final Size viewport,
+  required final Directory appDocumentsDirectory,
+  super.key,
+}) extends StatefulWidget {
   Orientation get viewportOrientation =>
       viewport.width > viewport.height ? Orientation.landscape : Orientation.portrait;
 
@@ -354,7 +337,7 @@ class ConfirmImageBackgroundScreen extends StatefulWidget {
   State<ConfirmImageBackgroundScreen> createState() => _ConfirmImageBackgroundScreenState();
 }
 
-class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScreen> {
+class _ConfirmImageBackgroundScreenState() extends State<ConfirmImageBackgroundScreen> {
   bool blur = false;
   bool showBoard = true;
 
@@ -556,12 +539,8 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
 /// Applies the background theme, based on [baseTheme], to the child widget.
 ///
 /// This is used to try new background themes without changing the whole app theme.
-class _BackgroundTheme extends StatelessWidget {
-  const _BackgroundTheme({required this.baseTheme, required this.child});
-
-  final ThemeData baseTheme;
-  final Widget child;
-
+class const _BackgroundTheme({required final ThemeData baseTheme, required final Widget child})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Theme(

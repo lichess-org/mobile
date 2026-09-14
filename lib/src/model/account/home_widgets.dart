@@ -1,7 +1,10 @@
 import 'package:lichess_mobile/l10n/l10n.dart';
 
 /// Enum representing the editable widgets on the home screen.
-enum HomeEditableWidget {
+enum HomeEditableWidget(
+  /// True if the widget should always be enabled and cannot be disabled.
+  final bool alwaysEnabled,
+) {
   hello(false),
   perfCards(false),
   friends(false),
@@ -21,9 +24,4 @@ enum HomeEditableWidget {
     HomeEditableWidget.recentGames => l10n.recentGames,
     HomeEditableWidget.blogCarousel => l10n.blog,
   };
-
-  const HomeEditableWidget(this.alwaysEnabled);
-
-  /// True if the widget should always be enabled and cannot be disabled.
-  final bool alwaysEnabled;
 }

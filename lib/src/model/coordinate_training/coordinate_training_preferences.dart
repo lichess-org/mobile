@@ -14,7 +14,8 @@ final coordinateTrainingPreferencesProvider =
       name: 'CoordinateTrainingPreferencesProvider',
     );
 
-class CoordinateTrainingPreferences extends Notifier<CoordinateTrainingPrefs>
+class CoordinateTrainingPreferences()
+    extends Notifier<CoordinateTrainingPrefs>
     with PreferencesStorage<CoordinateTrainingPrefs> {
   @override
   @protected
@@ -55,13 +56,9 @@ class CoordinateTrainingPreferences extends Notifier<CoordinateTrainingPrefs>
   }
 }
 
-enum TimeChoice {
+enum TimeChoice(final Duration? duration) {
   thirtySeconds(Duration(seconds: 30)),
   unlimited(null);
-
-  const TimeChoice(this.duration);
-
-  final Duration? duration;
 
   // TODO l10n
   Widget label(AppLocalizations l10n) {
@@ -74,7 +71,7 @@ enum TimeChoice {
   }
 }
 
-enum TrainingMode {
+enum TrainingMode() {
   findSquare,
   nameSquare;
 
@@ -89,10 +86,10 @@ enum TrainingMode {
 }
 
 @Freezed(fromJson: true, toJson: true)
-sealed class CoordinateTrainingPrefs with _$CoordinateTrainingPrefs implements Serializable {
-  const CoordinateTrainingPrefs._();
-
-  const factory CoordinateTrainingPrefs({
+sealed class const CoordinateTrainingPrefs._()
+    with _$CoordinateTrainingPrefs
+    implements Serializable {
+  const factory({
     required bool showCoordinates,
     required bool showPieces,
     required TrainingMode mode,
@@ -108,7 +105,7 @@ sealed class CoordinateTrainingPrefs with _$CoordinateTrainingPrefs implements S
     sideChoice: SideChoice.random,
   );
 
-  factory CoordinateTrainingPrefs.fromJson(Map<String, dynamic> json) {
+  factory fromJson(Map<String, dynamic> json) {
     return _$CoordinateTrainingPrefsFromJson(json);
   }
 }

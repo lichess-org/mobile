@@ -21,9 +21,7 @@ final pickPgnFileProvider = Provider<Future<PlatformFile?> Function()>((ref) {
   return () => FilePicker.pickFile(type: .custom, allowedExtensions: ['pgn']);
 });
 
-class ImportPgnScreen extends StatelessWidget {
-  const ImportPgnScreen({super.key});
-
+class const ImportPgnScreen({super.key}) extends StatelessWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const ImportPgnScreen());
   }
@@ -70,14 +68,12 @@ class ImportPgnScreen extends StatelessWidget {
   }
 }
 
-class _Body extends ConsumerStatefulWidget {
-  const _Body();
-
+class const _Body() extends ConsumerStatefulWidget {
   @override
   ConsumerState<_Body> createState() => _BodyState();
 }
 
-class _BodyState extends ConsumerState<_Body> {
+class _BodyState() extends ConsumerState<_Body> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -131,9 +127,9 @@ class _BodyState extends ConsumerState<_Body> {
       final file = await ref.read(pickPgnFileProvider)();
 
       if (file != null) {
-        final content = await const Utf8Decoder(
-          allowMalformed: true,
-        ).bind(file.readAsByteStream()).join();
+        final content = await const Utf8Decoder(allowMalformed: true)
+            .bind(file.readAsByteStream())
+            .join();
         if (mounted) {
           ImportPgnScreen.handlePgnText(context, content);
         }

@@ -31,9 +31,9 @@ const kDesktopCarouselFlexWeights = [3, 3, 3, 1];
 const _emptyPosts = IListConst<BlogPost>([]);
 
 class BlogCarousel extends StatefulWidget {
-  const BlogCarousel({required this.posts, required this.worker, super.key}) : _isLoading = false;
+  const new({required this.posts, required this.worker, super.key}) : _isLoading = false;
 
-  const BlogCarousel.loading({required this.worker}) : _isLoading = true, posts = _emptyPosts;
+  const new loading({required this.worker}) : _isLoading = true, posts = _emptyPosts;
 
   final IList<BlogPost> posts;
   final ImageColorWorker worker;
@@ -54,7 +54,7 @@ class BlogCarousel extends StatefulWidget {
   State<BlogCarousel> createState() => _BlogCarouselState();
 }
 
-class _BlogCarouselState extends State<BlogCarousel> {
+class _BlogCarouselState() extends State<BlogCarousel> {
   final _controller = CarouselController();
 
   @override
@@ -129,7 +129,7 @@ class _BlogCarouselState extends State<BlogCarousel> {
 }
 
 class BlogCarouselItem extends ConsumerStatefulWidget {
-  const BlogCarouselItem({
+  const new({
     required this.carouselWidth,
     required this.post,
     required this.flexWeights,
@@ -137,7 +137,7 @@ class BlogCarouselItem extends ConsumerStatefulWidget {
     super.key,
   });
 
-  BlogCarouselItem.loading({
+  new loading({
     required this.carouselWidth,
     required this.flexWeights,
     required this.worker,
@@ -159,7 +159,7 @@ class BlogCarouselItem extends ConsumerStatefulWidget {
   ConsumerState<BlogCarouselItem> createState() => _BlogCarouselItemState();
 }
 
-class _BlogCarouselItemState extends ConsumerState<BlogCarouselItem> {
+class _BlogCarouselItemState() extends ConsumerState<BlogCarouselItem> {
   _CardColors? _cardColors;
   bool _tapDown = false;
 
@@ -274,12 +274,10 @@ final Map<String, _CardColors?> _colorsCache = {};
 
 final _dateFormat = DateFormat.MMMd();
 
-class _BlogCardContent extends StatelessWidget {
-  const _BlogCardContent({required this.post, required this._cardColors});
-
-  final BlogPost post;
-  final _CardColors? _cardColors;
-
+class const _BlogCardContent({
+  required final BlogPost post,
+  required final _CardColors? _cardColors,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final titleColor = _cardColors?.onPrimaryContainer;

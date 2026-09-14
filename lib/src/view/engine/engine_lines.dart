@@ -15,18 +15,16 @@ import 'package:material_ui/material_ui.dart';
 const kEngineLineHeight = 24.0;
 const kEngineLineFontSize = 11.0;
 
-class EngineLines extends ConsumerStatefulWidget {
-  const EngineLines({required this.filters, required this.onTapMove, required this.analysisState});
-
-  final EngineEvaluationFilters filters;
-  final void Function(Move move) onTapMove;
-  final CommonAnalysisState analysisState;
-
+class const EngineLines({
+  required final EngineEvaluationFilters filters,
+  required final void Function(Move move) onTapMove,
+  required final CommonAnalysisState analysisState,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<EngineLines> createState() => _EngineLinesState();
 }
 
-class _EngineLinesState extends ConsumerState<EngineLines> {
+class _EngineLinesState() extends ConsumerState<EngineLines> {
   ClientEval? lastEval;
 
   @override
@@ -78,9 +76,9 @@ class _EngineLinesState extends ConsumerState<EngineLines> {
 }
 
 class Engineline extends ConsumerWidget {
-  const Engineline(this.onTapMove, this.fromPosition, this.pvData);
+  const new(this.onTapMove, this.fromPosition, this.pvData);
 
-  const Engineline.empty()
+  const new empty()
     : onTapMove = null,
       pvData = const PvData(moves: IListConst([])),
       fromPosition = Chess.initial;

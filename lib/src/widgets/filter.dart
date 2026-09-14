@@ -1,6 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 
-enum FilterType {
+enum FilterType() {
   /// Only one choice is intended to be selected at a time. Uses [ChoiceChip] to display choices.
   singleChoice,
 
@@ -9,38 +9,28 @@ enum FilterType {
 }
 
 /// Displays a row of choices that can be selected or deselected.
-class Filter<T extends Enum> extends StatelessWidget {
-  const Filter({
-    this.filterName,
-    required this.filterType,
-    required this.choices,
-    this.showCheckmark = true,
-    required this.choiceSelected,
-    required this.choiceLabel,
-    required this.onSelected,
-  });
-
+class const Filter<T extends Enum>({
   /// Will be displayed above the choices as a title.
-  final String? filterName;
+  final String? filterName,
 
   /// Controls how choices in a [Filter] are displayed.
-  final FilterType filterType;
+  required final FilterType filterType,
 
   /// The choices that will be displayed.
-  final Iterable<T> choices;
+  required final Iterable<T> choices,
 
   /// Whether to show a checkmark next to selected choices.
-  final bool showCheckmark;
+  final bool showCheckmark = true,
 
   /// Called to determine whether a choice is currently selected.
-  final bool Function(T choice) choiceSelected;
+  required final bool Function(T choice) choiceSelected,
 
   /// Determines label to display for the given choice.
-  final Widget Function(T choice) choiceLabel;
+  required final Widget Function(T choice) choiceLabel,
 
   /// Called when a choice is selected or deselected.
-  final void Function(T value, bool selected) onSelected;
-
+  required final void Function(T value, bool selected) onSelected,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(

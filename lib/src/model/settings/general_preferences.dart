@@ -17,7 +17,8 @@ final generalPreferencesProvider = NotifierProvider<GeneralPreferencesNotifier, 
   name: 'GeneralPreferencesProvider',
 );
 
-class GeneralPreferencesNotifier extends Notifier<GeneralPrefs>
+class GeneralPreferencesNotifier()
+    extends Notifier<GeneralPrefs>
     with PreferencesStorage<GeneralPrefs> {
   @override
   @protected
@@ -80,11 +81,9 @@ class GeneralPreferencesNotifier extends Notifier<GeneralPrefs>
 }
 
 @Freezed(fromJson: true, toJson: true)
-sealed class GeneralPrefs with _$GeneralPrefs implements Serializable {
-  const GeneralPrefs._();
-
+sealed class const GeneralPrefs._() with _$GeneralPrefs implements Serializable {
   @Assert('masterVolume >= 0 && masterVolume <= 1')
-  const factory GeneralPrefs({
+  const factory({
     @JsonKey(unknownEnumValue: BackgroundThemeMode.system, defaultValue: BackgroundThemeMode.system)
     required BackgroundThemeMode themeMode,
     required bool isSoundEnabled,
@@ -116,14 +115,14 @@ sealed class GeneralPrefs with _$GeneralPrefs implements Serializable {
     appThemeSeed: AppThemeSeed.board,
   );
 
-  factory GeneralPrefs.fromJson(Map<String, dynamic> json) {
+  factory fromJson(Map<String, dynamic> json) {
     return _$GeneralPrefsFromJson(json);
   }
 
   bool get isForcedDarkMode => backgroundColor != null || backgroundImage != null;
 }
 
-enum AppThemeSeed {
+enum AppThemeSeed() {
   /// The app theme is based on the user's system theme (only available on Android 10+).
   system,
 
@@ -132,7 +131,7 @@ enum AppThemeSeed {
 }
 
 /// Describes the background theme of the app.
-enum BackgroundThemeMode {
+enum BackgroundThemeMode() {
   /// Use either the light or dark theme based on what the user has selected in
   /// the system settings.
   system,
@@ -160,20 +159,16 @@ enum BackgroundThemeMode {
   }
 }
 
-enum SoundTheme {
+enum SoundTheme(final String label) {
   standard('Standard'),
   piano('Piano'),
   nes('NES'),
   sfx('SFX'),
   futuristic('Futuristic'),
-  lisp('Lisp');
-
-  final String label;
-
-  const SoundTheme(this.label);
+  lisp('Lisp'),
 }
 
-enum BackgroundColor {
+enum BackgroundColor(final Color color, final String _label) {
   blue(Color(0xff435665), 'Blue'),
   indigo(Color(0xff42455c), 'Indigo'),
   green(Color(0xff344d3c), 'Green'),
@@ -183,11 +178,6 @@ enum BackgroundColor {
   purple(Color(0xff624865), 'Purple'),
   lime(Color(0xff4f5530), 'Lime'),
   sepia(Color(0xff5f5d57), 'Sepia');
-
-  final Color color;
-  final String _label;
-
-  const BackgroundColor(this.color, this._label);
 
   String get label => _label;
 
@@ -199,10 +189,8 @@ enum BackgroundColor {
 }
 
 @freezed
-sealed class BackgroundImage with _$BackgroundImage {
-  const BackgroundImage._();
-
-  const factory BackgroundImage({
+sealed class const BackgroundImage._() with _$BackgroundImage {
+  const factory({
     /// The path to the image asset relative to the document directory returned by [getApplicationDocumentsDirectory]
     required String path,
     required Matrix4 transform,
@@ -234,9 +222,8 @@ sealed class BackgroundImage with _$BackgroundImage {
   ThemeData get baseTheme => getTheme(seedColor);
 }
 
-class BackgroundImageConverter implements JsonConverter<BackgroundImage?, Map<String, dynamic>?> {
-  const BackgroundImageConverter();
-
+class const BackgroundImageConverter()
+    implements JsonConverter<BackgroundImage?, Map<String, dynamic>?> {
   @override
   BackgroundImage? fromJson(Map<String, dynamic>? json) {
     if (json == null) {

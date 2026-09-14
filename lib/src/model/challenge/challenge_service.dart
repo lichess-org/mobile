@@ -32,11 +32,7 @@ final challengeServiceProvider = Provider<ChallengeService>((Ref ref) {
 }, name: 'ChallengeServiceProvider');
 
 /// A service that listens to challenge events and shows notifications.
-class ChallengeService {
-  ChallengeService(this.ref);
-
-  final Ref ref;
-
+class ChallengeService(final Ref ref) {
   ChallengesList? _current;
   ChallengesList? _previous;
 

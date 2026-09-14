@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 
-enum TvChannel {
+enum TvChannel(final IconData icon) {
   best(LichessIcons.crown),
   bullet(LichessIcons.bullet),
   blitz(LichessIcons.blitz),
@@ -21,10 +21,6 @@ enum TvChannel {
   ultraBullet(LichessIcons.ultrabullet),
   bot(LichessIcons.cogs),
   computer(LichessIcons.cogs);
-
-  const TvChannel(this.icon);
-
-  final IconData icon;
 
   String label(AppLocalizations l10n) {
     switch (this) {

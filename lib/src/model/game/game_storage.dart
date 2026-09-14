@@ -18,10 +18,7 @@ const kGameStorageTable = 'game';
 
 typedef StoredGame = ({UserId userId, DateTime lastModified, ExportedGame game});
 
-class GameStorage {
-  const GameStorage(this._db);
-  final Database _db;
-
+class const GameStorage(final Database _db) {
   Future<int> count({UserId? userId}) async {
     final result = await _db.rawQuery(
       'SELECT COUNT(*) as cnt FROM $kGameStorageTable WHERE userId = ?',

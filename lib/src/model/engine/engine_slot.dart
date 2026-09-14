@@ -4,7 +4,7 @@
 /// everything above works with [EngineSpec] and never has to think about it. Two [EngineSpec]s
 /// that resolve to the same slot are the same spec, so a slot can never be asked for two engines
 /// through the ordinary engine plumbing.
-enum EngineSlot {
+enum EngineSlot() {
   /// Stockfish with its small NNUE network embedded in the binary.
   sfLight,
 

@@ -17,11 +17,7 @@ final messageServiceProvider = Provider<MessageService>((Ref ref) {
   return service;
 }, name: 'MessageServiceProvider');
 
-class MessageService {
-  MessageService(this.ref);
-
-  final Ref ref;
-
+class MessageService(final Ref ref) {
   StreamSubscription<ParsedLocalNotification>? _notificationResponseSubscription;
   StreamSubscription<ReceivedFcmMessage>? _fcmSubscription;
 

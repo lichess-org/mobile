@@ -39,11 +39,7 @@ import 'package:share_plus/share_plus.dart';
 
 final _logger = Logger('StudyScreen');
 
-class StudyScreen extends StatelessWidget {
-  const StudyScreen({required this.options, super.key});
-
-  final StudyOptions options;
-
+class const StudyScreen({required final StudyOptions options, super.key}) extends StatelessWidget {
   static Route<dynamic> buildRoute(StudyOptions options) {
     return buildScreenRoute(screen: StudyScreen(options: options));
   }
@@ -54,11 +50,7 @@ class StudyScreen extends StatelessWidget {
   }
 }
 
-class _StudyScreenLoader extends ConsumerWidget {
-  const _StudyScreenLoader({required this.options});
-
-  final StudyOptions options;
-
+class const _StudyScreenLoader({required final StudyOptions options}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
@@ -139,17 +131,15 @@ class _StudyScreenLoader extends ConsumerWidget {
   }
 }
 
-class _StudyScreen extends ConsumerStatefulWidget {
-  const _StudyScreen({required this.options, required this.studyState});
-
-  final StudyOptions options;
-  final StudyState studyState;
-
+class const _StudyScreen({
+  required final StudyOptions options,
+  required final StudyState studyState,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_StudyScreen> createState() => _StudyScreenState();
 }
 
-class _StudyScreenState extends ConsumerState<_StudyScreen> with TickerProviderStateMixin {
+class _StudyScreenState() extends ConsumerState<_StudyScreen> with TickerProviderStateMixin {
   late List<AnalysisTab> tabs;
   late TabController _tabController;
 
@@ -212,11 +202,7 @@ class _StudyScreenState extends ConsumerState<_StudyScreen> with TickerProviderS
   }
 }
 
-class _StudyMenu extends ConsumerWidget {
-  const _StudyMenu({required this.options});
-
-  final StudyOptions options;
-
+class const _StudyMenu({required final StudyOptions options}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authUser = ref.watch(authControllerProvider);
@@ -351,11 +337,8 @@ class _StudyMenu extends ConsumerWidget {
   }
 }
 
-class _CannotRequestServerAnalysisReason extends StatelessWidget {
-  const _CannotRequestServerAnalysisReason({required this.reason});
-
-  final String reason;
-
+class const _CannotRequestServerAnalysisReason({required final String reason})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -364,13 +347,11 @@ class _CannotRequestServerAnalysisReason extends StatelessWidget {
   }
 }
 
-class _Body extends ConsumerWidget {
-  const _Body({required this.options, required this.tabController, required this.tabs});
-
-  final StudyOptions options;
-  final TabController tabController;
-  final List<AnalysisTab> tabs;
-
+class const _Body({
+  required final StudyOptions options,
+  required final TabController tabController,
+  required final List<AnalysisTab> tabs,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final studyState = ref.watch(studyControllerProvider(options)).requireValue;
@@ -524,16 +505,16 @@ extension on PgnCommentShape {
   }
 }
 
-class StudyAnalysisBoard extends AnalysisBoard {
-  const StudyAnalysisBoard({required this.options, required super.boardSize, super.boardRadius});
-
-  final StudyOptions options;
-
+class const StudyAnalysisBoard({
+  required final StudyOptions options,
+  required super.boardSize,
+  super.boardRadius,
+}) extends AnalysisBoard {
   @override
   ConsumerState<StudyAnalysisBoard> createState() => _StudyAnalysisBoardState();
 }
 
-class _StudyAnalysisBoardState
+class _StudyAnalysisBoardState()
     extends AnalysisBoardState<StudyAnalysisBoard, StudyState, StudyPrefs> {
   @override
   StudyState? readCurrentState() => ref.read(studyControllerProvider(widget.options)).value;

@@ -114,7 +114,7 @@ Annotation? makeAnnotation(Iterable<int>? nags) {
 const kFastReplayDebounceDelay = Duration(milliseconds: 150);
 
 /// Callbacks for interaction with [DebouncedPgnTreeView]
-abstract class PgnTreeNotifier {
+abstract class PgnTreeNotifier() {
   void expandVariations(UciPath path);
   void collapseVariations(UciPath path);
   void promoteVariation(UciPath path, bool toMainLine);
@@ -125,7 +125,7 @@ abstract class PgnTreeNotifier {
   String makeLinePgn(UciPath path, {required bool includeVariations});
 }
 
-enum PgnTreeDisplayMode {
+enum PgnTreeDisplayMode() {
   /// Mainline moves are displayed in a table with two columns, where the first column are moves by white and the second column are moves by black.
   /// Sidelines are always displayed on a new line and indented.
   twoColumn,
@@ -148,65 +148,51 @@ enum PgnTreeDisplayMode {
 /// For [PgnTreeDisplayMode.twoColumn], 1st level sidelines of the mainline are never displayed as inline (but nested sidelines may be).
 /// The mainline is split into parts whenever a move has a non-inline sideline, this corresponds to the [_MainLinePart] widget.
 /// Similarly, a [_SideLinePart] contains the moves sequence of a sideline where each node has only one child.
-class DebouncedPgnTreeView extends ConsumerStatefulWidget {
-  const DebouncedPgnTreeView({
-    required this.root,
-    required this.currentPath,
-    this.livePath,
-    this.premovePaths,
-    required this.pgnRootComments,
-    this.notifier,
-    this.showTopDivider = true,
-    this.shouldShowComputerAnalysis = true,
-    this.shouldShowAnnotations = true,
-    this.shouldShowComments = true,
-    this.displayMode = PgnTreeDisplayMode.twoColumn,
-  });
-
+class const DebouncedPgnTreeView({
   /// Root of the PGN tree to display
-  final ViewNode root;
+  required final ViewNode root,
 
   /// Path to the currently selected move in the tree
-  final UciPath currentPath;
+  required final UciPath currentPath,
 
   /// Path to the last live move in the tree if it is an ongoing game (usually broadcast or correspondence).
-  final UciPath? livePath;
+  final UciPath? livePath,
 
   /// Paths relative to [DebouncedPgnTreeView.livePath] that are currently saved as premoves in an ongoing correspondence game.
   /// We highlight these in a different color
-  final IList<UciPath>? premovePaths;
+  final IList<UciPath>? premovePaths,
 
   /// Comments associated with the root node
-  final IList<PgnComment>? pgnRootComments;
+  required final IList<PgnComment>? pgnRootComments,
 
   /// Callbacks for when the user interacts with the tree view, e.g. selecting a different move or collapsing variations
-  final PgnTreeNotifier? notifier;
+  final PgnTreeNotifier? notifier,
 
   /// Whether to show a divider line above the first mainline part.
-  final bool showTopDivider;
+  final bool showTopDivider = true,
 
   /// Whether to show computer analysis informations.
   ///
   /// If `true`, the tree view will show computer analysis variations and evaluations.
   /// Only applied to lichess game analysis.
-  final bool shouldShowComputerAnalysis;
+  final bool shouldShowComputerAnalysis = true,
+
+  /// Whether to show NAG annotations like '!' and '??'.
+  final bool shouldShowAnnotations = true,
+
+  /// Whether to show comments associated with the moves.
+  final bool shouldShowComments = true,
 
   /// Display mode of the tree view.
   ///
   /// Either [PgnTreeDisplayMode.twoColumn] or [PgnTreeDisplayMode.inlineNotation].
-  final PgnTreeDisplayMode displayMode;
-
-  /// Whether to show NAG annotations like '!' and '??'.
-  final bool shouldShowAnnotations;
-
-  /// Whether to show comments associated with the moves.
-  final bool shouldShowComments;
-
+  final PgnTreeDisplayMode displayMode = PgnTreeDisplayMode.twoColumn,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<DebouncedPgnTreeView> createState() => _DebouncedPgnTreeViewState();
 }
 
-class _DebouncedPgnTreeViewState extends ConsumerState<DebouncedPgnTreeView> {
+class _DebouncedPgnTreeViewState() extends ConsumerState<DebouncedPgnTreeView> {
   final currentMoveKey = GlobalKey();
   final _debounce = Debouncer(kFastReplayDebounceDelay);
 
@@ -375,17 +361,14 @@ Iterable<List<ViewNode>> _mainlineParts(ViewNode root, _PgnTreeViewParams params
         .splitAfter((n) => _hasNonInlineSideLine(n, params, isMainline: true))
         .takeWhile((nodes) => nodes.firstOrNull?.children.isNotEmpty == true);
 
-class _PgnTreeView extends StatefulWidget {
-  const _PgnTreeView({required this.root, required this.rootComments, required this.params});
-
+class const _PgnTreeView({
   /// Root of the PGN tree
-  final ViewNode root;
+  required final ViewNode root,
 
   /// Comments associated with the root node
-  final IList<PgnComment>? rootComments;
-
-  final _PgnTreeViewParams params;
-
+  required final IList<PgnComment>? rootComments,
+  required final _PgnTreeViewParams params,
+}) extends StatefulWidget {
   @override
   State<_PgnTreeView> createState() => _PgnTreeViewState();
 }
@@ -404,7 +387,7 @@ typedef _CachedRenderedSubtree = ({
   bool containsCurrentMove,
 });
 
-class _PgnTreeViewState extends State<_PgnTreeView> {
+class _PgnTreeViewState() extends State<_PgnTreeView> {
   /// Caches the result of [_mainlineParts], it only needs to be recalculated when the root changes,
   /// but not when `params.pathToCurrentMove` changes.
   Iterable<List<ViewNode>> mainlineParts = [];
@@ -589,7 +572,7 @@ List<InlineSpan> _buildInlineSideLine({
 const _baseTextStyle = TextStyle(fontSize: 16.0, height: 1.5);
 
 /// The different types of lines (move sequences) that are displayed in the tree view.
-enum _LineType {
+enum _LineType() {
   /// (A part of) the game's main line.
   mainline,
 
@@ -638,24 +621,19 @@ List<InlineSpan> _moveWithComment(
 /// A widget that renders part of a sideline, where each move is displayed on the same line without branching.
 ///
 /// Each node in the sideline has only one child (or two children where the second child is rendered as an inline sideline).
-class _SideLinePart extends ConsumerWidget {
-  _SideLinePart(
-    this.nodes, {
-    required this.initialPath,
-    required this.firstMoveKey,
-    required this.params,
-  }) : assert(nodes.isNotEmpty);
-
-  final List<ViewBranch> nodes;
-
-  final UciPath initialPath;
+// The assert below isn't constant-evaluable, so this can't be const.
+// ignore: prefer_const_constructors_in_immutables
+class _SideLinePart(
+  final List<ViewBranch> nodes, {
+  required final UciPath initialPath,
 
   /// The key that will be assigned to the first move in this sideline.
   ///
   /// This is needed so that the indent guidelines can be drawn correctly.
-  final GlobalKey firstMoveKey;
-
-  final _PgnTreeViewParams params;
+  required final GlobalKey firstMoveKey,
+  required final _PgnTreeViewParams params,
+}) extends ConsumerWidget {
+  this : assert(nodes.isNotEmpty);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -720,19 +698,11 @@ class _SideLinePart extends ConsumerWidget {
 /// |- 2. Nc3       -> sideline part
 /// |- 2. d4        -> sideline part
 /// 2. ... Nc6      -> mainline part
-class _TwoColumnMainlinePart extends ConsumerWidget {
-  const _TwoColumnMainlinePart({
-    required this.initialPath,
-    required this.params,
-    required this.nodes,
-  });
-
-  final UciPath initialPath;
-
-  final List<ViewNode> nodes;
-
-  final _PgnTreeViewParams params;
-
+class const _TwoColumnMainlinePart({
+  required final UciPath initialPath,
+  required final _PgnTreeViewParams params,
+  required final List<ViewNode> nodes,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
@@ -860,19 +830,11 @@ class _TwoColumnMainlinePart extends ConsumerWidget {
 /// |- 1... d5                    <-- sideline part
 /// |- 1... Nc6                   <-- sideline part
 /// 2. Nf3 Nc6 (2... a5) 3. Bc4   <-- mainline part
-class _InlineNotationMainlinePart extends ConsumerWidget {
-  const _InlineNotationMainlinePart({
-    required this.initialPath,
-    required this.params,
-    required this.nodes,
-  });
-
-  final UciPath initialPath;
-
-  final List<ViewNode> nodes;
-
-  final _PgnTreeViewParams params;
-
+class const _InlineNotationMainlinePart({
+  required final UciPath initialPath,
+  required final _PgnTreeViewParams params,
+  required final List<ViewNode> nodes,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final textStyle = _baseTextStyle.copyWith(color: _textColor(context, 0.9));
@@ -928,15 +890,11 @@ class _InlineNotationMainlinePart extends ConsumerWidget {
   }
 }
 
-class _MainLinePart extends ConsumerWidget {
-  const _MainLinePart({required this.initialPath, required this.params, required this.nodes});
-
-  final UciPath initialPath;
-
-  final List<ViewNode> nodes;
-
-  final _PgnTreeViewParams params;
-
+class const _MainLinePart({
+  required final UciPath initialPath,
+  required final _PgnTreeViewParams params,
+  required final List<ViewNode> nodes,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return switch (params.displayMode) {
@@ -959,23 +917,14 @@ class _MainLinePart extends ConsumerWidget {
 /// The moves are rendered on the same line (see [_SideLinePart]) until further
 /// branching is encountered, at which point the children sidelines are rendered
 /// on new lines and indented (see [_IndentedSideLines]).
-class _SideLine extends StatelessWidget {
-  const _SideLine({
-    required this.firstNode,
-    required this.parent,
-    required this.firstMoveKey,
-    required this.initialPath,
-    required this.params,
-    required this.nesting,
-  });
-
-  final ViewBranch firstNode;
-  final ViewNode parent;
-  final GlobalKey firstMoveKey;
-  final UciPath initialPath;
-  final _PgnTreeViewParams params;
-  final int nesting;
-
+class const _SideLine({
+  required final ViewBranch firstNode,
+  required final ViewNode parent,
+  required final GlobalKey firstMoveKey,
+  required final UciPath initialPath,
+  required final _PgnTreeViewParams params,
+  required final int nesting,
+}) extends StatelessWidget {
   List<ViewBranch> _getSidelinePartNodes() {
     final sidelineNodes = [firstNode];
     while (sidelineNodes.last.children.isNotEmpty &&
@@ -1016,19 +965,11 @@ class _SideLine extends StatelessWidget {
   }
 }
 
-class _IndentPainter extends CustomPainter {
-  const _IndentPainter({
-    required this.sideLineStartPositions,
-    required this.color,
-    required this.padding,
-  });
-
-  final List<Offset> sideLineStartPositions;
-
-  final Color color;
-
-  final double padding;
-
+class const _IndentPainter({
+  required final List<Offset> sideLineStartPositions,
+  required final Color color,
+  required final double padding,
+}) extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     if (sideLineStartPositions.isNotEmpty) {
@@ -1062,30 +1003,18 @@ class _IndentPainter extends CustomPainter {
 /// Will show one ore more sidelines indented on their own line and add indent
 /// guides.
 /// If there are hidden lines, a "+" button is displayed to expand them.
-class _IndentedSideLines extends StatefulWidget {
-  const _IndentedSideLines(
-    this.sideLines, {
-    required this.parent,
-    required this.initialPath,
-    required this.params,
-    required this.nesting,
-  });
-
-  final Iterable<ViewBranch> sideLines;
-
-  final ViewNode parent;
-
-  final UciPath initialPath;
-
-  final _PgnTreeViewParams params;
-
-  final int nesting;
-
+class const _IndentedSideLines(
+  final Iterable<ViewBranch> sideLines, {
+  required final ViewNode parent,
+  required final UciPath initialPath,
+  required final _PgnTreeViewParams params,
+  required final int nesting,
+}) extends StatefulWidget {
   @override
   State<_IndentedSideLines> createState() => _IndentedSideLinesState();
 }
 
-class _IndentedSideLinesState extends State<_IndentedSideLines> {
+class _IndentedSideLinesState() extends State<_IndentedSideLines> {
   /// Keys for the first move of each sideline.
   ///
   /// Used to calculate the position of the indent guidelines. The keys are
@@ -1218,37 +1147,24 @@ Color? _textColor(BuildContext context, double opacity, {int? nag}) {
 /// The move is displayed as a clickable button that will jump to the move when pressed.
 /// The move is highlighted if it is the current move.
 /// A long press on the move will display a context menu with options to promote the move to the main line, collapse variations, etc.
-class InlineMove extends ConsumerWidget {
-  const InlineMove({
-    required this.branch,
-    required this.path,
-    required this.textStyle,
-    required this.lineInfo,
-    required this.params,
-    this.showIndex = true,
-    this.canShowEval = false,
-    super.key,
-  });
-
-  final ViewBranch branch;
-  final UciPath path;
-
-  final TextStyle textStyle;
-
-  final _LineInfo lineInfo;
-
-  final _PgnTreeViewParams params;
+class const InlineMove({
+  required final ViewBranch branch,
+  required final UciPath path,
+  required final TextStyle textStyle,
+  required final _LineInfo lineInfo,
+  required final _PgnTreeViewParams params,
 
   /// Whether to show the index of the move.
-  final bool showIndex;
+  final bool showIndex = true,
 
   /// Whether to show the computer evaluation of the move.
   ///
   /// Default is `false` because we don't want to show the eval in the sidelines and in the mainline
   /// if the [PgnTreeDisplayMode] is [PgnTreeDisplayMode.inlineNotation].
   /// It is set to `true` in the mainline part of [PgnTreeDisplayMode.twoColumn] view.
-  final bool canShowEval;
-
+  final bool canShowEval = false,
+  super.key,
+}) extends ConsumerWidget {
   static const borderRadius = BorderRadius.all(Radius.circular(4.0));
 
   bool get isCurrentMove => params.pathToCurrentMove == path;
@@ -1373,21 +1289,13 @@ class InlineMove extends ConsumerWidget {
   }
 }
 
-class _MoveContextMenu extends ConsumerWidget {
-  const _MoveContextMenu({
-    required this.title,
-    required this.path,
-    required this.branch,
-    required this.lineInfo,
-    required this.notifier,
-  });
-
-  final String title;
-  final UciPath path;
-  final ViewBranch branch;
-  final _LineInfo lineInfo;
-  final PgnTreeNotifier? notifier;
-
+class const _MoveContextMenu({
+  required final String title,
+  required final UciPath path,
+  required final ViewBranch branch,
+  required final _LineInfo lineInfo,
+  required final PgnTreeNotifier? notifier,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return BottomSheetScrollableContainer(

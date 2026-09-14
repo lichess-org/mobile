@@ -20,30 +20,21 @@ import 'package:material_ui/material_ui.dart';
 /// This widget is meant to be embedded in the analysis, broadcast, and study screens.
 ///
 /// Network requests are debounced and cached to avoid unnecessary requests.
-class OpeningExplorerView extends ConsumerStatefulWidget {
-  const OpeningExplorerView({
-    required this.pov,
-    required this.position,
-    required this.onMoveSelected,
-    this.opening,
-    this.scrollable = true,
-    this.shouldDisplayGames = true,
-  });
-
-  final Side pov;
-  final Position position;
-  final Opening? opening;
-  final void Function(Move) onMoveSelected;
-  final bool scrollable;
+class const OpeningExplorerView({
+  required final Side pov,
+  required final Position position,
+  required final void Function(Move) onMoveSelected,
+  final Opening? opening,
+  final bool scrollable = true,
 
   /// Whether to display recent and top games in the explorer.
-  final bool shouldDisplayGames;
-
+  final bool shouldDisplayGames = true,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<OpeningExplorerView> createState() => _OpeningExplorerState();
 }
 
-class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
+class _OpeningExplorerState() extends ConsumerState<OpeningExplorerView> {
   // Variant is part of the key because the same FEN string can be queried
   // against different explorer datasets.
   final Map<({String fen, Variant variant, OpeningExplorerPrefs prefs}), OpeningExplorerEntry>
@@ -182,17 +173,11 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerView> {
   }
 }
 
-class _ExplorerListView extends StatelessWidget {
-  const _ExplorerListView({
-    required this.children,
-    required this.isLoading,
-    required this.scrollable,
-  });
-
-  final List<Widget> children;
-  final bool isLoading;
-  final bool scrollable;
-
+class const _ExplorerListView({
+  required final List<Widget> children,
+  required final bool isLoading,
+  required final bool scrollable,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final brightness = Theme.of(context).brightness;
