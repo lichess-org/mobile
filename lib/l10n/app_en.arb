@@ -6,6 +6,7 @@
   "mobileAreYouSure": "Are you sure?",
   "mobileBoardSettings": "Board settings",
   "mobileCancelTakebackOffer": "Cancel takeback offer",
+  "mobileChessEngine": "Chess engine",
   "mobileClearButton": "Clear",
   "mobileCorrespondenceClearSavedMove": "Clear saved move",
   "mobileCustomGameJoinAGame": "Join a game",
@@ -65,6 +66,8 @@
   "mobileSettingsDraggedPieceTarget": "Dragged piece target",
   "mobileSettingsDraggedTargetCircle": "Circle",
   "mobileSettingsDraggedTargetSquare": "Square",
+  "mobileSettingsDrawnShapeColor": "Drawn shape color",
+  "mobileSettingsDrawnShapeColorHelp": "This color is used for shapes drawn by hand using two fingers.",
   "mobileSettingsHomeWidgets": "Home widgets",
   "mobileSettingsImmersiveMode": "Immersive mode",
   "mobileSettingsImmersiveModeSubtitle": "Hide system UI while playing. Use this if you are bothered by the system's navigation gestures at the edges of the screen. Applies to game and puzzle screens.",
@@ -351,6 +354,7 @@
   "arenaHowIsTheWinnerDecided": "How is the winner decided?",
   "arenaHowIsTheWinnerDecidedAnswer": "When the tournament time limit expires, the player with the most points is declared the winner.\n\nIf two or more players are tied for points, tournament performance is the tie-break.",
   "arenaHowDoesPairingWork": "How does the pairing work?",
+  "arenaHowArePlayersPaired": "How are players paired?",
   "arenaHowDoesPairingWorkAnswer": "At the start of the tournament, players are paired based on their rating.\nAs soon as you finish a game and return to the tournament lobby, you will be paired with a new opponent close to your rank in the tournament. This keeps waiting times short. Note that you may not face every other player in the tournament.\nPlay quickly to play more games and score more points.",
   "arenaHowDoesItEnd": "How does it end?",
   "arenaHowDoesItEndAnswer": "The tournament has a countdown clock. When it reaches zero, the tournament rankings are frozen, and the winner is announced. Games in progress must be finished, however, they don't count for the tournament.",
@@ -393,6 +397,7 @@
   "arenaEditTournament": "Edit tournament",
   "arenaEditTeamBattle": "Edit team battle",
   "arenaDefender": "Defender",
+  "arenaDefenderLabel": "Defender:",
   "arenaPickYourTeam": "Pick your team",
   "arenaWhichTeamWillYouRepresentInThisBattle": "Which team will you represent in this battle?",
   "arenaYouMustJoinOneOfTheseTeamsToParticipate": "You must join one of these teams to participate!",
@@ -421,6 +426,7 @@
   "arenaOnlyTitledHelp": "Require an official title to join the tournament",
   "arenaTournamentPairingsAreNowClosed": "The tournament pairings are now closed.",
   "arenaBerserkRate": "Berserk rate",
+  "arenaLeaguesAndStreamerBattles": "Leagues & Streamer Battles",
   "arenaDrawingWithinNbMoves": "{count, plural, =1{Drawing the game within the first {count} move will earn neither player any points.} other{Drawing the game within the first {count} moves will earn neither player any points.}}",
   "@arenaDrawingWithinNbMoves": {
     "placeholders": {
@@ -481,6 +487,7 @@
   "broadcastResetRound": "Reset this round",
   "broadcastDeleteRound": "Delete this round",
   "broadcastDefinitivelyDeleteRound": "Definitively delete the round and all its games.",
+  "broadcastPermanentlyDeleteRound": "Permanently delete this round and all its games?",
   "broadcastDeleteAllGamesOfThisRound": "Delete all games of this round. The source will need to be active in order to re-create them.",
   "broadcastEditRoundStudy": "Edit round study",
   "broadcastDeleteTournament": "Delete this tournament",
@@ -504,6 +511,7 @@
   "broadcastSubscribeTitle": "Subscribe to be notified when each round starts. You can toggle bell or push notifications for broadcasts in your account preferences.",
   "broadcastUploadImage": "Upload tournament image",
   "broadcastNoBoardsYet": "No boards yet. These will appear once games are uploaded.",
+  "broadcastNoPlayersYet": "No players yet. They will appear once games are uploaded.",
   "broadcastBoardsCanBeLoaded": "Boards can be loaded with a source or via the {param}",
   "@broadcastBoardsCanBeLoaded": {
     "placeholders": {
@@ -1141,6 +1149,7 @@
   "puzzleThemeCollinearMoveDescription": "Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.",
   "puzzleThemeCornerMate": "Corner mate",
   "puzzleThemeCornerMateDescription": "Confine the king to the corner using a rook or queen and a knight to engage the checkmate.",
+  "puzzleThemeCornerMateKnightDeliversDescription": "Confine the king to the corner using a rook or queen, and use a knight to deliver the checkmate.",
   "puzzleThemeCrushing": "Crushing",
   "puzzleThemeCrushingDescription": "Spot the opponent blunder to obtain a crushing advantage. (eval ≥ 600cp)",
   "puzzleThemeDiscoveredCheck": "Discovered check",
@@ -1187,8 +1196,10 @@
   "puzzleThemeKillBoxMateDescription": "A rook is next to the enemy king and supported by a queen that also blocks the king's escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".",
   "puzzleThemePillsburysMate": "Pillsbury's mate",
   "puzzleThemePillsburysMateDescription": "The rook delivers checkmate, while the bishop helps to confine it.",
+  "puzzleThemePillsburyMateRookAndBishopDescription": "A rook delivers checkmate to the king, while a bishop helps confine it.",
   "puzzleThemeMorphysMate": "Morphy's mate",
   "puzzleThemeMorphysMateDescription": "Use the bishop to check the king, while your rook helps to confine it.",
+  "puzzleThemeMorphyMateBishopAndRookDescription": "A bishop delivers checkmate to the king, while a rook helps confine it.",
   "puzzleThemeSwallowstailMate": "Swallow's tail mate",
   "puzzleThemeSwallowstailMateDescription": "A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.",
   "puzzleThemeTriangleMate": "Triangle mate",
@@ -1229,6 +1240,7 @@
   "puzzleThemePinDescription": "A tactic involving pins, where a piece is unable to move without revealing an attack on a higher value piece.",
   "puzzleThemePromotion": "Promotion",
   "puzzleThemePromotionDescription": "Promote one of your pawn to a queen or minor piece.",
+  "puzzleThemePromotePawnToQueenRookOrMinor": "Promote one of your pawns to a queen, rook or minor piece.",
   "puzzleThemeQueenEndgame": "Queen endgame",
   "puzzleThemeQueenEndgameDescription": "An endgame with only queens and pawns.",
   "puzzleThemeQueenRookEndgame": "Queen and Rook",
@@ -1489,6 +1501,10 @@
   "inaccuracy": "Inaccuracy",
   "moveTimes": "Move times",
   "flipBoard": "Flip board",
+  "toggleLocalEngine": "Toggle local engine",
+  "engineSettings": "Engine settings",
+  "enginesFromStrongestToWeakest": "Engines from strongest to weakest",
+  "illegalPosition": "Illegal position",
   "threefoldRepetition": "Threefold repetition",
   "claimADraw": "Claim a draw",
   "drawClaimed": "Draw claimed",
@@ -1552,6 +1568,7 @@
   "signupUsernameHint": "Be sure to choose a username appropriate for all ages. You cannot change it later, and accounts with inappropriate usernames will be closed!",
   "signupEmailPromise": "We will only send you emails about your account and never share your email.",
   "password": "Password",
+  "showPassword": "Show password",
   "changePassword": "Change password",
   "changeEmail": "Change email",
   "email": "Email",
@@ -1650,7 +1667,9 @@
   "ok": "OK",
   "cancel": "Cancel",
   "whiteTimeOut": "White time out",
+  "whiteRanOutOfTime": "White ran out of time",
   "blackTimeOut": "Black time out",
+  "blackRanOutOfTime": "Black ran out of time",
   "drawOfferSent": "Draw offer sent",
   "drawOfferAccepted": "Draw offer accepted",
   "whiteOffersDraw": "White offers draw",
@@ -1727,6 +1746,7 @@
     }
   },
   "ratingRangeIsDisabledBecauseYourRatingIsProvisional": "Rating filters are locked because your rating is not stable. Playing rated games will increase stability.",
+  "cannotFilterByUnstableRating": "It is not possible to filter by rating because your rating is not stable.\nPlaying rated games will increase stability.",
   "yourPerfRatingIsTooHigh": "Your {param1} rating ({param2}) is too high",
   "@yourPerfRatingIsTooHigh": {
     "placeholders": {
@@ -1838,7 +1858,7 @@
   "apply": "Submit",
   "save": "Save",
   "leaderboard": "Leaderboard",
-  "screenshotCurrentPosition": "Screenshot current position",
+  "positionAsImage": "Position as image",
   "gameAsGIF": "Game as GIF",
   "playerNames": "Player names",
   "moveAnnotations": "Move annotations",
@@ -1893,6 +1913,7 @@
       }
     }
   },
+  "less": "Less",
   "more": "More",
   "memberSince": "Member since",
   "lastSeenActive": "Active {param}",
@@ -2000,7 +2021,7 @@
   "oneUrlPerLine": "One URL per line.",
   "inlineNotation": "Inline notation",
   "makeAStudy": "For safekeeping and sharing, consider making a study.",
-  "clearSavedMoves": "Clear moves",
+  "clearLocalData": "Clear local data",
   "previouslyOnLichessTV": "Previously on Lichess TV",
   "onlinePlayers": "Online players",
   "activePlayers": "Active players",
@@ -2296,6 +2317,7 @@
   "simulClockHint": "The more players you take on, the more time you may need.",
   "simulAddExtraTime": "You may add extra initial time to your clock to help you cope with the simul.",
   "simulHostExtraTime": "Host extra initial clock time",
+  "extraClockTimeForHost": "Extra clock time for the host:",
   "simulAddExtraTimePerPlayer": "Add initial time to your clock for each player joining the simul.",
   "simulHostExtraTimePerPlayer": "Host extra clock time per player",
   "lichessTournaments": "Lichess tournaments",
@@ -2306,8 +2328,10 @@
   "keyboardShortcuts": "Keyboard shortcuts",
   "keyMoveBackwardOrForward": "move backward/forward",
   "keyGoToStartOrEnd": "go to start/end",
+  "keyGoToPreviousOrNextLine": "go to previous/next line",
   "keyCycleSelectedVariation": "Cycle selected variation",
   "keyShowOrHideComments": "show/hide comments",
+  "keyShowOrHideCurrentVariation": "show/hide current variation",
   "keyEnterOrExitVariation": "enter/exit variation",
   "keyPreviousBranch": "Previous branch",
   "keyNextBranch": "Next branch",
@@ -2518,11 +2542,12 @@
   "theme": "Theme",
   "light": "Light",
   "dark": "Dark",
-  "transparent": "Transparent",
   "picture": "Picture",
   "deviceTheme": "Device theme",
   "roundness": "Roundness",
+  "backgroundImage": "Background image",
   "backgroundImageUrl": "Background image URL:",
+  "imageOpacity": "Image opacity",
   "board": "Board",
   "size": "Size",
   "opacity": "Opacity",
@@ -2554,6 +2579,14 @@
   },
   "perfRatingX": "Rating: {param}",
   "@perfRatingX": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "perfRatingLabel": "Rating: {param}.",
+  "@perfRatingLabel": {
     "placeholders": {
       "param": {
         "type": "String"
@@ -2649,6 +2682,7 @@
   },
   "showUnreadLichessMessage": "You have received a private message from Lichess.",
   "clickHereToReadIt": "Click here to read it",
+  "readTheMessage": "Read the message",
   "sorry": "Sorry :(",
   "weHadToTimeYouOutForAWhile": "We had to time you out for a while.",
   "why": "Why?",
@@ -2946,6 +2980,9 @@
   "tags": "Tags",
   "enPassant": "En passant rights",
   "settings": "Settings",
+  "verifyingYourDevice": "Verifying your device...",
+  "chessOpenings": "Chess openings",
+  "boards": "Boards",
   "opponentLeftCounter": "{count, plural, =1{Your opponent left the game. You can claim victory in {count} second.} other{Your opponent left the game. You can claim victory in {count} seconds.}}",
   "@opponentLeftCounter": {
     "placeholders": {
@@ -3471,6 +3508,7 @@
   "studyStudyUrl": "Study URL",
   "studyCurrentChapterUrl": "Current chapter URL",
   "studyYouCanPasteThisInTheForumToEmbed": "You can paste this in the forum or your Lichess blog to embed",
+  "studyPasteToEmbedChapterInForumOrBlog": "You can paste this in the forum or your Lichess blog to embed the chapter.",
   "studyStartAtInitialPosition": "Start at initial position",
   "studyStartAtX": "Start at {param}",
   "@studyStartAtX": {
@@ -3658,7 +3696,9 @@
   "studyCustomPositionTitle": "Custom position",
   "studyCustomPositionText": "Set up the board your way.<br>Suited to explore endgames.",
   "studyLoadExistingLichessGameTitle": "Load an existing lichess game",
+  "studyLoadGameFromTheWebTitle": "Load a game from the web",
   "studyLoadExistingLichessGameText": "Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.",
+  "studyLoadGameFromTheWebText": "Paste a game URL<br>(like lichess.org/7fHIU0XI)<br>to load game moves in the chapter.",
   "studyFromFenStringTitle": "From a FEN string",
   "studyFromFenStringText": "Paste a position in FEN format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>to start the chapter from a position.",
   "studyFromPgnGameTitle": "From a PGN game",

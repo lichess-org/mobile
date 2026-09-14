@@ -30,6 +30,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Скасаваць прапанову аб вяртанні хода';
 
   @override
+  String get mobileChessEngine => 'Chess engine';
+
+  @override
   String get mobileClearButton => 'Ачысціць';
 
   @override
@@ -148,6 +151,12 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get mobileSettingsDraggedTargetSquare => 'Квадрат';
+
+  @override
+  String get mobileSettingsDrawnShapeColor => 'Drawn shape color';
+
+  @override
+  String get mobileSettingsDrawnShapeColorHelp => 'This color is used for shapes drawn by hand using two fingers.';
 
   @override
   String get mobileSettingsHomeWidgets => 'Дамашнія віджеты';
@@ -691,6 +700,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String get arenaHowDoesPairingWork => 'Як працуе лёсаванне?';
 
   @override
+  String get arenaHowArePlayersPaired => 'How are players paired?';
+
+  @override
   String get arenaHowDoesPairingWorkAnswer => 'У пачатку турніру гульцы размяркоўваюцца паводле іх рэйтынгу.\nЯк толькі гульня скончылася, вярніцеся ў лобі турніру: наступная гульня будзе праведзеная з гульцом, найбліжэйшым да вас па рэйтынгу. Гэты механізм гарантуе, што вам не давядзецца доўга чакаць наступнага суперніка, аднак ёсць магчымасць, што вы не згуляеце з кожным удзельнікам турніру.\nГуляйце хутка, вяртайцеся ў лобі і гуляйце яшчэ, каб выйграць як мага болей балаў.';
 
   @override
@@ -779,6 +791,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String get arenaDefender => 'Абаронца';
 
   @override
+  String get arenaDefenderLabel => 'Defender:';
+
+  @override
   String get arenaPickYourTeam => 'Pick your team';
 
   @override
@@ -842,6 +857,9 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get arenaBerserkRate => 'Berserk rate';
+
+  @override
+  String get arenaLeaguesAndStreamerBattles => 'Leagues & Streamer Battles';
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -955,6 +973,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String get broadcastDefinitivelyDeleteRound => 'Канчаткова выдаліць ​​тур і ўсе яго гульні.';
 
   @override
+  String get broadcastPermanentlyDeleteRound => 'Permanently delete this round and all its games?';
+
+  @override
   String get broadcastDeleteAllGamesOfThisRound => 'Выдаліць усе гульні гэтага тура. Для іх паўторнага стварэння крыніца павінна быць актыўнай.';
 
   @override
@@ -1022,6 +1043,9 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get broadcastNoBoardsYet => 'Дошак пакуль няма. Яна з\'явяцца пасля загрузкі гульняў.';
+
+  @override
+  String get broadcastNoPlayersYet => 'No players yet. They will appear once games are uploaded.';
 
   @override
   String broadcastBoardsCanBeLoaded(String param) {
@@ -2152,6 +2176,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String get puzzleThemeCornerMateDescription => 'Confine the king to the corner using a rook or queen and a knight to engage the checkmate.';
 
   @override
+  String get puzzleThemeCornerMateKnightDeliversDescription => 'Confine the king to the corner using a rook or queen, and use a knight to deliver the checkmate.';
+
+  @override
   String get puzzleThemeCrushing => 'Зруйнаванне';
 
   @override
@@ -2290,10 +2317,16 @@ class AppLocalizationsBe extends AppLocalizations {
   String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
 
   @override
+  String get puzzleThemePillsburyMateRookAndBishopDescription => 'A rook delivers checkmate to the king, while a bishop helps confine it.';
+
+  @override
   String get puzzleThemeMorphysMate => 'Morphy\'s mate';
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphyMateBishopAndRookDescription => 'A bishop delivers checkmate to the king, while a rook helps confine it.';
 
   @override
   String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
@@ -2414,6 +2447,9 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get puzzleThemePromotionDescription => 'Ператварыцце адну з пешак ў ферзя або легкую фігуру.';
+
+  @override
+  String get puzzleThemePromotePawnToQueenRookOrMinor => 'Promote one of your pawns to a queen, rook or minor piece.';
 
   @override
   String get puzzleThemeQueenEndgame => 'Ферзевы эндшпіль';
@@ -2998,6 +3034,18 @@ class AppLocalizationsBe extends AppLocalizations {
   String get flipBoard => 'Перавярнуць дошку';
 
   @override
+  String get toggleLocalEngine => 'Toggle local engine';
+
+  @override
+  String get engineSettings => 'Engine settings';
+
+  @override
+  String get enginesFromStrongestToWeakest => 'Engines from strongest to weakest';
+
+  @override
+  String get illegalPosition => 'Illegal position';
+
+  @override
   String get threefoldRepetition => 'Трохразовы паўтор';
 
   @override
@@ -3140,6 +3188,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String get password => 'Пароль';
 
   @override
+  String get showPassword => 'Show password';
+
+  @override
   String get changePassword => 'Змяніць пароль';
 
   @override
@@ -3263,7 +3314,13 @@ class AppLocalizationsBe extends AppLocalizations {
   String get whiteTimeOut => 'Час белых скончыўся';
 
   @override
+  String get whiteRanOutOfTime => 'White ran out of time';
+
+  @override
   String get blackTimeOut => 'Час чорных скончыўся';
+
+  @override
+  String get blackRanOutOfTime => 'Black ran out of time';
 
   @override
   String get drawOfferSent => 'Прапанова нічыі даслана';
@@ -3475,6 +3532,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
 
   @override
+  String get cannotFilterByUnstableRating => 'It is not possible to filter by rating because your rating is not stable.\nPlaying rated games will increase stability.';
+
+  @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
     return 'Ваш рэйтынг у рэжыме «$param1» ($param2) занадта высокі';
   }
@@ -3555,7 +3615,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get leaderboard => 'Лепшыя гульцы';
 
   @override
-  String get screenshotCurrentPosition => 'Зрабіць здымак экрана з бягучай пазіцыяй';
+  String get positionAsImage => 'Position as image';
 
   @override
   String get gameAsGIF => 'Партыя ў фармаце GIF';
@@ -3652,6 +3712,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String xStartedFollowingY(String param1, String param2) {
     return '$param1 падпісаўся на $param2';
   }
+
+  @override
+  String get less => 'Less';
 
   @override
   String get more => 'Яшчэ';
@@ -3861,7 +3924,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get makeAStudy => 'Для захавання і сумеснага выкарыстання стварыце студыю.';
 
   @override
-  String get clearSavedMoves => 'Ачысціць хады';
+  String get clearLocalData => 'Clear local data';
 
   @override
   String get previouslyOnLichessTV => 'Раней на Lichess TV';
@@ -4373,6 +4436,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String get simulHostExtraTime => 'Дадатковы час для арганізатара';
 
   @override
+  String get extraClockTimeForHost => 'Extra clock time for the host:';
+
+  @override
   String get simulAddExtraTimePerPlayer => 'Add initial time to your clock for each player joining the simul.';
 
   @override
@@ -4403,10 +4469,16 @@ class AppLocalizationsBe extends AppLocalizations {
   String get keyGoToStartOrEnd => 'да пачатку/канцу';
 
   @override
+  String get keyGoToPreviousOrNextLine => 'go to previous/next line';
+
+  @override
   String get keyCycleSelectedVariation => 'Cycle selected variation';
 
   @override
   String get keyShowOrHideComments => 'паказаць/схаваць каментары';
+
+  @override
+  String get keyShowOrHideCurrentVariation => 'show/hide current variation';
 
   @override
   String get keyEnterOrExitVariation => 'увайсці/выйсці з варыянту';
@@ -4682,9 +4754,6 @@ class AppLocalizationsBe extends AppLocalizations {
   String get dark => 'Цёмны';
 
   @override
-  String get transparent => 'Празрысты';
-
-  @override
   String get picture => 'Picture';
 
   @override
@@ -4694,7 +4763,13 @@ class AppLocalizationsBe extends AppLocalizations {
   String get roundness => 'Roundness';
 
   @override
+  String get backgroundImage => 'Background image';
+
+  @override
   String get backgroundImageUrl => 'Спасылка на фон:';
+
+  @override
+  String get imageOpacity => 'Image opacity';
 
   @override
   String get board => 'Дошка';
@@ -4767,6 +4842,11 @@ class AppLocalizationsBe extends AppLocalizations {
   @override
   String perfRatingX(String param) {
     return 'Рэйтынг: $param';
+  }
+
+  @override
+  String perfRatingLabel(String param) {
+    return 'Rating: $param.';
   }
 
   @override
@@ -4921,6 +5001,9 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get clickHereToReadIt => 'Націсніце тут, каб прачытаць';
+
+  @override
+  String get readTheMessage => 'Read the message';
 
   @override
   String get sorry => 'Прабачце :(';
@@ -5358,6 +5441,15 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get settings => 'Settings';
+
+  @override
+  String get verifyingYourDevice => 'Verifying your device...';
+
+  @override
+  String get chessOpenings => 'Chess openings';
+
+  @override
+  String get boards => 'Boards';
 
   @override
   String opponentLeftCounter(int count) {
@@ -6291,6 +6383,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String get studyYouCanPasteThisInTheForumToEmbed => 'Вы можаце ўставіць гэта на форум, каб убудаваць';
 
   @override
+  String get studyPasteToEmbedChapterInForumOrBlog => 'You can paste this in the forum or your Lichess blog to embed the chapter.';
+
+  @override
   String get studyStartAtInitialPosition => 'Пачынаць у пачатковай пазіцыі';
 
   @override
@@ -6663,7 +6758,13 @@ class AppLocalizationsBe extends AppLocalizations {
   String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
 
   @override
+  String get studyLoadGameFromTheWebTitle => 'Load a game from the web';
+
+  @override
   String get studyLoadExistingLichessGameText => 'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
+
+  @override
+  String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/7fHIU0XI)<br>to load game moves in the chapter.';
 
   @override
   String get studyFromFenStringTitle => 'From a FEN string';

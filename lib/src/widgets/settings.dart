@@ -94,6 +94,9 @@ class const SliderSettingsTile({
   final Widget? title,
   required final double value,
   required final List<double> values,
+
+  /// The optional explanation of the settings.
+  final String? explanation,
   required final void Function(double value) onChangeEnd,
   final String Function(double)? labelBuilder,
 }) extends StatefulWidget {
@@ -123,10 +126,29 @@ class _SliderSettingsTileState() extends State<SliderSettingsTile> {
       },
     );
 
+    final subtitle = widget.explanation != null
+        ? Column(
+            mainAxisSize: .min,
+            crossAxisAlignment: .start,
+            children: [
+              const SizedBox(height: 4),
+              Text(
+                widget.explanation!,
+                maxLines: 5,
+                style: ListTileTheme.of(context).subtitleTextStyle
+                    ?.copyWith(fontSize: TextTheme.of(context).bodySmall?.fontSize),
+              ),
+              if (widget.title != null) slider,
+            ],
+          )
+        : widget.title != null
+        ? slider
+        : null;
+
     return ListTile(
       leading: widget.icon,
       title: widget.title ?? slider,
-      subtitle: widget.title != null ? slider : null,
+      subtitle: subtitle,
       trailing: widget.labelBuilder != null
           ? Text(widget.labelBuilder!.call(widget.values[_index]))
           : null,
