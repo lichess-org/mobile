@@ -435,7 +435,6 @@
   <string name="apply">Parashtroje</string>
   <string name="save">Ruaje</string>
   <string name="leaderboard">Tabelë klasifikimi</string>
-  <string name="screenshotCurrentPosition">Bëj foto ekrani të pozicionit të tanishëm</string>
   <string name="gameAsGIF">GIF i lojës</string>
   <string name="playerNames">Emra lojtarësh</string>
   <string name="moveAnnotations">Shënime lëvizjesh</string>
@@ -484,6 +483,7 @@ loje dhe URL për ta ndarë me të tjerë.</string>
     <item quantity="one">%s që ndiqet</item>
     <item quantity="other">%s që ndiqen</item>
   </plurals>
+  <string name="less">Më pak</string>
   <string name="more">Më shumë</string>
   <string name="memberSince">Anëtar që prej</string>
   <string name="lastSeenActive">Aktiv %s</string>
@@ -549,7 +549,6 @@ loje dhe URL për ta ndarë me të tjerë.</string>
   <string name="oneUrlPerLine">Një URL për rresht.</string>
   <string name="inlineNotation">Shënim brendazi</string>
   <string name="makeAStudy">Për ruajtje të sigurt dhe për ndarje me të tjerët, shihni mundësinë e krijimit të një studimi.</string>
-  <string name="clearSavedMoves">Spastroji lëvizjet</string>
   <string name="previouslyOnLichessTV">Herën e fundit në Lichess TV</string>
   <string name="onlinePlayers">Lojtarë në linjë</string>
   <string name="activePlayers">Lojëtarë aktivë</string>
@@ -580,6 +579,9 @@ loje dhe URL për ta ndarë me të tjerë.</string>
   <string name="replies">Përgjigje</string>
   <string name="replyToThisTopic">Përgjigjuni tek kjo temë</string>
   <string name="reply">Përgjigjuni</string>
+  <string name="reopen">Rihapeni</string>
+  <string name="quote">Citoje</string>
+  <string name="postEdited">përpunuar</string>
   <string name="message">Mesazh</string>
   <string name="createTheTopic">Krijoje temën</string>
   <string name="reportAUser">Raportoni një përdorues</string>
@@ -815,10 +817,12 @@ loje dhe URL për ta ndarë me të tjerë.</string>
   <string name="language">Gjuha</string>
   <string name="allLanguages">Krejt gjuhët</string>
   <string name="background">Sfond</string>
+  <string name="theme">Temë grafike</string>
   <string name="light">I çelët</string>
   <string name="dark">I errët</string>
-  <string name="transparent">I tejdukshëm</string>
+  <string name="picture">Foto</string>
   <string name="deviceTheme">Temën e pajisjes</string>
+  <string name="roundness">Rrumbullakësi</string>
   <string name="backgroundImageUrl">URL figure sfondi:</string>
   <string name="board">Fushë</string>
   <string name="size">Madhësi</string>
@@ -1008,6 +1012,7 @@ Që lojërat të fillojnë nga pozicioni fillestar normal, lëreni të zbrazët.
   <string name="gameInProgress">Keni një lojë në ecuri e sipër me %s.</string>
   <string name="abortTheGame">Ndërpriteni lojën</string>
   <string name="resignTheGame">Dorëzohuni</string>
+  <string name="youCantStartNewGame">S’mund të nisni një lojë të re teksa është radha juaj për të luajtur.</string>
   <string name="since">Që nga</string>
   <string name="until">Deri më</string>
   <string name="lichessDbExplanation">Lojëra me vlerësim, marrë nga krejt lojëtarët e Lichess-it</string>
