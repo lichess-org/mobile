@@ -63,7 +63,7 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) {
   return dbFactory.openDatabase(
     path,
     options: OpenDatabaseOptions(
-      version: 5,
+      version: 6,
       onConfigure: (db) async {
         final version = await _getDatabaseVersion(db);
         _logger.info('SQLite version: $version');
@@ -91,6 +91,7 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) {
         _createCorrespondenceGameTableV1(batch);
         _createChatReadMessagesTableV1(batch);
         _createGameTableV2(batch);
+        _createGameTableIndexesV6(batch);
         _createHttpLogTableV4(batch);
         _createAppLogTableV5(batch);
         await batch.commit();
@@ -108,6 +109,9 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) {
         }
         if (oldVersion < 5) {
           _createAppLogTableV5(batch);
+        }
+        if (oldVersion < 6) {
+          _createGameTableIndexesV6(batch);
         }
         await batch.commit();
       },
@@ -182,6 +186,13 @@ void _createGameTableV2(Batch batch) {
     data TEXT NOT NULL,
     PRIMARY KEY (gameId)
   )
+    ''');
+}
+
+void _createGameTableIndexesV6(Batch batch) {
+  batch.execute('''
+    CREATE INDEX IF NOT EXISTS idx_game_user_lastModified
+    ON game(userId, lastModified DESC)
     ''');
 }
 
