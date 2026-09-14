@@ -153,6 +153,12 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileSettingsDraggedTargetSquare => 'Cadrado';
 
   @override
+  String get mobileSettingsDrawnShapeColor => 'Drawn shape color';
+
+  @override
+  String get mobileSettingsDrawnShapeColorHelp => 'This color is used for shapes drawn by hand using two fingers.';
+
+  @override
   String get mobileSettingsHomeWidgets => 'Trebellos da páxina de inicio';
 
   @override

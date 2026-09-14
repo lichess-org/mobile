@@ -153,6 +153,12 @@ class AppLocalizationsSl extends AppLocalizations {
   String get mobileSettingsDraggedTargetSquare => 'Polje';
 
   @override
+  String get mobileSettingsDrawnShapeColor => 'Drawn shape color';
+
+  @override
+  String get mobileSettingsDrawnShapeColorHelp => 'This color is used for shapes drawn by hand using two fingers.';
+
+  @override
   String get mobileSettingsHomeWidgets => 'Domači pripomočki';
 
   @override

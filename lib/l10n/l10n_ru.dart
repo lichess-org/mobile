@@ -153,6 +153,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileSettingsDraggedTargetSquare => 'Квадратная';
 
   @override
+  String get mobileSettingsDrawnShapeColor => 'Drawn shape color';
+
+  @override
+  String get mobileSettingsDrawnShapeColorHelp => 'This color is used for shapes drawn by hand using two fingers.';
+
+  @override
   String get mobileSettingsHomeWidgets => 'Виджеты главного экрана';
 
   @override

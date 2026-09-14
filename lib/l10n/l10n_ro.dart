@@ -153,6 +153,12 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileSettingsDraggedTargetSquare => 'Pătrat';
 
   @override
+  String get mobileSettingsDrawnShapeColor => 'Drawn shape color';
+
+  @override
+  String get mobileSettingsDrawnShapeColorHelp => 'This color is used for shapes drawn by hand using two fingers.';
+
+  @override
   String get mobileSettingsHomeWidgets => 'Widget-uri pagină principală';
 
   @override

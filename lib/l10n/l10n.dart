@@ -472,6 +472,18 @@ abstract class AppLocalizations {
   /// **'Square'**
   String get mobileSettingsDraggedTargetSquare;
 
+  /// No description provided for @mobileSettingsDrawnShapeColor.
+  ///
+  /// In en, this message translates to:
+  /// **'Drawn shape color'**
+  String get mobileSettingsDrawnShapeColor;
+
+  /// No description provided for @mobileSettingsDrawnShapeColorHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'This color is used for shapes drawn by hand using two fingers.'**
+  String get mobileSettingsDrawnShapeColorHelp;
+
   /// No description provided for @mobileSettingsHomeWidgets.
   ///
   /// In en, this message translates to:

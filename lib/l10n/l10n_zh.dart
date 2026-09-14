@@ -153,6 +153,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileSettingsDraggedTargetSquare => '方形';
 
   @override
+  String get mobileSettingsDrawnShapeColor => 'Drawn shape color';
+
+  @override
+  String get mobileSettingsDrawnShapeColorHelp => 'This color is used for shapes drawn by hand using two fingers.';
+
+  @override
   String get mobileSettingsHomeWidgets => '首页小组件';
 
   @override
