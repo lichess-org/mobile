@@ -46,7 +46,7 @@ const Set<Sound> _emtpySet = {};
 final _linuxSoundPlayer = _LinuxSoundPlayer();
 
 /// Linux audio player using system audio backends (pw-play, paplay, or aplay).
-class _LinuxSoundPlayer {
+class _LinuxSoundPlayer() {
   final Map<String, String> _soundPaths = {};
   String? _playerCmd;
 
