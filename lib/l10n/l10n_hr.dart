@@ -341,6 +341,9 @@ class AppLocalizationsHr extends AppLocalizations {
   String get mobilePerfShortPuzzle => 'Puzzle';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get variantStandard => 'Standardni šah';
 
   @override

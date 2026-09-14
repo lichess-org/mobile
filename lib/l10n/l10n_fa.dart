@@ -341,6 +341,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobilePerfShortPuzzle => 'معما';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get variantStandard => 'اِستانده';
 
   @override

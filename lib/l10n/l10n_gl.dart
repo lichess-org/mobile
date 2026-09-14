@@ -341,6 +341,9 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobilePerfShortPuzzle => 'Crebacab';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get variantStandard => 'Estándar';
 
   @override

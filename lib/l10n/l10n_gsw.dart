@@ -341,6 +341,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobilePerfShortPuzzle => 'Ufgabe';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get variantStandard => 'Schtandard';
 
   @override

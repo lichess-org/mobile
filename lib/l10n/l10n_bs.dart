@@ -341,6 +341,9 @@ class AppLocalizationsBs extends AppLocalizations {
   String get mobilePerfShortPuzzle => 'Zagonetka';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get variantStandard => 'Standardna';
 
   @override

@@ -341,6 +341,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobilePerfShortPuzzle => 'Puzzel';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get variantStandard => 'Standaard';
 
   @override

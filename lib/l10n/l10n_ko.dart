@@ -341,6 +341,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobilePerfShortPuzzle => '퍼즐';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get variantStandard => '스탠다드';
 
   @override
