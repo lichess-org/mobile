@@ -78,10 +78,6 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> with Ro
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(conversationControllerProvider(widget.user.id)).value;
-    final canInteract =
-        state != null && !state.isBot && state.convo.postable && state.convo.messages.isNotEmpty;
-
     return PlatformScaffold(
       appBar: PlatformAppBar(
         titleSpacing: 0,
@@ -101,7 +97,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> with Ro
           },
         ),
         actions: [
-          if (canInteract)
+          if (widget.user.id.value != 'lichess')
             IconButton(
               icon: const Icon(Icons.delete_outline),
               tooltip: 'Delete conversation',
