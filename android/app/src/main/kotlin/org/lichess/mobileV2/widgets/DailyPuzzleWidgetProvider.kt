@@ -115,6 +115,22 @@ class DailyPuzzleWidgetProvider : AppWidgetProvider() {
       val prefs = context.getSharedPreferences("HomeWidgetPreferences", Context.MODE_PRIVATE)
       val lichessHost = prefs.getString("lichessHost", "lichess.org") ?: "lichess.org"
       val puzzle = fetchDailyPuzzle(lichessHost)
+
+      if(puzzle == null){
+        remoteViews.setViewVisibility(R.id.no_puzzle, View.VISIBLE)
+        remoteViews.setViewVisibility(R.id.puzzle_board_image,  View.GONE)
+      } else {
+        remoteViews.setViewVisibility(R.id.no_puzzle, View.GONE)
+        remoteViews.setViewVisibility(R.id.puzzle_board_image, View.VISIBLE)
+
+        val options = appWidgetManager.getAppWidgetOptions(appWidgetId)
+        val minWidth = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH)
+
+
+        val boardBitmap = getBoardBitmap(context, minWidth)
+        remoteViews.setImageViewBitmap(R.id.puzzle_board_image, boardBitmap)
+
+      }
     } catch (e: Exception) {
       Log.e("DailyPuzzleWidget", "Error updating widget $appWidgetId", e)
     }
@@ -122,5 +138,37 @@ class DailyPuzzleWidgetProvider : AppWidgetProvider() {
     appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
   }
 
+  private fun parseFen(fen : String): List<List<Char?>>
+  {
 
+  }
+
+  private fun getBoardBitmap(
+    context : Context,
+    minWidth : Int
+  ) : Bitmap
+  {
+    val boardSizedPx = (minWidth * context.resources.displayMetrics.density).toInt()
+    val bitmap = Bitmap.createBitmap(boardSizedPx, boardSizedPx, Bitmap.Config.ARGB_8888)
+    val canvas = Canvas(bitmap)
+
+    val sqrSize = boardSizedPx / 8
+    val lightPaint = Paint().apply { color = Color.rgb(0xF0, 0xD9, 0xB6) }
+    val darkPaint = Paint().apply { color = Color.rgb(0xB5, 0x88, 0x63) }
+
+    for(row in 0 until 8){
+      for(col in 0 until 8){
+        val flipped = false
+        val rankIndex = if (flipped) 7 - row else row
+        val fileIndex = if (flipped) 7 - col else col
+        val isLight = (rankIndex + fileIndex) % 2 == 0
+        val left = fileIndex *sqrSize
+        val top = rankIndex * sqrSize
+        val sqrRect = Rect(left, top, left + sqrSize, top + sqrSize)
+
+        canvas.drawRect(sqrRect, if(isLight) lightPaint else darkPaint)
+      }
+    }
+    return bitmap
+  }
 }

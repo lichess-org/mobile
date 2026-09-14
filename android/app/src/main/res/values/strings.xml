@@ -5,4 +5,6 @@
     <string name="widget_live">LIVE</string>
     <string name="widget_no_broadcasts">No active broadcasts</string>
     <string name="widget_daily_puzzle_title">Daily Puzzle\n</string>
+    <string name="widget_daily_puzzle_description">Shows daily puzzle</string>
+  <string name="widget_no_dailyPuzzle">No New Puzzles\n</string>
 </resources>
