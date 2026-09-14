@@ -21,11 +21,8 @@ final boardEditorControllerProvider = NotifierProvider.autoDispose
       name: 'BoardEditorControllerProvider',
     );
 
-class BoardEditorController extends Notifier<BoardEditorState> {
-  BoardEditorController(this.params);
-
-  final BoardEditorControllerParams? params;
-
+class BoardEditorController(final BoardEditorControllerParams? params)
+    extends Notifier<BoardEditorState> {
   @override
   BoardEditorState build() {
     final variant = params?.initialVariant ?? Variant.standard;
@@ -219,13 +216,16 @@ class BoardEditorController extends Notifier<BoardEditorState> {
   }
 }
 
-enum CastlingRight { whiteKing, whiteQueen, blackKing, blackQueen }
+enum CastlingRight() {
+  whiteKing,
+  whiteQueen,
+  blackKing,
+  blackQueen,
+}
 
 @freezed
-sealed class BoardEditorState with _$BoardEditorState {
-  const BoardEditorState._();
-
-  const factory BoardEditorState({
+sealed class const BoardEditorState._() with _$BoardEditorState {
+  const factory({
     required Side orientation,
     required Side sideToPlay,
     required Variant variant,

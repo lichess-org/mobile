@@ -15,9 +15,7 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class AccountPreferencesScreen extends ConsumerStatefulWidget {
-  const AccountPreferencesScreen({super.key});
-
+class const AccountPreferencesScreen({super.key}) extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const AccountPreferencesScreen());
   }
@@ -26,7 +24,8 @@ class AccountPreferencesScreen extends ConsumerStatefulWidget {
   ConsumerState<AccountPreferencesScreen> createState() => _AccountPreferencesScreenState();
 }
 
-class _AccountPreferencesScreenState extends ConsumerState<AccountPreferencesScreen>
+class _AccountPreferencesScreenState()
+    extends ConsumerState<AccountPreferencesScreen>
     with WidgetsBindingObserver {
   bool isLoading = false;
   bool _pendingKidModeRefresh = false;

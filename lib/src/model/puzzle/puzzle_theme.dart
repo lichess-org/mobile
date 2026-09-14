@@ -10,7 +10,7 @@ part 'puzzle_theme.freezed.dart';
 
 @freezed
 sealed class PuzzleThemeData with _$PuzzleThemeData {
-  const factory PuzzleThemeData({
+  const factory({
     required int count,
     required String? desc,
     required PuzzleThemeKey key,
@@ -18,7 +18,7 @@ sealed class PuzzleThemeData with _$PuzzleThemeData {
   }) = _PuzzleThemeData;
 }
 
-enum PuzzleThemeKey {
+enum PuzzleThemeKey(final IconData icon) {
   mix(PuzzleIcons.mix),
   advancedPawn(PuzzleIcons.advancedPawn),
   advantage(PuzzleIcons.advantage),
@@ -84,10 +84,6 @@ enum PuzzleThemeKey {
 
   // used internally to filter out unsupported keys
   unsupported(PuzzleIcons.mix);
-
-  const PuzzleThemeKey(this.icon);
-
-  final IconData icon;
 
   PuzzleThemeL10n l10n(AppLocalizations l10n) {
     switch (this) {
@@ -511,8 +507,4 @@ final puzzleThemeCategoriesProvider = Provider<IList<PuzzleThemeCategory>>((Ref 
   ]);
 }, name: 'PuzzleThemeCategoriesProvider');
 
-class PuzzleThemeL10n {
-  const PuzzleThemeL10n({required this.name, required this.description});
-  final String name;
-  final String description;
-}
+class const PuzzleThemeL10n({required final String name, required final String description});

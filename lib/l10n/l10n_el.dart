@@ -30,6 +30,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Ακύρωση προσφοράς ανάκλησης κίνησης';
 
   @override
+  String get mobileChessEngine => 'Chess engine';
+
+  @override
   String get mobileClearButton => 'Εκκαθάριση';
 
   @override
@@ -148,6 +151,12 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get mobileSettingsDraggedTargetSquare => 'Τετράγωνο';
+
+  @override
+  String get mobileSettingsDrawnShapeColor => 'Drawn shape color';
+
+  @override
+  String get mobileSettingsDrawnShapeColorHelp => 'This color is used for shapes drawn by hand using two fingers.';
 
   @override
   String get mobileSettingsHomeWidgets => 'Widget αρχικής σελίδες';
@@ -655,6 +664,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String get arenaHowDoesPairingWork => 'Πώς πραγματοποιούνται οι κληρώσεις;';
 
   @override
+  String get arenaHowArePlayersPaired => 'Πώς επιλέγονται οι αντίπαλοι;';
+
+  @override
   String get arenaHowDoesPairingWorkAnswer => 'Στην αρχή του τουρνουά, οι παίκτες κληρώνονται με βάση τη βαθμολογία τους.\nΜόλις τελειώσετε την παρτίδα σας, επιστρέψτε στον χώρο αναμονής του τουρνουά — εκεί, θα κληρωθείτε με κάποιον παίκτη ο οποίος έχει παρόμοια κατάταξη με εσάς. Με αυτόν τον τρόπο, ο χρόνος αναμονής γίνεται ο ελάχιστος δυνατός, αλλά πάντως ενδέχεται να μην αντιμετωπίσετε όλους τους παίκτες που συμμετέχουν στο τουρνουά πριν τη λήξη του.\nΣας προτείνουμε να ολοκληρώνετε γρήγορα τις παρτίδες σας και να επιστρέφετε αμέσως στον χώρο αναμονής ώστε να παίζετε όσο το δυνατόν περισσότερες παρτίδες και να κερδίζετε όσο το δυνατόν περισσότερους βαθμούς.';
 
   @override
@@ -743,6 +755,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String get arenaDefender => 'Υπερασπιστής';
 
   @override
+  String get arenaDefenderLabel => 'Υπερασπιστής:';
+
+  @override
   String get arenaPickYourTeam => 'Διαλέξτε την ομάδα σας';
 
   @override
@@ -767,7 +782,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get arenaRankAvgHelp => 'Ο μέσος όρος κατάταξης είναι ένα ποσοστό της θέσης σας. Όσο χαμηλότερος είναι ο μέσος όρος αυτός, τόσο καλύτερη ήταν η επίδοσή σας στο τουρνουά.\n\nΓια παράδειγμα, αν είστε τρίτος σε ένα τουρνουά 100 παικτών το ποσοστό είναι 3%, ενώ αν είστε δέκατος σε ένα τουρνουά 1000 παικτών, το ποσοστό σας είναι 1%.';
 
   @override
-  String get arenaRankAverageHelp => 'Your rank average represents your typical finishing position, relative to the total number of players in each tournament.\nThis is a measure of your tournament placement, not your general rating.\n\nFor example, a rank average of 3% means you typically finish in the top 3% (such as 30th place out of 1,000 players).';
+  String get arenaRankAverageHelp => 'Η μέση κατάταξή σας δείχνει τη συνήθη θέση τερματισμού σας συγκριτικά με τον συνολικό αριθμό παικτών ενός τουρνουά. Πρόκειται για ένα μέτρο επίδοσής στα τουρνουά και όχι της γενικής βαθμολογίας σας.\n\nΓια παράδειγμα, μία μέση κατάταξη 3% σημαίνει ότι συνήθως τερματίζετε στο κορυφαίο 3% των παικτών (π.χ. 30ος από 1.000 παίκτες).';
 
   @override
   String get arenaMedians => 'διάμεσες τιμές';
@@ -806,6 +821,9 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get arenaBerserkRate => 'Ποσοστό berserk';
+
+  @override
+  String get arenaLeaguesAndStreamerBattles => 'Leagues & Streamer Battles';
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -915,6 +933,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String get broadcastDefinitivelyDeleteRound => 'Οριστική διαγραφή του γύρου και των παρτίδων του.';
 
   @override
+  String get broadcastPermanentlyDeleteRound => 'Θέλετε σίγουρα να διαγράψετε οριστικά αυτόν τον γύρο και όλες τις παρτίδες του;';
+
+  @override
   String get broadcastDeleteAllGamesOfThisRound => 'Διαγραφή όλων των παρτίδων αυτού του γύρου. Η πηγή μετάδοσης θα πρέπει να είναι ενεργή για να τις δημιουργήσετε ξανά.';
 
   @override
@@ -982,6 +1003,9 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get broadcastNoBoardsYet => 'Δεν υπάρχουν διαθέσιμες σκακιέρες ακόμα. Θα εμφανιστούν μόλις φορτωθούν οι παρτίδες.';
+
+  @override
+  String get broadcastNoPlayersYet => 'Δεν υπάρχουν παίκτες. Θα εμφανιστούν όταν μεταφορτωθούν οι παρτίδες.';
 
   @override
   String broadcastBoardsCanBeLoaded(String param) {
@@ -2100,6 +2124,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String get puzzleThemeCornerMateDescription => 'Ο πύργος ή η βασίλισσα περιορίζουν τον αντίπαλο βασιλιά στη γωνία, με τον ίππο να δίνει ματ.';
 
   @override
+  String get puzzleThemeCornerMateKnightDeliversDescription => 'Confine the king to the corner using a rook or queen, and use a knight to deliver the checkmate.';
+
+  @override
   String get puzzleThemeCrushing => 'Σαρωτική επίθεση';
 
   @override
@@ -2238,10 +2265,16 @@ class AppLocalizationsEl extends AppLocalizations {
   String get puzzleThemePillsburysMateDescription => 'Ο πύργος κάνει ματ στον αντίπαλο βασιλιά, τον οποίο ένας αξιωματικός έχει περιορίσει.';
 
   @override
+  String get puzzleThemePillsburyMateRookAndBishopDescription => 'Ο πύργος κάνει ματ τον βασιλιά με την βοήθεια ενός αξιωματικού.';
+
+  @override
   String get puzzleThemeMorphysMate => 'Ματ του Μόρφυ';
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Ένας αξιωματικός κάνει σαχ στον αντίπαλο βασιλιά, περιορίζοντάς τον με τη βοήθεια ενός πύργου.';
+
+  @override
+  String get puzzleThemeMorphyMateBishopAndRookDescription => 'Ο αξιωματικός κάνει ματ στον βασιλιά που περιορίζεται από έναν πύργο.';
 
   @override
   String get puzzleThemeSwallowstailMate => 'Ματ χελιδονοουράς';
@@ -2364,6 +2397,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String get puzzleThemePromotionDescription => 'Προάγετε ένα πιόνι σας σε μια βασίλισσα ή σε κάποιο ελαφρύ κομμάτι.';
 
   @override
+  String get puzzleThemePromotePawnToQueenRookOrMinor => 'Promote one of your pawns to a queen, rook or minor piece.';
+
+  @override
   String get puzzleThemeQueenEndgame => 'Φινάλε βασιλισσών';
 
   @override
@@ -2471,6 +2507,14 @@ class AppLocalizationsEl extends AppLocalizations {
   }
 
   @override
+  String get recapAwaitQuestion => 'Πώς περάσατε φέτος;';
+
+  @override
+  String recapRecapReady(String param) {
+    return 'Η ανασκόπηση του έτους $param είναι έτοιμη!';
+  }
+
+  @override
   String get searchSearch => 'Αναζήτηση';
 
   @override
@@ -2498,7 +2542,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get gameSetup => 'Ρύθμιση παρτίδας';
 
   @override
-  String get challengeAFriend => 'Νέα πρόκληση';
+  String get challengeAFriend => 'Προκαλέστε φίλο';
 
   @override
   String get playAgainstComputer => 'Νέα παρτίδα εναντίον μηχανής';
@@ -2522,7 +2566,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get orLetYourOpponentScanQrCode => 'Ή ζητήστε από τον αντίπαλό σας να σαρώσει αυτόν τον κωδικό QR';
 
   @override
-  String get reusableChallengeUrl => 'Επαναχρησιμοποιήσιμος σύνδεσμος πρόκλησης';
+  String get reusableChallengeUrl => 'Μόνιμος σύνδεσμος πρόκλησης';
 
   @override
   String get permanentLinkForAnyoneToChallengeYou => 'Μόνιμος σύνδεσμος που επιτρέπει σε κάποιον να σας προκαλέσει χρησιμοποιώντας τις επιλεγμένες ρυθμίσεις.';
@@ -2938,6 +2982,18 @@ class AppLocalizationsEl extends AppLocalizations {
   String get flipBoard => 'Περιστροφή σκακιέρας';
 
   @override
+  String get toggleLocalEngine => 'Toggle local engine';
+
+  @override
+  String get engineSettings => 'Ρυθμίσεις μηχανής';
+
+  @override
+  String get enginesFromStrongestToWeakest => 'Μηχανές από την ισχυρότερη στην ασθενέστερη';
+
+  @override
+  String get illegalPosition => 'Illegal position';
+
+  @override
   String get threefoldRepetition => 'Τριπλή επανάληψη';
 
   @override
@@ -3080,6 +3136,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String get password => 'Κωδικός';
 
   @override
+  String get showPassword => 'Εμφάνιση κωδικού πρόσβασης';
+
+  @override
   String get changePassword => 'Αλλαγή κωδικού';
 
   @override
@@ -3203,7 +3262,13 @@ class AppLocalizationsEl extends AppLocalizations {
   String get whiteTimeOut => 'Τέλος χρόνου για τα λευκά';
 
   @override
+  String get whiteRanOutOfTime => 'Τελείωσε ο χρόνος των λευκών';
+
+  @override
   String get blackTimeOut => 'Τέλος χρόνου για τα μαύρα';
+
+  @override
+  String get blackRanOutOfTime => 'Τελείωσε ο χρόνος των μαύρων';
 
   @override
   String get drawOfferSent => 'Πρόταση ισοπαλίας εστάλη';
@@ -3415,6 +3480,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Τα φίλτρα βαθμολογιών είναι κλειδωμένα επειδή η βαθμολογία σας δεν είναι σταθερή ακόμα. Δοκιμάστε να παίξετε μερικές βαθμολογημένες παρτίδες για να τη σταθεροποιήσετε.';
 
   @override
+  String get cannotFilterByUnstableRating => 'It is not possible to filter by rating because your rating is not stable.\nPlaying rated games will increase stability.';
+
+  @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
     return 'Η $param1 βαθμολογία σας ($param2) είναι πολύ υψηλή';
   }
@@ -3495,7 +3563,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get leaderboard => 'Πίνακας βαθμολογίας';
 
   @override
-  String get screenshotCurrentPosition => 'Λήψη στιγμιότυπου τρέχουσας θέσης';
+  String get positionAsImage => 'Αποτύπωση θέσης ως εικόνα';
 
   @override
   String get gameAsGIF => 'Αποθήκευση ως GIF';
@@ -3592,6 +3660,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String xStartedFollowingY(String param1, String param2) {
     return 'Ο χρήστης $param1 άρχισε να ακολουθεί τον $param2';
   }
+
+  @override
+  String get less => 'Λιγότερα';
 
   @override
   String get more => 'Περισσότερα';
@@ -3801,7 +3872,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get makeAStudy => 'Αν θέλετε να αποθηκεύσετε και να κοινοποιήσετε τυχόν αλλαγές, μπορείτε να δημιουργήσετε μία μελέτη.';
 
   @override
-  String get clearSavedMoves => 'Εκκαθάριση κινήσεων';
+  String get clearLocalData => 'Εκκαθάριση τοπικών δεδομένων';
 
   @override
   String get previouslyOnLichessTV => 'Νωρίτερα στη Tηλεόραση Lichess';
@@ -4313,6 +4384,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String get simulHostExtraTime => 'Παροχή επιπλέον χρόνου στο ρολόι';
 
   @override
+  String get extraClockTimeForHost => 'Επιπλέον χρόνος για τον διοργανωτή:';
+
+  @override
   String get simulAddExtraTimePerPlayer => 'Προσθήκη επιπλέον χρόνου στο ρολόι σας για κάθε παίκτη που συμμετέχει στο σιμουλτανέ.';
 
   @override
@@ -4343,10 +4417,16 @@ class AppLocalizationsEl extends AppLocalizations {
   String get keyGoToStartOrEnd => 'πηγαίνετε στην έναρξη / λήξη';
 
   @override
+  String get keyGoToPreviousOrNextLine => 'go to previous/next line';
+
+  @override
   String get keyCycleSelectedVariation => 'Επιλογή επόμενης βαριάντας';
 
   @override
   String get keyShowOrHideComments => 'εμφάνιση / απόκρυψη σχολίων';
+
+  @override
+  String get keyShowOrHideCurrentVariation => 'εμφάνιση/απόκρυψη βαριάντας';
 
   @override
   String get keyEnterOrExitVariation => 'είσοδος / έξοδος εκδοχής';
@@ -4613,7 +4693,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get background => 'Φόντο';
 
   @override
-  String get theme => 'Theme';
+  String get theme => 'Εμφάνιση';
 
   @override
   String get light => 'Ανοιχτόχρωμο';
@@ -4622,19 +4702,22 @@ class AppLocalizationsEl extends AppLocalizations {
   String get dark => 'Σκουρόχρωμο';
 
   @override
-  String get transparent => 'Διάφανο';
-
-  @override
-  String get picture => 'Picture';
+  String get picture => 'Εικόνα';
 
   @override
   String get deviceTheme => 'Θέμα συσκευής';
 
   @override
-  String get roundness => 'Roundness';
+  String get roundness => 'Καμπυλότητα';
+
+  @override
+  String get backgroundImage => 'Εικόνα φόντου';
 
   @override
   String get backgroundImageUrl => 'Διεύθυνση εικόνας φόντου:';
+
+  @override
+  String get imageOpacity => 'Διαφάνεια εικόνας';
 
   @override
   String get board => 'Σκακιέρα';
@@ -4707,6 +4790,11 @@ class AppLocalizationsEl extends AppLocalizations {
   @override
   String perfRatingX(String param) {
     return 'Βαθμολογία: $param';
+  }
+
+  @override
+  String perfRatingLabel(String param) {
+    return 'Βαθμολογία: $param.';
   }
 
   @override
@@ -4861,6 +4949,9 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get clickHereToReadIt => 'Κάντε κλικ εδώ για να το δείτε';
+
+  @override
+  String get readTheMessage => 'Διαβάστε το μήνυμα';
 
   @override
   String get sorry => 'Λυπούμαστε :(';
@@ -5173,7 +5264,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get navigateMoveTree => 'Πλοηγηθείτε στο δέντρο κινήσεων';
 
   @override
-  String get moveListNavigation => 'Move list navigation';
+  String get moveListNavigation => 'Πλοήγηση στη λίστα κινήσεων';
 
   @override
   String get mouseTricks => '«Κόλπα» με το ποντίκι';
@@ -5298,6 +5389,15 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get settings => 'Ρυθμίσεις';
+
+  @override
+  String get verifyingYourDevice => 'Επαλήθευση της συσκευής σας...';
+
+  @override
+  String get chessOpenings => 'Ανοίγματα';
+
+  @override
+  String get boards => 'Σκακιέρες';
 
   @override
   String opponentLeftCounter(int count) {
@@ -6143,6 +6243,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String get studyYouCanPasteThisInTheForumToEmbed => 'Επικολλήστε την παραπάνω διεύθυνση URL στο φόρουμ ή στο ιστολόγιό σας στο Lichess αν θέλετε να ενσωματώσετε το κεφάλαιο';
 
   @override
+  String get studyPasteToEmbedChapterInForumOrBlog => 'You can paste this in the forum or your Lichess blog to embed the chapter.';
+
+  @override
   String get studyStartAtInitialPosition => 'Εκκίνηση από την αρχική θέση του κεφαλαίου';
 
   @override
@@ -6515,7 +6618,13 @@ class AppLocalizationsEl extends AppLocalizations {
   String get studyLoadExistingLichessGameTitle => 'Φόρτωση παρτίδας από το lichess';
 
   @override
+  String get studyLoadGameFromTheWebTitle => 'Φορτώστε παρτίδα από το διαδίκτυο';
+
+  @override
   String get studyLoadExistingLichessGameText => 'Επικολλήστε τη διεύθυνση URL μιας παρτίδας στο Lichess<br>(π.χ. lichess.org/7fHIU0XI)<br>για να φορτώσετε τις κινήσεις της σε αυτό το κεφάλαιο.';
+
+  @override
+  String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/7fHIU0XI)<br>to load game moves in the chapter.';
 
   @override
   String get studyFromFenStringTitle => 'Θέση από FEN';

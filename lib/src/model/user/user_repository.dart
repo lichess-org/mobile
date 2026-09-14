@@ -31,12 +31,7 @@ typedef UserScreenData = ({
   Crosstable? crosstable,
 });
 
-class UserRepository {
-  UserRepository(this.client, this.aggregator);
-
-  final LichessClient client;
-  final Aggregator aggregator;
-
+class UserRepository(final LichessClient client, final Aggregator aggregator) {
   Future<UserScreenData> getUserScreenData(UserId id) {
     return client.readJson(
       Uri(path: '/api/mobile/profile/$id'),
@@ -376,12 +371,12 @@ LeaderboardUser _leaderboardUserFromPick(RequiredPick pick) {
     flair: pick('flair').asStringOrNull(),
     patronColor: pick('patronColor').asIntOrNull(),
     online: pick('online').asBoolOrNull(),
-    rating: pick(
-      'perfs',
-    ).letOrThrow((perfsPick) => perfsPick(prefMap.keys.first, 'rating')).asIntOrThrow(),
-    progress: pick(
-      'perfs',
-    ).letOrThrow((prefsPick) => prefsPick(prefMap.keys.first, 'progress')).asIntOrThrow(),
+    rating: pick('perfs')
+        .letOrThrow((perfsPick) => perfsPick(prefMap.keys.first, 'rating'))
+        .asIntOrThrow(),
+    progress: pick('perfs')
+        .letOrThrow((prefsPick) => prefsPick(prefMap.keys.first, 'progress'))
+        .asIntOrThrow(),
   );
 }
 

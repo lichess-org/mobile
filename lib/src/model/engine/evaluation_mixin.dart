@@ -56,7 +56,7 @@ mixin EvaluationMixinState<State extends EvaluationMixinState<State>> {
   /// Whether to always request a cloud evaluation, regardless of the current ply.
   bool get alwaysRequestCloudEval;
 
-  /// Whether the engine is in threat mode, i.e. pretending it's the the opposite side's turn.
+  /// Whether the engine is in threat mode, i.e. pretending it's the opposite side's turn.
   bool get engineInThreatMode;
 
   /// Whether the "show threat" feature can be used in the current position.

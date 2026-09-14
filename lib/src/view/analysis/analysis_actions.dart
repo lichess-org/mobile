@@ -23,15 +23,14 @@ Future<void> showContinueFromHereMenu(BuildContext context, Variant variant, Str
     actions: [
       BottomSheetAction(
         makeLabel: (context) => Text(context.l10n.playAgainstComputer),
-        onPressed: () => Navigator.of(
-          context,
-        ).push(OfflineComputerGameScreen.buildRoute(initialVariant: variant, initialFen: fen)),
+        onPressed: () => Navigator.of(context)
+            .push(OfflineComputerGameScreen.buildRoute(initialVariant: variant, initialFen: fen)),
       ),
       BottomSheetAction(
         makeLabel: (context) => Text(context.l10n.mobileOverTheBoard),
-        onPressed: () => Navigator.of(
-          context,
-        ).push(OverTheBoardScreen.buildRoute(initialVariant: variant, initialFen: fen)),
+        onPressed: () =>
+            Navigator.of(context)
+                .push(OverTheBoardScreen.buildRoute(initialVariant: variant, initialFen: fen)),
       ),
     ],
   );

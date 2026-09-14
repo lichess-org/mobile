@@ -46,11 +46,7 @@ typedef ParsedLocalNotification = (NotificationResponse response, LocalNotificat
 /// It broadcasts the parsed incoming FCM messages to the [fcmMessageStream].
 ///
 /// It also listens for notification interaction responses and dispatches them to the [responseStream].
-class NotificationService {
-  NotificationService(this._ref);
-
-  final Ref _ref;
-
+class NotificationService(final Ref _ref) {
   /// The Firebase Cloud Messaging token refresh subscription.
   StreamSubscription<String>? _fcmTokenRefreshSubscription;
 
@@ -302,11 +298,22 @@ class NotificationService {
           notification,
         ));
 
+      case final RecapFcmMessage recapMessage:
+        final notification = RecapNotification.fromFcmMessage(recapMessage);
+        _responseStreamController.add((
+          NotificationResponse(
+            notificationResponseType: NotificationResponseType.selectedNotification,
+            id: notification.id,
+            payload: jsonEncode(notification.payload),
+          ),
+          notification,
+        ));
+
       // TODO: handle other notification types
-      case UnhandledFcmMessage(data: final data):
+      case UnhandledFcmMessage(:final data):
         _logger.warning('Received unhandled FCM notification type: ${data['lichess.type']}');
 
-      case MalformedFcmMessage(data: final data):
+      case MalformedFcmMessage(:final data):
         _logger.severe('Received malformed FCM message: $data');
     }
   }
@@ -339,12 +346,12 @@ class NotificationService {
     _fcmMessageStreamController.add((message: parsedMessage, fromBackground: fromBackground));
 
     switch (parsedMessage) {
-      case CorresGameUpdateFcmMessage(fullId: final fullId, notification: final notification):
+      case CorresGameUpdateFcmMessage(:final fullId, :final notification):
         if (fromBackground == false && notification != null) {
           await show(CorresGameUpdateNotification(fullId, notification.title!, notification.body!));
         }
 
-      case NewMessageFcmMessage(conversationId: final userId, notification: final notification):
+      case NewMessageFcmMessage(conversationId: final userId, :final notification):
         if (fromBackground == false && notification != null) {
           await show(NewMessageNotification(userId, notification.title!, notification.body!));
         }
@@ -353,7 +360,7 @@ class NotificationService {
         // nothing to do here in foreground as it should be handled by the socket
         break;
 
-      case ChallengeAcceptFcmMessage(fullId: final fullId, notification: final notification):
+      case ChallengeAcceptFcmMessage(:final fullId, :final notification):
         if (fromBackground == false && notification != null) {
           await show(
             ChallengeAcceptedNotification(fullId, notification.title!, notification.body!),
@@ -383,10 +390,15 @@ class NotificationService {
           );
         }
 
-      case UnhandledFcmMessage(data: final data):
+      case RecapFcmMessage(:final year, :final notification):
+        if (fromBackground == false && notification != null) {
+          await show(RecapNotification(year));
+        }
+
+      case UnhandledFcmMessage(:final data):
         _logger.warning('Received unhandled FCM notification type: ${data['lichess.type']}');
 
-      case MalformedFcmMessage(data: final data):
+      case MalformedFcmMessage(:final data):
         _logger.severe('Received malformed FCM message: $data');
     }
 

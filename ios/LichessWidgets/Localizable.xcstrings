@@ -495,6 +495,12 @@
             "value": "Bashkësi"
           }
         },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gemenskap"
+          }
+        },
         "tr": {
           "stringUnit": {
             "state": "translated",
@@ -803,7 +809,7 @@
         "uz": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ blogi"
+            "value": "%@'ning blogi"
           }
         },
         "vi": {

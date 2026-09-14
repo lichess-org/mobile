@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:chessground/chessground.dart';
 import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
@@ -9,21 +12,26 @@ import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
+import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
+import 'package:lichess_mobile/src/model/engine/weights_service.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/offline_computer_game.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/offline_computer/computer_analysis.dart';
+import 'package:lichess_mobile/src/model/offline_computer/offline_computer_clock.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_controller.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_preferences.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_storage.dart';
 import 'package:lichess_mobile/src/model/offline_computer/practice_analyser.dart';
 import 'package:lichess_mobile/src/model/offline_computer/practice_comment.dart';
+import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/offline_computer/offline_computer_game_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
+import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
 import 'package:lichess_mobile/src/widgets/pockets.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
@@ -32,10 +40,11 @@ import 'package:mocktail/mocktail.dart';
 
 import '../../binding.dart';
 import '../../model/engine/fake_engine.dart';
+import '../../model/engine/fake_weights_service.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 
-class MockOfflineComputerGameStorage extends Mock implements OfflineComputerGameStorage {}
+class MockOfflineComputerGameStorage() extends Mock implements OfflineComputerGameStorage;
 
 void main() {
   TestLichessBinding.ensureInitialized();
@@ -157,8 +166,8 @@ void main() {
 
       expect(engine.sessions.map((session) => session.spec.label).toSet(), {
         'variant',
-        'sf16',
-      }, reason: 'the opponent plays on Fairy while the hints are computed on Stockfish 16');
+        'light',
+      }, reason: 'the opponent plays on Fairy while the hints are computed on the light Stockfish');
       expect(
         engine.quitCount,
         0,
@@ -207,8 +216,8 @@ void main() {
       await tester.pump(kEngineEvalEmissionThrottleDelay * 2);
       expect(engine.stopCount, 0);
 
-      // The full sequence: [AppLifecycleListener] asserts on a transition the platform cannot
-      // make, and the socket pool now installs one.
+      // The full sequence: the app installs [AppLifecycleListener]s, which assert on a transition
+      // the platform cannot make.
       tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
       tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
       tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
@@ -592,6 +601,46 @@ void main() {
       expect(find.byType(Chessboard), findsOneWidget);
     });
 
+    testWidgets('A preferred Maia whose network was deleted falls back to the bundled one', (
+      tester,
+    ) async {
+      final gameStorage = MockOfflineComputerGameStorage();
+      when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
+      final weights = FakeMaiaWeightsService();
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const OfflineComputerGameScreen(),
+        defaultPreferences: {
+          PrefCategory.offlineComputerGame.storageKey: jsonEncode(
+            OfflineComputerGamePrefs.defaults
+                .copyWith(opponentSpec: const MaiaOpponentSpec(MaiaRating.maia2200))
+                .toJson(),
+          ),
+        },
+        overrides: {
+          offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+          maiaWeightsServiceProvider: maiaWeightsServiceProvider.overrideWithValue(weights),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Maia 2200'), findsNothing);
+      expect(find.text('Maia ${MaiaRating.defaultRating.rating}'), findsWidgets);
+
+      final container = ProviderScope.containerOf(
+        tester.element(find.byType(OfflineComputerGameScreen)),
+      );
+      expect(
+        container.read(offlineComputerGamePreferencesProvider).opponentSpec,
+        const MaiaOpponentSpec(MaiaRating.defaultRating),
+      );
+      expect(weights.downloads, isEmpty);
+    });
+
     testWidgets('Casual switch is shown in new game dialog', (tester) async {
       final gameStorage = MockOfflineComputerGameStorage();
       when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
@@ -719,9 +768,9 @@ void main() {
             appBar: AppBar(title: const Text('Test Screen')),
             body: FilledButton(
               child: const Text('Go to game'),
-              onPressed: () => Navigator.of(
-                context,
-              ).push(buildScreenRoute<void>(screen: const OfflineComputerGameScreen())),
+              onPressed: () =>
+                  Navigator.of(context)
+                      .push(buildScreenRoute<void>(screen: const OfflineComputerGameScreen())),
             ),
           ),
         ),
@@ -831,9 +880,9 @@ void main() {
             appBar: AppBar(title: const Text('Test Screen')),
             body: FilledButton(
               child: const Text('Go to game'),
-              onPressed: () => Navigator.of(
-                context,
-              ).push(buildScreenRoute<void>(screen: const OfflineComputerGameScreen())),
+              onPressed: () =>
+                  Navigator.of(context)
+                      .push(buildScreenRoute<void>(screen: const OfflineComputerGameScreen())),
             ),
           ),
         ),
@@ -1236,6 +1285,96 @@ void main() {
       await tester.pump(const Duration(seconds: 3));
       await tester.pump(kPracticeMaxSearchTime + const Duration(seconds: 2));
       await tester.pumpAndSettle();
+    });
+  });
+
+  group('Time control', () {
+    setUp(() {
+      fakeEngine = LegalMoveEngine();
+    });
+
+    testWidgets('a game is untimed unless a clock is asked for', (tester) async {
+      await initOfflineComputerGame(tester);
+
+      expect(find.byType(Clock), findsNothing);
+    });
+
+    testWidgets('both clocks are shown, and start on the first move', (tester) async {
+      const time = Duration(minutes: 5);
+      await initTimedOfflineComputerGame(tester, TimeIncrement(time.inSeconds, 3));
+
+      expect(find.byType(Clock), findsNWidgets(2));
+      expect(activeClock(tester), null);
+      expect(findPlayerClock(tester).timeLeft, time);
+      expect(findEngineClock(tester).timeLeft, time);
+
+      await playMove(tester, 'e2', 'e4');
+      await tester.pump(const Duration(milliseconds: 200));
+      await tester.pumpAndSettle();
+
+      // The exchange hands the clock back to the player, each side having been given the increment
+      // and charged for its own move.
+      expect(activeClock(tester), Side.white);
+      expect(findEngineClock(tester).timeLeft, greaterThan(time));
+      expect(findPlayerClock(tester).timeLeft, lessThan(time));
+    });
+
+    testWidgets('the game ends when the player runs out of time', (tester) async {
+      const time = Duration(seconds: 1);
+      await initTimedOfflineComputerGame(tester, TimeIncrement(time.inSeconds, 0));
+
+      await playMove(tester, 'e2', 'e4');
+      await tester.pump(const Duration(milliseconds: 200));
+      await tester.pumpAndSettle();
+
+      // The clock measures system time internally, so we need to actually sleep in order
+      // for the clock to reach 0, instead of using tester.pump()
+      sleep(time + const Duration(milliseconds: 100));
+
+      await tester.pumpAndSettle(const Duration(milliseconds: 600));
+
+      expect(find.text('White time out'), findsOneWidget);
+      expect(activeClock(tester), null);
+    });
+
+    testWidgets('practice mode is played without a clock', (tester) async {
+      final gameStorage = MockOfflineComputerGameStorage();
+      when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
+      when(() => gameStorage.save(any())).thenAnswer((_) async {});
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const OfflineComputerGameScreen(),
+        overrides: {
+          offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      await selectTimeControl(tester, 'Clock');
+      expect(timeControlTile(tester).settingsValue, 'Clock');
+
+      final practiceSwitch = find.descendant(
+        of: find.ancestor(of: find.text('Practice mode'), matching: find.byType(SwitchSettingTile)),
+        matching: find.byType(Switch),
+      );
+      await tester.ensureVisible(find.text('Practice mode'));
+      await tester.tap(practiceSwitch);
+      await tester.pumpAndSettle();
+
+      // Turning practice mode on takes the clock away, and there is no way to ask for one back.
+      expect(timeControlTile(tester).settingsValue, 'Unlimited');
+      expect(timeControlTile(tester).enabled, false);
+
+      await tester.ensureVisible(find.text('Play'));
+      await tester.tap(find.text('Play'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+
+      expect(find.byType(Clock), findsNothing);
     });
   });
 
@@ -2016,19 +2155,15 @@ void main() {
 }
 
 /// A fake controller that returns a preset state, used to inject specific practice comments.
-class _FakePracticeController extends OfflineComputerGameController {
-  _FakePracticeController(this._initialState);
-  final OfflineComputerGameState _initialState;
-
+class _FakePracticeController(final OfflineComputerGameState _initialState)
+    extends OfflineComputerGameController {
   @override
   OfflineComputerGameState build() => _initialState;
 }
 
 /// A fake preferences notifier that returns a preset [OfflineComputerGamePrefs].
-class _FakeGamePreferences extends OfflineComputerGamePreferences {
-  _FakeGamePreferences(this._prefs);
-  final OfflineComputerGamePrefs _prefs;
-
+class _FakeGamePreferences(final OfflineComputerGamePrefs _prefs)
+    extends OfflineComputerGamePreferences {
   @override
   OfflineComputerGamePrefs build() => _prefs;
 }
@@ -2249,6 +2384,77 @@ Future<Rect> initPracticeModeGame(WidgetTester tester, {Side side = Side.white})
 
   return tester.getRect(find.byType(Chessboard));
 }
+
+/// The "Time control" tile of the new game bottom sheet.
+SettingsListTile timeControlTile(WidgetTester tester) => tester.widget<SettingsListTile>(
+  find.ancestor(of: find.text('Time control'), matching: find.byType(SettingsListTile)),
+);
+
+/// Picks [choice] ('Clock' or 'Unlimited') in the new game bottom sheet's time control picker.
+Future<void> selectTimeControl(WidgetTester tester, String choice) async {
+  await tester.ensureVisible(find.text('Time control'));
+  await tester.tap(find.text('Time control'));
+  await tester.pumpAndSettle();
+  await tester.tap(find.text(choice).last);
+  await tester.pumpAndSettle();
+}
+
+/// Initializes an offline computer game played with [timeIncrement], with the player as white.
+Future<Rect> initTimedOfflineComputerGame(WidgetTester tester, TimeIncrement timeIncrement) async {
+  final gameStorage = MockOfflineComputerGameStorage();
+  when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
+  when(() => gameStorage.save(any())).thenAnswer((_) async {});
+
+  final app = await makeTestProviderScopeApp(
+    tester,
+    home: const OfflineComputerGameScreen(),
+    overrides: {
+      offlineComputerGameStorageProvider: offlineComputerGameStorageProvider.overrideWith(
+        (_) => gameStorage,
+      ),
+    },
+  );
+  await tester.pumpWidget(app);
+  await tester.pumpAndSettle();
+
+  await selectTimeControl(tester, 'Clock');
+  await selectSide(tester, Side.white);
+
+  await tester.ensureVisible(find.text('Play'));
+  await tester.tap(find.text('Play'));
+  await tester.pumpAndSettle();
+
+  // The sliders only offer preset times, so the exact one under test is set on the clock itself.
+  final container = ProviderScope.containerOf(tester.element(find.byType(Chessboard)));
+  container.read(offlineComputerClockProvider.notifier).setupClock(timeIncrement);
+  await tester.pumpAndSettle();
+
+  return tester.getRect(find.byType(Chessboard));
+}
+
+/// Which side's clock is currently running, if any.
+Side? activeClock(WidgetTester tester) {
+  final playerClock = findPlayerClock(tester);
+  final engineClock = findEngineClock(tester);
+
+  if (playerClock.active) {
+    expect(engineClock.active, false);
+    return Side.white;
+  }
+
+  if (engineClock.active) {
+    expect(playerClock.active, false);
+    return Side.black;
+  }
+
+  return null;
+}
+
+Clock findPlayerClock(WidgetTester tester) =>
+    tester.widget<Clock>(find.byKey(const ValueKey('playerClock')));
+
+Clock findEngineClock(WidgetTester tester) =>
+    tester.widget<Clock>(find.byKey(const ValueKey('engineClock')));
 
 /// Helper to select a side in the new game bottom sheet using the picker.
 Future<void> selectSide(WidgetTester tester, Side side) async {

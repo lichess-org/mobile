@@ -18,17 +18,13 @@ const kGameStorageTable = 'game';
 
 typedef StoredGame = ({UserId userId, DateTime lastModified, ExportedGame game});
 
-class GameStorage {
-  const GameStorage(this._db);
-  final Database _db;
-
+class const GameStorage(final Database _db) {
   Future<int> count({UserId? userId}) async {
-    final list = await _db.query(
-      kGameStorageTable,
-      where: 'userId = ?',
-      whereArgs: [userId ?? kStorageAnonId],
+    final result = await _db.rawQuery(
+      'SELECT COUNT(*) as cnt FROM $kGameStorageTable WHERE userId = ?',
+      [userId ?? kStorageAnonId],
     );
-    return list.length;
+    return Sqflite.firstIntValue(result) ?? 0;
   }
 
   Future<IList<StoredGame>> page({

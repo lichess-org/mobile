@@ -27,20 +27,18 @@ import 'package:lichess_mobile/src/widgets/pgn.dart';
 /// - [BroadcastAnalysisBoard]
 /// - [StudyAnalysisBoard]
 /// - [RetroAnalysisBoard]
-abstract class AnalysisBoard extends ConsumerStatefulWidget {
-  const AnalysisBoard({super.key, required this.boardSize, this.boardRadius});
-
-  final double boardSize;
-  final BorderRadiusGeometry? boardRadius;
-}
+abstract class const AnalysisBoard({
+  super.key,
+  required final double boardSize,
+  final BorderRadiusGeometry? boardRadius,
+}) extends ConsumerStatefulWidget;
 
 /// Abstract state class for analysis board widgets.
 abstract class AnalysisBoardState<
   T extends AnalysisBoard,
   AnalysisState extends CommonAnalysisState,
   AnalysisPrefs extends CommonAnalysisPrefs
->
-    extends ConsumerState<T> {
+>() extends ConsumerState<T> {
   AnalysisState get analysisState;
 
   AnalysisPrefs get analysisPrefs;

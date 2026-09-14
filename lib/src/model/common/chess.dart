@@ -14,11 +14,10 @@ typedef UCIMove = String;
 
 /// Represents a [Move] with its associated SAN.
 @Freezed(fromJson: true, toJson: true)
-sealed class SanMove with _$SanMove {
-  const SanMove._();
-  const factory SanMove(String san, @MoveConverter() Move move) = _SanMove;
+sealed class const SanMove._() with _$SanMove {
+  const factory(String san, @MoveConverter() Move move) = _SanMove;
 
-  factory SanMove.fromJson(Map<String, dynamic> json) => _$SanMoveFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$SanMoveFromJson(json);
 
   bool get isCheck => san.endsWith('+');
   bool get isCheckmate => san.endsWith('#');
@@ -51,10 +50,7 @@ sealed class SanMove with _$SanMove {
   }
 }
 
-class MoveConverter implements JsonConverter<Move, String> {
-  const MoveConverter();
-
-  // assume we are serializing only valid uci strings
+class const MoveConverter() implements JsonConverter<Move, String> {
   @override
   Move fromJson(String json) => Move.parse(json)!;
 
@@ -113,7 +109,7 @@ const IList<Variant> playSupportedVariants = IListConst([
   Variant.fromPosition,
 ]);
 
-enum Variant {
+enum Variant(final IconData icon) {
   standard(LichessIcons.crown),
   chess960(LichessIcons.die_six),
   fromPosition(LichessIcons.feather),
@@ -124,10 +120,6 @@ enum Variant {
   horde(LichessIcons.horde),
   racingKings(LichessIcons.racing_kings),
   crazyhouse(LichessIcons.h_square);
-
-  const Variant(this.icon);
-
-  final IconData icon;
 
   String label(AppLocalizations l10n) {
     switch (this) {
@@ -297,30 +289,28 @@ enum Variant {
 }
 
 /// Represents a chess opening.
-sealed class Opening {
+sealed class Opening() {
   String get eco;
   String get name;
 }
 
 @Freezed(fromJson: true, toJson: true)
-sealed class LightOpening with _$LightOpening implements Opening {
-  const LightOpening._();
-  const factory LightOpening({required String eco, required String name}) = _LightOpening;
+sealed class const LightOpening._() with _$LightOpening implements Opening {
+  const factory({required String eco, required String name}) = _LightOpening;
 
-  factory LightOpening.fromJson(Map<String, dynamic> json) => _$LightOpeningFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$LightOpeningFromJson(json);
 }
 
 @Freezed(fromJson: true, toJson: true)
 sealed class Division with _$Division {
-  const factory Division({int? middlegame, int? endgame}) = _Division;
+  const factory({int? middlegame, int? endgame}) = _Division;
 
-  factory Division.fromJson(Map<String, dynamic> json) => _$DivisionFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$DivisionFromJson(json);
 }
 
 @freezed
-sealed class FullOpening with _$FullOpening implements Opening {
-  const FullOpening._();
-  const factory FullOpening({
+sealed class const FullOpening._() with _$FullOpening implements Opening {
+  const factory({
     required String eco,
     required String name,
     required String fen,

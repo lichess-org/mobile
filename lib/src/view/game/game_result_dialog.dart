@@ -20,19 +20,18 @@ import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:material_ui/material_ui.dart';
 
-class GameResultDialog extends ConsumerStatefulWidget {
-  const GameResultDialog({required this.id, required this.onNewOpponentCallback, super.key});
-
-  final GameFullId id;
+class const GameResultDialog({
+  required final GameFullId id,
 
   /// Callback to load a new opponent.
-  final void Function(PlayableGame game) onNewOpponentCallback;
-
+  required final void Function(PlayableGame game) onNewOpponentCallback,
+  super.key,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<GameResultDialog> createState() => _GameResultDialogState();
 }
 
-class _GameResultDialogState extends ConsumerState<GameResultDialog> {
+class _GameResultDialogState() extends ConsumerState<GameResultDialog> {
   late Timer _buttonActivationTimer;
   bool _activateButtons = false;
 
@@ -261,13 +260,11 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
   }
 }
 
-class OverTheBoardGameResultDialog extends StatelessWidget {
-  const OverTheBoardGameResultDialog({super.key, required this.game, required this.onRematch});
-
-  final OverTheBoardGame game;
-
-  final void Function() onRematch;
-
+class const OverTheBoardGameResultDialog({
+  super.key,
+  required final OverTheBoardGame game,
+  required final void Function() onRematch,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final content = Column(
@@ -302,11 +299,7 @@ class OverTheBoardGameResultDialog extends StatelessWidget {
   }
 }
 
-class GameResult extends StatelessWidget {
-  const GameResult({required this.game, super.key});
-
-  final BaseGame game;
-
+class const GameResult({required final BaseGame game, super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final showWinner = game.winner != null
@@ -337,11 +330,7 @@ class GameResult extends StatelessWidget {
   }
 }
 
-class _ResultDialog extends StatelessWidget {
-  const _ResultDialog({required this.child});
-
-  final Widget child;
-
+class const _ResultDialog({required final Widget child}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.widthOf(context);

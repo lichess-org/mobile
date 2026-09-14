@@ -779,23 +779,23 @@ MockClient _subscribableBroadcastClient(
     if (subscribeDelay > Duration.zero) {
       await Future<void>.delayed(subscribeDelay);
     }
-    return mockResponse('{"ok":true}', subscribeStatusCode);
+    return await mockResponse('{"ok":true}', subscribeStatusCode);
   }
   if (request.url.path == '/api/broadcast/AQ28hmmO') {
-    return mockResponse(
+    return await mockResponse(
       _finishedTournamentResponse,
       200,
       headers: {'content-type': 'application/json; charset=utf-8'},
     );
   }
   if (request.url.path == '/api/broadcast/-/-/S5VCwuVn') {
-    return mockResponse(
+    return await mockResponse(
       _finishedRoundResponseWith(isSubscribed),
       200,
       headers: {'content-type': 'application/json; charset=utf-8'},
     );
   }
-  return mockResponse('', 404);
+  return await mockResponse('', 404);
 });
 
 final _finishedBroadcastClient = MockClient((request) {
@@ -864,8 +864,7 @@ final _finishedBroadcast = Broadcast(
     id: const BroadcastTournamentId('AQ28hmmO'),
     name: 'FIDE World Rapid & Blitz Championships 2024 | Blitz Open Knockout',
     slug: 'fide-world-rapid--blitz-championships-2024--blitz-open-knockout',
-    imageUrl:
-        'https://image.lichess1.org/display?fmt=webp&h=400&op=thumbnail&path=relay:AQ28hmmO:HJnFeGh1.webp&w=800&sig=fc2123e62c3ae7da1ebefd6533694bf627f84543',
+    imageUrl: 'https://image.lichess1.org/display?fmt=webp&h=400&op=thumbnail&path=relay:AQ28hmmO:HJnFeGh1.webp&w=800&sig=fc2123e62c3ae7da1ebefd6533694bf627f84543',
     description: null,
     tier: 5,
     information: (
@@ -1294,8 +1293,7 @@ final _upcomingBroadcast = Broadcast(
     id: const BroadcastTournamentId('KnP1dgul'),
     name: '"Ciudad de Sevilla" Seville Open 2025',
     slug: 'ciudad-de-sevilla-seville-open-2025',
-    imageUrl:
-        'https://image.lichess1.org/display?fmt=webp&h=400&op=thumbnail&path=relay:KnP1dgul:2Wv8zqiG.webp&w=800&sig=156cb75295be7ec71e898983e8b1a35896f0a38e',
+    imageUrl: 'https://image.lichess1.org/display?fmt=webp&h=400&op=thumbnail&path=relay:KnP1dgul:2Wv8zqiG.webp&w=800&sig=156cb75295be7ec71e898983e8b1a35896f0a38e',
     description: null,
     tier: 3,
     information: (

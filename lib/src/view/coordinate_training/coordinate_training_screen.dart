@@ -24,9 +24,7 @@ import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_ui/material_ui.dart';
 
-class CoordinateTrainingScreen extends StatelessWidget {
-  const CoordinateTrainingScreen({super.key});
-
+class const CoordinateTrainingScreen({super.key}) extends StatelessWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const CoordinateTrainingScreen());
   }
@@ -57,14 +55,12 @@ class CoordinateTrainingScreen extends StatelessWidget {
   }
 }
 
-class _Body extends ConsumerStatefulWidget {
-  const _Body();
-
+class const _Body() extends ConsumerStatefulWidget {
   @override
   ConsumerState<_Body> createState() => _BodyState();
 }
 
-class _BodyState extends ConsumerState<_Body> {
+class _BodyState() extends ConsumerState<_Body> {
   Square? highlightLastGuess;
 
   Timer? highlightTimer;
@@ -220,13 +216,11 @@ class _BodyState extends ConsumerState<_Body> {
   }
 }
 
-class _TimeBar extends StatelessWidget {
-  const _TimeBar({required this.maxWidth, required this.timeFractionElapsed, required this.color});
-
-  final double maxWidth;
-  final double? timeFractionElapsed;
-  final Color color;
-
+class const _TimeBar({
+  required final double maxWidth,
+  required final double? timeFractionElapsed,
+  required final Color color,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Align(
@@ -240,9 +234,7 @@ class _TimeBar extends StatelessWidget {
   }
 }
 
-class _CoordinateTrainingMenu extends ConsumerWidget {
-  const _CoordinateTrainingMenu();
-
+class const _CoordinateTrainingMenu() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final trainingPrefs = ref.watch(coordinateTrainingPreferencesProvider);
@@ -272,19 +264,12 @@ class _CoordinateTrainingMenu extends ConsumerWidget {
   }
 }
 
-class _ScoreAndTrainingButton extends ConsumerWidget {
-  const _ScoreAndTrainingButton({
-    required this.scoreSize,
-    required this.score,
-    required this.onPressed,
-    required this.label,
-  });
-
-  final double scoreSize;
-  final int score;
-  final VoidCallback onPressed;
-  final String label;
-
+class const _ScoreAndTrainingButton({
+  required final double scoreSize,
+  required final int score,
+  required final VoidCallback onPressed,
+  required final String label,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final trainingState = ref.watch(coordinateTrainingControllerProvider);
@@ -307,15 +292,11 @@ class _ScoreAndTrainingButton extends ConsumerWidget {
   }
 }
 
-class _Score extends StatelessWidget {
-  const _Score({required this.size, required this.color, required this.score});
-
-  final int score;
-
-  final double size;
-
-  final Color color;
-
+class const _Score({
+  required final double size,
+  required final Color color,
+  required final int score,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -338,12 +319,8 @@ class _Score extends StatelessWidget {
   }
 }
 
-class _Button extends StatelessWidget {
-  const _Button({required this.onPressed, required this.label});
-
-  final VoidCallback onPressed;
-  final String label;
-
+class const _Button({required final VoidCallback onPressed, required final String label})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FilledButton(
@@ -353,9 +330,7 @@ class _Button extends StatelessWidget {
   }
 }
 
-class SettingsBottomSheet extends ConsumerWidget {
-  const SettingsBottomSheet();
-
+class const SettingsBottomSheet() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final trainingPrefs = ref.watch(coordinateTrainingPreferencesProvider);
@@ -397,30 +372,18 @@ class SettingsBottomSheet extends ConsumerWidget {
   }
 }
 
-class _TrainingBoard extends ConsumerStatefulWidget {
-  const _TrainingBoard({
-    required this.boardSize,
-    required this.isTablet,
-    required this.orientation,
-    required this.onGuess,
-    required this.squareHighlights,
-  });
-
-  final double boardSize;
-
-  final bool isTablet;
-
-  final Side orientation;
-
-  final void Function(Square) onGuess;
-
-  final IMap<Square, SquareHighlight> squareHighlights;
-
+class const _TrainingBoard({
+  required final double boardSize,
+  required final bool isTablet,
+  required final Side orientation,
+  required final void Function(Square) onGuess,
+  required final IMap<Square, SquareHighlight> squareHighlights,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_TrainingBoard> createState() => _TrainingBoardState();
 }
 
-class _TrainingBoardState extends ConsumerState<_TrainingBoard> {
+class _TrainingBoardState() extends ConsumerState<_TrainingBoard> {
   @override
   Widget build(BuildContext context) {
     final boardPrefs = ref.watch(boardPreferencesProvider);

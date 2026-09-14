@@ -5,9 +5,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 
-class FloatingPlayButton extends ConsumerWidget {
-  const FloatingPlayButton({super.key});
-
+class const FloatingPlayButton({super.key}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return FloatingActionButton.extended(
@@ -26,9 +24,7 @@ class FloatingPlayButton extends ConsumerWidget {
   }
 }
 
-class PlayBottomSheet extends ConsumerWidget {
-  const PlayBottomSheet();
-
+class const PlayBottomSheet() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return const BottomSheetScrollableContainer(

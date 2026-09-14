@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/engine/engine_utils.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/opponent_level.dart';
 import 'package:lichess_mobile/src/model/engine/weights_service.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -11,14 +10,11 @@ import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:material_ui/material_ui.dart';
 
-class EngineSettingsScreen extends ConsumerStatefulWidget {
-  const EngineSettingsScreen({super.key});
-
+class const EngineSettingsScreen({super.key}) extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const EngineSettingsScreen());
   }
@@ -27,15 +23,15 @@ class EngineSettingsScreen extends ConsumerStatefulWidget {
   ConsumerState<EngineSettingsScreen> createState() => _EngineSettingsScreenState();
 }
 
-class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
-  /// null = loading, true = has files with checked integrity, false = doesn't have files
-  bool? _hasVerifiedNNUEFiles;
+class _EngineSettingsScreenState() extends ConsumerState<EngineSettingsScreen> {
+  /// null = loading, true = has the file with checked integrity, false = doesn't have it
+  bool? _hasVerifiedNNUEFile;
 
-  /// Whether there are NNUE files on disk the engine cannot use: the networks of a previous
-  /// Stockfish version, or a pair that did not survive its download.
+  /// Whether there are NNUE files on disk the engine cannot use: the network of a previous
+  /// Stockfish version, or one that did not survive its download.
   bool _hasUnusableNNUEFiles = false;
 
-  Future<bool>? _downloadNNUEFilesFuture;
+  Future<bool>? _downloadNNUEFileFuture;
 
   late final ValueListenable<double> _downloadProgress;
 
@@ -50,29 +46,29 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
 
   Future<void> _checkFiles() async {
     final nnueService = ref.read(stockfishNnueServiceProvider);
-    // Deletes the files itself if they are corrupted, so whatever is left over afterwards is
+    // Deletes the file itself if it is corrupted, so whatever is left over afterwards is
     // either usable or from another Stockfish version.
-    final good = await nnueService.checkNNUEFiles();
+    final good = await nnueService.checkNNUEFile();
     final leftOver = !good && await nnueService.hasNNUEFilesOnDisk();
     if (!mounted) return;
     setState(() {
-      _hasVerifiedNNUEFiles = good;
+      _hasVerifiedNNUEFile = good;
       _hasUnusableNNUEFiles = leftOver;
     });
   }
 
   void _startDownload() {
-    final future = ref.read(stockfishNnueServiceProvider).downloadNNUEFiles(inBackground: false);
+    final future = ref.read(stockfishNnueServiceProvider).downloadNNUEFile(inBackground: false);
     future.then((downloaded) {
       if (mounted && downloaded) {
         setState(() {
-          _hasVerifiedNNUEFiles = true;
+          _hasVerifiedNNUEFile = true;
           _hasUnusableNNUEFiles = false;
         });
       }
     });
     setState(() {
-      _downloadNNUEFilesFuture = future;
+      _downloadNNUEFileFuture = future;
     });
   }
 
@@ -81,10 +77,10 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
     final prefs = ref.watch(engineEvaluationPreferencesProvider);
 
     return PlatformScaffold(
-      appBar: PlatformAppBar(title: const Text('Chess engine')),
+      appBar: PlatformAppBar(title: Text(context.l10n.mobileChessEngine)),
       body: ListView(
         children: [
-          if (_hasVerifiedNNUEFiles == null)
+          if (_hasVerifiedNNUEFile == null)
             Shimmer(
               child: ShimmerLoading(isLoading: true, child: ListSection.loading(itemsNumber: 2)),
             )
@@ -92,8 +88,13 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
             ListSection(
               children: [
                 SettingsListTile(
-                  settingsLabel: const Text('Engine'),
-                  settingsValue: prefs.enginePref.label,
+                  settingsLabel: Text(context.l10n.mobileChessEngine),
+                  // The check tells apart the net that is on disk from the one still to download:
+                  // it only means something for the latest engine, the light one ships with the app.
+                  settingsValue:
+                      prefs.enginePref == ChessEnginePref.sfLatest && _hasVerifiedNNUEFile == true
+                      ? '${prefs.enginePref.label} \u2713'
+                      : prefs.enginePref.label,
                   onTap: () {
                     showChoicePicker(
                       context,
@@ -103,20 +104,20 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
                       onSelectedItemChanged: (ChessEnginePref? value) {
                         ref
                             .read(engineEvaluationPreferencesProvider.notifier)
-                            .setEvaluationFunction(value ?? ChessEnginePref.sf16);
-                        if (value == ChessEnginePref.sfLatest && _hasVerifiedNNUEFiles == false) {
+                            .setEvaluationFunction(value ?? ChessEnginePref.sfLight);
+                        if (value == ChessEnginePref.sfLatest && _hasVerifiedNNUEFile == false) {
                           _startDownload();
                         }
                       },
                     );
                   },
                 ),
-                if (prefs.enginePref == ChessEnginePref.sfLatest && _hasVerifiedNNUEFiles == false)
+                if (prefs.enginePref == ChessEnginePref.sfLatest && _hasVerifiedNNUEFile == false)
                   LoadingButtonBuilder(
-                    initialFuture: _downloadNNUEFilesFuture,
+                    initialFuture: _downloadNNUEFileFuture,
                     fetchData: () => ref
                         .read(stockfishNnueServiceProvider)
-                        .downloadNNUEFiles(inBackground: false),
+                        .downloadNNUEFile(inBackground: false),
                     builder: (context, isLoading, fetchData) {
                       return ListTile(
                         trailing: isLoading
@@ -130,62 +131,22 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
                                 },
                               )
                             : const Icon(Icons.download),
-                        title: Text(isLoading ? 'Downloading NNUE files' : 'Download NNUE files'),
-                        subtitle: const Text(nnueTotalSizeMB),
+                        title: Text(isLoading ? 'Downloading NNUE file' : 'Download NNUE file'),
+                        subtitle: const Text(nnueDownloadSizeMB),
                         enabled: !isLoading,
                         onTap: () async {
                           final downloaded = await fetchData();
                           if (context.mounted && downloaded) {
                             setState(() {
-                              _hasVerifiedNNUEFiles = true;
+                              _hasVerifiedNNUEFile = true;
                               _hasUnusableNNUEFiles = false;
                             });
                           }
                         },
                       );
                     },
-                  )
-                else if (prefs.enginePref == ChessEnginePref.sfLatest &&
-                    _hasVerifiedNNUEFiles == true)
-                  ListTile(
-                    trailing: const Icon(Icons.check),
-                    title: const Text('NNUE files downloaded'),
-                    subtitle: const Text('$nnueTotalSizeMB (tap to delete)'),
-                    onTap: () async {
-                      final isOk = await showAdaptiveDialog<bool>(
-                        context: context,
-                        barrierDismissible: true,
-                        builder: (context) {
-                          return AlertDialog.adaptive(
-                            content: const Text('Do you want to delete the NNUE files?'),
-                            actions: [
-                              PlatformDialogAction(
-                                child: const Text('OK'),
-                                onPressed: () {
-                                  Navigator.of(context).pop(true);
-                                },
-                              ),
-                              PlatformDialogAction(
-                                child: Text(context.l10n.cancel),
-                                onPressed: () {
-                                  Navigator.of(context).pop(false);
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                      if (isOk == true) {
-                        await ref.read(stockfishNnueServiceProvider).deleteNNUEFiles();
-                        if (!mounted) return;
-                        setState(() {
-                          _hasVerifiedNNUEFiles = false;
-                          _hasUnusableNNUEFiles = false;
-                        });
-                      }
-                    },
                   ),
-                if (_hasVerifiedNNUEFiles == false && _hasUnusableNNUEFiles)
+                if (_hasVerifiedNNUEFile == false && _hasUnusableNNUEFiles)
                   ListTile(
                     trailing: const Icon(Icons.delete),
                     title: const Text('Delete unusable NNUE files'),
@@ -203,7 +164,6 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
                   ),
               ],
             ),
-          const _MaiaNetworksSection(),
           EngineSettingsWidget(
             onSetEngineSearchTime: (value) {
               ref.read(engineEvaluationPreferencesProvider.notifier).setEngineSearchTime(value);
@@ -217,104 +177,6 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
           ),
         ],
       ),
-    );
-  }
-}
-
-/// The Maia networks that have been downloaded, and a way to get the space back.
-///
-/// Nothing is shown until there is something to delete: one network ships with the app, and the
-/// rest arrive only if someone chose that rating to play against.
-class _MaiaNetworksSection extends ConsumerStatefulWidget {
-  const _MaiaNetworksSection();
-
-  @override
-  ConsumerState<_MaiaNetworksSection> createState() => _MaiaNetworksSectionState();
-}
-
-class _MaiaNetworksSectionState extends ConsumerState<_MaiaNetworksSection> {
-  Set<MaiaRating>? _downloaded;
-
-  /// The networks on disk that no rating can use, left behind by an older version of the app.
-  ({int count, int bytes}) _unusable = (count: 0, bytes: 0);
-
-  @override
-  void initState() {
-    super.initState();
-    _refresh();
-  }
-
-  Future<void> _refresh() async {
-    final service = ref.read(maiaWeightsServiceProvider);
-    // Deletes the corrupted files it finds, so what [unusableWeights] reports afterwards is only
-    // what nothing claims any more.
-    final available = await service.availableRatings();
-    final unusable = await service.unusableWeights();
-    if (!mounted) return;
-    setState(() {
-      _downloaded = available.where((r) => !r.isBundled).toSet();
-      _unusable = unusable;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final downloaded = _downloaded;
-    if (downloaded == null) return const SizedBox.shrink();
-    if (downloaded.isEmpty && _unusable.count == 0) return const SizedBox.shrink();
-
-    final totalBytes = downloaded.fold(0, (sum, rating) => sum + rating.expectedSize);
-    final ratings = (downloaded.toList()..sort((a, b) => a.rating - b.rating))
-        .map((r) => r.rating.toString())
-        .join(', ');
-
-    return ListSection(
-      header: const Text('Maia networks'),
-      children: [
-        if (downloaded.isNotEmpty)
-          ListTile(
-            trailing: const Icon(Icons.delete_outline),
-            title: Text(ratings),
-            subtitle: Text('${(totalBytes / (1024 * 1024)).toStringAsFixed(1)} MB (tap to delete)'),
-            onTap: () async {
-              final isOk = await showAdaptiveDialog<bool>(
-                context: context,
-                barrierDismissible: true,
-                builder: (context) {
-                  return AlertDialog.adaptive(
-                    content: const Text('Do you want to delete the downloaded Maia networks?'),
-                    actions: [
-                      PlatformDialogAction(
-                        child: const Text('OK'),
-                        onPressed: () => Navigator.of(context).pop(true),
-                      ),
-                      PlatformDialogAction(
-                        child: Text(context.l10n.cancel),
-                        onPressed: () => Navigator.of(context).pop(false),
-                      ),
-                    ],
-                  );
-                },
-              );
-              if (isOk != true) return;
-              await ref.read(maiaWeightsServiceProvider).deleteWeights();
-              if (mounted) await _refresh();
-            },
-          ),
-        if (_unusable.count > 0)
-          ListTile(
-            trailing: const Icon(Icons.delete),
-            title: const Text('Delete unusable Maia networks'),
-            subtitle: Text(
-              '${(_unusable.bytes / (1024 * 1024)).toStringAsFixed(1)} MB of networks this version '
-              'of the app cannot use (tap to delete)',
-            ),
-            onTap: () async {
-              await ref.read(maiaWeightsServiceProvider).deleteUnusableWeights();
-              if (mounted) await _refresh();
-            },
-          ),
-      ],
     );
   }
 }

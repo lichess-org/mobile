@@ -6,11 +6,7 @@ import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/variations_bar.dart';
 import 'package:material_ui/material_ui.dart';
 
-class AnalysisTreeView extends ConsumerWidget {
-  const AnalysisTreeView(this.options);
-
-  final AnalysisOptions options;
-
+class const AnalysisTreeView(final AnalysisOptions options) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = analysisControllerProvider(options);

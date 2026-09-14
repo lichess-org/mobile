@@ -64,9 +64,9 @@ final client = MockClient((request) {
   return mockResponse('', 404);
 });
 
-class MockSoundService extends Mock implements SoundService {}
+class MockSoundService() extends Mock implements SoundService;
 
-class MockCreateGameService extends Mock implements CreateGameService {}
+class MockCreateGameService() extends Mock implements CreateGameService;
 
 void main() {
   const testGameFullId = GameFullId('qVChCOTcHSeW');
@@ -251,12 +251,10 @@ void main() {
         );
 
         final createGameService = MockCreateGameService();
-        when(
-          () => createGameService.newOpenOrRealTimeChallenge(challengeRequest),
-        ).thenAnswer((_) async => challenge);
-        when(
-          () => createGameService.waitForChallengeResponse(challenge),
-        ).thenAnswer((_) => Completer<ChallengeResponse>().future);
+        when(() => createGameService.newOpenOrRealTimeChallenge(challengeRequest))
+            .thenAnswer((_) async => challenge);
+        when(() => createGameService.waitForChallengeResponse(challenge))
+            .thenAnswer((_) => Completer<ChallengeResponse>().future);
 
         final app = await makeTestProviderScopeApp(
           tester,
@@ -329,9 +327,8 @@ void main() {
     testWidgets('lobby loading shows seek time control and mode', (WidgetTester tester) async {
       const seek = GameSeek(clock: (Duration(minutes: 3), Duration(seconds: 2)), rated: true);
       final createGameService = MockCreateGameService();
-      when(
-        () => createGameService.newLobbyGame(any()),
-      ).thenAnswer((_) => Completer<GameSeekResponse>().future);
+      when(() => createGameService.newLobbyGame(any()))
+          .thenAnswer((_) => Completer<GameSeekResponse>().future);
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -352,9 +349,8 @@ void main() {
     testWidgets('seek cancelled shows seek time control and mode', (WidgetTester tester) async {
       const seek = GameSeek(clock: (Duration(minutes: 3), Duration(seconds: 2)), rated: true);
       final createGameService = MockCreateGameService();
-      when(
-        () => createGameService.newLobbyGame(any()),
-      ).thenAnswer((_) async => const GameSeekCancelled());
+      when(() => createGameService.newLobbyGame(any()))
+          .thenAnswer((_) async => const GameSeekCancelled());
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -383,9 +379,8 @@ void main() {
         sideChoice: .random,
       );
       final createGameService = MockCreateGameService();
-      when(
-        () => createGameService.newOpenOrRealTimeChallenge(any()),
-      ).thenAnswer((_) => Completer<Challenge>().future);
+      when(() => createGameService.newOpenOrRealTimeChallenge(any()))
+          .thenAnswer((_) => Completer<Challenge>().future);
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -431,12 +426,10 @@ void main() {
         ),
       );
       final createGameService = MockCreateGameService();
-      when(
-        () => createGameService.newOpenOrRealTimeChallenge(any()),
-      ).thenAnswer((_) async => challenge);
-      when(
-        () => createGameService.waitForChallengeResponse(any()),
-      ).thenAnswer((_) async => const ChallengeResponseCancelled());
+      when(() => createGameService.newOpenOrRealTimeChallenge(any()))
+          .thenAnswer((_) async => challenge);
+      when(() => createGameService.waitForChallengeResponse(any()))
+          .thenAnswer((_) async => const ChallengeResponseCancelled());
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -481,9 +474,8 @@ void main() {
         ),
       );
       final createGameService = MockCreateGameService();
-      when(
-        () => createGameService.newOpenOrRealTimeChallenge(any()),
-      ).thenAnswer((_) async => challenge);
+      when(() => createGameService.newOpenOrRealTimeChallenge(any()))
+          .thenAnswer((_) async => challenge);
       when(() => createGameService.waitForChallengeResponse(any())).thenAnswer(
         (_) async => ChallengeResponseDeclined(challenge: challenge, declineReason: null),
       );
@@ -524,12 +516,10 @@ void main() {
         sideChoice: .random,
       );
       final createGameService = MockCreateGameService();
-      when(
-        () => createGameService.newOpenOrRealTimeChallenge(any()),
-      ).thenAnswer((_) async => challenge);
-      when(
-        () => createGameService.waitForChallengeResponse(any()),
-      ).thenAnswer((_) => Completer<ChallengeResponse>().future);
+      when(() => createGameService.newOpenOrRealTimeChallenge(any()))
+          .thenAnswer((_) async => challenge);
+      when(() => createGameService.waitForChallengeResponse(any()))
+          .thenAnswer((_) => Completer<ChallengeResponse>().future);
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -2218,9 +2208,8 @@ void main() {
     group('Enabled', () {
       testWidgets('onNewMessage', (WidgetTester tester) async {
         final mockSoundService = MockSoundService();
-        when(
-          () => mockSoundService.play(Sound.confirmation, volume: any(named: 'volume')),
-        ).thenAnswer((_) async {});
+        when(() => mockSoundService.play(Sound.confirmation, volume: any(named: 'volume')))
+            .thenAnswer((_) async {});
         await createTestGame(
           tester,
           pgn: 'e4 e5',
@@ -2232,9 +2221,8 @@ void main() {
           '{"t":"message","d":{"u":"Steven","t":"Hello!"}}',
         ]);
         await tester.pump();
-        verify(
-          () => mockSoundService.play(Sound.confirmation, volume: any(named: 'volume')),
-        ).called(1);
+        verify(() => mockSoundService.play(Sound.confirmation, volume: any(named: 'volume')))
+            .called(1);
       });
 
       testWidgets('chat messages do not disappear when game state changes', (
@@ -2926,8 +2914,7 @@ const _finishedGameFullEvent = '''
 
 /// Necessary to mock wakelock_plus method calls
 /// See: https://github.com/fluttercommunity/wakelock_plus/blob/0c74e5bbc6aefac57b6c96bb7ef987705ed559ec/wakelock_plus_platform_interface/lib/messages.g.dart#L127-L156
-class _PigeonCodec extends StandardMessageCodec {
-  const _PigeonCodec();
+class const _PigeonCodec() extends StandardMessageCodec {
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
     if (value is int) {

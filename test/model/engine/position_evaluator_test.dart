@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/engine_factory.dart';
 import 'package:lichess_mobile/src/model/engine/engine_providers.dart';
+import 'package:lichess_mobile/src/model/engine/engine_spec.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_context.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
@@ -28,11 +29,20 @@ import 'fake_stockfish_nnue_service.dart';
 /// Deliberately not called `EngineState`: that name belongs to the plugin's own reading of a
 /// native engine (`EngineFailure.engineState`), which is a different thing entirely. This is a
 /// test's way of reading two fields as one word, and exists nowhere in the app.
-enum EngineLifecycle { initial, loading, idle, computing, error }
+enum EngineLifecycle() {
+  initial,
+  loading,
+  idle,
+  computing,
+  error,
+}
 
 extension EngineEvaluationStateTest on EngineEvaluationState {
   /// The engine's `id name`, once it has one.
   String? get engineName => engine?.value;
+
+  /// Which engine the name came from: the two Stockfish flavors share a name.
+  EngineSpec? get spec => engineSpec;
 
   EngineLifecycle get lifecycle => switch (engine) {
     null => EngineLifecycle.initial,
@@ -753,42 +763,39 @@ void main() {
       expect(delayedStockfish.commands, isNot(contains('ucinewgame')));
     });
 
-    test(
-      'latestNoNNUE falling back to sf16 does not cause restart on subsequent latestNoNNUE requests',
-      () async {
-        final delayedStockfish = FakeEngine();
-        fakeEngine = delayedStockfish;
+    test('latestNoNNUE falling back to light does not cause restart on subsequent latestNoNNUE requests', () async {
+      final delayedStockfish = FakeEngine();
+      fakeEngine = delayedStockfish;
 
-        // NNUE files are unavailable: latestNoNNUE will fall back to sf16
-        final container = await makeContainer(
-          overrides: {
-            stockfishNnueServiceProvider: stockfishNnueServiceProvider.overrideWithValue(
-              FakeStockfishNnueServiceUnavailable(),
-            ),
-          },
-        );
-        final service = readEvaluator(container);
+      // The NNUE file is unavailable: latestNoNNUE will fall back to the light engine
+      final container = await makeContainer(
+        overrides: {
+          stockfishNnueServiceProvider: stockfishNnueServiceProvider.overrideWithValue(
+            FakeStockfishNnueServiceUnavailable(),
+          ),
+        },
+      );
+      final service = readEvaluator(container);
 
-        final work1 = makeWork();
-        final stream1 = service.evaluate(work1);
-        await stream1!.first;
+      final work1 = makeWork();
+      final stream1 = service.evaluate(work1);
+      await stream1!.first;
 
-        expect(delayedStockfish.startCount, 1);
+      expect(delayedStockfish.startCount, 1);
 
-        // A second request with latestNoNNUE should reuse the running sf16 engine.
-        final work2 = makeWork(path: UciPath.fromId(UciCharPair.fromUci('e2e4')));
-        final stream2 = service.evaluate(work2);
-        await stream2!.first;
+      // A second request with latestNoNNUE should reuse the running light engine.
+      final work2 = makeWork(path: UciPath.fromId(UciCharPair.fromUci('e2e4')));
+      final stream2 = service.evaluate(work2);
+      await stream2!.first;
 
-        expect(
-          delayedStockfish.startCount,
-          1,
-          reason:
-              'Engine must not restart when latestNoNNUE already fell back to sf16 '
-              'and a new latestNoNNUE request arrives',
-        );
-      },
-    );
+      expect(
+        delayedStockfish.startCount,
+        1,
+        reason:
+            'Engine must not restart when latestNoNNUE already fell back to the light engine '
+            'and a new latestNoNNUE request arrives',
+      );
+    });
   });
 
   group('PositionEvaluator', () {
@@ -799,7 +806,36 @@ void main() {
       final stream = service.evaluate(makeWork(variant: Variant.chess960));
       expect(stream, isNotNull);
       await stream!.first;
-      expect(service.state.engineName, 'Stockfish 16');
+      expect(service.state.spec, const StockfishSpec.light());
+    });
+
+    test('Falls back to Fairy-Stockfish on material Stockfish will not accept', () async {
+      final container = await makeContainer();
+      final service = readEvaluator(container);
+
+      // Three knights a side beside a full set of pawns: legal to set up, but not material a
+      // standard game could produce, and Stockfish 19 exits rather than evaluate it.
+      final position = Chess.fromSetup(
+        Setup.parseFen('nnnk4/pppppppp/8/8/8/8/PPPPPPPP/4KNNN w - - 0 1'),
+      );
+
+      final stream = service.evaluate(makeWork(initialPosition: position));
+      expect(stream, isNotNull);
+      await stream!.first;
+      expect(service.state.spec, const StockfishSpec.fairy());
+    });
+
+    test('Falls back to Fairy-Stockfish with ten pawns per side', () async {
+      final container = await makeContainer();
+      final service = readEvaluator(container);
+      final position = Chess.fromSetup(
+        Setup.parseFen('rnbqkbnr/pppppppp/4p3/3p4/8/5PP1/PPPPPPPP/RNBQKBNR w KQkq - 0 1'),
+      );
+
+      final stream = service.evaluate(makeWork(initialPosition: position));
+      expect(stream, isNotNull);
+      await stream!.first;
+      expect(service.state.spec, const StockfishSpec.fairy());
     });
 
     test('Falls back to Fairy-Stockfish for the variants Stockfish cannot play', () async {
@@ -1148,7 +1184,7 @@ void main() {
       expect(stream1, isNotNull);
       await stream1!.first;
 
-      expect(service.state.engineName, 'Stockfish 16');
+      expect(service.state.spec, const StockfishSpec.light());
 
       service.release();
       await pumpEventQueue();
@@ -1160,7 +1196,10 @@ void main() {
       expect(stream2, isNotNull);
       await stream2!.first;
 
-      expect(service.state.engineName, 'Stockfish 18');
+      expect(
+        service.state.spec,
+        isA<StockfishSpec>().having((s) => s.nnuePath, 'nnuePath', isNotNull),
+      );
     });
   });
 
@@ -1514,8 +1553,8 @@ void main() {
         service.evaluate(work);
         async.elapse(const Duration(seconds: 2));
 
-        // Notifier should have the first engine name
-        expect(latestState?.engineName, 'Stockfish 16');
+        // Notifier should have the first engine
+        expect(latestState?.spec, const StockfishSpec.light());
 
         // Let go of the engine, then ask for a different one.
         service.release();
@@ -1527,11 +1566,11 @@ void main() {
         service.evaluate(work);
         async.elapse(const Duration(seconds: 2));
 
-        // Notifier should have the updated engine name
+        // Notifier should have the updated engine
         expect(
-          latestState?.engineName,
-          'Stockfish 18',
-          reason: 'engineEvaluationProvider should surface the new engine name after a restart',
+          latestState?.spec,
+          isA<StockfishSpec>().having((s) => s.nnuePath, 'nnuePath', isNotNull),
+          reason: 'engineEvaluationProvider should surface the new engine after a restart',
         );
       });
     });

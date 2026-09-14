@@ -19,12 +19,8 @@ final openingExplorerProvider = AsyncNotifierProvider.autoDispose
       ({String fen, Variant variant})
     >((request) => OpeningExplorer(request.fen, request.variant), name: 'OpeningExplorerProvider');
 
-class OpeningExplorer extends AsyncNotifier<({OpeningExplorerEntry entry, bool isIndexing})?> {
-  OpeningExplorer(this.fen, this.variant);
-
-  final String fen;
-  final Variant variant;
-
+class OpeningExplorer(final String fen, final Variant variant)
+    extends AsyncNotifier<({OpeningExplorerEntry entry, bool isIndexing})?> {
   StreamSubscription<OpeningExplorerEntry>? _openingExplorerSubscription;
 
   @override
@@ -92,11 +88,7 @@ Uri _explorerUri(String path, [Map<String, dynamic>? queryParameters]) =>
     ? Uri.http(kLichessOpeningExplorerHost, path, queryParameters)
     : Uri.https(kLichessOpeningExplorerHost, path, queryParameters);
 
-class OpeningExplorerRepository {
-  const OpeningExplorerRepository(this.client);
-
-  final Client client;
-
+class const OpeningExplorerRepository(final Client client) {
   Future<OpeningExplorerEntry> getMasterDatabase(String fen, {int? since}) {
     return client.readJson(
       _explorerUri('/masters', {

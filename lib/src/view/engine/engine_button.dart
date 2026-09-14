@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
@@ -11,29 +12,24 @@ import 'package:lichess_mobile/src/widgets/popover.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// A button to toggle engine evaluation and show engine depth.
-class EngineButton extends ConsumerStatefulWidget {
-  const EngineButton({required this.filters, this.onTap, this.savedEval, this.goDeeper});
-
-  final EngineEvaluationFilters filters;
-
-  final ClientEval? savedEval;
-
-  final VoidCallback? onTap;
-
-  final VoidCallback? goDeeper;
-
+class const EngineButton({
+  required final EngineEvaluationFilters filters,
+  final VoidCallback? onTap,
+  final ClientEval? savedEval,
+  final VoidCallback? goDeeper,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<EngineButton> createState() => _EngineButtonState();
 }
 
-class _EngineButtonState extends ConsumerState<EngineButton> {
+class _EngineButtonState() extends ConsumerState<EngineButton> {
   late Color fromChipColor;
   Color? toChipColor;
 
   @override
   Widget build(BuildContext context) {
     final prefs = ref.watch(engineEvaluationPreferencesProvider);
-    final (engine: engine, eval: localEval, isComputing: isComputing, currentWork: _) = ref.watch(
+    final (:engine, :engineSpec, eval: localEval, :isComputing, currentWork: _) = ref.watch(
       engineEvaluationProvider(widget.filters),
     );
     final eval = pickBestClientEval(localEval: localEval, savedEval: widget.savedEval);
@@ -136,7 +132,7 @@ class _EngineButtonState extends ConsumerState<EngineButton> {
         Positioned(
           bottom: -6,
           child: Text(
-            engineShortLabel(engine?.value) ?? prefs.enginePref.shortLabel,
+            engineShortLabel(engine?.value, spec: engineSpec) ?? prefs.enginePref.shortLabel,
             style: TextStyle(
               fontSize: 10,
               fontWeight: FontWeight.w700,
@@ -149,11 +145,7 @@ class _EngineButtonState extends ConsumerState<EngineButton> {
   }
 }
 
-class MicroChipPainter extends CustomPainter {
-  const MicroChipPainter(this.color);
-
-  final Color color;
-
+class const MicroChipPainter(final Color color) extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     const pinLength = 3.5;
@@ -274,16 +266,15 @@ class MicroChipPainter extends CustomPainter {
   bool shouldRepaint(covariant MicroChipPainter oldDelegate) => color != oldDelegate.color;
 }
 
-class _EnginePopup extends ConsumerWidget {
-  const _EnginePopup({this.goDeeper, required this.filters});
-
-  final VoidCallback? goDeeper;
-  final EngineEvaluationFilters filters;
-
+class const _EnginePopup({
+  final VoidCallback? goDeeper,
+  required final EngineEvaluationFilters filters,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final (engine: engine, currentWork: work, eval: evalStateEval, isComputing: isComputing) = ref
-        .watch(engineEvaluationProvider(filters));
+    final (:engine, :engineSpec, currentWork: work, eval: evalStateEval, :isComputing) = ref.watch(
+      engineEvaluationProvider(filters),
+    );
     final bool canGoDeeper =
         goDeeper != null && !isComputing && (work == null || work.isDeeper != true);
 
@@ -306,16 +297,12 @@ class _EnginePopup extends ConsumerWidget {
 
     final knps = isComputing ? ', ${evalStateEval?.knps.round()}kn/s' : '';
 
-    // remove Fairy-Stockfish version from engine name
-    final engineName = engine?.value;
-    final fixedEngineName = engineName != null && engineName.startsWith('Fairy-Stockfish')
-        ? 'Fairy-Stockfish'
-        : engineName ?? 'Stockfish';
+    final displayName = engineDisplayName(engine?.value, spec: engineSpec);
 
     return ListTile(
       contentPadding: const EdgeInsets.only(left: 16.0),
       leading: Image.asset('assets/images/stockfish/icon.webp', width: 44, height: 44),
-      title: Text(fixedEngineName),
+      title: Text(displayName),
       subtitle: currentEval != null ? Text(context.l10n.depthX('${currentEval.depth}$knps')) : null,
       trailing: canGoDeeper
           ? IconButton(

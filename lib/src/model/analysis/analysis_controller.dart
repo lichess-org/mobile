@@ -25,6 +25,7 @@ import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
+import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
@@ -42,16 +43,14 @@ part 'analysis_controller.freezed.dart';
 final _dateFormat = DateFormat('yyyy.MM.dd');
 
 @freezed
-sealed class AnalysisOptions with _$AnalysisOptions {
-  const AnalysisOptions._();
-
-  const factory AnalysisOptions.standalone({
+sealed class const AnalysisOptions._() with _$AnalysisOptions {
+  const factory standalone({
     required Variant variant,
     @Default(null) int? initialMoveCursor,
     @Default(Side.white) Side orientation,
   }) = Standalone;
 
-  const factory AnalysisOptions.pgn({
+  const factory pgn({
     required StringId id,
     required Side orientation,
     int? initialMoveCursor,
@@ -60,13 +59,13 @@ sealed class AnalysisOptions with _$AnalysisOptions {
     required bool isComputerAnalysisAllowed,
   }) = Pgn;
 
-  const factory AnalysisOptions.archivedGame({
+  const factory archivedGame({
     required Side orientation,
     int? initialMoveCursor,
     required GameId gameId,
   }) = ArchivedGame;
 
-  const factory AnalysisOptions.activeCorrespondenceGame({
+  const factory activeCorrespondenceGame({
     required Side orientation,
     int? initialMoveCursor,
     required GameFullId gameFullId,
@@ -88,7 +87,7 @@ sealed class AnalysisOptions with _$AnalysisOptions {
   };
 }
 
-enum AnalysisGameResult {
+enum AnalysisGameResult() {
   whiteWins,
   blackWins,
   draw,
@@ -125,16 +124,13 @@ void clearSavedStandaloneAnalysis() {
   _savedStandalone = null;
 }
 
-class AnalysisController extends AsyncNotifier<AnalysisState>
+class AnalysisController(final AnalysisOptions options)
+    extends AsyncNotifier<AnalysisState>
     with
         EngineEvaluationMixin,
         ServerAnalysisMixin<AnalysisState>,
         OpeningExplorerMixin<AnalysisState>
     implements PgnTreeNotifier {
-  AnalysisController(this.options);
-
-  final AnalysisOptions options;
-
   static final Uri socketUri = Uri(path: '/analysis/socket/v5');
 
   StreamSubscription<SocketEvent>? _socketSubscription;
@@ -319,6 +315,8 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
       gameId: options.gameId,
       archivedGame: archivedGame,
       currentPath: currentPath,
+      clocks: _getClocks(currentPath),
+      mainlineClocks: _getMainlineClocks(),
       pathToLiveMove: isGameFinished || options is Standalone || options is Pgn
           ? null
           : currentPath,
@@ -550,6 +548,13 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
     _setPath(path.penultimate, shouldRecomputeRootView: true);
   }
 
+  @override
+  String makeLinePgn(UciPath path, {required bool includeVariations}) => _root.makeLinePgn(
+    path,
+    variant: state.requireValue.variant,
+    includeVariations: includeVariations,
+  );
+
   void addCurrentPathAsPremove() {
     state = AsyncData(
       state.requireValue.copyWith(
@@ -718,6 +723,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
       state = AsyncData(
         curState.copyWith(
           currentPath: path,
+          clocks: _getClocks(path),
           isOnMainline: _root.isOnMainline(path),
           currentNode: AnalysisCurrentNode.fromNode(currentNode),
           currentBranchOpening: opening,
@@ -729,6 +735,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
       state = AsyncData(
         curState.copyWith(
           currentPath: path,
+          clocks: _getClocks(path),
           isOnMainline: _root.isOnMainline(path),
           currentNode: AnalysisCurrentNode.fromNode(currentNode),
           currentBranchOpening: opening,
@@ -742,6 +749,28 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
       state = AsyncData(state.requireValue.copyWith(engineInThreatMode: false));
       requestEval();
     }
+  }
+
+  /// The clock left after each mainline move, null unless every one of them carries a reading.
+  IList<Duration>? _getMainlineClocks() {
+    final clocks = _root.mainline.map((branch) => branch.clock).toIList();
+    return clocks.isEmpty || clocks.any((clock) => clock == null)
+        ? null
+        : clocks.map((clock) => clock!).toIList();
+  }
+
+  /// The clocks to show either side of the board at [path].
+  ///
+  /// The node holds the clock of the side that has just moved, so the side to move is shown the
+  /// clock of its parent — the last reading it had.
+  ({Duration? parentClock, Duration? clock}) _getClocks(UciPath path) {
+    final node = _root.nodeAt(path);
+    final parent = _root.parentAt(path);
+
+    return (
+      parentClock: (parent is Branch) ? parent.clock : null,
+      clock: (node is Branch) ? node.clock : null,
+    );
   }
 
   @override
@@ -764,7 +793,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
 }
 
 @freezed
-sealed class AnalysisState
+sealed class const AnalysisState._()
     with
         _$AnalysisState,
         AnalysisExplosionMixin,
@@ -772,8 +801,6 @@ sealed class AnalysisState
         ServerAnalysisMixinState,
         OpeningExplorerMixinState
     implements CommonAnalysisState {
-  const AnalysisState._();
-
   @override
   ViewRoot get analysisRoot => root;
 
@@ -781,7 +808,7 @@ sealed class AnalysisState
   AnalysisState withThreatMode(bool engineInThreatMode) =>
       copyWith(engineInThreatMode: engineInThreatMode);
 
-  const factory AnalysisState({
+  const factory({
     /// The ID of the game if it's a lichess game.
     required GameId? gameId,
 
@@ -803,6 +830,15 @@ sealed class AnalysisState
 
     /// The path to the current node in the analysis view.
     required UciPath currentPath,
+
+    /// The clocks at the current node, if the analysed game carries any.
+    required ({Duration? parentClock, Duration? clock})? clocks,
+
+    /// The clock left after each mainline move, if every one of them carries a reading.
+    ///
+    /// Read off the tree once, when the analysis is loaded, so moves added since are not part of
+    /// it — the same way [archivedGame] holds the game as it was played.
+    IList<Duration>? mainlineClocks,
 
     /// If this is a correspondence game, the path to the last move that has been played.
     required UciPath? pathToLiveMove,
@@ -858,6 +894,25 @@ sealed class AnalysisState
 
   @override
   bool get alwaysRequestCloudEval => false;
+
+  /// The clock left after each mainline move, empty if the game was played without one.
+  ///
+  /// A lichess game is authoritative about its own clocks; anything else is read off the tree.
+  IList<Duration> get chartClocks =>
+      archivedGame?.clocks ?? mainlineClocks ?? const IListConst<Duration>([]);
+
+  /// The time spent on each mainline move, empty if the game was played without a clock.
+  IList<Duration> get chartMoveTimes =>
+      archivedGame?.moveTimes ?? moveTimesFromClocks(mainlineClocks, _pgnClockIncrement);
+
+  /// The increment of a game analysed from a PGN, read off its `TimeControl` header.
+  Duration get _pgnClockIncrement {
+    final timeControl = pgnHeaders['TimeControl'];
+    final increment = timeControl != null && timeControl.contains('+')
+        ? int.tryParse(timeControl.split('+').last)
+        : null;
+    return Duration(seconds: increment ?? 0);
+  }
 
   /// Whether the analysis is for a lichess game.
   bool get isLichessGameAnalysis => gameId != null;
@@ -943,12 +998,10 @@ sealed class AnalysisState
 }
 
 @freezed
-sealed class AnalysisCurrentNode
+sealed class const AnalysisCurrentNode._()
     with _$AnalysisCurrentNode
     implements AnalysisCurrentNodeInterface {
-  const AnalysisCurrentNode._();
-
-  const factory AnalysisCurrentNode({
+  const factory({
     required Position position,
     required bool hasChild,
     required bool isRoot,
@@ -961,7 +1014,7 @@ sealed class AnalysisCurrentNode
     IList<int>? nags,
   }) = _AnalysisCurrentNode;
 
-  factory AnalysisCurrentNode.fromNode(Node node) {
+  factory fromNode(Node node) {
     if (node is Branch) {
       return AnalysisCurrentNode(
         sanMove: node.sanMove,

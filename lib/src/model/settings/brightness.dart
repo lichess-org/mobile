@@ -8,7 +8,7 @@ final currentBrightnessProvider = NotifierProvider<CurrentBrightness, Brightness
   name: 'CurrentBrightnessProvider',
 );
 
-class CurrentBrightness extends Notifier<Brightness> {
+class CurrentBrightness() extends Notifier<Brightness> {
   @override
   Brightness build() {
     final themeMode = ref.watch(generalPreferencesProvider.select((state) => state.themeMode));

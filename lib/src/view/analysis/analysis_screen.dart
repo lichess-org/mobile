@@ -1,6 +1,5 @@
 import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
@@ -46,11 +45,8 @@ import 'package:share_plus/share_plus.dart';
 
 final _logger = Logger('AnalysisScreen');
 
-class AnalysisScreen extends StatelessWidget {
-  const AnalysisScreen({required this.options, super.key});
-
-  final AnalysisOptions options;
-
+class const AnalysisScreen({required final AnalysisOptions options, super.key})
+    extends StatelessWidget {
   static Route<dynamic> buildRoute(AnalysisOptions options) {
     return buildScreenRoute(screen: AnalysisScreen(options: options));
   }
@@ -61,16 +57,13 @@ class AnalysisScreen extends StatelessWidget {
   }
 }
 
-class _AnalysisScreen extends ConsumerStatefulWidget {
-  const _AnalysisScreen({required this.options});
-
-  final AnalysisOptions options;
-
+class const _AnalysisScreen({required final AnalysisOptions options})
+    extends ConsumerStatefulWidget {
   @override
   ConsumerState<_AnalysisScreen> createState() => _AnalysisScreenState();
 }
 
-class _AnalysisScreenState extends ConsumerState<_AnalysisScreen> {
+class _AnalysisScreenState() extends ConsumerState<_AnalysisScreen> {
   @override
   Widget build(BuildContext context) {
     final ctrlProvider = analysisControllerProvider(widget.options);
@@ -97,7 +90,7 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen> {
             body: _TabbedBody(
               options: widget.options,
               // Move times can only be shown for games played with a clock.
-              showMoveTimes: value.archivedGame?.clocks?.isNotEmpty ?? false,
+              showMoveTimes: value.chartClocks.isNotEmpty,
             ),
           ),
         );
@@ -118,17 +111,13 @@ class _AnalysisScreenState extends ConsumerState<_AnalysisScreen> {
 ///
 /// Which tabs are available depends on the loaded game, so the list can only be built once the
 /// analysis state is available.
-class _TabbedBody extends StatefulWidget {
-  const _TabbedBody({required this.options, required this.showMoveTimes});
-
-  final AnalysisOptions options;
-  final bool showMoveTimes;
-
+class const _TabbedBody({required final AnalysisOptions options, required final bool showMoveTimes})
+    extends StatefulWidget {
   @override
   State<_TabbedBody> createState() => _TabbedBodyState();
 }
 
-class _TabbedBodyState extends State<_TabbedBody> with SingleTickerProviderStateMixin {
+class _TabbedBodyState() extends State<_TabbedBody> with SingleTickerProviderStateMixin {
   late final List<AnalysisTab> tabs;
   late final TabController _tabController;
 
@@ -139,11 +128,9 @@ class _TabbedBodyState extends State<_TabbedBody> with SingleTickerProviderState
     tabs = [
       AnalysisTab.explorer,
       AnalysisTab.moves,
-      if (widget.options case ArchivedGame()) ...[
-        AnalysisTab.summary,
-        if (widget.showMoveTimes) AnalysisTab.moveTimes,
-      ] else if (widget.options case ActiveCorrespondenceGame())
-        AnalysisTab.conditionalPremoves,
+      if (widget.options case ArchivedGame()) AnalysisTab.summary,
+      if (widget.showMoveTimes) AnalysisTab.moveTimes,
+      if (widget.options case ActiveCorrespondenceGame()) AnalysisTab.conditionalPremoves,
     ];
 
     _tabController = TabController(
@@ -165,13 +152,11 @@ class _TabbedBodyState extends State<_TabbedBody> with SingleTickerProviderState
   }
 }
 
-class _Body extends ConsumerWidget {
-  const _Body({required this.options, required this.controller, required this.tabs});
-
-  final TabController controller;
-  final AnalysisOptions options;
-  final List<AnalysisTab> tabs;
-
+class const _Body({
+  required final AnalysisOptions options,
+  required final TabController controller,
+  required final List<AnalysisTab> tabs,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
@@ -225,8 +210,12 @@ class _Body extends ConsumerWidget {
       final playerWidgets = playerWidgetsFromPgnHeaders(
         pgnHeaders: analysisState.pgnHeaders,
         sideToMove: analysisState.currentPosition.turn,
-        whiteClock: null,
-        blackClock: null,
+        whiteClock: analysisState.currentPosition.turn == Side.white
+            ? analysisState.clocks?.parentClock
+            : analysisState.clocks?.clock,
+        blackClock: analysisState.currentPosition.turn == Side.black
+            ? analysisState.clocks?.parentClock
+            : analysisState.clocks?.clock,
       );
 
       (boardFooter, boardHeader) = pov == Side.white
@@ -310,8 +299,8 @@ class _Body extends ConsumerWidget {
               children: [
                 MoveTimesChart(
                   params: (
-                    moveTimes: analysisState.archivedGame!.moveTimes,
-                    clocks: analysisState.archivedGame!.clocks ?? const IListConst<Duration>([]),
+                    moveTimes: analysisState.chartMoveTimes,
+                    clocks: analysisState.chartClocks,
                     division: analysisState.division,
                     rootPly: analysisState.root.position.ply,
                     currentNodePly: analysisState.currentPosition.ply,
@@ -330,11 +319,7 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class _PlayerName extends StatelessWidget {
-  const _PlayerName({required this.player});
-
-  final Player player;
-
+class const _PlayerName({required final Player player}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return player.user != null
@@ -352,12 +337,10 @@ class _PlayerName extends StatelessWidget {
   }
 }
 
-class _BottomBar extends ConsumerWidget {
-  const _BottomBar({required this.options, required this.tabController});
-
-  final AnalysisOptions options;
-  final TabController tabController;
-
+class const _BottomBar({
+  required final AnalysisOptions options,
+  required final TabController tabController,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = analysisControllerProvider(options);
@@ -456,7 +439,7 @@ class _BottomBar extends ConsumerWidget {
         ),
         if (options case Standalone()) ...[
           BottomSheetAction(
-            makeLabel: (context) => Text(context.l10n.clearSavedMoves),
+            makeLabel: (context) => Text(context.l10n.clearLocalData),
             onPressed: () => ref
                 .read(analysisControllerProvider(options).notifier)
                 .clearSavedStandaloneAnalysis(),
@@ -542,15 +525,13 @@ class _BottomBar extends ConsumerWidget {
             else ...[
               BottomSheetAction(
                 makeLabel: (context) => Text(context.l10n.reviewWhiteMistakes),
-                onPressed: () => Navigator.of(
-                  context,
-                ).push(RetroScreen.buildRoute((id: options.gameId!, initialSide: Side.white))),
+                onPressed: () => Navigator.of(context)
+                    .push(RetroScreen.buildRoute((id: options.gameId!, initialSide: Side.white))),
               ),
               BottomSheetAction(
                 makeLabel: (context) => Text(context.l10n.reviewBlackMistakes),
-                onPressed: () => Navigator.of(
-                  context,
-                ).push(RetroScreen.buildRoute((id: options.gameId!, initialSide: Side.black))),
+                onPressed: () => Navigator.of(context)
+                    .push(RetroScreen.buildRoute((id: options.gameId!, initialSide: Side.black))),
               ),
             ],
         // board editor can be used to quickly analyze a position, so engine must be allowed to access
@@ -579,11 +560,7 @@ class _BottomBar extends ConsumerWidget {
 }
 
 /// App bar menu holding the game actions: bookmark, share and export.
-class _AnalysisMenu extends ConsumerWidget {
-  const _AnalysisMenu({required this.options});
-
-  final AnalysisOptions options;
-
+class const _AnalysisMenu({required final AnalysisOptions options}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final analysisState = ref.watch(analysisControllerProvider(options)).value;

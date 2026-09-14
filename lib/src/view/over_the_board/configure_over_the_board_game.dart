@@ -1,6 +1,7 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/local_game_clock.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_clock.dart';
@@ -38,19 +39,17 @@ void showConfigureGameSheet(
   );
 }
 
-class _ConfigureOverTheBoardGameSheet extends ConsumerStatefulWidget {
-  const _ConfigureOverTheBoardGameSheet({required this.initialVariant, this.initialFen});
-
-  final Variant initialVariant;
-
-  final String? initialFen;
-
+class const _ConfigureOverTheBoardGameSheet({
+  required final Variant initialVariant,
+  final String? initialFen,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_ConfigureOverTheBoardGameSheet> createState() =>
       _ConfigureOverTheBoardGameSheetState();
 }
 
-class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverTheBoardGameSheet> {
+class _ConfigureOverTheBoardGameSheetState()
+    extends ConsumerState<_ConfigureOverTheBoardGameSheet> {
   late Variant chosenVariant;
   late TimeControlType chosenTimeControlType;
 
@@ -275,9 +274,7 @@ void showConfigureDisplaySettings(BuildContext context) {
   );
 }
 
-class OverTheBoardDisplaySettings extends ConsumerWidget {
-  const OverTheBoardDisplaySettings();
-
+class const OverTheBoardDisplaySettings() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final prefs = ref.watch(overTheBoardPreferencesProvider);

@@ -238,6 +238,12 @@ abstract class AppLocalizations {
   /// **'Cancel takeback offer'**
   String get mobileCancelTakebackOffer;
 
+  /// No description provided for @mobileChessEngine.
+  ///
+  /// In en, this message translates to:
+  /// **'Chess engine'**
+  String get mobileChessEngine;
+
   /// No description provided for @mobileClearButton.
   ///
   /// In en, this message translates to:
@@ -465,6 +471,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Square'**
   String get mobileSettingsDraggedTargetSquare;
+
+  /// No description provided for @mobileSettingsDrawnShapeColor.
+  ///
+  /// In en, this message translates to:
+  /// **'Drawn shape color'**
+  String get mobileSettingsDrawnShapeColor;
+
+  /// No description provided for @mobileSettingsDrawnShapeColorHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'This color is used for shapes drawn by hand using two fingers.'**
+  String get mobileSettingsDrawnShapeColorHelp;
 
   /// No description provided for @mobileSettingsHomeWidgets.
   ///
@@ -1180,6 +1198,12 @@ abstract class AppLocalizations {
   /// **'How does the pairing work?'**
   String get arenaHowDoesPairingWork;
 
+  /// No description provided for @arenaHowArePlayersPaired.
+  ///
+  /// In en, this message translates to:
+  /// **'How are players paired?'**
+  String get arenaHowArePlayersPaired;
+
   /// No description provided for @arenaHowDoesPairingWorkAnswer.
   ///
   /// In en, this message translates to:
@@ -1348,6 +1372,12 @@ abstract class AppLocalizations {
   /// **'Defender'**
   String get arenaDefender;
 
+  /// No description provided for @arenaDefenderLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Defender:'**
+  String get arenaDefenderLabel;
+
   /// No description provided for @arenaPickYourTeam.
   ///
   /// In en, this message translates to:
@@ -1473,6 +1503,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Berserk rate'**
   String get arenaBerserkRate;
+
+  /// No description provided for @arenaLeaguesAndStreamerBattles.
+  ///
+  /// In en, this message translates to:
+  /// **'Leagues & Streamer Battles'**
+  String get arenaLeaguesAndStreamerBattles;
 
   /// No description provided for @arenaDrawingWithinNbMoves.
   ///
@@ -1648,6 +1684,12 @@ abstract class AppLocalizations {
   /// **'Definitively delete the round and all its games.'**
   String get broadcastDefinitivelyDeleteRound;
 
+  /// No description provided for @broadcastPermanentlyDeleteRound.
+  ///
+  /// In en, this message translates to:
+  /// **'Permanently delete this round and all its games?'**
+  String get broadcastPermanentlyDeleteRound;
+
   /// No description provided for @broadcastDeleteAllGamesOfThisRound.
   ///
   /// In en, this message translates to:
@@ -1785,6 +1827,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No boards yet. These will appear once games are uploaded.'**
   String get broadcastNoBoardsYet;
+
+  /// No description provided for @broadcastNoPlayersYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No players yet. They will appear once games are uploaded.'**
+  String get broadcastNoPlayersYet;
 
   /// No description provided for @broadcastBoardsCanBeLoaded.
   ///
@@ -3754,6 +3802,12 @@ abstract class AppLocalizations {
   /// **'Confine the king to the corner using a rook or queen and a knight to engage the checkmate.'**
   String get puzzleThemeCornerMateDescription;
 
+  /// No description provided for @puzzleThemeCornerMateKnightDeliversDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Confine the king to the corner using a rook or queen, and use a knight to deliver the checkmate.'**
+  String get puzzleThemeCornerMateKnightDeliversDescription;
+
   /// No description provided for @puzzleThemeCrushing.
   ///
   /// In en, this message translates to:
@@ -4030,6 +4084,12 @@ abstract class AppLocalizations {
   /// **'The rook delivers checkmate, while the bishop helps to confine it.'**
   String get puzzleThemePillsburysMateDescription;
 
+  /// No description provided for @puzzleThemePillsburyMateRookAndBishopDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'A rook delivers checkmate to the king, while a bishop helps confine it.'**
+  String get puzzleThemePillsburyMateRookAndBishopDescription;
+
   /// No description provided for @puzzleThemeMorphysMate.
   ///
   /// In en, this message translates to:
@@ -4041,6 +4101,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Use the bishop to check the king, while your rook helps to confine it.'**
   String get puzzleThemeMorphysMateDescription;
+
+  /// No description provided for @puzzleThemeMorphyMateBishopAndRookDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'A bishop delivers checkmate to the king, while a rook helps confine it.'**
+  String get puzzleThemeMorphyMateBishopAndRookDescription;
 
   /// No description provided for @puzzleThemeSwallowstailMate.
   ///
@@ -4282,6 +4348,12 @@ abstract class AppLocalizations {
   /// **'Promote one of your pawn to a queen or minor piece.'**
   String get puzzleThemePromotionDescription;
 
+  /// No description provided for @puzzleThemePromotePawnToQueenRookOrMinor.
+  ///
+  /// In en, this message translates to:
+  /// **'Promote one of your pawns to a queen, rook or minor piece.'**
+  String get puzzleThemePromotePawnToQueenRookOrMinor;
+
   /// No description provided for @puzzleThemeQueenEndgame.
   ///
   /// In en, this message translates to:
@@ -4491,6 +4563,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'These puzzles are in the public domain, and can be downloaded from {param}.'**
   String puzzleThemePuzzleDownloadInformation(String param);
+
+  /// No description provided for @recapAwaitQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'What have you been up to this year?'**
+  String get recapAwaitQuestion;
+
+  /// No description provided for @recapRecapReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Your {param} recap is ready!'**
+  String recapRecapReady(String param);
 
   /// No description provided for @searchSearch.
   ///
@@ -5398,6 +5482,30 @@ abstract class AppLocalizations {
   /// **'Flip board'**
   String get flipBoard;
 
+  /// No description provided for @toggleLocalEngine.
+  ///
+  /// In en, this message translates to:
+  /// **'Toggle local engine'**
+  String get toggleLocalEngine;
+
+  /// No description provided for @engineSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Engine settings'**
+  String get engineSettings;
+
+  /// No description provided for @enginesFromStrongestToWeakest.
+  ///
+  /// In en, this message translates to:
+  /// **'Engines from strongest to weakest'**
+  String get enginesFromStrongestToWeakest;
+
+  /// No description provided for @illegalPosition.
+  ///
+  /// In en, this message translates to:
+  /// **'Illegal position'**
+  String get illegalPosition;
+
   /// No description provided for @threefoldRepetition.
   ///
   /// In en, this message translates to:
@@ -5674,6 +5782,12 @@ abstract class AppLocalizations {
   /// **'Password'**
   String get password;
 
+  /// No description provided for @showPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Show password'**
+  String get showPassword;
+
   /// No description provided for @changePassword.
   ///
   /// In en, this message translates to:
@@ -5884,11 +5998,23 @@ abstract class AppLocalizations {
   /// **'White time out'**
   String get whiteTimeOut;
 
+  /// No description provided for @whiteRanOutOfTime.
+  ///
+  /// In en, this message translates to:
+  /// **'White ran out of time'**
+  String get whiteRanOutOfTime;
+
   /// No description provided for @blackTimeOut.
   ///
   /// In en, this message translates to:
   /// **'Black time out'**
   String get blackTimeOut;
+
+  /// No description provided for @blackRanOutOfTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Black ran out of time'**
+  String get blackRanOutOfTime;
 
   /// No description provided for @drawOfferSent.
   ///
@@ -6304,6 +6430,12 @@ abstract class AppLocalizations {
   /// **'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.'**
   String get ratingRangeIsDisabledBecauseYourRatingIsProvisional;
 
+  /// No description provided for @cannotFilterByUnstableRating.
+  ///
+  /// In en, this message translates to:
+  /// **'It is not possible to filter by rating because your rating is not stable.\nPlaying rated games will increase stability.'**
+  String get cannotFilterByUnstableRating;
+
   /// No description provided for @yourPerfRatingIsTooHigh.
   ///
   /// In en, this message translates to:
@@ -6424,11 +6556,11 @@ abstract class AppLocalizations {
   /// **'Leaderboard'**
   String get leaderboard;
 
-  /// No description provided for @screenshotCurrentPosition.
+  /// No description provided for @positionAsImage.
   ///
   /// In en, this message translates to:
-  /// **'Screenshot current position'**
-  String get screenshotCurrentPosition;
+  /// **'Position as image'**
+  String get positionAsImage;
 
   /// No description provided for @gameAsGIF.
   ///
@@ -6609,6 +6741,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{param1} started following {param2}'**
   String xStartedFollowingY(String param1, String param2);
+
+  /// No description provided for @less.
+  ///
+  /// In en, this message translates to:
+  /// **'Less'**
+  String get less;
 
   /// No description provided for @more.
   ///
@@ -7000,11 +7138,11 @@ abstract class AppLocalizations {
   /// **'For safekeeping and sharing, consider making a study.'**
   String get makeAStudy;
 
-  /// No description provided for @clearSavedMoves.
+  /// No description provided for @clearLocalData.
   ///
   /// In en, this message translates to:
-  /// **'Clear moves'**
-  String get clearSavedMoves;
+  /// **'Clear local data'**
+  String get clearLocalData;
 
   /// No description provided for @previouslyOnLichessTV.
   ///
@@ -7960,6 +8098,12 @@ abstract class AppLocalizations {
   /// **'Host extra initial clock time'**
   String get simulHostExtraTime;
 
+  /// No description provided for @extraClockTimeForHost.
+  ///
+  /// In en, this message translates to:
+  /// **'Extra clock time for the host:'**
+  String get extraClockTimeForHost;
+
   /// No description provided for @simulAddExtraTimePerPlayer.
   ///
   /// In en, this message translates to:
@@ -8020,6 +8164,12 @@ abstract class AppLocalizations {
   /// **'go to start/end'**
   String get keyGoToStartOrEnd;
 
+  /// No description provided for @keyGoToPreviousOrNextLine.
+  ///
+  /// In en, this message translates to:
+  /// **'go to previous/next line'**
+  String get keyGoToPreviousOrNextLine;
+
   /// No description provided for @keyCycleSelectedVariation.
   ///
   /// In en, this message translates to:
@@ -8031,6 +8181,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'show/hide comments'**
   String get keyShowOrHideComments;
+
+  /// No description provided for @keyShowOrHideCurrentVariation.
+  ///
+  /// In en, this message translates to:
+  /// **'show/hide current variation'**
+  String get keyShowOrHideCurrentVariation;
 
   /// No description provided for @keyEnterOrExitVariation.
   ///
@@ -8518,12 +8674,6 @@ abstract class AppLocalizations {
   /// **'Dark'**
   String get dark;
 
-  /// No description provided for @transparent.
-  ///
-  /// In en, this message translates to:
-  /// **'Transparent'**
-  String get transparent;
-
   /// No description provided for @picture.
   ///
   /// In en, this message translates to:
@@ -8542,11 +8692,23 @@ abstract class AppLocalizations {
   /// **'Roundness'**
   String get roundness;
 
+  /// No description provided for @backgroundImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Background image'**
+  String get backgroundImage;
+
   /// No description provided for @backgroundImageUrl.
   ///
   /// In en, this message translates to:
   /// **'Background image URL:'**
   String get backgroundImageUrl;
+
+  /// No description provided for @imageOpacity.
+  ///
+  /// In en, this message translates to:
+  /// **'Image opacity'**
+  String get imageOpacity;
 
   /// No description provided for @board.
   ///
@@ -8685,6 +8847,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Rating: {param}'**
   String perfRatingX(String param);
+
+  /// No description provided for @perfRatingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Rating: {param}.'**
+  String perfRatingLabel(String param);
 
   /// No description provided for @yourRatingIsX.
   ///
@@ -8967,6 +9135,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Click here to read it'**
   String get clickHereToReadIt;
+
+  /// No description provided for @readTheMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Read the message'**
+  String get readTheMessage;
 
   /// No description provided for @sorry.
   ///
@@ -9753,6 +9927,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Settings'**
   String get settings;
+
+  /// No description provided for @verifyingYourDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'Verifying your device...'**
+  String get verifyingYourDevice;
+
+  /// No description provided for @chessOpenings.
+  ///
+  /// In en, this message translates to:
+  /// **'Chess openings'**
+  String get chessOpenings;
+
+  /// No description provided for @boards.
+  ///
+  /// In en, this message translates to:
+  /// **'Boards'**
+  String get boards;
 
   /// No description provided for @opponentLeftCounter.
   ///
@@ -10672,6 +10864,12 @@ abstract class AppLocalizations {
   /// **'You can paste this in the forum or your Lichess blog to embed'**
   String get studyYouCanPasteThisInTheForumToEmbed;
 
+  /// No description provided for @studyPasteToEmbedChapterInForumOrBlog.
+  ///
+  /// In en, this message translates to:
+  /// **'You can paste this in the forum or your Lichess blog to embed the chapter.'**
+  String get studyPasteToEmbedChapterInForumOrBlog;
+
   /// No description provided for @studyStartAtInitialPosition.
   ///
   /// In en, this message translates to:
@@ -11380,11 +11578,23 @@ abstract class AppLocalizations {
   /// **'Load an existing lichess game'**
   String get studyLoadExistingLichessGameTitle;
 
+  /// No description provided for @studyLoadGameFromTheWebTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Load a game from the web'**
+  String get studyLoadGameFromTheWebTitle;
+
   /// No description provided for @studyLoadExistingLichessGameText.
   ///
   /// In en, this message translates to:
   /// **'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.'**
   String get studyLoadExistingLichessGameText;
+
+  /// No description provided for @studyLoadGameFromTheWebText.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste a game URL<br>(like lichess.org/7fHIU0XI)<br>to load game moves in the chapter.'**
+  String get studyLoadGameFromTheWebText;
 
   /// No description provided for @studyFromFenStringTitle.
   ///

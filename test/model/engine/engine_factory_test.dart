@@ -30,24 +30,24 @@ void main() {
       final engine = FakeEngine();
       final factory = factoryFor(engine);
 
-      final started = await factory.create(const StockfishSpec.sf16());
+      final started = await factory.create(const StockfishSpec.light());
       addTearDown(started.dispose);
       await pumpEventQueue();
 
-      expect(started.spec, const StockfishSpec.sf16());
-      expect(started.name.value, 'Stockfish 16');
+      expect(started.spec, const StockfishSpec.light());
+      expect(started.name.value, 'Stockfish 19');
     });
 
     test('a create waits for the engine it replaces to finish exiting', () async {
       final engine = FakeEngine(quitDelay: const Duration(milliseconds: 50));
       final factory = factoryFor(engine);
 
-      final first = await factory.create(const StockfishSpec.sf16());
+      final first = await factory.create(const StockfishSpec.light());
 
       // Let go of it without waiting: this is what a provider being disposed looks like.
       unawaited(first.dispose());
 
-      final second = await factory.create(const StockfishSpec.sf16());
+      final second = await factory.create(const StockfishSpec.light());
       addTearDown(second.dispose);
 
       // The native library only frees the slot once the engine has actually exited, so the second
@@ -61,11 +61,11 @@ void main() {
     test('two live engines on one slot are a programming error, not a restart', () async {
       final factory = factoryFor(FakeEngine());
 
-      final live = await factory.create(const StockfishSpec.sf16());
+      final live = await factory.create(const StockfishSpec.light());
       addTearDown(live.dispose);
 
       await expectLater(
-        factory.create(const StockfishSpec.sf16()),
+        factory.create(const StockfishSpec.light()),
         throwsA(
           isA<EngineCreationException>().having(
             (e) => e.failure.error,
@@ -80,7 +80,7 @@ void main() {
       final factory = factoryFor(ThrowingStartEngine());
 
       await expectLater(
-        factory.create(const StockfishSpec.sf16()),
+        factory.create(const StockfishSpec.light()),
         throwsA(
           isA<EngineCreationException>().having(
             (e) => e.failure.kind,
@@ -95,7 +95,7 @@ void main() {
       final factory = factoryFor(ErrorEngine());
 
       await expectLater(
-        factory.create(const StockfishSpec.sf16()),
+        factory.create(const StockfishSpec.light()),
         throwsA(
           isA<EngineCreationException>().having(
             (e) => e.failure.kind,
@@ -112,7 +112,7 @@ void main() {
       fakeAsync((async) {
         Object? error;
         factory
-            .create(const StockfishSpec.sf16())
+            .create(const StockfishSpec.light())
             .then<void>((_) {}, onError: (Object e) => error = e);
 
         async.elapse(kEngineCreateTimeout - const Duration(seconds: 1));
@@ -134,7 +134,7 @@ void main() {
       fakeAsync((async) {
         Object? error;
         factory
-            .create(const StockfishSpec.sf16())
+            .create(const StockfishSpec.light())
             .then<void>((_) {}, onError: (Object e) => error = e);
 
         async.elapse(kEngineCreateTimeout + const Duration(seconds: 1));
@@ -155,13 +155,13 @@ void main() {
       final engine = FakeEngine(startDelay: const Duration(milliseconds: 50));
       final factory = factoryFor(engine);
 
-      final firstRequest = factory.create(const StockfishSpec.sf16());
+      final firstRequest = factory.create(const StockfishSpec.light());
 
       // Listened to straight away: this one is expected to fail, and an error nobody is waiting
       // for yet would surface as an unhandled async error instead.
       Object? secondError;
       final secondRequest = factory
-          .create(const StockfishSpec.sf16())
+          .create(const StockfishSpec.light())
           .then<Engine?>(
             (engine) => engine,
             onError: (Object e) {
@@ -187,13 +187,13 @@ void main() {
       final engine = FakeEngine();
       final factory = factoryFor(engine);
 
-      final sf16 = await factory.create(const StockfishSpec.sf16());
-      addTearDown(sf16.dispose);
+      final light = await factory.create(const StockfishSpec.light());
+      addTearDown(light.dispose);
       final fairy = await factory.create(const StockfishSpec.fairy());
       addTearDown(fairy.dispose);
 
       expect(engine.quitCount, 0);
-      expect(sf16.spec, isNot(fairy.spec));
+      expect(light.spec, isNot(fairy.spec));
     });
 
     test('an LC0 engine and a Stockfish engine are live at once, each with its '
@@ -206,7 +206,7 @@ void main() {
       final engine = ThrottleTestEngine();
       final factory = factoryFor(engine);
 
-      final stockfish = await factory.create(const StockfishSpec.sf16());
+      final stockfish = await factory.create(const StockfishSpec.light());
       addTearDown(stockfish.dispose);
       final lc0 = await factory.create(const Lc0Spec());
       addTearDown(lc0.dispose);
@@ -216,7 +216,7 @@ void main() {
       expect(engine.quitCount, 0, reason: 'neither is quit to make room');
 
       // Each engine read its own handshake, from its own session.
-      expect(stockfish.name.value, 'Stockfish 16');
+      expect(stockfish.name.value, 'Stockfish 19');
       expect(lc0.name.value, 'Lc0 v0.32.1');
 
       // And each search is answered by the engine it was given to.

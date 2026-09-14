@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:crypto/crypto.dart';
 
 import 'package:lichess_mobile/src/constants.dart';

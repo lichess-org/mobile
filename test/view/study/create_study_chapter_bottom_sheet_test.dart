@@ -17,7 +17,7 @@ import '../../test_bottom_sheet_opener.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 
-class OnChaptersCreatedCallback extends Mock {
+class OnChaptersCreatedCallback() extends Mock {
   void call(StudyId studyId, IList<StudyChapterId> chapterIds);
 }
 
@@ -333,9 +333,8 @@ void main() {
         tester,
         home: Builder(
           builder: (context) => MediaQuery(
-            data: MediaQuery.of(
-              context,
-            ).copyWith(viewInsets: const EdgeInsets.only(bottom: keyboardHeight)),
+            data: MediaQuery.of(context)
+                .copyWith(viewInsets: const EdgeInsets.only(bottom: keyboardHeight)),
             child: CreateStudyChapterBottomSheet(
               params: CreateChapterOfExistingStudy(const StudyId('test-id')),
               chapterNumber: 1,

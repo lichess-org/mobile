@@ -51,28 +51,22 @@ import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:share_plus/share_plus.dart';
 
-class PuzzleScreen extends ConsumerStatefulWidget {
+class const PuzzleScreen({
+  required final PuzzleAngle angle,
+  final Puzzle? puzzle,
+  final PuzzleId? puzzleId,
+
+  /// If true, the result won't be recorded on the server for the provider [puzzleId].
+  final bool openCasual = false,
+
+  /// If set, load puzzles to replay from the given number of days.
+  final int? replayDays,
+  super.key,
+}) extends ConsumerStatefulWidget {
   /// Creates a new puzzle screen.
   ///
   /// If [puzzle] or [puzzleId] are provided, the screen will load the puzzle with that id. Otherwise, it will load the next puzzle from the queue.
-  const PuzzleScreen({
-    required this.angle,
-    this.puzzle,
-    this.puzzleId,
-    this.openCasual = false,
-    this.replayDays,
-    super.key,
-  });
-
-  final PuzzleAngle angle;
-  final Puzzle? puzzle;
-  final PuzzleId? puzzleId;
-
-  /// If true, the result won't be recorded on the server for the provider [puzzleId].
-  final bool openCasual;
-
-  /// If set, load puzzles to replay from the given number of days.
-  final int? replayDays;
+  this;
 
   static Route<dynamic> buildRoute({
     required PuzzleAngle angle,
@@ -96,7 +90,7 @@ class PuzzleScreen extends ConsumerStatefulWidget {
   ConsumerState<PuzzleScreen> createState() => _PuzzleScreenState();
 }
 
-class _PuzzleScreenState extends ConsumerState<PuzzleScreen> with RouteAware {
+class _PuzzleScreenState() extends ConsumerState<PuzzleScreen> with RouteAware {
   final _boardKey = GlobalKey(debugLabel: 'boardOnPuzzleScreen');
 
   @override
@@ -140,12 +134,8 @@ class _PuzzleScreenState extends ConsumerState<PuzzleScreen> with RouteAware {
   }
 }
 
-class _Title extends ConsumerWidget {
-  const _Title({required this.angle, this.initialPuzzleContext});
-
-  final PuzzleAngle angle;
-  final PuzzleContext? initialPuzzleContext;
-
+class const _Title({required final PuzzleAngle angle, final PuzzleContext? initialPuzzleContext})
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     bool isDailyPuzzle = false;
@@ -175,12 +165,8 @@ class _Title extends ConsumerWidget {
   }
 }
 
-class _LoadNextPuzzle extends ConsumerWidget {
-  const _LoadNextPuzzle({required this.boardKey, required this.angle});
-
-  final PuzzleAngle angle;
-  final GlobalKey boardKey;
-
+class const _LoadNextPuzzle({required final GlobalKey boardKey, required final PuzzleAngle angle})
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final nextPuzzle = ref.watch(nextPuzzleProvider(angle));
@@ -219,12 +205,8 @@ class _LoadNextPuzzle extends ConsumerWidget {
   }
 }
 
-class _LoadReplayPuzzle extends ConsumerWidget {
-  const _LoadReplayPuzzle({required this.boardKey, required this.days});
-
-  final GlobalKey boardKey;
-  final int days;
-
+class const _LoadReplayPuzzle({required final GlobalKey boardKey, required final int days})
+    extends ConsumerWidget {
   static const _angle = PuzzleTheme(PuzzleThemeKey.mix);
 
   @override
@@ -266,13 +248,11 @@ class _LoadReplayPuzzle extends ConsumerWidget {
   }
 }
 
-class _LoadPuzzleFromPuzzle extends ConsumerWidget {
-  const _LoadPuzzleFromPuzzle({required this.boardKey, required this.angle, required this.puzzle});
-
-  final PuzzleAngle angle;
-  final Puzzle puzzle;
-  final GlobalKey boardKey;
-
+class const _LoadPuzzleFromPuzzle({
+  required final GlobalKey boardKey,
+  required final PuzzleAngle angle,
+  required final Puzzle puzzle,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authUser = ref.watch(authControllerProvider);
@@ -289,19 +269,12 @@ class _LoadPuzzleFromPuzzle extends ConsumerWidget {
   }
 }
 
-class _LoadPuzzleFromId extends ConsumerWidget {
-  const _LoadPuzzleFromId({
-    required this.boardKey,
-    required this.angle,
-    required this.id,
-    this.openCasual = false,
-  });
-
-  final PuzzleAngle angle;
-  final PuzzleId id;
-  final GlobalKey boardKey;
-  final bool openCasual;
-
+class const _LoadPuzzleFromId({
+  required final GlobalKey boardKey,
+  required final PuzzleAngle angle,
+  required final PuzzleId id,
+  final bool openCasual = false,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final puzzle = ref.watch(puzzleProvider(id));
@@ -336,17 +309,11 @@ class _LoadPuzzleFromId extends ConsumerWidget {
   }
 }
 
-class _PuzzleScaffold extends StatelessWidget {
-  const _PuzzleScaffold({
-    required this.angle,
-    required this.initialPuzzleContext,
-    required this.body,
-  });
-
-  final PuzzleAngle angle;
-  final PuzzleContext? initialPuzzleContext;
-  final Widget body;
-
+class const _PuzzleScaffold({
+  required final PuzzleAngle angle,
+  required final PuzzleContext? initialPuzzleContext,
+  required final Widget body,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WakelockWidget(
@@ -366,17 +333,15 @@ class _PuzzleScaffold extends StatelessWidget {
   }
 }
 
-class _Body extends ConsumerStatefulWidget {
-  const _Body({required this.boardKey, required this.initialPuzzleContext});
-
-  final GlobalKey boardKey;
-  final PuzzleContext initialPuzzleContext;
-
+class const _Body({
+  required final GlobalKey boardKey,
+  required final PuzzleContext initialPuzzleContext,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_Body> createState() => _BodyState();
 }
 
-class _BodyState extends ConsumerState<_Body> {
+class _BodyState() extends ConsumerState<_Body> {
   late final ChessboardController _controller;
   bool _isBoardTurned = false;
 
@@ -654,11 +619,8 @@ class _BodyState extends ConsumerState<_Body> {
   }
 }
 
-class _PuzzleStatus extends ConsumerWidget {
-  const _PuzzleStatus({required this.initialPuzzleContext});
-
-  final PuzzleContext initialPuzzleContext;
-
+class const _PuzzleStatus({required final PuzzleContext initialPuzzleContext})
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = puzzleControllerProvider(initialPuzzleContext);
@@ -698,17 +660,11 @@ class _PuzzleStatus extends ConsumerWidget {
   }
 }
 
-class _BottomBar extends ConsumerStatefulWidget {
-  const _BottomBar({
-    required this.initialPuzzleContext,
-    required this.puzzleId,
-    required this.onFlipBoard,
-  });
-
-  final PuzzleContext initialPuzzleContext;
-  final PuzzleId puzzleId;
-  final VoidCallback onFlipBoard;
-
+class const _BottomBar({
+  required final PuzzleContext initialPuzzleContext,
+  required final PuzzleId puzzleId,
+  required final VoidCallback onFlipBoard,
+}) extends ConsumerStatefulWidget {
   static const _repeatTriggerDelays = [
     Duration(milliseconds: 500),
     Duration(milliseconds: 250),
@@ -719,7 +675,7 @@ class _BottomBar extends ConsumerStatefulWidget {
   ConsumerState<_BottomBar> createState() => _BottomBarState();
 }
 
-class _BottomBarState extends ConsumerState<_BottomBar> {
+class _BottomBarState() extends ConsumerState<_BottomBar> {
   static const viewSolutionDelay = Duration(seconds: 4);
 
   Timer? _viewSolutionTimer;
@@ -906,11 +862,8 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
   }
 }
 
-class _PuzzleSettingsButton extends StatelessWidget {
-  const _PuzzleSettingsButton(this.initialPuzzleContext);
-
-  final PuzzleContext initialPuzzleContext;
-
+class const _PuzzleSettingsButton(final PuzzleContext initialPuzzleContext)
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SemanticIconButton(
@@ -927,11 +880,8 @@ class _PuzzleSettingsButton extends StatelessWidget {
   }
 }
 
-class _PuzzleSettingsBottomSheet extends ConsumerWidget {
-  const _PuzzleSettingsBottomSheet(this.initialPuzzleContext);
-
-  final PuzzleContext initialPuzzleContext;
-
+class const _PuzzleSettingsBottomSheet(final PuzzleContext initialPuzzleContext)
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authUser = ref.watch(authControllerProvider);

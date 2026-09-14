@@ -45,13 +45,10 @@ final broadcastAnalysisControllerProvider = AsyncNotifierProvider.autoDispose
       name: 'BroadcastAnalysisControllerProvider',
     );
 
-class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
+class BroadcastAnalysisController(final BroadcastAnalysisControllerParams params)
+    extends AsyncNotifier<BroadcastAnalysisState>
     with EngineEvaluationMixin, OpeningExplorerMixin<BroadcastAnalysisState>
     implements PgnTreeNotifier {
-  BroadcastAnalysisController(this.params);
-
-  final BroadcastAnalysisControllerParams params;
-
   static Uri broadcastSocketUri(BroadcastRoundId broadcastRoundId) =>
       Uri(path: 'study/$broadcastRoundId/socket/v6');
 
@@ -420,6 +417,13 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
     _setPath(path.penultimate, shouldRecomputeRootView: true);
   }
 
+  @override
+  String makeLinePgn(UciPath path, {required bool includeVariations}) => _root.makeLinePgn(
+    path,
+    variant: state.requireValue.variant,
+    includeVariations: includeVariations,
+  );
+
   void _setPath(
     UciPath path, {
     bool shouldForceShowVariation = false,
@@ -563,15 +567,13 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
 }
 
 @freezed
-sealed class BroadcastAnalysisState
+sealed class const BroadcastAnalysisState._()
     with
         _$BroadcastAnalysisState,
         AnalysisExplosionMixin,
         EvaluationMixinState<BroadcastAnalysisState>,
         OpeningExplorerMixinState
     implements CommonAnalysisState {
-  const BroadcastAnalysisState._();
-
   @override
   ViewRoot get analysisRoot => root;
 
@@ -579,7 +581,7 @@ sealed class BroadcastAnalysisState
   BroadcastAnalysisState withThreatMode(bool engineInThreatMode) =>
       copyWith(engineInThreatMode: engineInThreatMode);
 
-  const factory BroadcastAnalysisState({
+  const factory({
     /// Broadcast game ID
     required StringId id,
 

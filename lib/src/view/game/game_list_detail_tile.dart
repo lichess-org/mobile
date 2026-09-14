@@ -17,17 +17,15 @@ import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// A list tile that shows more detailed game info than [GameListTile].
-class GameListDetailTile extends ConsumerWidget {
-  const GameListDetailTile({required this.item, this.onPressedBookmark});
-
-  final LightExportedGameWithPov item;
-  final Future<void> Function(BuildContext context)? onPressedBookmark;
-
+class const GameListDetailTile({
+  required final LightExportedGameWithPov item,
+  final Future<void> Function(BuildContext context)? onPressedBookmark,
+}) extends ConsumerWidget {
   Side get mySide => item.pov;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final (game: game, pov: youAre) = item;
+    final (:game, pov: youAre) = item;
     final me = youAre == Side.white ? game.white : game.black;
     final opponent = youAre == Side.white ? game.black : game.white;
     final isTablet = isTabletOrLarger(context);

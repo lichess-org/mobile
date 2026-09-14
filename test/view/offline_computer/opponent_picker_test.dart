@@ -10,17 +10,13 @@ import '../../model/engine/fake_weights_service.dart';
 import '../../test_provider_scope.dart';
 
 /// A screen whose only job is to open the picker and remember what it returned.
-class _PickerHost extends StatefulWidget {
-  const _PickerHost({required this.selected, required this.variant});
-
-  final OpponentSpec selected;
-  final Variant variant;
-
+class const _PickerHost({required final OpponentSpec selected, required final Variant variant})
+    extends StatefulWidget {
   @override
   State<_PickerHost> createState() => _PickerHostState();
 }
 
-class _PickerHostState extends State<_PickerHost> {
+class _PickerHostState() extends State<_PickerHost> {
   OpponentSpec? picked;
 
   @override
@@ -136,6 +132,26 @@ void main() {
       await tester.pumpAndSettle();
 
       // Never a game that cannot start: the network that ships with the app plays instead.
+      expect(host.picked, const MaiaOpponentSpec(MaiaRating.defaultRating));
+    });
+
+    testWidgets('falls back to the bundled network when the selected one was deleted', (
+      tester,
+    ) async {
+      final weights = FakeMaiaWeightsService();
+      final host = await openPicker(
+        tester,
+        selected: const MaiaOpponentSpec(MaiaRating.maia2200),
+        weights: weights,
+      );
+
+      expect(find.textContaining('${MaiaRating.defaultRating.rating}'), findsWidgets);
+      expect(find.textContaining('2200'), findsNothing);
+
+      await tester.tap(find.text('OK'));
+      await tester.pumpAndSettle();
+
+      expect(weights.downloads, isEmpty);
       expect(host.picked, const MaiaOpponentSpec(MaiaRating.defaultRating));
     });
 
