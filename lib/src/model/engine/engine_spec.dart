@@ -24,15 +24,14 @@ sealed class EngineSpec {
 /// A Stockfish engine, in one of the three flavors the app ships.
 @immutable
 final class StockfishSpec extends EngineSpec {
-  /// Stockfish 16, NNUE embedded in the binary.
-  const StockfishSpec.sf16()
-    : slot = EngineSlot.sf16,
-      flavor = StockfishFlavor.sf16,
-      bigNetPath = null,
-      smallNetPath = null;
+  /// Stockfish with a small NNUE network embedded in the binary.
+  const StockfishSpec.light()
+    : slot = EngineSlot.sfLight,
+      flavor = StockfishFlavor.light,
+      nnuePath = null;
 
-  /// The latest Stockfish, with its nets loaded from disk (see `StockfishNnueService`).
-  const StockfishSpec.latest({required String this.bigNetPath, required String this.smallNetPath})
+  /// The latest Stockfish, with its net loaded from disk (see `StockfishNnueService`).
+  const StockfishSpec.latest({required String this.nnuePath})
     : slot = EngineSlot.sfLatest,
       flavor = StockfishFlavor.latestNoNNUE;
 
@@ -40,8 +39,7 @@ final class StockfishSpec extends EngineSpec {
   const StockfishSpec.fairy()
     : slot = EngineSlot.fairy,
       flavor = StockfishFlavor.variant,
-      bigNetPath = null,
-      smallNetPath = null;
+      nnuePath = null;
 
   @override
   final EngineSlot slot;
@@ -52,22 +50,16 @@ final class StockfishSpec extends EngineSpec {
   @override
   String get label => flavor.name;
 
-  /// The big NNUE network, for [StockfishSpec.latest] only.
-  final String? bigNetPath;
-
-  /// The small NNUE network, for [StockfishSpec.latest] only.
-  final String? smallNetPath;
+  /// The NNUE network, for [StockfishSpec.latest] only.
+  final String? nnuePath;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is StockfishSpec &&
-          other.slot == slot &&
-          other.bigNetPath == bigNetPath &&
-          other.smallNetPath == smallNetPath;
+      other is StockfishSpec && other.slot == slot && other.nnuePath == nnuePath;
 
   @override
-  int get hashCode => Object.hash(slot, bigNetPath, smallNetPath);
+  int get hashCode => Object.hash(slot, nnuePath);
 
   @override
   String toString() => 'StockfishSpec(${flavor.name})';

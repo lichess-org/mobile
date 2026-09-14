@@ -128,7 +128,7 @@ class GameScreenLoaderNotifier extends AsyncNotifier<GameScreenState> {
 
     switch (source) {
       case LobbySource(:final seek):
-        return service
+        return await service
             .newLobbyGame(seek)
             .then(
               (data) => switch (data) {
@@ -147,14 +147,14 @@ class GameScreenLoaderNotifier extends AsyncNotifier<GameScreenState> {
               ChallengeResponseCancelled() => const ChallengeCancelledState(),
             });
           });
-          return Future.value(
+          return await Future.value(
             challenge.destUser != null
                 ? UserChallengeCreatedState(challenge)
                 : OpenChallengeCreatedState(challenge),
           );
         }
       case ExistingGameSource(:final id):
-        return Future.value(GameCreatedState(id));
+        return await Future.value(GameCreatedState(id));
     }
   }
 

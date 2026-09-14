@@ -36,11 +36,21 @@ final _logger = Logger('HttpClient');
 
 const _maxCacheSize = 2 * 1024 * 1024;
 
+/// Request header marking a request whose failure is expected and must not pollute the logs.
+///
+/// The connectivity checks run precisely when the device may be offline, so their requests fail
+/// as a matter of course; logging each failure as a warning only buries the records that matter.
+/// A request carrying this header is logged at [Level.FINEST] instead. The header is stripped
+/// before the request goes out, so it never reaches the server.
+const kQuietRequestHeader = 'x-quiet-request';
+
+bool guessIsUnsecureSchemeFromHost(String host) {
+  return host.startsWith('localhost') || host.startsWith('10.') || host.startsWith('192.168.');
+}
+
 /// Creates a Uri pointing to lichess server with the given unencoded path and query parameters.
 Uri lichessUri(String unencodedPath, [Map<String, dynamic>? queryParameters]) =>
-    kLichessHost.startsWith('localhost') ||
-        kLichessHost.startsWith('10.') ||
-        kLichessHost.startsWith('192.168.')
+    guessIsUnsecureSchemeFromHost(kLichessHost)
     ? Uri.http(kLichessHost, unencodedPath, queryParameters)
     : Uri.https(kLichessHost, unencodedPath, queryParameters);
 
@@ -189,13 +199,13 @@ Duration _defaultDelay(int retryCount) =>
     const Duration(milliseconds: 900) * math.pow(1.5, retryCount);
 
 final userAgentProvider = Provider<String>((Ref ref) {
-  final authUser = ref.watch(authControllerProvider);
+  final user = ref.watch(authControllerProvider.select((value) => value?.user));
 
   return makeUserAgent(
     ref.read(preloadedDataProvider).requireValue.packageInfo,
     ref.read(preloadedDataProvider).requireValue.deviceInfo,
     ref.read(preloadedDataProvider).requireValue.sri,
-    authUser?.user,
+    user,
   );
 });
 
@@ -240,13 +250,13 @@ Future<bool> downloadFile(
   try {
     response = await client.send(Request('GET', url));
   } catch (e, st) {
-    return discard('the request failed', e, st);
+    return await discard('the request failed', e, st);
   }
 
   if (response.statusCode != 200) {
     // The body is an error page, not the file we asked for.
     await response.stream.drain<void>().catchError((Object _) {});
-    return discard('unexpected status ${response.statusCode}');
+    return await discard('unexpected status ${response.statusCode}');
   }
 
   final sink = file.openWrite();
@@ -284,24 +294,24 @@ Future<bool> downloadFile(
   }
 
   if (failure != null) {
-    return discard('the file could not be written', failure, failureStackTrace);
+    return await discard('the file could not be written', failure, failureStackTrace);
   }
 
   // Fewer bytes than announced means the body was cut short. More is not an error: a client that
   // transparently decompresses the body reports the compressed length here.
   if (contentLength != null && received < contentLength) {
-    return discard('got $received bytes out of $contentLength');
+    return await discard('got $received bytes out of $contentLength');
   }
 
   final int length;
   try {
     length = await file.length();
   } catch (e, st) {
-    return discard('the file could not be read back', e, st);
+    return await discard('the file could not be read back', e, st);
   }
 
   if (length != received) {
-    return discard('only $length bytes of $received made it to disk');
+    return await discard('only $length bytes of $received made it to disk');
   }
 
   return length > 0;
@@ -324,7 +334,7 @@ Future<bool> downloadFiles(
     throw ArgumentError('expectedLengths must have the same length as urls.');
   }
 
-  // aggregrate progress of all files
+  // aggregate progress of all files
   final Map<Uri, int> fileLengths = {};
   final Map<Uri, int> fileReceived = {};
   final results = await Future.wait(
@@ -405,12 +415,18 @@ class _RegisterCallbackClient extends BaseClient {
 /// * When a response has the 401 status, checks if the authUser token is still valid,
 /// and deletes the authUser if it's not.
 class LichessClient implements Client {
-  LichessClient(this._inner, this._ref);
+  LichessClient(this._inner, this._ref)
+    : _cachedPackageInfo = _ref.read(preloadedDataProvider).requireValue.packageInfo,
+      _cachedDeviceInfo = _ref.read(preloadedDataProvider).requireValue.deviceInfo,
+      _cachedSri = _ref.read(preloadedDataProvider).requireValue.sri;
 
   static const defaultRequestTimeout = Duration(seconds: 15);
 
   final Ref _ref;
   final Client _inner;
+  final PackageInfo _cachedPackageInfo;
+  final BaseDeviceInfo _cachedDeviceInfo;
+  final String _cachedSri;
 
   @override
   Future<StreamedResponse> send(BaseRequest request) async {
@@ -421,18 +437,23 @@ class LichessClient implements Client {
       request.headers['Authorization'] = 'Bearer $bearer';
     }
     request.headers['User-Agent'] = makeUserAgent(
-      _ref.read(preloadedDataProvider).requireValue.packageInfo,
-      _ref.read(preloadedDataProvider).requireValue.deviceInfo,
-      _ref.read(preloadedDataProvider).requireValue.sri,
+      _cachedPackageInfo,
+      _cachedDeviceInfo,
+      _cachedSri,
       authUser?.user,
     );
 
-    _logger.info('${request.method} ${request.url} ${request.headers['User-Agent']}');
+    final quiet = request.headers.remove(kQuietRequestHeader) != null;
+
+    _logger.log(
+      quiet ? Level.FINEST : Level.INFO,
+      '${request.method} ${request.url} ${request.headers['User-Agent']}',
+    );
 
     try {
       final response = await _inner.send(request).timeout(defaultRequestTimeout);
 
-      _logIfError(response);
+      _logIfError(response, quiet: quiet);
 
       // Only the main server can tell us whether lichess is up: the opening
       // explorer and the tablebase run on their own servers and may well be
@@ -447,17 +468,18 @@ class LichessClient implements Client {
 
       return response;
     } catch (e, st) {
-      _logger.warning('Request to ${request.url} failed:', e, st);
+      _logger.log(quiet ? Level.FINEST : Level.WARNING, 'Request to ${request.url} failed:', e, st);
       rethrow;
     }
   }
 
-  void _logIfError(BaseResponse response) {
+  void _logIfError(BaseResponse response, {required bool quiet}) {
     if (response.request != null && response.statusCode >= 400) {
       final request = response.request!;
       final method = request.method;
       final url = request.url;
-      _logger.warning(
+      _logger.log(
+        quiet ? Level.FINEST : Level.WARNING,
         '$method $url responded with status ${response.statusCode} ${response.reasonPhrase}',
       );
     }
@@ -545,7 +567,7 @@ class LichessClient implements Client {
       }
     }
 
-    return Response.fromStream(await send(request));
+    return await Response.fromStream(await send(request));
   }
 }
 
@@ -563,26 +585,32 @@ class DefaultClient implements Client {
   Future<StreamedResponse> send(BaseRequest request) async {
     request.headers['User-Agent'] = _userAgent;
 
-    _logger.info('${request.method} ${request.url} ${request.headers['User-Agent']}');
+    final quiet = request.headers.remove(kQuietRequestHeader) != null;
+
+    _logger.log(
+      quiet ? Level.FINEST : Level.INFO,
+      '${request.method} ${request.url} ${request.headers['User-Agent']}',
+    );
 
     try {
       final response = await _inner.send(request);
 
-      _logIfError(response);
+      _logIfError(response, quiet: quiet);
 
       return response;
     } catch (e, st) {
-      _logger.warning('Request to ${request.url} failed:', e, st);
+      _logger.log(quiet ? Level.FINEST : Level.WARNING, 'Request to ${request.url} failed:', e, st);
       rethrow;
     }
   }
 
-  void _logIfError(BaseResponse response) {
+  void _logIfError(BaseResponse response, {required bool quiet}) {
     if (response.request != null && response.statusCode >= 400) {
       final request = response.request!;
       final method = request.method;
       final url = request.url;
-      _logger.warning(
+      _logger.log(
+        quiet ? Level.FINEST : Level.WARNING,
         '$method $url responded with status ${response.statusCode} ${response.reasonPhrase}',
       );
     }
@@ -667,7 +695,7 @@ class DefaultClient implements Client {
       }
     }
 
-    return Response.fromStream(await send(request));
+    return await Response.fromStream(await send(request));
   }
 }
 

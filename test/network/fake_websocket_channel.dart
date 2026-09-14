@@ -144,7 +144,40 @@ class FakeWebSocketChannel implements WebSocketChannel {
   late final _FakeWebSocketSink _sink;
 
   Future<void> _close() {
+    if (!_streamController.isClosed) {
+      _streamController.close();
+    }
     return _outcomingController.close();
+  }
+
+  /// The stream the client listens to, fed by the global incoming controller.
+  ///
+  /// It is per channel so that a single connection can be dropped, as [closeFromServer] does.
+  late final StreamController<dynamic> _streamController = StreamController<dynamic>.broadcast(
+    onListen: () {
+      _incomingSubscription = _incomingController.stream
+          .where((event) => event.$1 == route)
+          .map((event) => event.$2)
+          .listen(_streamController.add);
+    },
+    onCancel: () {
+      _incomingSubscription?.cancel();
+      _incomingSubscription = null;
+    },
+  );
+
+  StreamSubscription<dynamic>? _incomingSubscription;
+
+  /// Drops the connection the way a network going away under an open socket does.
+  ///
+  /// With [error], the stream errors out before it closes; without, it merely closes, as a peer
+  /// hanging up would.
+  void closeFromServer([Object? error]) {
+    if (_streamController.isClosed) return;
+    if (error != null) {
+      _streamController.addError(error);
+    }
+    _streamController.close();
   }
 
   int _pongCount = 0;
@@ -174,6 +207,19 @@ class FakeWebSocketChannel implements WebSocketChannel {
   /// Can be used to simulate a faulty connection.
   bool shouldSendPong = true;
 
+  /// Makes a write to the sink throw whenever this returns true, as one whose peer is already
+  /// gone does.
+  ///
+  /// The data written is passed in, so that a test can break on one particular message and let
+  /// everything else through — including a write the client should not have made.
+  bool Function(dynamic data)? failWriteWhen;
+
+  /// How long the channel takes to finish closing.
+  ///
+  /// A real one is not closed the moment it is asked to be: the client can well be connected again
+  /// by the time the old sink is done.
+  Duration closeDelay = Duration.zero;
+
   /// Number of pong response received
   int get pongCount => _pongCount;
 
@@ -200,8 +246,7 @@ class FakeWebSocketChannel implements WebSocketChannel {
   WebSocketSink get sink => _sink;
 
   @override
-  Stream<dynamic> get stream =>
-      _incomingController.stream.where((event) => event.$1 == route).map((event) => event.$2);
+  Stream<dynamic> get stream => _streamController.stream;
 
   @override
   void pipe(StreamChannel<dynamic> other) {}
@@ -254,6 +299,9 @@ class _FakeWebSocketSink implements WebSocketSink {
 
   @override
   void add(dynamic data) {
+    if (_channel.failWriteWhen?.call(data) == true) {
+      throw StateError('Cannot add to a closed sink');
+    }
     _channel._outcomingController.add(data);
 
     // Simulates pong response if connection is not closed
@@ -306,7 +354,8 @@ class _FakeWebSocketSink implements WebSocketSink {
     _serverHandlersTimers.forEach((_, timer) {
       timer?.cancel();
     });
-    return _channel._close();
+    final delay = _channel.closeDelay;
+    return delay > Duration.zero ? Future<void>.delayed(delay, _channel._close) : _channel._close();
   }
 
   @override

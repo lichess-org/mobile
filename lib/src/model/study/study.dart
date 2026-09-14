@@ -175,6 +175,7 @@ sealed class StudyPageItem with _$StudyPageItem {
     required IList<StudyMember> members,
     required IList<String> chapters,
     required String? flair,
+    required StudyVisibility visibility,
   }) = _StudyPageItem;
 
   factory StudyPageItem.fromJson(Map<String, Object?> json) => _$StudyPageItemFromJson(json);
@@ -198,3 +199,5 @@ sealed class CreateStudyChapterPayload with _$CreateStudyChapterPayload {
     @Default(null) Variant? variant,
   }) = _CreateStudyChapterPayload;
 }
+
+enum StudyVisibility { public, unlisted, private }

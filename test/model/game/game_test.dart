@@ -1,8 +1,18 @@
 import 'dart:convert';
 
+import 'package:dartchess/dartchess.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/intl.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/perf.dart';
+import 'package:lichess_mobile/src/model/common/speed.dart';
+import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
+import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/game_status.dart';
+import 'package:lichess_mobile/src/model/game/over_the_board_game.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 
 void main() {
@@ -245,6 +255,129 @@ void main() {
         expect(game.clocks, isEmpty);
         expect(game.moveTimes, isEmpty);
       });
+    });
+  });
+
+  group('LocalGame', () {
+    OverTheBoardGame gameWith({required List<Duration?> clocks, TimeIncrement? timeIncrement}) {
+      const sanMoves = ['e4', 'e5', 'Nf3', 'Nc6'];
+      Position position = Chess.initial;
+      final steps = <GameStep>[GameStep(position: position)];
+      for (final (index, san) in sanMoves.indexed) {
+        final move = position.parseSan(san)!;
+        position = position.playUnchecked(move);
+        steps.add(
+          GameStep(
+            position: position,
+            sanMove: SanMove(san, move),
+            clock: clocks.elementAtOrNull(index),
+          ),
+        );
+      }
+      return OverTheBoardGame(
+        id: const StringId('otb_test'),
+        steps: steps.lock,
+        initialFen: null,
+        status: GameStatus.started,
+        meta: GameMeta(
+          createdAt: DateTime.utc(2026),
+          rated: false,
+          variant: Variant.standard,
+          speed: Speed.blitz,
+          perf: Perf.blitz,
+          clock: clockMetaOf(timeIncrement ?? const TimeIncrement(300, 3)),
+        ),
+      );
+    }
+
+    test('clocks are derived from the steps', () {
+      final game = gameWith(
+        clocks: const [
+          Duration(minutes: 5, seconds: 1),
+          Duration(minutes: 5, seconds: 2),
+          Duration(minutes: 4, seconds: 55),
+          Duration(minutes: 4, seconds: 50),
+        ],
+      );
+
+      expect(game.clocks, const [
+        Duration(minutes: 5, seconds: 1),
+        Duration(minutes: 5, seconds: 2),
+        Duration(minutes: 4, seconds: 55),
+        Duration(minutes: 4, seconds: 50),
+      ]);
+      expect(game.moveTimes, const [
+        Duration.zero,
+        Duration.zero,
+        Duration(seconds: 9),
+        Duration(seconds: 15),
+      ]);
+    });
+
+    test('clocks are null for a game played without a time control', () {
+      final game = gameWith(
+        clocks: const [null, null, null, null],
+        timeIncrement: const TimeIncrement.infinite(),
+      );
+
+      expect(game.clocks, isNull);
+      expect(game.moveTimes, isEmpty);
+    });
+
+    test('clocks are null when only some of the moves carry one', () {
+      final game = gameWith(
+        clocks: const [null, null, Duration(minutes: 4, seconds: 55), Duration(minutes: 4)],
+      );
+
+      expect(game.clocks, isNull);
+    });
+
+    test('makePgn writes the recorded clocks', () {
+      final game = gameWith(
+        clocks: const [
+          Duration(minutes: 5, seconds: 1),
+          Duration(minutes: 5, seconds: 2),
+          Duration(minutes: 4, seconds: 55),
+          Duration(minutes: 4, seconds: 50),
+        ],
+      );
+
+      expect(
+        game.makePgn(),
+        contains(
+          '1. e4 { [%clk 0:05:01] } e5 { [%clk 0:05:02] } '
+          '2. Nf3 { [%emt 0:00:09] [%clk 0:04:55] } Nc6 { [%emt 0:00:15] [%clk 0:04:50] } *',
+        ),
+      );
+      expect(game.makePgn(), contains('[TimeControl "300+3"]'));
+    });
+
+    test('step clocks survive a storage round trip', () {
+      final game = gameWith(
+        clocks: const [
+          Duration(minutes: 5, seconds: 1),
+          Duration(minutes: 5, seconds: 2),
+          Duration(minutes: 4, seconds: 55),
+          Duration(minutes: 4, seconds: 50, milliseconds: 120),
+        ],
+      );
+
+      final restored = OverTheBoardGame.fromJson(
+        jsonDecode(jsonEncode(game.toJson())) as Map<String, dynamic>,
+      );
+
+      expect(restored.clocks, game.clocks);
+    });
+
+    test('a game saved before clocks were recorded still loads', () {
+      final game = gameWith(clocks: const [null, null, null, null]);
+
+      final restored = OverTheBoardGame.fromJson(
+        jsonDecode(jsonEncode(game.toJson())) as Map<String, dynamic>,
+      );
+
+      expect(restored.steps.length, game.steps.length);
+      expect(restored.clocks, isNull);
     });
   });
 }

@@ -670,6 +670,8 @@
   "puzzleThemePlayerGames": "Партии на играча",
   "puzzleThemePlayerGamesDescription": "Разгледайте пъзели генерирани от вашите игри, или игрите на други играчи.",
   "puzzleThemePuzzleDownloadInformation": "Тези пъзели са публични и могат да бъдат изтеглени от {param}.",
+  "recapAwaitQuestion": "С какво се занимаваше през тази година?",
+  "recapRecapReady": "Твоят обзор за {param} е готов!",
   "searchSearch": "Търсене",
   "settingsSettings": "Настройки",
   "settingsCloseAccount": "Закриване на регистрацията",

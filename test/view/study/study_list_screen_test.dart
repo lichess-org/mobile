@@ -80,6 +80,7 @@ void main() {
           "Chapter 2"
         ],
         "topics": [ ],
+        "visibility": "public",
         "members": [ ]
       }
     ],
@@ -161,6 +162,7 @@ const kStudyAllHotPage1Response = '''
         "topics": [
           "Broadcast"
         ],
+        "visibility": "public",
         "members": [
           {
             "user": {
@@ -196,6 +198,7 @@ const kStudyAllHotPage1Response = '''
         "topics": [
           "Broadcast"
         ],
+        "visibility": "public",
         "members": [
           {
             "user": {
@@ -223,6 +226,7 @@ const kStudyAllHotPage1Response = '''
         "topics": [
           "Broadcast"
         ],
+        "visibility": "public",
         "members": [
           {
             "user": {
@@ -263,6 +267,7 @@ const kStudyAllHotPage1Response = '''
         "topics": [
           "Broadcast"
         ],
+        "visibility": "public",
         "members": [
           {
             "user": {
@@ -294,6 +299,7 @@ const kStudyAllHotPage1Response = '''
         "topics": [
           "Broadcast"
         ],
+        "visibility": "public",
         "members": [
           {
             "user": {
@@ -325,6 +331,7 @@ const kStudyAllHotPage1Response = '''
         "topics": [
           "Broadcast"
         ],
+        "visibility": "public",
         "members": [
           {
             "user": {
@@ -356,6 +363,7 @@ const kStudyAllHotPage1Response = '''
         "topics": [
           "Broadcast"
         ],
+        "visibility": "public",
         "members": [
           {
             "user": {
@@ -387,6 +395,7 @@ const kStudyAllHotPage1Response = '''
         "topics": [
           "Broadcast"
         ],
+        "visibility": "public",
         "members": [
           {
             "user": {
@@ -418,6 +427,7 @@ const kStudyAllHotPage1Response = '''
         "topics": [
           "Broadcast"
         ],
+        "visibility": "public",
         "members": [
           {
             "user": {
@@ -449,6 +459,7 @@ const kStudyAllHotPage1Response = '''
         "topics": [
           "Broadcast"
         ],
+        "visibility": "public",
         "members": [
           {
             "user": {
@@ -480,6 +491,7 @@ const kStudyAllHotPage1Response = '''
         "topics": [
           "Broadcast"
         ],
+        "visibility": "public",
         "members": [
           {
             "user": {
@@ -511,6 +523,7 @@ const kStudyAllHotPage1Response = '''
         "topics": [
           "Broadcast"
         ],
+        "visibility": "public",
         "members": [
           {
             "user": {
@@ -539,6 +552,7 @@ const kStudyAllHotPage1Response = '''
         "topics": [
           "Broadcast"
         ],
+        "visibility": "public",
         "members": [
           {
             "user": {
@@ -567,6 +581,7 @@ const kStudyAllHotPage1Response = '''
         "topics": [
           "Broadcast"
         ],
+        "visibility": "public",
         "members": [
           {
             "user": {
@@ -595,6 +610,7 @@ const kStudyAllHotPage1Response = '''
         "topics": [
           "Broadcast"
         ],
+        "visibility": "public",
         "members": [
           {
             "user": {
@@ -623,6 +639,7 @@ const kStudyAllHotPage1Response = '''
         "topics": [
           "Broadcast"
         ],
+        "visibility": "public",
         "members": [
           {
             "user": {
@@ -666,6 +683,7 @@ const kStudyAllHotPage2Response = '''
         "topics": [
           "Broadcast"
         ],
+        "visibility": "public",
         "members": [
           {
             "user": {

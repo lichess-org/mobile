@@ -220,7 +220,7 @@ void main() {
       final client = MockClient((request) async {
         requests.add(request.url);
         if (delay > Duration.zero) await Future<void>.delayed(delay);
-        return mockResponse(response, status);
+        return await mockResponse(response, status);
       });
       final container = await makeContainer(
         overrides: {

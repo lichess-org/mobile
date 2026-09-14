@@ -779,23 +779,23 @@ MockClient _subscribableBroadcastClient(
     if (subscribeDelay > Duration.zero) {
       await Future<void>.delayed(subscribeDelay);
     }
-    return mockResponse('{"ok":true}', subscribeStatusCode);
+    return await mockResponse('{"ok":true}', subscribeStatusCode);
   }
   if (request.url.path == '/api/broadcast/AQ28hmmO') {
-    return mockResponse(
+    return await mockResponse(
       _finishedTournamentResponse,
       200,
       headers: {'content-type': 'application/json; charset=utf-8'},
     );
   }
   if (request.url.path == '/api/broadcast/-/-/S5VCwuVn') {
-    return mockResponse(
+    return await mockResponse(
       _finishedRoundResponseWith(isSubscribed),
       200,
       headers: {'content-type': 'application/json; charset=utf-8'},
     );
   }
-  return mockResponse('', 404);
+  return await mockResponse('', 404);
 });
 
 final _finishedBroadcastClient = MockClient((request) {

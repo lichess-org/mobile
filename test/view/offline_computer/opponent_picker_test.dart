@@ -139,6 +139,26 @@ void main() {
       expect(host.picked, const MaiaOpponentSpec(MaiaRating.defaultRating));
     });
 
+    testWidgets('falls back to the bundled network when the selected one was deleted', (
+      tester,
+    ) async {
+      final weights = FakeMaiaWeightsService();
+      final host = await openPicker(
+        tester,
+        selected: const MaiaOpponentSpec(MaiaRating.maia2200),
+        weights: weights,
+      );
+
+      expect(find.textContaining('${MaiaRating.defaultRating.rating}'), findsWidgets);
+      expect(find.textContaining('2200'), findsNothing);
+
+      await tester.tap(find.text('OK'));
+      await tester.pumpAndSettle();
+
+      expect(weights.downloads, isEmpty);
+      expect(host.picked, const MaiaOpponentSpec(MaiaRating.defaultRating));
+    });
+
     testWidgets('returns the Stockfish level that was chosen', (tester) async {
       final host = await openPicker(tester);
 

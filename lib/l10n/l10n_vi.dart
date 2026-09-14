@@ -2443,6 +2443,14 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
+  String get recapAwaitQuestion => 'Bạn đã làm được những gì trong năm nay nhỉ?';
+
+  @override
+  String recapRecapReady(String param) {
+    return 'Bản tóm tắt năm $param của bạn đã sẵn sàng rồi đây!';
+  }
+
+  @override
   String get searchSearch => 'Tìm kiếm';
 
   @override

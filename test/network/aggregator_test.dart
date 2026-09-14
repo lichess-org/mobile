@@ -35,12 +35,12 @@ void main() {
         }),
       },
     );
-    return container.read(aggregatorProvider);
+    return await container.read(aggregatorProvider);
   }
 
   Future<Aggregator> mockClientAggregator(MockClient client) async {
     final container = await lichessClientContainer(client);
-    return container.read(aggregatorProvider);
+    return await container.read(aggregatorProvider);
   }
 
   final String aggrInterval = '${kAggregationInterval.inMilliseconds}ms';

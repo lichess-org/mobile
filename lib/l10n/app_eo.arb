@@ -598,6 +598,7 @@
   "puzzleThemePlayerGames": "Ludantaj ludoj",
   "puzzleThemePlayerGamesDescription": "Serĉu enigmojn generitajn de viaj ludoj, aŭ de la ludoj de alia ludanto.",
   "puzzleThemePuzzleDownloadInformation": "Ĉi tiuj enigmoj estas en la publika domeno, kaj povas esti elŝutitaj de {param}.",
+  "recapAwaitQuestion": "Kiel vi fartis dum ĉi tiu jaro?",
   "searchSearch": "Serĉi",
   "settingsSettings": "Agordoj",
   "settingsCloseAccount": "Fermi konton",

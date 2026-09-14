@@ -417,10 +417,8 @@ class _BottomBar extends ConsumerWidget {
         BottomBarButton(
           key: const Key('analysis-board-button'),
           label: context.l10n.analysis,
-          onTap:
-              editorState.pgn != null &&
-                  // 1 condition (of many) where stockfish segfaults
-                  (pieceCount > 0 && (pieceCount <= 32 || editorState.variant == Variant.horde))
+          // The evaluator uses Fairy-Stockfish for nonstandard material.
+          onTap: editorState.pgn != null && pieceCount > 0
               ? () {
                   Navigator.of(context).push(
                     AnalysisScreen.buildRoute(

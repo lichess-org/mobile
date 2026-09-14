@@ -160,6 +160,11 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final authUser = ref.watch(authControllerProvider);
     final timeLeft = state.tournament.timeToStart ?? state.tournament.timeToFinish;
+    final showPairingStatus =
+        authUser != null &&
+        state.joined &&
+        state.tournament.isStarted == true &&
+        state.tournament.isFinished != true;
 
     final standingWidgets = [
       if (state.tournament.teamStanding != null) ...[
@@ -178,7 +183,7 @@ class _Body extends ConsumerWidget {
         _FeaturedGame(state.tournament.featuredGame!),
     ];
 
-    final bottomSheetSpacer = (authUser != null && state.joined)
+    final bottomSheetSpacer = showPairingStatus
         ? const SizedBox(height: 35)
         : const SizedBox.shrink();
 
@@ -272,7 +277,7 @@ class _Body extends ConsumerWidget {
             );
           },
         ),
-        bottomSheet: authUser != null && state.joined && state.tournament.isFinished != true
+        bottomSheet: showPairingStatus
             ? Material(
                 child: Container(
                   height: 35,
@@ -1379,7 +1384,7 @@ void _showPlayerDetails(BuildContext context, TournamentId tournamentId, UserId 
                   tournamentId: tournamentId,
                   scrollController: scrollController,
                 ),
-                AsyncError(error: final error) => Center(
+                AsyncError(:final error) => Center(
                   child: Text('Error loading player data: $error'),
                 ),
                 _ => const Center(child: CircularProgressIndicator.adaptive()),
@@ -1550,7 +1555,7 @@ class _StatRow extends StatelessWidget {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (prefix != null) prefix!,
+              ?prefix,
               Text(value, style: const TextStyle(fontWeight: FontWeight.bold)),
             ],
           ),
@@ -1675,9 +1680,7 @@ void _showTeamDetails(BuildContext context, TournamentId tournamentId, TeamId te
                   tournamentId: tournamentId,
                   scrollController: scrollController,
                 ),
-                AsyncError(error: final error) => Center(
-                  child: Text('Error loading team data: $error'),
-                ),
+                AsyncError(:final error) => Center(child: Text('Error loading team data: $error')),
                 _ => const Center(child: CircularProgressIndicator.adaptive()),
               };
             },

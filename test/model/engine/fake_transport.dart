@@ -36,10 +36,10 @@ const kFakeLc0OptionDeclarations = [
 /// the lines in and the lines out.
 class FakeTransport implements EngineTransport {
   FakeTransport({
-    this.spec = const StockfishSpec.sf16(),
+    this.spec = const StockfishSpec.light(),
     List<String> startupLines = const [
-      'Stockfish 16.1 by the Stockfish developers',
-      'id name Stockfish 16.1',
+      'Stockfish 19 by the Stockfish developers',
+      'id name Stockfish 19',
       ...kFakeOptionDeclarations,
       'uciok',
     ],

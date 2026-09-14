@@ -38,8 +38,6 @@ abstract class OverTheBoardGame with BaseGame, _$OverTheBoardGame, LocalGame, In
 
   @override
   IList<ExternalEval>? get evals => null;
-  @override
-  IList<Duration>? get clocks => null;
 
   bool get abortable => playable && lastPosition.fullmoves <= 1;
 

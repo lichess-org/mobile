@@ -52,27 +52,28 @@ final positionEvaluatorProvider = NotifierProvider.autoDispose
       name: 'PositionEvaluatorProvider',
     );
 
-/// The flavor the evaluator will use for [variant].
+/// The flavor the evaluator will use for [variant], played from [position].
 ///
-/// The user's preference, except for the variants Stockfish does not know how to play, which only
-/// Fairy-Stockfish can evaluate. Read when the work starts rather than carried on it, so that
+/// The user's preference, except where only Fairy-Stockfish will do: the variants Stockfish does
+/// not know how to play, and the positions it refuses to accept the material of (see
+/// [hasNonStandardMaterial]). Read when the work starts rather than carried on it, so that
 /// changing the preference is picked up by the next evaluation wherever it comes from.
-StockfishFlavor evaluatorFlavorFor(Ref ref, Variant variant) =>
-    officialStockfishVariants.contains(variant)
+StockfishFlavor evaluatorFlavorFor(Ref ref, Variant variant, Position position) =>
+    officialStockfishVariants.contains(variant) && !hasNonStandardMaterial(position)
     ? ref.read(engineEvaluationPreferencesProvider).enginePref.flavor
     : StockfishFlavor.variant;
 
-/// The engine the evaluator will run [variant] on.
+/// The engine the evaluator will run [variant] on, played from [position].
 ///
 /// The slot rather than the [EngineSpec] because resolving a spec is asynchronous — it depends on
-/// whether the NNUE files are on disk — while the caller needs the answer now, in order to build a
+/// whether the NNUE file is on disk — while the caller needs the answer now, in order to build a
 /// search request. What it is asked is whether some other role shares the evaluator's engine, and
-/// the slot settles that: the `latestNoNNUE` → `sf16` fallback can make this name the wrong
-/// Stockfish, but only a variant ever resolves to Fairy.
-EngineSlot evaluatorEngineSlotFor(Ref ref, Variant variant) =>
-    switch (evaluatorFlavorFor(ref, variant)) {
+/// the slot settles that: the `latestNoNNUE` → `light` fallback can make this name the wrong
+/// Stockfish, but only a variant or an unplayable material ever resolves to Fairy.
+EngineSlot evaluatorEngineSlotFor(Ref ref, Variant variant, Position position) =>
+    switch (evaluatorFlavorFor(ref, variant, position)) {
       StockfishFlavor.variant => EngineSlot.fairy,
-      StockfishFlavor.sf16 => EngineSlot.sf16,
+      StockfishFlavor.light => EngineSlot.sfLight,
       StockfishFlavor.latestNoNNUE => EngineSlot.sfLatest,
     };
 
@@ -90,7 +91,13 @@ class PositionEvaluator extends Notifier<EngineEvaluationState> {
   final EvaluationContext context;
 
   /// What the UI sees before anything has been asked of the engine.
-  static const defaultState = (engine: null, eval: null, isComputing: false, currentWork: null);
+  static const defaultState = (
+    engine: null,
+    engineSpec: null,
+    eval: null,
+    isComputing: false,
+    currentWork: null,
+  );
 
   @override
   EngineEvaluationState build() {
@@ -115,13 +122,13 @@ class PositionEvaluator extends Notifier<EngineEvaluationState> {
 
   /// The flavor [_spec] was resolved from.
   ///
-  /// The *requested* flavor, not the effective one, so that a latestNoNNUE→sf16 fallback does not
+  /// The *requested* flavor, not the effective one, so that a latestNoNNUE→light fallback does not
   /// make every later latestNoNNUE request look like a change of engine. The variant is not part
   /// of this: it is a per-search option now, so two variants share one Fairy-Stockfish engine.
   StockfishFlavor? _engineFlavor;
 
   /// Set while the spec for a flavor is being resolved, which is async because it depends on
-  /// whether the NNUE files are on disk.
+  /// whether the NNUE file is on disk.
   bool _resolvingSpec = false;
 
   /// Whether the user has turned the engine off with [release].
@@ -281,7 +288,7 @@ class PositionEvaluator extends Notifier<EngineEvaluationState> {
 
     _setEvalWork(work);
 
-    final flavor = _flavorFor(work.variant);
+    final flavor = _flavorFor(work);
 
     if (_engineFlavor == flavor) {
       // Already asking for the right engine. It may not be ready yet, in which case the work runs
@@ -411,28 +418,28 @@ class PositionEvaluator extends Notifier<EngineEvaluationState> {
     ),
   }.withContext(maxMemoryInMb: budget.maxMemoryInMb);
 
-  /// The spec for [flavor], falling back to SF 16 when the NNUE files are not on disk.
+  /// The spec for [flavor], falling back to the light engine when the NNUE file is not on disk.
   Future<EngineSpec> _resolveSpec(StockfishFlavor flavor) async {
     switch (flavor) {
       case StockfishFlavor.variant:
         return const StockfishSpec.fairy();
-      case StockfishFlavor.sf16:
-        return const StockfishSpec.sf16();
+      case StockfishFlavor.light:
+        return const StockfishSpec.light();
       case StockfishFlavor.latestNoNNUE:
-        if (await _nnueService.checkNNUEFiles()) {
-          final files = _nnueService.nnueFiles;
-          return StockfishSpec.latest(
-            bigNetPath: files.bigNet.path,
-            smallNetPath: files.smallNet.path,
-          );
+        if (await _nnueService.checkNNUEFile()) {
+          return StockfishSpec.latest(nnuePath: _nnueService.nnueFile.path);
         }
-        _logger.warning('NNUE files not found or corrupted. Falling back to SF16.');
-        return const StockfishSpec.sf16();
+        _logger.warning('NNUE file not found or corrupted. Falling back to the light engine.');
+        return const StockfishSpec.light();
     }
   }
 
-  /// The flavor to evaluate [variant] with.
-  StockfishFlavor _flavorFor(Variant variant) => evaluatorFlavorFor(ref, variant);
+  /// The flavor to evaluate [work] with.
+  ///
+  /// The material is read from the root of the tree rather than from the position being evaluated,
+  /// so that the engine cannot change under the user as pieces come off the board.
+  StockfishFlavor _flavorFor(EvalWork work) =>
+      evaluatorFlavorFor(ref, work.variant, work.initialPosition);
 
   /// Runs whatever work is current on the engine that has just become available.
   void _computeCurrentWork() {
@@ -661,6 +668,7 @@ class PositionEvaluator extends Notifier<EngineEvaluationState> {
     final current = state;
     final newState = (
       engine: engineFn != null ? engineFn() : current.engine,
+      engineSpec: _spec,
       eval: evalFn != null ? evalFn() : current.eval,
       isComputing: _engine?.isSearching.value ?? false,
       currentWork: workFn != null ? workFn() : current.currentWork,
@@ -692,6 +700,12 @@ typedef EngineEvaluationState = ({
   /// it is ready, and [AsyncError] when it could not start or has died. This is the whole of the
   /// engine's lifecycle as the UI sees it — there is no separate state machine to keep in step.
   AsyncValue<String?>? engine,
+
+  /// The engine the name came from, or null while there is none.
+  ///
+  /// What the name alone does not say: the two Stockfish flavors are the same version and report
+  /// the same `id name`, so only the spec tells the light one from the full-net one.
+  EngineSpec? engineSpec,
   LocalEval? eval,
 
   /// Whether the engine is searching right now.

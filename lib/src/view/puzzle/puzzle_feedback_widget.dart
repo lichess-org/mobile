@@ -158,7 +158,7 @@ class FeedbackTile extends StatelessWidget {
                 ),
                 child: title,
               ),
-              if (subtitle != null) subtitle!,
+              ?subtitle,
             ],
           ),
         ),
