@@ -24,7 +24,7 @@ import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
 import 'package:material_ui/material_ui.dart';
 
-enum _FriendSortType {
+enum _FriendSortType() {
   alphabetical,
   ratingDesc,
   ratingAsc,
@@ -239,10 +239,7 @@ class const _Online() extends ConsumerWidget {
   }
 }
 
-class _Following extends ConsumerWidget {
-  const _Following(this.sortType);
-  final _FriendSortType sortType;
-
+class const _Following(final _FriendSortType sortType) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final following = ref.watch(followingProvider);
