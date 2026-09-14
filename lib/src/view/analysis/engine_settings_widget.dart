@@ -39,8 +39,9 @@ class const EngineSettingsWidget({
               title: const Text('Search time'),
               value: prefs.engineSearchTime.inSeconds.toDouble(),
               values: kAvailableEngineSearchTimes.map((e) => e.inSeconds.toDouble()).toList(),
-              labelBuilder: (value) =>
-                  value == kMaxEngineSearchTime.inSeconds.toDouble() ? '∞' : '${value.toInt()}s',
+              labelBuilder: (value) => value == kMaxEngineSearchTime.inSeconds.toDouble()
+                  ? '∞'
+                  : '${value.toInt()}\u00A0s',
               onChangeEnd: (value) {
                 onSetEngineSearchTime(Duration(seconds: value.toInt()));
               },
