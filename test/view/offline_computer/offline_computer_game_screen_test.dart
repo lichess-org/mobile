@@ -1333,7 +1333,7 @@ void main() {
 
       await tester.pumpAndSettle(const Duration(milliseconds: 600));
 
-      expect(find.text('White time out'), findsOneWidget);
+      expect(find.text('White ran out of time'), findsOneWidget);
       expect(activeClock(tester), null);
     });
 

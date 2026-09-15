@@ -201,7 +201,7 @@ enum PuzzleThemeKey(final IconData icon) {
       case PuzzleThemeKey.enPassant:
         return PuzzleThemeL10n(
           name: l10n.enPassant,
-          description: l10n.puzzleThemeEnPassantDescription,
+          description: l10n.puzzleThemeEnPassantAdjacentCaptureDescription,
         );
       case PuzzleThemeKey.exposedKing:
         return PuzzleThemeL10n(
@@ -211,7 +211,7 @@ enum PuzzleThemeKey(final IconData icon) {
       case PuzzleThemeKey.fork:
         return PuzzleThemeL10n(
           name: l10n.puzzleThemeFork,
-          description: l10n.puzzleThemeForkDescription,
+          description: l10n.puzzleThemeForkOpposingPiecesDescription,
         );
       case PuzzleThemeKey.hangingPiece:
         return PuzzleThemeL10n(
@@ -221,7 +221,7 @@ enum PuzzleThemeKey(final IconData icon) {
       case PuzzleThemeKey.hookMate:
         return PuzzleThemeL10n(
           name: l10n.puzzleThemeHookMate,
-          description: l10n.puzzleThemeHookMateDescription,
+          description: l10n.puzzleThemeHookMateOpposingPawnDescription,
         );
       case PuzzleThemeKey.interference:
         return PuzzleThemeL10n(
@@ -326,7 +326,7 @@ enum PuzzleThemeKey(final IconData icon) {
       case PuzzleThemeKey.promotion:
         return PuzzleThemeL10n(
           name: l10n.puzzleThemePromotion,
-          description: l10n.puzzleThemePromotionDescription,
+          description: l10n.puzzleThemePromotePawnToQueenRookOrMinor,
         );
       case PuzzleThemeKey.queenEndgame:
         return PuzzleThemeL10n(

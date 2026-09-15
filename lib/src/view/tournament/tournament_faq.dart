@@ -67,7 +67,7 @@ class const TournamentFAQScreen({super.key}) extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(context.l10n.arenaHowDoesPairingWork, style: Styles.sectionTitle),
+                  Text(context.l10n.arenaHowArePlayersPaired, style: Styles.sectionTitle),
                   const SizedBox(height: 10),
                   Text(context.l10n.arenaHowDoesPairingWorkAnswer),
                 ],

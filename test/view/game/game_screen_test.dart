@@ -777,8 +777,8 @@ void main() {
         // flagged (white), not the side to move in the corrupted local position.
         await tester.pump(const Duration(milliseconds: 400));
         await tester.pump();
-        expect(find.text('White time out • Draw'), findsOneWidget);
-        expect(find.text('Black time out • Draw'), findsNothing);
+        expect(find.text('White ran out of time • Draw'), findsOneWidget);
+        expect(find.text('Black ran out of time • Draw'), findsNothing);
 
         // wait for the dong
         await tester.pump(const Duration(seconds: 500));
