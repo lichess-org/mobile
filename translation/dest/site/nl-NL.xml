@@ -849,7 +849,7 @@ Spelen met rating verhoogt de stabiliteit.</string>
   <string name="roundness">Ronde hoeken</string>
   <string name="backgroundImage">Achtergrondafbeelding</string>
   <string name="backgroundImageUrl">Achtergrondafbeelding URL:</string>
-  <string name="imageOpacity">Afbeeldingstransparantie</string>
+  <string name="imageOpacity">Transparantie</string>
   <string name="board">Bord</string>
   <string name="size">Grootte</string>
   <string name="opacity">Transparantie</string>
