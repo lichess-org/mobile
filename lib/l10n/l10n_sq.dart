@@ -1358,6 +1358,527 @@ class AppLocalizationsSq extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Ushtrohuni vetëm me disa shtylla & rreshta';
 
   @override
+  String get learnLearnChess => 'Mësoni shah';
+
+  @override
+  String get learnByPlaying => 'duke luajtur!';
+
+  @override
+  String learnProgressX(String param) {
+    return 'Përparim: $param';
+  }
+
+  @override
+  String get learnResetMyProgress => 'Rivendos përparimin tim';
+
+  @override
+  String get learnYouWillLoseAllYourProgress => 'Ju do të humbni të gjithë përparimin tuaj!';
+
+  @override
+  String get learnPlay => 'luaj!';
+
+  @override
+  String get learnChessPieces => 'Figurat e shahut';
+
+  @override
+  String get learnTheRook => 'Torra';
+
+  @override
+  String get learnItMovesInStraightLines => 'Ajo lëviz në vija të drejta';
+
+  @override
+  String get learnRookIntro => 'Topi është një figurë e fuqishme. A jeni gati ta komandoni?';
+
+  @override
+  String get learnRookGoal => 'Klikoni mbi topin\npër ta sjellë te ylli!';
+
+  @override
+  String get learnGrabAllTheStars => 'Kapni të gjithë yjet!';
+
+  @override
+  String get learnTheFewerMoves => 'Sa më pak lëvizje të bëni,\naq më shumë pikë fitoni!';
+
+  @override
+  String get learnUseTwoRooks => 'Përdorni dy topat\npër të shpejtuar gjërat!';
+
+  @override
+  String get learnRookComplete => 'Urime! Ju mësuat me sukses topin.';
+
+  @override
+  String get learnTheBishop => 'Fili (oficeri)';
+
+  @override
+  String get learnItMovesDiagonally => 'Ajo lëviz diagonalisht';
+
+  @override
+  String get learnBishopIntro => 'Tani do të mësojmë se si të manovrojmë një oficer!';
+
+  @override
+  String get learnYouNeedBothBishops => 'Nji llanfer ne katrorë të bardhë,\nnji llanfer ne katrorë të zezë.\nJu duhen të dy!';
+
+  @override
+  String get learnBishopComplete => 'Urime! Ju mund të komandoni një llanfer.';
+
+  @override
+  String get learnTheQueen => 'Mbretëresha';
+
+  @override
+  String get learnQueenCombinesRookAndBishop => 'Mbretëresha = topi + llanferi';
+
+  @override
+  String get learnQueenIntro => 'Hyn pjesa më e fuqishme e shahut. Madhëria e saj mbretëresha!';
+
+  @override
+  String get learnQueenComplete => 'Urime! Mbretëreshat nuk kanë sekrete për ju.';
+
+  @override
+  String get learnTheKing => 'Mbreti';
+
+  @override
+  String get learnTheMostImportantPiece => 'Figura më e rëndësishme';
+
+  @override
+  String get learnKingIntro => 'Ti je mbreti. Nëse bini në betejë, loja humbet.';
+
+  @override
+  String get learnTheKingIsSlow => 'Mbreti është i ngadalshëm.';
+
+  @override
+  String get learnLastOne => 'E fundit!';
+
+  @override
+  String get learnKingComplete => 'Tani mund të komandoni komandantin!';
+
+  @override
+  String get learnTheKnight => 'Kali';
+
+  @override
+  String get learnItMovesInAnLShape => 'Lëviz në trajtë L-je';
+
+  @override
+  String get learnKnightIntro => 'Këtu është një sfidë për ju. Kali është... një pjesë e ndërlikuar.';
+
+  @override
+  String get learnKnightsHaveAFancyWay => 'Kuajt kanë një mënyrë të zbukuruar\ntë kërcyer përreth!';
+
+  @override
+  String get learnKnightsCanJumpOverObstacles => 'Kuajt mund të kërcejnë mbi pengesat!\nIk dhe mposht yjet!';
+
+  @override
+  String get learnKnightComplete => 'Urime! Ju keni zotëruar kalin.';
+
+  @override
+  String get learnThePawn => 'Ushtari';
+
+  @override
+  String get learnItMovesForwardOnly => 'Ajo lëviz vetëm përpara';
+
+  @override
+  String get learnPawnIntro => 'Piunat  janë të dobët, por kanë  shumë potencial.';
+
+  @override
+  String get learnPawnsMoveOneSquareOnly => 'Piunat lëvizin vetëm një katror.\nPor kur mbërrijnë në anën tjetër të fushës, shndërrohen në një figurë më të fortë!';
+
+  @override
+  String get learnMostOfTheTimePromotingToAQueenIsBest => 'Shumicën e kohës të promovosh një mbretëreshë është më  mire.\nPor ndonjëherë një kali mund të jetë i dobishëm!';
+
+  @override
+  String get learnPawnsMoveForward => 'Piunat ecin përpara,\npor kapin diagonalisht!';
+
+  @override
+  String get learnCaptureThenPromote => 'Kapni, pastaj promovoni!';
+
+  @override
+  String get learnUseAllThePawns => 'Përdorni të gjithë Piunat!\nNuk kanë nevojë të promovohen.';
+
+  @override
+  String get learnAPawnOnTheSecondRank => 'Një piun në rendin e dytë mund të lëvizë 2 katrorë menjëherë!';
+
+  @override
+  String get learnGrabAllTheStarsNoNeedToPromote => 'Kapni të gjithë yjet!\nNuk ka nevojë të promovohet.';
+
+  @override
+  String get learnPawnComplete => 'Urime! Piunat  nuk kanë sekrete për ju.';
+
+  @override
+  String get learnPawnPromotion => 'Promovimi i piunit';
+
+  @override
+  String get learnYourPawnReachedTheEndOfTheBoard => 'Piuni juaj arriti në fund të tabelës!';
+
+  @override
+  String get learnItNowPromotesToAStrongerPiece => 'Tani promovohet në një figurë më të fortë.';
+
+  @override
+  String get learnSelectThePieceYouWant => 'Zgjidhni figuren që dëshironi!';
+
+  @override
+  String get learnFundamentals => 'Bazat';
+
+  @override
+  String get learnCapture => 'Kapni';
+
+  @override
+  String get learnTakeTheEnemyPieces => 'Merrni figurat e kundërshtarit';
+
+  @override
+  String get learnCaptureIntro => 'Identifikoni figurat e pambrojtura të kundërshtarit dhe merrni ato!';
+
+  @override
+  String get learnTakeTheBlackPieces => 'Merr figurat e zeza!';
+
+  @override
+  String get learnTakeTheBlackPiecesAndDontLoseYours => 'Merrni figurat e zeza!\nDhe mos i humbni tuajat.';
+
+  @override
+  String get learnCaptureComplete => 'Urime! Tani ju dini si të luftoni me figura të shahut!';
+
+  @override
+  String get learnProtection => 'Mbrojtja';
+
+  @override
+  String get learnKeepYourPiecesSafe => 'Mbani figurat tuaja të sigurta';
+
+  @override
+  String get learnProtectionIntro => 'Identifikoni figurat që sulmon kundërshtari juaj dhe mbrojini ato!';
+
+  @override
+  String get learnProtectionComplete => 'Urime! Një figure që nuk e humbet është një figure që e fitoni!';
+
+  @override
+  String get learnEscape => 'Ju jeni nën sulm!\nShpëtoni kërcënimit!';
+
+  @override
+  String get learnNoEscape => 'Nuk ka shpëtim,\npor ju mund të mbroheni!';
+
+  @override
+  String get learnDontLetThemTakeAnyUndefendedPiece => 'Mos i lini të marrin\nçdo figure të  pambrojtur!';
+
+  @override
+  String get learnCombat => 'Betejë';
+
+  @override
+  String get learnCaptureAndDefendPieces => 'Kapni dhe mbroni figurat';
+
+  @override
+  String get learnCombatIntro => 'Një luftëtar i mirë njeh edhe sulmin edhe mbrojtjen!';
+
+  @override
+  String get learnCombatComplete => 'Urime! Ju dini si të luftoni me figura të shahut!';
+
+  @override
+  String get learnCheckInOne => 'Shah me një lëvizje';
+
+  @override
+  String get learnAttackTheOpponentsKing => 'Sulmoni mbretin e kundërshtarit';
+
+  @override
+  String get learnCheckInOneIntro => 'Për të kontrolluar kundërshtarin tuaj, sulmoni mbretin e tij. Ai duhet ta mbrojë atë!';
+
+  @override
+  String get learnCheckInOneGoal => 'Synoni mbretin e kundërshtarit\nnë një lëvizje!';
+
+  @override
+  String get learnCheckInOneComplete => 'Urime! Ju kontrolluat kundërshtarin tuaj, duke e detyruar atë ta mbrojë mbretin e tij!';
+
+  @override
+  String get learnOutOfCheck => 'Jashtë kontrollit';
+
+  @override
+  String get learnDefendYourKing => 'Mbroni mbretin tuaj';
+
+  @override
+  String get learnOutOfCheckIntro => 'Ju jeni në shah ! Ju duhet të shpëtoni ose të bllokoni sulmin.';
+
+  @override
+  String get learnEscapeWithTheKing => 'Ik me mbretin!';
+
+  @override
+  String get learnTheKingCannotEscapeButBlock => 'Mbreti nuk mund të shpëtojë,\npor ju mund të bllokoni sulmin!';
+
+  @override
+  String get learnYouCanGetOutOfCheckByTaking => 'Mund të dilni nga shahu\nduke marrë pjesën sulmuese.';
+
+  @override
+  String get learnThisKnightIsCheckingThroughYourDefenses => 'Ky kali po ju jep shah \npërmes mbrojtjeve tuaja!';
+
+  @override
+  String get learnEscapeOrBlock => 'Ik me mbretin\nose bllokoni sulmin!';
+
+  @override
+  String get learnOutOfCheckComplete => 'Urime! Mbreti juaj s’mund të hahet kurrë, sigurohuni q mbroheni nga shahet!';
+
+  @override
+  String get learnMateInOne => 'Mat me një lëvizje';
+
+  @override
+  String get learnDefeatTheOpponentsKing => 'Mposhtni mbretin e kundërshtarit';
+
+  @override
+  String get learnMateInOneIntro => 'Fitoni kur kundërshtari s’mundet të mbrohet nga shahu.';
+
+  @override
+  String get learnAttackYourOpponentsKing => 'Sulmojeni mbretin e kundërshtarit\nnë një mënyrë që s\'mund të mbrohet!';
+
+  @override
+  String get learnMateInOneComplete => 'Urime! Kështu fitohet një lojë shahu!';
+
+  @override
+  String get learnIntermediate => 'Levizje ndermjetese';
+
+  @override
+  String get learnBoardSetup => 'Si të ujdiset fusha';
+
+  @override
+  String get learnHowTheGameStarts => 'Si fillon loja';
+
+  @override
+  String get learnBoardSetupIntro => 'Dy ushtritë janë përballë njëra-tjetrës, gati për betejë.';
+
+  @override
+  String get learnThisIsTheInitialPosition => 'Ky është pozicioni fillestar\ni çdo loje shahu!\nQë të vazhdohet, bëni një lëvizje.';
+
+  @override
+  String get learnFirstPlaceTheRooks => 'Sa pari vendosni torret!\nAto shkojnë në cep.';
+
+  @override
+  String get learnThenPlaceTheKnights => 'Pastaj vendosni kuajt!\nAta shkojnë pranë topave.';
+
+  @override
+  String get learnPlaceTheBishops => 'Vendos llanferat!\nAta shkojnë pranë kuajve.';
+
+  @override
+  String get learnPlaceTheQueen => 'Vendos mbretëreshën!\nAjo shkon në ngjyrën e saj.';
+
+  @override
+  String get learnPlaceTheKing => 'Vendose mbretin!\nPranë mbretëreshës së tij.';
+
+  @override
+  String get learnPawnsFormTheFrontLine => 'Piunat formojnë vijën e parë.\nBëni ndonjë lëvizje për të vazhduar.';
+
+  @override
+  String get learnBoardSetupComplete => 'Urime! Ju e dini se si të vendosni tabelën e shahut.';
+
+  @override
+  String get learnCastling => 'Rokada';
+
+  @override
+  String get learnTheSpecialKingMove => 'Lëvizja e veçantë e mbretit';
+
+  @override
+  String get learnCastlingIntro => 'Sillni mbretin tuaj në vend të sigurtë dhe vendoseni topin tuaj për sulm!';
+
+  @override
+  String get learnCastleKingSide => 'Lëvizeni mbretin dy kuti\npër të bërë rokadë të vogël!';
+
+  @override
+  String get learnCastleQueenSide => 'Lëvizeni mbretin dy kuti\npër të bërë rokadë të madhe!';
+
+  @override
+  String get learnTheKnightIsInTheWay => 'Kali bllokon rrugën!\nLëvizeni, mandej bëni rokadë të vogël.';
+
+  @override
+  String get learnCastleKingSideMovePiecesFirst => 'Rokada nga ana e mbretit!\nSë pari ju duhet të hiqni figurat.';
+
+  @override
+  String get learnCastleQueenSideMovePiecesFirst => 'Bëni rokadë të vogël!\nSë pari, duhet të lëvizni figura.';
+
+  @override
+  String get learnYouCannotCastleIfMoved => 'Nuk mund të bësh Rokaden nëse\nmbreti tashmë ka lëvizur\nose Topi tashmë ka lëvizur.';
+
+  @override
+  String get learnYouCannotCastleIfAttacked => 'S’mund të bëni rokadë, nëse\nmbretit i zihet rruga gjatë rokadës.\nBllokoni shahun, mandej bëni rokadën!';
+
+  @override
+  String get learnFindAWayToCastleKingSide => 'Gjeni një mënyrë\npër të bërë rokadë të vogël!';
+
+  @override
+  String get learnFindAWayToCastleQueenSide => 'Gjeni një mënyrë\npër të bërë rokadë të madhe!';
+
+  @override
+  String get learnCastlingComplete => 'Urime! Duhet, thuajse përherë, të bëni rokadë në një lojë.';
+
+  @override
+  String get learnTheSpecialPawnMove => 'Lëvizja e veçantë e ushtarit';
+
+  @override
+  String get learnEnPassantIntro => 'Nëse ushtari i kundërshtarit lëvizi dy kuti, mund ta hani njësoj sikur të kish lëvizur vetëm një kuti.';
+
+  @override
+  String get learnBlackJustMovedThePawnByTwoSquares => 'I ziu sapo lëvizi ushtarin\ndy kuti!\nPriteni.';
+
+  @override
+  String get learnEnPassantOnlyWorksImmediately => 'Prerja është e vlefshme vetëm\nmenjëherë mbasi kundërshtari\nka lëvizur ushtarin.';
+
+  @override
+  String get learnEnPassantOnlyWorksOnFifthRank => 'Prerja funksionon vetëm nëse\nushtari juaj është në rangun e pestë.';
+
+  @override
+  String get learnTakeAllThePawnsEnPassant => 'Priji krejt ushtarët!';
+
+  @override
+  String get learnEnPassantComplete => 'Urime! Tani dini të bëni prerje ushtarësh.';
+
+  @override
+  String get learnStalemate => 'Pat';
+
+  @override
+  String get learnTheGameIsADraw => 'Loja është barazim';
+
+  @override
+  String get learnStalemateIntro => 'Kur lojtari nuk është në shah dhe nuk ka lëvizje të ligjshme, loja del pat. Loja është barazim: askush s’fiton, as humb.';
+
+  @override
+  String get learnStalemateGoal => 'Për pat të të ziut:\n-I ziu s’mund të lëvizë kund\n-Nuk ka shah.';
+
+  @override
+  String get learnStalemateComplete => 'Urime! Më mirë pat, se sa shah mat!';
+
+  @override
+  String get learnAdvanced => 'Të thelluara';
+
+  @override
+  String get learnPieceValue => 'Vlerat e figurave';
+
+  @override
+  String get learnEvaluatePieceStrength => 'Vlerësoni forcën e figurave';
+
+  @override
+  String get learnPieceValueIntro => 'Figurat me më shumë mundësi lëvizjeje, kanë vlerë më të madhe!\nMbretëresha = 9\nTorra = 5\nOficeri = 3\nKali = 3\nUshtari = 1\nMbreti është i paçmueshëm! Të humbasësh mbretin do të thotë të humbasësh lojën.';
+
+  @override
+  String get learnQueenOverBishop => 'Merrni figurën\nme vlerën më të lartë!\nMbretëreshë > Oficer';
+
+  @override
+  String get learnPieceValueExchange => 'Merrni figurën me vlerë më të lartë!\nMos shkëmbeni një\nfigurë me vlerë më të lartë për një më pak të vlefshme.';
+
+  @override
+  String get learnPieceValueLegal => 'Merrni figurën\nme vlerë më të lartë!\nSigurohuni që lëvizja të jetë e ligjshme!';
+
+  @override
+  String get learnTakeThePieceWithTheHighestValue => 'Merrni figurën\nme vlerë më të lartë!';
+
+  @override
+  String get learnPieceValueComplete => 'Urime! Dini vlerat e figurave!\nMbretëreshë = 9\nTorre = 5\nOficer = 3\nKalë = 3\nUshtar =1';
+
+  @override
+  String get learnCheckInTwo => 'Shah me dy lëvizje';
+
+  @override
+  String get learnTwoMovesToGiveCheck => 'Dy lëvizje për të dhënë shah';
+
+  @override
+  String get learnCheckInTwoIntro => 'Gjeni kombinimin e duhur të dy lëvizjeve që i jep shah mbretit të kundërshtarit!';
+
+  @override
+  String get learnCheckInTwoGoal => 'Kërcënoni mbretin e kundërshtarit \nme dy lëvizje!';
+
+  @override
+  String get learnCheckInTwoComplete => 'Urime! I keni dhënë shah kundërshtarit, duke e detyruar të mbrojë mbretin!';
+
+  @override
+  String get learnWhatNext => 'Po më tej?';
+
+  @override
+  String get learnYouKnowHowToPlayChess => 'Dini si të luani shah, urime! Doni të bëni lojtar më i fortë?';
+
+  @override
+  String get learnRegister => 'Regjistrohuni';
+
+  @override
+  String get learnGetAFreeLichessAccount => 'Merrni një llogari falas Lichess';
+
+  @override
+  String get learnPractice => 'Ushtrohuni';
+
+  @override
+  String get learnLearnCommonChessPositions => 'Mësoni pozicione të zakonshme shahu';
+
+  @override
+  String get learnPuzzles => 'Ushtrime';
+
+  @override
+  String get learnExerciseYourTacticalSkills => 'Ushtroni aftësitë tuaja taktike';
+
+  @override
+  String get learnVideos => 'Video';
+
+  @override
+  String get learnWatchInstructiveChessVideos => 'Shihni video instruktive shahu';
+
+  @override
+  String get learnPlayPeople => 'Luani me njerëz';
+
+  @override
+  String get learnOpponentsFromAroundTheWorld => 'Kundërshtarë nga anembanë botës';
+
+  @override
+  String get learnPlayMachine => 'Luani me kompjuterin';
+
+  @override
+  String get learnTestYourSkillsWithTheComputer => 'Provoni aftësitë tuaja me kompjuterin';
+
+  @override
+  String get learnLetsGo => 'Shkojmë!';
+
+  @override
+  String learnStageX(String param) {
+    return 'Skena $param';
+  }
+
+  @override
+  String get learnAwesome => 'Mahnitshëm!';
+
+  @override
+  String get learnExcellent => 'Shkëlqyeshëm!';
+
+  @override
+  String get learnGreatJob => 'Punë e mbarë!';
+
+  @override
+  String get learnPerfect => 'E përsosur!';
+
+  @override
+  String get learnOutstanding => 'E dalluar!';
+
+  @override
+  String get learnWayToGo => 'Ashtu te lumte!';
+
+  @override
+  String get learnYesYesYes => 'Po, po, po!';
+
+  @override
+  String get learnYoureGoodAtThis => 'Ia morët dorën!';
+
+  @override
+  String get learnNailedIt => 'Fiks fare.';
+
+  @override
+  String get learnRightOn => 'Tamam siç duhet!';
+
+  @override
+  String learnStageXComplete(String param) {
+    return 'Skena $param u përmbush';
+  }
+
+  @override
+  String get learnNext => 'Pasuesja';
+
+  @override
+  String learnNextX(String param) {
+    return 'Pasuesja: $param';
+  }
+
+  @override
+  String get learnBackToMenu => 'Mbrapsht tek menuja';
+
+  @override
+  String get learnPuzzleFailed => 'Deshtove problemen!';
+
+  @override
+  String get learnRetry => 'Riprovoni';
+
+  @override
   String get patronDonate => 'Dhuroni';
 
   @override

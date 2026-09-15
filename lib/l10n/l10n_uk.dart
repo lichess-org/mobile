@@ -1402,6 +1402,527 @@ class AppLocalizationsUk extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Практикувати лише деякі ряди та стовпці';
 
   @override
+  String get learnLearnChess => 'Вчіться шахам';
+
+  @override
+  String get learnByPlaying => 'граючи!';
+
+  @override
+  String learnProgressX(String param) {
+    return 'Прогрес: $param';
+  }
+
+  @override
+  String get learnResetMyProgress => 'Скинути прогрес';
+
+  @override
+  String get learnYouWillLoseAllYourProgress => 'Весь ваш прогрес буде втрачено!';
+
+  @override
+  String get learnPlay => 'грати!';
+
+  @override
+  String get learnChessPieces => 'Шахові фігури';
+
+  @override
+  String get learnTheRook => 'Тура';
+
+  @override
+  String get learnItMovesInStraightLines => 'Рухається прямими лініями';
+
+  @override
+  String get learnRookIntro => 'Тура — це важка фігура. Чи готові ви керувати нею?';
+
+  @override
+  String get learnRookGoal => 'Натисніть на туру й доведіть її до зірки!';
+
+  @override
+  String get learnGrabAllTheStars => 'Зберіть всі зірки!';
+
+  @override
+  String get learnTheFewerMoves => 'Чим менше ходів ви зробите, тим більше очок ви отримаєте!';
+
+  @override
+  String get learnUseTwoRooks => 'Використовуйте дві тури, аби прискорити процес!';
+
+  @override
+  String get learnRookComplete => 'Вітаємо! Ви навчилися ходити турою.';
+
+  @override
+  String get learnTheBishop => 'Слон';
+
+  @override
+  String get learnItMovesDiagonally => 'Переміщається діагоналями';
+
+  @override
+  String get learnBishopIntro => 'Далі ми навчимося ходити слоном!';
+
+  @override
+  String get learnYouNeedBothBishops => 'Поля білого кольору контролює один слон, поля чорного кольору — інший. Вам потрібні обидва слони!';
+
+  @override
+  String get learnBishopComplete => 'Вітаємо! Ви навчилися ходити слоном.';
+
+  @override
+  String get learnTheQueen => 'Ферзь';
+
+  @override
+  String get learnQueenCombinesRookAndBishop => 'Ферзь = тура + слон';
+
+  @override
+  String get learnQueenIntro => 'Найпотужніша фігура. Його величність — ферзь!';
+
+  @override
+  String get learnQueenComplete => 'Вітаємо! Ви навчилися ходити ферзем.';
+
+  @override
+  String get learnTheKing => 'Король';
+
+  @override
+  String get learnTheMostImportantPiece => 'Найважливіша фігура';
+
+  @override
+  String get learnKingIntro => 'Ви - король. Якщо ви загинете в битві - гра програна.';
+
+  @override
+  String get learnTheKingIsSlow => 'Король повільно пересувається.';
+
+  @override
+  String get learnLastOne => 'І останній!';
+
+  @override
+  String get learnKingComplete => 'Ви навчилися ходити королем!';
+
+  @override
+  String get learnTheKnight => 'Кінь';
+
+  @override
+  String get learnItMovesInAnLShape => 'Він ходить літерою «Г»';
+
+  @override
+  String get learnKnightIntro => 'Ось вам виклик. Кінь... хитра фігура.';
+
+  @override
+  String get learnKnightsHaveAFancyWay => 'Коні мають химерний спосіб перестрибувати!';
+
+  @override
+  String get learnKnightsCanJumpOverObstacles => 'Коні можуть стрибати через перешкоди!\nВиберіться та зберіть всі зірки!';
+
+  @override
+  String get learnKnightComplete => 'Вітаємо! Ви освоїли фігуру \"Кінь\".';
+
+  @override
+  String get learnThePawn => 'Пішак';
+
+  @override
+  String get learnItMovesForwardOnly => 'Ходить лише вперед';
+
+  @override
+  String get learnPawnIntro => 'Пішаки слабкі, але мають великий потенціал.';
+
+  @override
+  String get learnPawnsMoveOneSquareOnly => 'Пішаки ходять лише на одне поле вперед. Але досягнувши іншого кінця дошки, вони перетворюються на сильну фігуру!';
+
+  @override
+  String get learnMostOfTheTimePromotingToAQueenIsBest => 'У більшості випадку пішака краще перетворити на ферзя. Але іноді перетворення в коня може бути вигідніше!';
+
+  @override
+  String get learnPawnsMoveForward => 'Пішаки рухаються вперед, але б\'ють по діагоналях!';
+
+  @override
+  String get learnCaptureThenPromote => 'Побийте, потім перетворіться!';
+
+  @override
+  String get learnUseAllThePawns => 'Використовуйте всіх пішаків!\nНеобов\'язково їх перетворювати.';
+
+  @override
+  String get learnAPawnOnTheSecondRank => 'Пішак на другому ряду може ходити на два поля за хід!';
+
+  @override
+  String get learnGrabAllTheStarsNoNeedToPromote => 'Зберіть всі зірки!\nНеобов\'язково перетворювати пішаки.';
+
+  @override
+  String get learnPawnComplete => 'Вітаємо! У пішаків немає секретів для вас.';
+
+  @override
+  String get learnPawnPromotion => 'Перетворення пішака';
+
+  @override
+  String get learnYourPawnReachedTheEndOfTheBoard => 'Ваш пішак досяг краю дошки!';
+
+  @override
+  String get learnItNowPromotesToAStrongerPiece => 'Зараз він перетвориться на фігуру сильніше.';
+
+  @override
+  String get learnSelectThePieceYouWant => 'Оберіть фігуру, яку захочете!';
+
+  @override
+  String get learnFundamentals => 'Основи';
+
+  @override
+  String get learnCapture => 'Взяття';
+
+  @override
+  String get learnTakeTheEnemyPieces => 'З\'їжте фігури противника';
+
+  @override
+  String get learnCaptureIntro => 'Визначте незахищені фігури суперника та з\'їжте їх!';
+
+  @override
+  String get learnTakeTheBlackPieces => 'З\'їжте чорні фігури!';
+
+  @override
+  String get learnTakeTheBlackPiecesAndDontLoseYours => 'З\'їжте всі чорні фігури! І не втратьте свої.';
+
+  @override
+  String get learnCaptureComplete => 'Вітаємо! Тепер ви знаєте, як боротися з шаховими фігурами!';
+
+  @override
+  String get learnProtection => 'Захист';
+
+  @override
+  String get learnKeepYourPiecesSafe => 'Захищайте ваші фігури';
+
+  @override
+  String get learnProtectionIntro => 'Визначте, які ваші фігури атакує суперник, і захистіть їх!';
+
+  @override
+  String get learnProtectionComplete => 'Вітаємо! Фігура, яку ви не втратили, це виграна фігура!';
+
+  @override
+  String get learnEscape => 'Вас атакують! Усуньте загрозу!';
+
+  @override
+  String get learnNoEscape => 'Це не вихід,\nАле ви можете захистити!';
+
+  @override
+  String get learnDontLetThemTakeAnyUndefendedPiece => 'Не дозвольте їм з\'їсти\nбудь-яку незахищену фігуру!';
+
+  @override
+  String get learnCombat => 'Битва';
+
+  @override
+  String get learnCaptureAndDefendPieces => 'Взяття та захист фігур';
+
+  @override
+  String get learnCombatIntro => 'Хороший воїн знає як атаку, так і захист!';
+
+  @override
+  String get learnCombatComplete => 'Вітаємо! Тепер ви знаєте, як боротися з шаховими фігурами!';
+
+  @override
+  String get learnCheckInOne => 'Шах';
+
+  @override
+  String get learnAttackTheOpponentsKing => 'Атака на короля';
+
+  @override
+  String get learnCheckInOneIntro => 'Щоб оголосити шах, атакуйте короля суперника. Він має захищатися!';
+
+  @override
+  String get learnCheckInOneGoal => 'Нападіть на короля суперника\nза один хід!';
+
+  @override
+  String get learnCheckInOneComplete => 'Вітаємо! Ви поставили шах своєму супернику, змусивши захищати свого короля!';
+
+  @override
+  String get learnOutOfCheck => 'Відхід з-під шаха';
+
+  @override
+  String get learnDefendYourKing => 'Захистіть свого короля';
+
+  @override
+  String get learnOutOfCheckIntro => 'Вам шах! Ви маєте рятуватись або блокувати атаку.';
+
+  @override
+  String get learnEscapeWithTheKing => 'Втеча королем!';
+
+  @override
+  String get learnTheKingCannotEscapeButBlock => 'Король не може врятуватись, але ви можете блокувати атаку!';
+
+  @override
+  String get learnYouCanGetOutOfCheckByTaking => 'Ви можете піти від шаха,\nз\'ївши атакуючу фігуру.';
+
+  @override
+  String get learnThisKnightIsCheckingThroughYourDefenses => 'Цей кінь ставить шах,\nминаючи Ваш захист!';
+
+  @override
+  String get learnEscapeOrBlock => 'Виведіть короля\nабо закрийтеся!';
+
+  @override
+  String get learnOutOfCheckComplete => 'Вітаємо! Ваш король не може бути взятим, переконайтеся, що ви можете захистити його від шаха!';
+
+  @override
+  String get learnMateInOne => 'Мат в один хід';
+
+  @override
+  String get learnDefeatTheOpponentsKing => 'Поразка короля суперника';
+
+  @override
+  String get learnMateInOneIntro => 'Ви виграєте, якщо Ваш суперник не може захиститися від шаха.';
+
+  @override
+  String get learnAttackYourOpponentsKing => 'Атакуйте короля вашого суперника таким чином, щоб його не можна було захистити!';
+
+  @override
+  String get learnMateInOneComplete => 'Вітаємо! Таким чином, ви виграєте в шахи!';
+
+  @override
+  String get learnIntermediate => 'Проміжний етап';
+
+  @override
+  String get learnBoardSetup => 'Позиція на дошці';
+
+  @override
+  String get learnHowTheGameStarts => 'Початок шахової партії';
+
+  @override
+  String get learnBoardSetupIntro => 'Обидві армії стикаються одна з одною, готові до битви.';
+
+  @override
+  String get learnThisIsTheInitialPosition => 'Це - початкова позиція у шахах! Зробіть будь-який хід, щоб продовжити.';
+
+  @override
+  String get learnFirstPlaceTheRooks => 'Спочатку розставте тури!\nВони знаходяться по кутах.';
+
+  @override
+  String get learnThenPlaceTheKnights => 'Потім розставте коней!\nВони стоять поряд з турами.';
+
+  @override
+  String get learnPlaceTheBishops => 'Розставте слонів!\nВони йдуть поруч з кіньми.';
+
+  @override
+  String get learnPlaceTheQueen => 'Поставте ферзя!\nФерзь любить свій колір.';
+
+  @override
+  String get learnPlaceTheKing => 'Поставте короля!\nВін стоїть поруч з ферзем.';
+
+  @override
+  String get learnPawnsFormTheFrontLine => 'Пішаки стоять на передній лінії.\nЗробіть будь-який хід, щоб продовжити.';
+
+  @override
+  String get learnBoardSetupComplete => 'Вітаємо! Тепер ви знаєте, як ставити фігури на шахівниці.';
+
+  @override
+  String get learnCastling => 'Рокіровка';
+
+  @override
+  String get learnTheSpecialKingMove => 'Особливий хід короля';
+
+  @override
+  String get learnCastlingIntro => 'Захистіть свого короля й виведіть у бій туру!';
+
+  @override
+  String get learnCastleKingSide => 'Пересуньте свого короля на дві клітини до тури королівського флангу!';
+
+  @override
+  String get learnCastleQueenSide => 'Пересуньте свого короля на дві клітини до тури ферзевого флангу!';
+
+  @override
+  String get learnTheKnightIsInTheWay => 'Кінь в дорозі! Зробіть хід конем, потім зробіть рокіровку.';
+
+  @override
+  String get learnCastleKingSideMovePiecesFirst => 'Коротка рокіровка! Спочатку вам потрібно перемістити фігури.';
+
+  @override
+  String get learnCastleQueenSideMovePiecesFirst => 'Довга рокіровка! Спочатку вам потрібно перемістити фігури.';
+
+  @override
+  String get learnYouCannotCastleIfMoved => 'Ви не можете робити рокіровку, якщо король чи тура, які беруть участь у рокіровці, робили хід.';
+
+  @override
+  String get learnYouCannotCastleIfAttacked => 'Ви не можете рокіруватися, \nякщо король перебуває під шахом. \nСпочатку захистіть короля!';
+
+  @override
+  String get learnFindAWayToCastleKingSide => 'Знайдіть спосіб зробити коротку рокіровку!';
+
+  @override
+  String get learnFindAWayToCastleQueenSide => 'Знайдіть спосіб зробити довгу рокіровку!';
+
+  @override
+  String get learnCastlingComplete => 'Вітаємо! Ви маєте майже завжди рокіруватися в партіях.';
+
+  @override
+  String get learnTheSpecialPawnMove => 'Особливий хід пішаком';
+
+  @override
+  String get learnEnPassantIntro => 'Коли пішак суперника зробив хід на два поля, Ви можете взяти його, ніби він зробив хід лише на одне.';
+
+  @override
+  String get learnBlackJustMovedThePawnByTwoSquares => 'Чорні щойно сходили пішаком на два поля! Візьміть його на проході.';
+
+  @override
+  String get learnEnPassantOnlyWorksImmediately => 'Взяття на проході можливо лише безпосередньо після того, як суперник зробив хід пішаком.';
+
+  @override
+  String get learnEnPassantOnlyWorksOnFifthRank => 'Взяття на проході можна зробити, якщо ваш пішак на п\'ятому рядку.';
+
+  @override
+  String get learnTakeAllThePawnsEnPassant => 'Візьміть всі пішаки на проході!';
+
+  @override
+  String get learnEnPassantComplete => 'Вітаємо! Тепер ви можете робити взяття на проході.';
+
+  @override
+  String get learnStalemate => 'Пат';
+
+  @override
+  String get learnTheGameIsADraw => 'Гра є нічийною';
+
+  @override
+  String get learnStalemateIntro => 'Коли гравцеві не поставлено шах і немає можливості зробити хід, це пат. Гра закінчується: без переможців та переможених.';
+
+  @override
+  String get learnStalemateGoal => 'Пат чорним: \n- Чорні не можуть сходити.\n- Король не під шахом.';
+
+  @override
+  String get learnStalemateComplete => 'Вітаємо! Краще отримати пат, ніж мат!';
+
+  @override
+  String get learnAdvanced => 'Просунутий етап';
+
+  @override
+  String get learnPieceValue => 'Цінність фігур';
+
+  @override
+  String get learnEvaluatePieceStrength => 'Оцініть силу фігури';
+
+  @override
+  String get learnPieceValueIntro => 'Фігури з високою рухливістю мають більш високу цінність!\nФерзь = 9 пішаків\nТура = 5 пішаків\nСлон = 3 пішаки\nКінь = 3 пішаки\nПішак = 1 пішак\nКороль безцінний! Його втрата означає, що гру програно.';
+
+  @override
+  String get learnQueenOverBishop => 'Атакуйте фігури з найбільшою цінністю!\nФерзь > Слон';
+
+  @override
+  String get learnPieceValueExchange => 'Побийте найціннішу фігуру!\nНе розмінюйте дорожчі фігури на менш цінні.';
+
+  @override
+  String get learnPieceValueLegal => 'Побийте найціннішу фігуру!\nПереконайтесь що ваш хід можливий!';
+
+  @override
+  String get learnTakeThePieceWithTheHighestValue => 'Атакуйте фігури з найбільшою цінністю!';
+
+  @override
+  String get learnPieceValueComplete => 'Вітаємо! Ви знаєте цінність фігур!\nФерзь = 9 пішаків\nТура = 5 пішаків\nСлон = 3 пішаки\nКінь = 3 пішаки\nПішак = 1 пішак';
+
+  @override
+  String get learnCheckInTwo => 'Шах в 2 ходи';
+
+  @override
+  String get learnTwoMovesToGiveCheck => 'Два ходи на те, щоб зробити шах';
+
+  @override
+  String get learnCheckInTwoIntro => 'Знайдіть комбінацію в два ходи, щоб поставити шах королю суперника!';
+
+  @override
+  String get learnCheckInTwoGoal => 'Створіть загрозу королю суперника в два ходи!';
+
+  @override
+  String get learnCheckInTwoComplete => 'Вітаємо! Ви поставили шах вашому супернику, змусивши його захищати свого короля!';
+
+  @override
+  String get learnWhatNext => 'Що далі?';
+
+  @override
+  String get learnYouKnowHowToPlayChess => 'Ви вмієте грати в шахи, вітаємо! Ви хочете стати сильнішим гравцем?';
+
+  @override
+  String get learnRegister => 'Реєстрація';
+
+  @override
+  String get learnGetAFreeLichessAccount => 'Створити безкоштовний акаунт';
+
+  @override
+  String get learnPractice => 'Практика';
+
+  @override
+  String get learnLearnCommonChessPositions => 'Вчіть основні позиції';
+
+  @override
+  String get learnPuzzles => 'Задачі';
+
+  @override
+  String get learnExerciseYourTacticalSkills => 'Тренуйте свої тактичні навички';
+
+  @override
+  String get learnVideos => 'Відео';
+
+  @override
+  String get learnWatchInstructiveChessVideos => 'Дивитися навчальні відеозаписи';
+
+  @override
+  String get learnPlayPeople => 'Гра онлайн';
+
+  @override
+  String get learnOpponentsFromAroundTheWorld => 'Суперники зі всього світу';
+
+  @override
+  String get learnPlayMachine => 'Гра з ботом';
+
+  @override
+  String get learnTestYourSkillsWithTheComputer => 'Перевірте свої навички з ботом';
+
+  @override
+  String get learnLetsGo => 'Поїхали!';
+
+  @override
+  String learnStageX(String param) {
+    return 'Етап $param';
+  }
+
+  @override
+  String get learnAwesome => 'Чудово!';
+
+  @override
+  String get learnExcellent => 'Прекрасно!';
+
+  @override
+  String get learnGreatJob => 'Відмінна робота!';
+
+  @override
+  String get learnPerfect => 'Ідеально!';
+
+  @override
+  String get learnOutstanding => 'Добре!';
+
+  @override
+  String get learnWayToGo => 'Вперед!';
+
+  @override
+  String get learnYesYesYes => 'Так, так, так!';
+
+  @override
+  String get learnYoureGoodAtThis => 'Ви молодець!';
+
+  @override
+  String get learnNailedIt => 'Успіх.';
+
+  @override
+  String get learnRightOn => 'Правильно!';
+
+  @override
+  String learnStageXComplete(String param) {
+    return 'Етап $param завершено';
+  }
+
+  @override
+  String get learnNext => 'Далі';
+
+  @override
+  String learnNextX(String param) {
+    return 'Далі $param';
+  }
+
+  @override
+  String get learnBackToMenu => 'Повернутися до меню';
+
+  @override
+  String get learnPuzzleFailed => 'Задачу не вирішено!';
+
+  @override
+  String get learnRetry => 'Ще раз';
+
+  @override
   String get patronDonate => 'Зробити внесок';
 
   @override

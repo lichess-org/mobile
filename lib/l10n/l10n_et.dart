@@ -1358,6 +1358,527 @@ class AppLocalizationsEt extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Practice only some files & ranks';
 
   @override
+  String get learnLearnChess => 'Õpi malet';
+
+  @override
+  String get learnByPlaying => 'mängides!';
+
+  @override
+  String learnProgressX(String param) {
+    return 'Edenemine: $param';
+  }
+
+  @override
+  String get learnResetMyProgress => 'Lähtesta saavutused';
+
+  @override
+  String get learnYouWillLoseAllYourProgress => 'Kaotad kõik oma saavutused!';
+
+  @override
+  String get learnPlay => 'mängi!';
+
+  @override
+  String get learnChessPieces => 'Malendid';
+
+  @override
+  String get learnTheRook => 'Vanker';
+
+  @override
+  String get learnItMovesInStraightLines => 'Ta liigub sirgejooneliselt';
+
+  @override
+  String get learnRookIntro => 'Vanker on võimas nupp. Kas olete selle käsutamiseks valmis?';
+
+  @override
+  String get learnRookGoal => 'Vajutage vankri peale,\net viia see tähekeseni!';
+
+  @override
+  String get learnGrabAllTheStars => 'Haara kõik tähekesed!';
+
+  @override
+  String get learnTheFewerMoves => 'Mida vähem liigutusi teed,\nseda rohkem punkte saad!';
+
+  @override
+  String get learnUseTwoRooks => 'Kasutage kahte vankrit,\net kiirust lisada!';
+
+  @override
+  String get learnRookComplete => 'Õnnitlused! Oled õppinud edukalt vankrit valitsema.';
+
+  @override
+  String get learnTheBishop => 'Oda';
+
+  @override
+  String get learnItMovesDiagonally => 'Ta liigub diagonaalselt';
+
+  @override
+  String get learnBishopIntro => 'Järgmiseks õpime, kuidas oda liigutada!';
+
+  @override
+  String get learnYouNeedBothBishops => 'Üks oda heledatel ruutudel,\nteine oda tumedatel ruutudel.\nVajad mõlemat!';
+
+  @override
+  String get learnBishopComplete => 'Õnnitlused! Te valdate nüüd oda.';
+
+  @override
+  String get learnTheQueen => 'Lipp';
+
+  @override
+  String get learnQueenCombinesRookAndBishop => 'Lipp = vanker + oda';
+
+  @override
+  String get learnQueenIntro => 'Kõige tugevam malend astub mängu. Lehvitage vastu lipule!';
+
+  @override
+  String get learnQueenComplete => 'Õnnitlused! Kuningannal pole sulle saladusi.';
+
+  @override
+  String get learnTheKing => 'Kuningas';
+
+  @override
+  String get learnTheMostImportantPiece => 'Kõige tähtsam malend';
+
+  @override
+  String get learnKingIntro => 'Sina oled kuningas. Kui sa langed lahingus, siis mäng lõppeb.';
+
+  @override
+  String get learnTheKingIsSlow => 'Kuningas on aeglane.';
+
+  @override
+  String get learnLastOne => 'Viimane!';
+
+  @override
+  String get learnKingComplete => 'Sa oskad nüüd juhatajat juhtida!';
+
+  @override
+  String get learnTheKnight => 'Ratsu';
+
+  @override
+  String get learnItMovesInAnLShape => 'Ta liigub L-kujuliselt';
+
+  @override
+  String get learnKnightIntro => 'Siin on teile väljakutse. Ratsu on... viguriga vigur.';
+
+  @override
+  String get learnKnightsHaveAFancyWay => 'Ratsudel on huvitav komme\nringi hüpata!';
+
+  @override
+  String get learnKnightsCanJumpOverObstacles => 'Ratsud suudavad malenditest üle hüpata!\nKogu kõik tähed!';
+
+  @override
+  String get learnKnightComplete => 'Õnnitlused! Te valdate nüüd ratsukäike.';
+
+  @override
+  String get learnThePawn => 'Ettur';
+
+  @override
+  String get learnItMovesForwardOnly => 'Ta liigub ainult edasi';
+
+  @override
+  String get learnPawnIntro => 'Etturid on nõrgad, kuid nendes on palju potentsiaali.';
+
+  @override
+  String get learnPawnsMoveOneSquareOnly => 'Etturid liiguvad ühe ruudu kaupa.\nKui nad jõuavad mängulaua lõppu, siis nendest saab palju tugevam nupp!';
+
+  @override
+  String get learnMostOfTheTimePromotingToAQueenIsBest => 'Enamik juhtudest on mõtekas ettur muundada lipuks.\nKuid mõnikord tuleb ratsu rohkem kasuks!';
+
+  @override
+  String get learnPawnsMoveForward => 'Etturid liiguvad ainult edasi,\nkuid löövad diagonaalselt!';
+
+  @override
+  String get learnCaptureThenPromote => 'Löö, siis muunda!';
+
+  @override
+  String get learnUseAllThePawns => 'Kasuta kõiki ettureid!\nPole vajadust muundada.';
+
+  @override
+  String get learnAPawnOnTheSecondRank => 'Ettur teisel real saab liikuda 2 ruutu korraga!';
+
+  @override
+  String get learnGrabAllTheStarsNoNeedToPromote => 'Kogu kõik tähed!\nMuundada pole tarvus.';
+
+  @override
+  String get learnPawnComplete => 'Õnnitlused! Tunnete nüüd etturi käike.';
+
+  @override
+  String get learnPawnPromotion => 'Etturi muundamine';
+
+  @override
+  String get learnYourPawnReachedTheEndOfTheBoard => 'Sinu ettur on jõudnud viimasele reale!';
+
+  @override
+  String get learnItNowPromotesToAStrongerPiece => 'Nüüd ta muundub tugevamaks malendiks.';
+
+  @override
+  String get learnSelectThePieceYouWant => 'Vali malend, mida sa soovid!';
+
+  @override
+  String get learnFundamentals => 'Põhialused';
+
+  @override
+  String get learnCapture => 'Löömine';
+
+  @override
+  String get learnTakeTheEnemyPieces => 'Löö vastase malendid';
+
+  @override
+  String get learnCaptureIntro => 'Tuvasta vastase kaitseta malendid ning löö nad!';
+
+  @override
+  String get learnTakeTheBlackPieces => 'Löö mustad malendid!';
+
+  @override
+  String get learnTakeTheBlackPiecesAndDontLoseYours => 'Löö mustad malendid!\nÄra kaota enda omi.';
+
+  @override
+  String get learnCaptureComplete => 'Õnnitlused! Oskad vastase malendeid lüüa!';
+
+  @override
+  String get learnProtection => 'Kaitsmine';
+
+  @override
+  String get learnKeepYourPiecesSafe => 'Hoia oma malendid kaitse all';
+
+  @override
+  String get learnProtectionIntro => 'Tuvasta malendid, mida vastane ründab ja kaitse neid!';
+
+  @override
+  String get learnProtectionComplete => 'Õnnitlused! Malend, mida sa ei kaota on võidetud malend!';
+
+  @override
+  String get learnEscape => 'Sa oled rünnaku all!\nPõgene ohtu!';
+
+  @override
+  String get learnNoEscape => 'Põgenemisteed ei leidu,\nkuid sul on võimalik kaitsta!';
+
+  @override
+  String get learnDontLetThemTakeAnyUndefendedPiece => 'Ära lase neil võtta\nühtegi kaitseta malendid!';
+
+  @override
+  String get learnCombat => 'Võitlus';
+
+  @override
+  String get learnCaptureAndDefendPieces => 'Löö ning kaitse malendeid';
+
+  @override
+  String get learnCombatIntro => 'Hea mängija oskab rünnata ja kaitsta üheaegselt!';
+
+  @override
+  String get learnCombatComplete => 'Õnnitlused! Oskate võidelda malenditega!';
+
+  @override
+  String get learnCheckInOne => 'Tuli ühe käiguga';
+
+  @override
+  String get learnAttackTheOpponentsKing => 'Ründa vastase kuningat';
+
+  @override
+  String get learnCheckInOneIntro => 'Et anda tuld vastasele, ründa nende kuningat. Nad peavad seda kaitsma!';
+
+  @override
+  String get learnCheckInOneGoal => 'Sihi vastase kuningat \nühe liigutusega!';
+
+  @override
+  String get learnCheckInOneComplete => 'Õnnitlused! Sa andsid tuld vastasele, sundides nad oma kuningat kaitsma!';
+
+  @override
+  String get learnOutOfCheck => 'Tule alt väljumine';
+
+  @override
+  String get learnDefendYourKing => 'Kaitse oma kuningat';
+
+  @override
+  String get learnOutOfCheckIntro => 'Sa oled tule all! Sa pead põgenema või blokeerima rünnaku.';
+
+  @override
+  String get learnEscapeWithTheKing => 'Põgene kuningaga!';
+
+  @override
+  String get learnTheKingCannotEscapeButBlock => 'Kuningas ei saa põgeneda, \naga sa saad rünnaku blokeerida!';
+
+  @override
+  String get learnYouCanGetOutOfCheckByTaking => 'Sa saad tule alt välja\nkui lööd ründava malendi.';
+
+  @override
+  String get learnThisKnightIsCheckingThroughYourDefenses => 'Ratsu annab tuld\nläbi sinu kaitse!';
+
+  @override
+  String get learnEscapeOrBlock => 'Põgene kuningaga \nvõi blokeeri rünnak!';
+
+  @override
+  String get learnOutOfCheckComplete => 'Õnnitlused! Sinu kuningat ei saa rünnata, veendu, et sa suudad teda tule vastu kaitsta!';
+
+  @override
+  String get learnMateInOne => 'Matt ühe käiguga';
+
+  @override
+  String get learnDefeatTheOpponentsKing => 'Alista vastase kuningas';
+
+  @override
+  String get learnMateInOneIntro => 'Sa võidad kui su vastane ei saa tule vastu kaitsta.';
+
+  @override
+  String get learnAttackYourOpponentsKing => 'Ründa vastase kuningat nii, \net seda ei saa kaitsta!';
+
+  @override
+  String get learnMateInOneComplete => 'Õnnitlused! Nii võidetakse malemänge!';
+
+  @override
+  String get learnIntermediate => 'Kesktase';
+
+  @override
+  String get learnBoardSetup => 'Laua ülesehitus';
+
+  @override
+  String get learnHowTheGameStarts => 'Kuidas mäng algab';
+
+  @override
+  String get learnBoardSetupIntro => 'Kaks sõjaväge seisavad vastamisi, ole valmis lahinguks.';
+
+  @override
+  String get learnThisIsTheInitialPosition => 'See on iga malemängu \nesialgne seis! \nTee käik, et jätkata.';
+
+  @override
+  String get learnFirstPlaceTheRooks => 'Kõigepealt paigalda vankrid! \nNad lähevad nurkadesse.';
+
+  @override
+  String get learnThenPlaceTheKnights => 'Siis paigalda ratsud! \nNad lähevad vankrite kõrvale.';
+
+  @override
+  String get learnPlaceTheBishops => 'Paigalda odad! \nNad lähevad ratsude kõrvale.';
+
+  @override
+  String get learnPlaceTheQueen => 'Paigalda lipp! \nTa läheb oma värvile.';
+
+  @override
+  String get learnPlaceTheKing => 'Paigalda kuningas! \nKohe lipu kõrvale.';
+
+  @override
+  String get learnPawnsFormTheFrontLine => 'Etturid on eesliinis. \nTee käik, et jätkata.';
+
+  @override
+  String get learnBoardSetupComplete => 'Õnnitlused! Tead kuidas seadistada malelauda.';
+
+  @override
+  String get learnCastling => 'Vangerdus';
+
+  @override
+  String get learnTheSpecialKingMove => 'Kuninga eriline käik';
+
+  @override
+  String get learnCastlingIntro => 'Too oma kuningas turvalisse kohta, ja kasuta oma vankreid rünnakuks!';
+
+  @override
+  String get learnCastleKingSide => 'Liiguta oma kuningat kahe ruudu võrra,\net vangerdada kuningatiivale!';
+
+  @override
+  String get learnCastleQueenSide => 'Liiguta oma kuningat kahe ruudu võrra, \net vangerdada liputiivale!';
+
+  @override
+  String get learnTheKnightIsInTheWay => 'Ratsu on teel ees!\nLiiguta teda, siis vangerda kuningatiivale.';
+
+  @override
+  String get learnCastleKingSideMovePiecesFirst => 'Vangerda kuningatiivale!\nSa pead kõigepealt malendid eest ära koristama.';
+
+  @override
+  String get learnCastleQueenSideMovePiecesFirst => 'Vangerda liputiivale!\nSa pead kõigepealt malendid eest ära koristama.';
+
+  @override
+  String get learnYouCannotCastleIfMoved => 'Sa ei saa vangerdada\nsiis kui kuningas või vanker\non juba käinud.';
+
+  @override
+  String get learnYouCannotCastleIfAttacked => 'Sa ei saa vangerdada siis kui\nkuningas läbib tule all olevat välja.\nBlokeeri tuli, siis vangerda!';
+
+  @override
+  String get learnFindAWayToCastleKingSide => 'Leia viis, kuidas\nvangerdada kuningatiivale!';
+
+  @override
+  String get learnFindAWayToCastleQueenSide => 'Leia viis, kuidas\nvangerdada liputiivale!';
+
+  @override
+  String get learnCastlingComplete => 'Õnnitlused! Te peaksite peaaegu alati vangerdama mängus.';
+
+  @override
+  String get learnTheSpecialPawnMove => 'Eriline etturi liigutus';
+
+  @override
+  String get learnEnPassantIntro => 'Kui vastase ettur on liikunud kahe ruudu võrra, siis sa saad seda kui ühe ruuduna võtta.';
+
+  @override
+  String get learnBlackJustMovedThePawnByTwoSquares => 'Must liikus etturiga\nkaks ruutu edasi!\nVõta see en passant käiguga.';
+
+  @override
+  String get learnEnPassantOnlyWorksImmediately => 'En passant töötab ainult\nkohe pärast seda, kui vastane\nkäis etturiga.';
+
+  @override
+  String get learnEnPassantOnlyWorksOnFifthRank => 'En passant töötab ainult juhul,\nkui sinu ettur on 5. real.';
+
+  @override
+  String get learnTakeAllThePawnsEnPassant => 'Löö kõik etturid en passant käiguga!';
+
+  @override
+  String get learnEnPassantComplete => 'Õnnitlused! Oskad nüüd en passant käiku.';
+
+  @override
+  String get learnStalemate => 'Patt';
+
+  @override
+  String get learnTheGameIsADraw => 'See mäng on viik';
+
+  @override
+  String get learnStalemateIntro => 'Kui mängija ei ole tules ning tal ei ole ühtegi legaalset käiku, siis tegemist on patiga. Tulemus on viik: kumbki ei võida ega kaota.';
+
+  @override
+  String get learnStalemateGoal => 'Musta patti viimine:\n- Must ei saa kuhugi käia\n- Must ei ole tules.';
+
+  @override
+  String get learnStalemateComplete => 'Õnnitlused! Parem on olla patis kui matis!';
+
+  @override
+  String get learnAdvanced => 'Edasijõudnud';
+
+  @override
+  String get learnPieceValue => 'Malendi väärtus';
+
+  @override
+  String get learnEvaluatePieceStrength => 'Hinda malendi tugevust';
+
+  @override
+  String get learnPieceValueIntro => 'Malendid suurema liikuvusega on väärtuslikumad!\nLipp = 9\nVanker = 5\nOda = 3\nRatsu = 3\nEttur = 1\nKuningas on hindamatu! Sellest ilma jäämine on võrdne kaotusega.';
+
+  @override
+  String get learnQueenOverBishop => 'Löö kõrgeima\nväärtusega malend!\nLipp > Oda';
+
+  @override
+  String get learnPieceValueExchange => 'Löö kõige väärtuslikum malend!\nÄra vaheta kõrgema väärtusega\nmalendit vähem väärtusliku eest.';
+
+  @override
+  String get learnPieceValueLegal => 'Löö kõige väärtuslikum malend!\nTehke kindlaks et käik\noleks reeglipärane!';
+
+  @override
+  String get learnTakeThePieceWithTheHighestValue => 'Löö kõrgeima\nväärtusega malend!';
+
+  @override
+  String get learnPieceValueComplete => 'Õnnitlused! Sa tead vigurite väärtust!\nLipp = 9\nVanker = 5\nOda = 3\nRatsu = 3\nEttur = 1';
+
+  @override
+  String get learnCheckInTwo => 'Tuli kahe käiguga';
+
+  @override
+  String get learnTwoMovesToGiveCheck => 'Kaks käiku, et anda tuld';
+
+  @override
+  String get learnCheckInTwoIntro => 'Leia õige kahe käiguga kombinatsioon, mille tulemusena jääb vastase kuningas tulle!';
+
+  @override
+  String get learnCheckInTwoGoal => 'Ohusta vastase kuningat\nkahe käiguga!';
+
+  @override
+  String get learnCheckInTwoComplete => 'Õnnitlused! Andsid vastasele tuld, sundides teda ohule reageerima!';
+
+  @override
+  String get learnWhatNext => 'Mis edasi?';
+
+  @override
+  String get learnYouKnowHowToPlayChess => 'Sa oskad mängida malet, õnnitlused! Kas sa tahad saada tugevamaks mängijaks?';
+
+  @override
+  String get learnRegister => 'Registreeru';
+
+  @override
+  String get learnGetAFreeLichessAccount => 'Lichess konto loomine on tasuta';
+
+  @override
+  String get learnPractice => 'Harjuta';
+
+  @override
+  String get learnLearnCommonChessPositions => 'Õpi tuntud maleseise';
+
+  @override
+  String get learnPuzzles => 'Pusled';
+
+  @override
+  String get learnExerciseYourTacticalSkills => 'Harjuta oma taktikalist taipu';
+
+  @override
+  String get learnVideos => 'Videod';
+
+  @override
+  String get learnWatchInstructiveChessVideos => 'Vaata õpetlikke malevideosid';
+
+  @override
+  String get learnPlayPeople => 'Mängi inimestega';
+
+  @override
+  String get learnOpponentsFromAroundTheWorld => 'Vastased kõikjalt maailmast';
+
+  @override
+  String get learnPlayMachine => 'Mängi arvuti vastu';
+
+  @override
+  String get learnTestYourSkillsWithTheComputer => 'Pane oma oskused proovile arvuti vastu';
+
+  @override
+  String get learnLetsGo => 'Alustame!';
+
+  @override
+  String learnStageX(String param) {
+    return 'Osa $param';
+  }
+
+  @override
+  String get learnAwesome => 'Lahe!';
+
+  @override
+  String get learnExcellent => 'Suurepärane!';
+
+  @override
+  String get learnGreatJob => 'Hästi tehtud!';
+
+  @override
+  String get learnPerfect => 'Täiuslik!';
+
+  @override
+  String get learnOutstanding => 'Uskumatu!';
+
+  @override
+  String get learnWayToGo => 'Väga hea!';
+
+  @override
+  String get learnYesYesYes => 'Jah, jah, jah!';
+
+  @override
+  String get learnYoureGoodAtThis => 'Sa oled selles hea!';
+
+  @override
+  String get learnNailedIt => 'Fantastiline.';
+
+  @override
+  String get learnRightOn => 'Just nii!';
+
+  @override
+  String learnStageXComplete(String param) {
+    return 'Osa $param läbitud';
+  }
+
+  @override
+  String get learnNext => 'Järgmine';
+
+  @override
+  String learnNextX(String param) {
+    return 'Järgmine: $param';
+  }
+
+  @override
+  String get learnBackToMenu => 'Tagasi menüüsse';
+
+  @override
+  String get learnPuzzleFailed => 'Kukkusid läbi!';
+
+  @override
+  String get learnRetry => 'Uuesti';
+
+  @override
   String get patronDonate => 'Anneta';
 
   @override

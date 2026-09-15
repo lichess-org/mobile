@@ -1358,6 +1358,527 @@ class AppLocalizationsEo extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Practice only some files & ranks';
 
   @override
+  String get learnLearnChess => 'Lernu ŝakon';
+
+  @override
+  String get learnByPlaying => 'per ludado!';
+
+  @override
+  String learnProgressX(String param) {
+    return 'Progreso: $param';
+  }
+
+  @override
+  String get learnResetMyProgress => 'Nulu mian progreson';
+
+  @override
+  String get learnYouWillLoseAllYourProgress => 'Vi tute perdos vian progreson!';
+
+  @override
+  String get learnPlay => 'ludi!';
+
+  @override
+  String get learnChessPieces => 'Ŝakludaj pecoj';
+
+  @override
+  String get learnTheRook => 'La turo';
+
+  @override
+  String get learnItMovesInStraightLines => 'Ĝi moviĝas rekte';
+
+  @override
+  String get learnRookIntro => 'La turo estas forta peco. Ĉu vi pretas regi ĝin?';
+
+  @override
+  String get learnRookGoal => 'Alklaku la turon por movi ĝin al la stelo!';
+
+  @override
+  String get learnGrabAllTheStars => 'Kaptu la stelojn!';
+
+  @override
+  String get learnTheFewerMoves => 'Ju malpli vi movus la pecon, des pli poentojn vi gajnus!';
+
+  @override
+  String get learnUseTwoRooks => 'Uzu du turojn por akceli la ludon!';
+
+  @override
+  String get learnRookComplete => 'Gratulon! Vi sukcese regis la turon.';
+
+  @override
+  String get learnTheBishop => 'La kuriero';
+
+  @override
+  String get learnItMovesDiagonally => 'Ĝi moviĝas diagonale';
+
+  @override
+  String get learnBishopIntro => 'Nun ni lernas kiel manovri kurieron!';
+
+  @override
+  String get learnYouNeedBothBishops => 'Unu hela-kvadrata kuriero,\nunu malhela-kvadrata kuriero.\nVi bezonas ambaŭ!';
+
+  @override
+  String get learnBishopComplete => 'Gratulojn! Vi povas regi kurieron.';
+
+  @override
+  String get learnTheQueen => 'La damo';
+
+  @override
+  String get learnQueenCombinesRookAndBishop => 'Damo = turo + kuriero';
+
+  @override
+  String get learnQueenIntro => 'La plej potenca ŝako peco eniras. Jen la damo!';
+
+  @override
+  String get learnQueenComplete => 'Gratulon! Damoj ne havas sekretojn por vi.';
+
+  @override
+  String get learnTheKing => 'La reĝo';
+
+  @override
+  String get learnTheMostImportantPiece => 'La plej grava peco';
+
+  @override
+  String get learnKingIntro => 'Vi estas la reĝo. Se vi falos en batalo, la ludo perdiĝos.';
+
+  @override
+  String get learnTheKingIsSlow => 'La reĝo estas malrapida.';
+
+  @override
+  String get learnLastOne => 'La lasta!';
+
+  @override
+  String get learnKingComplete => 'Vi nun povas regi la reganton!';
+
+  @override
+  String get learnTheKnight => 'La ĉevalo';
+
+  @override
+  String get learnItMovesInAnLShape => 'Ĝi moviĝas en L formo';
+
+  @override
+  String get learnKnightIntro => 'Jen defio por vi. La ĉevalo estas... malklara peco.';
+
+  @override
+  String get learnKnightsHaveAFancyWay => 'Ĉevaloj havas malsimplan vojon\nsalti ĉirkaŭe!';
+
+  @override
+  String get learnKnightsCanJumpOverObstacles => 'Ĉevaloj povas salti super obstakloj!\nEskapu kaj venku la stelojn!';
+
+  @override
+  String get learnKnightComplete => 'Gratulon! Vi regis la ĉevalon.';
+
+  @override
+  String get learnThePawn => 'La soldato';
+
+  @override
+  String get learnItMovesForwardOnly => 'Ĝi nur moviĝas antaŭe';
+
+  @override
+  String get learnPawnIntro => 'Soldatoj estas malfortaj, sed ili havas multe da potencialo.';
+
+  @override
+  String get learnPawnsMoveOneSquareOnly => 'Soldatoj povas moviĝi nur unu spaco. Sed atinginte la malan flankon de la tabulo, ili fariĝas pli fortaj pecoj!';
+
+  @override
+  String get learnMostOfTheTimePromotingToAQueenIsBest => 'Plejofte, rangaltigi al reĝino estas plej taŭga.\nSed foje, ĉevalo povas esti oportuna!';
+
+  @override
+  String get learnPawnsMoveForward => 'Peonoj moviĝas antaŭe, sed kaptas oblikve!';
+
+  @override
+  String get learnCaptureThenPromote => 'Kaptu, poste rangaltigu!';
+
+  @override
+  String get learnUseAllThePawns => 'Uzu ĉiujn soldatojn!\nNe necesas rangaltigi.';
+
+  @override
+  String get learnAPawnOnTheSecondRank => 'Soldato en la dua vico povas moviĝi 2 kvadratojn dum unu vico!';
+
+  @override
+  String get learnGrabAllTheStarsNoNeedToPromote => 'Prenu ĉiujn stelojn!\nNe necesas rangaltigi.';
+
+  @override
+  String get learnPawnComplete => 'Gratulon! Soldatoj kaŝas nenion al vi.';
+
+  @override
+  String get learnPawnPromotion => 'Rangaltigo de soldato';
+
+  @override
+  String get learnYourPawnReachedTheEndOfTheBoard => 'Via soldato atingis la finon de la tabulo!';
+
+  @override
+  String get learnItNowPromotesToAStrongerPiece => 'Ĝi nun rangaltiĝas al pli forta peco.';
+
+  @override
+  String get learnSelectThePieceYouWant => 'Elektu la pecojn, kiujn vi volas!';
+
+  @override
+  String get learnFundamentals => 'Fundamentoj';
+
+  @override
+  String get learnCapture => 'Kapti';
+
+  @override
+  String get learnTakeTheEnemyPieces => 'Mortigi la malamikajn pecojn';
+
+  @override
+  String get learnCaptureIntro => 'Rimarku kaj kaptu la malsekuraj pecoj de la oponanto!';
+
+  @override
+  String get learnTakeTheBlackPieces => 'Kaptu la nigrajn pecojn!';
+
+  @override
+  String get learnTakeTheBlackPiecesAndDontLoseYours => 'Kaptu la nigrajn pecojn!\nKaj ne perdu la viajn.';
+
+  @override
+  String get learnCaptureComplete => 'Gratulojn! Vi scias, kiel batali per ŝakaj pecoj!';
+
+  @override
+  String get learnProtection => 'Protekto';
+
+  @override
+  String get learnKeepYourPiecesSafe => 'Protektu viajn pecojn';
+
+  @override
+  String get learnProtectionIntro => 'Identigu la pecojn, kiujn atakas via kontraŭulo kaj defendu ilin!';
+
+  @override
+  String get learnProtectionComplete => 'Gratulojn! Peco, kiun vi ne perdas, estas peco, kiun vi gajnas!';
+
+  @override
+  String get learnEscape => 'Vi estas sub atako!\nEskapu la minacon!';
+
+  @override
+  String get learnNoEscape => 'Ne ekzistas eskapilo,\nsed vi povas protekti!';
+
+  @override
+  String get learnDontLetThemTakeAnyUndefendedPiece => 'Ne lasu ilin preni\nIu ajn senŝanĝa peco!';
+
+  @override
+  String get learnCombat => 'Batalo';
+
+  @override
+  String get learnCaptureAndDefendPieces => 'Kapti kaj protekti pecojn';
+
+  @override
+  String get learnCombatIntro => 'Bona militisto konas ambaŭ atakojn kaj defendojn!';
+
+  @override
+  String get learnCombatComplete => 'Gratulojn! Vi scias, kiel batali per ŝakaj pecoj!';
+
+  @override
+  String get learnCheckInOne => 'Ŝaku unu';
+
+  @override
+  String get learnAttackTheOpponentsKing => 'Ataku la reĝon de la kontraŭulo';
+
+  @override
+  String get learnCheckInOneIntro => 'Por ŝaki vian kontraŭulon, ataku ilian reĝon. Ili devas protekti ĝin!';
+
+  @override
+  String get learnCheckInOneGoal => 'Fino ĉe la reĝo de la kontraŭulo\nen unu movo!';
+
+  @override
+  String get learnCheckInOneComplete => 'Gratulojn! Vi ŝakis vian kontraŭulon, devigante ilin defendi sian reĝon!';
+
+  @override
+  String get learnOutOfCheck => 'Ekstere de ŝako';
+
+  @override
+  String get learnDefendYourKing => 'Defendu vian reĝon';
+
+  @override
+  String get learnOutOfCheckIntro => 'Vi estas en ŝako! Vi devas eskapi aŭ bloki la atakon.';
+
+  @override
+  String get learnEscapeWithTheKing => 'Eskapu kun la reĝo!';
+
+  @override
+  String get learnTheKingCannotEscapeButBlock => 'La reĝo ne povas eskapi,\nSed vi povas bloki la atakon!';
+
+  @override
+  String get learnYouCanGetOutOfCheckByTaking => 'Vi povas eskapi ŝakon\nprenante la atakantan pecon.';
+
+  @override
+  String get learnThisKnightIsCheckingThroughYourDefenses => 'Ĉi tiu ĉevalo ŝakas\ntra viaj arieruloj!';
+
+  @override
+  String get learnEscapeOrBlock => 'Eskapu kun la reĝo\nAŭ bloki la atakon!';
+
+  @override
+  String get learnOutOfCheckComplete => 'Gratulojn! Via reĝo neniam povas esti prenita, certigu, ke vi povas protekti kontraŭ ŝako!';
+
+  @override
+  String get learnMateInOne => 'Mato unu';
+
+  @override
+  String get learnDefeatTheOpponentsKing => 'Malvenki la reĝon de la kontraŭulo';
+
+  @override
+  String get learnMateInOneIntro => 'Vi venkas, kiam via kontraŭulo ne povas protekti kontraŭ ŝako.';
+
+  @override
+  String get learnAttackYourOpponentsKing => 'Ataku la reĝon de via kontraŭulo\nEn vojo kiu ne povas esti protektita!';
+
+  @override
+  String get learnMateInOneComplete => 'Gratulojn! Jen kiel vi venkas ŝakludojn!';
+
+  @override
+  String get learnIntermediate => 'Meznivela';
+
+  @override
+  String get learnBoardSetup => 'Antaŭfaro de la tabulo';
+
+  @override
+  String get learnHowTheGameStarts => 'Kiel la ludo komencas';
+
+  @override
+  String get learnBoardSetupIntro => 'La du armeoj alfrontas unu la alian, pretaj por la batalo.';
+
+  @override
+  String get learnThisIsTheInitialPosition => 'Ĉi tiu estas la komenca pozicio\nde ĉiu ludo de ŝako!\nFaru iun movon por daŭrigi.';
+
+  @override
+  String get learnFirstPlaceTheRooks => 'Unue loku la turojn!\nIli iras en la anguloj.';
+
+  @override
+  String get learnThenPlaceTheKnights => 'Tiam metu la ĉevalojn!\nIli iras apud la turoj.';
+
+  @override
+  String get learnPlaceTheBishops => 'Metu la kurierojn!\nIli iras apud la ĉevaloj.';
+
+  @override
+  String get learnPlaceTheQueen => 'Metu la damon!\nŜi iras sur sian propran koloron.';
+
+  @override
+  String get learnPlaceTheKing => 'Metu la reĝon!\nĜuste apud sia damo.';
+
+  @override
+  String get learnPawnsFormTheFrontLine => 'La antaŭa linio fariĝas el soldatoj.\nFaru ajnan movon por daŭrigi.';
+
+  @override
+  String get learnBoardSetupComplete => 'Gratulojn! Vi scias kiel starigi la ŝakan tabulon.';
+
+  @override
+  String get learnCastling => 'Aroki';
+
+  @override
+  String get learnTheSpecialKingMove => 'La speciala reĝo moviĝas';
+
+  @override
+  String get learnCastlingIntro => 'Alportu vian reĝon en sekurecon, kaj lanĉu vian turon por atako!';
+
+  @override
+  String get learnCastleKingSide => 'Movu vian reĝon du kvadratojn por aroki reĝflanke!';
+
+  @override
+  String get learnCastleQueenSide => 'Movu vian reĝon du kvadratojn por aroki damflanke!';
+
+  @override
+  String get learnTheKnightIsInTheWay => 'La ĉevalo obstrukcas la vojon!\nMovi ĝin, poste aroku reĝflanke.';
+
+  @override
+  String get learnCastleKingSideMovePiecesFirst => 'Aroku reĝflanke!\nUnue devas vi movi pecojn.';
+
+  @override
+  String get learnCastleQueenSideMovePiecesFirst => 'Aroku damflanke!\nUnue devas vi movi pecojn.';
+
+  @override
+  String get learnYouCannotCastleIfMoved => 'Vi ne povas aroki\nse la reĝo jam moviĝis\naŭ la turo jam moviĝis.';
+
+  @override
+  String get learnYouCannotCastleIfAttacked => 'Vi ne povas aroki se\nla reĝo estas atakita en la vojo.\nBloku la ŝakon, poste aroku!';
+
+  @override
+  String get learnFindAWayToCastleKingSide => 'Aroku reĝflanke iele!';
+
+  @override
+  String get learnFindAWayToCastleQueenSide => 'Aroku damflanke iele!';
+
+  @override
+  String get learnCastlingComplete => 'Gratulon! Vi devas preskaŭ ĉiam aroki dum ajna ludu.';
+
+  @override
+  String get learnTheSpecialPawnMove => 'La aparta movo de la soldato';
+
+  @override
+  String get learnEnPassantIntro => 'Kiam la kontraŭa soldato moviĝis 2 kvadratojn, vi povas kapti ĝin kvazaŭ ĝi movus 1 kvadraton.';
+
+  @override
+  String get learnBlackJustMovedThePawnByTwoSquares => 'La nigrulo ĵus movis la soldaton\nje du kvadratoj!\nPreterpase prenu ĝin.';
+
+  @override
+  String get learnEnPassantOnlyWorksImmediately => 'Preterpasa preno sole\nfareblas post soldatomovo\nde la kontraŭulo.';
+
+  @override
+  String get learnEnPassantOnlyWorksOnFifthRank => 'Preterpasa preno sole fareblas\nse via soldato staras en la 5-a vico.';
+
+  @override
+  String get learnTakeAllThePawnsEnPassant => 'Preterpase prenu ĉiujn soldatojn!';
+
+  @override
+  String get learnEnPassantComplete => 'Gratulojn! Vi nun scipovas preterpase preni.';
+
+  @override
+  String get learnStalemate => 'Pato';
+
+  @override
+  String get learnTheGameIsADraw => 'La ludo estas egalvenko';
+
+  @override
+  String get learnStalemateIntro => 'Kiam ludanto ne ŝakas kaj ne ekzistas permesebla movo, estas pato. La ludo estas remio: neniu venkas, neniu malvenkas.';
+
+  @override
+  String get learnStalemateGoal => 'Por pati la nigrulon:\n- Nigrulo ne povas movi iun pecon ien ajn.\n- Ne estas ŝako.';
+
+  @override
+  String get learnStalemateComplete => 'Gratulon! Pli bone pato ol mato!';
+
+  @override
+  String get learnAdvanced => 'Altnivela';
+
+  @override
+  String get learnPieceValue => 'Peca valoro';
+
+  @override
+  String get learnEvaluatePieceStrength => 'Taksi pecan forton';
+
+  @override
+  String get learnPieceValueIntro => 'Pecoj kun alta movebleco havas pli altan valoron!\nDamo = 9\nTuro = 5\nKuriero = 3\nĈevalo = 3\nSoldato = 1\nLa reĝo elstare valoregas! Kiu perdas lin, perdas la ludon.';
+
+  @override
+  String get learnQueenOverBishop => 'Prenu la pecon\nkun la plej alta valoro!\nDamo > Kuriero';
+
+  @override
+  String get learnPieceValueExchange => 'Prenu la pecon kun la plej alta valoro!\n Ne interŝanĝu\n pli altvaloran pecon kontraŭ malpli valora.';
+
+  @override
+  String get learnPieceValueLegal => 'Prenu la pecon\nkun la plej alta valoro!\nCertiĝu, ke via movo estas laŭleĝa!';
+
+  @override
+  String get learnTakeThePieceWithTheHighestValue => 'Prenu la pecon\nkun la plej alta valoro!';
+
+  @override
+  String get learnPieceValueComplete => 'Gratulon! Vi nun konas la valoron de materio!\nDamo = 9\nTuro = 5\nKuriero = 3\nĈevalo = 3\nSoldato = 1';
+
+  @override
+  String get learnCheckInTwo => 'Ŝaku du';
+
+  @override
+  String get learnTwoMovesToGiveCheck => 'Du movoj por doni ŝakon';
+
+  @override
+  String get learnCheckInTwoIntro => 'Trovu la ĝustan kombinon de du movoj, kiuj ŝakas la reĝon de la kontraŭulo!';
+
+  @override
+  String get learnCheckInTwoGoal => 'Minacas la reĝon de la kontraŭulo\nen du movoj!';
+
+  @override
+  String get learnCheckInTwoComplete => 'Gratulojn! Vi ŝakis vian kontraŭulon, devigante ilin defendi sian reĝon!';
+
+  @override
+  String get learnWhatNext => 'Kio proksime?';
+
+  @override
+  String get learnYouKnowHowToPlayChess => 'Vi scias kiel ludi ŝakon, gratulojn! Ĉu vi volas fariĝi pli forta ludanto?';
+
+  @override
+  String get learnRegister => 'Registriĝi';
+
+  @override
+  String get learnGetAFreeLichessAccount => 'Akiri liberan konton de Lichess';
+
+  @override
+  String get learnPractice => 'Praktiki';
+
+  @override
+  String get learnLearnCommonChessPositions => 'Lernu komunajn ŝakajn poziciojn';
+
+  @override
+  String get learnPuzzles => 'Puzloj';
+
+  @override
+  String get learnExerciseYourTacticalSkills => 'Ekzerĉi viajn taktikajn kapablojn';
+
+  @override
+  String get learnVideos => 'Filmetoj';
+
+  @override
+  String get learnWatchInstructiveChessVideos => 'Spektu instruajn ŝakajn filmetojn';
+
+  @override
+  String get learnPlayPeople => 'Ludi kontraŭ homoj';
+
+  @override
+  String get learnOpponentsFromAroundTheWorld => 'Kontraŭuloj de la tuta mondo';
+
+  @override
+  String get learnPlayMachine => 'Ludi kontraŭ komputilo';
+
+  @override
+  String get learnTestYourSkillsWithTheComputer => 'Provu viajn kapablojn per la komputilo';
+
+  @override
+  String get learnLetsGo => 'Ni iru!';
+
+  @override
+  String learnStageX(String param) {
+    return 'Nivelo $param';
+  }
+
+  @override
+  String get learnAwesome => 'Mojosa!';
+
+  @override
+  String get learnExcellent => 'Bonega!';
+
+  @override
+  String get learnGreatJob => 'Bonega laboro!';
+
+  @override
+  String get learnPerfect => 'Perfekta!';
+
+  @override
+  String get learnOutstanding => 'Elstara!';
+
+  @override
+  String get learnWayToGo => 'Vojo iri!';
+
+  @override
+  String get learnYesYesYes => 'Jes, jes, jes!';
+
+  @override
+  String get learnYoureGoodAtThis => 'Vi estas bona pri tio!';
+
+  @override
+  String get learnNailedIt => 'Perfekta.';
+
+  @override
+  String get learnRightOn => 'Ĝuste!';
+
+  @override
+  String learnStageXComplete(String param) {
+    return 'Nivelo $param kompleta';
+  }
+
+  @override
+  String get learnNext => 'Proksima';
+
+  @override
+  String learnNextX(String param) {
+    return 'Proksima: $param';
+  }
+
+  @override
+  String get learnBackToMenu => 'Reveni al la menuo';
+
+  @override
+  String get learnPuzzleFailed => 'Puzilo malsukcesis!';
+
+  @override
+  String get learnRetry => 'Reprovi';
+
+  @override
   String get patronDonate => 'Donaci';
 
   @override

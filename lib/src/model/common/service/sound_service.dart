@@ -30,6 +30,14 @@ enum Sound() {
   puzzleStormEnd,
   clock,
   berserk,
+
+  // Sounds of the learn feature, which exist in the standard theme only.
+  learnTake,
+  learnLevelStart,
+  learnLevelEnd,
+  learnStageStart,
+  learnStageEnd,
+  learnFailure,
 }
 
 /// A provider for [SoundService].

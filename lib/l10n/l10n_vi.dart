@@ -1336,6 +1336,527 @@ class AppLocalizationsVi extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Chỉ thực hành ở một số tệp & thứ hạng';
 
   @override
+  String get learnLearnChess => 'Học cờ vua';
+
+  @override
+  String get learnByPlaying => 'bằng cách chơi!';
+
+  @override
+  String learnProgressX(String param) {
+    return 'Tiến trình: $param';
+  }
+
+  @override
+  String get learnResetMyProgress => 'Đặt lại tiến trình của tôi';
+
+  @override
+  String get learnYouWillLoseAllYourProgress => 'Bạn sẽ mất tất cả các tiến trình của bạn!';
+
+  @override
+  String get learnPlay => 'chơi!';
+
+  @override
+  String get learnChessPieces => 'Các quân cờ';
+
+  @override
+  String get learnTheRook => 'Quân xe';
+
+  @override
+  String get learnItMovesInStraightLines => 'Nó đi theo các đường thẳng';
+
+  @override
+  String get learnRookIntro => 'Quân xe là một quân cờ mạnh. Bạn đã sẵn sàng điều khiển nó chưa?';
+
+  @override
+  String get learnRookGoal => 'Nhấn vào quân xe \nđể đưa nó đến ngôi sao!';
+
+  @override
+  String get learnGrabAllTheStars => 'Lấy tất cả các ngôi sao!';
+
+  @override
+  String get learnTheFewerMoves => 'Bạn đi càng ít nước, \nbạn càng được nhiều điểm!';
+
+  @override
+  String get learnUseTwoRooks => 'Dùng hai quân xe \nđể tăng tốc mọi thứ!';
+
+  @override
+  String get learnRookComplete => 'Chúc mừng! Bạn đã làm chủ được quân xe.';
+
+  @override
+  String get learnTheBishop => 'Quân tượng';
+
+  @override
+  String get learnItMovesDiagonally => 'Nó đi chéo';
+
+  @override
+  String get learnBishopIntro => 'Tiếp theo chúng ta sẽ học cách điều khiển quân tượng!';
+
+  @override
+  String get learnYouNeedBothBishops => 'Một quân tượng ô trắng, \nmột quân tượng ô đen. \nBạn cần cả hai!';
+
+  @override
+  String get learnBishopComplete => 'Chúc mừng! Bạn đã có thể chỉ huy một quân tượng.';
+
+  @override
+  String get learnTheQueen => 'Quân hậu';
+
+  @override
+  String get learnQueenCombinesRookAndBishop => 'Hậu = xe + tượng';
+
+  @override
+  String get learnQueenIntro => 'Quân cờ mạnh nhất là đây. Hoàng hậu vĩ đại!';
+
+  @override
+  String get learnQueenComplete => 'Chúc mừng! Bạn đã nắm mọi bí mật của quân Hậu.';
+
+  @override
+  String get learnTheKing => 'Quân vua';
+
+  @override
+  String get learnTheMostImportantPiece => 'Quân cờ quan trọng nhất';
+
+  @override
+  String get learnKingIntro => 'Bạn là quân vua. Nếu bạn bị ăn thì sẽ thua ván cờ.';
+
+  @override
+  String get learnTheKingIsSlow => 'Quân vua thì đi chậm.';
+
+  @override
+  String get learnLastOne => 'Cuối cùng!';
+
+  @override
+  String get learnKingComplete => 'Bây giờ bạn có thể chỉ huy người chỉ huy!';
+
+  @override
+  String get learnTheKnight => 'Quân mã';
+
+  @override
+  String get learnItMovesInAnLShape => 'Nó đi theo hình chữ L';
+
+  @override
+  String get learnKnightIntro => 'Đây là một thử thách cho bạn. Quân mã là... một quân mưu mẹo.';
+
+  @override
+  String get learnKnightsHaveAFancyWay => 'Quân mã nhảy vòng quanh \nmột cách sành điệu!';
+
+  @override
+  String get learnKnightsCanJumpOverObstacles => 'Quân mã có thể nhảy qua các chướng ngại vật!\nTrốn thoát và lấy các ngôi sao!';
+
+  @override
+  String get learnKnightComplete => 'Chúc mừng! Bạn đã làm chủ được quân mã.';
+
+  @override
+  String get learnThePawn => 'Quân tốt';
+
+  @override
+  String get learnItMovesForwardOnly => 'Nó chỉ đi về phía trước';
+
+  @override
+  String get learnPawnIntro => 'Tốt rất yếu, nhưng chúng có rất nhiều tiềm năng.';
+
+  @override
+  String get learnPawnsMoveOneSquareOnly => 'Tốt chỉ đi về phía trước một ô.\nNhưng khi chúng đi đến bên kia của bàn cờ, chúng trở thành một quân mạnh hơn!';
+
+  @override
+  String get learnMostOfTheTimePromotingToAQueenIsBest => 'Phần lớn trường hợp thì phong cấp thành một quân hậu là tốt nhất.\nNhưng đôi khi một quân mã có thể có ích!';
+
+  @override
+  String get learnPawnsMoveForward => 'Tốt đi về phía trước\nnhưng ăn quân theo hướng chéo!';
+
+  @override
+  String get learnCaptureThenPromote => 'Ăn quân, sau đó phong cấp!';
+
+  @override
+  String get learnUseAllThePawns => 'Hãy sử dụng hết quân Tốt!\nKhông cần phong cấp đâu.';
+
+  @override
+  String get learnAPawnOnTheSecondRank => 'Một quân tốt trắng mà nằm ở hàng thứ 2 hoặc quân tốt đen ở hàng 7 có thể đi 2 ô trong một nước đi đấy!';
+
+  @override
+  String get learnGrabAllTheStarsNoNeedToPromote => 'Hãy lấy tất cả các ngôi sao!\nNhưng không cần phải phong cấp đâu.';
+
+  @override
+  String get learnPawnComplete => 'Chúc mừng! Bạn đã nắm mọi bí mật của quân Tốt.';
+
+  @override
+  String get learnPawnPromotion => 'Phong cấp cho Tốt';
+
+  @override
+  String get learnYourPawnReachedTheEndOfTheBoard => 'Quân Tốt của bạn đã đến bên kia của bàn cờ rồi đấy!';
+
+  @override
+  String get learnItNowPromotesToAStrongerPiece => 'Bây giờ nó cần phải được phong cấp lên một quân mạnh hơn.';
+
+  @override
+  String get learnSelectThePieceYouWant => 'Chọn quân mà bạn muốn!';
+
+  @override
+  String get learnFundamentals => 'Nguyên tắc cơ bản';
+
+  @override
+  String get learnCapture => 'Ăn quân';
+
+  @override
+  String get learnTakeTheEnemyPieces => 'Ăn quân của đối thủ';
+
+  @override
+  String get learnCaptureIntro => 'Xác định các quân không được phòng thủ của đối phương và ăn chúng!';
+
+  @override
+  String get learnTakeTheBlackPieces => 'Hãy ăn lấy quân đen!';
+
+  @override
+  String get learnTakeTheBlackPiecesAndDontLoseYours => 'Ăn lấy quân đen!\nNhưng đừng để mất quân của bạn.';
+
+  @override
+  String get learnCaptureComplete => 'Chúc mừng! Bạn đã nắm được cách đánh với các quân cờ!';
+
+  @override
+  String get learnProtection => 'Phòng thủ';
+
+  @override
+  String get learnKeepYourPiecesSafe => 'Giữ an toàn cho quân của bạn';
+
+  @override
+  String get learnProtectionIntro => 'Xác định các quân đang bị đối thủ tấn công và phòng thủ cho chúng!';
+
+  @override
+  String get learnProtectionComplete => 'Chúc mừng! Quân cờ của bạn không bị mất là quân cờ của bạn thắng!';
+
+  @override
+  String get learnEscape => 'Bạn đang bị tấn công! \nHãy thoát khỏi mối đe dọa đó!';
+
+  @override
+  String get learnNoEscape => 'Không có nước để chạy thoát, \nnhưng bạn có thể phòng thủ!';
+
+  @override
+  String get learnDontLetThemTakeAnyUndefendedPiece => 'Đừng để chúng bắt \nbất kỳ quân không được bảo vệ nào!';
+
+  @override
+  String get learnCombat => 'Giao chiến';
+
+  @override
+  String get learnCaptureAndDefendPieces => 'Ăn và bảo vệ quân';
+
+  @override
+  String get learnCombatIntro => 'Một chiến binh giỏi phải biết cả tấn công lẫn phòng thủ!';
+
+  @override
+  String get learnCombatComplete => 'Chúc mừng! Bạn đã biết làm sao để chiến đấu với các quân cờ!';
+
+  @override
+  String get learnCheckInOne => 'Chiếu trong 1 nước';
+
+  @override
+  String get learnAttackTheOpponentsKing => 'Tấn công Vua đối phương';
+
+  @override
+  String get learnCheckInOneIntro => 'Để chiếu đối thủ, hãy tấn công quân Vua. Họ sẽ phải phòng thủ!';
+
+  @override
+  String get learnCheckInOneGoal => 'Đe dọa Vua đối phương trong một nước!';
+
+  @override
+  String get learnCheckInOneComplete => 'Chúc mừng! Bạn đang chiếu đối phương, bắt buộc họ phải bảo vệ Vua!';
+
+  @override
+  String get learnOutOfCheck => 'Thoát chiếu';
+
+  @override
+  String get learnDefendYourKing => 'Phòng thủ Vua';
+
+  @override
+  String get learnOutOfCheckIntro => 'Bạn đang bị chiếu! Bạn phải thoát khỏi vị trí bị chiếu hoặc chặn nước chiếu.';
+
+  @override
+  String get learnEscapeWithTheKing => 'Chạy Vua khỏi bị chiếu!';
+
+  @override
+  String get learnTheKingCannotEscapeButBlock => 'Quân Vua không thể thoát chiếu, \nnhưng bạn có thể chặn nước chiếu!';
+
+  @override
+  String get learnYouCanGetOutOfCheckByTaking => 'Bạn có thể thoát chiếu \nbằng cách ăn quân đang chiếu.';
+
+  @override
+  String get learnThisKnightIsCheckingThroughYourDefenses => 'Quân mã này đang chiếu \nxuyên qua các quân phòng thủ!';
+
+  @override
+  String get learnEscapeOrBlock => 'Chạy quân Vua \nhoặc chặn nước chiếu!';
+
+  @override
+  String get learnOutOfCheckComplete => 'Chúc mừng! Quân Vua có thể không bao giờ bị bắt, hãy đảm bảo bạn có thể phòng thủ nước chiếu!';
+
+  @override
+  String get learnMateInOne => 'Chiếu hết trong 1 nước';
+
+  @override
+  String get learnDefeatTheOpponentsKing => 'Đánh bại Vua đối phương';
+
+  @override
+  String get learnMateInOneIntro => 'Bạn thắng khi đối phương không thể phòng thủ nước chiếu.';
+
+  @override
+  String get learnAttackYourOpponentsKing => 'Tấn công Vua đối phương \nbằng một cách mà đối phương không thể phòng thủ!';
+
+  @override
+  String get learnMateInOneComplete => 'Chúc mừng! Đó là cách để bạn thắng ván cờ!';
+
+  @override
+  String get learnIntermediate => 'Trung cấp';
+
+  @override
+  String get learnBoardSetup => 'Thiết lập bàn cờ';
+
+  @override
+  String get learnHowTheGameStarts => 'Ván cờ bắt đầu như thế nào';
+
+  @override
+  String get learnBoardSetupIntro => 'Hai bên quân đối mặt với nhau, sẵn sàng cho cuộc chiến.';
+
+  @override
+  String get learnThisIsTheInitialPosition => 'Đây là thế trận ban đầu \ncủa mọi ván cờ!\nHãy đi nước bất kỳ để tiếp tục.';
+
+  @override
+  String get learnFirstPlaceTheRooks => 'Đầu tiên hãy đặt các quân xe!\nChúng nằm ở các góc bàn cờ.';
+
+  @override
+  String get learnThenPlaceTheKnights => 'Rồi đặt các quân Mã! \nNgay cạnh quân Xe.';
+
+  @override
+  String get learnPlaceTheBishops => 'Đặt quân Tượng!\nNgay cạnh quân Mã.';
+
+  @override
+  String get learnPlaceTheQueen => 'Đặt quân Hậu!\nNó ở ô cùng màu với quân của bạn.';
+
+  @override
+  String get learnPlaceTheKing => 'Đặt quân Vua!\nBên phải cạnh quân Hậu.';
+
+  @override
+  String get learnPawnsFormTheFrontLine => 'Các quân tốt tạo nên hàng phía trước.\nHãy đi nước bất kỳ để tiếp tục.';
+
+  @override
+  String get learnBoardSetupComplete => 'Chúc mừng! Bạn đã biết cách thiết lập bàn cờ.';
+
+  @override
+  String get learnCastling => 'Nhập thành';
+
+  @override
+  String get learnTheSpecialKingMove => 'Nước đi đặc biệt của quân Vua';
+
+  @override
+  String get learnCastlingIntro => 'Chuyển quân Vua đến vị trí an toàn, và triển khai quân Xe để tấn công!';
+
+  @override
+  String get learnCastleKingSide => 'Di chuyển quân Vua 2 ô để nhập thành gần!';
+
+  @override
+  String get learnCastleQueenSide => 'Di chuyển quân Vua 2 ô\nđể nhập thành xa!';
+
+  @override
+  String get learnTheKnightIsInTheWay => 'Quân Mã đang chắn lối nhập thành!\nDi chuyển nó, và nhập thành gần.';
+
+  @override
+  String get learnCastleKingSideMovePiecesFirst => 'Nhập thành gần!\nBạn cần đi hết quân ở đó trước.';
+
+  @override
+  String get learnCastleQueenSideMovePiecesFirst => 'Nhập thành xa!\nBạn cần đi hết quân ở đó trước.';
+
+  @override
+  String get learnYouCannotCastleIfMoved => 'Bạn không thể nhập thành nếu\nquân Vua đã di chuyển\nhoặc quân Xe đã di chuyển.';
+
+  @override
+  String get learnYouCannotCastleIfAttacked => 'Bạn không thể nhập thành nếu\nquân Vua bị chiếu trên đường nhập thành.\nHãy chặn nước chiếu sau đó nhập thành!';
+
+  @override
+  String get learnFindAWayToCastleKingSide => 'Tìm cách để\nnhập thành gần!';
+
+  @override
+  String get learnFindAWayToCastleQueenSide => 'Tìm cách để nhập thành xa!';
+
+  @override
+  String get learnCastlingComplete => 'Chúc mừng! Bạn luôn nên nhập thành trong mọi ván đấu.';
+
+  @override
+  String get learnTheSpecialPawnMove => 'Nước đi đặc biệt của quân Tốt';
+
+  @override
+  String get learnEnPassantIntro => 'Khi đối thủ di chuyển tốt lên hai ô, bạn có thể bắt nó như khi nó di chuyên lên một ô.';
+
+  @override
+  String get learnBlackJustMovedThePawnByTwoSquares => 'Quân đen vừa di chuyển tốt\nlên hai ô!\nHãy bắt tốt qua đường.';
+
+  @override
+  String get learnEnPassantOnlyWorksImmediately => 'Bắt tốt qua đường chỉ xảy ra\nngay lập tức sau khi đối thủ\ndi chuyển quân tốt.';
+
+  @override
+  String get learnEnPassantOnlyWorksOnFifthRank => 'Bắt tốt qua đường chỉ xẩy ra\nnếu tốt của bạn ở hàng thứ 5.';
+
+  @override
+  String get learnTakeAllThePawnsEnPassant => 'Bắt tất các các quân tốt bằng bắt tốt qua đường!';
+
+  @override
+  String get learnEnPassantComplete => 'Xin chúc mừng! Bây giờ bạn có thể bắt tốt qua đường.';
+
+  @override
+  String get learnStalemate => 'Thủ hòa';
+
+  @override
+  String get learnTheGameIsADraw => 'Ván cờ hòa do bí nước hay hết nước đi hợp lệ';
+
+  @override
+  String get learnStalemateIntro => 'Khi người chơi không bị chiếu và không có nước đi nào hợp lệ, nó được tính là hòa pat. Ván cờ kết thúc hòa: không ai thắng, không ai thua.';
+
+  @override
+  String get learnStalemateGoal => 'Để bên đen hòa pat:\n- Bên đen không thể di chuyển bất cứ đâu\n- Bên đen không bị chiếu.';
+
+  @override
+  String get learnStalemateComplete => 'Chúc mừng! Thà bị hòa pat còn hơn bị chiếu hết!';
+
+  @override
+  String get learnAdvanced => 'Nâng cao';
+
+  @override
+  String get learnPieceValue => 'Giá trị của quân';
+
+  @override
+  String get learnEvaluatePieceStrength => 'Đánh giá sức mạnh của quân';
+
+  @override
+  String get learnPieceValueIntro => 'Quân cờ có khả năng di chuyển linh hoạt có giá trị cao hơn!\nHậu = 9\nXe = 5\nTượng = 3\nMã = 3\nTốt = 1\nQuân Vua là vô giá! Để mất Vua là thua cuộc.';
+
+  @override
+  String get learnQueenOverBishop => 'Ăn quân cờ\ncó giá trị cao nhất!\nHậu > Tượng';
+
+  @override
+  String get learnPieceValueExchange => 'Ăn quân có giá trị cao nhất!\n Không đổi\n quân có giá trị cao với quân có giá trị thấp.';
+
+  @override
+  String get learnPieceValueLegal => 'Ăn quân\ncó giá trị cao nhất!\nĐảm bảo rằng nước đi của bạn là hợp lệ!';
+
+  @override
+  String get learnTakeThePieceWithTheHighestValue => 'Hãy ăn quân\nvới giá trị cao nhất!';
+
+  @override
+  String get learnPieceValueComplete => 'Chúc mừng! Bạn đã hiểu giá trị từng quân cờ!\nHậu = 9\nXe = 5\nTượng = 3\nMã = 3\nTốt = 1';
+
+  @override
+  String get learnCheckInTwo => 'Chiếu trong 2 nước';
+
+  @override
+  String get learnTwoMovesToGiveCheck => 'Hai nước để chiếu';
+
+  @override
+  String get learnCheckInTwoIntro => 'Tìm sự kết hợp chính xác 2 nước đi để chiếu Vua đối phương!';
+
+  @override
+  String get learnCheckInTwoGoal => 'Đe dọa Vua đối phương\ntrong 2 nước!';
+
+  @override
+  String get learnCheckInTwoComplete => 'Chúc mừng! Bạn đang chiếu, bắt buộc đối thủ phải phòng thủ quân Vua!';
+
+  @override
+  String get learnWhatNext => 'Bước tiếp theo?';
+
+  @override
+  String get learnYouKnowHowToPlayChess => 'Bạn biết cách chơi cờ vua rồi đấy, chúc mừng! Bạn có muốn trở thành một người chơi giỏi hơn?';
+
+  @override
+  String get learnRegister => 'Đăng kí';
+
+  @override
+  String get learnGetAFreeLichessAccount => 'Tạo một tài khoản Lichess miễn phí';
+
+  @override
+  String get learnPractice => 'Tập luyện';
+
+  @override
+  String get learnLearnCommonChessPositions => 'Học về các thế cờ cơ bản';
+
+  @override
+  String get learnPuzzles => 'Câu đố';
+
+  @override
+  String get learnExerciseYourTacticalSkills => 'Luyện tập các kỹ năng chiến thuật của bạn';
+
+  @override
+  String get learnVideos => 'Các thước phim';
+
+  @override
+  String get learnWatchInstructiveChessVideos => 'Xem các thước phim hướng dẫn chơi cờ';
+
+  @override
+  String get learnPlayPeople => 'Đấu với người';
+
+  @override
+  String get learnOpponentsFromAroundTheWorld => 'Các đối thủ từ khắp nơi trên thế giới';
+
+  @override
+  String get learnPlayMachine => 'Đấu với máy';
+
+  @override
+  String get learnTestYourSkillsWithTheComputer => 'Kiểm tra các kỹ năng của bạn với máy';
+
+  @override
+  String get learnLetsGo => 'Bắt đầu nào!';
+
+  @override
+  String learnStageX(String param) {
+    return 'Chặng $param';
+  }
+
+  @override
+  String get learnAwesome => 'Tuyệt vời!';
+
+  @override
+  String get learnExcellent => 'Xuất sắc!';
+
+  @override
+  String get learnGreatJob => 'Làm tốt lắm!';
+
+  @override
+  String get learnPerfect => 'Hoàn hảo!';
+
+  @override
+  String get learnOutstanding => 'Đáng chú ý!';
+
+  @override
+  String get learnWayToGo => 'Làm rất tốt!';
+
+  @override
+  String get learnYesYesYes => 'Đúng, đúng, rất đúng!';
+
+  @override
+  String get learnYoureGoodAtThis => 'Bạn giỏi quá!';
+
+  @override
+  String get learnNailedIt => 'Luyện tập tốt.';
+
+  @override
+  String get learnRightOn => 'Chính xác, tuyệt vời!';
+
+  @override
+  String learnStageXComplete(String param) {
+    return 'Chặng $param hoàn thành';
+  }
+
+  @override
+  String get learnNext => 'Tiếp';
+
+  @override
+  String learnNextX(String param) {
+    return 'Tiếp theo: $param';
+  }
+
+  @override
+  String get learnBackToMenu => 'Quay lại mục lục';
+
+  @override
+  String get learnPuzzleFailed => 'Giải sai!';
+
+  @override
+  String get learnRetry => 'Thử lại';
+
+  @override
   String get patronDonate => 'Ủng hộ';
 
   @override

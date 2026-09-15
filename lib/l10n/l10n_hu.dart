@@ -1358,6 +1358,527 @@ class AppLocalizationsHu extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Gyakorolj csak pár oszloppal & sorral';
 
   @override
+  String get learnLearnChess => 'Tanulj sakkozni';
+
+  @override
+  String get learnByPlaying => 'játszva!';
+
+  @override
+  String learnProgressX(String param) {
+    return 'Haladás: $param';
+  }
+
+  @override
+  String get learnResetMyProgress => 'Haladásom nullázása';
+
+  @override
+  String get learnYouWillLoseAllYourProgress => 'Az összes eddigi haladásod el fog veszni!';
+
+  @override
+  String get learnPlay => 'játssz!';
+
+  @override
+  String get learnChessPieces => 'Sakkfigurák';
+
+  @override
+  String get learnTheRook => 'A bástya';
+
+  @override
+  String get learnItMovesInStraightLines => 'Egyenes vonalban mozog';
+
+  @override
+  String get learnRookIntro => 'A bástya erős figura. Felkészültél az irányítására?';
+
+  @override
+  String get learnRookGoal => 'Kattints a bástyára\nés mozgasd a csillagokhoz!';
+
+  @override
+  String get learnGrabAllTheStars => 'Szedd fel az összes csillagot!';
+
+  @override
+  String get learnTheFewerMoves => 'Minél kevesebbszer lépsz,\nannál több pontot kapsz!';
+
+  @override
+  String get learnUseTwoRooks => 'Két bástyával\ngyorsabban végzel!';
+
+  @override
+  String get learnRookComplete => 'Gratulálunk! Sikeresen elsajátítottad a bástya mozgását.';
+
+  @override
+  String get learnTheBishop => 'A futó';
+
+  @override
+  String get learnItMovesDiagonally => 'Átlósan mozog';
+
+  @override
+  String get learnBishopIntro => 'Most pedig megtanuljuk hogyan kell lépni a futóval!';
+
+  @override
+  String get learnYouNeedBothBishops => 'Az egyik futó világos mezőkön halad,\na másik futó pedig sötét mezőkön.\nMindkettőre szükséged van!';
+
+  @override
+  String get learnBishopComplete => 'Gratulálunk! Most már tudod irányítani a futót.';
+
+  @override
+  String get learnTheQueen => 'A vezér';
+
+  @override
+  String get learnQueenCombinesRookAndBishop => 'Vezér = bástya + futó';
+
+  @override
+  String get learnQueenIntro => 'Színre lép a legerősebb sakkfigura. Őméltósága a vezér!';
+
+  @override
+  String get learnQueenComplete => 'Gratulálunk! Kiismerted a vezér rejtelmeit.';
+
+  @override
+  String get learnTheKing => 'A király';
+
+  @override
+  String get learnTheMostImportantPiece => 'A legfontosabb figura';
+
+  @override
+  String get learnKingIntro => 'Te vagy a király. Ha elesel a csatában, elveszted a játszmát.';
+
+  @override
+  String get learnTheKingIsSlow => 'A király lassú.';
+
+  @override
+  String get learnLastOne => 'Az utolsó!';
+
+  @override
+  String get learnKingComplete => 'Most már parancsolhatsz a parancsnoknak!';
+
+  @override
+  String get learnTheKnight => 'A huszár';
+
+  @override
+  String get learnItMovesInAnLShape => 'L alakban mozog';
+
+  @override
+  String get learnKnightIntro => 'Itt egy feladat számodra. A huszár trükkös figura.';
+
+  @override
+  String get learnKnightsHaveAFancyWay => 'A huszárok különös módon\nugrálnak a táblán!';
+
+  @override
+  String get learnKnightsCanJumpOverObstacles => 'A huszárok átugorhatják az akadályokat!\nMenekülj és szerezd meg a csillagokat!';
+
+  @override
+  String get learnKnightComplete => 'Gratulálunk! Most már a huszár mozgásának mestere vagy.';
+
+  @override
+  String get learnThePawn => 'A gyalog';
+
+  @override
+  String get learnItMovesForwardOnly => 'Csak előre tud lépni';
+
+  @override
+  String get learnPawnIntro => 'A gyalogok gyengék, de nagy lehetőséget rejtenek.';
+
+  @override
+  String get learnPawnsMoveOneSquareOnly => 'A gyalogok csak egy mezőt léphetnek.\nViszont amikor elérik a tábla túlsó felét, erősebb figurává változnak!';
+
+  @override
+  String get learnMostOfTheTimePromotingToAQueenIsBest => 'Többnyire a királynővé változtatás a legjobb.\nDe néha egy huszár is jól jöhet!';
+
+  @override
+  String get learnPawnsMoveForward => 'A gyalogok előre lépnek,\nde átlósan ütnek!';
+
+  @override
+  String get learnCaptureThenPromote => 'Üsd le az ellenfelet, aztán változtasd át a gyalogodat!';
+
+  @override
+  String get learnUseAllThePawns => 'Használd az összes gyalogot!\nNem kell átváltoztatni őket.';
+
+  @override
+  String get learnAPawnOnTheSecondRank => 'A második sorban levő gyalogok kettőt is léphetnek!';
+
+  @override
+  String get learnGrabAllTheStarsNoNeedToPromote => 'Szedd fel az összes csillagot!\nNem kell átváltoztatni.';
+
+  @override
+  String get learnPawnComplete => 'Gratulálunk! Kiismerted a gyalogok rejtelmeit.';
+
+  @override
+  String get learnPawnPromotion => 'Gyalog átváltozás';
+
+  @override
+  String get learnYourPawnReachedTheEndOfTheBoard => 'A gyalogod elérte a tábla szélét!';
+
+  @override
+  String get learnItNowPromotesToAStrongerPiece => 'És most átváltozik egy erősebb figurává.';
+
+  @override
+  String get learnSelectThePieceYouWant => 'Válaszd ki a kívánt figurát!';
+
+  @override
+  String get learnFundamentals => 'Alapok';
+
+  @override
+  String get learnCapture => 'Ütés';
+
+  @override
+  String get learnTakeTheEnemyPieces => 'Üsd le az ellenfél figuráit';
+
+  @override
+  String get learnCaptureIntro => 'Keresd meg az ellenfél védtelen figuráit és üsd le őket!';
+
+  @override
+  String get learnTakeTheBlackPieces => 'Üsd le sötét figuráit!';
+
+  @override
+  String get learnTakeTheBlackPiecesAndDontLoseYours => 'Üsd le a sötét figurákat!\nA sajátodat ne veszítsd el.';
+
+  @override
+  String get learnCaptureComplete => 'Gratulálunk! Most már tudsz harcolni a sakkfigurákkal!';
+
+  @override
+  String get learnProtection => 'Védelem';
+
+  @override
+  String get learnKeepYourPiecesSafe => 'Védd meg a figuráidat';
+
+  @override
+  String get learnProtectionIntro => 'Keresd meg a megtámadott figuráidat és védd meg őket!';
+
+  @override
+  String get learnProtectionComplete => 'Gratulálunk! Ha nem veszíted el a bábudat, az olyan, mintha megnyerted volna!';
+
+  @override
+  String get learnEscape => 'Megtámadtak!\nMenekülj a fenyegetéstől!';
+
+  @override
+  String get learnNoEscape => 'Bár nem tudsz elmenekülni,\nde meg tudod védeni!';
+
+  @override
+  String get learnDontLetThemTakeAnyUndefendedPiece => 'Ne engedd kiütni\na védtelen figuráidat!';
+
+  @override
+  String get learnCombat => 'Harc';
+
+  @override
+  String get learnCaptureAndDefendPieces => 'Figurák kiütése és védelme';
+
+  @override
+  String get learnCombatIntro => 'Egy jó harcos támadni és védekezni is tud!';
+
+  @override
+  String get learnCombatComplete => 'Gratulálunk! Most már tudsz harcolni a sakkfigurákkal!';
+
+  @override
+  String get learnCheckInOne => 'Sakk egy lépésben';
+
+  @override
+  String get learnAttackTheOpponentsKing => 'Támadd meg az ellenfél királyát';
+
+  @override
+  String get learnCheckInOneIntro => 'Úgy adhatsz sakkot, hogy megtámadod az ellenfél királyát. Kötelező kivédenie!';
+
+  @override
+  String get learnCheckInOneGoal => 'Támadd meg az ellenfél királyát egy lépésben!';
+
+  @override
+  String get learnCheckInOneComplete => 'Gratulálunk! Sakkban tartottad az ellenfeled, kénytelen volt védeni a királyát!';
+
+  @override
+  String get learnOutOfCheck => 'Sakk elhárítása';
+
+  @override
+  String get learnDefendYourKing => 'Védd a királyod';
+
+  @override
+  String get learnOutOfCheckIntro => 'Sakkban vagy! El kell lépned vagy ki kell védened a támadást.';
+
+  @override
+  String get learnEscapeWithTheKing => 'Menekülj a királlyal!';
+
+  @override
+  String get learnTheKingCannotEscapeButBlock => 'A királyod nem tud ellépni,\nde kivédheted a támadást!';
+
+  @override
+  String get learnYouCanGetOutOfCheckByTaking => 'Hárítsd el a sakkot\naz ellenfél figurájának leütésével.';
+
+  @override
+  String get learnThisKnightIsCheckingThroughYourDefenses => 'A huszár a védelmeden\nkeresztül is sakkot ad!';
+
+  @override
+  String get learnEscapeOrBlock => 'Lépj el a királlyal\nvagy védd ki a támadást!';
+
+  @override
+  String get learnOutOfCheckComplete => 'Gratulálunk! A királyt ugyan nem lehet leütni, de ügyelj, hogy mindig el tudd hárítani a sakkot!';
+
+  @override
+  String get learnMateInOne => 'Egylépéses matt';
+
+  @override
+  String get learnDefeatTheOpponentsKing => 'Győzd le az ellenfél királyát';
+
+  @override
+  String get learnMateInOneIntro => 'Győzöl, ha az ellenfeled nem tudja elhárítani a sakkot.';
+
+  @override
+  String get learnAttackYourOpponentsKing => 'Támadd meg az ellenfeled királyát úgy,\nhogy ne tudja kivédeni!';
+
+  @override
+  String get learnMateInOneComplete => 'Gratulálunk! Most már tudsz játszmát nyerni!';
+
+  @override
+  String get learnIntermediate => 'Középfok';
+
+  @override
+  String get learnBoardSetup => 'A tábla felállítása';
+
+  @override
+  String get learnHowTheGameStarts => 'Hogyan kezdődik a játék';
+
+  @override
+  String get learnBoardSetupIntro => 'A két hadsereg harcra készen néz szembe egymással.';
+
+  @override
+  String get learnThisIsTheInitialPosition => 'Minden sakkjátszma\nebből az állásból indul!\nLépj akármit a folytatáshoz.';
+
+  @override
+  String get learnFirstPlaceTheRooks => 'Először a bástyákat helyezd el!\nA sarokban van a helyük.';
+
+  @override
+  String get learnThenPlaceTheKnights => 'Ezután a huszárokat tedd a helyükre!\nA bástyák mellett állnak.';
+
+  @override
+  String get learnPlaceTheBishops => 'Majd a futókat!\nŐk a huszárok mellett állnak.';
+
+  @override
+  String get learnPlaceTheQueen => 'Helyezd a vezért arra a mezőre, amilyen színű.';
+
+  @override
+  String get learnPlaceTheKing => 'Helyezd el a királyt!\nA vezér mellett áll.';
+
+  @override
+  String get learnPawnsFormTheFrontLine => 'A gyalogok alkotják a frontvonalat.\nA folytatáshoz lépj bármit.';
+
+  @override
+  String get learnBoardSetupComplete => 'Gratulálunk! Most már tudod hogyan kell fölállítani a sakktáblát.';
+
+  @override
+  String get learnCastling => 'Sáncolás';
+
+  @override
+  String get learnTheSpecialKingMove => 'A király különleges lépése';
+
+  @override
+  String get learnCastlingIntro => 'Helyezd a királyod biztonságba, és mozgósítsd a bástyádat!';
+
+  @override
+  String get learnCastleKingSide => 'Lépj a királyoddal két mezőt\na királyszárnyi sáncoláshoz!';
+
+  @override
+  String get learnCastleQueenSide => 'Lépj a királyoddal két mezőt\na vezérszárnyi sáncoláshoz!';
+
+  @override
+  String get learnTheKnightIsInTheWay => 'A huszár útban van!\nLépj el vele, majd sáncolj a királyszárnyra.';
+
+  @override
+  String get learnCastleKingSideMovePiecesFirst => 'Sáncolj a királyszárnyra!\nElőbb el kell lépned a figuráiddal.';
+
+  @override
+  String get learnCastleQueenSideMovePiecesFirst => 'Sáncolj a vezérszárnyra!\nElőbb el kell lépned a figuráiddal.';
+
+  @override
+  String get learnYouCannotCastleIfMoved => 'Nem sáncolhatsz,\nha akár a király,\nakár a bástya lépett már.';
+
+  @override
+  String get learnYouCannotCastleIfAttacked => 'Nem sáncolhatsz,\nha a királyt útközben támadják.\nBlokkold a sakkot, és azután sáncolj!';
+
+  @override
+  String get learnFindAWayToCastleKingSide => 'Találd meg a módját,\nhogy királyszárnyra sáncolj!';
+
+  @override
+  String get learnFindAWayToCastleQueenSide => 'Találd meg a módját,\nhogy vezérszárnyra sáncolj!';
+
+  @override
+  String get learnCastlingComplete => 'Gratulálunk! Szinte minden partiban érdemes sáncolnod.';
+
+  @override
+  String get learnTheSpecialPawnMove => 'A gyalog különleges lépése';
+
+  @override
+  String get learnEnPassantIntro => 'Amikor az ellenfél gyalogja két mezőt lép, leütheted úgy, mintha csak egyet lépett volna.';
+
+  @override
+  String get learnBlackJustMovedThePawnByTwoSquares => 'Sötét most lépett\nkét mezőt a gyaloggal!\nÜsd le en passant.';
+
+  @override
+  String get learnEnPassantOnlyWorksImmediately => 'En passant ütés csak közvetlenül\naz ellenfél gyalog lépése\nután lehetséges.';
+
+  @override
+  String get learnEnPassantOnlyWorksOnFifthRank => 'En passant csak akkor lehetséges\namikor a gyalogod az 5. sorban van.';
+
+  @override
+  String get learnTakeAllThePawnsEnPassant => 'Üsd le az összes gyalogot en passant!';
+
+  @override
+  String get learnEnPassantComplete => 'Gratulálunk! Mos már tudsz en passant ütni.';
+
+  @override
+  String get learnStalemate => 'Patt';
+
+  @override
+  String get learnTheGameIsADraw => 'A döntetlen játszma';
+
+  @override
+  String get learnStalemateIntro => 'Patt az, amikor a játékos nincs sakkban és nincs szabályos lépése sem. A játszma döntetlen: senki sem győzött, senki sem vesztett.';
+
+  @override
+  String get learnStalemateGoal => 'Pattadás sötétnek:\n- Sötét nem tud lépni\n- Nincs sakkban sem.';
+
+  @override
+  String get learnStalemateComplete => 'Gratulálunk! Jobb pattot kapni, mint mattot!';
+
+  @override
+  String get learnAdvanced => 'Haladó';
+
+  @override
+  String get learnPieceValue => 'Bábuk értéke';
+
+  @override
+  String get learnEvaluatePieceStrength => 'Mérlegeld a figurák erősségét';
+
+  @override
+  String get learnPieceValueIntro => 'A mozgékonyabb figuráknak nagyobb az értéke!\nVezér = 9\nBástya = 5\nFutó = 3\nHuszár = 3\nGyalog = 1\nA király a legértékesebb! Ha elesik, elveszett a játszma.';
+
+  @override
+  String get learnQueenOverBishop => 'Üsd ki a legértékesebb figurát!\nVezér > Futó';
+
+  @override
+  String get learnPieceValueExchange => 'Üsd le a legértékesebb figurát!\n Ne cserélj\n értékesebb figurát kevésbé értékesre.';
+
+  @override
+  String get learnPieceValueLegal => 'Üsd le a\nlegértékesebb figurát!\nFigyelj, hogy szabályosan lépj!';
+
+  @override
+  String get learnTakeThePieceWithTheHighestValue => 'Üsd ki a legértékesebb figurát!';
+
+  @override
+  String get learnPieceValueComplete => 'Gratulálunk! Most már ismered a figurák anyagi értékét!\nVezér = 9\nBástya = 5\nFutó = 3\nHuszár = 3\nGyalog = 1';
+
+  @override
+  String get learnCheckInTwo => 'Sakk két lépésben';
+
+  @override
+  String get learnTwoMovesToGiveCheck => 'Adj sakkot két lépésből';
+
+  @override
+  String get learnCheckInTwoIntro => 'Találd meg azt a kombinációt, ami két lépésben sakkot ad az ellenfél királyának!';
+
+  @override
+  String get learnCheckInTwoGoal => 'Támadd meg az ellenfél királyát\nkét lépésben!';
+
+  @override
+  String get learnCheckInTwoComplete => 'Gratulálunk! Sakkban tartottad az ellenfeled, kénytelen volt védeni a királyát!';
+
+  @override
+  String get learnWhatNext => 'Mi következik?';
+
+  @override
+  String get learnYouKnowHowToPlayChess => 'Gratulálunk, már tudod hogyan sakkoz! Szeretnél erősebben játszani?';
+
+  @override
+  String get learnRegister => 'Regisztráció';
+
+  @override
+  String get learnGetAFreeLichessAccount => 'Szerezz ingyenes Lichess fiókot';
+
+  @override
+  String get learnPractice => 'Gyakorolj';
+
+  @override
+  String get learnLearnCommonChessPositions => 'Ismerd meg a gyakori sakkállásokat';
+
+  @override
+  String get learnPuzzles => 'Feladványok';
+
+  @override
+  String get learnExerciseYourTacticalSkills => 'Fejleszd a taktikai készséged';
+
+  @override
+  String get learnVideos => 'Videók';
+
+  @override
+  String get learnWatchInstructiveChessVideos => 'Nézz tanulságos sakk videókat';
+
+  @override
+  String get learnPlayPeople => 'Játssz emberekkel';
+
+  @override
+  String get learnOpponentsFromAroundTheWorld => 'Ellenfelek a világ minden tájáról';
+
+  @override
+  String get learnPlayMachine => 'Játssz a géppel';
+
+  @override
+  String get learnTestYourSkillsWithTheComputer => 'Tedd próbára magad a számítógéppel';
+
+  @override
+  String get learnLetsGo => 'Rajta!';
+
+  @override
+  String learnStageX(String param) {
+    return '$param. szint';
+  }
+
+  @override
+  String get learnAwesome => 'Klassz!';
+
+  @override
+  String get learnExcellent => 'Kiváló!';
+
+  @override
+  String get learnGreatJob => 'Szép munka!';
+
+  @override
+  String get learnPerfect => 'Tökéletes!';
+
+  @override
+  String get learnOutstanding => 'Kiváló!';
+
+  @override
+  String get learnWayToGo => 'Ez a beszéd!';
+
+  @override
+  String get learnYesYesYes => 'Igen, igen, igen!';
+
+  @override
+  String get learnYoureGoodAtThis => 'Megy ez neked!';
+
+  @override
+  String get learnNailedIt => 'Megcsináltad.';
+
+  @override
+  String get learnRightOn => 'Csont nélkül!';
+
+  @override
+  String learnStageXComplete(String param) {
+    return '$param. szint teljesítve';
+  }
+
+  @override
+  String get learnNext => 'Következő';
+
+  @override
+  String learnNextX(String param) {
+    return 'Következő: $param';
+  }
+
+  @override
+  String get learnBackToMenu => 'Vissza a menübe';
+
+  @override
+  String get learnPuzzleFailed => 'A megoldás sikertelen!';
+
+  @override
+  String get learnRetry => 'Újra';
+
+  @override
   String get patronDonate => 'Támogatás';
 
   @override

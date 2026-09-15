@@ -140,6 +140,8 @@ flutter:
     - assets/images/stockfish/
     - assets/images/maia/
     - assets/images/fide-fed/
+    - assets/images/learn/
+    - assets/images/learn/pieces/
     - assets/sounds/futuristic/
     - assets/sounds/lisp/
     - assets/sounds/nes/

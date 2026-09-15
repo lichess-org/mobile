@@ -1358,6 +1358,527 @@ class AppLocalizationsNb extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Øv på visse linjer og rader';
 
   @override
+  String get learnLearnChess => 'Lær deg sjakk';
+
+  @override
+  String get learnByPlaying => 'ved å spille!';
+
+  @override
+  String learnProgressX(String param) {
+    return 'Fremgang: $param';
+  }
+
+  @override
+  String get learnResetMyProgress => 'Tilbakestill';
+
+  @override
+  String get learnYouWillLoseAllYourProgress => 'Du kommer til å miste all din fremgang!';
+
+  @override
+  String get learnPlay => 'spill!';
+
+  @override
+  String get learnChessPieces => 'Sjakkbrikkene';
+
+  @override
+  String get learnTheRook => 'Tårnet';
+
+  @override
+  String get learnItMovesInStraightLines => 'Flyttes i rette linjer';
+
+  @override
+  String get learnRookIntro => 'Tårnet er en kraftig brikke. Er du klar til å ta det i bruk?';
+
+  @override
+  String get learnRookGoal => 'Klikk på tårnet for å flytte det til stjernen!';
+
+  @override
+  String get learnGrabAllTheStars => 'Fang alle stjernene!';
+
+  @override
+  String get learnTheFewerMoves => 'Jo færre trekk du gjør, desto fler poeng vinner du!';
+
+  @override
+  String get learnUseTwoRooks => 'Bruk to tårn for å sette litt fart på sakene!';
+
+  @override
+  String get learnRookComplete => 'Gratulerer! Du har nå mestret tårnet.';
+
+  @override
+  String get learnTheBishop => 'Løperen';
+
+  @override
+  String get learnItMovesDiagonally => 'Flyttes diagonalt';
+
+  @override
+  String get learnBishopIntro => 'Nå skal vi lære hvordan man manøvrerer en løper!';
+
+  @override
+  String get learnYouNeedBothBishops => 'Én hvitfeltsløper,\nén sortfeltsløper.\nDu trenger begge!';
+
+  @override
+  String get learnBishopComplete => 'Gratulerer! Du kan ta kommando over løperen.';
+
+  @override
+  String get learnTheQueen => 'Dronningen';
+
+  @override
+  String get learnQueenCombinesRookAndBishop => 'Dronning = tårn + løper';
+
+  @override
+  String get learnQueenIntro => 'Den sterkeste sjakkbrikken gjør sin entré. Hennes Majestet Dronningen!';
+
+  @override
+  String get learnQueenComplete => 'Gratulerer! Dronninger holder ingen hemmeligheter for deg.';
+
+  @override
+  String get learnTheKing => 'Kongen';
+
+  @override
+  String get learnTheMostImportantPiece => 'Den viktigste brikken';
+
+  @override
+  String get learnKingIntro => 'Du er kongen. Faller du i strid, er spillet tapt.';
+
+  @override
+  String get learnTheKingIsSlow => 'Kongen er treg.';
+
+  @override
+  String get learnLastOne => 'Siste!';
+
+  @override
+  String get learnKingComplete => 'Du kan nå befale befalet!';
+
+  @override
+  String get learnTheKnight => 'Springeren';
+
+  @override
+  String get learnItMovesInAnLShape => 'Den flyttes i en L-form';
+
+  @override
+  String get learnKnightIntro => 'Dette blir en utfordring. Springeren er en... vanskelig brikke.';
+
+  @override
+  String get learnKnightsHaveAFancyWay => 'Springere har en fancy måte å hoppe rundt på!';
+
+  @override
+  String get learnKnightsCanJumpOverObstacles => 'Springere kan hoppe over hindringer! \nFlykt og beseire stjernene!';
+
+  @override
+  String get learnKnightComplete => 'Gratulerer! Du har mestret springeren.';
+
+  @override
+  String get learnThePawn => 'Bonden';
+
+  @override
+  String get learnItMovesForwardOnly => 'Den går bare fremover';
+
+  @override
+  String get learnPawnIntro => 'Bonder er svake, men de innehar en masse potensial.';
+
+  @override
+  String get learnPawnsMoveOneSquareOnly => 'Bønder flytter bare ett felt om gangen.\nMen når de når den andre siden av brettet, blir de til en sterkere brikke!';
+
+  @override
+  String get learnMostOfTheTimePromotingToAQueenIsBest => 'Vanligvis er det best å gjøre den om til en dronning,\nmen noen ganger kan en springer være fin å ha!';
+
+  @override
+  String get learnPawnsMoveForward => 'Bønder går fremover, men fanger andre brikker diagonalt!';
+
+  @override
+  String get learnCaptureThenPromote => 'Slå ut, så forvandle!';
+
+  @override
+  String get learnUseAllThePawns => 'Bruk alle bøndene!\nIngen grunn til å forvandle.';
+
+  @override
+  String get learnAPawnOnTheSecondRank => 'En bonde på andreraden kan flytte 2 felt samtidig!';
+
+  @override
+  String get learnGrabAllTheStarsNoNeedToPromote => 'Ta alle stjernene!\nIngen grunn til å forvandle.';
+
+  @override
+  String get learnPawnComplete => 'Gratulerer! Bøndene holder ingen hemmeligheter for deg.';
+
+  @override
+  String get learnPawnPromotion => 'Bondeforvandling';
+
+  @override
+  String get learnYourPawnReachedTheEndOfTheBoard => 'Din bonde nådde enden av brettet!';
+
+  @override
+  String get learnItNowPromotesToAStrongerPiece => 'Nå kan den forvandles til en sterkere brikke.';
+
+  @override
+  String get learnSelectThePieceYouWant => 'Velg hvilken brikke du vil ha!';
+
+  @override
+  String get learnFundamentals => 'Grunnleggende';
+
+  @override
+  String get learnCapture => 'Slå ut brikker';
+
+  @override
+  String get learnTakeTheEnemyPieces => 'Slå ut motstanderens brikker';
+
+  @override
+  String get learnCaptureIntro => 'Oppdag motstanderens udekkede brikker, og slå dem!';
+
+  @override
+  String get learnTakeTheBlackPieces => 'Slå ut de svarte brikkene!';
+
+  @override
+  String get learnTakeTheBlackPiecesAndDontLoseYours => 'Slå ut de svarte brikkene! Og ikke miste dine egne.';
+
+  @override
+  String get learnCaptureComplete => 'Gratulerer! Du vet hvordan man kjemper med sjakkbrikker!';
+
+  @override
+  String get learnProtection => 'Beskyttelse';
+
+  @override
+  String get learnKeepYourPiecesSafe => 'Hold dine brikker trygge';
+
+  @override
+  String get learnProtectionIntro => 'Oppdag brikkene motstanderen angriper, og dekk dem!';
+
+  @override
+  String get learnProtectionComplete => 'Gratulerer! En brikke du ikke mister er en brikke du vinner!';
+
+  @override
+  String get learnEscape => 'Du er under angrep! Unnslipp trusselen!';
+
+  @override
+  String get learnNoEscape => 'Det er ingen flukt,\nmen du kan forsvare!';
+
+  @override
+  String get learnDontLetThemTakeAnyUndefendedPiece => 'La ikke motstanderen ta en udekket brikke!';
+
+  @override
+  String get learnCombat => 'Kamp';
+
+  @override
+  String get learnCaptureAndDefendPieces => 'Slå ut og forsvar brikker';
+
+  @override
+  String get learnCombatIntro => 'En god kriger mestrer både angrep og forsvar!';
+
+  @override
+  String get learnCombatComplete => 'Gratulerer! Du kjenner til hvordan en kjemper med sjakkbrikker!';
+
+  @override
+  String get learnCheckInOne => 'Sjakk i ett trekk';
+
+  @override
+  String get learnAttackTheOpponentsKing => 'Angrip motspillerens konge';
+
+  @override
+  String get learnCheckInOneIntro => 'Angrip og sjakk motspillerens konge, for den må forsvares!';
+
+  @override
+  String get learnCheckInOneGoal => 'Gå etter motspillerens konge på ett trekk!';
+
+  @override
+  String get learnCheckInOneComplete => 'Gratulerer! Du satte motspilleren i sjakk og tvang med det fram et forsvar av kongen!';
+
+  @override
+  String get learnOutOfCheck => 'Ut av sjakk';
+
+  @override
+  String get learnDefendYourKing => 'Forsvar kongen din';
+
+  @override
+  String get learnOutOfCheckIntro => 'Du står i sjakk! Du må flykte fra trusselen eller blokkere angrepet.';
+
+  @override
+  String get learnEscapeWithTheKing => 'Få kongen vekk!';
+
+  @override
+  String get learnTheKingCannotEscapeButBlock => 'Kongen kommer ikke unna, men du kan blokkere angrepet!';
+
+  @override
+  String get learnYouCanGetOutOfCheckByTaking => 'Du kan komme unna sjakken ved å slå ut den angripende brikken.';
+
+  @override
+  String get learnThisKnightIsCheckingThroughYourDefenses => 'Denne springeren sjakker rett gjennom forsvarsverket ditt!';
+
+  @override
+  String get learnEscapeOrBlock => 'Få kongen vekk eller blokker angrepet!';
+
+  @override
+  String get learnOutOfCheckComplete => 'Gratulerer! Kongen din kan ikke tas, pass på at du kan forsvare deg mot å bli satt sjakk!';
+
+  @override
+  String get learnMateInOne => 'Matt i ett trekk';
+
+  @override
+  String get learnDefeatTheOpponentsKing => 'Beseire motspillerens konge';
+
+  @override
+  String get learnMateInOneIntro => 'Du vinner når motspilleren ikke kan forsvare seg mot sjakk.';
+
+  @override
+  String get learnAttackYourOpponentsKing => 'Angrip motspillerens konge på en måte som det ikke er mulig å forsvare seg mot!';
+
+  @override
+  String get learnMateInOneComplete => 'Gratulerer! Slik vinner du et sjakkparti!';
+
+  @override
+  String get learnIntermediate => 'Middels vanskelig';
+
+  @override
+  String get learnBoardSetup => 'Oppstilling';
+
+  @override
+  String get learnHowTheGameStarts => 'Hvordan partiet starter';
+
+  @override
+  String get learnBoardSetupIntro => 'De to arméene står mot hverandre, klare til kamp.';
+
+  @override
+  String get learnThisIsTheInitialPosition => 'Dette er utgangsstillingen i alle sjakkpartier! Gjør et trekk for å fortsette.';
+
+  @override
+  String get learnFirstPlaceTheRooks => 'Plasser først tårnene! De står i hjørnene.';
+
+  @override
+  String get learnThenPlaceTheKnights => 'Plasser så springerne! De står ved siden av tårnene.';
+
+  @override
+  String get learnPlaceTheBishops => 'Sett løperne på plass. De står ved siden av springerne.';
+
+  @override
+  String get learnPlaceTheQueen => 'Plasser dronningen! Hun står på egen farge.';
+
+  @override
+  String get learnPlaceTheKing => 'Sett kongen på plass! Helt inntil dronningen.';
+
+  @override
+  String get learnPawnsFormTheFrontLine => 'Bøndene danner frontlinja. Gjør et valgfritt trekk når du vil fortsette.';
+
+  @override
+  String get learnBoardSetupComplete => 'Gratulerer! Du kjenner nå til hvordan brikkene stilles opp på brettet.';
+
+  @override
+  String get learnCastling => 'Rokade';
+
+  @override
+  String get learnTheSpecialKingMove => 'Det spesielle kongetrekket';
+
+  @override
+  String get learnCastlingIntro => 'Få kongen din i sikkerhet, og gjør tårnet klart for angrep!';
+
+  @override
+  String get learnCastleKingSide => 'Flytt kongen to felt mot kongefløyen for å rokere kort!';
+
+  @override
+  String get learnCastleQueenSide => 'Flytt kongen to felt mot dronningfløyen for å rokere langt!';
+
+  @override
+  String get learnTheKnightIsInTheWay => 'Springeren står i veien! Flytt den og ta en kort rokade.';
+
+  @override
+  String get learnCastleKingSideMovePiecesFirst => 'Roker kort! Du må få ut brikkene dine først.';
+
+  @override
+  String get learnCastleQueenSideMovePiecesFirst => 'Roker langt! Du må få ut brikkene dine først.';
+
+  @override
+  String get learnYouCannotCastleIfMoved => 'Du kan ikke rokere dersom kongen er flyttet tidligere, eller med et tårn som er flyttet tidligere.';
+
+  @override
+  String get learnYouCannotCastleIfAttacked => 'Du kan ikke rokere om kongen er under angrep. Blokker sjakken først og roker etterpå!';
+
+  @override
+  String get learnFindAWayToCastleKingSide => 'Finn en måte å rokere kort på!';
+
+  @override
+  String get learnFindAWayToCastleQueenSide => 'Finn en måte å rokere langt på!';
+
+  @override
+  String get learnCastlingComplete => 'Gratulerer! Du bør nesten alltid rokere.';
+
+  @override
+  String get learnTheSpecialPawnMove => 'Det spesielle bondetrekket';
+
+  @override
+  String get learnEnPassantIntro => 'Når motstanderens bonde flytter to felt, kan du ta den som om den bare hadde flyttet ett felt.';
+
+  @override
+  String get learnBlackJustMovedThePawnByTwoSquares => 'Svart flytta bonden to felt fram! Ta den en passant (i forbifarta).';
+
+  @override
+  String get learnEnPassantOnlyWorksImmediately => 'En passant kan bare brukes i det første trekket etter at motspilleren flyttet bonden to felt.';
+
+  @override
+  String get learnEnPassantOnlyWorksOnFifthRank => 'En passant er bare tillatt om bonden din står på den femte raden.';
+
+  @override
+  String get learnTakeAllThePawnsEnPassant => 'Slå alle bøndene en passant!';
+
+  @override
+  String get learnEnPassantComplete => 'Gratulerer! Du kan nå slå en passant.';
+
+  @override
+  String get learnStalemate => 'Patt';
+
+  @override
+  String get learnTheGameIsADraw => 'Partiet er remis';
+
+  @override
+  String get learnStalemateIntro => 'Når en spiller ikke står i sjakk og ikke har noe lovlig trekk, er det patt. Partiet er remis: ingen vinner, ingen taper.';
+
+  @override
+  String get learnStalemateGoal => 'Svart blir patt om:\n- svart ikke kan flytte noen av brikkene\n- svart ikke står i sjakk.';
+
+  @override
+  String get learnStalemateComplete => 'Gratulerer! Det er bedre å bli satt patt enn sjakk matt!';
+
+  @override
+  String get learnAdvanced => 'For viderekomne';
+
+  @override
+  String get learnPieceValue => 'Brikkeverdi';
+
+  @override
+  String get learnEvaluatePieceStrength => 'Vurdering av brikkestyrken';
+
+  @override
+  String get learnPieceValueIntro => 'Brikker med flest trekkmuligheter har høyest verdi!\nDronning = 9\nTårn = 5\nLøper = 3\nSpringer = 3\nBonde = 1\nKongen er uvurderlig! Mister du den er spillet tapt.';
+
+  @override
+  String get learnQueenOverBishop => 'Slå ut brikken \nmed høyest verdi!\nDronning > løper';
+
+  @override
+  String get learnPieceValueExchange => 'Slå brikken med høyest verdi!\n Ikke bytt\n brikke med høyere verdi mot brikke med lavere verdi.';
+
+  @override
+  String get learnPieceValueLegal => 'Slå brikken\nmed høyest verdi!\nPass på at trekket er lovlig!';
+
+  @override
+  String get learnTakeThePieceWithTheHighestValue => 'Slå ut brikken\nmed høyest verdi!';
+
+  @override
+  String get learnPieceValueComplete => 'Gratulerer! Du kjenner brikkenes verdi! \nDronning = 9 \nTårn = 5 \nLøper = 3 \nSpringer = 3 \nBonde = 1';
+
+  @override
+  String get learnCheckInTwo => 'Sjakk i to trekk';
+
+  @override
+  String get learnTwoMovesToGiveCheck => 'To trekk for å sette sjakk';
+
+  @override
+  String get learnCheckInTwoIntro => 'Finn den rette to-trekks-kombinasjonen som sjakker motspillerens konge!';
+
+  @override
+  String get learnCheckInTwoGoal => 'Du kan nå true motspillerens konge i to trekk!';
+
+  @override
+  String get learnCheckInTwoComplete => 'Gratulerer! Du satte motspilleren i sjakk og tvang fram et kongeforsvar!';
+
+  @override
+  String get learnWhatNext => 'Hva kommer nå?';
+
+  @override
+  String get learnYouKnowHowToPlayChess => 'Nå vet du hvordan man spiller sjakk, gratulerer! Vil du bli en sterkere spiller?';
+
+  @override
+  String get learnRegister => 'Registrer deg';
+
+  @override
+  String get learnGetAFreeLichessAccount => 'Få en gratis brukerkonto hos Lichess';
+
+  @override
+  String get learnPractice => 'Øv';
+
+  @override
+  String get learnLearnCommonChessPositions => 'Lær deg de oftest forekommende sjakkstillingene';
+
+  @override
+  String get learnPuzzles => 'Sjakknøtter';
+
+  @override
+  String get learnExerciseYourTacticalSkills => 'Øv opp dine taktiske ferdigheter';
+
+  @override
+  String get learnVideos => 'Videoer';
+
+  @override
+  String get learnWatchInstructiveChessVideos => 'Se instruktive sjakkvideoer';
+
+  @override
+  String get learnPlayPeople => 'Spill mot andre';
+
+  @override
+  String get learnOpponentsFromAroundTheWorld => 'Motspillere fra hele verden';
+
+  @override
+  String get learnPlayMachine => 'Spill mot maskinen';
+
+  @override
+  String get learnTestYourSkillsWithTheComputer => 'Test ferdighetene dine mot maskinen';
+
+  @override
+  String get learnLetsGo => 'Nå starter vi!';
+
+  @override
+  String learnStageX(String param) {
+    return 'Nivå $param';
+  }
+
+  @override
+  String get learnAwesome => 'Veldig bra!';
+
+  @override
+  String get learnExcellent => 'Utmerket!';
+
+  @override
+  String get learnGreatJob => 'Bra jobba!';
+
+  @override
+  String get learnPerfect => 'Perfekt!';
+
+  @override
+  String get learnOutstanding => 'Utmerket!';
+
+  @override
+  String get learnWayToGo => 'Fortsett slik!';
+
+  @override
+  String get learnYesYesYes => 'Ja, ja, ja!';
+
+  @override
+  String get learnYoureGoodAtThis => 'Dette er du god til!';
+
+  @override
+  String get learnNailedIt => 'Du traff spikeren på hodet.';
+
+  @override
+  String get learnRightOn => 'Midt i blinken!';
+
+  @override
+  String learnStageXComplete(String param) {
+    return 'Nivå $param er fullført';
+  }
+
+  @override
+  String get learnNext => 'Neste';
+
+  @override
+  String learnNextX(String param) {
+    return 'Neste: $param';
+  }
+
+  @override
+  String get learnBackToMenu => 'Tilbake til menyen';
+
+  @override
+  String get learnPuzzleFailed => 'Feilaktig løsning!';
+
+  @override
+  String get learnRetry => 'Forsøk på nytt';
+
+  @override
   String get patronDonate => 'Bidra';
 
   @override

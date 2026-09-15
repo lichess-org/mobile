@@ -1402,6 +1402,527 @@ class AppLocalizationsLt extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Treniruotis tik kai kurias statines ir gulstines';
 
   @override
+  String get learnLearnChess => 'Išmokite šachmatus';
+
+  @override
+  String get learnByPlaying => 'žaisdami!';
+
+  @override
+  String learnProgressX(String param) {
+    return 'Progresas: $param';
+  }
+
+  @override
+  String get learnResetMyProgress => 'Atkurti mano progresą';
+
+  @override
+  String get learnYouWillLoseAllYourProgress => 'Jūs neteksite viso progreso!';
+
+  @override
+  String get learnPlay => 'Žaisk!';
+
+  @override
+  String get learnChessPieces => 'Šachmatų figūros';
+
+  @override
+  String get learnTheRook => 'Bokštas';
+
+  @override
+  String get learnItMovesInStraightLines => 'Juda tiesiomis linijomis';
+
+  @override
+  String get learnRookIntro => 'Bokštas yra galinga figūra. Ar esate pasirengę ją valdyti?';
+
+  @override
+  String get learnRookGoal => 'Spustelėkite ant boškto, \nkad perkeltumėte jį ant žvaigždės!';
+
+  @override
+  String get learnGrabAllTheStars => 'Surinkite visas žvaigždes!';
+
+  @override
+  String get learnTheFewerMoves => 'Kuo mažiau ėjimų atliksite,\ntuo daugiau taškų gausite!';
+
+  @override
+  String get learnUseTwoRooks => 'Naudokite abu bokštus, \nkad surinktumėte greičiau!';
+
+  @override
+  String get learnRookComplete => 'Sveikinimai! Sėkmingai įvaldėte bokštą.';
+
+  @override
+  String get learnTheBishop => 'Rikis';
+
+  @override
+  String get learnItMovesDiagonally => 'Juda įstrižai';
+
+  @override
+  String get learnBishopIntro => 'Toliau mes išmoksime, \nkaip reikia judėti rikiu!';
+
+  @override
+  String get learnYouNeedBothBishops => 'Vienas rikis baltuose laukeliuose,\nkitas rikis juoduose laukeliuose.\nJums reikės abiejų!';
+
+  @override
+  String get learnBishopComplete => 'Sveikinimai! Sėkmingai įvaldėte rikį.';
+
+  @override
+  String get learnTheQueen => 'Valdovė';
+
+  @override
+  String get learnQueenCombinesRookAndBishop => 'Valdovė = bokštas + rikis';
+
+  @override
+  String get learnQueenIntro => 'Te pasirodo stipriausioji šachmatų figūra, jos didenybė valdovė!';
+
+  @override
+  String get learnQueenComplete => 'Sveikinimai! Valdovės tau nekelia jokių problemų.';
+
+  @override
+  String get learnTheKing => 'Karalius';
+
+  @override
+  String get learnTheMostImportantPiece => 'Pati svarbiausia figūra';
+
+  @override
+  String get learnKingIntro => 'Jūs esate karalius. Jeigu krisite kovoje, partija bus pralošta.';
+
+  @override
+  String get learnTheKingIsSlow => 'Karalius yra lėtas.';
+
+  @override
+  String get learnLastOne => 'Paskutinis!';
+
+  @override
+  String get learnKingComplete => 'Dabar gebate vadovauti vadui!';
+
+  @override
+  String get learnTheKnight => 'Žirgas';
+
+  @override
+  String get learnItMovesInAnLShape => 'Juda L raidės forma';
+
+  @override
+  String get learnKnightIntro => 'Štai jums iššūkis. Žirgas yra... sudėtinga figūra.';
+
+  @override
+  String get learnKnightsHaveAFancyWay => 'Žirgai geba šokinėti \npo lentą įdomiu būdu!';
+
+  @override
+  String get learnKnightsCanJumpOverObstacles => 'Žirgai geba šokinėti per kliūtis!\nIštrūkite ir nugalėkite žvaigždes!';
+
+  @override
+  String get learnKnightComplete => 'Sveikinimai! Įvaldėte žirgą.';
+
+  @override
+  String get learnThePawn => 'Pėstininkas';
+
+  @override
+  String get learnItMovesForwardOnly => 'Eina tik į priekį';
+
+  @override
+  String get learnPawnIntro => 'Pėstininkai yra silpni, tačiau turi daug potencialo.';
+
+  @override
+  String get learnPawnsMoveOneSquareOnly => 'Pėstininkai juda tik vienu laukeliu į priekį.\nTačiau pasiekę kitą lentos pusę, jie tampa stipresnėmis figūromis!';
+
+  @override
+  String get learnMostOfTheTimePromotingToAQueenIsBest => 'Dažniausiai geriausia paversti pėstininką valdove.\nTačiau kartais gali praversti ir žirgas!';
+
+  @override
+  String get learnPawnsMoveForward => 'Pėstininkai eina į priekį,\ntačiau kerta įstrižai!';
+
+  @override
+  String get learnCaptureThenPromote => 'Nukirskite ir paaukštinkite!';
+
+  @override
+  String get learnUseAllThePawns => 'Naudok visus pėstininkus! Nebūtina juos paaukštinti.';
+
+  @override
+  String get learnAPawnOnTheSecondRank => 'Nuo antros gulstinės pėstininkai gali judėti per du laukelius iš karto!';
+
+  @override
+  String get learnGrabAllTheStarsNoNeedToPromote => 'Griebk visas žvaigždes!\nPaaukštinti nebūtina.';
+
+  @override
+  String get learnPawnComplete => 'Sveikiname! Pėstininkai nebeturi tau jokių paslapčių.';
+
+  @override
+  String get learnPawnPromotion => 'Pėstininkų pavertimas';
+
+  @override
+  String get learnYourPawnReachedTheEndOfTheBoard => 'Tavo pėstininkas pasiekė lentos galą!';
+
+  @override
+  String get learnItNowPromotesToAStrongerPiece => 'Jis dabar paaukštinamas į stipresnę figūrą.';
+
+  @override
+  String get learnSelectThePieceYouWant => 'Pasirink, kurios figūros nori!';
+
+  @override
+  String get learnFundamentals => 'Pagrindai';
+
+  @override
+  String get learnCapture => 'Kirtimas';
+
+  @override
+  String get learnTakeTheEnemyPieces => 'Kirsti priešo figūras';
+
+  @override
+  String get learnCaptureIntro => 'Indentifikuoti neapgintas priešo figūras ir jas nukirsti!';
+
+  @override
+  String get learnTakeTheBlackPieces => 'Nukirskite juodąsias figūras!';
+
+  @override
+  String get learnTakeTheBlackPiecesAndDontLoseYours => 'Nukirskite juodąsias figūras.\nIr nepraraskite savųjų.';
+
+  @override
+  String get learnCaptureComplete => 'Sveikiname. Jūs žinote kaip kautis su šachmatų figūromis!';
+
+  @override
+  String get learnProtection => 'Apsauga';
+
+  @override
+  String get learnKeepYourPiecesSafe => 'Saugokite savo figūras';
+
+  @override
+  String get learnProtectionIntro => 'Indentifikuokite kurias figūras puola jūsų priešas ir jas apginkite!';
+
+  @override
+  String get learnProtectionComplete => 'Sveikiname. Figūra kurios neprarandate yra figūra, kurią laimite!';
+
+  @override
+  String get learnEscape => 'Jus puola. Išvenkite grėsmės!';
+
+  @override
+  String get learnNoEscape => 'Pabėgti negalite, tačiau galite apsiginti!';
+
+  @override
+  String get learnDontLetThemTakeAnyUndefendedPiece => 'Neleiskite jiems nukirsti neapgintų figūrų!';
+
+  @override
+  String get learnCombat => 'Mūšis';
+
+  @override
+  String get learnCaptureAndDefendPieces => 'Nukirskite ir apsaugokite figūras';
+
+  @override
+  String get learnCombatIntro => 'Geras karys moka ir pulti, ir gintis!';
+
+  @override
+  String get learnCombatComplete => 'Sveikiname. Jūs žinote kaip kautis su šachmatų figūromis!';
+
+  @override
+  String get learnCheckInOne => 'Šachas vienu ėjimu';
+
+  @override
+  String get learnAttackTheOpponentsKing => 'Atakuokite priešo karalių';
+
+  @override
+  String get learnCheckInOneIntro => 'Tam, kad šachuoti priešo karalių, atakuokite jo karalių. Jie privalės gintis!';
+
+  @override
+  String get learnCheckInOneGoal => 'Nusitaikykite į priešo karalių vienu ėjimu!';
+
+  @override
+  String get learnCheckInOneComplete => 'Sveikiname. Jūs pašachavote priešo karalių, priversdami jį ginti savo karalių!';
+
+  @override
+  String get learnOutOfCheck => 'Išsigelbėkite nuo šacho';
+
+  @override
+  String get learnDefendYourKing => 'Apginkite savo karalių';
+
+  @override
+  String get learnOutOfCheckIntro => 'Jums šachas. Privalote pabėgti arba blokuoti ataką.';
+
+  @override
+  String get learnEscapeWithTheKing => 'Pabėkite su karaliumi!';
+
+  @override
+  String get learnTheKingCannotEscapeButBlock => 'Karalius negali pabėgti, bet jūs galite blokuoti ataką!';
+
+  @override
+  String get learnYouCanGetOutOfCheckByTaking => 'Jūs galite išvengti šacho nukirsdami šachuojančią figūrą.';
+
+  @override
+  String get learnThisKnightIsCheckingThroughYourDefenses => 'Žirgas šachuoja kiaurai per jūsų gynybą!';
+
+  @override
+  String get learnEscapeOrBlock => 'Pabėkite su karaliumi arba blokuokite ataką!';
+
+  @override
+  String get learnOutOfCheckComplete => 'Sveikiname. Jūsų karalius negali būti nukirstas, todėl ginkites nuo šacho!';
+
+  @override
+  String get learnMateInOne => 'Matas vienu ėjimu';
+
+  @override
+  String get learnDefeatTheOpponentsKing => 'Nugalėkite priešo karalių';
+
+  @override
+  String get learnMateInOneIntro => 'Jūs laimite, kai priešas negali apsiginti nuo šacho.';
+
+  @override
+  String get learnAttackYourOpponentsKing => 'Atakuokite priešo karalių taip, kad jis negalėtų apsiginti!';
+
+  @override
+  String get learnMateInOneComplete => 'Sveikiname! Štai kaip laimimos šachmatų partijos!';
+
+  @override
+  String get learnIntermediate => 'Vidutinis';
+
+  @override
+  String get learnBoardSetup => 'Lentos nustatymai';
+
+  @override
+  String get learnHowTheGameStarts => 'Kaip prasideda visos partijos';
+
+  @override
+  String get learnBoardSetupIntro => 'Susiduria dvi armijos, pasiruošusios mūšiui.';
+
+  @override
+  String get learnThisIsTheInitialPosition => 'Tai pradinė šachmatų padėtis.\nNorėdami pradėti padarykite ėjimą.';
+
+  @override
+  String get learnFirstPlaceTheRooks => 'Pradėkite sudėkite bokštus. Jie keliauja į kampus.';
+
+  @override
+  String get learnThenPlaceTheKnights => 'Tada sudėkite žirgus. Jie statomi prie bokštų.';
+
+  @override
+  String get learnPlaceTheBishops => 'Tada sudėkite rikius. Jie keliauja prie žirgų.';
+
+  @override
+  String get learnPlaceTheQueen => 'Tada padėkite valdovę. Ji keliaują į savo spalvos laukelį.';
+
+  @override
+  String get learnPlaceTheKing => 'Padėkite karalių, jo vieta šalia valdovės.';
+
+  @override
+  String get learnPawnsFormTheFrontLine => 'Pėstininkai sudaro priekinę liniją. Darykite ėjimą tam, kad pradėti.';
+
+  @override
+  String get learnBoardSetupComplete => 'Sveikiname. Jūs žinote kaip sudėti šachmatų figūras.';
+
+  @override
+  String get learnCastling => 'Rokiruotė';
+
+  @override
+  String get learnTheSpecialKingMove => 'Specialus karaliaus ėjimas';
+
+  @override
+  String get learnCastlingIntro => 'Paslėpk savo karalių saugioje vietoje bei išvesk bokštą į puolimą!';
+
+  @override
+  String get learnCastleKingSide => 'Pajudink savo karalių per du laukelius,\nkad atliktum trumpą rokiruotę!';
+
+  @override
+  String get learnCastleQueenSide => 'Pajudink savo karalių per du laukelius,\nkad atliktum ilgą rokiruotę!';
+
+  @override
+  String get learnTheKnightIsInTheWay => 'Žirgas painiojasi tavo kelyje!\nIšvesk jį, tada atlik trumpą rokiruotę.';
+
+  @override
+  String get learnCastleKingSideMovePiecesFirst => 'Rokiruok karaliaus flange!\nPirma tu turi išvesti savo figūras.';
+
+  @override
+  String get learnCastleQueenSideMovePiecesFirst => 'Rokiruok valdovės flange!\nPirma tu turi išvesti savo figūras.';
+
+  @override
+  String get learnYouCannotCastleIfMoved => 'Negali atlikti rokiruotės\njeigu karalius jau pajudėjęs\narba bokštas jau pajudėjęs.';
+
+  @override
+  String get learnYouCannotCastleIfAttacked => 'Negali atlikti rokiruotės\njeigu karalius bus užpultas judėjimo metu.\nApsigink nuo šacho ir tik tada atlik rokiruotę!';
+
+  @override
+  String get learnFindAWayToCastleKingSide => 'Rask būdą\natlikti trumpąją rokiruotę!';
+
+  @override
+  String get learnFindAWayToCastleQueenSide => 'Rask būdą\natlikti ilgąją rokiruotę!';
+
+  @override
+  String get learnCastlingComplete => 'Sveikiname! Partijos metu beveik visada gera mintis atlikti rokiruotę.';
+
+  @override
+  String get learnTheSpecialPawnMove => 'Specialusis ėjimas pėstininku';
+
+  @override
+  String get learnEnPassantIntro => 'Kai varžovo pėstininkas pajudėjo per du laukelius, gali kirsti jį lyg būtų paėjęs vieną.';
+
+  @override
+  String get learnBlackJustMovedThePawnByTwoSquares => 'Juodieji ką tik paėjo pėstininku\nper du laukelius!\nNukirsk jį prasilenkiamuoju būdu.';
+
+  @override
+  String get learnEnPassantOnlyWorksImmediately => 'Kirtimas prasilenkiant veikia tik\nvaržovui iš karto pajudinus\npėstininką.';
+
+  @override
+  String get learnEnPassantOnlyWorksOnFifthRank => 'Kertimas prasilenkiant veikia tik tada\nkai tavo pėstininkas stovi 5-oje gulstinėje.';
+
+  @override
+  String get learnTakeAllThePawnsEnPassant => 'Iškirsk visus pėstininkus praeinančiuoju metodu!';
+
+  @override
+  String get learnEnPassantComplete => 'Sveikiname! Jau gali kirsti pėstininkus praeinančiuoju būdu.';
+
+  @override
+  String get learnStalemate => 'Patas';
+
+  @override
+  String get learnTheGameIsADraw => 'Partija baigėsi lygiosiomis';
+
+  @override
+  String get learnStalemateIntro => 'Kai žaidėjas nėra po šachu ir negali atlikti legalaus ėjimo, tai vadinama patu. Partija baigiasi lygiosiomis - niekas nelaimi ir nepralaimi.';
+
+  @override
+  String get learnStalemateGoal => 'Kad duoti patą juodiems:\n- Juodieji negali niekur paeiti\n- Nėra šacho.';
+
+  @override
+  String get learnStalemateComplete => 'Sveikiname! Geriau gauti patą nei matą!';
+
+  @override
+  String get learnAdvanced => 'Aukštesnis lygis';
+
+  @override
+  String get learnPieceValue => 'Figūrų vertė';
+
+  @override
+  String get learnEvaluatePieceStrength => 'Įvertink figūrų galią';
+
+  @override
+  String get learnPieceValueIntro => 'Paslankesnės figūros turi didesnę vertę!\nValdovė = 9\nBokštas = 5\nRikis = 3\nŽirgas = 3\nPėstininkas = 1\nKaralius neįkainojamas! Prarasti jį reiškia pralaimėti.';
+
+  @override
+  String get learnQueenOverBishop => 'Nukirsk didžiausios\nvertės figūrą!\nValdovė > Rikis';
+
+  @override
+  String get learnPieceValueExchange => 'Nukirskite didžiausios vertės figūrą!\n Neiškeiskite savo vertingesnės\n figūros į mažiau vertingą priešininko figūrą.';
+
+  @override
+  String get learnPieceValueLegal => 'Nukirskite didžiausios\nvertės figūrą!\nĖjimas turi būti galimas!';
+
+  @override
+  String get learnTakeThePieceWithTheHighestValue => 'Nukirsk didžiausios\nvertės figūrą!';
+
+  @override
+  String get learnPieceValueComplete => 'Sveikiname! Žinai figūrų vertę ir pajėgumą!\nValdovė = 9\nBokštas = 5\nRikis = 3\nŽirgas = 3\nPėstininkas = 1';
+
+  @override
+  String get learnCheckInTwo => 'Šachas dviem ėjimais';
+
+  @override
+  String get learnTwoMovesToGiveCheck => 'Du ėjimai duoti šachą';
+
+  @override
+  String get learnCheckInTwoIntro => 'Surask teisingą dviejų ėjimų seką kuri duoda šachą varžovo karaliui!';
+
+  @override
+  String get learnCheckInTwoGoal => 'Pagrasink varžovo karaliui\ndviem ėjimais!';
+
+  @override
+  String get learnCheckInTwoComplete => 'Sveikiname! Davei šachą savo varžovui ir privertei jį ginti savo karalių!';
+
+  @override
+  String get learnWhatNext => 'Kas toliau?';
+
+  @override
+  String get learnYouKnowHowToPlayChess => 'Jau žinai, kaip žaisti šachmatus, sveikiname! Ar norėtum tapti stipresniu žaidėju?';
+
+  @override
+  String get learnRegister => 'Užsiregistruok';
+
+  @override
+  String get learnGetAFreeLichessAccount => 'Susikurk nemokamą Lichess paskyrą';
+
+  @override
+  String get learnPractice => 'Treniruokis';
+
+  @override
+  String get learnLearnCommonChessPositions => 'Išmok dažnas šachmatų pozicijas';
+
+  @override
+  String get learnPuzzles => 'Užduotys';
+
+  @override
+  String get learnExerciseYourTacticalSkills => 'Tobulink savo taktinį matymą';
+
+  @override
+  String get learnVideos => 'Vaizdo įrašai';
+
+  @override
+  String get learnWatchInstructiveChessVideos => 'Žiūrėti mokomuosius vaizdo įrašus';
+
+  @override
+  String get learnPlayPeople => 'Žaisti su žmonėmis';
+
+  @override
+  String get learnOpponentsFromAroundTheWorld => 'Varžovai iš viso pasaulio';
+
+  @override
+  String get learnPlayMachine => 'Žaisti su kompiuteriu';
+
+  @override
+  String get learnTestYourSkillsWithTheComputer => 'Išbandyk savo įgūdžius prieš kompiuterį';
+
+  @override
+  String get learnLetsGo => 'Pirmyn!';
+
+  @override
+  String learnStageX(String param) {
+    return '$param lygis';
+  }
+
+  @override
+  String get learnAwesome => 'Nuostabu!';
+
+  @override
+  String get learnExcellent => 'Puiku!';
+
+  @override
+  String get learnGreatJob => 'Puikiai atlikta!';
+
+  @override
+  String get learnPerfect => 'Puiku!';
+
+  @override
+  String get learnOutstanding => 'Nepakartojama!';
+
+  @override
+  String get learnWayToGo => 'Pasiruošęs!';
+
+  @override
+  String get learnYesYesYes => 'Taip, taip, taip!';
+
+  @override
+  String get learnYoureGoodAtThis => 'Jūs įgudęs!';
+
+  @override
+  String get learnNailedIt => 'Tiesiai į dešimtuką.';
+
+  @override
+  String get learnRightOn => 'Tiksliai!';
+
+  @override
+  String learnStageXComplete(String param) {
+    return '$param lygis baigtas';
+  }
+
+  @override
+  String get learnNext => 'Sekantis';
+
+  @override
+  String learnNextX(String param) {
+    return 'Kita: $param';
+  }
+
+  @override
+  String get learnBackToMenu => 'Grįžti į meniu';
+
+  @override
+  String get learnPuzzleFailed => 'Suklydote užduotyje!';
+
+  @override
+  String get learnRetry => 'Bandykite dar kartą';
+
+  @override
   String get patronDonate => 'Paremti';
 
   @override

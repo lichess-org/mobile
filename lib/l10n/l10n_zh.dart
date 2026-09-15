@@ -1336,6 +1336,527 @@ class AppLocalizationsZh extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => '仅练习特定横线与纵线';
 
   @override
+  String get learnLearnChess => '学习国象';
+
+  @override
+  String get learnByPlaying => '边学边玩！';
+
+  @override
+  String learnProgressX(String param) {
+    return '进度：$param';
+  }
+
+  @override
+  String get learnResetMyProgress => '重置我的进度';
+
+  @override
+  String get learnYouWillLoseAllYourProgress => '您将丢失所有进度！';
+
+  @override
+  String get learnPlay => '开始玩！';
+
+  @override
+  String get learnChessPieces => '棋子';
+
+  @override
+  String get learnTheRook => '车';
+
+  @override
+  String get learnItMovesInStraightLines => '它沿直线移动';
+
+  @override
+  String get learnRookIntro => '车是威力强大的棋子。准备好指挥它了吗？';
+
+  @override
+  String get learnRookGoal => '点击车\n将它移动到星星上！';
+
+  @override
+  String get learnGrabAllTheStars => '吃掉所有的星星！';
+
+  @override
+  String get learnTheFewerMoves => '移动的次数越少，\n获得的分数越高！';
+
+  @override
+  String get learnUseTwoRooks => '使用双车，\n加快速度！';
+
+  @override
+  String get learnRookComplete => '恭喜！您已成功掌握了车。';
+
+  @override
+  String get learnTheBishop => '象';
+
+  @override
+  String get learnItMovesDiagonally => '它沿斜线移动';
+
+  @override
+  String get learnBishopIntro => '接下来我们将学习如何操纵象！';
+
+  @override
+  String get learnYouNeedBothBishops => '一个白格象，\n一个黑格象，\n两者您都需要！';
+
+  @override
+  String get learnBishopComplete => '恭喜！您可以指挥象了。';
+
+  @override
+  String get learnTheQueen => '后';
+
+  @override
+  String get learnQueenCombinesRookAndBishop => '后 = 车 + 象';
+
+  @override
+  String get learnQueenIntro => '最强大的棋子登场。女皇陛下——后！';
+
+  @override
+  String get learnQueenComplete => '恭喜！后对您已无秘密可言。';
+
+  @override
+  String get learnTheKing => '王';
+
+  @override
+  String get learnTheMostImportantPiece => '最重要的棋子';
+
+  @override
+  String get learnKingIntro => '您就是王。若您在战斗中倒下，对局就输了。';
+
+  @override
+  String get learnTheKingIsSlow => '王移动缓慢';
+
+  @override
+  String get learnLastOne => '最后一关！';
+
+  @override
+  String get learnKingComplete => '您现在已是位合格的指挥官啦！';
+
+  @override
+  String get learnTheKnight => '马';
+
+  @override
+  String get learnItMovesInAnLShape => '它沿 L 字形移动';
+
+  @override
+  String get learnKnightIntro => '这里有个挑战等着您。马…是一种难以捉摸的棋子。';
+
+  @override
+  String get learnKnightsHaveAFancyWay => '马以华丽的方式四处跳动！';
+
+  @override
+  String get learnKnightsCanJumpOverObstacles => '马可以跳过障碍！\n逃脱并征服所有星星！';
+
+  @override
+  String get learnKnightComplete => '恭喜！您已是位专业的驯马师啦。';
+
+  @override
+  String get learnThePawn => '兵';
+
+  @override
+  String get learnItMovesForwardOnly => '它只能向前移动';
+
+  @override
+  String get learnPawnIntro => '兵很弱小，但它们蕴含着巨大的潜力。';
+
+  @override
+  String get learnPawnsMoveOneSquareOnly => '兵一次只能走一格。\n但当它们到达棋盘的另一端时，会升变成更强的棋子！';
+
+  @override
+  String get learnMostOfTheTimePromotingToAQueenIsBest => '大多数时候升变为后是最好的。\n但有时升变为马会很管用！';
+
+  @override
+  String get learnPawnsMoveForward => '兵向前直行，\n但斜着吃子！';
+
+  @override
+  String get learnCaptureThenPromote => '吃子，然后升变！';
+
+  @override
+  String get learnUseAllThePawns => '使用所有的兵！\n无需升变。';
+
+  @override
+  String get learnAPawnOnTheSecondRank => '位于第二横线的兵可以一次移动两格！';
+
+  @override
+  String get learnGrabAllTheStarsNoNeedToPromote => '获取所有星星！\n无需升变。';
+
+  @override
+  String get learnPawnComplete => '恭喜！兵对您已无秘密可言。';
+
+  @override
+  String get learnPawnPromotion => '兵升变';
+
+  @override
+  String get learnYourPawnReachedTheEndOfTheBoard => '您的兵到达了棋盘底线！';
+
+  @override
+  String get learnItNowPromotesToAStrongerPiece => '现在它将升变为一个更强的棋子。';
+
+  @override
+  String get learnSelectThePieceYouWant => '请选择您想要升变为的棋子。';
+
+  @override
+  String get learnFundamentals => '基础';
+
+  @override
+  String get learnCapture => '吃子';
+
+  @override
+  String get learnTakeTheEnemyPieces => '吃掉对方的棋子';
+
+  @override
+  String get learnCaptureIntro => '找出对方未被保护的棋子，并吃掉它们！';
+
+  @override
+  String get learnTakeTheBlackPieces => '吃掉黑方的棋子！';
+
+  @override
+  String get learnTakeTheBlackPiecesAndDontLoseYours => '吃掉黑棋，\n保住白棋！';
+
+  @override
+  String get learnCaptureComplete => '恭喜！您知道如何用棋子战斗了！';
+
+  @override
+  String get learnProtection => '保护';
+
+  @override
+  String get learnKeepYourPiecesSafe => '确保己方棋子安全';
+
+  @override
+  String get learnProtectionIntro => '找出对方正在攻击的棋子，并保护它们！';
+
+  @override
+  String get learnProtectionComplete => '恭喜！没有丢失的棋子就是您赢得的棋子！';
+
+  @override
+  String get learnEscape => '您正被攻击！\n避开威胁！';
+
+  @override
+  String get learnNoEscape => '无法避开，\n但您可以防守！';
+
+  @override
+  String get learnDontLetThemTakeAnyUndefendedPiece => '别让对方吃掉，\n任何无保护的棋子！';
+
+  @override
+  String get learnCombat => '攻防';
+
+  @override
+  String get learnCaptureAndDefendPieces => '吃子与保护';
+
+  @override
+  String get learnCombatIntro => '优秀的战士懂得攻守兼备！';
+
+  @override
+  String get learnCombatComplete => '恭喜！您知道如何用棋子战斗了！';
+
+  @override
+  String get learnCheckInOne => '一步将';
+
+  @override
+  String get learnAttackTheOpponentsKing => '攻击对方的王';
+
+  @override
+  String get learnCheckInOneIntro => '要将军对方，就得攻击对方的王。他们必须应将！';
+
+  @override
+  String get learnCheckInOneGoal => '一步之内，\n瞄准对方的王！';
+
+  @override
+  String get learnCheckInOneComplete => '恭喜！您将军了对方，迫使他们应将！';
+
+  @override
+  String get learnOutOfCheck => '应将';
+
+  @override
+  String get learnDefendYourKing => '保护您的王';
+
+  @override
+  String get learnOutOfCheckIntro => '您被将军了！您必须逃跑或应将。';
+
+  @override
+  String get learnEscapeWithTheKing => '请将王移开！';
+
+  @override
+  String get learnTheKingCannotEscapeButBlock => '王无法逃跑，\n但您可以挡住攻击！';
+
+  @override
+  String get learnYouCanGetOutOfCheckByTaking => '您可以通过吃掉攻击的棋子来应将。';
+
+  @override
+  String get learnThisKnightIsCheckingThroughYourDefenses => '这匹马正穿过您的防线对您将军！';
+
+  @override
+  String get learnEscapeOrBlock => '请将王移开或应将！';
+
+  @override
+  String get learnOutOfCheckComplete => '恭喜！您的王永远不会被吃掉，确保您能应将！';
+
+  @override
+  String get learnMateInOne => '一步杀';
+
+  @override
+  String get learnDefeatTheOpponentsKing => '击败对方的王';
+
+  @override
+  String get learnMateInOneIntro => '当对方无法应将时，您就赢了。';
+
+  @override
+  String get learnAttackYourOpponentsKing => '以无法被应将的方式，\n攻击对方的王！';
+
+  @override
+  String get learnMateInOneComplete => '恭喜！这就是您赢得国际象棋对局的方式！';
+
+  @override
+  String get learnIntermediate => '进阶';
+
+  @override
+  String get learnBoardSetup => '棋盘布置';
+
+  @override
+  String get learnHowTheGameStarts => '对局如何开始';
+
+  @override
+  String get learnBoardSetupIntro => '两军对峙，准备战斗';
+
+  @override
+  String get learnThisIsTheInitialPosition => '这是每盘国际象棋对局的起始局面！\n走任意一步以继续。';
+
+  @override
+  String get learnFirstPlaceTheRooks => '首先是车！\n放在棋盘角落里';
+
+  @override
+  String get learnThenPlaceTheKnights => '然后是马！\n放在车的内侧';
+
+  @override
+  String get learnPlaceTheBishops => '接下来是象！\n放在马的内侧';
+
+  @override
+  String get learnPlaceTheQueen => '其次是后！\n黑后在黑格，白后在白格';
+
+  @override
+  String get learnPlaceTheKing => '最后是王！\n放在后的旁边';
+
+  @override
+  String get learnPawnsFormTheFrontLine => '兵构成前线，\n请走任意棋子继续';
+
+  @override
+  String get learnBoardSetupComplete => '恭喜！您知道如何布置棋盘了。';
+
+  @override
+  String get learnCastling => '王车易位';
+
+  @override
+  String get learnTheSpecialKingMove => '王的特殊走法';
+
+  @override
+  String get learnCastlingIntro => '将您的王带到安全地带，并调动您的车用于进攻！';
+
+  @override
+  String get learnCastleKingSide => '请将您的王移动两格\n进行王翼易位！';
+
+  @override
+  String get learnCastleQueenSide => '请将您的王移动两格\n进行后翼易位！';
+
+  @override
+  String get learnTheKnightIsInTheWay => '马挡在路上！\n移开它，然后进行王翼易位。';
+
+  @override
+  String get learnCastleKingSideMovePiecesFirst => '进行王翼易位！\n您需要先移开其他棋子。';
+
+  @override
+  String get learnCastleQueenSideMovePiecesFirst => '进行后翼易位！\n您需要先移开其他棋子。';
+
+  @override
+  String get learnYouCannotCastleIfMoved => '如果王或车已经移动过，\n您就不能易位啦。';
+
+  @override
+  String get learnYouCannotCastleIfAttacked => '如果王在移动路径上被攻击，您就不能易位。\n请先挡住将军，然后易位！';
+
+  @override
+  String get learnFindAWayToCastleKingSide => '请设法进行王翼易位！';
+
+  @override
+  String get learnFindAWayToCastleQueenSide => '请设法进行后翼易位！';
+
+  @override
+  String get learnCastlingComplete => '恭喜！在对局中，您几乎总是应该进行易位。';
+
+  @override
+  String get learnTheSpecialPawnMove => '兵的特殊走法';
+
+  @override
+  String get learnEnPassantIntro => '当对方的兵移动了两格时，您可以像它只移动了一格那样吃掉它。';
+
+  @override
+  String get learnBlackJustMovedThePawnByTwoSquares => '黑方刚刚将兵移动了两格！\n请吃过路兵。';
+
+  @override
+  String get learnEnPassantOnlyWorksImmediately => '吃过路兵仅在对方刚移动兵之后立即有效。';
+
+  @override
+  String get learnEnPassantOnlyWorksOnFifthRank => '只有当您的兵位于第 5 横线时，吃过路兵才有效。';
+
+  @override
+  String get learnTakeAllThePawnsEnPassant => '通过吃过路兵吃掉所有敌兵！';
+
+  @override
+  String get learnEnPassantComplete => '恭喜！您已经学会吃过路兵。';
+
+  @override
+  String get learnStalemate => '逼和';
+
+  @override
+  String get learnTheGameIsADraw => '对局为和棋';
+
+  @override
+  String get learnStalemateIntro => '当一方未被将军且没有合法着法可走时，即为逼和。\n对局和棋：无人获胜，无人落败。';
+
+  @override
+  String get learnStalemateGoal => '达成黑方逼和：\n- 黑方无处可走\n- 且没有将军';
+
+  @override
+  String get learnStalemateComplete => '恭喜！逼和总比被将杀好！';
+
+  @override
+  String get learnAdvanced => '高级';
+
+  @override
+  String get learnPieceValue => '子力价值';
+
+  @override
+  String get learnEvaluatePieceStrength => '评估棋子价值';
+
+  @override
+  String get learnPieceValueIntro => '机动性高的棋子价值更高！\n后 = 9 分\n车 = 5 分\n象 = 3 分\n马 = 3 分\n兵 = 1 分\n王是无价的！失去它就意味着输掉对局。';
+
+  @override
+  String get learnQueenOverBishop => '吃掉价值最高的棋子！\n后 > 象';
+
+  @override
+  String get learnPieceValueExchange => '吃掉价值最高的棋子！\n但请不要用高价值棋子兑换低价值棋子。';
+
+  @override
+  String get learnPieceValueLegal => '吃掉价值最高的棋子！\n请确保您的着法是合法的！';
+
+  @override
+  String get learnTakeThePieceWithTheHighestValue => '吃掉价值最高的棋子！';
+
+  @override
+  String get learnPieceValueComplete => '恭喜！您知道了子力价值！\n后 = 9 分\n车 = 5 分\n象 = 3 分\n马 = 3 分\n兵 = 1 分';
+
+  @override
+  String get learnCheckInTwo => '两步将';
+
+  @override
+  String get learnTwoMovesToGiveCheck => '两步棋将军对方';
+
+  @override
+  String get learnCheckInTwoIntro => '找出正确的两步棋组合，来将军对方的王！';
+
+  @override
+  String get learnCheckInTwoGoal => '两步之内威胁对方的王！';
+
+  @override
+  String get learnCheckInTwoComplete => '恭喜！您将军了对方，迫使他们保护自己的王！';
+
+  @override
+  String get learnWhatNext => '接下来呢？';
+
+  @override
+  String get learnYouKnowHowToPlayChess => '您已经学会如何下国际象棋了，恭喜！您想成为更强的棋手吗？';
+
+  @override
+  String get learnRegister => '注册';
+
+  @override
+  String get learnGetAFreeLichessAccount => '获取免费的 Lichess 账户';
+
+  @override
+  String get learnPractice => '练习';
+
+  @override
+  String get learnLearnCommonChessPositions => '学习常见的国际象棋局面';
+
+  @override
+  String get learnPuzzles => '谜题';
+
+  @override
+  String get learnExerciseYourTacticalSkills => '锻炼您的战术技巧';
+
+  @override
+  String get learnVideos => '视频';
+
+  @override
+  String get learnWatchInstructiveChessVideos => '观看有教学意义的国际象棋视频';
+
+  @override
+  String get learnPlayPeople => '与他人对弈';
+
+  @override
+  String get learnOpponentsFromAroundTheWorld => '来自世界各地的棋手';
+
+  @override
+  String get learnPlayMachine => '与电脑对弈';
+
+  @override
+  String get learnTestYourSkillsWithTheComputer => '和不同等级的电脑对弈';
+
+  @override
+  String get learnLetsGo => '开始！';
+
+  @override
+  String learnStageX(String param) {
+    return '阶段 $param';
+  }
+
+  @override
+  String get learnAwesome => '太棒了！';
+
+  @override
+  String get learnExcellent => '优秀！';
+
+  @override
+  String get learnGreatJob => '做得好！';
+
+  @override
+  String get learnPerfect => '完美！';
+
+  @override
+  String get learnOutstanding => '出类拔萃！';
+
+  @override
+  String get learnWayToGo => '干得漂亮！';
+
+  @override
+  String get learnYesYesYes => '好，好，非常好！';
+
+  @override
+  String get learnYoureGoodAtThis => '您很有潜力！';
+
+  @override
+  String get learnNailedIt => '漂亮！';
+
+  @override
+  String get learnRightOn => '完全正确！';
+
+  @override
+  String learnStageXComplete(String param) {
+    return '阶段 $param 完成';
+  }
+
+  @override
+  String get learnNext => '继续';
+
+  @override
+  String learnNextX(String param) {
+    return '下一项：$param';
+  }
+
+  @override
+  String get learnBackToMenu => '返回菜单';
+
+  @override
+  String get learnPuzzleFailed => '解题失败！';
+
+  @override
+  String get learnRetry => '重试';
+
+  @override
   String get patronDonate => '赞助';
 
   @override
@@ -7962,6 +8483,527 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get coordinatesPracticeOnlySomeFilesAndRanks => '只練習部分列與行';
+
+  @override
+  String get learnLearnChess => '學棋';
+
+  @override
+  String get learnByPlaying => '邊學邊玩！';
+
+  @override
+  String learnProgressX(String param) {
+    return '進度：$param';
+  }
+
+  @override
+  String get learnResetMyProgress => '重設我的進度';
+
+  @override
+  String get learnYouWillLoseAllYourProgress => '您的進度將會被清空！';
+
+  @override
+  String get learnPlay => '玩！';
+
+  @override
+  String get learnChessPieces => '棋子';
+
+  @override
+  String get learnTheRook => '城堡';
+
+  @override
+  String get learnItMovesInStraightLines => '它以直線移動';
+
+  @override
+  String get learnRookIntro => '城堡是一個強大的棋子，你準備好來指揮它了嗎？';
+
+  @override
+  String get learnRookGoal => '點擊城堡\n將它移動到星星的位置';
+
+  @override
+  String get learnGrabAllTheStars => '吃掉所有的星星！';
+
+  @override
+  String get learnTheFewerMoves => '移動的步數越少，\n贏得的點數越多！';
+
+  @override
+  String get learnUseTwoRooks => '兩個城堡\n快還要更快！';
+
+  @override
+  String get learnRookComplete => '恭喜！你已經懂得如何使用城堡了。';
+
+  @override
+  String get learnTheBishop => '主教';
+
+  @override
+  String get learnItMovesDiagonally => '它以斜線移動';
+
+  @override
+  String get learnBishopIntro => '接下來我們來學如何控制主教的移動。';
+
+  @override
+  String get learnYouNeedBothBishops => '淺色一個主教\n深色一個主教\n你全都要';
+
+  @override
+  String get learnBishopComplete => '恭喜！你現在知道如何掌握你的主教了。';
+
+  @override
+  String get learnTheQueen => '后';
+
+  @override
+  String get learnQueenCombinesRookAndBishop => '后 = 車 + 象';
+
+  @override
+  String get learnQueenIntro => '最強大的棋子上場！皇后登場！';
+
+  @override
+  String get learnQueenComplete => '恭喜！皇后對你來說已經毫無秘密可言了。';
+
+  @override
+  String get learnTheKing => '國王';
+
+  @override
+  String get learnTheMostImportantPiece => '最重要的棋子';
+
+  @override
+  String get learnKingIntro => '你就是國王。如果你輸了這場戰鬥，你就輸了這一局棋賽。';
+
+  @override
+  String get learnTheKingIsSlow => '國王很慢，不是普通的慢。';
+
+  @override
+  String get learnLastOne => '最後一步!';
+
+  @override
+  String get learnKingComplete => '現在連國王都要聽令於你了！';
+
+  @override
+  String get learnTheKnight => '騎士';
+
+  @override
+  String get learnItMovesInAnLShape => '它以L字形方式移動';
+
+  @override
+  String get learnKnightIntro => '給你一個小挑戰，騎士是一個．．．比較特別的棋子。';
+
+  @override
+  String get learnKnightsHaveAFancyWay => '騎士可以用華麗的方式跳來跳去！';
+
+  @override
+  String get learnKnightsCanJumpOverObstacles => '騎士可以跳過障礙物！\n逃跑並征服那些星星！';
+
+  @override
+  String get learnKnightComplete => '恭喜！你現在已經精通了騎士的用法。';
+
+  @override
+  String get learnThePawn => '士兵';
+
+  @override
+  String get learnItMovesForwardOnly => '它只向前移動';
+
+  @override
+  String get learnPawnIntro => '士兵也許弱小，但它們的潛能比你想的還多。';
+
+  @override
+  String get learnPawnsMoveOneSquareOnly => '士兵一次只能動一格。\n但當它們抵達棋盤的另一側，它們可以變成更強大的棋子！';
+
+  @override
+  String get learnMostOfTheTimePromotingToAQueenIsBest => '大多數的情況，升變成皇后是最好的選擇。\n但偶爾升變成騎士是個更棒的主意！';
+
+  @override
+  String get learnPawnsMoveForward => '士兵直走\n斜著吃棋';
+
+  @override
+  String get learnCaptureThenPromote => '吃棋，然後升變！';
+
+  @override
+  String get learnUseAllThePawns => '使用你全部的士兵！\n不需要升變。';
+
+  @override
+  String get learnAPawnOnTheSecondRank => '在第二排的士兵可以一次動兩格！';
+
+  @override
+  String get learnGrabAllTheStarsNoNeedToPromote => '取得全部的星星！\n不需要升變。';
+
+  @override
+  String get learnPawnComplete => '恭喜！士兵對你來說已經毫無秘密可言了。';
+
+  @override
+  String get learnPawnPromotion => '士兵的升變';
+
+  @override
+  String get learnYourPawnReachedTheEndOfTheBoard => '你的士兵走到了棋盤的最底端！';
+
+  @override
+  String get learnItNowPromotesToAStrongerPiece => '它將升級為更強大的棋子。';
+
+  @override
+  String get learnSelectThePieceYouWant => '選擇您要的棋子。';
+
+  @override
+  String get learnFundamentals => '基礎';
+
+  @override
+  String get learnCapture => '吃子';
+
+  @override
+  String get learnTakeTheEnemyPieces => '吃掉敵方的棋子';
+
+  @override
+  String get learnCaptureIntro => '找出對手毫無防禦的棋子，並將它吃掉！';
+
+  @override
+  String get learnTakeTheBlackPieces => '吃掉黑棋！';
+
+  @override
+  String get learnTakeTheBlackPiecesAndDontLoseYours => '吃掉黑棋！\n然後不要失去你自己的棋子。';
+
+  @override
+  String get learnCaptureComplete => '恭喜！你現在懂得使用各種棋子了！';
+
+  @override
+  String get learnProtection => '保護';
+
+  @override
+  String get learnKeepYourPiecesSafe => '保護您的棋';
+
+  @override
+  String get learnProtectionIntro => '找出被對手攻擊的棋子，並保護它們！';
+
+  @override
+  String get learnProtectionComplete => '恭喜！沒被吃掉棋子相當於賺了一個棋子！';
+
+  @override
+  String get learnEscape => '你受到攻擊了！\n逃離這個威脅！';
+
+  @override
+  String get learnNoEscape => '你逃不掉了！\n但你可以防禦！';
+
+  @override
+  String get learnDontLetThemTakeAnyUndefendedPiece => '別讓對手吃掉\n任何未受保護的棋子！';
+
+  @override
+  String get learnCombat => '攻防';
+
+  @override
+  String get learnCaptureAndDefendPieces => '吃子與防禦';
+
+  @override
+  String get learnCombatIntro => '優秀的戰士會知道如何同時攻擊和防禦！';
+
+  @override
+  String get learnCombatComplete => '恭喜！你現在懂得使用棋子戰鬥了！';
+
+  @override
+  String get learnCheckInOne => '一步將';
+
+  @override
+  String get learnAttackTheOpponentsKing => '攻擊敵王';
+
+  @override
+  String get learnCheckInOneIntro => '攻擊對手的國王來將軍對方，對手一定要應將！';
+
+  @override
+  String get learnCheckInOneGoal => '只用一步來攻擊對手的國王！';
+
+  @override
+  String get learnCheckInOneComplete => '恭喜！你將軍了你的對手，迫使對手應將！';
+
+  @override
+  String get learnOutOfCheck => '應將';
+
+  @override
+  String get learnDefendYourKing => '保護您的國王';
+
+  @override
+  String get learnOutOfCheckIntro => '你被將軍了！你必須逃跑或是防禦。';
+
+  @override
+  String get learnEscapeWithTheKing => '讓你的國王逃跑！';
+
+  @override
+  String get learnTheKingCannotEscapeButBlock => '國王逃不掉了，但你可以阻擋攻擊！';
+
+  @override
+  String get learnYouCanGetOutOfCheckByTaking => '你可以藉由吃掉攻擊的棋子來應將。';
+
+  @override
+  String get learnThisKnightIsCheckingThroughYourDefenses => '騎士越過了你的防線來將你軍了！';
+
+  @override
+  String get learnEscapeOrBlock => '讓國王逃跑，或是阻擋攻擊！';
+
+  @override
+  String get learnOutOfCheckComplete => '恭喜！你的國王永遠不會被吃掉，但請確保你不會被將軍！';
+
+  @override
+  String get learnMateInOne => '一步將死';
+
+  @override
+  String get learnDefeatTheOpponentsKing => '攻擊敵方的國王';
+
+  @override
+  String get learnMateInOneIntro => '如果你的對手無法應將，這局勝利將由你拿下。';
+
+  @override
+  String get learnAttackYourOpponentsKing => '用一種對手不能防禦的方式攻擊對手！';
+
+  @override
+  String get learnMateInOneComplete => '恭喜！這就是你贏得棋局的方式！';
+
+  @override
+  String get learnIntermediate => '中級';
+
+  @override
+  String get learnBoardSetup => '開局擺設';
+
+  @override
+  String get learnHowTheGameStarts => '如何準備一場棋局';
+
+  @override
+  String get learnBoardSetupIntro => '兩方對峙，準備開戰。';
+
+  @override
+  String get learnThisIsTheInitialPosition => '這就是每一盤國際象棋開局的擺法！\n請任意走一步棋來繼續。';
+
+  @override
+  String get learnFirstPlaceTheRooks => '首先來擺城堡！\n它們待在角落。';
+
+  @override
+  String get learnThenPlaceTheKnights => '接下來是騎士！\n它們在城堡旁邊。';
+
+  @override
+  String get learnPlaceTheBishops => '換主教了！\n它們在騎士旁邊。';
+
+  @override
+  String get learnPlaceTheQueen => '再來是皇后！\n它在跟它相同顏色的格子上。';
+
+  @override
+  String get learnPlaceTheKing => '再來是國王了！\n就在皇后旁邊。';
+
+  @override
+  String get learnPawnsFormTheFrontLine => '士兵在最前線。\n請任意走一步棋來繼續。';
+
+  @override
+  String get learnBoardSetupComplete => '恭喜！你已經知道該如何準備一場國際象棋了。';
+
+  @override
+  String get learnCastling => '王車易位';
+
+  @override
+  String get learnTheSpecialKingMove => '國王特殊移動';
+
+  @override
+  String get learnCastlingIntro => '讓國王被安全的保護著，並讓城堡加入戰場。';
+
+  @override
+  String get learnCastleKingSide => '移動國王兩格來進行短易位。';
+
+  @override
+  String get learnCastleQueenSide => '移動國王兩格來進行長易位。';
+
+  @override
+  String get learnTheKnightIsInTheWay => '騎士擋住路了！移動它，然後進行短易位。';
+
+  @override
+  String get learnCastleKingSideMovePiecesFirst => '進行短易位！但你要先把擋住路的棋子移開。';
+
+  @override
+  String get learnCastleQueenSideMovePiecesFirst => '進行長易位！但你還是要先把擋住路的棋子移開。';
+
+  @override
+  String get learnYouCannotCastleIfMoved => '如果你的國王或是城堡移動過，你就不能進行王車易位。';
+
+  @override
+  String get learnYouCannotCastleIfAttacked => '如果你的國王被攻擊你就不能進行王車易位，先應將再進行王車易位！';
+
+  @override
+  String get learnFindAWayToCastleKingSide => '找出可以進行短易位的方式！';
+
+  @override
+  String get learnFindAWayToCastleQueenSide => '找出可以進行長易位的方式！';
+
+  @override
+  String get learnCastlingComplete => '恭喜！大多數的時候，你應該都要進行王車易位。';
+
+  @override
+  String get learnTheSpecialPawnMove => '士兵的特殊走法';
+
+  @override
+  String get learnEnPassantIntro => '如果對手的士兵走了兩格，你可以吃掉它，就像它只走了一格一樣。';
+
+  @override
+  String get learnBlackJustMovedThePawnByTwoSquares => '黑方的士兵剛剛走了兩格！請吃過路兵。';
+
+  @override
+  String get learnEnPassantOnlyWorksImmediately => '只有在對手移動了士兵的下一步可以吃過路兵。';
+
+  @override
+  String get learnEnPassantOnlyWorksOnFifthRank => '你的士兵必須在第五行才可以吃過路兵，';
+
+  @override
+  String get learnTakeAllThePawnsEnPassant => '以吃過路兵的方式拿下對手全部的士兵！';
+
+  @override
+  String get learnEnPassantComplete => '恭喜！你現在知道怎麼吃過路兵了。';
+
+  @override
+  String get learnStalemate => '逼和';
+
+  @override
+  String get learnTheGameIsADraw => '這是一場平局';
+
+  @override
+  String get learnStalemateIntro => '當一個人沒有被將軍，但沒有任何一步棋合法，這就是逼和。沒人贏也沒人輸。';
+
+  @override
+  String get learnStalemateGoal => '使黑方逼和：\n黑方沒有棋步合法並且沒有被將軍。';
+
+  @override
+  String get learnStalemateComplete => '恭喜！逼和比你被將死好！';
+
+  @override
+  String get learnAdvanced => '高級';
+
+  @override
+  String get learnPieceValue => '棋子的價值';
+
+  @override
+  String get learnEvaluatePieceStrength => '對棋子的價值進行評估';
+
+  @override
+  String get learnPieceValueIntro => '移動能力越強的價值越高！\n皇后 = 9\n城堡 = 5\n主教 = 3\n騎士 = 3\n士兵 = 1\n國王無價！你失去國王就輸了棋局。';
+
+  @override
+  String get learnQueenOverBishop => '吃掉價值高的棋子！\n皇后　>　主教';
+
+  @override
+  String get learnPieceValueExchange => '吃掉對手價值最高的棋子！\n不要拿價值高的棋子去換價值低的棋子';
+
+  @override
+  String get learnPieceValueLegal => '吃掉對手價值最高的棋子！\n要確定自己的走棋沒有違反規則';
+
+  @override
+  String get learnTakeThePieceWithTheHighestValue => '吃掉價值高的棋子！';
+
+  @override
+  String get learnPieceValueComplete => '恭喜！你知道各棋子的價值了！\n皇后 = 9\n城堡 = 5\n主教 = 3\n騎士 = 3\n士兵 = 1';
+
+  @override
+  String get learnCheckInTwo => '兩步將';
+
+  @override
+  String get learnTwoMovesToGiveCheck => '走兩步棋並將軍對方';
+
+  @override
+  String get learnCheckInTwoIntro => '找出可以兩步將軍對手的正確組合！';
+
+  @override
+  String get learnCheckInTwoGoal => '二步將軍敵方的王！';
+
+  @override
+  String get learnCheckInTwoComplete => '恭喜！你將軍了你的對手，迫使對手應將！';
+
+  @override
+  String get learnWhatNext => '下一步';
+
+  @override
+  String get learnYouKnowHowToPlayChess => '恭喜！你現在會玩國際象棋了！你想成為更出色的棋手嗎？';
+
+  @override
+  String get learnRegister => '註冊';
+
+  @override
+  String get learnGetAFreeLichessAccount => '獲得免費的 Lichess 賬戶';
+
+  @override
+  String get learnPractice => '練習';
+
+  @override
+  String get learnLearnCommonChessPositions => '學習常見的棋子局面';
+
+  @override
+  String get learnPuzzles => '謎題';
+
+  @override
+  String get learnExerciseYourTacticalSkills => '練習您的戰術';
+
+  @override
+  String get learnVideos => '影片';
+
+  @override
+  String get learnWatchInstructiveChessVideos => '觀看教學影片';
+
+  @override
+  String get learnPlayPeople => '與玩家對弈';
+
+  @override
+  String get learnOpponentsFromAroundTheWorld => '世界各地的對手';
+
+  @override
+  String get learnPlayMachine => '與電腦下棋';
+
+  @override
+  String get learnTestYourSkillsWithTheComputer => '用電腦挑戰你的技術';
+
+  @override
+  String get learnLetsGo => '讓我們開始吧!';
+
+  @override
+  String learnStageX(String param) {
+    return '階段 $param';
+  }
+
+  @override
+  String get learnAwesome => '真棒！';
+
+  @override
+  String get learnExcellent => '妙著!';
+
+  @override
+  String get learnGreatJob => '做得好！';
+
+  @override
+  String get learnPerfect => '完美!';
+
+  @override
+  String get learnOutstanding => '優秀！';
+
+  @override
+  String get learnWayToGo => '還不錯！';
+
+  @override
+  String get learnYesYesYes => '對！就是這樣！';
+
+  @override
+  String get learnYoureGoodAtThis => '你很有潛力！';
+
+  @override
+  String get learnNailedIt => '正確！';
+
+  @override
+  String get learnRightOn => '很不錯！';
+
+  @override
+  String learnStageXComplete(String param) {
+    return '階段 $param 成功';
+  }
+
+  @override
+  String get learnNext => '繼續';
+
+  @override
+  String learnNextX(String param) {
+    return '接下來:$param';
+  }
+
+  @override
+  String get learnBackToMenu => '回到選單';
+
+  @override
+  String get learnPuzzleFailed => '解題失敗！';
+
+  @override
+  String get learnRetry => '重試';
 
   @override
   String get patronDonate => '捐款';

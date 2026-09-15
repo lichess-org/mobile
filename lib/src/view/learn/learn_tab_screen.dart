@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/account/account_menu.dart';
 import 'package:lichess_mobile/src/view/coordinate_training/coordinate_training_screen.dart';
+import 'package:lichess_mobile/src/view/learn/learn_screen.dart';
 import 'package:lichess_mobile/src/view/study/study_list_screen.dart';
 import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -118,6 +119,15 @@ class const _Body() extends ConsumerWidget {
               hasLeading: true,
               children: [
                 ListTile(
+                  leading: const Icon(Symbols.school),
+                  trailing: Theme.of(context).platform == TargetPlatform.iOS
+                      ? const CupertinoListTileChevron()
+                      : null,
+                  title: Text(context.l10n.learnLearnChess, style: Styles.callout),
+                  onTap: () =>
+                      Navigator.of(context, rootNavigator: true).push(LearnScreen.buildRoute()),
+                ),
+                ListTile(
                   leading: const Icon(Symbols.where_to_vote),
                   trailing: Theme.of(context).platform == TargetPlatform.iOS
                       ? const CupertinoListTileChevron()
@@ -130,8 +140,8 @@ class const _Body() extends ConsumerWidget {
                 ),
               ],
             ),
-            // Coordinate training works offline, so only the studies are
-            // replaced by the outage message.
+            // Learn and coordinate training work offline, so only the studies are replaced by the
+            // outage message.
             if (connectionStatus.isServerUnavailable) const ServerOutageDisplay(),
             if (connectionStatus == LichessConnectionStatus.online) ...[
               ListSection(
