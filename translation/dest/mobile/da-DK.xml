@@ -7,6 +7,7 @@
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Er du sikker?</string>
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Brætindstillinger</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Annuller tilbud om tilbagetagelse</string>
+  <string name="chessEngine" comment="Chess engine settings screen title.">Skakprogram</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Ryd</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Ryd gemt træk</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Deltag i et parti</string>
@@ -45,6 +46,8 @@
   <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">Mål for trukket brik</string>
   <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">Cirkel</string>
   <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">Kvadrat</string>
+  <string name="settingsDrawnShapeColor" comment="This is shown in the theme settings screen. Allow to choose the color of drawn shapes.">Farve på tegnet figur</string>
+  <string name="settingsDrawnShapeColorHelp" comment="This is shown in the theme settings screen. Explanation of the drawn shape color settings.">Denne farve bruges til figurer, der tegnes i hånden med to fingre.</string>
   <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">Hjem-widget</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Fordybelsestilstand</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Skjul systemets brugerflade, mens du spiller. Brug denne funktion, hvis du er generet af systemets navigationsbevægelser i kanterne af skærmen. Gælder for parti- og Puzzle Storm-skærme.</string>
