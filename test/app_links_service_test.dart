@@ -10,11 +10,15 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/app_links_service.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/game.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
@@ -30,6 +34,8 @@ import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_results_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
@@ -39,6 +45,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
 import 'example_data.dart';
+import 'model/auth/fake_auth_storage.dart';
 import 'model/game/game_socket_example_data.dart';
 import 'model/puzzle/mock_server_responses.dart';
 import 'network/fake_http_client_factory.dart';
@@ -59,6 +66,8 @@ class MockGameRepository() extends Mock implements GameRepository;
 class MockChallengeRepository() extends Mock implements ChallengeRepository;
 
 class MockUserRepository() extends Mock implements UserRepository;
+
+class MockAccountRepository() extends Mock implements AccountRepository;
 
 class const _DailyPuzzleLinkTestWidget({final String? puzzleId}) extends ConsumerWidget {
   @override
@@ -106,10 +115,12 @@ Future<void> triggerAppLink(
   WidgetTester tester,
   Uri appLinkUri, {
   Map<ProviderOrFamily, Override>? overrides,
+  AuthUser? authUser,
 }) async {
   final app = await makeTestProviderScopeApp(
     tester,
     overrides: overrides,
+    authUser: authUser,
     home: Scaffold(body: _TestWidget(uri: appLinkUri)),
   );
   await tester.pumpWidget(app);
@@ -657,6 +668,73 @@ void main() {
         tester.widget(find.byType(TvScreen)),
         isA<TvScreen>().having((s) => s.initialGame?.$1, 'id', ongoingGame.id),
       );
+    });
+
+    testWidgets('resolves /gameid link to GameScreen for ongoing game when user is playing', (
+      WidgetTester tester,
+    ) async {
+      final mockGameRepository = MockGameRepository();
+      final mockAccountRepository = MockAccountRepository();
+      const gameFullId = GameFullId('game0000aaaa');
+      final ongoingGame = generateExportedGames(count: 1).first.copyWith(
+        status: GameStatus.started,
+        white: Player(
+          user: LightUser(id: fakeAuthUser.user.id, name: fakeAuthUser.user.name),
+        ),
+        black: const Player(
+          user: LightUser(id: UserId('opponent'), name: 'Opponent'),
+        ),
+      );
+      when(() => mockGameRepository.getGame(ongoingGame.id)).thenAnswer((_) async => ongoingGame);
+      when(() => mockAccountRepository.getOngoingGames(nb: 3)).thenAnswer(
+        (_) async => [
+          OngoingGame(
+            id: ongoingGame.id,
+            fullId: gameFullId,
+            orientation: Side.white,
+            fen: kInitialFEN,
+            perf: Perf.blitz,
+            speed: Speed.blitz,
+            variant: Variant.standard,
+            isMyTurn: true,
+          ),
+        ].lock,
+      );
+
+      final uri = Uri.parse('https://lichess.org/${ongoingGame.id.value}');
+
+      await triggerAppLink(
+        tester,
+        uri,
+        authUser: fakeAuthUser,
+        overrides: {
+          gameRepositoryProvider: gameRepositoryProvider.overrideWith((_) => mockGameRepository),
+          accountRepositoryProvider: accountRepositoryProvider.overrideWith(
+            (_) => mockAccountRepository,
+          ),
+        },
+      );
+
+      await tester.pump();
+      await tester.pump(kFakeWebSocketConnectionLag);
+
+      sendServerSocketMessages(Uri(path: '/play/${gameFullId.value}/v6'), [
+        makeFullEvent(
+          ongoingGame.id,
+          '',
+          whiteUserName: fakeAuthUser.user.name,
+          blackUserName: 'Opponent',
+          youAre: Side.white,
+        ),
+      ]);
+      await tester.pump();
+      await tester.pumpAndSettle();
+
+      expect(
+        tester.widget(find.byType(GameScreen)),
+        isA<GameScreen>().having((s) => s.source, 'source', const ExistingGameSource(gameFullId)),
+      );
+      expect(find.byType(TvScreen), findsNothing);
     });
 
     testWidgets('replaces existing screen instead of stacking a duplicate', (tester) async {
