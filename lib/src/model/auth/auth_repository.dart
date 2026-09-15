@@ -1,9 +1,13 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_user.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
+import 'package:lichess_mobile/src/model/auth/loopback_oauth_client.dart';
 import 'package:lichess_mobile/src/model/auth/sign_in_failure_reporter.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -54,21 +58,28 @@ final appAuthProvider = Provider<FlutterAppAuth>((Ref ref) {
 }, name: 'AppAuthProvider');
 
 final authRepositoryProvider = Provider<AuthRepository>((Ref ref) {
-  final appAuth = ref.read(appAuthProvider);
-  return AuthRepository(ref, appAuth);
+  final appAuth = ref.watch(appAuthProvider);
+  final loopbackOAuthClient = ref.watch(loopbackOAuthClientProvider);
+  return AuthRepository(ref, appAuth, loopbackOAuthClient: loopbackOAuthClient);
 }, name: 'AuthRepositoryProvider');
 
 class AuthRepository {
-  AuthRepository(Ref ref, FlutterAppAuth appAuth) : _ref = ref, _appAuth = appAuth;
+  AuthRepository(this._ref, this._appAuth, {LoopbackOAuthClient? loopbackOAuthClient})
+    : _loopbackOAuthClient = loopbackOAuthClient ?? const LoopbackOAuthClient();
 
   final Ref _ref;
   final Logger _log = Logger('AuthRepository');
   final FlutterAppAuth _appAuth;
+  final LoopbackOAuthClient _loopbackOAuthClient;
 
   LichessClient get _client => _ref.read(lichessClientProvider);
 
   /// Sign in with Lichess using OAuth 2.0 PKCE using the system browser.
   Future<AuthUser> signIn() async {
+    if (defaultTargetPlatform == TargetPlatform.linux) {
+      return await _signInLinux();
+    }
+
     final AuthorizationTokenResponse authResp;
     try {
       authResp = await _appAuth.authorizeAndExchangeCode(
@@ -97,6 +108,53 @@ class AuthRepository {
       throw Exception('Access token not found.');
     }
 
+    return await _fetchAuthUser(token);
+  }
+
+  /// Sign in using loopback OAuth 2.0 PKCE on Linux desktop.
+  Future<AuthUser> _signInLinux() async {
+    final LoopbackAuthResult authResult;
+    try {
+      authResult = await _loopbackOAuthClient.acquireAuthorizationCode(
+        clientId: kLichessClientId,
+        scopes: kLoopbackOAuthScopes,
+      );
+    } on SignInCancelledException {
+      rethrow;
+    } catch (e, st) {
+      await reportSignInFailure(_ref, e, st);
+      rethrow;
+    }
+
+    final tokenResponse = await _ref
+        .read(defaultClientProvider)
+        .post(
+          lichessUri('/api/token'),
+          body: {
+            'grant_type': 'authorization_code',
+            'code': authResult.code,
+            'code_verifier': authResult.codeVerifier,
+            'redirect_uri': authResult.redirectUri,
+            'client_id': kLichessClientId,
+          },
+        );
+
+    if (tokenResponse.statusCode >= 400) {
+      throw ServerException(
+        tokenResponse.statusCode,
+        'Could not exchange authorization code: ${tokenResponse.statusCode} ${tokenResponse.body}',
+        lichessUri('/api/token'),
+        null,
+      );
+    }
+
+    final json = jsonDecode(tokenResponse.body) as Map<String, dynamic>;
+    final token = json['access_token'] as String?;
+    if (token == null || token.isEmpty) {
+      throw Exception('Access token not found in token response.');
+    }
+
+    _log.fine('Got OAuth token response on Linux');
     return await _fetchAuthUser(token);
   }
 

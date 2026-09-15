@@ -1,14 +1,42 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
+import 'package:lichess_mobile/src/model/auth/loopback_oauth_client.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 
 import '../../network/fake_http_client_factory.dart';
 import '../../test_container.dart';
 import '../../test_helpers.dart';
+
+class FakeLoopbackOAuthClient implements LoopbackOAuthClient {
+  FakeLoopbackOAuthClient({this.onAcquire});
+
+  final Future<LoopbackAuthResult> Function()? onAcquire;
+
+  @override
+  Future<LoopbackAuthResult> acquireAuthorizationCode({
+    required String clientId,
+    required List<String> scopes,
+    Duration timeout = const Duration(minutes: 5),
+  }) async {
+    if (onAcquire != null) {
+      return await onAcquire!();
+    }
+    return const LoopbackAuthResult(
+      code: 'linux-auth-code',
+      codeVerifier: 'test-code-verifier',
+      redirectUri: 'http://127.0.0.1:12345/',
+    );
+  }
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
 
 const _accountResponse =
     '{"id":"test","username":"test","createdAt":1290415680000,"seenAt":1290415680000,"perfs":{}}';
@@ -56,13 +84,21 @@ Future<ProviderContainer> emailLoginContainer(MockClientHandler handler) {
   );
 }
 
-Future<ProviderContainer> appAuthContainer(MockClient mockClient, FlutterAppAuth appAuth) {
+Future<ProviderContainer> appAuthContainer(
+  MockClient mockClient,
+  FlutterAppAuth appAuth, {
+  LoopbackOAuthClient? loopbackOAuthClient,
+}) {
   return makeContainer(
     overrides: {
       httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
         return FakeHttpClientFactory(() => mockClient);
       }),
       appAuthProvider: appAuthProvider.overrideWith((ref) => appAuth),
+      if (loopbackOAuthClient != null)
+        loopbackOAuthClientProvider: loopbackOAuthClientProvider.overrideWith(
+          (ref) => loopbackOAuthClient,
+        ),
     },
   );
 }
@@ -132,6 +168,83 @@ void main() {
       );
 
       await expectLater(container.read(authRepositoryProvider).signIn(), throwsA(isA<Exception>()));
+    });
+  });
+
+  group('AuthRepository.signIn on Linux', () {
+    final originalPlatform = defaultTargetPlatform;
+
+    tearDown(() {
+      debugDefaultTargetPlatformOverride = originalPlatform;
+    });
+
+    test('completes loopback OAuth PKCE sign-in flow', () async {
+      debugDefaultTargetPlatformOverride = TargetPlatform.linux;
+
+      final mockClient = MockClient((request) {
+        switch (request.url.path) {
+          case '/api/token':
+            expect(request.bodyFields['grant_type'], 'authorization_code');
+            expect(request.bodyFields['code'], 'linux-auth-code');
+            expect(request.bodyFields['code_verifier'], 'test-code-verifier');
+            expect(request.bodyFields['redirect_uri'], 'http://127.0.0.1:12345/');
+            expect(request.bodyFields['client_id'], kLichessClientId);
+            return mockResponse('{"access_token":"test-linux-token"}', 200);
+          case '/api/account':
+            return mockResponse(_accountResponse, 200);
+          default:
+            return mockResponse('', 404);
+        }
+      });
+
+      final container = await appAuthContainer(
+        mockClient,
+        FakeFlutterAppAuth((request) async => tokenResponse()),
+        loopbackOAuthClient: FakeLoopbackOAuthClient(),
+      );
+
+      final authUser = await container.read(authRepositoryProvider).signIn();
+      expect(authUser.token, 'test-linux-token');
+      expect(authUser.user.name, 'test');
+    });
+
+    test('rethrows SignInCancelledException from loopback client', () async {
+      debugDefaultTargetPlatformOverride = TargetPlatform.linux;
+
+      final container = await appAuthContainer(
+        accountClient(),
+        FakeFlutterAppAuth((request) async => tokenResponse()),
+        loopbackOAuthClient: FakeLoopbackOAuthClient(
+          onAcquire: () async => throw const SignInCancelledException(),
+        ),
+      );
+
+      await expectLater(
+        container.read(authRepositoryProvider).signIn(),
+        throwsA(isA<SignInCancelledException>()),
+      );
+    });
+
+    test('throws ServerException when token exchange fails', () async {
+      debugDefaultTargetPlatformOverride = TargetPlatform.linux;
+
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/api/token') {
+          return mockResponse('{"error":"invalid_grant"}', 400);
+        }
+        return mockResponse('', 404);
+      });
+
+      final container = await appAuthContainer(
+        mockClient,
+        FakeFlutterAppAuth((request) async => tokenResponse()),
+        loopbackOAuthClient: FakeLoopbackOAuthClient(),
+      );
+
+      await expectLater(
+        container.read(authRepositoryProvider).signIn(),
+        throwsA(isA<ServerException>()),
+      );
     });
   });
 
