@@ -175,6 +175,8 @@
   </plurals>
   <string name="moveTimes">Hamle zamanları</string>
   <string name="flipBoard">Tahtayı döndür</string>
+  <string name="toggleLocalEngine">Yerel motoru aç/kapat</string>
+  <string name="engineSettings">Motor ayarları</string>
   <string name="threefoldRepetition">Üç kez hamle tekrarı</string>
   <string name="claimADraw">Beraberlik talep et</string>
   <string name="drawClaimed">Beraberlik iddia edildi</string>
@@ -249,6 +251,7 @@
   <string name="signupUsernameHint">Aile dostu bir kullanıcı adı seçtiğinizden emin olun. Kullanıcı adı daha sonra değiştirilemez ve uygunsuz kullanıcı adına sahip hesaplar kapatılır!</string>
   <string name="signupEmailPromise">Size yalnızca hesabınızla ilgili e-postalar göndereceğiz ve e-posta adresinizi asla paylaşmayacağız.</string>
   <string name="password">Şifre</string>
+  <string name="showPassword">Şifreyi göster</string>
   <string name="changePassword">Şifre değiştir</string>
   <string name="changeEmail">E-posta adresini değiştir</string>
   <string name="email">E-posta</string>
@@ -1060,4 +1063,6 @@ Başlangıç pozisyonundan oynamak için boş bırakınız.</string>
   <string name="tags">Etiketler</string>
   <string name="enPassant">Geçerken alma</string>
   <string name="settings">Ayarlar</string>
+  <string name="chessOpenings">Satranç açılışları</string>
+  <string name="boards">Tahtalar</string>
 </resources>

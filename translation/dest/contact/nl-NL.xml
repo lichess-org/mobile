@@ -58,7 +58,7 @@
   <string name="reportErrorPage">Als u te maken kreeg met een foutpagina, kunt u dat melden:</string>
   <string name="learnHowToMakeBroadcasts">Lees hoe je je eigen uitzendingen op Lichess maakt</string>
   <string name="banAppeal">Vragen om een ban of IP beperking</string>
-  <string name="engineAppeal">Schaakcomputer of valsspel markering</string>
+  <string name="engineAppeal">Schaakcomputer of valsspelmarkering</string>
   <string name="sendAppealTo">U kunt een verzoek sturen naar %s.</string>
   <string name="falsePositives">Onterechte markeringen komen een enkele keer voor, en dat spijt ons.</string>
   <string name="ifLegit">Als uw verzoek gegrond is, zullen we het toegangsverbod zo snel mogelijk opheffen.</string>

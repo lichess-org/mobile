@@ -175,6 +175,9 @@
   </plurals>
   <string name="moveTimes">Træktider</string>
   <string name="flipBoard">Vend bræt</string>
+  <string name="toggleLocalEngine">Slå lokalt skakprogram til/fra</string>
+  <string name="engineSettings">Skakprogram-indstillinger</string>
+  <string name="enginesFromStrongestToWeakest">Skakprogrammer fra stærkeste til svageste</string>
   <string name="illegalPosition">Ulovlig position</string>
   <string name="threefoldRepetition">Trækgentagelse</string>
   <string name="claimADraw">Kræv remis</string>
@@ -744,8 +747,10 @@ At spille ratede partier vil øge stabiliteten.</string>
   <string name="keyboardShortcuts">Tastaturgenveje</string>
   <string name="keyMoveBackwardOrForward">ryk tilbage/frem</string>
   <string name="keyGoToStartOrEnd">gå til start/slut</string>
+  <string name="keyGoToPreviousOrNextLine">gå til forrige/næste linje</string>
   <string name="keyCycleSelectedVariation">Gennemgå den valgte variant</string>
   <string name="keyShowOrHideComments">vis/skjul kommentar</string>
+  <string name="keyShowOrHideCurrentVariation">vis/skjul nuværende variant</string>
   <string name="keyEnterOrExitVariation">Start/slut variant</string>
   <string name="keyPreviousBranch">Forrige gren</string>
   <string name="keyNextBranch">Næste gren</string>
@@ -1065,4 +1070,7 @@ Alle driftsomkostninger, udvikling og indhold finansieres udelukkende af brugerd
   <string name="tags">Etiketter</string>
   <string name="enPassant">En passant</string>
   <string name="settings">Indstillinger</string>
+  <string name="verifyingYourDevice">Bekræfter din enhed...</string>
+  <string name="chessOpenings">Skakåbninger</string>
+  <string name="boards">Brætter</string>
 </resources>
