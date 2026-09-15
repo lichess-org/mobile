@@ -105,7 +105,7 @@ class _PlayRatingRangeState() extends State<PlayRatingRange> {
             onTap: () => showAdaptiveDialog<void>(
               context: context,
               builder: (context) => AlertDialog.adaptive(
-                content: Text(context.l10n.ratingRangeIsDisabledBecauseYourRatingIsProvisional),
+                content: Text(context.l10n.cannotFilterByUnstableRating),
                 actions: [
                   PlatformDialogAction(
                     onPressed: () => Navigator.of(context).pop(),

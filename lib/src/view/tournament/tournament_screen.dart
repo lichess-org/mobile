@@ -436,7 +436,7 @@ class const _TournamentHelp({required final TournamentState state}) extends Stat
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(context.l10n.arenaHowDoesPairingWork, style: Styles.sectionTitle),
+                Text(context.l10n.arenaHowArePlayersPaired, style: Styles.sectionTitle),
                 const SizedBox(height: 10),
                 Text(context.l10n.arenaHowDoesPairingWorkAnswer),
               ],

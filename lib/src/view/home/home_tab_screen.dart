@@ -541,7 +541,7 @@ class const _LichessMessageBanner() extends ConsumerWidget {
               ),
               const SizedBox(height: 4.0),
               Text(
-                context.l10n.clickHereToReadIt,
+                context.l10n.readTheMessage,
                 style: TextStyle(color: theme.colorScheme.onTertiaryContainer),
               ),
             ],

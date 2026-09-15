@@ -374,7 +374,7 @@ class const NewMessageNotification(
   NotificationDetails details(AppLocalizations l10n) => NotificationDetails(
     android: AndroidNotificationDetails(
       channelId,
-      l10n.preferencesNotifyInboxMsg,
+      l10n.preferencesNotifyDirectMessage,
       importance: Importance.max,
       priority: Priority.high,
       autoCancel: true,

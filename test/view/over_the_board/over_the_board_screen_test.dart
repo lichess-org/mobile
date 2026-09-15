@@ -119,7 +119,7 @@ void main() {
 
       // Now for game result dialog to show up
       await tester.pumpAndSettle(const Duration(milliseconds: 600));
-      expect(find.text('White time out • Black is victorious'), findsOneWidget);
+      expect(find.text('White ran out of time • Black is victorious'), findsOneWidget);
 
       await tester.tap(find.text('Rematch'));
       expect(activeClock(tester), null);
