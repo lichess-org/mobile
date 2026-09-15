@@ -1402,6 +1402,527 @@ class AppLocalizationsSk extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Vybrať konkrétne stĺpce a rady';
 
   @override
+  String get learnLearnChess => 'Naučte sa šach';
+
+  @override
+  String get learnByPlaying => 'hrou!';
+
+  @override
+  String learnProgressX(String param) {
+    return 'Priebeh: $param';
+  }
+
+  @override
+  String get learnResetMyProgress => 'Vynulovať môj progres';
+
+  @override
+  String get learnYouWillLoseAllYourProgress => 'Stratíte celý váš progres!';
+
+  @override
+  String get learnPlay => 'hrať!';
+
+  @override
+  String get learnChessPieces => 'Šachové figúrky';
+
+  @override
+  String get learnTheRook => 'Veža';
+
+  @override
+  String get learnItMovesInStraightLines => 'Pohybuje sa vodorovne a zvislo';
+
+  @override
+  String get learnRookIntro => 'Veža je mocná figúrka. Ovládnete ju?';
+
+  @override
+  String get learnRookGoal => 'Kliknite a presuňte vež na hviezdu!';
+
+  @override
+  String get learnGrabAllTheStars => 'Zoberte všetky hviezdy!';
+
+  @override
+  String get learnTheFewerMoves => 'Čím menej ťahov urobíte, tým viac bodov získate!';
+
+  @override
+  String get learnUseTwoRooks => 'Urýchlite zbieranie pomocou dvoch veží!';
+
+  @override
+  String get learnRookComplete => 'Gratulujeme! Ťahy vežou máte úspešne zvládnuté.';
+
+  @override
+  String get learnTheBishop => 'Strelec';
+
+  @override
+  String get learnItMovesDiagonally => 'Pohybuje sa diagonálne';
+
+  @override
+  String get learnBishopIntro => 'Ďalej sa naučíte ako manévrovať so strelcom!';
+
+  @override
+  String get learnYouNeedBothBishops => 'Jeden bielopoľný strelec,\njeden čiernopoľný strelec.\nPotrebujete ich oboch!';
+
+  @override
+  String get learnBishopComplete => 'Gratulujeme! Dokážete ovládať strelca.';
+
+  @override
+  String get learnTheQueen => 'Dáma';
+
+  @override
+  String get learnQueenCombinesRookAndBishop => 'Dáma = Veža + Strelec';
+
+  @override
+  String get learnQueenIntro => 'Prichádza najsilnejšia figúrka na šachovnici. Áno, reč je o dáme!';
+
+  @override
+  String get learnQueenComplete => 'Gratulujeme! Dámy už pred Vami neukrývajú žiadne tajomstvá.';
+
+  @override
+  String get learnTheKing => 'Kráľ';
+
+  @override
+  String get learnTheMostImportantPiece => 'Najdôležitejšia figúrka';
+
+  @override
+  String get learnKingIntro => 'Vy ste kráľom. Ak v bitke padnete, partia je prehraná.';
+
+  @override
+  String get learnTheKingIsSlow => 'Kráľ je pomalý.';
+
+  @override
+  String get learnLastOne => 'A naposledy!';
+
+  @override
+  String get learnKingComplete => 'Gratulujeme! Teraz dokážete veliť veliteľovi!';
+
+  @override
+  String get learnTheKnight => 'Jazdec';
+
+  @override
+  String get learnItMovesInAnLShape => 'Pohybuje sa do \"L\"';
+
+  @override
+  String get learnKnightIntro => 'Máme pre Vás výzvu. Jazdec je... prešibaná figúrka.';
+
+  @override
+  String get learnKnightsHaveAFancyWay => 'Jazdci skáču naozaj nevyspytateľne!';
+
+  @override
+  String get learnKnightsCanJumpOverObstacles => 'Jazdci dokážu skákať cez prekážky!\nUniknite z obkľúčenia a premôžte hviezdy!';
+
+  @override
+  String get learnKnightComplete => 'Gratulujeme! Zvládli ste ťahy jazdcom.';
+
+  @override
+  String get learnThePawn => 'Pešiak';
+
+  @override
+  String get learnItMovesForwardOnly => 'Pohybuje sa výlučne vpred';
+
+  @override
+  String get learnPawnIntro => 'Pešiaci sú slabí, ale majú v sebe veľký potenciál.';
+
+  @override
+  String get learnPawnsMoveOneSquareOnly => 'Pešiaci sa pohybujú iba o jedno políčko vpred. Keď však dôjdu na koniec šachovnice, stane sa z nich silnejšia figúrka!';
+
+  @override
+  String get learnMostOfTheTimePromotingToAQueenIsBest => 'Väčšinou je najlepšie premeniť pešiaka na dámu.\nNiekedy sa však môže hodiť aj jazdec!';
+
+  @override
+  String get learnPawnsMoveForward => 'Pešiaci sa pohybujú vpred,\nale berú diagonálne!';
+
+  @override
+  String get learnCaptureThenPromote => 'Zbierajte, premente a opäť zbierajte!';
+
+  @override
+  String get learnUseAllThePawns => 'Použite všetkých pešiakov!\nPremieňať nepotrebujete.';
+
+  @override
+  String get learnAPawnOnTheSecondRank => 'Keď je pešiak v základnej pozícii, môže sa pohnúť o 2 políčka naraz!';
+
+  @override
+  String get learnGrabAllTheStarsNoNeedToPromote => 'Vyzbierajte všetky hviezdy!\nPremieňať nepotrebujete.';
+
+  @override
+  String get learnPawnComplete => 'Gratulujeme! Pešiakov zvládate ľavou zadnou.';
+
+  @override
+  String get learnPawnPromotion => 'Premena pešiaka';
+
+  @override
+  String get learnYourPawnReachedTheEndOfTheBoard => 'Váš pešiak došiel na koniec šachovnice!';
+
+  @override
+  String get learnItNowPromotesToAStrongerPiece => 'Teraz sa premení na silnejšiu figúrku.';
+
+  @override
+  String get learnSelectThePieceYouWant => 'Zvoľte figúrku, ktorú si prajete!';
+
+  @override
+  String get learnFundamentals => 'Základy';
+
+  @override
+  String get learnCapture => 'Branie';
+
+  @override
+  String get learnTakeTheEnemyPieces => 'Branie súperových figúrok';
+
+  @override
+  String get learnCaptureIntro => 'Rozpoznajte súperove nechránené figúrky a vezmite ich!';
+
+  @override
+  String get learnTakeTheBlackPieces => 'Vyhoďte čierne figúrky!';
+
+  @override
+  String get learnTakeTheBlackPiecesAndDontLoseYours => 'Vezmite súperove figúrky!\nA nepríďte o vlastné!';
+
+  @override
+  String get learnCaptureComplete => 'Gratulujeme! Teraz viete ako bojovať so šachovými figúrkami!';
+
+  @override
+  String get learnProtection => 'Ochrana';
+
+  @override
+  String get learnKeepYourPiecesSafe => 'Držte svoje figúrky v bezpečí';
+
+  @override
+  String get learnProtectionIntro => 'Rozpoznajte figúrky, ktoré Vám súper napadá a ochráňte ich!';
+
+  @override
+  String get learnProtectionComplete => 'Gratulujeme! Figúrka, ktorú nestratíte je figúrka, ktorú získate!';
+
+  @override
+  String get learnEscape => 'Ste napadnutí!\nUniknite ohrozeniu!';
+
+  @override
+  String get learnNoEscape => 'Nedá sa utiecť,\nale môžete sa brániť!';
+
+  @override
+  String get learnDontLetThemTakeAnyUndefendedPiece => 'Nenechajte si vziať žiadne nechránené figúrky!';
+
+  @override
+  String get learnCombat => 'Súboj';
+
+  @override
+  String get learnCaptureAndDefendPieces => 'Branie a chránenie figúrok';
+
+  @override
+  String get learnCombatIntro => 'Dobrý bojovník vie aj útočiť aj sa brániť!';
+
+  @override
+  String get learnCombatComplete => 'Gratulujeme! Teraz viete ako so šachovými figúrkami bojovať!';
+
+  @override
+  String get learnCheckInOne => 'Šach 1. ťahom';
+
+  @override
+  String get learnAttackTheOpponentsKing => 'Útočenie na súperovho kráľa';
+
+  @override
+  String get learnCheckInOneIntro => 'Ak chcete dať súperovi šach, zaútočte na jeho kráľa! On ho bude musieť brániť!';
+
+  @override
+  String get learnCheckInOneGoal => 'Namierte si to na súperovho kráľa jedným ťahom!';
+
+  @override
+  String get learnCheckInOneComplete => 'Gratulujeme! Šachom ste súpera prinútili k obrane svojho kráľa!';
+
+  @override
+  String get learnOutOfCheck => 'Únik zo šachu';
+
+  @override
+  String get learnDefendYourKing => 'Chránenie vlastného kráľa';
+
+  @override
+  String get learnOutOfCheckIntro => 'Ste v šachu! Musíte uniknúť alebo zablokovať útok.';
+
+  @override
+  String get learnEscapeWithTheKing => 'Ustúpte kráľom!';
+
+  @override
+  String get learnTheKingCannotEscapeButBlock => 'Kráľ nemôže ustúpiť, ale napadnutie môžete predkryť!';
+
+  @override
+  String get learnYouCanGetOutOfCheckByTaking => 'Môžete sa dostať zo šachu tým, že vezmete šachujúcu figúrku.';
+
+  @override
+  String get learnThisKnightIsCheckingThroughYourDefenses => 'Tento jazdec Vás šachuje aj cez Vašu obranu!';
+
+  @override
+  String get learnEscapeOrBlock => 'Ustúpte kráľom alebo napadnutie predkryte!';
+
+  @override
+  String get learnOutOfCheckComplete => 'Gratulujeme! Na Vášho kráľa si len tak niekto nepríde! Vždy sa uistite, že sa proti šachu dokážete brániť!';
+
+  @override
+  String get learnMateInOne => 'Mat 1. ťahom';
+
+  @override
+  String get learnDefeatTheOpponentsKing => 'Porazenie súperovho kráľa';
+
+  @override
+  String get learnMateInOneIntro => 'Vyhráte vtedy, keď sa Váš súper nedokáže brániť proti šachu.';
+
+  @override
+  String get learnAttackYourOpponentsKing => 'Napadnite súperovho kráľa spôsobom, ktorému sa nedokáže brániť!';
+
+  @override
+  String get learnMateInOneComplete => 'Gratulujeme! Presne takto sa vyhrávajú šachové partie!';
+
+  @override
+  String get learnIntermediate => 'Rozšírenie';
+
+  @override
+  String get learnBoardSetup => 'Základné postavenie';
+
+  @override
+  String get learnHowTheGameStarts => 'Ako rozostaviť figúrky';
+
+  @override
+  String get learnBoardSetupIntro => 'Dve armády stoja zoči voči, pripravené na bitku.';
+
+  @override
+  String get learnThisIsTheInitialPosition => 'Toto je počiatočná pozícia každej šachovej partie. Pre pokračovanie urobte ľubovoľný ťah!';
+
+  @override
+  String get learnFirstPlaceTheRooks => 'Najprv umiestnite veže! Patria do rohov šachovnice.';
+
+  @override
+  String get learnThenPlaceTheKnights => 'Potom umiestnite jazdcov! Ich miesto je vedľa veží.';
+
+  @override
+  String get learnPlaceTheBishops => 'Teraz umiestnite strelcov! Tí budú stáť vedľa jazdcov.';
+
+  @override
+  String get learnPlaceTheQueen => 'Prišiel čas na dámu! Patrí na pole vlastnej farby.';
+
+  @override
+  String get learnPlaceTheKing => 'A napokon kráľ! Kde inde ako po boku svojej dámy.';
+
+  @override
+  String get learnPawnsFormTheFrontLine => 'Pešiaci tvoria prvú líniu. Pre pokračovanie urobte ľubovoľný ťah.';
+
+  @override
+  String get learnBoardSetupComplete => 'Gratulujeme! Dokážete rozložiť figúrky do základného postavenia.';
+
+  @override
+  String get learnCastling => 'Rošáda';
+
+  @override
+  String get learnTheSpecialKingMove => 'Osobitý ťah kráľom';
+
+  @override
+  String get learnCastlingIntro => 'Schovajte svojho kráľa do bezpečia a nasaďte vežu do útoku!';
+
+  @override
+  String get learnCastleKingSide => 'Potiahnite kráľom o dve polia a urobte malú rošádu!';
+
+  @override
+  String get learnCastleQueenSide => 'Potiahnite kráľom o dve polia a urobte veľkú rošádu!';
+
+  @override
+  String get learnTheKnightIsInTheWay => 'Jazdec stojí v ceste. Pohnite ním a potom urobte malú rošádu!';
+
+  @override
+  String get learnCastleKingSideMovePiecesFirst => 'Vykonajte malú rošádu! Najprv si však potrebujete vyvinúť zopár figúrok.';
+
+  @override
+  String get learnCastleQueenSideMovePiecesFirst => 'Vykonajte veľkú rošádu! Najprv je ale potrebné vyvinúť zopár figúrok.';
+
+  @override
+  String get learnYouCannotCastleIfMoved => 'Nie je možné vykonať rošádu pokiaľ sa s kráľom alebo vežou už hýbalo.';
+
+  @override
+  String get learnYouCannotCastleIfAttacked => 'Nemôžete robiť rošádu ak je kráľ na ceste pohybu napadnutý. Zablokujte šach a urobte rošádu!';
+
+  @override
+  String get learnFindAWayToCastleKingSide => 'Nájdite spôsob ako urobiť malú rošádu!';
+
+  @override
+  String get learnFindAWayToCastleQueenSide => 'Nájdite spôsob ako urobiť veľkú rošádu!';
+
+  @override
+  String get learnCastlingComplete => 'Gratulujeme! Rošádu by ste v mali urobiť takmer v každej partii.';
+
+  @override
+  String get learnTheSpecialPawnMove => 'Osobitý ťah pešiakom';
+
+  @override
+  String get learnEnPassantIntro => 'Keď súper potiahne pešiakom o dve políčka, môžete ho vziať akoby potiahol len o jedno.';
+
+  @override
+  String get learnBlackJustMovedThePawnByTwoSquares => 'Čierny práve potiahol pešiakom o dve políčka. Vezmite ho mimochodom!';
+
+  @override
+  String get learnEnPassantOnlyWorksImmediately => 'Branie mimochodom je možné vykonať iba bezprostredne po ťahu súperovho pešiaka.';
+
+  @override
+  String get learnEnPassantOnlyWorksOnFifthRank => 'Branie mimochodom je možné vykonať iba pokiaľ je Váš pešiak na piatom rade.';
+
+  @override
+  String get learnTakeAllThePawnsEnPassant => 'Vezmite všetkých pešiakov mimochodom!';
+
+  @override
+  String get learnEnPassantComplete => 'Gratulujeme! Teraz už dokážete brať mimochodom.';
+
+  @override
+  String get learnStalemate => 'Pat';
+
+  @override
+  String get learnTheGameIsADraw => 'Partia končí remízou';
+
+  @override
+  String get learnStalemateIntro => 'Keď hráč, ktorý je na ťahu nemôže potiahnuť žiadnou figúrkou a jeho kráľ nie je v šachu, je to pat. Partia končí remízou: nikto nevyhrá ani neprehrá.';
+
+  @override
+  String get learnStalemateGoal => 'Dostaňte čierneho do patu:\n- Nemôže vykonať žiadny ťah\n- Jeho kráľ nie je v šachu.';
+
+  @override
+  String get learnStalemateComplete => 'Gratulujeme! Lepší pat, než dostať mat!';
+
+  @override
+  String get learnAdvanced => 'Nadstavba';
+
+  @override
+  String get learnPieceValue => 'Hodnota figúr';
+
+  @override
+  String get learnEvaluatePieceStrength => 'Ohodnotenie sily figúrok';
+
+  @override
+  String get learnPieceValueIntro => 'Figúrky s vyššou pohyblivosťou majú vyššiu hodnotu!\nDáma = 9\nVeža = 5\nStrelec = 3\nJazdec = 3\nPešiak = 1\nKráľ má nevyčísliteľnú hodnotu! Jeho strata znamená prehru partie.';
+
+  @override
+  String get learnQueenOverBishop => 'Vezmite figúrku s najvyššou hodnotou!\nDáma > Strelec';
+
+  @override
+  String get learnPieceValueExchange => 'Vezmite figúrku s najvyššou hodnotou!\nNevymieňajte\ncennejšiu figúrku za figúrku s nižšou hodnotou.';
+
+  @override
+  String get learnPieceValueLegal => 'Vezmite figúrku\ns najvyššou hodnotou!\nUistite sa, že je váš ťah podľa pravidiel!';
+
+  @override
+  String get learnTakeThePieceWithTheHighestValue => 'Vezmite figúrku s najvyššou hodnotou!';
+
+  @override
+  String get learnPieceValueComplete => 'Gratulujeme! Poznáte hodnotu šachového materiálu!\nDáma = 9\nVeža = 5\nStrelec = 3\nJazdec = 3\nPešiak = 1';
+
+  @override
+  String get learnCheckInTwo => 'Šach 2. ťahom';
+
+  @override
+  String get learnTwoMovesToGiveCheck => 'Šach na dva ťahy';
+
+  @override
+  String get learnCheckInTwoIntro => 'Nájdite správnu kombináciu dvoch ťahov aby ste dali súperovmu kráľovi šach!';
+
+  @override
+  String get learnCheckInTwoGoal => 'Ohrozte súperovho kráľa do dvoch ťahov!';
+
+  @override
+  String get learnCheckInTwoComplete => 'Gratulujeme! Šachom ste súpera prinútili k obrane svojho kráľa!';
+
+  @override
+  String get learnWhatNext => 'Čo ďalej?';
+
+  @override
+  String get learnYouKnowHowToPlayChess => 'Gratulujeme! Viete hrať šach! Chcete sa stať silnejším hráčom?';
+
+  @override
+  String get learnRegister => 'Registrácia';
+
+  @override
+  String get learnGetAFreeLichessAccount => 'Získajte zdarma účet na Lichess';
+
+  @override
+  String get learnPractice => 'Tréning';
+
+  @override
+  String get learnLearnCommonChessPositions => 'Spoznajte typické šachové pozície';
+
+  @override
+  String get learnPuzzles => 'Úlohy';
+
+  @override
+  String get learnExerciseYourTacticalSkills => 'Precvičte si taktické schopnosti';
+
+  @override
+  String get learnVideos => 'Videá';
+
+  @override
+  String get learnWatchInstructiveChessVideos => 'Sledujte náučné šachové videá';
+
+  @override
+  String get learnPlayPeople => 'Partie s ľuďmi';
+
+  @override
+  String get learnOpponentsFromAroundTheWorld => 'Hrajte so súpermi z celého sveta';
+
+  @override
+  String get learnPlayMachine => 'Partie s počítačom';
+
+  @override
+  String get learnTestYourSkillsWithTheComputer => 'Skúste čo dokážete proti počítaču';
+
+  @override
+  String get learnLetsGo => 'Poďme na to!';
+
+  @override
+  String learnStageX(String param) {
+    return 'Stupeň $param';
+  }
+
+  @override
+  String get learnAwesome => 'Úžasné!';
+
+  @override
+  String get learnExcellent => 'Znamenité!';
+
+  @override
+  String get learnGreatJob => 'Skvelá práca!';
+
+  @override
+  String get learnPerfect => 'Výborne!';
+
+  @override
+  String get learnOutstanding => 'Vynikajúce!';
+
+  @override
+  String get learnWayToGo => 'To je ono!';
+
+  @override
+  String get learnYesYesYes => 'Áno, áno, áno!';
+
+  @override
+  String get learnYoureGoodAtThis => 'Ide Vám to!';
+
+  @override
+  String get learnNailedIt => 'Zásah do čierneho!';
+
+  @override
+  String get learnRightOn => 'To je presne ono!';
+
+  @override
+  String learnStageXComplete(String param) {
+    return 'Stupeň $param dokončený';
+  }
+
+  @override
+  String get learnNext => 'Ďalej';
+
+  @override
+  String learnNextX(String param) {
+    return 'Nasleduje: $param';
+  }
+
+  @override
+  String get learnBackToMenu => 'Návrat do menu';
+
+  @override
+  String get learnPuzzleFailed => 'Nesprávne riešenie!';
+
+  @override
+  String get learnRetry => 'Skúsiť znova';
+
+  @override
   String get patronDonate => 'Prispieť';
 
   @override

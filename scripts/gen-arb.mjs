@@ -26,6 +26,7 @@ const modules = [
   'challenge',
   'contact',
   'coordinates',
+  'learn',
   'patron',
   'perfStat',
   'preferences',
@@ -77,6 +78,13 @@ const whiteLists = {
     'fromPosition',
     'fromPositionTitle',
   ],
+}
+
+// list of keys (per module) to exclude from the ARB file
+// Used when a module key would collide with an existing key once prefixed
+const blackLists = {
+  // `learn.menu` would become `learnMenu`, overwriting `site.learnMenu`
+  'learn': ['menu'],
 }
 
 // Order of locales with variants matters: the fallback must always be first
@@ -252,6 +260,12 @@ function transformTranslations(data, locale, module, makeTemplate = false) {
 
     const pluralFiltered = data.resources.plurals?.filter((plural) => whiteList.includes(plural.$.name))
     data.resources.plurals = pluralFiltered
+  }
+
+  if (blackLists[module]) {
+    const blackList = blackLists[module]
+    data.resources.string = data.resources.string.filter((stringElement) => !blackList.includes(stringElement.$.name))
+    data.resources.plurals = data.resources.plurals?.filter((plural) => !blackList.includes(plural.$.name))
   }
 
   const transformed = {}

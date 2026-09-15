@@ -1358,6 +1358,527 @@ class AppLocalizationsFi extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Harjoittele vain tiettyjä linjoja ja rivejä';
 
   @override
+  String get learnLearnChess => 'Opi shakkia';
+
+  @override
+  String get learnByPlaying => 'pelaamalla!';
+
+  @override
+  String learnProgressX(String param) {
+    return 'Edistyminen: $param';
+  }
+
+  @override
+  String get learnResetMyProgress => 'Nollaa edistymiseni';
+
+  @override
+  String get learnYouWillLoseAllYourProgress => 'Menetät kaiken edistymisesi!';
+
+  @override
+  String get learnPlay => 'pelaa!';
+
+  @override
+  String get learnChessPieces => 'Shakkinappulat';
+
+  @override
+  String get learnTheRook => 'Torni';
+
+  @override
+  String get learnItMovesInStraightLines => 'Liikkuu suoria linjoja pitkin';
+
+  @override
+  String get learnRookIntro => 'Torni on vahva nappula. Oletko valmis käskyttämään sitä?';
+
+  @override
+  String get learnRookGoal => 'Klikkaa tornia\nja vie se tähden luo!';
+
+  @override
+  String get learnGrabAllTheStars => 'Kerää kaikki tähdet!';
+
+  @override
+  String get learnTheFewerMoves => 'Mitä vähemmän siirtoja teet,\nsitä enemmän pisteitä saat!';
+
+  @override
+  String get learnUseTwoRooks => 'Käytä kahta tornia\nnopeuttaaksesi asioita!';
+
+  @override
+  String get learnRookComplete => 'Onneksi olkoon! Kesytit tornin onnistuneesti.';
+
+  @override
+  String get learnTheBishop => 'Lähetti';
+
+  @override
+  String get learnItMovesDiagonally => 'Se liikkuu viistoon';
+
+  @override
+  String get learnBishopIntro => 'Nyt opettelemme liikkumaan lähetillä!';
+
+  @override
+  String get learnYouNeedBothBishops => 'Yksi valkeilla liikkuva lähetti,\nYksi tummilla liikkuva lähetti.\nTarvitset kumpaakin!';
+
+  @override
+  String get learnBishopComplete => 'Onneksi olkoon! Osaat nyt käskyttää lähettiä.';
+
+  @override
+  String get learnTheQueen => 'Daami';
+
+  @override
+  String get learnQueenCombinesRookAndBishop => 'Daami = torni + lähetti';
+
+  @override
+  String get learnQueenIntro => 'Kaikista vahvin shakkinappula saapuu. Hänen majesteettinsa kuningatar!';
+
+  @override
+  String get learnQueenComplete => 'Onnittelut! Tiedät kuningattaresta kaiken.';
+
+  @override
+  String get learnTheKing => 'Kuningas';
+
+  @override
+  String get learnTheMostImportantPiece => 'Tärkein nappula';
+
+  @override
+  String get learnKingIntro => 'Olet kuningas. Jos kaadut taistelussa, häviät pelin.';
+
+  @override
+  String get learnTheKingIsSlow => 'Kuningas on hidas.';
+
+  @override
+  String get learnLastOne => 'Vielä yksi!';
+
+  @override
+  String get learnKingComplete => 'Hallitset nyt myös hallitsijaa!';
+
+  @override
+  String get learnTheKnight => 'Ratsu';
+
+  @override
+  String get learnItMovesInAnLShape => 'Liikkuu L-kirjaimen kaltaisesti';
+
+  @override
+  String get learnKnightIntro => 'Tässä haaste sinulle. Ratsu on... mutkikas nappula.';
+
+  @override
+  String get learnKnightsHaveAFancyWay => 'Ratsuilla on jännä tapa\nhyppiä ympäriinsä!';
+
+  @override
+  String get learnKnightsCanJumpOverObstacles => 'Ratsut voivat hyppiä esteiden yli!\nKarkaa ja päihitä tähdet!';
+
+  @override
+  String get learnKnightComplete => 'Onneksi olkoon! Kesytit ratsun.';
+
+  @override
+  String get learnThePawn => 'Sotilas';
+
+  @override
+  String get learnItMovesForwardOnly => 'Se liikkuu vain eteenpäin';
+
+  @override
+  String get learnPawnIntro => 'Sotilaat ovat heikkoja, mutta niihin on kätketty paljon potentiaalia.';
+
+  @override
+  String get learnPawnsMoveOneSquareOnly => 'Sotilaat liikkuvat yhden ruudun kerrallaan.\nMutta jos sotilas pääsee laudan toiseen päähän, siitä tulee vahvempi nappula!';
+
+  @override
+  String get learnMostOfTheTimePromotingToAQueenIsBest => 'Useimmiten daamiksi korottaminen on järkevintä. Mutta joskus ratsukin tulee tarpeen!';
+
+  @override
+  String get learnPawnsMoveForward => 'Sotilaat liikkuvat suoraan eteenpäin,\nmutta syövät viistoon!';
+
+  @override
+  String get learnCaptureThenPromote => 'Lyö ja sitten korota!';
+
+  @override
+  String get learnUseAllThePawns => 'Käytä kaikkia sotilaita!\nEi tarvitse korottaa.';
+
+  @override
+  String get learnAPawnOnTheSecondRank => 'Toisella rivillä oleva sotilas voi liikkua kaksi ruutua kerralla!';
+
+  @override
+  String get learnGrabAllTheStarsNoNeedToPromote => 'Kerää kaikki tähdet!\nEi tarvitse korottaa.';
+
+  @override
+  String get learnPawnComplete => 'Onnittelut! Tunnet kaikki sotilaiden tavat.';
+
+  @override
+  String get learnPawnPromotion => 'Sotilaan korotus';
+
+  @override
+  String get learnYourPawnReachedTheEndOfTheBoard => 'Sotilaasi on saapunut laudan toiseen päähän!';
+
+  @override
+  String get learnItNowPromotesToAStrongerPiece => 'Se korottuu nyt vahvemmaksi nappulaksi.';
+
+  @override
+  String get learnSelectThePieceYouWant => 'Valitse haluamasi nappula!';
+
+  @override
+  String get learnFundamentals => 'Alkeet';
+
+  @override
+  String get learnCapture => 'Lyöminen';
+
+  @override
+  String get learnTakeTheEnemyPieces => 'Poista vastustajan nappulat';
+
+  @override
+  String get learnCaptureIntro => 'Tunnista vastustajan suojaamattomat nappulat ja lyö ne!';
+
+  @override
+  String get learnTakeTheBlackPieces => 'Lyö mustat nappulat!';
+
+  @override
+  String get learnTakeTheBlackPiecesAndDontLoseYours => 'Lyö mustat nappulat!\nÄläkä menetä omiasi.';
+
+  @override
+  String get learnCaptureComplete => 'Onneksi olkoon! Osaat nyt tapella shakkinappuloilla!';
+
+  @override
+  String get learnProtection => 'Suojaaminen';
+
+  @override
+  String get learnKeepYourPiecesSafe => 'Pidä nappulasi turvassa';
+
+  @override
+  String get learnProtectionIntro => 'Tunnista nappulat joita vastustaja uhkaa ja puolusta niitä!';
+
+  @override
+  String get learnProtectionComplete => 'Onnittelut! Nappula jota et menetä on voitettu nappula!';
+
+  @override
+  String get learnEscape => 'Vastustaja hyökkää!\nPakene uhkaa!';
+
+  @override
+  String get learnNoEscape => 'Et voi paeta,\nmutta voit puolustaa!';
+
+  @override
+  String get learnDontLetThemTakeAnyUndefendedPiece => 'Älä anna hänen lyödä\nsuojaamatonta nappulaa!';
+
+  @override
+  String get learnCombat => 'Taisteleminen';
+
+  @override
+  String get learnCaptureAndDefendPieces => 'Lyö ja puolusta nappuloita';
+
+  @override
+  String get learnCombatIntro => 'Hyvä soturi hallitsee sekä hyökkäyksen että puolustuksen!';
+
+  @override
+  String get learnCombatComplete => 'Onneksi olkoon! Osaat nyt tapella shakkinappuloilla!';
+
+  @override
+  String get learnCheckInOne => 'Yhden siirron shakki';
+
+  @override
+  String get learnAttackTheOpponentsKing => 'Hyökkää vastustajan kuningasta vastaan';
+
+  @override
+  String get learnCheckInOneIntro => 'Shakkaa vastustajaasi uhkaamalla hänen kuningastaan. Hänen on pakko puolustaa sitä!';
+
+  @override
+  String get learnCheckInOneGoal => 'Saata kuningas uhatuksi\nyhdellä siirrolla!';
+
+  @override
+  String get learnCheckInOneComplete => 'Onnittelut! Shakkasit vastustajaasi ja pakotit hänet puolustamaan kuningastaan!';
+
+  @override
+  String get learnOutOfCheck => 'Shakin purkaminen';
+
+  @override
+  String get learnDefendYourKing => 'Puolusta kuningastasi';
+
+  @override
+  String get learnOutOfCheckIntro => 'Olet shakissa! Sinun täytyy paeta tai torjua hyökkäys.';
+
+  @override
+  String get learnEscapeWithTheKing => 'Pakene kuninkaalla!';
+
+  @override
+  String get learnTheKingCannotEscapeButBlock => 'Kuningas ei voi paeta,\nmutta voit torjua hyökkäyksen!';
+
+  @override
+  String get learnYouCanGetOutOfCheckByTaking => 'Voit purkaa shakin\nlyömällä hyökkäävän nappulan.';
+
+  @override
+  String get learnThisKnightIsCheckingThroughYourDefenses => 'Ratsu hyökkää\nyli puolustuksesi!';
+
+  @override
+  String get learnEscapeOrBlock => 'Pakene kuninkaalla\ntai torju hyökkäys!';
+
+  @override
+  String get learnOutOfCheckComplete => 'Onnittelut! Kuningastasi ei voi lyödä. Varmista että voit puolustaa sitä shakeilta!';
+
+  @override
+  String get learnMateInOne => 'Yhden siirron matti';
+
+  @override
+  String get learnDefeatTheOpponentsKing => 'Kukista vastustajan kuningas';
+
+  @override
+  String get learnMateInOneIntro => 'Voitat jos vastustaja ei voi puolustaa shakattua kuningastaan.';
+
+  @override
+  String get learnAttackYourOpponentsKing => 'Uhkaa vastustajan kuningasta niin\nettei sitä voi puolustaa!';
+
+  @override
+  String get learnMateInOneComplete => 'Onnittelut! Näin shakkipeli voitetaan!';
+
+  @override
+  String get learnIntermediate => 'Keskitaso';
+
+  @override
+  String get learnBoardSetup => 'Laudan asettaminen';
+
+  @override
+  String get learnHowTheGameStarts => 'Kuinka peli alkaa';
+
+  @override
+  String get learnBoardSetupIntro => 'Kaksi armeijaa on vastakkain, valmiina taistoon.';
+
+  @override
+  String get learnThisIsTheInitialPosition => 'Tämä on alkuasema\njokaisessa shakkipelissä!\nAloita tekemällä mikä siirto tahansa.';
+
+  @override
+  String get learnFirstPlaceTheRooks => 'Ensin sijoita tornit!\nNe kuuluvat kulmiin.';
+
+  @override
+  String get learnThenPlaceTheKnights => 'Sitten ratsut!\nNe kuuluvat tornien viereen.';
+
+  @override
+  String get learnPlaceTheBishops => 'Sijoita lähetit!\nNe kuuluvat ratsujen viereen.';
+
+  @override
+  String get learnPlaceTheQueen => 'Sijoita daami!\nHän kuuluu itsensä väriseen ruutuun.';
+
+  @override
+  String get learnPlaceTheKing => 'Sijoita kuningas!\nDaaminsa rinnalle.';
+
+  @override
+  String get learnPawnsFormTheFrontLine => 'Sotilaat muodostavat etulinjan.\nJatka tekemällä mikä tahansa siirto.';
+
+  @override
+  String get learnBoardSetupComplete => 'Onneksi olkoon! Osaat asetella shakkilaudan.';
+
+  @override
+  String get learnCastling => 'Linnoitus';
+
+  @override
+  String get learnTheSpecialKingMove => 'Kuninkaan erikoissiirto';
+
+  @override
+  String get learnCastlingIntro => 'Vie kuninkaasi turvaan ja tuo tornisi mukaan hyökkäykseen!';
+
+  @override
+  String get learnCastleKingSide => 'Siirrä kuningastasi kaksi ruutua\nja linnoittaudu kuningassivustalle!';
+
+  @override
+  String get learnCastleQueenSide => 'Siirrä kuningastasi kaksi ruutua\nja linnoittaudu daamisivustalle!';
+
+  @override
+  String get learnTheKnightIsInTheWay => 'Ratsu on tiellä!\nSiirrä sitä ja linnoittaudu sitten kuningassivustalle.';
+
+  @override
+  String get learnCastleKingSideMovePiecesFirst => 'Linnoittaudu kuningassivustalle!\nSinun täytyy siirtää nappulasi ensin tieltä pois.';
+
+  @override
+  String get learnCastleQueenSideMovePiecesFirst => 'Linnoittaudu daamisivustalle!\nSinun täytyy siirtää nappulasi ensin tieltä pois.';
+
+  @override
+  String get learnYouCannotCastleIfMoved => 'Et voi linnoittautua jos\nkuningas on jo liikkunut\ntai jos torni on liikkunut.';
+
+  @override
+  String get learnYouCannotCastleIfAttacked => 'Et voi linnoittautua\nJos kuningasta vastaan hyökättäisiin matkalla.\nBlokkaa shakki ja linnoittaudu sitten!';
+
+  @override
+  String get learnFindAWayToCastleKingSide => 'Keksi tapa\nlinnoittautua kuningassivustalle!';
+
+  @override
+  String get learnFindAWayToCastleQueenSide => 'Keksi tapa\nlinnoittautua daamisivustalle!';
+
+  @override
+  String get learnCastlingComplete => 'Onneksi olkoon! Kannattaa linnoittautua lähes aina.';
+
+  @override
+  String get learnTheSpecialPawnMove => 'Sotilaan erikoissiirto';
+
+  @override
+  String get learnEnPassantIntro => 'Kun vastustajan sotilas siirtyy kaksi ruutua, voit lyödä sen aivan kuin se olisi siirtynyt vain yhden.';
+
+  @override
+  String get learnBlackJustMovedThePawnByTwoSquares => 'Musta liikkui sotilaallaan\nkaksi ruutua!\nLyö se ohesta.';
+
+  @override
+  String get learnEnPassantOnlyWorksImmediately => 'Ohestalyönti onnistuu vain\nvälittömästi sen jälkeen, kun\nvastustaja on siirtänyt sotilasta.';
+
+  @override
+  String get learnEnPassantOnlyWorksOnFifthRank => 'Ohestalyönti onnistuu vain\nkun sotilaasi on viidennellä rivillä.';
+
+  @override
+  String get learnTakeAllThePawnsEnPassant => 'Lyö kaikki sotilaat ohesta!';
+
+  @override
+  String get learnEnPassantComplete => 'Onnittelut! Osaat nyt ohestalyönnin.';
+
+  @override
+  String get learnStalemate => 'Patti';
+
+  @override
+  String get learnTheGameIsADraw => 'Peli päättyy tasan';
+
+  @override
+  String get learnStalemateIntro => 'Kun pelaaja ei ole shakissa mutta hänellä ei ole laillista siirtoa, tilanne on patti. Peli päätty tasan, kumpikaan ei voita, kumpikaan ei häviä.';
+
+  @override
+  String get learnStalemateGoal => 'Mustan patittaminen:\n- Musta ei voi liikkua minnekään\n- Musta ei ole shakissa.';
+
+  @override
+  String get learnStalemateComplete => 'Onneksi olkoon! Parempi patissa kuin matissa!';
+
+  @override
+  String get learnAdvanced => 'Edistynyt';
+
+  @override
+  String get learnPieceValue => 'Nappuloiden arvot';
+
+  @override
+  String get learnEvaluatePieceStrength => 'Arvioi nappuloiden vahvuudet';
+
+  @override
+  String get learnPieceValueIntro => 'Nappulat joilla on parempi liikkuvuus ovat arvokkaampia!\nDaami = 9\nTorni = 5\nLähetti = 3\nRatsu = 3\nSotilas = 1\nKuningas on mittaamattoman arvokas! Sen menettäminen tietää sitä, että hävisit pelin.';
+
+  @override
+  String get learnQueenOverBishop => 'Lyö nappula\njoka on arvokkain!\nDaami > Lähetti';
+
+  @override
+  String get learnPieceValueExchange => 'Lyö arvokkain nappula!\n Älä vaihda\n arvokkaampaa nappulaa vähemmän arvokkaaseen.';
+
+  @override
+  String get learnPieceValueLegal => 'Lyö arvokkain nappula!\nVarmista, että siirtosi on laillinen!';
+
+  @override
+  String get learnTakeThePieceWithTheHighestValue => 'Lyö nappula\njoka on arvokkain!';
+
+  @override
+  String get learnPieceValueComplete => 'Onnittelut! Tunnet nyt materiaalin arvon!\nDaami = 9\nTorni = 5\nLähetti = 3\nRatsu = 3\nSotilas = 1';
+
+  @override
+  String get learnCheckInTwo => 'Kahden siirron shakki';
+
+  @override
+  String get learnTwoMovesToGiveCheck => 'Shakkaa kahdella siirrolla';
+
+  @override
+  String get learnCheckInTwoIntro => 'Löydä sopiva kahden siirron kombinaatio, jolla voit shakata vastustajan kuningasta!';
+
+  @override
+  String get learnCheckInTwoGoal => 'Uhkaa vastustajan kuningasta\nkahdella siirrolla!';
+
+  @override
+  String get learnCheckInTwoComplete => 'Onneksi olkoon! Shakkasit vastustajaa ja pakotit hänet puolustamaan kuningastaan!';
+
+  @override
+  String get learnWhatNext => 'Mitä seuraavaksi?';
+
+  @override
+  String get learnYouKnowHowToPlayChess => 'Osaat pelata shakkia, onnittelut! Haluatko tulla vahvemmaksi pelaajaksi?';
+
+  @override
+  String get learnRegister => 'Rekisteröidy';
+
+  @override
+  String get learnGetAFreeLichessAccount => 'Saat ilmaisen Lichess-tunnuksen';
+
+  @override
+  String get learnPractice => 'Harjoittele';
+
+  @override
+  String get learnLearnCommonChessPositions => 'Opi tyypillisiä shakkiasemia';
+
+  @override
+  String get learnPuzzles => 'Tehtävät';
+
+  @override
+  String get learnExerciseYourTacticalSkills => 'Harjoita taktisia kykyjäsi';
+
+  @override
+  String get learnVideos => 'Videot';
+
+  @override
+  String get learnWatchInstructiveChessVideos => 'Katso havainnollistavia shakkivideoita';
+
+  @override
+  String get learnPlayPeople => 'Pelaa toisia vastaan';
+
+  @override
+  String get learnOpponentsFromAroundTheWorld => 'Vastustajia kaikkialta maailmasta';
+
+  @override
+  String get learnPlayMachine => 'Pelaa konetta vastaan';
+
+  @override
+  String get learnTestYourSkillsWithTheComputer => 'Mittaa taitosi tietokonetta vastaan';
+
+  @override
+  String get learnLetsGo => 'Aloitetaan!';
+
+  @override
+  String learnStageX(String param) {
+    return 'Taso $param';
+  }
+
+  @override
+  String get learnAwesome => 'Mahtavaa!';
+
+  @override
+  String get learnExcellent => 'Erinomaista!';
+
+  @override
+  String get learnGreatJob => 'Hyvin tehty!';
+
+  @override
+  String get learnPerfect => 'Täydellistä!';
+
+  @override
+  String get learnOutstanding => 'Loistavaa!';
+
+  @override
+  String get learnWayToGo => 'Niin sitä pitää!';
+
+  @override
+  String get learnYesYesYes => 'Kyllä!';
+
+  @override
+  String get learnYoureGoodAtThis => 'Olet hyvä tässä!';
+
+  @override
+  String get learnNailedIt => 'Naulan kantaan.';
+
+  @override
+  String get learnRightOn => 'Naulan kantaan!';
+
+  @override
+  String learnStageXComplete(String param) {
+    return 'Taso $param valmis';
+  }
+
+  @override
+  String get learnNext => 'Seuraava';
+
+  @override
+  String learnNextX(String param) {
+    return 'Seuraavaksi: $param';
+  }
+
+  @override
+  String get learnBackToMenu => 'Valikkoon';
+
+  @override
+  String get learnPuzzleFailed => 'Tehtävä epäonnistui!';
+
+  @override
+  String get learnRetry => 'Yritä uudelleen';
+
+  @override
   String get patronDonate => 'Lahjoita';
 
   @override

@@ -1358,6 +1358,527 @@ class AppLocalizationsEu extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Zutabe eta errenkada batzuk bakarrik praktikatu';
 
   @override
+  String get learnLearnChess => 'Ikasi xakean';
+
+  @override
+  String get learnByPlaying => 'jokatuz!';
+
+  @override
+  String learnProgressX(String param) {
+    return 'Garapena: $param';
+  }
+
+  @override
+  String get learnResetMyProgress => 'Nire garapena hasieratu';
+
+  @override
+  String get learnYouWillLoseAllYourProgress => 'Zure garapen guztia galduko duzu!';
+
+  @override
+  String get learnPlay => 'jokatu!';
+
+  @override
+  String get learnChessPieces => 'Xake piezak';
+
+  @override
+  String get learnTheRook => 'Gaztelua edo Dorrea';
+
+  @override
+  String get learnItMovesInStraightLines => 'Lerro zuzenetan zehar mugitzen da';
+
+  @override
+  String get learnRookIntro => 'Gaztelua pieza indartsua da. Aurrera jarraitu nahi duzu?';
+
+  @override
+  String get learnRookGoal => 'Egin klik gazteluan\nizarrera eramateko!';
+
+  @override
+  String get learnGrabAllTheStars => 'Hartu izar guztiak!';
+
+  @override
+  String get learnTheFewerMoves => 'Zenbat eta jokaldi gutxiago egin,\nhainbat eta puntu gehiago lortuko duzu!';
+
+  @override
+  String get learnUseTwoRooks => 'Erabili bi gazteluak\ngauzak azkartzeko!';
+
+  @override
+  String get learnRookComplete => 'Zorionak! Gaztelua ondo menderatu duzu.';
+
+  @override
+  String get learnTheBishop => 'Alfila edo Gudaria';
+
+  @override
+  String get learnItMovesDiagonally => 'Diagonalean mugitzen da';
+
+  @override
+  String get learnBishopIntro => 'Jarraian alfila nola mugitu ikasiko dugu!';
+
+  @override
+  String get learnYouNeedBothBishops => 'Lauki argietako alfil bat,\nlauki ilunetako alfil bat. \nBiak behar dituzu!';
+
+  @override
+  String get learnBishopComplete => 'Zorionak! Alfila menderatzen duzu.';
+
+  @override
+  String get learnTheQueen => 'Dama edo Anderea';
+
+  @override
+  String get learnQueenCombinesRookAndBishop => 'Dama = gaztelua + alfila';
+
+  @override
+  String get learnQueenIntro => 'Pieza indartsuena dator jarraian. Dama!';
+
+  @override
+  String get learnQueenComplete => 'Zorionak! Damek ez dute zuretzat sekreturik.';
+
+  @override
+  String get learnTheKing => 'Erregea';
+
+  @override
+  String get learnTheMostImportantPiece => 'Pieza garrantzitsuena';
+
+  @override
+  String get learnKingIntro => 'Erregea zara. Gudan erortzen bazara, partida galdu egingo duzu.';
+
+  @override
+  String get learnTheKingIsSlow => 'Erregea geldoa da.';
+
+  @override
+  String get learnLastOne => 'Azkena!';
+
+  @override
+  String get learnKingComplete => 'Agintaria menperatzen duzu orain!';
+
+  @override
+  String get learnTheKnight => 'Zalduna';
+
+  @override
+  String get learnItMovesInAnLShape => 'L eran mugitzen da';
+
+  @override
+  String get learnKnightIntro => 'Hemen zuretzako erronka. Zalduna... pieza zaila da.';
+
+  @override
+  String get learnKnightsHaveAFancyWay => 'Zaldunek hortik zehar\nsalto egiteko joera dute!';
+
+  @override
+  String get learnKnightsCanJumpOverObstacles => 'Zaldunek oztopoen gainetik egin dezakete salto!\nIhes egin eta lortu izarrak!';
+
+  @override
+  String get learnKnightComplete => 'Zorionak! Zalduna menperatzen duzu.';
+
+  @override
+  String get learnThePawn => 'Peoia edo oinezkoa';
+
+  @override
+  String get learnItMovesForwardOnly => 'Aurrerantz mugitzen da bakarrik';
+
+  @override
+  String get learnPawnIntro => 'Peoiak ahulak dira, baina potentzial handia dute.';
+
+  @override
+  String get learnPawnsMoveOneSquareOnly => 'Peoiak lauki bat bakarrik mugitzen dira.\nBaina xake-taularen beste aldera heltzean, pieza indartsu bihurtzen dira!';
+
+  @override
+  String get learnMostOfTheTimePromotingToAQueenIsBest => 'Gehienetan dama sustatzea izaten da onena.\nBaina batzuetan zaldua ere ona izan daiteke!';
+
+  @override
+  String get learnPawnsMoveForward => 'Peoiak aurrerantz mugitzen dira,\nbaina diagonalean harrapatzen dituzte piezak!';
+
+  @override
+  String get learnCaptureThenPromote => 'Harrapatu, eta gero sustatu!';
+
+  @override
+  String get learnUseAllThePawns => 'Erabili peoi guztiak!\nEz duzu sustatu beharrik.';
+
+  @override
+  String get learnAPawnOnTheSecondRank => 'Bigarren lerroko peoiak 2 lauki mugitu ditzake batera!';
+
+  @override
+  String get learnGrabAllTheStarsNoNeedToPromote => 'Harrapatu izar guztiak!\nEz duzu sustatu beharrik.';
+
+  @override
+  String get learnPawnComplete => 'Zorionak! Peoiek ez dute zuretzat sekreturik.';
+
+  @override
+  String get learnPawnPromotion => 'Peoia sustatzea';
+
+  @override
+  String get learnYourPawnReachedTheEndOfTheBoard => 'Zure peoia xake-taularen bukaerara iritsi da!';
+
+  @override
+  String get learnItNowPromotesToAStrongerPiece => 'Orain sustatu eta pieza indartsuago bihurtzen da.';
+
+  @override
+  String get learnSelectThePieceYouWant => 'Aukeratu zuk nahi duzun pieza!';
+
+  @override
+  String get learnFundamentals => 'Oinarrizkoak';
+
+  @override
+  String get learnCapture => 'Harrapaketa';
+
+  @override
+  String get learnTakeTheEnemyPieces => 'Harrapatu aurkariaren piezak';
+
+  @override
+  String get learnCaptureIntro => 'Aurkitu zure aurkariak defendatu gabe dituen piezak eta harrapatu!';
+
+  @override
+  String get learnTakeTheBlackPieces => 'Harrapatu pieza beltzak!';
+
+  @override
+  String get learnTakeTheBlackPiecesAndDontLoseYours => 'Harrapatu pieza beltzak!\nEta ez galdu zureak.';
+
+  @override
+  String get learnCaptureComplete => 'Zorionak! Orain badakizu nola borrokatu zure piezekin!';
+
+  @override
+  String get learnProtection => 'Babesa';
+
+  @override
+  String get learnKeepYourPiecesSafe => 'Babestu zure piezak';
+
+  @override
+  String get learnProtectionIntro => 'Identifikatu zure aurkariak erasotzen dizkizun piezak eta defendatu itzazu!';
+
+  @override
+  String get learnProtectionComplete => 'Zorionak! Galtzen ez duzun pieza bat, irabazten duzun pieza bat da!';
+
+  @override
+  String get learnEscape => 'Erasopean zaude!\nEgin ihes mehatxuari!';
+
+  @override
+  String get learnNoEscape => 'Ez dago ihesbiderik,\nbaina defendatu zaitezke!';
+
+  @override
+  String get learnDontLetThemTakeAnyUndefendedPiece => 'Ez utzi inori\ndefendatu gabeko piezarik harrapatzen!';
+
+  @override
+  String get learnCombat => 'Borroka';
+
+  @override
+  String get learnCaptureAndDefendPieces => 'Piezak harrapatu eta defendatu';
+
+  @override
+  String get learnCombatIntro => 'Borrokalari on batek erasoa eta defentsa menperatzen ditu!';
+
+  @override
+  String get learnCombatComplete => 'Zorionak! Badakizu piezekin nola borrokatu!';
+
+  @override
+  String get learnCheckInOne => 'Xake jokaldi baten';
+
+  @override
+  String get learnAttackTheOpponentsKing => 'Aurkariaren erregea erasotu';
+
+  @override
+  String get learnCheckInOneIntro => 'Aurkariari xake emateko, erasotu bere erregea. Defendatu egin beharko du!';
+
+  @override
+  String get learnCheckInOneGoal => 'Helburua aurkariaren erregea da,\negin jokaldi baten!';
+
+  @override
+  String get learnCheckInOneComplete => 'Zorionak, aurkariari xake eman diozu, bere erregea defendatzera behartuz!';
+
+  @override
+  String get learnOutOfCheck => 'Xaketik kanpora';
+
+  @override
+  String get learnDefendYourKing => 'Defendatu zure erregea';
+
+  @override
+  String get learnOutOfCheckIntro => 'Xakean zaude! Ihes egin beharko duzu edo erasoa oztopatu.';
+
+  @override
+  String get learnEscapeWithTheKing => 'Egin ihes erregearekin!';
+
+  @override
+  String get learnTheKingCannotEscapeButBlock => 'Erregeak ezin du ihes egin,\nbaina erasoa oztopatu dezakezu!';
+
+  @override
+  String get learnYouCanGetOutOfCheckByTaking => 'Xaketik irten zaitezke\nerasotzen zaituen pieza harrapatuz.';
+
+  @override
+  String get learnThisKnightIsCheckingThroughYourDefenses => 'Zalduna xake ematen ari da\nzure defentsen artetik!';
+
+  @override
+  String get learnEscapeOrBlock => 'Egin ihes erregearekin\nedo oztopatu erasoa!';
+
+  @override
+  String get learnOutOfCheckComplete => 'Zorionak! Zure erregea ezin da harrapatu, baina ziurtatu xaketik defendatu dezakezula!';
+
+  @override
+  String get learnMateInOne => 'Xake-mate jokaldi baten';
+
+  @override
+  String get learnDefeatTheOpponentsKing => 'Aurkariaren erregea garaitu';
+
+  @override
+  String get learnMateInOneIntro => 'Zure aurkaria xaketik defendatu ezin denean irabazi egiten duzu.';
+
+  @override
+  String get learnAttackYourOpponentsKing => 'Erasotu aurkariaren erregea\nbere burua defendatu ezin daitekeen eran!';
+
+  @override
+  String get learnMateInOneComplete => 'Zorionak! Horrela irabazten dira xake partidak!';
+
+  @override
+  String get learnIntermediate => 'Erdi-mailakoa';
+
+  @override
+  String get learnBoardSetup => 'Xake-taularen ezarpenak';
+
+  @override
+  String get learnHowTheGameStarts => 'Partida nola hasi';
+
+  @override
+  String get learnBoardSetupIntro => 'Bi armadak elkarri begira hasten dira, gudarako prest.';
+
+  @override
+  String get learnThisIsTheInitialPosition => 'Hauxe partida guztien\nhasierako posizioa!\nEgin edozein jokaldi jarraitzeko.';
+
+  @override
+  String get learnFirstPlaceTheRooks => 'Kokatu lehenengo gazteluak!\nBazterretan kokatzen dira.';
+
+  @override
+  String get learnThenPlaceTheKnights => 'Jarraian kokatu zaldunak!\nGazteluen ondoan kokatuko dira.';
+
+  @override
+  String get learnPlaceTheBishops => 'Orain alfilak!\nZaldunen ondoan doaz.';
+
+  @override
+  String get learnPlaceTheQueen => 'Kokatu dama!\nBere koloreko laukian jarri ezazu.';
+
+  @override
+  String get learnPlaceTheKing => 'Jarri erregea!\nBere damaren ondoan kokatu.';
+
+  @override
+  String get learnPawnsFormTheFrontLine => 'Peoiek aurreko lerroa betetzen dute.\nEgin edozein jokaldi jarraitzeko.';
+
+  @override
+  String get learnBoardSetupComplete => 'Zorionak! Badakizu xake-taula nola kokatu.';
+
+  @override
+  String get learnCastling => 'Endrokea';
+
+  @override
+  String get learnTheSpecialKingMove => 'Erregearen jokaldi berezia';
+
+  @override
+  String get learnCastlingIntro => 'Segurtasuna eman zure erregeari eta ekarri gaztelua erasora!';
+
+  @override
+  String get learnCastleKingSide => 'Mugitu zure erregea bi lauki\nerregearen aldean endrokatzeko!';
+
+  @override
+  String get learnCastleQueenSide => 'Mugitu zure erregea bi lauki\ndamaren aldean endrokatzeko!';
+
+  @override
+  String get learnTheKnightIsInTheWay => 'Zalduna bidean dago!\nMugitu, eta ondoren erregearen aldean endrokatu.';
+
+  @override
+  String get learnCastleKingSideMovePiecesFirst => 'Endrokatu erregearen aldean!\nTarteko piezak mugitu behar dituzu lehenengo.';
+
+  @override
+  String get learnCastleQueenSideMovePiecesFirst => 'Endrokatu damaren aldean!\nTarteko piezak mugitu behar dituzu lehenengo.';
+
+  @override
+  String get learnYouCannotCastleIfMoved => 'Ezin duzu endrokerik egin\nerregea aurrez mugitu baduzu\nedo gaztelua aurrez mugitu baduzu.';
+
+  @override
+  String get learnYouCannotCastleIfAttacked => 'Ezin duzu endrokerik egin\nerregea erasotuta badago.\nOztopatu xakea eta ondoren endrokatu!';
+
+  @override
+  String get learnFindAWayToCastleKingSide => 'Aurkitu modua\nerregearen aldean endrokatzeko!';
+
+  @override
+  String get learnFindAWayToCastleQueenSide => 'Aurkitu modua\nerregearen aldean endrokatzeko!';
+
+  @override
+  String get learnCastlingComplete => 'Zorionak! Ia edozein partidatan endrokatu zaitezke.';
+
+  @override
+  String get learnTheSpecialPawnMove => 'Peoiaren jokaldi berezia';
+
+  @override
+  String get learnEnPassantIntro => 'Aurkariak peoi bat bi lauki aurreratu duenean, bat mugitu balu bezala harrapatu dezakezu.';
+
+  @override
+  String get learnBlackJustMovedThePawnByTwoSquares => 'Beltzak peoia bi laukiz\nmugitu du!\nHarrapatu igarotzean.';
+
+  @override
+  String get learnEnPassantOnlyWorksImmediately => 'Aurkariak peoia mugitu\nduen momentuan bakarrik\nharrapatu daiteke igarotzean.';
+
+  @override
+  String get learnEnPassantOnlyWorksOnFifthRank => 'Peoia 5. lerroan badago bakarrik\nharrapatu daiteke igarotzean.';
+
+  @override
+  String get learnTakeAllThePawnsEnPassant => 'Harrapatu peoi guztiak igarotzean!';
+
+  @override
+  String get learnEnPassantComplete => 'Zorionak! Igarotzean harrapatzen dakizu.';
+
+  @override
+  String get learnStalemate => 'Erregea itota';
+
+  @override
+  String get learnTheGameIsADraw => 'Partida berdinketarekin bukatu da';
+
+  @override
+  String get learnStalemateIntro => 'Jokalari bat xakean ez dagoenean eta legezko jokaldirik ez dagoenean, itota dago. Partida berdinketan bukatu da: inork ez du irabazi, inork ez du galdu.';
+
+  @override
+  String get learnStalemateGoal => 'Beltza itotzeko:\n- Beltzak ezin du inora mugitu.\n- Ez dago xakerik.';
+
+  @override
+  String get learnStalemateComplete => 'Zorionak! Hobe da itota gelditzea xake-mate jasotzea baino!';
+
+  @override
+  String get learnAdvanced => 'Aurreratua';
+
+  @override
+  String get learnPieceValue => 'Piezen balioa';
+
+  @override
+  String get learnEvaluatePieceStrength => 'Piezen indarra baloratu';
+
+  @override
+  String get learnPieceValueIntro => 'Mugikortasun handiago duten pizek balio handiagoa dute!\nDama = 9\nGaztelua = 5\nAlfila = 3\nZalduna = 3\nPeoia = 1\nErregeak ez du baliorik! Berau galtzeak partida galtzea baitakar.';
+
+  @override
+  String get learnQueenOverBishop => 'Harrapatu balio handiena\nduen pieza!\nDama > Alfila';
+
+  @override
+  String get learnPieceValueExchange => 'Harrapatu gehien balio duen pieza!\n Ez aldatu\n gehiago balio duen pieza bat gutxiago balio duen bategatik.';
+
+  @override
+  String get learnPieceValueLegal => 'Harrapatu gehien\nbalio duen pieza!\nZiurtatu zure jokaldia legezkoa dela!';
+
+  @override
+  String get learnTakeThePieceWithTheHighestValue => 'Harrapatu balio handiena\nduen pieza!';
+
+  @override
+  String get learnPieceValueComplete => 'Zorionak! Badakizu jada piezen balioa!\nDama = 9\nGaztelua = 5\nAlfila = 3\nZalduna = 3\nPeoia = 1';
+
+  @override
+  String get learnCheckInTwo => 'Xake bi jokalditan';
+
+  @override
+  String get learnTwoMovesToGiveCheck => 'Bi jokaldi xake emateko';
+
+  @override
+  String get learnCheckInTwoIntro => 'Aurkitu aurkariaren erregeari bi jokalditan xake emateko konbinazio zuzena!';
+
+  @override
+  String get learnCheckInTwoGoal => 'Mehatxatu aurkariaren erregea\nbi jokalditan!';
+
+  @override
+  String get learnCheckInTwoComplete => 'Zorionak! Aurkariari xake eman diozu, bere erregea defendatzera behartuz!';
+
+  @override
+  String get learnWhatNext => 'Eta orain zer?';
+
+  @override
+  String get learnYouKnowHowToPlayChess => 'Badakizu xakean jokatzen, zorionak! Jokalari hobe izan nahi duzu?';
+
+  @override
+  String get learnRegister => 'Izena eman';
+
+  @override
+  String get learnGetAFreeLichessAccount => 'Sortu Lichess kontu bat';
+
+  @override
+  String get learnPractice => 'Praktikatu';
+
+  @override
+  String get learnLearnCommonChessPositions => 'Ikasi ohiko posizioak';
+
+  @override
+  String get learnPuzzles => 'Ariketak';
+
+  @override
+  String get learnExerciseYourTacticalSkills => 'Entrenatu zure taktika';
+
+  @override
+  String get learnVideos => 'Bideoak';
+
+  @override
+  String get learnWatchInstructiveChessVideos => 'Ikusi bideoak';
+
+  @override
+  String get learnPlayPeople => 'Jendearekin jokatu';
+
+  @override
+  String get learnOpponentsFromAroundTheWorld => 'Munduan zeharreko aurkariak';
+
+  @override
+  String get learnPlayMachine => 'Ordenagailuarekin jokatu';
+
+  @override
+  String get learnTestYourSkillsWithTheComputer => 'Probatu zure jokoa ordenagailuarekin';
+
+  @override
+  String get learnLetsGo => 'Goazen!';
+
+  @override
+  String learnStageX(String param) {
+    return 'Pausua $param';
+  }
+
+  @override
+  String get learnAwesome => 'Zoragarria!';
+
+  @override
+  String get learnExcellent => 'Bikain!';
+
+  @override
+  String get learnGreatJob => 'Lan ona!';
+
+  @override
+  String get learnPerfect => 'Ederto!';
+
+  @override
+  String get learnOutstanding => 'Ezinhobeto!';
+
+  @override
+  String get learnWayToGo => 'Hori da bidea!';
+
+  @override
+  String get learnYesYesYes => 'Bai, bai, bai!';
+
+  @override
+  String get learnYoureGoodAtThis => 'Ona zara benetan!';
+
+  @override
+  String get learnNailedIt => 'Asmatu duzu.';
+
+  @override
+  String get learnRightOn => 'Horrela bai!';
+
+  @override
+  String learnStageXComplete(String param) {
+    return '$param pausua beteta';
+  }
+
+  @override
+  String get learnNext => 'Hurrengoa';
+
+  @override
+  String learnNextX(String param) {
+    return 'Hurrengoa: $param';
+  }
+
+  @override
+  String get learnBackToMenu => 'Menura itzuli';
+
+  @override
+  String get learnPuzzleFailed => 'Huts egin duzu!';
+
+  @override
+  String get learnRetry => 'Berriro saiatu';
+
+  @override
   String get patronDonate => 'Dirua eman';
 
   @override

@@ -2422,6 +2422,1032 @@ abstract class AppLocalizations {
   /// **'Practice only some files & ranks'**
   String get coordinatesPracticeOnlySomeFilesAndRanks;
 
+  /// No description provided for @learnLearnChess.
+  ///
+  /// In en, this message translates to:
+  /// **'Learn chess'**
+  String get learnLearnChess;
+
+  /// No description provided for @learnByPlaying.
+  ///
+  /// In en, this message translates to:
+  /// **'by playing!'**
+  String get learnByPlaying;
+
+  /// No description provided for @learnProgressX.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress: {param}'**
+  String learnProgressX(String param);
+
+  /// No description provided for @learnResetMyProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset my progress'**
+  String get learnResetMyProgress;
+
+  /// No description provided for @learnYouWillLoseAllYourProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'You will lose all your progress!'**
+  String get learnYouWillLoseAllYourProgress;
+
+  /// No description provided for @learnPlay.
+  ///
+  /// In en, this message translates to:
+  /// **'play!'**
+  String get learnPlay;
+
+  /// No description provided for @learnChessPieces.
+  ///
+  /// In en, this message translates to:
+  /// **'Chess pieces'**
+  String get learnChessPieces;
+
+  /// No description provided for @learnTheRook.
+  ///
+  /// In en, this message translates to:
+  /// **'The rook'**
+  String get learnTheRook;
+
+  /// No description provided for @learnItMovesInStraightLines.
+  ///
+  /// In en, this message translates to:
+  /// **'It moves in straight lines'**
+  String get learnItMovesInStraightLines;
+
+  /// No description provided for @learnRookIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'The rook is a powerful piece. Are you ready to command it?'**
+  String get learnRookIntro;
+
+  /// No description provided for @learnRookGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'Click on the rook\nto bring it to the star!'**
+  String get learnRookGoal;
+
+  /// No description provided for @learnGrabAllTheStars.
+  ///
+  /// In en, this message translates to:
+  /// **'Grab all the stars!'**
+  String get learnGrabAllTheStars;
+
+  /// No description provided for @learnTheFewerMoves.
+  ///
+  /// In en, this message translates to:
+  /// **'The fewer moves you make,\nthe more points you win!'**
+  String get learnTheFewerMoves;
+
+  /// No description provided for @learnUseTwoRooks.
+  ///
+  /// In en, this message translates to:
+  /// **'Use two rooks\nto speed things up!'**
+  String get learnUseTwoRooks;
+
+  /// No description provided for @learnRookComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Congratulations! You have successfully mastered the rook.'**
+  String get learnRookComplete;
+
+  /// No description provided for @learnTheBishop.
+  ///
+  /// In en, this message translates to:
+  /// **'The bishop'**
+  String get learnTheBishop;
+
+  /// No description provided for @learnItMovesDiagonally.
+  ///
+  /// In en, this message translates to:
+  /// **'It moves diagonally'**
+  String get learnItMovesDiagonally;
+
+  /// No description provided for @learnBishopIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Next we will learn how to manoeuvre a bishop!'**
+  String get learnBishopIntro;
+
+  /// No description provided for @learnYouNeedBothBishops.
+  ///
+  /// In en, this message translates to:
+  /// **'One light-squared bishop,\none dark-squared bishop.\nYou need both!'**
+  String get learnYouNeedBothBishops;
+
+  /// No description provided for @learnBishopComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Congratulations! You can command a bishop.'**
+  String get learnBishopComplete;
+
+  /// No description provided for @learnTheQueen.
+  ///
+  /// In en, this message translates to:
+  /// **'The queen'**
+  String get learnTheQueen;
+
+  /// No description provided for @learnQueenCombinesRookAndBishop.
+  ///
+  /// In en, this message translates to:
+  /// **'Queen = rook + bishop'**
+  String get learnQueenCombinesRookAndBishop;
+
+  /// No description provided for @learnQueenIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'The most powerful chess piece enters. Her majesty the queen!'**
+  String get learnQueenIntro;
+
+  /// No description provided for @learnQueenComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Congratulations! Queens have no secrets for you.'**
+  String get learnQueenComplete;
+
+  /// No description provided for @learnTheKing.
+  ///
+  /// In en, this message translates to:
+  /// **'The king'**
+  String get learnTheKing;
+
+  /// No description provided for @learnTheMostImportantPiece.
+  ///
+  /// In en, this message translates to:
+  /// **'The most important piece'**
+  String get learnTheMostImportantPiece;
+
+  /// No description provided for @learnKingIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'You are the king. If you fall in battle, the game is lost.'**
+  String get learnKingIntro;
+
+  /// No description provided for @learnTheKingIsSlow.
+  ///
+  /// In en, this message translates to:
+  /// **'The king is slow.'**
+  String get learnTheKingIsSlow;
+
+  /// No description provided for @learnLastOne.
+  ///
+  /// In en, this message translates to:
+  /// **'Last one!'**
+  String get learnLastOne;
+
+  /// No description provided for @learnKingComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'You can now command the commander!'**
+  String get learnKingComplete;
+
+  /// No description provided for @learnTheKnight.
+  ///
+  /// In en, this message translates to:
+  /// **'The knight'**
+  String get learnTheKnight;
+
+  /// No description provided for @learnItMovesInAnLShape.
+  ///
+  /// In en, this message translates to:
+  /// **'It moves in an L shape'**
+  String get learnItMovesInAnLShape;
+
+  /// No description provided for @learnKnightIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Here\'s a challenge for you. The knight is... a tricky piece.'**
+  String get learnKnightIntro;
+
+  /// No description provided for @learnKnightsHaveAFancyWay.
+  ///
+  /// In en, this message translates to:
+  /// **'Knights have a fancy way\nof jumping around!'**
+  String get learnKnightsHaveAFancyWay;
+
+  /// No description provided for @learnKnightsCanJumpOverObstacles.
+  ///
+  /// In en, this message translates to:
+  /// **'Knights can jump over obstacles!\nEscape and vanquish the stars!'**
+  String get learnKnightsCanJumpOverObstacles;
+
+  /// No description provided for @learnKnightComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Congratulations! You have mastered the knight.'**
+  String get learnKnightComplete;
+
+  /// No description provided for @learnThePawn.
+  ///
+  /// In en, this message translates to:
+  /// **'The pawn'**
+  String get learnThePawn;
+
+  /// No description provided for @learnItMovesForwardOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'It moves forward only'**
+  String get learnItMovesForwardOnly;
+
+  /// No description provided for @learnPawnIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Pawns are weak, but they pack a lot of potential.'**
+  String get learnPawnIntro;
+
+  /// No description provided for @learnPawnsMoveOneSquareOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Pawns move one square only.\nBut when they reach the other side of the board, they become a stronger piece!'**
+  String get learnPawnsMoveOneSquareOnly;
+
+  /// No description provided for @learnMostOfTheTimePromotingToAQueenIsBest.
+  ///
+  /// In en, this message translates to:
+  /// **'Most of the time promoting to a queen is the best.\nBut sometimes a knight can come in handy!'**
+  String get learnMostOfTheTimePromotingToAQueenIsBest;
+
+  /// No description provided for @learnPawnsMoveForward.
+  ///
+  /// In en, this message translates to:
+  /// **'Pawns move forward,\nbut capture diagonally!'**
+  String get learnPawnsMoveForward;
+
+  /// No description provided for @learnCaptureThenPromote.
+  ///
+  /// In en, this message translates to:
+  /// **'Capture, then promote!'**
+  String get learnCaptureThenPromote;
+
+  /// No description provided for @learnUseAllThePawns.
+  ///
+  /// In en, this message translates to:
+  /// **'Use all the pawns!\nNo need to promote.'**
+  String get learnUseAllThePawns;
+
+  /// No description provided for @learnAPawnOnTheSecondRank.
+  ///
+  /// In en, this message translates to:
+  /// **'A pawn on the second rank can move 2 squares at once!'**
+  String get learnAPawnOnTheSecondRank;
+
+  /// No description provided for @learnGrabAllTheStarsNoNeedToPromote.
+  ///
+  /// In en, this message translates to:
+  /// **'Grab all the stars!\nNo need to promote.'**
+  String get learnGrabAllTheStarsNoNeedToPromote;
+
+  /// No description provided for @learnPawnComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Congratulations! Pawns have no secrets for you.'**
+  String get learnPawnComplete;
+
+  /// No description provided for @learnPawnPromotion.
+  ///
+  /// In en, this message translates to:
+  /// **'Pawn promotion'**
+  String get learnPawnPromotion;
+
+  /// No description provided for @learnYourPawnReachedTheEndOfTheBoard.
+  ///
+  /// In en, this message translates to:
+  /// **'Your pawn reached the end of the board!'**
+  String get learnYourPawnReachedTheEndOfTheBoard;
+
+  /// No description provided for @learnItNowPromotesToAStrongerPiece.
+  ///
+  /// In en, this message translates to:
+  /// **'It now promotes to a stronger piece.'**
+  String get learnItNowPromotesToAStrongerPiece;
+
+  /// No description provided for @learnSelectThePieceYouWant.
+  ///
+  /// In en, this message translates to:
+  /// **'Select the piece you want!'**
+  String get learnSelectThePieceYouWant;
+
+  /// No description provided for @learnFundamentals.
+  ///
+  /// In en, this message translates to:
+  /// **'Fundamentals'**
+  String get learnFundamentals;
+
+  /// No description provided for @learnCapture.
+  ///
+  /// In en, this message translates to:
+  /// **'Capture'**
+  String get learnCapture;
+
+  /// No description provided for @learnTakeTheEnemyPieces.
+  ///
+  /// In en, this message translates to:
+  /// **'Take the enemy pieces'**
+  String get learnTakeTheEnemyPieces;
+
+  /// No description provided for @learnCaptureIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Identify the opponent\'s undefended pieces, and capture them!'**
+  String get learnCaptureIntro;
+
+  /// No description provided for @learnTakeTheBlackPieces.
+  ///
+  /// In en, this message translates to:
+  /// **'Take the black pieces!'**
+  String get learnTakeTheBlackPieces;
+
+  /// No description provided for @learnTakeTheBlackPiecesAndDontLoseYours.
+  ///
+  /// In en, this message translates to:
+  /// **'Take the black pieces!\nAnd don\'t lose yours.'**
+  String get learnTakeTheBlackPiecesAndDontLoseYours;
+
+  /// No description provided for @learnCaptureComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Congratulations! You know how to fight with chess pieces!'**
+  String get learnCaptureComplete;
+
+  /// No description provided for @learnProtection.
+  ///
+  /// In en, this message translates to:
+  /// **'Protection'**
+  String get learnProtection;
+
+  /// No description provided for @learnKeepYourPiecesSafe.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep your pieces safe'**
+  String get learnKeepYourPiecesSafe;
+
+  /// No description provided for @learnProtectionIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Identify the pieces your opponent attacks, and defend them!'**
+  String get learnProtectionIntro;
+
+  /// No description provided for @learnProtectionComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Congratulations! A piece you don\'t lose is a piece you win!'**
+  String get learnProtectionComplete;
+
+  /// No description provided for @learnEscape.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re under attack!\nEscape the threat!'**
+  String get learnEscape;
+
+  /// No description provided for @learnNoEscape.
+  ///
+  /// In en, this message translates to:
+  /// **'There is no escape,\nbut you can defend!'**
+  String get learnNoEscape;
+
+  /// No description provided for @learnDontLetThemTakeAnyUndefendedPiece.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t let them take\nany undefended piece!'**
+  String get learnDontLetThemTakeAnyUndefendedPiece;
+
+  /// No description provided for @learnCombat.
+  ///
+  /// In en, this message translates to:
+  /// **'Combat'**
+  String get learnCombat;
+
+  /// No description provided for @learnCaptureAndDefendPieces.
+  ///
+  /// In en, this message translates to:
+  /// **'Capture and defend pieces'**
+  String get learnCaptureAndDefendPieces;
+
+  /// No description provided for @learnCombatIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'A good warrior knows both attack and defence!'**
+  String get learnCombatIntro;
+
+  /// No description provided for @learnCombatComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Congratulations! You know how to fight with chess pieces!'**
+  String get learnCombatComplete;
+
+  /// No description provided for @learnCheckInOne.
+  ///
+  /// In en, this message translates to:
+  /// **'Check in one'**
+  String get learnCheckInOne;
+
+  /// No description provided for @learnAttackTheOpponentsKing.
+  ///
+  /// In en, this message translates to:
+  /// **'Attack the opponent\'s king'**
+  String get learnAttackTheOpponentsKing;
+
+  /// No description provided for @learnCheckInOneIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'To check your opponent, attack their king. They must defend it!'**
+  String get learnCheckInOneIntro;
+
+  /// No description provided for @learnCheckInOneGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'Aim at the opponent\'s king\nin one move!'**
+  String get learnCheckInOneGoal;
+
+  /// No description provided for @learnCheckInOneComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Congratulations! You checked your opponent, forcing them to defend their king!'**
+  String get learnCheckInOneComplete;
+
+  /// No description provided for @learnOutOfCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'Out of check'**
+  String get learnOutOfCheck;
+
+  /// No description provided for @learnDefendYourKing.
+  ///
+  /// In en, this message translates to:
+  /// **'Defend your king'**
+  String get learnDefendYourKing;
+
+  /// No description provided for @learnOutOfCheckIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'You are in check! You must escape or block the attack.'**
+  String get learnOutOfCheckIntro;
+
+  /// No description provided for @learnEscapeWithTheKing.
+  ///
+  /// In en, this message translates to:
+  /// **'Escape with the king!'**
+  String get learnEscapeWithTheKing;
+
+  /// No description provided for @learnTheKingCannotEscapeButBlock.
+  ///
+  /// In en, this message translates to:
+  /// **'The king cannot escape,\nbut you can block the attack!'**
+  String get learnTheKingCannotEscapeButBlock;
+
+  /// No description provided for @learnYouCanGetOutOfCheckByTaking.
+  ///
+  /// In en, this message translates to:
+  /// **'You can get out of check\nby taking the attacking piece.'**
+  String get learnYouCanGetOutOfCheckByTaking;
+
+  /// No description provided for @learnThisKnightIsCheckingThroughYourDefenses.
+  ///
+  /// In en, this message translates to:
+  /// **'This knight is checking\nthrough your defences!'**
+  String get learnThisKnightIsCheckingThroughYourDefenses;
+
+  /// No description provided for @learnEscapeOrBlock.
+  ///
+  /// In en, this message translates to:
+  /// **'Escape with the king\nor block the attack!'**
+  String get learnEscapeOrBlock;
+
+  /// No description provided for @learnOutOfCheckComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Congratulations! Your king must never be taken, so make sure you can defend against a check!'**
+  String get learnOutOfCheckComplete;
+
+  /// No description provided for @learnMateInOne.
+  ///
+  /// In en, this message translates to:
+  /// **'Mate in one'**
+  String get learnMateInOne;
+
+  /// No description provided for @learnDefeatTheOpponentsKing.
+  ///
+  /// In en, this message translates to:
+  /// **'Defeat the opponent\'s king'**
+  String get learnDefeatTheOpponentsKing;
+
+  /// No description provided for @learnMateInOneIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'You win when your opponent cannot defend against a check.'**
+  String get learnMateInOneIntro;
+
+  /// No description provided for @learnAttackYourOpponentsKing.
+  ///
+  /// In en, this message translates to:
+  /// **'Attack your opponent\'s king\nin a way that cannot be defended!'**
+  String get learnAttackYourOpponentsKing;
+
+  /// No description provided for @learnMateInOneComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Congratulations! That is how you win chess games!'**
+  String get learnMateInOneComplete;
+
+  /// No description provided for @learnIntermediate.
+  ///
+  /// In en, this message translates to:
+  /// **'Intermediate'**
+  String get learnIntermediate;
+
+  /// No description provided for @learnBoardSetup.
+  ///
+  /// In en, this message translates to:
+  /// **'Board setup'**
+  String get learnBoardSetup;
+
+  /// No description provided for @learnHowTheGameStarts.
+  ///
+  /// In en, this message translates to:
+  /// **'How the game starts'**
+  String get learnHowTheGameStarts;
+
+  /// No description provided for @learnBoardSetupIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'The two armies face each other, ready for the battle.'**
+  String get learnBoardSetupIntro;
+
+  /// No description provided for @learnThisIsTheInitialPosition.
+  ///
+  /// In en, this message translates to:
+  /// **'This is the initial position\nof every game of chess!\nMake any move to continue.'**
+  String get learnThisIsTheInitialPosition;
+
+  /// No description provided for @learnFirstPlaceTheRooks.
+  ///
+  /// In en, this message translates to:
+  /// **'First place the rooks!\nThey go in the corners.'**
+  String get learnFirstPlaceTheRooks;
+
+  /// No description provided for @learnThenPlaceTheKnights.
+  ///
+  /// In en, this message translates to:
+  /// **'Then place the knights!\nThey go next to the rooks.'**
+  String get learnThenPlaceTheKnights;
+
+  /// No description provided for @learnPlaceTheBishops.
+  ///
+  /// In en, this message translates to:
+  /// **'Place the bishops!\nThey go next to the knights.'**
+  String get learnPlaceTheBishops;
+
+  /// No description provided for @learnPlaceTheQueen.
+  ///
+  /// In en, this message translates to:
+  /// **'Place the queen!\nShe goes on her own colour.'**
+  String get learnPlaceTheQueen;
+
+  /// No description provided for @learnPlaceTheKing.
+  ///
+  /// In en, this message translates to:
+  /// **'Place the king!\nRight next to his queen.'**
+  String get learnPlaceTheKing;
+
+  /// No description provided for @learnPawnsFormTheFrontLine.
+  ///
+  /// In en, this message translates to:
+  /// **'Pawns form the front line.\nMake any move to continue.'**
+  String get learnPawnsFormTheFrontLine;
+
+  /// No description provided for @learnBoardSetupComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Congratulations! You know how to set up the chess board.'**
+  String get learnBoardSetupComplete;
+
+  /// No description provided for @learnCastling.
+  ///
+  /// In en, this message translates to:
+  /// **'Castling'**
+  String get learnCastling;
+
+  /// No description provided for @learnTheSpecialKingMove.
+  ///
+  /// In en, this message translates to:
+  /// **'The special king move'**
+  String get learnTheSpecialKingMove;
+
+  /// No description provided for @learnCastlingIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Bring your king to safety, and deploy your rook for attack!'**
+  String get learnCastlingIntro;
+
+  /// No description provided for @learnCastleKingSide.
+  ///
+  /// In en, this message translates to:
+  /// **'Move your king two squares\nto castle king-side!'**
+  String get learnCastleKingSide;
+
+  /// No description provided for @learnCastleQueenSide.
+  ///
+  /// In en, this message translates to:
+  /// **'Move your king two squares\nto castle queen-side!'**
+  String get learnCastleQueenSide;
+
+  /// No description provided for @learnTheKnightIsInTheWay.
+  ///
+  /// In en, this message translates to:
+  /// **'The knight is in the way!\nMove it, then castle king-side.'**
+  String get learnTheKnightIsInTheWay;
+
+  /// No description provided for @learnCastleKingSideMovePiecesFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Castle king-side!\nYou need to move out pieces first.'**
+  String get learnCastleKingSideMovePiecesFirst;
+
+  /// No description provided for @learnCastleQueenSideMovePiecesFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Castle queen-side!\nYou need to move out pieces first.'**
+  String get learnCastleQueenSideMovePiecesFirst;
+
+  /// No description provided for @learnYouCannotCastleIfMoved.
+  ///
+  /// In en, this message translates to:
+  /// **'You cannot castle if\nthe king has already moved\nor the rook has already moved.'**
+  String get learnYouCannotCastleIfMoved;
+
+  /// No description provided for @learnYouCannotCastleIfAttacked.
+  ///
+  /// In en, this message translates to:
+  /// **'You cannot castle if\nthe king is attacked on the way.\nBlock the check then castle!'**
+  String get learnYouCannotCastleIfAttacked;
+
+  /// No description provided for @learnFindAWayToCastleKingSide.
+  ///
+  /// In en, this message translates to:
+  /// **'Find a way to\ncastle king-side!'**
+  String get learnFindAWayToCastleKingSide;
+
+  /// No description provided for @learnFindAWayToCastleQueenSide.
+  ///
+  /// In en, this message translates to:
+  /// **'Find a way to\ncastle queen-side!'**
+  String get learnFindAWayToCastleQueenSide;
+
+  /// No description provided for @learnCastlingComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Congratulations! You should almost always castle in a game.'**
+  String get learnCastlingComplete;
+
+  /// No description provided for @learnTheSpecialPawnMove.
+  ///
+  /// In en, this message translates to:
+  /// **'The special pawn move'**
+  String get learnTheSpecialPawnMove;
+
+  /// No description provided for @learnEnPassantIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'When the opponent\'s pawn moves two squares, you can still take it as if it had only moved one square.'**
+  String get learnEnPassantIntro;
+
+  /// No description provided for @learnBlackJustMovedThePawnByTwoSquares.
+  ///
+  /// In en, this message translates to:
+  /// **'Black just moved the pawn\nby two squares!\nTake it en passant.'**
+  String get learnBlackJustMovedThePawnByTwoSquares;
+
+  /// No description provided for @learnEnPassantOnlyWorksImmediately.
+  ///
+  /// In en, this message translates to:
+  /// **'En passant only works\nimmediately after the opponent\nmoved the pawn.'**
+  String get learnEnPassantOnlyWorksImmediately;
+
+  /// No description provided for @learnEnPassantOnlyWorksOnFifthRank.
+  ///
+  /// In en, this message translates to:
+  /// **'En passant only works\nif your pawn is on the 5th rank.'**
+  String get learnEnPassantOnlyWorksOnFifthRank;
+
+  /// No description provided for @learnTakeAllThePawnsEnPassant.
+  ///
+  /// In en, this message translates to:
+  /// **'Take all the pawns en passant!'**
+  String get learnTakeAllThePawnsEnPassant;
+
+  /// No description provided for @learnEnPassantComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Congratulations! You can now take en passant.'**
+  String get learnEnPassantComplete;
+
+  /// No description provided for @learnStalemate.
+  ///
+  /// In en, this message translates to:
+  /// **'Stalemate'**
+  String get learnStalemate;
+
+  /// No description provided for @learnTheGameIsADraw.
+  ///
+  /// In en, this message translates to:
+  /// **'The game is a draw'**
+  String get learnTheGameIsADraw;
+
+  /// No description provided for @learnStalemateIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'When a player is not in check and does not have a legal move, it\'s a stalemate. The game is drawn: no one wins, no one loses.'**
+  String get learnStalemateIntro;
+
+  /// No description provided for @learnStalemateGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'To stalemate black:\n- Black cannot move anywhere\n- There is no check.'**
+  String get learnStalemateGoal;
+
+  /// No description provided for @learnStalemateComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Congratulations! Better be stalemated than checkmated!'**
+  String get learnStalemateComplete;
+
+  /// No description provided for @learnAdvanced.
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced'**
+  String get learnAdvanced;
+
+  /// No description provided for @learnPieceValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Piece value'**
+  String get learnPieceValue;
+
+  /// No description provided for @learnEvaluatePieceStrength.
+  ///
+  /// In en, this message translates to:
+  /// **'Evaluate piece strength'**
+  String get learnEvaluatePieceStrength;
+
+  /// No description provided for @learnPieceValueIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Pieces with high mobility have a higher value!\nQueen = 9\nRook = 5\nBishop = 3\nKnight = 3\nPawn = 1\nThe king is priceless! Losing it means losing the game.'**
+  String get learnPieceValueIntro;
+
+  /// No description provided for @learnQueenOverBishop.
+  ///
+  /// In en, this message translates to:
+  /// **'Take the piece\nwith the highest value!\nQueen > Bishop'**
+  String get learnQueenOverBishop;
+
+  /// No description provided for @learnPieceValueExchange.
+  ///
+  /// In en, this message translates to:
+  /// **'Take the piece with the highest value!\nDo not exchange\na higher valued piece for a less valuable one.'**
+  String get learnPieceValueExchange;
+
+  /// No description provided for @learnPieceValueLegal.
+  ///
+  /// In en, this message translates to:
+  /// **'Take the piece\nwith the highest value!\nMake sure your move is legal!'**
+  String get learnPieceValueLegal;
+
+  /// No description provided for @learnTakeThePieceWithTheHighestValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Take the piece\nwith the highest value!'**
+  String get learnTakeThePieceWithTheHighestValue;
+
+  /// No description provided for @learnPieceValueComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Congratulations! You know the value of material!\nQueen = 9\nRook = 5\nBishop = 3\nKnight = 3\nPawn = 1'**
+  String get learnPieceValueComplete;
+
+  /// No description provided for @learnCheckInTwo.
+  ///
+  /// In en, this message translates to:
+  /// **'Check in two'**
+  String get learnCheckInTwo;
+
+  /// No description provided for @learnTwoMovesToGiveCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'Two moves to give a check'**
+  String get learnTwoMovesToGiveCheck;
+
+  /// No description provided for @learnCheckInTwoIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Find the right combination of two moves that checks the opponent\'s king!'**
+  String get learnCheckInTwoIntro;
+
+  /// No description provided for @learnCheckInTwoGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'Threaten the opponent\'s king\nin two moves!'**
+  String get learnCheckInTwoGoal;
+
+  /// No description provided for @learnCheckInTwoComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Congratulations! You checked your opponent, forcing them to defend their king!'**
+  String get learnCheckInTwoComplete;
+
+  /// No description provided for @learnWhatNext.
+  ///
+  /// In en, this message translates to:
+  /// **'What next?'**
+  String get learnWhatNext;
+
+  /// No description provided for @learnYouKnowHowToPlayChess.
+  ///
+  /// In en, this message translates to:
+  /// **'You know how to play chess, congratulations! Do you want to become a stronger player?'**
+  String get learnYouKnowHowToPlayChess;
+
+  /// No description provided for @learnRegister.
+  ///
+  /// In en, this message translates to:
+  /// **'Register'**
+  String get learnRegister;
+
+  /// No description provided for @learnGetAFreeLichessAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Get a free Lichess account'**
+  String get learnGetAFreeLichessAccount;
+
+  /// No description provided for @learnPractice.
+  ///
+  /// In en, this message translates to:
+  /// **'Practise'**
+  String get learnPractice;
+
+  /// No description provided for @learnLearnCommonChessPositions.
+  ///
+  /// In en, this message translates to:
+  /// **'Learn common chess positions'**
+  String get learnLearnCommonChessPositions;
+
+  /// No description provided for @learnPuzzles.
+  ///
+  /// In en, this message translates to:
+  /// **'Puzzles'**
+  String get learnPuzzles;
+
+  /// No description provided for @learnExerciseYourTacticalSkills.
+  ///
+  /// In en, this message translates to:
+  /// **'Exercise your tactical skills'**
+  String get learnExerciseYourTacticalSkills;
+
+  /// No description provided for @learnVideos.
+  ///
+  /// In en, this message translates to:
+  /// **'Videos'**
+  String get learnVideos;
+
+  /// No description provided for @learnWatchInstructiveChessVideos.
+  ///
+  /// In en, this message translates to:
+  /// **'Watch instructive chess videos'**
+  String get learnWatchInstructiveChessVideos;
+
+  /// No description provided for @learnPlayPeople.
+  ///
+  /// In en, this message translates to:
+  /// **'Play people'**
+  String get learnPlayPeople;
+
+  /// No description provided for @learnOpponentsFromAroundTheWorld.
+  ///
+  /// In en, this message translates to:
+  /// **'Opponents from around the world'**
+  String get learnOpponentsFromAroundTheWorld;
+
+  /// No description provided for @learnPlayMachine.
+  ///
+  /// In en, this message translates to:
+  /// **'Play machine'**
+  String get learnPlayMachine;
+
+  /// No description provided for @learnTestYourSkillsWithTheComputer.
+  ///
+  /// In en, this message translates to:
+  /// **'Test your skills with the computer'**
+  String get learnTestYourSkillsWithTheComputer;
+
+  /// No description provided for @learnLetsGo.
+  ///
+  /// In en, this message translates to:
+  /// **'Let\'s go!'**
+  String get learnLetsGo;
+
+  /// No description provided for @learnStageX.
+  ///
+  /// In en, this message translates to:
+  /// **'Stage {param}'**
+  String learnStageX(String param);
+
+  /// No description provided for @learnAwesome.
+  ///
+  /// In en, this message translates to:
+  /// **'Awesome!'**
+  String get learnAwesome;
+
+  /// No description provided for @learnExcellent.
+  ///
+  /// In en, this message translates to:
+  /// **'Excellent!'**
+  String get learnExcellent;
+
+  /// No description provided for @learnGreatJob.
+  ///
+  /// In en, this message translates to:
+  /// **'Great job!'**
+  String get learnGreatJob;
+
+  /// No description provided for @learnPerfect.
+  ///
+  /// In en, this message translates to:
+  /// **'Perfect!'**
+  String get learnPerfect;
+
+  /// No description provided for @learnOutstanding.
+  ///
+  /// In en, this message translates to:
+  /// **'Outstanding!'**
+  String get learnOutstanding;
+
+  /// No description provided for @learnWayToGo.
+  ///
+  /// In en, this message translates to:
+  /// **'Way to go!'**
+  String get learnWayToGo;
+
+  /// No description provided for @learnYesYesYes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes, yes, yes!'**
+  String get learnYesYesYes;
+
+  /// No description provided for @learnYoureGoodAtThis.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re good at this!'**
+  String get learnYoureGoodAtThis;
+
+  /// No description provided for @learnNailedIt.
+  ///
+  /// In en, this message translates to:
+  /// **'Nailed it.'**
+  String get learnNailedIt;
+
+  /// No description provided for @learnRightOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Right on!'**
+  String get learnRightOn;
+
+  /// No description provided for @learnStageXComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Stage {param} complete'**
+  String learnStageXComplete(String param);
+
+  /// No description provided for @learnNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get learnNext;
+
+  /// No description provided for @learnNextX.
+  ///
+  /// In en, this message translates to:
+  /// **'Next: {param}'**
+  String learnNextX(String param);
+
+  /// No description provided for @learnBackToMenu.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to menu'**
+  String get learnBackToMenu;
+
+  /// No description provided for @learnPuzzleFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Puzzle failed!'**
+  String get learnPuzzleFailed;
+
+  /// No description provided for @learnRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get learnRetry;
+
   /// No description provided for @patronDonate.
   ///
   /// In en, this message translates to:

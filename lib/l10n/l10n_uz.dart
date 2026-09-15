@@ -1358,6 +1358,527 @@ class AppLocalizationsUz extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Faqat maʼlum vertikal va gorizontallar boʻyicha mashq qilish';
 
   @override
+  String get learnLearnChess => 'Shaxmat oʻynab';
+
+  @override
+  String get learnByPlaying => 'oʻrganing!';
+
+  @override
+  String learnProgressX(String param) {
+    return '$param oʻzlashtirildi';
+  }
+
+  @override
+  String get learnResetMyProgress => 'Noldan boshlash';
+
+  @override
+  String get learnYouWillLoseAllYourProgress => 'Barcha natijalaringiz oʻchirib tashlanadi!';
+
+  @override
+  String get learnPlay => 'oʻynang!';
+
+  @override
+  String get learnChessPieces => 'Shaxmat donalari';
+
+  @override
+  String get learnTheRook => 'Rux';
+
+  @override
+  String get learnItMovesInStraightLines => 'Rux toʻgʻri chiziq boʻyicha harakatlanadi';
+
+  @override
+  String get learnRookIntro => 'Rux — kuchli dona. Uni boshqarishga tayyormisiz?';
+
+  @override
+  String get learnRookGoal => 'Ruxni ustiga bosib\nyulduzchaga olib boring!';
+
+  @override
+  String get learnGrabAllTheStars => 'Barcha yulduzchalarni yigʻing!';
+
+  @override
+  String get learnTheFewerMoves => 'Qancha kam yurish qilsangiz shuncha koʻp ochko olasiz!';
+
+  @override
+  String get learnUseTwoRooks => 'Ishni tezlashtirish uchun\nikkita ruxdan foydalaning!';
+
+  @override
+  String get learnRookComplete => 'Tabriklaymiz! Siz rux bilan oʻynashni muvaffaqiyatli oʻzlashtirdingiz.';
+
+  @override
+  String get learnTheBishop => 'Fil';
+
+  @override
+  String get learnItMovesDiagonally => 'Fil diagonal boʻyicha harakatlanadi';
+
+  @override
+  String get learnBishopIntro => 'Endi filni boshqarishni oʻrganamiz!';
+
+  @override
+  String get learnYouNeedBothBishops => 'Bitta oq katakdagi fil,\nbitta qora rangdagi fil.\nSizga ikkalasi ham kerak!';
+
+  @override
+  String get learnBishopComplete => 'Tabriklaymiz! Endi siz filni boshqara olasiz.';
+
+  @override
+  String get learnTheQueen => 'Farzin';
+
+  @override
+  String get learnQueenCombinesRookAndBishop => 'Farzin = rux + fil';
+
+  @override
+  String get learnQueenIntro => 'Eng qudratli dona bilan tanishing. Qarshingizda — oliy hazratlari farzin!';
+
+  @override
+  String get learnQueenComplete => 'Tabriklaymiz! Endi farzinning siz bilmagan siri qolmadi.';
+
+  @override
+  String get learnTheKing => 'Shoh';
+
+  @override
+  String get learnTheMostImportantPiece => 'Eng muhim dona';
+
+  @override
+  String get learnKingIntro => 'Siz — shohsiz. Agar jangda magʻlub boʻlsangiz, oʻyin ham tugaydi.';
+
+  @override
+  String get learnTheKingIsSlow => 'Shoh vazmin harakat qiladi.';
+
+  @override
+  String get learnLastOne => 'Bu oxirgisi!';
+
+  @override
+  String get learnKingComplete => 'Endi siz lashkarboshini ham boshqara olasiz!';
+
+  @override
+  String get learnTheKnight => 'Ot';
+
+  @override
+  String get learnItMovesInAnLShape => 'Ot “L” shaklida harakatlanadi';
+
+  @override
+  String get learnKnightIntro => 'Siz uchun bir sinov: ot — biroz ayyor dona.';
+
+  @override
+  String get learnKnightsHaveAFancyWay => 'Otlar oʻziga xos usulda sakrab yura oladi!';
+
+  @override
+  String get learnKnightsCanJumpOverObstacles => 'Otlar toʻsiqlar ustidan sakrab oʻta oladi!\nToʻsiqlardan oʻting va yulduzlarni zabt eting!';
+
+  @override
+  String get learnKnightComplete => 'Tabriklaymiz! Siz otni jilovlashni oʻrgandingiz.';
+
+  @override
+  String get learnThePawn => 'Piyoda';
+
+  @override
+  String get learnItMovesForwardOnly => 'Faqat oldinga yuradi';
+
+  @override
+  String get learnPawnIntro => 'Piyodalar kuchsiz, lekin ularda katta potensial mavjud.';
+
+  @override
+  String get learnPawnsMoveOneSquareOnly => 'Piyodalar faqat bir katak oldinga yuradi. Lekin taxtaning oxiriga yetib borsa, kuchliroq donaga aylanadi!';
+
+  @override
+  String get learnMostOfTheTimePromotingToAQueenIsBest => 'Koʻpincha piyodani farzinga aylantirish eng yaxshi qarordir.\nAmmo baʼzan ot ham asqotib qolishi mumkin!';
+
+  @override
+  String get learnPawnsMoveForward => 'Piyoda oldinga yuradi,\nlekin diagonal boʻyicha uradi!';
+
+  @override
+  String get learnCaptureThenPromote => 'Uring va kuchliroq donaga aylantiring!';
+
+  @override
+  String get learnUseAllThePawns => 'Barcha piyodalardan foydalaning! Ularni boshqa donaga aylantirishga hojat yoʻq.';
+
+  @override
+  String get learnAPawnOnTheSecondRank => 'Ikkinchi qatordagi piyoda bir yoʻla ikki katak oldinga yura oladi!';
+
+  @override
+  String get learnGrabAllTheStarsNoNeedToPromote => 'Barcha yulduzlarni yigʻing!\nDonalarni almashtirish shart emas.';
+
+  @override
+  String get learnPawnComplete => 'Tabriklaymiz! Piyodalar endi siz uchun sirli emas.';
+
+  @override
+  String get learnPawnPromotion => 'Piyodani almashtirish';
+
+  @override
+  String get learnYourPawnReachedTheEndOfTheBoard => 'Piyodangiz taxtaning oxiriga yetib keldi!';
+
+  @override
+  String get learnItNowPromotesToAStrongerPiece => 'Endi uni kuchliroq donaga almashtirish mumkin.';
+
+  @override
+  String get learnSelectThePieceYouWant => 'Oʻzingiz xohlagan donani tanlang!';
+
+  @override
+  String get learnFundamentals => 'Asosiy prinsiplar';
+
+  @override
+  String get learnCapture => 'Urib olish';
+
+  @override
+  String get learnTakeTheEnemyPieces => 'Raqib donalarini urib oling';
+
+  @override
+  String get learnCaptureIntro => 'Raqibning himoyalanmagan donalarini aniqlang va ularni urib oling!';
+
+  @override
+  String get learnTakeTheBlackPieces => 'Qora donalarni urib oling!';
+
+  @override
+  String get learnTakeTheBlackPiecesAndDontLoseYours => 'Qora donalarni urib oling!\nVa oʻzingiznikilarni yoʻqotmang.';
+
+  @override
+  String get learnCaptureComplete => 'Tabriklaymiz! Endi siz shaxmat donalari bilan jang qilishni bilasiz!';
+
+  @override
+  String get learnProtection => 'Himoya';
+
+  @override
+  String get learnKeepYourPiecesSafe => 'Donalaringizni ehtiyot qiling';
+
+  @override
+  String get learnProtectionIntro => 'Raqib qaysi donangizga hujum qilayotganini toping va uni himoyalang!';
+
+  @override
+  String get learnProtectionComplete => 'Barakalla! Boy berilmagan dona — yutilgan dona bilan teng!';
+
+  @override
+  String get learnEscape => 'Qochishga joy yoʻq, lekin himoyalansa boʻladi!';
+
+  @override
+  String get learnNoEscape => 'Qochib qutulishning iloji yoʻq,\nammo himoyalanish mumkin!';
+
+  @override
+  String get learnDontLetThemTakeAnyUndefendedPiece => 'Birorta ham himoyasiz donani boy bermang!';
+
+  @override
+  String get learnCombat => 'Jang';
+
+  @override
+  String get learnCaptureAndDefendPieces => 'Donalarni urib olish va himoya qilish';
+
+  @override
+  String get learnCombatIntro => 'Yaxshi jangchi ham hujum qilishni, ham himoyalanishni biladi!';
+
+  @override
+  String get learnCombatComplete => 'Barakalla! Endi siz shaxmat donalari bilan jang qilishni bilasiz!';
+
+  @override
+  String get learnCheckInOne => 'Shoh berish';
+
+  @override
+  String get learnAttackTheOpponentsKing => 'Raqib shohiga hujum qiling';
+
+  @override
+  String get learnCheckInOneIntro => 'Raqibga shoh berish uchun uning shohiga hujum qiling. U albatta shohni himoya qilishi kerak!';
+
+  @override
+  String get learnCheckInOneGoal => 'Birgina yurish bilan raqib shohini nishonga oling!';
+
+  @override
+  String get learnCheckInOneComplete => 'Barakalla! Siz raqibga shoh berdingiz va uni shohini himoya qilishga majbur qildingiz!';
+
+  @override
+  String get learnOutOfCheck => 'Shohdan qutulish';
+
+  @override
+  String get learnDefendYourKing => 'Shohingizni himoya qiling';
+
+  @override
+  String get learnOutOfCheckIntro => 'Sizga shoh berildi! Shohni olib qochishingiz yoki hujumni toʻsishingiz kerak.';
+
+  @override
+  String get learnEscapeWithTheKing => 'Shohni olib qoching!';
+
+  @override
+  String get learnTheKingCannotEscapeButBlock => 'Shoh qocholmaydi, lekin hujumni toʻssa boʻladi!';
+
+  @override
+  String get learnYouCanGetOutOfCheckByTaking => 'Hujum qilayotgan donani urib olib,\nshohdan qutulishingiz mumkin.';
+
+  @override
+  String get learnThisKnightIsCheckingThroughYourDefenses => 'Bu ot himoyangizni yorib oʻtib,\nshoh bermoqda!';
+
+  @override
+  String get learnEscapeOrBlock => 'Shohni olib qoching yoki hujumni toʻsing!';
+
+  @override
+  String get learnOutOfCheckComplete => 'Barakalla! Shohingiz hech qachon urib olinmaydi, shuning uchun har doim shohdan himoyalanishga tayyor turing!';
+
+  @override
+  String get learnMateInOne => 'Mot berish';
+
+  @override
+  String get learnDefeatTheOpponentsKing => 'Raqib shohini taslim qiling';
+
+  @override
+  String get learnMateInOneIntro => 'Raqib shohdan himoyalana olmagan holatda siz gʻalaba qozonasiz.';
+
+  @override
+  String get learnAttackYourOpponentsKing => 'Raqib shohiga shunday hujum qilingki, undan himoyalanishning iloji boʻlmasin!';
+
+  @override
+  String get learnMateInOneComplete => 'Barakalla! Shaxmatda aynan shunday gʻalaba qozoniladi!';
+
+  @override
+  String get learnIntermediate => 'Oʻrta daraja';
+
+  @override
+  String get learnBoardSetup => 'Taxtani terish';
+
+  @override
+  String get learnHowTheGameStarts => 'Oʻyin qanday boshlanadi';
+
+  @override
+  String get learnBoardSetupIntro => 'Ikki qoʻshin jangga shay holatda bir‑biriga roʻbaro turibdi.';
+
+  @override
+  String get learnThisIsTheInitialPosition => 'Bu — har bir shaxmat oʻyinining boshlangʻich holati!\nDavom etish uchun ixtiyoriy yurishni amalga oshiring.';
+
+  @override
+  String get learnFirstPlaceTheRooks => 'Avval ruxlarni joylashtiring!\nUlar burchaklarda turadi.';
+
+  @override
+  String get learnThenPlaceTheKnights => 'Keyin otlarni qoʻying!\nUlar ruxlarning yonida turadi.';
+
+  @override
+  String get learnPlaceTheBishops => 'Fillarni qoʻying!\nUlar otlarning yonida turadi.';
+
+  @override
+  String get learnPlaceTheQueen => 'Farzinni joylashtiring!\nU oʻz rangidagi katakka qoʻyiladi.';
+
+  @override
+  String get learnPlaceTheKing => 'Shohni joylashtiring!\nUni farzinning yoniga qoʻying.';
+
+  @override
+  String get learnPawnsFormTheFrontLine => 'Piyodalar oldingi safni egallaydi.\nDavom etish uchun ixtiyoriy yurishni amalga oshiring.';
+
+  @override
+  String get learnBoardSetupComplete => 'Barakalla! Endi siz shaxmat taxtasini terishni bilasiz.';
+
+  @override
+  String get learnCastling => 'Rokirovka';
+
+  @override
+  String get learnTheSpecialKingMove => 'Shohning maxsus yurishi';
+
+  @override
+  String get learnCastlingIntro => 'Shohingizni xavfsiz joyga oʻtkazing, ruxingizni esa hujumga shaylang!';
+
+  @override
+  String get learnCastleKingSide => 'Qisqa rokirovka qilish uchun shohingizni ikki katak suring!';
+
+  @override
+  String get learnCastleQueenSide => 'Uzun rokirovka qilish uchun shohingizni ikki katak suring!';
+
+  @override
+  String get learnTheKnightIsInTheWay => 'Ot yoʻlingizga toʻgʻanoq boʻlyapti!\nUni suring va qisqa rokirovka qiling.';
+
+  @override
+  String get learnCastleKingSideMovePiecesFirst => 'Qisqa rokirovka qiling!\nAvval donalarni olib chiqishingiz kerak.';
+
+  @override
+  String get learnCastleQueenSideMovePiecesFirst => 'Uzun rokirovka qiling!\nAvval donalarni olib chiqishingiz kerak.';
+
+  @override
+  String get learnYouCannotCastleIfMoved => 'Agar shoh yoki rux ilgari yurilgan boʻlsa, rokirovka qilib boʻlmaydi.';
+
+  @override
+  String get learnYouCannotCastleIfAttacked => 'Agar shoh oʻtadigan katakka hujum qilingan boʻlsa, rokirovka qilib boʻlmaydi. Avval shohni himoya qiling, soʻng rokirovka qiling!';
+
+  @override
+  String get learnFindAWayToCastleKingSide => 'Qisqa rokirovka qilish yoʻlini toping!';
+
+  @override
+  String get learnFindAWayToCastleQueenSide => 'Uzun rokirovka qilish yoʻlini toping!';
+
+  @override
+  String get learnCastlingComplete => 'Barakalla! Oʻyin davomida deyarli har doim rokirovka qilish tavsiya etiladi.';
+
+  @override
+  String get learnTheSpecialPawnMove => 'Piyodaning maxsus yurishi';
+
+  @override
+  String get learnEnPassantIntro => 'Raqib piyodasi ikki katak yurganida, siz uni goʻyoki bir katak yurganidek urib olishingiz mumkin.';
+
+  @override
+  String get learnBlackJustMovedThePawnByTwoSquares => 'Qoralar piyodani ikki katak yurdi! Uni “en passant” orqali urib oling.';
+
+  @override
+  String get learnEnPassantOnlyWorksImmediately => '“En passant” qoidasi faqat raqib piyoda surganidan soʻng darhol ishlatilishi kerak.';
+
+  @override
+  String get learnEnPassantOnlyWorksOnFifthRank => '“En passant” qoidasi faqat piyodangiz 5‑gorizontalda boʻlgandagina amal qiladi.';
+
+  @override
+  String get learnTakeAllThePawnsEnPassant => 'Barcha piyodalarni “en passant” qoidasi bilan urib oling!';
+
+  @override
+  String get learnEnPassantComplete => 'Barakalla! Endi siz “en passant” qoidasini qoʻllashni bilasiz.';
+
+  @override
+  String get learnStalemate => 'Pat';
+
+  @override
+  String get learnTheGameIsADraw => 'Oʻyin — durang';
+
+  @override
+  String get learnStalemateIntro => 'Agar oʻyinchiga shoh berilmagan boʻlsa va yurishga yoʻllari qolmagan boʻlsa — bu pat hisoblanadi. Oʻyin durang bilan tugaydi: gʻolib ham magʻlub ham yoʻq.';
+
+  @override
+  String get learnStalemateGoal => 'Qoralarni pat qilish uchun:\n- Qoralarning yurishga yoʻl boʻlmasligi kerak\n- Shohga hujum (shoh) boʻlmasligi kerak.';
+
+  @override
+  String get learnStalemateComplete => 'Barakalla! Mot boʻlgandan koʻra, pat boʻlgani afzal!';
+
+  @override
+  String get learnAdvanced => 'Yuqori daraja';
+
+  @override
+  String get learnPieceValue => 'Donalar qiymati';
+
+  @override
+  String get learnEvaluatePieceStrength => 'Donalar kuchini baholang';
+
+  @override
+  String get learnPieceValueIntro => 'Harakatchanligi yuqori boʻlgan donalar koʻproq qiymatga ega!\nFarzin = 9\nRux = 5\nFil = 3\nOt = 3\nPiyoda = 1\nShoh — bebahodir! Uni yoʻqotish — oʻyinda magʻlub boʻlish demakdir.';
+
+  @override
+  String get learnQueenOverBishop => 'Eng baland qiymatga ega donani urib oling!\nFarzin > Fil';
+
+  @override
+  String get learnPieceValueExchange => 'Eng baland qiymatga ega donani urib oling!\nQimmatroq donani arzonrogʻiga almashtirib qoʻymang.';
+
+  @override
+  String get learnPieceValueLegal => 'Eng baland qiymatga ega donani urib oling!\nYurishingiz qoidalarga muvofiq ekanligiga ishonch hosil qiling!';
+
+  @override
+  String get learnTakeThePieceWithTheHighestValue => 'Eng baland qiymatga ega donani urib oling!';
+
+  @override
+  String get learnPieceValueComplete => 'Barakalla! Endi siz donalar qiymatini farqlay olasiz!\nFarzin = 9\nRux = 5\nFil = 3\nOt = 3\nPiyoda = 1';
+
+  @override
+  String get learnCheckInTwo => 'Ikki yurishda shoh berish';
+
+  @override
+  String get learnTwoMovesToGiveCheck => 'Shoh berish uchun ikki yurish';
+
+  @override
+  String get learnCheckInTwoIntro => 'Raqib shohiga ikki yurishda shoh berish yoʻlini toping!';
+
+  @override
+  String get learnCheckInTwoGoal => 'Raqib shohiga ikki yurishda xavf soling!';
+
+  @override
+  String get learnCheckInTwoComplete => 'Barakalla! Siz raqibga shoh berdingiz va uni shohini himoya qilishga majbur qildingiz!';
+
+  @override
+  String get learnWhatNext => 'Endi nima?';
+
+  @override
+  String get learnYouKnowHowToPlayChess => 'Tabriklaymiz, siz shaxmat oʻynashni oʻrgandingiz! Yanada kuchliroq shaxmatchi boʻlishni istaysizmi?';
+
+  @override
+  String get learnRegister => 'Roʻyxatdan oʻtish';
+
+  @override
+  String get learnGetAFreeLichessAccount => 'Bepul Lichess akkauntiga ega boʻling';
+
+  @override
+  String get learnPractice => 'Mashq qilish';
+
+  @override
+  String get learnLearnCommonChessPositions => 'Asosiy shaxmat qoidalarini oʻrganing';
+
+  @override
+  String get learnPuzzles => 'Masalalar';
+
+  @override
+  String get learnExerciseYourTacticalSkills => 'Taktik mahoratingizni oshiring';
+
+  @override
+  String get learnVideos => 'Videolar';
+
+  @override
+  String get learnWatchInstructiveChessVideos => 'Shaxmat oʻrgatadigan videolarni koʻring';
+
+  @override
+  String get learnPlayPeople => 'Odamlar bilan oʻynash';
+
+  @override
+  String get learnOpponentsFromAroundTheWorld => 'Dunyoning turli chekkalaridagi oʻyinchilar bilan bellashing';
+
+  @override
+  String get learnPlayMachine => 'Kompyuter bilan oʻynash';
+
+  @override
+  String get learnTestYourSkillsWithTheComputer => 'Mahoratingizni kompyuterga qarshi sinab koʻring';
+
+  @override
+  String get learnLetsGo => 'Olgʻa!';
+
+  @override
+  String learnStageX(String param) {
+    return '$param‑bosqich';
+  }
+
+  @override
+  String get learnAwesome => 'Ajoyib!';
+
+  @override
+  String get learnExcellent => 'Zoʻr!';
+
+  @override
+  String get learnGreatJob => 'Barakalla!';
+
+  @override
+  String get learnPerfect => 'Qoyilmaqom!';
+
+  @override
+  String get learnOutstanding => 'Aʼlo!';
+
+  @override
+  String get learnWayToGo => 'Xuddi shunday!';
+
+  @override
+  String get learnYesYesYes => 'Mana bu boshqa gap!';
+
+  @override
+  String get learnYoureGoodAtThis => 'Qoyil!';
+
+  @override
+  String get learnNailedIt => 'Ofarin!';
+
+  @override
+  String get learnRightOn => 'Toʻppa‑toʻgʻri!';
+
+  @override
+  String learnStageXComplete(String param) {
+    return '$param‑bosqich tugadi';
+  }
+
+  @override
+  String get learnNext => 'Keyingisi';
+
+  @override
+  String learnNextX(String param) {
+    return 'Keyingisi: $param';
+  }
+
+  @override
+  String get learnBackToMenu => 'Menyuga qaytish';
+
+  @override
+  String get learnPuzzleFailed => 'Xato yurish!';
+
+  @override
+  String get learnRetry => 'Qayta urinish';
+
+  @override
   String get patronDonate => 'Donat qilish';
 
   @override

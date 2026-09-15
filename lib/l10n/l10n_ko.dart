@@ -1336,6 +1336,527 @@ class AppLocalizationsKo extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => '특정 파일(세로줄)과 랭크(가로줄)에서만 연습하기';
 
   @override
+  String get learnLearnChess => '체스 배우기';
+
+  @override
+  String get learnByPlaying => '플레이하며 체스를 배우세요!';
+
+  @override
+  String learnProgressX(String param) {
+    return '진행도: $param';
+  }
+
+  @override
+  String get learnResetMyProgress => '진행도 초기화';
+
+  @override
+  String get learnYouWillLoseAllYourProgress => '모든 진행도가 사라집니다!';
+
+  @override
+  String get learnPlay => '시작!';
+
+  @override
+  String get learnChessPieces => '체스 기물';
+
+  @override
+  String get learnTheRook => '룩';
+
+  @override
+  String get learnItMovesInStraightLines => '직선으로 움직입니다';
+
+  @override
+  String get learnRookIntro => '룩은 강한 기물입니다. 지휘를 내릴 준비가 되셨나요?';
+
+  @override
+  String get learnRookGoal => '룩을 클릭해서 별로 이동시키세요!';
+
+  @override
+  String get learnGrabAllTheStars => '모든 별을 잡아보세요!';
+
+  @override
+  String get learnTheFewerMoves => '수를 더 적게 둘수록,\n더 많은 포인트를 얻습니다!';
+
+  @override
+  String get learnUseTwoRooks => '룩 두개를 써서\n더 빨리 끝내봅시다!';
+
+  @override
+  String get learnRookComplete => '축하드립니다! 룩 다루기를 성공적으로 마스터하셨습니다.';
+
+  @override
+  String get learnTheBishop => '비숍';
+
+  @override
+  String get learnItMovesDiagonally => '대각선으로 움직입니다';
+
+  @override
+  String get learnBishopIntro => '비숍을 어떻게 옮기는지 배워봅시다!';
+
+  @override
+  String get learnYouNeedBothBishops => '밝은 칸 비숍 한 개, \n어두운 칸 비숍 한 개. \n둘 다 필요합니다!';
+
+  @override
+  String get learnBishopComplete => '축하드립니다! 당신은 비숍을 조종할 수 있습니다.';
+
+  @override
+  String get learnTheQueen => '퀸';
+
+  @override
+  String get learnQueenCombinesRookAndBishop => '퀸 = 룩 + 비숍';
+
+  @override
+  String get learnQueenIntro => '가장 강력한 체스 기물이 입장하십니다. 퀸 여왕 폐하!';
+
+  @override
+  String get learnQueenComplete => '축하드립니다! 이제 퀸은 더 이상 비밀이 없습니다.';
+
+  @override
+  String get learnTheKing => '킹';
+
+  @override
+  String get learnTheMostImportantPiece => '가장 중요한 기물';
+
+  @override
+  String get learnKingIntro => '당신은 킹입니다. 당신이 전사하면, 게임을 패합니다.';
+
+  @override
+  String get learnTheKingIsSlow => '킹은 느립니다.';
+
+  @override
+  String get learnLastOne => '마지막 하나!';
+
+  @override
+  String get learnKingComplete => '이제 지휘관을 지휘 할 수 있습니다!';
+
+  @override
+  String get learnTheKnight => '나이트';
+
+  @override
+  String get learnItMovesInAnLShape => 'L자 모양으로 움직입니다';
+
+  @override
+  String get learnKnightIntro => '이번엔 어려울 수도 있어요. 나이트는.. 까다로운 기물이거든요.';
+
+  @override
+  String get learnKnightsHaveAFancyWay => '나이트는 독특한 \n행마를 선보입니다!';
+
+  @override
+  String get learnKnightsCanJumpOverObstacles => '나이트들은 장애물을 뛰어넘을 수 있습니다!\n탈출하고 별들을 획득하세요!';
+
+  @override
+  String get learnKnightComplete => '축하합니다! 당신은 이제 나이트를 다루실 수 있습니다.';
+
+  @override
+  String get learnThePawn => '폰';
+
+  @override
+  String get learnItMovesForwardOnly => '이 기물은 앞쪽으로만 전진할 수 있습니다.';
+
+  @override
+  String get learnPawnIntro => '폰은 약하지만, 엄청난 잠재력을 가지고 있습니다.';
+
+  @override
+  String get learnPawnsMoveOneSquareOnly => '폰은 한 칸씩만 전진할 수 있습니다.\n하지만 폰이 보드의 반대편에 도달하면, 더 강한 말로 승급합니다!';
+
+  @override
+  String get learnMostOfTheTimePromotingToAQueenIsBest => '보통은 퀸으로 승진하는 것이 가장 좋습니다.\n하지만 상황에 따라서는 나이트도 괜찮은 선택이에요!';
+
+  @override
+  String get learnPawnsMoveForward => '폰은 앞으로만 전진하지만,\n기물을 대각선으로 잡습니다!';
+
+  @override
+  String get learnCaptureThenPromote => '다른 기물을 잡고, 승진하세요!';
+
+  @override
+  String get learnUseAllThePawns => '모든 폰을 사용하세요!\n승급시킬 필요는 없습니다.';
+
+  @override
+  String get learnAPawnOnTheSecondRank => '아직 사용하지 않은 폰은 한번에 두 칸까지도 전진할 수 있습니다!';
+
+  @override
+  String get learnGrabAllTheStarsNoNeedToPromote => '모든 별을 잡으세요! \n승진시킬 필요는 없습니다.';
+
+  @override
+  String get learnPawnComplete => '축하합니다! 이제 폰에 대한 모든 걸 알게 되셨네요.';
+
+  @override
+  String get learnPawnPromotion => '폰 승진';
+
+  @override
+  String get learnYourPawnReachedTheEndOfTheBoard => '폰이 체스판 끝에 도달하였습니다!';
+
+  @override
+  String get learnItNowPromotesToAStrongerPiece => '이제 더 강한 기물로 승진합니다.';
+
+  @override
+  String get learnSelectThePieceYouWant => '원하는 기물을 고르세요!';
+
+  @override
+  String get learnFundamentals => '초급';
+
+  @override
+  String get learnCapture => '공격';
+
+  @override
+  String get learnTakeTheEnemyPieces => '상대의 기물을 잡으세요';
+
+  @override
+  String get learnCaptureIntro => '보호되지 않는 기물을 공격하세요!';
+
+  @override
+  String get learnTakeTheBlackPieces => '상대의 기물을 잡으세요!';
+
+  @override
+  String get learnTakeTheBlackPiecesAndDontLoseYours => '당신의 기물을 보호하면서 상대의 기물을 잡으세요!';
+
+  @override
+  String get learnCaptureComplete => '축하합니다! 체스 기물로 공격하는 법을 배웠군요!';
+
+  @override
+  String get learnProtection => '보호';
+
+  @override
+  String get learnKeepYourPiecesSafe => '당신의 기물을 보호하세요';
+
+  @override
+  String get learnProtectionIntro => '공격받고 있는 기물을 보호하세요!';
+
+  @override
+  String get learnProtectionComplete => '축하합니다! 잃지 않은 기물은 잡은 기물이 됩니다!';
+
+  @override
+  String get learnEscape => '공격받고 있습니다!\n위협에서 벗어나세요!';
+
+  @override
+  String get learnNoEscape => '탈출 할 수는 없지만,\n방어 할 수는 있어요!';
+
+  @override
+  String get learnDontLetThemTakeAnyUndefendedPiece => '모든 기물을 보호하세요!';
+
+  @override
+  String get learnCombat => '전투';
+
+  @override
+  String get learnCaptureAndDefendPieces => '공격하면서 방어하세요';
+
+  @override
+  String get learnCombatIntro => '좋은 병사는 공격과 방어 어느 하나 빠지지 않죠!';
+
+  @override
+  String get learnCombatComplete => '축하합니다! 당신은 체스 기물을 이용해 싸울 수 있습니다!';
+
+  @override
+  String get learnCheckInOne => '한 수 안에 체크하기';
+
+  @override
+  String get learnAttackTheOpponentsKing => '상대의 킹 위협하기';
+
+  @override
+  String get learnCheckInOneIntro => '킹을 공격하세요. 상대는 어쩔 수 없이 방어할 겁니다!';
+
+  @override
+  String get learnCheckInOneGoal => '한 수 안에 상대의 킹을 체크하세요!';
+
+  @override
+  String get learnCheckInOneComplete => '축하합니다! 상대방을 체크하면 상대는 무조건 킹을 방어해야합니다!';
+
+  @override
+  String get learnOutOfCheck => '체크에서 벗어나기';
+
+  @override
+  String get learnDefendYourKing => '킹을 보호하라';
+
+  @override
+  String get learnOutOfCheckIntro => '체크당했습니다! 도망치거나 공격을 막으세요.';
+
+  @override
+  String get learnEscapeWithTheKing => '킹 폐하를 피신시키십시오!';
+
+  @override
+  String get learnTheKingCannotEscapeButBlock => '킹이 탈출할 수 없더라도,\n다른 기물로 공격을 막을 수는 있습니다!';
+
+  @override
+  String get learnYouCanGetOutOfCheckByTaking => '최선의 방어는 공격입니다.\n폐하를 공격하는 기물을 공격하세요!';
+
+  @override
+  String get learnThisKnightIsCheckingThroughYourDefenses => '나이트가 방어를 뚫고 공격합니다!';
+
+  @override
+  String get learnEscapeOrBlock => '폐하를 피신시키거나\n공격을 막으세요!';
+
+  @override
+  String get learnOutOfCheckComplete => '축하합니다! 체크당하면 꼭 벗어나야 함을 명심하세요!';
+
+  @override
+  String get learnMateInOne => '한 수 안에 체크메이트하기';
+
+  @override
+  String get learnDefeatTheOpponentsKing => '상대 킹을 벗어날 수 없는 위협에 가두자';
+
+  @override
+  String get learnMateInOneIntro => '체크메이트란 더 이상 방어할 수 없는 체크 상태입니다. 한마디로 승리죠!';
+
+  @override
+  String get learnAttackYourOpponentsKing => '어느 방법으로도 체크를 피할 수 없도록 빈틈없이 공격하세요!';
+
+  @override
+  String get learnMateInOneComplete => '축하합니다! 이런식으로 이기는 겁니다!';
+
+  @override
+  String get learnIntermediate => '중급';
+
+  @override
+  String get learnBoardSetup => '보드 준비';
+
+  @override
+  String get learnHowTheGameStarts => '체스 기물들의 위치';
+
+  @override
+  String get learnBoardSetupIntro => '전열을 가다듬어라!';
+
+  @override
+  String get learnThisIsTheInitialPosition => '이 배치는 체스의 초기 배치입니다.\n아무 수나 두어 진행하세요.';
+
+  @override
+  String get learnFirstPlaceTheRooks => '우선 룩을 배치해봅시다.\n룩은 구석에 놓여요.';
+
+  @override
+  String get learnThenPlaceTheKnights => '그럼 나이트를 배치해봅시다!\n나이트는 룩 옆에 놓입니다.';
+
+  @override
+  String get learnPlaceTheBishops => '이제 비숍을 배치해봐요!\n비숍은 나이트 옆에 놓입니다.';
+
+  @override
+  String get learnPlaceTheQueen => '퀸을 배치하세요!\n퀸은 자신의 색의 칸 위에 놓입니다.';
+
+  @override
+  String get learnPlaceTheKing => '킹을 놓읍시다!\n퀸 옆에 있어요.';
+
+  @override
+  String get learnPawnsFormTheFrontLine => '폰은 나머지 기물들 앞에 섭니다.\n아무 수나 두어 진행하십시오.';
+
+  @override
+  String get learnBoardSetupComplete => '축하합니다! 이제 당신도 체스판을 구성할 수 있게 되었네요!';
+
+  @override
+  String get learnCastling => '캐슬링';
+
+  @override
+  String get learnTheSpecialKingMove => '왕의 특혜';
+
+  @override
+  String get learnCastlingIntro => '왕을 안전하게 피신시키고, 룩을 세워 공격 태세를 갖춥니다.';
+
+  @override
+  String get learnCastleKingSide => '킹 사이드 캐슬링을 하려면 킹을 두 칸 움직이세요.';
+
+  @override
+  String get learnCastleQueenSide => '퀸 사이드 캐슬링도 킹이 두 칸 움직입니다.';
+
+  @override
+  String get learnTheKnightIsInTheWay => '이런, 나이트가 길을 막고있네요!\n나이트를 치우고, 킹 사이드로 캐슬링합시다.';
+
+  @override
+  String get learnCastleKingSideMovePiecesFirst => '킹 사이드 캐슬링을 하세요!\n캐슬링 전에 킹과 룩 사이의 기물들을 치워야 합니다.';
+
+  @override
+  String get learnCastleQueenSideMovePiecesFirst => '이번엔 퀸 사이드 캐슬링을 하세요!\n캐슬링 전에 킹과 룩 사이의 기물들을 치워야 합니다.';
+
+  @override
+  String get learnYouCannotCastleIfMoved => '이미 킹이나 룩이 이동한 적이 있었다면 캐슬링을 할 수 없습니다.';
+
+  @override
+  String get learnYouCannotCastleIfAttacked => '또한 행로 도중 공격받을 수 있다면 캐슬링을 할 수 없습니다.\n공격을 막고 캐슬링하세요!';
+
+  @override
+  String get learnFindAWayToCastleKingSide => '킹 사이드 캐슬링을 할 방법을 찾아내세요!';
+
+  @override
+  String get learnFindAWayToCastleQueenSide => '퀸 사이드 캐슬링을 할 방법을 찾아내세요!';
+
+  @override
+  String get learnCastlingComplete => '축하합니다! 이제 거의 모든 게임에서 캐슬링을 하겠네요!';
+
+  @override
+  String get learnTheSpecialPawnMove => '폰의 특별한 수';
+
+  @override
+  String get learnEnPassantIntro => '상대 폰이 두 칸씩 움직였다 하더라도 폰이 한 칸만 움직인 상황처럼 잡을 수 있습니다.';
+
+  @override
+  String get learnBlackJustMovedThePawnByTwoSquares => '방금 흑이 폰을 두 칸\n움직였습니다!\n앙파상을 시도해보세요.';
+
+  @override
+  String get learnEnPassantOnlyWorksImmediately => '앙파상은 폰이\n움직인 바로 후에만\n적용됩니다.';
+
+  @override
+  String get learnEnPassantOnlyWorksOnFifthRank => '또한 앙파상은 당신의 폰이 잡을 상대의 폰과 같은 가로줄에 있을 때에만 할 수 있습니다.';
+
+  @override
+  String get learnTakeAllThePawnsEnPassant => '모든 폰들을 앙파상으로 잡으세요!';
+
+  @override
+  String get learnEnPassantComplete => '축하합니다! 이제 지나가던 폰을 놓치진 않겠네요!';
+
+  @override
+  String get learnStalemate => '스테일메이트';
+
+  @override
+  String get learnTheGameIsADraw => '게임이 무승부입니다';
+
+  @override
+  String get learnStalemateIntro => '체크에 걸리지도 않았지만 움직일 수 있는 수가 없는 상황은 무승부, 스테일메이트입니다.';
+
+  @override
+  String get learnStalemateGoal => '흑을 스테일메이트시키려면:\n- 흑은 어느 곳으로도 이동할 수 없어야 합니다.\n- 체크에 걸려서도 안됩니다.';
+
+  @override
+  String get learnStalemateComplete => '축하합니다! 무승부가 패배보다야 낫겠죠!';
+
+  @override
+  String get learnAdvanced => '상급';
+
+  @override
+  String get learnPieceValue => '기물의 가치';
+
+  @override
+  String get learnEvaluatePieceStrength => '기물의 중요성을 평가해봅시다';
+
+  @override
+  String get learnPieceValueIntro => '높은 기동성은 더 높은 가치를 뜻합니다!\n\n퀸 = 9\n룩 = 5\n비숍 = 3\n나이트 = 3\n폰 = 1\n킹은 값어치를 잴 수 없습니다. 킹이 잡힌다는 것은 게임에서 패배한다는 것이니까요. 굳이 따지자면 무한대입니다.';
+
+  @override
+  String get learnQueenOverBishop => '가장 높은 가치의 기물을 잡으세요!\n\n힌트: \n퀸 > 비숍';
+
+  @override
+  String get learnPieceValueExchange => '가장 가치가 높은 기물을 잡으세요!\n 가치가 높은 기물을 더 낮은 기물과\n 교환하지 마세요.';
+
+  @override
+  String get learnPieceValueLegal => '가장 가치가 높은\n기물을 잡으세요!\n가능한 수인지 확인하세요!';
+
+  @override
+  String get learnTakeThePieceWithTheHighestValue => '가장 높은 가치의 기물을 잡으세요!';
+
+  @override
+  String get learnPieceValueComplete => '축하드립니다! 이제 기물의 가치를 아시네요!\n퀸 = 9\n룩 = 5\n비숍 = 3\n나이트 = 3\n폰 = 1';
+
+  @override
+  String get learnCheckInTwo => '두 수 안에 체크하기';
+
+  @override
+  String get learnTwoMovesToGiveCheck => '두 수 만에 위협하기';
+
+  @override
+  String get learnCheckInTwoIntro => '두 수 만에 상대의 킹을 체크시킬 방법을 찾아내세요!';
+
+  @override
+  String get learnCheckInTwoGoal => '두 수 안에 킹을 위협하세요!';
+
+  @override
+  String get learnCheckInTwoComplete => '축하합니다! 상대방을 체크시키면 상대가 둘 수는 제한적으로 변합니다!';
+
+  @override
+  String get learnWhatNext => '더 나아가기';
+
+  @override
+  String get learnYouKnowHowToPlayChess => '축하드립니다, 이제 기본적인 체스 방법을 익히셨네요! 더 강한 체스가 두고 싶으신가요?';
+
+  @override
+  String get learnRegister => '회원가입';
+
+  @override
+  String get learnGetAFreeLichessAccount => '무료 Lichess 계정 받기';
+
+  @override
+  String get learnPractice => '연습';
+
+  @override
+  String get learnLearnCommonChessPositions => '유용한 체스 전략들';
+
+  @override
+  String get learnPuzzles => '퍼즐';
+
+  @override
+  String get learnExerciseYourTacticalSkills => '전술 실력 기르기';
+
+  @override
+  String get learnVideos => '동영상';
+
+  @override
+  String get learnWatchInstructiveChessVideos => '유익한 체스 동영상을 보세요';
+
+  @override
+  String get learnPlayPeople => '다른 사람들과 플레이';
+
+  @override
+  String get learnOpponentsFromAroundTheWorld => '전세계인들과 체스를 두세요';
+
+  @override
+  String get learnPlayMachine => '컴퓨터랑 게임하기';
+
+  @override
+  String get learnTestYourSkillsWithTheComputer => '컴퓨터로 실력을 평가하세요';
+
+  @override
+  String get learnLetsGo => '시작하기';
+
+  @override
+  String learnStageX(String param) {
+    return '스테이지 $param';
+  }
+
+  @override
+  String get learnAwesome => '좋아요!';
+
+  @override
+  String get learnExcellent => '멋져요!';
+
+  @override
+  String get learnGreatJob => '잘 하셨어요!';
+
+  @override
+  String get learnPerfect => '완벽해요!';
+
+  @override
+  String get learnOutstanding => '대단해요!';
+
+  @override
+  String get learnWayToGo => '그렇죠!';
+
+  @override
+  String get learnYesYesYes => '맞아요!';
+
+  @override
+  String get learnYoureGoodAtThis => '잘 하시네요!';
+
+  @override
+  String get learnNailedIt => '바로 그거에요.';
+
+  @override
+  String get learnRightOn => '맞습니다!';
+
+  @override
+  String learnStageXComplete(String param) {
+    return '$param번 퍼즐 완료';
+  }
+
+  @override
+  String get learnNext => '다음';
+
+  @override
+  String learnNextX(String param) {
+    return '다음: $param';
+  }
+
+  @override
+  String get learnBackToMenu => '메뉴로 돌아가기';
+
+  @override
+  String get learnPuzzleFailed => '퍼즐 실패';
+
+  @override
+  String get learnRetry => '다시하기';
+
+  @override
   String get patronDonate => '기부';
 
   @override

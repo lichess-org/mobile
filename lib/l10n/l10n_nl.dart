@@ -1358,6 +1358,527 @@ class AppLocalizationsNl extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Alleen sommige kolommen & rijen oefenen';
 
   @override
+  String get learnLearnChess => 'Leer schaken';
+
+  @override
+  String get learnByPlaying => 'door te spelen!';
+
+  @override
+  String learnProgressX(String param) {
+    return 'Voortgang: $param';
+  }
+
+  @override
+  String get learnResetMyProgress => 'Voortgang verwijderen';
+
+  @override
+  String get learnYouWillLoseAllYourProgress => 'Je zult al je voortgang verliezen!';
+
+  @override
+  String get learnPlay => 'speel!';
+
+  @override
+  String get learnChessPieces => 'Schaakstukken';
+
+  @override
+  String get learnTheRook => 'De toren';
+
+  @override
+  String get learnItMovesInStraightLines => 'Hij beweegt in rechte lijnen';
+
+  @override
+  String get learnRookIntro => 'De toren is een krachtig stuk. Ben je klaar om hem aan te voeren?';
+
+  @override
+  String get learnRookGoal => 'Klik op de toren\nom hem naar de ster te verplaatsen!';
+
+  @override
+  String get learnGrabAllTheStars => 'Grijp alle sterren!';
+
+  @override
+  String get learnTheFewerMoves => 'Hoe minder zetten je doet,\nhoe meer punten je wint!';
+
+  @override
+  String get learnUseTwoRooks => 'Gebruik twee torens\nom sneller klaar te zijn!';
+
+  @override
+  String get learnRookComplete => 'Gefeliciteerd! Je beheerst nu officieel de toren.';
+
+  @override
+  String get learnTheBishop => 'De loper';
+
+  @override
+  String get learnItMovesDiagonally => 'Hij beweegt diagonaal';
+
+  @override
+  String get learnBishopIntro => 'Nu zullen we leren hoe je een loper gebruikt!';
+
+  @override
+  String get learnYouNeedBothBishops => 'Een loper op de witte velden,\neen loper op de zwarte velden.\nJe hebt ze allebei nodig!';
+
+  @override
+  String get learnBishopComplete => 'Gefeliciteerd! Je kunt een loper aanvoeren.';
+
+  @override
+  String get learnTheQueen => 'De dame';
+
+  @override
+  String get learnQueenCombinesRookAndBishop => 'Dame = toren + loper';
+
+  @override
+  String get learnQueenIntro => 'Het machtigste schaakstuk komt binnen. De dame!';
+
+  @override
+  String get learnQueenComplete => 'Gefeliciteerd! De dame heeft geen geheimen meer voor jou.';
+
+  @override
+  String get learnTheKing => 'De koning';
+
+  @override
+  String get learnTheMostImportantPiece => 'Het belangrijkste stuk';
+
+  @override
+  String get learnKingIntro => 'Jij bent de koning. Als je sneuvelt in de strijd is de partij verloren.';
+
+  @override
+  String get learnTheKingIsSlow => 'De koning is traag.';
+
+  @override
+  String get learnLastOne => 'De laatste!';
+
+  @override
+  String get learnKingComplete => 'Je kunt nu de aanvoerder aanvoeren!';
+
+  @override
+  String get learnTheKnight => 'Het paard';
+
+  @override
+  String get learnItMovesInAnLShape => 'Het beweegt in een L-vorm';
+
+  @override
+  String get learnKnightIntro => 'Hier is een uitdaging voor jou. Het paard is... een lastig stuk.';
+
+  @override
+  String get learnKnightsHaveAFancyWay => 'Paarden hebben een mooie manier\nom rond de springen!';
+
+  @override
+  String get learnKnightsCanJumpOverObstacles => 'Paarden kunnen over andere stukken springen!\nOntsnap en doof de sterren!';
+
+  @override
+  String get learnKnightComplete => 'Gefeliciteerd! Je hebt het paard onder de knie.';
+
+  @override
+  String get learnThePawn => 'De pion';
+
+  @override
+  String get learnItMovesForwardOnly => 'Hij kan alleen vooruit bewegen';
+
+  @override
+  String get learnPawnIntro => 'Pionnen zijn zwak, maar hebben veel potentieel.';
+
+  @override
+  String get learnPawnsMoveOneSquareOnly => 'Pionnen bewegen slechts één veld vooruit.\nMaar als ze de andere kant van het bord bereiken, veranderen ze in een sterker stuk!';
+
+  @override
+  String get learnMostOfTheTimePromotingToAQueenIsBest => 'Meestal is promoveren tot dame het beste.\nMaar soms kan een paard handig zijn!';
+
+  @override
+  String get learnPawnsMoveForward => 'Pionnen bewegen voorwaarts,\nmaar slaan schuin!';
+
+  @override
+  String get learnCaptureThenPromote => 'Sla en promoveer meteen!';
+
+  @override
+  String get learnUseAllThePawns => 'Gebruik alle pionnen!\nPromoveren is niet nodig.';
+
+  @override
+  String get learnAPawnOnTheSecondRank => 'Een pion op de tweede rij kan 2 vakjes in één keer bewegen!';
+
+  @override
+  String get learnGrabAllTheStarsNoNeedToPromote => 'Grijp alle sterren!\nPromoveren is niet nodig.';
+
+  @override
+  String get learnPawnComplete => 'Gefeliciteerd! Pionnen hebben geen geheimen meer voor jou.';
+
+  @override
+  String get learnPawnPromotion => 'Pionpromotie';
+
+  @override
+  String get learnYourPawnReachedTheEndOfTheBoard => 'Je pion heeft het einde van het bord bereikt!';
+
+  @override
+  String get learnItNowPromotesToAStrongerPiece => 'Nu promoveert hij tot een sterker stuk.';
+
+  @override
+  String get learnSelectThePieceYouWant => 'Selecteer het stuk dat je wilt!';
+
+  @override
+  String get learnFundamentals => 'Basisprincipes';
+
+  @override
+  String get learnCapture => 'Slaan';
+
+  @override
+  String get learnTakeTheEnemyPieces => 'Sla de vijandelijke stukken';
+
+  @override
+  String get learnCaptureIntro => 'Identificeer de ongedekte stukken van de tegenstander en sla ze!';
+
+  @override
+  String get learnTakeTheBlackPieces => 'Sla de zwarte stukken!';
+
+  @override
+  String get learnTakeTheBlackPiecesAndDontLoseYours => 'Sla de zwarte stukken!\nEn verlies je eigen stukken niet.';
+
+  @override
+  String get learnCaptureComplete => 'Gefeliciteerd! Je weet nu hoe je moet vechten met schaakstukken!';
+
+  @override
+  String get learnProtection => 'Dekken';
+
+  @override
+  String get learnKeepYourPiecesSafe => 'Houd je stukken veilig';
+
+  @override
+  String get learnProtectionIntro => 'Kijk welke stukken door je tegenstander worden aangevallen, en verdedig ze!';
+
+  @override
+  String get learnProtectionComplete => 'Gefeliciteerd! Een stuk dat je niet verliest is een stuk dat je wint!';
+
+  @override
+  String get learnEscape => 'Je wordt aangevallen!\nOntsnap aan de dreiging!';
+
+  @override
+  String get learnNoEscape => 'Er is geen ontsnapping mogelijk,\nmaar je kunt verdedigen!';
+
+  @override
+  String get learnDontLetThemTakeAnyUndefendedPiece => 'Laat hen geen enkel\nongedekt stuk slaan!';
+
+  @override
+  String get learnCombat => 'De strijd';
+
+  @override
+  String get learnCaptureAndDefendPieces => 'Sla en verdedig stukken';
+
+  @override
+  String get learnCombatIntro => 'Een goede krijger kan zowel aanvallen als verdedigen!';
+
+  @override
+  String get learnCombatComplete => 'Gefeliciteerd! Nu weet je hoe je met de schaakstukken moet vechten!';
+
+  @override
+  String get learnCheckInOne => 'Schaak in 1 zet';
+
+  @override
+  String get learnAttackTheOpponentsKing => 'Val de vijandelijke koning aan';
+
+  @override
+  String get learnCheckInOneIntro => 'Om je tegenstander schaak te zetten, moet je hun koning aanvallen. Zij móéten hem verdedigen!';
+
+  @override
+  String get learnCheckInOneGoal => 'Mik op de vijandelijke koning\nin 1 zet!';
+
+  @override
+  String get learnCheckInOneComplete => 'Gefeliciteerd! Je hebt je tegenstander schaak gezet, hem dwingend zijn koning te verdedigen!';
+
+  @override
+  String get learnOutOfCheck => 'Schaak opheffen';
+
+  @override
+  String get learnDefendYourKing => 'Verdedig je koning';
+
+  @override
+  String get learnOutOfCheckIntro => 'Je staat schaak! Je moet ontsnappen of de aanval blokkeren.';
+
+  @override
+  String get learnEscapeWithTheKing => 'Ontsnap met de koning!';
+
+  @override
+  String get learnTheKingCannotEscapeButBlock => 'De koning kan niet ontsnappen,\nmaar je kunt de aanval blokkeren!';
+
+  @override
+  String get learnYouCanGetOutOfCheckByTaking => 'Je kunt ontsnappen uit de aanval\ndoor het aanvallende stuk te slaan.';
+
+  @override
+  String get learnThisKnightIsCheckingThroughYourDefenses => 'Het paard zet je schaak\ndoor je verdediging heen!';
+
+  @override
+  String get learnEscapeOrBlock => 'Ontsnap met de koning of blokkeer de aanval!';
+
+  @override
+  String get learnOutOfCheckComplete => 'Gefeliciteerd! Je koning kan nooit geslagen worden, zorg ervoor dat je je kunt verdedigen als je schaak staat!';
+
+  @override
+  String get learnMateInOne => 'Mat in één';
+
+  @override
+  String get learnDefeatTheOpponentsKing => 'Versla de koning van de tegenstander';
+
+  @override
+  String get learnMateInOneIntro => 'Je wint wanneer je tegenstander zich niet tegen schaak kan verdedigen.';
+
+  @override
+  String get learnAttackYourOpponentsKing => 'Val de vijandelijke koning aan\nop een manier die niet kan worden verdedigd!';
+
+  @override
+  String get learnMateInOneComplete => 'Gefeliciteerd! Dit is hoe je schaakpartijen wint!';
+
+  @override
+  String get learnIntermediate => 'Voor gevorderden';
+
+  @override
+  String get learnBoardSetup => 'Beginstelling';
+
+  @override
+  String get learnHowTheGameStarts => 'Hoe de partij begint';
+
+  @override
+  String get learnBoardSetupIntro => 'De 2 legers staan tegenover elkaar, klaar voor de strijd.';
+
+  @override
+  String get learnThisIsTheInitialPosition => 'Dit is de beginstelling\nvan iedere schaakpartij!\nDoe een willekeurige zet om door te gaan.';
+
+  @override
+  String get learnFirstPlaceTheRooks => 'Plaats eerst de torens!\nZij staan in de hoeken.';
+
+  @override
+  String get learnThenPlaceTheKnights => 'Plaats dan de paarden! Zij staan naast de torens.';
+
+  @override
+  String get learnPlaceTheBishops => 'Plaats de lopers! Zij staan naast de paarden.';
+
+  @override
+  String get learnPlaceTheQueen => 'Plaats de dame! Zij staat op haar eigen kleur.';
+
+  @override
+  String get learnPlaceTheKing => 'Plaats de koning! Aan de zijde van zijn koningin.';
+
+  @override
+  String get learnPawnsFormTheFrontLine => 'Pionnen vormen de frontlinie. \nDoe een willekeurige welke zet om door te gaan.';
+
+  @override
+  String get learnBoardSetupComplete => 'Gefeliciteerd! Nu weet je hoe je het schaakbord moet klaarzetten.';
+
+  @override
+  String get learnCastling => 'Rokeren';
+
+  @override
+  String get learnTheSpecialKingMove => 'De speciale koningszet';
+
+  @override
+  String get learnCastlingIntro => 'Breng je koning naar een veilige plaats, en zet je toren in voor de aanval!';
+
+  @override
+  String get learnCastleKingSide => 'Beweeg je koning twee vakjes\nom aan de koningszijde te rokeren!';
+
+  @override
+  String get learnCastleQueenSide => 'Beweeg je koning twee vakjes\nom aan de dameszijde te rokeren!';
+
+  @override
+  String get learnTheKnightIsInTheWay => 'Het paard staat in de weg!\nVerplaats het en rokeer dan naar de koningszijde.';
+
+  @override
+  String get learnCastleKingSideMovePiecesFirst => 'Rokeer naar de koningszijde!\nJe moet eerst nog stukken uit de weg zetten.';
+
+  @override
+  String get learnCastleQueenSideMovePiecesFirst => 'Rokeer naar de dameszijde!\nJe moet eerst nog stukken uit de weg zetten.';
+
+  @override
+  String get learnYouCannotCastleIfMoved => 'Je kunt niet rokeren als\nde koning al heeft bewogen\nof de toren al heeft bewogen.';
+
+  @override
+  String get learnYouCannotCastleIfAttacked => 'Je kunt niet rokeren als\nde koning onderweg wordt aangevallen.\nBlokkeer het stuk dat je schaak zou zetten en rokeer dan!';
+
+  @override
+  String get learnFindAWayToCastleKingSide => 'Vind een manier om\nnaar de koningszijde te rokeren!';
+
+  @override
+  String get learnFindAWayToCastleQueenSide => 'Vind een manier om\nnaar de dameszijde te rokeren!';
+
+  @override
+  String get learnCastlingComplete => 'Gefeliciteerd! Rokeren is bijna iedere partij een goed idee.';
+
+  @override
+  String get learnTheSpecialPawnMove => 'De speciale pionzet';
+
+  @override
+  String get learnEnPassantIntro => 'Als de vijandige pion twee vakjes tegelijk beweegt, kunt je hem slaan alsof hij maar één vakje heeft bewogen.';
+
+  @override
+  String get learnBlackJustMovedThePawnByTwoSquares => 'Zwart verplaatste zijn pion net\ntwee vakjes vooruit!\nSla hem en passant.';
+
+  @override
+  String get learnEnPassantOnlyWorksImmediately => 'En passant werkt alleen\nonmiddellijk nadat de tegenstander\nde pion heeft verplaatst.';
+
+  @override
+  String get learnEnPassantOnlyWorksOnFifthRank => 'En passant werkt alleen\nwanneer jouw pion op de vijfde rij staat.';
+
+  @override
+  String get learnTakeAllThePawnsEnPassant => 'Sla alle pionnen en passant!';
+
+  @override
+  String get learnEnPassantComplete => 'Gefeliciteerd! U kunt nu en passant slaan.';
+
+  @override
+  String get learnStalemate => 'Patstelling';
+
+  @override
+  String get learnTheGameIsADraw => 'De partij eindigt in remise';
+
+  @override
+  String get learnStalemateIntro => 'Als een speler niet schaak staat, maar ook geen enkele zet meer kan doen, is het pat. De partij eindigt in remise: niemand wint of verliest.';
+
+  @override
+  String get learnStalemateGoal => 'Zet zwart pat door:\n- Zwart geen legale zetten meer te geven\n- Zwart niet schaak te zetten.';
+
+  @override
+  String get learnStalemateComplete => 'Gefeliciteerd! Beter pat staan dan mat staan!';
+
+  @override
+  String get learnAdvanced => 'Meer voor gevorderden';
+
+  @override
+  String get learnPieceValue => 'Waarde van stukken';
+
+  @override
+  String get learnEvaluatePieceStrength => 'Evalueer de kracht van stukken';
+
+  @override
+  String get learnPieceValueIntro => 'Stukken die meer kunnen hebben een hogere waarde!\nDame = 9\nToren = 5\nLoper = 3\nPaard = 3\nPion = 1\nDe koning is onbetaalbaar! Als je hem verliest, verlies je de partij.';
+
+  @override
+  String get learnQueenOverBishop => 'Sla het stuk\nmet de hoogste waarde!\nKoningin > Loper';
+
+  @override
+  String get learnPieceValueExchange => 'Neem het stuk met de hoogste waarde!\n Ruil niet een hoger gewaardeerd stuk in voor een minder waardevol.';
+
+  @override
+  String get learnPieceValueLegal => 'Neem het stuk\nmet de hoogste waarde!\nZorg ervoor dat je zet geldig is!';
+
+  @override
+  String get learnTakeThePieceWithTheHighestValue => 'Sla het stuk\nmet de hoogste waarde!';
+
+  @override
+  String get learnPieceValueComplete => 'Gefeliciteerd! Je kent nu de waarde van materiaal! \nKoningin = 9 \nToren = 5 \nLoper = 3 \nPaard = 3 \nPion = 1';
+
+  @override
+  String get learnCheckInTwo => 'Schaak in twee zetten';
+
+  @override
+  String get learnTwoMovesToGiveCheck => 'Twee zetten om hem schaak te zetten';
+
+  @override
+  String get learnCheckInTwoIntro => 'Vind de juiste twee zetten om de vijandige koning schaak te zetten!';
+
+  @override
+  String get learnCheckInTwoGoal => 'Bedreig de vijandige koning in 2 zetten!';
+
+  @override
+  String get learnCheckInTwoComplete => 'Gefeliciteerd! Je hebt je tegenstander schaak gezet, hem dwingend zijn koning te verdedigen!';
+
+  @override
+  String get learnWhatNext => 'Wat nu?';
+
+  @override
+  String get learnYouKnowHowToPlayChess => 'Je weet hoe je moet schaken, gefeliciteerd! Wil je een sterkere speler worden?';
+
+  @override
+  String get learnRegister => 'Registreren';
+
+  @override
+  String get learnGetAFreeLichessAccount => 'Ontvang een gratis Lichess account';
+
+  @override
+  String get learnPractice => 'Oefenen';
+
+  @override
+  String get learnLearnCommonChessPositions => 'Leer veelvoorkomende schaakposities';
+
+  @override
+  String get learnPuzzles => 'Puzzels';
+
+  @override
+  String get learnExerciseYourTacticalSkills => 'Train je tactische vaardigheden';
+
+  @override
+  String get learnVideos => 'Video\'s';
+
+  @override
+  String get learnWatchInstructiveChessVideos => 'Bekijk leerzame schaakvideo\'s';
+
+  @override
+  String get learnPlayPeople => 'Speel tegen mensen';
+
+  @override
+  String get learnOpponentsFromAroundTheWorld => 'Tegenstanders van over de hele wereld';
+
+  @override
+  String get learnPlayMachine => 'Speel tegen de computer';
+
+  @override
+  String get learnTestYourSkillsWithTheComputer => 'Test je vaardigheden tegen de computer';
+
+  @override
+  String get learnLetsGo => 'Daar gaan we!';
+
+  @override
+  String learnStageX(String param) {
+    return 'Niveau $param';
+  }
+
+  @override
+  String get learnAwesome => 'Geweldig!';
+
+  @override
+  String get learnExcellent => 'Uitstekend!';
+
+  @override
+  String get learnGreatJob => 'Goed gedaan!';
+
+  @override
+  String get learnPerfect => 'Perfect!';
+
+  @override
+  String get learnOutstanding => 'Uitstekend!';
+
+  @override
+  String get learnWayToGo => 'Super, goed gedaan!';
+
+  @override
+  String get learnYesYesYes => 'Yes, yes, yes!';
+
+  @override
+  String get learnYoureGoodAtThis => 'Je bent hier goed in!';
+
+  @override
+  String get learnNailedIt => 'De spijker op de kop.';
+
+  @override
+  String get learnRightOn => 'Juist!';
+
+  @override
+  String learnStageXComplete(String param) {
+    return 'Niveau $param voltooid';
+  }
+
+  @override
+  String get learnNext => 'Volgende';
+
+  @override
+  String learnNextX(String param) {
+    return 'Volgende: $param';
+  }
+
+  @override
+  String get learnBackToMenu => 'Terug naar het menu';
+
+  @override
+  String get learnPuzzleFailed => 'Puzzel mislukt!';
+
+  @override
+  String get learnRetry => 'Opnieuw';
+
+  @override
   String get patronDonate => 'Doneer';
 
   @override

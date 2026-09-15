@@ -1380,6 +1380,527 @@ class AppLocalizationsRo extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Exersează doar câteva coloane și linii';
 
   @override
+  String get learnLearnChess => 'Învață șah';
+
+  @override
+  String get learnByPlaying => 'jucând!';
+
+  @override
+  String learnProgressX(String param) {
+    return 'Progres: $param';
+  }
+
+  @override
+  String get learnResetMyProgress => 'Reia învățarea de la inceput';
+
+  @override
+  String get learnYouWillLoseAllYourProgress => 'Vei pierde tot ce-ai făcut!';
+
+  @override
+  String get learnPlay => 'joacă!';
+
+  @override
+  String get learnChessPieces => 'Piese de șah';
+
+  @override
+  String get learnTheRook => 'Turnul';
+
+  @override
+  String get learnItMovesInStraightLines => 'Se mișcă în linii drepte';
+
+  @override
+  String get learnRookIntro => 'Turnul e o piesă puternică. Ești pregătit s-o mânuiești?';
+
+  @override
+  String get learnRookGoal => 'Dă click pe turn ca să îl aduci pe stea!';
+
+  @override
+  String get learnGrabAllTheStars => 'Prinde toate stelele!';
+
+  @override
+  String get learnTheFewerMoves => 'Cu cât faci mai puține mutări,\ncu atât căștigi mai multe puncte!';
+
+  @override
+  String get learnUseTwoRooks => 'Folosește două turnuri\nca să grăbești lucrurile!';
+
+  @override
+  String get learnRookComplete => 'Felicitări! Ai învățat să stăpânești turnul.';
+
+  @override
+  String get learnTheBishop => 'Nebunul';
+
+  @override
+  String get learnItMovesDiagonally => 'Se mișcă în diagonală';
+
+  @override
+  String get learnBishopIntro => 'Următorul lucru pe care-l vom învăța este manevrarea nebunului!';
+
+  @override
+  String get learnYouNeedBothBishops => 'Un nebun alb,\nun nebun negru.\nAi nevoie de ambii!';
+
+  @override
+  String get learnBishopComplete => 'Felicitări! Poți mânui un nebun.';
+
+  @override
+  String get learnTheQueen => 'Regina';
+
+  @override
+  String get learnQueenCombinesRookAndBishop => 'Regina = Turn + Nebun';
+
+  @override
+  String get learnQueenIntro => 'Cea mai puternică piesă își face intrarea. Majestatea sa regina!';
+
+  @override
+  String get learnQueenComplete => 'Felicitări! Reginele nu au secrete față de tine.';
+
+  @override
+  String get learnTheKing => 'Regele';
+
+  @override
+  String get learnTheMostImportantPiece => 'Cea mai importantă piesă';
+
+  @override
+  String get learnKingIntro => 'Tu ești regele. Când cazi în luptă, jocul e pierdut.';
+
+  @override
+  String get learnTheKingIsSlow => 'Regele este lent.';
+
+  @override
+  String get learnLastOne => 'Ultimul!';
+
+  @override
+  String get learnKingComplete => 'Acum poți comanda comandantul!';
+
+  @override
+  String get learnTheKnight => 'Calul';
+
+  @override
+  String get learnItMovesInAnLShape => 'Se mișcă în formă de L';
+
+  @override
+  String get learnKnightIntro => 'Iată o provocare pentru tine. Calul este... o piesă complicată.';
+
+  @override
+  String get learnKnightsHaveAFancyWay => 'Caii au un mod elegant\nde a face salturi!';
+
+  @override
+  String get learnKnightsCanJumpOverObstacles => 'Caii pot sări peste obstacole!\nEvadează și elimină stelele!';
+
+  @override
+  String get learnKnightComplete => 'Felicitări! Ai învățat să stăpânești calul.';
+
+  @override
+  String get learnThePawn => 'Pionul';
+
+  @override
+  String get learnItMovesForwardOnly => 'Se mișcă doar înainte';
+
+  @override
+  String get learnPawnIntro => 'Pionii sunt slabi, dar au un mare potențial.';
+
+  @override
+  String get learnPawnsMoveOneSquareOnly => 'Pionii se mișcă doar o pătrățică.\nDar atunci când ajung la celălalt capăt al tablei, ei devin piese mai puternice!';
+
+  @override
+  String get learnMostOfTheTimePromotingToAQueenIsBest => 'De cele mai multe ori, promovând pionul într-o regină e cea mai bună alegere.\nDar uneori, un cal poate fi util!';
+
+  @override
+  String get learnPawnsMoveForward => 'Pionii se mișcă înainte,\ndar capturează pe diagonală!';
+
+  @override
+  String get learnCaptureThenPromote => 'Capturează, apoi promovează!';
+
+  @override
+  String get learnUseAllThePawns => 'Folosește toți pionii!\nNu trebuie să-i promovezi.';
+
+  @override
+  String get learnAPawnOnTheSecondRank => 'Un pion de pe a doua linie se poate mișca două pătrățele deodată!';
+
+  @override
+  String get learnGrabAllTheStarsNoNeedToPromote => 'Capturează toate stelele!\nNu e nevoie să promovezi pioni.';
+
+  @override
+  String get learnPawnComplete => 'Felicitări! Pionii nu au secrete față de tine.';
+
+  @override
+  String get learnPawnPromotion => 'Promovarea pionului';
+
+  @override
+  String get learnYourPawnReachedTheEndOfTheBoard => 'Pionul tău a atins capătul tablei!';
+
+  @override
+  String get learnItNowPromotesToAStrongerPiece => 'Acum este promovat într-o piesă mai puternică.';
+
+  @override
+  String get learnSelectThePieceYouWant => 'Alege piesa pe care o vrei!';
+
+  @override
+  String get learnFundamentals => 'Principiile';
+
+  @override
+  String get learnCapture => 'Capturează';
+
+  @override
+  String get learnTakeTheEnemyPieces => 'Ia piesele inamice';
+
+  @override
+  String get learnCaptureIntro => 'Identifică piesele neprotejate ale adversarului și capturează-le!';
+
+  @override
+  String get learnTakeTheBlackPieces => 'Capturează piesele negre!';
+
+  @override
+  String get learnTakeTheBlackPiecesAndDontLoseYours => 'Capturează piesele negre!\nȘi nu le pierde pe ale tale.';
+
+  @override
+  String get learnCaptureComplete => 'Felicitări! Știi cum să lupți cu piesele de șah!';
+
+  @override
+  String get learnProtection => 'Protecție';
+
+  @override
+  String get learnKeepYourPiecesSafe => 'Protejează-ți piesele';
+
+  @override
+  String get learnProtectionIntro => 'Identifică piesele pe care adversarul tău le atacă și protejează-le!';
+
+  @override
+  String get learnProtectionComplete => 'Felicitări! O piesă pe care nu o pierzi este o piesă câștigată!';
+
+  @override
+  String get learnEscape => 'Ești atacat!\nScapă de amenințare!';
+
+  @override
+  String get learnNoEscape => 'Nu ai cum să fugi,\ndar te poți apăra!';
+
+  @override
+  String get learnDontLetThemTakeAnyUndefendedPiece => 'Nu-i lăsa să captureze\npiese neprotejate!';
+
+  @override
+  String get learnCombat => 'Bătălie';
+
+  @override
+  String get learnCaptureAndDefendPieces => 'Capturează și protejează piese';
+
+  @override
+  String get learnCombatIntro => 'Un războinic bun cunoaște și atacul și apărarea!';
+
+  @override
+  String get learnCombatComplete => 'Felicitări! Știi cum să lupți cu piesele de șah!';
+
+  @override
+  String get learnCheckInOne => 'Șah într-o mutare';
+
+  @override
+  String get learnAttackTheOpponentsKing => 'Atacă regele adversarului';
+
+  @override
+  String get learnCheckInOneIntro => 'Ca să dai șah adversarului, atacă-i regele. Va trebui să-l protejeze!';
+
+  @override
+  String get learnCheckInOneGoal => 'Țintește către regele inamic\nîntr-o mutare!';
+
+  @override
+  String get learnCheckInOneComplete => 'Felicitări! Ai dat șah inamicului, forțându-l să-și apere regele!';
+
+  @override
+  String get learnOutOfCheck => 'Ieșirea din șah';
+
+  @override
+  String get learnDefendYourKing => 'Apără-ți regele';
+
+  @override
+  String get learnOutOfCheckIntro => 'Ești în șah! Trebuie să evadezi sau să blochezi atacul.';
+
+  @override
+  String get learnEscapeWithTheKing => 'Scapă cu regele!';
+
+  @override
+  String get learnTheKingCannotEscapeButBlock => 'Regele nu poate scăpa, dar poți bloca atacul!';
+
+  @override
+  String get learnYouCanGetOutOfCheckByTaking => 'Poți ieși din șah capturând piesa care-ți atacă regele.';
+
+  @override
+  String get learnThisKnightIsCheckingThroughYourDefenses => 'Calul dă șah\nprin apărarea ta!';
+
+  @override
+  String get learnEscapeOrBlock => 'Evadează cu regele\nsau blochează atacul!';
+
+  @override
+  String get learnOutOfCheckComplete => 'Felicitări! Regele tău nu trebuie capturat niciodată, așa că asigură-te că-l poți apăra de șah!';
+
+  @override
+  String get learnMateInOne => 'Mat într-o mutare';
+
+  @override
+  String get learnDefeatTheOpponentsKing => 'Înfrânge regele adversarului';
+
+  @override
+  String get learnMateInOneIntro => 'Câștigi când adversarul tău nu se poate apăra de șah.';
+
+  @override
+  String get learnAttackYourOpponentsKing => 'Atacă regele adversarului\nîntr-un mod prin care nu poate fi apărat!';
+
+  @override
+  String get learnMateInOneComplete => 'Felicitări! Așa câștigi jocurile de șah!';
+
+  @override
+  String get learnIntermediate => 'Intermediar';
+
+  @override
+  String get learnBoardSetup => 'Așezarea tablei';
+
+  @override
+  String get learnHowTheGameStarts => 'Cum începe jocul';
+
+  @override
+  String get learnBoardSetupIntro => 'Cele două armate sunt față în față, gata de bătălie.';
+
+  @override
+  String get learnThisIsTheInitialPosition => 'Aceasta este poziția inițială\na fiecărui joc de șah!\nMută orice piesă pentru a continua.';
+
+  @override
+  String get learnFirstPlaceTheRooks => 'Prima dată, așează turnurile!\nEle vor fi în colțuri.';
+
+  @override
+  String get learnThenPlaceTheKnights => 'Apoi caii!\nVor fi lângă turnuri.';
+
+  @override
+  String get learnPlaceTheBishops => 'Așează nebunii!\nVor fi lângă cai.';
+
+  @override
+  String get learnPlaceTheQueen => 'Așează regina!\nVa fi pusă pe culoarea ei.';
+
+  @override
+  String get learnPlaceTheKing => 'Așează regele!\nFix lângă regina sa.';
+
+  @override
+  String get learnPawnsFormTheFrontLine => 'Pionii formează prima linie.\nMută oricare piesă pentru a continua.';
+
+  @override
+  String get learnBoardSetupComplete => 'Felicitări! Știi cum să pregătești tabla de șah.';
+
+  @override
+  String get learnCastling => 'Rocada';
+
+  @override
+  String get learnTheSpecialKingMove => 'Mutarea specială a regelui';
+
+  @override
+  String get learnCastlingIntro => 'Adu-ți regele la adăpost, și scoate-ți turnul pentru atac!';
+
+  @override
+  String get learnCastleKingSide => 'Mută-ți regele două pătrățele\npentru a face rocada mică!';
+
+  @override
+  String get learnCastleQueenSide => 'Mută-ți regele două pătrățele\npentru a face rocada mare!';
+
+  @override
+  String get learnTheKnightIsInTheWay => 'Calul stă în cale!\nMută-l, apoi fă rocada mică.';
+
+  @override
+  String get learnCastleKingSideMovePiecesFirst => 'Fă rocada mică!\nTrebuie să-ți muți piesele din cale mai întâi.';
+
+  @override
+  String get learnCastleQueenSideMovePiecesFirst => 'Fă rocada mare!\nTrebuie să-ți muți piesele din cale mai întâi.';
+
+  @override
+  String get learnYouCannotCastleIfMoved => 'Nu poți face rocada dacă\nregele sau turnul au fost\ndeja mutate.';
+
+  @override
+  String get learnYouCannotCastleIfAttacked => 'Nu poți face rocada dacă\nregele este atacat.\nBlochează atacul, iar apoi fă rocada!';
+
+  @override
+  String get learnFindAWayToCastleKingSide => 'Găsește o cale\nprin care să faci rocada mică!';
+
+  @override
+  String get learnFindAWayToCastleQueenSide => 'Găsește o cale prin care\nsă faci rocada mare!';
+
+  @override
+  String get learnCastlingComplete => 'Felicitări! Ar trebui să faci rocada mai mereu.';
+
+  @override
+  String get learnTheSpecialPawnMove => 'Mutarea de pion specială';
+
+  @override
+  String get learnEnPassantIntro => 'Când pionul oponentului a fost mutat două pătrățele, îl poți captura ca și cum ar fi mutat doar o pătrățică.';
+
+  @override
+  String get learnBlackJustMovedThePawnByTwoSquares => 'Jucătorul cu piesele negre tocmai\na mutat pionul două pătrățele!\nIa-l prin mișcarea en passant.';
+
+  @override
+  String get learnEnPassantOnlyWorksImmediately => 'Mișcarea en passant funcționează doar\no mutare după ce adversarul a mutat pionul.';
+
+  @override
+  String get learnEnPassantOnlyWorksOnFifthRank => 'Mișcarea en passant merge doar\ndacă pionul tău este pe al 5-lea rând.';
+
+  @override
+  String get learnTakeAllThePawnsEnPassant => 'Ia toți pionii prin mișcarea en passant!';
+
+  @override
+  String get learnEnPassantComplete => 'Felicitări! Ai învățat să capturezi prin mișcarea en passant.';
+
+  @override
+  String get learnStalemate => 'Pat';
+
+  @override
+  String get learnTheGameIsADraw => 'Acest meci este o remiză';
+
+  @override
+  String get learnStalemateIntro => 'Când un jucător nu este în șah și nu are nicio mutare validă, este pat. Meciul e o remiză: nimeni nu câștigă, nimeni nu pierde.';
+
+  @override
+  String get learnStalemateGoal => 'Ca să dai pat jucătorului cu piesele negre, va trebui ca el:\n- Să nu poată muta vreo piesă.\n- Să nu fie în șah.';
+
+  @override
+  String get learnStalemateComplete => 'Felicitări! Mai bine să fie pat decât să pierzi!';
+
+  @override
+  String get learnAdvanced => 'Avansat';
+
+  @override
+  String get learnPieceValue => 'Valoarea piesei';
+
+  @override
+  String get learnEvaluatePieceStrength => 'Evaluează puterea piesei';
+
+  @override
+  String get learnPieceValueIntro => 'Piesele cu mobilitate mare au o valoare mai mare!\nRegina = 9\nTurnul = 5\nNebunul = 3\nCalul = 3\nPionul = 1\nRegele este de neprețuit! Pierzându-l, pierzi jocul.';
+
+  @override
+  String get learnQueenOverBishop => 'Capturează piesa\ncu cea mai mare valoare!\nRegina > Nebunul';
+
+  @override
+  String get learnPieceValueExchange => 'Capturează piesa cu cea mai mare valoare!\n Nu schimba\n o piesă cu o valoare mai mare pentru una mai puțin valoroasă.';
+
+  @override
+  String get learnPieceValueLegal => 'Capturează piesa\ncu cea mai mare valoare!\nAsigură-te că mutarea ta este permisă!';
+
+  @override
+  String get learnTakeThePieceWithTheHighestValue => 'Capturează piesa\ncu cea mai mare valoare!';
+
+  @override
+  String get learnPieceValueComplete => 'Felicitări! Acum știi valoarea pieselor!\nRegina = 9\nTurnul = 5\nNebunul = 3\nCalul = 3\nPionul = 1';
+
+  @override
+  String get learnCheckInTwo => 'Șah mat în două mutări';
+
+  @override
+  String get learnTwoMovesToGiveCheck => 'Două mutări pentru a da șah';
+
+  @override
+  String get learnCheckInTwoIntro => 'Găsește combinația corectă de două mutări care dă șah regelui advers!';
+
+  @override
+  String get learnCheckInTwoGoal => 'Amenință regele adversarului\nîn două mutări!';
+
+  @override
+  String get learnCheckInTwoComplete => 'Felicitări! Ai dat șah adversarului tău, forțându-l să-și apere regele!';
+
+  @override
+  String get learnWhatNext => 'Ce urmează?';
+
+  @override
+  String get learnYouKnowHowToPlayChess => 'Știi cum să joci șah, felicitări! Vrei să devii un jucător mai puternic?';
+
+  @override
+  String get learnRegister => 'Înregistrează-te';
+
+  @override
+  String get learnGetAFreeLichessAccount => 'Obține un cont Lichess gratuit';
+
+  @override
+  String get learnPractice => 'Antrenament';
+
+  @override
+  String get learnLearnCommonChessPositions => 'Învață poziții des întâlnite în șah';
+
+  @override
+  String get learnPuzzles => 'Probleme de șah';
+
+  @override
+  String get learnExerciseYourTacticalSkills => 'Exersează-ți abilitățile tactice';
+
+  @override
+  String get learnVideos => 'Video-uri';
+
+  @override
+  String get learnWatchInstructiveChessVideos => 'Urmărește video-uri educative despre șah';
+
+  @override
+  String get learnPlayPeople => 'Joacă cu oameni';
+
+  @override
+  String get learnOpponentsFromAroundTheWorld => 'Adversari din toată lumea';
+
+  @override
+  String get learnPlayMachine => 'Joacă cu calculatorul';
+
+  @override
+  String get learnTestYourSkillsWithTheComputer => 'Testează-ți abilitățile cu calculatorul';
+
+  @override
+  String get learnLetsGo => 'Să începem!';
+
+  @override
+  String learnStageX(String param) {
+    return 'Etapa $param';
+  }
+
+  @override
+  String get learnAwesome => 'Minunat!';
+
+  @override
+  String get learnExcellent => 'Excelent!';
+
+  @override
+  String get learnGreatJob => 'Bună treabă!';
+
+  @override
+  String get learnPerfect => 'Perfect!';
+
+  @override
+  String get learnOutstanding => 'Remarcabil!';
+
+  @override
+  String get learnWayToGo => 'Bravo!';
+
+  @override
+  String get learnYesYesYes => 'Da, da, da!';
+
+  @override
+  String get learnYoureGoodAtThis => 'Ești bun la asta!';
+
+  @override
+  String get learnNailedIt => 'Ai nimerit-o.';
+
+  @override
+  String get learnRightOn => 'La fix!';
+
+  @override
+  String learnStageXComplete(String param) {
+    return 'Etapa $param completă';
+  }
+
+  @override
+  String get learnNext => 'Urmează';
+
+  @override
+  String learnNextX(String param) {
+    return 'Urmează: $param';
+  }
+
+  @override
+  String get learnBackToMenu => 'Înapoi la meniu';
+
+  @override
+  String get learnPuzzleFailed => 'Puzzle eșuat!';
+
+  @override
+  String get learnRetry => 'Încearcă din nou';
+
+  @override
   String get patronDonate => 'Donează';
 
   @override

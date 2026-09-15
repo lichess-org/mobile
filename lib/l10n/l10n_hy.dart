@@ -1358,6 +1358,527 @@ class AppLocalizationsHy extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Practice only some files & ranks';
 
   @override
+  String get learnLearnChess => 'Սովորեք շախմատ';
+
+  @override
+  String get learnByPlaying => 'խաղալով';
+
+  @override
+  String learnProgressX(String param) {
+    return 'Հաղթահարված է` $param';
+  }
+
+  @override
+  String get learnResetMyProgress => 'Զրոյացնել առաջխաղացումս';
+
+  @override
+  String get learnYouWillLoseAllYourProgress => 'Դուք կկորցնեք Ձեր բոլոր միավորները';
+
+  @override
+  String get learnPlay => 'Խաղա՛լ';
+
+  @override
+  String get learnChessPieces => 'Խաղաքարեր';
+
+  @override
+  String get learnTheRook => 'Նավակ';
+
+  @override
+  String get learnItMovesInStraightLines => 'Այն տեղաշարժվում է ուղիղ գծերով';
+
+  @override
+  String get learnRookIntro => 'Նավակը ուժեղ խաղաքար է: Պատրա՞ստ եք ղեկավարել նրան։';
+
+  @override
+  String get learnRookGoal => 'Սեղմեք նավակի վրա` աստղին հասցնելու համար։';
+
+  @override
+  String get learnGrabAllTheStars => 'Հավաքե՛ք բոլոր աստղերը։';
+
+  @override
+  String get learnTheFewerMoves => 'Ինչքան քիչ քայլ եք կատարում, այնքան շատ միավոր եք ստանում:';
+
+  @override
+  String get learnUseTwoRooks => 'Օգտագործեք երկու նավակ, որպեսզի արագացնեք ամենը';
+
+  @override
+  String get learnRookComplete => 'Շնորհավորում ենք: Դուք արդեն վարպետացել եք նավակի հարցում:';
+
+  @override
+  String get learnTheBishop => 'Փիղ';
+
+  @override
+  String get learnItMovesDiagonally => 'Տեղաշարժվում է անկյունագծերով';
+
+  @override
+  String get learnBishopIntro => 'Հաջորդը մենք կսովորենք, թե ինչպես է մանևրում փիղը';
+
+  @override
+  String get learnYouNeedBothBishops => 'Մեկ սպիտակադաշտ փիղ,\nմեկ սևադաշտ փիղ:\nՁեզ երկուսն էլ անհրաժեշտ են';
+
+  @override
+  String get learnBishopComplete => 'Շնորհավորում ենք, Դուք արդեն տիրապետում եք փղի քայլերին:';
+
+  @override
+  String get learnTheQueen => 'Թագուհի';
+
+  @override
+  String get learnQueenCombinesRookAndBishop => 'Թագուհի = նավակ + փիղ';
+
+  @override
+  String get learnQueenIntro => 'Շախմատի ամենաուժեղ խաղաքարը: Նորին Մեծություն Թագուհին։';
+
+  @override
+  String get learnQueenComplete => 'Շնորհավորում ենք: Թագուհին գաղտանզերծված է Ձեզ համար:';
+
+  @override
+  String get learnTheKing => 'Արքա';
+
+  @override
+  String get learnTheMostImportantPiece => 'Ամենակարևոր խաղաքարը';
+
+  @override
+  String get learnKingIntro => 'Դուք արքան եք: Եթե զոհվեք ճակատամարտում՝ խաղը կավարտվի։';
+
+  @override
+  String get learnTheKingIsSlow => 'Արքան դանդաղաշարժ է։';
+
+  @override
+  String get learnLastOne => 'Վերջինը';
+
+  @override
+  String get learnKingComplete => 'Հիմա կարող ես ղեկավարել հրամանատարին:';
+
+  @override
+  String get learnTheKnight => 'Ձի';
+
+  @override
+  String get learnItMovesInAnLShape => 'Այն քայլում է L տառի նման';
+
+  @override
+  String get learnKnightIntro => 'Ահա և խնդիր քեզ համար: Ձին խորամանկ խաղաքար է։';
+
+  @override
+  String get learnKnightsHaveAFancyWay => 'Ձիերը բավականին արտասովոր թռիչքներ են կատարում։';
+
+  @override
+  String get learnKnightsCanJumpOverObstacles => 'Ձիերը կարող են ցատկել արգելքների վրայով։ Ցատկե՜ք և հավաքե՜ք աստղերը։';
+
+  @override
+  String get learnKnightComplete => 'Շնորհավորո՜ւմ ենք։ Դուք յուրացրիք «ձիավարությունը»։';
+
+  @override
+  String get learnThePawn => 'Զինվոր';
+
+  @override
+  String get learnItMovesForwardOnly => 'Քայլում է միայն առաջ';
+
+  @override
+  String get learnPawnIntro => 'Զինվորները թույլ են, սակայն ունեն մեծ ներուժ։';
+
+  @override
+  String get learnPawnsMoveOneSquareOnly => 'Զինվորները քայլում են միայն մեկ վանդակ առաջ։ Բայց, հասնելով խաղատախտակի մյուս ծայրին, վերածվում են ուժեղ խաղաքարի։';
+
+  @override
+  String get learnMostOfTheTimePromotingToAQueenIsBest => 'Մեծ մասամբ զինվորը լավ է վերածել թագուհու։\nԲայց երբեմն ձիու վերածելն ավելի նպատակահարմար է լինում։';
+
+  @override
+  String get learnPawnsMoveForward => 'Զինվորները քայլում են առաջ, բայց հարվածում են անկյունագծերով։';
+
+  @override
+  String get learnCaptureThenPromote => 'Հարվածեք, այնուհետև վերածեք';
+
+  @override
+  String get learnUseAllThePawns => 'Օգտագործե՛ք բոլոր զինվորները։ Պարտադիր չէ դրանք վերածելը։';
+
+  @override
+  String get learnAPawnOnTheSecondRank => '2-րդ հորիզոնականում գտնվող զինվորը կարող է մեկ քայլով առաջ գնալ երկու վանդակ։';
+
+  @override
+  String get learnGrabAllTheStarsNoNeedToPromote => 'Հավաքե՛ք բոլոր աստղերը։ Պարտադիր չէ բոլոր զինվորները վերածելը։';
+
+  @override
+  String get learnPawnComplete => 'Շնորհավորում ենք: Զինվորները ձեզնից գաղտնիքներ չունեն։';
+
+  @override
+  String get learnPawnPromotion => 'Զինվորի վերածումը';
+
+  @override
+  String get learnYourPawnReachedTheEndOfTheBoard => 'Ձեր զինվորը հասել է խաղատախտակի եզրին։';
+
+  @override
+  String get learnItNowPromotesToAStrongerPiece => 'Այժմ այն կվերածվի ուժեղ խաղաքարի։';
+
+  @override
+  String get learnSelectThePieceYouWant => 'Ընտրե՛ք այն խաղաքարը, որը ցանկանում եք։';
+
+  @override
+  String get learnFundamentals => 'Հիմնական մակարդակ';
+
+  @override
+  String get learnCapture => 'Խաղաքարի հարվածում';
+
+  @override
+  String get learnTakeTheEnemyPieces => 'Վերցրեք մրցակցի խաղաքարերը';
+
+  @override
+  String get learnCaptureIntro => 'Գտե՛ք մրցակցի անպաշտպան խաղաքարերը և վերցրե՛ք։';
+
+  @override
+  String get learnTakeTheBlackPieces => 'Վերցրե՛ք սև խաղաքարերը։';
+
+  @override
+  String get learnTakeTheBlackPiecesAndDontLoseYours => 'Վերցրե՛ք բոլոր սև խաղաքարերը։ Եվ չկորցնեք ձերը։';
+
+  @override
+  String get learnCaptureComplete => 'Շնորհավորո՜ւմ ենք։ Այժմ դուք գիտե՜ք, ինչպես պայքարել շախմատի խաղաքարերով։';
+
+  @override
+  String get learnProtection => 'Պաշտպանություն';
+
+  @override
+  String get learnKeepYourPiecesSafe => 'Պաշտպանեք ձեր խաղաքարերը';
+
+  @override
+  String get learnProtectionIntro => 'Որոշե՛ք` ձեր որ խաղաքարերն է գրոհել մրցակիցը և պաշտպանե՛ք դրանք։';
+
+  @override
+  String get learnProtectionComplete => 'Շնորհավորո՜ւմ ենք։ Այն խաղաքարը, որը դուք տանուլ չեք տվել, շահած խաղաքար է։';
+
+  @override
+  String get learnEscape => 'Ձեզ գրոհո՜ւմ են։ Խուսափե՜ք սպառնալիքից։';
+
+  @override
+  String get learnNoEscape => 'Փախչել հնարավոր չէ, բայց կարելի՜ է պաշտպանել։';
+
+  @override
+  String get learnDontLetThemTakeAnyUndefendedPiece => 'Թույլ մի՛ տվեք վերցնել ոչ մի անպաշտպան խաղաքար։';
+
+  @override
+  String get learnCombat => 'Պայքար';
+
+  @override
+  String get learnCaptureAndDefendPieces => 'Հարվածեք և պաշտպանեք խաղաքարերը';
+
+  @override
+  String get learnCombatIntro => 'Լավ զինվորը գիտի ինչպես հարձակվելը, այնպես էլ պաշտպանվելը։';
+
+  @override
+  String get learnCombatComplete => 'Շնորհավորո՜ւմ ենք։ Այժմ դուք գիտե՜ք, ինչպես պայքարել շախմատի խաղաքարերով։';
+
+  @override
+  String get learnCheckInOne => 'Շախ';
+
+  @override
+  String get learnAttackTheOpponentsKing => 'Գրոհեք հակառակորդի արքան';
+
+  @override
+  String get learnCheckInOneIntro => 'Շախ հայտարարելու համար հարձակվե՛ք մրցակցի արքայի վրա։ Նա ստիպված պետք է պաշտպանվի։';
+
+  @override
+  String get learnCheckInOneGoal => 'Թիրախավորե՛ք մրցակցի արքային մեկ քայլով։';
+
+  @override
+  String get learnCheckInOneComplete => 'Շնորհավորո՜ւմ ենք։ Դուք շախ հայտարարեցիք մրցակցին` ստիպելով պաշտպանել արքային։';
+
+  @override
+  String get learnOutOfCheck => 'Ազատում շախից';
+
+  @override
+  String get learnDefendYourKing => 'Պաշտպանեք ձեր արքան';
+
+  @override
+  String get learnOutOfCheckIntro => 'Ձեզ շա՛խ։ Դուք պետք է հեռանաք կամ ծածկվեք գրոհից։';
+
+  @override
+  String get learnEscapeWithTheKing => 'Արքան փախչո՜ւմ է։';
+
+  @override
+  String get learnTheKingCannotEscapeButBlock => 'Արքան չի կարող հեռանալ, բայց դուք կարող եք պաշտպանել նրան։';
+
+  @override
+  String get learnYouCanGetOutOfCheckByTaking => 'Դուք կարող եք ազատվել շախից` վերցնելով գրոհող խաղաքարը։';
+
+  @override
+  String get learnThisKnightIsCheckingThroughYourDefenses => 'Ձին շախ է տալիս արքային նրա պաշտպանության միջով։';
+
+  @override
+  String get learnEscapeOrBlock => 'Հեռացրե՛ք արքան գրոհի տակից կամ պաշտպանե՛ք նրան։';
+
+  @override
+  String get learnOutOfCheckComplete => 'Շնորհավորո՜ւմ ենք։ Ձեր արքան հնարավոր չէ վերցնել, բայց համոզվեք, որ դուք կարող եք նրան պաշտպանել շախից։';
+
+  @override
+  String get learnMateInOne => 'Մատ 1 քայլից';
+
+  @override
+  String get learnDefeatTheOpponentsKing => 'Ջախջախեք մրցակցի արքան';
+
+  @override
+  String get learnMateInOneIntro => 'Դուք կհաղթեք, եթե ձեր մրցակիցը չկարողանա պաշտպանվել շախից։';
+
+  @override
+  String get learnAttackYourOpponentsKing => 'Գրոհե՛ք մրցակցի արքային այնպես, որ նրան հնարավոր չլինի պաշտպանել։';
+
+  @override
+  String get learnMateInOneComplete => 'Շնորհավորո՛ւմ ենք։ Հենց այսպես էլ Դուք կհաղթեք պարտիաներում։';
+
+  @override
+  String get learnIntermediate => 'Միջին մակարդակ';
+
+  @override
+  String get learnBoardSetup => 'Խաղաքարերի դասավորությունը';
+
+  @override
+  String get learnHowTheGameStarts => 'Շախմատային պարտիայի սկիզբը';
+
+  @override
+  String get learnBoardSetupIntro => 'Մարտի պատրաստ երկու բանակները հանդիպել են դեմ առ դեմ։';
+
+  @override
+  String get learnThisIsTheInitialPosition => 'Սա շախմատի սկզբնական դիրքն է։ Շարունակելու համար կատարեք որևէ քայլ։';
+
+  @override
+  String get learnFirstPlaceTheRooks => 'Սկզբում տեղադրեք նավակները։ Նրանք գտնվում են անկյուններում։';
+
+  @override
+  String get learnThenPlaceTheKnights => 'Այնուհետև տեղադրեք ձիերը։ Նրանք գտնվում են նավակների կողքին։';
+
+  @override
+  String get learnPlaceTheBishops => 'Տեղադրեք փղերը։ Նրանց տեղը ձիերի կողքին է։';
+
+  @override
+  String get learnPlaceTheQueen => 'Տեղադրեք թագուհին։ Նա սիրում է իր գույնը։';
+
+  @override
+  String get learnPlaceTheKing => 'Տեղադրեք արքան։ Նա կանգնում է թագուհու կողքին։';
+
+  @override
+  String get learnPawnsFormTheFrontLine => 'Զինվորները խաղաքարերի առաջ շարվել են մեկ գծով։\nՇարունակելու համար կատարեք որևէ քայլ։';
+
+  @override
+  String get learnBoardSetupComplete => 'Շնորհավորո՜ւմ ենք։ Այժմ դուք գիտե՜ք, թե ինչպես պետք է շարեք խաղաքարերը շախմատի տախտակին։';
+
+  @override
+  String get learnCastling => 'Փոխատեղում';
+
+  @override
+  String get learnTheSpecialKingMove => 'Արքայի յուրահատուկ քայլ';
+
+  @override
+  String get learnCastlingIntro => 'Արքան տեղափոխեք ապահով տեղ, և նավակը դուրս բերեք մարտի։';
+
+  @override
+  String get learnCastleKingSide => 'Տեղաշարժեք ձեր արքան երկու վանդակ դեպի արքայական թևի նավակը՝ կարճ փոխատեղում կատարելու համար։';
+
+  @override
+  String get learnCastleQueenSide => 'Տեղաշարժեք ձեր արքան երկու վանդակ դեպի թագուհու թևի նավակը՝ երկար փոխատեղում կատարելու համար։';
+
+  @override
+  String get learnTheKnightIsInTheWay => 'Ձին արդեն ճանապարհ է ընկել։ Արեք ձիով քայլ, այնուհետև կատարեք կարճ փոխատեղում։';
+
+  @override
+  String get learnCastleKingSideMovePiecesFirst => 'Կարճ փոխատեղո՜ւմ։ Սկզբում պետք է դուրս բերեք խաղաքարերը։';
+
+  @override
+  String get learnCastleQueenSideMovePiecesFirst => 'Երկար փոխատեղո՜ւմ։ Սկզբում պետք է դուրս բերեք խաղաքարերը։';
+
+  @override
+  String get learnYouCannotCastleIfMoved => 'Դուք չեք կարող կատարել փոխատեղում, եթե դրան մասնակցող արքան կամ նավակը արդեն քայլել են։';
+
+  @override
+  String get learnYouCannotCastleIfAttacked => 'Դուք չեք կարող կատարել փոխատեղում, եթե փոխատեղման ճանապարհին արքան հայտնվում է շախի տակ։ Նախ պաշտպանեք ճանապարհը, ապա փոխատեղեք։';
+
+  @override
+  String get learnFindAWayToCastleKingSide => 'Գտե՛ք կարճ փոխատեղում կատարելու եղանակը։';
+
+  @override
+  String get learnFindAWayToCastleQueenSide => 'Գտե՛ք երկար փոխատեղում կատարելու եղանակը։';
+
+  @override
+  String get learnCastlingComplete => 'Շնորհավորո՜ւմ ենք։ Գրեթե բոլոր պարտիաներում պետք է կատարել փոխատեղում։';
+
+  @override
+  String get learnTheSpecialPawnMove => 'Զինվորի յուրահատուկ քայլ';
+
+  @override
+  String get learnEnPassantIntro => 'Երբ մրցակցի զինվորը շարժվում է երկու վանդակ առաջ, Դուք կարող եք այն վերցնել, ասես այն առաջ է եկել մեկ վանդակ։';
+
+  @override
+  String get learnBlackJustMovedThePawnByTwoSquares => 'Սևերի զինվորը հենց նոր երկու դաշտ առաջ եկավ։ Վերցրե՛ք այն կողանցիկ հարվածով։';
+
+  @override
+  String get learnEnPassantOnlyWorksImmediately => 'Զինվորը հնարավոր է վերցնել կողանցիկ հարվածով անմիջապես այդ զինվորով քայլ կատարելուց հետո։';
+
+  @override
+  String get learnEnPassantOnlyWorksOnFifthRank => 'Կողանցիկ հարվածը հնարավոր է, եթե Ձեր զինվորը 5-րդ հորիզոնականում է։';
+
+  @override
+  String get learnTakeAllThePawnsEnPassant => 'Վերցրե՛ք բոլոր զինվորները կողանցիկ հարվածով։';
+
+  @override
+  String get learnEnPassantComplete => 'Շնորհավորո՜ւմ ենք։ Դուք արդեն կարող եք կատարել կողանցիկ հարված։';
+
+  @override
+  String get learnStalemate => 'Պատ';
+
+  @override
+  String get learnTheGameIsADraw => 'Խաղն ավարտվում է ոչ-ոքի։';
+
+  @override
+  String get learnStalemateIntro => 'Եթե այն խաղացողը, որի քայլի հերթն է, անելու քայլ չունի, և նրա արքան շախի տակ չէ, այդ իրավիճակը կոչվում է  «պատ»։ Խաղն ավարտվում է ոչ-ոքի․ ոչ ոք չի հաղթել, ոչ ոք չի պարտվել։';
+
+  @override
+  String get learnStalemateGoal => 'Պատ սևերին․\n- Սևերը քայլ անել չեն կարող։\n- Սևերի արքան շախի տակ չէ։';
+
+  @override
+  String get learnStalemateComplete => 'Շնորհավորո՜ւմ ենք։ Ավելի լավ է ստանալ պատ, քան մատ։';
+
+  @override
+  String get learnAdvanced => 'Առաջադեմ մակարդակ';
+
+  @override
+  String get learnPieceValue => 'Խաղաքարերի արժեքը';
+
+  @override
+  String get learnEvaluatePieceStrength => 'Գնահատեք խաղաքարի ուժը';
+
+  @override
+  String get learnPieceValueIntro => 'Բարձր շարժունակությամբ խաղաքարերն ունեն ավելի բարձր արժեք։\nԹագուհի = 9\nՆավակ = 5\nՓիղ = 3\nՁի = 3\nԶինվոր = 1\nԱրքան անգի՜ն է։ Նրա կորուստը նշանակում է պարտություն։';
+
+  @override
+  String get learnQueenOverBishop => 'Գրոհե՛ք ավելի բարձր արժեքով խաղաքարերը։\nԹագուհի > Փիղ';
+
+  @override
+  String get learnPieceValueExchange => 'Վերցրե՛ք ամենաարժեքավոր խաղաքարը։\nՄի՛ փոխանակեք արժեքավոր խաղաքարը պակաս արժեքավորի հետ։';
+
+  @override
+  String get learnPieceValueLegal => 'Վերցրե՛ք \nամենաարժեքավոր խաղաքարը։\nՀամոզվե՛ք, որ քայլը հնարավոր է։';
+
+  @override
+  String get learnTakeThePieceWithTheHighestValue => 'Գրոհե՛ք ավելի բարձր արժեքով խաղաքարերը։';
+
+  @override
+  String get learnPieceValueComplete => 'Շնորհավորո՜ւմ ենք։ Դուք գիտեք խաղաքարերի արժեքները։\nԹագուհի = 9\nՆավակ = 5\nՓիղ = 3\nՁի = 3\nԶինվոր = 1';
+
+  @override
+  String get learnCheckInTwo => 'Շախ երկու քայլից';
+
+  @override
+  String get learnTwoMovesToGiveCheck => 'Շախ հայտարարելու համար տրվում է երկու քայլ';
+
+  @override
+  String get learnCheckInTwoIntro => 'Գտե՛ք երկքայլանի կոմբինացիա, որպեսզի մրցակցի արքային շախ հայտարարեք։';
+
+  @override
+  String get learnCheckInTwoGoal => 'Երկու քայլում ստեղծե՛ք սպառնալիք մրցակցի արքային։';
+
+  @override
+  String get learnCheckInTwoComplete => 'Շնորհավորո՜ւմ ենք։ Դուք շախ հայտարարեցիք մրցակցին` ստիպելով պաշտպանել արքային։';
+
+  @override
+  String get learnWhatNext => 'Հետո՞';
+
+  @override
+  String get learnYouKnowHowToPlayChess => 'Դուք սովորեցիք շախմատ խաղալ, շնորհավորում ենք: Ցանկանո՞ւմ եք դառնալ ավելի ուժեղ խաղացող։';
+
+  @override
+  String get learnRegister => 'Գրանցում';
+
+  @override
+  String get learnGetAFreeLichessAccount => 'Գրանցվե՛ք Lichess-ում անվճար';
+
+  @override
+  String get learnPractice => 'Զբաղվել, Պարապել';
+
+  @override
+  String get learnLearnCommonChessPositions => 'Ուսումնասիրեք  շախմատային ընդհանուր շախմատային դիրքերը';
+
+  @override
+  String get learnPuzzles => 'Խնդիրներ';
+
+  @override
+  String get learnExerciseYourTacticalSkills => 'Մարզեք Ձեր մարտավարական ունակությունները';
+
+  @override
+  String get learnVideos => 'Տեսանյութեր';
+
+  @override
+  String get learnWatchInstructiveChessVideos => 'Դիտեք ուսուցանող տեսանյութերը';
+
+  @override
+  String get learnPlayPeople => 'Խաղացողներ';
+
+  @override
+  String get learnOpponentsFromAroundTheWorld => 'Խաղացեք ամբողջ աշխարհի շախմատիստների հետ';
+
+  @override
+  String get learnPlayMachine => 'Համակարգիչ';
+
+  @override
+  String get learnTestYourSkillsWithTheComputer => 'Ստուգեք Ձեր հմտությունները համակարգչով';
+
+  @override
+  String get learnLetsGo => 'Գնացի՜նք։';
+
+  @override
+  String learnStageX(String param) {
+    return 'Դաս $param';
+  }
+
+  @override
+  String get learnAwesome => 'Անհավանակա՜ն է։';
+
+  @override
+  String get learnExcellent => 'Գերազա՜նց է։';
+
+  @override
+  String get learnGreatJob => 'Հիանալի՜ աշխատանք։';
+
+  @override
+  String get learnPerfect => 'Հրաշալի՜ է։';
+
+  @override
+  String get learnOutstanding => 'Հիասքա՜նչ է։';
+
+  @override
+  String get learnWayToGo => 'Առա՛ջ։';
+
+  @override
+  String get learnYesYesYes => 'Այո՛, այո՛, այո՛։';
+
+  @override
+  String get learnYoureGoodAtThis => 'Կեցցե՛ք։';
+
+  @override
+  String get learnNailedIt => 'Հաջողվե՜ց։';
+
+  @override
+  String get learnRightOn => 'Հենց այդպե՛ս։';
+
+  @override
+  String learnStageXComplete(String param) {
+    return '$param դասը յուրացված է';
+  }
+
+  @override
+  String get learnNext => 'Հաջորդը';
+
+  @override
+  String learnNextX(String param) {
+    return 'Հաջորդ: $param';
+  }
+
+  @override
+  String get learnBackToMenu => 'Վերադառնալ ցանկ';
+
+  @override
+  String get learnPuzzleFailed => 'Առաջադրանքը ձախողվե՛ց';
+
+  @override
+  String get learnRetry => 'Կրկնել';
+
+  @override
   String get patronDonate => 'Նվիրաբերել';
 
   @override

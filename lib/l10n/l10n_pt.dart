@@ -1358,6 +1358,527 @@ class AppLocalizationsPt extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Pratica só algumas linhas & colunas';
 
   @override
+  String get learnLearnChess => 'Aprende xadrez';
+
+  @override
+  String get learnByPlaying => 'a jogar!';
+
+  @override
+  String learnProgressX(String param) {
+    return 'Progresso: $param';
+  }
+
+  @override
+  String get learnResetMyProgress => 'Reiniciar o meu progresso';
+
+  @override
+  String get learnYouWillLoseAllYourProgress => 'Vais perder todo o teu progresso!';
+
+  @override
+  String get learnPlay => 'joga!';
+
+  @override
+  String get learnChessPieces => 'Peças de xadrez';
+
+  @override
+  String get learnTheRook => 'A torre';
+
+  @override
+  String get learnItMovesInStraightLines => 'Move-se em linhas retas';
+
+  @override
+  String get learnRookIntro => 'A torre é uma peça poderosa. Estás preparado(a) para comandá-la?';
+
+  @override
+  String get learnRookGoal => 'Clica na torre\npara levá-la até à estrela!';
+
+  @override
+  String get learnGrabAllTheStars => 'Apanha todas as estrelas!';
+
+  @override
+  String get learnTheFewerMoves => 'Quantos menos movimentos fizeres,\nmais pontos ganhas!';
+
+  @override
+  String get learnUseTwoRooks => 'Usa as duas torres\npara acelerar o processo!';
+
+  @override
+  String get learnRookComplete => 'Parabéns! Agora dominas a torre.';
+
+  @override
+  String get learnTheBishop => 'O bispo';
+
+  @override
+  String get learnItMovesDiagonally => 'Move-se diagonalmente';
+
+  @override
+  String get learnBishopIntro => 'A seguir vamos aprender como manobrar o bispo!';
+
+  @override
+  String get learnYouNeedBothBishops => 'Um bispo de casas brancas,\num bispo de casas negras.\nTu precisas de ambos!';
+
+  @override
+  String get learnBishopComplete => 'Parabéns! Já sabes comandar o bispo.';
+
+  @override
+  String get learnTheQueen => 'A dama';
+
+  @override
+  String get learnQueenCombinesRookAndBishop => 'Dama = torre + bispo';
+
+  @override
+  String get learnQueenIntro => 'Entra a peça mais poderosa do xadrez. Sua majestade, a dama!';
+
+  @override
+  String get learnQueenComplete => 'Parabéns! As damas não têm segredos para ti.';
+
+  @override
+  String get learnTheKing => 'O rei';
+
+  @override
+  String get learnTheMostImportantPiece => 'A peça mais importante';
+
+  @override
+  String get learnKingIntro => 'Tu és o rei. Se cais em batalha, o jogo está perdido.';
+
+  @override
+  String get learnTheKingIsSlow => 'O rei é lento.';
+
+  @override
+  String get learnLastOne => 'Último!';
+
+  @override
+  String get learnKingComplete => 'Agora tu podes comandar o comandante!';
+
+  @override
+  String get learnTheKnight => 'O cavalo';
+
+  @override
+  String get learnItMovesInAnLShape => 'Move-se em forma de L';
+
+  @override
+  String get learnKnightIntro => 'Aqui está um desafio para ti. O cavalo é... uma peça manhosa.';
+
+  @override
+  String get learnKnightsHaveAFancyWay => 'Os cavalos têm uma maneira divertida\nde saltar por aí!';
+
+  @override
+  String get learnKnightsCanJumpOverObstacles => 'Os cavalos podem saltar obstáculos.\nEscapa e vence as estrelas!';
+
+  @override
+  String get learnKnightComplete => 'Parabéns! Já dominas o cavalo.';
+
+  @override
+  String get learnThePawn => 'O peão';
+
+  @override
+  String get learnItMovesForwardOnly => 'Move-se só para a frente';
+
+  @override
+  String get learnPawnIntro => 'Os peões são fracos, mas têm muito potencial.';
+
+  @override
+  String get learnPawnsMoveOneSquareOnly => 'Os peões andam só uma casa de cada vez.\nMas quando chegam ao final do tabuleiro, transformam-se numa peça mais forte!';
+
+  @override
+  String get learnMostOfTheTimePromotingToAQueenIsBest => 'Na maioria das vezes promover a dama é o melhor.\nMas às vezes um cavalo é mais útil!';
+
+  @override
+  String get learnPawnsMoveForward => 'Os peões mexem-se para a frente,\nmas comem na diagonal!';
+
+  @override
+  String get learnCaptureThenPromote => 'Come, depois promove!';
+
+  @override
+  String get learnUseAllThePawns => 'Usa todos os peões!\nNão é necessário promover.';
+
+  @override
+  String get learnAPawnOnTheSecondRank => 'Um peão na segunda fila pode mover-se duas casas duma vez!';
+
+  @override
+  String get learnGrabAllTheStarsNoNeedToPromote => 'Apanha todas as estrelas!\nNão é necessário promover.';
+
+  @override
+  String get learnPawnComplete => 'Parabéns! Os peões já não têm segredos para ti.';
+
+  @override
+  String get learnPawnPromotion => 'Promoção do peão';
+
+  @override
+  String get learnYourPawnReachedTheEndOfTheBoard => 'O teu peão alcançou o final do tabuleiro!';
+
+  @override
+  String get learnItNowPromotesToAStrongerPiece => 'Agora promove-se a uma peça mais forte.';
+
+  @override
+  String get learnSelectThePieceYouWant => 'Escolhe a peça que queres!';
+
+  @override
+  String get learnFundamentals => 'Fundamentos';
+
+  @override
+  String get learnCapture => 'Captura';
+
+  @override
+  String get learnTakeTheEnemyPieces => 'Captura as peças inimigas';
+
+  @override
+  String get learnCaptureIntro => 'Identifica as peças não defendidas do adversário, captura-las!';
+
+  @override
+  String get learnTakeTheBlackPieces => 'Captura as peças pretas!';
+
+  @override
+  String get learnTakeTheBlackPiecesAndDontLoseYours => 'Captura as peças pretas!\nE não percas as tuas.';
+
+  @override
+  String get learnCaptureComplete => 'Parabéns! Já sabes como lutar com as peças de xadrez!';
+
+  @override
+  String get learnProtection => 'Proteção';
+
+  @override
+  String get learnKeepYourPiecesSafe => 'Mantém as tuas peças seguras';
+
+  @override
+  String get learnProtectionIntro => 'Identifica as peças que o teu adversário está a atacar, e defende-as!';
+
+  @override
+  String get learnProtectionComplete => 'Parabéns! Uma peça que não perdes é uma peça que ganhas!';
+
+  @override
+  String get learnEscape => 'Estás a ser atacado!\nEscapa da ameaça!';
+
+  @override
+  String get learnNoEscape => 'Não há escapatória,\nmas podes defender-te!';
+
+  @override
+  String get learnDontLetThemTakeAnyUndefendedPiece => 'Não os deixes capturar\nas peças não defendidas!';
+
+  @override
+  String get learnCombat => 'Combate';
+
+  @override
+  String get learnCaptureAndDefendPieces => 'Captura e defende peças';
+
+  @override
+  String get learnCombatIntro => 'Um bom guerreiro sabe tanto atacar como defender!';
+
+  @override
+  String get learnCombatComplete => 'Parabéns! Sabes como lutar com as peças de xadrez!';
+
+  @override
+  String get learnCheckInOne => 'Xeque num lance';
+
+  @override
+  String get learnAttackTheOpponentsKing => 'Ataca o rei do adversário';
+
+  @override
+  String get learnCheckInOneIntro => 'Para fazeres xeque ao adversário, ataca o seu rei. Eles têm de defendê-lo!';
+
+  @override
+  String get learnCheckInOneGoal => 'Aponta ao rei adversário\nem apenas um movimento!';
+
+  @override
+  String get learnCheckInOneComplete => 'Parabéns! Fizeste xeque ao adversário, forçando-os a defender o seu rei!';
+
+  @override
+  String get learnOutOfCheck => 'Sair do xeque';
+
+  @override
+  String get learnDefendYourKing => 'Defende o teu rei';
+
+  @override
+  String get learnOutOfCheckIntro => 'Estás em xeque! Tens de escapar ou bloquear o ataque.';
+
+  @override
+  String get learnEscapeWithTheKing => 'Escapa com o rei!';
+
+  @override
+  String get learnTheKingCannotEscapeButBlock => 'O rei não pode escapar,\nmas podes bloquear o ataque!';
+
+  @override
+  String get learnYouCanGetOutOfCheckByTaking => 'Podes sair do xeque\ncapturando a peça atacante.';
+
+  @override
+  String get learnThisKnightIsCheckingThroughYourDefenses => 'Este cavalo está a fazer-te xeque\natravés das tuas defesas!';
+
+  @override
+  String get learnEscapeOrBlock => 'Escapa com o rei\nou bloqueia o ataque!';
+
+  @override
+  String get learnOutOfCheckComplete => 'Parabéns! O teu rei nunca pode ser capturado, certifica-te que podes sempre defender contra um xeque!';
+
+  @override
+  String get learnMateInOne => 'Xeque-mate num lance';
+
+  @override
+  String get learnDefeatTheOpponentsKing => 'Derrota o rei do adversário';
+
+  @override
+  String get learnMateInOneIntro => 'Tu ganhas quando o teu adversário não se pode defender de um xeque.';
+
+  @override
+  String get learnAttackYourOpponentsKing => 'Ataca o rei adversário\nde forma a que este não se possa defender!';
+
+  @override
+  String get learnMateInOneComplete => 'Parabéns! É assim que se ganham os jogos de xadrez!';
+
+  @override
+  String get learnIntermediate => 'Intermédio';
+
+  @override
+  String get learnBoardSetup => 'Organização do tabuleiro';
+
+  @override
+  String get learnHowTheGameStarts => 'Como começa o jogo';
+
+  @override
+  String get learnBoardSetupIntro => 'Os dois exércitos cara a cara, preparados para a batalha.';
+
+  @override
+  String get learnThisIsTheInitialPosition => 'Esta é a posição inicial\nde todos os jogos de xadrez!\nFaz qualquer movimento para continuar.';
+
+  @override
+  String get learnFirstPlaceTheRooks => 'Primeiro coloca as torres!\nElas ficam nos cantos.';
+
+  @override
+  String get learnThenPlaceTheKnights => 'Depois coloca os cavalos!\nEles ficam ao lado das torres.';
+
+  @override
+  String get learnPlaceTheBishops => 'Coloca os bispos!\nEles ficam ao lado dos cavalos.';
+
+  @override
+  String get learnPlaceTheQueen => 'Coloca a dama!\nEla fica na casa da sua cor.';
+
+  @override
+  String get learnPlaceTheKing => 'Coloca o rei!\nAo lado da dama.';
+
+  @override
+  String get learnPawnsFormTheFrontLine => 'Os peões formam a linha da frente.\nFaz qualquer movimentos para continuar.';
+
+  @override
+  String get learnBoardSetupComplete => 'Parabéns! Agora sabes como organizar o tabuleiro de xadrez.';
+
+  @override
+  String get learnCastling => 'Roque';
+
+  @override
+  String get learnTheSpecialKingMove => 'O movimento especial do rei';
+
+  @override
+  String get learnCastlingIntro => 'Trás o teu rei para a segurança e leva a tua torre para o ataque!';
+
+  @override
+  String get learnCastleKingSide => 'Move o teu rei duas casas\npara rocares para o lado do rei!';
+
+  @override
+  String get learnCastleQueenSide => 'Move o teu rei duas casas\npara rocares no lado da dama!';
+
+  @override
+  String get learnTheKnightIsInTheWay => 'O cavalo está no caminho!\nMove-o, depois roca para o lado do rei.';
+
+  @override
+  String get learnCastleKingSideMovePiecesFirst => 'Roca para o lado do rei!\nPrecisas de afastar as tuas peças primeiro.';
+
+  @override
+  String get learnCastleQueenSideMovePiecesFirst => 'Roca para o lado da dama!\nPrecisas de afastar as tuas peças primeiro.';
+
+  @override
+  String get learnYouCannotCastleIfMoved => 'Não podes fazer o roque se\no teu rei ou a torre correspondente\njá executaram algum movimento.';
+
+  @override
+  String get learnYouCannotCastleIfAttacked => 'Não fazer o roque se\no teu rei for atacado no caminho.\nBloqueia o xeque e depois roca!';
+
+  @override
+  String get learnFindAWayToCastleKingSide => 'Encontra uma maneira de\nfazer o roque do lado do rei!';
+
+  @override
+  String get learnFindAWayToCastleQueenSide => 'Encontra a maneira de\nfazer o roque grande!';
+
+  @override
+  String get learnCastlingComplete => 'Parabéns! Deves fazer o roque durante um jogo, quase sempre.';
+
+  @override
+  String get learnTheSpecialPawnMove => 'O movimento especial do peão';
+
+  @override
+  String get learnEnPassantIntro => 'Quando um peão do adversário avança duas casas, podes capturá-lo com um peão como se ele só tivesse avançado uma casa.';
+
+  @override
+  String get learnBlackJustMovedThePawnByTwoSquares => 'As pretas acabaram de\navançar o peão duas casas!\nCaptura-o en passant.';
+
+  @override
+  String get learnEnPassantOnlyWorksImmediately => 'O en passant só funciona\nimediatamente depois do adversário\nmover o peão.';
+
+  @override
+  String get learnEnPassantOnlyWorksOnFifthRank => 'O en passant só funciona\nse o teu peão estiver na quinta linha.';
+
+  @override
+  String get learnTakeAllThePawnsEnPassant => 'Captura todos os peões en passant!';
+
+  @override
+  String get learnEnPassantComplete => 'Parabéns! Agora sabes capturar en passant.';
+
+  @override
+  String get learnStalemate => 'Rei afogado';
+
+  @override
+  String get learnTheGameIsADraw => 'O jogo é um empate';
+
+  @override
+  String get learnStalemateIntro => 'Quando um jogador não está em xeque e não pode fazer um movimento legal, então diz-se que o rei esta afogado. O jogo é empatado: ninguém ganha, ninguém perde.';
+
+  @override
+  String get learnStalemateGoal => 'Para afogar o rei das pretas:\n- as pretas não se podem mexer\n- não há xeque.';
+
+  @override
+  String get learnStalemateComplete => 'Parabéns! É melhor teres o teu rei afogado do que levares xeque-mate!';
+
+  @override
+  String get learnAdvanced => 'Avançado';
+
+  @override
+  String get learnPieceValue => 'Valor das peças';
+
+  @override
+  String get learnEvaluatePieceStrength => 'Avalia a força das peças';
+
+  @override
+  String get learnPieceValueIntro => 'Peças com alta mobilidade têm maior valor!\nDama = 9\nTorre = 5\nBispo = 3\nCavalo = 3\nPeão = 1\nO rei não tem preço! Perdê-lo significa perder o jogo.';
+
+  @override
+  String get learnQueenOverBishop => 'Captura a peça\nde maior valor!\nDama > bispo';
+
+  @override
+  String get learnPieceValueExchange => 'Tome a peça de maior valor! Não troque uma peça de valor mais alto por uma de menor valor.';
+
+  @override
+  String get learnPieceValueLegal => 'Captura a peça\nCom o valor mais alto!\nConfirma que a tua jogada é legal!';
+
+  @override
+  String get learnTakeThePieceWithTheHighestValue => 'Captura a peça\nde maior valor!';
+
+  @override
+  String get learnPieceValueComplete => 'Parabéns! Sabes o valor do material!\nDama = 9\nTorre = 5\nBispo = 3\nCavalo = 3\nPeão = 1';
+
+  @override
+  String get learnCheckInTwo => 'Xeque em dois lances';
+
+  @override
+  String get learnTwoMovesToGiveCheck => 'Dois movimentos para fazer xeque';
+
+  @override
+  String get learnCheckInTwoIntro => 'Encontra a combinação correta de dois movimentos que faz xeque ao rei adversário!';
+
+  @override
+  String get learnCheckInTwoGoal => 'Ameaça o rei adversário\nem dois movimentos!';
+
+  @override
+  String get learnCheckInTwoComplete => 'Parabéns! Fizeste xeque ao adversário, forçando-o a defender o seu rei!';
+
+  @override
+  String get learnWhatNext => 'O que se segue?';
+
+  @override
+  String get learnYouKnowHowToPlayChess => 'Tu sabes como jogar xadrez, parabéns! Queres tornar-te um jogador mais forte?';
+
+  @override
+  String get learnRegister => 'Regista-te';
+
+  @override
+  String get learnGetAFreeLichessAccount => 'Obtém um conta gratuita no Lichess';
+
+  @override
+  String get learnPractice => 'Pratica';
+
+  @override
+  String get learnLearnCommonChessPositions => 'Aprende posições comuns no xadrez';
+
+  @override
+  String get learnPuzzles => 'Problemas';
+
+  @override
+  String get learnExerciseYourTacticalSkills => 'Pratica as tuas habilidades táticas';
+
+  @override
+  String get learnVideos => 'Vídeos';
+
+  @override
+  String get learnWatchInstructiveChessVideos => 'Vê vídeos instrutivos de xadrez';
+
+  @override
+  String get learnPlayPeople => 'Joga com pessoas';
+
+  @override
+  String get learnOpponentsFromAroundTheWorld => 'Adversários de todo o mundo';
+
+  @override
+  String get learnPlayMachine => 'Joga com o computador';
+
+  @override
+  String get learnTestYourSkillsWithTheComputer => 'Testa a tuas habilidades com o computador';
+
+  @override
+  String get learnLetsGo => 'Vamos!';
+
+  @override
+  String learnStageX(String param) {
+    return 'Fase $param';
+  }
+
+  @override
+  String get learnAwesome => 'Fantástico!';
+
+  @override
+  String get learnExcellent => 'Excelente!';
+
+  @override
+  String get learnGreatJob => 'Bom trabalho!';
+
+  @override
+  String get learnPerfect => 'Perfeito!';
+
+  @override
+  String get learnOutstanding => 'Excecional!';
+
+  @override
+  String get learnWayToGo => 'Boa!';
+
+  @override
+  String get learnYesYesYes => 'Sim, sim, sim!';
+
+  @override
+  String get learnYoureGoodAtThis => 'És bom nisto!';
+
+  @override
+  String get learnNailedIt => 'Acertaste em cheio.';
+
+  @override
+  String get learnRightOn => 'Assim mesmo!';
+
+  @override
+  String learnStageXComplete(String param) {
+    return 'Fase $param completa';
+  }
+
+  @override
+  String get learnNext => 'Seguinte';
+
+  @override
+  String learnNextX(String param) {
+    return 'Próximo: $param';
+  }
+
+  @override
+  String get learnBackToMenu => 'Voltar ao menu';
+
+  @override
+  String get learnPuzzleFailed => 'Exercício falhado!';
+
+  @override
+  String get learnRetry => 'Tentar novamente';
+
+  @override
   String get patronDonate => 'Doar';
 
   @override
@@ -8254,6 +8775,527 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Praticar só algumas fileiras e colunas';
+
+  @override
+  String get learnLearnChess => 'Aprenda xadrez';
+
+  @override
+  String get learnByPlaying => 'jogando!';
+
+  @override
+  String learnProgressX(String param) {
+    return 'Progresso: $param';
+  }
+
+  @override
+  String get learnResetMyProgress => 'Reiniciar meu progresso';
+
+  @override
+  String get learnYouWillLoseAllYourProgress => 'Você vai perder todo o seu progresso!';
+
+  @override
+  String get learnPlay => 'jogar!';
+
+  @override
+  String get learnChessPieces => 'As peças do xadrez';
+
+  @override
+  String get learnTheRook => 'A torre';
+
+  @override
+  String get learnItMovesInStraightLines => 'Move-se em linha reta';
+
+  @override
+  String get learnRookIntro => 'A torre é uma peça poderosa. Você está pronto para comandá-la?';
+
+  @override
+  String get learnRookGoal => 'Clique na torre para levá-la até a estrela!';
+
+  @override
+  String get learnGrabAllTheStars => 'Pegue todas as estrelas!';
+
+  @override
+  String get learnTheFewerMoves => 'Quanto menos movimentos você fizer, mais pontos ganhará!';
+
+  @override
+  String get learnUseTwoRooks => 'Use duas torres para acelerar as coisas!';
+
+  @override
+  String get learnRookComplete => 'Parabéns! Você dominou a torre com sucesso.';
+
+  @override
+  String get learnTheBishop => 'O bispo';
+
+  @override
+  String get learnItMovesDiagonally => 'Move-se em diagonais';
+
+  @override
+  String get learnBishopIntro => 'A seguir, aprenderemos como o bispo se movimenta!';
+
+  @override
+  String get learnYouNeedBothBishops => 'Um bispo para as casas brancas,\num bispo para as casas pretas.\nVocê precisa de ambos!';
+
+  @override
+  String get learnBishopComplete => 'Parabéns! Você pode comandar um bispo.';
+
+  @override
+  String get learnTheQueen => 'A dama';
+
+  @override
+  String get learnQueenCombinesRookAndBishop => 'Dama = torre + bispo';
+
+  @override
+  String get learnQueenIntro => 'Entra a mais poderosa das peças. Sua majestade, a dama!';
+
+  @override
+  String get learnQueenComplete => 'Parabéns! A Dama não é segredo para você.';
+
+  @override
+  String get learnTheKing => 'O rei';
+
+  @override
+  String get learnTheMostImportantPiece => 'A peça mais importante';
+
+  @override
+  String get learnKingIntro => 'Você é o rei. Se cair em batalha, perderá o jogo.';
+
+  @override
+  String get learnTheKingIsSlow => 'O rei é lento.';
+
+  @override
+  String get learnLastOne => 'A última!';
+
+  @override
+  String get learnKingComplete => 'Você agora pode comandar o comandante!';
+
+  @override
+  String get learnTheKnight => 'O cavalo';
+
+  @override
+  String get learnItMovesInAnLShape => 'Move-se no formato de um L';
+
+  @override
+  String get learnKnightIntro => 'Aqui está um desafio para você. O cavalo é... uma peça surpreendente.';
+
+  @override
+  String get learnKnightsHaveAFancyWay => 'Cavalos têm uma maneira peculiar de saltar por aí!';
+
+  @override
+  String get learnKnightsCanJumpOverObstacles => 'Cavalos podem saltar sobre obstáculos!\nEscape e conquiste as estrelas!';
+
+  @override
+  String get learnKnightComplete => 'Parabéns! Você acaba de tornar-se um mestre dos cavalos.';
+
+  @override
+  String get learnThePawn => 'O peão';
+
+  @override
+  String get learnItMovesForwardOnly => 'Move-se apenas para frente';
+
+  @override
+  String get learnPawnIntro => 'Peões são fracos, mas possuem grande potencial.';
+
+  @override
+  String get learnPawnsMoveOneSquareOnly => 'Peões andam apenas uma casa.\nMas quando alcançam o outro lado do tabuleiro, transformam-se em uma peça mais forte!';
+
+  @override
+  String get learnMostOfTheTimePromotingToAQueenIsBest => 'Na maioria das vezes o melhor é promovê-lo a uma dama.\nMas às vezes um cavalo pode ser útil!';
+
+  @override
+  String get learnPawnsMoveForward => 'Peões movem-se para a frente, mas capturam na diagonal!';
+
+  @override
+  String get learnCaptureThenPromote => 'Capture, e então promova!';
+
+  @override
+  String get learnUseAllThePawns => 'Use todos os peões! \nNão é necessário promover.';
+
+  @override
+  String get learnAPawnOnTheSecondRank => 'Um peão na segunda fileira pode mover-se duas casas de uma vez!';
+
+  @override
+  String get learnGrabAllTheStarsNoNeedToPromote => 'Pegue todas as estrelas!\nNão é necessário promover.';
+
+  @override
+  String get learnPawnComplete => 'Parabéns! Peões não têm segredos para você.';
+
+  @override
+  String get learnPawnPromotion => 'Promoção do peão';
+
+  @override
+  String get learnYourPawnReachedTheEndOfTheBoard => 'Seu peão alcançou a última fileira do tabuleiro!';
+
+  @override
+  String get learnItNowPromotesToAStrongerPiece => 'Ele agora é promovido a uma peça mais forte.';
+
+  @override
+  String get learnSelectThePieceYouWant => 'Escolha a peça que desejar!';
+
+  @override
+  String get learnFundamentals => 'Fundamentos';
+
+  @override
+  String get learnCapture => 'Capturar';
+
+  @override
+  String get learnTakeTheEnemyPieces => 'Capture as peças inimigas';
+
+  @override
+  String get learnCaptureIntro => 'Identifique as peças desprotegidas do adversário, e capture-as!';
+
+  @override
+  String get learnTakeTheBlackPieces => 'Capture as peças pretas!';
+
+  @override
+  String get learnTakeTheBlackPiecesAndDontLoseYours => 'Capture as peças pretas!\nE não perca as suas.';
+
+  @override
+  String get learnCaptureComplete => 'Parabéns! Você já sabe como lutar com peças de xadrez!';
+
+  @override
+  String get learnProtection => 'Defender';
+
+  @override
+  String get learnKeepYourPiecesSafe => 'Mantenha suas peças em segurança';
+
+  @override
+  String get learnProtectionIntro => 'Identifique as peças que seu oponente está atacando e defenda-as!';
+
+  @override
+  String get learnProtectionComplete => 'Parabéns! Cada peça que você não perde é uma peça que você ganha!';
+
+  @override
+  String get learnEscape => 'Você está sob ataque!\nFuja da ameaça!';
+
+  @override
+  String get learnNoEscape => 'Não há como fugir, \nmas você pode defender!';
+
+  @override
+  String get learnDontLetThemTakeAnyUndefendedPiece => 'Não deixe que capturem qualquer peça indefesa!';
+
+  @override
+  String get learnCombat => 'Combate';
+
+  @override
+  String get learnCaptureAndDefendPieces => 'Capture e defenda peças';
+
+  @override
+  String get learnCombatIntro => 'Um bom guerreiro sabe atacar e defender!';
+
+  @override
+  String get learnCombatComplete => 'Parabéns! Você sabe lutar com peças de xadrez!';
+
+  @override
+  String get learnCheckInOne => 'Xeque em 1';
+
+  @override
+  String get learnAttackTheOpponentsKing => 'Ataque o rei do seu adversário';
+
+  @override
+  String get learnCheckInOneIntro => 'Para dar xeque, ataque o rei. Seu oponente deve defendê-lo!';
+
+  @override
+  String get learnCheckInOneGoal => 'Ameace o rei de seu oponente em um movimento!';
+
+  @override
+  String get learnCheckInOneComplete => 'Parabéns! Você colocou o rei de seu oponente em xeque, obrigando-o a defendê-lo!';
+
+  @override
+  String get learnOutOfCheck => 'Salve o rei';
+
+  @override
+  String get learnDefendYourKing => 'Defenda-se de xeques';
+
+  @override
+  String get learnOutOfCheckIntro => 'Você está em xeque! Você deve escapar ou bloquear o ataque.';
+
+  @override
+  String get learnEscapeWithTheKing => 'Escape com o rei!';
+
+  @override
+  String get learnTheKingCannotEscapeButBlock => 'O rei não pode escapar,\nmas você pode bloquear o ataque!';
+
+  @override
+  String get learnYouCanGetOutOfCheckByTaking => 'Você pode sair de um xeque\ncapturando a peça atacante.';
+
+  @override
+  String get learnThisKnightIsCheckingThroughYourDefenses => 'Este cavalo está dando xeque\natravés de suas defesas!';
+
+  @override
+  String get learnEscapeOrBlock => 'Escape com o rei\nou bloqueie o ataque!';
+
+  @override
+  String get learnOutOfCheckComplete => 'Parabéns! Seu rei não deve ser tomado, certifique-se de que você pode defendê-lo de um xeque!';
+
+  @override
+  String get learnMateInOne => 'Mate em 1';
+
+  @override
+  String get learnDefeatTheOpponentsKing => 'Derrote o rei adversário';
+
+  @override
+  String get learnMateInOneIntro => 'Você vence quando seu oponente não pode se defender de um xeque.';
+
+  @override
+  String get learnAttackYourOpponentsKing => 'Ataque o rei adversário de uma maneira que ele não possa se defender!';
+
+  @override
+  String get learnMateInOneComplete => 'Parabéns! É assim que você vence jogos de xadrez!';
+
+  @override
+  String get learnIntermediate => 'Intermediário';
+
+  @override
+  String get learnBoardSetup => 'Posição inicial';
+
+  @override
+  String get learnHowTheGameStarts => 'Como o jogo inicia';
+
+  @override
+  String get learnBoardSetupIntro => 'Os dois exércitos se enfrentam, prontos para a batalha.';
+
+  @override
+  String get learnThisIsTheInitialPosition => 'Esta é a posição inicial de qualquer jogo de xadrez! Faça qualquer movimento para continuar.';
+
+  @override
+  String get learnFirstPlaceTheRooks => 'Primeiro posicione as torres!\nElas ficam nos cantos.';
+
+  @override
+  String get learnThenPlaceTheKnights => 'Agora posicione os cavalos!\nEles ficam ao lado das torres.';
+
+  @override
+  String get learnPlaceTheBishops => 'Posicione os bispos!\nEles vão ao lado dos cavalos.';
+
+  @override
+  String get learnPlaceTheQueen => 'Posicione a dama!\nEla vai na casa de sua cor.';
+
+  @override
+  String get learnPlaceTheKing => 'Posicione o rei!\nBem ao lado da sua dama.';
+
+  @override
+  String get learnPawnsFormTheFrontLine => 'Peões formam a linha de frente.\nFaça qualquer movimento para continuar.';
+
+  @override
+  String get learnBoardSetupComplete => 'Parabéns! Você sabe como posicionar as peças no tabuleiro de xadrez.';
+
+  @override
+  String get learnCastling => 'Roque';
+
+  @override
+  String get learnTheSpecialKingMove => 'O movimento especial do rei';
+
+  @override
+  String get learnCastlingIntro => 'Traga o seu rei para a segurança, e prepare sua torre para o ataque!';
+
+  @override
+  String get learnCastleKingSide => 'Mova o rei duas casas para fazer o roque curto!';
+
+  @override
+  String get learnCastleQueenSide => 'Mova o rei duas casas\npara fazer o roque longo!';
+
+  @override
+  String get learnTheKnightIsInTheWay => 'O cavalo está no caminho!\nMova-o, e então faça um roque.';
+
+  @override
+  String get learnCastleKingSideMovePiecesFirst => 'Faça um roque curto!\nMas antes você precisa retirar as peças do meio.';
+
+  @override
+  String get learnCastleQueenSideMovePiecesFirst => 'Faça um roque longo!\nMas antes você precisa retirar as peças do meio.';
+
+  @override
+  String get learnYouCannotCastleIfMoved => 'Você não pode rocar se o rei ou se a torre já se moveram.';
+
+  @override
+  String get learnYouCannotCastleIfAttacked => 'Você não pode rocar se o rei está sob ameaça no caminho. Bloqueie o xeque, e então conclua o roque!';
+
+  @override
+  String get learnFindAWayToCastleKingSide => 'Encontre uma maneira de executar o roque menor (da ala do rei)!';
+
+  @override
+  String get learnFindAWayToCastleQueenSide => 'Encontre uma maneira de executar o roque maior (da ala da dama)!';
+
+  @override
+  String get learnCastlingComplete => 'Parabéns! Você deve rocar em quase todas as partidas.';
+
+  @override
+  String get learnTheSpecialPawnMove => 'O movimento especial do peão';
+
+  @override
+  String get learnEnPassantIntro => 'Quando um peão do oponente mover-se duas posições, você pode capturá-lo como se ele tivesse movido apenas uma posição.';
+
+  @override
+  String get learnBlackJustMovedThePawnByTwoSquares => 'As pretas acabaram de mover o peão duas posições! Capture-o en passant.';
+
+  @override
+  String get learnEnPassantOnlyWorksImmediately => 'En passant somente é possível imediatamente após o oponente mover o peão.';
+
+  @override
+  String get learnEnPassantOnlyWorksOnFifthRank => 'En passant somente é possível caso o seu peão esteja na 5ª linha.';
+
+  @override
+  String get learnTakeAllThePawnsEnPassant => 'Capture todos os peões en passant!';
+
+  @override
+  String get learnEnPassantComplete => 'Parabéns! Você agora pode capturar en passant.';
+
+  @override
+  String get learnStalemate => 'Rei afogado';
+
+  @override
+  String get learnTheGameIsADraw => 'O jogo terminou em empate';
+
+  @override
+  String get learnStalemateIntro => 'Quando um jogador não está em xeque e não pode fazer nenhum movimento legal, há um afogamento. O jogo termina em empate: ninguém ganha, ninguém perde.';
+
+  @override
+  String get learnStalemateGoal => 'Para afogar as pretas:\n- As pretas não podem mover-se para lugar algum\n- Não há xeque.';
+
+  @override
+  String get learnStalemateComplete => 'Parabéns! Um empate é melhor do que uma derrota!';
+
+  @override
+  String get learnAdvanced => 'Avançado';
+
+  @override
+  String get learnPieceValue => 'Avaliando';
+
+  @override
+  String get learnEvaluatePieceStrength => 'Avalie o valor de cada peça';
+
+  @override
+  String get learnPieceValueIntro => 'Peças com maior mobilidade possuem maior valor!\nDama = 9 Torre = 5\nBispo = 3 Cavalo = 3\nPeão = 1\nO rei é inestimável! Perdê-lo significa ser derrotado.';
+
+  @override
+  String get learnQueenOverBishop => 'Capture a peça de maior valor!\nDama > Bispo';
+
+  @override
+  String get learnPieceValueExchange => 'Tome a peça com o valor mais alto!\n Não troque\n uma peça de maior valor por outra de menor valor.';
+
+  @override
+  String get learnPieceValueLegal => 'Tome a peça\ncom o valor mais alto!\nTenha certeza de que seu movimento é legal!';
+
+  @override
+  String get learnTakeThePieceWithTheHighestValue => 'Capture a peça de maior valor!';
+
+  @override
+  String get learnPieceValueComplete => 'Parabéns! Você conhece o valor material! \nDama = 9 \nTorre = 5 \nBispo = 3 \nCavalo = 3 \nPeão = 1';
+
+  @override
+  String get learnCheckInTwo => 'Xeque em 2';
+
+  @override
+  String get learnTwoMovesToGiveCheck => 'Dois movimentos para dar xeque';
+
+  @override
+  String get learnCheckInTwoIntro => 'Encontre a sequência correta de dois movimentos que coloque em xeque o rei adversário!';
+
+  @override
+  String get learnCheckInTwoGoal => 'Ameace o rei adversário em dois movimentos!';
+
+  @override
+  String get learnCheckInTwoComplete => 'Parabéns! Você colocou em xeque o seu adversário, forçando-o a defender seu rei!';
+
+  @override
+  String get learnWhatNext => 'O que vem depois?';
+
+  @override
+  String get learnYouKnowHowToPlayChess => 'Você sabe como jogar xadrez, parabéns! Você quer se tornar um jogador mais forte?';
+
+  @override
+  String get learnRegister => 'Registrar';
+
+  @override
+  String get learnGetAFreeLichessAccount => 'Obtenha uma conta Lichess grátis';
+
+  @override
+  String get learnPractice => 'Praticar';
+
+  @override
+  String get learnLearnCommonChessPositions => 'Aprenda posições comuns do xadrez';
+
+  @override
+  String get learnPuzzles => 'Problemas';
+
+  @override
+  String get learnExerciseYourTacticalSkills => 'Exercite suas habilidades táticas';
+
+  @override
+  String get learnVideos => 'Vídeos';
+
+  @override
+  String get learnWatchInstructiveChessVideos => 'Assista a vídeos de xadrez instrutivos';
+
+  @override
+  String get learnPlayPeople => 'Jogue online';
+
+  @override
+  String get learnOpponentsFromAroundTheWorld => 'Oponentes de todo o mundo';
+
+  @override
+  String get learnPlayMachine => 'Computador';
+
+  @override
+  String get learnTestYourSkillsWithTheComputer => 'Desafie o computador';
+
+  @override
+  String get learnLetsGo => 'Vamos lá!';
+
+  @override
+  String learnStageX(String param) {
+    return 'Etapa $param';
+  }
+
+  @override
+  String get learnAwesome => 'Fantástico!';
+
+  @override
+  String get learnExcellent => 'Excelente!';
+
+  @override
+  String get learnGreatJob => 'Ótimo trabalho!';
+
+  @override
+  String get learnPerfect => 'Perfeito!';
+
+  @override
+  String get learnOutstanding => 'Excepcional!';
+
+  @override
+  String get learnWayToGo => 'Continue assim!';
+
+  @override
+  String get learnYesYesYes => 'Sim, sim, sim!';
+
+  @override
+  String get learnYoureGoodAtThis => 'Você é bom nisso!';
+
+  @override
+  String get learnNailedIt => 'Acertou em cheio.';
+
+  @override
+  String get learnRightOn => 'Certo!';
+
+  @override
+  String learnStageXComplete(String param) {
+    return 'Etapa $param completa';
+  }
+
+  @override
+  String get learnNext => 'Próximo';
+
+  @override
+  String learnNextX(String param) {
+    return 'Próximo: $param';
+  }
+
+  @override
+  String get learnBackToMenu => 'Voltar ao menu';
+
+  @override
+  String get learnPuzzleFailed => 'Falhou no problema!';
+
+  @override
+  String get learnRetry => 'Tentar de novo';
 
   @override
   String get patronDonate => 'Doação';

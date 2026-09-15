@@ -1358,6 +1358,527 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Üeb nur einigi Dateie und Räng';
 
   @override
+  String get learnLearnChess => 'Lern Schach';
+
+  @override
+  String get learnByPlaying => 'idem du schpillsch!';
+
+  @override
+  String learnProgressX(String param) {
+    return 'Fortschritt: $param';
+  }
+
+  @override
+  String get learnResetMyProgress => 'De Fortschritt zruggsetze';
+
+  @override
+  String get learnYouWillLoseAllYourProgress => 'Aber so verlürsch du din ganze Fortschritt!';
+
+  @override
+  String get learnPlay => 'schpill!';
+
+  @override
+  String get learnChessPieces => 'Schachfigure';
+
+  @override
+  String get learnTheRook => 'De Turm';
+
+  @override
+  String get learnItMovesInStraightLines => 'Er bewegt sich nur i grade Linie';
+
+  @override
+  String get learnRookIntro => 'De Turm isch e starchi Figur. \nBisch parat, ihn z\'kommandiere?';
+
+  @override
+  String get learnRookGoal => 'Klick uf de Turm und beweg ihn zum Stern!';
+
+  @override
+  String get learnGrabAllTheStars => 'Schnapp dir all Stern!';
+
+  @override
+  String get learnTheFewerMoves => 'Je weniger Züg - je meh Pünkt!';
+
+  @override
+  String get learnUseTwoRooks => 'Machs schnäller - benutz beidi Türm!';
+
+  @override
+  String get learnRookComplete => 'Gratuliere, du beherrschisch jetzt de Turm.';
+
+  @override
+  String get learnTheBishop => 'De Läufer';
+
+  @override
+  String get learnItMovesDiagonally => 'Er bewegt sich nur diagonal';
+
+  @override
+  String get learnBishopIntro => 'Als Nächschts lerned mir en Läufer z\'manövriere!';
+
+  @override
+  String get learnYouNeedBothBishops => 'En wissfäldrige und en schwarzfäldrige Läufer, du bruchsch beidi!';
+
+  @override
+  String get learnBishopComplete => 'Gratuliere, du chasch jetzt de Läufer kommandiere.';
+
+  @override
+  String get learnTheQueen => 'Dame oder Königin';
+
+  @override
+  String get learnQueenCombinesRookAndBishop => 'Bewegt sich wie Turm und Läufer';
+
+  @override
+  String get learnQueenIntro => 'Die stärchscht Schachfigur chunnt: \n\"Ihre Majestät die Dame!\"!';
+
+  @override
+  String get learnQueenComplete => 'Gratuliere, die Königin hät kei Gheimnis meh für dich.';
+
+  @override
+  String get learnTheKing => 'De König';
+
+  @override
+  String get learnTheMostImportantPiece => 'Die allerwichtigscht Figur';
+
+  @override
+  String get learnKingIntro => 'Du bisch de König, wänn du dis Läbe lasch, isch s\'Schpiel verlore.';
+
+  @override
+  String get learnTheKingIsSlow => 'De König isch langsam.';
+
+  @override
+  String get learnLastOne => 'S\'letscht Mal!';
+
+  @override
+  String get learnKingComplete => 'Gratuliere, du chasch jetzt de Befehlshaber befehle!';
+
+  @override
+  String get learnTheKnight => 'De Schpringer';
+
+  @override
+  String get learnItMovesInAnLShape => 'Er bewegt sich in ere L-Form';
+
+  @override
+  String get learnKnightIntro => 'Jetzt e Useforderig für dich, de Schpringer isch e kniffligi Figur.';
+
+  @override
+  String get learnKnightsHaveAFancyWay => 'Schpringer händ e usgfalleni Art umezgumpe!';
+
+  @override
+  String get learnKnightsCanJumpOverObstacles => 'Schpringer chönd über Hindernis gumpe! \nHüpf los und triff uf jede Stern!';
+
+  @override
+  String get learnKnightComplete => 'Gratuliere, du beherrschisch jetzt au de Schpringer.';
+
+  @override
+  String get learnThePawn => 'De Pur';
+
+  @override
+  String get learnItMovesForwardOnly => 'Er chann sich nur vorwärts bewege';
+
+  @override
+  String get learnPawnIntro => 'Pure sind schwach, aber sie händ vill Möglichkeite.';
+
+  @override
+  String get learnPawnsMoveOneSquareOnly => 'En Pur bewegt sich nur eis Fäld vorwärts. Aber wänn er die ander Site vom Brätt erreicht, dänn chann er sich in e stärcheri Figur umwandle!';
+
+  @override
+  String get learnMostOfTheTimePromotingToAQueenIsBest => 'Meischtens isch es s\'Bescht, e Dame z\'mache. \nAber mängisch isch au en Schpringer nützlich!';
+
+  @override
+  String get learnPawnsMoveForward => 'Pure ziehnd vorwärts, aber schlah tüends diagonal!';
+
+  @override
+  String get learnCaptureThenPromote => 'Zerscht schlah und nachher umwandle!';
+
+  @override
+  String get learnUseAllThePawns => 'Benutz all Pure! Mer muess nöd Umwandle.';
+
+  @override
+  String get learnAPawnOnTheSecondRank => 'En Pur dörf - bim 1. Zug - grad 2 Fälder vorwärts!';
+
+  @override
+  String get learnGrabAllTheStarsNoNeedToPromote => 'Schnapp dir all die Stern! \nUmwandle muesch nöd.';
+
+  @override
+  String get learnPawnComplete => 'Gratuliere, au Puure sind keis Gheimnis meh für dich.';
+
+  @override
+  String get learnPawnPromotion => 'Pure Umwandlig';
+
+  @override
+  String get learnYourPawnReachedTheEndOfTheBoard => 'Din Puur hät s\'Ändi vom Brätt erreicht!';
+
+  @override
+  String get learnItNowPromotesToAStrongerPiece => 'Er wandlet sich jetzt in e stärcheri Figur um.';
+
+  @override
+  String get learnSelectThePieceYouWant => 'Wähl die Figur wo du wottsch!';
+
+  @override
+  String get learnFundamentals => 'Grundlage';
+
+  @override
+  String get learnCapture => 'Figure schlah';
+
+  @override
+  String get learnTakeTheEnemyPieces => 'Schlag die feindliche Figure';
+
+  @override
+  String get learnCaptureIntro => 'Entdeck ungschützti Figure vu dim Gägner und schlag sie!';
+
+  @override
+  String get learnTakeTheBlackPieces => 'Schlag die schwarze Figure!';
+
+  @override
+  String get learnTakeTheBlackPiecesAndDontLoseYours => 'Schlag die schwarze Figure, aber verlür dini nöd.';
+
+  @override
+  String get learnCaptureComplete => 'Gratuliere, du weisch jetzt, wie me mit de Schachfigure kämpft!';
+
+  @override
+  String get learnProtection => 'Deckig';
+
+  @override
+  String get learnKeepYourPiecesSafe => 'Beschütz dini Figure';
+
+  @override
+  String get learnProtectionIntro => 'Find use, welli Figure din Gägner agrift und beschütz sie!';
+
+  @override
+  String get learnProtectionComplete => 'Gratuliere, jedi Figur wo du nöd verlore häsch, isch e gunneni Figur!';
+
+  @override
+  String get learnEscape => 'Du wirsch agriffe, entchum dere Bedrohig!';
+
+  @override
+  String get learnNoEscape => 'Es git e keis Entrinne, aber du chasch di verteidige!';
+
+  @override
+  String get learnDontLetThemTakeAnyUndefendedPiece => 'Lass dir kei ungschützti Figure neh!';
+
+  @override
+  String get learnCombat => 'Kampf';
+
+  @override
+  String get learnCaptureAndDefendPieces => 'Schlag und verteidig Figure';
+
+  @override
+  String get learnCombatIntro => 'En guete Chrieger kännt beides, Agriff und Verteidigung!';
+
+  @override
+  String get learnCombatComplete => 'Gratuliere, du weisch jetzt, wie me mit de Schachfigure kämpft!';
+
+  @override
+  String get learnCheckInOne => 'Schach mit 1 Zug';
+
+  @override
+  String get learnAttackTheOpponentsKing => 'Grif de gägnerisch König a';
+
+  @override
+  String get learnCheckInOneIntro => 'Grif de gägnerisch König a und büt \"Schach\", so dass er sich verteidige muess!';
+
+  @override
+  String get learnCheckInOneGoal => 'Büt das \"Schach\" mit eim Zug!';
+
+  @override
+  String get learnCheckInOneComplete => 'Gratuliere, du häsch dim Gägner \"Schach\" bote und en zwunge, sin König z\'verteidige!';
+
+  @override
+  String get learnOutOfCheck => 'Es \"Schach\" abwehre';
+
+  @override
+  String get learnDefendYourKing => 'Verteidig din König';
+
+  @override
+  String get learnOutOfCheckIntro => 'Du stahsch im Schach, du muesch flüchte oder de Agriff blockiere.';
+
+  @override
+  String get learnEscapeWithTheKing => 'Mit em König flüchte!';
+
+  @override
+  String get learnTheKingCannotEscapeButBlock => 'De König chann nöd flüchte, aber du chasch de Agriff blockiere!';
+
+  @override
+  String get learnYouCanGetOutOfCheckByTaking => 'Du chunnsch us em Schach, wänn du de Agrifer schlahsch.';
+
+  @override
+  String get learnThisKnightIsCheckingThroughYourDefenses => 'De Schpringer bütet Schach, dur dini Verteidigung!';
+
+  @override
+  String get learnEscapeOrBlock => 'Mit em König flüchte oder de Agriff blockiere!';
+
+  @override
+  String get learnOutOfCheckComplete => 'Gratuliere, din König chann nöd gschlage werde, wänn du sicher stellsch, dass du Schachgebot abwehre chasch!';
+
+  @override
+  String get learnMateInOne => 'Matt mit 1 Zug';
+
+  @override
+  String get learnDefeatTheOpponentsKing => 'Besieg de gägnerisch König';
+
+  @override
+  String get learnMateInOneIntro => 'Du günnsch, wänn din Gägner dis Schachgebot nöd abwehre cha.';
+
+  @override
+  String get learnAttackYourOpponentsKing => 'Grif de gägnerisch König so a, dass din Agriff nöd abgwehrt werde cha!';
+
+  @override
+  String get learnMateInOneComplete => 'Gratuliere, genau so günnsch du Schachschpiel!';
+
+  @override
+  String get learnIntermediate => 'Mittlers Niveau';
+
+  @override
+  String get learnBoardSetup => 'Ufschtellig';
+
+  @override
+  String get learnHowTheGameStarts => 'Wie das Schpiel afangt';
+
+  @override
+  String get learnBoardSetupIntro => 'Die beide Armee stöhnd sich gägenüber, parat für d\'Schlacht.';
+
+  @override
+  String get learnThisIsTheInitialPosition => 'Das isch die korräkti Afangsschtellig vu jedem Schachschpiel. Mach irgend en Zug zum witer fahre.';
+
+  @override
+  String get learnFirstPlaceTheRooks => 'Stell zerscht die beide Türm uf!\nSie chömmed in Egge.';
+
+  @override
+  String get learnThenPlaceTheKnights => 'Dänn schtellsch zwei Schpringer uf!\nGrad näbe de Turm.';
+
+  @override
+  String get learnPlaceTheBishops => 'Jetzt chömmed no zwei Läufer!\nGrad nach de Schpringer.';
+
+  @override
+  String get learnPlaceTheQueen => 'Platzier d\'Königin!\nDie Wiss uf\'s wisse Fäld, die Schwarz uf\'s Schwarze.';
+
+  @override
+  String get learnPlaceTheKing => 'Und dänn no de König!\nZu de Dame - näbe sini Königin.';
+
+  @override
+  String get learnPawnsFormTheFrontLine => 'Pure bilded die vorderscht Linie.\nMach irgend en Zug zum witer fahre.';
+
+  @override
+  String get learnBoardSetupComplete => 'Gratuliere, du weisch jetzt, wie mer all Schachfigure richtig ufschtellt.';
+
+  @override
+  String get learnCastling => 'Rochade';
+
+  @override
+  String get learnTheSpecialKingMove => 'De schpezielli Königszug';
+
+  @override
+  String get learnCastlingIntro => 'Bring din König i Sicherheit und de Turm i Agrifsposizion!';
+
+  @override
+  String get learnCastleKingSide => 'Zieh de König - uf de Königssite - zwei Fälder. \nDas isch die churz Rochade \"0-0\"!';
+
+  @override
+  String get learnCastleQueenSide => 'Zieh de König - uf de Damesiie - zwei Fälder.\nDas isch die lang Rochade \"0-0-0\"!';
+
+  @override
+  String get learnTheKnightIsInTheWay => 'De Schpringer staht im Wäg, ziehn en weg und mach dänn die churz Rochade.';
+
+  @override
+  String get learnCastleKingSideMovePiecesFirst => 'Zieh zerscht - uf de Königssite - Figure weg und mach dänn die churz Rochade - \"0-0\".';
+
+  @override
+  String get learnCastleQueenSideMovePiecesFirst => 'Zieh zerscht - uf de Damesite - Figure weg und mach dänn die lang Rochade \"0-0-0\".';
+
+  @override
+  String get learnYouCannotCastleIfMoved => 'Du chasch e Rochade nümme mache, wänn de König oder de Turm bereits bewegt worde isch.';
+
+  @override
+  String get learnYouCannotCastleIfAttacked => 'Du chasch e Rochade nöd über agriffeni Fälder mache! Blockier das vorher!';
+
+  @override
+  String get learnFindAWayToCastleKingSide => 'Find en Wäg für die churz Rochade!';
+
+  @override
+  String get learnFindAWayToCastleQueenSide => 'Find en Wäg für die lang Rochade!';
+
+  @override
+  String get learnCastlingComplete => 'Gratuliere, mer sött im Schach fascht immer e Rochade mache.';
+
+  @override
+  String get learnTheSpecialPawnMove => 'De schpezielli Purezug';
+
+  @override
+  String get learnEnPassantIntro => 'Isch en Pur 2 Fälder vorgschtosse, chann er gschlage werde, wie wänn er nur 1 Fäld gfahre wär.';
+
+  @override
+  String get learnBlackJustMovedThePawnByTwoSquares => 'Schwarz hät grad en Pur 2 Fälder vor gschobe!\nSchlag de Pur \"en passant\".';
+
+  @override
+  String get learnEnPassantOnlyWorksImmediately => '\"En passant\" isch nur unmittelbar nach em Purezug - über die erschte zwei Fälder - erlaubt.';
+
+  @override
+  String get learnEnPassantOnlyWorksOnFifthRank => '\"En passant\" isch nur erlaubt, wänn de Pur wo schlaht, uf de 5. Reihe (Schwarz uf de 4. Reihe) staht.';
+
+  @override
+  String get learnTakeAllThePawnsEnPassant => 'Schlag jetzt jede Pur \"en passant\"!';
+
+  @override
+  String get learnEnPassantComplete => 'Gratuliere, du weisch jetzt, wie me \"en passant\" schlaht.';
+
+  @override
+  String get learnStalemate => 'Patt Schtellig';
+
+  @override
+  String get learnTheGameIsADraw => 'Es Schpiel isch Remis (unentschide)';
+
+  @override
+  String get learnStalemateIntro => 'Staht de König nöd im Schach und es isch kein gültige Zug möglich, dänn isch \"Patt\", d. h. s\'Schpiel ändet \"Remis\" (unentschiede): Niemer günnt, niemer verlürt.';
+
+  @override
+  String get learnStalemateGoal => 'Schwarz absichtlich Patt setze:\n- Schwarz chann kein Zug mache\n- Wiss chann kei \"Schach\" büte.';
+
+  @override
+  String get learnStalemateComplete => 'Gratuliere, lieber es Patt als es Matt!';
+
+  @override
+  String get learnAdvanced => 'Fortgschritte';
+
+  @override
+  String get learnPieceValue => 'Figurewert';
+
+  @override
+  String get learnEvaluatePieceStrength => 'Lueg uf de Wert vu de Figure';
+
+  @override
+  String get learnPieceValueIntro => 'Figure mit meh Mobilität händ en höchere Wert!\nDame = 9\nTurm = 5\nLäufer = 3\nSchpringer = 3\nPur = 1\nDe König hät kein Pris, gaht er verlore, isch au s\'Schpiel verlore.';
+
+  @override
+  String get learnQueenOverBishop => 'Schlag d\'Figur mit em höchschte Wert!\nDame > Läufer';
+
+  @override
+  String get learnPieceValueExchange => 'Schlag d\'Figur mit em höchschte Wert!\nAber tusch debi kei wertvolli Figur gäge e Figur wo weniger Wert hät.';
+
+  @override
+  String get learnPieceValueLegal => 'Schlag d\'Figur mit em höchschte Wert!\nUnd lueg debi, dass din Zug regulär isch!';
+
+  @override
+  String get learnTakeThePieceWithTheHighestValue => 'Schlag d\'Figur mit em höchschte Wert!';
+
+  @override
+  String get learnPieceValueComplete => 'Gratuliere, du kännsch jetzt de Wert vu de Figure!\nDam = 9\nTurm = 5\nLäufer = 3\nSchpringer = 3\nPur = 1';
+
+  @override
+  String get learnCheckInTwo => 'Schach mit 2 Züg';
+
+  @override
+  String get learnTwoMovesToGiveCheck => 'Mit 2 Züg Schach büte';
+
+  @override
+  String get learnCheckInTwoIntro => 'Find di richtig Kombination, zum de König mit 2 Züg Schach setze!';
+
+  @override
+  String get learnCheckInTwoGoal => 'Bedroh de König mit 2 Züg!';
+
+  @override
+  String get learnCheckInTwoComplete => 'Gratuliere, du häsch din Gägner Schach gsetzt und ihn zur Verteidigung vu sim König zwunge!';
+
+  @override
+  String get learnWhatNext => 'Wie gahts witer?';
+
+  @override
+  String get learnYouKnowHowToPlayChess => 'Gratuliere, du weisch jetzt wie me Schach schpillt! Wottsch en stärchere Schpiller werde?';
+
+  @override
+  String get learnRegister => 'Regischtriere';
+
+  @override
+  String get learnGetAFreeLichessAccount => 'Mach es Gratis Konto bi lichess';
+
+  @override
+  String get learnPractice => 'Training';
+
+  @override
+  String get learnLearnCommonChessPositions => 'Lern mit gängige Schtellige';
+
+  @override
+  String get learnPuzzles => 'Ufgabe';
+
+  @override
+  String get learnExerciseYourTacticalSkills => 'Trainier dini taktische Fähigkeite';
+
+  @override
+  String get learnVideos => 'Videos';
+
+  @override
+  String get learnWatchInstructiveChessVideos => 'Lueg lehrrichi Schach-Videos';
+
+  @override
+  String get learnPlayPeople => 'Schpill online mit Lüt';
+
+  @override
+  String get learnOpponentsFromAroundTheWorld => 'Gägner us de ganze Wält';
+
+  @override
+  String get learnPlayMachine => 'Computerschach';
+
+  @override
+  String get learnTestYourSkillsWithTheComputer => 'Erprob dis Schpiel mit em Computer';
+
+  @override
+  String get learnLetsGo => 'Los gaht\'s!';
+
+  @override
+  String learnStageX(String param) {
+    return 'Schtufe $param';
+  }
+
+  @override
+  String get learnAwesome => 'Fantastisch!';
+
+  @override
+  String get learnExcellent => 'Usgezeichnet!';
+
+  @override
+  String get learnGreatJob => 'Gueti Arbet!';
+
+  @override
+  String get learnPerfect => 'Perfäkt!';
+
+  @override
+  String get learnOutstanding => 'Herusragend!';
+
+  @override
+  String get learnWayToGo => 'Witer so!';
+
+  @override
+  String get learnYesYesYes => 'Ja - ja - ja!';
+
+  @override
+  String get learnYoureGoodAtThis => 'Du bisch guet i dem!';
+
+  @override
+  String get learnNailedIt => 'Ganz genau so.';
+
+  @override
+  String get learnRightOn => 'Uf de Punkt!';
+
+  @override
+  String learnStageXComplete(String param) {
+    return 'Schtufe $param beändet';
+  }
+
+  @override
+  String get learnNext => 'Witer mit';
+
+  @override
+  String learnNextX(String param) {
+    return 'Nächschti: $param';
+  }
+
+  @override
+  String get learnBackToMenu => 'Zrugg zum Menü';
+
+  @override
+  String get learnPuzzleFailed => 'Ufgab nöd glöst!';
+
+  @override
+  String get learnRetry => 'Probiers nomal';
+
+  @override
   String get patronDonate => 'Schpände';
 
   @override
