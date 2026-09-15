@@ -77,14 +77,45 @@ sealed class const GameSeek._() with _$GameSeek {
 
   /// Construct a game seek from a playable game to find a new opponent, using
   /// the same time control, variant and rated status.
-  factory newOpponentFromGame(PlayableGame game, GameSetupPrefs setup) {
+  factory newOpponentFromGame(PlayableGame game, GameSetupPrefs setup, {User? account}) {
+    (int, int)? ratingRange;
+    (int, int)? ratingDelta;
+
+    if (game.source == GameSource.lobby &&
+        game.meta.rated &&
+        setup.customRatingDelta != kDefaultRatingDelta) {
+      final perf = Perf.fromVariantAndSpeed(game.meta.variant, game.meta.speed);
+      final me = game.youAre != null ? game.playerOf(game.youAre!) : null;
+
+      int? currentRating;
+      bool? isProvisional;
+
+      if (me != null && me.rating != null) {
+        currentRating = me.rating! + (me.ratingDiff ?? 0);
+        isProvisional = me.provisional;
+      } else if (account != null) {
+        final userPerf = account.perfs[perf];
+        currentRating = userPerf?.rating;
+        isProvisional = userPerf?.provisional;
+      }
+
+      if (isProvisional != true && currentRating != null) {
+        final min = math.max(0, currentRating + setup.customRatingDelta.$1);
+        final max = currentRating + setup.customRatingDelta.$2;
+        ratingRange = (min, max);
+      } else if (currentRating == null) {
+        ratingDelta = setup.customRatingDelta;
+      }
+    }
+
     return GameSeek(
       clock: game.meta.clock != null
           ? (game.meta.clock!.initial, game.meta.clock!.increment)
           : null,
       rated: game.meta.rated,
       variant: game.meta.variant,
-      ratingDelta: game.source == GameSource.lobby ? setup.customRatingDelta : null,
+      ratingRange: ratingRange,
+      ratingDelta: ratingDelta,
     );
   }
 
