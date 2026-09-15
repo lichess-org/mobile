@@ -466,7 +466,7 @@ sealed class Crosstable with _$Crosstable {
 /// teams), so the filter + sort is memoized per map instance. [IMap] is
 /// immutable, so instance identity implies value identity and the cached list
 /// stays valid as long as the map is alive.
-
+///
 /// Expando uses a weak reference, ensuring that the cache is garbage collected
 /// once the perf map is destroyed
 final _sortedPerfsCache = Expando<List<Perf>>('sortedUserPerfs');
