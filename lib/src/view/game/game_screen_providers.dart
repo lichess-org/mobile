@@ -145,13 +145,19 @@ class GameScreenLoaderNotifier(final GameScreenSource source)
   }
 
   /// Search for a new opponent (lobby only).
-  Future<void> newOpponent() async {
-    if (source case LobbySource(:final seek)) {
+  Future<void> newOpponent([GameSeek? newSeek]) async {
+    final seekToUse =
+        newSeek ??
+        switch (source) {
+          LobbySource(:final seek) => seek,
+          _ => null,
+        };
+    if (seekToUse != null) {
       final service = ref.read(createGameServiceProvider);
       state = const AsyncValue.loading();
       state = AsyncValue.data(
         await service
-            .newLobbyGame(seek)
+            .newLobbyGame(seekToUse)
             .then(
               (data) => switch (data) {
                 GameSeekCreated(:final fullId) => GameCreatedState(fullId),

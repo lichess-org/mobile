@@ -1,5 +1,6 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
@@ -180,16 +181,15 @@ class _GameScreenState() extends ConsumerState<GameScreen> {
               onNewOpponentCallback: (game) {
                 if (!mounted) return;
 
-                if (widget.source is LobbySource) {
-                  ref.read(gameScreenLoaderProvider(widget.source).notifier).newOpponent();
-                } else {
-                  final savedSetup = ref.read(gameSetupPreferencesProvider);
-                  Navigator.of(context, rootNavigator: true).pushReplacement(
-                    GameScreen.buildRoute(
-                      source: LobbySource(GameSeek.newOpponentFromGame(game, savedSetup)),
+                final savedSetup = ref.read(gameSetupPreferencesProvider);
+                final account = ref.read(accountProvider).value;
+                Navigator.of(context, rootNavigator: true).pushReplacement(
+                  GameScreen.buildRoute(
+                    source: LobbySource(
+                      GameSeek.newOpponentFromGame(game, savedSetup, account: account),
                     ),
-                  );
-                }
+                  ),
+                );
               },
             ),
           ),
