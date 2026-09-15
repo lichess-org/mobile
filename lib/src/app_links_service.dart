@@ -1,12 +1,16 @@
 import 'dart:async';
 
 import 'package:app_links/app_links.dart';
+import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/account/ongoing_games_notifier.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -27,6 +31,8 @@ import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_results_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
@@ -318,6 +324,32 @@ class AppLinksService(final Ref ref, {AppLinks? appLinks}) {
     try {
       final gameId = GameId(appLinkUri.pathSegments[0]);
       if (!gameId.isValid) return null;
+
+      final authUser = ref.read(authControllerProvider);
+      if (authUser != null) {
+        try {
+          final ongoingGames = await ref.read(accountRepositoryProvider).getOngoingGames(nb: 3);
+          final ongoing = ongoingGames.firstWhereOrNull((g) => g.id == gameId);
+          if (ongoing != null) {
+            ref.invalidate(ongoingGamesProvider);
+            return [
+              GameScreen.buildRoute(
+                source: ExistingGameSource(ongoing.fullId),
+                loadingPosition: (
+                  variant: ongoing.variant,
+                  fen: ongoing.fen,
+                  orientation: ongoing.orientation,
+                  lastMove: ongoing.lastMove,
+                ),
+              ),
+            ];
+          }
+        } catch (e, st) {
+          _logger.warning('Failed to fetch ongoing games for $gameId', e, st);
+        }
+      }
+
+      if (!context.mounted) return null;
 
       final game = await ref.read(gameRepositoryProvider).getGame(gameId);
       final orientation = appLinkUri.pathSegments.getOrNull(1) == 'black' ? Side.black : Side.white;
