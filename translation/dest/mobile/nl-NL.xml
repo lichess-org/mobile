@@ -7,6 +7,7 @@
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Weet je het zeker?</string>
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Bordinstellingen</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Terugnameaanbod annuleren</string>
+  <string name="chessEngine" comment="Chess engine settings screen title.">Schaakcomputer</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Wissen</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Opgeslagen zet wissen</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Een partij beginnen</string>
@@ -45,6 +46,8 @@
   <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">Versleept stuk bestemming</string>
   <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">Cirkel</string>
   <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">Vierkant</string>
+  <string name="settingsDrawnShapeColor" comment="This is shown in the theme settings screen. Allow to choose the color of drawn shapes.">Vormkleur</string>
+  <string name="settingsDrawnShapeColorHelp" comment="This is shown in the theme settings screen. Explanation of the drawn shape color settings.">Deze kleur wordt gebruikt voor vormen getekend met twee vingers.</string>
   <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">Thuiswidgets</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Volledig scherm-modus</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Systeem-UI verbergen tijdens het spelen. Gebruik dit als je last hebt van de navigatiegebaren aan de randen van het scherm. Van toepassing bij partijen en puzzels.</string>
