@@ -1,10 +1,12 @@
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/profile.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
+import 'package:material_ui/material_ui.dart';
 
 part 'user.freezed.dart';
 part 'user.g.dart';
@@ -456,4 +458,29 @@ sealed class Crosstable with _$Crosstable {
       return CrosstableMatchup.fromPick(matchupPick.required());
     }),
   );
+}
+
+/// Perfs with enough rated games, sorted by game count descending.
+///
+/// This runs in every row of every scrolling user lists (leaderboards, search,
+/// teams), so the filter + sort is memoized per map instance. [IMap] is
+/// immutable, so instance identity implies value identity and the cached list
+/// stays valid as long as the map is alive.
+///
+/// Expando uses a weak reference, ensuring that the cache is garbage collected
+/// once the perf map is destroyed
+final _sortedPerfsCache = Expando<List<Perf>>('sortedUserPerfs');
+
+extension PerfsHelpers on IMap<Perf, UserPerf> {
+  List<Perf> get sortedUserPerfs => _sortedPerfsCache[this] ??=
+      Perf.values
+          .where((element) {
+            final p = this[element];
+            return p != null && p.numberOfGamesOrRuns > 0 && p.ratingDeviation < kClueLessDeviation;
+          })
+          .toList(growable: false)
+        ..sort((p1, p2) => this[p2]!.numberOfGamesOrRuns.compareTo(this[p1]!.numberOfGamesOrRuns));
+
+  int? get displayRating => sortedUserPerfs.isEmpty ? null : this[sortedUserPerfs.first]?.rating;
+  IconData? get displayIcon => sortedUserPerfs.isEmpty ? null : sortedUserPerfs.first.icon;
 }

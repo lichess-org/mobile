@@ -1,5 +1,4 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
@@ -50,7 +49,7 @@ class const UserListTile._(
 class const _UserRating({required final IMap<Perf, UserPerf> perfs}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final userPerfs = _sortedUserPerfs(perfs);
+    final userPerfs = perfs.sortedUserPerfs;
 
     if (userPerfs.isEmpty) return const SizedBox.shrink();
 
@@ -62,25 +61,4 @@ class const _UserRating({required final IMap<Perf, UserPerf> perfs}) extends Sta
       children: [Icon(icon, size: 16), const SizedBox(width: 5), Text(rating)],
     );
   }
-}
-
-/// Perfs with enough rated games, sorted by game count descending.
-///
-/// This runs in every row of every scrolling user list (leaderboards, search,
-/// teams), so the filter + sort is memoized per map instance. [IMap] is
-/// immutable, so instance identity implies value identity and the cached list
-/// stays valid as long as the map is alive.
-final _sortedPerfsCache = Expando<List<Perf>>('sortedUserPerfs');
-
-List<Perf> _sortedUserPerfs(IMap<Perf, UserPerf> perfs) {
-  return _sortedPerfsCache[perfs] ??=
-      Perf.values
-          .where((element) {
-            final p = perfs[element];
-            return p != null && p.numberOfGamesOrRuns > 0 && p.ratingDeviation < kClueLessDeviation;
-          })
-          .toList(growable: false)
-        ..sort(
-          (p1, p2) => perfs[p2]!.numberOfGamesOrRuns.compareTo(perfs[p1]!.numberOfGamesOrRuns),
-        );
 }
