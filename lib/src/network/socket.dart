@@ -245,7 +245,7 @@ class SocketClient(
 
     final authUser = getSession();
 
-    final queryParameters = Map<String, String>.from(route.queryParameters);
+    final queryParameters = Map<String, String>.of(route.queryParameters);
     if (version != null) {
       queryParameters['v'] = version.toString();
     }
