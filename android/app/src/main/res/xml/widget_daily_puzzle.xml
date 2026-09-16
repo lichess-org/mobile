@@ -2,12 +2,9 @@
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
   android:description="@string/widget_daily_puzzle_description"
   android:minWidth="250dp"
-  android:minHeight="110dp"
-  android:minResizeWidth="150dp"
-  android:minResizeHeight="110dp"
-  android:maxResizeHeight="290dp"
+  android:minHeight="100dp"
   android:updatePeriodMillis="3600000"
   android:initialLayout="@layout/widget_daily_puzzle"
-  android:resizeMode="horizontal|vertical"
+  android:resizeMode="none"
   android:widgetCategory="home_screen"
-  android:previewImage="@drawable/widget_broadcast_preview_image" />
+  android:previewImage="@drawable/widget_daily_puzzle_preview" />

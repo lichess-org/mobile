@@ -125,10 +125,11 @@ class DailyPuzzleWidgetProvider : AppWidgetProvider() {
 
         val options = appWidgetManager.getAppWidgetOptions(appWidgetId)
         val minWidth = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH)
+        val cornerRadiusPx = (12 * context.resources.displayMetrics.density).toInt()
 
-
-        val boardBitmap = getBoardBitmap(context, minWidth)
-        remoteViews.setImageViewBitmap(R.id.puzzle_board_image, boardBitmap)
+        val boardBitmap = getBoardBitmap(context, minWidth, puzzle.fen, puzzle.lastMove)
+        val roundBoard = getRoundedCornerBitmap(boardBitmap, cornerRadiusPx)
+        remoteViews.setImageViewBitmap(R.id.puzzle_board_image, roundBoard)
 
       }
     } catch (e: Exception) {
@@ -138,14 +139,54 @@ class DailyPuzzleWidgetProvider : AppWidgetProvider() {
     appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
   }
 
-  private fun parseFen(fen : String): List<List<Char?>>
-  {
+  private fun parseFen(fen : String): List<List<Char?>> {
+    val position = fen.split(" ").firstOrNull() ?: fen
+    val ranks = position.split('/')
 
+    if(ranks.size != 8) return emptyList()
+
+    return ranks.map { rank ->
+      val row = mutableListOf<Char?>()
+      for (ch in rank){
+        val emptyCount = ch.digitToIntOrNull()
+        if(emptyCount != null){
+          repeat(emptyCount) { row.add(null) }
+        } else {
+          row.add(ch)
+        }
+      }
+      row
+    }
+  }
+
+  private fun getPieceBitmap(context: Context, piece : Char): Bitmap?{
+    val color = if(piece.isUpperCase()) "w" else "b"
+    val kind = piece.lowercaseChar()
+    val name = "piece_cburnett_$color$kind"
+
+    val resId = context.resources.getIdentifier(name, "drawable", context.packageName)
+    if(resId == 0){
+      Log.e("Daily Puzzle Widget", "Missing piece asset: $name")
+      return null
+    }
+    return BitmapFactory.decodeResource(context.resources, resId)
+  }
+
+  private fun sqrName(rankIndex: Int, fileIndex: Int): String {
+    val files = "abcdefgh"
+    return "${files[fileIndex]}${8 - rankIndex}"
+  }
+
+  private fun highlightedSquare(lastMove: String): Set<String?>{
+    if(lastMove.length < 4) return emptySet()
+    return setOf(lastMove.substring(0, 2), lastMove.substring(2, 4))
   }
 
   private fun getBoardBitmap(
     context : Context,
-    minWidth : Int
+    minWidth : Int,
+    fen : String,
+    lastMove: String
   ) : Bitmap
   {
     val boardSizedPx = (minWidth * context.resources.displayMetrics.density).toInt()
@@ -155,20 +196,57 @@ class DailyPuzzleWidgetProvider : AppWidgetProvider() {
     val sqrSize = boardSizedPx / 8
     val lightPaint = Paint().apply { color = Color.rgb(0xF0, 0xD9, 0xB6) }
     val darkPaint = Paint().apply { color = Color.rgb(0xB5, 0x88, 0x63) }
+    val highlightedPaint = Paint().apply { color = Color.argb(128, 156, 199, 0)}
+
+    val highlighted = highlightedSquare(lastMove)
+    val boardData = parseFen(fen)
+    val isWhiteToMove = fen.split(" ").getOrNull(1) == "w"
+    val flipped = !isWhiteToMove
 
     for(row in 0 until 8){
       for(col in 0 until 8){
-        val flipped = false
         val rankIndex = if (flipped) 7 - row else row
         val fileIndex = if (flipped) 7 - col else col
         val isLight = (rankIndex + fileIndex) % 2 == 0
         val left = fileIndex *sqrSize
         val top = rankIndex * sqrSize
         val sqrRect = Rect(left, top, left + sqrSize, top + sqrSize)
+        val piece = boardData.getOrNull(rankIndex)?.getOrNull(fileIndex)
+        val name = sqrName(rankIndex, fileIndex)
 
         canvas.drawRect(sqrRect, if(isLight) lightPaint else darkPaint)
+        if(highlighted.contains(name)){
+          canvas.drawRect(sqrRect, highlightedPaint)
+        }
+
+        if(piece != null){
+          val pieceBitmap = getPieceBitmap(context, piece)
+          if(pieceBitmap != null){
+            val inset = (sqrSize * 0.05f).toInt()
+            val pieceRect = Rect(left + inset, top + inset, left + sqrSize -inset, top + sqrSize - inset)
+            canvas.drawBitmap(pieceBitmap, null, pieceRect, null)
+            pieceBitmap.recycle()
+          }
+        }
       }
     }
     return bitmap
+  }
+
+  private fun getRoundedCornerBitmap(bitmap: Bitmap, pixels: Int): Bitmap {
+    val output = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
+    val canvas = Canvas(output)
+    val paint = Paint().apply { isAntiAlias = true }
+    val rect = Rect(0, 0, bitmap.width, bitmap.height)
+    val rectF = RectF(rect)
+    val roundPx = pixels.toFloat()
+
+    canvas.drawARGB(0, 0, 0, 0)
+    paint.color = Color.BLACK
+    canvas.drawRoundRect(rectF, roundPx, roundPx, paint)
+    paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
+    canvas.drawBitmap(bitmap, rect, rect, paint)
+
+    return output
   }
 }
