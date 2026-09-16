@@ -131,7 +131,7 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
 
   Future<void> _refreshData() async {
     if (!mounted) return;
-    return _doRefreshDataForRef(ref);
+    return await _doRefreshDataForRef(ref);
   }
 }
 

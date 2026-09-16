@@ -71,6 +71,6 @@ jobs:
         working-directory: android
 
       - name: Install Firebase CLI
-        run: curl -sL https://firebase.tools | bash
+        run: npm install -g firebase-tools
       - name: Deploy symbols to Firebase Crashlytics
         run: firebase --token="${{ secrets.FIREBASE_CI }}" crashlytics:symbols:upload --app="${{ secrets.FIREBASE_ANDROID_APP_ID }}" ./build/app/outputs/bundle/release/symbols

@@ -27,7 +27,7 @@ class GameListDetailTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final (game: game, pov: youAre) = item;
+    final (:game, pov: youAre) = item;
     final me = youAre == Side.white ? game.white : game.black;
     final opponent = youAre == Side.white ? game.black : game.white;
     final isTablet = isTabletOrLarger(context);

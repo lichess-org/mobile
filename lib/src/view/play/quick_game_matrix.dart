@@ -200,7 +200,7 @@ class _ChoiceChip extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: [title, if (subtitle != null) subtitle!],
+                children: [title, ?subtitle],
               ),
             ),
           ),

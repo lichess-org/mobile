@@ -6,10 +6,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/board_editor/board_editor_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/chess960.dart';
+import 'package:lichess_mobile/src/model/engine/engine_spec.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:material_ui/material_ui.dart';
 
+import '../../model/engine/fake_engine.dart';
+import '../../test_helpers.dart' show getBoardPieces;
 import '../../test_provider_scope.dart';
 
 void _mockClipboard(String text) {
@@ -319,6 +323,32 @@ void main() {
         // Obtained by playing the moves above on lichess.org/editor
         '1nbqkbnr/pppppppp/r7/8/3PP3/8/PPP2PPP/RNQ1KBNR w KQk - 0 1',
       );
+    });
+
+    testWidgets('Analysis opens with Fairy-Stockfish after adding a 33rd piece', (tester) async {
+      fakeEngine = FakeEngine();
+      addTearDown(() => fakeEngine = FakeEngine());
+      final app = await makeTestProviderScopeApp(tester, home: const BoardEditorScreen());
+      await tester.pumpWidget(app);
+
+      await tester.tap(find.byKey(const Key('piece-button-white-knight')));
+      await tester.pump();
+      await tapSquare(tester, 'e3');
+
+      const fen = 'rnbqkbnr/pppppppp/8/8/8/4N3/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+      expect(tester.widget<ChessboardEditor>(find.byType(ChessboardEditor)).pieces, readFen(fen));
+      expect(
+        tester.widget<BottomBarButton>(find.byKey(const Key('analysis-board-button'))).onTap,
+        isNotNull,
+      );
+
+      await tester.tap(find.byKey(const Key('analysis-board-button')));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(AnalysisScreen), findsOneWidget);
+      expect(getBoardPieces(tester), readFen(fen));
+      expect(fakeEngine.spec, const StockfishSpec.fairy());
+      expect(fakeEngine.position?.fen, fen);
     });
 
     testWidgets('illegal position cannot be analyzed', (tester) async {

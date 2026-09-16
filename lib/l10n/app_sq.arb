@@ -639,6 +639,8 @@
   "puzzleThemeMixDescription": "Pak nga të gjitha. S’dini ç’të prisni, ndaj mbeteni gati për gjithçka! Mu si në lojëra të njëmendta.",
   "puzzleThemePlayerGames": "Lojëra të lojëtarit",
   "puzzleThemePuzzleDownloadInformation": "Këto ushtrime janë nën përkatësi publike dhe mund të shkarkohen nga {param}.",
+  "recapAwaitQuestion": "Me se jeni marrë këtë vit?",
+  "recapRecapReady": "Përmbledhja juaj për {param} është gati!",
   "searchSearch": "Kërko",
   "settingsSettings": "Rregullime",
   "settingsCloseAccount": "Mbyll llogarinë",

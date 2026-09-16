@@ -45,7 +45,7 @@ void main() {
       final engine = Engine(transport);
       await pumpEventQueue();
 
-      expect(engine.name.value, 'Stockfish 16.1');
+      expect(engine.name.value, 'Stockfish 19');
       addTearDown(engine.dispose);
     });
 
@@ -146,7 +146,7 @@ void main() {
     test('an option is reset even when the engine declared no defaults', () async {
       // A handshake with no `option` lines is what the plugin's own fakes produce, and what an
       // engine that answers `uciok` without listing its options would look like.
-      final transport = FakeTransport(startupLines: const ['id name Stockfish 16.1', 'uciok']);
+      final transport = FakeTransport(startupLines: const ['id name Stockfish 19', 'uciok']);
       final engine = Engine(transport);
       addTearDown(engine.dispose);
       await pumpEventQueue();
@@ -426,7 +426,7 @@ void main() {
       final search = await startSearch(engine, transport, makeRequest());
 
       transport.die(
-        const EngineFailure(kind: EngineFailureKind.runtime, message: 'boom', engine: 'sf16'),
+        const EngineFailure(kind: EngineFailureKind.runtime, message: 'boom', engine: 'light'),
       );
       await pumpEventQueue();
 

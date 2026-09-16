@@ -2583,6 +2583,14 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String get recapAwaitQuestion => 'ماذا كنت حتى تفعل في هذا العام؟';
+
+  @override
+  String recapRecapReady(String param) {
+    return 'موجز $param الخاص بك مُعَدّ!';
+  }
+
+  @override
   String get searchSearch => 'بحث';
 
   @override

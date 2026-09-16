@@ -23,8 +23,7 @@ enum OpponentEngine {
     name: 'Maia',
     iconAsset: 'assets/images/maia/icon.webp',
     description:
-        'Maia is a human-like neural network chess engine. This version was trained by learning '
-        'from over 10 million Lichess games between 1500s. Maia Chess is an ongoing research '
+        'Maia is a human-like neural network chess engine. Maia Chess is an ongoing research '
         'project aiming to make a more human-friendly, useful, and fun chess AI. For more '
         'information go to maiachess.com.',
   );
@@ -116,8 +115,19 @@ class _OpponentPickerSheetState extends ConsumerState<_OpponentPickerSheet> {
       final MaiaOpponentSpec spec => spec.rating,
       StockfishOpponentSpec() => MaiaRating.defaultRating,
     };
+    final initialRating = _rating;
     _weights.availableRatings().then((available) {
-      if (mounted) setState(() => _available = available);
+      if (!mounted) return;
+      setState(() => _available = available);
+      if (available.contains(_rating)) return;
+      if (_rating == initialRating) {
+        // The network of the rating the picker opened on is gone, e.g. cleared from the engine
+        // settings: fall back to the bundled one rather than download it unasked.
+        setState(() => _rating = MaiaRating.defaultRating);
+      } else {
+        // Picked before we knew what was on the device, so nothing fetched it yet.
+        _ensure(_rating);
+      }
     });
   }
 

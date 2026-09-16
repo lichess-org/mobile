@@ -29,13 +29,13 @@ const _kMaiaPolicyTemperature = 1.0;
 /// distribution exactly as trained, below 1 sharpens towards its favourite move, and above 1
 /// flattens towards the tail — the range LC0 accepts runs to 100, which is very nearly a uniform
 /// pick among legal moves. 0 turns sampling off and takes the top move every time.
-const _kMaiaTemperature = 0.8;
+const _kMaiaTemperature = 0.6;
 
 /// How long the temperature holds before it starts falling, and over how many moves it reaches 0.
 ///
 /// The delay ends where the offline opening book does.
 const _kMaiaTempDecayDelayMoves = 5;
-const _kMaiaTempDecayMoves = 35;
+const _kMaiaTempDecayMoves = 10;
 
 /// The floor the decay above never falls through, so that a long game does not become deterministic.
 const _kMaiaTempEndgame = 0.2;

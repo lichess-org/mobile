@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
@@ -196,6 +197,41 @@ void main() {
       expect(await file.exists(), isFalse);
     });
 
+    test('isAvailable returns false and does not delete file during in-flight download', () async {
+      final dir = await makeTempDir();
+      final downloadCompleter = Completer<void>();
+      final fileWrittenCompleter = Completer<void>();
+
+      final container = makeWeightsContainer(
+        appSupportDirectory: dir,
+        mockClient: MockClient((_) async {
+          final file = File('${dir.path}/maia/maia-1700.pb.gz');
+          await file.parent.create(recursive: true);
+          await file.writeAsBytes([1, 2, 3, 4, 5]);
+
+          if (!fileWrittenCompleter.isCompleted) {
+            fileWrittenCompleter.complete();
+          }
+
+          await downloadCompleter.future;
+          return http.Response('test content', 200);
+        }),
+      );
+      final service = container.read(maiaWeightsServiceProvider);
+
+      final downloadFuture = service.download(MaiaRating.maia1700);
+
+      await fileWrittenCompleter.future;
+
+      final file = service.weightsFile(MaiaRating.maia1700);
+      expect(await file.exists(), isTrue);
+      expect(await service.isAvailable(MaiaRating.maia1700), isFalse);
+      expect(await file.exists(), isTrue);
+
+      downloadCompleter.complete();
+      await downloadFuture;
+    });
+
     test('a corrupted bundled network is replaced by the one in the asset bundle', () async {
       final dir = await makeTempDir();
       final container = makeWeightsContainer(appSupportDirectory: dir);
@@ -241,6 +277,38 @@ void main() {
       expect(await stray.exists(), isFalse);
       expect(await File(path).exists(), isTrue);
       expect(await service.unusableWeights(), (count: 0, bytes: 0));
+    });
+
+    test('unusableWeights does not report in-flight download as unusable', () async {
+      final dir = await makeTempDir();
+      final downloadCompleter = Completer<void>();
+      final fileWrittenCompleter = Completer<void>();
+
+      final container = makeWeightsContainer(
+        appSupportDirectory: dir,
+        mockClient: MockClient((_) async {
+          final file = File('${dir.path}/maia/maia-1700.pb.gz');
+          await file.parent.create(recursive: true);
+          await file.writeAsBytes([1, 2, 3, 4, 5]);
+
+          if (!fileWrittenCompleter.isCompleted) {
+            fileWrittenCompleter.complete();
+          }
+
+          await downloadCompleter.future;
+          return http.Response('test content', 200);
+        }),
+      );
+      final service = container.read(maiaWeightsServiceProvider);
+
+      final downloadFuture = service.download(MaiaRating.maia1700);
+
+      await fileWrittenCompleter.future;
+
+      expect(await service.unusableWeights(), (count: 0, bytes: 0));
+
+      downloadCompleter.complete();
+      await downloadFuture;
     });
 
     test('reports rather than throws when there is nowhere to put a network', () async {

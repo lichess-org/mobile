@@ -101,7 +101,9 @@ class _BodyState extends ConsumerState<_Body> {
 
       final ongoingGame = await ref.read(overTheBoardGameStorageProvider).fetchOngoingGame();
       if (ongoingGame != null && ongoingGame.game.steps.length > 1 && !ongoingGame.game.finished) {
-        ref.read(overTheBoardGameControllerProvider.notifier).loadOngoingGame(ongoingGame.game);
+        ref
+            .read(overTheBoardGameControllerProvider.notifier)
+            .loadOngoingGame(ongoingGame.game, ongoingGame.timeIncrement);
 
         ref
             .read(overTheBoardClockProvider.notifier)
@@ -269,12 +271,6 @@ class _BodyState extends ConsumerState<_Body> {
                       lastMove: gameState.lastMove,
                       onMove: (move, {viaDragAndDrop}) {
                         ref.read(overTheBoardGameControllerProvider.notifier).makeMove(move);
-                        // Don't restart the clock on a game-ending move, or it keeps running.
-                        if (!ref.read(overTheBoardGameControllerProvider).finished) {
-                          ref
-                              .read(overTheBoardClockProvider.notifier)
-                              .onMove(newSideToMove: gameState.turn.opposite);
-                        }
                       },
                     ),
                     moves: gameState.moves,

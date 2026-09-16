@@ -223,7 +223,7 @@ class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> 
 
     _wasInBackground = true;
 
-    // real time games need the socket to stay connected otherwise lichess will think the player leaved
+    // real time games need the socket to stay connected otherwise lichess will think the player left
     // correspondence games can and should close the socket when the app is in background (because lichess won't send the push notification update when the player is still connected to the socket)
     if (state.requireValue.game.meta.speed == Speed.correspondence) {
       _socketClient.close();

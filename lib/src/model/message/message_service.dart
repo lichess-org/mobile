@@ -27,7 +27,7 @@ class MessageService {
 
   void start() {
     _fcmSubscription = NotificationService.fcmMessageStream.listen((data) {
-      final (message: fcmMessage, fromBackground: fromBackground) = data;
+      final (message: fcmMessage, :fromBackground) = data;
       switch (fcmMessage) {
         case NewMessageFcmMessage():
           ref.invalidate(contactsProvider);

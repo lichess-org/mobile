@@ -61,7 +61,7 @@ class _AppLogSettingsScreenState extends ConsumerState<AppLogSettingsScreen> {
 
   Future<void> _onRefresh() async {
     await Future<void>.delayed(const Duration(milliseconds: 300));
-    return ref.read(appLogPaginatorProvider(_searchQuery).notifier).refresh();
+    return await ref.read(appLogPaginatorProvider(_searchQuery).notifier).refresh();
   }
 
   @override

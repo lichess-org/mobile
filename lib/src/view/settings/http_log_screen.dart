@@ -52,7 +52,7 @@ class _HttpLogScreenState extends ConsumerState<HttpLogScreen> {
 
   Future<void> _onRefresh() async {
     await Future<void>.delayed(const Duration(milliseconds: 300));
-    return ref.read(httpLogPaginatorProvider(_searchQuery).notifier).refresh();
+    return await ref.read(httpLogPaginatorProvider(_searchQuery).notifier).refresh();
   }
 
   @override

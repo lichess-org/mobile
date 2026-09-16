@@ -505,7 +505,7 @@ void main() {
 
     group('NNUE files missing tip', () {
       const nnueFilesMissingTip =
-          'New Stockfish version available! Go to the settings to download the updated NNUE files.';
+          'New Stockfish version available! Go to the settings to download the updated NNUE file.';
       testWidgets('Shown if engine pref is latest sf and NNUE files are missing', (tester) async {
         final app = await makeTestProviderScope(
           tester,
@@ -560,7 +560,7 @@ void main() {
         expect(find.text(nnueFilesMissingTip), findsNothing);
       });
 
-      testWidgets('Not shown if engine pref is sf16', (tester) async {
+      testWidgets('Not shown if engine pref is sfLight', (tester) async {
         final app = await makeTestProviderScope(
           tester,
           overrides: {
@@ -572,7 +572,7 @@ void main() {
           defaultPreferences: {
             PrefCategory.engineEvaluation.storageKey: jsonEncode(
               EngineEvaluationPrefState.defaults
-                  .copyWith(enginePref: ChessEnginePref.sf16)
+                  .copyWith(enginePref: ChessEnginePref.sfLight)
                   .toJson(),
             ),
           },

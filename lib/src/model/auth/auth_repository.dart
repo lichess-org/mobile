@@ -97,7 +97,7 @@ class AuthRepository {
       throw Exception('Access token not found.');
     }
 
-    return _fetchAuthUser(token);
+    return await _fetchAuthUser(token);
   }
 
   /// Asks lichess to email a 6 character login code for the [username] account to [email].
@@ -161,7 +161,7 @@ class AuthRepository {
 
     _log.fine('Got a token from the email login code');
 
-    return _fetchAuthUser(token);
+    return await _fetchAuthUser(token);
   }
 
   /// Fetches the account owning [token] and pairs it with the token.

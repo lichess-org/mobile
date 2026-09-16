@@ -95,7 +95,7 @@ class AccountService {
     final context = _ref.read(currentNavigatorKeyProvider).currentContext;
     if (context == null || !context.mounted) return;
 
-    return showAdaptiveDialog(
+    return await showAdaptiveDialog(
       context: context,
       barrierDismissible: true,
       builder: (context) {

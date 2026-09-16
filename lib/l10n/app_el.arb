@@ -714,6 +714,8 @@
   "puzzleThemePlayerGames": "Παρτίδες παίκτη",
   "puzzleThemePlayerGamesDescription": "Αναζητήστε τακτικά που προήλθαν από παρτίδες είτε δικές σας είτε άλλων χρηστών.",
   "puzzleThemePuzzleDownloadInformation": "Τα τακτικά είναι δημόσια και διαθέσιμα για λήψη στην ιστοσελίδα {param}.",
+  "recapAwaitQuestion": "Πώς περάσατε φέτος;",
+  "recapRecapReady": "Η ανασκόπηση του έτους {param} είναι έτοιμη!",
   "searchSearch": "Αναζήτηση",
   "settingsSettings": "Ρυθμίσεις",
   "settingsCloseAccount": "Κλείσιμο λογαριασμού",

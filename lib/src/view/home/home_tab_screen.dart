@@ -1092,7 +1092,7 @@ class _NNUEFilesOutdatedTipState extends ConsumerState<_NNUEFilesOutdatedTip> {
     }
 
     final nnueService = ref.watch(stockfishNnueServiceProvider);
-    if (nnueService.isDownloadingNNUEFiles) {
+    if (nnueService.isDownloadingNNUEFile) {
       return const SizedBox.shrink();
     }
 
@@ -1122,7 +1122,7 @@ class _NNUEFilesOutdatedTipState extends ConsumerState<_NNUEFilesOutdatedTip> {
                 const Flexible(
                   child: Text(
                     // TODO l10n
-                    'New Stockfish version available! Go to the settings to download the updated NNUE files.',
+                    'New Stockfish version available! Go to the settings to download the updated NNUE file.',
                   ),
                 ),
               ],
