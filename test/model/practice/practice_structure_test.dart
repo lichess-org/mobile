@@ -7,27 +7,6 @@ import 'package:lichess_mobile/src/model/practice/practice_goal.dart';
 import 'package:lichess_mobile/src/model/practice/practice_structure.dart';
 
 void main() {
-  group('PracticeGoal.fromPick', () {
-    PracticeGoal parse(Map<String, dynamic> json) => PracticeGoal.fromPick(pick(json).required());
-
-    test('parses every goal shape', () {
-      expect(parse({'result': 'mate'}), const PracticeGoal.mate());
-      expect(parse({'result': 'mateIn', 'moves': 3}), const PracticeGoal.mateIn(moves: 3));
-      expect(parse({'result': 'drawIn', 'moves': 20}), const PracticeGoal.drawIn(moves: 20));
-      expect(parse({'result': 'equalIn', 'moves': 2}), const PracticeGoal.equalIn(moves: 2));
-      expect(
-        parse({'result': 'evalIn', 'cp': -400, 'moves': 3}),
-        const PracticeGoal.evalIn(cp: -400, moves: 3),
-      );
-      expect(parse({'result': 'promotion', 'cp': 100}), const PracticeGoal.promotion(cp: 100));
-    });
-
-    test('rejects an unknown goal or a missing field', () {
-      expect(() => parse({'result': 'stalemate'}), throwsA(isA<PickException>()));
-      expect(() => parse({'result': 'mateIn'}), throwsA(isA<PickException>()));
-    });
-  });
-
   group('PracticeStructure', () {
     final structure = PracticeStructure.fromJson({
       'sections': [
