@@ -43,8 +43,9 @@ void main() {
       expect(find.byType(ServerOutageDisplay), findsOneWidget);
       // The study section is gone...
       expect(find.text('Study'), findsNothing);
-      // ...but coordinate training works offline and stays available.
+      // ...but coordinate training and practice work offline and stay available.
       expect(find.text('Coordinate training'), findsOneWidget);
+      expect(find.text('Practice'), findsOneWidget);
     });
 
     testWidgets('pulling to refresh once the server is back restores the studies', (tester) async {

@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/engine_factory.dart';
 import 'package:lichess_mobile/src/model/engine/engine_providers.dart';
+import 'package:lichess_mobile/src/model/engine/engine_slot.dart';
 import 'package:lichess_mobile/src/model/engine/engine_spec.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_context.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
@@ -807,6 +808,28 @@ void main() {
       expect(stream, isNotNull);
       await stream!.first;
       expect(service.state.spec, const StockfishSpec.light());
+    });
+
+    test('Uses the engine the context asks for over the user preference', () async {
+      final container = await makeContainer();
+      await setEnginePref(container, ChessEnginePref.sfLatest);
+
+      final preferred = readEvaluator(container);
+      await preferred.evaluate(makeWork())!.first;
+      expect(
+        preferred.state.spec,
+        isA<StockfishSpec>().having((s) => s.slot, 'slot', EngineSlot.sfLatest),
+      );
+
+      const pinnedContext = EvaluationContext(
+        id: StringId('pinned'),
+        variant: Variant.standard,
+        initialPosition: Chess.initial,
+        enginePref: ChessEnginePref.sfLight,
+      );
+      final pinned = readEvaluator(container, pinnedContext);
+      await pinned.evaluate(makeWork(id: const StringId('pinned')))!.first;
+      expect(pinned.state.spec, const StockfishSpec.light());
     });
 
     test('Falls back to Fairy-Stockfish on material Stockfish will not accept', () async {

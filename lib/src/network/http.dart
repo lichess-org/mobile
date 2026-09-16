@@ -29,6 +29,7 @@ import 'package:lichess_mobile/src/model/log/http_log_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/aggregator.dart';
 import 'package:lichess_mobile/src/network/server_status.dart';
+import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -708,12 +709,6 @@ void _checkResponseSuccess(Uri url, Response response) {
   }
   throw ServerException(response.statusCode, message, url, jsonError);
 }
-
-/// A JSON decoder that decodes UTF-8 bytes.
-///
-/// This is a fusion of [Utf8Decoder] and [JsonDecoder] which is more efficient
-/// than decoding the bytes to a string and then parsing the JSON.
-final jsonUtf8Decoder = const Utf8Decoder().fuse(const JsonDecoder());
 
 extension ClientExtension on Client {
   /// Sends an HTTP POST request with the given headers and body to the given URL and read response body.
