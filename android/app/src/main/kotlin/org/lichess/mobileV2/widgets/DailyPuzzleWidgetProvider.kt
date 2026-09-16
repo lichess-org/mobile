@@ -159,6 +159,16 @@ class DailyPuzzleWidgetProvider : AppWidgetProvider() {
     }
   }
 
+  private fun sqrName(rankIndex: Int, fileIndex: Int): String {
+    val files = "abcdefgh"
+    return "${files[fileIndex]}${8 - rankIndex}"
+  }
+
+  private fun highlightedSquare(lastMove: String): Set<String?>{
+    if(lastMove.length < 4) return emptySet()
+    return setOf(lastMove.substring(0, 2), lastMove.substring(2, 4))
+  }
+
   private fun getPieceBitmap(context: Context, piece : Char): Bitmap?{
     val color = if(piece.isUpperCase()) "w" else "b"
     val kind = piece.lowercaseChar()
@@ -170,16 +180,6 @@ class DailyPuzzleWidgetProvider : AppWidgetProvider() {
       return null
     }
     return BitmapFactory.decodeResource(context.resources, resId)
-  }
-
-  private fun sqrName(rankIndex: Int, fileIndex: Int): String {
-    val files = "abcdefgh"
-    return "${files[fileIndex]}${8 - rankIndex}"
-  }
-
-  private fun highlightedSquare(lastMove: String): Set<String?>{
-    if(lastMove.length < 4) return emptySet()
-    return setOf(lastMove.substring(0, 2), lastMove.substring(2, 4))
   }
 
   private fun getBoardBitmap(
