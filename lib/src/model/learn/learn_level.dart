@@ -1,6 +1,7 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
+import 'package:lichess_mobile/src/model/learn/learn_assert.dart';
 import 'package:lichess_mobile/src/model/learn/learn_position.dart';
 import 'package:meta/meta.dart';
 
@@ -62,25 +63,6 @@ enum DetectCapture() {
   /// Any capture fails the level.
   any,
 }
-
-/// What the success and failure predicates of a level can look at.
-///
-/// Predicates are evaluated right after the player's move, before the turn is handed back to the
-/// player, so [position] has the opponent to move.
-@immutable
-class const LearnAssertData({
-  required final LearnPosition position,
-
-  /// Number of moves the player has made in the level, including the last one.
-  required final int nbMoves,
-  required final bool scenarioComplete,
-  required final bool scenarioFailed,
-
-  /// The castling side of the last move, if it was castling.
-  required final CastlingSide? lastMoveCastling,
-});
-
-typedef LearnAssert = bool Function(LearnAssertData data);
 
 /// A single exercise of a [LearnStage].
 @immutable

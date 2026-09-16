@@ -4,6 +4,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
+import 'package:lichess_mobile/src/model/learn/learn_assert.dart';
 import 'package:lichess_mobile/src/model/learn/learn_level.dart';
 import 'package:lichess_mobile/src/model/learn/learn_position.dart';
 import 'package:lichess_mobile/src/model/learn/learn_score.dart';

@@ -288,7 +288,7 @@ final _pawn = LearnStage(
       apples: 'c6 d5 d7',
       nbMoves: 4,
       shapes: [arrow('e3e4'), arrow('e4d5'), arrow('d5c6'), arrow('c6d7')],
-      failure: noPieceOn('e3 e4 c6 d5 d7'),
+      failure: .noPieceOn('e3 e4 c6 d5 d7'),
     ),
     LearnLevel.parse(
       goal: (l) => l.learnCaptureThenPromote,
@@ -300,7 +300,7 @@ final _pawn = LearnStage(
       goal: (l) => l.learnCaptureThenPromote,
       fen: '8/8/8/8/8/3P4/8/8 w - -',
       apples: 'c4 b5 b6 d5 d7 e6 c8',
-      failure: whitePawnOnAnyOf('b5 d4 d6 c7'),
+      failure: .whitePawnOnAnyOf('b5 d4 d6 c7'),
       nbMoves: 8,
     ),
     LearnLevel.parse(
@@ -315,7 +315,7 @@ final _pawn = LearnStage(
       apples: 'd6',
       nbMoves: 3,
       shapes: [arrow('e2e4')],
-      failure: whitePawnOnAnyOf('e3'),
+      failure: .whitePawnOnAnyOf('e3'),
       highlightedRank: 2,
     ),
     LearnLevel.parse(
@@ -345,7 +345,7 @@ final _capture = LearnStage(
       captures: 2,
       shapes: [arrow('c3c7'), arrow('c7f7')],
       pointsForCapture: true,
-      success: extinct(Side.black),
+      success: .extinct(Side.black),
     ),
     // queen
     LearnLevel.parse(
@@ -355,7 +355,7 @@ final _capture = LearnStage(
       captures: 2,
       shapes: [arrow('f4c7'), arrow('f4f7', .red), arrow('c7f7', .yellow)],
       pointsForCapture: true,
-      success: extinct(Side.black),
+      success: .extinct(Side.black),
     ),
     // bishop
     LearnLevel.parse(
@@ -364,7 +364,7 @@ final _capture = LearnStage(
       nbMoves: 5,
       captures: 3,
       pointsForCapture: true,
-      success: extinct(Side.black),
+      success: .extinct(Side.black),
     ),
     // queen
     LearnLevel.parse(
@@ -373,7 +373,7 @@ final _capture = LearnStage(
       nbMoves: 7,
       captures: 4,
       pointsForCapture: true,
-      success: extinct(Side.black),
+      success: .extinct(Side.black),
     ),
     // knight
     LearnLevel.parse(
@@ -382,7 +382,7 @@ final _capture = LearnStage(
       nbMoves: 6,
       captures: 4,
       pointsForCapture: true,
-      success: extinct(Side.black),
+      success: .extinct(Side.black),
     ),
   ]),
 );
@@ -453,7 +453,7 @@ final _combat = LearnStage(
       captures: 1,
       shapes: [arrow('a4a5'), arrow('g3f2'), arrow('f2d4'), arrow('d4a4', .yellow)],
       pointsForCapture: true,
-      success: extinct(Side.black),
+      success: .extinct(Side.black),
     ),
     LearnLevel.parse(
       goal: (l) => l.learnTakeTheBlackPiecesAndDontLoseYours,
@@ -461,7 +461,7 @@ final _combat = LearnStage(
       nbMoves: 4,
       captures: 2,
       pointsForCapture: true,
-      success: extinct(Side.black),
+      success: .extinct(Side.black),
     ),
     LearnLevel.parse(
       goal: (l) => l.learnTakeTheBlackPiecesAndDontLoseYours,
@@ -469,7 +469,7 @@ final _combat = LearnStage(
       nbMoves: 4,
       captures: 2,
       pointsForCapture: true,
-      success: extinct(Side.black),
+      success: .extinct(Side.black),
     ),
     LearnLevel.parse(
       goal: (l) => l.learnTakeTheBlackPiecesAndDontLoseYours,
@@ -477,7 +477,7 @@ final _combat = LearnStage(
       nbMoves: 4,
       captures: 2,
       pointsForCapture: true,
-      success: extinct(Side.black),
+      success: .extinct(Side.black),
     ),
     LearnLevel.parse(
       goal: (l) => l.learnTakeTheBlackPiecesAndDontLoseYours,
@@ -485,7 +485,7 @@ final _combat = LearnStage(
       nbMoves: 8,
       captures: 2,
       pointsForCapture: true,
-      success: extinct(Side.black),
+      success: .extinct(Side.black),
     ),
   ]),
 );
@@ -496,8 +496,8 @@ LearnLevel _check1Level({required String fen, List<LearnShape> shapes = const []
       fen: fen,
       shapes: shapes,
       nbMoves: 1,
-      failure: not(check),
-      success: check,
+      failure: .check.not,
+      success: .check,
     );
 
 final _check1 = LearnStage(
@@ -572,8 +572,8 @@ LearnLevel _checkmate1Level({
   shapes: shapes,
   scenario: scenario,
   nbMoves: 1,
-  failure: not(mate),
-  success: mate,
+  failure: .mate.not,
+  success: .mate,
   showFailureFollowUp: true,
 );
 
@@ -628,35 +628,35 @@ final _setup = LearnStage(
       apples: 'a1 h1',
       nbMoves: 2,
       shapes: [arrow('c1a1'), arrow('d1h1')],
-      success: and([pieceOn(Piece.whiteRook, 'a1'), pieceOn(Piece.whiteRook, 'h1')]),
+      success: .every([.pieceOn(Piece.whiteRook, 'a1'), .pieceOn(Piece.whiteRook, 'h1')]),
     ),
     LearnLevel.parse(
       goal: (l) => l.learnThenPlaceTheKnights,
       fen: 'rn4nr/pppppppp/8/8/8/8/2NN4/R6R w - -',
       apples: 'b1 g1',
       nbMoves: 4,
-      success: and([pieceOn(Piece.whiteKnight, 'b1'), pieceOn(Piece.whiteKnight, 'g1')]),
+      success: .every([.pieceOn(Piece.whiteKnight, 'b1'), .pieceOn(Piece.whiteKnight, 'g1')]),
     ),
     LearnLevel.parse(
       goal: (l) => l.learnPlaceTheBishops,
       fen: 'rnb2bnr/pppppppp/8/8/4BB2/8/8/RN4NR w - -',
       apples: 'c1 f1',
       nbMoves: 4,
-      success: and([pieceOn(Piece.whiteBishop, 'c1'), pieceOn(Piece.whiteBishop, 'f1')]),
+      success: .every([.pieceOn(Piece.whiteBishop, 'c1'), .pieceOn(Piece.whiteBishop, 'f1')]),
     ),
     LearnLevel.parse(
       goal: (l) => l.learnPlaceTheQueen,
       fen: 'rnbq1bnr/pppppppp/8/8/5Q2/8/8/RNB2BNR w - -',
       apples: 'd1',
       nbMoves: 2,
-      success: pieceOn(Piece.whiteQueen, 'd1'),
+      success: .pieceOn(Piece.whiteQueen, 'd1'),
     ),
     LearnLevel.parse(
       goal: (l) => l.learnPlaceTheKing,
       fen: 'rnbqkbnr/pppppppp/8/8/5K2/8/8/RNBQ1BNR w - -',
       apples: 'e1',
       nbMoves: 3,
-      success: pieceOn(Piece.whiteKing, 'e1'),
+      success: .pieceOn(Piece.whiteKing, 'e1'),
     ),
     LearnLevel.parse(
       goal: (l) => l.learnPawnsFormTheFrontLine,
@@ -667,16 +667,16 @@ final _setup = LearnStage(
   ]),
 );
 
-final _castledKingSide = castled(CastlingSide.king);
-final _castledQueenSide = castled(CastlingSide.queen);
+final _castledKingSide = LearnAssert.castled(CastlingSide.king);
+final _castledQueenSide = LearnAssert.castled(CastlingSide.queen);
 
-LearnAssert _cantCastle(CastlingSide side, {required String blackKing}) => and([
-  not(castled(side)),
-  or([
-    pieceNotOn(Piece.whiteKing, 'e1'),
-    pieceNotOn(Piece.whiteRook, side == CastlingSide.king ? 'h1' : 'a1'),
-    mate,
-    pieceNotOn(Piece.blackKing, blackKing),
+LearnAssert _cantCastle(CastlingSide side, {required String blackKing}) => .every([
+  .castled(side).not,
+  .any([
+    .pieceNotOn(Piece.whiteKing, 'e1'),
+    .pieceNotOn(Piece.whiteRook, side == CastlingSide.king ? 'h1' : 'a1'),
+    .mate,
+    .pieceNotOn(Piece.blackKing, blackKing),
   ]),
 ]);
 
@@ -779,8 +779,8 @@ final _enpassant = LearnStage(
       fen: 'rnbqkbnr/pppppppp/8/2P5/8/8/PP1PPPPP/RNBQKBNR b KQkq -',
       color: Side.white,
       nbMoves: 1,
-      success: scenarioComplete,
-      failure: scenarioFailed,
+      success: .scenarioComplete,
+      failure: .scenarioFailed,
       detectCapture: .none,
       scenario: [
         _step('d7d5', [arrow('c5d6')]),
@@ -793,8 +793,8 @@ final _enpassant = LearnStage(
       fen: 'rnbqkbnr/ppp1pppp/8/2Pp3P/8/8/PP1PPPP1/RNBQKBNR b KQkq -',
       color: Side.white,
       nbMoves: 1,
-      success: scenarioComplete,
-      failure: scenarioFailed,
+      success: .scenarioComplete,
+      failure: .scenarioFailed,
       detectCapture: .none,
       scenario: [
         _step('g7g5', [arrow('h5g6'), arrow('c5d6', .red)]),
@@ -807,8 +807,8 @@ final _enpassant = LearnStage(
       fen: 'rnbqkbnr/pppppppp/P7/2P5/8/8/PP1PPPP1/RNBQKBNR b KQkq -',
       color: Side.white,
       nbMoves: 1,
-      success: scenarioComplete,
-      failure: scenarioFailed,
+      success: .scenarioComplete,
+      failure: .scenarioFailed,
       detectCapture: .none,
       scenario: [
         _step('b7b5', [arrow('c5b6'), arrow('a6b7', .red)]),
@@ -823,8 +823,8 @@ final _enpassant = LearnStage(
       color: Side.white,
       nbMoves: 4,
       detectCapture: .none,
-      success: scenarioComplete,
-      failure: scenarioFailed,
+      success: .scenarioComplete,
+      failure: .scenarioFailed,
       scenario: [
         _step('b7b5'),
         _step('c5b6'),
@@ -853,8 +853,8 @@ LearnLevel _stalemateLevel({
   nbMoves: 1,
   nextButton: true,
   showFailureFollowUp: true,
-  success: scenarioComplete,
-  failure: scenarioFailed,
+  success: .scenarioComplete,
+  failure: .scenarioFailed,
 );
 
 final _stalemate = LearnStage(
@@ -950,8 +950,8 @@ LearnLevel _valueLevel({
   pointsForCapture: true,
   showPieceValues: true,
   offerIllegalMove: offerIllegalMove,
-  success: scenarioComplete,
-  failure: scenarioFailed,
+  success: .scenarioComplete,
+  failure: .scenarioFailed,
   detectCapture: detectCapture,
 );
 
@@ -1005,8 +1005,8 @@ LearnLevel _check2Level({required String fen, List<LearnShape> shapes = const []
       fen: fen,
       shapes: shapes,
       nbMoves: 2,
-      failure: noCheckIn(2),
-      success: checkIn(2),
+      failure: .noCheckIn(2),
+      success: .checkIn(2),
     );
 
 final _check2 = LearnStage(
