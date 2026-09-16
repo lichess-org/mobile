@@ -7,6 +7,7 @@
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Você tem certeza?</string>
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Configurações do tabuleiro</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Cancelar oferta de revanche</string>
+  <string name="chessEngine" comment="Chess engine settings screen title.">Motor de xadrez</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Limpar</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Limpar movimento salvos</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Entrar em um jogo</string>
@@ -45,6 +46,7 @@
   <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">Alvo da peça arrastada</string>
   <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">Círculo</string>
   <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">Casa</string>
+  <string name="settingsDrawnShapeColor" comment="This is shown in the theme settings screen. Allow to choose the color of drawn shapes.">Cor das formas desenhadas</string>
   <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">Widget da tela principal</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Modo imersivo</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Ocultar a interface do sistema enquanto joga. Utilizo isso se você está incomodado pelos gestos de navegação do sistema nas bordas do sistema. Aplicada nas telas de partida e problemas.</string>

@@ -7,6 +7,7 @@
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Emin misiniz?</string>
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Tahta seçenekleri</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Geri alma teklifini iptal et</string>
+  <string name="chessEngine" comment="Chess engine settings screen title.">Satranç motoru</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Temizle</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Kayıtlı hamleyi sil</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Bir oyuna katıl</string>
