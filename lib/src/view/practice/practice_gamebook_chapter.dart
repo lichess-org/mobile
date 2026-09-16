@@ -45,7 +45,7 @@ class const PracticeGamebookChapterBody({required final PracticeGamebookChapter 
           switch (state.feedback) {
             .play => BottomBarButton(
               label: context.l10n.viewTheSolution,
-              icon: Icons.visibility,
+              icon: Icons.flag_outlined,
               highlighted: state.isSolutionShown,
               onTap: controller.toggleSolution,
             ),

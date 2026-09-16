@@ -95,6 +95,20 @@ void main() {
     }
   });
 
+  test('no comment carries a PGN command the app does not read', () {
+    // Shapes are parsed out of comments; lila's author credits (`[%anno ...]`) are stripped by the
+    // generator. Anything else would show up as raw text.
+    final command = RegExp(r'\[%(?!cal |csl )[a-z]+');
+    for (final chapter in chapters) {
+      final pgn = switch (chapter) {
+        PracticeGamebookChapter(:final pgn) || PracticeLessonChapter(:final pgn) => pgn,
+        PracticeEngineChapter() => null,
+      };
+      if (pgn == null) continue;
+      expect(command.hasMatch(pgn), isFalse, reason: '${chapter.id} ${chapter.name}');
+    }
+  });
+
   test('a lesson has moves to browse', () {
     for (final lesson in chapters.whereType<PracticeLessonChapter>()) {
       expect(Root.fromPgnGame(PgnGame.parsePgn(lesson.pgn)).mainline, isNotEmpty);

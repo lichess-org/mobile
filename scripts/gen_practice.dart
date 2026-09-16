@@ -83,6 +83,10 @@ Map<String, String> _studyDescriptions(String html) {
   };
 }
 
+/// [pgn] without the `[%anno "Name", username]` lila writes at the start of a comment to credit
+/// its author, which no PGN reader knows and which would otherwise show up in the comment text.
+String _withoutAuthorAnnotations(String pgn) => pgn.replaceAll(RegExp(r'\[%anno [^\]]*\]\s*'), '');
+
 String _unescapeHtml(String text) => text
     .replaceAll('&lt;', '<')
     .replaceAll('&gt;', '>')
@@ -99,7 +103,7 @@ Future<Map<String, String>> _studyChapterPgns(_Lichess lichess, String studyId) 
   final chapterUrl = RegExp(r'\[ChapterURL "[^"]*/([A-Za-z0-9]{8})"\]');
   return {
     for (final game in pgn.trim().split(RegExp(r'\n\s*\n(?=\[Event )')))
-      chapterUrl.firstMatch(game)!.group(1)!: game.trim(),
+      chapterUrl.firstMatch(game)!.group(1)!: _withoutAuthorAnnotations(game.trim()),
   };
 }
 
