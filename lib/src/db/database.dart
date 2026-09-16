@@ -63,7 +63,7 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) {
   return dbFactory.openDatabase(
     path,
     options: OpenDatabaseOptions(
-      version: 6,
+      version: 7,
       onConfigure: (db) async {
         final version = await _getDatabaseVersion(db);
         _logger.info('SQLite version: $version');
@@ -94,6 +94,7 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) {
         _createGameTableIndexesV6(batch);
         _createHttpLogTableV4(batch);
         _createAppLogTableV5(batch);
+        _createLearnProgressTableV7(batch);
         await batch.commit();
       },
       onUpgrade: (db, oldVersion, newVersion) async {
@@ -112,6 +113,9 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) {
         }
         if (oldVersion < 6) {
           _createGameTableIndexesV6(batch);
+        }
+        if (oldVersion < 7) {
+          _createLearnProgressTableV7(batch);
         }
         await batch.commit();
       },
@@ -238,6 +242,20 @@ void _createAppLogTableV5(Batch batch) {
     error TEXT,
     stackTrace TEXT,
     lastModified TEXT NOT NULL
+  )
+    ''');
+}
+
+void _createLearnProgressTableV7(Batch batch) {
+  batch.execute('DROP TABLE IF EXISTS learn_progress');
+  batch.execute('''
+    CREATE TABLE learn_progress(
+    stageKey TEXT NOT NULL,
+    levelId INTEGER NOT NULL,
+    score INTEGER NOT NULL,
+    lastModified TEXT NOT NULL,
+    syncedAt TEXT,
+    PRIMARY KEY (stageKey, levelId)
   )
     ''');
 }

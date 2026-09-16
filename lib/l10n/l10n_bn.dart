@@ -1358,6 +1358,527 @@ class AppLocalizationsBn extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Practice only some files & ranks';
 
   @override
+  String get learnLearnChess => 'দাবা খেলা শিখুন';
+
+  @override
+  String get learnByPlaying => 'খেলার দ্বারা!';
+
+  @override
+  String learnProgressX(String param) {
+    return 'অগ্রগতি: $param';
+  }
+
+  @override
+  String get learnResetMyProgress => 'আমার অগ্রগতি রিসেট হোক';
+
+  @override
+  String get learnYouWillLoseAllYourProgress => 'আপনি আপনার সকল অগ্রগতি হারাবেন!';
+
+  @override
+  String get learnPlay => 'খেলুন!';
+
+  @override
+  String get learnChessPieces => 'দাবার ঘুটি';
+
+  @override
+  String get learnTheRook => 'নৌকা';
+
+  @override
+  String get learnItMovesInStraightLines => 'এটা সোজাসুজি (সোজা রেখার মতো) যায়';
+
+  @override
+  String get learnRookIntro => 'দাবার নৌকা হয় একটি শক্তিশালী টুকরা. এটাকে নির্দেশ দিতে আপনি কি প্রস্তুত?';
+
+  @override
+  String get learnRookGoal => 'তারায় নিয়ে আসতে নৌকায় ক্লিক করুন!';
+
+  @override
+  String get learnGrabAllTheStars => 'সকল তারা দখল করুন!';
+
+  @override
+  String get learnTheFewerMoves => 'কম চালে আপনি তৈরি করুন,\nআরো পয়েন্ট আপনার জয়!';
+
+  @override
+  String get learnUseTwoRooks => 'দুটি দাবার নৌকা ব্যবহার করুন\nকিছু গতিতে!';
+
+  @override
+  String get learnRookComplete => 'অভিনন্দন! আপনি সফল ভাবে দাবার নৌকাকে আয়ত্তে নিয়েছেন.';
+
+  @override
+  String get learnTheBishop => 'বিশপ';
+
+  @override
+  String get learnItMovesDiagonally => 'এটা কোণাকুণি সরান';
+
+  @override
+  String get learnBishopIntro => 'পরবর্তিতে আমরা শিখবো কিভাবে একটি বিশপ চালতে হয়!';
+
+  @override
+  String get learnYouNeedBothBishops => 'একটি আলো-ছক বিশপ,\nএকটি অন্ধকার-ছক বিশপ.\nআপনার দুটোই প্র‍য়োজন!';
+
+  @override
+  String get learnBishopComplete => 'অভিনন্দন! আপনি একটি বিশপকে নির্দেশ করতে পারবেন.';
+
+  @override
+  String get learnTheQueen => 'রানী';
+
+  @override
+  String get learnQueenCombinesRookAndBishop => 'রানী = দাবার নৌকা + বিশপ';
+
+  @override
+  String get learnQueenIntro => 'সবচেয়ে শক্তিশালী দাবার টুকারার প্রবেশ. তার মহিমা রানী!';
+
+  @override
+  String get learnQueenComplete => 'অভিনন্দন! আপনার জন্য রানীর কোন গোপনীয়তা নেই.';
+
+  @override
+  String get learnTheKing => 'রাজা';
+
+  @override
+  String get learnTheMostImportantPiece => 'সবচেয়ে গুরুত্বপূর্ণ টুকরা';
+
+  @override
+  String get learnKingIntro => 'আপনি হন রাজা. যদি আপনার পতন হয়, খেলাটি শেষ হয়ে যাবে.';
+
+  @override
+  String get learnTheKingIsSlow => 'রাজা হয় ধীর.';
+
+  @override
+  String get learnLastOne => 'শেষ একটি!';
+
+  @override
+  String get learnKingComplete => 'আপনি এখন সেনাপতি নির্দেশ করতে পারবেন!';
+
+  @override
+  String get learnTheKnight => 'দাবার ঘোড়া';
+
+  @override
+  String get learnItMovesInAnLShape => 'এটা একটি এল আকারে সরান';
+
+  @override
+  String get learnKnightIntro => 'এখানে আপনার জন্য চ্যালেঞ্জ রয়েছে. ঘোরা হয়... একটি চতুর টুকরা.';
+
+  @override
+  String get learnKnightsHaveAFancyWay => 'ঘোরার চারপাশে লাফানোর একটি অভনব উপায় আছে!';
+
+  @override
+  String get learnKnightsCanJumpOverObstacles => 'ঘোরা বাধার উপর লাফাতে পারে!\nমুক্ত এবং তারা পরাজিত!';
+
+  @override
+  String get learnKnightComplete => 'অভিনন্দন! আপনি ঘোরাকে আয়ত্ত করেছেন.';
+
+  @override
+  String get learnThePawn => 'গুটি';
+
+  @override
+  String get learnItMovesForwardOnly => 'এতা শুধু সামনের দিকে সরান';
+
+  @override
+  String get learnPawnIntro => 'গুটি হয় দুর্বল, কিন্তু তারা একটি শক্তিশালী দল.';
+
+  @override
+  String get learnPawnsMoveOneSquareOnly => 'গুটি শুধু একটি বর্গে সরান.\nকিন্তু যখন তারা বোর্ডের অন্য প্রান্তে পৌছাবে\nতারা একটি শক্তিশালী টুকরা হবে!';
+
+  @override
+  String get learnMostOfTheTimePromotingToAQueenIsBest => 'অনেক সময় একটি রানীকে প্রচার করা শ্রেষ্ঠ.\nকিন্তু মাঝে মাঝে একটি ঘোরা হাতের নাগালে আসতে পারে!';
+
+  @override
+  String get learnPawnsMoveForward => 'গুটি সামনে সরান,\nকিন্তু কোনাকুনি আটকিয়ে!';
+
+  @override
+  String get learnCaptureThenPromote => 'বন্দী করুন, তারপর প্রচার করুন!';
+
+  @override
+  String get learnUseAllThePawns => 'সবগুটি ব্যবহার করুন!\nপ্রচার করার প্রয়োজন নেই.';
+
+  @override
+  String get learnAPawnOnTheSecondRank => 'দ্বিতীয় পদের একটি গুটি একবার 2 বর্গ সরতে পারবে!';
+
+  @override
+  String get learnGrabAllTheStarsNoNeedToPromote => 'সব তারা লুফে নিন!\nপ্রচার করার প্রয়োজন নেই.';
+
+  @override
+  String get learnPawnComplete => 'অভিনন্দন! আপনার জন্য গুটির কোন গোপনীয়তা নেই.';
+
+  @override
+  String get learnPawnPromotion => 'গুটির প্রমোশন';
+
+  @override
+  String get learnYourPawnReachedTheEndOfTheBoard => 'আপনার গুটি বোর্ডের শেষ দিক অতিক্রম করেছে!';
+
+  @override
+  String get learnItNowPromotesToAStrongerPiece => 'এটা একটি শক্তুশালী টুকরার প্রচার.';
+
+  @override
+  String get learnSelectThePieceYouWant => 'আপনি যে টুকরা চান তা নির্বাচন করুন!';
+
+  @override
+  String get learnFundamentals => 'মূলসূত্র';
+
+  @override
+  String get learnCapture => 'অধিগ্রহন করুন';
+
+  @override
+  String get learnTakeTheEnemyPieces => 'শত্রুর টুকরা নিন';
+
+  @override
+  String get learnCaptureIntro => 'প্রতিপক্ষের অনির্দিষ্ট টুকরা চিহ্নিত করুন, এবং তাদের বন্দী করুন!';
+
+  @override
+  String get learnTakeTheBlackPieces => 'কালো টুকরা নিন!';
+
+  @override
+  String get learnTakeTheBlackPiecesAndDontLoseYours => 'কালো টুকরা নিন!\nএবং আপনাকে হারাবেন না.';
+
+  @override
+  String get learnCaptureComplete => 'অভিনন্দন! আপনি জানেন এখন কিভাবে দাবার টুকার সাথে যুদ্ধ করতে হয়!';
+
+  @override
+  String get learnProtection => 'নিরাপত্তা';
+
+  @override
+  String get learnKeepYourPiecesSafe => 'আপনার টুকরা গুলো নিরাপদ রাখুন';
+
+  @override
+  String get learnProtectionIntro => 'আপনার প্রতিদ্বন্দ্বীর টুকরা গুলো শনাক্ত করুন, এবং তাদের প্রতিরোধ করুন!';
+
+  @override
+  String get learnProtectionComplete => 'অভিনন্দন! একটি টুকরা আপনি হারিয়ে ফেলবেন না একটি টুকরাই হয় আপনার জয়!';
+
+  @override
+  String get learnEscape => 'আপনি আক্রমনের অধীনে.\nহ্নমকু ত্যাগ করুন!';
+
+  @override
+  String get learnNoEscape => 'এখানে কোন মুক্তি নেই,\nকিন্তু আপনি প্রতিরোধ করতে পারেন!';
+
+  @override
+  String get learnDontLetThemTakeAnyUndefendedPiece => 'তাদের কোন অরক্ষিত টুকরা নিতে দিবেন না!';
+
+  @override
+  String get learnCombat => 'যুদ্ধ';
+
+  @override
+  String get learnCaptureAndDefendPieces => 'বন্দী এবং প্রতিরোধ টুকরাগুলো';
+
+  @override
+  String get learnCombatIntro => 'একজন ভালো যোদ্ধা জানে উভয় আক্রমন এবং প্রতিরোধ!';
+
+  @override
+  String get learnCombatComplete => 'অভিনন্দন! আপনি জানেন কিভাবে দাবার টুকরা গুলোর সাথে যুদ্ধ করতে হয়!';
+
+  @override
+  String get learnCheckInOne => 'একটি চেক করুন';
+
+  @override
+  String get learnAttackTheOpponentsKing => 'প্রতিদ্বন্দ্বীর রাজাকে আক্রমন করুন';
+
+  @override
+  String get learnCheckInOneIntro => 'আপনার প্রতিদ্বন্দ্বীকে চেক করার জন্য, তাদের রাজাকে আক্রমন করুন. তারা অবশ্যই এটাকে রক্ষা করবে!';
+
+  @override
+  String get learnCheckInOneGoal => 'প্রতিদ্বন্দ্বী রাজার লক্ষ্য এক পদক্ষেপ!';
+
+  @override
+  String get learnCheckInOneComplete => 'অভিনন্দন! আপনি আপনার প্রতিদ্বন্দ্বীকে চেক করেছেন, তাদের রাজা রক্ষা করতে জোর করুন!';
+
+  @override
+  String get learnOutOfCheck => 'চেকের বাইরে';
+
+  @override
+  String get learnDefendYourKing => 'আপনার রাজা রক্ষা করুন';
+
+  @override
+  String get learnOutOfCheckIntro => 'আপনি চেকের মাঝে আছেন! অবশ্যই আপনাকে পালায়ন অথবা হামলা বন্ধ করতে হবে.';
+
+  @override
+  String get learnEscapeWithTheKing => 'রাজার সাথে পালান!';
+
+  @override
+  String get learnTheKingCannotEscapeButBlock => 'রাজা পালাতে পারবে না,\nকিন্তু আপনি হামলা বন্ধ করতে পারবেন!';
+
+  @override
+  String get learnYouCanGetOutOfCheckByTaking => 'আক্রমনের টুকরা গ্রহন করে\nআপনি চেক আউট পেতে পারেন.';
+
+  @override
+  String get learnThisKnightIsCheckingThroughYourDefenses => 'আপনার প্রতিরক্ষক দ্বারা\nদাবার ঘোরাটি চেক করা হচ্ছে!';
+
+  @override
+  String get learnEscapeOrBlock => 'রাজার সাথে পালান অথবা হামলা বন্ধ করুন!';
+
+  @override
+  String get learnOutOfCheckComplete => 'অভিনন্দন! আপনার রাজা নেওয়া যাবে না,\nনিশ্চিত হন আপনি চেকের বিরুদ্ধে রক্ষা করতে পারবেন!';
+
+  @override
+  String get learnMateInOne => 'এক সহচরে';
+
+  @override
+  String get learnDefeatTheOpponentsKing => 'প্রতিদ্বন্দ্বী রাজাকে পরাজিত';
+
+  @override
+  String get learnMateInOneIntro => 'যখন আপনার প্রতিদ্বন্দ্বী চেক রক্ষা করতে পারবেনা আপনি জিতে যাবেন.';
+
+  @override
+  String get learnAttackYourOpponentsKing => 'আপনার প্রতিদ্বন্দ্বী রাজাকে হামলা করুন \nএমন উপায়ে যাতে করে রক্ষা না করতে পারে!';
+
+  @override
+  String get learnMateInOneComplete => 'অভিনন্দন! ঐটা হয় কিভাবে আপনি দাবা খেলা জিতেছেন!';
+
+  @override
+  String get learnIntermediate => 'মাধ্যমিক';
+
+  @override
+  String get learnBoardSetup => 'বোর্ড সেটাপ';
+
+  @override
+  String get learnHowTheGameStarts => 'কিভাবে খেলাটি শুরু হয়';
+
+  @override
+  String get learnBoardSetupIntro => 'দুইটি সেনাদল একে অপরের দিকে, প্রস্তুত\nযু্দ্ধের জন্য.';
+
+  @override
+  String get learnThisIsTheInitialPosition => 'এটা হয় প্রাথমিক অবস্থান সকল দাবা খেলার!\nযেকোন একটি চাল তৈরি করুন অবিরতর জন্য.';
+
+  @override
+  String get learnFirstPlaceTheRooks => 'নৌকার প্রথম স্থান!\nতারা কোনাকোনি যাবে.';
+
+  @override
+  String get learnThenPlaceTheKnights => 'তারপর ঘোরার স্থান!\nতারা নৌকার পরে যাবে.';
+
+  @override
+  String get learnPlaceTheBishops => 'বিশপের স্থান!\nতারা ঘোরার পরে যাবে.';
+
+  @override
+  String get learnPlaceTheQueen => 'রানীর স্থান!\nসে তার নিজের রঙ নিয়ে যায়.';
+
+  @override
+  String get learnPlaceTheKing => 'রাজার স্থান!\nতার রানীর পরে ডান পাশে.';
+
+  @override
+  String get learnPawnsFormTheFrontLine => 'সামনে সারির গুটি\nঅবিরত রাখার জন্য যে কোন চাল তৈরি করে.';
+
+  @override
+  String get learnBoardSetupComplete => 'অভিনন্দন! আপনি জানেন কিভাবে দাবার বোর্ড সেটাপ করতে হয়.';
+
+  @override
+  String get learnCastling => 'কাস্টেলিং';
+
+  @override
+  String get learnTheSpecialKingMove => 'বিশেষ রাজাকে সরান';
+
+  @override
+  String get learnCastlingIntro => 'রাজাকে নিরাপদে নিয়ে আসুন, এবং আপনার নৌকাকে স্থাপন করুন হামলার জন্য!';
+
+  @override
+  String get learnCastleKingSide => 'আপনার রাজাকে দুই বর্গ সরান \nপ্রসাদ রাজার পাশে!';
+
+  @override
+  String get learnCastleQueenSide => 'আপনার রাজাকে দুই বর্গ সরান \nপ্রসাদ রানীর পাশে!';
+
+  @override
+  String get learnTheKnightIsInTheWay => 'ঘোরার উপায় আছে!\nএটা সরান, তারপর প্রসাদ রাজার পাশে.';
+
+  @override
+  String get learnCastleKingSideMovePiecesFirst => 'প্রসাদ রাজার পাশে!\nআপনার প্র‍য়োজন প্রথম টুকরা সরানো.';
+
+  @override
+  String get learnCastleQueenSideMovePiecesFirst => 'প্রসাদ রানীর পাশে!\nআপনার প্রয়োজন প্রথম টুকরা সরানো.';
+
+  @override
+  String get learnYouCannotCastleIfMoved => 'আপনি প্রসাদ করতে পারবেন না \nযদি রাজাকে ইতিমধ্যে সরানো হয়\nঅথবা নৌকাকে ইতিমধ্যে সরানো হয়.';
+
+  @override
+  String get learnYouCannotCastleIfAttacked => 'আপনি প্রসাদ করতে পারবেন না\nযদি রাজাকে কোন উপায় হামলা করা হয়.\nচেক বন্ধ করুন তারপর প্রসাদ!';
+
+  @override
+  String get learnFindAWayToCastleKingSide => 'প্রসাদ রাজার পাশে\nএকটি উপায় খুজুন!';
+
+  @override
+  String get learnFindAWayToCastleQueenSide => 'প্রসাদ রানীর পাশে\nএকটি উপায় খুজুন!';
+
+  @override
+  String get learnCastlingComplete => 'অভিনন্দন! আপনাকে প্রায় সবসময় খেলায় প্রসাদ করা উচিত.';
+
+  @override
+  String get learnTheSpecialPawnMove => 'বিশেষ গুটি সরান';
+
+  @override
+  String get learnEnPassantIntro => 'যখন প্রতিদ্বন্দ্বী গুটি দুই বর্গ সরে, আপনি এটা নিতে পারবেন যেমন এটা যদি এক বর্গে সরে.';
+
+  @override
+  String get learnBlackJustMovedThePawnByTwoSquares => 'শুধু কালো গুটি দুই বর্গ সরেছে!\nএটাকে এন পাসান্তে নিন.';
+
+  @override
+  String get learnEnPassantOnlyWorksImmediately => 'প্রতিদ্বন্দ্বী গুটি সরানোর পর তত্ক্ষণাৎ শুধু এন পাসান্ত কাজ করে.';
+
+  @override
+  String get learnEnPassantOnlyWorksOnFifthRank => 'যদি আপনার গুটির অনুপাত 5 হয় তাহলে\nশুধু এন পাসান্ত কাজ করে.';
+
+  @override
+  String get learnTakeAllThePawnsEnPassant => 'সব গুটি এন পাশান্ত নিন!';
+
+  @override
+  String get learnEnPassantComplete => 'অভিন! এখন আপনি এন পাসান্ত নিতে পারেন.';
+
+  @override
+  String get learnStalemate => 'চলমাত-সমান';
+
+  @override
+  String get learnTheGameIsADraw => 'খেলাটি হয় সমান';
+
+  @override
+  String get learnStalemateIntro => 'যখন একজন খেলোয়াড় চেকে থাকেনা এবং কোন বৈধ চাল থাকেনা, এটা হয় একট অচল অবস্থা. খেলাটি সমান হবে: কেউ জিতবেনা, কেউ হারবেনা.';
+
+  @override
+  String get learnStalemateGoal => 'কালো অচল অবস্থা থেকে:\n- কালো কোথায় সরতে পারবে না\n- সেখানে কোন চেক নেই.';
+
+  @override
+  String get learnStalemateComplete => 'অভিনন্দন! ভালো হবে অচল অবস্থা তারপর\nবাজিমাত!';
+
+  @override
+  String get learnAdvanced => 'উন্নত';
+
+  @override
+  String get learnPieceValue => 'টুকরার মান';
+
+  @override
+  String get learnEvaluatePieceStrength => 'টুকরা শক্তির মূল্য ্';
+
+  @override
+  String get learnPieceValueIntro => 'উচ্চ মানের টুকরাগুলো নিয়ে উচ্চ মূল্যে আছে!\nরানী = ৯\nনৌকা = ৫\nবিশপ = ৩\nঘোরা = ৩\nগুটি = ১\nরাজা হয় অমূল্য! রাজাকে হারিয়ে ফেলা মানে খেলা হেরে যাওয়া.';
+
+  @override
+  String get learnQueenOverBishop => 'উচ্চ মূল্যের টুকরা নিন!\nরানী > বিশপ';
+
+  @override
+  String get learnPieceValueExchange => 'সবচেয়ে বেশি মূল্যের গুটি খান!\nএকটা বেশি মূল্যের গুটির জন্য একটি কম মূল্যের গুটি\nবিনিময় করবেন না।';
+
+  @override
+  String get learnPieceValueLegal => 'সবচেয়ে বেশি মূল্যের গুটিটি খান!\nনিশ্চিত করুন যে আপনার চাল বৈধ!';
+
+  @override
+  String get learnTakeThePieceWithTheHighestValue => 'উচ্চ মানের গুটি নিন!';
+
+  @override
+  String get learnPieceValueComplete => 'অভিনন্দন! আপনি উপাদানের মূল্য জানেন!\nরানী = ৯\nনৌকা = ৫\nবিশপ = ৩\nঘোরা = ২\nগুটি = ১';
+
+  @override
+  String get learnCheckInTwo => 'দুইটির চেক';
+
+  @override
+  String get learnTwoMovesToGiveCheck => 'দুটি চাল দিয়ে একটি চেক দিন';
+
+  @override
+  String get learnCheckInTwoIntro => 'দুটি চালের সঠিক মিল খুজুন যা\nপ্রতিদ্বন্দ্বী রাজাকে চেক করবে!';
+
+  @override
+  String get learnCheckInTwoGoal => 'প্রতিদ্বন্দ্বী রাজাকে দুইচালে শাসান!';
+
+  @override
+  String get learnCheckInTwoComplete => 'অভিনন্দন! আপনি আপনার প্রতিদ্বন্দ্বীকে চেক করেছেন,\nতাদের রাজা রক্ষা করতে জোর করুন!';
+
+  @override
+  String get learnWhatNext => 'এরপর কি?';
+
+  @override
+  String get learnYouKnowHowToPlayChess => 'আপনি জানেন কিভাবে দাবা খেলতে হয়, অভিনন্দন!\nআপনকি কি একজন শক্তিশালী খেলোয়াড় হতে চান?';
+
+  @override
+  String get learnRegister => 'নিবন্ধন করুন';
+
+  @override
+  String get learnGetAFreeLichessAccount => 'বিনামূল্যে একটি দাবা একাউন্ট পান';
+
+  @override
+  String get learnPractice => 'চর্চা';
+
+  @override
+  String get learnLearnCommonChessPositions => 'সধারন দাবার অবস্থান শিখুন';
+
+  @override
+  String get learnPuzzles => 'ধাঁধা';
+
+  @override
+  String get learnExerciseYourTacticalSkills => 'আপনার কৌশলগত দক্ষতা চর্চা করুন';
+
+  @override
+  String get learnVideos => 'ভিডিওগুলো';
+
+  @override
+  String get learnWatchInstructiveChessVideos => 'শিক্ষা মূলক দাবার ভিডিও দেখুন';
+
+  @override
+  String get learnPlayPeople => 'মানুষ খেলে';
+
+  @override
+  String get learnOpponentsFromAroundTheWorld => 'সারা বিশ্ব থেকে প্রতিদ্বন্দ্বী';
+
+  @override
+  String get learnPlayMachine => 'মেশিন খেলা';
+
+  @override
+  String get learnTestYourSkillsWithTheComputer => 'কম্পিউটারের সাথে আপনার দক্ষতা যাচাই করুন';
+
+  @override
+  String get learnLetsGo => 'চলো যাই!';
+
+  @override
+  String learnStageX(String param) {
+    return 'পর্যায় $param';
+  }
+
+  @override
+  String get learnAwesome => 'অসাধারন!';
+
+  @override
+  String get learnExcellent => 'চমৎকার!';
+
+  @override
+  String get learnGreatJob => 'মহৎ কাজ!';
+
+  @override
+  String get learnPerfect => 'ঠিক আছে!';
+
+  @override
+  String get learnOutstanding => 'অসাধারন!';
+
+  @override
+  String get learnWayToGo => 'পথে যেতে হবে!';
+
+  @override
+  String get learnYesYesYes => 'হ্যা, হ্যা, হ্যা!';
+
+  @override
+  String get learnYoureGoodAtThis => 'এখান এটাতে আপনি ভালো!';
+
+  @override
+  String get learnNailedIt => 'দৃঢ়ভাবে ধরুন.';
+
+  @override
+  String get learnRightOn => 'ঠিক উপরে!';
+
+  @override
+  String learnStageXComplete(String param) {
+    return 'সম্পূর্ণ $param ধাপ';
+  }
+
+  @override
+  String get learnNext => 'পরবর্তী';
+
+  @override
+  String learnNextX(String param) {
+    return 'এরপরঃ $param';
+  }
+
+  @override
+  String get learnBackToMenu => 'মেনুতে ফিরে যান';
+
+  @override
+  String get learnPuzzleFailed => 'ধাঁধা ব্যর্থ!';
+
+  @override
+  String get learnRetry => 'পুনারয় চেষ্টা করুন';
+
+  @override
   String get patronDonate => 'দান করুন';
 
   @override

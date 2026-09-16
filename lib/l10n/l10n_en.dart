@@ -1358,6 +1358,527 @@ class AppLocalizationsEn extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Practice only some files & ranks';
 
   @override
+  String get learnLearnChess => 'Learn chess';
+
+  @override
+  String get learnByPlaying => 'by playing!';
+
+  @override
+  String learnProgressX(String param) {
+    return 'Progress: $param';
+  }
+
+  @override
+  String get learnResetMyProgress => 'Reset my progress';
+
+  @override
+  String get learnYouWillLoseAllYourProgress => 'You will lose all your progress!';
+
+  @override
+  String get learnPlay => 'play!';
+
+  @override
+  String get learnChessPieces => 'Chess pieces';
+
+  @override
+  String get learnTheRook => 'The rook';
+
+  @override
+  String get learnItMovesInStraightLines => 'It moves in straight lines';
+
+  @override
+  String get learnRookIntro => 'The rook is a powerful piece. Are you ready to command it?';
+
+  @override
+  String get learnRookGoal => 'Click on the rook\nto bring it to the star!';
+
+  @override
+  String get learnGrabAllTheStars => 'Grab all the stars!';
+
+  @override
+  String get learnTheFewerMoves => 'The fewer moves you make,\nthe more points you win!';
+
+  @override
+  String get learnUseTwoRooks => 'Use two rooks\nto speed things up!';
+
+  @override
+  String get learnRookComplete => 'Congratulations! You have successfully mastered the rook.';
+
+  @override
+  String get learnTheBishop => 'The bishop';
+
+  @override
+  String get learnItMovesDiagonally => 'It moves diagonally';
+
+  @override
+  String get learnBishopIntro => 'Next we will learn how to manoeuvre a bishop!';
+
+  @override
+  String get learnYouNeedBothBishops => 'One light-squared bishop,\none dark-squared bishop.\nYou need both!';
+
+  @override
+  String get learnBishopComplete => 'Congratulations! You can command a bishop.';
+
+  @override
+  String get learnTheQueen => 'The queen';
+
+  @override
+  String get learnQueenCombinesRookAndBishop => 'Queen = rook + bishop';
+
+  @override
+  String get learnQueenIntro => 'The most powerful chess piece enters. Her majesty the queen!';
+
+  @override
+  String get learnQueenComplete => 'Congratulations! Queens have no secrets for you.';
+
+  @override
+  String get learnTheKing => 'The king';
+
+  @override
+  String get learnTheMostImportantPiece => 'The most important piece';
+
+  @override
+  String get learnKingIntro => 'You are the king. If you fall in battle, the game is lost.';
+
+  @override
+  String get learnTheKingIsSlow => 'The king is slow.';
+
+  @override
+  String get learnLastOne => 'Last one!';
+
+  @override
+  String get learnKingComplete => 'You can now command the commander!';
+
+  @override
+  String get learnTheKnight => 'The knight';
+
+  @override
+  String get learnItMovesInAnLShape => 'It moves in an L shape';
+
+  @override
+  String get learnKnightIntro => 'Here\'s a challenge for you. The knight is... a tricky piece.';
+
+  @override
+  String get learnKnightsHaveAFancyWay => 'Knights have a fancy way\nof jumping around!';
+
+  @override
+  String get learnKnightsCanJumpOverObstacles => 'Knights can jump over obstacles!\nEscape and vanquish the stars!';
+
+  @override
+  String get learnKnightComplete => 'Congratulations! You have mastered the knight.';
+
+  @override
+  String get learnThePawn => 'The pawn';
+
+  @override
+  String get learnItMovesForwardOnly => 'It moves forward only';
+
+  @override
+  String get learnPawnIntro => 'Pawns are weak, but they pack a lot of potential.';
+
+  @override
+  String get learnPawnsMoveOneSquareOnly => 'Pawns move one square only.\nBut when they reach the other side of the board, they become a stronger piece!';
+
+  @override
+  String get learnMostOfTheTimePromotingToAQueenIsBest => 'Most of the time promoting to a queen is the best.\nBut sometimes a knight can come in handy!';
+
+  @override
+  String get learnPawnsMoveForward => 'Pawns move forward,\nbut capture diagonally!';
+
+  @override
+  String get learnCaptureThenPromote => 'Capture, then promote!';
+
+  @override
+  String get learnUseAllThePawns => 'Use all the pawns!\nNo need to promote.';
+
+  @override
+  String get learnAPawnOnTheSecondRank => 'A pawn on the second rank can move 2 squares at once!';
+
+  @override
+  String get learnGrabAllTheStarsNoNeedToPromote => 'Grab all the stars!\nNo need to promote.';
+
+  @override
+  String get learnPawnComplete => 'Congratulations! Pawns have no secrets for you.';
+
+  @override
+  String get learnPawnPromotion => 'Pawn promotion';
+
+  @override
+  String get learnYourPawnReachedTheEndOfTheBoard => 'Your pawn reached the end of the board!';
+
+  @override
+  String get learnItNowPromotesToAStrongerPiece => 'It now promotes to a stronger piece.';
+
+  @override
+  String get learnSelectThePieceYouWant => 'Select the piece you want!';
+
+  @override
+  String get learnFundamentals => 'Fundamentals';
+
+  @override
+  String get learnCapture => 'Capture';
+
+  @override
+  String get learnTakeTheEnemyPieces => 'Take the enemy pieces';
+
+  @override
+  String get learnCaptureIntro => 'Identify the opponent\'s undefended pieces, and capture them!';
+
+  @override
+  String get learnTakeTheBlackPieces => 'Take the black pieces!';
+
+  @override
+  String get learnTakeTheBlackPiecesAndDontLoseYours => 'Take the black pieces!\nAnd don\'t lose yours.';
+
+  @override
+  String get learnCaptureComplete => 'Congratulations! You know how to fight with chess pieces!';
+
+  @override
+  String get learnProtection => 'Protection';
+
+  @override
+  String get learnKeepYourPiecesSafe => 'Keep your pieces safe';
+
+  @override
+  String get learnProtectionIntro => 'Identify the pieces your opponent attacks, and defend them!';
+
+  @override
+  String get learnProtectionComplete => 'Congratulations! A piece you don\'t lose is a piece you win!';
+
+  @override
+  String get learnEscape => 'You\'re under attack!\nEscape the threat!';
+
+  @override
+  String get learnNoEscape => 'There is no escape,\nbut you can defend!';
+
+  @override
+  String get learnDontLetThemTakeAnyUndefendedPiece => 'Don\'t let them take\nany undefended piece!';
+
+  @override
+  String get learnCombat => 'Combat';
+
+  @override
+  String get learnCaptureAndDefendPieces => 'Capture and defend pieces';
+
+  @override
+  String get learnCombatIntro => 'A good warrior knows both attack and defence!';
+
+  @override
+  String get learnCombatComplete => 'Congratulations! You know how to fight with chess pieces!';
+
+  @override
+  String get learnCheckInOne => 'Check in one';
+
+  @override
+  String get learnAttackTheOpponentsKing => 'Attack the opponent\'s king';
+
+  @override
+  String get learnCheckInOneIntro => 'To check your opponent, attack their king. They must defend it!';
+
+  @override
+  String get learnCheckInOneGoal => 'Aim at the opponent\'s king\nin one move!';
+
+  @override
+  String get learnCheckInOneComplete => 'Congratulations! You checked your opponent, forcing them to defend their king!';
+
+  @override
+  String get learnOutOfCheck => 'Out of check';
+
+  @override
+  String get learnDefendYourKing => 'Defend your king';
+
+  @override
+  String get learnOutOfCheckIntro => 'You are in check! You must escape or block the attack.';
+
+  @override
+  String get learnEscapeWithTheKing => 'Escape with the king!';
+
+  @override
+  String get learnTheKingCannotEscapeButBlock => 'The king cannot escape,\nbut you can block the attack!';
+
+  @override
+  String get learnYouCanGetOutOfCheckByTaking => 'You can get out of check\nby taking the attacking piece.';
+
+  @override
+  String get learnThisKnightIsCheckingThroughYourDefenses => 'This knight is checking\nthrough your defences!';
+
+  @override
+  String get learnEscapeOrBlock => 'Escape with the king\nor block the attack!';
+
+  @override
+  String get learnOutOfCheckComplete => 'Congratulations! Your king must never be taken, so make sure you can defend against a check!';
+
+  @override
+  String get learnMateInOne => 'Mate in one';
+
+  @override
+  String get learnDefeatTheOpponentsKing => 'Defeat the opponent\'s king';
+
+  @override
+  String get learnMateInOneIntro => 'You win when your opponent cannot defend against a check.';
+
+  @override
+  String get learnAttackYourOpponentsKing => 'Attack your opponent\'s king\nin a way that cannot be defended!';
+
+  @override
+  String get learnMateInOneComplete => 'Congratulations! That is how you win chess games!';
+
+  @override
+  String get learnIntermediate => 'Intermediate';
+
+  @override
+  String get learnBoardSetup => 'Board setup';
+
+  @override
+  String get learnHowTheGameStarts => 'How the game starts';
+
+  @override
+  String get learnBoardSetupIntro => 'The two armies face each other, ready for the battle.';
+
+  @override
+  String get learnThisIsTheInitialPosition => 'This is the initial position\nof every game of chess!\nMake any move to continue.';
+
+  @override
+  String get learnFirstPlaceTheRooks => 'First place the rooks!\nThey go in the corners.';
+
+  @override
+  String get learnThenPlaceTheKnights => 'Then place the knights!\nThey go next to the rooks.';
+
+  @override
+  String get learnPlaceTheBishops => 'Place the bishops!\nThey go next to the knights.';
+
+  @override
+  String get learnPlaceTheQueen => 'Place the queen!\nShe goes on her own colour.';
+
+  @override
+  String get learnPlaceTheKing => 'Place the king!\nRight next to his queen.';
+
+  @override
+  String get learnPawnsFormTheFrontLine => 'Pawns form the front line.\nMake any move to continue.';
+
+  @override
+  String get learnBoardSetupComplete => 'Congratulations! You know how to set up the chess board.';
+
+  @override
+  String get learnCastling => 'Castling';
+
+  @override
+  String get learnTheSpecialKingMove => 'The special king move';
+
+  @override
+  String get learnCastlingIntro => 'Bring your king to safety, and deploy your rook for attack!';
+
+  @override
+  String get learnCastleKingSide => 'Move your king two squares\nto castle king-side!';
+
+  @override
+  String get learnCastleQueenSide => 'Move your king two squares\nto castle queen-side!';
+
+  @override
+  String get learnTheKnightIsInTheWay => 'The knight is in the way!\nMove it, then castle king-side.';
+
+  @override
+  String get learnCastleKingSideMovePiecesFirst => 'Castle king-side!\nYou need to move out pieces first.';
+
+  @override
+  String get learnCastleQueenSideMovePiecesFirst => 'Castle queen-side!\nYou need to move out pieces first.';
+
+  @override
+  String get learnYouCannotCastleIfMoved => 'You cannot castle if\nthe king has already moved\nor the rook has already moved.';
+
+  @override
+  String get learnYouCannotCastleIfAttacked => 'You cannot castle if\nthe king is attacked on the way.\nBlock the check then castle!';
+
+  @override
+  String get learnFindAWayToCastleKingSide => 'Find a way to\ncastle king-side!';
+
+  @override
+  String get learnFindAWayToCastleQueenSide => 'Find a way to\ncastle queen-side!';
+
+  @override
+  String get learnCastlingComplete => 'Congratulations! You should almost always castle in a game.';
+
+  @override
+  String get learnTheSpecialPawnMove => 'The special pawn move';
+
+  @override
+  String get learnEnPassantIntro => 'When the opponent\'s pawn moves two squares, you can still take it as if it had only moved one square.';
+
+  @override
+  String get learnBlackJustMovedThePawnByTwoSquares => 'Black just moved the pawn\nby two squares!\nTake it en passant.';
+
+  @override
+  String get learnEnPassantOnlyWorksImmediately => 'En passant only works\nimmediately after the opponent\nmoved the pawn.';
+
+  @override
+  String get learnEnPassantOnlyWorksOnFifthRank => 'En passant only works\nif your pawn is on the 5th rank.';
+
+  @override
+  String get learnTakeAllThePawnsEnPassant => 'Take all the pawns en passant!';
+
+  @override
+  String get learnEnPassantComplete => 'Congratulations! You can now take en passant.';
+
+  @override
+  String get learnStalemate => 'Stalemate';
+
+  @override
+  String get learnTheGameIsADraw => 'The game is a draw';
+
+  @override
+  String get learnStalemateIntro => 'When a player is not in check and does not have a legal move, it\'s a stalemate. The game is drawn: no one wins, no one loses.';
+
+  @override
+  String get learnStalemateGoal => 'To stalemate black:\n- Black cannot move anywhere\n- There is no check.';
+
+  @override
+  String get learnStalemateComplete => 'Congratulations! Better be stalemated than checkmated!';
+
+  @override
+  String get learnAdvanced => 'Advanced';
+
+  @override
+  String get learnPieceValue => 'Piece value';
+
+  @override
+  String get learnEvaluatePieceStrength => 'Evaluate piece strength';
+
+  @override
+  String get learnPieceValueIntro => 'Pieces with high mobility have a higher value!\nQueen = 9\nRook = 5\nBishop = 3\nKnight = 3\nPawn = 1\nThe king is priceless! Losing it means losing the game.';
+
+  @override
+  String get learnQueenOverBishop => 'Take the piece\nwith the highest value!\nQueen > Bishop';
+
+  @override
+  String get learnPieceValueExchange => 'Take the piece with the highest value!\nDo not exchange\na higher valued piece for a less valuable one.';
+
+  @override
+  String get learnPieceValueLegal => 'Take the piece\nwith the highest value!\nMake sure your move is legal!';
+
+  @override
+  String get learnTakeThePieceWithTheHighestValue => 'Take the piece\nwith the highest value!';
+
+  @override
+  String get learnPieceValueComplete => 'Congratulations! You know the value of material!\nQueen = 9\nRook = 5\nBishop = 3\nKnight = 3\nPawn = 1';
+
+  @override
+  String get learnCheckInTwo => 'Check in two';
+
+  @override
+  String get learnTwoMovesToGiveCheck => 'Two moves to give a check';
+
+  @override
+  String get learnCheckInTwoIntro => 'Find the right combination of two moves that checks the opponent\'s king!';
+
+  @override
+  String get learnCheckInTwoGoal => 'Threaten the opponent\'s king\nin two moves!';
+
+  @override
+  String get learnCheckInTwoComplete => 'Congratulations! You checked your opponent, forcing them to defend their king!';
+
+  @override
+  String get learnWhatNext => 'What next?';
+
+  @override
+  String get learnYouKnowHowToPlayChess => 'You know how to play chess, congratulations! Do you want to become a stronger player?';
+
+  @override
+  String get learnRegister => 'Register';
+
+  @override
+  String get learnGetAFreeLichessAccount => 'Get a free Lichess account';
+
+  @override
+  String get learnPractice => 'Practise';
+
+  @override
+  String get learnLearnCommonChessPositions => 'Learn common chess positions';
+
+  @override
+  String get learnPuzzles => 'Puzzles';
+
+  @override
+  String get learnExerciseYourTacticalSkills => 'Exercise your tactical skills';
+
+  @override
+  String get learnVideos => 'Videos';
+
+  @override
+  String get learnWatchInstructiveChessVideos => 'Watch instructive chess videos';
+
+  @override
+  String get learnPlayPeople => 'Play people';
+
+  @override
+  String get learnOpponentsFromAroundTheWorld => 'Opponents from around the world';
+
+  @override
+  String get learnPlayMachine => 'Play machine';
+
+  @override
+  String get learnTestYourSkillsWithTheComputer => 'Test your skills with the computer';
+
+  @override
+  String get learnLetsGo => 'Let\'s go!';
+
+  @override
+  String learnStageX(String param) {
+    return 'Stage $param';
+  }
+
+  @override
+  String get learnAwesome => 'Awesome!';
+
+  @override
+  String get learnExcellent => 'Excellent!';
+
+  @override
+  String get learnGreatJob => 'Great job!';
+
+  @override
+  String get learnPerfect => 'Perfect!';
+
+  @override
+  String get learnOutstanding => 'Outstanding!';
+
+  @override
+  String get learnWayToGo => 'Way to go!';
+
+  @override
+  String get learnYesYesYes => 'Yes, yes, yes!';
+
+  @override
+  String get learnYoureGoodAtThis => 'You\'re good at this!';
+
+  @override
+  String get learnNailedIt => 'Nailed it.';
+
+  @override
+  String get learnRightOn => 'Right on!';
+
+  @override
+  String learnStageXComplete(String param) {
+    return 'Stage $param complete';
+  }
+
+  @override
+  String get learnNext => 'Next';
+
+  @override
+  String learnNextX(String param) {
+    return 'Next: $param';
+  }
+
+  @override
+  String get learnBackToMenu => 'Back to menu';
+
+  @override
+  String get learnPuzzleFailed => 'Puzzle failed!';
+
+  @override
+  String get learnRetry => 'Retry';
+
+  @override
   String get patronDonate => 'Donate';
 
   @override
@@ -8261,6 +8782,527 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Practice only some files & ranks';
+
+  @override
+  String get learnLearnChess => 'Learn chess';
+
+  @override
+  String get learnByPlaying => 'by playing!';
+
+  @override
+  String learnProgressX(String param) {
+    return 'Progress: $param';
+  }
+
+  @override
+  String get learnResetMyProgress => 'Reset my progress';
+
+  @override
+  String get learnYouWillLoseAllYourProgress => 'You will lose all your progress!';
+
+  @override
+  String get learnPlay => 'play!';
+
+  @override
+  String get learnChessPieces => 'Chess pieces';
+
+  @override
+  String get learnTheRook => 'The rook';
+
+  @override
+  String get learnItMovesInStraightLines => 'It moves in straight lines';
+
+  @override
+  String get learnRookIntro => 'The rook is a powerful piece. Are you ready to command it?';
+
+  @override
+  String get learnRookGoal => 'Click on the rook\nto bring it to the star!';
+
+  @override
+  String get learnGrabAllTheStars => 'Grab all the stars!';
+
+  @override
+  String get learnTheFewerMoves => 'The fewer moves you make,\nthe more points you win!';
+
+  @override
+  String get learnUseTwoRooks => 'Use two rooks\nto speed things up!';
+
+  @override
+  String get learnRookComplete => 'Congratulations! You have successfully mastered the rook.';
+
+  @override
+  String get learnTheBishop => 'The bishop';
+
+  @override
+  String get learnItMovesDiagonally => 'It moves diagonally';
+
+  @override
+  String get learnBishopIntro => 'Next we will learn how to maneuver a bishop!';
+
+  @override
+  String get learnYouNeedBothBishops => 'One light-squared bishop,\none dark-squared bishop.\nYou need both!';
+
+  @override
+  String get learnBishopComplete => 'Congratulations! You can command a bishop.';
+
+  @override
+  String get learnTheQueen => 'The queen';
+
+  @override
+  String get learnQueenCombinesRookAndBishop => 'Queen = rook + bishop';
+
+  @override
+  String get learnQueenIntro => 'The most powerful chess piece enters. Her majesty the queen!';
+
+  @override
+  String get learnQueenComplete => 'Congratulations! Queens have no secrets for you.';
+
+  @override
+  String get learnTheKing => 'The king';
+
+  @override
+  String get learnTheMostImportantPiece => 'The most important piece';
+
+  @override
+  String get learnKingIntro => 'You are the king. If you fall in battle, the game is lost.';
+
+  @override
+  String get learnTheKingIsSlow => 'The king is slow.';
+
+  @override
+  String get learnLastOne => 'Last one!';
+
+  @override
+  String get learnKingComplete => 'You can now command the commander!';
+
+  @override
+  String get learnTheKnight => 'The knight';
+
+  @override
+  String get learnItMovesInAnLShape => 'It moves in an L shape';
+
+  @override
+  String get learnKnightIntro => 'Here\'s a challenge for you. The knight is... a tricky piece.';
+
+  @override
+  String get learnKnightsHaveAFancyWay => 'Knights have a fancy way\nof jumping around!';
+
+  @override
+  String get learnKnightsCanJumpOverObstacles => 'Knights can jump over obstacles!\nEscape and vanquish the stars!';
+
+  @override
+  String get learnKnightComplete => 'Congratulations! You have mastered the knight.';
+
+  @override
+  String get learnThePawn => 'The pawn';
+
+  @override
+  String get learnItMovesForwardOnly => 'It moves forward only';
+
+  @override
+  String get learnPawnIntro => 'Pawns are weak, but they pack a lot of potential.';
+
+  @override
+  String get learnPawnsMoveOneSquareOnly => 'Pawns move one square only.\nBut when they reach the other side of the board, they become a stronger piece!';
+
+  @override
+  String get learnMostOfTheTimePromotingToAQueenIsBest => 'Most of the time promoting to a queen is the best.\nBut sometimes a knight can come in handy!';
+
+  @override
+  String get learnPawnsMoveForward => 'Pawns move forward,\nbut capture diagonally!';
+
+  @override
+  String get learnCaptureThenPromote => 'Capture, then promote!';
+
+  @override
+  String get learnUseAllThePawns => 'Use all the pawns!\nNo need to promote.';
+
+  @override
+  String get learnAPawnOnTheSecondRank => 'A pawn on the second rank can move 2 squares at once!';
+
+  @override
+  String get learnGrabAllTheStarsNoNeedToPromote => 'Grab all the stars!\nNo need to promote.';
+
+  @override
+  String get learnPawnComplete => 'Congratulations! Pawns have no secrets for you.';
+
+  @override
+  String get learnPawnPromotion => 'Pawn promotion';
+
+  @override
+  String get learnYourPawnReachedTheEndOfTheBoard => 'Your pawn reached the end of the board!';
+
+  @override
+  String get learnItNowPromotesToAStrongerPiece => 'It now promotes to a stronger piece.';
+
+  @override
+  String get learnSelectThePieceYouWant => 'Select the piece you want!';
+
+  @override
+  String get learnFundamentals => 'Fundamentals';
+
+  @override
+  String get learnCapture => 'Capture';
+
+  @override
+  String get learnTakeTheEnemyPieces => 'Take the enemy pieces';
+
+  @override
+  String get learnCaptureIntro => 'Identify the opponent\'s undefended pieces, and capture them!';
+
+  @override
+  String get learnTakeTheBlackPieces => 'Take the black pieces!';
+
+  @override
+  String get learnTakeTheBlackPiecesAndDontLoseYours => 'Take the black pieces!\nAnd don\'t lose yours.';
+
+  @override
+  String get learnCaptureComplete => 'Congratulations! You know how to fight with chess pieces!';
+
+  @override
+  String get learnProtection => 'Protection';
+
+  @override
+  String get learnKeepYourPiecesSafe => 'Keep your pieces safe';
+
+  @override
+  String get learnProtectionIntro => 'Identify the pieces your opponent attacks, and defend them!';
+
+  @override
+  String get learnProtectionComplete => 'Congratulations! A piece you don\'t lose is a piece you win!';
+
+  @override
+  String get learnEscape => 'You\'re under attack!\nEscape the threat!';
+
+  @override
+  String get learnNoEscape => 'There is no escape,\nbut you can defend!';
+
+  @override
+  String get learnDontLetThemTakeAnyUndefendedPiece => 'Don\'t let them take\nany undefended piece!';
+
+  @override
+  String get learnCombat => 'Combat';
+
+  @override
+  String get learnCaptureAndDefendPieces => 'Capture and defend pieces';
+
+  @override
+  String get learnCombatIntro => 'A good warrior knows both attack and defense!';
+
+  @override
+  String get learnCombatComplete => 'Congratulations! You know how to fight with chess pieces!';
+
+  @override
+  String get learnCheckInOne => 'Check in one';
+
+  @override
+  String get learnAttackTheOpponentsKing => 'Attack the opponent\'s king';
+
+  @override
+  String get learnCheckInOneIntro => 'To check your opponent, attack their king. They must defend it!';
+
+  @override
+  String get learnCheckInOneGoal => 'Aim at the opponent\'s king\nin one move!';
+
+  @override
+  String get learnCheckInOneComplete => 'Congratulations! You checked your opponent, forcing them to defend their king!';
+
+  @override
+  String get learnOutOfCheck => 'Out of check';
+
+  @override
+  String get learnDefendYourKing => 'Defend your king';
+
+  @override
+  String get learnOutOfCheckIntro => 'You are in check! You must escape or block the attack.';
+
+  @override
+  String get learnEscapeWithTheKing => 'Escape with the king!';
+
+  @override
+  String get learnTheKingCannotEscapeButBlock => 'The king cannot escape,\nbut you can block the attack!';
+
+  @override
+  String get learnYouCanGetOutOfCheckByTaking => 'You can get out of check\nby taking the attacking piece.';
+
+  @override
+  String get learnThisKnightIsCheckingThroughYourDefenses => 'This knight is checking\nthrough your defenses!';
+
+  @override
+  String get learnEscapeOrBlock => 'Escape with the king\nor block the attack!';
+
+  @override
+  String get learnOutOfCheckComplete => 'Congratulations! Your king must never be taken, so make sure you can defend against a check!';
+
+  @override
+  String get learnMateInOne => 'Mate in one';
+
+  @override
+  String get learnDefeatTheOpponentsKing => 'Defeat the opponent\'s king';
+
+  @override
+  String get learnMateInOneIntro => 'You win when your opponent cannot defend against a check.';
+
+  @override
+  String get learnAttackYourOpponentsKing => 'Attack your opponent\'s king\nin a way that cannot be defended!';
+
+  @override
+  String get learnMateInOneComplete => 'Congratulations! That is how you win chess games!';
+
+  @override
+  String get learnIntermediate => 'Intermediate';
+
+  @override
+  String get learnBoardSetup => 'Board setup';
+
+  @override
+  String get learnHowTheGameStarts => 'How the game starts';
+
+  @override
+  String get learnBoardSetupIntro => 'The two armies face each other, ready for the battle.';
+
+  @override
+  String get learnThisIsTheInitialPosition => 'This is the initial position\nof every game of chess!\nMake any move to continue.';
+
+  @override
+  String get learnFirstPlaceTheRooks => 'First place the rooks!\nThey go in the corners.';
+
+  @override
+  String get learnThenPlaceTheKnights => 'Then place the knights!\nThey go next to the rooks.';
+
+  @override
+  String get learnPlaceTheBishops => 'Place the bishops!\nThey go next to the knights.';
+
+  @override
+  String get learnPlaceTheQueen => 'Place the queen!\nShe goes on her own color.';
+
+  @override
+  String get learnPlaceTheKing => 'Place the king!\nRight next to his queen.';
+
+  @override
+  String get learnPawnsFormTheFrontLine => 'Pawns form the front line.\nMake any move to continue.';
+
+  @override
+  String get learnBoardSetupComplete => 'Congratulations! You know how to set up the chess board.';
+
+  @override
+  String get learnCastling => 'Castling';
+
+  @override
+  String get learnTheSpecialKingMove => 'The special king move';
+
+  @override
+  String get learnCastlingIntro => 'Bring your king to safety, and deploy your rook for attack!';
+
+  @override
+  String get learnCastleKingSide => 'Move your king two squares\nto castle king-side!';
+
+  @override
+  String get learnCastleQueenSide => 'Move your king two squares\nto castle queen-side!';
+
+  @override
+  String get learnTheKnightIsInTheWay => 'The knight is in the way!\nMove it, then castle king-side.';
+
+  @override
+  String get learnCastleKingSideMovePiecesFirst => 'Castle king-side!\nYou need to move out pieces first.';
+
+  @override
+  String get learnCastleQueenSideMovePiecesFirst => 'Castle queen-side!\nYou need to move out pieces first.';
+
+  @override
+  String get learnYouCannotCastleIfMoved => 'You cannot castle if\nthe king has already moved\nor the rook has already moved.';
+
+  @override
+  String get learnYouCannotCastleIfAttacked => 'You cannot castle if\nthe king is attacked on the way.\nBlock the check then castle!';
+
+  @override
+  String get learnFindAWayToCastleKingSide => 'Find a way to\ncastle king-side!';
+
+  @override
+  String get learnFindAWayToCastleQueenSide => 'Find a way to\ncastle queen-side!';
+
+  @override
+  String get learnCastlingComplete => 'Congratulations! You should almost always castle in a game.';
+
+  @override
+  String get learnTheSpecialPawnMove => 'The special pawn move';
+
+  @override
+  String get learnEnPassantIntro => 'When the opponent\'s pawn moves two squares, you can still take it as if it had only moved one square.';
+
+  @override
+  String get learnBlackJustMovedThePawnByTwoSquares => 'Black just moved the pawn\nby two squares!\nTake it en passant.';
+
+  @override
+  String get learnEnPassantOnlyWorksImmediately => 'En passant only works\nimmediately after the opponent\nmoved the pawn.';
+
+  @override
+  String get learnEnPassantOnlyWorksOnFifthRank => 'En passant only works\nif your pawn is on the 5th rank.';
+
+  @override
+  String get learnTakeAllThePawnsEnPassant => 'Take all the pawns en passant!';
+
+  @override
+  String get learnEnPassantComplete => 'Congratulations! You can now take en passant.';
+
+  @override
+  String get learnStalemate => 'Stalemate';
+
+  @override
+  String get learnTheGameIsADraw => 'The game is a draw';
+
+  @override
+  String get learnStalemateIntro => 'When a player is not in check and does not have a legal move, it\'s a stalemate. The game is drawn: no one wins, no one loses.';
+
+  @override
+  String get learnStalemateGoal => 'To stalemate black:\n- Black cannot move anywhere\n- There is no check.';
+
+  @override
+  String get learnStalemateComplete => 'Congratulations! Better be stalemated than checkmated!';
+
+  @override
+  String get learnAdvanced => 'Advanced';
+
+  @override
+  String get learnPieceValue => 'Piece value';
+
+  @override
+  String get learnEvaluatePieceStrength => 'Evaluate piece strength';
+
+  @override
+  String get learnPieceValueIntro => 'Pieces with high mobility have a higher value!\nQueen = 9\nRook = 5\nBishop = 3\nKnight = 3\nPawn = 1\nThe king is priceless! Losing it means losing the game.';
+
+  @override
+  String get learnQueenOverBishop => 'Take the piece\nwith the highest value!\nQueen > Bishop';
+
+  @override
+  String get learnPieceValueExchange => 'Take the piece with the highest value!\nDo not exchange\na higher valued piece for a less valuable one.';
+
+  @override
+  String get learnPieceValueLegal => 'Take the piece\nwith the highest value!\nMake sure your move is legal!';
+
+  @override
+  String get learnTakeThePieceWithTheHighestValue => 'Take the piece\nwith the highest value!';
+
+  @override
+  String get learnPieceValueComplete => 'Congratulations! You know the value of material!\nQueen = 9\nRook = 5\nBishop = 3\nKnight = 3\nPawn = 1';
+
+  @override
+  String get learnCheckInTwo => 'Check in two';
+
+  @override
+  String get learnTwoMovesToGiveCheck => 'Two moves to give a check';
+
+  @override
+  String get learnCheckInTwoIntro => 'Find the right combination of two moves that checks the opponent\'s king!';
+
+  @override
+  String get learnCheckInTwoGoal => 'Threaten the opponent\'s king\nin two moves!';
+
+  @override
+  String get learnCheckInTwoComplete => 'Congratulations! You checked your opponent, forcing them to defend their king!';
+
+  @override
+  String get learnWhatNext => 'What next?';
+
+  @override
+  String get learnYouKnowHowToPlayChess => 'You know how to play chess, congratulations! Do you want to become a stronger player?';
+
+  @override
+  String get learnRegister => 'Register';
+
+  @override
+  String get learnGetAFreeLichessAccount => 'Get a free Lichess account';
+
+  @override
+  String get learnPractice => 'Practice';
+
+  @override
+  String get learnLearnCommonChessPositions => 'Learn common chess positions';
+
+  @override
+  String get learnPuzzles => 'Puzzles';
+
+  @override
+  String get learnExerciseYourTacticalSkills => 'Exercise your tactical skills';
+
+  @override
+  String get learnVideos => 'Videos';
+
+  @override
+  String get learnWatchInstructiveChessVideos => 'Watch instructive chess videos';
+
+  @override
+  String get learnPlayPeople => 'Play people';
+
+  @override
+  String get learnOpponentsFromAroundTheWorld => 'Opponents from around the world';
+
+  @override
+  String get learnPlayMachine => 'Play machine';
+
+  @override
+  String get learnTestYourSkillsWithTheComputer => 'Test your skills with the computer';
+
+  @override
+  String get learnLetsGo => 'Let\'s go!';
+
+  @override
+  String learnStageX(String param) {
+    return 'Stage $param';
+  }
+
+  @override
+  String get learnAwesome => 'Awesome!';
+
+  @override
+  String get learnExcellent => 'Excellent!';
+
+  @override
+  String get learnGreatJob => 'Great job!';
+
+  @override
+  String get learnPerfect => 'Perfect!';
+
+  @override
+  String get learnOutstanding => 'Outstanding!';
+
+  @override
+  String get learnWayToGo => 'Way to go!';
+
+  @override
+  String get learnYesYesYes => 'Yes, yes, yes!';
+
+  @override
+  String get learnYoureGoodAtThis => 'You\'re good at this!';
+
+  @override
+  String get learnNailedIt => 'Nailed it.';
+
+  @override
+  String get learnRightOn => 'Right on!';
+
+  @override
+  String learnStageXComplete(String param) {
+    return 'Stage $param complete';
+  }
+
+  @override
+  String get learnNext => 'Next';
+
+  @override
+  String learnNextX(String param) {
+    return 'Next: $param';
+  }
+
+  @override
+  String get learnBackToMenu => 'Back to menu';
+
+  @override
+  String get learnPuzzleFailed => 'Puzzle failed!';
+
+  @override
+  String get learnRetry => 'Retry';
 
   @override
   String get patronDonate => 'Donate';

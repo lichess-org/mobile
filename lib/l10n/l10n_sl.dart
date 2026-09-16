@@ -1402,6 +1402,527 @@ class AppLocalizationsSl extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Vadite le nekatere stolpce in vrstice';
 
   @override
+  String get learnLearnChess => 'Naučimo se šah';
+
+  @override
+  String get learnByPlaying => 'z igranjem!';
+
+  @override
+  String learnProgressX(String param) {
+    return 'Napredek: $param';
+  }
+
+  @override
+  String get learnResetMyProgress => 'Ponastavi moj napredek';
+
+  @override
+  String get learnYouWillLoseAllYourProgress => 'Izgubili boste ves napredek!';
+
+  @override
+  String get learnPlay => 'igraj!';
+
+  @override
+  String get learnChessPieces => 'Šahovske figure';
+
+  @override
+  String get learnTheRook => 'Trdnjava';
+
+  @override
+  String get learnItMovesInStraightLines => 'Se premika v ravni črti';
+
+  @override
+  String get learnRookIntro => 'Trdnjava je močna figura. Ali ste pripravljeni, da ji ukazujete?';
+
+  @override
+  String get learnRookGoal => 'Kliknite na trdnjavo, da jo pripeljete na zvezdo!';
+
+  @override
+  String get learnGrabAllTheStars => 'Osvojite vse zvezde!';
+
+  @override
+  String get learnTheFewerMoves => 'Manj potez ko naredite, več točk dobite!';
+
+  @override
+  String get learnUseTwoRooks => 'Uporabite dve trdnjavi, da bo šlo hitreje!';
+
+  @override
+  String get learnRookComplete => 'Čestitamo! Uspešno obvladate trdnjavo.';
+
+  @override
+  String get learnTheBishop => 'Lovec';
+
+  @override
+  String get learnItMovesDiagonally => 'Premika se diagonalno';
+
+  @override
+  String get learnBishopIntro => 'Naučili se bomo premikanja lovca!';
+
+  @override
+  String get learnYouNeedBothBishops => 'En belopoljni lovec,\nen črnopoljni lovec.\nPotrebujete oba!';
+
+  @override
+  String get learnBishopComplete => 'Čestitamo! Obvladate lovca.';
+
+  @override
+  String get learnTheQueen => 'Kraljica';
+
+  @override
+  String get learnQueenCombinesRookAndBishop => 'Kraljica = trdnjava + lovec';
+
+  @override
+  String get learnQueenIntro => 'Najmočnejša šahovska figura vstopa. Njeno veličanstvo, kraljica!';
+
+  @override
+  String get learnQueenComplete => 'Čestitamo! Kraljica nima več skrivnosti pred vami.';
+
+  @override
+  String get learnTheKing => 'Kralj';
+
+  @override
+  String get learnTheMostImportantPiece => 'Najpomembnejša figura';
+
+  @override
+  String get learnKingIntro => 'Vi ste kralj. Če izgubite bitko, je igra izgubljena.';
+
+  @override
+  String get learnTheKingIsSlow => 'Kralj je počasen.';
+
+  @override
+  String get learnLastOne => 'Še zadnja!';
+
+  @override
+  String get learnKingComplete => 'Sedaj lahko poveljujete poveljniku!';
+
+  @override
+  String get learnTheKnight => 'Skakač';
+
+  @override
+  String get learnItMovesInAnLShape => 'Premika se v obliki črke L';
+
+  @override
+  String get learnKnightIntro => 'Tukaj je izziv za vas. Skakač je... zvita figura.';
+
+  @override
+  String get learnKnightsHaveAFancyWay => 'Skakači imajo prebrisan način poskakovanja!';
+
+  @override
+  String get learnKnightsCanJumpOverObstacles => 'Skakač lahko preskoči ovire. Pobegnite in osvojite zvezde!';
+
+  @override
+  String get learnKnightComplete => 'Čestitamo! Obvladate skakača.';
+
+  @override
+  String get learnThePawn => 'Kmet';
+
+  @override
+  String get learnItMovesForwardOnly => 'Premika se samo naprej';
+
+  @override
+  String get learnPawnIntro => 'Kmetje so šibki, vendar imajo velik potencial.';
+
+  @override
+  String get learnPawnsMoveOneSquareOnly => 'Ko dosežejo drugo stran šahovnice, postanejo močnejša figura!';
+
+  @override
+  String get learnMostOfTheTimePromotingToAQueenIsBest => 'Običajno je promocija v kraljico najboljša. Včasih pa je lahko priročna tudi promocija v skakača!';
+
+  @override
+  String get learnPawnsMoveForward => 'Kmetje se premikajo naprej, vendar jemljejo diagonalno!';
+
+  @override
+  String get learnCaptureThenPromote => 'Jemljite, nato promovirajte!';
+
+  @override
+  String get learnUseAllThePawns => 'Uporabite vse kmete! Ni potrebno promovirati.';
+
+  @override
+  String get learnAPawnOnTheSecondRank => 'Kmet v drugi vrsti se lahko premakne za dve polji naenkrat!';
+
+  @override
+  String get learnGrabAllTheStarsNoNeedToPromote => 'Osvojite vse zvezde! Promocija ni potrebna.';
+
+  @override
+  String get learnPawnComplete => 'Čestitamo! Kmetje nimajo skrivnosti za vas.';
+
+  @override
+  String get learnPawnPromotion => 'Promocija kmeta';
+
+  @override
+  String get learnYourPawnReachedTheEndOfTheBoard => 'Vaš kmet je dosegel konec šahovnice!';
+
+  @override
+  String get learnItNowPromotesToAStrongerPiece => 'Sedaj promovira v močnejšo figuro.';
+
+  @override
+  String get learnSelectThePieceYouWant => 'Izberite figuro ki jo želite!';
+
+  @override
+  String get learnFundamentals => 'Osnove';
+
+  @override
+  String get learnCapture => 'Jemanje';
+
+  @override
+  String get learnTakeTheEnemyPieces => 'Pojejte nasprotnikove figure';
+
+  @override
+  String get learnCaptureIntro => 'Najdite nasprotnikove nezaščitene figure in jih pojejte!';
+
+  @override
+  String get learnTakeTheBlackPieces => 'Pojejte črne figure!';
+
+  @override
+  String get learnTakeTheBlackPiecesAndDontLoseYours => 'Vzemite črne figure!\nNe izgubite svojih.';
+
+  @override
+  String get learnCaptureComplete => 'Čestitamo! Zdaj se znate boriti s šahovskimi figurami!';
+
+  @override
+  String get learnProtection => 'Obramba';
+
+  @override
+  String get learnKeepYourPiecesSafe => 'Zaščitite figure';
+
+  @override
+  String get learnProtectionIntro => 'Poiščite figure, ki jih napada nasprotnik in jih zaščitite!';
+
+  @override
+  String get learnProtectionComplete => 'Čestitamo! Figura, ki je ne izgubite je figura, ki jo dobite!';
+
+  @override
+  String get learnEscape => 'Napadeni ste!\nPobegnite grožnji!';
+
+  @override
+  String get learnNoEscape => 'Ni izhoda,\nvendar se lahko branite!';
+
+  @override
+  String get learnDontLetThemTakeAnyUndefendedPiece => 'Ne dovolite, da vam vzamejo \nnezaščitene figure!';
+
+  @override
+  String get learnCombat => 'Boj';
+
+  @override
+  String get learnCaptureAndDefendPieces => 'Vzemite in ubranite figure';
+
+  @override
+  String get learnCombatIntro => 'Dober bojevnik obvlada napad in obrambo!';
+
+  @override
+  String get learnCombatComplete => 'Čestitamo! Obvladate bojevanje s figurami!';
+
+  @override
+  String get learnCheckInOne => 'Šah v eni potezi';
+
+  @override
+  String get learnAttackTheOpponentsKing => 'Napadite nasprotnikovega kralja';
+
+  @override
+  String get learnCheckInOneIntro => 'Da šahirate nasprotnika mu napadite kralja. Morajo ga branit!';
+
+  @override
+  String get learnCheckInOneGoal => 'Ciljajte na nasprotnikovega kralja v eni potezi!';
+
+  @override
+  String get learnCheckInOneComplete => 'Čestitamo! Šahirali ste nasprotnika in ga prisilili, da brani kralja!';
+
+  @override
+  String get learnOutOfCheck => 'Obramba pred šahom';
+
+  @override
+  String get learnDefendYourKing => 'Zaščitite kralja';
+
+  @override
+  String get learnOutOfCheckIntro => 'Ste v šahu! Morate se umakniti ali zaščititi napad.';
+
+  @override
+  String get learnEscapeWithTheKing => 'Pobegnite s kraljem!';
+
+  @override
+  String get learnTheKingCannotEscapeButBlock => 'Kralj ne mora pobegniti, vendar lahko zaščitite napad!';
+
+  @override
+  String get learnYouCanGetOutOfCheckByTaking => 'Šah lahko obranite, da vzamete napadalno figuro.';
+
+  @override
+  String get learnThisKnightIsCheckingThroughYourDefenses => 'Skakač daje šah\nskozi vašo obrambo!';
+
+  @override
+  String get learnEscapeOrBlock => 'Pobegnite s kraljem \nali zaščitite napad!';
+
+  @override
+  String get learnOutOfCheckComplete => 'Čestitamo! Vašega kralja ni mogoče vzeti poskrbite, da se ubranite pred šahom!';
+
+  @override
+  String get learnMateInOne => 'Mat v eni potezi';
+
+  @override
+  String get learnDefeatTheOpponentsKing => 'Premagajte nasprotnikovega kralja';
+
+  @override
+  String get learnMateInOneIntro => 'Zmagate, kadar vaš nasprotnik ne more obraniti šaha.';
+
+  @override
+  String get learnAttackYourOpponentsKing => 'Napadite nasprotnikovega kralja\ntako, da obramba ne bo mogoča!';
+
+  @override
+  String get learnMateInOneComplete => 'Čestitamo! Tako se zmaga šahovsko partijo!';
+
+  @override
+  String get learnIntermediate => 'Srednji nivo';
+
+  @override
+  String get learnBoardSetup => 'Postavitev figur';
+
+  @override
+  String get learnHowTheGameStarts => 'Kako začeti igro';
+
+  @override
+  String get learnBoardSetupIntro => 'Dve vojski si stojita nasproti, pripravljeni na bitko.';
+
+  @override
+  String get learnThisIsTheInitialPosition => 'To je začetna pozicija \nvsake šahovske partije!\nZa nadaljevanje naredite potezo.';
+
+  @override
+  String get learnFirstPlaceTheRooks => 'Najprej postavite trdnjavi!\nStojita v kotih.';
+
+  @override
+  String get learnThenPlaceTheKnights => 'Nato postavite skakača.\nStojita ob trdnjavah.';
+
+  @override
+  String get learnPlaceTheBishops => 'Postavite lovca!\nStojita ob skakačih.';
+
+  @override
+  String get learnPlaceTheQueen => 'Postavite kraljico.\nStoji na polju svoje barve.';
+
+  @override
+  String get learnPlaceTheKing => 'Postavite kralja!\nH kraljici.';
+
+  @override
+  String get learnPawnsFormTheFrontLine => 'Kmetje sestavljajo prednjo vrsto.\nZa nadaljevanje naredite potezo.';
+
+  @override
+  String get learnBoardSetupComplete => 'Čestitamo! Sedaj znate postaviti šahovnico.';
+
+  @override
+  String get learnCastling => 'Rokada';
+
+  @override
+  String get learnTheSpecialKingMove => 'Posebna poteza s kraljem';
+
+  @override
+  String get learnCastlingIntro => 'Spravite svojega kralja na varno in razvijte trdnjavo v napad!';
+
+  @override
+  String get learnCastleKingSide => 'Premaknite kralja za dve polji,\nda rokirate na kraljevo stran!';
+
+  @override
+  String get learnCastleQueenSide => 'Premaknite kralja za dve polji,\nda rokirate na kraljičino stran!';
+
+  @override
+  String get learnTheKnightIsInTheWay => 'Skakač je v napoto!\nPremaknite ga, nato rokirajte na kraljevo stran.';
+
+  @override
+  String get learnCastleKingSideMovePiecesFirst => 'Rokirajte na kraljevo stran!\nPrej odmaknite figure.';
+
+  @override
+  String get learnCastleQueenSideMovePiecesFirst => 'Rokirajte na kraljičino stran!\nPrej odmaknite figure.';
+
+  @override
+  String get learnYouCannotCastleIfMoved => 'Rokada ni dovoljena, če\nsta se kralj ali trdnjava že premaknila.';
+
+  @override
+  String get learnYouCannotCastleIfAttacked => 'Rokirati ni mogoče, če\nje kralj na poti napaden.\nUbranite šah in nato rokirajte!';
+
+  @override
+  String get learnFindAWayToCastleKingSide => 'Najdite način\nza rokado na kraljevo stran!';
+
+  @override
+  String get learnFindAWayToCastleQueenSide => 'Najdite način\nza rokado na kraljičino stran!';
+
+  @override
+  String get learnCastlingComplete => 'Čestitamo! V skoraj vsaki partiji je dobro rokirati.';
+
+  @override
+  String get learnTheSpecialPawnMove => 'Posebna poteza s kmetom';
+
+  @override
+  String get learnEnPassantIntro => 'Kadar se nasprotnikov kmet premakne za dve polji, ga lahko pojeste, kot če bi se premaknil za eno polje.';
+
+  @override
+  String get learnBlackJustMovedThePawnByTwoSquares => 'Črni je ravno premaknil kmeta\nza dve polji!\nVzemite \"en passant\".';
+
+  @override
+  String get learnEnPassantOnlyWorksImmediately => 'En passant je veljaven samo\ntakoj po tem, ko je nasprotnik\npremaknil kmeta.';
+
+  @override
+  String get learnEnPassantOnlyWorksOnFifthRank => 'En passant je mogoč le,\nče je vaš kmet na 5 vrsti.';
+
+  @override
+  String get learnTakeAllThePawnsEnPassant => 'Vzemite vse kmete en passant!';
+
+  @override
+  String get learnEnPassantComplete => 'Čestitamo! Zdaj znate jemati en passant.';
+
+  @override
+  String get learnStalemate => 'Pat';
+
+  @override
+  String get learnTheGameIsADraw => 'Izid partije je remi';
+
+  @override
+  String get learnStalemateIntro => 'Kadar igralec ni v šahu in nima na voljo veljavne poteze, nastopi pat. Igra je remizirana: nihče ne zmaga, nihče ne izgubi.';
+
+  @override
+  String get learnStalemateGoal => 'Da patirate črnega:\n- Črni se ne more premakniti\n- Ni v šahu.';
+
+  @override
+  String get learnStalemateComplete => 'Čestitamo! Bolje biti patiran kot matiran!';
+
+  @override
+  String get learnAdvanced => 'Napredno';
+
+  @override
+  String get learnPieceValue => 'Vrednosti figur';
+
+  @override
+  String get learnEvaluatePieceStrength => 'Ocenite moč figur';
+
+  @override
+  String get learnPieceValueIntro => 'Figure z večjo gibljivostjo štejejo več točk!\nKraljica = 9 \nTrdnjava = 5 \nLovec = 3 \nSkakač = 3 \nKmet = 1 \nKralj je neprecenljiv! Izgubiti ga, pomeni izgubiti partijo.';
+
+  @override
+  String get learnQueenOverBishop => 'Vzemite figuro\nz največjo vrednostjo!\nKraljica > Lovec';
+
+  @override
+  String get learnPieceValueExchange => 'Vzemite figuro z najvišjo vrednostjo!\n Ne menjajte\n vrednejše figure za manj vredno.';
+
+  @override
+  String get learnPieceValueLegal => 'Vzemi figuro\nz najvišjo vrednostjo!\nPrepričajte se, da je vaša poteza dovoljena!';
+
+  @override
+  String get learnTakeThePieceWithTheHighestValue => 'Vzemite figuro\nz najvišjo vrednostjo!';
+
+  @override
+  String get learnPieceValueComplete => 'Čestitamo! Poznate vrednosti figur!\nKraljica = 9 \nTrdnjava = 5 \nLovec = 3 \nSkakač = 3 \nKmet = 1';
+
+  @override
+  String get learnCheckInTwo => 'Šah v dve';
+
+  @override
+  String get learnTwoMovesToGiveCheck => 'Dajte šah v dveh potezah';
+
+  @override
+  String get learnCheckInTwoIntro => 'Najdite pravo kombinacijo dveh potez, ki šahira nasprotnikovega kralja!';
+
+  @override
+  String get learnCheckInTwoGoal => 'Ogrozite nasprotnikovega kralja\nv dveh potezah!';
+
+  @override
+  String get learnCheckInTwoComplete => 'Čestitamo! Šahirali ste nasprotnika in ga prisilili v obrambo kralja!';
+
+  @override
+  String get learnWhatNext => 'Kam naprej?';
+
+  @override
+  String get learnYouKnowHowToPlayChess => 'Znate igrati šah, čestitamo! Ali želite postati močnejši šahist?';
+
+  @override
+  String get learnRegister => 'Registrirajte se';
+
+  @override
+  String get learnGetAFreeLichessAccount => 'Ustvarite si brezplačen Lichess račun';
+
+  @override
+  String get learnPractice => 'Treniraje';
+
+  @override
+  String get learnLearnCommonChessPositions => 'Naučite se pogostih pozicij';
+
+  @override
+  String get learnPuzzles => 'Problemi';
+
+  @override
+  String get learnExerciseYourTacticalSkills => 'Vadite taktične veščine';
+
+  @override
+  String get learnVideos => 'Videi';
+
+  @override
+  String get learnWatchInstructiveChessVideos => 'Poglejte poučne šahovske videe';
+
+  @override
+  String get learnPlayPeople => 'Proti ljudem';
+
+  @override
+  String get learnOpponentsFromAroundTheWorld => 'Nasprotniki s celega sveta';
+
+  @override
+  String get learnPlayMachine => 'Proti računalniku';
+
+  @override
+  String get learnTestYourSkillsWithTheComputer => 'Preskusite svoje sposobnosti proti računalniku';
+
+  @override
+  String get learnLetsGo => 'Začnimo!';
+
+  @override
+  String learnStageX(String param) {
+    return 'Stopnja $param';
+  }
+
+  @override
+  String get learnAwesome => 'Odlično!';
+
+  @override
+  String get learnExcellent => 'Izjemno!';
+
+  @override
+  String get learnGreatJob => 'Zelo dobro!';
+
+  @override
+  String get learnPerfect => 'Popolno!';
+
+  @override
+  String get learnOutstanding => 'Izjemno!';
+
+  @override
+  String get learnWayToGo => 'Tako se dela!';
+
+  @override
+  String get learnYesYesYes => 'Ja, ja, ja!';
+
+  @override
+  String get learnYoureGoodAtThis => 'Dobri ste v tem!';
+
+  @override
+  String get learnNailedIt => 'Prav ste zadeli.';
+
+  @override
+  String get learnRightOn => 'Pravilno!';
+
+  @override
+  String learnStageXComplete(String param) {
+    return 'Stopnja $param je končana';
+  }
+
+  @override
+  String get learnNext => 'Naslednje';
+
+  @override
+  String learnNextX(String param) {
+    return 'Naslednji: $param';
+  }
+
+  @override
+  String get learnBackToMenu => 'Nazaj v meni';
+
+  @override
+  String get learnPuzzleFailed => 'Nepravilna rešitev!';
+
+  @override
+  String get learnRetry => 'Ponovno';
+
+  @override
   String get patronDonate => 'Donirajte';
 
   @override

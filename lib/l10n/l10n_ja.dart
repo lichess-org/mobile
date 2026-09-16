@@ -1336,6 +1336,527 @@ class AppLocalizationsJa extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => '一部のファイルとランクだけ練習';
 
   @override
+  String get learnLearnChess => 'チェスを学ぶ';
+
+  @override
+  String get learnByPlaying => '遊びながら！';
+
+  @override
+  String learnProgressX(String param) {
+    return '修了: $param';
+  }
+
+  @override
+  String get learnResetMyProgress => '学習履歴をリセット';
+
+  @override
+  String get learnYouWillLoseAllYourProgress => '修了の数字はゼロになります！';
+
+  @override
+  String get learnPlay => '今ここ';
+
+  @override
+  String get learnChessPieces => 'チェスの駒';
+
+  @override
+  String get learnTheRook => 'ルーク';
+
+  @override
+  String get learnItMovesInStraightLines => 'タテヨコに動く';
+
+  @override
+  String get learnRookIntro => 'ルークは強力な駒です。用意はいいですか？';
+
+  @override
+  String get learnRookGoal => 'ルークをクリックして\n星印まで動かす！';
+
+  @override
+  String get learnGrabAllTheStars => '星印を全部集めて！';
+
+  @override
+  String get learnTheFewerMoves => '手数が少ないほど\n高ポイントです！';
+
+  @override
+  String get learnUseTwoRooks => '2 つのルークで\nスピードアップ！';
+
+  @override
+  String get learnRookComplete => 'おめでとう！　ルークの動きをマスターしました。';
+
+  @override
+  String get learnTheBishop => 'ビショップ';
+
+  @override
+  String get learnItMovesDiagonally => 'ナナメに動く';
+
+  @override
+  String get learnBishopIntro => '次はビショップの動き方です！';
+
+  @override
+  String get learnYouNeedBothBishops => '白マスのビショップ、\n黒マスのビショップ、\n両方を使って！';
+
+  @override
+  String get learnBishopComplete => 'おめでとう！　ビショップを使えるようになりました。';
+
+  @override
+  String get learnTheQueen => 'クイーン';
+
+  @override
+  String get learnQueenCombinesRookAndBishop => 'ルーク + ビショップ';
+
+  @override
+  String get learnQueenIntro => 'チェスでいちばん強力な駒、クイーンの登場です！';
+
+  @override
+  String get learnQueenComplete => 'おめでとう！　もうクイーンもだいじょうぶですね。';
+
+  @override
+  String get learnTheKing => 'キング';
+
+  @override
+  String get learnTheMostImportantPiece => 'いちばんだいじな駒';
+
+  @override
+  String get learnKingIntro => 'キングは王様です。キングがやられるとゲームは負けです。';
+
+  @override
+  String get learnTheKingIsSlow => 'キングの動きは一歩ずつ。';
+
+  @override
+  String get learnLastOne => '最後です！';
+
+  @override
+  String get learnKingComplete => 'キングの動きも覚えましたね！';
+
+  @override
+  String get learnTheKnight => 'ナイト';
+
+  @override
+  String get learnItMovesInAnLShape => '「L」字に動く';
+
+  @override
+  String get learnKnightIntro => 'ちょっと難しくなります。ナイトは変わった駒です。';
+
+  @override
+  String get learnKnightsHaveAFancyWay => 'ナイトは面白い動きで\n盤上を跳ねまわります！';
+
+  @override
+  String get learnKnightsCanJumpOverObstacles => 'ナイトは他の駒を跳びこえられます！\n外に出て星印を消してください！';
+
+  @override
+  String get learnKnightComplete => 'おめでとう！　ナイトもマスターしました。';
+
+  @override
+  String get learnThePawn => 'ポーン';
+
+  @override
+  String get learnItMovesForwardOnly => '前にだけ動く';
+
+  @override
+  String get learnPawnIntro => 'ポーンは弱い駒ですが大きな可能性を秘めています。';
+
+  @override
+  String get learnPawnsMoveOneSquareOnly => 'ポーンは前に 1 マスしか動けません。\nしかしボードの向こう側まで行くと別の強い駒に成れるのです！';
+
+  @override
+  String get learnMostOfTheTimePromotingToAQueenIsBest => 'ほとんどの場合はクイーンに成るべきです。\nただしナイトに成るのがいい時もあります！';
+
+  @override
+  String get learnPawnsMoveForward => 'ポーンは動く時は前に進み、\n駒を取る時は斜めに進みます！';
+
+  @override
+  String get learnCaptureThenPromote => '星印を取ってから別の駒に成る！';
+
+  @override
+  String get learnUseAllThePawns => 'すべてのポーンを使って！\n成る必要はありません。';
+
+  @override
+  String get learnAPawnOnTheSecondRank => '2 段目にいるポーンは一度に 2 マス進めます！';
+
+  @override
+  String get learnGrabAllTheStarsNoNeedToPromote => '星印を全部消す！\n成る必要はありません。';
+
+  @override
+  String get learnPawnComplete => 'おめでとう！　ポーンもよくわかったでしょう。';
+
+  @override
+  String get learnPawnPromotion => 'ポーンの昇格';
+
+  @override
+  String get learnYourPawnReachedTheEndOfTheBoard => 'ポーンが盤の端まで進みました！';
+
+  @override
+  String get learnItNowPromotesToAStrongerPiece => 'もっと強い駒に成ることができます（昇格）。';
+
+  @override
+  String get learnSelectThePieceYouWant => '好きな駒を選んでください！';
+
+  @override
+  String get learnFundamentals => '初級';
+
+  @override
+  String get learnCapture => '駒取り';
+
+  @override
+  String get learnTakeTheEnemyPieces => '相手の駒を取る';
+
+  @override
+  String get learnCaptureIntro => '守られていない相手の駒を見つけて、取ってください！';
+
+  @override
+  String get learnTakeTheBlackPieces => '黒の駒を全部取ります！';
+
+  @override
+  String get learnTakeTheBlackPiecesAndDontLoseYours => '黒の駒を全部取ります！\n自分の駒を取られないように。';
+
+  @override
+  String get learnCaptureComplete => 'おめでとう！　相手の駒との戦い方を身につけました！';
+
+  @override
+  String get learnProtection => '守り';
+
+  @override
+  String get learnKeepYourPiecesSafe => '自分の駒を安全に';
+
+  @override
+  String get learnProtectionIntro => '相手に攻撃されている自分の駒を見つけ、守ってください！';
+
+  @override
+  String get learnProtectionComplete => 'おめでとう！　駒を取られないことは取るのと同じ値打ちです！';
+
+  @override
+  String get learnEscape => '攻撃を受けている！\n駒を逃がして！';
+
+  @override
+  String get learnNoEscape => '逃げ道はない。\n別の駒で守って！';
+
+  @override
+  String get learnDontLetThemTakeAnyUndefendedPiece => 'どの駒もただで\n取られないように！';
+
+  @override
+  String get learnCombat => '攻防';
+
+  @override
+  String get learnCaptureAndDefendPieces => '駒を取り、駒を守る';
+
+  @override
+  String get learnCombatIntro => 'すぐれた戦士は攻撃と防御、両方を使いこなす！';
+
+  @override
+  String get learnCombatComplete => 'おめでとう！　相手の駒との戦い方を身につけました！';
+
+  @override
+  String get learnCheckInOne => '1 手でチェック';
+
+  @override
+  String get learnAttackTheOpponentsKing => '相手のキングを攻撃する';
+
+  @override
+  String get learnCheckInOneIntro => 'チェックするには相手のキングを攻撃します。相手は何か防ぐしかない。';
+
+  @override
+  String get learnCheckInOneGoal => '1 手で相手のキングを\n狙ってください！';
+
+  @override
+  String get learnCheckInOneComplete => 'おめでとう！　相手のキングをチェックして、防ぐ手を指させました！';
+
+  @override
+  String get learnOutOfCheck => 'チェックを防ぐ';
+
+  @override
+  String get learnDefendYourKing => 'キングを守る';
+
+  @override
+  String get learnOutOfCheckIntro => 'チェックされました！　逃げるか合い駒で防ぎます。';
+
+  @override
+  String get learnEscapeWithTheKing => 'キングを逃がして！';
+
+  @override
+  String get learnTheKingCannotEscapeButBlock => '逃げ道はないが、\n途中に合い駒はできる！';
+
+  @override
+  String get learnYouCanGetOutOfCheckByTaking => '相手の駒を取るのでも\nチェックを防げる。';
+
+  @override
+  String get learnThisKnightIsCheckingThroughYourDefenses => 'ナイトは駒を跳びこえて\nチェックしてくる！';
+
+  @override
+  String get learnEscapeOrBlock => 'キングを逃がすか\n合い駒で防ぐか';
+
+  @override
+  String get learnOutOfCheckComplete => 'おめでとう！　キングを取られたらおしまいなので、チェックが来たら必ず防ぐこと！';
+
+  @override
+  String get learnMateInOne => '1 手でメイト';
+
+  @override
+  String get learnDefeatTheOpponentsKing => '相手のキングをメイトする';
+
+  @override
+  String get learnMateInOneIntro => '相手がチェックを防げなくなれば、あなたの勝ちです。';
+
+  @override
+  String get learnAttackYourOpponentsKing => '防げないような\nチェックをかけて！';
+
+  @override
+  String get learnMateInOneComplete => 'おめでとう！　これがチェスに勝つ方法です！';
+
+  @override
+  String get learnIntermediate => '中級';
+
+  @override
+  String get learnBoardSetup => '盤駒の用意';
+
+  @override
+  String get learnHowTheGameStarts => 'ゲームの始め方';
+
+  @override
+  String get learnBoardSetupIntro => '両軍が向かい合い、戦いに備えます。';
+
+  @override
+  String get learnThisIsTheInitialPosition => 'これがチェス対局の\n最初の局面です！\n好きな手を指して。';
+
+  @override
+  String get learnFirstPlaceTheRooks => 'まずルークを\n両隅に置く。';
+
+  @override
+  String get learnThenPlaceTheKnights => '次にナイトを\nルークのとなりに。';
+
+  @override
+  String get learnPlaceTheBishops => 'ビショップを\nナイトのとなりに。';
+
+  @override
+  String get learnPlaceTheQueen => 'クイーンは\n自分と同じ色のマスに。';
+
+  @override
+  String get learnPlaceTheKing => 'キングは\nクイーンのとなりに。';
+
+  @override
+  String get learnPawnsFormTheFrontLine => 'ポーンはその前に並びます。\n好きな手を指して。';
+
+  @override
+  String get learnBoardSetupComplete => 'おめでとう！　駒の並べ方を覚えました！';
+
+  @override
+  String get learnCastling => 'キャスリング';
+
+  @override
+  String get learnTheSpecialKingMove => 'キングの特殊な動き';
+
+  @override
+  String get learnCastlingIntro => 'キングを安全にし、ルークを攻撃に活用します！';
+
+  @override
+  String get learnCastleKingSide => 'キングを 2 マス動かして\nキングサイドにキャスリング！';
+
+  @override
+  String get learnCastleQueenSide => 'キングを 2 マス動かして\nクイーンサイドにキャスリング！';
+
+  @override
+  String get learnTheKnightIsInTheWay => 'ナイトがじゃまです！\nナイトを動かし次にキャスリング。';
+
+  @override
+  String get learnCastleKingSideMovePiecesFirst => '駒を外に出してから\nキングサイドにキャスリング。';
+
+  @override
+  String get learnCastleQueenSideMovePiecesFirst => '駒を外に出してから\nクイーンサイドにキャスリング。';
+
+  @override
+  String get learnYouCannotCastleIfMoved => 'キングかルークが\n動いたことがあると\nキャスリングできません。';
+
+  @override
+  String get learnYouCannotCastleIfAttacked => '途中に相手の駒が効いていると\nキャスリングできません。\n効きを止めてからキャスリング！';
+
+  @override
+  String get learnFindAWayToCastleKingSide => '準備してから\n右にキャスリング';
+
+  @override
+  String get learnFindAWayToCastleQueenSide => '準備してから\n左にキャスリング';
+
+  @override
+  String get learnCastlingComplete => 'おめでとう！　ほとんどの場合キャスリングはしておくべきです。';
+
+  @override
+  String get learnTheSpecialPawnMove => 'ポーンの特殊な動き';
+
+  @override
+  String get learnEnPassantIntro => '相手のポーンが 2 マス進んだら、1 マス進んだ時と同じように取ることができます。';
+
+  @override
+  String get learnBlackJustMovedThePawnByTwoSquares => '黒は今ポーンを\n2 マス進めました！\nアンパッサンで取ります。';
+
+  @override
+  String get learnEnPassantOnlyWorksImmediately => 'アンパッサンできるのは\n相手がポーンを進めた\n直後の手だけです。';
+
+  @override
+  String get learnEnPassantOnlyWorksOnFifthRank => 'アンパッサンできるのは自分の\nポーンが 5 段目にいる時だけです。';
+
+  @override
+  String get learnTakeAllThePawnsEnPassant => '全部のポーンをアンパッサンで取る！';
+
+  @override
+  String get learnEnPassantComplete => 'おめでとう！　アンパッサンの取り方を覚えました。';
+
+  @override
+  String get learnStalemate => 'ステイルメイト';
+
+  @override
+  String get learnTheGameIsADraw => '引き分けになる';
+
+  @override
+  String get learnStalemateIntro => 'チェックされていないのに動かす手がない場合が「ステイルメイト」です。ゲームは引き分けで、勝ち負けなしになります。';
+
+  @override
+  String get learnStalemateGoal => '黒をステイルメイトするには：\n- 黒に動かす手がない。\n- チェックがかかっていない。';
+
+  @override
+  String get learnStalemateComplete => 'おめでとう！　ステイルメイトはメイトされるよりましです！';
+
+  @override
+  String get learnAdvanced => '上級';
+
+  @override
+  String get learnPieceValue => '駒の価値';
+
+  @override
+  String get learnEvaluatePieceStrength => '駒の値打ちを数字で';
+
+  @override
+  String get learnPieceValueIntro => '動きの大きい駒ほど価値があります。\nクイーン = 9\nルーク = 5\nビショップ = 3\nナイト = 3\nポーン = 1\nキングは無限大です！　キングを失えば負けですから。';
+
+  @override
+  String get learnQueenOverBishop => 'いちばん価値の大きい\n駒を取ってください。\nクイーン ＞ ビショップ';
+
+  @override
+  String get learnPieceValueExchange => 'いちばん価値の高い駒を取って！\n 価値の高い駒を\n 価値の低い駒と交換しないように。';
+
+  @override
+  String get learnPieceValueLegal => 'いちばん価値の高い\n駒を取って！\nルールに従った手で！';
+
+  @override
+  String get learnTakeThePieceWithTheHighestValue => 'いちばん価値の大きい\n駒を取ってください。';
+
+  @override
+  String get learnPieceValueComplete => 'おめでとう！　駒の価値を覚えました！\nクイーン = 9\nルーク = 5\nビショップ = 3\nナイト = 3\nポーン = 1';
+
+  @override
+  String get learnCheckInTwo => '2 手でチェック';
+
+  @override
+  String get learnTwoMovesToGiveCheck => '2 手動かしてチェックする';
+
+  @override
+  String get learnCheckInTwoIntro => '相手のキングをチェックする 2 手の組み合わせを考えてください。';
+
+  @override
+  String get learnCheckInTwoGoal => '2 手で相手のキングを\n狙ってください！';
+
+  @override
+  String get learnCheckInTwoComplete => 'おめでとう！　相手のキングをチェックして、防ぐ手を指させました！';
+
+  @override
+  String get learnWhatNext => 'その先は？';
+
+  @override
+  String get learnYouKnowHowToPlayChess => 'おめでとう、あなたはチェスのルールを覚えました。もっと強くなりたいですか？';
+
+  @override
+  String get learnRegister => '登録';
+
+  @override
+  String get learnGetAFreeLichessAccount => 'Lichess の無料アカウントを作る';
+
+  @override
+  String get learnPractice => '練習';
+
+  @override
+  String get learnLearnCommonChessPositions => 'チェスのよくある局面を知る';
+
+  @override
+  String get learnPuzzles => 'タクティクス問題';
+
+  @override
+  String get learnExerciseYourTacticalSkills => '戦術の力をみがく';
+
+  @override
+  String get learnVideos => '動画';
+
+  @override
+  String get learnWatchInstructiveChessVideos => 'チェスの教材動画を見る';
+
+  @override
+  String get learnPlayPeople => '対人戦';
+
+  @override
+  String get learnOpponentsFromAroundTheWorld => '世界中に相手がいます';
+
+  @override
+  String get learnPlayMachine => 'マシンと対戦';
+
+  @override
+  String get learnTestYourSkillsWithTheComputer => 'コンピュータで腕前をテスト';
+
+  @override
+  String get learnLetsGo => 'どうぞ！';
+
+  @override
+  String learnStageX(String param) {
+    return 'ステージ $param';
+  }
+
+  @override
+  String get learnAwesome => 'やったね！';
+
+  @override
+  String get learnExcellent => 'すばらしい！';
+
+  @override
+  String get learnGreatJob => 'よくやった！';
+
+  @override
+  String get learnPerfect => 'おみごと！';
+
+  @override
+  String get learnOutstanding => 'すごいね！';
+
+  @override
+  String get learnWayToGo => 'その調子！';
+
+  @override
+  String get learnYesYesYes => 'そう、そう！';
+
+  @override
+  String get learnYoureGoodAtThis => 'うまくできた！';
+
+  @override
+  String get learnNailedIt => '正解！';
+
+  @override
+  String get learnRightOn => 'そのとおり！';
+
+  @override
+  String learnStageXComplete(String param) {
+    return 'ステージ $param 完了';
+  }
+
+  @override
+  String get learnNext => '次';
+
+  @override
+  String learnNextX(String param) {
+    return '次は：$param';
+  }
+
+  @override
+  String get learnBackToMenu => 'メニューに戻る';
+
+  @override
+  String get learnPuzzleFailed => '失敗！';
+
+  @override
+  String get learnRetry => 'もう一度';
+
+  @override
   String get patronDonate => '寄付';
 
   @override

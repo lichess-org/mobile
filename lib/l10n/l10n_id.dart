@@ -1339,6 +1339,527 @@ class AppLocalizationsId extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Practice only some files & ranks';
 
   @override
+  String get learnLearnChess => 'Materi pelajaran catur';
+
+  @override
+  String get learnByPlaying => 'dengan bermain!';
+
+  @override
+  String learnProgressX(String param) {
+    return 'Kemajuan: $param';
+  }
+
+  @override
+  String get learnResetMyProgress => 'Setel ulang kemajuan saya';
+
+  @override
+  String get learnYouWillLoseAllYourProgress => 'Anda akan kehilangan semua kemajuan Anda!';
+
+  @override
+  String get learnPlay => 'main!';
+
+  @override
+  String get learnChessPieces => 'Buah catur';
+
+  @override
+  String get learnTheRook => 'Benteng';
+
+  @override
+  String get learnItMovesInStraightLines => 'Bergerak secara garis lurus';
+
+  @override
+  String get learnRookIntro => 'Benteng adalah bagian yang kuat. Apakah kamu siap untuk perintah itu?';
+
+  @override
+  String get learnRookGoal => 'Klik di rook\nuntuk membawanya ke bintang!';
+
+  @override
+  String get learnGrabAllTheStars => 'Ambil semua bintang!';
+
+  @override
+  String get learnTheFewerMoves => 'Semakin sedikit gerakan yang Anda lakukan,\nsemakin banyak poin yang kamu menangkan!';
+
+  @override
+  String get learnUseTwoRooks => 'Gunakan dua rooks\nuntuk mempercepat segalanya!';
+
+  @override
+  String get learnRookComplete => 'Selamat! Anda telah berhasil menguasai benteng.';
+
+  @override
+  String get learnTheBishop => 'Gajah';
+
+  @override
+  String get learnItMovesDiagonally => 'Bergerak secara diagonal';
+
+  @override
+  String get learnBishopIntro => 'Selanjutnya kita akan belajar bagaimana cara mengarahkan langkah bidak gajah!';
+
+  @override
+  String get learnYouNeedBothBishops => 'Satu gajah di petak terang,\nsatu gajah di petak gelap.\nAnda membutuhkan keduanya!';
+
+  @override
+  String get learnBishopComplete => 'Selamat! Anda bisa memerintahkan gajah.';
+
+  @override
+  String get learnTheQueen => 'Menteri';
+
+  @override
+  String get learnQueenCombinesRookAndBishop => 'Menteri = benteng + gajah';
+
+  @override
+  String get learnQueenIntro => 'Memasuki bagian catur yang paling kuat. Yang Mulia sang Menteri!';
+
+  @override
+  String get learnQueenComplete => 'Selamat! Menteri tidak mempunyai rahasia untuk Anda.';
+
+  @override
+  String get learnTheKing => 'Raja';
+
+  @override
+  String get learnTheMostImportantPiece => 'Buah paling penting';
+
+  @override
+  String get learnKingIntro => 'Anda adalah rajanya. Apabila Anda gugur di pertempuran, permainan berakhir.';
+
+  @override
+  String get learnTheKingIsSlow => 'Sang raja bergerak lambat.';
+
+  @override
+  String get learnLastOne => 'Yang terakhir!';
+
+  @override
+  String get learnKingComplete => 'Anda sekarang bisa memerintah komandan!';
+
+  @override
+  String get learnTheKnight => 'Kuda';
+
+  @override
+  String get learnItMovesInAnLShape => 'Bergerak dalam bentuk L';
+
+  @override
+  String get learnKnightIntro => 'Inilah tantangan bagi Anda. Ksatria adalah... sepotong rumit.';
+
+  @override
+  String get learnKnightsHaveAFancyWay => 'Ksatria memiliki cara yang bagus\nmelompat-lompat!';
+
+  @override
+  String get learnKnightsCanJumpOverObstacles => 'Kuda dapat meloncati rintangan!\nLolosi dan hilangkan bintang-bintang!';
+
+  @override
+  String get learnKnightComplete => 'Selamat! Anda telah menguasai ksatria.';
+
+  @override
+  String get learnThePawn => 'Pion';
+
+  @override
+  String get learnItMovesForwardOnly => 'Ia hanya bergerak maju';
+
+  @override
+  String get learnPawnIntro => 'Pion adalah bidak lemah, tapi mereka punya banyak potensi.';
+
+  @override
+  String get learnPawnsMoveOneSquareOnly => 'Pion bergerak satu kotak saja. \nTapi apabila mereka sampai diujung papan, maka mereka menjelma menjadi buah yg lebih kuat!';
+
+  @override
+  String get learnMostOfTheTimePromotingToAQueenIsBest => 'Seringkali promosi menjadi menteri adalah yang terbaik.\nTapi kadangkala menjadi kuda lebih berguna!';
+
+  @override
+  String get learnPawnsMoveForward => 'Pion bergerak maju, tapi makan secara diagonal!';
+
+  @override
+  String get learnCaptureThenPromote => 'Makan, lalu promosikan!';
+
+  @override
+  String get learnUseAllThePawns => 'Gunakan semua pion! Tidak perlu untuk mempromosikan.';
+
+  @override
+  String get learnAPawnOnTheSecondRank => 'Pion pada lajur kedua dapat dipindahkan 2 petak sekaligus!';
+
+  @override
+  String get learnGrabAllTheStarsNoNeedToPromote => 'Ambil semua bintang! Tidak perlu untuk mempromosikan.';
+
+  @override
+  String get learnPawnComplete => 'Selamat! Pion tidak punya rahasia untuk Anda.';
+
+  @override
+  String get learnPawnPromotion => 'Promosi pion';
+
+  @override
+  String get learnYourPawnReachedTheEndOfTheBoard => 'Pion Anda mencapai akhir dari papan!';
+
+  @override
+  String get learnItNowPromotesToAStrongerPiece => 'Sekarang mempromosikan ke bagian yang lebih kuat.';
+
+  @override
+  String get learnSelectThePieceYouWant => 'Pilih buah yang Anda mau!';
+
+  @override
+  String get learnFundamentals => 'Dasar-dasar';
+
+  @override
+  String get learnCapture => 'Makan';
+
+  @override
+  String get learnTakeTheEnemyPieces => 'Makan buah lawan';
+
+  @override
+  String get learnCaptureIntro => 'Kenali potongan yang tidak terjaga lawan, dan tangkap mereka!';
+
+  @override
+  String get learnTakeTheBlackPieces => 'Makan buah hitam!';
+
+  @override
+  String get learnTakeTheBlackPiecesAndDontLoseYours => 'Ambil potongan hitamnya!\nDan jangan sampai kehilangan milikmu.';
+
+  @override
+  String get learnCaptureComplete => 'Selamat! Sekarang Anda tahu bertarung dengan buah-buah catur!';
+
+  @override
+  String get learnProtection => 'Proteksi';
+
+  @override
+  String get learnKeepYourPiecesSafe => 'Menjaga buah Anda agar aman';
+
+  @override
+  String get learnProtectionIntro => 'Identifikasi buah-buah Anda yang diserang lawan Anda, dan pertahankan mereka!';
+
+  @override
+  String get learnProtectionComplete => 'Selamat! Buah catur yang tidak hilang adalah buah yang Anda menangkan!';
+
+  @override
+  String get learnEscape => 'Anda diserang! Melarikan diri ancaman!';
+
+  @override
+  String get learnNoEscape => 'Tidak ada jalan keluar, tapi Anda dapat mempertahankan!';
+
+  @override
+  String get learnDontLetThemTakeAnyUndefendedPiece => 'Jangan biarkan mereka mengambil buah-buah yang tak terlindungi!';
+
+  @override
+  String get learnCombat => 'Pertempuran';
+
+  @override
+  String get learnCaptureAndDefendPieces => 'Makan dan pertahankan buah';
+
+  @override
+  String get learnCombatIntro => 'Seorang prajurit yang baik tahu serangan dan pertahanan!';
+
+  @override
+  String get learnCombatComplete => 'Selamat! Sekarang Anda tahu bertarung dengan buah-buah catur!';
+
+  @override
+  String get learnCheckInOne => 'Skak dalam 1 langkah';
+
+  @override
+  String get learnAttackTheOpponentsKing => 'Menyerang raja lawan';
+
+  @override
+  String get learnCheckInOneIntro => 'Untuk skak lawan Anda, serang rajanya. Mereka harus mempertahankannya!';
+
+  @override
+  String get learnCheckInOneGoal => 'Bidik Raja lawan dalam satu langkah!';
+
+  @override
+  String get learnCheckInOneComplete => 'Selamat! Anda telak skak lawan Anda, memaksa mereka melindungi rajanya!';
+
+  @override
+  String get learnOutOfCheck => 'Keluar dari skak';
+
+  @override
+  String get learnDefendYourKing => 'Membela raja';
+
+  @override
+  String get learnOutOfCheckIntro => 'Anda di skak! Anda harus menghindar atau blokir serangannya.';
+
+  @override
+  String get learnEscapeWithTheKing => 'Meloloskan diri dengan raja!';
+
+  @override
+  String get learnTheKingCannotEscapeButBlock => 'Raja tidak dapat melarikan diri, tapi Anda dapat memblokir serangan!';
+
+  @override
+  String get learnYouCanGetOutOfCheckByTaking => 'Anda bisa menghindari dari skak dengan mengambil buah yang menyerang.';
+
+  @override
+  String get learnThisKnightIsCheckingThroughYourDefenses => 'Kuda ini melakukan skak menembus pertahanan Anda!';
+
+  @override
+  String get learnEscapeOrBlock => 'Melarikan diri dengan raja atau memblokir serangan!';
+
+  @override
+  String get learnOutOfCheckComplete => 'Selamat! Raja Anda tidak akan pernah bisa diambil, pastikan Anda dapat menangkal serangan!';
+
+  @override
+  String get learnMateInOne => 'Mat dalam satu langkah';
+
+  @override
+  String get learnDefeatTheOpponentsKing => 'Mengalahkan raja lawan';
+
+  @override
+  String get learnMateInOneIntro => 'Anda menang apabila lawan tidak dapat menghindari skak.';
+
+  @override
+  String get learnAttackYourOpponentsKing => 'Menyerang Raja lawan Anda dengan cara yang tidak dapat dipertahankan!';
+
+  @override
+  String get learnMateInOneComplete => 'Selamat! Itu adalah cara Anda menang catur permainan!';
+
+  @override
+  String get learnIntermediate => 'Menengah';
+
+  @override
+  String get learnBoardSetup => 'Susunan buah catur';
+
+  @override
+  String get learnHowTheGameStarts => 'Bagaimana permainan dimulai';
+
+  @override
+  String get learnBoardSetupIntro => 'Kedua pasukan menghadapi satu sama lain, siap untuk pertempuran.';
+
+  @override
+  String get learnThisIsTheInitialPosition => 'Ini adalah posisi awal dari setiap permainan catur! Membuat setiap langkah untuk melanjutkan.';
+
+  @override
+  String get learnFirstPlaceTheRooks => 'Pertama-tama tempatkan kedua benteng!! \nMereka adai sudut-sudut.';
+
+  @override
+  String get learnThenPlaceTheKnights => 'Kemudian tempat kedua kuda! Mereka ada disebelah benteng.';
+
+  @override
+  String get learnPlaceTheBishops => 'Tempatkan para gajah!\nMereka ada disebelah kuda.';
+
+  @override
+  String get learnPlaceTheQueen => 'Tempatkan menteri! Dia berada di kotak warnanya sendiri.';
+
+  @override
+  String get learnPlaceTheKing => 'Tempatkan raja! Sebelah kanan dari menteri.';
+
+  @override
+  String get learnPawnsFormTheFrontLine => 'Pion membentuk garis depan. Buat langkah apa saja untuk melanjutkan.';
+
+  @override
+  String get learnBoardSetupComplete => 'Selamat! Anda tahu cara memasang papan catur.';
+
+  @override
+  String get learnCastling => 'Castling';
+
+  @override
+  String get learnTheSpecialKingMove => 'Raja khusus bergerak';
+
+  @override
+  String get learnCastlingIntro => 'Bawa raja anda ke tempat aman, dan siapkan benteng anda untuk menyerang!';
+
+  @override
+  String get learnCastleKingSide => 'Gerakkan raja anda dua kotak untuk rokade ke sisi raja!';
+
+  @override
+  String get learnCastleQueenSide => 'Gerakkan raja anda dua kotak untuk rokade panjang!';
+
+  @override
+  String get learnTheKnightIsInTheWay => 'Kuda menghalangi! Pindahkan lalu rokade ke sisi raja.';
+
+  @override
+  String get learnCastleKingSideMovePiecesFirst => 'Rokade ke sisi raja! Anda perlu memindahkan bidak lain terlebih dahulu.';
+
+  @override
+  String get learnCastleQueenSideMovePiecesFirst => 'Rokade panjang! Anda perlu memindahkan bidak lain terlebih dahulu.';
+
+  @override
+  String get learnYouCannotCastleIfMoved => 'Anda tidak bisa rokade bila\nraja sudah bergerak\natau benteng sudah bergerak.';
+
+  @override
+  String get learnYouCannotCastleIfAttacked => 'Anda tidak bisa rokade bila raja diserang di jalur tersebut. Halangi skak lalu rokade!';
+
+  @override
+  String get learnFindAWayToCastleKingSide => 'Temukan cara untuk rokade ke sisi raja!';
+
+  @override
+  String get learnFindAWayToCastleQueenSide => 'Temukan cara untuk rokade panjang!';
+
+  @override
+  String get learnCastlingComplete => 'Selamat! Kamu hampir pasti bisa rokade di setiap permainan.';
+
+  @override
+  String get learnTheSpecialPawnMove => 'Gerakan khusus pion';
+
+  @override
+  String get learnEnPassantIntro => 'Saat pion lawan digerakkan dua kotak, anda bisa mengambilnya seperti bila dia digerakkan satu kotak.';
+
+  @override
+  String get learnBlackJustMovedThePawnByTwoSquares => 'Hitam baru saja menggerakkan pion sejauh dua kotak! Ambil dengan en passant.';
+
+  @override
+  String get learnEnPassantOnlyWorksImmediately => 'En passant hanya berlaku sesaat setelah lawan menggerakkan pionnya.';
+
+  @override
+  String get learnEnPassantOnlyWorksOnFifthRank => 'En passant hanya bekerja\nJika pion Anda berada di peringkat 5.';
+
+  @override
+  String get learnTakeAllThePawnsEnPassant => 'Ambil semua pion dengan en passant!';
+
+  @override
+  String get learnEnPassantComplete => 'Selamat! Anda bisa mengambil dengan en passant sekarang.';
+
+  @override
+  String get learnStalemate => 'Jalan buntu';
+
+  @override
+  String get learnTheGameIsADraw => 'Permainan berakhir remis';
+
+  @override
+  String get learnStalemateIntro => 'Bila pemain tidak di cek dan tidak memiliki langkah hukum, itu adalah jalan buntu. Permainan ditarik: tidak ada yang menang, tidak ada yang kalah.';
+
+  @override
+  String get learnStalemateGoal => 'Untuk jalan buntu hitam:\n- Hitam tidak bisa bergerak kemana-mana\n- Tidak ada cek disana.';
+
+  @override
+  String get learnStalemateComplete => 'Selamat! Lebih baik buntu dari pada checkmated!';
+
+  @override
+  String get learnAdvanced => 'Maju';
+
+  @override
+  String get learnPieceValue => 'Nilai bidak';
+
+  @override
+  String get learnEvaluatePieceStrength => 'Menilai kekuatan bidak';
+
+  @override
+  String get learnPieceValueIntro => 'Bidak dengan mobilitas tinggi memiliki nilai lebih tinggi!\nMenteri= 9\nBenteng = 5\nGajah = 3\nKuda = 3\nPion = 1\nRaja tak ternilai harganya! Kehilangan raja berarti kekalahan.';
+
+  @override
+  String get learnQueenOverBishop => 'Ambil bidak dengan nilai tertinggi! Menteri > Gajah';
+
+  @override
+  String get learnPieceValueExchange => 'Take the piece with the highest value!\nDo not exchange\na higher valued piece for a less valuable one.';
+
+  @override
+  String get learnPieceValueLegal => 'Take the piece\nwith the highest value!\nMake sure your move is legal!';
+
+  @override
+  String get learnTakeThePieceWithTheHighestValue => 'Ambil bagian\ndengan nilai tertinggi!';
+
+  @override
+  String get learnPieceValueComplete => 'Selamat! Anda sudah tahu nilai bidak!\nMenteri = 9\nBenteng = 5\nGajah = 3\nKuda = 3\nPion = 1';
+
+  @override
+  String get learnCheckInTwo => 'Skak dalam dua langkah';
+
+  @override
+  String get learnTwoMovesToGiveCheck => 'Dua langkah menuju skak';
+
+  @override
+  String get learnCheckInTwoIntro => 'Temukan kombinasi yang tepat dalam dua langkah untuk skak raja lawan!';
+
+  @override
+  String get learnCheckInTwoGoal => 'Ancam raja lawan dalam dua langkah!';
+
+  @override
+  String get learnCheckInTwoComplete => 'Selamat! Anda telah skak lawan Anda, memaksa mereka melindungi rajanya!';
+
+  @override
+  String get learnWhatNext => 'Apa selanjutnya?';
+
+  @override
+  String get learnYouKnowHowToPlayChess => 'Anda tahu bagaimana cara bermain catur, selamat! Apakah anda ingin menjadi pemain yang lebih hebat?';
+
+  @override
+  String get learnRegister => 'Daftar';
+
+  @override
+  String get learnGetAFreeLichessAccount => 'Dapatkan akun Lichess gratis';
+
+  @override
+  String get learnPractice => 'Latihan';
+
+  @override
+  String get learnLearnCommonChessPositions => 'Belajar posisi umum catur';
+
+  @override
+  String get learnPuzzles => 'Teka teki';
+
+  @override
+  String get learnExerciseYourTacticalSkills => 'Latih keterampilan taktis anda';
+
+  @override
+  String get learnVideos => 'Video';
+
+  @override
+  String get learnWatchInstructiveChessVideos => 'Tonton video catur instruktif';
+
+  @override
+  String get learnPlayPeople => 'Orang bermain';
+
+  @override
+  String get learnOpponentsFromAroundTheWorld => 'Lawan dari di seluruh dunia';
+
+  @override
+  String get learnPlayMachine => 'Lawan komputer';
+
+  @override
+  String get learnTestYourSkillsWithTheComputer => 'Uji keterampilan Anda dengan komputer';
+
+  @override
+  String get learnLetsGo => 'Ayo!';
+
+  @override
+  String learnStageX(String param) {
+    return 'Tahap $param';
+  }
+
+  @override
+  String get learnAwesome => 'Mengagumkan!';
+
+  @override
+  String get learnExcellent => 'Mantap!';
+
+  @override
+  String get learnGreatJob => 'Kerja yang bagus!';
+
+  @override
+  String get learnPerfect => 'Sempurna!';
+
+  @override
+  String get learnOutstanding => 'Luar biasa!';
+
+  @override
+  String get learnWayToGo => 'Hebat!';
+
+  @override
+  String get learnYesYesYes => 'Ya, ya, ya!';
+
+  @override
+  String get learnYoureGoodAtThis => 'Anda jago dalam hal ini!';
+
+  @override
+  String get learnNailedIt => 'Kuasai itu.';
+
+  @override
+  String get learnRightOn => 'Teat sekali!';
+
+  @override
+  String learnStageXComplete(String param) {
+    return 'Tahap $param lengkap';
+  }
+
+  @override
+  String get learnNext => 'Berikutnya';
+
+  @override
+  String learnNextX(String param) {
+    return 'Selanjutnya: $param';
+  }
+
+  @override
+  String get learnBackToMenu => 'Kembali ke menu';
+
+  @override
+  String get learnPuzzleFailed => 'Teka-teki gagal!';
+
+  @override
+  String get learnRetry => 'Coba lagi';
+
+  @override
   String get patronDonate => 'Donasi';
 
   @override

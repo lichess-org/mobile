@@ -1358,6 +1358,527 @@ class AppLocalizationsFa extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'تمرین فقط روی ستون‌ها و ردیف‌های مشخص';
 
   @override
+  String get learnLearnChess => 'یادگیری شطرنج';
+
+  @override
+  String get learnByPlaying => 'با بازی کردن!';
+
+  @override
+  String learnProgressX(String param) {
+    return 'پیشرفت: $param';
+  }
+
+  @override
+  String get learnResetMyProgress => 'پیشروی را از نو می‌آغازم';
+
+  @override
+  String get learnYouWillLoseAllYourProgress => 'پیشروی‌تان صفر خواهد شد!';
+
+  @override
+  String get learnPlay => 'بازی کن!';
+
+  @override
+  String get learnChessPieces => 'مُهره‌های شطرنج';
+
+  @override
+  String get learnTheRook => 'رُخ';
+
+  @override
+  String get learnItMovesInStraightLines => 'در خط‌های راست حرکت می‌کند';
+
+  @override
+  String get learnRookIntro => 'رُخ مهره نیرومندیست. آماده‌اید که به آن دستور دهید؟';
+
+  @override
+  String get learnRookGoal => 'روی رُخ بِتِلیکید\nتا آن را به ستاره بَرید!';
+
+  @override
+  String get learnGrabAllTheStars => 'همه ستاره‌ها را بگیرید!';
+
+  @override
+  String get learnTheFewerMoves => 'هر چه تعداد حرکت‌ها کمتر،\nامتیاز بیشتر!';
+
+  @override
+  String get learnUseTwoRooks => 'از دو تا رُخ استفاده کن\nتا به همه چیز سرعت ببخشید!';
+
+  @override
+  String get learnRookComplete => 'تبریک! موفق شدید بر مُهره رُخ مسلط شوید.';
+
+  @override
+  String get learnTheBishop => 'فیل';
+
+  @override
+  String get learnItMovesDiagonally => 'کژ حرکت می‌کند';
+
+  @override
+  String get learnBishopIntro => 'در مرحله بعدی یاد می‌گیریم چگونه با فیل بجولانیم!';
+
+  @override
+  String get learnYouNeedBothBishops => 'یک فیل سفیدرو،\nیک فیل سیاه‌رو.\nبه هر دو نیازمندیم!';
+
+  @override
+  String get learnBishopComplete => 'تبریک! شما میتوانید یک فیل را فرمانروایی کنید.';
+
+  @override
+  String get learnTheQueen => 'وزیر';
+
+  @override
+  String get learnQueenCombinesRookAndBishop => 'وزیر = رخ + فیل';
+
+  @override
+  String get learnQueenIntro => 'قوی‌ترین مهره شطرنج وارد می‌شود. وزیرِ کاردان!';
+
+  @override
+  String get learnQueenComplete => 'تبریک! هیچ رازی از وزیر بر شما پنهان نیست.';
+
+  @override
+  String get learnTheKing => 'شاه';
+
+  @override
+  String get learnTheMostImportantPiece => 'مهم ترین مهره شطرنج';
+
+  @override
+  String get learnKingIntro => 'شما شاه هستید. اگه وارد جنگ شوید،باختید.';
+
+  @override
+  String get learnTheKingIsSlow => 'شاه کُنده.';
+
+  @override
+  String get learnLastOne => 'آخری!';
+
+  @override
+  String get learnKingComplete => 'حالا شما میتوانید فرمانده را فرمانروایی کنید!';
+
+  @override
+  String get learnTheKnight => 'اسب';
+
+  @override
+  String get learnItMovesInAnLShape => 'به شکل L حرکت می‌کند';
+
+  @override
+  String get learnKnightIntro => 'چالشی برای شما. اسب... مهره نیرنگ‌بازیست.';
+
+  @override
+  String get learnKnightsHaveAFancyWay => 'اسب‌ها حالت پریدن\nخاصی دارند!';
+
+  @override
+  String get learnKnightsCanJumpOverObstacles => 'اسب میتونه از روی مانع ها بپره!\nفرار کن و ستاره ها رو بگیر!';
+
+  @override
+  String get learnKnightComplete => 'تبریک! شما در بازی با اسب استاد شدید.';
+
+  @override
+  String get learnThePawn => 'پیاده';
+
+  @override
+  String get learnItMovesForwardOnly => 'فقط به جلو حرکت می‌کند';
+
+  @override
+  String get learnPawnIntro => 'پیاده‌ها ضعیفند، ولی تَوَند فراوانی دارند.';
+
+  @override
+  String get learnPawnsMoveOneSquareOnly => 'پیاده‌ها فقط یک خانه حرکت می‌کنند.\nاما وقتی به سوی دیگرِ تخته رسند، مهره‌ی نیرومندتری می‌شوند!';
+
+  @override
+  String get learnMostOfTheTimePromotingToAQueenIsBest => 'بیشتر وقت‌ها ارتقا به وزیر، بهترین است.\nاما گهگاه، یک اسب می‌تواند به درد خورد!';
+
+  @override
+  String get learnPawnsMoveForward => 'پیاده به جلو حرکت می‌کند،\nولی کژ می‌زند!';
+
+  @override
+  String get learnCaptureThenPromote => 'بزن، سپس ارتقا ده!';
+
+  @override
+  String get learnUseAllThePawns => 'از همه‌ی پیاده‌ها استفاده کن!\nنیازی به ارتقا نیست.';
+
+  @override
+  String get learnAPawnOnTheSecondRank => 'پیاده‌ی عرض دوم، می‌تواند یکباره ۲ خانه حرکت کند!';
+
+  @override
+  String get learnGrabAllTheStarsNoNeedToPromote => 'همه‌ی ستاره‌ها را بگیر!\nنیازی به ارتقا نیست.';
+
+  @override
+  String get learnPawnComplete => 'تبریک! هیچ رازی از پیاده ها بر شما پنهان نیست.';
+
+  @override
+  String get learnPawnPromotion => 'ارتقا پیاده';
+
+  @override
+  String get learnYourPawnReachedTheEndOfTheBoard => 'پیاده‌تان به عرض آخر رسید!';
+
+  @override
+  String get learnItNowPromotesToAStrongerPiece => 'اکنون به مهرهٔ نیرومندتری ارتقا می‌یابد.';
+
+  @override
+  String get learnSelectThePieceYouWant => 'مهره‌ای که می‌خواهید را برگزینید!';
+
+  @override
+  String get learnFundamentals => 'اصول';
+
+  @override
+  String get learnCapture => 'زدن';
+
+  @override
+  String get learnTakeTheEnemyPieces => 'مهره‌های دشمن را بزن';
+
+  @override
+  String get learnCaptureIntro => 'مهره‌های بی‌دفاع حریف را شناسایی کنید، و آن‌ها را بزنید!';
+
+  @override
+  String get learnTakeTheBlackPieces => 'مهره‌های سیاه را بزنید!';
+
+  @override
+  String get learnTakeTheBlackPiecesAndDontLoseYours => 'مهره‌های سیاه را بزنید!\nو مهره‌های خودتان را از دست ندهید.';
+
+  @override
+  String get learnCaptureComplete => 'تبریک! شما می‌دانید چگونه با مهره‌های شطرنج بجنگید!';
+
+  @override
+  String get learnProtection => 'محافظت';
+
+  @override
+  String get learnKeepYourPiecesSafe => 'مهره های خود را امن نگه دارید';
+
+  @override
+  String get learnProtectionIntro => 'مهره هایی که حریفتان حمله میکند را شناسایی کنید، و از آن ها دفاع کنید!';
+
+  @override
+  String get learnProtectionComplete => 'تبریک! مهره ای که شما از دست ندادی مهره ای است که شما بردید!';
+
+  @override
+  String get learnEscape => 'شما زیر حمله‌اید!\nاز تهدید فرار کنید!';
+
+  @override
+  String get learnNoEscape => 'هیچ راه فراری نیست،\nاما می‌توانید دفاع کنید!';
+
+  @override
+  String get learnDontLetThemTakeAnyUndefendedPiece => 'به آنها اجازه نده \nهیچ مهره بی‌دفاعی را بزنند!';
+
+  @override
+  String get learnCombat => 'مبارزه';
+
+  @override
+  String get learnCaptureAndDefendPieces => 'زدن و دفاع کردن مهره‌ها';
+
+  @override
+  String get learnCombatIntro => 'یک جنگجوی خوب هر دو را بلد است، دفاع و حمله!';
+
+  @override
+  String get learnCombatComplete => 'شادباش! شما بلدید چطور با مهره‌های شطرنج بجنگید!';
+
+  @override
+  String get learnCheckInOne => 'کیش در یک حرکت';
+
+  @override
+  String get learnAttackTheOpponentsKing => 'به شاه حریف حمله کن';
+
+  @override
+  String get learnCheckInOneIntro => 'برای کیش دادن به حریف، به شاهش حمله کن. اون باید دفاع کنه!';
+
+  @override
+  String get learnCheckInOneGoal => 'شاه حریف را در یک حرکت هدف بگیر!';
+
+  @override
+  String get learnCheckInOneComplete => 'تبریک میگم! شما حریف خود را کیش دادید و مجبور به دفاع از شاه خود!';
+
+  @override
+  String get learnOutOfCheck => 'رَفعِ کیش';
+
+  @override
+  String get learnDefendYourKing => 'از شاهت دفاع کن';
+
+  @override
+  String get learnOutOfCheckIntro => 'شما کیش هستید! یا باید فرار کنید یا خط کیش را ببندید.';
+
+  @override
+  String get learnEscapeWithTheKing => 'فرارِ شاه!';
+
+  @override
+  String get learnTheKingCannotEscapeButBlock => 'شاه نمی‌تواند فرار کند، اما شما\nمی‌توانید مسیر حمله را ببندید!';
+
+  @override
+  String get learnYouCanGetOutOfCheckByTaking => 'می‌توانید با زدن مهره مهاجم\nرفع کیش کنید.';
+
+  @override
+  String get learnThisKnightIsCheckingThroughYourDefenses => 'این اسب دارد کیش می‌دهد\nدفاع‌تان چیست؟!';
+
+  @override
+  String get learnEscapeOrBlock => 'یا شاه رو فراری بده\nیا مسیر حمله را ببند!';
+
+  @override
+  String get learnOutOfCheckComplete => 'تبریک! شاه‌تان را هیچوقت نمی‌شود زد، مطمئن شوید که می‌توانید در برابر کیش، دفاع کنید!';
+
+  @override
+  String get learnMateInOne => 'مات در یک حرکت';
+
+  @override
+  String get learnDefeatTheOpponentsKing => 'شاه حریف را شکست بده';
+
+  @override
+  String get learnMateInOneIntro => 'شما زمانی برنده می شوید که حریفتان در برابر کیش نمی تواند از خودش دفاع کند.';
+
+  @override
+  String get learnAttackYourOpponentsKing => 'به شاه حریف حمله کنید\nطوری که نتواند دفاع کند!';
+
+  @override
+  String get learnMateInOneComplete => 'شادباش! اینگونه بازی شطرنج را می‌برید!';
+
+  @override
+  String get learnIntermediate => 'متوسط';
+
+  @override
+  String get learnBoardSetup => 'بَرپایِشِ تخته';
+
+  @override
+  String get learnHowTheGameStarts => 'بازی چگونه می‌آغازد';
+
+  @override
+  String get learnBoardSetupIntro => 'دو لشکر باهم رودررو می‌شوند و آماده نَبَردند.';
+
+  @override
+  String get learnThisIsTheInitialPosition => 'این وضعیت آغازینِ هر\nبازی شطرنج است!\nبرای ادامه حرکتی کنید.';
+
+  @override
+  String get learnFirstPlaceTheRooks => 'نخست، رُخ‌ها را می‌گذاریم!\nآنها به گوشه‌ها می‌روند.';
+
+  @override
+  String get learnThenPlaceTheKnights => 'سپس اسب‌ها را می‌گذاریم!\nآنها کنار رُخ‌ها می‌روند.';
+
+  @override
+  String get learnPlaceTheBishops => 'فیل‌ها را می‌گذاریم!\nآنها کنار اسب‌ها می‌روند.';
+
+  @override
+  String get learnPlaceTheQueen => 'وزیر را می‌گذاریم!\nاو روی رنگ خودش می‌رود.';
+
+  @override
+  String get learnPlaceTheKing => 'شاه را می‌گذاریم!\nدرست در کنار وزیر.';
+
+  @override
+  String get learnPawnsFormTheFrontLine => 'پیاده‌ها خط جلو را می‌سازند.\nبرای ادامه حرکتی کنید.';
+
+  @override
+  String get learnBoardSetupComplete => 'شادبادش! شما می‌دانید چطور میزِ شطرنج را بچینید.';
+
+  @override
+  String get learnCastling => 'قلعه‌روی';
+
+  @override
+  String get learnTheSpecialKingMove => 'حرکت ویژه شاه';
+
+  @override
+  String get learnCastlingIntro => 'شاه‌تان را جای امنی ببرید و رخ‌تان را برای حمله به پا دارید!';
+
+  @override
+  String get learnCastleKingSide => 'برای قلعه‌ی کوچک\nشاه‌تان را دو خانه حرکت دهید!';
+
+  @override
+  String get learnCastleQueenSide => 'برای قلعه‌ی بزرگ\nشاه‌تان را دو خانه حرکت دهید!';
+
+  @override
+  String get learnTheKnightIsInTheWay => 'اسب سَرِ راه است!\nآن را حرکت دهید، سپس قلعه‌ی کوچک روید.';
+
+  @override
+  String get learnCastleKingSideMovePiecesFirst => 'قلعه‌ی کوچک!\nنخست لازم است مهره‌ها را بیرون آورید.';
+
+  @override
+  String get learnCastleQueenSideMovePiecesFirst => 'قلعه‌ی بزرگ!\nنخست لازم است مهره‌ها را بیرون آورید.';
+
+  @override
+  String get learnYouCannotCastleIfMoved => 'اگر شاه پیش‌تر حرکت کرده\nیا رخ پیش‌تر حرکت کرده است\nشما نمی‌توانید قلعه روید.';
+
+  @override
+  String get learnYouCannotCastleIfAttacked => 'اگر به شاه‌تان حمله شود\nنمی‌توانید قلعه روید.\nراه کیش را ببندید و سپس قلعه روید!';
+
+  @override
+  String get learnFindAWayToCastleKingSide => 'برای قلعه‌ی کوچک\nراهی بیابید!';
+
+  @override
+  String get learnFindAWayToCastleQueenSide => 'برای قلعه‌ی بزرگ\nراهی بیابید!';
+
+  @override
+  String get learnCastlingComplete => 'شادباش! تقریبا همیشه، بهتر است در بازی قلعه روید.';
+
+  @override
+  String get learnTheSpecialPawnMove => 'حرکت ویژه پیاده';
+
+  @override
+  String get learnEnPassantIntro => 'هنگامی که پیاده حریف دو خانه حرکت می‌کند، می‌توانید آن را بزنید، مانند آن است که یک خانه رفته است.';
+
+  @override
+  String get learnBlackJustMovedThePawnByTwoSquares => 'سیاه پیاده را\nدو خانه حرکت می‌دهد!\nآن را هنگام عبور بزنید.';
+
+  @override
+  String get learnEnPassantOnlyWorksImmediately => 'گرفتن هنگام عبور، فقط بلافاصله\nپس از حرکت پیاده حریف\nکار می‌کند.';
+
+  @override
+  String get learnEnPassantOnlyWorksOnFifthRank => 'گرفتن هنگام عبور، فقط زمانی که \nپیاده‌تان در عرض پنجم باشد، کار می‌کند.';
+
+  @override
+  String get learnTakeAllThePawnsEnPassant => 'همه پیاده‌ها را هنگام عبور بزنید!';
+
+  @override
+  String get learnEnPassantComplete => 'شادباش! اکنون می‌توانید هنگام عبور بزنید.';
+
+  @override
+  String get learnStalemate => 'پات';
+
+  @override
+  String get learnTheGameIsADraw => 'بازی مساوی است';
+
+  @override
+  String get learnStalemateIntro => 'وقتی که بازیکن کیش نیست و هیچ حرکت قانونی ندارد بازی پات شده است. این بازی مساوی است.';
+
+  @override
+  String get learnStalemateGoal => 'سیاه پات است:\n- سیاه هیچ حرکتی نمی‌تواند برود\n- کیش نیست.';
+
+  @override
+  String get learnStalemateComplete => 'شادباش! پات شدن بهتر از مات شدن است!';
+
+  @override
+  String get learnAdvanced => 'پیشرفته';
+
+  @override
+  String get learnPieceValue => 'ارزش مهره';
+
+  @override
+  String get learnEvaluatePieceStrength => 'ارزیابی قدرت مهره‌ها';
+
+  @override
+  String get learnPieceValueIntro => 'مهره با تحرک بالا، ارزش بالاتری دارد!\nوزیر = ۹\nرخ = ۵\nفیل = ۳\nاسب = ۳\nپیاده = ۱\nشاه قیمت ندارد! از دست دادنش یعنی باختن بازی.';
+
+  @override
+  String get learnQueenOverBishop => 'باارزش‌ترین مهره\nرا بزنید!\nوزیر > فیل';
+
+  @override
+  String get learnPieceValueExchange => 'باارزش‌ترین مهره را بزنید!\nمهره ارزشمندتر را با بی‌ارزش‌تر\nعوض نکنید.';
+
+  @override
+  String get learnPieceValueLegal => 'باارزش‌ترین مهره را بزنید!\nمطمئن شوید که حرکت‌تان\nقانونی است!';
+
+  @override
+  String get learnTakeThePieceWithTheHighestValue => 'با ارزش‌ترین مهره را بزن!';
+
+  @override
+  String get learnPieceValueComplete => 'شادباش! شما ارزش مُهره‌ها را می‌دانید!\nوزیر = ۹\nرُخ = ۵\nفیل = ۳\nاَسب = ۳\nپیاده = ۱';
+
+  @override
+  String get learnCheckInTwo => 'کیش در دو حرکت';
+
+  @override
+  String get learnTwoMovesToGiveCheck => 'دو حرکت برای کیش دادن';
+
+  @override
+  String get learnCheckInTwoIntro => 'ترکیب درستِ دوحرکتی را بیابید که به شاه حریف کیش دهید!';
+
+  @override
+  String get learnCheckInTwoGoal => 'در دو حرکت، شاه حریف\nرا تهدید کنید!';
+
+  @override
+  String get learnCheckInTwoComplete => 'شادباش! شما به حریف‌تان کیش دادید و آنها را مجبور به دفاع از شاه‌شان کردید!';
+
+  @override
+  String get learnWhatNext => 'گام بعدی چیست؟';
+
+  @override
+  String get learnYouKnowHowToPlayChess => 'اکنون شما می دانید چطور شطرنج بازی کنید, تبریک می گوییم! ایا می خواهید تبدیل به یک بازیکن قوی شوید؟';
+
+  @override
+  String get learnRegister => 'نام نویسی';
+
+  @override
+  String get learnGetAFreeLichessAccount => 'گرفتن یک حساب Lichess رایگان';
+
+  @override
+  String get learnPractice => 'تمرین';
+
+  @override
+  String get learnLearnCommonChessPositions => 'یادگیریِ وضعیت‌های رایج شطرنج';
+
+  @override
+  String get learnPuzzles => 'معماها';
+
+  @override
+  String get learnExerciseYourTacticalSkills => 'مهارت‌های راهکنشی‌تان را تمرین کنید';
+
+  @override
+  String get learnVideos => 'ویدیو ها';
+
+  @override
+  String get learnWatchInstructiveChessVideos => 'تماشای فیلم آموزندهٔ شطرنج';
+
+  @override
+  String get learnPlayPeople => 'با مردم بازی کنید';
+
+  @override
+  String get learnOpponentsFromAroundTheWorld => 'حریف هایی از سراسر دنیا';
+
+  @override
+  String get learnPlayMachine => 'بازی در برابر رایانه';
+
+  @override
+  String get learnTestYourSkillsWithTheComputer => 'مهارت‌های‌تان را با رایانه بیازمایید';
+
+  @override
+  String get learnLetsGo => 'بزن بریم!';
+
+  @override
+  String learnStageX(String param) {
+    return 'گامه‌ی $param';
+  }
+
+  @override
+  String get learnAwesome => 'محشر!';
+
+  @override
+  String get learnExcellent => 'عالی!';
+
+  @override
+  String get learnGreatJob => 'کاردرست!';
+
+  @override
+  String get learnPerfect => 'بی‌نقص!';
+
+  @override
+  String get learnOutstanding => 'چشم‌نواز!';
+
+  @override
+  String get learnWayToGo => 'برو بریم!';
+
+  @override
+  String get learnYesYesYes => 'آره، آره، آره!';
+
+  @override
+  String get learnYoureGoodAtThis => 'این کاره‌ای!';
+
+  @override
+  String get learnNailedIt => 'زدی تو خال.';
+
+  @override
+  String get learnRightOn => 'همینه!';
+
+  @override
+  String learnStageXComplete(String param) {
+    return 'گامه‌ی $param کامل شد';
+  }
+
+  @override
+  String get learnNext => 'بعدی';
+
+  @override
+  String learnNextX(String param) {
+    return 'بعدی $param';
+  }
+
+  @override
+  String get learnBackToMenu => 'بازگشت به نام‌چین';
+
+  @override
+  String get learnPuzzleFailed => 'معما حل نشد!';
+
+  @override
+  String get learnRetry => 'بازبِکوش';
+
+  @override
   String get patronDonate => 'داشَنیدن';
 
   @override
