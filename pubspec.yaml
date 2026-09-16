@@ -106,6 +106,12 @@ dev_dependencies:
 # The engine plugin branch pins native package versions that are not published yet. Remove this
 # whole block, and restore a pub.dev version under `multistockfish` above, once they are.
 dependency_overrides:
+  # chessground is pinned to the branch adding `CustomShape`, which learn draws its stars with
+  # (10.2.0, unreleased). Remove once it is on pub.dev and the constraint above is bumped.
+  chessground:
+    git:
+      url: https://github.com/lichess-org/flutter-chessground.git
+      ref: 5955381b9e139b8784a4ca4fb3724deb5c027c25
   # dartchess is pinned to the Zobrist hashing the opening book keys on (0.14.0, unreleased).
   # Remove once dartchess 0.14.0 is on pub.dev and the constraint above is bumped.
   dartchess:

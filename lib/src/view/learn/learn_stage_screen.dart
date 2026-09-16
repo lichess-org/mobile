@@ -195,7 +195,11 @@ class const _LearnBoard({
             controller: controller,
             settings: settings,
             onMove: (move, {viaDragAndDrop}) => onMove(move),
-            shapes: level.shapes.map(_toBoardShape).toSet(),
+            shapes: {
+              ...level.shapes.map(_toBoardShape),
+              for (final apple in level.apples)
+                CustomShape(orig: apple, scale: 0.8, child: const _Apple()),
+            },
             annotations: threat != null
                 ? {threat: const Annotation(symbol: '!', color: LichessColors.error)}
                 : const {},
@@ -213,16 +217,6 @@ class const _LearnBoard({
                     color: LichessColors.good.withValues(alpha: 0.15),
                   ),
                 ),
-              ),
-            ),
-          for (final apple in level.apples)
-            Positioned(
-              left: squareOffset(apple).dx,
-              top: squareOffset(apple).dy,
-              width: squareSize,
-              height: squareSize,
-              child: IgnorePointer(
-                child: _Apple(key: ValueKey(apple), size: squareSize),
               ),
             ),
         ],
@@ -246,16 +240,19 @@ Shape _toBoardShape(LearnShape shape) {
 }
 
 /// A star to collect.
-class const _Apple({super.key, required final double size}) extends StatelessWidget {
+///
+/// Scaled to the box the board gives it, so it must stay `const`: [CustomShape] compares its child
+/// by equality to decide whether the shape layer changed.
+class const _Apple() extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return const FittedBox(
       child: Icon(
         Symbols.star_rounded,
         fill: 1,
-        size: size * 0.8,
-        color: const Color(0xFFFFD43B),
-        shadows: const [Shadow(color: Color(0xAAD86D00), blurRadius: 4.0, offset: Offset(0, 1))],
+        size: 48.0,
+        color: Color(0xFFFFD43B),
+        shadows: [Shadow(color: Color(0xAAD86D00), blurRadius: 4.0, offset: Offset(0, 1))],
       ),
     );
   }

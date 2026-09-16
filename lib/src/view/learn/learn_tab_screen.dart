@@ -119,7 +119,7 @@ class const _Body() extends ConsumerWidget {
               hasLeading: true,
               children: [
                 ListTile(
-                  leading: const Icon(Symbols.school),
+                  leading: const Icon(Symbols.menu_book),
                   trailing: Theme.of(context).platform == TargetPlatform.iOS
                       ? const CupertinoListTileChevron()
                       : null,
