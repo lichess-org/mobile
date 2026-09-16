@@ -100,6 +100,7 @@ dev_dependencies:
   json_serializable: ^6.14.1
   lint: ^2.14.0
   mocktail: ^1.0.5
+  patrol: ^4.10.0
   stream_channel: ^2.1.4
   wakelock_plus_platform_interface: ^1.6.0
 
@@ -180,3 +181,9 @@ flutter_native_splash:
 
   color_dark: "#000000"
   image_dark: assets/images/logo-white.webp
+
+# Patrol end-to-end tests, see docs/e2e_tests.md
+patrol:
+  app_name: Lichess
+  android:
+    package_name: org.lichess.mobileV2.debug

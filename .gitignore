@@ -46,3 +46,7 @@ doc/api/
 
 # Cache directory created by scripts
 .cache/
+
+# Patrol end-to-end tests: generated test bundle and local dart-defines
+**/test_bundle.dart
+.patrol.env

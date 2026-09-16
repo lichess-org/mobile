@@ -44,6 +44,13 @@ android {
         ndk {
             abiFilters += listOf("armeabi-v7a", "arm64-v8a", "x86_64")
         }
+        // Patrol end-to-end tests, see docs/e2e_tests.md
+        testInstrumentationRunner = "pl.leancode.patrol.PatrolJUnitRunner"
+        testInstrumentationRunnerArguments["clearPackageData"] = "true"
+    }
+
+    testOptions {
+        execution = "ANDROIDX_TEST_ORCHESTRATOR"
     }
 
     signingConfigs {
@@ -93,4 +100,6 @@ dependencies {
     // Dependency required by flutter_local_notifications package
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
     implementation("androidx.core:core-splashscreen:1.0.1")
+    // Patrol end-to-end tests
+    androidTestUtil("androidx.test:orchestrator:1.5.1")
 }
