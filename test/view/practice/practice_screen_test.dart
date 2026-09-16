@@ -10,7 +10,6 @@ import 'package:lichess_mobile/src/model/practice/practice_repository.dart';
 import 'package:lichess_mobile/src/model/practice/practice_structure.dart';
 import 'package:lichess_mobile/src/view/practice/practice_chapter_screen.dart';
 import 'package:lichess_mobile/src/view/practice/practice_screen.dart';
-import 'package:lichess_mobile/src/view/practice/practice_study_screen.dart';
 
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
@@ -87,7 +86,7 @@ ProviderContainer _container(WidgetTester tester, Type screen) =>
     ProviderScope.containerOf(tester.element(find.byType(screen)));
 
 void main() {
-  testWidgets('lists the studies, and opens the first chapter to play over the study', (
+  testWidgets('lists the studies, opens the chapter to play, and comes back to the list', (
     tester,
   ) async {
     final app = await makeTestProviderScopeApp(
@@ -109,12 +108,20 @@ void main() {
     expect(find.widgetWithText(PracticeChapterScreen, 'Find e4'), findsOneWidget);
     expect(find.text('Take the centre'), findsOneWidget);
 
-    // The study's chapters are right behind it.
-    await tester.pageBack();
+    // Another chapter of the study, from the chapter list.
+    await tester.tap(find.byTooltip('Chapters'));
     await tester.pumpAndSettle();
-    expect(find.byType(PracticeStudyScreen), findsOneWidget);
     expect(find.text(l10n.studyInteractiveLesson), findsOneWidget);
     expect(find.text('Lesson'), findsOneWidget);
+    await tester.tap(find.text('A short game'));
+    await tester.pumpAndSettle();
+    expect(find.widgetWithText(PracticeChapterScreen, 'A short game'), findsOneWidget);
+
+    // Back goes straight to the practice menu, whatever chapters were visited.
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    expect(find.byType(PracticeChapterScreen), findsNothing);
+    expect(find.text('Openings'), findsOneWidget);
   });
 
   testWidgets('a gamebook completes when its moves are found, and moves on', (tester) async {
@@ -204,7 +211,7 @@ void main() {
 
     expect(find.text('Success!'), findsOneWidget);
     expect(find.text('Next exercise'), findsNothing, reason: 'the last chapter of its study');
-    expect(find.text('Back to the study'), findsOneWidget);
+    expect(find.text('Back to practice'), findsOneWidget);
 
     // Lets the engine the chapter started go.
     await tester.pumpWidget(const SizedBox.shrink());

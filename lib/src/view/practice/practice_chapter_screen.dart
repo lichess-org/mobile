@@ -2,9 +2,11 @@ import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/practice/practice_goal.dart';
+import 'package:lichess_mobile/src/model/practice/practice_progress.dart';
 import 'package:lichess_mobile/src/model/practice/practice_repository.dart';
 import 'package:lichess_mobile/src/model/practice/practice_structure.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -12,6 +14,7 @@ import 'package:lichess_mobile/src/view/practice/practice_engine_chapter.dart';
 import 'package:lichess_mobile/src/view/practice/practice_gamebook_chapter.dart';
 import 'package:lichess_mobile/src/view/practice/practice_lesson_chapter.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/rich_link_text.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -26,7 +29,21 @@ class const PracticeChapterScreen({required final PracticeChapter chapter, super
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(title: Text(chapter.name), actions: const [ToggleSoundButton()]),
+      appBar: AppBar(
+        title: Text(chapter.name),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.list),
+            tooltip: 'Chapters',
+            onPressed: () => showModalBottomSheet<void>(
+              context: context,
+              isScrollControlled: true,
+              builder: (_) => _ChaptersSheet(current: chapter),
+            ),
+          ),
+          const ToggleSoundButton(),
+        ],
+      ),
       body: switch (chapter) {
         final PracticeEngineChapter chapter => PracticeEngineChapterBody(chapter: chapter),
         final PracticeGamebookChapter chapter => PracticeGamebookChapterBody(chapter: chapter),
@@ -36,7 +53,46 @@ class const PracticeChapterScreen({required final PracticeChapter chapter, super
   }
 }
 
-/// Opens the chapter after [chapter] in its study, or goes back to the study when it was the last.
+/// The chapters of the current chapter's study, to jump to any of them.
+class const _ChaptersSheet({required final PracticeChapter current}) extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final study = ref.watch(practiceStructureProvider).value?.studyOf(current.id);
+    final progress = ref.watch(practiceProgressProvider).value ?? PracticeProgress.empty;
+    if (study == null) return const SizedBox.shrink();
+
+    return BottomSheetScrollableContainer(
+      children: [
+        ListTile(title: Text(study.name, style: Styles.title)),
+        for (final chapter in study.chapters)
+          ListTile(
+            selected: chapter.id == current.id,
+            leading: Icon(switch (chapter) {
+              PracticeEngineChapter() => Icons.memory,
+              PracticeGamebookChapter() => Icons.menu_book,
+              PracticeLessonChapter() => Icons.play_lesson,
+            }),
+            title: Text(chapter.name),
+            subtitle: Text(practiceChapterKindLabel(context, chapter)),
+            trailing: progress.isDone(chapter.id)
+                ? const Icon(Icons.check_circle, color: LichessColors.good)
+                : null,
+            onTap: () {
+              Navigator.of(context).pop();
+              if (chapter.id != current.id) {
+                // Replaced rather than pushed, so that going back always leads to the practice
+                // menu.
+                Navigator.of(context).pushReplacement(PracticeChapterScreen.buildRoute(chapter));
+              }
+            },
+          ),
+      ],
+    );
+  }
+}
+
+/// Opens the chapter after [chapter] in its study, or goes back to the practice menu when it was
+/// the last.
 void goToNextPracticeChapter(BuildContext context, WidgetRef ref, PracticeChapter chapter) {
   final next = ref.read(practiceStructureProvider).value?.nextChapter(chapter.id);
   if (next != null) {
@@ -58,7 +114,7 @@ class const PracticeNextChapterButton({required final PracticeChapter chapter})
       onPressed: () => goToNextPracticeChapter(context, ref, chapter),
       icon: Icon(hasNext ? Icons.chevron_right : Icons.chevron_left),
       iconAlignment: hasNext ? IconAlignment.end : IconAlignment.start,
-      label: Text(hasNext ? 'Next exercise' : 'Back to the study'),
+      label: Text(hasNext ? 'Next exercise' : 'Back to practice'),
     );
   }
 }

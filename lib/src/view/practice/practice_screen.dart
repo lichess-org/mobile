@@ -7,7 +7,6 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/practice/practice_chapter_screen.dart';
-import 'package:lichess_mobile/src/view/practice/practice_study_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
@@ -118,12 +117,10 @@ class const _StudyTile({
       trailing: progress.isStudyComplete(study)
           ? const Icon(Icons.check_circle, color: LichessColors.good)
           : Text('$done / ${study.chapters.length}'),
-      onTap: () {
-        final navigator = Navigator.of(context);
-        navigator.push(PracticeStudyScreen.buildRoute(study));
-        // Straight to the chapter to play, with the study's chapters behind it.
-        navigator.push(PracticeChapterScreen.buildRoute(progress.firstOngoingIn(study)));
-      },
+      // Straight to the chapter to play: the others are a tap away in the chapter screen.
+      onTap: () =>
+          Navigator.of(context)
+              .push(PracticeChapterScreen.buildRoute(progress.firstOngoingIn(study))),
     );
   }
 }
