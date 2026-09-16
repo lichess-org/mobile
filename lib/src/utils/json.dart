@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ui' show Locale;
 
 import 'package:deep_pick/deep_pick.dart';
@@ -7,6 +8,12 @@ import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:logging/logging.dart';
 
 final _logger = Logger('JsonUtils');
+
+/// A JSON decoder that decodes UTF-8 bytes.
+///
+/// This is a fusion of [Utf8Decoder] and [JsonDecoder] which is more efficient
+/// than decoding the bytes to a string and then parsing the JSON.
+final jsonUtf8Decoder = const Utf8Decoder().fuse(const JsonDecoder());
 
 /// Reads a JSON list of objects and maps it using the provided mapper function.
 IList<T> decodeObjectList<T>(Object? json, {required T? Function(Map<String, dynamic>) mapper}) {

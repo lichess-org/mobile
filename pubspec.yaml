@@ -152,6 +152,7 @@ flutter:
     - assets/maia/
     - assets/positions.json
     - assets/endgames.json
+    - assets/practice.json
 
   fonts:
     - family: LichessIcons
