@@ -8,6 +8,7 @@
      "id": "BJy6fEDf",
      "slug": "piece-checkmates-i",
      "name": "Piece Checkmates I",
+     "description": "Basic checkmates",
      "chapters": [
       {
        "id": "dW7KIuoY",
@@ -81,6 +82,7 @@
      "id": "fE4k21MW",
      "slug": "checkmate-patterns-i",
      "name": "Checkmate Patterns I",
+     "description": "Recognize the patterns",
      "chapters": [
       {
        "id": "9rd7XwOw",
@@ -300,6 +302,7 @@
      "id": "8yadFPpU",
      "slug": "checkmate-patterns-ii",
      "name": "Checkmate Patterns II",
+     "description": "Recognize the patterns",
      "chapters": [
       {
        "id": "UZ1np9Is",
@@ -582,6 +585,7 @@
      "id": "PDkQDt6u",
      "slug": "checkmate-patterns-iii",
      "name": "Checkmate Patterns III",
+     "description": "Recognize the patterns",
      "chapters": [
       {
        "id": "ygAaFQNc",
@@ -805,6 +809,7 @@
      "id": "96Lij7wH",
      "slug": "checkmate-patterns-iv",
      "name": "Checkmate Patterns IV",
+     "description": "Recognize the patterns",
      "chapters": [
       {
        "id": "qr2pOlrL",
@@ -992,6 +997,7 @@
      "id": "Rg2cMBZ6",
      "slug": "piece-checkmates-ii",
      "name": "Piece Checkmates II",
+     "description": "Challenging checkmates",
      "chapters": [
       {
        "id": "qooQw3mQ",
@@ -1076,6 +1082,7 @@
      "id": "ByhlXnmM",
      "slug": "knight-bishop-mate",
      "name": "Knight & Bishop Mate",
+     "description": "Interactive lesson",
      "chapters": [
       {
        "id": "D23EYigW",
@@ -1216,6 +1223,7 @@
      "id": "9ogFv8Ac",
      "slug": "the-pin",
      "name": "The Pin",
+     "description": "Pin it to win it",
      "chapters": [
       {
        "id": "eHgiqLYc",
@@ -1326,6 +1334,7 @@
      "id": "tuoBxVE5",
      "slug": "the-skewer",
      "name": "The Skewer",
+     "description": "Yum - skewers!",
      "chapters": [
       {
        "id": "DXc6bhG2",
@@ -1436,6 +1445,7 @@
      "id": "Qj281y1p",
      "slug": "the-fork",
      "name": "The Fork",
+     "description": "Use the fork, Luke",
      "chapters": [
       {
        "id": "uAoBhXY8",
@@ -1645,6 +1655,7 @@
      "id": "MnsJEWnI",
      "slug": "discovered-attacks",
      "name": "Discovered Attacks",
+     "description": "Including discovered checks",
      "chapters": [
       {
        "id": "vV50tWGB",
@@ -1779,6 +1790,7 @@
      "id": "RUQASaZm",
      "slug": "double-check",
      "name": "Double Check",
+     "description": "A very powerful tactic",
      "chapters": [
       {
        "id": "8Chn1bVb",
@@ -1859,6 +1871,7 @@
      "id": "o734CNqp",
      "slug": "overloaded-pieces",
      "name": "Overloaded Pieces",
+     "description": "They have too much work",
      "chapters": [
       {
        "id": "TgeQz3DF",
@@ -1995,6 +2008,7 @@
      "id": "ITWY4GN2",
      "slug": "zwischenzug",
      "name": "Zwischenzug",
+     "description": "In-between moves",
      "chapters": [
       {
        "id": "CSGoTH5f",
@@ -2067,6 +2081,7 @@
      "id": "lyVYjhPG",
      "slug": "x-ray",
      "name": "X-Ray",
+     "description": "Attacking through an enemy piece",
      "chapters": [
       {
        "id": "ykzze7QW",
@@ -2164,6 +2179,7 @@
      "id": "9cKgYrHb",
      "slug": "zugzwang",
      "name": "Zugzwang",
+     "description": "Being forced to move",
      "chapters": [
       {
        "id": "ybYJ9gNa",
@@ -2219,6 +2235,7 @@
      "id": "g1fxVZu9",
      "slug": "interference",
      "name": "Interference",
+     "description": "Interpose a piece to great effect",
      "chapters": [
       {
        "id": "zSpQlGkf",
@@ -2315,6 +2332,7 @@
      "id": "s5pLU7Of",
      "slug": "greek-gift",
      "name": "Greek Gift",
+     "description": "Study the greek gift sacrifice",
      "chapters": [
       {
        "id": "uCkLsFs1",
@@ -2399,6 +2417,7 @@
      "id": "kdKpaYLW",
      "slug": "deflection",
      "name": "Deflection",
+     "description": "Distracting a defender",
      "chapters": [
       {
        "id": "ZzZKekpm",
@@ -2527,6 +2546,7 @@
      "id": "jOZejFWk",
      "slug": "attraction",
      "name": "Attraction",
+     "description": "Lure a piece to a bad square",
      "chapters": [
       {
        "id": "11V1Hkyr",
@@ -2651,6 +2671,7 @@
      "id": "49fDW0wP",
      "slug": "underpromotion",
      "name": "Underpromotion",
+     "description": "Promote - but not to a queen!",
      "chapters": [
       {
        "id": "gMOaAtuK",
@@ -2780,6 +2801,7 @@
      "id": "0YcGiH4Y",
      "slug": "desperado",
      "name": "Desperado",
+     "description": "A piece is lost, but it can still help",
      "chapters": [
       {
        "id": "9aqZoA3g",
@@ -2852,6 +2874,7 @@
      "id": "CgjKPvxQ",
      "slug": "counter-check",
      "name": "Counter Check",
+     "description": "Respond to a check with a check",
      "chapters": [
       {
        "id": "RaDQLnsJ",
@@ -2921,6 +2944,7 @@
      "id": "udx042D6",
      "slug": "undermining",
      "name": "Undermining",
+     "description": "Remove the defending piece",
      "chapters": [
       {
        "id": "00n75ddn",
@@ -2989,6 +3013,7 @@
      "id": "Grmtwuft",
      "slug": "clearance",
      "name": "Clearance",
+     "description": "Get out of the way!",
      "chapters": [
       {
        "id": "IJcGsvqA",
@@ -3066,6 +3091,7 @@
      "id": "xebrDvFe",
      "slug": "key-squares",
      "name": "Key Squares",
+     "description": "Reach a key square",
      "chapters": [
       {
        "id": "o3Hq4RZ0",
@@ -3204,6 +3230,7 @@
      "id": "A4ujYOer",
      "slug": "opposition",
      "name": "Opposition",
+     "description": "Take the opposition",
      "chapters": [
       {
        "id": "eNlmabX1",
@@ -3307,6 +3334,7 @@
      "id": "pt20yRkT",
      "slug": "7th-rank-rook-pawn",
      "name": "7th-Rank Rook Pawn",
+     "description": "Versus a Queen",
      "chapters": [
       {
        "id": "rfcRWU6x",
@@ -3490,6 +3518,7 @@
      "id": "MkDViieT",
      "slug": "7th-rank-rook-pawn",
      "name": "7th-Rank Rook Pawn",
+     "description": "And Passive Rook vs Rook",
      "chapters": [
       {
        "id": "17CE1GKS",
@@ -3580,6 +3609,7 @@
      "id": "pqUSUw8Y",
      "slug": "basic-rook-endgames",
      "name": "Basic Rook Endgames",
+     "description": "Lucena and Philidor",
      "chapters": [
       {
        "id": "tAcIEIbG",
@@ -3700,6 +3730,7 @@
      "id": "heQDnvq7",
      "slug": "intermediate-rook-endings",
      "name": "Intermediate Rook Endings",
+     "description": "Broaden your knowledge",
      "chapters": [
       {
        "id": "YAqTqI8s",
@@ -3856,6 +3887,7 @@
      "id": "wS23j5Tm",
      "slug": "practical-rook-endings",
      "name": "Practical Rook Endings",
+     "description": "Rook endings with several pawns",
      "chapters": [
       {
        "id": "VL4BloZf",

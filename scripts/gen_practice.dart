@@ -28,6 +28,7 @@ Future<void> main(List<String> args) async {
 
   final index = jsonDecode(await lichess.get('/practice', json: true)) as Map<String, dynamic>;
   final sections = (index['sections']! as List<dynamic>).cast<Map<String, dynamic>>();
+  final descriptions = _studyDescriptions(await lichess.get('/practice'));
 
   final kinds = <String, int>{};
   final outSections = <Map<String, dynamic>>[];
@@ -44,10 +45,13 @@ Future<void> main(List<String> args) async {
         kinds.update(chapter['kind']! as String, (count) => count + 1, ifAbsent: () => 1);
         outChapters.add(chapter);
       }
+      final description = descriptions[studyId];
+      if (description == null) stderr.writeln('No description for study $studyId');
       outStudies.add({
         'id': studyId,
         'slug': study['slug'],
         'name': study['name'],
+        'description': ?description,
         'chapters': outChapters,
       });
     }
@@ -66,6 +70,26 @@ Future<void> main(List<String> args) async {
   );
   stdout.writeln('${lichess.fetched} fetched, ${lichess.cacheHits} from cache');
 }
+
+/// The short description of each study, by study id, read from the practice page.
+///
+/// The JSON of `/practice` leaves it out: the page is the only place lila publishes it.
+Map<String, String> _studyDescriptions(String html) {
+  final study = RegExp(
+    '<icon class="([A-Za-z0-9]{8})"></icon><span class="text"><h3>[^<]*</h3><p>([^<]*)</p>',
+  );
+  return {
+    for (final match in study.allMatches(html)) match.group(1)!: _unescapeHtml(match.group(2)!),
+  };
+}
+
+String _unescapeHtml(String text) => text
+    .replaceAll('&lt;', '<')
+    .replaceAll('&gt;', '>')
+    .replaceAll('&quot;', '"')
+    .replaceAll('&#39;', "'")
+    .replaceAll('&#x27;', "'")
+    .replaceAll('&amp;', '&');
 
 /// The PGN of every chapter of [studyId], keyed by chapter id, in chapter order.
 ///

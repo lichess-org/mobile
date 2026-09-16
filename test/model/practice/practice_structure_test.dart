@@ -18,6 +18,7 @@ void main() {
               'id': 'study1',
               'slug': 'study-one',
               'name': 'Study one',
+              'description': 'The first study',
               'chapters': [
                 {
                   'id': 'engine01',
@@ -68,6 +69,8 @@ void main() {
     test('parses each chapter kind', () {
       final study = structure.study(const PracticeStudyId('study1'))!;
       expect(study.name, 'Study one');
+      expect(study.description, 'The first study');
+      expect(structure.study(const PracticeStudyId('study2'))!.description, isNull);
 
       final engine = study.chapters[0] as PracticeEngineChapter;
       expect(engine.orientation, Side.white);

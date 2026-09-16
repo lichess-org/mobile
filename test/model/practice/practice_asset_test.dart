@@ -32,10 +32,11 @@ void main() {
     expect(chapters.whereType<PracticeLessonChapter>(), isNotEmpty);
   });
 
-  test('every study has chapters', () {
+  test('every study has a description and chapters', () {
     for (final section in structure.sections) {
       for (final study in section.studies) {
         expect(study.chapters, isNotEmpty, reason: study.name);
+        expect(study.description, isNotEmpty, reason: study.name);
       }
     }
   });

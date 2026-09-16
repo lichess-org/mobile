@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/practice/practice_repository.dart';
 import 'package:lichess_mobile/src/model/practice/practice_structure.dart';
 import 'package:lichess_mobile/src/view/practice/practice_chapter_screen.dart';
 import 'package:lichess_mobile/src/view/practice/practice_screen.dart';
+import 'package:material_ui/material_ui.dart' show BottomSheet;
 
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
@@ -29,6 +30,7 @@ final _structure = PracticeStructure.fromJson({
           'id': 'study001',
           'slug': 'first-moves',
           'name': 'First moves',
+          'description': 'How a game starts',
           'chapters': [
             {
               'id': 'gamebk01',
@@ -101,6 +103,7 @@ void main() {
     expect(find.text('Checkmates'), findsOneWidget);
     expect(find.text('0 / 2'), findsOneWidget);
     expect(find.text('0 / 1'), findsOneWidget);
+    expect(find.text('How a game starts'), findsOneWidget);
 
     await tester.tap(find.text('First moves'));
     await tester.pumpAndSettle();
@@ -122,6 +125,59 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(PracticeChapterScreen), findsNothing);
     expect(find.text('Openings'), findsOneWidget);
+  });
+
+  testWidgets('a long chapter list scrolls within the screen, and can be dismissed', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(390, 700));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    final chapters = [
+      for (var i = 1; i <= 20; i++)
+        {
+          'id': 'lesson${i.toString().padLeft(2, '0')}',
+          'name': 'Lesson $i',
+          'kind': 'lesson',
+          'orientation': 'white',
+          'fen': _fen,
+          'pgn': '1. e4 *',
+        },
+    ];
+    final long = PracticeStructure.fromJson({
+      'sections': [
+        {
+          'id': 'long',
+          'name': 'Long',
+          'studies': [
+            {'id': 'longstud', 'slug': 'long', 'name': 'Long study', 'chapters': chapters},
+          ],
+        },
+      ],
+    });
+    final app = await makeTestProviderScopeApp(
+      tester,
+      home: PracticeChapterScreen(chapter: long.chapter(const PracticeChapterId('lesson01'))!),
+      overrides: {practiceStructureProvider: practiceStructureProvider.overrideWith((ref) => long)},
+    );
+    await tester.pumpWidget(app);
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byTooltip('Chapters'));
+    await tester.pumpAndSettle();
+
+    // Scrollable up to the last chapter, which is off screen at first.
+    await tester.scrollUntilVisible(
+      find.text('Lesson 20'),
+      200.0,
+      scrollable: find.descendant(of: find.byType(BottomSheet), matching: find.byType(Scrollable)),
+    );
+    expect(find.text('Lesson 20'), findsOneWidget);
+
+    // The sheet leaves room above it to tap out of it.
+    expect(tester.getTopLeft(find.byType(BottomSheet)).dy, greaterThan(0));
+    await tester.tapAt(const Offset(20, 20));
+    await tester.pumpAndSettle();
+    expect(find.text('Lesson 20'), findsNothing);
   });
 
   testWidgets('a gamebook completes when its moves are found, and moves on', (tester) async {

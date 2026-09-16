@@ -142,6 +142,7 @@ flutter:
     - assets/images/fide-fed/
     - assets/images/learn/
     - assets/images/learn/pieces/
+    - assets/images/practice/
     - assets/sounds/futuristic/
     - assets/sounds/lisp/
     - assets/sounds/nes/

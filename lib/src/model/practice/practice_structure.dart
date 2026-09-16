@@ -66,6 +66,9 @@ sealed class const PracticeStudy._() with _$PracticeStudy {
     required PracticeStudyId id,
     required String slug,
     required String name,
+
+    /// A short line on what the study is about, as lichess.org shows it under the name.
+    String? description,
     required IList<PracticeChapter> chapters,
   }) = _PracticeStudy;
 
@@ -73,6 +76,7 @@ sealed class const PracticeStudy._() with _$PracticeStudy {
     id: PracticeStudyId(pick('id').asStringOrThrow()),
     slug: pick('slug').asStringOrThrow(),
     name: pick('name').asStringOrThrow(),
+    description: pick('description').asStringOrNull(),
     chapters: pick('chapters').asListOrThrow((chapter) => PracticeChapter.fromPick(chapter)).lock,
   );
 }

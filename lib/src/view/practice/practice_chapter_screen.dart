@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/practice/practice_engine_chapter.dart';
 import 'package:lichess_mobile/src/view/practice/practice_gamebook_chapter.dart';
 import 'package:lichess_mobile/src/view/practice/practice_lesson_chapter.dart';
+import 'package:lichess_mobile/src/view/practice/practice_study_icon.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/rich_link_text.dart';
@@ -37,7 +38,12 @@ class const PracticeChapterScreen({required final PracticeChapter chapter, super
             tooltip: 'Chapters',
             onPressed: () => showModalBottomSheet<void>(
               context: context,
+              // Sized to its content, up to most of the screen: a long study scrolls, and the
+              // barrier left above it and the handle still close it.
               isScrollControlled: true,
+              useSafeArea: true,
+              showDragHandle: true,
+              constraints: BoxConstraints(maxHeight: MediaQuery.heightOf(context) * 0.9),
               builder: (_) => _ChaptersSheet(current: chapter),
             ),
           ),
@@ -62,8 +68,12 @@ class const _ChaptersSheet({required final PracticeChapter current}) extends Con
     if (study == null) return const SizedBox.shrink();
 
     return BottomSheetScrollableContainer(
+      padding: const EdgeInsets.only(bottom: 16.0),
       children: [
-        ListTile(title: Text(study.name, style: Styles.title)),
+        ListTile(
+          leading: PracticeStudyIcon(study: study, size: 40.0),
+          title: Text(study.name, style: Styles.title),
+        ),
         for (final chapter in study.chapters)
           ListTile(
             selected: chapter.id == current.id,

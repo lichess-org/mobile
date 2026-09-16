@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/practice/practice_chapter_screen.dart';
+import 'package:lichess_mobile/src/view/practice/practice_study_icon.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
@@ -96,6 +97,7 @@ class const _Body({
         for (final section in structure.sections)
           ListSection(
             header: Text(section.name),
+            hasLeading: true,
             children: [
               for (final study in section.studies) _StudyTile(study: study, progress: progress),
             ],
@@ -113,7 +115,12 @@ class const _StudyTile({
   Widget build(BuildContext context) {
     final done = progress.countDone(study);
     return ListTile(
+      leading: PracticeStudyIcon(study: study),
       title: Text(study.name),
+      subtitle: switch (study.description) {
+        final description? => Text(description),
+        null => null,
+      },
       trailing: progress.isStudyComplete(study)
           ? const Icon(Icons.check_circle, color: LichessColors.good)
           : Text('$done / ${study.chapters.length}'),
