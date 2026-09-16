@@ -14,6 +14,9 @@ import 'package:sqflite/sqflite.dart';
 class const PracticeProgress(final IMap<PracticeChapterId, int> _nbMoves) {
   static const empty = PracticeProgress(IMapConst({}));
 
+  /// Whether no chapter was completed.
+  bool get isEmpty => _nbMoves.isEmpty;
+
   /// The fewest moves [chapterId] was completed in, or null if it was not completed.
   int? nbMoves(PracticeChapterId chapterId) => _nbMoves[chapterId];
 

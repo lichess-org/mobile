@@ -7,6 +7,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/engine/engine_budget.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_context.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
@@ -189,6 +190,7 @@ class PracticeEngineController(final PracticeEngineChapter _chapter)
       steps: state.steps.add(Step(position: position, sanMove: SanMove(san, move))),
       hint: null,
     );
+    ref.read(moveFeedbackServiceProvider).playedMove(san);
   }
 
   /// Judges the chapter as it stands, and ends it when that is decided.
