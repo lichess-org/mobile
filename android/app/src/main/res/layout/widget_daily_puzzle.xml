@@ -6,7 +6,7 @@
   android:orientation="vertical"
   android:background="@drawable/widget_background"
   android:paddingHorizontal="14dp"
-  android:paddingVertical="8dp">
+  android:paddingVertical="10dp">
 
   <LinearLayout
     android:id="@+id/widget_header"
