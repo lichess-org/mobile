@@ -6940,6 +6940,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get mobileCancelTakebackOffer => 'Cancelar oferta de revanche';
 
   @override
+  String get mobileChessEngine => 'Motor de xadrez';
+
+  @override
   String get mobileClearButton => 'Limpar';
 
   @override
@@ -7058,6 +7061,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get mobileSettingsDraggedTargetSquare => 'Casa';
+
+  @override
+  String get mobileSettingsDrawnShapeColor => 'Cor das formas desenhadas';
 
   @override
   String get mobileSettingsHomeWidgets => 'Widget da tela principal';

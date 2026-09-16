@@ -240,7 +240,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get mobileSystemColors => 'Sistem rəngləri';
 
   @override
-  String get mobileTheme => 'Tema';
+  String get mobileTheme => 'Mövzu';
 
   @override
   String get mobileToolsTab => 'Alətlər';
@@ -284,7 +284,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get mobileDisplayModeCompact => 'Compact';
 
   @override
-  String get mobileDisplayModeDetailed => 'Detailed';
+  String get mobileDisplayModeDetailed => 'Ətraflı';
 
   @override
   String get mobileOpeningExplorerNotAvailableOffline => 'Opening Explorer is not available offline.';

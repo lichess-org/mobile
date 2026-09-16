@@ -6935,7 +6935,10 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get mobileBoardSettings => 'Board settings';
 
   @override
-  String get mobileCancelTakebackOffer => 'Cancel takeback offer';
+  String get mobileCancelTakebackOffer => 'Cancel take back offer';
+
+  @override
+  String get mobileChessEngine => 'Chess engine';
 
   @override
   String get mobileClearButton => 'Clear';
@@ -7028,7 +7031,7 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak, but your score will be saved.';
 
   @override
-  String get mobilePuzzleThemesSubtitle => 'Play puzzles from your favorite openings, or choose a theme.';
+  String get mobilePuzzleThemesSubtitle => 'Do puzzles from your favorite openings, or choose a theme.';
 
   @override
   String get mobilePuzzlesTab => 'Puzzles';
@@ -7056,6 +7059,12 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get mobileSettingsDraggedTargetSquare => 'Square';
+
+  @override
+  String get mobileSettingsDrawnShapeColor => 'Drawn shape color';
+
+  @override
+  String get mobileSettingsDrawnShapeColorHelp => 'This color is used for shapes drawn by hand using two fingers.';
 
   @override
   String get mobileSettingsHomeWidgets => 'Home widgets';

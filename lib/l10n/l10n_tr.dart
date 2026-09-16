@@ -30,7 +30,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Geri alma teklifini iptal et';
 
   @override
-  String get mobileChessEngine => 'Chess engine';
+  String get mobileChessEngine => 'Satranç motoru';
 
   @override
   String get mobileClearButton => 'Temizle';

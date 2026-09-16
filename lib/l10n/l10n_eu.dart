@@ -30,7 +30,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Bertan behera utzi atzera-egite eskaera';
 
   @override
-  String get mobileChessEngine => 'Chess engine';
+  String get mobileChessEngine => 'Xake motorea';
 
   @override
   String get mobileClearButton => 'Garbitu';
@@ -153,10 +153,10 @@ class AppLocalizationsEu extends AppLocalizations {
   String get mobileSettingsDraggedTargetSquare => 'Karratua';
 
   @override
-  String get mobileSettingsDrawnShapeColor => 'Drawn shape color';
+  String get mobileSettingsDrawnShapeColor => 'Marraztutako formaren kolorea';
 
   @override
-  String get mobileSettingsDrawnShapeColorHelp => 'This color is used for shapes drawn by hand using two fingers.';
+  String get mobileSettingsDrawnShapeColorHelp => 'Kolore hau eskuz bi hatzekin marraztutako formetan erabiltzen da.';
 
   @override
   String get mobileSettingsHomeWidgets => 'Hasiera orriko widgetak';

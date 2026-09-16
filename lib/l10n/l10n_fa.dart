@@ -30,7 +30,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'رد درخواست برگرداندن';
 
   @override
-  String get mobileChessEngine => 'Chess engine';
+  String get mobileChessEngine => 'موتورِ شطرنج';
 
   @override
   String get mobileClearButton => 'پاکسازی';
@@ -67,13 +67,13 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileHomeTab => 'خانه';
 
   @override
-  String get mobileLiveStreamers => 'بَرخَط-محتواسازان زنده';
+  String get mobileLiveStreamers => 'جَریانگرانِ زنده';
 
   @override
   String get mobileMustBeLoggedIn => 'برای دیدن این صفحه باید وارد شده باشید.';
 
   @override
-  String get mobileNbOfflinePuzzles => 'معمای آفلاین';
+  String get mobileNbOfflinePuzzles => 'معمای بُرون‌خط';
 
   @override
   String get mobileNewGame => 'بازی جدید';
@@ -153,10 +153,10 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileSettingsDraggedTargetSquare => 'مربع';
 
   @override
-  String get mobileSettingsDrawnShapeColor => 'Drawn shape color';
+  String get mobileSettingsDrawnShapeColor => 'رنگِ شکل';
 
   @override
-  String get mobileSettingsDrawnShapeColorHelp => 'This color is used for shapes drawn by hand using two fingers.';
+  String get mobileSettingsDrawnShapeColorHelp => 'این رنگ برای شکل‌هایی که با دست (دو انگشت) رسم می‌شوند، استفاده می‌شود.';
 
   @override
   String get mobileSettingsHomeWidgets => 'اَبزارک‌های خانه';

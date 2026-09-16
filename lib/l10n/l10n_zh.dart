@@ -30,7 +30,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileCancelTakebackOffer => '取消悔棋请求';
 
   @override
-  String get mobileChessEngine => 'Chess engine';
+  String get mobileChessEngine => '国际象棋引擎';
 
   @override
   String get mobileClearButton => '清空';
@@ -153,10 +153,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileSettingsDraggedTargetSquare => '方形';
 
   @override
-  String get mobileSettingsDrawnShapeColor => 'Drawn shape color';
+  String get mobileSettingsDrawnShapeColor => '绘制图形颜色';
 
   @override
-  String get mobileSettingsDrawnShapeColorHelp => 'This color is used for shapes drawn by hand using two fingers.';
+  String get mobileSettingsDrawnShapeColorHelp => '该颜色将用于通过双指绘制的图形。';
 
   @override
   String get mobileSettingsHomeWidgets => '首页小组件';

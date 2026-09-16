@@ -30,7 +30,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Anuluj prośbę cofnięcia ruchu';
 
   @override
-  String get mobileChessEngine => 'Chess engine';
+  String get mobileChessEngine => 'Silnik szachowy';
 
   @override
   String get mobileClearButton => 'Wyczyść';
@@ -153,10 +153,10 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileSettingsDraggedTargetSquare => 'Kwadrat';
 
   @override
-  String get mobileSettingsDrawnShapeColor => 'Drawn shape color';
+  String get mobileSettingsDrawnShapeColor => 'Kolor rysowanego kształtu';
 
   @override
-  String get mobileSettingsDrawnShapeColorHelp => 'This color is used for shapes drawn by hand using two fingers.';
+  String get mobileSettingsDrawnShapeColorHelp => 'Ten kolor jest używany dla kształtów rysowanych dwoma palcami.';
 
   @override
   String get mobileSettingsHomeWidgets => 'Widżety ekranu głównego';
