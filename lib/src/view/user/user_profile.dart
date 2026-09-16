@@ -151,7 +151,10 @@ class const Location({required final Profile profile, super.key}) extends Statel
   Widget build(BuildContext context) {
     return Row(
       children: [
-        if (profile.location != null) ...[Text(profile.location!), const SizedBox(width: 5)],
+        if (profile.location != null) ...[
+          Flexible(flex: 2, child: Text(profile.location!)),
+          const SizedBox(width: 5),
+        ],
         if (profile.country != null) ...[
           HttpNetworkImageWidget(
             lichessFlagSrc(profile.country!),
@@ -159,7 +162,8 @@ class const Location({required final Profile profile, super.key}) extends Statel
           ),
           const SizedBox(width: 5),
         ],
-        if (countries[profile.country] != null) Text(countries[profile.country]!),
+        if (countries[profile.country] != null)
+          Expanded(flex: 3, child: Text(countries[profile.country]!)),
       ],
     );
   }
