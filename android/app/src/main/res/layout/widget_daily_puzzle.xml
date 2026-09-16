@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/widget_container"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:orientation="vertical"
+  android:background="@drawable/widget_background"
+  android:paddingHorizontal="14dp"
+  android:paddingVertical="10dp">
+
+  <LinearLayout
+    android:id="@+id/widget_header"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingHorizontal="2dp"
+    android:gravity="center_vertical">
+
+    <ImageView
+      android:layout_width="16dp"
+      android:layout_height="16dp"
+      android:src="@drawable/ic_stat_lichess_notification"
+      android:contentDescription="Lichess Daily Puzzle"
+      android:tint="@color/widget_text_primary"/>
+
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:layout_marginStart="6dp"
+      android:text="@string/widget_daily_puzzle_title"
+      android:textColor="@color/widget_text_primary"
+      android:textSize="14sp"
+      android:textStyle="bold" />
+
+    <TextView
+      android:id="@+id/daily_puzzle_date"
+      android:layout_width="100dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:gravity="right"
+      android:textColor="@color/widget_text_primary"
+      android:textSize="12sp" />
+
+  </LinearLayout>
+
+  <ImageView
+    android:id="@+id/puzzle_board_image"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    />
+
+  <TextView
+    android:id="@+id/no_puzzle"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingVertical="20dp"
+    android:gravity="center"
+    android:text="@string/widget_no_dailyPuzzle"
+    android:textColor="@color/widget_text_secondary"
+    android:textSize="14sp"
+    android:visibility="gone" />
+
+</LinearLayout>
+
+

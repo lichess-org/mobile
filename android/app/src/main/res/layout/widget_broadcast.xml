@@ -33,13 +33,13 @@
             android:textSize="14sp" />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/broadcast_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" />
+  <LinearLayout
+    android:id="@+id/broadcast_list"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" />
 
-    <TextView
+  <TextView
         android:id="@+id/empty_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -51,3 +51,4 @@
         android:visibility="gone" />
 
 </LinearLayout>
+
