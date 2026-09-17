@@ -58,6 +58,7 @@ class GameLayout extends ConsumerStatefulWidget {
     this.bottomTableUpsideDown = false,
     this.topTableFlex = 1,
     this.bottomTableFlex = 1,
+    this.portraitBoardHeightReserve = 180.0,
     this.shapes,
     this.moves,
     this.currentMoveIndex = 0,
@@ -89,6 +90,7 @@ class GameLayout extends ConsumerStatefulWidget {
       bottomTableUpsideDown = false,
       topTableFlex = 1,
       bottomTableFlex = 1,
+      portraitBoardHeightReserve = 180.0,
       shapes = null,
       currentMoveIndex = 0,
       onSelectMove = null,
@@ -143,6 +145,9 @@ class GameLayout extends ConsumerStatefulWidget {
 
   /// Flex factor for the bottom table in portrait mode (default: 1).
   final int bottomTableFlex;
+
+  /// Minimum portrait space for both player tables and the optional actions bar.
+  final double portraitBoardHeightReserve;
 
   /// Optional list of moves that will be displayed on top of the board.
   final List<String>? moves;
@@ -509,7 +514,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
               pocketsPadding;
 
           // Reserve vertical space for the top and bottom tables and the user actions bar if present.
-          final maxAllowedBoardSize = maxHeight - 180.0;
+          final maxAllowedBoardSize = maxHeight - widget.portraitBoardHeightReserve;
           if (effectiveBoardSize > maxAllowedBoardSize) {
             effectiveBoardSize = maxAllowedBoardSize;
           }

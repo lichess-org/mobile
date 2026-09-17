@@ -660,6 +660,114 @@ void main() {
       expect(container.read(ctrlProvider).requireValue.moveToConfirm, isNotNull);
     });
 
+    for (final profile in kCompactPortraitProfiles) {
+      for (final correspondence in [false, true]) {
+        testWidgets(
+          'compact post-startup confirmation ${profile.name} correspondence=$correspondence',
+          (tester) async {
+            mockWakelock();
+            await prepareLayoutGolden(tester);
+            await createTestGame(
+              tester,
+              pgn: 'e4 e5',
+              clock: correspondence
+                  ? null
+                  : const (
+                      running: true,
+                      initial: Duration(minutes: 1),
+                      increment: Duration.zero,
+                      white: Duration(seconds: 58),
+                      black: Duration(seconds: 54),
+                      emerg: Duration(seconds: 10),
+                    ),
+              correspondenceClock: correspondence
+                  ? const (
+                      white: Duration(hours: 20, minutes: 5),
+                      black: Duration(days: 1),
+                      daysPerTurn: 1,
+                    )
+                  : null,
+              serverPrefs: const ServerGamePrefs(
+                showRatings: true,
+                enablePremove: true,
+                autoQueen: AutoQueen.always,
+                confirmResign: true,
+                submitMove: true,
+                zenMode: Zen.no,
+              ),
+              surfaceSize: profile.surface,
+              devicePixelRatio: 3.0,
+              physicalViewPadding: profile.physicalPadding,
+              failOnOverflow: true,
+            );
+            final container = ProviderScope.containerOf(tester.element(find.byType(Chessboard)));
+            final controller = gameControllerProvider(testGameFullId);
+            final clocks = correspondence ? find.byType(CorrespondenceClock) : find.byType(Clock);
+            final cancel = find.byIcon(CupertinoIcons.xmark_rectangle_fill);
+            final accept = find.byIcon(CupertinoIcons.checkmark_rectangle_fill);
+
+            void checkLayout({required bool pending}) {
+              expectCompactBoardLayout(tester, heightCapped: profile.heightCapped);
+              expect(clocks, findsNWidgets(2));
+              expectGameControlsVisible(tester, clocks);
+              expectGameControlsVisible(tester, find.text('Steven'));
+              expectGameControlsVisible(tester, find.byType(BottomBarButton));
+              if (pending) {
+                expect(find.text('Peter'), findsNothing);
+                expectGameControlsVisible(tester, find.byType(ConfirmMove));
+                expectGameControlsVisible(tester, find.text('Confirm move'));
+                expect(cancel.hitTestable(), findsOneWidget);
+                expect(accept.hitTestable(), findsOneWidget);
+                final confirmation = tester.getRect(find.byType(ConfirmMove));
+                for (var index = 0; index < 2; index++) {
+                  expect(confirmation.overlaps(tester.getRect(clocks.at(index))), isFalse);
+                }
+              } else {
+                expect(find.byType(ConfirmMove), findsNothing);
+                expectGameControlsVisible(tester, find.text('Peter'));
+              }
+              expect(tester.takeException(), isNull);
+            }
+
+            checkLayout(pending: false);
+            if (correspondence) {
+              expect(find.text('One day', findRichText: true), findsOneWidget);
+              expect(find.text('20:05', findRichText: true), findsOneWidget);
+              await tester.pump(const Duration(minutes: 1));
+              expect(find.text('20:04', findRichText: true), findsOneWidget);
+              checkLayout(pending: false);
+            }
+            await playMove(tester, 'g1', 'f3');
+            checkLayout(pending: true);
+            expect(container.read(controller).requireValue.moveToConfirm, isNotNull);
+            await expectLayoutGolden(
+              find.byType(GameScreen),
+              '../../../build/compact-layout/confirmation-${profile.name}-$correspondence',
+            );
+            await tester.tap(cancel);
+            await tester.pump();
+            checkLayout(pending: false);
+            expect(container.read(controller).requireValue.moveToConfirm, isNull);
+            expect(boardHasPiece(tester, Square.g1, Piece.whiteKnight), isTrue);
+
+            await playMove(tester, 'g1', 'f3');
+            checkLayout(pending: true);
+            await tester.tap(accept);
+            await tester.pump();
+            checkLayout(pending: false);
+            expect(container.read(controller).requireValue.moveToConfirm, isNull);
+            expect(container.read(controller).requireValue.game.sanMoves, 'e4 e5 Nf3');
+            expect(boardHasPiece(tester, Square.f3, Piece.whiteKnight), isTrue);
+            await expectLayoutGolden(
+              find.byType(GameScreen),
+              '../../../build/compact-layout/confirmation-accepted-${profile.name}-$correspondence',
+            );
+          },
+          variant: kPlatformVariant,
+        );
+      }
+    }
+
     testWidgets('move confirmation', (WidgetTester tester) async {
       await createTestGame(
         tester,

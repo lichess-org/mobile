@@ -248,6 +248,8 @@ class _BodyState extends ConsumerState<_Body> {
                     bottomTable: _Player(side: isBoardFlipped ? orientation.opposite : orientation),
                     topTableFlex: 1,
                     bottomTableFlex: gameState.game.practiceMode ? 2 : 1,
+                    // Practice feedback needs the extra table space on height-capped displays.
+                    portraitBoardHeightReserve: gameState.game.practiceMode ? 196.0 : 180.0,
                     orientation: variantBoardOrientation(
                       variant: gameState.game.meta.variant,
                       youAre: orientation,
@@ -666,9 +668,14 @@ class _PracticeCommentCardState extends ConsumerState<_PracticeCommentCard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  verdictText,
-                  style: TextStyle(fontWeight: FontWeight.w600, color: iconColor),
+                Tooltip(
+                  message: verdictText,
+                  child: Text(
+                    verdictText,
+                    maxLines: isShortScreen ? 1 : null,
+                    overflow: isShortScreen ? TextOverflow.ellipsis : null,
+                    style: TextStyle(fontWeight: FontWeight.w600, color: iconColor),
+                  ),
                 ),
                 if (suggestedMoveWidget != null) suggestedMoveWidget,
               ],

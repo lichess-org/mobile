@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/foundation.dart';
@@ -5,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
+import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:material_ui/material_ui.dart';
 
 const double _kTestScreenWidth = 390.0;
@@ -37,6 +40,69 @@ const kTestSurfaces = [
 const kTestSurfaceSize = Size(_kTestScreenWidth, _kTestScreenHeight);
 
 const kPlatformVariant = TargetPlatformVariant({TargetPlatform.android, TargetPlatform.iOS});
+
+const kCompactPortraitProfiles = [
+  (
+    name: 'zoomed-iphone',
+    surface: Size(320.0, 693.0),
+    physicalPadding: EdgeInsets.only(top: 141.0, bottom: 102.0),
+    heightCapped: false,
+  ),
+  (
+    name: 'height-capped',
+    surface: Size(360.0, 560.0),
+    physicalPadding: EdgeInsets.only(top: 72.0, bottom: 72.0),
+    heightCapped: true,
+  ),
+];
+
+/// Allows game state transitions that toggle the native wakelock in a widget test.
+void mockWakelock() {
+  const channel = 'dev.flutter.pigeon.wakelock_plus_platform_interface.WakelockPlusApi.toggle';
+  final messenger = TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
+  messenger.setMockMessageHandler(
+    channel,
+    (_) async => const StandardMessageCodec().encodeMessage([null]),
+  );
+  addTearDown(() => messenger.setMockMessageHandler(channel, null));
+}
+
+/// Checks width-filling or height-capped sizing in a portrait phone game layout.
+void expectCompactBoardLayout(
+  WidgetTester tester, {
+  required bool heightCapped,
+  double heightReserve = 180.0,
+}) {
+  final layout = tester.getRect(find.byType(GameLayout));
+  final board = tester.getRect(_anyBoard());
+  final heightCap = layout.height - heightReserve;
+  expect(heightCap < layout.width, heightCapped);
+  expect(board.size, Size.square(min(layout.width, heightCap)));
+  expect(board.center.dx, moreOrLessEquals(layout.center.dx));
+  expect(board.top, greaterThanOrEqualTo(layout.top));
+  expect(board.bottom, lessThanOrEqualTo(layout.bottom));
+  expect(tester.getRect(find.byType(SolidColorChessboardBackground)), board);
+}
+
+/// Preloads pieces before building a game for opt-in visual captures.
+Future<void> prepareLayoutGolden(WidgetTester tester) async {
+  if (const bool.fromEnvironment('LAYOUT_GOLDENS')) {
+    await tester.runAsync(
+      () => ChessgroundImages.instance.loadAll(PieceSet.cburnett.assets, devicePixelRatio: 3.0),
+    );
+  }
+}
+
+/// Opt-in renders only; paths are relative to each caller's test file.
+Future<void> expectLayoutGolden(Finder screen, String path) async {
+  if (const bool.fromEnvironment('LAYOUT_GOLDENS')) {
+    expect(ChessgroundImages.instance.isAllLoaded(PieceSet.cburnett.assets), isTrue);
+    await expectLater(
+      screen,
+      matchesGoldenFile('$path-${debugDefaultTargetPlatformOverride!.name}.png'),
+    );
+  }
+}
 
 /// Mocks a surface with a given size.
 class TestSurface extends StatelessWidget {
