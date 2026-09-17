@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
@@ -25,18 +24,15 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
+import 'package:material_ui/material_ui.dart';
 
-class CreateChallengeBottomSheet extends ConsumerStatefulWidget {
-  const CreateChallengeBottomSheet({this.user, this.positionFen});
-
-  final LightUser? user;
-  final String? positionFen;
-
+class const CreateChallengeBottomSheet({final LightUser? user, final String? positionFen})
+    extends ConsumerStatefulWidget {
   @override
   ConsumerState<CreateChallengeBottomSheet> createState() => _CreateChallengeBottomSheetState();
 }
 
-class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBottomSheet> {
+class _CreateChallengeBottomSheetState() extends ConsumerState<CreateChallengeBottomSheet> {
   Future<ChallengeDeclineReason?>? _pendingCorrespondenceChallenge;
   final _controller = TextEditingController();
 
@@ -320,9 +316,8 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
                                   // new GameScreen always runs build() and creates a fresh
                                   // challenge instead of showing the old GameCreatedState.
                                   ref.invalidate(gameScreenLoaderProvider(source));
-                                  Navigator.of(
-                                    context,
-                                  ).popUntil((route) => route is! ModalBottomSheetRoute);
+                                  Navigator.of(context)
+                                      .popUntil((route) => route is! ModalBottomSheetRoute);
                                   // Use pushAndRemoveUntil to clear any old GameScreen from
                                   // the navigation stack without removing unrelated routes.
                                   Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
@@ -351,9 +346,8 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
 
                               if (!context.mounted) return;
 
-                              Navigator.of(
-                                context,
-                              ).popUntil((route) => route is! ModalBottomSheetRoute);
+                              Navigator.of(context)
+                                  .popUntil((route) => route is! ModalBottomSheetRoute);
 
                               if (maybeDeclined != null) {
                                 ScaffoldMessenger.of(context).showSnackBar(
@@ -376,7 +370,10 @@ class _CreateChallengeBottomSheetState extends ConsumerState<CreateChallengeBott
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
                                               const Text(' — '),
-                                              UserFullNameWidget(user: widget.user),
+                                              Flexible(
+                                                fit: FlexFit.loose,
+                                                child: UserFullNameWidget(user: widget.user),
+                                              ),
                                             ],
                                           ),
                                         ),

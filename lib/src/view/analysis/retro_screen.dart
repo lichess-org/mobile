@@ -2,17 +2,16 @@ import 'dart:math' as math;
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:chessground/chessground.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/retro_controller.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
+import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -31,12 +30,9 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
+import 'package:material_ui/material_ui.dart';
 
-class RetroScreen extends ConsumerWidget {
-  const RetroScreen({required this.options, super.key});
-
-  final RetroOptions options;
-
+class const RetroScreen({required final RetroOptions options, super.key}) extends ConsumerWidget {
   static Route<dynamic> buildRoute(RetroOptions options) {
     return buildScreenRoute(screen: RetroScreen(options: options));
   }
@@ -71,7 +67,7 @@ class RetroScreen extends ConsumerWidget {
             actions: [
               if (value.isEngineAvailable(enginePrefs) == true)
                 EngineButton(
-                  filters: (id: value.evaluationContext.id, path: value.currentPath),
+                  filters: (context: value.evaluationContext, path: value.currentPath),
                   savedEval: value.currentNode.eval,
                   goDeeper: () => ref
                       .read(retroControllerProvider(options).notifier)
@@ -88,11 +84,7 @@ class RetroScreen extends ConsumerWidget {
   }
 }
 
-class _LoadingScreen extends StatelessWidget {
-  const _LoadingScreen({this.serverAnalysisProgress});
-
-  final double? serverAnalysisProgress;
-
+class const _LoadingScreen({final double? serverAnalysisProgress}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -114,11 +106,7 @@ class _LoadingScreen extends StatelessWidget {
   }
 }
 
-class _RetroScreen extends ConsumerWidget {
-  const _RetroScreen(this.options);
-
-  final RetroOptions options;
-
+class const _RetroScreen(final RetroOptions options) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(retroControllerProvider(options)).requireValue;
@@ -155,16 +143,16 @@ class _RetroScreen extends ConsumerWidget {
   }
 }
 
-class RetroAnalysisBoard extends AnalysisBoard {
-  const RetroAnalysisBoard(this.options, {required super.boardSize, super.boardRadius});
-
-  final RetroOptions options;
-
+class const RetroAnalysisBoard(
+  final RetroOptions options, {
+  required super.boardSize,
+  super.boardRadius,
+}) extends AnalysisBoard {
   @override
   ConsumerState<RetroAnalysisBoard> createState() => _RetroAnalysisBoardState();
 }
 
-class _RetroAnalysisBoardState
+class _RetroAnalysisBoardState()
     extends AnalysisBoardState<RetroAnalysisBoard, RetroState, AnalysisPrefs> {
   @override
   RetroState? readCurrentState() => ref.read(retroControllerProvider(widget.options)).value;
@@ -198,7 +186,7 @@ class _RetroAnalysisBoardState
 
   @override
   EngineEvaluationFilters get engineEvaluationFilters =>
-      (id: analysisState.evaluationContext.id, path: analysisState.currentPath);
+      (context: analysisState.evaluationContext, path: analysisState.currentPath);
 
   @override
   String computeFen(RetroState state) => state.currentPosition.board.fen;
@@ -220,11 +208,7 @@ class _RetroAnalysisBoardState
   }
 }
 
-class _BottomBar extends ConsumerWidget {
-  const _BottomBar(this.options);
-
-  final RetroOptions options;
-
+class const _BottomBar(final RetroOptions options) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(retroControllerProvider(options)).requireValue;
@@ -295,11 +279,7 @@ class _BottomBar extends ConsumerWidget {
   }
 }
 
-class _FeedbackWidget extends ConsumerWidget {
-  const _FeedbackWidget(this.options);
-
-  final RetroOptions options;
-
+class const _FeedbackWidget(final RetroOptions options) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(retroControllerProvider(options)).requireValue;
@@ -374,11 +354,7 @@ String _branchMoveToString(ViewBranch branch) {
   return '${(branch.position.ply / 2).ceil()}${branch.position.turn == Side.black ? '.' : '...'} ${branch.sanMove.san}$nag';
 }
 
-class _RetroMenu extends ConsumerWidget {
-  const _RetroMenu({required this.options});
-
-  final RetroOptions options;
-
+class const _RetroMenu({required final RetroOptions options}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ContextMenuIconButton(

@@ -1,12 +1,12 @@
 import 'dart:math';
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_federation.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -18,11 +18,13 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_team_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/progression_widget.dart';
 import 'package:lichess_mobile/src/widgets/side_indicator.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:share_plus/share_plus.dart';
 
 final broadcastTournamentIdProvider = FutureProvider.autoDispose
@@ -42,17 +44,11 @@ int tournamentReferenceYear(BroadcastTournament tournament) {
   return (dates.endsAt ?? dates.startsAt).year;
 }
 
-class BroadcastPlayerResultsScreenLoading extends ConsumerWidget {
-  final BroadcastRoundId roundId;
-  final BroadcastPlayer? player;
-  final String playerId;
-
-  const BroadcastPlayerResultsScreenLoading({
-    required this.roundId,
-    this.player,
-    required this.playerId,
-  });
-
+class const BroadcastPlayerResultsScreenLoading({
+  required final BroadcastRoundId roundId,
+  final BroadcastPlayer? player,
+  required final String playerId,
+}) extends ConsumerWidget {
   static Route<dynamic> buildRoute(
     BroadcastRoundId roundId,
     String playerId, {
@@ -89,17 +85,11 @@ class BroadcastPlayerResultsScreenLoading extends ConsumerWidget {
   }
 }
 
-class BroadcastPlayerResultsScreen extends ConsumerWidget {
-  final BroadcastTournamentId tournamentId;
-  final BroadcastPlayer? player;
-  final String playerId;
-
-  const BroadcastPlayerResultsScreen({
-    required this.tournamentId,
-    this.player,
-    required this.playerId,
-  });
-
+class const BroadcastPlayerResultsScreen({
+  required final BroadcastTournamentId tournamentId,
+  final BroadcastPlayer? player,
+  required final String playerId,
+}) extends ConsumerWidget {
   static Route<dynamic> buildRoute(
     BroadcastTournamentId tournamentId,
     BroadcastPlayer player,
@@ -125,12 +115,18 @@ class BroadcastPlayerResultsScreen extends ConsumerWidget {
           _ => null,
         };
 
+    final playerResults = asyncData.value?.$1;
+    final fideId = playerResults?.playerWithOverallResult.player.fideId;
+    final isFollowing = playerResults?.isFollowing;
+
     return PlatformScaffold(
       appBar: PlatformAppBar(
         title: displayPlayer != null
             ? BroadcastPlayerWidget(player: displayPlayer, showFederation: false, showRating: false)
             : const SizedBox.shrink(),
         actions: [
+          if (fideId != null && isFollowing != null)
+            _FollowPlayerButton(fideId: fideId, isFollowing: isFollowing),
           if (asyncData case AsyncData(value: final data))
             SemanticIconButton(
               icon: const PlatformShareIcon(),
@@ -157,6 +153,48 @@ class BroadcastPlayerResultsScreen extends ConsumerWidget {
   }
 }
 
+/// App bar button to follow or unfollow a FIDE player.
+///
+/// The toggled value is kept locally so the button reacts immediately, without refetching the
+/// player. It is reverted if the request fails.
+class const _FollowPlayerButton({required final FideId fideId, required final bool isFollowing})
+    extends ConsumerStatefulWidget {
+  @override
+  ConsumerState<_FollowPlayerButton> createState() => _FollowPlayerButtonState();
+}
+
+class _FollowPlayerButtonState() extends ConsumerState<_FollowPlayerButton> {
+  bool? _isFollowing;
+
+  bool get _value => _isFollowing ?? widget.isFollowing;
+
+  Future<void> _toggle() async {
+    final newValue = !_value;
+    setState(() {
+      _isFollowing = newValue;
+    });
+
+    try {
+      await ref.read(broadcastRepositoryProvider).setFollowingPlayer(widget.fideId, newValue);
+    } catch (_) {
+      if (!mounted) return;
+      setState(() {
+        _isFollowing = !newValue;
+      });
+      showSnackBar(context, 'Could not update the follow status', type: SnackBarType.error);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SemanticIconButton(
+      icon: Icon(_value ? Icons.star : Icons.star_border),
+      semanticsLabel: _value ? context.l10n.unfollow : context.l10n.follow,
+      onPressed: _toggle,
+    );
+  }
+}
+
 final _playerAndTournamentProvider = FutureProvider.autoDispose
     .family<
       (BroadcastPlayerWithGameResults player, BroadcastTournament tournament),
@@ -169,12 +207,8 @@ final _playerAndTournamentProvider = FutureProvider.autoDispose
       return (player, tournament);
     });
 
-class _Body extends ConsumerWidget {
-  final BroadcastTournamentId tournamentId;
-  final String playerId;
-
-  const _Body(this.tournamentId, this.playerId);
-
+class const _Body(final BroadcastTournamentId tournamentId, final String playerId)
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     switch (ref.watch(_playerAndTournamentProvider((tournamentId, playerId)))) {
@@ -247,12 +281,10 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class _OverallStatPlayer extends StatelessWidget {
-  const _OverallStatPlayer({required this.playerWithGameResults, required this.tournament});
-
-  final BroadcastPlayerWithGameResults playerWithGameResults;
-  final BroadcastTournament tournament;
-
+class const _OverallStatPlayer({
+  required final BroadcastPlayerWithGameResults playerWithGameResults,
+  required final BroadcastTournament tournament,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final BroadcastPlayerWithGameResults(:playerWithOverallResult, :fideData, :games) =
@@ -306,9 +338,8 @@ class _OverallStatPlayer extends StatelessWidget {
                                 Flexible(
                                   child: Text(
                                     federationIdToName[federation]!,
-                                    style: Theme.of(
-                                      context,
-                                    ).textTheme.bodyLarge?.copyWith(height: 1.2),
+                                    style: Theme.of(context).textTheme.bodyLarge
+                                        ?.copyWith(height: 1.2),
                                     maxLines: 3,
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -323,14 +354,13 @@ class _OverallStatPlayer extends StatelessWidget {
                       GestureDetector(
                         onTap: () {
                           if (tournament.data.showTeamScores == true) {
-                            Navigator.of(
-                              context,
-                            ).push(BroadcastTeamScreen.buildRoute(tournament.data.id, team));
+                            Navigator.of(context)
+                                .push(BroadcastTeamScreen.buildRoute(tournament.data.id, team));
                           }
                         },
                         child: Row(
                           children: [
-                            const SizedBox(width: 100, child: Text('Team')),
+                            SizedBox(width: 100, child: Text(context.l10n.teamTeam)),
                             Expanded(
                               child: Text(team, style: Theme.of(context).textTheme.bodyLarge),
                             ),
@@ -445,12 +475,10 @@ class _OverallStatPlayer extends StatelessWidget {
   }
 }
 
-class _TieBreaksSection extends StatelessWidget {
-  const _TieBreaksSection(this.tieBreaks, this.player);
-
-  final BroadcastPlayerWithOverallResult player;
-  final IList<BroadcastTieBreakDetail> tieBreaks;
-
+class const _TieBreaksSection(
+  final IList<BroadcastTieBreakDetail> tieBreaks,
+  final BroadcastPlayerWithOverallResult player,
+) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -485,23 +513,14 @@ class _TieBreaksSection extends StatelessWidget {
   }
 }
 
-class _GameResultListTile extends StatelessWidget {
-  const _GameResultListTile({
-    required this.playerGameResult,
-    required this.tournament,
-    required this.index,
-    required this.indexWidth,
-    required this.showRatingDiff,
-    required this.showTCIcon,
-  });
-
-  final BroadcastPlayerGameResult playerGameResult;
-  final BroadcastTournament tournament;
-  final int index;
-  final double indexWidth;
-  final bool showRatingDiff;
-  final bool showTCIcon;
-
+class const _GameResultListTile({
+  required final BroadcastPlayerGameResult playerGameResult,
+  required final BroadcastTournament tournament,
+  required final int index,
+  required final double indexWidth,
+  required final bool showRatingDiff,
+  required final bool showTCIcon,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final BroadcastPlayerGameResult(
@@ -594,13 +613,8 @@ class _GameResultListTile extends StatelessWidget {
   }
 }
 
-class _StatCard extends StatelessWidget {
-  const _StatCard(this.stat, {this.value, this.child});
-
-  final String stat;
-  final String? value;
-  final Widget? child;
-
+class const _StatCard(final String stat, {final String? value, final Widget? child})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StatCard(

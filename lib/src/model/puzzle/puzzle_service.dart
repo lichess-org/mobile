@@ -32,11 +32,7 @@ final puzzleServiceFactoryProvider = Provider<PuzzleServiceFactory>((Ref ref) {
   return PuzzleServiceFactory(ref);
 }, name: 'PuzzleServiceFactoryProvider');
 
-class PuzzleServiceFactory {
-  PuzzleServiceFactory(this._ref);
-
-  final Ref _ref;
-
+class PuzzleServiceFactory(final Ref _ref) {
   Future<PuzzleService> call({required int queueLength}) async {
     return PuzzleService(
       _ref,
@@ -49,7 +45,7 @@ class PuzzleServiceFactory {
 
 @freezed
 sealed class PuzzleContext with _$PuzzleContext {
-  const factory PuzzleContext({
+  const factory({
     required Puzzle puzzle,
     required PuzzleAngle angle,
     required UserId? userId,
@@ -69,18 +65,12 @@ sealed class PuzzleContext with _$PuzzleContext {
   }) = _PuzzleContext;
 }
 
-class PuzzleService {
-  PuzzleService(
-    this._ref, {
-    required this.batchStorage,
-    required this.puzzleStorage,
-    required this.queueLength,
-  });
-
-  final Ref _ref;
-  final int queueLength;
-  final PuzzleBatchStorage batchStorage;
-  final PuzzleStorage puzzleStorage;
+class PuzzleService(
+  final Ref _ref, {
+  required final PuzzleBatchStorage batchStorage,
+  required final PuzzleStorage puzzleStorage,
+  required final int queueLength,
+}) {
   final Logger _log = Logger('PuzzleService');
 
   /// Loads the next puzzle from database and the glicko rating if available.
@@ -127,7 +117,7 @@ class PuzzleService {
         unsolved: data.unsolved.removeWhere((e) => e.puzzle.id == solution.id),
       ),
     );
-    return nextPuzzle(userId: userId, angle: angle);
+    return await nextPuzzle(userId: userId, angle: angle);
   }
 
   /// Clears the current puzzle batch, fetches a new one and returns the next puzzle.
@@ -136,7 +126,7 @@ class PuzzleService {
     PuzzleAngle angle = const PuzzleTheme(PuzzleThemeKey.mix),
   }) async {
     await batchStorage.delete(userId: userId, angle: angle);
-    return nextPuzzle(userId: userId, angle: angle);
+    return await nextPuzzle(userId: userId, angle: angle);
   }
 
   /// Deletes the puzzle batch of [angle] from the local storage.
@@ -183,16 +173,14 @@ class PuzzleService {
       final batchResponse = _ref.withClient(
         (client) => Result.capture(
           isSolving
-              ? PuzzleRepository(
-                  client,
-                ).solveBatch(nb: deficit, solved: solved, angle: angle, difficulty: difficulty)
-              : PuzzleRepository(
-                  client,
-                ).selectBatch(nb: deficit, angle: angle, difficulty: difficulty),
+              ? PuzzleRepository(client)
+                    .solveBatch(nb: deficit, solved: solved, angle: angle, difficulty: difficulty)
+              : PuzzleRepository(client)
+                    .selectBatch(nb: deficit, angle: angle, difficulty: difficulty),
         ),
       );
 
-      return batchResponse
+      return await batchResponse
           .fold(
             (value) => Result.value((
               PuzzleBatch(

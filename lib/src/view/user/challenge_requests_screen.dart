@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
@@ -10,10 +9,9 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/play/challenge_list_item.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:material_ui/material_ui.dart';
 
-class ChallengeRequestsScreen extends StatelessWidget {
-  const ChallengeRequestsScreen({super.key});
-
+class const ChallengeRequestsScreen({super.key}) extends StatelessWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const ChallengeRequestsScreen());
   }
@@ -22,12 +20,12 @@ class ChallengeRequestsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(context.l10n.preferencesNotifyChallenge)),
-      body: _Body(),
+      body: const _Body(),
     );
   }
 }
 
-class _Body extends ConsumerWidget {
+class const _Body() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final challengesAsync = ref.watch(challengesProvider);
@@ -63,12 +61,10 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class _ChallengeListItem extends ConsumerWidget {
-  const _ChallengeListItem({required this.challenge, required this.challengerUser});
-
-  final Challenge challenge;
-  final LightUser challengerUser;
-
+class const _ChallengeListItem({
+  required final Challenge challenge,
+  required final LightUser challengerUser,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final challengeService = ref.read(challengeServiceProvider);

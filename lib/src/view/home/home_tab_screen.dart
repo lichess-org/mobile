@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/experimental/mutation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/binding.dart';
@@ -19,7 +18,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
 import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
+import 'package:lichess_mobile/src/model/engine/weights_service.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/message/message_repository.dart';
 import 'package:lichess_mobile/src/model/relation/following_user.dart';
@@ -64,16 +63,14 @@ import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/server_outage_display.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// Number of cold app starts before hiding the home customization tip.
 const kColdAppStartsHideCustomizationTipThreshold = 5;
 
-class HomeTabScreen extends ConsumerStatefulWidget {
-  const HomeTabScreen({super.key, this.editModeEnabled = false});
-
-  final bool editModeEnabled;
-
+class const HomeTabScreen({super.key, final bool editModeEnabled = false})
+    extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute({bool editModeEnabled = false}) {
     return buildScreenRoute(screen: HomeTabScreen(editModeEnabled: editModeEnabled));
   }
@@ -82,11 +79,8 @@ class HomeTabScreen extends ConsumerStatefulWidget {
   ConsumerState<HomeTabScreen> createState() => _HomeScreenState();
 }
 
-class _IsEditingHome extends InheritedWidget {
-  const _IsEditingHome({required super.child, required this.isEditingWidgets});
-
-  final bool isEditingWidgets;
-
+class const _IsEditingHome({required super.child, required final bool isEditingWidgets})
+    extends InheritedWidget {
   @override
   bool updateShouldNotify(_IsEditingHome oldWidget) {
     return isEditingWidgets != oldWidget.isEditingWidgets;
@@ -106,7 +100,7 @@ class _IsEditingHome extends InheritedWidget {
 const String kWelcomeMessageShownKey = 'app_welcome_message_shown';
 const String kHideHomeWidgetCustomizationTip = 'app_hide_home_widget_customization_tip';
 
-class _HomeScreenState extends ConsumerState<HomeTabScreen> {
+class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
   ImageColorWorker? _worker;
   final _refreshKey = GlobalKey<RefreshIndicatorState>();
 
@@ -182,6 +176,17 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
             final followingAsync = authUser != null && hasServerContent
                 ? ref.watch(followingCarouselProvider)
                 : const AsyncValue.data(IListConst<FollowingUser>([]));
+
+            // Widgets whose content can be empty should not show a checkbox in
+            // edit mode when there is nothing to display next to it.
+            final hasFeaturedTournaments = featuredTournaments.maybeWhen(
+              data: (tournaments) => tournaments.any((t) => t.isSupportedInApp),
+              orElse: () => true,
+            );
+            final hasFollowing = followingAsync.maybeWhen(
+              data: (following) => following.isNotEmpty,
+              orElse: () => true,
+            );
 
             final isKidMode = ref.watch(kidModeProvider).value ?? false;
 
@@ -264,7 +269,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                     ),
                   _EditableWidget(
                     widget: HomeEditableWidget.featuredTournaments,
-                    shouldShow: hasServerContent,
+                    shouldShow: hasServerContent && hasFeaturedTournaments,
                     child: FeaturedTournamentsWidget(featured: featuredTournaments),
                   ),
                   if (_worker != null && !isKidMode)
@@ -295,7 +300,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                   ),
                 _EditableWidget(
                   widget: HomeEditableWidget.friends,
-                  shouldShow: authUser != null && hasServerContent,
+                  shouldShow: authUser != null && hasServerContent && hasFollowing,
                   child: FollowingCarousel(followingAsync),
                 ),
                 Row(
@@ -369,7 +374,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                 ),
                 _EditableWidget(
                   widget: HomeEditableWidget.friends,
-                  shouldShow: authUser != null && hasServerContent,
+                  shouldShow: authUser != null && hasServerContent && hasFollowing,
                   child: FollowingCarousel(followingAsync),
                 ),
                 _EditableWidget(
@@ -389,7 +394,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                 ),
                 _EditableWidget(
                   widget: HomeEditableWidget.featuredTournaments,
-                  shouldShow: hasServerContent,
+                  shouldShow: hasServerContent && hasFeaturedTournaments,
                   child: FeaturedTournamentsWidget(featured: featuredTournaments),
                 ),
                 if (_worker != null && !isKidMode)
@@ -507,9 +512,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
   }
 }
 
-class _LichessMessageBanner extends ConsumerWidget {
-  const _LichessMessageBanner();
-
+class const _LichessMessageBanner() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
@@ -538,7 +541,7 @@ class _LichessMessageBanner extends ConsumerWidget {
               ),
               const SizedBox(height: 4.0),
               Text(
-                context.l10n.clickHereToReadIt,
+                context.l10n.readTheMessage,
                 style: TextStyle(color: theme.colorScheme.onTertiaryContainer),
               ),
             ],
@@ -549,9 +552,7 @@ class _LichessMessageBanner extends ConsumerWidget {
   }
 }
 
-class _SignInWidget extends ConsumerWidget {
-  const _SignInWidget();
-
+class const _SignInWidget() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final signInState = ref.watch(signInMutation);
@@ -581,13 +582,11 @@ class _SignInWidget extends ConsumerWidget {
 ///   pairing matrix when the user is online.
 ///   This parameter is only active when the user is not in edit mode, as we
 ///   always want to display the widget in edit mode.
-class _EditableWidget extends ConsumerWidget {
-  const _EditableWidget({required this.child, required this.widget, required this.shouldShow});
-
-  final Widget child;
-  final HomeEditableWidget widget;
-  final bool shouldShow;
-
+class const _EditableWidget({
+  required final Widget child,
+  required final HomeEditableWidget widget,
+  required final bool shouldShow,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final disabledWidgets = ref.watch(homePreferencesProvider).disabledWidgets;
@@ -634,7 +633,7 @@ class _EditableWidget extends ConsumerWidget {
   }
 }
 
-class _IsDayTimeNotifier extends Notifier<bool> {
+class _IsDayTimeNotifier() extends Notifier<bool> {
   Timer? _timer;
 
   @override
@@ -658,9 +657,7 @@ final _isDayTimeProvider = NotifierProvider.autoDispose<_IsDayTimeNotifier, bool
   name: '_isDayTimeProvider',
 );
 
-class _GreetingWidget extends ConsumerWidget {
-  const _GreetingWidget();
-
+class const _GreetingWidget() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authUser = ref.watch(authControllerProvider);
@@ -713,9 +710,7 @@ class _GreetingWidget extends ConsumerWidget {
   }
 }
 
-class _TabletCreateAGameSection extends StatelessWidget {
-  const _TabletCreateAGameSection();
-
+class const _TabletCreateAGameSection() extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Column(
@@ -732,12 +727,10 @@ class _TabletCreateAGameSection extends StatelessWidget {
   }
 }
 
-class _BlogCarouselWidget extends ConsumerWidget {
-  const _BlogCarouselWidget(this.posts, this.worker);
-
-  final AsyncValue<IList<BlogPost>> posts;
-  final ImageColorWorker worker;
-
+class const _BlogCarouselWidget(
+  final AsyncValue<IList<BlogPost>> posts,
+  final ImageColorWorker worker,
+) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
@@ -765,13 +758,10 @@ class _BlogCarouselWidget extends ConsumerWidget {
   }
 }
 
-class _OngoingGamesCarousel extends ConsumerWidget {
-  const _OngoingGamesCarousel(this.games, {required this.maxGamesToShow});
-
-  final AsyncValue<IList<OngoingGame>> games;
-
-  final int maxGamesToShow;
-
+class const _OngoingGamesCarousel(
+  final AsyncValue<IList<OngoingGame>> games, {
+  required final int maxGamesToShow,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     switch (games) {
@@ -808,13 +798,10 @@ class _OngoingGamesCarousel extends ConsumerWidget {
   }
 }
 
-class _OfflineCorrespondenceCarousel extends ConsumerWidget {
-  const _OfflineCorrespondenceCarousel(this.offlineCorresGames, {required this.maxGamesToShow});
-
-  final int maxGamesToShow;
-
-  final AsyncValue<IList<(DateTime, OfflineCorrespondenceGame)>> offlineCorresGames;
-
+class const _OfflineCorrespondenceCarousel(
+  final AsyncValue<IList<(DateTime, OfflineCorrespondenceGame)>> offlineCorresGames, {
+  required final int maxGamesToShow,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return offlineCorresGames.maybeWhen(
@@ -857,12 +844,10 @@ class _OfflineCorrespondenceCarousel extends ConsumerWidget {
   }
 }
 
-class _OngoingGamesPreview extends ConsumerWidget {
-  const _OngoingGamesPreview(this.games, {required this.maxGamesToShow});
-
-  final AsyncValue<IList<OngoingGame>> games;
-  final int maxGamesToShow;
-
+class const _OngoingGamesPreview(
+  final AsyncValue<IList<OngoingGame>> games, {
+  required final int maxGamesToShow,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     switch (games) {
@@ -887,13 +872,10 @@ class _OngoingGamesPreview extends ConsumerWidget {
   }
 }
 
-class _OfflineCorrespondencePreview extends ConsumerWidget {
-  const _OfflineCorrespondencePreview(this.offlineCorresGames, {required this.maxGamesToShow});
-
-  final int maxGamesToShow;
-
-  final AsyncValue<IList<(DateTime, OfflineCorrespondenceGame)>> offlineCorresGames;
-
+class const _OfflineCorrespondencePreview(
+  final AsyncValue<IList<(DateTime, OfflineCorrespondenceGame)>> offlineCorresGames, {
+  required final int maxGamesToShow,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return offlineCorresGames.maybeWhen(
@@ -910,18 +892,12 @@ class _OfflineCorrespondencePreview extends ConsumerWidget {
   }
 }
 
-class PreviewGameList<T> extends StatelessWidget {
-  const PreviewGameList({
-    required this.list,
-    required this.builder,
-    required this.moreScreenRouteBuilder,
-    required this.maxGamesToShow,
-  });
-  final IList<T> list;
-  final Widget Function(T data) builder;
-  final Route<dynamic> Function(BuildContext) moreScreenRouteBuilder;
-  final int maxGamesToShow;
-
+class const PreviewGameList<T>({
+  required final IList<T> list,
+  required final Widget Function(T data) builder,
+  required final Route<dynamic> Function(BuildContext) moreScreenRouteBuilder,
+  required final int maxGamesToShow,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (list.isEmpty) {
@@ -948,9 +924,7 @@ class PreviewGameList<T> extends StatelessWidget {
   }
 }
 
-class _ChallengeScreenButton extends ConsumerWidget {
-  const _ChallengeScreenButton();
-
+class const _ChallengeScreenButton() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authUser = ref.watch(authControllerProvider);
@@ -986,13 +960,8 @@ class _ChallengeScreenButton extends ConsumerWidget {
   }
 }
 
-class _TipCard extends StatelessWidget {
-  const _TipCard({required this.content, required this.actions});
-
-  final Widget content;
-
-  final List<Widget> actions;
-
+class const _TipCard({required final Widget content, required final List<Widget> actions})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -1016,14 +985,12 @@ class _TipCard extends StatelessWidget {
   }
 }
 
-class _WelcomeMessageCard extends StatefulWidget {
-  const _WelcomeMessageCard();
-
+class const _WelcomeMessageCard() extends StatefulWidget {
   @override
   State<_WelcomeMessageCard> createState() => _WelcomeMessageCardState();
 }
 
-class _WelcomeMessageCardState extends State<_WelcomeMessageCard> {
+class _WelcomeMessageCardState() extends State<_WelcomeMessageCard> {
   bool _shouldDisplay() {
     return LichessBinding.instance.sharedPreferences.getBool(kWelcomeMessageShownKey) != true;
   }
@@ -1056,21 +1023,19 @@ class _WelcomeMessageCardState extends State<_WelcomeMessageCard> {
   }
 }
 
-class _NNUEFilesOutdatedTip extends ConsumerStatefulWidget {
-  const _NNUEFilesOutdatedTip();
-
+class const _NNUEFilesOutdatedTip() extends ConsumerStatefulWidget {
   @override
   ConsumerState<_NNUEFilesOutdatedTip> createState() => _NNUEFilesOutdatedTipState();
 }
 
-class _NNUEFilesOutdatedTipState extends ConsumerState<_NNUEFilesOutdatedTip> {
+class _NNUEFilesOutdatedTipState() extends ConsumerState<_NNUEFilesOutdatedTip> {
   bool _openedSettings = false;
   late Future<bool> _checkNNUEFilesFuture;
 
   @override
   void initState() {
     super.initState();
-    _checkNNUEFilesFuture = ref.read(nnueServiceProvider).hasOutdatedNNUEFiles();
+    _checkNNUEFilesFuture = ref.read(stockfishNnueServiceProvider).hasOutdatedNNUEFiles();
   }
 
   @override
@@ -1080,8 +1045,8 @@ class _NNUEFilesOutdatedTipState extends ConsumerState<_NNUEFilesOutdatedTip> {
       return const SizedBox.shrink();
     }
 
-    final nnueService = ref.watch(nnueServiceProvider);
-    if (nnueService.isDownloadingNNUEFiles) {
+    final nnueService = ref.watch(stockfishNnueServiceProvider);
+    if (nnueService.isDownloadingNNUEFile) {
       return const SizedBox.shrink();
     }
 
@@ -1111,7 +1076,7 @@ class _NNUEFilesOutdatedTipState extends ConsumerState<_NNUEFilesOutdatedTip> {
                 const Flexible(
                   child: Text(
                     // TODO l10n
-                    'New Stockfish version available! Go to the settings to download the updated NNUE files.',
+                    'New Stockfish version available! Go to the settings to download the updated NNUE file.',
                   ),
                 ),
               ],
@@ -1138,14 +1103,12 @@ class _NNUEFilesOutdatedTipState extends ConsumerState<_NNUEFilesOutdatedTip> {
   }
 }
 
-class _HomeCustomizationTip extends StatefulWidget {
-  const _HomeCustomizationTip();
-
+class const _HomeCustomizationTip() extends StatefulWidget {
   @override
   State<_HomeCustomizationTip> createState() => _HomeCustomizationTipState();
 }
 
-class _HomeCustomizationTipState extends State<_HomeCustomizationTip> {
+class _HomeCustomizationTipState() extends State<_HomeCustomizationTip> {
   bool _shouldDisplayHomeWidgetCustomizationTip() {
     final prefs = LichessBinding.instance.sharedPreferences;
 

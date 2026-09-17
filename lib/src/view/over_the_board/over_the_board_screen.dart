@@ -2,9 +2,8 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:chessground/chessground.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
@@ -32,16 +31,16 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
+import 'package:material_ui/material_ui.dart';
 
-class OverTheBoardScreen extends StatelessWidget {
-  const OverTheBoardScreen({this.initialFen, this.initialVariant, super.key});
-
+class const OverTheBoardScreen({
   /// Optional initial FEN to start the game from a custom position.
-  final String? initialFen;
+  final String? initialFen,
 
   /// Initial variant to be preselected in the "New Game" dialog.
-  final Variant? initialVariant;
-
+  final Variant? initialVariant,
+  super.key,
+}) extends StatelessWidget {
   static Route<void> buildRoute({Variant? initialVariant, String? initialFen}) {
     return buildScreenRoute(
       screen: OverTheBoardScreen(initialVariant: initialVariant, initialFen: initialFen),
@@ -66,18 +65,13 @@ class OverTheBoardScreen extends StatelessWidget {
   }
 }
 
-class _Body extends ConsumerStatefulWidget {
-  const _Body({required this.initialVariant, this.initialFen});
-
-  final Variant initialVariant;
-
-  final String? initialFen;
-
+class const _Body({required final Variant initialVariant, final String? initialFen})
+    extends ConsumerStatefulWidget {
   @override
   ConsumerState<_Body> createState() => _BodyState();
 }
 
-class _BodyState extends ConsumerState<_Body> {
+class _BodyState() extends ConsumerState<_Body> {
   final _boardKey = GlobalKey(debugLabel: 'boardOnOverTheBoardScreen');
 
   Side orientation = Side.white;
@@ -101,7 +95,9 @@ class _BodyState extends ConsumerState<_Body> {
 
       final ongoingGame = await ref.read(overTheBoardGameStorageProvider).fetchOngoingGame();
       if (ongoingGame != null && ongoingGame.game.steps.length > 1 && !ongoingGame.game.finished) {
-        ref.read(overTheBoardGameControllerProvider.notifier).loadOngoingGame(ongoingGame.game);
+        ref
+            .read(overTheBoardGameControllerProvider.notifier)
+            .loadOngoingGame(ongoingGame.game, ongoingGame.timeIncrement);
 
         ref
             .read(overTheBoardClockProvider.notifier)
@@ -191,6 +187,8 @@ class _BodyState extends ConsumerState<_Body> {
       }
     });
 
+    final blindfoldMode = overTheBoardPrefs.blindfoldMode;
+
     return WakelockWidget(
       child: PopScope(
         canPop: false,
@@ -267,12 +265,6 @@ class _BodyState extends ConsumerState<_Body> {
                       lastMove: gameState.lastMove,
                       onMove: (move, {viaDragAndDrop}) {
                         ref.read(overTheBoardGameControllerProvider.notifier).makeMove(move);
-                        // Don't restart the clock on a game-ending move, or it keeps running.
-                        if (!ref.read(overTheBoardGameControllerProvider).finished) {
-                          ref
-                              .read(overTheBoardClockProvider.notifier)
-                              .onMove(newSideToMove: gameState.turn.opposite);
-                        }
                       },
                     ),
                     moves: gameState.moves,
@@ -286,6 +278,7 @@ class _BodyState extends ConsumerState<_Body> {
                           ? PieceSet.symmetric.assets
                           : null,
                       enablePremoves: false,
+                      blindfoldMode: blindfoldMode,
                     ),
                     userActionsBar: _BottomBar(
                       onFlipBoard: () {
@@ -305,11 +298,7 @@ class _BodyState extends ConsumerState<_Body> {
   }
 }
 
-class _BottomBar extends ConsumerWidget {
-  const _BottomBar({required this.onFlipBoard});
-
-  final VoidCallback onFlipBoard;
-
+class const _BottomBar({required final VoidCallback onFlipBoard}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final gameState = ref.watch(overTheBoardGameControllerProvider);
@@ -459,12 +448,8 @@ class _BottomBar extends ConsumerWidget {
   }
 }
 
-class _Player extends ConsumerWidget {
-  const _Player({required this.clockKey, required this.side});
-
-  final Side side;
-  final Key clockKey;
-
+class const _Player({required final Key clockKey, required final Side side})
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final gameState = ref.watch(overTheBoardGameControllerProvider);

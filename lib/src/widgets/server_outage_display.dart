@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/network/server_status.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// Message shown in place of the content that needs the lichess server, when
@@ -16,9 +16,7 @@ import 'package:url_launcher/url_launcher.dart';
 /// This is laid out as a plain column so it can either be embedded among other
 /// widgets, as on the home tab where offline content is kept around it, or fill
 /// a whole screen.
-class ServerOutageDisplay extends ConsumerWidget {
-  const ServerOutageDisplay({super.key});
-
+class const ServerOutageDisplay({super.key}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isDark = Theme.of(context).brightness == Brightness.dark;

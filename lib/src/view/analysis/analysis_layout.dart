@@ -1,6 +1,5 @@
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -11,6 +10,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/pockets.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// The height of the board header or footer in the analysis layout.
 const kAnalysisBoardHeaderOrFooterHeight = 26.0;
@@ -18,21 +18,21 @@ const kAnalysisBoardHeaderOrFooterHeight = 26.0;
 /// Scale factor for the small board in portrait orientation.
 const kSmallBoardScale = 0.8;
 
-typedef BoardBuilder =
-    Widget Function(BuildContext context, double boardSize, BorderRadius? boardRadius);
+typedef BoardBuilder = Widget Function(
+  BuildContext context,
+  double boardSize,
+  BorderRadius? boardRadius,
+);
 
 typedef EngineGaugeBuilder = Widget Function(BuildContext context);
 
-enum AnalysisTab {
+enum AnalysisTab(final IconData icon) {
   pgn(Icons.sell_outlined),
   explorer(Icons.explore),
   moves(LichessIcons.flow_cascade),
   summary(Icons.area_chart),
+  moveTimes(Icons.punch_clock),
   conditionalPremoves(Icons.save);
-
-  const AnalysisTab(this.icon);
-
-  final IconData icon;
 
   String l10n(AppLocalizations l10n) {
     switch (this) {
@@ -44,6 +44,8 @@ enum AnalysisTab {
         return l10n.movesPlayed;
       case AnalysisTab.summary:
         return l10n.computerAnalysis;
+      case AnalysisTab.moveTimes:
+        return l10n.moveTimes;
       case AnalysisTab.conditionalPremoves:
         return l10n.conditionalPremoves;
     }
@@ -59,76 +61,60 @@ enum AnalysisTab {
 ///
 /// The length of the [children] list must match the [tabController]'s
 /// [TabController.length] and the length of the [AppBarAnalysisTabIndicator.tabs]
-class AnalysisLayout extends ConsumerWidget {
-  const AnalysisLayout({
-    this.tabController,
-    this.tabs,
-    required this.boardBuilder,
-    required this.children,
-    required this.pov,
-    required this.sideToMove,
-    this.boardHeader,
-    this.boardFooter,
-    this.engineGaugeBuilder,
-    this.engineLines,
-    this.bottomBar,
-    this.smallBoard = false,
-    this.pockets,
-    super.key,
-  });
-
+class const AnalysisLayout({
   /// The tab controller for the tab view.
-  final TabController? tabController;
+  final TabController? tabController,
 
   /// If non-null, a tab indicator bar will be shown above the tab view.
-  final List<AnalysisTab>? tabs;
+  final List<AnalysisTab>? tabs,
 
   /// The builder for the board widget.
-  final BoardBuilder boardBuilder;
-
-  /// The side the board is displayed from.
-  final Side pov;
-
-  /// The side to move. In crazyhouse, this enables the [PocketsMenu] of this side.
-  final Side? sideToMove;
-
-  /// A widget to show above the board.
-  ///
-  /// The widget will included in a parent container with a height of
-  /// [kAnalysisBoardHeaderOrFooterHeight].
-  final Widget? boardHeader;
-
-  /// A widget to show below the board.
-  ///
-  /// The widget will included in a parent container with a height of
-  /// [kAnalysisBoardHeaderOrFooterHeight].
-  final Widget? boardFooter;
+  required final BoardBuilder boardBuilder,
 
   /// The children of the tab view.
   ///
   /// The length of this list must match the [tabController]'s [TabController.length]
   /// and the length of the [tabs] list.
-  final List<Widget> children;
+  required final List<Widget> children,
+
+  /// The side the board is displayed from.
+  required final Side pov,
+
+  /// The side to move. In crazyhouse, this enables the [PocketsMenu] of this side.
+  required final Side? sideToMove,
+
+  /// A widget to show above the board.
+  ///
+  /// The widget will included in a parent container with a height of
+  /// [kAnalysisBoardHeaderOrFooterHeight].
+  final Widget? boardHeader,
+
+  /// A widget to show below the board.
+  ///
+  /// The widget will included in a parent container with a height of
+  /// [kAnalysisBoardHeaderOrFooterHeight].
+  final Widget? boardFooter,
 
   /// A builder for the engine gauge widget.
-  final EngineGaugeBuilder? engineGaugeBuilder;
+  final EngineGaugeBuilder? engineGaugeBuilder,
 
   /// A widget to show below the engine gauge, typically the engine lines.
-  final Widget? engineLines;
+  final Widget? engineLines,
 
   /// A widget to show at the bottom of the screen.
-  final Widget? bottomBar;
+  final Widget? bottomBar,
 
   /// If true, the board is displayed in a small size on portrait orientation.
   ///
   /// This is `false` by default.
-  final bool smallBoard;
+  final bool smallBoard = false,
 
   /// Current state of the pockets, in variants like crazyhouse.
   ///
   /// If not null, will render a [PocketsMenu] for each player.
-  final Pockets? pockets;
-
+  final Pockets? pockets,
+  super.key,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Column(
@@ -237,7 +223,7 @@ class AnalysisLayout extends ConsumerWidget {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              if (engineLines != null) engineLines!,
+                              ?engineLines,
                               if (pockets != null)
                                 Align(
                                   alignment: Alignment.center,
@@ -306,7 +292,7 @@ class AnalysisLayout extends ConsumerWidget {
                     mainAxisSize: MainAxisSize.max,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      if (engineLines != null) engineLines!,
+                      ?engineLines,
                       Padding(
                         padding: isTablet
                             ? const EdgeInsets.all(kTabletBoardTableSidePadding)
@@ -408,19 +394,17 @@ class AnalysisLayout extends ConsumerWidget {
             ),
           ),
         ),
-        if (bottomBar != null) bottomBar!,
+        ?bottomBar,
       ],
     );
   }
 }
 
-class _AnalysisTabView extends StatelessWidget {
-  const _AnalysisTabView({required this.tabs, required this.controller, required this.children});
-
-  final List<AnalysisTab>? tabs;
-  final TabController? controller;
-  final List<Widget> children;
-
+class const _AnalysisTabView({
+  required final List<AnalysisTab>? tabs,
+  required final TabController? controller,
+  required final List<Widget> children,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const iconSize = 18.0;
@@ -434,9 +418,12 @@ class _AnalysisTabView extends StatelessWidget {
               controller: controller,
               tabs: tabs!
                   .map(
-                    (tab) => Tab(
-                      height: iconSize + 8.0,
-                      icon: Icon(tab.icon, size: iconSize, semanticLabel: tab.l10n(context.l10n)),
+                    (tab) => Tooltip(
+                      message: tab.l10n(context.l10n),
+                      child: Tab(
+                        height: iconSize + 8.0,
+                        icon: Icon(tab.icon, size: iconSize, semanticLabel: tab.l10n(context.l10n)),
+                      ),
                     ),
                   )
                   .toList(),

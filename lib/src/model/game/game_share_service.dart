@@ -15,11 +15,7 @@ final gameShareServiceProvider = Provider<GameShareService>((Ref ref) {
   return GameShareService(ref);
 }, name: 'GameShareServiceProvider');
 
-class GameShareService {
-  GameShareService(this._ref);
-
-  final Ref _ref;
-
+class GameShareService(final Ref _ref) {
   /// Fetches the raw PGN of a game and launches the share dialog.
   Future<String> rawPgn(GameId id) async {
     final resp = await _ref.withClient(

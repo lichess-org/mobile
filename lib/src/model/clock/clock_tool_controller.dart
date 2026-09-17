@@ -10,7 +10,7 @@ import 'package:lichess_mobile/src/model/common/time_increment.dart';
 
 part 'clock_tool_controller.freezed.dart';
 
-enum ClockSide {
+enum ClockSide() {
   top,
   bottom;
 
@@ -19,7 +19,11 @@ enum ClockSide {
   Side get chessClockSide => this == ClockSide.top ? Side.black : Side.white;
 }
 
-enum ClockTimeControlType { increment, simpleDelay, bronsteinDelay }
+enum ClockTimeControlType() {
+  increment,
+  simpleDelay,
+  bronsteinDelay,
+}
 
 /// A provider for [ClockToolController].
 final clockToolControllerProvider = NotifierProvider.autoDispose<ClockToolController, ClockState>(
@@ -27,7 +31,7 @@ final clockToolControllerProvider = NotifierProvider.autoDispose<ClockToolContro
   name: 'ClockToolControllerProvider',
 );
 
-class ClockToolController extends Notifier<ClockState> {
+class ClockToolController() extends Notifier<ClockState> {
   late ChessClock _clock;
   final Map<ClockSide, bool> _hasPlayedLowTimeSound = {
     ClockSide.top: false,
@@ -141,35 +145,49 @@ class ClockToolController extends Notifier<ClockState> {
   }
 
   void updateOptionsCustom(TimeIncrement clock, ClockSide player) {
+    Duration topTime = state.options.topTime;
+    Duration bottomTime = state.options.bottomTime;
+    Duration topIncrement = state.options.topIncrement;
+    Duration bottomIncrement = state.options.bottomIncrement;
+    if (player == ClockSide.top) {
+      topIncrement = Duration(seconds: clock.increment);
+      // Update stored preferences only if the clock hasn't started yet
+      if (!state.started) {
+        topTime = Duration(seconds: clock.time);
+        ref.read(clockToolPreferencesProvider.notifier).setTopTimeIncrement(clock);
+      }
+      _clock.setTimes(
+        blackTime: Duration(seconds: clock.time),
+        whiteTime: state.bottomTime.value,
+      );
+    } else {
+      bottomIncrement = Duration(seconds: clock.increment);
+      // Update stored preferences only if the clock hasn't started yet
+      if (!state.started) {
+        bottomTime = Duration(seconds: clock.time);
+        ref.read(clockToolPreferencesProvider.notifier).setBottomTimeIncrement(clock);
+      }
+      _clock.setTimes(
+        blackTime: state.topTime.value,
+        whiteTime: Duration(seconds: clock.time),
+      );
+    }
+
     final options = ClockOptions(
       type: state.options.type,
-      topTime: player == ClockSide.top ? Duration(seconds: clock.time) : state.options.topTime,
-      bottomTime: player == ClockSide.bottom
-          ? Duration(seconds: clock.time)
-          : state.options.bottomTime,
-      topIncrement: player == ClockSide.top
-          ? Duration(seconds: clock.increment)
-          : state.options.topIncrement,
-      bottomIncrement: player == ClockSide.bottom
-          ? Duration(seconds: clock.increment)
-          : state.options.bottomIncrement,
+      topTime: topTime,
+      bottomTime: bottomTime,
+      topIncrement: topIncrement,
+      bottomIncrement: bottomIncrement,
     );
     _emergencyThresholds[player] = _calculateEmergencyThreshold(Duration(seconds: clock.time));
     _hasPlayedLowTimeSound[player] = false;
-    _clock.setTimes(blackTime: options.topTime, whiteTime: options.bottomTime);
-    state = ClockState(
+
+    state = state.copyWith(
       options: options,
       topTime: _clock.blackTime,
       bottomTime: _clock.whiteTime,
-      activeSide: state.activeSide,
-      clockOrientation: state.clockOrientation,
     );
-
-    if (player == ClockSide.top) {
-      ref.read(clockToolPreferencesProvider.notifier).setTopTimeIncrement(clock);
-    } else {
-      ref.read(clockToolPreferencesProvider.notifier).setBottomTimeIncrement(clock);
-    }
   }
 
   void updateClockType(ClockTimeControlType type) {
@@ -292,10 +310,8 @@ class ClockToolController extends Notifier<ClockState> {
 Duration _minDuration(Duration a, Duration b) => a < b ? a : b;
 
 @freezed
-sealed class ClockOptions with _$ClockOptions {
-  const ClockOptions._();
-
-  const factory ClockOptions({
+sealed class const ClockOptions._() with _$ClockOptions {
+  const factory({
     required ClockTimeControlType type,
     required Duration topTime,
     required Duration bottomTime,
@@ -303,7 +319,7 @@ sealed class ClockOptions with _$ClockOptions {
     required Duration bottomIncrement,
   }) = _ClockOptions;
 
-  factory ClockOptions.fromTimeIncrement(
+  factory fromTimeIncrement(
     TimeIncrement timeIncrement, {
     ClockTimeControlType type = ClockTimeControlType.increment,
   }) => ClockOptions(
@@ -314,16 +330,14 @@ sealed class ClockOptions with _$ClockOptions {
     bottomIncrement: Duration(seconds: timeIncrement.increment),
   );
 
-  factory ClockOptions.fromSeparateTimeIncrements(
-    TimeIncrement playerTop,
-    TimeIncrement playerBottom,
-  ) => ClockOptions(
-    type: ClockTimeControlType.increment,
-    topTime: Duration(seconds: playerTop.time),
-    bottomTime: Duration(seconds: playerBottom.time),
-    topIncrement: Duration(seconds: playerTop.increment),
-    bottomIncrement: Duration(seconds: playerBottom.increment),
-  );
+  factory fromSeparateTimeIncrements(TimeIncrement playerTop, TimeIncrement playerBottom) =>
+      ClockOptions(
+        type: ClockTimeControlType.increment,
+        topTime: Duration(seconds: playerTop.time),
+        bottomTime: Duration(seconds: playerBottom.time),
+        topIncrement: Duration(seconds: playerTop.increment),
+        bottomIncrement: Duration(seconds: playerBottom.increment),
+      );
 
   int getIncrement(ClockSide playerType) {
     return playerType == ClockSide.top ? topIncrement.inSeconds : bottomIncrement.inSeconds;
@@ -343,10 +357,8 @@ sealed class ClockOptions with _$ClockOptions {
 }
 
 @freezed
-sealed class ClockState with _$ClockState {
-  const ClockState._();
-
-  const factory ClockState({
+sealed class const ClockState._() with _$ClockState {
+  const factory({
     required ClockOptions options,
     required ValueListenable<Duration> topTime,
     required ValueListenable<Duration> bottomTime,
@@ -374,7 +386,7 @@ sealed class ClockState with _$ClockState {
   bool isFlagged(ClockSide playerType) => flagged == playerType;
 }
 
-enum ClockOrientation {
+enum ClockOrientation() {
   portraitUp,
   landscapeLeft,
   landscapeRight;

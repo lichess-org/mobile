@@ -1,6 +1,5 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_summary.dart';
@@ -8,6 +7,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:material_ui/material_ui.dart';
 
 part 'broadcast.freezed.dart';
 
@@ -15,7 +15,7 @@ typedef BroadcastList = ({IList<Broadcast> active, IList<Broadcast> past, int? n
 
 typedef BroadcastSearchList = ({IList<Broadcast> broadcasts, int? nextPage});
 
-enum BroadcastResult {
+enum BroadcastResult() {
   whiteWins,
   blackWins,
   draw,
@@ -66,10 +66,8 @@ enum BroadcastResult {
 }
 
 @freezed
-sealed class Broadcast with _$Broadcast {
-  const Broadcast._();
-
-  const factory Broadcast({
+sealed class const Broadcast._() with _$Broadcast {
+  const factory({
     required BroadcastTournamentData tour,
     required BroadcastRound round,
     required String? group,
@@ -87,7 +85,7 @@ sealed class Broadcast with _$Broadcast {
 
 @freezed
 sealed class BroadcastTournament with _$BroadcastTournament {
-  const factory BroadcastTournament({
+  const factory({
     required BroadcastTournamentData data,
     required IList<BroadcastRound> rounds,
     required BroadcastRoundId defaultRoundId,
@@ -98,7 +96,7 @@ sealed class BroadcastTournament with _$BroadcastTournament {
 
 @freezed
 sealed class BroadcastTournamentData with _$BroadcastTournamentData {
-  const factory BroadcastTournamentData({
+  const factory({
     required BroadcastTournamentId id,
     required String name,
     required String slug,
@@ -156,7 +154,7 @@ String resultString(BroadcastCustomScoring? customScoring, Side side, BroadcastR
 
 @freezed
 sealed class BroadcastRound with _$BroadcastRound {
-  const factory BroadcastRound({
+  const factory({
     required BroadcastRoundId id,
     required String name,
     required String slug,
@@ -165,6 +163,7 @@ sealed class BroadcastRound with _$BroadcastRound {
     required DateTime? finishedAt,
     required bool startsAfterPrevious,
     required BroadcastCustomScoring? customScoring,
+    String? pinnedComment,
   }) = _BroadcastRound;
 }
 
@@ -179,15 +178,18 @@ typedef BroadcastRoundResponse = ({
   BroadcastRound round,
   BroadcastRoundGames games,
   BroadcastPhotos? photos,
+
+  /// Whether the user is subscribed to the tournament this round belongs to.
+  ///
+  /// `null` when the user is not logged in.
+  bool? isSubscribed,
 });
 
 typedef BroadcastRoundGames = IMap<BroadcastGameId, BroadcastGame>;
 
 @freezed
-sealed class BroadcastGame with _$BroadcastGame {
-  const BroadcastGame._();
-
-  const factory BroadcastGame({
+sealed class const BroadcastGame._() with _$BroadcastGame {
+  const factory({
     required BroadcastGameId id,
     required IMap<Side, BroadcastPlayerWithClock> players,
     required String fen,
@@ -209,15 +211,14 @@ sealed class BroadcastGame with _$BroadcastGame {
 typedef BroadcastGamePgnWithAnalysisSummary = ({String pgn, AnalysisSummary? analysisSummary});
 
 @freezed
-sealed class BroadcastPlayer with _$BroadcastPlayer {
-  const BroadcastPlayer._();
-
-  const factory BroadcastPlayer({
+sealed class const BroadcastPlayer._() with _$BroadcastPlayer {
+  const factory({
     required String? name,
     required String? title,
     required int? rating,
     required String? federation,
     required FideId? fideId,
+    required String? team,
   }) = _BroadcastPlayer;
 
   String? get id => (fideId != null) ? fideId.toString() : name;
@@ -227,15 +228,13 @@ sealed class BroadcastPlayer with _$BroadcastPlayer {
 
 @freezed
 sealed class BroadcastPlayerWithClock with _$BroadcastPlayerWithClock {
-  const factory BroadcastPlayerWithClock({
-    required BroadcastPlayer player,
-    required Duration? clock,
-  }) = _BroadcastPlayerWithClock;
+  const factory({required BroadcastPlayer player, required Duration? clock}) =
+      _BroadcastPlayerWithClock;
 }
 
 @freezed
 sealed class BroadcastPlayerWithOverallResult with _$BroadcastPlayerWithOverallResult {
-  const factory BroadcastPlayerWithOverallResult({
+  const factory({
     required BroadcastPlayer player,
     required int played,
     required double? score,
@@ -252,7 +251,7 @@ typedef BroadcastTieBreakDetail = ({String extendedCode, String description, dou
 
 typedef StatByFideTC = IMap<BroadcastFideTC, int>;
 
-enum BroadcastFideTC {
+enum BroadcastFideTC() {
   standard,
   rapid,
   blitz;
@@ -276,9 +275,14 @@ typedef BroadcastPlayerWithGameResults = ({
   BroadcastPlayerWithOverallResult playerWithOverallResult,
   BroadcastFideData fideData,
   IList<BroadcastPlayerGameResult> games,
+
+  /// Whether the user follows this FIDE player.
+  ///
+  /// `null` when the user is not logged in, or when the player is not a FIDE player.
+  bool? isFollowing,
 });
 
-enum BroadcastPoints {
+enum BroadcastPoints() {
   one,
   half,
   zero;
@@ -300,7 +304,7 @@ enum BroadcastPoints {
 
 @freezed
 sealed class BroadcastPlayerGameResult with _$BroadcastPlayerGameResult {
-  const factory BroadcastPlayerGameResult({
+  const factory({
     required BroadcastRoundId roundId,
     required BroadcastGameId gameId,
     required Side color,
@@ -313,22 +317,25 @@ sealed class BroadcastPlayerGameResult with _$BroadcastPlayerGameResult {
   }) = _BroadcastPlayerGameResult;
 }
 
-enum RoundStatus { live, finished, upcoming }
+enum RoundStatus() {
+  live,
+  finished,
+  upcoming,
+}
 
 @freezed
 sealed class BroadcastTeam with _$BroadcastTeam {
-  const factory BroadcastTeam({required String name, required double points}) = _BroadcastTeam;
+  const factory({required String name, required double points}) = _BroadcastTeam;
 }
 
 @freezed
 sealed class BroadcastTeamGame with _$BroadcastTeamGame {
-  const factory BroadcastTeamGame({required BroadcastGameId id, required Side pov}) =
-      _BroadcastTeamGame;
+  const factory({required BroadcastGameId id, required Side pov}) = _BroadcastTeamGame;
 }
 
 @freezed
 sealed class BroadcastTeamMatch with _$BroadcastTeamMatch {
-  const factory BroadcastTeamMatch({
+  const factory({
     required BroadcastTeam team1,
     required BroadcastTeam team2,
     required IList<BroadcastTeamGame> games,
@@ -337,7 +344,7 @@ sealed class BroadcastTeamMatch with _$BroadcastTeamMatch {
 
 @freezed
 sealed class BroadcastTeamStandingMatch with _$BroadcastTeamStandingMatch {
-  const factory BroadcastTeamStandingMatch({
+  const factory({
     required BroadcastRoundId roundId,
     required String opponent,
     required String? points,
@@ -348,7 +355,7 @@ sealed class BroadcastTeamStandingMatch with _$BroadcastTeamStandingMatch {
 
 @freezed
 sealed class BroadcastTeamStanding with _$BroadcastTeamStanding {
-  const factory BroadcastTeamStanding({
+  const factory({
     required String name,
     required double mp,
     required double gp,

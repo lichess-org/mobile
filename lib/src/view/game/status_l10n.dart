@@ -32,7 +32,7 @@ String gameStatusL10n(
           ? context.l10n.whiteLeftTheGame
           : context.l10n.blackLeftTheGame;
     case GameStatus.insufficientMaterialClaim:
-      return '${context.l10n.insufficientMaterial} • ${context.l10n.draw}';
+      return '${context.l10n.drawClaimed} • ${context.l10n.insufficientMaterial}';
     case GameStatus.draw:
       if (lastPosition.isInsufficientMaterial) {
         return '${context.l10n.insufficientMaterial} • ${context.l10n.draw}';
@@ -44,11 +44,11 @@ String gameStatusL10n(
     case GameStatus.outoftime:
       return winner == null
           ? lastPosition.turn == Side.white
-                ? '${context.l10n.whiteTimeOut} • ${context.l10n.draw}'
-                : '${context.l10n.blackTimeOut} • ${context.l10n.draw}'
+                ? '${context.l10n.whiteRanOutOfTime} • ${context.l10n.draw}'
+                : '${context.l10n.blackRanOutOfTime} • ${context.l10n.draw}'
           : winner == Side.black
-          ? context.l10n.whiteTimeOut
-          : context.l10n.blackTimeOut;
+          ? context.l10n.whiteRanOutOfTime
+          : context.l10n.blackRanOutOfTime;
     case GameStatus.noStart:
       return winner == Side.black ? context.l10n.whiteDidntMove : context.l10n.blackDidntMove;
     case GameStatus.unknownFinish:

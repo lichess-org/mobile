@@ -10,8 +10,9 @@ import 'package:lichess_mobile/src/model/analysis/common_analysis_prefs.dart';
 import 'package:lichess_mobile/src/model/analysis/common_analysis_state.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
+import 'package:lichess_mobile/src/model/engine/engine_utils.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
+import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/view/analysis/game_analysis_board.dart';
@@ -26,20 +27,18 @@ import 'package:lichess_mobile/src/widgets/pgn.dart';
 /// - [BroadcastAnalysisBoard]
 /// - [StudyAnalysisBoard]
 /// - [RetroAnalysisBoard]
-abstract class AnalysisBoard extends ConsumerStatefulWidget {
-  const AnalysisBoard({super.key, required this.boardSize, this.boardRadius});
-
-  final double boardSize;
-  final BorderRadiusGeometry? boardRadius;
-}
+abstract class const AnalysisBoard({
+  super.key,
+  required final double boardSize,
+  final BorderRadiusGeometry? boardRadius,
+}) extends ConsumerStatefulWidget;
 
 /// Abstract state class for analysis board widgets.
 abstract class AnalysisBoardState<
   T extends AnalysisBoard,
   AnalysisState extends CommonAnalysisState,
   AnalysisPrefs extends CommonAnalysisPrefs
->
-    extends ConsumerState<T> {
+>() extends ConsumerState<T> {
   AnalysisState get analysisState;
 
   AnalysisPrefs get analysisPrefs;

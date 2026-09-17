@@ -1,20 +1,15 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/study/study_controller.dart';
 import 'package:lichess_mobile/src/model/study/study_preferences.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/variations_bar.dart';
+import 'package:material_ui/material_ui.dart';
 
-class StudyTreeView extends ConsumerWidget {
-  const StudyTreeView(this.options, {required this.showTopDivider});
-
-  final StudyOptions options;
-
-  final bool showTopDivider;
-
+class const StudyTreeView(final StudyOptions options, {required final bool showTopDivider})
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final studyState = ref.watch(studyControllerProvider(options)).requireValue;

@@ -38,11 +38,7 @@ const kCorrespondenceStorageTable = 'correspondence_game';
 
 const kCorrespondenceStorageAnonId = '**anonymous**';
 
-class CorrespondenceGameStorage {
-  const CorrespondenceGameStorage(this._db, this.ref);
-  final Database _db;
-  final Ref ref;
-
+class const CorrespondenceGameStorage(final Database _db, final Ref ref) {
   /// Fetches all ongoing correspondence games, sorted by time left.
   Future<IList<(DateTime, OfflineCorrespondenceGame)>> fetchOngoingGames(UserId? userId) async {
     final list = await _db.query(

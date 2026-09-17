@@ -1,22 +1,19 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
+import 'package:material_ui/material_ui.dart';
 
-class UserListTile extends StatelessWidget {
-  const UserListTile._(
-    this.username,
-    this.title,
-    this.patronColor,
-    this.flair,
-    this.onTap,
-    this.userPerfs,
-  );
-
-  factory UserListTile.fromUser(User user, {VoidCallback? onTap}) {
+class const UserListTile._(
+  final String username,
+  final String? title,
+  final int? patronColor,
+  final String? flair,
+  final VoidCallback? onTap,
+  final IMap<Perf, UserPerf>? userPerfs,
+) extends StatelessWidget {
+  factory fromUser(User user, {VoidCallback? onTap}) {
     return UserListTile._(
       user.username,
       user.title,
@@ -27,17 +24,9 @@ class UserListTile extends StatelessWidget {
     );
   }
 
-  factory UserListTile.fromLightUser(LightUser user, {VoidCallback? onTap}) {
+  factory fromLightUser(LightUser user, {VoidCallback? onTap}) {
     return UserListTile._(user.name, user.title, user.patronColor, user.flair, onTap, null);
   }
-
-  final String? title;
-  final String username;
-  final String? flair;
-  final int? patronColor;
-  final VoidCallback? onTap;
-
-  final IMap<Perf, UserPerf>? userPerfs;
 
   @override
   Widget build(BuildContext context) {
@@ -57,26 +46,12 @@ class UserListTile extends StatelessWidget {
   }
 }
 
-class _UserRating extends StatelessWidget {
-  const _UserRating({required this.perfs});
-
-  final IMap<Perf, UserPerf> perfs;
-
+class const _UserRating({required final IMap<Perf, UserPerf> perfs}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    List<Perf> userPerfs = Perf.values
-        .where((element) {
-          final p = perfs[element];
-          return p != null && p.numberOfGamesOrRuns > 0 && p.ratingDeviation < kClueLessDeviation;
-        })
-        .toList(growable: false);
+    final userPerfs = perfs.sortedUserPerfs;
 
     if (userPerfs.isEmpty) return const SizedBox.shrink();
-
-    userPerfs.sort(
-      (p1, p2) => perfs[p1]!.numberOfGamesOrRuns.compareTo(perfs[p2]!.numberOfGamesOrRuns),
-    );
-    userPerfs = userPerfs.reversed.toList();
 
     final rating = perfs[userPerfs.first]?.rating.toString() ?? '?';
     final icon = userPerfs.first.icon;

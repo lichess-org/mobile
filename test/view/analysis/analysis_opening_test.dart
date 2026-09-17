@@ -1,5 +1,4 @@
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
@@ -7,6 +6,7 @@ import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../model/analysis/fake_opening_service.dart';
 import '../../test_provider_scope.dart';

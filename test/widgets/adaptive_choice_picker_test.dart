@@ -1,14 +1,30 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../test_helpers.dart';
 
-enum TestEnumLarge { one, two, three, four, five, six, seven, eight, nine, ten, eleven }
+enum TestEnumLarge() {
+  one,
+  two,
+  three,
+  four,
+  five,
+  six,
+  seven,
+  eight,
+  nine,
+  ten,
+  eleven,
+}
 
-enum TestEnumSmall { one, two, three }
+enum TestEnumSmall() {
+  one,
+  two,
+  three,
+}
 
 void main() {
   testWidgets('showChoicePicker call onSelectedItemChanged (large choices)', (

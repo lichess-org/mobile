@@ -31,8 +31,8 @@ PlayerAnalysis _playerAnalysisSummaryFromPick(RequiredPick pick) {
     inaccuracies: pick('inaccuracy').asIntOrThrow(),
     mistakes: pick('mistake').asIntOrThrow(),
     blunders: pick('blunder').asIntOrThrow(),
-    acpl: pick('acpl').asIntOrThrow(),
-    accuracy: pick('accuracy').asIntOrThrow(),
+    acpl: pick('acpl').asIntOrNull(),
+    accuracy: pick('accuracy').asIntOrNull(),
   );
 }
 

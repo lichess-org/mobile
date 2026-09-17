@@ -1,5 +1,4 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
@@ -10,33 +9,18 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/acpl_chart.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/game_summary_table.dart';
+import 'package:material_ui/material_ui.dart';
 
-class ServerAnalysisSummary extends ConsumerWidget {
-  const ServerAnalysisSummary({
-    required this.serverAnalysisSource,
-    required this.playersAnalysis,
-    required this.pgnHeaders,
-    required this.acplChartParams,
-    required this.onRequestServerAnalysis,
-    this.whiteUser,
-    this.blackUser,
-    super.key,
-  });
-
-  final ServerAnalysisSource? serverAnalysisSource;
-
-  final PlayersAnalysis? playersAnalysis;
-
-  final IMap<String, String> pgnHeaders;
-
-  final LightUser? whiteUser;
-
-  final LightUser? blackUser;
-
-  final AcplChartParams? acplChartParams;
-
-  final Future<void> Function() onRequestServerAnalysis;
-
+class const ServerAnalysisSummary({
+  required final ServerAnalysisSource? serverAnalysisSource,
+  required final PlayersAnalysis? playersAnalysis,
+  required final IMap<String, String> pgnHeaders,
+  required final AcplChartParams? acplChartParams,
+  required final Future<void> Function() onRequestServerAnalysis,
+  final LightUser? whiteUser,
+  final LightUser? blackUser,
+  super.key,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final analysisPrefs = ref.watch(analysisPreferencesProvider);
@@ -150,9 +134,7 @@ class ServerAnalysisSummary extends ConsumerWidget {
   }
 }
 
-class WaitingForServerAnalysis extends StatelessWidget {
-  const WaitingForServerAnalysis({super.key});
-
+class const WaitingForServerAnalysis({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(

@@ -10,25 +10,20 @@ const _tickDelay = Duration(milliseconds: 100);
 typedef _EmergencyState = ({bool shouldTriggerEmergencyCallback, DateTime? nextEmergency});
 
 /// A chess clock.
-class ChessClock {
-  ChessClock({
-    required Duration whiteTime,
-    required Duration blackTime,
-    this.emergencyThreshold,
-    this.onFlag,
-    this.onEmergency,
-  }) : _whiteTime = ValueNotifier(whiteTime),
-       _blackTime = ValueNotifier(blackTime),
-       _activeSide = Side.white;
+class ChessClock({
+  required Duration whiteTime,
+  required Duration blackTime,
 
   /// The threshold at which the clock will call [onEmergency] if provided.
-  final Duration? emergencyThreshold;
+  final Duration? emergencyThreshold,
 
   /// Callback when the clock reaches zero.
-  VoidCallback? onFlag;
+  var VoidCallback? onFlag,
 
   /// Called when one clock timers reaches the emergency threshold.
-  final void Function(Side activeSide)? onEmergency;
+  final void Function(Side activeSide)? onEmergency,
+}) {
+  this : _activeSide = Side.white;
 
   Timer? _timer;
   Timer? _startDelayTimer;
@@ -43,8 +38,8 @@ class ChessClock {
     nextEmergency: null,
   );
 
-  final ValueNotifier<Duration> _whiteTime;
-  final ValueNotifier<Duration> _blackTime;
+  final ValueNotifier<Duration> _whiteTime = ValueNotifier(whiteTime);
+  final ValueNotifier<Duration> _blackTime = ValueNotifier(blackTime);
   Side _activeSide;
 
   bool get isRunning {

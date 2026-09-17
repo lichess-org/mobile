@@ -1,6 +1,5 @@
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/study/study.dart';
@@ -19,6 +18,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/server_outage_display.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:material_ui/material_ui.dart';
 
 final _hotStudiesProvider = FutureProvider.autoDispose<IList<StudyPageItem>>((Ref ref) {
   return ref.withClientCacheFor(
@@ -53,9 +53,7 @@ final _myFavoriteStudiesLengthProvider = FutureProvider.autoDispose<int>((Ref re
   );
 });
 
-class LearnTabScreen extends ConsumerWidget {
-  const LearnTabScreen({super.key});
-
+class const LearnTabScreen({super.key}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return PopScope(
@@ -80,9 +78,7 @@ class LearnTabScreen extends ConsumerWidget {
   }
 }
 
-class _Body extends ConsumerWidget {
-  const _Body();
-
+class const _Body() extends ConsumerWidget {
   Future<void> _refreshData(WidgetRef ref) async {
     try {
       await Future.wait([

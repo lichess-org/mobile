@@ -1,7 +1,6 @@
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
@@ -30,6 +29,7 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/server_outage_display.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
+import 'package:material_ui/material_ui.dart';
 
 const kThumbnailImageSize = 40.0;
 
@@ -55,14 +55,12 @@ final featuredChannelsProvider = FutureProvider.autoDispose<IList<TvGameSnapshot
       .toIList();
 });
 
-class WatchTabScreen extends ConsumerStatefulWidget {
-  const WatchTabScreen({super.key});
-
+class const WatchTabScreen({super.key}) extends ConsumerStatefulWidget {
   @override
   _WatchScreenState createState() => _WatchScreenState();
 }
 
-class _WatchScreenState extends ConsumerState<WatchTabScreen> {
+class _WatchScreenState() extends ConsumerState<WatchTabScreen> {
   final _androidRefreshKey = GlobalKey<RefreshIndicatorState>();
 
   @override
@@ -131,20 +129,16 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
 
   Future<void> _refreshData() async {
     if (!mounted) return;
-    return _doRefreshDataForRef(ref);
+    return await _doRefreshDataForRef(ref);
   }
 }
 
-class _Body extends ConsumerStatefulWidget {
-  const _Body(this.orientation);
-
-  final Orientation orientation;
-
+class const _Body(final Orientation orientation) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_Body> createState() => _BodyState();
 }
 
-class _BodyState extends ConsumerState<_Body> {
+class _BodyState() extends ConsumerState<_Body> {
   ImageColorWorker? _worker;
 
   @override
@@ -212,12 +206,10 @@ Future<void> _doRefreshDataForRef(WidgetRef ref) async {
   }
 }
 
-class _BroadcastWidget extends ConsumerWidget {
-  const _BroadcastWidget(this.broadcastList, this.worker);
-
-  final AsyncValue<BroadcastList> broadcastList;
-  final ImageColorWorker worker;
-
+class const _BroadcastWidget(
+  final AsyncValue<BroadcastList> broadcastList,
+  final ImageColorWorker worker,
+) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
@@ -253,11 +245,8 @@ class _BroadcastWidget extends ConsumerWidget {
   }
 }
 
-class _WatchTvWidget extends ConsumerWidget {
-  final AsyncValue<IList<TvGameSnapshot>> featuredChannels;
-
-  const _WatchTvWidget(this.featuredChannels);
-
+class const _WatchTvWidget(final AsyncValue<IList<TvGameSnapshot>> featuredChannels)
+    extends ConsumerWidget {
   static const _handsetFeaturedChannelsSet = ISetConst({
     TvChannel.best,
     TvChannel.bullet,
@@ -335,11 +324,7 @@ class _WatchTvWidget extends ConsumerWidget {
   }
 }
 
-class _StreamerWidget extends ConsumerWidget {
-  final AsyncValue<IList<Streamer>> streamers;
-
-  const _StreamerWidget(this.streamers);
-
+class const _StreamerWidget(final AsyncValue<IList<Streamer>> streamers) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final numberOfItems = isTabletOrLarger(context) ? 10 : 5;

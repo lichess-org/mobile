@@ -1,6 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:flutter_riverpod/experimental/mutation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
@@ -26,15 +25,14 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// Account menu screen opened by [AccountMenuButton].
 ///
 /// On Android it is pushed as a full-screen page. On iOS it is presented
 /// inside a [CupertinoSheetRoute] with nested navigation.
-class AccountMenuScreen extends ConsumerStatefulWidget {
-  const AccountMenuScreen({super.key});
-
+class const AccountMenuScreen({super.key}) extends ConsumerStatefulWidget {
   static Route<void> buildRoute(BuildContext context) {
     if (Theme.of(context).platform == TargetPlatform.iOS) {
       return buildScreenRoute(screen: const AccountMenuScreen());
@@ -56,7 +54,9 @@ class AccountMenuScreen extends ConsumerStatefulWidget {
   ConsumerState<AccountMenuScreen> createState() => _AccountMenuScreenState();
 }
 
-class _AccountMenuScreenState extends ConsumerState<AccountMenuScreen> with WidgetsBindingObserver {
+class _AccountMenuScreenState()
+    extends ConsumerState<AccountMenuScreen>
+    with WidgetsBindingObserver {
   bool _errorLoadingFlair = false;
   bool _pendingKidModeRefresh = false;
 
@@ -304,14 +304,12 @@ class _AccountMenuScreenState extends ConsumerState<AccountMenuScreen> with Widg
 /// On Android opens [AccountMenuScreen] as a full-screen page sliding from the
 /// right. On iOS opens the same screen inside a [CupertinoSheetRoute] with
 /// nested navigation.
-class AccountMenuButton extends ConsumerStatefulWidget {
-  const AccountMenuButton({super.key});
-
+class const AccountMenuButton({super.key}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<AccountMenuButton> createState() => _AccountMenuButtonState();
 }
 
-class _AccountMenuButtonState extends ConsumerState<AccountMenuButton> {
+class _AccountMenuButtonState() extends ConsumerState<AccountMenuButton> {
   bool _errorLoadingFlair = false;
 
   static const _materialAnonIconSize = 30.0;
@@ -377,9 +375,7 @@ class _AccountMenuButtonState extends ConsumerState<AccountMenuButton> {
 }
 
 /// About screen with links to various lichess resources and legal information.
-class AboutScreen extends ConsumerWidget {
-  const AboutScreen({super.key});
-
+class const AboutScreen({super.key}) extends ConsumerWidget {
   static Route<void> buildRoute() {
     return buildScreenRoute(screen: const AboutScreen());
   }

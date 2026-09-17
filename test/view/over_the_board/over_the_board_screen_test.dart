@@ -1,10 +1,9 @@
 import 'dart:io';
 
 import 'package:chessground/chessground.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -21,6 +20,7 @@ import 'package:lichess_mobile/src/model/over_the_board/over_the_board_game_stor
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/over_the_board/over_the_board_screen.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../test_helpers.dart';
@@ -34,7 +34,7 @@ const _customFen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2
 // Black has no legal moves = stalemate = black wins in antichess.
 const _antichessStalemateFen = '8/p7/8/P7/8/8/8/8 w - - 0 1';
 
-class MockOverTheBoardGameStorage extends Mock implements OverTheBoardGameStorage {}
+class MockOverTheBoardGameStorage() extends Mock implements OverTheBoardGameStorage;
 
 void main() {
   registerFallbackValue(
@@ -119,7 +119,7 @@ void main() {
 
       // Now for game result dialog to show up
       await tester.pumpAndSettle(const Duration(milliseconds: 600));
-      expect(find.text('White time out • Black is victorious'), findsOneWidget);
+      expect(find.text('White ran out of time • Black is victorious'), findsOneWidget);
 
       await tester.tap(find.text('Rematch'));
       expect(activeClock(tester), null);
@@ -133,20 +133,20 @@ void main() {
       await playMove(tester, 'e2', 'e4');
       await playMove(tester, 'e7', 'e5');
 
-      await tester.tap(find.byTooltip('Pause'));
+      await tester.tap(findByTooltip('Pause'));
       await tester.pump();
 
       expect(activeClock(tester), null);
 
-      await tester.tap(find.byTooltip('Resume'));
+      await tester.tap(findByTooltip('Resume'));
       await tester.pump();
 
       expect(activeClock(tester), Side.white);
 
       // Going back a move should not unpause...
-      await tester.tap(find.byTooltip('Pause'));
+      await tester.tap(findByTooltip('Pause'));
       await tester.pump();
-      await tester.tap(find.byTooltip('Previous'));
+      await tester.tap(findByTooltip('Previous'));
       await tester.pump();
 
       expect(activeClock(tester), null);
@@ -244,24 +244,24 @@ void main() {
       await playMove(tester, 'e2', 'e4');
       await playMove(tester, 'e7', 'e5');
 
-      await tester.tap(find.byTooltip('Previous'));
+      await tester.tap(findByTooltip('Previous'));
       await tester.pumpAndSettle();
       expect(boardHasPiece(tester, Square.e7, Piece.blackPawn), isTrue);
 
       expect(activeClock(tester), Side.black);
 
-      await tester.tap(find.byTooltip('Next'));
+      await tester.tap(findByTooltip('Next'));
       await tester.pumpAndSettle();
       expect(boardHasPiece(tester, Square.e5, Piece.blackPawn), isTrue);
 
       expect(activeClock(tester), Side.white);
 
       // Go back all the way to the initial position
-      await tester.tap(find.byTooltip('Previous'));
+      await tester.tap(findByTooltip('Previous'));
       await tester.pumpAndSettle();
-      await tester.tap(find.byTooltip('Previous'));
+      await tester.tap(findByTooltip('Previous'));
       await tester.pumpAndSettle();
-      await tester.tap(find.byTooltip('Previous'));
+      await tester.tap(findByTooltip('Previous'));
       await tester.pumpAndSettle();
       expect(boardHasPiece(tester, Square.e2, Piece.whitePawn), isTrue);
       expect(boardHasPiece(tester, Square.e7, Piece.blackPawn), isTrue);
@@ -309,6 +309,46 @@ void main() {
       expect(findBlackClock(tester).timeLeft, greaterThan(time));
 
       expect(findWhiteClock(tester).timeLeft, lessThan(time));
+    });
+
+    testWidgets('Moves record the clock they were played on', (tester) async {
+      const time = Duration(minutes: 5);
+
+      await initOverTheBoardGame(tester, TimeIncrement(time.inSeconds, 3));
+
+      await playMove(tester, 'e2', 'e4');
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      await playMove(tester, 'e7', 'e5');
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+
+      final container = ProviderScope.containerOf(tester.element(find.byType(Chessboard)));
+      final game = container.read(overTheBoardGameControllerProvider).game;
+
+      final clocks = game.clocks;
+      expect(clocks, isNotNull);
+      expect(clocks!.length, 2);
+      // White's move is what starts the clock, so it costs white nothing — and, since the clock
+      // was not running, earns no increment either.
+      expect(clocks[0], time);
+      // Black thought for less than the increment it is given back.
+      expect(clocks[1], greaterThan(time));
+
+      // And they come out the other end as PGN clock comments.
+      expect(game.makePgn(), contains('[%clk '));
+      expect(game.makePgn(), contains('[TimeControl "300+3"]'));
+    });
+
+    testWidgets('Moves of an untimed game record no clock', (tester) async {
+      await initOverTheBoardGame(tester, const TimeIncrement.infinite());
+
+      await playMove(tester, 'e2', 'e4');
+      await tester.pumpAndSettle();
+
+      final container = ProviderScope.containerOf(tester.element(find.byType(Chessboard)));
+      final game = container.read(overTheBoardGameControllerProvider).game;
+
+      expect(game.clocks, isNull);
+      expect(game.makePgn(), isNot(contains('[%clk ')));
     });
 
     testWidgets('Loading saved game', (tester) async {
@@ -366,9 +406,9 @@ void main() {
             appBar: AppBar(title: const Text('Test OTB Screen')),
             body: FilledButton(
               child: const Text('OTB'),
-              onPressed: () => Navigator.of(
-                context,
-              ).push(buildScreenRoute<void>(screen: const OverTheBoardScreen())),
+              onPressed: () =>
+                  Navigator.of(context)
+                      .push(buildScreenRoute<void>(screen: const OverTheBoardScreen())),
             ),
           ),
         ),
@@ -402,7 +442,7 @@ void main() {
       expect(findBlackClock(tester).timeLeft, const Duration(minutes: 1));
 
       // Start white's clock
-      await tester.tap(find.byTooltip('Resume'));
+      await tester.tap(findByTooltip('Resume'));
       await tester.pump();
       expect(activeClock(tester), Side.white);
 
@@ -415,7 +455,15 @@ void main() {
         () => gameStorage.save(
           any(),
           timeIncrement: const TimeIncrement(5, 3),
-          whiteTimeLeft: const Duration(minutes: 2),
+          // White's clock was left running, so pausing it on the way out charges white the time
+          // that had run since the last reading.
+          whiteTimeLeft: any(
+            named: 'whiteTimeLeft',
+            that: allOf(
+              lessThan(const Duration(minutes: 2)),
+              greaterThan(const Duration(minutes: 1, seconds: 59)),
+            ),
+          ),
           blackTimeLeft: const Duration(minutes: 1),
         ),
       ).called(1);
@@ -630,7 +678,7 @@ void main() {
 
       // Now open the configure sheet again without an initialFen (normal new game).
       // The sheet must not crash and must default to Variant.standard.
-      await tester.tap(find.byTooltip('Menu'));
+      await tester.tap(findByTooltip('Menu'));
       await tester.pumpAndSettle();
       await tester.tap(find.text('New game'));
       await tester.pumpAndSettle();
@@ -743,6 +791,32 @@ void main() {
       expect(gameState.game.steps.length, 1);
       expect(boardHasPiece(tester, Square.e4, Piece.whitePawn), isTrue);
       expect(boardHasPiece(tester, Square.e5, Piece.blackPawn), isTrue);
+    });
+
+    testWidgets('Blindfold option is shown in display settings sheet', (tester) async {
+      final gameStorage = MockOverTheBoardGameStorage();
+      when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const OverTheBoardScreen(),
+        overrides: {
+          overTheBoardGameStorageProvider: overTheBoardGameStorageProvider.overrideWith(
+            (_) => gameStorage,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Play'));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byIcon(Icons.settings));
+      await tester.pumpAndSettle();
+
+      // Verify Blindfold setting tile is present in display settings bottom sheet
+      expect(find.text('Blindfold'), findsOneWidget);
     });
   });
 }

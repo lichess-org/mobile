@@ -1,12 +1,13 @@
+import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_round_controller.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -16,6 +17,7 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 // height of 1.0 is important because we need to determine the height of the text
@@ -25,26 +27,21 @@ const _kPlayerWidgetTextStyle = TextStyle(fontSize: 13, height: 1.0);
 const _kPlayerWidgetPadding = EdgeInsets.symmetric(vertical: 5.0);
 
 /// A tab that displays the live games of a broadcast round.
-class BroadcastBoardsTab extends ConsumerWidget {
-  const BroadcastBoardsTab({
-    required this.tournamentId,
-    required this.roundId,
-    required this.tournamentSlug,
-    required this.showOnlyOngoingGames,
-  });
-
-  final BroadcastTournamentId tournamentId;
-  final BroadcastRoundId roundId;
-  final String tournamentSlug;
-  final bool showOnlyOngoingGames;
-
+class const BroadcastBoardsTab({
+  required final BroadcastTournamentId tournamentId,
+  required final BroadcastRoundId roundId,
+  required final String tournamentSlug,
+  required final bool showOnlyOngoingGames,
+  required final String? teamFilter,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final round = ref.watch(broadcastRoundControllerProvider(roundId));
 
     return switch (round) {
-      AsyncData(:final value) =>
-        value.games.isEmpty
+      AsyncData(:final value) => (() {
+        final filteredGames = _filteredGames(value.games, showOnlyOngoingGames, teamFilter);
+        return value.games.isEmpty || filteredGames.isEmpty
             ? Padding(
                 padding: Styles.bodyPadding,
                 child: Column(
@@ -53,29 +50,50 @@ class BroadcastBoardsTab extends ConsumerWidget {
                   children: [
                     const Icon(Icons.info, size: 30),
                     const SizedBox(height: 8.0),
-                    Text(context.l10n.broadcastNoBoardsYet, textAlign: TextAlign.center),
+                    Text(
+                      value.games.isEmpty
+                          ? context.l10n.broadcastNoBoardsYet
+                          : 'No games matching filter criteria.',
+                      textAlign: TextAlign.center,
+                    ),
                   ],
                 ),
               )
             : BroadcastPreview(
-                games: showOnlyOngoingGames
-                    ? value.games.values.where((game) => game.isOngoing).toIList()
-                    : value.games.values.toIList(),
+                games: filteredGames,
                 tournamentId: tournamentId,
                 roundId: roundId,
                 title: value.round.name,
                 tournamentSlug: tournamentSlug,
                 roundSlug: value.round.slug,
                 customScoring: value.round.customScoring,
-              ),
+                pinnedComment: value.round.pinnedComment,
+                teamFilter: teamFilter,
+              );
+      })(),
       AsyncError(:final error) => Center(child: Text('Could not load broadcast: $error')),
       _ => const Center(child: CircularProgressIndicator.adaptive()),
     };
   }
+
+  IList<BroadcastGame> _filteredGames(
+    IMap<BroadcastGameId, BroadcastGame> games,
+    bool showOnlyOngoingGames,
+    String? teamFilter,
+  ) {
+    final ongoingFiltered = showOnlyOngoingGames
+        ? games.values.where((game) => game.isOngoing).toIList()
+        : games.values.toIList();
+    return teamFilter == null
+        ? ongoingFiltered
+        : ongoingFiltered
+              .where((game) => Side.values.any((s) => game.players[s]?.player.team == teamFilter))
+              .toIList();
+  }
 }
 
 class BroadcastPreview extends ConsumerStatefulWidget {
-  const BroadcastPreview({
+  const new({
     required this.tournamentId,
     required this.roundId,
     required this.games,
@@ -83,17 +101,21 @@ class BroadcastPreview extends ConsumerStatefulWidget {
     required this.tournamentSlug,
     required this.roundSlug,
     required this.customScoring,
+    required this.pinnedComment,
+    required this.teamFilter,
   });
 
   // A circular progress indicator is used instead of shimmers currently
-  const BroadcastPreview.loading()
+  const new loading()
     : tournamentId = const BroadcastTournamentId(''),
       roundId = const BroadcastRoundId(''),
       games = null,
       title = '',
       tournamentSlug = '',
       roundSlug = '',
-      customScoring = null;
+      customScoring = null,
+      pinnedComment = null,
+      teamFilter = null;
 
   final BroadcastTournamentId tournamentId;
   final BroadcastRoundId roundId;
@@ -102,11 +124,13 @@ class BroadcastPreview extends ConsumerStatefulWidget {
   final String tournamentSlug;
   final String roundSlug;
   final BroadcastCustomScoring? customScoring;
+  final String? pinnedComment;
+  final String? teamFilter;
   @override
   ConsumerState<BroadcastPreview> createState() => _BroadcastPreviewState();
 }
 
-class _BroadcastPreviewState extends ConsumerState<BroadcastPreview> {
+class _BroadcastPreviewState() extends ConsumerState<BroadcastPreview> {
   String _searchQuery = '';
   late final TextEditingController _searchController;
 
@@ -147,12 +171,23 @@ class _BroadcastPreviewState extends ConsumerState<BroadcastPreview> {
         ? widget.games
         : widget.games!.where((game) => _containsPlayer(game, _searchQuery)).toIList();
     final showSearchBar = widget.games != null && widget.games!.length > 6;
+    final hasComment = widget.pinnedComment != null && widget.pinnedComment!.isNotEmpty;
     final mediaQueryPadding = MediaQuery.paddingOf(context);
 
     return CustomScrollView(
       slivers: [
+        if (hasComment)
+          SliverSafeArea(
+            bottom: false,
+            sliver: SliverPadding(
+              padding: Styles.bodyPadding.copyWith(bottom: 0.0),
+              sliver: SliverToBoxAdapter(child: _PinnedCommentCard(text: widget.pinnedComment!)),
+            ),
+          ),
+
         if (showSearchBar)
           SliverSafeArea(
+            top: !hasComment,
             bottom: false,
             sliver: SliverPadding(
               padding: Styles.bodyPadding.copyWith(bottom: 0.0),
@@ -177,8 +212,8 @@ class _BroadcastPreviewState extends ConsumerState<BroadcastPreview> {
         SliverPadding(
           padding: Styles.bodyPadding.add(
             EdgeInsetsGeometry.only(
-              // top media query padding is already included in the SliverSafeArea above
-              top: showSearchBar ? 0.0 : mediaQueryPadding.top,
+              // top media query padding is already included in one of the SliverSafeArea above
+              top: hasComment || showSearchBar ? 0.0 : mediaQueryPadding.top,
               bottom: mediaQueryPadding.bottom,
             ),
           ),
@@ -213,6 +248,7 @@ class _BroadcastPreviewState extends ConsumerState<BroadcastPreview> {
                 boardWithMaybeEvalBarWidth: boardWithMaybeEvalBarWidth,
                 playingSide: playingSide,
                 customScoring: widget.customScoring,
+                teamFilter: widget.teamFilter,
               );
             }, childCount: games == null ? numberLoadingBoards : games.length),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -229,42 +265,35 @@ class _BroadcastPreviewState extends ConsumerState<BroadcastPreview> {
   }
 }
 
-class ObservedBoardThumbnail extends ConsumerStatefulWidget {
-  const ObservedBoardThumbnail({
-    required this.roundId,
-    required this.game,
-    required this.title,
-    required this.tournamentId,
-    required this.tournamentSlug,
-    required this.roundSlug,
-    required this.showEvaluationGauge,
-    required this.boardSize,
-    required this.boardWithMaybeEvalBarWidth,
-    required this.playingSide,
-    required this.customScoring,
-  });
-
-  final BroadcastRoundId roundId;
-  final BroadcastGame game;
-  final String title;
-  final BroadcastTournamentId tournamentId;
-  final String tournamentSlug;
-  final String roundSlug;
-  final bool showEvaluationGauge;
-  final double boardSize;
-  final double boardWithMaybeEvalBarWidth;
-  final Side playingSide;
-  final BroadcastCustomScoring? customScoring;
-
+class const ObservedBoardThumbnail({
+  required final BroadcastRoundId roundId,
+  required final BroadcastGame game,
+  required final String title,
+  required final BroadcastTournamentId tournamentId,
+  required final String tournamentSlug,
+  required final String roundSlug,
+  required final bool showEvaluationGauge,
+  required final double boardSize,
+  required final double boardWithMaybeEvalBarWidth,
+  required final Side playingSide,
+  required final BroadcastCustomScoring? customScoring,
+  required final String? teamFilter,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<ObservedBoardThumbnail> createState() => _ObservedBoardThumbnailState();
 }
 
-class _ObservedBoardThumbnailState extends ConsumerState<ObservedBoardThumbnail> {
+class _ObservedBoardThumbnailState() extends ConsumerState<ObservedBoardThumbnail> {
   bool isBoardVisible = false;
 
   @override
   Widget build(BuildContext context) {
+    final orientation = widget.teamFilter != null
+        ? widget.game.players.entries
+                  .firstWhereOrNull((entry) => entry.value.player.team == widget.teamFilter)
+                  ?.key ??
+              Side.white
+        : Side.white;
     return VisibilityDetector(
       key: ValueKey(widget.game.id),
       onVisibilityChanged: (visibilityInfo) {
@@ -299,10 +328,11 @@ class _ObservedBoardThumbnailState extends ConsumerState<ObservedBoardThumbnail>
               tournamentSlug: widget.tournamentSlug,
               roundSlug: widget.roundSlug,
               title: widget.title,
+              initialPov: orientation,
             ),
           );
         },
-        orientation: Side.white,
+        orientation: orientation,
         fen: widget.game.fen,
         showEvaluationGauge: widget.showEvaluationGauge,
         whiteWinningChances: (widget.game.cp != null || widget.game.mate != null)
@@ -313,14 +343,14 @@ class _ObservedBoardThumbnailState extends ConsumerState<ObservedBoardThumbnail>
         header: _PlayerWidget(
           width: widget.boardWithMaybeEvalBarWidth,
           game: widget.game,
-          side: Side.black,
+          side: orientation.opposite,
           playingSide: widget.playingSide,
           customScoring: widget.customScoring,
         ),
         footer: _PlayerWidget(
           width: widget.boardWithMaybeEvalBarWidth,
           game: widget.game,
-          side: Side.white,
+          side: orientation,
           playingSide: widget.playingSide,
           customScoring: widget.customScoring,
         ),
@@ -329,11 +359,7 @@ class _ObservedBoardThumbnailState extends ConsumerState<ObservedBoardThumbnail>
   }
 }
 
-class _PlayerWidgetLoading extends StatelessWidget {
-  const _PlayerWidgetLoading({required this.width});
-
-  final double width;
-
+class const _PlayerWidgetLoading({required final double width}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -349,21 +375,13 @@ class _PlayerWidgetLoading extends StatelessWidget {
   }
 }
 
-class _PlayerWidget extends StatelessWidget {
-  const _PlayerWidget({
-    required this.width,
-    required this.game,
-    required this.side,
-    required this.playingSide,
-    required this.customScoring,
-  });
-
-  final BroadcastGame game;
-  final Side side;
-  final Side playingSide;
-  final double width;
-  final BroadcastCustomScoring? customScoring;
-
+class const _PlayerWidget({
+  required final double width,
+  required final BroadcastGame game,
+  required final Side side,
+  required final Side playingSide,
+  required final BroadcastCustomScoring? customScoring,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final playerWithClock = game.players[side]!;
@@ -386,10 +404,8 @@ class _PlayerWidget extends StatelessWidget {
               if (game.isOver)
                 Text(
                   resultString(customScoring, side, game.status),
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    fontWeight: .bold,
-                    color: game.status.colorFor(side, context),
-                  ),
+                  style: Theme.of(context).textTheme.bodySmall
+                      ?.copyWith(fontWeight: .bold, color: game.status.colorFor(side, context)),
                 )
               else if (clock != null)
                 CountdownClockBuilder(
@@ -416,4 +432,17 @@ class _PlayerWidget extends StatelessWidget {
 bool _containsPlayer(BroadcastGame game, String query) {
   final q = query.toLowerCase();
   return game.players.values.any((pwc) => pwc.player.name?.toLowerCase().contains(q) ?? false);
+}
+
+class const _PinnedCommentCard({required final String text}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: EdgeInsets.zero,
+      child: ListTile(
+        leading: const Icon(LichessIcons.radio_tower_lichess, size: 28),
+        title: Text(text, style: TextStyle(fontSize: _kPlayerWidgetTextStyle.fontSize)),
+      ),
+    );
+  }
 }

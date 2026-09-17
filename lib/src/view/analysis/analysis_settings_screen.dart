@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
@@ -10,12 +9,9 @@ import 'package:lichess_mobile/src/view/explorer/opening_explorer_settings.dart'
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
+import 'package:material_ui/material_ui.dart';
 
-class AnalysisSettingsScreen extends ConsumerWidget {
-  const AnalysisSettingsScreen(this.options);
-
-  final AnalysisOptions options;
-
+class const AnalysisSettingsScreen(final AnalysisOptions options) extends ConsumerWidget {
   static Route<dynamic> buildRoute({required AnalysisOptions options}) {
     return buildScreenRoute(screen: AnalysisSettingsScreen(options));
   }

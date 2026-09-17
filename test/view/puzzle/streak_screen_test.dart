@@ -1,11 +1,11 @@
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/puzzle/streak_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
@@ -163,7 +163,7 @@ void main() {
       expect(skipButtonFinder, findsOneWidget);
       expect(tester.widget<BottomBarButton>(skipButtonFinder).onTap, isNotNull);
 
-      await tester.tap(find.byTooltip('Skip this move'));
+      await tester.tap(findByTooltip('Skip this move'));
       await tester.pumpAndSettle(const Duration(milliseconds: 500));
 
       // verify skip button is now disabled
@@ -209,7 +209,7 @@ void main() {
       //game over correctly appears
       expect(find.text('GAME OVER'), findsOneWidget);
 
-      final button = find.byTooltip('New streak');
+      final button = findByTooltip('New streak');
       await tester.tap(button);
       await tester.pumpAndSettle(const Duration(milliseconds: 500));
 

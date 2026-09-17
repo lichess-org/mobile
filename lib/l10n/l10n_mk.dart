@@ -30,6 +30,9 @@ class AppLocalizationsMk extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Откажи ја понудата за враќање';
 
   @override
+  String get mobileChessEngine => 'Chess engine';
+
+  @override
   String get mobileClearButton => 'Исчисти';
 
   @override
@@ -148,6 +151,12 @@ class AppLocalizationsMk extends AppLocalizations {
 
   @override
   String get mobileSettingsDraggedTargetSquare => 'Square';
+
+  @override
+  String get mobileSettingsDrawnShapeColor => 'Drawn shape color';
+
+  @override
+  String get mobileSettingsDrawnShapeColorHelp => 'This color is used for shapes drawn by hand using two fingers.';
 
   @override
   String get mobileSettingsHomeWidgets => 'Home widgets';
@@ -655,6 +664,9 @@ class AppLocalizationsMk extends AppLocalizations {
   String get arenaHowDoesPairingWork => 'Како работи спарувањето?';
 
   @override
+  String get arenaHowArePlayersPaired => 'How are players paired?';
+
+  @override
   String get arenaHowDoesPairingWorkAnswer => 'На почетокот на секој турнир, играчите се спарени на база на нивниот ранг.\nШтом ќе завршите со една партија, вратете се во турнирското лоби: таму пак ќе бидете спарени со играч кој има сличен ранг на вашиот. Така, чекањето се сведува на минимум, но можно е да не играте против секој играч во турнирот.\nИграјте брзо и враќајте се во лобито за да играте повеќе партии и да освоите повеќе поени.';
 
   @override
@@ -743,6 +755,9 @@ class AppLocalizationsMk extends AppLocalizations {
   String get arenaDefender => 'Defender';
 
   @override
+  String get arenaDefenderLabel => 'Defender:';
+
+  @override
   String get arenaPickYourTeam => 'Pick your team';
 
   @override
@@ -806,6 +821,9 @@ class AppLocalizationsMk extends AppLocalizations {
 
   @override
   String get arenaBerserkRate => 'Berserk rate';
+
+  @override
+  String get arenaLeaguesAndStreamerBattles => 'Leagues & Streamer Battles';
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -915,6 +933,9 @@ class AppLocalizationsMk extends AppLocalizations {
   String get broadcastDefinitivelyDeleteRound => 'Definitively delete the round and all its games.';
 
   @override
+  String get broadcastPermanentlyDeleteRound => 'Permanently delete this round and all its games?';
+
+  @override
   String get broadcastDeleteAllGamesOfThisRound => 'Delete all games of this round. The source will need to be active in order to re-create them.';
 
   @override
@@ -982,6 +1003,9 @@ class AppLocalizationsMk extends AppLocalizations {
 
   @override
   String get broadcastNoBoardsYet => 'No boards yet. These will appear once games are uploaded.';
+
+  @override
+  String get broadcastNoPlayersYet => 'No players yet. They will appear once games are uploaded.';
 
   @override
   String broadcastBoardsCanBeLoaded(String param) {
@@ -2100,6 +2124,9 @@ class AppLocalizationsMk extends AppLocalizations {
   String get puzzleThemeCornerMateDescription => 'Confine the king to the corner using a rook or queen and a knight to engage the checkmate.';
 
   @override
+  String get puzzleThemeCornerMateKnightDeliversDescription => 'Confine the king to the corner using a rook or queen, and use a knight to deliver the checkmate.';
+
+  @override
   String get puzzleThemeCrushing => 'Crushing';
 
   @override
@@ -2238,10 +2265,16 @@ class AppLocalizationsMk extends AppLocalizations {
   String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
 
   @override
+  String get puzzleThemePillsburyMateRookAndBishopDescription => 'A rook delivers checkmate to the king, while a bishop helps confine it.';
+
+  @override
   String get puzzleThemeMorphysMate => 'Morphy\'s mate';
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphyMateBishopAndRookDescription => 'A bishop delivers checkmate to the king, while a rook helps confine it.';
 
   @override
   String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
@@ -2364,6 +2397,9 @@ class AppLocalizationsMk extends AppLocalizations {
   String get puzzleThemePromotionDescription => 'Promote one of your pawn to a queen or minor piece.';
 
   @override
+  String get puzzleThemePromotePawnToQueenRookOrMinor => 'Promote one of your pawns to a queen, rook or minor piece.';
+
+  @override
   String get puzzleThemeQueenEndgame => 'Queen endgame';
 
   @override
@@ -2468,6 +2504,14 @@ class AppLocalizationsMk extends AppLocalizations {
   @override
   String puzzleThemePuzzleDownloadInformation(String param) {
     return 'These puzzles are in the public domain, and can be downloaded from $param.';
+  }
+
+  @override
+  String get recapAwaitQuestion => 'What have you been up to this year?';
+
+  @override
+  String recapRecapReady(String param) {
+    return 'Your $param recap is ready!';
   }
 
   @override
@@ -2938,6 +2982,18 @@ class AppLocalizationsMk extends AppLocalizations {
   String get flipBoard => 'Сврти ја таблата';
 
   @override
+  String get toggleLocalEngine => 'Toggle local engine';
+
+  @override
+  String get engineSettings => 'Engine settings';
+
+  @override
+  String get enginesFromStrongestToWeakest => 'Engines from strongest to weakest';
+
+  @override
+  String get illegalPosition => 'Illegal position';
+
+  @override
   String get threefoldRepetition => 'Тројно повторување';
 
   @override
@@ -3080,6 +3136,9 @@ class AppLocalizationsMk extends AppLocalizations {
   String get password => 'Лозинка';
 
   @override
+  String get showPassword => 'Show password';
+
+  @override
   String get changePassword => 'Променете ја шифрата';
 
   @override
@@ -3203,7 +3262,13 @@ class AppLocalizationsMk extends AppLocalizations {
   String get whiteTimeOut => 'Времето на белиот истече';
 
   @override
+  String get whiteRanOutOfTime => 'White ran out of time';
+
+  @override
   String get blackTimeOut => 'Времето на црниот истече';
+
+  @override
+  String get blackRanOutOfTime => 'Black ran out of time';
 
   @override
   String get drawOfferSent => 'Понуда за реми е испратена';
@@ -3415,6 +3480,9 @@ class AppLocalizationsMk extends AppLocalizations {
   String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
 
   @override
+  String get cannotFilterByUnstableRating => 'It is not possible to filter by rating because your rating is not stable.\nPlaying rated games will increase stability.';
+
+  @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
     return 'Вашиот $param1 рејтинг ($param2) е превисок';
   }
@@ -3495,7 +3563,7 @@ class AppLocalizationsMk extends AppLocalizations {
   String get leaderboard => 'Табела';
 
   @override
-  String get screenshotCurrentPosition => 'Сликајте ја моменталната позиција';
+  String get positionAsImage => 'Position as image';
 
   @override
   String get gameAsGIF => 'Сочувај ја партијата како GIF';
@@ -3592,6 +3660,9 @@ class AppLocalizationsMk extends AppLocalizations {
   String xStartedFollowingY(String param1, String param2) {
     return '$param1 почна да го следи $param2';
   }
+
+  @override
+  String get less => 'Less';
 
   @override
   String get more => 'Повеќе';
@@ -3801,7 +3872,7 @@ class AppLocalizationsMk extends AppLocalizations {
   String get makeAStudy => 'Заради сигурност и споделување, креирајте студија.';
 
   @override
-  String get clearSavedMoves => 'Исчисти потези';
+  String get clearLocalData => 'Clear local data';
 
   @override
   String get previouslyOnLichessTV => 'Предходно на Личес ТВ';
@@ -4313,6 +4384,9 @@ class AppLocalizationsMk extends AppLocalizations {
   String get simulHostExtraTime => 'Додатно време за домаќинот';
 
   @override
+  String get extraClockTimeForHost => 'Extra clock time for the host:';
+
+  @override
   String get simulAddExtraTimePerPlayer => 'Додајте почетно време на Вашиот часовник со приклучувањето на секој нов играч во симултанката.';
 
   @override
@@ -4343,10 +4417,16 @@ class AppLocalizationsMk extends AppLocalizations {
   String get keyGoToStartOrEnd => 'оди на почеток/крај';
 
   @override
+  String get keyGoToPreviousOrNextLine => 'go to previous/next line';
+
+  @override
   String get keyCycleSelectedVariation => 'Cycle selected variation';
 
   @override
   String get keyShowOrHideComments => 'покажи/скриј ги коментарите';
+
+  @override
+  String get keyShowOrHideCurrentVariation => 'show/hide current variation';
 
   @override
   String get keyEnterOrExitVariation => 'отвори/затвори ја варијантата';
@@ -4622,9 +4702,6 @@ class AppLocalizationsMk extends AppLocalizations {
   String get dark => 'Темно';
 
   @override
-  String get transparent => 'Проѕирно';
-
-  @override
   String get picture => 'Picture';
 
   @override
@@ -4634,7 +4711,13 @@ class AppLocalizationsMk extends AppLocalizations {
   String get roundness => 'Roundness';
 
   @override
+  String get backgroundImage => 'Background image';
+
+  @override
   String get backgroundImageUrl => 'URL на заднинската слика:';
+
+  @override
+  String get imageOpacity => 'Image opacity';
 
   @override
   String get board => 'Board';
@@ -4707,6 +4790,11 @@ class AppLocalizationsMk extends AppLocalizations {
   @override
   String perfRatingX(String param) {
     return 'Рејтинг: $param';
+  }
+
+  @override
+  String perfRatingLabel(String param) {
+    return 'Rating: $param.';
   }
 
   @override
@@ -4861,6 +4949,9 @@ class AppLocalizationsMk extends AppLocalizations {
 
   @override
   String get clickHereToReadIt => 'Click here to read it';
+
+  @override
+  String get readTheMessage => 'Read the message';
 
   @override
   String get sorry => 'Извини :(';
@@ -5298,6 +5389,15 @@ class AppLocalizationsMk extends AppLocalizations {
 
   @override
   String get settings => 'Settings';
+
+  @override
+  String get verifyingYourDevice => 'Verifying your device...';
+
+  @override
+  String get chessOpenings => 'Chess openings';
+
+  @override
+  String get boards => 'Boards';
 
   @override
   String opponentLeftCounter(int count) {
@@ -6143,6 +6243,9 @@ class AppLocalizationsMk extends AppLocalizations {
   String get studyYouCanPasteThisInTheForumToEmbed => 'You can paste this in the forum or your Lichess blog to embed';
 
   @override
+  String get studyPasteToEmbedChapterInForumOrBlog => 'You can paste this in the forum or your Lichess blog to embed the chapter.';
+
+  @override
   String get studyStartAtInitialPosition => 'Start at initial position';
 
   @override
@@ -6515,7 +6618,13 @@ class AppLocalizationsMk extends AppLocalizations {
   String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
 
   @override
+  String get studyLoadGameFromTheWebTitle => 'Load a game from the web';
+
+  @override
   String get studyLoadExistingLichessGameText => 'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
+
+  @override
+  String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/7fHIU0XI)<br>to load game moves in the chapter.';
 
   @override
   String get studyFromFenStringTitle => 'From a FEN string';
@@ -6590,6 +6699,9 @@ class AppLocalizationsMk extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get teamTeam => 'Тим';
 
   @override
   String get teamIncorrectEntryCode => 'Incorrect entry code.';

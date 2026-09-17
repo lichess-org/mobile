@@ -25,25 +25,19 @@ const oauthScopes = ['web:mobile'];
 ///
 /// This is distinct from a genuine sign-in failure: the UI should silently
 /// ignore it rather than surfacing an error.
-class SignInCancelledException implements Exception {
-  const SignInCancelledException();
-
+class const SignInCancelledException() implements Exception {
   @override
   String toString() => 'Sign-in was cancelled.';
 }
 
 /// Thrown when the server rate-limits one of the email login requests (429).
-class EmailLoginRateLimitException implements Exception {
-  const EmailLoginRateLimitException();
-
+class const EmailLoginRateLimitException() implements Exception {
   @override
   String toString() => 'Too many email login requests.';
 }
 
 /// Thrown when the submitted login code is unknown, expired, or already used (404).
-class InvalidEmailLoginCodeException implements Exception {
-  const InvalidEmailLoginCodeException();
-
+class const InvalidEmailLoginCodeException() implements Exception {
   @override
   String toString() => 'Invalid or expired email login code.';
 }
@@ -58,13 +52,8 @@ final authRepositoryProvider = Provider<AuthRepository>((Ref ref) {
   return AuthRepository(ref, appAuth);
 }, name: 'AuthRepositoryProvider');
 
-class AuthRepository {
-  AuthRepository(Ref ref, FlutterAppAuth appAuth) : _ref = ref, _appAuth = appAuth;
-
-  final Ref _ref;
+class AuthRepository(final Ref _ref, final FlutterAppAuth _appAuth) {
   final Logger _log = Logger('AuthRepository');
-  final FlutterAppAuth _appAuth;
-
   LichessClient get _client => _ref.read(lichessClientProvider);
 
   /// Sign in with Lichess using OAuth 2.0 PKCE using the system browser.
@@ -97,7 +86,7 @@ class AuthRepository {
       throw Exception('Access token not found.');
     }
 
-    return _fetchAuthUser(token);
+    return await _fetchAuthUser(token);
   }
 
   /// Asks lichess to email a 6 character login code for the [username] account to [email].
@@ -161,7 +150,7 @@ class AuthRepository {
 
     _log.fine('Got a token from the email login code');
 
-    return _fetchAuthUser(token);
+    return await _fetchAuthUser(token);
   }
 
   /// Fetches the account owning [token] and pairs it with the token.

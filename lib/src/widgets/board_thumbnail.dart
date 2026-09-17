@@ -1,15 +1,15 @@
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// A board thumbnail widget
 class BoardThumbnail extends ConsumerStatefulWidget {
-  const BoardThumbnail({
+  const new({
     required this.size,
     required this.orientation,
     required this.fen,
@@ -22,7 +22,7 @@ class BoardThumbnail extends ConsumerStatefulWidget {
     this.animationDuration = const Duration(milliseconds: 200),
   });
 
-  const BoardThumbnail.loading({
+  const new loading({
     required this.size,
     this.header,
     this.footer,
@@ -67,7 +67,7 @@ class BoardThumbnail extends ConsumerStatefulWidget {
   _BoardThumbnailState createState() => _BoardThumbnailState();
 }
 
-class _BoardThumbnailState extends ConsumerState<BoardThumbnail> {
+class _BoardThumbnailState() extends ConsumerState<BoardThumbnail> {
   double scale = 1.0;
 
   void _onTapDown() {
@@ -113,7 +113,8 @@ class _BoardThumbnailState extends ConsumerState<BoardThumbnail> {
                   child: (widget.whiteWinningChances != null)
                       ? _BoardThumbnailEvalGauge(
                           height: widget.size,
-                          whiteWinnigChances: widget.whiteWinningChances!,
+                          whiteWinningChances: widget.whiteWinningChances!,
+                          orientation: widget.orientation,
                         )
                       : Container(
                           height: widget.size,
@@ -161,16 +162,19 @@ class _BoardThumbnailState extends ConsumerState<BoardThumbnail> {
 /// The aspect ratio of the eval gauge for board thumbnails
 const boardThumbnailEvalGaugeAspectRatio = 1 / 20;
 
-class _BoardThumbnailEvalGauge extends StatelessWidget {
-  final double height;
-  final double whiteWinnigChances;
-
-  const _BoardThumbnailEvalGauge({required this.height, required this.whiteWinnigChances});
-
+class const _BoardThumbnailEvalGauge({
+  required final double height,
+  required final double whiteWinningChances,
+  required final Side orientation,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final whiteBarHeight = height * (whiteWinnigChances + 1) / 2;
+    final whiteBarHeight = height * (whiteWinningChances + 1) / 2;
 
+    final children = [
+      Container(height: height - whiteBarHeight, color: EngineGauge.backgroundColor(context)),
+      Container(height: whiteBarHeight, color: EngineGauge.valueColor(context)),
+    ];
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -180,13 +184,7 @@ class _BoardThumbnailEvalGauge extends StatelessWidget {
             bottomLeft: Radius.zero,
           ),
           child: Column(
-            children: [
-              Container(
-                height: height - whiteBarHeight,
-                color: EngineGauge.backgroundColor(context),
-              ),
-              Container(height: whiteBarHeight, color: EngineGauge.valueColor(context)),
-            ],
+            children: orientation == Side.white ? children : children.reversed.toList(),
           ),
         ),
         Container(height: height / 100, color: darken(Colors.red)),

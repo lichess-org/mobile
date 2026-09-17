@@ -16,12 +16,7 @@ final studyRepositoryProvider = Provider<StudyRepository>((Ref ref) {
   return StudyRepository(ref, ref.watch(lichessClientProvider));
 }, name: 'StudyRepositoryProvider');
 
-class StudyRepository {
-  StudyRepository(this.ref, this.client);
-
-  final Client client;
-  final Ref ref;
-
+class StudyRepository(final Ref ref, final Client client) {
   Future<StudyList> getStudies({
     required StudyCategory category,
     required StudyListOrder order,
@@ -96,5 +91,25 @@ class StudyRepository {
     );
 
     return utf8.decode(pgnBytes);
+  }
+
+  /// Creates one or more (if the PGN contains multiple games) chapters in the study with the given [studyId].
+  Future<IList<StudyChapterId>> createChapter(
+    StudyId studyId,
+    CreateStudyChapterPayload chapter,
+  ) async {
+    return await client.postReadJson<IList<StudyChapterId>>(
+      Uri(path: '/api/study/$studyId/import-pgn'),
+      body: {
+        'pgn': chapter.pgn,
+        'name': chapter.name,
+        'orientation': chapter.orientation.name,
+        if (chapter.variant != null) 'variant': chapter.variant!.name,
+      },
+      mapper: (json) => pick(
+        json,
+        'chapters',
+      ).asListOrThrow((pick) => StudyChapterId(pick.required()('id').asStringOrThrow())).lock,
+    );
   }
 }

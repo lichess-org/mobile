@@ -75,11 +75,9 @@ bool _submitMoveEnabledForSpeed(SubmitMove submitMove, Speed speed) {
   };
 }
 
-class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> {
-  GameController(this.gameFullId);
-
-  final GameFullId gameFullId;
-
+class GameController(final GameFullId gameFullId)
+    extends AsyncNotifier<GameState>
+    with ChatMixin<GameState> {
   final _logger = Logger('GameController');
 
   StreamSubscription<SocketEvent>? _socketSubscription;
@@ -125,6 +123,10 @@ class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> 
   @protected
   @override
   bool get chatIsPublic => false;
+
+  @protected
+  @override
+  Side? get chatPlayerSide => state.value?.game.youAre;
 
   @override
   Future<GameState> build() async {
@@ -219,7 +221,7 @@ class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> 
 
     _wasInBackground = true;
 
-    // real time games need the socket to stay connected otherwise lichess will think the player leaved
+    // real time games need the socket to stay connected otherwise lichess will think the player left
     // correspondence games can and should close the socket when the app is in background (because lichess won't send the push notification update when the player is still connected to the socket)
     if (state.requireValue.game.meta.speed == Speed.correspondence) {
       _socketClient.close();
@@ -606,9 +608,10 @@ class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> 
 
   /// Move feedback while playing
   void _playMoveFeedback(SanMove sanMove, {bool skipAnimationDelay = false}) {
-    final animationDuration = ref.read(boardPreferencesProvider).pieceAnimationDuration;
-
-    final delay = animationDuration ~/ 2;
+    final pieceAnimationDuration = state.value?.hasPieceAnimation == true
+        ? ref.read(boardPreferencesProvider).pieceAnimationDuration
+        : Duration.zero;
+    final delay = pieceAnimationDuration ~/ 2;
 
     if (skipAnimationDelay || delay <= Duration.zero) {
       _moveFeedback(sanMove);
@@ -914,9 +917,8 @@ class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> 
       case 'clockInc':
         final data = event.data as Map<String, dynamic>;
         final side = pick(data['color']).asSideOrNull();
-        final newClock = pick(
-          data['total'],
-        ).letOrNull((it) => Duration(milliseconds: it.asIntOrThrow() * 10));
+        final newClock = pick(data['total'])
+            .letOrNull((it) => Duration(milliseconds: it.asIntOrThrow() * 10));
         final curState = state.requireValue;
 
         if (side != null && newClock != null) {
@@ -1147,10 +1149,8 @@ class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> 
 typedef LiveGameClock = ({ValueListenable<Duration> white, ValueListenable<Duration> black});
 
 @freezed
-sealed class GameState with _$GameState, ChatMixinState {
-  const GameState._();
-
-  const factory GameState({
+sealed class const GameState._() with _$GameState, ChatMixinState {
+  const factory({
     @Default(0) int nbWatchers,
     @Default(IList<String>.empty()) IList<String> watcherNames,
     required GameFullId gameFullId,
@@ -1206,6 +1206,9 @@ sealed class GameState with _$GameState, ChatMixinState {
       Zen.gameAuto => true,
     };
   }
+
+  /// Whether piece animations are enabled for this game. Animations are disabled for bullet and ultrabullet games.
+  bool get hasPieceAnimation => game.meta.speed != .bullet && game.meta.speed != .ultraBullet;
 
   bool get canPremove => game.meta.speed != Speed.correspondence;
   bool get canAutoQueen => autoQueenSettingOverride ?? (game.prefs?.autoQueen == AutoQueen.always);

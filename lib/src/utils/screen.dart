@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/widgets/pockets.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Returns the estimated height of what is left after removing the height of the board from the screen.
 double estimateHeightMinusBoard(MediaQueryData mediaQuery) {
@@ -24,8 +24,7 @@ bool isShortVerticalScreen(BuildContext context) {
   return estimateHeightMinusBoardFromContext(context) < kSmallHeightMinusBoard;
 }
 
-// ignore: avoid_classes_with_only_static_members
-abstract class FormFactor {
+abstract class FormFactor() {
   static const double desktop = 900;
   static const double tablet = 600;
   static const double handset = 300;
@@ -53,7 +52,12 @@ double pocketSquareSize({required double boardSize, required bool isTablet}) {
   return isTablet ? 0.7 * squareSize : squareSize;
 }
 
-enum ScreenType { watch, handset, tablet, desktop }
+enum ScreenType() {
+  watch,
+  handset,
+  tablet,
+  desktop,
+}
 
 extension ScreenTypeComparisonOperators on ScreenType {
   bool operator <(ScreenType other) {

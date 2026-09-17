@@ -17,9 +17,9 @@ import '../../test_container.dart';
 import '../../test_helpers.dart';
 import '../auth/fake_auth_storage.dart';
 
-class NotificationDisplayMock extends Mock implements FlutterLocalNotificationsPlugin {}
+class NotificationDisplayMock() extends Mock implements FlutterLocalNotificationsPlugin;
 
-class CorrespondenceServiceMock extends Mock implements CorrespondenceService {}
+class CorrespondenceServiceMock() extends Mock implements CorrespondenceService;
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -44,6 +44,16 @@ void main() {
   });
 
   group('Start service:', () {
+    test('enables firebase messaging auto-init', () async {
+      final container = await makeContainer();
+
+      expect(testBinding.firebaseMessaging.autoInitEnabled, isFalse);
+
+      await container.read(notificationServiceProvider).start();
+
+      expect(testBinding.firebaseMessaging.autoInitEnabled, isTrue);
+    });
+
     test('request permissions', () async {
       final container = await makeContainer();
 

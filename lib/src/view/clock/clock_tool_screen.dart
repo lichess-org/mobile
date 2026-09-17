@@ -1,5 +1,4 @@
-import 'package:flutter/cupertino.dart' show CupertinoIcons;
-import 'package:flutter/material.dart';
+import 'package:cupertino_ui/cupertino_ui.dart' show CupertinoIcons;
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/clock/clock_tool_controller.dart';
@@ -13,10 +12,9 @@ import 'package:lichess_mobile/src/view/clock/clock_settings.dart';
 import 'package:lichess_mobile/src/view/clock/custom_clock_settings.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
+import 'package:material_ui/material_ui.dart';
 
-class ClockToolScreen extends StatelessWidget {
-  const ClockToolScreen({super.key});
-
+class const ClockToolScreen({super.key}) extends StatelessWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const ClockToolScreen());
   }
@@ -29,14 +27,12 @@ class ClockToolScreen extends StatelessWidget {
   }
 }
 
-class _Body extends ConsumerStatefulWidget {
-  const _Body();
-
+class const _Body() extends ConsumerStatefulWidget {
   @override
   ConsumerState<_Body> createState() => _BodyState();
 }
 
-class _BodyState extends ConsumerState<_Body> {
+class _BodyState() extends ConsumerState<_Body> {
   bool isTablet = false;
 
   @override
@@ -94,23 +90,17 @@ class _BodyState extends ConsumerState<_Body> {
   }
 }
 
-class ClockTile extends ConsumerStatefulWidget {
-  const ClockTile({
-    required this.playerType,
-    required this.clockState,
-    required this.orientation,
-    super.key,
-  });
-
-  final ClockSide playerType;
-  final ClockState clockState;
-  final Orientation orientation;
-
+class const ClockTile({
+  required final ClockSide playerType,
+  required final ClockState clockState,
+  required final Orientation orientation,
+  super.key,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<ClockTile> createState() => _ClockTileState();
 }
 
-class _ClockTileState extends ConsumerState<ClockTile> with SingleTickerProviderStateMixin {
+class _ClockTileState() extends ConsumerState<ClockTile> with SingleTickerProviderStateMixin {
   late AnimationController _blinkController;
   bool _inEmergency = false;
 
@@ -288,9 +278,9 @@ class _ClockTileState extends ConsumerState<ClockTile> with SingleTickerProvider
                 Positioned(
                   bottom: MediaQuery.paddingOf(context).bottom + 48.0,
                   child: IgnorePointer(
-                    ignoring: clockState.started,
+                    ignoring: clockState.started && !clockState.paused,
                     child: AnimatedOpacity(
-                      opacity: clockState.started ? 0 : 1.0,
+                      opacity: (clockState.started && !clockState.paused) ? 0 : 1.0,
                       duration: const Duration(milliseconds: 300),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -300,7 +290,7 @@ class _ClockTileState extends ConsumerState<ClockTile> with SingleTickerProvider
                             iconSize: 32,
                             icon: const Icon(Icons.tune),
                             color: clockStyle.textColor,
-                            onPressed: clockState.started
+                            onPressed: (clockState.started && !clockState.paused)
                                 ? null
                                 : () => showModalBottomSheet<void>(
                                     context: context,
@@ -344,17 +334,11 @@ class _ClockTileState extends ConsumerState<ClockTile> with SingleTickerProvider
   }
 }
 
-class _ClockDisplay extends StatelessWidget {
-  const _ClockDisplay({
-    required this.clockState,
-    required this.playerType,
-    required this.clockStyle,
-  });
-
-  final ClockState clockState;
-  final ClockSide playerType;
-  final ClockStyle clockStyle;
-
+class const _ClockDisplay({
+  required final ClockState clockState,
+  required final ClockSide playerType,
+  required final ClockStyle clockStyle,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(

@@ -1,6 +1,5 @@
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
@@ -23,16 +22,16 @@ import 'package:lichess_mobile/src/view/more/import_pgn_screen.dart';
 import 'package:lichess_mobile/src/view/relation/friend_screen.dart';
 import 'package:lichess_mobile/src/view/settings/settings_screen.dart';
 import 'package:lichess_mobile/src/view/user/player_screen.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class MoreTabScreen extends ConsumerWidget {
-  const MoreTabScreen({super.key});
-
+class const MoreTabScreen({super.key}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return PopScope(
@@ -61,9 +60,7 @@ class MoreTabScreen extends ConsumerWidget {
   }
 }
 
-class _Body extends ConsumerWidget {
-  const _Body();
-
+class const _Body() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isOnline = ref.watch(isDeviceOnlineProvider);
@@ -105,17 +102,24 @@ class _Body extends ConsumerWidget {
                     : null,
                 title: Text(context.l10n.openingExplorer),
                 enabled: isOnline,
-                onTap: () => Navigator.of(context, rootNavigator: true).push(
-                  OpeningExplorerScreen.buildRoute(
-                    const AnalysisOptions.pgn(
-                      id: StringId('standalone_opening_explorer'),
-                      orientation: Side.white,
-                      pgn: '',
-                      isComputerAnalysisAllowed: false,
-                      variant: Variant.standard,
+                onTap: () {
+                  if (authUser == null) {
+                    showSnackBar(context, context.l10n.youNeedAnAccountToDoThat);
+                    return;
+                  }
+
+                  Navigator.of(context, rootNavigator: true).push(
+                    OpeningExplorerScreen.buildRoute(
+                      const AnalysisOptions.pgn(
+                        id: StringId('standalone_opening_explorer'),
+                        orientation: Side.white,
+                        pgn: '',
+                        isComputerAnalysisAllowed: false,
+                        variant: Variant.standard,
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                },
               ),
               ListTile(
                 leading: const Icon(Icons.edit_outlined),
@@ -205,9 +209,7 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class _AccountSection extends ConsumerWidget {
-  const _AccountSection();
-
+class const _AccountSection() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isOnline = ref.watch(isDeviceOnlineProvider);

@@ -28,13 +28,7 @@ final createGameServiceProvider = Provider.autoDispose<CreateGameService>((Ref r
 }, name: 'CreateGameServiceProvider');
 
 /// A service to create a new game from the lobby or from a challenge.
-class CreateGameService {
-  CreateGameService(this._log, {required this.ref, required this.sri});
-
-  final Ref ref;
-  final String sri;
-  final Logger _log;
-
+class CreateGameService(final Logger _log, {required final Ref ref, required final String sri}) {
   LichessClient get lichessClient => ref.read(lichessClientProvider);
   ChallengeRepository get challengeRepository => ref.read(challengeRepositoryProvider);
 
@@ -108,7 +102,7 @@ class CreateGameService {
       }
     }
 
-    return completer.future;
+    return await completer.future;
   }
 
   /// Create a new correspondence game.
@@ -163,7 +157,9 @@ class CreateGameService {
           _challengePingTimer?.cancel();
           _challengePingTimer = Timer.periodic(
             const Duration(seconds: 9),
-            (_) => socketClient.send('ping', null),
+            // Not queued while the socket is down: these say the user is still waiting *now*, and
+            // the listener above sends a fresh one as soon as it is back up.
+            (_) => socketClient.send('ping', null, noRetry: true),
           );
         }),
         socketClient.stream.listen((event) async {
@@ -238,7 +234,9 @@ class CreateGameService {
           _challengePingTimer?.cancel();
           _challengePingTimer = Timer.periodic(
             const Duration(seconds: 9),
-            (_) => socketClient.send('ping', null),
+            // Not queued while the socket is down: these say the user is still waiting *now*, and
+            // the listener above sends a fresh one as soon as it is back up.
+            (_) => socketClient.send('ping', null, noRetry: true),
           );
         }),
         socketClient.stream.listen((event) async {
@@ -271,7 +269,7 @@ class CreateGameService {
       }
     }
 
-    return completer.future;
+    return await completer.future;
   }
 
   /// Cancel the current game creation. No-op if no active lobby seek.

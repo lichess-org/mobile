@@ -30,6 +30,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Отменить предложение о возврате хода';
 
   @override
+  String get mobileChessEngine => 'Chess engine';
+
+  @override
   String get mobileClearButton => 'Очистить';
 
   @override
@@ -148,6 +151,12 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get mobileSettingsDraggedTargetSquare => 'Квадратная';
+
+  @override
+  String get mobileSettingsDrawnShapeColor => 'Drawn shape color';
+
+  @override
+  String get mobileSettingsDrawnShapeColorHelp => 'This color is used for shapes drawn by hand using two fingers.';
 
   @override
   String get mobileSettingsHomeWidgets => 'Виджеты главного экрана';
@@ -691,6 +700,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get arenaHowDoesPairingWork => 'Как проходит жеребьёвка?';
 
   @override
+  String get arenaHowArePlayersPaired => 'Как составляются пары?';
+
+  @override
   String get arenaHowDoesPairingWorkAnswer => 'В начале турнира пары образуются согласно рейтингу. По окончании каждой партии игроки возвращаются на страницу турнира, и им предоставляется свободный соперник с близким количеством турнирных очков. Это обеспечивает маленькое время ожидания соперника, однако в результате вы можете встретиться с некоторыми участниками много раз или же не встретиться с кем-то ни разу.\nИграйте быстро и возвращайтесь на страницу турнира, чтобы сыграть больше игр и заработать больше очков.';
 
   @override
@@ -779,6 +791,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get arenaDefender => 'Защищающийся';
 
   @override
+  String get arenaDefenderLabel => 'Defender:';
+
+  @override
   String get arenaPickYourTeam => 'Выберите свой клуб';
 
   @override
@@ -842,6 +857,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get arenaBerserkRate => 'Берсерк';
+
+  @override
+  String get arenaLeaguesAndStreamerBattles => 'Лиги & Битвы стримеров';
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -955,6 +973,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get broadcastDefinitivelyDeleteRound => 'Определенно удалить тур и его партии.';
 
   @override
+  String get broadcastPermanentlyDeleteRound => 'Окончательно удалить этот раунд и все его игры?';
+
+  @override
   String get broadcastDeleteAllGamesOfThisRound => 'Удалить все партии этого тура. Для их пересоздания потребуется активный источник.';
 
   @override
@@ -1022,6 +1043,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get broadcastNoBoardsYet => 'Пока нет досок. Они появятся после загрузки партий.';
+
+  @override
+  String get broadcastNoPlayersYet => 'Пока игроков нет. Они появятся сразу после загрузки партий.';
 
   @override
   String broadcastBoardsCanBeLoaded(String param) {
@@ -1690,7 +1714,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get preferencesNotifyTournamentStartReminders => 'Напоминания о начале турниров';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Broadcasts';
+  String get preferencesNotifyBroadcasts => 'Трансляции';
 
   @override
   String get preferencesNotifyTimeAlarm => 'В игре по переписке скоро упадёт флажок';
@@ -2156,6 +2180,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get puzzleThemeCornerMateDescription => 'Загоните короля в угол ладьёй или ферзём, и поставьте там мат конём.';
 
   @override
+  String get puzzleThemeCornerMateKnightDeliversDescription => 'Зажмите короля в углу, используя ладью или ферзя, а затем поставьте мат конем.';
+
+  @override
   String get puzzleThemeCrushing => 'Разгром';
 
   @override
@@ -2294,10 +2321,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get puzzleThemePillsburysMateDescription => 'Ладья ставит мат, в то время как слон контролирует угловое поле.';
 
   @override
+  String get puzzleThemePillsburyMateRookAndBishopDescription => 'Ладья ставит мат королю, пока слон ограничивает его передвижение.';
+
+  @override
   String get puzzleThemeMorphysMate => 'Мат Морфи';
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Слон ставит мат, в то время как ладья контролирует соседнюю вертикаль.';
+
+  @override
+  String get puzzleThemeMorphyMateBishopAndRookDescription => 'Слон ставит мат королю, пока ладья ограничивает его передвижение.';
 
   @override
   String get puzzleThemeSwallowstailMate => 'Мат \"Ласточкин хвост\"';
@@ -2420,6 +2453,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get puzzleThemePromotionDescription => 'Ход при котором пешка ходит на последнюю горизонталь и заменяется по выбору игрока на любую другую фигуру того же цвета, кроме короля.';
 
   @override
+  String get puzzleThemePromotePawnToQueenRookOrMinor => 'Превращение пешки в ферзя, ладью или легкую фигуру.';
+
+  @override
   String get puzzleThemeQueenEndgame => 'Ферзевый эндшпиль';
 
   @override
@@ -2527,6 +2563,14 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String get recapAwaitQuestion => 'Чем вы занимались в этом году?';
+
+  @override
+  String recapRecapReady(String param) {
+    return 'Ваши итоги $param года готовы!';
+  }
+
+  @override
   String get searchSearch => 'Поиск';
 
   @override
@@ -2625,7 +2669,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get asWhite => 'за белых';
 
   @override
-  String get asBlack => 'за чёрных';
+  String get asBlack => 'чёрными';
 
   @override
   String get randomColor => 'Случайный цвет';
@@ -2994,6 +3038,18 @@ class AppLocalizationsRu extends AppLocalizations {
   String get flipBoard => 'Перевернуть доску';
 
   @override
+  String get toggleLocalEngine => 'Toggle local engine';
+
+  @override
+  String get engineSettings => 'Настройки движка';
+
+  @override
+  String get enginesFromStrongestToWeakest => 'Движки от сильнейших к слабейшим';
+
+  @override
+  String get illegalPosition => 'Illegal position';
+
+  @override
   String get threefoldRepetition => 'Троекратное повторение позиции';
 
   @override
@@ -3136,6 +3192,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get password => 'Пароль';
 
   @override
+  String get showPassword => 'Показать пароль';
+
+  @override
   String get changePassword => 'Сменить пароль';
 
   @override
@@ -3259,7 +3318,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get whiteTimeOut => 'Белые просрочили время';
 
   @override
+  String get whiteRanOutOfTime => 'Белые просрочили время';
+
+  @override
   String get blackTimeOut => 'Чёрные просрочили время';
+
+  @override
+  String get blackRanOutOfTime => 'У черных закончилось время';
 
   @override
   String get drawOfferSent => 'Предложение ничьей отправлено';
@@ -3471,6 +3536,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Рейтинговые фильтры заблокированы, поскольку ваш рейтинг нестабилен. Играя в рейтинговые игры, вы повысите стабильность вашего рейтинга.';
 
   @override
+  String get cannotFilterByUnstableRating => 'Невозможно отфильтровать по рейтингу, потому что Ваш рейтинг нестабилен.\nИграйте рейтинговые партии, чтобы повысить стабильность.';
+
+  @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
     return 'Ваш рейтинг в $param1 ($param2) слишком высок для участия';
   }
@@ -3551,7 +3619,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get leaderboard => 'Лучшие игроки';
 
   @override
-  String get screenshotCurrentPosition => 'Сделать снимок этой позиции';
+  String get positionAsImage => 'Изображение позиции';
 
   @override
   String get gameAsGIF => 'Партия в формате GIF';
@@ -3648,6 +3716,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String xStartedFollowingY(String param1, String param2) {
     return '$param1 подписался на $param2';
   }
+
+  @override
+  String get less => 'Меньше';
 
   @override
   String get more => 'Ещё';
@@ -3857,7 +3928,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get makeAStudy => 'Чтобы сохранить и поделиться, рассмотрите возможность создания студии.';
 
   @override
-  String get clearSavedMoves => 'Очистить ходы';
+  String get clearLocalData => 'Очистить локальные данные';
 
   @override
   String get previouslyOnLichessTV => 'Ранее на Lichess TV';
@@ -3980,7 +4051,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get reportUsernameHelp => 'Объясните, что в этом имени пользователя является оскорбительным. Не надо просто писать «оно оскорбительно или неподобающе», лучше расскажите, как вы пришли к такому выводу, особенно если оскорбление завуалировано, не на английском языке, является сленгом, или же является исторической или культурной отсылкой.';
 
   @override
-  String get reportProcessedFasterInEnglish => 'Ваша жалоба будет рассмотрена быстрее, если она будет написана на английском языке.';
+  String get reportProcessedFasterInEnglish => 'Ваше обращение будет рассмотрено быстрее, если оно будет написано на английском языке.';
 
   @override
   String get processReportFasterInEnglish => 'Мы сможем обрабатывать ваши обращения быстрее, если вы напишете их на английском языке.';
@@ -4369,6 +4440,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get simulHostExtraTime => 'Дополнительное время сеансёра';
 
   @override
+  String get extraClockTimeForHost => 'Дополнительное время сеансёра:';
+
+  @override
   String get simulAddExtraTimePerPlayer => 'Добавьте начальное время на ваших часах для каждого игрока, вошедшего в ваш сеанс одновременной игры.';
 
   @override
@@ -4399,10 +4473,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get keyGoToStartOrEnd => 'в начало/конец';
 
   @override
+  String get keyGoToPreviousOrNextLine => 'go to previous/next line';
+
+  @override
   String get keyCycleSelectedVariation => 'Прокручивать выбранный вариант';
 
   @override
   String get keyShowOrHideComments => 'показать/скрыть комментарии';
+
+  @override
+  String get keyShowOrHideCurrentVariation => 'показать/скрыть текущий вариант';
 
   @override
   String get keyEnterOrExitVariation => 'ввести/закрыть вариант';
@@ -4678,9 +4758,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get dark => 'Тёмная';
 
   @override
-  String get transparent => 'Прозрачная';
-
-  @override
   String get picture => 'Изображение';
 
   @override
@@ -4690,7 +4767,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get roundness => 'Скругление';
 
   @override
+  String get backgroundImage => 'Обои';
+
+  @override
   String get backgroundImageUrl => 'URL фонового изображения:';
+
+  @override
+  String get imageOpacity => 'Непрозрачность';
 
   @override
   String get board => 'Доска';
@@ -4763,6 +4846,11 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String perfRatingX(String param) {
     return 'Рейтинг: $param';
+  }
+
+  @override
+  String perfRatingLabel(String param) {
+    return 'Рейтинг: $param.';
   }
 
   @override
@@ -4917,6 +5005,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get clickHereToReadIt => 'Нажмите здесь, чтобы прочитать его';
+
+  @override
+  String get readTheMessage => 'Прочитать сообщение';
 
   @override
   String get sorry => 'Извините :(';
@@ -5354,6 +5445,15 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get settings => 'Настройки';
+
+  @override
+  String get verifyingYourDevice => 'Проверка устройства...';
+
+  @override
+  String get chessOpenings => 'Шахматные дебюты';
+
+  @override
+  String get boards => 'Доски';
 
   @override
   String opponentLeftCounter(int count) {
@@ -6126,7 +6226,7 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get streamerLichessStreamers => 'Стримеры Lichess';
+  String get streamerLichessStreamers => 'Lichess cтримеры';
 
   @override
   String get studyPrivate => 'Частная';
@@ -6291,6 +6391,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get studyYouCanPasteThisInTheForumToEmbed => 'Вставьте этот код на форум для вставки';
+
+  @override
+  String get studyPasteToEmbedChapterInForumOrBlog => 'You can paste this in the forum or your Lichess blog to embed the chapter.';
 
   @override
   String get studyStartAtInitialPosition => 'Открыть в начальной позиции';
@@ -6665,7 +6768,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get studyLoadExistingLichessGameTitle => 'Загрузите существующую партию Lichess';
 
   @override
+  String get studyLoadGameFromTheWebTitle => 'Load a game from the web';
+
+  @override
   String get studyLoadExistingLichessGameText => 'Вставьте URL игры Lichess<br>(например, lichess.org/7fHIU0XI)<br>для загрузки ходов партии в главу.';
+
+  @override
+  String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/7fHIU0XI)<br>to load game moves in the chapter.';
 
   @override
   String get studyFromFenStringTitle => 'Из нотации FEN';
@@ -6748,6 +6857,9 @@ class AppLocalizationsRu extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get teamTeam => 'Клуб';
 
   @override
   String get teamIncorrectEntryCode => 'Неверный код для вступления.';

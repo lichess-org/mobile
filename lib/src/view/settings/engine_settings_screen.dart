@@ -1,9 +1,8 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/engine/engine.dart';
+import 'package:lichess_mobile/src/model/engine/engine_utils.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
+import 'package:lichess_mobile/src/model/engine/weights_service.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/engine_settings_widget.dart';
@@ -11,13 +10,11 @@ import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
+import 'package:material_ui/material_ui.dart';
 
-class EngineSettingsScreen extends ConsumerStatefulWidget {
-  const EngineSettingsScreen({super.key});
-
+class const EngineSettingsScreen({super.key}) extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const EngineSettingsScreen());
   }
@@ -26,40 +23,52 @@ class EngineSettingsScreen extends ConsumerStatefulWidget {
   ConsumerState<EngineSettingsScreen> createState() => _EngineSettingsScreenState();
 }
 
-class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
-  /// null = loading, true = has files with checked integrity, false = doesn't have files
-  bool? _hasVerifiedNNUEFiles;
+class _EngineSettingsScreenState() extends ConsumerState<EngineSettingsScreen> {
+  /// null = loading, true = has the file with checked integrity, false = doesn't have it
+  bool? _hasVerifiedNNUEFile;
 
-  Future<bool>? _downloadNNUEFilesFuture;
+  /// Whether there are NNUE files on disk the engine cannot use: the network of a previous
+  /// Stockfish version, or one that did not survive its download.
+  bool _hasUnusableNNUEFiles = false;
+
+  Future<bool>? _downloadNNUEFileFuture;
 
   late final ValueListenable<double> _downloadProgress;
 
   @override
   void initState() {
-    ref.read(nnueServiceProvider).checkNNUEFiles().then((good) {
-      if (mounted) {
-        setState(() {
-          _hasVerifiedNNUEFiles = good;
-        });
-      }
-    });
+    _checkFiles();
 
-    _downloadProgress = ref.read(nnueServiceProvider).nnueDownloadProgress;
+    _downloadProgress = ref.read(stockfishNnueServiceProvider).nnueDownloadProgress;
 
     super.initState();
   }
 
+  Future<void> _checkFiles() async {
+    final nnueService = ref.read(stockfishNnueServiceProvider);
+    // Deletes the file itself if it is corrupted, so whatever is left over afterwards is
+    // either usable or from another Stockfish version.
+    final good = await nnueService.checkNNUEFile();
+    final leftOver = !good && await nnueService.hasNNUEFilesOnDisk();
+    if (!mounted) return;
+    setState(() {
+      _hasVerifiedNNUEFile = good;
+      _hasUnusableNNUEFiles = leftOver;
+    });
+  }
+
   void _startDownload() {
-    final future = ref.read(nnueServiceProvider).downloadNNUEFiles(inBackground: false);
+    final future = ref.read(stockfishNnueServiceProvider).downloadNNUEFile(inBackground: false);
     future.then((downloaded) {
       if (mounted && downloaded) {
         setState(() {
-          _hasVerifiedNNUEFiles = true;
+          _hasVerifiedNNUEFile = true;
+          _hasUnusableNNUEFiles = false;
         });
       }
     });
     setState(() {
-      _downloadNNUEFilesFuture = future;
+      _downloadNNUEFileFuture = future;
     });
   }
 
@@ -68,10 +77,10 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
     final prefs = ref.watch(engineEvaluationPreferencesProvider);
 
     return PlatformScaffold(
-      appBar: PlatformAppBar(title: const Text('Chess engine')),
+      appBar: PlatformAppBar(title: Text(context.l10n.mobileChessEngine)),
       body: ListView(
         children: [
-          if (_hasVerifiedNNUEFiles == null)
+          if (_hasVerifiedNNUEFile == null)
             Shimmer(
               child: ShimmerLoading(isLoading: true, child: ListSection.loading(itemsNumber: 2)),
             )
@@ -79,8 +88,13 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
             ListSection(
               children: [
                 SettingsListTile(
-                  settingsLabel: const Text('Engine'),
-                  settingsValue: prefs.enginePref.label,
+                  settingsLabel: Text(context.l10n.mobileChessEngine),
+                  // The check tells apart the net that is on disk from the one still to download:
+                  // it only means something for the latest engine, the light one ships with the app.
+                  settingsValue:
+                      prefs.enginePref == ChessEnginePref.sfLatest && _hasVerifiedNNUEFile == true
+                      ? '${prefs.enginePref.label} \u2713'
+                      : prefs.enginePref.label,
                   onTap: () {
                     showChoicePicker(
                       context,
@@ -90,19 +104,20 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
                       onSelectedItemChanged: (ChessEnginePref? value) {
                         ref
                             .read(engineEvaluationPreferencesProvider.notifier)
-                            .setEvaluationFunction(value ?? ChessEnginePref.sf16);
-                        if (value == ChessEnginePref.sfLatest && _hasVerifiedNNUEFiles == false) {
+                            .setEvaluationFunction(value ?? ChessEnginePref.sfLight);
+                        if (value == ChessEnginePref.sfLatest && _hasVerifiedNNUEFile == false) {
                           _startDownload();
                         }
                       },
                     );
                   },
                 ),
-                if (prefs.enginePref == ChessEnginePref.sfLatest && _hasVerifiedNNUEFiles == false)
+                if (prefs.enginePref == ChessEnginePref.sfLatest && _hasVerifiedNNUEFile == false)
                   LoadingButtonBuilder(
-                    initialFuture: _downloadNNUEFilesFuture,
-                    fetchData: () =>
-                        ref.read(nnueServiceProvider).downloadNNUEFiles(inBackground: false),
+                    initialFuture: _downloadNNUEFileFuture,
+                    fetchData: () => ref
+                        .read(stockfishNnueServiceProvider)
+                        .downloadNNUEFile(inBackground: false),
                     builder: (context, isLoading, fetchData) {
                       return ListTile(
                         trailing: isLoading
@@ -116,57 +131,35 @@ class _EngineSettingsScreenState extends ConsumerState<EngineSettingsScreen> {
                                 },
                               )
                             : const Icon(Icons.download),
-                        title: Text(isLoading ? 'Downloading NNUE files' : 'Download NNUE files'),
-                        subtitle: const Text(nnueTotalSizeMB),
+                        title: Text(isLoading ? 'Downloading NNUE file' : 'Download NNUE file'),
+                        subtitle: const Text(nnueDownloadSizeMB),
                         enabled: !isLoading,
                         onTap: () async {
                           final downloaded = await fetchData();
                           if (context.mounted && downloaded) {
                             setState(() {
-                              _hasVerifiedNNUEFiles = true;
+                              _hasVerifiedNNUEFile = true;
+                              _hasUnusableNNUEFiles = false;
                             });
                           }
                         },
                       );
                     },
-                  )
-                else if (prefs.enginePref == ChessEnginePref.sfLatest &&
-                    _hasVerifiedNNUEFiles == true)
+                  ),
+                if (_hasVerifiedNNUEFile == false && _hasUnusableNNUEFiles)
                   ListTile(
-                    trailing: const Icon(Icons.check),
-                    title: const Text('NNUE files downloaded'),
-                    subtitle: const Text('$nnueTotalSizeMB (tap to delete)'),
+                    trailing: const Icon(Icons.delete),
+                    title: const Text('Delete unusable NNUE files'),
+                    subtitle: const Text(
+                      'Some NNUE files on this device cannot be used by the engine. Deleting them '
+                      'frees up space and lets you download them again.',
+                    ),
                     onTap: () async {
-                      final isOk = await showAdaptiveDialog<bool>(
-                        context: context,
-                        barrierDismissible: true,
-                        builder: (context) {
-                          return AlertDialog.adaptive(
-                            content: const Text('Do you want to delete the NNUE files?'),
-                            actions: [
-                              PlatformDialogAction(
-                                child: const Text('OK'),
-                                onPressed: () {
-                                  Navigator.of(context).pop(true);
-                                },
-                              ),
-                              PlatformDialogAction(
-                                child: Text(context.l10n.cancel),
-                                onPressed: () {
-                                  Navigator.of(context).pop(false);
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                      if (isOk == true) {
-                        await ref.read(nnueServiceProvider).deleteNNUEFiles();
-                        if (!mounted) return;
-                        setState(() {
-                          _hasVerifiedNNUEFiles = false;
-                        });
-                      }
+                      await ref.read(stockfishNnueServiceProvider).deleteNNUEFiles();
+                      if (!mounted) return;
+                      setState(() {
+                        _hasUnusableNNUEFiles = false;
+                      });
                     },
                   ),
               ],

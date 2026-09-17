@@ -1,6 +1,9 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
-enum PuzzleOpeningSort { popular, alphabetical }
+enum PuzzleOpeningSort() {
+  popular,
+  alphabetical,
+}
 
 typedef PuzzleOpeningFamily = ({
   String key,

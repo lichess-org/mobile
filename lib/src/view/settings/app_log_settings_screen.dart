@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/log/app_log_paginator.dart';
@@ -14,15 +13,14 @@ import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:logging/logging.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:share_plus/share_plus.dart';
 
 final Logger _logger = Logger('AppLogSettingsScreen');
 
 final _logDateFormatter = DateFormat.yMd().add_Hms();
 
-class AppLogSettingsScreen extends ConsumerStatefulWidget {
-  const AppLogSettingsScreen({super.key});
-
+class const AppLogSettingsScreen({super.key}) extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const AppLogSettingsScreen());
   }
@@ -31,7 +29,7 @@ class AppLogSettingsScreen extends ConsumerStatefulWidget {
   ConsumerState<AppLogSettingsScreen> createState() => _AppLogSettingsScreenState();
 }
 
-class _AppLogSettingsScreenState extends ConsumerState<AppLogSettingsScreen> {
+class _AppLogSettingsScreenState() extends ConsumerState<AppLogSettingsScreen> {
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _searchController = TextEditingController();
   String? _searchQuery;
@@ -61,7 +59,7 @@ class _AppLogSettingsScreenState extends ConsumerState<AppLogSettingsScreen> {
 
   Future<void> _onRefresh() async {
     await Future<void>.delayed(const Duration(milliseconds: 300));
-    return ref.read(appLogPaginatorProvider(_searchQuery).notifier).refresh();
+    return await ref.read(appLogPaginatorProvider(_searchQuery).notifier).refresh();
   }
 
   @override
@@ -80,14 +78,7 @@ class _AppLogSettingsScreenState extends ConsumerState<AppLogSettingsScreen> {
               icon: const Icon(Icons.share),
               onPressed: () => launchShareDialog(
                 context,
-                ShareParams(
-                  text: logs
-                      .map(
-                        (entry) =>
-                            '[${_logDateFormatter.format(entry.logTime)}] [${entry.loggerName}] [${entry.levelName}] ${entry.message}',
-                      )
-                      .join('\n'),
-                ),
+                ShareParams(text: logs.map(_formatLogEntry).join('\n')),
               ),
             ),
           if (asyncState.value?.isDeleteButtonVisible == true)
@@ -129,7 +120,7 @@ class _AppLogSettingsScreenState extends ConsumerState<AppLogSettingsScreen> {
                   onPressed: () {
                     showChoicePicker<Level>(
                       context,
-                      choices: Level.LEVELS,
+                      choices: kLogPreferencesAvailableLevels,
                       selectedItem: currentLevel,
                       labelBuilder: (Level l) => Text(l.name),
                       onSelectedItemChanged: (Level value) {
@@ -176,20 +167,33 @@ class _AppLogSettingsScreenState extends ConsumerState<AppLogSettingsScreen> {
   }
 }
 
-class _LogTile extends StatelessWidget {
-  const _LogTile({required this.entry});
+String _formatLogEntry(AppLogEntry entry) {
+  final buffer = StringBuffer(
+    '[${_logDateFormatter.format(entry.logTime)}] [${entry.loggerName}] [${entry.levelName}] ${entry.message}',
+  );
+  final error = entry.error;
+  final stackTrace = entry.stackTrace;
+  if (error != null) {
+    buffer.write('\n$error');
+  }
+  if (stackTrace != null) {
+    buffer.write('\n$stackTrace');
+  }
+  return buffer.toString();
+}
 
-  final AppLogEntry entry;
-
+class const _LogTile({required final AppLogEntry entry}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const titleStyle = TextStyle(fontSize: 14, letterSpacing: -0.15);
     final subtitleStyle = TextStyle(color: textShade(context, 0.7), fontSize: 12);
 
-    final leading = SizedBox(
-      width: 30,
-      child: Text(entry.levelName, style: const TextStyle(fontSize: 12)),
-    );
+    final (levelIcon, levelColor) = entry.levelValue >= Level.SEVERE.value
+        ? (Icons.error_outline, Colors.red)
+        : entry.levelValue >= Level.WARNING.value
+        ? (Icons.warning_amber_outlined, Colors.orange)
+        : (Icons.info_outline, textShade(context, 0.7));
+    final leading = Icon(levelIcon, size: 20, color: levelColor, semanticLabel: entry.levelName);
     final title = Text('[${entry.loggerName}] ${entry.message}', style: titleStyle);
     final subtitle = Text(_logDateFormatter.format(entry.logTime), style: subtitleStyle);
 

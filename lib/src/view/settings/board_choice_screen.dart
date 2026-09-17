@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
@@ -6,10 +5,9 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:material_ui/material_ui.dart';
 
-class BoardChoiceScreen extends StatelessWidget {
-  const BoardChoiceScreen({super.key});
-
+class const BoardChoiceScreen({super.key}) extends StatelessWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const BoardChoiceScreen());
   }
@@ -23,14 +21,12 @@ class BoardChoiceScreen extends StatelessWidget {
   }
 }
 
-class _Body extends ConsumerWidget {
-  const _Body();
-
+class const _Body() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final boardTheme = ref.watch(boardPreferencesProvider.select((p) => p.boardTheme));
 
-    final hasSystemColors = getCorePalette() != null;
+    final hasSystemColors = getSystemCorePalettes() != null;
 
     final choices = BoardTheme.values
         .where((t) => t != BoardTheme.system || hasSystemColors)

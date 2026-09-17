@@ -3,9 +3,9 @@ import 'dart:isolate';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_color_utilities/material_color_utilities.dart';
+import 'package:material_ui/material_ui.dart';
 
 typedef ImageColors = ({int primaryContainer, int onPrimaryContainer});
 
@@ -15,9 +15,7 @@ final imageWorkerFactoryProvider = Provider<ImageWorkerFactory>((ref) {
 }, name: 'ImageWorkerFactoryProvider');
 
 /// A factory that spawns [ImageColorWorker] instances.
-class ImageWorkerFactory {
-  const ImageWorkerFactory();
-
+class const ImageWorkerFactory() {
   Future<ImageColorWorker> spawn() {
     return ImageColorWorker.spawn();
   }
@@ -31,9 +29,7 @@ class ImageWorkerFactory {
 ///
 /// The worker is created by calling [ImageColorWorker.spawn], and the computation
 /// is run in a separate isolate.
-class ImageColorWorker {
-  final SendPort _commands;
-  final ReceivePort _responses;
+class ImageColorWorker._(final ReceivePort _responses, final SendPort _commands) {
   final Map<int, Completer<ImageColors?>> _activeRequests = {};
   int _idCounter = 0;
   bool _closed = false;
@@ -70,7 +66,7 @@ class ImageColorWorker {
     return ImageColorWorker._(receivePort, sendPort);
   }
 
-  ImageColorWorker._(this._responses, this._commands) {
+  this {
     _responses.listen(_handleResponsesFromIsolate);
   }
 

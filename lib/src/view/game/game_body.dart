@@ -2,9 +2,8 @@ import 'dart:async';
 
 import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
@@ -42,6 +41,7 @@ import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 typedef LoadingParam = ({Variant variant, String? fen, Move? lastMove, Side? orientation});
@@ -58,46 +58,35 @@ const kGameEndDialogDelay = Duration(milliseconds: 400);
 ///
 /// Handles the immersive mode through focus detection, and the pop scope to
 /// prevent the user from going back to the previous screen.
-class GameBody extends ConsumerWidget {
-  const GameBody({
-    required this.gameId,
-    this.loadingPosition,
-    required this.whiteClockKey,
-    required this.blackClockKey,
-    required this.onLoadGameCallback,
-    required this.onNewOpponentCallback,
-    required this.boardKey,
-  });
-
-  final GameFullId gameId;
-
-  final LoadingParam? loadingPosition;
+class const GameBody({
+  required final GameFullId gameId,
+  final LoadingParam? loadingPosition,
 
   /// [GlobalKey] for the white clock.
   ///
   /// This parameter is mandatory because the clock state needs to be preserved
   /// when the orientation changes on tablet.
-  final GlobalKey whiteClockKey;
+  required final GlobalKey whiteClockKey,
 
   /// [GlobalKey] for the black clock.
   ///
   /// This parameter is mandatory because the clock state needs to be preserved
   /// when the orientation changes on tablet.
-  final GlobalKey blackClockKey;
-
-  /// [GlobalKey] for the board.
-  ///
-  /// Used to set gestures exclusion on android.
-  final GlobalKey boardKey;
+  required final GlobalKey blackClockKey,
 
   /// Callback to load a new game. Used when the game is finished and the user
   /// wants to play a rematch, or when switching through games in correspondence
   /// chess.
-  final void Function(GameFullId id) onLoadGameCallback;
+  required final void Function(GameFullId id) onLoadGameCallback,
 
   /// Callback to load a new opponent.
-  final void Function(PlayableGame game) onNewOpponentCallback;
+  required final void Function(PlayableGame game) onNewOpponentCallback,
 
+  /// [GlobalKey] for the board.
+  ///
+  /// Used to set gestures exclusion on android.
+  required final GlobalKey boardKey,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = gameControllerProvider(gameId);
@@ -228,7 +217,12 @@ class GameBody extends ConsumerWidget {
 /// Coarse rendering phase for the [GameBody], derived from the controller's
 /// [AsyncValue]. Used so that per-move state changes (which stay in the [data]
 /// phase) do not rebuild the whole body.
-enum _GamePhase { loading, data, refreshing, error }
+enum _GamePhase() {
+  loading,
+  data,
+  refreshing,
+  error,
+}
 
 _GamePhase _gamePhaseOf(AsyncValue<GameState> state) => switch (state) {
   AsyncError() => _GamePhase.error,
@@ -245,28 +239,19 @@ _GamePhase _gamePhaseOf(AsyncValue<GameState> state) => switch (state) {
 /// player table slots) only rebuilds on rare changes (board flip, zen toggle,
 /// game-end). Player tables, the move list and the bottom bar are self-watching
 /// children that rebuild independently.
-class _PlayableGameBoard extends ConsumerStatefulWidget {
-  const _PlayableGameBoard({
-    required this.gameId,
-    required this.whiteClockKey,
-    required this.blackClockKey,
-    required this.boardKey,
-    required this.onLoadGameCallback,
-    required this.onNewOpponentCallback,
-  });
-
-  final GameFullId gameId;
-  final GlobalKey whiteClockKey;
-  final GlobalKey blackClockKey;
-  final GlobalKey boardKey;
-  final void Function(GameFullId id) onLoadGameCallback;
-  final void Function(PlayableGame game) onNewOpponentCallback;
-
+class const _PlayableGameBoard({
+  required final GameFullId gameId,
+  required final GlobalKey whiteClockKey,
+  required final GlobalKey blackClockKey,
+  required final GlobalKey boardKey,
+  required final void Function(GameFullId id) onLoadGameCallback,
+  required final void Function(PlayableGame game) onNewOpponentCallback,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_PlayableGameBoard> createState() => _PlayableGameBoardState();
 }
 
-class _PlayableGameBoardState extends ConsumerState<_PlayableGameBoard> {
+class _PlayableGameBoardState() extends ConsumerState<_PlayableGameBoard> {
   late final ChessboardController _controller;
 
   /// Ply of the position currently shown on the board. Used to tell a forward
@@ -415,9 +400,9 @@ class _PlayableGameBoardState extends ConsumerState<_PlayableGameBoard> {
     final topSide = topPlayerIsBlack ? Side.black : Side.white;
     final bottomSide = topPlayerIsBlack ? Side.white : Side.black;
 
-    final animationDuration = shell.speed == Speed.ultraBullet || shell.speed == Speed.bullet
-        ? Duration.zero
-        : boardPrefs.pieceAnimationDuration;
+    final animationDuration = shell.hasPieceAnimation
+        ? boardPrefs.pieceAnimationDuration
+        : Duration.zero;
 
     return FocusDetector(
       onFocusRegained: () {
@@ -480,7 +465,7 @@ class _PlayableGameBoardState extends ConsumerState<_PlayableGameBoard> {
 typedef _ShellData = ({
   Variant variant,
   Side youAre,
-  Speed speed,
+  bool hasPieceAnimation,
   bool zen,
   bool playable,
   bool canPremove,
@@ -498,7 +483,7 @@ _ShellData? _shellOf(AsyncValue<GameState> state) {
   return (
     variant: s.game.meta.variant,
     youAre: s.game.youAre ?? Side.white,
-    speed: s.game.meta.speed,
+    hasPieceAnimation: s.hasPieceAnimation,
     zen: s.isZenModeActive,
     playable: s.game.playable,
     canPremove: s.canPremove,
@@ -512,22 +497,15 @@ _ShellData? _shellOf(AsyncValue<GameState> state) {
 ///
 /// Lives inside the [_PlayableGameBoard] shell and rebuilds independently on the
 /// state it actually needs, so it does not force the shell or board to rebuild.
-class _GamePlayerTable extends ConsumerWidget {
-  const _GamePlayerTable({
-    required this.gameId,
-    required this.side,
-    required this.clockKey,
-    this.showOpponentLeftCountdown = false,
-  });
-
-  final GameFullId gameId;
-  final Side side;
-  final GlobalKey clockKey;
+class const _GamePlayerTable({
+  required final GameFullId gameId,
+  required final Side side,
+  required final GlobalKey clockKey,
 
   /// Whether this table displays the claim-win countdown and choices when the
   /// opponent has left. Only the bottom table (the user's) sets this.
-  final bool showOpponentLeftCountdown;
-
+  final bool showOpponentLeftCountdown = false,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = gameControllerProvider(gameId);
@@ -653,12 +631,8 @@ class _GamePlayerTable extends ConsumerWidget {
 
 /// A self-watching move list, driven by the game controller so move updates do
 /// not force the [GameLayout] shell to rebuild.
-class _GameMoveList extends ConsumerWidget {
-  const _GameMoveList({required this.gameId, required this.type});
-
-  final GameFullId gameId;
-  final MoveListType type;
-
+class const _GameMoveList({required final GameFullId gameId, required final MoveListType type})
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = gameControllerProvider(gameId);
@@ -685,17 +659,11 @@ class _GameMoveList extends ConsumerWidget {
   }
 }
 
-class _GameBottomBar extends ConsumerWidget {
-  const _GameBottomBar({
-    required this.id,
-    required this.onLoadGameCallback,
-    required this.onNewOpponentCallback,
-  });
-
-  final GameFullId id;
-  final void Function(GameFullId id) onLoadGameCallback;
-  final void Function(PlayableGame game) onNewOpponentCallback;
-
+class const _GameBottomBar({
+  required final GameFullId id,
+  required final void Function(GameFullId id) onLoadGameCallback,
+  required final void Function(PlayableGame game) onNewOpponentCallback,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ongoingGames = ref.watch(ongoingGamesProvider);
@@ -898,14 +866,6 @@ class _GameBottomBar extends ConsumerWidget {
             ref.read(isBoardTurnedProvider.notifier).toggle();
           },
         ),
-        if (gameState.game.playable && gameState.game.meta.speed == Speed.correspondence ||
-            gameState.game.finished)
-          BottomSheetAction(
-            makeLabel: (context) => Text(context.l10n.analysis),
-            onPressed: () {
-              Navigator.of(context).push(AnalysisScreen.buildRoute(gameState.analysisOptions));
-            },
-          ),
         if (gameState.game.abortable)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.abortGame),
@@ -1051,6 +1011,14 @@ class _GameBottomBar extends ConsumerWidget {
               Navigator.of(context).push(TournamentScreen.buildRoute(gameState.tournament!.id));
             },
           ),
+        if (gameState.game.playable && gameState.game.meta.speed == Speed.correspondence ||
+            gameState.game.finished)
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.analysis),
+            onPressed: () {
+              Navigator.of(context).push(AnalysisScreen.buildRoute(gameState.analysisOptions));
+            },
+          ),
       ],
     );
   }
@@ -1083,12 +1051,8 @@ class _GameBottomBar extends ConsumerWidget {
 /// Isolated from [_GameBottomBar] so that the per-move changes it depends on
 /// (cursor position, blink hint) repaint only this button instead of rebuilding
 /// the whole bar on every move.
-class _MoveNavButton extends ConsumerWidget {
-  const _MoveNavButton({required this.id, required this.forward});
-
-  final GameFullId id;
-  final bool forward;
-
+class const _MoveNavButton({required final GameFullId id, required final bool forward})
+    extends ConsumerWidget {
   void _move(WidgetRef ref) {
     final notifier = ref.read(gameControllerProvider(id).notifier);
     if (forward) {
@@ -1140,17 +1104,11 @@ class _MoveNavButton extends ConsumerWidget {
   }
 }
 
-class _GameNegotiationDialog extends StatelessWidget {
-  const _GameNegotiationDialog({
-    required this.title,
-    required this.onAccept,
-    required this.onDecline,
-  });
-
-  final Widget title;
-  final VoidCallback onAccept;
-  final VoidCallback onDecline;
-
+class const _GameNegotiationDialog({
+  required final Widget title,
+  required final VoidCallback onAccept,
+  required final VoidCallback onDecline,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void decline() {
@@ -1173,11 +1131,7 @@ class _GameNegotiationDialog extends StatelessWidget {
   }
 }
 
-class _ThreefoldDialog extends ConsumerWidget {
-  const _ThreefoldDialog({required this.id});
-
-  final GameFullId id;
-
+class const _ThreefoldDialog({required final GameFullId id}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final content = Text(context.l10n.threefoldRepetition);

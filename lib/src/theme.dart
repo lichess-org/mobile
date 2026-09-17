@@ -1,10 +1,10 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
+import 'package:material_ui/material_ui.dart';
 
 const kSliderTheme = SliderThemeData(
   // ignore: deprecated_member_use
@@ -40,12 +40,8 @@ ThemeData makeAppTheme(BuildContext context, GeneralPrefs generalPrefs, BoardPre
 
 /// A custom theme extension that adds lichess custom properties to the theme.
 @immutable
-class CustomTheme extends ThemeExtension<CustomTheme> {
-  const CustomTheme({required this.rowEven, required this.rowOdd});
-
-  final Color rowEven;
-  final Color rowOdd;
-
+class const CustomTheme({required final Color rowEven, required final Color rowOdd})
+    extends ThemeExtension<CustomTheme> {
   @override
   CustomTheme copyWith({Color? rowEven, Color? rowOdd}) {
     return CustomTheme(rowEven: rowEven ?? this.rowEven, rowOdd: rowOdd ?? this.rowOdd);

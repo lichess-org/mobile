@@ -21,7 +21,7 @@ import 'package:mocktail/mocktail.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 
-class MockStudyRepository extends Mock implements StudyRepository {}
+class MockStudyRepository() extends Mock implements StudyRepository;
 
 const testId = StudyId('test-id');
 
@@ -134,15 +134,12 @@ void main() {
         ),
       );
 
-      when(
-        () => mockRepository.getStudy(id: testId),
-      ).thenAnswer((_) async => (studyChapter1, null, '{pgn 1} 1. e4 {wow} e5 {such chess}'));
-      when(
-        () => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('1')),
-      ).thenAnswer((_) async => (studyChapter1, null, '{pgn 1} 1. e4 {wow} e5 {such chess}'));
-      when(
-        () => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('2')),
-      ).thenAnswer((_) async => (studyChapter2, null, '{pgn 2} 1. e4 {wow} e5 {such chess}'));
+      when(() => mockRepository.getStudy(id: testId))
+          .thenAnswer((_) async => (studyChapter1, null, '{pgn 1} 1. e4 {wow} e5 {such chess}'));
+      when(() => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('1')))
+          .thenAnswer((_) async => (studyChapter1, null, '{pgn 1} 1. e4 {wow} e5 {such chess}'));
+      when(() => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('2')))
+          .thenAnswer((_) async => (studyChapter2, null, '{pgn 2} 1. e4 {wow} e5 {such chess}'));
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -165,7 +162,7 @@ void main() {
       expect(find.bySemanticsLabel(RegExp('Opening explorer & tablebase')), findsNothing);
 
       // Open chapter selection dialog
-      await tester.tap(find.byTooltip('2 Chapters'));
+      await tester.tap(findByTooltip('2 Chapters'));
       // Wait for dialog to open
       await tester.pumpAndSettle();
 
@@ -213,9 +210,8 @@ void main() {
         chapter: makeChapter(id: const StudyChapterId('2')),
       );
 
-      when(
-        () => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('2')),
-      ).thenAnswer((_) async => (studyChapter2, null, '{pgn 2}'));
+      when(() => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('2')))
+          .thenAnswer((_) async => (studyChapter2, null, '{pgn 2}'));
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -285,9 +281,8 @@ void main() {
       final mockRepository = MockStudyRepository();
 
       // Return a study that branches: 1. e4 : e5 and c5
-      when(
-        () => mockRepository.getStudy(id: testId),
-      ).thenAnswer((_) async => (makeStudy(), null, '1. e4 e5 (1... c5)'));
+      when(() => mockRepository.getStudy(id: testId))
+          .thenAnswer((_) async => (makeStudy(), null, '1. e4 e5 (1... c5)'));
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -359,7 +354,7 @@ void main() {
 
       expect(tester.widget<Chessboard>(find.byType(Chessboard)).orientation, Side.white);
 
-      await tester.tap(find.byTooltip('Menu'));
+      await tester.tap(findByTooltip('Menu'));
       await tester.pumpAndSettle(); // Wait for menu to open
 
       await tester.tap(find.text('Flip board'));
@@ -446,7 +441,7 @@ void main() {
       expect(find.text('Not much to say after ...Qc7.'), findsOneWidget);
       expect(find.text(introText), findsNothing);
 
-      await tester.tap(find.byTooltip('Retry'));
+      await tester.tap(findByTooltip('Retry'));
       await tester.pump(); // Wait for move to be taken back
 
       expect(find.text(introText), findsOneWidget);
@@ -467,7 +462,7 @@ void main() {
         findsOneWidget,
       );
 
-      await tester.tap(find.byTooltip('Next'));
+      await tester.tap(findByTooltip('Next'));
       await tester.pump(); // Wait for opponent move to be played
 
       expect(find.text('What would you play in this position?'), findsOneWidget);
@@ -483,7 +478,7 @@ void main() {
       await playMove(tester, 'c3', 'g3');
       expect(find.text('A fork, threatening Rg7 & b3.'), findsOneWidget);
 
-      await tester.tap(find.byTooltip('Next'));
+      await tester.tap(findByTooltip('Next'));
       await tester.pump(); // Wait for opponent move to be played
 
       expect(find.text('What would you play in this position?'), findsOneWidget);
@@ -497,9 +492,9 @@ void main() {
         findsOneWidget,
       );
 
-      expect(find.byTooltip('Play again'), findsOneWidget);
-      expect(find.byTooltip('Next chapter'), findsOneWidget);
-      expect(find.byTooltip('Analysis board'), findsOneWidget);
+      expect(findByTooltip('Play again'), findsOneWidget);
+      expect(findByTooltip('Next chapter'), findsOneWidget);
+      expect(findByTooltip('Analysis board'), findsOneWidget);
     });
 
     testWidgets('Interactive study hints and deviation comments', (WidgetTester tester) async {
@@ -523,22 +518,21 @@ void main() {
           '1. e4 (1. d4 {Shown if d4 is played}) e5 2. Nf3 Nc6 3. d4',
         ),
       );
-      when(
-        () => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('2')),
-      ).thenAnswer(
-        (_) async => (
-          makeStudy(
-            chapter: makeChapter(
-              id: const StudyChapterId('2'),
-              orientation: Side.white,
-              gamebook: true,
+      when(() => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('2')))
+          .thenAnswer(
+            (_) async => (
+              makeStudy(
+                chapter: makeChapter(
+                  id: const StudyChapterId('2'),
+                  orientation: Side.white,
+                  gamebook: true,
+                ),
+                hints: ['Hint 1'].lock,
+              ),
+              null,
+              '1. e4 e5',
             ),
-            hints: ['Hint 1'].lock,
-          ),
-          null,
-          '1. e4 e5',
-        ),
-      );
+          );
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -561,7 +555,7 @@ void main() {
 
       await playMove(tester, 'e2', 'e3');
       expect(find.text('Shown if any move other than d4 is played'), findsOneWidget);
-      await tester.tap(find.byTooltip('Retry'));
+      await tester.tap(findByTooltip('Retry'));
       await tester.pump(); // Wait for move to be taken back
 
       // Hint should still be shown after incorrect move
@@ -569,11 +563,11 @@ void main() {
 
       await playMove(tester, 'd2', 'd4');
       expect(find.text('Shown if d4 is played'), findsOneWidget);
-      await tester.tap(find.byTooltip('Retry'));
+      await tester.tap(findByTooltip('Retry'));
       await tester.pump(); // Wait for move to be taken back
 
-      expect(find.byTooltip('View the solution'), findsOneWidget);
-      await tester.tap(find.byTooltip('View the solution'));
+      expect(findByTooltip('View the solution'), findsOneWidget);
+      await tester.tap(findByTooltip('View the solution'));
       // Wait for correct move and opponent's response to be played
       await tester.pump(const Duration(seconds: 1));
 
@@ -599,7 +593,7 @@ void main() {
       expect(find.text('Hint 2'), findsOneWidget);
 
       // Open chapter selection dialog
-      await tester.tap(find.byTooltip('2 Chapters'));
+      await tester.tap(findByTooltip('2 Chapters'));
       // Wait for dialog to open
       await tester.pumpAndSettle();
 
@@ -634,27 +628,24 @@ void main() {
       );
 
       // First chapter has a valid position
-      when(
-        () => mockRepository.getStudy(id: testId),
-      ).thenAnswer((_) async => (studyChapter1, null, '1. e4 e5'));
+      when(() => mockRepository.getStudy(id: testId))
+          .thenAnswer((_) async => (studyChapter1, null, '1. e4 e5'));
 
-      when(
-        () => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('1')),
-      ).thenAnswer((_) async => (studyChapter1, null, '1. e4 e5'));
+      when(() => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('1')))
+          .thenAnswer((_) async => (studyChapter1, null, '1. e4 e5'));
 
       // Second chapter has an illegal position (no pieces on Board)
-      when(
-        () => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('2')),
-      ).thenAnswer(
-        (_) async => (
-          studyChapter2,
-          null,
-          '''
+      when(() => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('2')))
+          .thenAnswer(
+            (_) async => (
+              studyChapter2,
+              null,
+              '''
 [FEN "8/8/8/8/8/8/8/8 w - - 0 1"]
 { Random comment } { [%csl Gd5,Ge5,Ge4,Gd4] }
     ''',
-        ),
-      );
+            ),
+          );
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -671,7 +662,7 @@ void main() {
       expect(find.text('1. Legal Chapter'), findsOneWidget);
 
       // Navigate to second chapter with illegal position
-      await tester.tap(find.byTooltip('2 Chapters'));
+      await tester.tap(findByTooltip('2 Chapters'));
       await tester.pumpAndSettle();
       await tester.tap(find.text('2 Illegal Chapter', findRichText: true));
       await tester.pumpAndSettle();
@@ -685,7 +676,7 @@ void main() {
       expect(staticBoard.fen, '8/8/8/8/8/8/8/8 w - - 0 1');
 
       // Verify we can navigate back to first chapter
-      await tester.tap(find.byTooltip('2 Chapters'));
+      await tester.tap(findByTooltip('2 Chapters'));
       await tester.pumpAndSettle();
 
       await tester.tap(find.text('1 Legal Chapter', findRichText: true));
@@ -693,7 +684,7 @@ void main() {
 
       expect(find.text('1. Legal Chapter'), findsOneWidget);
       // Verify we can navigate back to first chapter
-      await tester.tap(find.byTooltip('2 Chapters'));
+      await tester.tap(findByTooltip('2 Chapters'));
       await tester.pumpAndSettle();
 
       //Check that also via the chapter list the illegal chapter can be navigated to
@@ -762,11 +753,11 @@ void main() {
 
     // each pumpAndSettle() call waits for move to be played and potential annotation to appear
 
-    await tester.tap(find.byTooltip('Next'));
+    await tester.tap(findByTooltip('Next'));
     await tester.pumpAndSettle();
     expectAnnotations([]);
 
-    await tester.tap(find.byTooltip('Next'));
+    await tester.tap(findByTooltip('Next'));
     await tester.pumpAndSettle();
 
     // 4. Rg1!!
@@ -774,19 +765,19 @@ void main() {
       containsPair(Square.g1, predicate<Annotation>((annotation) => annotation.symbol == '!!')),
     ]);
 
-    await tester.tap(find.byTooltip('Next'));
+    await tester.tap(findByTooltip('Next'));
     await tester.pumpAndSettle(); // Wait for move to be played
     expectAnnotations([]);
 
-    await tester.tap(find.byTooltip('Next'));
+    await tester.tap(findByTooltip('Next'));
     await tester.pumpAndSettle(); // Wait for move to be played
     expectAnnotations([]);
 
-    await tester.tap(find.byTooltip('Next'));
+    await tester.tap(findByTooltip('Next'));
     await tester.pumpAndSettle(); // Wait for move to be played
     expectAnnotations([]);
 
-    await tester.tap(find.byTooltip('Next'));
+    await tester.tap(findByTooltip('Next'));
     await tester.pumpAndSettle(); // Wait for move to be played
 
     // Regression test for https://github.com/lichess-org/mobile/issues/2231
@@ -794,6 +785,52 @@ void main() {
     expectAnnotations([
       containsPair(Square.h1, predicate<Annotation>((annotation) => annotation.symbol == '??')),
     ]);
+  });
+
+  testWidgets('Displays PGN player names and clocks', (WidgetTester tester) async {
+    final mockRepository = MockStudyRepository();
+    when(() => mockRepository.getStudy(id: testId)).thenAnswer(
+      (_) async => (
+        makeStudy(
+          chapter: makeChapter(
+            id: const StudyChapterId('1'),
+            orientation: Side.white,
+            gamebook: false,
+          ),
+        ),
+        null,
+        '''
+[White "Magnus"]
+[Black "Hikaru"]
+[Result "1-0"]
+
+1. e4 { [%clk 0:10:00] } e5 { [%clk 0:10:00] } 2. Nf3 { [%clk 0:09:50] } 1-0
+''',
+      ),
+    );
+
+    final app = await makeTestProviderScopeApp(
+      tester,
+      home: const StudyScreen(options: (id: testId, initialChapter: null)),
+      overrides: {
+        studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
+      },
+    );
+    await tester.pumpWidget(app);
+    // Wait for study to load
+    await tester.pumpAndSettle();
+
+    await playMove(tester, 'e2', 'e4');
+    await playMove(tester, 'e7', 'e5');
+    await playMove(tester, 'g1', 'f3');
+
+    final whiteFooter = find.byKey(const ValueKey(Side.white));
+    expect(find.descendant(of: whiteFooter, matching: find.text('Magnus')), findsOneWidget);
+    expect(find.descendant(of: whiteFooter, matching: find.text('09:50')), findsOneWidget);
+
+    final blackHeader = find.byKey(const ValueKey(Side.black));
+    expect(find.descendant(of: blackHeader, matching: find.text('Hikaru')), findsOneWidget);
+    expect(find.descendant(of: blackHeader, matching: find.text('10:00')), findsOneWidget);
   });
 
   testWidgets('Displays correct annotation for castling on correct square', (
@@ -836,7 +873,7 @@ void main() {
     // Wait for study to load
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byTooltip('Next'));
+    await tester.tap(findByTooltip('Next'));
     await tester.pumpAndSettle(); // Wait for O-O-O move to be played
 
     final board = tester.widget<Chessboard>(find.byType(Chessboard));
@@ -938,9 +975,8 @@ void main() {
               orientation: Side.white,
               features: (computer: true, explorer: false),
             ),
-            members: IMap<UserId, StudyMember>(
-              const {},
-            ).add(user.user.id, StudyMember(user: user.user, role: '')),
+            members: IMap<UserId, StudyMember>(const {})
+                .add(user.user.id, StudyMember(user: user.user, role: '')),
           ),
           null,
           'e4 e5 Nf3 Nc6',
@@ -984,9 +1020,8 @@ void main() {
               orientation: Side.white,
               features: (computer: true, explorer: false),
             ),
-            members: IMap<UserId, StudyMember>(
-              const {},
-            ).add(user.user.id, StudyMember(user: user.user, role: 'w')),
+            members: IMap<UserId, StudyMember>(const {})
+                .add(user.user.id, StudyMember(user: user.user, role: 'w')),
           ),
           null,
           'e4 e5 Nf3 Nc6',

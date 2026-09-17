@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/model/clock/clock_tool_controller.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
@@ -8,23 +7,18 @@ import 'package:lichess_mobile/src/view/clock/clock_tool_l10n.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
+import 'package:material_ui/material_ui.dart';
 
-class CustomClockSettings extends StatefulWidget {
-  const CustomClockSettings({
-    required this.clockType,
-    required this.clock,
-    required this.onTimeSelected,
-  });
-
-  final ClockTimeControlType clockType;
-  final TimeIncrement clock;
-  final ValueSetter<TimeIncrement> onTimeSelected;
-
+class const CustomClockSettings({
+  required final ClockTimeControlType clockType,
+  required final TimeIncrement clock,
+  required final ValueSetter<TimeIncrement> onTimeSelected,
+}) extends StatefulWidget {
   @override
   State<CustomClockSettings> createState() => _CustomClockSettingsState();
 }
 
-class _CustomClockSettingsState extends State<CustomClockSettings> {
+class _CustomClockSettingsState() extends State<CustomClockSettings> {
   late TimeIncrement _clock;
 
   @override
@@ -100,9 +94,22 @@ class _CustomClockSettingsState extends State<CustomClockSettings> {
         ),
         Padding(
           padding: Styles.horizontalBodyPadding,
-          child: FilledButton(
-            onPressed: () => _submit(context),
-            child: Text(context.l10n.mobileOkButton, style: Styles.bold),
+          child: Row(
+            children: [
+              Expanded(
+                child: FilledButton(
+                  onPressed: () => _submit(context),
+                  child: Text(context.l10n.mobileOkButton, style: Styles.bold),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: FilledButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text(context.l10n.cancel, style: Styles.bold),
+                ),
+              ),
+            ],
           ),
         ),
       ],

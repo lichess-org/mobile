@@ -17,10 +17,7 @@ final httpLogStorageProvider = FutureProvider<HttpLogStorage>((Ref ref) async {
 const kHttpLogStorageTable = 'http_log';
 
 /// Manages the storage of HTTP logs in a SQLite database.
-class HttpLogStorage {
-  const HttpLogStorage(this._db);
-  final Database _db;
-
+class const HttpLogStorage(final Database _db) {
   /// Retrieves a paginated list of [HttpLogEntry] entries from the database.
   ///
   /// [searchQuery] filters entries whose request method, URL, or error message contain the query.
@@ -98,10 +95,8 @@ class HttpLogStorage {
 
 /// Represents an HTTP log entry.
 @Freezed(fromJson: true, toJson: true)
-sealed class HttpLogEntry with _$HttpLogEntry {
-  const HttpLogEntry._();
-
-  const factory HttpLogEntry({
+sealed class const HttpLogEntry._() with _$HttpLogEntry {
+  const factory({
     required String httpLogId,
     required String requestMethod,
     @JsonKey(toJson: _urlToJson, fromJson: _urlFromJson) required Uri requestUrl,
@@ -118,7 +113,7 @@ sealed class HttpLogEntry with _$HttpLogEntry {
     return responseDateTime!.difference(requestDateTime);
   }
 
-  factory HttpLogEntry.fromJson(Map<String, dynamic> json) => _$HttpLogEntryFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$HttpLogEntryFromJson(json);
 }
 
 String _urlToJson(Uri url) => url.toString();
@@ -131,7 +126,7 @@ Uri _urlFromJson(String url) => Uri.parse(url);
 /// - `next`: An optional integer representing the next cursor.
 @Freezed(fromJson: true, toJson: true)
 sealed class HttpLog with _$HttpLog {
-  const factory HttpLog({required IList<HttpLogEntry> items, required int? next}) = _HttpLog;
+  const factory({required IList<HttpLogEntry> items, required int? next}) = _HttpLog;
 
-  factory HttpLog.fromJson(Map<String, dynamic> json) => _$HttpLogFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$HttpLogFromJson(json);
 }

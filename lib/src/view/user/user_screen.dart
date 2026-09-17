@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' show ClientException;
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
@@ -31,6 +30,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/text_badge.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -39,11 +39,7 @@ final _userScreenDataProvider = FutureProvider.autoDispose.family<UserScreenData
   name: 'UserScreenDataProvider',
 );
 
-class UserScreen extends ConsumerStatefulWidget {
-  const UserScreen({required this.user, super.key});
-
-  final LightUser user;
-
+class const UserScreen({required final LightUser user, super.key}) extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute(LightUser user) {
     return buildScreenRoute(screen: UserScreen(user: user));
   }
@@ -81,7 +77,7 @@ class UserScreen extends ConsumerStatefulWidget {
   ConsumerState<UserScreen> createState() => _UserScreenState();
 }
 
-class _UserScreenState extends ConsumerState<UserScreen> {
+class _UserScreenState() extends ConsumerState<UserScreen> {
   bool isLoading = false;
 
   void setIsLoading(bool value) {
@@ -145,19 +141,12 @@ class _UserScreenState extends ConsumerState<UserScreen> {
   }
 }
 
-class _UserProfileListView extends ConsumerWidget {
-  const _UserProfileListView(
-    this.data,
-    this.isLoading,
-    this.setIsLoading, {
-    required this.onRefresh,
-  });
-
-  final UserScreenData data;
-  final bool isLoading;
-  final void Function(bool value) setIsLoading;
-  final RefreshCallback onRefresh;
-
+class const _UserProfileListView(
+  final UserScreenData data,
+  final bool isLoading,
+  final void Function(bool value) setIsLoading, {
+  required final RefreshCallback onRefresh,
+}) extends ConsumerWidget {
   String _scoreDisplay(double score) {
     final integerPart = score.truncate();
     final decimalPart = score - integerPart;

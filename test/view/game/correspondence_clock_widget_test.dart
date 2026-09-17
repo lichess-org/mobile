@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/view/game/correspondence_clock_widget.dart';
+import 'package:material_ui/material_ui.dart';
 
 Widget _buildClock({
   required Duration duration,

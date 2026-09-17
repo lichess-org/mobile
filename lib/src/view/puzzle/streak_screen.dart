@@ -1,7 +1,6 @@
 import 'package:chessground/chessground.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
@@ -32,11 +31,10 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:share_plus/share_plus.dart';
 
-class StreakScreen extends StatelessWidget {
-  const StreakScreen({super.key});
-
+class const StreakScreen({super.key}) extends StatelessWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const StreakScreen());
   }
@@ -52,9 +50,7 @@ class StreakScreen extends StatelessWidget {
   }
 }
 
-class _Load extends ConsumerWidget {
-  const _Load();
-
+class const _Load() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authUser = ref.watch(authControllerProvider);
@@ -80,17 +76,15 @@ class _Load extends ConsumerWidget {
   }
 }
 
-class _Body extends ConsumerStatefulWidget {
-  const _Body({required this.initialPuzzleContext, required this.streak});
-
-  final PuzzleContext initialPuzzleContext;
-  final PuzzleStreak streak;
-
+class const _Body({
+  required final PuzzleContext initialPuzzleContext,
+  required final PuzzleStreak streak,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_Body> createState() => _BodyState();
 }
 
-class _BodyState extends ConsumerState<_Body> {
+class _BodyState() extends ConsumerState<_Body> {
   final _boardKey = GlobalKey(debugLabel: 'boardOnPuzzleStreakScreen');
   late final ChessboardController _controller;
 
@@ -471,12 +465,10 @@ class _BodyState extends ConsumerState<_Body> {
   }
 }
 
-class _BottomBar extends ConsumerWidget {
-  const _BottomBar({required this.initialPuzzleContext, required this.streak});
-
-  final PuzzleContext initialPuzzleContext;
-  final PuzzleStreak streak;
-
+class const _BottomBar({
+  required final PuzzleContext initialPuzzleContext,
+  required final PuzzleStreak streak,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = puzzleControllerProvider(initialPuzzleContext);

@@ -17,17 +17,13 @@ final messageServiceProvider = Provider<MessageService>((Ref ref) {
   return service;
 }, name: 'MessageServiceProvider');
 
-class MessageService {
-  MessageService(this.ref);
-
-  final Ref ref;
-
+class MessageService(final Ref ref) {
   StreamSubscription<ParsedLocalNotification>? _notificationResponseSubscription;
   StreamSubscription<ReceivedFcmMessage>? _fcmSubscription;
 
   void start() {
     _fcmSubscription = NotificationService.fcmMessageStream.listen((data) {
-      final (message: fcmMessage, fromBackground: fromBackground) = data;
+      final (message: fcmMessage, :fromBackground) = data;
       switch (fcmMessage) {
         case NewMessageFcmMessage():
           ref.invalidate(contactsProvider);

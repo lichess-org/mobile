@@ -1,6 +1,5 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_player.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -11,6 +10,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
+import 'package:material_ui/material_ui.dart';
 
 typedef _GameData = ({
   AnalysisPlayer? white,
@@ -21,11 +21,8 @@ typedef _GameData = ({
 });
 
 /// A screen that lists multiple games parsed from one PGN file, allowing the user to select one for analysis.
-class PgnGamesListScreen extends StatefulWidget {
-  const PgnGamesListScreen({required this.games, super.key});
-
-  final IList<PgnLazyGame> games;
-
+class const PgnGamesListScreen({required final IList<PgnLazyGame> games, super.key})
+    extends StatefulWidget {
   static Route<dynamic> buildRoute(IList<PgnLazyGame> games) {
     return buildScreenRoute(screen: PgnGamesListScreen(games: games));
   }
@@ -34,7 +31,7 @@ class PgnGamesListScreen extends StatefulWidget {
   State<PgnGamesListScreen> createState() => _PgnGamesListScreenState();
 }
 
-class _PgnGamesListScreenState extends State<PgnGamesListScreen> {
+class _PgnGamesListScreenState() extends State<PgnGamesListScreen> {
   late final IList<_GameData> _gameData;
   String _searchQuery = '';
   late final TextEditingController _searchController;

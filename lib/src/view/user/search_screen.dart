@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/user/search_history.dart';
@@ -12,16 +11,16 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
+import 'package:material_ui/material_ui.dart';
 
 const _kSaveHistoryDebouncTimer = Duration(seconds: 2);
 
-class SearchScreen extends ConsumerStatefulWidget {
-  const SearchScreen({this.onUserTap, this.title, this.autoFocus = true, super.key});
-
-  final void Function(LightUser)? onUserTap;
-  final Widget? title;
-  final bool autoFocus;
-
+class const SearchScreen({
+  final void Function(LightUser)? onUserTap,
+  final Widget? title,
+  final bool autoFocus = true,
+  super.key,
+}) extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute({
     void Function(LightUser)? onUserTap,
     Widget? title,
@@ -37,7 +36,7 @@ class SearchScreen extends ConsumerStatefulWidget {
   ConsumerState<SearchScreen> createState() => _SearchScreenState();
 }
 
-class _SearchScreenState extends ConsumerState<SearchScreen> {
+class _SearchScreenState() extends ConsumerState<SearchScreen> {
   final _searchController = TextEditingController();
   final saveHistoryDebouncer = Debouncer(_kSaveHistoryDebouncTimer);
   String? _term;
@@ -110,12 +109,11 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   }
 }
 
-class _Body extends ConsumerWidget {
-  const _Body(this.term, this.onRecentSearchTap, this.onUserTap);
-
-  final String? term;
-  final void Function(String) onRecentSearchTap;
-  final void Function(LightUser)? onUserTap;
+class const _Body(
+  final String? term,
+  final void Function(String) onRecentSearchTap,
+  final void Function(LightUser)? onUserTap,
+) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (term != null) {
@@ -149,12 +147,8 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class _UserList extends ConsumerWidget {
-  const _UserList(this.term, this.onUserTap);
-
-  final String term;
-  final void Function(LightUser)? onUserTap;
-
+class const _UserList(final String term, final void Function(LightUser)? onUserTap)
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final autoComplete = ref.watch(autoCompleteUserProvider(term));

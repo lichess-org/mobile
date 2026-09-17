@@ -2,14 +2,13 @@ import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
+import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/study/study_controller.dart';
@@ -21,6 +20,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_player_widget.dart';
 import 'package:lichess_mobile/src/view/analysis/server_analysis.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
@@ -34,15 +34,12 @@ import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:logging/logging.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:share_plus/share_plus.dart';
 
 final _logger = Logger('StudyScreen');
 
-class StudyScreen extends StatelessWidget {
-  const StudyScreen({required this.options, super.key});
-
-  final StudyOptions options;
-
+class const StudyScreen({required final StudyOptions options, super.key}) extends StatelessWidget {
   static Route<dynamic> buildRoute(StudyOptions options) {
     return buildScreenRoute(screen: StudyScreen(options: options));
   }
@@ -53,11 +50,7 @@ class StudyScreen extends StatelessWidget {
   }
 }
 
-class _StudyScreenLoader extends ConsumerWidget {
-  const _StudyScreenLoader({required this.options});
-
-  final StudyOptions options;
-
+class const _StudyScreenLoader({required final StudyOptions options}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
@@ -138,17 +131,15 @@ class _StudyScreenLoader extends ConsumerWidget {
   }
 }
 
-class _StudyScreen extends ConsumerStatefulWidget {
-  const _StudyScreen({required this.options, required this.studyState});
-
-  final StudyOptions options;
-  final StudyState studyState;
-
+class const _StudyScreen({
+  required final StudyOptions options,
+  required final StudyState studyState,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_StudyScreen> createState() => _StudyScreenState();
 }
 
-class _StudyScreenState extends ConsumerState<_StudyScreen> with TickerProviderStateMixin {
+class _StudyScreenState() extends ConsumerState<_StudyScreen> with TickerProviderStateMixin {
   late List<AnalysisTab> tabs;
   late TabController _tabController;
 
@@ -211,11 +202,7 @@ class _StudyScreenState extends ConsumerState<_StudyScreen> with TickerProviderS
   }
 }
 
-class _StudyMenu extends ConsumerWidget {
-  const _StudyMenu({required this.options});
-
-  final StudyOptions options;
-
+class const _StudyMenu({required final StudyOptions options}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authUser = ref.watch(authControllerProvider);
@@ -286,7 +273,7 @@ class _StudyMenu extends ConsumerWidget {
                   ),
                   if (state.currentPosition != null)
                     BottomSheetAction(
-                      makeLabel: (context) => Text(context.l10n.screenshotCurrentPosition),
+                      makeLabel: (context) => Text(context.l10n.positionAsImage),
                       onPressed: () async {
                         try {
                           final image = await ref
@@ -350,11 +337,8 @@ class _StudyMenu extends ConsumerWidget {
   }
 }
 
-class _CannotRequestServerAnalysisReason extends StatelessWidget {
-  const _CannotRequestServerAnalysisReason({required this.reason});
-
-  final String reason;
-
+class const _CannotRequestServerAnalysisReason({required final String reason})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -363,13 +347,11 @@ class _CannotRequestServerAnalysisReason extends StatelessWidget {
   }
 }
 
-class _Body extends ConsumerWidget {
-  const _Body({required this.options, required this.tabController, required this.tabs});
-
-  final StudyOptions options;
-  final TabController tabController;
-  final List<AnalysisTab> tabs;
-
+class const _Body({
+  required final StudyOptions options,
+  required final TabController tabController,
+  required final List<AnalysisTab> tabs,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final studyState = ref.watch(studyControllerProvider(options)).requireValue;
@@ -407,6 +389,17 @@ class _Body extends ConsumerWidget {
         ? StudyGamebook(options)
         : StudyTreeView(options, showTopDivider: tabs.length == 1);
 
+    final playerWidgets = playerWidgetsFromPgnHeaders(
+      pgnHeaders: studyState.pgnHeaders,
+      sideToMove: studyState.currentPosition?.turn ?? Side.white,
+      whiteClock: studyState.currentPosition?.turn == Side.white
+          ? studyState.clocks?.parentClock
+          : studyState.clocks?.clock,
+      blackClock: studyState.currentPosition?.turn == Side.black
+          ? studyState.clocks?.parentClock
+          : studyState.clocks?.clock,
+    );
+
     return AnalysisLayout(
       tabController: tabController,
       pov: pov,
@@ -414,6 +407,8 @@ class _Body extends ConsumerWidget {
       boardBuilder: (context, boardSize, borderRadius) =>
           StudyAnalysisBoard(options: options, boardSize: boardSize, boardRadius: borderRadius),
       smallBoard: studyPrefs.smallBoard,
+      boardHeader: pov == Side.white ? playerWidgets.black : playerWidgets.white,
+      boardFooter: pov == Side.white ? playerWidgets.white : playerWidgets.black,
       engineGaugeBuilder:
           isComputerAnalysisAllowed && showEvaluationGauge && engineGaugeParams != null
           ? (context) {
@@ -426,7 +421,7 @@ class _Body extends ConsumerWidget {
               isLocalEvaluationEnabled &&
               numEvalLines > 0
           ? EngineLines(
-              filters: (id: studyState.evaluationContext.id, path: studyState.currentPath),
+              filters: (context: studyState.evaluationContext, path: studyState.currentPath),
               analysisState: studyState,
               onTapMove: ref.read(studyControllerProvider(options).notifier).onUserMove,
             )
@@ -510,16 +505,16 @@ extension on PgnCommentShape {
   }
 }
 
-class StudyAnalysisBoard extends AnalysisBoard {
-  const StudyAnalysisBoard({required this.options, required super.boardSize, super.boardRadius});
-
-  final StudyOptions options;
-
+class const StudyAnalysisBoard({
+  required final StudyOptions options,
+  required super.boardSize,
+  super.boardRadius,
+}) extends AnalysisBoard {
   @override
   ConsumerState<StudyAnalysisBoard> createState() => _StudyAnalysisBoardState();
 }
 
-class _StudyAnalysisBoardState
+class _StudyAnalysisBoardState()
     extends AnalysisBoardState<StudyAnalysisBoard, StudyState, StudyPrefs> {
   @override
   StudyState? readCurrentState() => ref.read(studyControllerProvider(widget.options)).value;
@@ -551,7 +546,7 @@ class _StudyAnalysisBoardState
 
   @override
   EngineEvaluationFilters get engineEvaluationFilters =>
-      (id: analysisState.evaluationContext.id, path: analysisState.currentPath);
+      (context: analysisState.evaluationContext, path: analysisState.currentPath);
 
   @override
   String computeFen(StudyState state) =>

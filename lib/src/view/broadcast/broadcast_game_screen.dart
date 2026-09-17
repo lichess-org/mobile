@@ -1,7 +1,6 @@
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
@@ -10,7 +9,7 @@ import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
+import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -19,6 +18,7 @@ import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_actions.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen_providers.dart';
@@ -30,6 +30,7 @@ import 'package:lichess_mobile/src/view/engine/engine_button.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/explorer/explorer_view.dart';
+
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -39,26 +40,21 @@ import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/variations_bar.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-class BroadcastGameScreen extends ConsumerStatefulWidget {
-  final BroadcastTournamentId? tournamentId;
-  final BroadcastRoundId roundId;
-  final BroadcastGameId gameId;
-  final String? tournamentSlug;
-  final String? roundSlug;
-  final String? title;
+class const BroadcastGameScreen({
+  final BroadcastTournamentId? tournamentId,
+  required final BroadcastRoundId roundId,
+  required final BroadcastGameId gameId,
+  final String? tournamentSlug,
+  final String? roundSlug,
+  final String? title,
 
-  const BroadcastGameScreen({
-    this.tournamentId,
-    required this.roundId,
-    required this.gameId,
-    this.tournamentSlug,
-    this.roundSlug,
-    this.title,
-  });
-
+  /// The side to view the board from, if it should differ from the default (white).
+  final Side? initialPov,
+}) extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute({
     BroadcastTournamentId? tournamentId,
     required BroadcastRoundId roundId,
@@ -66,6 +62,7 @@ class BroadcastGameScreen extends ConsumerStatefulWidget {
     String? tournamentSlug,
     String? roundSlug,
     String? title,
+    Side? initialPov,
   }) {
     return buildScreenRoute(
       screen: BroadcastGameScreen(
@@ -75,6 +72,7 @@ class BroadcastGameScreen extends ConsumerStatefulWidget {
         tournamentSlug: tournamentSlug,
         roundSlug: roundSlug,
         title: title,
+        initialPov: initialPov,
       ),
     );
   }
@@ -83,7 +81,8 @@ class BroadcastGameScreen extends ConsumerStatefulWidget {
   ConsumerState<BroadcastGameScreen> createState() => _BroadcastGameScreenState();
 }
 
-class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
+class _BroadcastGameScreenState()
+    extends ConsumerState<BroadcastGameScreen>
     with SingleTickerProviderStateMixin {
   late final List<AnalysisTab> tabs;
   late final TabController _tabController;
@@ -95,6 +94,26 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
     tabs = [AnalysisTab.pgn, AnalysisTab.explorer, AnalysisTab.moves, AnalysisTab.summary];
 
     _tabController = TabController(vsync: this, initialIndex: 2, length: tabs.length);
+
+    final initialPov = widget.initialPov;
+    if (initialPov != null) {
+      final ctrlProvider = broadcastAnalysisControllerProvider((
+        roundId: widget.roundId,
+        gameId: widget.gameId,
+      ));
+      // The controller loads asynchronously, so the point of view can only be set once its state
+      // is available. `fireImmediately` covers the case where the controller is already loaded.
+      // The write is deferred to a microtask because assigning the controller state from within
+      // the notification of its own first `AsyncData` value gets overwritten by Riverpod.
+      ref.listenManual<BroadcastAnalysisState?>(ctrlProvider.select((v) => v.value), (prev, next) {
+        if (prev == null && next != null) {
+          Future.microtask(() {
+            if (!mounted) return;
+            ref.read(ctrlProvider.notifier).setPov(initialPov);
+          });
+        }
+      }, fireImmediately: true);
+    }
   }
 
   @override
@@ -141,19 +160,12 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
   }
 }
 
-class _BroadcastGameMenu extends ConsumerWidget {
-  const _BroadcastGameMenu({
-    required this.roundId,
-    required this.gameId,
-    this.tournamentSlug,
-    this.roundSlug,
-  });
-
-  final BroadcastRoundId roundId;
-  final BroadcastGameId gameId;
-  final String? tournamentSlug;
-  final String? roundSlug;
-
+class const _BroadcastGameMenu({
+  required final BroadcastRoundId roundId,
+  required final BroadcastGameId gameId,
+  final String? tournamentSlug,
+  final String? roundSlug,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ContextMenuIconButton(
@@ -219,25 +231,15 @@ class _BroadcastGameMenu extends ConsumerWidget {
   }
 }
 
-class _Body extends ConsumerWidget {
-  const _Body(
-    this.tournamentId,
-    this.roundId,
-    this.gameId,
-    this.tournamentSlug,
-    this.roundSlug, {
-    required this.tabController,
-    required this.tabs,
-  });
-
-  final BroadcastTournamentId? tournamentId;
-  final BroadcastRoundId roundId;
-  final BroadcastGameId gameId;
-  final String? tournamentSlug;
-  final String? roundSlug;
-  final TabController tabController;
-  final List<AnalysisTab> tabs;
-
+class const _Body(
+  final BroadcastTournamentId? tournamentId,
+  final BroadcastRoundId roundId,
+  final BroadcastGameId gameId,
+  final String? tournamentSlug,
+  final String? roundSlug, {
+  required final TabController tabController,
+  required final List<AnalysisTab> tabs,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     switch (ref.watch(broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId)))) {
@@ -284,14 +286,12 @@ class _Body extends ConsumerWidget {
             engineLines:
                 isLocalEvaluationEnabled && broadcastPrefs.showEngineLines && numEvalLines > 0
                 ? EngineLines(
-                    filters: (id: state.evaluationContext.id, path: state.currentPath),
+                    filters: (context: state.evaluationContext, path: state.currentPath),
                     analysisState: state,
                     onTapMove: ref
                         .read(
-                          broadcastAnalysisControllerProvider((
-                            roundId: roundId,
-                            gameId: gameId,
-                          )).notifier,
+                          broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId))
+                              .notifier,
                         )
                         .onUserMove,
                   )
@@ -318,12 +318,8 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class _BroadcastGameTreeView extends ConsumerWidget {
-  const _BroadcastGameTreeView(this.roundId, this.gameId);
-
-  final BroadcastRoundId roundId;
-  final BroadcastGameId gameId;
-
+class const _BroadcastGameTreeView(final BroadcastRoundId roundId, final BroadcastGameId gameId)
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId));
@@ -366,7 +362,7 @@ class _BroadcastGameTreeView extends ConsumerWidget {
   }
 }
 
-enum PgnTags {
+enum PgnTags(final String tagName, {required final bool isLink}) {
   white('White', isLink: false),
   whiteElo('WhiteElo', isLink: false),
   whiteTitle('WhiteTitle', isLink: false),
@@ -381,11 +377,6 @@ enum PgnTags {
   event('Event', isLink: false),
   round('Round', isLink: false);
 
-  const PgnTags(this.tagName, {required this.isLink});
-
-  final String tagName;
-  final bool isLink;
-
   String? buildUrl(String value) {
     if (value.isEmpty) return null;
     switch (this) {
@@ -398,12 +389,8 @@ enum PgnTags {
   }
 }
 
-class _PgnTagsView extends ConsumerWidget {
-  const _PgnTagsView(this.roundId, this.gameId);
-
-  final BroadcastRoundId roundId;
-  final BroadcastGameId gameId;
-
+class const _PgnTagsView(final BroadcastRoundId roundId, final BroadcastGameId gameId)
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId));
@@ -458,12 +445,8 @@ class _PgnTagsView extends ConsumerWidget {
   }
 }
 
-class _OpeningExplorerTab extends ConsumerWidget {
-  const _OpeningExplorerTab(this.roundId, this.gameId);
-
-  final BroadcastRoundId roundId;
-  final BroadcastGameId gameId;
-
+class const _OpeningExplorerTab(final BroadcastRoundId roundId, final BroadcastGameId gameId)
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId));
@@ -485,22 +468,17 @@ class _OpeningExplorerTab extends ConsumerWidget {
   }
 }
 
-class BroadcastAnalysisBoard extends AnalysisBoard {
-  const BroadcastAnalysisBoard({
-    required this.roundId,
-    required this.gameId,
-    required super.boardSize,
-    super.boardRadius,
-  });
-
-  final BroadcastRoundId roundId;
-  final BroadcastGameId gameId;
-
+class const BroadcastAnalysisBoard({
+  required final BroadcastRoundId roundId,
+  required final BroadcastGameId gameId,
+  required super.boardSize,
+  super.boardRadius,
+}) extends AnalysisBoard {
   @override
   ConsumerState<BroadcastAnalysisBoard> createState() => _BroadcastAnalysisBoardState();
 }
 
-class _BroadcastAnalysisBoardState
+class _BroadcastAnalysisBoardState()
     extends AnalysisBoardState<BroadcastAnalysisBoard, BroadcastAnalysisState, BroadcastPrefs> {
   @override
   BroadcastAnalysisState? readCurrentState() => ref
@@ -511,10 +489,8 @@ class _BroadcastAnalysisBoardState
   void listenToStateChanges(
     void Function(BroadcastAnalysisState? prev, BroadcastAnalysisState? next) listener,
   ) => ref.listenManual<BroadcastAnalysisState?>(
-    broadcastAnalysisControllerProvider((
-      roundId: widget.roundId,
-      gameId: widget.gameId,
-    )).select((v) => v.value),
+    broadcastAnalysisControllerProvider((roundId: widget.roundId, gameId: widget.gameId))
+        .select((v) => v.value),
     listener,
   );
 
@@ -533,36 +509,30 @@ class _BroadcastAnalysisBoardState
   @override
   void onUserMove(Move move) => ref
       .read(
-        broadcastAnalysisControllerProvider((
-          roundId: widget.roundId,
-          gameId: widget.gameId,
-        )).notifier,
+        broadcastAnalysisControllerProvider((roundId: widget.roundId, gameId: widget.gameId))
+            .notifier,
       )
       .onUserMove(move);
 
   @override
   EngineEvaluationFilters get engineEvaluationFilters =>
-      (id: analysisState.evaluationContext.id, path: analysisState.currentPath);
+      (context: analysisState.evaluationContext, path: analysisState.currentPath);
 
   @override
   String computeFen(BroadcastAnalysisState state) => state.currentPosition.fen;
 }
 
-enum _PlayerWidgetPosition { bottom, top }
+enum _PlayerWidgetPosition() {
+  bottom,
+  top,
+}
 
-class _PlayerWidget extends ConsumerWidget {
-  const _PlayerWidget({
-    this.tournamentId,
-    required this.roundId,
-    required this.gameId,
-    required this.widgetPosition,
-  });
-
-  final BroadcastTournamentId? tournamentId;
-  final BroadcastRoundId roundId;
-  final BroadcastGameId gameId;
-  final _PlayerWidgetPosition widgetPosition;
-
+class const _PlayerWidget({
+  final BroadcastTournamentId? tournamentId,
+  required final BroadcastRoundId roundId,
+  required final BroadcastGameId gameId,
+  required final _PlayerWidgetPosition widgetPosition,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     switch (ref.watch(broadcastRoundGameProvider((roundId: roundId, gameId: gameId)))) {
@@ -611,10 +581,8 @@ class _PlayerWidget extends ConsumerWidget {
                 if (game.isOver) ...[
                   Text(
                     resultString(customScoring, side, game.status),
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontWeight: .bold,
-                      color: game.status.colorFor(side, context),
-                    ),
+                    style: Theme.of(context).textTheme.bodyMedium
+                        ?.copyWith(fontWeight: .bold, color: game.status.colorFor(side, context)),
                   ),
                   const SizedBox(width: 16.0),
                 ],
@@ -667,13 +635,11 @@ class _PlayerWidget extends ConsumerWidget {
   }
 }
 
-class _Clock extends StatelessWidget {
-  const _Clock({required this.timeLeft, required this.isSideToMove, required this.isClockActive});
-
-  final Duration timeLeft;
-  final bool isSideToMove;
-  final bool isClockActive;
-
+class const _Clock({
+  required final Duration timeLeft,
+  required final bool isSideToMove,
+  required final bool isClockActive,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
@@ -690,19 +656,12 @@ class _Clock extends StatelessWidget {
   }
 }
 
-class _BroadcastGameBottomBar extends ConsumerWidget {
-  const _BroadcastGameBottomBar({
-    required this.roundId,
-    required this.gameId,
-    this.tournamentSlug,
-    this.roundSlug,
-  });
-
-  final BroadcastRoundId roundId;
-  final BroadcastGameId gameId;
-  final String? tournamentSlug;
-  final String? roundSlug;
-
+class const _BroadcastGameBottomBar({
+  required final BroadcastRoundId roundId,
+  required final BroadcastGameId gameId,
+  final String? tournamentSlug,
+  final String? roundSlug,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId));
@@ -723,7 +682,7 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
               builder: (context, snapshot) {
                 return EngineButton(
                   filters: (
-                    id: broadcastAnalysisState.evaluationContext.id,
+                    context: broadcastAnalysisState.evaluationContext,
                     path: broadcastAnalysisState.currentPath,
                   ),
                   savedEval: broadcastAnalysisState.currentNode.eval,
@@ -769,19 +728,40 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
 
   Future<void> _showMenu(BuildContext context, WidgetRef ref) {
     final ctrlProvider = broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId));
+    final state = ref.read(ctrlProvider).requireValue;
+    final evalPrefs = ref.read(engineEvaluationPreferencesProvider);
 
     return showAdaptiveActionSheet(
       context: context,
       actions: [
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.settingsSettings),
-          onPressed: () => Navigator.of(
-            context,
-          ).push(BroadcastGameSettingsScreen.buildRoute(roundId: roundId, gameId: gameId)),
+          onPressed: () =>
+              Navigator.of(context)
+                  .push(BroadcastGameSettingsScreen.buildRoute(roundId: roundId, gameId: gameId)),
         ),
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.flipBoard),
           onPressed: () => ref.read(ctrlProvider.notifier).toggleBoard(),
+        ),
+        if (state.isEngineAvailable(evalPrefs) && state.canShowThreat)
+          BottomSheetAction(
+            makeLabel: (context) => Text(
+              state.engineInThreatMode
+                  ? context.l10n.mobileStopShowingThreat
+                  : context.l10n.showThreat,
+            ),
+            onPressed: () => ref.read(ctrlProvider.notifier).toggleEngineThreatMode(),
+          ),
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.boardEditor),
+          onPressed: () =>
+              openBoardEditor(context, state.variant, state.currentPosition.fen, state.pov),
+        ),
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.continueFromHere),
+          onPressed: () =>
+              showContinueFromHereMenu(context, state.variant, state.currentPosition.fen),
         ),
       ],
     );

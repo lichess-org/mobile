@@ -1,7 +1,8 @@
+import 'dart:math' as math;
+
 import 'package:chessground/chessground.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -9,8 +10,10 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/board_editor/board_editor_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/chess960.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -30,13 +33,11 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:share_plus/share_plus.dart';
 
-class BoardEditorScreen extends ConsumerWidget {
-  const BoardEditorScreen({super.key, this.params});
-
-  final BoardEditorControllerParams? params;
-
+class const BoardEditorScreen({super.key, final BoardEditorControllerParams? params})
+    extends ConsumerWidget {
   static Route<dynamic> buildRoute(BoardEditorControllerParams? params) {
     return buildScreenRoute(screen: BoardEditorScreen(params: params));
   }
@@ -119,21 +120,13 @@ class BoardEditorScreen extends ConsumerWidget {
   }
 }
 
-class _BoardEditor extends ConsumerWidget {
-  const _BoardEditor(
-    this.boardSize, {
-    required this.params,
-    required this.isTablet,
-    required this.orientation,
-    required this.pieces,
-  });
-
-  final BoardEditorControllerParams? params;
-  final double boardSize;
-  final bool isTablet;
-  final Side orientation;
-  final Pieces pieces;
-
+class const _BoardEditor(
+  final double boardSize, {
+  required final BoardEditorControllerParams? params,
+  required final bool isTablet,
+  required final Side orientation,
+  required final Pieces pieces,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final editorState = ref.watch(boardEditorControllerProvider(params));
@@ -160,30 +153,18 @@ class _BoardEditor extends ConsumerWidget {
   }
 }
 
-class _PieceMenu extends ConsumerStatefulWidget {
-  const _PieceMenu(
-    this.boardSize, {
-    required this.params,
-    required this.direction,
-    required this.side,
-    required this.isTablet,
-  });
-
-  final BoardEditorControllerParams? params;
-
-  final double boardSize;
-
-  final Axis direction;
-
-  final Side side;
-
-  final bool isTablet;
-
+class const _PieceMenu(
+  final double boardSize, {
+  required final BoardEditorControllerParams? params,
+  required final Axis direction,
+  required final Side side,
+  required final bool isTablet,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_PieceMenu> createState() => _PieceMenuState();
 }
 
-class _PieceMenuState extends ConsumerState<_PieceMenu> {
+class _PieceMenuState() extends ConsumerState<_PieceMenu> {
   @override
   Widget build(BuildContext context) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
@@ -274,11 +255,7 @@ class _PieceMenuState extends ConsumerState<_PieceMenu> {
   }
 }
 
-class _BottomBar extends ConsumerWidget {
-  const _BottomBar(this.params);
-
-  final BoardEditorControllerParams? params;
-
+class const _BottomBar(final BoardEditorControllerParams? params) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final editorController = boardEditorControllerProvider(params);
@@ -303,20 +280,35 @@ class _BottomBar extends ConsumerWidget {
                         .loadFen(editorState.variant.initialPosition.fen);
                   },
                 ),
-              BottomSheetAction(
-                makeLabel: (context) => Text(context.l10n.loadPosition),
-                onPressed: () {
-                  final notifier = ref.read(editorController.notifier);
-                  Navigator.of(context).push(
-                    BoardEditorPositionsScreen.buildRoute(
-                      onPositionSelected: (position) => {
-                        notifier.loadFen(position.fen),
-                        Navigator.of(context).pop(),
-                      },
-                    ),
-                  );
-                },
-              ),
+              if (editorState.variant == .chess960)
+                BottomSheetAction(
+                  makeLabel: (context) => const Text('Chess960 Position'),
+                  onPressed: () {
+                    showDialog<void>(
+                      context: context,
+                      builder: (_) => _Chess960PositionDialog(
+                        onFenLoaded: (fen) {
+                          ref.read(editorController.notifier).loadFen(fen);
+                        },
+                      ),
+                    );
+                  },
+                ),
+              if (editorState.variant == .standard)
+                BottomSheetAction(
+                  makeLabel: (context) => Text(context.l10n.loadPosition),
+                  onPressed: () {
+                    final notifier = ref.read(editorController.notifier);
+                    Navigator.of(context).push(
+                      BoardEditorPositionsScreen.buildRoute(
+                        onPositionSelected: (position) => {
+                          notifier.loadFen(position.fen),
+                          Navigator.of(context).pop(),
+                        },
+                      ),
+                    );
+                  },
+                ),
               if (editorState.variant == Variant.standard)
                 BottomSheetAction(
                   // TODO: l10n
@@ -364,10 +356,7 @@ class _BottomBar extends ConsumerWidget {
                 onPressed: () => showChoicePicker<Variant>(
                   context,
                   choices: readSupportedVariants
-                      .where(
-                        // TODO, for chess960 to be meaningful here, we'd need to display a dialog to load one of the starting positions
-                        (variant) => variant != Variant.fromPosition && variant != Variant.chess960,
-                      )
+                      .where((variant) => variant != .fromPosition)
                       .toList(),
                   selectedItem: editorState.variant,
                   labelBuilder: (variant) => VariantLabel(variant),
@@ -402,10 +391,8 @@ class _BottomBar extends ConsumerWidget {
         BottomBarButton(
           key: const Key('analysis-board-button'),
           label: context.l10n.analysis,
-          onTap:
-              editorState.pgn != null &&
-                  // 1 condition (of many) where stockfish segfaults
-                  (pieceCount > 0 && (pieceCount <= 32 || editorState.variant == Variant.horde))
+          // The evaluator uses Fairy-Stockfish for nonstandard material.
+          onTap: editorState.pgn != null && pieceCount > 0
               ? () {
                   Navigator.of(context).push(
                     AnalysisScreen.buildRoute(
@@ -414,9 +401,7 @@ class _BottomBar extends ConsumerWidget {
                         orientation: editorState.orientation,
                         pgn: editorState.pgn!,
                         isComputerAnalysisAllowed: true,
-                        variant: editorState.variant.rule == Rule.chess
-                            ? Variant.fromPosition
-                            : editorState.variant,
+                        variant: editorState.variant,
                       ),
                     ),
                   );
@@ -444,31 +429,27 @@ class _BottomBar extends ConsumerWidget {
       actions: [
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.playAgainstComputer),
-          onPressed: () => Navigator.of(
-            context,
-          ).push(OfflineComputerGameScreen.buildRoute(initialVariant: variant, initialFen: fen)),
+          onPressed: () => Navigator.of(context)
+              .push(OfflineComputerGameScreen.buildRoute(initialVariant: variant, initialFen: fen)),
         ),
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.mobileOverTheBoard),
-          onPressed: () => Navigator.of(
-            context,
-          ).push(OverTheBoardScreen.buildRoute(initialVariant: variant, initialFen: fen)),
+          onPressed: () =>
+              Navigator.of(context)
+                  .push(OverTheBoardScreen.buildRoute(initialVariant: variant, initialFen: fen)),
         ),
       ],
     );
   }
 }
 
-class _FenDialog extends StatefulWidget {
-  const _FenDialog({required this.onFenLoaded});
-
-  final void Function(String fen) onFenLoaded;
-
+class const _FenDialog({required final void Function(String fen) onFenLoaded})
+    extends StatefulWidget {
   @override
   State<_FenDialog> createState() => _FenDialogState();
 }
 
-class _FenDialogState extends State<_FenDialog> {
+class _FenDialogState() extends State<_FenDialog> {
   final _controller = TextEditingController();
 
   @override
@@ -511,6 +492,89 @@ class _FenDialogState extends State<_FenDialog> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class const _Chess960PositionDialog({required final void Function(String fen) onFenLoaded})
+    extends StatefulWidget {
+  @override
+  State<_Chess960PositionDialog> createState() => _Chess960PositionDialogState();
+}
+
+class _Chess960PositionDialogState() extends State<_Chess960PositionDialog> {
+  final _controller = TextEditingController();
+  String? _errorText;
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _generateRandom() {
+    final randomId = math.Random().nextInt(960);
+    setState(() {
+      _controller.text = randomId.toString();
+      _errorText = null;
+    });
+  }
+
+  void _validateInput(String value) {
+    final id = int.tryParse(value);
+    setState(() {
+      if (id != null && id > 959) {
+        _errorText = 'Max ID is 959';
+      } else {
+        _errorText = null;
+      }
+    });
+  }
+
+  void _loadPosition() {
+    final id = int.tryParse(_controller.text);
+    if (id == null) return;
+
+    final fen = chess960Position(id).fen;
+    widget.onFenLoaded(fen);
+    Navigator.of(context, rootNavigator: true).pop();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Chess960 Position'),
+      content: Column(
+        mainAxisSize: .min,
+        children: [
+          TextField(
+            controller: _controller,
+            keyboardType: .number,
+            onChanged: _validateInput,
+            decoration: InputDecoration(
+              hintText: 'Position ID (0-959)',
+              errorText: _errorText,
+              suffixIcon: IconButton(
+                icon: const Icon(LichessIcons.die_six),
+                onPressed: _generateRandom,
+                tooltip: context.l10n.randomChess960Position,
+              ),
+            ),
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            onSubmitted: (_) => _loadPosition(),
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
+          child: Text(context.l10n.cancel),
+        ),
+        TextButton(
+          onPressed: _errorText == null && _controller.text.isNotEmpty ? _loadPosition : null,
+          child: Text(context.l10n.loadPosition),
+        ),
+      ],
     );
   }
 }

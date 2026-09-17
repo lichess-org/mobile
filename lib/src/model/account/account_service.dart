@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart' show AlertDialog, Navigator, Text, showAdaptiveDialog;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/binding.dart' show LichessBinding;
@@ -14,6 +13,7 @@ import 'package:lichess_mobile/src/model/user/user.dart' show TemporaryBan, User
 import 'package:lichess_mobile/src/tab_navigation.dart' show currentNavigatorKeyProvider;
 import 'package:lichess_mobile/src/view/play/playban.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
+import 'package:material_ui/material_ui.dart' show AlertDialog, Navigator, Text, showAdaptiveDialog;
 
 /// A provider for [AccountService].
 final accountServiceProvider = Provider<AccountService>((Ref ref) {
@@ -24,9 +24,7 @@ final accountServiceProvider = Provider<AccountService>((Ref ref) {
   return service;
 }, name: 'AccountServiceProvider');
 
-class AccountService {
-  AccountService(this._ref);
-
+class AccountService(final Ref _ref) {
   ProviderSubscription<AsyncValue<User?>>? _accountProviderSubscription;
   StreamSubscription<(NotificationResponse, LocalNotification)>? _notificationResponseSubscription;
   Timer? _refreshTimer;
@@ -36,8 +34,6 @@ class AccountService {
 
   /// Stream of bookmark changes for the current user.
   Stream<(GameId, bool)> get bookmarkChanges => _bookmarkChangesController.stream;
-
-  final Ref _ref;
 
   static const _storageKey = 'account.playban_notification_date';
 
@@ -95,7 +91,7 @@ class AccountService {
     final context = _ref.read(currentNavigatorKeyProvider).currentContext;
     if (context == null || !context.mounted) return;
 
-    return showAdaptiveDialog(
+    return await showAdaptiveDialog(
       context: context,
       barrierDismissible: true,
       builder: (context) {

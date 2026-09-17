@@ -1,5 +1,4 @@
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/tv/live_tv_channels.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
@@ -11,10 +10,9 @@ import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
+import 'package:material_ui/material_ui.dart';
 
-class LiveTvChannelsScreen extends ConsumerWidget {
-  const LiveTvChannelsScreen({super.key});
-
+class const LiveTvChannelsScreen({super.key}) extends ConsumerWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const LiveTvChannelsScreen());
   }
@@ -30,17 +28,15 @@ class LiveTvChannelsScreen extends ConsumerWidget {
           ref.read(liveTvChannelsProvider.notifier).stopWatching();
         }
       },
-      child: PlatformScaffold(
-        appBar: PlatformAppBar(title: const Text('Lichess TV')),
-        body: const _Body(),
+      child: const PlatformScaffold(
+        appBar: PlatformAppBar(title: Text('Lichess TV')),
+        body: _Body(),
       ),
     );
   }
 }
 
-class _Body extends ConsumerWidget {
-  const _Body();
-
+class const _Body() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final gamesAsync = ref.watch(liveTvChannelsProvider);

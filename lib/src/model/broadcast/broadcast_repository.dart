@@ -18,12 +18,7 @@ final broadcastRepositoryProvider = Provider<BroadcastRepository>((ref) {
   return BroadcastRepository(client, aggregator);
 }, name: 'BroadcastRepositoryProvider');
 
-class BroadcastRepository {
-  BroadcastRepository(this.client, this.aggregator);
-
-  final LichessClient client;
-  final Aggregator aggregator;
-
+class BroadcastRepository(final LichessClient client, final Aggregator aggregator) {
   Future<BroadcastList> getBroadcasts({int page = 1}) {
     return aggregator.readJson(
       Uri(path: '/api/broadcast/top', queryParameters: {'page': page.toString()}),
@@ -99,6 +94,27 @@ class BroadcastRepository {
     return client.readJsonList(
       Uri(path: 'broadcast/$tournamentId/teams/standings'),
       mapper: (json) => _teamStandingFromPick(pick(json).required()),
+    );
+  }
+
+  /// Subscribes to, or unsubscribes from, a tournament.
+  ///
+  /// Subscribers get a notification when each round of the tournament starts.
+  Future<void> setSubscribed(BroadcastTournamentId tournamentId, bool subscribed) async {
+    await client.postRead(
+      Uri(
+        path: '/broadcast/$tournamentId/subscribe',
+        queryParameters: {'set': subscribed.toString()},
+      ),
+    );
+  }
+
+  /// Follows, or unfollows, a FIDE player.
+  ///
+  /// Followers get a notification when the player starts a game in an official broadcast.
+  Future<void> setFollowingPlayer(FideId fideId, bool following) async {
+    await client.postRead(
+      Uri(path: '/fide/$fideId/follow', queryParameters: {'follow': following.toString()}),
     );
   }
 }
@@ -219,16 +235,18 @@ BroadcastRoundResponse _makeRoundWithGamesFromJson(Map<String, dynamic> json) {
   final groupName = pick(json, 'group', 'name').asStringOrNull();
   final group = pick(json, 'group', 'tours').asListOrNull(_tournamentGroupFromPick)?.toIList();
   final tournament = pick(json, 'tour').required();
-  final round = pick(json, 'round').required();
+  final roundPick = pick(json, 'round').required();
   final games = pick(json, 'games').required();
+  final pinnedComment = pick(json, 'study', 'pinnedComment').asStringOrNull();
 
   return (
     groupName: groupName,
     group: group,
     tournament: _tournamentDataFromPick(tournament),
-    round: _roundFromPick(round),
+    round: _roundFromPick(roundPick).copyWith(pinnedComment: pinnedComment),
     games: _gamesFromPick(games),
     photos: _photosFromJson(json),
+    isSubscribed: pick(json, 'isSubscribed').asBoolOrNull(),
   );
 }
 
@@ -277,6 +295,7 @@ BroadcastPlayer _playerFromPick(RequiredPick pick) {
     rating: pick('rating').asIntOrNull(),
     federation: pick('fed').asStringOrNull(),
     fideId: pick('fideId').asFideIdOrNull(),
+    team: pick('team').asStringOrNull(),
   );
 }
 
@@ -328,6 +347,7 @@ BroadcastPlayerWithGameResults _makePlayerWithGameResultsFromJson(Map<String, dy
     playerWithOverallResult: _playerWithOverallResultFromPick(pick(json).required()),
     fideData: _fideDataFromPick(pick(json, 'fide')),
     games: pick(json, 'games').asListOrThrow(_playerGameResultFromPick).toIList(),
+    isFollowing: pick(json, 'fide', 'follow').asBoolOrNull(),
   );
 }
 
@@ -357,9 +377,9 @@ StatByFideTC pickStats(RequiredPick pick) {
   final rapid = pick('rapid').asIntOrNull();
   final blitz = pick('blitz').asIntOrNull();
   return {
-    if (standard != null) BroadcastFideTC.standard: standard,
-    if (rapid != null) BroadcastFideTC.rapid: rapid,
-    if (blitz != null) BroadcastFideTC.blitz: blitz,
+    BroadcastFideTC.standard: ?standard,
+    BroadcastFideTC.rapid: ?rapid,
+    BroadcastFideTC.blitz: ?blitz,
   }.lock;
 }
 

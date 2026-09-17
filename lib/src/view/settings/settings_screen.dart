@@ -1,6 +1,5 @@
 import 'package:app_settings/app_settings.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:flutter_riverpod/experimental/mutation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
@@ -25,14 +24,14 @@ import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class SettingsScreen extends ConsumerWidget {
-  const SettingsScreen({super.key});
-
+class const SettingsScreen({super.key}) extends ConsumerWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const SettingsScreen());
   }
@@ -79,25 +78,6 @@ class SettingsScreen extends ConsumerWidget {
                   Navigator.of(context).push(SoundSettingsScreen.buildRoute());
                 },
               ),
-              SettingsListTile(
-                enabled: !generalPrefs.isForcedDarkMode,
-                icon: const Icon(Icons.brightness_medium_outlined),
-                settingsLabel: Text(context.l10n.background),
-                settingsValue: generalPrefs.isForcedDarkMode
-                    ? BackgroundThemeMode.dark.title(context.l10n)
-                    : generalPrefs.themeMode.title(context.l10n),
-                onTap: () {
-                  showChoicePicker(
-                    context,
-                    choices: BackgroundThemeMode.values,
-                    selectedItem: generalPrefs.themeMode,
-                    labelBuilder: (t) => Text(t.title(context.l10n)),
-                    onSelectedItemChanged: (BackgroundThemeMode? value) => ref
-                        .read(generalPreferencesProvider.notifier)
-                        .setBackgroundThemeMode(value ?? BackgroundThemeMode.system),
-                  );
-                },
-              ),
               ListTile(
                 leading: const Icon(Icons.palette_outlined),
                 title: Text(context.l10n.mobileTheme),
@@ -130,7 +110,7 @@ class SettingsScreen extends ConsumerWidget {
               ),
               ListTile(
                 leading: const Icon(Icons.memory_outlined),
-                title: const Text('Chess engine'),
+                title: Text(context.l10n.mobileChessEngine, overflow: TextOverflow.ellipsis),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
                     ? const CupertinoListTileChevron()
                     : null,
@@ -173,6 +153,9 @@ class SettingsScreen extends ConsumerWidget {
                 leading: const Icon(Icons.http),
                 title: const Text('HTTP logs'),
                 onTap: () => Navigator.push(context, HttpLogScreen.buildRoute()),
+                trailing: Theme.of(context).platform == TargetPlatform.iOS
+                    ? const CupertinoListTileChevron()
+                    : null,
               ),
               ListTile(
                 leading: const Icon(Icons.bug_report),
@@ -204,6 +187,7 @@ class SettingsScreen extends ConsumerWidget {
                     );
                   }
                 },
+                trailing: const OpenInNewIcon(),
               ),
             ],
           ),

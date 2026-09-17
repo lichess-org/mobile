@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -10,16 +9,16 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
+import 'package:material_ui/material_ui.dart';
 
 const _kDefaultBroadcastImage = AssetImage('assets/images/broadcast_image.webp');
 const _kHandsetThumbnailSize = 80.0;
 const _kTabletThumbnailSize = 250.0;
 
 class BroadcastListTile extends StatelessWidget {
-  const BroadcastListTile({required this.broadcast, this.maxSubtitleLines = 4})
-    : _isLoading = false;
+  const new({required this.broadcast, this.maxSubtitleLines = 4}) : _isLoading = false;
 
-  const BroadcastListTile.loading({this.maxSubtitleLines = 4})
+  const new loading({this.maxSubtitleLines = 4})
     : broadcast = const Broadcast(
         tour: BroadcastTournamentData(
           id: BroadcastTournamentId(''),
@@ -212,16 +211,13 @@ class BroadcastListTile extends StatelessWidget {
   }
 }
 
-class BroadcastNextPageTile extends StatefulWidget {
-  const BroadcastNextPageTile(this.nextPageFunction);
-
-  final Future<void> Function() nextPageFunction;
-
+class const BroadcastNextPageTile(final Future<void> Function() nextPageFunction)
+    extends StatefulWidget {
   @override
   State<BroadcastNextPageTile> createState() => _BroadcastNextPageTileState();
 }
 
-class _BroadcastNextPageTileState extends State<BroadcastNextPageTile> {
+class _BroadcastNextPageTileState() extends State<BroadcastNextPageTile> {
   late Future<void> nextPageFuture;
 
   @override

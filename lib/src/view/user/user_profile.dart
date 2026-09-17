@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
@@ -15,17 +13,14 @@ import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/user/countries.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
+import 'package:lichess_mobile/src/widgets/rich_link_text.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const _userNameStyle = TextStyle(fontSize: 20, fontWeight: FontWeight.w500);
 
-class UserProfileWidget extends ConsumerWidget {
-  const UserProfileWidget({required this.user, this.bioMaxLines = 15});
-
-  final User user;
-
-  final int bioMaxLines;
-
+class const UserProfileWidget({required final User user, final int bioMaxLines = 15})
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authSession = ref.watch(authControllerProvider);
@@ -62,7 +57,7 @@ class UserProfileWidget extends ConsumerWidget {
             if (userFullName != null)
               Padding(padding: const EdgeInsets.only(bottom: 5), child: userFullName),
             if (user.profile?.bio != null)
-              Linkify(
+              RichLinkText(
                 onOpen: (link) async =>
                     await ref.read(appLinksServiceProvider).onLinkifyOpen(context, link),
                 linkifiers: AppLinksService.kLichessLinkifiers,
@@ -151,16 +146,15 @@ class UserProfileWidget extends ConsumerWidget {
   }
 }
 
-class Location extends StatelessWidget {
-  const Location({required this.profile, super.key});
-
-  final Profile profile;
-
+class const Location({required final Profile profile, super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        if (profile.location != null) ...[Text(profile.location!), const SizedBox(width: 5)],
+        if (profile.location != null) ...[
+          Flexible(flex: 2, child: Text(profile.location!)),
+          const SizedBox(width: 5),
+        ],
         if (profile.country != null) ...[
           HttpNetworkImageWidget(
             lichessFlagSrc(profile.country!),
@@ -168,7 +162,8 @@ class Location extends StatelessWidget {
           ),
           const SizedBox(width: 5),
         ],
-        if (countries[profile.country] != null) Text(countries[profile.country]!),
+        if (countries[profile.country] != null)
+          Expanded(flex: 3, child: Text(countries[profile.country]!)),
       ],
     );
   }

@@ -1,5 +1,4 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/relation/following_user.dart';
@@ -18,6 +17,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
+import 'package:material_ui/material_ui.dart';
 
 final followingCarouselProvider = FutureProvider.autoDispose<IList<FollowingUser>>((ref) {
   final authUser = ref.watch(authControllerProvider);
@@ -28,16 +28,13 @@ final followingCarouselProvider = FutureProvider.autoDispose<IList<FollowingUser
 }, name: 'FollowingCarouselProvider');
 
 /// A carousel widget that displays a list of users that the current user is following.
-class FollowingCarousel extends ConsumerStatefulWidget {
-  const FollowingCarousel(this.followingAsync, {super.key});
-
-  final AsyncValue<IList<FollowingUser>> followingAsync;
-
+class const FollowingCarousel(final AsyncValue<IList<FollowingUser>> followingAsync, {super.key})
+    extends ConsumerStatefulWidget {
   @override
   ConsumerState<FollowingCarousel> createState() => _FollowingWidgetState();
 }
 
-class _FollowingWidgetState extends ConsumerState<FollowingCarousel> {
+class _FollowingWidgetState() extends ConsumerState<FollowingCarousel> {
   @override
   Widget build(BuildContext context) {
     return widget.followingAsync.when(

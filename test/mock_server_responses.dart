@@ -77,3 +77,25 @@ String mockAccountOngoingGamesResponse() => '''
   ]
 }
 ''';
+
+/// Mock server response for /tournament/featured endpoint.
+const mockFeaturedTournamentsResponse = '''
+{
+  "featured": [
+    {
+      "id": "AbCdEfGh",
+      "fullName": "Hourly Blitz Arena",
+      "clock": {"limit": 300, "increment": 0},
+      "rated": true,
+      "createdBy": "lichess",
+      "minutes": 57,
+      "perf": {"key": "blitz", "name": "Blitz", "position": 1},
+      "schedule": {"freq": "hourly", "speed": "blitz"},
+      "variant": "standard",
+      "startsAt": 1700000000000,
+      "finishesAt": 1700003420000,
+      "nbPlayers": 100
+    }
+  ]
+}
+''';

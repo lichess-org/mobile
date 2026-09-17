@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -17,15 +16,14 @@ import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/expanded_section.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
+import 'package:material_ui/material_ui.dart';
 
-class CreateCorrespondenceGameBottomSheet extends ConsumerStatefulWidget {
-  const CreateCorrespondenceGameBottomSheet({super.key});
-
+class const CreateCorrespondenceGameBottomSheet({super.key}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<CreateCorrespondenceGameBottomSheet> createState() => _CreateGameBodyState();
 }
 
-class _CreateGameBodyState extends ConsumerState<CreateCorrespondenceGameBottomSheet> {
+class _CreateGameBodyState() extends ConsumerState<CreateCorrespondenceGameBottomSheet> {
   Future<void>? _pendingCreateGame;
 
   @override
@@ -158,9 +156,8 @@ class _CreateGameBodyState extends ConsumerState<CreateCorrespondenceGameBottomS
                               }
                             }
                             if (context.mounted) {
-                              Navigator.of(
-                                context,
-                              ).popUntil((route) => route is! ModalBottomSheetRoute);
+                              Navigator.of(context)
+                                  .popUntil((route) => route is! ModalBottomSheetRoute);
                             }
                           },
                     child: Text(context.l10n.createAGame),

@@ -1,6 +1,6 @@
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart' show Variant;
 import 'package:lichess_mobile/src/model/explorer/tablebase.dart';
 import 'package:lichess_mobile/src/model/explorer/tablebase_repository.dart';
@@ -9,13 +9,13 @@ import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/explorer/explorer_view.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
+import 'package:material_ui/material_ui.dart';
 
-class TablebaseView extends ConsumerWidget {
-  const TablebaseView({required this.position, this.onMoveSelected, super.key});
-
-  final Position position;
-  final void Function(Move)? onMoveSelected;
-
+class const TablebaseView({
+  required final Position position,
+  final void Function(Move)? onMoveSelected,
+  super.key,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tablebaseAsync = ref.watch(
@@ -25,16 +25,20 @@ class TablebaseView extends ConsumerWidget {
     switch (tablebaseAsync) {
       case AsyncData(:final value):
         if (value == null) {
-          final connectivity = ref.watch(connectivityChangesProvider);
-          final message = connectivity.whenIs(
-            online: () => 'Position not in tablebase.',
-            offline: () => 'Tablebase is not available offline.',
-          );
+          final message = ref.watch(isDeviceOnlineProvider)
+              ? 'Position not in tablebase.'
+              : 'Tablebase is not available offline.';
           return Center(
             child: Padding(padding: const EdgeInsets.all(16.0), child: Text(message)),
           );
         }
 
+        final pieceNotation = ref
+            .watch(pieceNotationProvider)
+            .maybeWhen(
+              data: (value) => value,
+              orElse: () => defaultAccountPreferences.pieceNotation,
+            );
         final children = <Widget>[];
 
         void addMoveSection({
@@ -57,6 +61,7 @@ class TablebaseView extends ConsumerWidget {
                   color: index.isEven ? context.lichessTheme.rowEven : context.lichessTheme.rowOdd,
                   onMoveSelected: onMoveSelected,
                   isWinningForWhite: isWinningForWhite,
+                  pieceNotation: pieceNotation,
                 );
               }, growable: false),
             );
@@ -138,11 +143,9 @@ class TablebaseView extends ConsumerWidget {
 
       case AsyncError(:final error):
         debugPrint('SEVERE: [TablebaseView] could not load tablebase data; $error');
-        final connectivity = ref.watch(connectivityChangesProvider);
-        final message = connectivity.whenIs(
-          online: () => 'Could not load tablebase data.',
-          offline: () => 'Tablebase is not available offline.',
-        );
+        final message = ref.watch(isDeviceOnlineProvider)
+            ? 'Could not load tablebase data.'
+            : 'Tablebase is not available offline.';
         return Center(
           child: Padding(padding: const EdgeInsets.all(16.0), child: Text(message)),
         );
@@ -163,12 +166,10 @@ class TablebaseView extends ConsumerWidget {
   }
 }
 
-class _TablebaseListView extends StatelessWidget {
-  const _TablebaseListView({required this.children, required this.isLoading});
-
-  final List<Widget> children;
-  final bool isLoading;
-
+class const _TablebaseListView({
+  required final List<Widget> children,
+  required final bool isLoading,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final brightness = Theme.of(context).brightness;
@@ -193,11 +194,7 @@ class _TablebaseListView extends StatelessWidget {
   }
 }
 
-class _TablebaseHeaderTile extends StatelessWidget {
-  const _TablebaseHeaderTile({required this.child, super.key});
-
-  final Widget child;
-
+class const _TablebaseHeaderTile({required final Widget child, super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -212,20 +209,14 @@ class _TablebaseHeaderTile extends StatelessWidget {
   }
 }
 
-class _TablebaseMoveRow extends StatelessWidget {
-  const _TablebaseMoveRow({
-    required this.move,
-    required this.color,
-    required this.isWinningForWhite,
-    this.onMoveSelected,
-    super.key,
-  });
-
-  final TablebaseMove move;
-  final Color color;
-  final bool? isWinningForWhite;
-  final void Function(Move)? onMoveSelected;
-
+class const _TablebaseMoveRow({
+  required final TablebaseMove move,
+  required final Color color,
+  required final bool? isWinningForWhite,
+  required final PieceNotation pieceNotation,
+  final void Function(Move)? onMoveSelected,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final metrics = <String>[];
@@ -301,7 +292,13 @@ class _TablebaseMoveRow extends StatelessWidget {
         child: Row(
           children: [
             Expanded(
-              child: Text(move.san, style: const TextStyle(fontWeight: FontWeight.w500)),
+              child: Text(
+                move.san,
+                style: TextStyle(
+                  fontFamily: pieceNotation == PieceNotation.symbol ? 'ChessFont' : null,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
             ),
             metricsWidget,
           ],
@@ -311,11 +308,8 @@ class _TablebaseMoveRow extends StatelessWidget {
   }
 }
 
-class _TablebaseLoadingPlaceholder extends StatelessWidget {
-  const _TablebaseLoadingPlaceholder({required this.position});
-
-  final Position position;
-
+class const _TablebaseLoadingPlaceholder({required final Position position})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(

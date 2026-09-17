@@ -1,5 +1,4 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/model/user/streamer.dart';
 import 'package:lichess_mobile/src/styles/social_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -8,15 +7,12 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const _kThumbnailSize = 75.0;
 
-class StreamerScreen extends StatelessWidget {
-  const StreamerScreen({required this.streamers});
-
-  final IList<Streamer> streamers;
-
+class const StreamerScreen({required final IList<Streamer> streamers}) extends StatelessWidget {
   static Route<dynamic> buildRoute(IList<Streamer> streamers) {
     return buildScreenRoute(screen: StreamerScreen(streamers: streamers));
   }
@@ -41,21 +37,14 @@ class StreamerScreen extends StatelessWidget {
   }
 }
 
-class StreamerListTile extends StatelessWidget {
-  const StreamerListTile({
-    required this.streamer,
-    this.maxSubtitleLines = 1,
-    this.thumbnailSize = _kThumbnailSize,
-    this.isPreview = true,
-  });
-
-  final Streamer streamer;
-  final int maxSubtitleLines;
-  final double thumbnailSize;
+class const StreamerListTile({
+  required final Streamer streamer,
+  final int maxSubtitleLines = 1,
+  final double thumbnailSize = _kThumbnailSize,
 
   /// Whether to return a more compact version of the tile.
-  final bool isPreview;
-
+  final bool isPreview = true,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final codes = streamer.lang.split('-');

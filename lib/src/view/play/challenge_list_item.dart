@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
@@ -18,25 +17,17 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
+import 'package:material_ui/material_ui.dart';
 
-class ChallengeListItem extends ConsumerWidget {
-  const ChallengeListItem({
-    super.key,
-    required this.challenge,
-    required this.challengerUser,
-    this.onPressed,
-    this.onAccept,
-    this.onDecline,
-    this.onCancel,
-  });
-
-  final Challenge challenge;
-  final LightUser challengerUser;
-  final VoidCallback? onPressed;
-  final VoidCallback? onAccept;
-  final VoidCallback? onCancel;
-  final void Function(ChallengeDeclineReason? reason)? onDecline;
-
+class const ChallengeListItem({
+  super.key,
+  required final Challenge challenge,
+  required final LightUser challengerUser,
+  final VoidCallback? onPressed,
+  final VoidCallback? onAccept,
+  final void Function(ChallengeDeclineReason? reason)? onDecline,
+  final VoidCallback? onCancel,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final me = ref.watch(authControllerProvider)?.user;
@@ -123,20 +114,13 @@ class ChallengeListItem extends ConsumerWidget {
   }
 }
 
-class CorrespondenceChallengeListItem extends StatelessWidget {
-  const CorrespondenceChallengeListItem({
-    super.key,
-    required this.seek,
-    required this.challengerUser,
-    this.onPressed,
-    this.onCancel,
-  });
-
-  final CorrespondenceSeek seek;
-  final LightUser challengerUser;
-  final VoidCallback? onPressed;
-  final VoidCallback? onCancel;
-
+class const CorrespondenceChallengeListItem({
+  super.key,
+  required final CorrespondenceSeek seek,
+  required final LightUser challengerUser,
+  final VoidCallback? onPressed,
+  final VoidCallback? onCancel,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChallengeListItem(
