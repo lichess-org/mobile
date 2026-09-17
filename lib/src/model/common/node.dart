@@ -183,10 +183,9 @@ abstract class Node({
     bool prepend = false,
     bool replace = false,
   }) {
-    final newPath = path + newNode.id;
     final node = nodeAtOrNull(path);
     if (node != null) {
-      final existing = nodeAtOrNull(newPath) != null;
+      final existing = !prepend && !replace && node.childById(newNode.id) != null;
       if (!existing) {
         if (replace) {
           node.children.clear();
@@ -197,7 +196,7 @@ abstract class Node({
           node.addChild(newNode);
         }
       }
-      return (newPath, !existing);
+      return (path + newNode.id, !existing);
     } else {
       return (null, false);
     }

@@ -257,6 +257,28 @@ void main() {
       expect(testNode.children[0], isNot(branch));
     });
 
+    test('addNodeAt, prepend duplicate move', () {
+      final root = Root.fromPgnMoves('e4 e5');
+      final newBranch = Branch(
+        sanMove: SanMove('e5', Move.parse('e7e5')!),
+        position: Chess.initial,
+      );
+      final e4Path = UciPath.fromId(UciCharPair.fromUci('e2e4'));
+      final (newPath, isNewNode) = root.addNodeAt(e4Path, newBranch, prepend: true);
+
+      expect(isNewNode, isTrue);
+      expect(newPath, equals(e4Path + newBranch.id));
+
+      final e4Node = root.nodeAt(e4Path);
+      expect(e4Node.children.length, equals(2));
+      expect(e4Node.children[0], equals(newBranch));
+      expect(e4Node.children[0].id, equals(UciCharPair.fromUci('e7e5')));
+      expect(
+        e4Node.children[1].id,
+        equals(UciCharPair.disambiguated(UciCharPair.fromUci('e7e5'), 1)),
+      );
+    });
+
     test('addNodesAt', () {
       final root = Root.fromPgnMoves('e4 e5');
       final branch = Branch(sanMove: SanMove('Nc6', Move.parse('b8c6')!), position: Chess.initial);
