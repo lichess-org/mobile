@@ -3,6 +3,7 @@ import 'dart:ui' show ImageFilter;
 import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/keys.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -38,7 +39,11 @@ class const MainTabScaffold({super.key}) extends ConsumerWidget {
                   items: [
                     for (final tab in BottomTab.values)
                       BottomNavigationBarItem(
-                        icon: Icon(tab.icon, fill: tab == currentTab ? 1 : 0),
+                        icon: Icon(
+                          key: keys.tabScaffold.tabIcon(tab),
+                          tab.icon,
+                          fill: tab == currentTab ? 1 : 0,
+                        ),
                         label: tab.label(context.l10n),
                       ),
                   ],
@@ -49,7 +54,11 @@ class const MainTabScaffold({super.key}) extends ConsumerWidget {
                   destinations: [
                     for (final tab in BottomTab.values)
                       NavigationDestination(
-                        icon: Icon(tab.icon, fill: tab == currentTab ? 1 : 0),
+                        icon: Icon(
+                          key: keys.tabScaffold.tabIcon(tab),
+                          tab.icon,
+                          fill: tab == currentTab ? 1 : 0,
+                        ),
                         label: tab.label(context.l10n),
                       ),
                   ],
