@@ -2,8 +2,6 @@ import 'package:lichess_mobile/keys.dart';
 
 import 'module.dart';
 
-final class PuzzleTab extends Module {
-  const PuzzleTab(super.$);
-
+final class const PuzzleTab(super.$) extends Module {
   Future<void> openPuzzleThemes() => $(keys.puzzleTab.puzzleThemesTile).tap();
 }
