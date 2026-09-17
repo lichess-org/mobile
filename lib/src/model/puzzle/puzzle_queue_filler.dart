@@ -18,6 +18,9 @@ import 'package:logging/logging.dart';
 
 /// Delay between successive fill requests, to spread the burst rather than fire
 /// it all at the server at once.
+///
+/// [RateLimitLichessClient] already keeps puzzle batch requests from overlapping, but this loop is
+/// the one caller that issues a run of them, so it is also the one that has to leave a gap.
 const _kFillRequestDelay = Duration(milliseconds: 200);
 
 /// Whether a one-time offline-queue background fill is currently running.
