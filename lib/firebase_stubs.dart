@@ -67,6 +67,10 @@ class FirebaseMessaging {
   static Stream<RemoteMessage> get onMessageOpenedApp => const Stream.empty();
 
   static void onBackgroundMessage(BackgroundMessageHandler handler) {}
+
+  Future<void> setAutoInitEnabled(bool enabled) {
+    return Future.value();
+  }
 }
 
 class FirebaseCrashlytics {
