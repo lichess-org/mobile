@@ -68,7 +68,11 @@ class _EngineButtonState() extends ConsumerState<EngineButton> {
             showPopover(
               context: context,
               bodyBuilder: (_) {
-                return _EnginePopup(goDeeper: widget.goDeeper, filters: widget.filters, savedEval: widget.savedEval);
+                return _EnginePopup(
+                  goDeeper: widget.goDeeper,
+                  filters: widget.filters,
+                  savedEval: widget.savedEval,
+                );
               },
               direction: PopoverDirection.top,
               width: 250,
@@ -273,7 +277,9 @@ class const _EnginePopup({
 }) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final (:engine, :engineSpec, currentWork: work, eval: localEval, :isComputing) = ref.watch(engineEvaluationProvider(filters));
+    final (:engine, :engineSpec, currentWork: work, eval: localEval, :isComputing) = ref.watch(
+      engineEvaluationProvider(filters),
+    );
     final bool canGoDeeper =
         goDeeper != null && !isComputing && (work == null || work.isDeeper != true);
 
