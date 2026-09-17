@@ -335,6 +335,43 @@ void main() {
       expect(root.mainline.length, equals(0));
     });
 
+    test('deleteAt, duplicate sideline only deletes that specific variation', () {
+      const pgn = '1. e4 (1. e4 e5) (1. e4 c5) 1... c6 *';
+      final root = Root.fromPgnGame(PgnGame.parsePgn(pgn));
+      expect(root.children.length, 3); // mainline (c6), sideline 1 (e5), sideline 2 (c5)
+
+      final sideline1Id = root.children[1].id;
+      final sideline2Id = root.children[2].id;
+
+      // Delete sideline 1 (1. e4 e5)
+      root.deleteAt(UciPath.fromId(sideline1Id));
+
+      // Mainline and sideline 2 remain
+      expect(root.children.length, 2);
+      expect(root.mainline.map((n) => n.sanMove.san).toList(), equals(['e4', 'c6']));
+      expect(root.children[1].id, equals(sideline2Id));
+      expect(root.children[1].children.first.sanMove.san, equals('c5'));
+    });
+
+    test('deleteAt, mainline with duplicate sidelines leaves sidelines intact', () {
+      const pgn = '1. e4 (1. e4 e5) (1. e4 c5) 1... c6 *';
+      final root = Root.fromPgnGame(PgnGame.parsePgn(pgn));
+      expect(root.children.length, 3);
+
+      final mainlineId = root.children[0].id;
+      final sideline1Id = root.children[1].id;
+      final sideline2Id = root.children[2].id;
+
+      // Delete the mainline (1. e4 c6)
+      root.deleteAt(UciPath.fromId(mainlineId));
+
+      // The two sidelines remain, and the first sideline becomes the new mainline
+      expect(root.children.length, 2);
+      expect(root.children[0].id, equals(sideline1Id));
+      expect(root.children[1].id, equals(sideline2Id));
+      expect(root.mainline.map((n) => n.sanMove.san).toList(), equals(['e4', 'e5']));
+    });
+
     test('promoteAt', () {
       const pgn = '1. e4 d5 2. exd5 Qxd5 (2... Nf6 3. c4 (3. Nc3)) 3. Nc3';
       final root = Root.fromPgnGame(PgnGame.parsePgn(pgn));
@@ -375,6 +412,30 @@ void main() {
       root.promoteAt(path, toMainline: false);
       expect(root.mainline.map((n) => n.sanMove.san).toList(), equals(['d4']));
       expect(root.makePgn(), equals('1. d4 ( 1. e4 ) *\n'));
+    });
+
+    test('promoteAt, duplicate variation to mainline', () {
+      const pgn = '1. e4 (1. e4 e5 2. Nf3) 1... c6 *';
+      final root = Root.fromPgnGame(PgnGame.parsePgn(pgn));
+      expect(root.children.length, 2);
+
+      final duplicateE4Id = root.children[1].id;
+      final e5Id = root.children[1].children.first.id;
+      final duplicatePath = UciPath.fromIds([duplicateE4Id, e5Id]);
+
+      expect(root.isOnMainline(duplicatePath), isFalse);
+
+      // Promote the duplicate variation (1. e4 e5 2. Nf3) to mainline
+      root.promoteAt(duplicatePath, toMainline: true);
+
+      // The promoted line is now the mainline
+      expect(root.mainline.map((n) => n.sanMove.san).toList(), equals(['e4', 'e5', 'Nf3']));
+
+      // isOnMainline now reports true for the promoted line
+      expect(root.isOnMainline(duplicatePath), isTrue);
+
+      // PGN export produces the promoted line as mainline and old mainline in parens
+      expect(root.makePgn(), equals('1. e4 ( 1. e4 c6 ) 1... e5 2. Nf3 *\n'));
     });
 
     group('merge', () {

@@ -40,6 +40,27 @@ sealed class const UciCharPair._() with _$UciCharPair {
     ),
   };
 
+  /// Creates a disambiguated [UciCharPair] for duplicate variations of the same move.
+  ///
+  /// For [duplicateIndex] <= 0, returns [base] unchanged.
+  /// For [duplicateIndex] > 0, encodes the duplicate index using Unicode private use area (0xE000..0xF8FF).
+  factory disambiguated(UciCharPair base, int duplicateIndex) {
+    if (duplicateIndex <= 0) return base;
+    return UciCharPair(
+      base.a,
+      String.fromCharCode(0xE000 + (duplicateIndex << 8) | base.b.codeUnitAt(0)),
+    );
+  }
+
+  /// Returns the base [UciCharPair] without any disambiguation encoding.
+  UciCharPair get basePair {
+    final bCode = b.codeUnitAt(0);
+    if (bCode >= 0xE000 && bCode <= 0xF8FF) {
+      return UciCharPair(a, String.fromCharCode(bCode & 0xFF));
+    }
+    return this;
+  }
+
   factory fromJson(Map<String, dynamic> json) => _$UciCharPairFromJson(json);
 
   @override
