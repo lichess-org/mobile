@@ -279,6 +279,27 @@ void main() {
       );
     });
 
+    test('addNodeAt, navigates to existing sibling even if only disambiguated id exists', () {
+      const pgn = '1. e4 (1. e4 e5) 1... c6 *';
+      final root = Root.fromPgnGame(PgnGame.parsePgn(pgn));
+      // Delete the mainline (1. e4 c6)
+      root.deleteAt(UciPath.fromId(root.children[0].id));
+      expect(root.children.length, 1);
+      final remainingDisambiguatedId = root.children[0].id;
+      expect(
+        remainingDisambiguatedId,
+        equals(UciCharPair.disambiguated(UciCharPair.fromUci('e2e4'), 1)),
+      );
+
+      // User plays 'e4' (which has base ID)
+      final branch = Branch(sanMove: SanMove('e4', Move.parse('e2e4')!), position: Chess.initial);
+      final (newPath, isNewNode) = root.addNodeAt(UciPath.empty, branch);
+
+      expect(isNewNode, isFalse);
+      expect(newPath, equals(UciPath.fromId(remainingDisambiguatedId)));
+      expect(root.children.length, 1);
+    });
+
     test('addNodesAt', () {
       final root = Root.fromPgnMoves('e4 e5');
       final branch = Branch(sanMove: SanMove('Nc6', Move.parse('b8c6')!), position: Chess.initial);

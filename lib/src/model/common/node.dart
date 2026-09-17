@@ -185,18 +185,21 @@ abstract class Node({
   }) {
     final node = nodeAtOrNull(path);
     if (node != null) {
-      final existing = !prepend && !replace && node.childById(newNode.id) != null;
-      if (!existing) {
-        if (replace) {
-          node.children.clear();
-        }
-        if (prepend) {
-          node.prependChild(newNode);
-        } else {
-          node.addChild(newNode);
-        }
+      final existingChild = !prepend && !replace
+          ? node.children.firstWhereOrNull((c) => c.id.basePair == newNode.id.basePair)
+          : null;
+      if (existingChild != null) {
+        return (path + existingChild.id, false);
       }
-      return (path + newNode.id, !existing);
+      if (replace) {
+        node.children.clear();
+      }
+      if (prepend) {
+        node.prependChild(newNode);
+      } else {
+        node.addChild(newNode);
+      }
+      return (path + newNode.id, true);
     } else {
       return (null, false);
     }
