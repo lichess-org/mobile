@@ -1,6 +1,6 @@
 # End-to-end tests
 
-The tests in `patrol_test/` run the real app on an Android emulator or device with
+The tests in `patrol_test/` run the real app on an emulator or device with
 [Patrol](https://patrol.leancode.co).
 
 Install the CLI in the version that pairs with the `patrol` package in `pubspec.yaml`
