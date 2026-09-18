@@ -4,7 +4,6 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:lichess_mobile/keys.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
@@ -215,7 +214,6 @@ Widget _buildMainListRemovedItem(
 }
 
 class const _PuzzleMenuListTile({
-  super.key,
   required final IconData icon,
   required final String title,
   required final String subtitle,
@@ -258,7 +256,6 @@ class const _PuzzleMenu() extends ConsumerWidget {
       hasLeading: true,
       children: [
         _PuzzleMenuListTile(
-          key: keys.puzzleTab.puzzleThemesTile,
           icon: PuzzleIcons.opening,
           title: context.l10n.puzzlePuzzleThemes,
           subtitle: context.l10n.mobilePuzzleThemesSubtitle,

@@ -1,13 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:patrol/patrol.dart';
 
-import '../api_clients/api_clients.dart';
 import '../modules/modules.dart';
 import '../system.dart';
 
 void lichessTest(
   String description,
-  Future<void> Function(PatrolIntegrationTester, Modules, System, ApiClients) callback, {
+  Future<void> Function(PatrolIntegrationTester, Modules, System) callback, {
   bool? skip,
   Timeout? timeout,
   bool semanticsEnabled = true,
@@ -25,8 +24,7 @@ void lichessTest(
       final system = System(
         config: platformAutomatorConfig ?? PlatformAutomatorConfig.defaultConfig(),
       );
-      final apiClients = ApiClients();
-      await callback($, modules, system, apiClients);
+      await callback($, modules, system);
     },
     skip: skip,
     timeout: timeout,
