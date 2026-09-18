@@ -46,3 +46,9 @@ doc/api/
 
 # Cache directory created by scripts
 .cache/
+
+# Patrol
+**/test_bundle.dart
+**/patrol_test_bundle.dart
+.patrol.env
+patrol.log
