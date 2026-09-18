@@ -39,6 +39,7 @@ jobs:
       - name: Patch dependencies
         run: |
           sed -i 's/-Wl,/-Wl,--build-id=none,/' ~/.pub-cache/hosted/pub.dev/jni-*/src/CMakeLists.txt
+          sed -i '/target_link_libraries/i target_link_options(lc0 PRIVATE "LINKER:--build-id=none")' ~/.pub-cache/git/dart-lc0-04284fa88176930a0e2ffd475979fa289710169e/android/CMakeLists.txt
           sed -i 's/-Wl,/-Wl,--build-id=none,/' ~/.pub-cache/git/dart-multistockfish-896c3884921ae1d775fcd3088ddcd1559fb87308/pkgs/multistockfish_chess/android/CMakeLists.txt
           sed -i 's/-Wl,/-Wl,--build-id=none,/' ~/.pub-cache/git/dart-multistockfish-896c3884921ae1d775fcd3088ddcd1559fb87308/pkgs/multistockfish_light/android/CMakeLists.txt
           sed -i 's/-Wl,/-Wl,--build-id=none,/' ~/.pub-cache/git/dart-multistockfish-896c3884921ae1d775fcd3088ddcd1559fb87308/pkgs/multistockfish_variant/android/CMakeLists.txt
