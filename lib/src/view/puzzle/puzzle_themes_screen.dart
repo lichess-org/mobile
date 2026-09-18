@@ -1,6 +1,5 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/keys.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
@@ -43,7 +42,6 @@ class const PuzzleThemesScreen({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
-      key: keys.puzzleThemesScreen.screen,
       appBar: PlatformAppBar(title: Text(context.l10n.puzzlePuzzleThemes)),
       body: const _Body(),
     );
