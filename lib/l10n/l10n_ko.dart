@@ -7146,6 +7146,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get teamTeam => '팀';
 
   @override
+  String get teamTeamUpdates => '팀 업데이트';
+
+  @override
   String get teamIncorrectEntryCode => '코드가 잘못되었습니다.';
 
   @override

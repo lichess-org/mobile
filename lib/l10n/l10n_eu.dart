@@ -7225,6 +7225,9 @@ class AppLocalizationsEu extends AppLocalizations {
   String get teamTeam => 'Taldea';
 
   @override
+  String get teamTeamUpdates => 'Taldearen eguneratzeak';
+
+  @override
   String get teamIncorrectEntryCode => 'Sarrera-kode okerra.';
 
   @override

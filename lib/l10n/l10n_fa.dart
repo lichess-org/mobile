@@ -7225,6 +7225,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get teamTeam => 'تیم';
 
   @override
+  String get teamTeamUpdates => 'روزامدهای تیم';
+
+  @override
   String get teamIncorrectEntryCode => 'کد ورودی اشتباه است.';
 
   @override

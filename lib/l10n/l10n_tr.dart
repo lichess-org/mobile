@@ -7225,6 +7225,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get teamTeam => 'Takım';
 
   @override
+  String get teamTeamUpdates => 'Takım güncellemeleri';
+
+  @override
   String get teamIncorrectEntryCode => 'Giriş kodu yanlış.';
 
   @override

@@ -7225,6 +7225,9 @@ class AppLocalizationsUz extends AppLocalizations {
   String get teamTeam => 'Jamoa';
 
   @override
+  String get teamTeamUpdates => 'Jamoa yangiliklari';
+
+  @override
   String get teamIncorrectEntryCode => 'Kirish kodi notoʻgʻri.';
 
   @override

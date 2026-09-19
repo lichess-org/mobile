@@ -7383,6 +7383,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get teamTeam => 'Клуб';
 
   @override
+  String get teamTeamUpdates => 'Новости клуба';
+
+  @override
   String get teamIncorrectEntryCode => 'Неверный код для вступления.';
 
   @override

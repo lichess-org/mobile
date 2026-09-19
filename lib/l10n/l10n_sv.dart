@@ -7225,6 +7225,9 @@ class AppLocalizationsSv extends AppLocalizations {
   String get teamTeam => 'Lag';
 
   @override
+  String get teamTeamUpdates => 'Team updates';
+
+  @override
   String get teamIncorrectEntryCode => 'Felaktig kod.';
 
   @override
