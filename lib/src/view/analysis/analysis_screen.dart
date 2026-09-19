@@ -28,6 +28,7 @@ import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/explorer/explorer_view.dart';
 import 'package:lichess_mobile/src/view/game/exported_game_title.dart';
 import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
+import 'package:lichess_mobile/src/view/study/add_pgn_to_study_screen.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
@@ -535,7 +536,7 @@ class const _BottomBar({
               ),
             ],
         // board editor can be used to quickly analyze a position, so engine must be allowed to access
-        if (analysisState.isComputerAnalysisAllowed)
+        if (analysisState.isComputerAnalysisAllowed) ...[
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.boardEditor),
             onPressed: () => openBoardEditor(
@@ -545,7 +546,6 @@ class const _BottomBar({
               analysisState.pov,
             ),
           ),
-        if (analysisState.isComputerAnalysisAllowed)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.continueFromHere),
             onPressed: () => showContinueFromHereMenu(
@@ -554,6 +554,17 @@ class const _BottomBar({
               analysisState.currentPosition.fen,
             ),
           ),
+          if (authUser != null)
+            BottomSheetAction(
+              makeLabel: (context) => const Text('Add to study'), // TODO l10n
+              onPressed: () => Navigator.of(context).push(
+                AddPgnToStudyScreen.buildRoute(
+                  pgn: ref.read(analysisControllerProvider(options).notifier).makeExportPgn(),
+                  orientation: analysisState.pov,
+                ),
+              ),
+            ),
+        ],
       ],
     );
   }
