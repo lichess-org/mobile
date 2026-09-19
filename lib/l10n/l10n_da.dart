@@ -7225,6 +7225,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get teamTeam => 'Hold';
 
   @override
+  String get teamTeamUpdates => 'Holdopdateringer';
+
+  @override
   String get teamIncorrectEntryCode => 'Forkert adgangskode.';
 
   @override

@@ -7223,6 +7223,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get teamTeam => 'टीम';
 
   @override
+  String get teamTeamUpdates => 'Team updates';
+
+  @override
   String get teamIncorrectEntryCode => 'अवैध प्रवेश कूट';
 
   @override

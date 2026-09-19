@@ -7225,6 +7225,9 @@ class AppLocalizationsNb extends AppLocalizations {
   String get teamTeam => 'Lag';
 
   @override
+  String get teamTeamUpdates => 'Lagoppdateringer';
+
+  @override
   String get teamIncorrectEntryCode => 'Feil adgangskode.';
 
   @override

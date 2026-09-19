@@ -7541,6 +7541,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get teamTeam => 'فريق';
 
   @override
+  String get teamTeamUpdates => 'تحديثات الفريق';
+
+  @override
   String get teamIncorrectEntryCode => 'رمز خاطئ.';
 
   @override

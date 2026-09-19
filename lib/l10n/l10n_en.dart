@@ -7223,6 +7223,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get teamTeam => 'Team';
 
   @override
+  String get teamTeamUpdates => 'Team updates';
+
+  @override
   String get teamIncorrectEntryCode => 'Incorrect entry code.';
 
   @override
@@ -14619,6 +14622,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get teamTeam => 'Team';
+
+  @override
+  String get teamTeamUpdates => 'Team updates';
 
   @override
   String get teamIncorrectEntryCode => 'Incorrect entry code.';

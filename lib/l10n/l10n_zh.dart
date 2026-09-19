@@ -7146,6 +7146,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get teamTeam => '团队';
 
   @override
+  String get teamTeamUpdates => '团队动态';
+
+  @override
   String get teamIncorrectEntryCode => '准入码不正确。';
 
   @override

@@ -7225,6 +7225,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get teamTeam => 'Joukkue';
 
   @override
+  String get teamTeamUpdates => 'Joukkueilmoitukset';
+
+  @override
   String get teamIncorrectEntryCode => 'Virheellinen sisäänpääsykoodi.';
 
   @override

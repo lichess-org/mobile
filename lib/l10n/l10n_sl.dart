@@ -7381,6 +7381,9 @@ class AppLocalizationsSl extends AppLocalizations {
   String get teamTeam => 'Ekipa';
 
   @override
+  String get teamTeamUpdates => 'Posodobitve ekipe';
+
+  @override
   String get teamIncorrectEntryCode => 'Nepravilna vstopna koda.';
 
   @override

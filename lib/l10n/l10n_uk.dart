@@ -7383,6 +7383,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get teamTeam => 'Команда';
 
   @override
+  String get teamTeamUpdates => 'Новини команди';
+
+  @override
   String get teamIncorrectEntryCode => 'Невірний вхідний код.';
 
   @override

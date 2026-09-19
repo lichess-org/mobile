@@ -2081,6 +2081,7 @@
   "studyNbMembers": "{count, plural, other{{count} メンバー}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, other{ここに PGN をペースト（{count} 局まで）}}",
   "teamTeam": "チーム",
+  "teamTeamUpdates": "チームからのお知らせ",
   "teamIncorrectEntryCode": "参加コードが違います。",
   "teamBattleOfNbTeams": "{count, plural, other{バトル、{count} チーム}}",
   "teamNbLeadersPerTeam": "{count, plural, other{各チーム {count} 人がリーダー}}",

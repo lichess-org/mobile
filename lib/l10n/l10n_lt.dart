@@ -7379,6 +7379,9 @@ class AppLocalizationsLt extends AppLocalizations {
   String get teamTeam => 'Komanda';
 
   @override
+  String get teamTeamUpdates => 'Team updates';
+
+  @override
   String get teamIncorrectEntryCode => 'Netinkamas kodas.';
 
   @override

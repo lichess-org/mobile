@@ -2075,6 +2075,7 @@
   "studyNbMembers": "{count, plural, =1{{count} عضو} other{{count} عضو}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{متن PGN خود را در اینجا بچسبانید، تا {count} بازی} other{متن PGN خود را در اینجا بچسبانید، تا {count} بازی}}",
   "teamTeam": "تیم",
+  "teamTeamUpdates": "روزامدهای تیم",
   "teamIncorrectEntryCode": "کد ورودی اشتباه است.",
   "teamBattleOfNbTeams": "{count, plural, =1{نبرد یک تیم} other{نبرد {count} تیم}}",
   "teamNbLeadersPerTeam": "{count, plural, =1{یک رهبر از هر تیم} other{{count} رهبر از هر تیم}}",

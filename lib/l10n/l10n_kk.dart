@@ -7225,6 +7225,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get teamTeam => 'Топ';
 
   @override
+  String get teamTeamUpdates => 'Team updates';
+
+  @override
   String get teamIncorrectEntryCode => 'Құпиясөз қате.';
 
   @override
