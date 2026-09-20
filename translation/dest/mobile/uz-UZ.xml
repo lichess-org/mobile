@@ -7,6 +7,7 @@
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Ishonchingiz komilmi?</string>
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Taxta sozlamalari</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Yurishni qaytarishni bekor qilish</string>
+  <string name="chessEngine" comment="Chess engine settings screen title.">Shaxmat dvijogi</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Tozalash</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Saqlangan yurishni oʻchirish</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Oʻyinga qoʻshilish</string>
@@ -45,6 +46,8 @@
   <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">Surilayotgan dona nishoni</string>
   <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">Aylana</string>
   <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">Kvadrat</string>
+  <string name="settingsDrawnShapeColor" comment="This is shown in the theme settings screen. Allow to choose the color of drawn shapes.">Chizilgan shakl rangi</string>
+  <string name="settingsDrawnShapeColorHelp" comment="This is shown in the theme settings screen. Explanation of the drawn shape color settings.">Ushbu rang ikki barmoq bilan chizilgan shakllar uchun ishlatiladi.</string>
   <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">Asosiy ekran vidjetlari</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Butun ekran rejimi</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Oʻyin paytida tizim interfeysini yashirish. Agar ekran chetidagi tizim navigatsiyasi imo‑ishoralari sizga xalaqit bersa, shu rejimdan foydalaning. Oʻyin va masala ekranlariga amal qiladi.</string>
