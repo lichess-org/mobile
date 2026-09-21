@@ -46,6 +46,8 @@
   <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">Sürüklenen taşın hedefi</string>
   <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">Daire</string>
   <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">Kare</string>
+  <string name="settingsDrawnShapeColor" comment="This is shown in the theme settings screen. Allow to choose the color of drawn shapes.">Çizilen şeklin rengi</string>
+  <string name="settingsDrawnShapeColorHelp" comment="This is shown in the theme settings screen. Explanation of the drawn shape color settings.">Bu renk, iki parmak kullanılarak elle çizilen şekiller için kullanılır.</string>
   <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">Ana ekran kısayolları</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Sürükleyici mod</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Oynarken sistem arayüzünü gizle. Sistemin, ekranın kenarlarındaki gezinme hareketlerinden rahatsızsan bunu kullan. Bu ayar oyun ve bulmaca ekranlarına uygulanır.</string>

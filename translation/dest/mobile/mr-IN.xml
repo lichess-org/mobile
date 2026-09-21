@@ -46,7 +46,7 @@
   <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">ओढलेल्या सोंगट्याचे निशाण</string>
   <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">वर्तुळ</string>
   <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">चौरस</string>
-  <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">घरचे परस्परसंवादी </string>
+  <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">घरचे परस्परसंवादी</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">विसर्जित रीत</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">खेळताना प्रणालीचे व्यासपीठ लपवा. जर तुम्हाला स्क्रीनच्या कडांवर असलेल्या सिस्टमच्या हालचाल नियंत्रणाचा त्रास होत असेल तर हे वापरा. ​​खेळ आणि कोडी स्क्रीनवर लागू होते.</string>
   <string name="settingsMaterialDifferenceCapturedPieces" comment="A value of the material difference settings choice (to show all captured pieces instead of material difference).">पकडलेल्या सोंगट्या</string>
