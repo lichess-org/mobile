@@ -36,7 +36,7 @@ Future<void> showChoicePicker<T>(
                 return RadioGroup(
                   groupValue: selectedItem,
                   onChanged: (value) {
-                    if (value != null && onSelectedItemChanged != null) {
+                    if (value is T && onSelectedItemChanged != null) {
                       onSelectedItemChanged(value);
                       Navigator.of(context).pop();
                     }
