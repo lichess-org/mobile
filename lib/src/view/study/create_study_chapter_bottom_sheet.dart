@@ -4,6 +4,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_player.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/study/study.dart';
@@ -17,12 +18,22 @@ import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:material_ui/material_ui.dart';
 
-sealed class CreateStudyChapterParams();
+sealed class CreateStudyChapterParams() {
+  String? get pgn;
+  Side? get orientation;
+}
 
-class CreateChapterOfExistingStudy(final StudyId studyId) extends CreateStudyChapterParams;
+class CreateChapterOfExistingStudy(
+  final StudyId studyId, {
+  @override final String? pgn,
+  @override final Side? orientation,
+}) extends CreateStudyChapterParams;
 
-class CreateFirstChapterOfNewStudy(final CreateStudyPayload studyPayload)
-    extends CreateStudyChapterParams;
+class CreateFirstChapterOfNewStudy(
+  final CreateStudyPayload studyPayload, {
+  @override final String? pgn,
+  @override final Side? orientation,
+}) extends CreateStudyChapterParams;
 
 enum _ChapterSource() {
   empty,
@@ -32,7 +43,7 @@ enum _ChapterSource() {
 
 class const CreateStudyChapterBottomSheet({
   required final CreateStudyChapterParams params,
-  required final int chapterNumber,
+  required final String initialChapterName,
   final void Function(StudyId, IList<StudyChapterId>)? onChaptersCreated,
 }) extends ConsumerStatefulWidget {
   @override
@@ -54,11 +65,27 @@ class _CreateStudyChapterBottomSheetState() extends ConsumerState<CreateStudyCha
   /// Whether a chapter creation request is in flight.
   bool _isSubmitting = false;
 
+  bool get _hasExistingPgn => widget.params.pgn != null;
+
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
-        chapterName = context.l10n.studyChapterX(widget.chapterNumber.toString());
+        chapterName = widget.initialChapterName;
+
+        if (_hasExistingPgn) {
+          _source = _ChapterSource.pgn;
+          _textController.text = widget.params.pgn!;
+          orientation = widget.params.orientation ?? Side.white;
+
+          final pgnHeaders = PgnGame.parsePgn(widget.params.pgn!).headers.lock;
+          final whitePlayer = AnalysisPlayer.fromPgnHeaders(pgnHeaders, Side.white);
+          final blackPlayer = AnalysisPlayer.fromPgnHeaders(pgnHeaders, Side.black);
+          if (whitePlayer != null && blackPlayer != null) {
+            chapterName = context.l10n.resVsX(whitePlayer.name, blackPlayer.name);
+          }
+        }
+
         _nameController.text = chapterName;
       });
     });
@@ -140,7 +167,7 @@ class _CreateStudyChapterBottomSheetState() extends ConsumerState<CreateStudyCha
               spacing: 8.0,
               children: [
                 ListTile(
-                  title: Text(context.l10n.name),
+                  title: const Text('Chapter Name'), // TODO l10n
                   subtitle: TextField(
                     controller: _nameController,
                     onChanged: (value) => setState(() => chapterName = value),
@@ -148,30 +175,31 @@ class _CreateStudyChapterBottomSheetState() extends ConsumerState<CreateStudyCha
                 ),
                 // [expandedInsets] makes the button fill the available width, so its size does not
                 // depend on which segment is selected
-                SegmentedButton<_ChapterSource>(
-                  expandedInsets: const EdgeInsets.symmetric(horizontal: 20.0),
-                  segments: [
-                    ButtonSegment(
-                      value: _ChapterSource.empty,
-                      label: Text(context.l10n.studyEmpty),
-                    ),
-                    const ButtonSegment(value: _ChapterSource.fen, label: Text('FEN')),
-                    const ButtonSegment(value: _ChapterSource.pgn, label: Text('PGN')),
-                  ],
-                  selected: {_source},
-                  onSelectionChanged: (selection) {
-                    setState(() {
-                      _source = selection.first;
-                      errorText = null;
-                      switch (_source) {
-                        case _ChapterSource.empty:
-                          break;
-                        case _ChapterSource.fen || _ChapterSource.pgn:
-                          _onTextChanged('');
-                      }
-                    });
-                  },
-                ),
+                if (!_hasExistingPgn)
+                  SegmentedButton<_ChapterSource>(
+                    expandedInsets: const EdgeInsets.symmetric(horizontal: 20.0),
+                    segments: [
+                      ButtonSegment(
+                        value: _ChapterSource.empty,
+                        label: Text(context.l10n.studyEmpty),
+                      ),
+                      const ButtonSegment(value: _ChapterSource.fen, label: Text('FEN')),
+                      const ButtonSegment(value: _ChapterSource.pgn, label: Text('PGN')),
+                    ],
+                    selected: {_source},
+                    onSelectionChanged: (selection) {
+                      setState(() {
+                        _source = selection.first;
+                        errorText = null;
+                        switch (_source) {
+                          case _ChapterSource.empty:
+                            break;
+                          case _ChapterSource.fen || _ChapterSource.pgn:
+                            _onTextChanged('');
+                        }
+                      });
+                    },
+                  ),
                 if (_source == _ChapterSource.fen)
                   SmallBoardPreview(
                     orientation: orientation,
@@ -192,7 +220,7 @@ class _CreateStudyChapterBottomSheetState() extends ConsumerState<CreateStudyCha
                       onTap: () => _getClipboardData(),
                     ),
                   ),
-                if (_source == _ChapterSource.pgn)
+                if (_source == _ChapterSource.pgn && !_hasExistingPgn)
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: Column(

@@ -13,7 +13,9 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/account/account_menu.dart';
 import 'package:lichess_mobile/src/view/coordinate_training/coordinate_training_screen.dart';
 import 'package:lichess_mobile/src/view/learn/learn_screen.dart';
+import 'package:lichess_mobile/src/view/study/study_list.dart';
 import 'package:lichess_mobile/src/view/study/study_list_screen.dart';
+import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -154,7 +156,16 @@ class const _Body() extends ConsumerWidget {
                     AsyncData(:final value) =>
                       value
                           .take(5)
-                          .map((study) => StudyListItem(study: study, titleMaxLines: 1))
+                          .map(
+                            (study) => StudyListItem(
+                              study: study,
+                              titleMaxLines: 1,
+                              onTap: (context, study) => Navigator.of(
+                                context,
+                                rootNavigator: true,
+                              ).push(StudyScreen.buildRoute((id: study.id, initialChapter: null))),
+                            ),
+                          )
                           .toList(growable: false),
                     _ => [],
                   }),

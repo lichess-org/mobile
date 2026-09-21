@@ -32,7 +32,7 @@ void main() {
         home: TestBottomSheetOpener(
           builder: (_) => CreateStudyChapterBottomSheet(
             params: CreateChapterOfExistingStudy(const StudyId('test-id')),
-            chapterNumber: 1,
+            initialChapterName: 'Chapter 1',
             onChaptersCreated: callback.call,
           ),
         ),
@@ -117,7 +117,7 @@ void main() {
                 sticky: true,
               ),
             ),
-            chapterNumber: 1,
+            initialChapterName: 'Chapter 1',
             onChaptersCreated: callback.call,
           ),
         ),
@@ -190,7 +190,7 @@ void main() {
         home: TestBottomSheetOpener(
           builder: (_) => CreateStudyChapterBottomSheet(
             params: CreateChapterOfExistingStudy(const StudyId('test-id')),
-            chapterNumber: 1,
+            initialChapterName: 'Chapter 1',
             onChaptersCreated: callback.call,
           ),
         ),
@@ -262,7 +262,7 @@ void main() {
       );
     });
 
-    testWidgets('Create chapter from PGN', (tester) async {
+    testWidgets('Create chapter from pasted PGN', (tester) async {
       final callback = OnChaptersCreatedCallback();
 
       const pgn = '1. e4 e5';
@@ -272,7 +272,7 @@ void main() {
         home: TestBottomSheetOpener(
           builder: (_) => CreateStudyChapterBottomSheet(
             params: CreateChapterOfExistingStudy(const StudyId('test-id')),
-            chapterNumber: 1,
+            initialChapterName: 'Chapter 1',
             onChaptersCreated: callback.call,
           ),
         ),
@@ -338,6 +338,81 @@ void main() {
       );
     });
 
+    testWidgets('Create chapter from existing PGN', (tester) async {
+      final callback = OnChaptersCreatedCallback();
+
+      const pgn = '1. e4 e5';
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: TestBottomSheetOpener(
+          builder: (_) => CreateStudyChapterBottomSheet(
+            params: CreateChapterOfExistingStudy(
+              const StudyId('test-id'),
+              pgn: pgn,
+              orientation: Side.black,
+            ),
+            initialChapterName: 'Chapter 1',
+            onChaptersCreated: callback.call,
+          ),
+        ),
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+            (ref) => FakeHttpClientFactory(
+              () => MockClient((request) {
+                if (request.url.path == '/api/study/test-id/import-pgn' &&
+                    request.method == 'POST') {
+                  expect(request.bodyFields, containsPair('name', 'Chapter 1'));
+                  expect(request.bodyFields, containsPair('orientation', 'black'));
+                  expect(request.bodyFields, containsPair('initial', 'false'));
+
+                  // Should not send variant here, server will infer it from the PGN.
+                  expect(request.bodyFields, isNot(containsPair('variant', anything)));
+
+                  expect(request.bodyFields['pgn'], equals(pgn));
+
+                  return mockResponse(
+                    jsonEncode({
+                      'chapters': [
+                        {'id': 'new-chapter'},
+                      ],
+                    }),
+                    200,
+                  );
+                }
+                return mockResponse('', 404);
+              }),
+            ),
+          ),
+        },
+        authUser: fakeAuthUser,
+      );
+
+      await tester.pumpWidget(app);
+
+      await TestBottomSheetOpener.openBottomSheet(tester);
+
+      expect(find.byType(CreateStudyChapterBottomSheet), findsOneWidget);
+
+      // We already have a PGN (from a game or analysis),
+      // so it shouldn't offer to paste a new one or to import a file.
+      expect(find.byIcon(Icons.paste), findsNothing);
+      expect(find.textContaining('PGN file'), findsNothing);
+
+      // Server infers variant from PGN, so there should be no manual selector here.
+      expect(find.text('Standard'), findsNothing);
+
+      // Should show the orientation that was passed in, and not the default (white).
+      expect(find.text('Black'), findsOneWidget);
+
+      await tester.tap(find.text('Create chapter'));
+      await tester.pumpAndSettle();
+
+      verify(
+        () => callback.call(const StudyId('test-id'), [const StudyChapterId('new-chapter')].lock),
+      );
+    });
+
     testWidgets('Invalid FEN', (tester) async {
       final callback = OnChaptersCreatedCallback();
 
@@ -346,7 +421,7 @@ void main() {
         home: TestBottomSheetOpener(
           builder: (_) => CreateStudyChapterBottomSheet(
             params: CreateChapterOfExistingStudy(const StudyId('test-id')),
-            chapterNumber: 1,
+            initialChapterName: 'Chapter 1',
             onChaptersCreated: callback.call,
           ),
         ),
@@ -376,7 +451,7 @@ void main() {
         home: TestBottomSheetOpener(
           builder: (_) => CreateStudyChapterBottomSheet(
             params: CreateChapterOfExistingStudy(const StudyId('test-id')),
-            chapterNumber: 1,
+            initialChapterName: 'Chapter 1',
             onChaptersCreated: callback.call,
           ),
         ),
@@ -422,7 +497,7 @@ void main() {
                 .copyWith(viewInsets: const EdgeInsets.only(bottom: keyboardHeight)),
             child: CreateStudyChapterBottomSheet(
               params: CreateChapterOfExistingStudy(const StudyId('test-id')),
-              chapterNumber: 1,
+              initialChapterName: 'Chapter 1',
               onChaptersCreated: callback.call,
             ),
           ),
@@ -455,7 +530,7 @@ void main() {
         home: TestBottomSheetOpener(
           builder: (_) => CreateStudyChapterBottomSheet(
             params: CreateChapterOfExistingStudy(const StudyId('test-id')),
-            chapterNumber: 1,
+            initialChapterName: 'Chapter 1',
             onChaptersCreated: callback.call,
           ),
         ),
@@ -493,7 +568,7 @@ void main() {
         home: TestBottomSheetOpener(
           builder: (_) => CreateStudyChapterBottomSheet(
             params: CreateChapterOfExistingStudy(const StudyId('test-id')),
-            chapterNumber: 1,
+            initialChapterName: 'Chapter 1',
             onChaptersCreated: callback.call,
           ),
         ),
