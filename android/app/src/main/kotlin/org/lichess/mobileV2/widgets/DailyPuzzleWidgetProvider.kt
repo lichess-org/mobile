@@ -87,22 +87,37 @@ class DailyPuzzleWidgetProvider : AppWidgetProvider() {
     appWidgetIds.forEach { updateWidget(context, appWidgetManager, it) }
   }
 
-  private fun updateWidget(context : Context, appWidgetManager : AppWidgetManager, appWidgetId : Int){
-    val remoteViews = RemoteViews(context.packageName, R.layout.widget_daily_puzzle)
-
-    val homeIntent = Intent(context, MainActivity::class.java).apply {
-      action = Intent.ACTION_MAIN
-      addCategory(Intent.CATEGORY_LAUNCHER)
-      addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+  // Builds the widget's click target. When a daily puzzle id is known, this opens the native
+  // "Daily Puzzle" screen directly via the `org.lichess.mobile://training/daily/{puzzleId}`
+  // deeplink handled by AppLinksService.handleDailyPuzzleLink (mirrors Deeplinks.swift on iOS).
+  // Otherwise it just falls back to launching the app.
+  private fun buildClickPendingIntent(
+    context: Context,
+    appWidgetId: Int,
+    puzzleId: String?
+  ): PendingIntent {
+    val intent = if (puzzleId != null) {
+      Intent(Intent.ACTION_VIEW, Uri.parse("org.lichess.mobile://training/daily/$puzzleId")).apply {
+        setClass(context, MainActivity::class.java)
+        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+      }
+    } else {
+      Intent(context, MainActivity::class.java).apply {
+        action = Intent.ACTION_MAIN
+        addCategory(Intent.CATEGORY_LAUNCHER)
+        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+      }
     }
-
-    val homePendingIntent = PendingIntent.getActivity(
+    return PendingIntent.getActivity(
       context,
       appWidgetId,
-      homeIntent,
+      intent,
       PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
     )
-    remoteViews.setOnClickPendingIntent(R.id.widget_container, homePendingIntent)
+  }
+
+  private fun updateWidget(context : Context, appWidgetManager : AppWidgetManager, appWidgetId : Int){
+    val remoteViews = RemoteViews(context.packageName, R.layout.widget_daily_puzzle)
 
     val dateStr = DateUtils.formatDateTime(
       context,
@@ -111,6 +126,7 @@ class DailyPuzzleWidgetProvider : AppWidgetProvider() {
     )
     remoteViews.setTextViewText(R.id.daily_puzzle_date, dateStr)
 
+    var puzzleId: String? = null
     try {
       val prefs = context.getSharedPreferences("HomeWidgetPreferences", Context.MODE_PRIVATE)
       val lichessHost = prefs.getString("lichessHost", "lichess.org") ?: "lichess.org"
@@ -120,6 +136,7 @@ class DailyPuzzleWidgetProvider : AppWidgetProvider() {
         remoteViews.setViewVisibility(R.id.no_puzzle, View.VISIBLE)
         remoteViews.setViewVisibility(R.id.puzzle_board_image,  View.GONE)
       } else {
+        puzzleId = puzzle.id
         remoteViews.setViewVisibility(R.id.no_puzzle, View.GONE)
         remoteViews.setViewVisibility(R.id.puzzle_board_image, View.VISIBLE)
 
@@ -135,6 +152,9 @@ class DailyPuzzleWidgetProvider : AppWidgetProvider() {
     } catch (e: Exception) {
       Log.e("DailyPuzzleWidget", "Error updating widget $appWidgetId", e)
     }
+
+    val clickPendingIntent = buildClickPendingIntent(context, appWidgetId, puzzleId)
+    remoteViews.setOnClickPendingIntent(R.id.widget_container, clickPendingIntent)
 
     appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
   }
