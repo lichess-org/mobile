@@ -661,7 +661,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get arenaHowIsTheWinnerDecidedAnswer => 'Mängija(-d), kellel on määratud turniiriaja lõppedes kogunenud kõige enam punkte, kuulutatakse võitja(-te)ks.';
 
   @override
-  String get arenaHowDoesPairingWork => 'Kuidas toimub paarimine?';
+  String get arenaHowDoesPairingWork => 'How does the pairing work?';
 
   @override
   String get arenaHowArePlayersPaired => 'How are players paired?';
@@ -930,7 +930,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get broadcastDeleteRound => 'Kustuta see voor';
 
   @override
-  String get broadcastDefinitivelyDeleteRound => 'Kustuta lõplikult voor ja selle mängud.';
+  String get broadcastDefinitivelyDeleteRound => 'Definitively delete the round and all its games.';
 
   @override
   String get broadcastPermanentlyDeleteRound => 'Permanently delete this round and all its games?';
@@ -2161,19 +2161,19 @@ class AppLocalizationsEt extends AppLocalizations {
   String get preferencesNotifyStreamStart => 'Striimija alustab otseülekannet';
 
   @override
-  String get preferencesNotifyInboxMsg => 'Postkastis on uus sõnum';
+  String get preferencesNotifyInboxMsg => 'New inbox message';
 
   @override
   String get preferencesNotifyDirectMessage => 'New direct message';
 
   @override
-  String get preferencesNotifyForumMention => 'Mainimised foorumis';
+  String get preferencesNotifyForumMention => 'Forum comment mentions you';
 
   @override
   String get preferencesNotifyForumMentions => 'Forum mentions';
 
   @override
-  String get preferencesNotifyInvitedStudy => 'Kutse uuringule';
+  String get preferencesNotifyInvitedStudy => 'Study invite';
 
   @override
   String get preferencesNotifyStudyInvites => 'Study invites';
@@ -2185,7 +2185,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get preferencesNotifyChallenge => 'Väljakutsed';
 
   @override
-  String get preferencesNotifyTournamentSoon => 'Turniir algab peatselt';
+  String get preferencesNotifyTournamentSoon => 'Tournament starting soon';
 
   @override
   String get preferencesNotifyTournamentStartReminders => 'Tournaments start reminders';
@@ -2720,7 +2720,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get puzzleThemeEndgameDescription => 'Taktika mängu viimases faasis.';
 
   @override
-  String get puzzleThemeEnPassantDescription => 'Taktika, kus rakendatakse en passant reeglit, kus ettur saab lüüa mööda läinud vastase etturit kasutades algset kahe ruutu käiku.';
+  String get puzzleThemeEnPassantDescription => 'A tactic involving the en passant rule, where a pawn can capture an opponent pawn that has bypassed it using its initial two-square move.';
 
   @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'A tactic involving the en passant rule, where a pawn can capture an opposing pawn that has just moved next to it with its initial two-square move.';
@@ -2741,7 +2741,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get puzzleThemeFork => 'Kahvel';
 
   @override
-  String get puzzleThemeForkDescription => 'Käik, millega mängija ründab oma malendiga korraga mitut vastase malendit.';
+  String get puzzleThemeForkDescription => 'A move where the moved piece attacks two opponent pieces at once.';
 
   @override
   String get puzzleThemeForkOpposingPiecesDescription => 'A move where a piece attacks two or more opposing pieces simultaneously.';
@@ -2915,7 +2915,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get puzzleThemePromotion => 'Muundamine';
 
   @override
-  String get puzzleThemePromotionDescription => 'Muunda oma ettur lipuks või teiseks viguriks.';
+  String get puzzleThemePromotionDescription => 'Promote one of your pawn to a queen or minor piece.';
 
   @override
   String get puzzleThemePromotePawnToQueenRookOrMinor => 'Promote one of your pawns to a queen, rook or minor piece.';
@@ -3729,7 +3729,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get refreshInboxAfterFiveMinutes => 'Oodake 5 minutit ja värskendage postkasti.';
 
   @override
-  String get checkSpamFolder => 'Kiri võib sattuda ka rämpsposti kausta. Sel juhul palun märkige see mitte rämpspostina.';
+  String get checkSpamFolder => 'Also check your spam folder, it might end up there. If so, mark it as not spam.';
 
   @override
   String get checkSpamOrJunkFolder => 'Kui sa ei saa kinnituskirja, kontrolli oma rämpsposti või prügikasti kausta. Märgi kindlasti lichess.org sõnumid turvaliseks ja \"mitte rämpspostiks\", et olla olulise teabega kursis.';
@@ -3780,13 +3780,13 @@ class AppLocalizationsEt extends AppLocalizations {
   String get cancel => 'Katkesta';
 
   @override
-  String get whiteTimeOut => 'Valge aeg sai läbi';
+  String get whiteTimeOut => 'White time out';
 
   @override
   String get whiteRanOutOfTime => 'White ran out of time';
 
   @override
-  String get blackTimeOut => 'Musta aeg sai läbi';
+  String get blackTimeOut => 'Black time out';
 
   @override
   String get blackRanOutOfTime => 'Black ran out of time';
@@ -3998,7 +3998,7 @@ class AppLocalizationsEt extends AppLocalizations {
   }
 
   @override
-  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Reitingufiltrid on lukustatud, kuna sinu reiting ei ole stabiilne. Reitingumängude mängimine suurendab reitingu stabiilsust.';
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
 
   @override
   String get cannotFilterByUnstableRating => 'It is not possible to filter by rating because your rating is not stable.\nPlaying rated games will increase stability.';
@@ -4516,7 +4516,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get reportUsernameHelp => 'Selgita, miks see kasutajanimi on solvav. Ära ütle lihtsalt \"see on solvav/sobimatu\", vaid selgita, kuidas sellele järeldusele jõudsid, eriti kui solvavus on raskesti mõistetav, ei ole inglise keeles, on slängis või viitab ajaloolisele või kultuurilisele kontekstile.';
 
   @override
-  String get reportProcessedFasterInEnglish => 'Sõnumit käsitletakse kiiremini, kui see on kirjutatud inglise keeles.';
+  String get reportProcessedFasterInEnglish => 'Your report will be processed faster if written in English.';
 
   @override
   String get processReportFasterInEnglish => 'Vaatame sinu teate kiiremini läbi, kui kirjutad inglise keeles.';
@@ -4887,7 +4887,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get create => 'Loo';
 
   @override
-  String get whenCreateSimul => 'Kui lood simultaani, saad mängida samaaegselt mitme vastasega.';
+  String get whenCreateSimul => 'When you create a simul, you get to play several players at once.';
 
   @override
   String get creatingASimul => 'Simultaani loomine võimaldab sul mängida korraga mitme vastase vastu.';
@@ -4902,7 +4902,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get simulAddExtraTime => 'Võid lisada kellale lisaaega, et simultaaniga paremini hakkama saada.';
 
   @override
-  String get simulHostExtraTime => 'Sinultaani korraldaja lisaaeg';
+  String get simulHostExtraTime => 'Host extra initial clock time';
 
   @override
   String get extraClockTimeForHost => 'Extra clock time for the host:';
@@ -5310,7 +5310,7 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String perfRatingX(String param) {
-    return 'Reiting: $param';
+    return 'Rating: $param';
   }
 
   @override
@@ -5469,7 +5469,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get showUnreadLichessMessage => 'Oled saanud Lichessilt privaatsõnumi.';
 
   @override
-  String get clickHereToReadIt => 'Selle lugemiseks klõpsa siin';
+  String get clickHereToReadIt => 'Click here to read it';
 
   @override
   String get readTheMessage => 'Read the message';
@@ -5755,7 +5755,7 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String markdownIsAvailable(String param) {
-    return '$param on vormindamiseks saadaval.';
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5782,7 +5782,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get onlyTeamMembers => 'Ainult võistkonnaliikmed';
 
   @override
-  String get navigateMoveTree => 'Navigeeri käiguloendis';
+  String get navigateMoveTree => 'Navigate the move tree';
 
   @override
   String get moveListNavigation => 'Käikute loendi juhtimine';
@@ -5947,8 +5947,8 @@ class AppLocalizationsEt extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count prohmakat',
-      one: '$count prohmakas',
+      other: '$count blunders',
+      one: '$count blunder',
     );
     return '$_temp0';
   }
@@ -5969,8 +5969,8 @@ class AppLocalizationsEt extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count viga',
-      one: '$count viga',
+      other: '$count mistakes',
+      one: '$count mistake',
     );
     return '$_temp0';
   }
@@ -5991,8 +5991,8 @@ class AppLocalizationsEt extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count ebatäpsust',
-      one: '$count ebatäpsus',
+      other: '$count inaccuracies',
+      one: '$count inaccuracy',
     );
     return '$_temp0';
   }
@@ -6376,8 +6376,8 @@ class AppLocalizationsEt extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Anonüümsed ($count)',
-      one: 'Anonüümne',
+      other: 'Anonymous ($count)',
+      one: 'Anonymous',
     );
     return '$_temp0';
   }
@@ -6761,7 +6761,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get studyCurrentChapterUrl => 'Praeguse peatüki URL';
 
   @override
-  String get studyYouCanPasteThisInTheForumToEmbed => 'Te saate selle asetada foorumisse või oma Lichessi blogisse sängitamiseks';
+  String get studyYouCanPasteThisInTheForumToEmbed => 'You can paste this in the forum or your Lichess blog to embed';
 
   @override
   String get studyPasteToEmbedChapterInForumOrBlog => 'You can paste this in the forum or your Lichess blog to embed the chapter.';

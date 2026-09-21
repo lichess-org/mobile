@@ -661,7 +661,7 @@ class AppLocalizationsMk extends AppLocalizations {
   String get arenaHowIsTheWinnerDecidedAnswer => 'Играчите со најмногу поени по истекот на времето на турнирот ќе бидат прогласени победници.\n\nКога 2 или повеќе играчи го имаат истиот број на поени, победникот се бира според перформансите во турнирот.';
 
   @override
-  String get arenaHowDoesPairingWork => 'Како работи спарувањето?';
+  String get arenaHowDoesPairingWork => 'How does the pairing work?';
 
   @override
   String get arenaHowArePlayersPaired => 'How are players paired?';
@@ -3729,7 +3729,7 @@ class AppLocalizationsMk extends AppLocalizations {
   String get refreshInboxAfterFiveMinutes => 'Почекајте 5 минути па превчитајте го email приемното сандаче.';
 
   @override
-  String get checkSpamFolder => 'Исто, проверете да не залутал во spam фолдерот. Во таков случај преместете го од таму.';
+  String get checkSpamFolder => 'Also check your spam folder, it might end up there. If so, mark it as not spam.';
 
   @override
   String get checkSpamOrJunkFolder => 'If you do not receive a confirmation email, check your Spam or Junk folder. Be sure to indicate messages from lichess.org as safe and \"not spam\", so you can stay informed of important communications.';
@@ -3780,13 +3780,13 @@ class AppLocalizationsMk extends AppLocalizations {
   String get cancel => 'Откажи';
 
   @override
-  String get whiteTimeOut => 'Времето на белиот истече';
+  String get whiteTimeOut => 'White time out';
 
   @override
   String get whiteRanOutOfTime => 'White ran out of time';
 
   @override
-  String get blackTimeOut => 'Времето на црниот истече';
+  String get blackTimeOut => 'Black time out';
 
   @override
   String get blackRanOutOfTime => 'Black ran out of time';
@@ -4887,7 +4887,7 @@ class AppLocalizationsMk extends AppLocalizations {
   String get create => 'Создади';
 
   @override
-  String get whenCreateSimul => 'Кога создаваш симултана партија, играш со повеќе противници наеднаш.';
+  String get whenCreateSimul => 'When you create a simul, you get to play several players at once.';
 
   @override
   String get creatingASimul => 'Creating a simul lets you play against multiple opponents at the same time.';
@@ -4902,7 +4902,7 @@ class AppLocalizationsMk extends AppLocalizations {
   String get simulAddExtraTime => 'Можеш да додадеш додатно време на часовникот, за да ти помогне со симултаната партија.';
 
   @override
-  String get simulHostExtraTime => 'Додатно време за домаќинот';
+  String get simulHostExtraTime => 'Host extra initial clock time';
 
   @override
   String get extraClockTimeForHost => 'Extra clock time for the host:';
@@ -5310,7 +5310,7 @@ class AppLocalizationsMk extends AppLocalizations {
 
   @override
   String perfRatingX(String param) {
-    return 'Рејтинг: $param';
+    return 'Rating: $param';
   }
 
   @override
@@ -5782,7 +5782,7 @@ class AppLocalizationsMk extends AppLocalizations {
   String get onlyTeamMembers => 'Само членови на тим';
 
   @override
-  String get navigateMoveTree => 'Навигирајте ја листата на движење';
+  String get navigateMoveTree => 'Navigate the move tree';
 
   @override
   String get moveListNavigation => 'Move list navigation';
@@ -5947,8 +5947,8 @@ class AppLocalizationsMk extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count големи грешки',
-      one: '$count голема грешка',
+      other: '$count blunders',
+      one: '$count blunder',
     );
     return '$_temp0';
   }
@@ -5969,8 +5969,8 @@ class AppLocalizationsMk extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count грешки',
-      one: '$count грешка',
+      other: '$count mistakes',
+      one: '$count mistake',
     );
     return '$_temp0';
   }
@@ -5991,8 +5991,8 @@ class AppLocalizationsMk extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count непрецизности',
-      one: '$count непрецизност',
+      other: '$count inaccuracies',
+      one: '$count inaccuracy',
     );
     return '$_temp0';
   }

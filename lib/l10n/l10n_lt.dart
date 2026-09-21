@@ -697,7 +697,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get arenaHowIsTheWinnerDecidedAnswer => 'Žaidėjas (-ai), surinkęs (-ę) daugiausiai taškų pasibaigus nustatytam turnyro laiko limitui, bus paskelbtas (-i) laimėtoju (-ais).';
 
   @override
-  String get arenaHowDoesPairingWork => 'Kaip veikia suporavimas?';
+  String get arenaHowDoesPairingWork => 'How does the pairing work?';
 
   @override
   String get arenaHowArePlayersPaired => 'How are players paired?';
@@ -788,7 +788,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get arenaEditTeamBattle => 'Redaguoti komandų turnyrą';
 
   @override
-  String get arenaDefender => 'Ginantis titulą';
+  String get arenaDefender => 'Defender';
 
   @override
   String get arenaDefenderLabel => 'Defender:';
@@ -815,7 +815,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get arenaTournamentStats => 'Turnyro statistika';
 
   @override
-  String get arenaRankAvgHelp => 'Reitingo vidurkis-tai jūsų reitingas procentais. Mažesnis yra geresnis.\n\nPavyzdžiui, užėmus 3 vietą 100 žaidėjų turnyre = 3%. Užėmus 10-ą vietą 1000 žaidėjų turnyre = 1%.';
+  String get arenaRankAvgHelp => 'The rank average is a percentage of your ranking. Lower is better.\n\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.';
 
   @override
   String get arenaRankAverageHelp => 'Your rank average represents your typical finishing position, relative to the total number of players in each tournament.\nThis is a measure of your tournament placement, not your general rating.\n\nFor example, a rank average of 3% means you typically finish in the top 3% (such as 30th place out of 1,000 players).';
@@ -970,7 +970,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get broadcastDeleteRound => 'Ištrinti raundą';
 
   @override
-  String get broadcastDefinitivelyDeleteRound => 'Užtikrintai ištrinti raundą ir jo partijas.';
+  String get broadcastDefinitivelyDeleteRound => 'Definitively delete the round and all its games.';
 
   @override
   String get broadcastPermanentlyDeleteRound => 'Permanently delete this round and all its games?';
@@ -985,7 +985,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get broadcastDeleteTournament => 'Ištrinti šį turnyrą';
 
   @override
-  String get broadcastDefinitivelyDeleteTournament => 'Užtikrintai ištrinti visą turnyrą, visus raundus ir visas jų partijas.';
+  String get broadcastDefinitivelyDeleteTournament => 'Definitively delete the entire tournament, all its rounds and all its games.';
 
   @override
   String get broadcastPermanentlyDeleteTournament => 'Permanently delete this tournament, including all rounds and games?';
@@ -2205,19 +2205,19 @@ class AppLocalizationsLt extends AppLocalizations {
   String get preferencesNotifyStreamStart => 'Transliuotojas pradeda transliaciją';
 
   @override
-  String get preferencesNotifyInboxMsg => 'Nauja žinutė';
+  String get preferencesNotifyInboxMsg => 'New inbox message';
 
   @override
   String get preferencesNotifyDirectMessage => 'New direct message';
 
   @override
-  String get preferencesNotifyForumMention => 'Jūs paminėti forumo komentare';
+  String get preferencesNotifyForumMention => 'Forum comment mentions you';
 
   @override
   String get preferencesNotifyForumMentions => 'Forum mentions';
 
   @override
-  String get preferencesNotifyInvitedStudy => 'Studijos pakvietimas';
+  String get preferencesNotifyInvitedStudy => 'Study invite';
 
   @override
   String get preferencesNotifyStudyInvites => 'Study invites';
@@ -2229,7 +2229,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get preferencesNotifyChallenge => 'Iššūkiai';
 
   @override
-  String get preferencesNotifyTournamentSoon => 'Greitai prasideda turnyras';
+  String get preferencesNotifyTournamentSoon => 'Tournament starting soon';
 
   @override
   String get preferencesNotifyTournamentStartReminders => 'Tournaments start reminders';
@@ -2774,7 +2774,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get puzzleThemeEndgameDescription => 'Taktika, skirta paskutinei žaidimo fazei.';
 
   @override
-  String get puzzleThemeEnPassantDescription => 'Taktika susijusi su kirtimu prasilenkiant (en passant). Pėstininkas gali nukirsti priešininko pėstininką, kuris \"aplenkė\" pirmąjį perkeltas per du langelius.';
+  String get puzzleThemeEnPassantDescription => 'A tactic involving the en passant rule, where a pawn can capture an opponent pawn that has bypassed it using its initial two-square move.';
 
   @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'A tactic involving the en passant rule, where a pawn can capture an opposing pawn that has just moved next to it with its initial two-square move.';
@@ -2795,7 +2795,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get puzzleThemeFork => 'Šakutė';
 
   @override
-  String get puzzleThemeForkDescription => 'Ėjimas, kurio metu perkelta figūra puola dvi ar daugiau priešininko figūrų vienu metu.';
+  String get puzzleThemeForkDescription => 'A move where the moved piece attacks two opponent pieces at once.';
 
   @override
   String get puzzleThemeForkOpposingPiecesDescription => 'A move where a piece attacks two or more opposing pieces simultaneously.';
@@ -2810,7 +2810,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get puzzleThemeHookMate => 'Kablio matas';
 
   @override
-  String get puzzleThemeHookMateDescription => 'Matas su bokštu, žirgu ir pėstininku palei vieną iš priešininko pėstininkų, apribojančių priešininko karaliaus pabėgimą.';
+  String get puzzleThemeHookMateDescription => 'Checkmate with a rook, knight, and pawn along with one enemy pawn to limit the enemy king\'s escape.';
 
   @override
   String get puzzleThemeHookMateOpposingPawnDescription => 'Checkmate using a rook, knight, and pawn, where an opposing pawn blocks the king\'s escape.';
@@ -2969,7 +2969,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get puzzleThemePromotion => 'Paaukštinimas';
 
   @override
-  String get puzzleThemePromotionDescription => 'Pėstininkas, kuris pasiaukština ar kėsinasi pasiaukštinti yra raktas šiai taktikai.';
+  String get puzzleThemePromotionDescription => 'Promote one of your pawn to a queen or minor piece.';
 
   @override
   String get puzzleThemePromotePawnToQueenRookOrMinor => 'Promote one of your pawns to a queen, rook or minor piece.';
@@ -3783,7 +3783,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get refreshInboxAfterFiveMinutes => 'Palaukite penkias minutes ir atnaujinkite savo el. pašto dėžutę.';
 
   @override
-  String get checkSpamFolder => 'Pasitikrinkite šlamtšo aplanką, laiškas galėjo atsirasti ir ten. Jei taip įvyko - pažymėkite kaip ne šlamštą.';
+  String get checkSpamFolder => 'Also check your spam folder, it might end up there. If so, mark it as not spam.';
 
   @override
   String get checkSpamOrJunkFolder => 'If you do not receive a confirmation email, check your Spam or Junk folder. Be sure to indicate messages from lichess.org as safe and \"not spam\", so you can stay informed of important communications.';
@@ -3834,13 +3834,13 @@ class AppLocalizationsLt extends AppLocalizations {
   String get cancel => 'Atšaukti';
 
   @override
-  String get whiteTimeOut => 'Baigėsi laikas baltiesiems';
+  String get whiteTimeOut => 'White time out';
 
   @override
   String get whiteRanOutOfTime => 'White ran out of time';
 
   @override
-  String get blackTimeOut => 'Baigėsi laikas juodiesiems';
+  String get blackTimeOut => 'Black time out';
 
   @override
   String get blackRanOutOfTime => 'Black ran out of time';
@@ -4052,7 +4052,7 @@ class AppLocalizationsLt extends AppLocalizations {
   }
 
   @override
-  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Reitingo filtrai užrakinti, nes jūsų reitingas nestabilus. Žaidžiant įvertintus žaidimus, padidės stabilumas.';
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
 
   @override
   String get cannotFilterByUnstableRating => 'It is not possible to filter by rating because your rating is not stable.\nPlaying rated games will increase stability.';
@@ -4570,7 +4570,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get reportUsernameHelp => 'Paaiškinkite, kuo šis vartotojo vardas yra įžeidžiantis. Nesakykite tiesiog „tai įžeidžia/netinkama“, bet papasakokite, kaip priėjote prie šios išvados, ypač jei įžeidimas yra užmaskuotas, ne anglų kalba, yra slengas arba yra istorinė / kultūrinė nuoroda.';
 
   @override
-  String get reportProcessedFasterInEnglish => 'Jūsų pranešimas bus apdorotas greičiau, jei jis bus parašytas anglų kalba.';
+  String get reportProcessedFasterInEnglish => 'Your report will be processed faster if written in English.';
 
   @override
   String get processReportFasterInEnglish => 'We can process your report faster if you write in English.';
@@ -4941,7 +4941,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get create => 'Sukurti';
 
   @override
-  String get whenCreateSimul => 'Sukūrę simultaną, turite galimybę žaisti su keletu žaidėjų vienu metu.';
+  String get whenCreateSimul => 'When you create a simul, you get to play several players at once.';
 
   @override
   String get creatingASimul => 'Creating a simul lets you play against multiple opponents at the same time.';
@@ -4956,7 +4956,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get simulAddExtraTime => 'Galite pridėti papildomo laiko savo laikrodžiui, kad būtų lengviau žaisti simultane.';
 
   @override
-  String get simulHostExtraTime => 'Papildomas laikas šeimininkui';
+  String get simulHostExtraTime => 'Host extra initial clock time';
 
   @override
   String get extraClockTimeForHost => 'Extra clock time for the host:';
@@ -5364,7 +5364,7 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String perfRatingX(String param) {
-    return 'Reitingas: $param';
+    return 'Rating: $param';
   }
 
   @override
@@ -5523,7 +5523,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get showUnreadLichessMessage => 'Jūs gavote privačią žinutę iš Lichess.';
 
   @override
-  String get clickHereToReadIt => 'Spustelėkite čia, kad peržiūrėtumėte';
+  String get clickHereToReadIt => 'Click here to read it';
 
   @override
   String get readTheMessage => 'Read the message';
@@ -5809,7 +5809,7 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String markdownIsAvailable(String param) {
-    return '$param galima formatuoti.';
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5836,7 +5836,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get onlyTeamMembers => 'Tik komandos nariams';
 
   @override
-  String get navigateMoveTree => 'Keliauti per ėjimų medį';
+  String get navigateMoveTree => 'Navigate the move tree';
 
   @override
   String get moveListNavigation => 'Move list navigation';
@@ -6005,10 +6005,8 @@ class AppLocalizationsLt extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count šiurkščių klaidų',
-      many: '$count šiurkščios klaidos',
-      few: '$count šiurkščios klaidos',
-      one: '$count šiurkšti klaida',
+      other: '$count blunders',
+      one: '$count blunder',
     );
     return '$_temp0';
   }
@@ -6031,10 +6029,8 @@ class AppLocalizationsLt extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count klaidų',
-      many: '$count klaidos',
-      few: '$count klaidos',
-      one: '$count klaida',
+      other: '$count mistakes',
+      one: '$count mistake',
     );
     return '$_temp0';
   }
@@ -6057,10 +6053,8 @@ class AppLocalizationsLt extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count netikslumų',
-      many: '$count netikslumo',
-      few: '$count netikslumai',
-      one: '$count netikslumas',
+      other: '$count inaccuracies',
+      one: '$count inaccuracy',
     );
     return '$_temp0';
   }
@@ -6907,7 +6901,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get studyCurrentChapterUrl => 'Dabartinio skyriaus URL';
 
   @override
-  String get studyYouCanPasteThisInTheForumToEmbed => 'Galite įklijuoti šį forume norėdami įterpti';
+  String get studyYouCanPasteThisInTheForumToEmbed => 'You can paste this in the forum or your Lichess blog to embed';
 
   @override
   String get studyPasteToEmbedChapterInForumOrBlog => 'You can paste this in the forum or your Lichess blog to embed the chapter.';

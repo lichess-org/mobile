@@ -661,7 +661,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get arenaHowIsTheWinnerDecidedAnswer => 'Die speler(s) met die meeste punte aan die einde van die toernooi se tydslimiet sal as die wenner(s) aangewys word.\n\nAs twee of meer spelers die selfde aantal punte het, sal die prestasie plasing van die toernooi die wenner bepaal.';
 
   @override
-  String get arenaHowDoesPairingWork => 'Hoe werk die plasing?';
+  String get arenaHowDoesPairingWork => 'How does the pairing work?';
 
   @override
   String get arenaHowArePlayersPaired => 'How are players paired?';
@@ -930,7 +930,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get broadcastDeleteRound => 'Skrap die ronde';
 
   @override
-  String get broadcastDefinitivelyDeleteRound => 'Skrap die rondte en sy spelle beslis uit.';
+  String get broadcastDefinitivelyDeleteRound => 'Definitively delete the round and all its games.';
 
   @override
   String get broadcastPermanentlyDeleteRound => 'Permanently delete this round and all its games?';
@@ -945,7 +945,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get broadcastDeleteTournament => 'Vee hierdie toernooi uit';
 
   @override
-  String get broadcastDefinitivelyDeleteTournament => 'Vee beslis die hele toernooi uit, met al sy rondtes en spelle.';
+  String get broadcastDefinitivelyDeleteTournament => 'Definitively delete the entire tournament, all its rounds and all its games.';
 
   @override
   String get broadcastPermanentlyDeleteTournament => 'Permanently delete this tournament, including all rounds and games?';
@@ -2161,19 +2161,19 @@ class AppLocalizationsAf extends AppLocalizations {
   String get preferencesNotifyStreamStart => 'Uitsending het begin';
 
   @override
-  String get preferencesNotifyInboxMsg => 'Nuwe inboks boodskap';
+  String get preferencesNotifyInboxMsg => 'New inbox message';
 
   @override
   String get preferencesNotifyDirectMessage => 'New direct message';
 
   @override
-  String get preferencesNotifyForumMention => 'Jy is genoem in \'n forumboodskap';
+  String get preferencesNotifyForumMention => 'Forum comment mentions you';
 
   @override
   String get preferencesNotifyForumMentions => 'Forum mentions';
 
   @override
-  String get preferencesNotifyInvitedStudy => 'Studie-uitnodiging';
+  String get preferencesNotifyInvitedStudy => 'Study invite';
 
   @override
   String get preferencesNotifyStudyInvites => 'Study invites';
@@ -2185,7 +2185,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get preferencesNotifyChallenge => 'Uitdagings';
 
   @override
-  String get preferencesNotifyTournamentSoon => 'Toernooi begin binnekort';
+  String get preferencesNotifyTournamentSoon => 'Tournament starting soon';
 
   @override
   String get preferencesNotifyTournamentStartReminders => 'Tournaments start reminders';
@@ -2720,7 +2720,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get puzzleThemeEndgameDescription => '\'N Taktiek tydens die laaste fase van die wedstryd.';
 
   @override
-  String get puzzleThemeEnPassantDescription => '\'N Taktiek waarby die en passant-reël betrokke is, waar \'n pion \'n teenstanderspion kan vang wat dit omseil het met die aanvanklike beweging van twee vierkante.';
+  String get puzzleThemeEnPassantDescription => 'A tactic involving the en passant rule, where a pawn can capture an opponent pawn that has bypassed it using its initial two-square move.';
 
   @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'A tactic involving the en passant rule, where a pawn can capture an opposing pawn that has just moved next to it with its initial two-square move.';
@@ -2741,7 +2741,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get puzzleThemeFork => 'Vurk';
 
   @override
-  String get puzzleThemeForkDescription => '\'N Beweging waar die bewegende stuk twee teenstanderstukke gelyktydig aanval.';
+  String get puzzleThemeForkDescription => 'A move where the moved piece attacks two opponent pieces at once.';
 
   @override
   String get puzzleThemeForkOpposingPiecesDescription => 'A move where a piece attacks two or more opposing pieces simultaneously.';
@@ -2756,7 +2756,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get puzzleThemeHookMate => 'Haak mat';
 
   @override
-  String get puzzleThemeHookMateDescription => 'Skaakmat deur \'n toring, ruiter en pion saam met een van die opponent se pione wat die ontsnapping keer.';
+  String get puzzleThemeHookMateDescription => 'Checkmate with a rook, knight, and pawn along with one enemy pawn to limit the enemy king\'s escape.';
 
   @override
   String get puzzleThemeHookMateOpposingPawnDescription => 'Checkmate using a rook, knight, and pawn, where an opposing pawn blocks the king\'s escape.';
@@ -2915,7 +2915,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get puzzleThemePromotion => 'Promosie';
 
   @override
-  String get puzzleThemePromotionDescription => '\'N Pion wat bevorder of dreig om te bevorder, is die sleutel tot die taktiek.';
+  String get puzzleThemePromotionDescription => 'Promote one of your pawn to a queen or minor piece.';
 
   @override
   String get puzzleThemePromotePawnToQueenRookOrMinor => 'Promote one of your pawns to a queen, rook or minor piece.';
@@ -3729,7 +3729,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get refreshInboxAfterFiveMinutes => 'Wag 5 minute en verfris jou e-pos.';
 
   @override
-  String get checkSpamFolder => 'Kyk ook in jou strooipos lêer, dit mag dalk daarin opeinding. In dien dit die geval is, merk dit as nie strooipos nie.';
+  String get checkSpamFolder => 'Also check your spam folder, it might end up there. If so, mark it as not spam.';
 
   @override
   String get checkSpamOrJunkFolder => 'If you do not receive a confirmation email, check your Spam or Junk folder. Be sure to indicate messages from lichess.org as safe and \"not spam\", so you can stay informed of important communications.';
@@ -3780,13 +3780,13 @@ class AppLocalizationsAf extends AppLocalizations {
   String get cancel => 'Kanseleer';
 
   @override
-  String get whiteTimeOut => 'Wit tyd verstreke';
+  String get whiteTimeOut => 'White time out';
 
   @override
   String get whiteRanOutOfTime => 'White ran out of time';
 
   @override
-  String get blackTimeOut => 'Swart time-out';
+  String get blackTimeOut => 'Black time out';
 
   @override
   String get blackRanOutOfTime => 'Black ran out of time';
@@ -4887,7 +4887,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get create => 'Skep';
 
   @override
-  String get whenCreateSimul => 'As jy \'n Simul skep, kan jy teen \'n paar spelers gelyktydig speel.';
+  String get whenCreateSimul => 'When you create a simul, you get to play several players at once.';
 
   @override
   String get creatingASimul => 'Creating a simul lets you play against multiple opponents at the same time.';
@@ -4902,7 +4902,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get simulAddExtraTime => 'Jy kan ekstra tyd by jou klok sit om jou te help om die simul te hanteer.';
 
   @override
-  String get simulHostExtraTime => 'Gasheer ekstra kloktyd';
+  String get simulHostExtraTime => 'Host extra initial clock time';
 
   @override
   String get extraClockTimeForHost => 'Extra clock time for the host:';
@@ -5310,7 +5310,7 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String perfRatingX(String param) {
-    return 'Gradering: $param';
+    return 'Rating: $param';
   }
 
   @override
@@ -5469,7 +5469,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get showUnreadLichessMessage => 'Jy het \'n privaatboodskap van Lichess ontvang.';
 
   @override
-  String get clickHereToReadIt => 'Klik hier om dit te lees';
+  String get clickHereToReadIt => 'Click here to read it';
 
   @override
   String get readTheMessage => 'Read the message';
@@ -5782,7 +5782,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get onlyTeamMembers => 'Slegs spanlede';
 
   @override
-  String get navigateMoveTree => 'Skuif boom navigasie';
+  String get navigateMoveTree => 'Navigate the move tree';
 
   @override
   String get moveListNavigation => 'Move list navigation';
@@ -5947,8 +5947,8 @@ class AppLocalizationsAf extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count flaters',
-      one: '$count flater',
+      other: '$count blunders',
+      one: '$count blunder',
     );
     return '$_temp0';
   }
@@ -5969,8 +5969,8 @@ class AppLocalizationsAf extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count foute',
-      one: '$count fout',
+      other: '$count mistakes',
+      one: '$count mistake',
     );
     return '$_temp0';
   }
@@ -5991,8 +5991,8 @@ class AppLocalizationsAf extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count onakuraathede',
-      one: '$count onakuraatheid',
+      other: '$count inaccuracies',
+      one: '$count inaccuracy',
     );
     return '$_temp0';
   }
@@ -6761,7 +6761,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get studyCurrentChapterUrl => 'Huidige hoofstuk URL';
 
   @override
-  String get studyYouCanPasteThisInTheForumToEmbed => 'U kan dit in die forum plak om in te bed';
+  String get studyYouCanPasteThisInTheForumToEmbed => 'You can paste this in the forum or your Lichess blog to embed';
 
   @override
   String get studyPasteToEmbedChapterInForumOrBlog => 'You can paste this in the forum or your Lichess blog to embed the chapter.';
@@ -7136,7 +7136,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get studyCustomPositionText => 'Stel die bord op soos jy dit wil hê.<br>Geskik vir eindspelle.';
 
   @override
-  String get studyLoadExistingLichessGameTitle => 'Laai \'n bestaande lichess-spel';
+  String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
 
   @override
   String get studyLoadGameFromTheWebTitle => 'Load a game from the web';

@@ -661,7 +661,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get arenaHowIsTheWinnerDecidedAnswer => 'Turnirin təyin olunmuş müddətinin sonunda ən çox xal toplayan oyunçu(lar) qalib(lər) elan olunacaq.\n\nİki və ya daha çox oyunçu eyni xala sahib olduqda, turnir taybrekə qalacaq.';
 
   @override
-  String get arenaHowDoesPairingWork => 'Qoşulma necə işləyir?';
+  String get arenaHowDoesPairingWork => 'How does the pairing work?';
 
   @override
   String get arenaHowArePlayersPaired => 'How are players paired?';
@@ -2718,7 +2718,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get puzzleThemeEndgameDescription => 'Oyunun son mərhələsindəki taktikalar.';
 
   @override
-  String get puzzleThemeEnPassantDescription => 'Başlanğıcda iki xana irəli gedən piyadanın, rəqib piyada ilə yan yana gəlməsindən sonra, keçiddə götürmə qaydasına əsasən, vurulan piyadanı əhatə edən taktikalar.';
+  String get puzzleThemeEnPassantDescription => 'A tactic involving the en passant rule, where a pawn can capture an opponent pawn that has bypassed it using its initial two-square move.';
 
   @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'A tactic involving the en passant rule, where a pawn can capture an opposing pawn that has just moved next to it with its initial two-square move.';
@@ -2739,7 +2739,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get puzzleThemeFork => 'Çəngəl';
 
   @override
-  String get puzzleThemeForkDescription => 'Bir fiqurun eyni anda iki rəqib fiquruna hücum etdiyi gediş.';
+  String get puzzleThemeForkDescription => 'A move where the moved piece attacks two opponent pieces at once.';
 
   @override
   String get puzzleThemeForkOpposingPiecesDescription => 'A move where a piece attacks two or more opposing pieces simultaneously.';
@@ -2754,7 +2754,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get puzzleThemeHookMate => 'Qarmaq matı';
 
   @override
-  String get puzzleThemeHookMateDescription => 'Top, at, piyada və rəqib şahının qaçışını məhdudlaşdırmaq üçün bir rəqib piyadası ilə birlikdə edilən mat.';
+  String get puzzleThemeHookMateDescription => 'Checkmate with a rook, knight, and pawn along with one enemy pawn to limit the enemy king\'s escape.';
 
   @override
   String get puzzleThemeHookMateOpposingPawnDescription => 'Checkmate using a rook, knight, and pawn, where an opposing pawn blocks the king\'s escape.';
@@ -2913,7 +2913,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get puzzleThemePromotion => 'Çevrilmə';
 
   @override
-  String get puzzleThemePromotionDescription => 'Çevrilən və ya çevrilməyə yaxın bir piyada taktikanın açarıdır.';
+  String get puzzleThemePromotionDescription => 'Promote one of your pawn to a queen or minor piece.';
 
   @override
   String get puzzleThemePromotePawnToQueenRookOrMinor => 'Promote one of your pawns to a queen, rook or minor piece.';
@@ -3067,7 +3067,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get playAgainstComputer => 'Play against computer';
 
   @override
-  String get gameMode => 'Game mode';
+  String get gameMode => 'Oyun modu';
 
   @override
   String get createLobbyGame => 'Create lobby game';
@@ -3447,7 +3447,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get pinnedPieces => 'Pinned pieces';
 
   @override
-  String get checkableKing => 'Checkable king';
+  String get checkableKing => 'Mümkün şah vermə';
 
   @override
   String get multipleLines => 'Oxların sayı';
@@ -3604,7 +3604,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get variants => 'Variantlar';
 
   @override
-  String get variantsDescription => 'More ways to play';
+  String get variantsDescription => 'Oynamağın daha çox yolu';
 
   @override
   String get timeControl => 'Vaxta nəzarət';
@@ -3649,7 +3649,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get signupUsernameHint => 'Ailə dostu bir istifadəçi adı seçdiyinizdən əmin olun. Siz onu daha sonra dəyişə bilməzsiniz və uyğun olmayan istifadəçi adları olan hesablar bağlanacaq!';
 
   @override
-  String get signupEmailPromise => 'We will only send you emails about your account and never share your email.';
+  String get signupEmailPromise => 'Sizə sadəcə hesabınızla bağlı e-poçtlar göndərəcəyik və e-poçt ünvanınızı heç vaxt paylaşmayacağıq.';
 
   @override
   String get password => 'Şifrə';
@@ -3727,7 +3727,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get refreshInboxAfterFiveMinutes => '5 dəqiqə gözləyin və email qutunuzu yenidən yoxlayın.';
 
   @override
-  String get checkSpamFolder => 'Spam qutusunu da yoxlayın, məktub oradada ola bilər. Elədirsə, zəhmət olmasa qeyri-spam kimi qeyd edin.';
+  String get checkSpamFolder => 'Also check your spam folder, it might end up there. If so, mark it as not spam.';
 
   @override
   String get checkSpamOrJunkFolder => 'If you do not receive a confirmation email, check your Spam or Junk folder. Be sure to indicate messages from lichess.org as safe and \"not spam\", so you can stay informed of important communications.';
@@ -3778,13 +3778,13 @@ class AppLocalizationsAz extends AppLocalizations {
   String get cancel => 'Ləğv et';
 
   @override
-  String get whiteTimeOut => 'Ağların vaxtı bitdi';
+  String get whiteTimeOut => 'White time out';
 
   @override
   String get whiteRanOutOfTime => 'White ran out of time';
 
   @override
-  String get blackTimeOut => 'Qaraların vaxtı bitdi';
+  String get blackTimeOut => 'Black time out';
 
   @override
   String get blackRanOutOfTime => 'Black ran out of time';
@@ -3835,7 +3835,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get standard => 'Standart';
 
   @override
-  String get customPosition => 'Custom position';
+  String get customPosition => 'Xüsusi mövqe';
 
   @override
   String get unlimited => 'Limitsiz';
@@ -3961,7 +3961,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get whiteCancelsTakeback => 'White cancels takeback';
 
   @override
-  String get blackCancelsTakeback => 'Qaralar geri qaytarmanı ləğv etdi';
+  String get blackCancelsTakeback => 'Qaralar geri qaytarmağı ləğv etdi';
 
   @override
   String get yourOpponentProposesATakeback => 'Rəqibiniz dala qaytarma təklifi edir';
@@ -3996,7 +3996,7 @@ class AppLocalizationsAz extends AppLocalizations {
   }
 
   @override
-  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Reytinq filtrləri kilidlənib, çünki reytinqiniz sabit deyil. Reytinqli oyunlar oynamaq sabitliyi artıracaq.';
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
 
   @override
   String get cannotFilterByUnstableRating => 'Reytinqiniz sabit olmadığı üçün reytinqə görə filtrləmək mümkün deyil. Reytinqli oyunlar oynamaq sabitliyi artıracaq.';
@@ -4181,7 +4181,7 @@ class AppLocalizationsAz extends AppLocalizations {
   }
 
   @override
-  String get less => 'Less';
+  String get less => 'Daha az';
 
   @override
   String get more => 'Daha çox';
@@ -4293,7 +4293,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get blackWins => 'Qaraların qələbəsi';
 
   @override
-  String get drawRate => 'Draw rate';
+  String get drawRate => 'Bərabərlik göstəricisi';
 
   @override
   String get draws => 'Heç-heçələr';
@@ -4508,7 +4508,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get other => 'Digər';
 
   @override
-  String get reportCheatBoostHelp => 'Paste the link to the game(s) and explain what is wrong about this user\'s behaviour. Don\'t just say \"they cheat\", but tell us how you came to this conclusion.';
+  String get reportCheatBoostHelp => 'Oyunun (oyunların) linkini yapışdırın və istifadəçinin yanlış davranışını açıqlayın. Sadəcə \"bu hiylədir\" deməyin, bu qənaətə necə gəldiyinizi bizə deyin.';
 
   @override
   String get reportUsernameHelp => 'Explain why this username is offensive. Don\'t just say \"it\'s offensive/inappropriate,\" but tell us how you came to this conclusion, especially if the offense is obscure, not in English, in slang, or a historical/cultural reference.';
@@ -4885,7 +4885,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get create => 'Yarat';
 
   @override
-  String get whenCreateSimul => 'Bir Seans yaratdığınızda eyni anda bir neçə oyunçu ilə oynamağa başlayırsınız.';
+  String get whenCreateSimul => 'When you create a simul, you get to play several players at once.';
 
   @override
   String get creatingASimul => 'Creating a simul lets you play against multiple opponents at the same time.';
@@ -4900,7 +4900,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get simulAddExtraTime => 'Sinxron seansla başa çıxmaq üçün öz saatınıza əlavə vaxtlar artıra bilərsiniz.';
 
   @override
-  String get simulHostExtraTime => 'Ev sahibinin əlavə vaxtı';
+  String get simulHostExtraTime => 'Host extra initial clock time';
 
   @override
   String get extraClockTimeForHost => 'Extra clock time for the host:';
@@ -5308,7 +5308,7 @@ class AppLocalizationsAz extends AppLocalizations {
 
   @override
   String perfRatingX(String param) {
-    return 'Reytinq: $param';
+    return 'Rating: $param';
   }
 
   @override
@@ -5945,8 +5945,8 @@ class AppLocalizationsAz extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count kobud səhv',
-      one: '$count kobud səhv',
+      other: '$count blunders',
+      one: '$count blunder',
     );
     return '$_temp0';
   }
@@ -5967,8 +5967,8 @@ class AppLocalizationsAz extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count səhv',
-      one: '$count səhv',
+      other: '$count mistakes',
+      one: '$count mistake',
     );
     return '$_temp0';
   }
@@ -5989,8 +5989,8 @@ class AppLocalizationsAz extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count qeyri-dəqiqlik',
-      one: '$count qeyri-dəqiqlik',
+      other: '$count inaccuracies',
+      one: '$count inaccuracy',
     );
     return '$_temp0';
   }
@@ -6759,7 +6759,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get studyCurrentChapterUrl => 'Cari fəsil URL-ii';
 
   @override
-  String get studyYouCanPasteThisInTheForumToEmbed => 'Pərçimləmək üçün bunu forumda paylaşa bilərsiniz';
+  String get studyYouCanPasteThisInTheForumToEmbed => 'You can paste this in the forum or your Lichess blog to embed';
 
   @override
   String get studyPasteToEmbedChapterInForumOrBlog => 'You can paste this in the forum or your Lichess blog to embed the chapter.';

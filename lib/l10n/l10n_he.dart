@@ -697,7 +697,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get arenaHowIsTheWinnerDecidedAnswer => 'השחקן/ית עם מספר הנקודות המרבי בסיום הזמן החוקי של התחרות יוכרזו כמנצחים.\n\nאם יש כמה שחקנים עם מספר זה, הם ידורגו לפי דירוג הביצוע שלהם בתחרות.';
 
   @override
-  String get arenaHowDoesPairingWork => 'איך מתבצע השיבוץ?';
+  String get arenaHowDoesPairingWork => 'How does the pairing work?';
 
   @override
   String get arenaHowArePlayersPaired => 'How are players paired?';
@@ -788,7 +788,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get arenaEditTeamBattle => 'עריכת קרב הקבוצות';
 
   @override
-  String get arenaDefender => 'האלוף היוצא';
+  String get arenaDefender => 'Defender';
 
   @override
   String get arenaDefenderLabel => 'Defender:';
@@ -815,7 +815,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get arenaTournamentStats => 'נתוני הטורנירים';
 
   @override
-  String get arenaRankAvgHelp => 'ממוצע הדירוג הוא האחוזון של הדירוגים שלך. ככל שהוא נמוך יותר, כך הוא טוב יותר!\n\nלדוגמה, מי שזוכה מקום שלישי בטורניר עם 100 משתתפים הוא באחוזון השלישי (3%).\n\nמי שזוכה במקום העשירי מתוך אלף משתתפים הוא באחוזון העליון (1%).';
+  String get arenaRankAvgHelp => 'The rank average is a percentage of your ranking. Lower is better.\n\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.';
 
   @override
   String get arenaRankAverageHelp => 'Your rank average represents your typical finishing position, relative to the total number of players in each tournament.\nThis is a measure of your tournament placement, not your general rating.\n\nFor example, a rank average of 3% means you typically finish in the top 3% (such as 30th place out of 1,000 players).';
@@ -968,7 +968,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get broadcastDeleteRound => 'מחיקת הסבב הזה';
 
   @override
-  String get broadcastDefinitivelyDeleteRound => 'מחיקת הסבב הזה והמשחקים שבו לצמיתות';
+  String get broadcastDefinitivelyDeleteRound => 'Definitively delete the round and all its games.';
 
   @override
   String get broadcastPermanentlyDeleteRound => 'Permanently delete this round and all its games?';
@@ -983,7 +983,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get broadcastDeleteTournament => 'מחיקת הטורניר הזה';
 
   @override
-  String get broadcastDefinitivelyDeleteTournament => 'מחיקה לצמיתות של הטורניר הזה, על כל סבביו והמשחקים שבו.';
+  String get broadcastDefinitivelyDeleteTournament => 'Definitively delete the entire tournament, all its rounds and all its games.';
 
   @override
   String get broadcastPermanentlyDeleteTournament => 'Permanently delete this tournament, including all rounds and games?';
@@ -2200,19 +2200,19 @@ class AppLocalizationsHe extends AppLocalizations {
   String get preferencesNotifyStreamStart => 'משדר עולה לשידור חי';
 
   @override
-  String get preferencesNotifyInboxMsg => 'הודעה חדשה בתיבת הדואר';
+  String get preferencesNotifyInboxMsg => 'New inbox message';
 
   @override
   String get preferencesNotifyDirectMessage => 'New direct message';
 
   @override
-  String get preferencesNotifyForumMention => 'מזכירים אותך בתגובה בפורום';
+  String get preferencesNotifyForumMention => 'Forum comment mentions you';
 
   @override
   String get preferencesNotifyForumMentions => 'Forum mentions';
 
   @override
-  String get preferencesNotifyInvitedStudy => 'הזמנה ללוח למידה';
+  String get preferencesNotifyInvitedStudy => 'Study invite';
 
   @override
   String get preferencesNotifyStudyInvites => 'Study invites';
@@ -2224,7 +2224,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get preferencesNotifyChallenge => 'הזמנות למשחקים';
 
   @override
-  String get preferencesNotifyTournamentSoon => 'טורניר מתחיל בקרוב';
+  String get preferencesNotifyTournamentSoon => 'Tournament starting soon';
 
   @override
   String get preferencesNotifyTournamentStartReminders => 'Tournaments start reminders';
@@ -2769,7 +2769,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get puzzleThemeEndgameDescription => 'טקטיקה במהלך השלב האחרון של המשחק.';
 
   @override
-  String get puzzleThemeEnPassantDescription => 'טקטיקה המשלבת את חוק ״הכאה דרך הילוכו\", בו רגלי יכול להכות רגלי יריב שעבר אותו בתנועתו על ידי מסע של שתי משבצות לפנים מהמשבצת ההתחלתית.';
+  String get puzzleThemeEnPassantDescription => 'A tactic involving the en passant rule, where a pawn can capture an opponent pawn that has bypassed it using its initial two-square move.';
 
   @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'A tactic involving the en passant rule, where a pawn can capture an opposing pawn that has just moved next to it with its initial two-square move.';
@@ -2790,7 +2790,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get puzzleThemeFork => 'מזלג';
 
   @override
-  String get puzzleThemeForkDescription => 'מסע בו הכלי הנע מאיים על שני כלי יריב במקביל.';
+  String get puzzleThemeForkDescription => 'A move where the moved piece attacks two opponent pieces at once.';
 
   @override
   String get puzzleThemeForkOpposingPiecesDescription => 'A move where a piece attacks two or more opposing pieces simultaneously.';
@@ -2805,7 +2805,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get puzzleThemeHookMate => 'מט קרס';
 
   @override
-  String get puzzleThemeHookMateDescription => 'מט עם צריח, פרש ורגלי יחד עם רגלי יריב המגבילים את בריחת המלך היריב.';
+  String get puzzleThemeHookMateDescription => 'Checkmate with a rook, knight, and pawn along with one enemy pawn to limit the enemy king\'s escape.';
 
   @override
   String get puzzleThemeHookMateOpposingPawnDescription => 'Checkmate using a rook, knight, and pawn, where an opposing pawn blocks the king\'s escape.';
@@ -2964,7 +2964,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get puzzleThemePromotion => 'הכתרה';
 
   @override
-  String get puzzleThemePromotionDescription => 'הכתרת אחד מהרגלים למלכה או לכלי משני.';
+  String get puzzleThemePromotionDescription => 'Promote one of your pawn to a queen or minor piece.';
 
   @override
   String get puzzleThemePromotePawnToQueenRookOrMinor => 'Promote one of your pawns to a queen, rook or minor piece.';
@@ -3778,7 +3778,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get refreshInboxAfterFiveMinutes => 'חכו 5 דקות ולאחר מכן בצעו ריענון לתיבת המייל.';
 
   @override
-  String get checkSpamFolder => 'בדקו גם את תיבת דואר הזבל (״ספאם״). יתכן שההודעה הגיעה לשם בטעות. אם זה מה שקרה, סמנו אותה כלא־ספאם.';
+  String get checkSpamFolder => 'Also check your spam folder, it might end up there. If so, mark it as not spam.';
 
   @override
   String get checkSpamOrJunkFolder => 'If you do not receive a confirmation email, check your Spam or Junk folder. Be sure to indicate messages from lichess.org as safe and \"not spam\", so you can stay informed of important communications.';
@@ -3829,13 +3829,13 @@ class AppLocalizationsHe extends AppLocalizations {
   String get cancel => 'ביטול';
 
   @override
-  String get whiteTimeOut => 'נגמר הזמן ללבן';
+  String get whiteTimeOut => 'White time out';
 
   @override
   String get whiteRanOutOfTime => 'White ran out of time';
 
   @override
-  String get blackTimeOut => 'נגמר הזמן לשחור';
+  String get blackTimeOut => 'Black time out';
 
   @override
   String get blackRanOutOfTime => 'Black ran out of time';
@@ -4565,7 +4565,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get reportUsernameHelp => 'הסבירו מה פוגעני בשם המשתמש הזה. אל תכתבו סתם ״שם המשתמש פוגעני״. הסבירו לנו כיצד הגעתם למסקנה הזו, במיוחד אם ההעלבה מוסווית, בשפה זרה (שאינה אנגלית), בלשון סלנג או תלויית תרבות והיסטוריה.';
 
   @override
-  String get reportProcessedFasterInEnglish => 'הדיווח שלך יטופל מהר יותר אם ייכתב באנגלית.';
+  String get reportProcessedFasterInEnglish => 'Your report will be processed faster if written in English.';
 
   @override
   String get processReportFasterInEnglish => 'We can process your report faster if you write in English.';
@@ -4936,7 +4936,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get create => 'צור';
 
   @override
-  String get whenCreateSimul => 'כאשר יוצרים משחק סימולטני, זוכים לשחק עם שחקנים רבים בו זמנית.';
+  String get whenCreateSimul => 'When you create a simul, you get to play several players at once.';
 
   @override
   String get creatingASimul => 'Creating a simul lets you play against multiple opponents at the same time.';
@@ -4951,7 +4951,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get simulAddExtraTime => 'באפשרותך להוסיף זמן לשעון שלך כדי לעזור לך להתמודד עם המשחק הסימולטני.';
 
   @override
-  String get simulHostExtraTime => 'זמן נוסף למארח/ת';
+  String get simulHostExtraTime => 'Host extra initial clock time';
 
   @override
   String get extraClockTimeForHost => 'Extra clock time for the host:';
@@ -5359,7 +5359,7 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String perfRatingX(String param) {
-    return 'דירוג: $param';
+    return 'Rating: $param';
   }
 
   @override
@@ -5518,7 +5518,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get showUnreadLichessMessage => 'קיבלתם הודעה פרטית מ־Lichess.';
 
   @override
-  String get clickHereToReadIt => 'לחצו כאן כדי לקרוא אותה';
+  String get clickHereToReadIt => 'Click here to read it';
 
   @override
   String get readTheMessage => 'Read the message';
@@ -5831,7 +5831,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get onlyTeamMembers => 'רק חברי קבוצות';
 
   @override
-  String get navigateMoveTree => 'נווט ברשימת המהלכים';
+  String get navigateMoveTree => 'Navigate the move tree';
 
   @override
   String get moveListNavigation => 'Move list navigation';
@@ -5998,9 +5998,8 @@ class AppLocalizationsHe extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count טעויות גסות',
-      two: '$count טעויות גסות',
-      one: '$count טעות גסה',
+      other: '$count blunders',
+      one: '$count blunder',
     );
     return '$_temp0';
   }
@@ -6022,9 +6021,8 @@ class AppLocalizationsHe extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count שגיאות',
-      two: '$count שגיאות',
-      one: '$count שגיאה',
+      other: '$count mistakes',
+      one: '$count mistake',
     );
     return '$_temp0';
   }
@@ -6046,9 +6044,8 @@ class AppLocalizationsHe extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count אי־דיוקים',
-      two: '$count אי־דיוקים',
-      one: '$count אי־דיוק',
+      other: '$count inaccuracies',
+      one: '$count inaccuracy',
     );
     return '$_temp0';
   }
@@ -6858,7 +6855,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get studyCurrentChapterUrl => 'כתובת האינטרנט של הפרק הנוכחי';
 
   @override
-  String get studyYouCanPasteThisInTheForumToEmbed => 'את/ה יכול/ה לפרסם את זה בפורום כדי להטמיע';
+  String get studyYouCanPasteThisInTheForumToEmbed => 'You can paste this in the forum or your Lichess blog to embed';
 
   @override
   String get studyPasteToEmbedChapterInForumOrBlog => 'You can paste this in the forum or your Lichess blog to embed the chapter.';

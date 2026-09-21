@@ -661,7 +661,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get arenaHowIsTheWinnerDecidedAnswer => 'Жарыстың белгіленген уақыты аяқталғанда, ең көп ұпайы бар ойыншы(лар) жеңімпаз деп жарияланады.\n\nЕкі не одан көп ойыншының ұпай саны бірдей болғанда, жарыс тай-брейкпен жалғасады.';
 
   @override
-  String get arenaHowDoesPairingWork => 'Жұптастыру әдісі қандай?';
+  String get arenaHowDoesPairingWork => 'How does the pairing work?';
 
   @override
   String get arenaHowArePlayersPaired => 'How are players paired?';
@@ -752,7 +752,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get arenaEditTeamBattle => 'Топтар күресін өңдеу';
 
   @override
-  String get arenaDefender => 'Қорғаушы';
+  String get arenaDefender => 'Defender';
 
   @override
   String get arenaDefenderLabel => 'Defender:';
@@ -779,7 +779,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get arenaTournamentStats => 'Жарыс статистикасы';
 
   @override
-  String get arenaRankAvgHelp => 'Орын орташасы деген орныңыздың пайыздық мөлшері. Азы жақсы.\nМысалы, 100 ойыншы қатысқан жарыста орныңыз 3-інші болса, орын орташасы 3%-ға тең. 1000 ойыншының арасында 10-ыншы болсаңыз, 1%-ға тең.';
+  String get arenaRankAvgHelp => 'The rank average is a percentage of your ranking. Lower is better.\n\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.';
 
   @override
   String get arenaRankAverageHelp => 'Your rank average represents your typical finishing position, relative to the total number of players in each tournament.\nThis is a measure of your tournament placement, not your general rating.\n\nFor example, a rank average of 3% means you typically finish in the top 3% (such as 30th place out of 1,000 players).';
@@ -930,7 +930,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get broadcastDeleteRound => 'Бұл айналымды жою';
 
   @override
-  String get broadcastDefinitivelyDeleteRound => 'Айналым мен оның ойындарын толығымен жою.';
+  String get broadcastDefinitivelyDeleteRound => 'Definitively delete the round and all its games.';
 
   @override
   String get broadcastPermanentlyDeleteRound => 'Permanently delete this round and all its games?';
@@ -945,7 +945,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get broadcastDeleteTournament => 'Бұл жарысты жою';
 
   @override
-  String get broadcastDefinitivelyDeleteTournament => 'Жарысты айналым мен ойындарымен бірге толығымен жою.';
+  String get broadcastDefinitivelyDeleteTournament => 'Definitively delete the entire tournament, all its rounds and all its games.';
 
   @override
   String get broadcastPermanentlyDeleteTournament => 'Permanently delete this tournament, including all rounds and games?';
@@ -2161,19 +2161,19 @@ class AppLocalizationsKk extends AppLocalizations {
   String get preferencesNotifyStreamStart => 'Стрим басталды';
 
   @override
-  String get preferencesNotifyInboxMsg => 'Жаңа хабар';
+  String get preferencesNotifyInboxMsg => 'New inbox message';
 
   @override
   String get preferencesNotifyDirectMessage => 'New direct message';
 
   @override
-  String get preferencesNotifyForumMention => 'Форумда сіз туралы айтты';
+  String get preferencesNotifyForumMention => 'Forum comment mentions you';
 
   @override
   String get preferencesNotifyForumMentions => 'Forum mentions';
 
   @override
-  String get preferencesNotifyInvitedStudy => 'Зерттеуге шақырды';
+  String get preferencesNotifyInvitedStudy => 'Study invite';
 
   @override
   String get preferencesNotifyStudyInvites => 'Study invites';
@@ -2185,7 +2185,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get preferencesNotifyChallenge => 'Шақырулар';
 
   @override
-  String get preferencesNotifyTournamentSoon => 'Жарыс жақында басталады';
+  String get preferencesNotifyTournamentSoon => 'Tournament starting soon';
 
   @override
   String get preferencesNotifyTournamentStartReminders => 'Tournaments start reminders';
@@ -2720,7 +2720,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get puzzleThemeEndgameDescription => 'Ойынның соңғы кезеңіндегі тактика.';
 
   @override
-  String get puzzleThemeEnPassantDescription => 'Бір сазбаз, қасынан қарсыластың сарбазы өткенде, оны басып алатын жағдайды, яғни жолай басып алуды қамтитын тактика.';
+  String get puzzleThemeEnPassantDescription => 'A tactic involving the en passant rule, where a pawn can capture an opponent pawn that has bypassed it using its initial two-square move.';
 
   @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'A tactic involving the en passant rule, where a pawn can capture an opposing pawn that has just moved next to it with its initial two-square move.';
@@ -2741,7 +2741,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get puzzleThemeFork => 'Шанышқы';
 
   @override
-  String get puzzleThemeForkDescription => 'Қарсыластың бірден екі тасын ұратын тас жүрісі.';
+  String get puzzleThemeForkDescription => 'A move where the moved piece attacks two opponent pieces at once.';
 
   @override
   String get puzzleThemeForkOpposingPiecesDescription => 'A move where a piece attacks two or more opposing pieces simultaneously.';
@@ -2756,7 +2756,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get puzzleThemeHookMate => 'Қармақ мат';
 
   @override
-  String get puzzleThemeHookMateDescription => 'Қарсылас патшасына өз сарбазы бөгет бола тұра, ат, тура мен сарбаз арқылы қойылған мат.';
+  String get puzzleThemeHookMateDescription => 'Checkmate with a rook, knight, and pawn along with one enemy pawn to limit the enemy king\'s escape.';
 
   @override
   String get puzzleThemeHookMateOpposingPawnDescription => 'Checkmate using a rook, knight, and pawn, where an opposing pawn blocks the king\'s escape.';
@@ -2915,7 +2915,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get puzzleThemePromotion => 'Айналу';
 
   @override
-  String get puzzleThemePromotionDescription => 'Айналуға ұмтылған не айналу қаупін төндіретін сарбаз – тактиканың өзегі.';
+  String get puzzleThemePromotionDescription => 'Promote one of your pawn to a queen or minor piece.';
 
   @override
   String get puzzleThemePromotePawnToQueenRookOrMinor => 'Promote one of your pawns to a queen, rook or minor piece.';
@@ -3729,7 +3729,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get refreshInboxAfterFiveMinutes => '5 минут күтіп, поштаңыздың бетін жаңартып көріңіз.';
 
   @override
-  String get checkSpamFolder => 'Сонымен қатар, Спам қалтасында қарап көріңіз. Хат сонда болса, \"Спам емес\" деп белгілеу жөн болар.';
+  String get checkSpamFolder => 'Also check your spam folder, it might end up there. If so, mark it as not spam.';
 
   @override
   String get checkSpamOrJunkFolder => 'If you do not receive a confirmation email, check your Spam or Junk folder. Be sure to indicate messages from lichess.org as safe and \"not spam\", so you can stay informed of important communications.';
@@ -3780,13 +3780,13 @@ class AppLocalizationsKk extends AppLocalizations {
   String get cancel => 'Болдыртпау';
 
   @override
-  String get whiteTimeOut => 'Ақтың уақыты бітті';
+  String get whiteTimeOut => 'White time out';
 
   @override
   String get whiteRanOutOfTime => 'White ran out of time';
 
   @override
-  String get blackTimeOut => 'Қараның уақыты бітті';
+  String get blackTimeOut => 'Black time out';
 
   @override
   String get blackRanOutOfTime => 'Black ran out of time';
@@ -4516,7 +4516,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get reportUsernameHelp => 'Осы ойыншы аты неге қорлау болып көрінетінін айтып беріңіз. Жай ғана \"Бұл қорлау/орынсыз\" демей, осы ойға қалай келгеніңізді жайып берсеңіз жөн. Әсіресе, қорлау жасырын түрде не ағылшын тілде емес не сленг не тарихи, мәдени бір сілтеме түрінде болса, түсіндірмеңіз қажет.';
 
   @override
-  String get reportProcessedFasterInEnglish => 'Шағымды ағылшынша жазсаңыз, шешім тезірек шығатын болады.';
+  String get reportProcessedFasterInEnglish => 'Your report will be processed faster if written in English.';
 
   @override
   String get processReportFasterInEnglish => 'We can process your report faster if you write in English.';
@@ -4887,7 +4887,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get create => 'Құру';
 
   @override
-  String get whenCreateSimul => 'Сіз қалың ойын құрғанда, бір мезгілде бірнеше қарсыласпен ойнайсыз.';
+  String get whenCreateSimul => 'When you create a simul, you get to play several players at once.';
 
   @override
   String get creatingASimul => 'Creating a simul lets you play against multiple opponents at the same time.';
@@ -4902,7 +4902,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get simulAddExtraTime => 'Қалың ойынды жеңілдету үшін өзіңізге қосымша уақыт қоса аласыз.';
 
   @override
-  String get simulHostExtraTime => 'Бас ойыншының қосымша уақыты';
+  String get simulHostExtraTime => 'Host extra initial clock time';
 
   @override
   String get extraClockTimeForHost => 'Extra clock time for the host:';
@@ -5310,7 +5310,7 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String perfRatingX(String param) {
-    return 'Рейтинг: $param';
+    return 'Rating: $param';
   }
 
   @override
@@ -5469,7 +5469,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get showUnreadLichessMessage => 'Сізге Личестен жеке хат келді.';
 
   @override
-  String get clickHereToReadIt => 'Осында басып оқыңыз';
+  String get clickHereToReadIt => 'Click here to read it';
 
   @override
   String get readTheMessage => 'Read the message';
@@ -5782,7 +5782,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get onlyTeamMembers => 'Тек топ мүшелері';
 
   @override
-  String get navigateMoveTree => 'Жүрістер тізімін шолу';
+  String get navigateMoveTree => 'Navigate the move tree';
 
   @override
   String get moveListNavigation => 'Move list navigation';
@@ -5947,8 +5947,8 @@ class AppLocalizationsKk extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count өрескел қателік',
-      one: '$count өрескел қателік',
+      other: '$count blunders',
+      one: '$count blunder',
     );
     return '$_temp0';
   }
@@ -5969,8 +5969,8 @@ class AppLocalizationsKk extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count қателік',
-      one: '$count қателік',
+      other: '$count mistakes',
+      one: '$count mistake',
     );
     return '$_temp0';
   }
@@ -5991,8 +5991,8 @@ class AppLocalizationsKk extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count ағаттық',
-      one: '$count ағаттық',
+      other: '$count inaccuracies',
+      one: '$count inaccuracy',
     );
     return '$_temp0';
   }
@@ -6761,7 +6761,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get studyCurrentChapterUrl => 'Қазіргі бөлімнің сілтемесі';
 
   @override
-  String get studyYouCanPasteThisInTheForumToEmbed => 'Сіз бұны форумға не Личес блогыңызға қоя аласыз';
+  String get studyYouCanPasteThisInTheForumToEmbed => 'You can paste this in the forum or your Lichess blog to embed';
 
   @override
   String get studyPasteToEmbedChapterInForumOrBlog => 'You can paste this in the forum or your Lichess blog to embed the chapter.';

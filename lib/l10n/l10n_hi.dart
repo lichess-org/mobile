@@ -661,7 +661,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get arenaHowIsTheWinnerDecidedAnswer => 'टूर्नामेंट की निर्धारित समय सीमा के समापन पर सबसे अधिक अंक वाले खिलाड़ी (विजेता) को विजेता घोषित किया जाएगा।';
 
   @override
-  String get arenaHowDoesPairingWork => 'पेयरिंग काम कैसे करता है?';
+  String get arenaHowDoesPairingWork => 'How does the pairing work?';
 
   @override
   String get arenaHowArePlayersPaired => 'How are players paired?';
@@ -752,7 +752,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get arenaEditTeamBattle => 'टीम लड़ाई संपादित करें';
 
   @override
-  String get arenaDefender => 'रक्षक';
+  String get arenaDefender => 'Defender';
 
   @override
   String get arenaDefenderLabel => 'Defender:';
@@ -779,7 +779,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get arenaTournamentStats => 'टूर्नामेंट आँकड़े';
 
   @override
-  String get arenaRankAvgHelp => 'रैंक औसत आपकी रैंकिंग का एक प्रतिशत है। कम बेहतर है।\n\nउदाहरण के लिए, 100 खिलाड़ियों के टूर्नामेंट में तीसरा स्थान प्राप्त होना = 3%। 1000 खिलाड़ियों के टूर्नामेंट में 10वें स्थान पर होना = 1%।';
+  String get arenaRankAvgHelp => 'The rank average is a percentage of your ranking. Lower is better.\n\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.';
 
   @override
   String get arenaRankAverageHelp => 'Your rank average represents your typical finishing position, relative to the total number of players in each tournament.\nThis is a measure of your tournament placement, not your general rating.\n\nFor example, a rank average of 3% means you typically finish in the top 3% (such as 30th place out of 1,000 players).';
@@ -930,7 +930,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get broadcastDeleteRound => 'इस राउंड को डिलीट करें';
 
   @override
-  String get broadcastDefinitivelyDeleteRound => 'राउंड और उसके सभी गेम को निश्चित रूप से हटा दें।';
+  String get broadcastDefinitivelyDeleteRound => 'Definitively delete the round and all its games.';
 
   @override
   String get broadcastPermanentlyDeleteRound => 'Permanently delete this round and all its games?';
@@ -945,7 +945,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get broadcastDeleteTournament => 'इस टूर्नामेंट को हटाएं';
 
   @override
-  String get broadcastDefinitivelyDeleteTournament => 'संपूर्ण टूर्नामेंट, उसके सभी राउंड और उसके सभी गेम को निश्चित रूप से हटा दें।';
+  String get broadcastDefinitivelyDeleteTournament => 'Definitively delete the entire tournament, all its rounds and all its games.';
 
   @override
   String get broadcastPermanentlyDeleteTournament => 'Permanently delete this tournament, including all rounds and games?';
@@ -2718,7 +2718,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get puzzleThemeEndgameDescription => 'खेल के अंतिम चरण के दौरान एक रणनीति।';
 
   @override
-  String get puzzleThemeEnPassantDescription => 'एन पास के नियम को शामिल करने वाली एक रणनीति, जहां एक मोहरा एक प्रतिद्वंद्वी मोहरे को पकड़ सकता है जिसने अपने शुरुआती दो-वर्ग चाल का उपयोग करके इसे बाईपास किया है।';
+  String get puzzleThemeEnPassantDescription => 'A tactic involving the en passant rule, where a pawn can capture an opponent pawn that has bypassed it using its initial two-square move.';
 
   @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'A tactic involving the en passant rule, where a pawn can capture an opposing pawn that has just moved next to it with its initial two-square move.';
@@ -2739,7 +2739,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get puzzleThemeFork => 'कांटा';
 
   @override
-  String get puzzleThemeForkDescription => 'एक चाल जहां स्थानांतरित टुकड़ा एक बार में दो प्रतिद्वंद्वी टुकड़ों पर हमला करता है।';
+  String get puzzleThemeForkDescription => 'A move where the moved piece attacks two opponent pieces at once.';
 
   @override
   String get puzzleThemeForkOpposingPiecesDescription => 'A move where a piece attacks two or more opposing pieces simultaneously.';
@@ -2754,7 +2754,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get puzzleThemeHookMate => 'हुक मात';
 
   @override
-  String get puzzleThemeHookMateDescription => 'शत्रु राजा के भागने को सीमित करने के लिए एक शत्रु प्यादा के साथ एक हाथी, घोड़ा और प्यादा के साथ चेकमेट।';
+  String get puzzleThemeHookMateDescription => 'Checkmate with a rook, knight, and pawn along with one enemy pawn to limit the enemy king\'s escape.';
 
   @override
   String get puzzleThemeHookMateOpposingPawnDescription => 'Checkmate using a rook, knight, and pawn, where an opposing pawn blocks the king\'s escape.';
@@ -2913,7 +2913,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get puzzleThemePromotion => 'पदोन्नति';
 
   @override
-  String get puzzleThemePromotionDescription => 'प्रचार करने या धमकी देने वाला मोहरा रणनीति की कुंजी है।';
+  String get puzzleThemePromotionDescription => 'Promote one of your pawn to a queen or minor piece.';
 
   @override
   String get puzzleThemePromotePawnToQueenRookOrMinor => 'Promote one of your pawns to a queen, rook or minor piece.';
@@ -3727,7 +3727,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get refreshInboxAfterFiveMinutes => '5 मिनट प्रतीक्षा करें और अपना ईमेल इनबॉक्स रिफ्रेश करें।';
 
   @override
-  String get checkSpamFolder => 'अपना स्पैम फ़ोल्डर भी जांचें, हो सकता है कि वह वहां हो। यदि हां, तो इसे स्पैम नहीं के रूप में चिह्नित करें।';
+  String get checkSpamFolder => 'Also check your spam folder, it might end up there. If so, mark it as not spam.';
 
   @override
   String get checkSpamOrJunkFolder => 'If you do not receive a confirmation email, check your Spam or Junk folder. Be sure to indicate messages from lichess.org as safe and \"not spam\", so you can stay informed of important communications.';
@@ -3778,13 +3778,13 @@ class AppLocalizationsHi extends AppLocalizations {
   String get cancel => 'रद्द करें';
 
   @override
-  String get whiteTimeOut => 'सफेद का समय समाप्त';
+  String get whiteTimeOut => 'White time out';
 
   @override
   String get whiteRanOutOfTime => 'White ran out of time';
 
   @override
-  String get blackTimeOut => 'काला का समय समाप्त';
+  String get blackTimeOut => 'Black time out';
 
   @override
   String get blackRanOutOfTime => 'Black ran out of time';
@@ -4885,7 +4885,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get create => 'बनाएं';
 
   @override
-  String get whenCreateSimul => 'जब आप सिमुल बनाते हैं तो आपको कई खिलाडियों के साथ एक साथ खेलने का मौका मिलता है';
+  String get whenCreateSimul => 'When you create a simul, you get to play several players at once.';
 
   @override
   String get creatingASimul => 'Creating a simul lets you play against multiple opponents at the same time.';
@@ -4900,7 +4900,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get simulAddExtraTime => 'सिमुल का सामना करने के लिए आप अपनी घडी में अतिरिक्त समय जोड़ सकते हैं';
 
   @override
-  String get simulHostExtraTime => 'अतिरिक्त समय की मेजबानी करें';
+  String get simulHostExtraTime => 'Host extra initial clock time';
 
   @override
   String get extraClockTimeForHost => 'Extra clock time for the host:';
@@ -5308,7 +5308,7 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String perfRatingX(String param) {
-    return 'रेटिंग: $param';
+    return 'Rating: $param';
   }
 
   @override
@@ -5780,7 +5780,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get onlyTeamMembers => 'केवल टीम सदस्य';
 
   @override
-  String get navigateMoveTree => 'चालों की सूची पर जाएं';
+  String get navigateMoveTree => 'Navigate the move tree';
 
   @override
   String get moveListNavigation => 'Move list navigation';
@@ -5945,8 +5945,8 @@ class AppLocalizationsHi extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count गंभीर गल्तियां',
-      one: '$count गंभीर गलती',
+      other: '$count blunders',
+      one: '$count blunder',
     );
     return '$_temp0';
   }
@@ -5967,8 +5967,8 @@ class AppLocalizationsHi extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count गलतियाँ',
-      one: '$count ग़लती',
+      other: '$count mistakes',
+      one: '$count mistake',
     );
     return '$_temp0';
   }
@@ -5989,8 +5989,8 @@ class AppLocalizationsHi extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count अशुद्धियाँ',
-      one: '$count अशुद्धि',
+      other: '$count inaccuracies',
+      one: '$count inaccuracy',
     );
     return '$_temp0';
   }
@@ -6759,7 +6759,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get studyCurrentChapterUrl => 'वर्तमान अध्याय URL';
 
   @override
-  String get studyYouCanPasteThisInTheForumToEmbed => 'आप अध्याय को जोड़ने के लिए इसे फ़ोरम में जोर सकते हैं';
+  String get studyYouCanPasteThisInTheForumToEmbed => 'You can paste this in the forum or your Lichess blog to embed';
 
   @override
   String get studyPasteToEmbedChapterInForumOrBlog => 'You can paste this in the forum or your Lichess blog to embed the chapter.';

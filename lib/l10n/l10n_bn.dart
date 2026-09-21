@@ -661,7 +661,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get arenaHowIsTheWinnerDecidedAnswer => 'সবচেয়ে বেশি পয়েন্টের সাথে বিজয়ী (গুলি) নির্ধারিত প্রতিযোগিতার সময়ের সীমার শেষে প্রতিযোগিতা (গুলি) ঘোষণা করা হবে।.';
 
   @override
-  String get arenaHowDoesPairingWork => 'কিভাবে জোরায় কাজ করে?';
+  String get arenaHowDoesPairingWork => 'How does the pairing work?';
 
   @override
   String get arenaHowArePlayersPaired => 'How are players paired?';
@@ -2720,7 +2720,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get puzzleThemeEndgameDescription => 'গেমের শেষ পর্যায়ের একটি ট্যাকটিক।';
 
   @override
-  String get puzzleThemeEnPassantDescription => 'এন প্যাসান্ট রুলকে কেন্দ্র করে একটি ট্যাকটিক, যেখানে একটা সৈন্য একটা প্রতিপক্ষের সৈন্যকে খেতে পারে যা তাকে পাশ কাটিয়েছে নিজের দুই ঘর অতিক্রমের ক্ষমতা ব্যবহার করে।';
+  String get puzzleThemeEnPassantDescription => 'A tactic involving the en passant rule, where a pawn can capture an opponent pawn that has bypassed it using its initial two-square move.';
 
   @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'A tactic involving the en passant rule, where a pawn can capture an opposing pawn that has just moved next to it with its initial two-square move.';
@@ -2741,7 +2741,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get puzzleThemeFork => 'কাঁটাচামচ';
 
   @override
-  String get puzzleThemeForkDescription => 'একটা চাল যেখানে একটা গুটি প্রতিপক্ষের দুটি গুটিকে আক্রমণ করে একইসাথে (যেভাবে একজন দুইহাতে দুটো কাঁটাচামচ দিয়ে দুটো জিনিসে আক্রমণ করে).';
+  String get puzzleThemeForkDescription => 'A move where the moved piece attacks two opponent pieces at once.';
 
   @override
   String get puzzleThemeForkOpposingPiecesDescription => 'A move where a piece attacks two or more opposing pieces simultaneously.';
@@ -2756,7 +2756,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get puzzleThemeHookMate => 'হুক মেট';
 
   @override
-  String get puzzleThemeHookMateDescription => 'একটি নৌকা, ঘোড়া এবং সৈন্য দ্বারা প্রতিপক্ষের রাজাকে কিস্তিমাত করা যা নিজের সৈন্য দ্বারা আটকা পরেছে।';
+  String get puzzleThemeHookMateDescription => 'Checkmate with a rook, knight, and pawn along with one enemy pawn to limit the enemy king\'s escape.';
 
   @override
   String get puzzleThemeHookMateOpposingPawnDescription => 'Checkmate using a rook, knight, and pawn, where an opposing pawn blocks the king\'s escape.';
@@ -2915,7 +2915,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get puzzleThemePromotion => 'Promotion/পদোন্নতি';
 
   @override
-  String get puzzleThemePromotionDescription => 'আপনার সৈন্যকে মন্ত্রী বা অন্য লঘু গুটিতে উন্নীত করুন।';
+  String get puzzleThemePromotionDescription => 'Promote one of your pawn to a queen or minor piece.';
 
   @override
   String get puzzleThemePromotePawnToQueenRookOrMinor => 'Promote one of your pawns to a queen, rook or minor piece.';
@@ -3729,7 +3729,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get refreshInboxAfterFiveMinutes => '৫ মিনিট অপেক্ষা করে ইমেইলবক্স রিফ্রেশ করুন.';
 
   @override
-  String get checkSpamFolder => 'এছাড়াও আপনার স্প্যাম ফোল্ডার চেক করুন, এটি সেখানে থাকতে পারে। যদি তাই হয়, এটি স্প্যাম নয় হিসাবে চিহ্নিত করুন.';
+  String get checkSpamFolder => 'Also check your spam folder, it might end up there. If so, mark it as not spam.';
 
   @override
   String get checkSpamOrJunkFolder => 'If you do not receive a confirmation email, check your Spam or Junk folder. Be sure to indicate messages from lichess.org as safe and \"not spam\", so you can stay informed of important communications.';
@@ -3780,13 +3780,13 @@ class AppLocalizationsBn extends AppLocalizations {
   String get cancel => 'বাতিল করুন';
 
   @override
-  String get whiteTimeOut => 'সাদার সময় শেষ';
+  String get whiteTimeOut => 'White time out';
 
   @override
   String get whiteRanOutOfTime => 'White ran out of time';
 
   @override
-  String get blackTimeOut => 'কালোর সময় আপ';
+  String get blackTimeOut => 'Black time out';
 
   @override
   String get blackRanOutOfTime => 'Black ran out of time';
@@ -4516,7 +4516,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get reportUsernameHelp => 'ব্যখ্যা করুন এই ব্যবহারকারীর নাম কোন দিক দিয়ে অশোভন। শুধু \"এটি অশোভন/অশালীন\" বলবেন না, আপনি কিভাবে এই উপসংহারে এলেন তা আমাদের বলুন, বিশেষ করে যদি এটি কোনো অপমান যা লুকানো হয়, ইংরেজিতে নয় এমন হয়, গালি হয়, অথবা কোনো ঐতিহাসিক/সাংস্কৃতিক দিকে হয়।';
 
   @override
-  String get reportProcessedFasterInEnglish => 'ইংরেজিতে লেখা হলে আপনার রিপোর্ট দ্রুত প্রক্রিয়া করা হবে।';
+  String get reportProcessedFasterInEnglish => 'Your report will be processed faster if written in English.';
 
   @override
   String get processReportFasterInEnglish => 'We can process your report faster if you write in English.';
@@ -4887,7 +4887,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get create => 'তৈরি করুন';
 
   @override
-  String get whenCreateSimul => 'যখন আপনি একটি সিমুল তৈরি করেন, আপনি খেলার জন্য একাধিক খেলোয়ার পাবেন.';
+  String get whenCreateSimul => 'When you create a simul, you get to play several players at once.';
 
   @override
   String get creatingASimul => 'Creating a simul lets you play against multiple opponents at the same time.';
@@ -4902,7 +4902,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get simulAddExtraTime => 'আপনি হয়তো অতিরিক্ত সময় যোগ করে আপনার ঘড়ি সিমুলের সাথে মোকাবেলা করতে পারবেন.';
 
   @override
-  String get simulHostExtraTime => 'অতিরিক্ত ঘড়ির সময়ের স্বাগতিক';
+  String get simulHostExtraTime => 'Host extra initial clock time';
 
   @override
   String get extraClockTimeForHost => 'Extra clock time for the host:';
@@ -5310,7 +5310,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String perfRatingX(String param) {
-    return 'অনুপাত: $param';
+    return 'Rating: $param';
   }
 
   @override
@@ -5469,7 +5469,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get showUnreadLichessMessage => 'আপনি Lichess থেকে একটি ব্যক্তিগত বার্তা পেয়েছেন.';
 
   @override
-  String get clickHereToReadIt => 'পড়তে এখানে ক্লিক করুন';
+  String get clickHereToReadIt => 'Click here to read it';
 
   @override
   String get readTheMessage => 'Read the message';
@@ -5782,7 +5782,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get onlyTeamMembers => 'শুধুমাত্র দলের সদস্যরা';
 
   @override
-  String get navigateMoveTree => 'Move/চালের তালিকা নির্দেশক';
+  String get navigateMoveTree => 'Navigate the move tree';
 
   @override
   String get moveListNavigation => 'Move list navigation';
@@ -5947,8 +5947,8 @@ class AppLocalizationsBn extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count টি ব্লান্ডার',
-      one: '$count টি ব্লান্ডার',
+      other: '$count blunders',
+      one: '$count blunder',
     );
     return '$_temp0';
   }
@@ -5969,8 +5969,8 @@ class AppLocalizationsBn extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$countটি ভূল',
-      one: '$countটি ভূল',
+      other: '$count mistakes',
+      one: '$count mistake',
     );
     return '$_temp0';
   }
@@ -5991,8 +5991,8 @@ class AppLocalizationsBn extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$countটি অনিপুণতা',
-      one: '$countটি অনিপুণতা',
+      other: '$count inaccuracies',
+      one: '$count inaccuracy',
     );
     return '$_temp0';
   }
