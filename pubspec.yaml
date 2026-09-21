@@ -41,7 +41,10 @@ dependencies:
   flutter_local_notifications: ^22.3.0
   flutter_localizations:
     sdk: flutter
-  flutter_markdown_plus: ^1.0.12
+  flutter_markdown_plus: 
+    git:
+      url: https://github.com/HaonRekcef/flutter_markdown_plus.git
+      ref: 74dd63f3dc91bcf919a612a1816ca82df248472e
   flutter_native_splash: ^2.4.8
   flutter_riverpod: ^3.4.2
   flutter_secure_storage: ^11.0.0
