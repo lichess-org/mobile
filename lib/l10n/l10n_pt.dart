@@ -7225,6 +7225,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get teamTeam => 'Equipa';
 
   @override
+  String get teamTeamUpdates => 'Atualizações da equipa';
+
+  @override
   String get teamIncorrectEntryCode => 'Código incorreto.';
 
   @override
@@ -14636,6 +14639,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get teamTeam => 'Equipe';
+
+  @override
+  String get teamTeamUpdates => 'Atualizações da equipe';
 
   @override
   String get teamIncorrectEntryCode => 'Código de entrada incorreto.';

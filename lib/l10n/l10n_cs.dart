@@ -7383,6 +7383,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get teamTeam => 'Tým';
 
   @override
+  String get teamTeamUpdates => 'Týmové zprávy';
+
+  @override
   String get teamIncorrectEntryCode => 'Špatné heslo.';
 
   @override

@@ -7225,6 +7225,9 @@ class AppLocalizationsHy extends AppLocalizations {
   String get teamTeam => 'Թիմ';
 
   @override
+  String get teamTeamUpdates => 'Team updates';
+
+  @override
   String get teamIncorrectEntryCode => 'Մուտքի սխալ կոդ։';
 
   @override

@@ -7304,6 +7304,9 @@ class AppLocalizationsBs extends AppLocalizations {
   String get teamTeam => 'Tim';
 
   @override
+  String get teamTeamUpdates => 'Team updates';
+
+  @override
   String get teamIncorrectEntryCode => 'Netačna ulazna koda.';
 
   @override

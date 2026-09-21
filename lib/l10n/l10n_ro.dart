@@ -7304,6 +7304,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get teamTeam => 'Echipe';
 
   @override
+  String get teamTeamUpdates => 'Anunțuri în echipă';
+
+  @override
   String get teamIncorrectEntryCode => 'Cod de intrare incorect.';
 
   @override

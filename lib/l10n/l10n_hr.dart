@@ -7301,6 +7301,9 @@ class AppLocalizationsHr extends AppLocalizations {
   String get teamTeam => 'Tim';
 
   @override
+  String get teamTeamUpdates => 'Team updates';
+
+  @override
   String get teamIncorrectEntryCode => 'Netočan ulazni kod.';
 
   @override

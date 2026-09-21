@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/message/message_repository.dart';
+import 'package:lichess_mobile/src/model/team/team_providers.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -20,6 +21,7 @@ import 'package:lichess_mobile/src/view/auth/sign_in_error.dart';
 import 'package:lichess_mobile/src/view/auth/sign_in_options.dart';
 import 'package:lichess_mobile/src/view/message/contacts_screen.dart';
 import 'package:lichess_mobile/src/view/settings/settings_screen.dart';
+import 'package:lichess_mobile/src/view/team/team_updates_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -93,6 +95,7 @@ class _AccountMenuScreenState()
     final kidMode = account.value?.kid ?? false;
     final LightUser? user = account.value?.lightUser ?? authUser?.user;
     final unreadMessages = ref.watch(unreadMessagesProvider).value?.unread ?? 0;
+    final unreadTeamUpdates = ref.watch(unreadTeamUpdatesCountProvider).value ?? 0;
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
@@ -179,7 +182,7 @@ class _AccountMenuScreenState()
           ],
           ListSection(
             children: [
-              if (user != null && account.hasValue && !kidMode)
+              if (user != null && account.hasValue && !kidMode) ...[
                 ListTile(
                   leading: Badge.count(
                     isLabelVisible: unreadMessages > 0,
@@ -195,6 +198,22 @@ class _AccountMenuScreenState()
                     _navigate(context, ContactsScreen.buildRoute());
                   },
                 ),
+                ListTile(
+                  leading: Badge.count(
+                    isLabelVisible: unreadTeamUpdates > 0,
+                    count: unreadTeamUpdates,
+                    child: const Icon(Icons.groups_outlined),
+                  ),
+                  trailing: Theme.of(context).platform == TargetPlatform.iOS
+                      ? const CupertinoListTileChevron()
+                      : null,
+                  title: Text(context.l10n.teamTeamUpdates),
+                  enabled: isOnline,
+                  onTap: () {
+                    _navigate(context, TeamUpdatesScreen.buildRoute());
+                  },
+                ),
+              ],
               ListTile(
                 leading: const Icon(Icons.settings_outlined),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS

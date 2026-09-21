@@ -7326,6 +7326,9 @@ class AppLocalizationsHe extends AppLocalizations {
   String get teamTeam => 'קבוצה';
 
   @override
+  String get teamTeamUpdates => 'Team updates';
+
+  @override
   String get teamIncorrectEntryCode => 'סיסמא שגויה.';
 
   @override

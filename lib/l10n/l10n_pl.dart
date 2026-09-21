@@ -7383,6 +7383,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get teamTeam => 'Klub';
 
   @override
+  String get teamTeamUpdates => 'Wiadomości klubowe';
+
+  @override
   String get teamIncorrectEntryCode => 'Niepoprawny kod dostępu.';
 
   @override

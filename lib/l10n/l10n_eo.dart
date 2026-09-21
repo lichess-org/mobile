@@ -7225,6 +7225,9 @@ class AppLocalizationsEo extends AppLocalizations {
   String get teamTeam => 'Teamo';
 
   @override
+  String get teamTeamUpdates => 'Team updates';
+
+  @override
   String get teamIncorrectEntryCode => 'Malĝusta enirkodo.';
 
   @override

@@ -7146,6 +7146,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get teamTeam => 'チーム';
 
   @override
+  String get teamTeamUpdates => 'チームからのお知らせ';
+
+  @override
   String get teamIncorrectEntryCode => '参加コードが違います。';
 
   @override

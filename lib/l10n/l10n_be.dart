@@ -7373,6 +7373,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String get teamTeam => 'Каманда';
 
   @override
+  String get teamTeamUpdates => 'Team updates';
+
+  @override
   String get teamIncorrectEntryCode => 'Няправільны код далучэння.';
 
   @override

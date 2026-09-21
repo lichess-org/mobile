@@ -7146,6 +7146,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get teamTeam => 'Đội';
 
   @override
+  String get teamTeamUpdates => 'Thông báo của đội';
+
+  @override
   String get teamIncorrectEntryCode => 'Mã không chính xác.';
 
   @override

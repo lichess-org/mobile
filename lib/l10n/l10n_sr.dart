@@ -7295,6 +7295,9 @@ class AppLocalizationsSr extends AppLocalizations {
   String get teamTeam => 'Тим';
 
   @override
+  String get teamTeamUpdates => 'Team updates';
+
+  @override
   String get teamIncorrectEntryCode => 'Incorrect entry code.';
 
   @override

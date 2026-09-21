@@ -7383,6 +7383,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get teamTeam => 'Družstvo';
 
   @override
+  String get teamTeamUpdates => 'Team updates';
+
+  @override
   String get teamIncorrectEntryCode => 'Nesprávny vstupný kód.';
 
   @override
