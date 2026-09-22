@@ -657,15 +657,6 @@ class AppLocalizationsBn extends AppLocalizations {
   String get mobileAppLogs => 'App Logs';
 
   @override
-  String get mobileChangesWillBeLost => 'Your changes will be lost.';
-
-  @override
-  String get mobileChess960Position => 'Chess960 Position';
-
-  @override
-  String get mobileFilterBroadcasts => 'Filter broadcasts';
-
-  @override
   String get mobileSmallBoard => 'Small board';
 
   @override

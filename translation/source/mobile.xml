@@ -210,9 +210,6 @@
   <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">Dismiss</string>
   <string name="customizeButton" comment="Text of a button, so translation should be short." maxLength="10">Customize</string>
   <string name="appLogs" comment="Settings screen entry that opens the application log.">App Logs</string>
-  <string name="changesWillBeLost" comment="Confirmation message when leaving the edit profile screen with unsaved changes.">Your changes will be lost.</string>
-  <string name="chess960Position" comment="Board editor menu action that opens the Chess960 starting position dialog.">Chess960 Position</string>
-  <string name="filterBroadcasts" comment="Accessibility label of the filter button on the broadcasts list screen.">Filter broadcasts</string>
   <string name="smallBoard" comment="Analysis/broadcast/study settings switch that uses a smaller board.">Small board</string>
   <string name="acceptDraw" comment="Over the board dialog asking whether to accept a draw after threefold repetition.">Accept draw?</string>
 </resources>

@@ -1456,24 +1456,6 @@ abstract class AppLocalizations {
   /// **'App Logs'**
   String get mobileAppLogs;
 
-  /// No description provided for @mobileChangesWillBeLost.
-  ///
-  /// In en, this message translates to:
-  /// **'Your changes will be lost.'**
-  String get mobileChangesWillBeLost;
-
-  /// No description provided for @mobileChess960Position.
-  ///
-  /// In en, this message translates to:
-  /// **'Chess960 Position'**
-  String get mobileChess960Position;
-
-  /// No description provided for @mobileFilterBroadcasts.
-  ///
-  /// In en, this message translates to:
-  /// **'Filter broadcasts'**
-  String get mobileFilterBroadcasts;
-
   /// No description provided for @mobileSmallBoard.
   ///
   /// In en, this message translates to:
