@@ -41,6 +41,7 @@ class const PracticeEngineChapterBody({required final PracticeEngineChapter chap
         lastMove: state.steps.lastOrNull?.sanMove.move,
         onMove: controller.onUserMove,
         shapes: _shapes(state),
+        isBusy: state.isEngineThinking,
         moves: [for (final step in state.steps) step.sanMove.san],
         table: _Table(state: state),
         bottomBar: BottomBar(
@@ -125,19 +126,12 @@ class const _Table({required final PracticeEngineState state}) extends ConsumerW
             color: LichessColors.error,
             text: goal.describe(playerSide: chapter.orientation, movesLeft: goal.movesAllowed ?? 0),
           ),
-          .ongoing => Row(
-            children: [
-              Expanded(
-                child: Text(
-                  goal.describe(
-                    playerSide: chapter.orientation,
-                    movesLeft: (goal.movesAllowed ?? 0) - state.nbMoves,
-                  ),
-                  style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600),
-                ),
-              ),
-              if (state.isEngineThinking) const CircularProgressIndicator.adaptive(),
-            ],
+          .ongoing => Text(
+            goal.describe(
+              playerSide: chapter.orientation,
+              movesLeft: (goal.movesAllowed ?? 0) - state.nbMoves,
+            ),
+            style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600),
           ),
         },
         if (feedback != null)

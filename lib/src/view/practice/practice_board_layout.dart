@@ -26,6 +26,11 @@ class const PracticeBoardLayout({
   final void Function(NormalMove move)? onMove,
   final ISet<Shape> shapes = const ISetConst({}),
 
+  /// Whether to show a progress bar under the board, while the engine thinks.
+  ///
+  /// The room it takes is always reserved, so that it never shifts the content.
+  final bool isBusy = false,
+
   /// The moves played, in SAN, shown as a line above the table.
   final List<String>? moves,
 
@@ -107,6 +112,13 @@ class _PracticeBoardLayoutState() extends ConsumerState<PracticeBoardLayout> {
             ),
           );
 
+          // Always laid out, so that the engine starting to think does not shift anything.
+          final progress = SizedBox(
+            width: boardSize,
+            height: 4.0,
+            child: widget.isBusy ? const LinearProgressIndicator(minHeight: 4.0) : null,
+          );
+
           final moves = widget.moves;
           final side = Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -123,16 +135,21 @@ class _PracticeBoardLayoutState() extends ConsumerState<PracticeBoardLayout> {
             ],
           );
 
+          final boardWithProgress = Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [board, progress],
+          );
+
           return isLandscape
               ? Row(
                   children: [
-                    board,
+                    boardWithProgress,
                     Expanded(child: side),
                   ],
                 )
               : Column(
                   children: [
-                    board,
+                    boardWithProgress,
                     Expanded(child: side),
                   ],
                 );
