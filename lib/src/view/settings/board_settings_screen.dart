@@ -408,10 +408,7 @@ class _BoardSettingsScreenState() extends ConsumerState<BoardSettingsScreen> {
               ),
               SwitchSettingTile(
                 title: Text(context.l10n.mobileMoveOnRelease),
-                subtitle: Text(
-                  context.l10n.mobileMoveOnReleaseSubtitle,
-                  maxLines: 5,
-                ),
+                subtitle: Text(context.l10n.mobileMoveOnReleaseSubtitle, maxLines: 5),
                 value: boardPrefs.moveOnRelease,
                 onChanged: (value) {
                   ref.read(boardPreferencesProvider.notifier).toggleMoveOnRelease();

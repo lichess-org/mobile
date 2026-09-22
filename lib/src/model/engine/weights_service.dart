@@ -181,9 +181,7 @@ class StockfishNnueService(final Ref _ref) {
             barrierDismissible: true,
             builder: (context) {
               return AlertDialog.adaptive(
-                content: Text(
-                  context.l10n.mobileAreYouSureDownloadNnue(nnueDownloadSizeMB),
-                ),
+                content: Text(context.l10n.mobileAreYouSureDownloadNnue(nnueDownloadSizeMB)),
                 actions: [
                   PlatformDialogAction(
                     child: const Text('OK'),

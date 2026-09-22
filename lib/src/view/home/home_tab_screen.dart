@@ -1073,9 +1073,7 @@ class _NNUEFilesOutdatedTipState() extends ConsumerState<_NNUEFilesOutdatedTip> 
               children: [
                 Icon(Icons.warning, size: 25.0, color: Theme.of(context).colorScheme.primary),
                 const SizedBox(width: 8.0),
-                Flexible(
-                  child: Text(context.l10n.mobileNewStockfishAvailable),
-                ),
+                Flexible(child: Text(context.l10n.mobileNewStockfishAvailable)),
               ],
             ),
             actions: [
