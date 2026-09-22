@@ -12,6 +12,24 @@ import 'mock_server_responses.dart';
 
 void main() {
   group('PuzzleRepository', () {
+    test('fetchMany', () async {
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/api/puzzle/many' &&
+            request.url.queryParameters['ids'] == '20yWT,7H5EV,1qUth') {
+          return mockResponse(mockMixBatchResponse, 200);
+        }
+        return mockResponse('', 404);
+      });
+
+      final container = await lichessClientContainer(mockClient);
+      final repo = PuzzleRepository(container.read(lichessClientProvider));
+
+      final ids = IList(const [PuzzleId('20yWT'), PuzzleId('7H5EV'), PuzzleId('1qUth')]);
+      final puzzles = await repo.fetchMany(ids);
+
+      expect(puzzles.map((p) => p.puzzle.id), ids);
+    });
+
     test('selectBatch', () async {
       final mockClient = MockClient((request) {
         if (request.url.path == '/api/puzzle/batch/mix') {
