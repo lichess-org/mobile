@@ -679,7 +679,7 @@ class AppLocalizationsBs extends AppLocalizations {
   String get arenaHowIsTheWinnerDecidedAnswer => 'Igrač(i) s najviše bodova nakon isteka zadanog turnirskog vremenskog ograničenja će biti proglašen(i) pobjednikom/pobjednicima.\n\nAko dva igrača imaju isti broj bodova, performans na turniru je odlučujući faktor.';
 
   @override
-  String get arenaHowDoesPairingWork => 'Kako funkcionira uparivanje?';
+  String get arenaHowDoesPairingWork => 'How does the pairing work?';
 
   @override
   String get arenaHowArePlayersPaired => 'Kako se igrači uparuju?';
@@ -770,7 +770,7 @@ class AppLocalizationsBs extends AppLocalizations {
   String get arenaEditTeamBattle => 'Uredi timsku bitku';
 
   @override
-  String get arenaDefender => 'Odbrambeni igrač';
+  String get arenaDefender => 'Defender';
 
   @override
   String get arenaDefenderLabel => 'Branilac:';
@@ -797,7 +797,7 @@ class AppLocalizationsBs extends AppLocalizations {
   String get arenaTournamentStats => 'Statistike turnira';
 
   @override
-  String get arenaRankAvgHelp => 'Prosječni rang je postotak vašeg ranga. Niži rang je bolji.\n\nNa primjer, biti rangiran na 3. mjestu na turniru sa 100 igrača = 3%. Biti rangiran na 10. mjestu na turniru sa 1000 igrača = 1%.';
+  String get arenaRankAvgHelp => 'The rank average is a percentage of your ranking. Lower is better.\n\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.';
 
   @override
   String get arenaRankAverageHelp => 'Vaš prosjek rejtinga predstavlja vašu uobičajenu poziciju u odnosu na ukupan broj igrača u svakom turniru. To je mjera vašeg plasmana na tuniru, a ne vašeg općeg rejtinga.\n\nNa primjer, prosjek ranga od 3% znači da obično završavate među najboljih 3% (kao što je 30. mjesto od 1.000 igrača).';
@@ -950,7 +950,7 @@ class AppLocalizationsBs extends AppLocalizations {
   String get broadcastDeleteRound => 'Izbrišite ovo kolo';
 
   @override
-  String get broadcastDefinitivelyDeleteRound => 'Definitivno izbrišite ovo kolo i partije u njemu.';
+  String get broadcastDefinitivelyDeleteRound => 'Definitively delete the round and all its games.';
 
   @override
   String get broadcastPermanentlyDeleteRound => 'Permanently delete this round and all its games?';
@@ -965,7 +965,7 @@ class AppLocalizationsBs extends AppLocalizations {
   String get broadcastDeleteTournament => 'Izbrišite ovaj turnir';
 
   @override
-  String get broadcastDefinitivelyDeleteTournament => 'Definitivno izbrišite cijeli turnir, sva kola i sve partije.';
+  String get broadcastDefinitivelyDeleteTournament => 'Definitively delete the entire tournament, all its rounds and all its games.';
 
   @override
   String get broadcastPermanentlyDeleteTournament => 'Permanently delete this tournament, including all rounds and games?';
@@ -2183,19 +2183,19 @@ class AppLocalizationsBs extends AppLocalizations {
   String get preferencesNotifyStreamStart => 'Strimer ide uživo';
 
   @override
-  String get preferencesNotifyInboxMsg => 'Nova poruka';
+  String get preferencesNotifyInboxMsg => 'New inbox message';
 
   @override
   String get preferencesNotifyDirectMessage => 'New direct message';
 
   @override
-  String get preferencesNotifyForumMention => 'Spomenuti ste u komentaru na forumu';
+  String get preferencesNotifyForumMention => 'Forum comment mentions you';
 
   @override
   String get preferencesNotifyForumMentions => 'Forum mentions';
 
   @override
-  String get preferencesNotifyInvitedStudy => 'Poziv na studiju';
+  String get preferencesNotifyInvitedStudy => 'Study invite';
 
   @override
   String get preferencesNotifyStudyInvites => 'Study invites';
@@ -2207,7 +2207,7 @@ class AppLocalizationsBs extends AppLocalizations {
   String get preferencesNotifyChallenge => 'Izazovi';
 
   @override
-  String get preferencesNotifyTournamentSoon => 'Turnir počinje uskoro';
+  String get preferencesNotifyTournamentSoon => 'Tournament starting soon';
 
   @override
   String get preferencesNotifyTournamentStartReminders => 'Tournaments start reminders';
@@ -2670,7 +2670,7 @@ class AppLocalizationsBs extends AppLocalizations {
   String get puzzleThemeCornerMate => 'Suigrač iz ugla';
 
   @override
-  String get puzzleThemeCornerMateDescription => 'Ograničite kralja u ugao koristeći top ili damu i skakača kako biste se suočili sa šah-matom.';
+  String get puzzleThemeCornerMateDescription => 'Confine the king to the corner using a rook or queen and a knight to engage the checkmate.';
 
   @override
   String get puzzleThemeCornerMateKnightDeliversDescription => 'Confine the king to the corner using a rook or queen, and use a knight to deliver the checkmate.';
@@ -2748,7 +2748,7 @@ class AppLocalizationsBs extends AppLocalizations {
   String get puzzleThemeEndgameDescription => 'Taktika tokom posljednje faze partije.';
 
   @override
-  String get puzzleThemeEnPassantDescription => 'Taktika koja uključuje pravilo \"en passant\", gdje pješak može uhvatiti protivničkog pješaka koji ga je zaobišao koristeći svoj početni potez u dva kvadrata.';
+  String get puzzleThemeEnPassantDescription => 'A tactic involving the en passant rule, where a pawn can capture an opponent pawn that has bypassed it using its initial two-square move.';
 
   @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'A tactic involving the en passant rule, where a pawn can capture an opposing pawn that has just moved next to it with its initial two-square move.';
@@ -2769,7 +2769,7 @@ class AppLocalizationsBs extends AppLocalizations {
   String get puzzleThemeFork => 'Viljuška';
 
   @override
-  String get puzzleThemeForkDescription => 'Potez kojim pomjerena figura istovremeno napada dvije protivničke.';
+  String get puzzleThemeForkDescription => 'A move where the moved piece attacks two opponent pieces at once.';
 
   @override
   String get puzzleThemeForkOpposingPiecesDescription => 'A move where a piece attacks two or more opposing pieces simultaneously.';
@@ -2784,7 +2784,7 @@ class AppLocalizationsBs extends AppLocalizations {
   String get puzzleThemeHookMate => 'Zakačni mat';
 
   @override
-  String get puzzleThemeHookMateDescription => 'Šah-mat s topom, vitezom i pješakom zajedno s jednim neprijateljskim pješakom da ograničite bijeg neprijateljskog kralja.';
+  String get puzzleThemeHookMateDescription => 'Checkmate with a rook, knight, and pawn along with one enemy pawn to limit the enemy king\'s escape.';
 
   @override
   String get puzzleThemeHookMateOpposingPawnDescription => 'Checkmate using a rook, knight, and pawn, where an opposing pawn blocks the king\'s escape.';
@@ -2943,7 +2943,7 @@ class AppLocalizationsBs extends AppLocalizations {
   String get puzzleThemePromotion => 'Promaknuče';
 
   @override
-  String get puzzleThemePromotionDescription => 'Promaknite jednog svog pijuna u kraljicu ili sporednu figuru.';
+  String get puzzleThemePromotionDescription => 'Promote one of your pawn to a queen or minor piece.';
 
   @override
   String get puzzleThemePromotePawnToQueenRookOrMinor => 'Promote one of your pawns to a queen, rook or minor piece.';
@@ -3757,7 +3757,7 @@ class AppLocalizationsBs extends AppLocalizations {
   String get refreshInboxAfterFiveMinutes => 'Pričekajte pet minuta i osvježite pristiglu poštu.';
 
   @override
-  String get checkSpamFolder => 'Također provjerite neželjenu poštu, možda je poruka završila tamo. Ako jest, označite da nije neželjena.';
+  String get checkSpamFolder => 'Also check your spam folder, it might end up there. If so, mark it as not spam.';
 
   @override
   String get checkSpamOrJunkFolder => 'Ako ne primite email potvrde, provjerite neželjenu poštu. Obavezno označite poruke sa lichess.org kao sigurne i \"nije neželjena pošta\", kako biste mogli ostati obaviješteni o važnim porukama.';
@@ -3808,13 +3808,13 @@ class AppLocalizationsBs extends AppLocalizations {
   String get cancel => 'Odustani';
 
   @override
-  String get whiteTimeOut => 'Isteklo vrijeme bijelome';
+  String get whiteTimeOut => 'White time out';
 
   @override
   String get whiteRanOutOfTime => 'Bijelom je ponestalo vremena';
 
   @override
-  String get blackTimeOut => 'Isteklo vrijeme crnome';
+  String get blackTimeOut => 'Black time out';
 
   @override
   String get blackRanOutOfTime => 'Crnom je ponestalo vremena';
@@ -4026,7 +4026,7 @@ class AppLocalizationsBs extends AppLocalizations {
   }
 
   @override
-  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Filteri za ocjenjivanje su zaključani jer vaša ocjena nije stabilna. Igranje ocijenjenih igara će povećati stabilnost.';
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
 
   @override
   String get cannotFilterByUnstableRating => 'Nije moguće filtrirati po rejtingu jer vaš rejting nije stabilan.\nIgranje rejtingovanih partija će povećati stabilnost.';
@@ -4544,7 +4544,7 @@ class AppLocalizationsBs extends AppLocalizations {
   String get reportUsernameHelp => 'Objasnite šta je uvredljivo u vezi s ovim korisničkim imenom. Nemojte samo reći \"uvredljivo je/neprikladno\", već nam recite kako ste došli do ovog zaključka, posebno ako je uvreda nejasna, nije na engleskom, napisana je slengom ili je historijska/kulturna referenca.';
 
   @override
-  String get reportProcessedFasterInEnglish => 'Vaš izvještaj će biti brže obrađen ako je napisan na engleskom jeziku.';
+  String get reportProcessedFasterInEnglish => 'Your report will be processed faster if written in English.';
 
   @override
   String get processReportFasterInEnglish => 'Možemo procesirati vaš izvještaj brže ako ga napišete na engleskom.';
@@ -4915,7 +4915,7 @@ class AppLocalizationsBs extends AppLocalizations {
   String get create => 'Kreiraj';
 
   @override
-  String get whenCreateSimul => 'Kada kreirate simultanku, igrate protiv više igrača istovremeno.';
+  String get whenCreateSimul => 'When you create a simul, you get to play several players at once.';
 
   @override
   String get creatingASimul => 'Kreiranje simultanke dozvoljava vam igranje protiv više protivnik istovremeno.';
@@ -4930,7 +4930,7 @@ class AppLocalizationsBs extends AppLocalizations {
   String get simulAddExtraTime => 'Možete dodati više vremena na svoj sat kako bi Vam to pomoglo tokom igranja simultanke.';
 
   @override
-  String get simulHostExtraTime => 'Dodatno vrijeme domaćina';
+  String get simulHostExtraTime => 'Host extra initial clock time';
 
   @override
   String get extraClockTimeForHost => 'Dodatno vrijeme za domaćina:';
@@ -5338,7 +5338,7 @@ class AppLocalizationsBs extends AppLocalizations {
 
   @override
   String perfRatingX(String param) {
-    return 'Rejting: $param';
+    return 'Rating: $param';
   }
 
   @override
@@ -5497,7 +5497,7 @@ class AppLocalizationsBs extends AppLocalizations {
   String get showUnreadLichessMessage => 'Primili ste privatnu poruku od Lichess-a.';
 
   @override
-  String get clickHereToReadIt => 'Kliknite ovdje da pročitate';
+  String get clickHereToReadIt => 'Click here to read it';
 
   @override
   String get readTheMessage => 'Pročitaj poruku';
@@ -5783,7 +5783,7 @@ class AppLocalizationsBs extends AppLocalizations {
 
   @override
   String markdownIsAvailable(String param) {
-    return '$param je dostupan za formatiranje.';
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5810,7 +5810,7 @@ class AppLocalizationsBs extends AppLocalizations {
   String get onlyTeamMembers => 'Samo članovi timova';
 
   @override
-  String get navigateMoveTree => 'Za kretanje po premještajnom stablu';
+  String get navigateMoveTree => 'Navigate the move tree';
 
   @override
   String get moveListNavigation => 'Pomjeri navigacijsku listu';
@@ -5977,9 +5977,8 @@ class AppLocalizationsBs extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count velike greške',
-      few: '$count velike greške',
-      one: '$count velika greška',
+      other: '$count blunders',
+      one: '$count blunder',
     );
     return '$_temp0';
   }
@@ -6001,9 +6000,8 @@ class AppLocalizationsBs extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count greške',
-      few: '$count greške',
-      one: '$count greška',
+      other: '$count mistakes',
+      one: '$count mistake',
     );
     return '$_temp0';
   }
@@ -6025,9 +6023,8 @@ class AppLocalizationsBs extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count netačnosti',
-      few: '$count netačnosti',
-      one: '$count netačnost',
+      other: '$count inaccuracies',
+      one: '$count inaccuracy',
     );
     return '$_temp0';
   }
@@ -6445,9 +6442,8 @@ class AppLocalizationsBs extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Anonimni korisnici ($count)',
-      few: 'Anonimni korisnici ($count)',
-      one: 'Anonimni korisnik',
+      other: 'Anonymous ($count)',
+      one: 'Anonymous',
     );
     return '$_temp0';
   }
@@ -6836,7 +6832,7 @@ class AppLocalizationsBs extends AppLocalizations {
   String get studyCurrentChapterUrl => 'Link trenutnog poglavlja';
 
   @override
-  String get studyYouCanPasteThisInTheForumToEmbed => 'Možete ovo zalijepiti na forumu ili Vašem blogu na Lichessu kako biste ugradili poglavlje';
+  String get studyYouCanPasteThisInTheForumToEmbed => 'You can paste this in the forum or your Lichess blog to embed';
 
   @override
   String get studyPasteToEmbedChapterInForumOrBlog => 'You can paste this in the forum or your Lichess blog to embed the chapter.';
@@ -7211,13 +7207,13 @@ class AppLocalizationsBs extends AppLocalizations {
   String get studyCustomPositionText => 'Postavite ploču na svoj način.<br>Pogodno za istraživanje završnica.';
 
   @override
-  String get studyLoadExistingLichessGameTitle => 'Učitaj postojeću lichess igru';
+  String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
 
   @override
   String get studyLoadGameFromTheWebTitle => 'Load a game from the web';
 
   @override
-  String get studyLoadExistingLichessGameText => 'Zalijepite URL lichess igre<br>(kao što je lichess.org/7fHIU0XI)<br>da biste učitali poteze igre u poglavlju.';
+  String get studyLoadExistingLichessGameText => 'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
 
   @override
   String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/7fHIU0XI)<br>to load game moves in the chapter.';
@@ -7302,6 +7298,9 @@ class AppLocalizationsBs extends AppLocalizations {
 
   @override
   String get teamTeam => 'Tim';
+
+  @override
+  String get teamTeamUpdates => 'Team updates';
 
   @override
   String get teamIncorrectEntryCode => 'Netačna ulazna koda.';

@@ -697,7 +697,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get arenaHowIsTheWinnerDecidedAnswer => 'Гулец(ы) з большасцю балаў па сканчэнні турнірнага часу будзе(-уць) аб\'яўлены пераможцам(і).';
 
   @override
-  String get arenaHowDoesPairingWork => 'Як працуе лёсаванне?';
+  String get arenaHowDoesPairingWork => 'How does the pairing work?';
 
   @override
   String get arenaHowArePlayersPaired => 'How are players paired?';
@@ -788,7 +788,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get arenaEditTeamBattle => 'Edit team battle';
 
   @override
-  String get arenaDefender => 'Абаронца';
+  String get arenaDefender => 'Defender';
 
   @override
   String get arenaDefenderLabel => 'Defender:';
@@ -970,7 +970,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get broadcastDeleteRound => 'Выдаліць гэты тур';
 
   @override
-  String get broadcastDefinitivelyDeleteRound => 'Канчаткова выдаліць ​​тур і ўсе яго гульні.';
+  String get broadcastDefinitivelyDeleteRound => 'Definitively delete the round and all its games.';
 
   @override
   String get broadcastPermanentlyDeleteRound => 'Permanently delete this round and all its games?';
@@ -985,7 +985,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get broadcastDeleteTournament => 'Выдаліць гэты турнір';
 
   @override
-  String get broadcastDefinitivelyDeleteTournament => 'Канчаткова выдаліць увесь турнір, усе яго туры і ўсе гульні.';
+  String get broadcastDefinitivelyDeleteTournament => 'Definitively delete the entire tournament, all its rounds and all its games.';
 
   @override
   String get broadcastPermanentlyDeleteTournament => 'Permanently delete this tournament, including all rounds and games?';
@@ -2201,19 +2201,19 @@ class AppLocalizationsBe extends AppLocalizations {
   String get preferencesNotifyStreamStart => 'Стрымер вядзе трансляцыю';
 
   @override
-  String get preferencesNotifyInboxMsg => 'Новае паведамленне';
+  String get preferencesNotifyInboxMsg => 'New inbox message';
 
   @override
   String get preferencesNotifyDirectMessage => 'New direct message';
 
   @override
-  String get preferencesNotifyForumMention => 'Каментарый на форуме закранае Вас';
+  String get preferencesNotifyForumMention => 'Forum comment mentions you';
 
   @override
   String get preferencesNotifyForumMentions => 'Forum mentions';
 
   @override
-  String get preferencesNotifyInvitedStudy => 'Запрашэнне на ўрок';
+  String get preferencesNotifyInvitedStudy => 'Study invite';
 
   @override
   String get preferencesNotifyStudyInvites => 'Study invites';
@@ -2225,7 +2225,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get preferencesNotifyChallenge => 'Выклікі';
 
   @override
-  String get preferencesNotifyTournamentSoon => 'У хуткім часе пачынаецца турнір';
+  String get preferencesNotifyTournamentSoon => 'Tournament starting soon';
 
   @override
   String get preferencesNotifyTournamentStartReminders => 'Tournaments start reminders';
@@ -2772,7 +2772,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get puzzleThemeEndgameDescription => 'Тактыка на апошнім этапе гульні.';
 
   @override
-  String get puzzleThemeEnPassantDescription => 'Задача звязаная з \"узяццем на праходзе\", дзе пешка можа ўзяць пешку суперніка, якая прайшла побач, выкарыстоўвыючы першы ход на два палі.';
+  String get puzzleThemeEnPassantDescription => 'A tactic involving the en passant rule, where a pawn can capture an opponent pawn that has bypassed it using its initial two-square move.';
 
   @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'A tactic involving the en passant rule, where a pawn can capture an opposing pawn that has just moved next to it with its initial two-square move.';
@@ -2793,7 +2793,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get puzzleThemeFork => 'Відэлец';
 
   @override
-  String get puzzleThemeForkDescription => 'Ход, калі фігура, якой пахадзілі, нападае адразу на дзве фігуры суперніка.';
+  String get puzzleThemeForkDescription => 'A move where the moved piece attacks two opponent pieces at once.';
 
   @override
   String get puzzleThemeForkOpposingPiecesDescription => 'A move where a piece attacks two or more opposing pieces simultaneously.';
@@ -2808,7 +2808,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get puzzleThemeHookMate => 'Хук-мат';
 
   @override
-  String get puzzleThemeHookMateDescription => 'Мат ладдзёй, канём і пешкай разам з дапамогай адной пешкай суперніка, абмяжоўваючай адыход варожага караля.';
+  String get puzzleThemeHookMateDescription => 'Checkmate with a rook, knight, and pawn along with one enemy pawn to limit the enemy king\'s escape.';
 
   @override
   String get puzzleThemeHookMateOpposingPawnDescription => 'Checkmate using a rook, knight, and pawn, where an opposing pawn blocks the king\'s escape.';
@@ -2967,7 +2967,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get puzzleThemePromotion => 'Ператварэнне пешкі';
 
   @override
-  String get puzzleThemePromotionDescription => 'Ператварыцце адну з пешак ў ферзя або легкую фігуру.';
+  String get puzzleThemePromotionDescription => 'Promote one of your pawn to a queen or minor piece.';
 
   @override
   String get puzzleThemePromotePawnToQueenRookOrMinor => 'Promote one of your pawns to a queen, rook or minor piece.';
@@ -3781,7 +3781,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get refreshInboxAfterFiveMinutes => 'Пачакайце 5 хвілін і абнавіце паштовую скрыню.';
 
   @override
-  String get checkSpamFolder => 'Таксама праверце папку са спамам, ён можа апынуцца там. Калі так, адзначце гэта як не спам.';
+  String get checkSpamFolder => 'Also check your spam folder, it might end up there. If so, mark it as not spam.';
 
   @override
   String get checkSpamOrJunkFolder => 'If you do not receive a confirmation email, check your Spam or Junk folder. Be sure to indicate messages from lichess.org as safe and \"not spam\", so you can stay informed of important communications.';
@@ -3832,13 +3832,13 @@ class AppLocalizationsBe extends AppLocalizations {
   String get cancel => 'Скасаваць';
 
   @override
-  String get whiteTimeOut => 'Час белых скончыўся';
+  String get whiteTimeOut => 'White time out';
 
   @override
   String get whiteRanOutOfTime => 'White ran out of time';
 
   @override
-  String get blackTimeOut => 'Час чорных скончыўся';
+  String get blackTimeOut => 'Black time out';
 
   @override
   String get blackRanOutOfTime => 'Black ran out of time';
@@ -4568,7 +4568,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get reportUsernameHelp => 'Explain why this username is offensive. Don\'t just say \"it\'s offensive/inappropriate,\" but tell us how you came to this conclusion, especially if the offense is obscure, not in English, in slang, or a historical/cultural reference.';
 
   @override
-  String get reportProcessedFasterInEnglish => 'Ваша справаздача будзе апрацавана хутчэй, калі яна будзе напісана на англійскай мове.';
+  String get reportProcessedFasterInEnglish => 'Your report will be processed faster if written in English.';
 
   @override
   String get processReportFasterInEnglish => 'We can process your report faster if you write in English.';
@@ -4939,7 +4939,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get create => 'Стварыць';
 
   @override
-  String get whenCreateSimul => 'Калі вы створыце сеанс адначасовай гульні, вам прыйдзецца гуляць супраць некалькіх супернікаў у адначассе.';
+  String get whenCreateSimul => 'When you create a simul, you get to play several players at once.';
 
   @override
   String get creatingASimul => 'Creating a simul lets you play against multiple opponents at the same time.';
@@ -4954,7 +4954,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get simulAddExtraTime => 'Вы можаце ўзяць сабе дадатковы час на роздумы.';
 
   @override
-  String get simulHostExtraTime => 'Дадатковы час для арганізатара';
+  String get simulHostExtraTime => 'Host extra initial clock time';
 
   @override
   String get extraClockTimeForHost => 'Extra clock time for the host:';
@@ -5362,7 +5362,7 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String perfRatingX(String param) {
-    return 'Рэйтынг: $param';
+    return 'Rating: $param';
   }
 
   @override
@@ -5521,7 +5521,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get showUnreadLichessMessage => 'You have received a private message from Lichess.';
 
   @override
-  String get clickHereToReadIt => 'Націсніце тут, каб прачытаць';
+  String get clickHereToReadIt => 'Click here to read it';
 
   @override
   String get readTheMessage => 'Read the message';
@@ -5834,7 +5834,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get onlyTeamMembers => 'Толькі чальцы каманды';
 
   @override
-  String get navigateMoveTree => 'Рухацца па дрэву ходаў';
+  String get navigateMoveTree => 'Navigate the move tree';
 
   @override
   String get moveListNavigation => 'Move list navigation';
@@ -6003,10 +6003,8 @@ class AppLocalizationsBe extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count позехаў',
-      many: '$count позехаў',
-      few: '$count зяўкоў',
-      one: '$count позех',
+      other: '$count blunders',
+      one: '$count blunder',
     );
     return '$_temp0';
   }
@@ -6029,10 +6027,8 @@ class AppLocalizationsBe extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count памылак',
-      many: '$count памылак',
-      few: '$count памылкі',
-      one: '$count памылка',
+      other: '$count mistakes',
+      one: '$count mistake',
     );
     return '$_temp0';
   }
@@ -6055,10 +6051,8 @@ class AppLocalizationsBe extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count недакладнасцяў',
-      many: '$count недакладнасцяў',
-      few: '$count недакладнасці',
-      one: '$count недакладнасць',
+      other: '$count inaccuracies',
+      one: '$count inaccuracy',
     );
     return '$_temp0';
   }
@@ -6901,7 +6895,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get studyCurrentChapterUrl => 'URL бягучага раздзелу';
 
   @override
-  String get studyYouCanPasteThisInTheForumToEmbed => 'Вы можаце ўставіць гэта на форум, каб убудаваць';
+  String get studyYouCanPasteThisInTheForumToEmbed => 'You can paste this in the forum or your Lichess blog to embed';
 
   @override
   String get studyPasteToEmbedChapterInForumOrBlog => 'You can paste this in the forum or your Lichess blog to embed the chapter.';
@@ -7371,6 +7365,9 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get teamTeam => 'Каманда';
+
+  @override
+  String get teamTeamUpdates => 'Team updates';
 
   @override
   String get teamIncorrectEntryCode => 'Няправільны код далучэння.';

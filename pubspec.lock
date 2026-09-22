@@ -647,10 +647,11 @@ packages:
   flutter_markdown_plus:
     dependency: "direct main"
     description:
-      name: flutter_markdown_plus
-      sha256: fce641d6c2106cc495de1cd603f97a4f9d615a97a64011928ded380dbdade935
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: "74dd63f3dc91bcf919a612a1816ca82df248472e"
+      resolved-ref: "74dd63f3dc91bcf919a612a1816ca82df248472e"
+      url: "https://github.com/HaonRekcef/flutter_markdown_plus.git"
+    source: git
     version: "1.0.12"
   flutter_native_splash:
     dependency: "direct main"
@@ -1858,4 +1859,4 @@ packages:
     version: "3.1.4"
 sdks:
   dart: ">=3.13.0 <4.0.0"
-  flutter: "3.47.4"
+  flutter: "3.47.5"

@@ -414,9 +414,14 @@ class _StudyChaptersMenuState() extends ConsumerState<_StudyChaptersMenu> {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Text(
-            context.l10n.studyNbChapters(state.study.chapters.length),
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                context.l10n.studyNbChapters(state.study.chapters.length),
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ],
           ),
         ),
         const SizedBox(height: 16),
@@ -456,7 +461,9 @@ class _StudyChaptersMenuState() extends ConsumerState<_StudyChaptersMenu> {
                   useRootNavigator: true,
                   builder: (context) => CreateStudyChapterBottomSheet(
                     params: CreateChapterOfExistingStudy(state.study.id),
-                    chapterNumber: state.study.chapters.length + 1,
+                    initialChapterName: context.l10n.studyChapterX(
+                      (state.study.chapters.length + 1).toString(),
+                    ),
                     onChaptersCreated: (_, chapters) {
                       // The server always answers with the created chapters, but the response
                       // mapper tolerates an empty list, and this runs after the sheet was popped:

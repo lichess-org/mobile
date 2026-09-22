@@ -59,10 +59,14 @@ final autoCompleteUserProvider = FutureProvider.autoDispose.family<IList<LightUs
   ref.onDispose(() => didDispose = true);
   await Future<void>.delayed(_kAutoCompleteDebounceTimer);
   if (didDispose) {
-    throw Exception('Cancelled');
+    return const IListConst([]);
   }
 
-  return await ref.read(userRepositoryProvider).autocompleteUser(term);
+  final result = await ref.read(userRepositoryProvider).autocompleteUser(term);
+  if (didDispose) {
+    return const IListConst([]);
+  }
+  return result;
 }, name: 'AutoCompleteUserProvider');
 
 final userRatingHistoryProvider = FutureProvider.autoDispose

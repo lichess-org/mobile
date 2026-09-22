@@ -644,7 +644,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get arenaHowIsTheWinnerDecidedAnswer => 'Para pemain dengan poin terbanyak di akhir turnamen pada saat selesai sesuai batas waktu yang turnamen yang akan diumumkan sebagai para pemenang.';
 
   @override
-  String get arenaHowDoesPairingWork => 'Bagaimana cara pairing para pemain?';
+  String get arenaHowDoesPairingWork => 'How does the pairing work?';
 
   @override
   String get arenaHowArePlayersPaired => 'How are players paired?';
@@ -762,7 +762,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get arenaTournamentStats => 'Statistik turnamen';
 
   @override
-  String get arenaRankAvgHelp => 'Rata-rata peringkat adalah persentase peringkat Anda. Lebih rendah lebih baik.\n\nMisalnya, menjadi peringkat 3 dalam turnamen yang terdiri dari 100 pemain = 3%. Menjadi peringkat 10 dalam turnamen 1000 pemain = 1%.';
+  String get arenaRankAvgHelp => 'The rank average is a percentage of your ranking. Lower is better.\n\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.';
 
   @override
   String get arenaRankAverageHelp => 'Your rank average represents your typical finishing position, relative to the total number of players in each tournament.\nThis is a measure of your tournament placement, not your general rating.\n\nFor example, a rank average of 3% means you typically finish in the top 3% (such as 30th place out of 1,000 players).';
@@ -2142,19 +2142,19 @@ class AppLocalizationsId extends AppLocalizations {
   String get preferencesNotifyStreamStart => 'Streamer memulai siaran';
 
   @override
-  String get preferencesNotifyInboxMsg => 'Pesan masuk';
+  String get preferencesNotifyInboxMsg => 'New inbox message';
 
   @override
   String get preferencesNotifyDirectMessage => 'New direct message';
 
   @override
-  String get preferencesNotifyForumMention => 'Komentar forum menyebutkan Anda';
+  String get preferencesNotifyForumMention => 'Forum comment mentions you';
 
   @override
   String get preferencesNotifyForumMentions => 'Forum mentions';
 
   @override
-  String get preferencesNotifyInvitedStudy => 'Undangan studi';
+  String get preferencesNotifyInvitedStudy => 'Study invite';
 
   @override
   String get preferencesNotifyStudyInvites => 'Study invites';
@@ -2166,7 +2166,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get preferencesNotifyChallenge => 'Tantangan';
 
   @override
-  String get preferencesNotifyTournamentSoon => 'Turnamen akan segera dimulai';
+  String get preferencesNotifyTournamentSoon => 'Tournament starting soon';
 
   @override
   String get preferencesNotifyTournamentStartReminders => 'Tournaments start reminders';
@@ -2696,7 +2696,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get puzzleThemeEndgameDescription => 'Sebuah taktik selama fase akhir permainan.';
 
   @override
-  String get puzzleThemeEnPassantDescription => 'Taktik melibatkan aturan \"en passant\", yang mana pion dapat makan pion lawan yang baru saja melangkah 2 petak awal.';
+  String get puzzleThemeEnPassantDescription => 'A tactic involving the en passant rule, where a pawn can capture an opponent pawn that has bypassed it using its initial two-square move.';
 
   @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'A tactic involving the en passant rule, where a pawn can capture an opposing pawn that has just moved next to it with its initial two-square move.';
@@ -2717,7 +2717,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get puzzleThemeFork => 'Fork';
 
   @override
-  String get puzzleThemeForkDescription => 'Sebuah gerakan dimana bidak yang digerakkan menyerang dua bidak lawan secara bersamaan.';
+  String get puzzleThemeForkDescription => 'A move where the moved piece attacks two opponent pieces at once.';
 
   @override
   String get puzzleThemeForkOpposingPiecesDescription => 'A move where a piece attacks two or more opposing pieces simultaneously.';
@@ -2732,7 +2732,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get puzzleThemeHookMate => 'Sekakmat kait';
 
   @override
-  String get puzzleThemeHookMateDescription => 'Skakmat dengan benteng, kuda, dan pion serta satu pion lawan untuk membatasi pergerakan raja lawan.';
+  String get puzzleThemeHookMateDescription => 'Checkmate with a rook, knight, and pawn along with one enemy pawn to limit the enemy king\'s escape.';
 
   @override
   String get puzzleThemeHookMateOpposingPawnDescription => 'Checkmate using a rook, knight, and pawn, where an opposing pawn blocks the king\'s escape.';
@@ -2891,7 +2891,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get puzzleThemePromotion => 'Promosi';
 
   @override
-  String get puzzleThemePromotionDescription => 'Promosi salah satu pion menjadi menteri atau bidak minor lainnya.';
+  String get puzzleThemePromotionDescription => 'Promote one of your pawn to a queen or minor piece.';
 
   @override
   String get puzzleThemePromotePawnToQueenRookOrMinor => 'Promote one of your pawns to a queen, rook or minor piece.';
@@ -3705,7 +3705,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get refreshInboxAfterFiveMinutes => 'Tunggu 5 menit dan refresh kotak masuk Anda.';
 
   @override
-  String get checkSpamFolder => 'Cek juga folder spam Anda, mungkin ada disana. Jika ada, tandai sebagai bukan spam.';
+  String get checkSpamFolder => 'Also check your spam folder, it might end up there. If so, mark it as not spam.';
 
   @override
   String get checkSpamOrJunkFolder => 'If you do not receive a confirmation email, check your Spam or Junk folder. Be sure to indicate messages from lichess.org as safe and \"not spam\", so you can stay informed of important communications.';
@@ -3756,13 +3756,13 @@ class AppLocalizationsId extends AppLocalizations {
   String get cancel => 'Batal';
 
   @override
-  String get whiteTimeOut => 'Putih kehabisan waktu';
+  String get whiteTimeOut => 'White time out';
 
   @override
   String get whiteRanOutOfTime => 'White ran out of time';
 
   @override
-  String get blackTimeOut => 'Hitam kehabisan waktu';
+  String get blackTimeOut => 'Black time out';
 
   @override
   String get blackRanOutOfTime => 'Black ran out of time';
@@ -3974,7 +3974,7 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
-  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Filter rating terkunci karena rating Anda tidak stabil. Memainkan game berperingkat akan meningkatkan stabilitas.';
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
 
   @override
   String get cannotFilterByUnstableRating => 'It is not possible to filter by rating because your rating is not stable.\nPlaying rated games will increase stability.';
@@ -4492,7 +4492,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get reportUsernameHelp => 'Jelaskan kenapa nama pengguna ini menyinggung. Jangan hanya mengatakan \"menyinggung/tidak pantas\", tapi katakan mengapa berkesimpulan seperti itu, khususnya apabila umpatan tersebut terselubung, bukan dalam bahasa inggris, slang, ataupun referensi sejarah/budaya.';
 
   @override
-  String get reportProcessedFasterInEnglish => 'Laporan Anda akan diproses lebih cepat jika ditulis dalam bahasa Inggris.';
+  String get reportProcessedFasterInEnglish => 'Your report will be processed faster if written in English.';
 
   @override
   String get processReportFasterInEnglish => 'We can process your report faster if you write in English.';
@@ -4863,7 +4863,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get create => 'Buat baru';
 
   @override
-  String get whenCreateSimul => 'Ketika anda membuat Simultan, anda akan bertemu banyak lawan dalam satu saat.';
+  String get whenCreateSimul => 'When you create a simul, you get to play several players at once.';
 
   @override
   String get creatingASimul => 'Creating a simul lets you play against multiple opponents at the same time.';
@@ -4878,7 +4878,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get simulAddExtraTime => 'Anda bisa menambah waktu pada jam anda untuk membantu simultan anda';
 
   @override
-  String get simulHostExtraTime => 'Penyedia waktu tambahan';
+  String get simulHostExtraTime => 'Host extra initial clock time';
 
   @override
   String get extraClockTimeForHost => 'Extra clock time for the host:';
@@ -5445,7 +5445,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get showUnreadLichessMessage => 'Anda telah menerima pesan pribadi dari Lichess.';
 
   @override
-  String get clickHereToReadIt => 'Klik di sini untuk membaca';
+  String get clickHereToReadIt => 'Click here to read it';
 
   @override
   String get readTheMessage => 'Read the message';
@@ -5758,7 +5758,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get onlyTeamMembers => 'Hanya anggota tim';
 
   @override
-  String get navigateMoveTree => 'Navigasi gerakan partai';
+  String get navigateMoveTree => 'Navigate the move tree';
 
   @override
   String get moveListNavigation => 'Move list navigation';
@@ -5921,7 +5921,8 @@ class AppLocalizationsId extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count blunder',
+      other: '$count blunders',
+      one: '$count blunder',
     );
     return '$_temp0';
   }
@@ -5941,7 +5942,8 @@ class AppLocalizationsId extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count kesalahan',
+      other: '$count mistakes',
+      one: '$count mistake',
     );
     return '$_temp0';
   }
@@ -5961,7 +5963,8 @@ class AppLocalizationsId extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count ketidaktepatan',
+      other: '$count inaccuracies',
+      one: '$count inaccuracy',
     );
     return '$_temp0';
   }
@@ -6691,7 +6694,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get studyCurrentChapterUrl => 'URL Bab saat ini';
 
   @override
-  String get studyYouCanPasteThisInTheForumToEmbed => 'Anda dapat menempelkan ini di forum untuk disematkan';
+  String get studyYouCanPasteThisInTheForumToEmbed => 'You can paste this in the forum or your Lichess blog to embed';
 
   @override
   String get studyPasteToEmbedChapterInForumOrBlog => 'You can paste this in the forum or your Lichess blog to embed the chapter.';
@@ -7149,6 +7152,9 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get teamTeam => 'Tim';
+
+  @override
+  String get teamTeamUpdates => 'Team updates';
 
   @override
   String get teamIncorrectEntryCode => 'Kode masuk salah.';
