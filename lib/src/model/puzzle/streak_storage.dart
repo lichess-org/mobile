@@ -8,21 +8,20 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_streak.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Provider for the streak storage for a given user.
-final streakStorageProvider = Provider.autoDispose.family<StreakStorage, UserId?>((
-  Ref ref,
-  UserId? userId,
-) {
+///
+/// Not auto-disposed, so that a run can still be saved once the streak screen has been left.
+final streakStorageProvider = Provider.family<StreakStorage, UserId?>((Ref ref, UserId? userId) {
   return StreakStorage(ref, userId);
 });
 
-/// Fetches the current streak score from the local storage if available, returns null otherwise.
+/// Fetches the score of the run in progress from the local storage if any, returns null otherwise.
 final savedStreakScoreProvider = FutureProvider.autoDispose<int?>((Ref ref) async {
   final authUser = ref.watch(authControllerProvider);
   // cannot use ref.watch because it would create a circular dependency
   // as we invalidate this provider in the storage saveActiveStreak and clearActiveStreak methods
   final streakStorage = ref.read(streakStorageProvider(authUser?.user.id));
   final streak = await streakStorage.loadActiveStreak();
-  return streak?.index;
+  return streak == null || streak.finished ? null : streak.index;
 });
 
 /// Local storage for the current puzzle streak.

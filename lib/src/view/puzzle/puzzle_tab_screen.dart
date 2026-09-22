@@ -251,6 +251,9 @@ class const _PuzzleMenu() extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isOnline = ref.watch(isDeviceOnlineProvider);
     final authUser = ref.watch(authControllerProvider);
+    final savedStreakScore = ref.watch(savedStreakScoreProvider).value;
+    // A saved streak goes on offline, a new one needs the network.
+    final canPlayStreak = isOnline || savedStreakScore != null;
 
     return ListSection(
       hasLeading: true,
@@ -264,19 +267,16 @@ class const _PuzzleMenu() extends ConsumerWidget {
           },
         ),
         _PuzzleMenuListTile(
-          enabled: isOnline,
+          enabled: canPlayStreak,
           icon: LichessIcons.streak,
           title: 'Puzzle Streak',
-          badgeLabel: switch (ref.watch(savedStreakScoreProvider)) {
-            AsyncData(:final value?) => value.toString(),
-            _ => null,
-          },
+          badgeLabel: savedStreakScore?.toString(),
           subtitle:
               context.l10n.puzzleStreakDescription.characters
                   .takeWhile((c) => c != '.')
                   .toString() +
               (context.l10n.puzzleStreakDescription.contains('.') ? '.' : ''),
-          onTap: isOnline
+          onTap: canPlayStreak
               ? () {
                   Navigator.of(context, rootNavigator: true).push(StreakScreen.buildRoute());
                 }

@@ -59,6 +59,10 @@ void main() {
         isFalse,
       );
     });
+
+    test('does not retry a streak prefetch (GET /api/puzzle/many)', () {
+      expect(shouldRetryOn429(response(429, path: '/api/puzzle/many')), isFalse);
+    });
   });
 
   group('LichessClient', () {

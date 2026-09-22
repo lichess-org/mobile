@@ -65,6 +65,16 @@ class PuzzleRepository(final LichessClient client) {
     return client.readJson(Uri(path: '/api/puzzle/$id'), mapper: _puzzleFromJson);
   }
 
+  /// Fetches puzzles by id. The server serves at most 50 ids per request and silently drops the ids
+  /// it cannot serve, so the result may be shorter than [ids].
+  Future<IList<Puzzle>> fetchMany(IList<PuzzleId> ids) async {
+    final response = await client.readJson(
+      Uri(path: '/api/puzzle/many', queryParameters: {'ids': ids.join(',')}),
+      mapper: _decodeBatchResponse,
+    );
+    return response.puzzles;
+  }
+
   Future<PuzzleStreakResponse> streak() {
     return client.readJson(
       Uri(path: '/api/streak'),

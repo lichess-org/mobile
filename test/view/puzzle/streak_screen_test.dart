@@ -1,12 +1,18 @@
+import 'dart:convert';
+
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
+import 'package:lichess_mobile/src/model/auth/auth_user.dart';
+import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/puzzle/streak_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:material_ui/material_ui.dart';
 
+import '../../model/auth/fake_auth_storage.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 
@@ -215,6 +221,191 @@ void main() {
 
       //now, the text should say 'Your turn'.
       expect(find.text('Your turn'), findsOneWidget);
+    });
+
+    testWidgets('solved puzzles can be played again without affecting the run', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: Builder(
+          builder: (context) => Scaffold(
+            appBar: AppBar(title: const Text('Test Streak Screen')),
+            body: FilledButton(
+              child: const Text('Start Streak'),
+              onPressed: () => Navigator.of(
+                context,
+                rootNavigator: true,
+              ).push(buildScreenRoute<void>(screen: const StreakScreen())),
+            ),
+          ),
+        ),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.tap(find.text('Start Streak'));
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      final previousButton = find.widgetWithText(BottomBarButton, 'Previous puzzle');
+      final nextButton = find.widgetWithText(BottomBarButton, 'Next puzzle');
+      expect(tester.widget<BottomBarButton>(previousButton).onTap, isNull);
+      expect(tester.widget<BottomBarButton>(nextButton).onTap, isNull);
+
+      await playMove(tester, 'e5', 'e1', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      await playMove(tester, 'f6', 'f4', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      await playMove(tester, 'f4', 'f2', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+      expect(find.textContaining('1058'), findsOneWidget);
+
+      // Back to the solved puzzle, where a wrong move does not end the run.
+      await tester.tap(previousButton);
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+      expect(find.textContaining('1012'), findsOneWidget);
+      await playMove(tester, 'e5', 'e1', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      await playMove(tester, 'f6', 'f7', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+      expect(find.text('Puzzle complete!'), findsOneWidget);
+      expect(find.text('GAME OVER'), findsNothing);
+
+      // The back button leads back to the current puzzle, which is still to be played.
+      await tester.pageBack();
+      await tester.pumpAndSettle();
+      expect(find.text('Yes'), findsNothing);
+      expect(find.textContaining('1058'), findsOneWidget);
+      expect(find.text('Your turn'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'1$')), findsOneWidget);
+
+      // So does the next button.
+      await tester.tap(previousButton);
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+      await tester.tap(nextButton);
+      await tester.pumpAndSettle();
+      expect(find.textContaining('1058'), findsOneWidget);
+
+      await playMove(tester, 'e6', 'c8', orientation: Side.white);
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      await playMove(tester, 'f7', 'e8', orientation: Side.white);
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      await playMove(tester, 'c8', 'e8', orientation: Side.white);
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+      expect(find.textContaining(RegExp(r'2$')), findsOneWidget);
+    });
+
+    group('offline', () {
+      /// Whether the device is online, as seen by the app and by [offlineClient].
+      late ValueNotifier<bool> online;
+
+      /// The requests [offlineClient] has served.
+      late List<http.BaseRequest> requests;
+
+      setUp(() {
+        online = ValueNotifier(true);
+        requests = [];
+      });
+
+      /// Serves [client], plus `/api/puzzle/many` if [prefetch] is true, and fails while offline.
+      MockClient offlineClient({bool prefetch = true}) => MockClient((request) async {
+        if (!online.value) throw http.ClientException('offline', request.url);
+        requests.add(request);
+        final url = request.url;
+        if (url.path.startsWith('/api/streak/')) return http.Response('{}', 200);
+        if (url.path == '/api/puzzle/many' && prefetch) {
+          final responses = await Future.wait([
+            for (final id in url.queryParameters['ids']!.split(','))
+              client.get(url.replace(path: '/api/puzzle/$id', query: '')),
+          ]);
+          final puzzles = [
+            for (final r in responses)
+              if (r.statusCode == 200) jsonDecode(r.body),
+          ];
+          return http.Response(jsonEncode({'puzzles': puzzles}), 200);
+        }
+        return await client.get(url);
+      });
+
+      Future<Widget> makeApp(WidgetTester tester, MockClient client, {AuthUser? authUser}) {
+        return makeTestProviderScopeApp(
+          tester,
+          home: const StreakScreen(),
+          authUser: authUser,
+          overrides: {
+            lichessClientProvider: lichessClientProvider.overrideWith(
+              (ref) => LichessClient(client, ref),
+            ),
+            isDeviceOnlineProvider: isDeviceOnlineProvider.overrideWith((ref) {
+              void listener() => ref.invalidateSelf();
+              online.addListener(listener);
+              ref.onDispose(() => online.removeListener(listener));
+              return online.value;
+            }),
+          },
+        );
+      }
+
+      Future<void> solveFirstPuzzle(WidgetTester tester) async {
+        await playMove(tester, 'e5', 'e1', orientation: Side.black);
+        await tester.pumpAndSettle(const Duration(milliseconds: 500));
+        await playMove(tester, 'f6', 'f4', orientation: Side.black);
+        await tester.pumpAndSettle(const Duration(milliseconds: 500));
+        await playMove(tester, 'f4', 'f2', orientation: Side.black);
+        await tester.pumpAndSettle(const Duration(seconds: 1));
+      }
+
+      testWidgets('plays on from the prefetched puzzles', (tester) async {
+        await tester.pumpWidget(await makeApp(tester, offlineClient()));
+        await tester.pumpAndSettle(const Duration(seconds: 2));
+
+        final prefetches = requests.where((r) => r.url.path == '/api/puzzle/many');
+        expect(prefetches.single.url.queryParameters['ids'], startsWith('4CZxz,kcN3a,1I9Ly,'));
+
+        online.value = false;
+        await solveFirstPuzzle(tester);
+
+        expect(find.textContaining(RegExp(r'1$')), findsOneWidget);
+        expect(find.text('Your turn'), findsOneWidget);
+      });
+
+      testWidgets('a solve counts when the next puzzle is not stored, and the run resumes online', (
+        tester,
+      ) async {
+        await tester.pumpWidget(await makeApp(tester, offlineClient(prefetch: false)));
+        await tester.pumpAndSettle(const Duration(seconds: 2));
+
+        online.value = false;
+        await solveFirstPuzzle(tester);
+
+        expect(find.textContaining("You're offline"), findsOneWidget);
+
+        online.value = true;
+        await tester.pumpAndSettle(const Duration(seconds: 2));
+
+        expect(find.textContaining(RegExp(r'1$')), findsOneWidget);
+        expect(find.text('Your turn'), findsOneWidget);
+      });
+
+      testWidgets('the score of a run lost offline is posted with the next run', (tester) async {
+        await tester.pumpWidget(await makeApp(tester, offlineClient(), authUser: fakeAuthUser));
+        await tester.pumpAndSettle(const Duration(seconds: 2));
+        await solveFirstPuzzle(tester);
+
+        online.value = false;
+        await playMove(tester, 'e6', 'e7', orientation: Side.white);
+        await tester.pumpAndSettle(const Duration(seconds: 2));
+        expect(find.text('GAME OVER'), findsOneWidget);
+
+        online.value = true;
+        await tester.tap(findByTooltip('New streak'));
+        await tester.pumpAndSettle(const Duration(seconds: 2));
+
+        final posts = requests.where((r) => r.method == 'POST').map((r) => r.url.path);
+        expect(posts, ['/api/streak/1']);
+        expect(find.textContaining(RegExp(r'0$')), findsOneWidget);
+      });
     });
   });
 }

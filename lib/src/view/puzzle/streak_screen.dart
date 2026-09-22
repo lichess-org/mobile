@@ -3,7 +3,6 @@ import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
@@ -13,6 +12,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_streak.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_streak_controller.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -28,6 +28,7 @@ import 'package:lichess_mobile/src/view/puzzle/puzzle_feedback_widget.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/board.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
@@ -56,10 +57,21 @@ class const _Load() extends ConsumerWidget {
     final authUser = ref.watch(authControllerProvider);
     final streak = ref.watch(puzzleStreakControllerProvider);
 
+    // A streak that could not be loaded offline resumes once back online.
+    ref.listen(isDeviceOnlineProvider, (wasOnline, isOnline) {
+      if (wasOnline == false && isOnline && ref.read(puzzleStreakControllerProvider).hasError) {
+        ref.invalidate(puzzleStreakControllerProvider);
+      }
+    });
+
     switch (streak) {
       case AsyncValue(:final error?, :final stackTrace):
         debugPrint('SEVERE: [StreakScreen] could not load streak; $error\n$stackTrace');
-        return PuzzleErrorBoardWidget(errorMessage: error.toString());
+        return PuzzleErrorBoardWidget(
+          errorMessage: ref.watch(isDeviceOnlineProvider)
+              ? error.toString()
+              : "You're offline. Your streak will resume once you're back online.",
+        );
       case AsyncValue(:final value?):
         return _Body(
           initialPuzzleContext: PuzzleContext(
@@ -88,6 +100,12 @@ class _BodyState() extends ConsumerState<_Body> {
   final _boardKey = GlobalKey(debugLabel: 'boardOnPuzzleStreakScreen');
   late final ChessboardController _controller;
 
+  /// A solved puzzle of the run, shown in place of the current one to be played again. It has its
+  /// own controller, so that the current puzzle keeps its state.
+  ({int index, PuzzleContext context})? _review;
+
+  PuzzleContext get _displayedContext => _review?.context ?? widget.initialPuzzleContext;
+
   @override
   void initState() {
     super.initState();
@@ -100,6 +118,7 @@ class _BodyState() extends ConsumerState<_Body> {
     // The streak feeds new puzzles by swapping the puzzle context (and thus the
     // controller provider), so push the new puzzle onto the board.
     if (oldWidget.initialPuzzleContext != widget.initialPuzzleContext) {
+      _review = null;
       _applyBoardUpdate();
     }
   }
@@ -121,7 +140,7 @@ class _BodyState() extends ConsumerState<_Body> {
   }
 
   GameData _buildGameData() {
-    final state = ref.read(puzzleControllerProvider(widget.initialPuzzleContext));
+    final state = ref.read(puzzleControllerProvider(_displayedContext));
     final boardPreferences = ref.read(boardPreferencesProvider);
     return buildGameData(
       fen: state.currentPosition.fen,
@@ -139,11 +158,46 @@ class _BodyState() extends ConsumerState<_Body> {
     _controller.updatePosition(_buildGameData());
   }
 
+  /// Shows the puzzle at [index] of the run: the current one, or a solved one to be played again.
+  Future<void> _showPuzzle(int index) async {
+    ({int index, PuzzleContext context})? review;
+    if (index < widget.streak.index) {
+      try {
+        final puzzle = await ref
+            .read(puzzleStreakControllerProvider.notifier)
+            .loadPuzzle(widget.streak.streak[index]);
+        review = (
+          index: index,
+          // A streak puzzle is not reported to the server, and without a user id the controller
+          // does not refresh the rating on every load.
+          context: PuzzleContext(
+            puzzle: puzzle,
+            angle: widget.initialPuzzleContext.angle,
+            userId: null,
+            isPuzzleStreak: true,
+          ),
+        );
+      } catch (e) {
+        if (mounted) showSnackBar(context, 'Could not load the puzzle', type: SnackBarType.error);
+        return;
+      }
+    }
+    if (!mounted) return;
+    _controller.clearDrawnShapes();
+    setState(() {
+      _review = review;
+    });
+    _applyBoardUpdate();
+  }
+
   @override
   Widget build(BuildContext context) {
     final boardPreferences = ref.watch(boardPreferencesProvider);
-    final ctrlProvider = puzzleControllerProvider(widget.initialPuzzleContext);
+    // The current puzzle drives the streak, the displayed one the board.
+    final liveProvider = puzzleControllerProvider(widget.initialPuzzleContext);
+    final ctrlProvider = puzzleControllerProvider(_displayedContext);
     final puzzleState = ref.watch(ctrlProvider);
+    final displayedIndex = _review?.index ?? widget.streak.index;
 
     // fix for #1951 : when failing the first puzzle, need to do
     // an explicit check when restarting, or else the puzzle will be in a bugged state
@@ -154,7 +208,7 @@ class _BodyState() extends ConsumerState<_Body> {
           _controller.clearDrawnShapes();
           final authUser = ref.read(authControllerProvider);
           ref
-              .read(ctrlProvider.notifier)
+              .read(liveProvider.notifier)
               .onLoadPuzzle(
                 PuzzleContext(
                   puzzle: next.requireValue.puzzle,
@@ -166,7 +220,7 @@ class _BodyState() extends ConsumerState<_Body> {
       }
     });
 
-    ref.listen(ctrlProvider, (previous, next) {
+    ref.listen(liveProvider, (previous, next) {
       if (previous?.result != PuzzleResult.lose && next.result == PuzzleResult.lose) {
         ref.read(puzzleStreakControllerProvider.notifier).gameOver();
       } else if (previous?.result != PuzzleResult.win && next.result == PuzzleResult.win) {
@@ -187,9 +241,13 @@ class _BodyState() extends ConsumerState<_Body> {
     );
 
     final content = PopScope(
-      canPop: widget.streak.index == 0 || widget.streak.finished,
+      canPop: _review == null && (widget.streak.index == 0 || widget.streak.finished),
       onPopInvokedWithResult: (bool didPop, _) async {
         if (didPop) {
+          return;
+        }
+        if (_review != null) {
+          _showPuzzle(widget.streak.index);
           return;
         }
         final NavigatorState navigator = Navigator.of(context);
@@ -270,7 +328,7 @@ class _BodyState() extends ConsumerState<_Body> {
                                             child: PuzzleFeedbackWidget(
                                               puzzle: puzzleState.puzzle,
                                               state: puzzleState,
-                                              onStreak: true,
+                                              onStreak: _review == null,
                                             ),
                                           ),
                                           Text(
@@ -337,8 +395,10 @@ class _BodyState() extends ConsumerState<_Body> {
                                       ),
                                     ),
                                     _BottomBar(
-                                      initialPuzzleContext: widget.initialPuzzleContext,
+                                      puzzleContext: _displayedContext,
                                       streak: widget.streak,
+                                      displayedIndex: displayedIndex,
+                                      onShowPuzzle: _showPuzzle,
                                     ),
                                   ],
                                 ),
@@ -367,7 +427,7 @@ class _BodyState() extends ConsumerState<_Body> {
                                     child: PuzzleFeedbackWidget(
                                       puzzle: puzzleState.puzzle,
                                       state: puzzleState,
-                                      onStreak: true,
+                                      onStreak: _review == null,
                                     ),
                                   ),
                                 ),
@@ -438,8 +498,10 @@ class _BodyState() extends ConsumerState<_Body> {
                               ),
                             ),
                             _BottomBar(
-                              initialPuzzleContext: widget.initialPuzzleContext,
+                              puzzleContext: _displayedContext,
                               streak: widget.streak,
+                              displayedIndex: displayedIndex,
+                              onShowPuzzle: _showPuzzle,
                             ),
                           ],
                         );
@@ -466,24 +528,26 @@ class _BodyState() extends ConsumerState<_Body> {
 }
 
 class const _BottomBar({
-  required final PuzzleContext initialPuzzleContext,
+  required final PuzzleContext puzzleContext,
   required final PuzzleStreak streak,
+  required final int displayedIndex,
+  required final ValueChanged<int> onShowPuzzle,
 }) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = puzzleControllerProvider(initialPuzzleContext);
+    final ctrlProvider = puzzleControllerProvider(puzzleContext);
     final puzzleState = ref.watch(ctrlProvider);
+    final isReviewing = displayedIndex < streak.index;
 
     return BottomBar(
       children: [
-        if (!streak.finished)
+        if (!streak.finished && !isReviewing) ...[
           BottomBarButton(
             icon: Icons.info_outline,
             label: context.l10n.aboutX('Streak'),
             showLabel: true,
             onTap: () => _streakInfoDialogBuilder(context),
           ),
-        if (!streak.finished)
           BottomBarButton(
             icon: Icons.skip_next,
             label: context.l10n.skipThisMove,
@@ -495,7 +559,7 @@ class const _BottomBar({
                     ref.read(puzzleStreakControllerProvider.notifier).skipMove();
                   },
           ),
-        if (streak.finished)
+        ] else ...[
           BottomBarButton(
             onTap: () {
               launchShareDialog(
@@ -508,46 +572,39 @@ class const _BottomBar({
             label: 'Share this puzzle',
             icon: Theme.of(context).platform == TargetPlatform.iOS ? Icons.ios_share : Icons.share,
           ),
-        if (streak.finished)
           BottomBarButton(
             onTap: () {
               Navigator.of(context, rootNavigator: true).push(
                 AnalysisScreen.buildRoute(
-                  AnalysisOptions.pgn(
-                    id: puzzleState.puzzle.puzzle.id,
-                    orientation: puzzleState.pov,
-                    pgn: ref.read(ctrlProvider.notifier).makePgn(),
-                    isComputerAnalysisAllowed: true,
-                    variant: Variant.standard,
-                    initialMoveCursor: 0,
-                  ),
+                  puzzleState.makeAnalysisOptions(ref.read(ctrlProvider.notifier).makePgn),
                 ),
               );
             },
             label: context.l10n.analysis,
             icon: Icons.biotech,
           ),
-        if (streak.finished)
-          BottomBarButton(
-            onTap: puzzleState.canGoBack
-                ? () => ref.read(ctrlProvider.notifier).userPrevious()
-                : null,
-            label: 'Previous',
-            icon: CupertinoIcons.chevron_back,
-          ),
-        if (streak.finished)
-          BottomBarButton(
-            onTap: puzzleState.canGoNext ? () => ref.read(ctrlProvider.notifier).userNext() : null,
-            label: context.l10n.next,
-            icon: CupertinoIcons.chevron_forward,
-          ),
+        ],
+        // Walk the solved puzzles of the run, the last one leading back to the current puzzle.
+        BottomBarButton(
+          onTap: displayedIndex > 0 ? () => onShowPuzzle(displayedIndex - 1) : null,
+          label: 'Previous puzzle',
+          showLabel: true,
+          icon: CupertinoIcons.chevron_back,
+        ),
+        BottomBarButton(
+          onTap: isReviewing ? () => onShowPuzzle(displayedIndex + 1) : null,
+          label: context.l10n.puzzleNextPuzzle,
+          showLabel: true,
+          icon: CupertinoIcons.chevron_forward,
+        ),
         if (streak.finished)
           BottomBarButton(
             onTap: ref.read(puzzleStreakControllerProvider).isLoading == false
-                ? () => ref.invalidate(puzzleStreakControllerProvider)
+                ? () => ref.read(puzzleStreakControllerProvider.notifier).newStreak()
                 : null,
             highlighted: true,
             label: context.l10n.puzzleNewStreak,
+            showLabel: true,
             icon: Icons.refresh,
           ),
       ],
