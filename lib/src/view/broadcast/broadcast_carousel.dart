@@ -41,12 +41,9 @@ const BroadcastList _emptyBroadcasts = (
 );
 
 class BroadcastCarousel extends StatefulWidget {
-  const BroadcastCarousel({required this.broadcasts, required this.worker, super.key})
-    : _isLoading = false;
+  const new({required this.broadcasts, required this.worker, super.key}) : _isLoading = false;
 
-  const BroadcastCarousel.loading({required this.worker})
-    : _isLoading = true,
-      broadcasts = _emptyBroadcasts;
+  const new loading({required this.worker}) : _isLoading = true, broadcasts = _emptyBroadcasts;
 
   final BroadcastList broadcasts;
   final ImageColorWorker worker;
@@ -67,7 +64,7 @@ class BroadcastCarousel extends StatefulWidget {
   State<BroadcastCarousel> createState() => _BroadcastCarouselState();
 }
 
-class _BroadcastCarouselState extends State<BroadcastCarousel> {
+class _BroadcastCarouselState() extends State<BroadcastCarousel> {
   final _controller = CarouselController();
 
   @override
@@ -137,18 +134,13 @@ class _BroadcastCarouselState extends State<BroadcastCarousel> {
 }
 
 class BroadcastCarouselItem extends ConsumerStatefulWidget {
-  const BroadcastCarouselItem({
-    required this.broadcast,
-    required this.flexWeights,
-    required this.worker,
-    super.key,
-  });
+  const new({required this.broadcast, required this.flexWeights, required this.worker, super.key});
 
   final Broadcast broadcast;
   final ImageColorWorker worker;
   final List<int> flexWeights;
 
-  const BroadcastCarouselItem.loading({required this.worker, required this.flexWeights})
+  const new loading({required this.worker, required this.flexWeights})
     : broadcast = const Broadcast(
         tour: BroadcastTournamentData(
           id: BroadcastTournamentId(''),
@@ -184,7 +176,7 @@ class BroadcastCarouselItem extends ConsumerStatefulWidget {
   ConsumerState<BroadcastCarouselItem> createState() => _BroadcastCarouselItemState();
 }
 
-class _BroadcastCarouselItemState extends ConsumerState<BroadcastCarouselItem> {
+class _BroadcastCarouselItemState() extends ConsumerState<BroadcastCarouselItem> {
   _CardColors? _cardColors;
   bool _tapDown = false;
 
@@ -303,12 +295,10 @@ final Map<String, _CardColors?> _colorsCache = {};
 
 final _dateFormat = DateFormat.MMMd().add_jm();
 
-class _BroadcastCardContent extends StatelessWidget {
-  const _BroadcastCardContent({required this.broadcast, required this._cardColors});
-
-  final Broadcast broadcast;
-  final _CardColors? _cardColors;
-
+class const _BroadcastCardContent({
+  required final Broadcast broadcast,
+  required final _CardColors? _cardColors,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String? eventDate;

@@ -17,25 +17,18 @@ const kGameCarouselFlexWeights = [6, 2];
 const kGameCarouselPadding = EdgeInsets.symmetric(horizontal: 8.0);
 
 /// A widget that displays a carousel of games.
-class GamesCarousel<T> extends StatefulWidget {
-  const GamesCarousel({
-    required this.list,
-    required this.builder,
-    required this.onTap,
-    required this.moreScreenRouteBuilder,
-    required this.maxGamesToShow,
-  });
-  final IList<T> list;
-  final Widget Function(T data) builder;
-  final void Function(int index)? onTap;
-  final Route<dynamic> Function(BuildContext) moreScreenRouteBuilder;
-  final int maxGamesToShow;
-
+class const GamesCarousel<T>({
+  required final IList<T> list,
+  required final Widget Function(T data) builder,
+  required final void Function(int index)? onTap,
+  required final Route<dynamic> Function(BuildContext) moreScreenRouteBuilder,
+  required final int maxGamesToShow,
+}) extends StatefulWidget {
   @override
   State<GamesCarousel<T>> createState() => _GamesCarouselState<T>();
 }
 
-class _GamesCarouselState<T> extends State<GamesCarousel<T>> {
+class _GamesCarouselState<T>() extends State<GamesCarousel<T>> {
   final _controller = CarouselController();
 
   @override
@@ -105,11 +98,7 @@ class _GamesCarouselState<T> extends State<GamesCarousel<T>> {
 /// A widget that displays an ongoing game carousel item.
 ///
 /// Typically used in a [GamesCarousel].
-class OngoingGameCarouselItem extends StatelessWidget {
-  const OngoingGameCarouselItem({required this.game});
-
-  final OngoingGame game;
-
+class const OngoingGameCarouselItem({required final OngoingGame game}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final timeLeft = game.secondsLeft != null
@@ -164,29 +153,20 @@ class OngoingGameCarouselItem extends StatelessWidget {
   }
 }
 
-class _BoardCarouselItem extends ConsumerWidget {
-  const _BoardCarouselItem({
-    required this.orientation,
-    required this.fen,
-    required this.description,
-    this.lastMove,
-    this.isRealTimeGame = false,
-  });
-
+class const _BoardCarouselItem({
   /// Side by which the board is oriented.
-  final Side orientation;
+  required final Side orientation,
 
   /// FEN string describing the position of the board.
-  final String fen;
+  required final String fen,
+  required final Widget description,
 
   /// Last move played, used to highlight corresponding squares.
-  final Move? lastMove;
-
-  final Widget description;
+  final Move? lastMove,
 
   /// Whether the game is a real-time game, so it will be highlighted differently.
-  final bool isRealTimeGame;
-
+  final bool isRealTimeGame = false,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final boardPrefs = ref.watch(boardPreferencesProvider);

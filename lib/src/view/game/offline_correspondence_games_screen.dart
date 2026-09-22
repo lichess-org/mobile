@@ -10,9 +10,7 @@ import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
 
-class OfflineCorrespondenceGamesScreen extends ConsumerWidget {
-  const OfflineCorrespondenceGamesScreen({super.key});
-
+class const OfflineCorrespondenceGamesScreen({super.key}) extends ConsumerWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const OfflineCorrespondenceGamesScreen());
   }
@@ -32,8 +30,7 @@ class OfflineCorrespondenceGamesScreen extends ConsumerWidget {
   }
 }
 
-class _Body extends ConsumerWidget {
-  const _Body();
+class const _Body() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final offlineGames = ref.watch(offlineOngoingCorrespondenceGamesProvider);
@@ -51,14 +48,11 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class OfflineCorrespondenceGamePreview extends ConsumerWidget {
-  const OfflineCorrespondenceGamePreview({
-    required this.game,
-    required this.lastModified,
-    super.key,
-  });
-  final DateTime lastModified;
-  final OfflineCorrespondenceGame game;
+class const OfflineCorrespondenceGamePreview({
+  required final OfflineCorrespondenceGame game,
+  required final DateTime lastModified,
+  super.key,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SmallBoardPreview(

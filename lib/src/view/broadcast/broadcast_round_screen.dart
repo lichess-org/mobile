@@ -27,7 +27,7 @@ import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_ui/material_ui.dart';
 
-enum BroadcastRoundTab {
+enum BroadcastRoundTab() {
   overview,
   boards,
   players,
@@ -44,7 +44,7 @@ enum BroadcastRoundTab {
   }
 }
 
-enum _BroadcastGameFilter {
+enum _BroadcastGameFilter() {
   all,
   ongoing;
 
@@ -58,18 +58,12 @@ enum _BroadcastGameFilter {
   }
 }
 
-class BroadcastRoundScreenLoading extends ConsumerWidget {
-  final BroadcastRoundId roundId;
-  final BroadcastRoundTab? initialTab;
-  final String? teamFilter;
-
-  const BroadcastRoundScreenLoading({
-    super.key,
-    required this.roundId,
-    this.initialTab,
-    this.teamFilter,
-  });
-
+class const BroadcastRoundScreenLoading({
+  super.key,
+  required final BroadcastRoundId roundId,
+  final BroadcastRoundTab? initialTab,
+  final String? teamFilter,
+}) extends ConsumerWidget {
   static Route<dynamic> buildRoute(
     BroadcastRoundId roundId, {
     BroadcastRoundTab? initialTab,
@@ -111,13 +105,11 @@ class BroadcastRoundScreenLoading extends ConsumerWidget {
   }
 }
 
-class BroadcastRoundScreen extends ConsumerStatefulWidget {
-  final Broadcast broadcast;
-  final BroadcastRoundTab? initialTab;
-  final String? teamFilter;
-
-  const BroadcastRoundScreen({required this.broadcast, this.initialTab, this.teamFilter});
-
+class const BroadcastRoundScreen({
+  required final Broadcast broadcast,
+  final BroadcastRoundTab? initialTab,
+  final String? teamFilter,
+}) extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute(Broadcast broadcast, {BroadcastRoundTab? initialTab}) {
     return buildScreenRoute(
       screen: BroadcastRoundScreen(broadcast: broadcast, initialTab: initialTab),
@@ -128,7 +120,8 @@ class BroadcastRoundScreen extends ConsumerStatefulWidget {
   _BroadcastRoundScreenState createState() => _BroadcastRoundScreenState();
 }
 
-class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
+class _BroadcastRoundScreenState()
+    extends ConsumerState<BroadcastRoundScreen>
     with SingleTickerProviderStateMixin {
   late final TabController _tabController;
   late BroadcastTournamentId _selectedTournamentId;
@@ -383,19 +376,12 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
   }
 }
 
-class _BottomBar extends ConsumerWidget {
-  const _BottomBar({
-    required this.tournament,
-    required this.roundId,
-    required this.setTournamentId,
-    required this.setRoundId,
-  });
-
-  final BroadcastTournament tournament;
-  final BroadcastRoundId roundId;
-  final void Function(BroadcastTournamentId) setTournamentId;
-  final void Function(BroadcastRoundId) setRoundId;
-
+class const _BottomBar({
+  required final BroadcastTournament tournament,
+  required final BroadcastRoundId roundId,
+  required final void Function(BroadcastTournamentId) setTournamentId,
+  required final void Function(BroadcastRoundId) setRoundId,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return BottomBar(
@@ -474,19 +460,12 @@ class _BottomBar extends ConsumerWidget {
   }
 }
 
-class _RoundSelectorMenu extends ConsumerStatefulWidget {
-  const _RoundSelectorMenu({
-    required this.selectedRoundId,
-    required this.rounds,
-    required this.scrollController,
-    required this.setRoundId,
-  });
-
-  final BroadcastRoundId selectedRoundId;
-  final IList<BroadcastRound> rounds;
-  final ScrollController scrollController;
-  final void Function(BroadcastRoundId) setRoundId;
-
+class const _RoundSelectorMenu({
+  required final BroadcastRoundId selectedRoundId,
+  required final IList<BroadcastRound> rounds,
+  required final ScrollController scrollController,
+  required final void Function(BroadcastRoundId) setRoundId,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_RoundSelectorMenu> createState() => _RoundSelectorState();
 }
@@ -494,7 +473,7 @@ class _RoundSelectorMenu extends ConsumerStatefulWidget {
 final _dateFormatMonth = DateFormat.MMMd().add_jm();
 final _dateFormatYearMonth = DateFormat.yMMMd().add_jm();
 
-class _RoundSelectorState extends ConsumerState<_RoundSelectorMenu> {
+class _RoundSelectorState() extends ConsumerState<_RoundSelectorMenu> {
   final currentRoundKey = GlobalKey();
 
   @override
@@ -539,24 +518,17 @@ class _RoundSelectorState extends ConsumerState<_RoundSelectorMenu> {
   }
 }
 
-class _TournamentSelectorMenu extends ConsumerStatefulWidget {
-  const _TournamentSelectorMenu({
-    required this.tournament,
-    required this.group,
-    required this.scrollController,
-    required this.setTournamentId,
-  });
-
-  final BroadcastTournament tournament;
-  final IList<BroadcastTournamentGroup> group;
-  final ScrollController scrollController;
-  final void Function(BroadcastTournamentId) setTournamentId;
-
+class const _TournamentSelectorMenu({
+  required final BroadcastTournament tournament,
+  required final IList<BroadcastTournamentGroup> group,
+  required final ScrollController scrollController,
+  required final void Function(BroadcastTournamentId) setTournamentId,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_TournamentSelectorMenu> createState() => _TournamentSelectorState();
 }
 
-class _TournamentSelectorState extends ConsumerState<_TournamentSelectorMenu> {
+class _TournamentSelectorState() extends ConsumerState<_TournamentSelectorMenu> {
   final currentTournamentKey = GlobalKey();
 
   @override
@@ -591,15 +563,13 @@ class _TournamentSelectorState extends ConsumerState<_TournamentSelectorMenu> {
   }
 }
 
-class _BroadcastSettingsBottomSheet extends ConsumerStatefulWidget {
-  const _BroadcastSettingsBottomSheet();
-
+class const _BroadcastSettingsBottomSheet() extends ConsumerStatefulWidget {
   @override
   ConsumerState<_BroadcastSettingsBottomSheet> createState() =>
       _BroadcastSettingsBottomSheetState();
 }
 
-class _BroadcastSettingsBottomSheetState extends ConsumerState<_BroadcastSettingsBottomSheet> {
+class _BroadcastSettingsBottomSheetState() extends ConsumerState<_BroadcastSettingsBottomSheet> {
   @override
   Widget build(BuildContext context) {
     final broadcastPreferences = ref.watch(broadcastPreferencesProvider);
@@ -624,29 +594,20 @@ class _BroadcastSettingsBottomSheetState extends ConsumerState<_BroadcastSetting
   }
 }
 
-class _BroadcastGamesFilterBottomSheet extends ConsumerStatefulWidget {
-  const _BroadcastGamesFilterBottomSheet(
-    this.selectedFilter,
-    this.selectedTeam, {
-    required this.allGamesCount,
-    required this.ongoingGamesCount,
-    required this.onGameFilterChange,
-    required this.teams,
-  });
-
-  final _BroadcastGameFilter selectedFilter;
-  final String? selectedTeam;
-  final int allGamesCount;
-  final int ongoingGamesCount;
-  final void Function(_BroadcastGameFilter filter, String? team) onGameFilterChange;
-  final IList<String>? teams;
-
+class const _BroadcastGamesFilterBottomSheet(
+  final _BroadcastGameFilter selectedFilter,
+  final String? selectedTeam, {
+  required final int allGamesCount,
+  required final int ongoingGamesCount,
+  required final void Function(_BroadcastGameFilter filter, String? team) onGameFilterChange,
+  required final IList<String>? teams,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_BroadcastGamesFilterBottomSheet> createState() =>
       _BroadcastGamesFilterBottomSheetState();
 }
 
-class _BroadcastGamesFilterBottomSheetState
+class _BroadcastGamesFilterBottomSheetState()
     extends ConsumerState<_BroadcastGamesFilterBottomSheet> {
   late _BroadcastGameFilter filter;
   late String? selectedTeam;

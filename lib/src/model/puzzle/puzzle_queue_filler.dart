@@ -26,7 +26,7 @@ final puzzleQueueFillerProvider = NotifierProvider<PuzzleQueueFiller, bool>(
   name: 'PuzzleQueueFillerProvider',
 );
 
-class PuzzleQueueFiller extends Notifier<bool> {
+class PuzzleQueueFiller() extends Notifier<bool> {
   final Logger _log = Logger('PuzzleQueueFiller');
 
   @override
@@ -97,9 +97,9 @@ class PuzzleQueueFiller extends Notifier<bool> {
         final PuzzleBatchResponse response;
         try {
           response = await ref.withClient(
-            (client) => PuzzleRepository(
-              client,
-            ).selectBatch(nb: deficit, angle: angle, difficulty: difficulty),
+            (client) =>
+                PuzzleRepository(client)
+                    .selectBatch(nb: deficit, angle: angle, difficulty: difficulty),
           );
         } catch (e, st) {
           // Offline or server error: stop the fill, keep what we have.

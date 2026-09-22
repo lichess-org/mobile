@@ -12,7 +12,10 @@ import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/account/account_menu.dart';
 import 'package:lichess_mobile/src/view/coordinate_training/coordinate_training_screen.dart';
+import 'package:lichess_mobile/src/view/learn/learn_screen.dart';
+import 'package:lichess_mobile/src/view/study/study_list.dart';
 import 'package:lichess_mobile/src/view/study/study_list_screen.dart';
+import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -53,9 +56,7 @@ final _myFavoriteStudiesLengthProvider = FutureProvider.autoDispose<int>((Ref re
   );
 });
 
-class LearnTabScreen extends ConsumerWidget {
-  const LearnTabScreen({super.key});
-
+class const LearnTabScreen({super.key}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return PopScope(
@@ -80,9 +81,7 @@ class LearnTabScreen extends ConsumerWidget {
   }
 }
 
-class _Body extends ConsumerWidget {
-  const _Body();
-
+class const _Body() extends ConsumerWidget {
   Future<void> _refreshData(WidgetRef ref) async {
     try {
       await Future.wait([
@@ -122,6 +121,15 @@ class _Body extends ConsumerWidget {
               hasLeading: true,
               children: [
                 ListTile(
+                  leading: const Icon(Symbols.menu_book),
+                  trailing: Theme.of(context).platform == TargetPlatform.iOS
+                      ? const CupertinoListTileChevron()
+                      : null,
+                  title: Text(context.l10n.learnLearnChess, style: Styles.callout),
+                  onTap: () =>
+                      Navigator.of(context, rootNavigator: true).push(LearnScreen.buildRoute()),
+                ),
+                ListTile(
                   leading: const Icon(Symbols.where_to_vote),
                   trailing: Theme.of(context).platform == TargetPlatform.iOS
                       ? const CupertinoListTileChevron()
@@ -134,8 +142,8 @@ class _Body extends ConsumerWidget {
                 ),
               ],
             ),
-            // Coordinate training works offline, so only the studies are
-            // replaced by the outage message.
+            // Learn and coordinate training work offline, so only the studies are replaced by the
+            // outage message.
             if (connectionStatus.isServerUnavailable) const ServerOutageDisplay(),
             if (connectionStatus == LichessConnectionStatus.online) ...[
               ListSection(
@@ -148,7 +156,16 @@ class _Body extends ConsumerWidget {
                     AsyncData(:final value) =>
                       value
                           .take(5)
-                          .map((study) => StudyListItem(study: study, titleMaxLines: 1))
+                          .map(
+                            (study) => StudyListItem(
+                              study: study,
+                              titleMaxLines: 1,
+                              onTap: (context, study) => Navigator.of(
+                                context,
+                                rootNavigator: true,
+                              ).push(StudyScreen.buildRoute((id: study.id, initialChapter: null))),
+                            ),
+                          )
                           .toList(growable: false),
                     _ => [],
                   }),

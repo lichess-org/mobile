@@ -23,11 +23,7 @@ const kTestGame = 'test-game';
 
 /// A [ThinkingTime] that always asks for the same wait, so a test can time the wiring rather than
 /// the distribution — which `thinking_time_test.dart` covers on its own.
-class FixedThinkingTime extends ThinkingTime {
-  FixedThinkingTime(this.duration);
-
-  final Duration duration;
-
+class FixedThinkingTime(final Duration duration) extends ThinkingTime {
   @override
   Duration forMove({required Position position, required Move move, Move? lastMove}) => duration;
 }

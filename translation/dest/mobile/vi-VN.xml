@@ -7,6 +7,7 @@
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Bạn chắc chứ?</string>
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Cài đặt bàn cờ</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Hủy đề nghị đi lại</string>
+  <string name="chessEngine" comment="Chess engine settings screen title.">Công cụ cờ vua</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Xóa</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Xóa nước cờ đã lưu</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Tham gia một ván cờ</string>
@@ -45,6 +46,7 @@
   <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">Kéo quân cờ mục tiêu</string>
   <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">Hình tròn</string>
   <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">Hình vuông</string>
+  <string name="settingsDrawnShapeColorHelp" comment="This is shown in the theme settings screen. Explanation of the drawn shape color settings.">Màu này được dùng cho các hình vẽ bằng hai ngón tay.</string>
   <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">Tiện ích trang chủ</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Chế độ toàn màn hình</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Ẩn giao diện hệ thống trong khi chơi. Dùng tuỳ chọn này nếu bạn bị các cử chỉ điều hướng của hệ thống ở các cạnh của màn hình làm phiền. Áp dụng cho màn hình ván đấu và câu đố.</string>

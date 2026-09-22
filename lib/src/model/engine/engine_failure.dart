@@ -4,7 +4,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/engine/engine_diagnostics.dart';
 
 /// What the engine was doing when it failed.
-enum EngineFailureKind {
+enum EngineFailureKind() {
   /// The engine could not be started.
   start,
 
@@ -26,37 +26,24 @@ enum EngineFailureKind {
 /// `state` alone only says *that* it failed. The native shim publishes which lifecycle phase and
 /// step it was on, which is what distinguishes a device that could not load the network from an
 /// engine wedged joining its search threads.
-class EngineFailure {
-  const EngineFailure({
-    required this.kind,
-    required this.message,
-    required this.engine,
-    this.engineState,
-    this.variant,
-    this.diagnostics,
-    this.maxMemoryInMb,
-    this.hashSizeInMb,
-    this.error,
-    this.stackTrace,
-  });
-
+class const EngineFailure({
   /// What the engine was doing when it failed.
-  final EngineFailureKind kind;
+  required final EngineFailureKind kind,
 
   /// A human-readable description of what went wrong, without the diagnostics.
-  final String message;
+  required final String message,
 
   /// A short name for the engine that failed: `light`, `variant`, `lc0`.
-  final String engine;
+  required final String engine,
+
+  /// The state the plugin reported for the engine when the failure was detected, or null when
+  /// there was no engine handle to ask — a start that never handed one back.
+  final String? engineState,
 
   /// The chess variant the engine was searching, when the failure was detected somewhere that
   /// knows it. The variant is a per-search option now, so the layers close to the engine — where
   /// most failures surface — do not.
-  final Variant? variant;
-
-  /// The state the plugin reported for the engine when the failure was detected, or null when
-  /// there was no engine handle to ask — a start that never handed one back.
-  final String? engineState;
+  final Variant? variant,
 
   /// What the native engine was doing when the failure was detected.
   ///
@@ -66,24 +53,24 @@ class EngineFailure {
   /// Null when there was no engine handle to read them from — a start that timed out before the
   /// plugin handed one back. The plugin puts its own reading of them into the [TimeoutException]
   /// it throws, so that case still reports where the engine stalled, in [error] rather than here.
-  final EngineDiagnostics? diagnostics;
+  final EngineDiagnostics? diagnostics,
 
   /// The whole memory budget for engines on this device, in MB. A boot that dies loading the
   /// network is usually a device that could not spare this much. Filled in by whoever owns the
   /// budget; null below that layer.
-  final int? maxMemoryInMb;
+  final int? maxMemoryInMb,
 
   /// The `Hash` the engine is actually running with, in MB, which is a share of [maxMemoryInMb]
   /// rather than all of it whenever two engines are resident. Filled in by the engine itself; null
   /// before it has run a search.
-  final int? hashSizeInMb;
+  final int? hashSizeInMb,
 
   /// The error that surfaced the failure, if it came from a throw.
-  final Object? error;
+  final Object? error,
 
   /// The stack trace of [error], if any.
-  final StackTrace? stackTrace;
-
+  final StackTrace? stackTrace,
+}) {
   /// Whether the engine is gone for the rest of the process's life.
   ///
   /// Two ways to get there, and neither can be undone by starting another engine. A native engine

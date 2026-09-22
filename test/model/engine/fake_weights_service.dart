@@ -9,14 +9,13 @@ import 'package:lichess_mobile/src/model/engine/weights_service.dart';
 /// [available] is what the device is pretending to have; anything else has to be "downloaded",
 /// which succeeds unless [downloadSucceeds] says otherwise. The bundled network is always there,
 /// as it is in the app.
-class FakeMaiaWeightsService implements MaiaWeightsService {
-  FakeMaiaWeightsService({Set<MaiaRating>? available, this.downloadSucceeds = true})
-    : available = {...?available, MaiaRating.defaultRating};
-
-  final Set<MaiaRating> available;
+class FakeMaiaWeightsService({
+  Set<MaiaRating>? available,
 
   /// Whether a download of a network that is not in [available] works.
-  bool downloadSucceeds;
+  var bool downloadSucceeds = true,
+}) implements MaiaWeightsService {
+  final Set<MaiaRating> available = {...?available, MaiaRating.defaultRating};
 
   /// The ratings [download] was asked for, in order.
   final List<MaiaRating> downloads = [];

@@ -34,9 +34,7 @@ final _openingsProvider = FutureProvider.autoDispose
       return (connectivityStatus.isOnline, savedOpenings, onlineOpenings);
     });
 
-class OpeningThemeScreen extends ConsumerWidget {
-  const OpeningThemeScreen({super.key});
-
+class const OpeningThemeScreen({super.key}) extends ConsumerWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const OpeningThemeScreen());
   }
@@ -76,9 +74,7 @@ class OpeningThemeScreen extends ConsumerWidget {
   }
 }
 
-class _Body extends ConsumerWidget {
-  const _Body();
-
+class const _Body() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final sort = ref.watch(_openingsSortProvider);
@@ -115,12 +111,10 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class _OpeningFamily extends ConsumerWidget {
-  const _OpeningFamily({required this.openingFamily, required this.titleStyle});
-
-  final PuzzleOpeningFamily openingFamily;
-  final TextStyle? titleStyle;
-
+class const _OpeningFamily({
+  required final PuzzleOpeningFamily openingFamily,
+  required final TextStyle? titleStyle,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Theme(
@@ -171,11 +165,7 @@ class _OpeningFamily extends ConsumerWidget {
 }
 
 /// An opening tile that reads the number of saved puzzles of that opening from the database.
-class _SavedOpeningTile extends ConsumerWidget {
-  const _SavedOpeningTile({required this.openingKey});
-
-  final String openingKey;
-
+class const _SavedOpeningTile({required final String openingKey}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return _OpeningTile(
@@ -187,21 +177,14 @@ class _SavedOpeningTile extends ConsumerWidget {
   }
 }
 
-class _OpeningTile extends StatelessWidget {
-  const _OpeningTile({
-    required this.name,
-    required this.openingKey,
-    required this.count,
-    this.titleStyle,
-  });
-
-  final String name;
-  final String openingKey;
+class const _OpeningTile({
+  required final String name,
+  required final String openingKey,
 
   /// The number of puzzles of that opening, or `null` while it is still unknown.
-  final int? count;
-  final TextStyle? titleStyle;
-
+  required final int? count,
+  final TextStyle? titleStyle,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(

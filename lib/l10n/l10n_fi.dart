@@ -30,6 +30,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Peruuta siirron peruutuspyyntö';
 
   @override
+  String get mobileChessEngine => 'Chess engine';
+
+  @override
   String get mobileClearButton => 'Tyhjennä';
 
   @override
@@ -148,6 +151,12 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get mobileSettingsDraggedTargetSquare => 'Neliö';
+
+  @override
+  String get mobileSettingsDrawnShapeColor => 'Drawn shape color';
+
+  @override
+  String get mobileSettingsDrawnShapeColorHelp => 'This color is used for shapes drawn by hand using two fingers.';
 
   @override
   String get mobileSettingsHomeWidgets => 'Etusivun pienohjelmat';
@@ -652,10 +661,13 @@ class AppLocalizationsFi extends AppLocalizations {
   String get arenaHowIsTheWinnerDecidedAnswer => 'Pelaaja(t) jo(i)lla on eniten pisteitä turnausajan päättyessä julistetaan voittajaksi tai voittajiksi.';
 
   @override
-  String get arenaHowDoesPairingWork => 'Kuinka peliparit määriytyvät?';
+  String get arenaHowDoesPairingWork => 'How does the pairing work?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => 'Turnauksen alussa peliparit määriytyvät vahvuuslukujen perusteella.\nKun pelisi on ohi, palaa turnausaulaan. Saat seuraavaksi vastustajaksesi pelaajan, jonka sijoitus on lähellä omaasi. Siten odotusaika pysyy mahdollisimman lyhyenä. Et välttämättä kuitenkaan kohtaa turnauksessa kaikkia siihen osallistuvia pelaajia.\nPelaa nopeasti ja palaa aulaan, niin voit pelata lisää pelejä ja ansaita lisää pisteitä.';
+  String get arenaHowArePlayersPaired => 'Kuinka peliparit määräytyvät?';
+
+  @override
+  String get arenaHowDoesPairingWorkAnswer => 'Turnauksen alussa peliparit määräytyvät vahvuuslukujen perusteella.\nKun pelisi on ohi, palaa turnausaulaan. Saat seuraavaksi vastustajaksesi pelaajan, jonka sijoitus on lähellä omaasi. Siten odotusaika pysyy mahdollisimman lyhyenä. Et välttämättä kuitenkaan kohtaa turnauksessa kaikkia siihen osallistuvia pelaajia.\nJos pelaat nopeasti, ehdit pelata enemmän pelejä ja ansaita enemmän pisteitä.';
 
   @override
   String get arenaHowDoesItEnd => 'Kuinka turnaus päättyy?';
@@ -740,7 +752,10 @@ class AppLocalizationsFi extends AppLocalizations {
   String get arenaEditTeamBattle => 'Muokkaa joukkuetaistoa';
 
   @override
-  String get arenaDefender => 'Puolustaja';
+  String get arenaDefender => 'Defender';
+
+  @override
+  String get arenaDefenderLabel => 'Puolustava:';
 
   @override
   String get arenaPickYourTeam => 'Valitse joukkueesi';
@@ -764,7 +779,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get arenaTournamentStats => 'Turnauksen tilastot';
 
   @override
-  String get arenaRankAvgHelp => 'Sijoitusten keskiarvo on sijoituksesi prosenttiarvo. Matalampi luku on parempi.\n\nEsimerkiksi sijoittuminen 3. sijalle 100 pelaajan turnauksessa = 3%. Sijoittuminen 10. sijalle 1 000 pelaajan turnauksessa = 1%.';
+  String get arenaRankAvgHelp => 'The rank average is a percentage of your ranking. Lower is better.\n\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.';
 
   @override
   String get arenaRankAverageHelp => 'Sijoituskeskiarvosi kuvaa tyypillistä sijoitustasi turnauksen lopussa suhteessa kunkin turnauksen pelaajien kokonaismäärään.\nTällä mitataan sijoituksiasi turnauksissa, ei yleistä vahvuuslukua.\n\nEsimerkiksi 3%:n sijoituskeskiarvo merkitsee sitä, että sijoitut tavallisesti turnauksen parhaan 3%:n joukkoon (kuten 30. sijalle 1 000 pelaajan turnauksessa).';
@@ -806,6 +821,9 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get arenaBerserkRate => 'Berserkkiprosentti';
+
+  @override
+  String get arenaLeaguesAndStreamerBattles => 'Liigat & Striimaajataistot';
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -912,7 +930,10 @@ class AppLocalizationsFi extends AppLocalizations {
   String get broadcastDeleteRound => 'Poista tämä kierros';
 
   @override
-  String get broadcastDefinitivelyDeleteRound => 'Poista kierros ja sen pelit lopullisesti.';
+  String get broadcastDefinitivelyDeleteRound => 'Definitively delete the round and all its games.';
+
+  @override
+  String get broadcastPermanentlyDeleteRound => 'Poistetaanko tämä kierros ja kaikki sen pelit pysyvästi?';
 
   @override
   String get broadcastDeleteAllGamesOfThisRound => 'Poista kaikki tämän kierroksen pelit. Lähteen on oltava aktiivinen, jotta pelit voidaan luoda uudelleen.';
@@ -924,7 +945,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get broadcastDeleteTournament => 'Poista tämä turnaus';
 
   @override
-  String get broadcastDefinitivelyDeleteTournament => 'Poista lopullisesti koko turnaus, sen kaikki kierrokset ja kaikki pelit.';
+  String get broadcastDefinitivelyDeleteTournament => 'Definitively delete the entire tournament, all its rounds and all its games.';
 
   @override
   String get broadcastPermanentlyDeleteTournament => 'Poistetaanko turnaus pysyvästi, mukaan lukien kaikki kierrokset ja pelit?';
@@ -982,6 +1003,9 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get broadcastNoBoardsYet => 'Pelilautoja ei vielä ole. Ne tulevat näkyviin sitä mukaa, kun pelit ladataan tänne.';
+
+  @override
+  String get broadcastNoPlayersYet => 'Pelaajia ei vielä ole. Niitä tulee sitä mukaa, kun tänne ladataan pelejä.';
 
   @override
   String broadcastBoardsCanBeLoaded(String param) {
@@ -1334,6 +1358,527 @@ class AppLocalizationsFi extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Harjoittele vain tiettyjä linjoja ja rivejä';
 
   @override
+  String get learnLearnChess => 'Opi shakkia';
+
+  @override
+  String get learnByPlaying => 'pelaamalla!';
+
+  @override
+  String learnProgressX(String param) {
+    return 'Edistyminen: $param';
+  }
+
+  @override
+  String get learnResetMyProgress => 'Nollaa edistymiseni';
+
+  @override
+  String get learnYouWillLoseAllYourProgress => 'Menetät kaiken edistymisesi!';
+
+  @override
+  String get learnPlay => 'pelaa!';
+
+  @override
+  String get learnChessPieces => 'Shakkinappulat';
+
+  @override
+  String get learnTheRook => 'Torni';
+
+  @override
+  String get learnItMovesInStraightLines => 'Liikkuu suoria linjoja pitkin';
+
+  @override
+  String get learnRookIntro => 'Torni on vahva nappula. Oletko valmis käskyttämään sitä?';
+
+  @override
+  String get learnRookGoal => 'Klikkaa tornia\nja vie se tähden luo!';
+
+  @override
+  String get learnGrabAllTheStars => 'Kerää kaikki tähdet!';
+
+  @override
+  String get learnTheFewerMoves => 'Mitä vähemmän siirtoja teet,\nsitä enemmän pisteitä saat!';
+
+  @override
+  String get learnUseTwoRooks => 'Käytä kahta tornia\nnopeuttaaksesi asioita!';
+
+  @override
+  String get learnRookComplete => 'Onneksi olkoon! Kesytit tornin onnistuneesti.';
+
+  @override
+  String get learnTheBishop => 'Lähetti';
+
+  @override
+  String get learnItMovesDiagonally => 'Se liikkuu viistoon';
+
+  @override
+  String get learnBishopIntro => 'Nyt opettelemme liikkumaan lähetillä!';
+
+  @override
+  String get learnYouNeedBothBishops => 'Yksi valkeilla liikkuva lähetti,\nYksi tummilla liikkuva lähetti.\nTarvitset kumpaakin!';
+
+  @override
+  String get learnBishopComplete => 'Onneksi olkoon! Osaat nyt käskyttää lähettiä.';
+
+  @override
+  String get learnTheQueen => 'Daami';
+
+  @override
+  String get learnQueenCombinesRookAndBishop => 'Daami = torni + lähetti';
+
+  @override
+  String get learnQueenIntro => 'Kaikista vahvin shakkinappula saapuu. Hänen majesteettinsa kuningatar!';
+
+  @override
+  String get learnQueenComplete => 'Onnittelut! Tiedät kuningattaresta kaiken.';
+
+  @override
+  String get learnTheKing => 'Kuningas';
+
+  @override
+  String get learnTheMostImportantPiece => 'Tärkein nappula';
+
+  @override
+  String get learnKingIntro => 'Olet kuningas. Jos kaadut taistelussa, häviät pelin.';
+
+  @override
+  String get learnTheKingIsSlow => 'Kuningas on hidas.';
+
+  @override
+  String get learnLastOne => 'Vielä yksi!';
+
+  @override
+  String get learnKingComplete => 'Hallitset nyt myös hallitsijaa!';
+
+  @override
+  String get learnTheKnight => 'Ratsu';
+
+  @override
+  String get learnItMovesInAnLShape => 'Liikkuu L-kirjaimen kaltaisesti';
+
+  @override
+  String get learnKnightIntro => 'Tässä haaste sinulle. Ratsu on... mutkikas nappula.';
+
+  @override
+  String get learnKnightsHaveAFancyWay => 'Ratsuilla on jännä tapa\nhyppiä ympäriinsä!';
+
+  @override
+  String get learnKnightsCanJumpOverObstacles => 'Ratsut voivat hyppiä esteiden yli!\nKarkaa ja päihitä tähdet!';
+
+  @override
+  String get learnKnightComplete => 'Onneksi olkoon! Kesytit ratsun.';
+
+  @override
+  String get learnThePawn => 'Sotilas';
+
+  @override
+  String get learnItMovesForwardOnly => 'Se liikkuu vain eteenpäin';
+
+  @override
+  String get learnPawnIntro => 'Sotilaat ovat heikkoja, mutta niihin on kätketty paljon potentiaalia.';
+
+  @override
+  String get learnPawnsMoveOneSquareOnly => 'Sotilaat liikkuvat yhden ruudun kerrallaan.\nMutta jos sotilas pääsee laudan toiseen päähän, siitä tulee vahvempi nappula!';
+
+  @override
+  String get learnMostOfTheTimePromotingToAQueenIsBest => 'Useimmiten daamiksi korottaminen on järkevintä. Mutta joskus ratsukin tulee tarpeen!';
+
+  @override
+  String get learnPawnsMoveForward => 'Sotilaat liikkuvat suoraan eteenpäin,\nmutta syövät viistoon!';
+
+  @override
+  String get learnCaptureThenPromote => 'Lyö ja sitten korota!';
+
+  @override
+  String get learnUseAllThePawns => 'Käytä kaikkia sotilaita!\nEi tarvitse korottaa.';
+
+  @override
+  String get learnAPawnOnTheSecondRank => 'Toisella rivillä oleva sotilas voi liikkua kaksi ruutua kerralla!';
+
+  @override
+  String get learnGrabAllTheStarsNoNeedToPromote => 'Kerää kaikki tähdet!\nEi tarvitse korottaa.';
+
+  @override
+  String get learnPawnComplete => 'Onnittelut! Tunnet kaikki sotilaiden tavat.';
+
+  @override
+  String get learnPawnPromotion => 'Sotilaan korotus';
+
+  @override
+  String get learnYourPawnReachedTheEndOfTheBoard => 'Sotilaasi on saapunut laudan toiseen päähän!';
+
+  @override
+  String get learnItNowPromotesToAStrongerPiece => 'Se korottuu nyt vahvemmaksi nappulaksi.';
+
+  @override
+  String get learnSelectThePieceYouWant => 'Valitse haluamasi nappula!';
+
+  @override
+  String get learnFundamentals => 'Alkeet';
+
+  @override
+  String get learnCapture => 'Lyöminen';
+
+  @override
+  String get learnTakeTheEnemyPieces => 'Poista vastustajan nappulat';
+
+  @override
+  String get learnCaptureIntro => 'Tunnista vastustajan suojaamattomat nappulat ja lyö ne!';
+
+  @override
+  String get learnTakeTheBlackPieces => 'Lyö mustat nappulat!';
+
+  @override
+  String get learnTakeTheBlackPiecesAndDontLoseYours => 'Lyö mustat nappulat!\nÄläkä menetä omiasi.';
+
+  @override
+  String get learnCaptureComplete => 'Onneksi olkoon! Osaat nyt tapella shakkinappuloilla!';
+
+  @override
+  String get learnProtection => 'Suojaaminen';
+
+  @override
+  String get learnKeepYourPiecesSafe => 'Pidä nappulasi turvassa';
+
+  @override
+  String get learnProtectionIntro => 'Tunnista nappulat joita vastustaja uhkaa ja puolusta niitä!';
+
+  @override
+  String get learnProtectionComplete => 'Onnittelut! Nappula jota et menetä on voitettu nappula!';
+
+  @override
+  String get learnEscape => 'Vastustaja hyökkää!\nPakene uhkaa!';
+
+  @override
+  String get learnNoEscape => 'Et voi paeta,\nmutta voit puolustaa!';
+
+  @override
+  String get learnDontLetThemTakeAnyUndefendedPiece => 'Älä anna hänen lyödä\nsuojaamatonta nappulaa!';
+
+  @override
+  String get learnCombat => 'Taisteleminen';
+
+  @override
+  String get learnCaptureAndDefendPieces => 'Lyö ja puolusta nappuloita';
+
+  @override
+  String get learnCombatIntro => 'Hyvä soturi hallitsee sekä hyökkäyksen että puolustuksen!';
+
+  @override
+  String get learnCombatComplete => 'Onneksi olkoon! Osaat nyt tapella shakkinappuloilla!';
+
+  @override
+  String get learnCheckInOne => 'Yhden siirron shakki';
+
+  @override
+  String get learnAttackTheOpponentsKing => 'Hyökkää vastustajan kuningasta vastaan';
+
+  @override
+  String get learnCheckInOneIntro => 'Shakkaa vastustajaasi uhkaamalla hänen kuningastaan. Hänen on pakko puolustaa sitä!';
+
+  @override
+  String get learnCheckInOneGoal => 'Saata kuningas uhatuksi\nyhdellä siirrolla!';
+
+  @override
+  String get learnCheckInOneComplete => 'Onnittelut! Shakkasit vastustajaasi ja pakotit hänet puolustamaan kuningastaan!';
+
+  @override
+  String get learnOutOfCheck => 'Shakin purkaminen';
+
+  @override
+  String get learnDefendYourKing => 'Puolusta kuningastasi';
+
+  @override
+  String get learnOutOfCheckIntro => 'Olet shakissa! Sinun täytyy paeta tai torjua hyökkäys.';
+
+  @override
+  String get learnEscapeWithTheKing => 'Pakene kuninkaalla!';
+
+  @override
+  String get learnTheKingCannotEscapeButBlock => 'Kuningas ei voi paeta,\nmutta voit torjua hyökkäyksen!';
+
+  @override
+  String get learnYouCanGetOutOfCheckByTaking => 'Voit purkaa shakin\nlyömällä hyökkäävän nappulan.';
+
+  @override
+  String get learnThisKnightIsCheckingThroughYourDefenses => 'Ratsu hyökkää\nyli puolustuksesi!';
+
+  @override
+  String get learnEscapeOrBlock => 'Pakene kuninkaalla\ntai torju hyökkäys!';
+
+  @override
+  String get learnOutOfCheckComplete => 'Onnittelut! Kuningastasi ei voi lyödä. Varmista että voit puolustaa sitä shakeilta!';
+
+  @override
+  String get learnMateInOne => 'Yhden siirron matti';
+
+  @override
+  String get learnDefeatTheOpponentsKing => 'Kukista vastustajan kuningas';
+
+  @override
+  String get learnMateInOneIntro => 'Voitat jos vastustaja ei voi puolustaa shakattua kuningastaan.';
+
+  @override
+  String get learnAttackYourOpponentsKing => 'Uhkaa vastustajan kuningasta niin\nettei sitä voi puolustaa!';
+
+  @override
+  String get learnMateInOneComplete => 'Onnittelut! Näin shakkipeli voitetaan!';
+
+  @override
+  String get learnIntermediate => 'Keskitaso';
+
+  @override
+  String get learnBoardSetup => 'Laudan asettaminen';
+
+  @override
+  String get learnHowTheGameStarts => 'Kuinka peli alkaa';
+
+  @override
+  String get learnBoardSetupIntro => 'Kaksi armeijaa on vastakkain, valmiina taistoon.';
+
+  @override
+  String get learnThisIsTheInitialPosition => 'Tämä on alkuasema\njokaisessa shakkipelissä!\nAloita tekemällä mikä siirto tahansa.';
+
+  @override
+  String get learnFirstPlaceTheRooks => 'Ensin sijoita tornit!\nNe kuuluvat kulmiin.';
+
+  @override
+  String get learnThenPlaceTheKnights => 'Sitten ratsut!\nNe kuuluvat tornien viereen.';
+
+  @override
+  String get learnPlaceTheBishops => 'Sijoita lähetit!\nNe kuuluvat ratsujen viereen.';
+
+  @override
+  String get learnPlaceTheQueen => 'Sijoita daami!\nHän kuuluu itsensä väriseen ruutuun.';
+
+  @override
+  String get learnPlaceTheKing => 'Sijoita kuningas!\nDaaminsa rinnalle.';
+
+  @override
+  String get learnPawnsFormTheFrontLine => 'Sotilaat muodostavat etulinjan.\nJatka tekemällä mikä tahansa siirto.';
+
+  @override
+  String get learnBoardSetupComplete => 'Onneksi olkoon! Osaat asetella shakkilaudan.';
+
+  @override
+  String get learnCastling => 'Linnoitus';
+
+  @override
+  String get learnTheSpecialKingMove => 'Kuninkaan erikoissiirto';
+
+  @override
+  String get learnCastlingIntro => 'Vie kuninkaasi turvaan ja tuo tornisi mukaan hyökkäykseen!';
+
+  @override
+  String get learnCastleKingSide => 'Siirrä kuningastasi kaksi ruutua\nja linnoittaudu kuningassivustalle!';
+
+  @override
+  String get learnCastleQueenSide => 'Siirrä kuningastasi kaksi ruutua\nja linnoittaudu daamisivustalle!';
+
+  @override
+  String get learnTheKnightIsInTheWay => 'Ratsu on tiellä!\nSiirrä sitä ja linnoittaudu sitten kuningassivustalle.';
+
+  @override
+  String get learnCastleKingSideMovePiecesFirst => 'Linnoittaudu kuningassivustalle!\nSinun täytyy siirtää nappulasi ensin tieltä pois.';
+
+  @override
+  String get learnCastleQueenSideMovePiecesFirst => 'Linnoittaudu daamisivustalle!\nSinun täytyy siirtää nappulasi ensin tieltä pois.';
+
+  @override
+  String get learnYouCannotCastleIfMoved => 'Et voi linnoittautua jos\nkuningas on jo liikkunut\ntai jos torni on liikkunut.';
+
+  @override
+  String get learnYouCannotCastleIfAttacked => 'Et voi linnoittautua\nJos kuningasta vastaan hyökättäisiin matkalla.\nBlokkaa shakki ja linnoittaudu sitten!';
+
+  @override
+  String get learnFindAWayToCastleKingSide => 'Keksi tapa\nlinnoittautua kuningassivustalle!';
+
+  @override
+  String get learnFindAWayToCastleQueenSide => 'Keksi tapa\nlinnoittautua daamisivustalle!';
+
+  @override
+  String get learnCastlingComplete => 'Onneksi olkoon! Kannattaa linnoittautua lähes aina.';
+
+  @override
+  String get learnTheSpecialPawnMove => 'Sotilaan erikoissiirto';
+
+  @override
+  String get learnEnPassantIntro => 'Kun vastustajan sotilas siirtyy kaksi ruutua, voit lyödä sen aivan kuin se olisi siirtynyt vain yhden.';
+
+  @override
+  String get learnBlackJustMovedThePawnByTwoSquares => 'Musta liikkui sotilaallaan\nkaksi ruutua!\nLyö se ohesta.';
+
+  @override
+  String get learnEnPassantOnlyWorksImmediately => 'Ohestalyönti onnistuu vain\nvälittömästi sen jälkeen, kun\nvastustaja on siirtänyt sotilasta.';
+
+  @override
+  String get learnEnPassantOnlyWorksOnFifthRank => 'Ohestalyönti onnistuu vain\nkun sotilaasi on viidennellä rivillä.';
+
+  @override
+  String get learnTakeAllThePawnsEnPassant => 'Lyö kaikki sotilaat ohesta!';
+
+  @override
+  String get learnEnPassantComplete => 'Onnittelut! Osaat nyt ohestalyönnin.';
+
+  @override
+  String get learnStalemate => 'Patti';
+
+  @override
+  String get learnTheGameIsADraw => 'Peli päättyy tasan';
+
+  @override
+  String get learnStalemateIntro => 'Kun pelaaja ei ole shakissa mutta hänellä ei ole laillista siirtoa, tilanne on patti. Peli päätty tasan, kumpikaan ei voita, kumpikaan ei häviä.';
+
+  @override
+  String get learnStalemateGoal => 'Mustan patittaminen:\n- Musta ei voi liikkua minnekään\n- Musta ei ole shakissa.';
+
+  @override
+  String get learnStalemateComplete => 'Onneksi olkoon! Parempi patissa kuin matissa!';
+
+  @override
+  String get learnAdvanced => 'Edistynyt';
+
+  @override
+  String get learnPieceValue => 'Nappuloiden arvot';
+
+  @override
+  String get learnEvaluatePieceStrength => 'Arvioi nappuloiden vahvuudet';
+
+  @override
+  String get learnPieceValueIntro => 'Nappulat joilla on parempi liikkuvuus ovat arvokkaampia!\nDaami = 9\nTorni = 5\nLähetti = 3\nRatsu = 3\nSotilas = 1\nKuningas on mittaamattoman arvokas! Sen menettäminen tietää sitä, että hävisit pelin.';
+
+  @override
+  String get learnQueenOverBishop => 'Lyö nappula\njoka on arvokkain!\nDaami > Lähetti';
+
+  @override
+  String get learnPieceValueExchange => 'Lyö arvokkain nappula!\n Älä vaihda\n arvokkaampaa nappulaa vähemmän arvokkaaseen.';
+
+  @override
+  String get learnPieceValueLegal => 'Lyö arvokkain nappula!\nVarmista, että siirtosi on laillinen!';
+
+  @override
+  String get learnTakeThePieceWithTheHighestValue => 'Lyö nappula\njoka on arvokkain!';
+
+  @override
+  String get learnPieceValueComplete => 'Onnittelut! Tunnet nyt materiaalin arvon!\nDaami = 9\nTorni = 5\nLähetti = 3\nRatsu = 3\nSotilas = 1';
+
+  @override
+  String get learnCheckInTwo => 'Kahden siirron shakki';
+
+  @override
+  String get learnTwoMovesToGiveCheck => 'Shakkaa kahdella siirrolla';
+
+  @override
+  String get learnCheckInTwoIntro => 'Löydä sopiva kahden siirron kombinaatio, jolla voit shakata vastustajan kuningasta!';
+
+  @override
+  String get learnCheckInTwoGoal => 'Uhkaa vastustajan kuningasta\nkahdella siirrolla!';
+
+  @override
+  String get learnCheckInTwoComplete => 'Onneksi olkoon! Shakkasit vastustajaa ja pakotit hänet puolustamaan kuningastaan!';
+
+  @override
+  String get learnWhatNext => 'Mitä seuraavaksi?';
+
+  @override
+  String get learnYouKnowHowToPlayChess => 'Osaat pelata shakkia, onnittelut! Haluatko tulla vahvemmaksi pelaajaksi?';
+
+  @override
+  String get learnRegister => 'Rekisteröidy';
+
+  @override
+  String get learnGetAFreeLichessAccount => 'Saat ilmaisen Lichess-tunnuksen';
+
+  @override
+  String get learnPractice => 'Harjoittele';
+
+  @override
+  String get learnLearnCommonChessPositions => 'Opi tyypillisiä shakkiasemia';
+
+  @override
+  String get learnPuzzles => 'Tehtävät';
+
+  @override
+  String get learnExerciseYourTacticalSkills => 'Harjoita taktisia kykyjäsi';
+
+  @override
+  String get learnVideos => 'Videot';
+
+  @override
+  String get learnWatchInstructiveChessVideos => 'Katso havainnollistavia shakkivideoita';
+
+  @override
+  String get learnPlayPeople => 'Pelaa toisia vastaan';
+
+  @override
+  String get learnOpponentsFromAroundTheWorld => 'Vastustajia kaikkialta maailmasta';
+
+  @override
+  String get learnPlayMachine => 'Pelaa konetta vastaan';
+
+  @override
+  String get learnTestYourSkillsWithTheComputer => 'Mittaa taitosi tietokonetta vastaan';
+
+  @override
+  String get learnLetsGo => 'Aloitetaan!';
+
+  @override
+  String learnStageX(String param) {
+    return 'Taso $param';
+  }
+
+  @override
+  String get learnAwesome => 'Mahtavaa!';
+
+  @override
+  String get learnExcellent => 'Erinomaista!';
+
+  @override
+  String get learnGreatJob => 'Hyvin tehty!';
+
+  @override
+  String get learnPerfect => 'Täydellistä!';
+
+  @override
+  String get learnOutstanding => 'Loistavaa!';
+
+  @override
+  String get learnWayToGo => 'Niin sitä pitää!';
+
+  @override
+  String get learnYesYesYes => 'Kyllä!';
+
+  @override
+  String get learnYoureGoodAtThis => 'Olet hyvä tässä!';
+
+  @override
+  String get learnNailedIt => 'Naulan kantaan.';
+
+  @override
+  String get learnRightOn => 'Naulan kantaan!';
+
+  @override
+  String learnStageXComplete(String param) {
+    return 'Taso $param valmis';
+  }
+
+  @override
+  String get learnNext => 'Seuraava';
+
+  @override
+  String learnNextX(String param) {
+    return 'Seuraavaksi: $param';
+  }
+
+  @override
+  String get learnBackToMenu => 'Valikkoon';
+
+  @override
+  String get learnPuzzleFailed => 'Tehtävä epäonnistui!';
+
+  @override
+  String get learnRetry => 'Yritä uudelleen';
+
+  @override
   String get patronDonate => 'Lahjoita';
 
   @override
@@ -1616,19 +2161,19 @@ class AppLocalizationsFi extends AppLocalizations {
   String get preferencesNotifyStreamStart => 'Striimaaja aloittaa striimin';
 
   @override
-  String get preferencesNotifyInboxMsg => 'Uusi saapunut viesti';
+  String get preferencesNotifyInboxMsg => 'New inbox message';
 
   @override
   String get preferencesNotifyDirectMessage => 'Uusi suora viesti';
 
   @override
-  String get preferencesNotifyForumMention => 'Sinut mainitaan foorumin kommentissa';
+  String get preferencesNotifyForumMention => 'Forum comment mentions you';
 
   @override
   String get preferencesNotifyForumMentions => 'Maininnat foorumilla';
 
   @override
-  String get preferencesNotifyInvitedStudy => 'Kutsu tutkielmaan';
+  String get preferencesNotifyInvitedStudy => 'Study invite';
 
   @override
   String get preferencesNotifyStudyInvites => 'Kutsut tutkielmiin';
@@ -1640,7 +2185,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get preferencesNotifyChallenge => 'Haasteet';
 
   @override
-  String get preferencesNotifyTournamentSoon => 'Turnaus alkamassa pian';
+  String get preferencesNotifyTournamentSoon => 'Tournament starting soon';
 
   @override
   String get preferencesNotifyTournamentStartReminders => 'Muistutukset turnausten alkamisesta';
@@ -2097,7 +2642,10 @@ class AppLocalizationsFi extends AppLocalizations {
   String get puzzleThemeCornerMate => 'Kulmamatti';
 
   @override
-  String get puzzleThemeCornerMateDescription => 'Kahlitse kuningas laudan nurkkaan tornilla tai daamilla ja tee sitten matti ratsulla.';
+  String get puzzleThemeCornerMateDescription => 'Confine the king to the corner using a rook or queen and a knight to engage the checkmate.';
+
+  @override
+  String get puzzleThemeCornerMateKnightDeliversDescription => 'Kahlitse kuningas laudan nurkkaan tornilla tai daamilla ja tee sitten matti ratsulla.';
 
   @override
   String get puzzleThemeCrushing => 'Murskaava etu';
@@ -2172,7 +2720,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get puzzleThemeEndgameDescription => 'Taktiikka pelin viimeisessä vaiheessa.';
 
   @override
-  String get puzzleThemeEnPassantDescription => 'Taktiikka, jossa sovelletaan ohestalyöntisääntöä, eli jossa sotilas voi lyödä sellaisen vastustajan sotilaan, joka on juuri ensimmäisellä kahden ruudun siirrollaan ohittanut sen.';
+  String get puzzleThemeEnPassantDescription => 'A tactic involving the en passant rule, where a pawn can capture an opponent pawn that has bypassed it using its initial two-square move.';
 
   @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'Taktiikka, jossa sovelletaan ohestalyöntisääntöä, eli jossa sotilas voi lyödä sellaisen vastustajan sotilaan, joka on juuri ensimmäisellä kahden ruudun siirrollaan siirtynyt tämän viereen.';
@@ -2193,7 +2741,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get puzzleThemeFork => 'Haarukka';
 
   @override
-  String get puzzleThemeForkDescription => 'Siirto, jolla siirrettävä nappula uhkaa samanaikaisesti kahta vastustajan nappulaa.';
+  String get puzzleThemeForkDescription => 'A move where the moved piece attacks two opponent pieces at once.';
 
   @override
   String get puzzleThemeForkOpposingPiecesDescription => 'Siirto, jolla nappula uhkaa samanaikaisesti kahta tai useampaa vastustajan nappulaa.';
@@ -2208,7 +2756,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get puzzleThemeHookMate => 'Koukkumatti';
 
   @override
-  String get puzzleThemeHookMateDescription => 'Tornin, ratsun ja sotilaan yhteispelillä syntyvä matti, jossa vastustajan sotilas vie kuninkaaltaan yhden pakoruudun.';
+  String get puzzleThemeHookMateDescription => 'Checkmate with a rook, knight, and pawn along with one enemy pawn to limit the enemy king\'s escape.';
 
   @override
   String get puzzleThemeHookMateOpposingPawnDescription => 'Matti tornilla, ratsulla ja sotilaalla, jossa vastustajan oma nappula vie kuninkaalta pakoruudun.';
@@ -2235,13 +2783,19 @@ class AppLocalizationsFi extends AppLocalizations {
   String get puzzleThemePillsburysMate => 'Pillsburyn matti';
 
   @override
-  String get puzzleThemePillsburysMateDescription => 'Torni matittaa kuninkaan samalla kun lähetti vie kuninkaalta pakoruudut.';
+  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+
+  @override
+  String get puzzleThemePillsburyMateRookAndBishopDescription => 'Torni matittaa kuninkaan samalla kun lähetti vie kuninkaalta pakoruudut.';
 
   @override
   String get puzzleThemeMorphysMate => 'Morphyn matti';
 
   @override
-  String get puzzleThemeMorphysMateDescription => 'Matita vastustajan kuningas lähetilläsi samalla kun torni vie kuninkaalta pakoruudut.';
+  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphyMateBishopAndRookDescription => 'Lähetti matittaa kuninkaan samalla kun torni vie kuninkaalta pakoruudut.';
 
   @override
   String get puzzleThemeSwallowstailMate => 'Pääskynpyrstömatti';
@@ -2361,7 +2915,10 @@ class AppLocalizationsFi extends AppLocalizations {
   String get puzzleThemePromotion => 'Korotus';
 
   @override
-  String get puzzleThemePromotionDescription => 'Taktiikassa keskeistä on sotilas, joka korottuu tai uhkaa korottua.';
+  String get puzzleThemePromotionDescription => 'Promote one of your pawn to a queen or minor piece.';
+
+  @override
+  String get puzzleThemePromotePawnToQueenRookOrMinor => 'Taktiikassa keskeistä on sotilas, joka korottuu tai uhkaa korottua daamiksi, torniksi tai kevyeksi upseeriksi.';
 
   @override
   String get puzzleThemeQueenEndgame => 'Daamiloppupeli';
@@ -2946,6 +3503,18 @@ class AppLocalizationsFi extends AppLocalizations {
   String get flipBoard => 'Käännä lauta';
 
   @override
+  String get toggleLocalEngine => 'Paikallinen tietokone päälle/pois';
+
+  @override
+  String get engineSettings => 'Tietokoneasetukset';
+
+  @override
+  String get enginesFromStrongestToWeakest => 'Tietokoneet vahvimmasta heikoimpaan';
+
+  @override
+  String get illegalPosition => 'Laiton asema';
+
+  @override
   String get threefoldRepetition => 'Aseman toisto kolmesti';
 
   @override
@@ -3088,6 +3657,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get password => 'Salasana';
 
   @override
+  String get showPassword => 'Näytä salasana';
+
+  @override
   String get changePassword => 'Vaihda salasana';
 
   @override
@@ -3157,7 +3729,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get refreshInboxAfterFiveMinutes => 'Odota 5 minuuttia ja päivitä sähköpostin saapuneet-kansio.';
 
   @override
-  String get checkSpamFolder => 'Tarkistathan myös roskapostikansiosi, koska se saattaa joutua sinne. Jos niin käy, merkitse, että viesti ei ole roskaposti.';
+  String get checkSpamFolder => 'Also check your spam folder, it might end up there. If so, mark it as not spam.';
 
   @override
   String get checkSpamOrJunkFolder => 'Jos et saa vahvistussähköpostia, tarkista roskapostikansiosi. Muista luokitella lichess.org-osoitteesta tulevat viestit turvallisiksi ja \"ei roskapostiksi\", jotta voit pysyä ajan tasalla tärkeistä viesteistä.';
@@ -3208,10 +3780,16 @@ class AppLocalizationsFi extends AppLocalizations {
   String get cancel => 'Peruuta';
 
   @override
-  String get whiteTimeOut => 'Valkealta loppui aika';
+  String get whiteTimeOut => 'White time out';
 
   @override
-  String get blackTimeOut => 'Mustalta loppui aika';
+  String get whiteRanOutOfTime => 'Valkealta loppui aika';
+
+  @override
+  String get blackTimeOut => 'Black time out';
+
+  @override
+  String get blackRanOutOfTime => 'Mustalta loppui aika';
 
   @override
   String get drawOfferSent => 'Tasapeliehdotus lähetetty';
@@ -3420,7 +3998,10 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
-  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Vahvuuslukusuodatin ei ole käytettävissäsi, koska vahvuuslukusi ei ole vakaa. Voit vakauttaa sitä pelaamalla pisteytettyjä pelejä.';
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
+
+  @override
+  String get cannotFilterByUnstableRating => 'Et voi tällä hetkellä suodattaa vahvuusluvun perusteella, sillä oma vahvuuslukusi ei ole vakaa. Voit vakauttaa sitä pelaamalla pisteytettyjä pelejä.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3503,7 +4084,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get leaderboard => 'Pistetaulukko';
 
   @override
-  String get screenshotCurrentPosition => 'Ota tämänhetkisestä asemasta kuvakaappaus';
+  String get positionAsImage => 'Asema kuvana';
 
   @override
   String get gameAsGIF => 'Tallenna peli GIF:nä';
@@ -3600,6 +4181,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String xStartedFollowingY(String param1, String param2) {
     return '$param1 alkoi seurata $param2';
   }
+
+  @override
+  String get less => 'Vähemmän';
 
   @override
   String get more => 'Lisää';
@@ -3809,7 +4393,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get makeAStudy => 'Tallenna analyysisi tutkielmaksi, jos haluat säilyttää sen tai jakaa sen muiden kanssa.';
 
   @override
-  String get clearSavedMoves => 'Tyhjennä siirrot';
+  String get clearLocalData => 'Tyhjennä paikalliset tiedot';
 
   @override
   String get previouslyOnLichessTV => 'Viimeksi Lichess TV:ssä';
@@ -3932,7 +4516,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get reportUsernameHelp => 'Selitä, mikä tässä käyttäjätunnuksessa on loukkaavaa. Älä vain sano sen olevan loukkaava tai sopimaton, vaan kerro meille, mihin näkemyksesi perustuu, varsinkin jos loukkaus on epäsuora, muun kuin englanninkielinen, slangia, tai jos siinä viitataan kulttuuriin tai historiaan.';
 
   @override
-  String get reportProcessedFasterInEnglish => 'Ilmoituksesi käsitellään nopeammin, jos se on kirjoitettu englanniksi.';
+  String get reportProcessedFasterInEnglish => 'Your report will be processed faster if written in English.';
 
   @override
   String get processReportFasterInEnglish => 'Voimme käsitellä ilmoituksesi nopeammin, jos kirjoitat meille englanniksi.';
@@ -4303,7 +4887,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get create => 'Luo';
 
   @override
-  String get whenCreateSimul => 'Jos luot simultaanin, sinun täytyy pelata useita pelaajia vastaan kerralla.';
+  String get whenCreateSimul => 'When you create a simul, you get to play several players at once.';
 
   @override
   String get creatingASimul => 'Kun luot simultaanin, voit pelata samanaikaisesti useaa vastustajaa vastaan.';
@@ -4318,7 +4902,10 @@ class AppLocalizationsFi extends AppLocalizations {
   String get simulAddExtraTime => 'Voit lisätä aikaa kelloosi selviytyäksesi simultaanista.';
 
   @override
-  String get simulHostExtraTime => 'Isännän ylimääräinen aika';
+  String get simulHostExtraTime => 'Host extra initial clock time';
+
+  @override
+  String get extraClockTimeForHost => 'Lisäaika isännän kellossa:';
 
   @override
   String get simulAddExtraTimePerPlayer => 'Lisää alussa kelloosi aikaa jokaista simultaaniin liittyvää pelaajaa kohden.';
@@ -4351,10 +4938,16 @@ class AppLocalizationsFi extends AppLocalizations {
   String get keyGoToStartOrEnd => 'siirry alkuun/loppuun';
 
   @override
+  String get keyGoToPreviousOrNextLine => 'siirry edelliseen/seuraavaan linjaan';
+
+  @override
   String get keyCycleSelectedVariation => 'Vaihda valittu muunnelma';
 
   @override
   String get keyShowOrHideComments => 'näytä/piilota kommentit';
+
+  @override
+  String get keyShowOrHideCurrentVariation => 'näytä/piilota nykyinen muunnelma';
 
   @override
   String get keyEnterOrExitVariation => 'lisää/poista muunnelma';
@@ -4630,9 +5223,6 @@ class AppLocalizationsFi extends AppLocalizations {
   String get dark => 'Tumma';
 
   @override
-  String get transparent => 'Läpinäkyvä';
-
-  @override
   String get picture => 'Kuva';
 
   @override
@@ -4642,7 +5232,13 @@ class AppLocalizationsFi extends AppLocalizations {
   String get roundness => 'Pyöreys';
 
   @override
+  String get backgroundImage => 'Taustakuva';
+
+  @override
   String get backgroundImageUrl => 'Taustakuvan URL:';
+
+  @override
+  String get imageOpacity => 'Kuvan läpinäkyvyys';
 
   @override
   String get board => 'Lauta';
@@ -4714,7 +5310,12 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String perfRatingX(String param) {
-    return 'Vahvuusluku: $param';
+    return 'Rating: $param';
+  }
+
+  @override
+  String perfRatingLabel(String param) {
+    return 'Vahvuusluku: $param.';
   }
 
   @override
@@ -4868,7 +5469,10 @@ class AppLocalizationsFi extends AppLocalizations {
   String get showUnreadLichessMessage => 'Olet saanut henkilökohtaisen viestin Lichessiltä.';
 
   @override
-  String get clickHereToReadIt => 'Lue se napsauttamalla tästä';
+  String get clickHereToReadIt => 'Click here to read it';
+
+  @override
+  String get readTheMessage => 'Lue viesti';
 
   @override
   String get sorry => 'Pahoittelumme :(';
@@ -5151,7 +5755,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String markdownIsAvailable(String param) {
-    return 'Muotoiluun voi käyttää $param-kieltä.';
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5178,7 +5782,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get onlyTeamMembers => 'Vain joukkueen jäsenille';
 
   @override
-  String get navigateMoveTree => 'Siirtolistalla liikkuminen';
+  String get navigateMoveTree => 'Navigate the move tree';
 
   @override
   String get moveListNavigation => 'Siirtolistalla liikkuminen';
@@ -5308,6 +5912,15 @@ class AppLocalizationsFi extends AppLocalizations {
   String get settings => 'Asetukset';
 
   @override
+  String get verifyingYourDevice => 'Vahvistetaan laitettasi...';
+
+  @override
+  String get chessOpenings => 'Shakkiavaukset';
+
+  @override
+  String get boards => 'Laudat';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5334,8 +5947,8 @@ class AppLocalizationsFi extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count vakavaa virhettä',
-      one: '$count vakava virhe',
+      other: '$count blunders',
+      one: '$count blunder',
     );
     return '$_temp0';
   }
@@ -5356,8 +5969,8 @@ class AppLocalizationsFi extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count virhettä',
-      one: '$count virhe',
+      other: '$count mistakes',
+      one: '$count mistake',
     );
     return '$_temp0';
   }
@@ -5378,8 +5991,8 @@ class AppLocalizationsFi extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count epätarkkuutta',
-      one: '$count epätarkkuus',
+      other: '$count inaccuracies',
+      one: '$count inaccuracy',
     );
     return '$_temp0';
   }
@@ -5763,8 +6376,8 @@ class AppLocalizationsFi extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Anonyymejä ($count)',
-      one: 'Anonyymi',
+      other: 'Anonymous ($count)',
+      one: 'Anonymous',
     );
     return '$_temp0';
   }
@@ -6148,7 +6761,10 @@ class AppLocalizationsFi extends AppLocalizations {
   String get studyCurrentChapterUrl => 'Tämän luvun URL';
 
   @override
-  String get studyYouCanPasteThisInTheForumToEmbed => 'Voit upottaa tämän foorumiin liittämällä';
+  String get studyYouCanPasteThisInTheForumToEmbed => 'You can paste this in the forum or your Lichess blog to embed';
+
+  @override
+  String get studyPasteToEmbedChapterInForumOrBlog => 'You can paste this in the forum or your Lichess blog to embed the chapter.';
 
   @override
   String get studyStartAtInitialPosition => 'Aloita alkuperäisestä asemasta';
@@ -6520,10 +7136,16 @@ class AppLocalizationsFi extends AppLocalizations {
   String get studyCustomPositionText => 'Aseta nappulat laudalle haluamallasi tavalla.<br>Tämä sopii loppupelien tutkimiseen.';
 
   @override
-  String get studyLoadExistingLichessGameTitle => 'Lataa Lichessissä pelattu peli';
+  String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
 
   @override
-  String get studyLoadExistingLichessGameText => 'Kun liität Lichessissä pelatun pelin URL:n<br>(esim. lichess.org/7fHIU0XI)<br>pelin siirrot latautuvat tutkielman lukuun.';
+  String get studyLoadGameFromTheWebTitle => 'Load a game from the web';
+
+  @override
+  String get studyLoadExistingLichessGameText => 'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
+
+  @override
+  String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/7fHIU0XI)<br>to load game moves in the chapter.';
 
   @override
   String get studyFromFenStringTitle => 'Tuo FEN-asema';
@@ -6601,6 +7223,9 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get teamTeam => 'Joukkue';
+
+  @override
+  String get teamTeamUpdates => 'Joukkueilmoitukset';
 
   @override
   String get teamIncorrectEntryCode => 'Virheellinen sisäänpääsykoodi.';

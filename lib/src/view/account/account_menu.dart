@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/message/message_repository.dart';
+import 'package:lichess_mobile/src/model/team/team_providers.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -20,6 +21,7 @@ import 'package:lichess_mobile/src/view/auth/sign_in_error.dart';
 import 'package:lichess_mobile/src/view/auth/sign_in_options.dart';
 import 'package:lichess_mobile/src/view/message/contacts_screen.dart';
 import 'package:lichess_mobile/src/view/settings/settings_screen.dart';
+import 'package:lichess_mobile/src/view/team/team_updates_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -32,9 +34,7 @@ import 'package:url_launcher/url_launcher.dart';
 ///
 /// On Android it is pushed as a full-screen page. On iOS it is presented
 /// inside a [CupertinoSheetRoute] with nested navigation.
-class AccountMenuScreen extends ConsumerStatefulWidget {
-  const AccountMenuScreen({super.key});
-
+class const AccountMenuScreen({super.key}) extends ConsumerStatefulWidget {
   static Route<void> buildRoute(BuildContext context) {
     if (Theme.of(context).platform == TargetPlatform.iOS) {
       return buildScreenRoute(screen: const AccountMenuScreen());
@@ -56,7 +56,9 @@ class AccountMenuScreen extends ConsumerStatefulWidget {
   ConsumerState<AccountMenuScreen> createState() => _AccountMenuScreenState();
 }
 
-class _AccountMenuScreenState extends ConsumerState<AccountMenuScreen> with WidgetsBindingObserver {
+class _AccountMenuScreenState()
+    extends ConsumerState<AccountMenuScreen>
+    with WidgetsBindingObserver {
   bool _errorLoadingFlair = false;
   bool _pendingKidModeRefresh = false;
 
@@ -93,6 +95,7 @@ class _AccountMenuScreenState extends ConsumerState<AccountMenuScreen> with Widg
     final kidMode = account.value?.kid ?? false;
     final LightUser? user = account.value?.lightUser ?? authUser?.user;
     final unreadMessages = ref.watch(unreadMessagesProvider).value?.unread ?? 0;
+    final unreadTeamUpdates = ref.watch(unreadTeamUpdatesCountProvider).value ?? 0;
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
@@ -179,7 +182,7 @@ class _AccountMenuScreenState extends ConsumerState<AccountMenuScreen> with Widg
           ],
           ListSection(
             children: [
-              if (user != null && account.hasValue && !kidMode)
+              if (user != null && account.hasValue && !kidMode) ...[
                 ListTile(
                   leading: Badge.count(
                     isLabelVisible: unreadMessages > 0,
@@ -195,6 +198,22 @@ class _AccountMenuScreenState extends ConsumerState<AccountMenuScreen> with Widg
                     _navigate(context, ContactsScreen.buildRoute());
                   },
                 ),
+                ListTile(
+                  leading: Badge.count(
+                    isLabelVisible: unreadTeamUpdates > 0,
+                    count: unreadTeamUpdates,
+                    child: const Icon(Icons.groups_outlined),
+                  ),
+                  trailing: Theme.of(context).platform == TargetPlatform.iOS
+                      ? const CupertinoListTileChevron()
+                      : null,
+                  title: Text(context.l10n.teamTeamUpdates),
+                  enabled: isOnline,
+                  onTap: () {
+                    _navigate(context, TeamUpdatesScreen.buildRoute());
+                  },
+                ),
+              ],
               ListTile(
                 leading: const Icon(Icons.settings_outlined),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
@@ -304,14 +323,12 @@ class _AccountMenuScreenState extends ConsumerState<AccountMenuScreen> with Widg
 /// On Android opens [AccountMenuScreen] as a full-screen page sliding from the
 /// right. On iOS opens the same screen inside a [CupertinoSheetRoute] with
 /// nested navigation.
-class AccountMenuButton extends ConsumerStatefulWidget {
-  const AccountMenuButton({super.key});
-
+class const AccountMenuButton({super.key}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<AccountMenuButton> createState() => _AccountMenuButtonState();
 }
 
-class _AccountMenuButtonState extends ConsumerState<AccountMenuButton> {
+class _AccountMenuButtonState() extends ConsumerState<AccountMenuButton> {
   bool _errorLoadingFlair = false;
 
   static const _materialAnonIconSize = 30.0;
@@ -377,9 +394,7 @@ class _AccountMenuButtonState extends ConsumerState<AccountMenuButton> {
 }
 
 /// About screen with links to various lichess resources and legal information.
-class AboutScreen extends ConsumerWidget {
-  const AboutScreen({super.key});
-
+class const AboutScreen({super.key}) extends ConsumerWidget {
   static Route<void> buildRoute() {
     return buildScreenRoute(screen: const AboutScreen());
   }

@@ -16,7 +16,8 @@ final offlineComputerGamePreferencesProvider =
       name: 'OfflineComputerGamePreferencesProvider',
     );
 
-class OfflineComputerGamePreferences extends Notifier<OfflineComputerGamePrefs>
+class OfflineComputerGamePreferences()
+    extends Notifier<OfflineComputerGamePrefs>
     with PreferencesStorage<OfflineComputerGamePrefs> {
   @override
   @protected
@@ -76,7 +77,7 @@ class OfflineComputerGamePreferences extends Notifier<OfflineComputerGamePrefs>
 }
 
 /// Represents the player's color choice for offline computer games.
-enum SideChoice {
+enum SideChoice() {
   white,
   random,
   black,
@@ -101,14 +102,14 @@ enum SideChoice {
 }
 
 @Freezed(fromJson: true, toJson: true)
-sealed class OfflineComputerGamePrefs with _$OfflineComputerGamePrefs implements Serializable {
-  const OfflineComputerGamePrefs._();
-
+sealed class const OfflineComputerGamePrefs._()
+    with _$OfflineComputerGamePrefs
+    implements Serializable {
   /// The time control a game falls back to when the player asks for a clock without having picked
   /// one yet.
   static const defaultClockTimeIncrement = TimeIncrement(300, 3);
 
-  const factory OfflineComputerGamePrefs({
+  const factory({
     @JsonKey(readValue: readOpponent) required OpponentSpec opponentSpec,
     required SideChoice sideChoice,
     @Default(Variant.standard) Variant variant,
@@ -134,7 +135,7 @@ sealed class OfflineComputerGamePrefs with _$OfflineComputerGamePrefs implements
     blindfoldMode: false,
   );
 
-  factory OfflineComputerGamePrefs.fromJson(Map<String, dynamic> json) {
+  factory fromJson(Map<String, dynamic> json) {
     try {
       return _$OfflineComputerGamePrefsFromJson(json);
     } catch (_) {

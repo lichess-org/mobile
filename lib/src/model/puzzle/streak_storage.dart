@@ -26,11 +26,7 @@ final savedStreakScoreProvider = FutureProvider.autoDispose<int?>((Ref ref) asyn
 });
 
 /// Local storage for the current puzzle streak.
-class StreakStorage {
-  const StreakStorage(this.ref, this.userId);
-  final Ref ref;
-  final UserId? userId;
-
+class const StreakStorage(final Ref ref, final UserId? userId) {
   Future<PuzzleStreak?> loadActiveStreak() async {
     final stored = _store.getString(_storageKey);
     if (stored == null) {

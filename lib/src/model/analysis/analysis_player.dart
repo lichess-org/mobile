@@ -9,15 +9,9 @@ part 'analysis_player.freezed.dart';
 /// Unlike `Player` from `package:lichess_mobile/src/model/game/player.dart`,
 /// this doesn't require user accounts or full game context.
 @freezed
-sealed class AnalysisPlayer with _$AnalysisPlayer {
-  const AnalysisPlayer._();
-
-  const factory AnalysisPlayer({
-    required String name,
-    required Side side,
-    String? title,
-    int? rating,
-  }) = _AnalysisPlayer;
+sealed class const AnalysisPlayer._() with _$AnalysisPlayer {
+  const factory({required String name, required Side side, String? title, int? rating}) =
+      _AnalysisPlayer;
 
   /// Creates an AnalysisPlayer from PGN headers for the given side.
   ///

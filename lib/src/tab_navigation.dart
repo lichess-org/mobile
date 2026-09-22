@@ -4,7 +4,7 @@ import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 
-enum BottomTab {
+enum BottomTab() {
   home,
   puzzles,
   learn,
@@ -91,7 +91,7 @@ final moreScrollController = ScrollController(debugLabel: 'MoreScroll');
 /// A [NavigatorObserver] that keeps track of the routes currently on the
 /// navigator it observes, so that code can query whether a named route is
 /// present in the stack (which Flutter does not expose publicly).
-class RouteStackObserver extends NavigatorObserver {
+class RouteStackObserver() extends NavigatorObserver {
   final List<Route<dynamic>> _stack = [];
 
   /// Whether a route with the given [name] is currently in the stack.
@@ -141,7 +141,7 @@ final RouteStackObserver rootNavRouteStackObserver = RouteStackObserver();
 
 final RouteObserver<PageRoute<void>> rootNavPageRouteObserver = RouteObserver<PageRoute<void>>();
 
-class BottomTabInteraction extends ChangeNotifier {
+class BottomTabInteraction() extends ChangeNotifier {
   void notifyItemTapped() {
     notifyListeners();
   }
@@ -153,11 +153,11 @@ final learnTabInteraction = BottomTabInteraction();
 final watchTabInteraction = BottomTabInteraction();
 final moreTabInteraction = BottomTabInteraction();
 
-class MainTabScaffoldProperties extends InheritedWidget {
-  const MainTabScaffoldProperties({required super.child, required this.extendBody, super.key});
-
-  final bool extendBody;
-
+class const MainTabScaffoldProperties({
+  required super.child,
+  required final bool extendBody,
+  super.key,
+}) extends InheritedWidget {
   @override
   bool updateShouldNotify(MainTabScaffoldProperties oldWidget) {
     return extendBody != oldWidget.extendBody;

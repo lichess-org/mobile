@@ -32,13 +32,11 @@ import 'package:share_plus/share_plus.dart';
 final _dateFormatter = DateFormat.yMMMd().add_Hm();
 
 /// A list tile for a game in a game list.
-class GameListTile extends ConsumerWidget {
-  const GameListTile({required this.item, this.padding, this.onPressedBookmark});
-
-  final LightExportedGameWithPov item;
-  final EdgeInsetsGeometry? padding;
-  final Future<void> Function(BuildContext context)? onPressedBookmark;
-
+class const GameListTile({
+  required final LightExportedGameWithPov item,
+  final EdgeInsetsGeometry? padding,
+  final Future<void> Function(BuildContext context)? onPressedBookmark,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final (:game, pov: youAre) = item;
@@ -115,17 +113,11 @@ class GameListTile extends ConsumerWidget {
   }
 }
 
-class GameContextMenu extends ConsumerWidget {
-  const GameContextMenu({
-    required this.game,
-    required this.mySide,
-    required this.onPressedBookmark,
-  });
-
-  final LightExportedGame game;
-  final Side mySide;
-  final Future<void> Function(BuildContext context)? onPressedBookmark;
-
+class const GameContextMenu({
+  required final LightExportedGame game,
+  required final Side mySide,
+  required final Future<void> Function(BuildContext context)? onPressedBookmark,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final orientation = mySide;
@@ -135,9 +127,8 @@ class GameContextMenu extends ConsumerWidget {
     return BottomSheetScrollableContainer(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16.0,
-          ).add(const EdgeInsets.only(bottom: 4.0)),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0)
+              .add(const EdgeInsets.only(bottom: 4.0)),
           child: Text(
             context.l10n.resVsX(
               game.white.fullName(context.l10n),

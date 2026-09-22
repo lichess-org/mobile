@@ -6,11 +6,10 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:material_ui/material_ui.dart';
 
-class BoardEditorPositionsScreen extends StatelessWidget {
-  const BoardEditorPositionsScreen({required this.onPositionSelected, super.key});
-
-  final void Function(Position position) onPositionSelected;
-
+class const BoardEditorPositionsScreen({
+  required final void Function(Position position) onPositionSelected,
+  super.key,
+}) extends StatelessWidget {
   static Route<dynamic> buildRoute({required void Function(Position position) onPositionSelected}) {
     return buildScreenRoute(
       screen: BoardEditorPositionsScreen(onPositionSelected: onPositionSelected),
@@ -42,16 +41,13 @@ class BoardEditorPositionsScreen extends StatelessWidget {
   }
 }
 
-class _OpeningsTab extends StatefulWidget {
-  const _OpeningsTab({required this.onPositionSelected});
-
-  final void Function(Position position) onPositionSelected;
-
+class const _OpeningsTab({required final void Function(Position position) onPositionSelected})
+    extends StatefulWidget {
   @override
   State<_OpeningsTab> createState() => _OpeningsTabState();
 }
 
-class _OpeningsTabState extends State<_OpeningsTab> {
+class _OpeningsTabState() extends State<_OpeningsTab> {
   late final Future<List<Position>>? _openings;
 
   @override
@@ -92,16 +88,13 @@ class _OpeningsTabState extends State<_OpeningsTab> {
   }
 }
 
-class _EndGamesTab extends StatefulWidget {
-  const _EndGamesTab({required this.onPositionSelected});
-
-  final void Function(Position position) onPositionSelected;
-
+class const _EndGamesTab({required final void Function(Position position) onPositionSelected})
+    extends StatefulWidget {
   @override
   State<_EndGamesTab> createState() => _EndGamesTabState();
 }
 
-class _EndGamesTabState extends State<_EndGamesTab> {
+class _EndGamesTabState() extends State<_EndGamesTab> {
   late final Future<List<Position>>? _endGames;
 
   @override

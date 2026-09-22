@@ -7,7 +7,7 @@ import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 
 /// Represents a lichess rating perf item
-enum Perf {
+enum Perf(final String title, final String shortTitle, final IconData icon) {
   ultraBullet('UltraBullet', 'Ultra', LichessIcons.ultrabullet),
   bullet('Bullet', 'Bullet', LichessIcons.bullet),
   blitz('Blitz', 'Blitz', LichessIcons.blitz),
@@ -26,12 +26,6 @@ enum Perf {
   puzzle('Puzzle', 'Puzzle', LichessIcons.target),
   storm('Storm', 'Storm', LichessIcons.storm),
   streak('Streak', 'Streak', LichessIcons.streak);
-
-  const Perf(this.title, this.shortTitle, this.icon);
-
-  final String title;
-  final String shortTitle;
-  final IconData icon;
 
   String label(AppLocalizations l10n) {
     switch (this) {
@@ -113,7 +107,7 @@ enum Perf {
     }
   }
 
-  factory Perf.fromVariantAndSpeed(Variant variant, Speed speed) {
+  factory fromVariantAndSpeed(Variant variant, Speed speed) {
     switch (variant) {
       case Variant.standard:
         switch (speed) {

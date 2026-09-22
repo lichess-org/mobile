@@ -11,40 +11,26 @@ import 'package:material_ui/material_ui.dart';
 /// For a non-interactive board, use [StaticChessboard] instead. To disable user
 /// interaction on this board (e.g. at the end of a game), drive the [controller]
 /// with game data whose `playerSide` is [PlayerSide.none].
-class BoardWidget extends StatelessWidget {
-  const BoardWidget({
-    required this.size,
-    required this.orientation,
-    required this.settings,
-    required this.controller,
-    this.onMove,
-    this.shapes = const {},
-    this.annotations = const {},
-    this.boardOverlay,
-    this.error,
-    this.boardKey,
-  });
-
-  final double size;
-  final Side orientation;
-  final ChessboardSettings settings;
+class const BoardWidget({
+  required final double size,
+  required final Side orientation,
+  required final ChessboardSettings settings,
 
   /// Controller that drives the board position and game state.
-  final ChessboardController controller;
+  required final ChessboardController controller,
 
   /// Called when the user completes a move on the board.
-  final void Function(Move, {bool? viaDragAndDrop})? onMove;
+  final void Function(Move, {bool? viaDragAndDrop})? onMove,
 
   /// External shapes to draw on the board (engine arrows, analysis annotations, etc.).
-  final Set<Shape> shapes;
+  final Set<Shape> shapes = const {},
 
   /// Move annotations to display on the board.
-  final Map<Square, Annotation> annotations;
-
-  final String? error;
-  final Widget? boardOverlay;
-  final GlobalKey? boardKey;
-
+  final Map<Square, Annotation> annotations = const {},
+  final Widget? boardOverlay,
+  final String? error,
+  final GlobalKey? boardKey,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final board = Chessboard(
@@ -82,10 +68,7 @@ class BoardWidget extends StatelessWidget {
   }
 }
 
-class _ErrorWidget extends StatelessWidget {
-  const _ErrorWidget({required this.errorMessage});
-  final String errorMessage;
-
+class const _ErrorWidget({required final String errorMessage}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(

@@ -10,11 +10,8 @@ import 'package:material_ui/material_ui.dart';
 /// Create a leaderboard list of the highest rated player for each perf.
 ///
 /// The title routes to a Leaderboard Screen with the top 10 players for each perf.
-class LeaderboardWidget extends ConsumerWidget {
-  const LeaderboardWidget({required this.top1, super.key});
-
-  final AsyncValue<Top1Leaderboard> top1;
-
+class const LeaderboardWidget({required final AsyncValue<Top1Leaderboard> top1, super.key})
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Shimmer(

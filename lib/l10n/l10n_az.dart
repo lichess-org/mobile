@@ -30,6 +30,9 @@ class AppLocalizationsAz extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Geri alma təklifini ləğv et';
 
   @override
+  String get mobileChessEngine => 'Chess engine';
+
+  @override
   String get mobileClearButton => 'Təmizlə';
 
   @override
@@ -150,6 +153,12 @@ class AppLocalizationsAz extends AppLocalizations {
   String get mobileSettingsDraggedTargetSquare => 'Square';
 
   @override
+  String get mobileSettingsDrawnShapeColor => 'Drawn shape color';
+
+  @override
+  String get mobileSettingsDrawnShapeColorHelp => 'This color is used for shapes drawn by hand using two fingers.';
+
+  @override
   String get mobileSettingsHomeWidgets => 'Home widgets';
 
   @override
@@ -231,7 +240,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get mobileSystemColors => 'Sistem rəngləri';
 
   @override
-  String get mobileTheme => 'Tema';
+  String get mobileTheme => 'Mövzu';
 
   @override
   String get mobileToolsTab => 'Alətlər';
@@ -275,7 +284,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get mobileDisplayModeCompact => 'Compact';
 
   @override
-  String get mobileDisplayModeDetailed => 'Detailed';
+  String get mobileDisplayModeDetailed => 'Ətraflı';
 
   @override
   String get mobileOpeningExplorerNotAvailableOffline => 'Opening Explorer is not available offline.';
@@ -652,7 +661,10 @@ class AppLocalizationsAz extends AppLocalizations {
   String get arenaHowIsTheWinnerDecidedAnswer => 'Turnirin təyin olunmuş müddətinin sonunda ən çox xal toplayan oyunçu(lar) qalib(lər) elan olunacaq.\n\nİki və ya daha çox oyunçu eyni xala sahib olduqda, turnir taybrekə qalacaq.';
 
   @override
-  String get arenaHowDoesPairingWork => 'Qoşulma necə işləyir?';
+  String get arenaHowDoesPairingWork => 'How does the pairing work?';
+
+  @override
+  String get arenaHowArePlayersPaired => 'How are players paired?';
 
   @override
   String get arenaHowDoesPairingWorkAnswer => 'Turnirin əvvəlində oyunçular reytinqlərinə görə qarşılaşırlar.\nBir oyunu bitirən kimi turnir lobbisinə qayıdın: daha sonra reytinqinizə yaxın bir oyunçu ilə qarşılaşacaqsınız. Beləliklə gözləmə müddətini ən aza endirilir, lakin turnirdəki bütün digər oyunçularla qarşılaşa bilməzsiniz.\nDaha çox oyun oynamaq və daha çox xal qazanmaq üçün sürətli oynayın və lobbiyə qayıdın.';
@@ -743,6 +755,9 @@ class AppLocalizationsAz extends AppLocalizations {
   String get arenaDefender => 'Defender';
 
   @override
+  String get arenaDefenderLabel => 'Defender:';
+
+  @override
   String get arenaPickYourTeam => 'Pick your team';
 
   @override
@@ -806,6 +821,9 @@ class AppLocalizationsAz extends AppLocalizations {
 
   @override
   String get arenaBerserkRate => 'Berserk rate';
+
+  @override
+  String get arenaLeaguesAndStreamerBattles => 'Leagues & Streamer Battles';
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -915,6 +933,9 @@ class AppLocalizationsAz extends AppLocalizations {
   String get broadcastDefinitivelyDeleteRound => 'Definitively delete the round and all its games.';
 
   @override
+  String get broadcastPermanentlyDeleteRound => 'Permanently delete this round and all its games?';
+
+  @override
   String get broadcastDeleteAllGamesOfThisRound => 'Delete all games of this round. The source will need to be active in order to re-create them.';
 
   @override
@@ -982,6 +1003,9 @@ class AppLocalizationsAz extends AppLocalizations {
 
   @override
   String get broadcastNoBoardsYet => 'No boards yet. These will appear once games are uploaded.';
+
+  @override
+  String get broadcastNoPlayersYet => 'No players yet. They will appear once games are uploaded.';
 
   @override
   String broadcastBoardsCanBeLoaded(String param) {
@@ -1332,6 +1356,527 @@ class AppLocalizationsAz extends AppLocalizations {
 
   @override
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Practice only some files & ranks';
+
+  @override
+  String get learnLearnChess => 'Şahmat öyrənin';
+
+  @override
+  String get learnByPlaying => 'oynayaraq!';
+
+  @override
+  String learnProgressX(String param) {
+    return 'İrəliləyiş: $param';
+  }
+
+  @override
+  String get learnResetMyProgress => 'Irəliləyiş tarixini sıfırla';
+
+  @override
+  String get learnYouWillLoseAllYourProgress => 'İrəliləyiş tarixi itəcək!';
+
+  @override
+  String get learnPlay => 'oyna!';
+
+  @override
+  String get learnChessPieces => 'Şahmat fiqurları';
+
+  @override
+  String get learnTheRook => 'Top';
+
+  @override
+  String get learnItMovesInStraightLines => 'Düz xətlə gedir';
+
+  @override
+  String get learnRookIntro => 'Top güclü fiqurdur. Onu idarə etməyə hazırsan?';
+
+  @override
+  String get learnRookGoal => 'Ulduza yetişmək üçün top fiquruna kliklə!';
+
+  @override
+  String get learnGrabAllTheStars => 'Bütün ulduzları topla!';
+
+  @override
+  String get learnTheFewerMoves => 'Daha az gediş et, daha çox xal qazan!';
+
+  @override
+  String get learnUseTwoRooks => 'Hər iki topdan istifadə etməklə\nsürəti artır!';
+
+  @override
+  String get learnRookComplete => 'Təbriklər! Siz top fiqurunu çox uğurla öyrəndiniz.';
+
+  @override
+  String get learnTheBishop => 'Fil';
+
+  @override
+  String get learnItMovesDiagonally => 'Çarpaz xətlə gedir';
+
+  @override
+  String get learnBishopIntro => 'Sonrakı mərhələdə, Fil fiquru ilə necə manevr etməyi öyrənəcəyik!';
+
+  @override
+  String get learnYouNeedBothBishops => 'Bir ağ xanalı fil, \nbir qara xanalı fil. \nHər ikisinə ehtiyacın olacaq!';
+
+  @override
+  String get learnBishopComplete => 'Təbriklər! Artıq Fillər sənin dostundur.';
+
+  @override
+  String get learnTheQueen => 'Vəzir';
+
+  @override
+  String get learnQueenCombinesRookAndBishop => 'Vəzir = top + fil';
+
+  @override
+  String get learnQueenIntro => 'Səhnəyə ən güclü şahmat fiquru daxil olur. Zati-aliləri Vəzir!';
+
+  @override
+  String get learnQueenComplete => 'Təbriklər! Vəzirlə bağlı bütün sirləri öyrəndiniz.';
+
+  @override
+  String get learnTheKing => 'Şah';
+
+  @override
+  String get learnTheMostImportantPiece => 'Ən önəmli fiqur';
+
+  @override
+  String get learnKingIntro => 'Siz şahsınız. Döyüşdə uduzsanız, oyunda da məğlubsunuz.';
+
+  @override
+  String get learnTheKingIsSlow => 'Şahın sürəti yavaşdır.';
+
+  @override
+  String get learnLastOne => 'Sonuncusu!';
+
+  @override
+  String get learnKingComplete => 'İndi isə əmr sahibinə əmri siz verə bilərsiniz!';
+
+  @override
+  String get learnTheKnight => 'At';
+
+  @override
+  String get learnItMovesInAnLShape => 'L hərfi formasında hərəkət edir';
+
+  @override
+  String get learnKnightIntro => 'Yaxşı yerdə axşamladıq. At... biraz çətin bir fiqurdur.';
+
+  @override
+  String get learnKnightsHaveAFancyWay => 'Atların üstündən atlamaq kimi\nözünəməxsus mərifəti var!';
+
+  @override
+  String get learnKnightsCanJumpOverObstacles => 'Atlar maneələrin üstündən tullana bilər!\nTullanın və bütün ulduzları toplayın!';
+
+  @override
+  String get learnKnightComplete => 'Təbriklər! Atı idarə etməyi öyrəndiniz.';
+
+  @override
+  String get learnThePawn => 'Piyada';
+
+  @override
+  String get learnItMovesForwardOnly => 'Yalnız irəliləyir';
+
+  @override
+  String get learnPawnIntro => 'Piyadalar zəifdir, lakin böyük potensiala sahibdirlər.';
+
+  @override
+  String get learnPawnsMoveOneSquareOnly => 'Piyadalar yalnız bir xana hərəkət edir.\nAncaq lövhənin digər tərəfinə çatdıqda daha güclü bir fiqura çevrilirlər!';
+
+  @override
+  String get learnMostOfTheTimePromotingToAQueenIsBest => 'Əksər hallarda Vəzirə çıxmaq ən yaxşısıdır.\nAmma bəzən At da lazım ola bilər!';
+
+  @override
+  String get learnPawnsMoveForward => 'Piyadalar irəliyə gedir,\nlakin çapraz vurur!';
+
+  @override
+  String get learnCaptureThenPromote => 'Vur və çevril!';
+
+  @override
+  String get learnUseAllThePawns => 'Bütün piyadalardan istifadə edin!\nÇevrilməyə ehtiyac yoxdur.';
+
+  @override
+  String get learnAPawnOnTheSecondRank => 'İkinci horizontaldakı piyada birdən iki xana irəliyə hərəkət edə bilər!';
+
+  @override
+  String get learnGrabAllTheStarsNoNeedToPromote => 'Bütün ulduzları yığın!\nÇevrilməyə ehtiyac yoxdur.';
+
+  @override
+  String get learnPawnComplete => 'Təbriklər! Artıq Piyadaların da sizdən gizlədəcək bir şeyləri yoxdur.';
+
+  @override
+  String get learnPawnPromotion => 'Piyada çevrilməsi';
+
+  @override
+  String get learnYourPawnReachedTheEndOfTheBoard => 'Piyadanız lövhənin sonuna çatdı!';
+
+  @override
+  String get learnItNowPromotesToAStrongerPiece => 'İndi daha güclü bir fiqura çevrilir.';
+
+  @override
+  String get learnSelectThePieceYouWant => 'İstədiyiniz fiquru seçin!';
+
+  @override
+  String get learnFundamentals => 'Təməl Prinsiplər';
+
+  @override
+  String get learnCapture => 'Vurma';
+
+  @override
+  String get learnTakeTheEnemyPieces => 'Rəqib daşlarını vur';
+
+  @override
+  String get learnCaptureIntro => 'Rəqibin müdafiəsiz fiqurlarını müəyyənləşdirin və onları vurun!';
+
+  @override
+  String get learnTakeTheBlackPieces => 'Qara fiqurları vur!';
+
+  @override
+  String get learnTakeTheBlackPiecesAndDontLoseYours => 'Qara fiqurları götürün!\nVə özünüzünkünü itirməyin.';
+
+  @override
+  String get learnCaptureComplete => 'Təbriklər! Şahmat fiqurları ilə necə mübarizə aparacağınızı bilirsiniz!';
+
+  @override
+  String get learnProtection => 'Müdafiə';
+
+  @override
+  String get learnKeepYourPiecesSafe => 'Fiqurlarını qoru';
+
+  @override
+  String get learnProtectionIntro => 'Rəqibinizin hücum etdiyi fiqurları müəyyənləşdirin və onları müdafiə edin!';
+
+  @override
+  String get learnProtectionComplete => 'Təbriklər! İtirmədiyiniz bir fiqur qazandığınız bir fiqurdur!';
+
+  @override
+  String get learnEscape => 'Hücum altındasınız!\nTəhlükədən qaçın!';
+
+  @override
+  String get learnNoEscape => 'Qaçış yoxdur,\nancaq sən müdafiə oluna bilərsən!';
+
+  @override
+  String get learnDontLetThemTakeAnyUndefendedPiece => 'Hər hansı müdafiəsiz fiquru\ngötürmələrinə imkan verməyin!';
+
+  @override
+  String get learnCombat => 'Döyüş';
+
+  @override
+  String get learnCaptureAndDefendPieces => 'Fiqurları vur və müdafiə et';
+
+  @override
+  String get learnCombatIntro => 'Yaxşı bir döyüşçü həm hücumu, həm müdafiəni bilir!';
+
+  @override
+  String get learnCombatComplete => 'Təbriklər! Şahmat fiqurları ilə necə mübarizə aparacağınızı bilirsiniz!';
+
+  @override
+  String get learnCheckInOne => 'Şah vermə';
+
+  @override
+  String get learnAttackTheOpponentsKing => 'Rəqib şahına hücum et';
+
+  @override
+  String get learnCheckInOneIntro => 'Rəqibinizə şah vermək üçün onun şahına hücum edin. O da şahını qorumalıdır!';
+
+  @override
+  String get learnCheckInOneGoal => 'Rəqibin kralını hədəf alın\nbir hərəkətdə!';
+
+  @override
+  String get learnCheckInOneComplete => 'Təbriklər! Şah verdiyiniz üçün, rəqibi şahını qorumağa məcbur etdiz!';
+
+  @override
+  String get learnOutOfCheck => 'Şahı qoru';
+
+  @override
+  String get learnDefendYourKing => 'Şahı müdafiə edin';
+
+  @override
+  String get learnOutOfCheckIntro => 'Rəqib sizə şah verdi! Şahı qaçmalı və ya hücumu blok etməlisiz.';
+
+  @override
+  String get learnEscapeWithTheKing => 'Şah ilə qaç!';
+
+  @override
+  String get learnTheKingCannotEscapeButBlock => 'Şah qaça bilməz,\nlakin hücumun bloklaya bilərsiz!';
+
+  @override
+  String get learnYouCanGetOutOfCheckByTaking => 'Hücum edən fiquru vuraraq\nşahdan qurtula bilərsiz.';
+
+  @override
+  String get learnThisKnightIsCheckingThroughYourDefenses => 'Bu at müdafiənin\nüstündən şah verdi!';
+
+  @override
+  String get learnEscapeOrBlock => 'Şahla qaç\nvə ya hücumu blokla!';
+
+  @override
+  String get learnOutOfCheckComplete => 'Təbriklər! Şahınız heç vaxt vurula bilməz, şah verilməkdən müdafiə müdafiə olunduğunuzdan əmin olun!';
+
+  @override
+  String get learnMateInOne => 'Mat vermə';
+
+  @override
+  String get learnDefeatTheOpponentsKing => 'Rəqib şahını mat et';
+
+  @override
+  String get learnMateInOneIntro => 'Rəqib, verdiyiniz şahın qarşısını ala bilmədikdə qalib sayılırsız.';
+
+  @override
+  String get learnAttackYourOpponentsKing => 'Rəqib şahına hücum edin\nmüdafiə oluna bilməyəcək bir şəkildə!';
+
+  @override
+  String get learnMateInOneComplete => 'Təbriklər! Şahmat oyunları belə qazanılır!';
+
+  @override
+  String get learnIntermediate => 'Orta';
+
+  @override
+  String get learnBoardSetup => 'Fiqurların düzülüşü';
+
+  @override
+  String get learnHowTheGameStarts => 'Oyuna necə başlamalı';
+
+  @override
+  String get learnBoardSetupIntro => 'İki ordu üz-üzə, döyüşə hazırdır.';
+
+  @override
+  String get learnThisIsTheInitialPosition => 'Bu hər bir şahmat oyunun\nbaşlanğıc pozisisyasıdır!\nDavam etmək üçün istənilən bir gediş edin.';
+
+  @override
+  String get learnFirstPlaceTheRooks => 'İlk öncə topları yerləşdirin!\nOnlar künclərdə yerləşir.';
+
+  @override
+  String get learnThenPlaceTheKnights => 'Sonra atları yerləşdir!\nOnlar topların yanına gedir.';
+
+  @override
+  String get learnPlaceTheBishops => 'Filləri yerləşdirin!\nOnlar atların yanına gedir.';
+
+  @override
+  String get learnPlaceTheQueen => 'Vəziri qoyun!\nÖzüylə eyni rəngli xanaya.';
+
+  @override
+  String get learnPlaceTheKing => 'Şahı qoyun!\nDüz vəzirin yanına.';
+
+  @override
+  String get learnPawnsFormTheFrontLine => 'Piyadalar ön xətti təşkil edir.\nDavam etmək üçün bir gediş edir.';
+
+  @override
+  String get learnBoardSetupComplete => 'Təbriklər! Artıq şahmat lövhəsini necə quracağınızı bilirsiniz.';
+
+  @override
+  String get learnCastling => 'Qalaqurma';
+
+  @override
+  String get learnTheSpecialKingMove => 'Xüsusi şah gedişi';
+
+  @override
+  String get learnCastlingIntro => 'Şahı təhlükəsiz yerə gətirin və hücum üçün topu hazırlayın!';
+
+  @override
+  String get learnCastleKingSide => 'Qısa qalaqurma üçün\nşahını iki xana hərəkət etdir!';
+
+  @override
+  String get learnCastleQueenSide => 'Uzun qalaqurma üçün\nşahını iki xana hərəkət etdir!';
+
+  @override
+  String get learnTheKnightIsInTheWay => 'At qalaqurmaya mane olur!\nOnu çək və qısa qalaqurma et.';
+
+  @override
+  String get learnCastleKingSideMovePiecesFirst => 'Qısa qalaqurma!\nİlk öncə aradakı fiqurları çəkmək lazımdır.';
+
+  @override
+  String get learnCastleQueenSideMovePiecesFirst => 'Uzun qalaqurma!\nİlk öncə aradakı fiqurları çəkmək lazımdır.';
+
+  @override
+  String get learnYouCannotCastleIfMoved => 'Şah yerindən tərpənibsə\nvə ya top yerindən tərpənibsə\nqalaqurma edə bilməzsiz.';
+
+  @override
+  String get learnYouCannotCastleIfAttacked => 'Şahın keçəcəyi xana hücum altında olarsa\nqalaqurma edə bilməzsiz\nHücumu bloklayın sonra qalaqurma edin!';
+
+  @override
+  String get learnFindAWayToCastleKingSide => 'Qısa qalaqurmanın bir yolunu tap!';
+
+  @override
+  String get learnFindAWayToCastleQueenSide => 'Vəzir tərəfə qalaqurmanın bir yolunu tapın!';
+
+  @override
+  String get learnCastlingComplete => 'Təbriklər! Demək olar hər bir oyunda qalaqurma etməlisən.';
+
+  @override
+  String get learnTheSpecialPawnMove => 'Xüsusi piyada gedişi';
+
+  @override
+  String get learnEnPassantIntro => 'Rəqib piyada iki xana hərəkət etdikdə, onu bir xana hərəkət etdiyi kimi qəbul edə bilərsiniz.';
+
+  @override
+  String get learnBlackJustMovedThePawnByTwoSquares => 'Qaralar piyadanı iki xana \nirəli gəldi!\nKeçiddə götür.';
+
+  @override
+  String get learnEnPassantOnlyWorksImmediately => 'Keçiddə götürmə, yalnız\nrəqib piyadanı oynadıqdan\ndərhal sonra keçərlidir.';
+
+  @override
+  String get learnEnPassantOnlyWorksOnFifthRank => 'Keçiddə götürmə yalnız\npiyadanız 5-ci horizontalda olanda mümkündür.';
+
+  @override
+  String get learnTakeAllThePawnsEnPassant => 'Bütün keçiddə piyadaları götür!';
+
+  @override
+  String get learnEnPassantComplete => 'Təbriklər! Artıq keçiddə piyada götürə bilərsiz.';
+
+  @override
+  String get learnStalemate => 'Pat';
+
+  @override
+  String get learnTheGameIsADraw => 'Oyun heç-heçədir';
+
+  @override
+  String get learnStalemateIntro => 'Əgər bir oyunçuya şah verilməyibsə və oynaya biləcəyi qanuni bir gedişi yoxdursa buna pat deyilir. Oyun heç-heçədir, qalib və məğlub yoxdur.';
+
+  @override
+  String get learnStalemateGoal => 'Pat etmək üçün:\n- Qaralar gediş edə bilməməlidir\n- Şah vermək mümkün olmamalıdır.';
+
+  @override
+  String get learnStalemateComplete => 'Təbriklər! Mat olmaqdansa Pat yaxşıdır!';
+
+  @override
+  String get learnAdvanced => 'Ətraflı';
+
+  @override
+  String get learnPieceValue => 'Fiqur dəyəri';
+
+  @override
+  String get learnEvaluatePieceStrength => 'Fiqur gücü qiymətləndirilməsi';
+
+  @override
+  String get learnPieceValueIntro => 'Yüksək hərəkətliliyi olan fiqurlar daha yüksək dəyərə sahibdir!\nVəzir = 9\nTop = 5\nFil = 3\nAt = 3\nPiyada = 1\nŞah ən dəyərli fiqurdur! Onu itirmək oyunu itirmək deməkdir.';
+
+  @override
+  String get learnQueenOverBishop => 'Ən yüksək\ndəyərli fiquru vur!\nVəzir > Fil';
+
+  @override
+  String get learnPieceValueExchange => 'Take the piece with the highest value!\nDo not exchange\na higher valued piece for a less valuable one.';
+
+  @override
+  String get learnPieceValueLegal => 'Take the piece\nwith the highest value!\nMake sure your move is legal!';
+
+  @override
+  String get learnTakeThePieceWithTheHighestValue => 'Ən dəyərli fiquru götürün!';
+
+  @override
+  String get learnPieceValueComplete => 'Təbriklər! Artıq fiqurların dəyərini bilirsiniz!\nVəzir = 9\nTop = 5\nFil = 3\nAt = 3\nPiyada = 1';
+
+  @override
+  String get learnCheckInTwo => '2 gedişə şah';
+
+  @override
+  String get learnTwoMovesToGiveCheck => 'Şah vermək üçün iki gediş';
+
+  @override
+  String get learnCheckInTwoIntro => 'Rəqibə şah vermək üçün iki gedişli doğru kombinasiyanı tapın!';
+
+  @override
+  String get learnCheckInTwoGoal => 'Rəqibə iki gedişdə\nşah ver!';
+
+  @override
+  String get learnCheckInTwoComplete => 'Təbriklər! Şah verdiyiniz üçün, rəqibi şahını qorumağa məcbur etdiz!';
+
+  @override
+  String get learnWhatNext => 'Sırada nə var?';
+
+  @override
+  String get learnYouKnowHowToPlayChess => 'Təbriklər! Şahmat oynamağı öyrəndiniz! Daha güclü bir oyunçu olmaq istəyirsiniz?';
+
+  @override
+  String get learnRegister => 'Qeydiyyat';
+
+  @override
+  String get learnGetAFreeLichessAccount => 'Pulsuz Lichess hesabı əldə edin';
+
+  @override
+  String get learnPractice => 'Məşğələ';
+
+  @override
+  String get learnLearnCommonChessPositions => 'Əsas şahmat pozisiyalarını öyrənin';
+
+  @override
+  String get learnPuzzles => 'Tapmacalar';
+
+  @override
+  String get learnExerciseYourTacticalSkills => 'Taktiki bacarıqlarınızı məşq edin';
+
+  @override
+  String get learnVideos => 'Videolar';
+
+  @override
+  String get learnWatchInstructiveChessVideos => 'Öyrədici şahmat videolarını izlə';
+
+  @override
+  String get learnPlayPeople => 'İnsanlarla oyna';
+
+  @override
+  String get learnOpponentsFromAroundTheWorld => 'Dünyanın hər yerindən oyunçular';
+
+  @override
+  String get learnPlayMachine => 'Kompüterlə oyna';
+
+  @override
+  String get learnTestYourSkillsWithTheComputer => 'Bacarıqlarınızı kompüterə qarşı yoxlayın';
+
+  @override
+  String get learnLetsGo => 'Getdik!';
+
+  @override
+  String learnStageX(String param) {
+    return 'Mərhələ $param';
+  }
+
+  @override
+  String get learnAwesome => 'Möhtəşəm!';
+
+  @override
+  String get learnExcellent => 'Mükəmməl!';
+
+  @override
+  String get learnGreatJob => 'Əla!';
+
+  @override
+  String get learnPerfect => 'Mükəmməl!';
+
+  @override
+  String get learnOutstanding => 'Mükəmməl!';
+
+  @override
+  String get learnWayToGo => 'Belə davam!';
+
+  @override
+  String get learnYesYesYes => 'Afərin!';
+
+  @override
+  String get learnYoureGoodAtThis => 'Yaxşı gedirsən!';
+
+  @override
+  String get learnNailedIt => 'Bacardın.';
+
+  @override
+  String get learnRightOn => 'Bax belə!';
+
+  @override
+  String learnStageXComplete(String param) {
+    return 'Mərhələ $param tamamlandı';
+  }
+
+  @override
+  String get learnNext => 'Növbəti';
+
+  @override
+  String learnNextX(String param) {
+    return 'Next: $param';
+  }
+
+  @override
+  String get learnBackToMenu => 'Menyuya qayıt';
+
+  @override
+  String get learnPuzzleFailed => 'Tapmaca həll olunmadı!';
+
+  @override
+  String get learnRetry => 'Yenidən başlat';
 
   @override
   String get patronDonate => 'İanə verin';
@@ -2098,6 +2643,9 @@ class AppLocalizationsAz extends AppLocalizations {
   String get puzzleThemeCornerMateDescription => 'Confine the king to the corner using a rook or queen and a knight to engage the checkmate.';
 
   @override
+  String get puzzleThemeCornerMateKnightDeliversDescription => 'Confine the king to the corner using a rook or queen, and use a knight to deliver the checkmate.';
+
+  @override
   String get puzzleThemeCrushing => 'Əzici üstünlük';
 
   @override
@@ -2170,7 +2718,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get puzzleThemeEndgameDescription => 'Oyunun son mərhələsindəki taktikalar.';
 
   @override
-  String get puzzleThemeEnPassantDescription => 'Başlanğıcda iki xana irəli gedən piyadanın, rəqib piyada ilə yan yana gəlməsindən sonra, keçiddə götürmə qaydasına əsasən, vurulan piyadanı əhatə edən taktikalar.';
+  String get puzzleThemeEnPassantDescription => 'A tactic involving the en passant rule, where a pawn can capture an opponent pawn that has bypassed it using its initial two-square move.';
 
   @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'A tactic involving the en passant rule, where a pawn can capture an opposing pawn that has just moved next to it with its initial two-square move.';
@@ -2191,7 +2739,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get puzzleThemeFork => 'Çəngəl';
 
   @override
-  String get puzzleThemeForkDescription => 'Bir fiqurun eyni anda iki rəqib fiquruna hücum etdiyi gediş.';
+  String get puzzleThemeForkDescription => 'A move where the moved piece attacks two opponent pieces at once.';
 
   @override
   String get puzzleThemeForkOpposingPiecesDescription => 'A move where a piece attacks two or more opposing pieces simultaneously.';
@@ -2206,7 +2754,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get puzzleThemeHookMate => 'Qarmaq matı';
 
   @override
-  String get puzzleThemeHookMateDescription => 'Top, at, piyada və rəqib şahının qaçışını məhdudlaşdırmaq üçün bir rəqib piyadası ilə birlikdə edilən mat.';
+  String get puzzleThemeHookMateDescription => 'Checkmate with a rook, knight, and pawn along with one enemy pawn to limit the enemy king\'s escape.';
 
   @override
   String get puzzleThemeHookMateOpposingPawnDescription => 'Checkmate using a rook, knight, and pawn, where an opposing pawn blocks the king\'s escape.';
@@ -2236,10 +2784,16 @@ class AppLocalizationsAz extends AppLocalizations {
   String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
 
   @override
+  String get puzzleThemePillsburyMateRookAndBishopDescription => 'A rook delivers checkmate to the king, while a bishop helps confine it.';
+
+  @override
   String get puzzleThemeMorphysMate => 'Morphy\'s mate';
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphyMateBishopAndRookDescription => 'A bishop delivers checkmate to the king, while a rook helps confine it.';
 
   @override
   String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
@@ -2359,7 +2913,10 @@ class AppLocalizationsAz extends AppLocalizations {
   String get puzzleThemePromotion => 'Çevrilmə';
 
   @override
-  String get puzzleThemePromotionDescription => 'Çevrilən və ya çevrilməyə yaxın bir piyada taktikanın açarıdır.';
+  String get puzzleThemePromotionDescription => 'Promote one of your pawn to a queen or minor piece.';
+
+  @override
+  String get puzzleThemePromotePawnToQueenRookOrMinor => 'Promote one of your pawns to a queen, rook or minor piece.';
 
   @override
   String get puzzleThemeQueenEndgame => 'Vəzir sonluğu';
@@ -2501,16 +3058,16 @@ class AppLocalizationsAz extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Hesab bağlanıldı.';
 
   @override
-  String get gameSetup => 'Game setup';
+  String get gameSetup => 'Oyun quruluşu';
 
   @override
-  String get challengeAFriend => 'Challenge a friend';
+  String get challengeAFriend => 'Dostuna meydan oxu';
 
   @override
   String get playAgainstComputer => 'Play against computer';
 
   @override
-  String get gameMode => 'Game mode';
+  String get gameMode => 'Oyun modu';
 
   @override
   String get createLobbyGame => 'Create lobby game';
@@ -2665,7 +3222,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get blackDidntMove => 'Qaralar gediş oynamadı';
 
   @override
-  String get whiteAborted => 'White aborted the game';
+  String get whiteAborted => 'Ağlar oyunu dayandırdı';
 
   @override
   String get blackAborted => 'Black aborted the game';
@@ -2890,7 +3447,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get pinnedPieces => 'Pinned pieces';
 
   @override
-  String get checkableKing => 'Checkable king';
+  String get checkableKing => 'Mümkün şah vermə';
 
   @override
   String get multipleLines => 'Oxların sayı';
@@ -2942,6 +3499,18 @@ class AppLocalizationsAz extends AppLocalizations {
 
   @override
   String get flipBoard => 'Lövhəni fırlat';
+
+  @override
+  String get toggleLocalEngine => 'Toggle local engine';
+
+  @override
+  String get engineSettings => 'Engine settings';
+
+  @override
+  String get enginesFromStrongestToWeakest => 'Engines from strongest to weakest';
+
+  @override
+  String get illegalPosition => 'Illegal position';
 
   @override
   String get threefoldRepetition => 'Üçqat təkrar';
@@ -3035,7 +3604,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get variants => 'Variantlar';
 
   @override
-  String get variantsDescription => 'More ways to play';
+  String get variantsDescription => 'Oynamağın daha çox yolu';
 
   @override
   String get timeControl => 'Vaxta nəzarət';
@@ -3080,10 +3649,13 @@ class AppLocalizationsAz extends AppLocalizations {
   String get signupUsernameHint => 'Ailə dostu bir istifadəçi adı seçdiyinizdən əmin olun. Siz onu daha sonra dəyişə bilməzsiniz və uyğun olmayan istifadəçi adları olan hesablar bağlanacaq!';
 
   @override
-  String get signupEmailPromise => 'We will only send you emails about your account and never share your email.';
+  String get signupEmailPromise => 'Sizə sadəcə hesabınızla bağlı e-poçtlar göndərəcəyik və e-poçt ünvanınızı heç vaxt paylaşmayacağıq.';
 
   @override
   String get password => 'Şifrə';
+
+  @override
+  String get showPassword => 'Şifri göstər';
 
   @override
   String get changePassword => 'Şifrəni dəyiş';
@@ -3155,7 +3727,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get refreshInboxAfterFiveMinutes => '5 dəqiqə gözləyin və email qutunuzu yenidən yoxlayın.';
 
   @override
-  String get checkSpamFolder => 'Spam qutusunu da yoxlayın, məktub oradada ola bilər. Elədirsə, zəhmət olmasa qeyri-spam kimi qeyd edin.';
+  String get checkSpamFolder => 'Also check your spam folder, it might end up there. If so, mark it as not spam.';
 
   @override
   String get checkSpamOrJunkFolder => 'If you do not receive a confirmation email, check your Spam or Junk folder. Be sure to indicate messages from lichess.org as safe and \"not spam\", so you can stay informed of important communications.';
@@ -3206,10 +3778,16 @@ class AppLocalizationsAz extends AppLocalizations {
   String get cancel => 'Ləğv et';
 
   @override
-  String get whiteTimeOut => 'Ağların vaxtı bitdi';
+  String get whiteTimeOut => 'White time out';
 
   @override
-  String get blackTimeOut => 'Qaraların vaxtı bitdi';
+  String get whiteRanOutOfTime => 'White ran out of time';
+
+  @override
+  String get blackTimeOut => 'Black time out';
+
+  @override
+  String get blackRanOutOfTime => 'Black ran out of time';
 
   @override
   String get drawOfferSent => 'Heç-heçə təklifi göndərildi';
@@ -3257,7 +3835,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get standard => 'Standart';
 
   @override
-  String get customPosition => 'Custom position';
+  String get customPosition => 'Xüsusi mövqe';
 
   @override
   String get unlimited => 'Limitsiz';
@@ -3374,16 +3952,16 @@ class AppLocalizationsAz extends AppLocalizations {
   String get blackDeclinesTakeback => 'Black declines takeback';
 
   @override
-  String get whiteAcceptsTakeback => 'White accepts takeback';
+  String get whiteAcceptsTakeback => 'Ağlar geri qaytarmanı qəbul etdi';
 
   @override
-  String get blackAcceptsTakeback => 'Black accepts takeback';
+  String get blackAcceptsTakeback => 'Qaralar geri qaytarmanı qəbul etdi';
 
   @override
   String get whiteCancelsTakeback => 'White cancels takeback';
 
   @override
-  String get blackCancelsTakeback => 'Black cancels takeback';
+  String get blackCancelsTakeback => 'Qaralar geri qaytarmağı ləğv etdi';
 
   @override
   String get yourOpponentProposesATakeback => 'Rəqibiniz dala qaytarma təklifi edir';
@@ -3419,6 +3997,9 @@ class AppLocalizationsAz extends AppLocalizations {
 
   @override
   String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
+
+  @override
+  String get cannotFilterByUnstableRating => 'Reytinqiniz sabit olmadığı üçün reytinqə görə filtrləmək mümkün deyil. Reytinqli oyunlar oynamaq sabitliyi artıracaq.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3501,7 +4082,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get leaderboard => 'Liderlik cədvəli';
 
   @override
-  String get screenshotCurrentPosition => 'Cari mövqe Ekran görüntüsü';
+  String get positionAsImage => 'Position as image';
 
   @override
   String get gameAsGIF => 'GIF kimi oyun';
@@ -3561,7 +4142,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get reconnecting => 'Yenidən qoşulur';
 
   @override
-  String get noNetwork => 'Offline';
+  String get noNetwork => 'Oflayn';
 
   @override
   String get favoriteOpponents => 'Sevimli rəqiblər';
@@ -3598,6 +4179,9 @@ class AppLocalizationsAz extends AppLocalizations {
   String xStartedFollowingY(String param1, String param2) {
     return '$param1 $param2 adlı oyunçunu izləməyə başladı';
   }
+
+  @override
+  String get less => 'Daha az';
 
   @override
   String get more => 'Daha çox';
@@ -3709,7 +4293,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get blackWins => 'Qaraların qələbəsi';
 
   @override
-  String get drawRate => 'Draw rate';
+  String get drawRate => 'Bərabərlik göstəricisi';
 
   @override
   String get draws => 'Heç-heçələr';
@@ -3807,7 +4391,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get makeAStudy => 'Saxlamaq və paylaşmaq üçün araşdırma aparmağı düşünün.';
 
   @override
-  String get clearSavedMoves => 'Clear moves';
+  String get clearLocalData => 'Clear local data';
 
   @override
   String get previouslyOnLichessTV => 'Daha öncə Lichess TV-də';
@@ -3891,10 +4475,10 @@ class AppLocalizationsAz extends AppLocalizations {
   String get reopen => 'Reopen';
 
   @override
-  String get quote => 'Quote';
+  String get quote => 'Sitat';
 
   @override
-  String get postEdited => 'edited';
+  String get postEdited => 'düzəliş edilib';
 
   @override
   String get message => 'Mesaj';
@@ -3924,7 +4508,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get other => 'Digər';
 
   @override
-  String get reportCheatBoostHelp => 'Paste the link to the game(s) and explain what is wrong about this user\'s behaviour. Don\'t just say \"they cheat\", but tell us how you came to this conclusion.';
+  String get reportCheatBoostHelp => 'Oyunun (oyunların) linkini yapışdırın və istifadəçinin yanlış davranışını açıqlayın. Sadəcə \"bu hiylədir\" deməyin, bu qənaətə necə gəldiyinizi bizə deyin.';
 
   @override
   String get reportUsernameHelp => 'Explain why this username is offensive. Don\'t just say \"it\'s offensive/inappropriate,\" but tell us how you came to this conclusion, especially if the offense is obscure, not in English, in slang, or a historical/cultural reference.';
@@ -3964,7 +4548,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get writeAPrivateNoteAboutThisUser => 'Write a private note about this user';
 
   @override
-  String get noNoteYet => 'No note yet';
+  String get noNoteYet => 'Hələ ki, not yoxdur';
 
   @override
   String get invalidUsernameOrPassword => 'Yanlış istifadəçi adı və ya şifrə';
@@ -4301,7 +4885,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get create => 'Yarat';
 
   @override
-  String get whenCreateSimul => 'Bir Seans yaratdığınızda eyni anda bir neçə oyunçu ilə oynamağa başlayırsınız.';
+  String get whenCreateSimul => 'When you create a simul, you get to play several players at once.';
 
   @override
   String get creatingASimul => 'Creating a simul lets you play against multiple opponents at the same time.';
@@ -4316,7 +4900,10 @@ class AppLocalizationsAz extends AppLocalizations {
   String get simulAddExtraTime => 'Sinxron seansla başa çıxmaq üçün öz saatınıza əlavə vaxtlar artıra bilərsiniz.';
 
   @override
-  String get simulHostExtraTime => 'Ev sahibinin əlavə vaxtı';
+  String get simulHostExtraTime => 'Host extra initial clock time';
+
+  @override
+  String get extraClockTimeForHost => 'Extra clock time for the host:';
 
   @override
   String get simulAddExtraTimePerPlayer => 'Add initial time to your clock for each player joining the simul.';
@@ -4349,10 +4936,16 @@ class AppLocalizationsAz extends AppLocalizations {
   String get keyGoToStartOrEnd => 'Əvvələ/sona get';
 
   @override
+  String get keyGoToPreviousOrNextLine => 'go to previous/next line';
+
+  @override
   String get keyCycleSelectedVariation => 'Cycle selected variation';
 
   @override
   String get keyShowOrHideComments => 'Rəyləri göstər/gizlə';
+
+  @override
+  String get keyShowOrHideCurrentVariation => 'show/hide current variation';
 
   @override
   String get keyEnterOrExitVariation => 'giriş/çıxış variasiyası';
@@ -4628,9 +5221,6 @@ class AppLocalizationsAz extends AppLocalizations {
   String get dark => 'Qaranlıq';
 
   @override
-  String get transparent => 'Şəffaf';
-
-  @override
   String get picture => 'Picture';
 
   @override
@@ -4640,7 +5230,13 @@ class AppLocalizationsAz extends AppLocalizations {
   String get roundness => 'Roundness';
 
   @override
+  String get backgroundImage => 'Background image';
+
+  @override
   String get backgroundImageUrl => 'Arxa fon rəsm URL-i:';
+
+  @override
+  String get imageOpacity => 'Image opacity';
 
   @override
   String get board => 'Board';
@@ -4712,7 +5308,12 @@ class AppLocalizationsAz extends AppLocalizations {
 
   @override
   String perfRatingX(String param) {
-    return 'Reytinq: $param';
+    return 'Rating: $param';
+  }
+
+  @override
+  String perfRatingLabel(String param) {
+    return 'Rating: $param.';
   }
 
   @override
@@ -4867,6 +5468,9 @@ class AppLocalizationsAz extends AppLocalizations {
 
   @override
   String get clickHereToReadIt => 'Click here to read it';
+
+  @override
+  String get readTheMessage => 'Read the message';
 
   @override
   String get sorry => 'Təəssüf :(';
@@ -5306,6 +5910,15 @@ class AppLocalizationsAz extends AppLocalizations {
   String get settings => 'Settings';
 
   @override
+  String get verifyingYourDevice => 'Verifying your device...';
+
+  @override
+  String get chessOpenings => 'Chess openings';
+
+  @override
+  String get boards => 'Boards';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5332,8 +5945,8 @@ class AppLocalizationsAz extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count kobud səhv',
-      one: '$count kobud səhv',
+      other: '$count blunders',
+      one: '$count blunder',
     );
     return '$_temp0';
   }
@@ -5354,8 +5967,8 @@ class AppLocalizationsAz extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count səhv',
-      one: '$count səhv',
+      other: '$count mistakes',
+      one: '$count mistake',
     );
     return '$_temp0';
   }
@@ -5376,8 +5989,8 @@ class AppLocalizationsAz extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count qeyri-dəqiqlik',
-      one: '$count qeyri-dəqiqlik',
+      other: '$count inaccuracies',
+      one: '$count inaccuracy',
     );
     return '$_temp0';
   }
@@ -6146,7 +6759,10 @@ class AppLocalizationsAz extends AppLocalizations {
   String get studyCurrentChapterUrl => 'Cari fəsil URL-ii';
 
   @override
-  String get studyYouCanPasteThisInTheForumToEmbed => 'Pərçimləmək üçün bunu forumda paylaşa bilərsiniz';
+  String get studyYouCanPasteThisInTheForumToEmbed => 'You can paste this in the forum or your Lichess blog to embed';
+
+  @override
+  String get studyPasteToEmbedChapterInForumOrBlog => 'You can paste this in the forum or your Lichess blog to embed the chapter.';
 
   @override
   String get studyStartAtInitialPosition => 'Başlanğıc pozisiyada başlasın';
@@ -6521,7 +7137,13 @@ class AppLocalizationsAz extends AppLocalizations {
   String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
 
   @override
+  String get studyLoadGameFromTheWebTitle => 'Load a game from the web';
+
+  @override
   String get studyLoadExistingLichessGameText => 'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
+
+  @override
+  String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/7fHIU0XI)<br>to load game moves in the chapter.';
 
   @override
   String get studyFromFenStringTitle => 'From a FEN string';
@@ -6601,6 +7223,9 @@ class AppLocalizationsAz extends AppLocalizations {
   String get teamTeam => 'Komanda';
 
   @override
+  String get teamTeamUpdates => 'Team updates';
+
+  @override
   String get teamIncorrectEntryCode => 'Incorrect entry code.';
 
   @override
@@ -6632,7 +7257,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get timeagoRightNow => 'indicə';
 
   @override
-  String get timeagoCompleted => 'completed';
+  String get timeagoCompleted => 'tamamlanan';
 
   @override
   String timeagoInNbSeconds(int count) {

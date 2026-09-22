@@ -30,6 +30,9 @@ class AppLocalizationsLv extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Cancel takeback offer';
 
   @override
+  String get mobileChessEngine => 'Chess engine';
+
+  @override
   String get mobileClearButton => 'Clear';
 
   @override
@@ -148,6 +151,12 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get mobileSettingsDraggedTargetSquare => 'Square';
+
+  @override
+  String get mobileSettingsDrawnShapeColor => 'Drawn shape color';
+
+  @override
+  String get mobileSettingsDrawnShapeColorHelp => 'This color is used for shapes drawn by hand using two fingers.';
 
   @override
   String get mobileSettingsHomeWidgets => 'Home widgets';
@@ -669,7 +678,10 @@ class AppLocalizationsLv extends AppLocalizations {
   String get arenaHowIsTheWinnerDecidedAnswer => 'Turnīra laikam beidzoties, spēlētājus, kam visvairāk punktu, pasludinās par uzvarētājiem.\n\nJa vairākiem spēlētājiem ir vienāds punktu skaits, uzvarošo nosaka pēc turnīra snieguma.';
 
   @override
-  String get arenaHowDoesPairingWork => 'Kā notiek sapārošana?';
+  String get arenaHowDoesPairingWork => 'How does the pairing work?';
+
+  @override
+  String get arenaHowArePlayersPaired => 'How are players paired?';
 
   @override
   String get arenaHowDoesPairingWorkAnswer => 'Turnīram sākoties, spēlētājus sapāro atbilstoši reitingam.\nTiklīdz spēle beigusies, atgriezies turnīra vestibilā: tad tiksi sapārots ar nākamo spēlētāju vistuvāk tavam reitingam.\nTādā veidā tiek panākts mazāks gaidīšanas laiks, taču var gadīties, ka netiksies ar katru turnīra spēlētāju.\nSpēlē ātri un atgriezies vestibilā lai spēlētu vairāk spēļu un iegūtu vairāk punktu.';
@@ -760,6 +772,9 @@ class AppLocalizationsLv extends AppLocalizations {
   String get arenaDefender => 'Defender';
 
   @override
+  String get arenaDefenderLabel => 'Defender:';
+
+  @override
   String get arenaPickYourTeam => 'Pick your team';
 
   @override
@@ -823,6 +838,9 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get arenaBerserkRate => 'Berserk rate';
+
+  @override
+  String get arenaLeaguesAndStreamerBattles => 'Leagues & Streamer Battles';
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -931,7 +949,10 @@ class AppLocalizationsLv extends AppLocalizations {
   String get broadcastDeleteRound => 'Dzēst šo raundu';
 
   @override
-  String get broadcastDefinitivelyDeleteRound => 'Neatgriezeniski dzēst raundu un tā spēles.';
+  String get broadcastDefinitivelyDeleteRound => 'Definitively delete the round and all its games.';
+
+  @override
+  String get broadcastPermanentlyDeleteRound => 'Permanently delete this round and all its games?';
 
   @override
   String get broadcastDeleteAllGamesOfThisRound => 'Izdzēst visas šī raunda spēles. To atjaunošanai būs nepieciešams aktīvs avots.';
@@ -1001,6 +1022,9 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get broadcastNoBoardsYet => 'No boards yet. These will appear once games are uploaded.';
+
+  @override
+  String get broadcastNoPlayersYet => 'No players yet. They will appear once games are uploaded.';
 
   @override
   String broadcastBoardsCanBeLoaded(String param) {
@@ -1353,6 +1377,527 @@ class AppLocalizationsLv extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Practice only some files & ranks';
 
   @override
+  String get learnLearnChess => 'Apgūt šahu';
+
+  @override
+  String get learnByPlaying => 'spēlējot!';
+
+  @override
+  String learnProgressX(String param) {
+    return 'Izpilde: $param';
+  }
+
+  @override
+  String get learnResetMyProgress => 'Atiestatīt savu izpildes progresu';
+
+  @override
+  String get learnYouWillLoseAllYourProgress => 'Jūs zaudēsiet visu, ko esat izpildījis!';
+
+  @override
+  String get learnPlay => 'spēlēt!';
+
+  @override
+  String get learnChessPieces => 'Šaha figūras';
+
+  @override
+  String get learnTheRook => 'Tornis';
+
+  @override
+  String get learnItMovesInStraightLines => 'Pārvietojas taisnās līnijās';
+
+  @override
+  String get learnRookIntro => 'Tornis ir spēcīga figūra. Vai esat gatavs to vadīt?';
+
+  @override
+  String get learnRookGoal => 'Noklikšķiniet uz torņa,\nlai to pārvietotu līdz zvaigznei!';
+
+  @override
+  String get learnGrabAllTheStars => 'Tveriet visas zvaigznes!';
+
+  @override
+  String get learnTheFewerMoves => 'Jo mazāk gājienu izdarīsiet, jo vairāk punktus iegūsiet!';
+
+  @override
+  String get learnUseTwoRooks => 'Izmantojiet divus troņus, lai veiktos ātrāk!';
+
+  @override
+  String get learnRookComplete => 'Apsveicam! Tagad esat torņa lietpratējs.';
+
+  @override
+  String get learnTheBishop => 'Laidnis';
+
+  @override
+  String get learnItMovesDiagonally => 'Pārvietojas pa diagonālēm';
+
+  @override
+  String get learnBishopIntro => 'Tagad mācīsimies veikt gājienus ar laidni!';
+
+  @override
+  String get learnYouNeedBothBishops => 'Viens gaišo lauciņu laidnis, viens tumšo lauciņu laidnis. Vajadzēs abus!';
+
+  @override
+  String get learnBishopComplete => 'Apsveicam! Varat būt laidņa pavēlnieks.';
+
+  @override
+  String get learnTheQueen => 'Dāma';
+
+  @override
+  String get learnQueenCombinesRookAndBishop => 'Dāma = tornis + laidnis';
+
+  @override
+  String get learnQueenIntro => 'Ierodas visspēcīgākā šaha figūra. Pati godība - dāma!';
+
+  @override
+  String get learnQueenComplete => 'Apsveicam! Dāmas vairs nav noslēpums.';
+
+  @override
+  String get learnTheKing => 'Karalis';
+
+  @override
+  String get learnTheMostImportantPiece => 'Pati svarīgākā figūra';
+
+  @override
+  String get learnKingIntro => 'Jūs esat karalis. Ja zaudējat cīņā - spēle ir zaudēta.';
+
+  @override
+  String get learnTheKingIsSlow => 'Karalis ir lēns.';
+
+  @override
+  String get learnLastOne => 'Pēdējais!';
+
+  @override
+  String get learnKingComplete => 'Tagad varat pavēlēt pavēlniekam!';
+
+  @override
+  String get learnTheKnight => 'Zirdziņš';
+
+  @override
+  String get learnItMovesInAnLShape => 'Pārvietojas burta L veidā';
+
+  @override
+  String get learnKnightIntro => 'Lūk, izaicinājums jums. Zirdziņš ir... viltīga figūra.';
+
+  @override
+  String get learnKnightsHaveAFancyWay => 'Zirdziņi var jocīgi lēkāt apkārt!';
+
+  @override
+  String get learnKnightsCanJumpOverObstacles => 'Zirdziņi var pārlēkt šķēršļiem! Izbēdziet un pieveiciet zvaigznes!';
+
+  @override
+  String get learnKnightComplete => 'Apsveicam! Tagad esat zirdziņa lietpratējs.';
+
+  @override
+  String get learnThePawn => 'Bandinieks';
+
+  @override
+  String get learnItMovesForwardOnly => 'Pārvietojas tikai uz priekšu';
+
+  @override
+  String get learnPawnIntro => 'Bandinieki ir vāji, bet tie slēpj milzu spēku.';
+
+  @override
+  String get learnPawnsMoveOneSquareOnly => 'Bandinieki pārvietojas pa vienam lauciņam. Bet, kad tie sasniedz galdiņa otru pusi, tie kļūst par stiprāku figūru!';
+
+  @override
+  String get learnMostOfTheTimePromotingToAQueenIsBest => 'Visbiežāk paaugstināt par dāmu ir vislabākais gājiens. Taču dažreiz var noderēt arī zirdziņš!';
+
+  @override
+  String get learnPawnsMoveForward => 'Bandinieki pārvietojas uz priekšu, bet sit pa diagonāli!';
+
+  @override
+  String get learnCaptureThenPromote => 'Nositiet, un paaugstiniet!';
+
+  @override
+  String get learnUseAllThePawns => 'Izmantojiet visus bandiniekus! Nav nepieciešams tos paaugstināt.';
+
+  @override
+  String get learnAPawnOnTheSecondRank => 'Bandinieki otrajā horizontālē var iet 2 lauciņus reizē!';
+
+  @override
+  String get learnGrabAllTheStarsNoNeedToPromote => 'Iegūstiet visas zvaigznes! Nav nepieciešams paaugstināt.';
+
+  @override
+  String get learnPawnComplete => 'Apsveicam! Bandinieki jums vairs nav noslēpums.';
+
+  @override
+  String get learnPawnPromotion => 'Bandinieka paaugstināšana';
+
+  @override
+  String get learnYourPawnReachedTheEndOfTheBoard => 'Jūsu bandinieks ir sasniedzis galdiņa malu!';
+
+  @override
+  String get learnItNowPromotesToAStrongerPiece => 'Tagad tas paaugstinās par spēcīgāku figūru.';
+
+  @override
+  String get learnSelectThePieceYouWant => 'Atlasiet figūru, kuru vēlaties!';
+
+  @override
+  String get learnFundamentals => 'Pamati';
+
+  @override
+  String get learnCapture => 'Sitiens';
+
+  @override
+  String get learnTakeTheEnemyPieces => 'Nositiet pretinieka figūras';
+
+  @override
+  String get learnCaptureIntro => 'Saskatiet pretinieka neaizsargātās figūras un nositiet tās!';
+
+  @override
+  String get learnTakeTheBlackPieces => 'Nositiet melno figūras!';
+
+  @override
+  String get learnTakeTheBlackPiecesAndDontLoseYours => 'Paņemiet melno figūras!\nUn nezaudējiet savas.';
+
+  @override
+  String get learnCaptureComplete => 'Apsveicam! Tagad protat cīnīties ar šaha figūrām!';
+
+  @override
+  String get learnProtection => 'Aizsargāšana';
+
+  @override
+  String get learnKeepYourPiecesSafe => 'Sargājiet savas figūras';
+
+  @override
+  String get learnProtectionIntro => 'Saskatiet figūras, kuras apdraud pretinieks un aizsargājiet tās!';
+
+  @override
+  String get learnProtectionComplete => 'Apsveicam! Figūra, kas nav pazaudēta, ir iegūta figūra!';
+
+  @override
+  String get learnEscape => 'Jums uzbrūk!\nIzvairieties no draudiem!';
+
+  @override
+  String get learnNoEscape => 'Izbēgt nevar, \nbet varat aizsargāties!';
+
+  @override
+  String get learnDontLetThemTakeAnyUndefendedPiece => 'Neļaujiet viņiem nosist nevienu neaizsargātu figūru!';
+
+  @override
+  String get learnCombat => 'Kauja';
+
+  @override
+  String get learnCaptureAndDefendPieces => 'Sitiet un aizsargājiet figūras';
+
+  @override
+  String get learnCombatIntro => 'Labs kareivis prot gan uzbrukt, gan aizsargāties!';
+
+  @override
+  String get learnCombatComplete => 'Apsveicam! Tagad protat cīnīties ar šaha figūrām!';
+
+  @override
+  String get learnCheckInOne => 'Šahs vienā gājienā';
+
+  @override
+  String get learnAttackTheOpponentsKing => 'Uzbrūciet pretinieka karalim';
+
+  @override
+  String get learnCheckInOneIntro => 'Lai pieteiktu šahu pretiniekam, uzbrūciet viņa karalim. Viņam nāksies aizstāvēties!';
+
+  @override
+  String get learnCheckInOneGoal => 'Uzbrūciet pretinieka karalim vienā gājienā!';
+
+  @override
+  String get learnCheckInOneComplete => 'Apsveicam! Jūs pieteicāt šahu pretiniekam, piespiežot viņam aizstāvēt savu karali!';
+
+  @override
+  String get learnOutOfCheck => 'Iziet no šaha';
+
+  @override
+  String get learnDefendYourKing => 'Aizsargājiet savu karali';
+
+  @override
+  String get learnOutOfCheckIntro => 'Jums pieteikts šahs! Jums jāpārvieto karalis vai jābloķē uzbrukums.';
+
+  @override
+  String get learnEscapeWithTheKing => 'Bēdziet ar karali!';
+
+  @override
+  String get learnTheKingCannotEscapeButBlock => 'Karalis nevar izbēgt,\nbet varat bloķēt uzbrukumu!';
+
+  @override
+  String get learnYouCanGetOutOfCheckByTaking => 'Jūs varat iziet no šaha,\nnositot uzbrūkošo figūru.';
+
+  @override
+  String get learnThisKnightIsCheckingThroughYourDefenses => 'Šis zirdziņš piesaka šahu cauri jūsu aizsardzībai!';
+
+  @override
+  String get learnEscapeOrBlock => 'Bēdziet ar karali vai bloķē uzbrukumu!';
+
+  @override
+  String get learnOutOfCheckComplete => 'Apsveicam! Jūsu karalis nekad nekritīs gūstā, bet pārliecinieties, vai varēsiet aizstāvēties pret pieteikto šahu!';
+
+  @override
+  String get learnMateInOne => 'Mats vienā gājienā';
+
+  @override
+  String get learnDefeatTheOpponentsKing => 'Sakaujiet pretinieka karali';
+
+  @override
+  String get learnMateInOneIntro => 'Ja pretinieks nevar aizstāvēties pret šahu, esat uzvarējis.';
+
+  @override
+  String get learnAttackYourOpponentsKing => 'Uzbrūciet sava pretinieka karalim tā, lai viņš nevarētu aizstāvēties!';
+
+  @override
+  String get learnMateInOneComplete => 'Apsveicam! Lūk, kā var uzvarēt šaha spēles!';
+
+  @override
+  String get learnIntermediate => 'Vidējs';
+
+  @override
+  String get learnBoardSetup => 'Galdiņa uzstādīšana';
+
+  @override
+  String get learnHowTheGameStarts => 'Kā sākas spēle';
+
+  @override
+  String get learnBoardSetupIntro => 'Satiekas divas armijas, gatavas kaujai.';
+
+  @override
+  String get learnThisIsTheInitialPosition => 'Šī ir katras šaha spēles sākotnējā pozīcija!\nIzdari jebkādu gājienu lai turpinātu.';
+
+  @override
+  String get learnFirstPlaceTheRooks => 'Vispirms nolieciet torņus!\nTie jāliek stūros.';
+
+  @override
+  String get learnThenPlaceTheKnights => 'Tad nolieciet zirdziņus!\nTiem jābūt blakus torņiem.';
+
+  @override
+  String get learnPlaceTheBishops => 'Nolieciet laidņus!\nTie būs blakus zirdziņiem.';
+
+  @override
+  String get learnPlaceTheQueen => 'Vieta dāmai!\nViņa iet uz savas krāsas lauciņa.';
+
+  @override
+  String get learnPlaceTheKing => 'Nolieciet karali!\nTieši blakus dāmai.';
+
+  @override
+  String get learnPawnsFormTheFrontLine => 'Bandinieki veido priekšējo līniju.\nVeiciet jebkādu gājienu lai turpinātu.';
+
+  @override
+  String get learnBoardSetupComplete => 'Apsveicam! Tagad zināt, kā uzstādīt šaha galdiņu.';
+
+  @override
+  String get learnCastling => 'Rokāde';
+
+  @override
+  String get learnTheSpecialKingMove => 'Īpašais karaļa gājiens';
+
+  @override
+  String get learnCastlingIntro => 'Nogādājiet karali drošībā un novietojiet torni uzbrukuma pozīcijā!';
+
+  @override
+  String get learnCastleKingSide => 'Pārvietojiet karali par diviem lauciņiem, lai roķētu karaļa spārnā!';
+
+  @override
+  String get learnCastleQueenSide => 'Pārvietojiet karali par diviem lauciņiem lai roķētu dāmas spārnā!';
+
+  @override
+  String get learnTheKnightIsInTheWay => 'Zirdziņš ir ceļā! Pārvietojiet to, tad veiciet rokādi karaļa spārnā.';
+
+  @override
+  String get learnCastleKingSideMovePiecesFirst => 'Roķējieties karaļa spārnā! Vispirms nepieciešams izlaist ārā figūras.';
+
+  @override
+  String get learnCastleQueenSideMovePiecesFirst => 'Roķējieties dāmas spārnā! Vispirms vajadzēs izlaist figūras.';
+
+  @override
+  String get learnYouCannotCastleIfMoved => 'Nedrīkst veikt rokādi, ja karalis vai tornis jau ir izdarījis gājienu.';
+
+  @override
+  String get learnYouCannotCastleIfAttacked => 'Nedrīkst veikt rokādi, ja pa ceļam karalis tiek apdraudēts. Nobloķējiet šahu un tad - rokāde!';
+
+  @override
+  String get learnFindAWayToCastleKingSide => 'Izdomājiet, kā roķēties karaļa spārnā!';
+
+  @override
+  String get learnFindAWayToCastleQueenSide => 'Atrodiet veidu kā roķēties dāmas spārnā!';
+
+  @override
+  String get learnCastlingComplete => 'Apsveicam! Rokāde ir ieteicama gandrīz katrā spēlē.';
+
+  @override
+  String get learnTheSpecialPawnMove => 'Īpašais bandinieka gājiens';
+
+  @override
+  String get learnEnPassantIntro => 'Kad pretinieka bandinieks pārvietojas par diviem lauciņiem, varat to sist it kā tas būtu pārvietojies par vienu.';
+
+  @override
+  String get learnBlackJustMovedThePawnByTwoSquares => 'Melnie tikko pagāja ar bandinieku par diviem lauciņiem! Sit to garāmejot.';
+
+  @override
+  String get learnEnPassantOnlyWorksImmediately => 'Garāmejot strādā tikai uzreiz pēc tam, kad pretinieks pagāja ar savu bandinieku.';
+
+  @override
+  String get learnEnPassantOnlyWorksOnFifthRank => 'Garāmejot strādā tikai tad, ja tavs bandinieks ir uz piektās horizontāles.';
+
+  @override
+  String get learnTakeAllThePawnsEnPassant => 'Nosit visus bandiniekus garāmejot!';
+
+  @override
+  String get learnEnPassantComplete => 'Apsveicam. Tagad vari sist garāmejot.';
+
+  @override
+  String get learnStalemate => 'Pats';
+
+  @override
+  String get learnTheGameIsADraw => 'Spēle ir neizšķirta';
+
+  @override
+  String get learnStalemateIntro => 'Kad spēlētājam nav pieteikts šahs un viņš nevar izdarīt legālu gājienu, tad ir pats. Spēle beidzas neizšķirti: neviens neuzvar, neviens nezaudē.';
+
+  @override
+  String get learnStalemateGoal => 'Lai melniem būtu pats:\n- Melnie nevar izdarīt gājienu\n- Nav pieteikts šahs.';
+
+  @override
+  String get learnStalemateComplete => 'Apsveicam! Labāk saņemts pats nekā šahs un mats!';
+
+  @override
+  String get learnAdvanced => 'Lietpratējiem';
+
+  @override
+  String get learnPieceValue => 'Figūras vērtība';
+
+  @override
+  String get learnEvaluatePieceStrength => 'Novērtē figūru stiprumu';
+
+  @override
+  String get learnPieceValueIntro => 'Figūrām ar augstāku mobilitāti ir augstākas vērtības!\nDāma = 9\nTornis = 5\nLaidnis = 3\nZirdziņš = 3\nBandinieks = 1\nKaralis ir nenovērtējams! To zaudējot tiek zaudēta spēle.';
+
+  @override
+  String get learnQueenOverBishop => 'Sit figūru\nar lielāko vērtību!\nDāma > Laidnis';
+
+  @override
+  String get learnPieceValueExchange => 'Nositiet figūru ar augstāko vērtību!\n Neapmainiet augstāk vērtētu figūru pret ko mazāk vērtīgu.';
+
+  @override
+  String get learnPieceValueLegal => 'Nositiet figūru ar augstāko vērtību!\nPārliecinieties, ka gājiens ir atļauts!';
+
+  @override
+  String get learnTakeThePieceWithTheHighestValue => 'Sit figūru ar lielāko vērtību!';
+
+  @override
+  String get learnPieceValueComplete => 'Apsveicam. Tu tagad zini resursu vērtību!\nDāma = 9\nTornis = 5\nLaidnis = 3\nZirdziņš = 3\nBandinieks = 1';
+
+  @override
+  String get learnCheckInTwo => 'Šahs divos';
+
+  @override
+  String get learnTwoMovesToGiveCheck => 'Piesaki šahu divos gājienos';
+
+  @override
+  String get learnCheckInTwoIntro => 'Atrodi pareizo divu gājienu kombināciju lai pieteiktu šahu pretiniekam!';
+
+  @override
+  String get learnCheckInTwoGoal => 'Apdraudi pretinieka karali divos gājienos!';
+
+  @override
+  String get learnCheckInTwoComplete => 'Apsveicam! Tu pieteici šahu pretiniekam, piespiežot viņam aizstāvēt savu karali!';
+
+  @override
+  String get learnWhatNext => 'Ko tālāk?';
+
+  @override
+  String get learnYouKnowHowToPlayChess => 'Tu proti spēlēt šahu, apsveicam! Vēlies kļūt par spēcīgu spēlētāju?';
+
+  @override
+  String get learnRegister => 'Reģistrējies';
+
+  @override
+  String get learnGetAFreeLichessAccount => 'Saņem bezmaksas Lichess kontu';
+
+  @override
+  String get learnPractice => 'Treniņš';
+
+  @override
+  String get learnLearnCommonChessPositions => 'Mācīties vispārīgas šaha pozīcijas';
+
+  @override
+  String get learnPuzzles => 'Uzdevumi';
+
+  @override
+  String get learnExerciseYourTacticalSkills => 'Trenē savas taktiķa iemaņas';
+
+  @override
+  String get learnVideos => 'Video';
+
+  @override
+  String get learnWatchInstructiveChessVideos => 'Skaties pamācošus šaha video';
+
+  @override
+  String get learnPlayPeople => 'Spēlē pret citiem';
+
+  @override
+  String get learnOpponentsFromAroundTheWorld => 'Pretinieki no visas pasaules';
+
+  @override
+  String get learnPlayMachine => 'Spēlē pret datoru';
+
+  @override
+  String get learnTestYourSkillsWithTheComputer => 'Pārbaudi savas prasmes pret datoru';
+
+  @override
+  String get learnLetsGo => 'Aiziet!';
+
+  @override
+  String learnStageX(String param) {
+    return 'Posms $param';
+  }
+
+  @override
+  String get learnAwesome => 'Satriecoši!';
+
+  @override
+  String get learnExcellent => 'Teicami!';
+
+  @override
+  String get learnGreatJob => 'Labi padarīts!';
+
+  @override
+  String get learnPerfect => 'Nevainojami!';
+
+  @override
+  String get learnOutstanding => 'Izcili!';
+
+  @override
+  String get learnWayToGo => 'Tieši tā!';
+
+  @override
+  String get learnYesYesYes => 'Jā, jā, jā!';
+
+  @override
+  String get learnYoureGoodAtThis => 'Tev sanāk!';
+
+  @override
+  String get learnNailedIt => 'Trāpīts.';
+
+  @override
+  String get learnRightOn => 'Pareizi!';
+
+  @override
+  String learnStageXComplete(String param) {
+    return 'Posms $param pabeigts';
+  }
+
+  @override
+  String get learnNext => 'Nākamais';
+
+  @override
+  String learnNextX(String param) {
+    return 'Turpinājumā: $param';
+  }
+
+  @override
+  String get learnBackToMenu => 'Atgriezties izvēlnē';
+
+  @override
+  String get learnPuzzleFailed => 'Uzdevums nav atrisināts!';
+
+  @override
+  String get learnRetry => 'Mēģināt vēlreiz';
+
+  @override
   String get patronDonate => 'Ziedot';
 
   @override
@@ -1635,19 +2180,19 @@ class AppLocalizationsLv extends AppLocalizations {
   String get preferencesNotifyStreamStart => 'Straumētājs sāk tiešraidi';
 
   @override
-  String get preferencesNotifyInboxMsg => 'Jauna ziņa iesūtnē';
+  String get preferencesNotifyInboxMsg => 'New inbox message';
 
   @override
   String get preferencesNotifyDirectMessage => 'New direct message';
 
   @override
-  String get preferencesNotifyForumMention => 'Foruma ziņa jūs piemin';
+  String get preferencesNotifyForumMention => 'Forum comment mentions you';
 
   @override
   String get preferencesNotifyForumMentions => 'Forum mentions';
 
   @override
-  String get preferencesNotifyInvitedStudy => 'Izpētes ielūgums';
+  String get preferencesNotifyInvitedStudy => 'Study invite';
 
   @override
   String get preferencesNotifyStudyInvites => 'Study invites';
@@ -1659,7 +2204,7 @@ class AppLocalizationsLv extends AppLocalizations {
   String get preferencesNotifyChallenge => 'Izaicinājumi';
 
   @override
-  String get preferencesNotifyTournamentSoon => 'Turnīra sākums tuvojas';
+  String get preferencesNotifyTournamentSoon => 'Tournament starting soon';
 
   @override
   String get preferencesNotifyTournamentStartReminders => 'Tournaments start reminders';
@@ -2124,6 +2669,9 @@ class AppLocalizationsLv extends AppLocalizations {
   String get puzzleThemeCornerMateDescription => 'Confine the king to the corner using a rook or queen and a knight to engage the checkmate.';
 
   @override
+  String get puzzleThemeCornerMateKnightDeliversDescription => 'Confine the king to the corner using a rook or queen, and use a knight to deliver the checkmate.';
+
+  @override
   String get puzzleThemeCrushing => 'Graušana';
 
   @override
@@ -2196,7 +2744,7 @@ class AppLocalizationsLv extends AppLocalizations {
   String get puzzleThemeEndgameDescription => 'Sēles noslēdzošā posma taktika.';
 
   @override
-  String get puzzleThemeEnPassantDescription => 'Stratēģija, kas iesaista garāmejošā sitiena noteikumu, kurš nosaka, ka bandinieks var nosist pretinieka bandinieku, ja tas tikko nostājies blakus ar sākotnējo divu lauciņu gājienu.';
+  String get puzzleThemeEnPassantDescription => 'A tactic involving the en passant rule, where a pawn can capture an opponent pawn that has bypassed it using its initial two-square move.';
 
   @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'A tactic involving the en passant rule, where a pawn can capture an opposing pawn that has just moved next to it with its initial two-square move.';
@@ -2217,7 +2765,7 @@ class AppLocalizationsLv extends AppLocalizations {
   String get puzzleThemeFork => 'Dakša';
 
   @override
-  String get puzzleThemeForkDescription => 'Gājiens, pēc kura kustinātā figūra uzbrūk diviem pretiniekiem reizē.';
+  String get puzzleThemeForkDescription => 'A move where the moved piece attacks two opponent pieces at once.';
 
   @override
   String get puzzleThemeForkOpposingPiecesDescription => 'A move where a piece attacks two or more opposing pieces simultaneously.';
@@ -2232,7 +2780,7 @@ class AppLocalizationsLv extends AppLocalizations {
   String get puzzleThemeHookMate => 'Āķa mats';
 
   @override
-  String get puzzleThemeHookMateDescription => 'Mats ar torni, zirdziņu un bandinieku, kurā iesaistīts viens pretinieka bandinieks, kas ierobežo karaļa izbēgšanu.';
+  String get puzzleThemeHookMateDescription => 'Checkmate with a rook, knight, and pawn along with one enemy pawn to limit the enemy king\'s escape.';
 
   @override
   String get puzzleThemeHookMateOpposingPawnDescription => 'Checkmate using a rook, knight, and pawn, where an opposing pawn blocks the king\'s escape.';
@@ -2262,10 +2810,16 @@ class AppLocalizationsLv extends AppLocalizations {
   String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
 
   @override
+  String get puzzleThemePillsburyMateRookAndBishopDescription => 'A rook delivers checkmate to the king, while a bishop helps confine it.';
+
+  @override
   String get puzzleThemeMorphysMate => 'Morphy\'s mate';
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphyMateBishopAndRookDescription => 'A bishop delivers checkmate to the king, while a rook helps confine it.';
 
   @override
   String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
@@ -2385,7 +2939,10 @@ class AppLocalizationsLv extends AppLocalizations {
   String get puzzleThemePromotion => 'Paaugstināšana';
 
   @override
-  String get puzzleThemePromotionDescription => 'Paaugstiniet bandinieku par dāmu vai citu figūru.';
+  String get puzzleThemePromotionDescription => 'Promote one of your pawn to a queen or minor piece.';
+
+  @override
+  String get puzzleThemePromotePawnToQueenRookOrMinor => 'Promote one of your pawns to a queen, rook or minor piece.';
 
   @override
   String get puzzleThemeQueenEndgame => 'Dāmu beigu spēle';
@@ -2970,6 +3527,18 @@ class AppLocalizationsLv extends AppLocalizations {
   String get flipBoard => 'Apgriezt galdiņu';
 
   @override
+  String get toggleLocalEngine => 'Toggle local engine';
+
+  @override
+  String get engineSettings => 'Engine settings';
+
+  @override
+  String get enginesFromStrongestToWeakest => 'Engines from strongest to weakest';
+
+  @override
+  String get illegalPosition => 'Illegal position';
+
+  @override
   String get threefoldRepetition => 'Trīskārša atkārtošanās';
 
   @override
@@ -3112,6 +3681,9 @@ class AppLocalizationsLv extends AppLocalizations {
   String get password => 'Parole';
 
   @override
+  String get showPassword => 'Show password';
+
+  @override
   String get changePassword => 'Mainīt paroli';
 
   @override
@@ -3181,7 +3753,7 @@ class AppLocalizationsLv extends AppLocalizations {
   String get refreshInboxAfterFiveMinutes => 'Pagaidiet 5 minūtes, un atsvaidziniet savu epasta iesūtni.';
 
   @override
-  String get checkSpamFolder => 'Pārbaudiet arī mēstuļu nodalījumu – iespējams, mūsu ziņa tur nonākusi. Tādā gadījumā, lūdzu atzīmējiet, ka tā nav mēstule.';
+  String get checkSpamFolder => 'Also check your spam folder, it might end up there. If so, mark it as not spam.';
 
   @override
   String get checkSpamOrJunkFolder => 'If you do not receive a confirmation email, check your Spam or Junk folder. Be sure to indicate messages from lichess.org as safe and \"not spam\", so you can stay informed of important communications.';
@@ -3232,10 +3804,16 @@ class AppLocalizationsLv extends AppLocalizations {
   String get cancel => 'Atcelt';
 
   @override
-  String get whiteTimeOut => 'Baltajiem beidzās laiks';
+  String get whiteTimeOut => 'White time out';
 
   @override
-  String get blackTimeOut => 'Melnajiem beidzās laiks';
+  String get whiteRanOutOfTime => 'White ran out of time';
+
+  @override
+  String get blackTimeOut => 'Black time out';
+
+  @override
+  String get blackRanOutOfTime => 'Black ran out of time';
 
   @override
   String get drawOfferSent => 'Neizšķirta piedāvājums nosūtīts';
@@ -3447,6 +4025,9 @@ class AppLocalizationsLv extends AppLocalizations {
   String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
 
   @override
+  String get cannotFilterByUnstableRating => 'It is not possible to filter by rating because your rating is not stable.\nPlaying rated games will increase stability.';
+
+  @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
     return 'Tavs $param1 reitings ($param2) ir pārāk augsts';
   }
@@ -3527,7 +4108,7 @@ class AppLocalizationsLv extends AppLocalizations {
   String get leaderboard => 'Labāko spēlētāju saraksts';
 
   @override
-  String get screenshotCurrentPosition => 'Uzņemt pašreizējās pozīcijas attēlu';
+  String get positionAsImage => 'Position as image';
 
   @override
   String get gameAsGIF => 'Spēle GIF formātā';
@@ -3624,6 +4205,9 @@ class AppLocalizationsLv extends AppLocalizations {
   String xStartedFollowingY(String param1, String param2) {
     return '$param1 sāka sekot $param2';
   }
+
+  @override
+  String get less => 'Less';
 
   @override
   String get more => 'Vairāk';
@@ -3833,7 +4417,7 @@ class AppLocalizationsLv extends AppLocalizations {
   String get makeAStudy => 'Lai saglabātu un dalītos, varat izveidot izpēti.';
 
   @override
-  String get clearSavedMoves => 'Dzēst gājienus';
+  String get clearLocalData => 'Clear local data';
 
   @override
   String get previouslyOnLichessTV => 'Iepriekš pārraidīts Lichess TV';
@@ -3956,7 +4540,7 @@ class AppLocalizationsLv extends AppLocalizations {
   String get reportUsernameHelp => 'Paskaidro, kāpēc lietotājvārds ir aizskarošs. Nepietiks, ja teiksi \"tas ir rupjš/nepieklājīgs\"; lūdzu pastāsti, kā nonāci pie šī secinājuma – it īpaši, ja aizvainojums ir slēpts, nav angļu valodā, izmanto žargonu vai atsauci uz vēsturisku notikumu vai kultūru.';
 
   @override
-  String get reportProcessedFasterInEnglish => 'Ja ziņojums būs rakstīts angliski, par to varēsim parūpēties ātrāk.';
+  String get reportProcessedFasterInEnglish => 'Your report will be processed faster if written in English.';
 
   @override
   String get processReportFasterInEnglish => 'We can process your report faster if you write in English.';
@@ -4327,7 +4911,7 @@ class AppLocalizationsLv extends AppLocalizations {
   String get create => 'Izveidot';
 
   @override
-  String get whenCreateSimul => 'Izveidojot simultānseansu, spēlēsiet ar vairākiem pretiniekiem vienlaicīgi.';
+  String get whenCreateSimul => 'When you create a simul, you get to play several players at once.';
 
   @override
   String get creatingASimul => 'Creating a simul lets you play against multiple opponents at the same time.';
@@ -4342,7 +4926,10 @@ class AppLocalizationsLv extends AppLocalizations {
   String get simulAddExtraTime => 'Varat pievienot papildus laiku savam pulkstenim, lai vieglāk tiktu galā ar simultānseansu.';
 
   @override
-  String get simulHostExtraTime => 'Papildu laiks vadītājam';
+  String get simulHostExtraTime => 'Host extra initial clock time';
+
+  @override
+  String get extraClockTimeForHost => 'Extra clock time for the host:';
 
   @override
   String get simulAddExtraTimePerPlayer => 'Pievienot papildu laiku jūsu pulkstenim par katru spēlētāju, kas pievienojas simultānseansam.';
@@ -4375,10 +4962,16 @@ class AppLocalizationsLv extends AppLocalizations {
   String get keyGoToStartOrEnd => 'iet uz sākumu/beigām';
 
   @override
+  String get keyGoToPreviousOrNextLine => 'go to previous/next line';
+
+  @override
   String get keyCycleSelectedVariation => 'Cycle selected variation';
 
   @override
   String get keyShowOrHideComments => 'slēpt/rādīt komentārus';
+
+  @override
+  String get keyShowOrHideCurrentVariation => 'show/hide current variation';
 
   @override
   String get keyEnterOrExitVariation => 'ieiet/iziet variācijā';
@@ -4654,9 +5247,6 @@ class AppLocalizationsLv extends AppLocalizations {
   String get dark => 'Tumšs';
 
   @override
-  String get transparent => 'Caurspīdīgs';
-
-  @override
   String get picture => 'Picture';
 
   @override
@@ -4666,7 +5256,13 @@ class AppLocalizationsLv extends AppLocalizations {
   String get roundness => 'Roundness';
 
   @override
+  String get backgroundImage => 'Background image';
+
+  @override
   String get backgroundImageUrl => 'Fona attēla URL:';
+
+  @override
+  String get imageOpacity => 'Image opacity';
 
   @override
   String get board => 'Galdiņš';
@@ -4738,7 +5334,12 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String perfRatingX(String param) {
-    return 'Reitings: $param';
+    return 'Rating: $param';
+  }
+
+  @override
+  String perfRatingLabel(String param) {
+    return 'Rating: $param.';
   }
 
   @override
@@ -4892,7 +5493,10 @@ class AppLocalizationsLv extends AppLocalizations {
   String get showUnreadLichessMessage => 'Saņemta privāta ziņa no Lichess.';
 
   @override
-  String get clickHereToReadIt => 'Klikšķini te, lai to lasītu';
+  String get clickHereToReadIt => 'Click here to read it';
+
+  @override
+  String get readTheMessage => 'Read the message';
 
   @override
   String get sorry => 'Lūdzu piedodiet :(';
@@ -5202,7 +5806,7 @@ class AppLocalizationsLv extends AppLocalizations {
   String get onlyTeamMembers => 'Tikai komandas dalībnieki';
 
   @override
-  String get navigateMoveTree => 'Izskatīt gājienu koku';
+  String get navigateMoveTree => 'Navigate the move tree';
 
   @override
   String get moveListNavigation => 'Move list navigation';
@@ -5332,6 +5936,15 @@ class AppLocalizationsLv extends AppLocalizations {
   String get settings => 'Settings';
 
   @override
+  String get verifyingYourDevice => 'Verifying your device...';
+
+  @override
+  String get chessOpenings => 'Chess openings';
+
+  @override
+  String get boards => 'Boards';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5360,9 +5973,8 @@ class AppLocalizationsLv extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count rupjas kļūdas',
-      one: '$count rupja kļūda',
-      zero: '$count rupju kļūdu',
+      other: '$count blunders',
+      one: '$count blunder',
     );
     return '$_temp0';
   }
@@ -5384,9 +5996,8 @@ class AppLocalizationsLv extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count kļūdas',
-      one: '$count kļūda',
-      zero: '$count kļūdu',
+      other: '$count mistakes',
+      one: '$count mistake',
     );
     return '$_temp0';
   }
@@ -5408,9 +6019,8 @@ class AppLocalizationsLv extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count neprecizitātes',
-      one: '$count neprecizitāte',
-      zero: '$count neprecizitāšu',
+      other: '$count inaccuracies',
+      one: '$count inaccuracy',
     );
     return '$_temp0';
   }
@@ -6218,7 +6828,10 @@ class AppLocalizationsLv extends AppLocalizations {
   String get studyCurrentChapterUrl => 'Pašreizējās nodaļas URL';
 
   @override
-  String get studyYouCanPasteThisInTheForumToEmbed => 'Šo varat ielīmēt forumā, lai iegultu';
+  String get studyYouCanPasteThisInTheForumToEmbed => 'You can paste this in the forum or your Lichess blog to embed';
+
+  @override
+  String get studyPasteToEmbedChapterInForumOrBlog => 'You can paste this in the forum or your Lichess blog to embed the chapter.';
 
   @override
   String get studyStartAtInitialPosition => 'Sākt no sākotnējās pozīcijas';
@@ -6593,7 +7206,13 @@ class AppLocalizationsLv extends AppLocalizations {
   String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
 
   @override
+  String get studyLoadGameFromTheWebTitle => 'Load a game from the web';
+
+  @override
   String get studyLoadExistingLichessGameText => 'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
+
+  @override
+  String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/7fHIU0XI)<br>to load game moves in the chapter.';
 
   @override
   String get studyFromFenStringTitle => 'From a FEN string';
@@ -6675,6 +7294,9 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get teamTeam => 'Komanda';
+
+  @override
+  String get teamTeamUpdates => 'Team updates';
 
   @override
   String get teamIncorrectEntryCode => 'Nepareizs pievienošanās kods.';

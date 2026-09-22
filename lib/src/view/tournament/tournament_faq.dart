@@ -5,9 +5,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_ui/material_ui.dart';
 
-class TournamentFAQScreen extends StatelessWidget {
-  const TournamentFAQScreen({super.key});
-
+class const TournamentFAQScreen({super.key}) extends StatelessWidget {
   static Route<void> buildRoute() {
     return buildScreenRoute(screen: const TournamentFAQScreen());
   }
@@ -69,7 +67,7 @@ class TournamentFAQScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(context.l10n.arenaHowDoesPairingWork, style: Styles.sectionTitle),
+                  Text(context.l10n.arenaHowArePlayersPaired, style: Styles.sectionTitle),
                   const SizedBox(height: 10),
                   Text(context.l10n.arenaHowDoesPairingWorkAnswer),
                 ],

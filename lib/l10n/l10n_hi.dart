@@ -30,6 +30,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'टेकबैक ऑफर कैंसल करें';
 
   @override
+  String get mobileChessEngine => 'Chess engine';
+
+  @override
   String get mobileClearButton => 'सब हटाएं';
 
   @override
@@ -148,6 +151,12 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get mobileSettingsDraggedTargetSquare => 'वर्ग';
+
+  @override
+  String get mobileSettingsDrawnShapeColor => 'Drawn shape color';
+
+  @override
+  String get mobileSettingsDrawnShapeColorHelp => 'This color is used for shapes drawn by hand using two fingers.';
 
   @override
   String get mobileSettingsHomeWidgets => 'होम विजेट';
@@ -652,7 +661,10 @@ class AppLocalizationsHi extends AppLocalizations {
   String get arenaHowIsTheWinnerDecidedAnswer => 'टूर्नामेंट की निर्धारित समय सीमा के समापन पर सबसे अधिक अंक वाले खिलाड़ी (विजेता) को विजेता घोषित किया जाएगा।';
 
   @override
-  String get arenaHowDoesPairingWork => 'पेयरिंग काम कैसे करता है?';
+  String get arenaHowDoesPairingWork => 'How does the pairing work?';
+
+  @override
+  String get arenaHowArePlayersPaired => 'How are players paired?';
 
   @override
   String get arenaHowDoesPairingWorkAnswer => 'टूर्नामेंट की शुरुआत में खिलाड़ियों को उनकी रेटिंग के आधार पर जोड़ा जाता है।\nजैसे ही आप एक खेल खत्म करते हैं, टूर्नामेंट लॉबी पर वापस लौटें: आपको फिर से आपकी रैंकिंग के करीब खिलाड़ी के साथ रखा जाएगा। यह न्यूनतम प्रतीक्षा समय सुनिश्चित करता है, हालांकि आप टूर्नामेंट में अन्य सभी खिलाड़ियों का सामना नहीं कर सकते हैं।\nतेजी से खेलते हैं और अधिक गेम खेलने और अधिक अंक जीतने के लिए लॉबी पर लौटें।';
@@ -740,7 +752,10 @@ class AppLocalizationsHi extends AppLocalizations {
   String get arenaEditTeamBattle => 'टीम लड़ाई संपादित करें';
 
   @override
-  String get arenaDefender => 'रक्षक';
+  String get arenaDefender => 'Defender';
+
+  @override
+  String get arenaDefenderLabel => 'Defender:';
 
   @override
   String get arenaPickYourTeam => 'अपनी टीम चुनें';
@@ -764,7 +779,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get arenaTournamentStats => 'टूर्नामेंट आँकड़े';
 
   @override
-  String get arenaRankAvgHelp => 'रैंक औसत आपकी रैंकिंग का एक प्रतिशत है। कम बेहतर है।\n\nउदाहरण के लिए, 100 खिलाड़ियों के टूर्नामेंट में तीसरा स्थान प्राप्त होना = 3%। 1000 खिलाड़ियों के टूर्नामेंट में 10वें स्थान पर होना = 1%।';
+  String get arenaRankAvgHelp => 'The rank average is a percentage of your ranking. Lower is better.\n\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.';
 
   @override
   String get arenaRankAverageHelp => 'Your rank average represents your typical finishing position, relative to the total number of players in each tournament.\nThis is a measure of your tournament placement, not your general rating.\n\nFor example, a rank average of 3% means you typically finish in the top 3% (such as 30th place out of 1,000 players).';
@@ -806,6 +821,9 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get arenaBerserkRate => 'Berserk rate';
+
+  @override
+  String get arenaLeaguesAndStreamerBattles => 'Leagues & Streamer Battles';
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -912,7 +930,10 @@ class AppLocalizationsHi extends AppLocalizations {
   String get broadcastDeleteRound => 'इस राउंड को डिलीट करें';
 
   @override
-  String get broadcastDefinitivelyDeleteRound => 'राउंड और उसके सभी गेम को निश्चित रूप से हटा दें।';
+  String get broadcastDefinitivelyDeleteRound => 'Definitively delete the round and all its games.';
+
+  @override
+  String get broadcastPermanentlyDeleteRound => 'Permanently delete this round and all its games?';
 
   @override
   String get broadcastDeleteAllGamesOfThisRound => 'इस दौर के सभी गेम हटाएं. उन्हें पुनः बनाने के लिए स्रोत को सक्रिय होने की आवश्यकता होगी।';
@@ -924,7 +945,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get broadcastDeleteTournament => 'इस टूर्नामेंट को हटाएं';
 
   @override
-  String get broadcastDefinitivelyDeleteTournament => 'संपूर्ण टूर्नामेंट, उसके सभी राउंड और उसके सभी गेम को निश्चित रूप से हटा दें।';
+  String get broadcastDefinitivelyDeleteTournament => 'Definitively delete the entire tournament, all its rounds and all its games.';
 
   @override
   String get broadcastPermanentlyDeleteTournament => 'Permanently delete this tournament, including all rounds and games?';
@@ -982,6 +1003,9 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get broadcastNoBoardsYet => 'No boards yet. These will appear once games are uploaded.';
+
+  @override
+  String get broadcastNoPlayersYet => 'No players yet. They will appear once games are uploaded.';
 
   @override
   String broadcastBoardsCanBeLoaded(String param) {
@@ -1332,6 +1356,527 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Practice only some files & ranks';
+
+  @override
+  String get learnLearnChess => 'शतरंज सीखें';
+
+  @override
+  String get learnByPlaying => 'खेल कर!';
+
+  @override
+  String learnProgressX(String param) {
+    return 'प्रगति: $param';
+  }
+
+  @override
+  String get learnResetMyProgress => 'मेरी प्रगति को रीसेट करें';
+
+  @override
+  String get learnYouWillLoseAllYourProgress => 'आप अपनी सारी प्रगति खो देंगे!';
+
+  @override
+  String get learnPlay => 'खेलें!';
+
+  @override
+  String get learnChessPieces => 'शतरंज के मोहरे';
+
+  @override
+  String get learnTheRook => 'हाथी';
+
+  @override
+  String get learnItMovesInStraightLines => 'यह सीधी रेखा में चलता है';
+
+  @override
+  String get learnRookIntro => 'हाथी एक शक्तिशाली टुकड़ा है। क्या आप इसे कमांड करने के लिए तैयार हैं?';
+
+  @override
+  String get learnRookGoal => 'तारा लाने के लिए हाथी पर क्लिक करें';
+
+  @override
+  String get learnGrabAllTheStars => 'सारे सितारों को एकत्रित करें';
+
+  @override
+  String get learnTheFewerMoves => 'आपके द्वारा की जाने वाली कम चालें,\nअधिक अंक आप जीत!';
+
+  @override
+  String get learnUseTwoRooks => 'Use two rooks\nto speed things up!';
+
+  @override
+  String get learnRookComplete => 'बधाई हो! आपने हाथियों का प्रयोग करना सफलतापूर्वक सीख लिया है';
+
+  @override
+  String get learnTheBishop => 'ऊँट';
+
+  @override
+  String get learnItMovesDiagonally => 'यह तिरछे चलता है';
+
+  @override
+  String get learnBishopIntro => 'अब हम ऊँट के चाल को सीखेंगे';
+
+  @override
+  String get learnYouNeedBothBishops => 'आपको दोनों सफ़ेद और काले रंग के ऊँट की ज़रूरत पड़ेगी';
+
+  @override
+  String get learnBishopComplete => 'बधाई हो! आपने ऊँट की चाल चलना सीख लिया है';
+
+  @override
+  String get learnTheQueen => 'वज़ीर';
+
+  @override
+  String get learnQueenCombinesRookAndBishop => 'वज़ीर = हाथी + ऊँट';
+
+  @override
+  String get learnQueenIntro => 'वज़ीर की जानकारी';
+
+  @override
+  String get learnQueenComplete => 'बधाई हो! वज़ीर आपके लिए कोई रहस्य नहीं है।';
+
+  @override
+  String get learnTheKing => 'राजा';
+
+  @override
+  String get learnTheMostImportantPiece => 'सबसे महत्वपूर्ण टुकड़ा';
+
+  @override
+  String get learnKingIntro => 'यदि राजा युद्ध में पराजित हो गया तो आप खेल हार जायेंगे!';
+
+  @override
+  String get learnTheKingIsSlow => 'राजा धीमा है।';
+
+  @override
+  String get learnLastOne => 'आखरी सबक';
+
+  @override
+  String get learnKingComplete => 'अब आप कमांडर को कमान कर सकते हैं!';
+
+  @override
+  String get learnTheKnight => 'घोड़ा';
+
+  @override
+  String get learnItMovesInAnLShape => 'यह L आकार में चलता है';
+
+  @override
+  String get learnKnightIntro => 'यहाँ आपके लिए एक चुनौती है घोड़ा... एक मुश्किल टुकड़ा है।';
+
+  @override
+  String get learnKnightsHaveAFancyWay => 'घोड़े को चारों ओर कूदने का एक शानदार तरीका है';
+
+  @override
+  String get learnKnightsCanJumpOverObstacles => 'घोड़ा बाधाओं पर से कूद सकते हैं!';
+
+  @override
+  String get learnKnightComplete => 'बधाई! आपने घोड़े की महारत हासिल कर लिया है|';
+
+  @override
+  String get learnThePawn => 'प्यादा';
+
+  @override
+  String get learnItMovesForwardOnly => 'यह केवल आगे बढ़ता है';
+
+  @override
+  String get learnPawnIntro => 'प्यादे कमजोर हैं, लेकिन वे बहुत क्षमता पैक करते हैं';
+
+  @override
+  String get learnPawnsMoveOneSquareOnly => 'प्यादा केवल एक कदम आगे बढ़ सकता है।\nलेकिन जब वे बोर्ड के दूसरी तरफ पहुंचते हैं, तो वे एक शक्तिशाली मोहरा बन जाते हैं!';
+
+  @override
+  String get learnMostOfTheTimePromotingToAQueenIsBest => 'ज्यादातर समय एक प्यादे को वज़ीर मैं पदोनत करना अच्छा है.\nलेकिन कभी-कभी घोडा भी काम आ सकता है!';
+
+  @override
+  String get learnPawnsMoveForward => 'प्यादे सीधा चलते है, लेकिन मारते तिरछा है!';
+
+  @override
+  String get learnCaptureThenPromote => 'कब्जा, फिर बढ़ावा दें!';
+
+  @override
+  String get learnUseAllThePawns => 'सभी पॉन्स का इस्तेमाल करे. प्रमोट करने की ज़रूरत नहीं है.';
+
+  @override
+  String get learnAPawnOnTheSecondRank => 'जब प्यादे प्रारंभिक स्थिति में होते है वो दो कदम आगे बढ़ सकते है!';
+
+  @override
+  String get learnGrabAllTheStarsNoNeedToPromote => 'सभी सितारों को पकड़ो!\nको बढ़ावा देने की कोई ज़रूरत नहीं है';
+
+  @override
+  String get learnPawnComplete => 'बधाई हो! प्यादे आपके लिए कोई रहस्य नहीं है।';
+
+  @override
+  String get learnPawnPromotion => 'प्यास पदोन्नति';
+
+  @override
+  String get learnYourPawnReachedTheEndOfTheBoard => 'आपका प्यादा बोर्ड के अंत तक पहुंच गया!';
+
+  @override
+  String get learnItNowPromotesToAStrongerPiece => 'यह अब एक ज़ोरदार टुकड़ा है';
+
+  @override
+  String get learnSelectThePieceYouWant => 'आप चाहते टुकड़ा का चयन करें!';
+
+  @override
+  String get learnFundamentals => 'बुनियादी बातों';
+
+  @override
+  String get learnCapture => 'कब्जा';
+
+  @override
+  String get learnTakeTheEnemyPieces => 'दुश्मन के टुकड़े ले लो';
+
+  @override
+  String get learnCaptureIntro => 'प्रतिद्वंद्वी के असहज मोहरो की पहचान करें, और उन्हें मार दे!';
+
+  @override
+  String get learnTakeTheBlackPieces => 'काले टुकड़े ले लो';
+
+  @override
+  String get learnTakeTheBlackPiecesAndDontLoseYours => 'काले टुकड़े ले लो!\nऔर अपना मत खोना|';
+
+  @override
+  String get learnCaptureComplete => 'बधाई! आप जानते हैं कि शतरंज के टुकड़ों से कैसे लड़ें!';
+
+  @override
+  String get learnProtection => 'सुरक्षा';
+
+  @override
+  String get learnKeepYourPiecesSafe => 'अपने टुकड़े सुरक्षित रखें';
+
+  @override
+  String get learnProtectionIntro => 'अपने असुरक्षित मोहरो की पहचान करे और उन्हें बचाए!';
+
+  @override
+  String get learnProtectionComplete => 'बधाई हो! आप जिस टुकड़े को नहीं खोते हैं वह एक टुकड़ा है जिसे आप जीते हैं!';
+
+  @override
+  String get learnEscape => 'आप पर हमला कर रहे हैं!\nखतरे से बच!';
+
+  @override
+  String get learnNoEscape => 'कहीं नहीं भाग सकते,\nलेकिन आप बचाव कर सकते हैं!';
+
+  @override
+  String get learnDontLetThemTakeAnyUndefendedPiece => 'प्रतिद्वंदी को असुरक्षित मोहरे लेने से रोके!';
+
+  @override
+  String get learnCombat => 'युद्ध';
+
+  @override
+  String get learnCaptureAndDefendPieces => 'कब्जा और टुकड़े की रक्षा';
+
+  @override
+  String get learnCombatIntro => 'एक अच्छा योद्धा हमले और बचाव को जानता है!';
+
+  @override
+  String get learnCombatComplete => 'बधाई! आप जानते हैं कि शतरंज के टुकड़ों से कैसे लड़ें';
+
+  @override
+  String get learnCheckInOne => 'एक में चेक करें';
+
+  @override
+  String get learnAttackTheOpponentsKing => 'विरोधी के राजा पर हमला करें';
+
+  @override
+  String get learnCheckInOneIntro => 'अपने प्रतिद्वंद्वी की जांच करने के लिए, अपने राजा पर हमला करें। उन्हें इसका बचाव करना होगा!';
+
+  @override
+  String get learnCheckInOneGoal => 'प्रतिद्वंद्वी के राजा को एक ही बार मैं शह दे!';
+
+  @override
+  String get learnCheckInOneComplete => 'बधाई हो! आपने अपने प्रतिद्वंद्वी को शह दी, उन्हें अपने राजा का बचाव करने के लिए मजबूर किया!';
+
+  @override
+  String get learnOutOfCheck => 'चेक से बाहर';
+
+  @override
+  String get learnDefendYourKing => 'अपने राजा की रक्षा करें';
+
+  @override
+  String get learnOutOfCheckIntro => 'आप शह में हैं! आपको हमले से बचना या शह रोकना चाहिए ।';
+
+  @override
+  String get learnEscapeWithTheKing => 'राजा के साथ भागो!';
+
+  @override
+  String get learnTheKingCannotEscapeButBlock => 'राजा बच नहीं सकता, लेकिन आप हमले को रोक सकते हैं!';
+
+  @override
+  String get learnYouCanGetOutOfCheckByTaking => 'आप पर हमला करने वाला टुकड़ा ले जाकर चेक से बाहर निकल सकते हैं।';
+
+  @override
+  String get learnThisKnightIsCheckingThroughYourDefenses => 'यह घोड़ा अपने बचाव के माध्यम से जांच रहा है|';
+
+  @override
+  String get learnEscapeOrBlock => 'राजा से बच या हमले को रोकें';
+
+  @override
+  String get learnOutOfCheckComplete => 'बधाई! आपके राजा को कभी भी नहीं ले जाया जा सकता है, सुनिश्चित करें कि आप किसी चेक से बचाव कर सकते हैं!';
+
+  @override
+  String get learnMateInOne => 'एक कदम में चेकमेट';
+
+  @override
+  String get learnDefeatTheOpponentsKing => 'प्रतिद्वंद्वी के राजा को हार';
+
+  @override
+  String get learnMateInOneIntro => 'आप तब जीतते हैं जब आपका प्रतिद्वंद्वी किसी शह से बचाव नहीं कर सकता।';
+
+  @override
+  String get learnAttackYourOpponentsKing => 'अपने प्रतिद्वंदी के राजा पर इस तरह हमला करे कि बचाव असंभव हो!';
+
+  @override
+  String get learnMateInOneComplete => 'बधाई! इसी तरह आप शतरंज के खेल जीतते हैं!';
+
+  @override
+  String get learnIntermediate => 'मध्यम';
+
+  @override
+  String get learnBoardSetup => 'बोर्ड सेटअप';
+
+  @override
+  String get learnHowTheGameStarts => 'गेम कैसे आरंभ होता है';
+
+  @override
+  String get learnBoardSetupIntro => 'युद्ध के लिए तैयार दोनों सेनाएं एक-दूसरे के सामने है।';
+
+  @override
+  String get learnThisIsTheInitialPosition => 'यह प्रारंभिक स्थिति है\nशतरंज के हर खेल में\nजारी रखने के लिए कोई भी मोहरा चलाये।';
+
+  @override
+  String get learnFirstPlaceTheRooks => 'हाथी को जगह पे रखे!\nवे कोनों में रखे जाते हैं।';
+
+  @override
+  String get learnThenPlaceTheKnights => 'आब घोड़ो को जगह पे रखे\nइन्हे हाथी के बगल में रखे!';
+
+  @override
+  String get learnPlaceTheBishops => 'ऊँटो को जगह पर रखे \nवे घोड़ो के पास रखे जायेंगे';
+
+  @override
+  String get learnPlaceTheQueen => 'वज़ीर को रखे!\nवह अपने रंग वाले खाने पे रखी जाती है';
+
+  @override
+  String get learnPlaceTheKing => 'राजा को रखे!\nठीक उसकी वज़ीर के बगल में।';
+
+  @override
+  String get learnPawnsFormTheFrontLine => 'प्यादे सामने वाली कतार में रखे जाते है\nजारी रखने के लिए कोई भी मोहरा चलाये';
+
+  @override
+  String get learnBoardSetupComplete => 'बधाई हो अब आप जानते है शतरंज के मोहरे कैसे जमाये जाते है';
+
+  @override
+  String get learnCastling => 'केस्लिंग';
+
+  @override
+  String get learnTheSpecialKingMove => 'विशेष राजा कदम';
+
+  @override
+  String get learnCastlingIntro => 'सुरक्षा के लिए अपने राजा लाओ, और हमले के लिए अपनी हड्डी तैनात!';
+
+  @override
+  String get learnCastleKingSide => 'राजा को दो कदम बढ़ाये \nकैसल किंग साइड!';
+
+  @override
+  String get learnCastleQueenSide => 'राजा को दो कदम बढाए \nकैसल वज़ीर साइड';
+
+  @override
+  String get learnTheKnightIsInTheWay => 'घोड़े को रास्ते से हटा कर किंग साइड कैसल करे';
+
+  @override
+  String get learnCastleKingSideMovePiecesFirst => 'किंग साइड कैसल करे\nइसके लिए आपको बिच के मोहरे हटाने पड़ेंगे';
+
+  @override
+  String get learnCastleQueenSideMovePiecesFirst => 'वज़ीर साइड कैसल करे\nइसके लिए आपको बिच के मोहरे हटाने पड़ेंगेवज़ीर';
+
+  @override
+  String get learnYouCannotCastleIfMoved => 'कैसल तभी मुमकिन जब राजा या हाथी अपनी शुरुआती स्थिति से हिले ना हो';
+
+  @override
+  String get learnYouCannotCastleIfAttacked => 'अगर कैसेल के रस्ते मैं कोई खतरा है तो कैसेल नही हो सकता\nपहले शह रोके फिर कैसेल करे';
+
+  @override
+  String get learnFindAWayToCastleKingSide => 'किंग साइड कैसेल करने का रास्ता खोजे';
+
+  @override
+  String get learnFindAWayToCastleQueenSide => 'वज़ीर साइड कैसेल करने का रास्ता खोजे';
+
+  @override
+  String get learnCastlingComplete => 'बधाई हो! अब आप कैसेल करने का तरीका जान चुके है';
+
+  @override
+  String get learnTheSpecialPawnMove => 'विशेष मोहरा कदम';
+
+  @override
+  String get learnEnPassantIntro => 'जब प्रतिद्वन्दी का मोहरा दो कदम आगे बढ़ेगा आप इसे ले सकते है जैसे कि उसने एक कदम बढ़ाया गया हो';
+
+  @override
+  String get learnBlackJustMovedThePawnByTwoSquares => 'काला प्यादा दो कदम बढ़ा है आप इसे en passant से ले सकते है';
+
+  @override
+  String get learnEnPassantOnlyWorksImmediately => 'En passant तभी काम करेगा जब इसे प्रतिद्वंद्वी की चाल के तुरंत बाद इस्तेमाल किया जाये';
+
+  @override
+  String get learnEnPassantOnlyWorksOnFifthRank => 'En passant तभी इस्तेमाल होगा जब आपका प्यादा पांचवी कतार में होगा';
+
+  @override
+  String get learnTakeAllThePawnsEnPassant => 'सारे प्यादो को Enpassant से ले';
+
+  @override
+  String get learnEnPassantComplete => 'बधाई हो! अब आप En passant इस्तेमाल कर सकते है';
+
+  @override
+  String get learnStalemate => 'गतिरोध';
+
+  @override
+  String get learnTheGameIsADraw => 'खेल आकर्षित है';
+
+  @override
+  String get learnStalemateIntro => 'जब राजा शह मैं न हो और ना ही खिलाडी के पास कोई चाल हो ऐसी स्तिथि में खेल ड्रा हो जायेगा';
+
+  @override
+  String get learnStalemateGoal => 'काले को स्टेलमेट करे\n- उसका राजा कही नहीं जा सके\n- राजा पे शह भी न हो';
+
+  @override
+  String get learnStalemateComplete => 'बधाई हो! आप स्टेलमेट करना सीख चुके है';
+
+  @override
+  String get learnAdvanced => 'उन्नत';
+
+  @override
+  String get learnPieceValue => 'टुकड़ा मूल्य';
+
+  @override
+  String get learnEvaluatePieceStrength => 'टुकड़ा ताकत का मूल्यांकन करें';
+
+  @override
+  String get learnPieceValueIntro => 'उच्च गतिशीलता वाले मोहरों का उच्च मूल्य है!\nवज़ीर = 9\nहाथी = 5\nऊँट = 3\nघोड़ा = 3\nप्यादा = 1\nराजा अनमोल है! इसे खोने का मतलब है खेल को खोना।';
+
+  @override
+  String get learnQueenOverBishop => 'उच्च मूल्य वाले मोहरे को लेवे रानी > ऊंट';
+
+  @override
+  String get learnPieceValueExchange => 'उच्चतम मूल्य के साथ मोहर ले लो! एक कम मूल्यवान के लिए एक उच्च मूल्यवान मोहर विनिमय न करें।';
+
+  @override
+  String get learnPieceValueLegal => 'उच्चतम मूल्य के साथ वाला मोहर ले लो! सुनिश्चित करें कि आपका कदम कानूनी है!';
+
+  @override
+  String get learnTakeThePieceWithTheHighestValue => 'उच्च मूल्य वाले मोहरे को लेवे!';
+
+  @override
+  String get learnPieceValueComplete => 'बधाई हो! आप मोहरों का मूल्य जानते हैं!\nवज़ीर = 9\nहाथी = 5\nऊँट = 3\nघोड़ा = 3\nप्यादा = 1';
+
+  @override
+  String get learnCheckInTwo => 'दो चाल मैं शह';
+
+  @override
+  String get learnTwoMovesToGiveCheck => 'दो चाल मैं शाह दे';
+
+  @override
+  String get learnCheckInTwoIntro => 'प्रतिद्वंदी के राजा को दो सही चाल चला कर शह दे';
+
+  @override
+  String get learnCheckInTwoGoal => 'प्रतिद्वंद्वी के राजा को शह दें\nदो चाल में!';
+
+  @override
+  String get learnCheckInTwoComplete => 'बधाई हो! आपने अपने प्रतिद्वंद्वी को शह दी, उन्हें अपने राजा का बचाव करने के लिए मजबूर किया!';
+
+  @override
+  String get learnWhatNext => 'आगे क्या?';
+
+  @override
+  String get learnYouKnowHowToPlayChess => 'आप शतरंज खेलना सीख चुके है, बधाई हो! क्या आप एक मजबूत खिलाड़ी बनना चाहते हैं?';
+
+  @override
+  String get learnRegister => 'पंजीकृत करें';
+
+  @override
+  String get learnGetAFreeLichessAccount => 'एक मुफ्त Lichess खाता प्राप्त करें';
+
+  @override
+  String get learnPractice => 'अभ्यास';
+
+  @override
+  String get learnLearnCommonChessPositions => 'सामान्य शतरंज की स्थिति जानें';
+
+  @override
+  String get learnPuzzles => 'पहेलियाँ';
+
+  @override
+  String get learnExerciseYourTacticalSkills => 'अपने सामरिक कौशल का प्रयोग करें';
+
+  @override
+  String get learnVideos => 'वीडियो';
+
+  @override
+  String get learnWatchInstructiveChessVideos => 'उपकारी शतरंज वीडियो देखें';
+
+  @override
+  String get learnPlayPeople => 'लोगों के साथ खेलें';
+
+  @override
+  String get learnOpponentsFromAroundTheWorld => 'दुनिया भर के विरोधियों';
+
+  @override
+  String get learnPlayMachine => 'मशीन के साथ खेलें';
+
+  @override
+  String get learnTestYourSkillsWithTheComputer => 'कंप्यूटर के साथ अपने कौशल का परीक्षण करें';
+
+  @override
+  String get learnLetsGo => 'चलो!';
+
+  @override
+  String learnStageX(String param) {
+    return 'मंच $param';
+  }
+
+  @override
+  String get learnAwesome => 'बहुत बढ़िया';
+
+  @override
+  String get learnExcellent => 'अति उत्कृष्ट';
+
+  @override
+  String get learnGreatJob => 'अच्छा काम';
+
+  @override
+  String get learnPerfect => 'उत्तम';
+
+  @override
+  String get learnOutstanding => 'शानदार';
+
+  @override
+  String get learnWayToGo => 'बहुत अच्छा!';
+
+  @override
+  String get learnYesYesYes => 'हाँ हाँ हाँ!';
+
+  @override
+  String get learnYoureGoodAtThis => 'आप इस पर अच्छा कर रहे हैं';
+
+  @override
+  String get learnNailedIt => 'बिल्कुल सही किया';
+
+  @override
+  String get learnRightOn => 'सही पर';
+
+  @override
+  String learnStageXComplete(String param) {
+    return 'स्टेज $param पूर्ण';
+  }
+
+  @override
+  String get learnNext => 'अगला';
+
+  @override
+  String learnNextX(String param) {
+    return 'अगला: $param';
+  }
+
+  @override
+  String get learnBackToMenu => 'वापस मेन्यू पर';
+
+  @override
+  String get learnPuzzleFailed => 'पहेली विफल हुई';
+
+  @override
+  String get learnRetry => 'पुन: प्रयास करें';
 
   @override
   String get patronDonate => 'दान करें';
@@ -2098,6 +2643,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get puzzleThemeCornerMateDescription => 'Confine the king to the corner using a rook or queen and a knight to engage the checkmate.';
 
   @override
+  String get puzzleThemeCornerMateKnightDeliversDescription => 'Confine the king to the corner using a rook or queen, and use a knight to deliver the checkmate.';
+
+  @override
   String get puzzleThemeCrushing => 'मुंहतोड़';
 
   @override
@@ -2170,7 +2718,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get puzzleThemeEndgameDescription => 'खेल के अंतिम चरण के दौरान एक रणनीति।';
 
   @override
-  String get puzzleThemeEnPassantDescription => 'एन पास के नियम को शामिल करने वाली एक रणनीति, जहां एक मोहरा एक प्रतिद्वंद्वी मोहरे को पकड़ सकता है जिसने अपने शुरुआती दो-वर्ग चाल का उपयोग करके इसे बाईपास किया है।';
+  String get puzzleThemeEnPassantDescription => 'A tactic involving the en passant rule, where a pawn can capture an opponent pawn that has bypassed it using its initial two-square move.';
 
   @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'A tactic involving the en passant rule, where a pawn can capture an opposing pawn that has just moved next to it with its initial two-square move.';
@@ -2191,7 +2739,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get puzzleThemeFork => 'कांटा';
 
   @override
-  String get puzzleThemeForkDescription => 'एक चाल जहां स्थानांतरित टुकड़ा एक बार में दो प्रतिद्वंद्वी टुकड़ों पर हमला करता है।';
+  String get puzzleThemeForkDescription => 'A move where the moved piece attacks two opponent pieces at once.';
 
   @override
   String get puzzleThemeForkOpposingPiecesDescription => 'A move where a piece attacks two or more opposing pieces simultaneously.';
@@ -2206,7 +2754,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get puzzleThemeHookMate => 'हुक मात';
 
   @override
-  String get puzzleThemeHookMateDescription => 'शत्रु राजा के भागने को सीमित करने के लिए एक शत्रु प्यादा के साथ एक हाथी, घोड़ा और प्यादा के साथ चेकमेट।';
+  String get puzzleThemeHookMateDescription => 'Checkmate with a rook, knight, and pawn along with one enemy pawn to limit the enemy king\'s escape.';
 
   @override
   String get puzzleThemeHookMateOpposingPawnDescription => 'Checkmate using a rook, knight, and pawn, where an opposing pawn blocks the king\'s escape.';
@@ -2236,10 +2784,16 @@ class AppLocalizationsHi extends AppLocalizations {
   String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
 
   @override
+  String get puzzleThemePillsburyMateRookAndBishopDescription => 'A rook delivers checkmate to the king, while a bishop helps confine it.';
+
+  @override
   String get puzzleThemeMorphysMate => 'Morphy\'s mate';
 
   @override
   String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+
+  @override
+  String get puzzleThemeMorphyMateBishopAndRookDescription => 'A bishop delivers checkmate to the king, while a rook helps confine it.';
 
   @override
   String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
@@ -2359,7 +2913,10 @@ class AppLocalizationsHi extends AppLocalizations {
   String get puzzleThemePromotion => 'पदोन्नति';
 
   @override
-  String get puzzleThemePromotionDescription => 'प्रचार करने या धमकी देने वाला मोहरा रणनीति की कुंजी है।';
+  String get puzzleThemePromotionDescription => 'Promote one of your pawn to a queen or minor piece.';
+
+  @override
+  String get puzzleThemePromotePawnToQueenRookOrMinor => 'Promote one of your pawns to a queen, rook or minor piece.';
 
   @override
   String get puzzleThemeQueenEndgame => 'वज़ीर एंडगेम';
@@ -2944,6 +3501,18 @@ class AppLocalizationsHi extends AppLocalizations {
   String get flipBoard => 'बोर्ड पलटें';
 
   @override
+  String get toggleLocalEngine => 'Toggle local engine';
+
+  @override
+  String get engineSettings => 'Engine settings';
+
+  @override
+  String get enginesFromStrongestToWeakest => 'Engines from strongest to weakest';
+
+  @override
+  String get illegalPosition => 'Illegal position';
+
+  @override
   String get threefoldRepetition => 'तीन बार दोहराव';
 
   @override
@@ -3086,6 +3655,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get password => 'पासवर्ड';
 
   @override
+  String get showPassword => 'Show password';
+
+  @override
   String get changePassword => 'पासवर्ड बदलें';
 
   @override
@@ -3155,7 +3727,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get refreshInboxAfterFiveMinutes => '5 मिनट प्रतीक्षा करें और अपना ईमेल इनबॉक्स रिफ्रेश करें।';
 
   @override
-  String get checkSpamFolder => 'अपना स्पैम फ़ोल्डर भी जांचें, हो सकता है कि वह वहां हो। यदि हां, तो इसे स्पैम नहीं के रूप में चिह्नित करें।';
+  String get checkSpamFolder => 'Also check your spam folder, it might end up there. If so, mark it as not spam.';
 
   @override
   String get checkSpamOrJunkFolder => 'If you do not receive a confirmation email, check your Spam or Junk folder. Be sure to indicate messages from lichess.org as safe and \"not spam\", so you can stay informed of important communications.';
@@ -3206,10 +3778,16 @@ class AppLocalizationsHi extends AppLocalizations {
   String get cancel => 'रद्द करें';
 
   @override
-  String get whiteTimeOut => 'सफेद का समय समाप्त';
+  String get whiteTimeOut => 'White time out';
 
   @override
-  String get blackTimeOut => 'काला का समय समाप्त';
+  String get whiteRanOutOfTime => 'White ran out of time';
+
+  @override
+  String get blackTimeOut => 'Black time out';
+
+  @override
+  String get blackRanOutOfTime => 'Black ran out of time';
 
   @override
   String get drawOfferSent => 'बराबरी पे खेल समाप्त करने का प्रस्ताव भेजा गया';
@@ -3421,6 +3999,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
 
   @override
+  String get cannotFilterByUnstableRating => 'It is not possible to filter by rating because your rating is not stable.\nPlaying rated games will increase stability.';
+
+  @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
     return 'आपके $param1 रेटिंग ($param2) बहुत अधिक है';
   }
@@ -3501,7 +4082,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get leaderboard => 'उच्च खिलाडी, अंक तालिका (लीडरबोर्ड)';
 
   @override
-  String get screenshotCurrentPosition => 'वर्तमान स्थिति का स्क्रीनशॉट';
+  String get positionAsImage => 'Position as image';
 
   @override
   String get gameAsGIF => 'GIF के रूप में सेव करें';
@@ -3598,6 +4179,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String xStartedFollowingY(String param1, String param2) {
     return '$param1 ने  $param2 का अनुसरण करना शुरू किया';
   }
+
+  @override
+  String get less => 'Less';
 
   @override
   String get more => 'अधिक';
@@ -3807,7 +4391,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get makeAStudy => 'सुरक्षित रखने और साझा करने के लिए, एक अध्ययन करने पर विचार करें।';
 
   @override
-  String get clearSavedMoves => 'चाल हटाओ';
+  String get clearLocalData => 'Clear local data';
 
   @override
   String get previouslyOnLichessTV => 'इससे पहले Lichess TV पर';
@@ -4301,7 +4885,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get create => 'बनाएं';
 
   @override
-  String get whenCreateSimul => 'जब आप सिमुल बनाते हैं तो आपको कई खिलाडियों के साथ एक साथ खेलने का मौका मिलता है';
+  String get whenCreateSimul => 'When you create a simul, you get to play several players at once.';
 
   @override
   String get creatingASimul => 'Creating a simul lets you play against multiple opponents at the same time.';
@@ -4316,7 +4900,10 @@ class AppLocalizationsHi extends AppLocalizations {
   String get simulAddExtraTime => 'सिमुल का सामना करने के लिए आप अपनी घडी में अतिरिक्त समय जोड़ सकते हैं';
 
   @override
-  String get simulHostExtraTime => 'अतिरिक्त समय की मेजबानी करें';
+  String get simulHostExtraTime => 'Host extra initial clock time';
+
+  @override
+  String get extraClockTimeForHost => 'Extra clock time for the host:';
 
   @override
   String get simulAddExtraTimePerPlayer => 'Add initial time to your clock for each player joining the simul.';
@@ -4349,10 +4936,16 @@ class AppLocalizationsHi extends AppLocalizations {
   String get keyGoToStartOrEnd => 'शुरूआत मे हिलाए';
 
   @override
+  String get keyGoToPreviousOrNextLine => 'go to previous/next line';
+
+  @override
   String get keyCycleSelectedVariation => 'Cycle selected variation';
 
   @override
   String get keyShowOrHideComments => 'टिपण्णी दिखाएँ/छिपाएँ';
+
+  @override
+  String get keyShowOrHideCurrentVariation => 'show/hide current variation';
 
   @override
   String get keyEnterOrExitVariation => 'अंदर बाहर करे';
@@ -4628,9 +5221,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get dark => 'काला';
 
   @override
-  String get transparent => 'पारदर्शी';
-
-  @override
   String get picture => 'Picture';
 
   @override
@@ -4640,7 +5230,13 @@ class AppLocalizationsHi extends AppLocalizations {
   String get roundness => 'Roundness';
 
   @override
+  String get backgroundImage => 'Background image';
+
+  @override
   String get backgroundImageUrl => 'पृष्ठभूमि छवि URL:';
+
+  @override
+  String get imageOpacity => 'Image opacity';
 
   @override
   String get board => 'Board';
@@ -4712,7 +5308,12 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String perfRatingX(String param) {
-    return 'रेटिंग: $param';
+    return 'Rating: $param';
+  }
+
+  @override
+  String perfRatingLabel(String param) {
+    return 'Rating: $param.';
   }
 
   @override
@@ -4867,6 +5468,9 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get clickHereToReadIt => 'Click here to read it';
+
+  @override
+  String get readTheMessage => 'Read the message';
 
   @override
   String get sorry => 'खेद :(';
@@ -5176,7 +5780,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get onlyTeamMembers => 'केवल टीम सदस्य';
 
   @override
-  String get navigateMoveTree => 'चालों की सूची पर जाएं';
+  String get navigateMoveTree => 'Navigate the move tree';
 
   @override
   String get moveListNavigation => 'Move list navigation';
@@ -5306,6 +5910,15 @@ class AppLocalizationsHi extends AppLocalizations {
   String get settings => 'Settings';
 
   @override
+  String get verifyingYourDevice => 'Verifying your device...';
+
+  @override
+  String get chessOpenings => 'Chess openings';
+
+  @override
+  String get boards => 'Boards';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5332,8 +5945,8 @@ class AppLocalizationsHi extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count गंभीर गल्तियां',
-      one: '$count गंभीर गलती',
+      other: '$count blunders',
+      one: '$count blunder',
     );
     return '$_temp0';
   }
@@ -5354,8 +5967,8 @@ class AppLocalizationsHi extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count गलतियाँ',
-      one: '$count ग़लती',
+      other: '$count mistakes',
+      one: '$count mistake',
     );
     return '$_temp0';
   }
@@ -5376,8 +5989,8 @@ class AppLocalizationsHi extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count अशुद्धियाँ',
-      one: '$count अशुद्धि',
+      other: '$count inaccuracies',
+      one: '$count inaccuracy',
     );
     return '$_temp0';
   }
@@ -6146,7 +6759,10 @@ class AppLocalizationsHi extends AppLocalizations {
   String get studyCurrentChapterUrl => 'वर्तमान अध्याय URL';
 
   @override
-  String get studyYouCanPasteThisInTheForumToEmbed => 'आप अध्याय को जोड़ने के लिए इसे फ़ोरम में जोर सकते हैं';
+  String get studyYouCanPasteThisInTheForumToEmbed => 'You can paste this in the forum or your Lichess blog to embed';
+
+  @override
+  String get studyPasteToEmbedChapterInForumOrBlog => 'You can paste this in the forum or your Lichess blog to embed the chapter.';
 
   @override
   String get studyStartAtInitialPosition => 'प्रारंभिक स्थिति में शुरू करें';
@@ -6521,7 +7137,13 @@ class AppLocalizationsHi extends AppLocalizations {
   String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
 
   @override
+  String get studyLoadGameFromTheWebTitle => 'Load a game from the web';
+
+  @override
   String get studyLoadExistingLichessGameText => 'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
+
+  @override
+  String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/7fHIU0XI)<br>to load game moves in the chapter.';
 
   @override
   String get studyFromFenStringTitle => 'From a FEN string';
@@ -6599,6 +7221,9 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get teamTeam => 'टीम';
+
+  @override
+  String get teamTeamUpdates => 'Team updates';
 
   @override
   String get teamIncorrectEntryCode => 'अवैध प्रवेश कूट';

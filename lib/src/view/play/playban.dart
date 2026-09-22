@@ -3,12 +3,11 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart' show CountdownClockBuilder;
 import 'package:material_ui/material_ui.dart';
 
-class PlaybanMessage extends StatelessWidget {
-  const PlaybanMessage({required this.playban, this.centerText = false, super.key});
-
-  final TemporaryBan playban;
-  final bool centerText;
-
+class const PlaybanMessage({
+  required final TemporaryBan playban,
+  final bool centerText = false,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(

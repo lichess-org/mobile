@@ -10,7 +10,7 @@ part 'puzzle_theme.freezed.dart';
 
 @freezed
 sealed class PuzzleThemeData with _$PuzzleThemeData {
-  const factory PuzzleThemeData({
+  const factory({
     required int count,
     required String? desc,
     required PuzzleThemeKey key,
@@ -18,7 +18,7 @@ sealed class PuzzleThemeData with _$PuzzleThemeData {
   }) = _PuzzleThemeData;
 }
 
-enum PuzzleThemeKey {
+enum PuzzleThemeKey(final IconData icon) {
   mix(PuzzleIcons.mix),
   advancedPawn(PuzzleIcons.advancedPawn),
   advantage(PuzzleIcons.advantage),
@@ -84,10 +84,6 @@ enum PuzzleThemeKey {
 
   // used internally to filter out unsupported keys
   unsupported(PuzzleIcons.mix);
-
-  const PuzzleThemeKey(this.icon);
-
-  final IconData icon;
 
   PuzzleThemeL10n l10n(AppLocalizations l10n) {
     switch (this) {
@@ -204,8 +200,8 @@ enum PuzzleThemeKey {
         );
       case PuzzleThemeKey.enPassant:
         return PuzzleThemeL10n(
-          name: 'En passant',
-          description: l10n.puzzleThemeEnPassantDescription,
+          name: l10n.enPassant,
+          description: l10n.puzzleThemeEnPassantAdjacentCaptureDescription,
         );
       case PuzzleThemeKey.exposedKing:
         return PuzzleThemeL10n(
@@ -215,7 +211,7 @@ enum PuzzleThemeKey {
       case PuzzleThemeKey.fork:
         return PuzzleThemeL10n(
           name: l10n.puzzleThemeFork,
-          description: l10n.puzzleThemeForkDescription,
+          description: l10n.puzzleThemeForkOpposingPiecesDescription,
         );
       case PuzzleThemeKey.hangingPiece:
         return PuzzleThemeL10n(
@@ -225,7 +221,7 @@ enum PuzzleThemeKey {
       case PuzzleThemeKey.hookMate:
         return PuzzleThemeL10n(
           name: l10n.puzzleThemeHookMate,
-          description: l10n.puzzleThemeHookMateDescription,
+          description: l10n.puzzleThemeHookMateOpposingPawnDescription,
         );
       case PuzzleThemeKey.interference:
         return PuzzleThemeL10n(
@@ -330,7 +326,7 @@ enum PuzzleThemeKey {
       case PuzzleThemeKey.promotion:
         return PuzzleThemeL10n(
           name: l10n.puzzleThemePromotion,
-          description: l10n.puzzleThemePromotionDescription,
+          description: l10n.puzzleThemePromotePawnToQueenRookOrMinor,
         );
       case PuzzleThemeKey.queenEndgame:
         return PuzzleThemeL10n(
@@ -511,8 +507,4 @@ final puzzleThemeCategoriesProvider = Provider<IList<PuzzleThemeCategory>>((Ref 
   ]);
 }, name: 'PuzzleThemeCategoriesProvider');
 
-class PuzzleThemeL10n {
-  const PuzzleThemeL10n({required this.name, required this.description});
-  final String name;
-  final String description;
-}
+class const PuzzleThemeL10n({required final String name, required final String description});

@@ -24,9 +24,7 @@ final accountServiceProvider = Provider<AccountService>((Ref ref) {
   return service;
 }, name: 'AccountServiceProvider');
 
-class AccountService {
-  AccountService(this._ref);
-
+class AccountService(final Ref _ref) {
   ProviderSubscription<AsyncValue<User?>>? _accountProviderSubscription;
   StreamSubscription<(NotificationResponse, LocalNotification)>? _notificationResponseSubscription;
   Timer? _refreshTimer;
@@ -36,8 +34,6 @@ class AccountService {
 
   /// Stream of bookmark changes for the current user.
   Stream<(GameId, bool)> get bookmarkChanges => _bookmarkChangesController.stream;
-
-  final Ref _ref;
 
   static const _storageKey = 'account.playban_notification_date';
 

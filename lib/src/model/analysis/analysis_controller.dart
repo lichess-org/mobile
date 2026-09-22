@@ -43,16 +43,14 @@ part 'analysis_controller.freezed.dart';
 final _dateFormat = DateFormat('yyyy.MM.dd');
 
 @freezed
-sealed class AnalysisOptions with _$AnalysisOptions {
-  const AnalysisOptions._();
-
-  const factory AnalysisOptions.standalone({
+sealed class const AnalysisOptions._() with _$AnalysisOptions {
+  const factory standalone({
     required Variant variant,
     @Default(null) int? initialMoveCursor,
     @Default(Side.white) Side orientation,
   }) = Standalone;
 
-  const factory AnalysisOptions.pgn({
+  const factory pgn({
     required StringId id,
     required Side orientation,
     int? initialMoveCursor,
@@ -61,13 +59,13 @@ sealed class AnalysisOptions with _$AnalysisOptions {
     required bool isComputerAnalysisAllowed,
   }) = Pgn;
 
-  const factory AnalysisOptions.archivedGame({
+  const factory archivedGame({
     required Side orientation,
     int? initialMoveCursor,
     required GameId gameId,
   }) = ArchivedGame;
 
-  const factory AnalysisOptions.activeCorrespondenceGame({
+  const factory activeCorrespondenceGame({
     required Side orientation,
     int? initialMoveCursor,
     required GameFullId gameFullId,
@@ -89,7 +87,7 @@ sealed class AnalysisOptions with _$AnalysisOptions {
   };
 }
 
-enum AnalysisGameResult {
+enum AnalysisGameResult() {
   whiteWins,
   blackWins,
   draw,
@@ -126,16 +124,13 @@ void clearSavedStandaloneAnalysis() {
   _savedStandalone = null;
 }
 
-class AnalysisController extends AsyncNotifier<AnalysisState>
+class AnalysisController(final AnalysisOptions options)
+    extends AsyncNotifier<AnalysisState>
     with
         EngineEvaluationMixin,
         ServerAnalysisMixin<AnalysisState>,
         OpeningExplorerMixin<AnalysisState>
     implements PgnTreeNotifier {
-  AnalysisController(this.options);
-
-  final AnalysisOptions options;
-
   static final Uri socketUri = Uri(path: '/analysis/socket/v5');
 
   StreamSubscription<SocketEvent>? _socketSubscription;
@@ -798,7 +793,7 @@ class AnalysisController extends AsyncNotifier<AnalysisState>
 }
 
 @freezed
-sealed class AnalysisState
+sealed class const AnalysisState._()
     with
         _$AnalysisState,
         AnalysisExplosionMixin,
@@ -806,8 +801,6 @@ sealed class AnalysisState
         ServerAnalysisMixinState,
         OpeningExplorerMixinState
     implements CommonAnalysisState {
-  const AnalysisState._();
-
   @override
   ViewRoot get analysisRoot => root;
 
@@ -815,7 +808,7 @@ sealed class AnalysisState
   AnalysisState withThreatMode(bool engineInThreatMode) =>
       copyWith(engineInThreatMode: engineInThreatMode);
 
-  const factory AnalysisState({
+  const factory({
     /// The ID of the game if it's a lichess game.
     required GameId? gameId,
 
@@ -1005,12 +998,10 @@ sealed class AnalysisState
 }
 
 @freezed
-sealed class AnalysisCurrentNode
+sealed class const AnalysisCurrentNode._()
     with _$AnalysisCurrentNode
     implements AnalysisCurrentNodeInterface {
-  const AnalysisCurrentNode._();
-
-  const factory AnalysisCurrentNode({
+  const factory({
     required Position position,
     required bool hasChild,
     required bool isRoot,
@@ -1023,7 +1014,7 @@ sealed class AnalysisCurrentNode
     IList<int>? nags,
   }) = _AnalysisCurrentNode;
 
-  factory AnalysisCurrentNode.fromNode(Node node) {
+  factory fromNode(Node node) {
     if (node is Branch) {
       return AnalysisCurrentNode(
         sanMove: node.sanMove,

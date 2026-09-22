@@ -33,12 +33,7 @@ final correspondenceServiceProvider = Provider<CorrespondenceService>((Ref ref) 
 }, name: 'CorrespondenceServiceProvider');
 
 /// Service that manages correspondence games.
-class CorrespondenceService {
-  CorrespondenceService(this._log, {required this.ref});
-
-  final Ref ref;
-  final Logger _log;
-
+class CorrespondenceService(final Logger _log, {required final Ref ref}) {
   StreamSubscription<ParsedLocalNotification>? _notificationResponseSubscription;
   StreamSubscription<ReceivedFcmMessage>? _fcmSubscription;
 
@@ -197,9 +192,8 @@ class CorrespondenceService {
 
           await movePlayedCompleter.future.timeout(const Duration(seconds: 3));
 
-          (await ref.read(
-            correspondenceGameStorageProvider.future,
-          )).save(gameToSync.copyWith(registeredMoveAtPgn: null));
+          (await ref.read(correspondenceGameStorageProvider.future))
+              .save(gameToSync.copyWith(registeredMoveAtPgn: null));
         } else {
           _log.info('Cannot play game ${gameToSync.id} move because its state has changed');
           updateStoredGame(gameToSync.fullId, playableGame);

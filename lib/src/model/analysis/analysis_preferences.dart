@@ -11,7 +11,7 @@ final analysisPreferencesProvider = NotifierProvider<AnalysisPreferences, Analys
   name: 'AnalysisPreferencesProvider',
 );
 
-class AnalysisPreferences extends Notifier<AnalysisPrefs> with PreferencesStorage<AnalysisPrefs> {
+class AnalysisPreferences() extends Notifier<AnalysisPrefs> with PreferencesStorage<AnalysisPrefs> {
   @override
   @protected
   final prefCategory = PrefCategory.analysis;
@@ -62,10 +62,10 @@ class AnalysisPreferences extends Notifier<AnalysisPrefs> with PreferencesStorag
 }
 
 @Freezed(fromJson: true, toJson: true)
-sealed class AnalysisPrefs with _$AnalysisPrefs implements Serializable, CommonAnalysisPrefs {
-  const AnalysisPrefs._();
-
-  const factory AnalysisPrefs({
+sealed class const AnalysisPrefs._()
+    with _$AnalysisPrefs
+    implements Serializable, CommonAnalysisPrefs {
+  const factory({
     @JsonKey(defaultValue: true) required bool enableServerAnalysis,
     required bool showEvaluationGauge,
     @JsonKey(defaultValue: true) required bool showEngineLines,
@@ -87,7 +87,7 @@ sealed class AnalysisPrefs with _$AnalysisPrefs implements Serializable, CommonA
     smallBoard: false,
   );
 
-  factory AnalysisPrefs.fromJson(Map<String, dynamic> json) {
+  factory fromJson(Map<String, dynamic> json) {
     return _$AnalysisPrefsFromJson(json);
   }
 }

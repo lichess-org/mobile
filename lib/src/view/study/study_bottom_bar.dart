@@ -21,11 +21,7 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
 
-class StudyBottomBar extends ConsumerWidget {
-  const StudyBottomBar({required this.options});
-
-  final StudyOptions options;
-
+class const StudyBottomBar({required final StudyOptions options}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final gamebook = ref.watch(
@@ -36,11 +32,7 @@ class StudyBottomBar extends ConsumerWidget {
   }
 }
 
-class _AnalysisBottomBar extends ConsumerWidget {
-  const _AnalysisBottomBar({required this.options});
-
-  final StudyOptions options;
-
+class const _AnalysisBottomBar({required final StudyOptions options}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(studyControllerProvider(options)).value;
@@ -125,11 +117,7 @@ class _AnalysisBottomBar extends ConsumerWidget {
   }
 }
 
-class _GamebookBottomBar extends ConsumerWidget {
-  const _GamebookBottomBar({required this.options});
-
-  final StudyOptions options;
-
+class const _GamebookBottomBar({required final StudyOptions options}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(studyControllerProvider(options)).requireValue;
@@ -219,24 +207,17 @@ class _GamebookBottomBar extends ConsumerWidget {
   }
 }
 
-class _NextChapterButton extends ConsumerStatefulWidget {
-  const _NextChapterButton({
-    required this.options,
-    required this.chapterId,
-    required this.hasNextChapter,
-    required this.blink,
-  });
-
-  final StudyOptions options;
-  final StudyChapterId chapterId;
-  final bool hasNextChapter;
-  final bool blink;
-
+class const _NextChapterButton({
+  required final StudyOptions options,
+  required final StudyChapterId chapterId,
+  required final bool hasNextChapter,
+  required final bool blink,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_NextChapterButton> createState() => _NextChapterButtonState();
 }
 
-class _NextChapterButtonState extends ConsumerState<_NextChapterButton> {
+class _NextChapterButtonState() extends ConsumerState<_NextChapterButton> {
   bool isLoading = false;
 
   @override
@@ -286,11 +267,7 @@ Future<void> _showStudySheet(
 }
 
 /// Menu holding the study actions that don't fit in the bottom bar.
-class _StudyMenuButton extends ConsumerWidget {
-  const _StudyMenuButton({required this.options});
-
-  final StudyOptions options;
-
+class const _StudyMenuButton({required final StudyOptions options}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return BottomBarButton(
@@ -361,11 +338,7 @@ class _StudyMenuButton extends ConsumerWidget {
   }
 }
 
-class _ChapterButton extends ConsumerWidget {
-  const _ChapterButton({required this.options});
-
-  final StudyOptions options;
-
+class const _ChapterButton({required final StudyOptions options}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final nbChapters = ref.watch(
@@ -383,12 +356,10 @@ class _ChapterButton extends ConsumerWidget {
   }
 }
 
-class _StudyMembersSheet extends ConsumerWidget {
-  const _StudyMembersSheet({required this.options, required this.scrollController});
-
-  final StudyOptions options;
-  final ScrollController scrollController;
-
+class const _StudyMembersSheet({
+  required final StudyOptions options,
+  required final ScrollController scrollController,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(studyControllerProvider(options)).requireValue;
@@ -416,17 +387,15 @@ class _StudyMembersSheet extends ConsumerWidget {
   }
 }
 
-class _StudyChaptersMenu extends ConsumerStatefulWidget {
-  const _StudyChaptersMenu({required this.options, required this.scrollController});
-
-  final StudyOptions options;
-  final ScrollController scrollController;
-
+class const _StudyChaptersMenu({
+  required final StudyOptions options,
+  required final ScrollController scrollController,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_StudyChaptersMenu> createState() => _StudyChaptersMenuState();
 }
 
-class _StudyChaptersMenuState extends ConsumerState<_StudyChaptersMenu> {
+class _StudyChaptersMenuState() extends ConsumerState<_StudyChaptersMenu> {
   final currentChapterKey = GlobalKey();
 
   @override
@@ -445,9 +414,14 @@ class _StudyChaptersMenuState extends ConsumerState<_StudyChaptersMenu> {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Text(
-            context.l10n.studyNbChapters(state.study.chapters.length),
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                context.l10n.studyNbChapters(state.study.chapters.length),
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ],
           ),
         ),
         const SizedBox(height: 16),
@@ -487,7 +461,9 @@ class _StudyChaptersMenuState extends ConsumerState<_StudyChaptersMenu> {
                   useRootNavigator: true,
                   builder: (context) => CreateStudyChapterBottomSheet(
                     params: CreateChapterOfExistingStudy(state.study.id),
-                    chapterNumber: state.study.chapters.length + 1,
+                    initialChapterName: context.l10n.studyChapterX(
+                      (state.study.chapters.length + 1).toString(),
+                    ),
                     onChaptersCreated: (_, chapters) {
                       // The server always answers with the created chapters, but the response
                       // mapper tolerates an empty list, and this runs after the sheet was popped:

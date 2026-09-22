@@ -15,11 +15,7 @@ final gameFilterProvider = NotifierProvider.autoDispose
       name: 'GameFilterProvider',
     );
 
-class GameFilter extends Notifier<GameFilterState> {
-  GameFilter(this.filter);
-
-  final GameFilterState? filter;
-
+class GameFilter(final GameFilterState? filter) extends Notifier<GameFilterState> {
   @override
   GameFilterState build() {
     return filter ?? const GameFilterState();
@@ -30,14 +26,9 @@ class GameFilter extends Notifier<GameFilterState> {
 }
 
 @freezed
-sealed class GameFilterState with _$GameFilterState {
-  const GameFilterState._();
-
-  const factory GameFilterState({
-    @Default(ISet<Perf>.empty()) ISet<Perf> perfs,
-    Side? side,
-    User? opponent,
-  }) = _GameFilterState;
+sealed class const GameFilterState._() with _$GameFilterState {
+  const factory({@Default(ISet<Perf>.empty()) ISet<Perf> perfs, Side? side, User? opponent}) =
+      _GameFilterState;
 
   /// Returns a translated label of the selected filters.
   String selectionLabel(AppLocalizations l10n) {

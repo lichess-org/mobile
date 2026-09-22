@@ -2,19 +2,19 @@ name: lichess_mobile
 description: Lichess mobile app V2
 publish_to: "none"
 
-version: 0.28.3+002803 # See README.md for details about versioning
+version: 0.28.4+002804 # See README.md for details about versioning
 
 environment:
-  sdk: ^3.12.2
+  sdk: ^3.13.0
   # this should be updated with every new flutter stable release
-  flutter: 3.47.4
+  flutter: 3.47.5
 
 dependencies:
   app_links: ^7.2.1
   app_settings: ^9.0.0
   async: ^2.13.1
   auto_size_text: ^3.0.0
-  chessground: ^10.1.1
+  chessground: ^10.2.0
   clock: ^1.1.2
   collection: ^1.19.1
   connectivity_plus: ^7.3.1
@@ -28,7 +28,7 @@ dependencies:
   device_info_plus: ^13.2.0
   dynamic_system_colors: ^1.9.0
   fast_immutable_collections: ^11.2.0
-  file_picker: ^12.0.0
+  file_picker: ^13.1.0
   firebase_core: ^4.13.0
   firebase_crashlytics: ^5.2.7
   firebase_messaging: ^16.5.0
@@ -41,7 +41,10 @@ dependencies:
   flutter_local_notifications: ^22.3.0
   flutter_localizations:
     sdk: flutter
-  flutter_markdown_plus: ^1.0.12
+  flutter_markdown_plus: 
+    git:
+      url: https://github.com/HaonRekcef/flutter_markdown_plus.git
+      ref: 74dd63f3dc91bcf919a612a1816ca82df248472e
   flutter_native_splash: ^2.4.8
   flutter_riverpod: ^3.4.2
   flutter_secure_storage: ^11.0.0
@@ -98,7 +101,7 @@ dev_dependencies:
     sdk: flutter
   freezed: ^4.0.1
   json_serializable: ^6.14.1
-  lint: ^2.8.0
+  lint: ^2.14.0
   mocktail: ^1.0.5
   stream_channel: ^2.1.4
   wakelock_plus_platform_interface: ^1.6.0
@@ -140,6 +143,8 @@ flutter:
     - assets/images/stockfish/
     - assets/images/maia/
     - assets/images/fide-fed/
+    - assets/images/learn/
+    - assets/images/learn/pieces/
     - assets/sounds/futuristic/
     - assets/sounds/lisp/
     - assets/sounds/nes/
