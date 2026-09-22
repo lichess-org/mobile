@@ -112,7 +112,7 @@ void main() {
     expect(find.text('Take the centre'), findsOneWidget);
 
     // Another chapter of the study, from the chapter list.
-    await tester.tap(find.byTooltip('Chapters'));
+    await tester.tap(findByTooltip(l10n.studyNbChapters(2)));
     await tester.pumpAndSettle();
     expect(find.text(l10n.studyInteractiveLesson), findsOneWidget);
     expect(find.text('Lesson'), findsOneWidget);
@@ -188,7 +188,7 @@ void main() {
     await tester.pumpWidget(app);
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byTooltip('Chapters'));
+    await tester.tap(findByTooltip(l10n.studyNbChapters(20)));
     await tester.pumpAndSettle();
 
     // Scrollable up to the last chapter, which is off screen at first.

@@ -29,13 +29,17 @@ class const PracticeChapterScreen({required final PracticeChapter chapter, super
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final nbChapters = ref.watch(
+      practiceStructureProvider.select((s) => s.value?.studyOf(chapter.id)?.chapters.length ?? 0),
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: Text(chapter.name),
         actions: [
           IconButton(
             icon: const Icon(Icons.list),
-            tooltip: 'Chapters',
+            tooltip: context.l10n.studyNbChapters(nbChapters),
             onPressed: () => showModalBottomSheet<void>(
               context: context,
               // Sized to its content, up to most of the screen: a long study scrolls, and the
