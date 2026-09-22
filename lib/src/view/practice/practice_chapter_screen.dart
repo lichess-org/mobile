@@ -77,11 +77,6 @@ class const _ChaptersSheet({required final PracticeChapter current}) extends Con
         for (final chapter in study.chapters)
           ListTile(
             selected: chapter.id == current.id,
-            leading: Icon(switch (chapter) {
-              PracticeEngineChapter() => Icons.memory,
-              PracticeGamebookChapter() => Icons.menu_book,
-              PracticeLessonChapter() => Icons.play_lesson,
-            }),
             title: Text(chapter.name),
             subtitle: Text(practiceChapterKindLabel(context, chapter)),
             trailing: progress.isDone(chapter.id)
