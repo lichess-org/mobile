@@ -72,12 +72,11 @@ class const _ChallengeListItem({
       challenge: challenge,
       challengerUser: challengerUser,
       onPressed: challenge.direction == ChallengeDirection.inward
-          ? () => challengeService.showConfirmDialog(
-              context,
-              challenge,
-              // TODO l10n
-              title: 'Do you accept the challenge?',
-            )
+            ? () => challengeService.showConfirmDialog(
+                context,
+                challenge,
+                title: context.l10n.mobileDoYouAcceptChallenge,
+              )
           : null,
       onAccept:
           challenge.direction == ChallengeDirection.outward || !challenge.variant.isPlaySupported

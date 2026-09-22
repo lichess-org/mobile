@@ -37,14 +37,13 @@ class const StudySettingsScreen(final StudyOptions options) extends ConsumerWidg
                     ref.read(studyPreferencesProvider.notifier).toggleInlineNotation(),
               ),
               SwitchSettingTile(
-                // TODO: l10n
-                title: const Text('Show engine lines'),
+                title: Text(context.l10n.mobileShowEngineLines),
                 value: studyPrefs.showEngineLines,
                 onChanged: (value) =>
                     ref.read(studyPreferencesProvider.notifier).toggleShowEngineLines(),
               ),
               SwitchSettingTile(
-                title: const Text('Small board'), // TODO l10n
+                title: Text(context.l10n.mobileSmallBoard),
                 value: studyPrefs.smallBoard,
                 onChanged: (value) =>
                     ref.read(studyPreferencesProvider.notifier).toggleSmallBoard(),

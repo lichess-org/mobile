@@ -556,7 +556,7 @@ class const _BottomBar({
           ),
           if (authUser != null)
             BottomSheetAction(
-              makeLabel: (context) => const Text('Add to study'), // TODO l10n
+              makeLabel: (context) => Text(context.l10n.mobileAddToStudy),
               onPressed: () => Navigator.of(context).push(
                 AddPgnToStudyScreen.buildRoute(
                   pgn: ref.read(analysisControllerProvider(options).notifier).makeExportPgn(),
@@ -634,8 +634,7 @@ class const _AnalysisMenu({required final AnalysisOptions options}) extends Cons
         // used to quickly analyze a position, so the engine must be allowed to access.
         if (analysisState.isComputerAnalysisAllowed)
           BottomSheetAction(
-            // TODO: l10n
-            makeLabel: (context) => const Text('Share local analysis PGN'),
+            makeLabel: (context) => Text(context.l10n.mobileShareLocalAnalysisPgn),
             onPressed: () {
               Navigator.of(context).push(AnalysisShareScreen.buildRoute(options: options));
             },

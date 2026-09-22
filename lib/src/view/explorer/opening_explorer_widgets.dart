@@ -301,8 +301,7 @@ class _IndexingIndicatorState() extends State<IndexingIndicator> with TickerProv
       child: CircularProgressIndicator(
         strokeWidth: 1.5,
         value: controller.value,
-        // TODO: l10n
-        semanticsLabel: 'Indexing',
+        semanticsLabel: context.l10n.mobileIndexing,
       ),
     );
   }

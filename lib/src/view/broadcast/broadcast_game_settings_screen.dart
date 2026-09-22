@@ -49,14 +49,13 @@ class const BroadcastGameSettingsScreen(
                     ref.read(broadcastPreferencesProvider.notifier).toggleInlineNotation(),
               ),
               SwitchSettingTile(
-                // TODO: l10n
-                title: const Text('Show engine lines'),
+                title: Text(context.l10n.mobileShowEngineLines),
                 value: broadcastPrefs.showEngineLines,
                 onChanged: (value) =>
                     ref.read(broadcastPreferencesProvider.notifier).toggleShowEngineLines(),
               ),
               SwitchSettingTile(
-                title: const Text('Small board'), // TODO l10n
+                title: Text(context.l10n.mobileSmallBoard),
                 value: broadcastPrefs.smallBoard,
                 onChanged: (value) =>
                     ref.read(broadcastPreferencesProvider.notifier).toggleSmallBoard(),
@@ -84,8 +83,7 @@ class const BroadcastGameSettingsScreen(
                 },
               ),
               SwitchSettingTile(
-                // TODO: l10n
-                title: const Text('Show evaluation gauge'),
+                title: Text(context.l10n.mobileShowEvaluationGauge),
                 value: broadcastPrefs.showEvaluationGauge,
                 onChanged: (value) =>
                     ref.read(broadcastPreferencesProvider.notifier).toggleShowEvaluationGauge(),
