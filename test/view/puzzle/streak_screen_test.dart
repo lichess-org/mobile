@@ -223,6 +223,79 @@ void main() {
       expect(find.text('Your turn'), findsOneWidget);
     });
 
+    testWidgets('solved puzzles can be played again without affecting the run', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: Builder(
+          builder: (context) => Scaffold(
+            appBar: AppBar(title: const Text('Test Streak Screen')),
+            body: FilledButton(
+              child: const Text('Start Streak'),
+              onPressed: () => Navigator.of(
+                context,
+                rootNavigator: true,
+              ).push(buildScreenRoute<void>(screen: const StreakScreen())),
+            ),
+          ),
+        ),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.tap(find.text('Start Streak'));
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      final previousButton = find.widgetWithText(BottomBarButton, 'Previous puzzle');
+      final nextButton = find.widgetWithText(BottomBarButton, 'Next puzzle');
+      expect(tester.widget<BottomBarButton>(previousButton).onTap, isNull);
+      expect(tester.widget<BottomBarButton>(nextButton).onTap, isNull);
+
+      await playMove(tester, 'e5', 'e1', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      await playMove(tester, 'f6', 'f4', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      await playMove(tester, 'f4', 'f2', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+      expect(find.textContaining('1058'), findsOneWidget);
+
+      // Back to the solved puzzle, where a wrong move does not end the run.
+      await tester.tap(previousButton);
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+      expect(find.textContaining('1012'), findsOneWidget);
+      await playMove(tester, 'e5', 'e1', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      await playMove(tester, 'f6', 'f7', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+      expect(find.text('Puzzle complete!'), findsOneWidget);
+      expect(find.text('GAME OVER'), findsNothing);
+
+      // The back button leads back to the current puzzle, which is still to be played.
+      await tester.pageBack();
+      await tester.pumpAndSettle();
+      expect(find.text('Yes'), findsNothing);
+      expect(find.textContaining('1058'), findsOneWidget);
+      expect(find.text('Your turn'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'1$')), findsOneWidget);
+
+      // So does the next button.
+      await tester.tap(previousButton);
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+      await tester.tap(nextButton);
+      await tester.pumpAndSettle();
+      expect(find.textContaining('1058'), findsOneWidget);
+
+      await playMove(tester, 'e6', 'c8', orientation: Side.white);
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      await playMove(tester, 'f7', 'e8', orientation: Side.white);
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      await playMove(tester, 'c8', 'e8', orientation: Side.white);
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+      expect(find.textContaining(RegExp(r'2$')), findsOneWidget);
+    });
+
     group('offline', () {
       /// Whether the device is online, as seen by the app and by [offlineClient].
       late ValueNotifier<bool> online;
