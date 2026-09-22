@@ -7,11 +7,17 @@ permissions: read-all
 jobs:
   build:
     name: Build ${{ matrix.target }}
-    runs-on: macos-26
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        target: ["appbundle --debug", "ios --no-codesign", "apk --debug"]
+        include:
+          - target: "appbundle --debug"
+            os: ubuntu-latest
+          - target: "ios --no-codesign"
+            os: macos-26
+          - target: "apk --debug"
+            os: ubuntu-latest
     steps:
       - name: Set up JDK 17
         uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
