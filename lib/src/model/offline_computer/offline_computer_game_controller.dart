@@ -24,6 +24,7 @@ import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/engine_budget.dart';
 import 'package:lichess_mobile/src/model/engine/engine_opponent.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_context.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer.dart';
@@ -128,7 +129,12 @@ class OfflineComputerGameController() extends Notifier<OfflineComputerGameState>
     if (!state.game.casual && !state.game.practiceMode) return false;
     final variant = state.game.meta.variant;
     return state.game.opponentSpec.engineSpec.slot ==
-        evaluatorEngineSlotFor(ref, variant, state.game.initialPosition);
+        evaluatorEngineSlotFor(
+          ref,
+          variant,
+          state.game.initialPosition,
+          enginePref: _analysisEnginePref,
+        );
   }
 
   /// The cores the evaluator asks for. The table it gets is the engine's own, settled when the
@@ -191,10 +197,19 @@ class OfflineComputerGameController() extends Notifier<OfflineComputerGameState>
     _setStepEval(index, eval);
   }
 
+  /// The engine the hints and the move feedback run on, whatever the user's preference.
+  ///
+  /// Stockfish 19 with its small embedded net, as the practice feature does: it is ready with
+  /// nothing to download and the fastest to reach [kPracticeUsableDepth], which is all the
+  /// analysis here asks for. A variant, or material Stockfish will not accept, still goes to
+  /// Fairy-Stockfish: [evaluatorFlavorFor] decides that before the preference is looked at.
+  static const _analysisEnginePref = ChessEnginePref.sfLight;
+
   EvaluationContext get _evaluationContext => EvaluationContext(
     id: state.game.id,
     variant: state.game.meta.variant,
     initialPosition: state.game.initialPosition,
+    enginePref: _analysisEnginePref,
   );
 
   PositionEvaluator get _evaluator {
