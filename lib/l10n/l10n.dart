@@ -484,6 +484,12 @@ abstract class AppLocalizations {
   /// **'Download my games'**
   String get mobileDownloadMyGames;
 
+  /// No description provided for @mobileDownloadNnueFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Download NNUE file'**
+  String get mobileDownloadNnueFile;
+
   /// No description provided for @mobileDownloadingNnueFile.
   ///
   /// In en, this message translates to:

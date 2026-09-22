@@ -132,7 +132,9 @@ class _EngineSettingsScreenState() extends ConsumerState<EngineSettingsScreen> {
                               )
                             : const Icon(Icons.download),
                         title: Text(
-                          isLoading ? context.l10n.mobileDownloadingNnueFile : 'Download NNUE file',
+                          isLoading
+                              ? context.l10n.mobileDownloadingNnueFile
+                              : context.l10n.mobileDownloadNnueFile,
                         ),
                         subtitle: const Text(nnueDownloadSizeMB),
                         enabled: !isLoading,

@@ -61,6 +61,7 @@
   "mobileDeleteYourAccount": "Delete your account",
   "mobileDoYouAcceptChallenge": "Do you accept the challenge?",
   "mobileDownloadMyGames": "Download my games",
+  "mobileDownloadNnueFile": "Download NNUE file",
   "mobileDownloadingNnueFile": "Downloading NNUE file",
   "mobileExport": "Export",
   "mobileFailedToExportGif": "Failed to export GIF: {param}",

@@ -157,6 +157,9 @@ class AppLocalizationsHr extends AppLocalizations {
   String get mobileDownloadMyGames => 'Download my games';
 
   @override
+  String get mobileDownloadNnueFile => 'Download NNUE file';
+
+  @override
   String get mobileDownloadingNnueFile => 'Downloading NNUE file';
 
   @override
