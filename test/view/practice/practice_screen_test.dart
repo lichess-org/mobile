@@ -127,6 +127,32 @@ void main() {
     expect(find.text('Openings'), findsOneWidget);
   });
 
+  testWidgets('a study in progress can be resumed from the top of the list', (tester) async {
+    final app = await makeTestProviderScopeApp(
+      tester,
+      home: const PracticeScreen(),
+      overrides: _overrides,
+    );
+    await tester.pumpWidget(app);
+    await tester.pumpAndSettle();
+
+    // Nothing started yet: nothing to resume.
+    expect(find.text(l10n.resumePractice), findsNothing);
+
+    final container = _container(tester, PracticeScreen);
+    await container
+        .read(practiceProgressProvider.notifier)
+        .complete(const StudyChapterId('gamebk01'), 1);
+    await tester.pumpAndSettle();
+
+    expect(find.text(l10n.resumePractice), findsOneWidget);
+
+    // It opens the next chapter of the study in progress.
+    await tester.tap(find.text(l10n.resumePractice));
+    await tester.pumpAndSettle();
+    expect(find.widgetWithText(PracticeChapterScreen, 'A short game'), findsOneWidget);
+  });
+
   testWidgets('a long chapter list scrolls within the screen, and can be dismissed', (
     tester,
   ) async {

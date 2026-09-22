@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/db/database.dart';
@@ -33,6 +34,19 @@ class const PracticeProgress(final IMap<StudyChapterId, int> _nbMoves) {
     (chapter) => !isDone(chapter.id),
     orElse: () => study.chapters.first,
   );
+
+  /// The study to resume: the first one started but not completed, or, if none is in progress,
+  /// the first one not completed.
+  ///
+  /// Null while nothing is started and once everything is done, so that resuming is only offered
+  /// to a user in the middle of the studies.
+  PracticeStudy? resumeStudy(PracticeStructure structure) {
+    final percent = this.percent(structure);
+    if (percent <= 0 || percent >= 100) return null;
+    final studies = structure.sections.expand((section) => section.studies);
+    return studies.firstWhereOrNull((study) => countDone(study) > 0 && !isStudyComplete(study)) ??
+        studies.firstWhereOrNull((study) => !isStudyComplete(study));
+  }
 
   /// The overall progress, from 0 to 100, rounded down as on lichess.org.
   int percent(PracticeStructure structure) {

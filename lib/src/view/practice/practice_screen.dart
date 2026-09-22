@@ -1,3 +1,4 @@
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/practice/practice_progress.dart';
 import 'package:lichess_mobile/src/model/practice/practice_repository.dart';
@@ -94,6 +95,23 @@ class const _Body({
             ],
           ),
         ),
+        if (progress.resumeStudy(structure) case final study?)
+          ListSection(
+            hasLeading: true,
+            children: [
+              ListTile(
+                leading: PracticeStudyIcon(study: study),
+                title: Text(context.l10n.resumePractice),
+                subtitle: Text(study.name),
+                trailing: Theme.of(context).platform == TargetPlatform.iOS
+                    ? const CupertinoListTileChevron()
+                    : null,
+                onTap: () =>
+                    Navigator.of(context)
+                        .push(PracticeChapterScreen.buildRoute(progress.firstOngoingIn(study))),
+              ),
+            ],
+          ),
         for (final section in structure.sections)
           ListSection(
             header: Text(section.name),
