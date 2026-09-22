@@ -11,16 +11,16 @@ import 'package:sqflite/sqflite.dart';
 /// A chapter is done as soon as it has an entry. Ids unknown to the [PracticeStructure] (a chapter
 /// removed from lichess.org since it was completed) are kept but never counted.
 @immutable
-class const PracticeProgress(final IMap<PracticeChapterId, int> _nbMoves) {
+class const PracticeProgress(final IMap<StudyChapterId, int> _nbMoves) {
   static const empty = PracticeProgress(IMapConst({}));
 
   /// Whether no chapter was completed.
   bool get isEmpty => _nbMoves.isEmpty;
 
   /// The fewest moves [chapterId] was completed in, or null if it was not completed.
-  int? nbMoves(PracticeChapterId chapterId) => _nbMoves[chapterId];
+  int? nbMoves(StudyChapterId chapterId) => _nbMoves[chapterId];
 
-  bool isDone(PracticeChapterId chapterId) => _nbMoves.containsKey(chapterId);
+  bool isDone(StudyChapterId chapterId) => _nbMoves.containsKey(chapterId);
 
   int countDone(PracticeStudy study) =>
       study.chapters.where((chapter) => isDone(chapter.id)).length;
@@ -46,7 +46,7 @@ class const PracticeProgress(final IMap<PracticeChapterId, int> _nbMoves) {
   /// Returns a copy with [chapterId] completed in [nbMoves], if it improves on the saved count.
   ///
   /// Keeping the minimum is also what lichess.org does, so merging with a server copy converges.
-  PracticeProgress withNbMoves(PracticeChapterId chapterId, int nbMoves) {
+  PracticeProgress withNbMoves(StudyChapterId chapterId, int nbMoves) {
     final current = _nbMoves[chapterId];
     if (current != null && current <= nbMoves) return this;
     return PracticeProgress(_nbMoves.add(chapterId, nbMoves));
@@ -68,14 +68,12 @@ class const PracticeProgressStorage(final Database _db) {
   Future<PracticeProgress> fetch() async {
     final rows = await _db.query(_tableName, columns: ['chapterId', 'nbMoves']);
     return PracticeProgress(
-      {
-        for (final row in rows)
-          PracticeChapterId(row['chapterId']! as String): row['nbMoves']! as int,
-      }.lock,
+      {for (final row in rows) StudyChapterId(row['chapterId']! as String): row['nbMoves']! as int}
+          .lock,
     );
   }
 
-  Future<void> save({required PracticeChapterId chapterId, required int nbMoves}) async {
+  Future<void> save({required StudyChapterId chapterId, required int nbMoves}) async {
     await _db.transaction((txn) async {
       final existing = await txn.query(
         _tableName,
@@ -113,7 +111,7 @@ class PracticeProgressNotifier() extends AsyncNotifier<PracticeProgress> {
   }
 
   /// Records [chapterId] as completed in [nbMoves], if it improves on the saved count.
-  Future<void> complete(PracticeChapterId chapterId, int nbMoves) async {
+  Future<void> complete(StudyChapterId chapterId, int nbMoves) async {
     final current = await future;
     state = AsyncData(current.withNbMoves(chapterId, nbMoves));
     final storage = await ref.read(practiceProgressStorageProvider.future);

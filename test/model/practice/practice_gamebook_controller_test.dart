@@ -30,7 +30,7 @@ PracticeGamebookChapter _gamebook(
   List<String?> hints = const [],
   List<String?> deviations = const [],
 }) => PracticeChapter.gamebook(
-  id: const PracticeChapterId('gamebook'),
+  id: const StudyChapterId('gamebook'),
   name: 'Gamebook',
   fen: fen,
   orientation: Side.white,
@@ -64,7 +64,7 @@ void main() {
   }
 
   /// Waits for the chapter's progress to reach the database, which it does after the move.
-  Future<int> savedNbMoves(ProviderContainer container, PracticeChapterId chapterId) async {
+  Future<int> savedNbMoves(ProviderContainer container, StudyChapterId chapterId) async {
     final storage = await container.read(practiceProgressStorageProvider.future);
     final stopwatch = Stopwatch()..start();
     while (true) {
@@ -219,8 +219,7 @@ void main() {
 
   test('plays a real gamebook chapter from the asset', () async {
     final structure = await PracticeRepository(rootBundle).getStructure();
-    final chapter =
-        structure.chapter(const PracticeChapterId('mXNCYwCt'))! as PracticeGamebookChapter;
+    final chapter = structure.chapter(const StudyChapterId('mXNCYwCt'))! as PracticeGamebookChapter;
     final (container, controller) = await start(chapter);
 
     var state = stateOf(container, chapter);

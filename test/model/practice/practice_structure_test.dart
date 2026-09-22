@@ -67,10 +67,10 @@ void main() {
     });
 
     test('parses each chapter kind', () {
-      final study = structure.study(const PracticeStudyId('study1'))!;
+      final study = structure.study(const StudyId('study1'))!;
       expect(study.name, 'Study one');
       expect(study.description, 'The first study');
-      expect(structure.study(const PracticeStudyId('study2'))!.description, isNull);
+      expect(structure.study(const StudyId('study2'))!.description, isNull);
 
       final engine = study.chapters[0] as PracticeEngineChapter;
       expect(engine.orientation, Side.white);
@@ -83,7 +83,7 @@ void main() {
       expect(gamebook.hints, IList(const [null, 'A hint']));
       expect(gamebook.deviations, isEmpty, reason: 'omitted from the asset when all null');
 
-      final lesson = structure.chapter(const PracticeChapterId('lesson01'))!;
+      final lesson = structure.chapter(const StudyChapterId('lesson01'))!;
       expect(lesson, isA<PracticeLessonChapter>());
       expect((lesson as PracticeLessonChapter).pgn, '1. Qa6+ *');
     });
@@ -93,19 +93,19 @@ void main() {
     });
 
     test('finds the study of a chapter', () {
-      expect(structure.studyOf(const PracticeChapterId('lesson01'))?.id, 'study2');
-      expect(structure.studyOf(const PracticeChapterId('unknown1')), isNull);
+      expect(structure.studyOf(const StudyChapterId('lesson01'))?.id, 'study2');
+      expect(structure.studyOf(const StudyChapterId('unknown1')), isNull);
     });
 
     test('gives the next chapter within the study only', () {
-      expect(structure.nextChapter(const PracticeChapterId('engine01'))?.id, 'gamebk01');
-      expect(structure.nextChapter(const PracticeChapterId('gamebk01')), isNull);
-      expect(structure.nextChapter(const PracticeChapterId('unknown1')), isNull);
+      expect(structure.nextChapter(const StudyChapterId('engine01'))?.id, 'gamebk01');
+      expect(structure.nextChapter(const StudyChapterId('gamebk01')), isNull);
+      expect(structure.nextChapter(const StudyChapterId('unknown1')), isNull);
     });
 
     test('ignores unknown ids', () {
-      expect(structure.chapter(const PracticeChapterId('unknown1')), isNull);
-      expect(structure.study(const PracticeStudyId('unknown')), isNull);
+      expect(structure.chapter(const StudyChapterId('unknown1')), isNull);
+      expect(structure.study(const StudyId('unknown')), isNull);
     });
 
     test('rejects an unknown chapter kind', () {

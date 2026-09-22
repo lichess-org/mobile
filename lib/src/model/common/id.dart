@@ -73,13 +73,6 @@ extension type const StudyChapterId(String value) implements StringId {
   new fromJson(dynamic json) : this(json as String);
 }
 
-/// A lichess.org/practice study. Same id space as [StudyId], kept apart so practice does not depend
-/// on the study model.
-extension type const PracticeStudyId(String value) implements StringId;
-
-/// A chapter of a lichess.org/practice study. Same id space as [StudyChapterId].
-extension type const PracticeChapterId(String value) implements StringId;
-
 extension type const FideId(int value) implements IntId;
 
 extension IDPick on Pick {

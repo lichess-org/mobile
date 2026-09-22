@@ -40,12 +40,12 @@ void main() {
       },
     ],
   });
-  final study1 = structure.study(const PracticeStudyId('study1'))!;
+  final study1 = structure.study(const StudyId('study1'))!;
 
-  const chapter1 = PracticeChapterId('chapter1');
-  const chapter2 = PracticeChapterId('chapter2');
-  const chapter3 = PracticeChapterId('chapter3');
-  const removed = PracticeChapterId('removed1');
+  const chapter1 = StudyChapterId('chapter1');
+  const chapter2 = StudyChapterId('chapter2');
+  const chapter3 = StudyChapterId('chapter3');
+  const removed = StudyChapterId('removed1');
 
   group('PracticeProgress', () {
     test('keeps the fewest moves', () {

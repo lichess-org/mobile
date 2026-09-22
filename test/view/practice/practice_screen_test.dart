@@ -82,7 +82,7 @@ final _overrides = {
   practiceStructureProvider: practiceStructureProvider.overrideWith((ref) => _structure),
 };
 
-PracticeChapter _chapter(String id) => _structure.chapter(PracticeChapterId(id))!;
+PracticeChapter _chapter(String id) => _structure.chapter(StudyChapterId(id))!;
 
 ProviderContainer _container(WidgetTester tester, Type screen) =>
     ProviderScope.containerOf(tester.element(find.byType(screen)));
@@ -156,7 +156,7 @@ void main() {
     });
     final app = await makeTestProviderScopeApp(
       tester,
-      home: PracticeChapterScreen(chapter: long.chapter(const PracticeChapterId('lesson01'))!),
+      home: PracticeChapterScreen(chapter: long.chapter(const StudyChapterId('lesson01'))!),
       overrides: {practiceStructureProvider: practiceStructureProvider.overrideWith((ref) => long)},
     );
     await tester.pumpWidget(app);
@@ -199,7 +199,7 @@ void main() {
 
     final container = _container(tester, PracticeChapterScreen);
     expect(
-      container.read(practiceProgressProvider).value!.isDone(const PracticeChapterId('gamebk01')),
+      container.read(practiceProgressProvider).value!.isDone(const StudyChapterId('gamebk01')),
       isTrue,
     );
 
@@ -240,7 +240,7 @@ void main() {
     expect(find.text('Watch how the game goes.'), findsOneWidget);
     final container = _container(tester, PracticeChapterScreen);
     expect(
-      container.read(practiceProgressProvider).value!.isDone(const PracticeChapterId('lesson01')),
+      container.read(practiceProgressProvider).value!.isDone(const StudyChapterId('lesson01')),
       isTrue,
     );
 

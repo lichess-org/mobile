@@ -63,7 +63,7 @@ class _ScriptedEngine() extends FakeEngine {
 
 PracticeEngineChapter _chapter(String fen, PracticeGoal goal, {Side orientation = Side.white}) =>
     PracticeChapter.engine(
-      id: const PracticeChapterId('chapter1'),
+      id: const StudyChapterId('chapter1'),
       name: 'Chapter',
       fen: fen,
       orientation: orientation,

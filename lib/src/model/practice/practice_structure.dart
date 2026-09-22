@@ -13,12 +13,12 @@ part 'practice_structure.freezed.dart';
 /// Built from `assets/practice.json` (see `scripts/gen_practice.dart`). Totals are computed from
 /// the content, never assumed.
 class PracticeStructure(final IList<PracticeSection> sections) {
-  final Map<PracticeStudyId, PracticeStudy> _studies = {
+  final Map<StudyId, PracticeStudy> _studies = {
     for (final section in sections)
       for (final study in section.studies) study.id: study,
   };
 
-  final Map<PracticeChapterId, PracticeStudy> _studyOfChapter = {
+  final Map<StudyChapterId, PracticeStudy> _studyOfChapter = {
     for (final section in sections)
       for (final study in section.studies)
         for (final chapter in study.chapters) chapter.id: study,
@@ -31,16 +31,16 @@ class PracticeStructure(final IList<PracticeSection> sections) {
 
   int get nbChapters => _studyOfChapter.length;
 
-  PracticeStudy? study(PracticeStudyId id) => _studies[id];
+  PracticeStudy? study(StudyId id) => _studies[id];
 
   /// The study [chapterId] belongs to.
-  PracticeStudy? studyOf(PracticeChapterId chapterId) => _studyOfChapter[chapterId];
+  PracticeStudy? studyOf(StudyChapterId chapterId) => _studyOfChapter[chapterId];
 
-  PracticeChapter? chapter(PracticeChapterId id) =>
+  PracticeChapter? chapter(StudyChapterId id) =>
       _studyOfChapter[id]?.chapters.firstWhere((chapter) => chapter.id == id);
 
   /// The chapter following [chapterId] in its study, or null if it is the last one.
-  PracticeChapter? nextChapter(PracticeChapterId chapterId) {
+  PracticeChapter? nextChapter(StudyChapterId chapterId) {
     final chapters = _studyOfChapter[chapterId]?.chapters;
     if (chapters == null) return null;
     final index = chapters.indexWhere((chapter) => chapter.id == chapterId);
@@ -63,7 +63,7 @@ sealed class const PracticeSection._() with _$PracticeSection {
 @freezed
 sealed class const PracticeStudy._() with _$PracticeStudy {
   const factory({
-    required PracticeStudyId id,
+    required StudyId id,
     required String slug,
     required String name,
 
@@ -73,7 +73,7 @@ sealed class const PracticeStudy._() with _$PracticeStudy {
   }) = _PracticeStudy;
 
   factory fromPick(RequiredPick pick) => PracticeStudy(
-    id: PracticeStudyId(pick('id').asStringOrThrow()),
+    id: StudyId(pick('id').asStringOrThrow()),
     slug: pick('slug').asStringOrThrow(),
     name: pick('name').asStringOrThrow(),
     description: pick('description').asStringOrNull(),
@@ -91,7 +91,7 @@ sealed class const PracticeChapter._() with _$PracticeChapter {
   /// lila strips the move tree of these chapters: the opponent's moves and the verdicts all come
   /// from the local engine.
   const factory engine({
-    required PracticeChapterId id,
+    required StudyChapterId id,
     required String name,
     required String fen,
 
@@ -103,7 +103,7 @@ sealed class const PracticeChapter._() with _$PracticeChapter {
 
   /// An authored line to find move by move: a wrong move is commented and taken back.
   const factory gamebook({
-    required PracticeChapterId id,
+    required StudyChapterId id,
     required String name,
     required String fen,
 
@@ -123,7 +123,7 @@ sealed class const PracticeChapter._() with _$PracticeChapter {
 
   /// A commented game to browse, with nothing to solve.
   const factory lesson({
-    required PracticeChapterId id,
+    required StudyChapterId id,
     required String name,
     required String fen,
     required Side orientation,
@@ -132,7 +132,7 @@ sealed class const PracticeChapter._() with _$PracticeChapter {
   }) = PracticeLessonChapter;
 
   factory fromPick(RequiredPick pick) {
-    final id = PracticeChapterId(pick('id').asStringOrThrow());
+    final id = StudyChapterId(pick('id').asStringOrThrow());
     final name = pick('name').asStringOrThrow();
     final fen = pick('fen').asStringOrThrow();
     final orientation = pick('orientation').asSideOrThrow();
