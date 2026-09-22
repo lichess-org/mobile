@@ -30,7 +30,7 @@
   <string name="chessEngine" comment="Chess engine settings screen title.">Chess engine</string>
   <string name="chooseCustomBackground" comment="Theme settings entry that opens the custom background picker.">Choose a custom background</string>
   <string name="clearAllLogs" comment="Tooltip of the button that clears all HTTP logs.">Clear all logs</string>
-  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Clear</string>
+  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short." maxLength="10">Clear</string>
   <string name="codeFieldLabel" comment="Label of the text field where the user enters their email login code.">Code</string>
   <string name="codeExpiresMessage" comment="Shown below the login code field in the email sign in flow.">The code expires after 5 minutes and can only be used once.</string>
   <string name="codeLengthMessage" comment="Validation error when the entered login code has the wrong length. %s is the expected length, e.g. 6.">The code is %s characters long.</string>
@@ -102,7 +102,7 @@
   <string name="noWorriesScoreWillBeSaved" comment="Confirmation message when aborting a puzzle streak run.">No worries, your score will be saved locally.</string>
   <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Please note that not all features from the old app or the website are currently available, but we are adding features all the time.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">You are not following any users.</string>
-  <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">OK</string>
+  <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short." maxLength="10">OK</string>
   <string name="ongoingGames" comment="Label of the home screen 'Ongoing Games' widget in the home customization editor.">Ongoing Games</string>
   <string name="openSettings" comment="Button on the home screen NNUE tip card that opens engine settings.">Open settings</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Over the board</string>
@@ -193,7 +193,7 @@
   <string name="timespan" comment="Title of the timespan filter row in the opening explorer settings.">Timespan</string>
   <string name="tooManyLoginAttempts" comment="Error shown when too many email login code requests were made.">Too many attempts. Please try again later.</string>
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Tools</string>
-  <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word">Completed</string>
+  <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word" maxLength="10">Completed</string>
   <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">Jump to my page</string>
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Variant %s is not supported in this version.</string>
   <string name="useSymmetricPieces" comment="Over the board display setting: use the same piece shape for both sides.">Use symmetric pieces</string>
@@ -220,16 +220,16 @@
   <string name="perfShortRacingKings" comment="Short label for the Racing Kings chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Racing</string>
   <string name="perfShortCrazyhouse" comment="Short label for the Crazyhouse chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Crazy</string>
   <string name="perfShortPuzzle" comment="Short label for puzzle performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Puzzle</string>
-  <string name="displayModeCompact" comment="">Compact</string>
-  <string name="displayModeDetailed" comment="">Detailed</string>
-  <string name="openingExplorerNotAvailableOffline" comment="">Opening Explorer is not available offline.</string>
+  <string name="displayModeCompact" comment="Label of the game history display mode menu entry that switches to the compact game list.">Compact</string>
+  <string name="displayModeDetailed" comment="Label of the game history display mode menu entry that switches to the detailed game list.">Detailed</string>
+  <string name="openingExplorerNotAvailableOffline" comment="Shown in the opening explorer when the device is offline.">Opening Explorer is not available offline.</string>
   <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">Challenge created: You will be notified when the game starts.\nYou can access it from the home tab.</string>
   <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Previous</string>
   <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">Or import a PGN file</string>
   <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">Good move, but there's better</string>
   <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">Tip: You can add more widgets to the Home Screen or remove those you don't need!</string>
   <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">Dismiss</string>
-  <string name="customizeButton" comment="Text of a button, so translation should be short.">Customize</string>
+  <string name="customizeButton" comment="Text of a button, so translation should be short." maxLength="10">Customize</string>
   <string name="appLogs" comment="Settings screen entry that opens the application log.">App Logs</string>
   <string name="changesWillBeLost" comment="Confirmation message when leaving the edit profile screen with unsaved changes.">Your changes will be lost.</string>
   <string name="chess960Position" comment="Board editor menu action that opens the Chess960 starting position dialog.">Chess960 Position</string>
