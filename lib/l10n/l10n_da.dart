@@ -139,15 +139,6 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileDateRangeOneYear => '1Y';
 
   @override
-  String get mobileDateRangeThreeMonths => '3M';
-
-  @override
-  String get mobileDeleteAllLogs => 'Delete all logs';
-
-  @override
-  String get mobileDeleteConversation => 'Delete conversation';
-
-  @override
   String get mobileDeleteYourAccount => 'Delete your account';
 
   @override
