@@ -268,60 +268,6 @@ abstract class AppLocalizations {
   /// **'Are you sure you want to download the NNUE file ({param})?'**
   String mobileAreYouSureDownloadNnue(String param);
 
-  /// No description provided for @mobileBackgroundBlue.
-  ///
-  /// In en, this message translates to:
-  /// **'Blue'**
-  String get mobileBackgroundBlue;
-
-  /// No description provided for @mobileBackgroundBrown.
-  ///
-  /// In en, this message translates to:
-  /// **'Brown'**
-  String get mobileBackgroundBrown;
-
-  /// No description provided for @mobileBackgroundGold.
-  ///
-  /// In en, this message translates to:
-  /// **'Gold'**
-  String get mobileBackgroundGold;
-
-  /// No description provided for @mobileBackgroundGreen.
-  ///
-  /// In en, this message translates to:
-  /// **'Green'**
-  String get mobileBackgroundGreen;
-
-  /// No description provided for @mobileBackgroundIndigo.
-  ///
-  /// In en, this message translates to:
-  /// **'Indigo'**
-  String get mobileBackgroundIndigo;
-
-  /// No description provided for @mobileBackgroundLime.
-  ///
-  /// In en, this message translates to:
-  /// **'Lime'**
-  String get mobileBackgroundLime;
-
-  /// No description provided for @mobileBackgroundPurple.
-  ///
-  /// In en, this message translates to:
-  /// **'Purple'**
-  String get mobileBackgroundPurple;
-
-  /// No description provided for @mobileBackgroundRed.
-  ///
-  /// In en, this message translates to:
-  /// **'Red'**
-  String get mobileBackgroundRed;
-
-  /// No description provided for @mobileBackgroundSepia.
-  ///
-  /// In en, this message translates to:
-  /// **'Sepia'**
-  String get mobileBackgroundSepia;
-
   /// No description provided for @mobileBoardPositionLandscape.
   ///
   /// In en, this message translates to:
@@ -520,18 +466,6 @@ abstract class AppLocalizations {
   /// **'Delete conversation'**
   String get mobileDeleteConversation;
 
-  /// No description provided for @mobileDeleteUnusableNnueFiles.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete unusable NNUE files'**
-  String get mobileDeleteUnusableNnueFiles;
-
-  /// No description provided for @mobileDeleteUnusableNnueFilesSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Some NNUE files on this device cannot be used by the engine. Deleting them frees up space and lets you download them again.'**
-  String get mobileDeleteUnusableNnueFilesSubtitle;
-
   /// No description provided for @mobileDeleteYourAccount.
   ///
   /// In en, this message translates to:
@@ -549,12 +483,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Download my games'**
   String get mobileDownloadMyGames;
-
-  /// No description provided for @mobileDownloadNnueFile.
-  ///
-  /// In en, this message translates to:
-  /// **'Download NNUE file'**
-  String get mobileDownloadNnueFile;
 
   /// No description provided for @mobileDownloadingNnueFile.
   ///
@@ -1198,30 +1126,6 @@ abstract class AppLocalizations {
   /// **'Share this puzzle'**
   String get mobileSharePuzzle;
 
-  /// No description provided for @mobileShapeColorBlue.
-  ///
-  /// In en, this message translates to:
-  /// **'Blue'**
-  String get mobileShapeColorBlue;
-
-  /// No description provided for @mobileShapeColorGreen.
-  ///
-  /// In en, this message translates to:
-  /// **'Green'**
-  String get mobileShapeColorGreen;
-
-  /// No description provided for @mobileShapeColorRed.
-  ///
-  /// In en, this message translates to:
-  /// **'Red'**
-  String get mobileShapeColorRed;
-
-  /// No description provided for @mobileShapeColorYellow.
-  ///
-  /// In en, this message translates to:
-  /// **'Yellow'**
-  String get mobileShapeColorYellow;
-
   /// No description provided for @mobileShowComments.
   ///
   /// In en, this message translates to:
@@ -1275,24 +1179,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Something went wrong.'**
   String get mobileSomethingWentWrong;
-
-  /// No description provided for @mobileSoundThemeFuturistic.
-  ///
-  /// In en, this message translates to:
-  /// **'Futuristic'**
-  String get mobileSoundThemeFuturistic;
-
-  /// No description provided for @mobileSoundThemeLisp.
-  ///
-  /// In en, this message translates to:
-  /// **'Lisp'**
-  String get mobileSoundThemeLisp;
-
-  /// No description provided for @mobileSoundThemePiano.
-  ///
-  /// In en, this message translates to:
-  /// **'Piano'**
-  String get mobileSoundThemePiano;
 
   /// No description provided for @mobileSortFriends.
   ///
@@ -1599,12 +1485,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Filter broadcasts'**
   String get mobileFilterBroadcasts;
-
-  /// No description provided for @mobileMasters.
-  ///
-  /// In en, this message translates to:
-  /// **'Masters'**
-  String get mobileMasters;
 
   /// No description provided for @mobileSmallBoard.
   ///

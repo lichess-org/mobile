@@ -47,33 +47,6 @@ class AppLocalizationsSr extends AppLocalizations {
   }
 
   @override
-  String get mobileBackgroundBlue => 'Blue';
-
-  @override
-  String get mobileBackgroundBrown => 'Brown';
-
-  @override
-  String get mobileBackgroundGold => 'Gold';
-
-  @override
-  String get mobileBackgroundGreen => 'Green';
-
-  @override
-  String get mobileBackgroundIndigo => 'Indigo';
-
-  @override
-  String get mobileBackgroundLime => 'Lime';
-
-  @override
-  String get mobileBackgroundPurple => 'Purple';
-
-  @override
-  String get mobileBackgroundRed => 'Red';
-
-  @override
-  String get mobileBackgroundSepia => 'Sepia';
-
-  @override
   String get mobileBoardPositionLandscape => 'Board position in landscape mode';
 
   @override
@@ -175,12 +148,6 @@ class AppLocalizationsSr extends AppLocalizations {
   String get mobileDeleteConversation => 'Delete conversation';
 
   @override
-  String get mobileDeleteUnusableNnueFiles => 'Delete unusable NNUE files';
-
-  @override
-  String get mobileDeleteUnusableNnueFilesSubtitle => 'Some NNUE files on this device cannot be used by the engine. Deleting them frees up space and lets you download them again.';
-
-  @override
   String get mobileDeleteYourAccount => 'Delete your account';
 
   @override
@@ -188,9 +155,6 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get mobileDownloadMyGames => 'Download my games';
-
-  @override
-  String get mobileDownloadNnueFile => 'Download NNUE file';
 
   @override
   String get mobileDownloadingNnueFile => 'Downloading NNUE file';
@@ -526,18 +490,6 @@ class AppLocalizationsSr extends AppLocalizations {
   String get mobileSharePuzzle => 'Подели ову вежбу';
 
   @override
-  String get mobileShapeColorBlue => 'Blue';
-
-  @override
-  String get mobileShapeColorGreen => 'Green';
-
-  @override
-  String get mobileShapeColorRed => 'Red';
-
-  @override
-  String get mobileShapeColorYellow => 'Yellow';
-
-  @override
   String get mobileShowComments => 'Прикажи коментаре';
 
   @override
@@ -563,15 +515,6 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get mobileSomethingWentWrong => 'Нешто није у реду.';
-
-  @override
-  String get mobileSoundThemeFuturistic => 'Futuristic';
-
-  @override
-  String get mobileSoundThemeLisp => 'Lisp';
-
-  @override
-  String get mobileSoundThemePiano => 'Piano';
 
   @override
   String get mobileSortFriends => 'Sort friends';
@@ -727,9 +670,6 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get mobileFilterBroadcasts => 'Filter broadcasts';
-
-  @override
-  String get mobileMasters => 'Masters';
 
   @override
   String get mobileSmallBoard => 'Small board';

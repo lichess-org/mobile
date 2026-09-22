@@ -12,15 +12,6 @@
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Are you sure?</string>
   <string name="areYouSureDeleteConversation" comment="Confirmation message when deleting a conversation.">Are you sure you want to delete this conversation?</string>
   <string name="areYouSureDownloadNnue" comment="Confirmation dialog before downloading the Stockfish NNUE file. %s is the download size, e.g. '40MB'.">Are you sure you want to download the NNUE file (%s)?</string>
-  <string name="backgroundBlue" comment="Name of the blue background color preset in the custom background screen.">Blue</string>
-  <string name="backgroundBrown" comment="Name of the brown background color preset in the custom background screen.">Brown</string>
-  <string name="backgroundGold" comment="Name of the gold background color preset in the custom background screen.">Gold</string>
-  <string name="backgroundGreen" comment="Name of the green background color preset in the custom background screen.">Green</string>
-  <string name="backgroundIndigo" comment="Name of the indigo background color preset in the custom background screen.">Indigo</string>
-  <string name="backgroundLime" comment="Name of the lime background color preset in the custom background screen.">Lime</string>
-  <string name="backgroundPurple" comment="Name of the purple background color preset in the custom background screen.">Purple</string>
-  <string name="backgroundRed" comment="Name of the red background color preset in the custom background screen.">Red</string>
-  <string name="backgroundSepia" comment="Name of the sepia background color preset in the custom background screen.">Sepia</string>
   <string name="boardPositionLandscape" comment="Board settings entry that controls where the board sits when the device is in landscape mode.">Board position in landscape mode</string>
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Board settings</string>
   <string name="bronsteinDelay" comment="Name of the Bronstein delay chess clock time control type.">Bronstein delay</string>
@@ -54,12 +45,9 @@
   <string name="dateRangeThreeMonths" comment="Perf stats chart time range filter. Short abbreviation preferred." maxLength="10">3M</string>
   <string name="deleteAllLogs" comment="Confirmation dialog title when deleting all logs.">Delete all logs</string>
   <string name="deleteConversation" comment="Tooltip of the button that deletes a conversation.">Delete conversation</string>
-  <string name="deleteUnusableNnueFiles" comment="Engine settings action that removes NNUE files the engine cannot use.">Delete unusable NNUE files</string>
-  <string name="deleteUnusableNnueFilesSubtitle" comment="Explanation under the 'Delete unusable NNUE files' action.">Some NNUE files on this device cannot be used by the engine. Deleting them frees up space and lets you download them again.</string>
   <string name="deleteYourAccount" comment="iOS-only settings entry that opens the account deletion page.">Delete your account</string>
   <string name="doYouAcceptChallenge" comment="Title of the challenge confirmation dialog.">Do you accept the challenge?</string>
   <string name="downloadMyGames" comment="Tournament menu action that downloads the user's games from that tournament as a PGN.">Download my games</string>
-  <string name="downloadNnueFile" comment="Engine settings button that downloads the Stockfish NNUE file.">Download NNUE file</string>
   <string name="downloadingNnueFile" comment="Engine settings label shown while the Stockfish NNUE file is downloading.">Downloading NNUE file</string>
   <string name="export" comment="Tooltip of the button that exports app logs for sharing.">Export</string>
   <string name="failedToExportGif" comment="Error snackbar when GIF export fails. %s is the error message.">Failed to export GIF: %s</string>
@@ -167,10 +155,6 @@
   <string name="shareLocalAnalysisPgn" comment="Menu action that shares the local analysis PGN from the analysis screen.">Share local analysis PGN</string>
   <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Share position as FEN</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Share this puzzle</string>
-  <string name="shapeColorBlue" comment="Name of the blue drawn shape color option in theme settings.">Blue</string>
-  <string name="shapeColorGreen" comment="Name of the green drawn shape color option in theme settings.">Green</string>
-  <string name="shapeColorRed" comment="Name of the red drawn shape color option in theme settings.">Red</string>
-  <string name="shapeColorYellow" comment="Name of the yellow drawn shape color option in theme settings.">Yellow</string>
   <string name="showComments" comment="Shown in the analysis screen.">Show comments</string>
   <string name="showEngineLines" comment="Analysis/broadcast/study settings switch that toggles engine lines.">Show engine lines</string>
   <string name="showEvaluationGauge" comment="Analysis/broadcast settings switch that toggles the evaluation gauge.">Show evaluation gauge</string>
@@ -180,9 +164,6 @@
   <string name="signInWithEmail" comment="Sign in option and screen title for the email login code flow.">Sign in with an email</string>
   <string name="simpleDelay" comment="Name of the simple delay chess clock time control type.">Simple delay</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Something went wrong.</string>
-  <string name="soundThemeFuturistic" comment="Name of the 'Futuristic' sound theme option. Prefer to not translate if it is a proper name of the sound set.">Futuristic</string>
-  <string name="soundThemeLisp" comment="Name of the 'Lisp' sound theme option. Prefer to not translate if it is a proper name of the sound set.">Lisp</string>
-  <string name="soundThemePiano" comment="Name of the 'Piano' sound theme option.">Piano</string>
   <string name="sortFriends" comment="Accessibility label of the sort button on the friends screen.">Sort friends</string>
   <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">Stop showing threat</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">System colors</string>
@@ -234,7 +215,6 @@
   <string name="changesWillBeLost" comment="Confirmation message when leaving the edit profile screen with unsaved changes.">Your changes will be lost.</string>
   <string name="chess960Position" comment="Board editor menu action that opens the Chess960 starting position dialog.">Chess960 Position</string>
   <string name="filterBroadcasts" comment="Accessibility label of the filter button on the broadcasts list screen.">Filter broadcasts</string>
-  <string name="masters" comment="Name of the masters opening database in the opening explorer settings.">Masters</string>
   <string name="smallBoard" comment="Analysis/broadcast/study settings switch that uses a smaller board.">Small board</string>
   <string name="acceptDraw" comment="Over the board dialog asking whether to accept a draw after threefold repetition.">Accept draw?</string>
 </resources>

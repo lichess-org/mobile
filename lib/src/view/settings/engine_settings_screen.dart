@@ -132,9 +132,7 @@ class _EngineSettingsScreenState() extends ConsumerState<EngineSettingsScreen> {
                               )
                             : const Icon(Icons.download),
                         title: Text(
-                          isLoading
-                              ? context.l10n.mobileDownloadingNnueFile
-                              : context.l10n.mobileDownloadNnueFile,
+                          isLoading ? context.l10n.mobileDownloadingNnueFile : 'Download NNUE file',
                         ),
                         subtitle: const Text(nnueDownloadSizeMB),
                         enabled: !isLoading,
@@ -153,8 +151,11 @@ class _EngineSettingsScreenState() extends ConsumerState<EngineSettingsScreen> {
                 if (_hasVerifiedNNUEFile == false && _hasUnusableNNUEFiles)
                   ListTile(
                     trailing: const Icon(Icons.delete),
-                    title: Text(context.l10n.mobileDeleteUnusableNnueFiles),
-                    subtitle: Text(context.l10n.mobileDeleteUnusableNnueFilesSubtitle),
+                    title: const Text('Delete unusable NNUE files'),
+                    subtitle: const Text(
+                      'Some NNUE files on this device cannot be used by the engine. Deleting them '
+                      'frees up space and lets you download them again.',
+                    ),
                     onTap: () async {
                       await ref.read(stockfishNnueServiceProvider).deleteNNUEFiles();
                       if (!mounted) return;
