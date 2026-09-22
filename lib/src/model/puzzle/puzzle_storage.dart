@@ -40,6 +40,7 @@ class const PuzzleStorage(final Database _db) {
 
   /// Returns the ids among [ids] that are not stored.
   Future<IList<PuzzleId>> missingIds(IList<PuzzleId> ids) async {
+    if (ids.isEmpty) return ids;
     final rows = await _db.query(
       _tableName,
       columns: ['puzzleId'],

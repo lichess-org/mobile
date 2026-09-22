@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_streak.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_streak_controller.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -56,10 +57,21 @@ class const _Load() extends ConsumerWidget {
     final authUser = ref.watch(authControllerProvider);
     final streak = ref.watch(puzzleStreakControllerProvider);
 
+    // A streak that could not be loaded offline resumes once back online.
+    ref.listen(isDeviceOnlineProvider, (wasOnline, isOnline) {
+      if (wasOnline == false && isOnline && ref.read(puzzleStreakControllerProvider).hasError) {
+        ref.invalidate(puzzleStreakControllerProvider);
+      }
+    });
+
     switch (streak) {
       case AsyncValue(:final error?, :final stackTrace):
         debugPrint('SEVERE: [StreakScreen] could not load streak; $error\n$stackTrace');
-        return PuzzleErrorBoardWidget(errorMessage: error.toString());
+        return PuzzleErrorBoardWidget(
+          errorMessage: ref.watch(isDeviceOnlineProvider)
+              ? error.toString()
+              : "You're offline. Your streak will resume once you're back online.",
+        );
       case AsyncValue(:final value?):
         return _Body(
           initialPuzzleContext: PuzzleContext(
@@ -544,7 +556,7 @@ class const _BottomBar({
         if (streak.finished)
           BottomBarButton(
             onTap: ref.read(puzzleStreakControllerProvider).isLoading == false
-                ? () => ref.invalidate(puzzleStreakControllerProvider)
+                ? () => ref.read(puzzleStreakControllerProvider.notifier).newStreak()
                 : null,
             highlighted: true,
             label: context.l10n.puzzleNewStreak,

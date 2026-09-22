@@ -1,12 +1,18 @@
+import 'dart:convert';
+
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
+import 'package:lichess_mobile/src/model/auth/auth_user.dart';
+import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/puzzle/streak_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:material_ui/material_ui.dart';
 
+import '../../model/auth/fake_auth_storage.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 
@@ -215,6 +221,118 @@ void main() {
 
       //now, the text should say 'Your turn'.
       expect(find.text('Your turn'), findsOneWidget);
+    });
+
+    group('offline', () {
+      /// Whether the device is online, as seen by the app and by [offlineClient].
+      late ValueNotifier<bool> online;
+
+      /// The requests [offlineClient] has served.
+      late List<http.BaseRequest> requests;
+
+      setUp(() {
+        online = ValueNotifier(true);
+        requests = [];
+      });
+
+      /// Serves [client], plus `/api/puzzle/many` if [prefetch] is true, and fails while offline.
+      MockClient offlineClient({bool prefetch = true}) => MockClient((request) async {
+        if (!online.value) throw http.ClientException('offline', request.url);
+        requests.add(request);
+        final url = request.url;
+        if (url.path.startsWith('/api/streak/')) return http.Response('{}', 200);
+        if (url.path == '/api/puzzle/many' && prefetch) {
+          final responses = await Future.wait([
+            for (final id in url.queryParameters['ids']!.split(','))
+              client.get(url.replace(path: '/api/puzzle/$id', query: '')),
+          ]);
+          final puzzles = [
+            for (final r in responses)
+              if (r.statusCode == 200) jsonDecode(r.body),
+          ];
+          return http.Response(jsonEncode({'puzzles': puzzles}), 200);
+        }
+        return await client.get(url);
+      });
+
+      Future<Widget> makeApp(WidgetTester tester, MockClient client, {AuthUser? authUser}) {
+        return makeTestProviderScopeApp(
+          tester,
+          home: const StreakScreen(),
+          authUser: authUser,
+          overrides: {
+            lichessClientProvider: lichessClientProvider.overrideWith(
+              (ref) => LichessClient(client, ref),
+            ),
+            isDeviceOnlineProvider: isDeviceOnlineProvider.overrideWith((ref) {
+              void listener() => ref.invalidateSelf();
+              online.addListener(listener);
+              ref.onDispose(() => online.removeListener(listener));
+              return online.value;
+            }),
+          },
+        );
+      }
+
+      Future<void> solveFirstPuzzle(WidgetTester tester) async {
+        await playMove(tester, 'e5', 'e1', orientation: Side.black);
+        await tester.pumpAndSettle(const Duration(milliseconds: 500));
+        await playMove(tester, 'f6', 'f4', orientation: Side.black);
+        await tester.pumpAndSettle(const Duration(milliseconds: 500));
+        await playMove(tester, 'f4', 'f2', orientation: Side.black);
+        await tester.pumpAndSettle(const Duration(seconds: 1));
+      }
+
+      testWidgets('plays on from the prefetched puzzles', (tester) async {
+        await tester.pumpWidget(await makeApp(tester, offlineClient()));
+        await tester.pumpAndSettle(const Duration(seconds: 2));
+
+        final prefetches = requests.where((r) => r.url.path == '/api/puzzle/many');
+        expect(prefetches.single.url.queryParameters['ids'], startsWith('4CZxz,kcN3a,1I9Ly,'));
+
+        online.value = false;
+        await solveFirstPuzzle(tester);
+
+        expect(find.textContaining(RegExp(r'1$')), findsOneWidget);
+        expect(find.text('Your turn'), findsOneWidget);
+      });
+
+      testWidgets('a solve counts when the next puzzle is not stored, and the run resumes online', (
+        tester,
+      ) async {
+        await tester.pumpWidget(await makeApp(tester, offlineClient(prefetch: false)));
+        await tester.pumpAndSettle(const Duration(seconds: 2));
+
+        online.value = false;
+        await solveFirstPuzzle(tester);
+
+        expect(find.textContaining("You're offline"), findsOneWidget);
+
+        online.value = true;
+        await tester.pumpAndSettle(const Duration(seconds: 2));
+
+        expect(find.textContaining(RegExp(r'1$')), findsOneWidget);
+        expect(find.text('Your turn'), findsOneWidget);
+      });
+
+      testWidgets('the score of a run lost offline is posted with the next run', (tester) async {
+        await tester.pumpWidget(await makeApp(tester, offlineClient(), authUser: fakeAuthUser));
+        await tester.pumpAndSettle(const Duration(seconds: 2));
+        await solveFirstPuzzle(tester);
+
+        online.value = false;
+        await playMove(tester, 'e6', 'e7', orientation: Side.white);
+        await tester.pumpAndSettle(const Duration(seconds: 2));
+        expect(find.text('GAME OVER'), findsOneWidget);
+
+        online.value = true;
+        await tester.tap(findByTooltip('New streak'));
+        await tester.pumpAndSettle(const Duration(seconds: 2));
+
+        final posts = requests.where((r) => r.method == 'POST').map((r) => r.url.path);
+        expect(posts, ['/api/streak/1']);
+        expect(find.textContaining(RegExp(r'0$')), findsOneWidget);
+      });
     });
   });
 }
