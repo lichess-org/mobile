@@ -436,10 +436,7 @@ abstract class Node({
 bool _sameElements<T>(IList<T>? locked, List<T>? list) {
   if (list == null) return locked == null;
   if (locked == null || locked.length != list.length) return false;
-  for (var i = 0; i < list.length; i++) {
-    if (locked[i] != list[i]) return false;
-  }
-  return true;
+  return locked.indexed.every((e) => e.$2 == list[e.$1]);
 }
 
 /// A branch node of a game tree
