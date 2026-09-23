@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/db/json_row.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
+import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:sqflite/sqflite.dart';
 
 /// A provider for [CorrespondenceGameStorage].
@@ -44,8 +45,8 @@ class const CorrespondenceGameStorage(final Database _db, final Ref ref) {
   Future<IList<(DateTime, OfflineCorrespondenceGame)>> fetchOngoingGames(UserId? userId) async {
     final list = await _db.query(
       kCorrespondenceStorageTable,
-      where: 'userId = ? AND data LIKE ?',
-      whereArgs: ['${userId ?? kCorrespondenceStorageAnonId}', '%"status":"started"%'],
+      where: 'userId = ? AND status = ?',
+      whereArgs: ['${userId ?? kCorrespondenceStorageAnonId}', GameStatus.started.name],
     );
 
     return _decodeGames(list).sort((a, b) {
@@ -61,28 +62,16 @@ class const CorrespondenceGameStorage(final Database _db, final Ref ref) {
     });
   }
 
-  /// Fetches all correspondence games with a registered move.
+  /// Fetches all correspondence games of [userId] with a registered move.
   Future<IList<(DateTime, OfflineCorrespondenceGame)>> fetchGamesWithRegisteredMove(
     UserId? userId,
   ) async {
-    try {
-      final list = await _db.query(
-        kCorrespondenceStorageTable,
-        where: "json_extract(data, '\$.registeredMoveAtPgn') IS NOT NULL",
-      );
-      return _decodeGames(list);
-    } catch (e) {
-      final list = await _db.query(
-        kCorrespondenceStorageTable,
-        where: 'userId = ? AND data LIKE ?',
-        whereArgs: ['${userId ?? kCorrespondenceStorageAnonId}', '%status":"started"%'],
-      );
-
-      return _decodeGames(list).where((e) {
-        final (_, game) = e;
-        return game.registeredMoveAtPgn != null;
-      }).toIList();
-    }
+    final list = await _db.query(
+      kCorrespondenceStorageTable,
+      where: 'userId = ? AND hasRegisteredMove = 1',
+      whereArgs: ['${userId ?? kCorrespondenceStorageAnonId}'],
+    );
+    return _decodeGames(list);
   }
 
   Future<OfflineCorrespondenceGame?> fetch({required GameId gameId}) {
@@ -101,6 +90,8 @@ class const CorrespondenceGameStorage(final Database _db, final Ref ref) {
         'userId': game.me?.user?.id.toString() ?? kCorrespondenceStorageAnonId,
         'gameId': game.id.toString(),
         'lastModified': DateTime.now().toIso8601String(),
+        'status': game.status.name,
+        'hasRegisteredMove': game.registeredMoveAtPgn != null ? 1 : 0,
         'data': jsonEncode(game.toJson()),
       });
       ref.invalidate(offlineOngoingCorrespondenceGamesProvider);
