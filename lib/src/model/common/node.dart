@@ -413,19 +413,24 @@ abstract class Node({
 
   /// The views of this node's children, sharing with [previous] the ones that did not change.
   ///
-  /// The list itself is shared too when no child changed, which is what keeps a whole untouched
-  /// subtree identical up to the branch that owns it.
+  /// Children are matched by move id, so adding or removing one still shares its unchanged
+  /// siblings. The list itself is shared too when no child changed, which is what keeps a whole
+  /// untouched subtree identical up to the branch that owns it.
   IList<ViewBranch> _childrenViews(IList<ViewBranch>? previous) {
-    if (previous == null || previous.length != children.length) {
+    if (previous == null) {
       return children.map((child) => child.view).toIList();
     }
 
-    final views = List<ViewBranch>.generate(
-      children.length,
-      (i) => children[i].viewSharing(previous[i]),
-    );
+    final previousById = {for (final view in previous) view.id: view};
+    final views = children
+        .map((child) => child.viewSharing(previousById[child.id]))
+        .toList(growable: false);
 
-    return views.indexed.every((e) => identical(e.$2, previous[e.$1])) ? previous : views.toIList();
+    if (views.length == previous.length &&
+        views.indexed.every((e) => identical(e.$2, previous[e.$1]))) {
+      return previous;
+    }
+    return views.toIList();
   }
 }
 

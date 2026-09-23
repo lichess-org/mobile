@@ -845,6 +845,48 @@ void main() {
       expect(identical(root.viewSharing(other.view), other.view), isFalse);
       expect(root.viewSharing(other.view), root.view);
     });
+
+    test('a removed child still shares its unchanged siblings', () {
+      final root = Root.fromPgnGame(PgnGame.parsePgn(pgn));
+      final first = root.view;
+
+      root.deleteAt(d5Path);
+      final second = root.viewSharing(first);
+
+      expect(second, root.view);
+      expect(second.children.first.children.length, 1);
+
+      // e4 is new (its children changed), but e5 beside the deleted move is not
+      final oldE4 = first.children.first;
+      final newE4 = second.children.first;
+      expect(identical(newE4, oldE4), isFalse);
+      expect(identical(newE4.children.first, oldE4.children.first), isTrue);
+    });
+
+    test('an added child still shares its unchanged siblings', () {
+      final root = Root.fromPgnGame(PgnGame.parsePgn(pgn));
+      final first = root.view;
+
+      final (newPath, _) = root.addMoveAt(e4Path, Move.parse('g8f6')!);
+      final second = root.viewSharing(first);
+
+      expect(second, root.view);
+      expect(second.children.first.children.length, 3);
+
+      final oldE4 = first.children.first;
+      final newE4 = second.children.first;
+      expect(identical(newE4, oldE4), isFalse);
+      // e5 and d5 keep their identity next to the new Nf6
+      expect(identical(newE4.children.first, oldE4.children.first), isTrue);
+      expect(
+        identical(
+          newE4.children.firstWhere((c) => c.id == d5Path.last),
+          oldE4.children.firstWhere((c) => c.id == d5Path.last),
+        ),
+        isTrue,
+      );
+      expect(second.branchesOn(newPath!).last.id, newPath.last);
+    });
   });
 }
 
