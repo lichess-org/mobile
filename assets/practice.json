@@ -1679,7 +1679,7 @@
        "description": "When a Discovered Attack is a check, it is called a Discovered Check.",
        "goal": {
         "result": "evalIn",
-        "cp": 1000,
+        "cp": 700,
         "moves": 2
        }
       },
@@ -1861,7 +1861,7 @@
        "description": "From Mikhail Tal - Alexey Suetin, 1969. https://lichess.org/SlTJaflO#40",
        "goal": {
         "result": "evalIn",
-        "cp": 1200,
+        "cp": 1000,
         "moves": 5
        }
       }
@@ -1908,7 +1908,7 @@
        "description": "In this example, the h7 pawn has two responsibilities. Can you exploit the situation? From Alexander Grischuk - Evgeny Alekseev, 2008. https://lichess.org/yOyudklB#104",
        "goal": {
         "result": "evalIn",
-        "cp": 1000,
+        "cp": 850,
         "moves": 4
        }
       },
@@ -2754,7 +2754,7 @@
        "description": "Aron G Reshko - Oleg Kaminsky, 1972. https://lichess.org/cLGy3ErP#120",
        "goal": {
         "result": "promotion",
-        "cp": 1000
+        "cp": 650
        }
       },
       {
@@ -2791,7 +2791,7 @@
        "description": "From Iroda Khamrakulova - Ekaterina Ubiennykh, 2001. https://lichess.org/x01XrVyp#154",
        "goal": {
         "result": "evalIn",
-        "cp": 1000,
+        "cp": 650,
         "moves": 1
        }
       }

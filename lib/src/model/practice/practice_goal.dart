@@ -40,6 +40,11 @@ sealed class const PracticeGoal._() with _$PracticeGoal {
   /// Reach an evaluation past [cp] within [moves] moves.
   ///
   /// [cp] is from White's point of view: an exercise played as Black has a negative one.
+  ///
+  /// A few chapters carry a lower [cp] than lichess.org publishes: the app judges a local search
+  /// of the small net, which scores a won position below the cloud eval the web judges on, and the
+  /// published target would be out of reach however well the player plays. The asset is generated
+  /// with those targets already lowered — see `_evalInOverrides` in `scripts/gen_practice.dart`.
   const factory evalIn({required int cp, required int moves}) = PracticeGoalEvalIn;
 
   /// Promote a pawn while keeping an evaluation past [cp], from White's point of view.

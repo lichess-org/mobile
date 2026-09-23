@@ -69,6 +69,11 @@ Future<void> main(List<String> args) async {
     '${(content.length / 1024).toStringAsFixed(1)} KB',
   );
   stdout.writeln('${lichess.fetched} fetched, ${lichess.cacheHits} from cache');
+
+  final missed = _goalCpOverrides.keys.where((id) => !_appliedOverrides.contains(id));
+  if (missed.isNotEmpty) {
+    stderr.writeln('Goal overrides that matched no chapter: ${missed.join(', ')}');
+  }
 }
 
 /// The short description of each study, by study id, read from the practice page.
@@ -105,6 +110,64 @@ Future<Map<String, String>> _studyChapterPgns(_Lichess lichess, String studyId) 
     for (final game in pgn.trim().split(RegExp(r'\n\s*\n(?=\[Event )')))
       chapterUrl.firstMatch(game)!.group(1)!: _withoutAuthorAnnotations(game.trim()),
   };
+}
+
+// ---------------------------------------------------------------------------------------------
+// Goal overrides
+// ---------------------------------------------------------------------------------------------
+
+/// The `evalIn` and `promotion` targets the app lowers, and what they were measured at.
+///
+/// lichess.org judges a practice goal on its own evaluation, which for most users is a cloud eval
+/// dozens of plies deep and often a mate score. The app is offline first: it judges a local search
+/// of Stockfish 19's small embedded net, stopped at `kPracticeUsableDepth`. That search scores a
+/// won position well below what the cloud reports — a rook up reads about +8.5 and never reaches
+/// the mate the cloud sees — so a target written for the cloud can be out of reach however well the
+/// player plays.
+///
+/// Every chapter was replayed with the player playing the engine's own best move, which is the
+/// best the chapter can possibly go (practice.md §13). The ones below could not be solved at all.
+/// Each target is lowered to what that line actually reaches, minus 150cp of margin, so that a
+/// slower device, a shallower depth or a slightly different line still passes. The rest of the
+/// goal is untouched, and the goals with no cp to lower — `mateIn`, `mate`, `drawIn`, `equalIn` —
+/// are left to the judging code.
+///
+/// `from` is the target lichess.org publishes: when it no longer matches, the chapter has been
+/// re-authored and the override is dropped rather than applied blindly — the measurement has to be
+/// run again, which is also true after any content refresh.
+const _goalCpOverrides = <String, ({int from, int to, int measured})>{
+  // Discovered Check #1: Ne5+ wins the queen for a knight, which the cloud reports as a mate.
+  'codj2tFw': (from: 1000, to: 700, measured: 856),
+  // Overloaded #3.
+  'YOva0EFV': (from: 1000, to: 800, measured: 983),
+  // Double Check #5.
+  'e7fu1G8T': (from: 1200, to: 1000, measured: 1182),
+  // Underpromotion #9.
+  'dmjaBDH6': (from: 1000, to: 650, measured: 809),
+  // Rook and Rook Pawn versus Rook, a `promotion` goal: the pawn queens with the eval 8cp short.
+  'AknfDdxO': (from: 500, to: 300, measured: 492),
+};
+
+/// The ids of [_goalCpOverrides] that were applied, to report the ones that no longer match.
+final _appliedOverrides = <String>{};
+
+/// [goal] with the app's target, when this chapter has an override.
+Map<String, dynamic> _withGoalOverride(String chapterId, Map<String, dynamic> goal) {
+  final override = _goalCpOverrides[chapterId];
+  if (override == null) return goal;
+  if (goal['cp'] != override.from) {
+    stderr.writeln(
+      'Chapter $chapterId no longer has the goal its override was measured against '
+      '(${override.from}cp): got $goal. Leaving it alone; re-run the measurement.',
+    );
+    return goal;
+  }
+  _appliedOverrides.add(chapterId);
+  stdout.writeln(
+    '  goal override: $chapterId ${override.from}cp -> ${override.to}cp '
+    '(best play reaches ${override.measured}cp)',
+  );
+  return {...goal, 'cp': override.to};
 }
 
 Future<Map<String, dynamic>> _chapter(
@@ -144,7 +207,10 @@ Future<Map<String, dynamic>> _chapter(
   };
 
   if (kind == 'practice') {
-    result['goal'] = analysis['practiceGoal'];
+    result['goal'] = _withGoalOverride(
+      chapterId,
+      analysis['practiceGoal']! as Map<String, dynamic>,
+    );
     return result;
   }
 
