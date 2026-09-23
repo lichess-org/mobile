@@ -60,10 +60,13 @@ class _TestState() with EvaluationMixinState<_TestState> {
 
   @override
   _TestState withThreatMode(bool engineInThreatMode) => this;
+
+  @override
+  _TestState withEvalRefresh({required Root tree, required bool recomputeRootView}) => this;
 }
 
 class _TestController() extends AsyncNotifier<_TestState> with EngineEvaluationMixin<_TestState> {
-  final Node _tree = Root(position: Chess.initial);
+  final Root _tree = Root(position: Chess.initial);
 
   @override
   Future<_TestState> build() async => _TestState();
@@ -72,7 +75,7 @@ class _TestController() extends AsyncNotifier<_TestState> with EngineEvaluationM
   SocketClient? get socketClient => null;
 
   @override
-  Node get positionTree => _tree;
+  Root get positionTree => _tree;
 }
 
 final _testControllerProvider = AsyncNotifierProvider.autoDispose<_TestController, _TestState>(
