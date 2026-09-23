@@ -409,7 +409,12 @@ class _PgnTreeViewState() extends State<_PgnTreeView> {
     return path;
   }
 
-  List<_CachedRenderedSubtree> _buildChangedSubtrees({required bool fullRebuild}) {
+  List<_CachedRenderedSubtree> _buildChangedSubtrees({
+    required bool fullRebuild,
+
+    /// When given, the part at this index may only be reused if it returns true.
+    bool Function(int index)? canReuse,
+  }) {
     var path = UciPath.empty;
     return mainlineParts
         .mapIndexed((i, mainlineNodes) {
@@ -437,7 +442,14 @@ class _PgnTreeViewState() extends State<_PgnTreeView> {
               : mainlinePartOfCurrentPath.size >= mainlineInitialPath.size &&
                     mainlinePartOfCurrentPath.size < path.size;
 
-          if (fullRebuild || subtrees[i].containsCurrentMove || containsCurrentMove) {
+          final mayReuse =
+              !fullRebuild &&
+              (canReuse?.call(i) ?? true) &&
+              i < subtrees.length &&
+              !subtrees[i].containsCurrentMove &&
+              !containsCurrentMove;
+
+          if (!mayReuse) {
             // Skip the first node which is the continuation of the mainline
             final filteredSidelineNodes = _filteredChildren(
               mainlineNodes.last,
@@ -478,6 +490,21 @@ class _PgnTreeViewState() extends State<_PgnTreeView> {
     });
   }
 
+  /// Whether mainline part [i] of [newParts] is made of the very same [ViewNode] objects as in
+  /// [oldParts].
+  ///
+  /// `viewSharing` leaves untouched subtrees identical, so a part whose nodes are all identical
+  /// cannot have changed and its cached widgets are still valid.
+  static bool _samePartNodes(List<List<ViewNode>> oldParts, List<List<ViewNode>> newParts, int i) {
+    if (i >= oldParts.length || oldParts[i].length != newParts[i].length) return false;
+    final oldPart = oldParts[i];
+    final newPart = newParts[i];
+    for (var j = 0; j < newPart.length; j++) {
+      if (!identical(oldPart[j], newPart[j])) return false;
+    }
+    return true;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -487,15 +514,38 @@ class _PgnTreeViewState() extends State<_PgnTreeView> {
   @override
   void didUpdateWidget(covariant _PgnTreeView oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _updateLines(
-      fullRebuild:
-          oldWidget.root != widget.root ||
-          oldWidget.params.premovePaths != widget.params.premovePaths ||
-          oldWidget.params.shouldShowComputerAnalysis != widget.params.shouldShowComputerAnalysis ||
-          oldWidget.params.shouldShowComments != widget.params.shouldShowComments ||
-          oldWidget.params.shouldShowAnnotations != widget.params.shouldShowAnnotations ||
-          oldWidget.params.displayMode != widget.params.displayMode,
-    );
+
+    final paramsRequireFullRebuild =
+        oldWidget.params.premovePaths != widget.params.premovePaths ||
+        oldWidget.params.shouldShowComputerAnalysis != widget.params.shouldShowComputerAnalysis ||
+        oldWidget.params.shouldShowComments != widget.params.shouldShowComments ||
+        oldWidget.params.shouldShowAnnotations != widget.params.shouldShowAnnotations ||
+        oldWidget.params.displayMode != widget.params.displayMode;
+
+    if (paramsRequireFullRebuild) {
+      _updateLines(fullRebuild: true);
+      return;
+    }
+
+    if (oldWidget.root == widget.root) {
+      // Same tree content: only the highlighted path (or live path) may have changed.
+      _updateLines(fullRebuild: false);
+      return;
+    }
+
+    // Root content changed (typically an engine eval). Freezed equality is structural, so this
+    // fires on every eval emission — but `viewSharing` only replaced the nodes on the current
+    // path. Refresh mainline parts from the new root, then rebuild only the parts whose nodes
+    // are not the same objects as last time.
+    final oldParts = mainlineParts.toList(growable: false);
+    final newParts = _mainlineParts(widget.root, widget.params).toList(growable: false);
+    setState(() {
+      mainlineParts = newParts;
+      subtrees = _buildChangedSubtrees(
+        fullRebuild: false,
+        canReuse: (i) => _samePartNodes(oldParts, newParts, i),
+      );
+    });
   }
 
   @override

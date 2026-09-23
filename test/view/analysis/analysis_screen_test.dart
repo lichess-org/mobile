@@ -50,6 +50,10 @@ void main() {
     clearSavedStandaloneAnalysis();
   });
 
+  Text parentText(WidgetTester tester, String move) {
+    return tester.widget<Text>(find.ancestor(of: find.text(move), matching: find.byType(Text)));
+  }
+
   group('Analysis Screen', () {
     testWidgets('displays correct move and position', (tester) async {
       final app = await makeTestProviderScopeApp(
@@ -494,10 +498,6 @@ void main() {
       );
 
       await tester.pumpWidget(app);
-    }
-
-    Text parentText(WidgetTester tester, String move) {
-      return tester.widget<Text>(find.ancestor(of: find.text(move), matching: find.byType(Text)));
     }
 
     void expectSameLine(WidgetTester tester, Iterable<String> moves) {
@@ -1198,6 +1198,72 @@ void main() {
 
         // ...and the branch next to it is the very same object as before
         expect(identical(afterParent.first, offPathBranch), isTrue);
+      });
+
+      testWidgets('an eval update does not rebuild mainline parts off the current path', (
+        tester,
+      ) async {
+        // two mainline parts:
+        // 1. e4 e5              <-- first mainline part
+        // |- 1... d5 2. exd5
+        // |- 1... Nf6 2. e5
+        // 2. Nf3 Nc6            <-- second mainline part
+        const pgn = '1. e4 e5 (1... d5 2. exd5) (1... Nf6 2. e5) 2. Nf3 Nc6 *';
+        const pgnOptions = AnalysisOptions.pgn(
+          id: StringId('standalone'),
+          orientation: Side.white,
+          pgn: pgn,
+          isComputerAnalysisAllowed: true,
+          variant: Variant.standard,
+        );
+        final stockfish = AnalysisTestEngine();
+        await makeEngineTestApp(
+          tester,
+          pgn: pgn,
+          isCloudEvalEnabled: false,
+          stockfish: stockfish,
+          inlineNotation: true,
+        );
+        await tester.pumpAndSettle();
+
+        final container = ProviderScope.containerOf(tester.element(find.byType(AnalysisScreen)));
+
+        int pathSize() =>
+            container.read(analysisControllerProvider(pgnOptions)).requireValue.currentPath.size;
+
+        expect(pathSize(), 4, reason: 'current starts at the end of the mainline');
+
+        // go back to e4, then onto the d5 sideline: the second mainline part (e5 Nf3 Nc6) is
+        // then entirely off the current path
+        await tester.tap(find.byKey(const Key('goto-previous')));
+        await tester.pump(const Duration(milliseconds: 200));
+        await tester.tap(find.byKey(const Key('goto-previous')));
+        await tester.pump(const Duration(milliseconds: 200));
+        await tester.tap(find.byKey(const Key('goto-previous')));
+        await tester.pump(const Duration(milliseconds: 200));
+        expect(pathSize(), 1, reason: 'current must sit on e4');
+
+        await tester.tap(find.text('1… d5'));
+        await tester.pump(const Duration(milliseconds: 200));
+        expect(pathSize(), 2, reason: 'current must sit on the d5 sideline');
+
+        // let the evaluation request for the sideline fire, then drain it so the next request is
+        // the one this test responds to
+        await tester.pump(kRequestEvalDebounceDelay);
+        stockfish.resetTracking();
+
+        final rootBefore = container.read(analysisControllerProvider(pgnOptions)).requireValue.root;
+        final secondMainlinePart = parentText(tester, '2. Nf3');
+
+        stockfish.emitDepthRange(toDepth: 12);
+        await tester.pump(kEngineEvalEmissionThrottleDelay);
+
+        final rootAfter = container.read(analysisControllerProvider(pgnOptions)).requireValue.root;
+        expect(rootAfter, isNot(same(rootBefore)), reason: 'the eval must have been published');
+
+        // the root changed (eval on the sideline), but the second mainline part is off the
+        // current path: its ViewNodes are shared, so its cached widgets must be reused
+        expect(identical(parentText(tester, '2. Nf3'), secondMainlinePart), isTrue);
       });
     });
 

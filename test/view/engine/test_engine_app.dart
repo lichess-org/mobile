@@ -37,6 +37,9 @@ Future<void> makeEngineTestApp(
   bool isEngineEnabled = true,
   bool isCloudEvalEnabled = true,
   bool showBestMoveArrow = true,
+
+  /// Render the analysis move tree with [PgnTreeDisplayMode.inlineNotation].
+  bool inlineNotation = false,
   Duration connectionLag = kFakeWebSocketConnectionLag,
 
   /// Custom engine for tests that need to control when evals are emitted.
@@ -67,6 +70,7 @@ Future<void> makeEngineTestApp(
             .copyWith(
               enableServerAnalysis: isServerAnalysisEnabled,
               showBestMoveArrow: showBestMoveArrow,
+              inlineNotation: inlineNotation,
             )
             .toJson(),
       ),
