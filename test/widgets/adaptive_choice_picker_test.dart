@@ -121,4 +121,46 @@ void main() {
     await tester.tap(find.text('three'));
     expect(selectedItems, [TestEnumSmall.three]);
   }, variant: kPlatformVariant);
+
+  testWidgets('showChoicePicker supports nullable choices (including null)', (
+    WidgetTester tester,
+  ) async {
+    final List<TestEnumSmall?> selectedItems = <TestEnumSmall?>[];
+
+    await tester.pumpWidget(
+      MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        home: Scaffold(
+          body: Builder(
+            builder: (context) {
+              return Center(
+                child: ElevatedButton(
+                  child: const Text('Show picker'),
+                  onPressed: () {
+                    showChoicePicker<TestEnumSmall?>(
+                      context,
+                      choices: const [...TestEnumSmall.values, null],
+                      selectedItem: TestEnumSmall.one,
+                      labelBuilder: (choice) => Text(choice?.name ?? 'custom'),
+                      onSelectedItemChanged: (choice) {
+                        selectedItems.add(choice);
+                      },
+                    );
+                  },
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.text('Show picker'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('custom'));
+    await tester.pumpAndSettle();
+
+    expect(selectedItems, [null]);
+  }, variant: kPlatformVariant);
 }

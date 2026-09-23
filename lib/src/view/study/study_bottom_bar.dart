@@ -52,34 +52,12 @@ class const _AnalysisBottomBar({required final StudyOptions options}) extends Co
         _StudyMenuButton(options: options),
         _ChapterButton(options: options),
         if (state.isComputerAnalysisAllowed)
-          Builder(
-            builder: (context) {
-              Future<void>? toggleFuture;
-              return FutureBuilder(
-                future: toggleFuture,
-                builder: (context, snapshot) {
-                  return EngineButton(
-                    filters: (context: state.evaluationContext, path: state.currentPath),
-                    savedEval: state.currentNode.eval,
-                    onTap: snapshot.connectionState != ConnectionState.waiting
-                        ? () async {
-                            toggleFuture = ref
-                                .read(studyControllerProvider(options).notifier)
-                                .toggleEngine();
-                            try {
-                              await toggleFuture;
-                            } finally {
-                              toggleFuture = null;
-                            }
-                          }
-                        : null,
-                    goDeeper: () => ref
-                        .read(studyControllerProvider(options).notifier)
-                        .requestEval(goDeeper: true),
-                  );
-                },
-              );
-            },
+          EngineToggleButton(
+            filters: (context: state.evaluationContext, path: state.currentPath),
+            savedEval: state.currentNode.eval,
+            onToggle: () => ref.read(studyControllerProvider(options).notifier).toggleEngine(),
+            onGoDeeper: () =>
+                ref.read(studyControllerProvider(options).notifier).requestEval(goDeeper: true),
           ),
         _NextChapterButton(
           options: options,
@@ -461,7 +439,9 @@ class _StudyChaptersMenuState() extends ConsumerState<_StudyChaptersMenu> {
                   useRootNavigator: true,
                   builder: (context) => CreateStudyChapterBottomSheet(
                     params: CreateChapterOfExistingStudy(state.study.id),
-                    chapterNumber: state.study.chapters.length + 1,
+                    initialChapterName: context.l10n.studyChapterX(
+                      (state.study.chapters.length + 1).toString(),
+                    ),
                     onChaptersCreated: (_, chapters) {
                       // The server always answers with the created chapters, but the response
                       // mapper tolerates an empty list, and this runs after the sheet was popped:

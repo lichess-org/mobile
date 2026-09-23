@@ -697,7 +697,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get arenaHowIsTheWinnerDecidedAnswer => 'Hráč s nejvyšším počtem bodů na konci stanoveného časového limitu pro turnaj se stane jeho vítězem.';
 
   @override
-  String get arenaHowDoesPairingWork => 'Jak funguje párování?';
+  String get arenaHowDoesPairingWork => 'How does the pairing work?';
 
   @override
   String get arenaHowArePlayersPaired => 'How are players paired?';
@@ -788,7 +788,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get arenaEditTeamBattle => 'Upravit týmové bitvy';
 
   @override
-  String get arenaDefender => 'Obránce';
+  String get arenaDefender => 'Defender';
 
   @override
   String get arenaDefenderLabel => 'Obránce:';
@@ -815,7 +815,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get arenaTournamentStats => 'Turnajové statistiky';
 
   @override
-  String get arenaRankAvgHelp => 'Průměrný rank je procento umístění. Nižší je lepší.\n\nNapříklad, umístíte se 3 v turnaji o 100 hráčích tak rank je 3%. Umístíte se 10 v turnaji o 1000 hráčích task rank je 1%.';
+  String get arenaRankAvgHelp => 'The rank average is a percentage of your ranking. Lower is better.\n\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.';
 
   @override
   String get arenaRankAverageHelp => 'Vaše průměrné umístění představuje Vaše typické závěrečné umístění vzhledem k celkovému počtu hráčů v každém turnaji.\nToto je ukazatel Vašeho umístění v turnajích, ne Váš obecný rating.\n\nNapříklad průměrné umístění 3 % znamená, že jste obvykle skončili mezi 3 % nejlepších (např. na 30. místě z 1000 hráčů).';
@@ -970,7 +970,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get broadcastDeleteRound => 'Smazat toto kolo';
 
   @override
-  String get broadcastDefinitivelyDeleteRound => 'Definitivně smazat kolo a jeho hry.';
+  String get broadcastDefinitivelyDeleteRound => 'Definitively delete the round and all its games.';
 
   @override
   String get broadcastPermanentlyDeleteRound => 'Trvale smazat toto kolo a všechny jeho hry?';
@@ -985,7 +985,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get broadcastDeleteTournament => 'Smazat tento turnaj';
 
   @override
-  String get broadcastDefinitivelyDeleteTournament => 'Opravdu smazat celý turnaj, všechna kola a hry.';
+  String get broadcastDefinitivelyDeleteTournament => 'Definitively delete the entire tournament, all its rounds and all its games.';
 
   @override
   String get broadcastPermanentlyDeleteTournament => 'Trvale smazat tento turnaj včetně všech kol a her?';
@@ -2205,19 +2205,19 @@ class AppLocalizationsCs extends AppLocalizations {
   String get preferencesNotifyStreamStart => 'Streamer vysílá živě';
 
   @override
-  String get preferencesNotifyInboxMsg => 'Nová zpráva';
+  String get preferencesNotifyInboxMsg => 'New inbox message';
 
   @override
   String get preferencesNotifyDirectMessage => 'Nová zpráva';
 
   @override
-  String get preferencesNotifyForumMention => 'Komentář ve fóru Vás zmiňuje';
+  String get preferencesNotifyForumMention => 'Forum comment mentions you';
 
   @override
   String get preferencesNotifyForumMentions => 'Zmínka ve fóru';
 
   @override
-  String get preferencesNotifyInvitedStudy => 'Pozvánka do studie';
+  String get preferencesNotifyInvitedStudy => 'Study invite';
 
   @override
   String get preferencesNotifyStudyInvites => 'Pozvánky do studie';
@@ -2229,7 +2229,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get preferencesNotifyChallenge => 'Výzvy';
 
   @override
-  String get preferencesNotifyTournamentSoon => 'Turnaj brzy začne';
+  String get preferencesNotifyTournamentSoon => 'Tournament starting soon';
 
   @override
   String get preferencesNotifyTournamentStartReminders => 'Připomenutí začátku turnaje';
@@ -2698,7 +2698,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get puzzleThemeCornerMate => 'Mat v rohu';
 
   @override
-  String get puzzleThemeCornerMateDescription => 'Uvězněte krále v rohu pomocí věže nebo dámy a jezdce, abyste zaútočili na mat.';
+  String get puzzleThemeCornerMateDescription => 'Confine the king to the corner using a rook or queen and a knight to engage the checkmate.';
 
   @override
   String get puzzleThemeCornerMateKnightDeliversDescription => 'Confine the king to the corner using a rook or queen, and use a knight to deliver the checkmate.';
@@ -2776,7 +2776,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get puzzleThemeEndgameDescription => 'Taktický obrat během poslední fáze hry.';
 
   @override
-  String get puzzleThemeEnPassantDescription => 'Taktický prvek obsahující braní mimochodem, v rámci kterého může pěšec vzít pěšce soupeřova, který prošel přes ohrožené pole pomocí tahu o dvě pole z druhé řady.';
+  String get puzzleThemeEnPassantDescription => 'A tactic involving the en passant rule, where a pawn can capture an opponent pawn that has bypassed it using its initial two-square move.';
 
   @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'Taktický prvek obsahující braní mimochodem, kdy může pěšec vzít soupeřova pěšce, který se právě ocitl vedle něj pomocí tahu o dvě pole z počáteční pozice.';
@@ -2797,7 +2797,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get puzzleThemeFork => 'Vidlička';
 
   @override
-  String get puzzleThemeForkDescription => 'Tah, kterým tažená figura útočí na dvě protivníkovy figury najednou.';
+  String get puzzleThemeForkDescription => 'A move where the moved piece attacks two opponent pieces at once.';
 
   @override
   String get puzzleThemeForkOpposingPiecesDescription => 'Tah, kterým figura současně zaútočí na dvě nebo více figur soupeře.';
@@ -2812,7 +2812,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get puzzleThemeHookMate => 'Hákový mat';
 
   @override
-  String get puzzleThemeHookMateDescription => 'Mat věží, jezdcem a pěšcem spolu s pěšcem nepřátelským, který blokuje ústup králi.';
+  String get puzzleThemeHookMateDescription => 'Checkmate with a rook, knight, and pawn along with one enemy pawn to limit the enemy king\'s escape.';
 
   @override
   String get puzzleThemeHookMateOpposingPawnDescription => 'Mat pomocí věže, jezdce a pěšce když protihráčův pěšec brání králi v úniku.';
@@ -2839,7 +2839,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get puzzleThemePillsburysMate => 'Pillsburyho mat';
 
   @override
-  String get puzzleThemePillsburysMateDescription => 'Věž dává mat, zatímco střelec omezuje pohyb krále.';
+  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
 
   @override
   String get puzzleThemePillsburyMateRookAndBishopDescription => 'A rook delivers checkmate to the king, while a bishop helps confine it.';
@@ -2848,7 +2848,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get puzzleThemeMorphysMate => 'Morphyův mat';
 
   @override
-  String get puzzleThemeMorphysMateDescription => 'Dejte králi šach střelcem, zatímco věž omezuje jeho pohyb.';
+  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
 
   @override
   String get puzzleThemeMorphyMateBishopAndRookDescription => 'A bishop delivers checkmate to the king, while a rook helps confine it.';
@@ -2971,7 +2971,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get puzzleThemePromotion => 'Proměna figury';
 
   @override
-  String get puzzleThemePromotionDescription => 'Proměna pěšce v dámu nebo lehkou figuru.';
+  String get puzzleThemePromotionDescription => 'Promote one of your pawn to a queen or minor piece.';
 
   @override
   String get puzzleThemePromotePawnToQueenRookOrMinor => 'Promote one of your pawns to a queen, rook or minor piece.';
@@ -3785,7 +3785,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get refreshInboxAfterFiveMinutes => 'Počkejte 5 minut a obnovte vaši e-mailovou schránku.';
 
   @override
-  String get checkSpamFolder => 'Také zkontrolujte složku nevyžádané pošty. Pokud ano, označte mail jako vyžádaný.';
+  String get checkSpamFolder => 'Also check your spam folder, it might end up there. If so, mark it as not spam.';
 
   @override
   String get checkSpamOrJunkFolder => 'Pokud neobdržíte potvrzovací e-mail, zkontrolujte složku Nevyžádaná pošta nebo Spam. Nezapomeňte označit zprávy z lichess.org jako bezpečné a \"ne spam\", abyste byli informováni o důležitých informacích i v budoucnu.';
@@ -3836,13 +3836,13 @@ class AppLocalizationsCs extends AppLocalizations {
   String get cancel => 'Zrušit';
 
   @override
-  String get whiteTimeOut => 'Bílému došel čas';
+  String get whiteTimeOut => 'White time out';
 
   @override
   String get whiteRanOutOfTime => 'Bílému došel čas';
 
   @override
-  String get blackTimeOut => 'Černému došel čas';
+  String get blackTimeOut => 'Black time out';
 
   @override
   String get blackRanOutOfTime => 'Černému došel čas';
@@ -4054,7 +4054,7 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
-  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Filtry hodnocení jsou uzamčeny, protože vaše hodnocení není stabilní. Hraní hodnocených her zvýší stabilitu vašeho hodnocení.';
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
 
   @override
   String get cannotFilterByUnstableRating => 'It is not possible to filter by rating because your rating is not stable.\nPlaying rated games will increase stability.';
@@ -4572,7 +4572,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get reportUsernameHelp => 'Vysvětli co je urážlivého na jeho u6ivatelském jménu. Nepiš pouze \"Je urážlivé/nevhodné\", ale řekni i důvod proč to tak je, zejména pokud je urážka zatemněná, nebo je v jiném jazyce než v angličtině, nebo je ve slangu či jde o historickou nebokulturní referenci.';
 
   @override
-  String get reportProcessedFasterInEnglish => 'Nahlášení bude rychlejší pokud bude v angličtině.';
+  String get reportProcessedFasterInEnglish => 'Your report will be processed faster if written in English.';
 
   @override
   String get processReportFasterInEnglish => 'Vaše hlášení můžeme zpracovat rychleji, pokud jej napíšete anglicky.';
@@ -4943,7 +4943,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get create => 'Vytvořte';
 
   @override
-  String get whenCreateSimul => 'Když vytvoříte simultánku, budete hrát proti více hráčům najednou.';
+  String get whenCreateSimul => 'When you create a simul, you get to play several players at once.';
 
   @override
   String get creatingASimul => 'Vytvoření simultánky umožňuje hrát proti více soupeřům zároveň.';
@@ -4958,7 +4958,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get simulAddExtraTime => 'Můžete si přidat více času, abyste  tu simultánku lépe zvládli.';
 
   @override
-  String get simulHostExtraTime => 'Hostův bonusový čas';
+  String get simulHostExtraTime => 'Host extra initial clock time';
 
   @override
   String get extraClockTimeForHost => 'Extra clock time for the host:';
@@ -5525,7 +5525,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get showUnreadLichessMessage => 'Dostali jste soukromou zprávu od Lichess.';
 
   @override
-  String get clickHereToReadIt => 'Pro přečtení klikněte zde';
+  String get clickHereToReadIt => 'Click here to read it';
 
   @override
   String get readTheMessage => 'Read the message';
@@ -5811,7 +5811,7 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String markdownIsAvailable(String param) {
-    return '$param je k dispozici k formátování.';
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5838,7 +5838,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get onlyTeamMembers => 'Pouze členové týmu';
 
   @override
-  String get navigateMoveTree => 'Navigovat seznamem tahů';
+  String get navigateMoveTree => 'Navigate the move tree';
 
   @override
   String get moveListNavigation => 'Navigace seznamu tahů';
@@ -6007,10 +6007,8 @@ class AppLocalizationsCs extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count hrubých chyb',
-      many: '$count hrubých chyb',
-      few: '$count hrubé chyby',
-      one: '$count hrubá chyba',
+      other: '$count blunders',
+      one: '$count blunder',
     );
     return '$_temp0';
   }
@@ -6033,10 +6031,8 @@ class AppLocalizationsCs extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count chyb',
-      many: '$count chyb',
-      few: '$count chyby',
-      one: '$count chyba',
+      other: '$count mistakes',
+      one: '$count mistake',
     );
     return '$_temp0';
   }
@@ -6059,10 +6055,8 @@ class AppLocalizationsCs extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count nepřesností',
-      many: '$count nepřesností',
-      few: '$count nepřesnosti',
-      one: '$count nepřesnost',
+      other: '$count inaccuracies',
+      one: '$count inaccuracy',
     );
     return '$_temp0';
   }
@@ -6514,10 +6508,8 @@ class AppLocalizationsCs extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Anonymních ($count)',
-      many: 'Anonymních ($count)',
-      few: 'Anonymní ($count)',
-      one: 'Anonymní',
+      other: 'Anonymous ($count)',
+      one: 'Anonymous',
     );
     return '$_temp0';
   }
@@ -6911,7 +6903,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get studyCurrentChapterUrl => 'URL aktuální kapitoly';
 
   @override
-  String get studyYouCanPasteThisInTheForumToEmbed => 'Tento odkaz můžete vložit např. do diskusního fóra';
+  String get studyYouCanPasteThisInTheForumToEmbed => 'You can paste this in the forum or your Lichess blog to embed';
 
   @override
   String get studyPasteToEmbedChapterInForumOrBlog => 'You can paste this in the forum or your Lichess blog to embed the chapter.';
@@ -7286,13 +7278,13 @@ class AppLocalizationsCs extends AppLocalizations {
   String get studyCustomPositionText => 'Nastavte si desku jak chcete.<br>Vhodná ke studiu koncovek.';
 
   @override
-  String get studyLoadExistingLichessGameTitle => 'Načíst existující lichess hru';
+  String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
 
   @override
   String get studyLoadGameFromTheWebTitle => 'Načíst hru z webu';
 
   @override
-  String get studyLoadExistingLichessGameText => 'Vložte lichess game URL<br>(jako lichess.org/7fHIU0XI)<br>pro načtení hry pohyby v kapitole.';
+  String get studyLoadExistingLichessGameText => 'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
 
   @override
   String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/7fHIU0XI)<br>to load game moves in the chapter.';
@@ -7381,6 +7373,9 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get teamTeam => 'Tým';
+
+  @override
+  String get teamTeamUpdates => 'Týmové zprávy';
 
   @override
   String get teamIncorrectEntryCode => 'Špatné heslo.';

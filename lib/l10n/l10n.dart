@@ -12712,6 +12712,12 @@ abstract class AppLocalizations {
   /// **'Team'**
   String get teamTeam;
 
+  /// No description provided for @teamTeamUpdates.
+  ///
+  /// In en, this message translates to:
+  /// **'Team updates'**
+  String get teamTeamUpdates;
+
   /// No description provided for @teamIncorrectEntryCode.
   ///
   /// In en, this message translates to:

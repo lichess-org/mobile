@@ -661,7 +661,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get arenaHowIsTheWinnerDecidedAnswer => 'Spilleren (eller spillerne) med flest point, når turneringens fastsatte tidsgrænse nås, erklæres for vinder(e).';
 
   @override
-  String get arenaHowDoesPairingWork => 'Hvordan foretages pardannelse?';
+  String get arenaHowDoesPairingWork => 'How does the pairing work?';
 
   @override
   String get arenaHowArePlayersPaired => 'Hvordan bliver spillerne sat sammen?';
@@ -752,7 +752,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get arenaEditTeamBattle => 'Rediger holdkamp';
 
   @override
-  String get arenaDefender => 'Forsvarer';
+  String get arenaDefender => 'Defender';
 
   @override
   String get arenaDefenderLabel => 'Forsvarer:';
@@ -779,7 +779,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get arenaTournamentStats => 'Turneringsstatistik';
 
   @override
-  String get arenaRankAvgHelp => 'Den gennemsnitlige rangering er en procentdel af din rangering. Lavere er bedre.\n\nEksempelvis er en rangering som nummer 3 i en turnering med 100 spillere = 3%. At være rangeret som nummer 10 i en turnering med 1000 spillere = 1%.';
+  String get arenaRankAvgHelp => 'The rank average is a percentage of your ranking. Lower is better.\n\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.';
 
   @override
   String get arenaRankAverageHelp => 'Dit ranggennemsnit repræsenterer din typiske slutplacering i forhold til det samlede antal spillere i hver turnering.\nDette er et mål for din placering i turneringen, ikke din generelle rating.\n\nEt ranggennemsnit på 3 % betyder for eksempel, at du typisk ender blandt de øverste 3 % (f.eks. på 30. pladsen ud af 1.000 spillere).';
@@ -823,7 +823,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get arenaBerserkRate => 'Bersærk-rate';
 
   @override
-  String get arenaLeaguesAndStreamerBattles => 'Leagues & Streamer Battles';
+  String get arenaLeaguesAndStreamerBattles => 'Leagues & Streamer Kampe';
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -930,7 +930,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get broadcastDeleteRound => 'Slet denne runde';
 
   @override
-  String get broadcastDefinitivelyDeleteRound => 'Slet runden og dens partier endegyldigt.';
+  String get broadcastDefinitivelyDeleteRound => 'Definitively delete the round and all its games.';
 
   @override
   String get broadcastPermanentlyDeleteRound => 'Slet denne runde og alle dens partier permanent?';
@@ -945,7 +945,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get broadcastDeleteTournament => 'Slet denne turnering';
 
   @override
-  String get broadcastDefinitivelyDeleteTournament => 'Slet hele turneringen, alle dens runder og alle dens partier.';
+  String get broadcastDefinitivelyDeleteTournament => 'Definitively delete the entire tournament, all its rounds and all its games.';
 
   @override
   String get broadcastPermanentlyDeleteTournament => 'Slet denne turnering permanent, herunder alle runder og partier?';
@@ -2161,19 +2161,19 @@ class AppLocalizationsDa extends AppLocalizations {
   String get preferencesNotifyStreamStart => 'Streamer går live';
 
   @override
-  String get preferencesNotifyInboxMsg => 'Ny besked i indbakke';
+  String get preferencesNotifyInboxMsg => 'New inbox message';
 
   @override
   String get preferencesNotifyDirectMessage => 'Ny direkte besked';
 
   @override
-  String get preferencesNotifyForumMention => 'Kommentar i forum nævner dig';
+  String get preferencesNotifyForumMention => 'Forum comment mentions you';
 
   @override
   String get preferencesNotifyForumMentions => 'Omtaler på forummet';
 
   @override
-  String get preferencesNotifyInvitedStudy => 'Invitation til studie';
+  String get preferencesNotifyInvitedStudy => 'Study invite';
 
   @override
   String get preferencesNotifyStudyInvites => 'Invitationer til studie';
@@ -2185,7 +2185,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get preferencesNotifyChallenge => 'Udfordringer';
 
   @override
-  String get preferencesNotifyTournamentSoon => 'Turneringsstart nærmer sig';
+  String get preferencesNotifyTournamentSoon => 'Tournament starting soon';
 
   @override
   String get preferencesNotifyTournamentStartReminders => 'Påmindelser om turneringsstart';
@@ -2642,7 +2642,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get puzzleThemeCornerMate => 'Hjørnemat';
 
   @override
-  String get puzzleThemeCornerMateDescription => 'Træng kongen op i hjørnet ved hjælp af et tårn eller dronning og en springer til at udføre skakmat.';
+  String get puzzleThemeCornerMateDescription => 'Confine the king to the corner using a rook or queen and a knight to engage the checkmate.';
 
   @override
   String get puzzleThemeCornerMateKnightDeliversDescription => 'Træng kongen op i hjørnet ved hjælp af et tårn eller dronning og brug en springer til at udføre skakmat.';
@@ -2720,7 +2720,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get puzzleThemeEndgameDescription => 'En taktik i den sidste fase af spillet.';
 
   @override
-  String get puzzleThemeEnPassantDescription => 'En taktik som inkluderer En passant-reglen, hvor en bonde kan tage en modstanderbonde, der er flyttet forbi med dens første to-felts-træk.';
+  String get puzzleThemeEnPassantDescription => 'A tactic involving the en passant rule, where a pawn can capture an opponent pawn that has bypassed it using its initial two-square move.';
 
   @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'En taktik som inkluderer En passant-reglen, hvor en bonde kan tage en modstanderbonde, der er flyttet forbi med dens første to-felts-træk.';
@@ -2741,7 +2741,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get puzzleThemeFork => 'Gaffel';
 
   @override
-  String get puzzleThemeForkDescription => 'Et træk hvor den flyttede brik angriber to af modstanderens brikker på én gang.';
+  String get puzzleThemeForkDescription => 'A move where the moved piece attacks two opponent pieces at once.';
 
   @override
   String get puzzleThemeForkOpposingPiecesDescription => 'Et træk, hvor en brik angriber to eller flere modstanderbrikker på samme tid.';
@@ -2756,7 +2756,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get puzzleThemeHookMate => 'Krog-mat';
 
   @override
-  String get puzzleThemeHookMateDescription => 'Skakmat med tårn, springer og bonde, som sammen med en fjendtlig bonde hindrer modstanderens konge i at undslippe.';
+  String get puzzleThemeHookMateDescription => 'Checkmate with a rook, knight, and pawn along with one enemy pawn to limit the enemy king\'s escape.';
 
   @override
   String get puzzleThemeHookMateOpposingPawnDescription => 'Skakmat ved hjælp af et tårn, en springer og en bonde, hvor en af modstanderens bønder blokerer kongens flugtvej.';
@@ -2783,7 +2783,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get puzzleThemePillsburysMate => 'Pillsbury\'s mat';
 
   @override
-  String get puzzleThemePillsburysMateDescription => 'Tårnet sætter skakmat, mens løberen hjælper med at spærre af.';
+  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
 
   @override
   String get puzzleThemePillsburyMateRookAndBishopDescription => 'Et tårn sætter kongen skakmat, mens en løber er med til at indespærre den.';
@@ -2792,7 +2792,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get puzzleThemeMorphysMate => 'Morphy\'s mat';
 
   @override
-  String get puzzleThemeMorphysMateDescription => 'Brug løberen til at sætte kongen skak, mens tårnet hjælper med at spærre den inde.';
+  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
 
   @override
   String get puzzleThemeMorphyMateBishopAndRookDescription => 'En løber sætter kongen skakmat, mens et tårn er med til at indespærre den.';
@@ -2915,7 +2915,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get puzzleThemePromotion => 'Bondeforvandling';
 
   @override
-  String get puzzleThemePromotionDescription => 'En bonde, der forvandles eller truer med at forvandle, er nøglen til taktikken.';
+  String get puzzleThemePromotionDescription => 'Promote one of your pawn to a queen or minor piece.';
 
   @override
   String get puzzleThemePromotePawnToQueenRookOrMinor => 'Forfrem en af dine bønder til en dronning, et tårn eller en mindre brik.';
@@ -3503,13 +3503,13 @@ class AppLocalizationsDa extends AppLocalizations {
   String get flipBoard => 'Vend bræt';
 
   @override
-  String get toggleLocalEngine => 'Toggle local engine';
+  String get toggleLocalEngine => 'Slå lokalt skakprogram til/fra';
 
   @override
-  String get engineSettings => 'Engine settings';
+  String get engineSettings => 'Skakprogram-indstillinger';
 
   @override
-  String get enginesFromStrongestToWeakest => 'Engines from strongest to weakest';
+  String get enginesFromStrongestToWeakest => 'Skakprogrammer fra stærkeste til svageste';
 
   @override
   String get illegalPosition => 'Ulovlig position';
@@ -3729,7 +3729,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get refreshInboxAfterFiveMinutes => 'Vent 5 minutter og opdater din e-mails indbakke.';
 
   @override
-  String get checkSpamFolder => 'Tjek også din spam-mappe, det kan være, at den havner der. Hvis det er tilfældet, skal du markere den som ikke-spam.';
+  String get checkSpamFolder => 'Also check your spam folder, it might end up there. If so, mark it as not spam.';
 
   @override
   String get checkSpamOrJunkFolder => 'Modtager du ikke en bekræftelses-e-mail, skal du tjekke din spam- eller junk-mappe. Sørg for at markere beskeder fra lichess.org som sikre og \"ikke spam\", så du kan holde dig opdateret om vigtige meddelelser.';
@@ -3780,13 +3780,13 @@ class AppLocalizationsDa extends AppLocalizations {
   String get cancel => 'Annuller';
 
   @override
-  String get whiteTimeOut => 'Tid udløbet for hvid';
+  String get whiteTimeOut => 'White time out';
 
   @override
   String get whiteRanOutOfTime => 'Hvid løb tør for tid';
 
   @override
-  String get blackTimeOut => 'Tid udløbet for sort';
+  String get blackTimeOut => 'Black time out';
 
   @override
   String get blackRanOutOfTime => 'Sort løb tør for tid';
@@ -3998,7 +3998,7 @@ class AppLocalizationsDa extends AppLocalizations {
   }
 
   @override
-  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating-filtre er låst, fordi din rating ikke er stabil. Stabiliteten øges ved at spille ratede partier.';
+  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
 
   @override
   String get cannotFilterByUnstableRating => 'Det er ikke muligt at filtrere efter rating, da din rating ikke er stabil.\nAt spille ratede partier vil øge stabiliteten.';
@@ -4254,7 +4254,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get points => 'Points';
 
   @override
-  String get wins => 'Gevinster';
+  String get wins => 'Sejre';
 
   @override
   String get losses => 'Tabte';
@@ -4516,7 +4516,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get reportUsernameHelp => 'Forklar, hvad der er stødende ved dette brugernavn. Sig ikke blot \"det er stødende/upassende\", men fortæl os, hvordan du nåede frem til denne konklusion, især hvis fornærmelsen er sløret, ikke er på engelsk, er slang eller er en historisk/kulturel reference.';
 
   @override
-  String get reportProcessedFasterInEnglish => 'Din indberetning vil blive behandlet hurtigere, hvis den er skrevet på engelsk.';
+  String get reportProcessedFasterInEnglish => 'Your report will be processed faster if written in English.';
 
   @override
   String get processReportFasterInEnglish => 'Vi kan behandle din anmeldelse hurtigere, hvis du skriver på engelsk.';
@@ -4887,7 +4887,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get create => 'Opret';
 
   @override
-  String get whenCreateSimul => 'Når du opretter et simultanspil, spiller du mod adskillige modstandere på én gang.';
+  String get whenCreateSimul => 'When you create a simul, you get to play several players at once.';
 
   @override
   String get creatingASimul => 'Når du opretter en simul, kan du spille mod flere modstandere på samme tid.';
@@ -4902,7 +4902,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get simulAddExtraTime => 'Du kan tilføje ekstra tid til dit ur for at hjælpe med at klare simultanspillet.';
 
   @override
-  String get simulHostExtraTime => 'Ekstra tid til værtsuret';
+  String get simulHostExtraTime => 'Host extra initial clock time';
 
   @override
   String get extraClockTimeForHost => 'Ekstra tid på uret for værten:';
@@ -4938,7 +4938,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get keyGoToStartOrEnd => 'gå til start/slut';
 
   @override
-  String get keyGoToPreviousOrNextLine => 'go to previous/next line';
+  String get keyGoToPreviousOrNextLine => 'gå til forrige/næste linje';
 
   @override
   String get keyCycleSelectedVariation => 'Gennemgå den valgte variant';
@@ -4947,7 +4947,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get keyShowOrHideComments => 'vis/skjul kommentar';
 
   @override
-  String get keyShowOrHideCurrentVariation => 'show/hide current variation';
+  String get keyShowOrHideCurrentVariation => 'vis/skjul nuværende variant';
 
   @override
   String get keyEnterOrExitVariation => 'Start/slut variant';
@@ -5469,7 +5469,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get showUnreadLichessMessage => 'Du har modtaget en privat besked fra Lichess.';
 
   @override
-  String get clickHereToReadIt => 'Klik her for at læse den';
+  String get clickHereToReadIt => 'Click here to read it';
 
   @override
   String get readTheMessage => 'Læs beskeden';
@@ -5755,7 +5755,7 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String markdownIsAvailable(String param) {
-    return '$param er tilgængelig til formatering.';
+    return '$param is available for formatting.';
   }
 
   @override
@@ -5782,7 +5782,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get onlyTeamMembers => 'Kun holdmedlemmer';
 
   @override
-  String get navigateMoveTree => 'Navigér i træk-træet';
+  String get navigateMoveTree => 'Navigate the move tree';
 
   @override
   String get moveListNavigation => 'Trækliste-navigation';
@@ -5912,13 +5912,13 @@ class AppLocalizationsDa extends AppLocalizations {
   String get settings => 'Indstillinger';
 
   @override
-  String get verifyingYourDevice => 'Verifying your device...';
+  String get verifyingYourDevice => 'Bekræfter din enhed...';
 
   @override
-  String get chessOpenings => 'Chess openings';
+  String get chessOpenings => 'Skakåbninger';
 
   @override
-  String get boards => 'Boards';
+  String get boards => 'Brætter';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5947,8 +5947,8 @@ class AppLocalizationsDa extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count brølere',
-      one: '$count brøler',
+      other: '$count blunders',
+      one: '$count blunder',
     );
     return '$_temp0';
   }
@@ -5969,8 +5969,8 @@ class AppLocalizationsDa extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count fejl',
-      one: '$count fejl',
+      other: '$count mistakes',
+      one: '$count mistake',
     );
     return '$_temp0';
   }
@@ -5991,8 +5991,8 @@ class AppLocalizationsDa extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count unøjagtigheder',
-      one: '$count unøjagtighed',
+      other: '$count inaccuracies',
+      one: '$count inaccuracy',
     );
     return '$_temp0';
   }
@@ -6376,8 +6376,8 @@ class AppLocalizationsDa extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Anonyme ($count)',
-      one: 'Anonym',
+      other: 'Anonymous ($count)',
+      one: 'Anonymous',
     );
     return '$_temp0';
   }
@@ -6761,7 +6761,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get studyCurrentChapterUrl => 'Nuværende kapitel URL';
 
   @override
-  String get studyYouCanPasteThisInTheForumToEmbed => 'Du kan indsætte dette i forummet for at indlejre';
+  String get studyYouCanPasteThisInTheForumToEmbed => 'You can paste this in the forum or your Lichess blog to embed';
 
   @override
   String get studyPasteToEmbedChapterInForumOrBlog => 'Du kan indsætte dette i forummet eller på din Lichess-blog for at indlejre kapitlet.';
@@ -7136,13 +7136,13 @@ class AppLocalizationsDa extends AppLocalizations {
   String get studyCustomPositionText => 'Opstil brættet på din måde.<br>Nyttigt til at udforske slutspil.';
 
   @override
-  String get studyLoadExistingLichessGameTitle => 'Indlæs et eksisterende lichess-parti';
+  String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
 
   @override
   String get studyLoadGameFromTheWebTitle => 'Indlæs et parti fra nettet';
 
   @override
-  String get studyLoadExistingLichessGameText => 'Indsæt en URL for et lichess-parti<br>(som lichess.org/7fHIU0XI)<br>for at indlæse partiets træk i kapitlet.';
+  String get studyLoadExistingLichessGameText => 'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
 
   @override
   String get studyLoadGameFromTheWebText => 'Indsæt en parti-URL<br>(som lichess.org/7fHIU0XI)<br>for at indlæse partitræk i kapitlet.';
@@ -7223,6 +7223,9 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get teamTeam => 'Hold';
+
+  @override
+  String get teamTeamUpdates => 'Holdopdateringer';
 
   @override
   String get teamIncorrectEntryCode => 'Forkert adgangskode.';

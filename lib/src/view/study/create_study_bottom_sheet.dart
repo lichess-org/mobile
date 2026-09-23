@@ -1,3 +1,4 @@
+import 'package:dartchess/dartchess.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/study/study.dart';
@@ -12,6 +13,8 @@ import 'package:material_ui/material_ui.dart';
 class const CreateStudyBottomSheet({
   required final LightUser user,
   final void Function(BuildContext, StudyId)? onStudyCreated,
+  final String? pgn,
+  final Side? orientation,
 }) extends ConsumerStatefulWidget {
   @override
   ConsumerState<CreateStudyBottomSheet> createState() => _CreateStudyBottomSheetState();
@@ -183,8 +186,12 @@ class _CreateStudyBottomSheetState() extends ConsumerState<CreateStudyBottomShee
                 isScrollControlled: true,
                 useRootNavigator: true,
                 builder: (context) => CreateStudyChapterBottomSheet(
-                  params: CreateFirstChapterOfNewStudy(payload),
-                  chapterNumber: 1,
+                  params: CreateFirstChapterOfNewStudy(
+                    payload,
+                    pgn: widget.pgn,
+                    orientation: widget.orientation,
+                  ),
+                  initialChapterName: context.l10n.studyChapterX('1'),
                   onChaptersCreated: (studyId, _) => widget.onStudyCreated?.call(context, studyId),
                 ),
               );

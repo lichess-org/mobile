@@ -54,7 +54,7 @@ const whiteLists = {
   'recap': ['recapReady', 'awaitQuestion'],
   'search': ['search'],
   'streamer': ['lichessStreamers'],
-  'team': ['nbLeadersPerTeam','battleOfNbTeams','incorrectEntryCode', 'team'],
+  'team': ['nbLeadersPerTeam', 'battleOfNbTeams', 'incorrectEntryCode', 'team', 'teamUpdates'],
   'tfa': ['twoFactorAuth'],
   'variant': [
     'standard',
@@ -223,11 +223,11 @@ async function generateTemplateARB() {
 function loadTranslations(module, locale) {
   if (locale === 'en-GB')
     return parseStringPromise(
-      readFileSync(`${sourcePath}/${module}.xml`, 'utf8').replace(/\r\n/g,'\n').replace(/\r/g,'\n')
+      readFileSync(`${sourcePath}/${module}.xml`, 'utf8').replace(/\r\n/g, '\n').replace(/\r/g, '\n')
     )
   else
     return parseStringPromise(
-      readFileSync(`${translationPath}/${module}/${locale}.xml`,'utf8').replace(/\r\n/g,'\n').replace(/\r/g,'\n')
+      readFileSync(`${translationPath}/${module}/${locale}.xml`, 'utf8').replace(/\r\n/g, '\n').replace(/\r/g, '\n')
     )
 }
 
@@ -337,9 +337,9 @@ function transformTranslations(data, locale, module, makeTemplate = false) {
         transformedString = string;
       }
       const quantity = child.$.quantity === 'zero' ? '=0' :
-      child.$.quantity === 'one' ? '=1' :
-      child.$.quantity === 'two' ? '=2' :
-      child.$.quantity
+        child.$.quantity === 'one' ? '=1' :
+          child.$.quantity === 'two' ? '=2' :
+            child.$.quantity
       pluralString += ` ${quantity}{${transformedString}}`
     })
     pluralString += '}'
