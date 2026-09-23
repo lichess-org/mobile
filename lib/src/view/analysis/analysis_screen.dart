@@ -362,35 +362,12 @@ class const _BottomBar({
           icon: CupertinoIcons.arrow_2_squarepath,
         ),
         if (analysisState.isComputerAnalysisAllowed)
-          Builder(
-            builder: (context) {
-              Future<void>? toggleFuture;
-              return FutureBuilder(
-                future: toggleFuture,
-                builder: (context, snapshot) {
-                  return EngineButton(
-                    filters: (
-                      context: analysisState.evaluationContext,
-                      path: analysisState.currentPath,
-                    ),
-                    savedEval: analysisState.currentNode.eval,
-                    onTap:
-                        analysisState.isEngineAllowed &&
-                            snapshot.connectionState != ConnectionState.waiting
-                        ? () async {
-                            toggleFuture = ref.read(ctrlProvider.notifier).toggleEngine();
-                            try {
-                              await toggleFuture;
-                            } finally {
-                              toggleFuture = null;
-                            }
-                          }
-                        : null,
-                    goDeeper: () => ref.read(ctrlProvider.notifier).requestEval(goDeeper: true),
-                  );
-                },
-              );
-            },
+          EngineToggleButton(
+            filters: (context: analysisState.evaluationContext, path: analysisState.currentPath),
+            savedEval: analysisState.currentNode.eval,
+            isEnabled: analysisState.isEngineAllowed,
+            onToggle: () => ref.read(ctrlProvider.notifier).toggleEngine(),
+            onGoDeeper: () => ref.read(ctrlProvider.notifier).requestEval(goDeeper: true),
           ),
         RepeatButton(
           onLongPress: analysisState.canGoBack ? () => _moveBackward(ref, fastSeek: true) : null,
