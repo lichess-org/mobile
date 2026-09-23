@@ -1,13 +1,17 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/analysis/retro_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
@@ -388,6 +392,48 @@ void main() {
       verifyNever(
         () => mockAnalysisService.requestAnalysis(const ServerAnalysisSource.game(gameId: testId)),
       );
+    });
+
+    testWidgets('Controller entry points are no-ops while state has no value', (
+      WidgetTester tester,
+    ) async {
+      final gameRequest = Completer<http.Response>();
+      await tester.pumpWidget(
+        await makeTestApp(
+          tester,
+          moves: 'e4 e5',
+          overrides: {
+            httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+              // Hang the game request so the controller stays in the loading state,
+              // where the AsyncValue has no value at all.
+              return FakeHttpClientFactory(() => MockClient((request) => gameRequest.future));
+            }),
+          },
+        ),
+      );
+
+      await tester.pump();
+
+      final container = ProviderScope.containerOf(tester.element(find.byType(RetroScreen)));
+      final provider = retroControllerProvider((id: testId, initialSide: Side.white));
+
+      expect(container.read(provider), isA<AsyncLoading<RetroState>>());
+
+      final controller = container.read(provider.notifier);
+
+      // All entry points must be no-ops instead of throwing a StateError
+      expect(() => controller.onUserMove(Move.parse('e2e4')!), returnsNormally);
+      expect(() => controller.userNext(), returnsNormally);
+      expect(() => controller.userPrevious(), returnsNormally);
+      expect(() => controller.viewSolution(), returnsNormally);
+      expect(() => controller.restart(), returnsNormally);
+      expect(() => controller.nextMistake(), returnsNormally);
+      await expectLater(controller.flipSide(), completes);
+
+      // Unblock the hanging request (a 404 maps to ServerException, which is never
+      // retried) so no timer is left pending when the test ends.
+      gameRequest.complete(mockResponse('', 404));
+      await tester.pump();
     });
   });
 }
