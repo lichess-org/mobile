@@ -1116,17 +1116,16 @@ void main() {
         expect(find.widgetWithText(InlineMove, '+0.3'), findsOne);
       });
 
-      /// The options of the analysis screen built by [makeEngineTestApp].
-      // ignore: prefer_const_constructors
-      final options = AnalysisOptions.pgn(
-        id: const StringId('standalone'),
+      // The options of the analysis screen built by [makeEngineTestApp].
+      const options = AnalysisOptions.pgn(
+        id: StringId('standalone'),
         orientation: Side.white,
         pgn: '',
         isComputerAnalysisAllowed: true,
         variant: Variant.standard,
       );
 
-      /// Reads the published game tree of the analysis screen built by [makeEngineTestApp].
+      // Reads the published game tree of the analysis screen built by [makeEngineTestApp].
       ViewRoot readTreeRoot(WidgetTester tester) {
         final container = ProviderScope.containerOf(tester.element(find.byType(AnalysisScreen)));
         return container.read(analysisControllerProvider(options)).requireValue.root;
