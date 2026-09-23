@@ -7,12 +7,14 @@ import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
@@ -1112,6 +1114,91 @@ void main() {
         // After e5, position has ply=2, so cp=30 which displays as +0.3
         expect(find.widgetWithText(InlineMove, '+0.2'), findsOne);
         expect(find.widgetWithText(InlineMove, '+0.3'), findsOne);
+      });
+
+      /// The options of the analysis screen built by [makeEngineTestApp].
+      // ignore: prefer_const_constructors
+      final options = AnalysisOptions.pgn(
+        id: const StringId('standalone'),
+        orientation: Side.white,
+        pgn: '',
+        isComputerAnalysisAllowed: true,
+        variant: Variant.standard,
+      );
+
+      /// Reads the published game tree of the analysis screen built by [makeEngineTestApp].
+      ViewRoot readTreeRoot(WidgetTester tester) {
+        final container = ProviderScope.containerOf(tester.element(find.byType(AnalysisScreen)));
+        return container.read(analysisControllerProvider(options)).requireValue.root;
+      }
+
+      testWidgets('an eval update keeps the branches off the current path identical', (
+        tester,
+      ) async {
+        final stockfish = AnalysisTestEngine();
+        await makeEngineTestApp(tester, isCloudEvalEnabled: false, stockfish: stockfish);
+
+        await playMove(tester, 'e2', 'e4');
+        await playMove(tester, 'e7', 'e5');
+
+        // go back to e4 with the move navigator (black to move), then play a sideline from
+        // it: the tree now has a branch the engine cannot be evaluating, since it only
+        // evaluates the current path
+        await tester.tap(find.byKey(const Key('goto-previous')));
+        await tester.pump(const Duration(milliseconds: 100));
+        expect(
+          ProviderScope.containerOf(tester.element(find.byType(AnalysisScreen)))
+              .read(analysisControllerProvider(options))
+              .requireValue
+              .currentPath
+              .size,
+          1,
+          reason: 'the navigator must go back to e4 before the sideline is played',
+        );
+        await playMove(tester, 'd7', 'd5');
+
+        // let the initial evaluation request fire and settle, then drain the requested list so
+        // that the next request — the sideline's — is the engine's work when the test emits
+        await tester.pump(kRequestEvalDebounceDelay);
+        stockfish.resetTracking();
+        expect(stockfish.requestedPositions, isEmpty);
+
+        final container = ProviderScope.containerOf(tester.element(find.byType(AnalysisScreen)));
+
+        final rootBefore = readTreeRoot(tester);
+        final currentPath = container
+            .read(analysisControllerProvider(options))
+            .requireValue
+            .currentPath;
+        final offPathBranch = rootBefore
+            .branchesOn(currentPath.penultimate)
+            .lastOrNull
+            ?.children
+            .whereType<ViewBranch>()
+            .firstWhere((branch) => branch.id != currentPath.last);
+        expect(
+          rootBefore.branchesOn(currentPath.penultimate).lastOrNull?.children.length,
+          2,
+          reason: 'the sideline sits next to the move it branched off',
+        );
+
+        // the evaluation of the current path is published, on the sideline...
+        stockfish.emitDepthRange(toDepth: 12);
+        await tester.pump(kEngineEvalEmissionThrottleDelay);
+
+        final rootAfter = readTreeRoot(tester);
+        expect(rootAfter, isNot(same(rootBefore)));
+        final afterParent = rootAfter
+            .branchesOn(currentPath.penultimate)
+            .lastOrNull
+            ?.children
+            .whereType<ViewBranch>()
+            .toList(growable: false);
+        expect(afterParent!.length, 2);
+        expect(afterParent.last.eval, isNotNull);
+
+        // ...and the branch next to it is the very same object as before
+        expect(identical(afterParent.first, offPathBranch), isTrue);
       });
     });
 

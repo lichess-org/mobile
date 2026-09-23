@@ -763,7 +763,103 @@ void main() {
       }
     });
   });
+
+  group('viewSharing', () {
+    const pgn = '1. e4 e5 (1... d5 2. a4) 2. Nf3 Nc6';
+    final e4Path = UciPath.fromUciMoves(['e2e4']);
+    final e5Path = UciPath.fromUciMoves(['e2e4', 'e7e5']);
+    final d5Path = UciPath.fromUciMoves(['e2e4', 'd7d5']);
+    final d5a4Path = UciPath.fromUciMoves(['e2e4', 'd7d5', 'a2a4']);
+
+    test('view never shares: it is viewSharing with no previous view', () {
+      final root = Root.fromPgnGame(PgnGame.parsePgn(pgn));
+
+      expect(identical(root.view, root.view), isFalse);
+      expect(root.viewSharing(null), root.view);
+    });
+
+    test('shares everything when nothing changed', () {
+      final root = Root.fromPgnGame(PgnGame.parsePgn(pgn));
+      final first = root.view;
+
+      final second = root.viewSharing(first);
+
+      expect(identical(second, first), isTrue);
+    });
+
+    test('a changed evaluation only makes the branches on its path new', () {
+      final root = Root.fromPgnGame(PgnGame.parsePgn(pgn));
+      final first = root.view;
+
+      root.updateAt(d5a4Path, (node) => node.eval = testLocalEval(position: node.position));
+      final second = root.viewSharing(first);
+
+      // the published view still describes the tree, with the new evaluation in it
+      expect(second, root.view);
+      expect(second.branchesOn(d5a4Path).last.eval, root.branchAt(d5a4Path)!.eval);
+
+      // the changed branch is new, and so is every branch on the way to it
+      expect(identical(second, first), isFalse);
+      expect(identical(second.children.first, first.children.first), isFalse);
+      expect(identical(second.branchesOn(d5Path).last, first.branchesOn(d5Path).last), isFalse);
+      expect(identical(second.branchesOn(d5a4Path).last, first.branchesOn(d5a4Path).last), isFalse);
+
+      // the mainline variation next to it is the very same object as before
+      expect(
+        identical(second.children.first.children.first, first.children.first.children.first),
+        isTrue,
+      );
+      expect(identical(second.branchesOn(e5Path).last, first.branchesOn(e5Path).last), isTrue);
+    });
+
+    test('a changed comment only makes the branch that owns it new', () {
+      final root = Root.fromPgnGame(PgnGame.parsePgn(pgn));
+      final first = root.view;
+
+      root.branchAt(d5Path)!.comments = [const PgnComment(text: 'a comment')];
+      final second = root.viewSharing(first);
+
+      expect(second, root.view);
+      expect(second.branchesOn(d5Path).last.comments?.single.text, 'a comment');
+      expect(identical(second.branchesOn(d5Path).last, first.branchesOn(d5Path).last), isFalse);
+      expect(identical(second.branchesOn(e5Path).last, first.branchesOn(e5Path).last), isTrue);
+    });
+
+    test('an added move only makes the branches on its path new', () {
+      final root = Root.fromPgnGame(PgnGame.parsePgn(pgn));
+      final first = root.view;
+
+      final (newPath, _) = root.addMoveAt(e5Path, Move.parse('f1c4')!);
+      final second = root.viewSharing(first);
+
+      expect(second, root.view);
+      expect(identical(second.branchesOn(newPath!).last, first.branchesOn(newPath).last), isFalse);
+      expect(identical(second.branchesOn(e4Path).last, first.branchesOn(e4Path).last), isFalse);
+      expect(identical(second.branchesOn(d5Path).last, first.branchesOn(d5Path).last), isTrue);
+    });
+
+    test('does not share with the view of another tree', () {
+      final root = Root.fromPgnGame(PgnGame.parsePgn(pgn));
+      final other = Root.fromPgnGame(PgnGame.parsePgn(pgn));
+
+      expect(identical(root.viewSharing(other.view), other.view), isFalse);
+      expect(root.viewSharing(other.view), root.view);
+    });
+  });
 }
+
+LocalEval testLocalEval({required Position position}) => LocalEval(
+  position: position,
+  searchTime: const Duration(seconds: 10),
+  cp: 100,
+  depth: 10,
+  nodes: 1000,
+  millis: 1000,
+  pvs: IList([
+    PvData(moves: IList(const ['e2e4'])),
+  ]),
+  threatMode: false,
+);
 
 const fisherSpasskyPgn = '''
 [Event "F/S Return Match"]

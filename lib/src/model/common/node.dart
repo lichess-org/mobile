@@ -32,7 +32,18 @@ abstract class Node({
   /// Immutable view of this node.
   ///
   /// Use sparingly, it is relatively expensive to compute.
-  ViewNode get view;
+  ViewNode get view => viewSharing(null);
+
+  /// Immutable view of this node, sharing with [previous] every part of it that did not change.
+  ///
+  /// [previous] must be the view of this same node, or null. A node whose own values are unchanged
+  /// and whose children all come back unchanged yields the very same object as in [previous].
+  ///
+  /// Identity is what a consumer of the view compares to decide what to redraw: the move list skips
+  /// a subtree whose nodes it has already rendered. Publishing a change through this method (an
+  /// engine evaluation, say, which changes one node's eval) therefore only makes the nodes on the
+  /// way to the change new, instead of the whole tree.
+  ViewNode viewSharing(ViewNode? previous);
 
   /// Adds a child to this node.
   void addChild(Branch node) => children.add(node);
@@ -399,6 +410,36 @@ abstract class Node({
       comments: [],
     ).makePgn();
   }
+
+  /// The views of this node's children, sharing with [previous] the ones that did not change.
+  ///
+  /// The list itself is shared too when no child changed, which is what keeps a whole untouched
+  /// subtree identical up to the branch that owns it.
+  IList<ViewBranch> _childrenViews(IList<ViewBranch>? previous) {
+    if (previous == null || previous.length != children.length) {
+      return children.map((child) => child.view).toIList();
+    }
+
+    final views = List<ViewBranch>.generate(
+      children.length,
+      (i) => children[i].viewSharing(previous[i]),
+    );
+
+    return views.indexed.every((e) => identical(e.$2, previous[e.$1])) ? previous : views.toIList();
+  }
+}
+
+/// Whether the node's [list] still holds the same elements as the view's locked copy [locked].
+///
+/// A view locks its own copy of a list rather than sharing the mutable one, so the elements are
+/// what is compared: an element that is still the same object cannot have changed.
+bool _sameElements<T>(IList<T>? locked, List<T>? list) {
+  if (list == null) return locked == null;
+  if (locked == null || locked.length != list.length) return false;
+  for (var i = 0; i < list.length; i++) {
+    if (locked[i] != list[i]) return false;
+  }
+  return true;
 }
 
 /// A branch node of a game tree
@@ -439,20 +480,47 @@ class Branch({
   UciCharPair get id => UciCharPair.fromMove(sanMove.move);
 
   @override
-  ViewBranch get view => ViewBranch(
-    position: position,
-    sanMove: sanMove,
-    eval: eval,
-    opening: opening,
-    children: IList(children.map((child) => child.view)),
-    isComputerVariation: isComputerVariation,
-    isCollapsed: isCollapsed,
-    isUserAdded: isUserAdded,
-    lichessAnalysisComments: lichessAnalysisComments?.lock,
-    startingComments: startingComments?.lock,
-    comments: comments?.lock,
-    nags: nags?.lock,
-  );
+  ViewBranch get view => viewSharing(null);
+
+  @override
+  ViewBranch viewSharing(ViewNode? previous) {
+    final previousBranch = previous is ViewBranch ? previous : null;
+    final childrenViews = _childrenViews(previousBranch?.children);
+
+    // Everything this branch owns has to match for its view to still describe it: the mutable
+    // fields are compared by value, the final ones (the position and the move, which the view
+    // copied from this very node) by identity.
+    if (previousBranch != null &&
+        identical(previousBranch.children, childrenViews) &&
+        identical(previousBranch.position, position) &&
+        identical(previousBranch.sanMove, sanMove) &&
+        identical(previousBranch.opening, opening) &&
+        previousBranch.eval == eval &&
+        previousBranch.isCollapsed == isCollapsed &&
+        previousBranch.isComputerVariation == isComputerVariation &&
+        previousBranch.isUserAdded == isUserAdded &&
+        _sameElements(previousBranch.lichessAnalysisComments, lichessAnalysisComments) &&
+        _sameElements(previousBranch.startingComments, startingComments) &&
+        _sameElements(previousBranch.comments, comments) &&
+        _sameElements(previousBranch.nags, nags)) {
+      return previousBranch;
+    }
+
+    return ViewBranch(
+      position: position,
+      sanMove: sanMove,
+      eval: eval,
+      opening: opening,
+      children: childrenViews,
+      isComputerVariation: isComputerVariation,
+      isCollapsed: isCollapsed,
+      isUserAdded: isUserAdded,
+      lichessAnalysisComments: lichessAnalysisComments?.lock,
+      startingComments: startingComments?.lock,
+      comments: comments?.lock,
+      nags: nags?.lock,
+    );
+  }
 
   /// Gets the branch at the given path
   @override
@@ -523,11 +591,22 @@ class Branch({
 /// Represents the initial position, where no move has been played yet.
 class Root({required super.position, super.eval}) extends Node {
   @override
-  ViewRoot get view => ViewRoot(
-    position: position,
-    eval: eval,
-    children: IList(children.map((child) => child.view)),
-  );
+  ViewRoot get view => viewSharing(null);
+
+  @override
+  ViewRoot viewSharing(ViewNode? previous) {
+    final previousRoot = previous is ViewRoot ? previous : null;
+    final childrenViews = _childrenViews(previousRoot?.children);
+
+    if (previousRoot != null &&
+        identical(previousRoot.children, childrenViews) &&
+        identical(previousRoot.position, position) &&
+        previousRoot.eval == eval) {
+      return previousRoot;
+    }
+
+    return ViewRoot(position: position, eval: eval, children: childrenViews);
+  }
 
   /// Creates a flat game tree from a PGN string.
   ///
