@@ -113,18 +113,6 @@ Annotation? makeAnnotation(Iterable<int>? nags) {
 // animation jank at the end of the replay
 const kFastReplayDebounceDelay = Duration(milliseconds: 150);
 
-/// Callbacks for interaction with [DebouncedPgnTreeView]
-abstract class PgnTreeNotifier() {
-  void expandVariations(UciPath path);
-  void collapseVariations(UciPath path);
-  void promoteVariation(UciPath path, bool toMainLine);
-  void deleteFromHere(UciPath path);
-  void userJump(UciPath path);
-
-  /// Exports the line going through [path] as a PGN string, see [Node.makeLinePgn].
-  String makeLinePgn(UciPath path, {required bool includeVariations});
-}
-
 enum PgnTreeDisplayMode() {
   /// Mainline moves are displayed in a table with two columns, where the first column are moves by white and the second column are moves by black.
   /// Sidelines are always displayed on a new line and indented.
