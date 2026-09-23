@@ -58,8 +58,6 @@
   "mobileDeleteYourAccount": "Delete your account",
   "mobileDoYouAcceptChallenge": "Do you accept the challenge?",
   "mobileDownloadMyGames": "Download my games",
-  "mobileDownloadNnueFile": "Download NNUE file",
-  "mobileDownloadingNnueFile": "Downloading NNUE file",
   "mobileExport": "Export",
   "mobileFailedToExportGif": "Failed to export GIF: {param}",
   "@mobileFailedToExportGif": {
@@ -255,7 +253,6 @@
   "mobilePerfShortClassical": "Classical",
   "mobilePerfShortCorrespondence": "Corresp.",
   "mobilePerfShortFromPosition": "From Pos.",
-  "mobilePerfShortChess960": "960",
   "mobilePerfShortAntichess": "Antichess",
   "mobilePerfShortKingOfTheHill": "KotH",
   "mobilePerfShortThreeCheck": "3check",

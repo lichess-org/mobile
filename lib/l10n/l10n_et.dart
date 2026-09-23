@@ -148,12 +148,6 @@ class AppLocalizationsEt extends AppLocalizations {
   String get mobileDownloadMyGames => 'Download my games';
 
   @override
-  String get mobileDownloadNnueFile => 'Download NNUE file';
-
-  @override
-  String get mobileDownloadingNnueFile => 'Downloading NNUE file';
-
-  @override
   String get mobileExport => 'Export';
 
   @override
@@ -595,9 +589,6 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get mobilePerfShortFromPosition => 'From Pos.';
-
-  @override
-  String get mobilePerfShortChess960 => '960';
 
   @override
   String get mobilePerfShortAntichess => 'Antichess';

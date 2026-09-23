@@ -466,18 +466,6 @@ abstract class AppLocalizations {
   /// **'Download my games'**
   String get mobileDownloadMyGames;
 
-  /// No description provided for @mobileDownloadNnueFile.
-  ///
-  /// In en, this message translates to:
-  /// **'Download NNUE file'**
-  String get mobileDownloadNnueFile;
-
-  /// No description provided for @mobileDownloadingNnueFile.
-  ///
-  /// In en, this message translates to:
-  /// **'Downloading NNUE file'**
-  String get mobileDownloadingNnueFile;
-
   /// No description provided for @mobileExport.
   ///
   /// In en, this message translates to:
@@ -1335,12 +1323,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'From Pos.'**
   String get mobilePerfShortFromPosition;
-
-  /// No description provided for @mobilePerfShortChess960.
-  ///
-  /// In en, this message translates to:
-  /// **'960'**
-  String get mobilePerfShortChess960;
 
   /// No description provided for @mobilePerfShortAntichess.
   ///

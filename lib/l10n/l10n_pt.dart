@@ -148,12 +148,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileDownloadMyGames => 'Download my games';
 
   @override
-  String get mobileDownloadNnueFile => 'Download NNUE file';
-
-  @override
-  String get mobileDownloadingNnueFile => 'Downloading NNUE file';
-
-  @override
   String get mobileExport => 'Export';
 
   @override
@@ -595,9 +589,6 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get mobilePerfShortFromPosition => 'Da Pos.';
-
-  @override
-  String get mobilePerfShortChess960 => '960';
 
   @override
   String get mobilePerfShortAntichess => 'Antixadrez';
@@ -8035,9 +8026,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get mobilePerfShortFromPosition => 'Da Pos.';
-
-  @override
-  String get mobilePerfShortChess960 => '960';
 
   @override
   String get mobilePerfShortAntichess => 'Antichess';
