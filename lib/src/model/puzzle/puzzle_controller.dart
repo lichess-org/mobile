@@ -21,8 +21,11 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:logging/logging.dart';
 
 part 'puzzle_controller.freezed.dart';
+
+final _logger = Logger('PuzzleController');
 
 final puzzleControllerProvider = NotifierProvider.autoDispose
     .family<PuzzleController, PuzzleState, PuzzleContext>(
@@ -72,7 +75,9 @@ class PuzzleController(final PuzzleContext initialContext) extends Notifier<Puzz
       if (glicko != null) {
         state = state.copyWith(glicko: glicko);
       }
-    } catch (_) {}
+    } catch (e, st) {
+      _logger.fine('Failed to update user rating:', e, st);
+    }
   }
 
   PuzzleState _loadNewContext(PuzzleContext context) {
