@@ -591,6 +591,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobilePerfShortFromPosition => '指定局面';
 
   @override
+  String get mobilePerfShortChess960 => '960';
+
+  @override
   String get mobilePerfShortAntichess => 'アンチ';
 
   @override

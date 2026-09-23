@@ -591,6 +591,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobilePerfShortFromPosition => 'З пазіцыі';
 
   @override
+  String get mobilePerfShortChess960 => '960';
+
+  @override
   String get mobilePerfShortAntichess => 'Паддаўкі';
 
   @override

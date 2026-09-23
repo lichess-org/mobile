@@ -591,6 +591,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobilePerfShortFromPosition => 'З позиції';
 
   @override
+  String get mobilePerfShortChess960 => '960';
+
+  @override
   String get mobilePerfShortAntichess => 'Антишахи';
 
   @override

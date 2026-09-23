@@ -591,6 +591,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobilePerfShortFromPosition => 'Tùy chỉnh';
 
   @override
+  String get mobilePerfShortChess960 => '960';
+
+  @override
   String get mobilePerfShortAntichess => 'Phản cờ';
 
   @override

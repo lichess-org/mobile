@@ -1324,6 +1324,12 @@ abstract class AppLocalizations {
   /// **'From Pos.'**
   String get mobilePerfShortFromPosition;
 
+  /// No description provided for @mobilePerfShortChess960.
+  ///
+  /// In en, this message translates to:
+  /// **'960'**
+  String get mobilePerfShortChess960;
+
   /// No description provided for @mobilePerfShortAntichess.
   ///
   /// In en, this message translates to:

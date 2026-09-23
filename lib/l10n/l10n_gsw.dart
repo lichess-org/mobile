@@ -591,6 +591,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobilePerfShortFromPosition => 'Vo Stel.';
 
   @override
+  String get mobilePerfShortChess960 => '960';
+
+  @override
   String get mobilePerfShortAntichess => 'Fresschach';
 
   @override

@@ -591,6 +591,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mobilePerfShortFromPosition => 'From Pos.';
 
   @override
+  String get mobilePerfShortChess960 => '960';
+
+  @override
   String get mobilePerfShortAntichess => 'Antichess';
 
   @override
@@ -8027,6 +8030,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get mobilePerfShortFromPosition => 'From Pos.';
+
+  @override
+  String get mobilePerfShortChess960 => '960';
 
   @override
   String get mobilePerfShortAntichess => 'Antichess';

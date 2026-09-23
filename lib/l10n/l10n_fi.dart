@@ -591,6 +591,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobilePerfShortFromPosition => 'Asemasta';
 
   @override
+  String get mobilePerfShortChess960 => '960';
+
+  @override
   String get mobilePerfShortAntichess => 'Antishakki';
 
   @override

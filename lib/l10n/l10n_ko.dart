@@ -591,6 +591,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobilePerfShortFromPosition => '커스텀';
 
   @override
+  String get mobilePerfShortChess960 => '960';
+
+  @override
   String get mobilePerfShortAntichess => '안티체스';
 
   @override

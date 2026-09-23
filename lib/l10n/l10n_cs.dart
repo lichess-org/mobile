@@ -591,6 +591,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobilePerfShortFromPosition => 'Z pozice.';
 
   @override
+  String get mobilePerfShortChess960 => '960';
+
+  @override
   String get mobilePerfShortAntichess => 'Antichess';
 
   @override

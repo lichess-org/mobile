@@ -591,6 +591,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobilePerfShortFromPosition => '来自局面';
 
   @override
+  String get mobilePerfShortChess960 => 'Chess960';
+
+  @override
   String get mobilePerfShortAntichess => '弃子棋';
 
   @override
