@@ -727,3 +727,22 @@ final engineEvaluationProvider = Provider.autoDispose
 
 /// A type for filtering engine evaluation notifications.
 typedef EngineEvaluationFilters = ({EvaluationContext context, UciPath? path});
+
+typedef EngineGaugeParams = ({
+  bool isLocalEngineAvailable,
+
+  /// Orientation of the board.
+  Side orientation,
+
+  /// Position to evaluate.
+  Position position,
+
+  /// Cached evaluation to display when the current evaluation is not available.
+  ClientEval? savedEval,
+
+  /// Server evaluation to display when the current evaluation and the cached evaluation is not available.
+  ExternalEval? serverEval,
+
+  /// Filters to identify the correct engine evaluation provider instance.
+  EngineEvaluationFilters filters,
+});
