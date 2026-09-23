@@ -450,9 +450,18 @@ class AppLinksService(final Ref ref, {AppLinks? appLinks}) {
 
   static const kLichessLinkifiers = [UrlLinkifier(), EmailLinkifier(), UserTagLinkifier()];
 
+  /// Whether [url] is an http(s) URL whose parsed authority is exactly
+  /// [kLichessHost] — a prefix match would accept hosts like `lichess.dev.evil.com`.
+  static bool _isFirstPartyUrl(String url) {
+    final uri = Uri.tryParse(url);
+    if (uri == null || (uri.scheme != 'http' && uri.scheme != 'https')) return false;
+    final expected = Uri.parse('${uri.scheme}://$kLichessHost');
+    return uri.host == expected.host && uri.port == expected.port;
+  }
+
   /// Handles link clicks in RichLinkText widgets throughout the app.
   Future<void> onLinkifyOpen(BuildContext context, LinkableElement link) async {
-    if (link is UrlElement && link.url.startsWith(RegExp('https?:\\/\\/$kLichessHost'))) {
+    if (link is UrlElement && _isFirstPartyUrl(link.url)) {
       // Handle Lichess links specifically
       final appLinkUri = Uri.parse(link.url);
       await handleAppLink(context, appLinkUri);

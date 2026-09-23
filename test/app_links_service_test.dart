@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/app_links_service.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
@@ -41,6 +42,7 @@ import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
+import 'package:lichess_mobile/src/widgets/rich_link_text.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -139,6 +141,27 @@ Future<void> triggerDailyPuzzleLink(
   );
   await tester.pumpWidget(app);
   await tester.tap(find.text('test daily link'));
+}
+
+class const _LinkifyTestWidget({required final String url}) extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ElevatedButton(
+      onPressed: () async {
+        await ref.read(appLinksServiceProvider).onLinkifyOpen(context, UrlElement(url));
+      },
+      child: const Text('test linkify'),
+    );
+  }
+}
+
+Future<void> triggerLinkifyOpen(WidgetTester tester, String url) async {
+  final app = await makeTestProviderScopeApp(
+    tester,
+    home: Scaffold(body: _LinkifyTestWidget(url: url)),
+  );
+  await tester.pumpWidget(app);
+  await tester.tap(find.text('test linkify'));
 }
 
 void main() {
@@ -960,6 +983,35 @@ void main() {
 
       expect(find.byType(TvScreen), findsNothing);
       expect(find.text('Invalid TV channel: not-a-real-channel'), findsOneWidget);
+    });
+  });
+
+  group('onLinkifyOpen', () {
+    testWidgets('routes a first-party url to the in-app screen', (WidgetTester tester) async {
+      await triggerLinkifyOpen(tester, 'https://$kLichessHost/editor');
+      await tester.pumpAndSettle();
+
+      expect(find.byType(BoardEditorScreen), findsOneWidget);
+    });
+
+    testWidgets('does not treat a host prefixed with the lichess host as first-party', (
+      WidgetTester tester,
+    ) async {
+      await triggerLinkifyOpen(tester, 'https://$kLichessHost.evil.com/editor');
+      await tester.pumpAndSettle();
+
+      expect(find.byType(BoardEditorScreen), findsNothing);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('does not treat userinfo disguising an attacker host as first-party', (
+      WidgetTester tester,
+    ) async {
+      await triggerLinkifyOpen(tester, 'https://$kLichessHost@evil.com/editor');
+      await tester.pumpAndSettle();
+
+      expect(find.byType(BoardEditorScreen), findsNothing);
+      expect(tester.takeException(), isNull);
     });
   });
 
