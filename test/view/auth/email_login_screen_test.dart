@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
@@ -21,6 +22,7 @@ const _autocompleteResponse = '["johndoe","johndoe2"]';
 /// Client that walks the happy path of the email login protocol.
 MockClientHandler happyPath({
   Uri Function(Uri url)? recordUrl,
+  void Function(http.Request request)? recordRequest,
   int emailStatus = 204,
   int bearerStatus = 200,
   String autocompleteResponse = _autocompleteResponse,
@@ -32,6 +34,7 @@ MockClientHandler happyPath({
       return mockResponse('', 200);
     }
     recordUrl?.call(request.url);
+    recordRequest?.call(request);
     switch (request.url.path) {
       case '/api/player/autocomplete':
         return mockResponse(autocompleteResponse, autocompleteStatus);
@@ -248,16 +251,8 @@ void main() {
   });
 
   testWidgets('signs the user in and pops when the code is accepted', (tester) async {
-    final urls = <Uri>[];
-    final app = await makeApp(
-      tester,
-      happyPath(
-        recordUrl: (url) {
-          urls.add(url);
-          return url;
-        },
-      ),
-    );
+    final requests = <http.Request>[];
+    final app = await makeApp(tester, happyPath(recordRequest: requests.add));
     await tester.pumpWidget(app);
     final container = ProviderScope.containerOf(
       tester.element(find.byType(EmailLoginScreen)),
@@ -273,8 +268,9 @@ void main() {
     await tester.tap(find.widgetWithText(FilledButton, 'Sign in'));
     await tester.pumpAndSettle();
 
-    final bearerUrl = urls.firstWhere((url) => url.path == '/auth/mobile-code/bearer');
-    expect(bearerUrl.queryParameters, {
+    final bearerRequest = requests.firstWhere((r) => r.url.path == '/auth/mobile-code/bearer');
+    expect(bearerRequest.url.hasQuery, isFalse);
+    expect(bearerRequest.bodyFields, {
       'email': 'johndoe@lichess.org',
       'username': 'johndoe',
       'code': 'xxxxxx',

@@ -121,12 +121,13 @@ class AuthRepository(final Ref _ref, final FlutterAppAuth _appAuth) {
     required String email,
     required String code,
   }) async {
-    final url = lichessUri('/auth/mobile-code/bearer', {
-      'email': email,
-      'username': username,
-      'code': code,
-    });
-    final response = await _ref.read(defaultClientProvider).post(url);
+    final url = lichessUri('/auth/mobile-code/bearer');
+    // The credentials go in the body, never the query string: query params end up verbatim in
+    // proxy access logs and in the app's own http_log table. Requires the server to read the
+    // form body (with query fallback for older app versions).
+    final response = await _ref
+        .read(defaultClientProvider)
+        .post(url, body: {'email': email, 'username': username, 'code': code});
 
     switch (response.statusCode) {
       case 429:

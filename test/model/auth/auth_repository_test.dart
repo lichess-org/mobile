@@ -178,10 +178,12 @@ void main() {
   group('AuthRepository.signInWithEmailCode', () {
     test('exchanges the code for a token and returns the authenticated user', () async {
       Uri? requestedUrl;
+      Map<String, String>? requestedBody;
       final container = await emailLoginContainer((request) {
         switch (request.url.path) {
           case '/auth/mobile-code/bearer':
             requestedUrl = request.url;
+            requestedBody = request.bodyFields;
             return mockResponse('lio_token', 200);
           case '/api/account':
             return mockResponse(_accountResponse, 200);
@@ -194,7 +196,8 @@ void main() {
           .read(authRepositoryProvider)
           .signInWithEmailCode(username: 'johndoe', email: 'johndoe@lichess.org', code: 'xxxxxx');
 
-      expect(requestedUrl?.queryParameters, {
+      expect(requestedUrl?.hasQuery, isFalse);
+      expect(requestedBody, {
         'email': 'johndoe@lichess.org',
         'username': 'johndoe',
         'code': 'xxxxxx',
