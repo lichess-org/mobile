@@ -610,6 +610,15 @@ class Root({required super.position, super.eval}) extends Node {
     return ViewRoot(position: position, eval: eval, children: childrenViews);
   }
 
+  /// View of this root to publish after an evaluation on the current path.
+  ///
+  /// An evaluation only ever changes the current node, so when [recompute] is true publish through
+  /// [viewSharing]: every branch it did not touch stays identical, which is what lets the move list
+  /// skip them — instead of recomputing (and thus replacing) the whole tree. When [recompute] is
+  /// false (the eval string did not change), keep [previous] as-is.
+  ViewRoot viewSharingAfterEval(ViewRoot previous, {required bool recompute}) =>
+      recompute ? viewSharing(previous) : previous;
+
   /// Creates a flat game tree from a PGN string.
   ///
   /// Assumes that the PGN string is valid and that the moves are legal.

@@ -436,12 +436,7 @@ class AnalysisController(final AnalysisOptions options)
   void _refreshCurrentNode({bool recomputeRootView = false}) {
     state = AsyncData(
       state.requireValue.copyWith(
-        // An evaluation only ever changes the current node, so publishing through
-        // viewSharing keeps every branch it did not touch identical — which is what lets the
-        // move list skip them — instead of recomputing (and thus replacing) the whole tree.
-        root: recomputeRootView
-            ? _root.viewSharing(state.requireValue.root)
-            : state.requireValue.root,
+        root: _root.viewSharingAfterEval(state.requireValue.root, recompute: recomputeRootView),
         currentNode: AnalysisCurrentNode.fromNode(_root.nodeAt(state.requireValue.currentPath)),
       ),
     );

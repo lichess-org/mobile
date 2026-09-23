@@ -128,12 +128,14 @@ class StudyController(final StudyOptions options)
   void _refreshCurrentNode({bool recomputeRootView = false}) {
     state = AsyncData(
       state.requireValue.copyWith(
-        // An evaluation only ever changes the current node, so publishing through
-        // viewSharing keeps every branch it did not touch identical — which is what lets the
-        // move list skip them — instead of recomputing (and thus replacing) the whole tree.
-        root: recomputeRootView
-            ? _root.viewSharing(state.requireValue.root)
-            : state.requireValue.root,
+        root: switch (state.requireValue.root) {
+          final ViewRoot previous => _root.viewSharingAfterEval(
+            previous,
+            recompute: recomputeRootView,
+          ),
+          null when recomputeRootView => _root.view,
+          null => null,
+        },
         currentNode: StudyCurrentNode.fromNode(_root.nodeAt(state.requireValue.currentPath)),
       ),
     );
