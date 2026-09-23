@@ -206,20 +206,6 @@ class BroadcastAnalysisController(final BroadcastAnalysisControllerParams params
     }
   }
 
-  @override
-  void onCurrentPathEvalChanged(bool isSameEvalString) {
-    _refreshCurrentNode(recomputeRootView: !isSameEvalString);
-  }
-
-  void _refreshCurrentNode({bool recomputeRootView = false}) {
-    state = AsyncData(
-      state.requireValue.copyWith(
-        root: _root.viewSharingAfterEval(state.requireValue.root, recompute: recomputeRootView),
-        currentNode: AnalysisCurrentNode.fromNode(_root.nodeAt(state.requireValue.currentPath)),
-      ),
-    );
-  }
-
   void _handleSocketEvent(SocketEvent event) {
     if (!state.hasValue) return;
 
@@ -580,6 +566,13 @@ sealed class const BroadcastAnalysisState._()
   @override
   BroadcastAnalysisState withThreatMode(bool engineInThreatMode) =>
       copyWith(engineInThreatMode: engineInThreatMode);
+
+  @override
+  BroadcastAnalysisState withEvalRefresh({required Root tree, required bool recomputeRootView}) =>
+      copyWith(
+        root: tree.viewSharingAfterEval(root, recompute: recomputeRootView),
+        currentNode: AnalysisCurrentNode.fromNode(tree.nodeAt(currentPath)),
+      );
 
   const factory({
     /// Broadcast game ID

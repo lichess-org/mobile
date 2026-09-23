@@ -384,7 +384,7 @@ class RetroController(final RetroOptions options)
 
   @override
   void onCurrentPathEvalChanged(bool isSameEvalString) {
-    _refreshCurrentNode(recomputeRootView: !isSameEvalString);
+    super.onCurrentPathEvalChanged(isSameEvalString);
 
     if (state.requireValue.feedback == RetroFeedback.evalMove) {
       final eval = state.requireValue.currentNode.eval;
@@ -410,15 +410,6 @@ class RetroController(final RetroOptions options)
         }
       }
     }
-  }
-
-  void _refreshCurrentNode({bool recomputeRootView = false}) {
-    state = AsyncData(
-      state.requireValue.copyWith(
-        root: _root.viewSharingAfterEval(state.requireValue.root, recompute: recomputeRootView),
-        currentNode: RetroCurrentNode.fromNode(_root.nodeAt(state.requireValue.currentPath)),
-      ),
-    );
   }
 
   void _updateFeedback() {
@@ -483,6 +474,12 @@ sealed class const RetroState._()
   @override
   RetroState withThreatMode(bool engineInThreatMode) =>
       copyWith(engineInThreatMode: engineInThreatMode);
+
+  @override
+  RetroState withEvalRefresh({required Root tree, required bool recomputeRootView}) => copyWith(
+    root: tree.viewSharingAfterEval(root, recompute: recomputeRootView),
+    currentNode: RetroCurrentNode.fromNode(tree.nodeAt(currentPath)),
+  );
 
   const factory({
     required GameId gameId,

@@ -70,6 +70,10 @@ mixin EvaluationMixinState<State extends EvaluationMixinState<State>> {
       threatModePosition(currentPosition!).isStalemate == false;
 
   State withThreatMode(bool engineInThreatMode);
+
+  /// Returns a copy with the tree view published through [Root.viewSharingAfterEval] and
+  /// `currentNode` rebuilt from the node at [currentPath].
+  State withEvalRefresh({required Root tree, required bool recomputeRootView});
 }
 
 /// A mixin to provide engine evaluation functionality to an [AsyncNotifier].
@@ -80,7 +84,8 @@ mixin EvaluationMixinState<State extends EvaluationMixinState<State>> {
 /// - [positionTree] to provide the tree where the evaluations are stored.
 ///
 /// The parent can implement:
-/// - [onCurrentPathEvalChanged] to refresh the current node after an evaluation.
+/// - [onCurrentPathEvalChanged] to refresh the current node after an evaluation (the default
+///   implementation publishes the eval through [EvaluationMixinState.withEvalRefresh]).
 mixin EngineEvaluationMixin<T extends EvaluationMixinState<T>> on AnyNotifier<AsyncValue<T>, T> {
   /// What keeps this screen's evaluator — and through it, its engine — alive.
   ///
@@ -100,7 +105,7 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState<T>> on AnyNotifier<As
   }
 
   SocketClient? get socketClient;
-  Node get positionTree;
+  Root get positionTree;
 
   EngineEvaluationPrefState get evaluationPrefs => ref.read(engineEvaluationPreferencesProvider);
 
@@ -119,7 +124,11 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState<T>> on AnyNotifier<As
   /// If the evaluation string is the same for both the received and the current evaluation, the
   /// [isSameEvalString] parameter will be `true`. It can be used to avoid refreshing the UI if the
   /// evaluation string is the same.
-  void onCurrentPathEvalChanged(bool isSameEvalString) {}
+  void onCurrentPathEvalChanged(bool isSameEvalString) {
+    state = AsyncData(
+      state.requireValue.withEvalRefresh(tree: positionTree, recomputeRootView: !isSameEvalString),
+    );
+  }
 
   @override
   WhenComplete runBuild() {

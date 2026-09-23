@@ -428,20 +428,6 @@ class AnalysisController(final AnalysisOptions options)
     _addNewLiveMoves([fenEvent.lastMove]);
   }
 
-  @override
-  void onCurrentPathEvalChanged(bool isSameEvalString) {
-    _refreshCurrentNode(recomputeRootView: !isSameEvalString);
-  }
-
-  void _refreshCurrentNode({bool recomputeRootView = false}) {
-    state = AsyncData(
-      state.requireValue.copyWith(
-        root: _root.viewSharingAfterEval(state.requireValue.root, recompute: recomputeRootView),
-        currentNode: AnalysisCurrentNode.fromNode(_root.nodeAt(state.requireValue.currentPath)),
-      ),
-    );
-  }
-
   void onUserMove(Move move, {bool shouldReplace = false}) {
     if (!state.requireValue.currentPosition.isLegal(move)) return;
 
@@ -807,6 +793,12 @@ sealed class const AnalysisState._()
   @override
   AnalysisState withThreatMode(bool engineInThreatMode) =>
       copyWith(engineInThreatMode: engineInThreatMode);
+
+  @override
+  AnalysisState withEvalRefresh({required Root tree, required bool recomputeRootView}) => copyWith(
+    root: tree.viewSharingAfterEval(root, recompute: recomputeRootView),
+    currentNode: AnalysisCurrentNode.fromNode(tree.nodeAt(currentPath)),
+  );
 
   const factory({
     /// The ID of the game if it's a lichess game.

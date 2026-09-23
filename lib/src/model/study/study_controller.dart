@@ -121,27 +121,6 @@ class StudyController(final StudyOptions options)
   }
 
   @override
-  void onCurrentPathEvalChanged(bool isSameEvalString) {
-    _refreshCurrentNode(recomputeRootView: !isSameEvalString);
-  }
-
-  void _refreshCurrentNode({bool recomputeRootView = false}) {
-    state = AsyncData(
-      state.requireValue.copyWith(
-        root: switch (state.requireValue.root) {
-          final ViewRoot previous => _root.viewSharingAfterEval(
-            previous,
-            recompute: recomputeRootView,
-          ),
-          null when recomputeRootView => _root.view,
-          null => null,
-        },
-        currentNode: StudyCurrentNode.fromNode(_root.nodeAt(state.requireValue.currentPath)),
-      ),
-    );
-  }
-
-  @override
   void refreshCurrentBranchOpening() {
     final curState = state.requireValue;
     state = AsyncData(
@@ -659,6 +638,16 @@ sealed class const StudyState._()
   @override
   StudyState withThreatMode(bool engineInThreatMode) =>
       copyWith(engineInThreatMode: engineInThreatMode);
+
+  @override
+  StudyState withEvalRefresh({required Root tree, required bool recomputeRootView}) => copyWith(
+    root: switch (root) {
+      final ViewRoot previous => tree.viewSharingAfterEval(previous, recompute: recomputeRootView),
+      null when recomputeRootView => tree.view,
+      null => null,
+    },
+    currentNode: StudyCurrentNode.fromNode(tree.nodeAt(currentPath)),
+  );
 
   const factory({
     UserId? myId,
