@@ -5,6 +5,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/db/database.dart';
+import 'package:lichess_mobile/src/db/json_row.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
@@ -40,28 +41,17 @@ class const PuzzleBatchStorage(final Database _db, final Ref _ref) {
   Future<PuzzleBatch?> fetch({
     required UserId? userId,
     PuzzleAngle angle = const PuzzleTheme(PuzzleThemeKey.mix),
-  }) async {
-    final list = await _db.query(
-      _tableName,
+  }) {
+    return _db.fetchJsonRow(
+      table: _tableName,
       where: '''
       userId = ? AND
       angle = ?
     ''',
       whereArgs: [userId ?? _anonUserKey, angle.key],
+      fromJson: PuzzleBatch.fromJson,
+      errorMessage: '[PuzzleBatchStorage] cannot fetch puzzles: expected an object',
     );
-
-    final raw = list.firstOrNull?['data'] as String?;
-
-    if (raw != null) {
-      final json = jsonDecode(raw);
-      if (json is! Map<String, dynamic>) {
-        throw const FormatException(
-          '[PuzzleBatchStorage] cannot fetch puzzles: expected an object',
-        );
-      }
-      return PuzzleBatch.fromJson(json);
-    }
-    return null;
   }
 
   Future<void> save({
@@ -69,11 +59,11 @@ class const PuzzleBatchStorage(final Database _db, final Ref _ref) {
     required PuzzleBatch data,
     PuzzleAngle angle = const PuzzleTheme(PuzzleThemeKey.mix),
   }) async {
-    await _db.insert(_tableName, {
+    await _db.saveJsonRow(_tableName, {
       'userId': userId ?? _anonUserKey,
       'angle': angle.key,
       'data': jsonEncode(data.toJson()),
-    }, conflictAlgorithm: ConflictAlgorithm.replace);
+    });
     if (_ref.mounted) _ref.invalidateSelf();
   }
 
@@ -81,7 +71,7 @@ class const PuzzleBatchStorage(final Database _db, final Ref _ref) {
     required UserId? userId,
     PuzzleAngle angle = const PuzzleTheme(PuzzleThemeKey.mix),
   }) async {
-    await _db.delete(
+    await _db.deleteJsonRow(
       _tableName,
       where: '''
       userId = ? AND
