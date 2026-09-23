@@ -46,7 +46,6 @@
   <string name="doYouAcceptChallenge" comment="Title of the challenge confirmation dialog.">Do you accept the challenge?</string>
   <string name="downloadMyGames" comment="Tournament menu action that downloads the user's games from that tournament as a PGN.">Download my games</string>
   <string name="downloadNnueFile" comment="Engine settings button that downloads the Stockfish NNUE file.">Download NNUE file</string>
-  <string name="downloadingNnueFile" comment="Engine settings label shown while the Stockfish NNUE file is downloading.">Downloading NNUE file</string>
   <string name="export" comment="Tooltip of the button that exports app logs for sharing.">Export</string>
   <string name="failedToExportGif" comment="Error snackbar when GIF export fails. %s is the error message.">Failed to export GIF: %s</string>
   <string name="failedToGetGif" comment="Error snackbar when fetching a study chapter GIF fails.">Failed to get GIF</string>
