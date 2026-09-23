@@ -74,22 +74,15 @@ Future<void> submitEmail(WidgetTester tester, {String username = 'johndoe', Stri
 
 void main() {
   testWidgets('moves to the code step once the code has been requested', (tester) async {
-    final urls = <Uri>[];
-    final app = await makeApp(
-      tester,
-      happyPath(
-        recordUrl: (url) {
-          urls.add(url);
-          return url;
-        },
-      ),
-    );
+    final requests = <http.Request>[];
+    final app = await makeApp(tester, happyPath(recordRequest: requests.add));
     await tester.pumpWidget(app);
 
     await submitEmail(tester);
 
-    final emailUrl = urls.firstWhere((url) => url.path == '/auth/mobile-code/email');
-    expect(emailUrl.queryParameters, {'email': 'johndoe@lichess.org', 'username': 'johndoe'});
+    final emailRequest = requests.firstWhere((r) => r.url.path == '/auth/mobile-code/email');
+    expect(emailRequest.url.hasQuery, isFalse);
+    expect(emailRequest.bodyFields, {'email': 'johndoe@lichess.org', 'username': 'johndoe'});
     expect(find.textContaining('johndoe@lichess.org'), findsOneWidget);
     expect(find.widgetWithText(FilledButton, 'Sign in'), findsOneWidget);
   });
@@ -147,23 +140,15 @@ void main() {
       'johndoe@lichess.co.uk',
     ]) {
       testWidgets(email, (tester) async {
-        final urls = <Uri>[];
-        final app = await makeApp(
-          tester,
-          happyPath(
-            recordUrl: (url) {
-              urls.add(url);
-              return url;
-            },
-          ),
-        );
+        final requests = <http.Request>[];
+        final app = await makeApp(tester, happyPath(recordRequest: requests.add));
         await tester.pumpWidget(app);
 
         await submitEmail(tester, email: email);
 
         expect(find.text('Please enter a valid email address.'), findsNothing);
-        final emailUrl = urls.firstWhere((url) => url.path == '/auth/mobile-code/email');
-        expect(emailUrl.queryParameters['email'], email);
+        final emailRequest = requests.firstWhere((r) => r.url.path == '/auth/mobile-code/email');
+        expect(emailRequest.bodyFields['email'], email);
       });
     }
   });
