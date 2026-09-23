@@ -499,10 +499,7 @@ class _PgnTreeViewState() extends State<_PgnTreeView> {
     if (i >= oldParts.length || oldParts[i].length != newParts[i].length) return false;
     final oldPart = oldParts[i];
     final newPart = newParts[i];
-    for (var j = 0; j < newPart.length; j++) {
-      if (!identical(oldPart[j], newPart[j])) return false;
-    }
-    return true;
+    return newPart.indexed.every((e) => identical(oldPart[e.$1], e.$2));
   }
 
   @override
