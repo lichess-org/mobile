@@ -29,7 +29,6 @@ import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
-import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:logging/logging.dart';
 
 part 'broadcast_analysis_controller.freezed.dart';
