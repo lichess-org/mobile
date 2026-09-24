@@ -43,6 +43,38 @@ void main() {
     return mockResponse('', 404);
   });
 
+  /// Starts the notification service with [notificationDisplayMock] as display, and stubs it
+  /// so that showing a notification always succeeds.
+  Future<void> startService() async {
+    final container = await makeContainer(
+      overrides: {
+        notificationDisplayProvider: notificationDisplayProvider.overrideWith(
+          (_) => notificationDisplayMock,
+        ),
+      },
+    );
+
+    when(
+      () => notificationDisplayMock.show(
+        id: any(named: 'id'),
+        title: any(named: 'title'),
+        body: any(named: 'body'),
+        notificationDetails: any(named: 'notificationDetails'),
+        payload: any(named: 'payload'),
+      ),
+    ).thenAnswer((_) => Future.value());
+
+    await container.read(notificationServiceProvider).start();
+  }
+
+  /// Collects the notification responses emitted from now on, until the test ends.
+  List<ParsedLocalNotification> collectResponses() {
+    final responses = <ParsedLocalNotification>[];
+    final subscription = NotificationService.responseStream.listen(responses.add);
+    addTearDown(subscription.cancel);
+    return responses;
+  }
+
   group('Start service:', () {
     test('enables firebase messaging auto-init', () async {
       final container = await makeContainer();
@@ -218,28 +250,6 @@ void main() {
   });
 
   group('FCM foreground display policy:', () {
-    Future<void> startService() async {
-      final container = await makeContainer(
-        overrides: {
-          notificationDisplayProvider: notificationDisplayProvider.overrideWith(
-            (_) => notificationDisplayMock,
-          ),
-        },
-      );
-
-      when(
-        () => notificationDisplayMock.show(
-          id: any(named: 'id'),
-          title: any(named: 'title'),
-          body: any(named: 'body'),
-          notificationDetails: any(named: 'notificationDetails'),
-          payload: any(named: 'payload'),
-        ),
-      ).thenAnswer((_) => Future.value());
-
-      await container.read(notificationServiceProvider).start();
-    }
-
     void verifyNeverShown() {
       verifyNever(
         () => notificationDisplayMock.show(
@@ -302,14 +312,8 @@ void main() {
 
   group('FCM opened message handling:', () {
     test('emits the local notification response of the opened message', () async {
-      final container = await makeContainer();
-
-      final notificationService = container.read(notificationServiceProvider);
-
-      await notificationService.start();
-
-      final responses = <ParsedLocalNotification>[];
-      final subscription = NotificationService.responseStream.listen(responses.add);
+      await startService();
+      final responses = collectResponses();
 
       testBinding.firebaseMessaging.onMessageOpenedApp.add(
         const RemoteMessage(
@@ -324,19 +328,11 @@ void main() {
       expect(notification, isA<ChallengeCreatedNotification>());
       expect(response.id, notification.id);
       expect(response.payload, jsonEncode(notification.payload));
-
-      await subscription.cancel();
     });
 
     test('emits nothing when an unhandled message is opened', () async {
-      final container = await makeContainer();
-
-      final notificationService = container.read(notificationServiceProvider);
-
-      await notificationService.start();
-
-      final responses = <ParsedLocalNotification>[];
-      final subscription = NotificationService.responseStream.listen(responses.add);
+      await startService();
+      final responses = collectResponses();
 
       testBinding.firebaseMessaging.onMessageOpenedApp.add(
         const RemoteMessage(data: {'lichess.type': 'unknown'}),
@@ -344,8 +340,6 @@ void main() {
       await Future<void>.delayed(Duration.zero);
 
       expect(responses, isEmpty);
-
-      await subscription.cancel();
     });
   });
 }
