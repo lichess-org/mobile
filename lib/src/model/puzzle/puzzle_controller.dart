@@ -76,7 +76,7 @@ class PuzzleController(final PuzzleContext initialContext) extends Notifier<Puzz
         state = state.copyWith(glicko: glicko);
       }
     } catch (e, st) {
-      _logger.fine('Failed to update user rating:', e, st);
+      _logger.warning('Failed to update user rating:', e, st);
     }
   }
 

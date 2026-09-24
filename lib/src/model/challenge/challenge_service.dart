@@ -177,7 +177,7 @@ class ChallengeService(final Ref ref) {
     try {
       await ref.read(createGameServiceProvider).cancelSeek();
     } catch (e, st) {
-      _logger.fine('Failed to cancel pending seek before accepting challenge:', e, st);
+      _logger.warning('Failed to cancel pending seek before accepting challenge:', e, st);
     }
 
     final challengeRepo = ref.read(challengeRepositoryProvider);
