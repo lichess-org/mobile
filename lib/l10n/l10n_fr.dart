@@ -159,11 +159,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get mobileFailedToGetGif => 'Failed to get GIF';
 
   @override
-  String mobileFailedToLoadLogs(String param) {
-    return 'Failed to load logs: $param';
-  }
-
-  @override
   String get mobileFeedbackButton => 'Commentaires';
 
   @override
@@ -224,12 +219,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
 
   @override
-  String get mobileJoinTeams => 'Join teams';
-
-  @override
-  String get mobileLichessTv => 'Lichess TV';
-
-  @override
   String get mobileLiveStreamers => 'Diffuseurs en direct';
 
   @override
@@ -269,12 +258,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get mobileNoTeamUpdatesYet => 'No team updates yet';
 
   @override
-  String get mobileNoWorriesGameWillBeSaved => 'No worries, your game will be saved.';
-
-  @override
-  String get mobileNoWorriesScoreWillBeSaved => 'No worries, your score will be saved locally.';
-
-  @override
   String get mobileNotAllFeaturesAreAvailable => 'Prenez note que certaines fonctionnalités de l\'ancienne appli ou du site Web ne sont pas disponibles, mais nous ajoutons constamment des fonctionnalités.';
 
   @override
@@ -307,16 +290,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get mobilePgnCopied => 'PGN copied.';
 
   @override
-  String get mobilePleaseEnterUsername => 'Please enter your username.';
-
-  @override
   String get mobilePleaseEnterValidEmail => 'Please enter a valid email address.';
 
   @override
   String get mobilePositionLeft => 'Côté gauche';
-
-  @override
-  String get mobilePositionNotInTablebase => 'Position not in tablebase.';
 
   @override
   String get mobilePositionRight => 'Côté droit';
@@ -358,16 +335,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get mobileRemoveBookmark => 'Supprimer le favori';
 
   @override
-  String get mobileReport => 'Report';
-
-  @override
   String get mobileSearchIsEmpty => 'Search is empty';
 
   @override
   String get mobileSearchLogs => 'Search logs...';
-
-  @override
-  String get mobileSelectALichessPlayer => 'Select a Lichess player';
 
   @override
   String get mobileSelectPlayerInSettings => 'Select a Lichess player in the settings.';
@@ -518,9 +489,6 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get mobileTapToRefresh => 'Tap to refresh';
-
-  @override
-  String get mobileTeamUpdatesAppearHere => 'Updates from teams you join will appear here.';
 
   @override
   String get mobileTheme => 'Thème';

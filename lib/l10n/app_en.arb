@@ -68,14 +68,6 @@
     }
   },
   "mobileFailedToGetGif": "Failed to get GIF",
-  "mobileFailedToLoadLogs": "Failed to load logs: {param}",
-  "@mobileFailedToLoadLogs": {
-    "placeholders": {
-      "param": {
-        "type": "String"
-      }
-    }
-  },
   "mobileFeedbackButton": "Feedback",
   "mobileFilters": "Filters",
   "mobileFlipClock": "Flip clock",
@@ -118,8 +110,6 @@
   },
   "mobileIndexing": "Indexing",
   "mobileInvalidOrExpiredLoginCode": "This code is invalid or has expired.",
-  "mobileJoinTeams": "Join teams",
-  "mobileLichessTv": "Lichess TV",
   "mobileLiveStreamers": "Live streamers",
   "mobileLocalDatabaseSize": "Local database size",
   "mobileLongGamesTakeMoreTime": "Long games take a bit more time...",
@@ -133,8 +123,6 @@
   "mobileNoLogsToShow": "No logs to show",
   "mobileNoSearchResults": "No results",
   "mobileNoTeamUpdatesYet": "No team updates yet",
-  "mobileNoWorriesGameWillBeSaved": "No worries, your game will be saved.",
-  "mobileNoWorriesScoreWillBeSaved": "No worries, your score will be saved locally.",
   "mobileNotAllFeaturesAreAvailable": "Please note that not all features from the old app or the website are currently available, but we are adding features all the time.",
   "mobileNotFollowingAnyUser": "You are not following any users.",
   "mobileOkButton": "OK",
@@ -152,10 +140,8 @@
     }
   },
   "mobilePgnCopied": "PGN copied.",
-  "mobilePleaseEnterUsername": "Please enter your username.",
   "mobilePleaseEnterValidEmail": "Please enter a valid email address.",
   "mobilePositionLeft": "Left",
-  "mobilePositionNotInTablebase": "Position not in tablebase.",
   "mobilePositionRight": "Right",
   "mobilePracticeMode": "Practice mode",
   "mobilePrefMagnifyDraggedPiece": "Magnify dragged piece",
@@ -169,10 +155,8 @@
   "mobileRateThisApp": "Rate this app",
   "mobileRecentSearches": "Recent searches",
   "mobileRemoveBookmark": "Remove bookmark",
-  "mobileReport": "Report",
   "mobileSearchIsEmpty": "Search is empty",
   "mobileSearchLogs": "Search logs...",
-  "mobileSelectALichessPlayer": "Select a Lichess player",
   "mobileSelectPlayerInSettings": "Select a Lichess player in the settings.",
   "mobileSelectAStudy": "Select a study",
   "mobileSendMeACode": "Send me a code",
@@ -223,7 +207,6 @@
   "mobileSystemColors": "System colors",
   "mobileTablebaseOffline": "Tablebase is not available offline.",
   "mobileTapToRefresh": "Tap to refresh",
-  "mobileTeamUpdatesAppearHere": "Updates from teams you join will appear here.",
   "mobileTheme": "Theme",
   "mobileTimespan": "Timespan",
   "mobileTooManyLoginAttempts": "Too many attempts. Please try again later.",

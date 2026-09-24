@@ -484,12 +484,6 @@ abstract class AppLocalizations {
   /// **'Failed to get GIF'**
   String get mobileFailedToGetGif;
 
-  /// No description provided for @mobileFailedToLoadLogs.
-  ///
-  /// In en, this message translates to:
-  /// **'Failed to load logs: {param}'**
-  String mobileFailedToLoadLogs(String param);
-
   /// No description provided for @mobileFeedbackButton.
   ///
   /// In en, this message translates to:
@@ -598,18 +592,6 @@ abstract class AppLocalizations {
   /// **'This code is invalid or has expired.'**
   String get mobileInvalidOrExpiredLoginCode;
 
-  /// No description provided for @mobileJoinTeams.
-  ///
-  /// In en, this message translates to:
-  /// **'Join teams'**
-  String get mobileJoinTeams;
-
-  /// No description provided for @mobileLichessTv.
-  ///
-  /// In en, this message translates to:
-  /// **'Lichess TV'**
-  String get mobileLichessTv;
-
   /// No description provided for @mobileLiveStreamers.
   ///
   /// In en, this message translates to:
@@ -688,18 +670,6 @@ abstract class AppLocalizations {
   /// **'No team updates yet'**
   String get mobileNoTeamUpdatesYet;
 
-  /// No description provided for @mobileNoWorriesGameWillBeSaved.
-  ///
-  /// In en, this message translates to:
-  /// **'No worries, your game will be saved.'**
-  String get mobileNoWorriesGameWillBeSaved;
-
-  /// No description provided for @mobileNoWorriesScoreWillBeSaved.
-  ///
-  /// In en, this message translates to:
-  /// **'No worries, your score will be saved locally.'**
-  String get mobileNoWorriesScoreWillBeSaved;
-
   /// No description provided for @mobileNotAllFeaturesAreAvailable.
   ///
   /// In en, this message translates to:
@@ -760,12 +730,6 @@ abstract class AppLocalizations {
   /// **'PGN copied.'**
   String get mobilePgnCopied;
 
-  /// No description provided for @mobilePleaseEnterUsername.
-  ///
-  /// In en, this message translates to:
-  /// **'Please enter your username.'**
-  String get mobilePleaseEnterUsername;
-
   /// No description provided for @mobilePleaseEnterValidEmail.
   ///
   /// In en, this message translates to:
@@ -777,12 +741,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Left'**
   String get mobilePositionLeft;
-
-  /// No description provided for @mobilePositionNotInTablebase.
-  ///
-  /// In en, this message translates to:
-  /// **'Position not in tablebase.'**
-  String get mobilePositionNotInTablebase;
 
   /// No description provided for @mobilePositionRight.
   ///
@@ -862,12 +820,6 @@ abstract class AppLocalizations {
   /// **'Remove bookmark'**
   String get mobileRemoveBookmark;
 
-  /// No description provided for @mobileReport.
-  ///
-  /// In en, this message translates to:
-  /// **'Report'**
-  String get mobileReport;
-
   /// No description provided for @mobileSearchIsEmpty.
   ///
   /// In en, this message translates to:
@@ -879,12 +831,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Search logs...'**
   String get mobileSearchLogs;
-
-  /// No description provided for @mobileSelectALichessPlayer.
-  ///
-  /// In en, this message translates to:
-  /// **'Select a Lichess player'**
-  String get mobileSelectALichessPlayer;
 
   /// No description provided for @mobileSelectPlayerInSettings.
   ///
@@ -1185,12 +1131,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Tap to refresh'**
   String get mobileTapToRefresh;
-
-  /// No description provided for @mobileTeamUpdatesAppearHere.
-  ///
-  /// In en, this message translates to:
-  /// **'Updates from teams you join will appear here.'**
-  String get mobileTeamUpdatesAppearHere;
 
   /// No description provided for @mobileTheme.
   ///
