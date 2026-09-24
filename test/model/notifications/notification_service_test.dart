@@ -217,6 +217,57 @@ void main() {
     });
   });
 
+  group('FCM foreground display policy:', () {
+    Future<void> startService() async {
+      final container = await makeContainer(
+        overrides: {
+          notificationDisplayProvider: notificationDisplayProvider.overrideWith(
+            (_) => notificationDisplayMock,
+          ),
+        },
+      );
+
+      await container.read(notificationServiceProvider).start();
+    }
+
+    void verifyNeverShown() {
+      verifyNever(
+        () => notificationDisplayMock.show(
+          id: any(named: 'id'),
+          title: any(named: 'title'),
+          body: any(named: 'body'),
+          notificationDetails: any(named: 'notificationDetails'),
+          payload: any(named: 'payload'),
+        ),
+      );
+    }
+
+    test('a message without a platform notification is not shown', () async {
+      await startService();
+
+      testBinding.firebaseMessaging.onMessage.add(
+        const RemoteMessage(data: {'lichess.type': 'gameMove', 'lichess.fullId': '9wlmxmibr9gh'}),
+      );
+      await Future<void>.delayed(Duration.zero);
+
+      verifyNeverShown();
+    });
+
+    test('a challenge creation is left to the socket', () async {
+      await startService();
+
+      testBinding.firebaseMessaging.onMessage.add(
+        const RemoteMessage(
+          data: {'lichess.type': 'challengeCreate', 'lichess.challengeId': 'challenging'},
+          notification: RemoteNotification(title: 'Challenge', body: 'Play me!'),
+        ),
+      );
+      await Future<void>.delayed(Duration.zero);
+
+      verifyNeverShown();
+    });
+  });
+
   group('FCM opened message handling:', () {
     test('emits the local notification response of the opened message', () async {
       final container = await makeContainer();
