@@ -8,7 +8,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
-import 'package:lichess_mobile/src/model/offline_computer/practice_comment.dart';
+import 'package:lichess_mobile/src/model/engine/practice_comment.dart';
 import 'package:lichess_mobile/src/model/practice/practice_engine_controller.dart';
 import 'package:lichess_mobile/src/model/practice/practice_structure.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';

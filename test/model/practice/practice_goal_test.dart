@@ -3,8 +3,8 @@ import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
-import 'package:lichess_mobile/src/model/offline_computer/practice_analyser.dart';
-import 'package:lichess_mobile/src/model/offline_computer/practice_comment.dart';
+import 'package:lichess_mobile/src/model/engine/practice_analyser.dart';
+import 'package:lichess_mobile/src/model/engine/practice_comment.dart';
 import 'package:lichess_mobile/src/model/practice/practice_goal.dart';
 
 Position _position(String fen) => Chess.fromSetup(Setup.parseFen(fen));

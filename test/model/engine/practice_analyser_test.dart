@@ -9,12 +9,12 @@ import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_context.dart';
 import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
+import 'package:lichess_mobile/src/model/engine/practice_analyser.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
-import 'package:lichess_mobile/src/model/offline_computer/practice_analyser.dart';
 
 import '../../binding.dart';
 import '../../test_container.dart';
-import '../engine/fake_engine.dart';
+import 'fake_engine.dart';
 
 /// Long enough for the evaluator's throttle to have let the last info line through.
 Future<void> settleEvals() =>

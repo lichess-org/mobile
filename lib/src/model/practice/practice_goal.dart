@@ -2,8 +2,8 @@ import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
-import 'package:lichess_mobile/src/model/offline_computer/practice_analyser.dart';
-import 'package:lichess_mobile/src/model/offline_computer/practice_comment.dart';
+import 'package:lichess_mobile/src/model/engine/practice_analyser.dart';
+import 'package:lichess_mobile/src/model/engine/practice_comment.dart';
 
 part 'practice_goal.freezed.dart';
 

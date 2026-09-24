@@ -13,15 +13,6 @@ final _logger = Logger('PracticeAnalyser');
 ///
 /// Lower-end devices may not reach it before the search time runs out, in which case whatever the
 /// search did reach is used instead — it is a threshold for unlocking, not a requirement.
-///
-/// Lower than the 18 the old hint burst stopped at, because it no longer *is* where the search
-/// stops: it is only where the player stops waiting, and the search runs on to
-/// [kPracticeTargetDepth] refining what it found. A shallower unlock costs nothing that the next
-/// second of searching does not put back.
-///
-/// Lower again in debug, where the engine is genuinely slower: `multistockfish` compiles Stockfish
-/// without `-O3 -DNDEBUG -funroll-loops` for the Debug configuration, and a debug run would
-/// otherwise spend the whole of the player's turn getting to a hint.
 // TODO: consider using searched nodes instead of depth
 const kPracticeUsableDepth = kDebugMode ? 13 : 15;
 
