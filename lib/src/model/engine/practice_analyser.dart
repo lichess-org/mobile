@@ -185,7 +185,10 @@ class PracticeAnalyser({
     _stopSearch();
   }
 
-  /// Forgets every evaluation of this game. For starting or loading another one.
+  /// Forgets every evaluation made so far, and gives the engine up.
+  ///
+  /// For starting or loading another game, and for replaying the same one from the start: an
+  /// evaluation kept across a retry would hand the player the same answer to the same move again.
   void clear() {
     yieldEngine();
     _restartedWork = null;

@@ -285,6 +285,21 @@ void main() {
       expect(state.steps, isEmpty);
       expect(state.canPlay, isTrue);
     });
+
+    test('retry analyses the chapter again instead of replaying the evals it kept', () async {
+      engine.script(_queenAndRook, mate: 5, best: 'h1h6');
+      engine.script(_afterRh6, mate: 5, best: 'd6c5');
+      final (container, controller) = await start(chapter);
+      await _waitFor(() => stateOf(container, chapter).eval != null);
+      final before = engine.searched.length;
+
+      controller().retry();
+
+      // Searched again: an eval kept across the retry would answer the same move with the same
+      // move again, and a chapter the search got wrong at the depth it had would stay wrong.
+      await _waitFor(() => engine.searched.length > before);
+      expect(engine.searched.last, _epd(_queenAndRook));
+    });
   });
 
   group('PracticeEngineState', () {

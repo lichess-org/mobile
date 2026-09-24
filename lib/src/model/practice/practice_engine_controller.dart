@@ -156,10 +156,12 @@ class PracticeEngineController(final PracticeEngineChapter _chapter)
     );
   }
 
-  /// Starts the chapter over from its initial position.
+  /// Starts the chapter over from its initial position, forgetting what was learned about it.
+  ///
+  /// The evaluations go with it, and the chapter is analysed from scratch.
   void retry() {
     _attempt++;
-    _analyser.yieldEngine();
+    _analyser.clear();
     state = PracticeEngineState.initial(_chapter, _initialPosition);
     _start();
   }
