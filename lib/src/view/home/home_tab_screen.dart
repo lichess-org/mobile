@@ -1087,7 +1087,7 @@ class _NNUEFilesOutdatedTipState() extends ConsumerState<_NNUEFilesOutdatedTip> 
                     rootNavigator: true,
                   ).push(EngineSettingsScreen.buildRoute());
                 },
-                child: const Text('Settings'),
+                child: Text(context.l10n.settingsSettings),
               ),
             ],
           );
