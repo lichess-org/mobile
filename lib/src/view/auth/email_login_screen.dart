@@ -208,7 +208,7 @@ class _EmailFormState() extends ConsumerState<_EmailForm> {
             validator: (value) {
               final email = value?.trim() ?? '';
               if (!_emailRegExp.hasMatch(email)) {
-                return 'Please enter a valid email address.';
+                return context.l10n.error_email;
               }
               return null;
             },

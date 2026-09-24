@@ -71,9 +71,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileChooseCustomBackground => 'Choose a custom background';
 
   @override
-  String get mobileClearAllLogs => 'Clear all logs';
-
-  @override
   String get mobileClearButton => '清空';
 
   @override
@@ -151,11 +148,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileExport => 'Export';
 
   @override
-  String mobileFailedToExportGif(String param) {
-    return 'Failed to export GIF: $param';
-  }
-
-  @override
   String get mobileFailedToGetGif => 'Failed to get GIF';
 
   @override
@@ -175,9 +167,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get mobileGetFeedbackOnMoves => 'Get feedback on your moves';
-
-  @override
-  String get mobileGifExportOptions => 'GIF Export Options';
 
   @override
   String mobileGoodEvening(String param) {
@@ -213,9 +202,6 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get mobileIndexing => 'Indexing';
-
-  @override
   String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
 
   @override
@@ -249,13 +235,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileNextMistake => 'Next mistake';
 
   @override
-  String get mobileNoLogsToShow => 'No logs to show';
-
-  @override
   String get mobileNoSearchResults => '无结果';
-
-  @override
-  String get mobileNoTeamUpdatesYet => 'No team updates yet';
 
   @override
   String get mobileNotAllFeaturesAreAvailable => '请注意，旧版应用或网站中的部分功能目前暂未提供，但我们正在持续添加新功能。';
@@ -268,9 +248,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get mobileOngoingGames => 'Ongoing Games';
-
-  @override
-  String get mobileOpenSettings => 'Open settings';
 
   @override
   String get mobileOverTheBoard => '离线棋盘';
@@ -288,9 +265,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get mobilePgnCopied => 'PGN copied.';
-
-  @override
-  String get mobilePleaseEnterValidEmail => 'Please enter a valid email address.';
 
   @override
   String get mobilePositionLeft => '左侧';
@@ -333,15 +307,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get mobileRemoveBookmark => '移除书签';
-
-  @override
-  String get mobileSearchIsEmpty => 'Search is empty';
-
-  @override
-  String get mobileSearchLogs => 'Search logs...';
-
-  @override
-  String get mobileSelectPlayerInSettings => 'Select a Lichess player in the settings.';
 
   @override
   String get mobileSelectAStudy => 'Select a study';

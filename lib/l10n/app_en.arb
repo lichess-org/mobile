@@ -26,7 +26,6 @@
   "mobileChapterName": "Chapter Name",
   "mobileChessEngine": "Chess engine",
   "mobileChooseCustomBackground": "Choose a custom background",
-  "mobileClearAllLogs": "Clear all logs",
   "mobileClearButton": "Clear",
   "mobileCodeFieldLabel": "Code",
   "mobileCodeExpiresMessage": "The code expires after 5 minutes and can only be used once.",
@@ -59,14 +58,6 @@
   "mobileDoYouAcceptChallenge": "Do you accept the challenge?",
   "mobileDownloadMyGames": "Download my games",
   "mobileExport": "Export",
-  "mobileFailedToExportGif": "Failed to export GIF: {param}",
-  "@mobileFailedToExportGif": {
-    "placeholders": {
-      "param": {
-        "type": "String"
-      }
-    }
-  },
   "mobileFailedToGetGif": "Failed to get GIF",
   "mobileFeedbackButton": "Feedback",
   "mobileFilters": "Filters",
@@ -74,7 +65,6 @@
   "mobileFlipPiecesAfterMove": "Flip pieces and opponent info after move",
   "mobileGenerateGif": "Generating GIF...",
   "mobileGetFeedbackOnMoves": "Get feedback on your moves",
-  "mobileGifExportOptions": "GIF Export Options",
   "mobileGoodEvening": "Good evening, {param}",
   "@mobileGoodEvening": {
     "placeholders": {
@@ -108,7 +98,6 @@
       }
     }
   },
-  "mobileIndexing": "Indexing",
   "mobileInvalidOrExpiredLoginCode": "This code is invalid or has expired.",
   "mobileLiveStreamers": "Live streamers",
   "mobileLocalDatabaseSize": "Local database size",
@@ -120,14 +109,11 @@
   "mobileNewGame": "New game",
   "mobileNewStockfishAvailable": "New Stockfish version available! Go to the settings to download the updated NNUE file.",
   "mobileNextMistake": "Next mistake",
-  "mobileNoLogsToShow": "No logs to show",
   "mobileNoSearchResults": "No results",
-  "mobileNoTeamUpdatesYet": "No team updates yet",
   "mobileNotAllFeaturesAreAvailable": "Please note that not all features from the old app or the website are currently available, but we are adding features all the time.",
   "mobileNotFollowingAnyUser": "You are not following any users.",
   "mobileOkButton": "OK",
   "mobileOngoingGames": "Ongoing Games",
-  "mobileOpenSettings": "Open settings",
   "mobileOverTheBoard": "Over the board",
   "mobilePasteFromClipboard": "Paste from clipboard",
   "mobilePerformanceCards": "Performance Cards",
@@ -140,7 +126,6 @@
     }
   },
   "mobilePgnCopied": "PGN copied.",
-  "mobilePleaseEnterValidEmail": "Please enter a valid email address.",
   "mobilePositionLeft": "Left",
   "mobilePositionRight": "Right",
   "mobilePracticeMode": "Practice mode",
@@ -155,9 +140,6 @@
   "mobileRateThisApp": "Rate this app",
   "mobileRecentSearches": "Recent searches",
   "mobileRemoveBookmark": "Remove bookmark",
-  "mobileSearchIsEmpty": "Search is empty",
-  "mobileSearchLogs": "Search logs...",
-  "mobileSelectPlayerInSettings": "Select a Lichess player in the settings.",
   "mobileSelectAStudy": "Select a study",
   "mobileSendMeACode": "Send me a code",
   "mobileServerAnalysis": "Server analysis",

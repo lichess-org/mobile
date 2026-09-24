@@ -57,9 +57,9 @@ class _BroadcastSearchScreenState() extends State<BroadcastSearchScreen> {
       body: (searchTerm != null)
           ? (searchTerm!.isNotEmpty)
                 ? _Body(searchTerm!)
-                : const Center(
+                : Center(
                     child: Text(
-                      'Search is empty', // TODO: translate
+                      context.l10n.mobileNoSearchResults,
                       style: Styles.noResultTextStyle,
                     ),
                   )

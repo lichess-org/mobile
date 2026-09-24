@@ -70,10 +70,10 @@ class _GifExportState() extends ConsumerState<GifExport> {
           chessClock: chessClock,
         ),
       );
-    } catch (e) {
+    } catch (_) {
       if (mounted) {
         ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Failed to export GIF: $e')));
+            .showSnackBar(SnackBar(content: Text(context.l10n.mobileFailedToGetGif)));
       }
     } finally {
       _clearTimers();
@@ -100,7 +100,7 @@ class _GifExportState() extends ConsumerState<GifExport> {
       padding: const EdgeInsets.only(bottom: 16),
       children: [
         ListSection(
-          header: const Text('GIF Export Options'),
+          header: const Text('Save game as GIF'),
           materialFilledCard: true,
           children: [
             SwitchSettingTile(

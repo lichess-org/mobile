@@ -316,12 +316,6 @@ abstract class AppLocalizations {
   /// **'Choose a custom background'**
   String get mobileChooseCustomBackground;
 
-  /// No description provided for @mobileClearAllLogs.
-  ///
-  /// In en, this message translates to:
-  /// **'Clear all logs'**
-  String get mobileClearAllLogs;
-
   /// No description provided for @mobileClearButton.
   ///
   /// In en, this message translates to:
@@ -472,12 +466,6 @@ abstract class AppLocalizations {
   /// **'Export'**
   String get mobileExport;
 
-  /// No description provided for @mobileFailedToExportGif.
-  ///
-  /// In en, this message translates to:
-  /// **'Failed to export GIF: {param}'**
-  String mobileFailedToExportGif(String param);
-
   /// No description provided for @mobileFailedToGetGif.
   ///
   /// In en, this message translates to:
@@ -519,12 +507,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Get feedback on your moves'**
   String get mobileGetFeedbackOnMoves;
-
-  /// No description provided for @mobileGifExportOptions.
-  ///
-  /// In en, this message translates to:
-  /// **'GIF Export Options'**
-  String get mobileGifExportOptions;
 
   /// No description provided for @mobileGoodEvening.
   ///
@@ -579,12 +561,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'If an account matches {param1}, a {param2} character code was sent to it. Check your inbox and enter the code below.'**
   String mobileIfAccountMatchesCodeSent(String param1, String param2);
-
-  /// No description provided for @mobileIndexing.
-  ///
-  /// In en, this message translates to:
-  /// **'Indexing'**
-  String get mobileIndexing;
 
   /// No description provided for @mobileInvalidOrExpiredLoginCode.
   ///
@@ -652,23 +628,11 @@ abstract class AppLocalizations {
   /// **'Next mistake'**
   String get mobileNextMistake;
 
-  /// No description provided for @mobileNoLogsToShow.
-  ///
-  /// In en, this message translates to:
-  /// **'No logs to show'**
-  String get mobileNoLogsToShow;
-
   /// No description provided for @mobileNoSearchResults.
   ///
   /// In en, this message translates to:
   /// **'No results'**
   String get mobileNoSearchResults;
-
-  /// No description provided for @mobileNoTeamUpdatesYet.
-  ///
-  /// In en, this message translates to:
-  /// **'No team updates yet'**
-  String get mobileNoTeamUpdatesYet;
 
   /// No description provided for @mobileNotAllFeaturesAreAvailable.
   ///
@@ -693,12 +657,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Ongoing Games'**
   String get mobileOngoingGames;
-
-  /// No description provided for @mobileOpenSettings.
-  ///
-  /// In en, this message translates to:
-  /// **'Open settings'**
-  String get mobileOpenSettings;
 
   /// No description provided for @mobileOverTheBoard.
   ///
@@ -729,12 +687,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'PGN copied.'**
   String get mobilePgnCopied;
-
-  /// No description provided for @mobilePleaseEnterValidEmail.
-  ///
-  /// In en, this message translates to:
-  /// **'Please enter a valid email address.'**
-  String get mobilePleaseEnterValidEmail;
 
   /// No description provided for @mobilePositionLeft.
   ///
@@ -819,24 +771,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Remove bookmark'**
   String get mobileRemoveBookmark;
-
-  /// No description provided for @mobileSearchIsEmpty.
-  ///
-  /// In en, this message translates to:
-  /// **'Search is empty'**
-  String get mobileSearchIsEmpty;
-
-  /// No description provided for @mobileSearchLogs.
-  ///
-  /// In en, this message translates to:
-  /// **'Search logs...'**
-  String get mobileSearchLogs;
-
-  /// No description provided for @mobileSelectPlayerInSettings.
-  ///
-  /// In en, this message translates to:
-  /// **'Select a Lichess player in the settings.'**
-  String get mobileSelectPlayerInSettings;
 
   /// No description provided for @mobileSelectAStudy.
   ///

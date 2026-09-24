@@ -20,7 +20,6 @@
   <string name="chapterName" comment="Label of the text field to name a new study chapter.">Chapter Name</string>
   <string name="chessEngine" comment="Chess engine settings screen title.">Chess engine</string>
   <string name="chooseCustomBackground" comment="Theme settings entry that opens the custom background picker.">Choose a custom background</string>
-  <string name="clearAllLogs" comment="Tooltip of the button that clears all HTTP logs.">Clear all logs</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short." maxLength="10">Clear</string>
   <string name="codeFieldLabel" comment="Label of the text field where the user enters their email login code.">Code</string>
   <string name="codeExpiresMessage" comment="Shown below the login code field in the email sign in flow.">The code expires after 5 minutes and can only be used once.</string>
@@ -46,7 +45,6 @@
   <string name="doYouAcceptChallenge" comment="Title of the challenge confirmation dialog.">Do you accept the challenge?</string>
   <string name="downloadMyGames" comment="Tournament menu action that downloads the user's games from that tournament as a PGN.">Download my games</string>
   <string name="export" comment="Tooltip of the button that exports app logs for sharing.">Export</string>
-  <string name="failedToExportGif" comment="Error snackbar when GIF export fails. %s is the error message.">Failed to export GIF: %s</string>
   <string name="failedToGetGif" comment="Error snackbar when fetching a study chapter GIF fails.">Failed to get GIF</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Feedback</string>
   <string name="filters" comment="Label of the board editor bottom bar button that opens position filters.">Filters</string>
@@ -54,7 +52,6 @@
   <string name="flipPiecesAfterMove" comment="Over the board display setting: rotate the board after each move.">Flip pieces and opponent info after move</string>
   <string name="generateGif" comment="Status message shown while a game GIF is being generated.">Generating GIF...</string>
   <string name="getFeedbackOnMoves" comment="Subtitle of the practice mode switch when playing against the offline computer.">Get feedback on your moves</string>
-  <string name="gifExportOptions" comment="Header of the GIF export options section.">GIF Export Options</string>
   <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Good evening, %s</string>
   <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Good evening</string>
   <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Good day, %s</string>
@@ -64,7 +61,6 @@
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Home</string>
   <string name="httpLogs" comment="Settings screen entry that opens the HTTP request log.">HTTP logs</string>
   <string name="ifAccountMatchesCodeSent" comment="Shown after requesting an email login code. %1$s is the email address, %2$s is the code length.">If an account matches %1$s, a %2$s character code was sent to it. Check your inbox and enter the code below.</string>
-  <string name="indexing" comment="Accessibility label of the progress indicator shown while the opening explorer is indexing.">Indexing</string>
   <string name="invalidOrExpiredLoginCode" comment="Error shown when an email login code is wrong or expired.">This code is invalid or has expired.</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Live streamers</string>
   <string name="localDatabaseSize" comment="Settings screen entry showing the size of the local database.">Local database size</string>
@@ -76,20 +72,16 @@
   <string name="newGame" comment="New game button in OTB and play against offline computer features">New game</string>
   <string name="newStockfishAvailable" comment="Tip card on the home screen shown when a newer Stockfish NNUE file is available.">New Stockfish version available! Go to the settings to download the updated NNUE file.</string>
   <string name="nextMistake" comment="Bottom bar button in the retro (mistake finder) analysis mode.">Next mistake</string>
-  <string name="noLogsToShow" comment="Shown in the HTTP and app log screens when there are no logs.">No logs to show</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">No results</string>
-  <string name="noTeamUpdatesYet" comment="Title of the empty state on the team updates screen.">No team updates yet</string>
   <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Please note that not all features from the old app or the website are currently available, but we are adding features all the time.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">You are not following any users.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short." maxLength="10">OK</string>
   <string name="ongoingGames" comment="Label of the home screen 'Ongoing Games' widget in the home customization editor.">Ongoing Games</string>
-  <string name="openSettings" comment="Button on the home screen NNUE tip card that opens engine settings.">Open settings</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Over the board</string>
   <string name="pasteFromClipboard" comment="Tooltip of the paste button in study chapter creation.">Paste from clipboard</string>
   <string name="performanceCards" comment="Label of the home screen performance cards widget in the home customization editor.">Performance Cards</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Players with "%s"</string>
   <string name="pgnCopied" comment="Snackbar shown after copying a PGN line to the clipboard.">PGN copied.</string>
-  <string name="pleaseEnterValidEmail" comment="Form validation error when the email field is invalid on the email sign in screen.">Please enter a valid email address.</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Left</string>
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Right</string>
   <string name="practiceMode" comment="Offline computer game setting that enables practice mode.">Practice mode</string>
@@ -104,9 +96,6 @@
   <string name="rateThisApp" comment="Settings screen entry that opens the app store listing.">Rate this app</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Recent searches</string>
   <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space is constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Remove bookmark</string>
-  <string name="searchIsEmpty" comment="Shown when the broadcast search query is empty.">Search is empty</string>
-  <string name="searchLogs" comment="Hint text of the search bar in the HTTP and app log screens.">Search logs...</string>
-  <string name="selectPlayerInSettings" comment="Shown in the opening explorer when the player database is selected but no player is set.">Select a Lichess player in the settings.</string>
   <string name="selectAStudy" comment="Screen title when choosing a study to add a PGN to.">Select a study</string>
   <string name="sendMeACode" comment="Button that requests an email login code on the email sign in screen.">Send me a code</string>
   <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.">Server analysis</string>

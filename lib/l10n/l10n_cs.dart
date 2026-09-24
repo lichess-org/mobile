@@ -71,9 +71,6 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileChooseCustomBackground => 'Choose a custom background';
 
   @override
-  String get mobileClearAllLogs => 'Clear all logs';
-
-  @override
   String get mobileClearButton => 'Vymazat';
 
   @override
@@ -151,11 +148,6 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileExport => 'Export';
 
   @override
-  String mobileFailedToExportGif(String param) {
-    return 'Failed to export GIF: $param';
-  }
-
-  @override
   String get mobileFailedToGetGif => 'Failed to get GIF';
 
   @override
@@ -175,9 +167,6 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get mobileGetFeedbackOnMoves => 'Get feedback on your moves';
-
-  @override
-  String get mobileGifExportOptions => 'GIF Export Options';
 
   @override
   String mobileGoodEvening(String param) {
@@ -213,9 +202,6 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
-  String get mobileIndexing => 'Indexing';
-
-  @override
   String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
 
   @override
@@ -249,13 +235,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileNextMistake => 'Next mistake';
 
   @override
-  String get mobileNoLogsToShow => 'No logs to show';
-
-  @override
   String get mobileNoSearchResults => 'Žádné výsledky';
-
-  @override
-  String get mobileNoTeamUpdatesYet => 'No team updates yet';
 
   @override
   String get mobileNotAllFeaturesAreAvailable => 'Vezmi prosím na vědomí, že všechny funkce z původní aplikace nebo webové stránky nejsou momentálně k dispozici. Funkce však neustále přidáváme.';
@@ -268,9 +248,6 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get mobileOngoingGames => 'Ongoing Games';
-
-  @override
-  String get mobileOpenSettings => 'Open settings';
 
   @override
   String get mobileOverTheBoard => 'Jako na šachovnici';
@@ -288,9 +265,6 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get mobilePgnCopied => 'PGN copied.';
-
-  @override
-  String get mobilePleaseEnterValidEmail => 'Please enter a valid email address.';
 
   @override
   String get mobilePositionLeft => 'Vlevo';
@@ -333,15 +307,6 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get mobileRemoveBookmark => 'Odebrat záložku';
-
-  @override
-  String get mobileSearchIsEmpty => 'Search is empty';
-
-  @override
-  String get mobileSearchLogs => 'Search logs...';
-
-  @override
-  String get mobileSelectPlayerInSettings => 'Select a Lichess player in the settings.';
 
   @override
   String get mobileSelectAStudy => 'Select a study';
