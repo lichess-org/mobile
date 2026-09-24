@@ -260,6 +260,15 @@ class NotificationService(final Ref _ref) {
     }
   }
 
+  /// Whether a received message must be displayed as a local notification by the app.
+  ///
+  /// Messages received in background are displayed by the system, messages without a
+  /// platform notification have nothing to display, and a challenge creation received in
+  /// foreground is handled by the socket, which shows a [ChallengeNotification] with
+  /// accept/decline actions instead.
+  static bool _shouldShow(FcmMessage message, {required bool fromBackground}) =>
+      !fromBackground && message.notification != null && message is! ChallengeCreateFcmMessage;
+
   /// Process a message received from the Firebase Cloud Messaging service.
   ///
   /// If the message contains a [RemoteMessage.notification] field and if it is
@@ -289,17 +298,9 @@ class NotificationService(final Ref _ref) {
 
     final localNotification = parsedMessage.toLocalNotification();
 
-    // Only messages received in foreground that carry a platform notification are shown here.
-    // In foreground, a challenge creation is handled by the socket instead, which shows a
-    // [ChallengeNotification] with accept/decline actions.
-    final shouldShow =
-        !fromBackground &&
-        parsedMessage.notification != null &&
-        parsedMessage is! ChallengeCreateFcmMessage;
-
     if (localNotification == null) {
       _logUnsupportedMessage(parsedMessage);
-    } else if (shouldShow) {
+    } else if (_shouldShow(parsedMessage, fromBackground: fromBackground)) {
       await show(localNotification);
     }
 
