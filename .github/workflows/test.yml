@@ -7,6 +7,10 @@ on:
       - '!lib/l10n/**'
       - 'test/**'
       - 'pubspec.yaml'
+      - 'pubspec.lock'
+      - 'analysis_options.yaml'
+      - 'build.yaml'
+      - '.github/workflows/test.yml'
     branches:
       - main
   pull_request:
@@ -15,6 +19,10 @@ on:
       - '!lib/l10n/**'
       - 'test/**'
       - 'pubspec.yaml'
+      - 'pubspec.lock'
+      - 'analysis_options.yaml'
+      - 'build.yaml'
+      - '.github/workflows/test.yml'
     branches:
       - main
 
