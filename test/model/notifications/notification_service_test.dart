@@ -227,6 +227,16 @@ void main() {
         },
       );
 
+      when(
+        () => notificationDisplayMock.show(
+          id: any(named: 'id'),
+          title: any(named: 'title'),
+          body: any(named: 'body'),
+          notificationDetails: any(named: 'notificationDetails'),
+          payload: any(named: 'payload'),
+        ),
+      ).thenAnswer((_) => Future.value());
+
       await container.read(notificationServiceProvider).start();
     }
 
@@ -265,6 +275,28 @@ void main() {
       await Future<void>.delayed(Duration.zero);
 
       verifyNeverShown();
+    });
+
+    test('a platform notification without title or body shows empty strings', () async {
+      await startService();
+
+      testBinding.firebaseMessaging.onMessage.add(
+        const RemoteMessage(
+          data: {'lichess.type': 'gameMove', 'lichess.fullId': '9wlmxmibr9gh'},
+          notification: RemoteNotification(),
+        ),
+      );
+      await Future<void>.delayed(Duration.zero);
+
+      verify(
+        () => notificationDisplayMock.show(
+          id: const GameFullId('9wlmxmibr9gh').hashCode,
+          title: '',
+          body: '',
+          notificationDetails: any(named: 'notificationDetails'),
+          payload: any(named: 'payload'),
+        ),
+      ).called(1);
     });
   });
 

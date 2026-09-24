@@ -134,9 +134,13 @@ sealed class const FcmMessage() {
     }
   }
 
-  /// The local notification corresponding to this message, if any.
+  /// The local notification corresponding to this message, if it has one.
   ///
-  /// Returns `null` for message types that are never displayed as a local notification.
+  /// Returns `null` for [UnhandledFcmMessage] and [MalformedFcmMessage], the only types
+  /// without a local notification representation.
+  ///
+  /// Types that display a server-provided title and body fall back to empty strings when
+  /// the message carries no platform notification, instead of failing.
   LocalNotification? toLocalNotification() => switch (this) {
     final NewMessageFcmMessage m => NewMessageNotification.fromFcmMessage(m),
     final CorresGameUpdateFcmMessage m => CorresGameUpdateNotification.fromFcmMessage(m),
