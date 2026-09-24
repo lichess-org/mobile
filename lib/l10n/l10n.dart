@@ -442,6 +442,12 @@ abstract class AppLocalizations {
   /// **'1Y'**
   String get mobileDateRangeOneYear;
 
+  /// No description provided for @mobileDateRangeThreeMonths.
+  ///
+  /// In en, this message translates to:
+  /// **'3M'**
+  String get mobileDateRangeThreeMonths;
+
   /// No description provided for @mobileDeleteYourAccount.
   ///
   /// In en, this message translates to:

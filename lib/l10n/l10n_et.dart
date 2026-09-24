@@ -136,6 +136,9 @@ class AppLocalizationsEt extends AppLocalizations {
   String get mobileDateRangeOneYear => '1Y';
 
   @override
+  String get mobileDateRangeThreeMonths => '3M';
+
+  @override
   String get mobileDeleteYourAccount => 'Delete your account';
 
   @override

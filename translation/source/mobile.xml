@@ -41,6 +41,7 @@
   <string name="dateRangeOneMonth" comment="Perf stats chart time range filter. Short abbreviation preferred." maxLength="10">1M</string>
   <string name="dateRangeOneWeek" comment="Perf stats chart time range filter. Short abbreviation preferred." maxLength="10">1W</string>
   <string name="dateRangeOneYear" comment="Perf stats chart time range filter. Short abbreviation preferred." maxLength="10">1Y</string>
+  <string name="dateRangeThreeMonths" comment="Perf stats chart time range filter. Short abbreviation preferred." maxLength="10">3M</string>
   <string name="deleteYourAccount" comment="iOS-only settings entry that opens the account deletion page.">Delete your account</string>
   <string name="doYouAcceptChallenge" comment="Title of the challenge confirmation dialog.">Do you accept the challenge?</string>
   <string name="downloadMyGames" comment="Tournament menu action that downloads the user's games from that tournament as a PGN.">Download my games</string>
