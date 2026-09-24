@@ -216,4 +216,53 @@ void main() {
       });
     });
   });
+
+  group('FCM opened message handling:', () {
+    test('emits the local notification response of the opened message', () async {
+      final container = await makeContainer();
+
+      final notificationService = container.read(notificationServiceProvider);
+
+      await notificationService.start();
+
+      final responses = <ParsedLocalNotification>[];
+      final subscription = NotificationService.responseStream.listen(responses.add);
+
+      testBinding.firebaseMessaging.onMessageOpenedApp.add(
+        const RemoteMessage(
+          data: {'lichess.type': 'challengeCreate', 'lichess.challengeId': 'challenging'},
+          notification: RemoteNotification(title: 'Challenge', body: 'Play me!'),
+        ),
+      );
+      await Future<void>.delayed(Duration.zero);
+
+      expect(responses, hasLength(1));
+      final (response, notification) = responses.single;
+      expect(notification, isA<ChallengeCreatedNotification>());
+      expect(response.id, notification.id);
+      expect(response.payload, jsonEncode(notification.payload));
+
+      await subscription.cancel();
+    });
+
+    test('emits nothing when an unhandled message is opened', () async {
+      final container = await makeContainer();
+
+      final notificationService = container.read(notificationServiceProvider);
+
+      await notificationService.start();
+
+      final responses = <ParsedLocalNotification>[];
+      final subscription = NotificationService.responseStream.listen(responses.add);
+
+      testBinding.firebaseMessaging.onMessageOpenedApp.add(
+        const RemoteMessage(data: {'lichess.type': 'unknown'}),
+      );
+      await Future<void>.delayed(Duration.zero);
+
+      expect(responses, isEmpty);
+
+      await subscription.cancel();
+    });
+  });
 }

@@ -230,91 +230,33 @@ class NotificationService(final Ref _ref) {
   /// Handle an FCM message that caused the application to open
   void _handleFcmMessageOpenedApp(RemoteMessage message) {
     final parsedMessage = FcmMessage.fromRemoteMessage(message);
+    final notification = parsedMessage.toLocalNotification();
+    if (notification != null) {
+      _emitOpenedResponse(notification);
+    } else {
+      _logUnsupportedMessage(parsedMessage);
+    }
+  }
 
-    switch (parsedMessage) {
-      case final ChallengeCreateFcmMessage challengeCreateMessage:
-        final notification = ChallengeCreatedNotification.fromFcmMessage(challengeCreateMessage);
-        _responseStreamController.add((
-          NotificationResponse(
-            notificationResponseType: NotificationResponseType.selectedNotification,
-            id: notification.id,
-            payload: jsonEncode(notification.payload),
-          ),
-          notification,
-        ));
+  /// Emits the response of a local notification the user has just opened.
+  void _emitOpenedResponse(LocalNotification notification) {
+    _responseStreamController.add((
+      NotificationResponse(
+        notificationResponseType: NotificationResponseType.selectedNotification,
+        id: notification.id,
+        payload: jsonEncode(notification.payload),
+      ),
+      notification,
+    ));
+  }
 
-      case final ChallengeAcceptFcmMessage challengeAcceptMessage:
-        final notification = ChallengeAcceptedNotification.fromFcmMessage(challengeAcceptMessage);
-        _responseStreamController.add((
-          NotificationResponse(
-            notificationResponseType: NotificationResponseType.selectedNotification,
-            id: notification.id,
-            payload: jsonEncode(notification.payload),
-          ),
-          notification,
-        ));
-
-      case final CorresGameUpdateFcmMessage corresMessage:
-        final notification = CorresGameUpdateNotification.fromFcmMessage(corresMessage);
-        _responseStreamController.add((
-          NotificationResponse(
-            notificationResponseType: NotificationResponseType.selectedNotification,
-            id: notification.id,
-            payload: jsonEncode(notification.payload),
-          ),
-          notification,
-        ));
-
-      case final NewMessageFcmMessage newMessage:
-        final notification = NewMessageNotification.fromFcmMessage(newMessage);
-        _responseStreamController.add((
-          NotificationResponse(
-            notificationResponseType: NotificationResponseType.selectedNotification,
-            id: notification.id,
-            payload: jsonEncode(notification.payload),
-          ),
-          notification,
-        ));
-
-      case final BroadcastRoundFcmMessage roundMessage:
-        final notification = BroadcastRoundNotification.fromFcmMessage(roundMessage);
-        _responseStreamController.add((
-          NotificationResponse(
-            notificationResponseType: NotificationResponseType.selectedNotification,
-            id: notification.id,
-            payload: jsonEncode(notification.payload),
-          ),
-          notification,
-        ));
-
-      case final BroadcastPlayerFollowFcmMessage playerFollowMessage:
-        final notification = BroadcastPlayerFollowNotification.fromFcmMessage(playerFollowMessage);
-        _responseStreamController.add((
-          NotificationResponse(
-            notificationResponseType: NotificationResponseType.selectedNotification,
-            id: notification.id,
-            payload: jsonEncode(notification.payload),
-          ),
-          notification,
-        ));
-
-      case final RecapFcmMessage recapMessage:
-        final notification = RecapNotification.fromFcmMessage(recapMessage);
-        _responseStreamController.add((
-          NotificationResponse(
-            notificationResponseType: NotificationResponseType.selectedNotification,
-            id: notification.id,
-            payload: jsonEncode(notification.payload),
-          ),
-          notification,
-        ));
-
-      // TODO: handle other notification types
-      case UnhandledFcmMessage(:final data):
-        _logger.warning('Received unhandled FCM notification type: ${data['lichess.type']}');
-
-      case MalformedFcmMessage(:final data):
-        _logger.severe('Received malformed FCM message: $data');
+  /// Logs an FCM message that cannot be turned into a local notification.
+  static void _logUnsupportedMessage(FcmMessage message) {
+    // TODO: handle other notification types
+    if (message case UnhandledFcmMessage(:final data)) {
+      _logger.warning('Received unhandled FCM notification type: ${data['lichess.type']}');
+    } else if (message case MalformedFcmMessage(:final data)) {
+      _logger.severe('Received malformed FCM message: $data');
     }
   }
 
