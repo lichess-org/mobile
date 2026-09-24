@@ -250,13 +250,26 @@ class NotificationService(final Ref _ref) {
     ));
   }
 
-  /// Logs an FCM message that cannot be turned into a local notification.
+  /// Logs an FCM message that has no local notification representation.
+  ///
+  /// The switch is exhaustive on purpose: a new [FcmMessage] subtype must be assigned a
+  /// case here instead of silently falling through.
   static void _logUnsupportedMessage(FcmMessage message) {
-    // TODO: handle other notification types
-    if (message case UnhandledFcmMessage(:final data)) {
-      _logger.warning('Received unhandled FCM notification type: ${data['lichess.type']}');
-    } else if (message case MalformedFcmMessage(:final data)) {
-      _logger.severe('Received malformed FCM message: $data');
+    switch (message) {
+      // TODO: handle other notification types
+      case UnhandledFcmMessage(:final data):
+        _logger.warning('Received unhandled FCM notification type: ${data['lichess.type']}');
+      case MalformedFcmMessage(:final data):
+        _logger.severe('Received malformed FCM message: $data');
+      // Types with a local notification representation are never logged here.
+      case NewMessageFcmMessage():
+      case CorresGameUpdateFcmMessage():
+      case ChallengeCreateFcmMessage():
+      case ChallengeAcceptFcmMessage():
+      case BroadcastRoundFcmMessage():
+      case BroadcastPlayerFollowFcmMessage():
+      case RecapFcmMessage():
+        break;
     }
   }
 
