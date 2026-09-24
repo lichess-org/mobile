@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
@@ -68,7 +69,14 @@ class PracticeEngineController(final PracticeEngineChapter _chapter)
 
   PositionEvaluator get _evaluator {
     final provider = positionEvaluatorProvider(_evaluationContext);
-    _evaluatorSubscription ??= ref.listen(provider, (_, _) {});
+    _evaluatorSubscription ??= ref.listen(provider, (previous, next) {
+      // The engine has stopped searching. It may have run out of its search time before saying
+      // anything usable about the position — on a slow device the first search can be spent
+      // starting the engine — and nothing else would ever start it again.
+      if (previous?.isComputing == true && !next.isComputing) {
+        _analyser.resumeIfUnfinished();
+      }
+    });
     return ref.read(provider.notifier);
   }
 
@@ -99,10 +107,26 @@ class PracticeEngineController(final PracticeEngineChapter _chapter)
     }
 
     _analyse();
-    final evalAfter = await _analyser.usableEval(state.position, timeout: _kEngineAnswerWait);
+    // At least as deep as the eval this move is about to be compared against. The position the
+    // player was thinking about was analysed for as long as they thought, up to
+    // [kPracticeTargetDepth]; the position their move led to has only just been started. Comparing
+    // the two would measure the difference in depth as much as the move — an eval drifts by a
+    // pawn or more between depth 13 and depth 20 — and a shift large enough to read as a mistake
+    // or a blunder fails the chapter outright.
+    final evalAfter = await _analyser.usableEval(
+      state.position,
+      timeout: _kEngineAnswerWait,
+      minDepth: math.min(
+        math.max(kPracticeUsableDepth, evalBefore?.depth ?? 0),
+        kPracticeTargetDepth,
+      ),
+    );
     if (!ref.mounted || attempt != _attempt) return;
 
-    final feedback = evalBefore != null && evalAfter != null
+    // Still shallower, because the search ran out of time: no verdict at all is better than one
+    // that measures depth. The goal is judged on it all the same — that compares the eval with a
+    // target rather than with another eval.
+    final feedback = evalBefore != null && evalAfter != null && evalAfter.depth >= evalBefore.depth
         ? _feedback(move, positionBefore, evalBefore, evalAfter)
         : null;
     state = state.copyWith(feedback: feedback);

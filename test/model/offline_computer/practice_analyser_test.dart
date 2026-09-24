@@ -91,6 +91,78 @@ void main() {
       expect(engine.stopCount, 1);
     });
 
+    test('a search that ends without a usable eval is started again', () async {
+      final container = await makeContainer();
+      final analyser = PracticeAnalyser(
+        evaluator: () => readEvaluator(container),
+        onEval: (_, _) {},
+      );
+      addTearDown(analyser.dispose);
+
+      analyser.analyse(makeWork());
+      await settleEvals();
+      // A device too slow to get anywhere within its search time: a couple of plies, then the
+      // engine stops on its own.
+      engine.emitDepthRange(toDepth: kPracticeUsableDepth - 2);
+      engine.emit('bestmove e2e4 ponder e7e5');
+      await settleEvals();
+
+      expect(analyser.evalFor(Chess.initial)!.depth, lessThan(kPracticeUsableDepth));
+
+      analyser.resumeIfUnfinished();
+      await settleEvals();
+
+      // Searched again rather than left with nothing to show for the position.
+      expect(engine.requestedPositions, [Chess.initial.fen, Chess.initial.fen]);
+      expect(analyser.isAnalysing, isTrue);
+
+      engine.emitDepthRange(toDepth: kPracticeUsableDepth);
+      await settleEvals();
+      expect(analyser.evalFor(Chess.initial)!.depth, kPracticeUsableDepth);
+    });
+
+    test('a search that reached the usable depth is left alone when it ends', () async {
+      final container = await makeContainer();
+      final analyser = PracticeAnalyser(
+        evaluator: () => readEvaluator(container),
+        onEval: (_, _) {},
+      );
+      addTearDown(analyser.dispose);
+
+      analyser.analyse(makeWork());
+      await settleEvals();
+      engine.emitDepthRange(toDepth: kPracticeUsableDepth);
+      engine.emit('bestmove e2e4 ponder e7e5');
+      await settleEvals();
+
+      analyser.resumeIfUnfinished();
+      await settleEvals();
+
+      expect(engine.requestedPositions, [Chess.initial.fen]);
+    });
+
+    test('it gives up on a position it cannot get a usable eval for', () async {
+      final container = await makeContainer();
+      final analyser = PracticeAnalyser(
+        evaluator: () => readEvaluator(container),
+        onEval: (_, _) {},
+      );
+      addTearDown(analyser.dispose);
+
+      analyser.analyse(makeWork());
+      await settleEvals();
+
+      // However often the search ends short, the engine is not left running on a loop.
+      for (var i = 0; i < 6; i++) {
+        engine.emit('bestmove e2e4 ponder e7e5');
+        await settleEvals();
+        analyser.resumeIfUnfinished();
+        await settleEvals();
+      }
+
+      expect(engine.requestedPositions.length, 4);
+    });
+
     test('usableEval completes as soon as the analysis is deep enough', () async {
       final container = await makeContainer();
       final analyser = PracticeAnalyser(

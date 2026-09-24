@@ -33,12 +33,29 @@ class _ScriptedEngine() extends FakeEngine {
   void script(String fen, {int? cp, int? mate, required String best}) =>
       lines[_epd(fen)] = (cp: cp, mate: mate, best: best);
 
+  /// Positions whose search runs out of time at the usable depth, the way a slow device's does.
+  final Map<String, ({int cp, String best})> shallowLines = {};
+
+  void scriptShallow(String fen, {required int cp, required String best}) =>
+      shallowLines[_epd(fen)] = (cp: cp, best: best);
+
   @override
   void onGo(FakeEngineSession session, List<String> parts) {
     final position = session.position;
     if (position == null) return;
     final key = _epd(position.fen);
     searched.add(key);
+
+    if (shallowLines[key] case final shallow?) {
+      final sign = position.turn == Side.white ? 1 : -1;
+      session.emit(
+        'info depth $kPracticeUsableDepth seldepth $kPracticeUsableDepth multipv 1 score '
+        'cp ${shallow.cp * sign} nodes 10000 nps 100000 hashfull 0 tbhits 0 time 100 '
+        'pv ${shallow.best}',
+      );
+      session.emit('bestmove ${shallow.best}');
+      return;
+    }
 
     final line = lines[key];
     final legal = makeLegalMoves(position);
@@ -74,10 +91,13 @@ PracticeEngineChapter _chapter(String fen, PracticeGoal goal, {Side orientation 
 const _queenAndRook = '8/8/3k4/8/8/4K3/8/Q6R w - - 0 1';
 const _afterRh6 = '8/8/3k3R/8/8/4K3/8/Q7 b - - 1 1';
 
-Future<void> _waitFor(bool Function() condition) async {
+Future<void> _waitFor(
+  bool Function() condition, {
+  Duration timeout = const Duration(seconds: 5),
+}) async {
   final stopwatch = Stopwatch()..start();
   while (!condition()) {
-    if (stopwatch.elapsed > const Duration(seconds: 5)) fail('Timed out waiting for a condition');
+    if (stopwatch.elapsed > timeout) fail('Timed out waiting for a condition');
     await Future<void>.delayed(const Duration(milliseconds: 20));
   }
 }
@@ -136,6 +156,31 @@ void main() {
       expect(state.nbMoves, 1);
       expect(state.isPlayerTurn, isTrue);
       expect(state.canPlay, isTrue);
+    });
+
+    test('a move gets no verdict from an eval shallower than the one before it', () async {
+      // The position the player thinks about is analysed for as long as they think, so it reaches
+      // the target depth; the one their move leads to is searched from scratch, and on a slow
+      // device that search runs out of time at the usable depth. Comparing the two would measure
+      // how far each search got as much as the move — here it would read as throwing three pawns
+      // away, which fails the chapter outright.
+      final chapter = _chapter(_queenAndRook, const PracticeGoal.evalIn(cp: 9000, moves: 9));
+      // The engine liked another move, so the played one is measured by the shift alone.
+      engine.script(_queenAndRook, cp: 30, best: 'a1a2');
+      engine.scriptShallow(_afterRh6, cp: -300, best: 'd6c5');
+      final (container, controller) = await start(chapter);
+      await _waitFor(() => stateOf(container, chapter).eval != null);
+
+      controller().onUserMove(const NormalMove(from: Square.h1, to: Square.h6));
+      await _waitFor(
+        () => stateOf(container, chapter).steps.length == 2,
+        // The controller waits for the deeper eval its verdict needs before giving up on it.
+        timeout: const Duration(seconds: 15),
+      );
+
+      final state = stateOf(container, chapter);
+      expect(state.feedback, isNull);
+      expect(state.status, PracticeStatus.ongoing);
     });
 
     test('a blunder fails the chapter, shows the better move, and gets no answer', () async {

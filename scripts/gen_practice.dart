@@ -125,27 +125,32 @@ Future<Map<String, String>> _studyChapterPgns(_Lichess lichess, String studyId) 
 /// the mate the cloud sees — so a target written for the cloud can be out of reach however well the
 /// player plays.
 ///
-/// Every chapter was replayed with the player playing the engine's own best move, which is the
-/// best the chapter can possibly go (practice.md §13). The ones below could not be solved at all.
-/// Each target is lowered to what that line actually reaches, minus 150cp of margin, so that a
-/// slower device, a shallower depth or a slightly different line still passes. The rest of the
-/// goal is untouched, and the goals with no cp to lower — `mateIn`, `mate`, `drawIn`, `equalIn` —
-/// are left to the judging code.
+/// Every chapter was replayed with a player that knows the solution — its moves come from a search
+/// far deeper than the one the app judges with, since these positions exist precisely because the
+/// right move is hard to find (`scripts/practice_engine_check`, practice.md §13). The chapters
+/// below are the ones perfect play still cannot solve, plus one it solves by less than the engine
+/// varies by. Each target is lowered to what that line reaches, minus 150cp, which is about the
+/// spread the same position shows between devices, thread counts and a warm or cold table. The
+/// rest of the goal is untouched, and the goals with no cp to lower — `mateIn`, `mate`, `drawIn`,
+/// `equalIn` — need none: perfect play solves all of them.
 ///
 /// `from` is the target lichess.org publishes: when it no longer matches, the chapter has been
 /// re-authored and the override is dropped rather than applied blindly — the measurement has to be
 /// run again, which is also true after any content refresh.
 const _goalCpOverrides = <String, ({int from, int to, int measured})>{
   // Discovered Check #1: Ne5+ wins the queen for a knight, which the cloud reports as a mate.
-  'codj2tFw': (from: 1000, to: 700, measured: 856),
-  // Overloaded #3.
-  'YOva0EFV': (from: 1000, to: 800, measured: 983),
-  // Double Check #5.
-  'e7fu1G8T': (from: 1200, to: 1000, measured: 1182),
+  'codj2tFw': (from: 1000, to: 700, measured: 877),
   // Underpromotion #9.
-  'dmjaBDH6': (from: 1000, to: 650, measured: 809),
-  // Rook and Rook Pawn versus Rook, a `promotion` goal: the pawn queens with the eval 8cp short.
-  'AknfDdxO': (from: 500, to: 300, measured: 492),
+  'dmjaBDH6': (from: 1000, to: 650, measured: 841),
+  // Underpromotion #6: only the bishop promotion keeps anything — the queen and the rook are both
+  // 0.00 — and it reads between +8.12 and +9.72 depending on what the engine's table already
+  // holds. The lower reading is the one to stay under.
+  'uiBRODnb': (from: 1000, to: 650, measured: 812),
+  // Double Check #5.
+  'e7fu1G8T': (from: 1200, to: 1000, measured: 1193),
+  // Overloaded #3 is the one the published target is reachable for, by 29cp — inside the spread
+  // above, so it passes or fails with the device rather than with the player.
+  'YOva0EFV': (from: 1000, to: 850, measured: 1029),
 };
 
 /// The ids of [_goalCpOverrides] that were applied, to report the ones that no longer match.

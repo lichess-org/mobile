@@ -33,6 +33,13 @@ const kPracticeUsableDepth = kDebugMode ? 13 : 15;
 /// the hint almost never, and cost more battery than everything before them put together.
 const kPracticeTargetDepth = kDebugMode ? 18 : 20;
 
+/// How many times a search is started again when it ends without a usable eval.
+///
+/// Small on purpose: a device that cannot reach [kPracticeUsableDepth] in three windows of
+/// [kPracticeMaxSearchTime] is not going to, and the chapter is better left without an eval than
+/// with an engine running on a loop.
+const _kMaxRestarts = 3;
+
 /// The wall-clock cap on analysing one position, for a device that would never reach either depth.
 ///
 /// Short, because it is a battery cap and not a quality one: a device still searching after this
@@ -67,6 +74,12 @@ class PracticeAnalyser({
 }) {
   /// The work being analysed, or null when nothing is.
   EvalWork? _analysing;
+
+  /// The work [_restarts] counts for, since a restart clears [_analysing] on its way through.
+  EvalWork? _restartedWork;
+
+  /// How many times that work has been started again after its search ended too early.
+  int _restarts = 0;
 
   StreamSubscription<EvalResult>? _subscription;
 
@@ -122,6 +135,41 @@ class PracticeAnalyser({
     });
   }
 
+  /// Starts the search again when it stopped before the position was understood at all.
+  ///
+  /// The search is capped at [kPracticeMaxSearchTime] so that it does not run for as long as the
+  /// player thinks, but that cap is meant to stop an eval being *refined*, not to leave a position
+  /// without one. A device slow enough to spend the whole window starting the engine — an emulator
+  /// cold, a phone under load — reaches the end of it with nothing, and since the stream stays open
+  /// and nothing else starts a search, the chapter would sit there for good with no eval, no hint
+  /// and nothing to judge a move against.
+  ///
+  /// Called when the engine stops searching, by whoever is watching it.
+  void resumeIfUnfinished() {
+    final work = _analysing;
+    if (work == null) return;
+    final known = _evals[work.position];
+    if (known != null && known.depth >= kPracticeUsableDepth) return;
+    if (_restartedWork != work) {
+      _restartedWork = work;
+      _restarts = 0;
+    }
+    if (_restarts >= _kMaxRestarts) {
+      _logger.warning(
+        'Giving up on ply ${work.position.ply} after $_restarts restarts without a usable eval',
+      );
+      return;
+    }
+    _restarts++;
+    _logger.info(
+      'The search at ply ${work.position.ply} ended at depth ${known?.depth ?? 0}, below '
+      '$kPracticeUsableDepth; starting it again ($_restarts)',
+    );
+    // Cleared so that `analyse` does not take this work for one already running.
+    _analysing = null;
+    analyse(work);
+  }
+
   /// Takes in an evaluation that came from somewhere else — a cloud eval, a tablebase lookup.
   ///
   /// Kept if it is deeper than what the search has reached, and it ends the search when it is
@@ -149,6 +197,8 @@ class PracticeAnalyser({
   /// Forgets every evaluation of this game. For starting or loading another one.
   void clear() {
     yieldEngine();
+    _restartedWork = null;
+    _restarts = 0;
     _evals.clear();
     _completeAll();
   }
