@@ -171,8 +171,7 @@ class _BodyState() extends ConsumerState<_Body> {
                     if (isCustomBackground)
                       ListTile(
                         leading: const Icon(Icons.wallpaper),
-                        // TODO: l10n
-                        title: const Text('Choose a custom background'),
+                        title: Text(context.l10n.mobileChooseCustomBackground),
                         trailing: Theme.of(context).platform == TargetPlatform.iOS
                             ? const CupertinoListTileChevron()
                             : null,

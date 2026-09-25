@@ -130,7 +130,7 @@ void main() {
         await submitEmail(tester, email: email);
 
         expect(requests, 0);
-        expect(find.text('Please enter a valid email address.'), findsOneWidget);
+        expect(find.text('This email address is invalid'), findsOneWidget);
       });
     }
   });
@@ -158,7 +158,7 @@ void main() {
 
         await submitEmail(tester, email: email);
 
-        expect(find.text('Please enter a valid email address.'), findsNothing);
+        expect(find.text('This email address is invalid'), findsNothing);
         final emailUrl = urls.firstWhere((url) => url.path == '/auth/mobile-code/email');
         expect(emailUrl.queryParameters['email'], email);
       });

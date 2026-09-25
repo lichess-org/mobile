@@ -59,7 +59,10 @@ class const _ChannelsList({required final IList<TeamUpdatesByTeam> teams}) exten
                     children: [
                       Icon(Icons.groups_outlined, size: 64, color: textShade(context, 0.4)),
                       const SizedBox(height: 16),
-                      Text('No team updates yet', style: Theme.of(context).textTheme.titleMedium),
+                      Text(
+                        context.l10n.nothingToSeeHere,
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
                       const SizedBox(height: 8),
                       Text(
                         'Updates from teams you join will appear here.',

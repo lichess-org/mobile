@@ -18,31 +18,158 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileAccountPreferencesHelp => 'Këto parapëlqime aplikohen te llogaria juaj Lichess dhe do të përdoren në krejt pajisjet.';
 
   @override
+  String get mobileAddToStudy => 'Add to study';
+
+  @override
   String get mobileAllGames => 'Krejt lojërat';
+
+  @override
+  String get mobileAllTime => 'All time';
+
+  @override
+  String get mobileAlmostThereFinalizingGif => 'Almost there! Finalizing the GIF...';
+
+  @override
+  String get mobileAllowTakebacksAndHints => 'Allow takebacks and hints';
+
+  @override
+  String get mobileAmoledBlack => 'Amoled black';
 
   @override
   String get mobileAreYouSure => 'Jeni i sigurt?';
 
   @override
+  String get mobileAreYouSureDeleteConversation => 'Are you sure you want to delete this conversation?';
+
+  @override
+  String mobileAreYouSureDownloadNnue(String param) {
+    return 'Are you sure you want to download the NNUE file ($param)?';
+  }
+
+  @override
+  String get mobileBoardPositionLandscape => 'Board position in landscape mode';
+
+  @override
   String get mobileBoardSettings => 'Rregullime fushe';
+
+  @override
+  String get mobileBronsteinDelay => 'Bronstein delay';
 
   @override
   String get mobileCancelTakebackOffer => 'Anulojeni ofertën për prapakthim';
 
   @override
+  String get mobileChallengeFromPosition => 'Challenge from position';
+
+  @override
+  String get mobileChapterName => 'Chapter Name';
+
+  @override
   String get mobileChessEngine => 'Chess engine';
+
+  @override
+  String get mobileChooseCustomBackground => 'Choose a custom background';
 
   @override
   String get mobileClearButton => 'Spastroje';
 
   @override
+  String get mobileCodeFieldLabel => 'Code';
+
+  @override
+  String get mobileCodeExpiresMessage => 'The code expires after 5 minutes and can only be used once.';
+
+  @override
+  String mobileCodeLengthMessage(String param) {
+    return 'The code is $param characters long.';
+  }
+
+  @override
   String get mobileCorrespondenceClearSavedMove => 'Spastroje lëvizjen e ruajtur';
+
+  @override
+  String get mobileCopied => 'Copied.';
 
   @override
   String get mobileCustomGameJoinAGame => 'Merrni pjesë në një lojë';
 
   @override
+  String get mobileDangerZone => 'Danger zone';
+
+  @override
+  String get mobileDateAllTime => 'All time';
+
+  @override
+  String get mobileDateLast10Years => 'Last 10 years';
+
+  @override
+  String get mobileDateLast20Years => 'Last 20 years';
+
+  @override
+  String get mobileDateLast3Years => 'Last 3 years';
+
+  @override
+  String get mobileDateLast5Years => 'Last 5 years';
+
+  @override
+  String get mobileDateLast6Months => 'Last 6 months';
+
+  @override
+  String get mobileDateLastMonth => 'Last month';
+
+  @override
+  String get mobileDateLastYear => 'Last year';
+
+  @override
+  String get mobileDateThisMonth => 'This month';
+
+  @override
+  String get mobileDateRangeAllTime => 'ALL';
+
+  @override
+  String get mobileDateRangeOneMonth => '1M';
+
+  @override
+  String get mobileDateRangeOneWeek => '1W';
+
+  @override
+  String get mobileDateRangeOneYear => '1Y';
+
+  @override
+  String get mobileDateRangeThreeMonths => '3M';
+
+  @override
+  String get mobileDeleteYourAccount => 'Delete your account';
+
+  @override
+  String get mobileDoYouAcceptChallenge => 'Do you accept the challenge?';
+
+  @override
+  String get mobileDownloadMyGames => 'Download my games';
+
+  @override
+  String get mobileExport => 'Export';
+
+  @override
+  String get mobileFailedToGetGif => 'Failed to get GIF';
+
+  @override
   String get mobileFeedbackButton => 'Përshtypje';
+
+  @override
+  String get mobileFilters => 'Filters';
+
+  @override
+  String get mobileFlipClock => 'Flip clock';
+
+  @override
+  String get mobileFlipPiecesAfterMove => 'Flip pieces and opponent info after move';
+
+  @override
+  String get mobileGenerateGif => 'Generating GIF...';
+
+  @override
+  String get mobileGetFeedbackOnMoves => 'Get feedback on your moves';
 
   @override
   String mobileGoodEvening(String param) {
@@ -61,22 +188,54 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileGoodDayWithoutName => 'Mirëdita';
 
   @override
+  String get mobileHello => 'Hello';
+
+  @override
   String get mobileHideVariation => 'Fshihe variantin';
 
   @override
   String get mobileHomeTab => 'Kreu';
 
   @override
+  String get mobileHttpLogs => 'HTTP logs';
+
+  @override
+  String mobileIfAccountMatchesCodeSent(String param1, String param2) {
+    return 'If an account matches $param1, a $param2 character code was sent to it. Check your inbox and enter the code below.';
+  }
+
+  @override
+  String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
+
+  @override
   String get mobileLiveStreamers => 'Transmetues drejtpërsëdrejti';
 
   @override
+  String get mobileLocalDatabaseSize => 'Local database size';
+
+  @override
+  String get mobileLongGamesTakeMoreTime => 'Long games take a bit more time...';
+
+  @override
   String get mobileMustBeLoggedIn => 'Që të shihni këtë faqe, duhet të keni bërë hyrjen në llogari.';
+
+  @override
+  String get mobileMoveOnRelease => 'Move on release';
+
+  @override
+  String get mobileMoveOnReleaseSubtitle => 'When moving a piece by tapping, the move is made when you lift your finger, letting you slide to change the destination square.';
 
   @override
   String get mobileNbOfflinePuzzles => 'Offline puzzles';
 
   @override
   String get mobileNewGame => 'Lojë e re';
+
+  @override
+  String get mobileNewStockfishAvailable => 'New Stockfish version available! Go to the settings to download the updated NNUE file.';
+
+  @override
+  String get mobileNextMistake => 'Next mistake';
 
   @override
   String get mobileNoSearchResults => 'Nuk ka rezultate';
@@ -91,7 +250,16 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileOkButton => 'OK';
 
   @override
+  String get mobileOngoingGames => 'Ongoing Games';
+
+  @override
   String get mobileOverTheBoard => 'Mbi tabelën';
+
+  @override
+  String get mobilePasteFromClipboard => 'Paste from clipboard';
+
+  @override
+  String get mobilePerformanceCards => 'Performance Cards';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -99,10 +267,16 @@ class AppLocalizationsSq extends AppLocalizations {
   }
 
   @override
+  String get mobilePgnCopied => 'PGN copied.';
+
+  @override
   String get mobilePositionLeft => 'Majtas';
 
   @override
   String get mobilePositionRight => 'Djathtas';
+
+  @override
+  String get mobilePracticeMode => 'Practice mode';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Zmadho gurin e tërhequr';
@@ -129,10 +303,19 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobilePuzzlesTab => 'Ushtrime';
 
   @override
+  String get mobileRateThisApp => 'Rate this app';
+
+  @override
   String get mobileRecentSearches => 'Kërkime së fundi';
 
   @override
   String get mobileRemoveBookmark => 'Hiqe faqerojtësin';
+
+  @override
+  String get mobileSelectAStudy => 'Select a study';
+
+  @override
+  String get mobileSendMeACode => 'Send me a code';
 
   @override
   String get mobileServerAnalysis => 'Analizë shërbyesi';
@@ -195,6 +378,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Prekni dy kuadrate';
 
   @override
+  String get mobileSettingsPreferencesSaved => 'Your preferences have been saved in your Lichess account. They will be synchronized across all your devices.';
+
+  @override
   String get mobileSettingsShapeDrawing => 'Vizatim formash';
 
   @override
@@ -213,10 +399,16 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileSettingsTab => 'Rregullime';
 
   @override
+  String get mobileShareChallengeUrl => 'Share challenge URL';
+
+  @override
   String get mobileShareGamePGN => 'Ndani PGN me të tjerë';
 
   @override
   String get mobileShareGameURL => 'Ndani URL loje me të tjerë';
+
+  @override
+  String get mobileShareLocalAnalysisPgn => 'Share local analysis PGN';
 
   @override
   String get mobileSharePositionAsFEN => 'Tregojuni të tjerëve pozicionin si FEN';
@@ -228,27 +420,75 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileShowComments => 'Shfaq komente';
 
   @override
+  String get mobileShowEngineLines => 'Show engine lines';
+
+  @override
+  String get mobileShowEvaluationGauge => 'Show evaluation gauge';
+
+  @override
   String get mobileShowResult => 'Shfaq përfundimin';
 
   @override
   String get mobileShowVariations => 'Shfaq variante';
 
   @override
+  String get mobileSignInWithBrowser => 'Sign in with the browser';
+
+  @override
+  String get mobileSignInWithEmail => 'Sign in with an email';
+
+  @override
+  String get mobileSimpleDelay => 'Simple delay';
+
+  @override
   String get mobileSomethingWentWrong => 'Diç shkoi ters.';
+
+  @override
+  String get mobileSortFriends => 'Sort friends';
+
+  @override
+  String get mobileStopShowingThreat => 'Resht së shfaquri kërcënimin';
 
   @override
   String get mobileSystemColors => 'Ngjyra sistemi';
 
   @override
+  String get mobileTablebaseOffline => 'Tablebase is not available offline.';
+
+  @override
+  String get mobileTapToRefresh => 'Tap to refresh';
+
+  @override
   String get mobileTheme => 'Temë';
+
+  @override
+  String get mobileTimespan => 'Timespan';
+
+  @override
+  String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
 
   @override
   String get mobileToolsTab => 'Mjete';
 
   @override
+  String get mobileTournamentCompleted => 'Të plotësuar';
+
+  @override
+  String get mobileTournamentJumpToMyPage => 'Kalo te faqja ime';
+
+  @override
   String mobileUnsupportedVariant(String param) {
     return 'Varianti $param nuk mbulohet në këtë version.';
   }
+
+  @override
+  String get mobileUseSymmetricPieces => 'Use symmetric pieces';
+
+  @override
+  String get mobileViewGame => 'Shihni Lojën';
+
+  @override
+  String get mobileViewLicenses => 'View licences';
 
   @override
   String get mobileWaitingForOpponentToJoin => 'Po pritet që të vijë kundërshtari...';
@@ -260,46 +500,10 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileWelcomeToLichessApp => 'Mirë se vini te aplikacioni Lichess!';
 
   @override
-  String get mobileViewGame => 'Shihni Lojën';
+  String get mobileWeWillEmailYouCode => 'We will email you a code to sign in with.';
 
   @override
-  String get mobileCustomizeHomeTip => 'Ndihmëz: Mundeni të shtoni më tepër widget-e te Skena e Kreut, ose të hiqni ata që s’ju duhen!';
-
-  @override
-  String get mobileCustomizeHomeTipDismiss => 'Hidhe tej';
-
-  @override
-  String get mobileCustomizeButton => 'Përshtateni';
-
-  @override
-  String get mobileStopShowingThreat => 'Resht së shfaquri kërcënimin';
-
-  @override
-  String get mobileTournamentCompleted => 'Të plotësuar';
-
-  @override
-  String get mobileTournamentJumpToMyPage => 'Kalo te faqja ime';
-
-  @override
-  String get mobileDisplayModeCompact => 'Kompakte';
-
-  @override
-  String get mobileDisplayModeDetailed => 'E hollësishme';
-
-  @override
-  String get mobileOpeningExplorerNotAvailableOffline => 'Hapja e Explorer-it s’bëhet dot jashtë linje.';
-
-  @override
-  String get mobileChallengeCreated => 'Sfida u krijua: Do të njoftoheni, kur të fillojë loja.\nMund ta përdorni që nga skeda shtëpi.';
-
-  @override
-  String get mobilePreviousPage => 'E mëparshmja';
-
-  @override
-  String get mobileOrImportPgnFile => 'Ose importoni një kartelë PNG';
-
-  @override
-  String get mobileGoodMoveButThereIsBetter => 'Lëvizje e mirë, por ka edhe më mirë';
+  String get mobileYouCannotChallengeYourself => 'You cannot challenge yourself';
 
   @override
   String get mobilePerfShortUltraBullet => 'Ultra';
@@ -348,6 +552,45 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get mobilePerfShortPuzzle => 'Puzzle';
+
+  @override
+  String get mobileDisplayModeCompact => 'Kompakte';
+
+  @override
+  String get mobileDisplayModeDetailed => 'E hollësishme';
+
+  @override
+  String get mobileOpeningExplorerNotAvailableOffline => 'Hapja e Explorer-it s’bëhet dot jashtë linje.';
+
+  @override
+  String get mobileChallengeCreated => 'Sfida u krijua: Do të njoftoheni, kur të fillojë loja.\nMund ta përdorni që nga skeda shtëpi.';
+
+  @override
+  String get mobilePreviousPage => 'E mëparshmja';
+
+  @override
+  String get mobileOrImportPgnFile => 'Ose importoni një kartelë PNG';
+
+  @override
+  String get mobileGoodMoveButThereIsBetter => 'Lëvizje e mirë, por ka edhe më mirë';
+
+  @override
+  String get mobileCustomizeHomeTip => 'Ndihmëz: Mundeni të shtoni më tepër widget-e te Skena e Kreut, ose të hiqni ata që s’ju duhen!';
+
+  @override
+  String get mobileCustomizeHomeTipDismiss => 'Hidhe tej';
+
+  @override
+  String get mobileCustomizeButton => 'Përshtateni';
+
+  @override
+  String get mobileAppLogs => 'App Logs';
+
+  @override
+  String get mobileSmallBoard => 'Small board';
+
+  @override
+  String get mobileAcceptDraw => 'Accept draw?';
 
   @override
   String get variantStandard => 'Standard';

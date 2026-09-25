@@ -75,8 +75,7 @@ class const _ChallengeListItem({
           ? () => challengeService.showConfirmDialog(
               context,
               challenge,
-              // TODO l10n
-              title: 'Do you accept the challenge?',
+              title: context.l10n.mobileDoYouAcceptChallenge,
             )
           : null,
       onAccept:
