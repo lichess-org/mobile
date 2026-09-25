@@ -15,11 +15,6 @@ sealed class EvaluationContext with _$EvaluationContext {
     required Position initialPosition,
 
     /// The engine to evaluate with, instead of the one the user chose in the settings.
-    ///
-    /// For features that need a particular engine whatever the preference, such as practice,
-    /// which wants the one that is always there and quickest to a usable depth. Still subject to
-    /// the rules no preference overrides: a variant or material Stockfish cannot play goes to
-    /// Fairy-Stockfish.
     ChessEnginePref? enginePref,
   }) = _EvaluationContext;
 }

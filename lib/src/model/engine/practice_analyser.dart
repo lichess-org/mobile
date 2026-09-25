@@ -45,9 +45,8 @@ const _kMaxRestarts = 3;
 
 /// The ply past which a cloud eval is a miss far more often than a hit.
 ///
-/// Only consulted when the caller has not said its positions are always worth asking for: a
-/// practice lesson starts from a position the server has evaluated whatever its ply, a game does
-/// not once it has left the book behind.
+/// Only consulted when the caller has not said its positions are always worth asking for: see
+/// [PracticeAnalyser.alwaysRequestCloudEvals].
 const _kCloudEvalPlyThreshold = 30;
 
 /// How long a cloud eval request waits for the server's answer before the search is left to it.
@@ -58,6 +57,15 @@ const _kCloudEvalTimeout = Duration(seconds: 2);
 /// Short, because it is a battery cap and not a quality one: a device still searching after this
 /// long is not about to find something better, and the player is waiting on the hint behind it.
 const kPracticeMaxSearchTime = Duration(seconds: 5);
+
+/// The cap on a wait whose search has not started yet.
+///
+/// [kPracticeMaxSearchTime] is search time and nothing else — the engine counts it from the moment
+/// it starts searching — so spawning the process and loading its network come before it rather
+/// than out of it, and on a cold device that is seconds. A wait is therefore not given its own
+/// deadline until the engine has said something about the position; this is what bounds it until
+/// then, for an engine that is never going to start at all.
+const kPracticeEngineStartWait = Duration(seconds: 15);
 
 /// Keeps an evaluation running on the position the game is at, for as long as it is worth running.
 ///
@@ -153,6 +161,9 @@ class PracticeAnalyser({
     _subscription = stream.listen((result) {
       final (resultWork, eval) = result;
       if (resultWork != _analysing) return;
+      // The engine has spoken, so it is searching rather than starting up, and a wait on this
+      // position is now a wait on the search: its own deadline can start.
+      _startWaiting(work.position);
       _record(work.position, eval);
       if (eval.depth >= kPracticeTargetDepth) {
         _logger.fine('Reached the target depth at ply ${work.position.ply}; the engine can idle');
@@ -163,12 +174,8 @@ class PracticeAnalyser({
 
   /// Starts the search again when it stopped before the position was understood at all.
   ///
-  /// The search is capped at [kPracticeMaxSearchTime] so that it does not run for as long as the
-  /// player thinks, but that cap is meant to stop an eval being *refined*, not to leave a position
-  /// without one. A device slow enough to spend the whole window starting the engine — an emulator
-  /// cold, a phone under load — reaches the end of it with nothing, and since the stream stays open
-  /// and nothing else starts a search, the chapter would sit there for good with no eval, no hint
-  /// and nothing to judge a move against.
+  /// The search is capped at [kPracticeMaxSearchTime] but that cap is meant to stop an eval being
+  /// *refined*, not to leave a position without one.
   ///
   /// Called when the engine stops searching, by whoever is watching it.
   void resumeIfUnfinished() {
@@ -241,6 +248,11 @@ class PracticeAnalyser({
   /// the depth, or, when [timeout] passes first, with the best one reached by then (null if the
   /// search produced nothing at all).
   ///
+  /// [timeout] is given to the search, and only starts once there is one: until the engine has
+  /// said something about the position it may still be starting up, which is not time the search
+  /// is spending and not time this is willing to hold against it. [kPracticeEngineStartWait] is
+  /// what bounds the wait until then.
+  ///
   /// [minDepth] defaults to [kPracticeUsableDepth], which is what unlocking a hint asks for.
   /// Judging a move the player has already played is allowed to ask for more: nobody is waiting on
   /// a board for it, and the verdict is worth more than the promptness.
@@ -254,14 +266,22 @@ class PracticeAnalyser({
     final known = _evals[position];
     if (known != null && known.depth >= minDepth) return Future.value(known);
 
-    final waiter = _Waiter(minDepth);
-    (_waiters[position] ??= []).add(waiter);
-
-    waiter.deadline = Timer(timeout, () {
+    final waiter = _Waiter(minDepth, timeout, (waiter) {
       _waiters[position]?.remove(waiter);
-      _logger.info('No usable eval at ply ${position.ply} within ${timeout.inMilliseconds}ms');
+      _logger.info(
+        'No usable eval at ply ${position.ply} within '
+        '${waiter.started ? timeout.inMilliseconds : kPracticeEngineStartWait.inMilliseconds}ms',
+      );
       waiter.complete(_evals[position]);
     });
+    (_waiters[position] ??= []).add(waiter);
+
+    // Something is known about the position already, so the engine is past starting up.
+    if (known != null) {
+      waiter.start();
+    } else {
+      waiter.waitForTheEngine();
+    }
 
     return waiter.future;
   }
@@ -405,6 +425,15 @@ class PracticeAnalyser({
     return true;
   }
 
+  /// Gives every wait on [position] its own deadline, the engine having started searching it.
+  void _startWaiting(Position position) {
+    final waiters = _waiters[position];
+    if (waiters == null) return;
+    for (final waiter in waiters) {
+      waiter.start();
+    }
+  }
+
   void _publish(Position position, ClientEval eval) {
     _evals[position] = eval;
     onEval(position, eval);
@@ -446,17 +475,47 @@ class PracticeAnalyser({
 class _Waiter(
   /// The depth this waiter is waiting for.
   final int minDepth,
+
+  /// How long the search is given, once it is the search that is being waited on.
+  final Duration timeout,
+
+  /// Called when the deadline passes, whichever of the two it was.
+  final void Function(_Waiter waiter) onTimeout,
 ) {
   final _completer = Completer<ClientEval?>();
 
   /// Cancelled when the wait ends another way, so that nothing is left ticking behind it.
-  Timer? deadline;
+  Timer? _deadline;
+
+  /// Whether [timeout] is what is running, rather than the wait for the engine to start.
+  bool started = false;
 
   Future<ClientEval?> get future => _completer.future;
 
+  /// Waits [kPracticeEngineStartWait] for the engine to say anything at all about the position.
+  void waitForTheEngine() {
+    _arm(kPracticeEngineStartWait);
+  }
+
+  /// Starts the search's own deadline, the engine having started searching.
+  ///
+  /// Does nothing once it has: a search started again by [PracticeAnalyser.resumeIfUnfinished]
+  /// is the same wait going on, not a new one to give the full [timeout] to.
+  void start() {
+    if (started) return;
+    started = true;
+    _arm(timeout);
+  }
+
   void complete(ClientEval? eval) {
-    deadline?.cancel();
-    deadline = null;
+    _deadline?.cancel();
+    _deadline = null;
     if (!_completer.isCompleted) _completer.complete(eval);
+  }
+
+  void _arm(Duration duration) {
+    if (_completer.isCompleted) return;
+    _deadline?.cancel();
+    _deadline = Timer(duration, () => onTimeout(this));
   }
 }

@@ -298,6 +298,32 @@ void main() {
       expect(eval?.depth, kPracticeUsableDepth - 3);
     });
 
+    test('the deadline does not run while the engine has yet to start searching', () async {
+      final container = await makeContainer();
+      final analyser = makeAnalyser(container);
+      addTearDown(analyser.dispose);
+
+      analyser.analyse(makeWork());
+      await settleEvals();
+
+      var completed = false;
+      final wait = analyser.usableEval(Chess.initial, timeout: const Duration(milliseconds: 100));
+      unawaited(wait.then((_) => completed = true));
+
+      // Long past the deadline, but the engine has not said a word: it may still be starting up,
+      // and none of that is search time to hold against it.
+      await Future<void>.delayed(const Duration(milliseconds: 400));
+      expect(completed, isFalse);
+
+      // It speaks, below the usable depth. Now the deadline is the search's, and it runs out with
+      // whatever the search had reached by then.
+      engine.emitDepthRange(toDepth: kPracticeUsableDepth - 3);
+
+      final eval = await wait;
+      expect(eval, isNotNull);
+      expect(eval!.depth, lessThan(kPracticeUsableDepth));
+    });
+
     test('yieldEngine hands the engine over, and analysing takes it back', () async {
       final container = await makeContainer();
       final evaluator = readEvaluator(container);

@@ -59,6 +59,9 @@ const _kOpeningPlyThreshold = 30;
 const _kPreMoveEvalWait = Duration(seconds: 4);
 
 /// How long the hints wait to become available before the spinner gives up.
+///
+/// The search's own [kPracticeMaxSearchTime] is what ends it; starting the engine is not in it, as
+/// the wait only begins once the engine is searching.
 final _kHintWait = kPracticeMaxSearchTime + const Duration(seconds: 1);
 
 /// Max search time for a move evaluation in practice mode when the move is not in the pre-move PVs.

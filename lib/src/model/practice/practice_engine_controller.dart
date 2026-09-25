@@ -27,8 +27,7 @@ final _logger = Logger('PracticeEngineController');
 
 /// How long the engine may take to answer a move, including judging it.
 ///
-/// The search itself stops at [kPracticeMaxSearchTime]; this only has to outlast it, so that the
-/// engine's own limit is what ends the wait.
+/// Starting the engine is not in it — the wait does not begin until the engine is searching.
 final _kEngineAnswerWait = kPracticeMaxSearchTime + const Duration(seconds: 1);
 
 /// A practice chapter played against the engine.
