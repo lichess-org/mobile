@@ -136,6 +136,9 @@ class PracticeAnalyser({
 
   bool _disposed = false;
 
+  /// Whether this analyser is over: disposed, or outlived by the owner whose [ref] it reads from.
+  bool get _isGone => _disposed || !ref.mounted;
+
   /// Whether an analysis is running.
   bool get isAnalysing => _analysing != null;
 
@@ -147,6 +150,8 @@ class PracticeAnalyser({
   /// Does nothing if that position is already being analysed, or if it has already been analysed
   /// deeply enough that there is nothing left to learn about it.
   void analyse(EvalWork work) {
+    if (_isGone) return;
+
     // The evaluator is asked as well, rather than trusted to be running whatever it was last
     // given: it drops the work on its own when the engine fails, and an analyser that took its
     // own record for the truth would refuse to ask for this position ever again.
@@ -211,6 +216,7 @@ class PracticeAnalyser({
   ///
   /// Called when the engine stops searching, which is what [onEvaluatorStateChanged] watches for.
   void resumeIfUnfinished() {
+    if (_isGone) return;
     final work = _analysing;
     if (work == null) return;
     final known = _evals[work.position];
@@ -243,7 +249,7 @@ class PracticeAnalyser({
   /// Kept if it is deeper than what the search has reached, and it ends the search when it is
   /// deeper than anything the search would have reached.
   void offer(Position position, ClientEval eval) {
-    if (_disposed || !ref.mounted) return;
+    if (_isGone) return;
     if (!_record(position, eval)) return;
     if (_isFinal(eval) && _analysing?.position == position) {
       _logger.fine('An eval from elsewhere beat the search at ply ${position.ply}');
@@ -308,6 +314,10 @@ class PracticeAnalyser({
     required Duration timeout,
     int minDepth = kPracticeUsableDepth,
   }) {
+    // Nothing is going to search this position, and nothing is left to end a wait on it either:
+    // the waits that were running have been completed by [dispose] already.
+    if (_isGone) return Future.value(_evals[position]);
+
     final known = _evals[position];
     if (known != null && _satisfies(known, minDepth)) return Future.value(known);
 
@@ -354,7 +364,7 @@ class PracticeAnalyser({
   bool _isEngineOnItsWayTo(Position position) {
     final analysing = _analysing;
     if (analysing == null || analysing.position != position) return false;
-    if (_disposed || !ref.mounted) return false;
+    if (_isGone) return false;
     return evaluator().currentWork == analysing;
   }
 
@@ -362,7 +372,7 @@ class PracticeAnalyser({
   /// or at any ply when [alwaysRequestCloudEvals] — and a tablebase lookup in an endgame. Whatever
   /// comes back is offered to the analysis.
   void _raceTheSearch(EvalWork work) {
-    if (!kPracticeCloudEvalsEnabled || _disposed) return;
+    if (!kPracticeCloudEvalsEnabled || _isGone) return;
 
     final position = work.position;
 
@@ -411,7 +421,7 @@ class PracticeAnalyser({
 
   /// The socket the cloud evals go over.
   SocketClient? get _socket {
-    if (_disposed || !ref.mounted) return null;
+    if (_isGone) return null;
     final client = ref.read(socketPoolProvider).open(AnalysisController.socketUri);
     // Held so that the pool does not let go of the connection between two requests. A client the
     // pool has replaced leaves its subscription behind on a stream that is closed for good.
@@ -476,7 +486,7 @@ class PracticeAnalyser({
 
   /// The tablebase evaluation of [position], or null when the lookup fails or is not conclusive.
   Future<ClientEval?> _fetchTablebaseEval(Position position) async {
-    if (_disposed || !ref.mounted) return null;
+    if (_isGone) return null;
     try {
       final entry = await ref
           .read(tablebaseRepositoryProvider)
@@ -572,7 +582,7 @@ class PracticeAnalyser({
       if (_engineSpokeFor == analysing.position) _engineSpokeFor = null;
       _strandWaiters(analysing.position);
     }
-    if (!stopEngine) return;
+    if (!stopEngine || _isGone) return;
     final currentEvaluator = evaluator();
     if (currentEvaluator.currentWork == analysing) currentEvaluator.stop();
   }

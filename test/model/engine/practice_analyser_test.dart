@@ -732,6 +732,24 @@ void main() {
       expect(analyser.evalFor(Chess.initial), isNull);
     }, skip: kPracticeCloudEvalsEnabled ? null : 'this build asks the server for nothing');
 
+    test('a disposed analyser starts nothing and keeps nobody waiting', () async {
+      final container = await makeContainer();
+      final analyser = makeAnalyser(container);
+
+      // The owner is gone, and with it the providers the evaluator and the network are read from.
+      analyser.dispose();
+      analyser.analyse(makeWork());
+      await settleEvals();
+
+      expect(engine.requestedPositions, isEmpty);
+      expect(analyser.isAnalysing, isFalse);
+
+      // A wait registered now would be one nothing is left to end: the waits that were running
+      // have been completed by the disposal already.
+      final wait = analyser.usableEval(Chess.initial, timeout: const Duration(seconds: 5));
+      expect(await wait, isNull);
+    });
+
     test('an analysis started while an eval is reported is left running', () async {
       final container = await makeContainer();
       late final PracticeAnalyser analyser;
