@@ -49,6 +49,14 @@ class const OpenChallengeRequestsEvent() extends UiEvent;
 /// Shows the dialog explaining why [playban] was applied.
 class const ShowPlaybanEvent(final TemporaryBan playban) extends UiEvent;
 
+/// Asks the user whether to carry out the action described by [message].
+///
+/// The answer is written to [completer]: `true` when the user agrees, `false` when they decline or
+/// when there is no widget tree to ask.
+class ConfirmActionEvent(final String message) extends UiEvent {
+  final Completer<bool> completer = Completer<bool>();
+}
+
 /// The channel on which [UiEvent]s travel from the model layer to the view layer.
 final uiEventBusProvider = Provider<UiEventBus>((Ref ref) {
   final bus = UiEventBus();

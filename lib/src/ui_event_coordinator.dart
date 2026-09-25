@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
 import 'package:lichess_mobile/src/model/ui_events.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
@@ -14,6 +14,8 @@ import 'package:lichess_mobile/src/view/play/playban.dart';
 import 'package:lichess_mobile/src/view/user/challenge_action_sheets.dart';
 import 'package:lichess_mobile/src/view/user/challenge_requests_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
+import 'package:material_ui/material_ui.dart';
 
 final uiEventCoordinatorProvider = Provider<UiEventCoordinator>((Ref ref) {
   final coordinator = UiEventCoordinator(ref);
@@ -40,7 +42,7 @@ class UiEventCoordinator(final Ref ref) {
     _subscription = null;
   }
 
-  void _handle(UiEvent event) {
+  Future<void> _handle(UiEvent event) async {
     switch (event) {
       case ShowErrorEvent(:final message):
         final context = _currentContext;
@@ -86,6 +88,38 @@ class UiEventCoordinator(final Ref ref) {
         final context = _currentContext;
         if (context != null) {
           showPlaybanDialog(context, playban);
+        }
+      case ConfirmActionEvent(:final message, :final completer):
+        final context = _currentContext;
+        if (context == null) {
+          completer.complete(false);
+        } else {
+          completer.complete(
+            await showAdaptiveDialog<bool>(
+                  context: context,
+                  barrierDismissible: true,
+                  builder: (context) {
+                    return AlertDialog.adaptive(
+                      content: Text(message),
+                      actions: [
+                        PlatformDialogAction(
+                          child: const Text('OK'),
+                          onPressed: () {
+                            Navigator.of(context).pop(true);
+                          },
+                        ),
+                        PlatformDialogAction(
+                          child: Text(context.l10n.cancel),
+                          onPressed: () {
+                            Navigator.of(context).pop(false);
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                ) ??
+                false,
+          );
         }
     }
   }
