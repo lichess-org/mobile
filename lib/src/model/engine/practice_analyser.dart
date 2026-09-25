@@ -1,10 +1,22 @@
 import 'dart:async';
 
 import 'package:dartchess/dartchess.dart';
+import 'package:deep_pick/deep_pick.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
+import 'package:lichess_mobile/src/model/common/socket.dart';
+import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
+import 'package:lichess_mobile/src/model/explorer/tablebase.dart';
+import 'package:lichess_mobile/src/model/explorer/tablebase_repository.dart';
+import 'package:lichess_mobile/src/model/offline_computer/tablebase_eval.dart';
+import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:logging/logging.dart';
 
 final _logger = Logger('PracticeAnalyser');
@@ -31,6 +43,16 @@ const kPracticeTargetDepth = kDebugMode ? 18 : 20;
 /// with an engine running on a loop.
 const _kMaxRestarts = 3;
 
+/// The ply past which a cloud eval is a miss far more often than a hit.
+///
+/// Only consulted when the caller has not said its positions are always worth asking for: a
+/// practice lesson starts from a position the server has evaluated whatever its ply, a game does
+/// not once it has left the book behind.
+const _kCloudEvalPlyThreshold = 30;
+
+/// How long a cloud eval request waits for the server's answer before the search is left to it.
+const _kCloudEvalTimeout = Duration(seconds: 2);
+
 /// The wall-clock cap on analysing one position, for a device that would never reach either depth.
 ///
 /// Short, because it is a battery cap and not a quality one: a device still searching after this
@@ -48,17 +70,20 @@ const kPracticeMaxSearchTime = Duration(seconds: 5);
 /// [kPracticeTargetDepth], refining the eval while the player thinks — which is the whole point:
 /// their thinking time becomes engine time instead of idle time.
 ///
-/// **Who has the floor is the caller's to decide**, through [analyse] and [yieldEngine]. On every
-/// variant the opponent plays on the same engine (see `EngineBudget`), and a search started there
-/// supersedes this one silently: the stream simply stops and nothing restarts it. So the analysis
-/// is handed over explicitly rather than left to be discovered — and taken back the same way, by
-/// analysing the position the game is at now, which is not always the one that was given up.
+/// The local search is not alone: every position analysed is also asked of the server — a cloud
+/// eval, and a tablebase lookup in an endgame — and whatever comes back first and deepest wins.
 class PracticeAnalyser({
+  /// Where the network lookups are made from, and what says whether the owner is still there.
+  required final Ref ref,
+
   /// The evaluator to run on.
   ///
   /// A function rather than the evaluator itself, because it is keyed by the game being played and
   /// is resolved lazily by the controller that owns both.
   required final PositionEvaluator Function() evaluator,
+
+  /// Whether every position analysed is worth asking the server about, whatever its ply.
+  required final bool alwaysRequestCloudEvals,
 
   /// Called whenever a position's evaluation improves, so the game can store it.
   required final void Function(Position position, ClientEval eval) onEval,
@@ -75,12 +100,20 @@ class PracticeAnalyser({
   StreamSubscription<EvalResult>? _subscription;
 
   /// The best evaluation seen for each position of this game.
-  ///
-  /// Keyed by position rather than by ply, which is what makes a takeback free: replaying the same
-  /// move arrives at a position that has already been analysed, and no search is needed for it.
   final Map<Position, ClientEval> _evals = {};
 
   final Map<Position, List<_Waiter>> _waiters = {};
+
+  /// The positions the server has already been asked about, so that two searches on the same
+  /// position do not each pay for the round trip.
+  final Set<Position> _raced = {};
+
+  /// The socket the cloud evals are asked over.
+  SocketClient? _socketClient;
+
+  StreamSubscription<SocketEvent>? _socketSubscription;
+
+  bool _disposed = false;
 
   /// Whether an analysis is running.
   bool get isAnalysing => _analysing != null;
@@ -94,6 +127,8 @@ class PracticeAnalyser({
   /// to [kPracticeTargetDepth] — there is nothing left to learn about it.
   void analyse(EvalWork work) {
     if (_analysing == work) return;
+
+    _raceTheSearch(work);
 
     final known = _evals[work.position];
     if (known != null && known.depth >= kPracticeTargetDepth) {
@@ -166,6 +201,7 @@ class PracticeAnalyser({
   /// Kept if it is deeper than what the search has reached, and it ends the search when it is
   /// deeper than anything the search would have reached.
   void offer(Position position, ClientEval eval) {
+    if (_disposed || !ref.mounted) return;
     if (!_record(position, eval)) return;
     if (eval.depth >= kPracticeTargetDepth && _analysing?.position == position) {
       _logger.fine('An eval from elsewhere beat the search at ply ${position.ply}');
@@ -194,6 +230,7 @@ class PracticeAnalyser({
     _restartedWork = null;
     _restarts = 0;
     _evals.clear();
+    _raced.clear();
     _completeAll();
   }
 
@@ -234,9 +271,129 @@ class PracticeAnalyser({
   /// Called from the owner's disposal, where the evaluator is being disposed too and reaching for
   /// it is not allowed — a provider may not be read from a life-cycle callback.
   void dispose() {
+    _disposed = true;
     _stopSearch(stopEngine: false);
+    _socketSubscription?.cancel();
+    _socketSubscription = null;
+    _socketClient = null;
     _completeAll();
     _evals.clear();
+    _raced.clear();
+  }
+
+  /// Asks the server for the evaluations that would beat the search: a cloud eval in the opening —
+  /// or at any ply when [alwaysRequestCloudEvals] — and a tablebase lookup in an endgame. Whatever
+  /// comes back is offered to the analysis.
+  void _raceTheSearch(EvalWork work) {
+    if (!kPracticeCloudEvalsEnabled || _disposed) return;
+
+    final position = work.position;
+
+    // Nothing to beat: this position has already been analysed as deeply as it is going to be.
+    if (_evals[position] case final known? when known.depth >= kPracticeTargetDepth) return;
+
+    // Already asked about. A second search on the same position — a takeback replayed, the screen
+    // coming back — would otherwise pay for the round trip all over again.
+    if (_raced.contains(position)) return;
+
+    final wantsCloudEval =
+        work.variant == Variant.standard &&
+        (alwaysRequestCloudEvals || position.ply < _kCloudEvalPlyThreshold);
+    final wantsTablebase = isTablebaseRelevant(position);
+    if (!wantsCloudEval && !wantsTablebase) return;
+
+    _raced.add(position);
+
+    // Offered one by one rather than once both are in: in an endgame lesson the two are asked
+    // together, and the search has no reason to wait on the slower of them.
+    Future<ClientEval?> ask(Future<ClientEval?> request) => request.then((eval) {
+      if (eval != null) offer(position, eval);
+      return eval;
+    });
+
+    Future.wait([
+      if (wantsCloudEval) ask(_getCloudEval(work)),
+      if (wantsTablebase) ask(_fetchTablebaseEval(position)),
+    ]).then((evals) {
+      // Nothing answered: no network, or a position the server has never seen. The attempt is
+      // forgotten, so that analysing this position again asks again.
+      if (evals.every((eval) => eval == null)) _raced.remove(position);
+    });
+  }
+
+  /// The socket the cloud evals go over, opened on first use.
+  SocketClient? get _socket {
+    if (_disposed || !ref.mounted) return null;
+    final client = _socketClient ??= ref
+        .read(socketPoolProvider)
+        .open(AnalysisController.socketUri);
+    _socketSubscription ??= client.stream.listen((_) {});
+    return client;
+  }
+
+  /// Asks the server for its evaluation of the position [work] describes.
+  ///
+  /// Returns null when the server has none, or does not answer within [_kCloudEvalTimeout].
+  Future<CloudEval?> _getCloudEval(EvalWork work) async {
+    final socketClient = _socket;
+    if (socketClient == null) return null;
+
+    try {
+      final uciPath = UciPath.fromUciMoves(
+        work.steps.map((s) => s.sanMove.normalizeUci(work.variant)),
+      );
+
+      _logger.fine(
+        'Requesting cloud eval for ply ${work.position.ply} and fen ${work.position.fen}',
+      );
+
+      socketClient.send('evalGet', {
+        'fen': work.position.fen,
+        'path': uciPath.value,
+        if (work.position.rule != Rule.chess) 'variant': Variant.fromRule(work.position.rule).name,
+        'mpv': work.multiPv,
+      });
+
+      await for (final event
+          in socketClient.stream.where((e) => e.topic == 'evalHit').timeout(_kCloudEvalTimeout)) {
+        final path = pick(event.data, 'path').asStringOrThrow();
+        if (path != uciPath.value) continue;
+
+        final nodes = pick(event.data, 'knodes').asIntOrThrow() * 1000;
+        final depth = pick(event.data, 'depth').asIntOrThrow();
+        final pvs = pick(event.data, 'pvs')
+            .asListOrThrow(
+              (pv) => PvData(
+                moves: pv('moves').asStringOrThrow().split(' ').toIList(),
+                cp: pv('cp').asIntOrNull(),
+                mate: pv('mate').asIntOrNull(),
+              ),
+            )
+            .toIList();
+
+        _logger.fine('Got a cloud eval at ply ${work.position.ply} with depth $depth');
+
+        return CloudEval(depth: depth, nodes: nodes, pvs: pvs, position: work.position);
+      }
+    } catch (e, st) {
+      _logger.fine('Could not get cloud eval:', e, st);
+    }
+
+    return null;
+  }
+
+  /// The tablebase evaluation of [position], or null when the lookup fails or is not conclusive.
+  Future<ClientEval?> _fetchTablebaseEval(Position position) async {
+    if (_disposed || !ref.mounted) return null;
+    try {
+      final entry = await ref
+          .read(tablebaseRepositoryProvider)
+          .getTablebaseEntry(position.fen, Variant.fromRule(position.rule));
+      return tablebaseEntryToCloudEval(entry, position);
+    } catch (e, st) {
+      _logger.fine('Could not get tablebase eval:', e, st);
+      return null;
+    }
   }
 
   /// Keeps [eval] if it is an improvement, and tells everyone waiting on it. Returns whether it

@@ -51,7 +51,12 @@ class PracticeEngineController(final PracticeEngineChapter _chapter)
   ProviderSubscription<EngineEvaluationState>? _evaluatorSubscription;
 
   late final PracticeAnalyser _analyser = PracticeAnalyser(
+    ref: ref,
     evaluator: () => _evaluator,
+    // Every position of a lesson is one thousands of players have already run through the cloud,
+    // however deep in the game it is, so the ply it is at says nothing about whether asking is
+    // worth it.
+    alwaysRequestCloudEvals: true,
     onEval: _onEval,
   );
 

@@ -4,6 +4,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -11,8 +12,10 @@ import 'package:lichess_mobile/src/model/engine/evaluation_context.dart';
 import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/model/engine/practice_analyser.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
+import 'package:lichess_mobile/src/network/socket.dart';
 
 import '../../binding.dart';
+import '../../network/fake_websocket_channel.dart';
 import '../../test_container.dart';
 import 'fake_engine.dart';
 
@@ -25,6 +28,64 @@ const _context = EvaluationContext(
   variant: Variant.standard,
   initialPosition: Chess.initial,
 );
+
+/// A [Ref] to build the analyser on, which is all it uses the container for.
+final refProvider = Provider<Ref>((ref) => ref, name: 'TestRefProvider');
+
+/// The analyser under test, running on [container]'s evaluator.
+///
+/// The network lookups it races the search with go nowhere here: nothing answers the `evalGet` on
+/// the fake socket, and the mock HTTP client has no tablebase entry to give.
+PracticeAnalyser makeAnalyser(
+  ProviderContainer container, {
+  PositionEvaluator Function()? evaluator,
+  bool alwaysRequestCloudEvals = false,
+  void Function(Position position, ClientEval eval) onEval = ignoreEval,
+}) => PracticeAnalyser(
+  ref: container.read(refProvider),
+  evaluator: evaluator ?? () => readEvaluator(container),
+  alwaysRequestCloudEvals: alwaysRequestCloudEvals,
+  onEval: onEval,
+);
+
+/// A container whose socket answers `evalGet` with a cloud eval at [depth].
+Future<ProviderContainer> cloudEvalContainer({required int depth}) => makeContainer(
+  overrides: {
+    webSocketChannelFactoryProvider: webSocketChannelFactoryProvider.overrideWith(
+      (_) => FakeWebSocketChannelFactory(
+        (uri) => FakeWebSocketChannel(
+          uri,
+          serverHandlers: {
+            'evalGet': (json) {
+              final data = json['d']! as Map<String, dynamic>;
+              return {
+                't': 'evalHit',
+                'd': {
+                  'path': data['path'],
+                  'knodes': '119234',
+                  'depth': '$depth',
+                  'pvs': [
+                    {'moves': 'e2e4 e7e5 g1f3', 'cp': '23'},
+                  ],
+                },
+              };
+            },
+          },
+        ),
+      ),
+    ),
+  },
+);
+
+/// Waits for [condition], which the socket's round trip only meets after a few event loop turns.
+Future<void> waitFor(bool Function() condition) async {
+  final deadline = DateTime.now().add(const Duration(seconds: 2));
+  while (!condition() && DateTime.now().isBefore(deadline)) {
+    await Future<void>.delayed(const Duration(milliseconds: 20));
+  }
+}
+
+void ignoreEval(Position position, ClientEval eval) {}
 
 /// The evaluator the analyser runs on, kept alive for the duration of the test.
 PositionEvaluator readEvaluator(ProviderContainer container) {
@@ -66,10 +127,7 @@ void main() {
   group('PracticeAnalyser', () {
     test('keeps searching past the usable depth, and stops at the target', () async {
       final container = await makeContainer();
-      final analyser = PracticeAnalyser(
-        evaluator: () => readEvaluator(container),
-        onEval: (_, _) {},
-      );
+      final analyser = makeAnalyser(container);
       addTearDown(analyser.dispose);
 
       analyser.analyse(makeWork());
@@ -93,10 +151,7 @@ void main() {
 
     test('a search that ends without a usable eval is started again', () async {
       final container = await makeContainer();
-      final analyser = PracticeAnalyser(
-        evaluator: () => readEvaluator(container),
-        onEval: (_, _) {},
-      );
+      final analyser = makeAnalyser(container);
       addTearDown(analyser.dispose);
 
       analyser.analyse(makeWork());
@@ -123,10 +178,7 @@ void main() {
 
     test('a search that reached the usable depth is left alone when it ends', () async {
       final container = await makeContainer();
-      final analyser = PracticeAnalyser(
-        evaluator: () => readEvaluator(container),
-        onEval: (_, _) {},
-      );
+      final analyser = makeAnalyser(container);
       addTearDown(analyser.dispose);
 
       analyser.analyse(makeWork());
@@ -143,10 +195,7 @@ void main() {
 
     test('it gives up on a position it cannot get a usable eval for', () async {
       final container = await makeContainer();
-      final analyser = PracticeAnalyser(
-        evaluator: () => readEvaluator(container),
-        onEval: (_, _) {},
-      );
+      final analyser = makeAnalyser(container);
       addTearDown(analyser.dispose);
 
       analyser.analyse(makeWork());
@@ -165,10 +214,7 @@ void main() {
 
     test('usableEval completes as soon as the analysis is deep enough', () async {
       final container = await makeContainer();
-      final analyser = PracticeAnalyser(
-        evaluator: () => readEvaluator(container),
-        onEval: (_, _) {},
-      );
+      final analyser = makeAnalyser(container);
       addTearDown(analyser.dispose);
 
       analyser.analyse(makeWork());
@@ -196,10 +242,7 @@ void main() {
 
     test('waiters asking for different depths are served at their own depth', () async {
       final container = await makeContainer();
-      final analyser = PracticeAnalyser(
-        evaluator: () => readEvaluator(container),
-        onEval: (_, _) {},
-      );
+      final analyser = makeAnalyser(container);
       addTearDown(analyser.dispose);
 
       analyser.analyse(makeWork());
@@ -238,10 +281,7 @@ void main() {
 
     test('usableEval gives up with the best it has when the deadline passes', () async {
       final container = await makeContainer();
-      final analyser = PracticeAnalyser(
-        evaluator: () => readEvaluator(container),
-        onEval: (_, _) {},
-      );
+      final analyser = makeAnalyser(container);
       addTearDown(analyser.dispose);
 
       analyser.analyse(makeWork());
@@ -261,7 +301,7 @@ void main() {
     test('yieldEngine hands the engine over, and analysing takes it back', () async {
       final container = await makeContainer();
       final evaluator = readEvaluator(container);
-      final analyser = PracticeAnalyser(evaluator: () => evaluator, onEval: (_, _) {});
+      final analyser = makeAnalyser(container, evaluator: () => evaluator);
       addTearDown(analyser.dispose);
 
       final work = makeWork();
@@ -285,10 +325,7 @@ void main() {
 
     test('an eval from elsewhere can end the search', () async {
       final container = await makeContainer();
-      final analyser = PracticeAnalyser(
-        evaluator: () => readEvaluator(container),
-        onEval: (_, _) {},
-      );
+      final analyser = makeAnalyser(container);
       addTearDown(analyser.dispose);
 
       analyser.analyse(makeWork());
@@ -316,10 +353,7 @@ void main() {
 
     test('a position already analysed to the target depth is not searched again', () async {
       final container = await makeContainer();
-      final analyser = PracticeAnalyser(
-        evaluator: () => readEvaluator(container),
-        onEval: (_, _) {},
-      );
+      final analyser = makeAnalyser(container);
       addTearDown(analyser.dispose);
 
       analyser.analyse(makeWork());
@@ -340,12 +374,26 @@ void main() {
       expect(analyser.evalFor(Chess.initial)?.depth, kPracticeTargetDepth);
     });
 
+    test('a cloud eval beats the local search and ends it', () async {
+      final container = await cloudEvalContainer(depth: 36);
+      final analyser = makeAnalyser(container, alwaysRequestCloudEvals: true);
+      addTearDown(analyser.dispose);
+
+      analyser.analyse(makeWork());
+      await settleEvals();
+      engine.emitDepthRange(toDepth: kPracticeUsableDepth - 2);
+      await settleEvals();
+
+      await waitFor(() => !analyser.isAnalysing);
+
+      expect(analyser.evalFor(Chess.initial), isA<CloudEval>());
+      expect(analyser.evalFor(Chess.initial)?.depth, 36);
+      expect(analyser.isAnalysing, isFalse);
+    }, skip: kPracticeCloudEvalsEnabled ? null : 'this build asks the server for nothing');
+
     test('forgets everything it knows when the game is replaced', () async {
       final container = await makeContainer();
-      final analyser = PracticeAnalyser(
-        evaluator: () => readEvaluator(container),
-        onEval: (_, _) {},
-      );
+      final analyser = makeAnalyser(container);
       addTearDown(analyser.dispose);
 
       analyser.analyse(makeWork());
