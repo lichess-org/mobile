@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/experimental/mutation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -223,7 +224,14 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
                         onPressed: () {
                           launchUrl(Uri.parse('https://lichess.org/patron'));
                         },
-                        child: Text(context.l10n.patronDonate),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          spacing: 5,
+                          children: [
+                            const Icon(LichessIcons.patron),
+                            Text(context.l10n.patronDonate),
+                          ],
+                        ),
                       ),
                     ),
                     const SizedBox(height: 16.0),
@@ -233,7 +241,7 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
                       onPressed: () {
                         launchUrl(Uri.parse('https://lichess.org/about'));
                       },
-                      child: Text(context.l10n.aboutX('Lichess...')),
+                      child: Text(context.l10n.aboutX('Lichess')),
                     ),
                   ),
                   const _WelcomeMessageCard(),
@@ -564,7 +572,11 @@ class const _SignInWidget() extends ConsumerWidget {
         MutationPending() => null,
         _ => () => showSignInOptions(context, ref),
       },
-      child: Text(context.l10n.signIn),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        spacing: 5,
+        children: [const Icon(CupertinoIcons.person), Text(context.l10n.signIn)],
+      ),
     );
   }
 }
