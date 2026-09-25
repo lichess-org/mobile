@@ -353,6 +353,7 @@ class const _Following(
                           });
                           try {
                             await ref.read(relationRepositoryProvider).unfollow(user.id);
+                            ref.invalidate(followingProvider);
                           } catch (_) {
                             setState(() {
                               following = oldState;
