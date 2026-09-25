@@ -11,6 +11,11 @@ final relationRepositoryProvider = Provider<RelationRepository>((ref) {
   return RelationRepository(ref.watch(lichessClientProvider), ref.watch(aggregatorProvider));
 }, name: 'RelationRepositoryProvider');
 
+/// The list of users that the current user is following.
+final followingProvider = FutureProvider.autoDispose<IList<User>>((ref) {
+  return ref.read(relationRepositoryProvider).getAllFollowing();
+});
+
 class const RelationRepository(final LichessClient client, final Aggregator aggregator) {
   /// Fetches the list of users that the current user is following.
   Future<IList<User>> getAllFollowing() {
