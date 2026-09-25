@@ -174,7 +174,8 @@ class StockfishNnueService(final Ref _ref) {
           final confirm = ConfirmActionEvent(
             'Are you sure you want to download the NNUE file ($nnueDownloadSizeMB)?',
           );
-          _ref.read(uiEventBusProvider).emit(confirm);
+          // No listener means no widget tree to ask, so decline like the old null-context check.
+          if (!_ref.read(uiEventBusProvider).emit(confirm)) return false;
           final isOk = await confirm.completer.future;
           if (isOk) {
             return await doDownload();

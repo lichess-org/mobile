@@ -69,10 +69,17 @@ class UiEventBus() {
 
   Stream<UiEvent> get stream => _controller.stream;
 
-  void emit(UiEvent event) {
-    if (!_controller.isClosed) {
+  /// Adds [event] to the bus.
+  ///
+  /// Returns whether anyone was listening. A broadcast stream silently drops events with no
+  /// listener, so callers that wait on a reply must check the return value instead of hanging.
+  bool emit(UiEvent event) {
+    if (_controller.isClosed) return false;
+    final delivered = _controller.hasListener;
+    if (delivered) {
       _controller.add(event);
     }
+    return delivered;
   }
 
   void close() {
