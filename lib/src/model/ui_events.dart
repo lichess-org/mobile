@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 
@@ -9,7 +10,7 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 ///
 /// Services in `model/` cannot navigate, show dialogs or display snackbars without reaching into
 /// the widget tree, which would make the model layer depend on the view layer. They emit these
-/// events on the [UiEventBus] instead. [UiEventCoordinator] is their only consumer.
+/// events on the [UiEventBus] instead. The view layer coordinator is their only consumer.
 sealed class const UiEvent();
 
 /// Shows [message] in a snackbar.
@@ -31,6 +32,19 @@ class const OpenBroadcastFollowEvent(
   final BroadcastGameId gameId,
   final Side pov,
 ) extends UiEvent;
+
+/// Shows the action sheet confirming the incoming [challenge].
+class const ShowChallengeConfirmEvent(
+  final Challenge challenge, {
+  final String? title,
+  final bool fromLink = false,
+}) extends UiEvent;
+
+/// Shows the action sheet for picking a decline reason for [challengeId].
+class const ShowChallengeDeclineEvent(final ChallengeId challengeId) extends UiEvent;
+
+/// Opens the incoming and outgoing challenge requests screen, without clearing the stack.
+class const OpenChallengeRequestsEvent() extends UiEvent;
 
 /// The channel on which [UiEvent]s travel from the model layer to the view layer.
 final uiEventBusProvider = Provider<UiEventBus>((Ref ref) {

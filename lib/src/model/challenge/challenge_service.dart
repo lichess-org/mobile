@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_games_notifier.dart';
@@ -12,17 +13,9 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
+import 'package:lichess_mobile/src/model/ui_events.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/tab_navigation.dart' show currentNavigatorKeyProvider;
-import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/view/game/game_screen.dart';
-import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
-import 'package:lichess_mobile/src/view/user/challenge_requests_screen.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
-import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:logging/logging.dart';
-import 'package:material_ui/material_ui.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 /// A provider for [ChallengeService].
@@ -63,7 +56,7 @@ class ChallengeService(final Ref ref) {
         case ChallengeCreatedNotification(:final challengeId):
           _onChallengeBackgroundNotificationResponse(challengeId);
         case ChallengeAcceptedNotification(:final fullId):
-          _onChallengeAccepted(fullId);
+          ref.read(uiEventBusProvider).emit(OpenGameEvent(fullId));
         case _:
           break;
       }
@@ -123,26 +116,23 @@ class ChallengeService(final Ref ref) {
     Challenge challenge,
   ) async {
     final challengeId = challenge.id;
+    final bus = ref.read(uiEventBusProvider);
 
     switch (actionid) {
       case 'accept':
         await acceptChallenge(challengeId);
 
       case 'decline':
-        final context = ref.read(currentNavigatorKeyProvider).currentContext;
-        if (context == null || !context.mounted) break;
-        showDeclineDialog(context, challengeId);
+        bus.emit(ShowChallengeDeclineEvent(challengeId));
 
       case null:
-        final context = ref.read(currentNavigatorKeyProvider).currentContext;
-        if (context == null || !context.mounted) break;
         final challenge = _current?.inward.firstWhereOrNull(
           (challenge) => challenge.id == challengeId,
         );
         if (challenge != null) {
-          showConfirmDialog(context, challenge);
+          bus.emit(ShowChallengeConfirmEvent(challenge));
         } else {
-          Navigator.of(context).push(ChallengeRequestsScreen.buildRoute());
+          bus.emit(const OpenChallengeRequestsEvent());
         }
     }
   }
@@ -150,24 +140,7 @@ class ChallengeService(final Ref ref) {
   /// Handle a local notification response when the app is in the background.
   Future<void> _onChallengeBackgroundNotificationResponse(ChallengeId id) async {
     final challenge = await ref.read(challengeRepositoryProvider).show(id);
-    final context = ref.read(currentNavigatorKeyProvider).currentContext;
-    if (context == null || !context.mounted) return;
-    showConfirmDialog(context, challenge);
-  }
-
-  void _onChallengeAccepted(GameFullId fullId) {
-    final context = ref.read(currentNavigatorKeyProvider).currentContext;
-    if (context == null || !context.mounted) return;
-
-    final rootNavState = Navigator.of(context, rootNavigator: true);
-    if (rootNavState.canPop()) {
-      rootNavState.popUntil((route) => route.isFirst);
-    }
-
-    Navigator.of(
-      context,
-      rootNavigator: true,
-    ).push(GameScreen.buildRoute(source: ExistingGameSource(fullId)));
+    ref.read(uiEventBusProvider).emit(ShowChallengeConfirmEvent(challenge));
   }
 
   /// Accept a challenge and open the GameScreen for the created game.
@@ -184,73 +157,20 @@ class ChallengeService(final Ref ref) {
     await challengeRepo.accept(id);
     final fullId = await challengeRepo.show(id).then((challenge) => challenge.gameFullId);
 
-    final context = ref.read(currentNavigatorKeyProvider).currentContext;
-    if (context == null || !context.mounted) return;
+    final bus = ref.read(uiEventBusProvider);
 
     if (fullId == null) {
-      return showSnackBar(context, 'Failed to accept challenge', type: SnackBarType.error);
+      bus.emit(const ShowErrorEvent('Failed to accept challenge'));
+      return;
     }
 
     ref.invalidate(ongoingGamesProvider);
 
-    _onChallengeAccepted(fullId);
+    bus.emit(OpenGameEvent(fullId));
   }
 
-  void showDeclineDialog(BuildContext context, ChallengeId id) {
-    showAdaptiveActionSheet<ChallengeDeclineReason>(
-      context: context,
-      title: Text(context.l10n.decline),
-      actions: ChallengeDeclineReason.values
-          .map(
-            (reason) => BottomSheetAction(
-              makeLabel: (context) => Text(reason.label(context.l10n)),
-              leading: Icon(Icons.close, color: context.lichessColors.error),
-              isDestructiveAction: true,
-              onPressed: () {
-                ref.read(challengeRepositoryProvider).decline(id, reason: reason);
-              },
-            ),
-          )
-          .toList(),
-    );
-  }
-
-  void showConfirmDialog(
-    BuildContext context,
-    Challenge challenge, {
-    String? title,
-    bool fromLink = false,
-  }) {
-    showAdaptiveActionSheet<void>(
-      context: context,
-      title: challenge.challenger != null && challenge.variant.isPlaySupported
-          ? Text(
-              title ??
-                  '${challenge.challenger!.user.name} challenges you: ${challenge.description(context.l10n)}',
-            )
-          : null,
-      actions: [
-        if (challenge.variant.isPlaySupported)
-          BottomSheetAction(
-            makeLabel: (context) => Text(context.l10n.accept),
-            leading: Icon(Icons.check, color: context.lichessColors.good),
-            isDefaultAction: true,
-            onPressed: () async => await acceptChallenge(challenge.id),
-          ),
-        if (fromLink && Theme.of(context).platform != TargetPlatform.iOS)
-          BottomSheetAction(
-            makeLabel: (context) => Text(context.l10n.cancel),
-            leading: const Icon(Icons.close),
-            onPressed: () {},
-          )
-        else if (!fromLink)
-          BottomSheetAction(
-            makeLabel: (context) => Text(context.l10n.decline),
-            leading: Icon(Icons.clear, color: context.lichessColors.error),
-            isDestructiveAction: true,
-            onPressed: () => showDeclineDialog(context, challenge.id),
-          ),
-      ],
-    );
+  /// Decline the challenge [id], optionally giving a [reason].
+  Future<void> declineChallenge(ChallengeId id, {ChallengeDeclineReason? reason}) {
+    return ref.read(challengeRepositoryProvider).decline(id, reason: reason);
   }
 }

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
 import 'package:lichess_mobile/src/model/ui_events.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
@@ -9,6 +10,8 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/message/conversation_screen.dart';
+import 'package:lichess_mobile/src/view/user/challenge_action_sheets.dart';
+import 'package:lichess_mobile/src/view/user/challenge_requests_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 
 final uiEventCoordinatorProvider = Provider<UiEventCoordinator>((Ref ref) {
@@ -25,7 +28,9 @@ final uiEventCoordinatorProvider = Provider<UiEventCoordinator>((Ref ref) {
 class UiEventCoordinator(final Ref ref) {
   StreamSubscription<UiEvent>? _subscription;
 
+  /// Subscribes to the event bus. Calling it more than once has no additional effect.
   void start() {
+    if (_subscription != null) return;
     _subscription = ref.read(uiEventBusProvider).stream.listen(_handle);
   }
 
@@ -58,6 +63,23 @@ class UiEventCoordinator(final Ref ref) {
           navigator.push(
             BroadcastGameScreen.buildRoute(roundId: roundId, gameId: gameId, initialPov: pov),
           );
+        }
+      case ShowChallengeConfirmEvent(:final challenge, :final title, :final fromLink):
+        final context = _currentContext;
+        if (context != null) {
+          ref
+              .read(challengeServiceProvider)
+              .showConfirmDialog(context, challenge, title: title, fromLink: fromLink);
+        }
+      case ShowChallengeDeclineEvent(:final challengeId):
+        final context = _currentContext;
+        if (context != null) {
+          ref.read(challengeServiceProvider).showDeclineDialog(context, challengeId);
+        }
+      case OpenChallengeRequestsEvent():
+        final context = _currentContext;
+        if (context != null) {
+          Navigator.of(context).push(ChallengeRequestsScreen.buildRoute());
         }
     }
   }
