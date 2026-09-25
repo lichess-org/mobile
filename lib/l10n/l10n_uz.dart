@@ -350,6 +350,9 @@ class AppLocalizationsUz extends AppLocalizations {
   String get mobilePerfShortPuzzle => 'Masala';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get variantStandard => 'Standart';
 
   @override

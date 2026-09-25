@@ -350,6 +350,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobilePerfShortPuzzle => 'Úlohy';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get variantStandard => 'Standardní';
 
   @override

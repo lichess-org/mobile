@@ -350,6 +350,9 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobilePerfShortPuzzle => 'Nøtt';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get variantStandard => 'Standard';
 
   @override

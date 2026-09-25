@@ -112,6 +112,9 @@ sealed class const StudyChapter._() with _$StudyChapter {
     required int? conceal,
     @JsonKey(defaultValue: false) required bool gamebook,
     @JsonKey(fromJson: studyChapterFeaturesFromJson) required StudyChapterFeatures features,
+
+    /// The pinned chapter comment, only set if the chapter has one.
+    String? description,
   }) = _StudyChapter;
 
   factory fromJson(Map<String, Object?> json) => _$StudyChapterFromJson(json);

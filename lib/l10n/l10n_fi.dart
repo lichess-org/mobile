@@ -350,6 +350,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobilePerfShortPuzzle => 'Tehtävä';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get variantStandard => 'Normaali';
 
   @override

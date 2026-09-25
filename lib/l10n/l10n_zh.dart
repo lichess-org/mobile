@@ -350,6 +350,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobilePerfShortPuzzle => '谜题';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get variantStandard => '标准';
 
   @override

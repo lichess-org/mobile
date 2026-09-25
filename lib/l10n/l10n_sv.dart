@@ -350,6 +350,9 @@ class AppLocalizationsSv extends AppLocalizations {
   String get mobilePerfShortPuzzle => 'Pussel';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get variantStandard => 'Standard';
 
   @override

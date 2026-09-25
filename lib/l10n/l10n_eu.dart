@@ -350,6 +350,9 @@ class AppLocalizationsEu extends AppLocalizations {
   String get mobilePerfShortPuzzle => 'Ariketak';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get variantStandard => 'Ohikoa';
 
   @override

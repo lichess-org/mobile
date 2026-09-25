@@ -350,6 +350,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobilePerfShortPuzzle => 'Zadania';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get variantStandard => 'Standardowe';
 
   @override

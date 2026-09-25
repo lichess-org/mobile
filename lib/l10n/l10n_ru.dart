@@ -350,6 +350,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobilePerfShortPuzzle => 'Задача';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get variantStandard => 'Шахматы';
 
   @override

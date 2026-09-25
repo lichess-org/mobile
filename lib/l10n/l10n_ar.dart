@@ -350,6 +350,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobilePerfShortPuzzle => 'لغز';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get variantStandard => 'الأساسي';
 
   @override
