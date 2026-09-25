@@ -627,7 +627,13 @@ class PositionEvaluator(
       return;
     }
 
-    ref.read(uiEventBusProvider).emit(const ShowErrorEvent(_kUnrecoverableEngineMessage));
+    final bus = ref.read(uiEventBusProvider);
+
+    // Nobody listening means the message would be dropped, so leave the throttle alone and try
+    // again next time, like the old null-context check did.
+    if (!bus.hasListeners) return;
+
+    bus.emit(const ShowErrorEvent(_kUnrecoverableEngineMessage));
     _lastUserNotification = now;
   }
 

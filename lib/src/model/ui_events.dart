@@ -69,6 +69,9 @@ class UiEventBus() {
 
   Stream<UiEvent> get stream => _controller.stream;
 
+  /// Whether the view layer coordinator is listening.
+  bool get hasListeners => _controller.hasListener;
+
   /// Adds [event] to the bus.
   ///
   /// Returns whether anyone was listening. A broadcast stream silently drops events with no
