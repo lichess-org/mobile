@@ -25,10 +25,6 @@ import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
 import 'package:material_ui/material_ui.dart';
 
-final followingProvider = FutureProvider.autoDispose<IList<User>>((ref) {
-  return ref.read(relationRepositoryProvider).getAllFollowing();
-});
-
 class const FriendScreen({super.key}) extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const FriendScreen());
