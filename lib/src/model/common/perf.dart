@@ -1,31 +1,29 @@
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/widgets.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
-import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 
 /// Represents a lichess rating perf item
-enum Perf(final String title, final String shortTitle, final IconData icon) {
-  ultraBullet('UltraBullet', 'Ultra', LichessIcons.ultrabullet),
-  bullet('Bullet', 'Bullet', LichessIcons.bullet),
-  blitz('Blitz', 'Blitz', LichessIcons.blitz),
-  rapid('Rapid', 'Rapid', LichessIcons.rapid),
-  classical('Classical', 'Classical', LichessIcons.classical),
-  correspondence('Correspondence', 'Corresp.', LichessIcons.correspondence),
-  fromPosition('From Position', 'From Pos.', LichessIcons.feather),
-  chess960('Chess960', '960', LichessIcons.die_six),
-  antichess('Antichess', 'Antichess', LichessIcons.antichess),
-  kingOfTheHill('King of the Hill', 'KotH', LichessIcons.flag),
-  threeCheck('Three-check', '3check', LichessIcons.three_check),
-  atomic('Atomic', 'Atomic', LichessIcons.atom),
-  horde('Horde', 'Horde', LichessIcons.horde),
-  racingKings('Racing Kings', 'Racing', LichessIcons.racing_kings),
-  crazyhouse('Crazyhouse', 'Crazy', LichessIcons.h_square),
-  puzzle('Puzzle', 'Puzzle', LichessIcons.target),
-  storm('Storm', 'Storm', LichessIcons.storm),
-  streak('Streak', 'Streak', LichessIcons.streak);
+enum Perf(final String title, final String shortTitle) {
+  ultraBullet('UltraBullet', 'Ultra'),
+  bullet('Bullet', 'Bullet'),
+  blitz('Blitz', 'Blitz'),
+  rapid('Rapid', 'Rapid'),
+  classical('Classical', 'Classical'),
+  correspondence('Correspondence', 'Corresp.'),
+  fromPosition('From Position', 'From Pos.'),
+  chess960('Chess960', '960'),
+  antichess('Antichess', 'Antichess'),
+  kingOfTheHill('King of the Hill', 'KotH'),
+  threeCheck('Three-check', '3check'),
+  atomic('Atomic', 'Atomic'),
+  horde('Horde', 'Horde'),
+  racingKings('Racing Kings', 'Racing'),
+  crazyhouse('Crazyhouse', 'Crazy'),
+  puzzle('Puzzle', 'Puzzle'),
+  storm('Storm', 'Storm'),
+  streak('Streak', 'Streak');
 
   String label(AppLocalizations l10n) {
     switch (this) {
@@ -156,7 +154,7 @@ final IMap<String, Perf> _lowerCaseTitleMap = Perf.nameMap.map(
 
 extension PerfExtension on Pick {
   Perf asPerfOrThrow() {
-    final value = this.required().value;
+    final value = required().value;
     if (value is Perf) {
       return value;
     }
