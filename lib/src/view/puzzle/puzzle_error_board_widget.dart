@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
+import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:material_ui/material_ui.dart';
 
 class const PuzzleErrorBoardWidget({final String? errorMessage}) extends ConsumerWidget {
@@ -68,13 +69,7 @@ class const PuzzleErrorBoardWidget({final String? errorMessage}) extends Consume
                   }
 
                   if (orientation == Orientation.landscape) {
-                    final defaultBoardSize =
-                        constraints.biggest.shortestSide - (kTabletBoardTableSidePadding * 2);
-                    final sideWidth = constraints.biggest.longestSide - defaultBoardSize;
-                    final boardSize = sideWidth >= 250
-                        ? defaultBoardSize
-                        : constraints.biggest.longestSide / kGoldenRatio -
-                              (kTabletBoardTableSidePadding * 2);
+                    final boardSize = boardSizeConstraints(constraints);
                     return Padding(
                       padding: const EdgeInsets.all(kTabletBoardTableSidePadding),
                       child: Row(mainAxisSize: MainAxisSize.max, children: [board(boardSize)]),

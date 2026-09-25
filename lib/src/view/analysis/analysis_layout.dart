@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
+import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/pockets.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -140,16 +141,7 @@ class const AnalysisLayout({
                   final headerAndFooterHeight =
                       (boardHeader != null ? kAnalysisBoardHeaderOrFooterHeight : 0.0) +
                       (boardFooter != null ? kAnalysisBoardHeaderOrFooterHeight : 0.0);
-                  final sideWidth =
-                      constraints.biggest.longestSide - constraints.biggest.shortestSide;
-                  final defaultBoardSize =
-                      constraints.biggest.shortestSide - (kTabletBoardTableSidePadding * 2);
-                  final boardSize =
-                      (sideWidth >= 250
-                          ? defaultBoardSize
-                          : constraints.biggest.longestSide / kGoldenRatio -
-                                (kTabletBoardTableSidePadding * 2)) -
-                      headerAndFooterHeight;
+                  final boardSize = boardSizeConstraints(constraints) - headerAndFooterHeight;
 
                   final boardPrefs = ref.watch(boardPreferencesProvider);
 
