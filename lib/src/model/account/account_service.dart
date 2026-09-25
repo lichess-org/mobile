@@ -62,7 +62,7 @@ class AccountService(final Ref _ref) {
       final (_, notification) = data;
       switch (notification) {
         case PlaybanNotification(:final playban):
-          _ref.read(uiEventBusProvider).emit(ShowPlaybanEvent(playban));
+          _ref.emitUiEvent(ShowPlaybanEvent(playban));
         case _:
           break;
       }

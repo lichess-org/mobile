@@ -91,7 +91,7 @@ class PuzzleStreakController() extends AsyncNotifier<StreakState> {
             ));
           })
           .catchError((_) {
-            ref.read(uiEventBusProvider).emit(const ShowErrorEvent('Error loading next puzzle'));
+            ref.emitUiEvent(const ShowErrorEvent('Error loading next puzzle'));
           });
     }
 

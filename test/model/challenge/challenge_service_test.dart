@@ -58,8 +58,7 @@ class const _ShowDeclineDialogWidget({required final ChallengeId challengeId})
   }
 }
 
-/// In production the coordinator is started from `_AppState.initState`; start it here so that the
-/// events emitted by [ChallengeService] reach this widget tree.
+/// Mirror production (`_AppState.initState`): the coordinator must listen before services emit.
 void startUiEventCoordinator(WidgetTester tester) {
   ProviderScope.containerOf(
     tester.element(find.byType(ElevatedButton)),

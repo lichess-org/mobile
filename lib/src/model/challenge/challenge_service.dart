@@ -56,7 +56,7 @@ class ChallengeService(final Ref ref) {
         case ChallengeCreatedNotification(:final challengeId):
           _onChallengeBackgroundNotificationResponse(challengeId);
         case ChallengeAcceptedNotification(:final fullId):
-          ref.read(uiEventBusProvider).emit(OpenGameEvent(fullId));
+          ref.emitUiEvent(OpenGameEvent(fullId));
         case _:
           break;
       }
@@ -140,7 +140,7 @@ class ChallengeService(final Ref ref) {
   /// Handle a local notification response when the app is in the background.
   Future<void> _onChallengeBackgroundNotificationResponse(ChallengeId id) async {
     final challenge = await ref.read(challengeRepositoryProvider).show(id);
-    ref.read(uiEventBusProvider).emit(ShowChallengeConfirmEvent(challenge));
+    ref.emitUiEvent(ShowChallengeConfirmEvent(challenge));
   }
 
   /// Accept a challenge and open the GameScreen for the created game.

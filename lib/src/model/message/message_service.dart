@@ -51,7 +51,7 @@ class MessageService(final Ref ref) {
       return;
     }
 
-    ref.read(uiEventBusProvider).emit(OpenConversationEvent(user.lightUser));
+    ref.emitUiEvent(OpenConversationEvent(user.lightUser));
   }
 
   void dispose() {

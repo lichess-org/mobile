@@ -89,3 +89,9 @@ class UiEventBus() {
     _controller.close();
   }
 }
+
+/// Emits [UiEvent]s on the [UiEventBus] from a service holding a [Ref].
+extension UiEventBusEmitter on Ref {
+  /// Emits [event], returning whether the view layer coordinator heard it.
+  bool emitUiEvent(UiEvent event) => read(uiEventBusProvider).emit(event);
+}

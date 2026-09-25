@@ -52,7 +52,7 @@ class CorrespondenceService(final Logger _log, {required final Ref ref}) {
       final (_, notification) = data;
       switch (notification) {
         case CorresGameUpdateNotification(:final fullId):
-          ref.read(uiEventBusProvider).emit(OpenGameEvent(fullId));
+          ref.emitUiEvent(OpenGameEvent(fullId));
         case _:
           break;
       }

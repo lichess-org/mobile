@@ -20,9 +20,9 @@ class BroadcastService(final Ref ref) {
       final (_, notification) = data;
       switch (notification) {
         case BroadcastRoundNotification(:final roundId):
-          ref.read(uiEventBusProvider).emit(OpenBroadcastRoundEvent(roundId));
+          ref.emitUiEvent(OpenBroadcastRoundEvent(roundId));
         case BroadcastPlayerFollowNotification(:final roundId, :final gameId, :final pov):
-          ref.read(uiEventBusProvider).emit(OpenBroadcastFollowEvent(roundId, gameId, pov));
+          ref.emitUiEvent(OpenBroadcastFollowEvent(roundId, gameId, pov));
         case _:
           break;
       }
