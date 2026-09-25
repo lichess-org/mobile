@@ -9,11 +9,8 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart'
     show LocalNotification, PlaybanNotification;
-import 'package:lichess_mobile/src/model/user/user.dart' show TemporaryBan, User;
-import 'package:lichess_mobile/src/tab_navigation.dart' show currentNavigatorKeyProvider;
-import 'package:lichess_mobile/src/view/play/playban.dart';
-import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
-import 'package:material_ui/material_ui.dart' show AlertDialog, Navigator, Text, showAdaptiveDialog;
+import 'package:lichess_mobile/src/model/ui_events.dart';
+import 'package:lichess_mobile/src/model/user/user.dart' show User;
 
 /// A provider for [AccountService].
 final accountServiceProvider = Provider<AccountService>((Ref ref) {
@@ -65,7 +62,7 @@ class AccountService(final Ref _ref) {
       final (_, notification) = data;
       switch (notification) {
         case PlaybanNotification(:final playban):
-          showPlaybanDialog(playban);
+          _ref.read(uiEventBusProvider).emit(ShowPlaybanEvent(playban));
         case _:
           break;
       }
@@ -85,29 +82,6 @@ class AccountService(final Ref _ref) {
     _accountProviderSubscription?.close();
     _notificationResponseSubscription?.cancel();
     _bookmarkChangesController.close();
-  }
-
-  Future<void> showPlaybanDialog(TemporaryBan playban) async {
-    final context = _ref.read(currentNavigatorKeyProvider).currentContext;
-    if (context == null || !context.mounted) return;
-
-    return await showAdaptiveDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (context) {
-        return AlertDialog.adaptive(
-          content: PlaybanMessage(playban: playban, centerText: true),
-          actions: [
-            PlatformDialogAction(
-              child: const Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 
   Future<void> setGameBookmark(GameId id, {required bool bookmark}) async {

@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/message/conversation_screen.dart';
+import 'package:lichess_mobile/src/view/play/playban.dart';
 import 'package:lichess_mobile/src/view/user/challenge_action_sheets.dart';
 import 'package:lichess_mobile/src/view/user/challenge_requests_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -80,6 +81,11 @@ class UiEventCoordinator(final Ref ref) {
         final context = _currentContext;
         if (context != null) {
           Navigator.of(context).push(ChallengeRequestsScreen.buildRoute());
+        }
+      case ShowPlaybanEvent(:final playban):
+        final context = _currentContext;
+        if (context != null) {
+          showPlaybanDialog(context, playban);
         }
     }
   }

@@ -46,6 +46,9 @@ class const ShowChallengeDeclineEvent(final ChallengeId challengeId) extends UiE
 /// Opens the incoming and outgoing challenge requests screen, without clearing the stack.
 class const OpenChallengeRequestsEvent() extends UiEvent;
 
+/// Shows the dialog explaining why [playban] was applied.
+class const ShowPlaybanEvent(final TemporaryBan playban) extends UiEvent;
+
 /// The channel on which [UiEvent]s travel from the model layer to the view layer.
 final uiEventBusProvider = Provider<UiEventBus>((Ref ref) {
   final bus = UiEventBus();
