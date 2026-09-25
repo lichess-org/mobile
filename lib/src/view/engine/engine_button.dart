@@ -68,7 +68,11 @@ class _EngineButtonState() extends ConsumerState<EngineButton> {
             showPopover(
               context: context,
               bodyBuilder: (_) {
-                return _EnginePopup(goDeeper: widget.goDeeper, filters: widget.filters);
+                return _EnginePopup(
+                  goDeeper: widget.goDeeper,
+                  filters: widget.filters,
+                  savedEval: widget.savedEval,
+                );
               },
               direction: PopoverDirection.top,
               width: 250,
@@ -311,22 +315,23 @@ class const MicroChipPainter(final Color color) extends CustomPainter {
 class const _EnginePopup({
   final VoidCallback? goDeeper,
   required final EngineEvaluationFilters filters,
+  final ClientEval? savedEval,
 }) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final (:engine, :engineSpec, currentWork: work, eval: evalStateEval, :isComputing) = ref.watch(
+    final (:engine, :engineSpec, currentWork: work, eval: localEval, :isComputing) = ref.watch(
       engineEvaluationProvider(filters),
     );
     final bool canGoDeeper =
         goDeeper != null && !isComputing && (work == null || work.isDeeper != true);
 
-    final currentEval = engine?.hasValue == true ? evalStateEval : null;
+    final currentEval = pickBestClientEval(localEval: localEval, savedEval: savedEval);
 
     if (currentEval is CloudEval) {
       return ListTile(
         contentPadding: const EdgeInsets.only(left: 16.0),
         title: Text(context.l10n.cloudAnalysis),
-        subtitle: Text(context.l10n.depthX('${currentEval!.depth}')),
+        subtitle: Text(context.l10n.depthX('${currentEval.depth}')),
         trailing: canGoDeeper
             ? IconButton(
                 icon: const Icon(Icons.add_circle_outlined),
@@ -337,7 +342,7 @@ class const _EnginePopup({
       );
     }
 
-    final knps = isComputing ? ', ${evalStateEval?.knps.round()}kn/s' : '';
+    final knps = isComputing ? ', ${localEval?.knps.round()}kn/s' : '';
 
     final displayName = engineDisplayName(engine?.value, spec: engineSpec);
 
