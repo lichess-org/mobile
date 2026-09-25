@@ -142,7 +142,7 @@ void main() {
       final stream = service.evaluate(work);
       expect(stream, isNotNull);
 
-      await stream!.first;
+      await stream.first;
 
       expect(states, contains(EngineLifecycle.loading));
       expect(states.last, anyOf(EngineLifecycle.idle, EngineLifecycle.computing));
@@ -154,7 +154,7 @@ void main() {
 
       final work = makeWork();
       final stream = service.evaluate(work);
-      await stream!.first;
+      await stream.first;
 
       // Verify we have non-initial state before quit
       expect(service.state.lifecycle, isNot(EngineLifecycle.initial));
@@ -178,7 +178,7 @@ void main() {
       // First evaluation to get engine into idle state
       final initWork = makeWork();
       final initStream = service.evaluate(initWork);
-      await initStream!.first;
+      await initStream.first;
 
       // Wait for state to settle to idle
       while (service.state.lifecycle != EngineLifecycle.idle) {
@@ -204,7 +204,7 @@ void main() {
       expect(stream, isNotNull);
 
       // Wait for evaluation to complete
-      await stream!.first;
+      await stream.first;
 
       // Wait for state to settle back to idle
       while (service.state.lifecycle != EngineLifecycle.idle) {
@@ -221,7 +221,7 @@ void main() {
       // Initialize engine
       final initWork = makeWork();
       final initStream = service.evaluate(initWork);
-      await initStream!.first;
+      await initStream.first;
 
       while (service.state.lifecycle != EngineLifecycle.idle) {
         await Future<void>.delayed(const Duration(milliseconds: 10));
@@ -235,7 +235,7 @@ void main() {
       final work1 = makeWork(path: UciPath.fromId(UciCharPair.fromUci('e2e4')));
       final stream1 = service.evaluate(work1);
 
-      stream1!.listen((result) {
+      stream1.listen((result) {
         if (work2Started) {
           stream1ResultsAfterWork2.add(result.$1);
         } else {
@@ -259,7 +259,7 @@ void main() {
       expect(service.state.currentWork, work2);
 
       // Wait for work2 to complete
-      final (resultWork2, _) = await stream2!.first;
+      final (resultWork2, _) = await stream2.first;
       expect(resultWork2, work2);
 
       while (service.state.lifecycle != EngineLifecycle.idle) {
@@ -279,7 +279,7 @@ void main() {
 
       final work = makeWork();
       final stream1 = service.evaluate(work);
-      await stream1!.first;
+      await stream1.first;
 
       expect(delayedStockfish.startCount, 1);
 
@@ -287,7 +287,7 @@ void main() {
       await pumpEventQueue();
 
       final stream2 = service.evaluate(work);
-      await stream2!.first;
+      await stream2.first;
 
       // Leaving one analysis screen for another is what the grace window exists for: the engine is
       // handed over instead of being quit and started again in between.
@@ -302,7 +302,7 @@ void main() {
       final container = await makeContainer();
       final service = readEvaluator(container);
 
-      await service.evaluate(makeWork())!.first;
+      await service.evaluate(makeWork()).first;
       expect(stockfish.startCount, 1);
 
       // The engine button, turned off and left off for longer than the grace window: the engine is
@@ -312,7 +312,7 @@ void main() {
       await Future<void>.delayed(kEngineDisposeDelay + const Duration(milliseconds: 100));
       expect(stockfish.quitCount, 0, reason: 'still inside the pause window');
 
-      await service.evaluate(makeWork())!.first;
+      await service.evaluate(makeWork()).first;
       expect(stockfish.startCount, 1, reason: 'the engine was never let go of');
       expect(stockfish.quitCount, 0);
       expect(service.state.engineName, isNotNull, reason: 'the button shows the engine again');
@@ -386,7 +386,7 @@ void main() {
       // Collect results from stream1 to verify it doesn't receive work3 results
       final stream1Results = <EvalWork>[];
       final stream1 = service.evaluate(work1);
-      stream1!.listen((result) => stream1Results.add(result.$1));
+      stream1.listen((result) => stream1Results.add(result.$1));
 
       service.evaluate(work2);
       final stream3 = service.evaluate(work3);
@@ -394,7 +394,7 @@ void main() {
       expect(service.state.currentWork, work3);
 
       // Wait for evaluation to complete
-      final (resultWork, _) = await stream3!.first;
+      final (resultWork, _) = await stream3.first;
 
       // Result should be for work3, not work1 or work2
       expect(resultWork, work3);
@@ -431,7 +431,7 @@ void main() {
       expect(service.state.currentWork, work2);
 
       // Wait for init to complete
-      await stream2!.first;
+      await stream2.first;
 
       // Still only one start call
       expect(delayedStockfish.startCount, 1);
@@ -458,7 +458,7 @@ void main() {
       final stream2 = service.evaluate(work2);
 
       // Wait for engine to be ready
-      await stream2!.first;
+      await stream2.first;
 
       // Should only have one start call (no restart when state was starting)
       expect(delayedStockfish.startCount, 1);
@@ -495,17 +495,17 @@ void main() {
 
       // First cycle
       final stream1 = service.evaluate(work);
-      await stream1!.first;
+      await stream1.first;
       service.release();
 
       // Second cycle
       final stream2 = service.evaluate(work);
-      await stream2!.first;
+      await stream2.first;
       service.release();
 
       // Third cycle
       final stream3 = service.evaluate(work);
-      await stream3!.first;
+      await stream3.first;
 
       // One engine for all three cycles: each quit() lets go of it, and each evaluate() picks the
       // same one back up before the grace window has passed.
@@ -522,7 +522,7 @@ void main() {
 
       final work = makeWork();
       final stream = service.evaluate(work);
-      await stream!.first;
+      await stream.first;
 
       service.release();
       service.release();
@@ -533,7 +533,7 @@ void main() {
       // Should still be able to evaluate after multiple quits
       final stream2 = service.evaluate(work);
       expect(stream2, isNotNull);
-      await stream2!.first;
+      await stream2.first;
     });
 
     test('redundant quit() calls do not issue extra engine quit operations', () async {
@@ -590,7 +590,7 @@ void main() {
       // its first result therefore deterministically guarantees the whole
       // serialized queue has drained — no fixed delay needed.
       final stream = service.evaluate(makeWork(id: const StringId('after')));
-      final (resultWork, _) = await stream!.first;
+      final (resultWork, _) = await stream.first;
       expect(resultWork.id, const StringId('after'));
 
       expect(
@@ -634,7 +634,7 @@ void main() {
       // Start first evaluation and wait for an eval result
       final work1 = makeWork(id: const StringId('game1'));
       final stream1 = service.evaluate(work1);
-      await stream1!.first;
+      await stream1.first;
       expect(service.state.eval, isNotNull);
 
       // Start a new evaluation - eval must be cleared immediately, before any new results arrive
@@ -652,7 +652,7 @@ void main() {
       final stream = service.evaluate(work);
       expect(stream, isNotNull);
 
-      final (resultWork, _) = await stream!.first;
+      final (resultWork, _) = await stream.first;
       expect(resultWork, work);
     });
 
@@ -664,15 +664,15 @@ void main() {
 
       final gameA = makeContext(id: const StringId('gameA'));
       final gameB = makeContext(id: const StringId('gameB'));
-      await readEvaluator(container, gameA).evaluate(makeWork(id: const StringId('a')))!.first;
+      await readEvaluator(container, gameA).evaluate(makeWork(id: const StringId('a'))).first;
 
       delayedStockfish.commands.clear();
-      await readEvaluator(container, gameB).evaluate(makeWork(id: const StringId('b')))!.first;
+      await readEvaluator(container, gameB).evaluate(makeWork(id: const StringId('b'))).first;
       expect(delayedStockfish.commands, contains('ucinewgame'));
 
       // Back to the first game, whose table the second one has just been given.
       delayedStockfish.commands.clear();
-      await readEvaluator(container, gameA).evaluate(makeWork(id: const StringId('a')))!.first;
+      await readEvaluator(container, gameA).evaluate(makeWork(id: const StringId('a'))).first;
       expect(delayedStockfish.commands, contains('ucinewgame'));
     });
 
@@ -685,13 +685,13 @@ void main() {
 
       final work1 = makeWork(id: const StringId('game1'), variant: Variant.standard);
       final stream1 = service.evaluate(work1);
-      await stream1!.first;
+      await stream1.first;
 
       delayedStockfish.commands.clear();
 
       final work2 = makeWork(id: const StringId('game1'), variant: Variant.atomic);
       final stream2 = service.evaluate(work2);
-      await stream2!.first;
+      await stream2.first;
 
       expect(delayedStockfish.commands, contains('ucinewgame'));
     });
@@ -705,14 +705,14 @@ void main() {
 
       final work1 = makeWork(id: const StringId('game1'));
       final stream1 = service.evaluate(work1);
-      await stream1!.first;
+      await stream1.first;
 
       delayedStockfish.commands.clear();
 
       await setEnginePref(container, ChessEnginePref.sfLatest);
       final work2 = makeWork(id: const StringId('game1'));
       final stream2 = service.evaluate(work2);
-      await stream2!.first;
+      await stream2.first;
 
       expect(delayedStockfish.commands, contains('ucinewgame'));
     });
@@ -725,7 +725,7 @@ void main() {
 
       final gameA = makeContext(id: const StringId('gameA'));
       final streamA = readEvaluator(container, gameA).evaluate(makeWork(id: const StringId('a')));
-      await streamA!.first;
+      await streamA.first;
 
       // Leaving one analysis screen for another keeps the engine alive for [kEngineDisposeDelay],
       // so the next game is searched on an engine still carrying this one's table.
@@ -734,7 +734,7 @@ void main() {
 
       final gameB = makeContext(id: const StringId('gameB'));
       final streamB = readEvaluator(container, gameB).evaluate(makeWork(id: const StringId('b')));
-      await streamB!.first;
+      await streamB.first;
 
       expect(delayedStockfish.quitCount, 0, reason: 'the engine was handed over, not restarted');
       expect(delayedStockfish.commands, contains('ucinewgame'));
@@ -749,7 +749,7 @@ void main() {
 
       final work1 = makeWork(id: const StringId('game1'));
       final stream1 = service.evaluate(work1);
-      await stream1!.first;
+      await stream1.first;
 
       delayedStockfish.commands.clear();
 
@@ -759,7 +759,7 @@ void main() {
         path: UciPath.fromId(UciCharPair.fromUci('e2e4')),
       );
       final stream2 = service.evaluate(work2);
-      await stream2!.first;
+      await stream2.first;
 
       expect(delayedStockfish.commands, isNot(contains('ucinewgame')));
     });
@@ -780,14 +780,14 @@ void main() {
 
       final work1 = makeWork();
       final stream1 = service.evaluate(work1);
-      await stream1!.first;
+      await stream1.first;
 
       expect(delayedStockfish.startCount, 1);
 
       // A second request with latestNoNNUE should reuse the running light engine.
       final work2 = makeWork(path: UciPath.fromId(UciCharPair.fromUci('e2e4')));
       final stream2 = service.evaluate(work2);
-      await stream2!.first;
+      await stream2.first;
 
       expect(
         delayedStockfish.startCount,
@@ -806,7 +806,7 @@ void main() {
 
       final stream = service.evaluate(makeWork(variant: Variant.chess960));
       expect(stream, isNotNull);
-      await stream!.first;
+      await stream.first;
       expect(service.state.spec, const StockfishSpec.light());
     });
 
@@ -815,7 +815,7 @@ void main() {
       await setEnginePref(container, ChessEnginePref.sfLatest);
 
       final preferred = readEvaluator(container);
-      await preferred.evaluate(makeWork())!.first;
+      await preferred.evaluate(makeWork()).first;
       expect(
         preferred.state.spec,
         isA<StockfishSpec>().having((s) => s.slot, 'slot', EngineSlot.sfLatest),
@@ -828,7 +828,7 @@ void main() {
         enginePref: ChessEnginePref.sfLight,
       );
       final pinned = readEvaluator(container, pinnedContext);
-      await pinned.evaluate(makeWork(id: const StringId('pinned')))!.first;
+      await pinned.evaluate(makeWork(id: const StringId('pinned'))).first;
       expect(pinned.state.spec, const StockfishSpec.light());
     });
 
@@ -844,7 +844,7 @@ void main() {
 
       final stream = service.evaluate(makeWork(initialPosition: position));
       expect(stream, isNotNull);
-      await stream!.first;
+      await stream.first;
       expect(service.state.spec, const StockfishSpec.fairy());
     });
 
@@ -857,7 +857,7 @@ void main() {
 
       final stream = service.evaluate(makeWork(initialPosition: position));
       expect(stream, isNotNull);
-      await stream!.first;
+      await stream.first;
       expect(service.state.spec, const StockfishSpec.fairy());
     });
 
@@ -869,7 +869,7 @@ void main() {
 
       final stream = service.evaluate(makeWork(variant: Variant.atomic));
       expect(stream, isNotNull);
-      await stream!.first;
+      await stream.first;
       expect(service.state.engineName, 'Fairy-Stockfish');
     });
 
@@ -911,10 +911,8 @@ void main() {
       expect(service.state.currentWork, work2);
 
       // Results from stream2 should have work2
-      if (stream2 != null) {
-        final result = await stream2.first;
-        expect(result.$1, work2);
-      }
+      final result = await stream2.first;
+      expect(result.$1, work2);
     });
 
     test('Stop clears current work', () async {
@@ -983,7 +981,7 @@ void main() {
       final stream = service.evaluate(work);
       expect(stream, isNotNull);
 
-      final (_, eval) = await stream!.first;
+      final (_, eval) = await stream.first;
 
       expect(eval.bestMove, const NormalMove(from: Square.e2, to: Square.e4));
     });
@@ -1205,7 +1203,7 @@ void main() {
 
       final stream1 = service.evaluate(work);
       expect(stream1, isNotNull);
-      await stream1!.first;
+      await stream1.first;
 
       expect(service.state.spec, const StockfishSpec.light());
 
@@ -1217,7 +1215,7 @@ void main() {
 
       final stream2 = service.evaluate(work);
       expect(stream2, isNotNull);
-      await stream2!.first;
+      await stream2.first;
 
       expect(
         service.state.spec,

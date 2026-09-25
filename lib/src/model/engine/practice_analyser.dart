@@ -152,9 +152,6 @@ class PracticeAnalyser({
   void analyse(EvalWork work) {
     if (_isGone) return;
 
-    // The evaluator is asked as well, rather than trusted to be running whatever it was last
-    // given: it drops the work on its own when the engine fails, and an analyser that took its
-    // own record for the truth would refuse to ask for this position ever again.
     if (_analysing == work && evaluator().currentWork == work) return;
 
     _raceTheSearch(work);
@@ -171,29 +168,14 @@ class PracticeAnalyser({
     _stopSearch(resumingOn: work.position);
     _analysing = work;
 
-    final stream = evaluator().evaluate(work);
-    if (stream == null) {
-      // The evaluator had a good enough eval cached and started nothing.
-      _analysing = null;
-      final cached = work.evalCache;
-      if (cached != null) _record(work.position, cached);
-      _strandWaiters(work.position);
-      return;
-    }
-
-    _subscription = stream.listen((result) {
-      // The stream is filtered on this work, so a result can only ever be for it; what is worth
-      // asking is whether it is still the work being analysed.
+    _subscription = evaluator().evaluate(work).listen((result) {
       if (_analysing != work) return;
       final (_, eval) = result;
       // The engine has spoken, so it is searching rather than starting up, and a wait on this
       // position is now a wait on the search: its own deadline can start.
       _engineSpoke(work.position);
       _record(work.position, eval);
-      // Asked again rather than taken from the check above: recording an eval reports it to the
-      // owner, which may well have moved the analysis on by now, and what is worth stopping is the
-      // search that is running rather than the one this result came from.
-      if (_analysing == work && _isFinal(eval)) {
+      if (_isFinal(eval)) {
         _logger.fine('Reached the target depth at ply ${work.position.ply}; the engine can idle');
         _stopSearch();
       }

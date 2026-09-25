@@ -197,27 +197,11 @@ class PositionEvaluator(
   ///
   /// This will stop any current evaluation and start a new one. Last caller wins.
   ///
-  /// Returns a [Stream] of [EvalResult]s for this work only. The stream completes
-  /// when the evaluation finishes or is replaced by another request.
-  ///
-  /// If [goDeeper] is true, the engine will use the maximum search time.
-  ///
-  /// Returns `null` if a cached eval is sufficient.
-  Stream<EvalResult>? evaluate(EvalWork work, {bool goDeeper = false}) {
+  /// Returns a [Stream] of [EvalResult]s for this work only. The stream completes when the
+  /// evaluation finishes or is replaced by another request.
+  Stream<EvalResult> evaluate(EvalWork work) {
     // reset eval is needed to avoid showing a stale eval from a previous work in a different position
     _setEval(null);
-
-    if (!work.threatMode) {
-      // If we have an already good enough eval in cache, skip the evaluation
-      switch (work.evalCache) {
-        case final LocalEval localEval when localEval.searchTime >= work.searchTime:
-        case CloudEval _ when goDeeper == false:
-          stop();
-          return null;
-        case _:
-          break;
-      }
-    }
 
     _logger.info(
       'Starting evaluation at ply ${work.position.ply} with options: '
