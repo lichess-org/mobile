@@ -44,7 +44,7 @@ jobs:
         run: dart run build_runner build
 
       - name: Setup Fastlane
-        uses: ruby/setup-ruby@v1.321.0
+        uses: ruby/setup-ruby@v1.324.0
         with:
           ruby-version: "3.4"
           bundler-cache: true
