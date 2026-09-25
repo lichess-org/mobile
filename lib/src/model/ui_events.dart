@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 
 /// A request from the model layer for something only the view can do.
 ///
@@ -11,6 +13,12 @@ sealed class const UiEvent();
 
 /// Shows [message] in a snackbar.
 class const ShowErrorEvent(final String message) extends UiEvent;
+
+/// Pops the root navigator back to its first route, then opens the game with [fullId].
+class const OpenGameEvent(final GameFullId fullId) extends UiEvent;
+
+/// Pops the root navigator back to its first route, then opens the conversation with [user].
+class const OpenConversationEvent(final LightUser user) extends UiEvent;
 
 /// The channel on which [UiEvent]s travel from the model layer to the view layer.
 final uiEventBusProvider = Provider<UiEventBus>((Ref ref) {
