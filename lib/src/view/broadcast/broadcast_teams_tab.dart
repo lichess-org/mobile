@@ -309,9 +309,7 @@ class _GameRowState() extends ConsumerState<_GameRow> {
       onVisibilityChanged: (visibilityInfo) {
         if (visibilityInfo.visibleFraction > 0.1) {
           if (!isGameVisible && context.mounted) {
-            ref
-                .read(broadcastRoundControllerProvider(widget.roundId).notifier)
-                .addObservedGame(widget.game.id);
+            ref.read(observedGamesControllerProvider(widget.roundId).notifier).add(widget.game.id);
             setState(() {
               isGameVisible = true;
             });
@@ -319,8 +317,8 @@ class _GameRowState() extends ConsumerState<_GameRow> {
         } else {
           if (isGameVisible && context.mounted) {
             ref
-                .read(broadcastRoundControllerProvider(widget.roundId).notifier)
-                .removeObservedGame(widget.game.id);
+                .read(observedGamesControllerProvider(widget.roundId).notifier)
+                .remove(widget.game.id);
             setState(() {
               isGameVisible = false;
             });
