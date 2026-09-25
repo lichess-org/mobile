@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -63,7 +64,7 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) {
   return dbFactory.openDatabase(
     path,
     options: OpenDatabaseOptions(
-      version: 7,
+      version: 8,
       onConfigure: (db) async {
         final version = await _getDatabaseVersion(db);
         _logger.info('SQLite version: $version');
@@ -88,7 +89,7 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) {
         final batch = db.batch();
         _createPuzzleBatchTableV3(batch);
         _createPuzzleTableV1(batch);
-        _createCorrespondenceGameTableV1(batch);
+        _createCorrespondenceGameTableV8(batch);
         _createChatReadMessagesTableV1(batch);
         _createGameTableV2(batch);
         _createGameTableIndexesV6(batch);
@@ -118,6 +119,9 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) {
           _createLearnProgressTableV7(batch);
         }
         await batch.commit();
+        if (oldVersion < 8) {
+          await _updateCorrespondenceGameTableToV8(db);
+        }
       },
       onDowngrade: onDatabaseDowngradeDelete,
     ),
@@ -167,16 +171,74 @@ void _createPuzzleTableV1(Batch batch) {
     ''');
 }
 
-void _createCorrespondenceGameTableV1(Batch batch) {
+void _createCorrespondenceGameTableV8(Batch batch) {
   batch.execute('DROP TABLE IF EXISTS correspondence_game');
   batch.execute('''
     CREATE TABLE correspondence_game(
     gameId TEXT NOT NULL,
     userId TEXT NOT NULL,
     lastModified TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT '',
+    hasRegisteredMove INTEGER NOT NULL DEFAULT 0,
     data TEXT NOT NULL,
     PRIMARY KEY (gameId)
   )
+    ''');
+  batch.execute('''
+    CREATE INDEX IF NOT EXISTS idx_correspondence_game_user_status
+    ON correspondence_game(userId, status)
+    ''');
+  batch.execute('''
+    CREATE INDEX IF NOT EXISTS idx_correspondence_game_user_hasRegisteredMove
+    ON correspondence_game(userId, hasRegisteredMove)
+    ''');
+}
+
+/// Upgrades the correspondence game table to v8: denormalized `status` and `hasRegisteredMove`
+/// columns, backfilled from the JSON `data` so queries stop full-scanning the blobs.
+///
+/// The backfill is done in Dart so it does not depend on the `json_extract` function, which is
+/// not available on all devices.
+Future<void> _updateCorrespondenceGameTableToV8(Database db) async {
+  await db.execute("ALTER TABLE correspondence_game ADD COLUMN status TEXT NOT NULL DEFAULT ''");
+  await db.execute(
+    'ALTER TABLE correspondence_game ADD COLUMN hasRegisteredMove INTEGER NOT NULL DEFAULT 0',
+  );
+
+  final rows = await db.query('correspondence_game', columns: ['gameId', 'data']);
+  for (final row in rows) {
+    final gameId = row['gameId'] as String?;
+    final raw = row['data'] as String?;
+    if (gameId == null || raw == null) continue;
+    String status = '';
+    int hasRegisteredMove = 0;
+    try {
+      final json = jsonDecode(raw);
+      if (json is Map<String, dynamic>) {
+        final statusValue = json['status'];
+        if (statusValue is String) {
+          status = statusValue;
+        }
+        hasRegisteredMove = json['registeredMoveAtPgn'] != null ? 1 : 0;
+      }
+    } catch (e, st) {
+      _logger.warning('Failed to backfill correspondence game $gameId:', e, st);
+    }
+    await db.update(
+      'correspondence_game',
+      {'status': status, 'hasRegisteredMove': hasRegisteredMove},
+      where: 'gameId = ?',
+      whereArgs: [gameId],
+    );
+  }
+
+  await db.execute('''
+    CREATE INDEX IF NOT EXISTS idx_correspondence_game_user_status
+    ON correspondence_game(userId, status)
+    ''');
+  await db.execute('''
+    CREATE INDEX IF NOT EXISTS idx_correspondence_game_user_hasRegisteredMove
+    ON correspondence_game(userId, hasRegisteredMove)
     ''');
 }
 
