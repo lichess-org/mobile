@@ -19,8 +19,7 @@ import 'package:lichess_mobile/src/model/engine/evaluation_context.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/weights_service.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
-import 'package:lichess_mobile/src/tab_navigation.dart';
-import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/model/ui_events.dart';
 import 'package:logging/logging.dart';
 import 'package:multistockfish/multistockfish.dart';
 
@@ -613,10 +612,12 @@ class PositionEvaluator(
     _notifyUser(failure);
   }
 
-  /// Shows the user a snackbar for a failure they cannot work around.
+  /// Reports an engine failure the user cannot work around.
   ///
   /// Recoverable failures are left to the engine button, which already shows an error state; only
-  /// an engine that will not come back until the app is restarted is worth interrupting for.
+  /// an engine that will not come back until the app is restarted is worth interrupting for. The
+  /// snackbar itself is shown by the view layer coordinator, since the model layer has no access
+  /// to the widget tree.
   void _notifyUser(EngineFailure failure) {
     if (!failure.isUnrecoverable) return;
 
@@ -626,17 +627,14 @@ class PositionEvaluator(
       return;
     }
 
-    try {
-      final navigatorContext = ref.read(currentNavigatorKeyProvider).currentContext;
-      if (navigatorContext == null || !navigatorContext.mounted) return;
+    final bus = ref.read(uiEventBusProvider);
 
-      showSnackBar(navigatorContext, _kUnrecoverableEngineMessage, type: SnackBarType.error);
-      _lastUserNotification = now;
-    } catch (e) {
-      // There may be no widget tree to show anything in. Telling the user is best effort and must
-      // never take the failure handling around it down.
-      _logger.fine('Could not show the engine failure message: $e');
-    }
+    // Nobody listening means the message would be dropped, so leave the throttle alone and try
+    // again next time, like the old null-context check did.
+    if (!bus.hasListeners) return;
+
+    bus.emit(const ShowErrorEvent(_kUnrecoverableEngineMessage));
+    _lastUserNotification = now;
   }
 
   // ---------------------------------------------------------------------------

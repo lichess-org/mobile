@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
@@ -10,6 +9,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/play/common_play_widgets.dart';
+import 'package:lichess_mobile/src/view/play/playban.dart';
 import 'package:lichess_mobile/src/view/play/time_control_modal.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
@@ -255,7 +255,7 @@ class const CreateGameWidget() extends ConsumerWidget {
 
                   final playban = ref.read(accountProvider).value?.playban;
                   if (playban != null) {
-                    ref.read(accountServiceProvider).showPlaybanDialog(playban);
+                    showPlaybanDialog(context, playban);
                     return;
                   }
 

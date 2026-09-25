@@ -9,13 +9,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/engine/engine_utils.dart';
 import 'package:lichess_mobile/src/model/engine/opponent_level.dart';
+import 'package:lichess_mobile/src/model/ui_events.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
-import 'package:lichess_mobile/src/tab_navigation.dart';
-import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:logging/logging.dart';
-import 'package:material_ui/material_ui.dart' show AlertDialog, Navigator, Text, showAdaptiveDialog;
 import 'package:multistockfish/multistockfish.dart';
 
 final _logger = Logger('EngineWeightsService');
@@ -174,34 +171,13 @@ class StockfishNnueService(final Ref _ref) {
         if (inBackground) {
           throw Exception('Cannot download in background on mobile data.');
         } else {
-          final context = _ref.read(currentNavigatorKeyProvider).currentContext;
-          if (context == null || !context.mounted) return false;
-          final isOk = await showAdaptiveDialog<bool>(
-            context: context,
-            barrierDismissible: true,
-            builder: (context) {
-              return AlertDialog.adaptive(
-                content: const Text(
-                  'Are you sure you want to download the NNUE file ($nnueDownloadSizeMB)?',
-                ),
-                actions: [
-                  PlatformDialogAction(
-                    child: const Text('OK'),
-                    onPressed: () {
-                      Navigator.of(context).pop(true);
-                    },
-                  ),
-                  PlatformDialogAction(
-                    child: Text(context.l10n.cancel),
-                    onPressed: () {
-                      Navigator.of(context).pop(false);
-                    },
-                  ),
-                ],
-              );
-            },
+          final confirm = ConfirmActionEvent(
+            'Are you sure you want to download the NNUE file ($nnueDownloadSizeMB)?',
           );
-          if (isOk == true) {
+          // No listener means no widget tree to ask, so decline like the old null-context check.
+          if (!_ref.emitUiEvent(confirm)) return false;
+          final isOk = await confirm.completer.future;
+          if (isOk) {
             return await doDownload();
           } else {
             return false;
