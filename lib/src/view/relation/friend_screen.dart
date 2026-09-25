@@ -2,8 +2,9 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:lichess_mobile/l10n/l10n.dart';
+import 'package:lichess_mobile/src/model/relation/friend_list_sort.dart';
 import 'package:lichess_mobile/src/model/relation/online_friends.dart';
+import 'package:lichess_mobile/src/model/relation/relation_preferences.dart';
 import 'package:lichess_mobile/src/model/relation/relation_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -24,26 +25,6 @@ import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
 import 'package:material_ui/material_ui.dart';
 
-enum _FriendSortType() {
-  alphabetical,
-  ratingDesc,
-  ratingAsc,
-  lastOnline;
-
-  String l10n(AppLocalizations l10n) {
-    switch (this) {
-      case _FriendSortType.alphabetical:
-        return l10n.studyAlphabetical;
-      case ratingDesc:
-        return 'Rating Descending';
-      case _FriendSortType.ratingAsc:
-        return 'Rating Ascending';
-      case _FriendSortType.lastOnline:
-        return 'Last Seen';
-    }
-  }
-}
-
 class const FriendScreen({super.key}) extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const FriendScreen());
@@ -56,7 +37,6 @@ class const FriendScreen({super.key}) extends ConsumerStatefulWidget {
 class _FriendScreenState() extends ConsumerState<FriendScreen> with TickerProviderStateMixin {
   late final TabController _tabController;
   final _searchController = TextEditingController();
-  _FriendSortType sortType = _FriendSortType.lastOnline;
   String searchTerm = '';
 
   @override
@@ -76,6 +56,10 @@ class _FriendScreenState() extends ConsumerState<FriendScreen> with TickerProvid
   Widget build(BuildContext context) {
     final onlineFriendsCount = ref.watch(onlineFriendsProvider.select((v) => v.value?.length ?? 0));
     final followingCount = ref.watch(followingProvider.select((v) => v.value?.length ?? 0));
+    final sort = ref.watch(
+      relationPreferencesProvider.select((v) => v.friendSort ?? FriendListSort.lastSeen),
+    );
+    var selectedSort = sort;
 
     final sortButton = SemanticIconButton(
       icon: const Icon(Icons.sort),
@@ -93,17 +77,19 @@ class _FriendScreenState() extends ConsumerState<FriendScreen> with TickerProvid
                 const SizedBox(height: 16.0),
                 Text('Sort by', style: Theme.of(context).textTheme.bodyLarge),
                 const SizedBox(height: 16.0),
-                Filter<_FriendSortType>(
+                Filter<FriendListSort>(
                   filterType: FilterType.singleChoice,
-                  choices: _FriendSortType.values,
-                  choiceSelected: (choice) => sortType == choice,
+                  choices: FriendListSort.values,
+                  choiceSelected: (choice) => selectedSort == choice,
                   choiceLabel: (category) => Text(category.l10n(context.l10n)),
                   onSelected: (value, selected) {
                     if (_tabController.index == 0) {
                       _tabController.animateTo(1, duration: kTabScrollDuration);
                     }
-                    setLocalState(() => sortType = value);
-                    setState(() => sortType = value);
+                    setLocalState(() {
+                      selectedSort = value;
+                    });
+                    ref.read(relationPreferencesProvider.notifier).setFriendSort(value);
                   },
                 ),
                 const SizedBox(height: 16.0),
@@ -130,7 +116,7 @@ class _FriendScreenState() extends ConsumerState<FriendScreen> with TickerProvid
         controller: _tabController,
         children: [
           _Online(searchTerm, _searchController, _onSearchChanged),
-          _Following(sortType, searchTerm, _searchController, _onSearchChanged),
+          _Following(searchTerm, _searchController, _onSearchChanged),
         ],
       ),
     );
@@ -287,7 +273,6 @@ bool _matchesSearch(String username, String searchTerm) =>
     searchTerm.isEmpty || username.toLowerCase().contains(searchTerm.toLowerCase().trim());
 
 class const _Following(
-  final _FriendSortType sortType,
   final String searchTerm,
   final TextEditingController searchController,
   final ValueChanged<String> onSearchChanged,
@@ -295,6 +280,9 @@ class const _Following(
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final following = ref.watch(followingProvider);
+    final sort = ref.watch(
+      relationPreferencesProvider.select((v) => v.friendSort ?? FriendListSort.lastSeen),
+    );
 
     switch (following) {
       case AsyncData(value: final users):
@@ -302,18 +290,18 @@ class const _Following(
         final showSearchBar = users.length >= _kMinItemsForSearchBar;
         final offset = showSearchBar ? 1 : 0;
         final value = users.where((u) => _matchesSearch(u.username, searchTerm)).toIList();
-        IList<User> following = switch (sortType) {
-          _FriendSortType.alphabetical => value.sort(
+        IList<User> following = switch (sort) {
+          FriendListSort.alphabetical => value.sort(
             (a, b) => a.username.toLowerCase().compareTo(b.username.toLowerCase()),
           ),
-          _FriendSortType.ratingDesc =>
+          FriendListSort.ratingDesc =>
             value
                 .sort((a, b) => (a.perfs.displayRating ?? 0).compareTo(b.perfs.displayRating ?? 0))
                 .reversed,
-          _FriendSortType.ratingAsc => value.sort(
+          FriendListSort.ratingAsc => value.sort(
             (a, b) => (a.perfs.displayRating ?? 0).compareTo(b.perfs.displayRating ?? 0),
           ),
-          _FriendSortType.lastOnline =>
+          FriendListSort.lastSeen =>
             value
                 .sort((a, b) => (a.seenAt ?? DateTime(1970)).compareTo(b.seenAt ?? DateTime(1970)))
                 .reversed,
