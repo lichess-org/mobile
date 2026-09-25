@@ -14,8 +14,8 @@ import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/model/explorer/tablebase.dart';
+import 'package:lichess_mobile/src/model/explorer/tablebase_eval.dart';
 import 'package:lichess_mobile/src/model/explorer/tablebase_repository.dart';
-import 'package:lichess_mobile/src/model/offline_computer/tablebase_eval.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:logging/logging.dart';
 
