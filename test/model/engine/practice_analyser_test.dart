@@ -324,6 +324,125 @@ void main() {
       expect(eval!.depth, lessThan(kPracticeUsableDepth));
     });
 
+    test('giving the engine up ends the waits that were waiting for it to start', () async {
+      final container = await makeContainer();
+      final analyser = makeAnalyser(container);
+      addTearDown(analyser.dispose);
+
+      analyser.analyse(makeWork());
+      await settleEvals();
+
+      var completed = false;
+      final wait = analyser.usableEval(Chess.initial, timeout: const Duration(milliseconds: 100));
+      unawaited(wait.then((_) => completed = true));
+
+      // The opponent takes the engine before it ever said a word about this position, so there is
+      // no engine on its way any more and nothing to go on waiting for.
+      analyser.yieldEngine();
+
+      expect(await wait, isNull);
+      expect(completed, isTrue);
+    });
+
+    test('moving the analysis on ends the waits on the position left behind', () async {
+      final container = await makeContainer();
+      final analyser = makeAnalyser(container);
+      addTearDown(analyser.dispose);
+
+      analyser.analyse(makeWork());
+      await settleEvals();
+
+      var completed = false;
+      final wait = analyser.usableEval(Chess.initial, timeout: const Duration(milliseconds: 100));
+      unawaited(wait.then((_) => completed = true));
+
+      // The engine goes to another position, and speaks about that one: a wait on the position
+      // left behind is not waiting for an engine to start, it is waiting for nothing.
+      analyser.analyse(makeWorkAfterE4());
+      await settleEvals();
+      engine.emitDepthRange(toDepth: kPracticeUsableDepth);
+      await settleEvals();
+
+      expect(completed, isTrue);
+    });
+
+    test('a search the evaluator has given up is asked for again', () async {
+      // An engine that will not start: the evaluator drops the work, and nothing is ever said
+      // about the position.
+      fakeEngine = FakeEngine(startThrows: true);
+      final container = await makeContainer();
+      final analyser = makeAnalyser(container);
+      addTearDown(analyser.dispose);
+
+      analyser.analyse(makeWork());
+      await settleEvals();
+      expect(readEvaluator(container).currentWork, isNull);
+
+      // Asking for the same position again is not taken for the search that is already running,
+      // because there is none: a failed start is worth another go, and nothing else would ever
+      // start one.
+      analyser.analyse(makeWork());
+      await settleEvals();
+
+      expect(fakeEngine.startCount, greaterThan(1));
+    });
+
+    test('an eval with no move to play does not bury one that has it', () async {
+      final container = await makeContainer();
+      final analyser = makeAnalyser(container);
+      addTearDown(analyser.dispose);
+
+      analyser.analyse(makeWork());
+      await settleEvals();
+      engine.emitDepthRange(toDepth: kPracticeUsableDepth);
+      await settleEvals();
+
+      // What a tablebase entry that lists no moves comes to, and a cloud eval whose variation
+      // came back empty: deeper than the search will ever get, and no use for a hint or for the
+      // opponent's reply.
+      analyser.offer(
+        Chess.initial,
+        const CloudEval(
+          position: Chess.initial,
+          depth: 99,
+          nodes: 0,
+          pvs: IListConst([PvData(moves: IListConst([]), cp: 0)]),
+        ),
+      );
+
+      expect(analyser.evalFor(Chess.initial)?.bestMove, isNotNull);
+      expect(analyser.isAnalysing, isTrue, reason: 'the search still has a move to find');
+    });
+
+    test('a position whose only eval has no move to play is searched again', () async {
+      final container = await makeContainer();
+      final analyser = makeAnalyser(container);
+      addTearDown(analyser.dispose);
+
+      analyser.analyse(makeWork());
+      await settleEvals();
+
+      // It arrives first, before the engine has said anything: deep enough to end the search on
+      // any other reading, and still no move to play.
+      analyser.offer(
+        Chess.initial,
+        const CloudEval(
+          position: Chess.initial,
+          depth: 99,
+          nodes: 0,
+          pvs: IListConst([PvData(moves: IListConst([]), cp: 0)]),
+        ),
+      );
+
+      expect(analyser.isAnalysing, isTrue);
+
+      analyser.yieldEngine();
+      analyser.analyse(makeWork());
+      await settleEvals();
+
+      expect(engine.requestedPositions, hasLength(2));
+    });
+
     test('yieldEngine hands the engine over, and analysing takes it back', () async {
       final container = await makeContainer();
       final evaluator = readEvaluator(container);
