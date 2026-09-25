@@ -1,10 +1,8 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
-import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 
 part 'chess.freezed.dart';
 part 'chess.g.dart';
@@ -109,17 +107,17 @@ const IList<Variant> playSupportedVariants = IListConst([
   Variant.fromPosition,
 ]);
 
-enum Variant(final IconData icon) {
-  standard(LichessIcons.crown),
-  chess960(LichessIcons.die_six),
-  fromPosition(LichessIcons.feather),
-  antichess(LichessIcons.antichess),
-  kingOfTheHill(LichessIcons.flag),
-  threeCheck(LichessIcons.three_check),
-  atomic(LichessIcons.atom),
-  horde(LichessIcons.horde),
-  racingKings(LichessIcons.racing_kings),
-  crazyhouse(LichessIcons.h_square);
+enum Variant() {
+  standard,
+  chess960,
+  fromPosition,
+  antichess,
+  kingOfTheHill,
+  threeCheck,
+  atomic,
+  horde,
+  racingKings,
+  crazyhouse;
 
   String label(AppLocalizations l10n) {
     switch (this) {
