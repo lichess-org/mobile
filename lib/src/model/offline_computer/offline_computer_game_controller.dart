@@ -223,7 +223,14 @@ class OfflineComputerGameController() extends Notifier<OfflineComputerGameState>
     if (_evaluatorContext != context) {
       _evaluatorSubscription?.close();
       _evaluatorContext = context;
-      _evaluatorSubscription = ref.listen(positionEvaluatorProvider(context), (_, _) {});
+      // The analysis needs to hear when the engine stops searching: it may have run out of its
+      // search time before saying anything usable about the position — on a slow device the first
+      // search can be spent starting the engine — and the hints behind it would wait for an
+      // evaluation nothing was going to make.
+      _evaluatorSubscription = ref.listen(
+        positionEvaluatorProvider(context),
+        _analyser.onEvaluatorStateChanged,
+      );
     }
     return ref.read(positionEvaluatorProvider(context).notifier);
   }

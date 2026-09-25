@@ -99,6 +99,12 @@ class PracticeAnalyser({
   /// The work being analysed, or null when nothing is.
   EvalWork? _analysing;
 
+  /// The position the engine has reported on, or null when it has not reported on any.
+  ///
+  /// What tells a wait on a search that is running from a wait on an engine that is still starting
+  /// up.
+  Position? _engineSpokeFor;
+
   /// The work [_restarts] counts for, since a restart clears [_analysing] on its way through.
   EvalWork? _restartedWork;
 
@@ -116,7 +122,14 @@ class PracticeAnalyser({
   /// position do not each pay for the round trip.
   final Set<Position> _raced = {};
 
-  /// The socket the cloud evals are asked over.
+  /// Bumped every time everything known is thrown away.
+  ///
+  /// What tells a lookup coming back from the server that the game it was asked for is not the one
+  /// being played any more: a network round trip outlives a [clear] easily, and an answer landing
+  /// after one would put back an evaluation the retry was there to forget.
+  int _epoch = 0;
+
+  /// The socket [_socketSubscription] is held on, or null when there is none.
   SocketClient? _socketClient;
 
   StreamSubscription<SocketEvent>? _socketSubscription;
@@ -164,17 +177,31 @@ class PracticeAnalyser({
     }
 
     _subscription = stream.listen((result) {
-      final (resultWork, eval) = result;
-      if (resultWork != _analysing) return;
+      // The stream is filtered on this work, so a result can only ever be for it; what is worth
+      // asking is whether it is still the work being analysed.
+      if (_analysing != work) return;
+      final (_, eval) = result;
       // The engine has spoken, so it is searching rather than starting up, and a wait on this
       // position is now a wait on the search: its own deadline can start.
-      _startWaiting(work.position);
+      _engineSpoke(work.position);
       _record(work.position, eval);
-      if (_isFinal(eval)) {
+      // Asked again rather than taken from the check above: recording an eval reports it to the
+      // owner, which may well have moved the analysis on by now, and what is worth stopping is the
+      // search that is running rather than the one this result came from.
+      if (_analysing == work && _isFinal(eval)) {
         _logger.fine('Reached the target depth at ply ${work.position.ply}; the engine can idle');
         _stopSearch();
       }
     });
+  }
+
+  /// Takes in the evaluator's state, which is how the analysis hears that the engine has stopped.
+  ///
+  /// The owner has that subscription anyway — it is what keeps the evaluator alive — so it passes
+  /// the state through rather than working out which change matters, which is a question about the
+  /// analysis and belongs here with [resumeIfUnfinished].
+  void onEvaluatorStateChanged(EngineEvaluationState? previous, EngineEvaluationState next) {
+    if (previous?.isComputing == true && !next.isComputing) resumeIfUnfinished();
   }
 
   /// Starts the search again when it stopped before the position was understood at all.
@@ -182,7 +209,7 @@ class PracticeAnalyser({
   /// The search is capped at [kPracticeMaxSearchTime] but that cap is meant to stop an eval being
   /// *refined*, not to leave a position without one.
   ///
-  /// Called when the engine stops searching, by whoever is watching it.
+  /// Called when the engine stops searching, which is what [onEvaluatorStateChanged] watches for.
   void resumeIfUnfinished() {
     final work = _analysing;
     if (work == null) return;
@@ -196,6 +223,9 @@ class PracticeAnalyser({
       _logger.warning(
         'Giving up on ply ${work.position.ply} after $_restarts restarts without a usable eval',
       );
+      // The search that was running is left alone: it has said its last word to the engine, but
+      // that word may still be on its way through the evaluator's throttle, and it is the only one
+      // this position is going to get.
       return;
     }
     _restarts++;
@@ -227,6 +257,11 @@ class PracticeAnalyser({
   /// position the game is at when the engine comes back, not about the search that was given up.
   /// [analyse] is how it comes back.
   void yieldEngine() {
+    // The restarts already spent are part of what is not remembered: they count what one search on
+    // one position was given, and the engine coming back is a fresh go at whatever position the
+    // game is at by then — on an engine that is warm now, where the restarts went on starting it.
+    _restartedWork = null;
+    _restarts = 0;
     final analysing = _analysing;
     if (analysing == null) return;
     _logger.fine('Yielding the engine at ply ${analysing.position.ply}');
@@ -238,20 +273,23 @@ class PracticeAnalyser({
   /// For starting or loading another game, and for replaying the same one from the start: an
   /// evaluation kept across a retry would hand the player the same answer to the same move again.
   void clear() {
+    // Which gives up the engine, and with it the restarts spent on the search that had it.
     yieldEngine();
-    _restartedWork = null;
-    _restarts = 0;
+    _epoch++;
     _evals.clear();
     _raced.clear();
-    _completeAll();
+    _engineSpokeFor = null;
+    // With nothing to hand out: an eval of the game that was is exactly what this is forgetting.
+    _completeAll(handOutEvals: false);
   }
 
-  /// The evaluation of [position] once it is at least [minDepth] deep.
+  /// The evaluation of [position] once it is at least [minDepth] deep and says what to play.
   ///
   /// Completes at once when it already is — which, with the analysis running throughout the
-  /// player's turn, is the ordinary case. Otherwise it completes with the first eval that reaches
-  /// the depth, or, when [timeout] passes first, with the best one reached by then (null if the
-  /// search produced nothing at all).
+  /// player's turn, is the ordinary case. Otherwise it completes with the first eval that answers
+  /// for it, or, when [timeout] passes first, with the best one reached by then — which is the
+  /// best there is rather than one that answers, so it may be shallower than [minDepth] or have no
+  /// move to play, and is null when the search produced nothing at all.
   ///
   /// [timeout] is given to the search, and only starts once there is one: until the engine has
   /// said something about the position it may still be starting up, which is not time the search
@@ -271,23 +309,22 @@ class PracticeAnalyser({
     int minDepth = kPracticeUsableDepth,
   }) {
     final known = _evals[position];
-    if (known != null && known.depth >= minDepth) return Future.value(known);
+    if (known != null && _satisfies(known, minDepth)) return Future.value(known);
 
     final waiter = _Waiter(minDepth, timeout, (waiter) {
-      _waiters[position]?.remove(waiter);
-      _logger.info(
-        'No usable eval at ply ${position.ply} within '
-        '${waiter.started ? timeout.inMilliseconds : kPracticeEngineStartWait.inMilliseconds}ms',
-      );
+      final deadline = waiter.started ? timeout : kPracticeEngineStartWait;
+      _dropWaiters(position, (other) => identical(other, waiter));
+      _logger.info('No usable eval at ply ${position.ply} within ${deadline.inMilliseconds}ms');
       waiter.complete(_evals[position]);
     });
     (_waiters[position] ??= []).add(waiter);
 
-    // Something is known about the position already, so the engine is past starting up.
-    if (known != null) {
-      waiter.start();
-    } else {
+    // Anything else — a position the analysis is not on, an engine that has already spoken, a
+    // search the evaluator has dropped — is a wait on the caller's own deadline.
+    if (_engineSpokeFor != position && _isEngineOnItsWayTo(position)) {
       waiter.waitForTheEngine();
+    } else {
+      waiter.start();
     }
 
     return waiter.future;
@@ -308,6 +345,19 @@ class PracticeAnalyser({
     _raced.clear();
   }
 
+  /// Whether an engine is on its way to [position], which is what [kPracticeEngineStartWait] is
+  /// there to bound.
+  ///
+  /// The analysis being on the position is not enough on its own: the evaluator drops the work when
+  /// the engine will not run at all, and a wait for an engine that is never coming is one nothing
+  /// but its own deadline will ever end.
+  bool _isEngineOnItsWayTo(Position position) {
+    final analysing = _analysing;
+    if (analysing == null || analysing.position != position) return false;
+    if (_disposed || !ref.mounted) return false;
+    return evaluator().currentWork == analysing;
+  }
+
   /// Asks the server for the evaluations that would beat the search: a cloud eval in the opening —
   /// or at any ply when [alwaysRequestCloudEvals] — and a tablebase lookup in an endgame. Whatever
   /// comes back is offered to the analysis.
@@ -317,7 +367,7 @@ class PracticeAnalyser({
     final position = work.position;
 
     // Nothing to beat: this position has already been analysed as deeply as it is going to be.
-    if (_evals[position] case final known? when known.depth >= kPracticeTargetDepth) return;
+    if (_evals[position] case final known? when _isFinal(known)) return;
 
     // Already asked about. A second search on the same position — a takeback replayed, the screen
     // coming back — would otherwise pay for the round trip all over again.
@@ -330,31 +380,46 @@ class PracticeAnalyser({
     if (!wantsCloudEval && !wantsTablebase) return;
 
     _raced.add(position);
+    final epoch = _epoch;
 
     // Offered one by one rather than once both are in: in an endgame lesson the two are asked
     // together, and the search has no reason to wait on the slower of them.
     Future<ClientEval?> ask(Future<ClientEval?> request) => request.then((eval) {
-      if (eval != null) offer(position, eval);
+      if (eval != null && epoch == _epoch) offer(position, eval);
       return eval;
     });
 
     Future.wait([
-      if (wantsCloudEval) ask(_getCloudEval(work)),
-      if (wantsTablebase) ask(_fetchTablebaseEval(position)),
-    ]).then((evals) {
-      // Nothing answered: no network, or a position the server has never seen. The attempt is
-      // forgotten, so that analysing this position again asks again.
-      if (evals.every((eval) => eval == null)) _raced.remove(position);
-    });
+          if (wantsCloudEval) ask(_getCloudEval(work)),
+          if (wantsTablebase) ask(_fetchTablebaseEval(position)),
+        ])
+        .then((evals) {
+          // A [clear] since. The attempt belongs to the game that was, and so does the record of
+          // it: another one has since been made, or will be, for the game being played now.
+          if (epoch != _epoch) return;
+          // Nothing answered: no network, or a position the server has never seen. The attempt is
+          // forgotten, so that analysing this position again asks again.
+          if (evals.every((eval) => eval == null)) _raced.remove(position);
+        })
+        // Everything either lookup can fail on is caught where it happens, so this is here for
+        // what [offer] reports the evaluation to rather than for the lookups themselves — and a
+        // throw from there is no reason to leave an unhandled error behind.
+        .catchError((Object e, StackTrace st) {
+          _logger.warning('Could not offer an eval from the server:', e, st);
+        });
   }
 
-  /// The socket the cloud evals go over, opened on first use.
+  /// The socket the cloud evals go over.
   SocketClient? get _socket {
     if (_disposed || !ref.mounted) return null;
-    final client = _socketClient ??= ref
-        .read(socketPoolProvider)
-        .open(AnalysisController.socketUri);
-    _socketSubscription ??= client.stream.listen((_) {});
+    final client = ref.read(socketPoolProvider).open(AnalysisController.socketUri);
+    // Held so that the pool does not let go of the connection between two requests. A client the
+    // pool has replaced leaves its subscription behind on a stream that is closed for good.
+    if (!identical(_socketClient, client)) {
+      _socketSubscription?.cancel();
+      _socketClient = client;
+      _socketSubscription = client.stream.listen((_) {});
+    }
     return client;
   }
 
@@ -423,38 +488,58 @@ class PracticeAnalyser({
     }
   }
 
-  /// Whether [eval] is enough to show a hint or judge a move.
+  /// Whether [eval] answers a question asked of a [minDepth]-deep evaluation.
   ///
-  /// Depth alone does not settle it, here or in [_isFinal]. An evaluation that does not say what to
-  /// play settles nothing: both the hint and the opponent's reply are read off the move, so a
-  /// position whose only evaluation is moveless — a tablebase entry that listed none, a cloud eval
-  /// whose variation came back empty — is one the search still has work to do on, however deep
-  /// that evaluation claims to be.
-  bool _isUsable(ClientEval eval) => eval.depth >= kPracticeUsableDepth && eval.bestMove != null;
+  /// Depth alone does not settle it. An evaluation that does not say what to play settles nothing:
+  /// both the hint and the opponent's reply are read off the move, so a position whose only
+  /// evaluation is moveless — a tablebase entry that listed none, a cloud eval whose variation
+  /// came back empty — is one the search still has work to do on, however deep that evaluation
+  /// claims to be.
+  bool _satisfies(ClientEval eval, int minDepth) => eval.depth >= minDepth && eval.bestMove != null;
+
+  /// Whether [eval] is enough to show a hint or judge a move.
+  bool _isUsable(ClientEval eval) => _satisfies(eval, kPracticeUsableDepth);
 
   /// Whether there is nothing left to learn about the position [eval] is of.
-  bool _isFinal(ClientEval eval) => eval.depth >= kPracticeTargetDepth && eval.bestMove != null;
+  bool _isFinal(ClientEval eval) => _satisfies(eval, kPracticeTargetDepth);
 
   /// Keeps [eval] if it is an improvement, and tells everyone waiting on it. Returns whether it
   /// was kept.
   bool _record(Position position, ClientEval eval) {
     final known = _evals[position];
-    if (known != null) {
-      if (known.depth > eval.depth) return false;
-      // Deeper, but with nothing to play: a tablebase entry that listed no moves, a cloud eval
-      // whose variation came back empty. Taking it would leave the position scored and unplayable
-      // — no hint, and no move for the opponent to answer with.
-      if (eval.bestMove == null && known.bestMove != null) return false;
-    }
+    if (known != null && !_isImprovement(eval, on: known)) return false;
     _publish(position, eval);
     return true;
   }
 
-  /// Gives every wait on [position] its own deadline, the engine having started searching it.
-  void _startWaiting(Position position) {
+  /// Whether [eval] is worth keeping over [on], the best known so far.
+  ///
+  /// Depth decides it between two evals that both say what to play. One that does not leaves the
+  /// position scored and unplayable — no hint, and no move for the opponent to answer with — so a
+  /// tablebase entry that listed no moves, or a cloud eval whose variation came back empty, never
+  /// buries an eval that has a move, and never keeps one out either however much shallower it is.
+  /// The search runs on for that move; taking it when it arrives is what the search is for.
+  bool _isImprovement(ClientEval eval, {required ClientEval on}) {
+    if ((eval.bestMove != null) != (on.bestMove != null)) return eval.bestMove != null;
+    return eval.depth >= on.depth;
+  }
+
+  /// Removes the waits on [position] that [end] returns true for, and [position] with them when
+  /// none is left.
+  ///
+  /// Nothing completes a waiter once it is dropped, so a caller drops one only where it is
+  /// completing it too.
+  void _dropWaiters(Position position, bool Function(_Waiter waiter) end) {
     final waiters = _waiters[position];
     if (waiters == null) return;
-    for (final waiter in waiters) {
+    waiters.removeWhere(end);
+    if (waiters.isEmpty) _waiters.remove(position);
+  }
+
+  /// Records that the engine is searching [position], and gives every wait on it its own deadline.
+  void _engineSpoke(Position position) {
+    _engineSpokeFor = position;
+    for (final waiter in _waiters[position] ?? const <_Waiter>[]) {
       waiter.start();
     }
   }
@@ -462,16 +547,13 @@ class PracticeAnalyser({
   void _publish(Position position, ClientEval eval) {
     _evals[position] = eval;
     onEval(position, eval);
-    final waiters = _waiters[position];
-    if (waiters == null) return;
-    // Only the waiters this eval is deep enough for: they do not all ask for the same depth, and
-    // one waiting on a deeper eval must stay waiting while a shallower one is served.
-    waiters.removeWhere((waiter) {
-      if (eval.depth < waiter.minDepth) return false;
+    // Only the waiters this eval answers: they do not all ask for the same depth, and one waiting
+    // on a deeper eval must stay waiting while a shallower one is served.
+    _dropWaiters(position, (waiter) {
+      if (!_satisfies(eval, waiter.minDepth)) return false;
       waiter.complete(eval);
       return true;
     });
-    if (waiters.isEmpty) _waiters.remove(position);
   }
 
   /// Stops the search, if this analyser started one. The engine is shared, so only its own work is
@@ -486,10 +568,13 @@ class PracticeAnalyser({
     final analysing = _analysing;
     _analysing = null;
     if (analysing == null) return;
-    if (analysing.position != resumingOn) _strandWaiters(analysing.position);
+    if (analysing.position != resumingOn) {
+      if (_engineSpokeFor == analysing.position) _engineSpokeFor = null;
+      _strandWaiters(analysing.position);
+    }
     if (!stopEngine) return;
-    final evaluator = this.evaluator();
-    if (evaluator.currentWork == analysing) evaluator.stop();
+    final currentEvaluator = evaluator();
+    if (currentEvaluator.currentWork == analysing) currentEvaluator.stop();
   }
 
   /// Ends the waits on [position] that are still waiting for the engine to start.
@@ -502,22 +587,20 @@ class PracticeAnalyser({
   /// A wait whose deadline has already started is not touched: it is the caller's own, and the
   /// search may yet come back to the position before it passes.
   void _strandWaiters(Position position) {
-    final waiters = _waiters[position];
-    if (waiters == null) return;
-    waiters.removeWhere((waiter) {
+    _dropWaiters(position, (waiter) {
       if (waiter.started) return false;
       waiter.complete(_evals[position]);
       return true;
     });
-    if (waiters.isEmpty) _waiters.remove(position);
   }
 
-  void _completeAll() {
-    for (final entry in _waiters.entries) {
-      for (final waiter in entry.value) {
-        waiter.complete(_evals[entry.key]);
+  /// Ends every wait, with the best eval known for its position unless [handOutEvals] says not to.
+  void _completeAll({bool handOutEvals = true}) {
+    _waiters.forEach((position, waiters) {
+      for (final waiter in waiters) {
+        waiter.complete(handOutEvals ? _evals[position] : null);
       }
-    }
+    });
     _waiters.clear();
   }
 }

@@ -73,14 +73,10 @@ class PracticeEngineController(final PracticeEngineChapter _chapter)
 
   PositionEvaluator get _evaluator {
     final provider = positionEvaluatorProvider(_evaluationContext);
-    _evaluatorSubscription ??= ref.listen(provider, (previous, next) {
-      // The engine has stopped searching. It may have run out of its search time before saying
-      // anything usable about the position — on a slow device the first search can be spent
-      // starting the engine — and nothing else would ever start it again.
-      if (previous?.isComputing == true && !next.isComputing) {
-        _analyser.resumeIfUnfinished();
-      }
-    });
+    // The analysis needs to hear when the engine stops searching: it may have run out of its search
+    // time before saying anything usable about the position — on a slow device the first search can
+    // be spent starting the engine — and nothing else would ever start it again.
+    _evaluatorSubscription ??= ref.listen(provider, _analyser.onEvaluatorStateChanged);
     return ref.read(provider.notifier);
   }
 

@@ -176,6 +176,59 @@ void main() {
       expect(analyser.evalFor(Chess.initial)!.depth, kPracticeUsableDepth);
     });
 
+    test('the engine going quiet is what starts an unfinished search again', () async {
+      final container = await makeContainer();
+      final analyser = makeAnalyser(container);
+      addTearDown(analyser.dispose);
+
+      analyser.analyse(makeWork());
+      await settleEvals();
+      engine.emit('bestmove e2e4 ponder e7e5');
+      await settleEvals();
+
+      // The edge the owner passes on, rather than one it has to pick out itself: both of them
+      // hold this subscription for the evaluator's sake anyway.
+      const searching = (
+        engine: null,
+        engineSpec: null,
+        eval: null,
+        isComputing: true,
+        currentWork: null,
+      );
+      analyser.onEvaluatorStateChanged(searching, PositionEvaluator.defaultState);
+      await settleEvals();
+
+      expect(engine.requestedPositions, [Chess.initial.fen, Chess.initial.fen]);
+    });
+
+    test('the restarts already spent go with the engine', () async {
+      final container = await makeContainer();
+      final analyser = makeAnalyser(container);
+      addTearDown(analyser.dispose);
+
+      analyser.analyse(makeWork());
+      await settleEvals();
+      for (var i = 0; i < 6; i++) {
+        engine.emit('bestmove e2e4 ponder e7e5');
+        await settleEvals();
+        analyser.resumeIfUnfinished();
+        await settleEvals();
+      }
+      expect(engine.requestedPositions, hasLength(4), reason: 'the restarts are all spent');
+
+      // The screen goes away and comes back. What ran before was a search on an engine that was
+      // starting; this is a fresh go at the position, and it is owed its own restarts.
+      analyser.yieldEngine();
+      analyser.analyse(makeWork());
+      await settleEvals();
+      engine.emit('bestmove e2e4 ponder e7e5');
+      await settleEvals();
+      analyser.resumeIfUnfinished();
+      await settleEvals();
+
+      expect(engine.requestedPositions, hasLength(6));
+    });
+
     test('a search that reached the usable depth is left alone when it ends', () async {
       final container = await makeContainer();
       final analyser = makeAnalyser(container);
@@ -210,6 +263,27 @@ void main() {
       }
 
       expect(engine.requestedPositions.length, 4);
+    });
+
+    test('a wait for an engine that is never coming ends on the deadline it was given', () async {
+      // An engine that will not start: the evaluator drops the work, and nothing is on its way to
+      // the position — so there is no engine start to hold the caller's deadline back for.
+      fakeEngine = FakeEngine(startThrows: true);
+      final container = await makeContainer();
+      final analyser = makeAnalyser(container);
+      addTearDown(analyser.dispose);
+
+      analyser.analyse(makeWork());
+      await settleEvals();
+      expect(readEvaluator(container).currentWork, isNull);
+
+      var completed = false;
+      final wait = analyser.usableEval(Chess.initial, timeout: const Duration(milliseconds: 100));
+      unawaited(wait.then((_) => completed = true));
+
+      await Future<void>.delayed(const Duration(milliseconds: 300));
+      expect(completed, isTrue, reason: 'it waited out kPracticeEngineStartWait instead');
+      expect(await wait, isNull);
     });
 
     test('usableEval completes as soon as the analysis is deep enough', () async {
@@ -317,6 +391,44 @@ void main() {
 
       // It speaks, below the usable depth. Now the deadline is the search's, and it runs out with
       // whatever the search had reached by then.
+      engine.emitDepthRange(toDepth: kPracticeUsableDepth - 3);
+
+      final eval = await wait;
+      expect(eval, isNotNull);
+      expect(eval!.depth, lessThan(kPracticeUsableDepth));
+    });
+
+    test('an eval from the server does not start the deadline of a search that has not', () async {
+      final container = await makeContainer();
+      final analyser = makeAnalyser(container);
+      addTearDown(analyser.dispose);
+
+      analyser.analyse(makeWork());
+      await settleEvals();
+
+      // The server answers long before a cold engine has loaded its network, and too shallow to
+      // serve the wait. None of the starting up that is still to come is search time either.
+      analyser.offer(
+        Chess.initial,
+        const CloudEval(
+          position: Chess.initial,
+          depth: kPracticeUsableDepth - 5,
+          nodes: 0,
+          pvs: IListConst([
+            PvData(moves: IListConst(['e2e4']), cp: 23),
+          ]),
+        ),
+      );
+
+      var completed = false;
+      final wait = analyser.usableEval(Chess.initial, timeout: const Duration(milliseconds: 100));
+      unawaited(wait.then((_) => completed = true));
+
+      await Future<void>.delayed(const Duration(milliseconds: 400));
+      expect(completed, isFalse, reason: 'the engine has still said nothing about the position');
+
+      // It speaks at last, below the usable depth. Now the deadline is the search's, and it runs
+      // out with whatever the search had reached by then.
       engine.emitDepthRange(toDepth: kPracticeUsableDepth - 3);
 
       final eval = await wait;
@@ -443,6 +555,42 @@ void main() {
       expect(engine.requestedPositions, hasLength(2));
     });
 
+    test('a wait is not served by an eval with no move to play', () async {
+      final container = await makeContainer();
+      final analyser = makeAnalyser(container);
+      addTearDown(analyser.dispose);
+
+      analyser.analyse(makeWork());
+      await settleEvals();
+
+      var completed = false;
+      final wait = analyser.usableEval(Chess.initial, timeout: const Duration(seconds: 5));
+      unawaited(wait.then((_) => completed = true));
+
+      // Deeper than the search will ever get, and no use to whoever is waiting: the hint it would
+      // unlock and the opponent's reply are both read off the move it does not have.
+      analyser.offer(
+        Chess.initial,
+        const CloudEval(
+          position: Chess.initial,
+          depth: 99,
+          nodes: 0,
+          pvs: IListConst([PvData(moves: IListConst([]), cp: 0)]),
+        ),
+      );
+      await settleEvals();
+      expect(completed, isFalse);
+
+      // The search finds the move it was left running for, and that is what the wait is served
+      // with — shallower than the eval it replaces, and the only one that can be played.
+      engine.emitDepthRange(toDepth: kPracticeUsableDepth);
+      await settleEvals();
+
+      final eval = await wait;
+      expect(eval?.depth, kPracticeUsableDepth);
+      expect(eval?.bestMove, isNotNull);
+    });
+
     test('yieldEngine hands the engine over, and analysing takes it back', () async {
       final container = await makeContainer();
       final evaluator = readEvaluator(container);
@@ -550,6 +698,66 @@ void main() {
 
       expect(analyser.evalFor(Chess.initial), isNull);
       expect(analyser.isAnalysing, isFalse);
+    });
+
+    test('a wait outliving the game it was for is answered with nothing', () async {
+      final container = await makeContainer();
+      final analyser = makeAnalyser(container);
+      addTearDown(analyser.dispose);
+
+      analyser.analyse(makeWork());
+      await settleEvals();
+      engine.emitDepthRange(toDepth: kPracticeUsableDepth - 3);
+      await settleEvals();
+
+      final wait = analyser.usableEval(Chess.initial, timeout: const Duration(seconds: 5));
+
+      // The player retries. What the search reached belongs to the attempt that was, and handing
+      // it to a wait from that attempt would judge the same move by it all over again.
+      analyser.clear();
+
+      expect(await wait, isNull);
+    });
+
+    test('a cloud eval still in flight does not land in the cache that replaced it', () async {
+      final container = await cloudEvalContainer(depth: 36);
+      final analyser = makeAnalyser(container, alwaysRequestCloudEvals: true);
+      addTearDown(analyser.dispose);
+
+      analyser.analyse(makeWork());
+      // A retry, before the round trip is back: what it answers is about the game that was.
+      analyser.clear();
+
+      await waitFor(() => analyser.evalFor(Chess.initial) != null);
+      expect(analyser.evalFor(Chess.initial), isNull);
+    }, skip: kPracticeCloudEvalsEnabled ? null : 'this build asks the server for nothing');
+
+    test('an analysis started while an eval is reported is left running', () async {
+      final container = await makeContainer();
+      late final PracticeAnalyser analyser;
+      var moved = false;
+      analyser = makeAnalyser(
+        container,
+        onEval: (position, eval) {
+          // What a listener on the state an eval is reported into can do: move the analysis on.
+          if (!moved && eval.depth >= kPracticeTargetDepth) {
+            moved = true;
+            analyser.analyse(makeWorkAfterE4());
+          }
+        },
+      );
+      addTearDown(analyser.dispose);
+
+      analyser.analyse(makeWork());
+      await settleEvals();
+      engine.emitDepthRange(toDepth: kPracticeTargetDepth);
+      await settleEvals();
+
+      expect(moved, isTrue);
+      // The search that reported the eval is over, but the one started from the report is not: it
+      // is not the target depth's to stop.
+      expect(analyser.isAnalysing, isTrue);
+      expect(engine.requestedPositions, hasLength(2));
     });
   });
 }
