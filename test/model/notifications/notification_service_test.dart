@@ -2,13 +2,20 @@ import 'dart:convert';
 
 import 'package:fake_async/fake_async.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
+import 'package:lichess_mobile/src/model/challenge/challenge.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/game.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:logging/logging.dart';
 import 'package:mocktail/mocktail.dart';
@@ -46,7 +53,7 @@ void main() {
 
   /// Starts the notification service with [notificationDisplayMock] as display, and stubs it
   /// so that showing a notification always succeeds.
-  Future<void> startService() async {
+  Future<ProviderContainer> startService() async {
     final container = await makeContainer(
       overrides: {
         notificationDisplayProvider: notificationDisplayProvider.overrideWith(
@@ -66,6 +73,7 @@ void main() {
     ).thenAnswer((_) => Future.value());
 
     await container.read(notificationServiceProvider).start();
+    return container;
   }
 
   /// Collects the notification responses emitted from now on, until the test ends.
@@ -304,6 +312,69 @@ void main() {
 
       verifyNeverShown();
       expect(records, anyElement(predicate((LogRecord r) => r.level == Level.SEVERE)));
+    });
+  });
+
+  group('Challenge notification from the socket:', () {
+    const challenge = Challenge(
+      id: ChallengeId('H9fIRZUk'),
+      status: ChallengeStatus.created,
+      challenger: (
+        user: LightUser(id: UserId('bot1'), name: 'Bot1', title: 'BOT', isOnline: true),
+        rating: 1500,
+        provisionalRating: true,
+        lagRating: 4,
+      ),
+      variant: Variant.standard,
+      rated: true,
+      speed: Speed.rapid,
+      timeControl: ChallengeTimeControlType.clock,
+      clock: (time: Duration(seconds: 600), increment: Duration.zero),
+      sideChoice: SideChoice.random,
+    );
+
+    test('is displayed while the app is inactive, still in the foreground', () async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+      addTearDown(() => binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed));
+
+      final container = await startService();
+
+      await container
+          .read(notificationServiceProvider)
+          .showChallengeFromSocket(const ChallengeNotification(challenge));
+
+      verify(
+        () => notificationDisplayMock.show(
+          id: any(named: 'id'),
+          title: any(named: 'title'),
+          body: any(named: 'body'),
+          notificationDetails: any(named: 'notificationDetails'),
+          payload: any(named: 'payload'),
+        ),
+      ).called(1);
+    });
+
+    test('is not displayed while the app is hidden', () async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
+      addTearDown(() => binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed));
+
+      final container = await startService();
+
+      await container
+          .read(notificationServiceProvider)
+          .showChallengeFromSocket(const ChallengeNotification(challenge));
+
+      verifyNever(
+        () => notificationDisplayMock.show(
+          id: any(named: 'id'),
+          title: any(named: 'title'),
+          body: any(named: 'body'),
+          notificationDetails: any(named: 'notificationDetails'),
+          payload: any(named: 'payload'),
+        ),
+      );
     });
   });
 

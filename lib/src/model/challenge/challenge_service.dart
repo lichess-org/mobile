@@ -92,23 +92,18 @@ class ChallengeService(final Ref ref) {
           .map((id) async => await notificationService.cancel(id.value.hashCode)),
     );
 
-    // new incoming challenges
-    // only display the notifications if the app is in the foreground because FCM already
-    // shows notifications when the app is in the background
-    // TODO find a better solution to avoid duplicate notifications
-    final state = WidgetsBinding.instance.lifecycleState;
-    final isForeground =
-        state == null || state == AppLifecycleState.resumed || state == AppLifecycleState.inactive;
-    if (isForeground) {
-      await Future.wait(
-        _current?.inward.whereNot((challenge) => prevInwardIds.contains(challenge.id)).map((
-              challenge,
-            ) async {
-              return await notificationService.show(ChallengeNotification(challenge));
-            }) ??
-            <Future<int>>[],
-      );
-    }
+    // new incoming challenges: [NotificationService.showChallengeFromSocket] displays them only
+    // while the app is visible, since the system displays the FCM push for the same challenge
+    // while the app is hidden, and showing both would be a duplicate.
+    await Future.wait(
+      _current?.inward
+              .whereNot((challenge) => prevInwardIds.contains(challenge.id))
+              .map(
+                (challenge) =>
+                    notificationService.showChallengeFromSocket(ChallengeNotification(challenge)),
+              ) ??
+          <Future<void>>[],
+    );
   }
 
   /// Stop listening to challenge events from the server.
