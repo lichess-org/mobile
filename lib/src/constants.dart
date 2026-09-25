@@ -31,8 +31,8 @@ const kLichessTablebaseHost = String.fromEnvironment(
 /// Whether the practice analysis may race the local engine against the server's evaluations —
 /// cloud evals and tablebase lookups.
 ///
-/// Turned off with `--dart-define=CLOUD_EVALS=false`.
-const kPracticeCloudEvalsEnabled = bool.fromEnvironment('CLOUD_EVALS', defaultValue: true);
+/// Turned off with `--dart-define=PRACTICE_CLOUD_EVALS=false`.
+const kPracticeCloudEvalsEnabled = bool.fromEnvironment('PRACTICE_CLOUD_EVALS', defaultValue: true);
 
 const kLichessCustomUriSchemeName = 'org.lichess.mobile';
 
