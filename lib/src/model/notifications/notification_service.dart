@@ -279,8 +279,22 @@ class NotificationService(final Ref _ref) {
   /// platform notification have nothing to display, and a challenge creation received in
   /// foreground is handled by the socket, which shows a [ChallengeNotification] with
   /// accept/decline actions instead.
-  static bool _shouldShow(FcmMessage message, {required bool fromBackground}) =>
-      !fromBackground && message.notification != null && message is! ChallengeCreateFcmMessage;
+  ///
+  /// A platform notification with no title or body is malformed and is flagged with a
+  /// severe log instead of being displayed as a blank notification.
+  static bool _shouldShow(FcmMessage message, {required bool fromBackground}) {
+    if (fromBackground) return false;
+    if (message is ChallengeCreateFcmMessage) return false;
+    final notification = message.notification;
+    if (notification == null) return false;
+    if (notification.title == null || notification.body == null) {
+      _logger.severe(
+        'Received a platform notification with no title or body (${message.runtimeType}).',
+      );
+      return false;
+    }
+    return true;
+  }
 
   /// Process a message received from the Firebase Cloud Messaging service.
   ///

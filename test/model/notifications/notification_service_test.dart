@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/correspondence/correspondence_service.d
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:logging/logging.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../binding.dart';
@@ -287,8 +288,11 @@ void main() {
       verifyNeverShown();
     });
 
-    test('a platform notification without title or body shows empty strings', () async {
+    test('a platform notification without title or body is not shown', () async {
       await startService();
+      final records = <LogRecord>[];
+      final subscription = Logger.root.onRecord.listen(records.add);
+      addTearDown(subscription.cancel);
 
       testBinding.firebaseMessaging.onMessage.add(
         const RemoteMessage(
@@ -298,15 +302,8 @@ void main() {
       );
       await Future<void>.delayed(Duration.zero);
 
-      verify(
-        () => notificationDisplayMock.show(
-          id: const GameFullId('9wlmxmibr9gh').hashCode,
-          title: '',
-          body: '',
-          notificationDetails: any(named: 'notificationDetails'),
-          payload: any(named: 'payload'),
-        ),
-      ).called(1);
+      verifyNeverShown();
+      expect(records, anyElement(predicate((LogRecord r) => r.level == Level.SEVERE)));
     });
   });
 
