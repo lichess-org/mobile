@@ -698,12 +698,18 @@ class SocketClient(
   }
 
   void _handleBatch(SocketEvent batchEvent) {
-    final jsonEventList = batchEvent.data as List<dynamic>;
+    final jsonEventList = batchEvent.data;
+    if (jsonEventList is! List) {
+      _logger.warning('Ignoring socket batch with invalid data.');
+      return;
+    }
 
     for (final jsonEvent in jsonEventList) {
-      final event = SocketEvent.fromJson(jsonEvent as Map<String, dynamic>);
-
-      _streamController.add(event);
+      if (jsonEvent is! Map) {
+        _logger.warning('Ignoring socket batch event with invalid data.');
+        continue;
+      }
+      _handleEvent(SocketEvent.fromJson(Map<String, dynamic>.from(jsonEvent)));
     }
   }
 }
