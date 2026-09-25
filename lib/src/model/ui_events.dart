@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dartchess/dartchess.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
@@ -19,6 +20,17 @@ class const OpenGameEvent(final GameFullId fullId) extends UiEvent;
 
 /// Pops the root navigator back to its first route, then opens the conversation with [user].
 class const OpenConversationEvent(final LightUser user) extends UiEvent;
+
+/// Pops the root navigator back to its first route, then opens the broadcast [roundId].
+class const OpenBroadcastRoundEvent(final BroadcastRoundId roundId) extends UiEvent;
+
+/// Pops the root navigator back to its first route, then opens the broadcast [roundId] and follows
+/// [gameId] from [pov]'s point of view.
+class const OpenBroadcastFollowEvent(
+  final BroadcastRoundId roundId,
+  final BroadcastGameId gameId,
+  final Side pov,
+) extends UiEvent;
 
 /// The channel on which [UiEvent]s travel from the model layer to the view layer.
 final uiEventBusProvider = Provider<UiEventBus>((Ref ref) {
