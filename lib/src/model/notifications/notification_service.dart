@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
@@ -197,6 +198,28 @@ class NotificationService(final Ref _ref) {
     return id;
   }
 
+  /// Shows the [ChallengeNotification] of a new challenge received from the socket.
+  ///
+  /// The server delivers a new challenge twice: as a socket event and as an FCM push. Only one
+  /// of the two paths may display it:
+  ///
+  /// * while the app is visible, the system does not display the push (it is delivered to
+  ///   [fcmMessageStream], where [_shouldShow] leaves challenges alone), so this notification —
+  ///   the one carrying accept/decline actions — is displayed here;
+  /// * while the app is hidden, the system displays the push itself, so this notification is
+  ///   dropped: displaying both would show the same challenge twice.
+  ///
+  /// `inactive` counts as visible: the app is still frontmost and the system does not display
+  /// notifications for it. The state is read at the moment the socket event arrives, which is
+  /// exactly the moment the question "who displays this challenge?" must be answered.
+  Future<void> showChallengeFromSocket(ChallengeNotification notification) async {
+    final state = WidgetsBinding.instance.lifecycleState;
+    final isAppVisible =
+        state == null || state == AppLifecycleState.resumed || state == AppLifecycleState.inactive;
+    if (!isAppVisible) return;
+    await show(notification);
+  }
+
   /// Cancels/removes a notification.
   Future<void> cancel(int id) {
     _logger.info('canceled notification id: [$id]');
@@ -277,8 +300,7 @@ class NotificationService(final Ref _ref) {
   ///
   /// Messages received in background are displayed by the system, messages without a
   /// platform notification have nothing to display, and a challenge creation received in
-  /// foreground is handled by the socket, which shows a [ChallengeNotification] with
-  /// accept/decline actions instead.
+  /// foreground is handled by the socket, via [showChallengeFromSocket].
   ///
   /// A platform notification with no title or body is malformed and is flagged with a
   /// severe log instead of being displayed as a blank notification.
