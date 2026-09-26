@@ -2,9 +2,145 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
+import 'package:lichess_mobile/src/network/http.dart';
+
+const _gameId = GameId('H9fIRZUk');
+
+/// The URL [GameRepository.requestServerAnalysis] posts to.
+final _requestUri = Uri(path: '/$_gameId/request-analysis');
+
+/// A 400 exactly as the server sends it. [Analyse.requestAnalysis] forwards the analyser's error
+/// string verbatim, so the body is plain text rather than JSON.
+ServerException _badRequest(String body) => ServerException(
+  400,
+  'Request to $_requestUri failed with status 400: $body',
+  _requestUri,
+  null,
+);
 
 void main() {
+  group('ServerAnalysisService.classifyRequestAnalysisError', () {
+    test('an already analysed game still has evals coming', () {
+      expect(
+        ServerAnalysisService.classifyRequestAnalysisError(
+          _badRequest('This game is already analysed'),
+        ),
+        ServerAnalysisRequestError.alreadyRequested,
+      );
+    });
+
+    test('an analysis already in flight is still going to arrive', () {
+      expect(
+        ServerAnalysisService.classifyRequestAnalysisError(
+          _badRequest('You already have an ongoing requested analysis'),
+        ),
+        ServerAnalysisRequestError.alreadyRequested,
+      );
+    });
+
+    test('the weekly limit means nothing is running', () {
+      // Treating this as "already requested" is the bug: the socket would be listened to for
+      // a minute and then time out, with no evals ever arriving.
+      expect(
+        ServerAnalysisService.classifyRequestAnalysisError(
+          _badRequest('You have reached the weekly analysis limit'),
+        ),
+        ServerAnalysisRequestError.weeklyLimitReached,
+      );
+    });
+
+    test('the daily limit means nothing is running', () {
+      expect(
+        ServerAnalysisService.classifyRequestAnalysisError(
+          _badRequest('You have reached the daily analysis limit'),
+        ),
+        ServerAnalysisRequestError.dailyLimitReached,
+      );
+    });
+
+    test('the daily IP limit is distinct from the account daily limit', () {
+      expect(
+        ServerAnalysisService.classifyRequestAnalysisError(
+          _badRequest('You have reached the daily analysis limit on this IP'),
+        ),
+        ServerAnalysisRequestError.dailyIpLimitReached,
+      );
+    });
+
+    test('a game that cannot be analysed reports why', () {
+      expect(
+        ServerAnalysisService.classifyRequestAnalysisError(
+          _badRequest('This game is not analysable'),
+        ),
+        ServerAnalysisRequestError.notAnalysable,
+      );
+    });
+
+    test('an unrecognised 400 is reported rather than assumed harmless', () {
+      expect(
+        ServerAnalysisService.classifyRequestAnalysisError(_badRequest('Something new')),
+        ServerAnalysisRequestError.unknown,
+      );
+    });
+
+    test('a 400 with an empty body is unknown', () {
+      expect(
+        ServerAnalysisService.classifyRequestAnalysisError(_badRequest('')),
+        ServerAnalysisRequestError.unknown,
+      );
+    });
+
+    test('the daily limit message does not swallow the longer daily IP limit', () {
+      // "You have reached the daily analysis limit" is a prefix of the IP-limit message, so a naive
+      // shortest-first scan would report every IP-limited request as a plain daily limit.
+      expect(
+        ServerAnalysisService.classifyRequestAnalysisError(
+          _badRequest('You have reached the daily analysis limit on this IP'),
+        ),
+        ServerAnalysisRequestError.dailyIpLimitReached,
+      );
+    });
+
+    test('reads the error from a JSON body when the server sends one', () {
+      final e = ServerException(
+        400,
+        'Request to $_requestUri failed with status 400',
+        _requestUri,
+        {'error': 'You have reached the weekly analysis limit'},
+      );
+      expect(
+        ServerAnalysisService.classifyRequestAnalysisError(e),
+        ServerAnalysisRequestError.weeklyLimitReached,
+      );
+    });
+
+    test('a non-400 is not one of these analysis errors', () {
+      final e = ServerException(
+        500,
+        'Request to $_requestUri failed with status 500: This game is already analysed',
+        _requestUri,
+        null,
+      );
+      expect(
+        ServerAnalysisService.classifyRequestAnalysisError(e),
+        ServerAnalysisRequestError.unknown,
+      );
+    });
+
+    test('only alreadyRequested may be treated as success', () {
+      // The whole point of the enum: everything except alreadyRequested must stop the analysis.
+      for (final error in ServerAnalysisRequestError.values) {
+        expect(
+          error.isBenign,
+          error == ServerAnalysisRequestError.alreadyRequested,
+          reason: '$error',
+        );
+      }
+    });
+  });
+
   group('ServerAnalysisService.mergeOngoingAnalysis', () {
     test('merges analysis using UCI instead of id field', () {
       // Create a simple game tree: e2e4

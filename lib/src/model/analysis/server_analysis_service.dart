@@ -32,6 +32,49 @@ sealed class const ServerAnalysisSource._() with _$ServerAnalysisSource {
 
 const Duration kMaxWaitForServerAnalysis = Duration(minutes: 1);
 
+/// Why the server refused to start a new analysis.
+///
+/// [Analyse.requestAnalysis] answers 400 with the analyser's error string as a plain-text body,
+/// so the status alone cannot tell a harmless refusal from a real one.
+///
+/// [isBenign] says whether the analysis is nonetheless already under way, so the request may be
+/// treated as a success. Only [alreadyRequested] qualifies: every other value means the request was
+/// refused outright, so listening would stall until [kMaxWaitForServerAnalysis] and then time out
+/// with no evals.
+enum ServerAnalysisRequestError({final bool isBenign = false}) {
+  /// The game is already analysed, or the user already has an analysis requested. Evals are
+  /// already coming, so listening for them is the right thing to do.
+  alreadyRequested(isBenign: true),
+
+  /// The user has run out of analyses this week.
+  weeklyLimitReached,
+
+  /// The user has run out of analyses today.
+  dailyLimitReached,
+
+  /// The user's IP has run out of analyses today.
+  dailyIpLimitReached,
+
+  /// The game cannot be analysed at all.
+  notAnalysable,
+
+  /// A 400 this list does not cover. Treated as a failure, so the app never waits on a socket
+  /// for an analysis the server is not going to send.
+  unknown;
+}
+
+/// The exact error strings [lila.fishnet.Analyser.Result] sends, keyed by the resulting error.
+const _kServerAnalysisRequestErrors = {
+  'This game is already analysed': ServerAnalysisRequestError.alreadyRequested,
+  'You already have an ongoing requested analysis': ServerAnalysisRequestError.alreadyRequested,
+  'You have reached the weekly analysis limit': ServerAnalysisRequestError.weeklyLimitReached,
+  'You have reached the daily analysis limit': ServerAnalysisRequestError.dailyLimitReached,
+  'You have reached the daily analysis limit on this IP':
+      ServerAnalysisRequestError.dailyIpLimitReached,
+  'This game is not analysable': ServerAnalysisRequestError.notAnalysable,
+  'Game not found': ServerAnalysisRequestError.notAnalysable,
+};
+
 /// A provider for [ServerAnalysisService].
 final serverAnalysisServiceProvider = Provider<ServerAnalysisService>((Ref ref) {
   return ServerAnalysisService(ref);
@@ -113,15 +156,16 @@ class ServerAnalysisService(final Ref ref) {
           await ref.read(gameRepositoryProvider).requestServerAnalysis(gameId);
           _currentAnalysis.value = source;
         } on ServerException catch (e, st) {
-          // 400 means analysis already requested (most likely) so we'll still try to listen to the socket
-          // for updates.
-          // TODO: should disambiguate this better. Server will also return an error when max number
-          // of analyses is reached.
-          if (e.statusCode == 400) {
-            _logger.info('Analysis already requested for game $gameId');
+          // A 400 does not by itself mean the analysis is under way: several distinct refusals
+          // share that status. Classify the body, and only keep listening for an analysis we
+          // actually expect to arrive.
+          final error = classifyRequestAnalysisError(e);
+          if (error.isBenign) {
+            // Already analysed or already queued: the evals are on their way, so keep listening.
+            _logger.info('Server did not start a new analysis for game $gameId: $error');
             _currentAnalysis.value = source;
           } else {
-            _logger.severe('ServerException requesting server analysis', e, st);
+            _logger.warning('Server refused to analyse game $gameId: $error', e, st);
             _cancelAnalysis();
             rethrow;
           }
@@ -147,6 +191,27 @@ class ServerAnalysisService(final Ref ref) {
     _analysisCompleter?.future.timeout(kMaxWaitForServerAnalysis).whenComplete(() {
       _cancelAnalysis();
     });
+  }
+
+  /// Work out why the server refused to start an analysis, from the plain-text body it sends
+  /// alongside the 400.
+  static ServerAnalysisRequestError classifyRequestAnalysisError(ServerException e) {
+    if (e.statusCode != 400) {
+      return ServerAnalysisRequestError.unknown;
+    }
+    // The body is appended to the message by the http client, so match on the tail rather than
+    // parsing it back out of the URL and status prefix.
+    final body = e.jsonError?['error'] as String? ?? e.message;
+    // Longest key first: the daily-limit key is a prefix of the daily-IP-limit key, so scanning in
+    // declaration order would report every IP-limited request as a plain daily limit.
+    final keys = _kServerAnalysisRequestErrors.keys.toList()
+      ..sort((a, b) => b.length.compareTo(a.length));
+    for (final key in keys) {
+      if (body == key || body.endsWith(key)) {
+        return _kServerAnalysisRequestErrors[key]!;
+      }
+    }
+    return ServerAnalysisRequestError.unknown;
   }
 
   /// Cancel the ongoing server analysis, if any.
