@@ -32,19 +32,24 @@ sealed class const ServerAnalysisSource._() with _$ServerAnalysisSource {
 
 const Duration kMaxWaitForServerAnalysis = Duration(minutes: 1);
 
-/// Why the server refused to start a new analysis.
+/// Why the server refused to start an analysis for a game.
 ///
-/// [Analyse.requestAnalysis] answers 400 with the analyser's error string as a plain-text body,
-/// so the status alone cannot tell a harmless refusal from a real one.
+/// [Analyse.requestAnalysis] answers 400 with the analyser's error string as a plain-text body, so
+/// the status alone cannot tell a refusal we can live with from one that leaves nothing running.
 ///
-/// [isBenign] says whether the analysis is nonetheless already under way, so the request may be
-/// treated as a success. Only [alreadyRequested] qualifies: every other value means the request was
-/// refused outright, so listening would stall until [kMaxWaitForServerAnalysis] and then time out
-/// with no evals.
+/// [isBenign] marks the single case where evals for *this* game are still expected on the socket.
+/// Every other value means the server queued nothing for this game, so listening would burn
+/// [kMaxWaitForServerAnalysis] and then time out having reported nothing.
 enum ServerAnalysisRequestError({final bool isBenign = false}) {
-  /// The game is already analysed, or the user already has an analysis requested. Evals are
-  /// already coming, so listening for them is the right thing to do.
-  alreadyRequested(isBenign: true),
+  /// The game has already been analysed. The evals exist, so the socket is the right thing to read.
+  alreadyAnalysed(isBenign: true),
+
+  /// The user or their IP already has an analysis queued.
+  ///
+  /// Deliberately not benign: [FishnetLimiter.concurrentCheck] matches on `sender.ip` and
+  /// `sender.userId` only, never on the game id, so the queued analysis may belong to a different
+  /// game entirely. Nothing will arrive for this one.
+  concurrentAnalysis,
 
   /// The user has run out of analyses this week.
   weeklyLimitReached,
@@ -58,21 +63,20 @@ enum ServerAnalysisRequestError({final bool isBenign = false}) {
   /// The game cannot be analysed at all.
   notAnalysable,
 
-  /// A 400 this list does not cover. Treated as a failure, so the app never waits on a socket
-  /// for an analysis the server is not going to send.
-  unknown;
+  /// A 400 this list does not cover. Treated as a failure, so the app never waits on a socket for
+  /// an analysis the server is not going to send.
+  unknown,
 }
 
 /// The exact error strings [lila.fishnet.Analyser.Result] sends, keyed by the resulting error.
 const _kServerAnalysisRequestErrors = {
-  'This game is already analysed': ServerAnalysisRequestError.alreadyRequested,
-  'You already have an ongoing requested analysis': ServerAnalysisRequestError.alreadyRequested,
+  'This game is already analysed': ServerAnalysisRequestError.alreadyAnalysed,
+  'You already have an ongoing requested analysis': ServerAnalysisRequestError.concurrentAnalysis,
   'You have reached the weekly analysis limit': ServerAnalysisRequestError.weeklyLimitReached,
   'You have reached the daily analysis limit': ServerAnalysisRequestError.dailyLimitReached,
   'You have reached the daily analysis limit on this IP':
       ServerAnalysisRequestError.dailyIpLimitReached,
   'This game is not analysable': ServerAnalysisRequestError.notAnalysable,
-  'Game not found': ServerAnalysisRequestError.notAnalysable,
 };
 
 /// A provider for [ServerAnalysisService].
@@ -157,15 +161,20 @@ class ServerAnalysisService(final Ref ref) {
           _currentAnalysis.value = source;
         } on ServerException catch (e, st) {
           // A 400 does not by itself mean the analysis is under way: several distinct refusals
-          // share that status. Classify the body, and only keep listening for an analysis we
-          // actually expect to arrive.
+          // share that status. Classify the body, and only keep listening when evals for *this*
+          // game are still expected.
           final error = classifyRequestAnalysisError(e);
           if (error.isBenign) {
-            // Already analysed or already queued: the evals are on their way, so keep listening.
-            _logger.info('Server did not start a new analysis for game $gameId: $error');
+            // Already analysed: the evals exist, so keep reading them off the socket.
+            _logger.info('Game $gameId is already analysed, reading it from the socket');
             _currentAnalysis.value = source;
-          } else {
+          } else if (e.statusCode == 400) {
+            // A refusal the server explained: the user hit a limit, or their queue is busy.
             _logger.warning('Server refused to analyse game $gameId: $error', e, st);
+            _cancelAnalysis();
+            rethrow;
+          } else {
+            _logger.severe('ServerException requesting server analysis', e, st);
             _cancelAnalysis();
             rethrow;
           }
@@ -201,14 +210,14 @@ class ServerAnalysisService(final Ref ref) {
     }
     // The body is appended to the message by the http client, so match on the tail rather than
     // parsing it back out of the URL and status prefix.
-    final body = e.jsonError?['error'] as String? ?? e.message;
-    // Longest key first: the daily-limit key is a prefix of the daily-IP-limit key, so scanning in
-    // declaration order would report every IP-limited request as a plain daily limit.
-    final keys = _kServerAnalysisRequestErrors.keys.toList()
-      ..sort((a, b) => b.length.compareTo(a.length));
-    for (final key in keys) {
-      if (body == key || body.endsWith(key)) {
-        return _kServerAnalysisRequestErrors[key]!;
+    //
+    // Matching the tail is what makes the near-identical limit messages safe to tell apart: the
+    // account daily limit is a *prefix* of the IP one, so a `contains` scan would report every
+    // IP-limited request as a plain daily limit, whereas an `endsWith` scan only ever matches the
+    // whole message and needs no ordering.
+    for (final MapEntry(key: body, value: error) in _kServerAnalysisRequestErrors.entries) {
+      if (e.message.endsWith(body)) {
+        return error;
       }
     }
     return ServerAnalysisRequestError.unknown;

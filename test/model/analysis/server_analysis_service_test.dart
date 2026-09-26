@@ -27,16 +27,21 @@ void main() {
         ServerAnalysisService.classifyRequestAnalysisError(
           _badRequest('This game is already analysed'),
         ),
-        ServerAnalysisRequestError.alreadyRequested,
+        ServerAnalysisRequestError.alreadyAnalysed,
       );
     });
 
-    test('an analysis already in flight is still going to arrive', () {
+    test('an ongoing request for another game means nothing will arrive here', () {
+      // FishnetLimiter.concurrentCheck only looks at sender.ip / sender.userId, never the game id:
+      //   analysisColl.exists(or(bdoc("sender.ip" -> ip), bdoc("sender.userId" -> userId))).not
+      // So this refusal may be about a *different* game, or another user behind the same NAT. The
+      // socket for this game would then never emit, so listening would burn a full minute and
+      // report nothing. It must not be treated as benign.
       expect(
         ServerAnalysisService.classifyRequestAnalysisError(
           _badRequest('You already have an ongoing requested analysis'),
         ),
-        ServerAnalysisRequestError.alreadyRequested,
+        ServerAnalysisRequestError.concurrentAnalysis,
       );
     });
 
@@ -61,6 +66,8 @@ void main() {
     });
 
     test('the daily IP limit is distinct from the account daily limit', () {
+      // The account message is a prefix of the IP one, so a naive `contains` scan in declaration
+      // order would report every IP-limited request as a plain daily limit.
       expect(
         ServerAnalysisService.classifyRequestAnalysisError(
           _badRequest('You have reached the daily analysis limit on this IP'),
@@ -92,30 +99,6 @@ void main() {
       );
     });
 
-    test('the daily limit message does not swallow the longer daily IP limit', () {
-      // "You have reached the daily analysis limit" is a prefix of the IP-limit message, so a naive
-      // shortest-first scan would report every IP-limited request as a plain daily limit.
-      expect(
-        ServerAnalysisService.classifyRequestAnalysisError(
-          _badRequest('You have reached the daily analysis limit on this IP'),
-        ),
-        ServerAnalysisRequestError.dailyIpLimitReached,
-      );
-    });
-
-    test('reads the error from a JSON body when the server sends one', () {
-      final e = ServerException(
-        400,
-        'Request to $_requestUri failed with status 400',
-        _requestUri,
-        {'error': 'You have reached the weekly analysis limit'},
-      );
-      expect(
-        ServerAnalysisService.classifyRequestAnalysisError(e),
-        ServerAnalysisRequestError.weeklyLimitReached,
-      );
-    });
-
     test('a non-400 is not one of these analysis errors', () {
       final e = ServerException(
         500,
@@ -129,12 +112,13 @@ void main() {
       );
     });
 
-    test('only alreadyRequested may be treated as success', () {
-      // The whole point of the enum: everything except alreadyRequested must stop the analysis.
+    test('only alreadyAnalysed may be treated as success', () {
+      // The whole point of the enum: a request that the server did not accept for *this* game
+      // must stop the analysis instead of waiting for evals that will never come.
       for (final error in ServerAnalysisRequestError.values) {
         expect(
           error.isBenign,
-          error == ServerAnalysisRequestError.alreadyRequested,
+          error == ServerAnalysisRequestError.alreadyAnalysed,
           reason: '$error',
         );
       }
