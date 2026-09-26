@@ -56,9 +56,6 @@ const _kCloudEvalPlyThreshold = 30;
 const _kCloudEvalTimeout = Duration(seconds: 2);
 
 /// The wall-clock cap on analysing one position, for a device that would never reach either depth.
-///
-/// Short, because it is a battery cap and not a quality one: a device still searching after this
-/// long is not about to find something better, and the player is waiting on the hint behind it.
 const kPracticeMaxSearchTime = Duration(seconds: 5);
 
 /// What a wait is given on top of its own deadline when the engine has yet to start searching.
@@ -66,14 +63,8 @@ const kPracticeEngineStartWait = Duration(seconds: 10);
 
 /// Keeps an evaluation running on the position the game is at, for as long as it is worth running.
 ///
-/// This is the practice-mode *policy* that [PositionEvaluator] deliberately has none of: how deep
-/// is deep enough to show a hint, how deep is deep enough to stop, and who has the engine. The
-/// evaluator underneath still only knows how to evaluate a position.
-///
-/// Two depths, because they answer different questions. Hints and move feedback unlock at
-/// [kPracticeUsableDepth] so the player is not kept waiting; the search then runs on to
-/// [kPracticeTargetDepth], refining the eval while the player thinks — which is the whole point:
-/// their thinking time becomes engine time instead of idle time.
+/// Hints and move feedback unlock at [kPracticeUsableDepth] so the player is not kept waiting;
+/// the search then runs on to [kPracticeTargetDepth], refining the eval while the player thinks.
 ///
 /// The local search is not alone: every position analysed is also asked of the server — a cloud
 /// eval, and a tablebase lookup in an endgame — and whatever comes back first and deepest wins.
