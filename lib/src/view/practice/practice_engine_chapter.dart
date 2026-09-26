@@ -88,13 +88,9 @@ class const PracticeEngineChapterBody({required final PracticeEngineChapter chap
       ),
       null => null,
     };
-    // Once the chapter is failed, the move that should have been played.
-    final best = state.status == .failed ? state.feedback?.bestMove?.move : null;
     return {
       if (state.steps.isEmpty) ...chapter.shapes.map((shape) => shape.chessground),
       ?hint,
-      if (best case NormalMove(:final from, :final to))
-        Arrow(color: ShapeColor.blue.color, orig: from, dest: to),
     }.lock;
   }
 
