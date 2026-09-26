@@ -142,39 +142,40 @@ class const AccountPerfCards({final EdgeInsetsGeometry? padding}) extends Consum
     // then rather than collapsing the section in between. Watching it here also starts that request
     // alongside the account one, instead of once the account has loaded.
     final showRatings = ref.watch(showRatingsPrefProvider);
-    final skeleton = Shimmer(
-      child: Padding(
-        padding: padding ?? Styles.bodySectionPadding,
-        child: SizedBox(
-          height: 106,
-          child: ListView.separated(
-            padding: const EdgeInsets.symmetric(vertical: 3.0),
-            scrollDirection: Axis.horizontal,
-            itemCount: 5,
-            separatorBuilder: (context, index) => const SizedBox(width: 10),
-            itemBuilder: (context, index) => ShimmerLoading(
-              isLoading: true,
-              child: Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(10.0),
+    return switch ((account, showRatings)) {
+      (AsyncData(value: final user?), AsyncData()) => PerfCards(
+        user: user,
+        isMe: true,
+        padding: padding,
+      ),
+      (AsyncData(value: null), _) ||
+      (AsyncError(), _) ||
+      (_, AsyncError()) => const SizedBox.shrink(),
+      _ => Shimmer(
+        child: Padding(
+          padding: padding ?? Styles.bodySectionPadding,
+          child: SizedBox(
+            height: 106,
+            child: ListView.separated(
+              padding: const EdgeInsets.symmetric(vertical: 3.0),
+              scrollDirection: Axis.horizontal,
+              itemCount: 5,
+              separatorBuilder: (context, index) => const SizedBox(width: 10),
+              itemBuilder: (context, index) => ShimmerLoading(
+                isLoading: true,
+                child: Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
                 ),
               ),
             ),
           ),
         ),
       ),
-    );
-    return account.when(
-      data: (user) => user == null
-          ? const SizedBox.shrink()
-          : showRatings.hasValue || showRatings.hasError
-          ? PerfCards(user: user, isMe: true, padding: padding)
-          : skeleton,
-      loading: () => skeleton,
-      error: (error, stack) => const SizedBox.shrink(),
-    );
+    };
   }
 }
