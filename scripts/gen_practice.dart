@@ -2,8 +2,8 @@
 // a JSON asset.
 //
 // Practice chapters are stored without their move tree: lila strips it, and the opponent's moves
-// and the verdicts come from the local engine. A chapter is a FEN, an orientation, a goal and a
-// description. Studies can also mix in gamebook chapters and plain lesson chapters, which do need
+// and the verdicts come from the local engine. A chapter is a FEN, an orientation, a goal, a
+// description and the shapes drawn on its position. Studies can also mix in gamebook chapters and plain lesson chapters, which do need
 // their tree, so those also get their PGN plus the gamebook hints and deviation comments that the
 // PGN export leaves out.
 //
@@ -216,6 +216,8 @@ Future<Map<String, dynamic>> _chapter(
       chapterId,
       analysis['practiceGoal']! as Map<String, dynamic>,
     );
+    final shapes = (treeParts.first['shapes'] as List<dynamic>?)?.cast<Map<String, dynamic>>();
+    if (shapes != null && shapes.isNotEmpty) result['shapes'] = shapes.map(_pgnShape).toList();
     return result;
   }
 
@@ -232,6 +234,22 @@ Future<Map<String, dynamic>> _chapter(
     if (deviations.any((deviation) => deviation != null)) result['deviations'] = deviations;
   }
   return result;
+}
+
+/// [shape] as a PGN `%cal`/`%csl` entry: `Gb8` for a circle, `Rf4b8` for an arrow.
+///
+/// A practice chapter has no PGN to carry the shapes drawn on its starting position, so they are
+/// written apart, in the notation the app already reads from gamebook and lesson comments.
+String _pgnShape(Map<String, dynamic> shape) {
+  final brush = shape['brush']! as String;
+  final color = switch (brush) {
+    'green' => 'G',
+    'red' => 'R',
+    'yellow' => 'Y',
+    'blue' => 'B',
+    _ => throw StateError('Unknown shape brush: $brush'),
+  };
+  return '$color${shape['orig']}${shape['dest'] ?? ''}';
 }
 
 Future<Map<String, dynamic>> _load(_Lichess lichess, String studyId, String chapterId) async =>

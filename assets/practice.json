@@ -905,7 +905,11 @@
        "goal": {
         "result": "mateIn",
         "moves": 1
-       }
+       },
+       "shapes": [
+        "Gb2h8",
+        "Gc2h7"
+       ]
       },
       {
        "id": "NwYqcfEK",
@@ -1236,7 +1240,11 @@
         "result": "evalIn",
         "cp": 200,
         "moves": 2
-       }
+       },
+       "shapes": [
+        "Ye5h8",
+        "Rd4h8"
+       ]
       },
       {
        "id": "xynNFlqJ",
@@ -1347,7 +1355,10 @@
         "result": "evalIn",
         "cp": 500,
         "moves": 2
-       }
+       },
+       "shapes": [
+        "Rf3b7"
+       ]
       },
       {
        "id": "3XsebZQb",
@@ -1458,7 +1469,11 @@
         "result": "evalIn",
         "cp": 100,
         "moves": 2
-       }
+       },
+       "shapes": [
+        "Re7g8",
+        "Re7c8"
+       ]
       },
       {
        "id": "TcNLB1o8",
@@ -1543,7 +1558,13 @@
         "result": "evalIn",
         "cp": 400,
         "moves": 3
-       }
+       },
+       "shapes": [
+        "Rc7a8",
+        "Rc7e8",
+        "Bd5c7",
+        "Bd5f4"
+       ]
       },
       {
        "id": "dWOHvyHB",
@@ -1668,7 +1689,11 @@
         "result": "evalIn",
         "cp": 300,
         "moves": 2
-       }
+       },
+       "shapes": [
+        "Rf1f8",
+        "Re5d7"
+       ]
       },
       {
        "id": "codj2tFw",
@@ -1884,7 +1909,11 @@
         "result": "evalIn",
         "cp": 500,
         "moves": 1
-       }
+       },
+       "shapes": [
+        "Gf7e6",
+        "Gf7g6"
+       ]
       },
       {
        "id": "uwHXFeHt",
@@ -2021,7 +2050,11 @@
         "result": "evalIn",
         "cp": -100,
         "moves": 2
-       }
+       },
+       "shapes": [
+        "Rb8",
+        "Rf4b8"
+       ]
       },
       {
        "id": "6ombaQny",
@@ -2034,7 +2067,11 @@
         "result": "evalIn",
         "cp": -100,
         "moves": 3
-       }
+       },
+       "shapes": [
+        "Rd2b4",
+        "Rb4"
+       ]
       },
       {
        "id": "eBDb7WF8",
@@ -2191,7 +2228,11 @@
        "goal": {
         "result": "mateIn",
         "moves": 2
-       }
+       },
+       "shapes": [
+        "Gd8c8",
+        "Gh5h8"
+       ]
       },
       {
        "id": "ZPw4FLdV",
@@ -2248,7 +2289,11 @@
         "result": "evalIn",
         "cp": -400,
         "moves": 2
-       }
+       },
+       "shapes": [
+        "Re8e2",
+        "Ga6e2"
+       ]
       },
       {
        "id": "JrzFnQwO",
@@ -2345,7 +2390,10 @@
         "result": "evalIn",
         "cp": 370,
         "moves": 4
-       }
+       },
+       "shapes": [
+        "Gd3h7"
+       ]
       },
       {
        "id": "p2mcIgK7",
@@ -3103,7 +3151,12 @@
        "goal": {
         "result": "promotion",
         "cp": 100
-       }
+       },
+       "shapes": [
+        "Gb4",
+        "Gc4",
+        "Gd4"
+       ]
       },
       {
        "id": "ZtcsDndf",
@@ -3115,7 +3168,12 @@
        "goal": {
         "result": "promotion",
         "cp": 100
-       }
+       },
+       "shapes": [
+        "Gb5",
+        "Gc5",
+        "Gd5"
+       ]
       },
       {
        "id": "5AR69ul5",
@@ -3127,7 +3185,12 @@
        "goal": {
         "result": "promotion",
         "cp": 100
-       }
+       },
+       "shapes": [
+        "Gb6",
+        "Gc6",
+        "Gd6"
+       ]
       },
       {
        "id": "G2OeEr3o",
@@ -3139,7 +3202,15 @@
        "goal": {
         "result": "promotion",
         "cp": 100
-       }
+       },
+       "shapes": [
+        "Gb7",
+        "Gb6",
+        "Gc6",
+        "Gd6",
+        "Gd7",
+        "Gc7"
+       ]
       },
       {
        "id": "0C9Uxfvh",
@@ -3151,7 +3222,15 @@
        "goal": {
         "result": "promotion",
         "cp": 100
-       }
+       },
+       "shapes": [
+        "Gb7",
+        "Gc7",
+        "Gd7",
+        "Gd8",
+        "Gc8",
+        "Gb8"
+       ]
       },
       {
        "id": "iC8DBiW6",
@@ -3163,7 +3242,16 @@
        "goal": {
         "result": "promotion",
         "cp": 100
-       }
+       },
+       "shapes": [
+        "Rb5b6",
+        "Rc7",
+        "Rc8",
+        "Gb7",
+        "Ga7",
+        "Ga8",
+        "Gb8"
+       ]
       },
       {
        "id": "NcEt7RJK",
@@ -3186,7 +3274,14 @@
        "goal": {
         "result": "promotion",
         "cp": 100
-       }
+       },
+       "shapes": [
+        "Gb8",
+        "Gc8",
+        "Gd8",
+        "Gd7",
+        "Gb7"
+       ]
       },
       {
        "id": "9rnbKpVG",
@@ -3198,7 +3293,16 @@
        "goal": {
         "result": "promotion",
         "cp": 100
-       }
+       },
+       "shapes": [
+        "Rh8",
+        "Rh7",
+        "Rh6",
+        "Rf8",
+        "Rf7",
+        "Gg8",
+        "Gg7"
+       ]
       },
       {
        "id": "AVrhWm1m",
@@ -3210,7 +3314,16 @@
        "goal": {
         "result": "drawIn",
         "moves": 10
-       }
+       },
+       "shapes": [
+        "Gb1",
+        "Gb2",
+        "Rc1",
+        "Rc2",
+        "Ra1",
+        "Ra2",
+        "Ra3"
+       ]
       },
       {
        "id": "S8rbDQmn",
@@ -3222,7 +3335,12 @@
        "goal": {
         "result": "promotion",
         "cp": 100
-       }
+       },
+       "shapes": [
+        "Gb5",
+        "Gc5",
+        "Gd5"
+       ]
       }
      ]
     },
@@ -3563,7 +3681,14 @@
        "description": "We know that an extra b-, c-, d-, e-, or f-pawn win for White. Prove it.",
        "goal": {
         "result": "mate"
-       }
+       },
+       "shapes": [
+        "Gb2",
+        "Gc2",
+        "Gd2",
+        "Ge2",
+        "Gf2"
+       ]
       },
       {
        "id": "SJzGMHAr",
@@ -3574,7 +3699,14 @@
        "description": "We know that an extra b-, c-, d-, e-, or f-pawn win for White. Force a win.",
        "goal": {
         "result": "mate"
-       }
+       },
+       "shapes": [
+        "Gb2",
+        "Gc2",
+        "Gd2",
+        "Ge2",
+        "Gf2"
+       ]
       },
       {
        "id": "jYURSgPr",
@@ -3621,7 +3753,18 @@
        "goal": {
         "result": "promotion",
         "cp": 100
-       }
+       },
+       "shapes": [
+        "Gf1e1",
+        "Ge1e4",
+        "Ge4g4",
+        "Gg4",
+        "Bg8f7",
+        "Bf7g6",
+        "Bg6f6",
+        "Bf6g5",
+        "Bg5"
+       ]
       },
       {
        "id": "hg6wz0gX",
@@ -3633,7 +3776,12 @@
        "goal": {
         "result": "promotion",
         "cp": 100
-       }
+       },
+       "shapes": [
+        "Ge1h1",
+        "Gh1h8",
+        "Gh8g8"
+       ]
       },
       {
        "id": "x7ABY4Aj",
@@ -3771,7 +3919,10 @@
        "goal": {
         "result": "promotion",
         "cp": 500
-       }
+       },
+       "shapes": [
+        "Ga1a8"
+       ]
       },
       {
        "id": "MhmGZ37h",
@@ -3863,7 +4014,14 @@
         "result": "evalIn",
         "cp": 500,
         "moves": 6
-       }
+       },
+       "shapes": [
+        "Gd7c6",
+        "Gd5e4",
+        "Bd5c4",
+        "Bd7e6",
+        "Ge7d7"
+       ]
       },
       {
        "id": "n9DF8U7O",
@@ -3899,7 +4057,10 @@
        "goal": {
         "result": "equalIn",
         "moves": 30
-       }
+       },
+       "shapes": [
+        "Gh7h5"
+       ]
       },
       {
        "id": "JTjVTDzq",
@@ -3911,7 +4072,10 @@
        "goal": {
         "result": "equalIn",
         "moves": 30
-       }
+       },
+       "shapes": [
+        "Gh2h4"
+       ]
       },
       {
        "id": "MTv41MYN",
@@ -3923,7 +4087,11 @@
        "goal": {
         "result": "promotion",
         "cp": 500
-       }
+       },
+       "shapes": [
+        "Ga4a5",
+        "Gd4a4"
+       ]
       },
       {
        "id": "GXRwlhld",

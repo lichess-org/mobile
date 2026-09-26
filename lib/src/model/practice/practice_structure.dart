@@ -99,6 +99,9 @@ sealed class const PracticeChapter._() with _$PracticeChapter {
     required Side orientation,
     String? description,
     required PracticeGoal goal,
+
+    /// The shapes the author drew on [fen], shown until the first move is played.
+    @Default(IListConst([])) IList<PgnCommentShape> shapes,
   }) = PracticeEngineChapter;
 
   /// An authored line to find move by move: a wrong move is commented and taken back.
@@ -152,6 +155,13 @@ sealed class const PracticeChapter._() with _$PracticeChapter {
         orientation: orientation,
         description: description,
         goal: PracticeGoal.fromPick(pick('goal').required()),
+        shapes:
+            pick('shapes').asListOrNull((shape) {
+              final pgn = shape.asStringOrThrow();
+              return PgnCommentShape.fromPgn(pgn) ??
+                  (throw PickException('Invalid shape "$pgn" at ${shape.debugParsingExit}'));
+            })?.lock ??
+            const IListConst([]),
       ),
       'gamebook' => PracticeChapter.gamebook(
         id: id,

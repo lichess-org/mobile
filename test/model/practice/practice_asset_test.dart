@@ -109,6 +109,11 @@ void main() {
     }
   });
 
+  test('engine chapters keep the shapes drawn on their position', () {
+    final engineChapters = chapters.whereType<PracticeEngineChapter>();
+    expect(engineChapters.where((chapter) => chapter.shapes.isNotEmpty), isNotEmpty);
+  });
+
   test('a lesson has moves to browse', () {
     for (final lesson in chapters.whereType<PracticeLessonChapter>()) {
       expect(Root.fromPgnGame(PgnGame.parsePgn(lesson.pgn)).mainline, isNotEmpty);
