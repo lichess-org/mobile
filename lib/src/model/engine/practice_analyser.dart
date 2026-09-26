@@ -175,7 +175,10 @@ class PracticeAnalyser({
       // position is now a wait on the search: its own deadline can start.
       _engineSpoke(work.position);
       _record(work.position, eval);
-      if (_isFinal(eval)) {
+      // Asked again rather than taken from the check above: recording an eval reports it to the
+      // owner, which may well have moved the analysis on by now, and what is worth stopping is the
+      // search that is running rather than the one this result came from.
+      if (_analysing == work && _isFinal(eval)) {
         _logger.fine('Reached the target depth at ply ${work.position.ply}; the engine can idle');
         _stopSearch();
       }
