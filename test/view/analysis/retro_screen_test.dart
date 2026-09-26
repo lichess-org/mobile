@@ -21,6 +21,7 @@ import 'package:lichess_mobile/src/model/explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/analysis/retro_screen.dart';
+import 'package:material_ui/material_ui.dart' show Icons;
 import 'package:mocktail/mocktail.dart';
 
 import '../../network/fake_http_client_factory.dart';
@@ -392,6 +393,52 @@ void main() {
       verifyNever(
         () => mockAnalysisService.requestAnalysis(const ServerAnalysisSource.game(gameId: testId)),
       );
+    });
+
+    testWidgets('A refused analysis request does not break the retro screen', (
+      WidgetTester tester,
+    ) async {
+      final mockAnalysisService = MockServerAnalysisService();
+      final currentAnalysis = ValueNotifier<ServerAnalysisSource?>(null);
+      final evalEvents = ValueNotifier<(ServerAnalysisSource, ServerEvalEvent)?>(null);
+      when(() => mockAnalysisService.currentAnalysis).thenReturn(currentAnalysis);
+      when(() => mockAnalysisService.lastAnalysisEvent).thenReturn(evalEvents);
+      when(
+        () => mockAnalysisService.requestAnalysis(const ServerAnalysisSource.game(gameId: testId)),
+      ).thenAnswer(
+        (_) async => throw ServerException(
+          400,
+          'Request to /${testId.value}/request-analysis failed with status 400: '
+          'You have reached the daily analysis limit',
+          Uri(path: '/${testId.value}/request-analysis'),
+          null,
+        ),
+      );
+
+      await tester.pumpWidget(
+        await makeTestApp(
+          tester,
+          moves: 'e4 e5',
+          alreadyHasServerAnalysis: false,
+          overrides: {
+            serverAnalysisServiceProvider: serverAnalysisServiceProvider.overrideWithValue(
+              mockAnalysisService,
+            ),
+          },
+        ),
+      );
+
+      await tester.pump();
+      expect(find.text('Calculating moves...'), findsOneWidget);
+
+      // Let the refused request reject.
+      await tester.pump();
+      await tester.pump();
+
+      // The refusal means only that no evals will arrive. The retro screen itself must survive
+      // it: showing the retry page would blame the game load for a server-side analysis limit.
+      expect(find.text('Calculating moves...'), findsOneWidget);
+      expect(find.byIcon(Icons.refresh), findsNothing);
     });
 
     testWidgets('Controller entry points are no-ops while state has no value', (

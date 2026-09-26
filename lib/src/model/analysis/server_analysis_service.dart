@@ -208,13 +208,9 @@ class ServerAnalysisService(final Ref ref) {
     if (e.statusCode != 400) {
       return ServerAnalysisRequestError.unknown;
     }
-    // The body is appended to the message by the http client, so match on the tail rather than
-    // parsing it back out of the URL and status prefix.
-    //
-    // Matching the tail is what makes the near-identical limit messages safe to tell apart: the
-    // account daily limit is a *prefix* of the IP one, so a `contains` scan would report every
-    // IP-limited request as a plain daily limit, whereas an `endsWith` scan only ever matches the
-    // whole message and needs no ordering.
+    // The body is appended to the message by the http client, so match on the tail. That is what
+    // keeps the two daily limits apart: the account one is a prefix of the IP one, so `contains`
+    // would report every IP-limited request as a plain daily limit.
     for (final MapEntry(key: body, value: error) in _kServerAnalysisRequestErrors.entries) {
       if (e.message.endsWith(body)) {
         return error;

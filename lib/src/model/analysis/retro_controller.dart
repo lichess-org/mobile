@@ -88,6 +88,10 @@ class RetroController(final RetroOptions options)
 
   final Completer<void> _serverAnalysisCompleter = Completer<void>();
 
+  /// Guards against the analysis never completing. Cancelled if the request is refused outright,
+  /// since no evals can arrive in that case.
+  Timer? _serverAnalysisTimeout;
+
   Timer? _incorrectMoveTimer;
 
   @override
@@ -102,6 +106,7 @@ class RetroController(final RetroOptions options)
   Future<RetroState> build() async {
     ref.onDispose(() {
       _incorrectMoveTimer?.cancel();
+      _serverAnalysisTimeout?.cancel();
     });
 
     socketClient = ref.watch(socketPoolProvider).open(AnalysisController.socketUri);
@@ -137,25 +142,24 @@ class RetroController(final RetroOptions options)
 
       if (currentServerAnalysis.value != ServerAnalysisSource.game(gameId: options.id)) {
         requestServerAnalysis().catchError((Object e, StackTrace st) {
+          // The server refused to start an analysis, so no evals are coming. The game and its tree
+          // are already loaded, so keep the current state: replacing it with AsyncError would blame
+          // the game load for a refusal, and hide the screen behind a retry that cannot help. The
+          // timeout is pointless now, so drop it rather than let it fire later.
           _logger.warning('Failed to request server analysis', e, st);
-          state = AsyncError(e, st);
+          _serverAnalysisTimeout?.cancel();
         });
       }
 
-      unawaited(
-        _serverAnalysisCompleter.future.timeout(
-          kMaxWaitForServerAnalysis,
-          onTimeout: () {
-            _logger.warning(
-              'Server analysis did not finish within $kMaxWaitForServerAnalysis for game ${options.id}',
-            );
-            state = AsyncError(
-              Exception('Server analysis did not finish within $kMaxWaitForServerAnalysis'),
-              StackTrace.current,
-            );
-          },
-        ),
-      );
+      _serverAnalysisTimeout = Timer(kMaxWaitForServerAnalysis, () {
+        _logger.warning(
+          'Server analysis did not finish within $kMaxWaitForServerAnalysis for game ${options.id}',
+        );
+        state = AsyncError(
+          Exception('Server analysis did not finish within $kMaxWaitForServerAnalysis'),
+          StackTrace.current,
+        );
+      });
 
       return state.requireValue;
     }
@@ -472,6 +476,8 @@ class RetroController(final RetroOptions options)
     state = AsyncValue.data(state.requireValue.copyWith(serverAnalysisProgress: progress));
 
     if (event.isAnalysisComplete) {
+      // The analysis landed, so the "never finished" guard has nothing left to catch.
+      _serverAnalysisTimeout?.cancel();
       if (_serverAnalysisCompleter.isCompleted == false) {
         _serverAnalysisCompleter.complete();
       }
