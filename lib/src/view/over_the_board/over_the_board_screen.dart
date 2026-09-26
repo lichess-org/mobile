@@ -113,11 +113,12 @@ class _BodyState() extends ConsumerState<_Body> {
     });
   }
 
-  void _saveGameState() {
+  Future<void> _saveGameState() async {
     if (!context.mounted) return;
+    ref.read(overTheBoardClockProvider.notifier).pause();
     final clockState = ref.read(overTheBoardClockProvider);
     final gameState = ref.read(overTheBoardGameControllerProvider);
-    ref
+    await ref
         .read(overTheBoardGameStorageProvider)
         .save(
           gameState.game,
@@ -191,41 +192,8 @@ class _BodyState() extends ConsumerState<_Body> {
 
     return WakelockWidget(
       child: PopScope(
-        canPop: false,
-        onPopInvokedWithResult: (didPop, _) async {
-          if (didPop) {
-            return;
-          }
-
-          final navigator = Navigator.of(context);
-          final game = gameState.game;
-          if (game.abortable || game.finished) {
-            return navigator.pop();
-          }
-
-          if (game.playable) {
-            ref.read(overTheBoardClockProvider.notifier).pause();
-          }
-
-          final shouldPop = await showAdaptiveDialog<bool>(
-            context: context,
-            builder: (context) {
-              return YesNoDialog(
-                title: Text(context.l10n.mobileAreYouSure),
-                content: const Text('No worries, your game will be saved.'),
-                onNo: () => Navigator.of(context).pop(false),
-                onYes: () {
-                  _saveGameState();
-                  Navigator.of(context).pop(true);
-                },
-              );
-            },
-          );
-          if (shouldPop == true) {
-            navigator.pop();
-          } else if (game.playable) {
-            ref.read(overTheBoardClockProvider.notifier).resume(gameState.turn);
-          }
+        onPopInvokedWithResult: (_, _) async {
+          await _saveGameState();
         },
         child: FocusDetector(
           onForegroundLost: _saveGameState,

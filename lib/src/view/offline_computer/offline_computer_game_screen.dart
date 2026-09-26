@@ -149,6 +149,7 @@ class _BodyState() extends ConsumerState<_Body> {
 
   Future<void> _saveGameState() async {
     if (!mounted) return;
+    ref.read(offlineComputerGameControllerProvider.notifier).suspendClock();
     final state = ref.read(offlineComputerGameControllerProvider);
     final clock = ref.read(offlineComputerClockProvider);
     await ref
