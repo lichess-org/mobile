@@ -1,5 +1,6 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
@@ -137,39 +138,42 @@ class const AccountPerfCards({final EdgeInsetsGeometry? padding}) extends Consum
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final account = ref.watch(accountProvider);
-    return account.when(
-      data: (user) {
-        if (user != null) {
-          return PerfCards(user: user, isMe: true, padding: padding);
-        } else {
-          return const SizedBox.shrink();
-        }
-      },
-      loading: () => Shimmer(
-        child: Padding(
-          padding: padding ?? Styles.bodySectionPadding,
-          child: SizedBox(
-            height: 106,
-            child: ListView.separated(
-              padding: const EdgeInsets.symmetric(vertical: 3.0),
-              scrollDirection: Axis.horizontal,
-              itemCount: 5,
-              separatorBuilder: (context, index) => const SizedBox(width: 10),
-              itemBuilder: (context, index) => ShimmerLoading(
-                isLoading: true,
-                child: Container(
-                  width: 100,
-                  height: 100,
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
+    // [PerfCards] shows nothing until the ratings preference is known, so the skeleton is kept until
+    // then rather than collapsing the section in between. Watching it here also starts that request
+    // alongside the account one, instead of once the account has loaded.
+    final showRatings = ref.watch(showRatingsPrefProvider);
+    final skeleton = Shimmer(
+      child: Padding(
+        padding: padding ?? Styles.bodySectionPadding,
+        child: SizedBox(
+          height: 106,
+          child: ListView.separated(
+            padding: const EdgeInsets.symmetric(vertical: 3.0),
+            scrollDirection: Axis.horizontal,
+            itemCount: 5,
+            separatorBuilder: (context, index) => const SizedBox(width: 10),
+            itemBuilder: (context, index) => ShimmerLoading(
+              isLoading: true,
+              child: Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(10.0),
                 ),
               ),
             ),
           ),
         ),
       ),
+    );
+    return account.when(
+      data: (user) => user == null
+          ? const SizedBox.shrink()
+          : showRatings.hasValue || showRatings.hasError
+          ? PerfCards(user: user, isMe: true, padding: padding)
+          : skeleton,
+      loading: () => skeleton,
       error: (error, stack) => const SizedBox.shrink(),
     );
   }
