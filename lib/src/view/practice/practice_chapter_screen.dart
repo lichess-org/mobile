@@ -1,6 +1,7 @@
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/app_links_service.dart';
 import 'package:lichess_mobile/src/model/practice/practice_goal.dart';
 import 'package:lichess_mobile/src/model/practice/practice_progress.dart';
 import 'package:lichess_mobile/src/model/practice/practice_repository.dart';
@@ -18,7 +19,6 @@ import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/rich_link_text.dart';
 import 'package:material_ui/material_ui.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 /// A practice chapter, played the way its kind is played.
 class const PracticeChapterScreen({required final PracticeChapter chapter, super.key})
@@ -128,15 +128,16 @@ class const PracticeNextChapterButton({required final PracticeChapter chapter})
   }
 }
 
-/// Text written by a study author, with its links opened in the browser.
+/// Text written by a study author, with its links opened in the app when it has a screen for them
+/// (a game opens in the analysis board), in the browser otherwise.
 class const PracticeText({required final String text, final TextStyle? style})
-    extends StatelessWidget {
+    extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return RichLinkText(
       text: text,
       style: style ?? const TextStyle(fontSize: 16.0),
-      onOpen: (link) => launchUrl(Uri.parse(link.url)),
+      onOpen: (link) => ref.read(appLinksServiceProvider).onLinkifyOpen(context, link),
     );
   }
 }
