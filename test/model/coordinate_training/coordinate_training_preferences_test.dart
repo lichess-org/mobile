@@ -89,5 +89,26 @@ void main() {
       expect(container.read(coordinateTrainingPreferencesProvider).scores.black, [18]);
       expect(container.read(coordinateTrainingPreferencesProvider).scores.averageBlack, 18.0);
     });
+
+    test('scores survive the real storage round trip and keep only the last 20', () async {
+      final container = await makeContainer();
+      final notifier = container.read(coordinateTrainingPreferencesProvider.notifier);
+
+      // 21 sessions: the oldest score must be evicted by the cap.
+      for (int score = 1; score <= 21; score++) {
+        await notifier.addScore(side: Side.white, score: score);
+      }
+
+      // A new container reads the preferences back through jsonEncode/jsonDecode.
+      final secondContainer = await makeContainer();
+      final stored = secondContainer.read(coordinateTrainingPreferencesProvider).scores;
+
+      expect(stored.white.length, kMaxCoordinateScoresCount);
+      expect(stored.white.first, 2);
+      expect(stored.white.last, 21);
+      // Mean of the retained 2..21 window, not of all 21 played sessions.
+      expect(stored.averageWhite, 11.5);
+      expect(stored.black, isEmpty);
+    });
   });
 }
