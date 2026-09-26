@@ -372,7 +372,7 @@ void main() {
       expect(eval?.depth, kPracticeUsableDepth - 3);
     });
 
-    test('the deadline does not run while the engine has yet to start searching', () async {
+    test('a wait on an engine that has yet to start is given time for the start', () async {
       final container = await makeContainer();
       final analyser = makeAnalyser(container);
       addTearDown(analyser.dispose);
@@ -384,21 +384,44 @@ void main() {
       final wait = analyser.usableEval(Chess.initial, timeout: const Duration(milliseconds: 100));
       unawaited(wait.then((_) => completed = true));
 
-      // Long past the deadline, but the engine has not said a word: it may still be starting up,
-      // and none of that is search time to hold against it.
+      // Long past the caller's own deadline, but the engine has not said a word: it may still be
+      // starting up, and none of that is search time to hold against it.
       await Future<void>.delayed(const Duration(milliseconds: 400));
       expect(completed, isFalse);
 
-      // It speaks, below the usable depth. Now the deadline is the search's, and it runs out with
-      // whatever the search had reached by then.
-      engine.emitDepthRange(toDepth: kPracticeUsableDepth - 3);
+      // It speaks, deep enough to serve the wait.
+      engine.emitDepthRange(toDepth: kPracticeUsableDepth);
 
-      final eval = await wait;
-      expect(eval, isNotNull);
-      expect(eval!.depth, lessThan(kPracticeUsableDepth));
+      expect((await wait)?.depth, greaterThanOrEqualTo(kPracticeUsableDepth));
     });
 
-    test('an eval from the server does not start the deadline of a search that has not', () async {
+    test('a wait on a warm engine runs on the deadline it was given', () async {
+      final container = await makeContainer();
+      final analyser = makeAnalyser(container);
+      addTearDown(analyser.dispose);
+
+      // The engine starts and speaks once, which is all it takes: it stays up from here on.
+      analyser.analyse(makeWork());
+      await settleEvals();
+      engine.emitDepthRange(toDepth: kPracticeUsableDepth);
+      await settleEvals();
+
+      // Another position, whose search has said nothing yet. Nothing is starting up any more, so
+      // the wait is the caller's to bound rather than kPracticeEngineStartWait's.
+      analyser.analyse(makeWorkAfterE4());
+      final wait = analyser.usableEval(
+        makeWorkAfterE4().position,
+        timeout: const Duration(milliseconds: 100),
+      );
+
+      var completed = false;
+      unawaited(wait.then((_) => completed = true));
+      await Future<void>.delayed(const Duration(milliseconds: 300));
+
+      expect(completed, isTrue, reason: 'it waited out kPracticeEngineStartWait instead');
+    });
+
+    test('an eval from the server does not eat into the time the engine is given', () async {
       final container = await makeContainer();
       final analyser = makeAnalyser(container);
       addTearDown(analyser.dispose);
@@ -427,16 +450,13 @@ void main() {
       await Future<void>.delayed(const Duration(milliseconds: 400));
       expect(completed, isFalse, reason: 'the engine has still said nothing about the position');
 
-      // It speaks at last, below the usable depth. Now the deadline is the search's, and it runs
-      // out with whatever the search had reached by then.
-      engine.emitDepthRange(toDepth: kPracticeUsableDepth - 3);
+      // It speaks at last, deep enough to serve the wait.
+      engine.emitDepthRange(toDepth: kPracticeUsableDepth);
 
-      final eval = await wait;
-      expect(eval, isNotNull);
-      expect(eval!.depth, lessThan(kPracticeUsableDepth));
+      expect((await wait)?.depth, greaterThanOrEqualTo(kPracticeUsableDepth));
     });
 
-    test('giving the engine up ends the waits that were waiting for it to start', () async {
+    test('giving the engine up ends the waits on the position it was searching', () async {
       final container = await makeContainer();
       final analyser = makeAnalyser(container);
       addTearDown(analyser.dispose);
@@ -448,12 +468,30 @@ void main() {
       final wait = analyser.usableEval(Chess.initial, timeout: const Duration(milliseconds: 100));
       unawaited(wait.then((_) => completed = true));
 
-      // The opponent takes the engine before it ever said a word about this position, so there is
-      // no engine on its way any more and nothing to go on waiting for.
+      // The opponent takes the engine, so nothing is searching this position any more and there is
+      // nothing to go on waiting for.
       analyser.yieldEngine();
 
       expect(await wait, isNull);
       expect(completed, isTrue);
+    });
+
+    test('giving the engine up ends a wait whose search was already under way', () async {
+      final container = await makeContainer();
+      final analyser = makeAnalyser(container);
+      addTearDown(analyser.dispose);
+
+      analyser.analyse(makeWork());
+      await settleEvals();
+      engine.emitDepthRange(toDepth: kPracticeUsableDepth - 3);
+      await settleEvals();
+
+      // A generous deadline, so that only the engine being given up can end this.
+      final wait = analyser.usableEval(Chess.initial, timeout: const Duration(seconds: 30));
+      analyser.yieldEngine();
+
+      // What the search had reached, which is the best there is now that it is over.
+      expect((await wait)?.depth, lessThan(kPracticeUsableDepth));
     });
 
     test('moving the analysis on ends the waits on the position left behind', () async {

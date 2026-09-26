@@ -58,14 +58,8 @@ const _kCloudEvalTimeout = Duration(seconds: 2);
 /// long is not about to find something better, and the player is waiting on the hint behind it.
 const kPracticeMaxSearchTime = Duration(seconds: 5);
 
-/// The cap on a wait whose search has not started yet.
-///
-/// [kPracticeMaxSearchTime] is search time and nothing else — the engine counts it from the moment
-/// it starts searching — so spawning the process and loading its network come before it rather
-/// than out of it, and on a cold device that is seconds. A wait is therefore not given its own
-/// deadline until the engine has said something about the position; this is what bounds it until
-/// then, for an engine that is never going to start at all.
-const kPracticeEngineStartWait = Duration(seconds: 15);
+/// What a wait is given on top of its own deadline when the engine has yet to start searching.
+const kPracticeEngineStartWait = Duration(seconds: 10);
 
 /// Keeps an evaluation running on the position the game is at, for as long as it is worth running.
 ///
@@ -99,11 +93,7 @@ class PracticeAnalyser({
   /// The work being analysed, or null when nothing is.
   EvalWork? _analysing;
 
-  /// The position the engine has reported on, or null when it has not reported on any.
-  ///
-  /// What tells a wait on a search that is running from a wait on an engine that is still starting
-  /// up.
-  Position? _engineSpokeFor;
+  bool _engineStarted = false;
 
   /// The work [_restarts] counts for, since a restart clears [_analysing] on its way through.
   EvalWork? _restartedWork;
@@ -160,7 +150,7 @@ class PracticeAnalyser({
     if (known != null && _isFinal(known)) {
       _stopSearch();
       _publish(work.position, known);
-      _strandWaiters(work.position);
+      _endWaitsOn(work.position);
       return;
     }
 
@@ -171,9 +161,7 @@ class PracticeAnalyser({
     _subscription = evaluator().evaluate(work).listen((result) {
       if (_analysing != work) return;
       final (_, eval) = result;
-      // The engine has spoken, so it is searching rather than starting up, and a wait on this
-      // position is now a wait on the search: its own deadline can start.
-      _engineSpoke(work.position);
+      _engineStarted = true;
       _record(work.position, eval);
       // Asked again rather than taken from the check above: recording an eval reports it to the
       // owner, which may well have moved the analysis on by now, and what is worth stopping is the
@@ -195,9 +183,6 @@ class PracticeAnalyser({
   }
 
   /// Starts the search again when it stopped before the position was understood at all.
-  ///
-  /// The search is capped at [kPracticeMaxSearchTime] but that cap is meant to stop an eval being
-  /// *refined*, not to leave a position without one.
   ///
   /// Called when the engine stops searching, which is what [onEvaluatorStateChanged] watches for.
   void resumeIfUnfinished() {
@@ -233,6 +218,7 @@ class PracticeAnalyser({
   ///
   /// Kept if it is deeper than what the search has reached, and it ends the search when it is
   /// deeper than anything the search would have reached.
+  @visibleForTesting
   void offer(Position position, ClientEval eval) {
     if (_isGone) return;
     if (!_record(position, eval)) return;
@@ -264,14 +250,14 @@ class PracticeAnalyser({
   /// For starting or loading another game, and for replaying the same one from the start: an
   /// evaluation kept across a retry would hand the player the same answer to the same move again.
   void clear() {
+    // First, and with nothing to hand out: an eval of the game that was is exactly what this is
+    // forgetting, and giving the engine up would otherwise end these waits with one.
+    _completeAll(handOutEvals: false);
     // Which gives up the engine, and with it the restarts spent on the search that had it.
     yieldEngine();
     _epoch++;
     _evals.clear();
     _raced.clear();
-    _engineSpokeFor = null;
-    // With nothing to hand out: an eval of the game that was is exactly what this is forgetting.
-    _completeAll(handOutEvals: false);
   }
 
   /// The evaluation of [position] once it is at least [minDepth] deep and says what to play.
@@ -281,13 +267,6 @@ class PracticeAnalyser({
   /// for it, or, when [timeout] passes first, with the best one reached by then — which is the
   /// best there is rather than one that answers, so it may be shallower than [minDepth] or have no
   /// move to play, and is null when the search produced nothing at all.
-  ///
-  /// [timeout] is given to the search, and only starts once there is one: until the engine has
-  /// said something about the position it may still be starting up, which is not time the search
-  /// is spending and not time this is willing to hold against it. [kPracticeEngineStartWait] is
-  /// what bounds the wait until then — and only an engine that is still on its way, since a
-  /// position the analysis gives up on before the engine ever speaks ends its waits there and
-  /// then.
   ///
   /// [minDepth] defaults to [kPracticeUsableDepth], which is what unlocking a hint asks for.
   /// Judging a move the player has already played is allowed to ask for more: nobody is waiting on
@@ -306,21 +285,17 @@ class PracticeAnalyser({
     final known = _evals[position];
     if (known != null && _satisfies(known, minDepth)) return Future.value(known);
 
-    final waiter = _Waiter(minDepth, timeout, (waiter) {
-      final deadline = waiter.started ? timeout : kPracticeEngineStartWait;
+    final deadline = !_engineStarted && evaluator().currentWork == _analysing
+        ? timeout + kPracticeEngineStartWait
+        : timeout;
+
+    final waiter = _Waiter(minDepth);
+    waiter.deadline = Timer(deadline, () {
       _dropWaiters(position, (other) => identical(other, waiter));
       _logger.info('No usable eval at ply ${position.ply} within ${deadline.inMilliseconds}ms');
       waiter.complete(_evals[position]);
     });
     (_waiters[position] ??= []).add(waiter);
-
-    // Anything else — a position the analysis is not on, an engine that has already spoken, a
-    // search the evaluator has dropped — is a wait on the caller's own deadline.
-    if (_engineSpokeFor != position && _isEngineOnItsWayTo(position)) {
-      waiter.waitForTheEngine();
-    } else {
-      waiter.start();
-    }
 
     return waiter.future;
   }
@@ -338,19 +313,6 @@ class PracticeAnalyser({
     _completeAll();
     _evals.clear();
     _raced.clear();
-  }
-
-  /// Whether an engine is on its way to [position], which is what [kPracticeEngineStartWait] is
-  /// there to bound.
-  ///
-  /// The analysis being on the position is not enough on its own: the evaluator drops the work when
-  /// the engine will not run at all, and a wait for an engine that is never coming is one nothing
-  /// but its own deadline will ever end.
-  bool _isEngineOnItsWayTo(Position position) {
-    final analysing = _analysing;
-    if (analysing == null || analysing.position != position) return false;
-    if (_isGone) return false;
-    return evaluator().currentWork == analysing;
   }
 
   /// Asks the server for the evaluations that would beat the search: a cloud eval in the opening —
@@ -484,12 +446,6 @@ class PracticeAnalyser({
   }
 
   /// Whether [eval] answers a question asked of a [minDepth]-deep evaluation.
-  ///
-  /// Depth alone does not settle it. An evaluation that does not say what to play settles nothing:
-  /// both the hint and the opponent's reply are read off the move, so a position whose only
-  /// evaluation is moveless — a tablebase entry that listed none, a cloud eval whose variation
-  /// came back empty — is one the search still has work to do on, however deep that evaluation
-  /// claims to be.
   bool _satisfies(ClientEval eval, int minDepth) => eval.depth >= minDepth && eval.bestMove != null;
 
   /// Whether [eval] is enough to show a hint or judge a move.
@@ -508,12 +464,6 @@ class PracticeAnalyser({
   }
 
   /// Whether [eval] is worth keeping over [on], the best known so far.
-  ///
-  /// Depth decides it between two evals that both say what to play. One that does not leaves the
-  /// position scored and unplayable — no hint, and no move for the opponent to answer with — so a
-  /// tablebase entry that listed no moves, or a cloud eval whose variation came back empty, never
-  /// buries an eval that has a move, and never keeps one out either however much shallower it is.
-  /// The search runs on for that move; taking it when it arrives is what the search is for.
   bool _isImprovement(ClientEval eval, {required ClientEval on}) {
     if ((eval.bestMove != null) != (on.bestMove != null)) return eval.bestMove != null;
     return eval.depth >= on.depth;
@@ -529,14 +479,6 @@ class PracticeAnalyser({
     if (waiters == null) return;
     waiters.removeWhere(end);
     if (waiters.isEmpty) _waiters.remove(position);
-  }
-
-  /// Records that the engine is searching [position], and gives every wait on it its own deadline.
-  void _engineSpoke(Position position) {
-    _engineSpokeFor = position;
-    for (final waiter in _waiters[position] ?? const <_Waiter>[]) {
-      waiter.start();
-    }
   }
 
   void _publish(Position position, ClientEval eval) {
@@ -563,30 +505,19 @@ class PracticeAnalyser({
     final analysing = _analysing;
     _analysing = null;
     if (analysing == null) return;
-    if (analysing.position != resumingOn) {
-      if (_engineSpokeFor == analysing.position) _engineSpokeFor = null;
-      _strandWaiters(analysing.position);
-    }
+    if (analysing.position != resumingOn) _endWaitsOn(analysing.position);
     if (!stopEngine || _isGone) return;
     final currentEvaluator = evaluator();
     if (currentEvaluator.currentWork == analysing) currentEvaluator.stop();
   }
 
-  /// Ends the waits on [position] that are still waiting for the engine to start.
-  ///
-  /// [kPracticeEngineStartWait] bounds an engine that is on its way, and nothing is on its way to
-  /// this position any more: it has been given up, or the analysis has moved on to another
-  /// position. Left alone, those waits would run out on a deadline of the analyser's rather than
-  /// the caller's — several times longer than the one the caller asked for.
-  ///
-  /// A wait whose deadline has already started is not touched: it is the caller's own, and the
-  /// search may yet come back to the position before it passes.
-  void _strandWaiters(Position position) {
-    _dropWaiters(position, (waiter) {
-      if (waiter.started) return false;
+  /// Ends every wait on [position], with the best eval known for it.
+  void _endWaitsOn(Position position) {
+    final waiters = _waiters.remove(position);
+    if (waiters == null) return;
+    for (final waiter in waiters) {
       waiter.complete(_evals[position]);
-      return true;
-    });
+    }
   }
 
   /// Ends every wait, with the best eval known for its position unless [handOutEvals] says not to.
@@ -601,50 +532,24 @@ class PracticeAnalyser({
 }
 
 /// Somebody waiting on a position reaching a depth, and the deadline they gave it.
+///
+/// The deadline is armed for the whole of the wait and never rescheduled: whatever the engine has
+/// left to do before it searches is counted into it up front, by [PracticeAnalyser.usableEval].
 class _Waiter(
   /// The depth this waiter is waiting for.
   final int minDepth,
-
-  /// How long the search is given, once it is the search that is being waited on.
-  final Duration timeout,
-
-  /// Called when the deadline passes, whichever of the two it was.
-  final void Function(_Waiter waiter) onTimeout,
 ) {
   final _completer = Completer<ClientEval?>();
 
-  /// Cancelled when the wait ends another way, so that nothing is left ticking behind it.
-  Timer? _deadline;
-
-  /// Whether [timeout] is what is running, rather than the wait for the engine to start.
-  bool started = false;
+  /// The deadline, armed by [PracticeAnalyser.usableEval] as soon as this exists, and cancelled
+  /// when the wait ends another way so that nothing is left ticking behind it.
+  Timer? deadline;
 
   Future<ClientEval?> get future => _completer.future;
 
-  /// Waits [kPracticeEngineStartWait] for the engine to say anything at all about the position.
-  void waitForTheEngine() {
-    _arm(kPracticeEngineStartWait);
-  }
-
-  /// Starts the search's own deadline, the engine having started searching.
-  ///
-  /// Does nothing once it has: a search started again by [PracticeAnalyser.resumeIfUnfinished]
-  /// is the same wait going on, not a new one to give the full [timeout] to.
-  void start() {
-    if (started) return;
-    started = true;
-    _arm(timeout);
-  }
-
   void complete(ClientEval? eval) {
-    _deadline?.cancel();
-    _deadline = null;
+    deadline?.cancel();
+    deadline = null;
     if (!_completer.isCompleted) _completer.complete(eval);
-  }
-
-  void _arm(Duration duration) {
-    if (_completer.isCompleted) return;
-    _deadline?.cancel();
-    _deadline = Timer(duration, () => onTimeout(this));
   }
 }
