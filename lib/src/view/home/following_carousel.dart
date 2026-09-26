@@ -199,7 +199,7 @@ Widget _buildLoadingSkeleton(BuildContext context) {
           child: ShimmerLoading(
             isLoading: true,
             child: SizedBox(
-              height: 120,
+              height: 110,
               child: ListView.separated(
                 physics: const NeverScrollableScrollPhysics(),
                 scrollDirection: Axis.horizontal,
