@@ -52,34 +52,12 @@ class const _AnalysisBottomBar({required final StudyOptions options}) extends Co
         _StudyMenuButton(options: options),
         _ChapterButton(options: options),
         if (state.isComputerAnalysisAllowed)
-          Builder(
-            builder: (context) {
-              Future<void>? toggleFuture;
-              return FutureBuilder(
-                future: toggleFuture,
-                builder: (context, snapshot) {
-                  return EngineButton(
-                    filters: (context: state.evaluationContext, path: state.currentPath),
-                    savedEval: state.currentNode.eval,
-                    onTap: snapshot.connectionState != ConnectionState.waiting
-                        ? () async {
-                            toggleFuture = ref
-                                .read(studyControllerProvider(options).notifier)
-                                .toggleEngine();
-                            try {
-                              await toggleFuture;
-                            } finally {
-                              toggleFuture = null;
-                            }
-                          }
-                        : null,
-                    goDeeper: () => ref
-                        .read(studyControllerProvider(options).notifier)
-                        .requestEval(goDeeper: true),
-                  );
-                },
-              );
-            },
+          EngineToggleButton(
+            filters: (context: state.evaluationContext, path: state.currentPath),
+            savedEval: state.currentNode.eval,
+            onToggle: () => ref.read(studyControllerProvider(options).notifier).toggleEngine(),
+            onGoDeeper: () =>
+                ref.read(studyControllerProvider(options).notifier).requestEval(goDeeper: true),
           ),
         _NextChapterButton(
           options: options,

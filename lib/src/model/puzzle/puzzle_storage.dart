@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/db/database.dart';
+import 'package:lichess_mobile/src/db/json_row.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:sqflite/sqflite.dart';
@@ -16,32 +17,21 @@ const _tableName = 'puzzle';
 
 /// Local storage for puzzles.
 class const PuzzleStorage(final Database _db) {
-  Future<Puzzle?> fetch({required PuzzleId puzzleId}) async {
-    final list = await _db.query(
-      _tableName,
+  Future<Puzzle?> fetch({required PuzzleId puzzleId}) {
+    return _db.fetchJsonRow(
+      table: _tableName,
       where: 'puzzleId = ?',
       whereArgs: [puzzleId.toString()],
+      fromJson: Puzzle.fromJson,
+      errorMessage: '[PuzzleHistoryStorage] cannot fetch puzzle: expected an object',
     );
-
-    final raw = list.firstOrNull?['data'] as String?;
-
-    if (raw != null) {
-      final json = jsonDecode(raw);
-      if (json is! Map<String, dynamic>) {
-        throw const FormatException(
-          '[PuzzleHistoryStorage] cannot fetch puzzle: expected an object',
-        );
-      }
-      return Puzzle.fromJson(json);
-    }
-    return null;
   }
 
-  Future<void> save({required Puzzle puzzle}) async {
-    await _db.insert(_tableName, {
+  Future<void> save({required Puzzle puzzle}) {
+    return _db.saveJsonRow(_tableName, {
       'puzzleId': puzzle.puzzle.id.toString(),
       'lastModified': DateTime.now().toIso8601String(),
       'data': jsonEncode(puzzle.toJson()),
-    }, conflictAlgorithm: ConflictAlgorithm.replace);
+    });
   }
 }

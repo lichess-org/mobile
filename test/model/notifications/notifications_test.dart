@@ -190,4 +190,68 @@ void main() {
       expect(round.payloadType, isNot(playerFollow.payloadType));
     });
   });
+
+  group('FCM message to local notification mapping:', () {
+    final displayable = <(RemoteMessage, Type)>[
+      (
+        const RemoteMessage(data: {'lichess.type': 'newMessage', 'lichess.threadId': 'thethread'}),
+        NewMessageNotification,
+      ),
+      (
+        const RemoteMessage(data: {'lichess.type': 'gameMove', 'lichess.fullId': '9wlmxmibr9gh'}),
+        CorresGameUpdateNotification,
+      ),
+      (
+        const RemoteMessage(
+          data: {'lichess.type': 'challengeCreate', 'lichess.challengeId': 'challenging'},
+        ),
+        ChallengeCreatedNotification,
+      ),
+      (
+        const RemoteMessage(
+          data: {
+            'lichess.type': 'challengeAccept',
+            'lichess.challengeId': 'challenging',
+            'lichess.fullId': '9wlmxmibr9gh',
+          },
+        ),
+        ChallengeAcceptedNotification,
+      ),
+      (
+        broadcastMessage('/broadcast/tata-steel-masters/round-3/RAIoMC7L'),
+        BroadcastRoundNotification,
+      ),
+      (
+        broadcastMessage('/broadcast/tata-steel-masters/round-3/RAIoMC7L/G2LUflKg?pov=white'),
+        BroadcastPlayerFollowNotification,
+      ),
+      (
+        const RemoteMessage(data: {'lichess.type': 'recap', 'lichess.year': '2025'}),
+        RecapNotification,
+      ),
+    ];
+
+    test('each displayable message maps to its local notification', () {
+      for (final (message, expectedType) in displayable) {
+        expect(
+          FcmMessage.fromRemoteMessage(message).toLocalNotification().runtimeType,
+          expectedType,
+          reason: 'for $message',
+        );
+      }
+    });
+
+    test('unhandled and malformed messages have no local notification', () {
+      final messages = <FcmMessage>[
+        FcmMessage.fromRemoteMessage(const RemoteMessage(data: {'lichess.type': 'unknown'})),
+        FcmMessage.fromRemoteMessage(const RemoteMessage(data: {})),
+        // a correspondence update without a game id cannot be parsed
+        FcmMessage.fromRemoteMessage(const RemoteMessage(data: {'lichess.type': 'gameMove'})),
+      ];
+
+      for (final message in messages) {
+        expect(message.toLocalNotification(), isNull, reason: 'for $message');
+      }
+    });
+  });
 }

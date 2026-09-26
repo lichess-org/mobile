@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/view/relation/friend_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:material_ui/material_ui.dart';
 
+import '../../model/auth/fake_auth_storage.dart';
 import '../../network/fake_http_client_factory.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
@@ -176,6 +177,72 @@ void main() {
         expect(find.text('You are not following any users.'), findsOneWidget);
       },
     );
+
+    testWidgets('following list drops the user after unfollow from their profile and going back', (
+      WidgetTester tester,
+    ) async {
+      var followingBody =
+          '{"id":"alice","username":"Alice","createdAt":1290415680000,"seenAt":1290415680000,"perfs":{}}\n'
+          '{"id":"bob","username":"Bob","createdAt":1290415680000,"seenAt":1290415680000,"perfs":{}}';
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/api/rel/following') {
+          return mockResponse(followingBody, 200);
+        }
+        if (request.url.path == '/api/mobile/profile/alice') {
+          return mockResponse(
+            '{"profile":{"id":"alice","username":"Alice","createdAt":1290415680000,"seenAt":1290415680000,"perfs":{},"following":true,"followable":true}}',
+            200,
+          );
+        }
+        if (request.method == 'POST' && request.url.path == '/api/rel/unfollow/alice') {
+          followingBody = '{"id":"bob","username":"Bob","createdAt":1290415680000,"seenAt":1290415680000,"perfs":{}}';
+          return mockResponse('', 200);
+        }
+        if (request.url.path == '/api/users/status') {
+          return mockResponse('[]', 200);
+        }
+        return mockResponse('', 404);
+      });
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const FriendScreen(),
+        authUser: fakeAuthUser,
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => mockClient);
+          }),
+          onlineFriendsProvider: onlineFriendsProvider.overrideWith(
+            () => _MockOnlineFriends(const IList.empty()),
+          ),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      // switch to following tab
+      await tester.tap(find.text('2 following'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Alice'), findsOneWidget);
+
+      // open Alice's profile
+      await tester.tap(find.text('Alice'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Unfollow'), findsOneWidget);
+
+      await tester.tap(find.text('Unfollow'));
+      await tester.pumpAndSettle();
+
+      await tester.pageBack();
+      await tester.pumpAndSettle();
+
+      expect(find.text('Alice'), findsNothing);
+      expect(find.text('1 following'), findsOneWidget);
+      expect(find.text('Bob'), findsOneWidget);
+    });
   });
 }
 

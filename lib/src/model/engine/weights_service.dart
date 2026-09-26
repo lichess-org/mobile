@@ -380,19 +380,20 @@ class MaiaWeightsService(final Ref _ref) {
   }
 
   Future<List<File>> _unusableFiles() async {
-    final claimed = <String>{};
+    // Compared as URIs: path separators differ between constructed and listed files on Windows.
+    final claimed = <Uri>{};
     for (final rating in MaiaRating.values) {
       // A bundled rating always claims its file, whether or not it has been written out yet.
       // An in-flight download also claims its file so it is not reported as unusable while downloading.
       if (rating.isBundled || _inFlight.containsKey(rating) || await isAvailable(rating)) {
-        claimed.add(weightsFile(rating).path);
+        claimed.add(weightsFile(rating).uri);
       }
     }
 
     // Listed after the checks above, which delete the corrupted files they find: what is left is
     // only what nothing claims.
     final files = await _filesOnDisk();
-    return files.where((file) => !claimed.contains(file.path)).toList();
+    return files.where((file) => !claimed.contains(file.uri)).toList();
   }
 
   Future<void> _deleteFiles(Iterable<File> files) async {

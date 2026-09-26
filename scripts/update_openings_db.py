@@ -38,6 +38,10 @@ with open(os.path.join(path_to_chess_openings, 'dist/all.tsv'), 'r') as f:
 
     cur.executemany('INSERT INTO openings (eco, name, pgn, uci, epd) VALUES (?, ?, ?, ?, ?);', to_db)
     conn.commit()
+    # The app looks up openings by exact epd on every position change
+    # (see OpeningService.fetchFromFen), so keep an index on epd.
+    cur.execute('CREATE INDEX IF NOT EXISTS idx_openings_epd ON openings(epd);')
+    conn.commit()
     new_openings = set(row[0] for row in cur.execute(openings_sql))
 conn.close()
 

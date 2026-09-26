@@ -93,11 +93,6 @@ sealed class const GeneralPrefs._() with _$GeneralPrefs implements Serializable 
     /// Whether to use system colors on android 10+.
     @JsonKey(defaultValue: true) required bool systemColors,
 
-    /// App theme seed
-    @Deprecated('Use systemColors instead')
-    @JsonKey(unknownEnumValue: AppThemeSeed.board, defaultValue: AppThemeSeed.board)
-    required AppThemeSeed appThemeSeed,
-
     /// Locale to use in the app, use system locale if null
     @LocaleConverter() Locale? locale,
 
@@ -112,7 +107,6 @@ sealed class const GeneralPrefs._() with _$GeneralPrefs implements Serializable 
     soundTheme: SoundTheme.standard,
     masterVolume: 0.8,
     systemColors: true,
-    appThemeSeed: AppThemeSeed.board,
   );
 
   factory fromJson(Map<String, dynamic> json) {
@@ -120,14 +114,6 @@ sealed class const GeneralPrefs._() with _$GeneralPrefs implements Serializable 
   }
 
   bool get isForcedDarkMode => backgroundColor != null || backgroundImage != null;
-}
-
-enum AppThemeSeed() {
-  /// The app theme is based on the user's system theme (only available on Android 10+).
-  system,
-
-  /// The app theme is based on the chessboard.
-  board,
 }
 
 /// Describes the background theme of the app.

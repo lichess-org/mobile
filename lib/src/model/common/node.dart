@@ -773,3 +773,15 @@ sealed class const ViewBranch._() extends ViewNode with _$ViewBranch {
   @override
   UciCharPair get id => UciCharPair.fromMove(sanMove.move);
 }
+
+/// Callbacks for interaction with `DebouncedPgnTreeView`.
+abstract class PgnTreeNotifier() {
+  void expandVariations(UciPath path);
+  void collapseVariations(UciPath path);
+  void promoteVariation(UciPath path, bool toMainLine);
+  void deleteFromHere(UciPath path);
+  void userJump(UciPath path);
+
+  /// Exports the line going through [path] as a PGN string, see [Node.makeLinePgn].
+  String makeLinePgn(UciPath path, {required bool includeVariations});
+}

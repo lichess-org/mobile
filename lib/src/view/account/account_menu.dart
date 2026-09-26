@@ -401,6 +401,7 @@ class const AboutScreen({super.key}) extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isOnline = ref.watch(isDeviceOnlineProvider);
     final packageInfo = ref.read(preloadedDataProvider).requireValue.packageInfo;
 
     return Scaffold(
@@ -411,6 +412,7 @@ class const AboutScreen({super.key}) extends ConsumerWidget {
             hasLeading: true,
             children: [
               ListTile(
+                enabled: isOnline,
                 leading: const Icon(Icons.info_outlined),
                 title: Text(context.l10n.aboutX('Lichess')),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
@@ -421,6 +423,7 @@ class const AboutScreen({super.key}) extends ConsumerWidget {
                 },
               ),
               ListTile(
+                enabled: isOnline,
                 leading: const Icon(Icons.feedback_outlined),
                 title: Text(context.l10n.mobileFeedbackButton),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
@@ -431,6 +434,7 @@ class const AboutScreen({super.key}) extends ConsumerWidget {
                 },
               ),
               ListTile(
+                enabled: isOnline,
                 leading: const Icon(Icons.article_outlined),
                 title: Text(context.l10n.termsOfService),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
@@ -441,6 +445,7 @@ class const AboutScreen({super.key}) extends ConsumerWidget {
                 },
               ),
               ListTile(
+                enabled: isOnline,
                 leading: const Icon(Icons.privacy_tip_outlined),
                 title: Text(context.l10n.privacyPolicy),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
@@ -456,6 +461,7 @@ class const AboutScreen({super.key}) extends ConsumerWidget {
             hasLeading: true,
             children: [
               ListTile(
+                enabled: isOnline,
                 leading: const Icon(Symbols.database),
                 title: Text(context.l10n.database),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
@@ -466,6 +472,7 @@ class const AboutScreen({super.key}) extends ConsumerWidget {
                 },
               ),
               ListTile(
+                enabled: isOnline,
                 leading: const Icon(Icons.code_outlined),
                 title: Text(context.l10n.sourceCode),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
@@ -476,6 +483,7 @@ class const AboutScreen({super.key}) extends ConsumerWidget {
                 },
               ),
               ListTile(
+                enabled: isOnline,
                 leading: const Icon(Icons.bug_report_outlined),
                 title: Text(context.l10n.contribute),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
@@ -486,6 +494,7 @@ class const AboutScreen({super.key}) extends ConsumerWidget {
                 },
               ),
               ListTile(
+                enabled: isOnline,
                 leading: const Icon(Icons.star_border_outlined),
                 title: Text(context.l10n.thankYou),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS

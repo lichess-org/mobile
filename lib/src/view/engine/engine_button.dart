@@ -145,6 +145,48 @@ class _EngineButtonState() extends ConsumerState<EngineButton> {
   }
 }
 
+/// Toggle button for engine evaluation with a guard against concurrent toggles.
+///
+/// Encapsulates the [Builder]+[FutureBuilder] pattern that disables the button while a
+/// toggle request is in flight. Callers differ only in how they compute [filters],
+/// [savedEval], [isEnabled], [onToggle] and [onGoDeeper].
+class const EngineToggleButton({
+  required final EngineEvaluationFilters filters,
+  final ClientEval? savedEval,
+  final bool isEnabled = true,
+  required final Future<void> Function() onToggle,
+  required final VoidCallback onGoDeeper,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Builder(
+      builder: (context) {
+        Future<void>? toggleFuture;
+        return FutureBuilder(
+          future: toggleFuture,
+          builder: (context, snapshot) {
+            return EngineButton(
+              filters: filters,
+              savedEval: savedEval,
+              onTap: isEnabled && snapshot.connectionState != ConnectionState.waiting
+                  ? () async {
+                      toggleFuture = onToggle();
+                      try {
+                        await toggleFuture;
+                      } finally {
+                        toggleFuture = null;
+                      }
+                    }
+                  : null,
+              goDeeper: onGoDeeper,
+            );
+          },
+        );
+      },
+    );
+  }
+}
+
 class const MicroChipPainter(final Color color) extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {

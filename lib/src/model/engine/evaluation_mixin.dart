@@ -114,6 +114,14 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState<T>> on AnyNotifier<As
 
   StreamSubscription<SocketEvent>? _socketSubscription;
 
+  /// Subscription to the eval stream of the latest eval request.
+  ///
+  /// Kept so it can be cancelled when the request is replaced or the notifier is disposed: the
+  /// stream is a view of the evaluator's broadcast controller, which is closed only when the
+  /// evaluator itself is disposed, so an uncancelled subscription would be dispatched on every
+  /// emission (and retain the captured state) until then.
+  StreamSubscription<EvalResult>? _engineEvalSubscription;
+
   /// Called when a received evaluation is for the current path.
   ///
   /// If the evaluation string is the same for both the received and the current evaluation, the
@@ -126,6 +134,7 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState<T>> on AnyNotifier<As
     ref.onDispose(() {
       _evalRequestDebounce.cancel();
       _localEngineAfterDelayDebounce.cancel();
+      _engineEvalSubscription?.cancel();
       _socketSubscription?.cancel();
       // Letting go of the evaluator disposes it, which releases the engine; the grace window is
       // what makes navigating to another analysis screen free.
@@ -354,7 +363,8 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState<T>> on AnyNotifier<As
       }
     }
 
-    _evaluator.evaluate(work).forEach((event) {
+    _engineEvalSubscription?.cancel();
+    _engineEvalSubscription = _evaluator.evaluate(work).listen((event) {
       if (curState.engineInThreatMode) {
         return;
       }

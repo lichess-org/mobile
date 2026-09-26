@@ -39,40 +39,40 @@ Color? _nagColor(BuildContext context, int nag) {
   };
 }
 
+/// Canonical NAG annotation table: NAG code → (symbol, color).
+///
+/// Single source of truth for [moveAnnotationChar] and [makeAnnotation].
+// sources: https://github.com/lichess-org/scalachess/blob/3f96a2935ee2ee670def67632171ffcea7c96b6d/core/src/main/scala/format/pgn/Glyph.scala
+// https://en.wikipedia.org/wiki/Portable_Game_Notation
+const Map<int, ({String symbol, Color color})> _nagAnnotations = {
+  1: (symbol: '!', color: Colors.lightGreen),
+  2: (symbol: '?', color: LichessColors.mistake),
+  3: (symbol: '!!', color: Colors.teal),
+  4: (symbol: '??', color: LichessColors.blunder),
+  5: (symbol: '!?', color: Colors.purple),
+  6: (symbol: '?!', color: LichessColors.inaccuracy),
+  8: (symbol: '□', color: Colors.grey),
+  10: (symbol: '=', color: Colors.grey),
+  11: (symbol: '=', color: Colors.grey),
+  13: (symbol: '∞', color: Colors.grey),
+  14: (symbol: '⩲', color: Colors.grey),
+  15: (symbol: '⩱', color: Colors.grey),
+  16: (symbol: '±', color: Colors.grey),
+  17: (symbol: '∓', color: Colors.grey),
+  18: (symbol: '+-', color: Colors.grey),
+  19: (symbol: '-+', color: Colors.grey),
+  22: (symbol: '⨀', color: Colors.grey),
+  32: (symbol: '⟳', color: Colors.grey),
+  36: (symbol: '↑', color: Colors.grey),
+  44: (symbol: '=∞', color: Colors.grey),
+  132: (symbol: '⇆', color: Colors.grey),
+  138: (symbol: '⊕', color: Colors.grey),
+  140: (symbol: '∆', color: Colors.grey),
+  146: (symbol: 'N', color: Colors.grey),
+};
+
 String moveAnnotationChar(Iterable<int> nags) {
-  return nags
-      .map(
-        //sources: https://github.com/lichess-org/scalachess/blob/3f96a2935ee2ee670def67632171ffcea7c96b6d/core/src/main/scala/format/pgn/Glyph.scala
-        //https://en.wikipedia.org/wiki/Portable_Game_Notation
-        (nag) => switch (nag) {
-          1 => '!',
-          2 => '?',
-          3 => '!!',
-          4 => '??',
-          5 => '!?',
-          6 => '?!',
-          8 => '□',
-          10 => '=',
-          11 => '=',
-          13 => '∞',
-          14 => '⩲',
-          15 => '⩱',
-          16 => '±',
-          17 => '∓',
-          18 => '+-',
-          19 => '-+',
-          22 => '⨀',
-          32 => '⟳',
-          36 => '↑',
-          44 => '=∞',
-          132 => '⇆',
-          138 => '⊕',
-          140 => '∆',
-          146 => 'N',
-          int() => '',
-        },
-      )
-      .join('');
+  return nags.map((nag) => _nagAnnotations[nag]?.symbol ?? '').join('');
 }
 
 Annotation? makeAnnotation(Iterable<int>? nags) {
@@ -80,50 +80,16 @@ Annotation? makeAnnotation(Iterable<int>? nags) {
   if (nag == null) {
     return null;
   }
-  return switch (nag) {
-    1 => const Annotation(symbol: '!', color: Colors.lightGreen),
-    3 => const Annotation(symbol: '!!', color: Colors.teal),
-    5 => const Annotation(symbol: '!?', color: Colors.purple),
-    6 => const Annotation(symbol: '?!', color: LichessColors.inaccuracy),
-    2 => const Annotation(symbol: '?', color: LichessColors.mistake),
-    4 => const Annotation(symbol: '??', color: LichessColors.blunder),
-    8 => const Annotation(symbol: '□', color: Colors.grey),
-    10 => const Annotation(symbol: '=', color: Colors.grey),
-    11 => const Annotation(symbol: '=', color: Colors.grey),
-    13 => const Annotation(symbol: '∞', color: Colors.grey),
-    14 => const Annotation(symbol: '⩲', color: Colors.grey),
-    15 => const Annotation(symbol: '⩱', color: Colors.grey),
-    16 => const Annotation(symbol: '±', color: Colors.grey),
-    17 => const Annotation(symbol: '∓', color: Colors.grey),
-    18 => const Annotation(symbol: '+-', color: Colors.grey),
-    19 => const Annotation(symbol: '-+', color: Colors.grey),
-    22 => const Annotation(symbol: '⨀', color: Colors.grey),
-    32 => const Annotation(symbol: '⟳', color: Colors.grey),
-    36 => const Annotation(symbol: '↑', color: Colors.grey),
-    44 => const Annotation(symbol: '=∞', color: Colors.grey),
-    132 => const Annotation(symbol: '⇆', color: Colors.grey),
-    138 => const Annotation(symbol: '⊕', color: Colors.grey),
-    140 => const Annotation(symbol: '∆', color: Colors.grey),
-    146 => const Annotation(symbol: 'N', color: Colors.grey),
-    int() => null,
-  };
+  final annotation = _nagAnnotations[nag];
+  if (annotation == null) {
+    return null;
+  }
+  return Annotation(symbol: annotation.symbol, color: annotation.color);
 }
 
 // fast replay debounce delay, same as piece animation duration, to avoid piece
 // animation jank at the end of the replay
 const kFastReplayDebounceDelay = Duration(milliseconds: 150);
-
-/// Callbacks for interaction with [DebouncedPgnTreeView]
-abstract class PgnTreeNotifier() {
-  void expandVariations(UciPath path);
-  void collapseVariations(UciPath path);
-  void promoteVariation(UciPath path, bool toMainLine);
-  void deleteFromHere(UciPath path);
-  void userJump(UciPath path);
-
-  /// Exports the line going through [path] as a PGN string, see [Node.makeLinePgn].
-  String makeLinePgn(UciPath path, {required bool includeVariations});
-}
 
 enum PgnTreeDisplayMode() {
   /// Mainline moves are displayed in a table with two columns, where the first column are moves by white and the second column are moves by black.
