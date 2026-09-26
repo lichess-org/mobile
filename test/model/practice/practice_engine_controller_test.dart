@@ -1,5 +1,6 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart' show Override, ProviderOrFamily;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -12,8 +13,10 @@ import 'package:lichess_mobile/src/model/practice/practice_engine_controller.dar
 import 'package:lichess_mobile/src/model/practice/practice_goal.dart';
 import 'package:lichess_mobile/src/model/practice/practice_progress.dart';
 import 'package:lichess_mobile/src/model/practice/practice_structure.dart';
+import 'package:lichess_mobile/src/network/socket.dart';
 
 import '../../binding.dart';
+import '../../network/fake_websocket_channel.dart';
 import '../../test_container.dart';
 import '../engine/fake_engine.dart';
 
@@ -87,9 +90,53 @@ PracticeEngineChapter _chapter(String fen, PracticeGoal goal, {Side orientation 
       goal: goal,
     ) as PracticeEngineChapter;
 
+/// A cloud eval the server hands out for one position.
+typedef _CloudLine = ({int depth, int? cp, int? mate, String best});
+
+/// Overrides the socket so that `evalGet` is answered with a cloud eval for the positions in
+/// [lines], and with nothing at all for every other one — which is how the server behaves: a
+/// position it has never been asked about before gets no answer, however early in the game it is.
+Map<ProviderOrFamily, Override> _cloudEvals(Map<String, _CloudLine> lines) {
+  final byPosition = {for (final line in lines.entries) _epd(line.key): line.value};
+  return {
+    webSocketChannelFactoryProvider: webSocketChannelFactoryProvider.overrideWith(
+      (_) => FakeWebSocketChannelFactory(
+        (uri) => FakeWebSocketChannel(
+          uri,
+          serverHandlers: {
+            'evalGet': (json) {
+              final data = json['d']! as Map<String, dynamic>;
+              final line = byPosition[_epd(data['fen']! as String)];
+              if (line == null) return <String, dynamic>{'t': 'noEval', 'd': <String, dynamic>{}};
+              return {
+                't': 'evalHit',
+                'd': {
+                  'path': data['path'],
+                  'knodes': '4000000',
+                  'depth': '${line.depth}',
+                  'pvs': [
+                    {
+                      'moves': line.best,
+                      if (line.cp != null) 'cp': '${line.cp}',
+                      if (line.mate != null) 'mate': '${line.mate}',
+                    },
+                  ],
+                },
+              };
+            },
+          },
+        ),
+      ),
+    ),
+  };
+}
+
 /// White: Ke3, Qa1, Rh1. Black: Kd6.
 const _queenAndRook = '8/8/3k4/8/8/4K3/8/Q6R w - - 0 1';
 const _afterRh6 = '8/8/3k3R/8/8/4K3/8/Q7 b - - 1 1';
+
+/// The position the losing Qa2 leads to.
+const _afterQa2 = '8/8/3k4/8/8/4K3/Q7/7R b - - 1 1';
 
 Future<void> _waitFor(
   bool Function() condition, {
@@ -113,9 +160,10 @@ void main() {
   });
 
   Future<(ProviderContainer, PracticeEngineController Function())> start(
-    PracticeEngineChapter chapter,
-  ) async {
-    final container = await makeContainer();
+    PracticeEngineChapter chapter, {
+    Map<ProviderOrFamily, Override>? overrides,
+  }) async {
+    final container = await makeContainer(overrides: overrides);
     final provider = practiceEngineControllerProvider(chapter);
     container.listen(provider, (_, _) {});
     await container.read(practiceProgressProvider.future);
@@ -185,7 +233,7 @@ void main() {
 
     test('a blunder fails the chapter, shows the better move, and gets no answer', () async {
       engine.script(_queenAndRook, mate: 5, best: 'h1h6');
-      engine.script('8/8/3k4/8/8/4K3/Q7/7R b - - 1 1', cp: 0, best: 'd6c5');
+      engine.script(_afterQa2, cp: 0, best: 'd6c5');
       final (container, controller) = await start(chapter);
       await _waitFor(() => stateOf(container, chapter).eval != null);
 
@@ -199,6 +247,50 @@ void main() {
       expect(state.steps, hasLength(1));
       expect(state.isEngineThinking, isFalse);
       expect(state.canPlay, isFalse);
+    });
+
+    test('judges a move against a cloud eval far deeper than the search reaches', () async {
+      // Every lesson position is one the cloud has seen thousands of times, at a depth the local
+      // search never gets near; the position a blunder leads to is one nobody has asked about, so
+      // the two evals the verdict compares come from different places and stop at very different
+      // depths. The verdict has to survive that, or a chapter played with cloud evals on would
+      // never call anything a blunder.
+      engine.script(_queenAndRook, mate: 5, best: 'h1h6');
+      engine.script(_afterQa2, cp: 0, best: 'd6c5');
+      final (container, controller) = await start(
+        chapter,
+        overrides: _cloudEvals({_queenAndRook: (depth: 45, cp: null, mate: 5, best: 'h1h6')}),
+      );
+      await _waitFor(() => stateOf(container, chapter).eval?.depth == 45);
+
+      controller().onUserMove(const NormalMove(from: Square.a1, to: Square.a2));
+      await _waitFor(() => stateOf(container, chapter).status != PracticeStatus.ongoing);
+
+      final state = stateOf(container, chapter);
+      expect(state.feedback?.verdict, MoveVerdict.blunder);
+      expect(state.feedback?.bestMove?.san, 'Rh6+');
+      expect(state.status, PracticeStatus.failed);
+    });
+
+    test('judges a move against a cloud eval of the position it led to', () async {
+      // The other way round: the cloud answers for the position after the move and not for the
+      // one before it. The search only gets to the usable depth on the position the move led to,
+      // and at that depth it still has White winning, so a blunder here is one only the cloud
+      // eval knows about.
+      engine.script(_queenAndRook, mate: 5, best: 'h1h6');
+      engine.scriptShallow(_afterQa2, cp: 9000, best: 'd6c5');
+      final (container, controller) = await start(
+        chapter,
+        overrides: _cloudEvals({_afterQa2: (depth: 45, cp: 0, mate: null, best: 'd6c5')}),
+      );
+      await _waitFor(() => stateOf(container, chapter).eval != null);
+
+      controller().onUserMove(const NormalMove(from: Square.a1, to: Square.a2));
+      await _waitFor(() => stateOf(container, chapter).status != PracticeStatus.ongoing);
+
+      final state = stateOf(container, chapter);
+      expect(state.feedback?.verdict, MoveVerdict.blunder);
+      expect(state.status, PracticeStatus.failed);
     });
 
     test('solving records the progress with the moves played', () async {

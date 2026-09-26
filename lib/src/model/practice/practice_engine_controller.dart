@@ -26,8 +26,6 @@ part 'practice_engine_controller.freezed.dart';
 final _logger = Logger('PracticeEngineController');
 
 /// How long the engine may take to answer a move, including judging it.
-///
-/// Starting the engine is not in it — the wait does not begin until the engine is searching.
 final _kEngineAnswerWait = kPracticeMaxSearchTime + const Duration(seconds: 1);
 
 /// A practice chapter played against the engine.
@@ -36,6 +34,11 @@ final practiceEngineControllerProvider = NotifierProvider.autoDispose
       PracticeEngineController.new,
       name: 'PracticeEngineControllerProvider',
     );
+
+/// The depth [eval] counts as when it is compared with another evaluation.
+///
+/// Capped at [kPracticeTargetDepth].
+int _comparableDepth(ClientEval? eval) => math.min(eval?.depth ?? 0, kPracticeTargetDepth);
 
 /// Plays a practice chapter against the engine.
 ///
@@ -52,9 +55,6 @@ class PracticeEngineController(final PracticeEngineChapter _chapter)
   late final PracticeAnalyser _analyser = PracticeAnalyser(
     ref: ref,
     evaluator: () => _evaluator,
-    // Every position of a lesson is one thousands of players have already run through the cloud,
-    // however deep in the game it is, so the ply it is at says nothing about whether asking is
-    // worth it.
     alwaysRequestCloudEvals: true,
     onEval: _onEval,
   );
@@ -107,26 +107,18 @@ class PracticeEngineController(final PracticeEngineChapter _chapter)
     }
 
     _analyse();
-    // At least as deep as the eval this move is about to be compared against. The position the
-    // player was thinking about was analysed for as long as they thought, up to
-    // [kPracticeTargetDepth]; the position their move led to has only just been started. Comparing
-    // the two would measure the difference in depth as much as the move — an eval drifts by a
-    // pawn or more between depth 13 and depth 20 — and a shift large enough to read as a mistake
-    // or a blunder fails the chapter outright.
+    // At least as deep as the eval this move is about to be compared against.
     final evalAfter = await _analyser.usableEval(
       state.position,
       timeout: _kEngineAnswerWait,
-      minDepth: math.min(
-        math.max(kPracticeUsableDepth, evalBefore?.depth ?? 0),
-        kPracticeTargetDepth,
-      ),
+      minDepth: math.max(kPracticeUsableDepth, _comparableDepth(evalBefore)),
     );
     if (!ref.mounted || attempt != _attempt) return;
 
-    // Still shallower, because the search ran out of time: no verdict at all is better than one
-    // that measures depth. The goal is judged on it all the same — that compares the eval with a
-    // target rather than with another eval.
-    final feedback = evalBefore != null && evalAfter != null && evalAfter.depth >= evalBefore.depth
+    final feedback =
+        evalBefore != null &&
+            evalAfter != null &&
+            _comparableDepth(evalAfter) >= _comparableDepth(evalBefore)
         ? _feedback(move, positionBefore, evalBefore, evalAfter)
         : null;
     state = state.copyWith(feedback: feedback);

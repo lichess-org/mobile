@@ -5,7 +5,6 @@ import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
@@ -20,6 +19,10 @@ import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:logging/logging.dart';
 
 final _logger = Logger('PracticeAnalyser');
+
+/// Whether the practice analysis may race the local engine against the server's evaluations.
+@visibleForTesting
+const kPracticeCloudEvalsEnabled = true;
 
 /// The depth at which an evaluation is good enough to show a hint or judge a move.
 ///
