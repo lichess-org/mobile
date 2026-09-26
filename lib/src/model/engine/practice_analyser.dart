@@ -300,10 +300,6 @@ class PracticeAnalyser({
     return waiter.future;
   }
 
-  /// Lets go of everything, without touching the evaluator.
-  ///
-  /// Called from the owner's disposal, where the evaluator is being disposed too and reaching for
-  /// it is not allowed — a provider may not be read from a life-cycle callback.
   void dispose() {
     _disposed = true;
     _stopSearch(stopEngine: false);
