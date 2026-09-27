@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/game_storage.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
@@ -44,6 +45,33 @@ void main() {
       final page2 = await storage.page(userId: userId, max: 10, until: page1.last.lastModified);
       expect(page2.length, 10);
       expect(page2.last.game.id, const GameId('game0080'));
+    });
+
+    test('page filters out games not won by the player', () async {
+      final container = await makeContainer();
+
+      final storage = await container.read(gameStorageProvider.future);
+
+      final wonGame = game.copyWith(id: const GameId('won00001'), winner: Side.white);
+      final lostGame = game.copyWith(id: const GameId('lost0001'), winner: Side.black);
+      final drawGame = game.copyWith(id: const GameId('draw0001'));
+
+      for (final g in [wonGame, lostGame, drawGame]) {
+        await storage.save(g);
+        await Future<void>.delayed(const Duration(milliseconds: 1));
+      }
+
+      const userId = UserId('whiteId');
+
+      final all = await storage.page(userId: userId);
+      expect(all.length, 3);
+
+      final won = await storage.page(
+        userId: userId,
+        filter: const GameFilterState(result: GameResultFilter.won),
+      );
+      expect(won.length, 1);
+      expect(won.first.game.id, const GameId('won00001'));
     });
   });
 }
