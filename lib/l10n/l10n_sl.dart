@@ -3095,6 +3095,9 @@ class AppLocalizationsSl extends AppLocalizations {
   String get searchSearch => 'Iskanje';
 
   @override
+  String get searchResult => 'Rezultat';
+
+  @override
   String get settingsSettings => 'Nastavitve';
 
   @override

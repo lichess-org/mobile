@@ -784,6 +784,7 @@
   "puzzleThemePuzzleDownloadInformation": "Dessa pussel tillhör den allmänna egendomen, och kan laddas ner från {param}.",
   "recapAwaitQuestion": "Vad har du gjort under året?",
   "searchSearch": "Sök",
+  "searchResult": "Resultat",
   "settingsSettings": "Inställningar",
   "settingsCloseAccount": "Avsluta konto",
   "settingsManagedAccountCannotBeClosed": "Ditt konto hanteras och kan inte stängas.",

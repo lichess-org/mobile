@@ -3039,6 +3039,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String get searchSearch => 'Αναζήτηση';
 
   @override
+  String get searchResult => 'Αποτέλεσμα';
+
+  @override
   String get settingsSettings => 'Ρυθμίσεις';
 
   @override

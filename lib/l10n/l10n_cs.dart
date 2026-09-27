@@ -3095,6 +3095,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get searchSearch => 'Hledat';
 
   @override
+  String get searchResult => 'Výsledek';
+
+  @override
   String get settingsSettings => 'Nastavení';
 
   @override

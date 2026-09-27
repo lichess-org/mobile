@@ -3065,6 +3065,9 @@ class AppLocalizationsHr extends AppLocalizations {
   String get searchSearch => 'Traži';
 
   @override
+  String get searchResult => 'Rezultat';
+
+  @override
   String get settingsSettings => 'Postavke';
 
   @override

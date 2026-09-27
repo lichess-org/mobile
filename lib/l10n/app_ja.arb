@@ -884,6 +884,7 @@
   "recapAwaitQuestion": "今年はどんなだったでしょう。",
   "recapRecapReady": "{param} 年のまとめが用意できました！",
   "searchSearch": "検索",
+  "searchResult": "結果",
   "settingsSettings": "設定",
   "settingsCloseAccount": "アカウント停止",
   "settingsManagedAccountCannotBeClosed": "あなたのアカウントは別の人が管理しており、自分では停止できません。",

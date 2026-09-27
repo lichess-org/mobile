@@ -659,6 +659,7 @@
   "puzzleThemeMixDescription": "सब का कुछ कुछ। आप नहीं जानते कि क्या उम्मीद है, इसलिए आप किसी भी चीज़ के लिए तैयार रहें! बिल्कुल असली खेल की तरह।",
   "puzzleThemePlayerGames": "खिलाड़ियों के खेल",
   "searchSearch": "खोजें",
+  "searchResult": "परिणाम",
   "settingsSettings": "व्यवस्था (सेटिंग्स)",
   "settingsCloseAccount": "खातें को बंद करें",
   "settingsManagedAccountCannotBeClosed": "आपका खाता प्रबंधित है, और बंद नहीं किया जा सकता|",

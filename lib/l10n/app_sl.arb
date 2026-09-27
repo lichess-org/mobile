@@ -849,6 +849,7 @@
   "recapAwaitQuestion": "Kaj si počel letos?",
   "recapRecapReady": "Vaš {param} povzetek je pripravljen!",
   "searchSearch": "Iskanje",
+  "searchResult": "Rezultat",
   "settingsSettings": "Nastavitve",
   "settingsCloseAccount": "Zapri račun",
   "settingsManagedAccountCannotBeClosed": "Vaš račun je upravljan in ga ni mogoče zapreti.",

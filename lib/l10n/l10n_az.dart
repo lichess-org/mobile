@@ -3037,6 +3037,9 @@ class AppLocalizationsAz extends AppLocalizations {
   String get searchSearch => 'Axtar';
 
   @override
+  String get searchResult => 'Nəticə';
+
+  @override
   String get settingsSettings => 'Tənzimləmələr';
 
   @override

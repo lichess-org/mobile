@@ -3039,6 +3039,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get searchSearch => 'Zoek';
 
   @override
+  String get searchResult => 'Uitslag';
+
+  @override
   String get settingsSettings => 'Instellingen';
 
   @override

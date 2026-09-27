@@ -3039,6 +3039,9 @@ class AppLocalizationsUz extends AppLocalizations {
   String get searchSearch => 'Qidirish';
 
   @override
+  String get searchResult => 'Natija';
+
+  @override
   String get settingsSettings => 'Sozlamalar';
 
   @override

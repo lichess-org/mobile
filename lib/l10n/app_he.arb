@@ -716,6 +716,7 @@
   "puzzleThemePlayerGamesDescription": "חפשו חידות אשר נוצרו ממשחקים שלכם או של שחקנים אחרים.",
   "puzzleThemePuzzleDownloadInformation": "החידות האלו הן נחלת הכלל, וניתן להוריד אותן מ־{param}.",
   "searchSearch": "חיפוש",
+  "searchResult": "תוצאה",
   "settingsSettings": "הגדרות",
   "settingsCloseAccount": "סגירת החשבון",
   "settingsManagedAccountCannotBeClosed": "חשבונך מנוהל, ולכן לא ניתן לסגור אותו.",

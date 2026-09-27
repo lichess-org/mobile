@@ -3067,6 +3067,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get searchSearch => 'Căutare';
 
   @override
+  String get searchResult => 'Rezultat';
+
+  @override
   String get settingsSettings => 'Setări';
 
   @override

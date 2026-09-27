@@ -880,6 +880,7 @@
   "recapAwaitQuestion": "Πώς περάσατε φέτος;",
   "recapRecapReady": "Η ανασκόπηση του έτους {param} είναι έτοιμη!",
   "searchSearch": "Αναζήτηση",
+  "searchResult": "Αποτέλεσμα",
   "settingsSettings": "Ρυθμίσεις",
   "settingsCloseAccount": "Κλείσιμο λογαριασμού",
   "settingsManagedAccountCannotBeClosed": "Ο λογαριασμός σας βρίσκεται υπό διαχείριση και δεν μπορεί να κλείσει.",

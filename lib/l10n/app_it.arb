@@ -854,6 +854,7 @@
   "recapAwaitQuestion": "Com'è andata quest'anno?",
   "recapRecapReady": "Il riassunto del tuo {param} è pronto!",
   "searchSearch": "Cerca",
+  "searchResult": "Risultato",
   "settingsSettings": "Impostazioni",
   "settingsCloseAccount": "Elimina account",
   "settingsManagedAccountCannotBeClosed": "Il tuo account è gestito esternamente e non può essere chiuso.",

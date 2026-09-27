@@ -3088,6 +3088,9 @@ class AppLocalizationsHe extends AppLocalizations {
   String get searchSearch => 'חיפוש';
 
   @override
+  String get searchResult => 'תוצאה';
+
+  @override
   String get settingsSettings => 'הגדרות';
 
   @override

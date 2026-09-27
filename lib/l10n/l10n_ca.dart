@@ -3039,6 +3039,9 @@ class AppLocalizationsCa extends AppLocalizations {
   String get searchSearch => 'Cerca';
 
   @override
+  String get searchResult => 'Resultat';
+
+  @override
   String get settingsSettings => 'Configuració';
 
   @override

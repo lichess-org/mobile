@@ -3039,6 +3039,9 @@ class AppLocalizationsSv extends AppLocalizations {
   String get searchSearch => 'Sök';
 
   @override
+  String get searchResult => 'Resultat';
+
+  @override
   String get settingsSettings => 'Inställningar';
 
   @override

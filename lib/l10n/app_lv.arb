@@ -596,6 +596,7 @@
   "puzzleThemePlayerGamesDescription": "Meklējiet uzdevumus, kas radīti no jūsu vai cita spēlētāja spēlēm.",
   "puzzleThemePuzzleDownloadInformation": "Šie uzdevumi ir neaizsargājami darbi, un tos var lejupielādēt lapā {param}.",
   "searchSearch": "Meklēt",
+  "searchResult": "Rezultāts",
   "settingsSettings": "Iestatījumi",
   "settingsCloseAccount": "Slēgt kontu",
   "settingsManagedAccountCannotBeClosed": "Jūsu konts tiek pārvaldīts, un to nevar slēgt.",

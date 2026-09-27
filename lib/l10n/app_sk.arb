@@ -845,6 +845,7 @@
   "recapAwaitQuestion": "Čomu si sa venoval tento rok?",
   "recapRecapReady": "Vaše zhrnutie {param} je pripravené!",
   "searchSearch": "Hľadať",
+  "searchResult": "Výsledok",
   "settingsSettings": "Nastavenia",
   "settingsCloseAccount": "Zrušiť účet",
   "settingsManagedAccountCannotBeClosed": "Váš účet je spravovaný niekým iným a nemožno ho zrušiť.",

@@ -884,6 +884,7 @@
   "recapAwaitQuestion": "Чем вы занимались в этом году?",
   "recapRecapReady": "Ваши итоги {param} года готовы!",
   "searchSearch": "Поиск",
+  "searchResult": "Результат",
   "settingsSettings": "Настройки",
   "settingsCloseAccount": "Удалить учётную запись",
   "settingsManagedAccountCannotBeClosed": "В вашем аккаунте происходят изменения, и он не может быть удалён.",

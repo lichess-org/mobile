@@ -3039,6 +3039,9 @@ class AppLocalizationsNb extends AppLocalizations {
   String get searchSearch => 'Søk';
 
   @override
+  String get searchResult => 'Resultat';
+
+  @override
   String get settingsSettings => 'Innstillinger';
 
   @override

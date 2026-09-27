@@ -758,6 +758,7 @@
   "puzzleThemePuzzleDownloadInformation": "Ĉi tiuj enigmoj estas en la publika domeno, kaj povas esti elŝutitaj de {param}.",
   "recapAwaitQuestion": "Kiel vi fartis dum ĉi tiu jaro?",
   "searchSearch": "Serĉi",
+  "searchResult": "Rezulto",
   "settingsSettings": "Agordoj",
   "settingsCloseAccount": "Fermi konton",
   "settingsManagedAccountCannotBeClosed": "Via konto estas administrata, kaj ne povas esti fermata.",

@@ -3039,6 +3039,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get searchSearch => 'Søg';
 
   @override
+  String get searchResult => 'Resultat';
+
+  @override
   String get settingsSettings => 'Indstillinger';
 
   @override

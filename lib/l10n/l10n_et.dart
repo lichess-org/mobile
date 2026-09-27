@@ -3039,6 +3039,9 @@ class AppLocalizationsEt extends AppLocalizations {
   String get searchSearch => 'Otsi';
 
   @override
+  String get searchResult => 'Tulemus';
+
+  @override
   String get settingsSettings => 'Seaded';
 
   @override

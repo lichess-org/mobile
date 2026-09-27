@@ -3039,6 +3039,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get searchSearch => 'جستجو';
 
   @override
+  String get searchResult => 'نتیجه';
+
+  @override
   String get settingsSettings => 'تنظیمات';
 
   @override

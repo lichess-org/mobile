@@ -883,6 +883,7 @@
   "recapAwaitQuestion": "Bạn đã làm được những gì trong năm nay nhỉ?",
   "recapRecapReady": "Bản tóm tắt năm {param} của bạn đã sẵn sàng rồi đây!",
   "searchSearch": "Tìm kiếm",
+  "searchResult": "Kết quả",
   "settingsSettings": "Cài đặt",
   "settingsCloseAccount": "Đóng tài khoản",
   "settingsManagedAccountCannotBeClosed": "Tài khoản của bạn đang bị quản lý, hiện không thể đóng.",

@@ -828,6 +828,7 @@
   "recapAwaitQuestion": "С какво се занимаваше през тази година?",
   "recapRecapReady": "Твоят обзор за {param} е готов!",
   "searchSearch": "Търсене",
+  "searchResult": "Резултат",
   "settingsSettings": "Настройки",
   "settingsCloseAccount": "Закриване на регистрацията",
   "settingsManagedAccountCannotBeClosed": "Вашият акаунт се управлява и не може да бъде закрит.",

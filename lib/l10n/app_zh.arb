@@ -885,6 +885,7 @@
   "recapAwaitQuestion": "今年您都下了哪些棋？",
   "recapRecapReady": "您的 {param} 年度回顾已就绪！",
   "searchSearch": "搜索",
+  "searchResult": "结果",
   "settingsSettings": "设置",
   "settingsCloseAccount": "关闭账户",
   "settingsManagedAccountCannotBeClosed": "您的账户已被托管，无法被关闭。",

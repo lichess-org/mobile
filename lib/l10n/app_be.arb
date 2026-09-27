@@ -773,6 +773,7 @@
   "puzzleThemePlayerGamesDescription": "Праглядзіце задачы ўзятыя з вашых гульняў, ці з партый іншага гульца.",
   "puzzleThemePuzzleDownloadInformation": "Гэта публічныя задачы, іх магчыма спампаваць з {param}.",
   "searchSearch": "Пошук",
+  "searchResult": "Вынік",
   "settingsSettings": "Налады",
   "settingsCloseAccount": "Выдаліць уліковы запіс",
   "settingsManagedAccountCannotBeClosed": "Ваш уліковы запіс кіруецца на дадзены момант і не можа быць выдален.",

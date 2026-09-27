@@ -3039,6 +3039,9 @@ class AppLocalizationsGl extends AppLocalizations {
   String get searchSearch => 'Buscar';
 
   @override
+  String get searchResult => 'Resultado';
+
+  @override
   String get settingsSettings => 'Configuración';
 
   @override

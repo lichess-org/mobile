@@ -3039,6 +3039,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get searchSearch => 'Procurar';
 
   @override
+  String get searchResult => 'Resultado';
+
+  @override
   String get settingsSettings => 'Configurações';
 
   @override
@@ -10420,6 +10423,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get searchSearch => 'Buscar';
+
+  @override
+  String get searchResult => 'Resultado';
 
   @override
   String get settingsSettings => 'Configurações';

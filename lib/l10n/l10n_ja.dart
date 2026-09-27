@@ -3011,6 +3011,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get searchSearch => '検索';
 
   @override
+  String get searchResult => '結果';
+
+  @override
   String get settingsSettings => '設定';
 
   @override

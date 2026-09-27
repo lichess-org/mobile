@@ -885,6 +885,7 @@
   "recapAwaitQuestion": "Bu yilingiz qanday oʻtdi?",
   "recapRecapReady": "Sizning {param}‑yil sarhisobingiz tayyor!",
   "searchSearch": "Qidirish",
+  "searchResult": "Natija",
   "settingsSettings": "Sozlamalar",
   "settingsCloseAccount": "Akkauntni yopish",
   "settingsManagedAccountCannotBeClosed": "Akkauntingiz nazorat ostida, uni yopib boʻlmaydi.",

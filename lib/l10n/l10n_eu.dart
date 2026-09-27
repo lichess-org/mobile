@@ -3039,6 +3039,9 @@ class AppLocalizationsEu extends AppLocalizations {
   String get searchSearch => 'Bilatu';
 
   @override
+  String get searchResult => 'Emaitza';
+
+  @override
   String get settingsSettings => 'Ezarpenak';
 
   @override

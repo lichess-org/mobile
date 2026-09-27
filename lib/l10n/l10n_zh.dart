@@ -3011,6 +3011,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get searchSearch => '搜索';
 
   @override
+  String get searchResult => '结果';
+
+  @override
   String get settingsSettings => '设置';
 
   @override
@@ -9949,6 +9952,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get searchSearch => '搜尋';
+
+  @override
+  String get searchResult => '結果';
 
   @override
   String get settingsSettings => '設定';

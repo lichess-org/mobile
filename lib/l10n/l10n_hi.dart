@@ -3037,6 +3037,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get searchSearch => 'खोजें';
 
   @override
+  String get searchResult => 'परिणाम';
+
+  @override
   String get settingsSettings => 'व्यवस्था (सेटिंग्स)';
 
   @override
