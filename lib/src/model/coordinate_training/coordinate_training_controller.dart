@@ -63,9 +63,13 @@ class CoordinateTrainingController() extends Notifier<CoordinateTrainingState> {
   }
 
   void _finishTraining() {
-    ref
-        .read(coordinateTrainingPreferencesProvider.notifier)
-        .addScore(side: state.orientation, score: state.score);
+    // Recorded from a timer callback, which can't await: `addScore` publishes the new state
+    // synchronously and the storage write completes on its own.
+    unawaited(
+      ref
+          .read(coordinateTrainingPreferencesProvider.notifier)
+          .addScore(side: state.orientation, score: state.score),
+    );
     // TODO display high score and/or average score in UI. Scores are already stored per side in
     // CoordinateScores, and the coordinatesAverageScoreAsWhiteX / coordinatesAverageScoreAsBlackX
     // strings are translated but unused.
