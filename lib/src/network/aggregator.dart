@@ -14,20 +14,28 @@ final Uri _homeUri = Uri(path: '/api/mobile/home');
 final Uri _watchUri = Uri(path: '/api/mobile/watch');
 
 /// Map of target URIs to their grouped client-side URIs and JSON keys.
-final Map<Uri, ISet<({String key, RegExp pathRegexp})>> _targetUris = {
+///
+/// [queryParams] lists the query parameters that the aggregated response still
+/// represents faithfully. A client-side URI carrying any other parameter cannot be
+/// served from the aggregated payload and must therefore not join the group.
+final Map<Uri, ISet<({String key, RegExp pathRegexp, Set<String> queryParams})>> _targetUris = {
   _homeUri: ISet({
-    (key: 'account', pathRegexp: RegExp(r'^\/api\/account$')),
-    (key: 'recentGames', pathRegexp: RegExp(r'^\/api\/games\/user\/[\w-]+$')),
-    (key: 'ongoingGames', pathRegexp: RegExp(r'^\/api\/account\/playing$')),
-    (key: 'challenges', pathRegexp: RegExp(r'^\/api\/challenge$')),
-    (key: 'tournaments', pathRegexp: RegExp(r'^\/tournament\/featured$')),
-    (key: 'inbox', pathRegexp: RegExp(r'^\/inbox\/unread-count$')),
-    (key: 'friends', pathRegexp: RegExp(r'^\/api\/mobile\/following$')),
+    (key: 'account', pathRegexp: RegExp(r'^\/api\/account$'), queryParams: const {'playban'}),
+    (
+      key: 'recentGames',
+      pathRegexp: RegExp(r'^\/api\/games\/user\/[\w-]+$'),
+      queryParams: const {},
+    ),
+    (key: 'ongoingGames', pathRegexp: RegExp(r'^\/api\/account\/playing$'), queryParams: const {}),
+    (key: 'challenges', pathRegexp: RegExp(r'^\/api\/challenge$'), queryParams: const {}),
+    (key: 'tournaments', pathRegexp: RegExp(r'^\/tournament\/featured$'), queryParams: const {}),
+    (key: 'inbox', pathRegexp: RegExp(r'^\/inbox\/unread-count$'), queryParams: const {}),
+    (key: 'friends', pathRegexp: RegExp(r'^\/api\/mobile\/following$'), queryParams: const {}),
   }),
   _watchUri: ISet({
-    (key: 'broadcast', pathRegexp: RegExp(r'^\/api\/broadcast\/top$')),
-    (key: 'tv', pathRegexp: RegExp(r'^\/api\/tv\/channels$')),
-    (key: 'streamers', pathRegexp: RegExp(r'^\/api\/streamer\/live$')),
+    (key: 'broadcast', pathRegexp: RegExp(r'^\/api\/broadcast\/top$'), queryParams: const {'page'}),
+    (key: 'tv', pathRegexp: RegExp(r'^\/api\/tv\/channels$'), queryParams: const {}),
+    (key: 'streamers', pathRegexp: RegExp(r'^\/api\/streamer\/live$'), queryParams: const {}),
   }),
 };
 
@@ -134,8 +142,16 @@ class Aggregator(
         // No point in making an aggregated request if we don't have enough accumulated URIs
         final hasEnoughUris = uris.length >= group.value.length / 2;
         if (hasEnoughUris &&
-            // test that list of uris matches all the group uris
-            uris.every((e) => group.value.any((g) => g.pathRegexp.hasMatch(e.path)))) {
+            // test that list of uris matches all the group uris, and that the aggregated
+            // payload still represents them: a uri carrying a query parameter the group
+            // does not reproduce (e.g. `wonBy` on the game history) must not be grouped,
+            // otherwise it would later be served an unfiltered aggregated response.
+            uris.every(
+              (e) => group.value.any((g) {
+                final extra = e.queryParameters.keys.where((k) => !g.queryParams.contains(k));
+                return g.pathRegexp.hasMatch(e.path) && extra.isEmpty;
+              }),
+            )) {
           _groupRequests.putIfAbsent(
             uris,
             () => (targetGroupUri: group.key, future: client.readJson(group.key, mapper: (x) => x)),
@@ -153,7 +169,10 @@ class Aggregator(
       final entry = _groupRequests[uris]!;
       final aggregated = await entry.future;
       final group = _targetUris[entry.targetGroupUri]!;
-      final jsonKey = group.firstWhere((e) => e.pathRegexp.hasMatch(uri.path)).key;
+      final jsonKey = group.firstWhere((e) {
+        final extra = uri.queryParameters.keys.where((k) => !e.queryParams.contains(k));
+        return e.pathRegexp.hasMatch(uri.path) && extra.isEmpty;
+      }).key;
       final result = aggregated[jsonKey] as Object;
 
       return mapper(result);
