@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 
 import '../../test_container.dart';
 import '../../test_helpers.dart';
@@ -41,11 +42,11 @@ void main() {
   });
 
   group('GameRepository.getUserGames', () {
-    test('sends wonBy only when the result filter is won', () async {
-      const response = '''
+    const response = '''
 {"id":"Huk88k3D","rated":false,"variant":"fromPosition","speed":"blitz","perf":"blitz","createdAt":1673716450321,"lastMoveAt":1673716450321,"status":"noStart","players":{"white":{"user":{"name":"MightyNanook","id":"mightynanook"},"rating":1116,"provisional":true},"black":{"user":{"name":"Thibault","patron":true,"id":"thibault"},"rating":1772}},"initialFen":"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1","winner":"black","clock":{"initial":300,"increment":0,"totalTime":300},"lastFen":"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1"}
 ''';
 
+    test('sends wonBy only when the result filter is won', () async {
       final requestedUrls = <Uri>[];
 
       final mockClient = MockClient((request) {
@@ -64,9 +65,51 @@ void main() {
 
       await repo.getUserGames(
         const UserId('testUser'),
+        filter: const GameFilterState(result: GameResultFilter.lost),
+      );
+      expect(requestedUrls.last.queryParameters.containsKey('wonBy'), isFalse);
+
+      await repo.getUserGames(
+        const UserId('testUser'),
+        filter: const GameFilterState(result: GameResultFilter.draw),
+      );
+      expect(requestedUrls.last.queryParameters.containsKey('wonBy'), isFalse);
+
+      await repo.getUserGames(
+        const UserId('testUser'),
         filter: const GameFilterState(result: GameResultFilter.won),
       );
       expect(requestedUrls.last.queryParameters['wonBy'], 'testUser');
+    });
+
+    test('combines wonBy with the opponent and side filters', () async {
+      final requestedUrls = <Uri>[];
+
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/api/games/user/testUser') {
+          requestedUrls.add(request.url);
+          return mockResponse(response, 200);
+        }
+        return mockResponse('', 404);
+      });
+
+      final container = await lichessClientContainer(mockClient);
+      final repo = container.read(gameRepositoryProvider);
+
+      await repo.getUserGames(
+        const UserId('testUser'),
+        filter: const GameFilterState(
+          opponent: User(id: UserId('thibault'), username: 'Thibault', perfs: IMap.empty()),
+          side: Side.black,
+          result: GameResultFilter.won,
+        ),
+      );
+
+      final queryParameters = requestedUrls.last.queryParameters;
+      // wonBy is always the profile the games are fetched for, never the opponent
+      expect(queryParameters['wonBy'], 'testUser');
+      expect(queryParameters['vs'], 'thibault');
+      expect(queryParameters['color'], 'black');
     });
   });
 

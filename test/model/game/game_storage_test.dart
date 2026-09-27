@@ -73,6 +73,67 @@ void main() {
       expect(won.length, 1);
       expect(won.first.game.id, const GameId('won00001'));
     });
+
+    test('page combines the result filter with the side filter', () async {
+      final container = await makeContainer();
+
+      final storage = await container.read(gameStorageProvider.future);
+
+      // whiteId plays both colours, so its games are stored under both sides
+      const asBlack = Player(
+        user: LightUser(id: UserId('whiteId'), name: 'White'),
+        rating: 1500,
+      );
+
+      final seeds = [
+        game.copyWith(id: const GameId('wonwhite'), winner: Side.white),
+        game.copyWith(id: const GameId('lostwhit'), winner: Side.black),
+        game.copyWith(
+          id: const GameId('lostblck'),
+          youAre: Side.black,
+          black: asBlack,
+          winner: Side.white,
+        ),
+        game.copyWith(
+          id: const GameId('wonblack'),
+          youAre: Side.black,
+          black: asBlack,
+          winner: Side.black,
+        ),
+      ];
+
+      for (final g in seeds) {
+        await storage.save(g);
+        await Future<void>.delayed(const Duration(milliseconds: 1));
+      }
+
+      const userId = UserId('whiteId');
+
+      final all = await storage.page(userId: userId);
+      expect(all.length, 4);
+
+      final filtered = await storage.page(
+        userId: userId,
+        filter: const GameFilterState(side: Side.white, result: GameResultFilter.won),
+      );
+      expect(filtered.map((e) => e.game.id), [const GameId('wonwhite')]);
+    });
+
+    test('page excludes games the player only watched from the won filter', () async {
+      final container = await makeContainer();
+
+      final storage = await container.read(gameStorageProvider.future);
+
+      await storage.save(
+        game.copyWith(id: const GameId('watched1'), youAre: null, winner: Side.white),
+      );
+
+      expect((await storage.page()).length, 1);
+      expect(
+        (await storage.page(filter: const GameFilterState(result: GameResultFilter.won))).length,
+        0,
+      );
+    });
   });
 }
 
