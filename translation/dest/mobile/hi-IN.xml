@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="account" comment="The account screen title.">खाता </string>
   <string name="accountPreferences" comment="Displayed on settings screen. This is for preferences synced with website on the server.">खाता प्राथमिकताएं</string>
   <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">ये प्राथमिकताएं आपके लीचेस खाते पर लागू होती हैं और सभी डिवाइसों पर उपयोग की जाएंगी।</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">सारे गेम्स</string>
@@ -18,6 +19,7 @@
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">होम</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">लाइव स्ट्रीमर्स</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">इस पेज को देखने के लिए आपको लॉगिन करना होगा।</string>
+  <string name="newGame" comment="New game button in OTB and play against offline computer features">नया खेल </string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">कोई रिजल्ट नहीं मिला</string>
   <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">कृपया ध्यान दें कि पुराने ऐप या वेबसाइट की सभी सुविधाएं वर्तमान में उपलब्ध नहीं हैं, लेकिन हम लगातार सुविधाएं जोड़ रहे हैं।</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">आप किसी उपभोक्ता को अनुसरण नहीं कर रहे हैं।</string>
