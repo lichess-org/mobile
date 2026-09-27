@@ -70,10 +70,20 @@ class BroadcastCarousel extends StatefulWidget {
 class _BroadcastCarouselState extends State<BroadcastCarousel> {
   final _controller = CarouselController();
 
+  /// Offscreen cards each fire image decode + isolate color work on insert,
+  /// so only the first page is built synchronously. The rest is appended
+  /// after the first frame, while the scroll offset is still 0.
+  bool _showAll = false;
+
   @override
   void initState() {
     super.initState();
     watchTabInteraction.addListener(_onTabInteraction);
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        setState(() => _showAll = true);
+      }
+    });
   }
 
   @override
@@ -103,6 +113,10 @@ class _BroadcastCarouselState extends State<BroadcastCarousel> {
         final elementHeightFactor = flexWeights.length == 2 ? 0.75 : 0.6;
         final infoHeight = math.max(120, pictureHeight * elementHeightFactor);
         final elementHeight = pictureHeight + infoHeight;
+        // One full page plus a spare card; the rest arrives via _showAll.
+        final active = widget.broadcasts.active;
+        final initialCount = math.min(active.length, flexWeights.length + 2);
+        final visible = _showAll ? active : active.take(initialCount);
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: ConstrainedBox(
@@ -121,7 +135,7 @@ class _BroadcastCarouselState extends State<BroadcastCarousel> {
                 if (widget._isLoading)
                   for (final _ in [1, 2, 3, 4, 5, 6, 7, 8, 9])
                     BroadcastCarouselItem.loading(worker: widget.worker, flexWeights: flexWeights),
-                for (final broadcast in widget.broadcasts.active)
+                for (final broadcast in visible)
                   BroadcastCarouselItem(
                     broadcast: broadcast,
                     worker: widget.worker,
