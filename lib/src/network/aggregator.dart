@@ -145,7 +145,10 @@ class Aggregator(
       }
     }
 
-    final uris = _groupRequests.keys.firstWhereOrNull((key) => key.any((e) => e.path == uri.path));
+    // only an exact uri match may be served from the aggregated response: a uri with
+    // different query parameters (e.g. `wonBy` on the game history) must hit the network,
+    // since the aggregated payload does not apply those parameters
+    final uris = _groupRequests.keys.firstWhereOrNull((key) => key.any((e) => e == uri));
     if (uris != null) {
       final entry = _groupRequests[uris]!;
       final aggregated = await entry.future;
