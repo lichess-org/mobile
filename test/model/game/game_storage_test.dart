@@ -119,6 +119,40 @@ void main() {
       expect(filtered.map((e) => e.game.id), [const GameId('wonwhite')]);
     });
 
+    test('page fills up to max even when the result filter drops rows', () async {
+      final container = await makeContainer();
+
+      final storage = await container.read(gameStorageProvider.future);
+
+      // one win every three games, spread over the whole storage
+      final seeds = List.generate(30, (index) {
+        return game.copyWith(
+          id: GameId('won${index.toString().padLeft(5, '0')}'),
+          winner: index % 3 == 0 ? Side.white : Side.black,
+        );
+      });
+
+      for (final g in seeds) {
+        await storage.save(g);
+        await Future<void>.delayed(const Duration(milliseconds: 1));
+      }
+
+      const userId = UserId('whiteId');
+      const filter = GameFilterState(result: GameResultFilter.won);
+
+      final page1 = await storage.page(userId: userId, max: 10, filter: filter);
+      expect(page1.length, 10);
+      expect(page1.every((e) => e.game.isWonByMe), isTrue);
+
+      final page2 = await storage.page(
+        userId: userId,
+        max: 10,
+        until: page1.last.lastModified,
+        filter: filter,
+      );
+      expect(page2.length, 0);
+    });
+
     test('page excludes games the player only watched from the won filter', () async {
       final container = await makeContainer();
 
