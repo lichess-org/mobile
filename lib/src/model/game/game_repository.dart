@@ -82,6 +82,8 @@ class const GameRepository(
                 'perfType': filter.perfs.map((perf) => perf.name).join(','),
               if (filter.side != null) 'color': filter.side!.name,
               if (filter.opponent != null) 'vs': filter.opponent!.id.value,
+              // the server applies the same rule as ExportedGame.isWonByMe, which filters
+              // the same games out of local storage
               if (filter.result == GameResultFilter.won) 'wonBy': userId.value,
               if (withBookmarked) 'withBookmarked': 'true',
             },

@@ -57,11 +57,7 @@ class const GameStorage(final Database _db) {
         })
         .where((e) => filter.perfs.isEmpty || filter.perfs.contains(e.game.meta.perf))
         .where((e) => filter.side == null || filter.side == e.game.youAre)
-        .where(
-          (e) =>
-              filter.result != GameResultFilter.won ||
-              (e.game.winner != null && e.game.winner == e.game.youAre),
-        )
+        .where((e) => filter.result != GameResultFilter.won || e.game.isWonByMe)
         .toIList();
   }
 
