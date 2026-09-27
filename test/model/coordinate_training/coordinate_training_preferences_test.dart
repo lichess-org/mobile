@@ -90,6 +90,19 @@ void main() {
       expect(container.read(coordinateTrainingPreferencesProvider).scores.averageBlack, 18.0);
     });
 
+    test('overlapping addScore calls both land', () async {
+      final container = await makeContainer();
+      final notifier = container.read(coordinateTrainingPreferencesProvider.notifier);
+
+      // Two sessions ending before the first write completes must not clobber each other.
+      final first = notifier.addScore(side: Side.white, score: 10);
+      final second = notifier.addScore(side: Side.white, score: 18);
+      await Future.wait([first, second]);
+
+      final scores = container.read(coordinateTrainingPreferencesProvider).scores;
+      expect(scores.white, [10, 18]);
+    });
+
     test('scores survive the real storage round trip and keep only the last 20', () async {
       final container = await makeContainer();
       final notifier = container.read(coordinateTrainingPreferencesProvider.notifier);
