@@ -117,6 +117,42 @@ void main() {
       expect(find.byType(ErrorWidget), findsNothing);
       expect(find.text('0%'), findsWidgets);
     }, variant: kPlatformVariant);
+
+    testWidgets('a long localized title stays within the app bar', (WidgetTester tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: Builder(
+          builder: (context) => Localizations.override(
+            context: context,
+            locale: const Locale('pt', 'BR'),
+            child: PerfStatsScreen(user: fakeUser, perf: testPerf),
+          ),
+        ),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith((ref) {
+            return LichessClient(client, ref);
+          }),
+        },
+      );
+
+      await tester.pumpWidget(app);
+
+      // wait for auth state and perf stats
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+
+      final appBar = tester.getRect(find.byType(AppBar));
+      final title = tester.getRect(
+        find.ancestor(of: find.byIcon(Icons.arrow_drop_down), matching: find.byType(InkWell)),
+      );
+      expect(title.left, greaterThanOrEqualTo(appBar.left));
+      expect(title.right, lessThanOrEqualTo(appBar.right));
+      expect(
+        tester.getRect(find.byIcon(Icons.arrow_drop_down)).right,
+        lessThanOrEqualTo(title.right),
+      );
+    }, variant: kPlatformVariant);
   });
 }
 
