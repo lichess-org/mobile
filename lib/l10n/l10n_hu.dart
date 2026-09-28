@@ -9,6 +9,9 @@ class AppLocalizationsHu extends AppLocalizations {
   AppLocalizationsHu([String locale = 'hu']) : super(locale);
 
   @override
+  String get mobileAcceptDraw => 'Accept draw?';
+
+  @override
   String get mobileAccount => 'Account';
 
   @override
@@ -18,39 +21,113 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileAccountPreferencesHelp => 'Ezek a beállítások a Lichess-profilodhoz tartoznak, és minden eszközön érvényesek.';
 
   @override
+  String get mobileAddToStudy => 'Add to study';
+
+  @override
   String get mobileAllGames => 'Összes játszma';
+
+  @override
+  String get mobileAllowTakebacksAndHints => 'Allow takebacks and hints';
+
+  @override
+  String get mobileAmoledBlack => 'Amoled black';
 
   @override
   String get mobileAreYouSure => 'Biztos vagy benne?';
 
   @override
+  String mobileAreYouSureDownloadNnue(String param) {
+    return 'Are you sure you want to download the NNUE file ($param)?';
+  }
+
+  @override
+  String get mobileBoardPositionLandscape => 'Board position in landscape mode';
+
+  @override
   String get mobileBoardSettings => 'Sakktábla-beállítások';
+
+  @override
+  String get mobileBronsteinDelay => 'Bronstein delay';
 
   @override
   String get mobileCancelTakebackOffer => 'Visszalépés kérésének visszavonása';
 
   @override
+  String get mobileChallengeCreated => 'Kihívás elkészítve: Értesítünk amint elindul a játék.\nA kihívás a kezdőlapon található.';
+
+  @override
+  String get mobileChallengeFromPosition => 'Challenge from position';
+
+  @override
+  String get mobileChapterName => 'Chapter Name';
+
+  @override
   String get mobileChessEngine => 'Chess engine';
+
+  @override
+  String get mobileChooseCustomBackground => 'Choose a custom background';
 
   @override
   String get mobileClearButton => 'Törlés';
 
   @override
+  String get mobileCodeExpiresMessage => 'The code expires after 5 minutes and can only be used once.';
+
+  @override
+  String get mobileCodeFieldLabel => 'Code';
+
+  @override
+  String mobileCodeLengthMessage(String param) {
+    return 'The code is $param characters long.';
+  }
+
+  @override
+  String get mobileCopied => 'Copied.';
+
+  @override
   String get mobileCorrespondenceClearSavedMove => 'Mentett lépés törlése';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Csatlakozás egy játszmához';
+  String get mobileCustomizeButton => 'Testreszabás';
+
+  @override
+  String get mobileCustomizeHomeTip => 'Tipp: Hozzáadhatsz más widgetet is a főképernyőhöz, vagy eltávolíthatod azokat amikre nincs szükséged!';
+
+  @override
+  String get mobileCustomizeHomeTipDismiss => 'Bezárás';
+
+  @override
+  String get mobileDangerZone => 'Danger zone';
+
+  @override
+  String get mobileDeleteYourAccount => 'Delete your account';
+
+  @override
+  String get mobileDisplayModeCompact => 'Kompakt';
+
+  @override
+  String get mobileDisplayModeDetailed => 'Részletes';
+
+  @override
+  String get mobileDoYouAcceptChallenge => 'Do you accept the challenge?';
+
+  @override
+  String get mobileDownloadMyGames => 'Download my games';
 
   @override
   String get mobileFeedbackButton => 'Visszajelzés';
 
   @override
-  String mobileGoodEvening(String param) {
-    return 'Szép estét, $param';
-  }
+  String get mobileFilters => 'Filters';
 
   @override
-  String get mobileGoodEveningWithoutName => 'Szép estét';
+  String get mobileFlipClock => 'Flip clock';
+
+  @override
+  String get mobileFlipPiecesAfterMove => 'Flip pieces and opponent info after move';
+
+  @override
+  String get mobileGetFeedbackOnMoves => 'Get feedback on your moves';
 
   @override
   String mobileGoodDay(String param) {
@@ -61,13 +138,41 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileGoodDayWithoutName => 'Szép napot';
 
   @override
-  String get mobileHideVariation => 'Változatok elrejtése';
+  String mobileGoodEvening(String param) {
+    return 'Szép estét, $param';
+  }
+
+  @override
+  String get mobileGoodEveningWithoutName => 'Szép estét';
+
+  @override
+  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+
+  @override
+  String get mobileHello => 'Hello';
 
   @override
   String get mobileHomeTab => 'Kezdőlap';
 
   @override
+  String mobileIfAccountMatchesCodeSent(String param1, String param2) {
+    return 'If an account matches $param1, a $param2 character code was sent to it. Check your inbox and enter the code below.';
+  }
+
+  @override
+  String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
+
+  @override
   String get mobileLiveStreamers => 'Lichess-közvetítések';
+
+  @override
+  String get mobileLocalDatabaseSize => 'Local database size';
+
+  @override
+  String get mobileMoveOnRelease => 'Move on release';
+
+  @override
+  String get mobileMoveOnReleaseSubtitle => 'When moving a piece by tapping, the move is made when you lift your finger, letting you slide to change the destination square.';
 
   @override
   String get mobileMustBeLoggedIn => 'Az oldal megtekintéséhez be kell jelentkezned.';
@@ -79,10 +184,10 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileNewGame => 'Új játék';
 
   @override
-  String get mobileNoSearchResults => 'Nincs találat.';
+  String get mobileNextMistake => 'Next mistake';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'Figyelem, a régi alkalmazásból vagy a weboldalról nem minden funkció érhető el jelenleg, de folyamatosan bővítjük az elérhető funkciókat.';
+  String get mobileNoSearchResults => 'Nincs találat.';
 
   @override
   String get mobileNotFollowingAnyUser => 'Jelenleg nem követsz senkit.';
@@ -91,7 +196,67 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileOkButton => 'OKÉ';
 
   @override
+  String get mobileOpeningExplorerNotAvailableOffline => 'A megnyitás böngésző nem elérhető offline módban.';
+
+  @override
+  String get mobileOrImportPgnFile => 'Vagy PGN fájl importálása';
+
+  @override
   String get mobileOverTheBoard => 'Asztali játék';
+
+  @override
+  String get mobilePasteFromClipboard => 'Paste from clipboard';
+
+  @override
+  String get mobilePerfShortAntichess => 'Antichess';
+
+  @override
+  String get mobilePerfShortAtomic => 'Atomic';
+
+  @override
+  String get mobilePerfShortBlitz => 'Blitz';
+
+  @override
+  String get mobilePerfShortBullet => 'Bullet';
+
+  @override
+  String get mobilePerfShortChess960 => '960';
+
+  @override
+  String get mobilePerfShortClassical => 'Classical';
+
+  @override
+  String get mobilePerfShortCorrespondence => 'Corresp.';
+
+  @override
+  String get mobilePerfShortCrazyhouse => 'Crazy';
+
+  @override
+  String get mobilePerfShortFromPosition => 'From Pos.';
+
+  @override
+  String get mobilePerfShortHorde => 'Horde';
+
+  @override
+  String get mobilePerfShortKingOfTheHill => 'KotH';
+
+  @override
+  String get mobilePerfShortPuzzle => 'Puzzle';
+
+  @override
+  String get mobilePerfShortRacingKings => 'Racing';
+
+  @override
+  String get mobilePerfShortRapid => 'Rapid';
+
+  @override
+  String get mobilePerfShortThreeCheck => '3check';
+
+  @override
+  String get mobilePerfShortUltraBullet => 'Ultra';
+
+  @override
+  String get mobilePgnCopied => 'PGN copied.';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -105,7 +270,13 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobilePositionRight => 'Jobb';
 
   @override
+  String get mobilePracticeMode => 'Practice mode';
+
+  @override
   String get mobilePrefMagnifyDraggedPiece => 'Fogott figura nagyítása';
+
+  @override
+  String get mobilePreviousPage => 'Előző';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Befejezed ezt a menetet?';
@@ -120,19 +291,25 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobilePuzzleStormSubtitle => 'Oldd meg a lehető legtöbb feladványt 3 perc alatt!';
 
   @override
-  String get mobilePuzzleStreakAbortWarning => 'A jelenlegi sorozatod elvész, és az eredményedet rögzítjük.';
-
-  @override
   String get mobilePuzzleThemesSubtitle => 'Oldj feladványokat kedvenc megnyitásaidból, vagy válassz egy témát!';
 
   @override
   String get mobilePuzzlesTab => 'Feladvány';
 
   @override
+  String get mobileRateThisApp => 'Rate this app';
+
+  @override
   String get mobileRecentSearches => 'Keresési előzmények';
 
   @override
   String get mobileRemoveBookmark => 'Könyvjelző eltávolítása';
+
+  @override
+  String get mobileSelectAStudy => 'Select a study';
+
+  @override
+  String get mobileSendMeACode => 'Send me a code';
 
   @override
   String get mobileServerAnalysis => 'Szerver elemzés';
@@ -174,10 +351,10 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileSettingsPickAnImage => 'Válassz egy képet!';
 
   @override
-  String get mobileSettingsPickAnImageHelp => 'A felhasználói háttér csak sötét módban használható. Sötétebb árnyalatú kép használata ajánlott.';
+  String get mobileSettingsPickAnImageBlur => 'Kép homályosítása';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'Kép homályosítása';
+  String get mobileSettingsPickAnImageHelp => 'A felhasználói háttér csak sötét módban használható. Sötétebb árnyalatú kép használata ajánlott.';
 
   @override
   String get mobileSettingsPickAnImageHideBoard => 'Sakktábla elrejtése';
@@ -195,6 +372,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Koppintás két mezőre';
 
   @override
+  String get mobileSettingsPreferencesSaved => 'Your preferences have been saved in your Lichess account. They will be synchronized across all your devices.';
+
+  @override
   String get mobileSettingsShapeDrawing => 'Alakzatok rajzolása';
 
   @override
@@ -210,13 +390,16 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileSettingsTouchFeedbackSubtitle => 'Az eszköz rezgést ad figurák mozgatásakor és ütésekor.';
 
   @override
-  String get mobileSettingsTab => 'Beállítás';
+  String get mobileShareChallengeUrl => 'Share challenge URL';
 
   @override
   String get mobileShareGamePGN => 'PGN megosztása';
 
   @override
   String get mobileShareGameURL => 'Játszma URL megosztása';
+
+  @override
+  String get mobileShareLocalAnalysisPgn => 'Share local analysis PGN';
 
   @override
   String get mobileSharePositionAsFEN => 'Állás megosztása FEN-ként';
@@ -228,51 +411,46 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileShowComments => 'Megjegyzések megjelenítése';
 
   @override
+  String get mobileShowEngineLines => 'Show engine lines';
+
+  @override
+  String get mobileShowEvaluationGauge => 'Show evaluation gauge';
+
+  @override
   String get mobileShowResult => 'Eredmény mutatása';
 
   @override
-  String get mobileShowVariations => 'Változatok megjelenítése';
+  String get mobileSignInWithBrowser => 'Sign in with the browser';
+
+  @override
+  String get mobileSignInWithEmail => 'Sign in with an email';
+
+  @override
+  String get mobileSimpleDelay => 'Simple delay';
+
+  @override
+  String get mobileSmallBoard => 'Small board';
 
   @override
   String get mobileSomethingWentWrong => 'Hiba történt.';
 
   @override
+  String get mobileSortFriends => 'Sort friends';
+
+  @override
+  String get mobileStopShowingThreat => 'Ne mutasd a fenyegetéseket';
+
+  @override
   String get mobileSystemColors => 'Rendszerszínek';
+
+  @override
+  String get mobileTablebaseOffline => 'Tablebase is not available offline.';
 
   @override
   String get mobileTheme => 'Megjelenés';
 
   @override
-  String get mobileToolsTab => 'Eszközök';
-
-  @override
-  String mobileUnsupportedVariant(String param) {
-    return 'A $param variáns nem támogatott ebben a verzióban.';
-  }
-
-  @override
-  String get mobileWaitingForOpponentToJoin => 'Várakozás az ellenfél csatlakozására...';
-
-  @override
-  String get mobileWatchTab => 'Néznivaló';
-
-  @override
-  String get mobileWelcomeToLichessApp => 'Üdvözlünk a Lichess-alkalmazásban!';
-
-  @override
-  String get mobileViewGame => 'Játék megtekintése';
-
-  @override
-  String get mobileCustomizeHomeTip => 'Tipp: Hozzáadhatsz más widgetet is a főképernyőhöz, vagy eltávolíthatod azokat amikre nincs szükséged!';
-
-  @override
-  String get mobileCustomizeHomeTipDismiss => 'Bezárás';
-
-  @override
-  String get mobileCustomizeButton => 'Testreszabás';
-
-  @override
-  String get mobileStopShowingThreat => 'Ne mutasd a fenyegetéseket';
+  String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
 
   @override
   String get mobileTournamentCompleted => 'Befejezve';
@@ -281,73 +459,30 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileTournamentJumpToMyPage => 'Ugrás az oldalamra';
 
   @override
-  String get mobileDisplayModeCompact => 'Kompakt';
+  String mobileUnsupportedVariant(String param) {
+    return 'A $param variáns nem támogatott ebben a verzióban.';
+  }
 
   @override
-  String get mobileDisplayModeDetailed => 'Részletes';
+  String get mobileUseSymmetricPieces => 'Use symmetric pieces';
 
   @override
-  String get mobileOpeningExplorerNotAvailableOffline => 'A megnyitás böngésző nem elérhető offline módban.';
+  String get mobileViewGame => 'Játék megtekintése';
 
   @override
-  String get mobileChallengeCreated => 'Kihívás elkészítve: Értesítünk amint elindul a játék.\nA kihívás a kezdőlapon található.';
+  String get mobileViewLicenses => 'View licences';
 
   @override
-  String get mobilePreviousPage => 'Előző';
+  String get mobileWaitingForOpponentToJoin => 'Várakozás az ellenfél csatlakozására...';
 
   @override
-  String get mobileOrImportPgnFile => 'Vagy PGN fájl importálása';
+  String get mobileWatchTab => 'Néznivaló';
 
   @override
-  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
+  String get mobileWeWillEmailYouCode => 'We will email you a code to sign in with.';
 
   @override
-  String get mobilePerfShortUltraBullet => 'Ultra';
-
-  @override
-  String get mobilePerfShortBullet => 'Bullet';
-
-  @override
-  String get mobilePerfShortBlitz => 'Blitz';
-
-  @override
-  String get mobilePerfShortRapid => 'Rapid';
-
-  @override
-  String get mobilePerfShortClassical => 'Classical';
-
-  @override
-  String get mobilePerfShortCorrespondence => 'Corresp.';
-
-  @override
-  String get mobilePerfShortFromPosition => 'From Pos.';
-
-  @override
-  String get mobilePerfShortChess960 => '960';
-
-  @override
-  String get mobilePerfShortAntichess => 'Antichess';
-
-  @override
-  String get mobilePerfShortKingOfTheHill => 'KotH';
-
-  @override
-  String get mobilePerfShortThreeCheck => '3check';
-
-  @override
-  String get mobilePerfShortAtomic => 'Atomic';
-
-  @override
-  String get mobilePerfShortHorde => 'Horde';
-
-  @override
-  String get mobilePerfShortRacingKings => 'Racing';
-
-  @override
-  String get mobilePerfShortCrazyhouse => 'Crazy';
-
-  @override
-  String get mobilePerfShortPuzzle => 'Puzzle';
+  String get mobileYouCannotChallengeYourself => 'You cannot challenge yourself';
 
   @override
   String get variantStandard => 'Normál';

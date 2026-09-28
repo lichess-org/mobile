@@ -9,6 +9,9 @@ class AppLocalizationsFi extends AppLocalizations {
   AppLocalizationsFi([String locale = 'fi']) : super(locale);
 
   @override
+  String get mobileAcceptDraw => 'Accept draw?';
+
+  @override
   String get mobileAccount => 'Käyttäjätunnus';
 
   @override
@@ -18,39 +21,113 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileAccountPreferencesHelp => 'Nämä asetukset tallentuvat Lichess-tunnukseesi ja tulevat käyttöön kaikilla laitteilla.';
 
   @override
+  String get mobileAddToStudy => 'Add to study';
+
+  @override
   String get mobileAllGames => 'Kaikki pelit';
+
+  @override
+  String get mobileAllowTakebacksAndHints => 'Allow takebacks and hints';
+
+  @override
+  String get mobileAmoledBlack => 'Amoled black';
 
   @override
   String get mobileAreYouSure => 'Oletko varma?';
 
   @override
+  String mobileAreYouSureDownloadNnue(String param) {
+    return 'Are you sure you want to download the NNUE file ($param)?';
+  }
+
+  @override
+  String get mobileBoardPositionLandscape => 'Board position in landscape mode';
+
+  @override
   String get mobileBoardSettings => 'Laudan asetukset';
+
+  @override
+  String get mobileBronsteinDelay => 'Bronstein delay';
 
   @override
   String get mobileCancelTakebackOffer => 'Peruuta siirron peruutuspyyntö';
 
   @override
+  String get mobileChallengeCreated => 'Haaste esitetty. Saat ilmoituksen, kun peli alkaa.\nNäet sen etusivulla.';
+
+  @override
+  String get mobileChallengeFromPosition => 'Challenge from position';
+
+  @override
+  String get mobileChapterName => 'Chapter Name';
+
+  @override
   String get mobileChessEngine => 'Chess engine';
+
+  @override
+  String get mobileChooseCustomBackground => 'Choose a custom background';
 
   @override
   String get mobileClearButton => 'Tyhjennä';
 
   @override
+  String get mobileCodeExpiresMessage => 'The code expires after 5 minutes and can only be used once.';
+
+  @override
+  String get mobileCodeFieldLabel => 'Code';
+
+  @override
+  String mobileCodeLengthMessage(String param) {
+    return 'The code is $param characters long.';
+  }
+
+  @override
+  String get mobileCopied => 'Copied.';
+
+  @override
   String get mobileCorrespondenceClearSavedMove => 'Poista tallennettu siirto';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Liity peliin';
+  String get mobileCustomizeButton => 'Mukauta';
+
+  @override
+  String get mobileCustomizeHomeTip => 'Vinkki: Voit lisätä etusivullesi lisää pienohjelmia tai poistaa ne, joita et tarvitse!';
+
+  @override
+  String get mobileCustomizeHomeTipDismiss => 'Ohita';
+
+  @override
+  String get mobileDangerZone => 'Danger zone';
+
+  @override
+  String get mobileDeleteYourAccount => 'Delete your account';
+
+  @override
+  String get mobileDisplayModeCompact => 'Tiivis';
+
+  @override
+  String get mobileDisplayModeDetailed => 'Yksityiskohtainen';
+
+  @override
+  String get mobileDoYouAcceptChallenge => 'Do you accept the challenge?';
+
+  @override
+  String get mobileDownloadMyGames => 'Download my games';
 
   @override
   String get mobileFeedbackButton => 'Palaute';
 
   @override
-  String mobileGoodEvening(String param) {
-    return 'Iltaa, $param';
-  }
+  String get mobileFilters => 'Filters';
 
   @override
-  String get mobileGoodEveningWithoutName => 'Hyvää iltaa';
+  String get mobileFlipClock => 'Flip clock';
+
+  @override
+  String get mobileFlipPiecesAfterMove => 'Flip pieces and opponent info after move';
+
+  @override
+  String get mobileGetFeedbackOnMoves => 'Get feedback on your moves';
 
   @override
   String mobileGoodDay(String param) {
@@ -61,13 +138,41 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileGoodDayWithoutName => 'Hyvää päivää';
 
   @override
-  String get mobileHideVariation => 'Piilota muunnelma';
+  String mobileGoodEvening(String param) {
+    return 'Iltaa, $param';
+  }
+
+  @override
+  String get mobileGoodEveningWithoutName => 'Hyvää iltaa';
+
+  @override
+  String get mobileGoodMoveButThereIsBetter => 'Hyvä siirto, mutta parempikin olisi';
+
+  @override
+  String get mobileHello => 'Hello';
 
   @override
   String get mobileHomeTab => 'Etusivu';
 
   @override
+  String mobileIfAccountMatchesCodeSent(String param1, String param2) {
+    return 'If an account matches $param1, a $param2 character code was sent to it. Check your inbox and enter the code below.';
+  }
+
+  @override
+  String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
+
+  @override
   String get mobileLiveStreamers => 'Live-striimaajat';
+
+  @override
+  String get mobileLocalDatabaseSize => 'Local database size';
+
+  @override
+  String get mobileMoveOnRelease => 'Move on release';
+
+  @override
+  String get mobileMoveOnReleaseSubtitle => 'When moving a piece by tapping, the move is made when you lift your finger, letting you slide to change the destination square.';
 
   @override
   String get mobileMustBeLoggedIn => 'Sinun täytyy olla kirjautuneena nähdäksesi tämän sivun.';
@@ -79,10 +184,10 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileNewGame => 'Uusi peli';
 
   @override
-  String get mobileNoSearchResults => 'Ei hakutuloksia';
+  String get mobileNextMistake => 'Next mistake';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'Ota huomioon, että kaikkia vanhan sovelluksemme tai nettisivumme toimintoja ei tällä hetkellä ole vielä käytettävissä, mutta lisäämme toimintoja koko ajan.';
+  String get mobileNoSearchResults => 'Ei hakutuloksia';
 
   @override
   String get mobileNotFollowingAnyUser => 'Et seuraa yhtäkään käyttäjää.';
@@ -91,7 +196,67 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileOkButton => 'OK';
 
   @override
+  String get mobileOpeningExplorerNotAvailableOffline => 'Avausselain ei ole käytettävissä offline-tilassa.';
+
+  @override
+  String get mobileOrImportPgnFile => 'Tai tuo PGN-tiedosto';
+
+  @override
   String get mobileOverTheBoard => 'Kaveria vastaan offline-tilassa';
+
+  @override
+  String get mobilePasteFromClipboard => 'Paste from clipboard';
+
+  @override
+  String get mobilePerfShortAntichess => 'Antishakki';
+
+  @override
+  String get mobilePerfShortAtomic => 'Atomi';
+
+  @override
+  String get mobilePerfShortBlitz => 'Pikapeli';
+
+  @override
+  String get mobilePerfShortBullet => 'Bullet';
+
+  @override
+  String get mobilePerfShortChess960 => '960';
+
+  @override
+  String get mobilePerfShortClassical => 'Klassinen';
+
+  @override
+  String get mobilePerfShortCorrespondence => 'Kirje';
+
+  @override
+  String get mobilePerfShortCrazyhouse => 'Crazy';
+
+  @override
+  String get mobilePerfShortFromPosition => 'Asemasta';
+
+  @override
+  String get mobilePerfShortHorde => 'Lauma';
+
+  @override
+  String get mobilePerfShortKingOfTheHill => 'Kukkulan';
+
+  @override
+  String get mobilePerfShortPuzzle => 'Tehtävä';
+
+  @override
+  String get mobilePerfShortRacingKings => 'KunKilpa';
+
+  @override
+  String get mobilePerfShortRapid => 'Nopea';
+
+  @override
+  String get mobilePerfShortThreeCheck => '3shakk.';
+
+  @override
+  String get mobilePerfShortUltraBullet => 'Ultra';
+
+  @override
+  String get mobilePgnCopied => 'PGN copied.';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -105,7 +270,13 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobilePositionRight => 'Oikealla';
 
   @override
+  String get mobilePracticeMode => 'Practice mode';
+
+  @override
   String get mobilePrefMagnifyDraggedPiece => 'Suurenna vedettävä nappula';
+
+  @override
+  String get mobilePreviousPage => 'Edellinen';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Haluatko lopettaa tämän sarjan?';
@@ -120,19 +291,25 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobilePuzzleStormSubtitle => 'Ratkaise mahdollisimman monta tehtävää 3 minuutissa.';
 
   @override
-  String get mobilePuzzleStreakAbortWarning => 'Parhaillaan menossa oleva putkesi päättyy, ja pistemääräsi tallennetaan.';
-
-  @override
   String get mobilePuzzleThemesSubtitle => 'Tee tehtäviä suosikkiavauksistasi tai valitse tehtäväteema.';
 
   @override
   String get mobilePuzzlesTab => 'Tehtävät';
 
   @override
+  String get mobileRateThisApp => 'Rate this app';
+
+  @override
   String get mobileRecentSearches => 'Viimeisimmät haut';
 
   @override
   String get mobileRemoveBookmark => 'Poista kirjanmerkki';
+
+  @override
+  String get mobileSelectAStudy => 'Select a study';
+
+  @override
+  String get mobileSendMeACode => 'Send me a code';
 
   @override
   String get mobileServerAnalysis => 'Palvelinanalyysi';
@@ -174,10 +351,10 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileSettingsPickAnImage => 'Valitse kuva';
 
   @override
-  String get mobileSettingsPickAnImageHelp => 'Mukautettu taustakuva toimii vain tummassa tilassa. Tumma kuva on suositeltava.';
+  String get mobileSettingsPickAnImageBlur => 'Sumenna kuvaa';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'Sumenna kuvaa';
+  String get mobileSettingsPickAnImageHelp => 'Mukautettu taustakuva toimii vain tummassa tilassa. Tumma kuva on suositeltava.';
 
   @override
   String get mobileSettingsPickAnImageHideBoard => 'Piilota lauta';
@@ -195,6 +372,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Napauta kahta ruutua';
 
   @override
+  String get mobileSettingsPreferencesSaved => 'Your preferences have been saved in your Lichess account. They will be synchronized across all your devices.';
+
+  @override
   String get mobileSettingsShapeDrawing => 'Muotojen piirtely';
 
   @override
@@ -210,13 +390,16 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileSettingsTouchFeedbackSubtitle => 'Kun käytössä, laite värähtelee hieman kun siirrät tai lyöt nappulan.';
 
   @override
-  String get mobileSettingsTab => 'Asetukset';
+  String get mobileShareChallengeUrl => 'Share challenge URL';
 
   @override
   String get mobileShareGamePGN => 'Jaa PGN';
 
   @override
   String get mobileShareGameURL => 'Jaa pelin URL';
+
+  @override
+  String get mobileShareLocalAnalysisPgn => 'Share local analysis PGN';
 
   @override
   String get mobileSharePositionAsFEN => 'Jaa asema FEN:nä';
@@ -228,51 +411,46 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileShowComments => 'Näytä kommentit';
 
   @override
+  String get mobileShowEngineLines => 'Show engine lines';
+
+  @override
+  String get mobileShowEvaluationGauge => 'Show evaluation gauge';
+
+  @override
   String get mobileShowResult => 'Näytä lopputulos';
 
   @override
-  String get mobileShowVariations => 'Näytä muunnelmat';
+  String get mobileSignInWithBrowser => 'Sign in with the browser';
+
+  @override
+  String get mobileSignInWithEmail => 'Sign in with an email';
+
+  @override
+  String get mobileSimpleDelay => 'Simple delay';
+
+  @override
+  String get mobileSmallBoard => 'Small board';
 
   @override
   String get mobileSomethingWentWrong => 'Jokin meni vikaan.';
 
   @override
+  String get mobileSortFriends => 'Sort friends';
+
+  @override
+  String get mobileStopShowingThreat => 'Älä näytä uhkaa';
+
+  @override
   String get mobileSystemColors => 'Järjestelmän värit';
+
+  @override
+  String get mobileTablebaseOffline => 'Tablebase is not available offline.';
 
   @override
   String get mobileTheme => 'Teema';
 
   @override
-  String get mobileToolsTab => 'Työkalut';
-
-  @override
-  String mobileUnsupportedVariant(String param) {
-    return 'Variantti $param ei ole tuettu tässä versiossa.';
-  }
-
-  @override
-  String get mobileWaitingForOpponentToJoin => 'Odotetaan vastustajan löytymistä...';
-
-  @override
-  String get mobileWatchTab => 'Seuraa';
-
-  @override
-  String get mobileWelcomeToLichessApp => 'Tervetuloa Lichess-sovellukseen!';
-
-  @override
-  String get mobileViewGame => 'Näytä peli';
-
-  @override
-  String get mobileCustomizeHomeTip => 'Vinkki: Voit lisätä etusivullesi lisää pienohjelmia tai poistaa ne, joita et tarvitse!';
-
-  @override
-  String get mobileCustomizeHomeTipDismiss => 'Ohita';
-
-  @override
-  String get mobileCustomizeButton => 'Mukauta';
-
-  @override
-  String get mobileStopShowingThreat => 'Älä näytä uhkaa';
+  String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
 
   @override
   String get mobileTournamentCompleted => 'Päättyneet';
@@ -281,73 +459,30 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileTournamentJumpToMyPage => 'Siirry omaan sijoitukseeni';
 
   @override
-  String get mobileDisplayModeCompact => 'Tiivis';
+  String mobileUnsupportedVariant(String param) {
+    return 'Variantti $param ei ole tuettu tässä versiossa.';
+  }
 
   @override
-  String get mobileDisplayModeDetailed => 'Yksityiskohtainen';
+  String get mobileUseSymmetricPieces => 'Use symmetric pieces';
 
   @override
-  String get mobileOpeningExplorerNotAvailableOffline => 'Avausselain ei ole käytettävissä offline-tilassa.';
+  String get mobileViewGame => 'Näytä peli';
 
   @override
-  String get mobileChallengeCreated => 'Haaste esitetty. Saat ilmoituksen, kun peli alkaa.\nNäet sen etusivulla.';
+  String get mobileViewLicenses => 'View licences';
 
   @override
-  String get mobilePreviousPage => 'Edellinen';
+  String get mobileWaitingForOpponentToJoin => 'Odotetaan vastustajan löytymistä...';
 
   @override
-  String get mobileOrImportPgnFile => 'Tai tuo PGN-tiedosto';
+  String get mobileWatchTab => 'Seuraa';
 
   @override
-  String get mobileGoodMoveButThereIsBetter => 'Hyvä siirto, mutta parempikin olisi';
+  String get mobileWeWillEmailYouCode => 'We will email you a code to sign in with.';
 
   @override
-  String get mobilePerfShortUltraBullet => 'Ultra';
-
-  @override
-  String get mobilePerfShortBullet => 'Bullet';
-
-  @override
-  String get mobilePerfShortBlitz => 'Pikapeli';
-
-  @override
-  String get mobilePerfShortRapid => 'Nopea';
-
-  @override
-  String get mobilePerfShortClassical => 'Klassinen';
-
-  @override
-  String get mobilePerfShortCorrespondence => 'Kirje';
-
-  @override
-  String get mobilePerfShortFromPosition => 'Asemasta';
-
-  @override
-  String get mobilePerfShortChess960 => '960';
-
-  @override
-  String get mobilePerfShortAntichess => 'Antishakki';
-
-  @override
-  String get mobilePerfShortKingOfTheHill => 'Kukkulan';
-
-  @override
-  String get mobilePerfShortThreeCheck => '3shakk.';
-
-  @override
-  String get mobilePerfShortAtomic => 'Atomi';
-
-  @override
-  String get mobilePerfShortHorde => 'Lauma';
-
-  @override
-  String get mobilePerfShortRacingKings => 'KunKilpa';
-
-  @override
-  String get mobilePerfShortCrazyhouse => 'Crazy';
-
-  @override
-  String get mobilePerfShortPuzzle => 'Tehtävä';
+  String get mobileYouCannotChallengeYourself => 'You cannot challenge yourself';
 
   @override
   String get variantStandard => 'Normaali';

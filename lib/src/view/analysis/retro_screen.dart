@@ -268,8 +268,7 @@ class const _BottomBar(final RetroOptions options) extends ConsumerWidget {
           if (state.feedback != RetroFeedback.done)
             BottomBarButton(
               icon: Icons.play_arrow,
-              // TODO: translate
-              label: 'Next mistake',
+              label: context.l10n.mobileNextMistake,
               showLabel: true,
               onTap: ref.read(retroControllerProvider(options).notifier).nextMistake,
             ),

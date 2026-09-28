@@ -9,6 +9,9 @@ class AppLocalizationsPt extends AppLocalizations {
   AppLocalizationsPt([String locale = 'pt']) : super(locale);
 
   @override
+  String get mobileAcceptDraw => 'Accept draw?';
+
+  @override
   String get mobileAccount => 'Conta';
 
   @override
@@ -18,39 +21,113 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileAccountPreferencesHelp => 'Estas preferências são aplicadas à tua conta Lichess e serão usadas em todos os dispositivos.';
 
   @override
+  String get mobileAddToStudy => 'Add to study';
+
+  @override
   String get mobileAllGames => 'Todos os jogos';
+
+  @override
+  String get mobileAllowTakebacksAndHints => 'Allow takebacks and hints';
+
+  @override
+  String get mobileAmoledBlack => 'Amoled black';
 
   @override
   String get mobileAreYouSure => 'Tens a certeza?';
 
   @override
+  String mobileAreYouSureDownloadNnue(String param) {
+    return 'Are you sure you want to download the NNUE file ($param)?';
+  }
+
+  @override
+  String get mobileBoardPositionLandscape => 'Board position in landscape mode';
+
+  @override
   String get mobileBoardSettings => 'Configurações do tabuleiro';
+
+  @override
+  String get mobileBronsteinDelay => 'Bronstein delay';
 
   @override
   String get mobileCancelTakebackOffer => 'Cancelar pedido de voltar';
 
   @override
+  String get mobileChallengeCreated => 'Desafio criado: Irás ser notificado quando o jogo começar. \nPodes acede-lo a partir do ecrã inicial.';
+
+  @override
+  String get mobileChallengeFromPosition => 'Challenge from position';
+
+  @override
+  String get mobileChapterName => 'Chapter Name';
+
+  @override
   String get mobileChessEngine => 'Chess engine';
+
+  @override
+  String get mobileChooseCustomBackground => 'Choose a custom background';
 
   @override
   String get mobileClearButton => 'Limpar';
 
   @override
+  String get mobileCodeExpiresMessage => 'The code expires after 5 minutes and can only be used once.';
+
+  @override
+  String get mobileCodeFieldLabel => 'Code';
+
+  @override
+  String mobileCodeLengthMessage(String param) {
+    return 'The code is $param characters long.';
+  }
+
+  @override
+  String get mobileCopied => 'Copied.';
+
+  @override
   String get mobileCorrespondenceClearSavedMove => 'Limpar movimento salvo';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Entrar num jogo';
+  String get mobileCustomizeButton => 'Personalizar';
+
+  @override
+  String get mobileCustomizeHomeTip => 'Dica: Podes adicionar mais widgets no ecrã inicial ou remover aqueles que não precisa!';
+
+  @override
+  String get mobileCustomizeHomeTipDismiss => 'Ignorar';
+
+  @override
+  String get mobileDangerZone => 'Danger zone';
+
+  @override
+  String get mobileDeleteYourAccount => 'Delete your account';
+
+  @override
+  String get mobileDisplayModeCompact => 'Compacto';
+
+  @override
+  String get mobileDisplayModeDetailed => 'Detalhado';
+
+  @override
+  String get mobileDoYouAcceptChallenge => 'Do you accept the challenge?';
+
+  @override
+  String get mobileDownloadMyGames => 'Download my games';
 
   @override
   String get mobileFeedbackButton => 'Feedback';
 
   @override
-  String mobileGoodEvening(String param) {
-    return 'Boa noite, $param';
-  }
+  String get mobileFilters => 'Filters';
 
   @override
-  String get mobileGoodEveningWithoutName => 'Boa noite';
+  String get mobileFlipClock => 'Flip clock';
+
+  @override
+  String get mobileFlipPiecesAfterMove => 'Flip pieces and opponent info after move';
+
+  @override
+  String get mobileGetFeedbackOnMoves => 'Get feedback on your moves';
 
   @override
   String mobileGoodDay(String param) {
@@ -61,13 +138,41 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileGoodDayWithoutName => 'Bom dia';
 
   @override
-  String get mobileHideVariation => 'Ocultar variação';
+  String mobileGoodEvening(String param) {
+    return 'Boa noite, $param';
+  }
+
+  @override
+  String get mobileGoodEveningWithoutName => 'Boa noite';
+
+  @override
+  String get mobileGoodMoveButThereIsBetter => 'Boa jogada, mas há melhor';
+
+  @override
+  String get mobileHello => 'Hello';
 
   @override
   String get mobileHomeTab => 'Início';
 
   @override
+  String mobileIfAccountMatchesCodeSent(String param1, String param2) {
+    return 'If an account matches $param1, a $param2 character code was sent to it. Check your inbox and enter the code below.';
+  }
+
+  @override
+  String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
+
+  @override
   String get mobileLiveStreamers => 'Streamers em direto';
+
+  @override
+  String get mobileLocalDatabaseSize => 'Local database size';
+
+  @override
+  String get mobileMoveOnRelease => 'Move on release';
+
+  @override
+  String get mobileMoveOnReleaseSubtitle => 'When moving a piece by tapping, the move is made when you lift your finger, letting you slide to change the destination square.';
 
   @override
   String get mobileMustBeLoggedIn => 'Tens de iniciar sessão para visualizar esta página.';
@@ -79,10 +184,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileNewGame => 'Novo jogo';
 
   @override
-  String get mobileNoSearchResults => 'Sem resultados';
+  String get mobileNextMistake => 'Next mistake';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'Por favor, repara que nem todas as funcionalidades da aplicação antiga ou do website estão atualmente disponíveis, mas estamos a adicionar novas funcionalidades a todo o momento.';
+  String get mobileNoSearchResults => 'Sem resultados';
 
   @override
   String get mobileNotFollowingAnyUser => 'Não estás a seguir nenhum utilizador.';
@@ -91,7 +196,67 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileOkButton => 'OK';
 
   @override
+  String get mobileOpeningExplorerNotAvailableOffline => 'O Explorador de Abertura não está disponível offline.';
+
+  @override
+  String get mobileOrImportPgnFile => 'Ou importar um ficheiro PGN';
+
+  @override
   String get mobileOverTheBoard => 'Jogar offline contra um amigo';
+
+  @override
+  String get mobilePasteFromClipboard => 'Paste from clipboard';
+
+  @override
+  String get mobilePerfShortAntichess => 'Antixadrez';
+
+  @override
+  String get mobilePerfShortAtomic => 'Atómico';
+
+  @override
+  String get mobilePerfShortBlitz => 'Rápidas';
+
+  @override
+  String get mobilePerfShortBullet => 'Bullet';
+
+  @override
+  String get mobilePerfShortChess960 => '960';
+
+  @override
+  String get mobilePerfShortClassical => 'Lentas';
+
+  @override
+  String get mobilePerfShortCorrespondence => 'Corresp.';
+
+  @override
+  String get mobilePerfShortCrazyhouse => 'Troca-Peça';
+
+  @override
+  String get mobilePerfShortFromPosition => 'Da Pos.';
+
+  @override
+  String get mobilePerfShortHorde => 'Horda';
+
+  @override
+  String get mobilePerfShortKingOfTheHill => 'KotH';
+
+  @override
+  String get mobilePerfShortPuzzle => 'Problema';
+
+  @override
+  String get mobilePerfShortRacingKings => 'Corrida';
+
+  @override
+  String get mobilePerfShortRapid => 'Semi-rápid';
+
+  @override
+  String get mobilePerfShortThreeCheck => '3 Xeques';
+
+  @override
+  String get mobilePerfShortUltraBullet => 'Ultra';
+
+  @override
+  String get mobilePgnCopied => 'PGN copied.';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -105,7 +270,13 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobilePositionRight => 'Direita';
 
   @override
+  String get mobilePracticeMode => 'Practice mode';
+
+  @override
   String get mobilePrefMagnifyDraggedPiece => 'Ampliar peça arrastada';
+
+  @override
+  String get mobilePreviousPage => 'Anterior';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Queres terminar esta sequência?';
@@ -120,19 +291,25 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobilePuzzleStormSubtitle => 'Resolve quantos problemas for possível em 3 minutos.';
 
   @override
-  String get mobilePuzzleStreakAbortWarning => 'Perderás a tua sequência atual e a tua pontuação será salva.';
-
-  @override
   String get mobilePuzzleThemesSubtitle => 'Joga problemas das tuas aberturas favoritas, ou escolhe um tema.';
 
   @override
   String get mobilePuzzlesTab => 'Problemas';
 
   @override
+  String get mobileRateThisApp => 'Rate this app';
+
+  @override
   String get mobileRecentSearches => 'Pesquisas recentes';
 
   @override
   String get mobileRemoveBookmark => 'Remover dos favoritos';
+
+  @override
+  String get mobileSelectAStudy => 'Select a study';
+
+  @override
+  String get mobileSendMeACode => 'Send me a code';
 
   @override
   String get mobileServerAnalysis => 'Análise do servidor';
@@ -174,10 +351,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileSettingsPickAnImage => 'Escolher uma imagem';
 
   @override
-  String get mobileSettingsPickAnImageHelp => 'O fundo personalizado funciona apenas no modo escuro. É recomendado uma imagem escura.';
+  String get mobileSettingsPickAnImageBlur => 'Desfocar a imagem';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'Desfocar a imagem';
+  String get mobileSettingsPickAnImageHelp => 'O fundo personalizado funciona apenas no modo escuro. É recomendado uma imagem escura.';
 
   @override
   String get mobileSettingsPickAnImageHideBoard => 'Ocultar tabuleiro';
@@ -195,6 +372,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Clica em dois quadrados';
 
   @override
+  String get mobileSettingsPreferencesSaved => 'Your preferences have been saved in your Lichess account. They will be synchronized across all your devices.';
+
+  @override
   String get mobileSettingsShapeDrawing => 'Desenho das figuras';
 
   @override
@@ -210,13 +390,16 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileSettingsTouchFeedbackSubtitle => 'Quando ativado, o dispositivo irá vibrar brevemente quando moves ou capturas uma peça.';
 
   @override
-  String get mobileSettingsTab => 'Definições';
+  String get mobileShareChallengeUrl => 'Share challenge URL';
 
   @override
   String get mobileShareGamePGN => 'Partilhar PGN';
 
   @override
   String get mobileShareGameURL => 'Partilhar o URL do jogo';
+
+  @override
+  String get mobileShareLocalAnalysisPgn => 'Share local analysis PGN';
 
   @override
   String get mobileSharePositionAsFEN => 'Partilhar posição como FEN';
@@ -228,51 +411,46 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileShowComments => 'Mostrar comentários';
 
   @override
+  String get mobileShowEngineLines => 'Show engine lines';
+
+  @override
+  String get mobileShowEvaluationGauge => 'Show evaluation gauge';
+
+  @override
   String get mobileShowResult => 'Mostrar resultado';
 
   @override
-  String get mobileShowVariations => 'Mostrar variantes';
+  String get mobileSignInWithBrowser => 'Sign in with the browser';
+
+  @override
+  String get mobileSignInWithEmail => 'Sign in with an email';
+
+  @override
+  String get mobileSimpleDelay => 'Simple delay';
+
+  @override
+  String get mobileSmallBoard => 'Small board';
 
   @override
   String get mobileSomethingWentWrong => 'Algo deu errado.';
 
   @override
+  String get mobileSortFriends => 'Sort friends';
+
+  @override
+  String get mobileStopShowingThreat => 'Parar de mostrar a ameaça';
+
+  @override
   String get mobileSystemColors => 'Cores do sistema';
+
+  @override
+  String get mobileTablebaseOffline => 'Tablebase is not available offline.';
 
   @override
   String get mobileTheme => 'Tema';
 
   @override
-  String get mobileToolsTab => 'Tools';
-
-  @override
-  String mobileUnsupportedVariant(String param) {
-    return 'A variante $param não é suportada nesta versão.';
-  }
-
-  @override
-  String get mobileWaitingForOpponentToJoin => 'À espera do adversário entrar...';
-
-  @override
-  String get mobileWatchTab => 'Assistir';
-
-  @override
-  String get mobileWelcomeToLichessApp => 'Bem-vindo à aplicação do Lichess!';
-
-  @override
-  String get mobileViewGame => 'Ver Jogo';
-
-  @override
-  String get mobileCustomizeHomeTip => 'Dica: Podes adicionar mais widgets no ecrã inicial ou remover aqueles que não precisa!';
-
-  @override
-  String get mobileCustomizeHomeTipDismiss => 'Ignorar';
-
-  @override
-  String get mobileCustomizeButton => 'Personalizar';
-
-  @override
-  String get mobileStopShowingThreat => 'Parar de mostrar a ameaça';
+  String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
 
   @override
   String get mobileTournamentCompleted => 'Concluído';
@@ -281,73 +459,30 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileTournamentJumpToMyPage => 'Ir para a minha página';
 
   @override
-  String get mobileDisplayModeCompact => 'Compacto';
+  String mobileUnsupportedVariant(String param) {
+    return 'A variante $param não é suportada nesta versão.';
+  }
 
   @override
-  String get mobileDisplayModeDetailed => 'Detalhado';
+  String get mobileUseSymmetricPieces => 'Use symmetric pieces';
 
   @override
-  String get mobileOpeningExplorerNotAvailableOffline => 'O Explorador de Abertura não está disponível offline.';
+  String get mobileViewGame => 'Ver Jogo';
 
   @override
-  String get mobileChallengeCreated => 'Desafio criado: Irás ser notificado quando o jogo começar. \nPodes acede-lo a partir do ecrã inicial.';
+  String get mobileViewLicenses => 'View licences';
 
   @override
-  String get mobilePreviousPage => 'Anterior';
+  String get mobileWaitingForOpponentToJoin => 'À espera do adversário entrar...';
 
   @override
-  String get mobileOrImportPgnFile => 'Ou importar um ficheiro PGN';
+  String get mobileWatchTab => 'Assistir';
 
   @override
-  String get mobileGoodMoveButThereIsBetter => 'Boa jogada, mas há melhor';
+  String get mobileWeWillEmailYouCode => 'We will email you a code to sign in with.';
 
   @override
-  String get mobilePerfShortUltraBullet => 'Ultra';
-
-  @override
-  String get mobilePerfShortBullet => 'Bullet';
-
-  @override
-  String get mobilePerfShortBlitz => 'Rápidas';
-
-  @override
-  String get mobilePerfShortRapid => 'Semi-rápid';
-
-  @override
-  String get mobilePerfShortClassical => 'Lentas';
-
-  @override
-  String get mobilePerfShortCorrespondence => 'Corresp.';
-
-  @override
-  String get mobilePerfShortFromPosition => 'Da Pos.';
-
-  @override
-  String get mobilePerfShortChess960 => '960';
-
-  @override
-  String get mobilePerfShortAntichess => 'Antixadrez';
-
-  @override
-  String get mobilePerfShortKingOfTheHill => 'KotH';
-
-  @override
-  String get mobilePerfShortThreeCheck => '3 Xeques';
-
-  @override
-  String get mobilePerfShortAtomic => 'Atómico';
-
-  @override
-  String get mobilePerfShortHorde => 'Horda';
-
-  @override
-  String get mobilePerfShortRacingKings => 'Corrida';
-
-  @override
-  String get mobilePerfShortCrazyhouse => 'Troca-Peça';
-
-  @override
-  String get mobilePerfShortPuzzle => 'Problema';
+  String get mobileYouCannotChallengeYourself => 'You cannot challenge yourself';
 
   @override
   String get variantStandard => 'Padrão';
@@ -7464,6 +7599,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get mobileCancelTakebackOffer => 'Cancelar oferta de revanche';
 
   @override
+  String get mobileChallengeCreated => 'Desafio criado: Você será notificado quando a partida começar.\nVocê pode acessá-lo pela aba de início.';
+
+  @override
   String get mobileChessEngine => 'Motor de xadrez';
 
   @override
@@ -7473,18 +7611,22 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get mobileCorrespondenceClearSavedMove => 'Limpar movimento salvos';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Entrar em um jogo';
+  String get mobileCustomizeButton => 'Personalizar';
+
+  @override
+  String get mobileCustomizeHomeTip => 'Dica: Você pode adicionar mais widgets para a Tela Inicial ou remover aqueles que você não precisa!';
+
+  @override
+  String get mobileCustomizeHomeTipDismiss => 'Dispensar';
+
+  @override
+  String get mobileDisplayModeCompact => 'Compacto';
+
+  @override
+  String get mobileDisplayModeDetailed => 'Detalhado';
 
   @override
   String get mobileFeedbackButton => 'Comentários';
-
-  @override
-  String mobileGoodEvening(String param) {
-    return 'Boa noite, $param';
-  }
-
-  @override
-  String get mobileGoodEveningWithoutName => 'Boa noite';
 
   @override
   String mobileGoodDay(String param) {
@@ -7495,7 +7637,15 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get mobileGoodDayWithoutName => 'Bom dia';
 
   @override
-  String get mobileHideVariation => 'Ocultar variante forçada';
+  String mobileGoodEvening(String param) {
+    return 'Boa noite, $param';
+  }
+
+  @override
+  String get mobileGoodEveningWithoutName => 'Boa noite';
+
+  @override
+  String get mobileGoodMoveButThereIsBetter => 'Bom lance, mas existe um melhor';
 
   @override
   String get mobileHomeTab => 'Início';
@@ -7516,16 +7666,67 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get mobileNoSearchResults => 'Sem Resultados';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'Nem todos os recursos do aplicativo antigo ou do site estão disponíveis no momento, mas estamos sempre adicionando recursos.';
-
-  @override
   String get mobileNotFollowingAnyUser => 'Você não está seguindo nenhum usuário.';
 
   @override
   String get mobileOkButton => 'Ok';
 
   @override
+  String get mobileOpeningExplorerNotAvailableOffline => 'O explorador de aberturas não está disponível offline.';
+
+  @override
+  String get mobileOrImportPgnFile => 'Ou importe um arquivo PGN';
+
+  @override
   String get mobileOverTheBoard => 'Xadrez OTB';
+
+  @override
+  String get mobilePerfShortAntichess => 'Antichess';
+
+  @override
+  String get mobilePerfShortAtomic => 'Atômico';
+
+  @override
+  String get mobilePerfShortBlitz => 'Blitz';
+
+  @override
+  String get mobilePerfShortBullet => 'Bullet';
+
+  @override
+  String get mobilePerfShortChess960 => '960';
+
+  @override
+  String get mobilePerfShortClassical => 'Clássico';
+
+  @override
+  String get mobilePerfShortCorrespondence => 'Corresp.';
+
+  @override
+  String get mobilePerfShortCrazyhouse => 'Crazy';
+
+  @override
+  String get mobilePerfShortFromPosition => 'Da Pos.';
+
+  @override
+  String get mobilePerfShortHorde => 'Horda';
+
+  @override
+  String get mobilePerfShortKingOfTheHill => 'KotH';
+
+  @override
+  String get mobilePerfShortPuzzle => 'Problemas';
+
+  @override
+  String get mobilePerfShortRacingKings => 'Corrida';
+
+  @override
+  String get mobilePerfShortRapid => 'Rápida';
+
+  @override
+  String get mobilePerfShortThreeCheck => '3 xeques';
+
+  @override
+  String get mobilePerfShortUltraBullet => 'Ultra';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -7542,6 +7743,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get mobilePrefMagnifyDraggedPiece => 'Ampliar peça segurada';
 
   @override
+  String get mobilePreviousPage => 'Anterior';
+
+  @override
   String get mobilePuzzleStormConfirmEndRun => 'Você quer terminar essa tentativa?';
 
   @override
@@ -7552,9 +7756,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get mobilePuzzleStormSubtitle => 'Resolva quantos problemas for possível em 3 minutos.';
-
-  @override
-  String get mobilePuzzleStreakAbortWarning => 'Você perderá a sua sequência atual e sua pontuação será salva.';
 
   @override
   String get mobilePuzzleThemesSubtitle => 'Jogue problemas de suas aberturas favoritas, ou escolha um tema.';
@@ -7605,10 +7806,10 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get mobileSettingsPickAnImage => 'Escolha uma imagem';
 
   @override
-  String get mobileSettingsPickAnImageHelp => 'Fundo personalizado só funciona no modo escuro. Recomenda-se uma imagem escura.';
+  String get mobileSettingsPickAnImageBlur => 'Desfocar a imagem';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'Desfocar a imagem';
+  String get mobileSettingsPickAnImageHelp => 'Fundo personalizado só funciona no modo escuro. Recomenda-se uma imagem escura.';
 
   @override
   String get mobileSettingsPickAnImageHideBoard => 'Ocultar tabuleiro';
@@ -7641,9 +7842,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get mobileSettingsTouchFeedbackSubtitle => 'Quando habilitado, o dispositivo fará uma leve vibração quando você mover ou capturar uma peça.';
 
   @override
-  String get mobileSettingsTab => 'Ajustes';
-
-  @override
   String get mobileShareGamePGN => 'Compartilhar PGN';
 
   @override
@@ -7662,10 +7860,10 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get mobileShowResult => 'Mostrar resultado';
 
   @override
-  String get mobileShowVariations => 'Mostrar setas de variantes';
+  String get mobileSomethingWentWrong => 'Houve algum problema.';
 
   @override
-  String get mobileSomethingWentWrong => 'Houve algum problema.';
+  String get mobileStopShowingThreat => 'Parar de mostrar ameaça';
 
   @override
   String get mobileSystemColors => 'Cores do sistema';
@@ -7674,7 +7872,10 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get mobileTheme => 'Tema';
 
   @override
-  String get mobileToolsTab => 'Ferramentas';
+  String get mobileTournamentCompleted => 'Concluído';
+
+  @override
+  String get mobileTournamentJumpToMyPage => 'Ir para a minha página';
 
   @override
   String mobileUnsupportedVariant(String param) {
@@ -7682,103 +7883,13 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   }
 
   @override
+  String get mobileViewGame => 'Ver partida';
+
+  @override
   String get mobileWaitingForOpponentToJoin => 'Esperando por um oponente...';
 
   @override
   String get mobileWatchTab => 'Assistir';
-
-  @override
-  String get mobileWelcomeToLichessApp => 'Bem-vindo ao aplicativo Lichess!';
-
-  @override
-  String get mobileViewGame => 'Ver partida';
-
-  @override
-  String get mobileCustomizeHomeTip => 'Dica: Você pode adicionar mais widgets para a Tela Inicial ou remover aqueles que você não precisa!';
-
-  @override
-  String get mobileCustomizeHomeTipDismiss => 'Dispensar';
-
-  @override
-  String get mobileCustomizeButton => 'Personalizar';
-
-  @override
-  String get mobileStopShowingThreat => 'Parar de mostrar ameaça';
-
-  @override
-  String get mobileTournamentCompleted => 'Concluído';
-
-  @override
-  String get mobileTournamentJumpToMyPage => 'Ir para a minha página';
-
-  @override
-  String get mobileDisplayModeCompact => 'Compacto';
-
-  @override
-  String get mobileDisplayModeDetailed => 'Detalhado';
-
-  @override
-  String get mobileOpeningExplorerNotAvailableOffline => 'O explorador de aberturas não está disponível offline.';
-
-  @override
-  String get mobileChallengeCreated => 'Desafio criado: Você será notificado quando a partida começar.\nVocê pode acessá-lo pela aba de início.';
-
-  @override
-  String get mobilePreviousPage => 'Anterior';
-
-  @override
-  String get mobileOrImportPgnFile => 'Ou importe um arquivo PGN';
-
-  @override
-  String get mobileGoodMoveButThereIsBetter => 'Bom lance, mas existe um melhor';
-
-  @override
-  String get mobilePerfShortUltraBullet => 'Ultra';
-
-  @override
-  String get mobilePerfShortBullet => 'Bullet';
-
-  @override
-  String get mobilePerfShortBlitz => 'Blitz';
-
-  @override
-  String get mobilePerfShortRapid => 'Rápida';
-
-  @override
-  String get mobilePerfShortClassical => 'Clássico';
-
-  @override
-  String get mobilePerfShortCorrespondence => 'Corresp.';
-
-  @override
-  String get mobilePerfShortFromPosition => 'Da Pos.';
-
-  @override
-  String get mobilePerfShortChess960 => '960';
-
-  @override
-  String get mobilePerfShortAntichess => 'Antichess';
-
-  @override
-  String get mobilePerfShortKingOfTheHill => 'KotH';
-
-  @override
-  String get mobilePerfShortThreeCheck => '3 xeques';
-
-  @override
-  String get mobilePerfShortAtomic => 'Atômico';
-
-  @override
-  String get mobilePerfShortHorde => 'Horda';
-
-  @override
-  String get mobilePerfShortRacingKings => 'Corrida';
-
-  @override
-  String get mobilePerfShortCrazyhouse => 'Crazy';
-
-  @override
-  String get mobilePerfShortPuzzle => 'Problemas';
 
   @override
   String get variantStandard => 'Clássico';

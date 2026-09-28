@@ -79,8 +79,7 @@ class _FriendScreenState() extends ConsumerState<FriendScreen> with TickerProvid
 
     final sortButton = SemanticIconButton(
       icon: const Icon(Icons.sort),
-      // TODO: translate
-      semanticsLabel: 'Sort friends',
+      semanticsLabel: context.l10n.mobileSortFriends,
       onPressed: () => showModalBottomSheet<void>(
         context: context,
         isScrollControlled: true,

@@ -9,6 +9,9 @@ class AppLocalizationsCs extends AppLocalizations {
   AppLocalizationsCs([String locale = 'cs']) : super(locale);
 
   @override
+  String get mobileAcceptDraw => 'Accept draw?';
+
+  @override
   String get mobileAccount => 'Účet';
 
   @override
@@ -18,39 +21,113 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileAccountPreferencesHelp => 'Tyto předvolby jsou aplikovány na váš Lichess účet a budou použity napříč všemi zařízeními.';
 
   @override
+  String get mobileAddToStudy => 'Add to study';
+
+  @override
   String get mobileAllGames => 'Všechny hry';
+
+  @override
+  String get mobileAllowTakebacksAndHints => 'Allow takebacks and hints';
+
+  @override
+  String get mobileAmoledBlack => 'Amoled black';
 
   @override
   String get mobileAreYouSure => 'Jste si jistí?';
 
   @override
+  String mobileAreYouSureDownloadNnue(String param) {
+    return 'Are you sure you want to download the NNUE file ($param)?';
+  }
+
+  @override
+  String get mobileBoardPositionLandscape => 'Board position in landscape mode';
+
+  @override
   String get mobileBoardSettings => 'Nastavení šachovnice';
+
+  @override
+  String get mobileBronsteinDelay => 'Bronstein delay';
 
   @override
   String get mobileCancelTakebackOffer => 'Zrušit nabídku vrácení tahu';
 
   @override
+  String get mobileChallengeCreated => 'Byla vytvořena výzva: Budete upozorněni, až hra začne.\nMůžete se k ní dostat z domovské obrazovky.';
+
+  @override
+  String get mobileChallengeFromPosition => 'Challenge from position';
+
+  @override
+  String get mobileChapterName => 'Chapter Name';
+
+  @override
   String get mobileChessEngine => 'Chess engine';
+
+  @override
+  String get mobileChooseCustomBackground => 'Choose a custom background';
 
   @override
   String get mobileClearButton => 'Vymazat';
 
   @override
+  String get mobileCodeExpiresMessage => 'The code expires after 5 minutes and can only be used once.';
+
+  @override
+  String get mobileCodeFieldLabel => 'Code';
+
+  @override
+  String mobileCodeLengthMessage(String param) {
+    return 'The code is $param characters long.';
+  }
+
+  @override
+  String get mobileCopied => 'Copied.';
+
+  @override
   String get mobileCorrespondenceClearSavedMove => 'Vymazat uložené tahy';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Připojit se ke hře';
+  String get mobileCustomizeButton => 'Přizpůsobit';
+
+  @override
+  String get mobileCustomizeHomeTip => 'Tip: Můžete přidat další widgety na domovskou obrazovku nebo odebrat ty, které nepotřebujete!';
+
+  @override
+  String get mobileCustomizeHomeTipDismiss => 'Zavřít';
+
+  @override
+  String get mobileDangerZone => 'Danger zone';
+
+  @override
+  String get mobileDeleteYourAccount => 'Delete your account';
+
+  @override
+  String get mobileDisplayModeCompact => 'Kompaktní';
+
+  @override
+  String get mobileDisplayModeDetailed => 'Podrobné';
+
+  @override
+  String get mobileDoYouAcceptChallenge => 'Do you accept the challenge?';
+
+  @override
+  String get mobileDownloadMyGames => 'Download my games';
 
   @override
   String get mobileFeedbackButton => 'Zpětná vazba';
 
   @override
-  String mobileGoodEvening(String param) {
-    return 'Dobrý večer, $param';
-  }
+  String get mobileFilters => 'Filters';
 
   @override
-  String get mobileGoodEveningWithoutName => 'Dobrý večer';
+  String get mobileFlipClock => 'Flip clock';
+
+  @override
+  String get mobileFlipPiecesAfterMove => 'Flip pieces and opponent info after move';
+
+  @override
+  String get mobileGetFeedbackOnMoves => 'Get feedback on your moves';
 
   @override
   String mobileGoodDay(String param) {
@@ -61,13 +138,41 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileGoodDayWithoutName => 'Dobrý den';
 
   @override
-  String get mobileHideVariation => 'Skrýt variace';
+  String mobileGoodEvening(String param) {
+    return 'Dobrý večer, $param';
+  }
+
+  @override
+  String get mobileGoodEveningWithoutName => 'Dobrý večer';
+
+  @override
+  String get mobileGoodMoveButThereIsBetter => 'Dobrý tah, ale je i lepší';
+
+  @override
+  String get mobileHello => 'Hello';
 
   @override
   String get mobileHomeTab => 'Domů';
 
   @override
+  String mobileIfAccountMatchesCodeSent(String param1, String param2) {
+    return 'If an account matches $param1, a $param2 character code was sent to it. Check your inbox and enter the code below.';
+  }
+
+  @override
+  String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
+
+  @override
   String get mobileLiveStreamers => 'Streameři';
+
+  @override
+  String get mobileLocalDatabaseSize => 'Local database size';
+
+  @override
+  String get mobileMoveOnRelease => 'Move on release';
+
+  @override
+  String get mobileMoveOnReleaseSubtitle => 'When moving a piece by tapping, the move is made when you lift your finger, letting you slide to change the destination square.';
 
   @override
   String get mobileMustBeLoggedIn => 'Pro zobrazení této stránky musíte být přihlášeni.';
@@ -79,10 +184,10 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileNewGame => 'Nová hra';
 
   @override
-  String get mobileNoSearchResults => 'Žádné výsledky';
+  String get mobileNextMistake => 'Next mistake';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'Vezmi prosím na vědomí, že všechny funkce z původní aplikace nebo webové stránky nejsou momentálně k dispozici. Funkce však neustále přidáváme.';
+  String get mobileNoSearchResults => 'Žádné výsledky';
 
   @override
   String get mobileNotFollowingAnyUser => 'Nesledujete žádného uživatele.';
@@ -91,7 +196,67 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileOkButton => 'OK';
 
   @override
+  String get mobileOpeningExplorerNotAvailableOffline => 'Průzkumník otevření není dostupný offline.';
+
+  @override
+  String get mobileOrImportPgnFile => 'Nebo nahrajte soubor PGN';
+
+  @override
   String get mobileOverTheBoard => 'Jako na šachovnici';
+
+  @override
+  String get mobilePasteFromClipboard => 'Paste from clipboard';
+
+  @override
+  String get mobilePerfShortAntichess => 'Antichess';
+
+  @override
+  String get mobilePerfShortAtomic => 'Atomové';
+
+  @override
+  String get mobilePerfShortBlitz => 'Blitz';
+
+  @override
+  String get mobilePerfShortBullet => 'Bullet';
+
+  @override
+  String get mobilePerfShortChess960 => '960';
+
+  @override
+  String get mobilePerfShortClassical => 'Klasické';
+
+  @override
+  String get mobilePerfShortCorrespondence => 'Koresp.';
+
+  @override
+  String get mobilePerfShortCrazyhouse => 'Crazy';
+
+  @override
+  String get mobilePerfShortFromPosition => 'Z pozice.';
+
+  @override
+  String get mobilePerfShortHorde => 'Horde';
+
+  @override
+  String get mobilePerfShortKingOfTheHill => 'KotH';
+
+  @override
+  String get mobilePerfShortPuzzle => 'Úlohy';
+
+  @override
+  String get mobilePerfShortRacingKings => 'Racing';
+
+  @override
+  String get mobilePerfShortRapid => 'Rapid';
+
+  @override
+  String get mobilePerfShortThreeCheck => '3šachy';
+
+  @override
+  String get mobilePerfShortUltraBullet => 'Ultra';
+
+  @override
+  String get mobilePgnCopied => 'PGN copied.';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -105,7 +270,13 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobilePositionRight => 'Vpravo';
 
   @override
+  String get mobilePracticeMode => 'Practice mode';
+
+  @override
   String get mobilePrefMagnifyDraggedPiece => 'Zvětšit taženou figuru';
+
+  @override
+  String get mobilePreviousPage => 'Předchozí';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Chceš ukončit tento běh?';
@@ -120,19 +291,25 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobilePuzzleStormSubtitle => 'Vyřešte co nejvíce úloh za 3 minuty.';
 
   @override
-  String get mobilePuzzleStreakAbortWarning => 'Ztratíte aktuální sérii a vaše skóre bude uloženo.';
-
-  @override
   String get mobilePuzzleThemesSubtitle => 'Hrajte úlohy ze svých oblíbených zahájení, nebo si zvolte téma.';
 
   @override
   String get mobilePuzzlesTab => 'Úlohy';
 
   @override
+  String get mobileRateThisApp => 'Rate this app';
+
+  @override
   String get mobileRecentSearches => 'Nedávná vyhledávání';
 
   @override
   String get mobileRemoveBookmark => 'Odebrat záložku';
+
+  @override
+  String get mobileSelectAStudy => 'Select a study';
+
+  @override
+  String get mobileSendMeACode => 'Send me a code';
 
   @override
   String get mobileServerAnalysis => 'Analýza na serveru';
@@ -174,10 +351,10 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileSettingsPickAnImage => 'Vybrat obrázek';
 
   @override
-  String get mobileSettingsPickAnImageHelp => 'Vlastní pozadí funguje pomůže ve tmavém režimu. Doporučuje se tmavý obrázek.';
+  String get mobileSettingsPickAnImageBlur => 'Rozmazat obrázek';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'Rozmazat obrázek';
+  String get mobileSettingsPickAnImageHelp => 'Vlastní pozadí funguje pomůže ve tmavém režimu. Doporučuje se tmavý obrázek.';
 
   @override
   String get mobileSettingsPickAnImageHideBoard => 'Skrýt šachovnici';
@@ -195,6 +372,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Kliknout na dva pole';
 
   @override
+  String get mobileSettingsPreferencesSaved => 'Your preferences have been saved in your Lichess account. They will be synchronized across all your devices.';
+
+  @override
   String get mobileSettingsShapeDrawing => 'Kreslení tvarů';
 
   @override
@@ -210,13 +390,16 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileSettingsTouchFeedbackSubtitle => 'Je-li zapnuto, zařízení po tahu nebo braní figury krátce zavibruje.';
 
   @override
-  String get mobileSettingsTab => 'Nastavení';
+  String get mobileShareChallengeUrl => 'Share challenge URL';
 
   @override
   String get mobileShareGamePGN => 'Sdílet PGN';
 
   @override
   String get mobileShareGameURL => 'Sdílet URL hry';
+
+  @override
+  String get mobileShareLocalAnalysisPgn => 'Share local analysis PGN';
 
   @override
   String get mobileSharePositionAsFEN => 'Sdílet pozici jako FEN';
@@ -228,51 +411,46 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileShowComments => 'Zobrazit komentáře';
 
   @override
+  String get mobileShowEngineLines => 'Show engine lines';
+
+  @override
+  String get mobileShowEvaluationGauge => 'Show evaluation gauge';
+
+  @override
   String get mobileShowResult => 'Zobrazit výsledky';
 
   @override
-  String get mobileShowVariations => 'Zobrazit variace';
+  String get mobileSignInWithBrowser => 'Sign in with the browser';
+
+  @override
+  String get mobileSignInWithEmail => 'Sign in with an email';
+
+  @override
+  String get mobileSimpleDelay => 'Simple delay';
+
+  @override
+  String get mobileSmallBoard => 'Small board';
 
   @override
   String get mobileSomethingWentWrong => 'Něco se pokazilo.';
 
   @override
+  String get mobileSortFriends => 'Sort friends';
+
+  @override
+  String get mobileStopShowingThreat => 'Skrýt zobrazování hrozby';
+
+  @override
   String get mobileSystemColors => 'Systémové barvy';
+
+  @override
+  String get mobileTablebaseOffline => 'Tablebase is not available offline.';
 
   @override
   String get mobileTheme => 'Téma';
 
   @override
-  String get mobileToolsTab => 'Nástroje';
-
-  @override
-  String mobileUnsupportedVariant(String param) {
-    return 'Varianta $param není v této verzi aplikace podporována.';
-  }
-
-  @override
-  String get mobileWaitingForOpponentToJoin => 'Čeká se na připojení protihráče...';
-
-  @override
-  String get mobileWatchTab => 'Sledovat';
-
-  @override
-  String get mobileWelcomeToLichessApp => 'Vítejte v aplikaci Lichess!';
-
-  @override
-  String get mobileViewGame => 'Zobrazit hru';
-
-  @override
-  String get mobileCustomizeHomeTip => 'Tip: Můžete přidat další widgety na domovskou obrazovku nebo odebrat ty, které nepotřebujete!';
-
-  @override
-  String get mobileCustomizeHomeTipDismiss => 'Zavřít';
-
-  @override
-  String get mobileCustomizeButton => 'Přizpůsobit';
-
-  @override
-  String get mobileStopShowingThreat => 'Skrýt zobrazování hrozby';
+  String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
 
   @override
   String get mobileTournamentCompleted => 'Dokončené';
@@ -281,73 +459,30 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileTournamentJumpToMyPage => 'Přejít na moji stránku';
 
   @override
-  String get mobileDisplayModeCompact => 'Kompaktní';
+  String mobileUnsupportedVariant(String param) {
+    return 'Varianta $param není v této verzi aplikace podporována.';
+  }
 
   @override
-  String get mobileDisplayModeDetailed => 'Podrobné';
+  String get mobileUseSymmetricPieces => 'Use symmetric pieces';
 
   @override
-  String get mobileOpeningExplorerNotAvailableOffline => 'Průzkumník otevření není dostupný offline.';
+  String get mobileViewGame => 'Zobrazit hru';
 
   @override
-  String get mobileChallengeCreated => 'Byla vytvořena výzva: Budete upozorněni, až hra začne.\nMůžete se k ní dostat z domovské obrazovky.';
+  String get mobileViewLicenses => 'View licences';
 
   @override
-  String get mobilePreviousPage => 'Předchozí';
+  String get mobileWaitingForOpponentToJoin => 'Čeká se na připojení protihráče...';
 
   @override
-  String get mobileOrImportPgnFile => 'Nebo nahrajte soubor PGN';
+  String get mobileWatchTab => 'Sledovat';
 
   @override
-  String get mobileGoodMoveButThereIsBetter => 'Dobrý tah, ale je i lepší';
+  String get mobileWeWillEmailYouCode => 'We will email you a code to sign in with.';
 
   @override
-  String get mobilePerfShortUltraBullet => 'Ultra';
-
-  @override
-  String get mobilePerfShortBullet => 'Bullet';
-
-  @override
-  String get mobilePerfShortBlitz => 'Blitz';
-
-  @override
-  String get mobilePerfShortRapid => 'Rapid';
-
-  @override
-  String get mobilePerfShortClassical => 'Klasické';
-
-  @override
-  String get mobilePerfShortCorrespondence => 'Koresp.';
-
-  @override
-  String get mobilePerfShortFromPosition => 'Z pozice.';
-
-  @override
-  String get mobilePerfShortChess960 => '960';
-
-  @override
-  String get mobilePerfShortAntichess => 'Antichess';
-
-  @override
-  String get mobilePerfShortKingOfTheHill => 'KotH';
-
-  @override
-  String get mobilePerfShortThreeCheck => '3šachy';
-
-  @override
-  String get mobilePerfShortAtomic => 'Atomové';
-
-  @override
-  String get mobilePerfShortHorde => 'Horde';
-
-  @override
-  String get mobilePerfShortRacingKings => 'Racing';
-
-  @override
-  String get mobilePerfShortCrazyhouse => 'Crazy';
-
-  @override
-  String get mobilePerfShortPuzzle => 'Úlohy';
+  String get mobileYouCannotChallengeYourself => 'You cannot challenge yourself';
 
   @override
   String get variantStandard => 'Standardní';

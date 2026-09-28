@@ -172,7 +172,7 @@ class _BodyState() extends ConsumerState<_Body> {
               context: context,
               builder: (context) => YesNoDialog(
                 title: Text(context.l10n.threefoldRepetition),
-                content: const Text('Accept draw?'),
+                content: Text(context.l10n.mobileAcceptDraw),
                 onYes: () {
                   Navigator.pop(context);
                   ref.read(overTheBoardGameControllerProvider.notifier).draw();

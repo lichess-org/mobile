@@ -800,7 +800,7 @@ class _EloChartState() extends State<_EloChart> {
                 .where((dateRange) => _dateIsInRange(dateRange))
                 .map(
                   (dateRange) => _RangeButton(
-                    text: dateRange.toString(),
+                    text: dateRange.label(context.l10n),
                     onPressed: () {
                       setState(() {
                         _selectedRange = dateRange;
@@ -940,8 +940,7 @@ enum DateRange() {
   oneYear,
   allTime;
 
-  @override
-  String toString() => switch (this) {
+  String label(AppLocalizations _) => switch (this) {
     DateRange.oneWeek => '1W',
     DateRange.oneMonth => '1M',
     DateRange.threeMonths => '3M',

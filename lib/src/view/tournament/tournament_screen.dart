@@ -1097,7 +1097,7 @@ class const _TournamentCompleteWidget({required final TournamentState state})
                 builder: (context, isLoading, fetchData) {
                   return ListTile(
                     leading: const Icon(Icons.download),
-                    title: const Text('Download my games'),
+                    title: Text(context.l10n.mobileDownloadMyGames),
                     enabled: !isLoading,
                     onTap: () async {
                       final file = await fetchData();

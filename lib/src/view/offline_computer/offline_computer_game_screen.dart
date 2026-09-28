@@ -1027,14 +1027,14 @@ class _NewGameSheetState() extends ConsumerState<_NewGameSheet> {
               },
             ),
             SwitchSettingTile(
-              title: const Text('Practice mode'),
-              subtitle: const Text('Get feedback on your moves'),
+              title: Text(context.l10n.mobilePracticeMode),
+              subtitle: Text(context.l10n.mobileGetFeedbackOnMoves),
               value: _practiceMode,
               onChanged: _selectedVariant == Variant.crazyhouse ? null : _setPracticeMode,
             ),
             SwitchSettingTile(
               title: Text(context.l10n.casual),
-              subtitle: const Text('Allow takebacks and hints'),
+              subtitle: Text(context.l10n.mobileAllowTakebacksAndHints),
               value: _practiceMode || _casual,
               onChanged: _practiceMode
                   ? null

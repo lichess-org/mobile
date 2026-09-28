@@ -9,6 +9,9 @@ class AppLocalizationsTr extends AppLocalizations {
   AppLocalizationsTr([String locale = 'tr']) : super(locale);
 
   @override
+  String get mobileAcceptDraw => 'Accept draw?';
+
+  @override
   String get mobileAccount => 'Hesap';
 
   @override
@@ -18,39 +21,113 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileAccountPreferencesHelp => 'Bu tercihler Lichess hesabınıza uygulanacak ve cihazlarınız arasında senkronize edilecektir.';
 
   @override
+  String get mobileAddToStudy => 'Add to study';
+
+  @override
   String get mobileAllGames => 'Tüm oyunlar';
+
+  @override
+  String get mobileAllowTakebacksAndHints => 'Allow takebacks and hints';
+
+  @override
+  String get mobileAmoledBlack => 'Amoled black';
 
   @override
   String get mobileAreYouSure => 'Emin misiniz?';
 
   @override
+  String mobileAreYouSureDownloadNnue(String param) {
+    return 'Are you sure you want to download the NNUE file ($param)?';
+  }
+
+  @override
+  String get mobileBoardPositionLandscape => 'Board position in landscape mode';
+
+  @override
   String get mobileBoardSettings => 'Tahta seçenekleri';
+
+  @override
+  String get mobileBronsteinDelay => 'Bronstein delay';
 
   @override
   String get mobileCancelTakebackOffer => 'Geri alma teklifini iptal et';
 
   @override
+  String get mobileChallengeCreated => 'Meydan okuma oluşturuldu: Oyun başladığında size bildirim gönderilecektir.\nOyuna ana sekmeden erişebilirsiniz.';
+
+  @override
+  String get mobileChallengeFromPosition => 'Challenge from position';
+
+  @override
+  String get mobileChapterName => 'Chapter Name';
+
+  @override
   String get mobileChessEngine => 'Satranç motoru';
+
+  @override
+  String get mobileChooseCustomBackground => 'Choose a custom background';
 
   @override
   String get mobileClearButton => 'Temizle';
 
   @override
+  String get mobileCodeExpiresMessage => 'The code expires after 5 minutes and can only be used once.';
+
+  @override
+  String get mobileCodeFieldLabel => 'Code';
+
+  @override
+  String mobileCodeLengthMessage(String param) {
+    return 'The code is $param characters long.';
+  }
+
+  @override
+  String get mobileCopied => 'Copied.';
+
+  @override
   String get mobileCorrespondenceClearSavedMove => 'Kayıtlı hamleyi sil';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Bir oyuna katıl';
+  String get mobileCustomizeButton => 'Özelleştir';
+
+  @override
+  String get mobileCustomizeHomeTip => 'İpucu: Ana ekrana daha fazla widget ekleyebilir veya ihtiyacınız olmayanları kaldırabilirsiniz!';
+
+  @override
+  String get mobileCustomizeHomeTipDismiss => 'Gizle';
+
+  @override
+  String get mobileDangerZone => 'Danger zone';
+
+  @override
+  String get mobileDeleteYourAccount => 'Delete your account';
+
+  @override
+  String get mobileDisplayModeCompact => 'Küçük';
+
+  @override
+  String get mobileDisplayModeDetailed => 'Ayrıntılı';
+
+  @override
+  String get mobileDoYouAcceptChallenge => 'Do you accept the challenge?';
+
+  @override
+  String get mobileDownloadMyGames => 'Download my games';
 
   @override
   String get mobileFeedbackButton => 'Geri bildirimde bulun';
 
   @override
-  String mobileGoodEvening(String param) {
-    return 'İyi akşamlar, $param';
-  }
+  String get mobileFilters => 'Filters';
 
   @override
-  String get mobileGoodEveningWithoutName => 'İyi akşamlar';
+  String get mobileFlipClock => 'Flip clock';
+
+  @override
+  String get mobileFlipPiecesAfterMove => 'Flip pieces and opponent info after move';
+
+  @override
+  String get mobileGetFeedbackOnMoves => 'Get feedback on your moves';
 
   @override
   String mobileGoodDay(String param) {
@@ -61,13 +138,41 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileGoodDayWithoutName => 'İyi günler';
 
   @override
-  String get mobileHideVariation => 'Varyasyonu gizle';
+  String mobileGoodEvening(String param) {
+    return 'İyi akşamlar, $param';
+  }
+
+  @override
+  String get mobileGoodEveningWithoutName => 'İyi akşamlar';
+
+  @override
+  String get mobileGoodMoveButThereIsBetter => 'İyi hamle ama daha iyisi var';
+
+  @override
+  String get mobileHello => 'Hello';
 
   @override
   String get mobileHomeTab => 'Ana sayfa';
 
   @override
+  String mobileIfAccountMatchesCodeSent(String param1, String param2) {
+    return 'If an account matches $param1, a $param2 character code was sent to it. Check your inbox and enter the code below.';
+  }
+
+  @override
+  String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
+
+  @override
   String get mobileLiveStreamers => 'Canlı yayıncılar';
+
+  @override
+  String get mobileLocalDatabaseSize => 'Local database size';
+
+  @override
+  String get mobileMoveOnRelease => 'Move on release';
+
+  @override
+  String get mobileMoveOnReleaseSubtitle => 'When moving a piece by tapping, the move is made when you lift your finger, letting you slide to change the destination square.';
 
   @override
   String get mobileMustBeLoggedIn => 'Bu sayfayı görüntülemek için giriş yapmalısınız.';
@@ -79,10 +184,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileNewGame => 'Yeni oyun';
 
   @override
-  String get mobileNoSearchResults => 'Sonuç bulunamadı';
+  String get mobileNextMistake => 'Next mistake';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'Eski uygulamadaki veya web sitesindeki tüm özelliklerin şu anda mevcut olmadığını, ancak her zaman özellik eklediğimizi lütfen unutmayın.';
+  String get mobileNoSearchResults => 'Sonuç bulunamadı';
 
   @override
   String get mobileNotFollowingAnyUser => 'Hiçbir kullanıcıyı takip etmiyorsunuz.';
@@ -91,7 +196,67 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileOkButton => 'Tamam';
 
   @override
+  String get mobileOpeningExplorerNotAvailableOffline => 'Açılış Kaşifi çevrimdışı kullanılamaz.';
+
+  @override
+  String get mobileOrImportPgnFile => 'Veya bir PGN dosyası aktar';
+
+  @override
   String get mobileOverTheBoard => 'Tahta üzerinde çevrimdışı oyna';
+
+  @override
+  String get mobilePasteFromClipboard => 'Paste from clipboard';
+
+  @override
+  String get mobilePerfShortAntichess => 'Antistranç';
+
+  @override
+  String get mobilePerfShortAtomic => 'Atomik';
+
+  @override
+  String get mobilePerfShortBlitz => 'Yıldırım';
+
+  @override
+  String get mobilePerfShortBullet => 'Bullet';
+
+  @override
+  String get mobilePerfShortChess960 => '960';
+
+  @override
+  String get mobilePerfShortClassical => 'Klasik';
+
+  @override
+  String get mobilePerfShortCorrespondence => 'Yazışma';
+
+  @override
+  String get mobilePerfShortCrazyhouse => 'Çılgın';
+
+  @override
+  String get mobilePerfShortFromPosition => 'Konumdan';
+
+  @override
+  String get mobilePerfShortHorde => 'Sürü';
+
+  @override
+  String get mobilePerfShortKingOfTheHill => 'MŞ';
+
+  @override
+  String get mobilePerfShortPuzzle => 'Bulmaca';
+
+  @override
+  String get mobilePerfShortRacingKings => 'Yarışan';
+
+  @override
+  String get mobilePerfShortRapid => 'Hızlı';
+
+  @override
+  String get mobilePerfShortThreeCheck => '3şah';
+
+  @override
+  String get mobilePerfShortUltraBullet => 'Ultra';
+
+  @override
+  String get mobilePgnCopied => 'PGN copied.';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -105,7 +270,13 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobilePositionRight => 'Sağ';
 
   @override
+  String get mobilePracticeMode => 'Practice mode';
+
+  @override
   String get mobilePrefMagnifyDraggedPiece => 'Sürüklenen taşı büyüt';
+
+  @override
+  String get mobilePreviousPage => 'Önceki';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Bu oyunu bitirmek istiyor musun?';
@@ -120,19 +291,25 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobilePuzzleStormSubtitle => '3 dakika içerisinde mümkün olduğunca çok bulmaca çözün.';
 
   @override
-  String get mobilePuzzleStreakAbortWarning => 'Mevcut serinizi kaybedeceksiniz ve puanınız kaydedilecektir.';
-
-  @override
   String get mobilePuzzleThemesSubtitle => 'En sevdiğiniz açılışlardan bulmacalar oynayın veya bir tema seçin.';
 
   @override
   String get mobilePuzzlesTab => 'Bulmacalar';
 
   @override
+  String get mobileRateThisApp => 'Rate this app';
+
+  @override
   String get mobileRecentSearches => 'Son aramalar';
 
   @override
   String get mobileRemoveBookmark => 'Yer işaretini kaldır';
+
+  @override
+  String get mobileSelectAStudy => 'Select a study';
+
+  @override
+  String get mobileSendMeACode => 'Send me a code';
 
   @override
   String get mobileServerAnalysis => 'Sunucu analizi';
@@ -174,10 +351,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileSettingsPickAnImage => 'Bir resim seçin';
 
   @override
-  String get mobileSettingsPickAnImageHelp => 'Özel arkaplan sadece karanlık modda çalışır. Karanlık bir resim tavsiye edilir.';
+  String get mobileSettingsPickAnImageBlur => 'Resmi bulanıklaştır';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'Resmi bulanıklaştır';
+  String get mobileSettingsPickAnImageHelp => 'Özel arkaplan sadece karanlık modda çalışır. Karanlık bir resim tavsiye edilir.';
 
   @override
   String get mobileSettingsPickAnImageHideBoard => 'Tahtayı gizle';
@@ -195,6 +372,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileSettingsPieceShiftMethodTapTwoSquares => 'İki kareye dokun';
 
   @override
+  String get mobileSettingsPreferencesSaved => 'Your preferences have been saved in your Lichess account. They will be synchronized across all your devices.';
+
+  @override
   String get mobileSettingsShapeDrawing => 'Şekil çizimi';
 
   @override
@@ -210,13 +390,16 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileSettingsTouchFeedbackSubtitle => 'Aktif olduğunda, bir taş oynatıldığında veya alındığında cihaz hafifçe titreyecektir.';
 
   @override
-  String get mobileSettingsTab => 'Ayarlar';
+  String get mobileShareChallengeUrl => 'Share challenge URL';
 
   @override
   String get mobileShareGamePGN => 'PGN\'yi paylaş';
 
   @override
   String get mobileShareGameURL => 'Oyun linkini paylaş';
+
+  @override
+  String get mobileShareLocalAnalysisPgn => 'Share local analysis PGN';
 
   @override
   String get mobileSharePositionAsFEN => 'Konumu FEN olarak paylaş';
@@ -228,51 +411,46 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileShowComments => 'Yorumları göster';
 
   @override
+  String get mobileShowEngineLines => 'Show engine lines';
+
+  @override
+  String get mobileShowEvaluationGauge => 'Show evaluation gauge';
+
+  @override
   String get mobileShowResult => 'Sonucu göster';
 
   @override
-  String get mobileShowVariations => 'Varyasyonları göster';
+  String get mobileSignInWithBrowser => 'Sign in with the browser';
+
+  @override
+  String get mobileSignInWithEmail => 'Sign in with an email';
+
+  @override
+  String get mobileSimpleDelay => 'Simple delay';
+
+  @override
+  String get mobileSmallBoard => 'Small board';
 
   @override
   String get mobileSomethingWentWrong => 'Birşeyler ters gitti.';
 
   @override
+  String get mobileSortFriends => 'Sort friends';
+
+  @override
+  String get mobileStopShowingThreat => 'Tehtidi göstermeyi durdur';
+
+  @override
   String get mobileSystemColors => 'Sistem renkleri';
+
+  @override
+  String get mobileTablebaseOffline => 'Tablebase is not available offline.';
 
   @override
   String get mobileTheme => 'Tema';
 
   @override
-  String get mobileToolsTab => 'Araçlar';
-
-  @override
-  String mobileUnsupportedVariant(String param) {
-    return '$param varyantı bu versiyonda desteklenmiyor.';
-  }
-
-  @override
-  String get mobileWaitingForOpponentToJoin => 'Rakip bekleniyor...';
-
-  @override
-  String get mobileWatchTab => 'İzle';
-
-  @override
-  String get mobileWelcomeToLichessApp => 'Lichess uygulamasına hoşgeldiniz!';
-
-  @override
-  String get mobileViewGame => 'Oyunu Gör';
-
-  @override
-  String get mobileCustomizeHomeTip => 'İpucu: Ana ekrana daha fazla widget ekleyebilir veya ihtiyacınız olmayanları kaldırabilirsiniz!';
-
-  @override
-  String get mobileCustomizeHomeTipDismiss => 'Gizle';
-
-  @override
-  String get mobileCustomizeButton => 'Özelleştir';
-
-  @override
-  String get mobileStopShowingThreat => 'Tehtidi göstermeyi durdur';
+  String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
 
   @override
   String get mobileTournamentCompleted => 'Tamamlanan';
@@ -281,73 +459,30 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileTournamentJumpToMyPage => 'Sayfama atla';
 
   @override
-  String get mobileDisplayModeCompact => 'Küçük';
+  String mobileUnsupportedVariant(String param) {
+    return '$param varyantı bu versiyonda desteklenmiyor.';
+  }
 
   @override
-  String get mobileDisplayModeDetailed => 'Ayrıntılı';
+  String get mobileUseSymmetricPieces => 'Use symmetric pieces';
 
   @override
-  String get mobileOpeningExplorerNotAvailableOffline => 'Açılış Kaşifi çevrimdışı kullanılamaz.';
+  String get mobileViewGame => 'Oyunu Gör';
 
   @override
-  String get mobileChallengeCreated => 'Meydan okuma oluşturuldu: Oyun başladığında size bildirim gönderilecektir.\nOyuna ana sekmeden erişebilirsiniz.';
+  String get mobileViewLicenses => 'View licences';
 
   @override
-  String get mobilePreviousPage => 'Önceki';
+  String get mobileWaitingForOpponentToJoin => 'Rakip bekleniyor...';
 
   @override
-  String get mobileOrImportPgnFile => 'Veya bir PGN dosyası aktar';
+  String get mobileWatchTab => 'İzle';
 
   @override
-  String get mobileGoodMoveButThereIsBetter => 'İyi hamle ama daha iyisi var';
+  String get mobileWeWillEmailYouCode => 'We will email you a code to sign in with.';
 
   @override
-  String get mobilePerfShortUltraBullet => 'Ultra';
-
-  @override
-  String get mobilePerfShortBullet => 'Bullet';
-
-  @override
-  String get mobilePerfShortBlitz => 'Yıldırım';
-
-  @override
-  String get mobilePerfShortRapid => 'Hızlı';
-
-  @override
-  String get mobilePerfShortClassical => 'Klasik';
-
-  @override
-  String get mobilePerfShortCorrespondence => 'Yazışma';
-
-  @override
-  String get mobilePerfShortFromPosition => 'Konumdan';
-
-  @override
-  String get mobilePerfShortChess960 => '960';
-
-  @override
-  String get mobilePerfShortAntichess => 'Antistranç';
-
-  @override
-  String get mobilePerfShortKingOfTheHill => 'MŞ';
-
-  @override
-  String get mobilePerfShortThreeCheck => '3şah';
-
-  @override
-  String get mobilePerfShortAtomic => 'Atomik';
-
-  @override
-  String get mobilePerfShortHorde => 'Sürü';
-
-  @override
-  String get mobilePerfShortRacingKings => 'Yarışan';
-
-  @override
-  String get mobilePerfShortCrazyhouse => 'Çılgın';
-
-  @override
-  String get mobilePerfShortPuzzle => 'Bulmaca';
+  String get mobileYouCannotChallengeYourself => 'You cannot challenge yourself';
 
   @override
   String get variantStandard => 'Standart';
