@@ -51,7 +51,7 @@ class const RetroScreen({required final RetroOptions options, super.key}) extend
           body: switch (error) {
             // The game loaded; the server just declined to analyse it. Retrying would not change
             // that answer, so show why instead.
-            ServerAnalysisRequestException refusal => Center(
+            final ServerAnalysisRequestException refusal => Center(
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: Text(
