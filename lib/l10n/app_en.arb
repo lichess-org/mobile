@@ -420,7 +420,6 @@
   "arenaBerserkAnswer": "When a player clicks the Berserk button at the beginning of the game, they lose half of their clock time, but the win is worth one extra tournament point.\n\nGoing Berserk in time controls with an increment also cancels the increment (1+2 is an exception, it gives 1+0).\n\nBerserk is not available for games with zero initial time (0+1, 0+2).\n\nBerserk only grants an extra point if you play at least 7 moves in the game.",
   "arenaHowIsTheWinnerDecided": "How is the winner decided?",
   "arenaHowIsTheWinnerDecidedAnswer": "When the tournament time limit expires, the player with the most points is declared the winner.\n\nIf two or more players are tied for points, tournament performance is the tie-break.",
-  "arenaHowDoesPairingWork": "How does the pairing work?",
   "arenaHowArePlayersPaired": "How are players paired?",
   "arenaHowDoesPairingWorkAnswer": "At the start of the tournament, players are paired based on their rating.\nAs soon as you finish a game and return to the tournament lobby, you will be paired with a new opponent close to your rank in the tournament. This keeps waiting times short. Note that you may not face every other player in the tournament.\nPlay quickly to play more games and score more points.",
   "arenaHowDoesItEnd": "How does it end?",
@@ -463,7 +462,6 @@
   "arenaMyTournaments": "My tournaments",
   "arenaEditTournament": "Edit tournament",
   "arenaEditTeamBattle": "Edit team battle",
-  "arenaDefender": "Defender",
   "arenaDefenderLabel": "Defender:",
   "arenaPickYourTeam": "Pick your team",
   "arenaWhichTeamWillYouRepresentInThisBattle": "Which team will you represent in this battle?",
@@ -472,7 +470,6 @@
   "arenaRecentlyPlayed": "Last played",
   "arenaBestResults": "Best results",
   "arenaTournamentStats": "Tournament stats",
-  "arenaRankAvgHelp": "The rank average is a percentage of your ranking. Lower is better.\n\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.",
   "arenaRankAverageHelp": "Your rank average represents your typical finishing position, relative to the total number of players in each tournament.\nThis is a measure of your tournament placement, not your general rating.\n\nFor example, a rank average of 3% means you typically finish in the top 3% (such as 30th place out of 1,000 players).",
   "arenaMedians": "medians",
   "arenaAllAveragesAreX": "All averages on this page are {param}.",
@@ -553,12 +550,10 @@
   "broadcastDownloadAllRounds": "Download all rounds",
   "broadcastResetRound": "Reset this round",
   "broadcastDeleteRound": "Delete this round",
-  "broadcastDefinitivelyDeleteRound": "Definitively delete the round and all its games.",
   "broadcastPermanentlyDeleteRound": "Permanently delete this round and all its games?",
   "broadcastDeleteAllGamesOfThisRound": "Delete all games of this round. The source will need to be active in order to re-create them.",
   "broadcastEditRoundStudy": "Edit round study",
   "broadcastDeleteTournament": "Delete this tournament",
-  "broadcastDefinitivelyDeleteTournament": "Definitively delete the entire tournament, all its rounds and all its games.",
   "broadcastPermanentlyDeleteTournament": "Permanently delete this tournament, including all rounds and games?",
   "broadcastShowScores": "Show player scores based on game results",
   "broadcastReplacePlayerTags": "Optional: replace player names, ratings and titles",
@@ -699,6 +694,7 @@
     }
   },
   "broadcastKnockouts": "Knockouts",
+  "broadcastPinPlayer": "Pin player",
   "broadcastUnderXAgeTournament": "U{param}",
   "@broadcastUnderXAgeTournament": {
     "placeholders": {
@@ -942,6 +938,7 @@
   "learnPawnsFormTheFrontLine": "Pawns form the front line.\nMake any move to continue.",
   "learnBoardSetupComplete": "Congratulations! You know how to set up the chess board.",
   "learnCastling": "Castling",
+  "learnEnPassant": "En passant",
   "learnTheSpecialKingMove": "The special king move",
   "learnCastlingIntro": "Bring your king to safety, and deploy your rook for attack!",
   "learnCastleKingSide": "Move your king two squares\nto castle king-side!",
@@ -1178,6 +1175,7 @@
   "preferencesClaimDrawOnThreefoldRepetitionAutomatically": "Claim draw on threefold repetition automatically",
   "preferencesWhenTimeRemainingLessThanThirtySeconds": "When time remaining < 30 seconds",
   "preferencesMoveConfirmation": "Move confirmation",
+  "preferencesMultipleChoices": "Multiple choices. ",
   "preferencesExplainCanThenBeTemporarilyDisabled": "Can be disabled during a game with the board menu",
   "preferencesInCorrespondenceGames": "Correspondence games",
   "preferencesCorrespondenceAndUnlimited": "Correspondence and unlimited",
@@ -1193,15 +1191,11 @@
   "preferencesScrollOnTheBoardToReplayMoves": "Scroll on the board to replay moves",
   "preferencesCorrespondenceEmailNotification": "Daily email listing your correspondence games",
   "preferencesNotifyStreamStart": "Streamer goes live",
-  "preferencesNotifyInboxMsg": "New inbox message",
   "preferencesNotifyDirectMessage": "New direct message",
-  "preferencesNotifyForumMention": "Forum comment mentions you",
   "preferencesNotifyForumMentions": "Forum mentions",
-  "preferencesNotifyInvitedStudy": "Study invite",
   "preferencesNotifyStudyInvites": "Study invites",
   "preferencesNotifyGameEvent": "Correspondence game updates",
   "preferencesNotifyChallenge": "Challenges",
-  "preferencesNotifyTournamentSoon": "Tournament starting soon",
   "preferencesNotifyTournamentStartReminders": "Tournaments start reminders",
   "preferencesNotifyBroadcasts": "Broadcasts",
   "preferencesNotifyTimeAlarm": "Correspondence time running out",
@@ -1230,6 +1224,12 @@
   "preferencesAnalysisSettings": "Analysis settings",
   "preferencesManeuverArrowsHelp": "Sequence of engine moves for one piece",
   "preferencesHoverOverSettingLabelsForHelp": "Hover over setting labels for help",
+  "preferencesNetwork": "Network",
+  "preferencesYouAreCurrentlyUsingDirectRouting": "You are currently using direct routing.",
+  "preferencesYouAreCurrentlyUsingCdnRouting": "You are currently using Content Delivery Network (CDN) routing.",
+  "preferencesFrequentDisconnectsAdvice": "If you have frequent disconnects, try changing the routing.",
+  "preferencesUseDirectRouting": "Use direct routing",
+  "preferencesUseCdnRouting": "Use CDN routing",
   "puzzlePuzzles": "Puzzles",
   "puzzlePuzzleThemes": "Puzzle Themes",
   "puzzleRecommended": "Recommended",
@@ -1408,13 +1408,13 @@
   "puzzleThemeBodenMate": "Boden's mate",
   "puzzleThemeBodenMateDescription": "Two attacking bishops on criss-crossing diagonals deliver mate to a king obstructed by friendly pieces.",
   "puzzleThemeCastling": "Castling",
+  "puzzleThemeEnPassant": "En passant",
   "puzzleThemeCastlingDescription": "Bring the king to safety, and deploy the rook for attack.",
   "puzzleThemeCapturingDefender": "Capture the defender",
   "puzzleThemeCapturingDefenderDescription": "Removing a piece that is critical to defence of another piece, allowing the now undefended piece to be captured on a following move.",
   "puzzleThemeCollinearMove": "Collinear move",
   "puzzleThemeCollinearMoveDescription": "Two opposing pieces face each other, and one slides along the line of attack without capturing the enemy piece.",
   "puzzleThemeCornerMate": "Corner mate",
-  "puzzleThemeCornerMateDescription": "Confine the king to the corner using a rook or queen and a knight to engage the checkmate.",
   "puzzleThemeCornerMateKnightDeliversDescription": "Confine the king to the corner using a rook or queen, and use a knight to deliver the checkmate.",
   "puzzleThemeCrushing": "Crushing",
   "puzzleThemeCrushingDescription": "Spot the opponent blunder to obtain a crushing advantage. (eval ≥ 600cp)",
@@ -1440,19 +1440,16 @@
   "puzzleThemeDoubleCheckDescription": "Checking with two pieces at once, as a result of a discovered attack where both the moving piece and the unveiled piece attack the opponent's king.",
   "puzzleThemeEndgame": "Endgame",
   "puzzleThemeEndgameDescription": "A tactic during the last phase of the game.",
-  "puzzleThemeEnPassantDescription": "A tactic involving the en passant rule, where a pawn can capture an opponent pawn that has bypassed it using its initial two-square move.",
   "puzzleThemeEnPassantAdjacentCaptureDescription": "A tactic involving the en passant rule, where a pawn can capture an opposing pawn that has just moved next to it with its initial two-square move.",
   "puzzleThemeEpauletteMate": "Epaulette mate",
   "puzzleThemeEpauletteMateDescription": "Two adjacent escape squares for a checked king are occupied by other pieces.",
   "puzzleThemeExposedKing": "Exposed king",
   "puzzleThemeExposedKingDescription": "A tactic involving a king with few defenders around it, often leading to checkmate.",
   "puzzleThemeFork": "Fork",
-  "puzzleThemeForkDescription": "A move where the moved piece attacks two opponent pieces at once.",
   "puzzleThemeForkOpposingPiecesDescription": "A move where a piece attacks two or more opposing pieces simultaneously.",
   "puzzleThemeHangingPiece": "Hanging piece",
   "puzzleThemeHangingPieceDescription": "A tactic involving an opponent piece being undefended or insufficiently defended and free to capture.",
   "puzzleThemeHookMate": "Hook mate",
-  "puzzleThemeHookMateDescription": "Checkmate with a rook, knight, and pawn along with one enemy pawn to limit the enemy king's escape.",
   "puzzleThemeHookMateOpposingPawnDescription": "Checkmate using a rook, knight, and pawn, where an opposing pawn blocks the king's escape.",
   "puzzleThemeInterference": "Interference",
   "puzzleThemeInterferenceDescription": "Moving a piece between two opponent pieces to leave one or both opponent pieces undefended, such as a knight on a defended square between two rooks.",
@@ -1461,10 +1458,8 @@
   "puzzleThemeKillBoxMate": "Kill box mate",
   "puzzleThemeKillBoxMateDescription": "A rook is next to the enemy king and supported by a queen that also blocks the king's escape squares. The rook and the queen catch the enemy king in a 3 by 3 \"kill box\".",
   "puzzleThemePillsburysMate": "Pillsbury's mate",
-  "puzzleThemePillsburysMateDescription": "The rook delivers checkmate, while the bishop helps to confine it.",
   "puzzleThemePillsburyMateRookAndBishopDescription": "A rook delivers checkmate to the king, while a bishop helps confine it.",
   "puzzleThemeMorphysMate": "Morphy's mate",
-  "puzzleThemeMorphysMateDescription": "Use the bishop to check the king, while your rook helps to confine it.",
   "puzzleThemeMorphyMateBishopAndRookDescription": "A bishop delivers checkmate to the king, while a rook helps confine it.",
   "puzzleThemeSwallowstailMate": "Swallow's tail mate",
   "puzzleThemeSwallowstailMateDescription": "A checkmate pattern that visually resembles the appearance of a swallow’s tail, similar to a V shape.",
@@ -1505,7 +1500,6 @@
   "puzzleThemePin": "Pin",
   "puzzleThemePinDescription": "A tactic involving pins, where a piece is unable to move without revealing an attack on a higher value piece.",
   "puzzleThemePromotion": "Promotion",
-  "puzzleThemePromotionDescription": "Promote one of your pawn to a queen or minor piece.",
   "puzzleThemePromotePawnToQueenRookOrMinor": "Promote one of your pawns to a queen, rook or minor piece.",
   "puzzleThemeQueenEndgame": "Queen endgame",
   "puzzleThemeQueenEndgameDescription": "An endgame with only queens and pawns.",
@@ -1566,6 +1560,21 @@
   "settingsCancelKeepAccount": "Cancel and keep my account",
   "settingsCloseAccountAreYouSure": "Are you sure you want to close your account?",
   "settingsThisAccountIsClosed": "This account is closed.",
+  "settingsWereSorryToSeeYouGo": "We're sorry to see you go.",
+  "settingsCloseAccountForeverLabel": "Close forever: make it impossible to reopen",
+  "settingsCloseAccountForeverWarning": "Prevent reopening the account later. If you tick this box, even administrators will be unable to reopen your account at your request.",
+  "settingsDeleteYourAccount": "Delete your account",
+  "settingsDeleteAccountWarning": "Once you delete your account, it's removed from Lichess and our administrators won't be able to bring it back for you.",
+  "settingsWouldYouLikeToXInstead": "Would you like to {param} instead?",
+  "@settingsWouldYouLikeToXInstead": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsCloseYourAccount": "close your account",
+  "settingsDeleteAccountConfirmText": "I understand that deleted accounts aren't recoverable",
   "gameSetup": "Game setup",
   "challengeAFriend": "Challenge a friend",
   "playAgainstComputer": "Play against computer",
@@ -1877,7 +1886,6 @@
   },
   "emailCanTakeSomeTime": "It can take some time to arrive.",
   "refreshInboxAfterFiveMinutes": "Wait 5 minutes and refresh your email inbox.",
-  "checkSpamFolder": "Also check your spam folder, it might end up there. If so, mark it as not spam.",
   "checkSpamOrJunkFolder": "If you do not receive a confirmation email, check your Spam or Junk folder. Be sure to indicate messages from lichess.org as safe and \"not spam\", so you can stay informed of important communications.",
   "sendEmailForAccountVerification": "If you can't find your confirmation email, send an email to {param} and we'll confirm your account for you.",
   "@sendEmailForAccountVerification": {
@@ -1932,9 +1940,7 @@
   "gamesPlayed": "Games played",
   "ok": "OK",
   "cancel": "Cancel",
-  "whiteTimeOut": "White time out",
   "whiteRanOutOfTime": "White ran out of time",
-  "blackTimeOut": "Black time out",
   "blackRanOutOfTime": "Black ran out of time",
   "drawOfferSent": "Draw offer sent",
   "drawOfferAccepted": "Draw offer accepted",
@@ -2011,7 +2017,6 @@
       }
     }
   },
-  "ratingRangeIsDisabledBecauseYourRatingIsProvisional": "Rating filters are locked because your rating is not stable. Playing rated games will increase stability.",
   "cannotFilterByUnstableRating": "It is not possible to filter by rating because your rating is not stable.\nPlaying rated games will increase stability.",
   "yourPerfRatingIsTooHigh": "Your {param1} rating ({param2}) is too high",
   "@yourPerfRatingIsTooHigh": {
@@ -2297,6 +2302,11 @@
   "autoSwitch": "Auto switch",
   "puzzles": "Puzzles",
   "onlineBots": "Online bots",
+  "aboutBotsOnLichess": "About bots on Lichess",
+  "featuredBots": "Featured bots",
+  "tryPlayingTheseInnovativeChessEngines": "Try playing these innovative chess engines! They are our favourites.",
+  "communityBots": "Community bots",
+  "moreChessEnginesCreatedByTheLichessCommunity": "More chess engines created by the Lichess community. They are hosted by their creators, and might not always be online.",
   "name": "Name",
   "description": "Description",
   "descPrivate": "Private description",
@@ -2328,7 +2338,6 @@
   "other": "Other",
   "reportCheatBoostHelp": "Paste the link to the game(s) and explain what is wrong about this user's behaviour. Don't just say \"they cheat\", but tell us how you came to this conclusion.",
   "reportUsernameHelp": "Explain why this username is offensive. Don't just say \"it's offensive/inappropriate,\" but tell us how you came to this conclusion, especially if the offense is obscure, not in English, in slang, or a historical/cultural reference.",
-  "reportProcessedFasterInEnglish": "Your report will be processed faster if written in English.",
   "processReportFasterInEnglish": "We can process your report faster if you write in English.",
   "error_provideOneCheatedGameLink": "Please provide at least one link to a game for review.",
   "by": "by {param}",
@@ -2359,6 +2368,7 @@
   "clearField": "Clear field",
   "orSeparator": "Or",
   "logInByEmail": "Log in by email",
+  "emailLoginInstructions": "We will send you an email containing a link to log you in.",
   "emailMeALink": "Email me a link",
   "currentPassword": "Current password",
   "newPassword": "New password",
@@ -2383,6 +2393,8 @@
   "onSlowGames": "On slow games",
   "always": "Always",
   "never": "Never",
+  "defeatOnly": "Defeat only",
+  "drawAndDefeat": "Draw and defeat",
   "xCompetesInY": "{param1} competes in {param2}",
   "@xCompetesInY": {
     "placeholders": {
@@ -2550,10 +2562,13 @@
     }
   },
   "really": "really",
+  "lichessUpdates": "Lichess updates",
   "contribute": "Contribute",
+  "changelog": "Changelog",
   "termsOfService": "Terms of Service",
   "titleVerification": "Title verification",
   "sourceCode": "Source Code",
+  "blockAds": "Block ads",
   "simultaneousExhibitions": "Simultaneous exhibitions",
   "host": "Host",
   "hostColorX": "Host colour: {param}",
@@ -2577,12 +2592,10 @@
   "aboutSimulRules": "When the simul starts, every player starts a game with the host. The simul ends when all games are complete.",
   "aboutSimulSettings": "Simuls are always casual. Rematches, takebacks and adding time are disabled.",
   "create": "Create",
-  "whenCreateSimul": "When you create a simul, you get to play several players at once.",
   "creatingASimul": "Creating a simul lets you play against multiple opponents at the same time.",
   "simulVariantsHint": "If you select several variants, each player gets to choose which one to play.",
   "simulClockHint": "The more players you take on, the more time you may need.",
   "simulAddExtraTime": "You may add extra initial time to your clock to help you cope with the simul.",
-  "simulHostExtraTime": "Host extra initial clock time",
   "extraClockTimeForHost": "Extra clock time for the host:",
   "simulAddExtraTimePerPlayer": "Add initial time to your clock for each player joining the simul.",
   "simulHostExtraTimePerPlayer": "Host extra clock time per player",
@@ -2843,14 +2856,6 @@
       }
     }
   },
-  "perfRatingX": "Rating: {param}",
-  "@perfRatingX": {
-    "placeholders": {
-      "param": {
-        "type": "String"
-      }
-    }
-  },
   "perfRatingLabel": "Rating: {param}.",
   "@perfRatingLabel": {
     "placeholders": {
@@ -2947,7 +2952,6 @@
     }
   },
   "showUnreadLichessMessage": "You have received a private message from Lichess.",
-  "clickHereToReadIt": "Click here to read it",
   "readTheMessage": "Read the message",
   "sorry": "Sorry :(",
   "weHadToTimeYouOutForAWhile": "We had to time you out for a while.",
@@ -3168,14 +3172,6 @@
   },
   "simulDescription": "Simul description",
   "simulDescriptionHelp": "Anything you want to tell the participants?",
-  "markdownIsAvailable": "{param} is available for formatting.",
-  "@markdownIsAvailable": {
-    "placeholders": {
-      "param": {
-        "type": "String"
-      }
-    }
-  },
   "youCanFormatTextUsing": "You can format text using {param}.",
   "@youCanFormatTextUsing": {
     "placeholders": {
@@ -3190,7 +3186,6 @@
   "noChat": "No chat",
   "onlyTeamLeaders": "Only team leaders",
   "onlyTeamMembers": "Only team members",
-  "navigateMoveTree": "Navigate the move tree",
   "moveListNavigation": "Move list navigation",
   "mouseTricks": "Mouse tricks",
   "toggleLocalAnalysis": "Toggle local computer analysis",
@@ -3249,6 +3244,8 @@
   "verifyingYourDevice": "Verifying your device...",
   "chessOpenings": "Chess openings",
   "boards": "Boards",
+  "write": "Write",
+  "preview": "Preview",
   "opponentLeftCounter": "{count, plural, =1{Your opponent left the game. You can claim victory in {count} second.} other{Your opponent left the game. You can claim victory in {count} seconds.}}",
   "@opponentLeftCounter": {
     "placeholders": {
@@ -3265,14 +3262,6 @@
       }
     }
   },
-  "nbBlunders": "{count, plural, =1{{count} blunder} other{{count} blunders}}",
-  "@nbBlunders": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "numberBlunders": "{count, plural, =1{{count} Blunder} other{{count} Blunders}}",
   "@numberBlunders": {
     "placeholders": {
@@ -3281,24 +3270,8 @@
       }
     }
   },
-  "nbMistakes": "{count, plural, =1{{count} mistake} other{{count} mistakes}}",
-  "@nbMistakes": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "numberMistakes": "{count, plural, =1{{count} Mistake} other{{count} Mistakes}}",
   "@numberMistakes": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "nbInaccuracies": "{count, plural, =1{{count} inaccuracy} other{{count} inaccuracies}}",
-  "@nbInaccuracies": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -3589,14 +3562,6 @@
       }
     }
   },
-  "nbAnonymous": "{count, plural, =1{Anonymous} other{Anonymous ({count})}}",
-  "@nbAnonymous": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "nbSecondsToPlayTheFirstMove": "{count, plural, =1{{count} second to play the first move} other{{count} seconds to play the first move}}",
   "@nbSecondsToPlayTheFirstMove": {
     "placeholders": {
@@ -3773,7 +3738,6 @@
   "studyDownloadGame": "Download game",
   "studyStudyUrl": "Study URL",
   "studyCurrentChapterUrl": "Current chapter URL",
-  "studyYouCanPasteThisInTheForumToEmbed": "You can paste this in the forum or your Lichess blog to embed",
   "studyPasteToEmbedChapterInForumOrBlog": "You can paste this in the forum or your Lichess blog to embed the chapter.",
   "studyStartAtInitialPosition": "Start at initial position",
   "studyStartAtX": "Start at {param}",
@@ -3961,9 +3925,7 @@
   "studyFromInitialPositionText": "A board set up for a new game.<br>Useful for exploring openings.",
   "studyCustomPositionTitle": "Custom position",
   "studyCustomPositionText": "Set up the board your way.<br>Suited to explore endgames.",
-  "studyLoadExistingLichessGameTitle": "Load an existing lichess game",
   "studyLoadGameFromTheWebTitle": "Load a game from the web",
-  "studyLoadExistingLichessGameText": "Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.",
   "studyLoadGameFromTheWebText": "Paste a game URL<br>(like lichess.org/7fHIU0XI)<br>to load game moves in the chapter.",
   "studyFromFenStringTitle": "From a FEN string",
   "studyFromFenStringText": "Paste a position in FEN format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>to start the chapter from a position.",

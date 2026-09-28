@@ -564,7 +564,6 @@ class AppLocalizationsHe extends AppLocalizations {
       count,
       locale: localeName,
       other: 'תמכ/ה בליצ\'ס במשך $count חודשים כ$param2',
-      many: 'תמכ/ה בליצ\'ס במשך $count חודשים כ$param2',
       two: 'תמכ/ה בליצ\'ס במשך $count חודשים כ$param2',
       one: 'תמכ/ה ב-lichess במשך חודש $count כ$param2',
     );
@@ -577,7 +576,6 @@ class AppLocalizationsHe extends AppLocalizations {
       count,
       locale: localeName,
       other: 'התאמן/ה על $count עמדות ב$param2',
-      many: 'התאמן/ה על $count עמדות ב$param2',
       two: 'התאמן/ה על $count עמדות ב$param2',
       one: 'התאמן/ה על עמדה $count ב$param2',
     );
@@ -590,7 +588,6 @@ class AppLocalizationsHe extends AppLocalizations {
       count,
       locale: localeName,
       other: 'פתר/ה $count חידות טקטיות',
-      many: 'פתר/ה $count חידות טקטיות',
       two: 'פתר/ה $count חידות טקטיות',
       one: 'פתר/ה חידה טקטית $count',
     );
@@ -603,7 +600,6 @@ class AppLocalizationsHe extends AppLocalizations {
       count,
       locale: localeName,
       other: 'שיחק/ה $count משחקי $param2',
-      many: 'שיחק/ה $count משחקי $param2',
       two: 'שיחק/ה $count משחקי $param2',
       one: 'שיחק/ה משחק $param2 $count',
     );
@@ -616,7 +612,6 @@ class AppLocalizationsHe extends AppLocalizations {
       count,
       locale: localeName,
       other: 'פרסם/ה $count הודעות ב$param2',
-      many: 'פרסם/ה $count הודעות ב$param2',
       two: 'פרסם/ה $count הודעות ב$param2',
       one: 'פרסם/ה הודעה $count ב$param2',
     );
@@ -629,7 +624,6 @@ class AppLocalizationsHe extends AppLocalizations {
       count,
       locale: localeName,
       other: 'שיחק/ה $count מהלכים',
-      many: 'שיחק/ה $count מהלכים',
       two: 'שיחק/ה $count מהלכים',
       one: 'שיחק/ה מהלך $count',
     );
@@ -642,7 +636,6 @@ class AppLocalizationsHe extends AppLocalizations {
       count,
       locale: localeName,
       other: 'ב$count משחקים בהתכתבות',
-      many: 'ב$count משחקים בהתכתבות',
       two: 'ב$count משחקים בהתכתבות',
       one: 'במשחק $count בהתכתבות',
     );
@@ -655,7 +648,6 @@ class AppLocalizationsHe extends AppLocalizations {
       count,
       locale: localeName,
       other: 'השלים/ה $count משחקי התכתבות',
-      many: 'השלים/ה $count משחקי התכתבות',
       two: 'השלים/ה $count משחקי התכתבות',
       one: 'השלים/ה משחק התכתבות $count',
     );
@@ -668,7 +660,6 @@ class AppLocalizationsHe extends AppLocalizations {
       count,
       locale: localeName,
       other: 'השלים/ה $count משחקי התכתבות מסוג $param2',
-      many: 'השלים/ה $count משחקי התכתבות מסוג $param2',
       two: 'השלים/ה $count משחקי התכתבות מסוג $param2',
       one: 'השלים/ה משחק התכתבות $count מסוג $param2',
     );
@@ -681,7 +672,6 @@ class AppLocalizationsHe extends AppLocalizations {
       count,
       locale: localeName,
       other: 'התחיל/ה לעקוב אחר $count שחקנים',
-      many: 'התחיל/ה לעקוב אחר $count שחקנים',
       two: 'התחיל/ה לעקוב אחר $count שחקנים',
       one: 'התחיל/ה לעקוב אחר שחקן $count',
     );
@@ -694,7 +684,6 @@ class AppLocalizationsHe extends AppLocalizations {
       count,
       locale: localeName,
       other: 'השיג/ה $count עוקבים חדשים',
-      many: 'השיג/ה $count עוקבים חדשים',
       two: 'השיג/ה $count עוקבים חדשים',
       one: 'השיג/ה עוקב/ת $count חדש/ה',
     );
@@ -707,7 +696,6 @@ class AppLocalizationsHe extends AppLocalizations {
       count,
       locale: localeName,
       other: 'אירח/ה $count משחקים סימולטניים',
-      many: 'אירח/ה $count משחקים סימולטניים',
       two: 'אירח/ה $count משחקים סימולטניים',
       one: 'אירח/ה משחק סימולטני $count',
     );
@@ -720,7 +708,6 @@ class AppLocalizationsHe extends AppLocalizations {
       count,
       locale: localeName,
       other: 'השתתף/ה ב־$count משחקים סימולטניים',
-      many: 'השתתף/ה ב־$count משחקים סימולטניים',
       two: 'השתתף/ה ב־$count משחקים סימולטניים',
       one: 'השתתף/ה במשחק סימולטני $count',
     );
@@ -733,7 +720,6 @@ class AppLocalizationsHe extends AppLocalizations {
       count,
       locale: localeName,
       other: 'יצר/ה $count לוחות למידה חדשים',
-      many: 'יצר/ה $count לוחות למידה חדשים',
       two: 'יצר/ה $count לוחות למידה חדשים',
       one: 'יצר/ה לוח למידה $count חדש',
     );
@@ -746,7 +732,6 @@ class AppLocalizationsHe extends AppLocalizations {
       count,
       locale: localeName,
       other: 'השתתף/ה ב־$count טורנירי זירה',
-      many: 'השתתף/ה ב־$count טורנירי זירה',
       two: 'השתתף/ה ב־$count טורנירי זירה',
       one: 'השתתף/ה בטורניר זירה $count',
     );
@@ -759,7 +744,6 @@ class AppLocalizationsHe extends AppLocalizations {
       count,
       locale: localeName,
       other: 'סיים/ה במקום #$count (אחוזון %$param2) עם $param3 משחקים ב$param4',
-      many: 'סיים/ה במקום #$count (אחוזון %$param2) עם $param3 משחקים ב$param4',
       two: 'סיים/ה במקום #$count (אחוזון %$param2) עם $param3 משחקים ב$param4',
       one: 'סיים/ה במקום #$count (אחוזון %$param2) עם משחק $param3 ב־$param4',
     );
@@ -772,7 +756,6 @@ class AppLocalizationsHe extends AppLocalizations {
       count,
       locale: localeName,
       other: 'השתתף/ה ב־$count טורנירים שוויצריים',
-      many: 'השתתף/ה ב־$count טורנירים שוויצריים',
       two: 'השתתף/ה ב־$count טורנירים שוויצריים',
       one: 'השתתף/ה בטורניר שוויצרי $count',
     );
@@ -785,7 +768,6 @@ class AppLocalizationsHe extends AppLocalizations {
       count,
       locale: localeName,
       other: 'הצטרף/ה ל־$count קבוצות',
-      many: 'הצטרף/ה ל־$count קבוצות',
       two: 'הצטרף/ה ל־$count קבוצות',
       one: 'הצטרף/ה לקבוצה $count',
     );
@@ -830,9 +812,6 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get arenaHowIsTheWinnerDecidedAnswer => 'השחקן/ית עם מספר הנקודות המרבי בסיום הזמן החוקי של התחרות יוכרזו כמנצחים.\n\nאם יש כמה שחקנים עם מספר זה, הם ידורגו לפי דירוג הביצוע שלהם בתחרות.';
-
-  @override
-  String get arenaHowDoesPairingWork => 'How does the pairing work?';
 
   @override
   String get arenaHowArePlayersPaired => 'How are players paired?';
@@ -923,9 +902,6 @@ class AppLocalizationsHe extends AppLocalizations {
   String get arenaEditTeamBattle => 'עריכת קרב הקבוצות';
 
   @override
-  String get arenaDefender => 'Defender';
-
-  @override
   String get arenaDefenderLabel => 'Defender:';
 
   @override
@@ -948,9 +924,6 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get arenaTournamentStats => 'נתוני הטורנירים';
-
-  @override
-  String get arenaRankAvgHelp => 'The rank average is a percentage of your ranking. Lower is better.\n\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.';
 
   @override
   String get arenaRankAverageHelp => 'Your rank average represents your typical finishing position, relative to the total number of players in each tournament.\nThis is a measure of your tournament placement, not your general rating.\n\nFor example, a rank average of 3% means you typically finish in the top 3% (such as 30th place out of 1,000 players).';
@@ -1103,9 +1076,6 @@ class AppLocalizationsHe extends AppLocalizations {
   String get broadcastDeleteRound => 'מחיקת הסבב הזה';
 
   @override
-  String get broadcastDefinitivelyDeleteRound => 'Definitively delete the round and all its games.';
-
-  @override
   String get broadcastPermanentlyDeleteRound => 'Permanently delete this round and all its games?';
 
   @override
@@ -1116,9 +1086,6 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get broadcastDeleteTournament => 'מחיקת הטורניר הזה';
-
-  @override
-  String get broadcastDefinitivelyDeleteTournament => 'Definitively delete the entire tournament, all its rounds and all its games.';
 
   @override
   String get broadcastPermanentlyDeleteTournament => 'Permanently delete this tournament, including all rounds and games?';
@@ -1349,6 +1316,9 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get broadcastKnockouts => 'Knockouts';
+
+  @override
+  String get broadcastPinPlayer => 'Pin player';
 
   @override
   String broadcastUnderXAgeTournament(String param) {
@@ -1837,6 +1807,9 @@ class AppLocalizationsHe extends AppLocalizations {
   String get learnCastling => 'הצרחה';
 
   @override
+  String get learnEnPassant => 'הכאה דרך הילוכו';
+
+  @override
   String get learnTheSpecialKingMove => 'מהלך מיוחד של המלך';
 
   @override
@@ -2290,6 +2263,9 @@ class AppLocalizationsHe extends AppLocalizations {
   String get preferencesMoveConfirmation => 'אישור המהלכים';
 
   @override
+  String get preferencesMultipleChoices => 'Multiple choices. ';
+
+  @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'ניתן לביטול במהלך המשחק באמצעות תפריט הלוח';
 
   @override
@@ -2335,19 +2311,10 @@ class AppLocalizationsHe extends AppLocalizations {
   String get preferencesNotifyStreamStart => 'משדר עולה לשידור חי';
 
   @override
-  String get preferencesNotifyInboxMsg => 'New inbox message';
-
-  @override
   String get preferencesNotifyDirectMessage => 'New direct message';
 
   @override
-  String get preferencesNotifyForumMention => 'Forum comment mentions you';
-
-  @override
   String get preferencesNotifyForumMentions => 'Forum mentions';
-
-  @override
-  String get preferencesNotifyInvitedStudy => 'Study invite';
 
   @override
   String get preferencesNotifyStudyInvites => 'Study invites';
@@ -2357,9 +2324,6 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get preferencesNotifyChallenge => 'הזמנות למשחקים';
-
-  @override
-  String get preferencesNotifyTournamentSoon => 'Tournament starting soon';
 
   @override
   String get preferencesNotifyTournamentStartReminders => 'Tournaments start reminders';
@@ -2444,6 +2408,24 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get preferencesHoverOverSettingLabelsForHelp => 'Hover over setting labels for help';
+
+  @override
+  String get preferencesNetwork => 'Network';
+
+  @override
+  String get preferencesYouAreCurrentlyUsingDirectRouting => 'You are currently using direct routing.';
+
+  @override
+  String get preferencesYouAreCurrentlyUsingCdnRouting => 'You are currently using Content Delivery Network (CDN) routing.';
+
+  @override
+  String get preferencesFrequentDisconnectsAdvice => 'If you have frequent disconnects, try changing the routing.';
+
+  @override
+  String get preferencesUseDirectRouting => 'Use direct routing';
+
+  @override
+  String get preferencesUseCdnRouting => 'Use CDN routing';
 
   @override
   String get puzzlePuzzles => 'חידות';
@@ -2668,7 +2650,6 @@ class AppLocalizationsHe extends AppLocalizations {
       count,
       locale: localeName,
       other: 'שוחק $count פעמים',
-      many: 'שוחק $count פעמים',
       two: 'שוחק $count פעמים',
       one: 'שוחק פעם $count',
     );
@@ -2681,7 +2662,6 @@ class AppLocalizationsHe extends AppLocalizations {
       count,
       locale: localeName,
       other: '$count נקודות מתחת לדירוג החידות שלך',
-      many: '$count נקודות מתחת לדירוג החידות שלך',
       two: '$count נקודות מתחת לדירוג החידות שלך',
       one: 'נקודה $count מתחת לדירוג החידות שלך',
     );
@@ -2694,7 +2674,6 @@ class AppLocalizationsHe extends AppLocalizations {
       count,
       locale: localeName,
       other: '$count נקודות מעל לדירוג החידות שלך',
-      many: '$count נקודות מעל לדירוג החידות שלך',
       two: 'נקודה 1 מתחת לדירוג הפזלים שלך',
       one: 'נקודה $count מעל לדירוג החידות שלך',
     );
@@ -2718,7 +2697,6 @@ class AppLocalizationsHe extends AppLocalizations {
       count,
       locale: localeName,
       other: '$count שוחקו',
-      many: '$count שוחקו',
       two: '$count שוחקו',
       one: '$count שוּחק',
     );
@@ -2731,7 +2709,6 @@ class AppLocalizationsHe extends AppLocalizations {
       count,
       locale: localeName,
       other: '$count שכדאי לפתור שוב',
-      many: '$count שכדאי לפתור שוב',
       two: '$count שכדאי לפתור שוב',
       one: '$count שכדאי לפתור שוב',
     );
@@ -2808,6 +2785,9 @@ class AppLocalizationsHe extends AppLocalizations {
   String get puzzleThemeCastling => 'הצרחה';
 
   @override
+  String get puzzleThemeEnPassant => 'הכאה דרך הילוכו';
+
+  @override
   String get puzzleThemeCastlingDescription => 'הביאו את המלך למקום מבטחים, והכינו את הצריח להתקפה.';
 
   @override
@@ -2824,9 +2804,6 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get puzzleThemeCornerMate => 'Corner mate';
-
-  @override
-  String get puzzleThemeCornerMateDescription => 'Confine the king to the corner using a rook or queen and a knight to engage the checkmate.';
 
   @override
   String get puzzleThemeCornerMateKnightDeliversDescription => 'Confine the king to the corner using a rook or queen, and use a knight to deliver the checkmate.';
@@ -2904,9 +2881,6 @@ class AppLocalizationsHe extends AppLocalizations {
   String get puzzleThemeEndgameDescription => 'טקטיקה במהלך השלב האחרון של המשחק.';
 
   @override
-  String get puzzleThemeEnPassantDescription => 'A tactic involving the en passant rule, where a pawn can capture an opponent pawn that has bypassed it using its initial two-square move.';
-
-  @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'A tactic involving the en passant rule, where a pawn can capture an opposing pawn that has just moved next to it with its initial two-square move.';
 
   @override
@@ -2925,9 +2899,6 @@ class AppLocalizationsHe extends AppLocalizations {
   String get puzzleThemeFork => 'מזלג';
 
   @override
-  String get puzzleThemeForkDescription => 'A move where the moved piece attacks two opponent pieces at once.';
-
-  @override
   String get puzzleThemeForkOpposingPiecesDescription => 'A move where a piece attacks two or more opposing pieces simultaneously.';
 
   @override
@@ -2938,9 +2909,6 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get puzzleThemeHookMate => 'מט קרס';
-
-  @override
-  String get puzzleThemeHookMateDescription => 'Checkmate with a rook, knight, and pawn along with one enemy pawn to limit the enemy king\'s escape.';
 
   @override
   String get puzzleThemeHookMateOpposingPawnDescription => 'Checkmate using a rook, knight, and pawn, where an opposing pawn blocks the king\'s escape.';
@@ -2967,16 +2935,10 @@ class AppLocalizationsHe extends AppLocalizations {
   String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
 
   @override
-  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
-
-  @override
   String get puzzleThemePillsburyMateRookAndBishopDescription => 'A rook delivers checkmate to the king, while a bishop helps confine it.';
 
   @override
   String get puzzleThemeMorphysMate => 'Morphy\'s mate';
-
-  @override
-  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
 
   @override
   String get puzzleThemeMorphyMateBishopAndRookDescription => 'A bishop delivers checkmate to the king, while a rook helps confine it.';
@@ -3097,9 +3059,6 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get puzzleThemePromotion => 'הכתרה';
-
-  @override
-  String get puzzleThemePromotionDescription => 'Promote one of your pawn to a queen or minor piece.';
 
   @override
   String get puzzleThemePromotePawnToQueenRookOrMinor => 'Promote one of your pawns to a queen, rook or minor piece.';
@@ -3242,6 +3201,32 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get settingsThisAccountIsClosed => 'החשבון הזה סגור.';
+
+  @override
+  String get settingsWereSorryToSeeYouGo => 'We\'re sorry to see you go.';
+
+  @override
+  String get settingsCloseAccountForeverLabel => 'Close forever: make it impossible to reopen';
+
+  @override
+  String get settingsCloseAccountForeverWarning => 'Prevent reopening the account later. If you tick this box, even administrators will be unable to reopen your account at your request.';
+
+  @override
+  String get settingsDeleteYourAccount => 'Delete your account';
+
+  @override
+  String get settingsDeleteAccountWarning => 'Once you delete your account, it\'s removed from Lichess and our administrators won\'t be able to bring it back for you.';
+
+  @override
+  String settingsWouldYouLikeToXInstead(String param) {
+    return 'Would you like to $param instead?';
+  }
+
+  @override
+  String get settingsCloseYourAccount => 'close your account';
+
+  @override
+  String get settingsDeleteAccountConfirmText => 'I understand that deleted accounts aren\'t recoverable';
 
   @override
   String get gameSetup => 'הגדרת משחק';
@@ -3913,9 +3898,6 @@ class AppLocalizationsHe extends AppLocalizations {
   String get refreshInboxAfterFiveMinutes => 'חכו 5 דקות ולאחר מכן בצעו ריענון לתיבת המייל.';
 
   @override
-  String get checkSpamFolder => 'Also check your spam folder, it might end up there. If so, mark it as not spam.';
-
-  @override
   String get checkSpamOrJunkFolder => 'If you do not receive a confirmation email, check your Spam or Junk folder. Be sure to indicate messages from lichess.org as safe and \"not spam\", so you can stay informed of important communications.';
 
   @override
@@ -3964,13 +3946,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get cancel => 'ביטול';
 
   @override
-  String get whiteTimeOut => 'White time out';
-
-  @override
   String get whiteRanOutOfTime => 'White ran out of time';
-
-  @override
-  String get blackTimeOut => 'Black time out';
 
   @override
   String get blackRanOutOfTime => 'Black ran out of time';
@@ -4180,9 +4156,6 @@ class AppLocalizationsHe extends AppLocalizations {
   String yourPerfRatingIsProvisional(String param) {
     return 'דירוג ה־$param שלך זמני';
   }
-
-  @override
-  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
 
   @override
   String get cannotFilterByUnstableRating => 'It is not possible to filter by rating because your rating is not stable.\nPlaying rated games will increase stability.';
@@ -4607,6 +4580,21 @@ class AppLocalizationsHe extends AppLocalizations {
   String get onlineBots => 'בוטים מחוברים';
 
   @override
+  String get aboutBotsOnLichess => 'About bots on Lichess';
+
+  @override
+  String get featuredBots => 'Featured bots';
+
+  @override
+  String get tryPlayingTheseInnovativeChessEngines => 'Try playing these innovative chess engines! They are our favourites.';
+
+  @override
+  String get communityBots => 'Community bots';
+
+  @override
+  String get moreChessEnginesCreatedByTheLichessCommunity => 'More chess engines created by the Lichess community. They are hosted by their creators, and might not always be online.';
+
+  @override
   String get name => 'שם';
 
   @override
@@ -4700,9 +4688,6 @@ class AppLocalizationsHe extends AppLocalizations {
   String get reportUsernameHelp => 'הסבירו מה פוגעני בשם המשתמש הזה. אל תכתבו סתם ״שם המשתמש פוגעני״. הסבירו לנו כיצד הגעתם למסקנה הזו, במיוחד אם ההעלבה מוסווית, בשפה זרה (שאינה אנגלית), בלשון סלנג או תלויית תרבות והיסטוריה.';
 
   @override
-  String get reportProcessedFasterInEnglish => 'Your report will be processed faster if written in English.';
-
-  @override
   String get processReportFasterInEnglish => 'We can process your report faster if you write in English.';
 
   @override
@@ -4753,6 +4738,9 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get logInByEmail => 'Log in by email';
+
+  @override
+  String get emailLoginInstructions => 'We will send you an email containing a link to log you in.';
 
   @override
   String get emailMeALink => 'שלחו לי קישור בדוא״ל';
@@ -4825,6 +4813,12 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get never => 'אף פעם';
+
+  @override
+  String get defeatOnly => 'Defeat only';
+
+  @override
+  String get drawAndDefeat => 'Draw and defeat';
 
   @override
   String xCompetesInY(String param1, String param2) {
@@ -5009,7 +5003,13 @@ class AppLocalizationsHe extends AppLocalizations {
   String get really => 'באמת';
 
   @override
+  String get lichessUpdates => 'Lichess updates';
+
+  @override
   String get contribute => 'תרומה ומעורבות';
+
+  @override
+  String get changelog => 'Changelog';
 
   @override
   String get termsOfService => 'תנאים לשימוש באתר';
@@ -5019,6 +5019,9 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get sourceCode => 'קוד המקור';
+
+  @override
+  String get blockAds => 'Block ads';
 
   @override
   String get simultaneousExhibitions => 'משחקים סימולטניים';
@@ -5071,9 +5074,6 @@ class AppLocalizationsHe extends AppLocalizations {
   String get create => 'צור';
 
   @override
-  String get whenCreateSimul => 'When you create a simul, you get to play several players at once.';
-
-  @override
   String get creatingASimul => 'Creating a simul lets you play against multiple opponents at the same time.';
 
   @override
@@ -5084,9 +5084,6 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get simulAddExtraTime => 'באפשרותך להוסיף זמן לשעון שלך כדי לעזור לך להתמודד עם המשחק הסימולטני.';
-
-  @override
-  String get simulHostExtraTime => 'Host extra initial clock time';
 
   @override
   String get extraClockTimeForHost => 'Extra clock time for the host:';
@@ -5493,11 +5490,6 @@ class AppLocalizationsHe extends AppLocalizations {
   }
 
   @override
-  String perfRatingX(String param) {
-    return 'Rating: $param';
-  }
-
-  @override
   String perfRatingLabel(String param) {
     return 'Rating: $param.';
   }
@@ -5651,9 +5643,6 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get showUnreadLichessMessage => 'קיבלתם הודעה פרטית מ־Lichess.';
-
-  @override
-  String get clickHereToReadIt => 'Click here to read it';
 
   @override
   String get readTheMessage => 'Read the message';
@@ -5938,11 +5927,6 @@ class AppLocalizationsHe extends AppLocalizations {
   String get simulDescriptionHelp => 'משהו שאת/ה רוצה להגיד למשתתפים?';
 
   @override
-  String markdownIsAvailable(String param) {
-    return '$param is available for formatting.';
-  }
-
-  @override
   String youCanFormatTextUsing(String param) {
     return 'You can format text using $param.';
   }
@@ -5964,9 +5948,6 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get onlyTeamMembers => 'רק חברי קבוצות';
-
-  @override
-  String get navigateMoveTree => 'Navigate the move tree';
 
   @override
   String get moveListNavigation => 'Move list navigation';
@@ -6105,6 +6086,12 @@ class AppLocalizationsHe extends AppLocalizations {
   String get boards => 'Boards';
 
   @override
+  String get write => 'Write';
+
+  @override
+  String get preview => 'Preview';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -6129,17 +6116,6 @@ class AppLocalizationsHe extends AppLocalizations {
   }
 
   @override
-  String nbBlunders(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count blunders',
-      one: '$count blunder',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String numberBlunders(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -6152,17 +6128,6 @@ class AppLocalizationsHe extends AppLocalizations {
   }
 
   @override
-  String nbMistakes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count mistakes',
-      one: '$count mistake',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String numberMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -6170,17 +6135,6 @@ class AppLocalizationsHe extends AppLocalizations {
       other: '$count שגיאות',
       two: '$count שגיאות',
       one: '$count שגיאה',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String nbInaccuracies(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count inaccuracies',
-      one: '$count inaccuracy',
     );
     return '$_temp0';
   }
@@ -6594,17 +6548,6 @@ class AppLocalizationsHe extends AppLocalizations {
   }
 
   @override
-  String nbAnonymous(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Anonymous ($count)',
-      one: 'Anonymous',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String nbSecondsToPlayTheFirstMove(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -6805,7 +6748,6 @@ class AppLocalizationsHe extends AppLocalizations {
       count,
       locale: localeName,
       other: '$count נסיונות',
-      many: '$count ניסיונות',
       two: '$count ניסיונות',
       one: 'ניסיון אחד',
     );
@@ -6818,7 +6760,6 @@ class AppLocalizationsHe extends AppLocalizations {
       count,
       locale: localeName,
       other: 'שוחקו $count ריצות של $param2',
-      many: 'שוחקו $count ריצות של $param2',
       two: 'שוחקו $count ריצות של $param2',
       one: 'שוחקה ריצה אחת של $param2',
     );
@@ -6988,9 +6929,6 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get studyCurrentChapterUrl => 'כתובת האינטרנט של הפרק הנוכחי';
-
-  @override
-  String get studyYouCanPasteThisInTheForumToEmbed => 'You can paste this in the forum or your Lichess blog to embed';
 
   @override
   String get studyPasteToEmbedChapterInForumOrBlog => 'You can paste this in the forum or your Lichess blog to embed the chapter.';
@@ -7365,13 +7303,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get studyCustomPositionText => 'Set up the board your way.<br>Suited to explore endgames.';
 
   @override
-  String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
-
-  @override
   String get studyLoadGameFromTheWebTitle => 'Load a game from the web';
-
-  @override
-  String get studyLoadExistingLichessGameText => 'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
 
   @override
   String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/7fHIU0XI)<br>to load game moves in the chapter.';
@@ -7469,7 +7401,6 @@ class AppLocalizationsHe extends AppLocalizations {
       count,
       locale: localeName,
       other: 'קרב של $count קבוצות',
-      many: 'קרב של $count קבוצות',
       two: 'קרב של $count קבוצות',
       one: 'קרב של קבוצה $count',
     );
@@ -7482,7 +7413,6 @@ class AppLocalizationsHe extends AppLocalizations {
       count,
       locale: localeName,
       other: '$count מנהיגים בכל קבוצה',
-      many: '$count מנהיגים בכל קבוצה',
       two: '$count מנהיגים בכל קבוצה',
       one: 'מנהיג אחד בכל קבוצה',
     );
@@ -7504,7 +7434,6 @@ class AppLocalizationsHe extends AppLocalizations {
       count,
       locale: localeName,
       other: 'עוד $count שניות',
-      many: 'עוד $count שניות',
       two: 'עוד $count שניות',
       one: 'עוד שנייה',
     );
@@ -7517,7 +7446,6 @@ class AppLocalizationsHe extends AppLocalizations {
       count,
       locale: localeName,
       other: 'עוד $count דקות',
-      many: 'עוד $count דקות',
       two: 'עוד $count דקות',
       one: 'עוד דקה $count',
     );
@@ -7530,7 +7458,6 @@ class AppLocalizationsHe extends AppLocalizations {
       count,
       locale: localeName,
       other: 'עוד $count שעות',
-      many: 'עוד $count שעות',
       two: 'עוד $count שעות',
       one: 'עוד שעה $count',
     );
@@ -7543,7 +7470,6 @@ class AppLocalizationsHe extends AppLocalizations {
       count,
       locale: localeName,
       other: 'עוד $count ימים',
-      many: 'עוד $count ימים',
       two: 'עוד $count ימים',
       one: 'עוד יום $count',
     );
@@ -7556,7 +7482,6 @@ class AppLocalizationsHe extends AppLocalizations {
       count,
       locale: localeName,
       other: 'עוד $count שבועות',
-      many: 'עוד $count שבועות',
       two: 'עוד $count שבועות',
       one: 'עוד שבוע $count',
     );
@@ -7569,7 +7494,6 @@ class AppLocalizationsHe extends AppLocalizations {
       count,
       locale: localeName,
       other: 'עוד $count חודשים',
-      many: 'עוד $count חודשים',
       two: 'עוד $count חודשים',
       one: 'עוד חודש $count',
     );
@@ -7582,7 +7506,6 @@ class AppLocalizationsHe extends AppLocalizations {
       count,
       locale: localeName,
       other: 'עוד $count שנים',
-      many: 'עוד $count שנים',
       two: 'עוד $count שנים',
       one: 'עוד שנה $count',
     );
@@ -7595,7 +7518,6 @@ class AppLocalizationsHe extends AppLocalizations {
       count,
       locale: localeName,
       other: 'לפני $count דקות',
-      many: 'לפני $count דקות',
       two: 'לפני $count דקות',
       one: 'לפני דקה $count',
     );
@@ -7608,7 +7530,6 @@ class AppLocalizationsHe extends AppLocalizations {
       count,
       locale: localeName,
       other: 'לפני $count שעות',
-      many: 'לפני $count שעות',
       two: 'לפני $count שעות',
       one: 'לפני שעה $count',
     );
@@ -7621,7 +7542,6 @@ class AppLocalizationsHe extends AppLocalizations {
       count,
       locale: localeName,
       other: 'לפני $count ימים',
-      many: 'לפני $count ימים',
       two: 'לפני $count ימים',
       one: 'לפני יום $count',
     );
@@ -7634,7 +7554,6 @@ class AppLocalizationsHe extends AppLocalizations {
       count,
       locale: localeName,
       other: 'לפני $count שבועות',
-      many: 'לפני $count שבועות',
       two: 'לפני $count שבועות',
       one: 'לפני שבוע $count',
     );
@@ -7647,7 +7566,6 @@ class AppLocalizationsHe extends AppLocalizations {
       count,
       locale: localeName,
       other: 'לפני $count חודשים',
-      many: 'לפני $count חודשים',
       two: 'לפני $count חודשים',
       one: 'לפני חודש $count',
     );
@@ -7660,7 +7578,6 @@ class AppLocalizationsHe extends AppLocalizations {
       count,
       locale: localeName,
       other: 'לפני $count שנים',
-      many: 'לפני $count שנים',
       two: 'לפני $count שנים',
       one: 'לפני שנה $count',
     );
@@ -7673,7 +7590,6 @@ class AppLocalizationsHe extends AppLocalizations {
       count,
       locale: localeName,
       other: '$count דקות נותרו',
-      many: '$count דקות נותרו',
       two: '$count דקות נותרו',
       one: 'דקה $count נותרה',
     );
@@ -7686,7 +7602,6 @@ class AppLocalizationsHe extends AppLocalizations {
       count,
       locale: localeName,
       other: '$count שעות נותרו',
-      many: '$count שעות נותרו',
       two: '$count שעות נותרו',
       one: 'שעה $count נותרה',
     );

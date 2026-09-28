@@ -208,7 +208,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobilePasteFromClipboard => 'Paste from clipboard';
 
   @override
-  String get mobilePerfShortAntichess => 'Antistranç';
+  String get mobilePerfShortAntichess => 'Anti';
 
   @override
   String get mobilePerfShortAtomic => 'Atomik';
@@ -796,9 +796,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get arenaHowIsTheWinnerDecidedAnswer => 'Turnuva sona erdiğinde en fazla puana sahip oyuncu(lar) galip ilan edilir.';
 
   @override
-  String get arenaHowDoesPairingWork => 'How does the pairing work?';
-
-  @override
   String get arenaHowArePlayersPaired => 'Oyuncular nasıl eşleştiriliyor?';
 
   @override
@@ -887,9 +884,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get arenaEditTeamBattle => 'Takım çarpışmasını düzenle';
 
   @override
-  String get arenaDefender => 'Defender';
-
-  @override
   String get arenaDefenderLabel => 'Savunucu:';
 
   @override
@@ -912,9 +906,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get arenaTournamentStats => 'Turnuva istatistikleri';
-
-  @override
-  String get arenaRankAvgHelp => 'The rank average is a percentage of your ranking. Lower is better.\n\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.';
 
   @override
   String get arenaRankAverageHelp => 'Sıralama ortalamanız, her turnuvadaki toplam oyuncu sayısına göre tipik bitirme sıranızı gösterir. Bu, genel puanınızın değil, turnuvadaki yerinizin bir ölçüsüdür. Örneğin, %3\'lük bir sıralama ortalaması, genellikle ilk %3 içinde bitirdiğiniz anlamına gelir (örneğin 1.000 oyuncu arasından 30. sırada).';
@@ -1056,16 +1047,13 @@ class AppLocalizationsTr extends AppLocalizations {
   String get broadcastCurrentGameUrl => 'Şu anki oyunun linki';
 
   @override
-  String get broadcastDownloadAllRounds => 'Bütün maçları indir';
+  String get broadcastDownloadAllRounds => 'Bütün turları indir';
 
   @override
   String get broadcastResetRound => 'Bu turu sıfırla';
 
   @override
   String get broadcastDeleteRound => 'Bu turu sil';
-
-  @override
-  String get broadcastDefinitivelyDeleteRound => 'Definitively delete the round and all its games.';
 
   @override
   String get broadcastPermanentlyDeleteRound => 'Bu turu ve tüm oyunlarını kalıcı olarak silmek istiyor musunuz?';
@@ -1078,9 +1066,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get broadcastDeleteTournament => 'Bu turnuvayı sil';
-
-  @override
-  String get broadcastDefinitivelyDeleteTournament => 'Definitively delete the entire tournament, all its rounds and all its games.';
 
   @override
   String get broadcastPermanentlyDeleteTournament => 'Bu turnuva, tüm turlar ve oyunlar dahil olmak üzere kalıcı olarak silinsin mi?';
@@ -1311,6 +1296,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get broadcastKnockouts => 'Eleme';
+
+  @override
+  String get broadcastPinPlayer => 'Oyuncuyu sabitle';
 
   @override
   String broadcastUnderXAgeTournament(String param) {
@@ -1798,6 +1786,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get learnCastling => 'Rok atma';
 
   @override
+  String get learnEnPassant => 'Geçerken alma';
+
+  @override
   String get learnTheSpecialKingMove => 'Şaha özgü bir hareket';
 
   @override
@@ -2251,6 +2242,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get preferencesMoveConfirmation => 'Hamleyi onayla';
 
   @override
+  String get preferencesMultipleChoices => 'Çoklu seçenek. ';
+
+  @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Oyun esnasında tahta menüsünden devre dışı bırakılabilir';
 
   @override
@@ -2296,19 +2290,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get preferencesNotifyStreamStart => 'Canlı yayın başladığında';
 
   @override
-  String get preferencesNotifyInboxMsg => 'New inbox message';
-
-  @override
   String get preferencesNotifyDirectMessage => 'Yeni özel mesaj';
 
   @override
-  String get preferencesNotifyForumMention => 'Forum comment mentions you';
-
-  @override
   String get preferencesNotifyForumMentions => 'Forum bahsetmeleri';
-
-  @override
-  String get preferencesNotifyInvitedStudy => 'Study invite';
 
   @override
   String get preferencesNotifyStudyInvites => 'Çalışma davetleri';
@@ -2318,9 +2303,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get preferencesNotifyChallenge => 'Meydan okumalar';
-
-  @override
-  String get preferencesNotifyTournamentSoon => 'Tournament starting soon';
 
   @override
   String get preferencesNotifyTournamentStartReminders => 'Turnuva başlangıç hatırlatıcıları';
@@ -2405,6 +2387,24 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get preferencesHoverOverSettingLabelsForHelp => 'Yardım için ayar etiketlerinin üzerine gelin';
+
+  @override
+  String get preferencesNetwork => 'Ağ';
+
+  @override
+  String get preferencesYouAreCurrentlyUsingDirectRouting => 'Şu anda doğrudan yönlendirme kullanıyorsunuz.';
+
+  @override
+  String get preferencesYouAreCurrentlyUsingCdnRouting => 'Şu anda İçerik Dağıtım Ağı (CDN) yönlendirmesi kullanıyorsunuz.';
+
+  @override
+  String get preferencesFrequentDisconnectsAdvice => 'Sık sık bağlantı kopmaları yaşıyorsanız, yönlendirmeyi değiştirmeyi deneyin.';
+
+  @override
+  String get preferencesUseDirectRouting => 'Doğrudan yönlendirme kullan';
+
+  @override
+  String get preferencesUseCdnRouting => 'CDN yönlendirmesi kullan';
 
   @override
   String get puzzlePuzzles => 'Bulmacalar';
@@ -2759,6 +2759,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get puzzleThemeCastling => 'Rok';
 
   @override
+  String get puzzleThemeEnPassant => 'Geçerken alma';
+
+  @override
   String get puzzleThemeCastlingDescription => 'Şahı güvene alırken kaleni saldırıya hazırla.';
 
   @override
@@ -2775,9 +2778,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get puzzleThemeCornerMate => 'Köşe matı';
-
-  @override
-  String get puzzleThemeCornerMateDescription => 'Confine the king to the corner using a rook or queen and a knight to engage the checkmate.';
 
   @override
   String get puzzleThemeCornerMateKnightDeliversDescription => 'Şahı, kale veya vezirle köşeye sıkıştırın ve atla mat yapın.';
@@ -2855,9 +2855,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get puzzleThemeEndgameDescription => 'Oyunun son aşamasında hayat kurtarıcı taktikler.';
 
   @override
-  String get puzzleThemeEnPassantDescription => 'A tactic involving the en passant rule, where a pawn can capture an opponent pawn that has bypassed it using its initial two-square move.';
-
-  @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'Piyonun, rakip piyonun başlangıçtaki iki karelik hamlesiyle hemen yanına geldikten sonra onu geçerken alma kuralıyla yapılan bir taktiktir.';
 
   @override
@@ -2876,9 +2873,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get puzzleThemeFork => 'Çatal';
 
   @override
-  String get puzzleThemeForkDescription => 'A move where the moved piece attacks two opponent pieces at once.';
-
-  @override
   String get puzzleThemeForkOpposingPiecesDescription => 'Bir taşın aynı anda iki veya daha fazla rakip taşa saldırdığı bir hamledir.';
 
   @override
@@ -2889,9 +2883,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get puzzleThemeHookMate => 'Kanca matı';
-
-  @override
-  String get puzzleThemeHookMateDescription => 'Checkmate with a rook, knight, and pawn along with one enemy pawn to limit the enemy king\'s escape.';
 
   @override
   String get puzzleThemeHookMateOpposingPawnDescription => 'Rakip piyonun şahın kaçışını engellediği; kale, at ve piyon kullanılarak yapılan bir mat.';
@@ -2918,16 +2909,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get puzzleThemePillsburysMate => 'Pillsbury matı';
 
   @override
-  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
-
-  @override
   String get puzzleThemePillsburyMateRookAndBishopDescription => 'Bir kale şah için mat yapar, bu arada bir fil onu sınırlamaya yardımcı olur.';
 
   @override
   String get puzzleThemeMorphysMate => 'Morphy matı';
-
-  @override
-  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
 
   @override
   String get puzzleThemeMorphyMateBishopAndRookDescription => 'Fil, şahı mat ederken kale şahın hareket alanını kısıtlar.';
@@ -3048,9 +3033,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get puzzleThemePromotion => 'Terfi';
-
-  @override
-  String get puzzleThemePromotionDescription => 'Promote one of your pawn to a queen or minor piece.';
 
   @override
   String get puzzleThemePromotePawnToQueenRookOrMinor => 'Piyonlarınızdan birini vezir, kale veya hafif taşa terfi ettirin.';
@@ -3193,6 +3175,32 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get settingsThisAccountIsClosed => 'Hesap kapatılmıştır.';
+
+  @override
+  String get settingsWereSorryToSeeYouGo => 'Aramızdan ayrıldığınız için üzgünüz.';
+
+  @override
+  String get settingsCloseAccountForeverLabel => 'Sonsuza dek kapat: Yeniden açılmasını imkansız kıl';
+
+  @override
+  String get settingsCloseAccountForeverWarning => 'Hesabın daha sonra yeniden açılmasını önleyin. Bu kutuyu işaretlerseniz, siz talep etseniz bile yöneticiler hesabınızı yeniden açamayacaktır.';
+
+  @override
+  String get settingsDeleteYourAccount => 'Hesabınızı silin';
+
+  @override
+  String get settingsDeleteAccountWarning => 'Hesabınızı sildiğinizde, hesap Lichess\'ten kaldırılır ve yöneticilerimiz onu sizin için geri getiremez.';
+
+  @override
+  String settingsWouldYouLikeToXInstead(String param) {
+    return 'Bunun yerine $param ister misiniz?';
+  }
+
+  @override
+  String get settingsCloseYourAccount => 'hesabını kapat';
+
+  @override
+  String get settingsDeleteAccountConfirmText => 'Silinen hesapların kurtarılamayacağını anlıyorum';
 
   @override
   String get gameSetup => 'Oyun ayarları';
@@ -3864,9 +3872,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get refreshInboxAfterFiveMinutes => '5 dakika bekleyip e-posta gelen kutunuzu yenileyin.';
 
   @override
-  String get checkSpamFolder => 'Also check your spam folder, it might end up there. If so, mark it as not spam.';
-
-  @override
   String get checkSpamOrJunkFolder => 'Onay e-postası almazsanız, Spam veya Gereksiz klasörünüzü kontrol edin. Önemli bildirimlerden haberdar olmaya devam edebilmeniz için lichess.org adresinden gelen mesajları güvenli olarak işaretlediğinizden ve \"spam değil\" olarak belirttiğinizden emin olun.';
 
   @override
@@ -3915,13 +3920,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get cancel => 'İptal et';
 
   @override
-  String get whiteTimeOut => 'White time out';
-
-  @override
   String get whiteRanOutOfTime => 'Beyaz\'ın süresi doldu';
-
-  @override
-  String get blackTimeOut => 'Black time out';
 
   @override
   String get blackRanOutOfTime => 'Siyah\'ın süresi doldu';
@@ -4131,9 +4130,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String yourPerfRatingIsProvisional(String param) {
     return '$param puanınız geçicidir';
   }
-
-  @override
-  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
 
   @override
   String get cannotFilterByUnstableRating => 'Puanınız istikrarlı olmadığı için puana göre filtreleme yapmak mümkün değil.\nPuanlı oyunlar oynamak istikrarınızı artıracaktır.';
@@ -4558,6 +4554,21 @@ class AppLocalizationsTr extends AppLocalizations {
   String get onlineBots => 'Çevrimiçi botlar';
 
   @override
+  String get aboutBotsOnLichess => 'Lichess\'teki botlar hakkında';
+
+  @override
+  String get featuredBots => 'Öne çıkan botlar';
+
+  @override
+  String get tryPlayingTheseInnovativeChessEngines => 'Bu yenilikçi satranç motorlarıyla oynamayı deneyin! Bunlar bizim favorilerimiz.';
+
+  @override
+  String get communityBots => 'Topluluk botları';
+
+  @override
+  String get moreChessEnginesCreatedByTheLichessCommunity => 'Lichess topluluğu tarafından oluşturulan daha fazla satranç motoru. Bunlar, yaratıcıları tarafından barındırılır ve her zaman çevrimiçi olmayabilirler.';
+
+  @override
   String get name => 'İsim';
 
   @override
@@ -4651,9 +4662,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get reportUsernameHelp => 'Bu kullanıcı adı hakkında neyin saldırganca olduğunu açıklayın. Sadece \"bu saldırganca/uygunsuz\" demeyin, bu sonuca nasıl vardığınızı söyleyin bize, özellikle de hakaret gizlenmiş, ingilizce olmayan, argo, veya tarihsel/kültürel referansalar varsa.';
 
   @override
-  String get reportProcessedFasterInEnglish => 'Your report will be processed faster if written in English.';
-
-  @override
   String get processReportFasterInEnglish => 'İngilizce yazarsanız bildiriminizi daha hızlı işleme alabiliriz.';
 
   @override
@@ -4704,6 +4712,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get logInByEmail => 'E-posta ile giriş yap';
+
+  @override
+  String get emailLoginInstructions => 'Size giriş yapmanızı sağlayacak bağlantıyı içeren bir e-posta göndereceğiz.';
 
   @override
   String get emailMeALink => 'E-Posta ile giriş linki yolla';
@@ -4776,6 +4787,12 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get never => 'Asla';
+
+  @override
+  String get defeatOnly => 'Sadece yenilgi';
+
+  @override
+  String get drawAndDefeat => 'Berabere ve yenilgi';
 
   @override
   String xCompetesInY(String param1, String param2) {
@@ -4960,7 +4977,13 @@ class AppLocalizationsTr extends AppLocalizations {
   String get really => 'ciddiyiz';
 
   @override
+  String get lichessUpdates => 'Lichess güncellemeleri';
+
+  @override
   String get contribute => 'Katkıda bulun';
+
+  @override
+  String get changelog => 'Değişiklik Notları';
 
   @override
   String get termsOfService => 'Hizmet koşulları';
@@ -4970,6 +4993,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get sourceCode => 'Kaynak Kodu';
+
+  @override
+  String get blockAds => 'Reklamları engelle';
 
   @override
   String get simultaneousExhibitions => 'Eş zamanlı gösteriler';
@@ -5022,9 +5048,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get create => 'Oluştur';
 
   @override
-  String get whenCreateSimul => 'When you create a simul, you get to play several players at once.';
-
-  @override
   String get creatingASimul => 'Bir simultane oluşturmak, aynı anda birden fazla rakibe karşı oynamanızı sağlar.';
 
   @override
@@ -5035,9 +5058,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get simulAddExtraTime => 'Eş zamanlı gösteride süreyi idare edebilmek için kendi saatinize fazladan zaman ekleyebilirsiniz.';
-
-  @override
-  String get simulHostExtraTime => 'Host extra initial clock time';
 
   @override
   String get extraClockTimeForHost => 'Ev sahibi için ekstra süre:';
@@ -5444,11 +5464,6 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String perfRatingX(String param) {
-    return 'Rating: $param';
-  }
-
-  @override
   String perfRatingLabel(String param) {
     return 'Puan: $param.';
   }
@@ -5602,9 +5617,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get showUnreadLichessMessage => 'Lichess size bir özel mesaj gönderdi.';
-
-  @override
-  String get clickHereToReadIt => 'Click here to read it';
 
   @override
   String get readTheMessage => 'Mesajı oku';
@@ -5889,11 +5901,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get simulDescriptionHelp => 'Katılımcılara söylemek istediğiniz bir şey var mı?';
 
   @override
-  String markdownIsAvailable(String param) {
-    return '$param is available for formatting.';
-  }
-
-  @override
   String youCanFormatTextUsing(String param) {
     return 'Metni $param kullanarak formatlayabilirsiniz.';
   }
@@ -5915,9 +5922,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get onlyTeamMembers => 'Yalnızca takım üyeleri';
-
-  @override
-  String get navigateMoveTree => 'Navigate the move tree';
 
   @override
   String get moveListNavigation => 'Hamle listesinde gezinme';
@@ -6021,7 +6025,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get copyToClipboard => 'Panoya kopyala';
 
   @override
-  String get online => 'çevrımıcı';
+  String get online => 'çevrimiçi';
 
   @override
   String get offline => 'çevrimdışı';
@@ -6056,6 +6060,12 @@ class AppLocalizationsTr extends AppLocalizations {
   String get boards => 'Tahtalar';
 
   @override
+  String get write => 'Yaz';
+
+  @override
+  String get preview => 'Önizleme';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -6078,17 +6088,6 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String nbBlunders(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count blunders',
-      one: '$count blunder',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String numberBlunders(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -6100,34 +6099,12 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String nbMistakes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count mistakes',
-      one: '$count mistake',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String numberMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
       other: '$count Hata',
       one: '$count Hata',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String nbInaccuracies(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count inaccuracies',
-      one: '$count inaccuracy',
     );
     return '$_temp0';
   }
@@ -6413,7 +6390,7 @@ class AppLocalizationsTr extends AppLocalizations {
       count,
       locale: localeName,
       other: '$count arkadaş çevrim içi',
-      one: '$count arkadaş çevrim içi',
+      one: '$count arkadaş çevrimiçi',
     );
     return '$_temp0';
   }
@@ -6502,17 +6479,6 @@ class AppLocalizationsTr extends AppLocalizations {
       locale: localeName,
       other: '$count farklı dili destekler!',
       one: '$count farklı dili destekler!',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String nbAnonymous(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Anonymous ($count)',
-      one: 'Anonymous',
     );
     return '$_temp0';
   }
@@ -6896,9 +6862,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get studyCurrentChapterUrl => 'Mevcut Bölümün Adresi';
 
   @override
-  String get studyYouCanPasteThisInTheForumToEmbed => 'You can paste this in the forum or your Lichess blog to embed';
-
-  @override
   String get studyPasteToEmbedChapterInForumOrBlog => 'Bu bölümü gömmek için aşağıdaki kodu forumda veya Lichess blogunuzda paylaşabilirsiniz.';
 
   @override
@@ -7271,13 +7234,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get studyCustomPositionText => 'Tahtayı istediğiniz gibi ayarlayın.<br>Son oyunları keşfetmek için uygun.';
 
   @override
-  String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
-
-  @override
   String get studyLoadGameFromTheWebTitle => 'Web\'den bir oyun yükle';
-
-  @override
-  String get studyLoadExistingLichessGameText => 'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
 
   @override
   String get studyLoadGameFromTheWebText => 'Bir oyun linki yapıştırın<br>(örneğin lichess.org/7fHIU0XI)<br>Oyun hamleleri bölüme yüklenir.';
