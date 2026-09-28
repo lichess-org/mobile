@@ -205,9 +205,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileOkButton => 'OK';
 
   @override
-  String get mobileOngoingGames => 'Ongoing Games';
-
-  @override
   String get mobileOpeningExplorerNotAvailableOffline => 'Khám phá Khai cuộc không khả dụng khi ngoại tuyến.';
 
   @override
@@ -266,9 +263,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get mobilePerfShortUltraBullet => 'Siêu đạn';
-
-  @override
-  String get mobilePerformanceCards => 'Performance Cards';
 
   @override
   String get mobilePgnCopied => 'PGN copied.';
@@ -466,9 +460,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get mobileTablebaseOffline => 'Tablebase is not available offline.';
-
-  @override
-  String get mobileTapToRefresh => 'Tap to refresh';
 
   @override
   String get mobileTheme => 'Giao diện';

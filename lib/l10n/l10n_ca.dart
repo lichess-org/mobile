@@ -205,9 +205,6 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileOkButton => 'D\'acord';
 
   @override
-  String get mobileOngoingGames => 'Ongoing Games';
-
-  @override
   String get mobileOpeningExplorerNotAvailableOffline => 'L\'explorador d\'obertures no està disponible sense connexió.';
 
   @override
@@ -266,9 +263,6 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get mobilePerfShortUltraBullet => 'Ultra';
-
-  @override
-  String get mobilePerformanceCards => 'Performance Cards';
 
   @override
   String get mobilePgnCopied => 'PGN copied.';
@@ -466,9 +460,6 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get mobileTablebaseOffline => 'Tablebase is not available offline.';
-
-  @override
-  String get mobileTapToRefresh => 'Tap to refresh';
 
   @override
   String get mobileTheme => 'Tema';

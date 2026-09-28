@@ -205,9 +205,6 @@ class AppLocalizationsEu extends AppLocalizations {
   String get mobileOkButton => 'Ados';
 
   @override
-  String get mobileOngoingGames => 'Ongoing Games';
-
-  @override
   String get mobileOpeningExplorerNotAvailableOffline => 'Irekieren esploratzaila ezin da konexio gabe erabili.';
 
   @override
@@ -266,9 +263,6 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get mobilePerfShortUltraBullet => 'Ultra';
-
-  @override
-  String get mobilePerformanceCards => 'Performance Cards';
 
   @override
   String get mobilePgnCopied => 'PGN copied.';
@@ -466,9 +460,6 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get mobileTablebaseOffline => 'Tablebase is not available offline.';
-
-  @override
-  String get mobileTapToRefresh => 'Tap to refresh';
 
   @override
   String get mobileTheme => 'Itxura';

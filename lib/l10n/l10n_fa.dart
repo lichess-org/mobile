@@ -205,9 +205,6 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileOkButton => 'باشه';
 
   @override
-  String get mobileOngoingGames => 'Ongoing Games';
-
-  @override
   String get mobileOpeningExplorerNotAvailableOffline => 'پویشگرِ گشایش، برون‌خط امکان‌پذیر نیست.';
 
   @override
@@ -266,9 +263,6 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get mobilePerfShortUltraBullet => 'اولا';
-
-  @override
-  String get mobilePerformanceCards => 'Performance Cards';
 
   @override
   String get mobilePgnCopied => 'PGN copied.';
@@ -466,9 +460,6 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get mobileTablebaseOffline => 'Tablebase is not available offline.';
-
-  @override
-  String get mobileTapToRefresh => 'Tap to refresh';
 
   @override
   String get mobileTheme => 'پوسته';

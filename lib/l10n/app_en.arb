@@ -99,7 +99,6 @@
   "mobileNoSearchResults": "No results",
   "mobileNotFollowingAnyUser": "You are not following any users.",
   "mobileOkButton": "OK",
-  "mobileOngoingGames": "Ongoing Games",
   "mobileOpeningExplorerNotAvailableOffline": "Opening Explorer is not available offline.",
   "mobileOrImportPgnFile": "Or import a PGN file",
   "mobileOverTheBoard": "Over the board",
@@ -120,7 +119,6 @@
   "mobilePerfShortRapid": "Rapid",
   "mobilePerfShortThreeCheck": "3check",
   "mobilePerfShortUltraBullet": "Ultra",
-  "mobilePerformanceCards": "Performance Cards",
   "mobilePgnCopied": "PGN copied.",
   "mobilePlayersMatchingSearchTerm": "Players with \"{param}\"",
   "@mobilePlayersMatchingSearchTerm": {
@@ -193,7 +191,6 @@
   "mobileStopShowingThreat": "Stop showing threat",
   "mobileSystemColors": "System colors",
   "mobileTablebaseOffline": "Tablebase is not available offline.",
-  "mobileTapToRefresh": "Tap to refresh",
   "mobileTheme": "Theme",
   "mobileTooManyLoginAttempts": "Too many attempts. Please try again later.",
   "mobileToolsTab": "Tools",

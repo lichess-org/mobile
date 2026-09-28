@@ -568,12 +568,6 @@ abstract class AppLocalizations {
   /// **'OK'**
   String get mobileOkButton;
 
-  /// No description provided for @mobileOngoingGames.
-  ///
-  /// In en, this message translates to:
-  /// **'Ongoing Games'**
-  String get mobileOngoingGames;
-
   /// No description provided for @mobileOpeningExplorerNotAvailableOffline.
   ///
   /// In en, this message translates to:
@@ -693,12 +687,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Ultra'**
   String get mobilePerfShortUltraBullet;
-
-  /// No description provided for @mobilePerformanceCards.
-  ///
-  /// In en, this message translates to:
-  /// **'Performance Cards'**
-  String get mobilePerformanceCards;
 
   /// No description provided for @mobilePgnCopied.
   ///
@@ -1089,12 +1077,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Tablebase is not available offline.'**
   String get mobileTablebaseOffline;
-
-  /// No description provided for @mobileTapToRefresh.
-  ///
-  /// In en, this message translates to:
-  /// **'Tap to refresh'**
-  String get mobileTapToRefresh;
 
   /// No description provided for @mobileTheme.
   ///

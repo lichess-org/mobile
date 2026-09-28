@@ -62,7 +62,6 @@
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">No results</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">You are not following any users.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short." maxLength="10">OK</string>
-  <string name="ongoingGames" comment="Label of the home screen 'Ongoing Games' widget in the home customization editor.">Ongoing Games</string>
   <string name="openingExplorerNotAvailableOffline" comment="Shown in the opening explorer when the device is offline.">Opening Explorer is not available offline.</string>
   <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">Or import a PGN file</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Over the board</string>
@@ -83,7 +82,6 @@
   <string name="perfShortRapid" comment="Short label for the Rapid chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Rapid</string>
   <string name="perfShortThreeCheck" comment="Short label for the Three-check performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">3check</string>
   <string name="perfShortUltraBullet" comment="Short label for the UltraBullet chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Ultra</string>
-  <string name="performanceCards" comment="Label of the home screen performance cards widget in the home customization editor.">Performance Cards</string>
   <string name="pgnCopied" comment="Snackbar shown after copying a PGN line to the clipboard.">PGN copied.</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Players with "%s"</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Left</string>
@@ -149,7 +147,6 @@
   <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">Stop showing threat</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">System colors</string>
   <string name="tablebaseOffline" comment="Message shown when the endgame tablebase is not available offline.">Tablebase is not available offline.</string>
-  <string name="tapToRefresh" comment="Button under the empty logs state that triggers a refresh.">Tap to refresh</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">Theme</string>
   <string name="tooManyLoginAttempts" comment="Error shown when too many email login code requests were made.">Too many attempts. Please try again later.</string>
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Tools</string>
