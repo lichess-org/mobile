@@ -140,12 +140,13 @@ class RetroController(final RetroOptions options)
 
       if (currentServerAnalysis.value != ServerAnalysisSource.game(gameId: options.id)) {
         requestServerAnalysis().catchError((Object e, StackTrace st) {
-          // The server refused to start an analysis, so no evals are coming. The game and its tree
-          // are already loaded, so keep the current state: replacing it with AsyncError would blame
-          // the game load for a refusal, and hide the screen behind a retry that cannot help. The
-          // timeout is pointless now, so drop it rather than let it fire later.
+          // Retro is unusable without evals, so the screen has to report the failure. The view
+          // distinguishes a refusal from a load error: a retry cannot make the server start an
+          // analysis it already declined, so the reason is shown instead of the retry screen.
           _logger.warning('Failed to request server analysis', e, st);
+          // The error is already reported, so the timeout has nothing left to add.
           _serverAnalysisTimeout?.cancel();
+          state = AsyncError(e, st);
         });
       }
 

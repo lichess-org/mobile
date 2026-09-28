@@ -8,6 +8,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/retro_controller.dart';
+import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
@@ -47,11 +48,26 @@ class const RetroScreen({required final RetroOptions options, super.key}) extend
         debugPrint('Error loading retro controller for ${options.id}: $error');
         return Scaffold(
           appBar: AppBar(title: AppBarTitleText(context.l10n.learnFromYourMistakes)),
-          body: FullScreenRetryRequest(
-            onRetry: () {
-              ref.invalidate(retroControllerProvider(options));
-            },
-          ),
+          body: switch (error) {
+            // The game loaded; the server just declined to analyse it. Retrying would not change
+            // that answer, so show why instead.
+            ServerAnalysisRequestException refusal => Center(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Text(
+                  refusal.error.message,
+                  style: Styles.sectionTitle,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+            // The game itself failed to load, which is worth another try.
+            _ => FullScreenRetryRequest(
+              onRetry: () {
+                ref.invalidate(retroControllerProvider(options));
+              },
+            ),
+          },
         );
       case AsyncData(:final value):
         if (value.serverAnalysisAvailable == false) {

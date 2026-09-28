@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:dartchess/dartchess.dart';
-import 'package:http/http.dart' show ClientException;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -37,17 +36,17 @@ const Duration kMaxWaitForServerAnalysis = Duration(minutes: 1);
 ///
 /// Distinct from a load failure so a view can tell the two apart: a game that failed to load is
 /// worth retrying, a refusal is not, and the reason is worth showing to the user.
-class ServerAnalysisRequestException extends ClientException {
-  ServerAnalysisRequestException(this.error, ServerException cause)
-    : super(cause.message, kRequestAnalysisUri);
-
+class ServerAnalysisRequestException(
   /// The reason the server refused, as classified by
   /// [ServerAnalysisService.classifyRequestAnalysisError].
-  final ServerAnalysisRequestError error;
-}
+  final ServerAnalysisRequestError error,
 
-/// The route [GameRepository.requestServerAnalysis] posts to, for a game of unknown id.
-final Uri kRequestAnalysisUri = Uri(path: '/request-analysis');
+  /// The raw failure, as reported by the server.
+  final String message,
+) {
+  @override
+  String toString() => 'ServerAnalysisRequestException: $error ($message)';
+}
 
 /// Why the server refused to start an analysis for a game.
 ///
@@ -57,32 +56,40 @@ final Uri kRequestAnalysisUri = Uri(path: '/request-analysis');
 /// [isBenign] marks the single case where evals for *this* game are still expected on the socket.
 /// Every other value means the server queued nothing for this game, so listening would burn
 /// [kMaxWaitForServerAnalysis] and then time out having reported nothing.
-enum ServerAnalysisRequestError({final bool isBenign = false}) {
+enum ServerAnalysisRequestError({
+  final bool isBenign = false,
+
+  /// A short explanation to show the user, in English.
+  ///
+  /// Not translated yet: [ServerAnalysisRequestException] is thrown from the model layer, and
+  /// wiring these through the arb files is a separate piece of work.
+  required final String message,
+}) {
   /// The game has already been analysed. The evals exist, so the socket is the right thing to read.
-  alreadyAnalysed(isBenign: true),
+  alreadyAnalysed(isBenign: true, message: 'This game has already been analysed'),
 
   /// The user or their IP already has an analysis queued.
   ///
   /// Deliberately not benign: [FishnetLimiter.concurrentCheck] matches on `sender.ip` and
   /// `sender.userId` only, never on the game id, so the queued analysis may belong to a different
   /// game entirely. Nothing will arrive for this one.
-  concurrentAnalysis,
+  concurrentAnalysis(message: 'Another analysis is already in progress'),
 
   /// The user has run out of analyses this week.
-  weeklyLimitReached,
+  weeklyLimitReached(message: 'Weekly analysis limit reached'),
 
   /// The user has run out of analyses today.
-  dailyLimitReached,
+  dailyLimitReached(message: 'Daily analysis limit reached'),
 
   /// The user's IP has run out of analyses today.
-  dailyIpLimitReached,
+  dailyIpLimitReached(message: 'Daily analysis limit reached for this IP address'),
 
   /// The game cannot be analysed at all.
-  notAnalysable,
+  notAnalysable(message: 'This game cannot be analysed'),
 
   /// A 400 this list does not cover. Treated as a failure, so the app never waits on a socket for
   /// an analysis the server is not going to send.
-  unknown,
+  unknown(message: 'The analysis could not be started'),
 }
 
 /// The exact error strings [lila.fishnet.Analyser.Result] sends, keyed by the resulting error.
@@ -190,7 +197,7 @@ class ServerAnalysisService(final Ref ref) {
             // Wrap it so the view can report the reason instead of a bare failure.
             _logger.warning('Server refused to analyse game $gameId: $error', e, st);
             _cancelAnalysis();
-            throw ServerAnalysisRequestException(error, e);
+            throw ServerAnalysisRequestException(error, e.message);
           } else {
             _logger.severe('ServerException requesting server analysis', e, st);
             _cancelAnalysis();

@@ -126,15 +126,17 @@ void main() {
   });
 
   group('ServerAnalysisRequestException', () {
-    test('carries the reason the server gave', () {
+    test('carries the reason and a message to show', () {
       // A refusal is not a generic failure: the view has to tell "you are out of analyses" apart
       // from "the game failed to load", because only the latter is worth offering a retry for.
       final e = ServerAnalysisRequestException(
         ServerAnalysisRequestError.weeklyLimitReached,
-        _badRequest('You have reached the weekly analysis limit'),
+        'Request to /abcdefgh/request-analysis failed with status 400: '
+        'You have reached the weekly analysis limit',
       );
       expect(e.error, ServerAnalysisRequestError.weeklyLimitReached);
-      expect(e.toString(), contains('weekly analysis limit'));
+      expect(e.message, contains('weekly analysis limit'));
+      expect(e.error.message, 'Weekly analysis limit reached');
     });
   });
 
