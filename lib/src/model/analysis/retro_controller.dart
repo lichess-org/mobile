@@ -88,8 +88,6 @@ class RetroController(final RetroOptions options)
 
   final Completer<void> _serverAnalysisCompleter = Completer<void>();
 
-  /// Guards against the analysis never completing. Cancelled if the request is refused outright,
-  /// since no evals can arrive in that case.
   Timer? _serverAnalysisTimeout;
 
   Timer? _incorrectMoveTimer;
