@@ -100,6 +100,14 @@ class const GameRepository(
                   pov: e.white.user?.id == userId ? Side.white : Side.black,
                 ),
               )
+              // The deployed lila accepts `wonBy` but does not filter on it yet, so the same
+              // rule as ExportedGame.isWonByMe is applied here. It is redundant once the
+              // server honours the parameter.
+              .where(
+                (e) =>
+                    filter.result != GameResultFilter.won ||
+                    (e.game.winner != null && e.game.winner == e.pov),
+              )
               .toIList(),
         );
   }
