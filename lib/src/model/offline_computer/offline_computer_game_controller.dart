@@ -90,6 +90,9 @@ final offlineComputerGameControllerProvider =
     );
 
 class OfflineComputerGameController() extends Notifier<OfflineComputerGameState> {
+  /// The engine the hints and the move feedback run on, whatever the user's preference.
+  static const _analysisEnginePref = ChessEnginePref.sfLight;
+
   /// The analysis socket, held open for as long as the game is.
   ///
   /// Nothing here reads from it: the cloud evals go over the same pooled connection from
@@ -153,48 +156,29 @@ class OfflineComputerGameController() extends Notifier<OfflineComputerGameState>
     onEval: _onAnalysisEval,
   );
 
-  /// Stops the analysis while the game is out of sight.
-  ///
-  /// The search now runs for as long as the player thinks, so it would otherwise go on burning the
-  /// battery under another screen or with the app in the background — which the old one-burst-per-
-  /// move model never could. The opponent's search is left alone: it is bounded, and the move it
-  /// is about to play is still wanted.
   void suspendAnalysis() {
-    // Called from a widget that may be on its way out, and whose provider may already be gone.
     if (!ref.mounted) return;
     _analyser.yieldEngine();
   }
 
-  /// Starts analysing again when the game comes back into view.
-  ///
-  /// Deliberately not "restart what was suspended": the game may have moved on while the screen was
-  /// away, and what is worth analysing is the position it is at now — which [_analyseCurrentPosition]
-  /// works out, and which is nothing at all when it is the opponent's turn.
   void resumeAnalysis() {
     if (!ref.mounted) return;
     _analyseCurrentPosition();
   }
 
-  /// Stops the clock while the game is out of sight, so that no time is lost to another screen or
-  /// to the app being in the background.
   void suspendClock() {
-    // Called from a widget that may be on its way out, and whose provider may already be gone.
     if (!ref.mounted) return;
     _clock.pause();
   }
 
-  /// Starts the clock again when the game comes back into view.
   void resumeClock() {
     if (!ref.mounted) return;
     final clock = ref.read(offlineComputerClockProvider);
-    // Nothing to resume: an untimed game, one that is over, or one whose first move — and with it
-    // the clock — has yet to be played.
     if (clock.timeIncrement.isInfinite || clock.flagSide != null) return;
     if (!state.game.playable || state.game.steps.length <= 1) return;
     _clock.resume(state.turn);
   }
 
-  /// Stores an evaluation the analysis has just improved on the step it belongs to.
   void _onAnalysisEval(Position position, ClientEval eval) {
     if (!ref.mounted) return;
     final index = state.game.steps.lastIndexWhere((step) => step.position == position);
@@ -202,14 +186,6 @@ class OfflineComputerGameController() extends Notifier<OfflineComputerGameState>
     if (index == -1) return;
     _setStepEval(index, eval);
   }
-
-  /// The engine the hints and the move feedback run on, whatever the user's preference.
-  ///
-  /// Stockfish 19 with its small embedded net, as the practice feature does: it is ready with
-  /// nothing to download and the fastest to reach [kPracticeUsableDepth], which is all the
-  /// analysis here asks for. A variant, or material Stockfish will not accept, still goes to
-  /// Fairy-Stockfish: [evaluatorFlavorFor] decides that before the preference is looked at.
-  static const _analysisEnginePref = ChessEnginePref.sfLight;
 
   EvaluationContext get _evaluationContext => EvaluationContext(
     id: state.game.id,
@@ -224,9 +200,7 @@ class OfflineComputerGameController() extends Notifier<OfflineComputerGameState>
       _evaluatorSubscription?.close();
       _evaluatorContext = context;
       // The analysis needs to hear when the engine stops searching: it may have run out of its
-      // search time before saying anything usable about the position — on a slow device the first
-      // search can be spent starting the engine — and the hints behind it would wait for an
-      // evaluation nothing was going to make.
+      // search time before saying anything usable about the position
       _evaluatorSubscription = ref.listen(
         positionEvaluatorProvider(context),
         _analyser.onEvaluatorStateChanged,

@@ -32,18 +32,9 @@ const kPracticeCloudEvalsEnabled = true;
 const kPracticeUsableDepth = kDebugMode ? 13 : 15;
 
 /// The depth at which the search stops and lets the engine idle.
-///
-/// Not infinite: the analysis runs for as long as the player thinks, and an engine searching for
-/// minutes on end is a battery and thermal problem the old burst model never had. Kept close to
-/// [kPracticeUsableDepth] for the same reason — the last few plies of a practice-game eval change
-/// the hint almost never, and cost more battery than everything before them put together.
 const kPracticeTargetDepth = kDebugMode ? 18 : 20;
 
 /// How many times a search is started again when it ends without a usable eval.
-///
-/// Small on purpose: a device that cannot reach [kPracticeUsableDepth] in three windows of
-/// [kPracticeMaxSearchTime] is not going to, and the chapter is better left without an eval than
-/// with an engine running on a loop.
 const _kMaxRestarts = 3;
 
 /// The ply past which a cloud eval is a miss far more often than a hit.
@@ -109,8 +100,7 @@ class PracticeAnalyser({
   /// Bumped every time everything known is thrown away.
   ///
   /// What tells a lookup coming back from the server that the game it was asked for is not the one
-  /// being played any more: a network round trip outlives a [clear] easily, and an answer landing
-  /// after one would put back an evaluation the retry was there to forget.
+  /// being played any more
   int _epoch = 0;
 
   /// The socket [_socketSubscription] is held on, or null when there is none.
@@ -168,10 +158,6 @@ class PracticeAnalyser({
   }
 
   /// Takes in the evaluator's state, which is how the analysis hears that the engine has stopped.
-  ///
-  /// The owner has that subscription anyway — it is what keeps the evaluator alive — so it passes
-  /// the state through rather than working out which change matters, which is a question about the
-  /// analysis and belongs here with [resumeIfUnfinished].
   void onEvaluatorStateChanged(EngineEvaluationState? previous, EngineEvaluationState next) {
     if (previous?.isComputing == true && !next.isComputing) resumeIfUnfinished();
   }
@@ -179,6 +165,7 @@ class PracticeAnalyser({
   /// Starts the search again when it stopped before the position was understood at all.
   ///
   /// Called when the engine stops searching, which is what [onEvaluatorStateChanged] watches for.
+  @visibleForTesting
   void resumeIfUnfinished() {
     if (_isGone) return;
     final work = _analysing;
@@ -329,8 +316,6 @@ class PracticeAnalyser({
     _raced.add(position);
     final epoch = _epoch;
 
-    // Offered one by one rather than once both are in: in an endgame lesson the two are asked
-    // together, and the search has no reason to wait on the slower of them.
     Future<ClientEval?> ask(Future<ClientEval?> request) => request.then((eval) {
       if (eval != null && epoch == _epoch) offer(position, eval);
       return eval;
@@ -341,16 +326,11 @@ class PracticeAnalyser({
           if (wantsTablebase) ask(_fetchTablebaseEval(position)),
         ])
         .then((evals) {
-          // A [clear] since. The attempt belongs to the game that was, and so does the record of
-          // it: another one has since been made, or will be, for the game being played now.
           if (epoch != _epoch) return;
-          // Nothing answered: no network, or a position the server has never seen. The attempt is
-          // forgotten, so that analysing this position again asks again.
+          // Nothing answered: the attempt is forgotten, so that analysing this position again asks
+          // again.
           if (evals.every((eval) => eval == null)) _raced.remove(position);
         })
-        // Everything either lookup can fail on is caught where it happens, so this is here for
-        // what [offer] reports the evaluation to rather than for the lookups themselves — and a
-        // throw from there is no reason to leave an unhandled error behind.
         .catchError((Object e, StackTrace st) {
           _logger.warning('Could not offer an eval from the server:', e, st);
         });
