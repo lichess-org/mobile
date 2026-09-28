@@ -352,8 +352,19 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState<T>> on AnyNotifier<As
       steps: positionTree.branchesOn(curState.currentPath).map(Step.fromNode).toIList(),
     );
 
+    if (!work.threatMode) {
+      // If we have an already good enough eval in cache, skip the evaluation
+      switch (work.evalCache) {
+        case final LocalEval localEval when localEval.searchTime >= work.searchTime:
+        case CloudEval _ when goDeeper == false:
+          return;
+        case _:
+          break;
+      }
+    }
+
     _engineEvalSubscription?.cancel();
-    _engineEvalSubscription = _evaluator.evaluate(work, goDeeper: goDeeper)?.listen((event) {
+    _engineEvalSubscription = _evaluator.evaluate(work).listen((event) {
       if (curState.engineInThreatMode) {
         return;
       }

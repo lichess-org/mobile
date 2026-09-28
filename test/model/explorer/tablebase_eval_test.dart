@@ -2,7 +2,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/explorer/tablebase.dart';
-import 'package:lichess_mobile/src/model/offline_computer/tablebase_eval.dart';
+import 'package:lichess_mobile/src/model/explorer/tablebase_eval.dart';
 
 // A non-terminal KQ vs K position used across tests.
 // White: Ka2, Qc2; Black: Kh1 — no side in check, non-terminal.

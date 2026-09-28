@@ -145,6 +145,7 @@ flutter:
     - assets/images/fide-fed/
     - assets/images/learn/
     - assets/images/learn/pieces/
+    - assets/images/practice/
     - assets/sounds/futuristic/
     - assets/sounds/lisp/
     - assets/sounds/nes/
@@ -155,6 +156,7 @@ flutter:
     - assets/maia/
     - assets/positions.json
     - assets/endgames.json
+    - assets/practice.json
 
   fonts:
     - family: LichessIcons
