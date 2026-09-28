@@ -88,9 +88,6 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileCorrespondenceClearSavedMove => 'Mentett lépés törlése';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Csatlakozás egy játszmához';
-
-  @override
   String get mobileCustomizeButton => 'Testreszabás';
 
   @override
@@ -153,9 +150,6 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get mobileHello => 'Hello';
-
-  @override
-  String get mobileHideVariation => 'Változatok elrejtése';
 
   @override
   String get mobileHomeTab => 'Kezdőlap';
@@ -390,9 +384,6 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileSettingsShowBorder => 'Sakktábla keret megjelenítése';
 
   @override
-  String get mobileSettingsTab => 'Beállítás';
-
-  @override
   String get mobileSettingsTouchFeedback => 'Rezgés érintésre';
 
   @override
@@ -429,9 +420,6 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileShowResult => 'Eredmény mutatása';
 
   @override
-  String get mobileShowVariations => 'Változatok megjelenítése';
-
-  @override
   String get mobileSignInWithBrowser => 'Sign in with the browser';
 
   @override
@@ -463,9 +451,6 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
-
-  @override
-  String get mobileToolsTab => 'Eszközök';
 
   @override
   String get mobileTournamentCompleted => 'Befejezve';

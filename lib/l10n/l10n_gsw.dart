@@ -88,9 +88,6 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileCorrespondenceClearSavedMove => 'Lösch die gschpeicherete Züg';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Es Schpiel mitschpille';
-
-  @override
   String get mobileCustomizeButton => 'Apasse';
 
   @override
@@ -153,9 +150,6 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get mobileHello => 'Hello';
-
-  @override
-  String get mobileHideVariation => 'Variante verberge';
 
   @override
   String get mobileHomeTab => 'Startsite';
@@ -390,9 +384,6 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileSettingsShowBorder => 'Zeig de Rand';
 
   @override
-  String get mobileSettingsTab => 'Ischtelle';
-
-  @override
   String get mobileSettingsTouchFeedback => 'Haptischi Rückmäldig';
 
   @override
@@ -429,9 +420,6 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileShowResult => 'Zeig Resultat';
 
   @override
-  String get mobileShowVariations => 'Zeig Variante';
-
-  @override
   String get mobileSignInWithBrowser => 'Sign in with the browser';
 
   @override
@@ -463,9 +451,6 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
-
-  @override
-  String get mobileToolsTab => 'Werchzüg';
 
   @override
   String get mobileTournamentCompleted => 'Komplett';

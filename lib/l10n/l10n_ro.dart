@@ -88,9 +88,6 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileCorrespondenceClearSavedMove => 'Șterge mutarea salvată';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Alătură-te unui joc';
-
-  @override
   String get mobileCustomizeButton => 'Personalizează';
 
   @override
@@ -153,9 +150,6 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get mobileHello => 'Hello';
-
-  @override
-  String get mobileHideVariation => 'Ascunde variațiile';
 
   @override
   String get mobileHomeTab => 'Acasă';
@@ -390,9 +384,6 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileSettingsShowBorder => 'Arată bordura';
 
   @override
-  String get mobileSettingsTab => 'Setări';
-
-  @override
   String get mobileSettingsTouchFeedback => 'Feedback tactil';
 
   @override
@@ -429,9 +420,6 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileShowResult => 'Arată rezultatul';
 
   @override
-  String get mobileShowVariations => 'Arată variațiile';
-
-  @override
   String get mobileSignInWithBrowser => 'Sign in with the browser';
 
   @override
@@ -463,9 +451,6 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
-
-  @override
-  String get mobileToolsTab => 'Unelte';
 
   @override
   String get mobileTournamentCompleted => 'Terminate';

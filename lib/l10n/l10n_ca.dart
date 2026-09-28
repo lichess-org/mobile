@@ -88,9 +88,6 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileCorrespondenceClearSavedMove => 'Elimina la jugada guardada';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Unir-se a una partida';
-
-  @override
   String get mobileCustomizeButton => 'Personalitza';
 
   @override
@@ -153,9 +150,6 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get mobileHello => 'Hello';
-
-  @override
-  String get mobileHideVariation => 'Amaga les variacions';
 
   @override
   String get mobileHomeTab => 'Inici';
@@ -390,9 +384,6 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileSettingsShowBorder => 'Mostra la vora';
 
   @override
-  String get mobileSettingsTab => 'Configuració';
-
-  @override
   String get mobileSettingsTouchFeedback => 'Resposta tàctil';
 
   @override
@@ -429,9 +420,6 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileShowResult => 'Mostra el resultat';
 
   @override
-  String get mobileShowVariations => 'Mostra les variacions';
-
-  @override
   String get mobileSignInWithBrowser => 'Sign in with the browser';
 
   @override
@@ -463,9 +451,6 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
-
-  @override
-  String get mobileToolsTab => 'Eines';
 
   @override
   String get mobileTournamentCompleted => 'Finalitzat';

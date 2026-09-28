@@ -88,9 +88,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileCorrespondenceClearSavedMove => 'Limpar movimento salvo';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Entrar num jogo';
-
-  @override
   String get mobileCustomizeButton => 'Personalizar';
 
   @override
@@ -153,9 +150,6 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get mobileHello => 'Hello';
-
-  @override
-  String get mobileHideVariation => 'Ocultar variação';
 
   @override
   String get mobileHomeTab => 'Início';
@@ -390,9 +384,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileSettingsShowBorder => 'Mostrar borda';
 
   @override
-  String get mobileSettingsTab => 'Definições';
-
-  @override
   String get mobileSettingsTouchFeedback => 'Feedback de toque';
 
   @override
@@ -429,9 +420,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileShowResult => 'Mostrar resultado';
 
   @override
-  String get mobileShowVariations => 'Mostrar variantes';
-
-  @override
   String get mobileSignInWithBrowser => 'Sign in with the browser';
 
   @override
@@ -463,9 +451,6 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
-
-  @override
-  String get mobileToolsTab => 'Tools';
 
   @override
   String get mobileTournamentCompleted => 'Concluído';
@@ -7626,9 +7611,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get mobileCorrespondenceClearSavedMove => 'Limpar movimento salvos';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Entrar em um jogo';
-
-  @override
   String get mobileCustomizeButton => 'Personalizar';
 
   @override
@@ -7664,9 +7646,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get mobileGoodMoveButThereIsBetter => 'Bom lance, mas existe um melhor';
-
-  @override
-  String get mobileHideVariation => 'Ocultar variante forçada';
 
   @override
   String get mobileHomeTab => 'Início';
@@ -7857,9 +7836,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get mobileSettingsShowBorder => 'Mostrar a borda';
 
   @override
-  String get mobileSettingsTab => 'Ajustes';
-
-  @override
   String get mobileSettingsTouchFeedback => 'Feedback por toque';
 
   @override
@@ -7884,9 +7860,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get mobileShowResult => 'Mostrar resultado';
 
   @override
-  String get mobileShowVariations => 'Mostrar setas de variantes';
-
-  @override
   String get mobileSomethingWentWrong => 'Houve algum problema.';
 
   @override
@@ -7897,9 +7870,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get mobileTheme => 'Tema';
-
-  @override
-  String get mobileToolsTab => 'Ferramentas';
 
   @override
   String get mobileTournamentCompleted => 'Concluído';

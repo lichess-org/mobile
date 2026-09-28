@@ -88,9 +88,6 @@ class AppLocalizationsHe extends AppLocalizations {
   String get mobileCorrespondenceClearSavedMove => 'ניקוי המהלך השמור';
 
   @override
-  String get mobileCustomGameJoinAGame => 'הצטרפות למשחק';
-
-  @override
   String get mobileCustomizeButton => 'התאימו אישית';
 
   @override
@@ -153,9 +150,6 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get mobileHello => 'Hello';
-
-  @override
-  String get mobileHideVariation => 'הסתרת וריאציות';
 
   @override
   String get mobileHomeTab => 'בית';
@@ -390,9 +384,6 @@ class AppLocalizationsHe extends AppLocalizations {
   String get mobileSettingsShowBorder => 'Show border';
 
   @override
-  String get mobileSettingsTab => 'הגדרות';
-
-  @override
   String get mobileSettingsTouchFeedback => 'Touch feedback';
 
   @override
@@ -429,9 +420,6 @@ class AppLocalizationsHe extends AppLocalizations {
   String get mobileShowResult => 'הצגת תוצאת המשחק';
 
   @override
-  String get mobileShowVariations => 'הצגת וריאציות';
-
-  @override
   String get mobileSignInWithBrowser => 'Sign in with the browser';
 
   @override
@@ -463,9 +451,6 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
-
-  @override
-  String get mobileToolsTab => 'כלים';
 
   @override
   String get mobileTournamentCompleted => 'Completed';

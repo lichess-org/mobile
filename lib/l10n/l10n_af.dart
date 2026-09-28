@@ -88,9 +88,6 @@ class AppLocalizationsAf extends AppLocalizations {
   String get mobileCorrespondenceClearSavedMove => 'Vee gestoorde skuif uit';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Sluit aan by \'n spel';
-
-  @override
   String get mobileCustomizeButton => 'Customize';
 
   @override
@@ -153,9 +150,6 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get mobileHello => 'Hello';
-
-  @override
-  String get mobileHideVariation => 'Verberg variasie';
 
   @override
   String get mobileHomeTab => 'Tuis';
@@ -390,9 +384,6 @@ class AppLocalizationsAf extends AppLocalizations {
   String get mobileSettingsShowBorder => 'Show border';
 
   @override
-  String get mobileSettingsTab => 'Instellings';
-
-  @override
   String get mobileSettingsTouchFeedback => 'Touch feedback';
 
   @override
@@ -429,9 +420,6 @@ class AppLocalizationsAf extends AppLocalizations {
   String get mobileShowResult => 'Wys resultaat';
 
   @override
-  String get mobileShowVariations => 'Wys variasies';
-
-  @override
   String get mobileSignInWithBrowser => 'Sign in with the browser';
 
   @override
@@ -463,9 +451,6 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
-
-  @override
-  String get mobileToolsTab => 'Hulpmiddels';
 
   @override
   String get mobileTournamentCompleted => 'Completed';

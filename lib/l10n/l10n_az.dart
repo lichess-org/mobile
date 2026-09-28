@@ -88,9 +88,6 @@ class AppLocalizationsAz extends AppLocalizations {
   String get mobileCorrespondenceClearSavedMove => 'Saxlanılmış gedişi təmizlə';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Oyuna qoşul';
-
-  @override
   String get mobileCustomizeButton => 'Customize';
 
   @override
@@ -153,9 +150,6 @@ class AppLocalizationsAz extends AppLocalizations {
 
   @override
   String get mobileHello => 'Hello';
-
-  @override
-  String get mobileHideVariation => 'Varyasiyanı gizlət';
 
   @override
   String get mobileHomeTab => 'Ana səhifə';
@@ -390,9 +384,6 @@ class AppLocalizationsAz extends AppLocalizations {
   String get mobileSettingsShowBorder => 'Show border';
 
   @override
-  String get mobileSettingsTab => 'Ayarlar';
-
-  @override
   String get mobileSettingsTouchFeedback => 'Touch feedback';
 
   @override
@@ -429,9 +420,6 @@ class AppLocalizationsAz extends AppLocalizations {
   String get mobileShowResult => 'Nəticəni göstər';
 
   @override
-  String get mobileShowVariations => 'Varyasiyaları göstər';
-
-  @override
   String get mobileSignInWithBrowser => 'Sign in with the browser';
 
   @override
@@ -463,9 +451,6 @@ class AppLocalizationsAz extends AppLocalizations {
 
   @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
-
-  @override
-  String get mobileToolsTab => 'Alətlər';
 
   @override
   String get mobileTournamentCompleted => 'Completed';

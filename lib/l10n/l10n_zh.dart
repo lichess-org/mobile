@@ -88,9 +88,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileCorrespondenceClearSavedMove => '清除已保存的着法';
 
   @override
-  String get mobileCustomGameJoinAGame => '加入对局';
-
-  @override
   String get mobileCustomizeButton => '自定义';
 
   @override
@@ -153,9 +150,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get mobileHello => 'Hello';
-
-  @override
-  String get mobileHideVariation => '隐藏变着';
 
   @override
   String get mobileHomeTab => '首页';
@@ -390,9 +384,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileSettingsShowBorder => '显示边框';
 
   @override
-  String get mobileSettingsTab => '设置';
-
-  @override
   String get mobileSettingsTouchFeedback => '触控反馈';
 
   @override
@@ -429,9 +420,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileShowResult => '显示结果';
 
   @override
-  String get mobileShowVariations => '显示变着';
-
-  @override
   String get mobileSignInWithBrowser => 'Sign in with the browser';
 
   @override
@@ -463,9 +451,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
-
-  @override
-  String get mobileToolsTab => '工具';
 
   @override
   String get mobileTournamentCompleted => '已完成';
@@ -7531,9 +7516,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get mobileCorrespondenceClearSavedMove => '清除已儲存移動';
 
   @override
-  String get mobileCustomGameJoinAGame => '加入棋局';
-
-  @override
   String get mobileCustomizeButton => '自訂';
 
   @override
@@ -7569,9 +7551,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get mobileGoodMoveButThereIsBetter => '好著，但有更好的選擇';
-
-  @override
-  String get mobileHideVariation => '隱藏變化';
 
   @override
   String get mobileHomeTab => '首頁';
@@ -7708,9 +7687,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get mobileSettingsShowBorder => '顯示邊框';
 
   @override
-  String get mobileSettingsTab => '設定';
-
-  @override
   String get mobileSettingsTouchFeedback => '震動回饋';
 
   @override
@@ -7735,9 +7711,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get mobileShowResult => '顯示結果';
 
   @override
-  String get mobileShowVariations => '顯示變體';
-
-  @override
   String get mobileSomethingWentWrong => '發生了一些問題。';
 
   @override
@@ -7748,9 +7721,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get mobileTheme => '佈景主題';
-
-  @override
-  String get mobileToolsTab => '工具';
 
   @override
   String get mobileTournamentCompleted => '已結束';

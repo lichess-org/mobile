@@ -346,12 +346,6 @@ abstract class AppLocalizations {
   /// **'Clear saved move'**
   String get mobileCorrespondenceClearSavedMove;
 
-  /// No description provided for @mobileCustomGameJoinAGame.
-  ///
-  /// In en, this message translates to:
-  /// **'Join a game'**
-  String get mobileCustomGameJoinAGame;
-
   /// No description provided for @mobileCustomizeButton.
   ///
   /// In en, this message translates to:
@@ -471,12 +465,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Hello'**
   String get mobileHello;
-
-  /// No description provided for @mobileHideVariation.
-  ///
-  /// In en, this message translates to:
-  /// **'Hide variation'**
-  String get mobileHideVariation;
 
   /// No description provided for @mobileHomeTab.
   ///
@@ -934,12 +922,6 @@ abstract class AppLocalizations {
   /// **'Show border'**
   String get mobileSettingsShowBorder;
 
-  /// No description provided for @mobileSettingsTab.
-  ///
-  /// In en, this message translates to:
-  /// **'Settings'**
-  String get mobileSettingsTab;
-
   /// No description provided for @mobileSettingsTouchFeedback.
   ///
   /// In en, this message translates to:
@@ -1012,12 +994,6 @@ abstract class AppLocalizations {
   /// **'Show result'**
   String get mobileShowResult;
 
-  /// No description provided for @mobileShowVariations.
-  ///
-  /// In en, this message translates to:
-  /// **'Show variations'**
-  String get mobileShowVariations;
-
   /// No description provided for @mobileSignInWithBrowser.
   ///
   /// In en, this message translates to:
@@ -1083,12 +1059,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Too many attempts. Please try again later.'**
   String get mobileTooManyLoginAttempts;
-
-  /// No description provided for @mobileToolsTab.
-  ///
-  /// In en, this message translates to:
-  /// **'Tools'**
-  String get mobileToolsTab;
 
   /// No description provided for @mobileTournamentCompleted.
   ///

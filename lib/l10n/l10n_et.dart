@@ -88,9 +88,6 @@ class AppLocalizationsEt extends AppLocalizations {
   String get mobileCorrespondenceClearSavedMove => 'Salvestatud käigu tühistamine';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Liitu mänguga';
-
-  @override
   String get mobileCustomizeButton => 'Kohanda';
 
   @override
@@ -153,9 +150,6 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get mobileHello => 'Hello';
-
-  @override
-  String get mobileHideVariation => 'Peida variatsioon';
 
   @override
   String get mobileHomeTab => 'Kodu';
@@ -390,9 +384,6 @@ class AppLocalizationsEt extends AppLocalizations {
   String get mobileSettingsShowBorder => 'Näita piire';
 
   @override
-  String get mobileSettingsTab => 'Seaded';
-
-  @override
   String get mobileSettingsTouchFeedback => 'Puutetagasiside';
 
   @override
@@ -429,9 +420,6 @@ class AppLocalizationsEt extends AppLocalizations {
   String get mobileShowResult => 'Näita tulemust';
 
   @override
-  String get mobileShowVariations => 'Näita variatsioone';
-
-  @override
   String get mobileSignInWithBrowser => 'Sign in with the browser';
 
   @override
@@ -463,9 +451,6 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
-
-  @override
-  String get mobileToolsTab => 'Tööriistad';
 
   @override
   String get mobileTournamentCompleted => 'Lõpetatud';

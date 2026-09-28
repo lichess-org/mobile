@@ -88,9 +88,6 @@ class AppLocalizationsEu extends AppLocalizations {
   String get mobileCorrespondenceClearSavedMove => 'Garbitu gordetako jokaldia';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Sartu partida baten';
-
-  @override
   String get mobileCustomizeButton => 'Pertsonalizatu';
 
   @override
@@ -153,9 +150,6 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get mobileHello => 'Hello';
-
-  @override
-  String get mobileHideVariation => 'Ezkutatu aukera';
 
   @override
   String get mobileHomeTab => 'Hasiera';
@@ -390,9 +384,6 @@ class AppLocalizationsEu extends AppLocalizations {
   String get mobileSettingsShowBorder => 'Erakutsi inguruko morra';
 
   @override
-  String get mobileSettingsTab => 'Ezarpenak';
-
-  @override
   String get mobileSettingsTouchFeedback => 'Ikutzeko bibrazioa';
 
   @override
@@ -429,9 +420,6 @@ class AppLocalizationsEu extends AppLocalizations {
   String get mobileShowResult => 'Erakutsi emaitza';
 
   @override
-  String get mobileShowVariations => 'Erakutsi aukerak';
-
-  @override
   String get mobileSignInWithBrowser => 'Sign in with the browser';
 
   @override
@@ -463,9 +451,6 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
-
-  @override
-  String get mobileToolsTab => 'Tresnak';
 
   @override
   String get mobileTournamentCompleted => 'Amaituta';

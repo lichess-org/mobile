@@ -88,9 +88,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Join a game';
-
-  @override
   String get mobileCustomizeButton => 'Customize';
 
   @override
@@ -153,9 +150,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mobileHello => 'Hello';
-
-  @override
-  String get mobileHideVariation => 'Hide variation';
 
   @override
   String get mobileHomeTab => 'Home';
@@ -390,9 +384,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mobileSettingsShowBorder => 'Show border';
 
   @override
-  String get mobileSettingsTab => 'Settings';
-
-  @override
   String get mobileSettingsTouchFeedback => 'Touch feedback';
 
   @override
@@ -429,9 +420,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mobileShowResult => 'Show result';
 
   @override
-  String get mobileShowVariations => 'Show variations';
-
-  @override
   String get mobileSignInWithBrowser => 'Sign in with the browser';
 
   @override
@@ -463,9 +451,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
-
-  @override
-  String get mobileToolsTab => 'Tools';
 
   @override
   String get mobileTournamentCompleted => 'Completed';
@@ -7624,9 +7609,6 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Join a game';
-
-  @override
   String get mobileCustomizeButton => 'Customize';
 
   @override
@@ -7662,9 +7644,6 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
-
-  @override
-  String get mobileHideVariation => 'Hide variation';
 
   @override
   String get mobileHomeTab => 'Home';
@@ -7858,9 +7837,6 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get mobileSettingsShowBorder => 'Show border';
 
   @override
-  String get mobileSettingsTab => 'Settings';
-
-  @override
   String get mobileSettingsTouchFeedback => 'Touch feedback';
 
   @override
@@ -7885,9 +7861,6 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get mobileShowResult => 'Show result';
 
   @override
-  String get mobileShowVariations => 'Show variations';
-
-  @override
   String get mobileSomethingWentWrong => 'Something went wrong.';
 
   @override
@@ -7898,9 +7871,6 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get mobileTheme => 'Theme';
-
-  @override
-  String get mobileToolsTab => 'Tools';
 
   @override
   String get mobileTournamentCompleted => 'Completed';

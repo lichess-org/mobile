@@ -88,9 +88,6 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileCorrespondenceClearSavedMove => 'Ryd gemt træk';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Deltag i et parti';
-
-  @override
   String get mobileCustomizeButton => 'Tilpas';
 
   @override
@@ -153,9 +150,6 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get mobileHello => 'Hello';
-
-  @override
-  String get mobileHideVariation => 'Skjul variation';
 
   @override
   String get mobileHomeTab => 'Hjem';
@@ -390,9 +384,6 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileSettingsShowBorder => 'Vis kant';
 
   @override
-  String get mobileSettingsTab => 'Indstillinger';
-
-  @override
   String get mobileSettingsTouchFeedback => 'Berøringsfeedback';
 
   @override
@@ -429,9 +420,6 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileShowResult => 'Vis resultat';
 
   @override
-  String get mobileShowVariations => 'Vis variationer';
-
-  @override
   String get mobileSignInWithBrowser => 'Sign in with the browser';
 
   @override
@@ -463,9 +451,6 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
-
-  @override
-  String get mobileToolsTab => 'Værktøjer';
 
   @override
   String get mobileTournamentCompleted => 'Afsluttet';

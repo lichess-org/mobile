@@ -88,9 +88,6 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileCorrespondenceClearSavedMove => 'Malplenigi konservitan movon';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Aliĝi al ludo';
-
-  @override
   String get mobileCustomizeButton => 'Customize';
 
   @override
@@ -153,9 +150,6 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get mobileHello => 'Hello';
-
-  @override
-  String get mobileHideVariation => 'Kaŝi varion';
 
   @override
   String get mobileHomeTab => 'Hejmo';
@@ -390,9 +384,6 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileSettingsShowBorder => 'Show border';
 
   @override
-  String get mobileSettingsTab => 'Agordoj';
-
-  @override
   String get mobileSettingsTouchFeedback => 'Touch feedback';
 
   @override
@@ -429,9 +420,6 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileShowResult => 'Montri rezulton';
 
   @override
-  String get mobileShowVariations => 'Montri varion';
-
-  @override
   String get mobileSignInWithBrowser => 'Sign in with the browser';
 
   @override
@@ -463,9 +451,6 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
-
-  @override
-  String get mobileToolsTab => 'Iloj';
 
   @override
   String get mobileTournamentCompleted => 'Completed';

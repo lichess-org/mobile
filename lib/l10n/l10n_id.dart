@@ -88,9 +88,6 @@ class AppLocalizationsId extends AppLocalizations {
   String get mobileCorrespondenceClearSavedMove => 'Hapus langkah yang disimpan';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Bergabung permainan';
-
-  @override
   String get mobileCustomizeButton => 'Customize';
 
   @override
@@ -153,9 +150,6 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get mobileHello => 'Hello';
-
-  @override
-  String get mobileHideVariation => 'Sembunyikan variasi';
 
   @override
   String get mobileHomeTab => 'Beranda';
@@ -390,9 +384,6 @@ class AppLocalizationsId extends AppLocalizations {
   String get mobileSettingsShowBorder => 'Tampilkan batas';
 
   @override
-  String get mobileSettingsTab => 'Pengaturan';
-
-  @override
   String get mobileSettingsTouchFeedback => 'Umpan balik sentuhan';
 
   @override
@@ -429,9 +420,6 @@ class AppLocalizationsId extends AppLocalizations {
   String get mobileShowResult => 'Tampilkan hasil';
 
   @override
-  String get mobileShowVariations => 'Tampilkan variasi';
-
-  @override
   String get mobileSignInWithBrowser => 'Sign in with the browser';
 
   @override
@@ -463,9 +451,6 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
-
-  @override
-  String get mobileToolsTab => 'Alat';
 
   @override
   String get mobileTournamentCompleted => 'Completed';

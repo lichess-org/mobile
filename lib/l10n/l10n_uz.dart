@@ -88,9 +88,6 @@ class AppLocalizationsUz extends AppLocalizations {
   String get mobileCorrespondenceClearSavedMove => 'Saqlangan yurishni oʻchirish';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Oʻyinga qoʻshilish';
-
-  @override
   String get mobileCustomizeButton => 'Sozlash';
 
   @override
@@ -153,9 +150,6 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get mobileHello => 'Hello';
-
-  @override
-  String get mobileHideVariation => 'Variantni yashirish';
 
   @override
   String get mobileHomeTab => 'Asosiy';
@@ -390,9 +384,6 @@ class AppLocalizationsUz extends AppLocalizations {
   String get mobileSettingsShowBorder => 'Ramkani koʻrsatish';
 
   @override
-  String get mobileSettingsTab => 'Sozlamalar';
-
-  @override
   String get mobileSettingsTouchFeedback => 'Bosganda vibratsiya';
 
   @override
@@ -429,9 +420,6 @@ class AppLocalizationsUz extends AppLocalizations {
   String get mobileShowResult => 'Natijani koʻrsatish';
 
   @override
-  String get mobileShowVariations => 'Variantlarni koʻrsatish';
-
-  @override
   String get mobileSignInWithBrowser => 'Sign in with the browser';
 
   @override
@@ -463,9 +451,6 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
-
-  @override
-  String get mobileToolsTab => 'Asboblar';
 
   @override
   String get mobileTournamentCompleted => 'Tugagan';

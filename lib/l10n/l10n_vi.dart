@@ -88,9 +88,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileCorrespondenceClearSavedMove => 'Xóa nước cờ đã lưu';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Tham gia một ván cờ';
-
-  @override
   String get mobileCustomizeButton => 'Tùy chỉnh';
 
   @override
@@ -153,9 +150,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get mobileHello => 'Hello';
-
-  @override
-  String get mobileHideVariation => 'Ẩn các biến';
 
   @override
   String get mobileHomeTab => 'Trang chủ';
@@ -390,9 +384,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileSettingsShowBorder => 'Hiển thị đường viền';
 
   @override
-  String get mobileSettingsTab => 'Cài đặt';
-
-  @override
   String get mobileSettingsTouchFeedback => 'Phản hồi khi chạm';
 
   @override
@@ -429,9 +420,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileShowResult => 'Xem kết quả';
 
   @override
-  String get mobileShowVariations => 'Hiện các biến';
-
-  @override
   String get mobileSignInWithBrowser => 'Sign in with the browser';
 
   @override
@@ -463,9 +451,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
-
-  @override
-  String get mobileToolsTab => 'Công cụ';
 
   @override
   String get mobileTournamentCompleted => 'Đã hoàn thành';

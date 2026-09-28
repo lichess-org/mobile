@@ -88,9 +88,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileCorrespondenceClearSavedMove => '保存した手を削除';
 
   @override
-  String get mobileCustomGameJoinAGame => 'ゲームに参加';
-
-  @override
   String get mobileCustomizeButton => 'カスタマイズ';
 
   @override
@@ -153,9 +150,6 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get mobileHello => 'Hello';
-
-  @override
-  String get mobileHideVariation => '変化手順を隠す';
 
   @override
   String get mobileHomeTab => 'ホーム';
@@ -390,9 +384,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileSettingsShowBorder => '盤面のフチの表示';
 
   @override
-  String get mobileSettingsTab => '設定';
-
-  @override
   String get mobileSettingsTouchFeedback => '触覚フィードバック';
 
   @override
@@ -429,9 +420,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileShowResult => '結果を表示';
 
   @override
-  String get mobileShowVariations => '変化手順を表示';
-
-  @override
   String get mobileSignInWithBrowser => 'Sign in with the browser';
 
   @override
@@ -463,9 +451,6 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
-
-  @override
-  String get mobileToolsTab => 'ツール';
 
   @override
   String get mobileTournamentCompleted => '終了';

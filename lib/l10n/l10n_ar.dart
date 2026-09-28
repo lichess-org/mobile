@@ -88,9 +88,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileCorrespondenceClearSavedMove => 'مسح النقلات المحفوظة';
 
   @override
-  String get mobileCustomGameJoinAGame => 'الإنضمام إلى مباراة';
-
-  @override
   String get mobileCustomizeButton => 'تخصيص';
 
   @override
@@ -153,9 +150,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get mobileHello => 'Hello';
-
-  @override
-  String get mobileHideVariation => 'إخفاء التسلسل';
 
   @override
   String get mobileHomeTab => 'الرئيسية';
@@ -390,9 +384,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileSettingsShowBorder => 'إظهار الحـواف';
 
   @override
-  String get mobileSettingsTab => 'الإعدادات';
-
-  @override
   String get mobileSettingsTouchFeedback => 'الإهتزاز عند لمس';
 
   @override
@@ -429,9 +420,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileShowResult => 'إظهار النتيجة';
 
   @override
-  String get mobileShowVariations => 'أظهر النقلات المرشحة';
-
-  @override
   String get mobileSignInWithBrowser => 'Sign in with the browser';
 
   @override
@@ -463,9 +451,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
-
-  @override
-  String get mobileToolsTab => 'الأدوات';
 
   @override
   String get mobileTournamentCompleted => 'مكتمل';

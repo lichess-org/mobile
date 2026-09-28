@@ -88,9 +88,6 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileCorrespondenceClearSavedMove => 'Εκκαθάριση αποθηκευμένης κίνησης';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Συμμετοχή σε παρτίδα';
-
-  @override
   String get mobileCustomizeButton => 'Προσαρμογή';
 
   @override
@@ -153,9 +150,6 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get mobileHello => 'Hello';
-
-  @override
-  String get mobileHideVariation => 'Απόκρυψη βαριάντας';
 
   @override
   String get mobileHomeTab => 'Αρχική';
@@ -390,9 +384,6 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileSettingsShowBorder => 'Εμφάνιση περιγράμματος';
 
   @override
-  String get mobileSettingsTab => 'Ρυθμίσεις';
-
-  @override
   String get mobileSettingsTouchFeedback => 'Δόνηση κατά την κίνηση';
 
   @override
@@ -429,9 +420,6 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileShowResult => 'Εμφάνιση αποτελέσματος';
 
   @override
-  String get mobileShowVariations => 'Εμφάνιση βαριάντων';
-
-  @override
   String get mobileSignInWithBrowser => 'Sign in with the browser';
 
   @override
@@ -463,9 +451,6 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
-
-  @override
-  String get mobileToolsTab => 'Εργαλεία';
 
   @override
   String get mobileTournamentCompleted => 'Ολοκληρωμένο';

@@ -88,9 +88,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileCorrespondenceClearSavedMove => 'Cancella mossa salvata';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Unisciti a una partita';
-
-  @override
   String get mobileCustomizeButton => 'Personalizza';
 
   @override
@@ -153,9 +150,6 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get mobileHello => 'Hello';
-
-  @override
-  String get mobileHideVariation => 'Nascondi variante';
 
   @override
   String get mobileHomeTab => 'Home';
@@ -390,9 +384,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileSettingsShowBorder => 'Mostra bordo';
 
   @override
-  String get mobileSettingsTab => 'Preferenze';
-
-  @override
   String get mobileSettingsTouchFeedback => 'Feedback tattile';
 
   @override
@@ -429,9 +420,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileShowResult => 'Mostra risultato';
 
   @override
-  String get mobileShowVariations => 'Mostra varianti';
-
-  @override
   String get mobileSignInWithBrowser => 'Sign in with the browser';
 
   @override
@@ -463,9 +451,6 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
-
-  @override
-  String get mobileToolsTab => 'Strumenti';
 
   @override
   String get mobileTournamentCompleted => 'Completati';

@@ -88,9 +88,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get mobileCorrespondenceClearSavedMove => 'सेव की गई चाल हटाएं';
 
   @override
-  String get mobileCustomGameJoinAGame => 'गेम जॉइन करें';
-
-  @override
   String get mobileCustomizeButton => 'Customize';
 
   @override
@@ -153,9 +150,6 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get mobileHello => 'Hello';
-
-  @override
-  String get mobileHideVariation => 'वेरिएशन छुपाएं';
 
   @override
   String get mobileHomeTab => 'होम';
@@ -390,9 +384,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get mobileSettingsShowBorder => 'सीमा दिखाएं';
 
   @override
-  String get mobileSettingsTab => 'सेटिंग';
-
-  @override
   String get mobileSettingsTouchFeedback => 'स्पर्श पर प्रतिक्रिया';
 
   @override
@@ -429,9 +420,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get mobileShowResult => 'रिजल्ट दिखाएं';
 
   @override
-  String get mobileShowVariations => 'वेरिएशन देखें';
-
-  @override
   String get mobileSignInWithBrowser => 'Sign in with the browser';
 
   @override
@@ -463,9 +451,6 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
-
-  @override
-  String get mobileToolsTab => 'टूल्स';
 
   @override
   String get mobileTournamentCompleted => 'Completed';

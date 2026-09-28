@@ -88,9 +88,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileCorrespondenceClearSavedMove => '저장된 수 삭제';
 
   @override
-  String get mobileCustomGameJoinAGame => '게임 참가';
-
-  @override
   String get mobileCustomizeButton => '맞춤설정';
 
   @override
@@ -153,9 +150,6 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get mobileHello => 'Hello';
-
-  @override
-  String get mobileHideVariation => '라인 숨기기';
 
   @override
   String get mobileHomeTab => '홈';
@@ -390,9 +384,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileSettingsShowBorder => '보드 테두리 보이기';
 
   @override
-  String get mobileSettingsTab => '설정';
-
-  @override
   String get mobileSettingsTouchFeedback => '터치 피드백';
 
   @override
@@ -429,9 +420,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileShowResult => '결과 표시';
 
   @override
-  String get mobileShowVariations => '라인 보이기';
-
-  @override
   String get mobileSignInWithBrowser => 'Sign in with the browser';
 
   @override
@@ -463,9 +451,6 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
-
-  @override
-  String get mobileToolsTab => '도구';
 
   @override
   String get mobileTournamentCompleted => '종료됨';

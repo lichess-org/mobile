@@ -88,9 +88,6 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileCorrespondenceClearSavedMove => 'Vymazať uložený ťah';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Pripojiť sa k partii';
-
-  @override
   String get mobileCustomizeButton => 'Prispôsobiť';
 
   @override
@@ -153,9 +150,6 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get mobileHello => 'Hello';
-
-  @override
-  String get mobileHideVariation => 'Skryť varianty';
 
   @override
   String get mobileHomeTab => 'Domov';
@@ -390,9 +384,6 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileSettingsShowBorder => 'Zobraziť okraj';
 
   @override
-  String get mobileSettingsTab => 'Nastavenia';
-
-  @override
   String get mobileSettingsTouchFeedback => 'Hmatová odozva';
 
   @override
@@ -429,9 +420,6 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileShowResult => 'Zobraziť výsledok';
 
   @override
-  String get mobileShowVariations => 'Zobraziť varianty';
-
-  @override
   String get mobileSignInWithBrowser => 'Sign in with the browser';
 
   @override
@@ -463,9 +451,6 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
-
-  @override
-  String get mobileToolsTab => 'Nástroje';
 
   @override
   String get mobileTournamentCompleted => 'Ukončený';

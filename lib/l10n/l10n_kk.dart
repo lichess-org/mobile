@@ -88,9 +88,6 @@ class AppLocalizationsKk extends AppLocalizations {
   String get mobileCorrespondenceClearSavedMove => 'Сақталған жүрісті жою';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Ойынға қосылу';
-
-  @override
   String get mobileCustomizeButton => 'Өзгерту';
 
   @override
@@ -153,9 +150,6 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get mobileHello => 'Hello';
-
-  @override
-  String get mobileHideVariation => 'Тармақты жасыру';
 
   @override
   String get mobileHomeTab => 'Үйге';
@@ -390,9 +384,6 @@ class AppLocalizationsKk extends AppLocalizations {
   String get mobileSettingsShowBorder => 'Шетін көрсету';
 
   @override
-  String get mobileSettingsTab => 'Баптау';
-
-  @override
   String get mobileSettingsTouchFeedback => 'Діріл жауап';
 
   @override
@@ -429,9 +420,6 @@ class AppLocalizationsKk extends AppLocalizations {
   String get mobileShowResult => 'Нәтижесін көру';
 
   @override
-  String get mobileShowVariations => 'Тармақтарын көру';
-
-  @override
   String get mobileSignInWithBrowser => 'Sign in with the browser';
 
   @override
@@ -463,9 +451,6 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
-
-  @override
-  String get mobileToolsTab => 'Құрал';
 
   @override
   String get mobileTournamentCompleted => 'Аяқталды';

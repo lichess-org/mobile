@@ -88,9 +88,6 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileCorrespondenceClearSavedMove => 'Spastroje lëvizjen e ruajtur';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Merrni pjesë në një lojë';
-
-  @override
   String get mobileCustomizeButton => 'Përshtateni';
 
   @override
@@ -153,9 +150,6 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get mobileHello => 'Hello';
-
-  @override
-  String get mobileHideVariation => 'Fshihe variantin';
 
   @override
   String get mobileHomeTab => 'Kreu';
@@ -390,9 +384,6 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileSettingsShowBorder => 'Shfa anë';
 
   @override
-  String get mobileSettingsTab => 'Rregullime';
-
-  @override
   String get mobileSettingsTouchFeedback => 'Reagim me prekje';
 
   @override
@@ -429,9 +420,6 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileShowResult => 'Shfaq përfundimin';
 
   @override
-  String get mobileShowVariations => 'Shfaq variante';
-
-  @override
   String get mobileSignInWithBrowser => 'Sign in with the browser';
 
   @override
@@ -463,9 +451,6 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
-
-  @override
-  String get mobileToolsTab => 'Mjete';
 
   @override
   String get mobileTournamentCompleted => 'Të plotësuar';
