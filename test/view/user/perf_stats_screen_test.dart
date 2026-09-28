@@ -147,6 +147,8 @@ void main() {
             return LichessClient(correspondenceClient, ref);
           }),
         },
+        // iPhone 14 screen width, matching the device (iPhone 16e) the bug was reported on.
+        surfaceSize: const Size(390, 844),
       );
 
       await tester.pumpWidget(app);
