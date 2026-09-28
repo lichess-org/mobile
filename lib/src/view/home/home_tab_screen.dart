@@ -1073,12 +1073,7 @@ class _NNUEFilesOutdatedTipState() extends ConsumerState<_NNUEFilesOutdatedTip> 
               children: [
                 Icon(Icons.warning, size: 25.0, color: Theme.of(context).colorScheme.primary),
                 const SizedBox(width: 8.0),
-                const Flexible(
-                  child: Text(
-                    // TODO l10n
-                    'New Stockfish version available! Go to the settings to download the updated NNUE file.',
-                  ),
-                ),
+                Flexible(child: Text(context.l10n.mobileNewStockfishAvailable)),
               ],
             ),
             actions: [
@@ -1092,8 +1087,7 @@ class _NNUEFilesOutdatedTipState() extends ConsumerState<_NNUEFilesOutdatedTip> 
                     rootNavigator: true,
                   ).push(EngineSettingsScreen.buildRoute());
                 },
-                // TODO l10n
-                child: const Text('Open settings'),
+                child: Text(context.l10n.settingsSettings),
               ),
             ],
           );

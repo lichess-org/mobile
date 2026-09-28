@@ -311,8 +311,7 @@ class const _BottomBar(final BoardEditorControllerParams? params) extends Consum
                 ),
               if (editorState.variant == Variant.standard)
                 BottomSheetAction(
-                  // TODO: l10n
-                  makeLabel: (context) => const Text('Challenge from position'),
+                  makeLabel: (context) => Text(context.l10n.mobileChallengeFromPosition),
                   onPressed: () {
                     final authUser = ref.read(authControllerProvider);
                     if (authUser == null) {
@@ -329,7 +328,7 @@ class const _BottomBar(final BoardEditorControllerParams? params) extends Consum
                           if (user.id == authUser.user.id) {
                             showSnackBar(
                               context,
-                              'You cannot challenge yourself',
+                              context.l10n.mobileYouCannotChallengeYourself,
                               type: SnackBarType.error,
                             );
                           }
@@ -345,8 +344,7 @@ class const _BottomBar(final BoardEditorControllerParams? params) extends Consum
                             },
                           );
                         },
-                        // TODO: l10n
-                        title: const Text('Challenge from position'),
+                        title: Text(context.l10n.mobileChallengeFromPosition),
                       ),
                     );
                   },

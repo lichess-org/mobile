@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/log/app_log_service.dart';
 import 'package:lichess_mobile/src/model/log/app_log_storage.dart';
 import 'package:lichess_mobile/src/model/settings/log_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
@@ -106,7 +107,7 @@ class _AppLogSettingsScreenState() extends ConsumerState<AppLogSettingsScreen> {
                 Expanded(
                   child: PlatformSearchBar(
                     controller: _searchController,
-                    hintText: 'Search logs...',
+                    hintText: context.l10n.searchSearch,
                     onChanged: (value) => setState(() {
                       _searchQuery = value.isEmpty ? null : value;
                     }),
@@ -141,7 +142,7 @@ class _AppLogSettingsScreenState() extends ConsumerState<AppLogSettingsScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text('No logs to show'),
+              Text(context.l10n.nothingToSeeHere),
               TextButton(onPressed: _onRefresh, child: const Text('Tap to refresh')),
             ],
           ),

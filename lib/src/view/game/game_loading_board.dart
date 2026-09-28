@@ -240,7 +240,7 @@ class _OpenChallengeLoadingContentState() extends ConsumerState<OpenChallengeLoa
                         onTap: () async {
                           await Clipboard.setData(ClipboardData(text: challengeLink));
                           if (!context.mounted) return;
-                          showSnackBar(context, 'Copied.'); // TODO l10n
+                          showSnackBar(context, context.l10n.mobileCopied);
                         },
                         child: Text.rich(
                           TextSpan(
@@ -353,7 +353,7 @@ class _OpenChallengeLoadingContentState() extends ConsumerState<OpenChallengeLoa
         BottomBar(
           children: [
             BottomBarButton(
-              label: 'Share challenge URL', // TODO l10n
+              label: context.l10n.mobileShareChallengeUrl,
               onTap: () => launchShareDialog(context, ShareParams(text: challengeLink)),
               showLabel: true,
               icon: Icons.share,
