@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="signUpToSaveYourProgress">注册以保存您的进度</string>
+  <string name="secHeadCheckmates">将杀</string>
+  <string name="secHeadFundamentalTactics">基础战术</string>
+  <string name="secHeadAdvancedTactics">高级战术</string>
+  <string name="secHeadPawnEndgames">兵残局</string>
+  <string name="secHeadRookEndgames">车残局</string>
+  <string name="stNamPieceCheckmatesI">棋子将杀 I</string>
+  <string name="stNamCheckmatePatternsI">将杀模式 I</string>
+  <string name="stNamCheckmatePatternsII">将杀模式 II</string>
+  <string name="stNamCheckmatePatternsIII">将杀模式 III</string>
+  <string name="stNamCheckmatePatternsIV">将杀模式 IV</string>
+  <string name="stNamPieceCheckmatesII">棋子将杀 II</string>
+  <string name="stNamKnightAndBishopMate">马象将杀</string>
+  <string name="stNamThePin">牵制</string>
+  <string name="stNamTheSkewer">串击</string>
+  <string name="stNamTheFork">捉双</string>
+  <string name="stNamDiscoveredAttacks">闪击</string>
+  <string name="stNamDoubleCheck">双将</string>
+  <string name="stNamOverloadedPieces">子力超载</string>
+  <string name="stNamZwischenzug">过渡着</string>
+  <string name="stNamZugzwang">楚茨文格</string>
+  <string name="stNamInterference">拦截</string>
+  <string name="stNamDeflection">引离</string>
+  <string name="stNamAttraction">引入</string>
+  <string name="stNamUnderpromotion">低升变</string>
+  <string name="stNamClearance">腾挪</string>
+</resources>
