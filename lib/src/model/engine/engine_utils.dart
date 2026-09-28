@@ -100,8 +100,11 @@ ClientEval? pickBestClientEval({
 /// Pass the [spec] the name came from to have the light Stockfish labelled by its net, which is
 /// all that tells it apart from the full-net engine of the same version.
 ///
+/// An external engine is labelled by its full name, which is the user's to choose.
+///
 /// Returns null if the engine name is null or doesn't match the expected pattern.
 String? engineShortLabel(String? engineName, {EngineSpec? spec}) {
+  if (spec is ExternalEngineSpec) return spec.engine.name;
   if (engineName == null) return null;
   if (engineName.startsWith('Fairy-Stockfish')) {
     return 'Fairy SF';

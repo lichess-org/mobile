@@ -1,6 +1,9 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lichess_mobile/src/model/engine/engine_spec.dart';
 import 'package:lichess_mobile/src/model/engine/engine_utils.dart';
+
+import 'fake_external_engines.dart';
 
 Position position(String fen) => Chess.fromSetup(Setup.parseFen(fen));
 
@@ -88,6 +91,12 @@ void main() {
     test('returns null for a name it cannot read', () {
       expect(engineShortLabel(null), isNull);
       expect(engineShortLabel('Lc0 v0.32.1'), isNull);
+    });
+
+    test('labels an external engine by its full name', () {
+      final spec = ExternalEngineSpec(testExternalEngine.copyWith(name: 'Stockfish 17'));
+
+      expect(engineShortLabel('Stockfish 17', spec: spec), 'Stockfish 17');
     });
   });
 }
