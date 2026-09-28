@@ -9,6 +9,9 @@ class AppLocalizationsFa extends AppLocalizations {
   AppLocalizationsFa([String locale = 'fa']) : super(locale);
 
   @override
+  String get mobileAcceptDraw => 'Accept draw?';
+
+  @override
   String get mobileAccount => 'حساب';
 
   @override
@@ -24,12 +27,6 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileAllGames => 'همه بازی‌ها';
 
   @override
-  String get mobileAllTime => 'All time';
-
-  @override
-  String get mobileAlmostThereFinalizingGif => 'Almost there! Finalizing the GIF...';
-
-  @override
   String get mobileAllowTakebacksAndHints => 'Allow takebacks and hints';
 
   @override
@@ -37,9 +34,6 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get mobileAreYouSure => 'مطمئنید؟';
-
-  @override
-  String get mobileAreYouSureDeleteConversation => 'Are you sure you want to delete this conversation?';
 
   @override
   String mobileAreYouSureDownloadNnue(String param) {
@@ -59,6 +53,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'رد درخواست برگرداندن';
 
   @override
+  String get mobileChallengeCreated => 'چالش ایجاد شد: وقتی بازی شروع شود شما آگاهنده می‌شوید.\nمی‌توانید از زبانهٔ خانه به آن دسترسی داشته باشید.';
+
+  @override
   String get mobileChallengeFromPosition => 'Challenge from position';
 
   @override
@@ -74,10 +71,10 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileClearButton => 'پاکسازی';
 
   @override
-  String get mobileCodeFieldLabel => 'Code';
+  String get mobileCodeExpiresMessage => 'The code expires after 5 minutes and can only be used once.';
 
   @override
-  String get mobileCodeExpiresMessage => 'The code expires after 5 minutes and can only be used once.';
+  String get mobileCodeFieldLabel => 'Code';
 
   @override
   String mobileCodeLengthMessage(String param) {
@@ -85,43 +82,25 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String get mobileCorrespondenceClearSavedMove => 'پاکسازی حرکت ذخیره‌ شده';
+  String get mobileCopied => 'Copied.';
 
   @override
-  String get mobileCopied => 'Copied.';
+  String get mobileCorrespondenceClearSavedMove => 'پاکسازی حرکت ذخیره‌ شده';
 
   @override
   String get mobileCustomGameJoinAGame => 'به بازی بپیوندید';
 
   @override
+  String get mobileCustomizeButton => 'شخصی سازی';
+
+  @override
+  String get mobileCustomizeHomeTip => 'نکته: می‌توانید ابزارک‌های بیشتری به صفحهٔ خانه بیفزایید یا آنهایی را که نیاز ندارید بحذفید!';
+
+  @override
+  String get mobileCustomizeHomeTipDismiss => 'رد کردن';
+
+  @override
   String get mobileDangerZone => 'Danger zone';
-
-  @override
-  String get mobileDateAllTime => 'All time';
-
-  @override
-  String get mobileDateLast10Years => 'Last 10 years';
-
-  @override
-  String get mobileDateLast20Years => 'Last 20 years';
-
-  @override
-  String get mobileDateLast3Years => 'Last 3 years';
-
-  @override
-  String get mobileDateLast5Years => 'Last 5 years';
-
-  @override
-  String get mobileDateLast6Months => 'Last 6 months';
-
-  @override
-  String get mobileDateLastMonth => 'Last month';
-
-  @override
-  String get mobileDateLastYear => 'Last year';
-
-  @override
-  String get mobileDateThisMonth => 'This month';
 
   @override
   String get mobileDateRangeAllTime => 'ALL';
@@ -142,6 +121,12 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileDeleteYourAccount => 'Delete your account';
 
   @override
+  String get mobileDisplayModeCompact => 'فشرده';
+
+  @override
+  String get mobileDisplayModeDetailed => 'با جزئیات';
+
+  @override
   String get mobileDoYouAcceptChallenge => 'Do you accept the challenge?';
 
   @override
@@ -149,9 +134,6 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get mobileExport => 'Export';
-
-  @override
-  String get mobileFailedToGetGif => 'Failed to get GIF';
 
   @override
   String get mobileFeedbackButton => 'بازخورد';
@@ -166,18 +148,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileFlipPiecesAfterMove => 'Flip pieces and opponent info after move';
 
   @override
-  String get mobileGenerateGif => 'Generating GIF...';
-
-  @override
   String get mobileGetFeedbackOnMoves => 'Get feedback on your moves';
-
-  @override
-  String mobileGoodEvening(String param) {
-    return 'عصر بخیر، $param';
-  }
-
-  @override
-  String get mobileGoodEveningWithoutName => 'عصر بخیر';
 
   @override
   String mobileGoodDay(String param) {
@@ -188,6 +159,17 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileGoodDayWithoutName => 'روز بخیر';
 
   @override
+  String mobileGoodEvening(String param) {
+    return 'عصر بخیر، $param';
+  }
+
+  @override
+  String get mobileGoodEveningWithoutName => 'عصر بخیر';
+
+  @override
+  String get mobileGoodMoveButThereIsBetter => 'حرکتِ خوب، اما بهتر هم هست';
+
+  @override
   String get mobileHello => 'Hello';
 
   @override
@@ -195,9 +177,6 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get mobileHomeTab => 'خانه';
-
-  @override
-  String get mobileHttpLogs => 'HTTP logs';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
@@ -214,16 +193,13 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileLocalDatabaseSize => 'Local database size';
 
   @override
-  String get mobileLongGamesTakeMoreTime => 'Long games take a bit more time...';
-
-  @override
-  String get mobileMustBeLoggedIn => 'برای دیدن این صفحه باید وارد شده باشید.';
-
-  @override
   String get mobileMoveOnRelease => 'Move on release';
 
   @override
   String get mobileMoveOnReleaseSubtitle => 'When moving a piece by tapping, the move is made when you lift your finger, letting you slide to change the destination square.';
+
+  @override
+  String get mobileMustBeLoggedIn => 'برای دیدن این صفحه باید وارد شده باشید.';
 
   @override
   String get mobileNbOfflinePuzzles => 'معمای بُرون‌خط';
@@ -232,16 +208,10 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileNewGame => 'بازی جدید';
 
   @override
-  String get mobileNewStockfishAvailable => 'New Stockfish version available! Go to the settings to download the updated NNUE file.';
-
-  @override
   String get mobileNextMistake => 'Next mistake';
 
   @override
   String get mobileNoSearchResults => 'بدون نتیجه';
-
-  @override
-  String get mobileNotAllFeaturesAreAvailable => 'لطفاً توجه کنید که همه آرَنگ‌های بَرکِ قدیمی یا وبگاه اکنون در دسترس نیستند، اما ما همواره در حال افزودنِ آرَنگ‌هاییم.';
 
   @override
   String get mobileNotFollowingAnyUser => 'شما هیچ کاربری را نمی‌دنبالید.';
@@ -253,21 +223,75 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileOngoingGames => 'Ongoing Games';
 
   @override
+  String get mobileOpeningExplorerNotAvailableOffline => 'پویشگرِ گشایش، برون‌خط امکان‌پذیر نیست.';
+
+  @override
+  String get mobileOrImportPgnFile => 'یا درونبُردِ یک پَروَنِ PGN';
+
+  @override
   String get mobileOverTheBoard => 'سَرِ میز';
 
   @override
   String get mobilePasteFromClipboard => 'Paste from clipboard';
 
   @override
+  String get mobilePerfShortAntichess => 'مَطرَنج';
+
+  @override
+  String get mobilePerfShortAtomic => 'اِنفجار';
+
+  @override
+  String get mobilePerfShortBlitz => 'برق‌آسا';
+
+  @override
+  String get mobilePerfShortBullet => 'گلوله';
+
+  @override
+  String get mobilePerfShortChess960 => '۹۶۰';
+
+  @override
+  String get mobilePerfShortClassical => 'فکری';
+
+  @override
+  String get mobilePerfShortCorrespondence => 'مُکات.';
+
+  @override
+  String get mobilePerfShortCrazyhouse => 'دیوانه';
+
+  @override
+  String get mobilePerfShortFromPosition => 'از وَض.';
+
+  @override
+  String get mobilePerfShortHorde => 'لشکر';
+
+  @override
+  String get mobilePerfShortKingOfTheHill => 'په.ته';
+
+  @override
+  String get mobilePerfShortPuzzle => 'معما';
+
+  @override
+  String get mobilePerfShortRacingKings => 'دو';
+
+  @override
+  String get mobilePerfShortRapid => 'سریع';
+
+  @override
+  String get mobilePerfShortThreeCheck => 'سه‌کیش';
+
+  @override
+  String get mobilePerfShortUltraBullet => 'اولا';
+
+  @override
   String get mobilePerformanceCards => 'Performance Cards';
+
+  @override
+  String get mobilePgnCopied => 'PGN copied.';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
     return 'بازیکنانِ «$param»';
   }
-
-  @override
-  String get mobilePgnCopied => 'PGN copied.';
 
   @override
   String get mobilePositionLeft => 'چپ';
@@ -282,6 +306,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobilePrefMagnifyDraggedPiece => 'بزرگ‌نمودن مهره‌ی کشیده';
 
   @override
+  String get mobilePreviousPage => 'پیشین';
+
+  @override
   String get mobilePuzzleStormConfirmEndRun => 'می‌خواهید این دور را پایان دهید؟';
 
   @override
@@ -292,9 +319,6 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get mobilePuzzleStormSubtitle => 'در ۳ دقیقه، هر چندتا معما که می‌توانید، حل کنید.';
-
-  @override
-  String get mobilePuzzleStreakAbortWarning => 'شما ریسه فعلی‌تان را خواهید باخت و امتیازتان ذخیره خواهد شد.';
 
   @override
   String get mobilePuzzleThemesSubtitle => 'معماهایی را از گشایش دلخواه‌تان بازی کنید، یا موضوعی را برگزینید.';
@@ -357,10 +381,10 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileSettingsPickAnImage => 'انتخاب عکس';
 
   @override
-  String get mobileSettingsPickAnImageHelp => 'پس‌زمینهٔ سفارشی فقط در حالت تاریک کار می‌کند. یک تصویر تاریک توصیه می‌شود.';
+  String get mobileSettingsPickAnImageBlur => 'تصویر را تار کنید';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'تصویر را تار کنید';
+  String get mobileSettingsPickAnImageHelp => 'پس‌زمینهٔ سفارشی فقط در حالت تاریک کار می‌کند. یک تصویر تاریک توصیه می‌شود.';
 
   @override
   String get mobileSettingsPickAnImageHideBoard => 'پنهانیدنِ تخته';
@@ -390,13 +414,13 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileSettingsShowBorder => 'نمایش حاشیه';
 
   @override
+  String get mobileSettingsTab => 'تنظیمات';
+
+  @override
   String get mobileSettingsTouchFeedback => 'بازخورد لمسی';
 
   @override
   String get mobileSettingsTouchFeedbackSubtitle => 'در صورت فعال شدن ، دستگاه شما زمانی که حرکتی انجام میدهید یا مهره ای را میگیرید و ویبره میشود';
-
-  @override
-  String get mobileSettingsTab => 'تنظیمات';
 
   @override
   String get mobileShareChallengeUrl => 'Share challenge URL';
@@ -441,6 +465,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileSimpleDelay => 'Simple delay';
 
   @override
+  String get mobileSmallBoard => 'Small board';
+
+  @override
   String get mobileSomethingWentWrong => 'مشکلی پیش آمد.';
 
   @override
@@ -460,9 +487,6 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get mobileTheme => 'پوسته';
-
-  @override
-  String get mobileTimespan => 'Timespan';
 
   @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
@@ -497,100 +521,10 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileWatchTab => 'تماشا';
 
   @override
-  String get mobileWelcomeToLichessApp => 'به بَرکِ lichess خوش آمدید!';
-
-  @override
   String get mobileWeWillEmailYouCode => 'We will email you a code to sign in with.';
 
   @override
   String get mobileYouCannotChallengeYourself => 'You cannot challenge yourself';
-
-  @override
-  String get mobilePerfShortUltraBullet => 'اولا';
-
-  @override
-  String get mobilePerfShortBullet => 'گلوله';
-
-  @override
-  String get mobilePerfShortBlitz => 'برق‌آسا';
-
-  @override
-  String get mobilePerfShortRapid => 'سریع';
-
-  @override
-  String get mobilePerfShortClassical => 'فکری';
-
-  @override
-  String get mobilePerfShortCorrespondence => 'مُکات.';
-
-  @override
-  String get mobilePerfShortFromPosition => 'از وَض.';
-
-  @override
-  String get mobilePerfShortChess960 => '۹۶۰';
-
-  @override
-  String get mobilePerfShortAntichess => 'مَطرَنج';
-
-  @override
-  String get mobilePerfShortKingOfTheHill => 'په.ته';
-
-  @override
-  String get mobilePerfShortThreeCheck => 'سه‌کیش';
-
-  @override
-  String get mobilePerfShortAtomic => 'اِنفجار';
-
-  @override
-  String get mobilePerfShortHorde => 'لشکر';
-
-  @override
-  String get mobilePerfShortRacingKings => 'دو';
-
-  @override
-  String get mobilePerfShortCrazyhouse => 'دیوانه';
-
-  @override
-  String get mobilePerfShortPuzzle => 'معما';
-
-  @override
-  String get mobileDisplayModeCompact => 'فشرده';
-
-  @override
-  String get mobileDisplayModeDetailed => 'با جزئیات';
-
-  @override
-  String get mobileOpeningExplorerNotAvailableOffline => 'پویشگرِ گشایش، برون‌خط امکان‌پذیر نیست.';
-
-  @override
-  String get mobileChallengeCreated => 'چالش ایجاد شد: وقتی بازی شروع شود شما آگاهنده می‌شوید.\nمی‌توانید از زبانهٔ خانه به آن دسترسی داشته باشید.';
-
-  @override
-  String get mobilePreviousPage => 'پیشین';
-
-  @override
-  String get mobileOrImportPgnFile => 'یا درونبُردِ یک پَروَنِ PGN';
-
-  @override
-  String get mobileGoodMoveButThereIsBetter => 'حرکتِ خوب، اما بهتر هم هست';
-
-  @override
-  String get mobileCustomizeHomeTip => 'نکته: می‌توانید ابزارک‌های بیشتری به صفحهٔ خانه بیفزایید یا آنهایی را که نیاز ندارید بحذفید!';
-
-  @override
-  String get mobileCustomizeHomeTipDismiss => 'رد کردن';
-
-  @override
-  String get mobileCustomizeButton => 'شخصی سازی';
-
-  @override
-  String get mobileAppLogs => 'App Logs';
-
-  @override
-  String get mobileSmallBoard => 'Small board';
-
-  @override
-  String get mobileAcceptDraw => 'Accept draw?';
 
   @override
   String get variantStandard => 'اِستانده';

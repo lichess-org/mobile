@@ -1,7 +1,6 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer.dart';
@@ -18,13 +17,13 @@ class const OpeningExplorerSettings() extends ConsumerWidget {
 
     final List<Widget> masterDbSettings = [
       ListTile(
-        title: Text(context.l10n.mobileTimespan),
+        title: const Text('Timespan'),
         subtitle: Wrap(
           spacing: 5,
           children: MasterDb.datesMap.keys
               .map(
                 (key) => ChoiceChip(
-                  label: Text(_masterTimespanLabel(key, context.l10n)),
+                  label: Text(key),
                   selected: prefs.masterDb.sinceYear == MasterDb.datesMap[key],
                   onSelected: (_) => ref
                       .read(openingExplorerPreferencesProvider.notifier)
@@ -81,13 +80,13 @@ class const OpeningExplorerSettings() extends ConsumerWidget {
         ),
       ),
       ListTile(
-        title: Text(context.l10n.mobileTimespan),
+        title: const Text('Timespan'),
         subtitle: Wrap(
           spacing: 5,
           children: LichessDb.datesMap.keys
               .map(
                 (key) => ChoiceChip(
-                  label: Text(_dbTimespanLabel(key, context.l10n)),
+                  label: Text(key),
                   selected: prefs.lichessDb.since == LichessDb.datesMap[key],
                   onSelected: (_) => ref
                       .read(openingExplorerPreferencesProvider.notifier)
@@ -189,13 +188,13 @@ class const OpeningExplorerSettings() extends ConsumerWidget {
         ),
       ),
       ListTile(
-        title: Text(context.l10n.mobileTimespan),
+        title: const Text('Timespan'),
         subtitle: Wrap(
           spacing: 5,
           children: PlayerDb.datesMap.keys
               .map(
                 (key) => ChoiceChip(
-                  label: Text(_dbTimespanLabel(key, context.l10n)),
+                  label: Text(key),
                   selected: prefs.playerDb.since == PlayerDb.datesMap[key],
                   onSelected: (_) => ref
                       .read(openingExplorerPreferencesProvider.notifier)
@@ -247,21 +246,3 @@ class const OpeningExplorerSettings() extends ConsumerWidget {
     );
   }
 }
-
-String _masterTimespanLabel(String label, AppLocalizations l10n) => switch (label) {
-  'Last 3 years' => l10n.mobileDateLast3Years,
-  'Last 10 years' => l10n.mobileDateLast10Years,
-  'Last 20 years' => l10n.mobileDateLast20Years,
-  'All time' => l10n.mobileDateAllTime,
-  _ => label,
-};
-
-String _dbTimespanLabel(String label, AppLocalizations l10n) => switch (label) {
-  'This month' => l10n.mobileDateThisMonth,
-  'Last month' => l10n.mobileDateLastMonth,
-  'Last 6 months' => l10n.mobileDateLast6Months,
-  'Last year' => l10n.mobileDateLastYear,
-  'Last 5 years' => l10n.mobileDateLast5Years,
-  'All time' => l10n.mobileAllTime,
-  _ => label,
-};

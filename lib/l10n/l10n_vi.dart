@@ -9,6 +9,9 @@ class AppLocalizationsVi extends AppLocalizations {
   AppLocalizationsVi([String locale = 'vi']) : super(locale);
 
   @override
+  String get mobileAcceptDraw => 'Accept draw?';
+
+  @override
   String get mobileAccount => 'Tài khoản';
 
   @override
@@ -24,12 +27,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileAllGames => 'Tất cả ván đấu';
 
   @override
-  String get mobileAllTime => 'All time';
-
-  @override
-  String get mobileAlmostThereFinalizingGif => 'Almost there! Finalizing the GIF...';
-
-  @override
   String get mobileAllowTakebacksAndHints => 'Allow takebacks and hints';
 
   @override
@@ -37,9 +34,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get mobileAreYouSure => 'Bạn chắc chứ?';
-
-  @override
-  String get mobileAreYouSureDeleteConversation => 'Are you sure you want to delete this conversation?';
 
   @override
   String mobileAreYouSureDownloadNnue(String param) {
@@ -59,6 +53,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Hủy đề nghị đi lại';
 
   @override
+  String get mobileChallengeCreated => 'Đã thách đấu người chơi: Bạn sẽ được thông báo nếu trận đấu bắt đầu.\nBạn có thể truy cập trận đấu từ trang chủ.';
+
+  @override
   String get mobileChallengeFromPosition => 'Challenge from position';
 
   @override
@@ -74,10 +71,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileClearButton => 'Xóa';
 
   @override
-  String get mobileCodeFieldLabel => 'Code';
+  String get mobileCodeExpiresMessage => 'The code expires after 5 minutes and can only be used once.';
 
   @override
-  String get mobileCodeExpiresMessage => 'The code expires after 5 minutes and can only be used once.';
+  String get mobileCodeFieldLabel => 'Code';
 
   @override
   String mobileCodeLengthMessage(String param) {
@@ -85,43 +82,25 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get mobileCorrespondenceClearSavedMove => 'Xóa nước cờ đã lưu';
+  String get mobileCopied => 'Copied.';
 
   @override
-  String get mobileCopied => 'Copied.';
+  String get mobileCorrespondenceClearSavedMove => 'Xóa nước cờ đã lưu';
 
   @override
   String get mobileCustomGameJoinAGame => 'Tham gia một ván cờ';
 
   @override
+  String get mobileCustomizeButton => 'Tùy chỉnh';
+
+  @override
+  String get mobileCustomizeHomeTip => 'Mẹo: Bạn có thể tuỳ chỉnh Trang chính của bạn!';
+
+  @override
+  String get mobileCustomizeHomeTipDismiss => 'Bỏ qua';
+
+  @override
   String get mobileDangerZone => 'Danger zone';
-
-  @override
-  String get mobileDateAllTime => 'All time';
-
-  @override
-  String get mobileDateLast10Years => 'Last 10 years';
-
-  @override
-  String get mobileDateLast20Years => 'Last 20 years';
-
-  @override
-  String get mobileDateLast3Years => 'Last 3 years';
-
-  @override
-  String get mobileDateLast5Years => 'Last 5 years';
-
-  @override
-  String get mobileDateLast6Months => 'Last 6 months';
-
-  @override
-  String get mobileDateLastMonth => 'Last month';
-
-  @override
-  String get mobileDateLastYear => 'Last year';
-
-  @override
-  String get mobileDateThisMonth => 'This month';
 
   @override
   String get mobileDateRangeAllTime => 'ALL';
@@ -142,6 +121,12 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileDeleteYourAccount => 'Delete your account';
 
   @override
+  String get mobileDisplayModeCompact => 'Thu gọn';
+
+  @override
+  String get mobileDisplayModeDetailed => 'Mở rộng';
+
+  @override
   String get mobileDoYouAcceptChallenge => 'Do you accept the challenge?';
 
   @override
@@ -149,9 +134,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get mobileExport => 'Export';
-
-  @override
-  String get mobileFailedToGetGif => 'Failed to get GIF';
 
   @override
   String get mobileFeedbackButton => 'Phản hồi';
@@ -166,18 +148,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileFlipPiecesAfterMove => 'Flip pieces and opponent info after move';
 
   @override
-  String get mobileGenerateGif => 'Generating GIF...';
-
-  @override
   String get mobileGetFeedbackOnMoves => 'Get feedback on your moves';
-
-  @override
-  String mobileGoodEvening(String param) {
-    return 'Chào buổi tối, $param';
-  }
-
-  @override
-  String get mobileGoodEveningWithoutName => 'Chào buổi tối';
 
   @override
   String mobileGoodDay(String param) {
@@ -188,6 +159,17 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileGoodDayWithoutName => 'Ngày mới tốt lành';
 
   @override
+  String mobileGoodEvening(String param) {
+    return 'Chào buổi tối, $param';
+  }
+
+  @override
+  String get mobileGoodEveningWithoutName => 'Chào buổi tối';
+
+  @override
+  String get mobileGoodMoveButThereIsBetter => 'Nước đi tốt, nhưng có nước đi tốt hơn nữa';
+
+  @override
   String get mobileHello => 'Hello';
 
   @override
@@ -195,9 +177,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get mobileHomeTab => 'Trang chủ';
-
-  @override
-  String get mobileHttpLogs => 'HTTP logs';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
@@ -214,16 +193,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileLocalDatabaseSize => 'Local database size';
 
   @override
-  String get mobileLongGamesTakeMoreTime => 'Long games take a bit more time...';
-
-  @override
-  String get mobileMustBeLoggedIn => 'Bạn phải đăng nhập để xem trang này.';
-
-  @override
   String get mobileMoveOnRelease => 'Move on release';
 
   @override
   String get mobileMoveOnReleaseSubtitle => 'When moving a piece by tapping, the move is made when you lift your finger, letting you slide to change the destination square.';
+
+  @override
+  String get mobileMustBeLoggedIn => 'Bạn phải đăng nhập để xem trang này.';
 
   @override
   String get mobileNbOfflinePuzzles => 'Câu đố ngoại tuyến';
@@ -232,16 +208,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileNewGame => 'Ván cờ mới';
 
   @override
-  String get mobileNewStockfishAvailable => 'New Stockfish version available! Go to the settings to download the updated NNUE file.';
-
-  @override
   String get mobileNextMistake => 'Next mistake';
 
   @override
   String get mobileNoSearchResults => 'Không có kết quả';
-
-  @override
-  String get mobileNotAllFeaturesAreAvailable => 'Xin lưu ý rằng không phải tất cả các tính năng từ ứng dụng cũ hoặc trang web hiện đều khả dụng, nhưng chúng tôi đang bổ sung thêm các tính năng mới.';
 
   @override
   String get mobileNotFollowingAnyUser => 'Bạn không theo dõi bất kỳ người dùng nào.';
@@ -253,21 +223,75 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileOngoingGames => 'Ongoing Games';
 
   @override
+  String get mobileOpeningExplorerNotAvailableOffline => 'Khám phá Khai cuộc không khả dụng khi ngoại tuyến.';
+
+  @override
+  String get mobileOrImportPgnFile => 'Hoặc nhập một tệp PGN';
+
+  @override
   String get mobileOverTheBoard => 'Trên bàn cờ';
 
   @override
   String get mobilePasteFromClipboard => 'Paste from clipboard';
 
   @override
+  String get mobilePerfShortAntichess => 'Phản cờ';
+
+  @override
+  String get mobilePerfShortAtomic => 'Nguyên tử';
+
+  @override
+  String get mobilePerfShortBlitz => 'Chớp';
+
+  @override
+  String get mobilePerfShortBullet => 'Đạn';
+
+  @override
+  String get mobilePerfShortChess960 => '960';
+
+  @override
+  String get mobilePerfShortClassical => 'Chậm';
+
+  @override
+  String get mobilePerfShortCorrespondence => 'Qua thư';
+
+  @override
+  String get mobilePerfShortCrazyhouse => 'Đặt quân';
+
+  @override
+  String get mobilePerfShortFromPosition => 'Tùy chỉnh';
+
+  @override
+  String get mobilePerfShortHorde => 'Đội quân';
+
+  @override
+  String get mobilePerfShortKingOfTheHill => 'Lên đồi';
+
+  @override
+  String get mobilePerfShortPuzzle => 'Câu đố';
+
+  @override
+  String get mobilePerfShortRacingKings => 'Đua vua';
+
+  @override
+  String get mobilePerfShortRapid => 'Nhanh';
+
+  @override
+  String get mobilePerfShortThreeCheck => '3 chiếu';
+
+  @override
+  String get mobilePerfShortUltraBullet => 'Siêu đạn';
+
+  @override
   String get mobilePerformanceCards => 'Performance Cards';
+
+  @override
+  String get mobilePgnCopied => 'PGN copied.';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
     return 'chơi với \"$param\"';
   }
-
-  @override
-  String get mobilePgnCopied => 'PGN copied.';
 
   @override
   String get mobilePositionLeft => 'Trái';
@@ -282,6 +306,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobilePrefMagnifyDraggedPiece => 'Phóng to quân cờ được kéo';
 
   @override
+  String get mobilePreviousPage => 'Trang trước';
+
+  @override
   String get mobilePuzzleStormConfirmEndRun => 'Bạn có muốn kết thúc lượt chạy này không?';
 
   @override
@@ -292,9 +319,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get mobilePuzzleStormSubtitle => 'Giải càng nhiều câu đố càng tốt trong 3 phút.';
-
-  @override
-  String get mobilePuzzleStreakAbortWarning => 'Bạn sẽ mất chuỗi hiện tại và điểm của bạn sẽ được lưu.';
 
   @override
   String get mobilePuzzleThemesSubtitle => 'Giải câu đố từ những khai cuộc yêu thích của bạn hoặc chọn một chủ đề.';
@@ -357,10 +381,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileSettingsPickAnImage => 'Chọn một ảnh';
 
   @override
-  String get mobileSettingsPickAnImageHelp => 'Hình nền tùy chỉnh chỉ hoạt động ở chế độ tối. Một hình ảnh tối được khuyến khích.';
+  String get mobileSettingsPickAnImageBlur => 'Làm mờ ảnh';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'Làm mờ ảnh';
+  String get mobileSettingsPickAnImageHelp => 'Hình nền tùy chỉnh chỉ hoạt động ở chế độ tối. Một hình ảnh tối được khuyến khích.';
 
   @override
   String get mobileSettingsPickAnImageHideBoard => 'Ẩn bàn cờ';
@@ -390,13 +414,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileSettingsShowBorder => 'Hiển thị đường viền';
 
   @override
+  String get mobileSettingsTab => 'Cài đặt';
+
+  @override
   String get mobileSettingsTouchFeedback => 'Phản hồi khi chạm';
 
   @override
   String get mobileSettingsTouchFeedbackSubtitle => 'Khi được bật, thiết bị sẽ rung trong thời gian ngắn khi bạn di chuyển hoặc ăn một quân cờ.';
-
-  @override
-  String get mobileSettingsTab => 'Cài đặt';
 
   @override
   String get mobileShareChallengeUrl => 'Share challenge URL';
@@ -441,6 +465,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileSimpleDelay => 'Simple delay';
 
   @override
+  String get mobileSmallBoard => 'Small board';
+
+  @override
   String get mobileSomethingWentWrong => 'Đã xảy ra lỗi.';
 
   @override
@@ -460,9 +487,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get mobileTheme => 'Giao diện';
-
-  @override
-  String get mobileTimespan => 'Timespan';
 
   @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
@@ -497,100 +521,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileWatchTab => 'Xem';
 
   @override
-  String get mobileWelcomeToLichessApp => 'Chào mừng đến với ứng dụng Lichess!';
-
-  @override
   String get mobileWeWillEmailYouCode => 'We will email you a code to sign in with.';
 
   @override
   String get mobileYouCannotChallengeYourself => 'You cannot challenge yourself';
-
-  @override
-  String get mobilePerfShortUltraBullet => 'Siêu đạn';
-
-  @override
-  String get mobilePerfShortBullet => 'Đạn';
-
-  @override
-  String get mobilePerfShortBlitz => 'Chớp';
-
-  @override
-  String get mobilePerfShortRapid => 'Nhanh';
-
-  @override
-  String get mobilePerfShortClassical => 'Chậm';
-
-  @override
-  String get mobilePerfShortCorrespondence => 'Qua thư';
-
-  @override
-  String get mobilePerfShortFromPosition => 'Tùy chỉnh';
-
-  @override
-  String get mobilePerfShortChess960 => '960';
-
-  @override
-  String get mobilePerfShortAntichess => 'Phản cờ';
-
-  @override
-  String get mobilePerfShortKingOfTheHill => 'Lên đồi';
-
-  @override
-  String get mobilePerfShortThreeCheck => '3 chiếu';
-
-  @override
-  String get mobilePerfShortAtomic => 'Nguyên tử';
-
-  @override
-  String get mobilePerfShortHorde => 'Đội quân';
-
-  @override
-  String get mobilePerfShortRacingKings => 'Đua vua';
-
-  @override
-  String get mobilePerfShortCrazyhouse => 'Đặt quân';
-
-  @override
-  String get mobilePerfShortPuzzle => 'Câu đố';
-
-  @override
-  String get mobileDisplayModeCompact => 'Thu gọn';
-
-  @override
-  String get mobileDisplayModeDetailed => 'Mở rộng';
-
-  @override
-  String get mobileOpeningExplorerNotAvailableOffline => 'Khám phá Khai cuộc không khả dụng khi ngoại tuyến.';
-
-  @override
-  String get mobileChallengeCreated => 'Đã thách đấu người chơi: Bạn sẽ được thông báo nếu trận đấu bắt đầu.\nBạn có thể truy cập trận đấu từ trang chủ.';
-
-  @override
-  String get mobilePreviousPage => 'Trang trước';
-
-  @override
-  String get mobileOrImportPgnFile => 'Hoặc nhập một tệp PGN';
-
-  @override
-  String get mobileGoodMoveButThereIsBetter => 'Nước đi tốt, nhưng có nước đi tốt hơn nữa';
-
-  @override
-  String get mobileCustomizeHomeTip => 'Mẹo: Bạn có thể tuỳ chỉnh Trang chính của bạn!';
-
-  @override
-  String get mobileCustomizeHomeTipDismiss => 'Bỏ qua';
-
-  @override
-  String get mobileCustomizeButton => 'Tùy chỉnh';
-
-  @override
-  String get mobileAppLogs => 'App Logs';
-
-  @override
-  String get mobileSmallBoard => 'Small board';
-
-  @override
-  String get mobileAcceptDraw => 'Accept draw?';
 
   @override
   String get variantStandard => 'Tiêu chuẩn';

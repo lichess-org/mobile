@@ -9,6 +9,9 @@ class AppLocalizationsKo extends AppLocalizations {
   AppLocalizationsKo([String locale = 'ko']) : super(locale);
 
   @override
+  String get mobileAcceptDraw => 'Accept draw?';
+
+  @override
   String get mobileAccount => '계정';
 
   @override
@@ -24,12 +27,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileAllGames => '모든 대국';
 
   @override
-  String get mobileAllTime => 'All time';
-
-  @override
-  String get mobileAlmostThereFinalizingGif => 'Almost there! Finalizing the GIF...';
-
-  @override
   String get mobileAllowTakebacksAndHints => 'Allow takebacks and hints';
 
   @override
@@ -37,9 +34,6 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get mobileAreYouSure => '확실하십니까?';
-
-  @override
-  String get mobileAreYouSureDeleteConversation => 'Are you sure you want to delete this conversation?';
 
   @override
   String mobileAreYouSureDownloadNnue(String param) {
@@ -59,6 +53,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileCancelTakebackOffer => '무르기 요청 취소';
 
   @override
+  String get mobileChallengeCreated => '도전이 생성되었습니다. 게임이 시작하면 알림을 받습니다.\n홈 탭에서 들어갈 수 있습니다.';
+
+  @override
   String get mobileChallengeFromPosition => 'Challenge from position';
 
   @override
@@ -74,10 +71,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileClearButton => '지우기';
 
   @override
-  String get mobileCodeFieldLabel => 'Code';
+  String get mobileCodeExpiresMessage => 'The code expires after 5 minutes and can only be used once.';
 
   @override
-  String get mobileCodeExpiresMessage => 'The code expires after 5 minutes and can only be used once.';
+  String get mobileCodeFieldLabel => 'Code';
 
   @override
   String mobileCodeLengthMessage(String param) {
@@ -85,43 +82,25 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get mobileCorrespondenceClearSavedMove => '저장된 수 삭제';
+  String get mobileCopied => 'Copied.';
 
   @override
-  String get mobileCopied => 'Copied.';
+  String get mobileCorrespondenceClearSavedMove => '저장된 수 삭제';
 
   @override
   String get mobileCustomGameJoinAGame => '게임 참가';
 
   @override
+  String get mobileCustomizeButton => '맞춤설정';
+
+  @override
+  String get mobileCustomizeHomeTip => '팁: 홈 스크린에 위젯을 추가하거나 필요없는 위젯을 삭제할 수 있습니다!';
+
+  @override
+  String get mobileCustomizeHomeTipDismiss => '무시';
+
+  @override
   String get mobileDangerZone => 'Danger zone';
-
-  @override
-  String get mobileDateAllTime => 'All time';
-
-  @override
-  String get mobileDateLast10Years => 'Last 10 years';
-
-  @override
-  String get mobileDateLast20Years => 'Last 20 years';
-
-  @override
-  String get mobileDateLast3Years => 'Last 3 years';
-
-  @override
-  String get mobileDateLast5Years => 'Last 5 years';
-
-  @override
-  String get mobileDateLast6Months => 'Last 6 months';
-
-  @override
-  String get mobileDateLastMonth => 'Last month';
-
-  @override
-  String get mobileDateLastYear => 'Last year';
-
-  @override
-  String get mobileDateThisMonth => 'This month';
 
   @override
   String get mobileDateRangeAllTime => 'ALL';
@@ -142,6 +121,12 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileDeleteYourAccount => 'Delete your account';
 
   @override
+  String get mobileDisplayModeCompact => '간단';
+
+  @override
+  String get mobileDisplayModeDetailed => '상세';
+
+  @override
   String get mobileDoYouAcceptChallenge => 'Do you accept the challenge?';
 
   @override
@@ -149,9 +134,6 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get mobileExport => 'Export';
-
-  @override
-  String get mobileFailedToGetGif => 'Failed to get GIF';
 
   @override
   String get mobileFeedbackButton => '피드백';
@@ -166,18 +148,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileFlipPiecesAfterMove => 'Flip pieces and opponent info after move';
 
   @override
-  String get mobileGenerateGif => 'Generating GIF...';
-
-  @override
   String get mobileGetFeedbackOnMoves => 'Get feedback on your moves';
-
-  @override
-  String mobileGoodEvening(String param) {
-    return '좋은 밤이에요, $param님';
-  }
-
-  @override
-  String get mobileGoodEveningWithoutName => '좋은 밤이에요';
 
   @override
   String mobileGoodDay(String param) {
@@ -188,6 +159,17 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileGoodDayWithoutName => '좋은 날이에요';
 
   @override
+  String mobileGoodEvening(String param) {
+    return '좋은 밤이에요, $param님';
+  }
+
+  @override
+  String get mobileGoodEveningWithoutName => '좋은 밤이에요';
+
+  @override
+  String get mobileGoodMoveButThereIsBetter => '좋은 수지만, 더 좋은 수가 있습니다';
+
+  @override
   String get mobileHello => 'Hello';
 
   @override
@@ -195,9 +177,6 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get mobileHomeTab => '홈';
-
-  @override
-  String get mobileHttpLogs => 'HTTP logs';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
@@ -214,16 +193,13 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileLocalDatabaseSize => 'Local database size';
 
   @override
-  String get mobileLongGamesTakeMoreTime => 'Long games take a bit more time...';
-
-  @override
-  String get mobileMustBeLoggedIn => '이 페이지를 보려면 로그인해야 합니다.';
-
-  @override
   String get mobileMoveOnRelease => 'Move on release';
 
   @override
   String get mobileMoveOnReleaseSubtitle => 'When moving a piece by tapping, the move is made when you lift your finger, letting you slide to change the destination square.';
+
+  @override
+  String get mobileMustBeLoggedIn => '이 페이지를 보려면 로그인해야 합니다.';
 
   @override
   String get mobileNbOfflinePuzzles => '오프라인 퍼즐';
@@ -232,16 +208,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileNewGame => '새 게임';
 
   @override
-  String get mobileNewStockfishAvailable => 'New Stockfish version available! Go to the settings to download the updated NNUE file.';
-
-  @override
   String get mobileNextMistake => 'Next mistake';
 
   @override
   String get mobileNoSearchResults => '결과 없음';
-
-  @override
-  String get mobileNotAllFeaturesAreAvailable => '아직 기존 앱과 웹사이트의 모든 기능이 지원되는 것은 아니지만, 지속적으로 기능을 추가하고 있습니다.';
 
   @override
   String get mobileNotFollowingAnyUser => '팔로우한 사용자가 없습니다.';
@@ -253,21 +223,75 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileOngoingGames => 'Ongoing Games';
 
   @override
+  String get mobileOpeningExplorerNotAvailableOffline => '오프닝 탐색기는 오프라인 상태에서 이용할 수 없습니다.';
+
+  @override
+  String get mobileOrImportPgnFile => '또는 PGN 파일 가져오기';
+
+  @override
   String get mobileOverTheBoard => '로컬 게임';
 
   @override
   String get mobilePasteFromClipboard => 'Paste from clipboard';
 
   @override
+  String get mobilePerfShortAntichess => '안티체스';
+
+  @override
+  String get mobilePerfShortAtomic => '아토믹';
+
+  @override
+  String get mobilePerfShortBlitz => '블리츠';
+
+  @override
+  String get mobilePerfShortBullet => '불릿';
+
+  @override
+  String get mobilePerfShortChess960 => '960';
+
+  @override
+  String get mobilePerfShortClassical => '클래시컬';
+
+  @override
+  String get mobilePerfShortCorrespondence => '통신';
+
+  @override
+  String get mobilePerfShortCrazyhouse => '크레이지';
+
+  @override
+  String get mobilePerfShortFromPosition => '커스텀';
+
+  @override
+  String get mobilePerfShortHorde => '호드';
+
+  @override
+  String get mobilePerfShortKingOfTheHill => '언덕의왕';
+
+  @override
+  String get mobilePerfShortPuzzle => '퍼즐';
+
+  @override
+  String get mobilePerfShortRacingKings => '킹 경주';
+
+  @override
+  String get mobilePerfShortRapid => '래피드';
+
+  @override
+  String get mobilePerfShortThreeCheck => '3체크';
+
+  @override
+  String get mobilePerfShortUltraBullet => '울트라';
+
+  @override
   String get mobilePerformanceCards => 'Performance Cards';
+
+  @override
+  String get mobilePgnCopied => 'PGN copied.';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
     return '닉네임에 \"$param\"가 포함된 플레이어';
   }
-
-  @override
-  String get mobilePgnCopied => 'PGN copied.';
 
   @override
   String get mobilePositionLeft => '왼쪽';
@@ -282,6 +306,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobilePrefMagnifyDraggedPiece => '드래그 중 기물 확대';
 
   @override
+  String get mobilePreviousPage => '이전';
+
+  @override
   String get mobilePuzzleStormConfirmEndRun => '이 도전을 종료하시겠습니까?';
 
   @override
@@ -292,9 +319,6 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get mobilePuzzleStormSubtitle => '3분 이내에 최대한 많은 퍼즐을 해결하세요.';
-
-  @override
-  String get mobilePuzzleStreakAbortWarning => '현재 연속 해결 기록을 잃고 점수는 저장될 것입니다.';
 
   @override
   String get mobilePuzzleThemesSubtitle => '당신이 가장 좋아하는 오프닝으로부터의 퍼즐을 플레이하거나, 테마를 선택하세요.';
@@ -357,10 +381,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileSettingsPickAnImage => '사진 선택';
 
   @override
-  String get mobileSettingsPickAnImageHelp => '사용자 지정 배경은 다크 모드 사용 시에만 적용되므로 어두운 사진을 사용하는 것을 추천합니다.';
+  String get mobileSettingsPickAnImageBlur => '사진을 흐리게';
 
   @override
-  String get mobileSettingsPickAnImageBlur => '사진을 흐리게';
+  String get mobileSettingsPickAnImageHelp => '사용자 지정 배경은 다크 모드 사용 시에만 적용되므로 어두운 사진을 사용하는 것을 추천합니다.';
 
   @override
   String get mobileSettingsPickAnImageHideBoard => '보드 숨기기';
@@ -390,13 +414,13 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileSettingsShowBorder => '보드 테두리 보이기';
 
   @override
+  String get mobileSettingsTab => '설정';
+
+  @override
   String get mobileSettingsTouchFeedback => '터치 피드백';
 
   @override
   String get mobileSettingsTouchFeedbackSubtitle => '기물을 움직이거나 잡았을 때 기기가 짧게 진동합니다.';
-
-  @override
-  String get mobileSettingsTab => '설정';
 
   @override
   String get mobileShareChallengeUrl => 'Share challenge URL';
@@ -441,6 +465,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileSimpleDelay => 'Simple delay';
 
   @override
+  String get mobileSmallBoard => 'Small board';
+
+  @override
   String get mobileSomethingWentWrong => '문제가 발생했습니다.';
 
   @override
@@ -460,9 +487,6 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get mobileTheme => '테마';
-
-  @override
-  String get mobileTimespan => 'Timespan';
 
   @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
@@ -497,100 +521,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileWatchTab => '중계';
 
   @override
-  String get mobileWelcomeToLichessApp => 'Lichess 앱에 오신 것을 환영합니다!';
-
-  @override
   String get mobileWeWillEmailYouCode => 'We will email you a code to sign in with.';
 
   @override
   String get mobileYouCannotChallengeYourself => 'You cannot challenge yourself';
-
-  @override
-  String get mobilePerfShortUltraBullet => '울트라';
-
-  @override
-  String get mobilePerfShortBullet => '불릿';
-
-  @override
-  String get mobilePerfShortBlitz => '블리츠';
-
-  @override
-  String get mobilePerfShortRapid => '래피드';
-
-  @override
-  String get mobilePerfShortClassical => '클래시컬';
-
-  @override
-  String get mobilePerfShortCorrespondence => '통신';
-
-  @override
-  String get mobilePerfShortFromPosition => '커스텀';
-
-  @override
-  String get mobilePerfShortChess960 => '960';
-
-  @override
-  String get mobilePerfShortAntichess => '안티체스';
-
-  @override
-  String get mobilePerfShortKingOfTheHill => '언덕의왕';
-
-  @override
-  String get mobilePerfShortThreeCheck => '3체크';
-
-  @override
-  String get mobilePerfShortAtomic => '아토믹';
-
-  @override
-  String get mobilePerfShortHorde => '호드';
-
-  @override
-  String get mobilePerfShortRacingKings => '킹 경주';
-
-  @override
-  String get mobilePerfShortCrazyhouse => '크레이지';
-
-  @override
-  String get mobilePerfShortPuzzle => '퍼즐';
-
-  @override
-  String get mobileDisplayModeCompact => '간단';
-
-  @override
-  String get mobileDisplayModeDetailed => '상세';
-
-  @override
-  String get mobileOpeningExplorerNotAvailableOffline => '오프닝 탐색기는 오프라인 상태에서 이용할 수 없습니다.';
-
-  @override
-  String get mobileChallengeCreated => '도전이 생성되었습니다. 게임이 시작하면 알림을 받습니다.\n홈 탭에서 들어갈 수 있습니다.';
-
-  @override
-  String get mobilePreviousPage => '이전';
-
-  @override
-  String get mobileOrImportPgnFile => '또는 PGN 파일 가져오기';
-
-  @override
-  String get mobileGoodMoveButThereIsBetter => '좋은 수지만, 더 좋은 수가 있습니다';
-
-  @override
-  String get mobileCustomizeHomeTip => '팁: 홈 스크린에 위젯을 추가하거나 필요없는 위젯을 삭제할 수 있습니다!';
-
-  @override
-  String get mobileCustomizeHomeTipDismiss => '무시';
-
-  @override
-  String get mobileCustomizeButton => '맞춤설정';
-
-  @override
-  String get mobileAppLogs => 'App Logs';
-
-  @override
-  String get mobileSmallBoard => 'Small board';
-
-  @override
-  String get mobileAcceptDraw => 'Accept draw?';
 
   @override
   String get variantStandard => '스탠다드';

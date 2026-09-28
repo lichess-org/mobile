@@ -9,6 +9,9 @@ class AppLocalizationsEl extends AppLocalizations {
   AppLocalizationsEl([String locale = 'el']) : super(locale);
 
   @override
+  String get mobileAcceptDraw => 'Accept draw?';
+
+  @override
   String get mobileAccount => 'Λογαριασμός';
 
   @override
@@ -24,12 +27,6 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileAllGames => 'Όλες οι παρτίδες';
 
   @override
-  String get mobileAllTime => 'All time';
-
-  @override
-  String get mobileAlmostThereFinalizingGif => 'Almost there! Finalizing the GIF...';
-
-  @override
   String get mobileAllowTakebacksAndHints => 'Allow takebacks and hints';
 
   @override
@@ -37,9 +34,6 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get mobileAreYouSure => 'Είστε σίγουρος/η;';
-
-  @override
-  String get mobileAreYouSureDeleteConversation => 'Are you sure you want to delete this conversation?';
 
   @override
   String mobileAreYouSureDownloadNnue(String param) {
@@ -59,6 +53,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Ακύρωση προσφοράς ανάκλησης κίνησης';
 
   @override
+  String get mobileChallengeCreated => 'Η πρόσκληση δημιουργήθηκε: Θα ειδοποιηθείτε μόλις ξεκινήσει η παρτίδα.\nΜπορείτε να έχετε πρόσβαση από την αρχική καρτέλα.';
+
+  @override
   String get mobileChallengeFromPosition => 'Challenge from position';
 
   @override
@@ -74,10 +71,10 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileClearButton => 'Εκκαθάριση';
 
   @override
-  String get mobileCodeFieldLabel => 'Code';
+  String get mobileCodeExpiresMessage => 'The code expires after 5 minutes and can only be used once.';
 
   @override
-  String get mobileCodeExpiresMessage => 'The code expires after 5 minutes and can only be used once.';
+  String get mobileCodeFieldLabel => 'Code';
 
   @override
   String mobileCodeLengthMessage(String param) {
@@ -85,43 +82,25 @@ class AppLocalizationsEl extends AppLocalizations {
   }
 
   @override
-  String get mobileCorrespondenceClearSavedMove => 'Εκκαθάριση αποθηκευμένης κίνησης';
+  String get mobileCopied => 'Copied.';
 
   @override
-  String get mobileCopied => 'Copied.';
+  String get mobileCorrespondenceClearSavedMove => 'Εκκαθάριση αποθηκευμένης κίνησης';
 
   @override
   String get mobileCustomGameJoinAGame => 'Συμμετοχή σε παρτίδα';
 
   @override
+  String get mobileCustomizeButton => 'Προσαρμογή';
+
+  @override
+  String get mobileCustomizeHomeTip => 'Συμβουλή: Μπορείτε να προσθέσετε περισσότερα εργαλεία στην αρχική οθόνη ή να αφαιρέσετε αυτά που δε χρειάζεστε!';
+
+  @override
+  String get mobileCustomizeHomeTipDismiss => 'Απόκρυψη';
+
+  @override
   String get mobileDangerZone => 'Danger zone';
-
-  @override
-  String get mobileDateAllTime => 'All time';
-
-  @override
-  String get mobileDateLast10Years => 'Last 10 years';
-
-  @override
-  String get mobileDateLast20Years => 'Last 20 years';
-
-  @override
-  String get mobileDateLast3Years => 'Last 3 years';
-
-  @override
-  String get mobileDateLast5Years => 'Last 5 years';
-
-  @override
-  String get mobileDateLast6Months => 'Last 6 months';
-
-  @override
-  String get mobileDateLastMonth => 'Last month';
-
-  @override
-  String get mobileDateLastYear => 'Last year';
-
-  @override
-  String get mobileDateThisMonth => 'This month';
 
   @override
   String get mobileDateRangeAllTime => 'ALL';
@@ -142,6 +121,12 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileDeleteYourAccount => 'Delete your account';
 
   @override
+  String get mobileDisplayModeCompact => 'Συμπαγής';
+
+  @override
+  String get mobileDisplayModeDetailed => 'Λεπτομερής';
+
+  @override
   String get mobileDoYouAcceptChallenge => 'Do you accept the challenge?';
 
   @override
@@ -149,9 +134,6 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get mobileExport => 'Export';
-
-  @override
-  String get mobileFailedToGetGif => 'Failed to get GIF';
 
   @override
   String get mobileFeedbackButton => 'Πείτε μας τη γνώμη σας';
@@ -166,18 +148,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileFlipPiecesAfterMove => 'Flip pieces and opponent info after move';
 
   @override
-  String get mobileGenerateGif => 'Generating GIF...';
-
-  @override
   String get mobileGetFeedbackOnMoves => 'Get feedback on your moves';
-
-  @override
-  String mobileGoodEvening(String param) {
-    return 'Καλησπέρα, $param';
-  }
-
-  @override
-  String get mobileGoodEveningWithoutName => 'Καλησπέρα';
 
   @override
   String mobileGoodDay(String param) {
@@ -188,6 +159,17 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileGoodDayWithoutName => 'Καλημέρα';
 
   @override
+  String mobileGoodEvening(String param) {
+    return 'Καλησπέρα, $param';
+  }
+
+  @override
+  String get mobileGoodEveningWithoutName => 'Καλησπέρα';
+
+  @override
+  String get mobileGoodMoveButThereIsBetter => 'Καλή κίνηση, αλλά υπάρχει καλύτερη';
+
+  @override
   String get mobileHello => 'Hello';
 
   @override
@@ -195,9 +177,6 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get mobileHomeTab => 'Αρχική';
-
-  @override
-  String get mobileHttpLogs => 'HTTP logs';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
@@ -214,16 +193,13 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileLocalDatabaseSize => 'Local database size';
 
   @override
-  String get mobileLongGamesTakeMoreTime => 'Long games take a bit more time...';
-
-  @override
-  String get mobileMustBeLoggedIn => 'Πρέπει να συνδεθείτε για να δείτε αυτή τη σελίδα.';
-
-  @override
   String get mobileMoveOnRelease => 'Move on release';
 
   @override
   String get mobileMoveOnReleaseSubtitle => 'When moving a piece by tapping, the move is made when you lift your finger, letting you slide to change the destination square.';
+
+  @override
+  String get mobileMustBeLoggedIn => 'Πρέπει να συνδεθείτε για να δείτε αυτή τη σελίδα.';
 
   @override
   String get mobileNbOfflinePuzzles => 'Γρίφοι εκτός σύνδεσης';
@@ -232,16 +208,10 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileNewGame => 'Νέα παρτίδα';
 
   @override
-  String get mobileNewStockfishAvailable => 'New Stockfish version available! Go to the settings to download the updated NNUE file.';
-
-  @override
   String get mobileNextMistake => 'Next mistake';
 
   @override
   String get mobileNoSearchResults => 'Δε βρέθηκαν αποτελέσματα';
-
-  @override
-  String get mobileNotAllFeaturesAreAvailable => 'Προς το παρόν δεν είναι διαθέσιμα όλα τα χαρακτηριστικά της ιστοσελίδας ή της παλιάς εφαρμογής, ωστόσο προσθέτουμε συνεχώς νέες λειτουργίες.';
 
   @override
   String get mobileNotFollowingAnyUser => 'Δεν ακολουθείτε κανέναν χρήστη.';
@@ -253,21 +223,75 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileOngoingGames => 'Ongoing Games';
 
   @override
+  String get mobileOpeningExplorerNotAvailableOffline => 'Ο εξερευνητής ανοιγμάτων δεν είναι διαθέσιμος εκτός σύνδεσης.';
+
+  @override
+  String get mobileOrImportPgnFile => 'Ή μεταφορτώστε ένα αρχείο PGN';
+
+  @override
   String get mobileOverTheBoard => 'Παρτίδα χωρίς σύνδεση';
 
   @override
   String get mobilePasteFromClipboard => 'Paste from clipboard';
 
   @override
+  String get mobilePerfShortAntichess => 'Φάτο';
+
+  @override
+  String get mobilePerfShortAtomic => 'Πυρηνικό';
+
+  @override
+  String get mobilePerfShortBlitz => 'Blitz';
+
+  @override
+  String get mobilePerfShortBullet => 'Bullet';
+
+  @override
+  String get mobilePerfShortChess960 => '960';
+
+  @override
+  String get mobilePerfShortClassical => 'Κλασικό';
+
+  @override
+  String get mobilePerfShortCorrespondence => 'Αλληλογρ.';
+
+  @override
+  String get mobilePerfShortCrazyhouse => 'Τρελάδικο';
+
+  @override
+  String get mobilePerfShortFromPosition => 'Από θέση';
+
+  @override
+  String get mobilePerfShortHorde => 'Ορδής';
+
+  @override
+  String get mobilePerfShortKingOfTheHill => 'Βασ. Λόφου';
+
+  @override
+  String get mobilePerfShortPuzzle => 'Γρίφος';
+
+  @override
+  String get mobilePerfShortRacingKings => 'Αγώνας';
+
+  @override
+  String get mobilePerfShortRapid => 'Rapid';
+
+  @override
+  String get mobilePerfShortThreeCheck => 'Τριών σαχ';
+
+  @override
+  String get mobilePerfShortUltraBullet => 'Ultra';
+
+  @override
   String get mobilePerformanceCards => 'Performance Cards';
+
+  @override
+  String get mobilePgnCopied => 'PGN copied.';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
     return 'Παίκτες με \"$param\"';
   }
-
-  @override
-  String get mobilePgnCopied => 'PGN copied.';
 
   @override
   String get mobilePositionLeft => 'Αριστερά';
@@ -282,6 +306,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobilePrefMagnifyDraggedPiece => 'Μεγέθυνση του επιλεγμένου κομματιού';
 
   @override
+  String get mobilePreviousPage => 'Προηγούμενη';
+
+  @override
   String get mobilePuzzleStormConfirmEndRun => 'Θέλετε να τερματίσετε αυτόν τον γύρο;';
 
   @override
@@ -292,9 +319,6 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get mobilePuzzleStormSubtitle => 'Λύστε όσα περισσότερα τακτικά μπορείτε σε 3 λεπτά.';
-
-  @override
-  String get mobilePuzzleStreakAbortWarning => 'Θα χάσετε το τρέχον σερί σας και το σκορ σας θα αποθηκευτεί.';
 
   @override
   String get mobilePuzzleThemesSubtitle => 'Λύστε τακτικά από τα αγαπημένα σας ανοίγματα, ή επιλέξτε κάποιο θέμα.';
@@ -357,10 +381,10 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileSettingsPickAnImage => 'Επιλέξτε μια εικόνα';
 
   @override
-  String get mobileSettingsPickAnImageHelp => 'Η χρήση προσαρμοσμένου υποβάθρου υποστηρίζεται μόνο στη σκουρόχρωμη λειτουργία — για τον λόγο αυτό συνιστάται η επιλογή μιας σκουρόχρωμης εικόνας.';
+  String get mobileSettingsPickAnImageBlur => 'Θόλωμα εικόνας';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'Θόλωμα εικόνας';
+  String get mobileSettingsPickAnImageHelp => 'Η χρήση προσαρμοσμένου υποβάθρου υποστηρίζεται μόνο στη σκουρόχρωμη λειτουργία — για τον λόγο αυτό συνιστάται η επιλογή μιας σκουρόχρωμης εικόνας.';
 
   @override
   String get mobileSettingsPickAnImageHideBoard => 'Απόκρυψη σκακιέρας';
@@ -390,13 +414,13 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileSettingsShowBorder => 'Εμφάνιση περιγράμματος';
 
   @override
+  String get mobileSettingsTab => 'Ρυθμίσεις';
+
+  @override
   String get mobileSettingsTouchFeedback => 'Δόνηση κατά την κίνηση';
 
   @override
   String get mobileSettingsTouchFeedbackSubtitle => 'Όταν αυτή η ρύθμιση είναι ενεργοποιημένη, η συσκευή σας θα δονείται σύντομα κάθε φορά που κάνετε μια κίνηση.';
-
-  @override
-  String get mobileSettingsTab => 'Ρυθμίσεις';
 
   @override
   String get mobileShareChallengeUrl => 'Share challenge URL';
@@ -441,6 +465,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileSimpleDelay => 'Simple delay';
 
   @override
+  String get mobileSmallBoard => 'Small board';
+
+  @override
   String get mobileSomethingWentWrong => 'Κάτι πήγε στραβά.';
 
   @override
@@ -460,9 +487,6 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get mobileTheme => 'Εμφάνιση';
-
-  @override
-  String get mobileTimespan => 'Timespan';
 
   @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
@@ -497,100 +521,10 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileWatchTab => 'Δείτε';
 
   @override
-  String get mobileWelcomeToLichessApp => 'Καλώς ήρθατε στην εφαρμογή Lichess!';
-
-  @override
   String get mobileWeWillEmailYouCode => 'We will email you a code to sign in with.';
 
   @override
   String get mobileYouCannotChallengeYourself => 'You cannot challenge yourself';
-
-  @override
-  String get mobilePerfShortUltraBullet => 'Ultra';
-
-  @override
-  String get mobilePerfShortBullet => 'Bullet';
-
-  @override
-  String get mobilePerfShortBlitz => 'Blitz';
-
-  @override
-  String get mobilePerfShortRapid => 'Rapid';
-
-  @override
-  String get mobilePerfShortClassical => 'Κλασικό';
-
-  @override
-  String get mobilePerfShortCorrespondence => 'Αλληλογρ.';
-
-  @override
-  String get mobilePerfShortFromPosition => 'Από θέση';
-
-  @override
-  String get mobilePerfShortChess960 => '960';
-
-  @override
-  String get mobilePerfShortAntichess => 'Φάτο';
-
-  @override
-  String get mobilePerfShortKingOfTheHill => 'Βασ. Λόφου';
-
-  @override
-  String get mobilePerfShortThreeCheck => 'Τριών σαχ';
-
-  @override
-  String get mobilePerfShortAtomic => 'Πυρηνικό';
-
-  @override
-  String get mobilePerfShortHorde => 'Ορδής';
-
-  @override
-  String get mobilePerfShortRacingKings => 'Αγώνας';
-
-  @override
-  String get mobilePerfShortCrazyhouse => 'Τρελάδικο';
-
-  @override
-  String get mobilePerfShortPuzzle => 'Γρίφος';
-
-  @override
-  String get mobileDisplayModeCompact => 'Συμπαγής';
-
-  @override
-  String get mobileDisplayModeDetailed => 'Λεπτομερής';
-
-  @override
-  String get mobileOpeningExplorerNotAvailableOffline => 'Ο εξερευνητής ανοιγμάτων δεν είναι διαθέσιμος εκτός σύνδεσης.';
-
-  @override
-  String get mobileChallengeCreated => 'Η πρόσκληση δημιουργήθηκε: Θα ειδοποιηθείτε μόλις ξεκινήσει η παρτίδα.\nΜπορείτε να έχετε πρόσβαση από την αρχική καρτέλα.';
-
-  @override
-  String get mobilePreviousPage => 'Προηγούμενη';
-
-  @override
-  String get mobileOrImportPgnFile => 'Ή μεταφορτώστε ένα αρχείο PGN';
-
-  @override
-  String get mobileGoodMoveButThereIsBetter => 'Καλή κίνηση, αλλά υπάρχει καλύτερη';
-
-  @override
-  String get mobileCustomizeHomeTip => 'Συμβουλή: Μπορείτε να προσθέσετε περισσότερα εργαλεία στην αρχική οθόνη ή να αφαιρέσετε αυτά που δε χρειάζεστε!';
-
-  @override
-  String get mobileCustomizeHomeTipDismiss => 'Απόκρυψη';
-
-  @override
-  String get mobileCustomizeButton => 'Προσαρμογή';
-
-  @override
-  String get mobileAppLogs => 'App Logs';
-
-  @override
-  String get mobileSmallBoard => 'Small board';
-
-  @override
-  String get mobileAcceptDraw => 'Accept draw?';
 
   @override
   String get variantStandard => 'Κανονικό';

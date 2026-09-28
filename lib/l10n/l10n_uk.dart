@@ -9,6 +9,9 @@ class AppLocalizationsUk extends AppLocalizations {
   AppLocalizationsUk([String locale = 'uk']) : super(locale);
 
   @override
+  String get mobileAcceptDraw => 'Accept draw?';
+
+  @override
   String get mobileAccount => 'Обліковий запис';
 
   @override
@@ -24,12 +27,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileAllGames => 'Усі ігри';
 
   @override
-  String get mobileAllTime => 'All time';
-
-  @override
-  String get mobileAlmostThereFinalizingGif => 'Almost there! Finalizing the GIF...';
-
-  @override
   String get mobileAllowTakebacksAndHints => 'Allow takebacks and hints';
 
   @override
@@ -37,9 +34,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get mobileAreYouSure => 'Ви впевнені?';
-
-  @override
-  String get mobileAreYouSureDeleteConversation => 'Are you sure you want to delete this conversation?';
 
   @override
   String mobileAreYouSureDownloadNnue(String param) {
@@ -59,6 +53,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Скасувати пропозицію повернення ходу';
 
   @override
+  String get mobileChallengeCreated => 'Виклик створено: Ви отримаєте повідомлення, коли почнеться гра.\nВи можете перейти до неї з головної сторінки.';
+
+  @override
   String get mobileChallengeFromPosition => 'Challenge from position';
 
   @override
@@ -74,10 +71,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileClearButton => 'Очистити';
 
   @override
-  String get mobileCodeFieldLabel => 'Code';
+  String get mobileCodeExpiresMessage => 'The code expires after 5 minutes and can only be used once.';
 
   @override
-  String get mobileCodeExpiresMessage => 'The code expires after 5 minutes and can only be used once.';
+  String get mobileCodeFieldLabel => 'Code';
 
   @override
   String mobileCodeLengthMessage(String param) {
@@ -85,43 +82,25 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
-  String get mobileCorrespondenceClearSavedMove => 'Очистити збережений хід';
+  String get mobileCopied => 'Copied.';
 
   @override
-  String get mobileCopied => 'Copied.';
+  String get mobileCorrespondenceClearSavedMove => 'Очистити збережений хід';
 
   @override
   String get mobileCustomGameJoinAGame => 'Приєднатися до гри';
 
   @override
+  String get mobileCustomizeButton => 'Змінити';
+
+  @override
+  String get mobileCustomizeHomeTip => 'Порада: Можна додавати більше віджетів на головний екран або прибирати непотрібні!';
+
+  @override
+  String get mobileCustomizeHomeTipDismiss => 'Прибрати';
+
+  @override
   String get mobileDangerZone => 'Danger zone';
-
-  @override
-  String get mobileDateAllTime => 'All time';
-
-  @override
-  String get mobileDateLast10Years => 'Last 10 years';
-
-  @override
-  String get mobileDateLast20Years => 'Last 20 years';
-
-  @override
-  String get mobileDateLast3Years => 'Last 3 years';
-
-  @override
-  String get mobileDateLast5Years => 'Last 5 years';
-
-  @override
-  String get mobileDateLast6Months => 'Last 6 months';
-
-  @override
-  String get mobileDateLastMonth => 'Last month';
-
-  @override
-  String get mobileDateLastYear => 'Last year';
-
-  @override
-  String get mobileDateThisMonth => 'This month';
 
   @override
   String get mobileDateRangeAllTime => 'ALL';
@@ -142,6 +121,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileDeleteYourAccount => 'Delete your account';
 
   @override
+  String get mobileDisplayModeCompact => 'Стислий';
+
+  @override
+  String get mobileDisplayModeDetailed => 'Детальний';
+
+  @override
   String get mobileDoYouAcceptChallenge => 'Do you accept the challenge?';
 
   @override
@@ -149,9 +134,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get mobileExport => 'Export';
-
-  @override
-  String get mobileFailedToGetGif => 'Failed to get GIF';
 
   @override
   String get mobileFeedbackButton => 'Відгук';
@@ -166,18 +148,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileFlipPiecesAfterMove => 'Flip pieces and opponent info after move';
 
   @override
-  String get mobileGenerateGif => 'Generating GIF...';
-
-  @override
   String get mobileGetFeedbackOnMoves => 'Get feedback on your moves';
-
-  @override
-  String mobileGoodEvening(String param) {
-    return 'Добрий вечір, $param';
-  }
-
-  @override
-  String get mobileGoodEveningWithoutName => 'Добрий вечір';
 
   @override
   String mobileGoodDay(String param) {
@@ -188,6 +159,17 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileGoodDayWithoutName => 'Добрий день';
 
   @override
+  String mobileGoodEvening(String param) {
+    return 'Добрий вечір, $param';
+  }
+
+  @override
+  String get mobileGoodEveningWithoutName => 'Добрий вечір';
+
+  @override
+  String get mobileGoodMoveButThereIsBetter => 'Хороший хід, але є кращий';
+
+  @override
   String get mobileHello => 'Hello';
 
   @override
@@ -195,9 +177,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get mobileHomeTab => 'Головна';
-
-  @override
-  String get mobileHttpLogs => 'HTTP logs';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
@@ -214,16 +193,13 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileLocalDatabaseSize => 'Local database size';
 
   @override
-  String get mobileLongGamesTakeMoreTime => 'Long games take a bit more time...';
-
-  @override
-  String get mobileMustBeLoggedIn => 'Ви повинні ввійти, аби переглянути цю сторінку.';
-
-  @override
   String get mobileMoveOnRelease => 'Move on release';
 
   @override
   String get mobileMoveOnReleaseSubtitle => 'When moving a piece by tapping, the move is made when you lift your finger, letting you slide to change the destination square.';
+
+  @override
+  String get mobileMustBeLoggedIn => 'Ви повинні ввійти, аби переглянути цю сторінку.';
 
   @override
   String get mobileNbOfflinePuzzles => 'Офлайн задачі';
@@ -232,16 +208,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileNewGame => 'Нова гра';
 
   @override
-  String get mobileNewStockfishAvailable => 'New Stockfish version available! Go to the settings to download the updated NNUE file.';
-
-  @override
   String get mobileNextMistake => 'Next mistake';
 
   @override
   String get mobileNoSearchResults => 'Немає результатів';
-
-  @override
-  String get mobileNotAllFeaturesAreAvailable => 'Зверніть увагу, що не всі функції зі старого додатку або сайту наразі доступні, але ми додаємо функції постійно.';
 
   @override
   String get mobileNotFollowingAnyUser => 'Ви не слідкуєте за користувачами.';
@@ -253,21 +223,75 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileOngoingGames => 'Ongoing Games';
 
   @override
+  String get mobileOpeningExplorerNotAvailableOffline => 'Довідник дебютів недоступний в режимі офлайн.';
+
+  @override
+  String get mobileOrImportPgnFile => 'Чи завантажте файл PGN';
+
+  @override
   String get mobileOverTheBoard => 'За дошкою';
 
   @override
   String get mobilePasteFromClipboard => 'Paste from clipboard';
 
   @override
+  String get mobilePerfShortAntichess => 'Антишахи';
+
+  @override
+  String get mobilePerfShortAtomic => 'Атомічні';
+
+  @override
+  String get mobilePerfShortBlitz => 'Бліц';
+
+  @override
+  String get mobilePerfShortBullet => 'Куля';
+
+  @override
+  String get mobilePerfShortChess960 => '960';
+
+  @override
+  String get mobilePerfShortClassical => 'Класичні';
+
+  @override
+  String get mobilePerfShortCorrespondence => 'Заочні';
+
+  @override
+  String get mobilePerfShortCrazyhouse => 'Шалені';
+
+  @override
+  String get mobilePerfShortFromPosition => 'З позиції';
+
+  @override
+  String get mobilePerfShortHorde => 'Орда';
+
+  @override
+  String get mobilePerfShortKingOfTheHill => 'К-ль гори';
+
+  @override
+  String get mobilePerfShortPuzzle => 'Задачі';
+
+  @override
+  String get mobilePerfShortRacingKings => 'Перегони';
+
+  @override
+  String get mobilePerfShortRapid => 'Швидкі';
+
+  @override
+  String get mobilePerfShortThreeCheck => '3 шахи';
+
+  @override
+  String get mobilePerfShortUltraBullet => 'Ультра';
+
+  @override
   String get mobilePerformanceCards => 'Performance Cards';
+
+  @override
+  String get mobilePgnCopied => 'PGN copied.';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
     return 'Гравці з «$param»';
   }
-
-  @override
-  String get mobilePgnCopied => 'PGN copied.';
 
   @override
   String get mobilePositionLeft => 'Ліворуч';
@@ -282,6 +306,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobilePrefMagnifyDraggedPiece => 'Збільшувати розмір фігури при перетягуванні';
 
   @override
+  String get mobilePreviousPage => 'Попередня';
+
+  @override
   String get mobilePuzzleStormConfirmEndRun => 'Ви хочете закінчити цю серію?';
 
   @override
@@ -292,9 +319,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get mobilePuzzleStormSubtitle => 'Розв\'яжіть якомога більше задач за 3 хвилини.';
-
-  @override
-  String get mobilePuzzleStreakAbortWarning => 'Ви втратите поточну серію, і ваш рахунок буде збережено.';
 
   @override
   String get mobilePuzzleThemesSubtitle => 'Розв\'язуйте задачі з улюбленими дебютами або обирайте тему.';
@@ -357,10 +381,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileSettingsPickAnImage => 'Вибрати зображення';
 
   @override
-  String get mobileSettingsPickAnImageHelp => 'Користувацький фон активний лише в темному режимі. Рекомендується темне зображення.';
+  String get mobileSettingsPickAnImageBlur => 'Розмити зображення';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'Розмити зображення';
+  String get mobileSettingsPickAnImageHelp => 'Користувацький фон активний лише в темному режимі. Рекомендується темне зображення.';
 
   @override
   String get mobileSettingsPickAnImageHideBoard => 'Заховати дошку';
@@ -390,13 +414,13 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileSettingsShowBorder => 'Показувати межі дошки';
 
   @override
+  String get mobileSettingsTab => 'Налашт.';
+
+  @override
   String get mobileSettingsTouchFeedback => 'Тактильний зворотний зв\'язок';
 
   @override
   String get mobileSettingsTouchFeedbackSubtitle => 'Коли активовано, пристрій вібруватиме при русі або захопленні фігури.';
-
-  @override
-  String get mobileSettingsTab => 'Налашт.';
 
   @override
   String get mobileShareChallengeUrl => 'Share challenge URL';
@@ -441,6 +465,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileSimpleDelay => 'Simple delay';
 
   @override
+  String get mobileSmallBoard => 'Small board';
+
+  @override
   String get mobileSomethingWentWrong => 'Щось пішло не так.';
 
   @override
@@ -460,9 +487,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get mobileTheme => 'Тема';
-
-  @override
-  String get mobileTimespan => 'Timespan';
 
   @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
@@ -497,100 +521,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileWatchTab => 'Дивитися';
 
   @override
-  String get mobileWelcomeToLichessApp => 'Вітаємо в додатку Lichess!';
-
-  @override
   String get mobileWeWillEmailYouCode => 'We will email you a code to sign in with.';
 
   @override
   String get mobileYouCannotChallengeYourself => 'You cannot challenge yourself';
-
-  @override
-  String get mobilePerfShortUltraBullet => 'Ультра';
-
-  @override
-  String get mobilePerfShortBullet => 'Куля';
-
-  @override
-  String get mobilePerfShortBlitz => 'Бліц';
-
-  @override
-  String get mobilePerfShortRapid => 'Швидкі';
-
-  @override
-  String get mobilePerfShortClassical => 'Класичні';
-
-  @override
-  String get mobilePerfShortCorrespondence => 'Заочні';
-
-  @override
-  String get mobilePerfShortFromPosition => 'З позиції';
-
-  @override
-  String get mobilePerfShortChess960 => '960';
-
-  @override
-  String get mobilePerfShortAntichess => 'Антишахи';
-
-  @override
-  String get mobilePerfShortKingOfTheHill => 'К-ль гори';
-
-  @override
-  String get mobilePerfShortThreeCheck => '3 шахи';
-
-  @override
-  String get mobilePerfShortAtomic => 'Атомічні';
-
-  @override
-  String get mobilePerfShortHorde => 'Орда';
-
-  @override
-  String get mobilePerfShortRacingKings => 'Перегони';
-
-  @override
-  String get mobilePerfShortCrazyhouse => 'Шалені';
-
-  @override
-  String get mobilePerfShortPuzzle => 'Задачі';
-
-  @override
-  String get mobileDisplayModeCompact => 'Стислий';
-
-  @override
-  String get mobileDisplayModeDetailed => 'Детальний';
-
-  @override
-  String get mobileOpeningExplorerNotAvailableOffline => 'Довідник дебютів недоступний в режимі офлайн.';
-
-  @override
-  String get mobileChallengeCreated => 'Виклик створено: Ви отримаєте повідомлення, коли почнеться гра.\nВи можете перейти до неї з головної сторінки.';
-
-  @override
-  String get mobilePreviousPage => 'Попередня';
-
-  @override
-  String get mobileOrImportPgnFile => 'Чи завантажте файл PGN';
-
-  @override
-  String get mobileGoodMoveButThereIsBetter => 'Хороший хід, але є кращий';
-
-  @override
-  String get mobileCustomizeHomeTip => 'Порада: Можна додавати більше віджетів на головний екран або прибирати непотрібні!';
-
-  @override
-  String get mobileCustomizeHomeTipDismiss => 'Прибрати';
-
-  @override
-  String get mobileCustomizeButton => 'Змінити';
-
-  @override
-  String get mobileAppLogs => 'App Logs';
-
-  @override
-  String get mobileSmallBoard => 'Small board';
-
-  @override
-  String get mobileAcceptDraw => 'Accept draw?';
 
   @override
   String get variantStandard => 'Стандартні шахи';

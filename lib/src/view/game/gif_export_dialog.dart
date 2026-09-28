@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/game/gif_export.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_ui/material_ui.dart';
@@ -72,8 +73,7 @@ class _GifExportState() extends ConsumerState<GifExport> {
       );
     } catch (_) {
       if (mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(context.l10n.mobileFailedToGetGif)));
+        showSnackBar(context, 'Failed to get GIF', type: SnackBarType.error);
       }
     } finally {
       _clearTimers();

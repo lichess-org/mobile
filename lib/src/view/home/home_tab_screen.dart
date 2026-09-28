@@ -17,8 +17,6 @@ import 'package:lichess_mobile/src/model/challenge/challenges.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
 import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/weights_service.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/message/message_repository.dart';
 import 'package:lichess_mobile/src/model/relation/following_user.dart';
@@ -51,7 +49,6 @@ import 'package:lichess_mobile/src/view/play/ongoing_games_screen.dart';
 import 'package:lichess_mobile/src/view/play/play_bottom_sheet.dart';
 import 'package:lichess_mobile/src/view/play/play_menu.dart';
 import 'package:lichess_mobile/src/view/play/quick_game_matrix.dart';
-import 'package:lichess_mobile/src/view/settings/engine_settings_screen.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_list_screen.dart';
 import 'package:lichess_mobile/src/view/user/challenge_requests_screen.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
@@ -236,7 +233,6 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
                       child: Text(context.l10n.aboutX('Lichess...')),
                     ),
                   ),
-                  const _WelcomeMessageCard(),
                   const _HomeCustomizationTip(),
                 ],
               ];
@@ -287,10 +283,7 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
                   shouldShow: true,
                   child: _GreetingWidget(),
                 ),
-                if (!widget.editModeEnabled) ...[
-                  const _HomeCustomizationTip(),
-                  const _NNUEFilesOutdatedTip(),
-                ],
+                if (!widget.editModeEnabled) ...[const _HomeCustomizationTip()],
                 if (showOutage) const ServerOutageDisplay(),
                 if (hasServerContent)
                   _EditableWidget(
@@ -360,10 +353,7 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
                   shouldShow: true,
                   child: _GreetingWidget(),
                 ),
-                if (!widget.editModeEnabled) ...[
-                  const _HomeCustomizationTip(),
-                  const _NNUEFilesOutdatedTip(),
-                ],
+                if (!widget.editModeEnabled) ...[const _HomeCustomizationTip()],
                 if (showOutage) const ServerOutageDisplay(),
                 _EditableWidget(
                   widget: HomeEditableWidget.perfCards,
@@ -980,118 +970,6 @@ class const _TipCard({required final Widget content, required final List<Widget>
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class const _WelcomeMessageCard() extends StatefulWidget {
-  @override
-  State<_WelcomeMessageCard> createState() => _WelcomeMessageCardState();
-}
-
-class _WelcomeMessageCardState() extends State<_WelcomeMessageCard> {
-  bool _shouldDisplay() {
-    return LichessBinding.instance.sharedPreferences.getBool(kWelcomeMessageShownKey) != true;
-  }
-
-  void _dismiss() {
-    LichessBinding.instance.sharedPreferences.setBool(kWelcomeMessageShownKey, true);
-    setState(() {});
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (!_shouldDisplay()) {
-      return const SizedBox.shrink();
-    }
-
-    return _TipCard(
-      content: Text.rich(
-        TextSpan(
-          children: [
-            TextSpan(
-              text: '${context.l10n.mobileWelcomeToLichessApp}\n\n',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            TextSpan(text: context.l10n.mobileNotAllFeaturesAreAvailable),
-          ],
-        ),
-      ),
-      actions: [TextButton(onPressed: _dismiss, child: Text(context.l10n.ok))],
-    );
-  }
-}
-
-class const _NNUEFilesOutdatedTip() extends ConsumerStatefulWidget {
-  @override
-  ConsumerState<_NNUEFilesOutdatedTip> createState() => _NNUEFilesOutdatedTipState();
-}
-
-class _NNUEFilesOutdatedTipState() extends ConsumerState<_NNUEFilesOutdatedTip> {
-  bool _openedSettings = false;
-  late Future<bool> _checkNNUEFilesFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    _checkNNUEFilesFuture = ref.read(stockfishNnueServiceProvider).hasOutdatedNNUEFiles();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final chessEnginePref = ref.watch(engineEvaluationPreferencesProvider).enginePref;
-    if (chessEnginePref != ChessEnginePref.sfLatest) {
-      return const SizedBox.shrink();
-    }
-
-    final nnueService = ref.watch(stockfishNnueServiceProvider);
-    if (nnueService.isDownloadingNNUEFile) {
-      return const SizedBox.shrink();
-    }
-
-    return FocusDetector(
-      // If we come back from the settings, trigger rebuild to hide the widget if the user has updated the NNUE files
-      onFocusRegained: () {
-        if (_openedSettings) {
-          setState(() {
-            _checkNNUEFilesFuture = nnueService.hasOutdatedNNUEFiles();
-            _openedSettings = false;
-          });
-        }
-      },
-      child: FutureBuilder(
-        future: _checkNNUEFilesFuture,
-        builder: (context, snapshot) {
-          final hasOutdatedNNUEFiles = snapshot.data ?? false;
-          if (!hasOutdatedNNUEFiles) {
-            return const SizedBox.shrink();
-          }
-
-          return _TipCard(
-            content: Row(
-              children: [
-                Icon(Icons.warning, size: 25.0, color: Theme.of(context).colorScheme.primary),
-                const SizedBox(width: 8.0),
-                Flexible(child: Text(context.l10n.mobileNewStockfishAvailable)),
-              ],
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    _openedSettings = true;
-                  });
-                  Navigator.of(
-                    context,
-                    rootNavigator: true,
-                  ).push(EngineSettingsScreen.buildRoute());
-                },
-                child: Text(context.l10n.settingsSettings),
-              ),
-            ],
-          );
-        },
       ),
     );
   }
