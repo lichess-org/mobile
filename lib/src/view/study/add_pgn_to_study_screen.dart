@@ -33,7 +33,7 @@ class _AddPgnToStudyScreenState() extends ConsumerState<AddPgnToStudyScreen> {
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
-        title: const Text('Select a study'), // TODO l10n
+        title: Text(context.l10n.mobileSelectAStudy),
         bottom: authUser != null
             ? StudyCategoryChips(
                 categories: [

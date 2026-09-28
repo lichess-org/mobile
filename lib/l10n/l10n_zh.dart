@@ -9,6 +9,9 @@ class AppLocalizationsZh extends AppLocalizations {
   AppLocalizationsZh([String locale = 'zh']) : super(locale);
 
   @override
+  String get mobileAcceptDraw => 'Accept draw?';
+
+  @override
   String get mobileAccount => '账户';
 
   @override
@@ -18,39 +21,113 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileAccountPreferencesHelp => '这些设置将应用于您的 Lichess 账户，并在所有设备上生效。';
 
   @override
+  String get mobileAddToStudy => 'Add to study';
+
+  @override
   String get mobileAllGames => '所有对局';
+
+  @override
+  String get mobileAllowTakebacksAndHints => 'Allow takebacks and hints';
+
+  @override
+  String get mobileAmoledBlack => 'Amoled black';
 
   @override
   String get mobileAreYouSure => '您确定吗？';
 
   @override
+  String mobileAreYouSureDownloadNnue(String param) {
+    return 'Are you sure you want to download the NNUE file ($param)?';
+  }
+
+  @override
+  String get mobileBoardPositionLandscape => 'Board position in landscape mode';
+
+  @override
   String get mobileBoardSettings => '棋盘设置';
+
+  @override
+  String get mobileBronsteinDelay => 'Bronstein delay';
 
   @override
   String get mobileCancelTakebackOffer => '取消悔棋请求';
 
   @override
+  String get mobileChallengeCreated => '挑战已创建：对局开始时您将收到通知。\n您可以在首页选项卡中访问它。';
+
+  @override
+  String get mobileChallengeFromPosition => 'Challenge from position';
+
+  @override
+  String get mobileChapterName => 'Chapter Name';
+
+  @override
   String get mobileChessEngine => '国际象棋引擎';
+
+  @override
+  String get mobileChooseCustomBackground => 'Choose a custom background';
 
   @override
   String get mobileClearButton => '清空';
 
   @override
+  String get mobileCodeExpiresMessage => 'The code expires after 5 minutes and can only be used once.';
+
+  @override
+  String get mobileCodeFieldLabel => 'Code';
+
+  @override
+  String mobileCodeLengthMessage(String param) {
+    return 'The code is $param characters long.';
+  }
+
+  @override
+  String get mobileCopied => 'Copied.';
+
+  @override
   String get mobileCorrespondenceClearSavedMove => '清除已保存的着法';
 
   @override
-  String get mobileCustomGameJoinAGame => '加入对局';
+  String get mobileCustomizeButton => '自定义';
+
+  @override
+  String get mobileCustomizeHomeTip => '提示：您可以在主屏幕上添加更多小组件，或移除不需要的！';
+
+  @override
+  String get mobileCustomizeHomeTipDismiss => '取消';
+
+  @override
+  String get mobileDangerZone => 'Danger zone';
+
+  @override
+  String get mobileDeleteYourAccount => 'Delete your account';
+
+  @override
+  String get mobileDisplayModeCompact => '简洁模式';
+
+  @override
+  String get mobileDisplayModeDetailed => '详细模式';
+
+  @override
+  String get mobileDoYouAcceptChallenge => 'Do you accept the challenge?';
+
+  @override
+  String get mobileDownloadMyGames => 'Download my games';
 
   @override
   String get mobileFeedbackButton => '问题反馈';
 
   @override
-  String mobileGoodEvening(String param) {
-    return '晚上好，$param';
-  }
+  String get mobileFilters => 'Filters';
 
   @override
-  String get mobileGoodEveningWithoutName => '晚上好';
+  String get mobileFlipClock => 'Flip clock';
+
+  @override
+  String get mobileFlipPiecesAfterMove => 'Flip pieces and opponent info after move';
+
+  @override
+  String get mobileGetFeedbackOnMoves => 'Get feedback on your moves';
 
   @override
   String mobileGoodDay(String param) {
@@ -61,13 +138,41 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileGoodDayWithoutName => '日安';
 
   @override
-  String get mobileHideVariation => '隐藏变着';
+  String mobileGoodEvening(String param) {
+    return '晚上好，$param';
+  }
+
+  @override
+  String get mobileGoodEveningWithoutName => '晚上好';
+
+  @override
+  String get mobileGoodMoveButThereIsBetter => '好着，但有更好的着法';
+
+  @override
+  String get mobileHello => 'Hello';
 
   @override
   String get mobileHomeTab => '首页';
 
   @override
+  String mobileIfAccountMatchesCodeSent(String param1, String param2) {
+    return 'If an account matches $param1, a $param2 character code was sent to it. Check your inbox and enter the code below.';
+  }
+
+  @override
+  String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
+
+  @override
   String get mobileLiveStreamers => '主播';
+
+  @override
+  String get mobileLocalDatabaseSize => 'Local database size';
+
+  @override
+  String get mobileMoveOnRelease => 'Move on release';
+
+  @override
+  String get mobileMoveOnReleaseSubtitle => 'When moving a piece by tapping, the move is made when you lift your finger, letting you slide to change the destination square.';
 
   @override
   String get mobileMustBeLoggedIn => '您需要登录才能浏览此页面';
@@ -79,10 +184,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileNewGame => '新的对局';
 
   @override
-  String get mobileNoSearchResults => '无结果';
+  String get mobileNextMistake => 'Next mistake';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => '请注意，旧版应用或网站中的部分功能目前暂未提供，但我们正在持续添加新功能。';
+  String get mobileNoSearchResults => '无结果';
 
   @override
   String get mobileNotFollowingAnyUser => '您尚未关注任何用户';
@@ -91,7 +196,67 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileOkButton => '确定';
 
   @override
+  String get mobileOpeningExplorerNotAvailableOffline => '离线状态下无法使用开局探索器';
+
+  @override
+  String get mobileOrImportPgnFile => '或者导入 PGN 文件';
+
+  @override
   String get mobileOverTheBoard => '离线棋盘';
+
+  @override
+  String get mobilePasteFromClipboard => 'Paste from clipboard';
+
+  @override
+  String get mobilePerfShortAntichess => '弃子棋';
+
+  @override
+  String get mobilePerfShortAtomic => '原子棋';
+
+  @override
+  String get mobilePerfShortBlitz => '超快棋';
+
+  @override
+  String get mobilePerfShortBullet => '子弹棋';
+
+  @override
+  String get mobilePerfShortChess960 => 'Chess960';
+
+  @override
+  String get mobilePerfShortClassical => '慢棋';
+
+  @override
+  String get mobilePerfShortCorrespondence => '通讯棋';
+
+  @override
+  String get mobilePerfShortCrazyhouse => 'Crazy';
+
+  @override
+  String get mobilePerfShortFromPosition => '来自局面';
+
+  @override
+  String get mobilePerfShortHorde => '部落棋';
+
+  @override
+  String get mobilePerfShortKingOfTheHill => '山丘之王';
+
+  @override
+  String get mobilePerfShortPuzzle => '谜题';
+
+  @override
+  String get mobilePerfShortRacingKings => '竞速棋';
+
+  @override
+  String get mobilePerfShortRapid => '快棋';
+
+  @override
+  String get mobilePerfShortThreeCheck => '三次将军';
+
+  @override
+  String get mobilePerfShortUltraBullet => '超子弹棋';
+
+  @override
+  String get mobilePgnCopied => 'PGN copied.';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -105,7 +270,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobilePositionRight => '右侧';
 
   @override
+  String get mobilePracticeMode => 'Practice mode';
+
+  @override
   String get mobilePrefMagnifyDraggedPiece => '放大拖动的棋子';
+
+  @override
+  String get mobilePreviousPage => '上一页';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => '您想结束本轮挑战吗？';
@@ -120,19 +291,25 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobilePuzzleStormSubtitle => '在 3 分钟内尽可能多地解答谜题';
 
   @override
-  String get mobilePuzzleStreakAbortWarning => '您将失去当前连胜记录，但得分将被保存。';
-
-  @override
   String get mobilePuzzleThemesSubtitle => '解答您喜爱的开局谜题，或选择特定主题';
 
   @override
   String get mobilePuzzlesTab => '谜题';
 
   @override
+  String get mobileRateThisApp => 'Rate this app';
+
+  @override
   String get mobileRecentSearches => '最近搜索';
 
   @override
   String get mobileRemoveBookmark => '移除书签';
+
+  @override
+  String get mobileSelectAStudy => 'Select a study';
+
+  @override
+  String get mobileSendMeACode => 'Send me a code';
 
   @override
   String get mobileServerAnalysis => '服务器分析';
@@ -174,10 +351,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileSettingsPickAnImage => '选择图像';
 
   @override
-  String get mobileSettingsPickAnImageHelp => '自定义背景仅在深色模式下生效，建议使用深色图像。';
+  String get mobileSettingsPickAnImageBlur => '模糊图像';
 
   @override
-  String get mobileSettingsPickAnImageBlur => '模糊图像';
+  String get mobileSettingsPickAnImageHelp => '自定义背景仅在深色模式下生效，建议使用深色图像。';
 
   @override
   String get mobileSettingsPickAnImageHideBoard => '隐藏棋盘';
@@ -195,6 +372,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileSettingsPieceShiftMethodTapTwoSquares => '点击两个棋格';
 
   @override
+  String get mobileSettingsPreferencesSaved => 'Your preferences have been saved in your Lichess account. They will be synchronized across all your devices.';
+
+  @override
   String get mobileSettingsShapeDrawing => '棋盘标记';
 
   @override
@@ -210,13 +390,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileSettingsTouchFeedbackSubtitle => '启用后，移动或吃子时设备将短暂振动。';
 
   @override
-  String get mobileSettingsTab => '设置';
+  String get mobileShareChallengeUrl => 'Share challenge URL';
 
   @override
   String get mobileShareGamePGN => '分享 PGN';
 
   @override
   String get mobileShareGameURL => '分享对局链接';
+
+  @override
+  String get mobileShareLocalAnalysisPgn => 'Share local analysis PGN';
 
   @override
   String get mobileSharePositionAsFEN => '分享 FEN 对局代码';
@@ -228,51 +411,46 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileShowComments => '显示评论';
 
   @override
+  String get mobileShowEngineLines => 'Show engine lines';
+
+  @override
+  String get mobileShowEvaluationGauge => 'Show evaluation gauge';
+
+  @override
   String get mobileShowResult => '显示结果';
 
   @override
-  String get mobileShowVariations => '显示变着';
+  String get mobileSignInWithBrowser => 'Sign in with the browser';
+
+  @override
+  String get mobileSignInWithEmail => 'Sign in with an email';
+
+  @override
+  String get mobileSimpleDelay => 'Simple delay';
+
+  @override
+  String get mobileSmallBoard => 'Small board';
 
   @override
   String get mobileSomethingWentWrong => '出现错误';
 
   @override
+  String get mobileSortFriends => 'Sort friends';
+
+  @override
+  String get mobileStopShowingThreat => '停止显示威胁';
+
+  @override
   String get mobileSystemColors => '跟随系统';
+
+  @override
+  String get mobileTablebaseOffline => 'Tablebase is not available offline.';
 
   @override
   String get mobileTheme => '主题';
 
   @override
-  String get mobileToolsTab => '工具';
-
-  @override
-  String mobileUnsupportedVariant(String param) {
-    return '此版本不支持 $param 变体';
-  }
-
-  @override
-  String get mobileWaitingForOpponentToJoin => '等待对手加入...';
-
-  @override
-  String get mobileWatchTab => '观看';
-
-  @override
-  String get mobileWelcomeToLichessApp => '欢迎使用 Lichess 应用！';
-
-  @override
-  String get mobileViewGame => '查看对局';
-
-  @override
-  String get mobileCustomizeHomeTip => '提示：您可以在主屏幕上添加更多小组件，或移除不需要的！';
-
-  @override
-  String get mobileCustomizeHomeTipDismiss => '取消';
-
-  @override
-  String get mobileCustomizeButton => '自定义';
-
-  @override
-  String get mobileStopShowingThreat => '停止显示威胁';
+  String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
 
   @override
   String get mobileTournamentCompleted => '已完成';
@@ -281,73 +459,30 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileTournamentJumpToMyPage => '跳转到我的页面';
 
   @override
-  String get mobileDisplayModeCompact => '简洁模式';
+  String mobileUnsupportedVariant(String param) {
+    return '此版本不支持 $param 变体';
+  }
 
   @override
-  String get mobileDisplayModeDetailed => '详细模式';
+  String get mobileUseSymmetricPieces => 'Use symmetric pieces';
 
   @override
-  String get mobileOpeningExplorerNotAvailableOffline => '离线状态下无法使用开局探索器';
+  String get mobileViewGame => '查看对局';
 
   @override
-  String get mobileChallengeCreated => '挑战已创建：对局开始时您将收到通知。\n您可以在首页选项卡中访问它。';
+  String get mobileViewLicenses => 'View licences';
 
   @override
-  String get mobilePreviousPage => '上一页';
+  String get mobileWaitingForOpponentToJoin => '等待对手加入...';
 
   @override
-  String get mobileOrImportPgnFile => '或者导入 PGN 文件';
+  String get mobileWatchTab => '观看';
 
   @override
-  String get mobileGoodMoveButThereIsBetter => '好着，但有更好的着法';
+  String get mobileWeWillEmailYouCode => 'We will email you a code to sign in with.';
 
   @override
-  String get mobilePerfShortUltraBullet => '超子弹棋';
-
-  @override
-  String get mobilePerfShortBullet => '子弹棋';
-
-  @override
-  String get mobilePerfShortBlitz => '超快棋';
-
-  @override
-  String get mobilePerfShortRapid => '快棋';
-
-  @override
-  String get mobilePerfShortClassical => '慢棋';
-
-  @override
-  String get mobilePerfShortCorrespondence => '通讯棋';
-
-  @override
-  String get mobilePerfShortFromPosition => '来自局面';
-
-  @override
-  String get mobilePerfShortChess960 => 'Chess960';
-
-  @override
-  String get mobilePerfShortAntichess => '弃子棋';
-
-  @override
-  String get mobilePerfShortKingOfTheHill => '山丘之王';
-
-  @override
-  String get mobilePerfShortThreeCheck => '三次将军';
-
-  @override
-  String get mobilePerfShortAtomic => '原子棋';
-
-  @override
-  String get mobilePerfShortHorde => '部落棋';
-
-  @override
-  String get mobilePerfShortRacingKings => '竞速棋';
-
-  @override
-  String get mobilePerfShortCrazyhouse => 'Crazy';
-
-  @override
-  String get mobilePerfShortPuzzle => '谜题';
+  String get mobileYouCannotChallengeYourself => 'You cannot challenge yourself';
 
   @override
   String get variantStandard => '标准';
@@ -643,9 +778,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get arenaHowIsTheWinnerDecidedAnswer => '在锦标赛设定的时限结束后，得分最高的棋手将被宣布为获胜者。\n\n当两名或多名棋手得分相同时，以锦标赛表现分作为破同分依据。';
 
   @override
-  String get arenaHowDoesPairingWork => 'How does the pairing work?';
-
-  @override
   String get arenaHowArePlayersPaired => '棋手之间如何配对？';
 
   @override
@@ -734,9 +866,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get arenaEditTeamBattle => '编辑团队战';
 
   @override
-  String get arenaDefender => 'Defender';
-
-  @override
   String get arenaDefenderLabel => '防守方：';
 
   @override
@@ -759,9 +888,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get arenaTournamentStats => '锦标赛统计';
-
-  @override
-  String get arenaRankAvgHelp => 'The rank average is a percentage of your ranking. Lower is better.\n\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.';
 
   @override
   String get arenaRankAverageHelp => '您的排名平均值代表您在每场锦标赛中相对于总参赛人数的典型最终名次。\n这是衡量您在锦标赛中的排名表现，而非您的通用等级分。\n\n例如，排名平均值 3% 意味着您通常处于前 3% 的位置（例如在 1,000 名选手中排名第 30）。';
@@ -910,9 +1036,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get broadcastDeleteRound => '删除此轮次';
 
   @override
-  String get broadcastDefinitivelyDeleteRound => 'Definitively delete the round and all its games.';
-
-  @override
   String get broadcastPermanentlyDeleteRound => '永久删除此轮次及其所有对局？';
 
   @override
@@ -923,9 +1046,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get broadcastDeleteTournament => '删除此锦标赛';
-
-  @override
-  String get broadcastDefinitivelyDeleteTournament => 'Definitively delete the entire tournament, all its rounds and all its games.';
 
   @override
   String get broadcastPermanentlyDeleteTournament => '永久删除该锦标赛，包括所有轮次和对局？';
@@ -1156,6 +1276,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get broadcastKnockouts => '淘汰赛';
+
+  @override
+  String get broadcastPinPlayer => '固定棋手';
 
   @override
   String broadcastUnderXAgeTournament(String param) {
@@ -1641,6 +1764,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get learnCastling => '王车易位';
 
   @override
+  String get learnEnPassant => '吃过路兵';
+
+  @override
   String get learnTheSpecialKingMove => '王的特殊走法';
 
   @override
@@ -2094,6 +2220,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get preferencesMoveConfirmation => '着法确认';
 
   @override
+  String get preferencesMultipleChoices => '多项选择。';
+
+  @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => '可在对局中通过棋盘菜单禁用';
 
   @override
@@ -2139,19 +2268,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get preferencesNotifyStreamStart => '主播开播';
 
   @override
-  String get preferencesNotifyInboxMsg => 'New inbox message';
-
-  @override
   String get preferencesNotifyDirectMessage => '新的私信';
 
   @override
-  String get preferencesNotifyForumMention => 'Forum comment mentions you';
-
-  @override
   String get preferencesNotifyForumMentions => '论坛提及';
-
-  @override
-  String get preferencesNotifyInvitedStudy => 'Study invite';
 
   @override
   String get preferencesNotifyStudyInvites => '研习邀请';
@@ -2161,9 +2281,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get preferencesNotifyChallenge => '挑战';
-
-  @override
-  String get preferencesNotifyTournamentSoon => 'Tournament starting soon';
 
   @override
   String get preferencesNotifyTournamentStartReminders => '锦标赛开始提醒';
@@ -2248,6 +2365,24 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get preferencesHoverOverSettingLabelsForHelp => '悬停至设置标签以获取帮助';
+
+  @override
+  String get preferencesNetwork => '网络';
+
+  @override
+  String get preferencesYouAreCurrentlyUsingDirectRouting => '您当前正在使用直接路由。';
+
+  @override
+  String get preferencesYouAreCurrentlyUsingCdnRouting => '您当前正在使用内容分发网络 (CDN) 路由。';
+
+  @override
+  String get preferencesFrequentDisconnectsAdvice => '如果您频繁断开连接，请尝试更改路由。';
+
+  @override
+  String get preferencesUseDirectRouting => '使用直接路由';
+
+  @override
+  String get preferencesUseCdnRouting => '使用 CDN 路由';
 
   @override
   String get puzzlePuzzles => '谜题';
@@ -2596,6 +2731,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get puzzleThemeCastling => '王车易位';
 
   @override
+  String get puzzleThemeEnPassant => '吃过路兵';
+
+  @override
   String get puzzleThemeCastlingDescription => '将王转移到安全位置，并出动车参与进攻。';
 
   @override
@@ -2612,9 +2750,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get puzzleThemeCornerMate => '角落将杀';
-
-  @override
-  String get puzzleThemeCornerMateDescription => 'Confine the king to the corner using a rook or queen and a knight to engage the checkmate.';
 
   @override
   String get puzzleThemeCornerMateKnightDeliversDescription => '用车或后把对方的王逼到角落，再用马将其将杀。';
@@ -2692,9 +2827,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get puzzleThemeEndgameDescription => '对局最后阶段的战术。';
 
   @override
-  String get puzzleThemeEnPassantDescription => 'A tactic involving the en passant rule, where a pawn can capture an opponent pawn that has bypassed it using its initial two-square move.';
-
-  @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => '一种涉及吃过路兵规则的战术，即当对方兵以初始两步着法移动到己方兵旁边时，己方兵可以将其吃掉。';
 
   @override
@@ -2713,9 +2845,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get puzzleThemeFork => '捉双';
 
   @override
-  String get puzzleThemeForkDescription => 'A move where the moved piece attacks two opponent pieces at once.';
-
-  @override
   String get puzzleThemeForkOpposingPiecesDescription => '一步同时攻击两个或多个对方棋子的着法。';
 
   @override
@@ -2726,9 +2855,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get puzzleThemeHookMate => '钩形将杀';
-
-  @override
-  String get puzzleThemeHookMateDescription => 'Checkmate with a rook, knight, and pawn along with one enemy pawn to limit the enemy king\'s escape.';
 
   @override
   String get puzzleThemeHookMateOpposingPawnDescription => '使用车、马和兵进行将杀，其中对方兵阻挡了其王的逃逸。';
@@ -2755,16 +2881,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get puzzleThemePillsburysMate => '皮尔斯伯里将杀';
 
   @override
-  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
-
-  @override
   String get puzzleThemePillsburyMateRookAndBishopDescription => '车执行将杀，同时象协助限制王移动。';
 
   @override
   String get puzzleThemeMorphysMate => '摩菲将杀';
-
-  @override
-  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
 
   @override
   String get puzzleThemeMorphyMateBishopAndRookDescription => '象执行将杀，同时车协助限制王移动。';
@@ -2885,9 +3005,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get puzzleThemePromotion => '升变';
-
-  @override
-  String get puzzleThemePromotionDescription => 'Promote one of your pawn to a queen or minor piece.';
 
   @override
   String get puzzleThemePromotePawnToQueenRookOrMinor => '兵升变或威胁升变是战术的关键。';
@@ -3030,6 +3147,32 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get settingsThisAccountIsClosed => '此账户已被关闭。';
+
+  @override
+  String get settingsWereSorryToSeeYouGo => '我们很遗憾看到您的离开。';
+
+  @override
+  String get settingsCloseAccountForeverLabel => '永久关闭：使其无法重新打开';
+
+  @override
+  String get settingsCloseAccountForeverWarning => '防止以后重新打开账户。如果勾选此框，即使是管理员也无法应您的要求重新打开您的账户！';
+
+  @override
+  String get settingsDeleteYourAccount => '删除您的账户';
+
+  @override
+  String get settingsDeleteAccountWarning => '一旦您删除账户，它将从 Lichess 中移除，且我们的管理员将无法为您恢复。';
+
+  @override
+  String settingsWouldYouLikeToXInstead(String param) {
+    return '您是否想改为$param？';
+  }
+
+  @override
+  String get settingsCloseYourAccount => '关闭您的账户';
+
+  @override
+  String get settingsDeleteAccountConfirmText => '我了解已删除的账户无法恢复';
 
   @override
   String get gameSetup => '对局设置';
@@ -3701,9 +3844,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get refreshInboxAfterFiveMinutes => '请等待 5 分钟并刷新您的收件箱。';
 
   @override
-  String get checkSpamFolder => 'Also check your spam folder, it might end up there. If so, mark it as not spam.';
-
-  @override
   String get checkSpamOrJunkFolder => '如果您没有收到确认邮件，请检查您的垃圾邮件文件夹。请务必将来自 lichess.org 的邮件标记为安全且“非垃圾邮件”，以便您能及时收到重要通知。';
 
   @override
@@ -3752,13 +3892,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get cancel => '取消';
 
   @override
-  String get whiteTimeOut => 'White time out';
-
-  @override
   String get whiteRanOutOfTime => '白方超时';
-
-  @override
-  String get blackTimeOut => 'Black time out';
 
   @override
   String get blackRanOutOfTime => '黑方超时';
@@ -3968,9 +4102,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String yourPerfRatingIsProvisional(String param) {
     return '您的 $param 等级分为暂定状态';
   }
-
-  @override
-  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
 
   @override
   String get cannotFilterByUnstableRating => '由于您的等级分尚不稳定，暂时无法按等级分进行筛选。\n进行排位对局将提高稳定性。';
@@ -4395,6 +4526,21 @@ class AppLocalizationsZh extends AppLocalizations {
   String get onlineBots => '在线机器人';
 
   @override
+  String get aboutBotsOnLichess => '关于 Lichess 上的机器人';
+
+  @override
+  String get featuredBots => '精选机器人';
+
+  @override
+  String get tryPlayingTheseInnovativeChessEngines => '试试与这些有创意性的国际象棋引擎对弈吧！它们是我们的最爱。';
+
+  @override
+  String get communityBots => '社区机器人';
+
+  @override
+  String get moreChessEnginesCreatedByTheLichessCommunity => '更多由 Lichess 社区创建的国际象棋引擎。它们由其创建者托管，可能不会始终在线。';
+
+  @override
   String get name => '名称';
 
   @override
@@ -4488,9 +4634,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get reportUsernameHelp => '解释此用户名有何冒犯之处。不要只说“冒犯/不当”，请告诉我们您是如何得出这个结论的，特别是当侮辱是隐晦的、非英语的、俚语或涉及历史/文化指涉时。';
 
   @override
-  String get reportProcessedFasterInEnglish => 'Your report will be processed faster if written in English.';
-
-  @override
   String get processReportFasterInEnglish => '如果您用英文撰写报告，我们可以更快地处理您的举报。';
 
   @override
@@ -4541,6 +4684,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get logInByEmail => '通过邮件登录';
+
+  @override
+  String get emailLoginInstructions => '我们将向您发送一封包含登录链接的邮件。';
 
   @override
   String get emailMeALink => '将链接发送到我的邮箱';
@@ -4613,6 +4759,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get never => '从不';
+
+  @override
+  String get defeatOnly => '仅输棋';
+
+  @override
+  String get drawAndDefeat => '和棋与输棋';
 
   @override
   String xCompetesInY(String param1, String param2) {
@@ -4797,7 +4949,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get really => '完全';
 
   @override
+  String get lichessUpdates => 'Lichess 动态';
+
+  @override
   String get contribute => '协助我们';
+
+  @override
+  String get changelog => '更新日志';
 
   @override
   String get termsOfService => '服务条款';
@@ -4807,6 +4965,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get sourceCode => '源代码';
+
+  @override
+  String get blockAds => '屏蔽广告';
 
   @override
   String get simultaneousExhibitions => '车轮战';
@@ -4859,9 +5020,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get create => '创建';
 
   @override
-  String get whenCreateSimul => 'When you create a simul, you get to play several players at once.';
-
-  @override
   String get creatingASimul => '创建车轮战让您可以同时与多名棋手对弈。';
 
   @override
@@ -4872,9 +5030,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get simulAddExtraTime => '您可以为自己增加额外的初始时间，以帮助您应对车轮战。';
-
-  @override
-  String get simulHostExtraTime => 'Host extra initial clock time';
 
   @override
   String get extraClockTimeForHost => '主持人额外时间：';
@@ -5281,11 +5436,6 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String perfRatingX(String param) {
-    return 'Rating: $param';
-  }
-
-  @override
   String perfRatingLabel(String param) {
     return '等级分：$param。';
   }
@@ -5439,9 +5589,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get showUnreadLichessMessage => '您收到了一条来自 Lichess 的私信。';
-
-  @override
-  String get clickHereToReadIt => 'Click here to read it';
 
   @override
   String get readTheMessage => '阅读消息';
@@ -5726,11 +5873,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get simulDescriptionHelp => '写下您想要告诉参与者的任何内容';
 
   @override
-  String markdownIsAvailable(String param) {
-    return '$param is available for formatting.';
-  }
-
-  @override
   String youCanFormatTextUsing(String param) {
     return '您可以使用 $param 来格式化文本。';
   }
@@ -5752,9 +5894,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get onlyTeamMembers => '仅限团队成员';
-
-  @override
-  String get navigateMoveTree => 'Navigate the move tree';
 
   @override
   String get moveListNavigation => '着法列表导航';
@@ -5893,6 +6032,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get boards => '棋盘';
 
   @override
+  String get write => '撰写';
+
+  @override
+  String get preview => '预览';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5913,17 +6058,6 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String nbBlunders(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count blunders',
-      one: '$count blunder',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String numberBlunders(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5934,33 +6068,11 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String nbMistakes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count mistakes',
-      one: '$count mistake',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String numberMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
       other: '$count 次错着',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String nbInaccuracies(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count inaccuracies',
-      one: '$count inaccuracy',
     );
     return '$_temp0';
   }
@@ -6301,17 +6413,6 @@ class AppLocalizationsZh extends AppLocalizations {
       count,
       locale: localeName,
       other: '支持 $count 种语言！',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String nbAnonymous(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Anonymous ($count)',
-      one: 'Anonymous',
     );
     return '$_temp0';
   }
@@ -6690,9 +6791,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get studyCurrentChapterUrl => '当前章节链接';
 
   @override
-  String get studyYouCanPasteThisInTheForumToEmbed => 'You can paste this in the forum or your Lichess blog to embed';
-
-  @override
   String get studyPasteToEmbedChapterInForumOrBlog => '您可以将此链接粘贴到论坛或您的 Lichess 博客中以嵌入该章节。';
 
   @override
@@ -7065,13 +7163,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get studyCustomPositionText => '按您的方式设置棋盘。<br>适合探索残局。';
 
   @override
-  String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
-
-  @override
   String get studyLoadGameFromTheWebTitle => '从网页加载对局';
-
-  @override
-  String get studyLoadExistingLichessGameText => 'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
 
   @override
   String get studyLoadGameFromTheWebText => '粘贴对局链接<br>（例如 lichess.org/7fHIU0XI）<br>以在章节中加载对局着法。';
@@ -7342,7 +7434,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String ublogXBlog(String param) {
-    return '$param 的博客';
+    return '$param 的博客';
   }
 }
 
@@ -7372,24 +7464,31 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get mobileCancelTakebackOffer => '取消悔棋請求';
 
   @override
+  String get mobileChallengeCreated => '挑戰已建立：對戰開始時您將收到通知。\n您可以在首頁分頁中查看。';
+
+  @override
   String get mobileClearButton => '清除';
 
   @override
   String get mobileCorrespondenceClearSavedMove => '清除已儲存移動';
 
   @override
-  String get mobileCustomGameJoinAGame => '加入棋局';
+  String get mobileCustomizeButton => '自訂';
+
+  @override
+  String get mobileCustomizeHomeTip => '提示：您可以將更多小工具新增至主畫面，或移除不需要的小工具！';
+
+  @override
+  String get mobileCustomizeHomeTipDismiss => '關閉';
+
+  @override
+  String get mobileDisplayModeCompact => '精簡';
+
+  @override
+  String get mobileDisplayModeDetailed => '詳細';
 
   @override
   String get mobileFeedbackButton => '問題反饋';
-
-  @override
-  String mobileGoodEvening(String param) {
-    return '晚安，$param';
-  }
-
-  @override
-  String get mobileGoodEveningWithoutName => '晚安';
 
   @override
   String mobileGoodDay(String param) {
@@ -7400,7 +7499,15 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get mobileGoodDayWithoutName => '你好';
 
   @override
-  String get mobileHideVariation => '隱藏變化';
+  String mobileGoodEvening(String param) {
+    return '晚安，$param';
+  }
+
+  @override
+  String get mobileGoodEveningWithoutName => '晚安';
+
+  @override
+  String get mobileGoodMoveButThereIsBetter => '好著，但有更好的選擇';
 
   @override
   String get mobileHomeTab => '首頁';
@@ -7418,13 +7525,16 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get mobileNoSearchResults => '沒有任何搜尋結果';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => '請注意，目前尚未提供舊版 App 或網站的所有功能，但我們會持續新增。';
-
-  @override
   String get mobileNotFollowingAnyUser => '您尚未追蹤任何使用者。';
 
   @override
   String get mobileOkButton => '確認';
+
+  @override
+  String get mobileOpeningExplorerNotAvailableOffline => '開局瀏覽器無法在離線狀態下使用。';
+
+  @override
+  String get mobileOrImportPgnFile => '或匯入 PGN 檔案';
 
   @override
   String get mobileOverTheBoard => '實體對弈';
@@ -7444,6 +7554,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get mobilePrefMagnifyDraggedPiece => '放大被拖曳的棋子';
 
   @override
+  String get mobilePreviousPage => '上一頁';
+
+  @override
   String get mobilePuzzleStormConfirmEndRun => '是否中斷？';
 
   @override
@@ -7454,9 +7567,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get mobilePuzzleStormSubtitle => '在 3 分鐘內盡可能解開最多的謎題。';
-
-  @override
-  String get mobilePuzzleStreakAbortWarning => '您的連勝紀錄將會中斷，分數會被儲存。';
 
   @override
   String get mobilePuzzleThemesSubtitle => '從您偏好的開局開始挑戰謎題，或選擇特定主題。';
@@ -7504,10 +7614,10 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get mobileSettingsPickAnImage => '選擇圖片';
 
   @override
-  String get mobileSettingsPickAnImageHelp => '自訂背景僅在深色模式下運作，建議使用深色圖片。';
+  String get mobileSettingsPickAnImageBlur => '模糊圖片';
 
   @override
-  String get mobileSettingsPickAnImageBlur => '模糊圖片';
+  String get mobileSettingsPickAnImageHelp => '自訂背景僅在深色模式下運作，建議使用深色圖片。';
 
   @override
   String get mobileSettingsPickAnImageHideBoard => '隱藏棋盤';
@@ -7540,9 +7650,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get mobileSettingsTouchFeedbackSubtitle => '啟用後，移動棋子或吃子時裝置會短暫震動。';
 
   @override
-  String get mobileSettingsTab => '設定';
-
-  @override
   String get mobileShareGamePGN => '分享 PGN';
 
   @override
@@ -7561,10 +7668,10 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get mobileShowResult => '顯示結果';
 
   @override
-  String get mobileShowVariations => '顯示變體';
+  String get mobileSomethingWentWrong => '發生了一些問題。';
 
   @override
-  String get mobileSomethingWentWrong => '發生了一些問題。';
+  String get mobileStopShowingThreat => '停止顯示威脅';
 
   @override
   String get mobileSystemColors => '系統顏色';
@@ -7573,7 +7680,10 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get mobileTheme => '佈景主題';
 
   @override
-  String get mobileToolsTab => '工具';
+  String get mobileTournamentCompleted => '已結束';
+
+  @override
+  String get mobileTournamentJumpToMyPage => '跳轉至我的頁面';
 
   @override
   String mobileUnsupportedVariant(String param) {
@@ -7581,55 +7691,13 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   }
 
   @override
+  String get mobileViewGame => '查看對局';
+
+  @override
   String get mobileWaitingForOpponentToJoin => '正在等待對手加入...';
 
   @override
   String get mobileWatchTab => '觀戰';
-
-  @override
-  String get mobileWelcomeToLichessApp => '歡迎使用 Lichess 應用程式！';
-
-  @override
-  String get mobileViewGame => '查看對局';
-
-  @override
-  String get mobileCustomizeHomeTip => '提示：您可以將更多小工具新增至主畫面，或移除不需要的小工具！';
-
-  @override
-  String get mobileCustomizeHomeTipDismiss => '關閉';
-
-  @override
-  String get mobileCustomizeButton => '自訂';
-
-  @override
-  String get mobileStopShowingThreat => '停止顯示威脅';
-
-  @override
-  String get mobileTournamentCompleted => '已結束';
-
-  @override
-  String get mobileTournamentJumpToMyPage => '跳轉至我的頁面';
-
-  @override
-  String get mobileDisplayModeCompact => '精簡';
-
-  @override
-  String get mobileDisplayModeDetailed => '詳細';
-
-  @override
-  String get mobileOpeningExplorerNotAvailableOffline => '開局瀏覽器無法在離線狀態下使用。';
-
-  @override
-  String get mobileChallengeCreated => '挑戰已建立：對戰開始時您將收到通知。\n您可以在首頁分頁中查看。';
-
-  @override
-  String get mobilePreviousPage => '上一頁';
-
-  @override
-  String get mobileOrImportPgnFile => '或匯入 PGN 檔案';
-
-  @override
-  String get mobileGoodMoveButThereIsBetter => '好著，但有更好的選擇';
 
   @override
   String get variantStandard => '標準';
@@ -8782,6 +8850,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get learnCastling => '王車易位';
 
   @override
+  String get learnEnPassant => '吃過路兵';
+
+  @override
   String get learnTheSpecialKingMove => '國王特殊移動';
 
   @override
@@ -9626,6 +9697,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get puzzleThemeCastling => '易位';
+
+  @override
+  String get puzzleThemeEnPassant => '吃過路兵';
 
   @override
   String get puzzleThemeCastlingDescription => '讓國王回到安全，並讓車發動攻擊。';
