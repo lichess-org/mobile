@@ -103,21 +103,6 @@ class AppLocalizationsLt extends AppLocalizations {
   String get mobileDangerZone => 'Danger zone';
 
   @override
-  String get mobileDateRangeAllTime => 'ALL';
-
-  @override
-  String get mobileDateRangeOneMonth => '1M';
-
-  @override
-  String get mobileDateRangeOneWeek => '1W';
-
-  @override
-  String get mobileDateRangeOneYear => '1Y';
-
-  @override
-  String get mobileDateRangeThreeMonths => '3M';
-
-  @override
   String get mobileDeleteYourAccount => 'Delete your account';
 
   @override

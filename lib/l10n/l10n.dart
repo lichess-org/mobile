@@ -376,36 +376,6 @@ abstract class AppLocalizations {
   /// **'Danger zone'**
   String get mobileDangerZone;
 
-  /// No description provided for @mobileDateRangeAllTime.
-  ///
-  /// In en, this message translates to:
-  /// **'ALL'**
-  String get mobileDateRangeAllTime;
-
-  /// No description provided for @mobileDateRangeOneMonth.
-  ///
-  /// In en, this message translates to:
-  /// **'1M'**
-  String get mobileDateRangeOneMonth;
-
-  /// No description provided for @mobileDateRangeOneWeek.
-  ///
-  /// In en, this message translates to:
-  /// **'1W'**
-  String get mobileDateRangeOneWeek;
-
-  /// No description provided for @mobileDateRangeOneYear.
-  ///
-  /// In en, this message translates to:
-  /// **'1Y'**
-  String get mobileDateRangeOneYear;
-
-  /// No description provided for @mobileDateRangeThreeMonths.
-  ///
-  /// In en, this message translates to:
-  /// **'3M'**
-  String get mobileDateRangeThreeMonths;
-
   /// No description provided for @mobileDeleteYourAccount.
   ///
   /// In en, this message translates to:

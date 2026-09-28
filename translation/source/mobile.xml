@@ -30,11 +30,6 @@
   <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">Tip: You can add more widgets to the Home Screen or remove those you don't need!</string>
   <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">Dismiss</string>
   <string name="dangerZone" comment="Header of the settings section containing account deletion.">Danger zone</string>
-  <string name="dateRangeAllTime" comment="Perf stats chart time range filter. Short abbreviation preferred." maxLength="10">ALL</string>
-  <string name="dateRangeOneMonth" comment="Perf stats chart time range filter. Short abbreviation preferred." maxLength="10">1M</string>
-  <string name="dateRangeOneWeek" comment="Perf stats chart time range filter. Short abbreviation preferred." maxLength="10">1W</string>
-  <string name="dateRangeOneYear" comment="Perf stats chart time range filter. Short abbreviation preferred." maxLength="10">1Y</string>
-  <string name="dateRangeThreeMonths" comment="Perf stats chart time range filter. Short abbreviation preferred." maxLength="10">3M</string>
   <string name="deleteYourAccount" comment="iOS-only settings entry that opens the account deletion page.">Delete your account</string>
   <string name="displayModeCompact" comment="Label of the game history display mode menu entry that switches to the compact game list.">Compact</string>
   <string name="displayModeDetailed" comment="Label of the game history display mode menu entry that switches to the detailed game list.">Detailed</string>

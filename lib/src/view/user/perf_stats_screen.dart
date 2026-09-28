@@ -940,11 +940,11 @@ enum DateRange() {
   oneYear,
   allTime;
 
-  String label(AppLocalizations l10n) => switch (this) {
-    DateRange.oneWeek => l10n.mobileDateRangeOneWeek,
-    DateRange.oneMonth => l10n.mobileDateRangeOneMonth,
-    DateRange.threeMonths => l10n.mobileDateRangeThreeMonths,
-    DateRange.oneYear => l10n.mobileDateRangeOneYear,
-    DateRange.allTime => l10n.mobileDateRangeAllTime,
+  String label(AppLocalizations _) => switch (this) {
+    DateRange.oneWeek => '1W',
+    DateRange.oneMonth => '1M',
+    DateRange.threeMonths => '3M',
+    DateRange.oneYear => '1Y',
+    DateRange.allTime => 'ALL',
   };
 }
