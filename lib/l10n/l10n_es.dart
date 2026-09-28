@@ -118,9 +118,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mobileDownloadMyGames => 'Download my games';
 
   @override
-  String get mobileExport => 'Export';
-
-  @override
   String get mobileFeedbackButton => 'Contacto';
 
   @override

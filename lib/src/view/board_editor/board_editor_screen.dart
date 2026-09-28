@@ -408,7 +408,7 @@ class const _BottomBar(final BoardEditorControllerParams? params) extends Consum
           icon: Icons.biotech,
         ),
         BottomBarButton(
-          label: 'Filters',
+          label: context.l10n.mobileFilters,
           onTap: () => showModalBottomSheet<void>(
             context: context,
             builder: (BuildContext context) => BoardEditorFilters(params: params),

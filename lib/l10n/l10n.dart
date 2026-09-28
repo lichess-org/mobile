@@ -406,12 +406,6 @@ abstract class AppLocalizations {
   /// **'Download my games'**
   String get mobileDownloadMyGames;
 
-  /// No description provided for @mobileExport.
-  ///
-  /// In en, this message translates to:
-  /// **'Export'**
-  String get mobileExport;
-
   /// No description provided for @mobileFeedbackButton.
   ///
   /// In en, this message translates to:

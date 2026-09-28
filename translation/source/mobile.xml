@@ -35,7 +35,6 @@
   <string name="displayModeDetailed" comment="Label of the game history display mode menu entry that switches to the detailed game list.">Detailed</string>
   <string name="doYouAcceptChallenge" comment="Title of the challenge confirmation dialog.">Do you accept the challenge?</string>
   <string name="downloadMyGames" comment="Tournament menu action that downloads the user's games from that tournament as a PGN.">Download my games</string>
-  <string name="export" comment="Tooltip of the button that exports app logs for sharing.">Export</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Feedback</string>
   <string name="filters" comment="Label of the board editor bottom bar button that opens position filters.">Filters</string>
   <string name="flipClock" comment="Tooltip of the button that flips the chess clock orientation.">Flip clock</string>

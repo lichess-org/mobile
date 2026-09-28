@@ -118,9 +118,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileDownloadMyGames => 'Download my games';
 
   @override
-  String get mobileExport => 'Export';
-
-  @override
   String get mobileFeedbackButton => '问题反馈';
 
   @override

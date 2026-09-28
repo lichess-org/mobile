@@ -118,9 +118,6 @@ class AppLocalizationsBn extends AppLocalizations {
   String get mobileDownloadMyGames => 'Download my games';
 
   @override
-  String get mobileExport => 'Export';
-
-  @override
   String get mobileFeedbackButton => 'প্রতিক্রিয়া';
 
   @override
