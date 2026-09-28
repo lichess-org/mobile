@@ -473,8 +473,7 @@ class RetroController(final RetroOptions options)
     final progress = event.evals.where((e) => e.hasEval).length / _root.mainline.length;
     state = AsyncValue.data(state.requireValue.copyWith(serverAnalysisProgress: progress));
 
-    if (event.isAnalysisComplete) {
-      // The analysis landed, so the "never finished" guard has nothing left to catch.
+    if (event.isAnalysisComplete)
       _serverAnalysisTimeout?.cancel();
       if (_serverAnalysisCompleter.isCompleted == false) {
         _serverAnalysisCompleter.complete();
