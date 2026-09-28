@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dartchess/dartchess.dart';
+import 'package:http/http.dart' show ClientException;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -31,6 +32,22 @@ sealed class const ServerAnalysisSource._() with _$ServerAnalysisSource {
 }
 
 const Duration kMaxWaitForServerAnalysis = Duration(minutes: 1);
+
+/// Raised when the server refused to start an analysis, carrying the reason.
+///
+/// Distinct from a load failure so a view can tell the two apart: a game that failed to load is
+/// worth retrying, a refusal is not, and the reason is worth showing to the user.
+class ServerAnalysisRequestException extends ClientException {
+  ServerAnalysisRequestException(this.error, ServerException cause)
+    : super(cause.message, kRequestAnalysisUri);
+
+  /// The reason the server refused, as classified by
+  /// [ServerAnalysisService.classifyRequestAnalysisError].
+  final ServerAnalysisRequestError error;
+}
+
+/// The route [GameRepository.requestServerAnalysis] posts to, for a game of unknown id.
+final Uri kRequestAnalysisUri = Uri(path: '/request-analysis');
 
 /// Why the server refused to start an analysis for a game.
 ///
@@ -170,9 +187,10 @@ class ServerAnalysisService(final Ref ref) {
             _currentAnalysis.value = source;
           } else if (e.statusCode == 400) {
             // A refusal the server explained: the user hit a limit, or their queue is busy.
+            // Wrap it so the view can report the reason instead of a bare failure.
             _logger.warning('Server refused to analyse game $gameId: $error', e, st);
             _cancelAnalysis();
-            rethrow;
+            throw ServerAnalysisRequestException(error, e);
           } else {
             _logger.severe('ServerException requesting server analysis', e, st);
             _cancelAnalysis();
