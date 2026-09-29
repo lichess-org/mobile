@@ -14,7 +14,7 @@ dependencies:
   app_settings: ^9.0.0
   async: ^2.13.1
   auto_size_text: ^3.0.0
-  chessground: ^10.2.0
+  chessground: ^10.3.0
   clock: ^1.1.2
   collection: ^1.19.1
   connectivity_plus: ^7.3.1
@@ -23,7 +23,7 @@ dependencies:
   cupertino_http: ^3.0.2
   cupertino_icons: ^1.0.9
   cupertino_ui: ^1.0.0
-  dartchess: ^0.13.1
+  dartchess: ^0.14.0
   deep_pick: ^1.1.0
   device_info_plus: ^13.2.0
   dynamic_system_colors: ^1.9.0
