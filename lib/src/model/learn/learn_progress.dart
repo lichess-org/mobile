@@ -229,6 +229,19 @@ class const LearnProgressStorage(final Database _db) {
     );
   }
 
+  /// Deletes the rows the server has already accepted.
+  ///
+  /// For when the server reports no progress at all: a clean row reached the server once, so
+  /// the server losing it means the progress was reset elsewhere, and the local copy has to go
+  /// as well. Dirty rows are kept, the server never had them.
+  Future<void> deleteSynced(UserId? userId) async {
+    await _db.delete(
+      _tableName,
+      where: 'userId = ? AND syncedAt IS NOT NULL',
+      whereArgs: [_accountKey(userId)],
+    );
+  }
+
   /// Whether a reset of [userId] is still waiting to reach the server.
   Future<bool> isResetPending(UserId? userId) async {
     final rows = await _db.query(
@@ -350,32 +363,41 @@ class LearnProgressNotifier() extends AsyncNotifier<LearnProgress> {
         await ref.withClient((client) => LearnRepository(client).fetchProgress()),
       );
       if (!_accountUnchanged) return;
-      for (final stageEntry in server.entries) {
-        for (final levelEntry in stageEntry.value.entries) {
-          if (!_accountUnchanged) return;
-          // The keep-max guard leaves the local score alone when the server is behind.
-          await storage.saveScore(
-            userId: userId,
-            stageKey: stageEntry.key,
-            levelIndex: levelEntry.key,
-            score: levelEntry.value,
-          );
-          // Stamps only when the row now holds exactly the server score, so a level where the
-          // local copy is better stays dirty and is uploaded by the flush below.
-          await storage.markSynced(
-            userId: userId,
-            stageKey: stageEntry.key,
-            levelIndex: levelEntry.key,
-            score: levelEntry.value,
-          );
+      if (server.isEmpty) {
+        // A reset performed on the web leaves the server with no progress, and the scores it
+        // drops are never pushed back, so the local copy has to be dropped as well. Otherwise
+        // a reset done on the website would silently never reach the app.
+        await storage.deleteSynced(userId);
+        if (!_accountUnchanged || !ref.mounted) return;
+        state = AsyncData(await storage.fetch(userId));
+      } else {
+        for (final stageEntry in server.entries) {
+          for (final levelEntry in stageEntry.value.entries) {
+            if (!_accountUnchanged) return;
+            // The keep-max guard leaves the local score alone when the server is behind.
+            await storage.saveScore(
+              userId: userId,
+              stageKey: stageEntry.key,
+              levelIndex: levelEntry.key,
+              score: levelEntry.value,
+            );
+            // Stamps only when the row now holds exactly the server score, so a level where the
+            // local copy is better stays dirty and is uploaded by the flush below.
+            await storage.markSynced(
+              userId: userId,
+              stageKey: stageEntry.key,
+              levelIndex: levelEntry.key,
+              score: levelEntry.value,
+            );
+          }
         }
-      }
-      if (!_accountUnchanged || !ref.mounted) return;
-      final current = state.value;
-      if (current != null) {
-        // Merged into the current state, so a level completed during the round-trip is kept.
-        final merged = current.mergedWithServer(server);
-        if (!identical(merged, current)) state = AsyncData(merged);
+        if (!_accountUnchanged || !ref.mounted) return;
+        final current = state.value;
+        if (current != null) {
+          // Merged into the current state, so a level completed during the round-trip is kept.
+          final merged = current.mergedWithServer(server);
+          if (!identical(merged, current)) state = AsyncData(merged);
+        }
       }
     } catch (e, st) {
       // Offline or errored: the local progress stands, and the flush still gets its chance.
