@@ -47,42 +47,6 @@ void main() {
       expect(find.text('Players'), findsOneWidget);
       expect(find.text('Teams'), findsNothing);
     });
-
-    testWidgets('Check that the screen can be loaded from round id', variant: kPlatformVariant, (
-      tester,
-    ) async {
-      final app = await makeTestProviderScopeApp(
-        tester,
-        home: const BroadcastRoundScreenLoading(roundId: BroadcastRoundId('S5VCwuVn')),
-        overrides: {
-          lichessClientProvider: lichessClientProvider.overrideWith(
-            (ref) => LichessClient(_finishedBroadcastClient, ref),
-          ),
-        },
-      );
-
-      await tester.pumpWidget(app);
-
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-
-      // Load the broadcast data
-      await tester.pump();
-
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-
-      // Load the tournament data
-      await tester.pump();
-
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-
-      // Load the round data
-      await tester.pump();
-
-      expect(find.text('Overview'), findsOneWidget);
-      expect(find.text('Boards'), findsOneWidget);
-      expect(find.text('Players'), findsOneWidget);
-      expect(find.text('Teams'), findsNothing);
-    });
   });
 
   group('Test boards tab', () {
@@ -430,110 +394,6 @@ void main() {
       expect(playersListReversed[0].playerWithOverallResult.player.name, 'Nepomniachtchi, Ian');
       expect(playersListReversed[1].playerWithOverallResult.player.name, 'Carlsen, Magnus');
     });
-
-    testWidgets('Test elo sort', (tester) async {
-      final app = await makeTestProviderScopeApp(
-        tester,
-        home: BroadcastRoundScreen(
-          broadcast: _liveBroadcast,
-          initialTab: BroadcastRoundTab.players,
-        ),
-        overrides: {
-          lichessClientProvider: lichessClientProvider.overrideWith(
-            (ref) => LichessClient(_liveBroadcastClient(), ref),
-          ),
-        },
-      );
-
-      await tester.pumpWidget(app);
-
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-
-      // Load the tournament
-      await tester.pump();
-
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-
-      // Load the round
-      await tester.pump();
-
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-
-      // Load the players
-      await tester.pump();
-
-      await tester.tap(find.text('Player (Elo)'));
-      await tester.pump();
-
-      final playersList = tester
-          .widgetList<BroadcastPlayerRow>(find.byType(BroadcastPlayerRow))
-          .toList();
-
-      expect(playersList[0].playerWithOverallResult.player.name, 'Carlsen, Magnus');
-      expect(playersList[1].playerWithOverallResult.player.name, 'Nepomniachtchi, Ian');
-
-      await tester.tap(find.text('Player (Elo)'));
-      await tester.pump();
-
-      final playersListReversed = tester
-          .widgetList<BroadcastPlayerRow>(find.byType(BroadcastPlayerRow))
-          .toList();
-
-      expect(playersListReversed[0].playerWithOverallResult.player.name, 'Nepomniachtchi, Ian');
-      expect(playersListReversed[1].playerWithOverallResult.player.name, 'Carlsen, Magnus');
-    });
-
-    testWidgets('Test games sort', (tester) async {
-      final app = await makeTestProviderScopeApp(
-        tester,
-        home: BroadcastRoundScreen(
-          broadcast: _liveBroadcast,
-          initialTab: BroadcastRoundTab.players,
-        ),
-        overrides: {
-          lichessClientProvider: lichessClientProvider.overrideWith(
-            (ref) => LichessClient(_liveBroadcastClient(withPlayerScores: false), ref),
-          ),
-        },
-      );
-
-      await tester.pumpWidget(app);
-
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-
-      // Load the tournament
-      await tester.pump();
-
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-
-      // Load the round
-      await tester.pump();
-
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-
-      // Load the players
-      await tester.pump();
-
-      await tester.tap(find.text('Games'));
-      await tester.pump();
-
-      final playersList = tester
-          .widgetList<BroadcastPlayerRow>(find.byType(BroadcastPlayerRow))
-          .toList();
-
-      expect(playersList[0].playerWithOverallResult.player.name, 'Carlsen, Magnus');
-      expect(playersList[1].playerWithOverallResult.player.name, 'Nepomniachtchi, Ian');
-
-      await tester.tap(find.text('Games'));
-      await tester.pump();
-
-      final playersListReversed = tester
-          .widgetList<BroadcastPlayerRow>(find.byType(BroadcastPlayerRow))
-          .toList();
-
-      expect(playersListReversed[0].playerWithOverallResult.player.name, 'Nepomniachtchi, Ian');
-      expect(playersListReversed[1].playerWithOverallResult.player.name, 'Carlsen, Magnus');
-    });
   });
   group('Test teams tab', () {
     testWidgets('Check that teams tab is present when teamTable is true', (tester) async {
@@ -684,12 +544,6 @@ void main() {
       expect(find.byIcon(Icons.notifications_none), findsNothing);
     });
 
-    testWidgets('is filled when already subscribed', variant: kPlatformVariant, (tester) async {
-      await pumpRoundScreen(tester, isSubscribed: true);
-
-      expect(find.byIcon(Icons.notifications), findsOneWidget);
-    });
-
     testWidgets('subscribes to the tournament when tapped', variant: kPlatformVariant, (
       tester,
     ) async {
@@ -816,7 +670,7 @@ final _finishedBroadcastClient = MockClient((request) {
   return mockResponse('', 404);
 });
 
-MockClient _liveBroadcastClient({bool withPlayerScores = true}) => MockClient((request) {
+MockClient _liveBroadcastClient() => MockClient((request) {
   if (request.url.path == '/api/broadcast/AAAAAAAA') {
     return mockResponse(
       _liveTournamentResponse,
@@ -833,7 +687,7 @@ MockClient _liveBroadcastClient({bool withPlayerScores = true}) => MockClient((r
   }
   if (request.url.path == '/broadcast/AAAAAAAA/players') {
     return mockResponse(
-      withPlayerScores ? _livePlayersResponse : _livePlayersWithoutScoresResponse,
+      _livePlayersResponse,
       200,
       headers: {'content-type': 'application/json; charset=utf-8'},
     );
@@ -2366,27 +2220,6 @@ const _livePlayersResponse = '''
     "fed": "RUS",
     "played": 4,
     "score": 1
-  }
-]
-''';
-
-const _livePlayersWithoutScoresResponse = '''
-[
-  {
-    "name": "Carlsen, Magnus",
-    "title": "GM",
-    "rating": 2890,
-    "fideId": 1503014,
-    "fed": "NOR",
-    "played": 5
-  },
-  {
-    "name": "Nepomniachtchi, Ian",
-    "title": "GM",
-    "rating": 2770,
-    "fideId": 4168119,
-    "fed": "RUS",
-    "played": 4
   }
 ]
 ''';

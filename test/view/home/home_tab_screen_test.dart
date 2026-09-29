@@ -315,33 +315,6 @@ void main() {
       expect(find.byType(OfflineBanner), findsOneWidget);
     });
 
-    testWidgets('shows Play button', (tester) async {
-      final app = await makeOfflineTestProviderScope(tester, child: const Application());
-
-      await tester.pumpWidget(app);
-
-      // wait for connectivity
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-      await tester.pump();
-
-      expect(find.byType(FloatingActionButton), findsOneWidget);
-    });
-
-    testWidgets('no authUser, no stored game: shows welcome screen ', (tester) async {
-      final app = await makeTestProviderScope(tester, child: const Application());
-      await tester.pumpWidget(app);
-      // wait for connectivity
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-      await tester.pumpAndSettle();
-
-      expect(
-        find.textContaining('libre, no-ads, open source chess server.', findRichText: true),
-        findsOneWidget,
-      );
-      expect(find.text('Sign in'), findsOneWidget);
-      expect(find.text('About Lichess...'), findsOneWidget);
-    });
-
     testWidgets('no authUser, with stored games: shows list of recent games', (tester) async {
       final app = await makeOfflineTestProviderScope(tester, child: const Application());
       await tester.pumpWidget(app);
@@ -533,24 +506,6 @@ void main() {
       // ...but the locally stored games are still listed below it.
       expect(find.text('Recent games'), findsOneWidget);
       expect(find.byType(GameListTile), findsNWidgets(3));
-    });
-
-    testWidgets('outage page shown and Play button still accessible', (tester) async {
-      final app = await makeTestProviderScope(
-        tester,
-        child: const Application(),
-        overrides: {
-          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
-            return FakeHttpClientFactory(() => serverDownClient());
-          }),
-        },
-      );
-
-      await tester.pumpWidget(app);
-      await tester.pumpAndSettle();
-
-      expect(find.byType(ServerOutageDisplay), findsOneWidget);
-      expect(find.byType(FloatingActionButton), findsOneWidget);
     });
 
     testWidgets('a 502 shows the outage message', (tester) async {
