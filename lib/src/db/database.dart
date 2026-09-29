@@ -63,7 +63,7 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) {
   return dbFactory.openDatabase(
     path,
     options: OpenDatabaseOptions(
-      version: 8,
+      version: 9,
       onConfigure: (db) async {
         final version = await _getDatabaseVersion(db);
         _logger.info('SQLite version: $version');
@@ -94,7 +94,7 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) {
         _createGameTableIndexesV6(batch);
         _createHttpLogTableV4(batch);
         _createAppLogTableV5(batch);
-        _createLearnProgressTableV7(batch);
+        _createLearnProgressTableV9(batch);
         _createPracticeProgressTableV8(batch);
         await batch.commit();
       },
@@ -115,11 +115,14 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) {
         if (oldVersion < 6) {
           _createGameTableIndexesV6(batch);
         }
-        if (oldVersion < 7) {
-          _createLearnProgressTableV7(batch);
-        }
         if (oldVersion < 8) {
           _createPracticeProgressTableV8(batch);
+        }
+        if (oldVersion < 9) {
+          if (oldVersion < 7) {
+            _createLearnProgressTableV7(batch);
+          }
+          _updateLearnProgressTableToV9(batch);
         }
         await batch.commit();
       },
@@ -272,6 +275,57 @@ void _createPracticeProgressTableV8(Batch batch) {
     nbMoves INTEGER NOT NULL,
     lastModified TEXT NOT NULL,
     syncedAt TEXT
+  )
+    ''');
+}
+
+void _createLearnProgressTableV9(Batch batch) {
+  batch.execute('DROP TABLE IF EXISTS learn_progress');
+  batch.execute('''
+    CREATE TABLE learn_progress(
+    userId TEXT NOT NULL,
+    stageKey TEXT NOT NULL,
+    levelId INTEGER NOT NULL,
+    score INTEGER NOT NULL,
+    lastModified TEXT NOT NULL,
+    syncedAt TEXT,
+    PRIMARY KEY (userId, stageKey, levelId)
+  )
+    ''');
+  batch.execute('''
+    CREATE TABLE learn_sync_state(
+    userId TEXT NOT NULL PRIMARY KEY,
+    resetPending INTEGER NOT NULL DEFAULT 0
+  )
+    ''');
+}
+
+// Unlike the other progress tables, the learn scores are uploaded to the server. They must be
+// keyed by account, or a second user on the device would be sent the first one's progress.
+// The pre-v9 rows predate any sync, so they cannot be attributed to an account: they are kept
+// under the anonymous bucket, which no signed-in user reads and no sync ever uploads.
+void _updateLearnProgressTableToV9(Batch batch) {
+  batch.execute('''
+    CREATE TABLE learn_progress_new(
+    userId TEXT NOT NULL,
+    stageKey TEXT NOT NULL,
+    levelId INTEGER NOT NULL,
+    score INTEGER NOT NULL,
+    lastModified TEXT NOT NULL,
+    syncedAt TEXT,
+    PRIMARY KEY (userId, stageKey, levelId)
+  )
+    ''');
+  batch.execute('''
+    INSERT INTO learn_progress_new(userId, stageKey, levelId, score, lastModified, syncedAt)
+    SELECT '$kStorageAnonId', stageKey, levelId, score, lastModified, syncedAt FROM learn_progress
+    ''');
+  batch.execute('DROP TABLE learn_progress');
+  batch.execute('ALTER TABLE learn_progress_new RENAME TO learn_progress');
+  batch.execute('''
+    CREATE TABLE learn_sync_state(
+    userId TEXT NOT NULL PRIMARY KEY,
+    resetPending INTEGER NOT NULL DEFAULT 0
   )
     ''');
 }
