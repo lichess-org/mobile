@@ -485,66 +485,6 @@ class AppLocalizationsUz extends AppLocalizations {
   String get mobileYouCannotChallengeYourself => 'You cannot challenge yourself';
 
   @override
-  String get variantStandard => 'Standart';
-
-  @override
-  String get variantStandardTitle => 'Standart shaxmat qoidalari (FIDE)';
-
-  @override
-  String get variantChess960 => 'Fisher shaxmati';
-
-  @override
-  String get variantChess960Title => 'Donalarni boshlangʻich pozitsiyasi tasodifiy ravishda aniqlanadi.';
-
-  @override
-  String get variantKingOfTheHill => 'Shoh markazda';
-
-  @override
-  String get variantKingOfTheHillTitle => 'Gʻalaba qozonish uchun shohni taxtani markaziga olib keling.';
-
-  @override
-  String get variantThreeCheck => 'Uch shoh';
-
-  @override
-  String get variantThreeCheckTitle => 'Gʻalaba qozonish uchun raqibingizga 3 marta shoh bering.';
-
-  @override
-  String get variantAntichess => 'Antishaxmat';
-
-  @override
-  String get variantAntichessTitle => 'Gʻalaba qozonish uchun barcha donalaringizni boy bering (yoki pat oling).';
-
-  @override
-  String get variantAtomic => 'Atomik shaxmat';
-
-  @override
-  String get variantAtomicTitle => 'Gʻalaba qozonish uchun raqibning shohini portlating.';
-
-  @override
-  String get variantHorde => 'Oʻrda';
-
-  @override
-  String get variantHordeTitle => 'Bir tarafda koʻp miqdorda piyodalar boʻlsa, boshqa tarafda standart shaxmat donalari mavjud.';
-
-  @override
-  String get variantRacingKings => 'Shohlar poygasi';
-
-  @override
-  String get variantRacingKingsTitle => 'Gʻalaba qozonish uchun shohni taxtani narigi tarariga olib boring.';
-
-  @override
-  String get variantCrazyhouse => 'Kreyzihaus';
-
-  @override
-  String get variantCrazyhouseTitle => 'Donani yurish oʻrniga yeyilgan donalarni taxtaga joylashtirishingiz mumkin.';
-
-  @override
-  String get variantFromPosition => 'Belgilangan pozitsiyadan';
-
-  @override
-  String get variantFromPositionTitle => 'Belgilangan pozitsiyadan standart shaxmat';
-
-  @override
   String get activityActivity => 'Faollik';
 
   @override
@@ -2117,6 +2057,207 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get perfStatNow => 'hozir';
+
+  @override
+  String get practiceMakesPerfect => 'makes your chess perfect';
+
+  @override
+  String get practiceSignUpToSaveYourProgress => 'Sign up to save your progress';
+
+  @override
+  String get practiceSecHeadCheckmates => 'Checkmates';
+
+  @override
+  String get practiceSecHeadFundamentalTactics => 'Fundamental tactics';
+
+  @override
+  String get practiceSecHeadAdvancedTactics => 'Advanced tactics';
+
+  @override
+  String get practiceSecHeadPawnEndgames => 'Pawn Endgames';
+
+  @override
+  String get practiceSecHeadRookEndgames => 'Rook Endgames';
+
+  @override
+  String get practiceStNamPieceCheckmatesI => 'Piece Checkmates I';
+
+  @override
+  String get practiceStNamCheckmatePatternsI => 'Checkmate Patterns I';
+
+  @override
+  String get practiceStNamCheckmatePatternsII => 'Checkmate Patterns II';
+
+  @override
+  String get practiceStNamCheckmatePatternsIII => 'Checkmate Patterns III';
+
+  @override
+  String get practiceStNamCheckmatePatternsIV => 'Checkmate Patterns IV';
+
+  @override
+  String get practiceStNamPieceCheckmatesII => 'Piece Checkmates II';
+
+  @override
+  String get practiceStNamKnightAndBishopMate => 'Knight & Bishop Mate';
+
+  @override
+  String get practiceStNamThePin => 'The Pin';
+
+  @override
+  String get practiceStNamTheSkewer => 'The Skewer';
+
+  @override
+  String get practiceStNamTheFork => 'The Fork';
+
+  @override
+  String get practiceStNamDiscoveredAttacks => 'Discovered Attacks';
+
+  @override
+  String get practiceStNamDoubleCheck => 'Double Check';
+
+  @override
+  String get practiceStNamOverloadedPieces => 'Overloaded Pieces';
+
+  @override
+  String get practiceStNamZwischenzug => 'Zwischenzug';
+
+  @override
+  String get practiceStNamXRay => 'X-Ray';
+
+  @override
+  String get practiceStNamZugzwang => 'Zugzwang';
+
+  @override
+  String get practiceStNamInterference => 'Interference';
+
+  @override
+  String get practiceStNamGreekGift => 'Greek Gift';
+
+  @override
+  String get practiceStNamDeflection => 'Deflection';
+
+  @override
+  String get practiceStNamAttraction => 'Attraction';
+
+  @override
+  String get practiceStNamUnderpromotion => 'Underpromotion';
+
+  @override
+  String get practiceStNamDesperado => 'Desperado';
+
+  @override
+  String get practiceStNamCounterCheck => 'Counter Check';
+
+  @override
+  String get practiceStNamUndermining => 'Undermining';
+
+  @override
+  String get practiceStNamClearance => 'Clearance';
+
+  @override
+  String get practiceStNamKeySquares => 'Key Squares';
+
+  @override
+  String get practiceStNamOpposition => 'Opposition';
+
+  @override
+  String get practiceStNam7thRankRookPawn => '7th-Rank Rook Pawn';
+
+  @override
+  String get practiceStNamBasicRookEndgames => 'Basic Rook Endgames';
+
+  @override
+  String get practiceStNamIntermediateRookEndings => 'Intermediate Rook Endings';
+
+  @override
+  String get practiceStNamPracticalRookEndings => 'Practical Rook Endings';
+
+  @override
+  String get practiceStDesBasicCheckmates => 'Basic checkmates';
+
+  @override
+  String get practiceStDesRecognizeThePatterns => 'Recognize the patterns';
+
+  @override
+  String get practiceStDesChallengingCheckmates => 'Challenging checkmates';
+
+  @override
+  String get practiceStDesInteractiveLesson => 'Interactive lesson';
+
+  @override
+  String get practiceStDesPinItToWinIt => 'Pin it to win it';
+
+  @override
+  String get practiceStDesYumSkewers => 'Yum - skewers!';
+
+  @override
+  String get practiceStDesUseTheForkLuke => 'Use the fork, Luke';
+
+  @override
+  String get practiceStDesIncludingDiscoveredChecks => 'Including discovered checks';
+
+  @override
+  String get practiceStDesAVeryPowerfulTactic => 'A very powerful tactic';
+
+  @override
+  String get practiceStDesTheyHaveTooMuchWork => 'They have too much work';
+
+  @override
+  String get practiceStDesInBetweenMoves => 'In-between moves';
+
+  @override
+  String get practiceStDesAttackingThroughAnEnemyPiece => 'Attacking through an enemy piece';
+
+  @override
+  String get practiceStDesBeingForcedToMove => 'Being forced to move';
+
+  @override
+  String get practiceStDesInterposeAPieceToGreatEffect => 'Interpose a piece to great effect';
+
+  @override
+  String get practiceStDesStudyTheGreekGiftSacrifice => 'Study the greek gift sacrifice';
+
+  @override
+  String get practiceStDesDistractingADefender => 'Distracting a defender';
+
+  @override
+  String get practiceStDesLureAPieceToABadSquare => 'Lure a piece to a bad square';
+
+  @override
+  String get practiceStDesPromoteButNotToAQueen => 'Promote - but not to a queen!';
+
+  @override
+  String get practiceStDesAPieceIsLostButItCanStillHelp => 'A piece is lost, but it can still help';
+
+  @override
+  String get practiceStDesRespondToACheckWithACheck => 'Respond to a check with a check';
+
+  @override
+  String get practiceStDesRemoveTheDefendingPiece => 'Remove the defending piece';
+
+  @override
+  String get practiceStDesGetOutOfTheWay => 'Get out of the way!';
+
+  @override
+  String get practiceStDesReachAKeySquare => 'Reach a key square';
+
+  @override
+  String get practiceStDesTakeTheOpposition => 'Take the opposition';
+
+  @override
+  String get practiceStDesVersusAQueen => 'Versus a Queen';
+
+  @override
+  String get practiceStDesAndPassiveRookVsRook => 'And Passive Rook vs Rook';
+
+  @override
+  String get practiceStDesLucenaAndPhilidor => 'Lucena and Philidor';
+
+  @override
+  String get practiceStDesBroadenYourKnowledge => 'Broaden your knowledge';
+
+  @override
+  String get practiceStDesRookEndingsWithSeveralPawns => 'Rook endings with several pawns';
 
   @override
   String get preferencesPreferences => 'Sozlamalar';
@@ -7345,6 +7486,9 @@ class AppLocalizationsUz extends AppLocalizations {
   }
 
   @override
+  String get tfaTwoFactorAuth => 'Ikki bosqishli autentifikatsiya';
+
+  @override
   String get timeagoJustNow => 'hozir';
 
   @override
@@ -7519,13 +7663,70 @@ class AppLocalizationsUz extends AppLocalizations {
   }
 
   @override
-  String get tfaTwoFactorAuth => 'Ikki bosqishli autentifikatsiya';
-
-  @override
   String get ublogCommunity => 'Hamjamiyat';
 
   @override
   String ublogXBlog(String param) {
     return '$param\'ning blogi';
   }
+
+  @override
+  String get variantStandard => 'Standart';
+
+  @override
+  String get variantStandardTitle => 'Standart shaxmat qoidalari (FIDE)';
+
+  @override
+  String get variantChess960 => 'Fisher shaxmati';
+
+  @override
+  String get variantChess960Title => 'Donalarni boshlangʻich pozitsiyasi tasodifiy ravishda aniqlanadi.';
+
+  @override
+  String get variantKingOfTheHill => 'Shoh markazda';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Gʻalaba qozonish uchun shohni taxtani markaziga olib keling.';
+
+  @override
+  String get variantThreeCheck => 'Uch shoh';
+
+  @override
+  String get variantThreeCheckTitle => 'Gʻalaba qozonish uchun raqibingizga 3 marta shoh bering.';
+
+  @override
+  String get variantAntichess => 'Antishaxmat';
+
+  @override
+  String get variantAntichessTitle => 'Gʻalaba qozonish uchun barcha donalaringizni boy bering (yoki pat oling).';
+
+  @override
+  String get variantAtomic => 'Atomik shaxmat';
+
+  @override
+  String get variantAtomicTitle => 'Gʻalaba qozonish uchun raqibning shohini portlating.';
+
+  @override
+  String get variantHorde => 'Oʻrda';
+
+  @override
+  String get variantHordeTitle => 'Bir tarafda koʻp miqdorda piyodalar boʻlsa, boshqa tarafda standart shaxmat donalari mavjud.';
+
+  @override
+  String get variantRacingKings => 'Shohlar poygasi';
+
+  @override
+  String get variantRacingKingsTitle => 'Gʻalaba qozonish uchun shohni taxtani narigi tarariga olib boring.';
+
+  @override
+  String get variantCrazyhouse => 'Kreyzihaus';
+
+  @override
+  String get variantCrazyhouseTitle => 'Donani yurish oʻrniga yeyilgan donalarni taxtaga joylashtirishingiz mumkin.';
+
+  @override
+  String get variantFromPosition => 'Belgilangan pozitsiyadan';
+
+  @override
+  String get variantFromPositionTitle => 'Belgilangan pozitsiyadan standart shaxmat';
 }

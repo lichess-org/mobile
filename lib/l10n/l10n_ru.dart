@@ -485,66 +485,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileYouCannotChallengeYourself => 'You cannot challenge yourself';
 
   @override
-  String get variantStandard => 'Шахматы';
-
-  @override
-  String get variantStandardTitle => 'Стандартные правила шахмат (FIDE)';
-
-  @override
-  String get variantChess960 => 'Шахматы Фишера';
-
-  @override
-  String get variantChess960Title => 'Стартовая позиция фигур на последней линии определяется случайно.';
-
-  @override
-  String get variantKingOfTheHill => 'Царь горы';
-
-  @override
-  String get variantKingOfTheHillTitle => 'Проведите короля в центр доски, чтобы выиграть партию.';
-
-  @override
-  String get variantThreeCheck => 'Три шаха';
-
-  @override
-  String get variantThreeCheckTitle => 'Объявите 3 шаха, чтобы победить.';
-
-  @override
-  String get variantAntichess => 'Анти-Шахматы';
-
-  @override
-  String get variantAntichessTitle => 'Проиграйте все ваши фигуры (или получите пат), чтобы выиграть игру.';
-
-  @override
-  String get variantAtomic => 'Атомные шахматы';
-
-  @override
-  String get variantAtomicTitle => 'Взорвите короля противника, чтобы победить.';
-
-  @override
-  String get variantHorde => 'Орда';
-
-  @override
-  String get variantHordeTitle => 'Одна сторона имеет большое количество пешек, когда другая имеет стандартный набор фигур.';
-
-  @override
-  String get variantRacingKings => 'Гонка королей';
-
-  @override
-  String get variantRacingKingsTitle => 'Проведите своего короля на другою сторону доски, чтобы победить.';
-
-  @override
-  String get variantCrazyhouse => 'Крейзихаус';
-
-  @override
-  String get variantCrazyhouseTitle => 'Срубленные фигуры могут быть возвращены на доску вместо хода фигурой.';
-
-  @override
-  String get variantFromPosition => 'С позиции';
-
-  @override
-  String get variantFromPositionTitle => 'Стандартные шахматы с заданной позиции';
-
-  @override
   String get activityActivity => 'Активность';
 
   @override
@@ -2161,6 +2101,207 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get perfStatNow => 'сейчас';
+
+  @override
+  String get practiceMakesPerfect => 'makes your chess perfect';
+
+  @override
+  String get practiceSignUpToSaveYourProgress => 'Sign up to save your progress';
+
+  @override
+  String get practiceSecHeadCheckmates => 'Checkmates';
+
+  @override
+  String get practiceSecHeadFundamentalTactics => 'Fundamental tactics';
+
+  @override
+  String get practiceSecHeadAdvancedTactics => 'Advanced tactics';
+
+  @override
+  String get practiceSecHeadPawnEndgames => 'Pawn Endgames';
+
+  @override
+  String get practiceSecHeadRookEndgames => 'Rook Endgames';
+
+  @override
+  String get practiceStNamPieceCheckmatesI => 'Piece Checkmates I';
+
+  @override
+  String get practiceStNamCheckmatePatternsI => 'Checkmate Patterns I';
+
+  @override
+  String get practiceStNamCheckmatePatternsII => 'Checkmate Patterns II';
+
+  @override
+  String get practiceStNamCheckmatePatternsIII => 'Checkmate Patterns III';
+
+  @override
+  String get practiceStNamCheckmatePatternsIV => 'Checkmate Patterns IV';
+
+  @override
+  String get practiceStNamPieceCheckmatesII => 'Piece Checkmates II';
+
+  @override
+  String get practiceStNamKnightAndBishopMate => 'Knight & Bishop Mate';
+
+  @override
+  String get practiceStNamThePin => 'The Pin';
+
+  @override
+  String get practiceStNamTheSkewer => 'The Skewer';
+
+  @override
+  String get practiceStNamTheFork => 'The Fork';
+
+  @override
+  String get practiceStNamDiscoveredAttacks => 'Discovered Attacks';
+
+  @override
+  String get practiceStNamDoubleCheck => 'Double Check';
+
+  @override
+  String get practiceStNamOverloadedPieces => 'Overloaded Pieces';
+
+  @override
+  String get practiceStNamZwischenzug => 'Zwischenzug';
+
+  @override
+  String get practiceStNamXRay => 'X-Ray';
+
+  @override
+  String get practiceStNamZugzwang => 'Zugzwang';
+
+  @override
+  String get practiceStNamInterference => 'Interference';
+
+  @override
+  String get practiceStNamGreekGift => 'Greek Gift';
+
+  @override
+  String get practiceStNamDeflection => 'Deflection';
+
+  @override
+  String get practiceStNamAttraction => 'Attraction';
+
+  @override
+  String get practiceStNamUnderpromotion => 'Underpromotion';
+
+  @override
+  String get practiceStNamDesperado => 'Desperado';
+
+  @override
+  String get practiceStNamCounterCheck => 'Counter Check';
+
+  @override
+  String get practiceStNamUndermining => 'Undermining';
+
+  @override
+  String get practiceStNamClearance => 'Clearance';
+
+  @override
+  String get practiceStNamKeySquares => 'Key Squares';
+
+  @override
+  String get practiceStNamOpposition => 'Opposition';
+
+  @override
+  String get practiceStNam7thRankRookPawn => '7th-Rank Rook Pawn';
+
+  @override
+  String get practiceStNamBasicRookEndgames => 'Basic Rook Endgames';
+
+  @override
+  String get practiceStNamIntermediateRookEndings => 'Intermediate Rook Endings';
+
+  @override
+  String get practiceStNamPracticalRookEndings => 'Practical Rook Endings';
+
+  @override
+  String get practiceStDesBasicCheckmates => 'Basic checkmates';
+
+  @override
+  String get practiceStDesRecognizeThePatterns => 'Recognize the patterns';
+
+  @override
+  String get practiceStDesChallengingCheckmates => 'Challenging checkmates';
+
+  @override
+  String get practiceStDesInteractiveLesson => 'Interactive lesson';
+
+  @override
+  String get practiceStDesPinItToWinIt => 'Pin it to win it';
+
+  @override
+  String get practiceStDesYumSkewers => 'Yum - skewers!';
+
+  @override
+  String get practiceStDesUseTheForkLuke => 'Use the fork, Luke';
+
+  @override
+  String get practiceStDesIncludingDiscoveredChecks => 'Including discovered checks';
+
+  @override
+  String get practiceStDesAVeryPowerfulTactic => 'A very powerful tactic';
+
+  @override
+  String get practiceStDesTheyHaveTooMuchWork => 'They have too much work';
+
+  @override
+  String get practiceStDesInBetweenMoves => 'In-between moves';
+
+  @override
+  String get practiceStDesAttackingThroughAnEnemyPiece => 'Attacking through an enemy piece';
+
+  @override
+  String get practiceStDesBeingForcedToMove => 'Being forced to move';
+
+  @override
+  String get practiceStDesInterposeAPieceToGreatEffect => 'Interpose a piece to great effect';
+
+  @override
+  String get practiceStDesStudyTheGreekGiftSacrifice => 'Study the greek gift sacrifice';
+
+  @override
+  String get practiceStDesDistractingADefender => 'Distracting a defender';
+
+  @override
+  String get practiceStDesLureAPieceToABadSquare => 'Lure a piece to a bad square';
+
+  @override
+  String get practiceStDesPromoteButNotToAQueen => 'Promote - but not to a queen!';
+
+  @override
+  String get practiceStDesAPieceIsLostButItCanStillHelp => 'A piece is lost, but it can still help';
+
+  @override
+  String get practiceStDesRespondToACheckWithACheck => 'Respond to a check with a check';
+
+  @override
+  String get practiceStDesRemoveTheDefendingPiece => 'Remove the defending piece';
+
+  @override
+  String get practiceStDesGetOutOfTheWay => 'Get out of the way!';
+
+  @override
+  String get practiceStDesReachAKeySquare => 'Reach a key square';
+
+  @override
+  String get practiceStDesTakeTheOpposition => 'Take the opposition';
+
+  @override
+  String get practiceStDesVersusAQueen => 'Versus a Queen';
+
+  @override
+  String get practiceStDesAndPassiveRookVsRook => 'And Passive Rook vs Rook';
+
+  @override
+  String get practiceStDesLucenaAndPhilidor => 'Lucena and Philidor';
+
+  @override
+  String get practiceStDesBroadenYourKnowledge => 'Broaden your knowledge';
+
+  @override
+  String get practiceStDesRookEndingsWithSeveralPawns => 'Rook endings with several pawns';
 
   @override
   String get preferencesPreferences => 'Настройки';
@@ -7499,6 +7640,9 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String get tfaTwoFactorAuth => 'Двухфакторная аутентификация';
+
+  @override
   String get timeagoJustNow => 'только что';
 
   @override
@@ -7703,13 +7847,70 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get tfaTwoFactorAuth => 'Двухфакторная аутентификация';
-
-  @override
   String get ublogCommunity => 'Сообщество';
 
   @override
   String ublogXBlog(String param) {
     return 'Блог $param';
   }
+
+  @override
+  String get variantStandard => 'Шахматы';
+
+  @override
+  String get variantStandardTitle => 'Стандартные правила шахмат (FIDE)';
+
+  @override
+  String get variantChess960 => 'Шахматы Фишера';
+
+  @override
+  String get variantChess960Title => 'Стартовая позиция фигур на последней линии определяется случайно.';
+
+  @override
+  String get variantKingOfTheHill => 'Царь горы';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Проведите короля в центр доски, чтобы выиграть партию.';
+
+  @override
+  String get variantThreeCheck => 'Три шаха';
+
+  @override
+  String get variantThreeCheckTitle => 'Объявите 3 шаха, чтобы победить.';
+
+  @override
+  String get variantAntichess => 'Анти-Шахматы';
+
+  @override
+  String get variantAntichessTitle => 'Проиграйте все ваши фигуры (или получите пат), чтобы выиграть игру.';
+
+  @override
+  String get variantAtomic => 'Атомные шахматы';
+
+  @override
+  String get variantAtomicTitle => 'Взорвите короля противника, чтобы победить.';
+
+  @override
+  String get variantHorde => 'Орда';
+
+  @override
+  String get variantHordeTitle => 'Одна сторона имеет большое количество пешек, когда другая имеет стандартный набор фигур.';
+
+  @override
+  String get variantRacingKings => 'Гонка королей';
+
+  @override
+  String get variantRacingKingsTitle => 'Проведите своего короля на другою сторону доски, чтобы победить.';
+
+  @override
+  String get variantCrazyhouse => 'Крейзихаус';
+
+  @override
+  String get variantCrazyhouseTitle => 'Срубленные фигуры могут быть возвращены на доску вместо хода фигурой.';
+
+  @override
+  String get variantFromPosition => 'С позиции';
+
+  @override
+  String get variantFromPositionTitle => 'Стандартные шахматы с заданной позиции';
 }

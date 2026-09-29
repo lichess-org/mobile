@@ -1742,6 +1742,7 @@
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{PGN мәтінін осында қойыңыз, {count} ойын ғана} other{PGN мәтінін осында қойыңыз, {count} ойынға дейін}}",
   "teamTeam": "Топ",
   "teamIncorrectEntryCode": "Құпиясөз қате.",
+  "tfaTwoFactorAuth": "Екісатылы өкіл-растау",
   "timeagoJustNow": "жаңа ғана",
   "timeagoRightNow": "дәл қазір",
   "timeagoCompleted": "аяқталған",
@@ -1760,6 +1761,5 @@
   "timeagoNbYearsAgo": "{count, plural, =1{{count} жыл бұрын} other{{count} жыл бұрын}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{{count} минут қалды} other{{count} минут қалды}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{{count} сағат қалды} other{{count} сағат қалды}}",
-  "tfaTwoFactorAuth": "Екісатылы өкіл-растау",
   "ublogXBlog": "{param} блогі"
 }

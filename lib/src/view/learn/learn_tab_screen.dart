@@ -122,16 +122,16 @@ class const _Body() extends ConsumerWidget {
               hasLeading: true,
               children: [
                 ListTile(
-                  leading: const Icon(Symbols.menu_book),
+                  leading: const Icon(Symbols.chess_pawn),
                   trailing: Theme.of(context).platform == TargetPlatform.iOS
                       ? const CupertinoListTileChevron()
                       : null,
-                  title: Text(context.l10n.learnLearnChess, style: Styles.callout),
+                  title: Text(context.l10n.chessBasics, style: Styles.callout),
                   onTap: () =>
                       Navigator.of(context, rootNavigator: true).push(LearnScreen.buildRoute()),
                 ),
                 ListTile(
-                  leading: const Icon(Symbols.fitness_center),
+                  leading: const Icon(Symbols.exercise),
                   trailing: Theme.of(context).platform == TargetPlatform.iOS
                       ? const CupertinoListTileChevron()
                       : null,

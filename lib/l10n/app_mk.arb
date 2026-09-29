@@ -1227,6 +1227,7 @@
   "studyMistake": "Грешка",
   "studyBlunder": "Глупа грешка",
   "teamTeam": "Тим",
+  "tfaTwoFactorAuth": "Двофакторна автентикација",
   "timeagoJustNow": "тукушто",
   "timeagoRightNow": "Тукушто",
   "timeagoCompleted": "завршено",
@@ -1244,6 +1245,5 @@
   "timeagoNbMonthsAgo": "{count, plural, =1{Пред {count} месец} other{Пред {count} месеци}}",
   "timeagoNbYearsAgo": "{count, plural, =1{Пред {count} година} other{Пред {count} години}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{преостанува {count} минута} other{преостануваат {count} минути}}",
-  "timeagoNbHoursRemaining": "{count, plural, =1{преостанува {count} час} other{преостануваат {count} часови}}",
-  "tfaTwoFactorAuth": "Двофакторна автентикација"
+  "timeagoNbHoursRemaining": "{count, plural, =1{преостанува {count} час} other{преостануваат {count} часови}}"
 }

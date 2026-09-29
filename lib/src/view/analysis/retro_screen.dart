@@ -270,6 +270,7 @@ class const _BottomBar(final RetroOptions options) extends ConsumerWidget {
               icon: Icons.play_arrow,
               label: context.l10n.mobileNextMistake,
               showLabel: true,
+              blink: true,
               onTap: ref.read(retroControllerProvider(options).notifier).nextMistake,
             ),
         ],

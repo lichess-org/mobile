@@ -485,66 +485,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileYouCannotChallengeYourself => 'You cannot challenge yourself';
 
   @override
-  String get variantStandard => 'Tiêu chuẩn';
-
-  @override
-  String get variantStandardTitle => 'Luật cờ vua tiêu chuẩn (FIDE)';
-
-  @override
-  String get variantChess960 => 'Chess960';
-
-  @override
-  String get variantChess960Title => 'Vị trí bắt đầu của các quân cờ hàng 1 và  8 được sắp xếp ngẫu nhiên.';
-
-  @override
-  String get variantKingOfTheHill => 'Vua lên đồi';
-
-  @override
-  String get variantKingOfTheHillTitle => 'Mang quân Vua của bạn vào 4 ô trung tâm để chiến thắng.';
-
-  @override
-  String get variantThreeCheck => '3 lần chiếu tướng';
-
-  @override
-  String get variantThreeCheckTitle => 'Chiếu vua đối thủ 3 lần để giành chiến thắng.';
-
-  @override
-  String get variantAntichess => 'Phản cờ vua';
-
-  @override
-  String get variantAntichessTitle => 'Để mất toàn bộ quân cờ của bạn (bao gồm cả vua hoặc làm bị hết nước đi) để chiến thắng.';
-
-  @override
-  String get variantAtomic => 'Cờ nguyên tử';
-
-  @override
-  String get variantAtomicTitle => 'Cho nổ vua đối phương để giành chiến thắng.';
-
-  @override
-  String get variantHorde => 'Đội quân tốt';
-
-  @override
-  String get variantHordeTitle => 'Một bên có số lượng quân tốt lớn, bên kia chỉ có đội quân bình thường.';
-
-  @override
-  String get variantRacingKings => 'Vua chạy đua';
-
-  @override
-  String get variantRacingKingsTitle => 'Đưa vua của bạn sang phía bên kia của bàn cờ để giành chiến thắng.';
-
-  @override
-  String get variantCrazyhouse => 'Cờ đặt quân';
-
-  @override
-  String get variantCrazyhouseTitle => 'Các quân cờ bắt được có thể được thả lại vào bàn cờ thay vì chỉ di chuyển một quân cờ.';
-
-  @override
-  String get variantFromPosition => 'Từ thế cờ';
-
-  @override
-  String get variantFromPositionTitle => 'Cờ tiêu chuẩn từ một thế trận tùy chỉnh';
-
-  @override
   String get activityActivity => 'Hoạt động';
 
   @override
@@ -2095,6 +2035,207 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get perfStatNow => 'bây giờ';
+
+  @override
+  String get practiceMakesPerfect => 'makes your chess perfect';
+
+  @override
+  String get practiceSignUpToSaveYourProgress => 'Sign up to save your progress';
+
+  @override
+  String get practiceSecHeadCheckmates => 'Checkmates';
+
+  @override
+  String get practiceSecHeadFundamentalTactics => 'Fundamental tactics';
+
+  @override
+  String get practiceSecHeadAdvancedTactics => 'Advanced tactics';
+
+  @override
+  String get practiceSecHeadPawnEndgames => 'Pawn Endgames';
+
+  @override
+  String get practiceSecHeadRookEndgames => 'Rook Endgames';
+
+  @override
+  String get practiceStNamPieceCheckmatesI => 'Piece Checkmates I';
+
+  @override
+  String get practiceStNamCheckmatePatternsI => 'Checkmate Patterns I';
+
+  @override
+  String get practiceStNamCheckmatePatternsII => 'Checkmate Patterns II';
+
+  @override
+  String get practiceStNamCheckmatePatternsIII => 'Checkmate Patterns III';
+
+  @override
+  String get practiceStNamCheckmatePatternsIV => 'Checkmate Patterns IV';
+
+  @override
+  String get practiceStNamPieceCheckmatesII => 'Piece Checkmates II';
+
+  @override
+  String get practiceStNamKnightAndBishopMate => 'Knight & Bishop Mate';
+
+  @override
+  String get practiceStNamThePin => 'The Pin';
+
+  @override
+  String get practiceStNamTheSkewer => 'The Skewer';
+
+  @override
+  String get practiceStNamTheFork => 'The Fork';
+
+  @override
+  String get practiceStNamDiscoveredAttacks => 'Discovered Attacks';
+
+  @override
+  String get practiceStNamDoubleCheck => 'Double Check';
+
+  @override
+  String get practiceStNamOverloadedPieces => 'Overloaded Pieces';
+
+  @override
+  String get practiceStNamZwischenzug => 'Zwischenzug';
+
+  @override
+  String get practiceStNamXRay => 'X-Ray';
+
+  @override
+  String get practiceStNamZugzwang => 'Zugzwang';
+
+  @override
+  String get practiceStNamInterference => 'Interference';
+
+  @override
+  String get practiceStNamGreekGift => 'Greek Gift';
+
+  @override
+  String get practiceStNamDeflection => 'Deflection';
+
+  @override
+  String get practiceStNamAttraction => 'Attraction';
+
+  @override
+  String get practiceStNamUnderpromotion => 'Underpromotion';
+
+  @override
+  String get practiceStNamDesperado => 'Desperado';
+
+  @override
+  String get practiceStNamCounterCheck => 'Counter Check';
+
+  @override
+  String get practiceStNamUndermining => 'Undermining';
+
+  @override
+  String get practiceStNamClearance => 'Clearance';
+
+  @override
+  String get practiceStNamKeySquares => 'Key Squares';
+
+  @override
+  String get practiceStNamOpposition => 'Opposition';
+
+  @override
+  String get practiceStNam7thRankRookPawn => '7th-Rank Rook Pawn';
+
+  @override
+  String get practiceStNamBasicRookEndgames => 'Basic Rook Endgames';
+
+  @override
+  String get practiceStNamIntermediateRookEndings => 'Intermediate Rook Endings';
+
+  @override
+  String get practiceStNamPracticalRookEndings => 'Practical Rook Endings';
+
+  @override
+  String get practiceStDesBasicCheckmates => 'Basic checkmates';
+
+  @override
+  String get practiceStDesRecognizeThePatterns => 'Recognize the patterns';
+
+  @override
+  String get practiceStDesChallengingCheckmates => 'Challenging checkmates';
+
+  @override
+  String get practiceStDesInteractiveLesson => 'Interactive lesson';
+
+  @override
+  String get practiceStDesPinItToWinIt => 'Pin it to win it';
+
+  @override
+  String get practiceStDesYumSkewers => 'Yum - skewers!';
+
+  @override
+  String get practiceStDesUseTheForkLuke => 'Use the fork, Luke';
+
+  @override
+  String get practiceStDesIncludingDiscoveredChecks => 'Including discovered checks';
+
+  @override
+  String get practiceStDesAVeryPowerfulTactic => 'A very powerful tactic';
+
+  @override
+  String get practiceStDesTheyHaveTooMuchWork => 'They have too much work';
+
+  @override
+  String get practiceStDesInBetweenMoves => 'In-between moves';
+
+  @override
+  String get practiceStDesAttackingThroughAnEnemyPiece => 'Attacking through an enemy piece';
+
+  @override
+  String get practiceStDesBeingForcedToMove => 'Being forced to move';
+
+  @override
+  String get practiceStDesInterposeAPieceToGreatEffect => 'Interpose a piece to great effect';
+
+  @override
+  String get practiceStDesStudyTheGreekGiftSacrifice => 'Study the greek gift sacrifice';
+
+  @override
+  String get practiceStDesDistractingADefender => 'Distracting a defender';
+
+  @override
+  String get practiceStDesLureAPieceToABadSquare => 'Lure a piece to a bad square';
+
+  @override
+  String get practiceStDesPromoteButNotToAQueen => 'Promote - but not to a queen!';
+
+  @override
+  String get practiceStDesAPieceIsLostButItCanStillHelp => 'A piece is lost, but it can still help';
+
+  @override
+  String get practiceStDesRespondToACheckWithACheck => 'Respond to a check with a check';
+
+  @override
+  String get practiceStDesRemoveTheDefendingPiece => 'Remove the defending piece';
+
+  @override
+  String get practiceStDesGetOutOfTheWay => 'Get out of the way!';
+
+  @override
+  String get practiceStDesReachAKeySquare => 'Reach a key square';
+
+  @override
+  String get practiceStDesTakeTheOpposition => 'Take the opposition';
+
+  @override
+  String get practiceStDesVersusAQueen => 'Versus a Queen';
+
+  @override
+  String get practiceStDesAndPassiveRookVsRook => 'And Passive Rook vs Rook';
+
+  @override
+  String get practiceStDesLucenaAndPhilidor => 'Lucena and Philidor';
+
+  @override
+  String get practiceStDesBroadenYourKnowledge => 'Broaden your knowledge';
+
+  @override
+  String get practiceStDesRookEndingsWithSeveralPawns => 'Rook endings with several pawns';
 
   @override
   String get preferencesPreferences => 'Tuỳ chỉnh';
@@ -7268,6 +7409,9 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
+  String get tfaTwoFactorAuth => 'Xác thực 2 bước';
+
+  @override
   String get timeagoJustNow => 'vừa mới đây';
 
   @override
@@ -7427,13 +7571,70 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get tfaTwoFactorAuth => 'Xác thực 2 bước';
-
-  @override
   String get ublogCommunity => 'Cộng đồng';
 
   @override
   String ublogXBlog(String param) {
     return 'Bài viết của $param';
   }
+
+  @override
+  String get variantStandard => 'Tiêu chuẩn';
+
+  @override
+  String get variantStandardTitle => 'Luật cờ vua tiêu chuẩn (FIDE)';
+
+  @override
+  String get variantChess960 => 'Chess960';
+
+  @override
+  String get variantChess960Title => 'Vị trí bắt đầu của các quân cờ hàng 1 và  8 được sắp xếp ngẫu nhiên.';
+
+  @override
+  String get variantKingOfTheHill => 'Vua lên đồi';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Mang quân Vua của bạn vào 4 ô trung tâm để chiến thắng.';
+
+  @override
+  String get variantThreeCheck => '3 lần chiếu tướng';
+
+  @override
+  String get variantThreeCheckTitle => 'Chiếu vua đối thủ 3 lần để giành chiến thắng.';
+
+  @override
+  String get variantAntichess => 'Phản cờ vua';
+
+  @override
+  String get variantAntichessTitle => 'Để mất toàn bộ quân cờ của bạn (bao gồm cả vua hoặc làm bị hết nước đi) để chiến thắng.';
+
+  @override
+  String get variantAtomic => 'Cờ nguyên tử';
+
+  @override
+  String get variantAtomicTitle => 'Cho nổ vua đối phương để giành chiến thắng.';
+
+  @override
+  String get variantHorde => 'Đội quân tốt';
+
+  @override
+  String get variantHordeTitle => 'Một bên có số lượng quân tốt lớn, bên kia chỉ có đội quân bình thường.';
+
+  @override
+  String get variantRacingKings => 'Vua chạy đua';
+
+  @override
+  String get variantRacingKingsTitle => 'Đưa vua của bạn sang phía bên kia của bàn cờ để giành chiến thắng.';
+
+  @override
+  String get variantCrazyhouse => 'Cờ đặt quân';
+
+  @override
+  String get variantCrazyhouseTitle => 'Các quân cờ bắt được có thể được thả lại vào bàn cờ thay vì chỉ di chuyển một quân cờ.';
+
+  @override
+  String get variantFromPosition => 'Từ thế cờ';
+
+  @override
+  String get variantFromPositionTitle => 'Cờ tiêu chuẩn từ một thế trận tùy chỉnh';
 }

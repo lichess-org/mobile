@@ -1461,8 +1461,8 @@
   "studyNbMembers": "{count, plural, =1{{count} Üzv} other{{count} Üzv}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{PGN mətninizi bura yapışdırın, ən çox {count} oyuna qədər} other{PGN mətninizi bura yapışdırın, ən çox {count} oyuna qədər}}",
   "teamTeam": "Komanda",
+  "tfaTwoFactorAuth": "2 mərhələli təsdiqləmə",
   "timeagoJustNow": "elə indi",
   "timeagoRightNow": "indicə",
-  "timeagoCompleted": "tamamlanan",
-  "tfaTwoFactorAuth": "2 mərhələli təsdiqləmə"
+  "timeagoCompleted": "tamamlanan"
 }

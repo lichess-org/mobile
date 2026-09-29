@@ -485,66 +485,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileYouCannotChallengeYourself => 'You cannot challenge yourself';
 
   @override
-  String get variantStandard => '스탠다드';
-
-  @override
-  String get variantStandardTitle => '체스(FIDE)의 표준 규칙';
-
-  @override
-  String get variantChess960 => '체스960';
-
-  @override
-  String get variantChess960Title => '백의 1랭크, 흑의 8랭크에 있는 기물의 시작 위치가 무작위로 변경됩니다.';
-
-  @override
-  String get variantKingOfTheHill => '언덕의 왕';
-
-  @override
-  String get variantKingOfTheHillTitle => '킹을 중앙 칸에 놓으면 승리합니다.';
-
-  @override
-  String get variantThreeCheck => '3체크';
-
-  @override
-  String get variantThreeCheckTitle => '상대방을 세 번 체크하면 승리합니다.';
-
-  @override
-  String get variantAntichess => '안티체스';
-
-  @override
-  String get variantAntichessTitle => '모든 기물을 잃거나 스테일메이트되면 승리합니다.';
-
-  @override
-  String get variantAtomic => '아토믹';
-
-  @override
-  String get variantAtomicTitle => '상대의 킹을 터뜨려버리면 승리합니다.';
-
-  @override
-  String get variantHorde => '호드';
-
-  @override
-  String get variantHordeTitle => '한 쪽은 다수의 폰으로, 다른 쪽은 일반적인 기물로 경기합니다.';
-
-  @override
-  String get variantRacingKings => '킹 경주';
-
-  @override
-  String get variantRacingKingsTitle => '킹이 보드 반대편 끝까지 도달하면 승리합니다.';
-
-  @override
-  String get variantCrazyhouse => '크레이지하우스';
-
-  @override
-  String get variantCrazyhouseTitle => '자신의 차례일 때, 기물을 움직이는 대신 잡았던 기물을 자신의 색으로 보드에 소환할 수 있습니다.';
-
-  @override
-  String get variantFromPosition => '정해진 보드판에서 시작';
-
-  @override
-  String get variantFromPositionTitle => '사용자가 지정한 포지션으로 시작하는 일반 체스';
-
-  @override
   String get activityActivity => '활동';
 
   @override
@@ -2095,6 +2035,207 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get perfStatNow => '지금';
+
+  @override
+  String get practiceMakesPerfect => '당신의 체스를 완벽하게 만듭니다';
+
+  @override
+  String get practiceSignUpToSaveYourProgress => '진행도를 저장하려면 회원가입하세요';
+
+  @override
+  String get practiceSecHeadCheckmates => '체크메이트';
+
+  @override
+  String get practiceSecHeadFundamentalTactics => '기초 전술';
+
+  @override
+  String get practiceSecHeadAdvancedTactics => '고급 전술';
+
+  @override
+  String get practiceSecHeadPawnEndgames => '폰 엔드게임';
+
+  @override
+  String get practiceSecHeadRookEndgames => '룩 엔드게임';
+
+  @override
+  String get practiceStNamPieceCheckmatesI => '기물 체크메이트 I';
+
+  @override
+  String get practiceStNamCheckmatePatternsI => '체크메이트 패턴 I';
+
+  @override
+  String get practiceStNamCheckmatePatternsII => '체크메이트 패턴 II';
+
+  @override
+  String get practiceStNamCheckmatePatternsIII => '체크메이트 패턴 III';
+
+  @override
+  String get practiceStNamCheckmatePatternsIV => '체크메이트 패턴 IV';
+
+  @override
+  String get practiceStNamPieceCheckmatesII => '기물 체크메이트 II';
+
+  @override
+  String get practiceStNamKnightAndBishopMate => '비숍 & 나이트 메이트';
+
+  @override
+  String get practiceStNamThePin => '핀';
+
+  @override
+  String get practiceStNamTheSkewer => '스큐어';
+
+  @override
+  String get practiceStNamTheFork => '포크';
+
+  @override
+  String get practiceStNamDiscoveredAttacks => '디스커버드 어택';
+
+  @override
+  String get practiceStNamDoubleCheck => '더블 체크';
+
+  @override
+  String get practiceStNamOverloadedPieces => '과부하된 기물';
+
+  @override
+  String get practiceStNamZwischenzug => '츠비셴추크';
+
+  @override
+  String get practiceStNamXRay => '엑스레이';
+
+  @override
+  String get practiceStNamZugzwang => '추크츠방';
+
+  @override
+  String get practiceStNamInterference => '간섭';
+
+  @override
+  String get practiceStNamGreekGift => '그릭 기프트';
+
+  @override
+  String get practiceStNamDeflection => '디플렉션';
+
+  @override
+  String get practiceStNamAttraction => '유인';
+
+  @override
+  String get practiceStNamUnderpromotion => '언더프로모션';
+
+  @override
+  String get practiceStNamDesperado => '데스페라도';
+
+  @override
+  String get practiceStNamCounterCheck => '카운터 체크';
+
+  @override
+  String get practiceStNamUndermining => '언더마이닝';
+
+  @override
+  String get practiceStNamClearance => '정리';
+
+  @override
+  String get practiceStNamKeySquares => '중요한 칸';
+
+  @override
+  String get practiceStNamOpposition => '오포지션';
+
+  @override
+  String get practiceStNam7thRankRookPawn => '7랭크 룩 폰';
+
+  @override
+  String get practiceStNamBasicRookEndgames => '기초 룩 엔드게임';
+
+  @override
+  String get practiceStNamIntermediateRookEndings => '중급 룩 엔드게임';
+
+  @override
+  String get practiceStNamPracticalRookEndings => '실전 룩 엔드게임';
+
+  @override
+  String get practiceStDesBasicCheckmates => '기초 체크메이트';
+
+  @override
+  String get practiceStDesRecognizeThePatterns => '패턴을 인식하세요';
+
+  @override
+  String get practiceStDesChallengingCheckmates => '고난도 체크메이트';
+
+  @override
+  String get practiceStDesInteractiveLesson => '대화형 수업';
+
+  @override
+  String get practiceStDesPinItToWinIt => '핀으로 기물을 따세요';
+
+  @override
+  String get practiceStDesYumSkewers => '꼬치(skewer)라... 맛있겠네요!';
+
+  @override
+  String get practiceStDesUseTheForkLuke => '포크를 쓰거라, 루크';
+
+  @override
+  String get practiceStDesIncludingDiscoveredChecks => '디스커버드 체크도 포함됩니다';
+
+  @override
+  String get practiceStDesAVeryPowerfulTactic => '매우 강력한 전술';
+
+  @override
+  String get practiceStDesTheyHaveTooMuchWork => '하는 일이 너무 많아요';
+
+  @override
+  String get practiceStDesInBetweenMoves => '사잇수라고도 합니다';
+
+  @override
+  String get practiceStDesAttackingThroughAnEnemyPiece => '적 기물을 통과해서 공격하기';
+
+  @override
+  String get practiceStDesBeingForcedToMove => '움직임이 강제된 상황';
+
+  @override
+  String get practiceStDesInterposeAPieceToGreatEffect => '기물을 끼어넣어 강력한 영향력을 발휘하세요';
+
+  @override
+  String get practiceStDesStudyTheGreekGiftSacrifice => '그릭 기프트 희생을 배우세요';
+
+  @override
+  String get practiceStDesDistractingADefender => '수비 기물을 분산시키기';
+
+  @override
+  String get practiceStDesLureAPieceToABadSquare => '기물을 나쁜 칸으로 유인하기';
+
+  @override
+  String get practiceStDesPromoteButNotToAQueen => '프로모션하세요 - 퀸 말고 다른 걸로요!';
+
+  @override
+  String get practiceStDesAPieceIsLostButItCanStillHelp => '기물을 잃었지만, 아직 도움이 될 수는 있습니다';
+
+  @override
+  String get practiceStDesRespondToACheckWithACheck => '체크를 체크로 대응하세요';
+
+  @override
+  String get practiceStDesRemoveTheDefendingPiece => '보호 기물을 제거하기';
+
+  @override
+  String get practiceStDesGetOutOfTheWay => '길을 비켜라!';
+
+  @override
+  String get practiceStDesReachAKeySquare => '중요한 칸에 도달하기';
+
+  @override
+  String get practiceStDesTakeTheOpposition => '상대 킹에 맞서세요';
+
+  @override
+  String get practiceStDesVersusAQueen => 'vs 퀸';
+
+  @override
+  String get practiceStDesAndPassiveRookVsRook => '+ 수동적인 룩 vs 룩';
+
+  @override
+  String get practiceStDesLucenaAndPhilidor => '루세나와 필리도어';
+
+  @override
+  String get practiceStDesBroadenYourKnowledge => '지식을 넓히세요';
+
+  @override
+  String get practiceStDesRookEndingsWithSeveralPawns => '폰이 몇 개 있는 룩 엔딩';
 
   @override
   String get preferencesPreferences => '설정';
@@ -7268,6 +7409,9 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
+  String get tfaTwoFactorAuth => '2단계 인증';
+
+  @override
   String get timeagoJustNow => '방금';
 
   @override
@@ -7427,13 +7571,70 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get tfaTwoFactorAuth => '2단계 인증';
-
-  @override
   String get ublogCommunity => '커뮤니티';
 
   @override
   String ublogXBlog(String param) {
     return '$param의 블로그';
   }
+
+  @override
+  String get variantStandard => '스탠다드';
+
+  @override
+  String get variantStandardTitle => '체스(FIDE)의 표준 규칙';
+
+  @override
+  String get variantChess960 => '체스960';
+
+  @override
+  String get variantChess960Title => '백의 1랭크, 흑의 8랭크에 있는 기물의 시작 위치가 무작위로 변경됩니다.';
+
+  @override
+  String get variantKingOfTheHill => '언덕의 왕';
+
+  @override
+  String get variantKingOfTheHillTitle => '킹을 중앙 칸에 놓으면 승리합니다.';
+
+  @override
+  String get variantThreeCheck => '3체크';
+
+  @override
+  String get variantThreeCheckTitle => '상대방을 세 번 체크하면 승리합니다.';
+
+  @override
+  String get variantAntichess => '안티체스';
+
+  @override
+  String get variantAntichessTitle => '모든 기물을 잃거나 스테일메이트되면 승리합니다.';
+
+  @override
+  String get variantAtomic => '아토믹';
+
+  @override
+  String get variantAtomicTitle => '상대의 킹을 터뜨려버리면 승리합니다.';
+
+  @override
+  String get variantHorde => '호드';
+
+  @override
+  String get variantHordeTitle => '한 쪽은 다수의 폰으로, 다른 쪽은 일반적인 기물로 경기합니다.';
+
+  @override
+  String get variantRacingKings => '킹 경주';
+
+  @override
+  String get variantRacingKingsTitle => '킹이 보드 반대편 끝까지 도달하면 승리합니다.';
+
+  @override
+  String get variantCrazyhouse => '크레이지하우스';
+
+  @override
+  String get variantCrazyhouseTitle => '자신의 차례일 때, 기물을 움직이는 대신 잡았던 기물을 자신의 색으로 보드에 소환할 수 있습니다.';
+
+  @override
+  String get variantFromPosition => '정해진 보드판에서 시작';
+
+  @override
+  String get variantFromPositionTitle => '사용자가 지정한 포지션으로 시작하는 일반 체스';
 }

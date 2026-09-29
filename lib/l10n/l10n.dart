@@ -1120,126 +1120,6 @@ abstract class AppLocalizations {
   /// **'You cannot challenge yourself'**
   String get mobileYouCannotChallengeYourself;
 
-  /// No description provided for @variantStandard.
-  ///
-  /// In en, this message translates to:
-  /// **'Standard'**
-  String get variantStandard;
-
-  /// No description provided for @variantStandardTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Standard rules of chess (FIDE)'**
-  String get variantStandardTitle;
-
-  /// No description provided for @variantChess960.
-  ///
-  /// In en, this message translates to:
-  /// **'Chess960'**
-  String get variantChess960;
-
-  /// No description provided for @variantChess960Title.
-  ///
-  /// In en, this message translates to:
-  /// **'The starting position of the home rank pieces is randomised.'**
-  String get variantChess960Title;
-
-  /// No description provided for @variantKingOfTheHill.
-  ///
-  /// In en, this message translates to:
-  /// **'King of the Hill'**
-  String get variantKingOfTheHill;
-
-  /// No description provided for @variantKingOfTheHillTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Bring your King to the centre to win the game.'**
-  String get variantKingOfTheHillTitle;
-
-  /// No description provided for @variantThreeCheck.
-  ///
-  /// In en, this message translates to:
-  /// **'Three-Check'**
-  String get variantThreeCheck;
-
-  /// No description provided for @variantThreeCheckTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Check your opponent 3 times to win the game.'**
-  String get variantThreeCheckTitle;
-
-  /// No description provided for @variantAntichess.
-  ///
-  /// In en, this message translates to:
-  /// **'Antichess'**
-  String get variantAntichess;
-
-  /// No description provided for @variantAntichessTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Lose all your pieces (or get stalemated) to win the game.'**
-  String get variantAntichessTitle;
-
-  /// No description provided for @variantAtomic.
-  ///
-  /// In en, this message translates to:
-  /// **'Atomic'**
-  String get variantAtomic;
-
-  /// No description provided for @variantAtomicTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Nuke your opponent\'s king to win.'**
-  String get variantAtomicTitle;
-
-  /// No description provided for @variantHorde.
-  ///
-  /// In en, this message translates to:
-  /// **'Horde'**
-  String get variantHorde;
-
-  /// No description provided for @variantHordeTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'One side has a large number of pawns, the other has a normal army.'**
-  String get variantHordeTitle;
-
-  /// No description provided for @variantRacingKings.
-  ///
-  /// In en, this message translates to:
-  /// **'Racing Kings'**
-  String get variantRacingKings;
-
-  /// No description provided for @variantRacingKingsTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Get your king to the other side of the board to win.'**
-  String get variantRacingKingsTitle;
-
-  /// No description provided for @variantCrazyhouse.
-  ///
-  /// In en, this message translates to:
-  /// **'Crazyhouse'**
-  String get variantCrazyhouse;
-
-  /// No description provided for @variantCrazyhouseTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Captured pieces can be dropped back on the board instead of moving a piece.'**
-  String get variantCrazyhouseTitle;
-
-  /// No description provided for @variantFromPosition.
-  ///
-  /// In en, this message translates to:
-  /// **'From Position'**
-  String get variantFromPosition;
-
-  /// No description provided for @variantFromPositionTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Standard chess from a custom position'**
-  String get variantFromPositionTitle;
-
   /// No description provided for @activityActivity.
   ///
   /// In en, this message translates to:
@@ -3879,6 +3759,408 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'now'**
   String get perfStatNow;
+
+  /// No description provided for @practiceMakesPerfect.
+  ///
+  /// In en, this message translates to:
+  /// **'makes your chess perfect'**
+  String get practiceMakesPerfect;
+
+  /// No description provided for @practiceSignUpToSaveYourProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign up to save your progress'**
+  String get practiceSignUpToSaveYourProgress;
+
+  /// No description provided for @practiceSecHeadCheckmates.
+  ///
+  /// In en, this message translates to:
+  /// **'Checkmates'**
+  String get practiceSecHeadCheckmates;
+
+  /// No description provided for @practiceSecHeadFundamentalTactics.
+  ///
+  /// In en, this message translates to:
+  /// **'Fundamental tactics'**
+  String get practiceSecHeadFundamentalTactics;
+
+  /// No description provided for @practiceSecHeadAdvancedTactics.
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced tactics'**
+  String get practiceSecHeadAdvancedTactics;
+
+  /// No description provided for @practiceSecHeadPawnEndgames.
+  ///
+  /// In en, this message translates to:
+  /// **'Pawn Endgames'**
+  String get practiceSecHeadPawnEndgames;
+
+  /// No description provided for @practiceSecHeadRookEndgames.
+  ///
+  /// In en, this message translates to:
+  /// **'Rook Endgames'**
+  String get practiceSecHeadRookEndgames;
+
+  /// No description provided for @practiceStNamPieceCheckmatesI.
+  ///
+  /// In en, this message translates to:
+  /// **'Piece Checkmates I'**
+  String get practiceStNamPieceCheckmatesI;
+
+  /// No description provided for @practiceStNamCheckmatePatternsI.
+  ///
+  /// In en, this message translates to:
+  /// **'Checkmate Patterns I'**
+  String get practiceStNamCheckmatePatternsI;
+
+  /// No description provided for @practiceStNamCheckmatePatternsII.
+  ///
+  /// In en, this message translates to:
+  /// **'Checkmate Patterns II'**
+  String get practiceStNamCheckmatePatternsII;
+
+  /// No description provided for @practiceStNamCheckmatePatternsIII.
+  ///
+  /// In en, this message translates to:
+  /// **'Checkmate Patterns III'**
+  String get practiceStNamCheckmatePatternsIII;
+
+  /// No description provided for @practiceStNamCheckmatePatternsIV.
+  ///
+  /// In en, this message translates to:
+  /// **'Checkmate Patterns IV'**
+  String get practiceStNamCheckmatePatternsIV;
+
+  /// No description provided for @practiceStNamPieceCheckmatesII.
+  ///
+  /// In en, this message translates to:
+  /// **'Piece Checkmates II'**
+  String get practiceStNamPieceCheckmatesII;
+
+  /// No description provided for @practiceStNamKnightAndBishopMate.
+  ///
+  /// In en, this message translates to:
+  /// **'Knight & Bishop Mate'**
+  String get practiceStNamKnightAndBishopMate;
+
+  /// No description provided for @practiceStNamThePin.
+  ///
+  /// In en, this message translates to:
+  /// **'The Pin'**
+  String get practiceStNamThePin;
+
+  /// No description provided for @practiceStNamTheSkewer.
+  ///
+  /// In en, this message translates to:
+  /// **'The Skewer'**
+  String get practiceStNamTheSkewer;
+
+  /// No description provided for @practiceStNamTheFork.
+  ///
+  /// In en, this message translates to:
+  /// **'The Fork'**
+  String get practiceStNamTheFork;
+
+  /// No description provided for @practiceStNamDiscoveredAttacks.
+  ///
+  /// In en, this message translates to:
+  /// **'Discovered Attacks'**
+  String get practiceStNamDiscoveredAttacks;
+
+  /// No description provided for @practiceStNamDoubleCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'Double Check'**
+  String get practiceStNamDoubleCheck;
+
+  /// No description provided for @practiceStNamOverloadedPieces.
+  ///
+  /// In en, this message translates to:
+  /// **'Overloaded Pieces'**
+  String get practiceStNamOverloadedPieces;
+
+  /// No description provided for @practiceStNamZwischenzug.
+  ///
+  /// In en, this message translates to:
+  /// **'Zwischenzug'**
+  String get practiceStNamZwischenzug;
+
+  /// No description provided for @practiceStNamXRay.
+  ///
+  /// In en, this message translates to:
+  /// **'X-Ray'**
+  String get practiceStNamXRay;
+
+  /// No description provided for @practiceStNamZugzwang.
+  ///
+  /// In en, this message translates to:
+  /// **'Zugzwang'**
+  String get practiceStNamZugzwang;
+
+  /// No description provided for @practiceStNamInterference.
+  ///
+  /// In en, this message translates to:
+  /// **'Interference'**
+  String get practiceStNamInterference;
+
+  /// No description provided for @practiceStNamGreekGift.
+  ///
+  /// In en, this message translates to:
+  /// **'Greek Gift'**
+  String get practiceStNamGreekGift;
+
+  /// No description provided for @practiceStNamDeflection.
+  ///
+  /// In en, this message translates to:
+  /// **'Deflection'**
+  String get practiceStNamDeflection;
+
+  /// No description provided for @practiceStNamAttraction.
+  ///
+  /// In en, this message translates to:
+  /// **'Attraction'**
+  String get practiceStNamAttraction;
+
+  /// No description provided for @practiceStNamUnderpromotion.
+  ///
+  /// In en, this message translates to:
+  /// **'Underpromotion'**
+  String get practiceStNamUnderpromotion;
+
+  /// No description provided for @practiceStNamDesperado.
+  ///
+  /// In en, this message translates to:
+  /// **'Desperado'**
+  String get practiceStNamDesperado;
+
+  /// No description provided for @practiceStNamCounterCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'Counter Check'**
+  String get practiceStNamCounterCheck;
+
+  /// No description provided for @practiceStNamUndermining.
+  ///
+  /// In en, this message translates to:
+  /// **'Undermining'**
+  String get practiceStNamUndermining;
+
+  /// No description provided for @practiceStNamClearance.
+  ///
+  /// In en, this message translates to:
+  /// **'Clearance'**
+  String get practiceStNamClearance;
+
+  /// No description provided for @practiceStNamKeySquares.
+  ///
+  /// In en, this message translates to:
+  /// **'Key Squares'**
+  String get practiceStNamKeySquares;
+
+  /// No description provided for @practiceStNamOpposition.
+  ///
+  /// In en, this message translates to:
+  /// **'Opposition'**
+  String get practiceStNamOpposition;
+
+  /// No description provided for @practiceStNam7thRankRookPawn.
+  ///
+  /// In en, this message translates to:
+  /// **'7th-Rank Rook Pawn'**
+  String get practiceStNam7thRankRookPawn;
+
+  /// No description provided for @practiceStNamBasicRookEndgames.
+  ///
+  /// In en, this message translates to:
+  /// **'Basic Rook Endgames'**
+  String get practiceStNamBasicRookEndgames;
+
+  /// No description provided for @practiceStNamIntermediateRookEndings.
+  ///
+  /// In en, this message translates to:
+  /// **'Intermediate Rook Endings'**
+  String get practiceStNamIntermediateRookEndings;
+
+  /// No description provided for @practiceStNamPracticalRookEndings.
+  ///
+  /// In en, this message translates to:
+  /// **'Practical Rook Endings'**
+  String get practiceStNamPracticalRookEndings;
+
+  /// No description provided for @practiceStDesBasicCheckmates.
+  ///
+  /// In en, this message translates to:
+  /// **'Basic checkmates'**
+  String get practiceStDesBasicCheckmates;
+
+  /// No description provided for @practiceStDesRecognizeThePatterns.
+  ///
+  /// In en, this message translates to:
+  /// **'Recognize the patterns'**
+  String get practiceStDesRecognizeThePatterns;
+
+  /// No description provided for @practiceStDesChallengingCheckmates.
+  ///
+  /// In en, this message translates to:
+  /// **'Challenging checkmates'**
+  String get practiceStDesChallengingCheckmates;
+
+  /// No description provided for @practiceStDesInteractiveLesson.
+  ///
+  /// In en, this message translates to:
+  /// **'Interactive lesson'**
+  String get practiceStDesInteractiveLesson;
+
+  /// No description provided for @practiceStDesPinItToWinIt.
+  ///
+  /// In en, this message translates to:
+  /// **'Pin it to win it'**
+  String get practiceStDesPinItToWinIt;
+
+  /// No description provided for @practiceStDesYumSkewers.
+  ///
+  /// In en, this message translates to:
+  /// **'Yum - skewers!'**
+  String get practiceStDesYumSkewers;
+
+  /// No description provided for @practiceStDesUseTheForkLuke.
+  ///
+  /// In en, this message translates to:
+  /// **'Use the fork, Luke'**
+  String get practiceStDesUseTheForkLuke;
+
+  /// No description provided for @practiceStDesIncludingDiscoveredChecks.
+  ///
+  /// In en, this message translates to:
+  /// **'Including discovered checks'**
+  String get practiceStDesIncludingDiscoveredChecks;
+
+  /// No description provided for @practiceStDesAVeryPowerfulTactic.
+  ///
+  /// In en, this message translates to:
+  /// **'A very powerful tactic'**
+  String get practiceStDesAVeryPowerfulTactic;
+
+  /// No description provided for @practiceStDesTheyHaveTooMuchWork.
+  ///
+  /// In en, this message translates to:
+  /// **'They have too much work'**
+  String get practiceStDesTheyHaveTooMuchWork;
+
+  /// No description provided for @practiceStDesInBetweenMoves.
+  ///
+  /// In en, this message translates to:
+  /// **'In-between moves'**
+  String get practiceStDesInBetweenMoves;
+
+  /// No description provided for @practiceStDesAttackingThroughAnEnemyPiece.
+  ///
+  /// In en, this message translates to:
+  /// **'Attacking through an enemy piece'**
+  String get practiceStDesAttackingThroughAnEnemyPiece;
+
+  /// No description provided for @practiceStDesBeingForcedToMove.
+  ///
+  /// In en, this message translates to:
+  /// **'Being forced to move'**
+  String get practiceStDesBeingForcedToMove;
+
+  /// No description provided for @practiceStDesInterposeAPieceToGreatEffect.
+  ///
+  /// In en, this message translates to:
+  /// **'Interpose a piece to great effect'**
+  String get practiceStDesInterposeAPieceToGreatEffect;
+
+  /// No description provided for @practiceStDesStudyTheGreekGiftSacrifice.
+  ///
+  /// In en, this message translates to:
+  /// **'Study the greek gift sacrifice'**
+  String get practiceStDesStudyTheGreekGiftSacrifice;
+
+  /// No description provided for @practiceStDesDistractingADefender.
+  ///
+  /// In en, this message translates to:
+  /// **'Distracting a defender'**
+  String get practiceStDesDistractingADefender;
+
+  /// No description provided for @practiceStDesLureAPieceToABadSquare.
+  ///
+  /// In en, this message translates to:
+  /// **'Lure a piece to a bad square'**
+  String get practiceStDesLureAPieceToABadSquare;
+
+  /// No description provided for @practiceStDesPromoteButNotToAQueen.
+  ///
+  /// In en, this message translates to:
+  /// **'Promote - but not to a queen!'**
+  String get practiceStDesPromoteButNotToAQueen;
+
+  /// No description provided for @practiceStDesAPieceIsLostButItCanStillHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'A piece is lost, but it can still help'**
+  String get practiceStDesAPieceIsLostButItCanStillHelp;
+
+  /// No description provided for @practiceStDesRespondToACheckWithACheck.
+  ///
+  /// In en, this message translates to:
+  /// **'Respond to a check with a check'**
+  String get practiceStDesRespondToACheckWithACheck;
+
+  /// No description provided for @practiceStDesRemoveTheDefendingPiece.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove the defending piece'**
+  String get practiceStDesRemoveTheDefendingPiece;
+
+  /// No description provided for @practiceStDesGetOutOfTheWay.
+  ///
+  /// In en, this message translates to:
+  /// **'Get out of the way!'**
+  String get practiceStDesGetOutOfTheWay;
+
+  /// No description provided for @practiceStDesReachAKeySquare.
+  ///
+  /// In en, this message translates to:
+  /// **'Reach a key square'**
+  String get practiceStDesReachAKeySquare;
+
+  /// No description provided for @practiceStDesTakeTheOpposition.
+  ///
+  /// In en, this message translates to:
+  /// **'Take the opposition'**
+  String get practiceStDesTakeTheOpposition;
+
+  /// No description provided for @practiceStDesVersusAQueen.
+  ///
+  /// In en, this message translates to:
+  /// **'Versus a Queen'**
+  String get practiceStDesVersusAQueen;
+
+  /// No description provided for @practiceStDesAndPassiveRookVsRook.
+  ///
+  /// In en, this message translates to:
+  /// **'And Passive Rook vs Rook'**
+  String get practiceStDesAndPassiveRookVsRook;
+
+  /// No description provided for @practiceStDesLucenaAndPhilidor.
+  ///
+  /// In en, this message translates to:
+  /// **'Lucena and Philidor'**
+  String get practiceStDesLucenaAndPhilidor;
+
+  /// No description provided for @practiceStDesBroadenYourKnowledge.
+  ///
+  /// In en, this message translates to:
+  /// **'Broaden your knowledge'**
+  String get practiceStDesBroadenYourKnowledge;
+
+  /// No description provided for @practiceStDesRookEndingsWithSeveralPawns.
+  ///
+  /// In en, this message translates to:
+  /// **'Rook endings with several pawns'**
+  String get practiceStDesRookEndingsWithSeveralPawns;
 
   /// No description provided for @preferencesPreferences.
   ///
@@ -12976,6 +13258,12 @@ abstract class AppLocalizations {
   /// **'{count, plural, =1{One leader per team} other{{count} leaders per team}}'**
   String teamNbLeadersPerTeam(int count);
 
+  /// No description provided for @tfaTwoFactorAuth.
+  ///
+  /// In en, this message translates to:
+  /// **'Two-factor authentication'**
+  String get tfaTwoFactorAuth;
+
   /// No description provided for @timeagoJustNow.
   ///
   /// In en, this message translates to:
@@ -13084,12 +13372,6 @@ abstract class AppLocalizations {
   /// **'{count, plural, =1{{count} hour remaining} other{{count} hours remaining}}'**
   String timeagoNbHoursRemaining(int count);
 
-  /// No description provided for @tfaTwoFactorAuth.
-  ///
-  /// In en, this message translates to:
-  /// **'Two-factor authentication'**
-  String get tfaTwoFactorAuth;
-
   /// No description provided for @ublogCommunity.
   ///
   /// In en, this message translates to:
@@ -13101,6 +13383,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{param}\'s Blog'**
   String ublogXBlog(String param);
+
+  /// No description provided for @variantStandard.
+  ///
+  /// In en, this message translates to:
+  /// **'Standard'**
+  String get variantStandard;
+
+  /// No description provided for @variantStandardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Standard rules of chess (FIDE)'**
+  String get variantStandardTitle;
+
+  /// No description provided for @variantChess960.
+  ///
+  /// In en, this message translates to:
+  /// **'Chess960'**
+  String get variantChess960;
+
+  /// No description provided for @variantChess960Title.
+  ///
+  /// In en, this message translates to:
+  /// **'The starting position of the home rank pieces is randomised.'**
+  String get variantChess960Title;
+
+  /// No description provided for @variantKingOfTheHill.
+  ///
+  /// In en, this message translates to:
+  /// **'King of the Hill'**
+  String get variantKingOfTheHill;
+
+  /// No description provided for @variantKingOfTheHillTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Bring your King to the centre to win the game.'**
+  String get variantKingOfTheHillTitle;
+
+  /// No description provided for @variantThreeCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'Three-Check'**
+  String get variantThreeCheck;
+
+  /// No description provided for @variantThreeCheckTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Check your opponent 3 times to win the game.'**
+  String get variantThreeCheckTitle;
+
+  /// No description provided for @variantAntichess.
+  ///
+  /// In en, this message translates to:
+  /// **'Antichess'**
+  String get variantAntichess;
+
+  /// No description provided for @variantAntichessTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Lose all your pieces (or get stalemated) to win the game.'**
+  String get variantAntichessTitle;
+
+  /// No description provided for @variantAtomic.
+  ///
+  /// In en, this message translates to:
+  /// **'Atomic'**
+  String get variantAtomic;
+
+  /// No description provided for @variantAtomicTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nuke your opponent\'s king to win.'**
+  String get variantAtomicTitle;
+
+  /// No description provided for @variantHorde.
+  ///
+  /// In en, this message translates to:
+  /// **'Horde'**
+  String get variantHorde;
+
+  /// No description provided for @variantHordeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'One side has a large number of pawns, the other has a normal army.'**
+  String get variantHordeTitle;
+
+  /// No description provided for @variantRacingKings.
+  ///
+  /// In en, this message translates to:
+  /// **'Racing Kings'**
+  String get variantRacingKings;
+
+  /// No description provided for @variantRacingKingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Get your king to the other side of the board to win.'**
+  String get variantRacingKingsTitle;
+
+  /// No description provided for @variantCrazyhouse.
+  ///
+  /// In en, this message translates to:
+  /// **'Crazyhouse'**
+  String get variantCrazyhouse;
+
+  /// No description provided for @variantCrazyhouseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Captured pieces can be dropped back on the board instead of moving a piece.'**
+  String get variantCrazyhouseTitle;
+
+  /// No description provided for @variantFromPosition.
+  ///
+  /// In en, this message translates to:
+  /// **'From Position'**
+  String get variantFromPosition;
+
+  /// No description provided for @variantFromPositionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Standard chess from a custom position'**
+  String get variantFromPositionTitle;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

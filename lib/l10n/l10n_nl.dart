@@ -485,66 +485,6 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileYouCannotChallengeYourself => 'You cannot challenge yourself';
 
   @override
-  String get variantStandard => 'Standaard';
-
-  @override
-  String get variantStandardTitle => 'Standaard schaakregels (FIDE)';
-
-  @override
-  String get variantChess960 => 'Schaak 960';
-
-  @override
-  String get variantChess960Title => 'De beginopstelling van de stukken op de eerste rij worden willekeurig bepaald.';
-
-  @override
-  String get variantKingOfTheHill => 'Koning van de heuvel';
-
-  @override
-  String get variantKingOfTheHillTitle => 'Breng je Koning naar het centrum om te winnen.';
-
-  @override
-  String get variantThreeCheck => 'Driemaalschaak';
-
-  @override
-  String get variantThreeCheckTitle => 'Breng je tegenstander 3 keer in schaak om te winnen.';
-
-  @override
-  String get variantAntichess => 'Weggeefschaak';
-
-  @override
-  String get variantAntichessTitle => 'Verlies al je stukken (of kom in pat) om te winnen.';
-
-  @override
-  String get variantAtomic => 'Atoomschaak';
-
-  @override
-  String get variantAtomicTitle => 'Vernietig de koning van je tegenstander om te winnen.';
-
-  @override
-  String get variantHorde => 'Hordeschaak';
-
-  @override
-  String get variantHordeTitle => 'De ene kant heeft een groot aantal pionnen, de andere speelt met normale stukken.';
-
-  @override
-  String get variantRacingKings => 'Rennende koningen';
-
-  @override
-  String get variantRacingKingsTitle => 'Breng je koning naar de andere kant van het bord om te winnen.';
-
-  @override
-  String get variantCrazyhouse => 'Gekkenhuisschaak';
-
-  @override
-  String get variantCrazyhouseTitle => 'Geslagen stukken kunnen terug op het bord worden geplaatst in plaats van dat ze verzet worden.';
-
-  @override
-  String get variantFromPosition => 'Vanaf stelling';
-
-  @override
-  String get variantFromPositionTitle => 'Standaard schaak vanaf eigen stelling';
-
-  @override
   String get activityActivity => 'Activiteit';
 
   @override
@@ -2117,6 +2057,207 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get perfStatNow => 'nu';
+
+  @override
+  String get practiceMakesPerfect => 'perfectioneer je schaken';
+
+  @override
+  String get practiceSignUpToSaveYourProgress => 'Meld je aan om je voortgang op te slaan';
+
+  @override
+  String get practiceSecHeadCheckmates => 'Schaakmat';
+
+  @override
+  String get practiceSecHeadFundamentalTactics => 'Fundamentele tactieken';
+
+  @override
+  String get practiceSecHeadAdvancedTactics => 'Geavanceerde tactieken';
+
+  @override
+  String get practiceSecHeadPawnEndgames => 'Pionneneindspel';
+
+  @override
+  String get practiceSecHeadRookEndgames => 'Toreneindspel';
+
+  @override
+  String get practiceStNamPieceCheckmatesI => 'Mat met stukken I';
+
+  @override
+  String get practiceStNamCheckmatePatternsI => 'Schaakmatpatronen I';
+
+  @override
+  String get practiceStNamCheckmatePatternsII => 'Schaakmatpatronen II';
+
+  @override
+  String get practiceStNamCheckmatePatternsIII => 'Schaakmatpatronen III';
+
+  @override
+  String get practiceStNamCheckmatePatternsIV => 'Schaakmatpatronen IV';
+
+  @override
+  String get practiceStNamPieceCheckmatesII => 'Mat met stukken II';
+
+  @override
+  String get practiceStNamKnightAndBishopMate => 'Paard- en lopermat';
+
+  @override
+  String get practiceStNamThePin => 'De penning';
+
+  @override
+  String get practiceStNamTheSkewer => 'Röntgenpenning';
+
+  @override
+  String get practiceStNamTheFork => 'De vork';
+
+  @override
+  String get practiceStNamDiscoveredAttacks => 'Aftrekaanval';
+
+  @override
+  String get practiceStNamDoubleCheck => 'Dubbelschaak';
+
+  @override
+  String get practiceStNamOverloadedPieces => 'Overbelaste stukken';
+
+  @override
+  String get practiceStNamZwischenzug => 'Tussenzet';
+
+  @override
+  String get practiceStNamXRay => 'Röntgenaanval';
+
+  @override
+  String get practiceStNamZugzwang => 'Zetdwang';
+
+  @override
+  String get practiceStNamInterference => 'Tussenplaatsing';
+
+  @override
+  String get practiceStNamGreekGift => 'Grieks geschenk';
+
+  @override
+  String get practiceStNamDeflection => 'Weglokken';
+
+  @override
+  String get practiceStNamAttraction => 'Lokken';
+
+  @override
+  String get practiceStNamUnderpromotion => 'Minorpromotie';
+
+  @override
+  String get practiceStNamDesperado => 'Desperado';
+
+  @override
+  String get practiceStNamCounterCheck => 'Tegenschaak';
+
+  @override
+  String get practiceStNamUndermining => 'Ondermijning';
+
+  @override
+  String get practiceStNamClearance => 'Breekzet';
+
+  @override
+  String get practiceStNamKeySquares => 'Belangrijke velden';
+
+  @override
+  String get practiceStNamOpposition => 'Oppositie';
+
+  @override
+  String get practiceStNam7thRankRookPawn => 'Torenpion van de 7e rang';
+
+  @override
+  String get practiceStNamBasicRookEndgames => 'Elementair toreneindspel';
+
+  @override
+  String get practiceStNamIntermediateRookEndings => 'Gevorderd toreneindspel';
+
+  @override
+  String get practiceStNamPracticalRookEndings => 'Praktisch toreneindspel';
+
+  @override
+  String get practiceStDesBasicCheckmates => 'Essentiële matten';
+
+  @override
+  String get practiceStDesRecognizeThePatterns => 'Herken de patronen';
+
+  @override
+  String get practiceStDesChallengingCheckmates => 'Uitdagende matten';
+
+  @override
+  String get practiceStDesInteractiveLesson => 'Interactieve les';
+
+  @override
+  String get practiceStDesPinItToWinIt => 'Pennen om te winnen';
+
+  @override
+  String get practiceStDesYumSkewers => 'Doorzie de zet';
+
+  @override
+  String get practiceStDesUseTheForkLuke => 'Valt binnen dit bestek';
+
+  @override
+  String get practiceStDesIncludingDiscoveredChecks => 'Inclusief aftrekschaak';
+
+  @override
+  String get practiceStDesAVeryPowerfulTactic => 'Een zeer sterke tactiek';
+
+  @override
+  String get practiceStDesTheyHaveTooMuchWork => 'Ze zijn overbelast';
+
+  @override
+  String get practiceStDesInBetweenMoves => 'Zwischenzug';
+
+  @override
+  String get practiceStDesAttackingThroughAnEnemyPiece => 'Aanvallen door een vijandelijk stuk heen';
+
+  @override
+  String get practiceStDesBeingForcedToMove => 'Gedwongen een zet te doen';
+
+  @override
+  String get practiceStDesInterposeAPieceToGreatEffect => 'Kom met groot succes tussenbeide';
+
+  @override
+  String get practiceStDesStudyTheGreekGiftSacrifice => 'Studeer het Griekse offer';
+
+  @override
+  String get practiceStDesDistractingADefender => 'Leid een verdedigend stuk af';
+
+  @override
+  String get practiceStDesLureAPieceToABadSquare => 'Lok een stuk naar een slecht vak';
+
+  @override
+  String get practiceStDesPromoteButNotToAQueen => 'Promoveer - maar niet naar een dame!';
+
+  @override
+  String get practiceStDesAPieceIsLostButItCanStillHelp => 'Een stuk is kwijt, maar niets is verloren';
+
+  @override
+  String get practiceStDesRespondToACheckWithACheck => 'Beantwoord schaak met schaak';
+
+  @override
+  String get practiceStDesRemoveTheDefendingPiece => 'Ruim het verdedigende stuk uit de weg';
+
+  @override
+  String get practiceStDesGetOutOfTheWay => 'Ga uit de weg!';
+
+  @override
+  String get practiceStDesReachAKeySquare => 'Bereik een sleutelvak';
+
+  @override
+  String get practiceStDesTakeTheOpposition => 'Neem de oppositie';
+
+  @override
+  String get practiceStDesVersusAQueen => 'Tegen een dame';
+
+  @override
+  String get practiceStDesAndPassiveRookVsRook => 'En passieve toren vs toren';
+
+  @override
+  String get practiceStDesLucenaAndPhilidor => 'Lucena en Philidor';
+
+  @override
+  String get practiceStDesBroadenYourKnowledge => 'Verbreed je kennis';
+
+  @override
+  String get practiceStDesRookEndingsWithSeveralPawns => 'Toreneindspel met een aantal pionnen';
 
   @override
   String get preferencesPreferences => 'Voorkeuren';
@@ -7345,6 +7486,9 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
+  String get tfaTwoFactorAuth => 'Tweestapsverificatie';
+
+  @override
   String get timeagoJustNow => 'zojuist';
 
   @override
@@ -7519,13 +7663,70 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get tfaTwoFactorAuth => 'Tweestapsverificatie';
-
-  @override
   String get ublogCommunity => 'Gemeenschap';
 
   @override
   String ublogXBlog(String param) {
     return 'Blog van $param';
   }
+
+  @override
+  String get variantStandard => 'Standaard';
+
+  @override
+  String get variantStandardTitle => 'Standaard schaakregels (FIDE)';
+
+  @override
+  String get variantChess960 => 'Schaak 960';
+
+  @override
+  String get variantChess960Title => 'De beginopstelling van de stukken op de eerste rij worden willekeurig bepaald.';
+
+  @override
+  String get variantKingOfTheHill => 'Koning van de heuvel';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Breng je Koning naar het centrum om te winnen.';
+
+  @override
+  String get variantThreeCheck => 'Driemaalschaak';
+
+  @override
+  String get variantThreeCheckTitle => 'Breng je tegenstander 3 keer in schaak om te winnen.';
+
+  @override
+  String get variantAntichess => 'Weggeefschaak';
+
+  @override
+  String get variantAntichessTitle => 'Verlies al je stukken (of kom in pat) om te winnen.';
+
+  @override
+  String get variantAtomic => 'Atoomschaak';
+
+  @override
+  String get variantAtomicTitle => 'Vernietig de koning van je tegenstander om te winnen.';
+
+  @override
+  String get variantHorde => 'Hordeschaak';
+
+  @override
+  String get variantHordeTitle => 'De ene kant heeft een groot aantal pionnen, de andere speelt met normale stukken.';
+
+  @override
+  String get variantRacingKings => 'Rennende koningen';
+
+  @override
+  String get variantRacingKingsTitle => 'Breng je koning naar de andere kant van het bord om te winnen.';
+
+  @override
+  String get variantCrazyhouse => 'Gekkenhuisschaak';
+
+  @override
+  String get variantCrazyhouseTitle => 'Geslagen stukken kunnen terug op het bord worden geplaatst in plaats van dat ze verzet worden.';
+
+  @override
+  String get variantFromPosition => 'Vanaf stelling';
+
+  @override
+  String get variantFromPositionTitle => 'Standaard schaak vanaf eigen stelling';
 }

@@ -485,66 +485,6 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileYouCannotChallengeYourself => 'You cannot challenge yourself';
 
   @override
-  String get variantStandard => 'Standardowe';
-
-  @override
-  String get variantStandardTitle => 'Standardowe zasady szachów (FIDE)';
-
-  @override
-  String get variantChess960 => 'Szachy 960';
-
-  @override
-  String get variantChess960Title => 'Pozycja początkowa figur jest losowa.';
-
-  @override
-  String get variantKingOfTheHill => 'Król wzgórza';
-
-  @override
-  String get variantKingOfTheHillTitle => 'Przeprowadź swojego króla na środek szachownicy, by wygrał partię.';
-
-  @override
-  String get variantThreeCheck => 'Trzy szachy';
-
-  @override
-  String get variantThreeCheckTitle => 'Zaszachuj swojego przeciwnika 3 razy, by wygrać partię.';
-
-  @override
-  String get variantAntichess => 'Antyszachy';
-
-  @override
-  String get variantAntichessTitle => 'Podstaw do bicia wszystkie swoje bierki (lub zmuś przeciwnika do pata), by wygrać partię.';
-
-  @override
-  String get variantAtomic => 'Atomowe';
-
-  @override
-  String get variantAtomicTitle => 'Wysadź króla przeciwnika, by wygrać partię.';
-
-  @override
-  String get variantHorde => 'Horda';
-
-  @override
-  String get variantHordeTitle => 'Jedna ze stron ma dużą liczbę pionów, druga ma standardowe bierki.';
-
-  @override
-  String get variantRacingKings => 'Wyścig królów';
-
-  @override
-  String get variantRacingKingsTitle => 'Poprowadź swojego króla na drugą stronę szachownicy, aby wygrać partię.';
-
-  @override
-  String get variantCrazyhouse => 'Crazyhouse';
-
-  @override
-  String get variantCrazyhouseTitle => 'Zbite przeciwnikowi bierki można z powrotem postawić na szachownicy zamiast swojego posunięcia.';
-
-  @override
-  String get variantFromPosition => 'Z zadanej pozycji';
-
-  @override
-  String get variantFromPositionTitle => 'Standardowa partia szachów startując z zadanej pozycji';
-
-  @override
   String get activityActivity => 'Aktywność';
 
   @override
@@ -2161,6 +2101,207 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get perfStatNow => 'teraz';
+
+  @override
+  String get practiceMakesPerfect => 'makes your chess perfect';
+
+  @override
+  String get practiceSignUpToSaveYourProgress => 'Sign up to save your progress';
+
+  @override
+  String get practiceSecHeadCheckmates => 'Maty';
+
+  @override
+  String get practiceSecHeadFundamentalTactics => 'Podstawowe taktyki';
+
+  @override
+  String get practiceSecHeadAdvancedTactics => 'Zaawansowane taktyki';
+
+  @override
+  String get practiceSecHeadPawnEndgames => 'Końcówka pionkowa';
+
+  @override
+  String get practiceSecHeadRookEndgames => 'Końcówka wieżowa';
+
+  @override
+  String get practiceStNamPieceCheckmatesI => 'Maty figurami I';
+
+  @override
+  String get practiceStNamCheckmatePatternsI => 'Motywy matowe I';
+
+  @override
+  String get practiceStNamCheckmatePatternsII => 'Motywy matowe II';
+
+  @override
+  String get practiceStNamCheckmatePatternsIII => 'Motywy matowe III';
+
+  @override
+  String get practiceStNamCheckmatePatternsIV => 'Motywy matowe IV';
+
+  @override
+  String get practiceStNamPieceCheckmatesII => 'Maty figurami II';
+
+  @override
+  String get practiceStNamKnightAndBishopMate => 'Matowanie skoczkiem i gońcem';
+
+  @override
+  String get practiceStNamThePin => 'Związanie';
+
+  @override
+  String get practiceStNamTheSkewer => 'Szpila';
+
+  @override
+  String get practiceStNamTheFork => 'Widełki';
+
+  @override
+  String get practiceStNamDiscoveredAttacks => 'Atak z odsłony';
+
+  @override
+  String get practiceStNamDoubleCheck => 'Podwójny szach';
+
+  @override
+  String get practiceStNamOverloadedPieces => 'Przeciążone bierki';
+
+  @override
+  String get practiceStNamZwischenzug => 'Wtrącony ruch';
+
+  @override
+  String get practiceStNamXRay => 'Rentgen';
+
+  @override
+  String get practiceStNamZugzwang => 'Zugzwang';
+
+  @override
+  String get practiceStNamInterference => 'Przesłona';
+
+  @override
+  String get practiceStNamGreekGift => 'Ofiara';
+
+  @override
+  String get practiceStNamDeflection => 'Odciągnięcie';
+
+  @override
+  String get practiceStNamAttraction => 'Przyciąganie';
+
+  @override
+  String get practiceStNamUnderpromotion => 'Promocja na słabszą figurę';
+
+  @override
+  String get practiceStNamDesperado => 'Wściekła figura';
+
+  @override
+  String get practiceStNamCounterCheck => 'Szach z zasłony';
+
+  @override
+  String get practiceStNamUndermining => 'Podważanie';
+
+  @override
+  String get practiceStNamClearance => 'Oczyszczenie pola';
+
+  @override
+  String get practiceStNamKeySquares => 'Kluczowe pola';
+
+  @override
+  String get practiceStNamOpposition => 'Opozycja';
+
+  @override
+  String get practiceStNam7thRankRookPawn => '7th-Rank Rook Pawn';
+
+  @override
+  String get practiceStNamBasicRookEndgames => 'Podstawowe końcowki wieżowe';
+
+  @override
+  String get practiceStNamIntermediateRookEndings => 'Intermediate Rook Endings';
+
+  @override
+  String get practiceStNamPracticalRookEndings => 'Praktyczne końcówki wieżowe';
+
+  @override
+  String get practiceStDesBasicCheckmates => 'Podstawowe maty';
+
+  @override
+  String get practiceStDesRecognizeThePatterns => 'Rozpoznaj motywy';
+
+  @override
+  String get practiceStDesChallengingCheckmates => 'Challenging checkmates';
+
+  @override
+  String get practiceStDesInteractiveLesson => 'Interaktywna lekcja';
+
+  @override
+  String get practiceStDesPinItToWinIt => 'Pin it to win it';
+
+  @override
+  String get practiceStDesYumSkewers => 'Yum - skewers!';
+
+  @override
+  String get practiceStDesUseTheForkLuke => 'Use the fork, Luke';
+
+  @override
+  String get practiceStDesIncludingDiscoveredChecks => 'Including discovered checks';
+
+  @override
+  String get practiceStDesAVeryPowerfulTactic => 'A very powerful tactic';
+
+  @override
+  String get practiceStDesTheyHaveTooMuchWork => 'They have too much work';
+
+  @override
+  String get practiceStDesInBetweenMoves => 'In-between moves';
+
+  @override
+  String get practiceStDesAttackingThroughAnEnemyPiece => 'Attacking through an enemy piece';
+
+  @override
+  String get practiceStDesBeingForcedToMove => 'Being forced to move';
+
+  @override
+  String get practiceStDesInterposeAPieceToGreatEffect => 'Interpose a piece to great effect';
+
+  @override
+  String get practiceStDesStudyTheGreekGiftSacrifice => 'Study the greek gift sacrifice';
+
+  @override
+  String get practiceStDesDistractingADefender => 'Odciąganie obrońcy';
+
+  @override
+  String get practiceStDesLureAPieceToABadSquare => 'Lure a piece to a bad square';
+
+  @override
+  String get practiceStDesPromoteButNotToAQueen => 'Promuj - ale nie do hetmana!';
+
+  @override
+  String get practiceStDesAPieceIsLostButItCanStillHelp => 'Figura stracona, ale nadal może być użyteczna';
+
+  @override
+  String get practiceStDesRespondToACheckWithACheck => 'Na szacha odpowiedz szachem';
+
+  @override
+  String get practiceStDesRemoveTheDefendingPiece => 'Remove the defending piece';
+
+  @override
+  String get practiceStDesGetOutOfTheWay => 'Get out of the way!';
+
+  @override
+  String get practiceStDesReachAKeySquare => 'Reach a key square';
+
+  @override
+  String get practiceStDesTakeTheOpposition => 'Take the opposition';
+
+  @override
+  String get practiceStDesVersusAQueen => 'Versus a Queen';
+
+  @override
+  String get practiceStDesAndPassiveRookVsRook => 'And Passive Rook vs Rook';
+
+  @override
+  String get practiceStDesLucenaAndPhilidor => 'Lucena and Philidor';
+
+  @override
+  String get practiceStDesBroadenYourKnowledge => 'Broaden your knowledge';
+
+  @override
+  String get practiceStDesRookEndingsWithSeveralPawns => 'Rook endings with several pawns';
 
   @override
   String get preferencesPreferences => 'Ustawienia';
@@ -7499,6 +7640,9 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
+  String get tfaTwoFactorAuth => 'Uwierzytelnianie dwuskładnikowe';
+
+  @override
   String get timeagoJustNow => 'właśnie teraz';
 
   @override
@@ -7703,13 +7847,70 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
-  String get tfaTwoFactorAuth => 'Uwierzytelnianie dwuskładnikowe';
-
-  @override
   String get ublogCommunity => 'Społeczność';
 
   @override
   String ublogXBlog(String param) {
     return 'Blog gracza $param';
   }
+
+  @override
+  String get variantStandard => 'Standardowe';
+
+  @override
+  String get variantStandardTitle => 'Standardowe zasady szachów (FIDE)';
+
+  @override
+  String get variantChess960 => 'Szachy 960';
+
+  @override
+  String get variantChess960Title => 'Pozycja początkowa figur jest losowa.';
+
+  @override
+  String get variantKingOfTheHill => 'Król wzgórza';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Przeprowadź swojego króla na środek szachownicy, by wygrał partię.';
+
+  @override
+  String get variantThreeCheck => 'Trzy szachy';
+
+  @override
+  String get variantThreeCheckTitle => 'Zaszachuj swojego przeciwnika 3 razy, by wygrać partię.';
+
+  @override
+  String get variantAntichess => 'Antyszachy';
+
+  @override
+  String get variantAntichessTitle => 'Podstaw do bicia wszystkie swoje bierki (lub zmuś przeciwnika do pata), by wygrać partię.';
+
+  @override
+  String get variantAtomic => 'Atomowe';
+
+  @override
+  String get variantAtomicTitle => 'Wysadź króla przeciwnika, by wygrać partię.';
+
+  @override
+  String get variantHorde => 'Horda';
+
+  @override
+  String get variantHordeTitle => 'Jedna ze stron ma dużą liczbę pionów, druga ma standardowe bierki.';
+
+  @override
+  String get variantRacingKings => 'Wyścig królów';
+
+  @override
+  String get variantRacingKingsTitle => 'Poprowadź swojego króla na drugą stronę szachownicy, aby wygrać partię.';
+
+  @override
+  String get variantCrazyhouse => 'Crazyhouse';
+
+  @override
+  String get variantCrazyhouseTitle => 'Zbite przeciwnikowi bierki można z powrotem postawić na szachownicy zamiast swojego posunięcia.';
+
+  @override
+  String get variantFromPosition => 'Z zadanej pozycji';
+
+  @override
+  String get variantFromPositionTitle => 'Standardowa partia szachów startując z zadanej pozycji';
 }
