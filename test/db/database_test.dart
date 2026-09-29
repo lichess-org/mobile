@@ -68,12 +68,6 @@ void main() {
       final path = p.join(dir.path, 'lichess_mobile.db');
 
       final oldDb = await databaseFactoryFfi.openDatabase(
-    test('an upgrade from v7 adds the practice progress table and keeps learn progress', () async {
-      final dir = await Directory.systemTemp.createTemp('db_upgrade');
-      addTearDown(() => dir.delete(recursive: true));
-      final path = '${dir.path}/app.db';
-
-      final v7 = await databaseFactoryFfi.openDatabase(
         path,
         options: OpenDatabaseOptions(
           version: 7,
@@ -104,6 +98,40 @@ void main() {
         'data': '{"status":"resign"}',
       });
       await oldDb.close();
+
+      final db = await openAppDatabase(databaseFactoryFfi, path);
+      addTearDown(db.close);
+
+      final rows = await db.query('correspondence_game', orderBy: 'gameId');
+      expect(rows.length, 2);
+      expect(rows[0]['status'], 'started');
+      expect(rows[0]['hasRegisteredMove'], 1);
+      expect(rows[1]['status'], 'resign');
+      expect(rows[1]['hasRegisteredMove'], 0);
+      expect(await db.getVersion(), 8);
+    });
+  });
+
+  group('App database v8 practice', () {
+    test('an upgrade from v7 adds the practice progress table and keeps learn progress', () async {
+      final dir = await Directory.systemTemp.createTemp('db_upgrade');
+      addTearDown(() => dir.delete(recursive: true));
+      final path = '${dir.path}/app.db';
+
+      final v7 = await databaseFactoryFfi.openDatabase(
+        path,
+        options: OpenDatabaseOptions(
+          version: 7,
+          onCreate: (db, version) async {
+            await db.execute('''
+              CREATE TABLE correspondence_game(
+              gameId TEXT NOT NULL,
+              userId TEXT NOT NULL,
+              lastModified TEXT NOT NULL,
+              data TEXT NOT NULL,
+              PRIMARY KEY (gameId)
+            )
+            ''');
             await db.execute(
               'CREATE TABLE learn_progress(stageKey TEXT NOT NULL, levelId INTEGER NOT NULL, '
               'score INTEGER NOT NULL, lastModified TEXT NOT NULL, syncedAt TEXT, '
@@ -123,12 +151,6 @@ void main() {
       final db = await openAppDatabase(databaseFactoryFfi, path);
       addTearDown(db.close);
 
-      final rows = await db.query('correspondence_game', orderBy: 'gameId');
-      expect(rows.length, 2);
-      expect(rows[0]['status'], 'started');
-      expect(rows[0]['hasRegisteredMove'], 1);
-      expect(rows[1]['status'], 'resign');
-      expect(rows[1]['hasRegisteredMove'], 0);
       expect(await db.getVersion(), 8);
       expect(await db.query('learn_progress'), hasLength(1));
       await db.insert('practice_progress', {
