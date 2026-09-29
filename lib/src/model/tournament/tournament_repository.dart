@@ -14,13 +14,7 @@ final tournamentRepositoryProvider = Provider<TournamentRepository>((Ref ref) {
   return TournamentRepository(ref.watch(lichessClientProvider), ref.watch(aggregatorProvider), ref);
 }, name: 'TournamentRepositoryProvider');
 
-class TournamentRepository {
-  TournamentRepository(this.client, this.aggregator, Ref ref) : _ref = ref;
-
-  final Ref _ref;
-  final http.Client client;
-  final Aggregator aggregator;
-
+class TournamentRepository(final http.Client client, final Aggregator aggregator, final Ref _ref) {
   Future<IList<LightTournament>> featured() {
     return aggregator.readJson(
       Uri(path: '/tournament/featured'),

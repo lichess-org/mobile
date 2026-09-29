@@ -58,10 +58,8 @@ mixin ServerAnalysisMixin<T extends ServerAnalysisMixinState> on AnyNotifier<Asy
   Future<void> onServerAnalysisEvent(ServerEvalEvent event);
 
   Future<void> _onServerAnalysisEvent() async {
-    if (ref.read(serverAnalysisServiceProvider).lastAnalysisEvent.value case (
-      final source,
-      final event,
-    ) when source == state.value?.serverAnalysisSource) {
+    if (ref.read(serverAnalysisServiceProvider).lastAnalysisEvent.value
+        case (final source, final event) when source == state.value?.serverAnalysisSource) {
       ServerAnalysisService.mergeOngoingAnalysis(positionTree, event.tree);
       await onServerAnalysisEvent(event);
     }

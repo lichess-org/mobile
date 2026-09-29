@@ -9,7 +9,7 @@ final overTheBoardClockProvider =
       name: 'OverTheBoardClockProvider',
     );
 
-class OverTheBoardClock extends LocalGameClock {
+class OverTheBoardClock() extends LocalGameClock {
   @override
   TimeIncrement get defaultTimeIncrement => OverTheBoardPrefs.defaults.timeIncrement;
 }

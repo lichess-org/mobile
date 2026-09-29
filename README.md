@@ -48,7 +48,7 @@ flutter test
 
 ## Internationalisation
 
-Do not edit the `app_en.arb` file by hand, this file is generated.
+Do not edit the files in `translation/` folder (except `translation/source/mobile.xml`), nor the `app_en.arb` file: these files are generated.
 For more information, see [Internationalisation](./docs/internationalisation.md).
 
 ## Releasing

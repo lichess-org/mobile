@@ -28,13 +28,7 @@ final createGameServiceProvider = Provider.autoDispose<CreateGameService>((Ref r
 }, name: 'CreateGameServiceProvider');
 
 /// A service to create a new game from the lobby or from a challenge.
-class CreateGameService {
-  CreateGameService(this._log, {required this.ref, required this.sri});
-
-  final Ref ref;
-  final String sri;
-  final Logger _log;
-
+class CreateGameService(final Logger _log, {required final Ref ref, required final String sri}) {
   LichessClient get lichessClient => ref.read(lichessClientProvider);
   ChallengeRepository get challengeRepository => ref.read(challengeRepositoryProvider);
 

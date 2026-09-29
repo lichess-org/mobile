@@ -7,6 +7,7 @@
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">مطمئنید؟</string>
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">تنظیمات تخته</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">رد درخواست برگرداندن</string>
+  <string name="chessEngine" comment="Chess engine settings screen title.">موتورِ شطرنج</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">پاکسازی</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">پاکسازی حرکت ذخیره‌ شده</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">به بازی بپیوندید</string>
@@ -17,9 +18,9 @@
   <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">روز بخیر</string>
   <string name="hideVariation" comment="Shown in the analysis screen.">بستن وَرتِش</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">خانه</string>
-  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">بَرخَط-محتواسازان زنده</string>
+  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">جَریانگرانِ زنده</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">برای دیدن این صفحه باید وارد شده باشید.</string>
-  <string name="nbOfflinePuzzles" comment="Label for the puzzle setting that controls how many puzzles are downloaded and kept available for offline play.">معمای آفلاین</string>
+  <string name="nbOfflinePuzzles" comment="Label for the puzzle setting that controls how many puzzles are downloaded and kept available for offline play.">معمای بُرون‌خط</string>
   <string name="newGame" comment="New game button in OTB and play against offline computer features">بازی جدید</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">بدون نتیجه</string>
   <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">لطفاً توجه کنید که همه آرَنگ‌های بَرکِ قدیمی یا وبگاه اکنون در دسترس نیستند، اما ما همواره در حال افزودنِ آرَنگ‌هاییم.</string>
@@ -45,6 +46,8 @@
   <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">هدفِ مهرهٔ کشیده</string>
   <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">دایره</string>
   <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">مربع</string>
+  <string name="settingsDrawnShapeColor" comment="This is shown in the theme settings screen. Allow to choose the color of drawn shapes.">رنگِ شکل</string>
+  <string name="settingsDrawnShapeColorHelp" comment="This is shown in the theme settings screen. Explanation of the drawn shape color settings.">این رنگ برای شکل‌هایی که با دست (دو انگشت) رسم می‌شوند، استفاده می‌شود.</string>
   <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">اَبزارک‌های خانه</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">حالت غوطه‌ور</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">رابط کاربری سامانه را هنگام بازی بپنهانید. اگر از ایماهای ناوِش سامانه در لبه‌های پرده آزرده می‌شوید، از این گزینه بَهرید. برای پرده‌های بازی و معما اعمال می‌شود.</string>

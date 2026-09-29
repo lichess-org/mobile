@@ -15,12 +15,11 @@ const kBackgroundImageBlurFactor = 8.0;
 /// the color, and the color will be ignored.
 ///
 /// Since the background image is always full screen, this widget should be used to wrap only [Scaffold] widgets.
-class FullScreenBackground extends ConsumerWidget {
-  const FullScreenBackground({required this.child, super.key});
-
+class const FullScreenBackground({
   /// The child widget to apply the theme to.
-  final Widget child;
-
+  required final Widget child,
+  super.key,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final generalPrefs = ref.watch(generalPreferencesProvider);
@@ -51,19 +50,12 @@ class FullScreenBackground extends ConsumerWidget {
 ///
 /// The image is always sized to cover the full screen, and the image is blurred if requested.
 /// This is intended to be used with [Scaffold] or [CupertinoPageScaffold] as the child.
-class FullScreenBackgroundImage extends StatefulWidget {
-  const FullScreenBackgroundImage({
-    required this.backgroundImage,
-    required this.viewport,
-    required this.appDocumentsDirectory,
-    required this.child,
-  });
-
-  final BackgroundImage backgroundImage;
-  final Size viewport;
-  final Directory appDocumentsDirectory;
-  final Widget child;
-
+class const FullScreenBackgroundImage({
+  required final BackgroundImage backgroundImage,
+  required final Size viewport,
+  required final Directory appDocumentsDirectory,
+  required final Widget child,
+}) extends StatefulWidget {
   static Size imageFitSize(BoxFit boxFit, Size imageSize, Size viewportSize) => switch (boxFit) {
     BoxFit.fitWidth => Size(
       viewportSize.width,
@@ -80,7 +72,7 @@ class FullScreenBackgroundImage extends StatefulWidget {
   State<FullScreenBackgroundImage> createState() => _FullScreenBackgroundImageState();
 }
 
-class _FullScreenBackgroundImageState extends State<FullScreenBackgroundImage> {
+class _FullScreenBackgroundImageState() extends State<FullScreenBackgroundImage> {
   final TransformationController _controller = TransformationController();
 
   Size get pickedImageViewport =>
@@ -186,12 +178,10 @@ class _FullScreenBackgroundImageState extends State<FullScreenBackgroundImage> {
   }
 }
 
-class _FullScreenBackgroundColorTheme extends StatelessWidget {
-  const _FullScreenBackgroundColorTheme({required this.backgroundColor, required this.child});
-
-  final (BackgroundColor, bool) backgroundColor;
-  final Widget child;
-
+class const _FullScreenBackgroundColorTheme({
+  required final (BackgroundColor, bool) backgroundColor,
+  required final Widget child,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final (color, _) = backgroundColor;

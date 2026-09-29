@@ -19,13 +19,13 @@ import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
+import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer_preferences.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer_repository.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
-import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:logging/logging.dart';
 
 part 'retro_controller.freezed.dart';
@@ -35,10 +35,8 @@ typedef RetroOptions = ({GameId id, Side initialSide});
 final Logger _logger = Logger('RetroController');
 
 @freezed
-sealed class Mistake with _$Mistake {
-  const Mistake._();
-
-  const factory Mistake({
+sealed class const Mistake._() with _$Mistake {
+  const factory({
     required ViewBranch branch,
     @Default(IList<UCIMove>.empty()) IList<UCIMove> openingExplorerSolutions,
   }) = _Mistake;
@@ -81,12 +79,9 @@ final retroControllerProvider = AsyncNotifierProvider.autoDispose
       name: 'RetroControllerProvider',
     );
 
-class RetroController extends AsyncNotifier<RetroState>
+class RetroController(final RetroOptions options)
+    extends AsyncNotifier<RetroState>
     with EngineEvaluationMixin, ServerAnalysisMixin {
-  RetroController(this.options);
-
-  final RetroOptions options;
-
   late Root _root;
 
   late ExportedGame _game;
@@ -257,6 +252,8 @@ class RetroController extends AsyncNotifier<RetroState>
   }
 
   void onUserMove(Move move) {
+    if (!state.hasValue) return;
+
     if (!state.requireValue.currentPosition.isLegal(move)) return;
 
     final (newPath, isNewNode) = _root.addMoveAt(state.requireValue.currentPath, move);
@@ -266,6 +263,8 @@ class RetroController extends AsyncNotifier<RetroState>
   }
 
   void userNext() {
+    if (!state.hasValue) return;
+
     _setPath(
       state.requireValue.currentPath +
           _root.nodeAt(state.requireValue.currentPath).children.first.id,
@@ -274,10 +273,14 @@ class RetroController extends AsyncNotifier<RetroState>
   }
 
   void userPrevious() {
+    if (!state.hasValue) return;
+
     _setPath(state.requireValue.currentPath.penultimate, isNavigating: true);
   }
 
   void viewSolution() {
+    if (!state.hasValue) return;
+
     final currentMistake = state.value?.currentMistake;
     if (currentMistake != null) {
       onUserMove(currentMistake.serverMove);
@@ -286,14 +289,20 @@ class RetroController extends AsyncNotifier<RetroState>
   }
 
   Future<void> flipSide() async {
+    if (!state.hasValue) return;
+
     state = AsyncValue.data(await _computeMistakes(state.requireValue.pov.opposite));
   }
 
   void restart() {
+    if (!state.hasValue) return;
+
     _showMistake(0);
   }
 
   void nextMistake() {
+    if (!state.hasValue) return;
+
     _showMistake(state.requireValue.currentMistakeIndex + 1);
   }
 
@@ -379,6 +388,8 @@ class RetroController extends AsyncNotifier<RetroState>
   }
 
   void _onIncorrectMove() {
+    if (!state.hasValue) return;
+
     state = AsyncValue.data(state.requireValue.copyWith(feedback: RetroFeedback.incorrect));
     userPrevious();
   }
@@ -389,6 +400,8 @@ class RetroController extends AsyncNotifier<RetroState>
 
   @override
   void onCurrentPathEvalChanged(bool isSameEvalString) {
+    if (!state.hasValue) return;
+
     _refreshCurrentNode(recomputeRootView: !isSameEvalString);
 
     if (state.requireValue.feedback == RetroFeedback.evalMove) {
@@ -468,23 +481,28 @@ class RetroController extends AsyncNotifier<RetroState>
   }
 }
 
-enum RetroFeedback { findMove, evalMove, correct, incorrect, viewingSolution, done }
+enum RetroFeedback() {
+  findMove,
+  evalMove,
+  correct,
+  incorrect,
+  viewingSolution,
+  done,
+}
 
 @freezed
-sealed class RetroState
+sealed class const RetroState._()
     with
         _$RetroState,
         AnalysisExplosionMixin,
         EvaluationMixinState<RetroState>,
         ServerAnalysisMixinState
     implements CommonAnalysisState {
-  const RetroState._();
-
   @override
   RetroState withThreatMode(bool engineInThreatMode) =>
       copyWith(engineInThreatMode: engineInThreatMode);
 
-  const factory RetroState({
+  const factory({
     required GameId gameId,
     required bool serverAnalysisAvailable,
 
@@ -550,10 +568,10 @@ sealed class RetroState
 }
 
 @freezed
-sealed class RetroCurrentNode with _$RetroCurrentNode implements AnalysisCurrentNodeInterface {
-  const RetroCurrentNode._();
-
-  const factory RetroCurrentNode({
+sealed class const RetroCurrentNode._()
+    with _$RetroCurrentNode
+    implements AnalysisCurrentNodeInterface {
+  const factory({
     required Position position,
     required bool isRoot,
     required bool hasChild,
@@ -563,7 +581,7 @@ sealed class RetroCurrentNode with _$RetroCurrentNode implements AnalysisCurrent
     IList<int>? nags,
   }) = _RetroCurrentNode;
 
-  factory RetroCurrentNode.fromNode(Node node) {
+  factory fromNode(Node node) {
     if (node is Branch) {
       return RetroCurrentNode(
         sanMove: node.sanMove,

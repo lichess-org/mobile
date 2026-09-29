@@ -7,6 +7,7 @@
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">확실하십니까?</string>
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">체스판 설정</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">무르기 요청 취소</string>
+  <string name="chessEngine" comment="Chess engine settings screen title.">체스 엔진</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">지우기</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">저장된 수 삭제</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">게임 참가</string>
@@ -45,6 +46,8 @@
   <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">드래그 중 착지점 강조</string>
   <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">원</string>
   <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">칸</string>
+  <string name="settingsDrawnShapeColor" comment="This is shown in the theme settings screen. Allow to choose the color of drawn shapes.">그려진 도형의 색상</string>
+  <string name="settingsDrawnShapeColorHelp" comment="This is shown in the theme settings screen. Explanation of the drawn shape color settings.">해당 색상은 두 손가락을 사용하여 그리는 도형들에 적용됩니다.</string>
   <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">홈 위젯</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">전체 화면 모드</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">플레이 중 시스템 UI를 숨깁니다. 화면 모서리의 네비게이션 제스쳐가 방해되는 경우 사용하세요. 게임과 퍼즐 플레이에 모두 적용됩니다.</string>

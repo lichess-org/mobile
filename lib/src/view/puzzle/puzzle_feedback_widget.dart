@@ -10,13 +10,11 @@ import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:material_ui/material_ui.dart';
 
-class PuzzleFeedbackWidget extends ConsumerWidget {
-  const PuzzleFeedbackWidget({required this.puzzle, required this.state, required this.onStreak});
-
-  final Puzzle puzzle;
-  final PuzzleState state;
-  final bool onStreak;
-
+class const PuzzleFeedbackWidget({
+  required final Puzzle puzzle,
+  required final PuzzleState state,
+  required final bool onStreak,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     switch (state.mode) {
@@ -87,11 +85,7 @@ class PuzzleFeedbackWidget extends ConsumerWidget {
 }
 
 /// Displays the side to move's king pience on a square matching the board's theme.
-class SideToPlayPiece extends ConsumerWidget {
-  const SideToPlayPiece({required this.side});
-
-  final Side side;
-
+class const SideToPlayPiece({required final Side side}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pieceSet = ref.watch(boardPreferencesProvider.select((value) => value.pieceSet));
@@ -131,13 +125,11 @@ class SideToPlayPiece extends ConsumerWidget {
   }
 }
 
-class FeedbackTile extends StatelessWidget {
-  const FeedbackTile({this.leading, required this.title, this.subtitle});
-
-  final Widget? leading;
-  final Widget title;
-  final Widget? subtitle;
-
+class const FeedbackTile({
+  final Widget? leading,
+  required final Widget title,
+  final Widget? subtitle,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final defaultFontSize = DefaultTextStyle.of(context).style.fontSize;

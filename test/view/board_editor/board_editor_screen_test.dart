@@ -554,6 +554,50 @@ void main() {
         expect(find.byType(AlertDialog), findsNothing);
         expect(find.text('Invalid FEN'), findsOneWidget);
       });
+
+      testWidgets('Pasting a FEN whose position is illegal sets up the board', (tester) async {
+        // Black is in check while it is White's turn, so the position is
+        // illegal, but the board can still be built
+        const fen = '4k3/4Q3/8/8/8/8/8/4K3 w - - 0 1';
+        _mockClipboard(fen);
+
+        final app = await makeTestProviderScopeApp(tester, home: const BoardEditorScreen());
+        await tester.pumpWidget(app);
+
+        await tester.tap(find.byIcon(Icons.edit));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.paste));
+        await tester.pumpAndSettle();
+
+        expect(find.text('Invalid FEN'), findsNothing);
+        final container = ProviderScope.containerOf(tester.element(find.byType(BoardEditorScreen)));
+        expect(container.read(boardEditorControllerProvider(null)).fen, fen);
+
+        // The position is not playable, so it still cannot be analyzed
+        expect(
+          tester.widget<BottomBarButton>(find.byKey(const Key('analysis-board-button'))).onTap,
+          isNull,
+        );
+      });
+
+      testWidgets('Pasting a FEN with a missing king sets up the board', (tester) async {
+        const fen = '4k3/8/8/8/8/8/8/8 w - - 0 1';
+        _mockClipboard(fen);
+
+        final app = await makeTestProviderScopeApp(tester, home: const BoardEditorScreen());
+        await tester.pumpWidget(app);
+
+        await tester.tap(find.byIcon(Icons.edit));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.paste));
+        await tester.pumpAndSettle();
+
+        expect(find.text('Invalid FEN'), findsNothing);
+        final container = ProviderScope.containerOf(tester.element(find.byType(BoardEditorScreen)));
+        expect(container.read(boardEditorControllerProvider(null)).fen, fen);
+      });
     });
 
     testWidgets('Drag pieces onto the board', (tester) async {

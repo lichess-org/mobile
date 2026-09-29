@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/auth/email_login_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:material_ui/material_ui.dart';
@@ -18,7 +19,7 @@ Future<void> showSignInOptions(BuildContext context, WidgetRef ref) {
     context: context,
     actions: [
       BottomSheetAction(
-        makeLabel: (context) => const Text('Sign in with the browser'),
+        makeLabel: (context) => Text(context.l10n.mobileSignInWithBrowser),
         leading: const Icon(Icons.open_in_browser),
         onPressed: () {
           // The error is surfaced by the caller's [ref.listen] on [signInMutation]; ignore the
@@ -29,7 +30,7 @@ Future<void> showSignInOptions(BuildContext context, WidgetRef ref) {
         },
       ),
       BottomSheetAction(
-        makeLabel: (context) => const Text('Sign in with an email'),
+        makeLabel: (context) => Text(context.l10n.mobileSignInWithEmail),
         leading: const Icon(Icons.mail_outline),
         onPressed: () {
           navigator.push(EmailLoginScreen.buildRoute());
