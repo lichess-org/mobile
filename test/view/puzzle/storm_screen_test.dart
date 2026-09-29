@@ -78,7 +78,7 @@ void main() {
       expect(boardHasPiece(tester, Square.h5, Piece.whiteRook), isTrue);
       await tester.tapAt(squareOffset(Square.h5, tester.getRect(find.byType(Chessboard))));
       await tester.pump();
-      expect(getBoardValidMoves(tester), isEmpty);
+      expect(getBoardSelectedSquare(tester), isNull);
 
       // wait for first move to be played
       await tester.pump(const Duration(seconds: 1));

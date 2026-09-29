@@ -408,7 +408,7 @@ void main() {
       final boardRect = tester.getRect(find.byType(Chessboard));
       await tester.tapAt(squareOffset(Square.g4, boardRect, orientation: Side.black));
       await tester.pump();
-      expect(getBoardValidMoves(tester), isEmpty);
+      expect(getBoardSelectedSquare(tester), isNull);
 
       const orientation = Side.black;
 
