@@ -100,11 +100,11 @@ class _GifExportState() extends ConsumerState<GifExport> {
       padding: const EdgeInsets.only(bottom: 16),
       children: [
         ListSection(
-          header: const Text('Save game as GIF'),
+          header: Text(context.l10n.gameAsGIF),
           materialFilledCard: true,
           children: [
             SwitchSettingTile(
-              title: const Text('Player names'),
+              title: Text(context.l10n.playerNames),
               value: playerNames,
               onChanged: (bool value) {
                 setState(() {
@@ -122,7 +122,7 @@ class _GifExportState() extends ConsumerState<GifExport> {
               },
             ),
             SwitchSettingTile(
-              title: const Text('Move annotations'),
+              title: Text(context.l10n.moveAnnotations),
               value: moveAnnotations,
               onChanged: (bool value) {
                 setState(() {
@@ -131,7 +131,7 @@ class _GifExportState() extends ConsumerState<GifExport> {
               },
             ),
             SwitchSettingTile(
-              title: const Text('Chess clock'),
+              title: Text(context.l10n.clock),
               value: chessClock,
               onChanged: (bool value) {
                 setState(() {
