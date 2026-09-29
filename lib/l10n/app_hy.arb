@@ -225,6 +225,7 @@
   "learnPawnsFormTheFrontLine": "Զինվորները խաղաքարերի առաջ շարվել են մեկ գծով։\nՇարունակելու համար կատարեք որևէ քայլ։",
   "learnBoardSetupComplete": "Շնորհավորո՜ւմ ենք։ Այժմ դուք գիտե՜ք, թե ինչպես պետք է շարեք խաղաքարերը շախմատի տախտակին։",
   "learnCastling": "Փոխատեղում",
+  "learnEnPassant": "Կողանցիկ հարված",
   "learnTheSpecialKingMove": "Արքայի յուրահատուկ քայլ",
   "learnCastlingIntro": "Արքան տեղափոխեք ապահով տեղ, և նավակը դուրս բերեք մարտի։",
   "learnCastleKingSide": "Տեղաշարժեք ձեր արքան երկու վանդակ դեպի արքայական թևի նավակը՝ կարճ փոխատեղում կատարելու համար։",
@@ -475,6 +476,7 @@
   "puzzleThemeBodenMate": "Բոդենի մատ",
   "puzzleThemeBodenMateDescription": "Խաչվող անկյունագծերում գտնվող երկու փղերը մատ են հայտարարում մրցակցի արքային, որը շրջափակված է սեփական խաղաքարերով։",
   "puzzleThemeCastling": "Փոխատեղում",
+  "puzzleThemeEnPassant": "Կողանցիկ հարված",
   "puzzleThemeCastlingDescription": "Արքայի տեղափոխումն ապահով տեղ և նավակի դուրսբերումը մարտի։",
   "puzzleThemeCapturingDefender": "Պաշտպանի վերացում",
   "puzzleThemeCapturingDefenderDescription": "Այլ խաղաքարը պաշտպանող խաղաքարի շահում կամ փոխանակում՝ հետագայում անպաշտպան մնացած խաղաքարի շահումով։",
@@ -1575,6 +1577,7 @@
   "teamTeam": "Թիմ",
   "teamIncorrectEntryCode": "Մուտքի սխալ կոդ։",
   "teamBattleOfNbTeams": "{count, plural, =1{{count} թիմով մրցաշար} other{{count} թիմով մրցաշար}}",
+  "tfaTwoFactorAuth": "Երկգործոն նույնականացում",
   "timeagoJustNow": "հենց հիմա",
   "timeagoRightNow": "հենց հիմա",
   "timeagoCompleted": "ավարտված",
@@ -1591,6 +1594,5 @@
   "timeagoNbWeeksAgo": "{count, plural, =1{{count} շաբաթ առաջ} other{{count} շաբաթ առաջ}}",
   "timeagoNbMonthsAgo": "{count, plural, =1{{count} ամիս առաջ} other{{count} ամիս առաջ}}",
   "timeagoNbYearsAgo": "{count, plural, =1{{count} տարի առաջ} other{{count} տարի առաջ}}",
-  "tfaTwoFactorAuth": "Երկգործոն նույնականացում",
   "ublogXBlog": "{param}-ի բլոգ"
 }

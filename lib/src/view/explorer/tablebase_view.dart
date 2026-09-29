@@ -27,7 +27,7 @@ class const TablebaseView({
         if (value == null) {
           final message = ref.watch(isDeviceOnlineProvider)
               ? 'Position not in tablebase.'
-              : 'Tablebase is not available offline.';
+              : context.l10n.mobileTablebaseOffline;
           return Center(
             child: Padding(padding: const EdgeInsets.all(16.0), child: Text(message)),
           );
@@ -145,7 +145,7 @@ class const TablebaseView({
         debugPrint('SEVERE: [TablebaseView] could not load tablebase data; $error');
         final message = ref.watch(isDeviceOnlineProvider)
             ? 'Could not load tablebase data.'
-            : 'Tablebase is not available offline.';
+            : context.l10n.mobileTablebaseOffline;
         return Center(
           child: Padding(padding: const EdgeInsets.all(16.0), child: Text(message)),
         );

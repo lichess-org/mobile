@@ -314,6 +314,7 @@
   "learnPawnsFormTheFrontLine": "Pėstininkai sudaro priekinę liniją. Darykite ėjimą tam, kad pradėti.",
   "learnBoardSetupComplete": "Sveikiname. Jūs žinote kaip sudėti šachmatų figūras.",
   "learnCastling": "Rokiruotė",
+  "learnEnPassant": "Kirtimas prasilenkiant",
   "learnTheSpecialKingMove": "Specialus karaliaus ėjimas",
   "learnCastlingIntro": "Paslėpk savo karalių saugioje vietoje bei išvesk bokštą į puolimą!",
   "learnCastleKingSide": "Pajudink savo karalių per du laukelius,\nkad atliktum trumpą rokiruotę!",
@@ -572,6 +573,7 @@
   "puzzleThemeBodenMate": "Bodeno matas",
   "puzzleThemeBodenMateDescription": "Du puolantys rikiai susikryžiojančiose įstrižainėse atlieka matą priešininko karaliui, įkalintam draugiškų figūrų.",
   "puzzleThemeCastling": "Rokiruotės",
+  "puzzleThemeEnPassant": "Kirtimas prasilenkiant",
   "puzzleThemeCastlingDescription": "Parveskite karalių į saugią vietą ir panaudokite atakai bokštą.",
   "puzzleThemeCapturingDefender": "Nukirskite gynėją",
   "puzzleThemeCapturingDefenderDescription": "Pašalinkite figūrą, kuri yra kritiškai svarbi kitos figūros gynybai, paruošdami naujai neapsaugotą figūrą kirtimui kitu ėjimu.",
@@ -1754,6 +1756,7 @@
   "teamIncorrectEntryCode": "Netinkamas kodas.",
   "teamBattleOfNbTeams": "{count, plural, =1{{count} komandų mūšis} few{{count} komandų mūšis} many{{count} komandų mūšis} other{{count} komandų mūšis}}",
   "teamNbLeadersPerTeam": "{count, plural, =1{Vienas lyderis komandoje} few{{count} lyderiai komandoje} many{{count} lyderių komandoje} other{{count} lyderių komandoje}}",
+  "tfaTwoFactorAuth": "Dviejų lygių tapatumo nustatymas",
   "timeagoJustNow": "ką tik",
   "timeagoRightNow": "dabar",
   "timeagoCompleted": "užbaigta",
@@ -1772,6 +1775,5 @@
   "timeagoNbYearsAgo": "{count, plural, =1{Prieš {count} metus} few{Prieš {count} metus} many{Prieš {count} metų} other{Prieš {count} metų}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{Liko {count} minutė} few{Liko {count} minutės} many{Liko {count} minučių} other{Liko {count} minučių}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{Liko {count} valanda} few{Liko {count} valandos} many{Liko {count} valandų} other{Liko {count} valandų}}",
-  "tfaTwoFactorAuth": "Dviejų lygių tapatumo nustatymas",
   "ublogXBlog": "{param} Tinklaraštis"
 }

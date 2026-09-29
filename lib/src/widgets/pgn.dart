@@ -1348,9 +1348,10 @@ class const _MoveContextMenu({
             final line = pgn.trimRight().replaceFirst(RegExp(r'\s*\*$'), '');
             // The bottom sheet can be disposed before the clipboard write completes.
             final messenger = ScaffoldMessenger.of(context);
+            final copiedMessage = context.l10n.mobilePgnCopied;
             await Clipboard.setData(ClipboardData(text: line));
             if (!messenger.mounted) return;
-            messenger.showSnackBar(const SnackBar(content: Text('PGN copied.'))); // TODO l10n
+            messenger.showSnackBar(SnackBar(content: Text(copiedMessage)));
           },
         ),
         BottomSheetContextMenuAction(
