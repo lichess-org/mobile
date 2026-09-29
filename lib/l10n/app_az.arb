@@ -237,6 +237,7 @@
   "learnPawnsFormTheFrontLine": "Piyadalar ön xətti təşkil edir.\nDavam etmək üçün bir gediş edir.",
   "learnBoardSetupComplete": "Təbriklər! Artıq şahmat lövhəsini necə quracağınızı bilirsiniz.",
   "learnCastling": "Qalaqurma",
+  "learnEnPassant": "Keçiddə götürmə",
   "learnTheSpecialKingMove": "Xüsusi şah gedişi",
   "learnCastlingIntro": "Şahı təhlükəsiz yerə gətirin və hücum üçün topu hazırlayın!",
   "learnCastleKingSide": "Qısa qalaqurma üçün\nşahını iki xana hərəkət etdir!",
@@ -458,6 +459,7 @@
   "puzzleThemeBodenMate": "Boden matı",
   "puzzleThemeBodenMateDescription": "İki fil, öz fiqurları tərəfindən bloklanan şahı çarpaz diaqonallardan hücum edərək mat edir.",
   "puzzleThemeCastling": "Qalaqurma",
+  "puzzleThemeEnPassant": "Keçiddə götürmə",
   "puzzleThemeCastlingDescription": "Şahı təhlükəsiz yerə gətirin və hücum üçün topu hazırlayın.",
   "puzzleThemeCapturingDefender": "Müdafiəçini vurmaq",
   "puzzleThemeCapturingDefenderDescription": "Bir fiquru müdafiə edən başqa bir fiquru ələ keçirərək, müdafiəsiz qalan digər fiquru da növbəti gedişdə ələ keçirin.",
@@ -1459,8 +1461,8 @@
   "studyNbMembers": "{count, plural, =1{{count} Üzv} other{{count} Üzv}}",
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{PGN mətninizi bura yapışdırın, ən çox {count} oyuna qədər} other{PGN mətninizi bura yapışdırın, ən çox {count} oyuna qədər}}",
   "teamTeam": "Komanda",
+  "tfaTwoFactorAuth": "2 mərhələli təsdiqləmə",
   "timeagoJustNow": "elə indi",
   "timeagoRightNow": "indicə",
-  "timeagoCompleted": "tamamlanan",
-  "tfaTwoFactorAuth": "2 mərhələli təsdiqləmə"
+  "timeagoCompleted": "tamamlanan"
 }

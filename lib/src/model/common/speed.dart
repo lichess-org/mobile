@@ -1,18 +1,16 @@
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/widgets.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
-import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 
 /// Represents a lichess rating Speed item
-enum Speed(final IconData icon) {
-  ultraBullet(LichessIcons.ultrabullet),
-  bullet(LichessIcons.bullet),
-  blitz(LichessIcons.blitz),
-  rapid(LichessIcons.rapid),
-  classical(LichessIcons.classical),
-  correspondence(LichessIcons.correspondence);
+enum Speed {
+  ultraBullet,
+  bullet,
+  blitz,
+  rapid,
+  classical,
+  correspondence;
 
   factory fromTimeIncrement(TimeIncrement t) {
     switch (t.estimatedDuration.inSeconds) {
@@ -53,7 +51,7 @@ enum Speed(final IconData icon) {
 
 extension SpeedExtension on Pick {
   Speed asSpeedOrThrow() {
-    final value = this.required().value;
+    final value = required().value;
     if (value is Speed) {
       return value;
     }

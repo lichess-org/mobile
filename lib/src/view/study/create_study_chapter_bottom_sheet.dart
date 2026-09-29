@@ -167,7 +167,7 @@ class _CreateStudyChapterBottomSheetState() extends ConsumerState<CreateStudyCha
               spacing: 8.0,
               children: [
                 ListTile(
-                  title: const Text('Chapter Name'), // TODO l10n
+                  title: Text(context.l10n.mobileChapterName),
                   subtitle: TextField(
                     controller: _nameController,
                     onChanged: (value) => setState(() => chapterName = value),
@@ -212,7 +212,7 @@ class _CreateStudyChapterBottomSheetState() extends ConsumerState<CreateStudyCha
                         suffixIcon: IconButton(
                           icon: const Icon(Icons.paste),
                           onPressed: _getClipboardData,
-                          tooltip: 'Paste from clipboard', // TODO l10n
+                          tooltip: context.l10n.mobilePasteFromClipboard,
                         ),
                       ),
                       controller: _textController,
@@ -238,7 +238,7 @@ class _CreateStudyChapterBottomSheetState() extends ConsumerState<CreateStudyCha
                               suffixIcon: IconButton(
                                 icon: const Icon(Icons.paste),
                                 onPressed: _getClipboardData,
-                                tooltip: 'Paste from clipboard', // TODO l10n
+                                tooltip: context.l10n.mobilePasteFromClipboard,
                               ),
                             ),
                             readOnly: true,

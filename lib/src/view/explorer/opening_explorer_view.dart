@@ -66,7 +66,6 @@ class _OpeningExplorerState() extends ConsumerState<OpeningExplorerView> {
     final variant = Variant.fromRule(widget.position.rule);
 
     if (prefs.db == OpeningDatabase.player && prefs.playerDb.username == null) {
-      // TODO: l10n
       return _buildListView(
         children: [const ExplorerMessage('Select a Lichess player in the settings.')],
       );
