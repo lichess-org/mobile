@@ -58,11 +58,7 @@ class ServerAnalysisRequestException(
 /// [kMaxWaitForServerAnalysis] and then time out having reported nothing.
 enum ServerAnalysisRequestError({
   final bool isBenign = false,
-
-  /// A short explanation to show the user, in English.
-  ///
-  /// Not translated yet: [ServerAnalysisRequestException] is thrown from the model layer, and
-  /// wiring these through the arb files is a separate piece of work.
+  
   required final String message,
 }) {
   /// The game has already been analysed. The evals exist, so the socket is the right thing to read.
